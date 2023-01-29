@@ -26,7 +26,7 @@ namespace SerialLoops
             clickMe.Executed += (sender, e) => MessageBox.Show(this, "I was clicked!");
 
             var aboutCommand = new Command { MenuText = "About..." };
-            AboutDialog aboutDialog = new() { ProgramName = "Serial Loops", Developers = new string[] { "Jonko", "William" }, Copyright = "Haroohie Translation Club", Website = new Uri("https://haroohie.club")  };
+            AboutDialog aboutDialog = new() { ProgramName = "Serial Loops", Developers = new string[] { "Jonko", "William" }, Copyright = "© Haroohie Translation Club, 2023", Website = new Uri("https://haroohie.club")  };
             aboutCommand.Executed += (sender, e) => aboutDialog.ShowDialog(this);
 
             // create menu
