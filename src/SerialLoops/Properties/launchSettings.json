@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "SerialLoops": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}
