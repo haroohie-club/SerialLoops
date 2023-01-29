@@ -8,8 +8,8 @@ namespace SerialLoops
     {
         void InitializeComponent()
         {
-            Title = "My Eto Form";
-            MinimumSize = new Size(200, 200);
+            Title = "Serial Loops";
+            MinimumSize = new Size(769, 420);
             Padding = 10;
 
             Content = new StackLayout
@@ -25,11 +25,9 @@ namespace SerialLoops
             var clickMe = new Command { MenuText = "Click Me!", ToolBarText = "Click Me!" };
             clickMe.Executed += (sender, e) => MessageBox.Show(this, "I was clicked!");
 
-            var quitCommand = new Command { MenuText = "Quit", Shortcut = Application.Instance.CommonModifier | Keys.Q };
-            quitCommand.Executed += (sender, e) => Application.Instance.Quit();
-
             var aboutCommand = new Command { MenuText = "About..." };
-            aboutCommand.Executed += (sender, e) => new AboutDialog().ShowDialog(this);
+            AboutDialog aboutDialog = new() { ProgramName = "Serial Loops", Developers = new string[] { "Jonko", "William" }, Copyright = "Haroohie Translation Club", Website = new Uri("https://haroohie.club")  };
+            aboutCommand.Executed += (sender, e) => aboutDialog.ShowDialog(this);
 
             // create menu
             Menu = new MenuBar
@@ -46,7 +44,6 @@ namespace SerialLoops
 					// application (OS X) or file menu (others)
 					new ButtonMenuItem { Text = "&Preferences..." },
                 },
-                QuitItem = quitCommand,
                 AboutItem = aboutCommand
             };
 
