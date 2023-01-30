@@ -9,7 +9,8 @@ namespace SerialLoops
         void InitializeComponent()
         {
             Title = "Serial Loops";
-            MinimumSize = new Size(769, 420);
+            ClientSize = new(769, 420);
+            MinimumSize = new(769, 420);
             Padding = 10;
 
             Content = new StackLayout
@@ -22,10 +23,10 @@ namespace SerialLoops
             };
 
             // create a few commands that can be used for the menu and toolbar
-            var clickMe = new Command { MenuText = "Click Me!", ToolBarText = "Click Me!" };
+            Command clickMe = new() { MenuText = "Click Me!", ToolBarText = "Click Me!" };
             clickMe.Executed += (sender, e) => MessageBox.Show(this, "I was clicked!");
 
-            var aboutCommand = new Command { MenuText = "About..." };
+            Command aboutCommand = new() { MenuText = "About..." };
             AboutDialog aboutDialog = new() { ProgramName = "Serial Loops", Developers = new string[] { "Jonko", "William" }, Copyright = "© Haroohie Translation Club, 2023", Website = new Uri("https://haroohie.club")  };
             aboutCommand.Executed += (sender, e) => aboutDialog.ShowDialog(this);
 
