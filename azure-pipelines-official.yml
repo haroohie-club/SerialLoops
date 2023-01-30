@@ -27,8 +27,7 @@ jobs:
       projects: $(Build.SourcesDirectory)/src/SerialLoops/SerialLoops.csproj
       arguments: '-c Release -o $(Build.ArtifactStagingDirectory)'
       publishWebProjects: false
-
-    displayName: Build solution
+    displayName: Build & Publish Serial Loops
 
   - task: PublishBuildArtifacts@1
     inputs:
