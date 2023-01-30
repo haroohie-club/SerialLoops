@@ -10,6 +10,12 @@ namespace SerialLoops.Lib
         public string ConfigPath { get; set; }
         public string ProjectsDirectory { get; set; }
 
+        public void Save(ILogger log)
+        {
+            log.Log($"Saving config to '{ConfigPath}'...");
+            IO.WriteStringFile(ConfigPath, JsonSerializer.Serialize(this), log);
+        }
+
         public static Config LoadConfig(ILogger log)
         {
             string configJson = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.json");

@@ -26,6 +26,32 @@ namespace SerialLoops.Tests
                 Assert.That(File.Exists(Path.Combine(Path.GetDirectoryName(config.ConfigPath), "SerialLoops.Lib.dll")),
                     $"SerialLoops library DLL not found at '{Path.Combine(Path.GetDirectoryName(config.ConfigPath), "SerialLoops.Lib.dll")}'");
             });
+
+            // Change config and save it
+            config.ProjectsDirectory = "testTime";
+            config.Save(_log);
+
+            // Load config from disk
+            Config newConfig = Config.LoadConfig(_log);
+            Assert.That(newConfig.ProjectsDirectory, Is.EqualTo(config.ProjectsDirectory));
+
+            File.Delete(config.ConfigPath);
+        }
+
+        [Test]
+        public void ProjectCreationTest()
+        {
+            Config config = Config.LoadConfig(_log);
+            Project project = new("Test", config, _log);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(Directory.Exists(project.MainDirectory));
+                Assert.That(Directory.Exists(project.BaseDirectory));
+                Assert.That(Directory.Exists(project.IterativeDirectory));
+            });
+
+            Directory.Delete(project.MainDirectory, true);
         }
     }
 }
