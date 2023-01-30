@@ -1,0 +1,31 @@
+pr:
+- main
+
+strategy:
+  matrix:
+    linux:
+      imageName: 'ubuntu-latest'
+    mac:
+      imageName: 'macOS-latest'
+    windows:
+      imageName: 'windows-latest'
+
+pool:
+  vmImage: $(imageName)
+
+steps:
+- checkout: self
+  clean: true
+  
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: SerialLoops.sln
+  displayName: Build solution
+
+- task: DotNetCoreCLI@2
+  inputs:
+    comand: 'test'
+    projects: test/SerialLoops.Tests/SerialLoops.Tests.csproj
+    publishTestResults: true
+
