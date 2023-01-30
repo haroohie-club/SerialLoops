@@ -18,6 +18,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SerialLoops.Lib\SerialLoops.Lib.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Update="ProjectCreationDialog.eto.cs">
       <DependentUpon>ProjectCreationDialog.cs</DependentUpon>
     </Compile>

@@ -1,5 +1,6 @@
-using Eto.Drawing;
 using Eto.Forms;
+using SerialLoops.Lib;
+using SerialLoops.Lib.Logging;
 using System;
 using System.IO;
 
@@ -9,6 +10,7 @@ namespace SerialLoops
     {
         private const string BASE_TITLE = "Serial Loops";
 
+        private ConsoleLogger _log;
         public Config CurrentConfig { get; set; }
         public Project OpenProject { get; set; }
 
@@ -29,12 +31,14 @@ namespace SerialLoops
             };
 
             // Commands
+            // File
             Command newProject = new() { MenuText = "New Project", ToolBarText = "New Project" };
             newProject.Executed += NewProjectCommand_Executed;
 
             Command openProject = new() { MenuText = "Open Project", ToolBarText = "Open Project" };
             openProject.Executed += OpenProject_Executed;
 
+            // About
             Command aboutCommand = new() { MenuText = "About..." };
             AboutDialog aboutDialog = new() { ProgramName = "Serial Loops", Developers = new string[] { "Jonko", "William" }, Copyright = "© Haroohie Translation Club, 2023", Website = new Uri("https://haroohie.club")  };
             aboutCommand.Executed += (sender, e) => aboutDialog.ShowDialog(this);
@@ -48,6 +52,7 @@ namespace SerialLoops
 					new SubMenuItem { Text = "&File", Items = { newProject, openProject } },
 					// new SubMenuItem { Text = "&Edit", Items = { /* commands/items */ } },
 					// new SubMenuItem { Text = "&View", Items = { /* commands/items */ } },
+                    new SubMenuItem { Text = "&Build", Items = { } },
 				},
                 ApplicationItems =
                 {
@@ -66,7 +71,8 @@ namespace SerialLoops
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            CurrentConfig = Config.LoadConfig();
+            _log = new();
+            CurrentConfig = Config.LoadConfig(_log);
         }
 
         private void NewProjectCommand_Executed(object sender, EventArgs e)
@@ -85,7 +91,7 @@ namespace SerialLoops
             SelectFolderDialog selectFolderDialog = new() { Directory = CurrentConfig.ProjectsDirectory };
             if (selectFolderDialog.ShowDialog(this) == DialogResult.Ok)
             {
-                OpenProject = Project.OpenProject(Path.GetFileNameWithoutExtension(selectFolderDialog.Directory), CurrentConfig);
+                OpenProject = Project.OpenProject(Path.GetFileNameWithoutExtension(selectFolderDialog.Directory), CurrentConfig, _log);
                 RenameWindow(OpenProject.Name);
             }
         }

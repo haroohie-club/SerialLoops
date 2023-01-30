@@ -1,11 +1,14 @@
-using System;
-using Eto.Forms;
 using Eto.Drawing;
+using Eto.Forms;
+using SerialLoops.Lib;
+using SerialLoops.Lib.Logging;
+using System;
 
 namespace SerialLoops
 {
 	partial class ProjectCreationDialog : Dialog
     {
+        private ConsoleLogger _log;
         public Config Config;
         public Project NewProject { get; private set; }
 
@@ -62,6 +65,7 @@ namespace SerialLoops
                 Close();
             }
             base.OnLoad(e);
+			_log = new();
         }
 
 		private void PickRomCommand_Executed(object sender, EventArgs e)
@@ -86,7 +90,7 @@ namespace SerialLoops
 			}
 			else
             {
-                NewProject = new(_nameBox.Text, Config);
+                NewProject = new(_nameBox.Text, Config, _log);
                 IO.OpenRom(NewProject, _romPath.Text);
                 Close();
             }
