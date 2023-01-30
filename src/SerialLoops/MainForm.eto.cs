@@ -10,7 +10,7 @@ namespace SerialLoops
     {
         private const string BASE_TITLE = "Serial Loops";
 
-        private ConsoleLogger _log;
+        private LoopyLogger _log;
         public Config CurrentConfig { get; set; }
         public Project OpenProject { get; set; }
 
@@ -77,7 +77,7 @@ namespace SerialLoops
 
         private void NewProjectCommand_Executed(object sender, EventArgs e)
         {
-            ProjectCreationDialog projectCreationDialog = new() { Config = CurrentConfig };
+            ProjectCreationDialog projectCreationDialog = new() { Config = CurrentConfig, Log = _log };
             projectCreationDialog.ShowModal(this);
             if (projectCreationDialog.NewProject is not null)
             {

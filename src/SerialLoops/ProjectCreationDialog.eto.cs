@@ -8,7 +8,7 @@ namespace SerialLoops
 {
 	partial class ProjectCreationDialog : Dialog
     {
-        private ConsoleLogger _log;
+        public LoopyLogger Log;
         public Config Config;
         public Project NewProject { get; private set; }
 
@@ -59,13 +59,17 @@ namespace SerialLoops
 
         protected override void OnLoad(EventArgs e)
         {
+			if (Log is null)
+			{
+				// We can't log that log is null, so we have to throw
+				throw new LoggerNullException();
+			}
             if (Config is null)
             {
-                // TODO: Log error saying config must be provided
+				Log.LogError($"Config not provided to project creation dialog");
                 Close();
             }
             base.OnLoad(e);
-			_log = new();
         }
 
 		private void PickRomCommand_Executed(object sender, EventArgs e)
@@ -90,7 +94,7 @@ namespace SerialLoops
 			}
 			else
             {
-                NewProject = new(_nameBox.Text, Config, _log);
+                NewProject = new(_nameBox.Text, Config, Log);
                 IO.OpenRom(NewProject, _romPath.Text);
                 Close();
             }
