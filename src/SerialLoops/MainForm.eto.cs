@@ -4,8 +4,11 @@ using System;
 
 namespace SerialLoops
 {
-    partial class MainForm : Form
+    public partial class MainForm : Form
     {
+        public Config CurrentConfig { get; set; }
+        public Project OpenProject { get; set; }
+
         void InitializeComponent()
         {
             Title = "Serial Loops";
@@ -22,9 +25,9 @@ namespace SerialLoops
 				}
             };
 
-            // create a few commands that can be used for the menu and toolbar
-            Command clickMe = new() { MenuText = "Click Me!", ToolBarText = "Click Me!" };
-            clickMe.Executed += (sender, e) => MessageBox.Show(this, "I was clicked!");
+            // Commands
+            Command newProject = new() { MenuText = "New Project", ToolBarText = "New Project" };
+            newProject.Executed += NewProjectCommand_Executed;
 
             Command aboutCommand = new() { MenuText = "About..." };
             AboutDialog aboutDialog = new() { ProgramName = "Serial Loops", Developers = new string[] { "Jonko", "William" }, Copyright = "© Haroohie Translation Club, 2023", Website = new Uri("https://haroohie.club")  };
@@ -36,7 +39,7 @@ namespace SerialLoops
                 Items =
                 {
 					// File submenu
-					new SubMenuItem { Text = "&File", Items = { clickMe } },
+					new SubMenuItem { Text = "&File", Items = { newProject } },
 					// new SubMenuItem { Text = "&Edit", Items = { /* commands/items */ } },
 					// new SubMenuItem { Text = "&View", Items = { /* commands/items */ } },
 				},
@@ -47,9 +50,22 @@ namespace SerialLoops
                 },
                 AboutItem = aboutCommand
             };
+        }
 
-            // create toolbar			
-            ToolBar = new ToolBar { Items = { clickMe } };
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            CurrentConfig = Config.LoadConfig();
+        }
+
+        private void NewProjectCommand_Executed(object sender, EventArgs e)
+        {
+            ProjectCreationDialog projectCreationDialog = new() { Config = CurrentConfig };
+            projectCreationDialog.ShowModal(this);
+            if (projectCreationDialog.NewProject is not null)
+            {
+                OpenProject = projectCreationDialog.NewProject;
+            }
         }
     }
 }

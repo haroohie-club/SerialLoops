@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace SerialLoops
 {
-    public class Build
+    public static class Build
     {
+
     }
 }
