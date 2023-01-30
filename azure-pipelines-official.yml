@@ -25,6 +25,7 @@ jobs:
     inputs:
       command: 'publish'
       arguments: '-o $(Build.ArtifactStagingDirectory)'
+      publishWebProjects: false
 
     displayName: Build solution
 
