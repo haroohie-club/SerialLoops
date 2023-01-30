@@ -10,22 +10,24 @@ strategy:
     windows:
       imageName: 'windows-latest'
 
-pool:
-  vmImage: $(imageName)
+jobs:
+- job:
+  displayName: Build & Test
+  pool:
+    vmImage: $(imageName)
+  steps:
+  - checkout: self
+    clean: true
+    
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: 'build'
+      projects: SerialLoops.sln
+    displayName: Build solution
 
-steps:
-- checkout: self
-  clean: true
-  
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'build'
-    projects: SerialLoops.sln
-  displayName: Build solution
-
-- task: DotNetCoreCLI@2
-  inputs:
-    comand: 'test'
-    projects: test/SerialLoops.Tests/SerialLoops.Tests.csproj
-    publishTestResults: true
+  - task: DotNetCoreCLI@2
+    inputs:
+      comand: 'test'
+      projects: test/SerialLoops.Tests/SerialLoops.Tests.csproj
+      publishTestResults: true
 
