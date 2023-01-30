@@ -1,7 +1,8 @@
 trigger:
-- none
-pr:
 - main
+- release/*
+pr:
+- none
 
 jobs:
 - job:
@@ -22,13 +23,14 @@ jobs:
     
   - task: DotNetCoreCLI@2
     inputs:
-      command: 'build'
-      projects: $(Build.SourcesDirectory)/SerialLoops.sln
+      command: 'publish'
+      arguments: '-o $(Build.ArtifactStagingDirectory)'
+
     displayName: Build solution
 
-  - task: DotNetCoreCLI@2
+  - task: PublishBuildArtifacts@1
     inputs:
-      comand: 'test'
-      projects: $(Build.SourcesDirectory)/test/SerialLoops.Tests/SerialLoops.Tests.csproj
-      publishTestResults: true
-
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+      ArtifactName: '$(imageName)'
+      publishLocation: 'Container'
+    displayName: Publish build artifacts
