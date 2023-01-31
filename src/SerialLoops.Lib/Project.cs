@@ -1,5 +1,7 @@
-﻿using SerialLoops.Lib.Logging;
+﻿using SerialLoops.Lib.Items;
+using SerialLoops.Lib.Logging;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace SerialLoops.Lib
@@ -30,6 +32,20 @@ namespace SerialLoops.Lib
                     log.LogError($"Exception occurred while attempting to create project directories.\n{exc.Message}\n\n{exc.StackTrace}");
                 }
             }
+        }
+
+        public List<ItemDescription> GetItems()
+        {
+            //todo Return list of items (representing editable project parts, like maps, etc)
+            List<ItemDescription> items = new()
+            {
+                new ItemDescription("map_1", ItemDescription.ItemType.Map),
+                new ItemDescription("map_2", ItemDescription.ItemType.Map),
+                new ItemDescription("dialogue_1", ItemDescription.ItemType.Dialogue),
+                new ItemDescription("dialogue_2", ItemDescription.ItemType.Dialogue),
+                new ItemDescription("dialogue_3", ItemDescription.ItemType.Dialogue)
+            };
+            return items;
         }
 
         public static Project OpenProject(string name, Config config, ILogger log)
