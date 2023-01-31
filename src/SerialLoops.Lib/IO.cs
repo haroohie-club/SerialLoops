@@ -72,6 +72,14 @@ namespace SerialLoops.Lib
             }
         }
 
+        public static void CopyFiles(string sourceDirectory, string destinationDirectory)
+        {
+            foreach (string file in Directory.GetFiles(sourceDirectory,"*", SearchOption.AllDirectories))
+            {
+                File.Copy(file, Path.Combine(destinationDirectory, file));
+            }
+        }
+
         public static bool WriteStringFile(string file, string str, ILogger log)
         {
             try
