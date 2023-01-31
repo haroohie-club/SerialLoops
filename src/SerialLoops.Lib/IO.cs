@@ -12,8 +12,42 @@ namespace SerialLoops.Lib
     {
         public static void OpenRom(Project project, string romPath)
         {
-            NdsProjectFile.Create(project.Name, romPath, project.BaseDirectory);
-            NdsProjectFile.Create(project.Name, romPath, project.IterativeDirectory);
+            NdsProjectFile.Create(project.Name, romPath, Path.Combine(project.BaseDirectory, "rom"));
+            NdsProjectFile.Create(project.Name, romPath, Path.Combine(project.IterativeDirectory, "rom"));
+
+            Directory.CreateDirectory(Path.Combine(project.BaseDirectory, "original", "archives"));
+            Directory.CreateDirectory(Path.Combine(project.BaseDirectory, "original", "overlay"));
+            Directory.CreateDirectory(Path.Combine(project.IterativeDirectory, "original", "archives"));
+            Directory.CreateDirectory(Path.Combine(project.IterativeDirectory, "original", "overlay"));
+            Directory.CreateDirectory(Path.Combine(project.BaseDirectory, "src", "source"));
+            Directory.CreateDirectory(Path.Combine(project.IterativeDirectory, "src", "source"));
+            Directory.CreateDirectory(Path.Combine(project.BaseDirectory, "src", "replSource"));
+            Directory.CreateDirectory(Path.Combine(project.IterativeDirectory, "src", "replSource"));
+            Directory.CreateDirectory(Path.Combine(project.BaseDirectory, "src", "overlays"));
+            Directory.CreateDirectory(Path.Combine(project.IterativeDirectory, "src", "overlays"));
+
+            File.Copy(Path.Combine(project.BaseDirectory, "rom", "arm9.bin"), Path.Combine(project.BaseDirectory, "src", "arm9.bin"));
+            File.Copy(Path.Combine(project.IterativeDirectory, "rom", "arm9.bin"), Path.Combine(project.IterativeDirectory, "src", "arm9.bin"));
+            CopyFiles(Path.Combine(project.BaseDirectory, "rom", "data"), Path.Combine(project.BaseDirectory, "original", "archives"), "*.bin");
+            CopyFiles(Path.Combine(project.IterativeDirectory, "rom", "data"), Path.Combine(project.IterativeDirectory, "original", "archives"), "*.bin");
+            CopyFiles(Path.Combine(project.BaseDirectory, "rom", "overlay"), Path.Combine(project.BaseDirectory, "original", "overlays"));
+            CopyFiles(Path.Combine(project.IterativeDirectory, "rom", "overlay"), Path.Combine(project.IterativeDirectory, "original", "overlays"));
+            // We conditionalize these so we can test on a non-copyrighted ROM; this should always be true with real data
+            if (Directory.Exists(Path.Combine(project.BaseDirectory, "rom", "data", "bgm")))
+            {
+                CopyFiles(Path.Combine(project.BaseDirectory, "rom", "data", "bgm"), Path.Combine(project.BaseDirectory, "original", "bgm"));
+                CopyFiles(Path.Combine(project.IterativeDirectory, "rom", "data", "bgm"), Path.Combine(project.IterativeDirectory, "original", "bgm"));
+                CopyFiles(Path.Combine(project.BaseDirectory, "rom", "data", "vce"), Path.Combine(project.BaseDirectory, "original", "vce"));
+                CopyFiles(Path.Combine(project.IterativeDirectory, "rom", "data", "vce"), Path.Combine(project.IterativeDirectory, "original", "vce"));
+            }
+            File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "linker.x"), Path.Combine(project.BaseDirectory, "src", "linker.x"));
+            File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "linker.x"), Path.Combine(project.IterativeDirectory, "src", "linker.x"));
+            File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "linker.x"), Path.Combine(project.BaseDirectory, "src", "overlays", "linker.x"));
+            File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "linker.x"), Path.Combine(project.IterativeDirectory, "src", "overlays", "linker.x"));
+            File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Makefile_main"), Path.Combine(project.BaseDirectory, "src", "Makefile"));
+            File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Makefile_main"), Path.Combine(project.IterativeDirectory, "src", "Makefile"));
+            File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Makefile_overlay"), Path.Combine(project.BaseDirectory, "src", "overlays", "Makefile"));
+            File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Makefile_overlay"), Path.Combine(project.IterativeDirectory, "src", "overlays", "Makefile"));
         }
 
         public static async Task FetchAssets(Project project, Uri assetsRepoZip, Uri stringsRepoZip, ILogger log)
@@ -45,7 +79,7 @@ namespace SerialLoops.Lib
             try
             {
                 ZipFile.ExtractToDirectory(assetsZipPath, assetsBasePath);
-                ZipFile.ExtractToDirectory(assetsZipPath, assetsIterativePath);
+                CopyFiles(assetsBasePath, assetsIterativePath);
             }
             catch (Exception exc)
             {
@@ -54,7 +88,7 @@ namespace SerialLoops.Lib
             try
             {
                 ZipFile.ExtractToDirectory(stringsZipPath, stringsBasePath);
-                ZipFile.ExtractToDirectory(stringsZipPath, stringsIterativePath);
+                CopyFiles(stringsBasePath, stringsIterativePath);
             }
             catch (Exception exc)
             {
@@ -70,13 +104,34 @@ namespace SerialLoops.Lib
             {
                 log.LogError($"Exception occurred during deleting zip files.\n{exc.Message}\n\n{exc.StackTrace}");
             }
+
+            SetUpLocalizedHacks(project);
         }
 
-        public static void CopyFiles(string sourceDirectory, string destinationDirectory)
+        public static void SetUpLocalizedHacks(Project project)
         {
-            foreach (string file in Directory.GetFiles(sourceDirectory,"*", SearchOption.AllDirectories))
+            File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Hacks", "fontOffset.c"), Path.Combine(project.BaseDirectory, "src", "source", "fontOffset.c"));
+            File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Hacks", "fontOffset.c"), Path.Combine(project.IterativeDirectory, "src", "source", "fontOffset.c"));
+            File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Hacks", "fontOffset_asm.s"), Path.Combine(project.BaseDirectory, "src", "source", "fontOffset_asm.s"));
+            File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Hacks", "fontOffset_asm.s"), Path.Combine(project.IterativeDirectory, "src", "source", "fontOffset_asm.s"));
+        }
+
+        public static void CopyFiles(string sourceDirectory, string destinationDirectory, string filter = "*")
+        {
+            foreach (string file in Directory.GetFiles(sourceDirectory, filter, SearchOption.AllDirectories))
             {
                 File.Copy(file, Path.Combine(destinationDirectory, file));
+            }
+        }
+
+        public static void DeleteFilesKeepDirectories(string sourceDirectory)
+        {
+            foreach (string directory in Directory.GetDirectories(sourceDirectory, "*", SearchOption.AllDirectories))
+            {
+                foreach (string file in Directory.GetFiles(directory))
+                {
+                    File.Delete(file);
+                }
             }
         }
 

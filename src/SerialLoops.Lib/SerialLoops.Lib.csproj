@@ -11,4 +11,10 @@
     <PackageReference Include="NitroPacker.Core" Version="2.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Sources\*">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
