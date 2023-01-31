@@ -1,4 +1,5 @@
-﻿using HaruhiChokuretsuLib.Util;
+﻿using Eto.Forms;
+using HaruhiChokuretsuLib.Util;
 
 namespace SerialLoops
 {
@@ -11,7 +12,7 @@ namespace SerialLoops
 
         public void LogError(string message, bool lookForWarnings = false)
         {
-            // do nothing for now
+            MessageBox.Show($"ERROR: {message}", MessageBoxType.Error);
         }
 
         public void LogWarning(string message, bool lookForErrors = false)
