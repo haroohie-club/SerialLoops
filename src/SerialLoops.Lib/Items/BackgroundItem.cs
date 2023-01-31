@@ -28,6 +28,33 @@ namespace SerialLoops.Lib.Items
             {
                 return Graphic1.GetImage();
             }
+            else if (BackgroundType == BgType.TEX_BOTTOM_TILE_TOP)
+            {
+                SKBitmap bitmap = new(Graphic1.Width, Graphic1.Height + Graphic2.Height);
+                SKCanvas canvas = new(bitmap);
+
+                SKBitmap tileBitmap = new(Graphic2.Width, Graphic2.Height);
+                SKBitmap tiles = Graphic2.GetImage(width: 64);
+                SKCanvas tileCanvas = new(tileBitmap);
+                int currentTile = 0;
+                for (int y = 0; y < tileBitmap.Height; y += 64)
+                {
+                    for (int x = 0; x < tileBitmap.Width; x += 64)
+                    {
+                        SKRect crop = new(0, currentTile * 64, 64, (currentTile + 1) * 64);
+                        SKRect dest = new(x, y, x + 64, y + 64);
+                        tileCanvas.DrawBitmap(tiles, crop, dest);
+                        currentTile++;
+                    }
+                }
+                tileCanvas.Flush();
+
+                canvas.DrawBitmap(tileBitmap, new SKPoint(0, 0));
+                canvas.DrawBitmap(Graphic1.GetImage(), new SKPoint(0, Graphic2.Height));
+                canvas.Flush();
+
+                return bitmap;
+            }
             else if (BackgroundType == BgType.KINETIC_VECTOR)
             {
                 return Graphic2.GetScreenImage(Graphic1);
