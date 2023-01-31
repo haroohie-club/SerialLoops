@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HaruhiChokuretsuLib.Util;
+using System;
 
 namespace SerialLoops.Lib.Logging
 {

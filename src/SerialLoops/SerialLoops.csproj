@@ -13,6 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="HaruhiChokuretsuLib" Version="0.10.0" />
     <PackageReference Include="System.Text.Json" Version="7.0.1" />
   </ItemGroup>
 

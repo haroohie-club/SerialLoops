@@ -121,6 +121,7 @@ namespace SerialLoops
                     }
                     IO.SetUpLocalizedHacks(NewProject);
                 }
+				NewProject.LoadArchives(Log);
                 Close();
             }
         }

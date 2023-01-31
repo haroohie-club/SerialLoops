@@ -6,11 +6,7 @@ using System.Threading.Tasks;
 
 namespace SerialLoops.Lib.Items
 {
-    public class DialogueItem : Item
+    internal class PuzzleItem
     {
-        public DialogueItem(string name) : base(name, ItemType.Dialogue)
-        {
-        }
-
     }
 }

@@ -27,8 +27,22 @@ namespace SerialLoops.Lib.Items
         // Enum with values for each type of item
         public enum ItemType
         {
+            Background,
+            BGM,
+            Character_Sprite,
+            Chess,
+            Chibi,
+            Dialogue_Config,
+            Event,
+            Group_Selection,
             Map,
-            Dialogue
+            Puzzle,
+            Scenario,
+            System_Texture,
+            Topic,
+            Transition,
+            Tutorial,
+            Voice,
         }
 
     }

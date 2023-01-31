@@ -1,5 +1,5 @@
-﻿using HaroohieClub.NitroPacker.Core;
-using SerialLoops.Lib.Logging;
+﻿using HaruhiChokuretsuLib.Util;
+using HaroohieClub.NitroPacker.Core;
 using System;
 using System.IO;
 using System.IO.Compression;

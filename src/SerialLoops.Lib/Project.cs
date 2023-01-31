@@ -1,9 +1,16 @@
-﻿using SerialLoops.Lib.Items;
-using SerialLoops.Lib.Logging;
+﻿using HaruhiChokuretsuLib.Archive;
+using HaruhiChokuretsuLib.Archive.Data;
+using HaruhiChokuretsuLib.Archive.Event;
+using HaruhiChokuretsuLib.Archive.Graphics;
+using HaruhiChokuretsuLib.Util;
+using SerialLoops.Lib.Items;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Xml.Linq;
 
 namespace SerialLoops.Lib
 {
@@ -11,9 +18,25 @@ namespace SerialLoops.Lib
     {
         public string Name { get; set; }
         public string LangCode { get; set; }
-        public string MainDirectory { get; }
+        public string MainDirectory { get; set; }
+        [JsonIgnore]
         public string BaseDirectory => Path.Combine(MainDirectory, "base");
+        [JsonIgnore]
         public string IterativeDirectory => Path.Combine(MainDirectory, "iterative");
+
+        [JsonIgnore]
+        public List<ItemDescription> Items { get; set; } = new();
+
+        [JsonIgnore]
+        private ArchiveFile<DataFile> _dat;
+        [JsonIgnore]
+        private ArchiveFile<GraphicsFile> _grp;
+        [JsonIgnore]
+        private ArchiveFile<EventFile> _evt;
+
+        public Project()
+        {
+        }
 
         public Project(string name, string langCode, Config config, ILogger log)
         {
@@ -34,36 +57,46 @@ namespace SerialLoops.Lib
             }
         }
 
-        public List<ItemDescription> GetItems()
+        public void LoadArchives(ILogger log)
         {
-            //todo Return list of items (representing editable project parts, like maps, etc)
-            List<ItemDescription> items = new()
-            {
-                new ("map_1", ItemDescription.ItemType.Map),
-                new ("map_2", ItemDescription.ItemType.Map),
-                new ("dialogue_1", ItemDescription.ItemType.Dialogue),
-                new ("dialogue_2", ItemDescription.ItemType.Dialogue),
-                new ("dialogue_3", ItemDescription.ItemType.Dialogue)
-            };
-            return items;
-        }
+            _dat = ArchiveFile<DataFile>.FromFile(Path.Combine(IterativeDirectory, "original", "archives", "dat.bin"), log);
+            _grp = ArchiveFile<GraphicsFile>.FromFile(Path.Combine(IterativeDirectory, "original", "archives", "grp.bin"), log);
+            _evt = ArchiveFile<EventFile>.FromFile(Path.Combine(IterativeDirectory, "original", "archives", "evt.bin"), log);
 
-        public ItemDescription? FindItem(string name)
-        {
-            foreach (ItemDescription item in GetItems())
+            Items.AddRange(_evt.Files
+                .Where(e => !new string[] { "CHESSS", "EVTTBLS", "TOPICS", "SCENARIOS", "TUTORIALS", "VOICEMAPS" }.Contains(e.Name))
+                .Select(e => new EventItem(e)));
+            QMapFile qmap = _dat.Files.First(f => f.Name == "QMAPS").CastTo<QMapFile>();
+            Items.AddRange(_dat.Files
+                .Where(d => qmap.QMaps.Select(q => q.Name.Replace(".", "")).Contains(d.Name))
+                .Select(m => new MapItem(m.CastTo<MapFile>())));
+            BgTableFile bgTable = _dat.Files.First(f => f.Name == "BGTBLS").CastTo<BgTableFile>();
+            foreach (BgTableEntry entry in bgTable.BgTableEntries)
             {
-                if (item.Name == name)
+                if (entry.BgIndex1 > 0)
                 {
-                    return item;
+                    GraphicsFile nameGraphic = _grp.Files.First(g => g.Index == entry.BgIndex1);
+                    string name = $"BG_{nameGraphic.Name[0..(nameGraphic.Name.LastIndexOf('_'))]}";
+                    string bgNameBackup = name;
+                    for (int j = 1; Items.Select(i => i.Name).Contains(name); j++)
+                    {
+                        name = $"{bgNameBackup}{j:D2}";
+                    }
+                    Items.Add(new BackgroundItem(name, entry, _grp));
                 }
             }
-            return null;
+        }
+
+        public ItemDescription FindItem(string name)
+        {
+            return Items.FirstOrDefault(i => i.Name == name);
         }
 
         public static Project OpenProject(string projFile, Config config, ILogger log)
         {
             log.Log($"Loading project from '{projFile}'...");
-            Project project = JsonSerializer.Deserialize<Project>(projFile);
+            Project project = JsonSerializer.Deserialize<Project>(File.ReadAllText(projFile));
+            project.LoadArchives(log);
             return project;
         }
     }

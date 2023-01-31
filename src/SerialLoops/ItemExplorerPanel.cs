@@ -30,7 +30,7 @@ namespace SerialLoops
 
             // Test items
             Dictionary<ItemDescription.ItemType, Section> itemTypes = new();
-            foreach (ItemDescription item in _project.GetItems())
+            foreach (ItemDescription item in _project.Items)
             {
                 if (!itemTypes.ContainsKey(item.Type))
                 {
