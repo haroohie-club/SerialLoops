@@ -16,6 +16,8 @@ namespace SerialLoops.Lib
 {
     public class Project
     {
+        public const string PROJECT_FORMAT = "slproj";
+
         public string Name { get; set; }
         public string LangCode { get; set; }
         public string MainDirectory { get; set; }
@@ -47,7 +49,7 @@ namespace SerialLoops.Lib
             try
             {
                 Directory.CreateDirectory(MainDirectory);
-                File.WriteAllText(Path.Combine(MainDirectory, $"{Name}.seproj"), JsonSerializer.Serialize(this));
+                File.WriteAllText(Path.Combine(MainDirectory, $"{Name}.{PROJECT_FORMAT}"), JsonSerializer.Serialize(this));
                 Directory.CreateDirectory(BaseDirectory);
                 Directory.CreateDirectory(IterativeDirectory);
             }

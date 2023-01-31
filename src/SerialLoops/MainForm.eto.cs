@@ -93,7 +93,7 @@ namespace SerialLoops
         private void OpenProject_Executed(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new() { Directory = new Uri(CurrentConfig.ProjectsDirectory) };
-            openFileDialog.Filters.Add(new("Serial Loops Project", ".seproj"));
+            openFileDialog.Filters.Add(new("Serial Loops Project", $".{Project.PROJECT_FORMAT}"));
             if (openFileDialog.ShowDialog(this) == DialogResult.Ok)
             {
                 OpenProject = Project.OpenProject(openFileDialog.FileName, CurrentConfig, _log);

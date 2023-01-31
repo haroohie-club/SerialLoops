@@ -10,6 +10,52 @@ namespace SerialLoops.Lib
 {
     public static class IO
     {
+        private class IODirectory
+        {
+            public string Name { get; set; }
+            public IODirectory[] Subdirectories { get; set; }
+            public IOFile[] Files { get; set; }
+
+            public IODirectory(string name, IODirectory[] subdirectories, IOFile[] files)
+            {
+                Name = name;
+                Subdirectories = subdirectories;
+                Files = files;
+            }
+
+            public void Create(string basePath)
+            {
+                string dirPath = Path.Combine(basePath, Name);
+                Directory.CreateDirectory(dirPath);
+                foreach (IOFile file in Files)
+                {
+                    File.Copy(file.FilePath, Path.Combine(dirPath, file.Name));
+                }
+                foreach (IODirectory subdirectory in Subdirectories)
+                {
+                    subdirectory.Create(dirPath);
+                }
+            }
+        }
+
+        private class IOFile
+        {
+            public string FilePath { get; set; }
+            public string Name { get; set; }
+
+            public IOFile(string path)
+            {
+                FilePath = path;
+                Name = Path.GetFileName(FilePath);
+            }
+
+            public IOFile(string path, string name)
+            {
+                FilePath = path;
+                Name = name;
+            }
+        }
+
         public static void OpenRom(Project project, string romPath)
         {
             // Unpack the ROM, creating the two project directories
@@ -17,24 +63,36 @@ namespace SerialLoops.Lib
             NdsProjectFile.Create(project.Name, romPath, Path.Combine(project.IterativeDirectory, "rom"));
 
             // Create our structure for building the ROM
-            Directory.CreateDirectory(Path.Combine(project.BaseDirectory, "original", "archives"));
-            Directory.CreateDirectory(Path.Combine(project.BaseDirectory, "original", "overlay"));
-            Directory.CreateDirectory(Path.Combine(project.BaseDirectory, "original", "bgm"));
-            Directory.CreateDirectory(Path.Combine(project.BaseDirectory, "original", "vce"));
-            Directory.CreateDirectory(Path.Combine(project.IterativeDirectory, "original", "archives"));
-            Directory.CreateDirectory(Path.Combine(project.IterativeDirectory, "original", "overlay"));
-            Directory.CreateDirectory(Path.Combine(project.IterativeDirectory, "original", "bgm"));
-            Directory.CreateDirectory(Path.Combine(project.IterativeDirectory, "original", "vce"));
-            Directory.CreateDirectory(Path.Combine(project.BaseDirectory, "src", "source"));
-            Directory.CreateDirectory(Path.Combine(project.IterativeDirectory, "src", "source"));
-            Directory.CreateDirectory(Path.Combine(project.BaseDirectory, "src", "replSource"));
-            Directory.CreateDirectory(Path.Combine(project.IterativeDirectory, "src", "replSource"));
-            Directory.CreateDirectory(Path.Combine(project.BaseDirectory, "src", "overlays"));
-            Directory.CreateDirectory(Path.Combine(project.IterativeDirectory, "src", "overlays"));
+            IODirectory originalDirectoryTree = new("original", new IODirectory[]
+            {
+                new("archives", Array.Empty<IODirectory>(), Array.Empty<IOFile>()),
+                new("overlay", Array.Empty<IODirectory>(), Array.Empty<IOFile>()),
+                new("bgm", Array.Empty<IODirectory>(), Array.Empty<IOFile>()),
+                new("vce", Array.Empty<IODirectory>(), Array.Empty<IOFile>()),
+            }, Array.Empty<IOFile>());
+            IODirectory srcDirectoryTree = new("src", new IODirectory[]
+            {
+                new("source", Array.Empty<IODirectory>(), Array.Empty<IOFile>()),
+                new("replSource", Array.Empty<IODirectory>(), Array.Empty<IOFile>()),
+                new("overlays", Array.Empty<IODirectory>(), new IOFile[]
+                {
+                    new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "linker.x")),
+                    new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Makefile_overlay"), "Makefile"),
+                }),
+            },
+            new IOFile[]
+            {
+                new(Path.Combine(project.BaseDirectory, "rom", "arm9.bin")),
+                new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "linker.x")),
+                new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Makefile_main"), "Makefile"),
+            });
+            originalDirectoryTree.Create(project.BaseDirectory);
+            originalDirectoryTree.Create(project.IterativeDirectory);
+            srcDirectoryTree.Create(project.BaseDirectory);
+            srcDirectoryTree.Create(project.IterativeDirectory);
+
 
             // Copy out the files we need to build the ROM
-            File.Copy(Path.Combine(project.BaseDirectory, "rom", "arm9.bin"), Path.Combine(project.BaseDirectory, "src", "arm9.bin"));
-            File.Copy(Path.Combine(project.IterativeDirectory, "rom", "arm9.bin"), Path.Combine(project.IterativeDirectory, "src", "arm9.bin"));
             CopyFiles(Path.Combine(project.BaseDirectory, "rom", "data"), Path.Combine(project.BaseDirectory, "original", "archives"), "*.bin");
             CopyFiles(Path.Combine(project.IterativeDirectory, "rom", "data"), Path.Combine(project.IterativeDirectory, "original", "archives"), "*.bin");
             CopyFiles(Path.Combine(project.BaseDirectory, "rom", "overlay"), Path.Combine(project.BaseDirectory, "original", "overlay"));
@@ -48,16 +106,6 @@ namespace SerialLoops.Lib
                 CopyFiles(Path.Combine(project.BaseDirectory, "rom", "data", "vce"), Path.Combine(project.BaseDirectory, "original", "vce"));
                 CopyFiles(Path.Combine(project.IterativeDirectory, "rom", "data", "vce"), Path.Combine(project.IterativeDirectory, "original", "vce"));
             }
-
-            // Copy out static files used during build
-            File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "linker.x"), Path.Combine(project.BaseDirectory, "src", "linker.x"));
-            File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "linker.x"), Path.Combine(project.IterativeDirectory, "src", "linker.x"));
-            File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "linker.x"), Path.Combine(project.BaseDirectory, "src", "overlays", "linker.x"));
-            File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "linker.x"), Path.Combine(project.IterativeDirectory, "src", "overlays", "linker.x"));
-            File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Makefile_main"), Path.Combine(project.BaseDirectory, "src", "Makefile"));
-            File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Makefile_main"), Path.Combine(project.IterativeDirectory, "src", "Makefile"));
-            File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Makefile_overlay"), Path.Combine(project.BaseDirectory, "src", "overlays", "Makefile"));
-            File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Makefile_overlay"), Path.Combine(project.IterativeDirectory, "src", "overlays", "Makefile"));
         }
 
         public static void FetchAssets(Project project, Uri assetsRepoZip, Uri stringsRepoZip, ILogger log)
