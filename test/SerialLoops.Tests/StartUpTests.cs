@@ -1,6 +1,6 @@
+using HaruhiChokuretsuLib.Util;
 using NUnit.Framework;
 using SerialLoops.Lib;
-using SerialLoops.Lib.Logging;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
