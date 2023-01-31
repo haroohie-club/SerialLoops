@@ -39,11 +39,11 @@ namespace SerialLoops.Lib
             //todo Return list of items (representing editable project parts, like maps, etc)
             List<ItemDescription> items = new()
             {
-                new ItemDescription("map_1", ItemDescription.ItemType.Map),
-                new ItemDescription("map_2", ItemDescription.ItemType.Map),
-                new ItemDescription("dialogue_1", ItemDescription.ItemType.Dialogue),
-                new ItemDescription("dialogue_2", ItemDescription.ItemType.Dialogue),
-                new ItemDescription("dialogue_3", ItemDescription.ItemType.Dialogue)
+                new ("map_1", ItemDescription.ItemType.Map),
+                new ("map_2", ItemDescription.ItemType.Map),
+                new ("dialogue_1", ItemDescription.ItemType.Dialogue),
+                new ("dialogue_2", ItemDescription.ItemType.Dialogue),
+                new ("dialogue_3", ItemDescription.ItemType.Dialogue)
             };
             return items;
         }
