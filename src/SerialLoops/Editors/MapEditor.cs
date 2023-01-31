@@ -11,11 +11,11 @@ namespace SerialLoops.Editors
     public class MapEditor : Editor
     {
 
-        private MapItem _item;
+        private MapItem _map;
 
         public MapEditor(MapItem map) : base(map)
         {
-            _item = map;
+            _map = map;
         }
 
         public override Panel GetEditorPanel()

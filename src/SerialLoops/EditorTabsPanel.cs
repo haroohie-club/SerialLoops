@@ -30,8 +30,7 @@ namespace SerialLoops
             Tabs = new()
             {
                 AllowReordering = true,
-                Enabled = true,
-                BackgroundColor = new Color(1, 1, 1)
+                Enabled = true
             };
             Content = new StackLayout
             {
