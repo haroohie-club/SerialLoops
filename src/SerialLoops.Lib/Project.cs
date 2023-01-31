@@ -39,18 +39,5 @@ namespace SerialLoops.Lib
             Project project = JsonSerializer.Deserialize<Project>(projFile);
             return project;
         }
-
-        public static Dictionary<string, string> AvailableLanguages = new()
-        {
-            { "English", "en" },
-            { "Japanese", "ja" },
-            { "Russian", "ru" },
-            { "Spanish", "es" },
-            { "Portuguese (Brazilian)", "pt-BR" },
-            { "Italian", "it" },
-            { "French", "fr" },
-            { "German", "de" },
-            { "Greek", "el" },
-        };
     }
 }

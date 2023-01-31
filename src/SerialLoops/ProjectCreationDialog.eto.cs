@@ -3,6 +3,7 @@ using Eto.Forms;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Logging;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SerialLoops
@@ -27,7 +28,7 @@ namespace SerialLoops
 
             _nameBox = new();
 			_languageDropDown = new();
-			_languageDropDown.Items.AddRange(Project.AvailableLanguages.Select(a => new ListItem() { Text = a.Key, Key = a.Value }));
+			_languageDropDown.Items.AddRange(AvailableLanguages.Select(a => new ListItem() { Text = a.Key, Key = a.Value }));
 			_romPath = new() { Text = NO_ROM_TEXT };
 			Command pickRomCommand = new();
             pickRomCommand.Executed += PickRomCommand_Executed;
@@ -109,9 +110,21 @@ namespace SerialLoops
             {
                 NewProject = new(_nameBox.Text, _languageDropDown.Items[_languageDropDown.SelectedIndex].Key, Config, Log);
                 IO.OpenRom(NewProject, _romPath.Text);
-				// if (NewProject.)
                 Close();
             }
         }
+
+        public static Dictionary<string, string> AvailableLanguages = new()
+        {
+            { "English", "en" },
+            { "Japanese", "ja" },
+            { "Russian", "ru" },
+            { "Spanish", "es" },
+            { "Portuguese (Brazilian)", "pt-BR" },
+            { "Italian", "it" },
+            { "French", "fr" },
+            { "German", "de" },
+            { "Greek", "el" },
+        };
     }
 }
