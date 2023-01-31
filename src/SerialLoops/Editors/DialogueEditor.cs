@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SerialLoops.Editors
 {
-    internal class DialogueEditor : Editor
+    public class DialogueEditor : Editor
     {
         private DialogueItem _item;
 

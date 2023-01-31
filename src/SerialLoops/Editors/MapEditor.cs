@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SerialLoops.Editors
 {
-    internal class MapEditor : Editor
+    public class MapEditor : Editor
     {
 
         private MapItem _item;

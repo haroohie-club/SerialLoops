@@ -3,7 +3,7 @@ using SerialLoops.Lib.Items;
 
 namespace SerialLoops.Editors
 {
-    internal abstract class Editor : DocumentPage
+    public abstract class Editor : DocumentPage
     {
 
         public readonly ItemDescription Description;

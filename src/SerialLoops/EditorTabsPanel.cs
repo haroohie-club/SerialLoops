@@ -7,7 +7,7 @@ using System;
 
 namespace SerialLoops
 {
-    internal class EditorTabsPanel : Panel
+    public class EditorTabsPanel : Panel
     {
 
         public static readonly Size EDITOR_BASE_SIZE = new(500, 420);

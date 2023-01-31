@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace SerialLoops
 {
-    internal class ItemExplorerPanel : Scrollable
+    public class ItemExplorerPanel : Scrollable
     {
 
         public static readonly Size ITEM_EXPLORER_BASE_SIZE = new(200, 420);
