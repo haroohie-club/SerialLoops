@@ -4,6 +4,7 @@ using HaruhiChokuretsuLib.Archive.Graphics;
 using HaruhiChokuretsuLib.Util;
 using NUnit.Framework;
 using SerialLoops.Lib.Items;
+using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -49,7 +50,8 @@ namespace SerialLoops.Tests
             grp1.Initialize(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "inputs", "graphics", "KBG00_128.bin")), 0, _log);
             grp2.Initialize(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "inputs", "graphics", "KBG00.bin")), 0, _log);
             BackgroundItem item = new($"BG_{grp2.Name}") { Graphic1 = grp1, Graphic2 = grp2, BackgroundType = BgType.KINETIC_SCREEN };
-            item.GetBackground();
+            SKBitmap bitmap = item.GetBackground();
+            bitmap.Encode(SKEncodedImageFormat.Png, 1); // Make sure we can encode, something we have to do to display the image
         }
     }
 }
