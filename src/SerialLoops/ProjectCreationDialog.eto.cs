@@ -116,7 +116,8 @@ namespace SerialLoops
                 {
                     if (MessageBox.Show("Would you like to download assets/strings from GitHub?", MessageBoxButtons.YesNo, MessageBoxType.Question, MessageBoxDefaultButton.Yes) == DialogResult.Yes)
                     {
-                        IO.FetchAssets(NewProject, new(ASSETS_URL), new(STRINGS_URL), Log);
+						MessageBox.Show("Assets & strings are not currently publically available. Please join the Haroohie Translation Club Discord server to request an asset bundle.");
+                        // IO.FetchAssets(NewProject, new(ASSETS_URL), new(STRINGS_URL), Log);
                     }
                     IO.SetUpLocalizedHacks(NewProject);
                 }

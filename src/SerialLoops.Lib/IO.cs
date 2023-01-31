@@ -145,7 +145,7 @@ namespace SerialLoops.Lib
 
         public static void CopyFiles(string sourceDirectory, string destinationDirectory, string filter = "*")
         {
-            foreach (string file in Directory.GetFiles(sourceDirectory, filter, SearchOption.AllDirectories))
+            foreach (string file in Directory.GetFiles(sourceDirectory, filter))
             {
                 File.Copy(file, Path.Combine(destinationDirectory, Path.GetFileName(file)));
             }
