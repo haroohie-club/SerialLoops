@@ -19,7 +19,7 @@ namespace SerialLoops.Lib.Items
         }
 
         // Load an item from an ItemDescription
-        public Item Load()
+        public virtual Item Load()
         {
             throw new NotImplementedException();
         }

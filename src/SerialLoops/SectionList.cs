@@ -50,10 +50,10 @@ namespace SerialLoops
         public SectionTreeItem(Section section)
         {
             this.Section = section;
-            this.Expanded = true;
+            this.Expanded = false;
             foreach (var child in section)
             {
-                var temp = new SectionTreeItem(child);
+                SectionTreeItem temp = new(child);
                 temp.Parent = this;
                 this.Add(temp); // recursive
             }

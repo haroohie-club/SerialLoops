@@ -56,7 +56,7 @@ namespace SerialLoops
             // If a tab page with the name and type exists, switch to it
             foreach (DocumentPage page in Tabs.Pages)
             {
-                if (page.Text.Equals(item.Name))
+                if (page.Text == item.Name)
                 {
                     Tabs.SelectedPage = page;
                     return;
