@@ -74,6 +74,13 @@ namespace SerialLoops.Lib
             {
                 File.WriteAllBytes(assetsZipPath, await client.GetByteArrayAsync(assetsRepoZip));
             }
+            catch (HttpRequestException exc)
+            {
+                if (exc.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    log.LogWarning($"Failed to download assets zip. Please join the Haroohie Translation Club Discord and request an assets bundle there.");
+                }
+            }
             catch (Exception exc)
             {
                 log.LogError($"Exception occurred during assets zip fetch.\n{exc.Message}\n\n{exc.StackTrace}");
@@ -81,6 +88,13 @@ namespace SerialLoops.Lib
             try
             {
                 File.WriteAllBytes(stringsZipPath, await client.GetByteArrayAsync(stringsRepoZip));
+            }
+            catch (HttpRequestException exc)
+            {
+                if (exc.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    log.LogWarning($"Failed to download assets zip. Please join the Haroohie Translation Club Discord and request an assets bundle there.");
+                }
             }
             catch (Exception exc)
             {

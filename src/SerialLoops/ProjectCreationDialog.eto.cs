@@ -30,7 +30,7 @@ namespace SerialLoops
 
             _nameBox = new();
 			_languageDropDown = new();
-			_languageDropDown.Items.AddRange(AvailableLanguages.Select(a => new ListItem() { Text = a.Key, Key = a.Value }));
+			_languageDropDown.Items.AddRange(_availableLanguages.Select(a => new ListItem() { Text = a.Key, Key = a.Value }));
 			_romPath = new() { Text = NO_ROM_TEXT };
 			Command pickRomCommand = new();
             pickRomCommand.Executed += PickRomCommand_Executed;
@@ -124,7 +124,7 @@ namespace SerialLoops
             }
         }
 
-        public static Dictionary<string, string> AvailableLanguages = new()
+        private readonly static Dictionary<string, string> _availableLanguages = new()
         {
             { "English", "en" },
             { "Japanese", "ja" },
