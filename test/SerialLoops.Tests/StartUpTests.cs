@@ -20,7 +20,7 @@ namespace SerialLoops.Tests
         private async Task<Project> DownloadTestRom()
         {
             Config config = Config.LoadConfig(_log);
-            Project project = new("Test", config, _log);
+            Project project = new("Test", "en", config, _log);
 
             string romPath = Path.Combine(project.MainDirectory, "bcsds.nds");
             HttpClient client = new();
@@ -58,7 +58,7 @@ namespace SerialLoops.Tests
         public void ProjectCreationTest()
         {
             Config config = Config.LoadConfig(_log);
-            Project project = new("Test", config, _log);
+            Project project = new("Test", "en", config, _log);
 
             Assert.Multiple(() =>
             {

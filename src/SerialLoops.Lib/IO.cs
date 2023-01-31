@@ -12,9 +12,11 @@ namespace SerialLoops.Lib
     {
         public static void OpenRom(Project project, string romPath)
         {
+            // Unpack the ROM, creating the two project directories
             NdsProjectFile.Create(project.Name, romPath, Path.Combine(project.BaseDirectory, "rom"));
             NdsProjectFile.Create(project.Name, romPath, Path.Combine(project.IterativeDirectory, "rom"));
 
+            // Create our structure for building the ROM
             Directory.CreateDirectory(Path.Combine(project.BaseDirectory, "original", "archives"));
             Directory.CreateDirectory(Path.Combine(project.BaseDirectory, "original", "overlay"));
             Directory.CreateDirectory(Path.Combine(project.IterativeDirectory, "original", "archives"));
@@ -26,12 +28,14 @@ namespace SerialLoops.Lib
             Directory.CreateDirectory(Path.Combine(project.BaseDirectory, "src", "overlays"));
             Directory.CreateDirectory(Path.Combine(project.IterativeDirectory, "src", "overlays"));
 
+            // Copy out the files we need to build the ROM
             File.Copy(Path.Combine(project.BaseDirectory, "rom", "arm9.bin"), Path.Combine(project.BaseDirectory, "src", "arm9.bin"));
             File.Copy(Path.Combine(project.IterativeDirectory, "rom", "arm9.bin"), Path.Combine(project.IterativeDirectory, "src", "arm9.bin"));
             CopyFiles(Path.Combine(project.BaseDirectory, "rom", "data"), Path.Combine(project.BaseDirectory, "original", "archives"), "*.bin");
             CopyFiles(Path.Combine(project.IterativeDirectory, "rom", "data"), Path.Combine(project.IterativeDirectory, "original", "archives"), "*.bin");
             CopyFiles(Path.Combine(project.BaseDirectory, "rom", "overlay"), Path.Combine(project.BaseDirectory, "original", "overlays"));
             CopyFiles(Path.Combine(project.IterativeDirectory, "rom", "overlay"), Path.Combine(project.IterativeDirectory, "original", "overlays"));
+
             // We conditionalize these so we can test on a non-copyrighted ROM; this should always be true with real data
             if (Directory.Exists(Path.Combine(project.BaseDirectory, "rom", "data", "bgm")))
             {
@@ -40,6 +44,8 @@ namespace SerialLoops.Lib
                 CopyFiles(Path.Combine(project.BaseDirectory, "rom", "data", "vce"), Path.Combine(project.BaseDirectory, "original", "vce"));
                 CopyFiles(Path.Combine(project.IterativeDirectory, "rom", "data", "vce"), Path.Combine(project.IterativeDirectory, "original", "vce"));
             }
+
+            // Copy out static files used during build
             File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "linker.x"), Path.Combine(project.BaseDirectory, "src", "linker.x"));
             File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "linker.x"), Path.Combine(project.IterativeDirectory, "src", "linker.x"));
             File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "linker.x"), Path.Combine(project.BaseDirectory, "src", "overlays", "linker.x"));
