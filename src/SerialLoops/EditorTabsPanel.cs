@@ -4,13 +4,6 @@ using SerialLoops.Editors;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace SerialLoops
 {
@@ -19,7 +12,7 @@ namespace SerialLoops
 
         public static readonly Size EDITOR_BASE_SIZE = new(500, 420);
 
-        public TabControl Tabs { get; private set; }
+        public DocumentControl Tabs { get; private set; }
         
         private readonly Project _project;
 
@@ -34,7 +27,12 @@ namespace SerialLoops
             MinimumSize = EDITOR_BASE_SIZE;
             Padding = 0;
 
-            Tabs = new();
+            Tabs = new()
+            {
+                AllowReordering = true,
+                Enabled = true,
+                BackgroundColor = new Color(1, 1, 1)
+            };
             Content = new StackLayout
             {
                 Orientation = Orientation.Vertical,
@@ -56,7 +54,7 @@ namespace SerialLoops
         internal void OpenTab(ItemDescription item)
         {
             // If a tab page with the name and type exists, switch to it
-            foreach (TabPage page in Tabs.Pages)
+            foreach (DocumentPage page in Tabs.Pages)
             {
                 if (page.Text.Equals(item.Name))
                 {
@@ -66,14 +64,22 @@ namespace SerialLoops
             }
 
             // Open a new editor for the item -- This is where the item can be loaded from the project files
+            DocumentPage newPage = CreateTab(item);
+            Tabs.Pages.Add(newPage);
+            Tabs.SelectedPage = newPage;
+
+        }
+
+        internal static DocumentPage CreateTab(ItemDescription item)
+        {
             switch (item.Type)
             {
                 case ItemDescription.ItemType.Map:
-                    Tabs.Pages.Add(new MapEditor(new MapItem(item.Name)));
-                    break;
+                    return (new MapEditor(new MapItem(item.Name)));
                 case ItemDescription.ItemType.Dialogue:
-                    Tabs.Pages.Add(new DialogueEditor(new DialogueItem(item.Name)));
-                    break;
+                    return new DialogueEditor(new DialogueItem(item.Name));
+                default:
+                    throw new ArgumentException("Invalid item type");
             }
         }
     }

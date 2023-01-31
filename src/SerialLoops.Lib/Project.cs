@@ -48,6 +48,18 @@ namespace SerialLoops.Lib
             return items;
         }
 
+        public ItemDescription? FindItem(string name)
+        {
+            foreach (ItemDescription item in GetItems())
+            {
+                if (item.Name == name)
+                {
+                    return item;
+                }
+            }
+            return null;
+        }
+
         public static Project OpenProject(string name, Config config, ILogger log)
         {
             Project project = new(name, config, log, createDirectories: false);

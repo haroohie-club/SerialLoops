@@ -1,10 +1,9 @@
 ﻿using Eto.Forms;
-using Eto.Drawing;
 using SerialLoops.Lib.Items;
 
 namespace SerialLoops.Editors
 {
-    internal abstract class Editor : TabPage
+    internal abstract class Editor : DocumentPage
     {
 
         public readonly ItemDescription Description;
