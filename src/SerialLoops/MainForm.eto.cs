@@ -1,7 +1,6 @@
 using Eto.Forms;
 using SerialLoops.Lib;
 using System;
-using System.IO;
 
 namespace SerialLoops
 {
@@ -87,10 +86,11 @@ namespace SerialLoops
 
         private void OpenProject_Executed(object sender, EventArgs e)
         {
-            SelectFolderDialog selectFolderDialog = new() { Directory = CurrentConfig.ProjectsDirectory };
-            if (selectFolderDialog.ShowDialog(this) == DialogResult.Ok)
+            OpenFileDialog openFileDialog = new() { Directory = new Uri(CurrentConfig.ProjectsDirectory) };
+            openFileDialog.Filters.Add(new("Serial Loops Project", ".seproj"));
+            if (openFileDialog.ShowDialog(this) == DialogResult.Ok)
             {
-                OpenProject = Project.OpenProject(Path.GetFileNameWithoutExtension(selectFolderDialog.Directory), CurrentConfig, _log);
+                OpenProject = Project.OpenProject(openFileDialog.FileName, CurrentConfig, _log);
                 RenameWindow(OpenProject.Name);
             }
         }
