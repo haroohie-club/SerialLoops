@@ -32,7 +32,7 @@ namespace SerialLoops
 
             // About
             Command aboutCommand = new() { MenuText = "About..." };
-            AboutDialog aboutDialog = new() { ProgramName = "Serial Loops", Developers = new string[] { "Jonko", "William" }, Copyright = "© Haroohie Translation Club, 2023", Website = new Uri("https://haroohie.club")  };
+            AboutDialog aboutDialog = new() { ProgramName = "Serial Loops", Developers = new string[] { "Jonko", "William" }, Copyright = "Â© Haroohie Translation Club, 2023", Website = new Uri("https://haroohie.club")  };
             aboutCommand.Executed += (sender, e) => aboutDialog.ShowDialog(this);
 
             // create menu
@@ -57,10 +57,10 @@ namespace SerialLoops
 
         private void OpenProjectView(Project project)
         {
-            EditorTabsPanel tabs = new EditorTabsPanel(project);
-            ItemExplorerPanel items = new ItemExplorerPanel(project, tabs);
+            EditorTabsPanel tabs = new(project);
+            ItemExplorerPanel items = new(project, tabs);
             Title = $"{BASE_TITLE} - {project.Name}";
-            Content = new StackLayout()
+            Content = new StackLayout
             {
                 Items =
                 {

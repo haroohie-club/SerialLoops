@@ -6,7 +6,7 @@ namespace SerialLoops.Editors
     public abstract class Editor : DocumentPage
     {
 
-        public readonly ItemDescription Description;
+        public readonly ItemDescription Description { get; private set; }
 
         public Editor(ItemDescription description)
         {
