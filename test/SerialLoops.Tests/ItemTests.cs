@@ -1,5 +1,6 @@
 ﻿using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
+using HaruhiChokuretsuLib.Archive.Graphics;
 using HaruhiChokuretsuLib.Util;
 using NUnit.Framework;
 using SerialLoops.Lib.Items;
@@ -36,6 +37,19 @@ namespace SerialLoops.Tests
             EventItem eventItem = new(evt);
 
             Assert.That(evt.Name[0..^1], Is.EqualTo(eventItem.Name));
+        }
+
+        [Test]
+        public void BackgroundItemCreationTest()
+        {
+            GraphicsFile grp1 = new();
+            GraphicsFile grp2 = new();
+            grp1.Name = "KBG00_128DNX";
+            grp2.Name = "KBG00BNS";
+            grp1.Initialize(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "inputs", "graphics", "KBG00_128.bin")), 0, _log);
+            grp2.Initialize(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "inputs", "graphics", "KBG00.bin")), 0, _log);
+            BackgroundItem item = new($"BG_{grp2.Name}") { Graphic1 = grp1, Graphic2 = grp2, BackgroundType = BgType.KINETIC_SCREEN };
+            item.GetBackground();
         }
     }
 }

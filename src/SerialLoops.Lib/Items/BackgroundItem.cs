@@ -55,7 +55,7 @@ namespace SerialLoops.Lib.Items
 
                 return bitmap;
             }
-            else if (BackgroundType == BgType.KINETIC_VECTOR)
+            else if (BackgroundType == BgType.KINETIC_SCREEN)
             {
                 return Graphic2.GetScreenImage(Graphic1);
             }

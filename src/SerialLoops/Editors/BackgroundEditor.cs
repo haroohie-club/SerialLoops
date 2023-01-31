@@ -22,7 +22,7 @@ namespace SerialLoops.Editors
                 Orientation = Orientation.Vertical,
                 Items =
                 {
-                    new ImageView() { Image = new SKImage(((BackgroundItem)Description).GetBackground()) },
+                    new ImageView() { Image = new SKGuiImage(((BackgroundItem)Description).GetBackground()) },
                 }
             };
         }
