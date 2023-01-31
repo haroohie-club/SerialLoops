@@ -19,14 +19,6 @@ namespace SerialLoops
             MinimumSize = new(769, 420);
             Padding = 10;
 
-            Content = new StackLayout
-            {
-                Items =
-                {
-                    "Hello World!",
-					// add more controls here
-				}
-            };
 
             // Commands
             // File
@@ -38,7 +30,7 @@ namespace SerialLoops
 
             // About
             Command aboutCommand = new() { MenuText = "About..." };
-            AboutDialog aboutDialog = new() { ProgramName = "Serial Loops", Developers = new string[] { "Jonko", "William" }, Copyright = "© Haroohie Translation Club, 2023", Website = new Uri("https://haroohie.club")  };
+            AboutDialog aboutDialog = new() { ProgramName = "Serial Loops", Developers = new string[] { "Jonko", "William" }, Copyright = "Â© Haroohie Translation Club, 2023", Website = new Uri("https://haroohie.club")  };
             aboutCommand.Executed += (sender, e) => aboutDialog.ShowDialog(this);
 
             // create menu
@@ -61,9 +53,23 @@ namespace SerialLoops
             };
         }
 
-        private void RenameWindow(string subtitle)
+        private void OpenProjectView(Project project)
         {
-            Title = $"{BASE_TITLE} - {subtitle}";
+            EditorTabsPanel tabs = new(project);
+            ItemExplorerPanel items = new(project, tabs);
+            Title = $"{BASE_TITLE} - {project.Name}";
+            Content = new StackLayout
+            {
+                Items =
+                {
+                    new Splitter
+                    {
+                        Orientation = Orientation.Horizontal,
+                        Panel1 = items,
+                        Panel2 = tabs
+                    }
+                }
+            };
         }
 
         protected override void OnLoad(EventArgs e)
@@ -80,7 +86,7 @@ namespace SerialLoops
             if (projectCreationDialog.NewProject is not null)
             {
                 OpenProject = projectCreationDialog.NewProject;
-                RenameWindow(OpenProject.Name);
+                OpenProjectView(OpenProject);
             }
         }
 
@@ -91,7 +97,7 @@ namespace SerialLoops
             if (openFileDialog.ShowDialog(this) == DialogResult.Ok)
             {
                 OpenProject = Project.OpenProject(openFileDialog.FileName, CurrentConfig, _log);
-                RenameWindow(OpenProject.Name);
+                OpenProjectView(OpenProject);
             }
         }
     }
