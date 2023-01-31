@@ -19,6 +19,8 @@ namespace SerialLoops
 		private Label _romPath;
 
 		private const string NO_ROM_TEXT = "None Selected";
+		private const string ASSETS_URL = "https://github.com/haroohie-club/ChokuretsuTranslationAssets/archive/refs/heads/main.zip";
+		private const string STRINGS_URL = "https://github.com/haroohie-club/ChokuretsuTranslationStrings/archive/refs/heads/main.zip";
 
         void InitializeComponent()
 		{
@@ -98,18 +100,26 @@ namespace SerialLoops
 
         private void CreateCommand_Executed(object sender, EventArgs e)
         {
-			if (_romPath.Text == NO_ROM_TEXT)
-			{
-				MessageBox.Show("Please select a ROM before creating the project.");
-			}
-			else if (string.IsNullOrWhiteSpace(_nameBox.Text))
-			{
-				MessageBox.Show("Please choose a project name before creating the project.");
-			}
-			else
+            if (_romPath.Text == NO_ROM_TEXT)
+            {
+                MessageBox.Show("Please select a ROM before creating the project.");
+            }
+            else if (string.IsNullOrWhiteSpace(_nameBox.Text))
+            {
+                MessageBox.Show("Please choose a project name before creating the project.");
+            }
+            else
             {
                 NewProject = new(_nameBox.Text, _languageDropDown.Items[_languageDropDown.SelectedIndex].Key, Config, Log);
                 IO.OpenRom(NewProject, _romPath.Text);
+                if (NewProject.LangCode != "ja")
+                {
+                    if (MessageBox.Show("Would you like to download assets/strings from GitHub?", MessageBoxButtons.YesNo, MessageBoxType.Question, MessageBoxDefaultButton.Yes) == DialogResult.Yes)
+                    {
+                        IO.FetchAssets(NewProject, new(ASSETS_URL), new(STRINGS_URL), Log);
+                    }
+                    IO.SetUpLocalizedHacks(NewProject);
+                }
                 Close();
             }
         }

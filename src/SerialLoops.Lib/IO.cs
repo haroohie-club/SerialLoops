@@ -19,8 +19,12 @@ namespace SerialLoops.Lib
             // Create our structure for building the ROM
             Directory.CreateDirectory(Path.Combine(project.BaseDirectory, "original", "archives"));
             Directory.CreateDirectory(Path.Combine(project.BaseDirectory, "original", "overlay"));
+            Directory.CreateDirectory(Path.Combine(project.BaseDirectory, "original", "bgm"));
+            Directory.CreateDirectory(Path.Combine(project.BaseDirectory, "original", "vce"));
             Directory.CreateDirectory(Path.Combine(project.IterativeDirectory, "original", "archives"));
             Directory.CreateDirectory(Path.Combine(project.IterativeDirectory, "original", "overlay"));
+            Directory.CreateDirectory(Path.Combine(project.IterativeDirectory, "original", "bgm"));
+            Directory.CreateDirectory(Path.Combine(project.IterativeDirectory, "original", "vce"));
             Directory.CreateDirectory(Path.Combine(project.BaseDirectory, "src", "source"));
             Directory.CreateDirectory(Path.Combine(project.IterativeDirectory, "src", "source"));
             Directory.CreateDirectory(Path.Combine(project.BaseDirectory, "src", "replSource"));
@@ -33,8 +37,8 @@ namespace SerialLoops.Lib
             File.Copy(Path.Combine(project.IterativeDirectory, "rom", "arm9.bin"), Path.Combine(project.IterativeDirectory, "src", "arm9.bin"));
             CopyFiles(Path.Combine(project.BaseDirectory, "rom", "data"), Path.Combine(project.BaseDirectory, "original", "archives"), "*.bin");
             CopyFiles(Path.Combine(project.IterativeDirectory, "rom", "data"), Path.Combine(project.IterativeDirectory, "original", "archives"), "*.bin");
-            CopyFiles(Path.Combine(project.BaseDirectory, "rom", "overlay"), Path.Combine(project.BaseDirectory, "original", "overlays"));
-            CopyFiles(Path.Combine(project.IterativeDirectory, "rom", "overlay"), Path.Combine(project.IterativeDirectory, "original", "overlays"));
+            CopyFiles(Path.Combine(project.BaseDirectory, "rom", "overlay"), Path.Combine(project.BaseDirectory, "original", "overlay"));
+            CopyFiles(Path.Combine(project.IterativeDirectory, "rom", "overlay"), Path.Combine(project.IterativeDirectory, "original", "overlay"));
 
             // We conditionalize these so we can test on a non-copyrighted ROM; this should always be true with real data
             if (Directory.Exists(Path.Combine(project.BaseDirectory, "rom", "data", "bgm")))
@@ -56,7 +60,12 @@ namespace SerialLoops.Lib
             File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Makefile_overlay"), Path.Combine(project.IterativeDirectory, "src", "overlays", "Makefile"));
         }
 
-        public static async Task FetchAssets(Project project, Uri assetsRepoZip, Uri stringsRepoZip, ILogger log)
+        public static void FetchAssets(Project project, Uri assetsRepoZip, Uri stringsRepoZip, ILogger log)
+        {
+            FetchAssetsAsync(project, assetsRepoZip, stringsRepoZip, log).GetAwaiter().GetResult();
+        }
+
+        public static async Task FetchAssetsAsync(Project project, Uri assetsRepoZip, Uri stringsRepoZip, ILogger log)
         {
             using HttpClient client = new();
             string assetsZipPath = Path.Combine(project.MainDirectory, "assets.zip");
@@ -110,8 +119,6 @@ namespace SerialLoops.Lib
             {
                 log.LogError($"Exception occurred during deleting zip files.\n{exc.Message}\n\n{exc.StackTrace}");
             }
-
-            SetUpLocalizedHacks(project);
         }
 
         public static void SetUpLocalizedHacks(Project project)
@@ -126,7 +133,7 @@ namespace SerialLoops.Lib
         {
             foreach (string file in Directory.GetFiles(sourceDirectory, filter, SearchOption.AllDirectories))
             {
-                File.Copy(file, Path.Combine(destinationDirectory, file));
+                File.Copy(file, Path.Combine(destinationDirectory, Path.GetFileName(file)));
             }
         }
 
