@@ -1,0 +1,37 @@
+trigger:
+- main
+- release/*
+pr:
+- none
+
+jobs:
+- job:
+  strategy:
+    matrix:
+      Linux:
+        imageName: 'ubuntu-latest'
+      macOS:
+        imageName: 'macOS-latest'
+      Windows:
+        imageName: 'windows-latest'
+  displayName: Build & Publish
+  pool:
+    vmImage: $(imageName)
+  steps:
+  - checkout: self
+    clean: true
+    
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: 'publish'
+      projects: $(Build.SourcesDirectory)/src/SerialLoops/SerialLoops.csproj
+      arguments: '-c Release -o $(Build.ArtifactStagingDirectory)'
+      publishWebProjects: false
+    displayName: Build & Publish Serial Loops
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+      ArtifactName: '$(imageName)'
+      publishLocation: 'Container'
+    displayName: Publish build artifacts
