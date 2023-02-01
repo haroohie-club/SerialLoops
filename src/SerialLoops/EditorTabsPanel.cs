@@ -6,7 +6,6 @@ using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using System;
 using System.Linq;
-using System.Reflection;
 
 namespace SerialLoops
 {
@@ -48,7 +47,7 @@ namespace SerialLoops
 
         public static Icon GetItemIcon(ItemDescription.ItemType type)
         {
-            return Icon.FromResource($"SerialLoops.Icons.{type}.png", Assembly.GetExecutingAssembly()).WithSize(16, 16);
+            return Icon.FromResource($"SerialLoops.Icons.{type}.png").WithSize(16, 16);
         }
 
         internal void OpenTab(ItemDescription item, ILogger log)
@@ -67,7 +66,6 @@ namespace SerialLoops
             DocumentPage newPage = CreateTab(item, _project, log);
             Tabs.Pages.Add(newPage);
             Tabs.SelectedPage = newPage;
-
         }
 
         internal static DocumentPage CreateTab(ItemDescription item, Project project, ILogger log)
