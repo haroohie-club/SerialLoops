@@ -24,99 +24,98 @@ namespace SerialLoops
         private const string STRINGS_URL = "https://github.com/haroohie-club/ChokuretsuTranslationStrings/archive/refs/heads/main.zip";
 
         void InitializeComponent()
-		{
-			Title = "Create New Project";
-			MinimumSize = new Size(400, 275);
-			Padding = 10;
+        {
+            Title = "Create New Project";
+            MinimumSize = new Size(400, 275);
+            Padding = 10;
 
-			_nameBox = new()
-			{
-				PlaceholderText = "haroohie",
-				Size = new Size(150, 25)
-			};
-			_languageDropDown = new();
-			_languageDropDown.Items.AddRange(_availableLanguages.Select(a => new ListItem() { Text = a.Key, Key = a.Value }));
-			_languageDropDown.SelectedIndex = 0;
-			_romPath = new() { Text = NO_ROM_TEXT };
-			Command pickRomCommand = new();
+            _nameBox = new()
+            {
+                PlaceholderText = "haroohie",
+                Size = new Size(150, 25)
+            };
+            _languageDropDown = new();
+            _languageDropDown.Items.AddRange(_availableLanguages.Select(a => new ListItem() { Text = a.Key, Key = a.Value }));
+            _languageDropDown.SelectedIndex = 0;
+            _romPath = new() { Text = NO_ROM_TEXT };
+            Command pickRomCommand = new();
             pickRomCommand.Executed += PickRomCommand_Executed;
             Command createCommand = new();
             createCommand.Executed += CreateCommand_Executed;
             Command cancelCommand = new();
             cancelCommand.Executed += CancelCommand_Executed;
 
-			Content = new StackLayout
-			{
-				Spacing = 10,
-				HorizontalContentAlignment = HorizontalAlignment.Center,
-				Items =
-				{
-					new GroupBox
-					{
-						Text = "Project Options",
-						Padding = 5,
-						MinimumSize = new Size(300, 100),
-						Content = new StackLayout
-						{
-							Spacing = 10,
-							VerticalContentAlignment = VerticalAlignment.Center,
-							Items = { new StackLayout
-								{
-									Orientation = Orientation.Horizontal,
-									HorizontalContentAlignment = HorizontalAlignment.Stretch,
-									Spacing = 10,
-									Items =
-									{
-										"Name",
-										_nameBox,
-									}
-								},
-								new StackLayout
-								{
-									Orientation = Orientation.Horizontal,
-									HorizontalContentAlignment = HorizontalAlignment.Stretch,
-									Spacing = 10,
-									Items =
-									{
-										"Language",
-										_languageDropDown,
-									}
-								}
-							}
-						}
-					},
-					
-					new GroupBox
-					{
-						Text = "Select ROM",
-						Padding = 5,
-						MinimumSize = new Size(300, 80),
-						Content = new StackLayout
-						{
-							Orientation = Orientation.Horizontal,
-							Spacing = 10,
-							VerticalContentAlignment = VerticalAlignment.Center,
-							Items =
-							{
-								new Button { Text = "Open ROM", Command = pickRomCommand },
-								_romPath,
-							}
-						}
-					},
-					new StackLayout
-					{
-						Orientation = Orientation.Horizontal,
-						Padding = 5,
-						Spacing = 10,
-						Items =
-						{
-							new Button { Text = "Create", Command = createCommand },
-							new Button { Text = "Cancel", Command = cancelCommand }
-						} 
-					},
-
-				}
-			};
+            Content = new StackLayout
+            {
+                Spacing = 10,
+                HorizontalContentAlignment = HorizontalAlignment.Center,
+                Items =
+                {
+                    new GroupBox
+                    {
+                        Text = "Project Options",
+                        Padding = 5,
+                        MinimumSize = new Size(300, 100),
+                        Content = new StackLayout
+                        {
+                            Spacing = 10,
+                            VerticalContentAlignment = VerticalAlignment.Center,
+                            Items = {
+                                new StackLayout
+                                {
+                                    Orientation = Orientation.Horizontal,
+                                    HorizontalContentAlignment = HorizontalAlignment.Stretch,
+                                    Spacing = 10,
+                                    Items =
+                                    {
+                                        "Name",
+                                        _nameBox,
+                                    }
+                                },
+                                new StackLayout
+                                {
+                                    Orientation = Orientation.Horizontal,
+                                    HorizontalContentAlignment = HorizontalAlignment.Stretch,
+                                    Spacing = 10,
+                                    Items =
+                                    {
+                                        "Language",
+                                        _languageDropDown,
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    new GroupBox
+                    {
+                        Text = "Select ROM",
+                        Padding = 5,
+                        MinimumSize = new Size(300, 80),
+                        Content = new StackLayout
+                        {
+                            Orientation = Orientation.Horizontal,
+                            Spacing = 10,
+                            VerticalContentAlignment = VerticalAlignment.Center,
+                            Items =
+                            {
+                                new Button { Text = "Open ROM", Command = pickRomCommand },
+                                _romPath,
+                            }
+                        }
+                    },
+                    new StackLayout
+                    {
+                        Orientation = Orientation.Horizontal,
+                        Padding = 5,
+                        Spacing = 10,
+                        Items =
+                        {
+                            new Button { Text = "Create", Command = createCommand },
+                            new Button { Text = "Cancel", Command = cancelCommand }
+                        }
+                    },
+                }
+            };
         }
 
         protected override void OnLoad(EventArgs e)
@@ -133,21 +132,21 @@ namespace SerialLoops
             }
             base.OnLoad(e);
         }
-
-		private void PickRomCommand_Executed(object sender, EventArgs e)
-		{
-			OpenFileDialog openFileDialog = new() { Title = "Open ROM", CheckFileExists = true };
-			openFileDialog.Filters.Add(new("Chokuretsu ROM", ".nds"));
-			if (openFileDialog.ShowAndReportIfFileSelected(this))
-			{
-				_romPath.Text = openFileDialog.FileName;
-			}
+        
+        private void PickRomCommand_Executed(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new() { Title = "Open ROM", CheckFileExists = true };
+            openFileDialog.Filters.Add(new("Chokuretsu ROM", ".nds"));
+            if (openFileDialog.ShowAndReportIfFileSelected(this))
+            {
+                _romPath.Text = openFileDialog.FileName;
+            }
         }
 
-		private void CancelCommand_Executed(object sender, EventArgs e)
-		{
-			Close();
-		}
+        private void CancelCommand_Executed(object sender, EventArgs e)
+        {
+            Close();
+        }
 
         private void CreateCommand_Executed(object sender, EventArgs e)
         {
