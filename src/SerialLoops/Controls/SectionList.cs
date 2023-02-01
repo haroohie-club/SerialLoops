@@ -36,7 +36,7 @@ using Eto.Drawing;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace SerialLoops
+namespace SerialLoops.Controls
 {
     public interface ISection
     {
@@ -122,9 +122,12 @@ namespace SerialLoops
     {
         private TreeGridView _treeView;
 
-        public override Control Control { get { return _treeView; } }
+        public override Control Control => _treeView;
 
-        public override void Focus() { Control.Focus(); }
+        public override void Focus()
+        {
+            Control.Focus();
+        }
 
         public override ISection SelectedItem
         {
@@ -177,5 +180,4 @@ namespace SerialLoops
             _treeView.Size = size;
         }
     }
-
 }

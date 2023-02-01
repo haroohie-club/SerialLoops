@@ -5,11 +5,11 @@ using System.Collections.Generic;
 
 namespace SerialLoops
 {
-	public partial class ProjectCreationDialog : Dialog
-	{
-		public ProjectCreationDialog()
-		{
-			InitializeComponent();
-		}
-	}
+    public partial class ProjectCreationDialog : Dialog
+    {
+        public ProjectCreationDialog()
+        {
+            InitializeComponent();
+        }
+    }
 }

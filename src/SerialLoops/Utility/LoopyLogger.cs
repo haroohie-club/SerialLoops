@@ -1,7 +1,7 @@
 ﻿using Eto.Forms;
 using HaruhiChokuretsuLib.Util;
 
-namespace SerialLoops
+namespace SerialLoops.Utility
 {
     public class LoopyLogger : ILogger
     {
