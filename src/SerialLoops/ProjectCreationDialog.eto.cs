@@ -2,6 +2,7 @@ using Eto.Drawing;
 using Eto.Forms;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Logging;
+using SerialLoops.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;

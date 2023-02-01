@@ -5,7 +5,7 @@ using System.Linq;
 using Eto.Drawing;
 
 /// Taken from https://github.com/picoe/Eto/blob/ac4610775b70538b96995bdb0c7f0fbcc5ae1b66/test/Eto.Test/SectionList.cs
-namespace SerialLoops
+namespace SerialLoops.Controls
 {
     public interface ISection
     {
@@ -32,7 +32,7 @@ namespace SerialLoops
         public Section(string text, IEnumerable<Section> sections)
             : base(sections.OrderBy(r => r.Text, StringComparer.CurrentCultureIgnoreCase).ToArray())
         {
-            this.Text = text;
+            Text = text;
         }
     }
 
@@ -49,13 +49,13 @@ namespace SerialLoops
 
         public SectionTreeItem(Section section)
         {
-            this.Section = section;
-            this.Expanded = false;
+            Section = section;
+            Expanded = false;
             foreach (var child in section)
             {
                 SectionTreeItem temp = new(child);
                 temp.Parent = this;
-                this.Add(temp); // recursive
+                Add(temp); // recursive
             }
         }
     }
@@ -89,7 +89,7 @@ namespace SerialLoops
     {
         TreeGridView treeView;
 
-        public override Control Control { get { return this.treeView; } }
+        public override Control Control { get { return treeView; } }
 
         public override void Focus() { Control.Focus(); }
 
@@ -124,7 +124,7 @@ namespace SerialLoops
 
         public SectionListTreeGridView(IEnumerable<Section> topNodes, Size size)
         {
-            this.treeView = new TreeGridView();
+            treeView = new TreeGridView();
             treeView.Style = "sectionList";
             treeView.ShowHeader = false;
             treeView.AllowEmptySelection = false;

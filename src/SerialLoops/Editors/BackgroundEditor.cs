@@ -1,5 +1,6 @@
 ﻿using Eto.Forms;
 using HaruhiChokuretsuLib.Util;
+using SerialLoops.Utility;
 using SerialLoops.Lib.Items;
 
 namespace SerialLoops.Editors

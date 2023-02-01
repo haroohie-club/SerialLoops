@@ -7,7 +7,7 @@ using SerialLoops.Lib.Items;
 using System;
 using System.Linq;
 
-namespace SerialLoops
+namespace SerialLoops.Controls
 {
     public class EditorTabsPanel : Panel
     {
@@ -15,7 +15,7 @@ namespace SerialLoops
         public static readonly Size EDITOR_BASE_SIZE = new(500, 420);
 
         public DocumentControl Tabs { get; private set; }
-        
+
         private readonly Project _project;
 
         public EditorTabsPanel(Project project)

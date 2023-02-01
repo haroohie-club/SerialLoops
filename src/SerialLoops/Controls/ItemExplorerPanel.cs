@@ -6,7 +6,7 @@ using SerialLoops.Lib.Items;
 using System;
 using System.Collections.Generic;
 
-namespace SerialLoops
+namespace SerialLoops.Controls
 {
     public class ItemExplorerPanel : Scrollable
     {
