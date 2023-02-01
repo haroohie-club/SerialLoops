@@ -1,5 +1,6 @@
 ﻿using Eto.Forms;
 using HaruhiChokuretsuLib.Util;
+using SerialLoops.Controls;
 using SerialLoops.Lib.Items;
 using System;
 
@@ -21,14 +22,7 @@ namespace SerialLoops.Editors
         {
             Text = Description.Name;
             MinimumSize = EditorTabsPanel.EDITOR_BASE_SIZE;
-            try
-            {
-                Image = EditorTabsPanel.GetItemIcon(Description.Type);
-            }
-            catch (Exception exc)
-            {
-                _log.LogWarning($"Failed to load icon.\n{exc.Message}\n\n{exc.StackTrace}");
-            }
+            Image = EditorTabsPanel.GetItemIcon(Description.Type, _log);
             Padding = 10;
 
             Panel panel = GetEditorPanel();

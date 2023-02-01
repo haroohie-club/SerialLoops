@@ -1,5 +1,7 @@
 using Eto.Forms;
+using SerialLoops.Controls;
 using SerialLoops.Lib;
+using SerialLoops.Utility;
 using System;
 
 namespace SerialLoops
@@ -38,16 +40,16 @@ namespace SerialLoops
             {
                 Items =
                 {
-					// File submenu
-					new SubMenuItem { Text = "&File", Items = { newProject, openProject } },
-					// new SubMenuItem { Text = "&Edit", Items = { /* commands/items */ } },
-					// new SubMenuItem { Text = "&View", Items = { /* commands/items */ } },
+                    // File submenu
+                    new SubMenuItem { Text = "&File", Items = { newProject, openProject } },
+                    // new SubMenuItem { Text = "&Edit", Items = { /* commands/items */ } },
+                    // new SubMenuItem { Text = "&View", Items = { /* commands/items */ } },
                     new SubMenuItem { Text = "&Build", Items = { } },
-				},
+                },
                 ApplicationItems =
                 {
-					// application (OS X) or file menu (others)
-					new ButtonMenuItem { Text = "&Preferences..." },
+                    // application (OS X) or file menu (others)
+                    new ButtonMenuItem { Text = "&Preferences..." },
                 },
                 AboutItem = aboutCommand
             };
