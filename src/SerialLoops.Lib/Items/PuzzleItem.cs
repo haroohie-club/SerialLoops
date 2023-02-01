@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using HaruhiChokuretsuLib.Archive.Data;
 
 namespace SerialLoops.Lib.Items
 {
-    internal class PuzzleItem
+    public class PuzzleItem : Item
     {
+        public PuzzleFile Puzzle { get; set; }
+
+        public PuzzleItem(PuzzleFile puzzleFile) : base(puzzleFile.Name[0..^1], ItemType.Puzzle)
+        {
+            Puzzle = puzzleFile;
+        }
     }
 }
