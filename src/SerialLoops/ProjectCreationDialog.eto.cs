@@ -31,7 +31,7 @@ namespace SerialLoops
 
             _nameBox = new()
             {
-                PlaceholderText = "haroohie",
+                PlaceholderText = "Haroohie",
                 Size = new Size(150, 25)
             };
             _languageDropDown = new();
