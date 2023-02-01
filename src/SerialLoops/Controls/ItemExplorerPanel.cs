@@ -33,8 +33,7 @@ namespace SerialLoops.Controls
             Padding = 0;
             SizeChanged += (sender, e) =>
             {
-                _items.Control.Width = Width;
-                _items.Control.Height = Height;
+                _items.Control.Size = Size;
             };
 
             IEnumerable<Section> sections = _project.Items.GroupBy(i => i.Type).OrderBy(g => g.Key)

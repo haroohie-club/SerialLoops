@@ -45,8 +45,7 @@ namespace SerialLoops.Controls
             };
             SizeChanged += (sender, e) =>
             {
-                Tabs.Width = Width;
-                Tabs.Height = Height;
+                Tabs.Size = Size;
             };
         }
 

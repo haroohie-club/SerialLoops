@@ -96,7 +96,7 @@ namespace SerialLoops
         {
             OpenFileDialog openFileDialog = new() { Directory = new Uri(CurrentConfig.ProjectsDirectory) };
             openFileDialog.Filters.Add(new("Serial Loops Project", $".{Project.PROJECT_FORMAT}"));
-            if (openFileDialog.ShowDialog(this) == DialogResult.Ok)
+            if (openFileDialog.ShowAndReportIfFileSelected(this))
             {
                 OpenProject = Project.OpenProject(openFileDialog.FileName, CurrentConfig, _log);
                 OpenProjectView(OpenProject);
