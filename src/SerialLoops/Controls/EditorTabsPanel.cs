@@ -43,6 +43,11 @@ namespace SerialLoops.Controls
                     Tabs
                 }
             };
+            SizeChanged += (sender, e) =>
+            {
+                Tabs.Width = Width;
+                Tabs.Height = Height;
+            };
         }
 
         public static Icon GetItemIcon(ItemDescription.ItemType type, ILogger log)
