@@ -1,20 +1,15 @@
 ﻿using Eto.Forms;
 using SerialLoops.Lib.Items;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SerialLoops.Editors
 {
-    public class DialogueEditor : Editor
+    public class EventEditor : Editor
     {
-        private DialogueItem _item;
+        private EventItem _event;
 
-        public DialogueEditor(DialogueItem item) : base(item)
+        public EventEditor(EventItem item) : base(item)
         {
-            _item = item;
+            _event = item;
         }
 
         public override Panel GetEditorPanel()

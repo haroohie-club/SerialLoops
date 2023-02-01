@@ -1,8 +1,6 @@
 using Eto.Forms;
 using SerialLoops.Lib;
-using SerialLoops.Lib.Logging;
 using System;
-using System.IO;
 
 namespace SerialLoops
 {
@@ -10,7 +8,7 @@ namespace SerialLoops
     {
         private const string BASE_TITLE = "Serial Loops";
 
-        private ConsoleLogger _log;
+        private LoopyLogger _log;
         public Config CurrentConfig { get; set; }
         public Project OpenProject { get; set; }
 
@@ -83,7 +81,7 @@ namespace SerialLoops
 
         private void NewProjectCommand_Executed(object sender, EventArgs e)
         {
-            ProjectCreationDialog projectCreationDialog = new() { Config = CurrentConfig };
+            ProjectCreationDialog projectCreationDialog = new() { Config = CurrentConfig, Log = _log };
             projectCreationDialog.ShowModal(this);
             if (projectCreationDialog.NewProject is not null)
             {
@@ -94,10 +92,11 @@ namespace SerialLoops
 
         private void OpenProject_Executed(object sender, EventArgs e)
         {
-            SelectFolderDialog selectFolderDialog = new() { Directory = CurrentConfig.ProjectsDirectory };
-            if (selectFolderDialog.ShowDialog(this) == DialogResult.Ok)
+            OpenFileDialog openFileDialog = new() { Directory = new Uri(CurrentConfig.ProjectsDirectory) };
+            openFileDialog.Filters.Add(new("Serial Loops Project", $".{Project.PROJECT_FORMAT}"));
+            if (openFileDialog.ShowDialog(this) == DialogResult.Ok)
             {
-                OpenProject = Project.OpenProject(Path.GetFileNameWithoutExtension(selectFolderDialog.Directory), CurrentConfig, _log);
+                OpenProject = Project.OpenProject(openFileDialog.FileName, CurrentConfig, _log);
                 OpenProjectView(OpenProject);
             }
         }

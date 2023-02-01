@@ -4,6 +4,7 @@ using SerialLoops.Editors;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using System;
+using System.Linq;
 
 namespace SerialLoops
 {
@@ -63,20 +64,22 @@ namespace SerialLoops
             }
 
             // Open a new editor for the item -- This is where the item can be loaded from the project files
-            DocumentPage newPage = CreateTab(item);
+            DocumentPage newPage = CreateTab(item, _project);
             Tabs.Pages.Add(newPage);
             Tabs.SelectedPage = newPage;
 
         }
 
-        internal static DocumentPage CreateTab(ItemDescription item)
+        internal static DocumentPage CreateTab(ItemDescription item, Project project)
         {
             switch (item.Type)
             {
+                case ItemDescription.ItemType.Background:
+                    return new BackgroundEditor((BackgroundItem)project.Items.First(i => i.Name == item.Name));
                 case ItemDescription.ItemType.Map:
-                    return (new MapEditor(new MapItem(item.Name)));
-                case ItemDescription.ItemType.Dialogue:
-                    return new DialogueEditor(new DialogueItem(item.Name));
+                    return new MapEditor((MapItem)project.Items.First(i => i.Name == item.Name));
+                case ItemDescription.ItemType.Event:
+                    return new EventEditor((EventItem)project.Items.First(i => i.Name == item.Name));
                 default:
                     throw new ArgumentException("Invalid item type");
             }

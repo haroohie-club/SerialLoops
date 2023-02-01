@@ -1,7 +1,7 @@
-﻿using System;
+﻿using HaruhiChokuretsuLib.Util;
+using System;
 using System.IO;
 using System.Text.Json;
-using SerialLoops.Lib.Logging;
 
 namespace SerialLoops.Lib
 {

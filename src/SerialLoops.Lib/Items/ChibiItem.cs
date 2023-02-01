@@ -1,14 +1,12 @@
-﻿using HaruhiChokuretsuLib;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SerialLoops.Lib
+namespace SerialLoops.Lib.Items
 {
-    public static class Build
+    internal class ChibiItem
     {
-
     }
 }
