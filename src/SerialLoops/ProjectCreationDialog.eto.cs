@@ -93,7 +93,7 @@ namespace SerialLoops
         {
             OpenFileDialog openFileDialog = new() { Title = "Open ROM", CheckFileExists = true };
             openFileDialog.Filters.Add(new("Chokuretsu ROM", ".nds"));
-            if (openFileDialog.ShowDialog(this) == DialogResult.Ok)
+            if (openFileDialog.ShowAndReportIfFileSelected(this))
             {
                 _romPath.Text = openFileDialog.FileName;
             }
