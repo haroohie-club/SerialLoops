@@ -1,15 +1,13 @@
 ﻿using Eto.Forms;
+using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib.Items;
 
 namespace SerialLoops.Editors
 {
     public class EventEditor : Editor
     {
-        private EventItem _event;
-
-        public EventEditor(EventItem item) : base(item)
+        public EventEditor(EventItem item, ILogger log) : base(item, log)
         {
-            _event = item;
         }
 
         public override Panel GetEditorPanel()

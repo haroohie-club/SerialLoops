@@ -13,6 +13,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Icons\Event.png" />
+    <None Remove="Icons\Map.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Icons\Event.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Icons\Map.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="System.Text.Json" Version="7.0.1" />
   </ItemGroup>
 

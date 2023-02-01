@@ -1,5 +1,6 @@
 ﻿using Eto.Drawing;
 using Eto.Forms;
+using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using System;
@@ -9,15 +10,16 @@ namespace SerialLoops
 {
     public class ItemExplorerPanel : Scrollable
     {
-
+        private ILogger _log;
         public static readonly Size ITEM_EXPLORER_BASE_SIZE = new(200, 420);
 
         private SectionListTreeGridView _items;
         private readonly Project _project;
         private readonly EditorTabsPanel _tabs;
 
-        public ItemExplorerPanel(Project project, EditorTabsPanel tabs)
+        public ItemExplorerPanel(Project project, EditorTabsPanel tabs, ILogger log)
         {
+            _log = log;
             _project = project;
             _tabs = tabs;
             InitializeComponent();
@@ -71,7 +73,7 @@ namespace SerialLoops
                 ItemDescription item = _project.FindItem(view.SelectedItem?.Text);
                 if (item != null)
                 {
-                    _tabs.OpenTab(item);
+                    _tabs.OpenTab(item, _log);
                 }
             }
         }
