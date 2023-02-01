@@ -1,4 +1,4 @@
-﻿<Project Sdk="Eto.Forms/2.7.1">
+﻿<Project Sdk="Eto.Forms/2.7.3">
 
   <!--
     Set the BuildPlatform property to the Eto platform you wish to build for.
@@ -11,6 +11,20 @@
     <Version>0.1.0</Version>
 
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Icons\Map.png" />
+    <None Remove="Icons\Script.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Icons\Script.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Icons\Map.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="System.Text.Json" Version="7.0.1" />

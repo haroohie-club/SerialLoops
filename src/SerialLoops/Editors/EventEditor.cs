@@ -1,15 +1,13 @@
 ﻿using Eto.Forms;
+using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib.Items;
 
 namespace SerialLoops.Editors
 {
-    public class EventEditor : Editor
+    public class ScriptEditor : Editor
     {
-        private EventItem _event;
-
-        public EventEditor(EventItem item) : base(item)
+        public ScriptEditor(ScriptItem item, ILogger log) : base(item, log)
         {
-            _event = item;
         }
 
         public override Panel GetEditorPanel()
@@ -19,7 +17,7 @@ namespace SerialLoops.Editors
                 Orientation = Orientation.Vertical,
                 Items =
                 {
-                    new Label { Text = "Dialogue Editor..todo" }
+                    new Label { Text = "Script Editor..todo" }
                 }
             };
         }

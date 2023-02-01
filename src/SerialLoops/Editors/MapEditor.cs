@@ -1,16 +1,13 @@
 ﻿using Eto.Forms;
+using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib.Items;
 
 namespace SerialLoops.Editors
 {
     public class MapEditor : Editor
     {
-
-        private MapItem _map;
-
-        public MapEditor(MapItem map) : base(map)
+        public MapEditor(MapItem map, ILogger log) : base(map, log)
         {
-            _map = map;
         }
 
         public override Panel GetEditorPanel()

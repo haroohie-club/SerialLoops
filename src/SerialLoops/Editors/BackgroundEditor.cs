@@ -1,17 +1,12 @@
-﻿using Eto.Drawing;
-using Eto.Forms;
+﻿using Eto.Forms;
+using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib.Items;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SerialLoops.Editors
 {
     public class BackgroundEditor : Editor
     {
-        public BackgroundEditor(BackgroundItem item) : base(item)
+        public BackgroundEditor(BackgroundItem item, ILogger log) : base(item, log)
         {
         }
 

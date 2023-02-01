@@ -56,7 +56,7 @@ namespace SerialLoops
         private void OpenProjectView(Project project)
         {
             EditorTabsPanel tabs = new(project);
-            ItemExplorerPanel items = new(project, tabs);
+            ItemExplorerPanel items = new(project, tabs, _log);
             Title = $"{BASE_TITLE} - {project.Name}";
             Content = new StackLayout
             {
