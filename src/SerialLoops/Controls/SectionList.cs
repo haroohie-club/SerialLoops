@@ -5,6 +5,37 @@ using System.Linq;
 using Eto.Drawing;
 
 /// Taken from https://github.com/picoe/Eto/blob/ac4610775b70538b96995bdb0c7f0fbcc5ae1b66/test/Eto.Test/SectionList.cs
+/// Licensed under the BSD-3 License, reproduced below:
+/// 
+/*
+ * The BSD-3 License.
+ * 
+ * AUTHORS
+ * Copyright © 2011-2022 Curtis Wensley. All Rights Reserved.
+ * Copyright © 2012-2013 Vivek Jhaveri. All Rights Reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without modification, are permitted 
+ * provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice, this list of conditions 
+ *    and the following disclaimer.
+ * 
+ * 2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions
+ *    and the following disclaimer in the documentation and/or other materials provided with the
+ *    distribution.
+ * 
+ * 3. The name of the author may not be used to endorse or promote products derived from this software
+ *    without specific prior written permission.
+ *    
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+ * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+ * GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
 namespace SerialLoops.Controls
 {
     public interface ISection
@@ -23,16 +54,18 @@ namespace SerialLoops.Controls
     /// </summary>
     public class Section : List<Section>, ISection
     {
+        public Icon SectionIcon { get; set; }
         public string Text { get; set; }
 
         public Section()
         {
         }
 
-        public Section(string text, IEnumerable<Section> sections)
+        public Section(string text, IEnumerable<Section> sections, Icon icon)
             : base(sections.OrderBy(r => r.Text, StringComparer.CurrentCultureIgnoreCase).ToArray())
         {
             Text = text;
+            SectionIcon = icon;
         }
     }
 
@@ -42,9 +75,10 @@ namespace SerialLoops.Controls
     public class SectionTreeItem : List<SectionTreeItem>, ITreeGridItem<SectionTreeItem>
     {
         public Section Section { get; private set; }
-        public string Text { get { return Section.Text; } }
+        public Icon SectionIcon => Section.SectionIcon;
+        public string Text => Section.Text;
         public bool Expanded { get; set; }
-        public bool Expandable { get { return Count > 0; } }
+        public bool Expandable => Count > 0;
         public ITreeGridItem Parent { get; set; }
 
         public SectionTreeItem(Section section)
@@ -53,8 +87,7 @@ namespace SerialLoops.Controls
             Expanded = false;
             foreach (var child in section)
             {
-                SectionTreeItem temp = new(child);
-                temp.Parent = this;
+                SectionTreeItem temp = new(child) { Parent = this };
                 Add(temp); // recursive
             }
         }
@@ -87,22 +120,25 @@ namespace SerialLoops.Controls
 
     public class SectionListTreeGridView : SectionList
     {
-        TreeGridView treeView;
+        private TreeGridView _treeView;
 
-        public override Control Control { get { return treeView; } }
+        public override Control Control => _treeView;
 
-        public override void Focus() { Control.Focus(); }
+        public override void Focus()
+        {
+            Control.Focus();
+        }
 
         public override ISection SelectedItem
         {
             get
             {
-                var sectionTreeItem = treeView.SelectedItem as SectionTreeItem;
+                var sectionTreeItem = _treeView.SelectedItem as SectionTreeItem;
                 return sectionTreeItem?.Section as ISection;
             }
             set
             {
-                treeView.SelectedItem = FindItem(treeView.DataStore as SectionTreeItem, value);
+                _treeView.SelectedItem = FindItem(_treeView.DataStore as SectionTreeItem, value);
             }
         }
 
@@ -124,16 +160,24 @@ namespace SerialLoops.Controls
 
         public SectionListTreeGridView(IEnumerable<Section> topNodes, Size size)
         {
-            treeView = new TreeGridView();
-            treeView.Style = "sectionList";
-            treeView.ShowHeader = false;
-            treeView.AllowEmptySelection = false;
-            treeView.Columns.Add(new GridColumn { DataCell = new TextBoxCell { Binding = new DelegateBinding<SectionTreeItem, string>(r => r.Text) } });
-            treeView.SelectedItemChanged += (sender, e) => OnSelectedItemChanged(e);
-            treeView.Activated += (sender, e) => OnActivated(e);
-            treeView.DataStore = new SectionTreeItem(new Section("Top", topNodes));
-            treeView.Size = size;
+            _treeView = new TreeGridView
+            {
+                Style = "sectionList",
+                ShowHeader = false,
+                AllowEmptySelection = false
+            };
+            _treeView.Columns.Add(new GridColumn
+            {
+                DataCell = new ImageTextCell
+                {
+                    ImageBinding = new DelegateBinding<SectionTreeItem, Image>(r => r.SectionIcon),
+                    TextBinding = new DelegateBinding<SectionTreeItem, string>(r => r.Text)
+                }
+            });
+            _treeView.SelectedItemChanged += (sender, e) => OnSelectedItemChanged(e);
+            _treeView.Activated += (sender, e) => OnActivated(e);
+            _treeView.DataStore = new SectionTreeItem(new Section("Top", topNodes, null));
+            _treeView.Size = size;
         }
     }
-
 }

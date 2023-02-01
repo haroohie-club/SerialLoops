@@ -45,9 +45,17 @@ namespace SerialLoops.Controls
             };
         }
 
-        public static Icon GetItemIcon(ItemDescription.ItemType type)
+        public static Icon GetItemIcon(ItemDescription.ItemType type, ILogger log)
         {
-            return Icon.FromResource($"SerialLoops.Icons.{type}.png").WithSize(16, 16);
+            try
+            {
+                return Icon.FromResource($"SerialLoops.Icons.{type}.png").WithSize(16, 16);
+            }
+            catch (Exception exc)
+            {
+                log.LogWarning($"Failed to load icon.\n{exc.Message}\n\n{exc.StackTrace}");
+                return null;
+            }
         }
 
         internal void OpenTab(ItemDescription item, ILogger log)

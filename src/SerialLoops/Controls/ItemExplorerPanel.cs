@@ -5,6 +5,8 @@ using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace SerialLoops.Controls
 {
@@ -30,29 +32,10 @@ namespace SerialLoops.Controls
             MinimumSize = ITEM_EXPLORER_BASE_SIZE;
             Padding = 0;
 
-            // Test items
-            Dictionary<ItemDescription.ItemType, Section> itemTypes = new();
-            foreach (ItemDescription item in _project.Items)
-            {
-                if (!itemTypes.ContainsKey(item.Type))
-                {
-                    itemTypes[item.Type] = new Section
-                    {
-                        Text = item.Type.ToString()
-                    };
+            IEnumerable<Section> sections = _project.Items.GroupBy(i => i.Type).OrderBy(g => g.Key)
+                .Select(g => new Section($"{g.Key}s", g.Select(i => new Section() { Text = i.Name }), EditorTabsPanel.GetItemIcon(g.Key, _log)));
 
-                }
-                itemTypes[item.Type].Add(new Section
-                {
-                    Text = item.Name
-                });
-            }
-            foreach (var category in itemTypes.Values)
-            {
-                category.Sort((x, y) => string.Compare(x.Text, y.Text, StringComparison.CurrentCultureIgnoreCase));
-            }
-
-            _items = new SectionListTreeGridView(itemTypes.Values, ITEM_EXPLORER_BASE_SIZE);
+            _items = new SectionListTreeGridView(sections, ITEM_EXPLORER_BASE_SIZE);
             _items.Activated += ItemList_ItemClicked;
 
             Content = new StackLayout
@@ -63,7 +46,6 @@ namespace SerialLoops.Controls
                     _items.Control
                 }
             };
-
         }
 
         private void ItemList_ItemClicked(object sender, EventArgs e)
