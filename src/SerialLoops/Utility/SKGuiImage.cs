@@ -1,7 +1,7 @@
 ﻿using Eto.Drawing;
 using SkiaSharp;
 
-namespace SerialLoops
+namespace SerialLoops.Utility
 {
     public class SKGuiImage : Bitmap
     {
