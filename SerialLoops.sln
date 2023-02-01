@@ -5,9 +5,9 @@ VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SerialLoops", "src\SerialLoops\SerialLoops.csproj", "{E049F009-138F-401A-9D5A-1977CB8DAF49}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialLoops.Tests", "test\SerialLoops.Tests\SerialLoops.Tests.csproj", "{0B5D20CC-9E91-4BC0-8A6E-0342ADCAC48D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SerialLoops.Tests", "test\SerialLoops.Tests\SerialLoops.Tests.csproj", "{0B5D20CC-9E91-4BC0-8A6E-0342ADCAC48D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialLoops.Lib", "src\SerialLoops.Lib\SerialLoops.Lib.csproj", "{CC729174-57CD-499A-B6E7-1FA6F9CE255F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SerialLoops.Lib", "src\SerialLoops.Lib\SerialLoops.Lib.csproj", "{CC729174-57CD-499A-B6E7-1FA6F9CE255F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,6 +32,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {A7259B55-BEEA-4ECC-AC0A-85CC8FA1BD53}
+		        SolutionGuid = {A7259B55-BEEA-4ECC-AC0A-85CC8FA1BD53}
+		SolutionGuid = {E759843A-3373-4FDE-9719-548E39289366}
 	EndGlobalSection
 EndGlobal
