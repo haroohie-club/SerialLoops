@@ -32,7 +32,7 @@ namespace SerialLoops.Tests
         {
             EventFile evt = new() { Name = $"{Path.GetFileNameWithoutExtension(evtFile)}S" };
             evt.Initialize(File.ReadAllBytes(evtFile), 0, _log);
-            EventItem eventItem = new(evt);
+            ScriptItem eventItem = new(evt);
 
             Assert.That(evt.Name[0..^1], Is.EqualTo(eventItem.Name));
         }

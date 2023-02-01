@@ -4,9 +4,9 @@ using SerialLoops.Lib.Items;
 
 namespace SerialLoops.Editors
 {
-    public class EventEditor : Editor
+    public class ScriptEditor : Editor
     {
-        public EventEditor(EventItem item, ILogger log) : base(item, log)
+        public ScriptEditor(ScriptItem item, ILogger log) : base(item, log)
         {
         }
 
@@ -17,7 +17,7 @@ namespace SerialLoops.Editors
                 Orientation = Orientation.Vertical,
                 Items =
                 {
-                    new Label { Text = "Dialogue Editor..todo" }
+                    new Label { Text = "Script Editor..todo" }
                 }
             };
         }

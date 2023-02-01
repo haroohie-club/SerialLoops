@@ -13,12 +13,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Icons\Event.png" />
     <None Remove="Icons\Map.png" />
+    <None Remove="Icons\Script.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Icons\Event.png">
+    <EmbeddedResource Include="Icons\Script.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Icons\Map.png">

@@ -66,7 +66,7 @@ namespace SerialLoops.Lib
 
             Items.AddRange(_evt.Files
                 .Where(e => !new string[] { "CHESSS", "EVTTBLS", "TOPICS", "SCENARIOS", "TUTORIALS", "VOICEMAPS" }.Contains(e.Name))
-                .Select(e => new EventItem(e)));
+                .Select(e => new ScriptItem(e)));
             QMapFile qmap = _dat.Files.First(f => f.Name == "QMAPS").CastTo<QMapFile>();
             Items.AddRange(_dat.Files
                 .Where(d => qmap.QMaps.Select(q => q.Name.Replace(".", "")).Contains(d.Name))

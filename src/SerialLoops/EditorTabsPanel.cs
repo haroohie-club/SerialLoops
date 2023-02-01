@@ -78,8 +78,8 @@ namespace SerialLoops
                     return new BackgroundEditor((BackgroundItem)project.Items.First(i => i.Name == item.Name), log);
                 case ItemDescription.ItemType.Map:
                     return new MapEditor((MapItem)project.Items.First(i => i.Name == item.Name), log);
-                case ItemDescription.ItemType.Event:
-                    return new EventEditor((EventItem)project.Items.First(i => i.Name == item.Name), log);
+                case ItemDescription.ItemType.Script:
+                    return new ScriptEditor((ScriptItem)project.Items.First(i => i.Name == item.Name), log);
                 default:
                     throw new ArgumentException("Invalid item type");
             }

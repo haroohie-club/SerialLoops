@@ -2,13 +2,13 @@
 
 namespace SerialLoops.Lib.Items
 {
-    public class EventItem : Item
+    public class ScriptItem : Item
     {
         public EventFile Event { get; set; }
-        public EventItem(string name) : base(name, ItemType.Event)
+        public ScriptItem(string name) : base(name, ItemType.Script)
         {
         }
-        public EventItem(EventFile evt) : base(evt.Name[0..^1], ItemType.Event)
+        public ScriptItem(EventFile evt) : base(evt.Name[0..^1], ItemType.Script)
         {
             Event = evt;
         }
