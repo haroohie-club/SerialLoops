@@ -28,7 +28,7 @@ jobs:
 
   - task: DotNetCoreCLI@2
     inputs:
-      comand: 'test'
+      command: 'test'
       projects: $(Build.SourcesDirectory)/test/SerialLoops.Tests/SerialLoops.Tests.csproj
       publishTestResults: true
     displayName: Run tests
