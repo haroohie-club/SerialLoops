@@ -31,6 +31,11 @@ namespace SerialLoops.Controls
         {
             MinimumSize = ITEM_EXPLORER_BASE_SIZE;
             Padding = 0;
+            SizeChanged += (sender, e) =>
+            {
+                _items.Control.Width = Width;
+                _items.Control.Height = Height;
+            };
 
             IEnumerable<Section> sections = _project.Items.GroupBy(i => i.Type).OrderBy(g => g.Key)
                 .Select(g => new Section($"{g.Key}s", g.Select(i => new Section() { Text = i.Name }), EditorTabsPanel.GetItemIcon(g.Key, _log)));
