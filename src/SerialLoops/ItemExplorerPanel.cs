@@ -46,7 +46,6 @@ namespace SerialLoops
                     _items.Control
                 }
             };
-
         }
 
         private void ItemList_ItemClicked(object sender, EventArgs e)
