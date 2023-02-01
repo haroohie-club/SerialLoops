@@ -11,9 +11,6 @@ namespace SerialLoops.Controls
 {
     public class EditorTabsPanel : Panel
     {
-
-        public static readonly Size EDITOR_BASE_SIZE = new(500, 420);
-
         public DocumentControl Tabs { get; private set; }
 
         private readonly Project _project;
@@ -26,7 +23,6 @@ namespace SerialLoops.Controls
 
         void InitializeComponent()
         {
-            MinimumSize = EDITOR_BASE_SIZE;
             Padding = 0;
 
             Tabs = new()
@@ -34,19 +30,7 @@ namespace SerialLoops.Controls
                 AllowReordering = true,
                 Enabled = true
             };
-            Content = new StackLayout
-            {
-                Orientation = Orientation.Vertical,
-                MinimumSize = EDITOR_BASE_SIZE,
-                Items =
-                {
-                    Tabs
-                }
-            };
-            SizeChanged += (sender, e) =>
-            {
-                Tabs.Size = Size;
-            };
+            Content = new TableLayout(Tabs);
         }
 
         public static Icon GetItemIcon(ItemDescription.ItemType type, ILogger log)
