@@ -31,7 +31,7 @@ namespace SerialLoops
 			_nameBox = new()
 			{
 				PlaceholderText = "haroohie",
-				Size = new Size(150, 20)
+				Size = new Size(150, 25)
 			};
 			_languageDropDown = new();
 			_languageDropDown.Items.AddRange(_availableLanguages.Select(a => new ListItem() { Text = a.Key, Key = a.Value }));
