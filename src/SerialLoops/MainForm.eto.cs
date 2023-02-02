@@ -33,9 +33,8 @@ namespace SerialLoops
             openProject.Executed += OpenProject_Executed;
 
             // Tools
-            Command toolsMenu = new() { MenuText = "Tools" };
-            Command search = new() { MenuText = "Search", ToolBarText = "Search" };
-            search.Executed += Search_Executed;
+            Command searchProject = new() { MenuText = "Search", ToolBarText = "Search", Shortcut = Application.Instance.CommonModifier | Keys.F };
+            searchProject.Executed += Search_Executed;
 
             // About
             Command aboutCommand = new() { MenuText = "About..." };
@@ -49,7 +48,7 @@ namespace SerialLoops
                 {
                     // File submenu
                     new SubMenuItem { Text = "&File", Items = { newProject, openProject } },
-                    new SubMenuItem { Text = "&Tools", Items = { search } },
+                    new SubMenuItem { Text = "&Tools", Items = { searchProject } },
                     // new SubMenuItem { Text = "&Edit", Items = { /* commands/items */ } },
                     // new SubMenuItem { Text = "&View", Items = { /* commands/items */ } },
                     //new SubMenuItem { Text = "&Build", Items = { } },
