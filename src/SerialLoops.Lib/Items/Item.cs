@@ -1,9 +1,4 @@
-﻿using HaruhiChokuretsuLib.Archive;
-using HaruhiChokuretsuLib.Archive.Data;
-using HaruhiChokuretsuLib.Archive.Event;
-using HaruhiChokuretsuLib.Archive.Graphics;
-
-namespace SerialLoops.Lib.Items
+﻿namespace SerialLoops.Lib.Items
 {
     public abstract class Item : ItemDescription
     {
@@ -12,7 +7,7 @@ namespace SerialLoops.Lib.Items
         {
         }
 
-        public abstract void Refresh(ArchiveFile<DataFile> dat, ArchiveFile<EventFile> evt, ArchiveFile<GraphicsFile> grp);
+        public abstract void Refresh(Project project);
     }
 
 }

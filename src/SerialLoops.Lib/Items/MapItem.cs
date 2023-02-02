@@ -21,7 +21,7 @@ namespace SerialLoops.Lib.Items
             Map = map;
         }
 
-        public override void Refresh(ArchiveFile<DataFile> dat, ArchiveFile<EventFile> evt, ArchiveFile<GraphicsFile> grp)
+        public override void Refresh(Project project)
         {
             throw new NotImplementedException();
         }

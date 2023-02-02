@@ -16,7 +16,7 @@ namespace SerialLoops.Lib.Items
             Event = evt;
         }
 
-        public override void Refresh(ArchiveFile<DataFile> dat, ArchiveFile<EventFile> evt, ArchiveFile<GraphicsFile> grp)
+        public override void Refresh(Project project)
         {
             throw new System.NotImplementedException();
         }

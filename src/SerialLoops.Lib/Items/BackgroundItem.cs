@@ -27,9 +27,9 @@ namespace SerialLoops.Lib.Items
             PopulateScriptUses(evt);
         }
 
-        public override void Refresh(ArchiveFile<DataFile> dat, ArchiveFile<EventFile> evt, ArchiveFile<GraphicsFile> grp)
+        public override void Refresh(Project project)
         {
-            PopulateScriptUses(evt);
+            PopulateScriptUses(project.Evt);
         }
 
         public SKBitmap GetBackground()
