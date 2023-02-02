@@ -72,6 +72,8 @@ namespace SerialLoops.Controls
                     return new BackgroundEditor((BackgroundItem)project.Items.First(i => i.Name == item.Name), log);
                 case ItemDescription.ItemType.Map:
                     return new MapEditor((MapItem)project.Items.First(i => i.Name == item.Name), log);
+                case ItemDescription.ItemType.Puzzle:
+                    return new PuzzleEditor((PuzzleItem)project.Items.First(i => i.Name == item.Name), log);
                 case ItemDescription.ItemType.Script:
                     return new ScriptEditor((ScriptItem)project.Items.First(i => i.Name == item.Name), log);
                 default:

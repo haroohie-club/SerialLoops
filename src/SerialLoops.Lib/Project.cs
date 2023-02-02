@@ -64,13 +64,6 @@ namespace SerialLoops.Lib
             _grp = ArchiveFile<GraphicsFile>.FromFile(Path.Combine(IterativeDirectory, "original", "archives", "grp.bin"), log);
             _evt = ArchiveFile<EventFile>.FromFile(Path.Combine(IterativeDirectory, "original", "archives", "evt.bin"), log);
 
-            Items.AddRange(_evt.Files
-                .Where(e => !new string[] { "CHESSS", "EVTTBLS", "TOPICS", "SCENARIOS", "TUTORIALS", "VOICEMAPS" }.Contains(e.Name))
-                .Select(e => new ScriptItem(e)));
-            QMapFile qmap = _dat.Files.First(f => f.Name == "QMAPS").CastTo<QMapFile>();
-            Items.AddRange(_dat.Files
-                .Where(d => qmap.QMaps.Select(q => q.Name.Replace(".", "")).Contains(d.Name))
-                .Select(m => new MapItem(m.CastTo<MapFile>())));
             BgTableFile bgTable = _dat.Files.First(f => f.Name == "BGTBLS").CastTo<BgTableFile>();
             for (int i = 0; i < bgTable.BgTableEntries.Count; i++)
             {
@@ -87,6 +80,16 @@ namespace SerialLoops.Lib
                     Items.Add(new BackgroundItem(name, i, entry, _evt, _grp));
                 }
             }
+            Items.AddRange(_evt.Files
+                .Where(e => !new string[] { "CHESSS", "EVTTBLS", "TOPICS", "SCENARIOS", "TUTORIALS", "VOICEMAPS" }.Contains(e.Name))
+                .Select(e => new ScriptItem(e)));
+            QMapFile qmap = _dat.Files.First(f => f.Name == "QMAPS").CastTo<QMapFile>();
+            Items.AddRange(_dat.Files
+                .Where(d => qmap.QMaps.Select(q => q.Name.Replace(".", "")).Contains(d.Name))
+                .Select(m => new MapItem(m.CastTo<MapFile>())));
+            Items.AddRange(_dat.Files
+                .Where(d => d.Name.StartsWith("SLG"))
+                .Select(d => new PuzzleItem(d.CastTo<PuzzleFile>())));
         }
 
         public ItemDescription FindItem(string name)
