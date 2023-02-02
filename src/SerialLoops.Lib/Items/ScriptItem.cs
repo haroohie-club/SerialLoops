@@ -1,4 +1,7 @@
-﻿using HaruhiChokuretsuLib.Archive.Event;
+﻿using HaruhiChokuretsuLib.Archive;
+using HaruhiChokuretsuLib.Archive.Data;
+using HaruhiChokuretsuLib.Archive.Event;
+using HaruhiChokuretsuLib.Archive.Graphics;
 
 namespace SerialLoops.Lib.Items
 {
@@ -13,5 +16,9 @@ namespace SerialLoops.Lib.Items
             Event = evt;
         }
 
+        public override void Refresh(Project project)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

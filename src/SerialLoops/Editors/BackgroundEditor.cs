@@ -2,6 +2,7 @@
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Utility;
 using SerialLoops.Lib.Items;
+using System.Linq;
 
 namespace SerialLoops.Editors
 {
@@ -22,6 +23,7 @@ namespace SerialLoops.Editors
                 Items =
                 {
                     new ImageView() { Image = new SKGuiImage(_bg.GetBackground()) },
+                    $"Used in the following scripts: {string.Join(", ", _bg.ScriptUses.Select(s => s.ScriptName))}",
                 }
             };
         }

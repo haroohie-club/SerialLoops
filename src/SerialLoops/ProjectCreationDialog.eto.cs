@@ -60,7 +60,8 @@ namespace SerialLoops
                         {
                             Spacing = 10,
                             VerticalContentAlignment = VerticalAlignment.Center,
-                            Items = {
+                            Items =
+                            {
                                 new StackLayout
                                 {
                                     Orientation = Orientation.Horizontal,
