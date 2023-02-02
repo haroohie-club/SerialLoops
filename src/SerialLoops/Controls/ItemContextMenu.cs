@@ -15,7 +15,7 @@ namespace SerialLoops.Controls
         private readonly EditorTabsPanel _tabs;
         private readonly ItemExplorerPanel _explorer;
 
-        public ItemContextMenu(Project project, ItemExplorerPanel explorer, EditorTabsPanel tabs, ILogger log)
+        public ItemContextMenu(Project project, ItemExplorerPanel explorer, EditorTabsPanel tabs, ILogger log) : base()
         {
             _project = project;
             _tabs = tabs;
