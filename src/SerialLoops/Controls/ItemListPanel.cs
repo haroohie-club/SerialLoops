@@ -13,22 +13,21 @@ namespace SerialLoops.Controls
 {
     public abstract class ItemListPanel : Scrollable
     {
-        private List<ItemDescription> _items;
-        private bool _expandItems { get; set; }
-
-        public List<ItemDescription> Items { 
-            protected get { return _items;  }
+        public List<ItemDescription> Items
+        {
+            protected get { return _items; }
             set
             {
                 _items = value;
-                _viewer?.SetContents(GetSections(), _expandItems);
+                Viewer?.SetContents(GetSections(), _expandItems);
             }
         }
-
+        public SectionListTreeGridView Viewer { get; private set; }
+        
         protected ILogger _log;
-        protected SectionListTreeGridView _viewer;
-
         private readonly Size _size;
+        private List<ItemDescription> _items;
+        private bool _expandItems { get; set; }
 
         protected ItemListPanel(List<ItemDescription> items, Size size, bool expandItems, ILogger log)
         {
@@ -41,11 +40,11 @@ namespace SerialLoops.Controls
 
         void InitializeComponent()
         {
-            _viewer = new SectionListTreeGridView(GetSections(), _size, _expandItems);
+            Viewer = new SectionListTreeGridView(GetSections(), _size, _expandItems);
             MinimumSize = _size;
             Padding = 0;
-            Content = new TableLayout(_viewer.Control);
-            _viewer.Activated += ItemList_ItemClicked;
+            Content = new TableLayout(Viewer.Control);
+            Viewer.Activated += ItemList_ItemClicked;
         }
 
         private IEnumerable<Section> GetSections()

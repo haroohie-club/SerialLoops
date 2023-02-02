@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 namespace SerialLoops
 {
-    public partial class SearchDialog : FindItemsDialog
+    public partial class ReferenceDialog : FindItemsDialog
     {
-        public SearchDialog()
+        public ReferenceDialog()
         {
             InitializeComponent();
         }

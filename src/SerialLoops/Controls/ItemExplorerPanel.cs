@@ -4,9 +4,6 @@ using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
 
 namespace SerialLoops.Controls
 {
@@ -20,6 +17,7 @@ namespace SerialLoops.Controls
         {
             _project = project;
             _tabs = tabs;
+            ((TreeGridView)Viewer.Control).ContextMenu = new ItemContextMenu(project, this, tabs, _log);
         }
 
         protected override void ItemList_ItemClicked(object sender, EventArgs e)

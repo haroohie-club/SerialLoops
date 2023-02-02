@@ -12,17 +12,17 @@ namespace SerialLoops.Controls
 {
     public class ItemResultsPanel : ItemListPanel
     {
-        public SearchDialog Dialog;
+        public FindItemsDialog Dialog;
         public ItemResultsPanel(List<ItemDescription> results, ILogger log) : base(results, new Size(280, 185), true, log) { }
 
         protected override void ItemList_ItemClicked(object sender, EventArgs e)
         {
             if (sender is SectionListTreeGridView view)
             {
-                ItemDescription item = Dialog.OpenProject.FindItem(view.SelectedItem?.Text);
+                ItemDescription item = Dialog.Project.FindItem(view.SelectedItem?.Text);
                 if (item != null)
                 {
-                    Dialog.EditorTabs.OpenTab(item, _log);
+                    Dialog.Tabs.OpenTab(item, _log);
                 }
                 Dialog.Close();
             }

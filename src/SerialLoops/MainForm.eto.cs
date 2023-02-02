@@ -105,8 +105,8 @@ namespace SerialLoops
             {
                 SearchDialog searchDialog = new()
                 {
-                    OpenProject = OpenProject,
-                    EditorTabs = EditorTabs,
+                    Project = OpenProject,
+                    Tabs = EditorTabs,
                     Log = _log
                 };
                 searchDialog.ShowModal(this);
