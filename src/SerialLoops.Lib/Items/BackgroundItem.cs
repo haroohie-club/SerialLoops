@@ -1,5 +1,6 @@
 ﻿using HaruhiChokuretsuLib.Archive;
 using HaruhiChokuretsuLib.Archive.Data;
+using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Archive.Graphics;
 using SkiaSharp;
 using System.Linq;
@@ -8,18 +9,27 @@ namespace SerialLoops.Lib.Items
 {
     public class BackgroundItem : Item
     {
+        public int Id { get; set; }
         public GraphicsFile Graphic1 { get; set; }
         public GraphicsFile Graphic2 { get; set; }
         public BgType BackgroundType { get; set; }
+        public (string ScriptName, ScriptCommandInvocation command)[] ScriptUses { get; set; }
 
         public BackgroundItem(string name) : base(name, ItemType.Background)
         {
         }
-        public BackgroundItem(string name, BgTableEntry entry, ArchiveFile<GraphicsFile> grp) : base(name, ItemType.Background)
+        public BackgroundItem(string name, int id, BgTableEntry entry, ArchiveFile<EventFile> evt, ArchiveFile<GraphicsFile> grp) : base(name, ItemType.Background)
         {
+            Id = id;
             BackgroundType = entry.Type;
             Graphic1 = grp.Files.First(g => g.Index == entry.BgIndex1);
             Graphic2 = grp.Files.FirstOrDefault(g => g.Index == entry.BgIndex2); // can be null if type is SINGLE_TEX
+            PopulateScriptUses(evt);
+        }
+
+        public override void Refresh(ArchiveFile<DataFile> dat, ArchiveFile<EventFile> evt, ArchiveFile<GraphicsFile> grp)
+        {
+            PopulateScriptUses(evt);
         }
 
         public SKBitmap GetBackground()
@@ -70,6 +80,16 @@ namespace SerialLoops.Lib.Items
 
                 return bitmap;
             }
+        }
+
+        public void PopulateScriptUses(ArchiveFile<EventFile> evt)
+        {
+            string[] bgCommands = new string[] { "KBG_DISP", "BG_DISP", "BG_DISP2", "BG_DISPTEMP", "BG_FADE" };
+
+            ScriptUses = evt.Files.SelectMany(e =>
+                e.ScriptSections.SelectMany(sec =>
+                    sec.Objects.Where(c => bgCommands.Contains(c.Command.Mnemonic)).Select(c => (e.Name[0..^1], c))))
+                .Where(t => t.c.Parameters[0] == Id || t.c.Command.Mnemonic == "BG_FADE" && t.c.Parameters[1] == Id).ToArray();
         }
     }
 }

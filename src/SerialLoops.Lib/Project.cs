@@ -72,8 +72,9 @@ namespace SerialLoops.Lib
                 .Where(d => qmap.QMaps.Select(q => q.Name.Replace(".", "")).Contains(d.Name))
                 .Select(m => new MapItem(m.CastTo<MapFile>())));
             BgTableFile bgTable = _dat.Files.First(f => f.Name == "BGTBLS").CastTo<BgTableFile>();
-            foreach (BgTableEntry entry in bgTable.BgTableEntries)
+            for (int i = 0; i < bgTable.BgTableEntries.Count; i++)
             {
+                BgTableEntry entry = bgTable.BgTableEntries[i];
                 if (entry.BgIndex1 > 0)
                 {
                     GraphicsFile nameGraphic = _grp.Files.First(g => g.Index == entry.BgIndex1);
@@ -83,7 +84,7 @@ namespace SerialLoops.Lib
                     {
                         name = $"{bgNameBackup}{j:D2}";
                     }
-                    Items.Add(new BackgroundItem(name, entry, _grp));
+                    Items.Add(new BackgroundItem(name, i, entry, _evt, _grp));
                 }
             }
         }
