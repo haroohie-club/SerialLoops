@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SerialLoops.Lib.Items
+﻿namespace SerialLoops.Lib.Items
 {
     public class ItemDescription
     {
@@ -16,12 +10,6 @@ namespace SerialLoops.Lib.Items
         {
             Name = name;
             Type = type;
-        }
-
-        // Load an item from an ItemDescription
-        public virtual Item Load()
-        {
-            throw new NotImplementedException();
         }
 
         // Enum with values for each type of item
