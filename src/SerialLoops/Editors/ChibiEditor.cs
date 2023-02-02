@@ -3,11 +3,7 @@ using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib.Items;
 using SerialLoops.Utility;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SerialLoops.Editors
 {
@@ -16,6 +12,7 @@ namespace SerialLoops.Editors
         private ChibiItem _chibi;
         private DropDown _chibiSelection;
         private AnimatedImage _animatedImage;
+        private StackLayout _framesStack;
 
         public ChibiEditor(ChibiItem chibi, ILogger log) : base(chibi, log)
         {
@@ -33,15 +30,44 @@ namespace SerialLoops.Editors
             _animatedImage = new(_chibi.ChibiAnimations[0]);
             _animatedImage.Play();
 
+            _framesStack = new() { Orientation = Orientation.Vertical, Spacing = 10 };
+            UpdateFramesStack();
+
             return new StackLayout
             {
                 Orientation = Orientation.Vertical,
                 Items =
                 {
                     _chibiSelection,
-                    _animatedImage
+                    new StackLayout
+                    {
+                        Orientation = Orientation.Horizontal,
+                        Spacing = 20,
+                        Items =
+                        {
+                            new GroupBox
+                            {
+                                Text = "Animation",
+                                Content = _animatedImage,
+                            },
+                            new GroupBox
+                            {
+                                Text = "Frames",
+                                Content = _framesStack,
+                            }
+                        }
+                    }
                 }
             };
+        }
+
+        private void UpdateFramesStack()
+        {
+            _framesStack.Items.Clear();
+            foreach (SKGuiImage image in _animatedImage.FramesWithTimings.Select(f => f.Frame))
+            {
+                _framesStack.Items.Add(image);
+            }
         }
 
         private void ChibiSelection_SelectedKeyChanged(object sender, EventArgs e)
@@ -51,7 +77,7 @@ namespace SerialLoops.Editors
             _animatedImage.CurrentFrame = 0;
             _animatedImage.FramesWithTimings = newImage.FramesWithTimings;
             _animatedImage.UpdateImage();
-            _animatedImage.Play();
+            UpdateFramesStack();
         }
     }
 }
