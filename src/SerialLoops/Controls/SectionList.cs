@@ -176,8 +176,13 @@ namespace SerialLoops.Controls
             });
             _treeView.SelectedItemChanged += (sender, e) => OnSelectedItemChanged(e);
             _treeView.Activated += (sender, e) => OnActivated(e);
-            _treeView.DataStore = new SectionTreeItem(new Section("Top", topNodes, null));
             _treeView.Size = size;
+            SetContents(topNodes);
+        }
+
+        public void SetContents(IEnumerable<Section> topNodes)
+        {
+            _treeView.DataStore = new SectionTreeItem(new Section("Top", topNodes, null));
         }
     }
 }

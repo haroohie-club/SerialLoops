@@ -10,27 +10,25 @@ using System.Runtime.CompilerServices;
 
 namespace SerialLoops.Controls
 {
-    public class ItemExplorerPanel : ItemListPanel
+    public class ItemResultsPanel : ItemListPanel
     {
 
-        private readonly Project _project;
-        private readonly EditorTabsPanel _tabs;
-        
-        public ItemExplorerPanel(Project project, EditorTabsPanel tabs, ILogger log) : base(project.Items, new Size(200, 420), log)
-        {
-            _project = project;
-            _tabs = tabs;
-        }
+        public Project Project;
+        public EditorTabsPanel Tabs;
+        public Dialog Dialog;
+
+        public ItemResultsPanel(List<ItemDescription> results, ILogger log) : base(results, new Size(280, 185), log) { }
 
         protected override void ItemList_ItemClicked(object sender, EventArgs e)
         {
             if (sender is SectionListTreeGridView view)
             {
-                ItemDescription item = _project.FindItem(view.SelectedItem?.Text);
+                ItemDescription item = Project.FindItem(view.SelectedItem?.Text);
                 if (item != null)
                 {
-                    _tabs.OpenTab(item, _log);
+                    Tabs.OpenTab(item, _log);
                 }
+                Dialog.Close();
             }
         }
     }

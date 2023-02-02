@@ -13,6 +13,8 @@ namespace SerialLoops
         private LoopyLogger _log;
         public Config CurrentConfig { get; set; }
         public Project OpenProject { get; set; }
+        public EditorTabsPanel EditorTabs { get; set; }
+        public ItemExplorerPanel ItemExplorer { get; set; }
 
         void InitializeComponent()
         {
@@ -30,6 +32,11 @@ namespace SerialLoops
             Command openProject = new() { MenuText = "Open Project", ToolBarText = "Open Project" };
             openProject.Executed += OpenProject_Executed;
 
+            // Tools
+            Command toolsMenu = new() { MenuText = "Tools" };
+            Command search = new() { MenuText = "Search", ToolBarText = "Search" };
+            search.Executed += Search_Executed;
+
             // About
             Command aboutCommand = new() { MenuText = "About..." };
             AboutDialog aboutDialog = new() { ProgramName = "Serial Loops", Developers = new string[] { "Jonko", "William" }, Copyright = "© Haroohie Translation Club, 2023", Website = new Uri("https://haroohie.club")  };
@@ -42,9 +49,10 @@ namespace SerialLoops
                 {
                     // File submenu
                     new SubMenuItem { Text = "&File", Items = { newProject, openProject } },
+                    new SubMenuItem { Text = "&Tools", Items = { search } },
                     // new SubMenuItem { Text = "&Edit", Items = { /* commands/items */ } },
                     // new SubMenuItem { Text = "&View", Items = { /* commands/items */ } },
-                    new SubMenuItem { Text = "&Build", Items = { } },
+                    //new SubMenuItem { Text = "&Build", Items = { } },
                 },
                 ApplicationItems =
                 {
@@ -57,10 +65,10 @@ namespace SerialLoops
 
         private void OpenProjectView(Project project)
         {
-            EditorTabsPanel tabs = new(project);
-            ItemExplorerPanel items = new(project, tabs, _log);
+            EditorTabs = new(project);
+            ItemExplorer = new(project, EditorTabs, _log);
             Title = $"{BASE_TITLE} - {project.Name}";
-            Content = new TableLayout(new TableRow(items, tabs));
+            Content = new TableLayout(new TableRow(ItemExplorer, EditorTabs));
         }
 
         protected override void OnLoad(EventArgs e)
@@ -89,6 +97,20 @@ namespace SerialLoops
             {
                 OpenProject = Project.OpenProject(openFileDialog.FileName, CurrentConfig, _log);
                 OpenProjectView(OpenProject);
+            }
+        }
+
+        private void Search_Executed(object sender, EventArgs e)
+        {
+            if (OpenProject is not null)
+            {
+                SearchDialog searchDialog = new()
+                {
+                    OpenProject = OpenProject,
+                    EditorTabs = EditorTabs,
+                    Log = _log
+                };
+                searchDialog.ShowModal(this);
             }
         }
     }
