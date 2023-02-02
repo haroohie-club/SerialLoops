@@ -29,11 +29,11 @@ namespace SerialLoops.Lib
         public List<ItemDescription> Items { get; set; } = new();
 
         [JsonIgnore]
-        private ArchiveFile<DataFile> _dat;
+        public ArchiveFile<DataFile> Dat;
         [JsonIgnore]
-        private ArchiveFile<GraphicsFile> _grp;
+        public ArchiveFile<GraphicsFile> Grp;
         [JsonIgnore]
-        private ArchiveFile<EventFile> _evt;
+        public ArchiveFile<EventFile> Evt;
 
         public Project()
         {
@@ -60,30 +60,32 @@ namespace SerialLoops.Lib
 
         public void LoadArchives(ILogger log)
         {
-            _dat = ArchiveFile<DataFile>.FromFile(Path.Combine(IterativeDirectory, "original", "archives", "dat.bin"), log);
-            _grp = ArchiveFile<GraphicsFile>.FromFile(Path.Combine(IterativeDirectory, "original", "archives", "grp.bin"), log);
-            _evt = ArchiveFile<EventFile>.FromFile(Path.Combine(IterativeDirectory, "original", "archives", "evt.bin"), log);
+            Dat = ArchiveFile<DataFile>.FromFile(Path.Combine(IterativeDirectory, "original", "archives", "dat.bin"), log);
+            Grp = ArchiveFile<GraphicsFile>.FromFile(Path.Combine(IterativeDirectory, "original", "archives", "grp.bin"), log);
+            Evt = ArchiveFile<EventFile>.FromFile(Path.Combine(IterativeDirectory, "original", "archives", "evt.bin"), log);
 
-            Items.AddRange(_evt.Files
+            Items.AddRange(Dat.Files.First(d => d.Name == "CHIBIS").CastTo<ChibiFile>()
+                .Chibis.Select(c => new ChibiItem(c, this)));
+            Items.AddRange(Evt.Files
                 .Where(e => !new string[] { "CHESSS", "EVTTBLS", "TOPICS", "SCENARIOS", "TUTORIALS", "VOICEMAPS" }.Contains(e.Name))
                 .Select(e => new ScriptItem(e)));
-            QMapFile qmap = _dat.Files.First(f => f.Name == "QMAPS").CastTo<QMapFile>();
-            Items.AddRange(_dat.Files
+            QMapFile qmap = Dat.Files.First(f => f.Name == "QMAPS").CastTo<QMapFile>();
+            Items.AddRange(Dat.Files
                 .Where(d => qmap.QMaps.Select(q => q.Name.Replace(".", "")).Contains(d.Name))
                 .Select(m => new MapItem(m.CastTo<MapFile>())));
-            BgTableFile bgTable = _dat.Files.First(f => f.Name == "BGTBLS").CastTo<BgTableFile>();
+            BgTableFile bgTable = Dat.Files.First(f => f.Name == "BGTBLS").CastTo<BgTableFile>();
             foreach (BgTableEntry entry in bgTable.BgTableEntries)
             {
                 if (entry.BgIndex1 > 0)
                 {
-                    GraphicsFile nameGraphic = _grp.Files.First(g => g.Index == entry.BgIndex1);
+                    GraphicsFile nameGraphic = Grp.Files.First(g => g.Index == entry.BgIndex1);
                     string name = $"BG_{nameGraphic.Name[0..(nameGraphic.Name.LastIndexOf('_'))]}";
                     string bgNameBackup = name;
                     for (int j = 1; Items.Select(i => i.Name).Contains(name); j++)
                     {
                         name = $"{bgNameBackup}{j:D2}";
                     }
-                    Items.Add(new BackgroundItem(name, entry, _grp));
+                    Items.Add(new BackgroundItem(name, entry, Grp));
                 }
             }
         }

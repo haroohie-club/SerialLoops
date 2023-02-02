@@ -9,7 +9,7 @@ namespace SerialLoops.Lib.Items
     public class ItemDescription
     {
 
-        public string Name { get; private set; }
+        public string Name { get; protected set; }
         public ItemType Type { get; private set; }
 
         public ItemDescription(string name, ItemType type)
