@@ -28,8 +28,6 @@ namespace SerialLoops
 
             _results = new(new List<ItemDescription>(), Log)
             {
-                Project = OpenProject,
-                Tabs = EditorTabs,
                 Dialog = this
             };
             _searchInput = new()
@@ -92,7 +90,7 @@ namespace SerialLoops
             string searchTerm = _searchInput.Text;
             if (!String.IsNullOrWhiteSpace(searchTerm))
             {
-                _results.Items = OpenProject.Items;
+                _results.Items = OpenProject.Items.Where(item => item.Name.Contains(searchTerm.Trim(), StringComparison.OrdinalIgnoreCase)).ToList();
             } else
             {
                 _results.Items = Enumerable.Empty<ItemDescription>().ToList();
