@@ -33,5 +33,10 @@ namespace SerialLoops.Lib.Items
 
             return frames.Zip(timings);
         }
+
+        public override void Refresh(Project project)
+        {
+            GetChibiAnimation(Name, project.Grp);
+        }
     }
 }
