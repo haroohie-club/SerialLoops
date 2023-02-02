@@ -73,7 +73,7 @@ namespace SerialLoops.Controls
                 case ItemDescription.ItemType.Background:
                     return new BackgroundEditor((BackgroundItem)project.Items.First(i => i.Name == item.Name), log);
                 case ItemDescription.ItemType.Character_Sprite:
-                    return new CharacterSpriteEditor((CharacterSpriteItem)project.Items.First(i => i.Name == item.Name), log);
+                    return new CharacterSpriteEditor((CharacterSpriteItem)project.Items.First(i => i.Name == item.Name), project, log);
                 case ItemDescription.ItemType.Chibi:
                     return new ChibiEditor((ChibiItem)project.Items.First(i => i.Name == item.Name), log);
                 case ItemDescription.ItemType.Map:

@@ -81,7 +81,8 @@ namespace SerialLoops.Lib
                 }
             }
             Items.AddRange(Dat.Files.First(d => d.Name == "CHRDATAS").CastTo<CharacterDataFile>()
-                .Sprites.Select(s => new CharacterSpriteItem(s, this)));
+                .Sprites.Where(s => (int)s.Character > 0)
+                .Select(s => new CharacterSpriteItem(s)));
             Items.AddRange(Dat.Files.First(d => d.Name == "CHIBIS").CastTo<ChibiFile>()
                 .Chibis.Select(c => new ChibiItem(c, this)));
             Items.AddRange(Evt.Files
