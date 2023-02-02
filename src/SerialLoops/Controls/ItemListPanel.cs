@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace SerialLoops.Controls
 {
-    public abstract class ItemListPanel : Scrollable
+    public abstract class ItemListPanel : Panel
     {
         public List<ItemDescription> Items
         {
