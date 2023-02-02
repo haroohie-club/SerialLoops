@@ -88,10 +88,11 @@ namespace SerialLoops
         private void SearchInput_OnTextChanged(object sender, EventArgs e)
         {
             string searchTerm = _searchInput.Text;
-            if (!String.IsNullOrWhiteSpace(searchTerm))
+            if (!string.IsNullOrWhiteSpace(searchTerm))
             {
                 _results.Items = OpenProject.Items.Where(item => item.Name.Contains(searchTerm.Trim(), StringComparison.OrdinalIgnoreCase)).ToList();
-            } else
+            } 
+            else
             {
                 _results.Items = Enumerable.Empty<ItemDescription>().ToList();
             }
