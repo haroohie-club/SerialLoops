@@ -59,15 +59,7 @@ namespace SerialLoops.Controls
             ItemDescription item = _project.FindItem(_explorer.Viewer.SelectedItem?.Text);
             if (item != null)
             {
-                ReferenceDialog referenceDialog = new()
-                {
-                    Log = _log,
-                    Tabs = _tabs,
-                    Explorer = _explorer,
-                    Project = _project,
-                    Mode = mode,
-                    Item = item,
-                };
+                ReferenceDialog referenceDialog = new(item, mode, _project, _explorer, _tabs, _log);
                 referenceDialog.ShowModal(_explorer);
             }
         }

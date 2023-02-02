@@ -7,7 +7,6 @@ using System;
 
 namespace SerialLoops
 {
-
     public abstract class FindItemsDialog : Dialog
     {
         public ILogger Log;

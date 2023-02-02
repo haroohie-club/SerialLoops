@@ -27,7 +27,7 @@ namespace SerialLoops.Controls
         protected ILogger _log;
         private readonly Size _size;
         private List<ItemDescription> _items;
-        private bool _expandItems { get; set; }
+        private readonly bool _expandItems;
 
         protected ItemListPanel(List<ItemDescription> items, Size size, bool expandItems, ILogger log)
         {
