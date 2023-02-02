@@ -70,6 +70,8 @@ namespace SerialLoops.Controls
             {
                 case ItemDescription.ItemType.Background:
                     return new BackgroundEditor((BackgroundItem)project.Items.First(i => i.Name == item.Name), log);
+                case ItemDescription.ItemType.Chibi:
+                    return new ChibiEditor((ChibiItem)project.Items.First(i => i.Name == item.Name), log);
                 case ItemDescription.ItemType.Map:
                     return new MapEditor((MapItem)project.Items.First(i => i.Name == item.Name), log);
                 case ItemDescription.ItemType.Puzzle:

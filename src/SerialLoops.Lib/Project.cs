@@ -80,6 +80,8 @@ namespace SerialLoops.Lib
                     Items.Add(new BackgroundItem(name, i, entry, Evt, Grp));
                 }
             }
+            Items.AddRange(Dat.Files.First(d => d.Name == "CHIBIS").CastTo<ChibiFile>()
+                .Chibis.Select(c => new ChibiItem(c, this)));
             Items.AddRange(Evt.Files
                 .Where(e => !new string[] { "CHESSS", "EVTTBLS", "TOPICS", "SCENARIOS", "TUTORIALS", "VOICEMAPS" }.Contains(e.Name))
                 .Select(e => new ScriptItem(e)));
