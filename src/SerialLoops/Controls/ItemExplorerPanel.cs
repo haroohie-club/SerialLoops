@@ -16,7 +16,7 @@ namespace SerialLoops.Controls
         private readonly Project _project;
         private readonly EditorTabsPanel _tabs;
         
-        public ItemExplorerPanel(Project project, EditorTabsPanel tabs, ILogger log) : base(project.Items, new Size(200, 420), log)
+        public ItemExplorerPanel(Project project, EditorTabsPanel tabs, ILogger log) : base(project.Items, new Size(200, 420), false, log)
         {
             _project = project;
             _tabs = tabs;

@@ -81,13 +81,13 @@ namespace SerialLoops.Controls
         public bool Expandable => Count > 0;
         public ITreeGridItem Parent { get; set; }
 
-        public SectionTreeItem(Section section)
+        public SectionTreeItem(Section section, bool expanded)
         {
             Section = section;
-            Expanded = false;
+            Expanded = expanded;
             foreach (var child in section)
             {
-                SectionTreeItem temp = new(child) { Parent = this };
+                SectionTreeItem temp = new(child, expanded) { Parent = this };
                 Add(temp); // recursive
             }
         }
@@ -158,7 +158,7 @@ namespace SerialLoops.Controls
             return null;
         }
 
-        public SectionListTreeGridView(IEnumerable<Section> topNodes, Size size)
+        public SectionListTreeGridView(IEnumerable<Section> topNodes, Size size, bool expanded)
         {
             _treeView = new TreeGridView
             {
@@ -177,12 +177,12 @@ namespace SerialLoops.Controls
             _treeView.SelectedItemChanged += (sender, e) => OnSelectedItemChanged(e);
             _treeView.Activated += (sender, e) => OnActivated(e);
             _treeView.Size = size;
-            SetContents(topNodes);
+            SetContents(topNodes, expanded);
         }
 
-        public void SetContents(IEnumerable<Section> topNodes)
+        public void SetContents(IEnumerable<Section> topNodes, bool expanded)
         {
-            _treeView.DataStore = new SectionTreeItem(new Section("Top", topNodes, null));
+            _treeView.DataStore = new SectionTreeItem(new Section("Top", topNodes, null), expanded);
         }
     }
 }

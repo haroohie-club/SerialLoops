@@ -17,7 +17,7 @@ namespace SerialLoops.Controls
         public EditorTabsPanel Tabs;
         public Dialog Dialog;
 
-        public ItemResultsPanel(List<ItemDescription> results, ILogger log) : base(results, new Size(280, 185), log) { }
+        public ItemResultsPanel(List<ItemDescription> results, ILogger log) : base(results, new Size(280, 185), true, log) { }
 
         protected override void ItemList_ItemClicked(object sender, EventArgs e)
         {
