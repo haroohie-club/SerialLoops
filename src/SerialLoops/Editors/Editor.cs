@@ -21,12 +21,10 @@ namespace SerialLoops.Editors
         void InitializeComponent()
         {
             Text = Description.Name;
-            MinimumSize = EditorTabsPanel.EDITOR_BASE_SIZE;
             Image = EditorTabsPanel.GetItemIcon(Description.Type, _log);
             Padding = 10;
 
             Panel panel = GetEditorPanel();
-            panel.MinimumSize = EditorTabsPanel.EDITOR_BASE_SIZE;
             Content = panel;
         }
 

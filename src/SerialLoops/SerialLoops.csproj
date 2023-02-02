@@ -13,15 +13,26 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Icons\Background.png" />
+    <None Remove="Icons\BGM.png" />
+    <None Remove="Icons\Character_Sprite.png" />
+    <None Remove="Icons\Chess.png" />
+    <None Remove="Icons\Chibi.png" />
+    <None Remove="Icons\Dialogue_Config.png" />
+    <None Remove="Icons\Group_Selection.png" />
     <None Remove="Icons\Map.png" />
+    <None Remove="Icons\Puzzle.png" />
+    <None Remove="Icons\Scenario.png" />
     <None Remove="Icons\Script.png" />
+    <None Remove="Icons\System_Texture.png" />
+    <None Remove="Icons\Topic.png" />
+    <None Remove="Icons\Transition.png" />
+    <None Remove="Icons\Tutorial.png" />
+    <None Remove="Icons\Voice.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Icons\Script.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Icons\Map.png">
+    <EmbeddedResource Include="Icons\*.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>

@@ -38,14 +38,7 @@ namespace SerialLoops.Controls
             _items = new SectionListTreeGridView(sections, ITEM_EXPLORER_BASE_SIZE);
             _items.Activated += ItemList_ItemClicked;
 
-            Content = new StackLayout
-            {
-                Orientation = Orientation.Vertical,
-                Items =
-                {
-                    _items.Control
-                }
-            };
+            Content = new TableLayout(_items.Control);
         }
 
         private void ItemList_ItemClicked(object sender, EventArgs e)

@@ -60,18 +60,7 @@ namespace SerialLoops
             EditorTabsPanel tabs = new(project);
             ItemExplorerPanel items = new(project, tabs, _log);
             Title = $"{BASE_TITLE} - {project.Name}";
-            Content = new StackLayout
-            {
-                Items =
-                {
-                    new Splitter
-                    {
-                        Orientation = Orientation.Horizontal,
-                        Panel1 = items,
-                        Panel2 = tabs
-                    }
-                }
-            };
+            Content = new TableLayout(new TableRow(items, tabs));
         }
 
         protected override void OnLoad(EventArgs e)
@@ -96,7 +85,7 @@ namespace SerialLoops
         {
             OpenFileDialog openFileDialog = new() { Directory = new Uri(CurrentConfig.ProjectsDirectory) };
             openFileDialog.Filters.Add(new("Serial Loops Project", $".{Project.PROJECT_FORMAT}"));
-            if (openFileDialog.ShowDialog(this) == DialogResult.Ok)
+            if (openFileDialog.ShowAndReportIfFileSelected(this))
             {
                 OpenProject = Project.OpenProject(openFileDialog.FileName, CurrentConfig, _log);
                 OpenProjectView(OpenProject);
