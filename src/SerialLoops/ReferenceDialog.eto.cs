@@ -5,6 +5,7 @@ using SerialLoops.Controls;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SerialLoops
 {
@@ -30,7 +31,7 @@ namespace SerialLoops
             MinimumSize = new Size(400, 275);
             Padding = 10;
 
-            List<ItemDescription> results = GetResults();
+            List<ItemDescription> results = Mode == ReferenceMode.REFERENCES_TO ? GetReferencesTo() : GetReferencedBy();
             Content = new StackLayout
             {
                 Orientation = Orientation.Vertical,
@@ -45,9 +46,27 @@ namespace SerialLoops
             };
         }
 
-        private List<ItemDescription> GetResults()
+        private List<ItemDescription> GetReferencesTo()
         {
-            return new List<ItemDescription>(); //todo
+            switch (Item.Type)
+            {
+                case ItemDescription.ItemType.Background:
+                        BackgroundItem bg = (BackgroundItem)Item;
+                        return Project.Items.Where(i => bg.ScriptUses.Select(s => s.ScriptName).Contains(i.Name)).ToList();
+                case ItemDescription.ItemType.Character_Sprite:
+                        CharacterSpriteItem sprite = (CharacterSpriteItem)Item;
+                        return Project.Items.Where(i => sprite.ScriptUses.Select(s => s.ScriptName).Contains(i.Name)).ToList();
+                case ItemDescription.ItemType.Chibi:
+                        ChibiItem chibi = (ChibiItem)Item;
+                        return Project.Items.Where(i => chibi.ScriptUses.Select(s => s.ScriptName).Contains(i.Name)).ToList();
+                default:
+                    return new List<ItemDescription>();
+            }
+        }
+
+        private List<ItemDescription> GetReferencedBy()
+        {
+            return new List<ItemDescription>();
         }
 
         public enum ReferenceMode
