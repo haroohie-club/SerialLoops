@@ -1,9 +1,11 @@
-﻿using Eto.Forms;
+﻿using Eto.Drawing;
+using Eto.Forms;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Controls;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace SerialLoops.Editors
@@ -19,10 +21,10 @@ namespace SerialLoops.Editors
         public override Container GetEditorPanel()
         {
             _scenario = (ScenarioItem)Description;
-            StackLayout mainLayout = new()
+
+            TableLayout tableLayout = new()
             {
-                Orientation = Orientation.Vertical,
-                Spacing = 10,
+                Spacing = new Size(5, 5)
             };
 
             IEnumerable<ListItem> verbs = new string[]
@@ -45,35 +47,30 @@ namespace SerialLoops.Editors
 
             foreach ((string verb, string parameter) in _scenario.ScenarioCommands)
             {
-                StackLayout commandLayout = new()
-                {
-                    Orientation = Orientation.Horizontal,
-                    Spacing = 10,
-                };
+                TableRow row = new();
 
                 DropDown commandDropDown = new();
                 commandDropDown.Items.AddRange(verbs);
                 commandDropDown.SelectedKey = verb;
-                commandLayout.Items.Add(commandDropDown);
+                row.Cells.Add(new TableCell(commandDropDown));
                 switch (verb)
                 {
                     case "LOAD_SCENE":
                     case "PUZZLE_PHASE":
                         LinkButton link = new() { Text = parameter };
                         link.Click += LinkClick_Click;
-                        commandLayout.Items.Add(link);
+                        row.Cells.Add(new TableCell(link));
                         break;
 
                     default:
-                        commandLayout.Items.Add(new TextBox { Text = parameter });
+                        row.Cells.Add(new TableCell(new TextBox { Text = parameter }));
                         break;
                 }
 
-                mainLayout.Items.Add(commandLayout);
+                tableLayout.Rows.Add(row);
             }
 
-            Container container = new() { Content = mainLayout };
-            return container;
+            return tableLayout;
         }
 
         private void LinkClick_Click(object sender, System.EventArgs e)
