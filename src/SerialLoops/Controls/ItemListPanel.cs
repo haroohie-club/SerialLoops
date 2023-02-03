@@ -50,7 +50,7 @@ namespace SerialLoops.Controls
         private IEnumerable<Section> GetSections()
         {
              return Items.GroupBy(i => i.Type).OrderBy(g => g.Key)
-                .Select(g => new Section($"{g.Key}s", g.Select(i => new Section() { Text = i.Name }), EditorTabsPanel.GetItemIcon(g.Key, _log)));
+                .Select(g => new Section($"{g.Key.ToString().Replace('_', ' ')}s", g.Select(i => new Section() { Text = i.Name }), EditorTabsPanel.GetItemIcon(g.Key, _log)));
         }
 
         protected abstract void ItemList_ItemClicked(object sender, EventArgs e);

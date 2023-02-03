@@ -8,6 +8,7 @@ namespace SerialLoops.Lib.Items
     public class ScriptItem : Item
     {
         public EventFile Event { get; set; }
+
         public ScriptItem(string name) : base(name, ItemType.Script)
         {
         }

@@ -66,7 +66,7 @@ namespace SerialLoops.Controls
             Tabs.SelectedPage = newPage;
         }
 
-        internal static DocumentPage CreateTab(ItemDescription item, Project project, ILogger log)
+        internal DocumentPage CreateTab(ItemDescription item, Project project, ILogger log)
         {
             switch (item.Type)
             {
@@ -80,6 +80,8 @@ namespace SerialLoops.Controls
                     return new MapEditor((MapItem)project.Items.First(i => i.Name == item.Name), log);
                 case ItemDescription.ItemType.Puzzle:
                     return new PuzzleEditor((PuzzleItem)project.Items.First(i => i.Name == item.Name), log);
+                case ItemDescription.ItemType.Scenario:
+                    return new ScenarioEditor((ScenarioItem)project.Items.First(i => i.Name == item.Name), log, project, this);
                 case ItemDescription.ItemType.Script:
                     return new ScriptEditor((ScriptItem)project.Items.First(i => i.Name == item.Name), log);
                 default:
