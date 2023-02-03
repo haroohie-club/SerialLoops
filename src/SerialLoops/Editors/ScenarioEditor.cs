@@ -70,7 +70,7 @@ namespace SerialLoops.Editors
                 tableLayout.Rows.Add(row);
             }
 
-            return tableLayout;
+            return new Scrollable { Content = tableLayout };
         }
 
         private void LinkClick_Click(object sender, System.EventArgs e)
