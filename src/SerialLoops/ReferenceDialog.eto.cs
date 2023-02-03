@@ -57,6 +57,13 @@ namespace SerialLoops
                         return Project.Items.Where(i => bg.ScriptUses.Select(s => s.ScriptName).Contains(i.Name)).ToList();
                     }
                     return new List<ItemDescription>();
+                case ItemDescription.ItemType.Character_Sprite:
+                    if (Mode == ReferenceMode.REFERENCES_TO)
+                    {
+                        CharacterSpriteItem sprite = (CharacterSpriteItem)Item;
+                        return Project.Items.Where(i => sprite.ScriptUses.Select(s => s.ScriptName).Contains(i.Name)).ToList();
+                    }
+                    return new List<ItemDescription>();
                 case ItemDescription.ItemType.Chibi:
                     if (Mode == ReferenceMode.REFERENCES_TO)
                     {
