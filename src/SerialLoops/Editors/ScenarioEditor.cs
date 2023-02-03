@@ -16,7 +16,7 @@ namespace SerialLoops.Editors
         {
         }
 
-        public override Scrollable GetEditorPanel()
+        public override Container GetEditorPanel()
         {
             _scenario = (ScenarioItem)Description;
             StackLayout mainLayout = new()
@@ -72,7 +72,8 @@ namespace SerialLoops.Editors
                 mainLayout.Items.Add(commandLayout);
             }
 
-            return new Scrollable() { Content = mainLayout };
+            Container container = new() { Content = mainLayout };
+            return container;
         }
 
         private void LinkClick_Click(object sender, System.EventArgs e)
