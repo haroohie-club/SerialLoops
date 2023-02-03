@@ -5,6 +5,7 @@ using SerialLoops.Controls;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SerialLoops
 {
@@ -47,7 +48,25 @@ namespace SerialLoops
 
         private List<ItemDescription> GetResults()
         {
-            return new List<ItemDescription>(); //todo
+            switch (Item.Type)
+            {
+                case ItemDescription.ItemType.Background:
+                    if (Mode == ReferenceMode.REFERENCES_TO)
+                    {
+                        BackgroundItem bg = (BackgroundItem)Item;
+                        return Project.Items.Where(i => bg.ScriptUses.Select(s => s.ScriptName).Contains(i.Name)).ToList();
+                    }
+                    return new List<ItemDescription>();
+                case ItemDescription.ItemType.Chibi:
+                    if (Mode == ReferenceMode.REFERENCES_TO)
+                    {
+                        ChibiItem chibi = (ChibiItem)Item;
+                        return Project.Items.Where(i => chibi.ScriptUses.Select(s => s.ScriptName).Contains(i.Name)).ToList();
+                    }
+                    return new List<ItemDescription>();
+                default:
+                    return new List<ItemDescription>(); //todo
+            }
         }
 
         public enum ReferenceMode
