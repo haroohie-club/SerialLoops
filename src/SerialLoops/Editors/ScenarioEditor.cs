@@ -1,7 +1,9 @@
 ﻿using Eto.Forms;
-using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
+using SerialLoops.Controls;
+using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SerialLoops.Editors
@@ -10,20 +12,20 @@ namespace SerialLoops.Editors
     {
         private ScenarioItem _scenario;
 
-        public ScenarioEditor(ScenarioItem item, ILogger log) : base(item, log)
+        public ScenarioEditor(ScenarioItem item, ILogger log, Project project, EditorTabsPanel tabs) : base(item, log, project, tabs)
         {
         }
 
-        public override Panel GetEditorPanel()
+        public override Scrollable GetEditorPanel()
         {
             _scenario = (ScenarioItem)Description;
             StackLayout mainLayout = new()
             {
                 Orientation = Orientation.Vertical,
-                Spacing = 20,
+                Spacing = 10,
             };
 
-            string[] verbs = new string[]
+            IEnumerable<ListItem> verbs = new string[]
             {
                 "NEW_GAME",
                 "SAVE",
@@ -39,22 +41,48 @@ namespace SerialLoops.Editors
                 "UNKNOWN0B",
                 "UNLOCK",
                 "END",
-            };
+            }.Select(v => new ListItem() { Text = v, Key = v });
 
-            foreach (ScenarioCommand command in _scenario.Scenario.Commands)
+            foreach ((string verb, string parameter) in _scenario.ScenarioCommands)
             {
-                DropDown commandDropDown = new();
-                commandDropDown.Items.AddRange(verbs.Select(v => new ListItem() { Text = v }));
-                switch (command.Verb)
+                StackLayout commandLayout = new()
                 {
-                    default:
+                    Orientation = Orientation.Horizontal,
+                    Spacing = 10,
+                };
 
-                        mainLayout.Items.Add(new Label { Text = "" })
+                DropDown commandDropDown = new();
+                commandDropDown.Items.AddRange(verbs);
+                commandDropDown.SelectedKey = verb;
+                commandLayout.Items.Add(commandDropDown);
+                switch (verb)
+                {
+                    case "LOAD_SCENE":
+                    case "PUZZLE_PHASE":
+                        LinkButton link = new() { Text = parameter };
+                        link.Click += LinkClick_Click;
+                        commandLayout.Items.Add(link);
+                        break;
+
+                    default:
+                        commandLayout.Items.Add(new TextBox { Text = parameter });
                         break;
                 }
+
+                mainLayout.Items.Add(commandLayout);
             }
 
-            return mainLayout;
+            return new Scrollable() { Content = mainLayout };
+        }
+
+        private void LinkClick_Click(object sender, System.EventArgs e)
+        {
+            LinkButton link = (LinkButton)sender;
+            ItemDescription item = _project.FindItem(link.Text);
+            if (item != null)
+            {
+                _tabs.OpenTab(item, _log);
+            }
         }
     }
 }

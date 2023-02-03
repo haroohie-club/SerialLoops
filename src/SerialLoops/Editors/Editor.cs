@@ -11,12 +11,14 @@ namespace SerialLoops.Editors
     {
         protected ILogger _log;
         protected Project _project;
+        protected EditorTabsPanel _tabs;
         public ItemDescription Description { get; private set; }
 
-        public Editor(ItemDescription description, ILogger log, Project project = null)
+        public Editor(ItemDescription description, ILogger log, Project project = null, EditorTabsPanel tabs = null)
         {
             Description = description;
             _project = project;
+            _tabs = tabs;
             _log = log;
             InitializeComponent();
         }

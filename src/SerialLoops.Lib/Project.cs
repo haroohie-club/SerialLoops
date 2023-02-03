@@ -87,6 +87,8 @@ namespace SerialLoops.Lib
             Items.AddRange(Evt.Files
                 .Where(e => !new string[] { "CHESSS", "EVTTBLS", "TOPICS", "SCENARIOS", "TUTORIALS", "VOICEMAPS" }.Contains(e.Name))
                 .Select(e => new ScriptItem(e)));
+            EventFile scenarioFile = Evt.Files.First(f => f.Name == "SCENARIOS");
+            scenarioFile.InitializeScenarioFile();
             QMapFile qmap = Dat.Files.First(f => f.Name == "QMAPS").CastTo<QMapFile>();
             Items.AddRange(Dat.Files
                 .Where(d => qmap.QMaps.Select(q => q.Name.Replace(".", "")).Contains(d.Name))
@@ -94,6 +96,8 @@ namespace SerialLoops.Lib
             Items.AddRange(Dat.Files
                 .Where(d => d.Name.StartsWith("SLG"))
                 .Select(d => new PuzzleItem(d.CastTo<PuzzleFile>(), this)));
+            // Scenario item must be created after script and puzzle items are constructed
+            Items.Add(new ScenarioItem(scenarioFile.Scenario, this));
         }
 
         public ItemDescription FindItem(string name)
