@@ -15,7 +15,7 @@ namespace SerialLoops.Editors
         {
         }
 
-        public override Panel GetEditorPanel()
+        public override Container GetEditorPanel()
         {
             _sprite = (CharacterSpriteItem)Description;
             _animatedImage = new AnimatedImage(_sprite.GetLipFlapAnimation(_project));

@@ -14,7 +14,7 @@ namespace SerialLoops.Lib.Items
         public Chibi Chibi { get; set; }
         public int ChibiIndex { get; set; }
         public List<(string Name, ChibiEntry Chibi)> ChibiEntries { get; set; } = new();
-        public List<IEnumerable<(SKBitmap Frame, int Timing)>> ChibiAnimations { get; set; } = new();
+        public Dictionary<string, IEnumerable<(SKBitmap Frame, int Timing)>> ChibiAnimations { get; set; } = new();
         public (string ScriptName, ScriptCommandInvocation command)[] ScriptUses { get; set; }
 
         public ChibiItem(Chibi chibi, Project project) : base($"CHIBI{chibi.ChibiEntries[0].Animation}", ItemType.Chibi)
@@ -27,7 +27,7 @@ namespace SerialLoops.Lib.Items
             ChibiIndex = chibiIndices.IndexOf(firstAnimationName[0..3]);
             ChibiEntries.AddRange(Chibi.ChibiEntries.Where(c => c.Animation > 0)
                 .Select(c => (project.Grp.Files.First(f => f.Index == c.Animation).Name[0..^3], c)));
-            ChibiAnimations.AddRange(ChibiEntries.Select(c => GetChibiAnimation(c.Name, project.Grp)));
+            ChibiEntries.ForEach(e => ChibiAnimations.Add(e.Name, GetChibiAnimation(e.Name, project.Grp)));
             PopulateScriptUses(project.Evt);
         }
 
@@ -60,4 +60,6 @@ namespace SerialLoops.Lib.Items
             ScriptUses = list.ToArray();
         }
     }
+
+
 }

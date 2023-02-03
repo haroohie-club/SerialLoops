@@ -12,7 +12,7 @@ namespace SerialLoops.Editors
         {
         }
 
-        public override Panel GetEditorPanel()
+        public override Container GetEditorPanel()
         {
             _script = (ScriptItem)Description;
             return new StackLayout

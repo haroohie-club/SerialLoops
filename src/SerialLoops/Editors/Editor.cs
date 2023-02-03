@@ -28,12 +28,10 @@ namespace SerialLoops.Editors
             Text = Description.Name;
             Image = EditorTabsPanel.GetItemIcon(Description.Type, _log);
             Padding = 10;
-
-            Panel panel = GetEditorPanel();
-            Content = panel;
+            Content = GetEditorPanel();
         }
 
-        public abstract Panel GetEditorPanel();
+        public abstract Container GetEditorPanel();
         
     }
 }
