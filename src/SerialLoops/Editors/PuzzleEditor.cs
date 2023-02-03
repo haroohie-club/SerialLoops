@@ -15,7 +15,7 @@ namespace SerialLoops.Editors
         {
         }
 
-        public override Panel GetEditorPanel()
+        public override Container GetEditorPanel()
         {
             _puzzle = (PuzzleItem)Description;
             StackLayout mainLayout = new()

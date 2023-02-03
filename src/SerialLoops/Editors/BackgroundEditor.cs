@@ -14,7 +14,7 @@ namespace SerialLoops.Editors
         {
         }
 
-        public override Panel GetEditorPanel()
+        public override Container GetEditorPanel()
         {
             _bg = (BackgroundItem)Description;
             return new StackLayout
