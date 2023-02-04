@@ -35,7 +35,7 @@ namespace SerialLoops.Lib.Script
                         switch (i)
                         {
                             case 0:
-                                parameters.Add(new StringScriptParameter("dialogue", GetDialogueLine(parameter, eventFile)));
+                                parameters.Add(new StringScriptParameter("dialogue", StringScriptParameter.StringParameterType.DIALOGUE, GetDialogueLine(parameter, eventFile)));
                                 break;
                             case 1:
                                 parameters.Add(new ShortScriptParameter("spriteIndex", parameter));
@@ -82,7 +82,7 @@ namespace SerialLoops.Lib.Script
                     case CommandVerb.PIN_MNL:
                         if (i == 0)
                         {
-                            parameters.Add(new StringScriptParameter("dialogue", GetDialogueLine(parameter, eventFile)));
+                            parameters.Add(new StringScriptParameter("dialogue", StringScriptParameter.StringParameterType.DIALOGUE, GetDialogueLine(parameter, eventFile)));
                         }
                         break;
                     case CommandVerb.BG_DISP:
