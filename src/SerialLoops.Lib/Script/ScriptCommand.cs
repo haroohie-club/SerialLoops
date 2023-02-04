@@ -187,7 +187,7 @@ namespace SerialLoops.Lib.Script
                         switch (i)
                         {
                             case 0:
-                                parameters.Add(new BgmScriptParameter("bgmIndex", (BackgroundMusicItem)project.Items.First(i => i.Type == ItemDescription.ItemType.BGM && ((BackgroundMusicItem)i).Index == parameter)));
+                                parameters.Add(new ShortScriptParameter("bgmIndex", parameter)); //BgmScriptParameter("bgmIndex", (BackgroundMusicItem)project.Items.First(i => i.Type == ItemDescription.ItemType.BGM && ((BackgroundMusicItem)i).Index == parameter)));
                                 break;
                             case 1:
                                 parameters.Add(new BgmModeScriptParameter("mode", parameter));
@@ -236,16 +236,16 @@ namespace SerialLoops.Lib.Script
                         switch (i)
                         {
                             case 0:
-                                parameters.Add(new OptionScriptParameter("option1", ((ChoicesSection)Convert.ChangeType(eventFile.SectionPointersAndCounts.First(s => s.Section.SectionType == typeof(ChoicesSection)), typeof(ChoicesSection))).Objects[parameter]));
+                                parameters.Add(new OptionScriptParameter("option1", eventFile.ChoicesSection.Objects[parameter + 1]));
                                 break;
                             case 1:
-                                parameters.Add(new OptionScriptParameter("option2", ((ChoicesSection)Convert.ChangeType(eventFile.SectionPointersAndCounts.First(s => s.Section.SectionType == typeof(ChoicesSection)), typeof(ChoicesSection))).Objects[parameter]));
+                                parameters.Add(new OptionScriptParameter("option2", eventFile.ChoicesSection.Objects[parameter + 1]));
                                 break;
                             case 2:
-                                parameters.Add(new OptionScriptParameter("option3", ((ChoicesSection)Convert.ChangeType(eventFile.SectionPointersAndCounts.First(s => s.Section.SectionType == typeof(ChoicesSection)), typeof(ChoicesSection))).Objects[parameter]));
+                                parameters.Add(new OptionScriptParameter("option3", eventFile.ChoicesSection.Objects[parameter + 1]));
                                 break;
                             case 3:
-                                parameters.Add(new OptionScriptParameter("option4", ((ChoicesSection)Convert.ChangeType(eventFile.SectionPointersAndCounts.First(s => s.Section.SectionType == typeof(ChoicesSection)), typeof(ChoicesSection))).Objects[parameter]));
+                                parameters.Add(new OptionScriptParameter("option4", eventFile.ChoicesSection.Objects[parameter + 1]));
                                 break;
                             case 4:
                                 parameters.Add(new ShortScriptParameter("unknown08", parameter));
@@ -279,14 +279,14 @@ namespace SerialLoops.Lib.Script
                         if (i == 0)
                         {
                             //todo script section labels?
-                            parameters.Add(new ScriptSectionScriptParameter("blockId", ((ScriptSectionDefinitionsSection)Convert.ChangeType(eventFile.SectionPointersAndCounts.First(s => s.Section.SectionType == typeof(ScriptSectionDefinitionsSection)), typeof(ScriptSectionDefinitionsSection))).Objects[parameter]));
+                            parameters.Add(new ScriptSectionScriptParameter("blockId", eventFile.ScriptSections.First(s => s.Name == eventFile.LabelsSection.Objects.First(l => l.Id == parameter).Name.Replace("/", ""))));
                         }
                         break;
                     case CommandVerb.SCENE_GOTO:
                     case CommandVerb.SCENE_GOTO2:
                         if (i == 0)
                         {
-                            parameters.Add(new ConditionalScriptParameter("conditionalIndex", ((ConditionalSection)Convert.ChangeType(eventFile.SectionPointersAndCounts.First(s => s.Section.SectionType == typeof(ConditionalSection)), typeof(ConditionalSection))).Objects[parameter]));
+                            parameters.Add(new ConditionalScriptParameter("conditionalIndex", eventFile.ConditionalsSection.Objects[parameter]));
                         }
                         break;
                     case CommandVerb.WAIT:
@@ -299,11 +299,11 @@ namespace SerialLoops.Lib.Script
                         switch (i)
                         {
                             case 0:
-                                parameters.Add(new ConditionalScriptParameter("conditionalIndex", ((ConditionalSection)Convert.ChangeType(eventFile.SectionPointersAndCounts.First(s => s.Section.SectionType == typeof(ConditionalSection)), typeof(ConditionalSection))).Objects[parameter]));
+                                parameters.Add(new ConditionalScriptParameter("conditionalIndex", eventFile.ConditionalsSection.Objects[parameter]));
                                 break;
                             // 1 is unused
                             case 2:
-                                parameters.Add(new ScriptSectionScriptParameter("gotoId", ((ScriptSectionDefinitionsSection)Convert.ChangeType(eventFile.SectionPointersAndCounts.First(s => s.Section.SectionType == typeof(ScriptSectionDefinitionsSection)), typeof(ScriptSectionDefinitionsSection))).Objects[parameter]));
+                                parameters.Add(new ScriptSectionScriptParameter("gotoId", eventFile.ScriptSections.First(s => s.Name == eventFile.LabelsSection.Objects.First(l => l.Id == parameter).Name)));
                                 break;
                         }
                         break;
@@ -343,10 +343,10 @@ namespace SerialLoops.Lib.Script
                         switch (i)
                         {
                             case 0:
-                                parameters.Add(new BgScriptParameter("bgIndex", (BackgroundItem)project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == parameter)));
+                                parameters.Add(new BgScriptParameter("bgIndex", (BackgroundItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == parameter)));
                                 break;
                             case 1:
-                                parameters.Add(new BgScriptParameter("bgIndexSuper", (BackgroundItem)project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == parameter)));
+                                parameters.Add(new BgScriptParameter("bgIndexSuper", (BackgroundItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == parameter)));
                                 break;
                             case 2:
                                 parameters.Add(new ShortScriptParameter("fadeTime", parameter));
@@ -401,7 +401,7 @@ namespace SerialLoops.Lib.Script
                                 parameters.Add(new ShortScriptParameter($"unknown0{i}", parameter));
                                 break;
                             case 4:
-                                parameters.Add(new ScriptSectionScriptParameter("endScriptBlock", ((ScriptSectionDefinitionsSection)Convert.ChangeType(eventFile.SectionPointersAndCounts.First(s => s.Section.SectionType == typeof(ScriptSectionDefinitionsSection)), typeof(ScriptSectionDefinitionsSection))).Objects[parameter]));
+                                parameters.Add(new ScriptSectionScriptParameter("endScriptBlock", eventFile.ScriptSections.First(s => s.Name == eventFile.LabelsSection.Objects.First(l => l.Id == parameter).Name.Replace("NONE/", ""))));
                                 break;
                         }
                         break;
@@ -463,13 +463,13 @@ namespace SerialLoops.Lib.Script
                         switch (i)
                         {
                             case 0:
-                                parameters.Add(new ScriptSectionScriptParameter("clearBlock", ((ScriptSectionDefinitionsSection)Convert.ChangeType(eventFile.SectionPointersAndCounts.First(s => s.Section.SectionType == typeof(ScriptSectionDefinitionsSection)), typeof(ScriptSectionDefinitionsSection))).Objects[parameter]));
+                                parameters.Add(new ScriptSectionScriptParameter("clearBlock", eventFile.ScriptSections.First(s => s.Name == eventFile.LabelsSection.Objects.First(l => l.Id == parameter).Name.Replace("NONE/", ""))));
                                 break;
                             case 1:
-                                parameters.Add(new ScriptSectionScriptParameter("missBlock", ((ScriptSectionDefinitionsSection)Convert.ChangeType(eventFile.SectionPointersAndCounts.First(s => s.Section.SectionType == typeof(ScriptSectionDefinitionsSection)), typeof(ScriptSectionDefinitionsSection))).Objects[parameter]));
+                                parameters.Add(new ScriptSectionScriptParameter("missBlock", eventFile.ScriptSections.First(s => s.Name == eventFile.LabelsSection.Objects.First(l => l.Id == parameter).Name.Replace("NONE/", ""))));
                                 break;
                             case 2:
-                                parameters.Add(new ScriptSectionScriptParameter("miss2Block", ((ScriptSectionDefinitionsSection)Convert.ChangeType(eventFile.SectionPointersAndCounts.First(s => s.Section.SectionType == typeof(ScriptSectionDefinitionsSection)), typeof(ScriptSectionDefinitionsSection))).Objects[parameter]));
+                                parameters.Add(new ScriptSectionScriptParameter("miss2Block", eventFile.ScriptSections.First(s => s.Name == eventFile.LabelsSection.Objects.First(l => l.Id == parameter).Name.Replace("NONE/", ""))));
                                 break;
                         }
                         break;

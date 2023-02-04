@@ -92,7 +92,7 @@ namespace SerialLoops.Lib
             QMapFile qmap = Dat.Files.First(f => f.Name == "QMAPS").CastTo<QMapFile>();
             Items.AddRange(Dat.Files
                 .Where(d => qmap.QMaps.Select(q => q.Name.Replace(".", "")).Contains(d.Name))
-                .Select(m => new MapItem(m.CastTo<MapFile>())));
+                .Select(m => new MapItem(m.CastTo<MapFile>(), qmap.QMaps.FindIndex(q => q.Name.Replace(".", "") == m.Name))));
             Items.AddRange(Dat.Files
                 .Where(d => d.Name.StartsWith("SLG"))
                 .Select(d => new PuzzleItem(d.CastTo<PuzzleFile>(), this)));
