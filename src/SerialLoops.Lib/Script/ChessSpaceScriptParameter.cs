@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SerialLoops.Lib.Script
+﻿namespace SerialLoops.Lib.Script
 {
-    internal class ChessSpaceScriptParameter
+    public class ChessSpaceScriptParameter : ScriptParameter
     {
+        public ChessSpaceScriptParameter(string name) : base(name, ParameterType.CHESS_SPACE)
+        {
+        }
+
     }
 }

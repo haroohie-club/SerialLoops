@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using HaruhiChokuretsuLib.Archive.Data;
 
 namespace SerialLoops.Lib.Script
 {
-    internal class DialoguePropertyScriptParameter
+    public class DialoguePropertyScriptParameter : ScriptParameter
     {
+        public MessageInfo DialogueProperties { get; set; }
+
+        public DialoguePropertyScriptParameter(string name, MessageInfo dialogueProperties) : base(name, ParameterType.DIALOGUE_PROPERTY)
+        {
+            DialogueProperties = dialogueProperties;
+        }
     }
 }

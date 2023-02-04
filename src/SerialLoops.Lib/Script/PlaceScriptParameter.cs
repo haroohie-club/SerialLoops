@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SerialLoops.Lib.Script
 {
-    internal class PlaceScriptParameter
+    public class PlaceScriptParameter
     {
     }
 }

@@ -1,12 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SerialLoops.Lib.Script
+﻿namespace SerialLoops.Lib.Script
 {
-    internal class SfxModeScriptParameter
+    public class SfxModeScriptParameter : ScriptParameter
     {
+        public SfxMode Mode { get; set; }
+
+        public SfxModeScriptParameter(string name, short mode) : base(name, ParameterType.SFX_MODE)
+        {
+            Mode = (SfxMode)mode;
+        }
+
+        public enum SfxMode : short
+        {
+            START = 6,
+            STOP = 7,
+        }
     }
 }

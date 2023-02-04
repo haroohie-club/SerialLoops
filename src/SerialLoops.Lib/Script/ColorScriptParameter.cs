@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SkiaSharp;
 
 namespace SerialLoops.Lib.Script
 {
-    internal class ColorScriptParameter
+    public class ColorScriptParameter : ScriptParameter
     {
+        public SKColor Color { get; set; }
+
+        public ColorScriptParameter(string name, short red, short green, short blue) : base(name, ParameterType.COLOR)
+        {
+            Color = new((byte)red, (byte)green, (byte)blue);
+        }
     }
 }

@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SerialLoops.Lib.Items;
 
 namespace SerialLoops.Lib.Script
 {
-    internal class BgScriptParameter
+    public class BgScriptParameter : ScriptParameter
     {
+        public BackgroundItem Background { get; set; }
+
+        public BgScriptParameter(string name, BackgroundItem background) : base(name, ParameterType.BG)
+        {
+            Background = background;
+        }
     }
 }

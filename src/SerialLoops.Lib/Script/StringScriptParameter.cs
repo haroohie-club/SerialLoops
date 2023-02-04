@@ -1,18 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SerialLoops.Lib.Script
+﻿namespace SerialLoops.Lib.Script
 {
     public class StringScriptParameter : ScriptParameter
     {
+        public StringParameterType StringType { get; set; }
         public string Value { get; set; }
 
-        public StringScriptParameter(string name, string value) : base(name, ParameterType.STRING)
+        public StringScriptParameter(string name, StringParameterType type, string value) : base(name, ParameterType.STRING)
         {
+            StringType = type;
             Value = value;
+        }
+
+        public enum StringParameterType
+        {
+            CONDITIONAL,
+            DIALOGUE,
+            OPTION,
         }
     }
 }

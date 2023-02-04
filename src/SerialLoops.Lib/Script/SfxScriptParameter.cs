@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SerialLoops.Lib.Script
+﻿namespace SerialLoops.Lib.Script
 {
-    internal class SfxScriptParameter
+    public class SfxScriptParameter : ScriptParameter
     {
+        public SfxScriptParameter(string name) : base(name, ParameterType.SFX)
+        {
+        }
     }
 }

@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SerialLoops.Lib.Script
+﻿namespace SerialLoops.Lib.Script
 {
-    internal class VoiceLineScriptParameter
+    public class VoiceLineScriptParameter : ScriptParameter
     {
+        public VoiceLineScriptParameter(string name) : base(name, ParameterType.VOICE_LINE)
+        {
+        }
     }
 }

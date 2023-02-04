@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SerialLoops.Lib.Items;
 
 namespace SerialLoops.Lib.Script
 {
-    internal class ChibiScriptParameter
+    public class ChibiScriptParameter : ScriptParameter
     {
+        public ChibiItem Chibi { get; set; }
+
+        public ChibiScriptParameter(string name, ChibiItem chibi) : base(name, ParameterType.CHIBI)
+        {
+            Chibi = chibi;
+        }
     }
 }

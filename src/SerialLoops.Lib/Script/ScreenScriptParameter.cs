@@ -1,12 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SerialLoops.Lib.Script
+﻿namespace SerialLoops.Lib.Script
 {
-    internal class ScreenScriptParameter
+    public class ScreenScriptParameter : ScriptParameter
     {
+        public DsScreen Screen { get; set; }
+
+        public ScreenScriptParameter(string name, short screen) : base(name, ParameterType.SCREEN)
+        {
+            Screen = (DsScreen)screen;
+        }
+
+        public enum DsScreen : short
+        {
+            BOTTOM = 0,
+            TOP = 1,
+            BOTH = 2,
+        }
     }
 }

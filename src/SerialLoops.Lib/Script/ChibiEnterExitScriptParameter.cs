@@ -1,12 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SerialLoops.Lib.Script
+﻿namespace SerialLoops.Lib.Script
 {
-    internal class ChibiEnterExitScriptParameter
+    public class ChibiEnterExitScriptParameter : ScriptParameter
     {
+        public ChibiEnterExitType Mode { get; set; }
+
+        public ChibiEnterExitScriptParameter(string name, short mode) : base(name, ParameterType.CHIBI_ENTER_EXIT)
+        {
+            Mode = (ChibiEnterExitType)mode;
+        }
+
+        public enum ChibiEnterExitType
+        {
+            ENTER = 0,
+            EXIT = 1,
+        }
     }
 }

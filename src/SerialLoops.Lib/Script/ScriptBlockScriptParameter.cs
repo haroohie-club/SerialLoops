@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using HaruhiChokuretsuLib.Archive.Event;
 
 namespace SerialLoops.Lib.Script
 {
-    internal class ScriptBlockScriptParameter
+    public class ScriptSectionScriptParameter : ScriptParameter
     {
+        public ScriptSection Section { get; set; }
+
+        public ScriptSectionScriptParameter(string name, ScriptSection section) : base(name, ParameterType.SCRIPT_SECTION)
+        {
+            Section = section;
+        }
     }
 }

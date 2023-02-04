@@ -1,12 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SerialLoops.Lib.Script
+﻿namespace SerialLoops.Lib.Script
 {
-    internal class FlagScriptParameter
+    public class FlagScriptParameter : ScriptParameter
     {
+        private short _internalFlagId;
+
+        public bool Global { get; set; }
+        public short Id => (short)(_internalFlagId - 1);
+        public string FlagName => Global ? $"G{Id:D2}" : $"F{Id:D2}";
+
+        public FlagScriptParameter(string name, short id, bool global) : base(name, ParameterType.FLAG)
+        {
+            _internalFlagId = id;
+            Global = global;
+        }
     }
 }
