@@ -2,8 +2,11 @@
 {
     public class SfxScriptParameter : ScriptParameter
     {
-        public SfxScriptParameter(string name) : base(name, ParameterType.SFX)
+        public short SfxIndex { get; set; }
+
+        public SfxScriptParameter(string name, short sfxIndex) : base(name, ParameterType.SFX)
         {
+            SfxIndex = sfxIndex;
         }
     }
 }

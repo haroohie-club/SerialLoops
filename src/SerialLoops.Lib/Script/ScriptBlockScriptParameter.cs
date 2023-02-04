@@ -4,9 +4,9 @@ namespace SerialLoops.Lib.Script
 {
     public class ScriptSectionScriptParameter : ScriptParameter
     {
-        public ScriptSection Section { get; set; }
+        public ScriptSectionDefinition Section { get; set; }
 
-        public ScriptSectionScriptParameter(string name, ScriptSection section) : base(name, ParameterType.SCRIPT_SECTION)
+        public ScriptSectionScriptParameter(string name, ScriptSectionDefinition section) : base(name, ParameterType.SCRIPT_SECTION)
         {
             Section = section;
         }

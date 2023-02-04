@@ -1,4 +1,5 @@
-﻿using Eto.Forms;
+﻿using Eto.Drawing;
+using Eto.Forms;
 
 namespace SerialLoops.Utility
 {
@@ -17,6 +18,14 @@ namespace SerialLoops.Utility
                     title,
                     control,
                 },
+            };
+        }
+
+        public static TableLayout GetControlWithLabelTable(string title, Control control)
+        {
+            return new TableLayout(new TableRow(new Label { Text = title }, control))
+            {
+                Spacing = new Size(10, 5)
             };
         }
     }

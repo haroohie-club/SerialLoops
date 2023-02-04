@@ -26,6 +26,8 @@
             CHIBI_ENTER_EXIT,
             COLOR,
             COLOR_MONOCHROME,
+            CONDITIONAL,
+            DIALOGUE,
             DIALOGUE_PROPERTY,    // MESSINFO stuff, voice font & text speed
             EPISODE_HEADER,
             FLAG,
@@ -43,7 +45,6 @@
             SPRITE_ENTRANCE,
             SPRITE_EXIT,
             SPRITE_SHAKE,
-            STRING,
             TEXT_ENTRANCE_EFFECT,
             TOPIC,
             TRANSITION,

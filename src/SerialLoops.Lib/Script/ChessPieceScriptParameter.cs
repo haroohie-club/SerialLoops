@@ -2,8 +2,11 @@
 {
     public class ChessPieceScriptParameter : ScriptParameter
     {
-        public ChessPieceScriptParameter(string name) : base(name, ParameterType.CHESS_PIECE)
+        public short ChessPiece { get; set; }
+
+        public ChessPieceScriptParameter(string name, short chessPiece) : base(name, ParameterType.CHESS_PIECE)
         {
+            ChessPiece = chessPiece;
         }
     }
 }

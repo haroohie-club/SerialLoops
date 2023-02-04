@@ -1,27 +1,32 @@
-﻿using HaruhiChokuretsuLib.Archive.Event;
+﻿using HaruhiChokuretsuLib.Archive.Data;
+using HaruhiChokuretsuLib.Archive.Event;
+using SerialLoops.Lib.Items;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection.PortableExecutable;
 
 namespace SerialLoops.Lib.Script
 {
-    public class ScriptCommand
+    public class ScriptItemCommand
     {
         public CommandVerb Verb { get; set; }
 
         public List<ScriptParameter> Parameters { get; set; }
 
-        public static ScriptCommand FromInvocation(ScriptCommandInvocation invocation, EventFile eventFile)
+        public static ScriptItemCommand FromInvocation(ScriptCommandInvocation invocation, EventFile eventFile, Project project)
         {
             return new()
             {
                 Verb = (CommandVerb)Enum.Parse(typeof(CommandVerb), invocation.Command.Mnemonic),
-                Parameters = GetScriptParameters(invocation, eventFile)
+                Parameters = GetScriptParameters(invocation, eventFile, project)
             };
         }
 
-        private static List<ScriptParameter> GetScriptParameters(ScriptCommandInvocation invocation, EventFile eventFile)
+        private static List<ScriptParameter> GetScriptParameters(ScriptCommandInvocation invocation, EventFile eventFile, Project project)
         {
             List<ScriptParameter> parameters = new();
+            MessageInfoFile messageInfo = project.Dat.Files.First(f => f.Name == "MESSINFOS").CastTo<MessageInfoFile>();
 
             for (int i = 0; i < invocation.Parameters.Count; i++)
             {
@@ -35,31 +40,31 @@ namespace SerialLoops.Lib.Script
                         switch (i)
                         {
                             case 0:
-                                parameters.Add(new StringScriptParameter("dialogue", StringScriptParameter.StringParameterType.DIALOGUE, GetDialogueLine(parameter, eventFile)));
+                                parameters.Add(new DialogueScriptParameter("dialogue", GetDialogueLine(parameter, eventFile)));
                                 break;
                             case 1:
-                                parameters.Add(new ShortScriptParameter("spriteIndex", parameter));
+                                parameters.Add(new SpriteScriptParameter("spriteIndex", (CharacterSpriteItem)project.Items.First(i => i.Type == ItemDescription.ItemType.Character_Sprite && (parameter + 1) == ((CharacterSpriteItem)i).Index)));
                                 break;
                             case 2:
-                                parameters.Add(new ShortScriptParameter("spriteEntranceTransition", parameter));
+                                parameters.Add(new SpriteEntranceScriptParameter("spriteEntranceTransition", parameter));
                                 break;
                             case 3:
-                                parameters.Add(new ShortScriptParameter("spriteExitOrInternalTransition", parameter));
+                                parameters.Add(new SpriteExitScriptParameter("spriteExitOrInternalTransition", parameter));
                                 break;
                             case 4:
-                                parameters.Add(new ShortScriptParameter("spriteShake", parameter));
+                                parameters.Add(new SpriteShakeScriptParameter("spriteShake", parameter));
                                 break;
                             case 5:
-                                parameters.Add(new ShortScriptParameter("voiceIndex", parameter));
+                                parameters.Add(new VoiceLineScriptParameter("voiceIndex", parameter));
                                 break;
                             case 6:
-                                parameters.Add(new ShortScriptParameter("textVoiceFont", parameter));
+                                parameters.Add(new DialoguePropertyScriptParameter("textVoiceFont", messageInfo.MessageInfos[parameter]));
                                 break;
                             case 7:
-                                parameters.Add(new ShortScriptParameter("textSpeed", parameter));
+                                parameters.Add(new DialoguePropertyScriptParameter("textSpeed", messageInfo.MessageInfos[parameter]));
                                 break;
                             case 8:
-                                parameters.Add(new ShortScriptParameter("textEntranceEffect", parameter));
+                                parameters.Add(new TextEntranceEffectScriptParameter("textEntranceEffect", parameter));
                                 break;
                             case 9:
                                 parameters.Add(new ShortScriptParameter("spriteLayer", parameter));
@@ -76,20 +81,20 @@ namespace SerialLoops.Lib.Script
                     case CommandVerb.KBG_DISP:
                         if (i == 0)
                         {
-                            parameters.Add(new ShortScriptParameter("kbgIndex", parameter));
+                            parameters.Add(new BgScriptParameter("kbgIndex", (BackgroundItem)project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == parameter)));
                         }
                         break;
                     case CommandVerb.PIN_MNL:
                         if (i == 0)
                         {
-                            parameters.Add(new StringScriptParameter("dialogue", StringScriptParameter.StringParameterType.DIALOGUE, GetDialogueLine(parameter, eventFile)));
+                            parameters.Add(new DialogueScriptParameter("dialogue", GetDialogueLine(parameter, eventFile)));
                         }
                         break;
                     case CommandVerb.BG_DISP:
                     case CommandVerb.BG_DISP2:
                         if (i == 0)
                         {
-                            parameters.Add(new ShortScriptParameter("bgIndex", parameter));
+                            parameters.Add(new BgScriptParameter("bgIndex", (BackgroundItem)project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == parameter)));
                         }
                         break;
                     case CommandVerb.SCREEN_FADEIN:
@@ -102,10 +107,10 @@ namespace SerialLoops.Lib.Script
                                 parameters.Add(new ShortScriptParameter("fadeInToPercentage", parameter));
                                 break;
                             case 2:
-                                parameters.Add(new ShortScriptParameter("fadeLocation", parameter));
+                                parameters.Add(new ScreenScriptParameter("fadeLocation", parameter));
                                 break;
                             case 3:
-                                parameters.Add(new ShortScriptParameter("fadeColor", parameter));
+                                parameters.Add(new ColorMonochromeScriptParameter("fadeColor", parameter));
                                 break;
                         }
                         break;
@@ -119,19 +124,19 @@ namespace SerialLoops.Lib.Script
                                 parameters.Add(new ShortScriptParameter("fadeInToPercentage", parameter));
                                 break;
                             case 2:
-                                parameters.Add(new ShortScriptParameter("fadeColorRed", parameter));
+                                parameters.Add(new ColorScriptParameter("fadeColorCustom", parameter));
                                 break;
                             case 3:
-                                parameters.Add(new ShortScriptParameter("fadeColorGreen", parameter));
+                                ((ColorScriptParameter)parameters.Last()).SetGreen(parameter);
                                 break;
                             case 4:
-                                parameters.Add(new ShortScriptParameter("fadeColorBlue", parameter));
+                                ((ColorScriptParameter)parameters.Last()).SetBlue(parameter);
                                 break;
                             case 5:
-                                parameters.Add(new ShortScriptParameter("fadeLocation", parameter));
+                                parameters.Add(new ScreenScriptParameter("fadeLocation", parameter));
                                 break;
                             case 6:
-                                parameters.Add(new ShortScriptParameter("fadeColor", parameter));
+                                parameters.Add(new ColorMonochromeScriptParameter("fadeColor", parameter));
                                 break;
                         }
                         break;
@@ -148,13 +153,13 @@ namespace SerialLoops.Lib.Script
                                 parameters.Add(new ShortScriptParameter("fadeOutTime", parameter));
                                 break;
                             case 3:
-                                parameters.Add(new ShortScriptParameter("flashColorRed", parameter));
+                                parameters.Add(new ColorScriptParameter("flashColor", parameter));
                                 break;
                             case 4:
-                                parameters.Add(new ShortScriptParameter("flashColorGreen", parameter));
+                                ((ColorScriptParameter)parameters.Last()).SetGreen(parameter);
                                 break;
                             case 5:
-                                parameters.Add(new ShortScriptParameter("flashColorBlue", parameter));
+                                ((ColorScriptParameter)parameters.Last()).SetBlue(parameter);
                                 break;
                         }
                         break;
@@ -162,10 +167,10 @@ namespace SerialLoops.Lib.Script
                         switch (i)
                         {
                             case 0:
-                                parameters.Add(new ShortScriptParameter("soundIndex", parameter));
+                                parameters.Add(new SfxScriptParameter("soundIndex", parameter));
                                 break;
                             case 1:
-                                parameters.Add(new ShortScriptParameter("mode", parameter));
+                                parameters.Add(new SfxModeScriptParameter("mode", parameter));
                                 break;
                             case 2:
                                 parameters.Add(new ShortScriptParameter("volume", parameter));
@@ -182,10 +187,10 @@ namespace SerialLoops.Lib.Script
                         switch (i)
                         {
                             case 0:
-                                parameters.Add(new ShortScriptParameter("bgmIndex", parameter));
+                                parameters.Add(new BgmScriptParameter("bgmIndex", (BackgroundMusicItem)project.Items.First(i => i.Type == ItemDescription.ItemType.BGM && ((BackgroundMusicItem)i).Index == parameter)));
                                 break;
                             case 1:
-                                parameters.Add(new ShortScriptParameter("mode", parameter));
+                                parameters.Add(new BgmModeScriptParameter("mode", parameter));
                                 break;
                             case 2:
                                 parameters.Add(new ShortScriptParameter("volume", parameter));
@@ -201,14 +206,14 @@ namespace SerialLoops.Lib.Script
                     case CommandVerb.VCE_PLAY:
                         if (i == 0)
                         {
-                            parameters.Add(new ShortScriptParameter("vceIndex", parameter));
+                            parameters.Add(new VoiceLineScriptParameter("vceIndex", parameter));
                         }
                         break;
                     case CommandVerb.FLAG:
                         switch (i)
                         {
                             case 0:
-                                parameters.Add(new ShortScriptParameter("flag", parameter));
+                                parameters.Add(new FlagScriptParameter("flag", parameter, global: false));
                                 break;
                             case 1:
                                 parameters.Add(new BoolScriptParameter("set", parameter == 1));
@@ -218,7 +223,7 @@ namespace SerialLoops.Lib.Script
                     case CommandVerb.TOPIC_GET:
                         if (i == 0)
                         {
-                            parameters.Add(new ShortScriptParameter("topicId", parameter));
+                            parameters.Add(new TopicScriptParameter("topicId", parameter));
                         }
                         break;
                     case CommandVerb.TOGGLE_DIALOGUE:
@@ -231,16 +236,16 @@ namespace SerialLoops.Lib.Script
                         switch (i)
                         {
                             case 0:
-                                parameters.Add(new ShortScriptParameter("option1", parameter));
+                                parameters.Add(new OptionScriptParameter("option1", ((ChoicesSection)Convert.ChangeType(eventFile.SectionPointersAndCounts.First(s => s.Section.SectionType == typeof(ChoicesSection)), typeof(ChoicesSection))).Objects[parameter]));
                                 break;
                             case 1:
-                                parameters.Add(new ShortScriptParameter("option2", parameter));
+                                parameters.Add(new OptionScriptParameter("option2", ((ChoicesSection)Convert.ChangeType(eventFile.SectionPointersAndCounts.First(s => s.Section.SectionType == typeof(ChoicesSection)), typeof(ChoicesSection))).Objects[parameter]));
                                 break;
                             case 2:
-                                parameters.Add(new ShortScriptParameter("option3", parameter));
+                                parameters.Add(new OptionScriptParameter("option3", ((ChoicesSection)Convert.ChangeType(eventFile.SectionPointersAndCounts.First(s => s.Section.SectionType == typeof(ChoicesSection)), typeof(ChoicesSection))).Objects[parameter]));
                                 break;
                             case 3:
-                                parameters.Add(new ShortScriptParameter("option4", parameter));
+                                parameters.Add(new OptionScriptParameter("option4", ((ChoicesSection)Convert.ChangeType(eventFile.SectionPointersAndCounts.First(s => s.Section.SectionType == typeof(ChoicesSection)), typeof(ChoicesSection))).Objects[parameter]));
                                 break;
                             case 4:
                                 parameters.Add(new ShortScriptParameter("unknown08", parameter));
@@ -274,15 +279,14 @@ namespace SerialLoops.Lib.Script
                         if (i == 0)
                         {
                             //todo script section labels?
-                            parameters.Add(new ShortScriptParameter("blockId", parameter));
+                            parameters.Add(new ScriptSectionScriptParameter("blockId", ((ScriptSectionDefinitionsSection)Convert.ChangeType(eventFile.SectionPointersAndCounts.First(s => s.Section.SectionType == typeof(ScriptSectionDefinitionsSection)), typeof(ScriptSectionDefinitionsSection))).Objects[parameter]));
                         }
                         break;
                     case CommandVerb.SCENE_GOTO:
                     case CommandVerb.SCENE_GOTO2:
                         if (i == 0)
                         {
-                            //todo script conditions
-                            parameters.Add(new ShortScriptParameter("conditionalIndex", parameter));
+                            parameters.Add(new ConditionalScriptParameter("conditionalIndex", ((ConditionalSection)Convert.ChangeType(eventFile.SectionPointersAndCounts.First(s => s.Section.SectionType == typeof(ConditionalSection)), typeof(ConditionalSection))).Objects[parameter]));
                         }
                         break;
                     case CommandVerb.WAIT:
@@ -295,11 +299,11 @@ namespace SerialLoops.Lib.Script
                         switch (i)
                         {
                             case 0:
-                                parameters.Add(new ShortScriptParameter("conditionalIndex", parameter));
+                                parameters.Add(new ConditionalScriptParameter("conditionalIndex", ((ConditionalSection)Convert.ChangeType(eventFile.SectionPointersAndCounts.First(s => s.Section.SectionType == typeof(ConditionalSection)), typeof(ConditionalSection))).Objects[parameter]));
                                 break;
                             // 1 is unused
                             case 2:
-                                parameters.Add(new ShortScriptParameter("gotoId", parameter));
+                                parameters.Add(new ScriptSectionScriptParameter("gotoId", ((ScriptSectionDefinitionsSection)Convert.ChangeType(eventFile.SectionPointersAndCounts.First(s => s.Section.SectionType == typeof(ScriptSectionDefinitionsSection)), typeof(ScriptSectionDefinitionsSection))).Objects[parameter]));
                                 break;
                         }
                         break;
@@ -325,13 +329,13 @@ namespace SerialLoops.Lib.Script
                         switch (i)
                         {
                             case 0:
-                                parameters.Add(new ShortScriptParameter("paletteMode", parameter));
+                                parameters.Add(new PaletteEffectScriptParameter("paletteMode", parameter));
                                 break;
                             case 1:
                                 parameters.Add(new ShortScriptParameter("transitionTime", parameter));
                                 break;
                             case 2:
-                                parameters.Add(new ShortScriptParameter("unknownBool", parameter));
+                                parameters.Add(new BoolScriptParameter("unknownBool", parameter > 0));
                                 break;
                         }
                         break;
@@ -339,10 +343,10 @@ namespace SerialLoops.Lib.Script
                         switch (i)
                         {
                             case 0:
-                                parameters.Add(new ShortScriptParameter("bgIndex", parameter));
+                                parameters.Add(new BgScriptParameter("bgIndex", (BackgroundItem)project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == parameter)));
                                 break;
                             case 1:
-                                parameters.Add(new ShortScriptParameter("bgIndexSuper", parameter));
+                                parameters.Add(new BgScriptParameter("bgIndexSuper", (BackgroundItem)project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == parameter)));
                                 break;
                             case 2:
                                 parameters.Add(new ShortScriptParameter("fadeTime", parameter));
@@ -353,7 +357,7 @@ namespace SerialLoops.Lib.Script
                     case CommandVerb.TRANS_IN:
                         if (i == 0)
                         {
-                            parameters.Add(new ShortScriptParameter("index", parameter));
+                            parameters.Add(new TransitionScriptParameter("index", parameter));
                         }
                         break;
                     case CommandVerb.SET_PLACE:
@@ -363,7 +367,7 @@ namespace SerialLoops.Lib.Script
                                 parameters.Add(new BoolScriptParameter("display", parameter == 1));
                                 break;
                             case 1:
-                                parameters.Add(new ShortScriptParameter("placeIndex", parameter));
+                                parameters.Add(new PlaceScriptParameter("placeIndex", parameter));
                                 break;
                         }
                         break;
@@ -371,7 +375,7 @@ namespace SerialLoops.Lib.Script
                         switch (i)
                         {
                             case 0:
-                                parameters.Add(new ShortScriptParameter("itemIndex", parameter));
+                                parameters.Add(new ItemScriptParameter("itemIndex", parameter));
                                 break;
                             case 1:
                                 parameters.Add(new ShortScriptParameter("x", parameter));
@@ -384,7 +388,7 @@ namespace SerialLoops.Lib.Script
                     case CommandVerb.LOAD_ISOMAP:
                         if (i == 0)
                         {
-                            parameters.Add(new ShortScriptParameter("mapFileIndex", parameter));
+                            parameters.Add(new MapScriptParameter("mapFileIndex", (MapItem)project.Items.First(i => i.Type == ItemDescription.ItemType.Map && (parameter) == ((MapItem)i).QmapIndex)));
                         }
                         break;
                     case CommandVerb.INVEST_START:
@@ -397,7 +401,7 @@ namespace SerialLoops.Lib.Script
                                 parameters.Add(new ShortScriptParameter($"unknown0{i}", parameter));
                                 break;
                             case 4:
-                                parameters.Add(new ShortScriptParameter("endScriptBlock", parameter));
+                                parameters.Add(new ScriptSectionScriptParameter("endScriptBlock", ((ScriptSectionDefinitionsSection)Convert.ChangeType(eventFile.SectionPointersAndCounts.First(s => s.Section.SectionType == typeof(ScriptSectionDefinitionsSection)), typeof(ScriptSectionDefinitionsSection))).Objects[parameter]));
                                 break;
                         }
                         break;
@@ -405,10 +409,10 @@ namespace SerialLoops.Lib.Script
                         switch (i)
                         {
                             case 0:
-                                parameters.Add(new ShortScriptParameter("chibiIndex", parameter));
+                                parameters.Add(new ChibiScriptParameter("chibiIndex", (ChibiItem)project.Items.First(i => i.Type == ItemDescription.ItemType.Chibi && (parameter) == ((ChibiItem)i).ChibiIndex)));
                                 break;
                             case 1:
-                                parameters.Add(new ShortScriptParameter("emoteIndex", parameter));
+                                parameters.Add(new ChibiEmoteScriptParameter("emoteIndex", parameter));
                                 break;
                         }
                         break;
@@ -422,7 +426,7 @@ namespace SerialLoops.Lib.Script
                         switch (i)
                         {
                             case 0:
-                                parameters.Add(new ShortScriptParameter("globalIndex", parameter));
+                                parameters.Add(new FlagScriptParameter("globalIndex", parameter, global: true));
                                 break;
                             case 1:
                                 parameters.Add(new ShortScriptParameter("value", parameter));
@@ -433,7 +437,7 @@ namespace SerialLoops.Lib.Script
                         switch (i)
                         {
                             case 0:
-                                parameters.Add(new ShortScriptParameter("chibiIndex", parameter));
+                                parameters.Add(new ChibiScriptParameter("chibiIndex", (ChibiItem)project.Items.First(i => i.Type == ItemDescription.ItemType.Chibi && (parameter) == ((ChibiItem)i).ChibiIndex)));
                                 break;
                             case 1:
                                 parameters.Add(new BoolScriptParameter("entering", parameter != 1));
@@ -452,20 +456,20 @@ namespace SerialLoops.Lib.Script
                     case CommandVerb.CHESS_LOAD:
                         if (i == 0)
                         {
-                            parameters.Add(new ShortScriptParameter("chessFileIndex", parameter));
+                            parameters.Add(new ChessFileScriptParameter("chessFileIndex", parameter));
                         }
                         break;
                     case CommandVerb.CHESS_VGOTO:
                         switch (i)
                         {
                             case 0:
-                                parameters.Add(new ShortScriptParameter("clearBlock", parameter));
+                                parameters.Add(new ScriptSectionScriptParameter("clearBlock", ((ScriptSectionDefinitionsSection)Convert.ChangeType(eventFile.SectionPointersAndCounts.First(s => s.Section.SectionType == typeof(ScriptSectionDefinitionsSection)), typeof(ScriptSectionDefinitionsSection))).Objects[parameter]));
                                 break;
                             case 1:
-                                parameters.Add(new ShortScriptParameter("missBlock", parameter));
+                                parameters.Add(new ScriptSectionScriptParameter("missBlock", ((ScriptSectionDefinitionsSection)Convert.ChangeType(eventFile.SectionPointersAndCounts.First(s => s.Section.SectionType == typeof(ScriptSectionDefinitionsSection)), typeof(ScriptSectionDefinitionsSection))).Objects[parameter]));
                                 break;
                             case 2:
-                                parameters.Add(new ShortScriptParameter("miss2Block", parameter));
+                                parameters.Add(new ScriptSectionScriptParameter("miss2Block", ((ScriptSectionDefinitionsSection)Convert.ChangeType(eventFile.SectionPointersAndCounts.First(s => s.Section.SectionType == typeof(ScriptSectionDefinitionsSection)), typeof(ScriptSectionDefinitionsSection))).Objects[parameter]));
                                 break;
                         }
                         break;
@@ -473,16 +477,16 @@ namespace SerialLoops.Lib.Script
                         switch (i)
                         {
                             case 0:
-                                parameters.Add(new ShortScriptParameter("whiteSpaceBegin", parameter));
+                                parameters.Add(new ChessSpaceScriptParameter("whiteSpaceBegin", parameter));
                                 break;
                             case 1:
-                                parameters.Add(new ShortScriptParameter("whiteSpaceEnd", parameter));
+                                parameters.Add(new ChessSpaceScriptParameter("whiteSpaceEnd", parameter));
                                 break;
                             case 2:
-                                parameters.Add(new ShortScriptParameter("blackSpaceBegin", parameter));
+                                parameters.Add(new ChessSpaceScriptParameter("blackSpaceBegin", parameter));
                                 break;
                             case 3:
-                                parameters.Add(new ShortScriptParameter("blackSpaceEnd", parameter));
+                                parameters.Add(new ChessSpaceScriptParameter("blackSpaceEnd", parameter));
                                 break;
                         }
                         break;
@@ -490,35 +494,35 @@ namespace SerialLoops.Lib.Script
                         switch (i)
                         {
                             case 0:
-                                parameters.Add(new ShortScriptParameter("piece1", parameter));
+                                parameters.Add(new ChessPieceScriptParameter("piece1", parameter));
                                 break;
                             case 1:
-                                parameters.Add(new ShortScriptParameter("piece2", parameter));
+                                parameters.Add(new ChessPieceScriptParameter("piece2", parameter));
                                 break;
                             case 2:
-                                parameters.Add(new ShortScriptParameter("piece3", parameter));
+                                parameters.Add(new ChessPieceScriptParameter("piece3", parameter));
                                 break;
                             case 3:
-                                parameters.Add(new ShortScriptParameter("piece4", parameter));
+                                parameters.Add(new ChessPieceScriptParameter("piece4", parameter));
                                 break;
                         }
                         break;
                     case CommandVerb.CHESS_TOGGLE_HIGHLIGHT:
                         if (parameter != -1)
                         {
-                            parameters.Add(new ShortScriptParameter($"highlightSpace{i}", parameter));
+                            parameters.Add(new ChessSpaceScriptParameter($"highlightSpace{i}", parameter));
                         }
                         break;
                     case CommandVerb.CHESS_TOGGLE_CROSS:
                         if (parameter != -1)
                         {
-                            parameters.Add(new ShortScriptParameter($"crossSpace{i}", parameter));
+                            parameters.Add(new ChessSpaceScriptParameter($"crossSpace{i}", parameter));
                         }
                         break;
                     case CommandVerb.EPHEADER:
                         if (i == 0)
                         {
-                            parameters.Add(new ShortScriptParameter("headerIndex", parameter));
+                            parameters.Add(new EpisodeHeaderScriptParameter("headerIndex", parameter));
                         }
                         break;
                     case CommandVerb.CONFETTI:
@@ -531,7 +535,7 @@ namespace SerialLoops.Lib.Script
                         switch (i)
                         {
                             case 0:
-                                parameters.Add(new ShortScriptParameter("bgIndex", parameter));
+                                parameters.Add(new BgScriptParameter("bgIndex", (BackgroundItem)project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == parameter)));
                                 break;
                             case 1:
                                 parameters.Add(new ShortScriptParameter("unknown1", parameter));
@@ -542,7 +546,7 @@ namespace SerialLoops.Lib.Script
                         switch (i)
                         {
                             case 0:
-                                parameters.Add(new ShortScriptParameter("scrollDirection", parameter));
+                                parameters.Add(new BgScrollDirectionScriptParameter("scrollDirection", parameter));
                                 break;
                             case 1:
                                 parameters.Add(new ShortScriptParameter("scrollSpeed", parameter));
@@ -561,9 +565,19 @@ namespace SerialLoops.Lib.Script
             return parameters;
         }
 
-        private static string GetDialogueLine(short index, EventFile eventFile)
+        public override string ToString()
         {
-            return eventFile.DialogueLines[index].Text;
+            string str = $"{Verb}";
+            if (Verb == CommandVerb.DIALOGUE)
+            {
+                str += $" {((DialogueScriptParameter)Parameters[0]).Line.Text[0..Math.Min(((DialogueScriptParameter)Parameters[0]).Line.Text.Length, 10)]}...";
+            }
+            return str;
+        }
+
+        private static DialogueLine GetDialogueLine(short index, EventFile eventFile)
+        {
+            return eventFile.DialogueLines[index];
         }
 
         public enum CommandVerb

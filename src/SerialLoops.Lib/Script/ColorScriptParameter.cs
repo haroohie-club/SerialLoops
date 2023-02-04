@@ -4,11 +4,27 @@ namespace SerialLoops.Lib.Script
 {
     public class ColorScriptParameter : ScriptParameter
     {
+        private byte _red;
+        private byte _green;
+        private byte _blue;
+
         public SKColor Color { get; set; }
 
-        public ColorScriptParameter(string name, short red, short green, short blue) : base(name, ParameterType.COLOR)
+        public ColorScriptParameter(string name, short red) : base(name, ParameterType.COLOR)
         {
-            Color = new((byte)red, (byte)green, (byte)blue);
+            _red = (byte)red;
+        }
+
+        public void SetGreen(short green)
+        {
+            _green = (byte)green;
+        }
+
+        public void SetBlue(short blue)
+        {
+            _blue = (byte)blue;
+
+            Color = new(_red, _green, _blue);
         }
     }
 }

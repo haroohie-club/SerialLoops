@@ -2,8 +2,11 @@
 {
     public class VoiceLineScriptParameter : ScriptParameter
     {
-        public VoiceLineScriptParameter(string name) : base(name, ParameterType.VOICE_LINE)
+        public short VoiceIndex { get; set; }
+
+        public VoiceLineScriptParameter(string name, short voiceIndex) : base(name, ParameterType.VOICE_LINE)
         {
+            VoiceIndex = voiceIndex;
         }
     }
 }

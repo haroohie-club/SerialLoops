@@ -19,7 +19,7 @@ namespace SerialLoops
         void InitializeComponent()
         {
             Title = BASE_TITLE;
-            ClientSize = new(769, 420);
+            ClientSize = new(1000, 600);
             MinimumSize = new(769, 420);
             Padding = 10;
 

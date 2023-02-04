@@ -2,8 +2,11 @@
 {
     public class TopicScriptParameter : ScriptParameter
     {
-        public TopicScriptParameter(string name) : base(name, ParameterType.TOPIC)
+        public short TopicId { get; set; }
+
+        public TopicScriptParameter(string name, short topic) : base(name, ParameterType.TOPIC)
         {
+            TopicId = topic;
         }
     }
 }

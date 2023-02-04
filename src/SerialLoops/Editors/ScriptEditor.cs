@@ -1,97 +1,233 @@
 ﻿using Eto.Drawing;
 using Eto.Forms;
+using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
+using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
 using SerialLoops.Utility;
 using System;
 using System.Collections.Generic;
-using System.Data;
-using static SerialLoops.Lib.Script.ScriptCommand;
+using System.Linq;
+using static SerialLoops.Lib.Script.ScriptItemCommand;
 
 namespace SerialLoops.Editors
 {
     public class ScriptEditor : Editor
     {
         private ScriptItem _script;
+        private List<ScriptItemCommand> _commands = new();
 
-        public ScriptEditor(ScriptItem item, ILogger log) : base(item, log)
+        private TableLayout _detailsLayout = new();
+        private StackLayout _preview = new() { Items = { new SKGuiImage(new(256, 384)) } };
+        private StackLayout _editorControls = new();
+
+        public ScriptEditor(ScriptItem item, Project project, ILogger log) : base(item, log, project)
         {
         }
 
         public override Container GetEditorPanel()
         {
             _script = (ScriptItem)Description;
-            return new Scrollable
-            {
-                Content = GetCommandsContainer()
-            };
+            PopulateScriptCommands(_project);
+            return GetCommandsContainer(_project);
         }
 
-        private List<Lib.Script.ScriptCommand> GetEventCommands()
+        private void PopulateScriptCommands(Project project)
         {
-            List<Lib.Script.ScriptCommand> commands = new();
             foreach (ScriptSection section in _script.Event.ScriptSections)
             {
                 foreach (ScriptCommandInvocation command in section.Objects)
                 {
-                    commands.Add(Lib.Script.ScriptCommand.FromInvocation(command, _script.Event));
+                    _commands.Add(FromInvocation(command, _script.Event, project));
                 }
             }
-            return commands;
         }
 
-        private Container GetCommandsContainer()
+        private Container GetCommandsContainer(Project project)
         {
             TableLayout layout = new()
             {
-                Spacing = new Size(5, 5)
+                Spacing = new Size(5, 5),
             };
 
-            foreach (Lib.Script.ScriptCommand command in GetEventCommands())
+            TableRow mainRow = new();
+
+            ListBox commandListBox = new();
+            commandListBox.Items.AddRange(_commands.Select(i => new ListItem() { Text = i.ToString() }));
+            commandListBox.SelectedIndexChanged += CommandListBox_SelectedIndexChanged;
+            mainRow.Cells.Add(commandListBox);
+
+            _detailsLayout = new()
             {
-                TableRow row = new();
+                Spacing = new Size(5, 5),
+            };
 
-                DropDown commandDropDown = new();
-                foreach (CommandVerb verb in Enum.GetValues(typeof(CommandVerb)))
-                {
-                    commandDropDown.Items.Add(new ListItem { Key = verb.ToString(), Text = verb.ToString() });
-                }
-                commandDropDown.SelectedKey = command.Verb.ToString();
+            _editorControls = new()
+            {
+                Orientation = Orientation.Horizontal
+            };
+            _detailsLayout.Rows.Add(new(_preview));
+            _detailsLayout.Rows.Add(new(_editorControls));
 
-                row.Cells.Add(new(commandDropDown));
-                foreach (ScriptParameter parameter in command.Parameters) {
-                    switch (parameter.Type)
-                    {
-                        case ScriptParameter.ParameterType.SHORT:
-                            row.Cells.Add(new(new TextBox
-                            {
-                                Text = ((ShortScriptParameter)parameter).Value.ToString(),
-                                PlaceholderText = ((ShortScriptParameter)parameter).Name
-                            }));
-                            break;
-                        case ScriptParameter.ParameterType.STRING:
-                            row.Cells.Add(new(new TextBox 
-                            { 
-                                Text = ((StringScriptParameter)parameter).Value,
-                                PlaceholderText = ((StringScriptParameter)parameter).Name
-                            }));
-                            break;
-                        case ScriptParameter.ParameterType.BOOL:
-                            row.Cells.Add(new(ControlGenerator.GetControlWithLabel(parameter.Name, new CheckBox() 
-                            { 
-                                Checked = ((BoolScriptParameter)parameter).Value
-                            }
-                            )));
-                            break;
-                    }
-                }
-
-                layout.Rows.Add(row);
-            }
+            mainRow.Cells.Add(new(_detailsLayout));
+            layout.Rows.Add(mainRow);
 
             return layout;
+        }
+
+        private void CommandListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ScriptItemCommand command = _commands[((ListBox)sender).SelectedIndex];
+            _editorControls.Items.Clear();
+
+            if (command.Parameters.Count == 0)
+            {
+                return;
+            }
+
+            int cols = (int)Math.Round(Math.Sqrt(command.Parameters.Count));
+
+            // We're going to embed table layouts inside a table layout so we can have colspan
+            TableLayout controlsTable = new()
+            {
+                Spacing = new Size(5, 5)
+            };
+            controlsTable.Rows.Add(new(new TableLayout { Spacing = new Size(5, 5) }));
+            ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows.Add(new());
+
+            int currentRow = 0, currentCol = 0;
+
+            foreach (ScriptParameter parameter in command.Parameters)
+            {
+                switch (parameter.Type)
+                {
+                    case ScriptParameter.ParameterType.BG:
+                        DropDown bgDropDown = new();
+                        bgDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background).Select(i => new ListItem { Text = i.Name, Key = i.Name }));
+                        bgDropDown.SelectedKey = ((BgScriptParameter)parameter).Background.Name;
+
+                        ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
+                            ControlGenerator.GetControlWithLabel(parameter.Name, bgDropDown));
+                        break;
+
+                    case ScriptParameter.ParameterType.BOOL:
+                        ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
+                            ControlGenerator.GetControlWithLabel(parameter.Name,
+                            new CheckBox { Checked = ((BoolScriptParameter)parameter).Value }));
+                        break;
+
+                    case ScriptParameter.ParameterType.DIALOGUE:
+                        DialogueScriptParameter dialogueParam = (DialogueScriptParameter)parameter;
+                        DropDown speakerDropDown = new();
+                        speakerDropDown.Items.AddRange(Enum.GetValues<Speaker>().Select(s => new ListItem { Text = s.ToString(), Key = s.ToString() }));
+                        speakerDropDown.SelectedKey = dialogueParam.Line.Speaker.ToString();
+                        if (currentCol > 0)
+                        {
+                            controlsTable.Rows.Add(new(new TableLayout { Spacing = new Size(5, 5) }));
+                            currentRow++;
+                            currentCol = 0;
+                        }
+                        ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
+                            ControlGenerator.GetControlWithLabelTable(parameter.Name,
+                            new StackLayout
+                            {
+                                Orientation = Orientation.Horizontal,
+                                Items =
+                                {
+                                    speakerDropDown,
+                                    new StackLayoutItem(new TextArea { Text = dialogueParam.Line.Text, AcceptsReturn = true }, expand: true),
+                                },
+                            }));
+                        controlsTable.Rows.Add(new(new TableLayout { Spacing = new Size(5, 5) }));
+                        ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows.Add(new());
+                        currentRow++;
+                        currentCol = 0;
+                        break;
+
+                    case ScriptParameter.ParameterType.DIALOGUE_PROPERTY:
+                        DropDown dialoguePropertyDropDown = new();
+                        dialoguePropertyDropDown.Items.AddRange(Enum.GetValues<Speaker>().Select(t => new ListItem { Text = t.ToString(), Key = t.ToString() }));
+                        dialoguePropertyDropDown.SelectedKey = ((DialoguePropertyScriptParameter)parameter).DialogueProperties.Character.ToString();
+
+                        ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
+                            ControlGenerator.GetControlWithLabel(parameter.Name, dialoguePropertyDropDown));
+                        break;
+
+                    case ScriptParameter.ParameterType.SHORT:
+                        ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
+                            ControlGenerator.GetControlWithLabel(parameter.Name,
+                            new TextBox { Text = ((ShortScriptParameter)parameter).Value.ToString() }));
+                        break;
+
+                    case ScriptParameter.ParameterType.SPRITE:
+                        DropDown spriteDropDown = new();
+                        spriteDropDown.Items.Add(new ListItem { Text = "NONE", Key = "NONE" });
+                        spriteDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Character_Sprite).Select(s => new ListItem { Text = s.Name, Key = s.Name }));
+                        spriteDropDown.SelectedKey = ((SpriteScriptParameter)parameter).Sprite.Name;
+
+                        ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
+                            ControlGenerator.GetControlWithLabel(parameter.Name, spriteDropDown));
+                        break;
+
+                    case ScriptParameter.ParameterType.SPRITE_ENTRANCE:
+                        DropDown spriteEntranceDropDown = new();
+                        spriteEntranceDropDown.Items.AddRange(Enum.GetValues<SpriteEntranceScriptParameter.SpriteEntranceTransition>().Select(t => new ListItem { Text = t.ToString(), Key = t.ToString() }));
+                        spriteEntranceDropDown.SelectedKey = ((SpriteEntranceScriptParameter)parameter).EntranceTransition.ToString();
+
+                        ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
+                            ControlGenerator.GetControlWithLabel(parameter.Name, spriteEntranceDropDown));
+                        break;
+
+                    case ScriptParameter.ParameterType.SPRITE_EXIT:
+                        DropDown spriteExitDropDown = new();
+                        spriteExitDropDown.Items.AddRange(Enum.GetValues<SpriteExitScriptParameter.SpriteExitTransition>().Select(t => new ListItem { Text = t.ToString(), Key = t.ToString() }));
+                        spriteExitDropDown.SelectedKey = ((SpriteExitScriptParameter)parameter).ExitTransition.ToString();
+
+                        ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
+                            ControlGenerator.GetControlWithLabel(parameter.Name, spriteExitDropDown));
+                        break;
+
+                    case ScriptParameter.ParameterType.SPRITE_SHAKE:
+                        DropDown spriteShakeDropDown = new();
+                        spriteShakeDropDown.Items.AddRange(Enum.GetValues<SpriteShakeScriptParameter.SpriteShakeEffect>().Select(t => new ListItem { Text = t.ToString(), Key = t.ToString() }));
+                        spriteShakeDropDown.SelectedKey = ((SpriteShakeScriptParameter)parameter).ShakeEffect.ToString();
+
+                        ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
+                            ControlGenerator.GetControlWithLabel(parameter.Name, spriteShakeDropDown));
+                        break;
+
+                    case ScriptParameter.ParameterType.TEXT_ENTRANCE_EFFECT:
+                        DropDown textEntranceEffectDropDown = new();
+                        textEntranceEffectDropDown.Items.AddRange(Enum.GetValues<TextEntranceEffectScriptParameter.TextEntranceEffect>().Select(t => new ListItem { Text = t.ToString(), Key = t.ToString() }));
+                        textEntranceEffectDropDown.SelectedKey = ((TextEntranceEffectScriptParameter)parameter).EntranceEffect.ToString();
+
+                        ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
+                            ControlGenerator.GetControlWithLabel(parameter.Name, textEntranceEffectDropDown));
+                        break;
+
+                    case ScriptParameter.ParameterType.VOICE_LINE:
+                        ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
+                            ControlGenerator.GetControlWithLabel(parameter.Name, 
+                            new TextBox { Text = ((VoiceLineScriptParameter)parameter).VoiceIndex.ToString() }));
+                        break;
+
+                    default:
+                        _log.LogError($"Invalid parameter detected in script {_script.Name} parameter {parameter.Name}");
+                        break;
+                }
+                currentCol++;
+                if (currentCol >= cols)
+                {
+                    currentCol = 0;
+                    currentRow++;
+                    controlsTable.Rows.Add(new(new TableLayout { Spacing = new Size(5, 5) }));
+                    ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows.Add(new());
+                }
+            }
+
+            _editorControls.Items.Add(new StackLayoutItem(controlsTable, expand: true));
         }
     }
 }

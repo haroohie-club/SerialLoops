@@ -6,7 +6,13 @@ using System.Threading.Tasks;
 
 namespace SerialLoops.Lib.Script
 {
-    public class PlaceScriptParameter
+    public class PlaceScriptParameter : ScriptParameter
     {
+        public short PlaceIndex { get; set; }
+
+        public PlaceScriptParameter(string name, short placeIndex) : base(name, ParameterType.PLACE)
+        {
+            PlaceIndex = placeIndex;
+        }
     }
 }

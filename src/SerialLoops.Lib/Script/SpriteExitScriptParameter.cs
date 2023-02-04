@@ -4,7 +4,7 @@
     {
         public SpriteExitTransition ExitTransition { get; set; }
 
-        public SpriteEntranceScriptParameter(string name, short exitTransition) : base(name, ParameterType.SPRITE_EXIT)
+        public SpriteExitScriptParameter(string name, short exitTransition) : base(name, ParameterType.SPRITE_EXIT)
         {
             ExitTransition = (SpriteExitTransition)exitTransition;
         }
