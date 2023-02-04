@@ -105,17 +105,104 @@ namespace SerialLoops.Editors
                 {
                     case ScriptParameter.ParameterType.BG:
                         DropDown bgDropDown = new();
+                        bgDropDown.Items.Add(new ListItem { Text = "NONE", Key = "NONE" });
                         bgDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background).Select(i => new ListItem { Text = i.Name, Key = i.Name }));
-                        bgDropDown.SelectedKey = ((BgScriptParameter)parameter).Background.Name;
+                        bgDropDown.SelectedKey = ((BgScriptParameter)parameter).Background?.Name ?? "NONE";
 
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
                             ControlGenerator.GetControlWithLabel(parameter.Name, bgDropDown));
+                        break;
+
+                    case ScriptParameter.ParameterType.BG_SCROLL_DIRECTION:
+                        DropDown bgScrollDropDown = new();
+                        bgScrollDropDown.Items.AddRange(Enum.GetValues<BgScrollDirectionScriptParameter.BgScrollDirection>().Select(i => new ListItem { Text = i.ToString(), Key = i.ToString() }));
+                        bgScrollDropDown.SelectedKey = ((BgScrollDirectionScriptParameter)parameter).ScrollDirection.ToString();
+
+                        ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
+                            ControlGenerator.GetControlWithLabel(parameter.Name, bgScrollDropDown));
+                        break;
+
+                    case ScriptParameter.ParameterType.BGM_MODE:
+                        DropDown bgmModeDropDown = new();
+                        bgmModeDropDown.Items.AddRange(Enum.GetValues<BgmModeScriptParameter.BgmMode>().Select(i => new ListItem { Text = i.ToString(), Key = i.ToString() }));
+                        bgmModeDropDown.SelectedKey = ((BgmModeScriptParameter)parameter).Mode.ToString();
+
+                        ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
+                            ControlGenerator.GetControlWithLabel(parameter.Name, bgmModeDropDown));
                         break;
 
                     case ScriptParameter.ParameterType.BOOL:
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
                             ControlGenerator.GetControlWithLabel(parameter.Name,
                             new CheckBox { Checked = ((BoolScriptParameter)parameter).Value }));
+                        break;
+
+                    case ScriptParameter.ParameterType.CHESS_FILE:
+                        ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
+                            ControlGenerator.GetControlWithLabel(parameter.Name,
+                            new TextBox { Text = ((ChessFileScriptParameter)parameter).ChessFileIndex.ToString() }));
+                        break;
+
+                    case ScriptParameter.ParameterType.CHESS_PIECE:
+                        ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
+                            ControlGenerator.GetControlWithLabel(parameter.Name,
+                            new TextBox { Text = ((ChessPieceScriptParameter)parameter).ChessPiece.ToString() }));
+                        break;
+
+                    case ScriptParameter.ParameterType.CHESS_SPACE:
+                        ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
+                            ControlGenerator.GetControlWithLabel(parameter.Name,
+                            new TextBox { Text = ((ChessSpaceScriptParameter)parameter).SpaceIndex.ToString() }));
+                        break;
+
+                    case ScriptParameter.ParameterType.CHIBI:
+                        DropDown chibiDropDown = new();
+                        chibiDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Chibi).Select(i => new ListItem { Text = i.Name, Key = i.Name }));
+                        chibiDropDown.SelectedKey = ((ChibiScriptParameter)parameter).Chibi.Name;
+                        break;
+
+                    case ScriptParameter.ParameterType.CHIBI_EMOTE:
+                        DropDown chibiEmoteDropDown = new();
+                        chibiEmoteDropDown.Items.AddRange(Enum.GetValues<ChibiEmoteScriptParameter.ChibiEmote>().Select(i => new ListItem { Text = i.ToString(), Key = i.ToString() }));
+                        chibiEmoteDropDown.SelectedKey = ((ChibiEmoteScriptParameter)parameter).Emote.ToString();
+
+                        ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
+                            ControlGenerator.GetControlWithLabel(parameter.Name, chibiEmoteDropDown));
+                        break;
+
+                    case ScriptParameter.ParameterType.CHIBI_ENTER_EXIT:
+                        DropDown chibiEnterExitDropDown = new();
+                        chibiEnterExitDropDown.Items.AddRange(Enum.GetValues<ChibiEnterExitScriptParameter.ChibiEnterExitType>().Select(i => new ListItem { Text = i.ToString(), Key = i.ToString() }));
+                        chibiEnterExitDropDown.SelectedKey = ((ChibiEnterExitScriptParameter)parameter).Mode.ToString();
+
+                        ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
+                            ControlGenerator.GetControlWithLabel(parameter.Name, chibiEnterExitDropDown));
+                        break;
+
+                    case ScriptParameter.ParameterType.COLOR:
+                        ColorPicker colorPicker = new()
+                        {
+                            AllowAlpha = false,
+                            Value = ((ColorScriptParameter)parameter).Color.ToEtoDrawingColor(),
+                        };
+
+                        ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
+                            ControlGenerator.GetControlWithLabel(parameter.Name, colorPicker));
+                        break;
+
+                    case ScriptParameter.ParameterType.CONDITIONAL:
+                        ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
+                            ControlGenerator.GetControlWithLabel(parameter.Name,
+                            new TextBox { Text = ((ConditionalScriptParameter)parameter).Value } ));
+                        break;
+
+                    case ScriptParameter.ParameterType.COLOR_MONOCHROME:
+                        DropDown colorMonochromeDropDown = new();
+                        colorMonochromeDropDown.Items.AddRange(Enum.GetValues<ColorMonochromeScriptParameter.ColorMonochrome>().Select(i => new ListItem { Text = i.ToString(), Key = i.ToString() }));
+                        colorMonochromeDropDown.SelectedKey = ((ColorMonochromeScriptParameter)parameter).ColorType.ToString();
+
+                        ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
+                            ControlGenerator.GetControlWithLabel(parameter.Name, colorMonochromeDropDown));
                         break;
 
                     case ScriptParameter.ParameterType.DIALOGUE:
@@ -153,6 +240,18 @@ namespace SerialLoops.Editors
 
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
                             ControlGenerator.GetControlWithLabel(parameter.Name, dialoguePropertyDropDown));
+                        break;
+
+                    case ScriptParameter.ParameterType.EPISODE_HEADER:
+                        ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
+                            ControlGenerator.GetControlWithLabel(parameter.Name,
+                            new TextBox { Text = ((EpisodeHeaderScriptParameter)parameter).EpisodeHeaderIndex.ToString() }));
+                        break;
+
+                    case ScriptParameter.ParameterType.FLAG:
+                        ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
+                            ControlGenerator.GetControlWithLabel(parameter.Name,
+                            new TextBox { Text = ((FlagScriptParameter)parameter).FlagName }));
                         break;
 
                     case ScriptParameter.ParameterType.SHORT:

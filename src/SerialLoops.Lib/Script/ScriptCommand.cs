@@ -303,7 +303,7 @@ namespace SerialLoops.Lib.Script
                                 break;
                             // 1 is unused
                             case 2:
-                                parameters.Add(new ScriptSectionScriptParameter("gotoId", eventFile.ScriptSections.First(s => s.Name == eventFile.LabelsSection.Objects.First(l => l.Id == parameter).Name)));
+                                parameters.Add(new ScriptSectionScriptParameter("gotoId", eventFile.ScriptSections.First(s => s.Name == eventFile.LabelsSection.Objects.First(l => l.Id == parameter).Name.Replace("/", ""))));
                                 break;
                         }
                         break;
@@ -388,7 +388,7 @@ namespace SerialLoops.Lib.Script
                     case CommandVerb.LOAD_ISOMAP:
                         if (i == 0)
                         {
-                            parameters.Add(new MapScriptParameter("mapFileIndex", (MapItem)project.Items.First(i => i.Type == ItemDescription.ItemType.Map && (parameter) == ((MapItem)i).QmapIndex)));
+                            parameters.Add(new MapScriptParameter("mapFileIndex", (MapItem)project.Items.First(i => i.Type == ItemDescription.ItemType.Map && (parameter) == ((MapItem)i).Map.Index)));
                         }
                         break;
                     case CommandVerb.INVEST_START:
@@ -401,7 +401,7 @@ namespace SerialLoops.Lib.Script
                                 parameters.Add(new ShortScriptParameter($"unknown0{i}", parameter));
                                 break;
                             case 4:
-                                parameters.Add(new ScriptSectionScriptParameter("endScriptBlock", eventFile.ScriptSections.First(s => s.Name == eventFile.LabelsSection.Objects.First(l => l.Id == parameter).Name.Replace("NONE/", ""))));
+                                parameters.Add(new ScriptSectionScriptParameter("endScriptBlock", eventFile.ScriptSections.First(s => s.Name == eventFile.LabelsSection.Objects.First(l => l.Id == parameter).Name.Replace("/", ""))));
                                 break;
                         }
                         break;
@@ -463,13 +463,13 @@ namespace SerialLoops.Lib.Script
                         switch (i)
                         {
                             case 0:
-                                parameters.Add(new ScriptSectionScriptParameter("clearBlock", eventFile.ScriptSections.First(s => s.Name == eventFile.LabelsSection.Objects.First(l => l.Id == parameter).Name.Replace("NONE/", ""))));
+                                parameters.Add(new ScriptSectionScriptParameter("clearBlock", eventFile.ScriptSections.First(s => s.Name == eventFile.LabelsSection.Objects.First(l => l.Id == parameter).Name.Replace("/", ""))));
                                 break;
                             case 1:
-                                parameters.Add(new ScriptSectionScriptParameter("missBlock", eventFile.ScriptSections.First(s => s.Name == eventFile.LabelsSection.Objects.First(l => l.Id == parameter).Name.Replace("NONE/", ""))));
+                                parameters.Add(new ScriptSectionScriptParameter("missBlock", eventFile.ScriptSections.First(s => s.Name == eventFile.LabelsSection.Objects.First(l => l.Id == parameter).Name.Replace("/", ""))));
                                 break;
                             case 2:
-                                parameters.Add(new ScriptSectionScriptParameter("miss2Block", eventFile.ScriptSections.First(s => s.Name == eventFile.LabelsSection.Objects.First(l => l.Id == parameter).Name.Replace("NONE/", ""))));
+                                parameters.Add(new ScriptSectionScriptParameter("miss2Block", eventFile.ScriptSections.First(s => s.Name == eventFile.LabelsSection.Objects.First(l => l.Id == parameter).Name.Replace("/", ""))));
                                 break;
                         }
                         break;
