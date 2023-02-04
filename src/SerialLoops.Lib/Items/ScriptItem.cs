@@ -19,7 +19,6 @@ namespace SerialLoops.Lib.Items
 
         public override void Refresh(Project project)
         {
-            throw new System.NotImplementedException();
         }
     }
 }

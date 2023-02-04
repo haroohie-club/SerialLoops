@@ -1,9 +1,6 @@
 ﻿using HaruhiChokuretsuLib.Archive.Event;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SerialLoops.Lib.Script
 {
@@ -17,7 +14,7 @@ namespace SerialLoops.Lib.Script
         {
             return new()
             {
-                Verb = GetCommandVerb(invocation.Command.Mnemonic.ToUpper().Trim()),
+                Verb = (CommandVerb)Enum.Parse(typeof(CommandVerb), invocation.Command.Mnemonic),
                 Parameters = GetScriptParameters(invocation, eventFile)
             };
         }
@@ -32,7 +29,7 @@ namespace SerialLoops.Lib.Script
                 // also, color pickers, special types for things like DS screen location, etc
                 // these can then be represented by special controls
                 short parameter = invocation.Parameters[i];
-                switch (GetCommandVerb(invocation.Command.Mnemonic.ToUpper().Trim()))
+                switch ((CommandVerb)Enum.Parse(typeof(CommandVerb), invocation.Command.Mnemonic))
                 {
                     case CommandVerb.DIALOGUE:
                         switch (i)
@@ -569,18 +566,6 @@ namespace SerialLoops.Lib.Script
             return eventFile.DialogueLines[index].Text;
         }
 
-        private static CommandVerb GetCommandVerb(string text)
-        {
-            foreach (CommandVerb verb in Enum.GetValues(typeof(CommandVerb)))
-            {
-                if (text == verb.ToString())
-                {
-                    return verb;
-                }
-            }
-            throw new ArgumentException($"Invalid command verb, {text}");
-        }
-
         public enum CommandVerb
         {
             INIT_READ_FLAG,
@@ -648,6 +633,5 @@ namespace SerialLoops.Lib.Script
             BG_REVERT,
             BG_DISP2
         }
-
     }
 }

@@ -14,6 +14,5 @@ namespace SerialLoops.Lib.Script
         {
             Value = value;
         }
-        
     }
 }
