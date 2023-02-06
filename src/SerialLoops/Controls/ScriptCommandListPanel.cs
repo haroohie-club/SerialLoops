@@ -2,10 +2,7 @@
 using Eto.Forms;
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
-using Microsoft.WindowsAPICodePack.Dialogs;
-using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
