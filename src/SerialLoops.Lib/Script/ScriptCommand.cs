@@ -59,7 +59,7 @@ namespace SerialLoops.Lib.Script
                         break;
                     }
                     else if (currentCommand.Verb == CommandVerb.CHESS_VGOTO &&
-                        currentCommand.Parameters.Any(p => ((ScriptSectionScriptParameter)p).Section.Name == Section))
+                        currentCommand.Parameters.Where(p => ((ScriptSectionScriptParameter)p).Section is not null).Any(p => ((ScriptSectionScriptParameter)p).Section.Name == Section))
                     {
                         // -1 bc section is about to be incremented after we break
                         curSectionIndex = commandTree.Keys.ToList()
@@ -78,7 +78,8 @@ namespace SerialLoops.Lib.Script
                 }
 
                 curSectionIndex++;
-            } while (!(commandTree.Keys.ElementAt(curSectionIndex - 1).Name == Section && curCommandIndex == Index));
+            } while (!(commandTree.Keys.ElementAt(curSectionIndex - 1).Name == Section && curCommandIndex == Index)
+                && curSectionIndex < commandTree.Count);
 
             return commands;
         }
