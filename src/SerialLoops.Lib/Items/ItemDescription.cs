@@ -26,6 +26,7 @@
             Puzzle,
             Scenario,
             Script,
+            Sfx,
             System_Texture,
             Topic,
             Transition,
