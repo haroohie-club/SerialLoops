@@ -18,5 +18,7 @@ namespace SerialLoops.Utility
         public SKGuiImage(SKBitmap skBitmap) : base(skBitmap.Encode(SKEncodedImageFormat.Png, 1).AsStream())
         {
         }
+
+
     }
 }

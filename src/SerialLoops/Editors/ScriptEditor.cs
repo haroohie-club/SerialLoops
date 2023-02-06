@@ -7,9 +7,11 @@ using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
 using SerialLoops.Utility;
+using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using static SerialLoops.Lib.Script.ScriptItemCommand;
 
 namespace SerialLoops.Editors
@@ -81,6 +83,8 @@ namespace SerialLoops.Editors
         {
             ScriptItemCommand command = _commands[((ListBox)sender).SelectedIndex];
             _editorControls.Items.Clear();
+
+            Application.Instance.Invoke(() => UpdatePreview(((ListBox)sender).SelectedIndex));
 
             if (command.Parameters.Count == 0)
             {
@@ -317,7 +321,7 @@ namespace SerialLoops.Editors
                     case ScriptParameter.ParameterType.PLACE:
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
                             ControlGenerator.GetControlWithLabel(parameter.Name,
-                            new TextBox { Text = ((ShortScriptParameter)parameter).Value.ToString() }));
+                            new TextBox { Text = ((PlaceScriptParameter)parameter).PlaceIndex.ToString() }));
                         break;
 
                     case ScriptParameter.ParameterType.SCREEN:
@@ -441,6 +445,57 @@ namespace SerialLoops.Editors
             }
 
             _editorControls.Items.Add(new StackLayoutItem(controlsTable, expand: true));
+        }
+
+        private void UpdatePreview(int selectedIndex)
+        {
+            _preview.Items.Clear();
+
+            SKBitmap previewBitmap = new(256, 384);
+            SKCanvas canvas = new(previewBitmap);
+            canvas.DrawColor(SKColors.Black);
+
+            // Draw top screen "kinetic" background
+            for (int i = selectedIndex; i >= 0; i--)
+            {
+                if (_commands[i].Verb == EventFile.CommandVerb.KBG_DISP)
+                {
+                    canvas.DrawBitmap(((BgScriptParameter)_commands[i].Parameters[0]).Background.GetBackground(), new SKPoint(0, 0));
+                    break;
+                }
+            }
+
+            // Draw background
+            bool bgReverted = false;
+            for (int i = selectedIndex; i >= 0; i--)
+            {
+                if (_commands[i].Verb == EventFile.CommandVerb.BG_REVERT)
+                {
+                    bgReverted = true;
+                    continue;
+                }
+                if (_commands[i].Verb == EventFile.CommandVerb.BG_DISP || _commands[i].Verb == EventFile.CommandVerb.BG_DISP2 ||
+                    (_commands[i].Verb == EventFile.CommandVerb.BG_FADE && (((BgScriptParameter)_commands[i].Parameters[1]).Background is not null)) ||
+                    (!bgReverted && (_commands[i].Verb == EventFile.CommandVerb.BG_DISPTEMP || _commands[i].Verb == EventFile.CommandVerb.BG_FADE)))
+                {
+                    BackgroundItem background = (_commands[i].Verb == EventFile.CommandVerb.BG_FADE && ((BgScriptParameter)_commands[i].Parameters[0]).Background is null) ?
+                        ((BgScriptParameter)_commands[i].Parameters[1]).Background : ((BgScriptParameter)_commands[i].Parameters[0]).Background;
+                    switch (background.BackgroundType)
+                    {
+                        case BgType.TEX_BOTTOM_TILE_TOP:
+                            canvas.DrawBitmap(background.GetBackground(), new SKPoint(0, 0));
+                            break;
+
+                        default:
+                            canvas.DrawBitmap(background.GetBackground(), new SKPoint(0, 194));
+                            break;
+                    }
+                    break;
+                }
+            }
+            canvas.Flush();
+
+            _preview.Items.Add(new SKGuiImage(previewBitmap));
         }
     }
 }
