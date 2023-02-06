@@ -31,22 +31,22 @@ namespace SerialLoops.Editors
         public override Container GetEditorPanel()
         {
             _script = (ScriptItem)Description;
-            PopulateScriptCommands(_project);
-            return GetCommandsContainer(_project);
+            PopulateScriptCommands();
+            return GetCommandsContainer();
         }
 
-        private void PopulateScriptCommands(Project project)
+        private void PopulateScriptCommands()
         {
             foreach (ScriptSection section in _script.Event.ScriptSections)
             {
                 foreach (ScriptCommandInvocation command in section.Objects)
                 {
-                    _commands.Add(FromInvocation(command, _script.Event, project));
+                    _commands.Add(FromInvocation(command, _script.Event, _project));
                 }
             }
         }
 
-        private Container GetCommandsContainer(Project project)
+        private Container GetCommandsContainer()
         {
             TableLayout layout = new()
             {
@@ -70,7 +70,7 @@ namespace SerialLoops.Editors
                 Orientation = Orientation.Horizontal
             };
             _detailsLayout.Rows.Add(new(_preview));
-            _detailsLayout.Rows.Add(new(_editorControls));
+            _detailsLayout.Rows.Add(new(new Scrollable { Content = _editorControls }));
 
             mainRow.Cells.Add(new(_detailsLayout));
             layout.Rows.Add(mainRow);
