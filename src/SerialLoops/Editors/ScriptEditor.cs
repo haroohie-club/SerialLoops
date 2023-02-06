@@ -11,7 +11,6 @@ using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using static SerialLoops.Lib.Script.ScriptItemCommand;
 
 namespace SerialLoops.Editors
@@ -493,6 +492,59 @@ namespace SerialLoops.Editors
                     break;
                 }
             }
+
+            List<ChibiItem> chibis = new();
+
+            foreach (StartingChibiEntry chibi in _script.Event.StartingChibisSection?.Objects ?? new List<StartingChibiEntry>())
+            {
+                if (chibi.ChibiIndex > 0)
+                {
+                    chibis.Add((ChibiItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Chibi && ((ChibiItem)i).ChibiIndex == chibi.ChibiIndex));
+                }
+            }
+            for (int i = 0; i <= selectedIndex; i++)
+            {
+                if (_commands[i].Verb == EventFile.CommandVerb.CHIBI_ENTEREXIT)
+                {
+                    if (((ChibiEnterExitScriptParameter)_commands[i].Parameters[1]).Mode == ChibiEnterExitScriptParameter.ChibiEnterExitType.ENTER)
+                    {
+                        if (!chibis.Contains(((ChibiScriptParameter)_commands[i].Parameters[0]).Chibi))
+                        {
+                            chibis.Add(((ChibiScriptParameter)_commands[i].Parameters[0]).Chibi);
+                        }
+                    }
+                    else
+                    {
+                        try
+                        {
+                            chibis.Remove(((ChibiScriptParameter)_commands[i].Parameters[0]).Chibi);
+                        }
+                        catch (Exception)
+                        {
+                            _log.LogWarning($"Chibi set to leave was not present.");
+                        }
+                    }
+                }
+            }
+
+            int currentX, y;
+            if (_commands.Take(selectedIndex).Any(c => c.Verb == EventFile.CommandVerb.OP_MODE))
+            {
+                currentX = 100;
+                y = 50;
+            }
+            else
+            {
+                currentX = 24;
+                y = 100;
+            }
+            foreach (ChibiItem chibi in chibis)
+            {
+                SKBitmap chibiFrame = chibi.ChibiAnimations.First().Value.ElementAt(0).Frame;
+                canvas.DrawBitmap(chibiFrame, new SKPoint(currentX, y));
+                currentX += chibiFrame.Width - 2;
+            }
+
             canvas.Flush();
 
             _preview.Items.Add(new SKGuiImage(previewBitmap));
