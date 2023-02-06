@@ -26,7 +26,7 @@ namespace SerialLoops.Lib.Script
             };
         }
 
-        public List<ScriptItemCommand> WalkCommandTree(Dictionary<ScriptSection, List<ScriptItemCommand>> commandTree, LabelsSection labels)
+        public List<ScriptItemCommand> WalkCommandTree(Dictionary<ScriptSection, List<ScriptItemCommand>> commandTree, MapCharactersSection mapCharacters, LabelsSection labels)
         {
             List<ScriptItemCommand> commands = new();
 
@@ -39,11 +39,21 @@ namespace SerialLoops.Lib.Script
                 {
                     ScriptItemCommand currentCommand = commandTree[section][curCommandIndex];
                     commands.Add(currentCommand);
+                    
                     if (currentCommand.Section == Section && curCommandIndex == Index)
                     {
                         break;
                     }
-                    if (currentCommand.Verb == CommandVerb.GOTO)
+                    else if (currentCommand.Verb == CommandVerb.INVEST_START && (
+                        mapCharacters.Objects.Select(m => m.TalkScriptBlock).Contains(labels.Objects.FirstOrDefault(l => l.Name.Replace("/", "") == Section)?.Id ?? labels.Objects.Skip(1).First().Id) ||
+                        ((ScriptSectionScriptParameter)currentCommand.Parameters[4]).Section.Name == Section))
+                    {
+                        // -1 bc section is about to be incremented after we break
+                        curSectionIndex = commandTree.Keys.ToList()
+                            .IndexOf(commandTree.Keys.First(s => s.Name == Section)) - 1;
+                        break;
+                    }
+                    else if (currentCommand.Verb == CommandVerb.GOTO)
                     {
                         // -1 bc section is about to be incremented after we break
                         curSectionIndex = commandTree.Keys.ToList()

@@ -462,7 +462,7 @@ namespace SerialLoops.Editors
             SKCanvas canvas = new(previewBitmap);
             canvas.DrawColor(SKColors.Black);
 
-            List<ScriptItemCommand> commands = ((ScriptCommandSectionEntry)_commandsPanel.Viewer.SelectedItem).Command.WalkCommandTree(_commands, _script.Event.LabelsSection);
+            List<ScriptItemCommand> commands = ((ScriptCommandSectionEntry)_commandsPanel.Viewer.SelectedItem).Command.WalkCommandTree(_commands, _script.Event.MapCharactersSection, _script.Event.LabelsSection);
 
             // Draw top screen "kinetic" background
             for (int i = commands.Count - 1; i >= 0; i--)
