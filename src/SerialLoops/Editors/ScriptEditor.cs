@@ -567,6 +567,7 @@ namespace SerialLoops.Editors
             ParameterDropDown dropDown = (ParameterDropDown)sender;
             ((BgScriptParameter)_commands[_commandsListBox.SelectedIndex].Parameters[dropDown.ParameterIndex]).Background =
                 (BackgroundItem)_project.Items.First(i => i.Name == dropDown.SelectedKey);
+            UpdateTabTitle(false);
             Application.Instance.Invoke(() => UpdatePreview());
         }
     }

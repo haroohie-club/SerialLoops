@@ -4,7 +4,9 @@
     {
 
         public string Name { get; protected set; }
+        public string DisplayName => UnsavedChanges ? $"{Name} *" : Name;
         public ItemType Type { get; private set; }
+        public bool UnsavedChanges { get; set; } = false;
 
         public ItemDescription(string name, ItemType type)
         {
