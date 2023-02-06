@@ -13,12 +13,15 @@ namespace SerialLoops.Lib.Items
     public class MapItem : Item
     {
         public MapFile Map { get; set; }
+        public int QmapIndex { get; set; }
+
         public MapItem(string name) : base(name, ItemType.Map)
         {
         }
-        public MapItem(MapFile map) : base(map.Name[0..^1], ItemType.Map)
+        public MapItem(MapFile map, int qmapIndex) : base(map.Name[0..^1], ItemType.Map)
         {
             Map = map;
+            QmapIndex = qmapIndex;
         }
 
         public override void Refresh(Project project)

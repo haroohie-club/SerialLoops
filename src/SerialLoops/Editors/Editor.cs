@@ -25,7 +25,7 @@ namespace SerialLoops.Editors
 
         void InitializeComponent()
         {
-            Text = Description.Name;
+            Text = Description.DisplayName;
             Image = EditorTabsPanel.GetItemIcon(Description.Type, _log);
             Padding = 10;
             Content = GetEditorPanel();
@@ -33,5 +33,10 @@ namespace SerialLoops.Editors
 
         public abstract Container GetEditorPanel();
         
+        public void UpdateTabTitle(bool saved)
+        {
+            Description.UnsavedChanges = !saved;
+            Text = Description.DisplayName;
+        }
     }
 }

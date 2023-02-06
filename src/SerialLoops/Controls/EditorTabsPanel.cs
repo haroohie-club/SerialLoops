@@ -51,7 +51,7 @@ namespace SerialLoops.Controls
             // If a tab page with the name and type exists, switch to it
             foreach (DocumentPage page in Tabs.Pages)
             {
-                if (page.Text == item.Name)
+                if (page.Text == item.Name || page.Text == $"{item.Name} *")
                 {
                     Tabs.SelectedPage = page;
                     return;
@@ -83,7 +83,7 @@ namespace SerialLoops.Controls
                 case ItemDescription.ItemType.Scenario:
                     return new ScenarioEditor((ScenarioItem)project.Items.First(i => i.Name == item.Name), log, project, this);
                 case ItemDescription.ItemType.Script:
-                    return new ScriptEditor((ScriptItem)project.Items.First(i => i.Name == item.Name), log);
+                    return new ScriptEditor((ScriptItem)project.Items.First(i => i.Name == item.Name), project, log);
                 default:
                     throw new ArgumentException("Invalid item type");
             }

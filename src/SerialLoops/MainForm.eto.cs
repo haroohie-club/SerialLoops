@@ -1,8 +1,15 @@
 using Eto.Forms;
+using HaruhiChokuretsuLib.Archive;
+using HaruhiChokuretsuLib.Archive.Event;
 using SerialLoops.Controls;
+using SerialLoops.Editors;
 using SerialLoops.Lib;
+using SerialLoops.Lib.Items;
 using SerialLoops.Utility;
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace SerialLoops
 {
@@ -19,7 +26,7 @@ namespace SerialLoops
         void InitializeComponent()
         {
             Title = BASE_TITLE;
-            ClientSize = new(769, 420);
+            ClientSize = new(1000, 600);
             MinimumSize = new(769, 420);
             Padding = 10;
 
@@ -31,6 +38,9 @@ namespace SerialLoops
 
             Command openProject = new() { MenuText = "Open Project", ToolBarText = "Open Project" };
             openProject.Executed += OpenProject_Executed;
+
+            Command saveProject = new() { MenuText = "Save Project", ToolBarText = "Save Project", Shortcut = Application.Instance.CommonModifier | Keys.S };
+            saveProject.Executed += SaveProject_Executed;
 
             // Tools
             Command searchProject = new() { MenuText = "Search", ToolBarText = "Search", Shortcut = Application.Instance.CommonModifier | Keys.F };
@@ -47,7 +57,7 @@ namespace SerialLoops
                 Items =
                 {
                     // File submenu
-                    new SubMenuItem { Text = "&File", Items = { newProject, openProject } },
+                    new SubMenuItem { Text = "&File", Items = { newProject, openProject, saveProject } },
                     new SubMenuItem { Text = "&Tools", Items = { searchProject } },
                     // new SubMenuItem { Text = "&Edit", Items = { /* commands/items */ } },
                     // new SubMenuItem { Text = "&View", Items = { /* commands/items */ } },
@@ -99,15 +109,40 @@ namespace SerialLoops
             }
         }
 
+        private void SaveProject_Executed(object sender, EventArgs e)
+        {
+            IEnumerable<ItemDescription> unsavedItems = OpenProject.Items.Where(i => i.UnsavedChanges);
+            foreach (ItemDescription item in unsavedItems)
+            {
+                switch (item.Type)
+                {
+                    case ItemDescription.ItemType.Script:
+                        EventFile evt = ((ScriptItem)item).Event;
+                        File.WriteAllText(Path.Combine(OpenProject.BaseDirectory, "assets", "events", $"{evt.Index:X3}.s"),
+                            evt.GetSource(new()));
+                        File.WriteAllText(Path.Combine(OpenProject.IterativeDirectory, "assets", "events", $"{evt.Index:X3}.s"),
+                            evt.GetSource(new()));
+                        foreach (Editor editor in EditorTabs.Tabs.Pages.Cast<Editor>())
+                        {
+                            editor.UpdateTabTitle(true);
+                        }
+                        break;
+
+                    default:
+                        _log.LogWarning($"Saving for {item.Type}s not yet implemented.");
+                        break;
+                }
+            }
+        }
+
         private void Search_Executed(object sender, EventArgs e)
         {
             if (OpenProject is not null)
             {
-                SearchDialog searchDialog = new()
+                SearchDialog searchDialog = new(_log)
                 {
                     Project = OpenProject,
                     Tabs = EditorTabs,
-                    Log = _log
                 };
                 searchDialog.ShowModal(this);
             }

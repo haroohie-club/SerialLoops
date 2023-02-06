@@ -86,11 +86,21 @@ namespace SerialLoops.Lib
                 new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "linker.x")),
                 new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Makefile_main"), "Makefile"),
             });
+            IODirectory assetsDirectoryTree = new("assets", new IODirectory[]
+            {
+                new("data", Array.Empty<IODirectory>(), Array.Empty<IOFile>()),
+                new("events", Array.Empty<IODirectory>(), Array.Empty<IOFile>()),
+                new("graphics", Array.Empty<IODirectory>(), Array.Empty<IOFile>()),
+                new("misc", Array.Empty<IODirectory>(), new IOFile[] { new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "charset.json")) }),
+                new("movie", Array.Empty<IODirectory>(), Array.Empty<IOFile>()),
+                new("scn", Array.Empty<IODirectory>(), Array.Empty<IOFile>()),
+            }, Array.Empty<IOFile>());
             originalDirectoryTree.Create(project.BaseDirectory);
             originalDirectoryTree.Create(project.IterativeDirectory);
             srcDirectoryTree.Create(project.BaseDirectory);
             srcDirectoryTree.Create(project.IterativeDirectory);
-
+            assetsDirectoryTree.Create(project.BaseDirectory);
+            assetsDirectoryTree.Create(project.IterativeDirectory);
 
             // Copy out the files we need to build the ROM
             CopyFiles(Path.Combine(project.BaseDirectory, "rom", "data"), Path.Combine(project.BaseDirectory, "original", "archives"), "*.bin");
