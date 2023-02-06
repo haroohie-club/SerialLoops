@@ -3,6 +3,7 @@ using Eto.Forms;
 using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
+using SerialLoops.Controls;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
@@ -23,6 +24,7 @@ namespace SerialLoops.Editors
         private TableLayout _detailsLayout = new();
         private StackLayout _preview = new() { Items = { new SKGuiImage(new(256, 384)) } };
         private StackLayout _editorControls = new();
+        private ListBox _commandsListBox;
 
         public ScriptEditor(ScriptItem item, Project project, ILogger log) : base(item, log, project)
         {
@@ -55,10 +57,10 @@ namespace SerialLoops.Editors
 
             TableRow mainRow = new();
 
-            ListBox commandListBox = new();
-            commandListBox.Items.AddRange(_commands.Select(i => new ListItem() { Text = i.ToString() }));
-            commandListBox.SelectedIndexChanged += CommandListBox_SelectedIndexChanged;
-            mainRow.Cells.Add(commandListBox);
+            _commandsListBox = new();
+            _commandsListBox.Items.AddRange(_commands.Select(i => new ListItem() { Text = i.ToString() }));
+            _commandsListBox.SelectedIndexChanged += CommandListBox_SelectedIndexChanged;
+            mainRow.Cells.Add(_commandsListBox);
 
             _detailsLayout = new()
             {
@@ -83,7 +85,7 @@ namespace SerialLoops.Editors
             ScriptItemCommand command = _commands[((ListBox)sender).SelectedIndex];
             _editorControls.Items.Clear();
 
-            Application.Instance.Invoke(() => UpdatePreview(((ListBox)sender).SelectedIndex));
+            Application.Instance.Invoke(() => UpdatePreview());
 
             if (command.Parameters.Count == 0)
             {
@@ -102,16 +104,18 @@ namespace SerialLoops.Editors
 
             int currentRow = 0, currentCol = 0;
 
-            foreach (ScriptParameter parameter in command.Parameters)
+            for (int i = 0; i < command.Parameters.Count; i++)
             {
+                ScriptParameter parameter = command.Parameters[i];
                 switch (parameter.Type)
                 {
                     case ScriptParameter.ParameterType.BG:
                         BgScriptParameter bgParam = (BgScriptParameter)parameter;
-                        DropDown bgDropDown = new();
+                        ParameterDropDown bgDropDown = new() { ParameterIndex = i };
                         bgDropDown.Items.Add(new ListItem { Text = "NONE", Key = "NONE" });
                         bgDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background && (!bgParam.Kinetic ^ ((BackgroundItem)i).BackgroundType == BgType.KINETIC_SCREEN)).Select(i => new ListItem { Text = i.Name, Key = i.Name }));
                         bgDropDown.SelectedKey = bgParam.Background?.Name ?? "NONE";
+                        bgDropDown.SelectedKeyChanged += BgDropDown_SelectedKeyChanged;
 
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
                             ControlGenerator.GetControlWithLabel(parameter.Name, bgDropDown));
@@ -335,7 +339,7 @@ namespace SerialLoops.Editors
                     case ScriptParameter.ParameterType.SCRIPT_SECTION:
                         DropDown scriptSectionDropDown = new();
                         scriptSectionDropDown.Items.AddRange(_script.Event.ScriptSections.Select(s => new ListItem { Text = s.Name, Key = s.Name }));
-                        scriptSectionDropDown.SelectedKey = ((ScriptSectionScriptParameter)parameter).Name;
+                        scriptSectionDropDown.SelectedKey = ((ScriptSectionScriptParameter)parameter).Section.Name;
 
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
                             ControlGenerator.GetControlWithLabel(parameter.Name, scriptSectionDropDown));
@@ -446,7 +450,7 @@ namespace SerialLoops.Editors
             _editorControls.Items.Add(new StackLayoutItem(controlsTable, expand: true));
         }
 
-        private void UpdatePreview(int selectedIndex)
+        private void UpdatePreview()
         {
             _preview.Items.Clear();
 
@@ -455,7 +459,7 @@ namespace SerialLoops.Editors
             canvas.DrawColor(SKColors.Black);
 
             // Draw top screen "kinetic" background
-            for (int i = selectedIndex; i >= 0; i--)
+            for (int i = _commandsListBox.SelectedIndex; i >= 0; i--)
             {
                 if (_commands[i].Verb == EventFile.CommandVerb.KBG_DISP)
                 {
@@ -466,7 +470,7 @@ namespace SerialLoops.Editors
 
             // Draw background
             bool bgReverted = false;
-            for (int i = selectedIndex; i >= 0; i--)
+            for (int i = _commandsListBox.SelectedIndex; i >= 0; i--)
             {
                 if (_commands[i].Verb == EventFile.CommandVerb.BG_REVERT)
                 {
@@ -502,7 +506,7 @@ namespace SerialLoops.Editors
                     chibis.Add((ChibiItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Chibi && ((ChibiItem)i).ChibiIndex == chibi.ChibiIndex));
                 }
             }
-            for (int i = 0; i <= selectedIndex; i++)
+            for (int i = 0; i <= _commandsListBox.SelectedIndex; i++)
             {
                 if (_commands[i].Verb == EventFile.CommandVerb.CHIBI_ENTEREXIT)
                 {
@@ -510,7 +514,15 @@ namespace SerialLoops.Editors
                     {
                         if (!chibis.Contains(((ChibiScriptParameter)_commands[i].Parameters[0]).Chibi))
                         {
-                            chibis.Add(((ChibiScriptParameter)_commands[i].Parameters[0]).Chibi);
+                            ChibiItem chibi = ((ChibiScriptParameter)_commands[i].Parameters[0]).Chibi;
+                            if (!chibis.Contains(chibi))
+                            {
+                                chibis.Add(chibi);
+                            }
+                            else
+                            {
+                                _log.LogWarning($"Chibi {chibi.Name} set to join");
+                            }
                         }
                     }
                     else
@@ -528,7 +540,7 @@ namespace SerialLoops.Editors
             }
 
             int currentX, y;
-            if (_commands.Take(selectedIndex).Any(c => c.Verb == EventFile.CommandVerb.OP_MODE))
+            if (_commands.Take(_commandsListBox.SelectedIndex).Any(c => c.Verb == EventFile.CommandVerb.OP_MODE))
             {
                 currentX = 100;
                 y = 50;
@@ -548,6 +560,14 @@ namespace SerialLoops.Editors
             canvas.Flush();
 
             _preview.Items.Add(new SKGuiImage(previewBitmap));
+        }
+
+        private void BgDropDown_SelectedKeyChanged(object sender, EventArgs e)
+        {
+            ParameterDropDown dropDown = (ParameterDropDown)sender;
+            ((BgScriptParameter)_commands[_commandsListBox.SelectedIndex].Parameters[dropDown.ParameterIndex]).Background =
+                (BackgroundItem)_project.Items.First(i => i.Name == dropDown.SelectedKey);
+            Application.Instance.Invoke(() => UpdatePreview());
         }
     }
 }
