@@ -11,16 +11,76 @@ namespace SerialLoops.Lib.Script
     public class ScriptItemCommand
     {
         public CommandVerb Verb { get; set; }
-
         public List<ScriptParameter> Parameters { get; set; }
+        public string Section { get; set; }
+        public int Index { get; set; }
 
-        public static ScriptItemCommand FromInvocation(ScriptCommandInvocation invocation, EventFile eventFile, Project project)
+        public static ScriptItemCommand FromInvocation(ScriptCommandInvocation invocation, string section, int index, EventFile eventFile, Project project)
         {
             return new()
             {
                 Verb = (CommandVerb)Enum.Parse(typeof(CommandVerb), invocation.Command.Mnemonic),
-                Parameters = GetScriptParameters(invocation, eventFile, project)
+                Parameters = GetScriptParameters(invocation, eventFile, project),
+                Section = section == "NONEMiss2" ? "Miss 2 Block" : section,
+                Index = index,
             };
+        }
+
+        public List<ScriptItemCommand> WalkCommandTree(Dictionary<ScriptSection, List<ScriptItemCommand>> commandTree, LabelsSection labels)
+        {
+            List<ScriptItemCommand> commands = new();
+
+            int curCommandIndex = 0;
+            int curSectionIndex = 0;
+            do
+            {
+                ScriptSection section = commandTree.Keys.ElementAt(curSectionIndex);
+                for (curCommandIndex = 0; curCommandIndex < commandTree[section].Count; curCommandIndex++)
+                {
+                    ScriptItemCommand currentCommand = commandTree[section][curCommandIndex];
+                    commands.Add(currentCommand);
+                    if (currentCommand.Section == Section && curCommandIndex == Index)
+                    {
+                        break;
+                    }
+                    if (currentCommand.Verb == CommandVerb.GOTO)
+                    {
+                        // -1 bc section is about to be incremented after we break
+                        curSectionIndex = commandTree.Keys.ToList()
+                            .IndexOf(((ScriptSectionScriptParameter)commandTree[section][curCommandIndex].Parameters[0]).Section) - 1;
+                        break;
+                    }
+                    else if (currentCommand.Verb == CommandVerb.VGOTO &&
+                        ((ScriptSectionScriptParameter)currentCommand.Parameters[1]).Section.Name == Section)
+                    {
+                        // -1 bc section is about to be incremented after we break
+                        curSectionIndex = commandTree.Keys.ToList()
+                            .IndexOf(((ScriptSectionScriptParameter)commandTree[section][curCommandIndex].Parameters[1]).Section) - 1;
+                        break;
+                    }
+                    else if (currentCommand.Verb == CommandVerb.CHESS_VGOTO &&
+                        currentCommand.Parameters.Any(p => ((ScriptSectionScriptParameter)p).Section.Name == Section))
+                    {
+                        // -1 bc section is about to be incremented after we break
+                        curSectionIndex = commandTree.Keys.ToList()
+                            .IndexOf(commandTree.Keys.First(s => s.Name == Section)) - 1;
+                        break;
+                    }
+                    else if (currentCommand.Verb == CommandVerb.SELECT &&
+                        currentCommand.Parameters.Where(p => p.Type == ScriptParameter.ParameterType.OPTION).Any(p => ((OptionScriptParameter)p).Option.Id == (labels.Objects.FirstOrDefault(f => f.Name.Replace("/", "") == Section)?.Id
+                        ?? labels.Objects.Skip(1).First().Id)))
+                    {
+                        // -1 bc section is about to be incremented after we break
+                        curSectionIndex = commandTree.Keys.ToList()
+                            .IndexOf(commandTree.Keys.First(s => s.Name == Section)) - 1;
+                        break;
+                    }
+                }
+
+                curSectionIndex++;
+            } while (!(commandTree.Keys.ElementAt(curSectionIndex - 1).Name == Section && curCommandIndex == Index));
+
+            return commands;
         }
 
         private static List<ScriptParameter> GetScriptParameters(ScriptCommandInvocation invocation, EventFile eventFile, Project project)

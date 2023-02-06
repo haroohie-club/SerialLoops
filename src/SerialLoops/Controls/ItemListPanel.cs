@@ -54,6 +54,5 @@ namespace SerialLoops.Controls
         }
 
         protected abstract void ItemList_ItemClicked(object sender, EventArgs e);
-
     }
 }
