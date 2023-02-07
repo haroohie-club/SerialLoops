@@ -611,6 +611,14 @@ namespace SerialLoops.Lib.Script
             {
                 str += $" {((DialogueScriptParameter)Parameters[0]).Line.Text[0..Math.Min(((DialogueScriptParameter)Parameters[0]).Line.Text.Length, 10)]}...";
             }
+            else if (Verb == CommandVerb.GOTO)
+            {
+                str += $" {((ScriptSectionScriptParameter)Parameters[0]).Section.Name}";
+            }
+            else if (Verb == CommandVerb.VGOTO)
+            {
+                str += $" {((ConditionalScriptParameter)Parameters[0]).Value}, {((ScriptSectionScriptParameter)Parameters[1]).Section.Name}";
+            }
             return str;
         }
 
