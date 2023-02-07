@@ -7,6 +7,7 @@ using SerialLoops.Controls;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
+using SerialLoops.Lib.Script.Parameters;
 using SerialLoops.Utility;
 using SkiaSharp;
 using System;
@@ -34,6 +35,7 @@ namespace SerialLoops.Editors
         {
             _script = (ScriptItem)Description;
             PopulateScriptCommands();
+            _script.CalculateGraphEdges(_commands);
             return GetCommandsContainer();
         }
 
@@ -44,7 +46,7 @@ namespace SerialLoops.Editors
                 _commands.Add(section, new());
                 foreach (ScriptCommandInvocation command in section.Objects)
                 {
-                    _commands[section].Add(FromInvocation(command, section.Name, _commands[section].Count, _script.Event, _project));
+                    _commands[section].Add(FromInvocation(command, section, _commands[section].Count, _script.Event, _project));
                 }
             }
         }
@@ -343,7 +345,7 @@ namespace SerialLoops.Editors
                     case ScriptParameter.ParameterType.SCRIPT_SECTION:
                         DropDown scriptSectionDropDown = new();
                         scriptSectionDropDown.Items.AddRange(_script.Event.ScriptSections.Select(s => new ListItem { Text = s.Name, Key = s.Name }));
-                        scriptSectionDropDown.SelectedKey = ((ScriptSectionScriptParameter)parameter).Section.Name;
+                        scriptSectionDropDown.SelectedKey = ((ScriptSectionScriptParameter)parameter)?.Section?.Name ?? "NONE";
 
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
                             ControlGenerator.GetControlWithLabel(parameter.Name, scriptSectionDropDown));
@@ -462,7 +464,7 @@ namespace SerialLoops.Editors
             SKCanvas canvas = new(previewBitmap);
             canvas.DrawColor(SKColors.Black);
 
-            List<ScriptItemCommand> commands = ((ScriptCommandSectionEntry)_commandsPanel.Viewer.SelectedItem).Command.WalkCommandTree(_commands, _script.Event.MapCharactersSection, _script.Event.LabelsSection);
+            List<ScriptItemCommand> commands = ((ScriptCommandSectionEntry)_commandsPanel.Viewer.SelectedItem).Command.WalkCommandGraph(_commands, _script.Graph);
 
             // Draw top screen "kinetic" background
             for (int i = commands.Count - 1; i >= 0; i--)
