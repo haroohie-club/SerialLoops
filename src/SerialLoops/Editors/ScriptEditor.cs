@@ -375,10 +375,11 @@ namespace SerialLoops.Editors
                         break;
 
                     case ScriptParameter.ParameterType.SPRITE:
-                        DropDown spriteDropDown = new();
+                        CommandDropDown spriteDropDown = new() { Command = command, ParameterIndex = i };
                         spriteDropDown.Items.Add(new ListItem { Text = "NONE", Key = "NONE" });
                         spriteDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Character_Sprite).Select(s => new ListItem { Text = s.Name, Key = s.Name }));
                         spriteDropDown.SelectedKey = ((SpriteScriptParameter)parameter).Sprite?.Name ?? "NONE";
+                        spriteDropDown.SelectedKeyChanged += SpriteDropDown_SelectedKeyChanged;
 
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
                             ControlGenerator.GetControlWithLabel(parameter.Name, spriteDropDown));
@@ -687,6 +688,17 @@ namespace SerialLoops.Editors
         private void ChibiEmoteDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
             _log.LogWarning("Chibi emote changing not yet implemented.");
+        }
+        private void SpriteDropDown_SelectedKeyChanged(object sender, EventArgs e)
+        {
+            CommandDropDown dropDown = (CommandDropDown)sender;
+            ((SpriteScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Sprite =
+                (CharacterSpriteItem)_project.Items.First(i => i.Name == dropDown.SelectedKey);
+            _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
+                .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
+                (short)((CharacterSpriteItem)_project.Items.First(i => i.Name == dropDown.SelectedKey)).Index;
+            UpdateTabTitle(false);
+            Application.Instance.Invoke(() => UpdatePreview());
         }
     }
 }

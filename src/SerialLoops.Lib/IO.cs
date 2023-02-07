@@ -100,13 +100,6 @@ namespace SerialLoops.Lib
             if (includeFontHack)
             {
                 assetsDirectoryTree.Subdirectories.First(f => f.Name == "misc").Files = new IOFile[] { new IOFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "charset.json")) };
-                assetsDirectoryTree.Subdirectories.First(f => f.Name == "graphics").Subdirectories = new IODirectory[]
-                {
-                    new("font", Array.Empty<IODirectory>(), new IOFile[]
-                    {
-                        new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "e50_newsize.png"))
-                    }),
-                };
             }
 
             originalDirectoryTree.Create(project.BaseDirectory);
