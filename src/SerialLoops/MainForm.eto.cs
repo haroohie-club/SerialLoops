@@ -158,12 +158,26 @@ namespace SerialLoops
 
         private async void BuildIterativeProject_Executed(object sender, EventArgs e)
         {
-            await Build.BuildIterative(OpenProject, CurrentConfig, _log);
+            if (await Build.BuildIterative(OpenProject, CurrentConfig, _log))
+            {
+                MessageBox.Show("Build succeeded!");
+            }
+            else
+            {
+                MessageBox.Show("Build failed!");
+            }
         }
 
         private async void BuildBaseProject_Executed(object sender, EventArgs e)
         {
-            await Build.BuildBase(OpenProject, CurrentConfig, _log);
+            if (await Build.BuildBase(OpenProject, CurrentConfig, _log))
+            {
+                MessageBox.Show("Build succeeded!");
+            }
+            else
+            {
+                MessageBox.Show("Build failed!");
+            }
         }
 
         private void PreferencesCommand_Executed(object sender, EventArgs e)
