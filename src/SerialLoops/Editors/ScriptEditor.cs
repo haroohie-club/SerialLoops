@@ -221,7 +221,7 @@ namespace SerialLoops.Editors
                     case ScriptParameter.ParameterType.CONDITIONAL:
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
                             ControlGenerator.GetControlWithLabel(parameter.Name,
-                            new TextBox { Text = ((ConditionalScriptParameter)parameter).Value } ));
+                            new TextBox { Text = ((ConditionalScriptParameter)parameter).Value }));
                         break;
 
                     case ScriptParameter.ParameterType.COLOR_MONOCHROME:
@@ -376,7 +376,7 @@ namespace SerialLoops.Editors
                         DropDown spriteDropDown = new();
                         spriteDropDown.Items.Add(new ListItem { Text = "NONE", Key = "NONE" });
                         spriteDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Character_Sprite).Select(s => new ListItem { Text = s.Name, Key = s.Name }));
-                        spriteDropDown.SelectedKey = ((SpriteScriptParameter)parameter).Sprite.Name;
+                        spriteDropDown.SelectedKey = ((SpriteScriptParameter)parameter).Sprite?.Name ?? "NONE";
 
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
                             ControlGenerator.GetControlWithLabel(parameter.Name, spriteDropDown));
@@ -435,7 +435,7 @@ namespace SerialLoops.Editors
 
                     case ScriptParameter.ParameterType.VOICE_LINE:
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
-                            ControlGenerator.GetControlWithLabel(parameter.Name, 
+                            ControlGenerator.GetControlWithLabel(parameter.Name,
                             new TextBox { Text = ((VoiceLineScriptParameter)parameter).VoiceIndex.ToString() }));
                         break;
 
@@ -505,6 +505,7 @@ namespace SerialLoops.Editors
                 }
             }
 
+            // Draw top screen chibis
             List<ChibiItem> chibis = new();
 
             foreach (StartingChibiEntry chibi in _script.Event.StartingChibisSection?.Objects ?? new List<StartingChibiEntry>())
@@ -514,7 +515,7 @@ namespace SerialLoops.Editors
                     chibis.Add((ChibiItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Chibi && ((ChibiItem)i).ChibiIndex == chibi.ChibiIndex));
                 }
             }
-            for (int i = 0; i <= commands.Count - 1; i++)
+            for (int i = 0; i < commands.Count; i++)
             {
                 if (commands[i].Verb == EventFile.CommandVerb.CHIBI_ENTEREXIT)
                 {
@@ -563,6 +564,95 @@ namespace SerialLoops.Editors
                 SKBitmap chibiFrame = chibi.ChibiAnimations.First().Value.ElementAt(0).Frame;
                 canvas.DrawBitmap(chibiFrame, new SKPoint(currentX, y));
                 currentX += chibiFrame.Width - 2;
+            }
+
+            // Draw character sprites
+            Dictionary<Speaker, PositionedSprite> sprites = new();
+
+            foreach (ScriptItemCommand command in commands.Where(c => c.Verb == EventFile.CommandVerb.DIALOGUE || c.Verb == EventFile.CommandVerb.LOAD_ISOMAP))
+            {
+                if (command.Verb == EventFile.CommandVerb.DIALOGUE)
+                {
+                    SpriteScriptParameter spriteParam = (SpriteScriptParameter)command.Parameters[1];
+                    if (spriteParam.Sprite is not null)
+                    {
+                        Speaker speaker = ((DialogueScriptParameter)command.Parameters[0]).Line.Speaker;
+                        SpriteEntranceScriptParameter spriteEntranceParam = (SpriteEntranceScriptParameter)command.Parameters[2];
+                        SpriteExitScriptParameter spriteExitMoveParam = (SpriteExitScriptParameter)command.Parameters[3];
+                        short layer = ((ShortScriptParameter)command.Parameters[9]).Value;
+
+                        if (!sprites.ContainsKey(speaker))
+                        {
+                            sprites.Add(speaker, new());
+                        }
+
+                        if (spriteExitMoveParam.ExitTransition != SpriteExitScriptParameter.SpriteExitTransition.NO_EXIT)
+                        {
+                            switch (spriteExitMoveParam.ExitTransition)
+                            {
+                                case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_LEFT_TO_LEFT_FADE_OUT:
+                                case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_LEFT_TO_RIGHT_FADE_OUT:
+                                case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_FROM_CENTER_TO_LEFT_FADE_OUT:
+                                case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_FROM_CENTER_TO_RIGHT_FADE_OUT:
+                                case SpriteExitScriptParameter.SpriteExitTransition.FADE_OUT_CENTER:
+                                case SpriteExitScriptParameter.SpriteExitTransition.FADE_OUT_LEFT:
+                                    sprites.Remove(speaker);
+                                    break;
+
+                                case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_CENTER_TO_LEFT_AND_STAY:
+                                case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_RIGHT_TO_LEFT_AND_STAY:
+                                    sprites[speaker] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.LEFT, Layer = layer } };
+                                    break;
+
+                                case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_CENTER_TO_RIGHT_AND_STAY:
+                                case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_LEFT_TO_RIGHT_AND_STAY:
+                                    sprites[speaker] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.RIGHT, Layer = layer } };
+                                    break;
+                            }
+                        }
+                        else if (spriteEntranceParam.EntranceTransition != SpriteEntranceScriptParameter.SpriteEntranceTransition.NO_TRANSITION)
+                        {
+                            switch (spriteEntranceParam.EntranceTransition)
+                            {
+                                case SpriteEntranceScriptParameter.SpriteEntranceTransition.FADE_TO_CENTER:
+                                case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_CENTER:
+                                case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_CENTER:
+                                    sprites[speaker] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.CENTER, Layer = layer } };
+                                    break;
+
+                                case SpriteEntranceScriptParameter.SpriteEntranceTransition.FADE_IN_LEFT:
+                                case SpriteEntranceScriptParameter.SpriteEntranceTransition.PEEK_RIGHT_TO_LEFT:
+                                case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_LEFT:
+                                case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_LEFT_FAST:
+                                case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_LEFT_SLOW:
+                                    sprites[speaker] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.LEFT, Layer = layer } };
+                                    break;
+
+                                case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_RIGHT:
+                                case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_RIGHT_FAST:
+                                case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_RIGHT_SLOW:
+                                    sprites[speaker] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.RIGHT, Layer = layer } };
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            SpritePositioning.SpritePosition position = sprites[speaker].Positioning.Position;
+
+                            sprites[speaker] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = position, Layer = layer } };
+                        }
+                    }
+                }
+                else
+                {
+                    sprites.Clear();
+                }
+            }
+
+            foreach (PositionedSprite sprite in sprites.Values.OrderBy(p => p.Positioning.Layer))
+            {
+                SKBitmap spriteBitmap = sprite.Sprite.GetClosedMouthAnimation(_project)[0].frame;
+                canvas.DrawBitmap(spriteBitmap, sprite.Positioning.GetSpritePosition(spriteBitmap));
             }
 
             canvas.Flush();

@@ -69,9 +69,6 @@ namespace SerialLoops.Lib.Script
 
             for (int i = 0; i < invocation.Parameters.Count; i++)
             {
-                //todo add additional parameter types for indexed references to other items
-                // also, color pickers, special types for things like DS screen location, etc
-                // these can then be represented by special controls
                 short parameter = invocation.Parameters[i];
                 switch ((CommandVerb)Enum.Parse(typeof(CommandVerb), invocation.Command.Mnemonic))
                 {
@@ -82,7 +79,7 @@ namespace SerialLoops.Lib.Script
                                 parameters.Add(new DialogueScriptParameter("Dialogue", GetDialogueLine(parameter, eventFile)));
                                 break;
                             case 1:
-                                parameters.Add(new SpriteScriptParameter("Sprite", (CharacterSpriteItem)project.Items.First(i => i.Type == ItemDescription.ItemType.Character_Sprite && (parameter + 1) == ((CharacterSpriteItem)i).Index)));
+                                parameters.Add(new SpriteScriptParameter("Sprite", (CharacterSpriteItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Character_Sprite && (parameter) == ((CharacterSpriteItem)i).Index)));
                                 break;
                             case 2:
                                 parameters.Add(new SpriteEntranceScriptParameter("Sprite Entrance Transition", parameter));
