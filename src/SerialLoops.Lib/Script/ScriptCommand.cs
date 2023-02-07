@@ -1,6 +1,12 @@
 ﻿using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
+using QuikGraph;
+using QuikGraph.Algorithms;
+using QuikGraph.Algorithms.Observers;
+using QuikGraph.Algorithms.Search;
+using QuikGraph.Algorithms.ShortestPath;
 using SerialLoops.Lib.Items;
+using SerialLoops.Lib.Script.Parameters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,16 +17,49 @@ namespace SerialLoops.Lib.Script
     public class ScriptItemCommand
     {
         public CommandVerb Verb { get; set; }
-
         public List<ScriptParameter> Parameters { get; set; }
+        public ScriptSection Section { get; set; }
+        public int Index { get; set; }
 
-        public static ScriptItemCommand FromInvocation(ScriptCommandInvocation invocation, EventFile eventFile, Project project)
+        public static ScriptItemCommand FromInvocation(ScriptCommandInvocation invocation, ScriptSection section, int index, EventFile eventFile, Project project)
         {
             return new()
             {
                 Verb = (CommandVerb)Enum.Parse(typeof(CommandVerb), invocation.Command.Mnemonic),
-                Parameters = GetScriptParameters(invocation, eventFile, project)
+                Parameters = GetScriptParameters(invocation, eventFile, project),
+                Section = section,
+                Index = index,
             };
+        }
+
+        public List<ScriptItemCommand> WalkCommandGraph(Dictionary<ScriptSection, List<ScriptItemCommand>> commandTree, AdjacencyGraph<ScriptSection, ScriptSectionEdge> graph)
+        {
+            List<ScriptItemCommand> commands = new();
+
+            Func<ScriptSectionEdge, double> weightFunction = new((ScriptSectionEdge edge) =>
+            {
+                return 1;
+            });
+
+            if (Section != commandTree.Keys.First())
+            {
+                DepthFirstSearchAlgorithm<ScriptSection, ScriptSectionEdge> dfs = new(graph);
+                var observer = new VertexPredecessorRecorderObserver<ScriptSection, ScriptSectionEdge>();
+                using (observer.Attach(dfs))
+                {
+                    dfs.Compute(commandTree.Keys.First());
+                }
+                bool test = observer.TryGetPath(Section, out IEnumerable<ScriptSectionEdge> path);
+
+                foreach (ScriptSectionEdge edge in path)
+                {
+                    commands.AddRange(commandTree[edge.Source]);
+                }
+            }
+            commands.AddRange(commandTree[Section].TakeWhile(c => c != this));
+            commands.Add(this);
+
+            return commands;
         }
 
         private static List<ScriptParameter> GetScriptParameters(ScriptCommandInvocation invocation, EventFile eventFile, Project project)
@@ -30,9 +69,6 @@ namespace SerialLoops.Lib.Script
 
             for (int i = 0; i < invocation.Parameters.Count; i++)
             {
-                //todo add additional parameter types for indexed references to other items
-                // also, color pickers, special types for things like DS screen location, etc
-                // these can then be represented by special controls
                 short parameter = invocation.Parameters[i];
                 switch ((CommandVerb)Enum.Parse(typeof(CommandVerb), invocation.Command.Mnemonic))
                 {
@@ -43,7 +79,7 @@ namespace SerialLoops.Lib.Script
                                 parameters.Add(new DialogueScriptParameter("Dialogue", GetDialogueLine(parameter, eventFile)));
                                 break;
                             case 1:
-                                parameters.Add(new SpriteScriptParameter("Sprite", (CharacterSpriteItem)project.Items.First(i => i.Type == ItemDescription.ItemType.Character_Sprite && (parameter + 1) == ((CharacterSpriteItem)i).Index)));
+                                parameters.Add(new SpriteScriptParameter("Sprite", (CharacterSpriteItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Character_Sprite && (parameter) == ((CharacterSpriteItem)i).Index)));
                                 break;
                             case 2:
                                 parameters.Add(new SpriteEntranceScriptParameter("Sprite Entrance Transition", parameter));
@@ -571,6 +607,14 @@ namespace SerialLoops.Lib.Script
             if (Verb == CommandVerb.DIALOGUE)
             {
                 str += $" {((DialogueScriptParameter)Parameters[0]).Line.Text[0..Math.Min(((DialogueScriptParameter)Parameters[0]).Line.Text.Length, 10)]}...";
+            }
+            else if (Verb == CommandVerb.GOTO)
+            {
+                str += $" {((ScriptSectionScriptParameter)Parameters[0]).Section.Name}";
+            }
+            else if (Verb == CommandVerb.VGOTO)
+            {
+                str += $" {((ConditionalScriptParameter)Parameters[0]).Value}, {((ScriptSectionScriptParameter)Parameters[1]).Section.Name}";
             }
             return str;
         }

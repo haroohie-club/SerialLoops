@@ -7,6 +7,7 @@ using SerialLoops.Controls;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
+using SerialLoops.Lib.Script.Parameters;
 using SerialLoops.Utility;
 using SkiaSharp;
 using System;
@@ -19,12 +20,12 @@ namespace SerialLoops.Editors
     public class ScriptEditor : Editor
     {
         private ScriptItem _script;
-        private List<ScriptItemCommand> _commands = new();
+        private Dictionary<ScriptSection, List<ScriptItemCommand>> _commands = new();
 
         private TableLayout _detailsLayout = new();
         private StackLayout _preview = new() { Items = { new SKGuiImage(new(256, 384)) } };
         private StackLayout _editorControls = new();
-        private ListBox _commandsListBox;
+        private ScriptCommandListPanel _commandsPanel;
 
         public ScriptEditor(ScriptItem item, Project project, ILogger log) : base(item, log, project)
         {
@@ -34,6 +35,7 @@ namespace SerialLoops.Editors
         {
             _script = (ScriptItem)Description;
             PopulateScriptCommands();
+            _script.CalculateGraphEdges(_commands);
             return GetCommandsContainer();
         }
 
@@ -41,9 +43,10 @@ namespace SerialLoops.Editors
         {
             foreach (ScriptSection section in _script.Event.ScriptSections)
             {
+                _commands.Add(section, new());
                 foreach (ScriptCommandInvocation command in section.Objects)
                 {
-                    _commands.Add(FromInvocation(command, _script.Event, _project));
+                    _commands[section].Add(FromInvocation(command, section, _commands[section].Count, _script.Event, _project));
                 }
             }
         }
@@ -57,10 +60,9 @@ namespace SerialLoops.Editors
 
             TableRow mainRow = new();
 
-            _commandsListBox = new();
-            _commandsListBox.Items.AddRange(_commands.Select(i => new ListItem() { Text = i.ToString() }));
-            _commandsListBox.SelectedIndexChanged += CommandListBox_SelectedIndexChanged;
-            mainRow.Cells.Add(_commandsListBox);
+            _commandsPanel = new(_commands, new Size(280, 185), expandItems: true, _log);
+            _commandsPanel.Viewer.SelectedItemChanged += CommandsPanel_SelectedIndexChanged;
+            mainRow.Cells.Add(_commandsPanel);
 
             _detailsLayout = new()
             {
@@ -80,10 +82,14 @@ namespace SerialLoops.Editors
             return layout;
         }
 
-        private void CommandListBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void CommandsPanel_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ScriptItemCommand command = _commands[((ListBox)sender).SelectedIndex];
+            ScriptItemCommand command = ((ScriptCommandSectionEntry)((ScriptCommandSectionTreeGridView)sender).SelectedItem).Command;
             _editorControls.Items.Clear();
+            if (command is null) // if we've selected a script section header
+            {
+                return;
+            }
 
             Application.Instance.Invoke(() => UpdatePreview());
 
@@ -111,7 +117,7 @@ namespace SerialLoops.Editors
                 {
                     case ScriptParameter.ParameterType.BG:
                         BgScriptParameter bgParam = (BgScriptParameter)parameter;
-                        ParameterDropDown bgDropDown = new() { ParameterIndex = i };
+                        CommandDropDown bgDropDown = new() { Command = command, ParameterIndex = i };
                         bgDropDown.Items.Add(new ListItem { Text = "NONE", Key = "NONE" });
                         bgDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background && (!bgParam.Kinetic ^ ((BackgroundItem)i).BackgroundType == BgType.KINETIC_SCREEN)).Select(i => new ListItem { Text = i.Name, Key = i.Name }));
                         bgDropDown.SelectedKey = bgParam.Background?.Name ?? "NONE";
@@ -215,7 +221,7 @@ namespace SerialLoops.Editors
                     case ScriptParameter.ParameterType.CONDITIONAL:
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
                             ControlGenerator.GetControlWithLabel(parameter.Name,
-                            new TextBox { Text = ((ConditionalScriptParameter)parameter).Value } ));
+                            new TextBox { Text = ((ConditionalScriptParameter)parameter).Value }));
                         break;
 
                     case ScriptParameter.ParameterType.COLOR_MONOCHROME:
@@ -339,7 +345,7 @@ namespace SerialLoops.Editors
                     case ScriptParameter.ParameterType.SCRIPT_SECTION:
                         DropDown scriptSectionDropDown = new();
                         scriptSectionDropDown.Items.AddRange(_script.Event.ScriptSections.Select(s => new ListItem { Text = s.Name, Key = s.Name }));
-                        scriptSectionDropDown.SelectedKey = ((ScriptSectionScriptParameter)parameter).Section.Name;
+                        scriptSectionDropDown.SelectedKey = ((ScriptSectionScriptParameter)parameter)?.Section?.Name ?? "NONE";
 
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
                             ControlGenerator.GetControlWithLabel(parameter.Name, scriptSectionDropDown));
@@ -370,7 +376,7 @@ namespace SerialLoops.Editors
                         DropDown spriteDropDown = new();
                         spriteDropDown.Items.Add(new ListItem { Text = "NONE", Key = "NONE" });
                         spriteDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Character_Sprite).Select(s => new ListItem { Text = s.Name, Key = s.Name }));
-                        spriteDropDown.SelectedKey = ((SpriteScriptParameter)parameter).Sprite.Name;
+                        spriteDropDown.SelectedKey = ((SpriteScriptParameter)parameter).Sprite?.Name ?? "NONE";
 
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
                             ControlGenerator.GetControlWithLabel(parameter.Name, spriteDropDown));
@@ -429,7 +435,7 @@ namespace SerialLoops.Editors
 
                     case ScriptParameter.ParameterType.VOICE_LINE:
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
-                            ControlGenerator.GetControlWithLabel(parameter.Name, 
+                            ControlGenerator.GetControlWithLabel(parameter.Name,
                             new TextBox { Text = ((VoiceLineScriptParameter)parameter).VoiceIndex.ToString() }));
                         break;
 
@@ -458,31 +464,33 @@ namespace SerialLoops.Editors
             SKCanvas canvas = new(previewBitmap);
             canvas.DrawColor(SKColors.Black);
 
+            List<ScriptItemCommand> commands = ((ScriptCommandSectionEntry)_commandsPanel.Viewer.SelectedItem).Command.WalkCommandGraph(_commands, _script.Graph);
+
             // Draw top screen "kinetic" background
-            for (int i = _commandsListBox.SelectedIndex; i >= 0; i--)
+            for (int i = commands.Count - 1; i >= 0; i--)
             {
-                if (_commands[i].Verb == EventFile.CommandVerb.KBG_DISP)
+                if (commands[i].Verb == EventFile.CommandVerb.KBG_DISP)
                 {
-                    canvas.DrawBitmap(((BgScriptParameter)_commands[i].Parameters[0]).Background.GetBackground(), new SKPoint(0, 0));
+                    canvas.DrawBitmap(((BgScriptParameter)commands[i].Parameters[0]).Background.GetBackground(), new SKPoint(0, 0));
                     break;
                 }
             }
 
             // Draw background
             bool bgReverted = false;
-            for (int i = _commandsListBox.SelectedIndex; i >= 0; i--)
+            for (int i = commands.Count - 1; i >= 0; i--)
             {
-                if (_commands[i].Verb == EventFile.CommandVerb.BG_REVERT)
+                if (commands[i].Verb == EventFile.CommandVerb.BG_REVERT)
                 {
                     bgReverted = true;
                     continue;
                 }
-                if (_commands[i].Verb == EventFile.CommandVerb.BG_DISP || _commands[i].Verb == EventFile.CommandVerb.BG_DISP2 ||
-                    (_commands[i].Verb == EventFile.CommandVerb.BG_FADE && (((BgScriptParameter)_commands[i].Parameters[1]).Background is not null)) ||
-                    (!bgReverted && (_commands[i].Verb == EventFile.CommandVerb.BG_DISPTEMP || _commands[i].Verb == EventFile.CommandVerb.BG_FADE)))
+                if (commands[i].Verb == EventFile.CommandVerb.BG_DISP || commands[i].Verb == EventFile.CommandVerb.BG_DISP2 ||
+                    (commands[i].Verb == EventFile.CommandVerb.BG_FADE && (((BgScriptParameter)commands[i].Parameters[1]).Background is not null)) ||
+                    (!bgReverted && (commands[i].Verb == EventFile.CommandVerb.BG_DISPTEMP || commands[i].Verb == EventFile.CommandVerb.BG_FADE)))
                 {
-                    BackgroundItem background = (_commands[i].Verb == EventFile.CommandVerb.BG_FADE && ((BgScriptParameter)_commands[i].Parameters[0]).Background is null) ?
-                        ((BgScriptParameter)_commands[i].Parameters[1]).Background : ((BgScriptParameter)_commands[i].Parameters[0]).Background;
+                    BackgroundItem background = (commands[i].Verb == EventFile.CommandVerb.BG_FADE && ((BgScriptParameter)commands[i].Parameters[0]).Background is null) ?
+                        ((BgScriptParameter)commands[i].Parameters[1]).Background : ((BgScriptParameter)commands[i].Parameters[0]).Background;
                     switch (background.BackgroundType)
                     {
                         case BgType.TEX_BOTTOM_TILE_TOP:
@@ -497,6 +505,7 @@ namespace SerialLoops.Editors
                 }
             }
 
+            // Draw top screen chibis
             List<ChibiItem> chibis = new();
 
             foreach (StartingChibiEntry chibi in _script.Event.StartingChibisSection?.Objects ?? new List<StartingChibiEntry>())
@@ -506,15 +515,15 @@ namespace SerialLoops.Editors
                     chibis.Add((ChibiItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Chibi && ((ChibiItem)i).ChibiIndex == chibi.ChibiIndex));
                 }
             }
-            for (int i = 0; i <= _commandsListBox.SelectedIndex; i++)
+            for (int i = 0; i < commands.Count; i++)
             {
-                if (_commands[i].Verb == EventFile.CommandVerb.CHIBI_ENTEREXIT)
+                if (commands[i].Verb == EventFile.CommandVerb.CHIBI_ENTEREXIT)
                 {
-                    if (((ChibiEnterExitScriptParameter)_commands[i].Parameters[1]).Mode == ChibiEnterExitScriptParameter.ChibiEnterExitType.ENTER)
+                    if (((ChibiEnterExitScriptParameter)commands[i].Parameters[1]).Mode == ChibiEnterExitScriptParameter.ChibiEnterExitType.ENTER)
                     {
-                        if (!chibis.Contains(((ChibiScriptParameter)_commands[i].Parameters[0]).Chibi))
+                        if (!chibis.Contains(((ChibiScriptParameter)commands[i].Parameters[0]).Chibi))
                         {
-                            ChibiItem chibi = ((ChibiScriptParameter)_commands[i].Parameters[0]).Chibi;
+                            ChibiItem chibi = ((ChibiScriptParameter)commands[i].Parameters[0]).Chibi;
                             if (!chibis.Contains(chibi))
                             {
                                 chibis.Add(chibi);
@@ -529,7 +538,7 @@ namespace SerialLoops.Editors
                     {
                         try
                         {
-                            chibis.Remove(((ChibiScriptParameter)_commands[i].Parameters[0]).Chibi);
+                            chibis.Remove(((ChibiScriptParameter)commands[i].Parameters[0]).Chibi);
                         }
                         catch (Exception)
                         {
@@ -540,7 +549,7 @@ namespace SerialLoops.Editors
             }
 
             int currentX, y;
-            if (_commands.Take(_commandsListBox.SelectedIndex).Any(c => c.Verb == EventFile.CommandVerb.OP_MODE))
+            if (commands.Any(c => c.Verb == EventFile.CommandVerb.OP_MODE))
             {
                 currentX = 100;
                 y = 50;
@@ -557,6 +566,95 @@ namespace SerialLoops.Editors
                 currentX += chibiFrame.Width - 2;
             }
 
+            // Draw character sprites
+            Dictionary<Speaker, PositionedSprite> sprites = new();
+
+            foreach (ScriptItemCommand command in commands.Where(c => c.Verb == EventFile.CommandVerb.DIALOGUE || c.Verb == EventFile.CommandVerb.LOAD_ISOMAP))
+            {
+                if (command.Verb == EventFile.CommandVerb.DIALOGUE)
+                {
+                    SpriteScriptParameter spriteParam = (SpriteScriptParameter)command.Parameters[1];
+                    if (spriteParam.Sprite is not null)
+                    {
+                        Speaker speaker = ((DialogueScriptParameter)command.Parameters[0]).Line.Speaker;
+                        SpriteEntranceScriptParameter spriteEntranceParam = (SpriteEntranceScriptParameter)command.Parameters[2];
+                        SpriteExitScriptParameter spriteExitMoveParam = (SpriteExitScriptParameter)command.Parameters[3];
+                        short layer = ((ShortScriptParameter)command.Parameters[9]).Value;
+
+                        if (!sprites.ContainsKey(speaker))
+                        {
+                            sprites.Add(speaker, new());
+                        }
+
+                        if (spriteExitMoveParam.ExitTransition != SpriteExitScriptParameter.SpriteExitTransition.NO_EXIT)
+                        {
+                            switch (spriteExitMoveParam.ExitTransition)
+                            {
+                                case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_LEFT_TO_LEFT_FADE_OUT:
+                                case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_LEFT_TO_RIGHT_FADE_OUT:
+                                case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_FROM_CENTER_TO_LEFT_FADE_OUT:
+                                case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_FROM_CENTER_TO_RIGHT_FADE_OUT:
+                                case SpriteExitScriptParameter.SpriteExitTransition.FADE_OUT_CENTER:
+                                case SpriteExitScriptParameter.SpriteExitTransition.FADE_OUT_LEFT:
+                                    sprites.Remove(speaker);
+                                    break;
+
+                                case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_CENTER_TO_LEFT_AND_STAY:
+                                case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_RIGHT_TO_LEFT_AND_STAY:
+                                    sprites[speaker] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.LEFT, Layer = layer } };
+                                    break;
+
+                                case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_CENTER_TO_RIGHT_AND_STAY:
+                                case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_LEFT_TO_RIGHT_AND_STAY:
+                                    sprites[speaker] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.RIGHT, Layer = layer } };
+                                    break;
+                            }
+                        }
+                        else if (spriteEntranceParam.EntranceTransition != SpriteEntranceScriptParameter.SpriteEntranceTransition.NO_TRANSITION)
+                        {
+                            switch (spriteEntranceParam.EntranceTransition)
+                            {
+                                case SpriteEntranceScriptParameter.SpriteEntranceTransition.FADE_TO_CENTER:
+                                case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_CENTER:
+                                case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_CENTER:
+                                    sprites[speaker] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.CENTER, Layer = layer } };
+                                    break;
+
+                                case SpriteEntranceScriptParameter.SpriteEntranceTransition.FADE_IN_LEFT:
+                                case SpriteEntranceScriptParameter.SpriteEntranceTransition.PEEK_RIGHT_TO_LEFT:
+                                case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_LEFT:
+                                case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_LEFT_FAST:
+                                case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_LEFT_SLOW:
+                                    sprites[speaker] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.LEFT, Layer = layer } };
+                                    break;
+
+                                case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_RIGHT:
+                                case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_RIGHT_FAST:
+                                case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_RIGHT_SLOW:
+                                    sprites[speaker] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.RIGHT, Layer = layer } };
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            SpritePositioning.SpritePosition position = sprites[speaker].Positioning.Position;
+
+                            sprites[speaker] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = position, Layer = layer } };
+                        }
+                    }
+                }
+                else
+                {
+                    sprites.Clear();
+                }
+            }
+
+            foreach (PositionedSprite sprite in sprites.Values.OrderBy(p => p.Positioning.Layer))
+            {
+                SKBitmap spriteBitmap = sprite.Sprite.GetClosedMouthAnimation(_project)[0].frame;
+                canvas.DrawBitmap(spriteBitmap, sprite.Positioning.GetSpritePosition(spriteBitmap));
+            }
+
             canvas.Flush();
 
             _preview.Items.Add(new SKGuiImage(previewBitmap));
@@ -564,9 +662,12 @@ namespace SerialLoops.Editors
 
         private void BgDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
-            ParameterDropDown dropDown = (ParameterDropDown)sender;
-            ((BgScriptParameter)_commands[_commandsListBox.SelectedIndex].Parameters[dropDown.ParameterIndex]).Background =
+            CommandDropDown dropDown = (CommandDropDown)sender;
+            ((BgScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Background =
                 (BackgroundItem)_project.Items.First(i => i.Name == dropDown.SelectedKey);
+            _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
+                .Objects[dropDown.Command.Index].Parameters[0] =
+                (short)((BackgroundItem)_project.Items.First(i => i.Name == dropDown.SelectedKey)).Id;
             UpdateTabTitle(false);
             Application.Instance.Invoke(() => UpdatePreview());
         }
