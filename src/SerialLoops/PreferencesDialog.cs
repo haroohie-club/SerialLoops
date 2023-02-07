@@ -53,6 +53,7 @@ namespace SerialLoops
 
         private void SaveButton_Click(object sender, System.EventArgs e)
         {
+            Configuration.Save(_log);
             Close();
         }
 
