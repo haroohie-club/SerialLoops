@@ -162,16 +162,15 @@ namespace SerialLoops
             else
             {
                 NewProject = new(_nameBox.Text, _languageDropDown.Items[_languageDropDown.SelectedIndex].Key, Config, Log);
-                IO.OpenRom(NewProject, _romPath.Text);
+                bool includeFontHack = false;
                 if (NewProject.LangCode != "ja")
                 {
-                    if (MessageBox.Show("Would you like to download assets/strings from GitHub?", MessageBoxButtons.YesNo, MessageBoxType.Question, MessageBoxDefaultButton.Yes) == DialogResult.Yes)
+                    if (MessageBox.Show("Would you like to install the font hack? If you are using a translated base ROM, select no.", MessageBoxButtons.YesNo, MessageBoxType.Question, MessageBoxDefaultButton.Yes) == DialogResult.Yes)
                     {
-                        MessageBox.Show("Assets & strings are not currently publically available. Please join the Haroohie Translation Club Discord server to request an asset bundle.");
-                        // IO.FetchAssets(NewProject, new(ASSETS_URL), new(STRINGS_URL), Log);
+                        includeFontHack = true;
                     }
-                    IO.SetUpLocalizedHacks(NewProject);
                 }
+                IO.OpenRom(NewProject, _romPath.Text, includeFontHack);
                 NewProject.LoadArchives(Log);
                 Close();
             }

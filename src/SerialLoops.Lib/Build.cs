@@ -1,4 +1,4 @@
-﻿using HaroohieClub.NitroPacker.IO.Archive;
+﻿using HaroohieClub.NitroPacker.Core;
 using HaruhiChokuretsuLib.Archive;
 using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
@@ -11,7 +11,6 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -24,6 +23,8 @@ namespace SerialLoops.Lib
         public static async Task<bool> BuildIterative(Project project, Config config, ILogger log)
         {
             bool result = await DoBuild(project.IterativeDirectory, project, config, log);
+            CopyToArchivesToIterativeOriginal(Path.Combine(project.IterativeDirectory, "rom", "data"),
+                Path.Combine(project.IterativeDirectory, "original", "archives"), log);
             if (result)
             {
                 CleanIterative(project, log);
@@ -34,6 +35,8 @@ namespace SerialLoops.Lib
         public static async Task<bool> BuildBase(Project project, Config config, ILogger log)
         {
             bool result = await DoBuild(project.BaseDirectory, project, config, log);
+            CopyToArchivesToIterativeOriginal(Path.Combine(project.BaseDirectory, "rom", "data"),
+                Path.Combine(project.IterativeDirectory, "original", "archives"), log);
             if (result)
             {
                 CleanIterative(project, log);
@@ -44,7 +47,7 @@ namespace SerialLoops.Lib
         private static void CleanIterative(Project project, ILogger log)
         {
             string[] preservedFiles = new string[] { "charset.json", "e50_newsize.png" };
-            foreach (string file in Directory.GetFiles(project.IterativeDirectory, "*", SearchOption.AllDirectories))
+            foreach (string file in Directory.GetFiles(Path.Combine(project.IterativeDirectory, "assets"), "*", SearchOption.AllDirectories))
             {
                 if (!preservedFiles.Contains(Path.GetFileName(file)))
                 {
@@ -74,7 +77,7 @@ namespace SerialLoops.Lib
             // Replace files
             foreach (string file in Directory.GetFiles(Path.Combine(directory, "assets"), "*.*", SearchOption.AllDirectories))
             {
-                if (int.TryParse(file.Split('_')[0], NumberStyles.HexNumber, new CultureInfo("en-US"), out int index) || Path.GetFileName(file).StartsWith("new", StringComparison.OrdinalIgnoreCase))
+                if (int.TryParse(Path.GetFileNameWithoutExtension(file).Split('_')[0], NumberStyles.HexNumber, new CultureInfo("en-US"), out int index) || Path.GetFileName(file).StartsWith("new", StringComparison.OrdinalIgnoreCase))
                 {
                     if (index > 0)
                     {
@@ -86,7 +89,7 @@ namespace SerialLoops.Lib
                         {
                             if (string.IsNullOrEmpty(config.DevkitArmPath))
                             {
-                                log.LogError("DevkitARM must be supplied for replacing with source files");
+                                log.LogError("DevkitARM must be supplied in order to build");
                                 return false;
                             }
                             if (file.Contains("events"))
@@ -120,9 +123,22 @@ namespace SerialLoops.Lib
             IO.WriteBinaryFile(Path.Combine(directory, "rom", "data", "evt.bin"), evt.GetBytes(), log);
             IO.WriteBinaryFile(Path.Combine(directory, "rom", "data", "grp.bin"), grp.GetBytes(), log);
 
-
-
+            NdsProjectFile.Pack(Path.Combine(project.MainDirectory, $"{project.Name}.nds"), Path.Combine(directory, "rom", $"{project.Name}.xml"));
             return true;
+        }
+
+        private static void CopyToArchivesToIterativeOriginal(string newDataDir, string iterativeOriginalDir, ILogger log)
+        {
+            try
+            {
+                File.Copy(Path.Combine(newDataDir, "dat.bin"), Path.Combine(iterativeOriginalDir, "dat.bin"), overwrite: true);
+                File.Copy(Path.Combine(newDataDir, "evt.bin"), Path.Combine(iterativeOriginalDir, "evt.bin"), overwrite: true);
+                File.Copy(Path.Combine(newDataDir, "grp.bin"), Path.Combine(iterativeOriginalDir, "grp.bin"), overwrite: true);
+            }
+            catch (IOException exc)
+            {
+                log.LogError($"Failed to copy newly built archives to the iterative originals directory.\n{exc.Message}\n\n{exc.StackTrace}");
+            }
         }
 
         private static void ReplaceSingleGraphicsFile(ArchiveFile<GraphicsFile> grp, string filePath, int index, Dictionary<int, List<SKColor>> sharedPalettes)
@@ -173,10 +189,18 @@ namespace SerialLoops.Lib
 
             string objFile = $"{Path.Combine(Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath))}.o";
             string binFile = $"{Path.Combine(Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath))}.bin";
-            ProcessStartInfo gcc = new(Path.Combine(devkitArm, "bin", $"arm-none-eabi-gcc{exeExtension}"), $"-c -nostdlib -static \"{filePath}\" -o \"{objFile}") { WorkingDirectory = workingDirectory };
+            ProcessStartInfo gcc = new(Path.Combine(devkitArm, "bin", $"arm-none-eabi-gcc{exeExtension}"), $"-c -nostdlib -static \"{filePath}\" -o \"{objFile}")
+            {
+                CreateNoWindow = true,
+                WorkingDirectory = workingDirectory,
+            };
             await Process.Start(gcc).WaitForExitAsync();
             await Task.Delay(50); // ensures process is actually complete
-            ProcessStartInfo objcopy = new(Path.Combine(devkitArm, "bin", $"arm-none-eabi-objcopy{exeExtension}"), $"-O binary \"{objFile}\" \"{binFile}");
+            ProcessStartInfo objcopy = new(Path.Combine(devkitArm, "bin", $"arm-none-eabi-objcopy{exeExtension}"), $"-O binary \"{objFile}\" \"{binFile}")
+            {
+                CreateNoWindow = true,
+                WorkingDirectory = workingDirectory,
+            };
             await Process.Start(objcopy).WaitForExitAsync();
             await Task.Delay(50); // ensures process is actually complete
 

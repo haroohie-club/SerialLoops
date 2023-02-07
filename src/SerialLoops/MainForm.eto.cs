@@ -46,6 +46,17 @@ namespace SerialLoops
             Command searchProject = new() { MenuText = "Search", ToolBarText = "Search", Shortcut = Application.Instance.CommonModifier | Keys.F };
             searchProject.Executed += Search_Executed;
 
+            // Build
+            Command buildIterativeProject = new() { MenuText = "Build", ToolBarText = "Build" };
+            buildIterativeProject.Executed += BuildIterativeProject_Executed;
+
+            Command buildBaseProject = new() { MenuText = "Build from Scratch", ToolBarText = "Build from Scratch" };
+            buildBaseProject.Executed += BuildBaseProject_Executed;
+
+            // Application Items
+            Command preferencesCommand = new();
+            preferencesCommand.Executed += PreferencesCommand_Executed;
+
             // About
             Command aboutCommand = new() { MenuText = "About..." };
             AboutDialog aboutDialog = new() { ProgramName = "Serial Loops", Developers = new string[] { "Jonko", "William" }, Copyright = "© Haroohie Translation Club, 2023", Website = new Uri("https://haroohie.club")  };
@@ -61,12 +72,12 @@ namespace SerialLoops
                     new SubMenuItem { Text = "&Tools", Items = { searchProject } },
                     // new SubMenuItem { Text = "&Edit", Items = { /* commands/items */ } },
                     // new SubMenuItem { Text = "&View", Items = { /* commands/items */ } },
-                    //new SubMenuItem { Text = "&Build", Items = { } },
+                    new SubMenuItem { Text = "&Build", Items = { buildIterativeProject, buildBaseProject } },
                 },
                 ApplicationItems =
                 {
                     // application (OS X) or file menu (others)
-                    new ButtonMenuItem { Text = "&Preferences..." },
+                    new ButtonMenuItem { Text = "&Preferences...", Command = preferencesCommand },
                 },
                 AboutItem = aboutCommand
             };
@@ -143,6 +154,23 @@ namespace SerialLoops
                 };
                 searchDialog.ShowModal(this);
             }
+        }
+
+        private async void BuildIterativeProject_Executed(object sender, EventArgs e)
+        {
+            await Build.BuildIterative(OpenProject, CurrentConfig, _log);
+        }
+
+        private async void BuildBaseProject_Executed(object sender, EventArgs e)
+        {
+            await Build.BuildBase(OpenProject, CurrentConfig, _log);
+        }
+
+        private void PreferencesCommand_Executed(object sender, EventArgs e)
+        {
+            PreferencesDialog preferencesDialog = new(CurrentConfig, _log);
+            preferencesDialog.ShowModal(this);
+            CurrentConfig = preferencesDialog.Configuration;
         }
     }
 }

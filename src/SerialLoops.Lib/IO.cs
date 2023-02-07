@@ -57,7 +57,7 @@ namespace SerialLoops.Lib
             }
         }
 
-        public static void OpenRom(Project project, string romPath)
+        public static void OpenRom(Project project, string romPath, bool includeFontHack)
         {
             // Unpack the ROM, creating the two project directories
             NdsProjectFile.Create(project.Name, romPath, Path.Combine(project.BaseDirectory, "rom"));
@@ -97,7 +97,7 @@ namespace SerialLoops.Lib
                 new("scn", Array.Empty<IODirectory>(), Array.Empty<IOFile>()),
             }, Array.Empty<IOFile>());
 
-            if (project.LangCode != "ja")
+            if (includeFontHack)
             {
                 assetsDirectoryTree.Subdirectories.First(f => f.Name == "misc").Files = new IOFile[] { new IOFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "charset.json")) };
                 assetsDirectoryTree.Subdirectories.First(f => f.Name == "graphics").Subdirectories = new IODirectory[]
@@ -115,6 +115,11 @@ namespace SerialLoops.Lib
             srcDirectoryTree.Create(project.IterativeDirectory);
             assetsDirectoryTree.Create(project.BaseDirectory);
             assetsDirectoryTree.Create(project.IterativeDirectory);
+
+            if (includeFontHack)
+            {
+                SetUpLocalizedHacks(project);
+            }
 
             // Copy out the files we need to build the ROM
             CopyFiles(Path.Combine(project.BaseDirectory, "rom", "data"), Path.Combine(project.BaseDirectory, "original", "archives"), "*.bin");

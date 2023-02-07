@@ -25,6 +25,7 @@ namespace SerialLoops.Lib
             {
                 log.Log($"Creating default config at '{configJson}'...");
                 Config defaultConfig = GetDefault();
+                defaultConfig.ValidateConfig(log);
                 defaultConfig.ConfigPath = configJson;
                 IO.WriteStringFile(configJson, JsonSerializer.Serialize(defaultConfig), log);
                 return defaultConfig;
@@ -34,6 +35,7 @@ namespace SerialLoops.Lib
                 try
                 {
                     Config config = JsonSerializer.Deserialize<Config>(File.ReadAllText(configJson));
+                    config.ValidateConfig(log);
                     config.ConfigPath = configJson;
                     return config;
                 }
@@ -41,9 +43,18 @@ namespace SerialLoops.Lib
                 {
                     log.LogError($"Exception occurred while parsing config.json!\n{exc.Message}\n\n{exc.StackTrace}");
                     Config defaultConfig = GetDefault();
+                    defaultConfig.ValidateConfig(log);
                     IO.WriteStringFile(configJson, JsonSerializer.Serialize(defaultConfig), log);
                     return defaultConfig;
                 }
+            }
+        }
+
+        public void ValidateConfig(ILogger log)
+        {
+            if (string.IsNullOrWhiteSpace(DevkitArmPath))
+            {
+                log.LogError("devkitARM is not detected at the default or specified install location. Please set devkitPro path.");
             }
         }
 
