@@ -5,6 +5,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace SerialLoops.Lib
 {
@@ -56,7 +57,7 @@ namespace SerialLoops.Lib
             }
         }
 
-        public static void OpenRom(Project project, string romPath)
+        public static void OpenRom(Project project, string romPath, bool includeFontHack)
         {
             // Unpack the ROM, creating the two project directories
             NdsProjectFile.Create(project.Name, romPath, Path.Combine(project.BaseDirectory, "rom"));
@@ -91,16 +92,27 @@ namespace SerialLoops.Lib
                 new("data", Array.Empty<IODirectory>(), Array.Empty<IOFile>()),
                 new("events", Array.Empty<IODirectory>(), Array.Empty<IOFile>()),
                 new("graphics", Array.Empty<IODirectory>(), Array.Empty<IOFile>()),
-                new("misc", Array.Empty<IODirectory>(), new IOFile[] { new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "charset.json")) }),
+                new("misc", Array.Empty<IODirectory>(), Array.Empty<IOFile>()),
                 new("movie", Array.Empty<IODirectory>(), Array.Empty<IOFile>()),
                 new("scn", Array.Empty<IODirectory>(), Array.Empty<IOFile>()),
             }, Array.Empty<IOFile>());
+
+            if (includeFontHack)
+            {
+                assetsDirectoryTree.Subdirectories.First(f => f.Name == "misc").Files = new IOFile[] { new IOFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "charset.json")) };
+            }
+
             originalDirectoryTree.Create(project.BaseDirectory);
             originalDirectoryTree.Create(project.IterativeDirectory);
             srcDirectoryTree.Create(project.BaseDirectory);
             srcDirectoryTree.Create(project.IterativeDirectory);
             assetsDirectoryTree.Create(project.BaseDirectory);
             assetsDirectoryTree.Create(project.IterativeDirectory);
+
+            if (includeFontHack)
+            {
+                SetUpLocalizedHacks(project);
+            }
 
             // Copy out the files we need to build the ROM
             CopyFiles(Path.Combine(project.BaseDirectory, "rom", "data"), Path.Combine(project.BaseDirectory, "original", "archives"), "*.bin");
@@ -115,81 +127,6 @@ namespace SerialLoops.Lib
                 CopyFiles(Path.Combine(project.IterativeDirectory, "rom", "data", "bgm"), Path.Combine(project.IterativeDirectory, "original", "bgm"));
                 CopyFiles(Path.Combine(project.BaseDirectory, "rom", "data", "vce"), Path.Combine(project.BaseDirectory, "original", "vce"));
                 CopyFiles(Path.Combine(project.IterativeDirectory, "rom", "data", "vce"), Path.Combine(project.IterativeDirectory, "original", "vce"));
-            }
-        }
-
-        public static void FetchAssets(Project project, Uri assetsRepoZip, Uri stringsRepoZip, ILogger log)
-        {
-            FetchAssetsAsync(project, assetsRepoZip, stringsRepoZip, log).GetAwaiter().GetResult();
-        }
-
-        public static async Task FetchAssetsAsync(Project project, Uri assetsRepoZip, Uri stringsRepoZip, ILogger log)
-        {
-            using HttpClient client = new();
-            string assetsZipPath = Path.Combine(project.MainDirectory, "assets.zip");
-            string stringsZipPath = Path.Combine(project.MainDirectory, "strings.zip");
-            try
-            {
-                File.WriteAllBytes(assetsZipPath, await client.GetByteArrayAsync(assetsRepoZip));
-            }
-            catch (HttpRequestException exc)
-            {
-                if (exc.StatusCode == System.Net.HttpStatusCode.NotFound)
-                {
-                    log.LogWarning($"Failed to download assets zip. Please join the Haroohie Translation Club Discord and request an assets bundle there.");
-                }
-            }
-            catch (Exception exc)
-            {
-                log.LogError($"Exception occurred during assets zip fetch.\n{exc.Message}\n\n{exc.StackTrace}");
-            }
-            try
-            {
-                File.WriteAllBytes(stringsZipPath, await client.GetByteArrayAsync(stringsRepoZip));
-            }
-            catch (HttpRequestException exc)
-            {
-                if (exc.StatusCode == System.Net.HttpStatusCode.NotFound)
-                {
-                    log.LogWarning($"Failed to download assets zip. Please join the Haroohie Translation Club Discord and request an assets bundle there.");
-                }
-            }
-            catch (Exception exc)
-            {
-                log.LogError($"Exception occurred during strings zip fetch.\n{exc.Message}\n\n{exc.StackTrace}");
-            }
-
-            string assetsBasePath = Path.Combine(project.BaseDirectory, "assets");
-            string assetsIterativePath = Path.Combine(project.IterativeDirectory, "assets");
-            string stringsBasePath = Path.Combine(project.BaseDirectory, "strings");
-            string stringsIterativePath = Path.Combine(project.IterativeDirectory, "strings");
-            try
-            {
-                ZipFile.ExtractToDirectory(assetsZipPath, assetsBasePath);
-                CopyFiles(assetsBasePath, assetsIterativePath);
-            }
-            catch (Exception exc)
-            {
-                log.LogError($"Exception occurred during unzipping assets zip.\n{exc.Message}\n\n{exc.StackTrace}");
-            }
-            try
-            {
-                ZipFile.ExtractToDirectory(stringsZipPath, stringsBasePath);
-                CopyFiles(stringsBasePath, stringsIterativePath);
-            }
-            catch (Exception exc)
-            {
-                log.LogError($"Exception occurred during unzipping strings zip.\n{exc.Message}\n\n{exc.StackTrace}");
-            }
-
-            try
-            {
-                File.Delete(assetsZipPath);
-                File.Delete(stringsZipPath);
-            }
-            catch (Exception exc)
-            {
-                log.LogError($"Exception occurred during deleting zip files.\n{exc.Message}\n\n{exc.StackTrace}");
             }
         }
 
@@ -220,11 +157,35 @@ namespace SerialLoops.Lib
             }
         }
 
+        public static bool WriteStringFile(string relativePath, string src, Project project, ILogger log)
+        {
+            return WriteStringFile(Path.Combine(project.IterativeDirectory, relativePath), src, log) && WriteStringFile(Path.Combine(project.BaseDirectory, relativePath), src, log);
+        }
+
+        public static bool WriteBinaryFile(string relativePath, byte[] bytes, Project project, ILogger log)
+        {
+            return WriteBinaryFile(Path.Combine(project.IterativeDirectory, relativePath), bytes, log) && WriteBinaryFile(Path.Combine(project.BaseDirectory, relativePath), bytes, log);
+        }
+
         public static bool WriteStringFile(string file, string str, ILogger log)
         {
             try
             {
                 File.WriteAllText(file, str);
+                return true;
+            }
+            catch (IOException exc)
+            {
+                log.LogError($"Exception occurred while writing file '{file}' to disk.\n{exc.Message}\n\n{exc.StackTrace}");
+                return false;
+            }
+        }
+
+        public static bool WriteBinaryFile(string file, byte[] bytes, ILogger log)
+        {
+            try
+            {
+                File.WriteAllBytes(file, bytes);
                 return true;
             }
             catch (IOException exc)
