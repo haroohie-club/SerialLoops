@@ -118,10 +118,7 @@ namespace SerialLoops
                 {
                     case ItemDescription.ItemType.Script:
                         EventFile evt = ((ScriptItem)item).Event;
-                        File.WriteAllText(Path.Combine(OpenProject.BaseDirectory, "assets", "events", $"{evt.Index:X3}.s"),
-                            evt.GetSource(new()));
-                        File.WriteAllText(Path.Combine(OpenProject.IterativeDirectory, "assets", "events", $"{evt.Index:X3}.s"),
-                            evt.GetSource(new()));
+                        IO.WriteStringFile(Path.Combine("assets", "events", $"{evt.Index:X3}.s"), evt.GetSource(new()), OpenProject, _log);
                         foreach (Editor editor in EditorTabs.Tabs.Pages.Cast<Editor>())
                         {
                             editor.UpdateTabTitle(true);

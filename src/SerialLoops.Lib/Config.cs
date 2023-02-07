@@ -1,6 +1,7 @@
 ﻿using HaruhiChokuretsuLib.Util;
 using System;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Text.Json;
 
 namespace SerialLoops.Lib
@@ -9,6 +10,7 @@ namespace SerialLoops.Lib
     {
         public string ConfigPath { get; set; }
         public string ProjectsDirectory { get; set; }
+        public string DevkitArmPath { get; set; }
 
         public void Save(ILogger log)
         {
@@ -47,9 +49,24 @@ namespace SerialLoops.Lib
 
         private static Config GetDefault()
         {
+            string devkitArmDir;
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                devkitArmDir = Path.Combine("C:", "devkitPro", "devkitARM");
+            }
+            else
+            {
+                devkitArmDir = Path.Combine("opt", "devkitpro", "devkitARM");
+            }
+            if (!Directory.Exists(devkitArmDir))
+            {
+                devkitArmDir = "";
+            }
+
             return new Config
             {
                 ProjectsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "SerialLoops"),
+                DevkitArmPath = devkitArmDir,
             };
         }
     }
