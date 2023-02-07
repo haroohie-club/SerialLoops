@@ -81,6 +81,14 @@ namespace SerialLoops
                 },
                 AboutItem = aboutCommand
             };
+
+            ToolBar = new ToolBar
+            {
+                Items =
+                {
+                    buildIterativeProject
+                }
+            };
         }
 
         private void OpenProjectView(Project project)
