@@ -703,7 +703,7 @@ namespace SerialLoops.Editors
         private void SpriteSelectionButton_SelectionMade(object sender, EventArgs e)
         {
             CommandGraphicSelectionButton selection = (CommandGraphicSelectionButton)sender;
-            _log.Log($"Attempting to modify parameter {selection.ParameterIndex} to sprite {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
+            _log.Log($"Attempting to modify parameter {selection.ParameterIndex} to sprite {((ItemDescription)selection.Selected).Name} in {selection.Command.Index} in file {_script.Name}...");
             ((SpriteScriptParameter)selection.Command.Parameters[selection.ParameterIndex]).Sprite =
                 (CharacterSpriteItem)selection.Selected;
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(selection.Command.Section)]
