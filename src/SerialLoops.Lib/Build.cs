@@ -196,6 +196,7 @@ namespace SerialLoops.Lib
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
             };
+            log.Log($"Compiling '{filePath}' to '{objFile}' with '{gccStartInfo.FileName}'...");
             Process gcc = new() { StartInfo = gccStartInfo };
             gcc.OutputDataReceived += (object sender, DataReceivedEventArgs e) => log.Log(e.Data);
             gcc.ErrorDataReceived += (object sender, DataReceivedEventArgs e) => log.LogError(e.Data, lookForWarnings: true);
@@ -209,6 +210,7 @@ namespace SerialLoops.Lib
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
             };
+            log.Log($"Objcopying '{objFile}' to '{binFile}' with '{objcopyStartInfo.FileName}'...");
             Process objcopy = new() { StartInfo = objcopyStartInfo };
             objcopy.OutputDataReceived += (object sender, DataReceivedEventArgs e) => log.Log(e.Data);
             objcopy.ErrorDataReceived += (object sender, DataReceivedEventArgs e) => log.LogError(e.Data, lookForWarnings: true);
