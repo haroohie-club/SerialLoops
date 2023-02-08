@@ -1,4 +1,8 @@
-﻿namespace SerialLoops.Lib.Items
+﻿
+
+using NAudio.Wave;
+
+namespace SerialLoops.Lib.Items
 {
     public class BackgroundMusicItem : Item
     {
@@ -14,5 +18,10 @@
         public override void Refresh(Project project)
         {
         }
+
+        //public WaveBuffer GetWaveBuffer()
+        //{
+        //    WaveBuffer
+        //}
     }
 }
