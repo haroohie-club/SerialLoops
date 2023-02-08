@@ -166,27 +166,33 @@ namespace SerialLoops
 
         private async void BuildIterativeProject_Executed(object sender, EventArgs e)
         {
-            if (await Build.BuildIterative(OpenProject, CurrentConfig, _log))
+            if (OpenProject is not null)
             {
-                _log.Log("Build succeeded!");
-                MessageBox.Show("Build succeeded!", "Build Result", MessageBoxType.Information);
-            }
-            else
-            {
-                _log.LogError("Build failed!");
+                if (await Build.BuildIterative(OpenProject, CurrentConfig, _log))
+                {
+                    _log.Log("Build succeeded!");
+                    MessageBox.Show("Build succeeded!", "Build Result", MessageBoxType.Information);
+                }
+                else
+                {
+                    _log.LogError("Build failed!");
+                }
             }
         }
 
         private async void BuildBaseProject_Executed(object sender, EventArgs e)
         {
-            if (await Build.BuildBase(OpenProject, CurrentConfig, _log))
+            if (OpenProject is not null)
             {
-                _log.Log("Build succeeded!");
-                MessageBox.Show("Build succeeded!", "Build Result", MessageBoxType.Information);
-            }
-            else
-            {
-                _log.LogError("Build failed!");
+                if (await Build.BuildBase(OpenProject, CurrentConfig, _log))
+                {
+                    _log.Log("Build succeeded!");
+                    MessageBox.Show("Build succeeded!", "Build Result", MessageBoxType.Information);
+                }
+                else
+                {
+                    _log.LogError("Build failed!");
+                }
             }
         }
 
