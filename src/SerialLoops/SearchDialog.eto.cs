@@ -58,6 +58,8 @@ namespace SerialLoops
                     _results
                 }
             };
+
+            _searchInput.Focus();
         }
 
         private void SearchInput_OnTextChanged(object sender, EventArgs e)
