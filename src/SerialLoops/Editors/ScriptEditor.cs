@@ -677,6 +677,7 @@ namespace SerialLoops.Editors
         private void ChibiDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
             CommandDropDown dropDown = (CommandDropDown)sender;
+            _log.Log($"Attempting to modify parameter {dropDown.ParameterIndex} to chibi {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
             ((ChibiScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Chibi =
                 (ChibiItem)_project.Items.First(i => i.Name == dropDown.SelectedKey);
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
@@ -692,6 +693,7 @@ namespace SerialLoops.Editors
         private void SpriteDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
             CommandDropDown dropDown = (CommandDropDown)sender;
+            _log.Log($"Attempting to modify parameter {dropDown.ParameterIndex} to sprite {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
             ((SpriteScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Sprite =
                 (CharacterSpriteItem)_project.Items.First(i => i.Name == dropDown.SelectedKey);
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
