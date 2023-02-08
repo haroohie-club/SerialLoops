@@ -78,7 +78,7 @@ namespace SerialLoops.Lib
 
             if (dat is null || evt is null || grp is null)
             {
-                log.LogError("One or more archives is null. Build failed.");
+                log.LogError("One or more archives is null.");
                 return false;
             }
 
@@ -142,17 +142,14 @@ namespace SerialLoops.Lib
             // Save files to disk
             if (!IO.WriteBinaryFile(Path.Combine(directory, "rom", "data", "dat.bin"), dat.GetBytes(), log))
             {
-                log.LogError("Build failed!");
                 return false;
             }
             if (!IO.WriteBinaryFile(Path.Combine(directory, "rom", "data", "evt.bin"), evt.GetBytes(), log))
             {
-                log.LogError("Build failed!");
                 return false;
             }
             if (!IO.WriteBinaryFile(Path.Combine(directory, "rom", "data", "grp.bin"), grp.GetBytes(), log))
             {
-                log.LogError("Build failed!");
                 return false;
             }
 
@@ -214,7 +211,7 @@ namespace SerialLoops.Lib
             (string objFile, string binFile) = await CompileSourceFileAsync(filePath, devkitArm, workingDirectory, log);
             if (!File.Exists(binFile))
             {
-                log.LogError($"Compiled file {binFile} does not exist! Build failed!");
+                log.LogError($"Compiled file {binFile} does not exist!");
                 return false;
             }
             ReplaceSingleFile(archive, binFile, index);
@@ -227,7 +224,7 @@ namespace SerialLoops.Lib
             (string objFile, string binFile) = await CompileSourceFileAsync(filePath, devkitArm, workingDirectory, log);
             if (!File.Exists(binFile))
             {
-                log.LogError($"Compiled file {binFile} does not exist! Build failed!");
+                log.LogError($"Compiled file {binFile} does not exist!");
                 return false;
             }
             ReplaceSingleFile(archive, binFile, index);

@@ -168,11 +168,12 @@ namespace SerialLoops
         {
             if (await Build.BuildIterative(OpenProject, CurrentConfig, _log))
             {
-                MessageBox.Show("Build succeeded!");
+                _log.Log("Build succeeded!");
+                MessageBox.Show("Build succeeded!", "Build Result", MessageBoxType.Information);
             }
             else
             {
-                MessageBox.Show("Build failed!");
+                _log.LogError("Build failed!");
             }
         }
 
@@ -180,11 +181,12 @@ namespace SerialLoops
         {
             if (await Build.BuildBase(OpenProject, CurrentConfig, _log))
             {
-                MessageBox.Show("Build succeeded!");
+                _log.Log("Build succeeded!");
+                MessageBox.Show("Build succeeded!", "Build Result", MessageBoxType.Information);
             }
             else
             {
-                MessageBox.Show("Build failed!");
+                _log.LogError("Build failed!");
             }
         }
 
