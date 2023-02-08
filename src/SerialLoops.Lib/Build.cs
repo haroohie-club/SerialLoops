@@ -46,12 +46,19 @@ namespace SerialLoops.Lib
 
         private static void CleanIterative(Project project, ILogger log)
         {
-            string[] preservedFiles = new string[] { "charset.json", "e50_newsize.png" };
+            string[] preservedFiles = new string[] { "charset.json" };
             foreach (string file in Directory.GetFiles(Path.Combine(project.IterativeDirectory, "assets"), "*", SearchOption.AllDirectories))
             {
                 if (!preservedFiles.Contains(Path.GetFileName(file)))
                 {
-                    File.Delete(file);
+                    try
+                    {
+                        File.Delete(file);
+                    }
+                    catch (IOException exc)
+                    {
+                        log.LogError($"Failed to clean iterative directory: {exc.Message}\n\n{exc.StackTrace}");
+                    }
                 }
             }
         }
@@ -69,10 +76,24 @@ namespace SerialLoops.Lib
             var evt = ArchiveFile<EventFile>.FromFile(Path.Combine(directory, "original", "archives", "evt.bin"), log);
             var grp = ArchiveFile<GraphicsFile>.FromFile(Path.Combine(directory, "original", "archives", "grp.bin"), log);
 
-            File.WriteAllText(Path.Combine(directory, "COMMANDS.INC"), commandsIncSb.ToString());
-            File.WriteAllText(Path.Combine(directory, "DATBIN.INC"), dat.GetSourceInclude());
-            File.WriteAllText(Path.Combine(directory, "EVTBIN.INC"), evt.GetSourceInclude());
-            File.WriteAllText(Path.Combine(directory, "GRPBIN.INC"), grp.GetSourceInclude());
+            if (dat is null || evt is null || grp is null)
+            {
+                log.LogError("One or more archives is null.");
+                return false;
+            }
+
+            try
+            {
+                File.WriteAllText(Path.Combine(directory, "COMMANDS.INC"), commandsIncSb.ToString());
+                File.WriteAllText(Path.Combine(directory, "DATBIN.INC"), dat.GetSourceInclude());
+                File.WriteAllText(Path.Combine(directory, "EVTBIN.INC"), evt.GetSourceInclude());
+                File.WriteAllText(Path.Combine(directory, "GRPBIN.INC"), grp.GetSourceInclude());
+            }
+            catch (IOException exc)
+            {
+                log.LogError($"Failed to write include files to disk: {exc.Message}\n\n{exc.StackTrace}");
+                return false;
+            }
 
             // Replace files
             foreach (string file in Directory.GetFiles(Path.Combine(directory, "assets"), "*.*", SearchOption.AllDirectories))
@@ -94,11 +115,11 @@ namespace SerialLoops.Lib
                             }
                             if (file.Contains("events"))
                             {
-                                await ReplaceSingleSourceFileAsync(evt, file, index, config.DevkitArmPath, directory);
+                                await ReplaceSingleSourceFileAsync(evt, file, index, config.DevkitArmPath, directory, log);
                             }
                             else if (file.Contains("data"))
                             {
-                                await ReplaceSingleSourceFileAsync(dat, file, index, config.DevkitArmPath, directory);
+                                await ReplaceSingleSourceFileAsync(dat, file, index, config.DevkitArmPath, directory, log);
                             }
                             else
                             {
@@ -119,11 +140,28 @@ namespace SerialLoops.Lib
             }
 
             // Save files to disk
-            IO.WriteBinaryFile(Path.Combine(directory, "rom", "data", "dat.bin"), dat.GetBytes(), log);
-            IO.WriteBinaryFile(Path.Combine(directory, "rom", "data", "evt.bin"), evt.GetBytes(), log);
-            IO.WriteBinaryFile(Path.Combine(directory, "rom", "data", "grp.bin"), grp.GetBytes(), log);
+            if (!IO.WriteBinaryFile(Path.Combine(directory, "rom", "data", "dat.bin"), dat.GetBytes(), log))
+            {
+                return false;
+            }
+            if (!IO.WriteBinaryFile(Path.Combine(directory, "rom", "data", "evt.bin"), evt.GetBytes(), log))
+            {
+                return false;
+            }
+            if (!IO.WriteBinaryFile(Path.Combine(directory, "rom", "data", "grp.bin"), grp.GetBytes(), log))
+            {
+                return false;
+            }
 
-            NdsProjectFile.Pack(Path.Combine(project.MainDirectory, $"{project.Name}.nds"), Path.Combine(directory, "rom", $"{project.Name}.xml"));
+            try
+            {
+                NdsProjectFile.Pack(Path.Combine(project.MainDirectory, $"{project.Name}.nds"), Path.Combine(directory, "rom", $"{project.Name}.xml"));
+            }
+            catch (Exception exc)
+            {
+                log.LogError($"NitroPacker failed to pack ROM with exception '{exc.Message}'\n\n{exc.StackTrace}");
+                return false;
+            }
             return true;
         }
 
@@ -168,40 +206,76 @@ namespace SerialLoops.Lib
             grp.Files[grp.Files.IndexOf(grpFile)] = grpFile;
         }
 
-        private static async Task ReplaceSingleSourceFileAsync(ArchiveFile<EventFile> archive, string filePath, int index, string devkitArm, string workingDirectory)
+        private static async Task<bool> ReplaceSingleSourceFileAsync(ArchiveFile<EventFile> archive, string filePath, int index, string devkitArm, string workingDirectory, ILogger log)
         {
-            (string objFile, string binFile) = await CompileSourceFileAsync(filePath, devkitArm, workingDirectory);
+            (string objFile, string binFile) = await CompileSourceFileAsync(filePath, devkitArm, workingDirectory, log);
+            if (!File.Exists(binFile))
+            {
+                log.LogError($"Compiled file {binFile} does not exist!");
+                return false;
+            }
             ReplaceSingleFile(archive, binFile, index);
             File.Delete(objFile);
             File.Delete(binFile);
+            return true;
         }
-        private static async Task ReplaceSingleSourceFileAsync(ArchiveFile<DataFile> archive, string filePath, int index, string devkitArm, string workingDirectory)
+        private static async Task<bool> ReplaceSingleSourceFileAsync(ArchiveFile<DataFile> archive, string filePath, int index, string devkitArm, string workingDirectory, ILogger log)
         {
-            (string objFile, string binFile) = await CompileSourceFileAsync(filePath, devkitArm, workingDirectory);
+            (string objFile, string binFile) = await CompileSourceFileAsync(filePath, devkitArm, workingDirectory, log);
+            if (!File.Exists(binFile))
+            {
+                log.LogError($"Compiled file {binFile} does not exist!");
+                return false;
+            }
             ReplaceSingleFile(archive, binFile, index);
             File.Delete(objFile);
             File.Delete(binFile);
+            return true;
         }
 
-        private static async Task<(string, string)> CompileSourceFileAsync(string filePath, string devkitArm, string workingDirectory)
+        private static async Task<(string, string)> CompileSourceFileAsync(string filePath, string devkitArm, string workingDirectory, ILogger log)
         {
             string exeExtension = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? ".exe" : string.Empty;
 
             string objFile = $"{Path.Combine(Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath))}.o";
             string binFile = $"{Path.Combine(Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath))}.bin";
-            ProcessStartInfo gcc = new(Path.Combine(devkitArm, "bin", $"arm-none-eabi-gcc{exeExtension}"), $"-c -nostdlib -static \"{filePath}\" -o \"{objFile}")
+            ProcessStartInfo gccStartInfo = new(Path.Combine(devkitArm, "bin", $"arm-none-eabi-gcc{exeExtension}"), $"-c -nostdlib -static \"{filePath}\" -o \"{objFile}")
             {
                 CreateNoWindow = true,
                 WorkingDirectory = workingDirectory,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
             };
-            await Process.Start(gcc).WaitForExitAsync();
+            if (!File.Exists(gccStartInfo.FileName))
+            {
+                log.LogError($"gcc not found at '{gccStartInfo.FileName}'");
+                return (string.Empty, string.Empty);
+            }
+            log.Log($"Compiling '{filePath}' to '{objFile}' with '{gccStartInfo.FileName}'...");
+            Process gcc = new() { StartInfo = gccStartInfo };
+            gcc.OutputDataReceived += (object sender, DataReceivedEventArgs e) => log.Log(e.Data);
+            gcc.ErrorDataReceived += (object sender, DataReceivedEventArgs e) => log.LogError(e.Data, lookForWarnings: true);
+            gcc.Start();
+            await gcc.WaitForExitAsync();
             await Task.Delay(50); // ensures process is actually complete
-            ProcessStartInfo objcopy = new(Path.Combine(devkitArm, "bin", $"arm-none-eabi-objcopy{exeExtension}"), $"-O binary \"{objFile}\" \"{binFile}")
+            ProcessStartInfo objcopyStartInfo = new(Path.Combine(devkitArm, "bin", $"arm-none-eabi-objcopy{exeExtension}"), $"-O binary \"{objFile}\" \"{binFile}")
             {
                 CreateNoWindow = true,
                 WorkingDirectory = workingDirectory,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
             };
-            await Process.Start(objcopy).WaitForExitAsync();
+            if (!File.Exists(objcopyStartInfo.FileName))
+            {
+                log.LogError($"objcopy not found at '{objcopyStartInfo.FileName}'");
+                return (string.Empty, string.Empty);
+            }
+            log.Log($"Objcopying '{objFile}' to '{binFile}' with '{objcopyStartInfo.FileName}'...");
+            Process objcopy = new() { StartInfo = objcopyStartInfo };
+            objcopy.OutputDataReceived += (object sender, DataReceivedEventArgs e) => log.Log(e.Data);
+            objcopy.ErrorDataReceived += (object sender, DataReceivedEventArgs e) => log.LogError(e.Data, lookForWarnings: true);
+            objcopy.Start();
+            await objcopy.WaitForExitAsync();
             await Task.Delay(50); // ensures process is actually complete
 
             return (objFile, binFile);
