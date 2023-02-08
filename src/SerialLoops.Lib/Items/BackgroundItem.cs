@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace SerialLoops.Lib.Items
 {
-    public class BackgroundItem : Item
+    public class BackgroundItem : Item, IPreviewableGraphic
     {
         public int Id { get; set; }
         public GraphicsFile Graphic1 { get; set; }
@@ -90,6 +90,11 @@ namespace SerialLoops.Lib.Items
                 e.ScriptSections.SelectMany(sec =>
                     sec.Objects.Where(c => bgCommands.Contains(c.Command.Mnemonic)).Select(c => (e.Name[0..^1], c))))
                 .Where(t => t.c.Parameters[0] == Id || t.c.Command.Mnemonic == "BG_FADE" && t.c.Parameters[1] == Id).ToArray();
+        }
+
+        public SKBitmap GetPreview(Project project)
+        {
+            return GetBackground();
         }
     }
 }

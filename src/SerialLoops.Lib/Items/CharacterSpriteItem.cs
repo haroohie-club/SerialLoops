@@ -7,13 +7,13 @@ using System.Linq;
 
 namespace SerialLoops.Lib.Items
 {
-    public class CharacterSpriteItem : Item
+    public class CharacterSpriteItem : Item, IPreviewableGraphic
     {
-        public CharacterSprite Sprite { get; set; }
+        public HaruhiChokuretsuLib.Archive.Data.CharacterSprite Sprite { get; set; }
         public int Index { get; set; }
         public (string ScriptName, ScriptCommandInvocation command)[] ScriptUses { get; set; }
 
-        public CharacterSpriteItem(CharacterSprite sprite, CharacterDataFile chrdata, Project project) : base($"SPR_{sprite.Character}_{chrdata.Sprites.IndexOf(sprite):D3}", ItemType.Character_Sprite)
+        public CharacterSpriteItem(HaruhiChokuretsuLib.Archive.Data.CharacterSprite sprite, CharacterDataFile chrdata, Project project) : base($"SPR_{sprite.Character}_{chrdata.Sprites.IndexOf(sprite):D3}", ItemType.Character_Sprite)
         {
             Sprite = sprite;
             Index = chrdata.Sprites.IndexOf(sprite);
@@ -43,6 +43,11 @@ namespace SerialLoops.Lib.Items
                 e.ScriptSections.SelectMany(sec =>
                     sec.Objects.Where(c => c.Command.Mnemonic == "DIALOGUE").Select(c => (e.Name[0..^1], c))))
                 .Where(t => t.c.Parameters[1] == Index).ToArray();
+        }
+        
+        public SKBitmap GetPreview(Project project)
+        {
+            return GetClosedMouthAnimation(project).First().frame;
         }
     }
 }

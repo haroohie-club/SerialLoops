@@ -109,7 +109,6 @@ namespace SerialLoops.Editors
             ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows.Add(new());
 
             int currentRow = 0, currentCol = 0;
-
             for (int i = 0; i < command.Parameters.Count; i++)
             {
                 ScriptParameter parameter = command.Parameters[i];
@@ -117,14 +116,19 @@ namespace SerialLoops.Editors
                 {
                     case ScriptParameter.ParameterType.BG:
                         BgScriptParameter bgParam = (BgScriptParameter)parameter;
-                        CommandDropDown bgDropDown = new() { Command = command, ParameterIndex = i };
-                        bgDropDown.Items.Add(new ListItem { Text = "NONE", Key = "NONE" });
-                        bgDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background && (!bgParam.Kinetic ^ ((BackgroundItem)i).BackgroundType == BgType.KINETIC_SCREEN)).Select(i => new ListItem { Text = i.Name, Key = i.Name }));
-                        bgDropDown.SelectedKey = bgParam.Background?.Name ?? "NONE";
-                        bgDropDown.SelectedKeyChanged += BgDropDown_SelectedKeyChanged;
+                        CommandGraphicSelectionButton bgSelectionButton = new(ItemDescription.ItemType.Background, 
+                            bgParam.Background is not null ? bgParam.Background : NonePreviewableGraphic.BACKGROUND, _log)
+                        {
+                            Command = command,
+                            ParameterIndex = i,
+                            Project = _project,
+                        };
+                        bgSelectionButton.Items.Add(NonePreviewableGraphic.BACKGROUND);
+                        bgSelectionButton.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background && (!bgParam.Kinetic ^ ((BackgroundItem)i).BackgroundType == BgType.KINETIC_SCREEN)).Select(i => (IPreviewableGraphic)i));
+                        bgSelectionButton.SelectedChanged.Executed += (obj, args) => BgSelectionButton_SelectionMade(bgSelectionButton, args);
 
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
-                            ControlGenerator.GetControlWithLabel(parameter.Name, bgDropDown));
+                            ControlGenerator.GetControlWithLabel(parameter.Name, bgSelectionButton));
                         break;
 
                     case ScriptParameter.ParameterType.BG_SCROLL_DIRECTION:
@@ -375,14 +379,20 @@ namespace SerialLoops.Editors
                         break;
 
                     case ScriptParameter.ParameterType.SPRITE:
-                        CommandDropDown spriteDropDown = new() { Command = command, ParameterIndex = i };
-                        spriteDropDown.Items.Add(new ListItem { Text = "NONE", Key = "NONE" });
-                        spriteDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Character_Sprite).Select(s => new ListItem { Text = s.Name, Key = s.Name }));
-                        spriteDropDown.SelectedKey = ((SpriteScriptParameter)parameter).Sprite?.Name ?? "NONE";
-                        spriteDropDown.SelectedKeyChanged += SpriteDropDown_SelectedKeyChanged;
-
+                        SpriteScriptParameter spriteParam = (SpriteScriptParameter)parameter;
+                        CommandGraphicSelectionButton spriteSelectionButton = new(ItemDescription.ItemType.Character_Sprite, 
+                            spriteParam.Sprite is not null ? spriteParam.Sprite : NonePreviewableGraphic.CHARACTER_SPRITE, _log)
+                        {
+                            Command = command,
+                            ParameterIndex = i,
+                            Project = _project,
+                        };
+                        spriteSelectionButton.Items.Add(NonePreviewableGraphic.CHARACTER_SPRITE);
+                        spriteSelectionButton.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Character_Sprite).Select(s => (IPreviewableGraphic)s));
+                        spriteSelectionButton.SelectedChanged.Executed += (obj, args) => SpriteSelectionButton_SelectionMade(spriteSelectionButton, args);
+                        
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
-                            ControlGenerator.GetControlWithLabel(parameter.Name, spriteDropDown));
+                            ControlGenerator.GetControlWithLabel(parameter.Name, spriteSelectionButton));
                         break;
 
                     case ScriptParameter.ParameterType.SPRITE_ENTRANCE:
@@ -663,14 +673,14 @@ namespace SerialLoops.Editors
             _preview.Items.Add(new SKGuiImage(previewBitmap));
         }
 
-        private void BgDropDown_SelectedKeyChanged(object sender, EventArgs e)
+        private void BgSelectionButton_SelectionMade(object sender, EventArgs e)
         {
-            CommandDropDown dropDown = (CommandDropDown)sender;
-            ((BgScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Background =
-                (BackgroundItem)_project.Items.First(i => i.Name == dropDown.SelectedKey);
-            _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
-                .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
-                (short)((BackgroundItem)_project.Items.First(i => i.Name == dropDown.SelectedKey)).Id;
+            CommandGraphicSelectionButton selection = (CommandGraphicSelectionButton)sender;
+            ((BgScriptParameter)selection.Command.Parameters[selection.ParameterIndex]).Background =
+                (BackgroundItem)_project.Items.FirstOrDefault(i => i.Name == ((ItemDescription)selection.Selected).Name);
+            _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(selection.Command.Section)]
+                .Objects[selection.Command.Index].Parameters[selection.ParameterIndex] =
+                (short)((BackgroundItem)_project.Items.First(i => i.Name == ((ItemDescription)selection.Selected).Name)).Id;
             UpdateTabTitle(false);
             Application.Instance.Invoke(() => UpdatePreview());
         }
@@ -689,14 +699,14 @@ namespace SerialLoops.Editors
         {
             _log.LogWarning("Chibi emote changing not yet implemented.");
         }
-        private void SpriteDropDown_SelectedKeyChanged(object sender, EventArgs e)
+        private void SpriteSelectionButton_SelectionMade(object sender, EventArgs e)
         {
-            CommandDropDown dropDown = (CommandDropDown)sender;
-            ((SpriteScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Sprite =
-                (CharacterSpriteItem)_project.Items.First(i => i.Name == dropDown.SelectedKey);
-            _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
-                .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
-                (short)((CharacterSpriteItem)_project.Items.First(i => i.Name == dropDown.SelectedKey)).Index;
+            CommandGraphicSelectionButton selection = (CommandGraphicSelectionButton)sender;
+            ((SpriteScriptParameter)selection.Command.Parameters[selection.ParameterIndex]).Sprite =
+                (CharacterSpriteItem)selection.Selected;
+            _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(selection.Command.Section)]
+                .Objects[selection.Command.Index].Parameters[selection.ParameterIndex] =
+                (short)((CharacterSpriteItem)selection.Selected).Index;
             UpdateTabTitle(false);
             Application.Instance.Invoke(() => UpdatePreview());
         }
