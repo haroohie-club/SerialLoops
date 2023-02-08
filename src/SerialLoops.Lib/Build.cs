@@ -94,11 +94,11 @@ namespace SerialLoops.Lib
                             }
                             if (file.Contains("events"))
                             {
-                                await ReplaceSingleSourceFileAsync(evt, file, index, config.DevkitArmPath, directory);
+                                await ReplaceSingleSourceFileAsync(evt, file, index, config.DevkitArmPath, directory, log);
                             }
                             else if (file.Contains("data"))
                             {
-                                await ReplaceSingleSourceFileAsync(dat, file, index, config.DevkitArmPath, directory);
+                                await ReplaceSingleSourceFileAsync(dat, file, index, config.DevkitArmPath, directory, log);
                             }
                             else
                             {
@@ -168,40 +168,50 @@ namespace SerialLoops.Lib
             grp.Files[grp.Files.IndexOf(grpFile)] = grpFile;
         }
 
-        private static async Task ReplaceSingleSourceFileAsync(ArchiveFile<EventFile> archive, string filePath, int index, string devkitArm, string workingDirectory)
+        private static async Task ReplaceSingleSourceFileAsync(ArchiveFile<EventFile> archive, string filePath, int index, string devkitArm, string workingDirectory, ILogger log)
         {
-            (string objFile, string binFile) = await CompileSourceFileAsync(filePath, devkitArm, workingDirectory);
+            (string objFile, string binFile) = await CompileSourceFileAsync(filePath, devkitArm, workingDirectory, log);
             ReplaceSingleFile(archive, binFile, index);
             File.Delete(objFile);
             File.Delete(binFile);
         }
-        private static async Task ReplaceSingleSourceFileAsync(ArchiveFile<DataFile> archive, string filePath, int index, string devkitArm, string workingDirectory)
+        private static async Task ReplaceSingleSourceFileAsync(ArchiveFile<DataFile> archive, string filePath, int index, string devkitArm, string workingDirectory, ILogger log)
         {
-            (string objFile, string binFile) = await CompileSourceFileAsync(filePath, devkitArm, workingDirectory);
+            (string objFile, string binFile) = await CompileSourceFileAsync(filePath, devkitArm, workingDirectory, log);
             ReplaceSingleFile(archive, binFile, index);
             File.Delete(objFile);
             File.Delete(binFile);
         }
 
-        private static async Task<(string, string)> CompileSourceFileAsync(string filePath, string devkitArm, string workingDirectory)
+        private static async Task<(string, string)> CompileSourceFileAsync(string filePath, string devkitArm, string workingDirectory, ILogger log)
         {
             string exeExtension = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? ".exe" : string.Empty;
 
             string objFile = $"{Path.Combine(Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath))}.o";
             string binFile = $"{Path.Combine(Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath))}.bin";
-            ProcessStartInfo gcc = new(Path.Combine(devkitArm, "bin", $"arm-none-eabi-gcc{exeExtension}"), $"-c -nostdlib -static \"{filePath}\" -o \"{objFile}")
+            ProcessStartInfo gccStartInfo = new(Path.Combine(devkitArm, "bin", $"arm-none-eabi-gcc{exeExtension}"), $"-c -nostdlib -static \"{filePath}\" -o \"{objFile}")
             {
                 CreateNoWindow = true,
                 WorkingDirectory = workingDirectory,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
             };
-            await Process.Start(gcc).WaitForExitAsync();
+            Process gcc = new() { StartInfo = gccStartInfo };
+            gcc.OutputDataReceived += (object sender, DataReceivedEventArgs e) => log.Log(e.Data);
+            gcc.ErrorDataReceived += (object sender, DataReceivedEventArgs e) => log.LogWarning(e.Data, lookForErrors: true);
+            gcc.Start();
+            await gcc.WaitForExitAsync();
             await Task.Delay(50); // ensures process is actually complete
-            ProcessStartInfo objcopy = new(Path.Combine(devkitArm, "bin", $"arm-none-eabi-objcopy{exeExtension}"), $"-O binary \"{objFile}\" \"{binFile}")
+            ProcessStartInfo objcopyStartInfo = new(Path.Combine(devkitArm, "bin", $"arm-none-eabi-objcopy{exeExtension}"), $"-O binary \"{objFile}\" \"{binFile}")
             {
                 CreateNoWindow = true,
                 WorkingDirectory = workingDirectory,
             };
-            await Process.Start(objcopy).WaitForExitAsync();
+            Process objcopy = new() { StartInfo = objcopyStartInfo };
+            objcopy.OutputDataReceived += (object sender, DataReceivedEventArgs e) => log.Log(e.Data);
+            objcopy.ErrorDataReceived += (object sender, DataReceivedEventArgs e) => log.LogWarning(e.Data, lookForErrors: true);
+            objcopy.Start();
+            await objcopy.WaitForExitAsync();
             await Task.Delay(50); // ensures process is actually complete
 
             return (objFile, binFile);
