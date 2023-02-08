@@ -18,10 +18,5 @@ namespace SerialLoops.Lib.Items
         public override void Refresh(Project project)
         {
         }
-
-        //public WaveBuffer GetWaveBuffer()
-        //{
-        //    WaveBuffer
-        //}
     }
 }
