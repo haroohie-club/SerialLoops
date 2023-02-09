@@ -1,5 +1,4 @@
-﻿using Eto.Drawing;
-using Eto.Forms;
+﻿using Eto.Forms;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Editors;
 using SerialLoops.Lib;
@@ -31,19 +30,6 @@ namespace SerialLoops.Controls
                 Enabled = true
             };
             Content = new TableLayout(Tabs);
-        }
-
-        public static Icon GetItemIcon(ItemDescription.ItemType type, ILogger log)
-        {
-            try
-            {
-                return Icon.FromResource($"SerialLoops.Icons.{type}.png").WithSize(16, 16);
-            }
-            catch (Exception exc)
-            {
-                log.LogWarning($"Failed to load icon.\n{exc.Message}\n\n{exc.StackTrace}");
-                return null;
-            }
         }
 
         internal void OpenTab(ItemDescription item, ILogger log)
@@ -83,7 +69,7 @@ namespace SerialLoops.Controls
                 case ItemDescription.ItemType.Scenario:
                     return new ScenarioEditor((ScenarioItem)project.Items.First(i => i.Name == item.Name), log, project, this);
                 case ItemDescription.ItemType.Script:
-                    return new ScriptEditor((ScriptItem)project.Items.First(i => i.Name == item.Name), project, log);
+                    return new ScriptEditor((ScriptItem)project.Items.First(i => i.Name == item.Name), project, log, this);
                 default:
                     throw new ArgumentException("Invalid item type");
             }
