@@ -3,7 +3,7 @@ using HaruhiChokuretsuLib.Util;
 using SerialLoops.Controls;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
-using System;
+using SerialLoops.Utility;
 
 namespace SerialLoops.Editors
 {
@@ -26,7 +26,7 @@ namespace SerialLoops.Editors
         void InitializeComponent()
         {
             Text = Description.DisplayName;
-            Image = EditorTabsPanel.GetItemIcon(Description.Type, _log);
+            Image = ControlGenerator.GetItemIcon(Description.Type, _log);
             Padding = 10;
             Content = GetEditorPanel();
         }

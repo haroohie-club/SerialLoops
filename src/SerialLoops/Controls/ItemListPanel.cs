@@ -1,13 +1,11 @@
 ﻿using Eto.Drawing;
 using Eto.Forms;
 using HaruhiChokuretsuLib.Util;
-using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
+using SerialLoops.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SerialLoops.Controls
 {
@@ -50,7 +48,7 @@ namespace SerialLoops.Controls
         private IEnumerable<Section> GetSections()
         {
              return Items.GroupBy(i => i.Type).OrderBy(g => g.Key)
-                .Select(g => new Section($"{g.Key.ToString().Replace('_', ' ')}s", g.Select(i => new Section() { Text = i.Name }), EditorTabsPanel.GetItemIcon(g.Key, _log)));
+                .Select(g => new Section($"{g.Key.ToString().Replace('_', ' ')}s", g.Select(i => new Section() { Text = i.Name }), ControlGenerator.GetItemIcon(g.Key, _log)));
         }
 
         protected abstract void ItemList_ItemClicked(object sender, EventArgs e);
