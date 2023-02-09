@@ -2,10 +2,10 @@
 using Eto.Forms;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib.Items;
+using SerialLoops.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using SerialLoops.Utility;
 
 namespace SerialLoops.Controls
 {

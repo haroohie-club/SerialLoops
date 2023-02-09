@@ -69,7 +69,7 @@ namespace SerialLoops.Controls
                 case ItemDescription.ItemType.Scenario:
                     return new ScenarioEditor((ScenarioItem)project.Items.First(i => i.Name == item.Name), log, project, this);
                 case ItemDescription.ItemType.Script:
-                    return new ScriptEditor((ScriptItem)project.Items.First(i => i.Name == item.Name), project, log);
+                    return new ScriptEditor((ScriptItem)project.Items.First(i => i.Name == item.Name), project, log, this);
                 default:
                     throw new ArgumentException("Invalid item type");
             }

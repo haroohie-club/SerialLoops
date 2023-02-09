@@ -27,7 +27,7 @@ namespace SerialLoops.Editors
         private StackLayout _editorControls = new();
         private ScriptCommandListPanel _commandsPanel;
 
-        public ScriptEditor(ScriptItem item, Project project, ILogger log) : base(item, log, project)
+        public ScriptEditor(ScriptItem item, Project project, ILogger log, EditorTabsPanel tabs) : base(item, log, project, tabs)
         {
         }
 
@@ -116,8 +116,8 @@ namespace SerialLoops.Editors
                 {
                     case ScriptParameter.ParameterType.BG:
                         BgScriptParameter bgParam = (BgScriptParameter)parameter;
-                        CommandGraphicSelectionButton bgSelectionButton = new(ItemDescription.ItemType.Background, 
-                            bgParam.Background is not null ? bgParam.Background : NonePreviewableGraphic.BACKGROUND, _log)
+                        CommandGraphicSelectionButton bgSelectionButton = new(bgParam.Background is not null ? bgParam.Background
+                            : NonePreviewableGraphic.BACKGROUND, _tabs, _log)
                         {
                             Command = command,
                             ParameterIndex = i,
@@ -380,8 +380,8 @@ namespace SerialLoops.Editors
 
                     case ScriptParameter.ParameterType.SPRITE:
                         SpriteScriptParameter spriteParam = (SpriteScriptParameter)parameter;
-                        CommandGraphicSelectionButton spriteSelectionButton = new(ItemDescription.ItemType.Character_Sprite, 
-                            spriteParam.Sprite is not null ? spriteParam.Sprite : NonePreviewableGraphic.CHARACTER_SPRITE, _log)
+                        CommandGraphicSelectionButton spriteSelectionButton = new(spriteParam.Sprite is not null ? spriteParam.Sprite
+                            : NonePreviewableGraphic.CHARACTER_SPRITE, _tabs, _log)
                         {
                             Command = command,
                             ParameterIndex = i,
