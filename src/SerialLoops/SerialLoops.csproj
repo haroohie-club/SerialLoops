@@ -9,6 +9,7 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Version>0.1.0</Version>
+    <ApplicationIcon>WindowsIcon.ico</ApplicationIcon>
 
   </PropertyGroup>
 
@@ -35,6 +36,10 @@
     <EmbeddedResource Include="Icons\*.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="WindowsIcon.ico" />
   </ItemGroup>
 
   <ItemGroup>
