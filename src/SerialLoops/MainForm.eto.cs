@@ -268,7 +268,6 @@ namespace SerialLoops
                     } catch (Exception ex)
                     {
                         _log.LogError($"Failed to start emulator: {ex.Message}");
-                        MessageBox.Show("Failed to start your emulator", "Emulator Startup Failed", MessageBoxType.Error);
                     }
                 }
                 else
