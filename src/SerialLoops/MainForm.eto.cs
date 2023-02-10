@@ -8,6 +8,7 @@ using SerialLoops.Lib.Items;
 using SerialLoops.Utility;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -18,10 +19,13 @@ namespace SerialLoops
         private const string BASE_TITLE = "Serial Loops";
 
         private LoopyLogger _log;
+        public RecentProjects RecentProjects { get; set; }
         public Config CurrentConfig { get; set; }
         public Project OpenProject { get; set; }
         public EditorTabsPanel EditorTabs { get; set; }
         public ItemExplorerPanel ItemExplorer { get; set; }
+        
+        private readonly SubMenuItem _recentProjects = new() { Text = "Recent Projects" };
 
         void InitializeComponent()
         {
@@ -43,15 +47,18 @@ namespace SerialLoops
             saveProject.Executed += SaveProject_Executed;
 
             // Tools
-            Command searchProject = new() { MenuText = "Search", ToolBarText = "Search", Shortcut = Application.Instance.CommonModifier | Keys.F };
+            Command searchProject = new() { MenuText = "Search", ToolBarText = "Search", Shortcut = Application.Instance.CommonModifier | Keys.F, Image = ControlGenerator.GetIcon("Search", _log) };
             searchProject.Executed += Search_Executed;
 
             // Build
-            Command buildIterativeProject = new() { MenuText = "Build", ToolBarText = "Build" };
+            Command buildIterativeProject = new() { MenuText = "Build", ToolBarText = "Build", Image = ControlGenerator.GetIcon("Build", _log) };
             buildIterativeProject.Executed += BuildIterativeProject_Executed;
 
-            Command buildBaseProject = new() { MenuText = "Build from Scratch", ToolBarText = "Build from Scratch" };
+            Command buildBaseProject = new() { MenuText = "Build from Scratch", ToolBarText = "Build from Scratch", Image = ControlGenerator.GetIcon("Build_Scratch", _log) };
             buildBaseProject.Executed += BuildBaseProject_Executed;
+            
+            Command buildAndRunProject = new() { MenuText = "Build and Run", ToolBarText = "Run", Image = ControlGenerator.GetIcon("Build_Run", _log) };
+            buildAndRunProject.Executed += BuildAndRunProject_Executed;
 
             // Application Items
             Command preferencesCommand = new();
@@ -59,7 +66,7 @@ namespace SerialLoops
 
             // About
             Command aboutCommand = new() { MenuText = "About..." };
-            AboutDialog aboutDialog = new() { ProgramName = "Serial Loops", Developers = new string[] { "Jonko", "William" }, Copyright = "© Haroohie Translation Club, 2023", Website = new Uri("https://haroohie.club")  };
+            AboutDialog aboutDialog = new() { ProgramName = "Serial Loops", Developers = new[] { "Jonko", "William" }, Copyright = "© Haroohie Translation Club, 2023", Website = new Uri("https://haroohie.club")  };
             aboutCommand.Executed += (sender, e) => aboutDialog.ShowDialog(this);
 
             // create menu
@@ -68,11 +75,11 @@ namespace SerialLoops
                 Items =
                 {
                     // File submenu
-                    new SubMenuItem { Text = "&File", Items = { newProject, openProject, saveProject } },
+                    new SubMenuItem { Text = "&File", Items = { newProject, openProject, _recentProjects, saveProject } },
                     new SubMenuItem { Text = "&Tools", Items = { searchProject } },
                     // new SubMenuItem { Text = "&Edit", Items = { /* commands/items */ } },
                     // new SubMenuItem { Text = "&View", Items = { /* commands/items */ } },
-                    new SubMenuItem { Text = "&Build", Items = { buildIterativeProject, buildBaseProject } },
+                    new SubMenuItem { Text = "&Build", Items = { buildIterativeProject, buildBaseProject, buildAndRunProject } },
                 },
                 ApplicationItems =
                 {
@@ -86,7 +93,9 @@ namespace SerialLoops
             {
                 Items =
                 {
-                    buildIterativeProject
+                    buildIterativeProject,
+                    buildAndRunProject,
+                    searchProject
                 }
             };
         }
@@ -97,6 +106,16 @@ namespace SerialLoops
             ItemExplorer = new(project, EditorTabs, _log);
             Title = $"{BASE_TITLE} - {project.Name}";
             Content = new TableLayout(new TableRow(ItemExplorer, EditorTabs));
+            try
+            {
+                RecentProjects.AddProject(Path.Combine(project.MainDirectory, $"{project.Name}.{Project.PROJECT_FORMAT}"));
+                RecentProjects.Save(_log);
+                UpdateRecentProjects();
+            }
+            catch (Exception e)
+            {
+                _log.Log($"Failed to add project to recent projects list: {e.Message}");
+            }
         }
 
         protected override void OnLoad(EventArgs e)
@@ -104,6 +123,26 @@ namespace SerialLoops
             base.OnLoad(e);
             _log = new();
             CurrentConfig = Config.LoadConfig(_log);
+            RecentProjects = RecentProjects.LoadRecentProjects(_log);
+            UpdateRecentProjects();
+        }
+
+        private void UpdateRecentProjects()
+        {
+            _recentProjects.Items.Clear();
+            foreach (string project in RecentProjects.Projects)
+            {
+                Command recentProject = new() { MenuText = Path.GetFileNameWithoutExtension(project), ToolTip = project };
+                recentProject.Executed += OpenRecentProject_Executed;
+                if (!File.Exists(project))
+                {
+                    recentProject.Enabled = false;
+                    recentProject.MenuText += " (Missing)";
+                    recentProject.Image = ControlGenerator.GetIcon("Warning", _log);
+                }
+                _recentProjects.Items.Add(recentProject);
+            }
+            _recentProjects.Enabled = _recentProjects.Items.Count > 0;
         }
 
         private void NewProjectCommand_Executed(object sender, EventArgs e)
@@ -126,6 +165,13 @@ namespace SerialLoops
                 OpenProject = Project.OpenProject(openFileDialog.FileName, CurrentConfig, _log);
                 OpenProjectView(OpenProject);
             }
+        }
+        
+        private void OpenRecentProject_Executed(object sender, EventArgs e)
+        {
+            Command command = (Command)sender;
+            OpenProject = Project.OpenProject(command.ToolTip, CurrentConfig, _log);
+            OpenProjectView(OpenProject);
         }
 
         private void SaveProject_Executed(object sender, EventArgs e)
@@ -188,6 +234,41 @@ namespace SerialLoops
                 {
                     _log.Log("Build succeeded!");
                     MessageBox.Show("Build succeeded!", "Build Result", MessageBoxType.Information);
+                }
+                else
+                {
+                    _log.LogError("Build failed!");
+                }
+            }
+        }
+        
+        private async void BuildAndRunProject_Executed(object sender, EventArgs e)
+        {
+            if (OpenProject is not null)
+            {
+                if (CurrentConfig.EmulatorPath is null)
+                {
+                    MessageBox.Show("No emulator path set. Please set the path to your emulator.", "No Emulator Path", MessageBoxType.Warning);
+                    return;
+                }
+                if (await Build.BuildIterative(OpenProject, CurrentConfig, _log))
+                {
+                    _log.Log("Build succeeded!");
+                    try
+                    {
+                        // If the EmulatorPath is an .app bundle, we need to run the executable inside it
+                        string emulatorExecutable = CurrentConfig.EmulatorPath;
+                        if (emulatorExecutable.EndsWith(".app"))
+                        {
+                            emulatorExecutable = Path.Combine(CurrentConfig.EmulatorPath, "Contents", "MacOS", Path.GetFileNameWithoutExtension(CurrentConfig.EmulatorPath));
+                        }
+                        
+                        Process.Start(emulatorExecutable, $"\"{Path.Combine(OpenProject.MainDirectory, $"{OpenProject.Name}.nds")}\"");
+                    } catch (Exception ex)
+                    {
+                        _log.LogError($"Failed to start emulator: {ex.Message}");
+                        MessageBox.Show("Failed to start your emulator", "Emulator Startup Failed", MessageBoxType.Error);
+                    }
                 }
                 else
                 {
