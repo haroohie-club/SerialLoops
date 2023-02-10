@@ -30,6 +30,11 @@
     <None Remove="Icons\Transition.png" />
     <None Remove="Icons\Tutorial.png" />
     <None Remove="Icons\Voice.png" />
+    <None Remove="Icons\Build.png" />
+    <None Remove="Icons\Build_Scratch.png" />
+    <None Remove="Icons\Build_Run.png" />
+    <None Remove="Icons\Help.png" />
+    <None Remove="Icons\Warning.png" />
   </ItemGroup>
 
   <ItemGroup>

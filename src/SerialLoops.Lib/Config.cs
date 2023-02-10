@@ -11,6 +11,7 @@ namespace SerialLoops.Lib
         public string ConfigPath { get; set; }
         public string ProjectsDirectory { get; set; }
         public string DevkitArmPath { get; set; }
+        public string EmulatorPath { get; set; }
 
         public void Save(ILogger log)
         {
@@ -24,29 +25,27 @@ namespace SerialLoops.Lib
             if (!File.Exists(configJson))
             {
                 log.Log($"Creating default config at '{configJson}'...");
-                Config defaultConfig = GetDefault();
+                Config defaultConfig = GetDefault(log);
                 defaultConfig.ValidateConfig(log);
                 defaultConfig.ConfigPath = configJson;
                 IO.WriteStringFile(configJson, JsonSerializer.Serialize(defaultConfig), log);
                 return defaultConfig;
             }
-            else
+
+            try
             {
-                try
-                {
-                    Config config = JsonSerializer.Deserialize<Config>(File.ReadAllText(configJson));
-                    config.ValidateConfig(log);
-                    config.ConfigPath = configJson;
-                    return config;
-                }
-                catch (JsonException exc)
-                {
-                    log.LogError($"Exception occurred while parsing config.json!\n{exc.Message}\n\n{exc.StackTrace}");
-                    Config defaultConfig = GetDefault();
-                    defaultConfig.ValidateConfig(log);
-                    IO.WriteStringFile(configJson, JsonSerializer.Serialize(defaultConfig), log);
-                    return defaultConfig;
-                }
+                Config config = JsonSerializer.Deserialize<Config>(File.ReadAllText(configJson));
+                config.ValidateConfig(log);
+                config.ConfigPath = configJson;
+                return config;
+            }
+            catch (JsonException exc)
+            {
+                log.LogError($"Exception occurred while parsing config.json!\n{exc.Message}\n\n{exc.StackTrace}");
+                Config defaultConfig = GetDefault(log);
+                defaultConfig.ValidateConfig(log);
+                IO.WriteStringFile(configJson, JsonSerializer.Serialize(defaultConfig), log);
+                return defaultConfig;
             }
         }
 
@@ -58,7 +57,7 @@ namespace SerialLoops.Lib
             }
         }
 
-        private static Config GetDefault()
+        private static Config GetDefault(ILogger log)
         {
             string devkitArmDir;
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -74,10 +73,24 @@ namespace SerialLoops.Lib
                 devkitArmDir = "";
             }
 
+            // TODO: Probably make a way of defining "presets" of common emulator install paths on different platforms.
+            // Ideally this should be as painless as possible.
+            string emulatorPath = "";
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                emulatorPath = Path.Combine("/Applications", "melonDS.app");
+            }
+            if (!Directory.Exists(emulatorPath))
+            {
+                emulatorPath = "";
+                log.LogWarning("Valid emulator path not found in config.json.");
+            }
+
             return new Config
             {
                 ProjectsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "SerialLoops"),
                 DevkitArmPath = devkitArmDir,
+                EmulatorPath = emulatorPath
             };
         }
     }
