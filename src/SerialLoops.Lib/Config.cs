@@ -25,7 +25,7 @@ namespace SerialLoops.Lib
             if (!File.Exists(configJson))
             {
                 log.Log($"Creating default config at '{configJson}'...");
-                Config defaultConfig = GetDefault();
+                Config defaultConfig = GetDefault(log);
                 defaultConfig.ValidateConfig(log);
                 defaultConfig.ConfigPath = configJson;
                 IO.WriteStringFile(configJson, JsonSerializer.Serialize(defaultConfig), log);
@@ -42,7 +42,7 @@ namespace SerialLoops.Lib
             catch (JsonException exc)
             {
                 log.LogError($"Exception occurred while parsing config.json!\n{exc.Message}\n\n{exc.StackTrace}");
-                Config defaultConfig = GetDefault();
+                Config defaultConfig = GetDefault(log);
                 defaultConfig.ValidateConfig(log);
                 IO.WriteStringFile(configJson, JsonSerializer.Serialize(defaultConfig), log);
                 return defaultConfig;
@@ -57,7 +57,7 @@ namespace SerialLoops.Lib
             }
         }
 
-        private static Config GetDefault()
+        private static Config GetDefault(ILogger log)
         {
             string devkitArmDir;
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -83,6 +83,7 @@ namespace SerialLoops.Lib
             if (!Directory.Exists(emulatorPath))
             {
                 emulatorPath = "";
+                log.LogWarning("Valid emulator path not found in config.json.");
             }
 
             return new Config

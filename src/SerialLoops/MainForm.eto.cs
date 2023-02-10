@@ -114,7 +114,7 @@ namespace SerialLoops
             }
             catch (Exception e)
             {
-                _log.Log($"Failed to add project to recent projects list: {e.Message}");
+                _log.LogError($"Failed to add project to recent projects list: {e.Message}");
             }
         }
 
@@ -249,6 +249,7 @@ namespace SerialLoops
                 if (CurrentConfig.EmulatorPath is null)
                 {
                     MessageBox.Show("No emulator path set. Please set the path to your emulator.", "No Emulator Path", MessageBoxType.Warning);
+                    _log.LogWarning("No emulator path set. Please set the path to your emulator.");
                     return;
                 }
                 if (await Build.BuildIterative(OpenProject, CurrentConfig, _log))
