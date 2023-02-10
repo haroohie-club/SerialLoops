@@ -2,8 +2,8 @@
 using Eto.Drawing;
 using Eto.Forms;
 using HaruhiChokuretsuLib.Util;
-using SerialLoops.Controls;
 using SerialLoops.Lib.Items;
+using SerialLoops.Controls;
 
 namespace SerialLoops.Utility
 {
@@ -56,9 +56,14 @@ namespace SerialLoops.Utility
 
         public static Icon GetItemIcon(ItemDescription.ItemType type, ILogger log)
         {
+            return GetIcon(type.ToString(), log);
+        }
+        
+        public static Icon GetIcon(string iconName, ILogger log)
+        {
             try
             {
-                return Icon.FromResource($"SerialLoops.Icons.{type}.png").WithSize(16, 16);
+                return Icon.FromResource($"SerialLoops.Icons.{iconName}.png").WithSize(16, 16);
             }
             catch (Exception exc)
             {
