@@ -64,6 +64,7 @@ namespace SerialLoops.Lib
             Grp = ArchiveFile<GraphicsFile>.FromFile(Path.Combine(IterativeDirectory, "original", "archives", "grp.bin"), log);
             Evt = ArchiveFile<EventFile>.FromFile(Path.Combine(IterativeDirectory, "original", "archives", "evt.bin"), log);
 
+            ExtraFile extras = Dat.Files.First(f => f.Name == "EXTRAS").CastTo<ExtraFile>();
             BgTableFile bgTable = Dat.Files.First(f => f.Name == "BGTBLS").CastTo<BgTableFile>();
             for (int i = 0; i < bgTable.BgTableEntries.Count; i++)
             {
@@ -77,9 +78,10 @@ namespace SerialLoops.Lib
                     {
                         name = $"{bgNameBackup}{j:D2}";
                     }
-                    Items.Add(new BackgroundItem(name, i, entry, Evt, Grp));
+                    Items.Add(new BackgroundItem(name, i, entry, Evt, Grp, extras));
                 }
             }
+            Items.AddRange(Directory.GetFiles(Path.Combine(IterativeDirectory, "original", "bgm")).Select(b => new BackgroundMusicItem(b, extras)));
             CharacterDataFile chrdata = Dat.Files.First(d => d.Name == "CHRDATAS").CastTo<CharacterDataFile>();
             Items.AddRange(chrdata.Sprites.Where(s => (int)s.Character > 0).Select(s => new CharacterSpriteItem(s, chrdata, this)));
             Items.AddRange(Dat.Files.First(d => d.Name == "CHIBIS").CastTo<ChibiFile>()

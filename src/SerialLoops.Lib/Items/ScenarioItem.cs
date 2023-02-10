@@ -7,7 +7,7 @@ namespace SerialLoops.Lib.Items
     public class ScenarioItem : Item
     {
         public ScenarioStruct Scenario { get; set; }
-        public List<(string Command, string Parameter)> ScenarioCommands { get; set; } = new();
+        public List<(ScenarioCommand.ScenarioVerb Command, string Parameter)> ScenarioCommands { get; set; } = new();
 
         public ScenarioItem(ScenarioStruct scenario, Project project) : base("Scenario", ItemType.Scenario)
         {
@@ -24,12 +24,12 @@ namespace SerialLoops.Lib.Items
             {
                 switch (command.Verb)
                 {
-                    case "LOAD_SCENE":
+                    case ScenarioCommand.ScenarioVerb.LOAD_SCENE:
                         ScriptItem script = scriptItems.First(s => s.Event.Index == command.Parameter);
                         ScenarioCommands.Add((command.Verb, script.Name));
                         break;
 
-                    case "PUZZLE_PHASE":
+                    case ScenarioCommand.ScenarioVerb.PUZZLE_PHASE:
                         PuzzleItem puzzle = puzzleItems.First(s => s.Puzzle.Index == command.Parameter);
                         ScenarioCommands.Add((command.Verb, puzzle.Name));
                         break;

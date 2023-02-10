@@ -36,7 +36,10 @@ namespace SerialLoops.Utility
         public static StackLayout GetFileLink(ItemDescription description, EditorTabsPanel editorTabs, ILogger log)
         {
             LinkButton link = new() { Text = description.Name };
-            link.Click += (s, e) => { editorTabs.OpenTab(description, log); };
+            if (description.Name != "NONE")
+            {
+                link.Click += (s, e) => { editorTabs.OpenTab(description, log); };
+            }
             return new StackLayout
             {
                 Orientation = Orientation.Horizontal,

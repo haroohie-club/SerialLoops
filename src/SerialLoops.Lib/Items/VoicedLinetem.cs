@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SerialLoops.Lib.Items
 {
-    public class VoiceFile
+    public class VoicedLinetem
     {
     }
 }

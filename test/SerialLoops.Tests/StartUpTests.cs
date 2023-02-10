@@ -26,7 +26,7 @@ namespace SerialLoops.Tests
             HttpClient client = new();
             File.WriteAllBytes(romPath, await client.GetByteArrayAsync("https://github.com/WiIIiam278/BCSDS/releases/download/1.0/bcsds.nds"));
 
-            IO.OpenRom(project, romPath, true);
+            Lib.IO.OpenRom(project, romPath, true);
 
             return project;
         }

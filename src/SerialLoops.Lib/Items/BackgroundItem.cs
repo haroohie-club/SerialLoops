@@ -13,17 +13,27 @@ namespace SerialLoops.Lib.Items
         public GraphicsFile Graphic1 { get; set; }
         public GraphicsFile Graphic2 { get; set; }
         public BgType BackgroundType { get; set; }
+        public string CgName { get; set; }
+        public short ExtrasShort { get; set; }
+        public int ExtrasInt { get; set; }
         public (string ScriptName, ScriptCommandInvocation command)[] ScriptUses { get; set; }
 
         public BackgroundItem(string name) : base(name, ItemType.Background)
         {
         }
-        public BackgroundItem(string name, int id, BgTableEntry entry, ArchiveFile<EventFile> evt, ArchiveFile<GraphicsFile> grp) : base(name, ItemType.Background)
+        public BackgroundItem(string name, int id, BgTableEntry entry, ArchiveFile<EventFile> evt, ArchiveFile<GraphicsFile> grp, ExtraFile extras) : base(name, ItemType.Background)
         {
             Id = id;
             BackgroundType = entry.Type;
             Graphic1 = grp.Files.First(g => g.Index == entry.BgIndex1);
             Graphic2 = grp.Files.FirstOrDefault(g => g.Index == entry.BgIndex2); // can be null if type is SINGLE_TEX
+            CgStruct? cgEntry = extras.Cgs.FirstOrDefault(c => c.BgId == Id);
+            if (cgEntry.HasValue)
+            {
+                CgName = cgEntry?.Name;
+                ExtrasShort = cgEntry?.Unknown02 ?? 0;
+                ExtrasInt = cgEntry?.Unknown04 ?? 0;
+            }
             PopulateScriptUses(evt);
         }
 

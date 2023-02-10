@@ -1,8 +1,7 @@
 ﻿using Eto.Forms;
 using HaruhiChokuretsuLib.Util;
-using SerialLoops.Utility;
 using SerialLoops.Lib.Items;
-using System.Linq;
+using SerialLoops.Utility;
 
 namespace SerialLoops.Editors
 {
@@ -17,13 +16,21 @@ namespace SerialLoops.Editors
         public override Container GetEditorPanel()
         {
             _bg = (BackgroundItem)Description;
+            StackLayout extrasInfo = new();
+            if (!string.IsNullOrEmpty(_bg.CgName))
+            {
+                extrasInfo.Items.Add(_bg.CgName);
+                extrasInfo.Items.Add($"Unknown Extras Short: {_bg.ExtrasShort}");
+                extrasInfo.Items.Add($"Unknown Extras Integer: {_bg.ExtrasInt}");
+            }
             return new StackLayout
             {
                 Orientation = Orientation.Vertical,
                 Items =
                 {
                     new ImageView() { Image = new SKGuiImage(_bg.GetBackground()) },
-                    $"Used in the following scripts: {string.Join(", ", _bg.ScriptUses.Select(s => s.ScriptName))}",
+                    $"{_bg.Id} (0x{_bg.Id:X3})",
+                    extrasInfo,
                 }
             };
         }

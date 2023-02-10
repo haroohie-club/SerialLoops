@@ -1,5 +1,6 @@
 using Eto.Drawing;
 using Eto.Forms;
+using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Controls;
 using SerialLoops.Lib;
@@ -63,14 +64,14 @@ namespace SerialLoops
                     return Project.Items.Where(i => chibi.ScriptUses.Select(s => s.ScriptName).Contains(i.Name)).ToList();
                 case ItemDescription.ItemType.Puzzle:
                     PuzzleItem puzzle = (PuzzleItem)Item;
-                    if (scenario.Scenario.Commands.Any(c => c.Verb == "PUZZLE_PHASE" && c.Parameter == puzzle.Puzzle.Index))
+                    if (scenario.Scenario.Commands.Any(c => c.Verb == ScenarioCommand.ScenarioVerb.PUZZLE_PHASE && c.Parameter == puzzle.Puzzle.Index))
                     {
                         references.Add(scenario);
                     }
                     return references;
                 case ItemDescription.ItemType.Script:
                     ScriptItem script = (ScriptItem)Item;
-                    if (scenario.Scenario.Commands.Any(c => c.Verb == "LOAD_SCENE" && c.Parameter == script.Event.Index))
+                    if (scenario.Scenario.Commands.Any(c => c.Verb == ScenarioCommand.ScenarioVerb.LOAD_SCENE && c.Parameter == script.Event.Index))
                     {
                         references.Add(scenario);
                     }
