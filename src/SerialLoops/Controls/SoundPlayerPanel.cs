@@ -23,7 +23,16 @@ namespace SerialLoops.Controls
             WaveFileWriter writer = new(memoryStream, _sound.WaveFormat);
             waveStream.CopyTo(writer);
             memoryStream.Position = 0;
-            LibVLC libVlc = new();
+            LibVLC libVlc;
+            try
+            {
+                libVlc = new();
+            }
+            catch (VLCException exc)
+            {
+                _log.LogError($"Error instantiating VLC -- if you're using Linux, ensure you've followed the instructions on installing libvlc for your platform.\nInner exception: {exc.Message}\n\n{exc.StackTrace}");
+                return;
+            }
             StreamMediaInput mediaInput = new(memoryStream);
             Media media = new(libVlc, mediaInput);
             _player = new(media);
