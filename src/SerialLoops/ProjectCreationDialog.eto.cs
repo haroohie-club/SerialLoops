@@ -153,11 +153,11 @@ namespace SerialLoops
         {
             if (_romPath.Text == NO_ROM_TEXT)
             {
-                MessageBox.Show("Please select a ROM before creating the project.");
+                MessageBox.Show("Please select a ROM before creating the project.", "Project Creation Warning", MessageBoxType.Warning);
             }
             else if (string.IsNullOrWhiteSpace(_nameBox.Text))
             {
-                MessageBox.Show("Please choose a project name before creating the project.");
+                MessageBox.Show("Please choose a project name before creating the project.", "Project Creation Warning", MessageBoxType.Warning);
             }
             else
             {
@@ -165,7 +165,7 @@ namespace SerialLoops
                 bool includeFontHack = false;
                 if (NewProject.LangCode != "ja")
                 {
-                    if (MessageBox.Show("Would you like to install the font hack? If you are using a translated base ROM, select no.", MessageBoxButtons.YesNo, MessageBoxType.Question, MessageBoxDefaultButton.Yes) == DialogResult.Yes)
+                    if (MessageBox.Show("Would you like to install the font hack? If you are using a translated base ROM, select no.", "Project Creation", MessageBoxButtons.YesNo, MessageBoxType.Question, MessageBoxDefaultButton.Yes) == DialogResult.Yes)
                     {
                         includeFontHack = true;
                     }
