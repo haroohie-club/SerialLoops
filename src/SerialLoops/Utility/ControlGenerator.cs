@@ -2,6 +2,7 @@
 using Eto.Drawing;
 using Eto.Forms;
 using HaruhiChokuretsuLib.Util;
+using SerialLoops.Controls;
 using SerialLoops.Lib.Items;
 
 namespace SerialLoops.Utility
@@ -32,8 +33,10 @@ namespace SerialLoops.Utility
             };
         }
         
-        public static StackLayout GetIconifiedFileName(ItemDescription.ItemType type, string fileName, ILogger log)
+        public static StackLayout GetFileLink(ItemDescription description, EditorTabsPanel editorTabs, ILogger log)
         {
+            LinkButton link = new() { Text = description.Name };
+            link.Click += (s, e) => { editorTabs.OpenTab(description, log); };
             return new StackLayout
             {
                 Orientation = Orientation.Horizontal,
@@ -42,8 +45,8 @@ namespace SerialLoops.Utility
                 Spacing = 5,
                 Items =
                 {
-                    new ImageView { Image = new Bitmap(GetItemIcon(type, log)) },
-                    fileName
+                    new ImageView { Image = new Bitmap(GetItemIcon(description.Type, log)) },
+                    link
                 }
             };
         }

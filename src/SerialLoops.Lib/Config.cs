@@ -67,7 +67,7 @@ namespace SerialLoops.Lib
             }
             else
             {
-                devkitArmDir = Path.Combine("opt", "devkitpro", "devkitARM");
+                devkitArmDir = Path.Combine("/opt", "devkitpro", "devkitARM");
             }
             if (!Directory.Exists(devkitArmDir))
             {

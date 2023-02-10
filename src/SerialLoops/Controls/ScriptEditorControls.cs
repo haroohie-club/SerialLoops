@@ -17,7 +17,7 @@ namespace SerialLoops.Controls
 
     public class CommandGraphicSelectionButton : Panel
     {
-        private readonly ItemDescription.ItemType _type;
+        private readonly EditorTabsPanel _editorTabs;
         private readonly ILogger _log;
         public IPreviewableGraphic Selected { get; private set; }
         public ScriptItemCommand Command { get; set; }
@@ -26,9 +26,9 @@ namespace SerialLoops.Controls
         public List<IPreviewableGraphic> Items { get; }
         public Project Project { get; set; }
 
-        public CommandGraphicSelectionButton(ItemDescription.ItemType type, IPreviewableGraphic selected, ILogger log)
+        public CommandGraphicSelectionButton(IPreviewableGraphic selected, EditorTabsPanel editorTabs, ILogger log)
         {
-            _type = type;
+            _editorTabs = editorTabs;
             _log = log;
             Selected = selected;
             
@@ -39,18 +39,23 @@ namespace SerialLoops.Controls
 
         private void InitializeComponent()
         {
+            Content = GetButtonPanel();
+        }
+
+        private StackLayout GetButtonPanel()
+        {
             Button button = new();
             button.Text = "Select...";
             button.Click += GraphicSelectionButton_Click;
-            
-            Content = new StackLayout
+
+            return new StackLayout
             {
                 Spacing = 10,
                 Orientation = Orientation.Horizontal,
                 Items =
                 {
                     button,
-                    ControlGenerator.GetIconifiedFileName(_type, ((ItemDescription)Selected).Name, _log)
+                    ControlGenerator.GetFileLink(((ItemDescription)Selected), _editorTabs, _log)
                 }
             };
         }
@@ -62,6 +67,7 @@ namespace SerialLoops.Controls
             if (description == null) return;
             Selected = description;
             SelectedChanged?.Execute();
+            Content = GetButtonPanel();
         }
     }
 }

@@ -27,7 +27,7 @@ namespace SerialLoops.Editors
         private StackLayout _editorControls = new();
         private ScriptCommandListPanel _commandsPanel;
 
-        public ScriptEditor(ScriptItem item, Project project, ILogger log) : base(item, log, project)
+        public ScriptEditor(ScriptItem item, Project project, ILogger log, EditorTabsPanel tabs) : base(item, log, project, tabs)
         {
         }
 
@@ -116,8 +116,8 @@ namespace SerialLoops.Editors
                 {
                     case ScriptParameter.ParameterType.BG:
                         BgScriptParameter bgParam = (BgScriptParameter)parameter;
-                        CommandGraphicSelectionButton bgSelectionButton = new(ItemDescription.ItemType.Background, 
-                            bgParam.Background is not null ? bgParam.Background : NonePreviewableGraphic.BACKGROUND, _log)
+                        CommandGraphicSelectionButton bgSelectionButton = new(bgParam.Background is not null ? bgParam.Background
+                            : NonePreviewableGraphic.BACKGROUND, _tabs, _log)
                         {
                             Command = command,
                             ParameterIndex = i,
@@ -380,8 +380,8 @@ namespace SerialLoops.Editors
 
                     case ScriptParameter.ParameterType.SPRITE:
                         SpriteScriptParameter spriteParam = (SpriteScriptParameter)parameter;
-                        CommandGraphicSelectionButton spriteSelectionButton = new(ItemDescription.ItemType.Character_Sprite, 
-                            spriteParam.Sprite is not null ? spriteParam.Sprite : NonePreviewableGraphic.CHARACTER_SPRITE, _log)
+                        CommandGraphicSelectionButton spriteSelectionButton = new(spriteParam.Sprite is not null ? spriteParam.Sprite
+                            : NonePreviewableGraphic.CHARACTER_SPRITE, _tabs, _log)
                         {
                             Command = command,
                             ParameterIndex = i,
@@ -687,6 +687,7 @@ namespace SerialLoops.Editors
         private void ChibiDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
             CommandDropDown dropDown = (CommandDropDown)sender;
+            _log.Log($"Attempting to modify parameter {dropDown.ParameterIndex} to chibi {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
             ((ChibiScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Chibi =
                 (ChibiItem)_project.Items.First(i => i.Name == dropDown.SelectedKey);
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
@@ -702,6 +703,7 @@ namespace SerialLoops.Editors
         private void SpriteSelectionButton_SelectionMade(object sender, EventArgs e)
         {
             CommandGraphicSelectionButton selection = (CommandGraphicSelectionButton)sender;
+            _log.Log($"Attempting to modify parameter {selection.ParameterIndex} to sprite {((ItemDescription)selection.Selected).Name} in {selection.Command.Index} in file {_script.Name}...");
             ((SpriteScriptParameter)selection.Command.Parameters[selection.ParameterIndex]).Sprite =
                 (CharacterSpriteItem)selection.Selected;
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(selection.Command.Section)]
