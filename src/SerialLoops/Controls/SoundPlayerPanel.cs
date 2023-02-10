@@ -34,6 +34,12 @@ namespace SerialLoops.Controls
             Content = new TableLayout(new TableRow(playPauseButton), new TableRow(volumeSlider));
         }
 
+        public void Stop()
+        {
+            _output.Stop();
+            _output.Dispose();
+        }
+
         private void PlayPauseButton_Click(object sender, System.EventArgs e)
         {
             Button playPauseButton = (Button)sender;

@@ -50,6 +50,7 @@ namespace SerialLoops.Controls
 
             Tabs.Pages.Add(newPage);
             Tabs.SelectedPage = newPage;
+            Tabs.PageClosed += Tabs_PageClosed;
         }
 
         internal DocumentPage CreateTab(ItemDescription item, Project project, ILogger log)
@@ -74,6 +75,14 @@ namespace SerialLoops.Controls
                     return new ScriptEditor((ScriptItem)project.Items.First(i => i.Name == item.Name), project, log, this);
                 default:
                     throw new ArgumentException("Invalid item type");
+            }
+        }
+
+        private void Tabs_PageClosed(object sender, DocumentPageEventArgs e)
+        {
+            if (e.Page.GetType() == typeof(BackgroundMusicEditor))
+            {
+                ((BackgroundMusicEditor)e.Page).BgmPlayer.Stop();
             }
         }
     }

@@ -11,6 +11,7 @@ namespace SerialLoops.Editors
     public class BackgroundMusicEditor : Editor
     {
         private BackgroundMusicItem _bgm;
+        public SoundPlayerPanel BgmPlayer { get; set; }
 
         public BackgroundMusicEditor(BackgroundMusicItem item, ILogger log) : base(item, log)
         {
@@ -38,7 +39,7 @@ namespace SerialLoops.Editors
             }
 
             AdxWaveProvider waveProvider = new(new AdxDecoder(adxBytes, _log));
-            SoundPlayerPanel bgmPlayer = new(waveProvider, _log);
+            BgmPlayer = new(waveProvider, _log);
             
             return new TableLayout(new TableRow(new StackLayout
             {
@@ -48,8 +49,8 @@ namespace SerialLoops.Editors
                     Path.GetFileNameWithoutExtension(_bgm.BgmFile),
                     _bgm.BgmName,
                 }
-            },
-            new TableRow(bgmPlayer)));
+            }),
+            new TableRow(BgmPlayer));
         }
     }
 }
