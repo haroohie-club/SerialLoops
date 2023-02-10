@@ -12,6 +12,7 @@ namespace SerialLoops
         private ILogger _log { get; set; }
 
         private TextBox _devkitArmBox;
+        private TextBox _emulatorBox;
 
         public PreferencesDialog(Config config, ILogger log)
         {
@@ -22,9 +23,15 @@ namespace SerialLoops
 
             _devkitArmBox = new() { Text = Configuration.DevkitArmPath };
             _devkitArmBox.TextChanged += DevkitArmBox_TextChanged;
+            
+            _emulatorBox = new() { Text = Configuration.EmulatorPath };
+            _emulatorBox.TextChanged += EmulatorBox_TextChanged;
 
             Button devkitArmButton = new() { Text = "Select" };
             devkitArmButton.Click += DevkitArmButton_Click;
+            
+            Button emulatorButton = new() { Text = "Select" };
+            emulatorButton.Click += EmulatorButton_Click;
 
             Button saveButton = new() { Text = "Save Preferences" };
             saveButton.Click += SaveButton_Click;
@@ -35,17 +42,36 @@ namespace SerialLoops
                     {
                         Text = "Paths",
                         Padding = 5,
-                        Content = ControlGenerator.GetControlWithLabel("DevkitARM Path",
-                        new StackLayout
+                        Content = new StackLayout
                         {
-                            Orientation = Orientation.Horizontal,
-                            Spacing = 5,
+                            Spacing = 10,
+                            Orientation = Orientation.Vertical,
                             Items =
                             {
-                                _devkitArmBox,
-                                devkitArmButton,
+                                ControlGenerator.GetControlWithLabel("DevkitARM Path",
+                                    new StackLayout
+                                    {
+                                        Orientation = Orientation.Horizontal,
+                                        Spacing = 5,
+                                        Items =
+                                        {
+                                            _devkitArmBox,
+                                            devkitArmButton,
+                                        }
+                                    }),
+                                ControlGenerator.GetControlWithLabel("Emulator Path",
+                                    new StackLayout
+                                    {
+                                        Orientation = Orientation.Horizontal,
+                                        Spacing = 5,
+                                        Items =
+                                        {
+                                            _emulatorBox,
+                                            emulatorButton,
+                                        }
+                                    }),
                             }
-                        }),
+                        },
                     }),
                 new TableRow(saveButton)
                 );
@@ -68,6 +94,20 @@ namespace SerialLoops
             if (selectFolderDialog.ShowAndReportIfFileSelected(this))
             {
                 _devkitArmBox.Text = selectFolderDialog.Directory;
+            }
+        }
+        
+        private void EmulatorBox_TextChanged(object sender, System.EventArgs e)
+        {
+            Configuration.EmulatorPath = _emulatorBox.Text;
+        }
+
+        private void EmulatorButton_Click(object sender, System.EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new();
+            if (openFileDialog.ShowAndReportIfFileSelected(this))
+            {
+                _emulatorBox.Text = openFileDialog.FileName;
             }
         }
     }
