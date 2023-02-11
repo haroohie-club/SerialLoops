@@ -2,7 +2,7 @@
 using HaruhiChokuretsuLib.Util;
 using LibVLCSharp.Shared;
 using NAudio.Wave;
-using SerialLoops.Utility;
+using SerialLoops.Lib.Util;
 using System.IO;
 
 namespace SerialLoops.Controls
