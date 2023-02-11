@@ -38,7 +38,6 @@ namespace SerialLoops.Controls
             StreamMediaInput mediaInput = new(memoryStream);
             Media media = new(libVlc, mediaInput);
             _player = new(media);
-            _player.Stopped += _player_Stopped;
 
             InitializeComponent();
         }
@@ -75,12 +74,6 @@ namespace SerialLoops.Controls
         private void VolumeSlider_ValueChanged(object sender, System.EventArgs e)
         {
             _player.Volume = ((Slider)sender).Value;
-        }
-
-        private void _player_Stopped(object sender, System.EventArgs e)
-        {
-            _playPauseButton.Text = "▶️";
-            _player.SeekTo(TimeSpan.Zero);
         }
     }
 }
