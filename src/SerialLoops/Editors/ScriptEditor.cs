@@ -142,13 +142,25 @@ namespace SerialLoops.Editors
 
                     case ScriptParameter.ParameterType.BGM:
                         BgmScriptParameter bgmParam = (BgmScriptParameter)parameter;
-                        DropDown bgmDropDown = new();
-                        bgmDropDown.Items.Add(new ListItem { Text = "NONE", Key = "NONE" });
-                        bgmDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.BGM).Select(i => new ListItem { Text = i.Name, Key = i.Name }));
-                        bgmDropDown.SelectedKey = bgmParam.Bgm?.Name ?? "NONE";
+                        StackLayout bgmLink = ControlGenerator.GetFileLink(bgmParam.Bgm, _tabs, _log);
 
-                        ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
-                            ControlGenerator.GetControlWithLabel(parameter.Name, bgmDropDown));
+                        CommandDropDown bgmDropDown = new() { Command = command, ParameterIndex = i, Link = (ClearableLinkButton)bgmLink.Items[1].Control };
+                        bgmDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.BGM).Select(i => new ListItem { Text = i.Name, Key = i.Name }));
+                        bgmDropDown.SelectedKey = bgmParam.Bgm.Name;
+                        bgmDropDown.SelectedKeyChanged += BgmDropDown_SelectedKeyChanged;                        
+
+                        StackLayout bgmLayout = new()
+                        {
+                            Orientation = Orientation.Horizontal,
+                            VerticalContentAlignment = VerticalAlignment.Center,
+                            Items =
+                            {
+                                ControlGenerator.GetControlWithLabel(parameter.Name, bgmDropDown),
+                                bgmLink,
+                            }
+                        };
+
+                        ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(bgmLayout);
                         break;
 
                     case ScriptParameter.ParameterType.BGM_MODE:
@@ -447,9 +459,27 @@ namespace SerialLoops.Editors
                         break;
 
                     case ScriptParameter.ParameterType.VOICE_LINE:
-                        ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
-                            ControlGenerator.GetControlWithLabel(parameter.Name,
-                            new TextBox { Text = ((VoiceLineScriptParameter)parameter).VoiceIndex.ToString() }));
+                        VoicedLineScriptParameter vceParam = (VoicedLineScriptParameter)parameter;
+                        StackLayout vceLink = ControlGenerator.GetFileLink(vceParam.VoiceLine is not null ? vceParam.VoiceLine : NoneItem.VOICE, _tabs, _log);
+
+                        CommandDropDown vceDropDown = new() { Command = command, ParameterIndex = i, Link = (ClearableLinkButton)vceLink.Items[1].Control };
+                        vceDropDown.Items.Add(new ListItem { Key = "NONE", Text = "NONE" });
+                        vceDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Voice).Select(i => new ListItem { Text = i.Name, Key = i.Name }));
+                        vceDropDown.SelectedKey = vceParam.VoiceLine?.Name ?? "NONE";
+                        vceDropDown.SelectedKeyChanged += VceDropDown_SelectedKeyChanged;
+
+                        StackLayout vceLayout = new()
+                        {
+                            Orientation = Orientation.Horizontal,
+                            VerticalContentAlignment = VerticalAlignment.Center,
+                            Items =
+                            {
+                                ControlGenerator.GetControlWithLabel(parameter.Name, vceDropDown),
+                                vceLink,
+                            }
+                        };
+
+                        ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(vceLayout);
                         break;
 
                     default:
@@ -676,6 +706,7 @@ namespace SerialLoops.Editors
         private void BgSelectionButton_SelectionMade(object sender, EventArgs e)
         {
             CommandGraphicSelectionButton selection = (CommandGraphicSelectionButton)sender;
+            _log.Log($"Attempting to modify parameter {selection.ParameterIndex} to background {((ItemDescription)selection.Selected).Name} in {selection.Command.Index} in file {_script.Name}...");
             ((BgScriptParameter)selection.Command.Parameters[selection.ParameterIndex]).Background =
                 (BackgroundItem)_project.Items.FirstOrDefault(i => i.Name == ((ItemDescription)selection.Selected).Name);
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(selection.Command.Section)]
@@ -683,6 +714,22 @@ namespace SerialLoops.Editors
                 (short)((BackgroundItem)_project.Items.First(i => i.Name == ((ItemDescription)selection.Selected).Name)).Id;
             UpdateTabTitle(false);
             Application.Instance.Invoke(() => UpdatePreview());
+        }
+        private void BgmDropDown_SelectedKeyChanged(object sender, EventArgs e)
+        {
+            CommandDropDown dropDown = (CommandDropDown)sender;
+            _log.Log($"Attempting to modify parameter {dropDown.ParameterIndex} to BGM {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
+            ((BgmScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Bgm =
+                (BackgroundMusicItem)_project.Items.FirstOrDefault(i => i.Name == dropDown.SelectedKey);
+            _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
+                .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
+                (short)((BackgroundMusicItem)_project.Items.First(i => i.Name == dropDown.SelectedKey)).Index;
+
+            dropDown.Link.Text = dropDown.SelectedKey;
+            dropDown.Link.RemoveAllClickEvents();
+            dropDown.Link.ClickUnique += (s, e) => { _tabs.OpenTab(_project.Items.FirstOrDefault(i => i.Name == dropDown.SelectedKey), _log); };
+
+            UpdateTabTitle(false);
         }
         private void ChibiDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
@@ -711,6 +758,22 @@ namespace SerialLoops.Editors
                 (short)((CharacterSpriteItem)selection.Selected).Index;
             UpdateTabTitle(false);
             Application.Instance.Invoke(() => UpdatePreview());
+        }
+        private void VceDropDown_SelectedKeyChanged(object sender, EventArgs e)
+        {
+            CommandDropDown dropDown = (CommandDropDown)sender;
+            _log.Log($"Attempting to modify parameter {dropDown.ParameterIndex} to voiced line {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
+            ((VoicedLineScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).VoiceLine =
+                (VoicedLineItem)_project.Items.FirstOrDefault(i => i.Name == dropDown.SelectedKey);
+            _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
+                .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
+                (short)((VoicedLineItem)_project.Items.First(i => i.Name == dropDown.SelectedKey)).Index;
+
+            dropDown.Link.Text = dropDown.SelectedKey;
+            dropDown.Link.RemoveAllClickEvents();
+            dropDown.Link.ClickUnique += (s, e) => { _tabs.OpenTab(_project.Items.FirstOrDefault(i => i.Name == dropDown.SelectedKey), _log); };
+
+            UpdateTabTitle(false);
         }
     }
 }

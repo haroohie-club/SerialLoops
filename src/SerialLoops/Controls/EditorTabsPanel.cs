@@ -50,6 +50,7 @@ namespace SerialLoops.Controls
 
             Tabs.Pages.Add(newPage);
             Tabs.SelectedPage = newPage;
+            Tabs.PageClosed += Tabs_PageClosed;
         }
 
         internal DocumentPage CreateTab(ItemDescription item, Project project, ILogger log)
@@ -58,6 +59,8 @@ namespace SerialLoops.Controls
             {
                 case ItemDescription.ItemType.Background:
                     return new BackgroundEditor((BackgroundItem)project.Items.First(i => i.Name == item.Name), log);
+                case ItemDescription.ItemType.BGM:
+                    return new BackgroundMusicEditor((BackgroundMusicItem)project.Items.First(i => i.Name == item.Name), log);
                 case ItemDescription.ItemType.Character_Sprite:
                     return new CharacterSpriteEditor((CharacterSpriteItem)project.Items.First(i => i.Name == item.Name), project, log);
                 case ItemDescription.ItemType.Chibi:
@@ -70,8 +73,22 @@ namespace SerialLoops.Controls
                     return new ScenarioEditor((ScenarioItem)project.Items.First(i => i.Name == item.Name), log, project, this);
                 case ItemDescription.ItemType.Script:
                     return new ScriptEditor((ScriptItem)project.Items.First(i => i.Name == item.Name), project, log, this);
+                case ItemDescription.ItemType.Voice:
+                    return new VoicedLineEditor((VoicedLineItem)project.Items.First(i => i.Name == item.Name), log);
                 default:
                     throw new ArgumentException("Invalid item type");
+            }
+        }
+
+        private void Tabs_PageClosed(object sender, DocumentPageEventArgs e)
+        {
+            if (e.Page.GetType() == typeof(BackgroundMusicEditor))
+            {
+                ((BackgroundMusicEditor)e.Page).BgmPlayer.Stop();
+            }
+            else if (e.Page.GetType() == typeof(VoicedLineEditor))
+            {
+                ((VoicedLineEditor)e.Page).VcePlayer.Stop();
             }
         }
     }

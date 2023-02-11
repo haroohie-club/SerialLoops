@@ -1,5 +1,6 @@
 ﻿using Eto.Drawing;
 using Eto.Forms;
+using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Controls;
 using SerialLoops.Lib;
@@ -45,18 +46,18 @@ namespace SerialLoops.Editors
                 "END",
             }.Select(v => new ListItem() { Text = v, Key = v });
 
-            foreach ((string verb, string parameter) in _scenario.ScenarioCommands)
+            foreach ((ScenarioCommand.ScenarioVerb verb, string parameter) in _scenario.ScenarioCommands)
             {
                 TableRow row = new();
 
                 DropDown commandDropDown = new();
                 commandDropDown.Items.AddRange(verbs);
-                commandDropDown.SelectedKey = verb;
+                commandDropDown.SelectedKey = verb.ToString();
                 row.Cells.Add(new TableCell(commandDropDown));
                 switch (verb)
                 {
-                    case "LOAD_SCENE":
-                    case "PUZZLE_PHASE":
+                    case ScenarioCommand.ScenarioVerb.LOAD_SCENE:
+                    case ScenarioCommand.ScenarioVerb.PUZZLE_PHASE:
                         LinkButton link = new() { Text = parameter };
                         link.Click += LinkClick_Click;
                         row.Cells.Add(new TableCell(link));

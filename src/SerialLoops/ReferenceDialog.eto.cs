@@ -1,5 +1,6 @@
 using Eto.Drawing;
 using Eto.Forms;
+using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Controls;
 using SerialLoops.Lib;
@@ -55,6 +56,9 @@ namespace SerialLoops
                 case ItemDescription.ItemType.Background:
                     BackgroundItem bg = (BackgroundItem)Item;
                     return Project.Items.Where(i => bg.ScriptUses.Select(s => s.ScriptName).Contains(i.Name)).ToList();
+                case ItemDescription.ItemType.BGM:
+                    BackgroundMusicItem bgm = (BackgroundMusicItem)Item;
+                    return Project.Items.Where(i => bgm.ScriptUses.Select(s => s.ScriptName).Contains(i.Name)).ToList();
                 case ItemDescription.ItemType.Character_Sprite:
                     CharacterSpriteItem sprite = (CharacterSpriteItem)Item;
                     return Project.Items.Where(i => sprite.ScriptUses.Select(s => s.ScriptName).Contains(i.Name)).ToList();
@@ -63,14 +67,14 @@ namespace SerialLoops
                     return Project.Items.Where(i => chibi.ScriptUses.Select(s => s.ScriptName).Contains(i.Name)).ToList();
                 case ItemDescription.ItemType.Puzzle:
                     PuzzleItem puzzle = (PuzzleItem)Item;
-                    if (scenario.Scenario.Commands.Any(c => c.Verb == "PUZZLE_PHASE" && c.Parameter == puzzle.Puzzle.Index))
+                    if (scenario.Scenario.Commands.Any(c => c.Verb == ScenarioCommand.ScenarioVerb.PUZZLE_PHASE && c.Parameter == puzzle.Puzzle.Index))
                     {
                         references.Add(scenario);
                     }
                     return references;
                 case ItemDescription.ItemType.Script:
                     ScriptItem script = (ScriptItem)Item;
-                    if (scenario.Scenario.Commands.Any(c => c.Verb == "LOAD_SCENE" && c.Parameter == script.Event.Index))
+                    if (scenario.Scenario.Commands.Any(c => c.Verb == ScenarioCommand.ScenarioVerb.LOAD_SCENE && c.Parameter == script.Event.Index))
                     {
                         references.Add(scenario);
                     }

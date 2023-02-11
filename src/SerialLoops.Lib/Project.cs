@@ -3,6 +3,7 @@ using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Archive.Graphics;
 using HaruhiChokuretsuLib.Util;
+using NAudio.MediaFoundation;
 using SerialLoops.Lib.Items;
 using System;
 using System.Collections.Generic;
@@ -64,6 +65,8 @@ namespace SerialLoops.Lib
             Grp = ArchiveFile<GraphicsFile>.FromFile(Path.Combine(IterativeDirectory, "original", "archives", "grp.bin"), log);
             Evt = ArchiveFile<EventFile>.FromFile(Path.Combine(IterativeDirectory, "original", "archives", "evt.bin"), log);
 
+            ExtraFile extras = Dat.Files.First(f => f.Name == "EXTRAS").CastTo<ExtraFile>();
+
             BgTableFile bgTable = Dat.Files.First(f => f.Name == "BGTBLS").CastTo<BgTableFile>();
             for (int i = 0; i < bgTable.BgTableEntries.Count; i++)
             {
@@ -77,26 +80,44 @@ namespace SerialLoops.Lib
                     {
                         name = $"{bgNameBackup}{j:D2}";
                     }
-                    Items.Add(new BackgroundItem(name, i, entry, Evt, Grp));
+                    Items.Add(new BackgroundItem(name, i, entry, Evt, Grp, extras));
                 }
             }
+
+            string[] bgmFiles = Directory.GetFiles(Path.Combine(IterativeDirectory, "original", "bgm")).OrderBy(s => s).ToArray();
+            for (int i = 0; i < bgmFiles.Length; i++)
+            {
+                Items.Add(new BackgroundMusicItem(bgmFiles[i], i, extras, this));
+            }
+
+            string[] voiceFiles = Directory.GetFiles(Path.Combine(IterativeDirectory, "original", "vce")).OrderBy(s => s).ToArray();
+            for (int i = 0; i < voiceFiles.Length; i++)
+            {
+                Items.Add(new VoicedLineItem(voiceFiles[i], i + 1, this));
+            }
+
             CharacterDataFile chrdata = Dat.Files.First(d => d.Name == "CHRDATAS").CastTo<CharacterDataFile>();
             Items.AddRange(chrdata.Sprites.Where(s => (int)s.Character > 0).Select(s => new CharacterSpriteItem(s, chrdata, this)));
+
             Items.AddRange(Dat.Files.First(d => d.Name == "CHIBIS").CastTo<ChibiFile>()
                 .Chibis.Select(c => new ChibiItem(c, this)));
+
             Items.AddRange(Evt.Files
                 .Where(e => !new string[] { "CHESSS", "EVTTBLS", "TOPICS", "SCENARIOS", "TUTORIALS", "VOICEMAPS" }.Contains(e.Name))
                 .Select(e => new ScriptItem(e)));
-            EventFile scenarioFile = Evt.Files.First(f => f.Name == "SCENARIOS");
-            scenarioFile.InitializeScenarioFile();
+
             QMapFile qmap = Dat.Files.First(f => f.Name == "QMAPS").CastTo<QMapFile>();
             Items.AddRange(Dat.Files
                 .Where(d => qmap.QMaps.Select(q => q.Name.Replace(".", "")).Contains(d.Name))
                 .Select(m => new MapItem(m.CastTo<MapFile>(), qmap.QMaps.FindIndex(q => q.Name.Replace(".", "") == m.Name))));
+
             Items.AddRange(Dat.Files
                 .Where(d => d.Name.StartsWith("SLG"))
                 .Select(d => new PuzzleItem(d.CastTo<PuzzleFile>(), this)));
+
             // Scenario item must be created after script and puzzle items are constructed
+            EventFile scenarioFile = Evt.Files.First(f => f.Name == "SCENARIOS");
+            scenarioFile.InitializeScenarioFile();
             Items.Add(new ScenarioItem(scenarioFile.Scenario, this));
         }
 
