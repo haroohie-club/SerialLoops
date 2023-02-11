@@ -462,7 +462,7 @@ namespace SerialLoops.Editors
                     case ScriptParameter.ParameterType.VOICE_LINE:
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
                             ControlGenerator.GetControlWithLabel(parameter.Name,
-                            new TextBox { Text = ((VoiceLineScriptParameter)parameter).VoiceIndex.ToString() }));
+                            new TextBox { Text = ((VoicedLineScriptParameter)parameter).VoiceIndex.ToString() }));
                         break;
 
                     default:

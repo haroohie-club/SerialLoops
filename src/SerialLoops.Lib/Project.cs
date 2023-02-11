@@ -90,6 +90,12 @@ namespace SerialLoops.Lib
                 Items.Add(new BackgroundMusicItem(bgmFiles[i], i, extras, this));
             }
 
+            string[] voiceFiles = Directory.GetFiles(Path.Combine(IterativeDirectory, "original", "vce")).OrderBy(s => s).ToArray();
+            for (int i = 0; i < voiceFiles.Length; i++)
+            {
+                Items.Add(new VoicedLineItem(voiceFiles[i], i, this));
+            }
+
             CharacterDataFile chrdata = Dat.Files.First(d => d.Name == "CHRDATAS").CastTo<CharacterDataFile>();
             Items.AddRange(chrdata.Sprites.Where(s => (int)s.Character > 0).Select(s => new CharacterSpriteItem(s, chrdata, this)));
 

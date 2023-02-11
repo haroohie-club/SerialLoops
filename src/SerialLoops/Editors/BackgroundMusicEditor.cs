@@ -46,7 +46,7 @@ namespace SerialLoops.Editors
                 Orientation = Orientation.Vertical,
                 Items =
                 {
-                    Path.GetFileNameWithoutExtension(_bgm.BgmFile),
+                    _bgm.Name,
                     _bgm.BgmName,
                 }
             }),

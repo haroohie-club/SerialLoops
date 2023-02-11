@@ -73,6 +73,8 @@ namespace SerialLoops.Controls
                     return new ScenarioEditor((ScenarioItem)project.Items.First(i => i.Name == item.Name), log, project, this);
                 case ItemDescription.ItemType.Script:
                     return new ScriptEditor((ScriptItem)project.Items.First(i => i.Name == item.Name), project, log, this);
+                case ItemDescription.ItemType.Voice:
+                    return new VoicedLineEditor((VoicedLineItem)project.Items.First(i => i.Name == item.Name), log);
                 default:
                     throw new ArgumentException("Invalid item type");
             }
@@ -83,6 +85,10 @@ namespace SerialLoops.Controls
             if (e.Page.GetType() == typeof(BackgroundMusicEditor))
             {
                 ((BackgroundMusicEditor)e.Page).BgmPlayer.Stop();
+            }
+            else if (e.Page.GetType() == typeof(VoicedLineEditor))
+            {
+                ((VoicedLineEditor)e.Page).VcePlayer.Stop();
             }
         }
     }

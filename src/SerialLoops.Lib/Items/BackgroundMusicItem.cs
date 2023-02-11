@@ -29,12 +29,10 @@ namespace SerialLoops.Lib.Items
 
         public void PopulateScriptUses(Project project)
         {
-            var list = project.Evt.Files.SelectMany(e =>
+            ScriptUses = project.Evt.Files.SelectMany(e =>
                 e.ScriptSections.SelectMany(sec =>
                     sec.Objects.Where(c => c.Command.Mnemonic == EventFile.CommandVerb.BGM_PLAY.ToString()).Select(c => (e.Name[0..^1], c))))
-                .Where(t => t.c.Parameters[0] == Index).ToList();
-
-            ScriptUses = list.ToArray();
+                .Where(t => t.c.Parameters[0] == Index).ToArray();
         }
     }
 }

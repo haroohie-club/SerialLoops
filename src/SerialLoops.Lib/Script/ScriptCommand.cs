@@ -91,7 +91,7 @@ namespace SerialLoops.Lib.Script
                                 parameters.Add(new SpriteShakeScriptParameter("Sprite Shake", parameter));
                                 break;
                             case 5:
-                                parameters.Add(new VoiceLineScriptParameter("Voice File", parameter));
+                                parameters.Add(new VoicedLineScriptParameter("Voice Line", parameter));
                                 break;
                             case 6:
                                 parameters.Add(new DialoguePropertyScriptParameter("Text Voice Font", messageInfo.MessageInfos[parameter]));
@@ -242,7 +242,7 @@ namespace SerialLoops.Lib.Script
                     case CommandVerb.VCE_PLAY:
                         if (i == 0)
                         {
-                            parameters.Add(new VoiceLineScriptParameter("Voice File", parameter));
+                            parameters.Add(new VoicedLineScriptParameter("Voice File", parameter));
                         }
                         break;
                     case CommandVerb.FLAG:

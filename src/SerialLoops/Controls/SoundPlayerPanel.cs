@@ -3,6 +3,7 @@ using HaruhiChokuretsuLib.Util;
 using LibVLCSharp.Shared;
 using NAudio.Wave;
 using SerialLoops.Lib.Util;
+using System;
 using System.IO;
 
 namespace SerialLoops.Controls
@@ -11,7 +12,8 @@ namespace SerialLoops.Controls
     {
         private ILogger _log;
         private IWaveProvider _sound;
-        private MediaPlayer _player { get; set; }
+        private MediaPlayer _player;
+        private Button _playPauseButton;
 
         public SoundPlayerPanel(IWaveProvider sound, ILogger log)
         {
@@ -36,18 +38,19 @@ namespace SerialLoops.Controls
             StreamMediaInput mediaInput = new(memoryStream);
             Media media = new(libVlc, mediaInput);
             _player = new(media);
+            _player.Stopped += _player_Stopped;
 
             InitializeComponent();
         }
 
         public void InitializeComponent()
         {
-            Button playPauseButton = new() { Text = "▶️", Font = new(Eto.Drawing.SystemFont.Default, 30.0f) };
+            _playPauseButton = new() { Text = "▶️", Font = new(Eto.Drawing.SystemFont.Default, 30.0f) };
             Slider volumeSlider = new() { Orientation = Orientation.Horizontal, MinValue = 0, MaxValue = 100, Value = 100 };
-            playPauseButton.Click += PlayPauseButton_Click;
+            _playPauseButton.Click += PlayPauseButton_Click;
             volumeSlider.ValueChanged += VolumeSlider_ValueChanged;
 
-            Content = new TableLayout(new TableRow(playPauseButton), new TableRow(volumeSlider));
+            Content = new TableLayout(new TableRow(_playPauseButton), new TableRow(volumeSlider));
         }
 
         public void Stop()
@@ -57,22 +60,27 @@ namespace SerialLoops.Controls
 
         private void PlayPauseButton_Click(object sender, System.EventArgs e)
         {
-            Button playPauseButton = (Button)sender;
             if (_player.IsPlaying)
             {
                 _player.Pause();
-                playPauseButton.Text = "▶️";
+                _playPauseButton.Text = "▶️";
             }
             else
             {
                 _player.Play();
-                playPauseButton.Text = "⏸️";
+                _playPauseButton.Text = "⏸️";
             }
         }
 
         private void VolumeSlider_ValueChanged(object sender, System.EventArgs e)
         {
             _player.Volume = ((Slider)sender).Value;
+        }
+
+        private void _player_Stopped(object sender, System.EventArgs e)
+        {
+            _playPauseButton.Text = "▶️";
+            _player.SeekTo(TimeSpan.Zero);
         }
     }
 }
