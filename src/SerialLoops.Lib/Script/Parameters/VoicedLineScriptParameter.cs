@@ -1,12 +1,14 @@
-﻿namespace SerialLoops.Lib.Script.Parameters
+﻿using SerialLoops.Lib.Items;
+
+namespace SerialLoops.Lib.Script.Parameters
 {
     public class VoicedLineScriptParameter : ScriptParameter
     {
-        public short VoiceIndex { get; set; }
+        public VoicedLineItem VoiceLine { get; set; }
 
-        public VoicedLineScriptParameter(string name, short voiceIndex) : base(name, ParameterType.VOICE_LINE)
+        public VoicedLineScriptParameter(string name, VoicedLineItem vce) : base(name, ParameterType.VOICE_LINE)
         {
-            VoiceIndex = voiceIndex;
+            VoiceLine = vce;
         }
     }
 }

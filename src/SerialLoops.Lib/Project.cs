@@ -93,7 +93,7 @@ namespace SerialLoops.Lib
             string[] voiceFiles = Directory.GetFiles(Path.Combine(IterativeDirectory, "original", "vce")).OrderBy(s => s).ToArray();
             for (int i = 0; i < voiceFiles.Length; i++)
             {
-                Items.Add(new VoicedLineItem(voiceFiles[i], i, this));
+                Items.Add(new VoicedLineItem(voiceFiles[i], i + 1, this));
             }
 
             CharacterDataFile chrdata = Dat.Files.First(d => d.Name == "CHRDATAS").CastTo<CharacterDataFile>();

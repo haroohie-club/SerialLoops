@@ -35,14 +35,10 @@ namespace SerialLoops.Utility
         
         public static StackLayout GetFileLink(ItemDescription description, EditorTabsPanel editorTabs, ILogger log)
         {
-            Control link = new ClearableLinkButton() { Text = description.Name };
+            ClearableLinkButton link = new() { Text = description.Name };
             if (description.Name != "NONE")
             {
-                ((ClearableLinkButton)link).ClickUnique += (s, e) => { editorTabs.OpenTab(description, log); };
-            }
-            else
-            {
-                link = new Label { Text = description.Name };
+                link.ClickUnique += (s, e) => { editorTabs.OpenTab(description, log); };
             }
             return new StackLayout
             {

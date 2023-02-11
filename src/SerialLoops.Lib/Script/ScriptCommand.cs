@@ -79,7 +79,7 @@ namespace SerialLoops.Lib.Script
                                 parameters.Add(new DialogueScriptParameter("Dialogue", GetDialogueLine(parameter, eventFile)));
                                 break;
                             case 1:
-                                parameters.Add(new SpriteScriptParameter("Sprite", (CharacterSpriteItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Character_Sprite && (parameter) == ((CharacterSpriteItem)i).Index)));
+                                parameters.Add(new SpriteScriptParameter("Sprite", (CharacterSpriteItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Character_Sprite && parameter == ((CharacterSpriteItem)i).Index)));
                                 break;
                             case 2:
                                 parameters.Add(new SpriteEntranceScriptParameter("Sprite Entrance Transition", parameter));
@@ -91,7 +91,7 @@ namespace SerialLoops.Lib.Script
                                 parameters.Add(new SpriteShakeScriptParameter("Sprite Shake", parameter));
                                 break;
                             case 5:
-                                parameters.Add(new VoicedLineScriptParameter("Voice Line", parameter));
+                                parameters.Add(new VoicedLineScriptParameter("Voice Line", (VoicedLineItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Voice && parameter == ((VoicedLineItem)i).Index)));
                                 break;
                             case 6:
                                 parameters.Add(new DialoguePropertyScriptParameter("Text Voice Font", messageInfo.MessageInfos[parameter]));
@@ -242,7 +242,7 @@ namespace SerialLoops.Lib.Script
                     case CommandVerb.VCE_PLAY:
                         if (i == 0)
                         {
-                            parameters.Add(new VoicedLineScriptParameter("Voice File", parameter));
+                            parameters.Add(new VoicedLineScriptParameter("Voice Line", (VoicedLineItem)project.Items.First(i => i.Type == ItemDescription.ItemType.Voice && parameter == ((VoicedLineItem)i).Index)));
                         }
                         break;
                     case CommandVerb.FLAG:
