@@ -56,6 +56,9 @@ namespace SerialLoops
                 case ItemDescription.ItemType.Background:
                     BackgroundItem bg = (BackgroundItem)Item;
                     return Project.Items.Where(i => bg.ScriptUses.Select(s => s.ScriptName).Contains(i.Name)).ToList();
+                case ItemDescription.ItemType.BGM:
+                    BackgroundMusicItem bgm = (BackgroundMusicItem)Item;
+                    return Project.Items.Where(i => bgm.ScriptUses.Select(s => s.ScriptName).Contains(i.Name)).ToList();
                 case ItemDescription.ItemType.Character_Sprite:
                     CharacterSpriteItem sprite = (CharacterSpriteItem)Item;
                     return Project.Items.Where(i => sprite.ScriptUses.Select(s => s.ScriptName).Contains(i.Name)).ToList();

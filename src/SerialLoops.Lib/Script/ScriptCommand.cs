@@ -223,7 +223,7 @@ namespace SerialLoops.Lib.Script
                         switch (i)
                         {
                             case 0:
-                                parameters.Add(new ShortScriptParameter("BGM", parameter)); //BgmScriptParameter("bgmIndex", (BackgroundMusicItem)project.Items.First(i => i.Type == ItemDescription.ItemType.BGM && ((BackgroundMusicItem)i).Index == parameter)));
+                                parameters.Add(new BgmScriptParameter("bgmIndex", (BackgroundMusicItem)project.Items.First(i => i.Type == ItemDescription.ItemType.BGM && ((BackgroundMusicItem)i).Index == parameter)));
                                 break;
                             case 1:
                                 parameters.Add(new BgmModeScriptParameter("Mode", parameter));

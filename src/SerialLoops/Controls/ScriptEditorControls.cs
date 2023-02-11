@@ -13,6 +13,35 @@ namespace SerialLoops.Controls
     {
         public ScriptItemCommand Command { get; set; }
         public int ParameterIndex { get; set; }
+        public ClearableLinkButton Link { get; set; }
+    }
+
+    public class ClearableLinkButton : LinkButton
+    {
+        public List<EventHandler<EventArgs>> ClickEvents { get; set; } = new();
+
+        public event EventHandler<EventArgs> ClickUnique
+        {
+            add
+            {
+                Click += value;
+                ClickEvents.Add(value);
+            }
+            remove
+            {
+                Click -= value;
+                ClickEvents.Remove(value);
+            }
+        }
+
+        public void RemoveAllClickEvents()
+        {
+            foreach (EventHandler<EventArgs> eh in ClickEvents)
+            {
+                Click -= eh;
+            }
+            ClickEvents.Clear();
+        }
     }
 
     public class CommandGraphicSelectionButton : Panel

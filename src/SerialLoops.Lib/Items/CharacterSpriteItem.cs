@@ -9,11 +9,11 @@ namespace SerialLoops.Lib.Items
 {
     public class CharacterSpriteItem : Item, IPreviewableGraphic
     {
-        public HaruhiChokuretsuLib.Archive.Data.CharacterSprite Sprite { get; set; }
+        public CharacterSprite Sprite { get; set; }
         public int Index { get; set; }
         public (string ScriptName, ScriptCommandInvocation command)[] ScriptUses { get; set; }
 
-        public CharacterSpriteItem(HaruhiChokuretsuLib.Archive.Data.CharacterSprite sprite, CharacterDataFile chrdata, Project project) : base($"SPR_{sprite.Character}_{chrdata.Sprites.IndexOf(sprite):D3}", ItemType.Character_Sprite)
+        public CharacterSpriteItem(CharacterSprite sprite, CharacterDataFile chrdata, Project project) : base($"SPR_{sprite.Character}_{chrdata.Sprites.IndexOf(sprite):D3}", ItemType.Character_Sprite)
         {
             Sprite = sprite;
             Index = chrdata.Sprites.IndexOf(sprite);
