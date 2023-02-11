@@ -84,7 +84,7 @@ namespace SerialLoops.Lib
                 }
             }
 
-            string[] bgmFiles = Directory.GetFiles(Path.Combine(IterativeDirectory, "original", "bgm"));
+            string[] bgmFiles = Directory.GetFiles(Path.Combine(IterativeDirectory, "original", "bgm")).OrderBy(s => s).ToArray();
             for (int i = 0; i < bgmFiles.Length; i++)
             {
                 Items.Add(new BackgroundMusicItem(bgmFiles[i], i, extras, this));
