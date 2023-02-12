@@ -115,6 +115,9 @@ namespace SerialLoops.Lib
                 .Where(d => d.Name.StartsWith("SLG"))
                 .Select(d => new PuzzleItem(d.CastTo<PuzzleFile>(), this)));
 
+            Evt.Files.First(f => f.Name == "TOPICS").InitializeTopicFile();
+            Items.AddRange(Evt.Files.First(f => f.Name == "TOPICS").TopicStructs.Select(t => new TopicItem(t, this)));
+
             // Scenario item must be created after script and puzzle items are constructed
             EventFile scenarioFile = Evt.Files.First(f => f.Name == "SCENARIOS");
             scenarioFile.InitializeScenarioFile();

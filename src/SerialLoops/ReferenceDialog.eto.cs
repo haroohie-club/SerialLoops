@@ -78,15 +78,25 @@ namespace SerialLoops
                     {
                         references.Add(scenario);
                     }
+                    references.AddRange(Project.Items.Where(i => i.Type == ItemDescription.ItemType.Topic && ((TopicItem)i).Topic.EventIndex == script.Event.Index));
                     return references;
+                case ItemDescription.ItemType.Topic:
+                    TopicItem topic = (TopicItem)Item;
+                    return Project.Items.Where(i => topic.ScriptUses.Select(s => s.ScriptName).Contains(i.Name)).ToList();
                 default:
-                    return new List<ItemDescription>();
+                    return references;
             }
         }
 
         private List<ItemDescription> GetReferencedBy()
         {
-            return new List<ItemDescription>();
+            List<ItemDescription> references = new();
+
+            switch (Item.Type)
+            {
+                default:
+                    return references;
+            }
         }
 
         public enum ReferenceMode
