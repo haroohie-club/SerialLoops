@@ -272,16 +272,16 @@ namespace SerialLoops.Lib.Script
                         switch (i)
                         {
                             case 0:
-                                parameters.Add(new OptionScriptParameter("Option 1", eventFile.ChoicesSection.Objects[parameter + 1]));
+                                parameters.Add(new OptionScriptParameter("Option 1", eventFile.ChoicesSection.Objects[parameter]));
                                 break;
                             case 1:
-                                parameters.Add(new OptionScriptParameter("Option 2", eventFile.ChoicesSection.Objects[parameter + 1]));
+                                parameters.Add(new OptionScriptParameter("Option 2", eventFile.ChoicesSection.Objects[parameter]));
                                 break;
                             case 2:
-                                parameters.Add(new OptionScriptParameter("Option 3", eventFile.ChoicesSection.Objects[parameter + 1]));
+                                parameters.Add(new OptionScriptParameter("Option 3", eventFile.ChoicesSection.Objects[parameter]));
                                 break;
                             case 3:
-                                parameters.Add(new OptionScriptParameter("Option 4", eventFile.ChoicesSection.Objects[parameter + 1]));
+                                parameters.Add(new OptionScriptParameter("Option 4", eventFile.ChoicesSection.Objects[parameter]));
                                 break;
                             case 4:
                                 parameters.Add(new ShortScriptParameter("unknown08", parameter));

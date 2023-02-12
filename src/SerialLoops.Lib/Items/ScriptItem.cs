@@ -63,6 +63,10 @@ namespace SerialLoops.Lib.Items
                             .Select(s => new ScriptSectionEdge() { Source = section, Target = s }));
                         @continue = true;
                     }
+                    else if (command.Verb == CommandVerb.NEXT_SCENE)
+                    {
+                        @continue = true;
+                    }
                 }
                 if (@continue)
                 {
