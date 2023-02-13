@@ -8,7 +8,7 @@ namespace SerialLoops.Wpf
     {
         private WaveOut _player;
         public IWaveProvider WaveProvider { get; set; }
-        public bool IsPlaying { get => _player.PlaybackState == PlaybackState.Playing; }
+        public PlaybackState PlaybackState => _player.PlaybackState;
 
         public SoundPlayerHandler()
         {

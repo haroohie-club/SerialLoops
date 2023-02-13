@@ -9,7 +9,7 @@ namespace SerialLoops.Mac
     {
         public IWaveProvider WaveProvider { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-        public bool IsPlaying => throw new NotImplementedException();
+        public PlaybackState PlaybackState => throw new NotImplementedException();
 
         public void Initialize(IWaveProvider waveProvider)
         {

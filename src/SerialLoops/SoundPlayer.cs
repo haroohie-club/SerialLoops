@@ -14,9 +14,9 @@ namespace SerialLoops
             get => Handler.WaveProvider;
             set => Handler.WaveProvider = value;
         }
-        public bool IsPlaying
+        public PlaybackState PlaybackState
         {
-            get => Handler.IsPlaying;
+            get => Handler.PlaybackState;
         }
 
         public void Initialize(IWaveProvider waveProvider) => Handler.Initialize(waveProvider);
@@ -27,7 +27,7 @@ namespace SerialLoops
         public interface ISoundPlayer : IHandler
         {
             public IWaveProvider WaveProvider { get; set; }
-            public bool IsPlaying { get; }
+            public PlaybackState PlaybackState { get; }
 
             public void Initialize(IWaveProvider waveProvider);
             public void Play();

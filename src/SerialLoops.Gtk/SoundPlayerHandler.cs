@@ -8,9 +8,9 @@ namespace SerialLoops.Gtk
     public class SoundPlayerHandler : GtkControl<Button, SoundPlayer, SoundPlayer.ICallback>, SoundPlayer.ISoundPlayer
     {
         private TkWavePlayer _player;
-        public IWaveProvider WaveProvider { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public IWaveProvider WaveProvider { get; set; }
 
-        public bool IsPlaying => throw new NotImplementedException();
+        public PlaybackState PlaybackState => _player.PlaybackState;
 
         public SoundPlayerHandler()
         {
