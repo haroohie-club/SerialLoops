@@ -9,9 +9,11 @@ namespace SerialLoops.Utility
 
         private readonly ProgressBar _loadingProgress;
         private readonly Label _loadingItem;
+        private readonly string _processVerb;
 
-        public LoopyProgressTracker()
+        public LoopyProgressTracker(string processVerb = "Loading: ")
         {
+            _processVerb = processVerb;
             _loadingProgress = new() { Width = 390 };
             _loadingItem = new();
 
@@ -49,7 +51,7 @@ namespace SerialLoops.Utility
             get => _currentlyLoading;
             set
             {
-                _currentlyLoading = $"Loading {value}...";
+                _currentlyLoading = $"{_processVerb} {value}...";
                 Application.Instance.Invoke(() => _loadingItem.Text = _currentlyLoading);
             }
         }
