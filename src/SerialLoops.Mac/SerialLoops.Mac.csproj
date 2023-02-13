@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <RuntimeIdentifiers>osx-x64;osx-arm64</RuntimeIdentifiers>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="MacIcon.icns" />
+  </ItemGroup>
+	
+  <ItemGroup>
+    <ProjectReference Include="..\SerialLoops\SerialLoops.csproj" />
+  </ItemGroup>
+	
+  <ItemGroup>
+    <PackageReference Include="Eto.Platform.Mac64" Version="2.7.2-ci-20230201.4059880747" />
+  </ItemGroup>
+	
+</Project>

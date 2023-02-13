@@ -9,6 +9,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SerialLoops.Tests", "test\S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SerialLoops.Lib", "src\SerialLoops.Lib\SerialLoops.Lib.csproj", "{CC729174-57CD-499A-B6E7-1FA6F9CE255F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialLoops.Gtk", "src\SerialLoops.Gtk\SerialLoops.Gtk.csproj", "{EA5F17A9-CA95-43A0-BE14-33F41EDF02BB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialLoops.Mac", "src\SerialLoops.Mac\SerialLoops.Mac.csproj", "{2DF676C8-9917-48EA-A8CF-435CE29BB8A8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialLoops.Wpf", "src\SerialLoops.Wpf\SerialLoops.Wpf.csproj", "{2DF0B35B-5A1C-43C7-A6BD-95D4D48FE39A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,12 +33,24 @@ Global
 		{CC729174-57CD-499A-B6E7-1FA6F9CE255F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC729174-57CD-499A-B6E7-1FA6F9CE255F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC729174-57CD-499A-B6E7-1FA6F9CE255F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA5F17A9-CA95-43A0-BE14-33F41EDF02BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA5F17A9-CA95-43A0-BE14-33F41EDF02BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA5F17A9-CA95-43A0-BE14-33F41EDF02BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA5F17A9-CA95-43A0-BE14-33F41EDF02BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DF676C8-9917-48EA-A8CF-435CE29BB8A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DF676C8-9917-48EA-A8CF-435CE29BB8A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DF676C8-9917-48EA-A8CF-435CE29BB8A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DF676C8-9917-48EA-A8CF-435CE29BB8A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DF0B35B-5A1C-43C7-A6BD-95D4D48FE39A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DF0B35B-5A1C-43C7-A6BD-95D4D48FE39A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DF0B35B-5A1C-43C7-A6BD-95D4D48FE39A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DF0B35B-5A1C-43C7-A6BD-95D4D48FE39A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {922A1BAC-5F5E-4225-8E10-69036C42B786}
 		        SolutionGuid = {A7259B55-BEEA-4ECC-AC0A-85CC8FA1BD53}
+		SolutionGuid = {922A1BAC-5F5E-4225-8E10-69036C42B786}
 	EndGlobalSection
 EndGlobal
