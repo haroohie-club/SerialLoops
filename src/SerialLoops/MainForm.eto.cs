@@ -5,12 +5,14 @@ using SerialLoops.Controls;
 using SerialLoops.Editors;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
+using SerialLoops.Lib.Util;
 using SerialLoops.Utility;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SerialLoops
 {
@@ -162,20 +164,28 @@ namespace SerialLoops
             openFileDialog.Filters.Add(new("Serial Loops Project", $".{Project.PROJECT_FORMAT}"));
             if (openFileDialog.ShowAndReportIfFileSelected(this))
             {
-                OpenProject = Project.OpenProject(openFileDialog.FileName, CurrentConfig, _log);
-                OpenProjectView(OpenProject);
+                OpenProjectFromPath(openFileDialog.FileName);
             }
         }
         
         private void OpenRecentProject_Executed(object sender, EventArgs e)
         {
-            Command command = (Command)sender;
-            OpenProject = Project.OpenProject(command.ToolTip, CurrentConfig, _log);
-            OpenProjectView(OpenProject);
+            OpenProjectFromPath(((Command)sender).ToolTip);
+        }
+
+        private void OpenProjectFromPath(string path)
+        {
+            LoopyProgressTracker tracker = new ();
+            new LoadingDialog(() => OpenProject = Project.OpenProject(path, CurrentConfig, _log, tracker), () => OpenProjectView(OpenProject), tracker);
         }
 
         private void SaveProject_Executed(object sender, EventArgs e)
         {
+            if (OpenProject == null)
+            {
+                return;
+            }
+
             IEnumerable<ItemDescription> unsavedItems = OpenProject.Items.Where(i => i.UnsavedChanges);
             foreach (ItemDescription item in unsavedItems)
             {

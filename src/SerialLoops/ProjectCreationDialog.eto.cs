@@ -171,7 +171,7 @@ namespace SerialLoops
                     }
                 }
                 IO.OpenRom(NewProject, _romPath.Text, includeFontHack);
-                NewProject.LoadArchives(Log);
+                NewProject.LoadArchives(Log, new LoopyProgressTracker());
                 Close();
             }
         }

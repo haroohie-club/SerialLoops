@@ -1,0 +1,58 @@
+﻿using Eto.Forms;
+using SerialLoops.Lib.Util;
+using System;
+
+namespace SerialLoops.Utility
+{
+    public class LoopyProgressTracker : StackLayout, IProgressTracker
+    {
+
+        private readonly ProgressBar _loadingProgress;
+        private readonly Label _loadingItem;
+
+        public LoopyProgressTracker()
+        {
+            _loadingProgress = new() { Width = 390 };
+            _loadingItem = new();
+
+            Padding = 10;
+            Spacing = 10;
+            HorizontalContentAlignment = HorizontalAlignment.Center;
+            Items.Add(_loadingItem);
+            Items.Add(_loadingProgress);
+        }
+
+
+        private int _current;
+        public int Loaded { 
+            get => _current;
+            set
+            {
+                _current = value;
+                Application.Instance.Invoke(() => _loadingProgress.Value = _current);
+            }
+        }
+
+        private int _total;
+        public int Total
+        {
+            get => _total;
+            set
+            {
+                _total = value;
+                Application.Instance.Invoke(() => _loadingProgress.MaxValue = _total);
+            }
+        }
+
+        private string _currentlyLoading;
+        public string CurrentlyLoading {
+            get => _currentlyLoading;
+            set
+            {
+                _currentlyLoading = $"Loading {value}...";
+                Application.Instance.Invoke(() => _loadingItem.Text = _currentlyLoading);
+            }
+        }
+
+    }
+}
