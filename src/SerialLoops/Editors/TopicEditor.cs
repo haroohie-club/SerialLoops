@@ -24,8 +24,9 @@ namespace SerialLoops.Editors
             TextBox titleTextBox = new() { Text = _topic.Topic.Title, Width = 200 };
 
             DropDown linkedScriptDropDown = new();
+            linkedScriptDropDown.Items.Add(new ListItem { Key = "NONE", Text = "NONE" });
             linkedScriptDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Script).Select(s => new ListItem { Key = s.Name, Text = s.Name }));
-            linkedScriptDropDown.SelectedKey = _project.Items.First(i => i.Type == ItemDescription.ItemType.Script && ((ScriptItem)i).Event.Index == _topic.Topic.EventIndex).Name;
+            linkedScriptDropDown.SelectedKey = _project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Script && ((ScriptItem)i).Event.Index == _topic.Topic.EventIndex)?.Name ?? "NONE";
 
             StackLayout shortsLayout = new();
             for (int i = 0; i < _topic.Topic.UnknownShorts.Length; i++)
