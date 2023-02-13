@@ -1,27 +1,25 @@
 ﻿using Eto.Drawing;
 using Eto.Forms;
-using SerialLoops.Controls;
-using SerialLoops.Lib.Util;
 using SerialLoops.Utility;
 using System;
 using System.Threading.Tasks;
 
 namespace SerialLoops
 {
-    public class LoadingDialog : Dialog
+    public class ProgressDialog : Dialog
     {
 
         private readonly Action _loadingTask;
         private readonly LoopyProgressTracker _tracker;
         private readonly Action _onComplete;
 
-        public LoadingDialog(Action loadingTask, Action onComplete, LoopyProgressTracker tracker)
+        public ProgressDialog(Action loadingTask, Action onComplete, LoopyProgressTracker tracker, string title)
         {
             _loadingTask = loadingTask;
             _tracker = tracker;
             _onComplete = onComplete;
             
-            Title = "Loading";
+            Title = title;
             ShowInTaskbar = false;
             Closeable = false;
             Resizable = false;

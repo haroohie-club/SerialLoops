@@ -4,6 +4,7 @@ using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Archive.Graphics;
 using HaruhiChokuretsuLib.Util;
+using SerialLoops.Lib.Util;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
@@ -20,34 +21,36 @@ namespace SerialLoops.Lib
 {
     public static class Build
     {
-        public static async Task<bool> BuildIterative(Project project, Config config, ILogger log)
+        public static async Task<bool> BuildIterative(Project project, Config config, ILogger log, IProgressTracker tracker)
         {
-            bool result = await DoBuild(project.IterativeDirectory, project, config, log);
+            bool result = await DoBuild(project.IterativeDirectory, project, config, log, tracker);
             CopyToArchivesToIterativeOriginal(Path.Combine(project.IterativeDirectory, "rom", "data"),
-                Path.Combine(project.IterativeDirectory, "original", "archives"), log);
+                Path.Combine(project.IterativeDirectory, "original", "archives"), log, tracker);
             if (result)
             {
-                CleanIterative(project, log);
+                CleanIterative(project, log, tracker);
             }
             return result;
         }
 
-        public static async Task<bool> BuildBase(Project project, Config config, ILogger log)
+        public static async Task<bool> BuildBase(Project project, Config config, ILogger log, IProgressTracker tracker)
         {
-            bool result = await DoBuild(project.BaseDirectory, project, config, log);
+            bool result = await DoBuild(project.BaseDirectory, project, config, log, tracker);
             CopyToArchivesToIterativeOriginal(Path.Combine(project.BaseDirectory, "rom", "data"),
-                Path.Combine(project.IterativeDirectory, "original", "archives"), log);
+                Path.Combine(project.IterativeDirectory, "original", "archives"), log, tracker);
             if (result)
             {
-                CleanIterative(project, log);
+                CleanIterative(project, log, tracker);
             }
             return result;
         }
 
-        private static void CleanIterative(Project project, ILogger log)
+        private static void CleanIterative(Project project, ILogger log, IProgressTracker tracker)
         {
             string[] preservedFiles = new string[] { "charset.json" };
-            foreach (string file in Directory.GetFiles(Path.Combine(project.IterativeDirectory, "assets"), "*", SearchOption.AllDirectories))
+            string[] cleanableFiles = Directory.GetFiles(Path.Combine(project.IterativeDirectory, "assets"), "*", SearchOption.AllDirectories);
+            tracker.Focus("Cleaning Iterative Directory", cleanableFiles.Length);
+            foreach (string file in cleanableFiles)
             {
                 if (!preservedFiles.Contains(Path.GetFileName(file)))
                 {
@@ -60,10 +63,11 @@ namespace SerialLoops.Lib
                         log.LogError($"Failed to clean iterative directory: {exc.Message}\n\n{exc.StackTrace}");
                     }
                 }
+                tracker.Loaded++;
             }
         }
 
-        private static async Task<bool> DoBuild(string directory, Project project, Config config, ILogger log)
+        private static async Task<bool> DoBuild(string directory, Project project, Config config, ILogger log, IProgressTracker tracker)
         {
             // Export includes
             StringBuilder commandsIncSb = new();
@@ -72,8 +76,13 @@ namespace SerialLoops.Lib
                 commandsIncSb.AppendLine(command.GetMacro());
             }
 
+            tracker.Focus("Compressing Archives (dat.bin)", 3);
             var dat = ArchiveFile<DataFile>.FromFile(Path.Combine(directory, "original", "archives", "dat.bin"), log);
+            tracker.Loaded++;
+            tracker.CurrentlyLoading = "Compressing Archives (evt.bin)";
             var evt = ArchiveFile<EventFile>.FromFile(Path.Combine(directory, "original", "archives", "evt.bin"), log);
+            tracker.Loaded++;
+            tracker.CurrentlyLoading = "Compressing Archives (grp.bin)";
             var grp = ArchiveFile<GraphicsFile>.FromFile(Path.Combine(directory, "original", "archives", "grp.bin"), log);
 
             if (dat is null || evt is null || grp is null)
@@ -82,6 +91,7 @@ namespace SerialLoops.Lib
                 return false;
             }
 
+            tracker.Focus("Writing Includes", 4);
             try
             {
                 File.WriteAllText(Path.Combine(directory, "COMMANDS.INC"), commandsIncSb.ToString());
@@ -94,9 +104,12 @@ namespace SerialLoops.Lib
                 log.LogError($"Failed to write include files to disk: {exc.Message}\n\n{exc.StackTrace}");
                 return false;
             }
+            tracker.Loaded+= 4;
 
             // Replace files
-            foreach (string file in Directory.GetFiles(Path.Combine(directory, "assets"), "*.*", SearchOption.AllDirectories))
+            string[] files = Directory.GetFiles(Path.Combine(directory, "assets"), "*.*", SearchOption.AllDirectories);
+            tracker.Focus("Replacing Files", files.Length);
+            foreach (string file in files)
             {
                 if (int.TryParse(Path.GetFileNameWithoutExtension(file).Split('_')[0], NumberStyles.HexNumber, new CultureInfo("en-US"), out int index) || Path.GetFileName(file).StartsWith("new", StringComparison.OrdinalIgnoreCase))
                 {
@@ -137,9 +150,11 @@ namespace SerialLoops.Lib
                         //AddNewFile(archive, filePath, log);
                     }
                 }
+                tracker.Loaded++;
             }
 
             // Save files to disk
+            tracker.Focus("Writing Replaced Archives", 3);
             if (!IO.WriteBinaryFile(Path.Combine(directory, "rom", "data", "dat.bin"), dat.GetBytes(), log))
             {
                 return false;
@@ -152,7 +167,9 @@ namespace SerialLoops.Lib
             {
                 return false;
             }
+            tracker.Loaded+= 3;
 
+            tracker.Focus("Packing ROM", 1);
             try
             {
                 NdsProjectFile.Pack(Path.Combine(project.MainDirectory, $"{project.Name}.nds"), Path.Combine(directory, "rom", $"{project.Name}.xml"));
@@ -162,11 +179,13 @@ namespace SerialLoops.Lib
                 log.LogError($"NitroPacker failed to pack ROM with exception '{exc.Message}'\n\n{exc.StackTrace}");
                 return false;
             }
+            tracker.Loaded++;
             return true;
         }
 
-        private static void CopyToArchivesToIterativeOriginal(string newDataDir, string iterativeOriginalDir, ILogger log)
+        private static void CopyToArchivesToIterativeOriginal(string newDataDir, string iterativeOriginalDir, ILogger log, IProgressTracker tracker)
         {
+            tracker.Focus("Copying Archives to Iterative Originals", 3);
             try
             {
                 File.Copy(Path.Combine(newDataDir, "dat.bin"), Path.Combine(iterativeOriginalDir, "dat.bin"), overwrite: true);
@@ -177,6 +196,7 @@ namespace SerialLoops.Lib
             {
                 log.LogError($"Failed to copy newly built archives to the iterative originals directory.\n{exc.Message}\n\n{exc.StackTrace}");
             }
+            tracker.Loaded+= 3;
         }
 
         private static void ReplaceSingleGraphicsFile(ArchiveFile<GraphicsFile> grp, string filePath, int index, Dictionary<int, List<SKColor>> sharedPalettes)

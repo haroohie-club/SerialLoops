@@ -176,7 +176,7 @@ namespace SerialLoops
         private void OpenProjectFromPath(string path)
         {
             LoopyProgressTracker tracker = new ();
-            new LoadingDialog(() => OpenProject = Project.OpenProject(path, CurrentConfig, _log, tracker), () => OpenProjectView(OpenProject), tracker);
+            new ProgressDialog(() => OpenProject = Project.OpenProject(path, CurrentConfig, _log, tracker), () => OpenProjectView(OpenProject), tracker, "Loading Project");
         }
 
         private void SaveProject_Executed(object sender, EventArgs e)
@@ -220,39 +220,49 @@ namespace SerialLoops
             }
         }
 
-        private async void BuildIterativeProject_Executed(object sender, EventArgs e)
+        private void BuildIterativeProject_Executed(object sender, EventArgs e)
         {
             if (OpenProject is not null)
             {
-                if (await Build.BuildIterative(OpenProject, CurrentConfig, _log))
+                bool buildSucceeded = false;
+                LoopyProgressTracker tracker = new("Building:");
+                ProgressDialog loadingDialog = new(async () => buildSucceeded = await Build.BuildIterative(OpenProject, CurrentConfig, _log, tracker), () =>
                 {
-                    _log.Log("Build succeeded!");
-                    MessageBox.Show("Build succeeded!", "Build Result", MessageBoxType.Information);
-                }
-                else
-                {
-                    _log.LogError("Build failed!");
-                }
+                    if (buildSucceeded)
+                    {
+                        _log.Log("Build succeeded!");
+                        MessageBox.Show("Build succeeded!", "Build Result", MessageBoxType.Information);
+                    }
+                    else
+                    {
+                        _log.LogError("Build failed!");
+                    }
+                }, tracker, "Building Iteratively");
             }
         }
 
-        private async void BuildBaseProject_Executed(object sender, EventArgs e)
+        private void BuildBaseProject_Executed(object sender, EventArgs e)
         {
             if (OpenProject is not null)
             {
-                if (await Build.BuildBase(OpenProject, CurrentConfig, _log))
+                bool buildSucceeded = false;
+                LoopyProgressTracker tracker = new("Building:");
+                ProgressDialog loadingDialog = new(async () => buildSucceeded = await Build.BuildBase(OpenProject, CurrentConfig, _log, tracker), () =>
                 {
-                    _log.Log("Build succeeded!");
-                    MessageBox.Show("Build succeeded!", "Build Result", MessageBoxType.Information);
-                }
-                else
-                {
-                    _log.LogError("Build failed!");
-                }
+                    if (buildSucceeded)
+                    {
+                        _log.Log("Build succeeded!");
+                        MessageBox.Show("Build succeeded!", "Build Result", MessageBoxType.Information);
+                    }
+                    else
+                    {
+                        _log.LogError("Build failed!");
+                    }
+                }, tracker, "Building from Scratch");
             }
         }
         
-        private async void BuildAndRunProject_Executed(object sender, EventArgs e)
+        private void BuildAndRunProject_Executed(object sender, EventArgs e)
         {
             if (OpenProject is not null)
             {
@@ -262,28 +272,35 @@ namespace SerialLoops
                     _log.LogWarning("No emulator path set. Please set the path to your emulator.");
                     return;
                 }
-                if (await Build.BuildIterative(OpenProject, CurrentConfig, _log))
+
+                bool buildSucceeded = false;
+                LoopyProgressTracker tracker = new("Building:");
+                ProgressDialog loadingDialog = new(async () => buildSucceeded = await Build.BuildIterative(OpenProject, CurrentConfig, _log, tracker), () =>
                 {
-                    _log.Log("Build succeeded!");
-                    try
+                    if (buildSucceeded)
                     {
-                        // If the EmulatorPath is an .app bundle, we need to run the executable inside it
-                        string emulatorExecutable = CurrentConfig.EmulatorPath;
-                        if (emulatorExecutable.EndsWith(".app"))
+                        _log.Log("Build succeeded!");
+                        try
                         {
-                            emulatorExecutable = Path.Combine(CurrentConfig.EmulatorPath, "Contents", "MacOS", Path.GetFileNameWithoutExtension(CurrentConfig.EmulatorPath));
+                            // If the EmulatorPath is an .app bundle, we need to run the executable inside it
+                            string emulatorExecutable = CurrentConfig.EmulatorPath;
+                            if (emulatorExecutable.EndsWith(".app"))
+                            {
+                                emulatorExecutable = Path.Combine(CurrentConfig.EmulatorPath, "Contents", "MacOS", Path.GetFileNameWithoutExtension(CurrentConfig.EmulatorPath));
+                            }
+
+                            Process.Start(emulatorExecutable, $"\"{Path.Combine(OpenProject.MainDirectory, $"{OpenProject.Name}.nds")}\"");
                         }
-                        
-                        Process.Start(emulatorExecutable, $"\"{Path.Combine(OpenProject.MainDirectory, $"{OpenProject.Name}.nds")}\"");
-                    } catch (Exception ex)
-                    {
-                        _log.LogError($"Failed to start emulator: {ex.Message}");
+                        catch (Exception ex)
+                        {
+                            _log.LogError($"Failed to start emulator: {ex.Message}");
+                        }
                     }
-                }
-                else
-                {
-                    _log.LogError("Build failed!");
-                }
+                    else
+                    {
+                        _log.LogError("Build failed!");
+                    }
+                }, tracker, "Building and Running");
             }
         }
 
