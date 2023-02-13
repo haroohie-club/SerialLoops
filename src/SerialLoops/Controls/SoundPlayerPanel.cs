@@ -38,7 +38,7 @@ namespace SerialLoops.Controls
 
         private void PlayPauseButton_Click(object sender, System.EventArgs e)
         {
-            if (_player.PlaybackState != PlaybackState.Playing)
+            if (_player.PlaybackState == PlaybackState.Playing)
             {
                 _player.Pause();
                 _playPauseButton.Text = "▶️";
