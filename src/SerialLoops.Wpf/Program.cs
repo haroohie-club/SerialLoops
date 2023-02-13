@@ -1,8 +1,7 @@
 ﻿using Eto.Forms;
-using SerialLoops;
 using System;
 
-namespace TestEto.Wpf
+namespace SerialLoops.Wpf
 {
     internal class Program
     {
@@ -10,9 +9,9 @@ namespace TestEto.Wpf
         public static void Main(string[] args)
         {
             var platform = new Eto.Wpf.Platform();
-            
+            platform.Add<SoundPlayer.ISoundPlayer>(() => new SoundPlayerHandler());
 
-            new Application(Eto.Platforms.Wpf).Run(new MainForm());
+            new Application(platform).Run(new MainForm());
         }
     }
 }

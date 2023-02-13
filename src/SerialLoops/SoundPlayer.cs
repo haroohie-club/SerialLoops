@@ -7,7 +7,7 @@ namespace SerialLoops
     [Handler(typeof(ISoundPlayer))]
     public class SoundPlayer : Control
     {
-        public new ISoundPlayer Handler => (ISoundPlayer)base.Handler;
+        new ISoundPlayer Handler => (ISoundPlayer)base.Handler;
 
         public IWaveProvider WaveProvider
         {
@@ -17,19 +17,19 @@ namespace SerialLoops
         public bool IsPlaying
         {
             get => Handler.IsPlaying;
-            set => Handler.IsPlaying = value;
         }
 
+        public void Initialize(IWaveProvider waveProvider) => Handler.Initialize(waveProvider);
         public void Play() => Handler.Play();
         public void Pause() => Handler.Pause();
         public void Stop() => Handler.Stop();
 
-
         public interface ISoundPlayer : IHandler
         {
             public IWaveProvider WaveProvider { get; set; }
-            public bool IsPlaying { get; set; }
+            public bool IsPlaying { get; }
 
+            public void Initialize(IWaveProvider waveProvider);
             public void Play();
             public void Pause();
             public void Stop();

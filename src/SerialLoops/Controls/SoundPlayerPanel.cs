@@ -1,10 +1,6 @@
 ﻿using Eto.Forms;
 using HaruhiChokuretsuLib.Util;
-using LibVLCSharp.Shared;
 using NAudio.Wave;
-using SerialLoops.Lib.Util;
-using System;
-using System.IO;
 
 namespace SerialLoops.Controls
 {
@@ -12,32 +8,15 @@ namespace SerialLoops.Controls
     {
         private ILogger _log;
         private IWaveProvider _sound;
-        private MediaPlayer _player;
+        private SoundPlayer _player;
         private Button _playPauseButton;
 
         public SoundPlayerPanel(IWaveProvider sound, ILogger log)
         {
             _log = log;
             _sound = sound;
-
-            MemoryStream memoryStream = new();
-            WaveProviderStream waveStream = new(_sound);
-            WaveFileWriter writer = new(memoryStream, _sound.WaveFormat);
-            waveStream.CopyTo(writer);
-            memoryStream.Position = 0;
-            LibVLC libVlc;
-            try
-            {
-                libVlc = new();
-            }
-            catch (VLCException exc)
-            {
-                _log.LogError($"Error instantiating VLC -- if you're using Linux, ensure you've followed the instructions on installing libvlc for your platform.\nInner exception: {exc.Message}\n\n{exc.StackTrace}");
-                return;
-            }
-            StreamMediaInput mediaInput = new(memoryStream);
-            Media media = new(libVlc, mediaInput);
-            _player = new(media);
+            _player = new SoundPlayer();
+            _player.Initialize(_sound);
 
             InitializeComponent();
         }
@@ -47,7 +26,7 @@ namespace SerialLoops.Controls
             _playPauseButton = new() { Text = "▶️", Font = new(Eto.Drawing.SystemFont.Default, 30.0f) };
             Slider volumeSlider = new() { Orientation = Orientation.Horizontal, MinValue = 0, MaxValue = 100, Value = 100 };
             _playPauseButton.Click += PlayPauseButton_Click;
-            volumeSlider.ValueChanged += VolumeSlider_ValueChanged;
+            //volumeSlider.ValueChanged += VolumeSlider_ValueChanged;
 
             Content = new TableLayout(new TableRow(_playPauseButton), new TableRow(volumeSlider));
         }
@@ -71,9 +50,9 @@ namespace SerialLoops.Controls
             }
         }
 
-        private void VolumeSlider_ValueChanged(object sender, System.EventArgs e)
-        {
-            _player.Volume = ((Slider)sender).Value;
-        }
+        //private void VolumeSlider_ValueChanged(object sender, System.EventArgs e)
+        //{
+        //    _player.Volume = ((Slider)sender).Value;
+        //}
     }
 }

@@ -1,15 +1,17 @@
 ﻿using Eto.Forms;
-using SerialLoops;
 using System;
 
-namespace TestEto.Gtk
+namespace SerialLoops.Gtk
 {
     internal class Program
     {
         [STAThread]
         public static void Main(string[] args)
         {
-            new Application(Eto.Platforms.Gtk).Run(new MainForm());
+            var platform = new Eto.GtkSharp.Platform();
+            platform.Add<SoundPlayer.ISoundPlayer>(() => new SoundPlayerHandler());
+
+            new Application(platform).Run(new MainForm());
         }
     }
 }

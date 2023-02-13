@@ -1,15 +1,17 @@
 ﻿using Eto.Forms;
-using SerialLoops;
 using System;
 
-namespace TestEto.Mac
+namespace SerialLoops.Mac
 {
     internal class Program
     {
         [STAThread]
         public static void Main(string[] args)
         {
-            new Application(Eto.Platforms.Mac64).Run(new MainForm());
+            var platform = new Eto.Mac.Platform();
+            platform.Add<SoundPlayer.ISoundPlayer>(() => new SoundPlayerHandler());
+
+            new Application(platform).Run(new MainForm());
         }
     }
 }
