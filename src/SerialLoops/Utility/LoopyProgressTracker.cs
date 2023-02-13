@@ -26,7 +26,7 @@ namespace SerialLoops.Utility
 
 
         private int _current;
-        public int Loaded { 
+        public int Finished { 
             get => _current;
             set
             {
