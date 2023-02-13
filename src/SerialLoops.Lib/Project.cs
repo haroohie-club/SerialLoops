@@ -5,6 +5,7 @@ using HaruhiChokuretsuLib.Archive.Graphics;
 using HaruhiChokuretsuLib.Util;
 using NAudio.MediaFoundation;
 using SerialLoops.Lib.Items;
+using SerialLoops.Lib.Util;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -59,15 +60,26 @@ namespace SerialLoops.Lib
             }
         }
 
-        public void LoadArchives(ILogger log)
+        public void LoadArchives(ILogger log, IProgressTracker tracker)
         {
+            tracker.Focus("dat.bin", 3);
             Dat = ArchiveFile<DataFile>.FromFile(Path.Combine(IterativeDirectory, "original", "archives", "dat.bin"), log);
-            Grp = ArchiveFile<GraphicsFile>.FromFile(Path.Combine(IterativeDirectory, "original", "archives", "grp.bin"), log);
-            Evt = ArchiveFile<EventFile>.FromFile(Path.Combine(IterativeDirectory, "original", "archives", "evt.bin"), log);
+            tracker.Loaded++;
 
+            tracker.CurrentlyLoading = "grp.bin";
+            Grp = ArchiveFile<GraphicsFile>.FromFile(Path.Combine(IterativeDirectory, "original", "archives", "grp.bin"), log);
+            tracker.Loaded++;
+
+            tracker.CurrentlyLoading = "evt.bin";
+            Evt = ArchiveFile<EventFile>.FromFile(Path.Combine(IterativeDirectory, "original", "archives", "evt.bin"), log);
+            tracker.Loaded++;
+
+            tracker.Focus("Extras", 1);
             ExtraFile extras = Dat.Files.First(f => f.Name == "EXTRAS").CastTo<ExtraFile>();
+            tracker.Loaded++;
 
             BgTableFile bgTable = Dat.Files.First(f => f.Name == "BGTBLS").CastTo<BgTableFile>();
+            tracker.Focus("Backgrounds", bgTable.BgTableEntries.Count);
             for (int i = 0; i < bgTable.BgTableEntries.Count; i++)
             {
                 BgTableEntry entry = bgTable.BgTableEntries[i];
@@ -82,46 +94,63 @@ namespace SerialLoops.Lib
                     }
                     Items.Add(new BackgroundItem(name, i, entry, Evt, Grp, extras));
                 }
+                tracker.Loaded++;
             }
 
             string[] bgmFiles = Directory.GetFiles(Path.Combine(IterativeDirectory, "original", "bgm")).OrderBy(s => s).ToArray();
+            tracker.Focus("BGM Tracks", bgmFiles.Length);
             for (int i = 0; i < bgmFiles.Length; i++)
             {
                 Items.Add(new BackgroundMusicItem(bgmFiles[i], i, extras, this));
+                tracker.Loaded++;
             }
 
             string[] voiceFiles = Directory.GetFiles(Path.Combine(IterativeDirectory, "original", "vce")).OrderBy(s => s).ToArray();
+            tracker.Focus("Voiced Lines", voiceFiles.Length);
             for (int i = 0; i < voiceFiles.Length; i++)
             {
                 Items.Add(new VoicedLineItem(voiceFiles[i], i + 1, this));
+                tracker.Loaded++;
             }
 
+            tracker.Focus("Character Sprites", 1);
             CharacterDataFile chrdata = Dat.Files.First(d => d.Name == "CHRDATAS").CastTo<CharacterDataFile>();
             Items.AddRange(chrdata.Sprites.Where(s => (int)s.Character > 0).Select(s => new CharacterSpriteItem(s, chrdata, this)));
+            tracker.Loaded++;
 
+            tracker.Focus("Chibis", 1);
             Items.AddRange(Dat.Files.First(d => d.Name == "CHIBIS").CastTo<ChibiFile>()
                 .Chibis.Select(c => new ChibiItem(c, this)));
+            tracker.Loaded++;
 
+            tracker.Focus("Event Files", 1);
             Items.AddRange(Evt.Files
                 .Where(e => !new string[] { "CHESSS", "EVTTBLS", "TOPICS", "SCENARIOS", "TUTORIALS", "VOICEMAPS" }.Contains(e.Name))
                 .Select(e => new ScriptItem(e)));
+            tracker.Loaded++;
 
+            tracker.Focus("Maps", 1);
             QMapFile qmap = Dat.Files.First(f => f.Name == "QMAPS").CastTo<QMapFile>();
             Items.AddRange(Dat.Files
                 .Where(d => qmap.QMaps.Select(q => q.Name.Replace(".", "")).Contains(d.Name))
                 .Select(m => new MapItem(m.CastTo<MapFile>(), qmap.QMaps.FindIndex(q => q.Name.Replace(".", "") == m.Name))));
+            tracker.Loaded++;
 
+            tracker.Focus("Puzzles", 1);
             Items.AddRange(Dat.Files
                 .Where(d => d.Name.StartsWith("SLG"))
                 .Select(d => new PuzzleItem(d.CastTo<PuzzleFile>(), this)));
+            tracker.Loaded++;
 
             Evt.Files.First(f => f.Name == "TOPICS").InitializeTopicFile();
             Items.AddRange(Evt.Files.First(f => f.Name == "TOPICS").TopicStructs.Select(t => new TopicItem(t, this)));
 
             // Scenario item must be created after script and puzzle items are constructed
+            tracker.Focus("Scenario", 1);
             EventFile scenarioFile = Evt.Files.First(f => f.Name == "SCENARIOS");
             scenarioFile.InitializeScenarioFile();
             Items.Add(new ScenarioItem(scenarioFile.Scenario, this));
+            tracker.Loaded++;
         }
 
         public ItemDescription FindItem(string name)
@@ -129,11 +158,13 @@ namespace SerialLoops.Lib
             return Items.FirstOrDefault(i => i.Name == name);
         }
 
-        public static Project OpenProject(string projFile, Config config, ILogger log)
+        public static Project OpenProject(string projFile, Config config, ILogger log, IProgressTracker tracker)
         {
             log.Log($"Loading project from '{projFile}'...");
+            tracker.Focus($"{Path.GetFileNameWithoutExtension(projFile)} Project Data", 1);
             Project project = JsonSerializer.Deserialize<Project>(File.ReadAllText(projFile));
-            project.LoadArchives(log);
+            tracker.Loaded++;
+            project.LoadArchives(log, tracker);
             return project;
         }
     }
