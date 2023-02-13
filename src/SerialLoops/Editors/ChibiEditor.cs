@@ -1,6 +1,7 @@
 ﻿using Eto.Forms;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib.Items;
+using SerialLoops.Lib.Util;
 using SerialLoops.Utility;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace SerialLoops.Editors
         private AnimatedImage _animatedImage;
         private StackLayout _framesStack;
 
-        public ChibiEditor(ChibiItem chibi, ILogger log) : base(chibi, log)
+        public ChibiEditor(ChibiItem chibi, ILogger log, IProgressTracker tracker) : base(chibi, log, tracker)
         {
         }
 

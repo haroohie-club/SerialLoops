@@ -1,6 +1,7 @@
 ﻿using Eto.Forms;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib.Items;
+using SerialLoops.Lib.Util;
 
 namespace SerialLoops.Editors
 {
@@ -8,7 +9,7 @@ namespace SerialLoops.Editors
     {
         private MapItem _map;
 
-        public MapEditor(MapItem map, ILogger log) : base(map, log)
+        public MapEditor(MapItem map, ILogger log, IProgressTracker tracker) : base(map, log, tracker)
         {
         }
 

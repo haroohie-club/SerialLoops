@@ -1,6 +1,7 @@
 ﻿using Eto.Forms;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib.Items;
+using SerialLoops.Lib.Util;
 using SerialLoops.Utility;
 
 namespace SerialLoops.Editors
@@ -9,7 +10,7 @@ namespace SerialLoops.Editors
     {
         private BackgroundItem _bg;
 
-        public BackgroundEditor(BackgroundItem item, ILogger log) : base(item, log)
+        public BackgroundEditor(BackgroundItem item, ILogger log, IProgressTracker tracker) : base(item, log, tracker)
         {
         }
 

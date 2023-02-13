@@ -3,6 +3,7 @@ using HaruhiChokuretsuLib.Audio;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Controls;
 using SerialLoops.Lib.Items;
+using SerialLoops.Lib.Util;
 using System;
 using System.IO;
 
@@ -13,7 +14,7 @@ namespace SerialLoops.Editors
         private VoicedLineItem _vce;
         public SoundPlayerPanel VcePlayer { get; set; }
 
-        public VoicedLineEditor(VoicedLineItem vce, ILogger log) : base(vce, log)
+        public VoicedLineEditor(VoicedLineItem vce, ILogger log, IProgressTracker tracker) : base(vce, log, tracker)
         {
         }
 
@@ -51,7 +52,7 @@ namespace SerialLoops.Editors
             }
 
             AdxWaveProvider waveProvider = new(decoder);
-            VcePlayer = new(waveProvider, _log);
+            VcePlayer = new(waveProvider, _log, _tracker);
 
             return new TableLayout(new TableRow(new StackLayout
             {

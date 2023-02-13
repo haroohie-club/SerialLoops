@@ -5,6 +5,7 @@ using HaruhiChokuretsuLib.Util;
 using SerialLoops.Controls;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
+using SerialLoops.Lib.Util;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace SerialLoops.Editors
     {
         private ScenarioItem _scenario;
 
-        public ScenarioEditor(ScenarioItem item, ILogger log, Project project, EditorTabsPanel tabs) : base(item, log, project, tabs)
+        public ScenarioEditor(ScenarioItem item, ILogger log, IProgressTracker tracker, Project project, EditorTabsPanel tabs) : base(item, log, tracker, project, tabs)
         {
         }
 

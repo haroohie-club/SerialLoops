@@ -2,6 +2,7 @@
 using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib.Items;
+using SerialLoops.Lib.Util;
 using SerialLoops.Utility;
 using System.Linq;
 
@@ -11,7 +12,7 @@ namespace SerialLoops.Editors
     {
         private PuzzleItem _puzzle;
 
-        public PuzzleEditor(PuzzleItem item, ILogger log) : base(item, log)
+        public PuzzleEditor(PuzzleItem item, ILogger log, IProgressTracker tracker) : base(item, log, tracker)
         {
         }
 

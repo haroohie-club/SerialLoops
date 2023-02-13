@@ -2,6 +2,7 @@
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
+using SerialLoops.Lib.Util;
 using SerialLoops.Utility;
 
 namespace SerialLoops.Editors
@@ -11,7 +12,7 @@ namespace SerialLoops.Editors
         private CharacterSpriteItem _sprite;
         private AnimatedImage _animatedImage;
 
-        public CharacterSpriteEditor(CharacterSpriteItem item, Project project, ILogger log) : base(item, log, project)
+        public CharacterSpriteEditor(CharacterSpriteItem item, Project project, ILogger log, IProgressTracker tracker) : base(item, log, tracker, project)
         {
         }
 

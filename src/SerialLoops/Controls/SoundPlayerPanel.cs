@@ -15,16 +15,20 @@ namespace SerialLoops.Controls
         private MediaPlayer _player;
         private Button _playPauseButton;
 
-        public SoundPlayerPanel(IWaveProvider sound, ILogger log)
+        public SoundPlayerPanel(IWaveProvider sound, ILogger log, IProgressTracker tracker)
         {
             _log = log;
             _sound = sound;
 
+            tracker.Focus("Copying Audio Stream", 1);
             MemoryStream memoryStream = new();
             WaveProviderStream waveStream = new(_sound);
             WaveFileWriter writer = new(memoryStream, _sound.WaveFormat);
             waveStream.CopyTo(writer);
             memoryStream.Position = 0;
+            tracker.Loaded++;
+
+            tracker.Focus("Preparing Player", 1);
             LibVLC libVlc;
             try
             {
@@ -38,6 +42,7 @@ namespace SerialLoops.Controls
             StreamMediaInput mediaInput = new(memoryStream);
             Media media = new(libVlc, mediaInput);
             _player = new(media);
+            tracker.Loaded++;
 
             InitializeComponent();
         }

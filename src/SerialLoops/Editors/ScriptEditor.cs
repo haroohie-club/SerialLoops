@@ -8,6 +8,7 @@ using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
 using SerialLoops.Lib.Script.Parameters;
+using SerialLoops.Lib.Util;
 using SerialLoops.Utility;
 using SkiaSharp;
 using System;
@@ -27,7 +28,7 @@ namespace SerialLoops.Editors
         private StackLayout _editorControls = new();
         private ScriptCommandListPanel _commandsPanel;
 
-        public ScriptEditor(ScriptItem item, Project project, ILogger log, EditorTabsPanel tabs) : base(item, log, project, tabs)
+        public ScriptEditor(ScriptItem item, Project project, ILogger log, IProgressTracker tracker, EditorTabsPanel tabs) : base(item, log, tracker, project, tabs)
         {
         }
 

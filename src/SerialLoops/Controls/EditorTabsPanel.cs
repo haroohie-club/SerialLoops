@@ -1,8 +1,11 @@
 ﻿using Eto.Forms;
+using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Editors;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
+using SerialLoops.Lib.Util;
+using SerialLoops.Utility;
 using System;
 using System.Linq;
 
@@ -45,36 +48,48 @@ namespace SerialLoops.Controls
             }
 
             // Open a new editor for the item -- This is where the item can be loaded from the project files
-            DocumentPage newPage = CreateTab(item, _project, log);
-            newPage.ContextMenu = new TabContextMenu(this, newPage, log);
-
-            Tabs.Pages.Add(newPage);
-            Tabs.SelectedPage = newPage;
-            Tabs.PageClosed += Tabs_PageClosed;
+            DocumentPage newPage = null;
+            IProgressTracker tracker = new LoopyProgressTracker();
+            tracker.Focus($"{item.Name}", 1);
+            ProgressDialog progressDialog = new(() =>
+            {
+                Application.Instance.Invoke(() =>
+                {
+                    newPage = CreateTab(item, _project, log, tracker);
+                    tracker.Loaded++;
+                    newPage.ContextMenu = new TabContextMenu(this, newPage, log);
+                });
+            }, () =>
+            {
+                Tabs.Pages.Add(newPage);
+                Tabs.SelectedPage = newPage;
+                Tabs.PageClosed += Tabs_PageClosed;
+            }, (LoopyProgressTracker)tracker, $"Loading {item.Name}");
         }
 
-        internal DocumentPage CreateTab(ItemDescription item, Project project, ILogger log)
+        internal DocumentPage CreateTab(ItemDescription item, Project project, ILogger log, IProgressTracker tracker)
         {
+            tracker.Focus(item.Type.ToString(), 1);
             switch (item.Type)
             {
                 case ItemDescription.ItemType.Background:
-                    return new BackgroundEditor((BackgroundItem)project.Items.First(i => i.Name == item.Name), log);
+                    return new BackgroundEditor((BackgroundItem)project.Items.First(i => i.Name == item.Name), log, tracker);
                 case ItemDescription.ItemType.BGM:
-                    return new BackgroundMusicEditor((BackgroundMusicItem)project.Items.First(i => i.Name == item.Name), log);
+                    return new BackgroundMusicEditor((BackgroundMusicItem)project.Items.First(i => i.Name == item.Name), log, tracker);
                 case ItemDescription.ItemType.Character_Sprite:
-                    return new CharacterSpriteEditor((CharacterSpriteItem)project.Items.First(i => i.Name == item.Name), project, log);
+                    return new CharacterSpriteEditor((CharacterSpriteItem)project.Items.First(i => i.Name == item.Name), project, log, tracker);
                 case ItemDescription.ItemType.Chibi:
-                    return new ChibiEditor((ChibiItem)project.Items.First(i => i.Name == item.Name), log);
+                    return new ChibiEditor((ChibiItem)project.Items.First(i => i.Name == item.Name), log, tracker);
                 case ItemDescription.ItemType.Map:
-                    return new MapEditor((MapItem)project.Items.First(i => i.Name == item.Name), log);
+                    return new MapEditor((MapItem)project.Items.First(i => i.Name == item.Name), log, tracker);
                 case ItemDescription.ItemType.Puzzle:
-                    return new PuzzleEditor((PuzzleItem)project.Items.First(i => i.Name == item.Name), log);
+                    return new PuzzleEditor((PuzzleItem)project.Items.First(i => i.Name == item.Name), log, tracker);
                 case ItemDescription.ItemType.Scenario:
-                    return new ScenarioEditor((ScenarioItem)project.Items.First(i => i.Name == item.Name), log, project, this);
+                    return new ScenarioEditor((ScenarioItem)project.Items.First(i => i.Name == item.Name), log, tracker, project, this);
                 case ItemDescription.ItemType.Script:
-                    return new ScriptEditor((ScriptItem)project.Items.First(i => i.Name == item.Name), project, log, this);
+                    return new ScriptEditor((ScriptItem)project.Items.First(i => i.Name == item.Name), project, log, tracker, this);
                 case ItemDescription.ItemType.Voice:
-                    return new VoicedLineEditor((VoicedLineItem)project.Items.First(i => i.Name == item.Name), log);
+                    return new VoicedLineEditor((VoicedLineItem)project.Items.First(i => i.Name == item.Name), log, tracker);
                 default:
                     throw new ArgumentException("Invalid item type");
             }
