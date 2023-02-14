@@ -8,16 +8,9 @@ The following prerequisites need to be installed in order to use Serial Loops:
     - Using the Windows graphical installer, you can simply select the devkitARM (Nintendo DS) workloads
     - On macOS and Linux, run `sudo skp-pacman -S nds-dev` from the terminal after installing the devkitPro pacman distribution.
 
-Additionally, on Linux, the following are prerequisites to using the program:
-* libvlc
-* VLC
-* libx11
-
-On Ubuntu/Debian (which are the distros we test on), these can be installed in three commands:
+Additionally, on Linux, you will need to install OpenAL. On Ubuntu/Debian (which are the distros we test on), it can be installed in a single command:
 ```
-sudo apt install libvlc-dev
-sudo apt install vlc
-sudo apt install libx11
+sudo apt install libopenal-dev
 ```
 
 ## Bugs
