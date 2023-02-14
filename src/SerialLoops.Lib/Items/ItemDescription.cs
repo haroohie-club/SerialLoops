@@ -9,7 +9,7 @@
         public ItemType Type { get; private set; }
         public bool UnsavedChanges { get; set; } = false;
 
-        public ItemDescription(string name, ItemType type, string displayName = "")
+        public ItemDescription(string name, ItemType type, string displayName)
         {
             Name = name;
             Type = type;

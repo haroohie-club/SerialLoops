@@ -12,9 +12,8 @@ namespace SerialLoops.Lib.Items
         public AdxEncoding AdxType { get; set; }
         public (string ScriptName, ScriptCommandInvocation command)[] ScriptUses { get; set; }
 
-        public VoicedLineItem(string voiceFile, int index, Project project) : base(voiceFile, ItemType.Voice)
+        public VoicedLineItem(string voiceFile, int index, Project project) : base(Path.GetFileNameWithoutExtension(voiceFile), ItemType.Voice)
         {
-            Name = Path.GetFileNameWithoutExtension(voiceFile);
             VoiceFile = voiceFile;
             Index = index;
             PopulateScriptUses(project);
