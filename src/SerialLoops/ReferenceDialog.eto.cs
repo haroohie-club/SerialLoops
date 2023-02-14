@@ -28,7 +28,7 @@ namespace SerialLoops
 
         private void InitializeComponent()
         {
-            Title = Mode == ReferenceMode.REFERENCES_TO ? $"References to {Item.Name}" : $"Items referenced by {Item.Name}";
+            Title = Mode == ReferenceMode.REFERENCES_TO ? $"References to {Item.DisplayName}" : $"Items referenced by {Item.DisplayName}";
             MinimumSize = new Size(400, 275);
             Padding = 10;
 
