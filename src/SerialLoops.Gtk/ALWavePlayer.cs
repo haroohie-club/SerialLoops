@@ -1,8 +1,6 @@
 ﻿using NAudio.Wave;
 using OpenTK.Audio.OpenAL;
-using OpenTK.Mathematics;
 using System;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -10,6 +8,14 @@ namespace SerialLoops.Gtk
 {
     public class ALWavePlayer : IWavePlayer, IDisposable
     {
+        private CancellationTokenSource _cancellationToken;
+        private IWaveProvider _waveProvider;
+        private int _audioBufferSize = 5;
+        private int _bufferSize = 4096;
+        private int[] _audioBuffers;
+        private int sourceID;
+        private byte[] _buffer;
+
         public const float SpeedOfSound = 343.3f;
         public const float DoplerFactor = 1f;
 
@@ -103,7 +109,10 @@ namespace SerialLoops.Gtk
 
         public void Pause()
         {
-            if (State == ALSourceState.Stopped) return;
+            if (State == ALSourceState.Stopped)
+            {
+                return;
+            }
             AL.SourcePause(sourceID);
             _cancellationToken.Cancel();
             PlaybackState = PlaybackState.Paused;
@@ -121,7 +130,10 @@ namespace SerialLoops.Gtk
 
         public void Stop()
         {
-            if (State == ALSourceState.Stopped) return;
+            if (State == ALSourceState.Stopped)
+            {
+                return;
+            }
 
             AL.SourceStop(sourceID);
             _cancellationToken.Cancel();
@@ -163,7 +175,7 @@ namespace SerialLoops.Gtk
 
         protected void WriteToAudioBuffer(int audioBuffer)
         {
-            _bufferBytes = _waveProvider.Read(_buffer, 0, _buffer.Length);
+            _ = _waveProvider.Read(_buffer, 0, _buffer.Length);
             AL.BufferData(audioBuffer, ParseFormat(_waveProvider.WaveFormat), _buffer, _waveProvider.WaveFormat.SampleRate);
         }
 
@@ -201,14 +213,5 @@ namespace SerialLoops.Gtk
             }
             throw new FormatException("Cannot translate WaveFormat.");
         }
-
-        private CancellationTokenSource _cancellationToken;
-        private IWaveProvider _waveProvider;
-        private int _audioBufferSize = 5;
-        private int _bufferSize = 10240;
-        private int[] _audioBuffers;
-        private int sourceID;
-        private int _bufferBytes;
-        private byte[] _buffer;
     }
 }
