@@ -52,17 +52,34 @@ namespace SerialLoops.Gtk
 
     public class ALWavePlayer : IWavePlayer, IDisposable
     {
-        private float volume;
+        private float _volume;
         public float Volume
         {
-            get => volume;
+            get => _volume;
             set
             {
-                volume = value;
+                _volume = value;
             }
         }
 
-        public PlaybackState PlaybackState { get; }
+        public PlaybackState PlaybackState
+        {
+            get
+            {
+                if (Stopped)
+                {
+                    return PlaybackState.Stopped;
+                }
+                else if (Paused)
+                {
+                    return PlaybackState.Paused;
+                }
+                else
+                {
+                    return PlaybackState.Playing;
+                }
+            }
+        }
 
         public event EventHandler<StoppedEventArgs> PlaybackStopped;
 
@@ -71,16 +88,16 @@ namespace SerialLoops.Gtk
 
         private IWaveProvider WaveProvider;
 
-        private int Source;
-        private int NextBuffer;
-        private int OtherBuffer;
+        private int _source;
+        private int _nextBuffer;
+        private int _otherBuffer;
 
-        private byte[] Buffer;
-        private Accumulator Accumulator;
+        private byte[] _buffer;
+        private Accumulator _accumulator;
 
-        private System.Threading.ManualResetEventSlim Signaller;
+        private System.Threading.ManualResetEventSlim _signaller;
 
-        private System.Threading.CancellationTokenSource PlayerCanceller;
+        private System.Threading.CancellationTokenSource _playerCanceller;
         private Task Player;
         public bool Paused { get; private set; } = false;
         public bool Stopped { get; private set; } = false;
@@ -97,14 +114,14 @@ namespace SerialLoops.Gtk
         {
             WaveProvider = waveProvider;
 
-            AL.GenSources(1, ref Source);
-            AL.GenBuffers(1, ref NextBuffer);
-            AL.GenBuffers(1, ref OtherBuffer);
+            AL.GenSources(1, ref _source);
+            AL.GenBuffers(1, ref _nextBuffer);
+            AL.GenBuffers(1, ref _otherBuffer);
 
-            Buffer = new byte[BufferSize];
-            Accumulator = new Accumulator(waveProvider, Buffer);
+            _buffer = new byte[BufferSize];
+            _accumulator = new Accumulator(waveProvider, _buffer);
 
-            Signaller = new System.Threading.ManualResetEventSlim(false);
+            _signaller = new System.Threading.ManualResetEventSlim(false);
         }
 
         public void Pause()
@@ -113,9 +130,9 @@ namespace SerialLoops.Gtk
                 throw new InvalidOperationException("Stopped");
 
             Paused = true;
-            PlayerCanceller?.Cancel();
-            PlayerCanceller = null;
-            AL.SourcePause(Source);
+            _playerCanceller?.Cancel();
+            _playerCanceller = null;
+            AL.SourcePause(_source);
         }
 
         public void Play()
@@ -124,10 +141,10 @@ namespace SerialLoops.Gtk
                 throw new InvalidOperationException("Stopped");
 
             Paused = false;
-            if (PlayerCanceller == null)
+            if (_playerCanceller == null)
             {
-                PlayerCanceller = new System.Threading.CancellationTokenSource();
-                Player = PlayLoop(PlayerCanceller.Token).ContinueWith(PlayerStopped);
+                _playerCanceller = new System.Threading.CancellationTokenSource();
+                Player = PlayLoop(_playerCanceller.Token).ContinueWith(PlayerStopped);
             }
         }
 
@@ -145,11 +162,11 @@ namespace SerialLoops.Gtk
                 throw new InvalidOperationException("Already stopped");
 
             Paused = false;
-            if (PlayerCanceller != null)
+            if (_playerCanceller != null)
             {
-                PlayerCanceller?.Cancel();
-                PlayerCanceller = null;
-                AL.SourceStop(Source);
+                _playerCanceller?.Cancel();
+                _playerCanceller = null;
+                AL.SourceStop(_source);
             }
             else
             {
@@ -159,17 +176,17 @@ namespace SerialLoops.Gtk
 
         private async Task PlayLoop(System.Threading.CancellationToken ct)
         {
-            AL.SourcePlay(Source);
+            AL.SourcePlay(_source);
             await Task.Yield();
 
         again:
-            AL.GetSource(Source, ALGetSourcei.BuffersQueued, out int queued);
-            AL.GetSource(Source, ALGetSourcei.BuffersProcessed, out int processed);
-            AL.GetSource(Source, ALGetSourcei.SourceState, out int state);
+            AL.GetSource(_source, ALGetSourcei.BuffersQueued, out int queued);
+            AL.GetSource(_source, ALGetSourcei.BuffersProcessed, out int processed);
+            AL.GetSource(_source, ALGetSourcei.SourceState, out int state);
 
             if ((ALSourceState)state != ALSourceState.Playing)
             {
-                AL.SourcePlay(Source);
+                AL.SourcePlay(_source);
             }
 
             if (processed == 0 && queued == 2)
@@ -180,21 +197,21 @@ namespace SerialLoops.Gtk
 
             if (processed > 0)
             {
-                AL.SourceUnqueueBuffers(Source, processed);
+                AL.SourceUnqueueBuffers(_source, processed);
             }
 
-            var notFinished = await Accumulator.Accumulate(ct);
-            Accumulator.Reset();
+            var notFinished = await _accumulator.Accumulate(ct);
+            _accumulator.Reset();
 
             if (!notFinished)
             {
                 return;
             }
 
-            AL.BufferData(NextBuffer, TranslateFormat(WaveProvider.WaveFormat), Buffer, WaveProvider.WaveFormat.SampleRate);
-            AL.SourceQueueBuffer(Source, NextBuffer);
+            AL.BufferData(_nextBuffer, TranslateFormat(WaveProvider.WaveFormat), _buffer, WaveProvider.WaveFormat.SampleRate);
+            AL.SourceQueueBuffer(_source, _nextBuffer);
 
-            (NextBuffer, OtherBuffer) = (OtherBuffer, NextBuffer);
+            (_nextBuffer, _otherBuffer) = (_otherBuffer, _nextBuffer);
 
             goto again;
         }
@@ -212,9 +229,9 @@ namespace SerialLoops.Gtk
 
         protected void Dispose(bool disposing)
         {
-            AL.DeleteSource(Source);
-            AL.DeleteBuffer(NextBuffer);
-            AL.DeleteBuffer(OtherBuffer);
+            AL.DeleteSource(_source);
+            AL.DeleteBuffer(_nextBuffer);
+            AL.DeleteBuffer(_otherBuffer);
         }
 
         public static ALFormat TranslateFormat(WaveFormat format)
