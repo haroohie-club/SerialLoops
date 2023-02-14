@@ -28,7 +28,7 @@ namespace SerialLoops
 
         private void InitializeComponent()
         {
-            Title = Mode == ReferenceMode.REFERENCES_TO ? $"References to {Item.Name}" : $"Items referenced by {Item.Name}";
+            Title = Mode == ReferenceMode.REFERENCES_TO ? $"References to {Item.DisplayName}" : $"Items referenced by {Item.DisplayName}";
             MinimumSize = new Size(400, 275);
             Padding = 10;
 
@@ -78,18 +78,28 @@ namespace SerialLoops
                     {
                         references.Add(scenario);
                     }
+                    references.AddRange(Project.Items.Where(i => i.Type == ItemDescription.ItemType.Topic && ((TopicItem)i).Topic.EventIndex == script.Event.Index));
                     return references;
+                case ItemDescription.ItemType.Topic:
+                    TopicItem topic = (TopicItem)Item;
+                    return Project.Items.Where(i => topic.ScriptUses.Select(s => s.ScriptName).Contains(i.Name)).ToList();
                 case ItemDescription.ItemType.Voice:
                     VoicedLineItem voicedLine = (VoicedLineItem)Item;
                     return Project.Items.Where(i => voicedLine.ScriptUses.Select(s => s.ScriptName).Contains(i.Name)).ToList();
                 default:
-                    return new List<ItemDescription>();
+                    return references;
             }
         }
 
         private List<ItemDescription> GetReferencedBy()
         {
-            return new List<ItemDescription>();
+            List<ItemDescription> references = new();
+
+            switch (Item.Type)
+            {
+                default:
+                    return references;
+            }
         }
 
         public enum ReferenceMode

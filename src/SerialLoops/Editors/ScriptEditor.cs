@@ -445,9 +445,40 @@ namespace SerialLoops.Editors
                         break;
 
                     case ScriptParameter.ParameterType.TOPIC:
-                        ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
-                            ControlGenerator.GetControlWithLabel(parameter.Name,
-                            new TextBox { Text = ((TopicScriptParameter)parameter).TopicId.ToString() }));
+                        string topicName = _project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Topic &&
+                            ((TopicItem)i).Topic.Id == ((TopicScriptParameter)parameter).TopicId)?.DisplayName;
+                        if (string.IsNullOrEmpty(topicName))
+                        {
+                            // If the topic has been deleted, we will just display the index in a textbox
+                            ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
+                                ControlGenerator.GetControlWithLabel(parameter.Name,
+                                new TextBox { Text = ((TopicScriptParameter)parameter).TopicId.ToString() }));
+                        }
+                        else
+                        {
+                            StackLayout topicLink = ControlGenerator.GetFileLink(_project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Topic &&
+                                ((TopicItem)i).Topic.Id == ((TopicScriptParameter)parameter).TopicId), _tabs, _log);
+
+                            CommandDropDown topicDropDown = new() { Command = command, ParameterIndex = i, Link = (ClearableLinkButton)topicLink.Items[1].Control };
+                            topicDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Topic)
+                                .Select(t => new ListItem { Key = t.DisplayName, Text = t.DisplayName }));
+                            topicDropDown.SelectedKey = topicName;
+                            topicDropDown.SelectedIndexChanged += TopicDropDown_SelectedIndexChanged;
+
+                            StackLayout topicLinkLayout = new()
+                            {
+                                Orientation = Orientation.Horizontal,
+                                Items =
+                                {
+                                    topicDropDown,
+                                    topicLink,
+                                },
+                            };
+
+                            ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
+                                ControlGenerator.GetControlWithLabel(parameter.Name,
+                                topicLinkLayout));
+                        }
                         break;
 
                     case ScriptParameter.ParameterType.TRANSITION:
@@ -780,6 +811,22 @@ namespace SerialLoops.Editors
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
                 .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
                 (short)((VoicedLineItem)_project.Items.First(i => i.Name == dropDown.SelectedKey)).Index;
+
+            dropDown.Link.Text = dropDown.SelectedKey;
+            dropDown.Link.RemoveAllClickEvents();
+            dropDown.Link.ClickUnique += (s, e) => { _tabs.OpenTab(_project.Items.FirstOrDefault(i => i.Name == dropDown.SelectedKey), _log); };
+
+            UpdateTabTitle(false);
+        }
+        private void TopicDropDown_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            CommandDropDown dropDown = (CommandDropDown)sender;
+            _log.Log($"Attempting to modify parameter {dropDown.ParameterIndex} to topic {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
+            ((TopicScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).TopicId =
+                ((TopicItem)_project.Items.FirstOrDefault(i => i.Name == dropDown.SelectedKey)).Topic.Id;
+            _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
+                .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
+                ((TopicItem)_project.Items.First(i => i.Name == dropDown.SelectedKey)).Topic.Id;
 
             dropDown.Link.Text = dropDown.SelectedKey;
             dropDown.Link.RemoveAllClickEvents();

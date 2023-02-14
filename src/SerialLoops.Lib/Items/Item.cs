@@ -3,7 +3,7 @@
     public abstract class Item : ItemDescription
     {
 
-        public Item(string name, ItemType type) : base(name, type)
+        public Item(string name, ItemType type, string displayName = "") : base(name, type, displayName)
         {
         }
 
