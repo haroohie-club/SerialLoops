@@ -83,6 +83,9 @@ namespace SerialLoops
                 case ItemDescription.ItemType.Topic:
                     TopicItem topic = (TopicItem)Item;
                     return Project.Items.Where(i => topic.ScriptUses.Select(s => s.ScriptName).Contains(i.Name)).ToList();
+                case ItemDescription.ItemType.Voice:
+                    VoicedLineItem voicedLine = (VoicedLineItem)Item;
+                    return Project.Items.Where(i => voicedLine.ScriptUses.Select(s => s.ScriptName).Contains(i.Name)).ToList();
                 default:
                     return references;
             }

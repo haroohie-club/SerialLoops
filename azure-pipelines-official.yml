@@ -10,10 +10,13 @@ jobs:
     matrix:
       Linux:
         imageName: 'ubuntu-latest'
+        platformName: 'Gtk'
       macOS:
         imageName: 'macOS-latest'
+        platformName: 'Mac'
       Windows:
         imageName: 'windows-latest'
+        platformName: 'Wpf'
   displayName: Build & Publish
   pool:
     vmImage: $(imageName)
@@ -24,7 +27,7 @@ jobs:
   - task: DotNetCoreCLI@2
     inputs:
       command: 'publish'
-      projects: $(Build.SourcesDirectory)/src/SerialLoops/SerialLoops.csproj
+      projects: $(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/SerialLoops.$(platformName).csproj
       arguments: '-c Release -o $(Build.ArtifactStagingDirectory)'
       publishWebProjects: false
     displayName: Build & Publish Serial Loops
