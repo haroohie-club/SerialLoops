@@ -507,7 +507,8 @@ namespace SerialLoops.Editors
             SKCanvas canvas = new(previewBitmap);
             canvas.DrawColor(SKColors.Black);
 
-            List<ScriptItemCommand> commands = ((ScriptCommandSectionEntry)_commandsPanel.Viewer.SelectedItem).Command.WalkCommandGraph(_commands, _script.Graph);
+            ScriptItemCommand currentCommand = ((ScriptCommandSectionEntry)_commandsPanel.Viewer.SelectedItem).Command;
+            List<ScriptItemCommand> commands = currentCommand.WalkCommandGraph(_commands, _script.Graph);
 
             // Draw top screen "kinetic" background
             for (int i = commands.Count - 1; i >= 0; i--)
@@ -591,22 +592,43 @@ namespace SerialLoops.Editors
                 }
             }
 
-            int currentX, y;
+            int chibiStartX, chibiY;
             if (commands.Any(c => c.Verb == EventFile.CommandVerb.OP_MODE))
             {
-                currentX = 100;
-                y = 50;
+                chibiStartX = 100;
+                chibiY = 50;
             }
             else
             {
-                currentX = 24;
-                y = 100;
+                chibiStartX = 24;
+                chibiY = 100;
             }
+            int chibiCurrentX = chibiStartX;
+            int chibiWidth = 0;
             foreach (ChibiItem chibi in chibis)
             {
                 SKBitmap chibiFrame = chibi.ChibiAnimations.First().Value.ElementAt(0).Frame;
-                canvas.DrawBitmap(chibiFrame, new SKPoint(currentX, y));
-                currentX += chibiFrame.Width - 2;
+                canvas.DrawBitmap(chibiFrame, new SKPoint(chibiCurrentX, chibiY));
+                chibiWidth = chibiFrame.Width - 2;
+                chibiCurrentX += chibiWidth;
+            }
+
+            // Draw top screen chibi emotes
+            if (currentCommand.Verb == EventFile.CommandVerb.CHIBI_EMOTE)
+            {
+                ChibiItem chibi = ((ChibiScriptParameter)currentCommand.Parameters[0]).Chibi;
+                if (chibis.Contains(chibi))
+                {
+                    int chibiIndex = chibis.IndexOf(chibi);
+                    SKBitmap emotes = _project.Grp.Files.First(f => f.Name == "SYS_ADV_T08DNX").GetImage(width: 32, transparentIndex: 0);
+                    int internalYOffset = ((int)((ChibiEmoteScriptParameter)currentCommand.Parameters[1]).Emote - 1) * 32;
+                    int externalXOffset = chibiStartX + chibiWidth * chibiIndex;
+                    canvas.DrawBitmap(emotes, new SKRect(0, internalYOffset, 32, internalYOffset + 32), new SKRect(externalXOffset + 16, chibiY - 32, externalXOffset + 48, chibiY));
+                }
+                else
+                {
+                    _log.LogWarning($"Chibi {chibi.Name} not currently on screen; cannot display emote.");
+                }
             }
 
             // Draw character sprites
