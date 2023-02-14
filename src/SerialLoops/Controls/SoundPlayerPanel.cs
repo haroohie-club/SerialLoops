@@ -26,7 +26,7 @@ namespace SerialLoops.Controls
             _playPauseButton = new() { Text = "▶️", Font = new(Eto.Drawing.SystemFont.Default, 30.0f) };
             _playPauseButton.Click += PlayPauseButton_Click;
 
-            Content = new TableLayout(new TableRow(_playPauseButton));
+            Content = new TableLayout(new TableRow(_playPauseButton), new TableRow());
         }
 
         public void Stop()
