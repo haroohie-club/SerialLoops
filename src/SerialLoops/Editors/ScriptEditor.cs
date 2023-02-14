@@ -13,6 +13,7 @@ using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using static SerialLoops.Lib.Script.ScriptItemCommand;
 
 namespace SerialLoops.Editors
@@ -612,9 +613,40 @@ namespace SerialLoops.Editors
             // Draw character sprites
             Dictionary<Speaker, PositionedSprite> sprites = new();
 
-            ScriptItemCommand previousSpriteCommand = null;
-            foreach (ScriptItemCommand command in commands.Where(c => c.Verb == EventFile.CommandVerb.DIALOGUE || c.Verb == EventFile.CommandVerb.LOAD_ISOMAP))
+            ScriptItemCommand previousCommand = null;
+            foreach (ScriptItemCommand command in commands)
             {
+                if (previousCommand?.Verb == EventFile.CommandVerb.DIALOGUE)
+                {
+                    SpriteExitScriptParameter spriteExitMoveParam = (SpriteExitScriptParameter)previousCommand?.Parameters[3]; // exits/moves happen _after_ dialogue is advanced, so we check these at this point
+                    if ((spriteExitMoveParam.ExitTransition) != SpriteExitScriptParameter.SpriteExitTransition.NO_EXIT)
+                    {
+                        Speaker prevSpeaker = ((DialogueScriptParameter)previousCommand.Parameters[0]).Line.Speaker;
+                        SpriteScriptParameter previousSpriteParam = (SpriteScriptParameter)previousCommand.Parameters[1];
+                        short layer = ((ShortScriptParameter)previousCommand.Parameters[9]).Value;
+                        switch (spriteExitMoveParam.ExitTransition)
+                        {
+                            case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_LEFT_TO_LEFT_FADE_OUT:
+                            case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_LEFT_TO_RIGHT_FADE_OUT:
+                            case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_FROM_CENTER_TO_LEFT_FADE_OUT:
+                            case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_FROM_CENTER_TO_RIGHT_FADE_OUT:
+                            case SpriteExitScriptParameter.SpriteExitTransition.FADE_OUT_CENTER:
+                            case SpriteExitScriptParameter.SpriteExitTransition.FADE_OUT_LEFT:
+                                sprites.Remove(prevSpeaker);
+                                break;
+
+                            case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_CENTER_TO_LEFT_AND_STAY:
+                            case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_RIGHT_TO_LEFT_AND_STAY:
+                                sprites[prevSpeaker] = new() { Sprite = previousSpriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.LEFT, Layer = layer } };
+                                break;
+
+                            case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_CENTER_TO_RIGHT_AND_STAY:
+                            case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_LEFT_TO_RIGHT_AND_STAY:
+                                sprites[prevSpeaker] = new() { Sprite = previousSpriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.RIGHT, Layer = layer } };
+                                break;
+                        }
+                    }
+                }
                 if (command.Verb == EventFile.CommandVerb.DIALOGUE)
                 {
                     SpriteScriptParameter spriteParam = (SpriteScriptParameter)command.Parameters[1];
@@ -622,39 +654,11 @@ namespace SerialLoops.Editors
                     {
                         Speaker speaker = ((DialogueScriptParameter)command.Parameters[0]).Line.Speaker;
                         SpriteEntranceScriptParameter spriteEntranceParam = (SpriteEntranceScriptParameter)command.Parameters[2];
-                        SpriteExitScriptParameter spriteExitMoveParam = (SpriteExitScriptParameter)previousSpriteCommand?.Parameters[3]; // exits/moves happen _after_ dialogue is advanced, so we check these at this point
                         short layer = ((ShortScriptParameter)command.Parameters[9]).Value;
 
                         if (!sprites.ContainsKey(speaker))
                         {
                             sprites.Add(speaker, new());
-                        }
-
-                        if ((spriteExitMoveParam?.ExitTransition ?? SpriteExitScriptParameter.SpriteExitTransition.NO_EXIT) != SpriteExitScriptParameter.SpriteExitTransition.NO_EXIT)
-                        {
-                            Speaker prevSpeaker = ((DialogueScriptParameter)previousSpriteCommand.Parameters[0]).Line.Speaker;
-                            SpriteScriptParameter previousSpriteParam = (SpriteScriptParameter)previousSpriteCommand.Parameters[1];
-                            switch (spriteExitMoveParam.ExitTransition)
-                            {
-                                case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_LEFT_TO_LEFT_FADE_OUT:
-                                case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_LEFT_TO_RIGHT_FADE_OUT:
-                                case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_FROM_CENTER_TO_LEFT_FADE_OUT:
-                                case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_FROM_CENTER_TO_RIGHT_FADE_OUT:
-                                case SpriteExitScriptParameter.SpriteExitTransition.FADE_OUT_CENTER:
-                                case SpriteExitScriptParameter.SpriteExitTransition.FADE_OUT_LEFT:
-                                    sprites.Remove(prevSpeaker);
-                                    break;
-
-                                case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_CENTER_TO_LEFT_AND_STAY:
-                                case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_RIGHT_TO_LEFT_AND_STAY:
-                                    sprites[prevSpeaker] = new() { Sprite = previousSpriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.LEFT, Layer = layer } };
-                                    break;
-
-                                case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_CENTER_TO_RIGHT_AND_STAY:
-                                case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_LEFT_TO_RIGHT_AND_STAY:
-                                    sprites[prevSpeaker] = new() { Sprite = previousSpriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.RIGHT, Layer = layer } };
-                                    break;
-                            }
                         }
                         if (spriteEntranceParam.EntranceTransition != SpriteEntranceScriptParameter.SpriteEntranceTransition.NO_TRANSITION)
                         {
@@ -683,21 +687,24 @@ namespace SerialLoops.Editors
                         }
                         else
                         {
-                            SpritePositioning.SpritePosition position = sprites[speaker].Positioning.Position;
+                            if (sprites[speaker].Positioning is null)
+                            {
+                                _log.LogWarning($"Sprite {sprites[speaker]} has null positioning data!");
+                            }
+                            SpritePositioning.SpritePosition position = sprites[speaker].Positioning?.Position ?? SpritePositioning.SpritePosition.CENTER;
 
                             sprites[speaker] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = position, Layer = layer } };
                         }
-
-                        previousSpriteCommand = command;
                     }
                 }
-                else
+                else if (command.Verb == EventFile.CommandVerb.INVEST_START)
                 {
                     sprites.Clear();
                 }
+                previousCommand = command;
             }
 
-            foreach (PositionedSprite sprite in sprites.Values.OrderBy(p => p.Positioning.Layer))
+            foreach (PositionedSprite sprite in sprites.Values.OrderByDescending(p => p.Positioning.Layer))
             {
                 SKBitmap spriteBitmap = sprite.Sprite.GetClosedMouthAnimation(_project)[0].frame;
                 canvas.DrawBitmap(spriteBitmap, sprite.Positioning.GetSpritePosition(spriteBitmap));
