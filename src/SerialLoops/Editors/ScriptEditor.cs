@@ -612,6 +612,7 @@ namespace SerialLoops.Editors
             // Draw character sprites
             Dictionary<Speaker, PositionedSprite> sprites = new();
 
+            ScriptItemCommand previousSpriteCommand = null;
             foreach (ScriptItemCommand command in commands.Where(c => c.Verb == EventFile.CommandVerb.DIALOGUE || c.Verb == EventFile.CommandVerb.LOAD_ISOMAP))
             {
                 if (command.Verb == EventFile.CommandVerb.DIALOGUE)
@@ -621,7 +622,7 @@ namespace SerialLoops.Editors
                     {
                         Speaker speaker = ((DialogueScriptParameter)command.Parameters[0]).Line.Speaker;
                         SpriteEntranceScriptParameter spriteEntranceParam = (SpriteEntranceScriptParameter)command.Parameters[2];
-                        SpriteExitScriptParameter spriteExitMoveParam = (SpriteExitScriptParameter)command.Parameters[3];
+                        SpriteExitScriptParameter spriteExitMoveParam = (SpriteExitScriptParameter)previousSpriteCommand?.Parameters[3]; // exits/moves happen _after_ dialogue is advanced, so we check these at this point
                         short layer = ((ShortScriptParameter)command.Parameters[9]).Value;
 
                         if (!sprites.ContainsKey(speaker))
@@ -629,8 +630,10 @@ namespace SerialLoops.Editors
                             sprites.Add(speaker, new());
                         }
 
-                        if (spriteExitMoveParam.ExitTransition != SpriteExitScriptParameter.SpriteExitTransition.NO_EXIT)
+                        if ((spriteExitMoveParam?.ExitTransition ?? SpriteExitScriptParameter.SpriteExitTransition.NO_EXIT) != SpriteExitScriptParameter.SpriteExitTransition.NO_EXIT)
                         {
+                            Speaker prevSpeaker = ((DialogueScriptParameter)previousSpriteCommand.Parameters[0]).Line.Speaker;
+                            SpriteScriptParameter previousSpriteParam = (SpriteScriptParameter)previousSpriteCommand.Parameters[1];
                             switch (spriteExitMoveParam.ExitTransition)
                             {
                                 case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_LEFT_TO_LEFT_FADE_OUT:
@@ -639,21 +642,21 @@ namespace SerialLoops.Editors
                                 case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_FROM_CENTER_TO_RIGHT_FADE_OUT:
                                 case SpriteExitScriptParameter.SpriteExitTransition.FADE_OUT_CENTER:
                                 case SpriteExitScriptParameter.SpriteExitTransition.FADE_OUT_LEFT:
-                                    sprites.Remove(speaker);
+                                    sprites.Remove(prevSpeaker);
                                     break;
 
                                 case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_CENTER_TO_LEFT_AND_STAY:
                                 case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_RIGHT_TO_LEFT_AND_STAY:
-                                    sprites[speaker] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.LEFT, Layer = layer } };
+                                    sprites[prevSpeaker] = new() { Sprite = previousSpriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.LEFT, Layer = layer } };
                                     break;
 
                                 case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_CENTER_TO_RIGHT_AND_STAY:
                                 case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_LEFT_TO_RIGHT_AND_STAY:
-                                    sprites[speaker] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.RIGHT, Layer = layer } };
+                                    sprites[prevSpeaker] = new() { Sprite = previousSpriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.RIGHT, Layer = layer } };
                                     break;
                             }
                         }
-                        else if (spriteEntranceParam.EntranceTransition != SpriteEntranceScriptParameter.SpriteEntranceTransition.NO_TRANSITION)
+                        if (spriteEntranceParam.EntranceTransition != SpriteEntranceScriptParameter.SpriteEntranceTransition.NO_TRANSITION)
                         {
                             switch (spriteEntranceParam.EntranceTransition)
                             {
@@ -684,6 +687,8 @@ namespace SerialLoops.Editors
 
                             sprites[speaker] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = position, Layer = layer } };
                         }
+
+                        previousSpriteCommand = command;
                     }
                 }
                 else
