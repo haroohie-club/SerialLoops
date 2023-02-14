@@ -7,7 +7,7 @@ namespace SerialLoops.Gtk
 {
     public class SoundPlayerHandler : GtkControl<Button, SoundPlayer, SoundPlayer.ICallback>, SoundPlayer.ISoundPlayer
     {
-        private TkWavePlayer _player;
+        private ALWavePlayer _player;
         public IWaveProvider WaveProvider { get; set; }
 
         public PlaybackState PlaybackState => _player.PlaybackState;
@@ -19,7 +19,7 @@ namespace SerialLoops.Gtk
 
         public void Initialize(IWaveProvider waveProvider)
         {
-            _player = new(new(), 4096);
+            _player = new();
             _player.Init(WaveProvider);
         }
 
