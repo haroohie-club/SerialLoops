@@ -20,7 +20,7 @@ namespace SerialLoops.Gtk
         public void Initialize(IWaveProvider waveProvider)
         {
             WaveProvider = waveProvider;
-            _player = new();
+            _player = new(new(), 4096);
             _player.Init(WaveProvider);
         }
 

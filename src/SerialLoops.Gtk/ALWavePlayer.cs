@@ -1,153 +1,301 @@
 ﻿using NAudio.Wave;
 using OpenTK.Audio.OpenAL;
 using System;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace SerialLoops.Gtk
 {
-    public class ALWavePlayer : IWavePlayer
+    public class ALAudioContext : IDisposable
     {
-        private int sourceID; // source is the sound source, like an ID of the soundcard
-        private int bufferCount;
-        private int[] bufferIDs; // generating four buffers, so they can be played in sequence
-        private int state; // current execution state, should be 4116 for ALSourceState.Stopped and 4114 for ALSourceState.Playing
-        private int channels; // how many audio channels to allocate
-        private int bitsPerSample; // default bits per sample
-        private int sampleRate; // default audio rate
-        private byte[] soundData;
-        private ALFormat alFormat;
-        private int milissecondsPerBuffer;
-        private int bufferSize;
-        private int currentBufferIndex;
-        private Thread playThread;
-        private int buffersRead;
-        private int buffersPlayed;
-        private bool shouldPlay;
+        public ALDevice Device { get; private set; }
+        public ALContext Context { get; private set; }
 
-        private IWaveProvider waveProvider;
-
-        public event EventHandler<StoppedEventArgs> PlaybackStopped;
-
-        public PlaybackState PlaybackState
+        public ALAudioContext()
         {
-            get
-            {
-                return PlaybackState.Stopped; // mock
-            }
+            Init();
         }
 
-        public float Volume { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
-        public WaveFormat OutputWaveFormat => throw new NotImplementedException();
-
-        public ALWavePlayer()
+        private unsafe void Init()
         {
+            Device = ALC.OpenDevice(null);
+            Context = ALC.CreateContext(Device, (int*)null);
+            ALC.MakeContextCurrent(Context);
         }
 
-        public ALWavePlayer(int latency)
+        ~ALAudioContext()
         {
-        }
-
-        public void Init(IWaveProvider waveProvider)
-        {
-            sourceID = AL.GenSource(); // source is the sound source, like an ID of the soundcard
-            bufferCount = 3; // tripple buffering, just so we get backed up.
-            bufferIDs = AL.GenBuffers(bufferCount); // generating four buffers, so they can be played in sequence
-            state = 4116; // current execution state, should be 4116 for ALSourceState.Stopped and 4114 for ALSourceState.Playing
-            channels = 2; // how many audio channels to allocate. 1 for mono and 2 for stereo
-            bitsPerSample = 16; // default bits per sample
-            sampleRate = 44100; // default audio rate
-            milissecondsPerBuffer = 1000;
-            alFormat = ALWavePlayer.GetSoundFormat(channels, bitsPerSample);
-            int sampleSizeInBytes = (bitsPerSample / 8) * channels;
-            bufferSize = (int)(sampleSizeInBytes * sampleRate * (milissecondsPerBuffer / 1000f));
-            Console.WriteLine("Using buffers of " + (milissecondsPerBuffer / 1000f) + " seconds");
-            currentBufferIndex = 0;
-            buffersRead = 0;
-            buffersPlayed = 0;
-
-            this.waveProvider = waveProvider;
-        }
-
-        public void Play()
-        {
-            playThread = new Thread(new ThreadStart(PlaybackThreadFunc));
-            //			playThread = new Thread (new ParameterizedThreadStart(PlaybackThreadFunc));
-            //			playThread = new Thread (() => PlaybackThreadFunc (this));
-            // put this back to highest when we are confident we don't have any bugs in the thread proc
-            playThread.Priority = ThreadPriority.Normal;
-            playThread.IsBackground = true;
-            shouldPlay = true;
-            playThread.Start(this);
-        }
-
-        public void Stop()
-        {
-            AL.SourceStop(sourceID);
-            shouldPlay = false;
-            Console.WriteLine("Trying to stop play thread");
-            Console.WriteLine(shouldPlay);
+            Dispose(false);
         }
 
         public void Dispose()
         {
-            AL.SourceStop(sourceID); // stop sound source
-            AL.DeleteSource(sourceID); // delete it
-            AL.DeleteBuffers(bufferIDs); // and also the buffers
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
-        private void PlaybackThreadFunc()
+        protected void Dispose(bool disposing)
         {
-            for (int i = 0; i < bufferIDs.Length; i++)
-            { // fill all the buffers first
-                soundData = new byte[bufferSize];
-                waveProvider.Read(soundData, 0, soundData.Length);
-                AL.BufferData(bufferIDs[i], alFormat, soundData, sampleRate); // put it into the sound buffer
-                buffersRead++;
-                Console.WriteLine("Queuing chunk " + buffersRead + ".");
-            }
-
-            AL.SourceQueueBuffers(sourceID, bufferIDs.Length, bufferIDs);
-            AL.SourcePlay(sourceID); // and plays them
-            buffersPlayed++;
-
-            do
+            if (Context != ALContext.Null)
             {
-                Thread.Sleep(100); // wait a little bit
-                int buffersProcessed = 0;
-                AL.GetSource(sourceID, ALGetSourcei.BuffersProcessed, out buffersProcessed); // verify if some buffer has ended playing
-                for (; buffersProcessed > 0; buffersProcessed--)
-                {
-                    int oldestProcessedBufferID = AL.SourceUnqueueBuffer(sourceID); // unqueue the oldest played buffer
-                    buffersRead++;
-                    Console.WriteLine("Queuing chunk " + buffersRead + ".");
-                    waveProvider.Read(soundData, 0, soundData.Length);
-                    AL.BufferData(oldestProcessedBufferID, alFormat, soundData, sampleRate); // put it into the sound buffer
-                    AL.SourceQueueBuffer(sourceID, oldestProcessedBufferID); // enqueues the next buffer
-                }
-                AL.GetSource(sourceID, ALGetSourcei.SourceState, out state); // check the state of the audio source execution
-                Console.WriteLine(shouldPlay);
-            } while ((ALSourceState)state == ALSourceState.Playing && shouldPlay);
+                ALC.MakeContextCurrent(ALContext.Null);
+                ALC.DestroyContext(Context);
+            }
+            Context = ALContext.Null;
+
+            if (Device != IntPtr.Zero)
+            {
+                ALC.CloseDevice(Device);
+            }
+            Device = ALDevice.Null;
+        }
+    }
+
+    public class ALWavePlayer : IWavePlayer, IDisposable
+    {
+        private float volume;
+        public float Volume
+        {
+            get => volume;
+            set
+            {
+                volume = value;
+            }
         }
 
-        private static ALFormat GetSoundFormat(int channels, int bits)
+        public PlaybackState PlaybackState { get; }
+
+        public event EventHandler<StoppedEventArgs> PlaybackStopped;
+
+        private ALAudioContext Context { get; }
+        public int BufferSize { get; }
+
+        private IWaveProvider WaveProvider;
+
+        private int Source;
+        private int NextBuffer;
+        private int OtherBuffer;
+
+        private byte[] Buffer;
+        private Accumulator Accumulator;
+
+        private System.Threading.ManualResetEventSlim Signaller;
+
+        private System.Threading.CancellationTokenSource PlayerCanceller;
+        private Task Player;
+        public bool Paused { get; private set; } = false;
+        public bool Stopped { get; private set; } = false;
+
+        public WaveFormat OutputWaveFormat => WaveProvider.WaveFormat;
+
+        public ALWavePlayer(ALAudioContext context, int bufferSize)
         {
-            switch (channels)
-            {
-                case 1:
-                    return bits <= 8 ? ALFormat.Mono8 : ALFormat.Mono16;
-                case 2:
-                    return bits <= 8 ? ALFormat.Stereo8 : ALFormat.Stereo16;
-                default:
-                    throw new NotSupportedException("The specified sound format is not supported.");
-            }
+            Context = context;
+            BufferSize = bufferSize;
+        }
+
+        public unsafe void Init(IWaveProvider waveProvider)
+        {
+            WaveProvider = waveProvider;
+
+            AL.GenSources(1, ref Source);
+            AL.GenBuffers(1, ref NextBuffer);
+            AL.GenBuffers(1, ref OtherBuffer);
+
+            Buffer = new byte[BufferSize];
+            Accumulator = new Accumulator(waveProvider, Buffer);
+
+            Signaller = new System.Threading.ManualResetEventSlim(false);
         }
 
         public void Pause()
         {
-            throw new NotImplementedException();
+            if (Stopped)
+                throw new InvalidOperationException("Stopped");
+
+            Paused = true;
+            PlayerCanceller?.Cancel();
+            PlayerCanceller = null;
+            AL.SourcePause(Source);
+        }
+
+        public void Play()
+        {
+            if (Stopped)
+                throw new InvalidOperationException("Stopped");
+
+            Paused = false;
+            if (PlayerCanceller == null)
+            {
+                PlayerCanceller = new System.Threading.CancellationTokenSource();
+                Player = PlayLoop(PlayerCanceller.Token).ContinueWith(PlayerStopped);
+            }
+        }
+
+        private void PlayerStopped(Task t)
+        {
+            if (!Paused)
+            {
+                PlaybackStopped?.Invoke(this, new StoppedEventArgs(t?.Exception));
+            }
+        }
+
+        public void Stop()
+        {
+            if (Stopped)
+                throw new InvalidOperationException("Already stopped");
+
+            Paused = false;
+            if (PlayerCanceller != null)
+            {
+                PlayerCanceller?.Cancel();
+                PlayerCanceller = null;
+                AL.SourceStop(Source);
+            }
+            else
+            {
+                PlaybackStopped?.Invoke(this, new StoppedEventArgs());
+            }
+        }
+
+        private async Task PlayLoop(System.Threading.CancellationToken ct)
+        {
+            AL.SourcePlay(Source);
+            await Task.Yield();
+
+        again:
+            AL.GetSource(Source, ALGetSourcei.BuffersQueued, out int queued);
+            AL.GetSource(Source, ALGetSourcei.BuffersProcessed, out int processed);
+            AL.GetSource(Source, ALGetSourcei.SourceState, out int state);
+
+            if ((ALSourceState)state != ALSourceState.Playing)
+            {
+                AL.SourcePlay(Source);
+            }
+
+            if (processed == 0 && queued == 2)
+            {
+                await Task.Delay(1);
+                goto again;
+            }
+
+            if (processed > 0)
+            {
+                AL.SourceUnqueueBuffers(Source, processed);
+            }
+
+            var notFinished = await Accumulator.Accumulate(ct);
+            Accumulator.Reset();
+
+            if (!notFinished)
+            {
+                return;
+            }
+
+            AL.BufferData(NextBuffer, TranslateFormat(WaveProvider.WaveFormat), Buffer, WaveProvider.WaveFormat.SampleRate);
+            AL.SourceQueueBuffer(Source, NextBuffer);
+
+            (NextBuffer, OtherBuffer) = (OtherBuffer, NextBuffer);
+
+            goto again;
+        }
+
+        ~ALWavePlayer()
+        {
+            Dispose(false);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected void Dispose(bool disposing)
+        {
+            AL.DeleteSource(Source);
+            AL.DeleteBuffer(NextBuffer);
+            AL.DeleteBuffer(OtherBuffer);
+        }
+
+        public static ALFormat TranslateFormat(WaveFormat format)
+        {
+            if (format.Channels == 2)
+            {
+                if (format.BitsPerSample == 32)
+                {
+                    return ALFormat.StereoFloat32Ext;
+                }
+                else if (format.BitsPerSample == 16)
+                {
+                    return ALFormat.Stereo16;
+                }
+                else if (format.BitsPerSample == 8)
+                {
+                    return ALFormat.Stereo8;
+                }
+            }
+            else if (format.Channels == 1)
+            {
+                if (format.BitsPerSample == 32)
+                {
+                    return ALFormat.MonoFloat32Ext;
+                }
+                else if (format.BitsPerSample == 16)
+                {
+                    return ALFormat.Mono16;
+                }
+                else if (format.BitsPerSample == 8)
+                {
+                    return ALFormat.Mono8;
+                }
+            }
+
+            throw new FormatException("Cannot translate WaveFormat.");
         }
     }
 
+    public class Accumulator
+    {
+        public Accumulator(IWaveProvider provider, byte[] buffer)
+        {
+            Provider = provider ?? throw new ArgumentNullException(nameof(provider));
+            Buffer = buffer ?? throw new ArgumentNullException(nameof(buffer));
+            Position = 0;
+        }
+
+        public IWaveProvider Provider { get; }
+        public byte[] Buffer { get; }
+        public int Position { get; private set; }
+        private object Locker = new object();
+
+        public async Task<bool> Accumulate(System.Threading.CancellationToken ct)
+        {
+            if (Position == Buffer.Length)
+                return true;
+
+            await Task.Yield();
+
+            lock (Locker)
+            {
+                while (Position != Buffer.Length)
+                {
+                    if (ct.IsCancellationRequested)
+                        throw new TaskCanceledException();
+                    var read = Provider.Read(Buffer, Position, Buffer.Length - Position);
+
+                    if (read == 0)
+                        return false;
+
+                    Position += read;
+                }
+
+                return true;
+            }
+        }
+
+        public void Reset()
+        {
+            Position = 0;
+        }
+    }
 }
