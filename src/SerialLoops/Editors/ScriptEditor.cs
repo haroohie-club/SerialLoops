@@ -145,7 +145,7 @@ namespace SerialLoops.Editors
                         BgmScriptParameter bgmParam = (BgmScriptParameter)parameter;
                         StackLayout bgmLink = ControlGenerator.GetFileLink(bgmParam.Bgm, _tabs, _log);
 
-                        CommandDropDown bgmDropDown = new() { Command = command, ParameterIndex = i, Link = (ClearableLinkButton)bgmLink.Items[1].Control };
+                        ScriptCommandDropDown bgmDropDown = new() { Command = command, ParameterIndex = i, Link = (ClearableLinkButton)bgmLink.Items[1].Control };
                         bgmDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.BGM).Select(i => new ListItem { Text = i.Name, Key = i.Name }));
                         bgmDropDown.SelectedKey = bgmParam.Bgm.Name;
                         bgmDropDown.SelectedKeyChanged += BgmDropDown_SelectedKeyChanged;                        
@@ -198,7 +198,7 @@ namespace SerialLoops.Editors
                         break;
 
                     case ScriptParameter.ParameterType.CHIBI:
-                        CommandDropDown chibiDropDown = new() { Command = command, ParameterIndex = i };
+                        ScriptCommandDropDown chibiDropDown = new() { Command = command, ParameterIndex = i };
                         chibiDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Chibi).Select(i => new ListItem { Text = i.Name, Key = i.Name }));
                         chibiDropDown.SelectedKey = ((ChibiScriptParameter)parameter).Chibi.Name;
                         chibiDropDown.SelectedKeyChanged += ChibiDropDown_SelectedKeyChanged;
@@ -459,7 +459,7 @@ namespace SerialLoops.Editors
                             StackLayout topicLink = ControlGenerator.GetFileLink(_project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Topic &&
                                 ((TopicItem)i).Topic.Id == ((TopicScriptParameter)parameter).TopicId), _tabs, _log);
 
-                            CommandDropDown topicDropDown = new() { Command = command, ParameterIndex = i, Link = (ClearableLinkButton)topicLink.Items[1].Control };
+                            ScriptCommandDropDown topicDropDown = new() { Command = command, ParameterIndex = i, Link = (ClearableLinkButton)topicLink.Items[1].Control };
                             topicDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Topic)
                                 .Select(t => new ListItem { Key = t.DisplayName, Text = t.DisplayName }));
                             topicDropDown.SelectedKey = topicName;
@@ -494,7 +494,7 @@ namespace SerialLoops.Editors
                         VoicedLineScriptParameter vceParam = (VoicedLineScriptParameter)parameter;
                         StackLayout vceLink = ControlGenerator.GetFileLink(vceParam.VoiceLine is not null ? vceParam.VoiceLine : NoneItem.VOICE, _tabs, _log);
 
-                        CommandDropDown vceDropDown = new() { Command = command, ParameterIndex = i, Link = (ClearableLinkButton)vceLink.Items[1].Control };
+                        ScriptCommandDropDown vceDropDown = new() { Command = command, ParameterIndex = i, Link = (ClearableLinkButton)vceLink.Items[1].Control };
                         vceDropDown.Items.Add(new ListItem { Key = "NONE", Text = "NONE" });
                         vceDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Voice).Select(i => new ListItem { Text = i.Name, Key = i.Name }));
                         vceDropDown.SelectedKey = vceParam.VoiceLine?.Name ?? "NONE";
@@ -782,7 +782,7 @@ namespace SerialLoops.Editors
         }
         private void BgmDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
-            CommandDropDown dropDown = (CommandDropDown)sender;
+            ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
             _log.Log($"Attempting to modify parameter {dropDown.ParameterIndex} to BGM {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
             ((BgmScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Bgm =
                 (BackgroundMusicItem)_project.Items.FirstOrDefault(i => i.Name == dropDown.SelectedKey);
@@ -798,7 +798,7 @@ namespace SerialLoops.Editors
         }
         private void ChibiDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
-            CommandDropDown dropDown = (CommandDropDown)sender;
+            ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
             _log.Log($"Attempting to modify parameter {dropDown.ParameterIndex} to chibi {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
             ((ChibiScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Chibi =
                 (ChibiItem)_project.Items.First(i => i.Name == dropDown.SelectedKey);
@@ -826,7 +826,7 @@ namespace SerialLoops.Editors
         }
         private void VceDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
-            CommandDropDown dropDown = (CommandDropDown)sender;
+            ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
             _log.Log($"Attempting to modify parameter {dropDown.ParameterIndex} to voiced line {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
             ((VoicedLineScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).VoiceLine =
                 (VoicedLineItem)_project.Items.FirstOrDefault(i => i.Name == dropDown.SelectedKey);
@@ -842,7 +842,7 @@ namespace SerialLoops.Editors
         }
         private void TopicDropDown_SelectedIndexChanged(object sender, EventArgs e)
         {
-            CommandDropDown dropDown = (CommandDropDown)sender;
+            ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
             _log.Log($"Attempting to modify parameter {dropDown.ParameterIndex} to topic {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
             ((TopicScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).TopicId =
                 ((TopicItem)_project.Items.FirstOrDefault(i => i.Name == dropDown.SelectedKey)).Topic.Id;

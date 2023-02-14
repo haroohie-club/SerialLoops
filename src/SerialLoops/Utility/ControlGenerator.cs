@@ -38,7 +38,7 @@ namespace SerialLoops.Utility
             ClearableLinkButton link = new() { Text = description.DisplayName };
             if (description.Name != "NONE")
             {
-                link.ClickUnique += (s, e) => { editorTabs.OpenTab(description, log); };
+                link.ClickUnique += GetFileLinkClickHandler(description, editorTabs, log);
             }
             return new StackLayout
             {
@@ -52,6 +52,11 @@ namespace SerialLoops.Utility
                     link
                 }
             };
+        }
+
+        public static EventHandler<EventArgs> GetFileLinkClickHandler(ItemDescription description, EditorTabsPanel editorTabs, ILogger log)
+        {
+            return (s, e) => { editorTabs.OpenTab(description, log); };
         }
 
         public static Icon GetItemIcon(ItemDescription.ItemType type, ILogger log)
