@@ -445,7 +445,7 @@ namespace SerialLoops.Editors
 
                     case ScriptParameter.ParameterType.TOPIC:
                         string topicName = _project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Topic &&
-                            ((TopicItem)i).Topic.Id == ((TopicScriptParameter)parameter).TopicId)?.Name;
+                            ((TopicItem)i).Topic.Id == ((TopicScriptParameter)parameter).TopicId)?.DisplayName;
                         if (string.IsNullOrEmpty(topicName))
                         {
                             // If the topic has been deleted, we will just display the index in a textbox
@@ -460,7 +460,7 @@ namespace SerialLoops.Editors
 
                             CommandDropDown topicDropDown = new() { Command = command, ParameterIndex = i, Link = (ClearableLinkButton)topicLink.Items[1].Control };
                             topicDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Topic)
-                                .Select(t => new ListItem { Key = t.Name, Text = t.Name }));
+                                .Select(t => new ListItem { Key = t.DisplayName, Text = t.DisplayName }));
                             topicDropDown.SelectedKey = topicName;
                             topicDropDown.SelectedIndexChanged += TopicDropDown_SelectedIndexChanged;
 
