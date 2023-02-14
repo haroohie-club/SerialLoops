@@ -37,7 +37,7 @@ namespace SerialLoops.Controls
 
         private void OpenCommand_OnClick(object sender, EventArgs args)
         {
-            ItemDescription item = _project.FindItem(_explorer.Viewer.SelectedItem?.Text);
+            ItemDescription item = _project.FindItem(_explorer.Viewer.SelectedItem?.Text.Split(" - ")[0]);
             if (item != null)
             {
                 _tabs.OpenTab(item, _log);
@@ -56,7 +56,7 @@ namespace SerialLoops.Controls
 
         private void ShowReferences(ReferenceDialog.ReferenceMode mode)
         {
-            ItemDescription item = _project.FindItem(_explorer.Viewer.SelectedItem?.Text);
+            ItemDescription item = _project.FindItem(_explorer.Viewer.SelectedItem?.Text.Split(" - ")[0]);
             if (item != null)
             {
                 ReferenceDialog referenceDialog = new(item, mode, _project, _explorer, _tabs, _log);
