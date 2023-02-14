@@ -24,7 +24,7 @@ namespace SerialLoops.Controls
         {
             if (sender is SectionListTreeGridView view)
             {
-                ItemDescription item = _project.FindItem(view.SelectedItem?.Text.Split(" - ")[0]);
+                ItemDescription item = _project.FindItem(view.SelectedItem?.Text);
                 if (item != null)
                 {
                     _tabs.OpenTab(item, _log);
