@@ -180,8 +180,7 @@ namespace SerialLoops.Gtk
                     AL.SourceUnqueueBuffers(_source, processed);
                 }
 
-                var notFinished = await _accumulator.Accumulate(ct);
-                _accumulator.Reset();
+                var notFinished = await _accumulator.Accumulate(_buffer, ct);
 
                 if (!notFinished)
                 {
@@ -190,6 +189,7 @@ namespace SerialLoops.Gtk
 
                 AL.BufferData(_nextBuffer, TranslateFormat(WaveProvider.WaveFormat), _buffer, WaveProvider.WaveFormat.SampleRate);
                 AL.SourceQueueBuffer(_source, _nextBuffer);
+                await Task.Delay(10, ct);
 
                 (_nextBuffer, _otherBuffer) = (_otherBuffer, _nextBuffer);
             }
@@ -255,40 +255,29 @@ namespace SerialLoops.Gtk
         public Accumulator(IWaveProvider provider, byte[] buffer)
         {
             Provider = provider ?? throw new ArgumentNullException(nameof(provider));
-            Buffer = buffer ?? throw new ArgumentNullException(nameof(buffer));
-            Position = 0;
         }
 
         public IWaveProvider Provider { get; }
-        public byte[] Buffer { get; }
-        public int Position { get; private set; }
         //private object Locker = new();
 
-        public async Task<bool> Accumulate(System.Threading.CancellationToken ct)
+        public async Task<bool> Accumulate(byte[] buffer, System.Threading.CancellationToken ct)
         {
-            if (Position == Buffer.Length)
-                return true;
-
             await Task.Yield();
 
-            while (Position != Buffer.Length)
+            int position = 0;
+            while (position < buffer.Length)
             {
                 if (ct.IsCancellationRequested)
                     throw new TaskCanceledException();
-                var read = Provider.Read(Buffer, Position, Buffer.Length - Position);
+                var read = Provider.Read(buffer, position, buffer.Length - position);
 
                 if (read == 0)
                     return false;
 
-                Position += read;
+                position += read;
             }
 
             return true;
-        }
-
-        public void Reset()
-        {
-            Position = 0;
         }
     }
 }
