@@ -9,10 +9,13 @@ jobs:
     matrix:
       Linux:
         imageName: 'ubuntu-latest'
+        platformName: 'Gtk'
       macOS:
         imageName: 'macOS-latest'
+        platformName: 'Mac'
       Windows:
         imageName: 'windows-latest'
+        platformName: 'Wpf'
   displayName: Build & Test
   pool:
     vmImage: $(imageName)
@@ -23,7 +26,7 @@ jobs:
   - task: DotNetCoreCLI@2
     inputs:
       command: 'build'
-      projects: $(Build.SourcesDirectory)/SerialLoops.sln
+      projects: $(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/SerialLoops.$(platformName).csproj
     displayName: Build solution
 
   - task: DotNetCoreCLI@2

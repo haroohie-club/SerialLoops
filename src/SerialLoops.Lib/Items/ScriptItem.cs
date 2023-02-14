@@ -67,6 +67,10 @@ namespace SerialLoops.Lib.Items
                     {
                         @continue = true;
                     }
+                    else if (command.Verb == CommandVerb.SET_READ_FLAG && section.Name != "SCRIPT00")
+                    {
+                        @continue = true;
+                    }
                 }
                 if (@continue)
                 {

@@ -13,9 +13,8 @@ namespace SerialLoops.Lib.Items
         public string ExtrasShort { get; set; }
         public (string ScriptName, ScriptCommandInvocation command)[] ScriptUses { get; set; }
 
-        public BackgroundMusicItem(string bgmFile, int index, ExtraFile extras, Project project) : base(bgmFile, ItemType.BGM)
+        public BackgroundMusicItem(string bgmFile, int index, ExtraFile extras, Project project) : base(Path.GetFileNameWithoutExtension(bgmFile), ItemType.BGM)
         {
-            Name = Path.GetFileNameWithoutExtension(bgmFile);
             BgmFile = bgmFile;
             Index = index;
             BgmName = extras.Bgms.FirstOrDefault(b => b.Index == Index).Name ?? "";

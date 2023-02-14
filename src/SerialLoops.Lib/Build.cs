@@ -63,7 +63,7 @@ namespace SerialLoops.Lib
                         log.LogError($"Failed to clean iterative directory: {exc.Message}\n\n{exc.StackTrace}");
                     }
                 }
-                tracker.Loaded++;
+                tracker.Finished++;
             }
         }
 
@@ -78,10 +78,10 @@ namespace SerialLoops.Lib
 
             tracker.Focus("Compressing Archives (dat.bin)", 3);
             var dat = ArchiveFile<DataFile>.FromFile(Path.Combine(directory, "original", "archives", "dat.bin"), log);
-            tracker.Loaded++;
+            tracker.Finished++;
             tracker.CurrentlyLoading = "Compressing Archives (evt.bin)";
             var evt = ArchiveFile<EventFile>.FromFile(Path.Combine(directory, "original", "archives", "evt.bin"), log);
-            tracker.Loaded++;
+            tracker.Finished++;
             tracker.CurrentlyLoading = "Compressing Archives (grp.bin)";
             var grp = ArchiveFile<GraphicsFile>.FromFile(Path.Combine(directory, "original", "archives", "grp.bin"), log);
 
@@ -104,7 +104,7 @@ namespace SerialLoops.Lib
                 log.LogError($"Failed to write include files to disk: {exc.Message}\n\n{exc.StackTrace}");
                 return false;
             }
-            tracker.Loaded+= 4;
+            tracker.Finished+= 4;
 
             // Replace files
             string[] files = Directory.GetFiles(Path.Combine(directory, "assets"), "*.*", SearchOption.AllDirectories);
@@ -150,7 +150,7 @@ namespace SerialLoops.Lib
                         //AddNewFile(archive, filePath, log);
                     }
                 }
-                tracker.Loaded++;
+                tracker.Finished++;
             }
 
             // Save files to disk
@@ -167,7 +167,7 @@ namespace SerialLoops.Lib
             {
                 return false;
             }
-            tracker.Loaded+= 3;
+            tracker.Finished+= 3;
 
             tracker.Focus("Packing ROM", 1);
             try
@@ -179,7 +179,7 @@ namespace SerialLoops.Lib
                 log.LogError($"NitroPacker failed to pack ROM with exception '{exc.Message}'\n\n{exc.StackTrace}");
                 return false;
             }
-            tracker.Loaded++;
+            tracker.Finished++;
             return true;
         }
 
@@ -196,7 +196,7 @@ namespace SerialLoops.Lib
             {
                 log.LogError($"Failed to copy newly built archives to the iterative originals directory.\n{exc.Message}\n\n{exc.StackTrace}");
             }
-            tracker.Loaded+= 3;
+            tracker.Finished+= 3;
         }
 
         private static void ReplaceSingleGraphicsFile(ArchiveFile<GraphicsFile> grp, string filePath, int index, Dictionary<int, List<SKColor>> sharedPalettes)

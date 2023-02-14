@@ -21,7 +21,7 @@ namespace SerialLoops.Lib.Items
         public static NonePreviewableGraphic BACKGROUND = new(ItemType.Background);
         public static NonePreviewableGraphic CHARACTER_SPRITE = new(ItemType.Character_Sprite);
 
-        private NonePreviewableGraphic(ItemType type) : base("NONE", type) { }
+        private NonePreviewableGraphic(ItemType type) : base("NONE", type, "NONE") { }
 
         public SKBitmap GetPreview(Project project)
         {
