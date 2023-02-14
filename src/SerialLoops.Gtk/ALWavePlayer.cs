@@ -8,17 +8,8 @@ namespace SerialLoops.Gtk
 {
     public class ALWavePlayer : IWavePlayer, IDisposable
     {
-        private CancellationTokenSource _cancellationToken;
-        private IWaveProvider _waveProvider;
-        private int _audioBufferSize = 5;
-        private int _bufferSize = 10240;
-        private int[] _audioBuffers;
-        private int _audioSource;
-        private int _bufferBytes;
-        private byte[] _buffer;
-
         public float Volume { get; set; }
-        public PlaybackState PlaybackState { get; }
+        public PlaybackState PlaybackState { get; private set; }
         public event EventHandler<StoppedEventArgs> PlaybackStopped;
 
         public ALSourceState State => AL.GetSourceState(_audioSource);
@@ -74,22 +65,18 @@ namespace SerialLoops.Gtk
 
         public void Pause()
         {
-            if (State == ALSourceState.Stopped)
-            {
-                return;
-            }
+            if (State == ALSourceState.Stopped) return;
 
+            PlaybackState = PlaybackState.Paused;
             _cancellationToken?.Cancel();
             AL.SourcePause(_audioSource);
         }
 
         public async void Play()
         {
-            if (State == ALSourceState.Stopped)
-            {
-                return;
-            }
+            if (State == ALSourceState.Stopped) return;
 
+            PlaybackState = PlaybackState.Playing;
             if (_cancellationToken is null)
             {
                 _cancellationToken = new();
@@ -99,11 +86,9 @@ namespace SerialLoops.Gtk
 
         public void Stop()
         {
-            if (State == ALSourceState.Stopped) 
-            { 
-                return;
-            }
+            if (State == ALSourceState.Stopped) return;
 
+            PlaybackState = PlaybackState.Stopped;
             if (_cancellationToken is not null)
             {
                 _cancellationToken.Cancel();
@@ -188,5 +173,16 @@ namespace SerialLoops.Gtk
 
             throw new FormatException("Cannot translate WaveFormat.");
         }
+
+
+        private CancellationTokenSource _cancellationToken;
+        private IWaveProvider _waveProvider;
+        private int _audioBufferSize = 5;
+        private int _bufferSize = 10240;
+        private int[] _audioBuffers;
+        private int _audioSource;
+        private int _bufferBytes;
+        private byte[] _buffer;
+
     }
 }
