@@ -14,7 +14,7 @@ namespace SerialLoops.Gtk
         public const float DoplerFactor = 1f;
 
         public float Volume { get; set; }
-        public PlaybackState PlaybackState { get; }
+        public PlaybackState PlaybackState { get; private set; }
         public event EventHandler<StoppedEventArgs> PlaybackStopped;
 
         public ALSourceState State => AL.GetSourceState(sourceID);
@@ -106,6 +106,7 @@ namespace SerialLoops.Gtk
             if (State == ALSourceState.Stopped) return;
             AL.SourcePause(sourceID);
             _cancellationToken.Cancel();
+            PlaybackState = PlaybackState.Paused;
         }
 
         public async void Play()
@@ -115,6 +116,7 @@ namespace SerialLoops.Gtk
                 _cancellationToken = new();
                 await PlayAsync();
             }
+            PlaybackState = PlaybackState.Playing;
         }
 
         public void Stop()
@@ -125,6 +127,7 @@ namespace SerialLoops.Gtk
             _cancellationToken.Cancel();
 
             PlaybackStopped?.Invoke(this, new StoppedEventArgs());
+            PlaybackState = PlaybackState.Stopped;
         }
 
         public async Task PlayAsync()
@@ -158,13 +161,10 @@ namespace SerialLoops.Gtk
         }
 
 
-        protected unsafe void WriteToAudioBuffer(int audioBuffer)
+        protected void WriteToAudioBuffer(int audioBuffer)
         {
             _bufferBytes = _waveProvider.Read(_buffer, 0, _buffer.Length);
-            fixed (byte* ptr = _buffer)
-            {
-                AL.BufferData(audioBuffer, ParseFormat(_waveProvider.WaveFormat), ptr, _bufferBytes, _waveProvider.WaveFormat.SampleRate);
-            }
+            AL.BufferData(audioBuffer, ParseFormat(_waveProvider.WaveFormat), _buffer, _waveProvider.WaveFormat.SampleRate);
         }
 
         public static ALFormat ParseFormat(WaveFormat format)
