@@ -24,11 +24,9 @@ namespace SerialLoops.Controls
         public void InitializeComponent()
         {
             _playPauseButton = new() { Text = "▶️", Font = new(Eto.Drawing.SystemFont.Default, 30.0f) };
-            Slider volumeSlider = new() { Orientation = Orientation.Horizontal, MinValue = 0, MaxValue = 100, Value = 100 };
             _playPauseButton.Click += PlayPauseButton_Click;
-            //volumeSlider.ValueChanged += VolumeSlider_ValueChanged;
 
-            Content = new TableLayout(new TableRow(_playPauseButton), new TableRow(volumeSlider));
+            Content = new TableLayout(new TableRow(_playPauseButton));
         }
 
         public void Stop()
@@ -49,10 +47,5 @@ namespace SerialLoops.Controls
                 _playPauseButton.Text = "⏸️";
             }
         }
-
-        //private void VolumeSlider_ValueChanged(object sender, System.EventArgs e)
-        //{
-        //    _player.Volume = ((Slider)sender).Value;
-        //}
     }
 }

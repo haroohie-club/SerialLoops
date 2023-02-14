@@ -3,7 +3,7 @@ using OpenTK.Audio.OpenAL;
 using System;
 using System.Threading.Tasks;
 
-namespace SerialLoops.Gtk
+namespace SerialLoops.Mac
 {
     // Adapted from https://gist.github.com/VisualMelon/d02edcd7c44fadcd6f5745e92c449a90
     public class ALAudioContext : IDisposable

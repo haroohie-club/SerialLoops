@@ -1,34 +1,42 @@
 ﻿using Eto.Mac.Forms.Controls;
 using MonoMac.AppKit;
 using NAudio.Wave;
-using System;
 
 namespace SerialLoops.Mac
 {
     public class SoundPlayerHandler : MacControl<NSButton, SoundPlayer, SoundPlayer.ICallback>, SoundPlayer.ISoundPlayer
     {
-        public IWaveProvider WaveProvider { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        private ALWavePlayer _player;
+        public IWaveProvider WaveProvider { get; set; }
 
-        public PlaybackState PlaybackState => throw new NotImplementedException();
+        public PlaybackState PlaybackState => _player.PlaybackState;
+
+        public SoundPlayerHandler()
+        {
+            Control = new NSButton();
+        }
 
         public void Initialize(IWaveProvider waveProvider)
         {
-            throw new NotImplementedException();
+            WaveProvider = waveProvider;
+            _player = new(new(), 8192);
+            _player.Init(WaveProvider);
         }
 
         public void Pause()
         {
-            throw new NotImplementedException();
+            _player.Pause();
         }
 
         public void Play()
         {
-            throw new NotImplementedException();
+            _player.Play();
         }
 
         public void Stop()
         {
-            throw new NotImplementedException();
+            // AL has a static player, so if we stop it we'll throw errors
+            _player.Pause();
         }
     }
 }

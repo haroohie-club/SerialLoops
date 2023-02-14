@@ -1,7 +1,6 @@
 ﻿using Eto.GtkSharp.Forms;
 using Gtk;
 using NAudio.Wave;
-using System;
 
 namespace SerialLoops.Gtk
 {
