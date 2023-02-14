@@ -5,7 +5,6 @@ using HaruhiChokuretsuLib.Archive.Graphics;
 using SkiaSharp;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Linq;
 
 namespace SerialLoops.Lib.Items
 {
@@ -24,6 +23,7 @@ namespace SerialLoops.Lib.Items
             Chibi = chibi;
             string firstAnimationName = project.Grp.Files.First(f => f.Index == Chibi.ChibiEntries[0].Animation).Name;
             Name = $"CHIBI_{firstAnimationName[0..firstAnimationName.IndexOf('_')]}";
+            DisplayName = $"CHIBI_{firstAnimationName[0..firstAnimationName.IndexOf('_')]}";
             ChibiIndex = chibiIndices.IndexOf(firstAnimationName[0..3]);
             ChibiEntries.AddRange(Chibi.ChibiEntries.Where(c => c.Animation > 0)
                 .Select(c => (project.Grp.Files.First(f => f.Index == c.Animation).Name[0..^3], c)));
