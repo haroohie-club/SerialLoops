@@ -8,8 +8,9 @@ namespace SerialLoops.Lib.Items
         public TopicStruct Topic { get; set; }
         public (string ScriptName, ScriptCommandInvocation command)[] ScriptUses { get; set; }
 
-        public TopicItem(TopicStruct topicStruct, Project project) : base($"{topicStruct.Id} {topicStruct.Title}", ItemType.Topic)
+        public TopicItem(TopicStruct topicStruct, Project project) : base($"{topicStruct.Id}", ItemType.Topic)
         {
+            DisplayName = $"{topicStruct.Title}";
             Topic = topicStruct;
             PopulateScriptUses(project);
         }

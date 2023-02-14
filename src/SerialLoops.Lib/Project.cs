@@ -142,8 +142,9 @@ namespace SerialLoops.Lib
                 .Select(d => new PuzzleItem(d.CastTo<PuzzleFile>(), this)));
             tracker.Finished++;
 
-            tracker.Focus("Topics", 1);
+            tracker.Focus("Topics", 2);
             Evt.Files.First(f => f.Name == "TOPICS").InitializeTopicFile();
+            tracker.Finished++;
             Items.AddRange(Evt.Files.First(f => f.Name == "TOPICS").TopicStructs.Select(t => new TopicItem(t, this)));
             tracker.Finished++;
 
