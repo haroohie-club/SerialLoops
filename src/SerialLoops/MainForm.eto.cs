@@ -1,18 +1,15 @@
 using Eto.Forms;
-using HaruhiChokuretsuLib.Archive;
 using HaruhiChokuretsuLib.Archive.Event;
 using SerialLoops.Controls;
 using SerialLoops.Editors;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
-using SerialLoops.Lib.Util;
 using SerialLoops.Utility;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace SerialLoops
 {
