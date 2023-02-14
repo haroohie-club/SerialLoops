@@ -36,7 +36,8 @@ namespace SerialLoops.Gtk
 
         public void Stop()
         {
-            _player.Stop();
+            // AL has a static player, so if we stop it we'll throw errors
+            _player.Pause();
         }
     }
 }
