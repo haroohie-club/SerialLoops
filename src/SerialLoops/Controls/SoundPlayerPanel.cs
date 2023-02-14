@@ -15,8 +15,10 @@ namespace SerialLoops.Controls
         {
             _log = log;
             _sound = sound;
+            _log.Log("Attempting to initialize sound player...");
             _player = new SoundPlayer();
             _player.Initialize(_sound);
+            _log.Log("Sound player successfully initialized.");
 
             InitializeComponent();
         }
