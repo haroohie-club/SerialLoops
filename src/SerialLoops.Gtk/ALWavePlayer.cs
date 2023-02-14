@@ -62,24 +62,7 @@ namespace SerialLoops.Gtk
             }
         }
 
-        public PlaybackState PlaybackState
-        {
-            get
-            {
-                if (Stopped)
-                {
-                    return PlaybackState.Stopped;
-                }
-                else if (Paused)
-                {
-                    return PlaybackState.Paused;
-                }
-                else
-                {
-                    return PlaybackState.Playing;
-                }
-            }
-        }
+        public PlaybackState PlaybackState { get; private set; }
 
         public event EventHandler<StoppedEventArgs> PlaybackStopped;
 
@@ -99,8 +82,6 @@ namespace SerialLoops.Gtk
 
         private System.Threading.CancellationTokenSource _playerCanceller;
         private Task Player;
-        public bool Paused { get; private set; } = false;
-        public bool Stopped { get; private set; } = false;
 
         public WaveFormat OutputWaveFormat => WaveProvider.WaveFormat;
 
@@ -122,14 +103,15 @@ namespace SerialLoops.Gtk
             _accumulator = new Accumulator(waveProvider, _buffer);
 
             _signaller = new System.Threading.ManualResetEventSlim(false);
+            PlaybackState = PlaybackState.Paused;
         }
 
         public void Pause()
         {
-            if (Stopped)
+            if (PlaybackState == PlaybackState.Stopped)
                 throw new InvalidOperationException("Stopped");
 
-            Paused = true;
+            PlaybackState = PlaybackState.Paused;
             _playerCanceller?.Cancel();
             _playerCanceller = null;
             AL.SourcePause(_source);
@@ -137,10 +119,10 @@ namespace SerialLoops.Gtk
 
         public void Play()
         {
-            if (Stopped)
+            if (PlaybackState == PlaybackState.Stopped)
                 throw new InvalidOperationException("Stopped");
 
-            Paused = false;
+            PlaybackState = PlaybackState.Playing;
             if (_playerCanceller == null)
             {
                 _playerCanceller = new System.Threading.CancellationTokenSource();
@@ -150,18 +132,15 @@ namespace SerialLoops.Gtk
 
         private void PlayerStopped(Task t)
         {
-            if (!Paused)
-            {
-                PlaybackStopped?.Invoke(this, new StoppedEventArgs(t?.Exception));
-            }
+            PlaybackStopped?.Invoke(this, new StoppedEventArgs(t?.Exception));
         }
 
         public void Stop()
         {
-            if (Stopped)
+            if (PlaybackState == PlaybackState.Stopped)
                 throw new InvalidOperationException("Already stopped");
 
-            Paused = false;
+            PlaybackState = PlaybackState.Stopped;
             if (_playerCanceller != null)
             {
                 _playerCanceller?.Cancel();
@@ -179,41 +158,41 @@ namespace SerialLoops.Gtk
             AL.SourcePlay(_source);
             await Task.Yield();
 
-        again:
-            AL.GetSource(_source, ALGetSourcei.BuffersQueued, out int queued);
-            AL.GetSource(_source, ALGetSourcei.BuffersProcessed, out int processed);
-            AL.GetSource(_source, ALGetSourcei.SourceState, out int state);
-
-            if ((ALSourceState)state != ALSourceState.Playing)
+            while (true)
             {
-                AL.SourcePlay(_source);
+                AL.GetSource(_source, ALGetSourcei.BuffersQueued, out int queued);
+                AL.GetSource(_source, ALGetSourcei.BuffersProcessed, out int processed);
+                AL.GetSource(_source, ALGetSourcei.SourceState, out int state);
+
+                if ((ALSourceState)state != ALSourceState.Playing)
+                {
+                    AL.SourcePlay(_source);
+                }
+
+                if (processed == 0 && queued == 2)
+                {
+                    await Task.Delay(1);
+                    continue;
+                }
+
+                if (processed > 0)
+                {
+                    AL.SourceUnqueueBuffers(_source, processed);
+                }
+
+                var notFinished = await _accumulator.Accumulate(ct);
+                _accumulator.Reset();
+
+                if (!notFinished)
+                {
+                    return;
+                }
+
+                AL.BufferData(_nextBuffer, TranslateFormat(WaveProvider.WaveFormat), _buffer, WaveProvider.WaveFormat.SampleRate);
+                AL.SourceQueueBuffer(_source, _nextBuffer);
+
+                (_nextBuffer, _otherBuffer) = (_otherBuffer, _nextBuffer);
             }
-
-            if (processed == 0 && queued == 2)
-            {
-                await Task.Delay(1);
-                goto again;
-            }
-
-            if (processed > 0)
-            {
-                AL.SourceUnqueueBuffers(_source, processed);
-            }
-
-            var notFinished = await _accumulator.Accumulate(ct);
-            _accumulator.Reset();
-
-            if (!notFinished)
-            {
-                return;
-            }
-
-            AL.BufferData(_nextBuffer, TranslateFormat(WaveProvider.WaveFormat), _buffer, WaveProvider.WaveFormat.SampleRate);
-            AL.SourceQueueBuffer(_source, _nextBuffer);
-
-            (_nextBuffer, _otherBuffer) = (_otherBuffer, _nextBuffer);
-
-            goto again;
         }
 
         ~ALWavePlayer()
@@ -283,7 +262,7 @@ namespace SerialLoops.Gtk
         public IWaveProvider Provider { get; }
         public byte[] Buffer { get; }
         public int Position { get; private set; }
-        private object Locker = new object();
+        //private object Locker = new();
 
         public async Task<bool> Accumulate(System.Threading.CancellationToken ct)
         {
@@ -292,22 +271,19 @@ namespace SerialLoops.Gtk
 
             await Task.Yield();
 
-            lock (Locker)
+            while (Position != Buffer.Length)
             {
-                while (Position != Buffer.Length)
-                {
-                    if (ct.IsCancellationRequested)
-                        throw new TaskCanceledException();
-                    var read = Provider.Read(Buffer, Position, Buffer.Length - Position);
+                if (ct.IsCancellationRequested)
+                    throw new TaskCanceledException();
+                var read = Provider.Read(Buffer, Position, Buffer.Length - Position);
 
-                    if (read == 0)
-                        return false;
+                if (read == 0)
+                    return false;
 
-                    Position += read;
-                }
-
-                return true;
+                Position += read;
             }
+
+            return true;
         }
 
         public void Reset()
