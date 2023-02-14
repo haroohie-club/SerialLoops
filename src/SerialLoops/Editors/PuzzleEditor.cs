@@ -1,6 +1,8 @@
 ﻿using Eto.Forms;
 using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Util;
+using SerialLoops.Controls;
+using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Utility;
 using System.Linq;
@@ -11,7 +13,7 @@ namespace SerialLoops.Editors
     {
         private PuzzleItem _puzzle;
 
-        public PuzzleEditor(PuzzleItem item, ILogger log) : base(item, log)
+        public PuzzleEditor(PuzzleItem item, Project project, EditorTabsPanel tabs, ILogger log) : base(item, log, project, tabs)
         {
         }
 
@@ -31,10 +33,16 @@ namespace SerialLoops.Editors
             };
 
             GroupBox topicsBox = new() { Text = "Associated Main Topics", Padding = 5 };
-            StackLayout topics = new() { Orientation = Orientation.Horizontal, Spacing = 5 };
-            foreach (var (topic, _) in _puzzle.Puzzle.AssociatedTopics.Take(_puzzle.Puzzle.AssociatedTopics.Count - 1))
+            StackLayout topics = new() { Orientation = Orientation.Vertical, Spacing = 5 };
+            foreach (var (topicId, _) in _puzzle.Puzzle.AssociatedTopics.Take(_puzzle.Puzzle.AssociatedTopics.Count - 1))
             {
-                topics.Items.Add(new LinkButton { Text = topic.ToString() });
+                TopicItem topic = (TopicItem)_project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Topic && ((TopicItem)i).Topic.Id == topicId);
+                LinkButton topicButton = new() { Text = topic?.Topic.Title ?? topicId.ToString() };
+                if (topic is not null)
+                {
+                    topicButton.Click += (s, e) => _tabs.OpenTab(topic, _log);
+                }
+                topics.Items.Add(topicButton);                
             }
             topicsBox.Content = topics;
             panel1.Items.Add(topicsBox);
