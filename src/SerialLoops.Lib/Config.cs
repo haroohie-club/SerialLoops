@@ -3,19 +3,24 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace SerialLoops.Lib
 {
     public class Config
     {
+        [JsonIgnore]
         public string ConfigPath { get; set; }
-        public string ProjectsDirectory { get; set; }
+        public string UserDirectory { get; set; }
+        [JsonIgnore]
+        public string ProjectsDirectory => Path.Combine(UserDirectory, "Projects");
+        [JsonIgnore]
+        public string LogsDirectory => Path.Combine(UserDirectory, "Logs");
         public string DevkitArmPath { get; set; }
         public string EmulatorPath { get; set; }
 
         public void Save(ILogger log)
         {
-            log.Log($"Saving config to '{ConfigPath}'...");
             IO.WriteStringFile(ConfigPath, JsonSerializer.Serialize(this), log);
         }
 
@@ -24,7 +29,6 @@ namespace SerialLoops.Lib
             string configJson = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.json");
             if (!File.Exists(configJson))
             {
-                log.Log($"Creating default config at '{configJson}'...");
                 Config defaultConfig = GetDefault(log);
                 defaultConfig.ValidateConfig(log);
                 defaultConfig.ConfigPath = configJson;
@@ -88,7 +92,7 @@ namespace SerialLoops.Lib
 
             return new Config
             {
-                ProjectsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "SerialLoops"),
+                UserDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "SerialLoops"),
                 DevkitArmPath = devkitArmDir,
                 EmulatorPath = emulatorPath
             };

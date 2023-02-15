@@ -1,14 +1,15 @@
-using System;
+using HaruhiChokuretsuLib.Util;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
-using HaruhiChokuretsuLib.Util;
+using System.Text.Json.Serialization;
 
 namespace SerialLoops.Lib
 {
     public class RecentProjects
     {
-        private const int MAX_RECENT_PROJECTS = 10; 
+        private const int MAX_RECENT_PROJECTS = 10;
+        [JsonIgnore]
         public string RecentProjectsPath { get; set; }
         public List<string> Projects { get; set; }
 
@@ -18,9 +19,9 @@ namespace SerialLoops.Lib
             IO.WriteStringFile(RecentProjectsPath, JsonSerializer.Serialize(this), log);
         }
         
-        public static RecentProjects LoadRecentProjects(ILogger log)
+        public static RecentProjects LoadRecentProjects(Config config, ILogger log)
         {
-            string recentProjectsJson = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "recent_projects.json");
+            string recentProjectsJson = Path.Combine(config.UserDirectory, "recent_projects.json");
             if (!File.Exists(recentProjectsJson))
             {
                 log.Log($"Creating default recent projects cache at '{recentProjectsJson}'...");
