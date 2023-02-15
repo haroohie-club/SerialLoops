@@ -1,5 +1,6 @@
 ﻿using Eto.Drawing;
 using Eto.Forms;
+using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Controls;
 using SerialLoops.Lib;
@@ -15,6 +16,7 @@ namespace SerialLoops.Editors
     public class ScenarioEditor : Editor
     {
         private ScenarioItem _scenario;
+        private Scrollable _scrollable;
 
         public ScenarioEditor(ScenarioItem item, ILogger log, Project project, EditorTabsPanel tabs) : base(item, log, project, tabs)
         {
@@ -24,7 +26,13 @@ namespace SerialLoops.Editors
         {
             _scenario = (ScenarioItem)Description;
 
-            TableLayout tableLayout = new()
+            _scrollable = new() { Content = GetTable() };
+            return _scrollable;
+        }
+
+        private TableLayout GetTable()
+        {
+            TableLayout table = new()
             {
                 Spacing = new Size(5, 5)
             };
@@ -35,6 +43,11 @@ namespace SerialLoops.Editors
             foreach ((ScenarioVerb verb, string parameter) in _scenario.ScenarioCommands)
             {
                 TableRow row = new();
+
+                ScenarioCommandButton addAfterButton = new() { Text = "+", CommandIndex = commandIndex };
+                ScenarioCommandButton deleteButton = new() { Text = "x", CommandIndex = commandIndex };
+                addAfterButton.Click += AddAfterButton_Click;
+                deleteButton.Click += DeleteButton_Click;
 
                 ScenarioCommandDropDown commandDropDown = new() { CommandIndex = commandIndex, ModifyCommand = true };
                 commandDropDown.Items.AddRange(verbs);
@@ -63,7 +76,7 @@ namespace SerialLoops.Editors
                         parameterDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Group_Selection).Select(p => new ListItem { Key = p.DisplayName, Text = p.DisplayName }));
                         break;
                 }
-                
+
                 if (parameterItem is not null)
                 {
                     parameterDropDown.SelectedKey = parameterItem.DisplayName;
@@ -100,11 +113,15 @@ namespace SerialLoops.Editors
                     row.Cells.Add(parameterLayout);
                 }
 
-                tableLayout.Rows.Add(row);
+                row.Cells.Add(addAfterButton);
+                row.Cells.Add(deleteButton);
+                row.Cells.Add(new());
+
+                table.Rows.Add(row);
                 commandIndex++;
             }
 
-            return new Scrollable { Content = tableLayout };
+            return table;
         }
 
         private void CommandDropDown_SelectedKeyChanged(object sender, EventArgs e)
@@ -195,6 +212,28 @@ namespace SerialLoops.Editors
 
                 UpdateTabTitle(false);
             }
+        }
+
+        private void AddAfterButton_Click(object sender, EventArgs e)
+        {
+            ScenarioCommandButton addAfterButton = (ScenarioCommandButton)sender;
+
+            _scenario.Scenario.Commands.Insert(addAfterButton.CommandIndex + 1, new(ScenarioVerb.LOAD_SCENE, 1));
+            _scenario.ScenarioCommands.Insert(addAfterButton.CommandIndex + 1, (ScenarioVerb.LOAD_SCENE, "BGTEST"));
+
+            _scrollable.Content = GetTable();
+            UpdateTabTitle(false);
+        }
+
+        private void DeleteButton_Click(object sender, EventArgs e)
+        {
+            ScenarioCommandButton deleteButton = (ScenarioCommandButton)sender;
+
+            _scenario.Scenario.Commands.RemoveAt(deleteButton.CommandIndex);
+            _scenario.ScenarioCommands.RemoveAt(deleteButton.CommandIndex);
+
+            _scrollable.Content = GetTable();
+            UpdateTabTitle(false);
         }
     }
 }

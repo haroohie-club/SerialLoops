@@ -28,6 +28,10 @@ namespace SerialLoops.Controls
     {
         public int CommandIndex { get; set; }
     }
+    public class ScenarioCommandButton : Button
+    {
+        public int CommandIndex { get; set; }
+    }
 
     public class ClearableLinkButton : LinkButton
     {
