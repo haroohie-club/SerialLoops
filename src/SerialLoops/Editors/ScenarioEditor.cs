@@ -64,6 +64,7 @@ namespace SerialLoops.Editors
                                 scriptLink,
                             },
                         };
+                        //commandDropDown.ParameterDropDown = scriptDropDown;
 
                         row.Cells.Add(scriptLayout);
                         break;
@@ -71,12 +72,12 @@ namespace SerialLoops.Editors
                     case ScenarioVerb.PUZZLE_PHASE:
                         PuzzleItem puzzle = (PuzzleItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Puzzle && i.DisplayName == parameter);
 
-                        DropDown puzzleDropDown = new();
+                        StackLayout puzzleLink = ControlGenerator.GetFileLink(puzzle, _tabs, _log);
+
+                        ScenarioCommandDropDown puzzleDropDown = new() { CommandIndex = commandIndex, ModifyCommand = false, Link = (ClearableLinkButton)puzzleLink.Items[1].Control };
                         puzzleDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Puzzle).Select(p => new ListItem { Key = p.DisplayName, Text = p.DisplayName }));
                         puzzleDropDown.SelectedKey = puzzle.DisplayName;
                         puzzleDropDown.SelectedKeyChanged += CommandDropDown_SelectedKeyChanged;
-
-                        StackLayout puzzleLink = ControlGenerator.GetFileLink(puzzle, _tabs, _log);
 
                         StackLayout puzzleLayout = new()
                         {
@@ -89,6 +90,8 @@ namespace SerialLoops.Editors
                         };
 
                         row.Cells.Add(puzzleLayout);
+                        //commandDropDown.ParameterDropDown = puzzleDropDown;
+
                         break;
 
                     default:
@@ -110,6 +113,18 @@ namespace SerialLoops.Editors
             if (dropDown.ModifyCommand)
             {
                 _scenario.Scenario.Commands[dropDown.CommandIndex].Verb = Enum.Parse<ScenarioVerb>(dropDown.SelectedKey);
+                dropDown.ParameterDropDown.Items.Clear();
+                switch (Enum.Parse<ScenarioVerb>(dropDown.SelectedKey))
+                {
+                    case ScenarioVerb.LOAD_SCENE:
+                        dropDown.ParameterDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Script).Select(i => new ListItem { Key = i.DisplayName, Text = i.DisplayName }));
+                        break;
+
+                    case ScenarioVerb.PUZZLE_PHASE:
+                        dropDown.ParameterDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Puzzle).Select(i => new ListItem { Key = i.DisplayName, Text = i.DisplayName }));
+                        break;
+                }
+                _scenario.Refresh(_project);
             }
             else
             {
