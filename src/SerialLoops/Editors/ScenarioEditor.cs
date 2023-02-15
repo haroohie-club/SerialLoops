@@ -85,7 +85,8 @@ namespace SerialLoops.Editors
                 }
                 else
                 {
-                    TextBox parameterBox = new() { Text = parameter };
+                    ScenarioCommandTextBox parameterBox = new() { Text = parameter, CommandIndex = commandIndex };
+                    parameterBox.TextChanged += ParameterBox_TextChanged;
                     StackLayout parameterLayout = new()
                     {
                         Orientation = Orientation.Horizontal,
@@ -147,7 +148,9 @@ namespace SerialLoops.Editors
                 }
                 else
                 {
-                    dropDown.ParameterLayout.Items.Add(new TextBox());
+                    ScenarioCommandTextBox parameterBox = new() { CommandIndex = dropDown.CommandIndex };
+                    parameterBox.TextChanged += ParameterBox_TextChanged;
+                    dropDown.ParameterLayout.Items.Add(parameterBox);
                 }
 
                 _scenario.Refresh(_project);
@@ -180,6 +183,18 @@ namespace SerialLoops.Editors
             }
 
             UpdateTabTitle(false);
+        }
+
+        private void ParameterBox_TextChanged(object sender, EventArgs e)
+        {
+            ScenarioCommandTextBox parameterBox = (ScenarioCommandTextBox)sender;
+            if (short.TryParse(parameterBox.Text, out short parameter))
+            {
+                _scenario.Scenario.Commands[parameterBox.CommandIndex].Parameter = parameter;
+                _scenario.ScenarioCommands[parameterBox.CommandIndex] = (_scenario.ScenarioCommands[parameterBox.CommandIndex].Command, parameter.ToString());
+
+                UpdateTabTitle(false);
+            }
         }
     }
 }

@@ -24,6 +24,10 @@ namespace SerialLoops.Controls
         public ClearableLinkButton Link { get; set; }
         public StackLayout ParameterLayout { get; set; }
     }
+    public class ScenarioCommandTextBox : TextBox
+    {
+        public int CommandIndex { get; set; }
+    }
 
     public class ClearableLinkButton : LinkButton
     {
