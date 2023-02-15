@@ -57,9 +57,9 @@ namespace SerialLoops.Editors
                     Items =
                     {
                         ControlGenerator.GetControlWithLabel("Haruhi Present", new CheckBox { Checked = routeSelection.HaruhiPresent }),
-                        ControlGenerator.GetControlWithLabel("Required Brigade Member", new Label { Text = routeSelection.RequiredBrigadeMember }),
-                        ControlGenerator.GetControlWithLabel("Future Description", new TextBox { Text = routeSelection.FutureDesc, Width = 200 }),
-                        ControlGenerator.GetControlWithLabel("Past Description", new TextBox { Text = routeSelection.PastDesc, Width = 200 }),
+                        ControlGenerator.GetControlWithLabel("Required Brigade Member", new Label { Text = routeSelection.RequiredBrigadeMember.ToString() }),
+                        ControlGenerator.GetControlWithLabel("Future Description", new TextBox { Text = routeSelection.FutureDesc, Width = 400 }),
+                        ControlGenerator.GetControlWithLabel("Past Description", new TextBox { Text = routeSelection.PastDesc, Width = 400 }),
                         ControlGenerator.GetControlWithLabel("Unknown 1", new TextBox { Text = routeSelection.UnknownInt1.ToString(), Width = 50 }),
                         ControlGenerator.GetControlWithLabel("Unknown 2", new TextBox { Text = routeSelection.UnknownInt2.ToString(), Width = 50 }),
                         ControlGenerator.GetControlWithLabel("Unknown 3", new TextBox { Text = routeSelection.UnknownInt3.ToString(), Width = 50 }),
