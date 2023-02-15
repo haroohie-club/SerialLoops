@@ -22,7 +22,7 @@ namespace SerialLoops.Controls
         public int CommandIndex { get; set; }
         public bool ModifyCommand { get; set; } // false = modify parameter
         public ClearableLinkButton Link { get; set; }
-        public ScenarioCommandDropDown ParameterDropDown { get; set; }
+        public StackLayout ParameterLayout { get; set; }
     }
 
     public class ClearableLinkButton : LinkButton

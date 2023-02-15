@@ -1,6 +1,5 @@
 ﻿using Eto.Drawing;
 using Eto.Forms;
-using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Controls;
 using SerialLoops.Lib;
@@ -42,61 +41,62 @@ namespace SerialLoops.Editors
                 commandDropDown.SelectedKey = verb.ToString();
                 commandDropDown.SelectedKeyChanged += CommandDropDown_SelectedKeyChanged;
                 row.Cells.Add(new TableCell(commandDropDown));
+
+                Item parameterItem = null;
+                StackLayout parameterLink = null;
+                ScenarioCommandDropDown parameterDropDown = new() { CommandIndex = commandIndex, ModifyCommand = false };
+
                 switch (verb)
                 {
                     case ScenarioVerb.LOAD_SCENE:
-                        ScriptItem script = (ScriptItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Script && i.DisplayName == parameter);
-
-                        StackLayout scriptLink = ControlGenerator.GetFileLink(script, _tabs, _log);
-
-                        ScenarioCommandDropDown scriptDropDown = new() { CommandIndex = commandIndex, ModifyCommand = false, Link = (ClearableLinkButton)scriptLink.Items[1].Control };
-                        scriptDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Script).Select(p => new ListItem { Key = p.DisplayName, Text = p.DisplayName }));
-                        scriptDropDown.SelectedKey = script.DisplayName;
-                        scriptDropDown.SelectedKeyChanged += CommandDropDown_SelectedKeyChanged;
-
-                        StackLayout scriptLayout = new()
-                        {
-                            Orientation = Orientation.Horizontal,
-                            Spacing = 5,
-                            Items =
-                            {
-                                scriptDropDown,
-                                scriptLink,
-                            },
-                        };
-                        //commandDropDown.ParameterDropDown = scriptDropDown;
-
-                        row.Cells.Add(scriptLayout);
+                        parameterItem = (ScriptItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Script && i.DisplayName == parameter);
+                        parameterDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Script).Select(p => new ListItem { Key = p.DisplayName, Text = p.DisplayName }));
                         break;
 
                     case ScenarioVerb.PUZZLE_PHASE:
-                        PuzzleItem puzzle = (PuzzleItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Puzzle && i.DisplayName == parameter);
+                        parameterItem = (PuzzleItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Puzzle && i.DisplayName == parameter);
+                        parameterDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Puzzle).Select(p => new ListItem { Key = p.DisplayName, Text = p.DisplayName }));
+                        break;
 
-                        StackLayout puzzleLink = ControlGenerator.GetFileLink(puzzle, _tabs, _log);
-
-                        ScenarioCommandDropDown puzzleDropDown = new() { CommandIndex = commandIndex, ModifyCommand = false, Link = (ClearableLinkButton)puzzleLink.Items[1].Control };
-                        puzzleDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Puzzle).Select(p => new ListItem { Key = p.DisplayName, Text = p.DisplayName }));
-                        puzzleDropDown.SelectedKey = puzzle.DisplayName;
-                        puzzleDropDown.SelectedKeyChanged += CommandDropDown_SelectedKeyChanged;
-
-                        StackLayout puzzleLayout = new()
+                    case ScenarioVerb.ROUTE_SELECT:
+                        parameterItem = (GroupSelectionItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Group_Selection && ((GroupSelectionItem)i).Index == short.Parse(parameter));
+                        parameterDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Group_Selection).Select(p => new ListItem { Key = p.DisplayName, Text = p.DisplayName }));
+                        break;
+                }
+                
+                if (parameterItem is not null)
+                {
+                    parameterDropDown.SelectedKey = parameterItem.DisplayName;
+                    parameterDropDown.SelectedKeyChanged += CommandDropDown_SelectedKeyChanged;
+                    parameterLink = ControlGenerator.GetFileLink(parameterItem, _tabs, _log);
+                    parameterDropDown.Link = (ClearableLinkButton)parameterLink.Items[1].Control;
+                    StackLayout parameterLayout = new()
+                    {
+                        Orientation = Orientation.Horizontal,
+                        Spacing = 5,
+                        Items =
                         {
-                            Orientation = Orientation.Horizontal,
-                            Items =
-                            {
-                                puzzleDropDown,
-                                puzzleLink,
-                            },
-                        };
-
-                        row.Cells.Add(puzzleLayout);
-                        //commandDropDown.ParameterDropDown = puzzleDropDown;
-
-                        break;
-
-                    default:
-                        row.Cells.Add(new TableCell(new TextBox { Text = parameter }));
-                        break;
+                            parameterDropDown,
+                            parameterLink,
+                        },
+                    };
+                    commandDropDown.ParameterLayout = parameterLayout;
+                    row.Cells.Add(parameterLayout);
+                }
+                else
+                {
+                    TextBox parameterBox = new() { Text = parameter };
+                    StackLayout parameterLayout = new()
+                    {
+                        Orientation = Orientation.Horizontal,
+                        Spacing = 5,
+                        Items =
+                        {
+                            parameterBox
+                        },
+                    };
+                    commandDropDown.ParameterLayout = parameterLayout;
+                    row.Cells.Add(parameterLayout);
                 }
 
                 tableLayout.Rows.Add(row);
@@ -109,36 +109,71 @@ namespace SerialLoops.Editors
         private void CommandDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
             ScenarioCommandDropDown dropDown = (ScenarioCommandDropDown)sender;
+            if (string.IsNullOrEmpty(dropDown.SelectedKey))
+            {
+                return;
+            }
 
             if (dropDown.ModifyCommand)
             {
                 _scenario.Scenario.Commands[dropDown.CommandIndex].Verb = Enum.Parse<ScenarioVerb>(dropDown.SelectedKey);
-                dropDown.ParameterDropDown.Items.Clear();
+                _scenario.ScenarioCommands[dropDown.CommandIndex] = (_scenario.Scenario.Commands[dropDown.CommandIndex].Verb, _scenario.ScenarioCommands[dropDown.CommandIndex].Parameter);
+                dropDown.ParameterLayout.Items.Clear();
+
+                ScenarioCommandDropDown parameterDropDown = new() { CommandIndex = dropDown.CommandIndex, ModifyCommand = false };
                 switch (Enum.Parse<ScenarioVerb>(dropDown.SelectedKey))
                 {
                     case ScenarioVerb.LOAD_SCENE:
-                        dropDown.ParameterDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Script).Select(i => new ListItem { Key = i.DisplayName, Text = i.DisplayName }));
+                        parameterDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Script).Select(p => new ListItem { Key = p.DisplayName, Text = p.DisplayName }));
                         break;
 
                     case ScenarioVerb.PUZZLE_PHASE:
-                        dropDown.ParameterDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Puzzle).Select(i => new ListItem { Key = i.DisplayName, Text = i.DisplayName }));
+                        parameterDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Puzzle).Select(p => new ListItem { Key = p.DisplayName, Text = p.DisplayName }));
+                        break;
+
+                    case ScenarioVerb.ROUTE_SELECT:
+                        parameterDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Group_Selection).Select(p => new ListItem { Key = p.DisplayName, Text = p.DisplayName }));
                         break;
                 }
+                if (parameterDropDown.Items.Count > 0)
+                {
+                    parameterDropDown.SelectedKeyChanged += CommandDropDown_SelectedKeyChanged;
+                    StackLayout parameterLink = ControlGenerator.GetFileLink(_project.Items.First(i => i.DisplayName == parameterDropDown.Items.First().Key), _tabs, _log);
+                    parameterDropDown.Link = (ClearableLinkButton)parameterLink.Items[1].Control;
+                    parameterDropDown.SelectedKey = parameterDropDown.Items.First().Key;
+
+                    dropDown.ParameterLayout.Items.Add(parameterDropDown);
+                    dropDown.ParameterLayout.Items.Add(parameterLink);
+                }
+                else
+                {
+                    dropDown.ParameterLayout.Items.Add(new TextBox());
+                }
+
                 _scenario.Refresh(_project);
             }
             else
             {
                 ItemDescription item = _project.Items.First(i => i.Name == dropDown.SelectedKey);
-                if (item.Type == ItemDescription.ItemType.Script)
+                switch (item.Type)
                 {
-                    _scenario.Scenario.Commands[dropDown.CommandIndex].Parameter = ((ScriptItem)item).Event.Index;
-                    _scenario.Refresh(_project);
+                    case ItemDescription.ItemType.Group_Selection:
+                        _scenario.Scenario.Commands[dropDown.CommandIndex].Parameter = ((GroupSelectionItem)item).Index;
+                        _scenario.ScenarioCommands[dropDown.CommandIndex] = (_scenario.ScenarioCommands[dropDown.CommandIndex].Command, ((GroupSelectionItem)item).Index.ToString());
+                        break;
+
+                    case ItemDescription.ItemType.Puzzle:
+                        _scenario.Scenario.Commands[dropDown.CommandIndex].Parameter = ((PuzzleItem)item).Puzzle.Index;
+                        _scenario.ScenarioCommands[dropDown.CommandIndex] = (_scenario.ScenarioCommands[dropDown.CommandIndex].Command, item.DisplayName);
+                        break;
+
+                    case ItemDescription.ItemType.Script:
+                        _scenario.Scenario.Commands[dropDown.CommandIndex].Parameter = ((ScriptItem)item).Event.Index;
+                        _scenario.ScenarioCommands[dropDown.CommandIndex] = (_scenario.ScenarioCommands[dropDown.CommandIndex].Command, item.DisplayName);
+                        break;
                 }
-                else if (item.Type == ItemDescription.ItemType.Puzzle)
-                {
-                    _scenario.Scenario.Commands[dropDown.CommandIndex].Parameter = ((PuzzleItem)item).Puzzle.Index;
-                    _scenario.Refresh(_project);
-                }
+                _scenario.Refresh(_project);
+
                 dropDown.Link.RemoveAllClickEvents();
                 dropDown.Link.Text = item.DisplayName;
                 dropDown.Link.ClickUnique += ControlGenerator.GetFileLinkClickHandler(item, _tabs, _log);
