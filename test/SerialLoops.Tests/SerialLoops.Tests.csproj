@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\SerialLoops.Lib\SerialLoops.Lib.csproj" />
+    <ProjectReference Include="..\..\src\SerialLoops\SerialLoops.csproj" />
   </ItemGroup>
 
   <ItemGroup>

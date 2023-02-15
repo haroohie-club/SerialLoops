@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
-using SerialLoops.Editors;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
+using SerialLoops.Utility;
 using System;
 using System.IO;
 using System.IO.Compression;
@@ -10,7 +10,7 @@ using System.Net.Http;
 
 namespace SerialLoops.Tests
 {
-    public class IntegrationTests
+    public class ItemTests
     {
         private Project _project;
         private Config _config;
@@ -19,7 +19,6 @@ namespace SerialLoops.Tests
 
         private HaruhiChokuretsuLib.Util.ConsoleLogger _log;
         private ConsoleProgressTracker _progressTracker;
-        Platform _platform;
 
         [OneTimeSetUp]
         public void SetUp()
@@ -67,11 +66,6 @@ namespace SerialLoops.Tests
 
             // Load the project archives
             _project.LoadArchives(_log, _progressTracker);
-
-            if (OperatingSystem.IsWindows())
-            {
-                //_platform = Eto;
-            }
         }
 
         [OneTimeTearDown]
@@ -82,12 +76,34 @@ namespace SerialLoops.Tests
             Directory.Delete(_project.MainDirectory, true);
         }
 
-        [Test]
+        [Test, Parallelizable(ParallelScope.Self)]
         public void BackgroundTest()
         {
             foreach (BackgroundItem bg in _project.Items.Where(i => i.Type == ItemDescription.ItemType.Background).Cast<BackgroundItem>())
             {
-                new Application(Platform.Detect).Run(new MainForm());
+                Assert.Multiple(() =>
+                {
+                    Assert.DoesNotThrow(() => bg.GetPreview(_project));
+                    Assert.That(bg.Graphic1 is not null);
+                });
+            }
+        }
+
+        [Test, Parallelizable]
+        public void BackgroundMusicItem()
+        {
+            foreach (BackgroundMusicItem bgm in _project.Items.Where(i => i.Type == ItemDescription.ItemType.BGM).Cast<BackgroundMusicItem>())
+            {
+                Assert.That(bgm.BgmFile.Contains(bgm.Name));
+            }
+        }
+
+        [Test, Parallelizable]
+        public void CharacterSpriteItem()
+        {
+            foreach (CharacterSpriteItem sprite in _project.Items.Where(i => i.Type == ItemDescription.ItemType.Character_Sprite).Cast<CharacterSpriteItem>())
+            {
+                Assert.That(sprite.)
             }
         }
     }

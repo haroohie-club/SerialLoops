@@ -10,7 +10,7 @@ namespace SerialLoops.Wpf
         {
             var platform = new Eto.Wpf.Platform();
             platform.Add<SoundPlayer.ISoundPlayer>(() => new SoundPlayerHandler());
-
+            
             new Application(platform).Run(new MainForm());
         }
     }
