@@ -274,7 +274,7 @@ namespace SerialLoops.Lib
             log.Log($"Compiling '{filePath}' to '{objFile}' with '{gccStartInfo.FileName}'...");
             Process gcc = new() { StartInfo = gccStartInfo };
             gcc.OutputDataReceived += (object sender, DataReceivedEventArgs e) => log.Log(e.Data);
-            gcc.ErrorDataReceived += (object sender, DataReceivedEventArgs e) => log.LogError(e.Data, lookForWarnings: true);
+            gcc.ErrorDataReceived += (object sender, DataReceivedEventArgs e) => log.LogWarning(e.Data);
             gcc.Start();
             await gcc.WaitForExitAsync();
             await Task.Delay(50); // ensures process is actually complete
@@ -293,7 +293,7 @@ namespace SerialLoops.Lib
             log.Log($"Objcopying '{objFile}' to '{binFile}' with '{objcopyStartInfo.FileName}'...");
             Process objcopy = new() { StartInfo = objcopyStartInfo };
             objcopy.OutputDataReceived += (object sender, DataReceivedEventArgs e) => log.Log(e.Data);
-            objcopy.ErrorDataReceived += (object sender, DataReceivedEventArgs e) => log.LogError(e.Data, lookForWarnings: true);
+            objcopy.ErrorDataReceived += (object sender, DataReceivedEventArgs e) => log.LogWarning(e.Data);
             objcopy.Start();
             await objcopy.WaitForExitAsync();
             await Task.Delay(50); // ensures process is actually complete

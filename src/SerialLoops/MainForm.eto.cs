@@ -1,4 +1,5 @@
 using Eto.Forms;
+using HaruhiChokuretsuLib.Archive;
 using HaruhiChokuretsuLib.Archive.Event;
 using SerialLoops.Controls;
 using SerialLoops.Editors;
@@ -188,6 +189,21 @@ namespace SerialLoops
             {
                 switch (item.Type)
                 {
+                    case ItemDescription.ItemType.Scenario:
+                        ScenarioStruct scenario = ((ScenarioItem)item).Scenario;
+                        IO.WriteStringFile(Path.Combine("assets", "events", $"{OpenProject.Evt.Files.First(f => f.Name == "SCENARIOS").Index:X3}.s"),
+                            // TODO: Refactor this logic into the chokuretsu library so that we don't end up with ugliness like this for all of our includes
+                            scenario.GetSource(new()
+                            {
+                                { "DATBIN", OpenProject.Dat.GetSourceInclude().Split('\n').Where(s => !string.IsNullOrEmpty(s)).Select(i => new IncludeEntry(i)).ToArray() },
+                                { "EVTBIN", OpenProject.Evt.GetSourceInclude().Split('\n').Where(s => !string.IsNullOrEmpty(s)).Select(i => new IncludeEntry(i)).ToArray() }
+                            }, _log),
+                            OpenProject, _log);
+                        foreach (Editor editor in EditorTabs.Tabs.Pages.Cast<Editor>())
+                        {
+                            editor.UpdateTabTitle(true);
+                        }
+                        break;
                     case ItemDescription.ItemType.Script:
                         EventFile evt = ((ScriptItem)item).Event;
                         IO.WriteStringFile(Path.Combine("assets", "events", $"{evt.Index:X3}.s"), evt.GetSource(new()), OpenProject, _log);
@@ -221,7 +237,7 @@ namespace SerialLoops
         {
             if (OpenProject is not null)
             {
-                bool buildSucceeded = false;
+                bool buildSucceeded = true; // imo it's better to have a false negative than a false positive here
                 LoopyProgressTracker tracker = new("Building:");
                 ProgressDialog loadingDialog = new(async () => buildSucceeded = await Build.BuildIterative(OpenProject, CurrentConfig, _log, tracker), () =>
                 {
