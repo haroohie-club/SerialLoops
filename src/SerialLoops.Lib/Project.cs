@@ -153,6 +153,13 @@ namespace SerialLoops.Lib
             scenarioFile.InitializeScenarioFile();
             Items.Add(new ScenarioItem(scenarioFile.Scenario, this));
             tracker.Finished++;
+
+            tracker.Focus("Group Selections", scenarioFile.Scenario.Selects.Count);
+            for (int i = 0; i < scenarioFile.Scenario.Selects.Count; i++)
+            {
+                Items.Add(new GroupSelectionItem(scenarioFile.Scenario.Selects[i], i, this));
+                tracker.Finished++;
+            }
         }
 
         public ItemDescription FindItem(string name)

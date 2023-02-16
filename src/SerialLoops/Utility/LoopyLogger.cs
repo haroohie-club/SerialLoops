@@ -36,7 +36,7 @@ namespace SerialLoops.Utility
 
         public void LogError(string message, bool lookForWarnings = false)
         {
-            MessageBox.Show($"ERROR: {message}", "Error", MessageBoxType.Error);
+            Application.Instance.Invoke(() => MessageBox.Show($"ERROR: {message}", "Error", MessageBoxType.Error));
             if (_writer is not null)
             {
                 _writer.WriteLine($"{DateTimeOffset.Now} - ERROR: {message}");

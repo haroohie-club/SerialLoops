@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Eto.Forms;
+using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
@@ -9,11 +10,27 @@ using SerialLoops.Utility;
 
 namespace SerialLoops.Controls
 {
-    public class CommandDropDown : DropDown
+    public class ScriptCommandDropDown : DropDown
     {
         public ScriptItemCommand Command { get; set; }
         public int ParameterIndex { get; set; }
         public ClearableLinkButton Link { get; set; }
+    }
+
+    public class ScenarioCommandDropDown : DropDown
+    {
+        public int CommandIndex { get; set; }
+        public bool ModifyCommand { get; set; } // false = modify parameter
+        public ClearableLinkButton Link { get; set; }
+        public StackLayout ParameterLayout { get; set; }
+    }
+    public class ScenarioCommandTextBox : TextBox
+    {
+        public int CommandIndex { get; set; }
+    }
+    public class ScenarioCommandButton : Button
+    {
+        public int CommandIndex { get; set; }
     }
 
     public class ClearableLinkButton : LinkButton
