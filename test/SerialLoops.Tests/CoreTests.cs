@@ -128,6 +128,13 @@ namespace SerialLoops.Tests
             });
         }
 
+        [Test, TestCaseSource(nameof(GroupSelectionNames)), Parallelizable(ParallelScope.All)]
+        public void GroupSelectionItemTest(string groupSelectionName)
+        {
+            var groupSelection = (GroupSelectionItem)_project.FindItem(groupSelectionName);
+            Assert.That(groupSelection.Selection.RouteSelections, Is.Not.Empty);
+        }
+
         [Test, TestCaseSource(nameof(MapNames)), Parallelizable(ParallelScope.All)]
         public void MapItemTest(string mapNames)
         {
@@ -218,6 +225,10 @@ namespace SerialLoops.Tests
         private static string[] ChibiNames()
         {
             return File.ReadAllLines(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "item_names", "Chibis.txt"));
+        }
+        public static string[] GroupSelectionNames()
+        {
+            return File.ReadAllLines(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "item_names", "Group_Selections.txt"));
         }
         private static string[] MapNames()
         {
