@@ -577,7 +577,7 @@ namespace SerialLoops.Lib.Script
                                 parameters.Add(new BgScriptParameter("Background", (BackgroundItem)project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == parameter), kinetic: false));
                                 break;
                             case 1:
-                                parameters.Add(new ShortScriptParameter("Unknown", parameter));
+                                parameters.Add(new BoolScriptParameter("Display from Bottom", parameter == 1));
                                 break;
                         }
                         break;
