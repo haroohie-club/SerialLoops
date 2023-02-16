@@ -3,6 +3,7 @@ using Eto.Forms;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
+using SerialLoops.Utility;
 using System;
 
 namespace SerialLoops.Controls
@@ -17,7 +18,13 @@ namespace SerialLoops.Controls
         {
             _project = project;
             _tabs = tabs;
-            ((TreeGridView)Viewer.Control).ContextMenu = new ItemContextMenu(project, this, tabs, _log);
+            Viewer.SelectedItemChanged += Viewer_SelectedItemChanged;
+            ((TreeGridView)Viewer.Control).ContextMenu = Viewer.SelectedItem.Text.GetContextMenu(_project, this, _tabs, _log);
+        }
+
+        private void Viewer_SelectedItemChanged(object sender, EventArgs e)
+        {
+            ((TreeGridView)Viewer.Control).ContextMenu = Viewer.SelectedItem.Text.GetContextMenu(_project, this, _tabs, _log);
         }
 
         protected override void ItemList_ItemClicked(object sender, EventArgs e)

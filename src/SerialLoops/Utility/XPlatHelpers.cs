@@ -12,6 +12,11 @@ namespace SerialLoops.Utility
             DialogResult result = openFileDialog.ShowDialog(parent);
             return result == DialogResult.Ok || result == DialogResult.Ignore; // "Ignore" is returned on Linux
         }
+        public static bool ShowAndReportIfFileSelected(this SaveFileDialog saveFileDialog, Control parent)
+        {
+            DialogResult result = saveFileDialog.ShowDialog(parent);
+            return result == DialogResult.Ok || result == DialogResult.Ignore; // "Ignore" is returned on Linux
+        }
         public static bool ShowAndReportIfFileSelected(this SelectFolderDialog selectFolderDialog, Control parent)
         {
             DialogResult result = selectFolderDialog.ShowDialog(parent);

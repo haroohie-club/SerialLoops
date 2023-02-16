@@ -3,7 +3,6 @@ using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Archive.Graphics;
 using HaruhiChokuretsuLib.Util;
-using NAudio.MediaFoundation;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Util;
 using System;
@@ -170,7 +169,7 @@ namespace SerialLoops.Lib
             project.LoadArchives(log, tracker);
             return project;
         }
-        public static List<ItemDescription> GetSearchResults(string searchTerm)
+        public List<ItemDescription> GetSearchResults(string searchTerm)
         {
             return Items.Where(item => item.Name.Contains(searchTerm.Trim(), StringComparison.OrdinalIgnoreCase) || item.DisplayName.Contains(searchTerm.Trim(), StringComparison.OrdinalIgnoreCase)).ToList();
         }

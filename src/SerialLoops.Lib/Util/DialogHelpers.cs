@@ -11,6 +11,6 @@ namespace SerialLoops.Lib.Util
 {
     public static class DialogHelpers
     {
-        
+
     }
 }

@@ -13,8 +13,6 @@ using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Emit;
-using static SerialLoops.Lib.Script.ScriptItemCommand;
 
 namespace SerialLoops.Editors
 {
@@ -42,14 +40,7 @@ namespace SerialLoops.Editors
 
         private void PopulateScriptCommands()
         {
-            foreach (ScriptSection section in _script.Event.ScriptSections)
-            {
-                _commands.Add(section, new());
-                foreach (ScriptCommandInvocation command in section.Objects)
-                {
-                    _commands[section].Add(FromInvocation(command, section, _commands[section].Count, _script.Event, _project));
-                }
-            }
+            _commands = _script.GetScriptCommandTree(_project);
         }
 
         private Container GetCommandsContainer()
@@ -540,6 +531,12 @@ namespace SerialLoops.Editors
             canvas.DrawColor(SKColors.Black);
 
             List<ScriptItemCommand> commands = ((ScriptCommandSectionEntry)_commandsPanel.Viewer.SelectedItem).Command.WalkCommandGraph(_commands, _script.Graph);
+
+            if (commands is null)
+            {
+                _log.LogError($"Unable to render preview for command as commands list was null.");
+                return;
+            }
 
             // Draw top screen "kinetic" background
             for (int i = commands.Count - 1; i >= 0; i--)

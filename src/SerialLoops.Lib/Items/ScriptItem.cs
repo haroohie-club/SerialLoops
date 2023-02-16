@@ -24,6 +24,20 @@ namespace SerialLoops.Lib.Items
             Graph.AddVertexRange(Event.ScriptSections);
         }
 
+        public Dictionary<ScriptSection, List<ScriptItemCommand>> GetScriptCommandTree(Project project)
+        {
+            Dictionary<ScriptSection, List<ScriptItemCommand>> commands = new();
+            foreach (ScriptSection section in Event.ScriptSections)
+            {
+                commands.Add(section, new());
+                foreach (ScriptCommandInvocation command in section.Objects)
+                {
+                    commands[section].Add(ScriptItemCommand.FromInvocation(command, section, commands[section].Count, Event, project));
+                }
+            }
+            return commands;
+        }
+
         public void CalculateGraphEdges(Dictionary<ScriptSection, List<ScriptItemCommand>> commandTree)
         {
             foreach (ScriptSection section in commandTree.Keys)
@@ -37,6 +51,10 @@ namespace SerialLoops.Lib.Items
                         Graph.AddEdgeRange(Event.ScriptSections.Where(s =>
                             Event.LabelsSection.Objects.Where(l =>
                             Event.MapCharactersSection.Objects.Select(c => c.TalkScriptBlock).Contains(l.Id))
+                            .Select(l => l.Name.Replace("/", "")).Contains(s.Name)).Select(s => new ScriptSectionEdge() { Source = section, Target = s }));
+                        Graph.AddEdgeRange(Event.ScriptSections.Where(s =>
+                            Event.LabelsSection.Objects.Where(l =>
+                            Event.InteractableObjectsSection.Objects.Select(o => o.ScriptBlock).Contains(l.Id))
                             .Select(l => l.Name.Replace("/", "")).Contains(s.Name)).Select(s => new ScriptSectionEdge() { Source = section, Target = s }));
                         @continue = true;
                     }
@@ -53,6 +71,11 @@ namespace SerialLoops.Lib.Items
                     {
                         Graph.AddEdgeRange(command.Parameters.Cast<ScriptSectionScriptParameter>()
                             .Where(p => p.Section is not null).Select(p => new ScriptSectionEdge() { Source = section, Target = p.Section }));
+                        ScriptSection miss2Section = Event.ScriptSections.FirstOrDefault(s => s.Name == "NONEMiss2");
+                        if (miss2Section is not null)
+                        {
+                            Graph.AddEdge(new() { Source = section, Target = Event.ScriptSections.First(s => s.Name == "NONEMiss2") }); // hardcode this section, even tho you can't get to it
+                        }
                     }
                     else if (command.Verb == CommandVerb.SELECT)
                     {
@@ -70,6 +93,10 @@ namespace SerialLoops.Lib.Items
                     else if (command.Verb == CommandVerb.SET_READ_FLAG && section.Name != "SCRIPT00")
                     {
                         @continue = true;
+                    }
+                    else if (Name.StartsWith("CHS") && Name.EndsWith("90") && commandTree.Keys.ToList().IndexOf(section) > 1 && command.Index == 0)
+                    {
+                        Graph.AddEdge(new() { Source = Event.ScriptSections[1], Target = section }); // these particular chess files have no VGOTOs, so uh... we manually hardcode them
                     }
                 }
                 if (@continue)

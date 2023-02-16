@@ -47,7 +47,12 @@ namespace SerialLoops.Lib.Script
                 {
                     dfs.Compute(commandTree.Keys.First());
                 }
-                bool test = observer.TryGetPath(Section, out IEnumerable<ScriptSectionEdge> path);
+                bool success = observer.TryGetPath(Section, out IEnumerable<ScriptSectionEdge> path);
+
+                if (!success)
+                {
+                    return null;
+                }
 
                 foreach (ScriptSectionEdge edge in path)
                 {

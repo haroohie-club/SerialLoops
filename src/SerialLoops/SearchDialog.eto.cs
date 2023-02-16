@@ -67,7 +67,7 @@ namespace SerialLoops
             string searchTerm = _searchInput.Text;
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
-                Project.GetSearchResults(searchTerm);
+                _results.Items = Project.GetSearchResults(searchTerm);
             }
             else
             {

@@ -33,7 +33,5 @@ namespace SerialLoops
             }
             base.OnLoad(e);
         }
-        
     }
-    
 }
