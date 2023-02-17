@@ -143,6 +143,10 @@ namespace SerialLoops
             catch (Exception e)
             {
                 _log.LogError($"Failed to load cached data: {e.Message}");
+                string projectFile = project.ProjectFile;
+                ProjectsCache.RecentWorkspaces.Remove(projectFile);
+                ProjectsCache.RecentProjects.Remove(projectFile);
+                ProjectsCache.Save(_log);
             }
         }
 

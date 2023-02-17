@@ -123,11 +123,17 @@ namespace SerialLoops.Lib
             // Copy out the files we need to build the ROM
             tracker.Focus("Copying Files", 4);
             CopyFiles(Path.Combine(project.BaseDirectory, "rom", "data"), Path.Combine(project.BaseDirectory, "original", "archives"), "*.bin");
+            tracker.Finished++;
+
             CopyFiles(Path.Combine(project.IterativeDirectory, "rom", "data"), Path.Combine(project.IterativeDirectory, "original", "archives"), "*.bin");
+            tracker.Finished++;
+
             CopyFiles(Path.Combine(project.BaseDirectory, "rom", "overlay"), Path.Combine(project.BaseDirectory, "original", "overlay"));
+            tracker.Finished++;
+
             CopyFiles(Path.Combine(project.IterativeDirectory, "rom", "overlay"), Path.Combine(project.IterativeDirectory, "original", "overlay"));
-            tracker.Finished += 4;
-            
+            tracker.Finished++;
+
             // We conditionalize these so we can test on a non-copyrighted ROM; this should always be true with real data
             if (Directory.Exists(Path.Combine(project.BaseDirectory, "rom", "data", "bgm")))
             {
