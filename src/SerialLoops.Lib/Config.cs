@@ -4,6 +4,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 
 namespace SerialLoops.Lib
 {
@@ -18,10 +19,15 @@ namespace SerialLoops.Lib
         public string LogsDirectory => Path.Combine(UserDirectory, "Logs");
         public string DevkitArmPath { get; set; }
         public string EmulatorPath { get; set; }
+        public bool AutoReopenLastProject { get; set; }
+        public bool RememberProjectWorkspace { get; set; }
 
-        public void Save(ILogger log)
+        public async void Save(ILogger log)
         {
-            IO.WriteStringFile(ConfigPath, JsonSerializer.Serialize(this), log);
+            await Task.Run(() =>
+            {
+                IO.WriteStringFile(ConfigPath, JsonSerializer.Serialize(this), log);
+            });
         }
 
         public static Config LoadConfig(ILogger log)
@@ -94,7 +100,9 @@ namespace SerialLoops.Lib
             {
                 UserDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "SerialLoops"),
                 DevkitArmPath = devkitArmDir,
-                EmulatorPath = emulatorPath
+                EmulatorPath = emulatorPath,
+                AutoReopenLastProject = true,
+                RememberProjectWorkspace = true
             };
         }
     }
