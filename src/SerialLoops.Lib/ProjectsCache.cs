@@ -17,11 +17,8 @@ namespace SerialLoops.Lib
 
         public async void Save(ILogger log)
         {
-            await Task.Run(() =>
-            {
-                log.Log($"Caching recent projects and workspaces to '{CacheFilePath}'...");
-                IO.WriteStringFile(CacheFilePath, JsonSerializer.Serialize(this), log);
-            });
+            log.Log($"Caching recent projects and workspaces to '{CacheFilePath}'...");
+            IO.WriteStringFile(CacheFilePath, JsonSerializer.Serialize(this), log);
         }
         
         public static ProjectsCache LoadCache(Config config, ILogger log)

@@ -93,11 +93,12 @@ namespace SerialLoops
 
             ToolBar = new ToolBar
             {
+                Style = "sl-toolbar",
                 Items =
                 {
-                    buildIterativeProject,
-                    buildAndRunProject,
-                    searchProject
+                    ControlGenerator.GetToolBarItem(buildIterativeProject),
+                    ControlGenerator.GetToolBarItem(buildAndRunProject),
+                    ControlGenerator.GetToolBarItem(searchProject)
                 }
             };
         }

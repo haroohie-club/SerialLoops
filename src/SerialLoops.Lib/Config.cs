@@ -22,12 +22,9 @@ namespace SerialLoops.Lib
         public bool AutoReopenLastProject { get; set; }
         public bool RememberProjectWorkspace { get; set; }
 
-        public async void Save(ILogger log)
+        public void Save(ILogger log)
         {
-            await Task.Run(() =>
-            {
-                IO.WriteStringFile(ConfigPath, JsonSerializer.Serialize(this), log);
-            });
+            IO.WriteStringFile(ConfigPath, JsonSerializer.Serialize(this), log);
         }
 
         public static Config LoadConfig(ILogger log)

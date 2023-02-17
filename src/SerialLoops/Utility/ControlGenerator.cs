@@ -76,5 +76,10 @@ namespace SerialLoops.Utility
                 return null;
             }
         }
+
+        public static ButtonToolItem GetToolBarItem(Command command)
+        {
+            return new(command) { Style = "sl-toolbar-button" };
+        }
     }
 }
