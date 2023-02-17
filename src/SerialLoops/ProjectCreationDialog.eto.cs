@@ -6,6 +6,7 @@ using SerialLoops.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using SerialLoops.Lib.Util;
 
 namespace SerialLoops
 {
@@ -170,9 +171,12 @@ namespace SerialLoops
                         includeFontHack = true;
                     }
                 }
-                IO.OpenRom(NewProject, _romPath.Text, includeFontHack);
-                NewProject.LoadArchives(Log, new LoopyProgressTracker());
-                Close();
+                LoopyProgressTracker tracker = new();
+                ProgressDialog _ = new(() => 
+                {
+                    IO.OpenRom(NewProject, _romPath.Text, includeFontHack, tracker);
+                    NewProject.LoadArchives(Log, tracker);
+                }, Close, tracker, "Creating Project");
             }
         }
 
