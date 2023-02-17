@@ -2,11 +2,11 @@ using Eto.Drawing;
 using Eto.Forms;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Logging;
+using SerialLoops.Lib.Util;
 using SerialLoops.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using SerialLoops.Lib.Util;
 
 namespace SerialLoops
 {
@@ -164,6 +164,7 @@ namespace SerialLoops
             {
                 NewProject = new(_nameBox.Text, _languageDropDown.Items[_languageDropDown.SelectedIndex].Key, Config, Log);
                 bool includeFontHack = false;
+                string romPath = _romPath.Text;
                 if (NewProject.LangCode != "ja")
                 {
                     if (MessageBox.Show("Would you like to install the font hack? If you are using a translated base ROM, select no.", "Project Creation", MessageBoxButtons.YesNo, MessageBoxType.Question, MessageBoxDefaultButton.Yes) == DialogResult.Yes)
@@ -174,7 +175,9 @@ namespace SerialLoops
                 LoopyProgressTracker tracker = new();
                 ProgressDialog _ = new(() => 
                 {
-                    IO.OpenRom(NewProject, _romPath.Text, includeFontHack, tracker);
+                    ((IProgressTracker)tracker).Focus("Creating Project", 1);
+                    IO.OpenRom(NewProject, romPath, includeFontHack, tracker);
+                    tracker.Finished++;
                     NewProject.LoadArchives(Log, tracker);
                 }, Close, tracker, "Creating Project");
             }
