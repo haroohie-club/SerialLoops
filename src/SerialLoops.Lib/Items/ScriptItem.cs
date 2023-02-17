@@ -22,6 +22,11 @@ namespace SerialLoops.Lib.Items
             Event = evt;
 
             Graph.AddVertexRange(Event.ScriptSections);
+
+            SearchableText = string.Join('\n', evt.ScriptSections.SelectMany(s => s.Objects.Select(c => c.Command.Mnemonic))
+                .Concat(evt.ConditionalsSection.Objects));
+                //.Concat(evt.LabelsSection.Objects.Select(l => l.Name))
+                //.Concat(evt.DialogueLines.Select(l => l.Text)));
         }
 
         public Dictionary<ScriptSection, List<ScriptItemCommand>> GetScriptCommandTree(Project project)

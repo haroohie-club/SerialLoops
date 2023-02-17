@@ -3,6 +3,7 @@ using Eto.Forms;
 using SerialLoops.Controls;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
+using SerialLoops.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +12,9 @@ namespace SerialLoops
 {
     partial class SearchDialog : FindItemsDialog
     {
-        
         private ItemResultsPanel _results;
         private TextBox _searchInput;
+        private bool _titlesOnly = true;
 
         void InitializeComponent()
         {
@@ -31,6 +32,8 @@ namespace SerialLoops
                 Size = new Size(200, 25)
             };
             _searchInput.TextChanged += SearchInput_OnTextChanged;
+            CheckBox titlesOnlyBox = new() { Checked = _titlesOnly };
+            titlesOnlyBox.CheckedChanged += TitlesOnlyBox_CheckedChanged;
 
             Content = new StackLayout
             {
@@ -51,7 +54,8 @@ namespace SerialLoops
                             Items =
                             {
                                 "Find: ",
-                                _searchInput
+                                _searchInput,
+                                ControlGenerator.GetControlWithLabel("Titles Only?", titlesOnlyBox),
                             }
                         }
                     },
@@ -61,13 +65,13 @@ namespace SerialLoops
 
             _searchInput.Focus();
         }
-
-        private void SearchInput_OnTextChanged(object sender, EventArgs e)
+        
+        private void Search()
         {
             string searchTerm = _searchInput.Text;
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
-                _results.Items = Project.GetSearchResults(searchTerm);
+                _results.Items = Project.GetSearchResults(searchTerm, _titlesOnly);
             }
             else
             {
@@ -75,5 +79,15 @@ namespace SerialLoops
             }
         }
 
+        private void SearchInput_OnTextChanged(object sender, EventArgs e)
+        {
+            Search();
+        }
+
+        private void TitlesOnlyBox_CheckedChanged(object sender, EventArgs e)
+        {
+            _titlesOnly = ((CheckBox)sender).Checked ?? false;
+            Search();
+        }
     }
 }

@@ -176,9 +176,22 @@ namespace SerialLoops.Lib
             project.LoadArchives(log, tracker);
             return project;
         }
-        public List<ItemDescription> GetSearchResults(string searchTerm)
+        public List<ItemDescription> GetSearchResults(string searchTerm, bool titlesOnly = true)
         {
-            return Items.Where(item => item.Name.Contains(searchTerm.Trim(), StringComparison.OrdinalIgnoreCase) || item.DisplayName.Contains(searchTerm.Trim(), StringComparison.OrdinalIgnoreCase)).ToList();
+            if (titlesOnly)
+            {
+                return Items.Where(item =>
+                    item.Name.Contains(searchTerm.Trim(), StringComparison.OrdinalIgnoreCase) ||
+                    item.DisplayName.Contains(searchTerm.Trim(), StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+            else
+            {
+                return Items.Where(item => 
+                    item.Name.Contains(searchTerm.Trim(), StringComparison.OrdinalIgnoreCase) || 
+                    item.DisplayName.Contains(searchTerm.Trim(), StringComparison.OrdinalIgnoreCase) ||
+                    (!string.IsNullOrEmpty(item.SearchableText) &&
+                    item.SearchableText.Contains(searchTerm.Trim(), StringComparison.OrdinalIgnoreCase))).ToList();
+            }
         }
     }
 }
