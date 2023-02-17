@@ -9,11 +9,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SerialLoops.Tests", "test\S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SerialLoops.Lib", "src\SerialLoops.Lib\SerialLoops.Lib.csproj", "{CC729174-57CD-499A-B6E7-1FA6F9CE255F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialLoops.Gtk", "src\SerialLoops.Gtk\SerialLoops.Gtk.csproj", "{EA5F17A9-CA95-43A0-BE14-33F41EDF02BB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SerialLoops.Gtk", "src\SerialLoops.Gtk\SerialLoops.Gtk.csproj", "{EA5F17A9-CA95-43A0-BE14-33F41EDF02BB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialLoops.Mac", "src\SerialLoops.Mac\SerialLoops.Mac.csproj", "{2DF676C8-9917-48EA-A8CF-435CE29BB8A8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SerialLoops.Mac", "src\SerialLoops.Mac\SerialLoops.Mac.csproj", "{2DF676C8-9917-48EA-A8CF-435CE29BB8A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialLoops.Wpf", "src\SerialLoops.Wpf\SerialLoops.Wpf.csproj", "{2DF0B35B-5A1C-43C7-A6BD-95D4D48FE39A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SerialLoops.Wpf", "src\SerialLoops.Wpf\SerialLoops.Wpf.csproj", "{2DF0B35B-5A1C-43C7-A6BD-95D4D48FE39A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{79884E84-D537-402C-BC5F-33F2B9ED56A0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{1F8886B6-CAA8-4A7C-BC62-56F591290E02}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "platforms", "platforms", "{D63057DD-B2DB-49A0-8680-0CDBE6268550}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,8 +55,17 @@ Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E049F009-138F-401A-9D5A-1977CB8DAF49} = {79884E84-D537-402C-BC5F-33F2B9ED56A0}
+		{0B5D20CC-9E91-4BC0-8A6E-0342ADCAC48D} = {1F8886B6-CAA8-4A7C-BC62-56F591290E02}
+		{CC729174-57CD-499A-B6E7-1FA6F9CE255F} = {79884E84-D537-402C-BC5F-33F2B9ED56A0}
+		{EA5F17A9-CA95-43A0-BE14-33F41EDF02BB} = {D63057DD-B2DB-49A0-8680-0CDBE6268550}
+		{2DF676C8-9917-48EA-A8CF-435CE29BB8A8} = {D63057DD-B2DB-49A0-8680-0CDBE6268550}
+		{2DF0B35B-5A1C-43C7-A6BD-95D4D48FE39A} = {D63057DD-B2DB-49A0-8680-0CDBE6268550}
+		{D63057DD-B2DB-49A0-8680-0CDBE6268550} = {79884E84-D537-402C-BC5F-33F2B9ED56A0}
+	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		        SolutionGuid = {A7259B55-BEEA-4ECC-AC0A-85CC8FA1BD53}
 		SolutionGuid = {922A1BAC-5F5E-4225-8E10-69036C42B786}
+		        SolutionGuid = {A7259B55-BEEA-4ECC-AC0A-85CC8FA1BD53}
 	EndGlobalSection
 EndGlobal

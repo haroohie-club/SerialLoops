@@ -18,4 +18,4 @@ Please file bugs in the Issues tab in this repository. Please include the follow
 * The platform you are running Serial Loops on
 * The version of the Chokuretsu ROM you are using (Japanese, patched English ROM, etc.)
 * A description of the steps required to reproduce the issue
-* The relevant logs for the issue (can be found in ~/SerialLoops/logs)
+* The relevant logs for the issue (can be found in ~/SerialLoops/Logs)

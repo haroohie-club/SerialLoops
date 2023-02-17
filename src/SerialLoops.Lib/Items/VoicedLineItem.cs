@@ -1,5 +1,7 @@
 ﻿using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Audio;
+using HaruhiChokuretsuLib.Util;
+using System;
 using System.IO;
 using System.Linq;
 
@@ -17,6 +19,40 @@ namespace SerialLoops.Lib.Items
             VoiceFile = voiceFile;
             Index = index;
             PopulateScriptUses(project);
+        }
+        
+        public AdxWaveProvider GetAdxWaveProvider(ILogger log)
+        {
+            byte[] adxBytes = Array.Empty<byte>();
+            try
+            {
+                adxBytes = File.ReadAllBytes(VoiceFile);
+            }
+            catch
+            {
+                if (!File.Exists(VoiceFile))
+                {
+                    log.LogError($"Failed to load voice file {VoiceFile}: file not found.");
+                }
+                else
+                {
+                    log.LogError($"Failed to load voice file {VoiceFile}: file invalid.");
+                }
+            }
+
+            AdxType = (AdxEncoding)adxBytes[4];
+
+            IAdxDecoder decoder;
+            if (AdxType == AdxEncoding.Ahx10 || AdxType == AdxEncoding.Ahx11)
+            {
+                decoder = new AhxDecoder(adxBytes, log);
+            }
+            else
+            {
+                decoder = new AdxDecoder(adxBytes, log);
+            }
+
+            return new AdxWaveProvider(decoder);
         }
 
         public override void Refresh(Project project)

@@ -13,7 +13,6 @@ namespace SerialLoops
 {
     public class GraphicSelectionDialog : Dialog<IPreviewableGraphic>
     {
-        
         private readonly ObservableCollection<IPreviewableGraphic> _items;
         private readonly IPreviewableGraphic _currentSelection;
         private readonly Project _project;
@@ -137,6 +136,5 @@ namespace SerialLoops
                 }
             };
         }
-
     }   
 }

@@ -21,25 +21,7 @@ namespace SerialLoops.Editors
         {
             _bgm = (BackgroundMusicItem)Description;
 
-            byte[] adxBytes = Array.Empty<byte>();
-            try
-            {
-                adxBytes = File.ReadAllBytes(_bgm.BgmFile);
-            }
-            catch
-            {
-                if (!File.Exists(_bgm.BgmFile))
-                {
-                    _log.LogError($"Failed to load BGM file {_bgm.BgmFile}: file not found.");
-                }
-                else
-                {
-                    _log.LogError($"Failed to load BGM file {_bgm.BgmFile}: file invalid.");
-                }
-            }
-
-            AdxWaveProvider waveProvider = new(new AdxDecoder(adxBytes, _log));
-            BgmPlayer = new(waveProvider, _log);
+            BgmPlayer = new(_bgm.GetAdxWaveProvider(_log), _log);
             
             return new TableLayout(new TableRow(new StackLayout
             {

@@ -28,6 +28,11 @@ namespace SerialLoops.Editors
             List<GroupBox> groups = new();
             foreach (ScenarioRouteSelectionStruct routeSelection in _selection.Selection.RouteSelections)
             {
+                if (routeSelection is null)
+                {
+                    continue;
+                }
+
                 GroupBox selectionBox = new() { Text = routeSelection.Title };
 
                 GroupBox routesBox = new() { Text = "Routes" };

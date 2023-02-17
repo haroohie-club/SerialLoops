@@ -67,8 +67,8 @@ namespace SerialLoops
             string searchTerm = _searchInput.Text;
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
-                _results.Items = Project.Items.Where(item => item.Name.Contains(searchTerm.Trim(), StringComparison.OrdinalIgnoreCase) || item.DisplayName.Contains(searchTerm.Trim(), StringComparison.OrdinalIgnoreCase)).ToList();
-            } 
+                _results.Items = Project.GetSearchResults(searchTerm);
+            }
             else
             {
                 _results.Items = Enumerable.Empty<ItemDescription>().ToList();

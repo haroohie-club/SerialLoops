@@ -17,10 +17,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\SerialLoops.Lib\SerialLoops.Lib.csproj" />
+    <ProjectReference Include="..\..\src\SerialLoops\SerialLoops.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="inputs\**">
+    <None Update="item_names\**">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

@@ -44,12 +44,12 @@ namespace SerialLoops.Tests
             });
 
             // Change config and save it
-            config.ProjectsDirectory = "testTime";
+            config.UserDirectory = "testTime";
             config.Save(_log);
 
             // Load config from disk
             Config newConfig = Config.LoadConfig(_log);
-            Assert.That(newConfig.ProjectsDirectory, Is.EqualTo(config.ProjectsDirectory));
+            Assert.That(newConfig.UserDirectory, Is.EqualTo(config.UserDirectory));
 
             File.Delete(config.ConfigPath);
         }

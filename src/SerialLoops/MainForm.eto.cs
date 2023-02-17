@@ -123,7 +123,8 @@ namespace SerialLoops
             base.OnLoad(e);
             _log = new();
             CurrentConfig = Config.LoadConfig(_log);
-            RecentProjects = RecentProjects.LoadRecentProjects(_log);
+            _log.Initialize(CurrentConfig);            
+            RecentProjects = RecentProjects.LoadRecentProjects(CurrentConfig, _log);
             UpdateRecentProjects();
         }
 

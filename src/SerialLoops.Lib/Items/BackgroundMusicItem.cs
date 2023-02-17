@@ -1,5 +1,8 @@
 ﻿using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
+using HaruhiChokuretsuLib.Audio;
+using HaruhiChokuretsuLib.Util;
+using System;
 using System.IO;
 using System.Linq;
 
@@ -32,6 +35,28 @@ namespace SerialLoops.Lib.Items
                 e.ScriptSections.SelectMany(sec =>
                     sec.Objects.Where(c => c.Command.Mnemonic == EventFile.CommandVerb.BGM_PLAY.ToString()).Select(c => (e.Name[0..^1], c))))
                 .Where(t => t.c.Parameters[0] == Index).ToArray();
+        }
+
+        public AdxWaveProvider GetAdxWaveProvider(ILogger log)
+        {
+            byte[] adxBytes = Array.Empty<byte>();
+            try
+            {
+                adxBytes = File.ReadAllBytes(BgmFile);
+            }
+            catch
+            {
+                if (!File.Exists(BgmFile))
+                {
+                    log.LogError($"Failed to load BGM file {BgmFile}: file not found.");
+                }
+                else
+                {
+                    log.LogError($"Failed to load BGM file {BgmFile}: file invalid.");
+                }
+            }
+
+            return new(new AdxDecoder(adxBytes, log));
         }
     }
 }
