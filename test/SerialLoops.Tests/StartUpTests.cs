@@ -4,7 +4,6 @@ using SerialLoops.Lib;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
-using SerialLoops.Utility;
 
 namespace SerialLoops.Tests
 {
@@ -27,7 +26,7 @@ namespace SerialLoops.Tests
             HttpClient client = new();
             File.WriteAllBytes(romPath, await client.GetByteArrayAsync("https://github.com/WiIIiam278/BCSDS/releases/download/1.0/bcsds.nds"));
 
-            Lib.IO.OpenRom(project, romPath, true, new LoopyProgressTracker());
+            Lib.IO.OpenRom(project, romPath, true, new ConsoleProgressTracker());
 
             return project;
         }
