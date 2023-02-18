@@ -99,11 +99,8 @@ namespace SerialLoops.Lib
                 new("movie", Array.Empty<IODirectory>(), Array.Empty<IOFile>()),
                 new("scn", Array.Empty<IODirectory>(), Array.Empty<IOFile>()),
             }, Array.Empty<IOFile>());
-
-            if (includeFontHack)
-            {
-                assetsDirectoryTree.Subdirectories.First(f => f.Name == "misc").Files = new IOFile[] { new IOFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "charset.json")) };
-            }
+            
+            assetsDirectoryTree.Subdirectories.First(f => f.Name == "misc").Files = new IOFile[] { new IOFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "charset.json")) };
 
             originalDirectoryTree.Create(project.BaseDirectory);
             originalDirectoryTree.Create(project.IterativeDirectory);
@@ -179,6 +176,21 @@ namespace SerialLoops.Lib
         public static bool WriteBinaryFile(string relativePath, byte[] bytes, Project project, ILogger log)
         {
             return WriteBinaryFile(Path.Combine(project.IterativeDirectory, relativePath), bytes, log) && WriteBinaryFile(Path.Combine(project.BaseDirectory, relativePath), bytes, log);
+        }
+
+        public static bool TryReadStringFile(string file, out string content, ILogger log)
+        {
+            try
+            {
+                content = File.ReadAllText(file);
+                return true;
+            }
+            catch (IOException exc)
+            {
+                log.LogError($"Exception occurred while reading file '{file}' from disk.\n{exc.Message}\n\n{exc.StackTrace}");
+                content = string.Empty;
+                return false;
+            }
         }
 
         public static bool WriteStringFile(string file, string str, ILogger log)

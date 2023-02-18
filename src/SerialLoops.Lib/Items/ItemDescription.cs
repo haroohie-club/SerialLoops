@@ -6,7 +6,6 @@ namespace SerialLoops.Lib.Items
 {
     public class ItemDescription
     {
-
         public string Name { get; protected set; }
         public string DisplayName { get; protected set; }
         public string DisplayNameWithStatus => UnsavedChanges ? $"{DisplayName} *" : DisplayName;

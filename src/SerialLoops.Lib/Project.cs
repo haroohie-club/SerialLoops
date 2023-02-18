@@ -2,6 +2,7 @@
 using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Archive.Graphics;
+using HaruhiChokuretsuLib.Font;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Util;
@@ -32,11 +33,14 @@ namespace SerialLoops.Lib
         public List<ItemDescription> Items { get; set; } = new();
 
         [JsonIgnore]
-        public ArchiveFile<DataFile> Dat;
+        public ArchiveFile<DataFile> Dat { get; set; }
         [JsonIgnore]
-        public ArchiveFile<GraphicsFile> Grp;
+        public ArchiveFile<GraphicsFile> Grp { get; set; }
         [JsonIgnore]
-        public ArchiveFile<EventFile> Evt;
+        public ArchiveFile<EventFile> Evt { get; set; }
+
+        [JsonIgnore]
+        public FontReplacementDictionary FontReplacement { get; set; } = new();
 
         public Project()
         {
@@ -73,6 +77,17 @@ namespace SerialLoops.Lib
 
             tracker.CurrentlyLoading = "evt.bin";
             Evt = ArchiveFile<EventFile>.FromFile(Path.Combine(IterativeDirectory, "original", "archives", "evt.bin"), log);
+            tracker.Finished++;
+
+            tracker.Focus("Font Replacement Dictionary", 1);
+            if (IO.TryReadStringFile(Path.Combine(BaseDirectory, "assets", "misc", "charset.json"), out string json, log))
+            {
+                FontReplacement.AddRange(JsonSerializer.Deserialize<List<FontReplacement>>(json));
+            }
+            else
+            {
+                log.LogError("Failed to load font replacement dictionary.");
+            }
             tracker.Finished++;
 
             tracker.Focus("Extras", 1);

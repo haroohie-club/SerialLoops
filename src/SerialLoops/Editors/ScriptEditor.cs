@@ -8,6 +8,7 @@ using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
 using SerialLoops.Lib.Script.Parameters;
+using SerialLoops.Lib.Util;
 using SerialLoops.Utility;
 using SkiaSharp;
 using System;
@@ -262,7 +263,7 @@ namespace SerialLoops.Editors
                                 Items =
                                 {
                                     speakerDropDown,
-                                    new StackLayoutItem(new TextArea { Text = dialogueParam.Line.Text, AcceptsReturn = true }, expand: true),
+                                    new StackLayoutItem(new TextArea { Text = dialogueParam.Line.Text.GetSubstitutedString(_project), AcceptsReturn = true }, expand: true),
                                 },
                             }));
                         controlsTable.Rows.Add(new(new TableLayout { Spacing = new Size(5, 5) }));
@@ -323,7 +324,7 @@ namespace SerialLoops.Editors
                                 Items =
                                 {
                                     optionScriptSectionDropDown,
-                                    new StackLayoutItem(new TextBox { Text = optionParam.Option.Text }, expand: true),
+                                    new StackLayoutItem(new TextBox { Text = optionParam.Option.Text.GetSubstitutedString(_project) }, expand: true),
                                 }
                             }));
                         break;
@@ -769,6 +770,7 @@ namespace SerialLoops.Editors
         {
             CommandGraphicSelectionButton selection = (CommandGraphicSelectionButton)sender;
             _log.Log($"Attempting to modify parameter {selection.ParameterIndex} to background {((ItemDescription)selection.Selected).Name} in {selection.Command.Index} in file {_script.Name}...");
+            
             ((BgScriptParameter)selection.Command.Parameters[selection.ParameterIndex]).Background =
                 (BackgroundItem)_project.Items.FirstOrDefault(i => i.Name == ((ItemDescription)selection.Selected).Name);
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(selection.Command.Section)]
@@ -813,11 +815,22 @@ namespace SerialLoops.Editors
         {
             CommandGraphicSelectionButton selection = (CommandGraphicSelectionButton)sender;
             _log.Log($"Attempting to modify parameter {selection.ParameterIndex} to sprite {((ItemDescription)selection.Selected).Name} in {selection.Command.Index} in file {_script.Name}...");
-            ((SpriteScriptParameter)selection.Command.Parameters[selection.ParameterIndex]).Sprite =
-                (CharacterSpriteItem)selection.Selected;
-            _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(selection.Command.Section)]
-                .Objects[selection.Command.Index].Parameters[selection.ParameterIndex] =
-                (short)((CharacterSpriteItem)selection.Selected).Index;
+            if (((ItemDescription)selection.Selected).Name == "NONE")
+            {
+                ((SpriteScriptParameter)selection.Command.Parameters[selection.ParameterIndex]).Sprite =
+                    null;
+                _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(selection.Command.Section)]
+                    .Objects[selection.Command.Index].Parameters[selection.ParameterIndex] =
+                    0;
+            }
+            else
+            {
+                ((SpriteScriptParameter)selection.Command.Parameters[selection.ParameterIndex]).Sprite =
+                    (CharacterSpriteItem)selection.Selected;
+                _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(selection.Command.Section)]
+                    .Objects[selection.Command.Index].Parameters[selection.ParameterIndex] =
+                    (short)((CharacterSpriteItem)selection.Selected).Index;
+            }
             UpdateTabTitle(false);
             Application.Instance.Invoke(() => UpdatePreview());
         }
