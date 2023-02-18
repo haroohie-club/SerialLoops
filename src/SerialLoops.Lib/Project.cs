@@ -25,6 +25,8 @@ namespace SerialLoops.Lib
         public string BaseDirectory => Path.Combine(MainDirectory, "base");
         [JsonIgnore]
         public string IterativeDirectory => Path.Combine(MainDirectory, "iterative");
+        [JsonIgnore]
+        public string ProjectFile => Path.Combine(MainDirectory, $"{Name}.{PROJECT_FORMAT}");
 
         [JsonIgnore]
         public List<ItemDescription> Items { get; set; } = new();

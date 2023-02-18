@@ -6,6 +6,7 @@ using System.IO.Compression;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Linq;
+using SerialLoops.Lib.Util;
 
 namespace SerialLoops.Lib
 {
@@ -57,11 +58,13 @@ namespace SerialLoops.Lib
             }
         }
 
-        public static void OpenRom(Project project, string romPath, bool includeFontHack)
+        public static void OpenRom(Project project, string romPath, bool includeFontHack, IProgressTracker tracker)
         {
             // Unpack the ROM, creating the two project directories
+            tracker.Focus("Creating Directories", 8);
             NdsProjectFile.Create(project.Name, romPath, Path.Combine(project.BaseDirectory, "rom"));
             NdsProjectFile.Create(project.Name, romPath, Path.Combine(project.IterativeDirectory, "rom"));
+            tracker.Finished += 2;
 
             // Create our structure for building the ROM
             IODirectory originalDirectoryTree = new("original", new IODirectory[]
@@ -108,17 +111,28 @@ namespace SerialLoops.Lib
             srcDirectoryTree.Create(project.IterativeDirectory);
             assetsDirectoryTree.Create(project.BaseDirectory);
             assetsDirectoryTree.Create(project.IterativeDirectory);
+            tracker.Finished += 6;
 
             if (includeFontHack)
             {
+                tracker.Focus("Applying Hacks", 1);
                 SetUpLocalizedHacks(project);
+                tracker.Finished++;
             }
 
             // Copy out the files we need to build the ROM
+            tracker.Focus("Copying Files", 4);
             CopyFiles(Path.Combine(project.BaseDirectory, "rom", "data"), Path.Combine(project.BaseDirectory, "original", "archives"), "*.bin");
+            tracker.Finished++;
+
             CopyFiles(Path.Combine(project.IterativeDirectory, "rom", "data"), Path.Combine(project.IterativeDirectory, "original", "archives"), "*.bin");
+            tracker.Finished++;
+
             CopyFiles(Path.Combine(project.BaseDirectory, "rom", "overlay"), Path.Combine(project.BaseDirectory, "original", "overlay"));
+            tracker.Finished++;
+
             CopyFiles(Path.Combine(project.IterativeDirectory, "rom", "overlay"), Path.Combine(project.IterativeDirectory, "original", "overlay"));
+            tracker.Finished++;
 
             // We conditionalize these so we can test on a non-copyrighted ROM; this should always be true with real data
             if (Directory.Exists(Path.Combine(project.BaseDirectory, "rom", "data", "bgm")))
