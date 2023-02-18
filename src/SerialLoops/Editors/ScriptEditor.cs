@@ -117,7 +117,29 @@ namespace SerialLoops.Editors
                             Project = _project,
                         };
                         bgSelectionButton.Items.Add(NonePreviewableGraphic.BACKGROUND);
-                        bgSelectionButton.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background && (!bgParam.Kinetic ^ ((BackgroundItem)i).BackgroundType == BgType.KINETIC_SCREEN)).Select(i => (IPreviewableGraphic)i));
+
+                        // BGDISPTEMP is able to display a lot more kinds of backgrounds properly than the other BG commands
+                        // Hence, this switch to make sure you don't accidentally crash the game
+                        switch (command.Verb)
+                        {
+                            case EventFile.CommandVerb.BG_DISP:
+                            case EventFile.CommandVerb.BG_DISP2:
+                            case EventFile.CommandVerb.BG_FADE:
+                                bgSelectionButton.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background &&
+                                    (((BackgroundItem)i).BackgroundType == BgType.TEX_BOTTOM || ((BackgroundItem)i).BackgroundType == BgType.TEX_BOTTOM_TEMP))
+                                    .Select(b => b as IPreviewableGraphic));
+                                break;
+
+                            case EventFile.CommandVerb.BG_DISPTEMP:
+                                bgSelectionButton.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background &&
+                                    ((BackgroundItem)i).BackgroundType != BgType.KINETIC_SCREEN).Select(b => b as IPreviewableGraphic));
+                                break;
+
+                            case EventFile.CommandVerb.KBG_DISP:
+                                bgSelectionButton.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background &&
+                                    ((BackgroundItem)i).BackgroundType == BgType.KINETIC_SCREEN).Select(b => b as IPreviewableGraphic));
+                                break;
+                        }
                         bgSelectionButton.SelectedChanged.Executed += (obj, args) => BgSelectionButton_SelectionMade(bgSelectionButton, args);
 
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
@@ -125,9 +147,10 @@ namespace SerialLoops.Editors
                         break;
 
                     case ScriptParameter.ParameterType.BG_SCROLL_DIRECTION:
-                        DropDown bgScrollDropDown = new();
+                        ScriptCommandDropDown bgScrollDropDown = new() { Command = command, ParameterIndex = i };
                         bgScrollDropDown.Items.AddRange(Enum.GetValues<BgScrollDirectionScriptParameter.BgScrollDirection>().Select(i => new ListItem { Text = i.ToString(), Key = i.ToString() }));
                         bgScrollDropDown.SelectedKey = ((BgScrollDirectionScriptParameter)parameter).ScrollDirection.ToString();
+                        bgScrollDropDown.SelectedKeyChanged += BgScrollDropDown_SelectedKeyChanged;
 
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
                             ControlGenerator.GetControlWithLabel(parameter.Name, bgScrollDropDown));
@@ -157,18 +180,21 @@ namespace SerialLoops.Editors
                         break;
 
                     case ScriptParameter.ParameterType.BGM_MODE:
-                        DropDown bgmModeDropDown = new();
+                        ScriptCommandDropDown bgmModeDropDown = new() { Command = command, ParameterIndex = i };
                         bgmModeDropDown.Items.AddRange(Enum.GetValues<BgmModeScriptParameter.BgmMode>().Select(i => new ListItem { Text = i.ToString(), Key = i.ToString() }));
                         bgmModeDropDown.SelectedKey = ((BgmModeScriptParameter)parameter).Mode.ToString();
+                        bgmModeDropDown.SelectedKeyChanged += BgmModeDropDown_SelectedKeyChanged;
 
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
                             ControlGenerator.GetControlWithLabel(parameter.Name, bgmModeDropDown));
                         break;
 
                     case ScriptParameter.ParameterType.BOOL:
+                        ScriptCommandCheckBox boolParameterCheckbox = new() { Command = command, ParameterIndex = i, Checked = ((BoolScriptParameter)parameter).Value };
+                        boolParameterCheckbox.CheckedChanged += BoolParameterCheckbox_CheckedChanged;
+
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
-                            ControlGenerator.GetControlWithLabel(parameter.Name,
-                            new CheckBox { Checked = ((BoolScriptParameter)parameter).Value }));
+                            ControlGenerator.GetControlWithLabel(parameter.Name, boolParameterCheckbox));
                         break;
 
                     case ScriptParameter.ParameterType.CHESS_FILE:
@@ -200,7 +226,7 @@ namespace SerialLoops.Editors
                         break;
 
                     case ScriptParameter.ParameterType.CHIBI_EMOTE:
-                        DropDown chibiEmoteDropDown = new();
+                        ScriptCommandDropDown chibiEmoteDropDown = new() { Command = command, ParameterIndex = i };
                         chibiEmoteDropDown.Items.AddRange(Enum.GetValues<ChibiEmoteScriptParameter.ChibiEmote>().Select(i => new ListItem { Text = i.ToString(), Key = i.ToString() }));
                         chibiEmoteDropDown.SelectedKey = ((ChibiEmoteScriptParameter)parameter).Emote.ToString();
                         chibiEmoteDropDown.SelectedKeyChanged += ChibiEmoteDropDown_SelectedKeyChanged;
@@ -210,29 +236,35 @@ namespace SerialLoops.Editors
                         break;
 
                     case ScriptParameter.ParameterType.CHIBI_ENTER_EXIT:
-                        DropDown chibiEnterExitDropDown = new();
+                        ScriptCommandDropDown chibiEnterExitDropDown = new() { Command = command, ParameterIndex = i };
                         chibiEnterExitDropDown.Items.AddRange(Enum.GetValues<ChibiEnterExitScriptParameter.ChibiEnterExitType>().Select(i => new ListItem { Text = i.ToString(), Key = i.ToString() }));
                         chibiEnterExitDropDown.SelectedKey = ((ChibiEnterExitScriptParameter)parameter).Mode.ToString();
+                        chibiEnterExitDropDown.SelectedKeyChanged += ChibiEnterExitDropDown_SelectedKeyChanged;
 
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
                             ControlGenerator.GetControlWithLabel(parameter.Name, chibiEnterExitDropDown));
                         break;
 
                     case ScriptParameter.ParameterType.COLOR:
-                        ColorPicker colorPicker = new()
+                        ScriptCommandColorPicker colorPicker = new()
                         {
                             AllowAlpha = false,
                             Value = ((ColorScriptParameter)parameter).Color.ToEtoDrawingColor(),
+                            Command = command,
+                            ParameterIndex = i,
                         };
+                        colorPicker.ValueChanged += ColorPicker_ValueChanged;
 
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
                             ControlGenerator.GetControlWithLabel(parameter.Name, colorPicker));
                         break;
 
                     case ScriptParameter.ParameterType.CONDITIONAL:
+                        ScriptCommandTextBox conditionalBox = new() { Text = ((ConditionalScriptParameter)parameter).Value, Command = command, ParameterIndex = i };
+                        conditionalBox.TextChanged += ConditionalBox_TextChanged;
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
                             ControlGenerator.GetControlWithLabel(parameter.Name,
-                            new TextBox { Text = ((ConditionalScriptParameter)parameter).Value }));
+                            conditionalBox));
                         break;
 
                     case ScriptParameter.ParameterType.COLOR_MONOCHROME:
@@ -565,17 +597,33 @@ namespace SerialLoops.Editors
                 {
                     BackgroundItem background = (commands[i].Verb == EventFile.CommandVerb.BG_FADE && ((BgScriptParameter)commands[i].Parameters[0]).Background is null) ?
                         ((BgScriptParameter)commands[i].Parameters[1]).Background : ((BgScriptParameter)commands[i].Parameters[0]).Background;
-                    switch (background.BackgroundType)
+                    if (background is not null)
                     {
-                        case BgType.TEX_BOTTOM_TILE_TOP:
-                            canvas.DrawBitmap(background.GetBackground(), new SKPoint(0, 0));
-                            break;
+                        switch (background.BackgroundType)
+                        {
+                            case BgType.TEX_DUAL:
+                                canvas.DrawBitmap(background.GetBackground(), new SKPoint(0, 0));
+                                break;
 
-                        default:
-                            canvas.DrawBitmap(background.GetBackground(), new SKPoint(0, 194));
-                            break;
+                            case BgType.SINGLE_TEX:
+                                if (commands[i].Verb == EventFile.CommandVerb.BG_DISPTEMP && ((BoolScriptParameter)commands[i].Parameters[1]).Value)
+                                {
+                                    SKBitmap bgBitmap = background.GetBackground();
+                                    canvas.DrawBitmap(bgBitmap, new SKRect(0, bgBitmap.Height - 194, bgBitmap.Width, bgBitmap.Height), 
+                                        new SKRect(0, 194, 256, 388));
+                                }
+                                else
+                                {
+                                    canvas.DrawBitmap(background.GetBackground(), new SKPoint(0, 194));
+                                }
+                                break;
+
+                            default:
+                                canvas.DrawBitmap(background.GetBackground(), new SKPoint(0, 194));
+                                break;
+                        }
+                        break;
                     }
-                    break;
                 }
             }
 
@@ -775,8 +823,7 @@ namespace SerialLoops.Editors
                 ((BgScriptParameter)selection.Command.Parameters[selection.ParameterIndex]).Background =
                     (BackgroundItem)_project.Items.FirstOrDefault(i => i.Name == ((ItemDescription)selection.Selected).Name);
                 _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(selection.Command.Section)]
-                    .Objects[selection.Command.Index].Parameters[selection.ParameterIndex] =
-                    (short)((BackgroundItem)_project.Items.First(i => i.Name == ((ItemDescription)selection.Selected).Name)).Id;
+                    .Objects[selection.Command.Index].Parameters[selection.ParameterIndex] = 0;
             }
             else
             {
@@ -788,6 +835,18 @@ namespace SerialLoops.Editors
             }
             UpdateTabTitle(false);
             Application.Instance.Invoke(() => UpdatePreview());
+        }
+        private void BgScrollDropDown_SelectedKeyChanged(object sender, EventArgs e)
+        {
+            ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
+            _log.Log($"Attempting to modify parameter {dropDown.ParameterIndex} to BG scroll direction {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
+            ((BgScrollDirectionScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).ScrollDirection =
+                Enum.Parse<BgScrollDirectionScriptParameter.BgScrollDirection>(dropDown.SelectedKey);
+            _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
+                .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
+                (short)Enum.Parse<BgScrollDirectionScriptParameter.BgScrollDirection>(dropDown.SelectedKey);
+
+            UpdateTabTitle(false);
         }
         private void BgmDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
@@ -805,6 +864,29 @@ namespace SerialLoops.Editors
 
             UpdateTabTitle(false);
         }
+        private void BgmModeDropDown_SelectedKeyChanged(object sender, EventArgs e)
+        {
+            ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
+            _log.Log($"Attempting to modify parameter {dropDown.ParameterIndex} to BGM mode {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
+            ((BgmModeScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Mode =
+                Enum.Parse<BgmModeScriptParameter.BgmMode>(dropDown.SelectedKey);
+            _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
+                .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
+                (short)Enum.Parse<BgmModeScriptParameter.BgmMode>(dropDown.SelectedKey);
+
+            UpdateTabTitle(false);
+        }
+        private void BoolParameterCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            ScriptCommandCheckBox checkBox = (ScriptCommandCheckBox)sender;
+            _log.Log($"Attempting to modify parameter {checkBox.ParameterIndex} to BGM mode {checkBox.Checked} in {checkBox.Command.Index} in file {_script.Name}...");
+            ((BoolScriptParameter)checkBox.Command.Parameters[checkBox.ParameterIndex]).Value = checkBox.Checked ?? false;
+            _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(checkBox.Command.Section)]
+                .Objects[checkBox.Command.Index].Parameters[checkBox.ParameterIndex] = (short)((checkBox.Checked ?? false) ? 1 : 0);
+
+            UpdateTabTitle(false);
+            Application.Instance.Invoke(() => UpdatePreview());
+        }
         private void ChibiDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
             ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
@@ -819,7 +901,60 @@ namespace SerialLoops.Editors
         }
         private void ChibiEmoteDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
-            _log.LogWarning("Chibi emote changing not yet implemented.");
+            ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
+            _log.Log($"Attempting to modify parameter {dropDown.ParameterIndex} to chibi emote {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
+            ((ChibiEmoteScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Emote =
+                Enum.Parse<ChibiEmoteScriptParameter.ChibiEmote>(dropDown.SelectedKey);
+            _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
+                .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
+                (short)Enum.Parse<ChibiEmoteScriptParameter.ChibiEmote>(dropDown.SelectedKey);
+            UpdateTabTitle(false);
+            Application.Instance.Invoke(() => UpdatePreview());
+        }
+        private void ChibiEnterExitDropDown_SelectedKeyChanged(object sender, EventArgs e)
+        {
+            ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
+            _log.Log($"Attempting to modify parameter {dropDown.ParameterIndex} to chibi enter/exit {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
+            ((ChibiEnterExitScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Mode =
+                Enum.Parse<ChibiEnterExitScriptParameter.ChibiEnterExitType>(dropDown.SelectedKey);
+            _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
+                .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
+                (short)Enum.Parse<ChibiEnterExitScriptParameter.ChibiEnterExitType>(dropDown.SelectedKey);
+            UpdateTabTitle(false);
+            Application.Instance.Invoke(() => UpdatePreview());
+        }
+        private void ColorPicker_ValueChanged(object sender, EventArgs e)
+        {
+            ScriptCommandColorPicker colorPicker = (ScriptCommandColorPicker)sender;
+            _log.Log($"Attempting to modify parameters {colorPicker.ParameterIndex} through {colorPicker.ParameterIndex + 2} to color #{colorPicker.Value.ToHex()} in {colorPicker.Command.Index} in file {_script.Name}...");
+            SKColor color = colorPicker.Value.ToSKColor();
+            ((ColorScriptParameter)colorPicker.Command.Parameters[colorPicker.ParameterIndex]).Color = color;
+            _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(colorPicker.Command.Section)]
+                .Objects[colorPicker.Command.Index].Parameters[colorPicker.ParameterIndex] = (short)color.Red;
+            _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(colorPicker.Command.Section)]
+                .Objects[colorPicker.Command.Index].Parameters[colorPicker.ParameterIndex + 1] = (short)color.Green;
+            _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(colorPicker.Command.Section)]
+                .Objects[colorPicker.Command.Index].Parameters[colorPicker.ParameterIndex + 2] = (short)color.Blue;
+            UpdateTabTitle(false);
+            Application.Instance.Invoke(() => UpdatePreview());
+        }
+        private void ConditionalBox_TextChanged(object sender, EventArgs e)
+        {
+            ScriptCommandTextBox textBox = (ScriptCommandTextBox)sender;
+            _log.Log($"Attempting to modify parameter {textBox.ParameterIndex} to color {textBox.Text} in {textBox.Command.Index} in file {_script.Name}...");
+            ((ConditionalScriptParameter)textBox.Command.Parameters[textBox.ParameterIndex]).Value = textBox.Text;
+            if (_script.Event.ConditionalsSection.Objects.Contains(textBox.Text))
+            {
+                _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(textBox.Command.Section)]
+                    .Objects[textBox.Command.Index].Parameters[textBox.ParameterIndex] = (short)_script.Event.ConditionalsSection.Objects.IndexOf(textBox.Text);
+            }
+            else
+            {
+                _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(textBox.Command.Section)]
+                    .Objects[textBox.Command.Index].Parameters[textBox.ParameterIndex] = (short)_script.Event.ConditionalsSection.Objects.Count;
+                _script.Event.ConditionalsSection.Objects.Add(textBox.Text);
+            }
+            UpdateTabTitle(false);
         }
         private void SpriteSelectionButton_SelectionMade(object sender, EventArgs e)
         {

@@ -123,6 +123,12 @@ namespace SerialLoops
         
         private StackLayout GeneratePreview()
         {
+            Label backgroundTypeLabel = new();
+            if (((ItemDescription)_selector.SelectedValue).Type == ItemDescription.ItemType.Background)
+            {
+                backgroundTypeLabel.Text = ((BackgroundItem)_selector.SelectedValue).BackgroundType.ToString();
+            }
+
             return new StackLayout
             {
                 Orientation = Orientation.Vertical,
@@ -132,7 +138,8 @@ namespace SerialLoops
                 {
                     new Label { Text = _selector.SelectedValue == null ? "No preview available" : ((ItemDescription)_selector.SelectedValue).Name },
                     new SKGuiImage(_selector.SelectedValue == null ? new SKBitmap(64, 64) : 
-                        ((IPreviewableGraphic) _selector.SelectedValue).GetPreview(_project, 250, 400))
+                        ((IPreviewableGraphic) _selector.SelectedValue).GetPreview(_project, 250, 400)),
+                    backgroundTypeLabel,
                 }
             };
         }

@@ -244,6 +244,7 @@ namespace SerialLoops
                         break;
                     case ItemDescription.ItemType.Script:
                         EventFile evt = ((ScriptItem)item).Event;
+                        evt.CollectGarbage();
                         IO.WriteStringFile(Path.Combine("assets", "events", $"{evt.Index:X3}.s"), evt.GetSource(new()), OpenProject, _log);
                         foreach (Editor editor in EditorTabs.Tabs.Pages.Cast<Editor>())
                         {
@@ -296,7 +297,7 @@ namespace SerialLoops
         {
             if (OpenProject is not null)
             {
-                bool buildSucceeded = false;
+                bool buildSucceeded = true;
                 LoopyProgressTracker tracker = new("Building:");
                 ProgressDialog loadingDialog = new(async () => buildSucceeded = await Build.BuildBase(OpenProject, CurrentConfig, _log, tracker), () =>
                 {
@@ -324,7 +325,7 @@ namespace SerialLoops
                     return;
                 }
 
-                bool buildSucceeded = false;
+                bool buildSucceeded = true;
                 LoopyProgressTracker tracker = new("Building:");
                 ProgressDialog loadingDialog = new(async () => buildSucceeded = await Build.BuildIterative(OpenProject, CurrentConfig, _log, tracker), () =>
                 {

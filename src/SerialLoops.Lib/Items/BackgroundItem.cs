@@ -48,7 +48,7 @@ namespace SerialLoops.Lib.Items
             {
                 return Graphic1.GetImage();
             }
-            else if (BackgroundType == BgType.TEX_BOTTOM_TILE_TOP)
+            else if (BackgroundType == BgType.TEX_DUAL)
             {
                 SKBitmap bitmap = new(Graphic1.Width, Graphic1.Height + Graphic2.Height);
                 SKCanvas canvas = new(bitmap);
