@@ -3,6 +3,7 @@ using Eto.Forms;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib;
 using SerialLoops.Utility;
+using System;
 
 namespace SerialLoops
 {
@@ -13,11 +14,13 @@ namespace SerialLoops
 
         private TextBox _devkitArmBox;
         private TextBox _emulatorBox;
+        private CheckBox _autoReopenLastProjectBox;
+        private CheckBox _rememberProjectWorkspaceBox;
 
         public PreferencesDialog(Config config, ILogger log)
         {
             Title = "Preferences";
-            MinimumSize = new Size(200, 200);
+            MinimumSize = new Size(300, 300);
             Configuration = config;
             _log = log;
 
@@ -27,53 +30,103 @@ namespace SerialLoops
             _emulatorBox = new() { Text = Configuration.EmulatorPath };
             _emulatorBox.TextChanged += EmulatorBox_TextChanged;
 
+            _autoReopenLastProjectBox = new() { Checked = Configuration.AutoReopenLastProject };
+            _autoReopenLastProjectBox.CheckedChanged += AutoReopenLastProjectBox_CheckedChanged;
+
+            _rememberProjectWorkspaceBox = new() { Checked = Configuration.RememberProjectWorkspace};
+            _rememberProjectWorkspaceBox.CheckedChanged += RememberProjectWorkspaceBox_CheckedChanged;
+
             Button devkitArmButton = new() { Text = "Select" };
             devkitArmButton.Click += DevkitArmButton_Click;
             
             Button emulatorButton = new() { Text = "Select" };
             emulatorButton.Click += EmulatorButton_Click;
 
-            Button saveButton = new() { Text = "Save Preferences" };
+            Button saveButton = new() { Text = "Save" };
             saveButton.Click += SaveButton_Click;
+
+            Button cancelButton = new() { Text = "Cancel" };
+            cancelButton.Click += (sender, args) => Close();
 
             Content = new TableLayout(
                 new TableRow(
-                    new GroupBox
+                    new StackLayout
                     {
-                        Text = "Paths",
-                        Padding = 5,
-                        Content = new StackLayout
+                        Padding = 10,
+                        Spacing = 10,
+                        HorizontalContentAlignment = HorizontalAlignment.Center,
+                        VerticalContentAlignment = VerticalAlignment.Center,
+                        Items =
                         {
-                            Spacing = 10,
-                            Orientation = Orientation.Vertical,
-                            Items =
+                            new GroupBox
                             {
-                                ControlGenerator.GetControlWithLabel("DevkitARM Path",
-                                    new StackLayout
+                                Text = "Build",
+                                Padding = 5,
+                                Content = new StackLayout
+                                {
+                                    Spacing = 10,
+                                    Orientation = Orientation.Vertical,
+                                    Width = 275,
+                                    Items =
                                     {
-                                        Orientation = Orientation.Horizontal,
-                                        Spacing = 5,
-                                        Items =
-                                        {
-                                            _devkitArmBox,
-                                            devkitArmButton,
-                                        }
-                                    }),
-                                ControlGenerator.GetControlWithLabel("Emulator Path",
-                                    new StackLayout
+                                        ControlGenerator.GetControlWithLabel("DevkitARM Path",
+                                            new StackLayout
+                                            {
+                                                Orientation = Orientation.Horizontal,
+                                                Spacing = 5,
+                                                Items =
+                                                {
+                                                    _devkitArmBox,
+                                                    devkitArmButton,
+                                                }
+                                            }),
+                                        ControlGenerator.GetControlWithLabel("Emulator Path",
+                                            new StackLayout
+                                            {
+                                                Orientation = Orientation.Horizontal,
+                                                Spacing = 5,
+                                                Items =
+                                                {
+                                                    _emulatorBox,
+                                                    emulatorButton,
+                                                }
+                                            }),
+                                    }
+                                },
+                            },
+                            new GroupBox
+                            {
+                                Text = "Projects",
+                                Padding = 5,
+                                Content = new StackLayout
+                                {
+                                    Spacing = 10,
+                                    Orientation = Orientation.Vertical,
+                                    Width = 275,
+                                    Items =
                                     {
-                                        Orientation = Orientation.Horizontal,
-                                        Spacing = 5,
-                                        Items =
-                                        {
-                                            _emulatorBox,
-                                            emulatorButton,
-                                        }
-                                    }),
+                                        ControlGenerator.GetControlWithLabel("Auto Re-open Last Project",
+                                                                                   _autoReopenLastProjectBox),
+                                        ControlGenerator.GetControlWithLabel("Remember Project Workspace",
+                                                                                   _rememberProjectWorkspaceBox),
+                                    }
+                                },
                             }
-                        },
+                        }
                     }),
-                new TableRow(saveButton)
+                new TableRow(
+                    new StackLayout
+                    {
+                        Padding = 10,
+                        Spacing = 10,
+                        Orientation = Orientation.Horizontal,
+                        HorizontalContentAlignment = HorizontalAlignment.Center,
+                        Items =
+                        {
+                            saveButton,
+                            cancelButton
+                        }
+                    })
                 );
         }
 
@@ -109,6 +162,16 @@ namespace SerialLoops
             {
                 _emulatorBox.Text = openFileDialog.FileName;
             }
+        }
+
+        private void AutoReopenLastProjectBox_CheckedChanged(object sender, EventArgs e)
+        {
+            Configuration.AutoReopenLastProject = _autoReopenLastProjectBox.Checked ?? false;
+        }
+
+        private void RememberProjectWorkspaceBox_CheckedChanged(object sender, EventArgs e)
+        {
+            Configuration.RememberProjectWorkspace = _rememberProjectWorkspaceBox.Checked ?? false;
         }
     }
 }

@@ -5,9 +5,11 @@ using SerialLoops.Controls;
 using SerialLoops.Editors;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
+using SerialLoops.Lib.Util;
 using SerialLoops.Utility;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -19,7 +21,7 @@ namespace SerialLoops
         private const string BASE_TITLE = "Serial Loops";
 
         private LoopyLogger _log;
-        public RecentProjects RecentProjects { get; set; }
+        public ProjectsCache ProjectsCache { get; set; }
         public Config CurrentConfig { get; set; }
         public Project OpenProject { get; set; }
         public EditorTabsPanel EditorTabs { get; set; }
@@ -33,7 +35,7 @@ namespace SerialLoops
             ClientSize = new(1000, 600);
             MinimumSize = new(769, 420);
             Padding = 10;
-
+            Closing += MainForm_Closed;
 
             // Commands
             // File
@@ -91,30 +93,60 @@ namespace SerialLoops
 
             ToolBar = new ToolBar
             {
+                Style = "sl-toolbar",
                 Items =
                 {
-                    buildIterativeProject,
-                    buildAndRunProject,
-                    searchProject
+                    ControlGenerator.GetToolBarItem(buildIterativeProject),
+                    ControlGenerator.GetToolBarItem(buildAndRunProject),
+                    ControlGenerator.GetToolBarItem(searchProject)
                 }
             };
         }
 
-        private void OpenProjectView(Project project)
+        private void OpenProjectView(Project project, IProgressTracker tracker)
         {
             EditorTabs = new(project);
             ItemExplorer = new(project, EditorTabs, _log);
             Title = $"{BASE_TITLE} - {project.Name}";
             Content = new TableLayout(new TableRow(ItemExplorer, EditorTabs));
+            LoadCachedData(project, tracker);    
+        }
+
+        private void LoadCachedData(Project project, IProgressTracker tracker)
+        {
             try
             {
-                RecentProjects.AddProject(Path.Combine(project.MainDirectory, $"{project.Name}.{Project.PROJECT_FORMAT}"));
-                RecentProjects.Save(_log);
+                List<string> openTabs = new();
+                if (ProjectsCache.RecentWorkspaces.ContainsKey(project.ProjectFile))
+                {
+                    openTabs = ProjectsCache.RecentWorkspaces[project.ProjectFile];
+                }
+
+                ProjectsCache.CacheRecentProject(project.ProjectFile, openTabs);
+                ProjectsCache.Save(_log);
                 UpdateRecentProjects();
+
+                if (CurrentConfig.RememberProjectWorkspace)
+                {
+                    tracker.Focus("Restoring Workspace", openTabs.Count);
+                    foreach (string itemName in openTabs)
+                    {
+                        ItemDescription item = project.FindItem(itemName);
+                        if (item is not null)
+                        {
+                            Application.Instance.Invoke(() => EditorTabs.OpenTab(item, _log));
+                        }
+                        tracker.Finished++;
+                    }
+                }
             }
             catch (Exception e)
             {
-                _log.LogError($"Failed to add project to recent projects list: {e.Message}");
+                _log.LogError($"Failed to load cached data: {e.Message}");
+                string projectFile = project.ProjectFile;
+                ProjectsCache.RecentWorkspaces.Remove(projectFile);
+                ProjectsCache.RecentProjects.Remove(projectFile);
+                ProjectsCache.Save(_log);
             }
         }
 
@@ -124,14 +156,19 @@ namespace SerialLoops
             _log = new();
             CurrentConfig = Config.LoadConfig(_log);
             _log.Initialize(CurrentConfig);            
-            RecentProjects = RecentProjects.LoadRecentProjects(CurrentConfig, _log);
+            ProjectsCache = ProjectsCache.LoadCache(CurrentConfig, _log);
             UpdateRecentProjects();
+
+            if (CurrentConfig.AutoReopenLastProject && ProjectsCache.RecentProjects.Count > 0)
+            {
+                OpenProjectFromPath(ProjectsCache.RecentProjects[0]);
+            }
         }
 
         private void UpdateRecentProjects()
         {
             _recentProjects.Items.Clear();
-            foreach (string project in RecentProjects.Projects)
+            foreach (string project in ProjectsCache.RecentProjects)
             {
                 Command recentProject = new() { MenuText = Path.GetFileNameWithoutExtension(project), ToolTip = project };
                 recentProject.Executed += OpenRecentProject_Executed;
@@ -153,7 +190,7 @@ namespace SerialLoops
             if (projectCreationDialog.NewProject is not null)
             {
                 OpenProject = projectCreationDialog.NewProject;
-                OpenProjectView(OpenProject);
+                OpenProjectView(OpenProject, new LoopyProgressTracker());
             }
         }
 
@@ -175,7 +212,7 @@ namespace SerialLoops
         private void OpenProjectFromPath(string path)
         {
             LoopyProgressTracker tracker = new();
-            _ = new ProgressDialog(() => OpenProject = Project.OpenProject(path, CurrentConfig, _log, tracker), () => OpenProjectView(OpenProject), tracker, "Loading Project");
+            _ = new ProgressDialog(() => OpenProject = Project.OpenProject(path, CurrentConfig, _log, tracker), () => OpenProjectView(OpenProject, tracker), tracker, "Loading Project");
         }
 
         private void SaveProject_Executed(object sender, EventArgs e)
@@ -323,6 +360,37 @@ namespace SerialLoops
             PreferencesDialog preferencesDialog = new(CurrentConfig, _log);
             preferencesDialog.ShowModal(this);
             CurrentConfig = preferencesDialog.Configuration;
+        }
+
+        public void MainForm_Closed(object sender, EventArgs e)
+        {
+            if (OpenProject is not null)
+            {
+                // Warn against unsaved items
+                IEnumerable<ItemDescription> unsavedItems = OpenProject.Items.Where(i => i.UnsavedChanges);
+                if (unsavedItems.Any())
+                {
+                    // message box with yes no cancel buttons
+                    DialogResult result = MessageBox.Show($"You have unsaved changes in {unsavedItems.Count()} item(s). Would you like to save before quitting?", MessageBoxButtons.YesNoCancel, MessageBoxType.Warning);
+                    switch (result)
+                    {
+                        case DialogResult.Yes:
+                            SaveProject_Executed(sender, e);
+                            break;
+                        case DialogResult.Cancel:
+                            ((CancelEventArgs)e).Cancel = true;
+                            break;
+                    }
+                }
+
+                // Record open items
+                List<string> openItems = EditorTabs.Tabs.Pages.Cast<Editor>()
+                    .Select(e => e.Description)
+                    .Select(i => i.Name)
+                    .ToList();
+                ProjectsCache.CacheRecentProject(OpenProject.ProjectFile, openItems);
+                ProjectsCache.Save(_log);
+            }
         }
     }
 }
