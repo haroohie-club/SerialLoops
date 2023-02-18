@@ -770,12 +770,22 @@ namespace SerialLoops.Editors
         {
             CommandGraphicSelectionButton selection = (CommandGraphicSelectionButton)sender;
             _log.Log($"Attempting to modify parameter {selection.ParameterIndex} to background {((ItemDescription)selection.Selected).Name} in {selection.Command.Index} in file {_script.Name}...");
-            
-            ((BgScriptParameter)selection.Command.Parameters[selection.ParameterIndex]).Background =
-                (BackgroundItem)_project.Items.FirstOrDefault(i => i.Name == ((ItemDescription)selection.Selected).Name);
-            _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(selection.Command.Section)]
-                .Objects[selection.Command.Index].Parameters[selection.ParameterIndex] =
-                (short)((BackgroundItem)_project.Items.First(i => i.Name == ((ItemDescription)selection.Selected).Name)).Id;
+            if (((ItemDescription)selection.Selected).Name == "NONE")
+            {
+                ((BgScriptParameter)selection.Command.Parameters[selection.ParameterIndex]).Background =
+                    (BackgroundItem)_project.Items.FirstOrDefault(i => i.Name == ((ItemDescription)selection.Selected).Name);
+                _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(selection.Command.Section)]
+                    .Objects[selection.Command.Index].Parameters[selection.ParameterIndex] =
+                    (short)((BackgroundItem)_project.Items.First(i => i.Name == ((ItemDescription)selection.Selected).Name)).Id;
+            }
+            else
+            {
+                ((BgScriptParameter)selection.Command.Parameters[selection.ParameterIndex]).Background =
+                    (BackgroundItem)_project.Items.FirstOrDefault(i => i.Name == ((ItemDescription)selection.Selected).Name);
+                _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(selection.Command.Section)]
+                    .Objects[selection.Command.Index].Parameters[selection.ParameterIndex] =
+                    (short)((BackgroundItem)_project.Items.First(i => i.Name == ((ItemDescription)selection.Selected).Name)).Id;
+            }
             UpdateTabTitle(false);
             Application.Instance.Invoke(() => UpdatePreview());
         }
@@ -838,12 +848,20 @@ namespace SerialLoops.Editors
         {
             ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
             _log.Log($"Attempting to modify parameter {dropDown.ParameterIndex} to voiced line {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
-            ((VoicedLineScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).VoiceLine =
-                (VoicedLineItem)_project.Items.FirstOrDefault(i => i.Name == dropDown.SelectedKey);
-            _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
-                .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
-                (short)((VoicedLineItem)_project.Items.First(i => i.Name == dropDown.SelectedKey)).Index;
-
+            if (dropDown.SelectedKey == "NONE")
+            {
+                ((VoicedLineScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).VoiceLine = null;
+                _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
+                    .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] = 0;
+            }
+            else
+            {
+                ((VoicedLineScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).VoiceLine =
+                    (VoicedLineItem)_project.Items.FirstOrDefault(i => i.Name == dropDown.SelectedKey);
+                _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
+                    .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
+                    (short)((VoicedLineItem)_project.Items.First(i => i.Name == dropDown.SelectedKey)).Index;
+            }
             dropDown.Link.Text = dropDown.SelectedKey;
             dropDown.Link.RemoveAllClickEvents();
             dropDown.Link.ClickUnique += (s, e) => { _tabs.OpenTab(_project.Items.FirstOrDefault(i => i.Name == dropDown.SelectedKey), _log); };
