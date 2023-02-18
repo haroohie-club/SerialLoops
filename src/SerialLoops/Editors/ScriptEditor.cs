@@ -268,9 +268,10 @@ namespace SerialLoops.Editors
                         break;
 
                     case ScriptParameter.ParameterType.COLOR_MONOCHROME:
-                        DropDown colorMonochromeDropDown = new();
+                        ScriptCommandDropDown colorMonochromeDropDown = new() { Command = command, ParameterIndex = i };
                         colorMonochromeDropDown.Items.AddRange(Enum.GetValues<ColorMonochromeScriptParameter.ColorMonochrome>().Select(i => new ListItem { Text = i.ToString(), Key = i.ToString() }));
                         colorMonochromeDropDown.SelectedKey = ((ColorMonochromeScriptParameter)parameter).ColorType.ToString();
+                        colorMonochromeDropDown.SelectedKeyChanged += ColorMonochromeDropDown_SelectedKeyChanged;
 
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
                             ControlGenerator.GetControlWithLabel(parameter.Name, colorMonochromeDropDown));
@@ -278,9 +279,10 @@ namespace SerialLoops.Editors
 
                     case ScriptParameter.ParameterType.DIALOGUE:
                         DialogueScriptParameter dialogueParam = (DialogueScriptParameter)parameter;
-                        DropDown speakerDropDown = new();
+                        ScriptCommandDropDown speakerDropDown = new() { Command = command, ParameterIndex = i };
                         speakerDropDown.Items.AddRange(Enum.GetValues<Speaker>().Select(s => new ListItem { Text = s.ToString(), Key = s.ToString() }));
                         speakerDropDown.SelectedKey = dialogueParam.Line.Speaker.ToString();
+                        speakerDropDown.SelectedKeyChanged += SpeakerDropDown_SelectedKeyChanged;
                         if (currentCol > 0)
                         {
                             controlsTable.Rows.Add(new(new TableLayout { Spacing = new Size(5, 5) }));
@@ -938,10 +940,22 @@ namespace SerialLoops.Editors
             UpdateTabTitle(false);
             Application.Instance.Invoke(() => UpdatePreview());
         }
+        private void ColorMonochromeDropDown_SelectedKeyChanged(object sender, EventArgs e)
+        {
+            ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
+            _log.Log($"Attempting to modify parameter {dropDown.ParameterIndex} to monochrome color {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
+            ((ColorMonochromeScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).ColorType =
+                Enum.Parse<ColorMonochromeScriptParameter.ColorMonochrome>(dropDown.SelectedKey);
+            _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
+                .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
+                (short)Enum.Parse<ColorMonochromeScriptParameter.ColorMonochrome>(dropDown.SelectedKey);
+            UpdateTabTitle(false);
+            Application.Instance.Invoke(() => UpdatePreview());
+        }
         private void ConditionalBox_TextChanged(object sender, EventArgs e)
         {
             ScriptCommandTextBox textBox = (ScriptCommandTextBox)sender;
-            _log.Log($"Attempting to modify parameter {textBox.ParameterIndex} to color {textBox.Text} in {textBox.Command.Index} in file {_script.Name}...");
+            _log.Log($"Attempting to modify parameter {textBox.ParameterIndex} to conditional {textBox.Text} in {textBox.Command.Index} in file {_script.Name}...");
             ((ConditionalScriptParameter)textBox.Command.Parameters[textBox.ParameterIndex]).Value = textBox.Text;
             if (_script.Event.ConditionalsSection.Objects.Contains(textBox.Text))
             {
@@ -955,6 +969,17 @@ namespace SerialLoops.Editors
                 _script.Event.ConditionalsSection.Objects.Add(textBox.Text);
             }
             UpdateTabTitle(false);
+        }
+        private void SpeakerDropDown_SelectedKeyChanged(object sender, EventArgs e)
+        {
+            ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
+            _log.Log($"Attempting to modify speaker in parameter {dropDown.ParameterIndex} to speaker {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
+            ((DialogueScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Line.Speaker =
+                Enum.Parse<Speaker>(dropDown.SelectedKey);
+            _script.Event.DialogueLines[_script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
+                .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex]].Speaker = Enum.Parse<Speaker>(dropDown.SelectedKey);
+            UpdateTabTitle(false);
+            Application.Instance.Invoke(() => UpdatePreview());
         }
         private void SpriteSelectionButton_SelectionMade(object sender, EventArgs e)
         {

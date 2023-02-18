@@ -19,7 +19,10 @@ namespace SerialLoops.Controls
             _project = project;
             _tabs = tabs;
             Viewer.SelectedItemChanged += Viewer_SelectedItemChanged;
-            ((TreeGridView)Viewer.Control).ContextMenu = Viewer.SelectedItem.Text.GetContextMenu(_project, this, _tabs, _log);
+            if (Viewer.SelectedItem is not null)
+            {
+                ((TreeGridView)Viewer.Control).ContextMenu = Viewer.SelectedItem.Text.GetContextMenu(_project, this, _tabs, _log);
+            }
         }
 
         private void Viewer_SelectedItemChanged(object sender, EventArgs e)
