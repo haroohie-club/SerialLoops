@@ -66,7 +66,7 @@ namespace SerialLoops.Lib.Items
                     else if (command.Verb == CommandVerb.GOTO)
                     {
                         Graph.AddEdge(new() { Source = section, Target = ((ScriptSectionScriptParameter)command.Parameters[0]).Section });
-                        continue;
+                        @continue = true;
                     }
                     else if (command.Verb == CommandVerb.VGOTO)
                     {

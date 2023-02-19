@@ -28,7 +28,7 @@ namespace SerialLoops.Editors
         private StackLayout _preview = new() { Items = { new SKGuiImage(new(256, 384)) } };
         private StackLayout _editorControls = new();
         private ScriptCommandListPanel _commandsPanel;
-        private CancellationTokenSource _cancellation;
+        private CancellationTokenSource _dialogueCancellation;
 
         public ScriptEditor(ScriptItem item, Project project, ILogger log, EditorTabsPanel tabs) : base(item, log, project, tabs)
         {
@@ -321,9 +321,10 @@ namespace SerialLoops.Editors
                         break;
 
                     case ScriptParameter.ParameterType.DIALOGUE_PROPERTY:
-                        DropDown dialoguePropertyDropDown = new();
+                        ScriptCommandDropDown dialoguePropertyDropDown = new() { Command = command, ParameterIndex = i };
                         dialoguePropertyDropDown.Items.AddRange(Enum.GetValues<Speaker>().Select(t => new ListItem { Text = t.ToString(), Key = t.ToString() }));
                         dialoguePropertyDropDown.SelectedKey = ((DialoguePropertyScriptParameter)parameter).DialogueProperties.Character.ToString();
+                        dialoguePropertyDropDown.SelectedKeyChanged += DialoguePropertyDropDown_SelectedKeyChanged;
 
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
                             ControlGenerator.GetControlWithLabel(parameter.Name, dialoguePropertyDropDown));
@@ -378,9 +379,10 @@ namespace SerialLoops.Editors
                         break;
 
                     case ScriptParameter.ParameterType.PALETTE_EFFECT:
-                        DropDown paletteEffectDropDown = new();
+                        ScriptCommandDropDown paletteEffectDropDown = new() { Command = command, ParameterIndex = i };
                         paletteEffectDropDown.Items.AddRange(Enum.GetValues<PaletteEffectScriptParameter.PaletteEffect>().Select(t => new ListItem { Text = t.ToString(), Key = t.ToString() }));
                         paletteEffectDropDown.SelectedKey = ((PaletteEffectScriptParameter)parameter).Effect.ToString();
+                        paletteEffectDropDown.SelectedKeyChanged += PaletteEffectDropDown_SelectedKeyChanged;
 
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
                             ControlGenerator.GetControlWithLabel(parameter.Name, paletteEffectDropDown));
@@ -600,6 +602,29 @@ namespace SerialLoops.Editors
 
             // Draw background
             bool bgReverted = false;
+            ScriptItemCommand bgPalCommand = commands.LastOrDefault(c => c.Verb == EventFile.CommandVerb.BG_PALEFFECT);
+            SKPaint bgEffectPaint = PaletteEffectScriptParameter.IdentityPaint;
+            if (bgPalCommand is not null)
+            {
+                switch (((PaletteEffectScriptParameter)bgPalCommand.Parameters[0]).Effect)
+                {
+                    case PaletteEffectScriptParameter.PaletteEffect.INVERTED:
+                        bgEffectPaint = PaletteEffectScriptParameter.InvertedPaint;
+                        break;
+
+                    case PaletteEffectScriptParameter.PaletteEffect.GRAYSCALE:
+                        bgEffectPaint = PaletteEffectScriptParameter.GrayscalePaint;
+                        break;
+
+                    case PaletteEffectScriptParameter.PaletteEffect.SEPIA:
+                        bgEffectPaint = PaletteEffectScriptParameter.SepiaPaint;
+                        break;
+
+                    case PaletteEffectScriptParameter.PaletteEffect.DIMMED:
+                        bgEffectPaint = PaletteEffectScriptParameter.DimmedPaint;
+                        break;
+                }
+            }
             for (int i = commands.Count - 1; i >= 0; i--)
             {
                 if (commands[i].Verb == EventFile.CommandVerb.BG_REVERT)
@@ -618,7 +643,7 @@ namespace SerialLoops.Editors
                         switch (background.BackgroundType)
                         {
                             case BgType.TEX_DUAL:
-                                canvas.DrawBitmap(background.GetBackground(), new SKPoint(0, 0));
+                                canvas.DrawBitmap(background.GetBackground(), new SKPoint(0, 0), bgEffectPaint);
                                 break;
 
                             case BgType.SINGLE_TEX:
@@ -626,16 +651,16 @@ namespace SerialLoops.Editors
                                 {
                                     SKBitmap bgBitmap = background.GetBackground();
                                     canvas.DrawBitmap(bgBitmap, new SKRect(0, bgBitmap.Height - 194, bgBitmap.Width, bgBitmap.Height), 
-                                        new SKRect(0, 194, 256, 388));
+                                        new SKRect(0, 194, 256, 388), bgEffectPaint);
                                 }
                                 else
                                 {
-                                    canvas.DrawBitmap(background.GetBackground(), new SKPoint(0, 194));
+                                    canvas.DrawBitmap(background.GetBackground(), new SKPoint(0, 194), bgEffectPaint);
                                 }
                                 break;
 
                             default:
-                                canvas.DrawBitmap(background.GetBackground(), new SKPoint(0, 194));
+                                canvas.DrawBitmap(background.GetBackground(), new SKPoint(0, 194), bgEffectPaint);
                                 break;
                         }
                         break;
@@ -1000,8 +1025,8 @@ namespace SerialLoops.Editors
             ScriptCommandTextArea textArea = (ScriptCommandTextArea)sender;
             _log.Log($"Attempting to modify dialogue in parameter {textArea.ParameterIndex} to dialogue '{textArea.Text}' in {textArea.Command.Index} in file {_script.Name}...");
 
-            _cancellation?.Cancel();
-            _cancellation = new();
+            _dialogueCancellation?.Cancel();
+            _dialogueCancellation = new();
 
             string text = textArea.Text;
             ScriptItemCommand command = textArea.Command;
@@ -1011,14 +1036,37 @@ namespace SerialLoops.Editors
                 string originalText = text.GetOriginalString(_project);
                 ((DialogueScriptParameter)command.Parameters[parameterIndex]).Line.Text = originalText;
                 _script.Event.DialogueSection.Objects[command.Section.Objects[command.Index].Parameters[0]].Text = originalText;
-                _cancellation = null;
-            }, _cancellation.Token);
+                _dialogueCancellation = null;
+            }, _dialogueCancellation.Token);
             task.Start();
             UpdateTabTitle(false);
         }
         private void DialogueTextArea_LostFocus(object sender, EventArgs e)
         {
             UpdatePreview();
+        }
+        private void DialoguePropertyDropDown_SelectedKeyChanged(object sender, EventArgs e)
+        {
+            ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
+            MessageInfoFile messInfoFile = _project.Dat.Files.First(d => d.Name == "MESSINFOS").CastTo<MessageInfoFile>();
+            MessageInfo messInfo = messInfoFile.MessageInfos.First(m => m.Character == Enum.Parse<Speaker>(dropDown.SelectedKey));
+            _log.Log($"Attempting to modify dialogue property in parameter {dropDown.ParameterIndex} to dialogue {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
+            ((DialoguePropertyScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).DialogueProperties = messInfo;
+            _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)].Objects[dropDown.Command.Index]
+                .Parameters[dropDown.ParameterIndex] = (short)messInfoFile.MessageInfos.IndexOf(messInfo);
+            UpdateTabTitle(false);
+        }
+        private void PaletteEffectDropDown_SelectedKeyChanged(object sender, EventArgs e)
+        {
+            ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
+            _log.Log($"Attempting to modify parameter {dropDown.ParameterIndex} to BG palette effect {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
+            ((PaletteEffectScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Effect =
+                Enum.Parse<PaletteEffectScriptParameter.PaletteEffect>(dropDown.SelectedKey);
+            _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
+                .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
+                (short)Enum.Parse<PaletteEffectScriptParameter.PaletteEffect>(dropDown.SelectedKey);
+            UpdateTabTitle(false);
+            Application.Instance.Invoke(() => UpdatePreview());
         }
         private void SpriteSelectionButton_SelectionMade(object sender, EventArgs e)
         {

@@ -10,7 +10,8 @@ namespace SerialLoops.Lib.Util
 
         public void Focus(string item, int count)
         {
-            Total += count;
+            Total = count;
+            Finished = 0;
             CurrentlyLoading = item;
         }
 

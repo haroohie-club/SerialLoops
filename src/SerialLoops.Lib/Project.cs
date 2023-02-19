@@ -139,6 +139,11 @@ namespace SerialLoops.Lib
                 .Chibis.Select(c => new ChibiItem(c, this)));
             tracker.Finished++;
 
+            tracker.Focus("Dialogue Configs", 1);
+            Items.AddRange(Dat.Files.First(d => d.Name == "MESSINFOS").CastTo<MessageInfoFile>()
+                .MessageInfos.Where(m => (int)m.Character > 0).Select(m => new DialogueConfigItem(m)));
+            tracker.Finished++;
+
             tracker.Focus("Event Files", 1);
             Items.AddRange(Evt.Files
                 .Where(e => !new string[] { "CHESSS", "EVTTBLS", "TOPICS", "SCENARIOS", "TUTORIALS", "VOICEMAPS" }.Contains(e.Name))
