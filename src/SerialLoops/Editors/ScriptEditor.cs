@@ -151,7 +151,7 @@ namespace SerialLoops.Editors
 
                     case ScriptParameter.ParameterType.BG_SCROLL_DIRECTION:
                         ScriptCommandDropDown bgScrollDropDown = new() { Command = command, ParameterIndex = i };
-                        bgScrollDropDown.Items.AddRange(Enum.GetValues<BgScrollDirectionScriptParameter.BgScrollDirection>().Select(i => new ListItem { Text = i.ToString(), Key = i.ToString() }));
+                        bgScrollDropDown.Items.AddRange(Enum.GetNames<BgScrollDirectionScriptParameter.BgScrollDirection>().Select(i => new ListItem { Text = i, Key = i }));
                         bgScrollDropDown.SelectedKey = ((BgScrollDirectionScriptParameter)parameter).ScrollDirection.ToString();
                         bgScrollDropDown.SelectedKeyChanged += BgScrollDropDown_SelectedKeyChanged;
 
@@ -184,7 +184,7 @@ namespace SerialLoops.Editors
 
                     case ScriptParameter.ParameterType.BGM_MODE:
                         ScriptCommandDropDown bgmModeDropDown = new() { Command = command, ParameterIndex = i };
-                        bgmModeDropDown.Items.AddRange(Enum.GetValues<BgmModeScriptParameter.BgmMode>().Select(i => new ListItem { Text = i.ToString(), Key = i.ToString() }));
+                        bgmModeDropDown.Items.AddRange(Enum.GetNames<BgmModeScriptParameter.BgmMode>().Select(i => new ListItem { Text = i, Key = i }));
                         bgmModeDropDown.SelectedKey = ((BgmModeScriptParameter)parameter).Mode.ToString();
                         bgmModeDropDown.SelectedKeyChanged += BgmModeDropDown_SelectedKeyChanged;
 
@@ -230,7 +230,7 @@ namespace SerialLoops.Editors
 
                     case ScriptParameter.ParameterType.CHIBI_EMOTE:
                         ScriptCommandDropDown chibiEmoteDropDown = new() { Command = command, ParameterIndex = i };
-                        chibiEmoteDropDown.Items.AddRange(Enum.GetValues<ChibiEmoteScriptParameter.ChibiEmote>().Select(i => new ListItem { Text = i.ToString(), Key = i.ToString() }));
+                        chibiEmoteDropDown.Items.AddRange(Enum.GetNames<ChibiEmoteScriptParameter.ChibiEmote>().Select(i => new ListItem { Text = i, Key = i }));
                         chibiEmoteDropDown.SelectedKey = ((ChibiEmoteScriptParameter)parameter).Emote.ToString();
                         chibiEmoteDropDown.SelectedKeyChanged += ChibiEmoteDropDown_SelectedKeyChanged;
 
@@ -240,7 +240,7 @@ namespace SerialLoops.Editors
 
                     case ScriptParameter.ParameterType.CHIBI_ENTER_EXIT:
                         ScriptCommandDropDown chibiEnterExitDropDown = new() { Command = command, ParameterIndex = i };
-                        chibiEnterExitDropDown.Items.AddRange(Enum.GetValues<ChibiEnterExitScriptParameter.ChibiEnterExitType>().Select(i => new ListItem { Text = i.ToString(), Key = i.ToString() }));
+                        chibiEnterExitDropDown.Items.AddRange(Enum.GetNames<ChibiEnterExitScriptParameter.ChibiEnterExitType>().Select(i => new ListItem { Text = i, Key = i }));
                         chibiEnterExitDropDown.SelectedKey = ((ChibiEnterExitScriptParameter)parameter).Mode.ToString();
                         chibiEnterExitDropDown.SelectedKeyChanged += ChibiEnterExitDropDown_SelectedKeyChanged;
 
@@ -272,7 +272,7 @@ namespace SerialLoops.Editors
 
                     case ScriptParameter.ParameterType.COLOR_MONOCHROME:
                         ScriptCommandDropDown colorMonochromeDropDown = new() { Command = command, ParameterIndex = i };
-                        colorMonochromeDropDown.Items.AddRange(Enum.GetValues<ColorMonochromeScriptParameter.ColorMonochrome>().Select(i => new ListItem { Text = i.ToString(), Key = i.ToString() }));
+                        colorMonochromeDropDown.Items.AddRange(Enum.GetNames<ColorMonochromeScriptParameter.ColorMonochrome>().Select(i => new ListItem { Text = i, Key = i }));
                         colorMonochromeDropDown.SelectedKey = ((ColorMonochromeScriptParameter)parameter).ColorType.ToString();
                         colorMonochromeDropDown.SelectedKeyChanged += ColorMonochromeDropDown_SelectedKeyChanged;
 
@@ -283,7 +283,7 @@ namespace SerialLoops.Editors
                     case ScriptParameter.ParameterType.DIALOGUE:
                         DialogueScriptParameter dialogueParam = (DialogueScriptParameter)parameter;
                         ScriptCommandDropDown speakerDropDown = new() { Command = command, ParameterIndex = i };
-                        speakerDropDown.Items.AddRange(Enum.GetValues<Speaker>().Select(s => new ListItem { Text = s.ToString(), Key = s.ToString() }));
+                        speakerDropDown.Items.AddRange(Enum.GetNames<Speaker>().Select(s => new ListItem { Text = s, Key = s }));
                         speakerDropDown.SelectedKey = dialogueParam.Line.Speaker.ToString();
                         speakerDropDown.SelectedKeyChanged += SpeakerDropDown_SelectedKeyChanged;
                         if (currentCol > 0)
@@ -322,7 +322,7 @@ namespace SerialLoops.Editors
 
                     case ScriptParameter.ParameterType.DIALOGUE_PROPERTY:
                         ScriptCommandDropDown dialoguePropertyDropDown = new() { Command = command, ParameterIndex = i };
-                        dialoguePropertyDropDown.Items.AddRange(Enum.GetValues<Speaker>().Select(t => new ListItem { Text = t.ToString(), Key = t.ToString() }));
+                        dialoguePropertyDropDown.Items.AddRange(Enum.GetNames<Speaker>().Select(t => new ListItem { Text = t, Key = t }));
                         dialoguePropertyDropDown.SelectedKey = ((DialoguePropertyScriptParameter)parameter).DialogueProperties.Character.ToString();
                         dialoguePropertyDropDown.SelectedKeyChanged += DialoguePropertyDropDown_SelectedKeyChanged;
 
@@ -331,9 +331,14 @@ namespace SerialLoops.Editors
                         break;
 
                     case ScriptParameter.ParameterType.EPISODE_HEADER:
+                        ScriptCommandDropDown epHeaderDropDown = new() { Command = command, ParameterIndex = i };
+                        epHeaderDropDown.Items.AddRange(Enum.GetNames<EpisodeHeaderScriptParameter.Episode>().Select(e => new ListItem { Key = e, Text = e }));
+                        epHeaderDropDown.SelectedKey = ((EpisodeHeaderScriptParameter)parameter).EpisodeHeaderIndex.ToString();
+                        epHeaderDropDown.SelectedKeyChanged += EpHeaderDropDown_SelectedKeyChanged;
+
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
                             ControlGenerator.GetControlWithLabel(parameter.Name,
-                            new TextBox { Text = ((EpisodeHeaderScriptParameter)parameter).EpisodeHeaderIndex.ToString() }));
+                            epHeaderDropDown));
                         break;
 
                     case ScriptParameter.ParameterType.FLAG:
@@ -380,7 +385,7 @@ namespace SerialLoops.Editors
 
                     case ScriptParameter.ParameterType.PALETTE_EFFECT:
                         ScriptCommandDropDown paletteEffectDropDown = new() { Command = command, ParameterIndex = i };
-                        paletteEffectDropDown.Items.AddRange(Enum.GetValues<PaletteEffectScriptParameter.PaletteEffect>().Select(t => new ListItem { Text = t.ToString(), Key = t.ToString() }));
+                        paletteEffectDropDown.Items.AddRange(Enum.GetNames<PaletteEffectScriptParameter.PaletteEffect>().Select(t => new ListItem { Text = t, Key = t }));
                         paletteEffectDropDown.SelectedKey = ((PaletteEffectScriptParameter)parameter).Effect.ToString();
                         paletteEffectDropDown.SelectedKeyChanged += PaletteEffectDropDown_SelectedKeyChanged;
 
@@ -396,7 +401,7 @@ namespace SerialLoops.Editors
 
                     case ScriptParameter.ParameterType.SCREEN:
                         DropDown screenDropDown = new();
-                        screenDropDown.Items.AddRange(Enum.GetValues<ScreenScriptParameter.DsScreen>().Select(t => new ListItem { Text = t.ToString(), Key = t.ToString() }));
+                        screenDropDown.Items.AddRange(Enum.GetNames<ScreenScriptParameter.DsScreen>().Select(t => new ListItem { Text = t, Key = t }));
                         screenDropDown.SelectedKey = ((ScreenScriptParameter)parameter).Screen.ToString();
 
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
@@ -420,7 +425,7 @@ namespace SerialLoops.Editors
 
                     case ScriptParameter.ParameterType.SFX_MODE:
                         DropDown sfxModeDropDown = new();
-                        sfxModeDropDown.Items.AddRange(Enum.GetValues<SfxModeScriptParameter.SfxMode>().Select(t => new ListItem { Text = t.ToString(), Key = t.ToString() }));
+                        sfxModeDropDown.Items.AddRange(Enum.GetNames<SfxModeScriptParameter.SfxMode>().Select(t => new ListItem { Text = t, Key = t }));
                         sfxModeDropDown.SelectedKey = ((SfxModeScriptParameter)parameter).Mode.ToString();
 
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
@@ -452,7 +457,7 @@ namespace SerialLoops.Editors
 
                     case ScriptParameter.ParameterType.SPRITE_ENTRANCE:
                         DropDown spriteEntranceDropDown = new();
-                        spriteEntranceDropDown.Items.AddRange(Enum.GetValues<SpriteEntranceScriptParameter.SpriteEntranceTransition>().Select(t => new ListItem { Text = t.ToString(), Key = t.ToString() }));
+                        spriteEntranceDropDown.Items.AddRange(Enum.GetNames<SpriteEntranceScriptParameter.SpriteEntranceTransition>().Select(t => new ListItem { Text = t, Key = t }));
                         spriteEntranceDropDown.SelectedKey = ((SpriteEntranceScriptParameter)parameter).EntranceTransition.ToString();
 
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
@@ -461,7 +466,7 @@ namespace SerialLoops.Editors
 
                     case ScriptParameter.ParameterType.SPRITE_EXIT:
                         DropDown spriteExitDropDown = new();
-                        spriteExitDropDown.Items.AddRange(Enum.GetValues<SpriteExitScriptParameter.SpriteExitTransition>().Select(t => new ListItem { Text = t.ToString(), Key = t.ToString() }));
+                        spriteExitDropDown.Items.AddRange(Enum.GetNames<SpriteExitScriptParameter.SpriteExitTransition>().Select(t => new ListItem { Text = t, Key = t }));
                         spriteExitDropDown.SelectedKey = ((SpriteExitScriptParameter)parameter).ExitTransition.ToString();
 
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
@@ -470,7 +475,7 @@ namespace SerialLoops.Editors
 
                     case ScriptParameter.ParameterType.SPRITE_SHAKE:
                         DropDown spriteShakeDropDown = new();
-                        spriteShakeDropDown.Items.AddRange(Enum.GetValues<SpriteShakeScriptParameter.SpriteShakeEffect>().Select(t => new ListItem { Text = t.ToString(), Key = t.ToString() }));
+                        spriteShakeDropDown.Items.AddRange(Enum.GetNames<SpriteShakeScriptParameter.SpriteShakeEffect>().Select(t => new ListItem { Text = t, Key = t }));
                         spriteShakeDropDown.SelectedKey = ((SpriteShakeScriptParameter)parameter).ShakeEffect.ToString();
 
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
@@ -479,7 +484,7 @@ namespace SerialLoops.Editors
 
                     case ScriptParameter.ParameterType.TEXT_ENTRANCE_EFFECT:
                         DropDown textEntranceEffectDropDown = new();
-                        textEntranceEffectDropDown.Items.AddRange(Enum.GetValues<TextEntranceEffectScriptParameter.TextEntranceEffect>().Select(t => new ListItem { Text = t.ToString(), Key = t.ToString() }));
+                        textEntranceEffectDropDown.Items.AddRange(Enum.GetNames<TextEntranceEffectScriptParameter.TextEntranceEffect>().Select(t => new ListItem { Text = t, Key = t }));
                         textEntranceEffectDropDown.SelectedKey = ((TextEntranceEffectScriptParameter)parameter).EntranceEffect.ToString();
 
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
@@ -525,7 +530,7 @@ namespace SerialLoops.Editors
 
                     case ScriptParameter.ParameterType.TRANSITION:
                         DropDown transitionDropDown = new();
-                        transitionDropDown.Items.AddRange(Enum.GetValues<TransitionScriptParameter.TransitionEffect>().Select(t => new ListItem { Text = t.ToString(), Key = t.ToString() }));
+                        transitionDropDown.Items.AddRange(Enum.GetNames<TransitionScriptParameter.TransitionEffect>().Select(t => new ListItem { Text = t, Key = t }));
                         transitionDropDown.SelectedKey = ((TransitionScriptParameter)parameter).Transition.ToString();
 
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
@@ -597,74 +602,6 @@ namespace SerialLoops.Editors
                 {
                     canvas.DrawBitmap(((BgScriptParameter)commands[i].Parameters[0]).Background.GetBackground(), new SKPoint(0, 0));
                     break;
-                }
-            }
-
-            // Draw background
-            bool bgReverted = false;
-            ScriptItemCommand bgPalCommand = commands.LastOrDefault(c => c.Verb == EventFile.CommandVerb.BG_PALEFFECT);
-            SKPaint bgEffectPaint = PaletteEffectScriptParameter.IdentityPaint;
-            if (bgPalCommand is not null)
-            {
-                switch (((PaletteEffectScriptParameter)bgPalCommand.Parameters[0]).Effect)
-                {
-                    case PaletteEffectScriptParameter.PaletteEffect.INVERTED:
-                        bgEffectPaint = PaletteEffectScriptParameter.InvertedPaint;
-                        break;
-
-                    case PaletteEffectScriptParameter.PaletteEffect.GRAYSCALE:
-                        bgEffectPaint = PaletteEffectScriptParameter.GrayscalePaint;
-                        break;
-
-                    case PaletteEffectScriptParameter.PaletteEffect.SEPIA:
-                        bgEffectPaint = PaletteEffectScriptParameter.SepiaPaint;
-                        break;
-
-                    case PaletteEffectScriptParameter.PaletteEffect.DIMMED:
-                        bgEffectPaint = PaletteEffectScriptParameter.DimmedPaint;
-                        break;
-                }
-            }
-            for (int i = commands.Count - 1; i >= 0; i--)
-            {
-                if (commands[i].Verb == EventFile.CommandVerb.BG_REVERT)
-                {
-                    bgReverted = true;
-                    continue;
-                }
-                if (commands[i].Verb == EventFile.CommandVerb.BG_DISP || commands[i].Verb == EventFile.CommandVerb.BG_DISP2 ||
-                    (commands[i].Verb == EventFile.CommandVerb.BG_FADE && (((BgScriptParameter)commands[i].Parameters[1]).Background is not null)) ||
-                    (!bgReverted && (commands[i].Verb == EventFile.CommandVerb.BG_DISPTEMP || commands[i].Verb == EventFile.CommandVerb.BG_FADE)))
-                {
-                    BackgroundItem background = (commands[i].Verb == EventFile.CommandVerb.BG_FADE && ((BgScriptParameter)commands[i].Parameters[0]).Background is null) ?
-                        ((BgScriptParameter)commands[i].Parameters[1]).Background : ((BgScriptParameter)commands[i].Parameters[0]).Background;
-                    if (background is not null)
-                    {
-                        switch (background.BackgroundType)
-                        {
-                            case BgType.TEX_DUAL:
-                                canvas.DrawBitmap(background.GetBackground(), new SKPoint(0, 0), bgEffectPaint);
-                                break;
-
-                            case BgType.SINGLE_TEX:
-                                if (commands[i].Verb == EventFile.CommandVerb.BG_DISPTEMP && ((BoolScriptParameter)commands[i].Parameters[1]).Value)
-                                {
-                                    SKBitmap bgBitmap = background.GetBackground();
-                                    canvas.DrawBitmap(bgBitmap, new SKRect(0, bgBitmap.Height - 194, bgBitmap.Width, bgBitmap.Height), 
-                                        new SKRect(0, 194, 256, 388), bgEffectPaint);
-                                }
-                                else
-                                {
-                                    canvas.DrawBitmap(background.GetBackground(), new SKPoint(0, 194), bgEffectPaint);
-                                }
-                                break;
-
-                            default:
-                                canvas.DrawBitmap(background.GetBackground(), new SKPoint(0, 194), bgEffectPaint);
-                                break;
-                        }
-                        break;
-                    }
                 }
             }
 
@@ -747,6 +684,77 @@ namespace SerialLoops.Editors
                 else
                 {
                     _log.LogWarning($"Chibi {chibi.Name} not currently on screen; cannot display emote.");
+                }
+            }
+
+            // Draw background
+            bool bgReverted = false;
+            ScriptItemCommand bgPalCommand = commands.LastOrDefault(c => c.Verb == EventFile.CommandVerb.BG_PALEFFECT);
+            ScriptItemCommand lastBgCommand = commands.LastOrDefault(c => c.Verb == EventFile.CommandVerb.BG_DISP ||
+                c.Verb == EventFile.CommandVerb.BG_DISP2 || c.Verb == EventFile.CommandVerb.BG_DISPTEMP || c.Verb == EventFile.CommandVerb.BG_FADE ||
+                c.Verb == EventFile.CommandVerb.BG_REVERT);
+            SKPaint bgEffectPaint = PaletteEffectScriptParameter.IdentityPaint;
+            if (bgPalCommand is not null && lastBgCommand is not null && commands.IndexOf(bgPalCommand) > commands.IndexOf(lastBgCommand))
+            {
+                switch (((PaletteEffectScriptParameter)bgPalCommand.Parameters[0]).Effect)
+                {
+                    case PaletteEffectScriptParameter.PaletteEffect.INVERTED:
+                        bgEffectPaint = PaletteEffectScriptParameter.InvertedPaint;
+                        break;
+
+                    case PaletteEffectScriptParameter.PaletteEffect.GRAYSCALE:
+                        bgEffectPaint = PaletteEffectScriptParameter.GrayscalePaint;
+                        break;
+
+                    case PaletteEffectScriptParameter.PaletteEffect.SEPIA:
+                        bgEffectPaint = PaletteEffectScriptParameter.SepiaPaint;
+                        break;
+
+                    case PaletteEffectScriptParameter.PaletteEffect.DIMMED:
+                        bgEffectPaint = PaletteEffectScriptParameter.DimmedPaint;
+                        break;
+                }
+            }
+            for (int i = commands.Count - 1; i >= 0; i--)
+            {
+                if (commands[i].Verb == EventFile.CommandVerb.BG_REVERT)
+                {
+                    bgReverted = true;
+                    continue;
+                }
+                if (commands[i].Verb == EventFile.CommandVerb.BG_DISP || commands[i].Verb == EventFile.CommandVerb.BG_DISP2 ||
+                    (commands[i].Verb == EventFile.CommandVerb.BG_FADE && (((BgScriptParameter)commands[i].Parameters[1]).Background is not null)) ||
+                    (!bgReverted && (commands[i].Verb == EventFile.CommandVerb.BG_DISPTEMP || commands[i].Verb == EventFile.CommandVerb.BG_FADE)))
+                {
+                    BackgroundItem background = (commands[i].Verb == EventFile.CommandVerb.BG_FADE && ((BgScriptParameter)commands[i].Parameters[0]).Background is null) ?
+                        ((BgScriptParameter)commands[i].Parameters[1]).Background : ((BgScriptParameter)commands[i].Parameters[0]).Background;
+                    if (background is not null)
+                    {
+                        switch (background.BackgroundType)
+                        {
+                            case BgType.TEX_DUAL:
+                                canvas.DrawBitmap(background.GetBackground(), new SKPoint(0, 0), bgEffectPaint);
+                                break;
+
+                            case BgType.SINGLE_TEX:
+                                if (commands[i].Verb == EventFile.CommandVerb.BG_DISPTEMP && ((BoolScriptParameter)commands[i].Parameters[1]).Value)
+                                {
+                                    SKBitmap bgBitmap = background.GetBackground();
+                                    canvas.DrawBitmap(bgBitmap, new SKRect(0, bgBitmap.Height - 194, bgBitmap.Width, bgBitmap.Height), 
+                                        new SKRect(0, 194, 256, 388), bgEffectPaint);
+                                }
+                                else
+                                {
+                                    canvas.DrawBitmap(background.GetBackground(), new SKPoint(0, 194), bgEffectPaint);
+                                }
+                                break;
+
+                            default:
+                                canvas.DrawBitmap(background.GetBackground(), new SKPoint(0, 194), bgEffectPaint);
+                                break;
+                        }
+                        break;
+                    }
                 }
             }
 
@@ -1055,6 +1063,18 @@ namespace SerialLoops.Editors
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)].Objects[dropDown.Command.Index]
                 .Parameters[dropDown.ParameterIndex] = (short)messInfoFile.MessageInfos.IndexOf(messInfo);
             UpdateTabTitle(false);
+        }
+        private void EpHeaderDropDown_SelectedKeyChanged(object sender, EventArgs e)
+        {
+            ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
+            _log.Log($"Attempting to modify speaker in parameter {dropDown.ParameterIndex} to speaker {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
+            ((EpisodeHeaderScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).EpisodeHeaderIndex =
+                Enum.Parse<EpisodeHeaderScriptParameter.Episode>(dropDown.SelectedKey);
+            _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
+                .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
+                (short)Enum.Parse<EpisodeHeaderScriptParameter.Episode>(dropDown.SelectedKey);
+            UpdateTabTitle(false);
+            Application.Instance.Invoke(() => UpdatePreview());
         }
         private void PaletteEffectDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
