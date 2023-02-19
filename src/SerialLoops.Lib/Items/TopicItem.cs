@@ -1,4 +1,5 @@
 ﻿using HaruhiChokuretsuLib.Archive.Event;
+using SerialLoops.Lib.Util;
 using System.Linq;
 
 namespace SerialLoops.Lib.Items
@@ -10,7 +11,7 @@ namespace SerialLoops.Lib.Items
 
         public TopicItem(TopicStruct topicStruct, Project project) : base($"{topicStruct.Id}", ItemType.Topic)
         {
-            DisplayName = $"{topicStruct.Title}";
+            DisplayName = $"{topicStruct.Title.GetSubstitutedString(project)}";
             Topic = topicStruct;
             PopulateScriptUses(project);
         }

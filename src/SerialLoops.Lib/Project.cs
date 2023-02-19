@@ -58,6 +58,8 @@ namespace SerialLoops.Lib
                 File.WriteAllText(Path.Combine(MainDirectory, $"{Name}.{PROJECT_FORMAT}"), JsonSerializer.Serialize(this));
                 Directory.CreateDirectory(BaseDirectory);
                 Directory.CreateDirectory(IterativeDirectory);
+                Directory.CreateDirectory(Path.Combine(MainDirectory, "font"));
+                File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "charset.json"), Path.Combine(MainDirectory, "font", "charset.json"));
             }
             catch (Exception exc)
             {
@@ -80,7 +82,7 @@ namespace SerialLoops.Lib
             tracker.Finished++;
 
             tracker.Focus("Font Replacement Dictionary", 1);
-            if (IO.TryReadStringFile(Path.Combine(BaseDirectory, "assets", "misc", "charset.json"), out string json, log))
+            if (IO.TryReadStringFile(Path.Combine(MainDirectory, "font", "charset.json"), out string json, log))
             {
                 FontReplacement.AddRange(JsonSerializer.Deserialize<List<FontReplacement>>(json));
             }
@@ -108,7 +110,7 @@ namespace SerialLoops.Lib
                     {
                         name = $"{bgNameBackup}{j:D2}";
                     }
-                    Items.Add(new BackgroundItem(name, i, entry, Evt, Grp, extras));
+                    Items.Add(new BackgroundItem(name, i, entry, this, extras));
                 }
                 tracker.Finished++;
             }
@@ -192,11 +194,24 @@ namespace SerialLoops.Lib
         public static Project OpenProject(string projFile, Config config, ILogger log, IProgressTracker tracker)
         {
             log.Log($"Loading project from '{projFile}'...");
-            tracker.Focus($"{Path.GetFileNameWithoutExtension(projFile)} Project Data", 1);
-            Project project = JsonSerializer.Deserialize<Project>(File.ReadAllText(projFile));
-            tracker.Finished++;
-            project.LoadArchives(log, tracker);
-            return project;
+            if (!File.Exists(projFile))
+            {
+                log.LogError($"Project file {projFile} not found -- has it been deleted?");
+                return null;
+            }
+            try
+            {
+                tracker.Focus($"{Path.GetFileNameWithoutExtension(projFile)} Project Data", 1);
+                Project project = JsonSerializer.Deserialize<Project>(File.ReadAllText(projFile));
+                tracker.Finished++;
+                project.LoadArchives(log, tracker);
+                return project;
+            }
+            catch (Exception exc)
+            {
+                log.LogError($"Error while loading project: {exc.Message}\n\n{exc.StackTrace}");
+                return null;
+            }
         }
         public List<ItemDescription> GetSearchResults(string searchTerm, bool titlesOnly = true)
         {

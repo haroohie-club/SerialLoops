@@ -99,8 +99,6 @@ namespace SerialLoops.Lib
                 new("movie", Array.Empty<IODirectory>(), Array.Empty<IOFile>()),
                 new("scn", Array.Empty<IODirectory>(), Array.Empty<IOFile>()),
             }, Array.Empty<IOFile>());
-            
-            assetsDirectoryTree.Subdirectories.First(f => f.Name == "misc").Files = new IOFile[] { new IOFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "charset.json")) };
 
             originalDirectoryTree.Create(project.BaseDirectory);
             originalDirectoryTree.Create(project.IterativeDirectory);

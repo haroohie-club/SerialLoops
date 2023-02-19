@@ -2,6 +2,7 @@
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
+using SerialLoops.Lib.Util;
 using SerialLoops.Utility;
 using System.Linq;
 
@@ -21,7 +22,7 @@ namespace SerialLoops.Editors
 
             Label idLabel = new() { Text = _topic.Topic.Id.ToString() };
 
-            TextBox titleTextBox = new() { Text = _topic.Topic.Title, Width = 200 };
+            TextBox titleTextBox = new() { Text = _topic.Topic.Title.GetSubstitutedString(_project), Width = 200 };
 
             DropDown linkedScriptDropDown = new();
             linkedScriptDropDown.Items.Add(new ListItem { Key = "NONE", Text = "NONE" });

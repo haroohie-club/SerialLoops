@@ -2,6 +2,7 @@
 using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Archive.Graphics;
+using SerialLoops.Lib.Util;
 using SkiaSharp;
 using System.Linq;
 
@@ -21,20 +22,20 @@ namespace SerialLoops.Lib.Items
         public BackgroundItem(string name) : base(name, ItemType.Background)
         {
         }
-        public BackgroundItem(string name, int id, BgTableEntry entry, ArchiveFile<EventFile> evt, ArchiveFile<GraphicsFile> grp, ExtraFile extras) : base(name, ItemType.Background)
+        public BackgroundItem(string name, int id, BgTableEntry entry, Project project, ExtraFile extras) : base(name, ItemType.Background)
         {
             Id = id;
             BackgroundType = entry.Type;
-            Graphic1 = grp.Files.First(g => g.Index == entry.BgIndex1);
-            Graphic2 = grp.Files.FirstOrDefault(g => g.Index == entry.BgIndex2); // can be null if type is SINGLE_TEX
+            Graphic1 = project.Grp.Files.First(g => g.Index == entry.BgIndex1);
+            Graphic2 = project.Grp.Files.FirstOrDefault(g => g.Index == entry.BgIndex2); // can be null if type is SINGLE_TEX
             CgStruct? cgEntry = extras.Cgs.FirstOrDefault(c => c.BgId == Id);
             if (cgEntry.HasValue)
             {
-                CgName = cgEntry?.Name;
+                CgName = cgEntry?.Name?.GetSubstitutedString(project);
                 ExtrasShort = cgEntry?.Unknown02 ?? 0;
                 ExtrasInt = cgEntry?.Unknown04 ?? 0;
             }
-            PopulateScriptUses(evt);
+            PopulateScriptUses(project.Evt);
         }
 
         public override void Refresh(Project project)

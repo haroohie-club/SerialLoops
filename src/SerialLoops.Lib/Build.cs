@@ -47,7 +47,7 @@ namespace SerialLoops.Lib
 
         private static void CleanIterative(Project project, ILogger log, IProgressTracker tracker)
         {
-            string[] preservedFiles = new string[] { "charset.json" };
+            string[] preservedFiles = Array.Empty<string>();
             string[] cleanableFiles = Directory.GetFiles(Path.Combine(project.IterativeDirectory, "assets"), "*", SearchOption.AllDirectories);
             tracker.Focus("Cleaning Iterative Directory", cleanableFiles.Length);
             foreach (string file in cleanableFiles)

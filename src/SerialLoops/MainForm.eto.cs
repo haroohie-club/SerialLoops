@@ -212,7 +212,13 @@ namespace SerialLoops
         private void OpenProjectFromPath(string path)
         {
             LoopyProgressTracker tracker = new();
-            _ = new ProgressDialog(() => OpenProject = Project.OpenProject(path, CurrentConfig, _log, tracker), () => OpenProjectView(OpenProject, tracker), tracker, "Loading Project");
+            _ = new ProgressDialog(() => OpenProject = Project.OpenProject(path, CurrentConfig, _log, tracker), () => 
+            {
+                if (OpenProject is not null)
+                {
+                    OpenProjectView(OpenProject, tracker);
+                }
+            }, tracker, "Loading Project");
         }
 
         private void SaveProject_Executed(object sender, EventArgs e)
