@@ -124,9 +124,12 @@ namespace SerialLoops
         private StackLayout GeneratePreview()
         {
             Label backgroundTypeLabel = new();
-            if (((ItemDescription)_selector.SelectedValue).Type == ItemDescription.ItemType.Background)
+            if (_selector.SelectedValue is not null)
             {
-                backgroundTypeLabel.Text = ((BackgroundItem)_selector.SelectedValue).BackgroundType.ToString();
+                if (((ItemDescription)_selector.SelectedValue).Type == ItemDescription.ItemType.Background)
+                {
+                    backgroundTypeLabel.Text = ((BackgroundItem)_selector.SelectedValue).BackgroundType.ToString();
+                }
             }
 
             return new StackLayout

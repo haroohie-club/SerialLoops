@@ -30,6 +30,11 @@ namespace SerialLoops.Controls
         public ScriptItemCommand Command { get; set; }
         public int ParameterIndex { get; set; }
     }
+    public class ScriptCommandTextArea : TextArea
+    {
+        public ScriptItemCommand Command { get; set; }
+        public int ParameterIndex { get; set; }
+    }
 
     public class ScenarioCommandDropDown : DropDown
     {

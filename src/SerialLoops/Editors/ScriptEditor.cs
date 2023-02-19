@@ -14,6 +14,8 @@ using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SerialLoops.Editors
 {
@@ -26,6 +28,7 @@ namespace SerialLoops.Editors
         private StackLayout _preview = new() { Items = { new SKGuiImage(new(256, 384)) } };
         private StackLayout _editorControls = new();
         private ScriptCommandListPanel _commandsPanel;
+        private CancellationTokenSource _cancellation;
 
         public ScriptEditor(ScriptItem item, Project project, ILogger log, EditorTabsPanel tabs) : base(item, log, project, tabs)
         {
@@ -289,6 +292,17 @@ namespace SerialLoops.Editors
                             currentRow++;
                             currentCol = 0;
                         }
+
+                        ScriptCommandTextArea dialogueTextArea = new() 
+                        {
+                            Text = dialogueParam.Line.Text.GetSubstitutedString(_project),
+                            AcceptsReturn = true,
+                            Command = command,
+                            ParameterIndex = i,
+                        };
+                        dialogueTextArea.TextChanged += DialogueTextArea_TextChanged;
+                        dialogueTextArea.LostFocus += DialogueTextArea_LostFocus;
+
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
                             ControlGenerator.GetControlWithLabelTable(parameter.Name,
                             new StackLayout
@@ -297,7 +311,7 @@ namespace SerialLoops.Editors
                                 Items =
                                 {
                                     speakerDropDown,
-                                    new StackLayoutItem(new TextArea { Text = dialogueParam.Line.Text.GetSubstitutedString(_project), AcceptsReturn = true }, expand: true),
+                                    new StackLayoutItem(dialogueTextArea, expand: true),
                                 },
                             }));
                         controlsTable.Rows.Add(new(new TableLayout { Spacing = new Size(5, 5) }));
@@ -976,10 +990,35 @@ namespace SerialLoops.Editors
             _log.Log($"Attempting to modify speaker in parameter {dropDown.ParameterIndex} to speaker {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
             ((DialogueScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Line.Speaker =
                 Enum.Parse<Speaker>(dropDown.SelectedKey);
-            _script.Event.DialogueLines[_script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
-                .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex]].Speaker = Enum.Parse<Speaker>(dropDown.SelectedKey);
+            _script.Event.DialogueSection.Objects[dropDown.Command.Section.Objects[dropDown.Command.Index].Parameters[0]].Speaker =
+                Enum.Parse<Speaker>(dropDown.SelectedKey);
             UpdateTabTitle(false);
             Application.Instance.Invoke(() => UpdatePreview());
+        }
+        private void DialogueTextArea_TextChanged(object sender, EventArgs e)
+        {
+            ScriptCommandTextArea textArea = (ScriptCommandTextArea)sender;
+            _log.Log($"Attempting to modify dialogue in parameter {textArea.ParameterIndex} to dialogue '{textArea.Text}' in {textArea.Command.Index} in file {_script.Name}...");
+
+            _cancellation?.Cancel();
+            _cancellation = new();
+
+            string text = textArea.Text;
+            ScriptItemCommand command = textArea.Command;
+            int parameterIndex = textArea.ParameterIndex;
+            Task task = new(() =>
+            {
+                string originalText = text.GetOriginalString(_project);
+                ((DialogueScriptParameter)command.Parameters[parameterIndex]).Line.Text = originalText;
+                _script.Event.DialogueSection.Objects[command.Section.Objects[command.Index].Parameters[0]].Text = originalText;
+                _cancellation = null;
+            }, _cancellation.Token);
+            task.Start();
+            UpdateTabTitle(false);
+        }
+        private void DialogueTextArea_LostFocus(object sender, EventArgs e)
+        {
+            UpdatePreview();
         }
         private void SpriteSelectionButton_SelectionMade(object sender, EventArgs e)
         {
