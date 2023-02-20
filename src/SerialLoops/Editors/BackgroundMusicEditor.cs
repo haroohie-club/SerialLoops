@@ -2,6 +2,7 @@
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Controls;
 using SerialLoops.Lib.Items;
+using SerialLoops.Utility;
 
 namespace SerialLoops.Editors
 {
@@ -17,26 +18,12 @@ namespace SerialLoops.Editors
         public override Container GetEditorPanel()
         {
             _bgm = (BackgroundMusicItem)Description;
-
             BgmPlayer = new(_bgm, _log);
 
-            return new TableLayout(new TableRow(new StackLayout
-            {
-                Orientation = Orientation.Horizontal,
-                VerticalContentAlignment = VerticalAlignment.Center,
-                Spacing = 10,
-                Items =
-                    {
-                        BgmPlayer,
-                        new StackLayout
-                        {
-                            Orientation = Orientation.Vertical,
-                            Spacing = 5,
-                            Items = { _bgm.BgmName, _bgm.Name }
-                        }
-                    }
-            }),
-            new TableRow()); // todo extract / replace buttons
+            return new TableLayout(
+                new TableRow(ControlGenerator.GetPlayerStackLayout(BgmPlayer, _bgm.BgmName, _bgm.Name)),
+                new TableRow() // todo extract / replace buttons
+                );
         }
     }
 }
