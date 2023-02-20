@@ -4,6 +4,7 @@ using HaruhiChokuretsuLib.Util;
 using SerialLoops.Controls;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
+using SerialLoops.Lib.Util;
 using SerialLoops.Utility;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,13 +31,13 @@ namespace SerialLoops.Editors
                     continue;
                 }
 
-                GroupBox selectionBox = new() { Text = routeSelection.Title };
+                GroupBox selectionBox = new() { Text = routeSelection.Title.GetSubstitutedString(_project) };
 
                 GroupBox routesBox = new() { Text = "Routes" };
                 StackLayout routesLayout = new() { Orientation = Orientation.Vertical, Spacing = 2 };
                 foreach (ScenarioRouteStruct route in routeSelection.Routes)
                 {
-                    GroupBox routeBox = new() { Text = route.Title };
+                    GroupBox routeBox = new() { Text = route.Title.GetSubstitutedString(_project) };
                     StackLayout routeLayout = new()
                     {
                         Orientation = Orientation.Vertical,
@@ -60,8 +61,8 @@ namespace SerialLoops.Editors
                     {
                         ControlGenerator.GetControlWithLabel("Haruhi Present", new CheckBox { Checked = routeSelection.HaruhiPresent }),
                         ControlGenerator.GetControlWithLabel("Required Brigade Member", new Label { Text = routeSelection.RequiredBrigadeMember.ToString() }),
-                        ControlGenerator.GetControlWithLabel("Future Description", new TextBox { Text = routeSelection.FutureDesc, Width = 400 }),
-                        ControlGenerator.GetControlWithLabel("Past Description", new TextBox { Text = routeSelection.PastDesc, Width = 400 }),
+                        ControlGenerator.GetControlWithLabel("Future Description", new TextBox { Text = routeSelection.FutureDesc.GetSubstitutedString(_project), Width = 400 }),
+                        ControlGenerator.GetControlWithLabel("Past Description", new TextBox { Text = routeSelection.PastDesc.GetSubstitutedString(_project), Width = 400 }),
                         ControlGenerator.GetControlWithLabel("Unknown 1", new TextBox { Text = routeSelection.UnknownInt1.ToString(), Width = 50 }),
                         ControlGenerator.GetControlWithLabel("Unknown 2", new TextBox { Text = routeSelection.UnknownInt2.ToString(), Width = 50 }),
                         ControlGenerator.GetControlWithLabel("Unknown 3", new TextBox { Text = routeSelection.UnknownInt3.ToString(), Width = 50 }),
