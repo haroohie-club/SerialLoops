@@ -99,8 +99,7 @@ namespace SerialLoops.Tests
         {
             var bgm = (BackgroundMusicItem)_project.FindItem(bgmName);
             Assert.That(bgm.BgmFile, Does.Contain(bgm.Name));
-            AdxWaveProvider waveProvider = bgm.GetAdxWaveProvider(_log);
-            Assert.That(waveProvider, Is.Not.Null);
+            Assert.That(bgm.GetWaveProvider(_log), Is.Not.Null);
         }
 
         [Test, TestCaseSource(nameof(CharacterSpriteNames)), Parallelizable(ParallelScope.All)]
@@ -167,8 +166,7 @@ namespace SerialLoops.Tests
         {
             var vce = (VoicedLineItem)_project.FindItem(voiceName);
             Assert.That(vce.VoiceFile, Does.Contain(vce.Name));
-            AdxWaveProvider waveProvider = vce.GetAdxWaveProvider(_log);
-            Assert.That(waveProvider, Is.Not.Null);
+            Assert.That(vce.GetWaveProvider(_log), Is.Not.Null);
         }
         #endregion
 
