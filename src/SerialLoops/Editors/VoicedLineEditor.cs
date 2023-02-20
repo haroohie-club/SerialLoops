@@ -1,10 +1,7 @@
 ﻿using Eto.Forms;
-using HaruhiChokuretsuLib.Audio;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Controls;
 using SerialLoops.Lib.Items;
-using System;
-using System.IO;
 
 namespace SerialLoops.Editors
 {
@@ -21,18 +18,24 @@ namespace SerialLoops.Editors
         {
             _vce = (VoicedLineItem)Description;
 
-            VcePlayer = new(_vce.GetAdxWaveProvider(_log), _log);
+            VcePlayer = new(_vce, _log);
 
             return new TableLayout(new TableRow(new StackLayout
-            {
-                Orientation = Orientation.Vertical,
-                Items =
                 {
-                    _vce.Name,
-                    _vce.AdxType.ToString(),
-                }
-            }),
-            new TableRow(VcePlayer));
+                    Orientation = Orientation.Horizontal,
+                    Spacing = 10,
+                    Items =
+                    {
+                        VcePlayer,
+                        new StackLayout
+                        {
+                            Orientation = Orientation.Vertical,
+                            Spacing = 5,
+                            Items = { _vce.Name, _vce.AdxType.ToString() }
+                        }
+                    }
+                }),
+                new TableRow()); // todo extract / replace buttons
         }
     }
 }
