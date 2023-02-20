@@ -19,22 +19,23 @@ namespace SerialLoops.Editors
             _bgm = (BackgroundMusicItem)Description;
 
             BgmPlayer = new(_bgm, _log);
-            
+
             return new TableLayout(new TableRow(new StackLayout
-                {
-                    Orientation = Orientation.Horizontal,
-                    Spacing = 10,
-                    Items =
+            {
+                Orientation = Orientation.Horizontal,
+                VerticalContentAlignment = VerticalAlignment.Center,
+                Spacing = 10,
+                Items =
                     {
                         BgmPlayer,
                         new StackLayout
                         {
                             Orientation = Orientation.Vertical,
                             Spacing = 5,
-                            Items = { _bgm.Name, _bgm.BgmName }
+                            Items = { _bgm.BgmName, _bgm.Name }
                         }
                     }
-                }),
+            }),
             new TableRow()); // todo extract / replace buttons
         }
     }

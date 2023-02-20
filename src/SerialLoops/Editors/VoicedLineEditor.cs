@@ -21,21 +21,22 @@ namespace SerialLoops.Editors
             VcePlayer = new(_vce, _log);
 
             return new TableLayout(new TableRow(new StackLayout
+            {
+            Orientation = Orientation.Horizontal,
+            VerticalContentAlignment = VerticalAlignment.Center,
+            Spacing = 10,
+                Items =
                 {
-                    Orientation = Orientation.Horizontal,
-                    Spacing = 10,
-                    Items =
+                    VcePlayer,
+                    new StackLayout
                     {
-                        VcePlayer,
-                        new StackLayout
-                        {
-                            Orientation = Orientation.Vertical,
-                            Spacing = 5,
-                            Items = { _vce.Name, _vce.AdxType.ToString() }
-                        }
+                        Orientation = Orientation.Vertical,
+                        Spacing = 5,
+                        Items = { _vce.Name, _vce.AdxType.ToString() }
                     }
-                }),
-                new TableRow()); // todo extract / replace buttons
+                }
+            }),
+            new TableRow()); // todo extract / replace buttons
         }
     }
 }

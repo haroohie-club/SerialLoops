@@ -3,6 +3,7 @@ using HaruhiChokuretsuLib.Util;
 using NAudio.Wave;
 using SerialLoops.Lib.Items;
 using SerialLoops.Utility;
+using System;
 
 namespace SerialLoops.Controls
 {
@@ -19,20 +20,26 @@ namespace SerialLoops.Controls
         {
             _log = log;
             _item = item;
+
+            InitializePlayer();
+            InitializeComponent();
+        }
+
+        private void InitializePlayer()
+        {
             _log.Log("Attempting to initialize sound player...");
             _player = new SoundPlayer();
+            _sound = _item.GetWaveProvider(_log);
             _player.Initialize(_sound);
             _log.Log("Sound player successfully initialized.");
-
-            InitializeComponent();
         }
 
         public void InitializeComponent()
         {
             _playPauseButton = new() { Image = ControlGenerator.GetIcon("Play", _log), Width = 25, Height = 25 };
             _stopButton = new() { Image = ControlGenerator.GetIcon("Stop", _log), Width = 25, Height = 25, Enabled = false };
-            _sound = _item.GetWaveProvider(_log);
             _playPauseButton.Click += PlayPauseButton_Click;
+            _stopButton.Click += StopButton_Click;
 
             Content = new StackLayout
             {
@@ -48,9 +55,10 @@ namespace SerialLoops.Controls
 
         public void Stop()
         {
-            _player.Stop();
-            _sound = _item.GetWaveProvider(_log);
             _stopButton.Enabled = false;
+            _playPauseButton.Image = ControlGenerator.GetIcon("Play", _log);
+            _player.Stop();
+            InitializePlayer();
         }
 
         private void PlayPauseButton_Click(object sender, System.EventArgs e)
@@ -66,6 +74,11 @@ namespace SerialLoops.Controls
                 _player.Play();
                 _playPauseButton.Image = ControlGenerator.GetIcon("Pause", _log);
             }
+        }
+
+        private void StopButton_Click(object sender, EventArgs e)
+        {
+            Stop();
         }
     }
 }
