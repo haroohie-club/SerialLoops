@@ -22,6 +22,7 @@ namespace SerialLoops.Lib.Items
             BgmFile = bgmFile;
             Index = index;
             BgmName = extras.Bgms.FirstOrDefault(b => b.Index == Index).Name ?? "";
+            DisplayName = string.IsNullOrEmpty(BgmName) ? Name : BgmName;
             PopulateScriptUses(project);
         }
 

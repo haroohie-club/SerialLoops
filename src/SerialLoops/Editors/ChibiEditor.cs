@@ -3,9 +3,7 @@ using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib.Items;
 using SerialLoops.Utility;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http.Headers;
 
 namespace SerialLoops.Editors
 {
@@ -25,11 +23,7 @@ namespace SerialLoops.Editors
         public override Container GetEditorPanel()
         {
             _chibi = (ChibiItem)Description;
-
-            TableRow row = new(GetAnimationEditor(), GetChibiSelector());
-            row.ScaleHeight = false;
-
-            return new TableLayout(row);
+            return new TableLayout(GetAnimationEditor(), GetChibiSelector());
         }
 
         private Container GetChibiSelector()
@@ -49,7 +43,7 @@ namespace SerialLoops.Editors
 
             return new TableLayout
             {
-                Width = 200,
+                Height = 250,
                 Padding = 10,
                 Rows =
                 {
@@ -76,8 +70,7 @@ namespace SerialLoops.Editors
 
             _framesStack = new() { 
                 Orientation = Orientation.Horizontal, 
-                Spacing = 15,
-                MinimumSize = new(300, 100)
+                Spacing = 15
             };
             UpdateFramesStack();
 
