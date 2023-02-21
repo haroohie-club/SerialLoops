@@ -1,4 +1,5 @@
 ﻿using HaruhiChokuretsuLib.Archive.Event;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -80,7 +81,9 @@ namespace SerialLoops.Lib.Items
                     {
                         references.Add(scenario);
                     }
+                    references.AddRange(project.Items.Where(i => i.Type == ItemType.Group_Selection && ((GroupSelectionItem)i).Selection.RouteSelections.Where(s => s is not null).Any(s => s.Routes.Any(r => r.ScriptIndex == script.Event.Index))));
                     references.AddRange(project.Items.Where(i => i.Type == ItemType.Topic && ((TopicItem)i).Topic.EventIndex == script.Event.Index));
+                    references.AddRange(project.Items.Where(i => i.Type == ItemType.Script && ((ScriptItem)i).Event.ConditionalsSection.Objects.Contains(Name)));
                     return references;
                 case ItemType.Topic:
                     TopicItem topic = (TopicItem)this;

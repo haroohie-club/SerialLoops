@@ -33,6 +33,34 @@ namespace SerialLoops.Editors
 
                 GroupBox selectionBox = new() { Text = routeSelection.Title.GetSubstitutedString(_project) };
 
+                GroupBox optimalGroupBox = new() { Text = "Optimal Group" };
+                StackLayout optimalGroupLayout = new()
+                {
+                    Orientation = Orientation.Horizontal,
+                    Spacing = 10,
+                    Items =
+                    {
+                        routeSelection.OptimalGroup.Item1.ToString(),
+                        routeSelection.OptimalGroup.Item2.ToString(),
+                        routeSelection.OptimalGroup.Item3.ToString(),
+                    }
+                };
+                optimalGroupBox.Content = optimalGroupLayout;
+
+                GroupBox worstGroupBox = new() { Text = "Worst Group" };
+                StackLayout worstGroupLayout = new()
+                {
+                    Orientation = Orientation.Horizontal,
+                    Spacing = 10,
+                    Items =
+                    {
+                        routeSelection.WorstGroup.Item1.ToString(),
+                        routeSelection.WorstGroup.Item2.ToString(),
+                        routeSelection.WorstGroup.Item3.ToString(),
+                    }
+                };
+                worstGroupBox.Content = worstGroupLayout;
+
                 GroupBox routesBox = new() { Text = "Routes" };
                 StackLayout routesLayout = new() { Orientation = Orientation.Vertical, Spacing = 2 };
                 foreach (ScenarioRouteStruct route in routeSelection.Routes)
@@ -63,12 +91,8 @@ namespace SerialLoops.Editors
                         ControlGenerator.GetControlWithLabel("Required Brigade Member", new Label { Text = routeSelection.RequiredBrigadeMember.ToString() }),
                         ControlGenerator.GetControlWithLabel("Future Description", new TextBox { Text = routeSelection.FutureDesc.GetSubstitutedString(_project), Width = 400 }),
                         ControlGenerator.GetControlWithLabel("Past Description", new TextBox { Text = routeSelection.PastDesc.GetSubstitutedString(_project), Width = 400 }),
-                        ControlGenerator.GetControlWithLabel("Unknown 1", new TextBox { Text = routeSelection.UnknownInt1.ToString(), Width = 50 }),
-                        ControlGenerator.GetControlWithLabel("Unknown 2", new TextBox { Text = routeSelection.UnknownInt2.ToString(), Width = 50 }),
-                        ControlGenerator.GetControlWithLabel("Unknown 3", new TextBox { Text = routeSelection.UnknownInt3.ToString(), Width = 50 }),
-                        ControlGenerator.GetControlWithLabel("Unknown 4", new TextBox { Text = routeSelection.UnknownInt4.ToString(), Width = 50 }),
-                        ControlGenerator.GetControlWithLabel("Unknown 5", new TextBox { Text = routeSelection.UnknownInt5.ToString(), Width = 50 }),
-                        ControlGenerator.GetControlWithLabel("Unknown 6", new TextBox { Text = routeSelection.UnknownInt6.ToString(), Width = 50 }),
+                        optimalGroupBox,
+                        worstGroupBox,
                         routesBox,
                     }
                 };
