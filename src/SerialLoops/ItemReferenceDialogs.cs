@@ -9,11 +9,11 @@ using System.Linq;
 
 namespace SerialLoops
 {
-    public class ItemReferenceDialogs : FindItemsDialog
+    public class ReferencesDialog : FindItemsDialog
     {
         public ItemDescription Item;
 
-        public ItemReferenceDialogs(ItemDescription item, Project project, ItemExplorerPanel explorer, EditorTabsPanel tabs, ILogger log)
+        public ReferencesDialog(ItemDescription item, Project project, ItemExplorerPanel explorer, EditorTabsPanel tabs, ILogger log)
         {
             Item = item;
             Project = project;
