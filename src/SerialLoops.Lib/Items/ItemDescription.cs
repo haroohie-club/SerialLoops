@@ -93,15 +93,5 @@ namespace SerialLoops.Lib.Items
             }
         }
 
-        public List<ItemDescription> GetReferencedBy(Project project)
-        {
-            List<ItemDescription> references = new();
-
-            switch (Type)
-            {
-                default:
-                    return references;
-            }
-        }
     }
 }
