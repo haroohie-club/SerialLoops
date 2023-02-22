@@ -76,7 +76,7 @@ namespace SerialLoops.Controls
     {
         public Section Section { get; private set; }
         public Icon SectionIcon => Section.SectionIcon;
-        public string Text => Section.Text;
+        public string Text => Count > 1 ? $"{Section.Text} ({Count})" : Section.Text;
         public bool Expanded { get; set; }
         public bool Expandable => Count > 0;
         public ITreeGridItem Parent { get; set; }

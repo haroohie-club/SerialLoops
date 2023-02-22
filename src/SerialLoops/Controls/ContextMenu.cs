@@ -34,10 +34,6 @@ namespace SerialLoops.Controls
             Command findReferences = new();
             findReferences.Executed += FindReferences_OnClick;
             Items.Add(new ButtonMenuItem { Text = "Find References...", Command = findReferences });
-
-            Command findReferencedBy = new();
-            findReferencedBy.Executed += FindReferencedBy_OnClick;
-            Items.Add(new ButtonMenuItem { Text = "Find Referenced By...", Command = findReferencedBy });
         }
 
         private void OpenCommand_OnClick(object sender, EventArgs args)
@@ -51,20 +47,10 @@ namespace SerialLoops.Controls
 
         private void FindReferences_OnClick(object sender, EventArgs args)
         {
-            ShowReferences(ReferenceDialog.ReferenceMode.REFERENCES_TO);
-        }
-
-        private void FindReferencedBy_OnClick(object sender, EventArgs args)
-        {
-            ShowReferences(ReferenceDialog.ReferenceMode.REFERENCED_BY);
-        }
-
-        private void ShowReferences(ReferenceDialog.ReferenceMode mode)
-        {
             ItemDescription item = _project.FindItem(_explorer.Viewer.SelectedItem?.Text);
             if (item != null)
             {
-                ReferenceDialog referenceDialog = new(item, mode, _project, _explorer, _tabs, _log);
+                ReferencesDialog referenceDialog = new(item, _project, _explorer, _tabs, _log);
                 referenceDialog.ShowModal(_explorer);
             }
         }

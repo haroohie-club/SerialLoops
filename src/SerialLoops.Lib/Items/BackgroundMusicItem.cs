@@ -6,10 +6,11 @@ using SerialLoops.Lib.Util;
 using System;
 using System.IO;
 using System.Linq;
+using NAudio.Wave;
 
 namespace SerialLoops.Lib.Items
 {
-    public class BackgroundMusicItem : Item
+    public class BackgroundMusicItem : Item, ISoundItem
     {
         public string BgmFile { get; set; }
         public int Index { get; set; }
@@ -22,6 +23,7 @@ namespace SerialLoops.Lib.Items
             BgmFile = bgmFile;
             Index = index;
             BgmName = extras.Bgms.FirstOrDefault(b => b.Index == Index).Name?.GetSubstitutedString(project) ?? "";
+            DisplayName = string.IsNullOrEmpty(BgmName) ? Name : BgmName;
             PopulateScriptUses(project);
         }
 
@@ -37,8 +39,8 @@ namespace SerialLoops.Lib.Items
                     sec.Objects.Where(c => c.Command.Mnemonic == EventFile.CommandVerb.BGM_PLAY.ToString()).Select(c => (e.Name[0..^1], c))))
                 .Where(t => t.c.Parameters[0] == Index).ToArray();
         }
-
-        public AdxWaveProvider GetAdxWaveProvider(ILogger log)
+        
+        public IWaveProvider GetWaveProvider(ILogger log)
         {
             byte[] adxBytes = Array.Empty<byte>();
             try
@@ -57,7 +59,7 @@ namespace SerialLoops.Lib.Items
                 }
             }
 
-            return new(new AdxDecoder(adxBytes, log));
+            return new AdxWaveProvider(new AdxDecoder(adxBytes, log));
         }
     }
 }

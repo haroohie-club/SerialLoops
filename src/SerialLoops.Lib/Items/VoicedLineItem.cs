@@ -4,10 +4,11 @@ using HaruhiChokuretsuLib.Util;
 using System;
 using System.IO;
 using System.Linq;
+using NAudio.Wave;
 
 namespace SerialLoops.Lib.Items
 {
-    public class VoicedLineItem : Item
+    public class VoicedLineItem : Item, ISoundItem
     {
         public string VoiceFile { get; set; }
         public int Index { get; set; }
@@ -21,7 +22,7 @@ namespace SerialLoops.Lib.Items
             PopulateScriptUses(project);
         }
         
-        public AdxWaveProvider GetAdxWaveProvider(ILogger log)
+        public IWaveProvider GetWaveProvider(ILogger log)
         {
             byte[] adxBytes = Array.Empty<byte>();
             try
@@ -73,5 +74,6 @@ namespace SerialLoops.Lib.Items
 
             ScriptUses = list.ToArray();
         }
+        
     }
 }

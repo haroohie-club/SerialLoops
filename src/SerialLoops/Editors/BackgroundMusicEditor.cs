@@ -1,10 +1,8 @@
 ﻿using Eto.Forms;
-using HaruhiChokuretsuLib.Audio;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Controls;
 using SerialLoops.Lib.Items;
-using System;
-using System.IO;
+using SerialLoops.Utility;
 
 namespace SerialLoops.Editors
 {
@@ -20,19 +18,12 @@ namespace SerialLoops.Editors
         public override Container GetEditorPanel()
         {
             _bgm = (BackgroundMusicItem)Description;
+            BgmPlayer = new(_bgm, _log);
 
-            BgmPlayer = new(_bgm.GetAdxWaveProvider(_log), _log);
-            
-            return new TableLayout(new TableRow(new StackLayout
-            {
-                Orientation = Orientation.Vertical,
-                Items =
-                {
-                    _bgm.Name,
-                    _bgm.BgmName,
-                }
-            }),
-            new TableRow(BgmPlayer));
+            return new TableLayout(
+                new TableRow(ControlGenerator.GetPlayerStackLayout(BgmPlayer, _bgm.BgmName, _bgm.Name)),
+                new TableRow() // todo extract / replace buttons
+                );
         }
     }
 }

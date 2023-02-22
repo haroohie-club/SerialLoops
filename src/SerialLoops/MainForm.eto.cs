@@ -52,6 +52,9 @@ namespace SerialLoops
             Command searchProject = new() { MenuText = "Search", ToolBarText = "Search", Shortcut = Application.Instance.CommonModifier | Keys.F, Image = ControlGenerator.GetIcon("Search", _log) };
             searchProject.Executed += Search_Executed;
 
+            Command findOrphanedItems = new() { MenuText = "Find Orphaned Items" };
+            findOrphanedItems.Executed += FindOrphanedItems_Executed;
+
             // Build
             Command buildIterativeProject = new() { MenuText = "Build", ToolBarText = "Build", Image = ControlGenerator.GetIcon("Build", _log) };
             buildIterativeProject.Executed += BuildIterativeProject_Executed;
@@ -78,7 +81,7 @@ namespace SerialLoops
                 {
                     // File submenu
                     new SubMenuItem { Text = "&File", Items = { newProject, openProject, _recentProjects, saveProject } },
-                    new SubMenuItem { Text = "&Tools", Items = { searchProject } },
+                    new SubMenuItem { Text = "&Tools", Items = { searchProject, findOrphanedItems } },
                     // new SubMenuItem { Text = "&Edit", Items = { /* commands/items */ } },
                     // new SubMenuItem { Text = "&View", Items = { /* commands/items */ } },
                     new SubMenuItem { Text = "&Build", Items = { buildIterativeProject, buildBaseProject, buildAndRunProject } },
@@ -275,6 +278,30 @@ namespace SerialLoops
                     Tabs = EditorTabs,
                 };
                 searchDialog.ShowModal(this);
+            }
+        }
+
+        private void FindOrphanedItems_Executed(object sender, EventArgs e)
+        {
+            if (OpenProject is not null)
+            {
+                OrphanedItemsDialog orphanedItemsDialog = null;
+                LoopyProgressTracker tracker = new("");
+                ((IProgressTracker)tracker).Focus("Finding orphaned items...", 1);
+
+                ProgressDialog _ = new(() =>
+                {
+                    Application.Instance.Invoke(() =>
+                    {
+                        orphanedItemsDialog = new(OpenProject, ItemExplorer, EditorTabs, _log);
+                        tracker.Finished++;
+                    });
+                }, () => {
+                    Application.Instance.Invoke(() =>
+                    {
+                        orphanedItemsDialog?.ShowModal(this);
+                    });
+                }, tracker, "Finding orphaned items");
             }
         }
 
