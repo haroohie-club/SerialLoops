@@ -14,6 +14,7 @@ using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -1031,6 +1032,11 @@ namespace SerialLoops.Editors
         private void DialogueTextArea_TextChanged(object sender, EventArgs e)
         {
             ScriptCommandTextArea textArea = (ScriptCommandTextArea)sender;
+
+            textArea.Text = Regex.Replace(textArea.Text, @"^""", "“");
+            textArea.Text = Regex.Replace(textArea.Text, @"""\s", "“");
+            textArea.Text = textArea.Text.Replace('"', '”');
+
             _log.Log($"Attempting to modify dialogue in parameter {textArea.ParameterIndex} to dialogue '{textArea.Text}' in {textArea.Command.Index} in file {_script.Name}...");
 
             _dialogueCancellation?.Cancel();

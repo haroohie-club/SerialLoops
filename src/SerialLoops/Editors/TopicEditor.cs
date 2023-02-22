@@ -137,7 +137,6 @@ namespace SerialLoops.Editors
                 ControlGenerator.GetControlWithLabel("Title", titleTextBox),
                 ControlGenerator.GetControlWithLabel("Associated Script", linkedScriptDropDown),
                 new GroupBox() { Text = "Times", Content = timesLayout },
-                timesLayout,
                 unknownsLayout);
         }
 

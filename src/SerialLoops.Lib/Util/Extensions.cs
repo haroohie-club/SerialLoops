@@ -1,8 +1,6 @@
 ﻿using HaruhiChokuretsuLib.Archive.Event;
-using SerialLoops.Lib.Script.Parameters;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using static HaruhiChokuretsuLib.Archive.Event.EventFile;
 
 namespace SerialLoops.Lib.Util
@@ -11,21 +9,12 @@ namespace SerialLoops.Lib.Util
     {
         public static string GetSubstitutedString(this string line, Project project)
         {
-            return string.Join("", line.Select(c => project.FontReplacement.ReverseLookup(c)?.ReplacedCharacter ?? c));
+            // we replace " in the base library, but we don't want to do that here since we'll rely on rich-text editing instead
+            return string.Join("", line.Select(c => c != '“' ? (project.FontReplacement.ReverseLookup(c)?.ReplacedCharacter ?? c) : c));
         }
         public static string GetOriginalString(this string line, Project project)
         {
-            return string.Join("", line.Select(c =>
-            {
-                if (project.FontReplacement.ContainsKey(c))
-                {
-                    return project.FontReplacement[c].OriginalCharacter;
-                }
-                else
-                {
-                    return c;
-                }
-            }));
+            return string.Join("", line.Select(c => project.FontReplacement.ContainsKey(c) ? project.FontReplacement[c].OriginalCharacter : c));
         }
 
         public static void CollectGarbage(this EventFile evt)
