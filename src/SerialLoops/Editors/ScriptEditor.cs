@@ -443,9 +443,11 @@ namespace SerialLoops.Editors
                         break;
 
                     case ScriptParameter.ParameterType.SHORT:
+                        ScriptCommandTextBox shortTextBox = new() { Command = command, ParameterIndex = i, Text = ((ShortScriptParameter)parameter).Value.ToString() };
+                        shortTextBox.TextChanged += ShortTextBox_TextChanged;
+
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
-                            ControlGenerator.GetControlWithLabel(parameter.Name,
-                            new TextBox { Text = ((ShortScriptParameter)parameter).Value.ToString() }));
+                            ControlGenerator.GetControlWithLabel(parameter.Name, shortTextBox));
                         break;
 
                     case ScriptParameter.ParameterType.SPRITE:
@@ -1194,6 +1196,11 @@ namespace SerialLoops.Editors
                 .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
                 (short)Enum.Parse<SfxModeScriptParameter.SfxMode>(dropDown.SelectedKey);
             UpdateTabTitle(false);
+        }
+        private void ShortTextBox_TextChanged(object sender, EventArgs e)
+        {
+            ScriptCommandTextBox textBox = (ScriptCommandTextBox)sender;
+            _log.Log($"Attempting to modify parameter {dropDown.ParameterIndex} to SFX mode {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
         }
         private void SpriteEntranceDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
