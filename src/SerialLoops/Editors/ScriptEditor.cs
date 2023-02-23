@@ -29,7 +29,7 @@ namespace SerialLoops.Editors
         private StackLayout _preview = new() { Items = { new SKGuiImage(new(256, 384)) } };
         private StackLayout _editorControls = new();
         private ScriptCommandListPanel _commandsPanel;
-        private CancellationTokenSource _dialogueCancellation;
+        private CancellationTokenSource _dialogueCancellation, _optionCancellation;
 
         public ScriptEditor(ScriptItem item, Project project, ILogger log, EditorTabsPanel tabs) : base(item, log, project, tabs)
         {
@@ -343,9 +343,10 @@ namespace SerialLoops.Editors
                         break;
 
                     case ScriptParameter.ParameterType.FLAG:
+                        ScriptCommandTextBox flagTextBox = new() { Command = command, ParameterIndex = i, Text = ((FlagScriptParameter)parameter).FlagName };
+                        flagTextBox.TextChanged += FlagTextBox_TextChanged;
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
-                            ControlGenerator.GetControlWithLabel(parameter.Name,
-                            new TextBox { Text = ((FlagScriptParameter)parameter).FlagName }));
+                            ControlGenerator.GetControlWithLabel(parameter.Name, flagTextBox));
                         break;
 
                     case ScriptParameter.ParameterType.ITEM:
@@ -356,10 +357,11 @@ namespace SerialLoops.Editors
 
                     case ScriptParameter.ParameterType.MAP:
                         MapScriptParameter mapParam = (MapScriptParameter)parameter;
-                        DropDown mapDropDown = new();
+                        ScriptCommandDropDown mapDropDown = new() { Command = command, ParameterIndex = i };
                         mapDropDown.Items.Add(new ListItem { Text = "NONE", Key = "NONE" });
                         mapDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Map).Select(i => new ListItem { Text = i.Name, Key = i.Name }));
                         mapDropDown.SelectedKey = mapParam.Map?.Name ?? "NONE";
+                        mapDropDown.SelectedKeyChanged += MapDropDown_SelectedKeyChanged;
 
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
                             ControlGenerator.GetControlWithLabel(parameter.Name, mapDropDown));
@@ -367,10 +369,14 @@ namespace SerialLoops.Editors
 
                     case ScriptParameter.ParameterType.OPTION:
                         OptionScriptParameter optionParam = (OptionScriptParameter)parameter;
-                        DropDown optionScriptSectionDropDown = new();
+                        ScriptCommandDropDown optionScriptSectionDropDown = new() { Command = command, ParameterIndex = i };
                         optionScriptSectionDropDown.Items.Add(new ListItem { Text = "NONE", Key = "NONE" });
                         optionScriptSectionDropDown.Items.AddRange(_script.Event.ScriptSections.Skip(1).Select(s => new ListItem { Text = s.Name, Key = s.Name }));
                         optionScriptSectionDropDown.SelectedKey = optionParam.Option.Id == 0 ? "NONE" : _script.Event.LabelsSection.Objects.First(l => l.Id == optionParam.Option.Id).Name.Replace("/", "");
+                        optionScriptSectionDropDown.SelectedKeyChanged += OptionScriptSectionDropDown_SelectedKeyChanged;
+
+                        ScriptCommandTextBox optionTextBox = new() { Command = command, ParameterIndex = i, Text = optionParam.Option.Text.GetSubstitutedString(_project) };
+                        optionTextBox.TextChanged += OptionTextBox_TextChanged;
 
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
                             ControlGenerator.GetControlWithLabel(parameter.Name, new StackLayout
@@ -379,7 +385,7 @@ namespace SerialLoops.Editors
                                 Items =
                                 {
                                     optionScriptSectionDropDown,
-                                    new StackLayoutItem(new TextBox { Text = optionParam.Option.Text.GetSubstitutedString(_project) }, expand: true),
+                                    new StackLayoutItem(optionTextBox, expand: true),
                                 }
                             }));
                         break;
@@ -401,18 +407,20 @@ namespace SerialLoops.Editors
                         break;
 
                     case ScriptParameter.ParameterType.SCREEN:
-                        DropDown screenDropDown = new();
+                        ScriptCommandDropDown screenDropDown = new() { Command = command, ParameterIndex = i };
                         screenDropDown.Items.AddRange(Enum.GetNames<ScreenScriptParameter.DsScreen>().Select(t => new ListItem { Text = t, Key = t }));
                         screenDropDown.SelectedKey = ((ScreenScriptParameter)parameter).Screen.ToString();
+                        screenDropDown.SelectedKeyChanged += ScreenDropDown_SelectedKeyChanged;
 
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
                             ControlGenerator.GetControlWithLabel(parameter.Name, screenDropDown));
                         break;
 
                     case ScriptParameter.ParameterType.SCRIPT_SECTION:
-                        DropDown scriptSectionDropDown = new();
+                        ScriptCommandDropDown scriptSectionDropDown = new() { Command = command, ParameterIndex = i };
                         scriptSectionDropDown.Items.AddRange(_script.Event.ScriptSections.Select(s => new ListItem { Text = s.Name, Key = s.Name }));
                         scriptSectionDropDown.SelectedKey = ((ScriptSectionScriptParameter)parameter)?.Section?.Name ?? "NONE";
+                        scriptSectionDropDown.SelectedKeyChanged += ScriptSectionDropDown_SelectedKeyChanged;
 
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
                             ControlGenerator.GetControlWithLabel(parameter.Name, scriptSectionDropDown));
@@ -425,9 +433,10 @@ namespace SerialLoops.Editors
                         break;
 
                     case ScriptParameter.ParameterType.SFX_MODE:
-                        DropDown sfxModeDropDown = new();
+                        ScriptCommandDropDown sfxModeDropDown = new() { Command = command, ParameterIndex = i };
                         sfxModeDropDown.Items.AddRange(Enum.GetNames<SfxModeScriptParameter.SfxMode>().Select(t => new ListItem { Text = t, Key = t }));
                         sfxModeDropDown.SelectedKey = ((SfxModeScriptParameter)parameter).Mode.ToString();
+                        sfxModeDropDown.SelectedKeyChanged += SfxModeDropDown_SelectedKeyChanged;
 
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
                             ControlGenerator.GetControlWithLabel(parameter.Name, sfxModeDropDown));
@@ -457,34 +466,37 @@ namespace SerialLoops.Editors
                         break;
 
                     case ScriptParameter.ParameterType.SPRITE_ENTRANCE:
-                        DropDown spriteEntranceDropDown = new();
+                        ScriptCommandDropDown spriteEntranceDropDown = new() { Command = command, ParameterIndex = i };
                         spriteEntranceDropDown.Items.AddRange(Enum.GetNames<SpriteEntranceScriptParameter.SpriteEntranceTransition>().Select(t => new ListItem { Text = t, Key = t }));
                         spriteEntranceDropDown.SelectedKey = ((SpriteEntranceScriptParameter)parameter).EntranceTransition.ToString();
+                        spriteEntranceDropDown.SelectedKeyChanged += SpriteEntranceDropDown_SelectedKeyChanged;
 
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
                             ControlGenerator.GetControlWithLabel(parameter.Name, spriteEntranceDropDown));
                         break;
 
                     case ScriptParameter.ParameterType.SPRITE_EXIT:
-                        DropDown spriteExitDropDown = new();
+                        ScriptCommandDropDown spriteExitDropDown = new() { Command = command, ParameterIndex = i };
                         spriteExitDropDown.Items.AddRange(Enum.GetNames<SpriteExitScriptParameter.SpriteExitTransition>().Select(t => new ListItem { Text = t, Key = t }));
                         spriteExitDropDown.SelectedKey = ((SpriteExitScriptParameter)parameter).ExitTransition.ToString();
+                        spriteExitDropDown.SelectedKeyChanged += SpriteExitDropDown_SelectedKeyChanged;
 
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
                             ControlGenerator.GetControlWithLabel(parameter.Name, spriteExitDropDown));
                         break;
 
                     case ScriptParameter.ParameterType.SPRITE_SHAKE:
-                        DropDown spriteShakeDropDown = new();
+                        ScriptCommandDropDown spriteShakeDropDown = new() { Command = command, ParameterIndex = i };
                         spriteShakeDropDown.Items.AddRange(Enum.GetNames<SpriteShakeScriptParameter.SpriteShakeEffect>().Select(t => new ListItem { Text = t, Key = t }));
                         spriteShakeDropDown.SelectedKey = ((SpriteShakeScriptParameter)parameter).ShakeEffect.ToString();
+                        spriteShakeDropDown.SelectedKeyChanged += SpriteShakeDropDown_SelectedKeyChanged;
 
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
                             ControlGenerator.GetControlWithLabel(parameter.Name, spriteShakeDropDown));
                         break;
 
                     case ScriptParameter.ParameterType.TEXT_ENTRANCE_EFFECT:
-                        DropDown textEntranceEffectDropDown = new();
+                        ScriptCommandDropDown textEntranceEffectDropDown = new() { Command = command, ParameterIndex = i };
                         textEntranceEffectDropDown.Items.AddRange(Enum.GetNames<TextEntranceEffectScriptParameter.TextEntranceEffect>().Select(t => new ListItem { Text = t, Key = t }));
                         textEntranceEffectDropDown.SelectedKey = ((TextEntranceEffectScriptParameter)parameter).EntranceEffect.ToString();
 
@@ -1073,7 +1085,7 @@ namespace SerialLoops.Editors
         private void EpHeaderDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
             ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
-            _log.Log($"Attempting to modify speaker in parameter {dropDown.ParameterIndex} to speaker {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
+            _log.Log($"Attempting to modify episode header in parameter {dropDown.ParameterIndex} to speaker {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
             ((EpisodeHeaderScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).EpisodeHeaderIndex =
                 Enum.Parse<EpisodeHeaderScriptParameter.Episode>(dropDown.SelectedKey);
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
@@ -1081,6 +1093,62 @@ namespace SerialLoops.Editors
                 (short)Enum.Parse<EpisodeHeaderScriptParameter.Episode>(dropDown.SelectedKey);
             UpdateTabTitle(false);
             Application.Instance.Invoke(() => UpdatePreview());
+        }
+        private void FlagTextBox_TextChanged(object sender, EventArgs e)
+        {
+            ScriptCommandTextBox textBox = (ScriptCommandTextBox)sender;
+            if ((textBox.Text.StartsWith("F", StringComparison.OrdinalIgnoreCase) || textBox.Text.StartsWith("G", StringComparison.OrdinalIgnoreCase)) && short.TryParse(textBox.Text[1..], out short flagId))
+            {
+                _log.Log($"Attempting to modify parameter {textBox.ParameterIndex} to flag {textBox.Text} in {textBox.Command.Index} in file {_script.Name}...");
+                ((FlagScriptParameter)textBox.Command.Parameters[textBox.ParameterIndex]).Id = flagId;
+                _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(textBox.Command.Section)]
+                    .Objects[textBox.Command.Index].Parameters[textBox.ParameterIndex] = ((FlagScriptParameter)textBox.Command.Parameters[textBox.ParameterIndex]).Id;
+                UpdateTabTitle(false);
+            }
+        }
+        private void MapDropDown_SelectedKeyChanged(object sender, EventArgs e)
+        {
+            ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
+            _log.Log($"Attempting to modify parameter {dropDown.ParameterIndex} to map {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
+            ((MapScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Map = (MapItem)_project.FindItem(dropDown.SelectedKey);
+            _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
+                .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] = (short)((MapScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Map.Map.Index;
+            UpdateTabTitle(false);
+        }
+        private void OptionScriptSectionDropDown_SelectedKeyChanged(object sender, EventArgs e)
+        {
+            ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
+            _log.Log($"Attempting to modify script section in parameter {dropDown.ParameterIndex} to script section {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
+            short newScriptSectionId = _script.Event.LabelsSection.Objects.First(l => ((OptionScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Option.Text.Replace("/", "") == dropDown.SelectedKey).Id;
+            ((OptionScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Option.Id = newScriptSectionId;
+            _script.Event.ChoicesSection.Objects[dropDown.ParameterIndex].Id = newScriptSectionId;
+            UpdateTabTitle(false);
+        }
+        private void OptionTextBox_TextChanged(object sender, EventArgs e)
+        {
+            ScriptCommandTextBox textBox = (ScriptCommandTextBox)sender;
+
+            textBox.Text = Regex.Replace(textBox.Text, @"^""", "“");
+            textBox.Text = Regex.Replace(textBox.Text, @"""\s", "“");
+            textBox.Text = textBox.Text.Replace('"', '”');
+
+            _log.Log($"Attempting to modify option text in parameter {textBox.ParameterIndex} to text '{textBox.Text}' in '{textBox.Command.Index}' in file {_script.Name}...");
+
+            _optionCancellation?.Cancel();
+            _optionCancellation = new();
+
+            string text = textBox.Text;
+            ScriptItemCommand command = textBox.Command;
+            int parameterIndex = textBox.ParameterIndex;
+            Task task = new(() =>
+            {
+                string originalText = text.GetOriginalString(_project);
+                ((OptionScriptParameter)command.Parameters[parameterIndex]).Option.Text = originalText;
+                _script.Event.ChoicesSection.Objects[command.Section.Objects[command.Index].Parameters[0]].Text = originalText;
+                _optionCancellation = null;
+            }, _optionCancellation.Token);
+            task.Start();
+            UpdateTabTitle(false);
         }
         private void PaletteEffectDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
@@ -1093,6 +1161,72 @@ namespace SerialLoops.Editors
                 (short)Enum.Parse<PaletteEffectScriptParameter.PaletteEffect>(dropDown.SelectedKey);
             UpdateTabTitle(false);
             Application.Instance.Invoke(() => UpdatePreview());
+        }
+        private void ScreenDropDown_SelectedKeyChanged(object sender, EventArgs e)
+        {
+            ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
+            _log.Log($"Attempting to modify parameter {dropDown.ParameterIndex} to screen {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
+            ((ScreenScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Screen =
+                Enum.Parse<ScreenScriptParameter.DsScreen>(dropDown.SelectedKey);
+            _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
+                .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
+                (short)Enum.Parse<ScreenScriptParameter.DsScreen>(dropDown.SelectedKey);
+            UpdateTabTitle(false);
+            Application.Instance.Invoke(() => UpdatePreview());
+        }
+        private void ScriptSectionDropDown_SelectedKeyChanged(object sender, EventArgs e)
+        {
+            ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
+            _log.Log($"Attempting to modify parameter {dropDown.ParameterIndex} to script section {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
+            ((ScriptSectionScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Section = _script.Event.ScriptSections.First(s => s.Name.Replace("/", "") == dropDown.SelectedKey);
+            _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
+                .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
+                _script.Event.LabelsSection.Objects.First(l => ((ScriptSectionScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Section.Name.Replace("/", "") == dropDown.SelectedKey).Id;
+            UpdateTabTitle(false);
+        }
+        private void SfxModeDropDown_SelectedKeyChanged(object sender, EventArgs e)
+        {
+            ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
+            _log.Log($"Attempting to modify parameter {dropDown.ParameterIndex} to SFX mode {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
+            ((SfxModeScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Mode =
+                Enum.Parse<SfxModeScriptParameter.SfxMode>(dropDown.SelectedKey);
+            _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
+                .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
+                (short)Enum.Parse<SfxModeScriptParameter.SfxMode>(dropDown.SelectedKey);
+            UpdateTabTitle(false);
+        }
+        private void SpriteEntranceDropDown_SelectedKeyChanged(object sender, EventArgs e)
+        {
+            ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
+            _log.Log($"Attempting to modify parameter {dropDown.ParameterIndex} to sprite entrance {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
+            ((SpriteEntranceScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).EntranceTransition =
+                Enum.Parse<SpriteEntranceScriptParameter.SpriteEntranceTransition>(dropDown.SelectedKey);
+            _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
+                .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
+                (short)Enum.Parse<SpriteEntranceScriptParameter.SpriteEntranceTransition>(dropDown.SelectedKey);
+            UpdateTabTitle(false);
+        }
+        private void SpriteExitDropDown_SelectedKeyChanged(object sender, EventArgs e)
+        {
+            ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
+            _log.Log($"Attempting to modify parameter {dropDown.ParameterIndex} to sprite exit {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
+            ((SpriteExitScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).ExitTransition =
+                Enum.Parse<SpriteExitScriptParameter.SpriteExitTransition>(dropDown.SelectedKey);
+            _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
+                .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
+                (short)Enum.Parse<SpriteExitScriptParameter.SpriteExitTransition>(dropDown.SelectedKey);
+            UpdateTabTitle(false);
+        }
+        private void SpriteShakeDropDown_SelectedKeyChanged(object sender, EventArgs e)
+        {
+            ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
+            _log.Log($"Attempting to modify parameter {dropDown.ParameterIndex} to sprite shake {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
+            ((SpriteShakeScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).ShakeEffect =
+                Enum.Parse<SpriteShakeScriptParameter.SpriteShakeEffect>(dropDown.SelectedKey);
+            _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
+                .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
+                (short)Enum.Parse<SpriteShakeScriptParameter.SpriteShakeEffect>(dropDown.SelectedKey);
+            UpdateTabTitle(false);
         }
         private void SpriteSelectionButton_SelectionMade(object sender, EventArgs e)
         {
