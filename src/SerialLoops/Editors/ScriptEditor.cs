@@ -867,7 +867,7 @@ namespace SerialLoops.Editors
                 previousCommand = command;
             }
 
-            foreach (PositionedSprite sprite in sprites.Values.OrderByDescending(p => p.Positioning.Layer))
+            foreach (PositionedSprite sprite in sprites.Values.OrderBy(p => p.Positioning.Layer))
             {
                 SKBitmap spriteBitmap = sprite.Sprite.GetClosedMouthAnimation(_project)[0].frame;
                 canvas.DrawBitmap(spriteBitmap, sprite.Positioning.GetSpritePosition(spriteBitmap));
@@ -1200,7 +1200,8 @@ namespace SerialLoops.Editors
         private void ShortTextBox_TextChanged(object sender, EventArgs e)
         {
             ScriptCommandTextBox textBox = (ScriptCommandTextBox)sender;
-            _log.Log($"Attempting to modify parameter {dropDown.ParameterIndex} to SFX mode {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
+            _log.Log($"Attempting to modify parameter {textBox.ParameterIndex} to SFX mode {textBox.Text} in {textBox.Command.Index} in file {_script.Name}...");
+            
         }
         private void SpriteEntranceDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
