@@ -1080,9 +1080,26 @@ namespace SerialLoops.Editors
             int parameterIndex = textArea.ParameterIndex;
             Task task = new(() =>
             {
-                string originalText = text.GetOriginalString(_project);
-                ((DialogueScriptParameter)command.Parameters[parameterIndex]).Line.Text = originalText;
-                _script.Event.DialogueSection.Objects[command.Section.Objects[command.Index].Parameters[0]].Text = originalText;
+                if (string.IsNullOrEmpty(text))
+                {
+                    ((DialogueScriptParameter)command.Parameters[parameterIndex]).Line.Text = "";
+                    _script.Event.DialogueSection.Objects[command.Section.Objects[command.Index].Parameters[0]].Text = "";
+                    ((DialogueScriptParameter)command.Parameters[parameterIndex]).Line.Pointer = 0;
+                    _script.Event.DialogueSection.Objects[command.Section.Objects[command.Index].Parameters[0]].Pointer = 0;
+                }
+                else
+                {
+                    if (((DialogueScriptParameter)command.Parameters[parameterIndex]).Line.Pointer == 0)
+                    {
+                        // It doesn't matter what we set this to as long as it's greater than zero
+                        // The ASM creation routine only checks that the pointer is not zero
+                        ((DialogueScriptParameter)command.Parameters[parameterIndex]).Line.Pointer = 1;
+                        _script.Event.DialogueSection.Objects[command.Section.Objects[command.Index].Parameters[0]].Pointer = 1;
+                    }
+                    string originalText = text.GetOriginalString(_project);
+                    ((DialogueScriptParameter)command.Parameters[parameterIndex]).Line.Text = originalText;
+                    _script.Event.DialogueSection.Objects[command.Section.Objects[command.Index].Parameters[0]].Text = originalText;
+                }
                 _dialogueCancellation = null;
             }, _dialogueCancellation.Token);
             task.Start();

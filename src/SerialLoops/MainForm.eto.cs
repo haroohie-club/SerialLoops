@@ -108,7 +108,7 @@ namespace SerialLoops
 
         private void OpenProjectView(Project project, IProgressTracker tracker)
         {
-            EditorTabs = new(project);
+            EditorTabs = new(project, _log);
             ItemExplorer = new(project, EditorTabs, _log);
             Title = $"{BASE_TITLE} - {project.Name}";
             Content = new TableLayout(new TableRow(ItemExplorer, EditorTabs));
