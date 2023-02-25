@@ -503,6 +503,7 @@ namespace SerialLoops.Editors
                         ScriptCommandDropDown textEntranceEffectDropDown = new() { Command = command, ParameterIndex = i };
                         textEntranceEffectDropDown.Items.AddRange(Enum.GetNames<TextEntranceEffectScriptParameter.TextEntranceEffect>().Select(t => new ListItem { Text = t, Key = t }));
                         textEntranceEffectDropDown.SelectedKey = ((TextEntranceEffectScriptParameter)parameter).EntranceEffect.ToString();
+                        textEntranceEffectDropDown.SelectedKeyChanged += TextEntranceEffectDropDown_SelectedKeyChanged;
 
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
                             ControlGenerator.GetControlWithLabel(parameter.Name, textEntranceEffectDropDown));
@@ -1283,6 +1284,18 @@ namespace SerialLoops.Editors
             UpdateTabTitle(false);
             Application.Instance.Invoke(() => UpdatePreview());
         }
+        private void TextEntranceEffectDropDown_SelectedKeyChanged(object sender, EventArgs e)
+        {
+            ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
+            _log.Log($"Attempting to modify parameter {dropDown.ParameterIndex} to sprite shake {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
+            ((TextEntranceEffectScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).EntranceEffect =
+                Enum.Parse<TextEntranceEffectScriptParameter.TextEntranceEffect>(dropDown.SelectedKey);
+            _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
+                .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
+                (short)Enum.Parse<TextEntranceEffectScriptParameter.TextEntranceEffect>(dropDown.SelectedKey);
+            UpdateTabTitle(false);
+        }
+
         private void TopicDropDown_SelectedIndexChanged(object sender, EventArgs e)
         {
             ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
