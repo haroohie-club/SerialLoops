@@ -35,6 +35,12 @@ namespace SerialLoops.Controls
         public ScriptItemCommand Command { get; set; }
         public int ParameterIndex { get; set; }
     }
+    public class TopicSelectButton : Button
+    {
+        public ScriptItemCommand ScriptCommand { get; set; }
+        public int ParameterIndex { get; set; }
+        public StackLayout Layout { get; set; }
+    }
 
     public class ScenarioCommandDropDown : DropDown
     {
