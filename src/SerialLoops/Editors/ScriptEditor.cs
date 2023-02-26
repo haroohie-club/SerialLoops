@@ -2,6 +2,7 @@
 using Eto.Forms;
 using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
+using HaruhiChokuretsuLib.Font;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Controls;
 using SerialLoops.Lib;
@@ -13,9 +14,7 @@ using SerialLoops.Utility;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.Linq;
-using System.Reflection.Metadata;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -32,6 +31,7 @@ namespace SerialLoops.Editors
         private StackLayout _editorControls = new();
         private ScriptCommandListPanel _commandsPanel;
         private CancellationTokenSource _dialogueCancellation, _optionCancellation;
+        private System.Timers.Timer _dialogueRefreshTimer;
 
         public ScriptEditor(ScriptItem item, Project project, ILogger log, EditorTabsPanel tabs) : base(item, log, project, tabs)
         {
@@ -42,6 +42,8 @@ namespace SerialLoops.Editors
             _script = (ScriptItem)Description;
             PopulateScriptCommands();
             _script.CalculateGraphEdges(_commands);
+            _dialogueRefreshTimer = new(500) { AutoReset = false };
+            _dialogueRefreshTimer.Elapsed += DialogueRefreshTimer_Elapsed;
             return GetCommandsContainer();
         }
 
@@ -63,7 +65,7 @@ namespace SerialLoops.Editors
 
             _commandsPanel = new(_commands, new Size(280, 185), expandItems: true, _log);
             _commandsPanel.Viewer.SelectedItemChanged += CommandsPanel_SelectedItemChanged;
-            
+
             mainRow.Cells.Add(_commandsPanel);
 
             _detailsLayout = new()
@@ -172,7 +174,7 @@ namespace SerialLoops.Editors
                         ScriptCommandDropDown bgmDropDown = new() { Command = command, ParameterIndex = i, Link = (ClearableLinkButton)bgmLink.Items[1].Control };
                         bgmDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.BGM).Select(i => new ListItem { Text = i.Name, Key = i.Name }));
                         bgmDropDown.SelectedKey = bgmParam.Bgm.Name;
-                        bgmDropDown.SelectedKeyChanged += BgmDropDown_SelectedKeyChanged;                        
+                        bgmDropDown.SelectedKeyChanged += BgmDropDown_SelectedKeyChanged;
 
                         StackLayout bgmLayout = new()
                         {
@@ -299,7 +301,7 @@ namespace SerialLoops.Editors
                             currentCol = 0;
                         }
 
-                        ScriptCommandTextArea dialogueTextArea = new() 
+                        ScriptCommandTextArea dialogueTextArea = new()
                         {
                             Text = dialogueParam.Line.Text.GetSubstitutedString(_project),
                             AcceptsReturn = true,
@@ -467,7 +469,7 @@ namespace SerialLoops.Editors
                         spriteSelectionButton.Items.Add(NonePreviewableGraphic.CHARACTER_SPRITE);
                         spriteSelectionButton.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Character_Sprite).Select(s => (IPreviewableGraphic)s));
                         spriteSelectionButton.SelectedChanged.Executed += (obj, args) => SpriteSelectionButton_SelectionMade(spriteSelectionButton, args);
-                        
+
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
                             ControlGenerator.GetControlWithLabel(parameter.Name, spriteSelectionButton));
                         break;
@@ -777,7 +779,7 @@ namespace SerialLoops.Editors
                                 if (commands[i].Verb == EventFile.CommandVerb.BG_DISPTEMP && ((BoolScriptParameter)commands[i].Parameters[1]).Value)
                                 {
                                     SKBitmap bgBitmap = background.GetBackground();
-                                    canvas.DrawBitmap(bgBitmap, new SKRect(0, bgBitmap.Height - 194, bgBitmap.Width, bgBitmap.Height), 
+                                    canvas.DrawBitmap(bgBitmap, new SKRect(0, bgBitmap.Height - 194, bgBitmap.Width, bgBitmap.Height),
                                         new SKRect(0, 194, 256, 388), bgEffectPaint);
                                 }
                                 else
@@ -893,6 +895,50 @@ namespace SerialLoops.Editors
             {
                 SKBitmap spriteBitmap = sprite.Sprite.GetClosedMouthAnimation(_project)[0].frame;
                 canvas.DrawBitmap(spriteBitmap, sprite.Positioning.GetSpritePosition(spriteBitmap));
+            }
+
+            ScriptItemCommand lastDialogueCommand = commands.LastOrDefault(c => c.Verb == EventFile.CommandVerb.DIALOGUE);
+            if ((commands.LastOrDefault(c => c.Verb == EventFile.CommandVerb.TOGGLE_DIALOGUE &&
+                !((BoolScriptParameter)c.Parameters[0]).Value)?.Index ?? -1) < (lastDialogueCommand?.Index ?? -1))
+            {
+                DialogueLine line = ((DialogueScriptParameter)lastDialogueCommand.Parameters[0]).Line;
+
+                canvas.DrawBitmap(_project.DialogueBitmap, new SKRect(0, 24, 32, 36), new SKRect(0, 344, 256, 356));
+                SKColor dialogueBoxColor = _project.DialogueBitmap.GetPixel(0, 28);
+                canvas.DrawRect(0, 356, 224, 384, new() { Color = dialogueBoxColor });
+                canvas.DrawBitmap(_project.DialogueBitmap, new SKRect(0, 37, 32, 64), new SKRect(224, 356, 256, 384));
+                canvas.DrawBitmap(_project.SpeakerBitmap, new SKRect(0, 16 * ((int)line.Speaker - 1), 64, 16 * ((int)line.Speaker)),
+                    new SKRect(0, 332, 64, 348));
+
+                int currentX = 10;
+                int currentY = 352;
+                for (int i = 0; i < line.Text.Length; i++)
+                {
+                    if (line.Text[i] == '\n')
+                    {
+                        currentX = 10;
+                        currentY += 16;
+                        continue;
+                    }
+                    if (line.Text[i] != '　') // if it's a full width space
+                    {
+                        int charIndex = _project.FontMap.CharMap.IndexOf(line.Text[i]);
+                        if ((charIndex + 1) * 16 <= _project.FontBitmap.Height)
+                        {
+                            canvas.DrawBitmap(_project.FontBitmap, new SKRect(0, charIndex * 16, 16, (charIndex + 1) * 16),
+                                new SKRect(currentX, currentY, currentX + 16, currentY + 16));
+                        }
+                    }
+                    FontReplacement replacement = _project.FontReplacement.ReverseLookup(line.Text[i]);
+                    if (replacement is not null)
+                    {
+                        currentX += replacement.Offset;
+                    }
+                    else
+                    {
+                        currentX += 14;
+                    }
+                }
             }
 
             canvas.Flush();
@@ -1106,11 +1152,18 @@ namespace SerialLoops.Editors
                 _dialogueCancellation = null;
             }, _dialogueCancellation.Token);
             task.Start();
+            _dialogueRefreshTimer.Stop();
+            _dialogueRefreshTimer.Start();
             UpdateTabTitle(false);
         }
         private void DialogueTextArea_LostFocus(object sender, EventArgs e)
         {
             UpdatePreview();
+        }
+        private void DialogueRefreshTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            Application.Instance.Invoke(() => UpdatePreview());
+            _dialogueRefreshTimer.Stop();
         }
         private void DialoguePropertyDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {

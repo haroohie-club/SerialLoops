@@ -6,6 +6,7 @@ using HaruhiChokuretsuLib.Font;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Util;
+using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -41,6 +42,14 @@ namespace SerialLoops.Lib
 
         [JsonIgnore]
         public FontReplacementDictionary FontReplacement { get; set; } = new();
+        [JsonIgnore]
+        public FontFile FontMap { get; set; } = new();
+        [JsonIgnore]
+        public SKBitmap SpeakerBitmap { get; set; }
+        [JsonIgnore]
+        public SKBitmap DialogueBitmap { get; set; }
+        [JsonIgnore]
+        public SKBitmap FontBitmap { get; set; }
 
         public Project()
         {
@@ -81,7 +90,7 @@ namespace SerialLoops.Lib
             Evt = ArchiveFile<EventFile>.FromFile(Path.Combine(IterativeDirectory, "original", "archives", "evt.bin"), log);
             tracker.Finished++;
 
-            tracker.Focus("Font Replacement Dictionary", 1);
+            tracker.Focus("Font", 5);
             if (IO.TryReadStringFile(Path.Combine(MainDirectory, "font", "charset.json"), out string json, log))
             {
                 FontReplacement.AddRange(JsonSerializer.Deserialize<List<FontReplacement>>(json));
@@ -90,6 +99,16 @@ namespace SerialLoops.Lib
             {
                 log.LogError("Failed to load font replacement dictionary.");
             }
+            tracker.Finished++;
+            FontMap = Dat.Files.First(f => f.Name == "FONTS").CastTo<FontFile>();
+            tracker.Finished++;
+            SpeakerBitmap = Grp.Files.First(f => f.Name == "SYS_CMN_B12DNX").GetImage(transparentIndex: 0);
+            tracker.Finished++;
+            DialogueBitmap = Grp.Files.First(f => f.Name == "SYS_CMN_B02DNX").GetImage(transparentIndex: 0);
+            tracker.Finished++;
+            GraphicsFile fontFile = Grp.Files.First(f => f.Name == "ZENFONTBNF");
+            fontFile.InitializeFontFile();
+            FontBitmap = Grp.Files.First(f => f.Name == "ZENFONTBNF").GetImage(transparentIndex: 0);
             tracker.Finished++;
 
             tracker.Focus("Extras", 1);
