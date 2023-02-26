@@ -108,7 +108,7 @@ namespace SerialLoops
 
         private void OpenProjectView(Project project, IProgressTracker tracker)
         {
-            EditorTabs = new(project);
+            EditorTabs = new(project, _log);
             ItemExplorer = new(project, EditorTabs, _log);
             Title = $"{BASE_TITLE} - {project.Name}";
             Content = new TableLayout(new TableRow(ItemExplorer, EditorTabs));
@@ -215,7 +215,13 @@ namespace SerialLoops
         private void OpenProjectFromPath(string path)
         {
             LoopyProgressTracker tracker = new();
-            _ = new ProgressDialog(() => OpenProject = Project.OpenProject(path, CurrentConfig, _log, tracker), () => OpenProjectView(OpenProject, tracker), tracker, "Loading Project");
+            _ = new ProgressDialog(() => OpenProject = Project.OpenProject(path, CurrentConfig, _log, tracker), () => 
+            {
+                if (OpenProject is not null)
+                {
+                    OpenProjectView(OpenProject, tracker);
+                }
+            }, tracker, "Loading Project");
         }
 
         private void SaveProject_Executed(object sender, EventArgs e)
@@ -247,6 +253,7 @@ namespace SerialLoops
                         break;
                     case ItemDescription.ItemType.Script:
                         EventFile evt = ((ScriptItem)item).Event;
+                        evt.CollectGarbage();
                         IO.WriteStringFile(Path.Combine("assets", "events", $"{evt.Index:X3}.s"), evt.GetSource(new()), OpenProject, _log);
                         foreach (Editor editor in EditorTabs.Tabs.Pages.Cast<Editor>())
                         {
@@ -323,7 +330,7 @@ namespace SerialLoops
         {
             if (OpenProject is not null)
             {
-                bool buildSucceeded = false;
+                bool buildSucceeded = true;
                 LoopyProgressTracker tracker = new("Building:");
                 ProgressDialog loadingDialog = new(async () => buildSucceeded = await Build.BuildBase(OpenProject, CurrentConfig, _log, tracker), () =>
                 {
@@ -351,7 +358,7 @@ namespace SerialLoops
                     return;
                 }
 
-                bool buildSucceeded = false;
+                bool buildSucceeded = true;
                 LoopyProgressTracker tracker = new("Building:");
                 ProgressDialog loadingDialog = new(async () => buildSucceeded = await Build.BuildIterative(OpenProject, CurrentConfig, _log, tracker), () =>
                 {

@@ -13,10 +13,12 @@ namespace SerialLoops.Controls
         public DocumentControl Tabs { get; private set; }
 
         private readonly Project _project;
+        private readonly ILogger _log;
 
-        public EditorTabsPanel(Project project)
+        public EditorTabsPanel(Project project, ILogger log)
         {
             _project = project;
+            _log = log;
             InitializeComponent();
         }
 
@@ -30,6 +32,7 @@ namespace SerialLoops.Controls
                 Enabled = true
             };
             Content = new TableLayout(Tabs);
+            ContextMenu = new TabContextMenu(this, _log);
         }
 
         internal void OpenTab(ItemDescription item, ILogger log)
@@ -46,7 +49,7 @@ namespace SerialLoops.Controls
 
             // Open a new editor for the item -- This is where the item can be loaded from the project files
             DocumentPage newPage = CreateTab(item, _project, log);
-            newPage.ContextMenu = new TabContextMenu(this, newPage, log);
+            newPage.ContextMenu = null;
 
             Tabs.Pages.Add(newPage);
             Tabs.SelectedPage = newPage;
@@ -65,6 +68,8 @@ namespace SerialLoops.Controls
                     return new CharacterSpriteEditor((CharacterSpriteItem)project.Items.First(i => i.Name == item.Name), project, log);
                 case ItemDescription.ItemType.Chibi:
                     return new ChibiEditor((ChibiItem)project.Items.First(i => i.Name == item.Name), log);
+                case ItemDescription.ItemType.Dialogue_Config:
+                    return new DialogueConfigEditor((DialogueConfigItem)project.Items.First(i => i.Name == item.Name), log);
                 case ItemDescription.ItemType.Group_Selection:
                     return new GroupSelectionEditor((GroupSelectionItem)project.Items.First(i => i.Name == item.Name), log, project, this);
                 case ItemDescription.ItemType.Map:

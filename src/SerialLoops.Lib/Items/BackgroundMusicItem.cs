@@ -2,6 +2,7 @@
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Audio;
 using HaruhiChokuretsuLib.Util;
+using SerialLoops.Lib.Util;
 using System;
 using System.IO;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace SerialLoops.Lib.Items
         {
             BgmFile = bgmFile;
             Index = index;
-            BgmName = extras.Bgms.FirstOrDefault(b => b.Index == Index).Name ?? "";
+            BgmName = extras.Bgms.FirstOrDefault(b => b.Index == Index).Name?.GetSubstitutedString(project) ?? "";
             DisplayName = string.IsNullOrEmpty(BgmName) ? Name : BgmName;
             PopulateScriptUses(project);
         }

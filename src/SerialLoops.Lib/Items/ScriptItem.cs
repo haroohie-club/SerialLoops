@@ -22,6 +22,11 @@ namespace SerialLoops.Lib.Items
             Event = evt;
 
             Graph.AddVertexRange(Event.ScriptSections);
+
+            SearchableText = string.Join('\n', evt.ScriptSections.SelectMany(s => s.Objects.Select(c => c.Command.Mnemonic))
+                .Concat(evt.ConditionalsSection.Objects));
+                //.Concat(evt.LabelsSection.Objects.Select(l => l.Name))
+                //.Concat(evt.DialogueLines.Select(l => l.Text)));
         }
 
         public Dictionary<ScriptSection, List<ScriptItemCommand>> GetScriptCommandTree(Project project)
@@ -61,7 +66,7 @@ namespace SerialLoops.Lib.Items
                     else if (command.Verb == CommandVerb.GOTO)
                     {
                         Graph.AddEdge(new() { Source = section, Target = ((ScriptSectionScriptParameter)command.Parameters[0]).Section });
-                        continue;
+                        @continue = true;
                     }
                     else if (command.Verb == CommandVerb.VGOTO)
                     {
@@ -90,7 +95,7 @@ namespace SerialLoops.Lib.Items
                     {
                         @continue = true;
                     }
-                    else if (command.Verb == CommandVerb.SET_READ_FLAG && section.Name != "SCRIPT00")
+                    else if (command.Verb == CommandVerb.BACK && section.Name != "SCRIPT00")
                     {
                         @continue = true;
                     }

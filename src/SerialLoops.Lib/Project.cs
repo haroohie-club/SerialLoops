@@ -2,9 +2,11 @@
 using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Archive.Graphics;
+using HaruhiChokuretsuLib.Font;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Util;
+using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -32,11 +34,22 @@ namespace SerialLoops.Lib
         public List<ItemDescription> Items { get; set; } = new();
 
         [JsonIgnore]
-        public ArchiveFile<DataFile> Dat;
+        public ArchiveFile<DataFile> Dat { get; set; }
         [JsonIgnore]
-        public ArchiveFile<GraphicsFile> Grp;
+        public ArchiveFile<GraphicsFile> Grp { get; set; }
         [JsonIgnore]
-        public ArchiveFile<EventFile> Evt;
+        public ArchiveFile<EventFile> Evt { get; set; }
+
+        [JsonIgnore]
+        public FontReplacementDictionary FontReplacement { get; set; } = new();
+        [JsonIgnore]
+        public FontFile FontMap { get; set; } = new();
+        [JsonIgnore]
+        public SKBitmap SpeakerBitmap { get; set; }
+        [JsonIgnore]
+        public SKBitmap DialogueBitmap { get; set; }
+        [JsonIgnore]
+        public SKBitmap FontBitmap { get; set; }
 
         public Project()
         {
@@ -54,6 +67,8 @@ namespace SerialLoops.Lib
                 File.WriteAllText(Path.Combine(MainDirectory, $"{Name}.{PROJECT_FORMAT}"), JsonSerializer.Serialize(this));
                 Directory.CreateDirectory(BaseDirectory);
                 Directory.CreateDirectory(IterativeDirectory);
+                Directory.CreateDirectory(Path.Combine(MainDirectory, "font"));
+                File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "charset.json"), Path.Combine(MainDirectory, "font", "charset.json"));
             }
             catch (Exception exc)
             {
@@ -75,6 +90,27 @@ namespace SerialLoops.Lib
             Evt = ArchiveFile<EventFile>.FromFile(Path.Combine(IterativeDirectory, "original", "archives", "evt.bin"), log);
             tracker.Finished++;
 
+            tracker.Focus("Font", 5);
+            if (IO.TryReadStringFile(Path.Combine(MainDirectory, "font", "charset.json"), out string json, log))
+            {
+                FontReplacement.AddRange(JsonSerializer.Deserialize<List<FontReplacement>>(json));
+            }
+            else
+            {
+                log.LogError("Failed to load font replacement dictionary.");
+            }
+            tracker.Finished++;
+            FontMap = Dat.Files.First(f => f.Name == "FONTS").CastTo<FontFile>();
+            tracker.Finished++;
+            SpeakerBitmap = Grp.Files.First(f => f.Name == "SYS_CMN_B12DNX").GetImage(transparentIndex: 0);
+            tracker.Finished++;
+            DialogueBitmap = Grp.Files.First(f => f.Name == "SYS_CMN_B02DNX").GetImage(transparentIndex: 0);
+            tracker.Finished++;
+            GraphicsFile fontFile = Grp.Files.First(f => f.Name == "ZENFONTBNF");
+            fontFile.InitializeFontFile();
+            FontBitmap = Grp.Files.First(f => f.Name == "ZENFONTBNF").GetImage(transparentIndex: 0);
+            tracker.Finished++;
+
             tracker.Focus("Extras", 1);
             ExtraFile extras = Dat.Files.First(f => f.Name == "EXTRAS").CastTo<ExtraFile>();
             tracker.Finished++;
@@ -93,7 +129,7 @@ namespace SerialLoops.Lib
                     {
                         name = $"{bgNameBackup}{j:D2}";
                     }
-                    Items.Add(new BackgroundItem(name, i, entry, Evt, Grp, extras));
+                    Items.Add(new BackgroundItem(name, i, entry, this, extras));
                 }
                 tracker.Finished++;
             }
@@ -122,6 +158,11 @@ namespace SerialLoops.Lib
             tracker.Focus("Chibis", 1);
             Items.AddRange(Dat.Files.First(d => d.Name == "CHIBIS").CastTo<ChibiFile>()
                 .Chibis.Select(c => new ChibiItem(c, this)));
+            tracker.Finished++;
+
+            tracker.Focus("Dialogue Configs", 1);
+            Items.AddRange(Dat.Files.First(d => d.Name == "MESSINFOS").CastTo<MessageInfoFile>()
+                .MessageInfos.Where(m => (int)m.Character > 0).Select(m => new DialogueConfigItem(m)));
             tracker.Finished++;
 
             tracker.Focus("Event Files", 1);
@@ -172,15 +213,41 @@ namespace SerialLoops.Lib
         public static Project OpenProject(string projFile, Config config, ILogger log, IProgressTracker tracker)
         {
             log.Log($"Loading project from '{projFile}'...");
-            tracker.Focus($"{Path.GetFileNameWithoutExtension(projFile)} Project Data", 1);
-            Project project = JsonSerializer.Deserialize<Project>(File.ReadAllText(projFile));
-            tracker.Finished++;
-            project.LoadArchives(log, tracker);
-            return project;
+            if (!File.Exists(projFile))
+            {
+                log.LogError($"Project file {projFile} not found -- has it been deleted?");
+                return null;
+            }
+            try
+            {
+                tracker.Focus($"{Path.GetFileNameWithoutExtension(projFile)} Project Data", 1);
+                Project project = JsonSerializer.Deserialize<Project>(File.ReadAllText(projFile));
+                tracker.Finished++;
+                project.LoadArchives(log, tracker);
+                return project;
+            }
+            catch (Exception exc)
+            {
+                log.LogError($"Error while loading project: {exc.Message}\n\n{exc.StackTrace}");
+                return null;
+            }
         }
-        public List<ItemDescription> GetSearchResults(string searchTerm)
+        public List<ItemDescription> GetSearchResults(string searchTerm, bool titlesOnly = true)
         {
-            return Items.Where(item => item.Name.Contains(searchTerm.Trim(), StringComparison.OrdinalIgnoreCase) || item.DisplayName.Contains(searchTerm.Trim(), StringComparison.OrdinalIgnoreCase)).ToList();
+            if (titlesOnly)
+            {
+                return Items.Where(item =>
+                    item.Name.Contains(searchTerm.Trim(), StringComparison.OrdinalIgnoreCase) ||
+                    item.DisplayName.Contains(searchTerm.Trim(), StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+            else
+            {
+                return Items.Where(item => 
+                    item.Name.Contains(searchTerm.Trim(), StringComparison.OrdinalIgnoreCase) || 
+                    item.DisplayName.Contains(searchTerm.Trim(), StringComparison.OrdinalIgnoreCase) ||
+                    (!string.IsNullOrEmpty(item.SearchableText) &&
+                    item.SearchableText.Contains(searchTerm.Trim(), StringComparison.OrdinalIgnoreCase))).ToList();
+            }
         }
     }
 }

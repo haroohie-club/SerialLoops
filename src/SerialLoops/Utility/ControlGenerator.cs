@@ -32,6 +32,22 @@ namespace SerialLoops.Utility
                 Spacing = new Size(10, 5)
             };
         }
+
+        public static StackLayout GetControlWithSuffix(Control control, string suffix)
+        {
+            return new StackLayout
+            {
+                Orientation = Orientation.Horizontal,
+                HorizontalContentAlignment = HorizontalAlignment.Stretch,
+                VerticalContentAlignment = VerticalAlignment.Center,
+                Spacing = 2,
+                Items =
+                {
+                    control,
+                    suffix,
+                }
+            };
+        }
         
         public static StackLayout GetFileLink(ItemDescription description, EditorTabsPanel editorTabs, ILogger log)
         {

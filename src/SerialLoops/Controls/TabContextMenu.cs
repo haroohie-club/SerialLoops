@@ -10,18 +10,16 @@ namespace SerialLoops.Controls
 
         private readonly ILogger _log;
         private readonly EditorTabsPanel _tabs;
-        private readonly DocumentPage _clicked;
 
-        public TabContextMenu(EditorTabsPanel tabs, DocumentPage clicked, ILogger log) : base()
+        public TabContextMenu(EditorTabsPanel tabs, ILogger log) : base()
         {
             _tabs = tabs;
-            _clicked = clicked;
             _log = log;
 
             Opening += ContextMenu_OnOpen;
 
             Command closeTabCommand = new();
-            closeTabCommand.Executed += (sender, args) => _tabs.Tabs.Remove(_clicked);
+            closeTabCommand.Executed += (sender, args) => _tabs.Tabs.Remove(_tabs.Tabs.SelectedPage);
             Items.Add(new ButtonMenuItem
             {
                 Text = "Close",
@@ -31,7 +29,7 @@ namespace SerialLoops.Controls
             Command closeTabsToRightCommand = new();
             closeTabsToRightCommand.Executed += (sender, args) =>
             {
-                int index = _tabs.Tabs.Pages.IndexOf(_clicked);
+                int index = _tabs.Tabs.SelectedIndex;
                 for (int i = _tabs.Tabs.Pages.Count - 1; i > index; i--)
                 {
                     _tabs.Tabs.Remove(_tabs.Tabs.Pages[i]);
@@ -57,8 +55,9 @@ namespace SerialLoops.Controls
             Command closeAllTabsButThisCommand = new();
             closeAllTabsButThisCommand.Executed += (sender, args) =>
             {
+                DocumentPage @this = _tabs.Tabs.SelectedPage;
                 _tabs.Tabs.Pages.Clear();
-                _tabs.Tabs.Pages.Add(_clicked);
+                _tabs.Tabs.Pages.Add(@this);
             };
             Items.Add(new ButtonMenuItem
             {
@@ -83,7 +82,7 @@ namespace SerialLoops.Controls
             }
 
             // If the clicked tab is the last tab, disable the "Close All To Right" option
-            if (_tabs.Tabs.Pages.IndexOf(_clicked) == _tabs.Tabs.Pages.Count - 1)
+            if (_tabs.Tabs.Pages.IndexOf(_tabs.Tabs.SelectedPage) == _tabs.Tabs.Pages.Count - 1)
             {
                 Items[1].Enabled = false;
             }

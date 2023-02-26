@@ -5,6 +5,7 @@ using QuikGraph.Algorithms.Observers;
 using QuikGraph.Algorithms.Search;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script.Parameters;
+using SerialLoops.Lib.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,8 @@ namespace SerialLoops.Lib.Script
         public ScriptSection Section { get; set; }
         public int Index { get; set; }
 
+        private Project _project;
+
         public static ScriptItemCommand FromInvocation(ScriptCommandInvocation invocation, ScriptSection section, int index, EventFile eventFile, Project project)
         {
             return new()
@@ -27,6 +30,7 @@ namespace SerialLoops.Lib.Script
                 Parameters = GetScriptParameters(invocation, eventFile, project),
                 Section = section,
                 Index = index,
+                _project = project,
             };
         }
 
@@ -317,7 +321,6 @@ namespace SerialLoops.Lib.Script
                     case CommandVerb.GOTO:
                         if (i == 0)
                         {
-                            //todo script section labels?
                             parameters.Add(new ScriptSectionScriptParameter("Script Section", eventFile.ScriptSections.First(s => s.Name == eventFile.LabelsSection.Objects.First(l => l.Id == parameter).Name.Replace("/", ""))));
                         }
                         break;
@@ -609,7 +612,7 @@ namespace SerialLoops.Lib.Script
             string str = $"{Verb}";
             if (Verb == CommandVerb.DIALOGUE)
             {
-                str += $" {((DialogueScriptParameter)Parameters[0]).Line.Text[0..Math.Min(((DialogueScriptParameter)Parameters[0]).Line.Text.Length, 10)]}...";
+                str += $" {((DialogueScriptParameter)Parameters[0]).Line.Text.GetSubstitutedString(_project)[0..Math.Min(((DialogueScriptParameter)Parameters[0]).Line.Text.Length, 10)]}...";
             }
             else if (Verb == CommandVerb.GOTO)
             {

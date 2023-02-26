@@ -4,6 +4,7 @@ using HaruhiChokuretsuLib.Util;
 using SerialLoops.Controls;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
+using SerialLoops.Lib.Util;
 using SerialLoops.Utility;
 using System.Linq;
 
@@ -37,12 +38,12 @@ namespace SerialLoops.Editors
             foreach (var (topicId, _) in _puzzle.Puzzle.AssociatedTopics.Take(_puzzle.Puzzle.AssociatedTopics.Count - 1))
             {
                 TopicItem topic = (TopicItem)_project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Topic && ((TopicItem)i).Topic.Id == topicId);
-                LinkButton topicButton = new() { Text = topic?.Topic.Title ?? topicId.ToString() };
+                LinkButton topicButton = new() { Text = topic?.Topic.Title.GetSubstitutedString(_project) ?? topicId.ToString() };
                 if (topic is not null)
                 {
                     topicButton.Click += (s, e) => _tabs.OpenTab(topic, _log);
                 }
-                topics.Items.Add(topicButton);                
+                topics.Items.Add(topicButton);
             }
             topicsBox.Content = topics;
             panel1.Items.Add(topicsBox);

@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using Eto.Forms;
-using HaruhiChokuretsuLib.Archive.Event;
+﻿using Eto.Forms;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
 using SerialLoops.Utility;
+using System;
+using System.Collections.Generic;
 
 namespace SerialLoops.Controls
 {
@@ -15,6 +14,37 @@ namespace SerialLoops.Controls
         public ScriptItemCommand Command { get; set; }
         public int ParameterIndex { get; set; }
         public ClearableLinkButton Link { get; set; }
+    }
+    public class ScriptCommandCheckBox : CheckBox
+    {
+        public ScriptItemCommand Command { get; set; }
+        public int ParameterIndex { get; set; }
+    }
+    public class ScriptCommandColorPicker : ColorPicker
+    {
+        public ScriptItemCommand Command { get; set; }
+        public int ParameterIndex { get; set; }
+    }
+    public class ScriptCommandTextBox : TextBox
+    {
+        public ScriptItemCommand Command { get; set; }
+        public int ParameterIndex { get; set; }
+    }
+    public class ScriptCommandTextArea : TextArea
+    {
+        public ScriptItemCommand Command { get; set; }
+        public int ParameterIndex { get; set; }
+    }
+    public class ScriptCommandNumericStepper : NumericStepper
+    {
+        public ScriptItemCommand Command { get; set; }
+        public int ParameterIndex { get; set; }
+    }
+    public class TopicSelectButton : Button
+    {
+        public ScriptItemCommand ScriptCommand { get; set; }
+        public int ParameterIndex { get; set; }
+        public StackLayout Layout { get; set; }
     }
 
     public class ScenarioCommandDropDown : DropDown
@@ -90,8 +120,7 @@ namespace SerialLoops.Controls
 
         private StackLayout GetButtonPanel()
         {
-            Button button = new();
-            button.Text = "Select...";
+            Button button = new() { Text = "Select..." };
             button.Click += GraphicSelectionButton_Click;
 
             return new StackLayout
