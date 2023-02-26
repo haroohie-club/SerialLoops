@@ -59,8 +59,11 @@ namespace SerialLoops.Editors
 
             TableRow mainRow = new();
 
+            ContextMenu contextMenu = new();
+
             _commandsPanel = new(_commands, new Size(280, 185), expandItems: true, _log);
-            _commandsPanel.Viewer.SelectedItemChanged += CommandsPanel_SelectedIndexChanged;
+            _commandsPanel.Viewer.SelectedItemChanged += CommandsPanel_SelectedItemChanged;
+            
             mainRow.Cells.Add(_commandsPanel);
 
             _detailsLayout = new()
@@ -81,7 +84,7 @@ namespace SerialLoops.Editors
             return layout;
         }
 
-        private void CommandsPanel_SelectedIndexChanged(object sender, EventArgs e)
+        private void CommandsPanel_SelectedItemChanged(object sender, EventArgs e)
         {
             ScriptItemCommand command = ((ScriptCommandSectionEntry)((ScriptCommandSectionTreeGridView)sender).SelectedItem).Command;
             _editorControls.Items.Clear();

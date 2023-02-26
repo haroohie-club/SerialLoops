@@ -321,7 +321,6 @@ namespace SerialLoops.Lib.Script
                     case CommandVerb.GOTO:
                         if (i == 0)
                         {
-                            //todo script section labels?
                             parameters.Add(new ScriptSectionScriptParameter("Script Section", eventFile.ScriptSections.First(s => s.Name == eventFile.LabelsSection.Objects.First(l => l.Id == parameter).Name.Replace("/", ""))));
                         }
                         break;
