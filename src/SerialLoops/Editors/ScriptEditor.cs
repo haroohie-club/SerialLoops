@@ -550,6 +550,7 @@ namespace SerialLoops.Editors
                         }
                         else
                         {
+                            topicName = $"{_project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Topic && ((TopicItem)i).Topic.Id == ((TopicScriptParameter)parameter).TopicId)?.Name} - {topicName}";
                             StackLayout topicLink = ControlGenerator.GetFileLink(_project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Topic &&
                                 ((TopicItem)i).Topic.Id == ((TopicScriptParameter)parameter).TopicId), _tabs, _log);
 
