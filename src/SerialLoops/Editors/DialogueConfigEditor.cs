@@ -33,8 +33,8 @@ namespace SerialLoops.Editors
                 Items =
                 {
                     ControlGenerator.GetControlWithLabel("Character", characterDropDown),
-                    ControlGenerator.GetControlWithLabel("Voice Font", new TextBox { Text = _dialogueConfig.DialogueConfig.VoiceFont.ToString() }),
-                    ControlGenerator.GetControlWithLabel("Text Timer", new TextBox { Text = _dialogueConfig.DialogueConfig.TextTimer.ToString() }),
+                    ControlGenerator.GetControlWithLabel("Voice Font", new NumericStepper { Value = _dialogueConfig.DialogueConfig.VoiceFont }),
+                    ControlGenerator.GetControlWithLabel("Text Timer", new NumericStepper { Value = _dialogueConfig.DialogueConfig.TextTimer }),
                 },
             };
         }
