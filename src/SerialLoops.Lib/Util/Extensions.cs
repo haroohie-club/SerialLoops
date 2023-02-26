@@ -1,6 +1,7 @@
 ﻿using HaruhiChokuretsuLib.Archive.Event;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using static HaruhiChokuretsuLib.Archive.Event.EventFile;
 
 namespace SerialLoops.Lib.Util
@@ -9,12 +10,46 @@ namespace SerialLoops.Lib.Util
     {
         public static string GetSubstitutedString(this string line, Project project)
         {
-            // we replace " in the base library, but we don't want to do that here since we'll rely on rich-text editing instead
-            return string.Join("", line.Select(c => c != '“' ? (project.FontReplacement.ReverseLookup(c)?.ReplacedCharacter ?? c) : c));
+            if (project.LangCode != "ja")
+            {
+                // we replace " in the base library, but we don't want to do that here since we'll rely on rich-text editing instead
+                return string.Join("", line.Select(c => c != '“' ? (project.FontReplacement.ReverseLookup(c)?.ReplacedCharacter ?? c) : c));
+            }
+            else
+            {
+                return line;
+            }
         }
         public static string GetOriginalString(this string line, Project project)
         {
-            return string.Join("", line.Select(c => project.FontReplacement.ContainsKey(c) ? project.FontReplacement[c].OriginalCharacter : c));
+            if (project.LangCode != "ja")
+            {
+                string originalString = string.Join("", line.Select(c => project.FontReplacement.ContainsKey(c) ? project.FontReplacement[c].OriginalCharacter : c));
+                foreach (Match match in Regex.Matches(originalString, @"\$(\d{1,2})").Cast<Match>())
+                {
+                    originalString = originalString.Replace(match.Value, match.Value.GetSubstitutedString(project));
+                }
+                foreach (Match match in Regex.Matches(originalString, @"。Ｗ(\d{1,2})").Cast<Match>())
+                {
+                    originalString = originalString.Replace(match.Value, match.Value.GetSubstitutedString(project));
+                }
+                foreach (Match match in Regex.Matches(originalString, @"。Ｐ(\d{2})").Cast<Match>())
+                {
+                    originalString = originalString.Replace(match.Value, match.Value.GetSubstitutedString(project));
+                }
+                originalString = Regex.Replace(originalString, @"。ＤＰ", "#DP");
+                foreach (Match match in Regex.Matches(originalString, @"。ＳＥ(\d{3})").Cast<Match>())
+                {
+                    originalString = originalString.Replace(match.Value, match.Value.GetSubstitutedString(project));
+                }
+                originalString = Regex.Replace(originalString, @"。ＳＫ０", "#SK0");
+                originalString = Regex.Replace(originalString, @"。ｓｋ", "#sk");
+                return originalString;
+            }
+            else
+            {
+                return line;
+            }
         }
 
         public static void CollectGarbage(this EventFile evt)

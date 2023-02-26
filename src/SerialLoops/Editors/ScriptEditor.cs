@@ -705,7 +705,7 @@ namespace SerialLoops.Editors
             }
             else
             {
-                chibiStartX = 24;
+                chibiStartX = 44;
                 chibiY = 100;
             }
             int chibiCurrentX = chibiStartX;
@@ -714,7 +714,7 @@ namespace SerialLoops.Editors
             {
                 SKBitmap chibiFrame = chibi.ChibiAnimations.First().Value.ElementAt(0).Frame;
                 canvas.DrawBitmap(chibiFrame, new SKPoint(chibiCurrentX, chibiY));
-                chibiWidth = chibiFrame.Width - 2;
+                chibiWidth = chibiFrame.Width - 10;
                 chibiCurrentX += chibiWidth;
             }
 
@@ -913,6 +913,12 @@ namespace SerialLoops.Editors
                 !((BoolScriptParameter)c.Parameters[0]).Value) < commands.IndexOf(lastDialogueCommand))
             {
                 DialogueLine line = ((DialogueScriptParameter)lastDialogueCommand.Parameters[0]).Line;
+                SKPaint currentDialoguePaint = line.Speaker switch
+                {
+                    Speaker.MONOLOGUE => DialogueScriptParameter.Paint01,
+                    Speaker.INFO => DialogueScriptParameter.Paint04,
+                    _ => DialogueScriptParameter.Paint00,
+                };
                 if (!string.IsNullOrEmpty(line.Text))
                 {
                     canvas.DrawBitmap(_project.DialogueBitmap, new SKRect(0, 24, 32, 36), new SKRect(0, 344, 256, 356));
@@ -926,23 +932,60 @@ namespace SerialLoops.Editors
                     int currentY = 352;
                     for (int i = 0; i < line.Text.Length; i++)
                     {
+                        // handle newlines
                         if (line.Text[i] == '\n')
                         {
                             currentX = 10;
                             currentY += 14;
                             continue;
                         }
-                        if (line.Text[i] != '　') // if it's a full width space
+                        // handle operators
+                        if (i < line.Text.Length - 2 && Regex.IsMatch(line.Text[i..(i + 2)], @"\$\d"))
+                        {
+                            if (i < line.Text.Length - 3 && Regex.IsMatch(line.Text[i..(i + 3)], @"\$\d{2}"))
+                            {
+                                i++;
+                            }
+                            i++;
+                            continue;
+                        }
+                        else if (i < line.Text.Length - 3 && Regex.IsMatch(line.Text[i..(i + 3)], @"#W\d"))
+                        {
+                            if (i < line.Text.Length - 4 && Regex.IsMatch(line.Text[i..(i + 4)], @"#W\d{2}"))
+                            {
+                                i++;
+                            }
+                            i += 2;
+                            continue;
+                        }
+                        else if (i < line.Text.Length - 4 && Regex.IsMatch(line.Text[i..(i + 4)], @"#P\d{2}"))
+                        {
+                            currentDialoguePaint = int.Parse(Regex.Match(line.Text[i..(i + 4)], @"#P(?<id>\d{2})").Groups["id"].Value) switch
+                            {
+                                1 => DialogueScriptParameter.Paint01,
+                                2 => DialogueScriptParameter.Paint02,
+                                3 => DialogueScriptParameter.Paint03,
+                                4 => DialogueScriptParameter.Paint04,
+                                5 => DialogueScriptParameter.Paint05,
+                                6 => DialogueScriptParameter.Paint06,
+                                7 => DialogueScriptParameter.Paint07,
+                                _ => DialogueScriptParameter.Paint00,
+                            };
+                            i += 3;
+                            continue;
+                        }
+
+                        if (line.Text[i] != '　') // if it's a space, we just skip drawing
                         {
                             int charIndex = _project.FontMap.CharMap.IndexOf(line.Text[i]);
                             if ((charIndex + 1) * 16 <= _project.FontBitmap.Height)
                             {
                                 canvas.DrawBitmap(_project.FontBitmap, new SKRect(0, charIndex * 16, 16, (charIndex + 1) * 16),
-                                    new SKRect(currentX, currentY, currentX + 16, currentY + 16));
+                                    new SKRect(currentX, currentY, currentX + 16, currentY + 16), currentDialoguePaint);
                             }
                         }
                         FontReplacement replacement = _project.FontReplacement.ReverseLookup(line.Text[i]);
-                        if (replacement is not null)
+                        if (replacement is not null && _project.LangCode != "ja")
                         {
                             currentX += replacement.Offset;
                         }
@@ -1128,9 +1171,11 @@ namespace SerialLoops.Editors
         {
             ScriptCommandTextArea textArea = (ScriptCommandTextArea)sender;
 
+            int currentCaretIndex = textArea.CaretIndex;
             textArea.Text = Regex.Replace(textArea.Text, @"^""", "“");
             textArea.Text = Regex.Replace(textArea.Text, @"\s""", "“");
             textArea.Text = textArea.Text.Replace('"', '”');
+            textArea.CaretIndex = currentCaretIndex;
 
             _log.Log($"Attempting to modify dialogue in parameter {textArea.ParameterIndex} to dialogue '{textArea.Text}' in {textArea.Command.Index} in file {_script.Name}...");
 

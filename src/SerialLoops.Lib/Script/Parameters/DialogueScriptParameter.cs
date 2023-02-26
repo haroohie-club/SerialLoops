@@ -1,6 +1,5 @@
 ﻿using HaruhiChokuretsuLib.Archive.Event;
-using HaruhiChokuretsuLib.Util;
-using System.Linq;
+using SkiaSharp;
 
 namespace SerialLoops.Lib.Script.Parameters
 {
@@ -12,5 +11,86 @@ namespace SerialLoops.Lib.Script.Parameters
         {
             Line = line;
         }
+
+        public static SKPaint Paint00 { get; } = new()
+        {
+            ColorFilter = SKColorFilter.CreateColorMatrix(new float[]
+            {
+                1.00f, 0.00f, 0.00f, 0.00f, 0.00f,
+                0.00f, 1.00f, 0.00f, 0.00f, 0.00f,
+                0.00f, 0.00f, 1.00f, 0.00f, 0.00f,
+                0.00f, 0.00f, 0.00f, 1.00f, 0.00f,
+            }),
+        };
+        public static SKPaint Paint01 { get; } = new()
+        {
+            ColorFilter = SKColorFilter.CreateColorMatrix(new float[]
+            {
+                0.69f, 0.00f, 0.00f, 0.00f, 0.00f,
+                0.00f, 0.69f, 0.00f, 0.00f, 0.00f,
+                0.00f, 0.00f, 0.38f, 0.00f, 0.00f,
+                0.00f, 0.00f, 0.00f, 1.00f, 0.00f,
+            }),
+        };
+        public static SKPaint Paint02 { get; } = new()
+        {
+            ColorFilter = SKColorFilter.CreateColorMatrix(new float[]
+            {
+                0.96f, 0.00f, 0.00f, 0.00f, 0.00f,
+                0.00f, 0.96f, 0.00f, 0.00f, 0.00f,
+                0.00f, 0.00f, 0.96f, 0.00f, 0.00f,
+                0.00f, 0.00f, 0.00f, 1.00f, 0.00f,
+            }),
+        };
+        public static SKPaint Paint03 { get; } = new()
+        {
+            ColorFilter = SKColorFilter.CreateColorMatrix(new float[]
+            {
+                0.65f, 0.00f, 0.00f, 0.00f, 0.00f,
+                0.00f, 0.67f, 0.00f, 0.00f, 0.00f,
+                0.00f, 0.00f, 0.75f, 0.00f, 0.00f,
+                0.00f, 0.00f, 0.00f, 1.00f, 0.00f,
+            }),
+        };
+        public static SKPaint Paint04 { get; } = new()
+        {
+            ColorFilter = SKColorFilter.CreateColorMatrix(new float[]
+            {
+                0.55f, 0.00f, 0.00f, 0.00f, 0.00f,
+                0.00f, 0.48f, 0.00f, 0.00f, 0.00f,
+                0.00f, 0.00f, 0.65f, 0.00f, 0.00f,
+                0.00f, 0.00f, 0.00f, 1.00f, 0.00f,
+            }),
+        };
+        public static SKPaint Paint05 { get; } = new()
+        {
+            ColorFilter = SKColorFilter.CreateColorMatrix(new float[]
+            {
+                0.75f, 0.00f, 0.00f, 0.00f, 0.00f,
+                0.00f, 0.14f, 0.00f, 0.00f, 0.00f,
+                0.00f, 0.00f, 0.23f, 0.00f, 0.00f,
+                0.00f, 0.00f, 0.00f, 1.00f, 0.00f,
+            }),
+        };
+        public static SKPaint Paint06 { get; } = new()
+        {
+            ColorFilter = SKColorFilter.CreateColorMatrix(new float[]
+            {
+                0.36f, 0.00f, 0.00f, 0.00f, 0.00f,
+                0.00f, 0.36f, 0.00f, 0.00f, 0.00f,
+                0.00f, 0.00f, 0.36f, 0.00f, 0.00f,
+                0.00f, 0.00f, 0.00f, 1.00f, 0.00f,
+            }),
+        };
+        public static SKPaint Paint07 { get; } = new()
+        {
+            ColorFilter = SKColorFilter.CreateColorMatrix(new float[]
+            {
+                0.00f, 0.00f, 0.00f, 0.00f, 0.00f,
+                0.00f, 0.00f, 0.00f, 0.00f, 0.00f,
+                0.00f, 0.00f, 0.00f, 0.00f, 0.00f,
+                0.00f, 0.00f, 0.00f, 1.00f, 0.00f,
+            }),
+        };
     }
 }
