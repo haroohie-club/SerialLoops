@@ -1255,6 +1255,7 @@ namespace SerialLoops.Editors
                 .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
                 (short)Enum.Parse<SpriteEntranceScriptParameter.SpriteEntranceTransition>(dropDown.SelectedKey);
             UpdateTabTitle(false);
+            Application.Instance.Invoke(() => UpdatePreview());
         }
         private void SpriteExitDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
