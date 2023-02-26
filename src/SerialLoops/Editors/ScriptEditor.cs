@@ -15,6 +15,7 @@ using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -450,11 +451,19 @@ namespace SerialLoops.Editors
                         break;
 
                     case ScriptParameter.ParameterType.SHORT:
-                        ScriptCommandTextBox shortTextBox = new() { Command = command, ParameterIndex = i, Text = ((ShortScriptParameter)parameter).Value.ToString() };
-                        shortTextBox.TextChanged += ShortTextBox_TextChanged;
+                        ScriptCommandNumericStepper shortNumericStepper = new()
+                        {
+                            Command = command,
+                            ParameterIndex = i,
+                            MinValue = short.MinValue,
+                            MaxValue = short.MaxValue,
+                            DecimalPlaces = 0,
+                            Value = ((ShortScriptParameter)parameter).Value
+                        };
+                        shortNumericStepper.ValueChanged += ShortNumericStepper_ValueChanged;
 
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
-                            ControlGenerator.GetControlWithLabel(parameter.Name, shortTextBox));
+                            ControlGenerator.GetControlWithLabel(parameter.Name, shortNumericStepper));
                         break;
 
                     case ScriptParameter.ParameterType.SPRITE:
@@ -546,7 +555,7 @@ namespace SerialLoops.Editors
 
                             ScriptCommandDropDown topicDropDown = new() { Command = command, ParameterIndex = i, Link = (ClearableLinkButton)topicLink.Items[1].Control };
                             topicDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Topic)
-                                .Select(t => new ListItem { Key = t.DisplayName, Text = t.DisplayName }));
+                                .Select(t => new ListItem { Key = $"{t.Name} - {t.DisplayName}", Text = $"{t.Name} - {t.DisplayName}" }));
                             topicDropDown.SelectedKey = topicName;
                             topicDropDown.SelectedIndexChanged += TopicDropDown_SelectedIndexChanged;
 
@@ -897,46 +906,49 @@ namespace SerialLoops.Editors
                 canvas.DrawBitmap(spriteBitmap, sprite.Positioning.GetSpritePosition(spriteBitmap));
             }
 
+            // Draw dialogue
             ScriptItemCommand lastDialogueCommand = commands.LastOrDefault(c => c.Verb == EventFile.CommandVerb.DIALOGUE);
-            if ((commands.LastOrDefault(c => c.Verb == EventFile.CommandVerb.TOGGLE_DIALOGUE &&
-                !((BoolScriptParameter)c.Parameters[0]).Value)?.Index ?? -1) < (lastDialogueCommand?.Index ?? -1))
+            if (commands.FindLastIndex(c => c.Verb == EventFile.CommandVerb.TOGGLE_DIALOGUE &&
+                !((BoolScriptParameter)c.Parameters[0]).Value) < commands.IndexOf(lastDialogueCommand))
             {
                 DialogueLine line = ((DialogueScriptParameter)lastDialogueCommand.Parameters[0]).Line;
-
-                canvas.DrawBitmap(_project.DialogueBitmap, new SKRect(0, 24, 32, 36), new SKRect(0, 344, 256, 356));
-                SKColor dialogueBoxColor = _project.DialogueBitmap.GetPixel(0, 28);
-                canvas.DrawRect(0, 356, 224, 384, new() { Color = dialogueBoxColor });
-                canvas.DrawBitmap(_project.DialogueBitmap, new SKRect(0, 37, 32, 64), new SKRect(224, 356, 256, 384));
-                canvas.DrawBitmap(_project.SpeakerBitmap, new SKRect(0, 16 * ((int)line.Speaker - 1), 64, 16 * ((int)line.Speaker)),
-                    new SKRect(0, 332, 64, 348));
-
-                int currentX = 10;
-                int currentY = 352;
-                for (int i = 0; i < line.Text.Length; i++)
+                if (!string.IsNullOrEmpty(line.Text))
                 {
-                    if (line.Text[i] == '\n')
+                    canvas.DrawBitmap(_project.DialogueBitmap, new SKRect(0, 24, 32, 36), new SKRect(0, 344, 256, 356));
+                    SKColor dialogueBoxColor = _project.DialogueBitmap.GetPixel(0, 28);
+                    canvas.DrawRect(0, 356, 224, 384, new() { Color = dialogueBoxColor });
+                    canvas.DrawBitmap(_project.DialogueBitmap, new SKRect(0, 37, 32, 64), new SKRect(224, 356, 256, 384));
+                    canvas.DrawBitmap(_project.SpeakerBitmap, new SKRect(0, 16 * ((int)line.Speaker - 1), 64, 16 * ((int)line.Speaker)),
+                        new SKRect(0, 332, 64, 348));
+
+                    int currentX = 10;
+                    int currentY = 352;
+                    for (int i = 0; i < line.Text.Length; i++)
                     {
-                        currentX = 10;
-                        currentY += 16;
-                        continue;
-                    }
-                    if (line.Text[i] != '　') // if it's a full width space
-                    {
-                        int charIndex = _project.FontMap.CharMap.IndexOf(line.Text[i]);
-                        if ((charIndex + 1) * 16 <= _project.FontBitmap.Height)
+                        if (line.Text[i] == '\n')
                         {
-                            canvas.DrawBitmap(_project.FontBitmap, new SKRect(0, charIndex * 16, 16, (charIndex + 1) * 16),
-                                new SKRect(currentX, currentY, currentX + 16, currentY + 16));
+                            currentX = 10;
+                            currentY += 14;
+                            continue;
                         }
-                    }
-                    FontReplacement replacement = _project.FontReplacement.ReverseLookup(line.Text[i]);
-                    if (replacement is not null)
-                    {
-                        currentX += replacement.Offset;
-                    }
-                    else
-                    {
-                        currentX += 14;
+                        if (line.Text[i] != '　') // if it's a full width space
+                        {
+                            int charIndex = _project.FontMap.CharMap.IndexOf(line.Text[i]);
+                            if ((charIndex + 1) * 16 <= _project.FontBitmap.Height)
+                            {
+                                canvas.DrawBitmap(_project.FontBitmap, new SKRect(0, charIndex * 16, 16, (charIndex + 1) * 16),
+                                    new SKRect(currentX, currentY, currentX + 16, currentY + 16));
+                            }
+                        }
+                        FontReplacement replacement = _project.FontReplacement.ReverseLookup(line.Text[i]);
+                        if (replacement is not null)
+                        {
+                            currentX += replacement.Offset;
+                        }
+                        else
+                        {
+                            currentX += 14;
+                        }
                     }
                 }
             }
@@ -1116,7 +1128,7 @@ namespace SerialLoops.Editors
             ScriptCommandTextArea textArea = (ScriptCommandTextArea)sender;
 
             textArea.Text = Regex.Replace(textArea.Text, @"^""", "“");
-            textArea.Text = Regex.Replace(textArea.Text, @"""\s", "“");
+            textArea.Text = Regex.Replace(textArea.Text, @"\s""", "“");
             textArea.Text = textArea.Text.Replace('"', '”');
 
             _log.Log($"Attempting to modify dialogue in parameter {textArea.ParameterIndex} to dialogue '{textArea.Text}' in {textArea.Command.Index} in file {_script.Name}...");
@@ -1289,17 +1301,14 @@ namespace SerialLoops.Editors
                 (short)Enum.Parse<SfxModeScriptParameter.SfxMode>(dropDown.SelectedKey);
             UpdateTabTitle(false);
         }
-        private void ShortTextBox_TextChanged(object sender, EventArgs e)
+        private void ShortNumericStepper_ValueChanged(object sender, EventArgs e)
         {
-            ScriptCommandTextBox textBox = (ScriptCommandTextBox)sender;
-            _log.Log($"Attempting to modify parameter {textBox.ParameterIndex} to SFX mode {textBox.Text} in {textBox.Command.Index} in file {_script.Name}...");
-            if (short.TryParse(textBox.Text, out short value))
-            {
-                ((ShortScriptParameter)textBox.Command.Parameters[textBox.ParameterIndex]).Value = value;
-                _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(textBox.Command.Section)]
-                    .Objects[textBox.Command.Index].Parameters[textBox.ParameterIndex] = value;
-                UpdateTabTitle(false);
-            }
+            ScriptCommandNumericStepper numericStepper = (ScriptCommandNumericStepper)sender;
+            _log.Log($"Attempting to modify parameter {numericStepper.ParameterIndex} to SFX mode {numericStepper.Value} in {numericStepper.Command.Index} in file {_script.Name}...");
+            ((ShortScriptParameter)numericStepper.Command.Parameters[numericStepper.ParameterIndex]).Value = (short)numericStepper.Value;
+            _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(numericStepper.Command.Section)]
+                .Objects[numericStepper.Command.Index].Parameters[numericStepper.ParameterIndex] = (short)numericStepper.Value;
+            UpdateTabTitle(false);
         }
         private void SpriteEntranceDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
@@ -1375,10 +1384,10 @@ namespace SerialLoops.Editors
             ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
             _log.Log($"Attempting to modify parameter {dropDown.ParameterIndex} to topic {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
             ((TopicScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).TopicId =
-                ((TopicItem)_project.Items.FirstOrDefault(i => i.DisplayName == dropDown.SelectedKey)).Topic.Id;
+                ((TopicItem)_project.Items.FirstOrDefault(i => dropDown.SelectedKey == $"{i.Name} - {i.DisplayName}")).Topic.Id;
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
                 .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
-                ((TopicItem)_project.Items.First(i => i.DisplayName == dropDown.SelectedKey)).Topic.Id;
+                ((TopicItem)_project.Items.First(i => dropDown.SelectedKey == $"{i.Name} - {i.DisplayName}")).Topic.Id;
 
             dropDown.Link.Text = dropDown.SelectedKey;
             dropDown.Link.RemoveAllClickEvents();
@@ -1392,7 +1401,7 @@ namespace SerialLoops.Editors
 
             ScriptCommandDropDown topicDropDown = new() { Command = button.ScriptCommand, ParameterIndex = button.ParameterIndex };
             topicDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Topic)
-                .Select(t => new ListItem { Key = t.DisplayName, Text = t.DisplayName }));
+                .Select(t => new ListItem { Key = $"{t.Name} - {t.DisplayName}", Text = $"{t.Name} - {t.DisplayName}" }));
             topicDropDown.SelectedIndex = 0;
             topicDropDown.SelectedIndexChanged += TopicDropDown_SelectedIndexChanged;
 
