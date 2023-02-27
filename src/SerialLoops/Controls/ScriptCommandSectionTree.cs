@@ -25,7 +25,9 @@ namespace SerialLoops.Controls
             Text = text;
         }
     }
-    public class ScriptCommandSectionTreeItem : List<ScriptCommandSectionTreeItem>, ITreeGridItem<ScriptCommandSectionTreeItem>
+
+    public class ScriptCommandSectionTreeItem : List<ScriptCommandSectionTreeItem>,
+        ITreeGridItem<ScriptCommandSectionTreeItem>
     {
         public ScriptCommandSectionEntry Section { get; private set; }
         public string Text => Section.Text;
@@ -48,7 +50,8 @@ namespace SerialLoops.Controls
     public class ScriptCommandSectionTreeGridView : SectionList
     {
         private TreeGridView _treeView;
-
+        private ScriptCommandSectionTreeItem _dragging;
+        public event EventHandler RePositionItemEvent;
         public override Control Control => _treeView;
 
         public override void Focus()
@@ -91,7 +94,8 @@ namespace SerialLoops.Controls
             {
                 Style = "sectionList",
                 ShowHeader = false,
-                AllowEmptySelection = false
+                AllowEmptySelection = false,
+                AllowDrop = true
             };
             _treeView.Columns.Add(new GridColumn
             {
@@ -104,6 +108,49 @@ namespace SerialLoops.Controls
             _treeView.Activated += (sender, e) => OnActivated(e);
             _treeView.Size = size;
             SetContents(topNodes, expanded);
+
+            // Drag events
+            _treeView.MouseMove += OnMouseMove;
+            _treeView.DragOver += OnDragOver;
+            _treeView.DragDrop += OnDragDrop;
+        }
+
+        private void OnMouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Buttons != MouseButtons.Primary) return;
+            if (_treeView.GetCellAt(e.Location).Item is not ScriptCommandSectionTreeItem {Parent: ScriptCommandSectionTreeItem parent} item) return;
+            _dragging = item;
+                
+            var data = new DataObject();
+            data.SetObject(item, nameof(ScriptCommandSectionTreeItem));
+            _treeView.DoDragDrop(data, DragEffects.Move);
+        }
+
+        private void OnDragOver(object sender, DragEventArgs e)
+        {
+            if (!e.Data.Contains(nameof(ScriptCommandSectionTreeItem)) || _dragging == null) return;
+            if (_treeView.GetCellAt(e.Location).Item is not ScriptCommandSectionTreeItem releasedOn) return;
+            if (releasedOn.Parent is not ScriptCommandSectionTreeItem parent) return;
+            if (parent.Text == "Top" && releasedOn.Text != "Top") return;
+            e.Effects = DragEffects.Move;
+        }
+
+        private void OnDragDrop(object sender, DragEventArgs e)
+        {
+            if (!e.Data.Contains(nameof(ScriptCommandSectionTreeItem)) || _dragging == null) return;
+            if (_treeView.GetCellAt(e.Location).Item is not ScriptCommandSectionTreeItem releasedOn) return;
+            if (releasedOn.Parent is not ScriptCommandSectionTreeItem parent) return;
+            if (parent.Text == "Top" && releasedOn.Text != "Top") return;
+
+            var index = parent.IndexOf(releasedOn);
+            if (index == -1) return;
+
+            parent.Remove(_dragging);
+            parent.Insert(index, _dragging);
+            RePositionItemEvent?.Invoke(this, e);
+            _treeView.DataStore = _treeView.DataStore;
+            _treeView.SelectedItem = _dragging;
+            _dragging = null;
         }
 
         public void SetContents(IEnumerable<ScriptCommandSectionEntry> topNodes, bool expanded)
