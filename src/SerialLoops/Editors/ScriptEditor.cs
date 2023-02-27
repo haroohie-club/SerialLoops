@@ -28,7 +28,8 @@ namespace SerialLoops.Editors
         private Dictionary<ScriptSection, List<ScriptItemCommand>> _commands = new();
 
         private TableLayout _detailsLayout = new();
-        private StackLayout _preview = new() { Items = { new SKGuiImage(new(256, 384)) } };
+        private readonly StackLayout _preview = new() { Items = { new SKGuiImage(new(256, 384)) } };
+        private StackLayout _scriptProperties = new();
         private StackLayout _editorControls = new();
         private ScriptCommandListPanel _commandsPanel;
         private CancellationTokenSource _dialogueCancellation, _optionCancellation;
@@ -78,13 +79,72 @@ namespace SerialLoops.Editors
             {
                 Orientation = Orientation.Horizontal
             };
-            _detailsLayout.Rows.Add(new(_preview));
+
+            TabControl propertiesTabs = GetPropertiesTabs();
+            if (propertiesTabs.Pages.Count > 0)
+            {
+                _scriptProperties = new() { Items = { GetPropertiesTabs() } };
+            }
+
+            _detailsLayout.Rows.Add(new(new TableLayout(new TableRow(_preview, _scriptProperties))));
             _detailsLayout.Rows.Add(new(new Scrollable { Content = _editorControls }));
 
             mainRow.Cells.Add(new(_detailsLayout));
             layout.Rows.Add(mainRow);
 
             return layout;
+        }
+
+        private TabControl GetPropertiesTabs()
+        {
+            TabControl propertiesTabs = new();
+
+            List<ChibiItem> allChibis = _project.Items.Where(i => i.Type == ItemDescription.ItemType.Chibi).Cast<ChibiItem>().ToList();
+            List <ChibiItem> usedChibis =  allChibis.Where(c => _script.Event.StartingChibisSection.Objects
+                .Select(sc => sc.ChibiIndex).ToList().Contains((short)c.ChibiIndex)).Cast<ChibiItem>().ToList();
+            ListBox availableChibisBox = new();
+            ListBox usedChibisBox = new();
+            availableChibisBox.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Chibi
+                && !usedChibis.Contains((ChibiItem)i)).Select(c => new ListItem { Key = c.DisplayName, Text = c.DisplayName }));
+            usedChibisBox.Items.AddRange(usedChibis.Select(c => new ListItem { Key = c.DisplayName, Text = c.DisplayName }));
+
+            availableChibisBox.MouseDoubleClick += (o, args) =>
+            {
+                IListItem chibiSelected = (IListItem)availableChibisBox.SelectedValue;
+                availableChibisBox.Items.Remove(chibiSelected);
+                usedChibisBox.Items.Add(chibiSelected);
+                _script.Event.StartingChibisSection.Objects.Add(new() { ChibiIndex = (short)allChibis.First(c => c.DisplayName == chibiSelected.Text).ChibiIndex });
+                UpdateTabTitle(false);
+                Application.Instance.Invoke(() => UpdatePreview());
+            };
+            usedChibisBox.MouseDoubleClick += (o, args) =>
+            {
+                IListItem chibiSelected = (IListItem)usedChibisBox.SelectedValue;
+                usedChibisBox.Items.Remove(chibiSelected);
+                availableChibisBox.Items.Add(chibiSelected);
+                _script.Event.StartingChibisSection.Objects.Remove(_script.Event.StartingChibisSection.Objects
+                    .First(c => c.ChibiIndex == (short)allChibis.First(c => c.DisplayName == chibiSelected.Text).ChibiIndex));
+                UpdateTabTitle(false);
+                Application.Instance.Invoke(() => UpdatePreview());
+            };
+
+            StackLayout startingChibis = new()
+            {
+                Orientation = Orientation.Horizontal,
+                Spacing = 5,
+                Items =
+                {
+                    availableChibisBox, usedChibisBox,
+                },
+            };
+
+            propertiesTabs.Pages.Add(new()
+            {
+                Text = "Starting Chibis",
+                Content = startingChibis,
+            });
+
+            return propertiesTabs;
         }
 
         private void CommandsPanel_SelectedItemChanged(object sender, EventArgs e)
