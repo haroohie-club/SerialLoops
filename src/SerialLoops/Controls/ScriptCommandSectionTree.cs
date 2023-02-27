@@ -50,8 +50,8 @@ namespace SerialLoops.Controls
     public class ScriptCommandSectionTreeGridView : SectionList
     {
         private TreeGridView _treeView;
-        private ScriptCommandSectionTreeItem _dragging;
-        public event EventHandler RePositionItemEvent;
+        private ScriptCommandSectionTreeItem _cursorItem;
+        public event EventHandler RepositionItem;
         public override Control Control => _treeView;
 
         public override void Focus()
@@ -119,7 +119,7 @@ namespace SerialLoops.Controls
         {
             if (e.Buttons != MouseButtons.Primary) return;
             if (_treeView.GetCellAt(e.Location).Item is not ScriptCommandSectionTreeItem {Parent: ScriptCommandSectionTreeItem parent} item) return;
-            _dragging = item;
+            _cursorItem = item;
                 
             var data = new DataObject();
             data.SetObject(item, nameof(ScriptCommandSectionTreeItem));
@@ -128,7 +128,7 @@ namespace SerialLoops.Controls
 
         private void OnDragOver(object sender, DragEventArgs e)
         {
-            if (!e.Data.Contains(nameof(ScriptCommandSectionTreeItem)) || _dragging == null) return;
+            if (!e.Data.Contains(nameof(ScriptCommandSectionTreeItem)) || _cursorItem == null) return;
             if (_treeView.GetCellAt(e.Location).Item is not ScriptCommandSectionTreeItem releasedOn) return;
             if (releasedOn.Parent is not ScriptCommandSectionTreeItem parent) return;
             if (parent.Text == "Top" && releasedOn.Text != "Top") return;
@@ -137,7 +137,7 @@ namespace SerialLoops.Controls
 
         private void OnDragDrop(object sender, DragEventArgs e)
         {
-            if (!e.Data.Contains(nameof(ScriptCommandSectionTreeItem)) || _dragging == null) return;
+            if (!e.Data.Contains(nameof(ScriptCommandSectionTreeItem)) || _cursorItem == null) return;
             if (_treeView.GetCellAt(e.Location).Item is not ScriptCommandSectionTreeItem releasedOn) return;
             if (releasedOn.Parent is not ScriptCommandSectionTreeItem parent) return;
             if (parent.Text == "Top" && releasedOn.Text != "Top") return;
@@ -145,12 +145,12 @@ namespace SerialLoops.Controls
             var index = parent.IndexOf(releasedOn);
             if (index == -1) return;
 
-            parent.Remove(_dragging);
-            parent.Insert(index, _dragging);
-            RePositionItemEvent?.Invoke(this, e);
+            parent.Remove(_cursorItem);
+            parent.Insert(index, _cursorItem);
+            RepositionItem?.Invoke(this, e);
             _treeView.DataStore = _treeView.DataStore;
-            _treeView.SelectedItem = _dragging;
-            _dragging = null;
+            _treeView.SelectedItem = _cursorItem;
+            _cursorItem = null;
         }
 
         public void SetContents(IEnumerable<ScriptCommandSectionEntry> topNodes, bool expanded)
