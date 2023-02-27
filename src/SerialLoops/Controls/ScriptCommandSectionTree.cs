@@ -129,9 +129,12 @@ namespace SerialLoops.Controls
         private void OnDragOver(object sender, DragEventArgs e)
         {
             if (!e.Data.Contains(nameof(ScriptCommandSectionTreeItem)) || _cursorItem == null) return;
-            if (_treeView.GetCellAt(e.Location).Item is not ScriptCommandSectionTreeItem releasedOn) return;
-            if (releasedOn.Parent is not ScriptCommandSectionTreeItem parent) return;
-            if (parent.Text == "Top" && releasedOn.Text != "Top") return;
+            if (_treeView.GetCellAt(e.Location).Item is not ScriptCommandSectionTreeItem hoveredOver) return;
+            if (hoveredOver == _cursorItem) return;
+            if (hoveredOver.Parent is not ScriptCommandSectionTreeItem hoveredParent) return;
+            if (_cursorItem.Parent is not ScriptCommandSectionTreeItem cursorParent) return;
+            if ((hoveredParent.Text == "Top" && cursorParent.Text != "Top") 
+                || (cursorParent.Text == "Top" && hoveredParent.Text != "Top")) return;
             e.Effects = DragEffects.Move;
         }
 
@@ -139,14 +142,16 @@ namespace SerialLoops.Controls
         {
             if (!e.Data.Contains(nameof(ScriptCommandSectionTreeItem)) || _cursorItem == null) return;
             if (_treeView.GetCellAt(e.Location).Item is not ScriptCommandSectionTreeItem releasedOn) return;
-            if (releasedOn.Parent is not ScriptCommandSectionTreeItem parent) return;
-            if (parent.Text == "Top" && releasedOn.Text != "Top") return;
-
-            var index = parent.IndexOf(releasedOn);
+            if (releasedOn == _cursorItem) return;
+            if (releasedOn.Parent is not ScriptCommandSectionTreeItem hoveredParent) return;
+            if (_cursorItem.Parent is not ScriptCommandSectionTreeItem cursorParent) return;
+            if ((hoveredParent.Text == "Top" && cursorParent.Text != "Top") 
+                || (cursorParent.Text == "Top" && hoveredParent.Text != "Top")) return;
+            var index = cursorParent.IndexOf(releasedOn);
             if (index == -1) return;
 
-            parent.Remove(_cursorItem);
-            parent.Insert(index, _cursorItem);
+            cursorParent.Remove(_cursorItem);
+            cursorParent.Insert(index, _cursorItem);
             RepositionItem?.Invoke(this, e);
             _treeView.DataStore = _treeView.DataStore;
             _treeView.SelectedItem = _cursorItem;
