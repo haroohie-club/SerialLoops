@@ -99,6 +99,7 @@ namespace SerialLoops.Editors
         {
             TabControl propertiesTabs = new();
 
+            // Starting Chibis Properties
             List<ChibiItem> allChibis = _project.Items.Where(i => i.Type == ItemDescription.ItemType.Chibi).Cast<ChibiItem>().ToList();
             List <ChibiItem> usedChibis =  allChibis.Where(c => _script.Event.StartingChibisSection.Objects
                 .Select(sc => sc.ChibiIndex).ToList().Contains((short)c.ChibiIndex)).Cast<ChibiItem>().ToList();
