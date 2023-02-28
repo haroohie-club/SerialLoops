@@ -39,6 +39,7 @@ namespace SerialLoops.Controls
         {
             Section = section;
             Expanded = expanded;
+            
             foreach (var child in section)
             {
                 ScriptCommandSectionTreeItem temp = new(child, expanded) { Parent = this };
@@ -51,7 +52,8 @@ namespace SerialLoops.Controls
     {
         private TreeGridView _treeView;
         private ScriptCommandSectionTreeItem _cursorItem;
-        public event EventHandler RepositionItem;
+        public event EventHandler RepositionCommand;
+        public event EventHandler DeleteCommand;
         public override Control Control => _treeView;
 
         public override void Focus()
@@ -109,10 +111,11 @@ namespace SerialLoops.Controls
             _treeView.Size = size;
             SetContents(topNodes, expanded);
 
-            // Drag events
             _treeView.MouseMove += OnMouseMove;
             _treeView.DragOver += OnDragOver;
             _treeView.DragDrop += OnDragDrop;
+
+            _treeView.ContextMenu = new ScriptCommandListContextMenu(this);
         }
 
         private void OnMouseMove(object sender, MouseEventArgs e)
@@ -152,15 +155,35 @@ namespace SerialLoops.Controls
 
             cursorParent.Remove(_cursorItem);
             cursorParent.Insert(index, _cursorItem);
-            RepositionItem?.Invoke(this, e);
+            RepositionCommand?.Invoke(this, e);
             _treeView.DataStore = _treeView.DataStore;
             _treeView.SelectedItem = _cursorItem;
             _cursorItem = null;
+        }
+
+        internal void DeleteItem(ScriptCommandSectionTreeItem item)
+        {
+            if (item.Parent is not ScriptCommandSectionTreeItem parent) return;
+            parent.Remove(item);
+            DeleteCommand?.Invoke(this, EventArgs.Empty);
+            _treeView.DataStore = _treeView.DataStore;
+        }
+
+        internal void AddItem(ScriptCommandSectionTreeItem item)
+        {
+            if (SelectedItem is not ScriptCommandSectionTreeItem selected) return;
+            if (selected.Parent is not ScriptCommandSectionTreeItem parent) return;
+            var index = parent.IndexOf(selected);
+            if (index == -1) return;
+            parent.Insert(index + 1, item);
+            _treeView.DataStore = _treeView.DataStore;
+            _treeView.SelectedItem = item;
         }
 
         public void SetContents(IEnumerable<ScriptCommandSectionEntry> topNodes, bool expanded)
         {
             _treeView.DataStore = new ScriptCommandSectionTreeItem(new ScriptCommandSectionEntry("Top", topNodes), expanded);
         }
+
     }
 }
