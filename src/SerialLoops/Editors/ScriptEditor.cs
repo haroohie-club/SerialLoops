@@ -100,13 +100,29 @@ namespace SerialLoops.Editors
             TabControl propertiesTabs = new();
 
             // Starting Chibis Properties
-            List<ChibiItem> allChibis = _project.Items.Where(i => i.Type == ItemDescription.ItemType.Chibi).Cast<ChibiItem>().ToList();
-            List <ChibiItem> usedChibis =  allChibis.Where(c => _script.Event.StartingChibisSection.Objects
+            TabPage startingChibisPage = new() { Text = "Starting Chibis" };
+            if (_script.Event.StartingChibisSection is not null)
+            {
+                startingChibisPage.Content = GetStartingChibisLayout(startingChibisPage);
+            }
+            else
+            {
+                startingChibisPage.Content = GetStartingChibisAddButton(startingChibisPage);
+            }
+
+            propertiesTabs.Pages.Add(startingChibisPage);
+
+            return propertiesTabs;
+        }
+
+        private StackLayout GetStartingChibisLayout(TabPage parent)
+        {
+            List<ChibiItem> allChibis = _project.Items.Where(i => i.Type == ItemDescription.ItemType.Chibi && ((ChibiItem)i).ChibiAnimations.Any(c => c.Key.Contains("_01_"))).Cast<ChibiItem>().ToList();
+            List<ChibiItem> usedChibis = allChibis.Where(c => _script.Event.StartingChibisSection.Objects
                 .Select(sc => sc.ChibiIndex).ToList().Contains((short)c.ChibiIndex)).Cast<ChibiItem>().ToList();
             ListBox availableChibisBox = new();
             ListBox usedChibisBox = new();
-            availableChibisBox.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Chibi
-                && !usedChibis.Contains((ChibiItem)i)).Select(c => new ListItem { Key = c.DisplayName, Text = c.DisplayName }));
+            availableChibisBox.Items.AddRange(allChibis.Where(i => !usedChibis.Contains(i)).Select(c => new ListItem { Key = c.DisplayName, Text = c.DisplayName }));
             usedChibisBox.Items.AddRange(usedChibis.Select(c => new ListItem { Key = c.DisplayName, Text = c.DisplayName }));
 
             availableChibisBox.MouseDoubleClick += (o, args) =>
@@ -114,7 +130,7 @@ namespace SerialLoops.Editors
                 IListItem chibiSelected = (IListItem)availableChibisBox.SelectedValue;
                 availableChibisBox.Items.Remove(chibiSelected);
                 usedChibisBox.Items.Add(chibiSelected);
-                _script.Event.StartingChibisSection.Objects.Add(new() { ChibiIndex = (short)allChibis.First(c => c.DisplayName == chibiSelected.Text).ChibiIndex });
+                _script.Event.StartingChibisSection.Objects.Insert(_script.Event.StartingChibisSection.Objects.Count - 1, new() { ChibiIndex = (short)allChibis.First(c => c.DisplayName == chibiSelected.Text).ChibiIndex });
                 UpdateTabTitle(false);
                 Application.Instance.Invoke(() => UpdatePreview());
             };
@@ -123,29 +139,63 @@ namespace SerialLoops.Editors
                 IListItem chibiSelected = (IListItem)usedChibisBox.SelectedValue;
                 usedChibisBox.Items.Remove(chibiSelected);
                 availableChibisBox.Items.Add(chibiSelected);
+                availableChibisBox.Items.Sort((a, b) => allChibis.First(c => c.DisplayName == a.Key).ChibiIndex - allChibis.First(c => c.DisplayName == b.Key).ChibiIndex);
                 _script.Event.StartingChibisSection.Objects.Remove(_script.Event.StartingChibisSection.Objects
                     .First(c => c.ChibiIndex == (short)allChibis.First(c => c.DisplayName == chibiSelected.Text).ChibiIndex));
                 UpdateTabTitle(false);
                 Application.Instance.Invoke(() => UpdatePreview());
             };
+            
+            Button removeButton = new() { Text = "Remove Starting Chibis" };
+            removeButton.Click += (o, args) =>
+            {
+                _script.Event.StartingChibisSection = null;
+                parent.Content = GetStartingChibisAddButton(parent);
+                UpdateTabTitle(false);
+                Application.Instance.Invoke(() => UpdatePreview());
+            };
 
-            StackLayout startingChibis = new()
+            return new StackLayout()
+            {
+                Orientation = Orientation.Vertical,
+                Spacing = 5,
+                Items =
+                {
+                    new StackLayout
+                    {
+                        Orientation = Orientation.Horizontal,
+                        Spacing = 5,
+                        Items =
+                        {
+                            availableChibisBox, usedChibisBox,
+                        },
+                    },
+                    removeButton
+                },
+            };
+        }
+
+        private StackLayout GetStartingChibisAddButton(TabPage parent)
+        {
+            Button addButton = new() { Text = "Add Starting Chibis" };
+            addButton.Click += (o, args) =>
+            {
+                _script.Event.StartingChibisSection = new() { Name = "STARTINGCHIBIS" };
+                _script.Event.StartingChibisSection.Objects.Add(new()); // Blank chibi entry
+                parent.Content = GetStartingChibisLayout(parent);
+                UpdateTabTitle(false);
+                Application.Instance.Invoke(() => UpdatePreview());
+            };
+
+            return new StackLayout()
             {
                 Orientation = Orientation.Horizontal,
                 Spacing = 5,
                 Items =
                 {
-                    availableChibisBox, usedChibisBox,
-                },
+                    addButton
+                }
             };
-
-            propertiesTabs.Pages.Add(new()
-            {
-                Text = "Starting Chibis",
-                Content = startingChibis,
-            });
-
-            return propertiesTabs;
         }
 
         private void CommandsPanel_SelectedItemChanged(object sender, EventArgs e)
@@ -697,6 +747,10 @@ namespace SerialLoops.Editors
             canvas.DrawColor(SKColors.Black);
 
             ScriptItemCommand currentCommand = ((ScriptCommandSectionEntry)_commandsPanel.Viewer.SelectedItem).Command;
+            if (currentCommand is null)
+            {
+                return;
+            }
             List<ScriptItemCommand> commands = currentCommand.WalkCommandGraph(_commands, _script.Graph);
 
             if (commands is null)
