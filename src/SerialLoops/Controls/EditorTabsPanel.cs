@@ -49,7 +49,14 @@ namespace SerialLoops.Controls
 
             // Open a new editor for the item -- This is where the item can be loaded from the project files
             DocumentPage newPage = CreateTab(item, _project, log);
-            newPage.ContextMenu = null;
+            if (Platform.IsMac)
+            {
+                newPage.ContextMenu = new();
+            }
+            else
+            {
+                newPage.ContextMenu = null;
+            }
 
             Tabs.Pages.Add(newPage);
             Tabs.SelectedPage = newPage;
