@@ -1,12 +1,8 @@
 ﻿using HaruhiChokuretsuLib.Archive;
 using HaruhiChokuretsuLib.Archive.Data;
-using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Archive.Graphics;
-using System;
-using System.Collections.Generic;
+using SkiaSharp;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SerialLoops.Lib.Items
 {
@@ -24,9 +20,27 @@ namespace SerialLoops.Lib.Items
             QmapIndex = qmapIndex;
         }
 
+        public SKBitmap GetMapWithGrid(ArchiveFile<GraphicsFile> grp)
+        {
+            SKBitmap map;
+            if (Map.Settings.BackgroundLayoutStartIndex > 0)
+            {
+                map = Map.GetMapImages(grp, 0, Map.Settings.BackgroundLayoutStartIndex);
+            }
+            else
+            {
+                map = Map.GetMapImages(grp, 0, grp.Files.First(f => f.Index == Map.Settings.LayoutFileIndex).LayoutEntries.Count);
+            }
+            SKBitmap mapWithGrid = new(map.Width, map.Height);
+            SKCanvas canvas = new(mapWithGrid);
+            canvas.DrawBitmap(map, new SKPoint(0, 0));
+
+            canvas.Flush();
+            return mapWithGrid;
+        }
+
         public override void Refresh(Project project)
         {
-            throw new NotImplementedException();
         }
     }
 }
