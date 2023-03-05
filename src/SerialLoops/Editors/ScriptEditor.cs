@@ -109,7 +109,18 @@ namespace SerialLoops.Editors
                 startingChibisPage.Content = GetStartingChibisAddButton(startingChibisPage);
             }
 
+            TabPage mapCharactersPage = new() { Text = "Map Characters" };
+            if (_script.Event.MapCharactersSection is not null)
+            {
+                mapCharactersPage.Content = GetMapCharactersLayout(mapCharactersPage);
+            }
+            else
+            {
+                mapCharactersPage.Content = GetAddMapCharactersButton(mapCharactersPage);
+            }
+
             propertiesTabs.Pages.Add(startingChibisPage);
+            propertiesTabs.Pages.Add(mapCharactersPage);
 
             return propertiesTabs;
         }
@@ -154,7 +165,7 @@ namespace SerialLoops.Editors
                 Application.Instance.Invoke(() => UpdatePreview());
             };
 
-            return new StackLayout()
+            return new StackLayout
             {
                 Orientation = Orientation.Vertical,
                 Spacing = 5,
@@ -186,7 +197,120 @@ namespace SerialLoops.Editors
                 Application.Instance.Invoke(() => UpdatePreview());
             };
 
-            return new StackLayout()
+            return new StackLayout
+            {
+                Orientation = Orientation.Horizontal,
+                Spacing = 5,
+                Items =
+                {
+                    addButton
+                }
+            };
+        }
+
+        private StackLayout GetMapCharactersLayout(TabPage parent)
+        {
+            MapItem[] maps = _commands.Values.SelectMany(c => c).Where(c => c.Verb == EventFile.CommandVerb.LOAD_ISOMAP)
+                .Select(c => ((MapScriptParameter)c.Parameters[0]).Map).ToArray();
+
+            Button refreshMapListButton = new() { Text = "Refresh Maps List" };
+            refreshMapListButton.Click += (o, args) =>
+            {
+                parent.Content = GetMapCharactersLayout(parent);
+            };
+
+            Button removeButton = new() { Text = "Remove Map Characters" };
+            removeButton.Click += (o, args) =>
+            {
+                _script.Event.MapCharactersSection = null;
+                parent.Content = GetAddMapCharactersButton(parent);
+                UpdateTabTitle(false);
+                Application.Instance.Invoke(() => UpdatePreview());
+            };
+
+            if (maps.Length == 0)
+            {
+                return new StackLayout
+                {
+                    Orientation = Orientation.Vertical,
+                    Spacing = 5,
+                    Items =
+                    {
+                        "No valid maps found.",
+                        refreshMapListButton,
+                        removeButton,
+                    }
+                };
+            }
+
+            DropDown mapsDropdown = new();
+            mapsDropdown.Items.AddRange(maps.Select(m => new ListItem { Key = m.Name, Text = m.Name }));
+            mapsDropdown.SelectedIndex = 0;
+
+            PixelLayout mapLayout = new() { AllowDrop = true };
+            SKBitmap mapBitmap = maps[0].GetMapImage(_project.Grp, false);
+            Icon mapImage = new SKGuiImage(mapBitmap).WithSize(mapBitmap.Width / 2, mapBitmap.Height / 2);
+            mapLayout.Add(mapImage, 0, 0);
+
+            foreach (MapCharactersSectionEntry character in _script.Event.MapCharactersSection.Objects.Where(c => c.CharacterIndex > 0))
+            {
+                ChibiItem chibi = (ChibiItem)_project.Items.Where(i => i.Type == ItemDescription.ItemType.Chibi).ElementAt(character.CharacterIndex - 1);
+                SKBitmap chibiBitmap = chibi.ChibiAnimations.ElementAt(character.FacingDirection).Value.ElementAt(0).Frame;
+                Icon chibiIcon = new SKGuiImage(chibiBitmap).WithSize(chibiBitmap.Width / 2, chibiBitmap.Height / 2);
+                StackLayout chibiLayout = new()
+                {
+                    Items =
+                    {
+                        chibiIcon
+                    }
+                };
+                chibiLayout.MouseEnter += (o, args) =>
+                {
+                    chibiLayout.BackgroundColor = Colors.SteelBlue;
+                };
+                chibiLayout.MouseLeave += (o, args) =>
+                {
+                    chibiLayout.BackgroundColor = Colors.Transparent;
+                };
+                chibiLayout.MouseDown += (o, args) =>
+                {
+                    if (args.Buttons == MouseButtons.Alternate)
+                    {
+                        _script.Event.MapCharactersSection.Objects.Remove(character);
+                        UpdateTabTitle(false);
+                        chibiLayout.Detach();
+                    }
+                };
+
+                SKPoint skOrigin = maps[0].GetOrigin(_project.Grp);
+                mapLayout.Add(chibiLayout, ((int)skOrigin.X - character.Y * 16 + character.X * 16 - chibiBitmap.Width / 2) / 2, ((int)skOrigin.Y + character.X * 8 + character.Y * 8 - chibiBitmap.Height / 2 - 24) / 2);
+            }
+
+            return new StackLayout
+            {
+                Orientation = Orientation.Vertical,
+                Spacing = 5,
+                Items =
+                {
+                    mapsDropdown,
+                    mapLayout,
+                },
+            };
+        }
+
+        private StackLayout GetAddMapCharactersButton(TabPage parent)
+        {
+            Button addButton = new() { Text = "Add Map Characters" };
+            addButton.Click += (o, args) =>
+            {
+                _script.Event.MapCharactersSection = new() { Name = "MAPCHARACTERS" };
+                _script.Event.MapCharactersSection.Objects.Add(new()); // Blank map characters entry
+                parent.Content = GetStartingChibisLayout(parent);
+                UpdateTabTitle(false);
+                Application.Instance.Invoke(() => UpdatePreview());
+            };
+
+            return new StackLayout
             {
                 Orientation = Orientation.Horizontal,
                 Spacing = 5,

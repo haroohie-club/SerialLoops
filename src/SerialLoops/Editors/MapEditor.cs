@@ -3,6 +3,7 @@ using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Utility;
+using System;
 
 namespace SerialLoops.Editors
 {
@@ -18,12 +19,27 @@ namespace SerialLoops.Editors
         {
             _map = (MapItem)Description;
 
+            StackLayout mapLayout = new()
+            {
+                Items =
+                {
+                    new SKGuiImage(_map.GetMapImage(_project.Grp, false)),
+                }
+            };
+
+            CheckBox drawPathingMapBox = new() { Text = "Draw Pathing Map", Checked = false };
+            drawPathingMapBox.CheckedChanged += (obj, args) =>
+            {
+                mapLayout.Content = new SKGuiImage(_map.GetMapImage(_project.Grp, drawPathingMapBox.Checked ?? true));
+            };
+
             return new StackLayout
             {
                 Orientation = Orientation.Vertical,
                 Items =
                 {
-                    new SKGuiImage(_map.GetMapWithGrid(_project.Grp))
+                    mapLayout,
+                    drawPathingMapBox,
                 }
             };
         }
