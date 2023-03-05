@@ -91,6 +91,11 @@ namespace SerialLoops.Controls
         }
     }
 
+    public class ChibiStackLayout : StackLayout
+    {
+        public int ChibiIndex { get; set; }
+    }
+
     public class CommandGraphicSelectionButton : Panel
     {
         private readonly EditorTabsPanel _editorTabs;
