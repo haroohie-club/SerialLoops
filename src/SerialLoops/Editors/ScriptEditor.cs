@@ -18,6 +18,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using static HaruhiChokuretsuLib.Archive.Data.QMapFile;
 
 namespace SerialLoops.Editors
 {
@@ -252,6 +253,31 @@ namespace SerialLoops.Editors
             Icon mapImage = new SKGuiImage(mapBitmap).WithSize(mapBitmap.Width / 2, mapBitmap.Height / 2);
             mapLayout.Add(mapImage, 0, 0);
 
+            SKPoint gridZero = maps[0].GetOrigin(_project.Grp);
+            Dictionary<PointF,Point> grid = new();
+            for (int x = 0; x < maps[0].Map.PathingMap.Length; x++)
+            {
+                for (int y = 0; y < maps[0].Map.PathingMap[x].Length; y++)
+                {
+                    grid.Add(new((gridZero.X - x * 16 + y * 16) / 2, (gridZero.Y + x * 8 + y * 8) / 2), new Point(x, y));
+                }
+            }
+
+            mapLayout.DragEnter += (obj, args) =>
+            {
+                Console.WriteLine("Hello");
+            };
+
+            mapLayout.DragDrop += (obj, args) =>
+            {
+                ChibiStackLayout sourceChibiLayout = (ChibiStackLayout)args.Source;
+                PointF newLocation = grid.Keys.MinBy(p => p.Distance(args.Location));
+                mapLayout.Remove(sourceChibiLayout);
+                mapLayout.Add(sourceChibiLayout, new((int)newLocation.X, (int)newLocation.Y));
+                (_script.Event.MapCharactersSection.Objects[sourceChibiLayout.ChibiIndex].X, _script.Event.MapCharactersSection.Objects[sourceChibiLayout.ChibiIndex].Y)
+                    = ((short)grid[newLocation].X, (short)grid[newLocation].Y);
+            };
+
             StackLayout mapDetailsLayout = new()
             {
                 Orientation = Orientation.Vertical,
@@ -294,6 +320,17 @@ namespace SerialLoops.Editors
                 chibiLayout.MouseLeave += (o, args) =>
                 {
                     chibiLayout.BackgroundColor = Colors.Transparent;
+                };
+                chibiLayout.MouseMove += (o, args) =>
+                {
+                    if (args.Buttons != MouseButtons.Primary)
+                    {
+                        return;
+                    }
+
+                    DataObject chibiData = new();
+                    chibiData.SetObject(chibi, nameof(ChibiItem));
+                    chibiLayout.DoDragDrop(chibiData, DragEffects.Move, chibiIcon, new(8, 16));
                 };
                 chibiLayout.MouseDown += (o, args) =>
                 {
