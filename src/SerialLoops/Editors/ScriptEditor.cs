@@ -380,7 +380,7 @@ namespace SerialLoops.Editors
             {
                 _script.Event.MapCharactersSection = new() { Name = "MAPCHARACTERS" };
                 _script.Event.MapCharactersSection.Objects.Add(new()); // Blank map characters entry
-                parent.Content = GetStartingChibisLayout(parent);
+                parent.Content = GetMapCharactersLayout(parent);
                 UpdateTabTitle(false);
                 Application.Instance.Invoke(() => UpdatePreview());
             };
