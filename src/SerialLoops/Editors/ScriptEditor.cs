@@ -220,7 +220,7 @@ namespace SerialLoops.Editors
                 parent.Content = GetMapCharactersLayout(parent);
             };
 
-            Button removeButton = new() { Text = "Remove Map Characters" };
+            Button removeButton = new() { Text = "Remove Map Characters", AllowDrop = true };
             removeButton.Click += (o, args) =>
             {
                 _script.Event.MapCharactersSection = null;
@@ -268,14 +268,19 @@ namespace SerialLoops.Editors
                 Console.WriteLine("Hello");
             };
 
+            mapLayout.DragOver += (obj, args) =>
+            {
+                args.Effects = DragEffects.Move;
+            };
             mapLayout.DragDrop += (obj, args) =>
             {
                 ChibiStackLayout sourceChibiLayout = (ChibiStackLayout)args.Source;
                 PointF newLocation = grid.Keys.MinBy(p => p.Distance(args.Location));
                 mapLayout.Remove(sourceChibiLayout);
-                mapLayout.Add(sourceChibiLayout, new((int)newLocation.X, (int)newLocation.Y));
+                mapLayout.Add(sourceChibiLayout, new((int)newLocation.X - sourceChibiLayout.Width / 4, (int)newLocation.Y - sourceChibiLayout.Height / 4 - 12));
                 (_script.Event.MapCharactersSection.Objects[sourceChibiLayout.ChibiIndex].X, _script.Event.MapCharactersSection.Objects[sourceChibiLayout.ChibiIndex].Y)
                     = ((short)grid[newLocation].X, (short)grid[newLocation].Y);
+                UpdateTabTitle(false);
             };
 
             StackLayout mapDetailsLayout = new()
@@ -315,7 +320,7 @@ namespace SerialLoops.Editors
                 };
                 chibiLayout.MouseEnter += (o, args) =>
                 {
-                    chibiLayout.BackgroundColor = Colors.SteelBlue;
+                    chibiLayout.BackgroundColor = Color.FromArgb(170, 170, 200, 128);
                 };
                 chibiLayout.MouseLeave += (o, args) =>
                 {
@@ -406,6 +411,16 @@ namespace SerialLoops.Editors
                 {
                     mapsDropdown,
                     mapAndDetailsLayout,
+                    new StackLayout
+                    {
+                        Orientation = Orientation.Horizontal,   
+                        Spacing = 5,
+                        Items =
+                        {
+                            refreshMapListButton,
+                            removeButton,
+                        }
+                    }
                 },
             };
         }
@@ -419,7 +434,6 @@ namespace SerialLoops.Editors
                 _script.Event.MapCharactersSection.Objects.Add(new()); // Blank map characters entry
                 parent.Content = GetMapCharactersLayout(parent);
                 UpdateTabTitle(false);
-                Application.Instance.Invoke(() => UpdatePreview());
             };
 
             return new StackLayout
