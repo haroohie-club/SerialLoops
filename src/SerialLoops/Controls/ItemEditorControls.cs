@@ -1,10 +1,10 @@
-﻿using Eto.Drawing;
-using Eto.Forms;
+﻿using Eto.Forms;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
 using SerialLoops.Utility;
+using SkiaSharp;
 using System;
 using System.Collections.Generic;
 
@@ -95,7 +95,7 @@ namespace SerialLoops.Controls
     public class ChibiStackLayout : StackLayout
     {
         public int ChibiIndex { get; set; }
-        public Size ChibiSize { get; set; }
+        public SKBitmap ChibiBitmap { get; set; }
     }
 
     public class CommandGraphicSelectionButton : Panel

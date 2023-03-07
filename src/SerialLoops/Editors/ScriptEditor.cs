@@ -276,8 +276,8 @@ namespace SerialLoops.Editors
                     = ((short)grid[newLocation].X, (short)grid[newLocation].Y);
                 mapLayout.Remove(sourceChibiLayout);
                 mapLayout.Add(sourceChibiLayout,
-                    ((int)gridZero.X - _script.Event.MapCharactersSection.Objects[sourceChibiLayout.ChibiIndex].Y * 16 + _script.Event.MapCharactersSection.Objects[sourceChibiLayout.ChibiIndex].X * 16 - sourceChibiLayout.ChibiSize.Width / 2) / 2,
-                    ((int)gridZero.Y + _script.Event.MapCharactersSection.Objects[sourceChibiLayout.ChibiIndex].X * 8 + _script.Event.MapCharactersSection.Objects[sourceChibiLayout.ChibiIndex].Y * 8 - sourceChibiLayout.ChibiSize.Height / 2 - 24) / 2);
+                    ((int)gridZero.X - _script.Event.MapCharactersSection.Objects[sourceChibiLayout.ChibiIndex].Y * 16 + _script.Event.MapCharactersSection.Objects[sourceChibiLayout.ChibiIndex].X * 16 - sourceChibiLayout.ChibiBitmap.Width / 2) / 2,
+                    ((int)gridZero.Y + _script.Event.MapCharactersSection.Objects[sourceChibiLayout.ChibiIndex].X * 8 + _script.Event.MapCharactersSection.Objects[sourceChibiLayout.ChibiIndex].Y * 8 - sourceChibiLayout.ChibiBitmap.Height / 2 - 24) / 2);
                 UpdateTabTitle(false);
             };
 
@@ -315,7 +315,7 @@ namespace SerialLoops.Editors
                         chibiIcon
                     },
                     ChibiIndex = i,
-                    ChibiSize = new(chibiBitmap.Width, chibiBitmap.Height),
+                    ChibiBitmap = new(chibiBitmap.Width, chibiBitmap.Height),
                 };
                 chibiLayout.MouseEnter += (o, args) =>
                 {
