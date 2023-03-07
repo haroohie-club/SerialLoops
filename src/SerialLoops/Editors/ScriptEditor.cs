@@ -14,6 +14,7 @@ using SerialLoops.Utility;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -255,18 +256,13 @@ namespace SerialLoops.Editors
 
             SKPoint gridZero = maps[0].GetOrigin(_project.Grp);
             Dictionary<PointF,Point> grid = new();
-            for (int x = 0; x < maps[0].Map.PathingMap.Length; x++)
+            for (int y = 0; y < maps[0].Map.PathingMap.Length; y++)
             {
-                for (int y = 0; y < maps[0].Map.PathingMap[x].Length; y++)
+                for (int x = 0; x < maps[0].Map.PathingMap[y].Length; x++)
                 {
-                    grid.Add(new((gridZero.X - x * 16 + y * 16) / 2, (gridZero.Y + x * 8 + y * 8) / 2), new Point(x, y));
+                    grid.Add(new((gridZero.X - y * 16 + x * 16) / 2, (gridZero.Y + y * 8 + x * 8) / 2), new Point(x, y));
                 }
             }
-
-            mapLayout.DragEnter += (obj, args) =>
-            {
-                Console.WriteLine("Hello");
-            };
 
             mapLayout.DragOver += (obj, args) =>
             {
@@ -276,10 +272,12 @@ namespace SerialLoops.Editors
             {
                 ChibiStackLayout sourceChibiLayout = (ChibiStackLayout)args.Source;
                 PointF newLocation = grid.Keys.MinBy(p => p.Distance(args.Location));
-                mapLayout.Remove(sourceChibiLayout);
-                mapLayout.Add(sourceChibiLayout, new((int)newLocation.X - sourceChibiLayout.Width / 4, (int)newLocation.Y - sourceChibiLayout.Height / 4 - 12));
                 (_script.Event.MapCharactersSection.Objects[sourceChibiLayout.ChibiIndex].X, _script.Event.MapCharactersSection.Objects[sourceChibiLayout.ChibiIndex].Y)
                     = ((short)grid[newLocation].X, (short)grid[newLocation].Y);
+                mapLayout.Remove(sourceChibiLayout);
+                mapLayout.Add(sourceChibiLayout,
+                    ((int)gridZero.X - _script.Event.MapCharactersSection.Objects[sourceChibiLayout.ChibiIndex].Y * 16 + _script.Event.MapCharactersSection.Objects[sourceChibiLayout.ChibiIndex].X * 16 - sourceChibiLayout.ChibiSize.Width / 2) / 2,
+                    ((int)gridZero.Y + _script.Event.MapCharactersSection.Objects[sourceChibiLayout.ChibiIndex].X * 8 + _script.Event.MapCharactersSection.Objects[sourceChibiLayout.ChibiIndex].Y * 8 - sourceChibiLayout.ChibiSize.Height / 2 - 24) / 2);
                 UpdateTabTitle(false);
             };
 
@@ -317,6 +315,7 @@ namespace SerialLoops.Editors
                         chibiIcon
                     },
                     ChibiIndex = i,
+                    ChibiSize = new(chibiBitmap.Width, chibiBitmap.Height),
                 };
                 chibiLayout.MouseEnter += (o, args) =>
                 {
