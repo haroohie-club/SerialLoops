@@ -15,7 +15,6 @@ using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Metadata.Ecma335;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -28,7 +27,8 @@ namespace SerialLoops.Editors
         private Dictionary<ScriptSection, List<ScriptItemCommand>> _commands = new();
 
         private TableLayout _detailsLayout = new();
-        private StackLayout _preview = new() { Items = { new SKGuiImage(new(256, 384)) } };
+        private readonly StackLayout _preview = new() { Items = { new SKGuiImage(new(256, 384)) } };
+        private StackLayout _scriptProperties = new();
         private StackLayout _editorControls = new();
         private ScriptCommandListPanel _commandsPanel;
         private CancellationTokenSource _dialogueCancellation, _optionCancellation;
@@ -78,13 +78,123 @@ namespace SerialLoops.Editors
             {
                 Orientation = Orientation.Horizontal
             };
-            _detailsLayout.Rows.Add(new(_preview));
+
+            TabControl propertiesTabs = GetPropertiesTabs();
+            if (propertiesTabs.Pages.Count > 0)
+            {
+                _scriptProperties = new() { Items = { GetPropertiesTabs() } };
+            }
+
+            _detailsLayout.Rows.Add(new(new TableLayout(new TableRow(_preview, _scriptProperties))));
             _detailsLayout.Rows.Add(new(new Scrollable { Content = _editorControls }));
 
             mainRow.Cells.Add(new(_detailsLayout));
             layout.Rows.Add(mainRow);
 
             return layout;
+        }
+
+        private TabControl GetPropertiesTabs()
+        {
+            TabControl propertiesTabs = new();
+
+            // Starting Chibis Properties
+            TabPage startingChibisPage = new() { Text = "Starting Chibis" };
+            if (_script.Event.StartingChibisSection is not null)
+            {
+                startingChibisPage.Content = GetStartingChibisLayout(startingChibisPage);
+            }
+            else
+            {
+                startingChibisPage.Content = GetStartingChibisAddButton(startingChibisPage);
+            }
+
+            propertiesTabs.Pages.Add(startingChibisPage);
+
+            return propertiesTabs;
+        }
+
+        private StackLayout GetStartingChibisLayout(TabPage parent)
+        {
+            List<ChibiItem> allChibis = _project.Items.Where(i => i.Type == ItemDescription.ItemType.Chibi && ((ChibiItem)i).ChibiAnimations.Any(c => c.Key.Contains("_01_"))).Cast<ChibiItem>().ToList();
+            List<ChibiItem> usedChibis = allChibis.Where(c => _script.Event.StartingChibisSection.Objects
+                .Select(sc => sc.ChibiIndex).ToList().Contains((short)c.ChibiIndex)).Cast<ChibiItem>().ToList();
+            ListBox availableChibisBox = new();
+            ListBox usedChibisBox = new();
+            availableChibisBox.Items.AddRange(allChibis.Where(i => !usedChibis.Contains(i)).Select(c => new ListItem { Key = c.DisplayName, Text = c.DisplayName }));
+            usedChibisBox.Items.AddRange(usedChibis.Select(c => new ListItem { Key = c.DisplayName, Text = c.DisplayName }));
+
+            availableChibisBox.MouseDoubleClick += (o, args) =>
+            {
+                IListItem chibiSelected = (IListItem)availableChibisBox.SelectedValue;
+                availableChibisBox.Items.Remove(chibiSelected);
+                usedChibisBox.Items.Add(chibiSelected);
+                _script.Event.StartingChibisSection.Objects.Insert(_script.Event.StartingChibisSection.Objects.Count - 1, new() { ChibiIndex = (short)allChibis.First(c => c.DisplayName == chibiSelected.Text).ChibiIndex });
+                UpdateTabTitle(false);
+                Application.Instance.Invoke(() => UpdatePreview());
+            };
+            usedChibisBox.MouseDoubleClick += (o, args) =>
+            {
+                IListItem chibiSelected = (IListItem)usedChibisBox.SelectedValue;
+                usedChibisBox.Items.Remove(chibiSelected);
+                availableChibisBox.Items.Add(chibiSelected);
+                availableChibisBox.Items.Sort((a, b) => allChibis.First(c => c.DisplayName == a.Key).ChibiIndex - allChibis.First(c => c.DisplayName == b.Key).ChibiIndex);
+                _script.Event.StartingChibisSection.Objects.Remove(_script.Event.StartingChibisSection.Objects
+                    .First(c => c.ChibiIndex == (short)allChibis.First(c => c.DisplayName == chibiSelected.Text).ChibiIndex));
+                UpdateTabTitle(false);
+                Application.Instance.Invoke(() => UpdatePreview());
+            };
+            
+            Button removeButton = new() { Text = "Remove Starting Chibis" };
+            removeButton.Click += (o, args) =>
+            {
+                _script.Event.StartingChibisSection = null;
+                parent.Content = GetStartingChibisAddButton(parent);
+                UpdateTabTitle(false);
+                Application.Instance.Invoke(() => UpdatePreview());
+            };
+
+            return new StackLayout()
+            {
+                Orientation = Orientation.Vertical,
+                Spacing = 5,
+                Items =
+                {
+                    new StackLayout
+                    {
+                        Orientation = Orientation.Horizontal,
+                        Spacing = 5,
+                        Items =
+                        {
+                            availableChibisBox, usedChibisBox,
+                        },
+                    },
+                    removeButton
+                },
+            };
+        }
+
+        private StackLayout GetStartingChibisAddButton(TabPage parent)
+        {
+            Button addButton = new() { Text = "Add Starting Chibis" };
+            addButton.Click += (o, args) =>
+            {
+                _script.Event.StartingChibisSection = new() { Name = "STARTINGCHIBIS" };
+                _script.Event.StartingChibisSection.Objects.Add(new()); // Blank chibi entry
+                parent.Content = GetStartingChibisLayout(parent);
+                UpdateTabTitle(false);
+                Application.Instance.Invoke(() => UpdatePreview());
+            };
+
+            return new StackLayout()
+            {
+                Orientation = Orientation.Horizontal,
+                Spacing = 5,
+                Items =
+                {
+                    addButton
+                }
+            };
         }
 
         private void CommandsPanel_SelectedItemChanged(object sender, EventArgs e)
@@ -636,362 +746,365 @@ namespace SerialLoops.Editors
             canvas.DrawColor(SKColors.Black);
 
             ScriptItemCommand currentCommand = ((ScriptCommandSectionEntry)_commandsPanel.Viewer.SelectedItem).Command;
-            List<ScriptItemCommand> commands = currentCommand.WalkCommandGraph(_commands, _script.Graph);
-
-            if (commands is null)
+            if (currentCommand is not null)
             {
-                _log.LogError($"Unable to render preview for command as commands list was null.");
-                return;
-            }
+                List<ScriptItemCommand> commands = currentCommand.WalkCommandGraph(_commands, _script.Graph);
 
-            // Draw top screen "kinetic" background
-            for (int i = commands.Count - 1; i >= 0; i--)
-            {
-                if (commands[i].Verb == EventFile.CommandVerb.KBG_DISP)
+                if (commands is null)
                 {
-                    canvas.DrawBitmap(((BgScriptParameter)commands[i].Parameters[0]).Background.GetBackground(), new SKPoint(0, 0));
-                    break;
+                    _log.LogError($"Unable to render preview for command as commands list was null.");
+                    return;
                 }
-            }
 
-            // Draw top screen chibis
-            List<ChibiItem> chibis = new();
-
-            foreach (StartingChibiEntry chibi in _script.Event.StartingChibisSection?.Objects ?? new List<StartingChibiEntry>())
-            {
-                if (chibi.ChibiIndex > 0)
+                // Draw top screen "kinetic" background
+                for (int i = commands.Count - 1; i >= 0; i--)
                 {
-                    chibis.Add((ChibiItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Chibi && ((ChibiItem)i).ChibiIndex == chibi.ChibiIndex));
-                }
-            }
-            for (int i = 0; i < commands.Count; i++)
-            {
-                if (commands[i].Verb == EventFile.CommandVerb.CHIBI_ENTEREXIT)
-                {
-                    if (((ChibiEnterExitScriptParameter)commands[i].Parameters[1]).Mode == ChibiEnterExitScriptParameter.ChibiEnterExitType.ENTER)
+                    if (commands[i].Verb == EventFile.CommandVerb.KBG_DISP)
                     {
-                        if (!chibis.Contains(((ChibiScriptParameter)commands[i].Parameters[0]).Chibi))
-                        {
-                            ChibiItem chibi = ((ChibiScriptParameter)commands[i].Parameters[0]).Chibi;
-                            if (!chibis.Contains(chibi))
-                            {
-                                chibis.Add(chibi);
-                            }
-                            else
-                            {
-                                _log.LogWarning($"Chibi {chibi.Name} set to join");
-                            }
-                        }
-                    }
-                    else
-                    {
-                        try
-                        {
-                            chibis.Remove(((ChibiScriptParameter)commands[i].Parameters[0]).Chibi);
-                        }
-                        catch (Exception)
-                        {
-                            _log.LogWarning($"Chibi set to leave was not present.");
-                        }
+                        canvas.DrawBitmap(((BgScriptParameter)commands[i].Parameters[0]).Background.GetBackground(), new SKPoint(0, 0));
+                        break;
                     }
                 }
-            }
 
-            int chibiStartX, chibiY;
-            if (commands.Any(c => c.Verb == EventFile.CommandVerb.OP_MODE))
-            {
-                chibiStartX = 100;
-                chibiY = 50;
-            }
-            else
-            {
-                chibiStartX = 44;
-                chibiY = 100;
-            }
-            int chibiCurrentX = chibiStartX;
-            int chibiWidth = 0;
-            foreach (ChibiItem chibi in chibis)
-            {
-                SKBitmap chibiFrame = chibi.ChibiAnimations.First().Value.ElementAt(0).Frame;
-                canvas.DrawBitmap(chibiFrame, new SKPoint(chibiCurrentX, chibiY));
-                chibiWidth = chibiFrame.Width - 10;
-                chibiCurrentX += chibiWidth;
-            }
+                // Draw top screen chibis
+                List<ChibiItem> chibis = new();
 
-            // Draw top screen chibi emotes
-            if (currentCommand.Verb == EventFile.CommandVerb.CHIBI_EMOTE)
-            {
-                ChibiItem chibi = ((ChibiScriptParameter)currentCommand.Parameters[0]).Chibi;
-                if (chibis.Contains(chibi))
+                foreach (StartingChibiEntry chibi in _script.Event.StartingChibisSection?.Objects ?? new List<StartingChibiEntry>())
                 {
-                    int chibiIndex = chibis.IndexOf(chibi);
-                    SKBitmap emotes = _project.Grp.Files.First(f => f.Name == "SYS_ADV_T08DNX").GetImage(width: 32, transparentIndex: 0);
-                    int internalYOffset = ((int)((ChibiEmoteScriptParameter)currentCommand.Parameters[1]).Emote - 1) * 32;
-                    int externalXOffset = chibiStartX + chibiWidth * chibiIndex;
-                    canvas.DrawBitmap(emotes, new SKRect(0, internalYOffset, 32, internalYOffset + 32), new SKRect(externalXOffset + 16, chibiY - 32, externalXOffset + 48, chibiY));
-                }
-                else
-                {
-                    _log.LogWarning($"Chibi {chibi.Name} not currently on screen; cannot display emote.");
-                }
-            }
-
-            // Draw background
-            bool bgReverted = false;
-            ScriptItemCommand bgPalCommand = commands.LastOrDefault(c => c.Verb == EventFile.CommandVerb.BG_PALEFFECT);
-            ScriptItemCommand lastBgCommand = commands.LastOrDefault(c => c.Verb == EventFile.CommandVerb.BG_DISP ||
-                c.Verb == EventFile.CommandVerb.BG_DISP2 || c.Verb == EventFile.CommandVerb.BG_DISPTEMP || c.Verb == EventFile.CommandVerb.BG_FADE ||
-                c.Verb == EventFile.CommandVerb.BG_REVERT);
-            SKPaint bgEffectPaint = PaletteEffectScriptParameter.IdentityPaint;
-            if (bgPalCommand is not null && lastBgCommand is not null && commands.IndexOf(bgPalCommand) > commands.IndexOf(lastBgCommand))
-            {
-                switch (((PaletteEffectScriptParameter)bgPalCommand.Parameters[0]).Effect)
-                {
-                    case PaletteEffectScriptParameter.PaletteEffect.INVERTED:
-                        bgEffectPaint = PaletteEffectScriptParameter.InvertedPaint;
-                        break;
-
-                    case PaletteEffectScriptParameter.PaletteEffect.GRAYSCALE:
-                        bgEffectPaint = PaletteEffectScriptParameter.GrayscalePaint;
-                        break;
-
-                    case PaletteEffectScriptParameter.PaletteEffect.SEPIA:
-                        bgEffectPaint = PaletteEffectScriptParameter.SepiaPaint;
-                        break;
-
-                    case PaletteEffectScriptParameter.PaletteEffect.DIMMED:
-                        bgEffectPaint = PaletteEffectScriptParameter.DimmedPaint;
-                        break;
-                }
-            }
-            for (int i = commands.Count - 1; i >= 0; i--)
-            {
-                if (commands[i].Verb == EventFile.CommandVerb.BG_REVERT)
-                {
-                    bgReverted = true;
-                    continue;
-                }
-                if (commands[i].Verb == EventFile.CommandVerb.BG_DISP || commands[i].Verb == EventFile.CommandVerb.BG_DISP2 ||
-                    (commands[i].Verb == EventFile.CommandVerb.BG_FADE && (((BgScriptParameter)commands[i].Parameters[1]).Background is not null)) ||
-                    (!bgReverted && (commands[i].Verb == EventFile.CommandVerb.BG_DISPTEMP || commands[i].Verb == EventFile.CommandVerb.BG_FADE)))
-                {
-                    BackgroundItem background = (commands[i].Verb == EventFile.CommandVerb.BG_FADE && ((BgScriptParameter)commands[i].Parameters[0]).Background is null) ?
-                        ((BgScriptParameter)commands[i].Parameters[1]).Background : ((BgScriptParameter)commands[i].Parameters[0]).Background;
-                    if (background is not null)
+                    if (chibi.ChibiIndex > 0)
                     {
-                        switch (background.BackgroundType)
+                        chibis.Add((ChibiItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Chibi && ((ChibiItem)i).ChibiIndex == chibi.ChibiIndex));
+                    }
+                }
+                for (int i = 0; i < commands.Count; i++)
+                {
+                    if (commands[i].Verb == EventFile.CommandVerb.CHIBI_ENTEREXIT)
+                    {
+                        if (((ChibiEnterExitScriptParameter)commands[i].Parameters[1]).Mode == ChibiEnterExitScriptParameter.ChibiEnterExitType.ENTER)
                         {
-                            case BgType.TEX_DUAL:
-                                canvas.DrawBitmap(background.GetBackground(), new SKPoint(0, 0), bgEffectPaint);
-                                break;
-
-                            case BgType.SINGLE_TEX:
-                                if (commands[i].Verb == EventFile.CommandVerb.BG_DISPTEMP && ((BoolScriptParameter)commands[i].Parameters[1]).Value)
+                            if (!chibis.Contains(((ChibiScriptParameter)commands[i].Parameters[0]).Chibi))
+                            {
+                                ChibiItem chibi = ((ChibiScriptParameter)commands[i].Parameters[0]).Chibi;
+                                if (!chibis.Contains(chibi))
                                 {
-                                    SKBitmap bgBitmap = background.GetBackground();
-                                    canvas.DrawBitmap(bgBitmap, new SKRect(0, bgBitmap.Height - 194, bgBitmap.Width, bgBitmap.Height),
-                                        new SKRect(0, 194, 256, 388), bgEffectPaint);
+                                    chibis.Add(chibi);
                                 }
                                 else
                                 {
-                                    canvas.DrawBitmap(background.GetBackground(), new SKPoint(0, 194), bgEffectPaint);
+                                    _log.LogWarning($"Chibi {chibi.Name} set to join");
                                 }
-                                break;
-
-                            default:
-                                canvas.DrawBitmap(background.GetBackground(), new SKPoint(0, 194), bgEffectPaint);
-                                break;
-                        }
-                        break;
-                    }
-                }
-            }
-
-            // Draw character sprites
-            Dictionary<Speaker, PositionedSprite> sprites = new();
-
-            ScriptItemCommand previousCommand = null;
-            foreach (ScriptItemCommand command in commands)
-            {
-                if (previousCommand?.Verb == EventFile.CommandVerb.DIALOGUE)
-                {
-                    SpriteExitScriptParameter spriteExitMoveParam = (SpriteExitScriptParameter)previousCommand?.Parameters[3]; // exits/moves happen _after_ dialogue is advanced, so we check these at this point
-                    if ((spriteExitMoveParam.ExitTransition) != SpriteExitScriptParameter.SpriteExitTransition.NO_EXIT)
-                    {
-                        Speaker prevSpeaker = ((DialogueScriptParameter)previousCommand.Parameters[0]).Line.Speaker;
-                        SpriteScriptParameter previousSpriteParam = (SpriteScriptParameter)previousCommand.Parameters[1];
-                        short layer = ((ShortScriptParameter)previousCommand.Parameters[9]).Value;
-                        switch (spriteExitMoveParam.ExitTransition)
-                        {
-                            case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_LEFT_TO_LEFT_FADE_OUT:
-                            case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_LEFT_TO_RIGHT_FADE_OUT:
-                            case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_FROM_CENTER_TO_LEFT_FADE_OUT:
-                            case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_FROM_CENTER_TO_RIGHT_FADE_OUT:
-                            case SpriteExitScriptParameter.SpriteExitTransition.FADE_OUT_CENTER:
-                            case SpriteExitScriptParameter.SpriteExitTransition.FADE_OUT_LEFT:
-                                sprites.Remove(prevSpeaker);
-                                break;
-
-                            case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_CENTER_TO_LEFT_AND_STAY:
-                            case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_RIGHT_TO_LEFT_AND_STAY:
-                                sprites[prevSpeaker] = new() { Sprite = previousSpriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.LEFT, Layer = layer } };
-                                break;
-
-                            case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_CENTER_TO_RIGHT_AND_STAY:
-                            case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_LEFT_TO_RIGHT_AND_STAY:
-                                sprites[prevSpeaker] = new() { Sprite = previousSpriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.RIGHT, Layer = layer } };
-                                break;
-                        }
-                    }
-                }
-                if (command.Verb == EventFile.CommandVerb.DIALOGUE)
-                {
-                    SpriteScriptParameter spriteParam = (SpriteScriptParameter)command.Parameters[1];
-                    if (spriteParam.Sprite is not null)
-                    {
-                        Speaker speaker = ((DialogueScriptParameter)command.Parameters[0]).Line.Speaker;
-                        SpriteEntranceScriptParameter spriteEntranceParam = (SpriteEntranceScriptParameter)command.Parameters[2];
-                        short layer = ((ShortScriptParameter)command.Parameters[9]).Value;
-
-                        if (!sprites.ContainsKey(speaker))
-                        {
-                            sprites.Add(speaker, new());
-                        }
-                        if (spriteEntranceParam.EntranceTransition != SpriteEntranceScriptParameter.SpriteEntranceTransition.NO_TRANSITION)
-                        {
-                            switch (spriteEntranceParam.EntranceTransition)
-                            {
-                                case SpriteEntranceScriptParameter.SpriteEntranceTransition.FADE_TO_CENTER:
-                                case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_CENTER:
-                                case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_CENTER:
-                                    sprites[speaker] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.CENTER, Layer = layer } };
-                                    break;
-
-                                case SpriteEntranceScriptParameter.SpriteEntranceTransition.FADE_IN_LEFT:
-                                case SpriteEntranceScriptParameter.SpriteEntranceTransition.PEEK_RIGHT_TO_LEFT:
-                                case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_LEFT:
-                                case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_LEFT_FAST:
-                                case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_LEFT_SLOW:
-                                    sprites[speaker] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.LEFT, Layer = layer } };
-                                    break;
-
-                                case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_RIGHT:
-                                case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_RIGHT_FAST:
-                                case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_RIGHT_SLOW:
-                                    sprites[speaker] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.RIGHT, Layer = layer } };
-                                    break;
                             }
                         }
                         else
                         {
-                            if (sprites[speaker].Positioning is null)
+                            try
                             {
-                                _log.LogWarning($"Sprite {sprites[speaker]} has null positioning data!");
+                                chibis.Remove(((ChibiScriptParameter)commands[i].Parameters[0]).Chibi);
                             }
-                            SpritePositioning.SpritePosition position = sprites[speaker].Positioning?.Position ?? SpritePositioning.SpritePosition.CENTER;
-
-                            sprites[speaker] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = position, Layer = layer } };
+                            catch (Exception)
+                            {
+                                _log.LogWarning($"Chibi set to leave was not present.");
+                            }
                         }
                     }
                 }
-                else if (command.Verb == EventFile.CommandVerb.INVEST_START)
+
+                int chibiStartX, chibiY;
+                if (commands.Any(c => c.Verb == EventFile.CommandVerb.OP_MODE))
                 {
-                    sprites.Clear();
+                    chibiStartX = 100;
+                    chibiY = 50;
                 }
-                previousCommand = command;
-            }
-
-            foreach (PositionedSprite sprite in sprites.Values.OrderBy(p => p.Positioning.Layer))
-            {
-                SKBitmap spriteBitmap = sprite.Sprite.GetClosedMouthAnimation(_project)[0].frame;
-                canvas.DrawBitmap(spriteBitmap, sprite.Positioning.GetSpritePosition(spriteBitmap));
-            }
-
-            // Draw dialogue
-            ScriptItemCommand lastDialogueCommand = commands.LastOrDefault(c => c.Verb == EventFile.CommandVerb.DIALOGUE);
-            if (commands.FindLastIndex(c => c.Verb == EventFile.CommandVerb.TOGGLE_DIALOGUE &&
-                !((BoolScriptParameter)c.Parameters[0]).Value) < commands.IndexOf(lastDialogueCommand))
-            {
-                DialogueLine line = ((DialogueScriptParameter)lastDialogueCommand.Parameters[0]).Line;
-                SKPaint currentDialoguePaint = line.Speaker switch
+                else
                 {
-                    Speaker.MONOLOGUE => DialogueScriptParameter.Paint01,
-                    Speaker.INFO => DialogueScriptParameter.Paint04,
-                    _ => DialogueScriptParameter.Paint00,
-                };
-                if (!string.IsNullOrEmpty(line.Text))
+                    chibiStartX = 44;
+                    chibiY = 100;
+                }
+                int chibiCurrentX = chibiStartX;
+                int chibiWidth = 0;
+                foreach (ChibiItem chibi in chibis)
                 {
-                    canvas.DrawBitmap(_project.DialogueBitmap, new SKRect(0, 24, 32, 36), new SKRect(0, 344, 256, 356));
-                    SKColor dialogueBoxColor = _project.DialogueBitmap.GetPixel(0, 28);
-                    canvas.DrawRect(0, 356, 224, 384, new() { Color = dialogueBoxColor });
-                    canvas.DrawBitmap(_project.DialogueBitmap, new SKRect(0, 37, 32, 64), new SKRect(224, 356, 256, 384));
-                    canvas.DrawBitmap(_project.SpeakerBitmap, new SKRect(0, 16 * ((int)line.Speaker - 1), 64, 16 * ((int)line.Speaker)),
-                        new SKRect(0, 332, 64, 348));
+                    SKBitmap chibiFrame = chibi.ChibiAnimations.First().Value.ElementAt(0).Frame;
+                    canvas.DrawBitmap(chibiFrame, new SKPoint(chibiCurrentX, chibiY));
+                    chibiWidth = chibiFrame.Width - 10;
+                    chibiCurrentX += chibiWidth;
+                }
 
-                    int currentX = 10;
-                    int currentY = 352;
-                    for (int i = 0; i < line.Text.Length; i++)
+                // Draw top screen chibi emotes
+                if (currentCommand.Verb == EventFile.CommandVerb.CHIBI_EMOTE)
+                {
+                    ChibiItem chibi = ((ChibiScriptParameter)currentCommand.Parameters[0]).Chibi;
+                    if (chibis.Contains(chibi))
                     {
-                        // handle newlines
-                        if (line.Text[i] == '\n')
-                        {
-                            currentX = 10;
-                            currentY += 14;
-                            continue;
-                        }
-                        // handle operators
-                        if (i < line.Text.Length - 2 && Regex.IsMatch(line.Text[i..(i + 2)], @"\$\d"))
-                        {
-                            if (i < line.Text.Length - 3 && Regex.IsMatch(line.Text[i..(i + 3)], @"\$\d{2}"))
-                            {
-                                i++;
-                            }
-                            i++;
-                            continue;
-                        }
-                        else if (i < line.Text.Length - 3 && Regex.IsMatch(line.Text[i..(i + 3)], @"#W\d"))
-                        {
-                            if (i < line.Text.Length - 4 && Regex.IsMatch(line.Text[i..(i + 4)], @"#W\d{2}"))
-                            {
-                                i++;
-                            }
-                            i += 2;
-                            continue;
-                        }
-                        else if (i < line.Text.Length - 4 && Regex.IsMatch(line.Text[i..(i + 4)], @"#P\d{2}"))
-                        {
-                            currentDialoguePaint = int.Parse(Regex.Match(line.Text[i..(i + 4)], @"#P(?<id>\d{2})").Groups["id"].Value) switch
-                            {
-                                1 => DialogueScriptParameter.Paint01,
-                                2 => DialogueScriptParameter.Paint02,
-                                3 => DialogueScriptParameter.Paint03,
-                                4 => DialogueScriptParameter.Paint04,
-                                5 => DialogueScriptParameter.Paint05,
-                                6 => DialogueScriptParameter.Paint06,
-                                7 => DialogueScriptParameter.Paint07,
-                                _ => DialogueScriptParameter.Paint00,
-                            };
-                            i += 3;
-                            continue;
-                        }
+                        int chibiIndex = chibis.IndexOf(chibi);
+                        SKBitmap emotes = _project.Grp.Files.First(f => f.Name == "SYS_ADV_T08DNX").GetImage(width: 32, transparentIndex: 0);
+                        int internalYOffset = ((int)((ChibiEmoteScriptParameter)currentCommand.Parameters[1]).Emote - 1) * 32;
+                        int externalXOffset = chibiStartX + chibiWidth * chibiIndex;
+                        canvas.DrawBitmap(emotes, new SKRect(0, internalYOffset, 32, internalYOffset + 32), new SKRect(externalXOffset + 16, chibiY - 32, externalXOffset + 48, chibiY));
+                    }
+                    else
+                    {
+                        _log.LogWarning($"Chibi {chibi.Name} not currently on screen; cannot display emote.");
+                    }
+                }
 
-                        if (line.Text[i] != '　') // if it's a space, we just skip drawing
+                // Draw background
+                bool bgReverted = false;
+                ScriptItemCommand bgPalCommand = commands.LastOrDefault(c => c.Verb == EventFile.CommandVerb.BG_PALEFFECT);
+                ScriptItemCommand lastBgCommand = commands.LastOrDefault(c => c.Verb == EventFile.CommandVerb.BG_DISP ||
+                    c.Verb == EventFile.CommandVerb.BG_DISP2 || c.Verb == EventFile.CommandVerb.BG_DISPTEMP || c.Verb == EventFile.CommandVerb.BG_FADE ||
+                    c.Verb == EventFile.CommandVerb.BG_REVERT);
+                SKPaint bgEffectPaint = PaletteEffectScriptParameter.IdentityPaint;
+                if (bgPalCommand is not null && lastBgCommand is not null && commands.IndexOf(bgPalCommand) > commands.IndexOf(lastBgCommand))
+                {
+                    switch (((PaletteEffectScriptParameter)bgPalCommand.Parameters[0]).Effect)
+                    {
+                        case PaletteEffectScriptParameter.PaletteEffect.INVERTED:
+                            bgEffectPaint = PaletteEffectScriptParameter.InvertedPaint;
+                            break;
+
+                        case PaletteEffectScriptParameter.PaletteEffect.GRAYSCALE:
+                            bgEffectPaint = PaletteEffectScriptParameter.GrayscalePaint;
+                            break;
+
+                        case PaletteEffectScriptParameter.PaletteEffect.SEPIA:
+                            bgEffectPaint = PaletteEffectScriptParameter.SepiaPaint;
+                            break;
+
+                        case PaletteEffectScriptParameter.PaletteEffect.DIMMED:
+                            bgEffectPaint = PaletteEffectScriptParameter.DimmedPaint;
+                            break;
+                    }
+                }
+                for (int i = commands.Count - 1; i >= 0; i--)
+                {
+                    if (commands[i].Verb == EventFile.CommandVerb.BG_REVERT)
+                    {
+                        bgReverted = true;
+                        continue;
+                    }
+                    if (commands[i].Verb == EventFile.CommandVerb.BG_DISP || commands[i].Verb == EventFile.CommandVerb.BG_DISP2 ||
+                        (commands[i].Verb == EventFile.CommandVerb.BG_FADE && (((BgScriptParameter)commands[i].Parameters[1]).Background is not null)) ||
+                        (!bgReverted && (commands[i].Verb == EventFile.CommandVerb.BG_DISPTEMP || commands[i].Verb == EventFile.CommandVerb.BG_FADE)))
+                    {
+                        BackgroundItem background = (commands[i].Verb == EventFile.CommandVerb.BG_FADE && ((BgScriptParameter)commands[i].Parameters[0]).Background is null) ?
+                            ((BgScriptParameter)commands[i].Parameters[1]).Background : ((BgScriptParameter)commands[i].Parameters[0]).Background;
+                        if (background is not null)
                         {
-                            int charIndex = _project.FontMap.CharMap.IndexOf(line.Text[i]);
-                            if ((charIndex + 1) * 16 <= _project.FontBitmap.Height)
+                            switch (background.BackgroundType)
                             {
-                                canvas.DrawBitmap(_project.FontBitmap, new SKRect(0, charIndex * 16, 16, (charIndex + 1) * 16),
-                                    new SKRect(currentX, currentY, currentX + 16, currentY + 16), currentDialoguePaint);
+                                case BgType.TEX_DUAL:
+                                    canvas.DrawBitmap(background.GetBackground(), new SKPoint(0, 0), bgEffectPaint);
+                                    break;
+
+                                case BgType.SINGLE_TEX:
+                                    if (commands[i].Verb == EventFile.CommandVerb.BG_DISPTEMP && ((BoolScriptParameter)commands[i].Parameters[1]).Value)
+                                    {
+                                        SKBitmap bgBitmap = background.GetBackground();
+                                        canvas.DrawBitmap(bgBitmap, new SKRect(0, bgBitmap.Height - 194, bgBitmap.Width, bgBitmap.Height),
+                                            new SKRect(0, 194, 256, 388), bgEffectPaint);
+                                    }
+                                    else
+                                    {
+                                        canvas.DrawBitmap(background.GetBackground(), new SKPoint(0, 194), bgEffectPaint);
+                                    }
+                                    break;
+
+                                default:
+                                    canvas.DrawBitmap(background.GetBackground(), new SKPoint(0, 194), bgEffectPaint);
+                                    break;
+                            }
+                            break;
+                        }
+                    }
+                }
+
+                // Draw character sprites
+                Dictionary<Speaker, PositionedSprite> sprites = new();
+
+                ScriptItemCommand previousCommand = null;
+                foreach (ScriptItemCommand command in commands)
+                {
+                    if (previousCommand?.Verb == EventFile.CommandVerb.DIALOGUE)
+                    {
+                        SpriteExitScriptParameter spriteExitMoveParam = (SpriteExitScriptParameter)previousCommand?.Parameters[3]; // exits/moves happen _after_ dialogue is advanced, so we check these at this point
+                        if ((spriteExitMoveParam.ExitTransition) != SpriteExitScriptParameter.SpriteExitTransition.NO_EXIT)
+                        {
+                            Speaker prevSpeaker = ((DialogueScriptParameter)previousCommand.Parameters[0]).Line.Speaker;
+                            SpriteScriptParameter previousSpriteParam = (SpriteScriptParameter)previousCommand.Parameters[1];
+                            short layer = ((ShortScriptParameter)previousCommand.Parameters[9]).Value;
+                            switch (spriteExitMoveParam.ExitTransition)
+                            {
+                                case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_LEFT_TO_LEFT_FADE_OUT:
+                                case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_LEFT_TO_RIGHT_FADE_OUT:
+                                case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_FROM_CENTER_TO_LEFT_FADE_OUT:
+                                case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_FROM_CENTER_TO_RIGHT_FADE_OUT:
+                                case SpriteExitScriptParameter.SpriteExitTransition.FADE_OUT_CENTER:
+                                case SpriteExitScriptParameter.SpriteExitTransition.FADE_OUT_LEFT:
+                                    sprites.Remove(prevSpeaker);
+                                    break;
+
+                                case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_CENTER_TO_LEFT_AND_STAY:
+                                case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_RIGHT_TO_LEFT_AND_STAY:
+                                    sprites[prevSpeaker] = new() { Sprite = previousSpriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.LEFT, Layer = layer } };
+                                    break;
+
+                                case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_CENTER_TO_RIGHT_AND_STAY:
+                                case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_LEFT_TO_RIGHT_AND_STAY:
+                                    sprites[prevSpeaker] = new() { Sprite = previousSpriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.RIGHT, Layer = layer } };
+                                    break;
                             }
                         }
-                        FontReplacement replacement = _project.FontReplacement.ReverseLookup(line.Text[i]);
-                        if (replacement is not null && _project.LangCode != "ja")
+                    }
+                    if (command.Verb == EventFile.CommandVerb.DIALOGUE)
+                    {
+                        SpriteScriptParameter spriteParam = (SpriteScriptParameter)command.Parameters[1];
+                        if (spriteParam.Sprite is not null)
                         {
-                            currentX += replacement.Offset;
+                            Speaker speaker = ((DialogueScriptParameter)command.Parameters[0]).Line.Speaker;
+                            SpriteEntranceScriptParameter spriteEntranceParam = (SpriteEntranceScriptParameter)command.Parameters[2];
+                            short layer = ((ShortScriptParameter)command.Parameters[9]).Value;
+
+                            if (!sprites.ContainsKey(speaker))
+                            {
+                                sprites.Add(speaker, new());
+                            }
+                            if (spriteEntranceParam.EntranceTransition != SpriteEntranceScriptParameter.SpriteEntranceTransition.NO_TRANSITION)
+                            {
+                                switch (spriteEntranceParam.EntranceTransition)
+                                {
+                                    case SpriteEntranceScriptParameter.SpriteEntranceTransition.FADE_TO_CENTER:
+                                    case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_CENTER:
+                                    case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_CENTER:
+                                        sprites[speaker] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.CENTER, Layer = layer } };
+                                        break;
+
+                                    case SpriteEntranceScriptParameter.SpriteEntranceTransition.FADE_IN_LEFT:
+                                    case SpriteEntranceScriptParameter.SpriteEntranceTransition.PEEK_RIGHT_TO_LEFT:
+                                    case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_LEFT:
+                                    case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_LEFT_FAST:
+                                    case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_LEFT_SLOW:
+                                        sprites[speaker] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.LEFT, Layer = layer } };
+                                        break;
+
+                                    case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_RIGHT:
+                                    case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_RIGHT_FAST:
+                                    case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_RIGHT_SLOW:
+                                        sprites[speaker] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.RIGHT, Layer = layer } };
+                                        break;
+                                }
+                            }
+                            else
+                            {
+                                if (sprites[speaker].Positioning is null)
+                                {
+                                    _log.LogWarning($"Sprite {sprites[speaker]} has null positioning data!");
+                                }
+                                SpritePositioning.SpritePosition position = sprites[speaker].Positioning?.Position ?? SpritePositioning.SpritePosition.CENTER;
+
+                                sprites[speaker] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = position, Layer = layer } };
+                            }
                         }
-                        else
+                    }
+                    else if (command.Verb == EventFile.CommandVerb.INVEST_START)
+                    {
+                        sprites.Clear();
+                    }
+                    previousCommand = command;
+                }
+
+                foreach (PositionedSprite sprite in sprites.Values.OrderBy(p => p.Positioning.Layer))
+                {
+                    SKBitmap spriteBitmap = sprite.Sprite.GetClosedMouthAnimation(_project)[0].frame;
+                    canvas.DrawBitmap(spriteBitmap, sprite.Positioning.GetSpritePosition(spriteBitmap));
+                }
+
+                // Draw dialogue
+                ScriptItemCommand lastDialogueCommand = commands.LastOrDefault(c => c.Verb == EventFile.CommandVerb.DIALOGUE);
+                if (commands.FindLastIndex(c => c.Verb == EventFile.CommandVerb.TOGGLE_DIALOGUE &&
+                    !((BoolScriptParameter)c.Parameters[0]).Value) < commands.IndexOf(lastDialogueCommand))
+                {
+                    DialogueLine line = ((DialogueScriptParameter)lastDialogueCommand.Parameters[0]).Line;
+                    SKPaint currentDialoguePaint = line.Speaker switch
+                    {
+                        Speaker.MONOLOGUE => DialogueScriptParameter.Paint01,
+                        Speaker.INFO => DialogueScriptParameter.Paint04,
+                        _ => DialogueScriptParameter.Paint00,
+                    };
+                    if (!string.IsNullOrEmpty(line.Text))
+                    {
+                        canvas.DrawBitmap(_project.DialogueBitmap, new SKRect(0, 24, 32, 36), new SKRect(0, 344, 256, 356));
+                        SKColor dialogueBoxColor = _project.DialogueBitmap.GetPixel(0, 28);
+                        canvas.DrawRect(0, 356, 224, 384, new() { Color = dialogueBoxColor });
+                        canvas.DrawBitmap(_project.DialogueBitmap, new SKRect(0, 37, 32, 64), new SKRect(224, 356, 256, 384));
+                        canvas.DrawBitmap(_project.SpeakerBitmap, new SKRect(0, 16 * ((int)line.Speaker - 1), 64, 16 * ((int)line.Speaker)),
+                            new SKRect(0, 332, 64, 348));
+
+                        int currentX = 10;
+                        int currentY = 352;
+                        for (int i = 0; i < line.Text.Length; i++)
                         {
-                            currentX += 14;
+                            // handle newlines
+                            if (line.Text[i] == '\n')
+                            {
+                                currentX = 10;
+                                currentY += 14;
+                                continue;
+                            }
+                            // handle operators
+                            if (i < line.Text.Length - 2 && Regex.IsMatch(line.Text[i..(i + 2)], @"\$\d"))
+                            {
+                                if (i < line.Text.Length - 3 && Regex.IsMatch(line.Text[i..(i + 3)], @"\$\d{2}"))
+                                {
+                                    i++;
+                                }
+                                i++;
+                                continue;
+                            }
+                            else if (i < line.Text.Length - 3 && Regex.IsMatch(line.Text[i..(i + 3)], @"#W\d"))
+                            {
+                                if (i < line.Text.Length - 4 && Regex.IsMatch(line.Text[i..(i + 4)], @"#W\d{2}"))
+                                {
+                                    i++;
+                                }
+                                i += 2;
+                                continue;
+                            }
+                            else if (i < line.Text.Length - 4 && Regex.IsMatch(line.Text[i..(i + 4)], @"#P\d{2}"))
+                            {
+                                currentDialoguePaint = int.Parse(Regex.Match(line.Text[i..(i + 4)], @"#P(?<id>\d{2})").Groups["id"].Value) switch
+                                {
+                                    1 => DialogueScriptParameter.Paint01,
+                                    2 => DialogueScriptParameter.Paint02,
+                                    3 => DialogueScriptParameter.Paint03,
+                                    4 => DialogueScriptParameter.Paint04,
+                                    5 => DialogueScriptParameter.Paint05,
+                                    6 => DialogueScriptParameter.Paint06,
+                                    7 => DialogueScriptParameter.Paint07,
+                                    _ => DialogueScriptParameter.Paint00,
+                                };
+                                i += 3;
+                                continue;
+                            }
+
+                            if (line.Text[i] != '　') // if it's a space, we just skip drawing
+                            {
+                                int charIndex = _project.FontMap.CharMap.IndexOf(line.Text[i]);
+                                if ((charIndex + 1) * 16 <= _project.FontBitmap.Height)
+                                {
+                                    canvas.DrawBitmap(_project.FontBitmap, new SKRect(0, charIndex * 16, 16, (charIndex + 1) * 16),
+                                        new SKRect(currentX, currentY, currentX + 16, currentY + 16), currentDialoguePaint);
+                                }
+                            }
+                            FontReplacement replacement = _project.FontReplacement.ReverseLookup(line.Text[i]);
+                            if (replacement is not null && _project.LangCode != "ja")
+                            {
+                                currentX += replacement.Offset;
+                            }
+                            else
+                            {
+                                currentX += 14;
+                            }
                         }
                     }
                 }
