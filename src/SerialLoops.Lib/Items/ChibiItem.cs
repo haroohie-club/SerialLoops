@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace SerialLoops.Lib.Items
 {
-    public class ChibiItem : Item
+    public class ChibiItem : Item, IPreviewableGraphic
     {
         public Chibi Chibi { get; set; }
         public int ChibiIndex { get; set; }
@@ -58,6 +58,11 @@ namespace SerialLoops.Lib.Items
                 .Where(t => t.c.Parameters[0] == ChibiIndex).ToList();
 
             ScriptUses = list.ToArray();
+        }
+
+        SKBitmap IPreviewableGraphic.GetPreview(Project project)
+        {
+            return ChibiAnimations.First().Value.First().Frame;
         }
     }
 

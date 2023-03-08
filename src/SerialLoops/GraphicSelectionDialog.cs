@@ -95,7 +95,7 @@ namespace SerialLoops
                                     _filter,
                                     _selector
                                 }
-                            }, 
+                            },
                             _preview
                         }
                     }),
@@ -141,7 +141,7 @@ namespace SerialLoops
                 {
                     new Label { Text = _selector.SelectedValue == null ? "No preview available" : ((ItemDescription)_selector.SelectedValue).Name },
                     new SKGuiImage(_selector.SelectedValue == null ? new SKBitmap(64, 64) : 
-                        ((IPreviewableGraphic) _selector.SelectedValue).GetPreview(_project, 250, 400)),
+                        ((IPreviewableGraphic) _selector.SelectedValue).GetPreview(_project, 250, 350)),
                     backgroundTypeLabel,
                 }
             };

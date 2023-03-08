@@ -305,102 +305,22 @@ namespace SerialLoops.Editors
                     continue;
                 }
 
-                ChibiItem chibi = (ChibiItem)_project.Items.Where(i => i.Type == ItemDescription.ItemType.Chibi).ElementAt(_script.Event.MapCharactersSection.Objects[i].CharacterIndex - 1);
-                SKBitmap chibiBitmap = chibi.ChibiAnimations.ElementAt(_script.Event.MapCharactersSection.Objects[i].FacingDirection).Value.ElementAt(0).Frame;
-                Icon chibiIcon = new SKGuiImage(chibiBitmap).WithSize(chibiBitmap.Width / 2, chibiBitmap.Height / 2);
-                ChibiStackLayout chibiLayout = new()
-                {
-                    Items =
-                    {
-                        chibiIcon
-                    },
-                    ChibiIndex = i,
-                    ChibiBitmap = new(chibiBitmap.Width, chibiBitmap.Height),
-                };
-                chibiLayout.MouseEnter += (o, args) =>
-                {
-                    chibiLayout.BackgroundColor = Color.FromArgb(170, 170, 200, 128);
-                };
-                chibiLayout.MouseLeave += (o, args) =>
-                {
-                    chibiLayout.BackgroundColor = Colors.Transparent;
-                };
-                chibiLayout.MouseMove += (o, args) =>
-                {
-                    if (args.Buttons != MouseButtons.Primary)
-                    {
-                        return;
-                    }
-
-                    DataObject chibiData = new();
-                    chibiData.SetObject(chibi, nameof(ChibiItem));
-                    chibiLayout.DoDragDrop(chibiData, DragEffects.Move, chibiIcon, new(8, 16));
-                };
-                chibiLayout.MouseDown += (o, args) =>
-                {
-                    mapDetailsLayout.Items.Clear();
-                    DropDown chibisSelectorDropDown = new();
-                    chibisSelectorDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Chibi).Select(c => new ListItem { Key = c.Name, Text = c.Name }));
-                    chibisSelectorDropDown.SelectedKey = chibi.Name;
-                    DropDown facingDirectionDropDown = new()
-                    {
-                        Items =
-                        {
-                            "Down Left",
-                            "Down Right",
-                            "Up Left",
-                            "Up Right",
-                        },
-                        SelectedIndex = _script.Event.MapCharactersSection.Objects[chibiLayout.ChibiIndex].FacingDirection
-                    };
-                    
-                    void chibiEventHandler(object o, EventArgs args)
-                    {
-                        ChibiItem newChibi = (ChibiItem)_project.Items.First(i => i.Name == chibisSelectorDropDown.SelectedKey);
-                        if (newChibi.ChibiAnimations.Count <= facingDirectionDropDown.SelectedIndex)
-                        {
-                            facingDirectionDropDown.SelectedIndex = 0;
-                        }
-                        SKBitmap newChibiBitmap = newChibi.ChibiAnimations.ElementAt(facingDirectionDropDown.SelectedIndex).Value.ElementAt(0).Frame;
-                        Icon newChibiIcon = new SKGuiImage(newChibiBitmap).WithSize(newChibiBitmap.Width / 2, newChibiBitmap.Height / 2);
-                        chibiLayout.Items.Clear();
-                        chibiLayout.Items.Add(newChibiIcon);
-                        _script.Event.MapCharactersSection.Objects[chibiLayout.ChibiIndex].CharacterIndex = chibisSelectorDropDown.SelectedIndex + 1;
-                        _script.Event.MapCharactersSection.Objects[chibiLayout.ChibiIndex].FacingDirection = (short)facingDirectionDropDown.SelectedIndex;
-                        UpdateTabTitle(false);
-                    }
-
-                    chibisSelectorDropDown.SelectedKeyChanged += chibiEventHandler;
-                    facingDirectionDropDown.SelectedIndexChanged += chibiEventHandler;
-
-                    DropDown talkScriptBlockDropDown = new();
-                    talkScriptBlockDropDown.Items.AddRange(_script.Event.LabelsSection.Objects.Select(l => new ListItem { Key = l.Id.ToString(), Text = l.Name }));
-                    talkScriptBlockDropDown.SelectedKey = _script.Event.MapCharactersSection.Objects[chibiLayout.ChibiIndex].TalkScriptBlock.ToString();
-                    talkScriptBlockDropDown.SelectedKeyChanged += (o, args) =>
-                    {
-                        _script.Event.MapCharactersSection.Objects[chibiLayout.ChibiIndex].TalkScriptBlock = short.Parse(talkScriptBlockDropDown.SelectedKey);
-                        UpdateTabTitle(false);
-                    };
-
-                    Button removeButton = new() { Text = "Remove Chibi" };
-                    removeButton.Click += (o, args) =>
-                    {
-                        _script.Event.MapCharactersSection.Objects.RemoveAt(chibiLayout.ChibiIndex);
-                        UpdateTabTitle(false);
-                        chibiLayout.Detach();
-                    };
-
-                    mapDetailsLayout.Items.Add(chibisSelectorDropDown);
-                    mapDetailsLayout.Items.Add(facingDirectionDropDown);
-                    mapDetailsLayout.Items.Add(talkScriptBlockDropDown);
-                    mapDetailsLayout.Items.Add(removeButton);
-                };
-
-                SKPoint skOrigin = maps[0].GetOrigin(_project.Grp);
-                mapLayout.Add(chibiLayout,
-                    ((int)skOrigin.X - _script.Event.MapCharactersSection.Objects[i].Y * 16 + _script.Event.MapCharactersSection.Objects[i].X * 16 - chibiBitmap.Width / 2) / 2, 
-                    ((int)skOrigin.Y + _script.Event.MapCharactersSection.Objects[i].X * 8 + _script.Event.MapCharactersSection.Objects[i].Y * 8 - chibiBitmap.Height / 2 - 24) / 2);
+                mapLayout.Add(GetChibiStackLayout((ChibiItem)_project.Items.Where(i => i.Type == ItemDescription.ItemType.Chibi).ElementAt(_script.Event.MapCharactersSection.Objects[i].CharacterIndex - 1), i, mapDetailsLayout, mapLayout, out SKBitmap chibiBitmap),
+                    ((int)gridZero.X - _script.Event.MapCharactersSection.Objects[i].Y * 16 + _script.Event.MapCharactersSection.Objects[i].X * 16 - chibiBitmap.Width / 2) / 2,
+                    ((int)gridZero.Y + _script.Event.MapCharactersSection.Objects[i].X * 8 + _script.Event.MapCharactersSection.Objects[i].Y * 8 - chibiBitmap.Height / 2 - 24) / 2);
             }
+
+            GraphicSelectionButton addCharacterButton = new("Add Character", _log);
+            addCharacterButton.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Chibi).Cast<ChibiItem>());
+            addCharacterButton.SelectedChanged.Executed += (obj, args) =>
+            {
+                int index = _script.Event.MapCharactersSection.Objects.Count - 1;
+                _script.Event.MapCharactersSection.Objects.Insert(index, new() { CharacterIndex = addCharacterButton.SelectedIndex + 1 });
+                mapLayout.Add(GetChibiStackLayout((ChibiItem)_project.Items.Where(i => i.Type == ItemDescription.ItemType.Chibi).ElementAt(_script.Event.MapCharactersSection.Objects[index].CharacterIndex - 1), index, mapDetailsLayout, mapLayout, out SKBitmap chibiBitmap),
+                    ((int)gridZero.X - _script.Event.MapCharactersSection.Objects[index].Y * 16 + _script.Event.MapCharactersSection.Objects[index].X * 16 - chibiBitmap.Width / 2) / 2,
+                    ((int)gridZero.Y + _script.Event.MapCharactersSection.Objects[index].X * 8 + _script.Event.MapCharactersSection.Objects[index].Y * 8 - chibiBitmap.Height / 2 - 24) / 2);
+                UpdateTabTitle(false);
+            };
 
             return new StackLayout
             {
@@ -408,7 +328,16 @@ namespace SerialLoops.Editors
                 Spacing = 5,
                 Items =
                 {
-                    mapsDropdown,
+                    new StackLayout
+                    {
+                        Orientation = Orientation.Horizontal,
+                        Spacing = 5,
+                        Items =
+                        {
+                            mapsDropdown,
+                            refreshMapListButton,
+                        },
+                    },
                     mapAndDetailsLayout,
                     new StackLayout
                     {
@@ -416,12 +345,114 @@ namespace SerialLoops.Editors
                         Spacing = 5,
                         Items =
                         {
-                            refreshMapListButton,
+                            addCharacterButton,
                             removeButton,
                         }
                     }
                 },
             };
+        }
+
+        private ChibiStackLayout GetChibiStackLayout(ChibiItem chibi, int index, StackLayout mapDetailsLayout, PixelLayout mapLayout, out SKBitmap chibiBitmap)
+        {
+            chibiBitmap = chibi.ChibiAnimations.ElementAt(_script.Event.MapCharactersSection.Objects[index].FacingDirection).Value.ElementAt(0).Frame;
+            Icon chibiIcon = new SKGuiImage(chibiBitmap).WithSize(chibiBitmap.Width / 2, chibiBitmap.Height / 2);
+            ChibiStackLayout chibiLayout = new()
+            {
+                Items =
+                    {
+                        chibiIcon
+                    },
+                ChibiIndex = index,
+                ChibiBitmap = new(chibiBitmap.Width, chibiBitmap.Height),
+            };
+            chibiLayout.MouseEnter += (o, args) =>
+            {
+                chibiLayout.BackgroundColor = Color.FromArgb(170, 170, 200, 128);
+            };
+            chibiLayout.MouseLeave += (o, args) =>
+            {
+                chibiLayout.BackgroundColor = Colors.Transparent;
+            };
+            chibiLayout.MouseMove += (o, args) =>
+            {
+                if (args.Buttons != MouseButtons.Primary)
+                {
+                    return;
+                }
+
+                DataObject chibiData = new();
+                chibiData.SetObject(chibi, nameof(ChibiItem));
+                chibiLayout.DoDragDrop(chibiData, DragEffects.Move, chibiIcon, new(8, 16));
+            };
+            chibiLayout.MouseDown += (o, args) =>
+            {
+                mapDetailsLayout.Items.Clear();
+                DropDown chibisSelectorDropDown = new();
+                chibisSelectorDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Chibi).Select(c => new ListItem { Key = c.Name, Text = c.Name }));
+                chibisSelectorDropDown.SelectedKey = chibi.Name;
+                DropDown facingDirectionDropDown = new()
+                {
+                    Items =
+                    {
+                        "Down Left",
+                        "Down Right",
+                        "Up Left",
+                        "Up Right",
+                    },
+                    SelectedIndex = _script.Event.MapCharactersSection.Objects[chibiLayout.ChibiIndex].FacingDirection
+                };
+
+                void chibiEventHandler(object o, EventArgs args)
+                {
+                    ChibiItem newChibi = (ChibiItem)_project.Items.First(i => i.Name == chibisSelectorDropDown.SelectedKey);
+                    if (newChibi.ChibiAnimations.Count <= facingDirectionDropDown.SelectedIndex)
+                    {
+                        facingDirectionDropDown.SelectedIndex = 0;
+                    }
+                    SKBitmap newChibiBitmap = newChibi.ChibiAnimations.ElementAt(facingDirectionDropDown.SelectedIndex).Value.ElementAt(0).Frame;
+                    Icon newChibiIcon = new SKGuiImage(newChibiBitmap).WithSize(newChibiBitmap.Width / 2, newChibiBitmap.Height / 2);
+                    chibiLayout.Items.Clear();
+                    chibiLayout.Items.Add(newChibiIcon);
+                    _script.Event.MapCharactersSection.Objects[chibiLayout.ChibiIndex].CharacterIndex = chibisSelectorDropDown.SelectedIndex + 1;
+                    _script.Event.MapCharactersSection.Objects[chibiLayout.ChibiIndex].FacingDirection = (short)facingDirectionDropDown.SelectedIndex;
+                    UpdateTabTitle(false);
+                }
+
+                chibisSelectorDropDown.SelectedKeyChanged += chibiEventHandler;
+                facingDirectionDropDown.SelectedIndexChanged += chibiEventHandler;
+
+                DropDown talkScriptBlockDropDown = new();
+                talkScriptBlockDropDown.Items.AddRange(_script.Event.LabelsSection.Objects.Select(l => new ListItem { Key = l.Id.ToString(), Text = l.Name }));
+                talkScriptBlockDropDown.SelectedKey = _script.Event.MapCharactersSection.Objects[chibiLayout.ChibiIndex].TalkScriptBlock.ToString();
+                talkScriptBlockDropDown.SelectedKeyChanged += (o, args) =>
+                {
+                    _script.Event.MapCharactersSection.Objects[chibiLayout.ChibiIndex].TalkScriptBlock = short.Parse(talkScriptBlockDropDown.SelectedKey);
+                    UpdateTabTitle(false);
+                };
+
+                Button removeButton = new() { Text = "Remove Chibi" };
+                removeButton.Click += (o, args) =>
+                {
+                    _script.Event.MapCharactersSection.Objects.RemoveAt(chibiLayout.ChibiIndex);
+                    foreach (ChibiStackLayout otherChibiLayout in mapLayout.Controls.Where(c => c.GetType() == typeof(ChibiStackLayout)).Cast<ChibiStackLayout>())
+                    {
+                        if (otherChibiLayout.ChibiIndex > chibiLayout.ChibiIndex)
+                        {
+                            otherChibiLayout.ChibiIndex--;
+                        }
+                    }
+                    UpdateTabTitle(false);
+                    chibiLayout.Detach();
+                };
+
+                mapDetailsLayout.Items.Add(chibisSelectorDropDown);
+                mapDetailsLayout.Items.Add(facingDirectionDropDown);
+                mapDetailsLayout.Items.Add(talkScriptBlockDropDown);
+                mapDetailsLayout.Items.Add(removeButton);
+            };
+
+            return chibiLayout;
         }
 
         private StackLayout GetAddMapCharactersButton(TabPage parent)
