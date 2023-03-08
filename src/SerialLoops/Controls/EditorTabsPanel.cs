@@ -80,7 +80,7 @@ namespace SerialLoops.Controls
                 case ItemDescription.ItemType.Group_Selection:
                     return new GroupSelectionEditor((GroupSelectionItem)project.Items.First(i => i.Name == item.Name), log, project, this);
                 case ItemDescription.ItemType.Map:
-                    return new MapEditor((MapItem)project.Items.First(i => i.Name == item.Name), log);
+                    return new MapEditor((MapItem)project.Items.First(i => i.Name == item.Name), project, log);
                 case ItemDescription.ItemType.Puzzle:
                     return new PuzzleEditor((PuzzleItem)project.Items.First(i => i.Name == item.Name), project, this, log);
                 case ItemDescription.ItemType.Scenario:

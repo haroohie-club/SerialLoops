@@ -14,10 +14,12 @@ using SerialLoops.Utility;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using static HaruhiChokuretsuLib.Archive.Data.QMapFile;
 
 namespace SerialLoops.Editors
 {
@@ -109,7 +111,18 @@ namespace SerialLoops.Editors
                 startingChibisPage.Content = GetStartingChibisAddButton(startingChibisPage);
             }
 
+            TabPage mapCharactersPage = new() { Text = "Map Characters" };
+            if (_script.Event.MapCharactersSection is not null)
+            {
+                mapCharactersPage.Content = GetMapCharactersLayout(mapCharactersPage);
+            }
+            else
+            {
+                mapCharactersPage.Content = GetAddMapCharactersButton(mapCharactersPage);
+            }
+
             propertiesTabs.Pages.Add(startingChibisPage);
+            propertiesTabs.Pages.Add(mapCharactersPage);
 
             return propertiesTabs;
         }
@@ -154,7 +167,7 @@ namespace SerialLoops.Editors
                 Application.Instance.Invoke(() => UpdatePreview());
             };
 
-            return new StackLayout()
+            return new StackLayout
             {
                 Orientation = Orientation.Vertical,
                 Spacing = 5,
@@ -186,7 +199,274 @@ namespace SerialLoops.Editors
                 Application.Instance.Invoke(() => UpdatePreview());
             };
 
-            return new StackLayout()
+            return new StackLayout
+            {
+                Orientation = Orientation.Horizontal,
+                Spacing = 5,
+                Items =
+                {
+                    addButton
+                }
+            };
+        }
+
+        private StackLayout GetMapCharactersLayout(TabPage parent)
+        {
+            MapItem[] maps = _commands.Values.SelectMany(c => c).Where(c => c.Verb == EventFile.CommandVerb.LOAD_ISOMAP)
+                .Select(c => ((MapScriptParameter)c.Parameters[0]).Map).ToArray();
+
+            Button refreshMapListButton = new() { Text = "Refresh Maps List" };
+            refreshMapListButton.Click += (o, args) =>
+            {
+                parent.Content = GetMapCharactersLayout(parent);
+            };
+
+            Button removeButton = new() { Text = "Remove Map Characters", AllowDrop = true };
+            removeButton.Click += (o, args) =>
+            {
+                _script.Event.MapCharactersSection = null;
+                parent.Content = GetAddMapCharactersButton(parent);
+                UpdateTabTitle(false);
+                Application.Instance.Invoke(() => UpdatePreview());
+            };
+
+            if (maps.Length == 0)
+            {
+                return new StackLayout
+                {
+                    Orientation = Orientation.Vertical,
+                    Spacing = 5,
+                    Items =
+                    {
+                        "No valid maps found.",
+                        refreshMapListButton,
+                        removeButton,
+                    }
+                };
+            }
+
+            DropDown mapsDropdown = new();
+            mapsDropdown.Items.AddRange(maps.Select(m => new ListItem { Key = m.Name, Text = m.Name }));
+            mapsDropdown.SelectedIndex = 0;
+
+            PixelLayout mapLayout = new() { AllowDrop = true };
+            SKBitmap mapBitmap = maps[0].GetMapImage(_project.Grp, false);
+            Icon mapImage = new SKGuiImage(mapBitmap).WithSize(mapBitmap.Width / 2, mapBitmap.Height / 2);
+            mapLayout.Add(mapImage, 0, 0);
+
+            SKPoint gridZero = maps[0].GetOrigin(_project.Grp);
+            Dictionary<PointF,Point> grid = new();
+            for (int y = 0; y < maps[0].Map.PathingMap.Length; y++)
+            {
+                for (int x = 0; x < maps[0].Map.PathingMap[y].Length; x++)
+                {
+                    grid.Add(new((gridZero.X - y * 16 + x * 16) / 2, (gridZero.Y + y * 8 + x * 8) / 2), new Point(x, y));
+                }
+            }
+
+            mapLayout.DragOver += (obj, args) =>
+            {
+                args.Effects = DragEffects.Move;
+            };
+            mapLayout.DragDrop += (obj, args) =>
+            {
+                ChibiStackLayout sourceChibiLayout = (ChibiStackLayout)args.Source;
+                PointF newLocation = grid.Keys.MinBy(p => p.Distance(args.Location));
+                (_script.Event.MapCharactersSection.Objects[sourceChibiLayout.ChibiIndex].X, _script.Event.MapCharactersSection.Objects[sourceChibiLayout.ChibiIndex].Y)
+                    = ((short)grid[newLocation].X, (short)grid[newLocation].Y);
+                mapLayout.Remove(sourceChibiLayout);
+                mapLayout.Add(sourceChibiLayout,
+                    ((int)gridZero.X - _script.Event.MapCharactersSection.Objects[sourceChibiLayout.ChibiIndex].Y * 16 + _script.Event.MapCharactersSection.Objects[sourceChibiLayout.ChibiIndex].X * 16 - sourceChibiLayout.ChibiBitmap.Width / 2) / 2,
+                    ((int)gridZero.Y + _script.Event.MapCharactersSection.Objects[sourceChibiLayout.ChibiIndex].X * 8 + _script.Event.MapCharactersSection.Objects[sourceChibiLayout.ChibiIndex].Y * 8 - sourceChibiLayout.ChibiBitmap.Height / 2 - 24) / 2);
+                UpdateTabTitle(false);
+            };
+
+            StackLayout mapDetailsLayout = new()
+            {
+                Orientation = Orientation.Vertical,
+                Spacing = 5,
+            };
+
+            StackLayout mapAndDetailsLayout = new()
+            {
+                Orientation = Orientation.Horizontal,
+                Spacing = 3,
+                Items =
+                {
+                    mapLayout,
+                    mapDetailsLayout,
+                }
+            };
+
+            for (int i = 0; i < _script.Event.MapCharactersSection.Objects.Count; i++)
+            {
+                if (_script.Event.MapCharactersSection.Objects[i].CharacterIndex == 0)
+                {
+                    continue;
+                }
+
+                mapLayout.Add(GetChibiStackLayout((ChibiItem)_project.Items.Where(i => i.Type == ItemDescription.ItemType.Chibi).ElementAt(_script.Event.MapCharactersSection.Objects[i].CharacterIndex - 1), i, mapDetailsLayout, mapLayout, out SKBitmap chibiBitmap),
+                    ((int)gridZero.X - _script.Event.MapCharactersSection.Objects[i].Y * 16 + _script.Event.MapCharactersSection.Objects[i].X * 16 - chibiBitmap.Width / 2) / 2,
+                    ((int)gridZero.Y + _script.Event.MapCharactersSection.Objects[i].X * 8 + _script.Event.MapCharactersSection.Objects[i].Y * 8 - chibiBitmap.Height / 2 - 24) / 2);
+            }
+
+            GraphicSelectionButton addCharacterButton = new("Add Character", _log);
+            addCharacterButton.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Chibi).Cast<ChibiItem>());
+            addCharacterButton.SelectedChanged.Executed += (obj, args) =>
+            {
+                int index = _script.Event.MapCharactersSection.Objects.Count - 1;
+                _script.Event.MapCharactersSection.Objects.Insert(index, new() { CharacterIndex = addCharacterButton.SelectedIndex + 1 });
+                mapLayout.Add(GetChibiStackLayout((ChibiItem)_project.Items.Where(i => i.Type == ItemDescription.ItemType.Chibi).ElementAt(_script.Event.MapCharactersSection.Objects[index].CharacterIndex - 1), index, mapDetailsLayout, mapLayout, out SKBitmap chibiBitmap),
+                    ((int)gridZero.X - _script.Event.MapCharactersSection.Objects[index].Y * 16 + _script.Event.MapCharactersSection.Objects[index].X * 16 - chibiBitmap.Width / 2) / 2,
+                    ((int)gridZero.Y + _script.Event.MapCharactersSection.Objects[index].X * 8 + _script.Event.MapCharactersSection.Objects[index].Y * 8 - chibiBitmap.Height / 2 - 24) / 2);
+                UpdateTabTitle(false);
+            };
+
+            return new StackLayout
+            {
+                Orientation = Orientation.Vertical,
+                Spacing = 5,
+                Items =
+                {
+                    new StackLayout
+                    {
+                        Orientation = Orientation.Horizontal,
+                        Spacing = 5,
+                        Items =
+                        {
+                            mapsDropdown,
+                            refreshMapListButton,
+                        },
+                    },
+                    mapAndDetailsLayout,
+                    new StackLayout
+                    {
+                        Orientation = Orientation.Horizontal,   
+                        Spacing = 5,
+                        Items =
+                        {
+                            addCharacterButton,
+                            removeButton,
+                        }
+                    }
+                },
+            };
+        }
+
+        private ChibiStackLayout GetChibiStackLayout(ChibiItem chibi, int index, StackLayout mapDetailsLayout, PixelLayout mapLayout, out SKBitmap chibiBitmap)
+        {
+            chibiBitmap = chibi.ChibiAnimations.ElementAt(_script.Event.MapCharactersSection.Objects[index].FacingDirection).Value.ElementAt(0).Frame;
+            Icon chibiIcon = new SKGuiImage(chibiBitmap).WithSize(chibiBitmap.Width / 2, chibiBitmap.Height / 2);
+            ChibiStackLayout chibiLayout = new()
+            {
+                Items =
+                    {
+                        chibiIcon
+                    },
+                ChibiIndex = index,
+                ChibiBitmap = new(chibiBitmap.Width, chibiBitmap.Height),
+            };
+            chibiLayout.MouseEnter += (o, args) =>
+            {
+                chibiLayout.BackgroundColor = Color.FromArgb(170, 170, 200, 128);
+            };
+            chibiLayout.MouseLeave += (o, args) =>
+            {
+                chibiLayout.BackgroundColor = Colors.Transparent;
+            };
+            chibiLayout.MouseMove += (o, args) =>
+            {
+                if (args.Buttons != MouseButtons.Primary)
+                {
+                    return;
+                }
+
+                DataObject chibiData = new();
+                chibiData.SetObject(chibi, nameof(ChibiItem));
+                chibiLayout.DoDragDrop(chibiData, DragEffects.Move, chibiIcon, new(8, 16));
+            };
+            chibiLayout.MouseDown += (o, args) =>
+            {
+                mapDetailsLayout.Items.Clear();
+                DropDown chibisSelectorDropDown = new();
+                chibisSelectorDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Chibi).Select(c => new ListItem { Key = c.Name, Text = c.Name }));
+                chibisSelectorDropDown.SelectedKey = chibi.Name;
+                DropDown facingDirectionDropDown = new()
+                {
+                    Items =
+                    {
+                        "Down Left",
+                        "Down Right",
+                        "Up Left",
+                        "Up Right",
+                    },
+                    SelectedIndex = _script.Event.MapCharactersSection.Objects[chibiLayout.ChibiIndex].FacingDirection
+                };
+
+                void chibiEventHandler(object o, EventArgs args)
+                {
+                    ChibiItem newChibi = (ChibiItem)_project.Items.First(i => i.Name == chibisSelectorDropDown.SelectedKey);
+                    if (newChibi.ChibiAnimations.Count <= facingDirectionDropDown.SelectedIndex)
+                    {
+                        facingDirectionDropDown.SelectedIndex = 0;
+                    }
+                    SKBitmap newChibiBitmap = newChibi.ChibiAnimations.ElementAt(facingDirectionDropDown.SelectedIndex).Value.ElementAt(0).Frame;
+                    Icon newChibiIcon = new SKGuiImage(newChibiBitmap).WithSize(newChibiBitmap.Width / 2, newChibiBitmap.Height / 2);
+                    chibiLayout.Items.Clear();
+                    chibiLayout.Items.Add(newChibiIcon);
+                    _script.Event.MapCharactersSection.Objects[chibiLayout.ChibiIndex].CharacterIndex = chibisSelectorDropDown.SelectedIndex + 1;
+                    _script.Event.MapCharactersSection.Objects[chibiLayout.ChibiIndex].FacingDirection = (short)facingDirectionDropDown.SelectedIndex;
+                    UpdateTabTitle(false);
+                }
+
+                chibisSelectorDropDown.SelectedKeyChanged += chibiEventHandler;
+                facingDirectionDropDown.SelectedIndexChanged += chibiEventHandler;
+
+                DropDown talkScriptBlockDropDown = new();
+                talkScriptBlockDropDown.Items.AddRange(_script.Event.LabelsSection.Objects.Select(l => new ListItem { Key = l.Id.ToString(), Text = l.Name }));
+                talkScriptBlockDropDown.SelectedKey = _script.Event.MapCharactersSection.Objects[chibiLayout.ChibiIndex].TalkScriptBlock.ToString();
+                talkScriptBlockDropDown.SelectedKeyChanged += (o, args) =>
+                {
+                    _script.Event.MapCharactersSection.Objects[chibiLayout.ChibiIndex].TalkScriptBlock = short.Parse(talkScriptBlockDropDown.SelectedKey);
+                    UpdateTabTitle(false);
+                };
+
+                Button removeButton = new() { Text = "Remove Chibi" };
+                removeButton.Click += (o, args) =>
+                {
+                    _script.Event.MapCharactersSection.Objects.RemoveAt(chibiLayout.ChibiIndex);
+                    foreach (ChibiStackLayout otherChibiLayout in mapLayout.Controls.Where(c => c.GetType() == typeof(ChibiStackLayout)).Cast<ChibiStackLayout>())
+                    {
+                        if (otherChibiLayout.ChibiIndex > chibiLayout.ChibiIndex)
+                        {
+                            otherChibiLayout.ChibiIndex--;
+                        }
+                    }
+                    UpdateTabTitle(false);
+                    chibiLayout.Detach();
+                };
+
+                mapDetailsLayout.Items.Add(chibisSelectorDropDown);
+                mapDetailsLayout.Items.Add(facingDirectionDropDown);
+                mapDetailsLayout.Items.Add(talkScriptBlockDropDown);
+                mapDetailsLayout.Items.Add(removeButton);
+            };
+
+            return chibiLayout;
+        }
+
+        private StackLayout GetAddMapCharactersButton(TabPage parent)
+        {
+            Button addButton = new() { Text = "Add Map Characters" };
+            addButton.Click += (o, args) =>
+            {
+                _script.Event.MapCharactersSection = new() { Name = "MAPCHARACTERS" };
+                _script.Event.MapCharactersSection.Objects.Add(new()); // Blank map characters entry
+                parent.Content = GetMapCharactersLayout(parent);
+                UpdateTabTitle(false);
+            };
+
+            return new StackLayout
             {
                 Orientation = Orientation.Horizontal,
                 Spacing = 5,
