@@ -3,7 +3,6 @@ using HaruhiChokuretsuLib.Util;
 using SerialLoops.Editors;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
-using System;
 using System.Linq;
 
 namespace SerialLoops.Controls
