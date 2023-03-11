@@ -4,6 +4,7 @@ using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
 using SerialLoops.Utility;
+using SkiaSharp;
 using System;
 using System.Collections.Generic;
 
@@ -91,16 +92,33 @@ namespace SerialLoops.Controls
         }
     }
 
+    public class ChibiStackLayout : StackLayout
+    {
+        public int ChibiIndex { get; set; }
+        public SKBitmap ChibiBitmap { get; set; }
+    }
+
     public class CommandGraphicSelectionButton : Panel
     {
         private readonly EditorTabsPanel _editorTabs;
         private readonly ILogger _log;
         public IPreviewableGraphic Selected { get; private set; }
+        public int SelectedIndex { get; set; }
         public ScriptItemCommand Command { get; set; }
         public int ParameterIndex { get; set; }
         public Command SelectedChanged { get; }
         public List<IPreviewableGraphic> Items { get; }
         public Project Project { get; set; }
+
+        public CommandGraphicSelectionButton(EditorTabsPanel editorTabs, ILogger log)
+        {
+            _editorTabs = editorTabs;
+            _log = log;
+
+            SelectedChanged = new();
+            Items = new List<IPreviewableGraphic>();
+            InitializeComponent();
+        }
 
         public CommandGraphicSelectionButton(IPreviewableGraphic selected, EditorTabsPanel editorTabs, ILogger log)
         {
@@ -130,7 +148,7 @@ namespace SerialLoops.Controls
                 Items =
                 {
                     button,
-                    ControlGenerator.GetFileLink(((ItemDescription)Selected), _editorTabs, _log)
+                    ControlGenerator.GetFileLink((ItemDescription)Selected, _editorTabs, _log)
                 }
             };
         }
@@ -141,6 +159,61 @@ namespace SerialLoops.Controls
             IPreviewableGraphic description = dialog.ShowModal(this);
             if (description == null) return;
             Selected = description;
+            SelectedIndex = Items.IndexOf(Selected);
+            SelectedChanged?.Execute();
+            Content = GetButtonPanel();
+        }
+    }
+
+    public class GraphicSelectionButton : Panel
+    {
+        private readonly ILogger _log;
+        public IPreviewableGraphic Selected { get; private set; }
+        public int SelectedIndex { get; set; }
+        public Command SelectedChanged { get; }
+        public List<IPreviewableGraphic> Items { get; }
+        public Project Project { get; set; }
+
+        private string _text;
+
+        public GraphicSelectionButton(string text, ILogger log)
+        {
+            _log = log;
+            _text = text;
+
+            SelectedChanged = new();
+            Items = new List<IPreviewableGraphic>();
+            InitializeComponent();
+        }
+
+        private void InitializeComponent()
+        {
+            Content = GetButtonPanel();
+        }
+
+        private StackLayout GetButtonPanel()
+        {
+            Button button = new() { Text = _text };
+            button.Click += GraphicSelectionButton_Click;
+
+            return new StackLayout
+            {
+                Spacing = 10,
+                Orientation = Orientation.Horizontal,
+                Items =
+                {
+                    button
+                }
+            };
+        }
+
+        private void GraphicSelectionButton_Click(object sender, EventArgs e)
+        {
+            GraphicSelectionDialog dialog = new(new(Items), Selected, Project, _log);
+            IPreviewableGraphic description = dialog.ShowModal(this);
+            if (description == null) return;
+            Selected = description;
+            SelectedIndex = Items.IndexOf(Selected);
             SelectedChanged?.Execute();
             Content = GetButtonPanel();
         }
