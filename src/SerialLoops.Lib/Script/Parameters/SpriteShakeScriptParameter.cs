@@ -9,6 +9,11 @@
             ShakeEffect = (SpriteShakeEffect)shakeEffect;
         }
 
+        public override SpriteShakeScriptParameter Clone()
+        {
+            return new(Name, (short)ShakeEffect);
+        }
+
         public enum SpriteShakeEffect : short
         {
             NONE = 0,

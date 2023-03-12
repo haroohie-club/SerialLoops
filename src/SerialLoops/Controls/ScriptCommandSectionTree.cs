@@ -24,6 +24,16 @@ namespace SerialLoops.Controls
         {
             Text = text;
         }
+
+        internal ScriptCommandSectionEntry Clone()
+        {
+            ScriptCommandSectionEntry temp = new(Command.Clone());
+            foreach (var child in this)
+            {
+                temp.Add(child.Clone());
+            }
+            return temp;
+        }
     }
 
     public class ScriptCommandSectionTreeItem : List<ScriptCommandSectionTreeItem>,
@@ -45,6 +55,11 @@ namespace SerialLoops.Controls
                 ScriptCommandSectionTreeItem temp = new(child, expanded) { Parent = this };
                 Add(temp); // recursive
             }
+        }
+
+        internal ScriptCommandSectionTreeItem Clone()
+        {
+            return new(Section.Clone(), Expanded);
         }
     }
 
@@ -71,6 +86,16 @@ namespace SerialLoops.Controls
             set
             {
                 _treeView.SelectedItem = FindItem(_treeView.DataStore as ScriptCommandSectionTreeItem, value);
+            }
+        }
+
+        public ScriptCommandSectionTreeItem? SelectedCommandTreeItem
+        {
+            get
+            {
+                var item = _treeView.SelectedItem;
+                if (item is null) return null;
+                return item as ScriptCommandSectionTreeItem;            
             }
         }
 
@@ -171,13 +196,12 @@ namespace SerialLoops.Controls
 
         internal void AddItem(ScriptCommandSectionTreeItem item)
         {
-            if (SelectedItem is not ScriptCommandSectionTreeItem selected) return;
-            if (selected.Parent is not ScriptCommandSectionTreeItem parent) return;
-            var index = parent.IndexOf(selected);
+            if (SelectedCommandTreeItem is null) return;
+            if (SelectedCommandTreeItem.Parent is not ScriptCommandSectionTreeItem parent) return;
+            var index = parent.IndexOf(SelectedCommandTreeItem);
             if (index == -1) return;
             parent.Insert(index + 1, item);
             _treeView.DataStore = _treeView.DataStore;
-            _treeView.SelectedItem = item;
         }
 
         public void SetContents(IEnumerable<ScriptCommandSectionEntry> topNodes, bool expanded)

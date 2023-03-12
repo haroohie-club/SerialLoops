@@ -9,7 +9,9 @@ using SerialLoops.Lib.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using static HaruhiChokuretsuLib.Archive.Event.EventFile;
+using static System.Collections.Specialized.BitVector32;
 
 namespace SerialLoops.Lib.Script
 {
@@ -628,6 +630,18 @@ namespace SerialLoops.Lib.Script
         private static DialogueLine GetDialogueLine(short index, EventFile eventFile)
         {
             return eventFile.DialogueLines[index];
+        }
+
+        public ScriptItemCommand Clone()
+        {
+            return new()
+            {
+                Verb = Verb,
+                Parameters = Parameters.Select(p => p.Clone()).ToList(),
+                Section = Section,
+                Index = Index,
+                _project = _project,
+            };
         }
     }
 }

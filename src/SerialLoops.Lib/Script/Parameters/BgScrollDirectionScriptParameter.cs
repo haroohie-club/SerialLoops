@@ -15,6 +15,11 @@ namespace SerialLoops.Lib.Script.Parameters
             ScrollDirection = (BgScrollDirection)scrollDirection;
         }
 
+        public override BgScrollDirectionScriptParameter Clone()
+        {
+            return new(Name, (short)ScrollDirection);
+        }
+
         public enum BgScrollDirection : short
         {
             DOWN = 1,
@@ -24,5 +29,6 @@ namespace SerialLoops.Lib.Script.Parameters
             DIAGONAL_RIGHT_DOWN = 5,
             DIAGONAL_LEFT_UP = 6,
         }
+
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace SerialLoops.Lib.Script.Parameters
+﻿using System;
+
+namespace SerialLoops.Lib.Script.Parameters
 {
     public abstract class ScriptParameter
     {
@@ -10,6 +12,8 @@
             Name = name;
             Type = type;
         }
+
+        public abstract ScriptParameter Clone();
 
         public enum ParameterType
         {
@@ -50,5 +54,6 @@
             TRANSITION,
             VOICE_LINE,
         }
+
     }
 }

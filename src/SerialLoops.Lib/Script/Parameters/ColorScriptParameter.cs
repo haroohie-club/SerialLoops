@@ -15,6 +15,11 @@ namespace SerialLoops.Lib.Script.Parameters
             _red = (byte)red;
         }
 
+        public override ColorScriptParameter Clone()
+        {
+            return new(Name, _red);
+        }
+
         public void SetGreen(short green)
         {
             _green = (byte)green;

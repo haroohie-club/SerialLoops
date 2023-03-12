@@ -8,5 +8,10 @@
         {
             SfxIndex = sfxIndex;
         }
+
+        public override SfxScriptParameter Clone()
+        {
+            return new(Name, SfxIndex);
+        }
     }
 }

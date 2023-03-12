@@ -11,6 +11,11 @@ namespace SerialLoops.Lib.Script.Parameters
             Effect = (PaletteEffect)effect;
         }
 
+        public override PaletteEffectScriptParameter Clone()
+        {
+            return new(Name, (short)Effect);
+        }
+
         public enum PaletteEffect : short
         {
             DEFAULT = 216,

@@ -10,5 +10,10 @@ namespace SerialLoops.Lib.Script.Parameters
         {
             DialogueProperties = dialogueProperties;
         }
+
+        public override DialoguePropertyScriptParameter Clone()
+        {
+            return new(Name, DialogueProperties);
+        }
     }
 }

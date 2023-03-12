@@ -12,6 +12,11 @@ namespace SerialLoops.Lib.Script.Parameters
             Line = line;
         }
 
+        public override DialogueScriptParameter Clone()
+        {
+            return new(Name, Line); //todo Need to create a new dialogueline with the same text, adjust data file accordingly?
+        }
+
         public static SKPaint Paint00 { get; } = new()
         {
             ColorFilter = SKColorFilter.CreateColorMatrix(new float[]

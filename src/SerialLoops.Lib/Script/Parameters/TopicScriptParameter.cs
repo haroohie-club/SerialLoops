@@ -8,5 +8,10 @@
         {
             TopicId = topic;
         }
+
+        public override TopicScriptParameter Clone()
+        {
+            return new(Name, TopicId);
+        }
     }
 }

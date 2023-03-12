@@ -9,6 +9,11 @@
             ExitTransition = (SpriteExitTransition)exitTransition;
         }
 
+        public override SpriteExitScriptParameter Clone()
+        {
+            return new(Name, (short)ExitTransition);
+        }
+
         public enum SpriteExitTransition : short
         {
             NO_EXIT = 0,

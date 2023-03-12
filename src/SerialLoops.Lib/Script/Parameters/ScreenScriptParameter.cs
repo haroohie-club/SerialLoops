@@ -9,6 +9,11 @@
             Screen = (DsScreen)screen;
         }
 
+        public override ScreenScriptParameter Clone()
+        {
+            return new(Name, (short)Screen);
+        }
+
         public enum DsScreen : short
         {
             BOTTOM = 0,

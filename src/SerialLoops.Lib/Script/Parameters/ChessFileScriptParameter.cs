@@ -8,5 +8,10 @@
         {
             ChessFileIndex = chessFileIndex;
         }
+
+        public override ChessFileScriptParameter Clone()
+        {
+            return new(Name, ChessFileIndex);
+        }
     }
 }

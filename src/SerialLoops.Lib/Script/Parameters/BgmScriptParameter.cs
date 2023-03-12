@@ -15,5 +15,10 @@ namespace SerialLoops.Lib.Script.Parameters
         {
             Bgm = bgm;
         }
+
+        public override BgmScriptParameter Clone()
+        {
+            return new(Name, Bgm);
+        }
     }
 }

@@ -9,6 +9,11 @@
             Mode = (SfxMode)mode;
         }
 
+        public override SfxModeScriptParameter Clone()
+        {
+            return new(Name, (short)Mode);
+        }
+
         public enum SfxMode : short
         {
             START = 6,

@@ -8,5 +8,10 @@
         {
             Value = value;
         }
+
+        public override ShortScriptParameter Clone()
+        {
+            return new(Name, Value);
+        }
     }
 }
