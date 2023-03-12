@@ -33,6 +33,11 @@ namespace SerialLoops.Editors
                 Spacing = 10,
             };
 
+            MapItem map = (MapItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Map && i.Name ==
+                _project.Dat.Files.First(f => f.Name == "QMAPS").CastTo<QMapFile>().QMaps[_puzzle.Puzzle.Settings.MapId].Name[0..^2]);
+            LinkButton mapLink = new() { Text = map.Name };
+            mapLink.Click += (o, e) => _tabs.OpenTab(map, _log);
+
             GroupBox topicsBox = new() { Text = "Associated Main Topics", Padding = 5 };
             StackLayout topics = new() { Orientation = Orientation.Vertical, Spacing = 5 };
             foreach (var (topicId, _) in _puzzle.Puzzle.AssociatedTopics.Take(_puzzle.Puzzle.AssociatedTopics.Count - 1))
@@ -86,7 +91,7 @@ namespace SerialLoops.Editors
                             HorizontalContentAlignment = HorizontalAlignment.Stretch,
                             Items =
                             {
-                                ControlGenerator.GetControlWithLabel("Map ID", new TextBox { Text = _puzzle.Puzzle.Settings.MapId.ToString() }),
+                                ControlGenerator.GetControlWithLabel("Map", mapLink),
                                 ControlGenerator.GetControlWithLabel("Base Time", new TextBox { Text = _puzzle.Puzzle.Settings.BaseTime.ToString() }),
                                 ControlGenerator.GetControlWithLabel("Number of Singularities", new TextBox { Text = _puzzle.Puzzle.Settings.NumSingularities.ToString() }),
                                 ControlGenerator.GetControlWithLabel("Unknown 04", new TextBox { Text = _puzzle.Puzzle.Settings.Unknown04.ToString() }),

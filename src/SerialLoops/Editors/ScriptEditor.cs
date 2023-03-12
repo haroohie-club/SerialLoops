@@ -250,7 +250,7 @@ namespace SerialLoops.Editors
             mapsDropdown.SelectedIndex = 0;
 
             PixelLayout mapLayout = new() { AllowDrop = true };
-            SKBitmap mapBitmap = maps[0].GetMapImage(_project.Grp, false);
+            SKBitmap mapBitmap = maps[0].GetMapImage(_project.Grp, false, false);
             Icon mapImage = new SKGuiImage(mapBitmap).WithSize(mapBitmap.Width / 2, mapBitmap.Height / 2);
             mapLayout.Add(mapImage, 0, 0);
 

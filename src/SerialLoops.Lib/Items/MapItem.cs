@@ -26,7 +26,7 @@ namespace SerialLoops.Lib.Items
             return new SKPoint(layout.LayoutEntries[Map.Settings.LayoutSizeDefinitionIndex].ScreenX, layout.LayoutEntries[Map.Settings.LayoutSizeDefinitionIndex].ScreenY);
         }
 
-        public SKBitmap GetMapImage(ArchiveFile<GraphicsFile> grp, bool displayPathingMap)
+        public SKBitmap GetMapImage(ArchiveFile<GraphicsFile> grp, bool displayPathingMap, bool displayMapStart)
         {
             SKBitmap map;
             if (Map.Settings.BackgroundLayoutStartIndex > 0)
@@ -41,10 +41,9 @@ namespace SerialLoops.Lib.Items
             SKCanvas canvas = new(mapWithGrid);
             canvas.DrawBitmap(map, new SKPoint(0, 0));
 
+            SKPoint gridZero = GetOrigin(grp);
             if (displayPathingMap)
             {
-                SKPoint gridZero = GetOrigin(grp);
-
                 if (Map.Settings.SlgMode)
                 {
                     for (int y = 0; y < Map.PathingMap.Length; y++)
@@ -82,6 +81,20 @@ namespace SerialLoops.Lib.Items
                             canvas.DrawRegion(new SKRegion(diamond), GetPathingCellPaint(x, y));
                         }
                     }
+                }
+            }
+
+            if (displayMapStart)
+            {
+                if (Map.Settings.SlgMode)
+                {
+                    SKPoint start = new(gridZero.X - Map.Settings.StartingPosition.x * 32 + Map.Settings.StartingPosition.y * 32, gridZero.Y + Map.Settings.StartingPosition.x * 16 + Map.Settings.StartingPosition.y * 16 + 16);
+                    canvas.DrawCircle(start, 3, new SKPaint() { Color = SKColors.Pink });
+                }
+                else
+                {
+                    SKPoint start = new(gridZero.X - Map.Settings.StartingPosition.x * 16 + Map.Settings.StartingPosition.y * 16, gridZero.Y + Map.Settings.StartingPosition.x * 8 + Map.Settings.StartingPosition.y * 8 + 8);
+                    canvas.DrawCircle(start, 3, new SKPaint() { Color = SKColors.Pink });
                 }
             }
 
