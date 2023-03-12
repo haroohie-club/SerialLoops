@@ -9,9 +9,7 @@ using SerialLoops.Lib.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using static HaruhiChokuretsuLib.Archive.Event.EventFile;
-using static System.Collections.Specialized.BitVector32;
 
 namespace SerialLoops.Lib.Script
 {

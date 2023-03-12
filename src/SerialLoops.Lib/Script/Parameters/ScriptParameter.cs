@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SerialLoops.Lib.Script.Parameters
+﻿namespace SerialLoops.Lib.Script.Parameters
 {
     public abstract class ScriptParameter
     {
