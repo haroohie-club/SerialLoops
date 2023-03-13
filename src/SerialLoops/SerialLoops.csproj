@@ -33,6 +33,10 @@
     <None Remove="Icons\Build_Run.png" />
     <None Remove="Icons\Help.png" />
     <None Remove="Icons\Warning.png" />
+    <None Remove="Icons\Chibi_DOWN_LEFT.png" />
+    <None Remove="Icons\Chibi_DOWN_RIGHT.png" />
+    <None Remove="Icons\Chibi_UP_LEFT.png" />
+    <None Remove="Icons\Chibi_UP_RIGHT.png" />
   </ItemGroup>
 
   <ItemGroup>

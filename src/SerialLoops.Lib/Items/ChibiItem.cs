@@ -64,7 +64,14 @@ namespace SerialLoops.Lib.Items
         {
             return ChibiAnimations.First().Value.First().Frame;
         }
+
+        public enum Direction
+        {
+            DOWN_LEFT,
+            DOWN_RIGHT,
+            UP_LEFT,
+            UP_RIGHT
+        }
     }
-
-
+    
 }
