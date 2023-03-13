@@ -1,9 +1,4 @@
 ﻿using SerialLoops.Lib.Items;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SerialLoops.Lib.Script.Parameters
 {
@@ -14,6 +9,11 @@ namespace SerialLoops.Lib.Script.Parameters
         public BgmScriptParameter(string name, BackgroundMusicItem bgm) : base(name, ParameterType.BGM)
         {
             Bgm = bgm;
+        }
+
+        public override BgmScriptParameter Clone()
+        {
+            return new(Name, Bgm);
         }
     }
 }

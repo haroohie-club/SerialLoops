@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SerialLoops.Lib.Util
+﻿namespace SerialLoops.Lib.Util
 {
     public interface IProgressTracker
     {

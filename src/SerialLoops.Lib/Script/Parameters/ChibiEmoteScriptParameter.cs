@@ -9,6 +9,11 @@
             Emote = (ChibiEmote)emote;
         }
 
+        public override ChibiEmoteScriptParameter Clone()
+        {
+            return new(Name, (short)Emote);
+        }
+
         public enum ChibiEmote : short
         {
             EXCLAMATION_POINT = 1,

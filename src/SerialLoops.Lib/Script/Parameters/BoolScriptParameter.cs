@@ -8,5 +8,10 @@
         {
             Value = value;
         }
+
+        public override BoolScriptParameter Clone()
+        {
+            return new(Name, Value);
+        }
     }
 }

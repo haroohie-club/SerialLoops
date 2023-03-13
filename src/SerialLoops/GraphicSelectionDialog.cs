@@ -1,6 +1,3 @@
-using System;
-using System.Collections.ObjectModel;
-using System.Linq;
 using Eto.Drawing;
 using Eto.Forms;
 using HaruhiChokuretsuLib.Util;
@@ -8,6 +5,9 @@ using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Utility;
 using SkiaSharp;
+using System;
+using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace SerialLoops
 {

@@ -9,6 +9,11 @@
             Mode = (ChibiEnterExitType)mode;
         }
 
+        public override ChibiEnterExitScriptParameter Clone()
+        {
+            return new(Name, (short)Mode);
+        }
+
         public enum ChibiEnterExitType
         {
             ENTER = 0,

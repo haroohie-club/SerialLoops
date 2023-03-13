@@ -9,6 +9,11 @@
             EntranceEffect = (TextEntranceEffect)entranceEffect;
         }
 
+        public override TextEntranceEffectScriptParameter Clone()
+        {
+            return new(Name, (short)EntranceEffect);
+        }
+
         public enum TextEntranceEffect : short
         {
             NORMAL = 0,

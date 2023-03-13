@@ -14,12 +14,10 @@ using SerialLoops.Utility;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using static HaruhiChokuretsuLib.Archive.Data.QMapFile;
 
 namespace SerialLoops.Editors
 {
@@ -35,6 +33,7 @@ namespace SerialLoops.Editors
         private ScriptCommandListPanel _commandsPanel;
         private CancellationTokenSource _dialogueCancellation, _optionCancellation;
         private System.Timers.Timer _dialogueRefreshTimer;
+        private int _chibiHighlighted = -1;
 
         public ScriptEditor(ScriptItem item, Project project, ILogger log, EditorTabsPanel tabs) : base(item, log, project, tabs)
         {
@@ -360,23 +359,33 @@ namespace SerialLoops.Editors
             ChibiStackLayout chibiLayout = new()
             {
                 Items =
-                    {
-                        chibiIcon
-                    },
+                {
+                    chibiIcon
+                },
                 ChibiIndex = index,
                 ChibiBitmap = new(chibiBitmap.Width, chibiBitmap.Height),
             };
             chibiLayout.MouseEnter += (o, args) =>
             {
+                if (_chibiHighlighted >= 0)
+                {
+                    return;
+                }
+                _chibiHighlighted = chibiLayout.ChibiIndex;
                 chibiLayout.BackgroundColor = Color.FromArgb(170, 170, 200, 128);
             };
             chibiLayout.MouseLeave += (o, args) =>
             {
+                if (_chibiHighlighted != chibiLayout.ChibiIndex)
+                {
+                    return;
+                }
+                _chibiHighlighted = -1;
                 chibiLayout.BackgroundColor = Colors.Transparent;
             };
             chibiLayout.MouseMove += (o, args) =>
             {
-                if (args.Buttons != MouseButtons.Primary)
+                if (args.Buttons != MouseButtons.Primary || _chibiHighlighted != chibiLayout.ChibiIndex)
                 {
                     return;
                 }

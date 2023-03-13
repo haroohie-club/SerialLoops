@@ -13,5 +13,10 @@
             _internalFlagId = id;
             Global = global;
         }
+
+        public override FlagScriptParameter Clone()
+        {
+            return new(Name, Id, Global);
+        }
     }
 }

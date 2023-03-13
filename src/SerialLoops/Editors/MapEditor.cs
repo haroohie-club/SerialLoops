@@ -3,7 +3,6 @@ using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Utility;
-using System;
 
 namespace SerialLoops.Editors
 {

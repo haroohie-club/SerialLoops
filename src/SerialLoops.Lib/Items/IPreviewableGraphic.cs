@@ -1,5 +1,5 @@
-using System;
 using SkiaSharp;
+using System;
 
 namespace SerialLoops.Lib.Items
 {

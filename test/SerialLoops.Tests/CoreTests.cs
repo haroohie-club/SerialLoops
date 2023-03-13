@@ -1,7 +1,4 @@
-﻿using Eto.Forms;
-using HaruhiChokuretsuLib.Archive.Event;
-using HaruhiChokuretsuLib.Audio;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
@@ -11,7 +8,6 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
-using System.Xml.Linq;
 
 namespace SerialLoops.Tests
 {

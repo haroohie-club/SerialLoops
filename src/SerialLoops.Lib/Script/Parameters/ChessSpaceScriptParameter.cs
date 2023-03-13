@@ -1,6 +1,4 @@
-﻿using System.Security.Cryptography.X509Certificates;
-
-namespace SerialLoops.Lib.Script.Parameters
+﻿namespace SerialLoops.Lib.Script.Parameters
 {
     public class ChessSpaceScriptParameter : ScriptParameter
     {
@@ -9,6 +7,11 @@ namespace SerialLoops.Lib.Script.Parameters
         public ChessSpaceScriptParameter(string name, short spaceIndex) : base(name, ParameterType.CHESS_SPACE)
         {
             SpaceIndex = spaceIndex;
+        }
+
+        public override ChessSpaceScriptParameter Clone()
+        {
+            return new(Name, SpaceIndex);
         }
 
     }

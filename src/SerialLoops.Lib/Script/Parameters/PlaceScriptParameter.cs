@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SerialLoops.Lib.Script.Parameters
+﻿namespace SerialLoops.Lib.Script.Parameters
 {
     public class PlaceScriptParameter : ScriptParameter
     {
@@ -13,6 +7,11 @@ namespace SerialLoops.Lib.Script.Parameters
         public PlaceScriptParameter(string name, short placeIndex) : base(name, ParameterType.PLACE)
         {
             PlaceIndex = placeIndex;
+        }
+
+        public override PlaceScriptParameter Clone()
+        {
+            return new(Name, PlaceIndex);
         }
     }
 }

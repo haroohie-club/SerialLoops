@@ -10,5 +10,10 @@ namespace SerialLoops.Lib.Script.Parameters
         {
             Sprite = sprite;
         }
+
+        public override SpriteScriptParameter Clone()
+        {
+            return new(Name, Sprite);
+        }
     }
 }

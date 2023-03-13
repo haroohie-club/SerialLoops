@@ -10,5 +10,10 @@ namespace SerialLoops.Lib.Script.Parameters
         {
             Section = section;
         }
+
+        public override ScriptSectionScriptParameter Clone()
+        {
+            return new(Name, Section);
+        }
     }
 }
