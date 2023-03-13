@@ -2,7 +2,6 @@
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Controls;
 using SerialLoops.Lib;
-using SerialLoops.Lib.Items;
 
 namespace SerialLoops.Utility
 {

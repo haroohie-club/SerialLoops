@@ -1,12 +1,8 @@
-﻿using HaruhiChokuretsuLib.Util;
-using HaroohieClub.NitroPacker.Core;
+﻿using HaroohieClub.NitroPacker.Core;
+using HaruhiChokuretsuLib.Util;
+using SerialLoops.Lib.Util;
 using System;
 using System.IO;
-using System.IO.Compression;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System.Linq;
-using SerialLoops.Lib.Util;
 
 namespace SerialLoops.Lib
 {
