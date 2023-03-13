@@ -70,10 +70,9 @@ namespace SerialLoops.Lib.Items
                     ChibiItem chibi = (ChibiItem)this;
                     return project.Items.Where(i => chibi.ScriptUses.Select(s => s.ScriptName).Contains(i.Name)).ToList();
                 case ItemType.Map:
-                    //MapItem map = (MapItem)this;
-                    //QMapFile qmap = project.Dat.Files.First(f => f.Name == "QMAPS").CastTo<QMapFile>();
-                    //return project.Items.Where(i => )
-                    return new();
+                    MapItem map = (MapItem)this;
+                    return project.Items.Where(i => i.Type == ItemType.Puzzle && ((PuzzleItem)i).Puzzle.Settings.MapId == map.QmapIndex)
+                        .Concat(project.Items.Where(i => map.ScriptUses.Select(s => s.ScriptName).Contains(i.Name))).ToList();
                 case ItemType.Puzzle:
                     PuzzleItem puzzle = (PuzzleItem)this;
                     if (scenario.Scenario.Commands.Any(c => c.Verb == ScenarioCommand.ScenarioVerb.PUZZLE_PHASE && c.Parameter == puzzle.Puzzle.Index))

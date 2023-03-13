@@ -1,5 +1,6 @@
 ﻿using HaruhiChokuretsuLib.Archive;
 using HaruhiChokuretsuLib.Archive.Data;
+using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Archive.Graphics;
 using SkiaSharp;
 using System.Linq;
@@ -10,14 +11,16 @@ namespace SerialLoops.Lib.Items
     {
         public MapFile Map { get; set; }
         public int QmapIndex { get; set; }
+        public (string ScriptName, ScriptCommandInvocation command)[] ScriptUses { get; set; }
 
         public MapItem(string name) : base(name, ItemType.Map)
         {
         }
-        public MapItem(MapFile map, int qmapIndex) : base(map.Name[0..^1], ItemType.Map)
+        public MapItem(MapFile map, int qmapIndex, Project project) : base(map.Name[0..^1], ItemType.Map)
         {
             Map = map;
             QmapIndex = qmapIndex;
+            PopulateScriptUses(project.Evt);
         }
 
         public SKPoint GetOrigin(ArchiveFile<GraphicsFile> grp)
@@ -112,8 +115,21 @@ namespace SerialLoops.Lib.Items
             };
         }
 
+        public void PopulateScriptUses(ArchiveFile<EventFile> evt)
+        {
+            string[] chibiCommands = new string[] { "LOAD_ISOMAP" };
+
+            var list = evt.Files.SelectMany(e =>
+                e.ScriptSections.SelectMany(sec =>
+                    sec.Objects.Where(c => chibiCommands.Contains(c.Command.Mnemonic)).Select(c => (e.Name[0..^1], c))))
+                .Where(t => t.c.Parameters[0] == Map.Index).ToList();
+
+            ScriptUses = list.ToArray();
+        }
+
         public override void Refresh(Project project)
         {
+            PopulateScriptUses(project.Evt);
         }
     }
 }
