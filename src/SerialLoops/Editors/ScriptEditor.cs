@@ -400,36 +400,30 @@ namespace SerialLoops.Editors
                 DropDown chibisSelectorDropDown = new();
                 chibisSelectorDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Chibi).Select(c => new ListItem { Key = c.Name, Text = c.Name }));
                 chibisSelectorDropDown.SelectedKey = chibi.Name;
-                DropDown facingDirectionDropDown = new()
+
+                ChibiDirectionSelector facingDirectionSelector = new(_log)
                 {
-                    Items =
-                    {
-                        "Down Left",
-                        "Down Right",
-                        "Up Left",
-                        "Up Right",
-                    },
-                    SelectedIndex = _script.Event.MapCharactersSection.Objects[chibiLayout.ChibiIndex].FacingDirection
+                    Direction = (ChibiItem.Direction)_script.Event.MapCharactersSection.Objects[chibiLayout.ChibiIndex].FacingDirection
                 };
 
                 void chibiEventHandler(object o, EventArgs args)
                 {
                     ChibiItem newChibi = (ChibiItem)_project.Items.First(i => i.Name == chibisSelectorDropDown.SelectedKey);
-                    if (newChibi.ChibiAnimations.Count <= facingDirectionDropDown.SelectedIndex)
+                    if (newChibi.ChibiAnimations.Count <= (short) facingDirectionSelector.Direction)
                     {
-                        facingDirectionDropDown.SelectedIndex = 0;
+                        facingDirectionSelector.Direction = ChibiItem.Direction.DOWN_LEFT;
                     }
-                    SKBitmap newChibiBitmap = newChibi.ChibiAnimations.ElementAt(facingDirectionDropDown.SelectedIndex).Value.ElementAt(0).Frame;
+                    SKBitmap newChibiBitmap = newChibi.ChibiAnimations.ElementAt((short)facingDirectionSelector.Direction).Value.ElementAt(0).Frame;
                     Icon newChibiIcon = new SKGuiImage(newChibiBitmap).WithSize(newChibiBitmap.Width / 2, newChibiBitmap.Height / 2);
                     chibiLayout.Items.Clear();
                     chibiLayout.Items.Add(newChibiIcon);
                     _script.Event.MapCharactersSection.Objects[chibiLayout.ChibiIndex].CharacterIndex = chibisSelectorDropDown.SelectedIndex + 1;
-                    _script.Event.MapCharactersSection.Objects[chibiLayout.ChibiIndex].FacingDirection = (short)facingDirectionDropDown.SelectedIndex;
+                    _script.Event.MapCharactersSection.Objects[chibiLayout.ChibiIndex].FacingDirection = (short)facingDirectionSelector.Direction;
                     UpdateTabTitle(false);
                 }
 
                 chibisSelectorDropDown.SelectedKeyChanged += chibiEventHandler;
-                facingDirectionDropDown.SelectedIndexChanged += chibiEventHandler;
+                facingDirectionSelector.DirectionChanged += chibiEventHandler;
 
                 DropDown talkScriptBlockDropDown = new();
                 talkScriptBlockDropDown.Items.AddRange(_script.Event.LabelsSection.Objects.Select(l => new ListItem { Key = l.Id.ToString(), Text = l.Name }));
@@ -456,7 +450,7 @@ namespace SerialLoops.Editors
                 };
 
                 mapDetailsLayout.Items.Add(chibisSelectorDropDown);
-                mapDetailsLayout.Items.Add(facingDirectionDropDown);
+                mapDetailsLayout.Items.Add(facingDirectionSelector);
                 mapDetailsLayout.Items.Add(talkScriptBlockDropDown);
                 mapDetailsLayout.Items.Add(removeButton);
             };

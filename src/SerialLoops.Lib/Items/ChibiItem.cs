@@ -67,11 +67,10 @@ namespace SerialLoops.Lib.Items
 
         public enum Direction
         {
-            DOWN_LEFT,
-            DOWN_RIGHT,
-            UP_LEFT,
-            UP_RIGHT
+            DOWN_LEFT = 0,
+            DOWN_RIGHT = 1,
+            UP_LEFT = 2,
+            UP_RIGHT = 3
         }
     }
-    
 }

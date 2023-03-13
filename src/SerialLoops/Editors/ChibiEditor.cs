@@ -1,5 +1,6 @@
 ﻿using Eto.Forms;
 using HaruhiChokuretsuLib.Util;
+using SerialLoops.Controls;
 using SerialLoops.Lib.Items;
 using SerialLoops.Utility;
 using System;
@@ -11,7 +12,7 @@ namespace SerialLoops.Editors
     {
         private ChibiItem _chibi;
         private DropDown _animationSelection;
-        private RadioButtonList _poseSelection;
+        private ChibiDirectionSelector _directionSelector;
 
         private AnimatedImage _animatedImage;
         private StackLayout _framesStack;
@@ -23,10 +24,23 @@ namespace SerialLoops.Editors
         public override Container GetEditorPanel()
         {
             _chibi = (ChibiItem)Description;
-            return new TableLayout(GetAnimationEditor(), GetChibiSelector());
+            return new TableLayout(GetAnimatedChibi(), GetBottomPanel());
         }
 
-        private Container GetChibiSelector()
+        private StackLayout GetAnimatedChibi()
+        {
+            _animatedImage = new(_chibi.ChibiAnimations.FirstOrDefault().Value);
+            _animatedImage.Play();
+            return new StackLayout
+            {
+                Items = { new TableLayout(_animatedImage) },
+                Height = Math.Max(250, _animatedImage.Height),
+                HorizontalContentAlignment = HorizontalAlignment.Center,
+                VerticalContentAlignment = VerticalAlignment.Center
+            };
+        }
+
+        private Container GetBottomPanel()
         {
             _animationSelection = new();
             _animationSelection.Items.AddRange(_chibi.ChibiEntries
@@ -34,69 +48,53 @@ namespace SerialLoops.Editors
             _animationSelection.SelectedIndex = 0;
             _animationSelection.SelectedKeyChanged += ChibiSelection_SelectedKeyChanged;
 
-            _poseSelection = new RadioButtonList();
-            _poseSelection.Items.AddRange(Enum.GetValues(typeof(ChibiPose))
-                .Cast<ChibiPose>().Select(p => new ListItem() { Text = p.ToString(), Key = p.ToString() }));
-            _poseSelection.SelectedIndex = 0;
-            _poseSelection.SelectedKeyChanged += ChibiSelection_SelectedKeyChanged;
-            _poseSelection.Orientation = Orientation.Vertical;
+            _directionSelector = new(_log)
+            {
+                Direction = ChibiItem.Direction.DOWN_RIGHT
+            };
+            _directionSelector.DirectionChanged += ChibiSelection_SelectedKeyChanged;
 
             return new TableLayout
             {
-                Height = 250,
                 Padding = 10,
+                Spacing = new(5, 5),
                 Rows =
                 {
-                    new GroupBox
-                    {
-                        Text = "Animation",
-                        Padding = 10,
-                        Content = _animationSelection
-                    },
-                    new GroupBox
-                    {
-                        Text = "Pose",
-                        Padding = 10,
-                        Content = _poseSelection
-                    }
+                    new(
+                        new GroupBox
+                        {
+                            Text = "Animation",
+                            Padding = 10,
+                            Content = new StackLayout
+                            {
+                                Spacing = 10,
+                                Items =
+                                {
+                                    _animationSelection, 
+                                    _directionSelector
+                                }
+                            }
+                        },
+                        new GroupBox
+                        {
+                            Text = "Frames",
+                            Padding = 10,
+                            Content = new Scrollable { Content = GetFramesStack() }
+                        }
+                    )
                 }
             };
         }
 
-        private Container GetAnimationEditor()
+        private StackLayout GetFramesStack()
         {
-            _animatedImage = new(_chibi.ChibiAnimations.FirstOrDefault().Value);
-            _animatedImage.Play();
-
-            _framesStack = new() { 
-                Orientation = Orientation.Horizontal, 
+            _framesStack = new()
+            {
+                Orientation = Orientation.Horizontal,
                 Spacing = 15
             };
             UpdateFramesStack();
-
-            return new StackLayout
-            {
-                Orientation = Orientation.Vertical,
-                Spacing = 10,
-                Items =
-                {
-                    new GroupBox
-                    {
-                        Text = _chibi.Name,
-                        Padding = 10,
-                        Content = _animatedImage
-                    },
-                    new GroupBox
-                    {
-                        Text = "Frames",
-                        Padding = 10,
-                        Content = new Scrollable
-                        {
-                            Content = _framesStack
-                        }
-                    }
-                }
-            };
+            return _framesStack;
         }
 
         private void UpdateFramesStack()
@@ -110,7 +108,7 @@ namespace SerialLoops.Editors
 
         private void ChibiSelection_SelectedKeyChanged(object sender, EventArgs e)
         {
-            string selectedAnimationKey = getSelectedAnimationKey();
+            string selectedAnimationKey = GetSelectedAnimationKey();
             if (!_chibi.ChibiAnimations.ContainsKey(selectedAnimationKey))
             {
                 _animatedImage.FramesWithTimings = new() { (new SKGuiImage(new SkiaSharp.SKBitmap(32, 32)), 1) };
@@ -124,17 +122,26 @@ namespace SerialLoops.Editors
             UpdateFramesStack();
         }
 
-        private string getSelectedAnimationKey()
+        private string GetSelectedAnimationKey()
         {
-            return $"{_animationSelection.SelectedKey.Trim()}_{_poseSelection.SelectedKey.Trim()}";
+            string direction = "";
+            switch (_directionSelector.Direction)
+            {
+                case ChibiItem.Direction.DOWN_LEFT:
+                    direction = "BL";
+                    break;
+                case ChibiItem.Direction.DOWN_RIGHT:
+                    direction = "BR";
+                    break;
+                case ChibiItem.Direction.UP_LEFT:
+                    direction = "UL";
+                    break;
+                case ChibiItem.Direction.UP_RIGHT:
+                    direction = "UR";
+                    break;
+            }
+            return $"{_animationSelection.SelectedKey.Trim()}_{direction}";
         }
 
-        public enum ChibiPose
-        {
-            BL,
-            BR,
-            UL,
-            UR
-        }
     }
 }
