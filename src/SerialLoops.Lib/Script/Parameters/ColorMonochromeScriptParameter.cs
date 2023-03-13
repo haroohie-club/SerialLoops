@@ -9,6 +9,11 @@
             ColorType = (ColorMonochrome)colorType;
         }
 
+        public override ColorMonochromeScriptParameter Clone()
+        {
+            return new(Name, (short)ColorType);
+        }
+
         public enum ColorMonochrome : short
         {
             CUSTOM = 0,

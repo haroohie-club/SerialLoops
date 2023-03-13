@@ -8,5 +8,10 @@
         {
             Value = value;
         }
+
+        public override ConditionalScriptParameter Clone()
+        {
+            return new(Name, Value);
+        }
     }
 }

@@ -14,5 +14,10 @@ namespace SerialLoops.Lib.Script.Parameters
         {
             PlaceIndex = placeIndex;
         }
+
+        public override PlaceScriptParameter Clone()
+        {
+            return new(Name, PlaceIndex);
+        }
     }
 }

@@ -10,5 +10,10 @@ namespace SerialLoops.Lib.Script.Parameters
         {
             VoiceLine = vce;
         }
+
+        public override VoicedLineScriptParameter Clone()
+        {
+            return new(Name, VoiceLine);
+        }
     }
 }

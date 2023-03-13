@@ -10,5 +10,10 @@ namespace SerialLoops.Lib.Script.Parameters
         {
             Map = map;
         }
+
+        public override MapScriptParameter Clone()
+        {
+            return new(Name, Map);
+        }
     }
 }

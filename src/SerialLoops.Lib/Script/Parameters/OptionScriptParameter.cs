@@ -10,5 +10,10 @@ namespace SerialLoops.Lib.Script.Parameters
         {
             Option = option;
         }
+
+        public override OptionScriptParameter Clone()
+        {
+            return new(Name, Option);
+        }
     }
 }

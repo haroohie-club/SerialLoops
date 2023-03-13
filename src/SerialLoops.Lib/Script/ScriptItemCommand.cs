@@ -629,5 +629,17 @@ namespace SerialLoops.Lib.Script
         {
             return eventFile.DialogueLines[index];
         }
+
+        public ScriptItemCommand Clone()
+        {
+            return new()
+            {
+                Verb = Verb,
+                Parameters = Parameters.Select(p => p.Clone()).ToList(),
+                Section = Section,
+                Index = Index,
+                _project = _project,
+            };
+        }
     }
 }

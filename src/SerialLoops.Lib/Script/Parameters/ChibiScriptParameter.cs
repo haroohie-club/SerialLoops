@@ -10,5 +10,10 @@ namespace SerialLoops.Lib.Script.Parameters
         {
             Chibi = chibi;
         }
+
+        public override ChibiScriptParameter Clone()
+        {
+            return new(Name, Chibi);
+        }
     }
 }

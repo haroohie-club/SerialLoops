@@ -14,5 +14,10 @@
             START = 2,
             STOP = 4,
         }
+
+        public override BgmModeScriptParameter Clone()
+        {
+            return new(Name, (short)Mode);
+        }
     }
 }

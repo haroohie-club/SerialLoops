@@ -9,6 +9,11 @@
             Transition = (TransitionEffect)transition;
         }
 
+        public override TransitionScriptParameter Clone()
+        {
+            return new(Name, (short)Transition);
+        }
+
         public enum TransitionEffect
         {
             WIPE_RIGHT = 0,

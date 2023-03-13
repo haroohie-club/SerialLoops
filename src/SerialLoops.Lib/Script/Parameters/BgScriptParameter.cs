@@ -12,5 +12,10 @@ namespace SerialLoops.Lib.Script.Parameters
             Background = background;
             Kinetic = kinetic;
         }
+
+        public override BgScriptParameter Clone()
+        {
+            return new(Name, Background, Kinetic);
+        }
     }
 }

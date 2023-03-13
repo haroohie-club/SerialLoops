@@ -8,5 +8,10 @@
         {
             ChessPiece = chessPiece;
         }
+
+        public override ChessPieceScriptParameter Clone()
+        {
+            return new(Name, ChessPiece);
+        }
     }
 }

@@ -11,6 +11,8 @@
             Type = type;
         }
 
+        public abstract ScriptParameter Clone();
+
         public enum ParameterType
         {
             BG,
@@ -50,5 +52,6 @@
             TRANSITION,
             VOICE_LINE,
         }
+
     }
 }

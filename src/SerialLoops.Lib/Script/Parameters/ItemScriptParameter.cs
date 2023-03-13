@@ -8,5 +8,10 @@
         {
             ItemIndex = itemIndex;
         }
+
+        public override ItemScriptParameter Clone()
+        {
+            return new(Name, ItemIndex);
+        }
     }
 }

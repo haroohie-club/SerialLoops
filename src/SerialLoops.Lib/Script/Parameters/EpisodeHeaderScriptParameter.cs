@@ -9,6 +9,11 @@
             EpisodeHeaderIndex = (Episode)epHeaderIndex;
         }
 
+        public override EpisodeHeaderScriptParameter Clone()
+        {
+            return new(Name, (short)EpisodeHeaderIndex);
+        }
+
         public enum Episode
         {
             None = 0,

@@ -11,5 +11,10 @@ namespace SerialLoops.Lib.Script.Parameters
             SpaceIndex = spaceIndex;
         }
 
+        public override ChessSpaceScriptParameter Clone()
+        {
+            return new(Name, SpaceIndex);
+        }
+
     }
 }

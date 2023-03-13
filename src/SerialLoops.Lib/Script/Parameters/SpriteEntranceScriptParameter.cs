@@ -9,6 +9,11 @@
             EntranceTransition = (SpriteEntranceTransition)entranceTransition;
         }
 
+        public override SpriteEntranceScriptParameter Clone()
+        {
+            return new(Name, (short)EntranceTransition);
+        }
+
         public enum SpriteEntranceTransition : short
         {
             NO_TRANSITION = 0,
