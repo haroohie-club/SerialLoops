@@ -201,6 +201,7 @@ namespace SerialLoops.Controls
             var index = parent.IndexOf(SelectedCommandTreeItem);
             if (index == -1) return;
             parent.Insert(index + 1, item);
+            item.Parent = parent;
             _treeView.DataStore = _treeView.DataStore;
         }
 
