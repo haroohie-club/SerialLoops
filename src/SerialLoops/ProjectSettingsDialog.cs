@@ -1,10 +1,10 @@
-using Eto.Drawing;
 using Eto.Forms;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib;
 using SerialLoops.Utility;
 using SkiaSharp;
 using System;
+using System.Runtime;
 
 namespace SerialLoops
 {
@@ -86,8 +86,9 @@ namespace SerialLoops
 
                 if (dialog.ShowDialog(this) == DialogResult.Ok)
                 {
-                    _newIcon = SKBitmap.Decode(dialog.FileName);
-                    _settings.Icon = _newIcon; // todo
+                    SKBitmap newIcon = SKBitmap.Decode(dialog.FileName);
+                    _newIcon = new(32, 32);
+                    newIcon.ScalePixels(_newIcon, SKFilterQuality.High);
                     iconPanel.Content = GetPreview(_newIcon);
                 }
             };
@@ -108,7 +109,6 @@ namespace SerialLoops
 
         private static SKGuiImage GetPreview(SKBitmap icon)
         {
-
             SKBitmap preview = new(64, 64);
             icon.ScalePixels(preview, SKFilterQuality.None);
             return new SKGuiImage(preview);
@@ -156,10 +156,11 @@ namespace SerialLoops
             }
             _settings.Name = text;
 
-            if (_newIcon != null)
+            if (_newIcon is not null)
             {
                 _settings.Icon = _newIcon;
             }
+
             _log.Log("Updated NDS Project File settings");
             Close();
         }

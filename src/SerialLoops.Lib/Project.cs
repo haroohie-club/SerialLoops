@@ -81,7 +81,7 @@ namespace SerialLoops.Lib
         public void LoadArchives(ILogger log, IProgressTracker tracker)
         {
             tracker.Focus("Project Settings", 1);
-            Settings = new(NdsProjectFile.FromByteArray<NdsProjectFile>(File.ReadAllBytes(Path.Combine(IterativeDirectory, "rom", $"{Name}.xml"))));
+            Settings = new(NdsProjectFile.FromByteArray<NdsProjectFile>(File.ReadAllBytes(Path.Combine(IterativeDirectory, "rom", $"{Name}.xml"))), log);
             tracker.Finished++;
 
             tracker.Focus("dat.bin", 3);

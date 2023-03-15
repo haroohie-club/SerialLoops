@@ -1,17 +1,19 @@
 ﻿using HaroohieClub.NitroPacker.Core;
 using HaroohieClub.NitroPacker.Nitro.Gx;
+using HaruhiChokuretsuLib.Archive.Graphics;
+using HaruhiChokuretsuLib.Util;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using static HaroohieClub.NitroPacker.Nitro.Card.Rom.RomBanner;
-using static HaruhiChokuretsuLib.Archive.Event.VoiceMapFile.VoiceMapStruct;
 
 namespace SerialLoops.Lib
 {
     public class ProjectSettings
     {
         public NdsProjectFile File { get; private set; }
+        private ILogger _log;
 
         public BannerV1 Banner {
             get => File.RomInfo.Banner.Banner;
@@ -48,16 +50,29 @@ namespace SerialLoops.Lib
             }
             set
             {
-                // todo encode into image
-                // 512 bytes => image (1b / 2 pixels)
-                // 32 bytes => palette (2b / color)
-                // see https://github.com/haroohie-club/NitroPacker/blob/master/HaroohieClub.NitroPacker.Nitro/Gx/GxUtil.cs#L264-L276
-                // also useful reference: https://github.com/TheGameratorT/NDS_Banner_Editor/blob/master/qndsimage.cpp
+                GraphicsFile grp = new()
+                {
+                    Name = "ICON",
+                    PixelData = new(),
+                    PaletteData = new(),
+                };
+                grp.Initialize(Array.Empty<byte>(), 0, _log);
+                grp.FileFunction = GraphicsFile.Function.SHTX;
+                grp.ImageForm = GraphicsFile.Form.TILE;
+                grp.ImageTileForm = GraphicsFile.TileForm.GBA_4BPP;
+                grp.Width = 32;
+                grp.Height = 32;
+                grp.Palette = new(new SKColor[16]);
+                grp.SetImage(value, setPalette: true, transparentIndex: 0, newSize: true);
+
+                Banner.Image = grp.PixelData.ToArray();
+                Banner.Pltt = grp.PaletteData.ToArray();
             }
         }
-        public ProjectSettings(NdsProjectFile file)
+        public ProjectSettings(NdsProjectFile file, ILogger log)
         {
             File = file;
+            _log = log;
         }
 
     }
