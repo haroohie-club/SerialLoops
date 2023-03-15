@@ -169,10 +169,23 @@ namespace SerialLoops.Lib
             }
             tracker.Finished+= 3;
 
+            var ndsProjectFile = Path.Combine(directory, "rom", $"{project.Name}.xml");
+            tracker.Focus("Writing NitroPacker Project File", 1);
+            try
+            {
+                File.WriteAllBytes(ndsProjectFile, project.Settings.File.Write());
+            } 
+            catch (IOException exc)
+            {
+                log.LogError($"Failed to write NitroPacker NDS project file to disk: {exc.Message}\n\n{exc.StackTrace}");
+                return false;
+            }
+            tracker.Finished++;
+
             tracker.Focus("Packing ROM", 1);
             try
             {
-                NdsProjectFile.Pack(Path.Combine(project.MainDirectory, $"{project.Name}.nds"), Path.Combine(directory, "rom", $"{project.Name}.xml"));
+                NdsProjectFile.Pack(Path.Combine(project.MainDirectory, $"{project.Name}.nds"), ndsProjectFile);
             }
             catch (Exception exc)
             {
