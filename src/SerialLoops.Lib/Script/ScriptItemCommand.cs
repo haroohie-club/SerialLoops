@@ -113,7 +113,7 @@ namespace SerialLoops.Lib.Script
                                 parameters.Add(new ShortScriptParameter("Sprite Layer", parameter));
                                 break;
                             case 10:
-                                parameters.Add(new BoolScriptParameter("Continue Immediately", parameter == 1));
+                                parameters.Add(new BoolScriptParameter("Don't Clear Text", parameter == 1));
                                 break;
                             case 11:
                                 parameters.Add(new BoolScriptParameter("Disable Lip Flap", parameter == 1));
