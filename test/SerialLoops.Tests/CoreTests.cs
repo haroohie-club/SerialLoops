@@ -47,7 +47,7 @@ namespace SerialLoops.Tests
             _log.Log("Creating project...");
             _config = Config.LoadConfig(_log);
             _project = new("Tester", "en", _config, _log);
-
+            
             string archivesDir = Path.Combine("original", "archives");
             string bgmDir = Path.Combine("original", "bgm");
             string vceDir = Path.Combine("original", "vce");

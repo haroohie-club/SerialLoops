@@ -9,8 +9,6 @@ using System.Linq;
 
 namespace SerialLoops.Controls
 {
-
-
     internal class ItemContextMenu : ContextMenu
     {
         private readonly ILogger _log;

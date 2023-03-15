@@ -1,4 +1,5 @@
-﻿using HaruhiChokuretsuLib.Archive;
+﻿using HaroohieClub.NitroPacker.Core;
+using HaruhiChokuretsuLib.Archive;
 using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Archive.Graphics;
@@ -29,7 +30,8 @@ namespace SerialLoops.Lib
         public string IterativeDirectory => Path.Combine(MainDirectory, "iterative");
         [JsonIgnore]
         public string ProjectFile => Path.Combine(MainDirectory, $"{Name}.{PROJECT_FORMAT}");
-
+        [JsonIgnore]
+        public ProjectSettings Settings { get; set; }
         [JsonIgnore]
         public List<ItemDescription> Items { get; set; } = new();
 
@@ -75,7 +77,21 @@ namespace SerialLoops.Lib
                 log.LogError($"Exception occurred while attempting to create project directories.\n{exc.Message}\n\n{exc.StackTrace}");
             }
         }
+        
+        public void Load(ILogger log, IProgressTracker tracker)
+        {
+            LoadProjectSettings(log, tracker);
+            LoadArchives(log, tracker);
+        }
 
+        public void LoadProjectSettings(ILogger log, IProgressTracker tracker)
+        {
+            tracker.Focus("Project Settings", 1);
+            byte[] projectFile = File.ReadAllBytes(Path.Combine(IterativeDirectory, "rom", $"{Name}.xml"));
+            Settings = new(NdsProjectFile.FromByteArray<NdsProjectFile>(projectFile), log);
+            tracker.Finished++;
+        }
+        
         public void LoadArchives(ILogger log, IProgressTracker tracker)
         {
             tracker.Focus("dat.bin", 3);
@@ -223,7 +239,7 @@ namespace SerialLoops.Lib
                 tracker.Focus($"{Path.GetFileNameWithoutExtension(projFile)} Project Data", 1);
                 Project project = JsonSerializer.Deserialize<Project>(File.ReadAllText(projFile));
                 tracker.Finished++;
-                project.LoadArchives(log, tracker);
+                project.Load(log, tracker);
                 return project;
             }
             catch (Exception exc)
@@ -249,5 +265,6 @@ namespace SerialLoops.Lib
                     item.SearchableText.Contains(searchTerm.Trim(), StringComparison.OrdinalIgnoreCase))).ToList();
             }
         }
+
     }
 }
