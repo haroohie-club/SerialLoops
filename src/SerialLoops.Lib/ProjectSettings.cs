@@ -4,7 +4,6 @@ using HaruhiChokuretsuLib.Archive.Graphics;
 using HaruhiChokuretsuLib.Util;
 using SkiaSharp;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using static HaroohieClub.NitroPacker.Nitro.Card.Rom.RomBanner;
 
@@ -12,22 +11,12 @@ namespace SerialLoops.Lib
 {
     public class ProjectSettings
     {
-        public NdsProjectFile File { get; private set; }
-        private ILogger _log;
-
-        public BannerV1 Banner {
-            get => File.RomInfo.Banner.Banner;
-            private set
-            {
-                File.RomInfo.Banner.Banner = value;
-            }
-        }
-
+        public NdsProjectFile File { get; }
+        private BannerV1 Banner => File.RomInfo.Banner.Banner;
+        private readonly ILogger _log;
+        
         public string Name {
-            get
-            {
-                return Banner.GameName[0];
-            }
+            get => Banner.GameName[0];
             set
             {
                 string name = value.Length > 128 ? value[..63] : value;

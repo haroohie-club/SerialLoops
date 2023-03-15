@@ -4,22 +4,18 @@ using SerialLoops.Lib;
 using SerialLoops.Utility;
 using SkiaSharp;
 using System;
-using System.Runtime;
 
 namespace SerialLoops
 {
-    public partial class ProjectSettingsDialog : Dialog
+    public class ProjectSettingsDialog : Dialog
     {
-        private Project _project;
-        private ProjectSettings _settings { get => _project.Settings; }
-
-        private TextBox _nameBox;
-        private TextBox _authorBox;
-
-        private SKBitmap _newIcon;
-
+        private readonly Project _project;
         private readonly ILogger _log;
-
+        private ProjectSettings Settings => _project.Settings;
+        
+        private TextArea _nameBox;
+        private SKBitmap _newIcon;
+        
         public ProjectSettingsDialog(Project project, ILogger log)
         {
             _project = project;
@@ -73,7 +69,7 @@ namespace SerialLoops
         {
             Panel iconPanel = new()
             {
-                Content = GetPreview(_settings.Icon)
+                Content = GetPreview(Settings.Icon)
             };
             Button replaceButton = new() { Text = "Replace..." };
             replaceButton.Click += (sender, e) =>
@@ -116,20 +112,12 @@ namespace SerialLoops
 
         private Container GetNameEditor()
         {
-            string[] names = _settings.Name.Split("\n");
             _nameBox = new()
             {
-                Text = names[0],
-                PlaceholderText = "Name",
-                Size = new(175, 23),
-                MaxLength = 64,
-            };
-            _authorBox = new()
-            {
-                Text = names[1],
-                PlaceholderText = "Author",
-                Size = new(175, 23),
-                MaxLength = 64
+                Text = Settings.Name,
+                Size = new(190, 50),
+                SpellCheck = false,
+                AcceptsTab = false
             };
 
             return new StackLayout
@@ -138,27 +126,29 @@ namespace SerialLoops
                 Spacing = 5,
                 HorizontalContentAlignment = HorizontalAlignment.Center,
                 VerticalContentAlignment = VerticalAlignment.Center,
-                Items =
-                {
-                    _nameBox,
-                    _authorBox
-                }
+                Items = {"Game Title", _nameBox }
             };
         }
 
         private void ApplyButton_OnClick(object sender, EventArgs e)
         {
-            string text = $"{_nameBox.Text}\n{_authorBox.Text}";
-            if (_nameBox.Text.Length < 1 || _authorBox.Text.Length < 1)
+            string text = _nameBox.Text;
+            if (text.Length is < 1 or > 127)
             {
-                MessageBox.Show("Please enter a name and author for the DS Menu banner", MessageBoxType.Error);
+                MessageBox.Show("Please enter a game name for the banner, between 1 and 128 characters.", MessageBoxType.Warning);
                 return;
             }
-            _settings.Name = text;
+            
+            if (text.Split('\n').Length > 3)
+            {
+                MessageBox.Show("Game banner can only contain up to three lines.", MessageBoxType.Error);
+                return;
+            }
+            Settings.Name = text;
 
             if (_newIcon is not null)
             {
-                _settings.Icon = _newIcon;
+                Settings.Icon = _newIcon;
             }
 
             _log.Log("Updated NDS Project File settings");
