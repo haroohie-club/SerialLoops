@@ -77,13 +77,23 @@ namespace SerialLoops.Lib
                 log.LogError($"Exception occurred while attempting to create project directories.\n{exc.Message}\n\n{exc.StackTrace}");
             }
         }
+        
+        public void Load(ILogger log, IProgressTracker tracker)
+        {
+            LoadProjectSettings(log, tracker);
+            LoadArchives(log, tracker);
+        }
 
-        public void LoadArchives(ILogger log, IProgressTracker tracker)
+        public void LoadProjectSettings(ILogger log, IProgressTracker tracker)
         {
             tracker.Focus("Project Settings", 1);
-            Settings = new(NdsProjectFile.FromByteArray<NdsProjectFile>(File.ReadAllBytes(Path.Combine(IterativeDirectory, "rom", $"{Name}.xml"))), log);
+            byte[] projectFile = File.ReadAllBytes(Path.Combine(IterativeDirectory, "rom", $"{Name}.xml"));
+            Settings = new(NdsProjectFile.FromByteArray<NdsProjectFile>(projectFile), log);
             tracker.Finished++;
-
+        }
+        
+        public void LoadArchives(ILogger log, IProgressTracker tracker)
+        {
             tracker.Focus("dat.bin", 3);
             Dat = ArchiveFile<DataFile>.FromFile(Path.Combine(IterativeDirectory, "original", "archives", "dat.bin"), log);
             tracker.Finished++;
@@ -229,7 +239,7 @@ namespace SerialLoops.Lib
                 tracker.Focus($"{Path.GetFileNameWithoutExtension(projFile)} Project Data", 1);
                 Project project = JsonSerializer.Deserialize<Project>(File.ReadAllText(projFile));
                 tracker.Finished++;
-                project.LoadArchives(log, tracker);
+                project.Load(log, tracker);
                 return project;
             }
             catch (Exception exc)
@@ -255,5 +265,6 @@ namespace SerialLoops.Lib
                     item.SearchableText.Contains(searchTerm.Trim(), StringComparison.OrdinalIgnoreCase))).ToList();
             }
         }
+
     }
 }

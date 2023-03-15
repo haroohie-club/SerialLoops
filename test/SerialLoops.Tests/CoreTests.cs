@@ -1,7 +1,4 @@
-﻿using Eto.Forms;
-using HaruhiChokuretsuLib.Archive.Event;
-using HaruhiChokuretsuLib.Audio;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
@@ -11,7 +8,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
-using System.Xml.Linq;
+using HaroohieClub.NitroPacker.Core;
 
 namespace SerialLoops.Tests
 {
@@ -51,7 +48,7 @@ namespace SerialLoops.Tests
             _log.Log("Creating project...");
             _config = Config.LoadConfig(_log);
             _project = new("Tester", "en", _config, _log);
-
+            
             string archivesDir = Path.Combine("original", "archives");
             string bgmDir = Path.Combine("original", "bgm");
             string vceDir = Path.Combine("original", "vce");
