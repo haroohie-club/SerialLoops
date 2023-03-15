@@ -1,4 +1,5 @@
-﻿using HaruhiChokuretsuLib.Archive;
+﻿using HaroohieClub.NitroPacker.Core;
+using HaruhiChokuretsuLib.Archive;
 using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Archive.Graphics;
@@ -29,7 +30,8 @@ namespace SerialLoops.Lib
         public string IterativeDirectory => Path.Combine(MainDirectory, "iterative");
         [JsonIgnore]
         public string ProjectFile => Path.Combine(MainDirectory, $"{Name}.{PROJECT_FORMAT}");
-
+        [JsonIgnore]
+        public ProjectSettings Settings { get; set; }
         [JsonIgnore]
         public List<ItemDescription> Items { get; set; } = new();
 
@@ -78,6 +80,10 @@ namespace SerialLoops.Lib
 
         public void LoadArchives(ILogger log, IProgressTracker tracker)
         {
+            tracker.Focus("Project Settings", 1);
+            Settings = new(NdsProjectFile.FromByteArray<NdsProjectFile>(File.ReadAllBytes(Path.Combine(IterativeDirectory, "rom", $"{Name}.xml"))));
+            tracker.Finished++;
+
             tracker.Focus("dat.bin", 3);
             Dat = ArchiveFile<DataFile>.FromFile(Path.Combine(IterativeDirectory, "original", "archives", "dat.bin"), log);
             tracker.Finished++;

@@ -48,6 +48,9 @@ namespace SerialLoops
             Command saveProject = new() { MenuText = "Save Project", ToolBarText = "Save Project", Shortcut = Application.Instance.CommonModifier | Keys.S };
             saveProject.Executed += SaveProject_Executed;
 
+            Command projectSettings = new() { MenuText = "Project Settings", ToolBarText = "Project Settings" };
+            projectSettings.Executed += ProjectSettings_Executed;
+
             // Tools
             Command searchProject = new() { MenuText = "Search", ToolBarText = "Search", Shortcut = Application.Instance.CommonModifier | Keys.F, Image = ControlGenerator.GetIcon("Search", _log) };
             searchProject.Executed += Search_Executed;
@@ -80,7 +83,7 @@ namespace SerialLoops
                 Items =
                 {
                     // File submenu
-                    new SubMenuItem { Text = "&File", Items = { newProject, openProject, _recentProjects, saveProject } },
+                    new SubMenuItem { Text = "&File", Items = { newProject, openProject, _recentProjects, saveProject, projectSettings } },
                     new SubMenuItem { Text = "&Tools", Items = { searchProject, findOrphanedItems } },
                     // new SubMenuItem { Text = "&Edit", Items = { /* commands/items */ } },
                     // new SubMenuItem { Text = "&View", Items = { /* commands/items */ } },
@@ -265,6 +268,15 @@ namespace SerialLoops
                         _log.LogWarning($"Saving for {item.Type}s not yet implemented.");
                         break;
                 }
+            }
+        }
+
+        private void ProjectSettings_Executed(object sender, EventArgs e)
+        {
+            if (OpenProject is not null)
+            {
+                ProjectSettingsDialog projectSettingsDialog = new(OpenProject, _log);
+                projectSettingsDialog.ShowModal(this);
             }
         }
 

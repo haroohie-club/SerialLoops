@@ -23,6 +23,5 @@ namespace SerialLoops.Utility
         {
         }
 
-
     }
 }

@@ -55,6 +55,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="ProjectCreationDialog - Copy.eto.cs">
+      <DependentUpon>$([System.String]::Copy('%(Filename)').Replace('.eto', ''))%(Extension)</DependentUpon>
+    </Compile>
     <Compile Update="SearchDialog.eto.cs">
       <DependentUpon>$([System.String]::Copy('%(Filename)').Replace('.eto', ''))%(Extension)</DependentUpon>
     </Compile>
