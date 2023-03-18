@@ -1289,7 +1289,7 @@ namespace SerialLoops.Editors
                             }
                         }
                     }
-                    else if (command.Verb == EventFile.CommandVerb.INVEST_START)
+                    else if (command.Verb == EventFile.CommandVerb.INVEST_START || command.Verb == EventFile.CommandVerb.SCREEN_FADEOUT)
                     {
                         sprites.Clear();
                     }
