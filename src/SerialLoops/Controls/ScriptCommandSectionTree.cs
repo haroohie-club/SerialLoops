@@ -196,9 +196,11 @@ namespace SerialLoops.Controls
         internal void DeleteItem(ScriptCommandSectionTreeItem item)
         {
             if (item.Parent is not ScriptCommandSectionTreeItem parent) return;
+            int newIndex = parent.IndexOf(item);
             parent.Remove(item);
             DeleteCommand?.Invoke(this, EventArgs.Empty);
             _treeView.DataStore = _treeView.DataStore;
+            _treeView.SelectedItem = parent[newIndex];
         }
 
         internal void AddItem(ScriptCommandSectionTreeItem item)
