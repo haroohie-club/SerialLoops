@@ -83,8 +83,8 @@ namespace SerialLoops.Controls
                 }
                 entry.Command.Section.Objects.Remove(command);
                 _commands[entry.Command.Section].Remove(entry.Command);
+                _editor.UpdateTabTitle(false);
             };
-            _editor.UpdateTabTitle(false);
         }
 
         private IEnumerable<ScriptCommandSectionEntry> GetSections()
