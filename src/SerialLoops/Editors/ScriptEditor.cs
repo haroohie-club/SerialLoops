@@ -65,7 +65,7 @@ namespace SerialLoops.Editors
 
             ContextMenu contextMenu = new();
 
-            _commandsPanel = new(_commands, new Size(280, 185), expandItems: true, _log);
+            _commandsPanel = new(_commands, new Size(280, 185), expandItems: true, this, _log);
             _commandsPanel.Viewer.SelectedItemChanged += CommandsPanel_SelectedItemChanged;
 
             mainRow.Cells.Add(_commandsPanel);

@@ -1,5 +1,6 @@
 ﻿using Eto.Drawing;
 using Eto.Forms;
+using HaruhiChokuretsuLib.Archive.Event;
 using SerialLoops.Lib.Script;
 using System;
 using System.Collections.Generic;
@@ -63,6 +64,12 @@ namespace SerialLoops.Controls
         }
     }
 
+    public class ScriptCommandSectionEventArgs : EventArgs
+    {
+        public int NewIndex { get; set; }
+        public ScriptCommandSectionTreeItem NewParent { get; set; }
+    }
+
     public class ScriptCommandSectionTreeGridView : SectionList
     {
         private TreeGridView _treeView;
@@ -81,7 +88,7 @@ namespace SerialLoops.Controls
             get
             {
                 var sectionTreeItem = _treeView.SelectedItem as ScriptCommandSectionTreeItem;
-                return sectionTreeItem?.Section as ISection;
+                return sectionTreeItem?.Section;
             }
             set
             {
@@ -175,12 +182,12 @@ namespace SerialLoops.Controls
             if (_cursorItem.Parent is not ScriptCommandSectionTreeItem cursorParent) return;
             if ((hoveredParent.Text == "Top" && cursorParent.Text != "Top") 
                 || (cursorParent.Text == "Top" && hoveredParent.Text != "Top")) return;
-            var index = cursorParent.IndexOf(releasedOn);
+            var index = hoveredParent.IndexOf(releasedOn);
             if (index == -1) return;
 
             cursorParent.Remove(_cursorItem);
-            cursorParent.Insert(index, _cursorItem);
-            RepositionCommand?.Invoke(this, e);
+            hoveredParent.Insert(index, _cursorItem);
+            RepositionCommand?.Invoke(this, new ScriptCommandSectionEventArgs { NewIndex = index, NewParent = hoveredParent });
             _treeView.DataStore = _treeView.DataStore;
             _treeView.SelectedItem = _cursorItem;
             _cursorItem = null;

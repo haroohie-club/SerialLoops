@@ -18,6 +18,7 @@ namespace SerialLoops.Lib.Script
         public CommandVerb Verb { get; set; }
         public List<ScriptParameter> Parameters { get; set; }
         public ScriptSection Section { get; set; }
+        public EventFile Script { get; set; }
         public int Index { get; set; }
 
         private Project _project;
@@ -30,6 +31,7 @@ namespace SerialLoops.Lib.Script
                 Parameters = GetScriptParameters(invocation, eventFile, project),
                 Section = section,
                 Index = index,
+                Script = eventFile,
                 _project = project,
             };
         }
