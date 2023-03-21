@@ -1,5 +1,6 @@
 ﻿using Eto.Drawing;
 using Eto.Forms;
+using HaruhiChokuretsuLib.Archive.Event;
 using SerialLoops.Lib.Script;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ namespace SerialLoops.Controls
 {
     public class ScriptCommandSectionEntry : List<ScriptCommandSectionEntry>, ISection
     {
+        public EventFile ScriptFile { get; set; }
         public ScriptItemCommand Command { get; set; }
         public string Text { get; set; }
 
@@ -19,10 +21,11 @@ namespace SerialLoops.Controls
             Text = Command.ToString();
         }
 
-        public ScriptCommandSectionEntry(string text, IEnumerable<ScriptCommandSectionEntry> commands)
+        public ScriptCommandSectionEntry(string text, IEnumerable<ScriptCommandSectionEntry> commands, EventFile scriptFile)
             : base(commands.ToArray())
         {
             Text = text;
+            ScriptFile = scriptFile;
         }
 
         internal ScriptCommandSectionEntry Clone()
@@ -63,6 +66,12 @@ namespace SerialLoops.Controls
         }
     }
 
+    public class ScriptCommandSectionEventArgs : EventArgs
+    {
+        public int NewIndex { get; set; }
+        public ScriptCommandSectionTreeItem NewParent { get; set; }
+    }
+
     public class ScriptCommandSectionTreeGridView : SectionList
     {
         private TreeGridView _treeView;
@@ -81,7 +90,7 @@ namespace SerialLoops.Controls
             get
             {
                 var sectionTreeItem = _treeView.SelectedItem as ScriptCommandSectionTreeItem;
-                return sectionTreeItem?.Section as ISection;
+                return sectionTreeItem?.Section;
             }
             set
             {
@@ -175,12 +184,12 @@ namespace SerialLoops.Controls
             if (_cursorItem.Parent is not ScriptCommandSectionTreeItem cursorParent) return;
             if ((hoveredParent.Text == "Top" && cursorParent.Text != "Top") 
                 || (cursorParent.Text == "Top" && hoveredParent.Text != "Top")) return;
-            var index = cursorParent.IndexOf(releasedOn);
+            var index = hoveredParent.IndexOf(releasedOn);
             if (index == -1) return;
 
             cursorParent.Remove(_cursorItem);
-            cursorParent.Insert(index, _cursorItem);
-            RepositionCommand?.Invoke(this, e);
+            hoveredParent.Insert(index, _cursorItem);
+            RepositionCommand?.Invoke(this, new ScriptCommandSectionEventArgs { NewIndex = index, NewParent = hoveredParent });
             _treeView.DataStore = _treeView.DataStore;
             _treeView.SelectedItem = _cursorItem;
             _cursorItem = null;
@@ -189,9 +198,11 @@ namespace SerialLoops.Controls
         internal void DeleteItem(ScriptCommandSectionTreeItem item)
         {
             if (item.Parent is not ScriptCommandSectionTreeItem parent) return;
+            int newIndex = parent.IndexOf(item);
             parent.Remove(item);
             DeleteCommand?.Invoke(this, EventArgs.Empty);
             _treeView.DataStore = _treeView.DataStore;
+            _treeView.SelectedItem = parent[newIndex];
         }
 
         internal void AddItem(ScriptCommandSectionTreeItem item)
@@ -207,7 +218,7 @@ namespace SerialLoops.Controls
 
         public void SetContents(IEnumerable<ScriptCommandSectionEntry> topNodes, bool expanded)
         {
-            _treeView.DataStore = new ScriptCommandSectionTreeItem(new ScriptCommandSectionEntry("Top", topNodes), expanded);
+            _treeView.DataStore = new ScriptCommandSectionTreeItem(new ScriptCommandSectionEntry("Top", topNodes, null), expanded);
         }
 
     }

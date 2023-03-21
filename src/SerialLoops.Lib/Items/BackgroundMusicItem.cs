@@ -2,11 +2,11 @@
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Audio;
 using HaruhiChokuretsuLib.Util;
+using NAudio.Wave;
 using SerialLoops.Lib.Util;
 using System;
 using System.IO;
 using System.Linq;
-using NAudio.Wave;
 
 namespace SerialLoops.Lib.Items
 {

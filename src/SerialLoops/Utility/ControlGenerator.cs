@@ -1,9 +1,9 @@
-﻿using System;
-using Eto.Drawing;
+﻿using Eto.Drawing;
 using Eto.Forms;
 using HaruhiChokuretsuLib.Util;
-using SerialLoops.Lib.Items;
 using SerialLoops.Controls;
+using SerialLoops.Lib.Items;
+using System;
 
 namespace SerialLoops.Utility
 {

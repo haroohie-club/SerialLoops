@@ -1,5 +1,6 @@
 ﻿using HaruhiChokuretsuLib.Archive;
 using HaruhiChokuretsuLib.Archive.Data;
+using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Archive.Graphics;
 using SkiaSharp;
 using System.Linq;
@@ -10,14 +11,16 @@ namespace SerialLoops.Lib.Items
     {
         public MapFile Map { get; set; }
         public int QmapIndex { get; set; }
+        public (string ScriptName, ScriptCommandInvocation command)[] ScriptUses { get; set; }
 
         public MapItem(string name) : base(name, ItemType.Map)
         {
         }
-        public MapItem(MapFile map, int qmapIndex) : base(map.Name[0..^1], ItemType.Map)
+        public MapItem(MapFile map, int qmapIndex, Project project) : base(map.Name[0..^1], ItemType.Map)
         {
             Map = map;
             QmapIndex = qmapIndex;
+            PopulateScriptUses(project.Evt);
         }
 
         public SKPoint GetOrigin(ArchiveFile<GraphicsFile> grp)
@@ -26,7 +29,7 @@ namespace SerialLoops.Lib.Items
             return new SKPoint(layout.LayoutEntries[Map.Settings.LayoutSizeDefinitionIndex].ScreenX, layout.LayoutEntries[Map.Settings.LayoutSizeDefinitionIndex].ScreenY);
         }
 
-        public SKBitmap GetMapImage(ArchiveFile<GraphicsFile> grp, bool displayPathingMap)
+        public SKBitmap GetMapImage(ArchiveFile<GraphicsFile> grp, bool displayPathingMap, bool displayMapStart)
         {
             SKBitmap map;
             if (Map.Settings.BackgroundLayoutStartIndex > 0)
@@ -41,10 +44,9 @@ namespace SerialLoops.Lib.Items
             SKCanvas canvas = new(mapWithGrid);
             canvas.DrawBitmap(map, new SKPoint(0, 0));
 
+            SKPoint gridZero = GetOrigin(grp);
             if (displayPathingMap)
             {
-                SKPoint gridZero = GetOrigin(grp);
-
                 if (Map.Settings.SlgMode)
                 {
                     for (int y = 0; y < Map.PathingMap.Length; y++)
@@ -85,6 +87,20 @@ namespace SerialLoops.Lib.Items
                 }
             }
 
+            if (displayMapStart)
+            {
+                if (Map.Settings.SlgMode)
+                {
+                    SKPoint start = new(gridZero.X - Map.Settings.StartingPosition.x * 32 + Map.Settings.StartingPosition.y * 32, gridZero.Y + Map.Settings.StartingPosition.x * 16 + Map.Settings.StartingPosition.y * 16 + 16);
+                    canvas.DrawCircle(start, 3, new SKPaint() { Color = SKColors.Pink });
+                }
+                else
+                {
+                    SKPoint start = new(gridZero.X - Map.Settings.StartingPosition.x * 16 + Map.Settings.StartingPosition.y * 16, gridZero.Y + Map.Settings.StartingPosition.x * 8 + Map.Settings.StartingPosition.y * 8 + 8);
+                    canvas.DrawCircle(start, 3, new SKPaint() { Color = SKColors.Pink });
+                }
+            }
+
             canvas.Flush();
             return mapWithGrid;
         }
@@ -99,8 +115,21 @@ namespace SerialLoops.Lib.Items
             };
         }
 
+        public void PopulateScriptUses(ArchiveFile<EventFile> evt)
+        {
+            string[] chibiCommands = new string[] { "LOAD_ISOMAP" };
+
+            var list = evt.Files.SelectMany(e =>
+                e.ScriptSections.SelectMany(sec =>
+                    sec.Objects.Where(c => chibiCommands.Contains(c.Command.Mnemonic)).Select(c => (e.Name[0..^1], c))))
+                .Where(t => t.c.Parameters[0] == Map.Index).ToList();
+
+            ScriptUses = list.ToArray();
+        }
+
         public override void Refresh(Project project)
         {
+            PopulateScriptUses(project.Evt);
         }
     }
 }

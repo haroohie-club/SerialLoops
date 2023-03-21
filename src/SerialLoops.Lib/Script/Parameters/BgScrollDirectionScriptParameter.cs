@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SerialLoops.Lib.Script.Parameters
+﻿namespace SerialLoops.Lib.Script.Parameters
 {
     public class BgScrollDirectionScriptParameter : ScriptParameter
     {

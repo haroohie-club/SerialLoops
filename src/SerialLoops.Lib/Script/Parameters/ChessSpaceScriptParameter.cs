@@ -1,6 +1,4 @@
-﻿using System.Security.Cryptography.X509Certificates;
-
-namespace SerialLoops.Lib.Script.Parameters
+﻿namespace SerialLoops.Lib.Script.Parameters
 {
     public class ChessSpaceScriptParameter : ScriptParameter
     {

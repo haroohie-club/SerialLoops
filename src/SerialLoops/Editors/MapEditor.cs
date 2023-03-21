@@ -3,6 +3,7 @@ using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Utility;
+using System;
 
 namespace SerialLoops.Editors
 {
@@ -22,15 +23,20 @@ namespace SerialLoops.Editors
             {
                 Items =
                 {
-                    new SKGuiImage(_map.GetMapImage(_project.Grp, false)),
+                    new SKGuiImage(_map.GetMapImage(_project.Grp, false, false)),
                 }
             };
 
             CheckBox drawPathingMapBox = new() { Text = "Draw Pathing Map", Checked = false };
-            drawPathingMapBox.CheckedChanged += (obj, args) =>
+            CheckBox drawStartingPointBox = new() { Text = "Draw Starting Point", Checked = false };
+
+            void redrawMap(object obj, EventArgs args)
             {
-                mapLayout.Content = new SKGuiImage(_map.GetMapImage(_project.Grp, drawPathingMapBox.Checked ?? true));
-            };
+                mapLayout.Content = new SKGuiImage(_map.GetMapImage(_project.Grp, drawPathingMapBox.Checked ?? true, drawStartingPointBox.Checked ?? true));
+            }
+
+            drawPathingMapBox.CheckedChanged += redrawMap;
+            drawStartingPointBox.CheckedChanged += redrawMap;
 
             return new StackLayout
             {
@@ -39,6 +45,7 @@ namespace SerialLoops.Editors
                 {
                     mapLayout,
                     drawPathingMapBox,
+                    drawStartingPointBox,
                 }
             };
         }

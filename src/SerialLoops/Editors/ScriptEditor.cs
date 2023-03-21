@@ -65,7 +65,7 @@ namespace SerialLoops.Editors
 
             ContextMenu contextMenu = new();
 
-            _commandsPanel = new(_commands, new Size(280, 185), expandItems: true, _log);
+            _commandsPanel = new(_commands, new Size(280, 185), expandItems: true, this, _log);
             _commandsPanel.Viewer.SelectedItemChanged += CommandsPanel_SelectedItemChanged;
 
             mainRow.Cells.Add(_commandsPanel);
@@ -249,7 +249,7 @@ namespace SerialLoops.Editors
             mapsDropdown.SelectedIndex = 0;
 
             PixelLayout mapLayout = new() { AllowDrop = true };
-            SKBitmap mapBitmap = maps[0].GetMapImage(_project.Grp, false);
+            SKBitmap mapBitmap = maps[0].GetMapImage(_project.Grp, false, false);
             Icon mapImage = new SKGuiImage(mapBitmap).WithSize(mapBitmap.Width / 2, mapBitmap.Height / 2);
             mapLayout.Add(mapImage, 0, 0);
 
@@ -1289,7 +1289,7 @@ namespace SerialLoops.Editors
                             }
                         }
                     }
-                    else if (command.Verb == EventFile.CommandVerb.INVEST_START)
+                    else if (command.Verb == EventFile.CommandVerb.INVEST_START || command.Verb == EventFile.CommandVerb.SCREEN_FADEOUT)
                     {
                         sprites.Clear();
                     }

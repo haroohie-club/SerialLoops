@@ -18,6 +18,7 @@ namespace SerialLoops.Lib.Script
         public CommandVerb Verb { get; set; }
         public List<ScriptParameter> Parameters { get; set; }
         public ScriptSection Section { get; set; }
+        public EventFile Script { get; set; }
         public int Index { get; set; }
 
         private Project _project;
@@ -30,6 +31,7 @@ namespace SerialLoops.Lib.Script
                 Parameters = GetScriptParameters(invocation, eventFile, project),
                 Section = section,
                 Index = index,
+                Script = eventFile,
                 _project = project,
             };
         }
@@ -113,7 +115,7 @@ namespace SerialLoops.Lib.Script
                                 parameters.Add(new ShortScriptParameter("Sprite Layer", parameter));
                                 break;
                             case 10:
-                                parameters.Add(new BoolScriptParameter("Continue Immediately", parameter == 1));
+                                parameters.Add(new BoolScriptParameter("Don't Clear Text", parameter == 1));
                                 break;
                             case 11:
                                 parameters.Add(new BoolScriptParameter("Disable Lip Flap", parameter == 1));

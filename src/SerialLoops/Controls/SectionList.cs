@@ -1,8 +1,8 @@
-﻿using Eto.Forms;
-using System.Collections.Generic;
+﻿using Eto.Drawing;
+using Eto.Forms;
 using System;
+using System.Collections.Generic;
 using System.Linq;
-using Eto.Drawing;
 
 /// Taken from https://github.com/picoe/Eto/blob/ac4610775b70538b96995bdb0c7f0fbcc5ae1b66/test/Eto.Test/SectionList.cs
 /// Licensed under the BSD-3 License, reproduced below:

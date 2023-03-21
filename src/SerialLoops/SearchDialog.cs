@@ -1,7 +1,3 @@
-using System;
-using Eto.Forms;
-using Eto.Drawing;
-using System.Collections.Generic;
 using HaruhiChokuretsuLib.Util;
 
 namespace SerialLoops

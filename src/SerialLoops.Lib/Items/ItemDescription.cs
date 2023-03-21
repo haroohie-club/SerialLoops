@@ -1,4 +1,5 @@
-﻿using HaruhiChokuretsuLib.Archive.Event;
+﻿using HaruhiChokuretsuLib.Archive.Data;
+using HaruhiChokuretsuLib.Archive.Event;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -68,6 +69,10 @@ namespace SerialLoops.Lib.Items
                 case ItemType.Chibi:
                     ChibiItem chibi = (ChibiItem)this;
                     return project.Items.Where(i => chibi.ScriptUses.Select(s => s.ScriptName).Contains(i.Name)).ToList();
+                case ItemType.Map:
+                    MapItem map = (MapItem)this;
+                    return project.Items.Where(i => i.Type == ItemType.Puzzle && ((PuzzleItem)i).Puzzle.Settings.MapId == map.QmapIndex)
+                        .Concat(project.Items.Where(i => map.ScriptUses.Select(s => s.ScriptName).Contains(i.Name))).ToList();
                 case ItemType.Puzzle:
                     PuzzleItem puzzle = (PuzzleItem)this;
                     if (scenario.Scenario.Commands.Any(c => c.Verb == ScenarioCommand.ScenarioVerb.PUZZLE_PHASE && c.Parameter == puzzle.Puzzle.Index))

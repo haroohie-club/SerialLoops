@@ -4,7 +4,6 @@ using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Utility;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 

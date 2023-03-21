@@ -1,9 +1,7 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Controls;
+﻿using Eto.Wpf;
 using Eto.Wpf.Forms.ToolBar;
-using Eto.Wpf;
-using Eto.Forms;
+using System;
+using System.Windows.Controls;
 using Application = Eto.Forms.Application;
 
 namespace SerialLoops.Wpf
@@ -34,7 +32,7 @@ namespace SerialLoops.Wpf
                 button.Control.Width = 50;
                 button.Control.Height = 40;
 
-                StackPanel stackPanel = new() { Orientation = System.Windows.Controls.Orientation.Vertical };
+                StackPanel stackPanel = new() { Orientation = Orientation.Vertical };
                 TextBlock textBlock = new() { Text = button.Text, TextAlignment = System.Windows.TextAlignment.Center };
                 Image image = button.Image.ToWpfImage();
                 image.Height = 20;
