@@ -1,5 +1,6 @@
 ﻿using Eto.Drawing;
 using Eto.Forms;
+using HaruhiChokuretsuLib.Archive.Event;
 using SerialLoops.Lib.Script;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ namespace SerialLoops.Controls
 {
     public class ScriptCommandSectionEntry : List<ScriptCommandSectionEntry>, ISection
     {
+        public EventFile ScriptFile { get; set; }
         public ScriptItemCommand Command { get; set; }
         public string Text { get; set; }
 
@@ -19,10 +21,11 @@ namespace SerialLoops.Controls
             Text = Command.ToString();
         }
 
-        public ScriptCommandSectionEntry(string text, IEnumerable<ScriptCommandSectionEntry> commands)
+        public ScriptCommandSectionEntry(string text, IEnumerable<ScriptCommandSectionEntry> commands, EventFile scriptFile)
             : base(commands.ToArray())
         {
             Text = text;
+            ScriptFile = scriptFile;
         }
 
         internal ScriptCommandSectionEntry Clone()
@@ -215,7 +218,7 @@ namespace SerialLoops.Controls
 
         public void SetContents(IEnumerable<ScriptCommandSectionEntry> topNodes, bool expanded)
         {
-            _treeView.DataStore = new ScriptCommandSectionTreeItem(new ScriptCommandSectionEntry("Top", topNodes), expanded);
+            _treeView.DataStore = new ScriptCommandSectionTreeItem(new ScriptCommandSectionEntry("Top", topNodes, null), expanded);
         }
 
     }

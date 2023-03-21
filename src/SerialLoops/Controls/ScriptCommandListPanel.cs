@@ -51,22 +51,38 @@ namespace SerialLoops.Controls
                 var entry = (ScriptCommandSectionEntry)treeGridView.SelectedItem;
                 var args = (ScriptCommandSectionEventArgs)e;
 
-                ScriptCommandInvocation command = entry.Command.Script.ScriptSections[entry.Command.Script.ScriptSections.IndexOf(entry.Command.Section)]
-                    .Objects[entry.Command.Index];
-                entry.Command.Script.ScriptSections[entry.Command.Script.ScriptSections.IndexOf(entry.Command.Section)]
-                    .Objects.RemoveAt(entry.Command.Index);
-                _commands[entry.Command.Section].RemoveAt(entry.Command.Index);
-                for (int i = entry.Command.Index; i < _commands[entry.Command.Section].Count; i++)
+                if (args.NewParent.Text == "Top")
                 {
-                    _commands[entry.Command.Section][i].Index--;
+                    ScriptSection section = entry.ScriptFile.ScriptSections.First(s => s.Name.Replace("/", "") == entry.Text);
+                    entry.ScriptFile.ScriptSections.Remove(section);
+                    entry.ScriptFile.ScriptSections.Insert(args.NewIndex, section);
+
+                    LabelsSectionEntry label = entry.ScriptFile.LabelsSection.Objects.FirstOrDefault(l => l.Name.Replace("/", "") == entry.Text);
+                    if (label is not null)
+                    {
+                        entry.ScriptFile.LabelsSection.Objects.Remove(label);
+                        entry.ScriptFile.LabelsSection.Objects.Insert(args.NewIndex, label);
+                    }
                 }
-                entry.Command.Section = entry.Command.Script.ScriptSections.First(s => s.Name.Replace("/", "").Equals(args.NewParent.Text));
-                entry.Command.Section.Objects.Insert(args.NewIndex, command);
-                entry.Command.Index = args.NewIndex;
-                _commands[entry.Command.Section].Insert(args.NewIndex, entry.Command);
-                for (int i = args.NewIndex + 1; i < _commands[entry.Command.Section].Count; i++)
+                else
                 {
-                    _commands[entry.Command.Section][i].Index++;
+                    ScriptCommandInvocation command = entry.Command.Script.ScriptSections[entry.Command.Script.ScriptSections.IndexOf(entry.Command.Section)]
+                        .Objects[entry.Command.Index];
+                    entry.Command.Script.ScriptSections[entry.Command.Script.ScriptSections.IndexOf(entry.Command.Section)]
+                        .Objects.RemoveAt(entry.Command.Index);
+                    _commands[entry.Command.Section].RemoveAt(entry.Command.Index);
+                    for (int i = entry.Command.Index; i < _commands[entry.Command.Section].Count; i++)
+                    {
+                        _commands[entry.Command.Section][i].Index--;
+                    }
+                    entry.Command.Section = entry.Command.Script.ScriptSections.First(s => s.Name.Replace("/", "").Equals(args.NewParent.Text));
+                    entry.Command.Section.Objects.Insert(args.NewIndex, command);
+                    entry.Command.Index = args.NewIndex;
+                    _commands[entry.Command.Section].Insert(args.NewIndex, entry.Command);
+                    for (int i = args.NewIndex + 1; i < _commands[entry.Command.Section].Count; i++)
+                    {
+                        _commands[entry.Command.Section][i].Index++;
+                    }
                 }
                 _editor.UpdateTabTitle(false);
             };
@@ -96,9 +112,9 @@ namespace SerialLoops.Controls
                 {
                     commands.Add(new(command));
                 }
-                ScriptCommandSectionEntry s = new(section.Name, commands);
+                ScriptCommandSectionEntry s = new(section.Name, commands, Commands.Values.First().First().Script);
             }
-            return Commands.Select(s => new ScriptCommandSectionEntry(s.Key.Name, s.Value.Select(c => new ScriptCommandSectionEntry(c))));
+            return Commands.Select(s => new ScriptCommandSectionEntry(s.Key.Name, s.Value.Select(c => new ScriptCommandSectionEntry(c)), Commands.Values.First().First().Script));
         }
     }
 }
