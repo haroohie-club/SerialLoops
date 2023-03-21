@@ -90,15 +90,27 @@ namespace SerialLoops.Controls
             {
                 var treeGridView = (ScriptCommandSectionTreeGridView)o;
                 var entry = (ScriptCommandSectionEntry)treeGridView.SelectedItem;
-
-                ScriptCommandInvocation command = entry.Command.Script.ScriptSections[entry.Command.Script.ScriptSections.IndexOf(entry.Command.Section)]
-                    .Objects[entry.Command.Index];
-                for (int i = entry.Command.Section.Objects.IndexOf(command); i < entry.Command.Section.Objects.Count; i++)
+                
+                if (entry.Count > 0)
                 {
-                    _commands[entry.Command.Section][i].Index--;
+                    entry.ScriptFile.ScriptSections.Remove(entry.ScriptFile.ScriptSections.First(s => s.Name.Replace("/", "") == entry.Text));
+                    LabelsSectionEntry label = entry.ScriptFile.LabelsSection.Objects.FirstOrDefault(l => l.Name.Replace("/", "") == entry.Text);
+                    if (label is not null)
+                    {
+                        entry.ScriptFile.LabelsSection.Objects.Remove(label);
+                    }
                 }
-                entry.Command.Section.Objects.Remove(command);
-                _commands[entry.Command.Section].Remove(entry.Command);
+                else
+                {
+                    ScriptCommandInvocation command = entry.Command.Script.ScriptSections[entry.Command.Script.ScriptSections.IndexOf(entry.Command.Section)]
+                        .Objects[entry.Command.Index];
+                    for (int i = entry.Command.Section.Objects.IndexOf(command); i < entry.Command.Section.Objects.Count; i++)
+                    {
+                        _commands[entry.Command.Section][i].Index--;
+                    }
+                    entry.Command.Section.Objects.Remove(command);
+                    _commands[entry.Command.Section].Remove(entry.Command);
+                }
                 _editor.UpdateTabTitle(false);
             };
         }
