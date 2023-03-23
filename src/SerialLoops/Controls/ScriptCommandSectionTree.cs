@@ -1,6 +1,7 @@
 ﻿using Eto.Drawing;
 using Eto.Forms;
 using HaruhiChokuretsuLib.Archive.Event;
+using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
 using System;
 using System.Collections.Generic;
@@ -78,6 +79,7 @@ namespace SerialLoops.Controls
         private ScriptCommandSectionTreeItem _cursorItem;
         public event EventHandler RepositionCommand;
         public event EventHandler DeleteCommand;
+        public event EventHandler AddCommand;
         public override Control Control => _treeView;
 
         public override void Focus()
@@ -213,6 +215,20 @@ namespace SerialLoops.Controls
             if (index == -1) return;
             parent.Insert(index + 1, item);
             item.Parent = parent;
+            AddCommand?.Invoke(this, EventArgs.Empty); //todo invoke this with the new item args
+            _treeView.DataStore = _treeView.DataStore;
+        }
+
+        internal void AddSection(ScriptCommandSectionTreeItem section)
+        {
+            // add a new top node
+            if (SelectedCommandTreeItem is null) return;
+            if (SelectedCommandTreeItem.Parent is not ScriptCommandSectionTreeItem parent) return;
+            var index = parent.IndexOf(SelectedCommandTreeItem);
+            if (index == -1) return;
+            parent.Insert(index + 1, section);
+            section.Parent = parent;
+            AddCommand?.Invoke(this, EventArgs.Empty); //todo invoke this with the new item args
             _treeView.DataStore = _treeView.DataStore;
         }
 
