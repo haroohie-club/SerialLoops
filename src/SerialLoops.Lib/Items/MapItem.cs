@@ -89,16 +89,19 @@ namespace SerialLoops.Lib.Items
 
             if (displayMapStart)
             {
+                SKBitmap icon;
+                SKPoint start;
                 if (Map.Settings.SlgMode)
                 {
-                    SKPoint start = new(gridZero.X - Map.Settings.StartingPosition.x * 32 + Map.Settings.StartingPosition.y * 32, gridZero.Y + Map.Settings.StartingPosition.x * 16 + Map.Settings.StartingPosition.y * 16 + 16);
-                    canvas.DrawCircle(start, 3, new SKPaint() { Color = SKColors.Pink });
+                    start = new(gridZero.X - Map.Settings.StartingPosition.x * 32 + Map.Settings.StartingPosition.y * 32, gridZero.Y + Map.Settings.StartingPosition.x * 16 + Map.Settings.StartingPosition.y * 16 + 16);
+                    icon = GetMapIcon("Origin_Point", 32);
                 }
                 else
                 {
-                    SKPoint start = new(gridZero.X - Map.Settings.StartingPosition.x * 16 + Map.Settings.StartingPosition.y * 16, gridZero.Y + Map.Settings.StartingPosition.x * 8 + Map.Settings.StartingPosition.y * 8 + 8);
-                    canvas.DrawCircle(start, 3, new SKPaint() { Color = SKColors.Pink });
+                    start = new(gridZero.X - Map.Settings.StartingPosition.x * 16 + Map.Settings.StartingPosition.y * 16, gridZero.Y + Map.Settings.StartingPosition.x * 8 + Map.Settings.StartingPosition.y * 8 + 8);
+                    icon = GetMapIcon("Origin_Point", 16);
                 }
+                canvas.DrawBitmap(icon, start);
             }
 
             canvas.Flush();
@@ -125,6 +128,14 @@ namespace SerialLoops.Lib.Items
                 .Where(t => t.c.Parameters[0] == Map.Index).ToList();
 
             ScriptUses = list.ToArray();
+        }
+
+        private static SKBitmap GetMapIcon(string name, int size)
+        {
+            SKBitmap icon = new(size, size);
+            SKImage image = SKImage.FromEncodedData($"MapIcons/{name}.png");
+            SKBitmap.FromImage(image).ScalePixels(icon, SKFilterQuality.Medium);
+            return icon;
         }
 
         public override void Refresh(Project project)
