@@ -110,6 +110,14 @@ namespace SerialLoops.Controls
             }
         }
 
+        public ScriptCommandSectionEntry SelecteSection
+        {
+            get
+            {
+                return SelectedCommandTreeItem?.Section; 
+            }
+        }
+
         ITreeGridItem FindItem(ScriptCommandSectionTreeItem node, ISection section)
         {
             foreach (var item in node)

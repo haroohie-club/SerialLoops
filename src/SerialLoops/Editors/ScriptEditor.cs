@@ -119,30 +119,35 @@ namespace SerialLoops.Editors
                     };
                     createButton.Click += (sender, args) =>
                     {
-                        dialog.Close();
-                        CommandVerb verb = (CommandVerb)Enum.Parse(typeof(CommandVerb), verbSelecter.SelectedKey);
-                        ScriptCommandSectionEntry section = treeGridView.SelectedCommandTreeItem.Section;
-
-                        List<ScriptParameter> parameters;
-                        try
+                        ScriptCommand scriptCommand = CommandsAvailable
+                                .Find(command => command.Mnemonic.Equals(verbSelecter.SelectedKey));
+                        if (scriptCommand == null)
                         {
-                            parameters = ScriptItemCommand.GetBlankParameters(verb, _project, _script.Event);
-                        } catch (Exception e)
-                        {
-                            _log.LogError($"Could not create command in the current context. Caused by: {e.Message}");
+                            _log.LogError($"Invalid or unavailable script command selected: {verbSelecter.SelectedKey}");
                             return;
                         }
+                        dialog.Close();
 
-                        ScriptItemCommand newCommand = new()
+                        try
                         {
-                            Verb = verb,
-                            Script = _script.Event,
-                            Index = section.Command.Index + 1,
-                            Section = section.Command.Section,
-                            Project = _project,
-                            Parameters = parameters
-                        };
-                        treeGridView.AddItem(new(new(newCommand), false));
+                            ScriptCommandSectionTreeItem item = treeGridView.SelectedCommandTreeItem;
+                            ScriptCommandSectionEntry section = item.Section;
+                            int index = ((ScriptCommandSectionTreeItem)item.Parent).IndexOf(item);
+                            ScriptItemCommand command = ScriptItemCommand.FromInvocation(
+                                new(scriptCommand),
+                                section.Command.Section,
+                                index == -1 ? 0 : index,
+                                section.ScriptFile,
+                                _project
+                            );
+
+                            treeGridView.AddItem(new(new(command), false));
+                        }
+                        catch (Exception ex)
+                        {
+                            _log.LogError($"Unable to create command: {ex.Message}");
+                            return;
+                        }
                     };
 
                     dialog.ShowModal(this);
