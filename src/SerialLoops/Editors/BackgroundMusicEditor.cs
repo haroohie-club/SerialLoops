@@ -6,6 +6,7 @@ using SerialLoops.Controls;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Utility;
+using System.IO;
 
 namespace SerialLoops.Editors
 {
@@ -42,7 +43,7 @@ namespace SerialLoops.Editors
                 if (openFileDialog.ShowAndReportIfFileSelected(this))
                 {
                     LoopyProgressTracker tracker = new();
-                    _ = new ProgressDialog(() => AdxUtil.EncodeWav(openFileDialog.FileName, _bgm.BgmFile), () =>
+                    _ = new ProgressDialog(() => _bgm.Replace(openFileDialog.FileName, _project.BaseDirectory, _project.IterativeDirectory), () =>
                     {
                         Content = GetEditorPanel();
                     }, tracker, "Replace BGM track");

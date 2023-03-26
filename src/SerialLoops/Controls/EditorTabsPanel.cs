@@ -89,7 +89,7 @@ namespace SerialLoops.Controls
                 case ItemDescription.ItemType.Topic:
                     return new TopicEditor((TopicItem)project.Items.First(i => i.Name == item.Name), project, log);
                 case ItemDescription.ItemType.Voice:
-                    return new VoicedLineEditor((VoicedLineItem)project.Items.First(i => i.Name == item.Name), log);
+                    return new VoicedLineEditor((VoicedLineItem)project.Items.First(i => i.Name == item.Name), project, log);
                 default:
                     log.LogError("Invalid item type!");
                     return null;
