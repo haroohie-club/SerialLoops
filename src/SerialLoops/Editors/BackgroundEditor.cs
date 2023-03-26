@@ -32,7 +32,7 @@ namespace SerialLoops.Editors
                 Items =
                 {
                     new ImageView() { Image = new SKGuiImage(_bg.GetBackground()) },
-                    $"{_bg.Id} (0x{_bg.Id:X3})",
+                    $"{_bg.Id} (0x{_bg.Id:X3}); {_bg.BackgroundType}",
                     exportButton,
                     extrasInfo,
                 }
