@@ -42,6 +42,7 @@ namespace SerialLoops.Editors
                 if (openFileDialog.ShowAndReportIfFileSelected(this))
                 {
                     LoopyProgressTracker tracker = new();
+                    VcePlayer.Stop();
                     _ = new ProgressDialog(() => _vce.Replace(openFileDialog.FileName, _project.BaseDirectory, _project.IterativeDirectory), () =>
                     {
                         Content = GetEditorPanel();
@@ -52,6 +53,7 @@ namespace SerialLoops.Editors
             Button restoreButton = new() { Text = "Restore" };
             restoreButton.Click += (obj, args) =>
             {
+                VcePlayer.Stop();
                 File.Copy(Path.Combine(_project.BaseDirectory, "original", "vce", Path.GetFileName(_vce.VoiceFile)), Path.Combine(_project.BaseDirectory, _vce.VoiceFile), true);
                 File.Copy(Path.Combine(_project.IterativeDirectory, "original", "vce", Path.GetFileName(_vce.VoiceFile)), Path.Combine(_project.IterativeDirectory, _vce.VoiceFile), true);
                 Content = GetEditorPanel();

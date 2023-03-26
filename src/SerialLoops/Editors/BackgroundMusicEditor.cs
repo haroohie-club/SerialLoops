@@ -42,6 +42,7 @@ namespace SerialLoops.Editors
                 if (openFileDialog.ShowAndReportIfFileSelected(this))
                 {
                     LoopyProgressTracker tracker = new();
+                    BgmPlayer.Stop();
                     _ = new ProgressDialog(() => _bgm.Replace(openFileDialog.FileName, _project.BaseDirectory, _project.IterativeDirectory), () =>
                     {
                         Content = GetEditorPanel();
@@ -52,6 +53,7 @@ namespace SerialLoops.Editors
             Button restoreButton = new() { Text = "Restore" };
             restoreButton.Click += (obj, args) =>
             {
+                BgmPlayer.Stop();
                 File.Copy(Path.Combine(_project.BaseDirectory, "original", "bgm", Path.GetFileName(_bgm.BgmFile)), Path.Combine(_project.BaseDirectory, _bgm.BgmFile), true);
                 File.Copy(Path.Combine(_project.IterativeDirectory, "original", "bgm", Path.GetFileName(_bgm.BgmFile)), Path.Combine(_project.IterativeDirectory, _bgm.BgmFile), true);
                 Content = GetEditorPanel();
