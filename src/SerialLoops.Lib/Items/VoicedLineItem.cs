@@ -62,7 +62,7 @@ namespace SerialLoops.Lib.Items
         public void Replace(string wavFile, string baseDirectory, string iterativeDirectory)
         {
             AdxUtil.EncodeWav(wavFile, Path.Combine(baseDirectory, VoiceFile), true);
-            AdxUtil.EncodeWav(wavFile, Path.Combine(iterativeDirectory, VoiceFile), true);
+            File.Copy(Path.Combine(baseDirectory, VoiceFile), Path.Combine(iterativeDirectory, VoiceFile), true);
         }
 
         public override void Refresh(Project project)

@@ -46,7 +46,7 @@ namespace SerialLoops.Lib.Items
         public void Replace(string wavFile, string baseDirectory, string iterativeDirectory)
         {
             AdxUtil.EncodeWav(wavFile, Path.Combine(baseDirectory, BgmFile), false);
-            AdxUtil.EncodeWav(wavFile, Path.Combine(iterativeDirectory, BgmFile), false);
+            File.Copy(Path.Combine(baseDirectory, BgmFile), Path.Combine(iterativeDirectory, BgmFile), true);
         }
         
         public IWaveProvider GetWaveProvider(ILogger log)

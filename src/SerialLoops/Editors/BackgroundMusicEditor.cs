@@ -67,6 +67,7 @@ namespace SerialLoops.Editors
                     {
                         replaceButton,
                         extractButton,
+                        restoreButton,
                     }
                 }),
                 new TableRow()
