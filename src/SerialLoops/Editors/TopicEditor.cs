@@ -118,8 +118,9 @@ namespace SerialLoops.Editors
                 Spacing = 5,
                 Items =
                 {
-                    ControlGenerator.GetControlWithLabel("Unknown 00", new TextBox { Text = _topic.Topic.UnknownShort00.ToString() }),
-                    ControlGenerator.GetControlWithLabel("Unknown 01", new TextBox { Text = _topic.Topic.UnknownShort01.ToString() }),
+                    ControlGenerator.GetControlWithLabel("Type", new TextBox { Text = _topic.Topic.Type.ToString() }),
+                    ControlGenerator.GetControlWithLabel("Episode Group", new TextBox { Text = _topic.Topic.EpisodeGroup.ToString() }),
+                    ControlGenerator.GetControlWithLabel("Group Selection", new TextBox { Text = _topic.Topic.GroupSelection.ToString() }),
                     ControlGenerator.GetControlWithLabel("Unknown 03", new TextBox { Text = _topic.Topic.UnknownShort03.ToString() }),
                     ControlGenerator.GetControlWithLabel("Unknown 04", new TextBox { Text = _topic.Topic.UnknownShort04.ToString() }),
                     ControlGenerator.GetControlWithLabel("Unknown 09", new TextBox { Text = _topic.Topic.UnknownShort09.ToString() }),
