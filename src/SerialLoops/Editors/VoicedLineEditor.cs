@@ -1,11 +1,11 @@
 ﻿using Eto.Forms;
-using HaruhiChokuretsuLib.Audio;
 using HaruhiChokuretsuLib.Util;
 using NAudio.Wave;
 using SerialLoops.Controls;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Utility;
+using System.IO;
 
 namespace SerialLoops.Editors
 {
@@ -49,6 +49,14 @@ namespace SerialLoops.Editors
                 }
             };
 
+            Button restoreButton = new() { Text = "Restore" };
+            restoreButton.Click += (obj, args) =>
+            {
+                File.Copy(Path.Combine(_project.BaseDirectory, "original", "vce", Path.GetFileName(_vce.VoiceFile)), Path.Combine(_project.BaseDirectory, _vce.VoiceFile), true);
+                File.Copy(Path.Combine(_project.IterativeDirectory, "original", "vce", Path.GetFileName(_vce.VoiceFile)), Path.Combine(_project.IterativeDirectory, _vce.VoiceFile), true);
+                Content = GetEditorPanel();
+            };
+
             return new TableLayout(
                 new TableRow(ControlGenerator.GetPlayerStackLayout(VcePlayer, _vce.Name, _vce.AdxType.ToString())),
                 new TableRow(new StackLayout
@@ -59,6 +67,7 @@ namespace SerialLoops.Editors
                     {
                         replaceButton,
                         extractButton,
+                        restoreButton,
                     }
                 }),
                 new TableRow()

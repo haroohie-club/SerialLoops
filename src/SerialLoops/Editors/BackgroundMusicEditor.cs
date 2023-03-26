@@ -1,5 +1,4 @@
 ﻿using Eto.Forms;
-using HaruhiChokuretsuLib.Audio;
 using HaruhiChokuretsuLib.Util;
 using NAudio.Wave;
 using SerialLoops.Controls;
@@ -48,6 +47,14 @@ namespace SerialLoops.Editors
                         Content = GetEditorPanel();
                     }, tracker, "Replace BGM track");
                 }
+            };
+
+            Button restoreButton = new() { Text = "Restore" };
+            restoreButton.Click += (obj, args) =>
+            {
+                File.Copy(Path.Combine(_project.BaseDirectory, "original", "bgm", Path.GetFileName(_bgm.BgmFile)), Path.Combine(_project.BaseDirectory, _bgm.BgmFile), true);
+                File.Copy(Path.Combine(_project.IterativeDirectory, "original", "bgm", Path.GetFileName(_bgm.BgmFile)), Path.Combine(_project.IterativeDirectory, _bgm.BgmFile), true);
+                Content = GetEditorPanel();
             };
 
             return new TableLayout(
