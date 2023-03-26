@@ -12,6 +12,8 @@ namespace SerialLoops.Lib.Items
 {
     public class BackgroundMusicItem : Item, ISoundItem
     {
+        private string _bgmFile;
+
         public string BgmFile { get; set; }
         public int Index { get; set; }
         public string BgmName { get; set; }
@@ -20,7 +22,8 @@ namespace SerialLoops.Lib.Items
 
         public BackgroundMusicItem(string bgmFile, int index, ExtraFile extras, Project project) : base(Path.GetFileNameWithoutExtension(bgmFile), ItemType.BGM)
         {
-            BgmFile = bgmFile;
+            BgmFile = Path.GetRelativePath(project.IterativeDirectory, bgmFile);
+            _bgmFile = bgmFile;
             Index = index;
             BgmName = extras.Bgms.FirstOrDefault(b => b.Index == Index).Name?.GetSubstitutedString(project) ?? "";
             DisplayName = string.IsNullOrEmpty(BgmName) ? Name : BgmName;
@@ -39,23 +42,29 @@ namespace SerialLoops.Lib.Items
                     sec.Objects.Where(c => c.Command.Mnemonic == EventFile.CommandVerb.BGM_PLAY.ToString()).Select(c => (e.Name[0..^1], c))))
                 .Where(t => t.c.Parameters[0] == Index).ToArray();
         }
+
+        public void Replace(string wavFile, string baseDirectory, string iterativeDirectory)
+        {
+            AdxUtil.EncodeWav(wavFile, Path.Combine(baseDirectory, BgmFile), false);
+            File.Copy(Path.Combine(baseDirectory, BgmFile), Path.Combine(iterativeDirectory, BgmFile), true);
+        }
         
         public IWaveProvider GetWaveProvider(ILogger log)
         {
             byte[] adxBytes = Array.Empty<byte>();
             try
             {
-                adxBytes = File.ReadAllBytes(BgmFile);
+                adxBytes = File.ReadAllBytes(_bgmFile);
             }
             catch
             {
-                if (!File.Exists(BgmFile))
+                if (!File.Exists(_bgmFile))
                 {
-                    log.LogError($"Failed to load BGM file {BgmFile}: file not found.");
+                    log.LogError($"Failed to load BGM file {_bgmFile}: file not found.");
                 }
                 else
                 {
-                    log.LogError($"Failed to load BGM file {BgmFile}: file invalid.");
+                    log.LogError($"Failed to load BGM file {_bgmFile}: file invalid.");
                 }
             }
 

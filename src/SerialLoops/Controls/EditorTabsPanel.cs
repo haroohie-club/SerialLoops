@@ -69,7 +69,7 @@ namespace SerialLoops.Controls
                 case ItemDescription.ItemType.Background:
                     return new BackgroundEditor((BackgroundItem)project.Items.First(i => i.Name == item.Name), log);
                 case ItemDescription.ItemType.BGM:
-                    return new BackgroundMusicEditor((BackgroundMusicItem)project.Items.First(i => i.Name == item.Name), log);
+                    return new BackgroundMusicEditor((BackgroundMusicItem)project.Items.First(i => i.Name == item.Name), project, log);
                 case ItemDescription.ItemType.Character_Sprite:
                     return new CharacterSpriteEditor((CharacterSpriteItem)project.Items.First(i => i.Name == item.Name), project, log);
                 case ItemDescription.ItemType.Chibi:
@@ -89,7 +89,7 @@ namespace SerialLoops.Controls
                 case ItemDescription.ItemType.Topic:
                     return new TopicEditor((TopicItem)project.Items.First(i => i.Name == item.Name), project, log);
                 case ItemDescription.ItemType.Voice:
-                    return new VoicedLineEditor((VoicedLineItem)project.Items.First(i => i.Name == item.Name), log);
+                    return new VoicedLineEditor((VoicedLineItem)project.Items.First(i => i.Name == item.Name), project, log);
                 default:
                     log.LogError("Invalid item type!");
                     return null;

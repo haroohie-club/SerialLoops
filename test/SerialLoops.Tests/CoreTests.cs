@@ -49,8 +49,8 @@ namespace SerialLoops.Tests
             _project = new("Tester", "en", _config, _log);
             
             string archivesDir = Path.Combine("original", "archives");
-            string bgmDir = Path.Combine("original", "bgm");
-            string vceDir = Path.Combine("original", "vce");
+            string bgmDir = Path.Combine("rom", "data", "bgm");
+            string vceDir = Path.Combine("rom", "data", "vce");
             Directory.CreateDirectory(Path.Combine(_project.BaseDirectory, archivesDir));
             Directory.CreateDirectory(Path.Combine(_project.IterativeDirectory, archivesDir));
             Directory.CreateDirectory(Path.Combine(_project.BaseDirectory, bgmDir));

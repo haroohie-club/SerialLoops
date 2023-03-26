@@ -150,7 +150,7 @@ namespace SerialLoops.Lib
                 tracker.Finished++;
             }
 
-            string[] bgmFiles = Directory.GetFiles(Path.Combine(IterativeDirectory, "original", "bgm")).OrderBy(s => s).ToArray();
+            string[] bgmFiles = Directory.GetFiles(Path.Combine(IterativeDirectory, "rom", "data", "bgm")).OrderBy(s => s).ToArray();
             tracker.Focus("BGM Tracks", bgmFiles.Length);
             for (int i = 0; i < bgmFiles.Length; i++)
             {
@@ -158,7 +158,7 @@ namespace SerialLoops.Lib
                 tracker.Finished++;
             }
 
-            string[] voiceFiles = Directory.GetFiles(Path.Combine(IterativeDirectory, "original", "vce")).OrderBy(s => s).ToArray();
+            string[] voiceFiles = Directory.GetFiles(Path.Combine(IterativeDirectory, "rom", "data", "vce")).OrderBy(s => s).ToArray();
             tracker.Focus("Voiced Lines", voiceFiles.Length);
             for (int i = 0; i < voiceFiles.Length; i++)
             {
