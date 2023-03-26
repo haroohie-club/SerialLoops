@@ -4,7 +4,7 @@ Serial Loops is a level editor for the Nintendo DS game Suzumiya Haruhi no Choku
 The following prerequisites need to be installed in order to use Serial Loops:
 
 * The [.NET 6.0 runtime](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)
-* [devkitARM](https://devkitpro.org/wiki/Getting_Started).
+* [devkitARM](https://devkitpro.org/wiki/Getting_Started)
     - Using the Windows graphical installer, you can simply select the devkitARM (Nintendo DS) workloads
     - On macOS and Linux, run `sudo dkp-pacman -S nds-dev` from the terminal after installing the devkitPro pacman distribution.
 

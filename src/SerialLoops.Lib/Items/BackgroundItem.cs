@@ -93,6 +93,8 @@ namespace SerialLoops.Lib.Items
             }
         }
 
+
+
         public void PopulateScriptUses(ArchiveFile<EventFile> evt)
         {
             string[] bgCommands = new string[] { "KBG_DISP", "BG_DISP", "BG_DISP2", "BG_DISPTEMP", "BG_FADE" };
