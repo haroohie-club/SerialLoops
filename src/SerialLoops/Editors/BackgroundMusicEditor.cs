@@ -34,6 +34,7 @@ namespace SerialLoops.Editors
                     WaveFileWriter.CreateWaveFile(_bgmCachedFile, BgmPlayer.Sound);
                 }
                 using WaveFileReader reader = new(_bgmCachedFile);
+
             };
 
             Button extractButton = new() { Text = "Extract" };
@@ -81,7 +82,7 @@ namespace SerialLoops.Editors
                     Spacing = 3,
                     Items =
                     {
-
+                        loopSettingsButton,
                     }
                 }),
                 new TableRow(new StackLayout
