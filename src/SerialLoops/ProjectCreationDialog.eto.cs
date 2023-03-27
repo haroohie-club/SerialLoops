@@ -178,7 +178,7 @@ namespace SerialLoops
                     ((IProgressTracker)tracker).Focus("Creating Project", 1);
                     IO.OpenRom(NewProject, romPath, includeFontHack, tracker);
                     tracker.Finished++;
-                    NewProject.Load(Log, tracker);
+                    NewProject.Load(Config, Log, tracker);
                 }, Close, tracker, "Creating Project");
             }
         }

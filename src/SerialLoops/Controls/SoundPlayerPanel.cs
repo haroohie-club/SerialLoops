@@ -10,11 +10,12 @@ namespace SerialLoops.Controls
     public class SoundPlayerPanel : Panel
     {
         private ILogger _log;
-        private IWaveProvider _sound;
         private ISoundItem _item;
         private SoundPlayer _player;
         private Button _playPauseButton;
         private Button _stopButton;
+
+        public IWaveProvider Sound { get; private set; }
 
         public SoundPlayerPanel(ISoundItem item, ILogger log)
         {
@@ -29,8 +30,8 @@ namespace SerialLoops.Controls
         {
             _log.Log("Attempting to initialize sound player...");
             _player = new SoundPlayer();
-            _sound = _item.GetWaveProvider(_log);
-            _player.Initialize(_sound);
+            Sound = _item.GetWaveProvider(_log);
+            _player.Initialize(Sound);
             _log.Log("Sound player successfully initialized.");
         }
 

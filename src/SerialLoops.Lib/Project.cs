@@ -31,6 +31,8 @@ namespace SerialLoops.Lib
         [JsonIgnore]
         public string ProjectFile => Path.Combine(MainDirectory, $"{Name}.{PROJECT_FORMAT}");
         [JsonIgnore]
+        public Config Config { get; private set; }
+        [JsonIgnore]
         public ProjectSettings Settings { get; set; }
         [JsonIgnore]
         public List<ItemDescription> Items { get; set; } = new();
@@ -62,6 +64,7 @@ namespace SerialLoops.Lib
             Name = name;
             LangCode = langCode;
             MainDirectory = Path.Combine(config.ProjectsDirectory, name);
+            Config = config;
             log.Log("Creating project directories...");
             try
             {
@@ -78,9 +81,11 @@ namespace SerialLoops.Lib
             }
         }
         
-        public void Load(ILogger log, IProgressTracker tracker)
+        public void Load(Config config, ILogger log, IProgressTracker tracker)
         {
+            Config = config;
             LoadProjectSettings(log, tracker);
+            ClearOrCreateCaches(config.CachesDirectory, log);
             LoadArchives(log, tracker);
         }
 
@@ -221,6 +226,21 @@ namespace SerialLoops.Lib
             }
         }
 
+        public static void ClearOrCreateCaches(string cachesDirectory, ILogger log)
+        {
+            if (Directory.Exists(cachesDirectory))
+            {
+                Directory.Delete(cachesDirectory, true);
+            }
+
+            log.Log("Creating cache directory...");
+            Directory.CreateDirectory(cachesDirectory);
+
+            string bgmCache = Path.Combine(cachesDirectory, "bgm");
+            log.Log("Creating BGM cache...");
+            Directory.CreateDirectory(bgmCache);
+        }
+
         public ItemDescription FindItem(string name)
         {
             return Items.FirstOrDefault(i => i.Name == name.Split(" - ")[0]);
@@ -239,7 +259,7 @@ namespace SerialLoops.Lib
                 tracker.Focus($"{Path.GetFileNameWithoutExtension(projFile)} Project Data", 1);
                 Project project = JsonSerializer.Deserialize<Project>(File.ReadAllText(projFile));
                 tracker.Finished++;
-                project.Load(log, tracker);
+                project.Load(config, log, tracker);
                 return project;
             }
             catch (Exception exc)

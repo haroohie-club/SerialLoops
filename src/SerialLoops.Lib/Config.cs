@@ -16,6 +16,8 @@ namespace SerialLoops.Lib
         public string ProjectsDirectory => Path.Combine(UserDirectory, "Projects");
         [JsonIgnore]
         public string LogsDirectory => Path.Combine(UserDirectory, "Logs");
+        [JsonIgnore]
+        public string CachesDirectory => Path.Combine(UserDirectory, "Caches");
         public string DevkitArmPath { get; set; }
         public string EmulatorPath { get; set; }
         public bool AutoReopenLastProject { get; set; }

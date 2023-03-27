@@ -18,6 +18,7 @@ namespace SerialLoops.Lib.Items
         public int Index { get; set; }
         public string BgmName { get; set; }
         public string ExtrasShort { get; set; }
+        public string CachedWaveFile { get; set; }
         public (string ScriptName, ScriptCommandInvocation command)[] ScriptUses { get; set; }
 
         public BackgroundMusicItem(string bgmFile, int index, ExtraFile extras, Project project) : base(Path.GetFileNameWithoutExtension(bgmFile), ItemType.BGM)
@@ -43,8 +44,9 @@ namespace SerialLoops.Lib.Items
                 .Where(t => t.c.Parameters[0] == Index).ToArray();
         }
 
-        public void Replace(string wavFile, string baseDirectory, string iterativeDirectory)
+        public void Replace(string wavFile, string baseDirectory, string iterativeDirectory, string bgmCachedFile)
         {
+            File.Copy(wavFile, bgmCachedFile, true);
             AdxUtil.EncodeWav(wavFile, Path.Combine(baseDirectory, BgmFile), false);
             File.Copy(Path.Combine(baseDirectory, BgmFile), Path.Combine(iterativeDirectory, BgmFile), true);
         }
