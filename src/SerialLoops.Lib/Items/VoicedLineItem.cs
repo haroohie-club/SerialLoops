@@ -10,6 +10,8 @@ namespace SerialLoops.Lib.Items
 {
     public class VoicedLineItem : Item, ISoundItem
     {
+        private string _vceFile;
+
         public string VoiceFile { get; set; }
         public int Index { get; set; }
         public AdxEncoding AdxType { get; set; }
@@ -17,7 +19,8 @@ namespace SerialLoops.Lib.Items
 
         public VoicedLineItem(string voiceFile, int index, Project project) : base(Path.GetFileNameWithoutExtension(voiceFile), ItemType.Voice)
         {
-            VoiceFile = voiceFile;
+            VoiceFile = Path.GetRelativePath(project.IterativeDirectory, voiceFile);
+            _vceFile = voiceFile;
             Index = index;
             PopulateScriptUses(project);
         }
@@ -27,17 +30,17 @@ namespace SerialLoops.Lib.Items
             byte[] adxBytes = Array.Empty<byte>();
             try
             {
-                adxBytes = File.ReadAllBytes(VoiceFile);
+                adxBytes = File.ReadAllBytes(_vceFile);
             }
             catch
             {
-                if (!File.Exists(VoiceFile))
+                if (!File.Exists(_vceFile))
                 {
-                    log.LogError($"Failed to load voice file {VoiceFile}: file not found.");
+                    log.LogError($"Failed to load voice file {_vceFile}: file not found.");
                 }
                 else
                 {
-                    log.LogError($"Failed to load voice file {VoiceFile}: file invalid.");
+                    log.LogError($"Failed to load voice file {_vceFile}: file invalid.");
                 }
             }
 
@@ -54,6 +57,12 @@ namespace SerialLoops.Lib.Items
             }
 
             return new AdxWaveProvider(decoder);
+        }
+
+        public void Replace(string wavFile, string baseDirectory, string iterativeDirectory)
+        {
+            AdxUtil.EncodeWav(wavFile, Path.Combine(baseDirectory, VoiceFile), true);
+            File.Copy(Path.Combine(baseDirectory, VoiceFile), Path.Combine(iterativeDirectory, VoiceFile), true);
         }
 
         public override void Refresh(Project project)
