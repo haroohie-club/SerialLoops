@@ -5,6 +5,7 @@ using SerialLoops.Controls;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Util.WaveformRenderer;
 using SerialLoops.Utility;
+using SkiaSharp;
 using System;
 using System.IO;
 
@@ -23,7 +24,11 @@ namespace SerialLoops.Dialogs
         {
             _log = log;
             Title = title;
-            Waveform = new(WaveformRenderer.Render(wav, WaveFormRendererSettings.StandardSettings));
+            Waveform = new(WaveformRenderer.Render(wav, new()
+            {
+                TopPeakPaint = new() { Color = SKColors.Coral },
+                BottomPeakPaint = new() { Color = SKColors.Crimson },
+            }));
             if (endSample == 0)
             {
                 endSample = (uint)(wav.Length / (wav.WaveFormat.BitsPerSample / 8));
@@ -199,7 +204,7 @@ namespace SerialLoops.Dialogs
             EndSample = endSample;
         }
 
-        public IWaveProvider GetWaveProvider(ILogger log, IProgressTracker tracker, bool loop)
+        public IWaveProvider GetWaveProvider(ILogger log, bool loop)
         {
             MemoryStream stream = new();
             RawSourceWaveStream loopStream = new(stream, Wave.WaveFormat);

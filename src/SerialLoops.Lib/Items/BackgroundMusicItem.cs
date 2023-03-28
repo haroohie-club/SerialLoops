@@ -47,11 +47,10 @@ namespace SerialLoops.Lib.Items
                 .Where(t => t.c.Parameters[0] == Index).ToArray();
         }
 
-        public void Replace(string audioFile, string baseDirectory, string iterativeDirectory, string bgmCachedFile, bool loopEnabled, uint loopStartSample, uint loopEndSample, ILogger log, IProgressTracker tracker)
+        public void Replace(string audioFile, string baseDirectory, string iterativeDirectory, string bgmCachedFile, bool loopEnabled, uint loopStartSample, uint loopEndSample, ILogger log)
         {
             // The MP3 reader is able to create wave files but for whatever reason messes with the ADX encoder
             // So we just convert to WAV AOT
-            
             if (Path.GetExtension(audioFile).Equals(".mp3", StringComparison.OrdinalIgnoreCase))
             {
                 log.Log($"Converting {audioFile} to WAV...");
@@ -84,13 +83,13 @@ namespace SerialLoops.Lib.Items
                 string newAudioFile = Path.Combine(Path.GetDirectoryName(bgmCachedFile), $"{Path.GetFileNameWithoutExtension(bgmCachedFile)}-downsampled.wav");
                 WaveFileWriter.CreateWaveFile(newAudioFile, new WdlResamplingSampleProvider(audio.ToSampleProvider(), SoundItem.MAX_SAMPLERATE).ToWaveProvider16());
                 log.Log($"Encoding audio to ADX...");
-                AdxUtil.EncodeWav(newAudioFile, Path.Combine(baseDirectory, BgmFile), loopEnabled, loopStartSample, loopEndSample, tracker);
+                AdxUtil.EncodeWav(newAudioFile, Path.Combine(baseDirectory, BgmFile), loopEnabled, loopStartSample, loopEndSample);
                 audioFile = newAudioFile;
             }
             else
             {
                 log.Log($"Encoding audio to ADX...");
-                AdxUtil.EncodeAudio(audio, Path.Combine(baseDirectory, BgmFile), loopEnabled, loopStartSample, loopEndSample, tracker);
+                AdxUtil.EncodeAudio(audio, Path.Combine(baseDirectory, BgmFile), loopEnabled, loopStartSample, loopEndSample);
             }
             File.Copy(Path.Combine(baseDirectory, BgmFile), Path.Combine(iterativeDirectory, BgmFile), true);
             if (!string.Equals(audioFile, bgmCachedFile))
@@ -108,7 +107,7 @@ namespace SerialLoops.Lib.Items
             }
         }
 
-        public IWaveProvider GetWaveProvider(ILogger log, IProgressTracker tracker, bool loop)
+        public IWaveProvider GetWaveProvider(ILogger log, bool loop)
         {
             byte[] adxBytes = Array.Empty<byte>();
             try
@@ -128,7 +127,7 @@ namespace SerialLoops.Lib.Items
             }
 
             AdxDecoder decoder = new(adxBytes, log) { DoLoop = loop };
-            return new AdxWaveProvider(decoder, tracker, decoder.Header.LoopInfo.EnabledInt == 1, decoder.LoopInfo.StartSample, decoder.LoopInfo.EndSample);
+            return new AdxWaveProvider(decoder, decoder.Header.LoopInfo.EnabledInt == 1, decoder.LoopInfo.StartSample, decoder.LoopInfo.EndSample);
         }
     }
 }

@@ -13,19 +13,13 @@ namespace SerialLoops.Lib.Util.WaveformRenderer
 {
     public class WaveFormRendererSettings
     {
-        public static readonly WaveFormRendererSettings StandardSettings = new()
-        {
-            Width = 400,
-            TopHeight = 50,
-            BottomHeight = 50,
-            PixelsPerPeak = 1,
-            SpacerPixels = 0,
-            TopPeakPaint = new() { Color = new SKColor(230, 0, 83) },
-            BottomPeakPaint = new() { Color = new SKColor(179, 0, 64) },
-        };
-
         public WaveFormRendererSettings()
         {
+            Width = 400;
+            TopHeight = 50;
+            BottomHeight = 50;
+            PixelsPerPeak = 1;
+            SpacerPixels = 0;
             BackgroundColor = SKColors.Transparent;
         }
 

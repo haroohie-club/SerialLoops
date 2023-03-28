@@ -29,7 +29,7 @@ namespace SerialLoops.Lib.Items
             PopulateScriptUses(project);
         }
         
-        public IWaveProvider GetWaveProvider(ILogger log, IProgressTracker tracker, bool loop = false)
+        public IWaveProvider GetWaveProvider(ILogger log, bool loop = false)
         {
             byte[] adxBytes = Array.Empty<byte>();
             try
@@ -60,10 +60,10 @@ namespace SerialLoops.Lib.Items
                 decoder = new AdxDecoder(adxBytes, log);
             }
 
-            return new AdxWaveProvider(decoder, tracker);
+            return new AdxWaveProvider(decoder);
         }
 
-        public void Replace(string audioFile, string baseDirectory, string iterativeDirectory, string vceCachedFile, ILogger log, IProgressTracker tracker)
+        public void Replace(string audioFile, string baseDirectory, string iterativeDirectory, string vceCachedFile, ILogger log)
         {
             // The MP3 decoder is able to create wave files but for whatever reason messes with the ADX encoder
             // So we just convert to WAV AOT
@@ -118,12 +118,12 @@ namespace SerialLoops.Lib.Items
 
                 log.Log($"Encoding audio to AHX...");
                 audioFile = newAudioFile;
-                AdxUtil.EncodeWav(newAudioFile, Path.Combine(baseDirectory, VoiceFile), true, tracker);
+                AdxUtil.EncodeWav(newAudioFile, Path.Combine(baseDirectory, VoiceFile), true);
             }
             else
             {
                 log.Log($"Encoding audio to AHX...");
-                AdxUtil.EncodeAudio(audio, Path.Combine(baseDirectory, VoiceFile), true, tracker);
+                AdxUtil.EncodeAudio(audio, Path.Combine(baseDirectory, VoiceFile), true);
             }
             File.Copy(Path.Combine(baseDirectory, VoiceFile), Path.Combine(iterativeDirectory, VoiceFile), true);
         }

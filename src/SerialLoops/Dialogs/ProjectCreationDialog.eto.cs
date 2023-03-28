@@ -1,6 +1,5 @@
 using Eto.Drawing;
 using Eto.Forms;
-using HaruhiChokuretsuLib.Util;
 using SerialLoops.Dialogs;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Logging;
@@ -178,7 +177,7 @@ namespace SerialLoops
                 ProgressDialog _ = new(() => 
                 {
                     ((IProgressTracker)tracker).Focus("Creating Project", 1);
-                    Lib.IO.OpenRom(NewProject, romPath, includeFontHack, tracker);
+                    IO.OpenRom(NewProject, romPath, includeFontHack, tracker);
                     tracker.Finished++;
                     NewProject.Load(Config, Log, tracker);
                 }, Close, tracker, "Creating Project");

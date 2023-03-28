@@ -53,7 +53,7 @@ namespace SerialLoops.Editors
                 LoopyProgressTracker tracker = new();
                 if (!File.Exists(_bgmCachedFile))
                 {
-                    _ = new ProgressDialog(() => WaveFileWriter.CreateWaveFile(_bgmCachedFile, _bgm.GetWaveProvider(_log, tracker, false)), () => { }, tracker, "Caching BGM");
+                    _ = new ProgressDialog(() => WaveFileWriter.CreateWaveFile(_bgmCachedFile, _bgm.GetWaveProvider(_log, false)), () => { }, tracker, "Caching BGM");
                 }
                 string loopAdjustedWav = Path.Combine(Path.GetDirectoryName(_bgmCachedFile), $"{Path.GetFileNameWithoutExtension(_bgmCachedFile)}-loop.wav");
                 File.Copy(_bgmCachedFile, loopAdjustedWav, true);
@@ -70,7 +70,7 @@ namespace SerialLoops.Editors
                         BgmPlayer.Stop();
                         _ = new ProgressDialog(() =>
                         {
-                            _bgm.Replace(_bgmCachedFile, _project.BaseDirectory, _project.IterativeDirectory, _bgmCachedFile, _loopEnabled, _loopStartSample, _loopEndSample, _log, tracker);
+                            _bgm.Replace(_bgmCachedFile, _project.BaseDirectory, _project.IterativeDirectory, _bgmCachedFile, _loopEnabled, _loopStartSample, _loopEndSample, _log);
                             reader.Dispose();
                             File.Delete(loopAdjustedWav);
                         },
@@ -89,7 +89,7 @@ namespace SerialLoops.Editors
                 LoopyProgressTracker tracker = new();
                 if (!File.Exists(_bgmCachedFile))
                 {
-                    _ = new ProgressDialog(() => WaveFileWriter.CreateWaveFile(_bgmCachedFile, _bgm.GetWaveProvider(_log, tracker, false)), () => { }, tracker, "Caching BGM");
+                    _ = new ProgressDialog(() => WaveFileWriter.CreateWaveFile(_bgmCachedFile, _bgm.GetWaveProvider(_log, false)), () => { }, tracker, "Caching BGM");
                 }
                 string volumeAdjustedWav = Path.Combine(Path.GetDirectoryName(_bgmCachedFile), $"{Path.GetFileNameWithoutExtension(_bgmCachedFile)}-volume.wav");
                 File.Copy(_bgmCachedFile, volumeAdjustedWav, true);
@@ -103,9 +103,9 @@ namespace SerialLoops.Editors
                         BgmPlayer.Stop();
                         _ = new ProgressDialog(() =>
                         {
-                            WaveFileWriter.CreateWaveFile(_bgmCachedFile, volumeDialog.VolumePreview.GetWaveProvider(_log, tracker, false));
+                            WaveFileWriter.CreateWaveFile(_bgmCachedFile, volumeDialog.VolumePreview.GetWaveProvider(_log, false));
                             tracker.Finished++;
-                            _bgm.Replace(_bgmCachedFile, _project.BaseDirectory, _project.IterativeDirectory, _bgmCachedFile, _loopEnabled, _loopStartSample, _loopEndSample, _log, tracker);
+                            _bgm.Replace(_bgmCachedFile, _project.BaseDirectory, _project.IterativeDirectory, _bgmCachedFile, _loopEnabled, _loopStartSample, _loopEndSample, _log);
                             tracker.Finished++;
                             reader.Dispose();
                             File.Delete(volumeAdjustedWav);
@@ -127,7 +127,7 @@ namespace SerialLoops.Editors
                 if (saveFileDialog.ShowAndReportIfFileSelected(this))
                 {
                     LoopyProgressTracker tracker = new();
-                    _ = new ProgressDialog(() => WaveFileWriter.CreateWaveFile(saveFileDialog.FileName, _bgm.GetWaveProvider(_log, tracker, false)),
+                    _ = new ProgressDialog(() => WaveFileWriter.CreateWaveFile(saveFileDialog.FileName, _bgm.GetWaveProvider(_log, false)),
                         () => { }, tracker, "Exporting BGM");
                 }
             };
@@ -145,7 +145,7 @@ namespace SerialLoops.Editors
                 {
                     LoopyProgressTracker tracker = new();
                     BgmPlayer.Stop();
-                    _ = new ProgressDialog(() => _bgm.Replace(openFileDialog.FileName, _project.BaseDirectory, _project.IterativeDirectory, _bgmCachedFile, _loopEnabled, _loopStartSample, _loopEndSample, _log, tracker), () =>
+                    _ = new ProgressDialog(() => _bgm.Replace(openFileDialog.FileName, _project.BaseDirectory, _project.IterativeDirectory, _bgmCachedFile, _loopEnabled, _loopStartSample, _loopEndSample, _log), () =>
                     {
                         Content = GetEditorPanel();
                     }, tracker, "Replace BGM track");
