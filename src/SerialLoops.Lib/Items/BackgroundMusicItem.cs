@@ -82,15 +82,19 @@ namespace SerialLoops.Lib.Items
                 log.Log($"Downsampling audio from {audio.WaveFormat.SampleRate} to NDS max sample rate {SoundItem.MAX_SAMPLERATE}...");
                 string newAudioFile = Path.Combine(Path.GetDirectoryName(bgmCachedFile), $"{Path.GetFileNameWithoutExtension(bgmCachedFile)}-downsampled.wav");
                 WaveFileWriter.CreateWaveFile(newAudioFile, new WdlResamplingSampleProvider(audio.ToSampleProvider(), SoundItem.MAX_SAMPLERATE).ToWaveProvider16());
+                log.Log($"Encoding audio to ADX...");
                 AdxUtil.EncodeWav(newAudioFile, Path.Combine(baseDirectory, BgmFile), loopEnabled, loopStartSample, loopEndSample);
+                audioFile = newAudioFile;
             }
             else
             {
+                log.Log($"Encoding audio to ADX...");
                 AdxUtil.EncodeAudio(audio, Path.Combine(baseDirectory, BgmFile), loopEnabled, loopStartSample, loopEndSample);
             }
             File.Copy(Path.Combine(baseDirectory, BgmFile), Path.Combine(iterativeDirectory, BgmFile), true);
             if (!string.Equals(audioFile, bgmCachedFile))
             {
+                log.Log($"Attempting to cache audio file from {audioFile} to {bgmCachedFile}...");
                 if (Path.GetExtension(audioFile).Equals(".wav", StringComparison.OrdinalIgnoreCase))
                 {
                     File.Copy(audioFile, bgmCachedFile, true);

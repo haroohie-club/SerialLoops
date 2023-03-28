@@ -116,10 +116,13 @@ namespace SerialLoops.Lib.Items
                     }
                 }
 
+                log.Log($"Encoding audio to AHX...");
+                audioFile = newAudioFile;
                 AdxUtil.EncodeWav(newAudioFile, Path.Combine(baseDirectory, VoiceFile), true);
             }
             else
             {
+                log.Log($"Encoding audio to AHX...");
                 AdxUtil.EncodeAudio(audio, Path.Combine(baseDirectory, VoiceFile), true);
             }
             File.Copy(Path.Combine(baseDirectory, VoiceFile), Path.Combine(iterativeDirectory, VoiceFile), true);
