@@ -13,7 +13,7 @@ namespace SerialLoops.Dialogs
 {
     public class BgmLoopPropertiesDialog : Dialog
     {
-        private ILogger _log { get; set; }
+        private ILogger _log;
 
         public bool SaveChanges { get; set; } = false;
         public BgmLoopPreviewItem LoopPreview { get; set; }
@@ -60,12 +60,11 @@ namespace SerialLoops.Dialogs
             };
             Slider endSampleSlider = new()
             {
-                MinValue = startSampleSlider.Value,
+                MinValue = 0,
                 MaxValue = (int)(LoopPreview.Wave.Length / LoopPreview.Wave.WaveFormat.BitsPerSample * 8 / LoopPreview.Wave.WaveFormat.Channels),
                 Value = (int)LoopPreview.EndSample,
                 Width = Waveform.Width
             };
-            startSampleSlider.MaxValue = endSampleSlider.Value;
 
             NumericStepper startSampleBox = new()
             {
@@ -85,17 +84,25 @@ namespace SerialLoops.Dialogs
 
             startSampleSlider.ValueChanged += (obj, args) =>
             {
+                if (startSampleSlider.Value > endSampleSlider.Value)
+                {
+                    startSampleSlider.Value = endSampleSlider.Value;
+                    return;
+                }
                 LoopPreview.StartSample = (uint)startSampleSlider.Value;
                 startSampleBox.Value = LoopPreview.GetTimestampFromSample(LoopPreview.StartSample);
-                endSampleSlider.MinValue = startSampleSlider.Value;
                 endSampleBox.MinValue = startSampleBox.Value;
                 LoopPreviewPlayer.Stop();
             };
             endSampleSlider.ValueChanged += (obj, args) =>
             {
+                if (endSampleSlider.Value < startSampleSlider.Value)
+                {
+                    endSampleSlider.Value = startSampleSlider.Value;
+                    return;
+                }
                 LoopPreview.EndSample = (uint)endSampleSlider.Value;
                 endSampleBox.Value = LoopPreview.GetTimestampFromSample(LoopPreview.EndSample);
-                startSampleSlider.MaxValue = endSampleSlider.Value;
                 startSampleBox.MaxValue = endSampleBox.Value;
                 LoopPreviewPlayer.Stop();
             };
@@ -103,7 +110,6 @@ namespace SerialLoops.Dialogs
             {
                 LoopPreview.StartSample = LoopPreview.GetSampleFromTimestamp(startSampleBox.Value);
                 startSampleSlider.Value = (int)LoopPreview.StartSample;
-                endSampleSlider.MinValue = startSampleSlider.Value;
                 endSampleBox.MinValue = startSampleBox.Value;
                 LoopPreviewPlayer.Stop();
             };
@@ -111,7 +117,6 @@ namespace SerialLoops.Dialogs
             {
                 LoopPreview.EndSample = LoopPreview.GetSampleFromTimestamp(endSampleBox.Value);
                 endSampleSlider.Value = (int)LoopPreview.EndSample;
-                startSampleSlider.MaxValue = endSampleSlider.Value;
                 startSampleBox.MaxValue = endSampleBox.Value;
                 LoopPreviewPlayer.Stop();
             };

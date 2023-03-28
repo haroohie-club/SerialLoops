@@ -26,6 +26,17 @@ namespace SerialLoops.Lib.Util.WaveformRenderer
             return Render(peakProvider, settings);
         }
 
+        public static SKBitmap Render(ISampleProvider sampleProvider, long length, WaveFormRendererSettings settings)
+        {
+            int bytesPerSample = sampleProvider.WaveFormat.BitsPerSample / 8;
+            long numSamples = length / bytesPerSample;
+            int samplesPerPixel = (int)(numSamples / settings.Width);
+            int stepSize = settings.PixelsPerPeak + settings.SpacerPixels;
+            MaxPeakProvider peakProvider = new();
+            peakProvider.Init(sampleProvider, samplesPerPixel * stepSize);
+            return Render(peakProvider, settings);
+        }
+
         private static SKBitmap Render(PeakProvider peakProvider, WaveFormRendererSettings settings)
         {
             SKBitmap waveformBitmap = new(settings.Width, settings.TopHeight + settings.BottomHeight);

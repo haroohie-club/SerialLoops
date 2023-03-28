@@ -31,32 +31,75 @@ namespace SerialLoops.Editors
             _bgm = (BackgroundMusicItem)Description;
             BgmPlayer = new(_bgm, _log);
 
-            Button settingsButton = new() { Text = "Manage Looping" };
-            settingsButton.Click += (obj, args) =>
+            Button loopSettingsButton = new() { Text = "Manage Loop" };
+            loopSettingsButton.Click += (obj, args) =>
             {
                 LoopyProgressTracker tracker = new();
                 if (!File.Exists(_bgmCachedFile))
                 {
                     _ = new ProgressDialog(() => WaveFileWriter.CreateWaveFile(_bgmCachedFile, _bgm.GetWaveProvider(_log, false)), () => { }, tracker, "Caching BGM");
                 }
-                using WaveFileReader reader = new(_bgmCachedFile);
-                BgmLoopPropertiesDialog propertiesDialog = new(reader, _bgm.Name, _log, ((AdxWaveProvider)BgmPlayer.Sound).LoopEnabled, ((AdxWaveProvider)BgmPlayer.Sound).LoopStartSample, ((AdxWaveProvider)BgmPlayer.Sound).LoopEndSample);
-                propertiesDialog.ShowModal(this);
-                propertiesDialog.Closed += (obj, args) =>
+                string loopAdjustedWav = Path.Combine(Path.GetDirectoryName(_bgmCachedFile), $"{Path.GetFileNameWithoutExtension(_bgmCachedFile)}-loop.wav");
+                File.Copy(_bgmCachedFile, loopAdjustedWav, true);
+                using WaveFileReader reader = new(loopAdjustedWav);
+                BgmLoopPropertiesDialog loopDialog = new(reader, _bgm.Name, _log, ((AdxWaveProvider)BgmPlayer.Sound).LoopEnabled, ((AdxWaveProvider)BgmPlayer.Sound).LoopStartSample, ((AdxWaveProvider)BgmPlayer.Sound).LoopEndSample);
+                loopDialog.Closed += (obj, args) =>
                 {
-                    if (propertiesDialog.SaveChanges)
+                    if (loopDialog.SaveChanges)
                     {
-                        _loopEnabled = propertiesDialog.LoopPreview.LoopEnabled;
-                        _loopStartSample = propertiesDialog.LoopPreview.StartSample;
-                        _loopEndSample = propertiesDialog.LoopPreview.EndSample;
+                        _loopEnabled = loopDialog.LoopPreview.LoopEnabled;
+                        _loopStartSample = loopDialog.LoopPreview.StartSample;
+                        _loopEndSample = loopDialog.LoopPreview.EndSample;
                         LoopyProgressTracker tracker = new();
                         BgmPlayer.Stop();
-                        _ = new ProgressDialog(() => _bgm.Replace(_bgmCachedFile, _project.BaseDirectory, _project.IterativeDirectory, _bgmCachedFile, _loopEnabled, _loopStartSample, _loopEndSample), () =>
+                        _ = new ProgressDialog(() =>
+                        {
+                            _bgm.Replace(_bgmCachedFile, _project.BaseDirectory, _project.IterativeDirectory, _bgmCachedFile, _loopEnabled, _loopStartSample, _loopEndSample);
+                            reader.Dispose();
+                            File.Delete(loopAdjustedWav);
+                        },
+                        () =>
                         {
                             Content = GetEditorPanel();
-                        }, tracker, "Replace BGM track");
+                        }, tracker, "Set BGM loop info");
                     }
                 };
+                loopDialog.ShowModal(this);
+            };
+            Button volumeSettingsButton = new() { Text = "Adjust Volume" };
+            volumeSettingsButton.Click += (obj, args) =>
+            {
+                LoopyProgressTracker tracker = new();
+                if (!File.Exists(_bgmCachedFile))
+                {
+                    _ = new ProgressDialog(() => WaveFileWriter.CreateWaveFile(_bgmCachedFile, _bgm.GetWaveProvider(_log, false)), () => { }, tracker, "Caching BGM");
+                }
+                string volumeAdjustedWav = Path.Combine(Path.GetDirectoryName(_bgmCachedFile), $"{Path.GetFileNameWithoutExtension(_bgmCachedFile)}-volume.wav");
+                File.Copy(_bgmCachedFile, volumeAdjustedWav, true);
+                using WaveFileReader reader = new(volumeAdjustedWav);
+                BgmVolumePropertiesDialog volumeDialog = new(reader, _bgm.Name, _log);
+                volumeDialog.Closed += (obj, args) =>
+                {
+                    if (volumeDialog.SaveChanges)
+                    {
+                        LoopyProgressTracker tracker = new() { Total = 2 };
+                        BgmPlayer.Stop();
+                        _ = new ProgressDialog(() =>
+                        {
+                            WaveFileWriter.CreateWaveFile(_bgmCachedFile, volumeDialog.VolumePreview.GetWaveProvider(_log, false));
+                            tracker.Finished++;
+                            _bgm.Replace(_bgmCachedFile, _project.BaseDirectory, _project.IterativeDirectory, _bgmCachedFile, _loopEnabled, _loopStartSample, _loopEndSample);
+                            tracker.Finished++;
+                            reader.Dispose();
+                            File.Delete(volumeAdjustedWav);
+                        },
+                        () =>
+                        {
+                            Content = GetEditorPanel();
+                        }, tracker, "Set BGM volume");
+                    }
+                };
+                volumeDialog.ShowModal(this);
             };
 
             Button extractButton = new() { Text = "Extract" };
@@ -107,7 +150,8 @@ namespace SerialLoops.Editors
                     Padding = 2,
                     Items =
                     {
-                        settingsButton,
+                        loopSettingsButton,
+                        volumeSettingsButton,
                     }
                 }),
                 new TableRow(new StackLayout

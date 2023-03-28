@@ -46,7 +46,10 @@ namespace SerialLoops.Lib.Items
 
         public void Replace(string wavFile, string baseDirectory, string iterativeDirectory, string bgmCachedFile, bool loopEnabled, uint loopStartSample, uint loopEndSample)
         {
-            File.Copy(wavFile, bgmCachedFile, true);
+            if (!string.Equals(wavFile, bgmCachedFile))
+            {
+                File.Copy(wavFile, bgmCachedFile, true);
+            }
             AdxUtil.EncodeWav(wavFile, Path.Combine(baseDirectory, BgmFile), loopEnabled, loopStartSample, loopEndSample);
             File.Copy(Path.Combine(baseDirectory, BgmFile), Path.Combine(iterativeDirectory, BgmFile), true);
         }
