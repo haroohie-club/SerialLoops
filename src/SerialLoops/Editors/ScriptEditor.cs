@@ -18,6 +18,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using static HaruhiChokuretsuLib.Archive.Event.EventFile;
 
 namespace SerialLoops.Editors
 {
@@ -31,6 +32,9 @@ namespace SerialLoops.Editors
         private StackLayout _scriptProperties = new();
         private StackLayout _editorControls = new();
         private ScriptCommandListPanel _commandsPanel;
+        private Button _addCommandButton;
+        private Button _addSectionButton;
+        private Button _deleteButton;
         private CancellationTokenSource _dialogueCancellation, _optionCancellation;
         private System.Timers.Timer _dialogueRefreshTimer;
         private int _chibiHighlighted = -1;
@@ -66,9 +70,179 @@ namespace SerialLoops.Editors
             ContextMenu contextMenu = new();
 
             _commandsPanel = new(_commands, new Size(280, 185), expandItems: true, this, _log);
-            _commandsPanel.Viewer.SelectedItemChanged += CommandsPanel_SelectedItemChanged;
+            ScriptCommandSectionTreeGridView treeGridView = _commandsPanel.Viewer;
+            treeGridView.SelectedItemChanged += CommandsPanel_SelectedItemChanged;
 
-            mainRow.Cells.Add(_commandsPanel);
+            _addCommandButton = new() { 
+                Image = ControlGenerator.GetIcon("Add", _log),
+                ToolTip = "New Command",
+                Width = 22,
+                Enabled = treeGridView.SelectedCommandTreeItem is not null 
+            };
+            _addCommandButton.Click += (sender, args) =>
+            {
+                if (treeGridView.SelectedCommandTreeItem is not null)
+                {
+                    DropDown verbSelecter = new()
+                    {
+                        SelectedIndex = 0,
+                        ToolTip = "Select Command Type"
+                    };
+                    foreach (string verb in CommandsAvailable.Select(command => command.Mnemonic))
+                    {
+                        verbSelecter.Items.Add(new ListItem { Key = verb, Text = verb });
+                    }
+
+                    Button createButton = new() { Text = "Create" };
+                    Button cancelButton = new() { Text = "Cancel" };
+                    Dialog dialog = new() {
+                        Title = "Add Command",
+                        MinimumSize = new(250, 150),
+                        Content = new TableLayout(
+                            new TableRow(new StackLayout { Padding = 10, Items = { "Command Type:", verbSelecter } }), 
+                            new TableRow(new StackLayout
+                            {
+                                Padding = 10,
+                                Spacing = 5,
+                                Width = 100,
+                                Orientation = Orientation.Horizontal,
+                                HorizontalContentAlignment = HorizontalAlignment.Center,
+                                Items = { createButton, cancelButton }
+                            }
+                        )),
+                    };
+
+
+                    cancelButton.Click += (sender, args) =>
+                    {
+                        dialog.Close();
+                    };
+                    createButton.Click += (sender, args) =>
+                    {
+                        ScriptCommand scriptCommand = CommandsAvailable
+                                .Find(command => command.Mnemonic.Equals(verbSelecter.SelectedKey));
+                        if (scriptCommand is null)
+                        {
+                            _log.LogError($"Invalid or unavailable script command selected: {verbSelecter.SelectedKey}");
+                            return;
+                        }
+                        dialog.Close();
+
+                        try
+                        {
+                            ScriptCommandSectionTreeItem item = treeGridView.SelectedCommandTreeItem;
+                            if (item is null) return;
+
+                            string sectionName = item.Text;
+                            if (treeGridView.SelectedCommandTreeItem.Parent is ScriptCommandSectionTreeItem parent && !parent.Text.Equals("Top"))
+                            {
+                                sectionName = parent.Text;
+                            }
+
+                            ScriptSection scriptSection = _script.Event.ScriptSections.Find(section => section.Name.Equals(sectionName));
+                            if (scriptSection is null)
+                            {
+                                _log.LogError($"Unable to find script section: {sectionName}");
+                                return;
+                            }
+
+                            int index = item.Parent is not null ? ((ScriptCommandSectionTreeItem)item.Parent).IndexOf(item) : 0;
+                            ScriptItemCommand command = ScriptItemCommand.FromInvocation(
+                                new(scriptCommand),
+                                scriptSection,
+                                index == -1 ? 0 : index,
+                                _script.Event,
+                                _project
+                            );
+
+                            treeGridView.AddItem(new(new(command), false));
+                        }
+                        catch (Exception ex)
+                        {
+                            _log.LogError($"Unable to create command: {ex.Message}");
+                            return;
+                        }
+                    };
+
+                    dialog.ShowModal(this);
+                }
+            };
+
+            _addSectionButton = new()
+            {
+                Image = ControlGenerator.GetIcon("Add_Section", _log),
+                ToolTip = "New Section",
+                Width = 22,
+                Enabled = true
+            };
+            _addSectionButton.Click += (sender, args) =>
+            {
+                TextBox labelBox = new() { PlaceholderText = "Section Label" };
+
+                Button createButton = new() { Text = "Create" };
+                Button cancelButton = new() { Text = "Cancel" };
+                Dialog dialog = new()
+                {
+                    Title = "Add Section",
+                    MinimumSize = new(250, 150),
+                    Content = new TableLayout(
+                        new TableRow(new StackLayout { Padding = 10, Items = { "Section Name:", labelBox } }),
+                        new TableRow(new StackLayout
+                        {
+                            Padding = 10,
+                            Spacing = 5,
+                            Width = 100,
+                            Orientation = Orientation.Horizontal,
+                            HorizontalContentAlignment = HorizontalAlignment.Center,
+                            Items = { createButton, cancelButton }
+                        }
+                    )),
+                };
+
+
+                cancelButton.Click += (sender, args) =>
+                {
+                    dialog.Close();
+                };
+                createButton.Click += (sender, args) =>
+                {
+                    if (string.IsNullOrWhiteSpace(labelBox.Text)) {
+                        MessageBox.Show("Please enter a value for the label name", MessageBoxType.Error);
+                        return;
+                    }
+
+                    dialog.Close();
+                    ScriptCommandSectionEntry section = new(labelBox.Text.ToUpper(), new List<ScriptCommandSectionEntry>(), _script.Event);
+                    treeGridView.AddSection(new(section, true));
+                };
+
+                dialog.ShowModal(this);
+            };
+
+            _deleteButton = new() {
+                Image = ControlGenerator.GetIcon("Remove", _log),
+                ToolTip = "Remove Command/Section",
+                Width = 22,
+                Enabled = treeGridView.SelectedCommandTreeItem is not null
+            };
+            _deleteButton.Click += (sender, args) =>
+            {
+                if (treeGridView.SelectedCommandTreeItem is not null)
+                {
+                    treeGridView.DeleteItem(treeGridView.SelectedCommandTreeItem);
+                }
+            };
+
+            StackLayout commandPanelButtons = new() { 
+                Orientation = Orientation.Horizontal,
+                HorizontalContentAlignment = HorizontalAlignment.Right,
+                Width = _commandsPanel.Width,
+                Spacing = 5,
+                Padding = 5,
+                Items = { _addCommandButton, _addSectionButton, _deleteButton }
+            };
+
+            mainRow.Cells.Add(new TableLayout(commandPanelButtons, _commandsPanel));
 
             _detailsLayout = new()
             {
@@ -484,7 +658,12 @@ namespace SerialLoops.Editors
         {
             ScriptItemCommand command = ((ScriptCommandSectionEntry)((ScriptCommandSectionTreeGridView)sender).SelectedItem).Command;
             _editorControls.Items.Clear();
-            if (command is null) // if we've selected a script section header
+
+            _addCommandButton.Enabled = true;
+            _deleteButton.Enabled = true;
+
+            // if we've selected a script section header
+            if (command is null)
             {
                 return;
             }
