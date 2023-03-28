@@ -5,7 +5,6 @@ using SerialLoops.Controls;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Util.WaveformRenderer;
 using SerialLoops.Utility;
-using SkiaSharp;
 using System;
 using System.IO;
 
@@ -173,8 +172,8 @@ namespace SerialLoops.Dialogs
                                         Spacing = 3,
                                         Items =
                                         {
-                                            cancelButton,
                                             saveButton,
+                                            cancelButton,
                                         }
                                     }
                                 },

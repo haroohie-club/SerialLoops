@@ -6,7 +6,6 @@ using SerialLoops.Controls;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Util.WaveformRenderer;
 using SerialLoops.Utility;
-using SkiaSharp;
 using System.IO;
 
 namespace SerialLoops.Dialogs
@@ -43,7 +42,7 @@ namespace SerialLoops.Dialogs
 
             InitializeComponent();
         }
-        
+
         public void InitializeComponent()
         {
             Slider volumeSlider = new()
@@ -96,14 +95,24 @@ namespace SerialLoops.Dialogs
                     },
                     new StackLayout
                     {
-                        Orientation = Orientation.Horizontal,
+                        Orientation = Orientation.Vertical,
                         Spacing = 3,
+                        HorizontalContentAlignment = HorizontalAlignment.Right,
+                        Width = Waveform.Width + 105,
                         Items =
                         {
-                            cancelButton,
-                            saveButton,
+                            new StackLayout
+                            {
+                                Orientation = Orientation.Horizontal,
+                                Spacing = 3,
+                                Items =
+                                {
+                                    saveButton,
+                                    cancelButton,
+                                }
+                            },
                         }
-                    },
+                    }
                 }
             };
         }
