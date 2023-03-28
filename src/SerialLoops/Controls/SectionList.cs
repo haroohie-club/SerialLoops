@@ -94,7 +94,7 @@ namespace SerialLoops.Controls
     }
 
     /// <summary>
-    /// The base class for views that display the set of tests.
+    /// The base class for nested section lists.
     /// </summary>
     public abstract class SectionList
     {

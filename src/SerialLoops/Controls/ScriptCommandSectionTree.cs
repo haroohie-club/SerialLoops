@@ -1,6 +1,7 @@
 ﻿using Eto.Drawing;
 using Eto.Forms;
 using HaruhiChokuretsuLib.Archive.Event;
+using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
 using System;
 using System.Collections.Generic;
@@ -78,6 +79,7 @@ namespace SerialLoops.Controls
         private ScriptCommandSectionTreeItem _cursorItem;
         public event EventHandler RepositionCommand;
         public event EventHandler DeleteCommand;
+        public event EventHandler AddCommand;
         public override Control Control => _treeView;
 
         public override void Focus()
@@ -202,18 +204,42 @@ namespace SerialLoops.Controls
             parent.Remove(item);
             DeleteCommand?.Invoke(this, EventArgs.Empty);
             _treeView.DataStore = _treeView.DataStore;
+            if (newIndex >= parent.Count)
+            {
+                newIndex = parent.Count - 1;
+            }
+            if (newIndex < 0) return;
             _treeView.SelectedItem = parent[newIndex];
         }
 
         internal void AddItem(ScriptCommandSectionTreeItem item)
         {
             if (SelectedCommandTreeItem is null) return;
-            if (SelectedCommandTreeItem.Parent is not ScriptCommandSectionTreeItem parent) return;
-            var index = parent.IndexOf(SelectedCommandTreeItem);
-            if (index == -1) return;
-            parent.Insert(index + 1, item);
-            item.Parent = parent;
+            if (SelectedCommandTreeItem.Parent is ScriptCommandSectionTreeItem parent && !parent.Text.Equals("Top"))
+            {
+                int index = parent.IndexOf(SelectedCommandTreeItem);
+                if (index == -1) return;
+                parent.Insert(index + 1, item);
+            }
+            else
+            {
+                SelectedCommandTreeItem.Insert(0, item);
+            }
+            
+            AddCommand?.Invoke(this, EventArgs.Empty); //todo invoke this with the new item args
+            _treeView.SelectedItem = item;
             _treeView.DataStore = _treeView.DataStore;
+        }
+
+        internal void AddSection(ScriptCommandSectionTreeItem section)
+        {
+            ScriptCommandSectionTreeItem rootNode = (ScriptCommandSectionTreeItem)_treeView.DataStore;
+            if (rootNode is null) return;
+            rootNode.Add(section);
+
+            AddCommand?.Invoke(this, EventArgs.Empty); //todo invoke this with the new script section args
+            _treeView.SelectedItem = section;
+            _treeView.DataStore = rootNode;
         }
 
         public void SetContents(IEnumerable<ScriptCommandSectionEntry> topNodes, bool expanded)
@@ -221,5 +247,10 @@ namespace SerialLoops.Controls
             _treeView.DataStore = new ScriptCommandSectionTreeItem(new ScriptCommandSectionEntry("Top", topNodes, null), expanded);
         }
 
+        public ScriptCommandSectionEntry FindSection(string text)
+        {
+            ScriptCommandSectionTreeItem rootNode = (ScriptCommandSectionTreeItem)_treeView.DataStore;
+            return rootNode.Find(s => s.Text.Equals(text))?.Section;
+        }
     }
 }

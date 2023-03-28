@@ -12,15 +12,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Icons\Add.png" />
+    <None Remove="Icons\Add_Section.png" />
     <None Remove="Icons\Background.png" />
     <None Remove="Icons\BGM.png" />
+    <None Remove="Icons\Camera.png" />
     <None Remove="Icons\Character_Sprite.png" />
     <None Remove="Icons\Chess.png" />
     <None Remove="Icons\Chibi.png" />
     <None Remove="Icons\Dialogue_Config.png" />
     <None Remove="Icons\Group_Selection.png" />
     <None Remove="Icons\Map.png" />
+    <None Remove="Icons\Pathing.png" />
     <None Remove="Icons\Puzzle.png" />
+    <None Remove="Icons\Remove.png" />
     <None Remove="Icons\Scenario.png" />
     <None Remove="Icons\Script.png" />
     <None Remove="Icons\System_Texture.png" />
