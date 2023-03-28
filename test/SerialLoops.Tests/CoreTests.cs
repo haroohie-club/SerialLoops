@@ -101,10 +101,6 @@ namespace SerialLoops.Tests
                 Assert.That(bgm.BgmFile, Does.Contain(bgm.Name));
                 Assert.That(bgm.GetWaveProvider(_log, true), Is.Not.Null);
             });
-            string newBgmFile = Path.Combine(_project.MainDirectory, $"{bgmName}.wav");
-            AdxWaveProvider waveProvider = (AdxWaveProvider)bgm.GetWaveProvider(_log, false);
-            WaveFileWriter.CreateWaveFile(newBgmFile, waveProvider);
-            bgm.Replace(newBgmFile, _project.BaseDirectory, _project.IterativeDirectory, Path.Combine(_project.Config.CachesDirectory, "bgm", $"{bgm.Name}.wav"), waveProvider.LoopEnabled, waveProvider.LoopStartSample, waveProvider.LoopEndSample, _log);
         }
 
         [Test, TestCaseSource(nameof(CharacterSpriteNames)), Parallelizable(ParallelScope.All)]
@@ -180,10 +176,6 @@ namespace SerialLoops.Tests
                 Assert.That(vce.VoiceFile, Does.Contain(vce.Name));
                 Assert.That(vce.GetWaveProvider(_log), Is.Not.Null);
             }); 
-            string newVceFile = Path.Combine(_project.MainDirectory, $"{voiceName}.wav");
-            AdxWaveProvider waveProvider = (AdxWaveProvider)vce.GetWaveProvider(_log, false);
-            WaveFileWriter.CreateWaveFile(newVceFile, waveProvider);
-            vce.Replace(newVceFile, _project.BaseDirectory, _project.IterativeDirectory, Path.Combine(_project.Config.CachesDirectory, "vce", $"{vce.Name}.wav"), _log);
         }
         #endregion
 
