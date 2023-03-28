@@ -1,5 +1,6 @@
 using Eto.Drawing;
 using Eto.Forms;
+using SerialLoops.Dialogs;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Logging;
 using SerialLoops.Lib.Util;
@@ -178,7 +179,7 @@ namespace SerialLoops
                     ((IProgressTracker)tracker).Focus("Creating Project", 1);
                     IO.OpenRom(NewProject, romPath, includeFontHack, tracker);
                     tracker.Finished++;
-                    NewProject.Load(Log, tracker);
+                    NewProject.Load(Config, Log, tracker);
                 }, Close, tracker, "Creating Project");
             }
         }

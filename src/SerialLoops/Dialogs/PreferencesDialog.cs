@@ -5,7 +5,7 @@ using SerialLoops.Lib;
 using SerialLoops.Utility;
 using System;
 
-namespace SerialLoops
+namespace SerialLoops.Dialogs
 {
     public partial class PreferencesDialog : Dialog
     {
@@ -26,19 +26,19 @@ namespace SerialLoops
 
             _devkitArmBox = new() { Text = Configuration.DevkitArmPath };
             _devkitArmBox.TextChanged += DevkitArmBox_TextChanged;
-            
+
             _emulatorBox = new() { Text = Configuration.EmulatorPath };
             _emulatorBox.TextChanged += EmulatorBox_TextChanged;
 
             _autoReopenLastProjectBox = new() { Checked = Configuration.AutoReopenLastProject };
             _autoReopenLastProjectBox.CheckedChanged += AutoReopenLastProjectBox_CheckedChanged;
 
-            _rememberProjectWorkspaceBox = new() { Checked = Configuration.RememberProjectWorkspace};
+            _rememberProjectWorkspaceBox = new() { Checked = Configuration.RememberProjectWorkspace };
             _rememberProjectWorkspaceBox.CheckedChanged += RememberProjectWorkspaceBox_CheckedChanged;
 
             Button devkitArmButton = new() { Text = "Select" };
             devkitArmButton.Click += DevkitArmButton_Click;
-            
+
             Button emulatorButton = new() { Text = "Select" };
             emulatorButton.Click += EmulatorButton_Click;
 
@@ -130,18 +130,18 @@ namespace SerialLoops
                 );
         }
 
-        private void SaveButton_Click(object sender, System.EventArgs e)
+        private void SaveButton_Click(object sender, EventArgs e)
         {
             Configuration.Save(_log);
             Close();
         }
 
-        private void DevkitArmBox_TextChanged(object sender, System.EventArgs e)
+        private void DevkitArmBox_TextChanged(object sender, EventArgs e)
         {
             Configuration.DevkitArmPath = _devkitArmBox.Text;
         }
 
-        private void DevkitArmButton_Click(object sender, System.EventArgs e)
+        private void DevkitArmButton_Click(object sender, EventArgs e)
         {
             SelectFolderDialog selectFolderDialog = new();
             if (selectFolderDialog.ShowAndReportIfFileSelected(this))
@@ -149,13 +149,13 @@ namespace SerialLoops
                 _devkitArmBox.Text = selectFolderDialog.Directory;
             }
         }
-        
-        private void EmulatorBox_TextChanged(object sender, System.EventArgs e)
+
+        private void EmulatorBox_TextChanged(object sender, EventArgs e)
         {
             Configuration.EmulatorPath = _emulatorBox.Text;
         }
 
-        private void EmulatorButton_Click(object sender, System.EventArgs e)
+        private void EmulatorButton_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new();
             if (openFileDialog.ShowAndReportIfFileSelected(this))

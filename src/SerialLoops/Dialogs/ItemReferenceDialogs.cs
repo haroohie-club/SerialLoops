@@ -7,7 +7,7 @@ using SerialLoops.Lib.Items;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SerialLoops
+namespace SerialLoops.Dialogs
 {
     public class ReferencesDialog : FindItemsDialog
     {
@@ -48,7 +48,7 @@ namespace SerialLoops
 
     public class OrphanedItemsDialog : FindItemsDialog
     {
-        private static readonly ItemDescription.ItemType[] IGNORED_ORPHAN_TYPES = { 
+        private static readonly ItemDescription.ItemType[] IGNORED_ORPHAN_TYPES = {
             ItemDescription.ItemType.Scenario,
             ItemDescription.ItemType.Dialogue_Config
         };

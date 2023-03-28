@@ -63,10 +63,10 @@
     <Compile Update="ProjectCreationDialog - Copy.eto.cs">
       <DependentUpon>$([System.String]::Copy('%(Filename)').Replace('.eto', ''))%(Extension)</DependentUpon>
     </Compile>
-    <Compile Update="SearchDialog.eto.cs">
+    <Compile Update="Dialogs\SearchDialog.eto.cs">
       <DependentUpon>$([System.String]::Copy('%(Filename)').Replace('.eto', ''))%(Extension)</DependentUpon>
     </Compile>
-    <Compile Update="ProjectCreationDialog.eto.cs">
+    <Compile Update="Dialogs\ProjectCreationDialog.eto.cs">
       <DependentUpon>ProjectCreationDialog.cs</DependentUpon>
     </Compile>
   </ItemGroup>

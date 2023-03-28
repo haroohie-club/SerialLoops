@@ -1,7 +1,9 @@
 using Eto.Forms;
 using HaruhiChokuretsuLib.Archive;
+using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
 using SerialLoops.Controls;
+using SerialLoops.Dialogs;
 using SerialLoops.Editors;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
@@ -235,10 +237,18 @@ namespace SerialLoops
             }
 
             IEnumerable<ItemDescription> unsavedItems = OpenProject.Items.Where(i => i.UnsavedChanges);
+            bool savedExtra = false;
             foreach (ItemDescription item in unsavedItems)
             {
                 switch (item.Type)
                 {
+                    case ItemDescription.ItemType.BGM:
+                        if (!savedExtra)
+                        {
+                            IO.WriteStringFile(Path.Combine("assets", "data", $"{OpenProject.Extra.Index:X3}.s"), OpenProject.Extra.GetSource(new()), OpenProject, _log);
+                            savedExtra = true;
+                        }
+                        break;
                     case ItemDescription.ItemType.Scenario:
                         ScenarioStruct scenario = ((ScenarioItem)item).Scenario;
                         IO.WriteStringFile(Path.Combine("assets", "events", $"{OpenProject.Evt.Files.First(f => f.Name == "SCENARIOS").Index:X3}.s"),
@@ -249,25 +259,21 @@ namespace SerialLoops
                                 { "EVTBIN", OpenProject.Evt.GetSourceInclude().Split('\n').Where(s => !string.IsNullOrEmpty(s)).Select(i => new IncludeEntry(i)).ToArray() }
                             }, _log),
                             OpenProject, _log);
-                        foreach (Editor editor in EditorTabs.Tabs.Pages.Cast<Editor>())
-                        {
-                            editor.UpdateTabTitle(true);
-                        }
                         break;
                     case ItemDescription.ItemType.Script:
                         EventFile evt = ((ScriptItem)item).Event;
                         evt.CollectGarbage();
                         IO.WriteStringFile(Path.Combine("assets", "events", $"{evt.Index:X3}.s"), evt.GetSource(new()), OpenProject, _log);
-                        foreach (Editor editor in EditorTabs.Tabs.Pages.Cast<Editor>())
-                        {
-                            editor.UpdateTabTitle(true);
-                        }
                         break;
 
                     default:
                         _log.LogWarning($"Saving for {item.Type}s not yet implemented.");
                         break;
                 }
+            }
+            foreach (Editor editor in EditorTabs.Tabs.Pages.Cast<Editor>())
+            {
+                editor.UpdateTabTitle(true);
             }
         }
 

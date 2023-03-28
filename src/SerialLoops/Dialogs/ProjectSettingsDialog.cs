@@ -5,17 +5,17 @@ using SerialLoops.Utility;
 using SkiaSharp;
 using System;
 
-namespace SerialLoops
+namespace SerialLoops.Dialogs
 {
     public class ProjectSettingsDialog : Dialog
     {
         private readonly Project _project;
         private readonly ILogger _log;
         private ProjectSettings Settings => _project.Settings;
-        
+
         private TextArea _nameBox;
         private SKBitmap _newIcon;
-        
+
         public ProjectSettingsDialog(Project project, ILogger log)
         {
             _project = project;
@@ -126,7 +126,7 @@ namespace SerialLoops
                 Spacing = 5,
                 HorizontalContentAlignment = HorizontalAlignment.Center,
                 VerticalContentAlignment = VerticalAlignment.Center,
-                Items = {"Game Title", _nameBox }
+                Items = { "Game Title", _nameBox }
             };
         }
 
@@ -138,7 +138,7 @@ namespace SerialLoops
                 MessageBox.Show("Please enter a game name for the banner, between 1 and 128 characters.", MessageBoxType.Warning);
                 return;
             }
-            
+
             if (text.Split('\n').Length > 3)
             {
                 MessageBox.Show("Game banner can only contain up to three lines.", MessageBoxType.Error);

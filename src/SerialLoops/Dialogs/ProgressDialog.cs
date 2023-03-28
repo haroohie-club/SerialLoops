@@ -4,7 +4,7 @@ using SerialLoops.Utility;
 using System;
 using System.Threading.Tasks;
 
-namespace SerialLoops
+namespace SerialLoops.Dialogs
 {
     public class ProgressDialog : Dialog
     {
@@ -18,7 +18,7 @@ namespace SerialLoops
             _loadingTask = loadingTask;
             _tracker = tracker;
             _onComplete = onComplete;
-            
+
             Title = title;
             ShowInTaskbar = false;
             Closeable = false;

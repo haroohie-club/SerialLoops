@@ -1,6 +1,7 @@
 ﻿using Eto.Mac.Forms.Controls;
 using MonoMac.AppKit;
 using NAudio.Wave;
+using SerialLoops.Utility;
 
 namespace SerialLoops.Mac
 {

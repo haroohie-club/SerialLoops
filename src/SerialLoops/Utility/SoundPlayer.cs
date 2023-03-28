@@ -2,7 +2,7 @@
 using Eto.Forms;
 using NAudio.Wave;
 
-namespace SerialLoops
+namespace SerialLoops.Utility
 {
     [Handler(typeof(ISoundPlayer))]
     public class SoundPlayer : Control

@@ -5,14 +5,14 @@ using SerialLoops.Lib;
 using SerialLoops.Lib.Logging;
 using System;
 
-namespace SerialLoops
+namespace SerialLoops.Dialogs
 {
     public abstract class FindItemsDialog : Dialog
     {
-        public ILogger Log;
-        public EditorTabsPanel Tabs;
-        public ItemExplorerPanel Explorer;
-        public Project Project;
+        public ILogger Log { get; set; }
+        public EditorTabsPanel Tabs { get; set; }
+        public ItemExplorerPanel Explorer { get; set; }
+        public Project Project { get; set; }
 
         protected override void OnLoad(EventArgs e)
         {

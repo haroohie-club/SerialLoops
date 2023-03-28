@@ -1,4 +1,5 @@
 ﻿using Eto.Forms;
+using SerialLoops.Utility;
 using System;
 
 namespace SerialLoops.Mac

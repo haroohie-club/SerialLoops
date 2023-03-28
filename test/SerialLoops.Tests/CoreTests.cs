@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using HaruhiChokuretsuLib.Audio;
+using NAudio.Wave;
+using NUnit.Framework;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
@@ -94,8 +96,11 @@ namespace SerialLoops.Tests
         public void BackgroundMusicItemTest(string bgmName)
         {
             var bgm = (BackgroundMusicItem)_project.FindItem(bgmName);
-            Assert.That(bgm.BgmFile, Does.Contain(bgm.Name));
-            Assert.That(bgm.GetWaveProvider(_log), Is.Not.Null);
+            Assert.Multiple(() =>
+            {
+                Assert.That(bgm.BgmFile, Does.Contain(bgm.Name));
+                Assert.That(bgm.GetWaveProvider(_log, true), Is.Not.Null);
+            });
         }
 
         [Test, TestCaseSource(nameof(CharacterSpriteNames)), Parallelizable(ParallelScope.All)]
@@ -166,8 +171,11 @@ namespace SerialLoops.Tests
         public void VoiceItemTest(string voiceName)
         {
             var vce = (VoicedLineItem)_project.FindItem(voiceName);
-            Assert.That(vce.VoiceFile, Does.Contain(vce.Name));
-            Assert.That(vce.GetWaveProvider(_log), Is.Not.Null);
+            Assert.Multiple(() =>
+            {
+                Assert.That(vce.VoiceFile, Does.Contain(vce.Name));
+                Assert.That(vce.GetWaveProvider(_log), Is.Not.Null);
+            }); 
         }
         #endregion
 

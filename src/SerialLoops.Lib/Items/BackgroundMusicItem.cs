@@ -1,8 +1,11 @@
-﻿using HaruhiChokuretsuLib.Archive.Data;
-using HaruhiChokuretsuLib.Archive.Event;
+﻿using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Audio;
 using HaruhiChokuretsuLib.Util;
+using NAudio.Flac;
+using NAudio.Vorbis;
 using NAudio.Wave;
+using NAudio.Wave.SampleProviders;
+using NLayer.NAudioSupport;
 using SerialLoops.Lib.Util;
 using System;
 using System.IO;
@@ -18,14 +21,15 @@ namespace SerialLoops.Lib.Items
         public int Index { get; set; }
         public string BgmName { get; set; }
         public string ExtrasShort { get; set; }
+        public string CachedWaveFile { get; set; }
         public (string ScriptName, ScriptCommandInvocation command)[] ScriptUses { get; set; }
 
-        public BackgroundMusicItem(string bgmFile, int index, ExtraFile extras, Project project) : base(Path.GetFileNameWithoutExtension(bgmFile), ItemType.BGM)
+        public BackgroundMusicItem(string bgmFile, int index, Project project) : base(Path.GetFileNameWithoutExtension(bgmFile), ItemType.BGM)
         {
             BgmFile = Path.GetRelativePath(project.IterativeDirectory, bgmFile);
             _bgmFile = bgmFile;
             Index = index;
-            BgmName = extras.Bgms.FirstOrDefault(b => b.Index == Index).Name?.GetSubstitutedString(project) ?? "";
+            BgmName = project.Extra.Bgms.FirstOrDefault(b => b.Index == Index)?.Name?.GetSubstitutedString(project) ?? "";
             DisplayName = string.IsNullOrEmpty(BgmName) ? Name : BgmName;
             PopulateScriptUses(project);
         }
@@ -43,13 +47,67 @@ namespace SerialLoops.Lib.Items
                 .Where(t => t.c.Parameters[0] == Index).ToArray();
         }
 
-        public void Replace(string wavFile, string baseDirectory, string iterativeDirectory)
+        public void Replace(string audioFile, string baseDirectory, string iterativeDirectory, string bgmCachedFile, bool loopEnabled, uint loopStartSample, uint loopEndSample, ILogger log)
         {
-            AdxUtil.EncodeWav(wavFile, Path.Combine(baseDirectory, BgmFile), false);
+            // The MP3 reader is able to create wave files but for whatever reason messes with the ADX encoder
+            // So we just convert to WAV AOT
+            if (Path.GetExtension(audioFile).Equals(".mp3", StringComparison.OrdinalIgnoreCase))
+            {
+                log.Log($"Converting {audioFile} to WAV...");
+                using Mp3FileReaderBase mp3Reader = new(audioFile, new Mp3FileReaderBase.FrameDecompressorBuilder(wf => new Mp3FrameDecompressor(wf)));
+                WaveFileWriter.CreateWaveFile(bgmCachedFile, mp3Reader.ToSampleProvider().ToWaveProvider16());
+                audioFile = bgmCachedFile;
+            }
+            // Ditto the Vorbis decoder
+            else if (Path.GetExtension(audioFile).Equals(".ogg", StringComparison.OrdinalIgnoreCase))
+            {
+                log.Log($"Converting {audioFile} to WAV...");
+                using VorbisWaveReader vorbisReader = new(audioFile);
+                WaveFileWriter.CreateWaveFile(bgmCachedFile, vorbisReader.ToSampleProvider().ToWaveProvider16());
+                audioFile = bgmCachedFile;
+            }
+            using WaveStream audio = Path.GetExtension(audioFile).ToLower() switch
+            {
+                ".wav" => new WaveFileReader(audioFile),
+                ".flac" => new FlacReader(audioFile),
+                _ => null,
+            };
+            if (audio is null)
+            {
+                log.LogError($"Invalid audio file '{audioFile}' selected.");
+                return;
+            }
+            if (audio.WaveFormat.SampleRate > SoundItem.MAX_SAMPLERATE)
+            {
+                log.Log($"Downsampling audio from {audio.WaveFormat.SampleRate} to NDS max sample rate {SoundItem.MAX_SAMPLERATE}...");
+                string newAudioFile = Path.Combine(Path.GetDirectoryName(bgmCachedFile), $"{Path.GetFileNameWithoutExtension(bgmCachedFile)}-downsampled.wav");
+                WaveFileWriter.CreateWaveFile(newAudioFile, new WdlResamplingSampleProvider(audio.ToSampleProvider(), SoundItem.MAX_SAMPLERATE).ToWaveProvider16());
+                log.Log($"Encoding audio to ADX...");
+                AdxUtil.EncodeWav(newAudioFile, Path.Combine(baseDirectory, BgmFile), loopEnabled, loopStartSample, loopEndSample);
+                audioFile = newAudioFile;
+            }
+            else
+            {
+                log.Log($"Encoding audio to ADX...");
+                AdxUtil.EncodeAudio(audio, Path.Combine(baseDirectory, BgmFile), loopEnabled, loopStartSample, loopEndSample);
+            }
             File.Copy(Path.Combine(baseDirectory, BgmFile), Path.Combine(iterativeDirectory, BgmFile), true);
+            if (!string.Equals(audioFile, bgmCachedFile))
+            {
+                log.Log($"Attempting to cache audio file from {audioFile} to {bgmCachedFile}...");
+                if (Path.GetExtension(audioFile).Equals(".wav", StringComparison.OrdinalIgnoreCase))
+                {
+                    File.Copy(audioFile, bgmCachedFile, true);
+                }
+                else
+                {
+                    audio.Seek(0, SeekOrigin.Begin);
+                    WaveFileWriter.CreateWaveFile(bgmCachedFile, audio.ToSampleProvider().ToWaveProvider16());
+                }
+            }
         }
-        
-        public IWaveProvider GetWaveProvider(ILogger log)
+
+        public IWaveProvider GetWaveProvider(ILogger log, bool loop)
         {
             byte[] adxBytes = Array.Empty<byte>();
             try
@@ -68,7 +126,8 @@ namespace SerialLoops.Lib.Items
                 }
             }
 
-            return new AdxWaveProvider(new AdxDecoder(adxBytes, log));
+            AdxDecoder decoder = new(adxBytes, log) { DoLoop = loop };
+            return new AdxWaveProvider(decoder, decoder.Header.LoopInfo.EnabledInt == 1, decoder.LoopInfo.StartSample, decoder.LoopInfo.EndSample);
         }
     }
 }
