@@ -95,7 +95,7 @@ namespace SerialLoops.Tests
         {
             var bgm = (BackgroundMusicItem)_project.FindItem(bgmName);
             Assert.That(bgm.BgmFile, Does.Contain(bgm.Name));
-            Assert.That(bgm.GetWaveProvider(_log), Is.Not.Null);
+            Assert.That(bgm.GetWaveProvider(_log, true), Is.Not.Null);
         }
 
         [Test, TestCaseSource(nameof(CharacterSpriteNames)), Parallelizable(ParallelScope.All)]

@@ -118,7 +118,11 @@ namespace SerialLoops.Utility
                 Orientation = Orientation.Horizontal,
                 VerticalContentAlignment = VerticalAlignment.Center,
                 Spacing = 10,
-                Items = { soundPlayer, details }
+                Items =
+                {
+                    soundPlayer,
+                    details
+                }
             };
         }
     }

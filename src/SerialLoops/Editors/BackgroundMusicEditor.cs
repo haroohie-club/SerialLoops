@@ -1,4 +1,5 @@
 ﻿using Eto.Forms;
+using HaruhiChokuretsuLib.Audio;
 using HaruhiChokuretsuLib.Util;
 using NAudio.Wave;
 using SerialLoops.Controls;
@@ -12,6 +13,9 @@ namespace SerialLoops.Editors
     public class BackgroundMusicEditor : Editor
     {
         private BackgroundMusicItem _bgm;
+        private bool _loopEnabled;
+        private uint _loopStartSample;
+        private uint _loopEndSample;
         public SoundPlayerPanel BgmPlayer { get; set; }
 
         private string _bgmCachedFile;
@@ -26,15 +30,32 @@ namespace SerialLoops.Editors
             _bgm = (BackgroundMusicItem)Description;
             BgmPlayer = new(_bgm, _log);
 
-            Button loopSettingsButton = new() { Text = "Manage Looping" };
-            loopSettingsButton.Click += (obj, args) =>
+            Button settingsButton = new() { Text = "Manage Looping" };
+            settingsButton.Click += (obj, args) =>
             {
+                LoopyProgressTracker tracker = new();
                 if (!File.Exists(_bgmCachedFile))
                 {
-                    WaveFileWriter.CreateWaveFile(_bgmCachedFile, BgmPlayer.Sound);
+                    _ = new ProgressDialog(() => WaveFileWriter.CreateWaveFile(_bgmCachedFile, _bgm.GetWaveProvider(_log, false)), () => { }, tracker, "Caching BGM");
                 }
                 using WaveFileReader reader = new(_bgmCachedFile);
-
+                BgmPropertiesDialog propertiesDialog = new(reader, _log, ((AdxWaveProvider)BgmPlayer.Sound).LoopEnabled, ((AdxWaveProvider)BgmPlayer.Sound).LoopStartSample, ((AdxWaveProvider)BgmPlayer.Sound).LoopEndSample);
+                propertiesDialog.ShowModal(this);
+                propertiesDialog.Closed += (obj, args) =>
+                {
+                    if (propertiesDialog.SaveChanges)
+                    {
+                        _loopEnabled = propertiesDialog.LoopPreview.LoopEnabled;
+                        _loopStartSample = propertiesDialog.LoopPreview.StartSample;
+                        _loopEndSample = propertiesDialog.LoopPreview.EndSample;
+                        LoopyProgressTracker tracker = new();
+                        BgmPlayer.Stop();
+                        _ = new ProgressDialog(() => _bgm.Replace(_bgmCachedFile, _project.BaseDirectory, _project.IterativeDirectory, _bgmCachedFile, _loopEnabled, _loopStartSample, _loopEndSample), () =>
+                        {
+                            Content = GetEditorPanel();
+                        }, tracker, "Replace BGM track");
+                    }
+                };
             };
 
             Button extractButton = new() { Text = "Extract" };
@@ -44,7 +65,9 @@ namespace SerialLoops.Editors
                 saveFileDialog.Filters.Add(new() { Name = "WAV File", Extensions = new string[] { ".wav" } });
                 if (saveFileDialog.ShowAndReportIfFileSelected(this))
                 {
-                    WaveFileWriter.CreateWaveFile(saveFileDialog.FileName, _bgm.GetWaveProvider(_log));
+                    LoopyProgressTracker tracker = new();
+                    _ = new ProgressDialog(() => WaveFileWriter.CreateWaveFile(saveFileDialog.FileName, _bgm.GetWaveProvider(_log, false)),
+                        () => { }, tracker, "Exporting BGM");
                 }
             };
 
@@ -57,7 +80,7 @@ namespace SerialLoops.Editors
                 {
                     LoopyProgressTracker tracker = new();
                     BgmPlayer.Stop();
-                    _ = new ProgressDialog(() => _bgm.Replace(openFileDialog.FileName, _project.BaseDirectory, _project.IterativeDirectory, _bgmCachedFile), () =>
+                    _ = new ProgressDialog(() => _bgm.Replace(openFileDialog.FileName, _project.BaseDirectory, _project.IterativeDirectory, _bgmCachedFile, _loopEnabled, _loopStartSample, _loopEndSample), () =>
                     {
                         Content = GetEditorPanel();
                     }, tracker, "Replace BGM track");
@@ -82,7 +105,7 @@ namespace SerialLoops.Editors
                     Spacing = 3,
                     Items =
                     {
-                        loopSettingsButton,
+                        settingsButton,
                     }
                 }),
                 new TableRow(new StackLayout

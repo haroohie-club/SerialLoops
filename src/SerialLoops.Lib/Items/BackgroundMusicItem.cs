@@ -44,19 +44,14 @@ namespace SerialLoops.Lib.Items
                 .Where(t => t.c.Parameters[0] == Index).ToArray();
         }
 
-        public void Replace(string wavFile, string baseDirectory, string iterativeDirectory, string bgmCachedFile)
+        public void Replace(string wavFile, string baseDirectory, string iterativeDirectory, string bgmCachedFile, bool loopEnabled, uint loopStartSample, uint loopEndSample)
         {
             File.Copy(wavFile, bgmCachedFile, true);
-            long endTime = 0;
-            using (WaveFileReader wav = new(bgmCachedFile))
-            {
-                endTime = (uint)(wav.SampleCount / wav.WaveFormat.SampleRate);
-            }
-            AdxUtil.EncodeWav(wavFile, Path.Combine(baseDirectory, BgmFile), 0.0, endTime);
+            AdxUtil.EncodeWav(wavFile, Path.Combine(baseDirectory, BgmFile), loopEnabled, loopStartSample, loopEndSample);
             File.Copy(Path.Combine(baseDirectory, BgmFile), Path.Combine(iterativeDirectory, BgmFile), true);
         }
-        
-        public IWaveProvider GetWaveProvider(ILogger log)
+
+        public IWaveProvider GetWaveProvider(ILogger log, bool loop)
         {
             byte[] adxBytes = Array.Empty<byte>();
             try
@@ -75,7 +70,8 @@ namespace SerialLoops.Lib.Items
                 }
             }
 
-            return new AdxWaveProvider(new AdxDecoder(adxBytes, log));
+            AdxDecoder decoder = new(adxBytes, log) { DoLoop = loop };
+            return new AdxWaveProvider(decoder, decoder.Header.LoopInfo.EnabledInt == 1, decoder.LoopInfo.StartSample, decoder.LoopInfo.EndSample);
         }
     }
 }

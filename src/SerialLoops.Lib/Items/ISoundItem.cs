@@ -5,5 +5,5 @@ namespace SerialLoops.Lib.Items;
 
 public interface ISoundItem
 {
-    IWaveProvider GetWaveProvider(ILogger log);
+    IWaveProvider GetWaveProvider(ILogger log, bool loop);
 }

@@ -16,6 +16,7 @@ namespace SerialLoops.Controls
         private Button _stopButton;
 
         public IWaveProvider Sound { get; private set; }
+        public SKGuiImage Waveform { get; private set; }
 
         public SoundPlayerPanel(ISoundItem item, ILogger log)
         {
@@ -29,8 +30,8 @@ namespace SerialLoops.Controls
         private void InitializePlayer()
         {
             _log.Log("Attempting to initialize sound player...");
-            _player = new SoundPlayer();
-            Sound = _item.GetWaveProvider(_log);
+            _player = new();
+            Sound = _item.GetWaveProvider(_log, true);
             _player.Initialize(Sound);
             _log.Log("Sound player successfully initialized.");
         }
@@ -49,7 +50,8 @@ namespace SerialLoops.Controls
                 Items =
                 {
                     _playPauseButton,
-                    _stopButton
+                    _stopButton,
+                    Waveform,
                 }
             };
         }

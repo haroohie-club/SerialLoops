@@ -25,7 +25,7 @@ namespace SerialLoops.Lib.Items
             PopulateScriptUses(project);
         }
         
-        public IWaveProvider GetWaveProvider(ILogger log)
+        public IWaveProvider GetWaveProvider(ILogger log, bool loop = false)
         {
             byte[] adxBytes = Array.Empty<byte>();
             try
