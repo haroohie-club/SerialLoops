@@ -2,6 +2,7 @@ using Eto.Forms;
 using HaruhiChokuretsuLib.Archive;
 using HaruhiChokuretsuLib.Archive.Event;
 using SerialLoops.Controls;
+using SerialLoops.Dialogs;
 using SerialLoops.Editors;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;

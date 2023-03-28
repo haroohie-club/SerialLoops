@@ -3,6 +3,7 @@ using HaruhiChokuretsuLib.Audio;
 using HaruhiChokuretsuLib.Util;
 using NAudio.Wave;
 using SerialLoops.Controls;
+using SerialLoops.Dialogs;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Utility;
@@ -39,7 +40,7 @@ namespace SerialLoops.Editors
                     _ = new ProgressDialog(() => WaveFileWriter.CreateWaveFile(_bgmCachedFile, _bgm.GetWaveProvider(_log, false)), () => { }, tracker, "Caching BGM");
                 }
                 using WaveFileReader reader = new(_bgmCachedFile);
-                BgmPropertiesDialog propertiesDialog = new(reader, _log, ((AdxWaveProvider)BgmPlayer.Sound).LoopEnabled, ((AdxWaveProvider)BgmPlayer.Sound).LoopStartSample, ((AdxWaveProvider)BgmPlayer.Sound).LoopEndSample);
+                BgmLoopPropertiesDialog propertiesDialog = new(reader, _bgm.Name, _log, ((AdxWaveProvider)BgmPlayer.Sound).LoopEnabled, ((AdxWaveProvider)BgmPlayer.Sound).LoopStartSample, ((AdxWaveProvider)BgmPlayer.Sound).LoopEndSample);
                 propertiesDialog.ShowModal(this);
                 propertiesDialog.Closed += (obj, args) =>
                 {
@@ -103,6 +104,7 @@ namespace SerialLoops.Editors
                 {
                     Orientation = Orientation.Horizontal,
                     Spacing = 3,
+                    Padding = 2,
                     Items =
                     {
                         settingsButton,
@@ -112,6 +114,7 @@ namespace SerialLoops.Editors
                 {
                     Orientation = Orientation.Horizontal,
                     Spacing = 3,
+                    Padding = 2,
                     Items =
                     {
                         replaceButton,

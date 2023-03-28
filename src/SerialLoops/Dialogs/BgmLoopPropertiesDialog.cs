@@ -1,5 +1,4 @@
 ﻿using Eto.Forms;
-using HaruhiChokuretsuLib.Audio;
 using HaruhiChokuretsuLib.Util;
 using NAudio.Wave;
 using SerialLoops.Controls;
@@ -10,9 +9,9 @@ using SkiaSharp;
 using System;
 using System.IO;
 
-namespace SerialLoops
+namespace SerialLoops.Dialogs
 {
-    public class BgmPropertiesDialog : Dialog
+    public class BgmLoopPropertiesDialog : Dialog
     {
         private ILogger _log { get; set; }
 
@@ -21,9 +20,10 @@ namespace SerialLoops
         public SKGuiImage Waveform { get; set; }
         public SoundPlayerPanel LoopPreviewPlayer { get; set; }
 
-        public BgmPropertiesDialog(WaveStream wav, ILogger log, bool loopEnabled, uint startSample = 0, uint endSample = 0)
+        public BgmLoopPropertiesDialog(WaveStream wav, string title, ILogger log, bool loopEnabled, uint startSample = 0, uint endSample = 0)
         {
             _log = log;
+            Title = title;
             Waveform = new(WaveformRenderer.Render(wav, new()
             {
                 TopPeakPaint = new() { Color = SKColors.Coral },

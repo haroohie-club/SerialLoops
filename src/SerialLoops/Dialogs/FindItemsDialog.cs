@@ -5,7 +5,7 @@ using SerialLoops.Lib;
 using SerialLoops.Lib.Logging;
 using System;
 
-namespace SerialLoops
+namespace SerialLoops.Dialogs
 {
     public abstract class FindItemsDialog : Dialog
     {

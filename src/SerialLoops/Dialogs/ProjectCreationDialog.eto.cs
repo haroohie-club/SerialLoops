@@ -1,5 +1,6 @@
 using Eto.Drawing;
 using Eto.Forms;
+using SerialLoops.Dialogs;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Logging;
 using SerialLoops.Lib.Util;

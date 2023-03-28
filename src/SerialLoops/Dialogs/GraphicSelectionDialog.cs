@@ -9,7 +9,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 
-namespace SerialLoops
+namespace SerialLoops.Dialogs
 {
     public class GraphicSelectionDialog : Dialog<IPreviewableGraphic>
     {
@@ -17,7 +17,7 @@ namespace SerialLoops
         private readonly IPreviewableGraphic _currentSelection;
         private readonly Project _project;
         private readonly ILogger _log;
-        
+
         private TextBox _filter;
         private ListBox _selector;
         private Panel _preview;
@@ -47,7 +47,7 @@ namespace SerialLoops
                 _selector.DataStore = new ObservableCollection<IPreviewableGraphic>(_items
                     .Where(i => ((ItemDescription)i).Name.ToLower().Contains(_filter.Text.ToLower())));
             };
-            
+
             _selector = new ListBox
             {
                 Size = new Size(150, 390),
@@ -56,7 +56,7 @@ namespace SerialLoops
                 ItemTextBinding = Binding.Delegate<IPreviewableGraphic, string>(i => ((ItemDescription)i).Name),
                 ItemKeyBinding = Binding.Delegate<IPreviewableGraphic, string>(i => ((ItemDescription)i).Name),
             };
-            
+
             _preview = new StackLayout
             {
                 HorizontalContentAlignment = HorizontalAlignment.Center,
@@ -67,12 +67,12 @@ namespace SerialLoops
             {
                 _preview.Content = GeneratePreview();
             };
-            
+
             Button closeButton = new() { Text = "Confirm" };
             closeButton.Click += (sender, args) => Close(_selector.SelectedValue as IPreviewableGraphic);
             Button cancelButton = new() { Text = "Cancel" };
             cancelButton.Click += (sender, args) => Close(_currentSelection);
-            
+
             Content = new StackLayout
             {
                 Orientation = Orientation.Vertical,
@@ -113,14 +113,14 @@ namespace SerialLoops
                 }
             };
         }
-        
+
         protected override void OnShown(EventArgs e)
         {
             base.OnShown(e);
             _filter.Focus();
             _preview.Content = GeneratePreview();
         }
-        
+
         private StackLayout GeneratePreview()
         {
             Label backgroundTypeLabel = new();
@@ -140,11 +140,11 @@ namespace SerialLoops
                 Items =
                 {
                     new Label { Text = _selector.SelectedValue == null ? "No preview available" : ((ItemDescription)_selector.SelectedValue).Name },
-                    new SKGuiImage(_selector.SelectedValue == null ? new SKBitmap(64, 64) : 
+                    new SKGuiImage(_selector.SelectedValue == null ? new SKBitmap(64, 64) :
                         ((IPreviewableGraphic) _selector.SelectedValue).GetPreview(_project, 250, 350)),
                     backgroundTypeLabel,
                 }
             };
         }
-    }   
+    }
 }
