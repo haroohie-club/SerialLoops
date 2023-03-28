@@ -23,7 +23,7 @@ namespace SerialLoops.Dialogs
         public BgmLoopPropertiesDialog(WaveStream wav, string title, ILogger log, bool loopEnabled, uint startSample = 0, uint endSample = 0)
         {
             _log = log;
-            Title = title;
+            Title = $"{title} - Manage Loop";
             Waveform = new(WaveformRenderer.Render(wav, WaveFormRendererSettings.StandardSettings));
             if (endSample == 0)
             {
@@ -133,6 +133,7 @@ namespace SerialLoops.Dialogs
             {
                 Orientation = Orientation.Horizontal,
                 Spacing = 5,
+                Padding = 10,
                 Items =
                 {
                     new StackLayout

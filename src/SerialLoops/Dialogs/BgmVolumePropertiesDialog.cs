@@ -26,7 +26,7 @@ namespace SerialLoops.Dialogs
         public BgmVolumePropertiesDialog(WaveStream wav, string title, ILogger log)
         {
             _log = log;
-            Title = title;
+            Title = $"{title} - Adjust Volume";
             _wav = wav;
             Waveform = new(WaveformRenderer.Render(wav, WaveFormRendererSettings.StandardSettings));
             _waveformLayout = new()
@@ -80,6 +80,7 @@ namespace SerialLoops.Dialogs
             {
                 Orientation = Orientation.Vertical,
                 Spacing = 5,
+                Padding = 10,
                 Items =
                 {
                     new StackLayout
