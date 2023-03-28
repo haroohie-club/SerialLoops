@@ -24,11 +24,7 @@ namespace SerialLoops.Dialogs
         {
             _log = log;
             Title = title;
-            Waveform = new(WaveformRenderer.Render(wav, new()
-            {
-                TopPeakPaint = new() { Color = SKColors.Coral },
-                BottomPeakPaint = new() { Color = SKColors.Crimson },
-            }));
+            Waveform = new(WaveformRenderer.Render(wav, WaveFormRendererSettings.StandardSettings));
             if (endSample == 0)
             {
                 endSample = (uint)(wav.Length / (wav.WaveFormat.BitsPerSample / 8));
