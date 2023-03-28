@@ -70,7 +70,7 @@ namespace SerialLoops.Editors
                         BgmPlayer.Stop();
                         _ = new ProgressDialog(() =>
                         {
-                            _bgm.Replace(_bgmCachedFile, _project.BaseDirectory, _project.IterativeDirectory, _bgmCachedFile, _loopEnabled, _loopStartSample, _loopEndSample);
+                            _bgm.Replace(_bgmCachedFile, _project.BaseDirectory, _project.IterativeDirectory, _bgmCachedFile, _loopEnabled, _loopStartSample, _loopEndSample, _log);
                             reader.Dispose();
                             File.Delete(loopAdjustedWav);
                         },
@@ -105,7 +105,7 @@ namespace SerialLoops.Editors
                         {
                             WaveFileWriter.CreateWaveFile(_bgmCachedFile, volumeDialog.VolumePreview.GetWaveProvider(_log, false));
                             tracker.Finished++;
-                            _bgm.Replace(_bgmCachedFile, _project.BaseDirectory, _project.IterativeDirectory, _bgmCachedFile, _loopEnabled, _loopStartSample, _loopEndSample);
+                            _bgm.Replace(_bgmCachedFile, _project.BaseDirectory, _project.IterativeDirectory, _bgmCachedFile, _loopEnabled, _loopStartSample, _loopEndSample, _log);
                             tracker.Finished++;
                             reader.Dispose();
                             File.Delete(volumeAdjustedWav);
@@ -136,12 +136,16 @@ namespace SerialLoops.Editors
             replaceButton.Click += (obj, args) =>
             {
                 OpenFileDialog openFileDialog = new() { Title = "Replace BGM" };
-                openFileDialog.Filters.Add(new() { Name = "WAV File", Extensions = new string[] { ".wav" } });
+                openFileDialog.Filters.Add(new() { Name = "Supported Audio Files", Extensions = new string[] { ".wav", ".flac", ".mp3", ".ogg" } });
+                openFileDialog.Filters.Add(new() { Name = "WAV files", Extensions = new string[] { ".wav" } });
+                openFileDialog.Filters.Add(new() { Name = "FLAC files", Extensions = new string[] { ".flac" } });
+                openFileDialog.Filters.Add(new() { Name = "MP3 files", Extensions = new string[] { ".mp3" } });
+                openFileDialog.Filters.Add(new() { Name = "Vorbis files", Extensions = new string[] { ".ogg" } });
                 if (openFileDialog.ShowAndReportIfFileSelected(this))
                 {
                     LoopyProgressTracker tracker = new();
                     BgmPlayer.Stop();
-                    _ = new ProgressDialog(() => _bgm.Replace(openFileDialog.FileName, _project.BaseDirectory, _project.IterativeDirectory, _bgmCachedFile, _loopEnabled, _loopStartSample, _loopEndSample), () =>
+                    _ = new ProgressDialog(() => _bgm.Replace(openFileDialog.FileName, _project.BaseDirectory, _project.IterativeDirectory, _bgmCachedFile, _loopEnabled, _loopStartSample, _loopEndSample, _log), () =>
                     {
                         Content = GetEditorPanel();
                     }, tracker, "Replace BGM track");

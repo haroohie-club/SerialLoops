@@ -1,7 +1,10 @@
 ﻿using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Audio;
 using HaruhiChokuretsuLib.Util;
+using NAudio.Flac;
+using NAudio.Vorbis;
 using NAudio.Wave;
+using NLayer.NAudioSupport;
 using SerialLoops.Lib.Util;
 using System;
 using System.IO;
@@ -43,14 +46,48 @@ namespace SerialLoops.Lib.Items
                 .Where(t => t.c.Parameters[0] == Index).ToArray();
         }
 
-        public void Replace(string wavFile, string baseDirectory, string iterativeDirectory, string bgmCachedFile, bool loopEnabled, uint loopStartSample, uint loopEndSample)
+        public void Replace(string audioFile, string baseDirectory, string iterativeDirectory, string bgmCachedFile, bool loopEnabled, uint loopStartSample, uint loopEndSample, ILogger log)
         {
-            if (!string.Equals(wavFile, bgmCachedFile))
+            // The MP3 reader is able to create wave files but for whatever reason messes with the ADX encoder
+            // So we just convert to WAV AOT
+            if (Path.GetExtension(audioFile).Equals(".mp3", StringComparison.OrdinalIgnoreCase))
             {
-                File.Copy(wavFile, bgmCachedFile, true);
+                using Mp3FileReaderBase mp3Reader = new(audioFile, new Mp3FileReaderBase.FrameDecompressorBuilder(wf => new Mp3FrameDecompressor(wf)));
+                WaveFileWriter.CreateWaveFile(bgmCachedFile, mp3Reader.ToSampleProvider().ToWaveProvider16());
+                audioFile = bgmCachedFile;
             }
-            AdxUtil.EncodeWav(wavFile, Path.Combine(baseDirectory, BgmFile), loopEnabled, loopStartSample, loopEndSample);
+            // Ditto the Vorbis decoder
+            else if (Path.GetExtension(audioFile).Equals(".ogg", StringComparison.OrdinalIgnoreCase))
+            {
+                using VorbisWaveReader vorbisReader = new(audioFile);
+                WaveFileWriter.CreateWaveFile(bgmCachedFile, vorbisReader.ToSampleProvider().ToWaveProvider16());
+                audioFile = bgmCachedFile;
+            }
+            using WaveStream audio = Path.GetExtension(audioFile).ToLower() switch
+            {
+                ".wav" => new WaveFileReader(audioFile),
+                ".flac" => new FlacReader(audioFile),
+                _ => null,
+            };
+            if (audio is null)
+            {
+                log.LogError($"Invalid audio file '{audioFile}' selected.");
+                return;
+            }
+            AdxUtil.EncodeAudio(audio, Path.Combine(baseDirectory, BgmFile), loopEnabled, loopStartSample, loopEndSample);
             File.Copy(Path.Combine(baseDirectory, BgmFile), Path.Combine(iterativeDirectory, BgmFile), true);
+            if (!string.Equals(audioFile, bgmCachedFile))
+            {
+                if (Path.GetExtension(audioFile).Equals(".wav", StringComparison.OrdinalIgnoreCase))
+                {
+                    File.Copy(audioFile, bgmCachedFile, true);
+                }
+                else
+                {
+                    audio.Seek(0, SeekOrigin.Begin);
+                    WaveFileWriter.CreateWaveFile(bgmCachedFile, audio.ToSampleProvider().ToWaveProvider16());
+                }
+            }
         }
 
         public IWaveProvider GetWaveProvider(ILogger log, bool loop)
