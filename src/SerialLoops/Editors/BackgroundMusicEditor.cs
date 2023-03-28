@@ -6,8 +6,10 @@ using SerialLoops.Controls;
 using SerialLoops.Dialogs;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
+using SerialLoops.Lib.Util;
 using SerialLoops.Utility;
 using System.IO;
+using System.Linq;
 
 namespace SerialLoops.Editors
 {
@@ -17,6 +19,7 @@ namespace SerialLoops.Editors
         private bool _loopEnabled;
         private uint _loopStartSample;
         private uint _loopEndSample;
+
         public SoundPlayerPanel BgmPlayer { get; set; }
 
         private string _bgmCachedFile;
@@ -30,6 +33,18 @@ namespace SerialLoops.Editors
         {
             _bgm = (BackgroundMusicItem)Description;
             BgmPlayer = new(_bgm, _log);
+
+            TextBox bgmTitleBox = null;
+            if ((_bgm.BgmName?.Length ?? 0) > 0)
+            {
+                bgmTitleBox = new() { Text = _bgm.BgmName, Width = 200 };
+                bgmTitleBox.TextChanged += (obj, args) =>
+                {
+                    _project.Extra.Bgms[_project.Extra.Bgms.IndexOf(_project.Extra.Bgms.First(b => b.Name.GetSubstitutedString(_project) == _bgm.BgmName))].Name = bgmTitleBox.Text.GetOriginalString(_project);
+                    _bgm.BgmName = bgmTitleBox.Text;
+                    UpdateTabTitle(false);
+                };
+            }
 
             Button loopSettingsButton = new() { Text = "Manage Loop" };
             loopSettingsButton.Click += (obj, args) =>
@@ -142,7 +157,7 @@ namespace SerialLoops.Editors
             };
 
             return new TableLayout(
-                new TableRow(ControlGenerator.GetPlayerStackLayout(BgmPlayer, _bgm.BgmName, _bgm.Name)),
+                new TableRow(ControlGenerator.GetPlayerStackLayout(BgmPlayer, bgmTitleBox, _bgm.Name)),
                 new TableRow(new StackLayout
                 {
                     Orientation = Orientation.Horizontal,

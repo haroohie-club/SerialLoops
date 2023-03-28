@@ -55,6 +55,9 @@ namespace SerialLoops.Lib
         [JsonIgnore]
         public SKBitmap FontBitmap { get; set; }
 
+        [JsonIgnore]
+        public ExtraFile Extra { get; set; }
+
         public Project()
         {
         }
@@ -133,7 +136,7 @@ namespace SerialLoops.Lib
             tracker.Finished++;
 
             tracker.Focus("Extras", 1);
-            ExtraFile extras = Dat.Files.First(f => f.Name == "EXTRAS").CastTo<ExtraFile>();
+            Extra = Dat.Files.First(f => f.Name == "EXTRAS").CastTo<ExtraFile>();
             tracker.Finished++;
 
             BgTableFile bgTable = Dat.Files.First(f => f.Name == "BGTBLS").CastTo<BgTableFile>();
@@ -150,7 +153,7 @@ namespace SerialLoops.Lib
                     {
                         name = $"{bgNameBackup}{j:D2}";
                     }
-                    Items.Add(new BackgroundItem(name, i, entry, this, extras));
+                    Items.Add(new BackgroundItem(name, i, entry, this));
                 }
                 tracker.Finished++;
             }
@@ -159,7 +162,7 @@ namespace SerialLoops.Lib
             tracker.Focus("BGM Tracks", bgmFiles.Length);
             for (int i = 0; i < bgmFiles.Length; i++)
             {
-                Items.Add(new BackgroundMusicItem(bgmFiles[i], i, extras, this));
+                Items.Add(new BackgroundMusicItem(bgmFiles[i], i, this));
                 tracker.Finished++;
             }
 

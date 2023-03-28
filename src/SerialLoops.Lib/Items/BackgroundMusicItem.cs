@@ -1,5 +1,4 @@
-﻿using HaruhiChokuretsuLib.Archive.Data;
-using HaruhiChokuretsuLib.Archive.Event;
+﻿using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Audio;
 using HaruhiChokuretsuLib.Util;
 using NAudio.Wave;
@@ -21,12 +20,12 @@ namespace SerialLoops.Lib.Items
         public string CachedWaveFile { get; set; }
         public (string ScriptName, ScriptCommandInvocation command)[] ScriptUses { get; set; }
 
-        public BackgroundMusicItem(string bgmFile, int index, ExtraFile extras, Project project) : base(Path.GetFileNameWithoutExtension(bgmFile), ItemType.BGM)
+        public BackgroundMusicItem(string bgmFile, int index, Project project) : base(Path.GetFileNameWithoutExtension(bgmFile), ItemType.BGM)
         {
             BgmFile = Path.GetRelativePath(project.IterativeDirectory, bgmFile);
             _bgmFile = bgmFile;
             Index = index;
-            BgmName = extras.Bgms.FirstOrDefault(b => b.Index == Index).Name?.GetSubstitutedString(project) ?? "";
+            BgmName = project.Extra.Bgms.FirstOrDefault(b => b.Index == Index)?.Name?.GetSubstitutedString(project) ?? "";
             DisplayName = string.IsNullOrEmpty(BgmName) ? Name : BgmName;
             PopulateScriptUses(project);
         }
