@@ -214,7 +214,7 @@ namespace SerialLoops.Controls
 
         internal void AddItem(ScriptCommandSectionTreeItem item)
         {
-            if (SelectedCommandTreeItem == null) return;
+            if (SelectedCommandTreeItem is null) return;
             if (SelectedCommandTreeItem.Parent is ScriptCommandSectionTreeItem parent && !parent.Text.Equals("Top"))
             {
                 int index = parent.IndexOf(SelectedCommandTreeItem);
@@ -227,6 +227,7 @@ namespace SerialLoops.Controls
             }
             
             AddCommand?.Invoke(this, EventArgs.Empty); //todo invoke this with the new item args
+            _treeView.SelectedItem = item;
             _treeView.DataStore = _treeView.DataStore;
         }
 
@@ -235,6 +236,8 @@ namespace SerialLoops.Controls
             ScriptCommandSectionTreeItem rootNode = (ScriptCommandSectionTreeItem)_treeView.DataStore;
             if (rootNode is null) return;
             rootNode.Add(section);
+
+            AddCommand?.Invoke(this, EventArgs.Empty); //todo invoke this with the new script section args
             _treeView.SelectedItem = section;
             _treeView.DataStore = rootNode;
         }
