@@ -6,7 +6,6 @@ using SerialLoops.Controls;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Util.WaveformRenderer;
 using SerialLoops.Utility;
-using SkiaSharp;
 using System.IO;
 
 namespace SerialLoops.Dialogs
@@ -28,11 +27,7 @@ namespace SerialLoops.Dialogs
             _log = log;
             Title = title;
             _wav = wav;
-            Waveform = new(WaveformRenderer.Render(wav, new()
-            {
-                TopPeakPaint = new() { Color = SKColors.Coral },
-                BottomPeakPaint = new() { Color = SKColors.Crimson },
-            }));
+            Waveform = new(WaveformRenderer.Render(wav, WaveFormRendererSettings.StandardSettings));
             _waveformLayout = new()
             {
                 Orientation = Orientation.Horizontal,
@@ -61,11 +56,7 @@ namespace SerialLoops.Dialogs
             {
                 _wav.Seek(0, SeekOrigin.Begin);
                 VolumePreview.SetVolume(volumeSlider.Value);
-                Waveform = new(WaveformRenderer.Render(VolumePreview.Provider, _waveLength, new()
-                {
-                    TopPeakPaint = new() { Color = SKColors.Coral },
-                    BottomPeakPaint = new() { Color = SKColors.Crimson },
-                }));
+                Waveform = new(WaveformRenderer.Render(VolumePreview.Provider, _waveLength, WaveFormRendererSettings.StandardSettings));
                 _wav.Seek(0, SeekOrigin.Begin);
                 _waveformLayout.Items.Clear();
                 _waveformLayout.Items.Add(Waveform);
@@ -131,7 +122,7 @@ namespace SerialLoops.Dialogs
             Provider.Volume = volume / 100f;
         }
 
-        public IWaveProvider GetWaveProvider(ILogger log, bool loop)
+        public IWaveProvider GetWaveProvider(ILogger log, IProgressTracker tracker, bool loop)
         {
             return Provider.ToWaveProvider16();
         }

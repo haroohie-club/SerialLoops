@@ -1,5 +1,5 @@
 ﻿using Eto.Forms;
-using SerialLoops.Lib.Util;
+using HaruhiChokuretsuLib.Util;
 
 namespace SerialLoops.Utility
 {

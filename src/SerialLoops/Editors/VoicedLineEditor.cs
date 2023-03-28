@@ -31,7 +31,8 @@ namespace SerialLoops.Editors
                 saveFileDialog.Filters.Add(new() { Name = "WAV File", Extensions = new string[] { ".wav" } });
                 if (saveFileDialog.ShowAndReportIfFileSelected(this))
                 {
-                    WaveFileWriter.CreateWaveFile(saveFileDialog.FileName, _vce.GetWaveProvider(_log));
+                    LoopyProgressTracker tracker = new();
+                    _ = new ProgressDialog(() => WaveFileWriter.CreateWaveFile(saveFileDialog.FileName, _vce.GetWaveProvider(_log, tracker)), () => { }, tracker, "Extract WAV file");
                 }
             };
 
@@ -48,7 +49,7 @@ namespace SerialLoops.Editors
                 {
                     LoopyProgressTracker tracker = new();
                     VcePlayer.Stop();
-                    _ = new ProgressDialog(() => _vce.Replace(openFileDialog.FileName, _project.BaseDirectory, _project.IterativeDirectory, Path.Combine(_project.Config.CachesDirectory, "vce", $"{_vce.Name}.wav"), _log), () =>
+                    _ = new ProgressDialog(() => _vce.Replace(openFileDialog.FileName, _project.BaseDirectory, _project.IterativeDirectory, Path.Combine(_project.Config.CachesDirectory, "vce", $"{_vce.Name}.wav"), _log, tracker), () =>
                     {
                         Content = GetEditorPanel();
                     }, tracker, "Replace voiced line");

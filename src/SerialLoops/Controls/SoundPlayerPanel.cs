@@ -29,9 +29,10 @@ namespace SerialLoops.Controls
 
         private void InitializePlayer()
         {
+            ConsoleProgressTracker tracker = new();
             _log.Log("Attempting to initialize sound player...");
             _player = new();
-            Sound = _item.GetWaveProvider(_log, true);
+            Sound = _item.GetWaveProvider(_log, tracker, true);
             _player.Initialize(Sound);
             _log.Log("Sound player successfully initialized.");
         }

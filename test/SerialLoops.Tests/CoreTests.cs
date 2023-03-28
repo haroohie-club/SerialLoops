@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using HaruhiChokuretsuLib.Util;
+using NUnit.Framework;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
@@ -58,12 +59,12 @@ namespace SerialLoops.Tests
             Directory.CreateDirectory(Path.Combine(_project.BaseDirectory, vceDir));
             Directory.CreateDirectory(Path.Combine(_project.IterativeDirectory, vceDir));
 
-            IO.CopyFiles(_dataDir, Path.Combine(_project.BaseDirectory, archivesDir));
-            IO.CopyFiles(_dataDir, Path.Combine(_project.IterativeDirectory, archivesDir));
-            IO.CopyFiles(Path.Combine(_dataDir, "bgm"), Path.Combine(_project.BaseDirectory, bgmDir));
-            IO.CopyFiles(Path.Combine(_dataDir, "bgm"), Path.Combine(_project.IterativeDirectory, bgmDir));
-            IO.CopyFiles(Path.Combine(_dataDir, "vce"), Path.Combine(_project.BaseDirectory, vceDir));
-            IO.CopyFiles(Path.Combine(_dataDir, "vce"), Path.Combine(_project.IterativeDirectory, vceDir));
+            Lib.IO.CopyFiles(_dataDir, Path.Combine(_project.BaseDirectory, archivesDir));
+            Lib.IO.CopyFiles(_dataDir, Path.Combine(_project.IterativeDirectory, archivesDir));
+            Lib.IO.CopyFiles(Path.Combine(_dataDir, "bgm"), Path.Combine(_project.BaseDirectory, bgmDir));
+            Lib.IO.CopyFiles(Path.Combine(_dataDir, "bgm"), Path.Combine(_project.IterativeDirectory, bgmDir));
+            Lib.IO.CopyFiles(Path.Combine(_dataDir, "vce"), Path.Combine(_project.BaseDirectory, vceDir));
+            Lib.IO.CopyFiles(Path.Combine(_dataDir, "vce"), Path.Combine(_project.IterativeDirectory, vceDir));
 
             // Load the project archives
             _project.LoadArchives(_log, _progressTracker);
@@ -93,9 +94,13 @@ namespace SerialLoops.Tests
         [Test, TestCaseSource(nameof(BgmNames)), Parallelizable(ParallelScope.All)]
         public void BackgroundMusicItemTest(string bgmName)
         {
+            ConsoleProgressTracker tracker = new();
             var bgm = (BackgroundMusicItem)_project.FindItem(bgmName);
-            Assert.That(bgm.BgmFile, Does.Contain(bgm.Name));
-            Assert.That(bgm.GetWaveProvider(_log, true), Is.Not.Null);
+            Assert.Multiple(() =>
+            {
+                Assert.That(bgm.BgmFile, Does.Contain(bgm.Name));
+                Assert.That(bgm.GetWaveProvider(_log, tracker, true), Is.Not.Null);
+            });
         }
 
         [Test, TestCaseSource(nameof(CharacterSpriteNames)), Parallelizable(ParallelScope.All)]
@@ -165,9 +170,13 @@ namespace SerialLoops.Tests
         [Test, TestCaseSource(nameof(VoiceNames)), Parallelizable(ParallelScope.All)]
         public void VoiceItemTest(string voiceName)
         {
+            ConsoleProgressTracker tracker = new();
             var vce = (VoicedLineItem)_project.FindItem(voiceName);
-            Assert.That(vce.VoiceFile, Does.Contain(vce.Name));
-            Assert.That(vce.GetWaveProvider(_log), Is.Not.Null);
+            Assert.Multiple(() =>
+            {
+                Assert.That(vce.VoiceFile, Does.Contain(vce.Name));
+                Assert.That(vce.GetWaveProvider(_log, tracker), Is.Not.Null);
+            });
         }
         #endregion
 

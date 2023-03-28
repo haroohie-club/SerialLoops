@@ -1,7 +1,7 @@
 using Eto.Forms;
 using HaruhiChokuretsuLib.Archive;
-using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
+using HaruhiChokuretsuLib.Util;
 using SerialLoops.Controls;
 using SerialLoops.Dialogs;
 using SerialLoops.Editors;
@@ -245,13 +245,13 @@ namespace SerialLoops
                     case ItemDescription.ItemType.BGM:
                         if (!savedExtra)
                         {
-                            IO.WriteStringFile(Path.Combine("assets", "data", $"{OpenProject.Extra.Index:X3}.s"), OpenProject.Extra.GetSource(new()), OpenProject, _log);
+                            Lib.IO.WriteStringFile(Path.Combine("assets", "data", $"{OpenProject.Extra.Index:X3}.s"), OpenProject.Extra.GetSource(new()), OpenProject, _log);
                             savedExtra = true;
                         }
                         break;
                     case ItemDescription.ItemType.Scenario:
                         ScenarioStruct scenario = ((ScenarioItem)item).Scenario;
-                        IO.WriteStringFile(Path.Combine("assets", "events", $"{OpenProject.Evt.Files.First(f => f.Name == "SCENARIOS").Index:X3}.s"),
+                        Lib.IO.WriteStringFile(Path.Combine("assets", "events", $"{OpenProject.Evt.Files.First(f => f.Name == "SCENARIOS").Index:X3}.s"),
                             // TODO: Refactor this logic into the chokuretsu library so that we don't end up with ugliness like this for all of our includes
                             scenario.GetSource(new()
                             {
@@ -263,7 +263,7 @@ namespace SerialLoops
                     case ItemDescription.ItemType.Script:
                         EventFile evt = ((ScriptItem)item).Event;
                         evt.CollectGarbage();
-                        IO.WriteStringFile(Path.Combine("assets", "events", $"{evt.Index:X3}.s"), evt.GetSource(new()), OpenProject, _log);
+                        Lib.IO.WriteStringFile(Path.Combine("assets", "events", $"{evt.Index:X3}.s"), evt.GetSource(new()), OpenProject, _log);
                         break;
 
                     default:
