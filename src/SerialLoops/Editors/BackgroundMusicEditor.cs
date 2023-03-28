@@ -49,6 +49,7 @@ namespace SerialLoops.Editors
             Button loopSettingsButton = new() { Text = "Manage Loop" };
             loopSettingsButton.Click += (obj, args) =>
             {
+                BgmPlayer.Stop();
                 LoopyProgressTracker tracker = new();
                 if (!File.Exists(_bgmCachedFile))
                 {
@@ -84,6 +85,7 @@ namespace SerialLoops.Editors
             Button volumeSettingsButton = new() { Text = "Adjust Volume" };
             volumeSettingsButton.Click += (obj, args) =>
             {
+                BgmPlayer.Stop();
                 LoopyProgressTracker tracker = new();
                 if (!File.Exists(_bgmCachedFile))
                 {
