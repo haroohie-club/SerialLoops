@@ -10,6 +10,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using static HaruhiChokuretsuLib.Archive.Event.EventFile;
+using static SerialLoops.Lib.Script.Parameters.BgmModeScriptParameter;
+using static SerialLoops.Lib.Script.Parameters.BgScrollDirectionScriptParameter;
+using static SerialLoops.Lib.Script.Parameters.ChibiEmoteScriptParameter;
+using static SerialLoops.Lib.Script.Parameters.ChibiEnterExitScriptParameter;
+using static SerialLoops.Lib.Script.Parameters.ColorMonochromeScriptParameter;
+using static SerialLoops.Lib.Script.Parameters.EpisodeHeaderScriptParameter;
+using static SerialLoops.Lib.Script.Parameters.PaletteEffectScriptParameter;
+using static SerialLoops.Lib.Script.Parameters.ScreenScriptParameter;
+using static SerialLoops.Lib.Script.Parameters.SfxModeScriptParameter;
+using static SerialLoops.Lib.Script.Parameters.SpriteEntranceScriptParameter;
+using static SerialLoops.Lib.Script.Parameters.SpriteExitScriptParameter;
+using static SerialLoops.Lib.Script.Parameters.SpriteShakeScriptParameter;
+using static SerialLoops.Lib.Script.Parameters.TextEntranceEffectScriptParameter;
+using static SerialLoops.Lib.Script.Parameters.TransitionScriptParameter;
 
 namespace SerialLoops.Lib.Script
 {
@@ -20,8 +34,7 @@ namespace SerialLoops.Lib.Script
         public ScriptSection Section { get; set; }
         public EventFile Script { get; set; }
         public int Index { get; set; }
-
-        private Project _project;
+        public Project Project { get; set; }
 
         public static ScriptItemCommand FromInvocation(ScriptCommandInvocation invocation, ScriptSection section, int index, EventFile eventFile, Project project)
         {
@@ -32,7 +45,7 @@ namespace SerialLoops.Lib.Script
                 Section = section,
                 Index = index,
                 Script = eventFile,
-                _project = project,
+                Project = project,
             };
         }
 
@@ -499,6 +512,7 @@ namespace SerialLoops.Lib.Script
                         break;
                     case CommandVerb.CHESS_LOAD:
                         if (i == 0)
+
                         {
                             parameters.Add(new ChessFileScriptParameter("Chess File", parameter));
                         }
@@ -565,12 +579,14 @@ namespace SerialLoops.Lib.Script
                         break;
                     case CommandVerb.EPHEADER:
                         if (i == 0)
+
                         {
                             parameters.Add(new EpisodeHeaderScriptParameter("Episode Header", parameter));
                         }
                         break;
                     case CommandVerb.CONFETTI:
                         if (i == 0)
+
                         {
                             parameters.Add(new BoolScriptParameter("Visible?", parameter == 1));
                         }
@@ -614,7 +630,7 @@ namespace SerialLoops.Lib.Script
             string str = $"{Verb}";
             if (Verb == CommandVerb.DIALOGUE)
             {
-                str += $" {((DialogueScriptParameter)Parameters[0]).Line.Text.GetSubstitutedString(_project)[0..Math.Min(((DialogueScriptParameter)Parameters[0]).Line.Text.Length, 10)]}...";
+                str += $" {((DialogueScriptParameter)Parameters[0]).Line.Text.GetSubstitutedString(Project)[0..Math.Min(((DialogueScriptParameter)Parameters[0]).Line.Text.Length, 10)]}...";
             }
             else if (Verb == CommandVerb.GOTO)
             {
@@ -632,6 +648,11 @@ namespace SerialLoops.Lib.Script
             return eventFile.DialogueLines[index];
         }
 
+        private static DialogueLine CreateDialogueLine(EventFile eventFile)
+        {
+            return eventFile.DialogueLines[0]; // todo
+        }
+
         public ScriptItemCommand Clone()
         {
             return new()
@@ -640,8 +661,9 @@ namespace SerialLoops.Lib.Script
                 Parameters = Parameters.Select(p => p.Clone()).ToList(),
                 Section = Section,
                 Index = Index,
-                _project = _project,
+                Project = Project,
             };
         }
+
     }
 }

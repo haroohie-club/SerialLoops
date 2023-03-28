@@ -113,6 +113,10 @@ namespace SerialLoops.Controls
                 }
                 _editor.UpdateTabTitle(false);
             };
+            Viewer.AddCommand += (o, e) =>
+            {
+                // todo
+            };
         }
 
         private IEnumerable<ScriptCommandSectionEntry> GetSections()

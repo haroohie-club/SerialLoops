@@ -56,18 +56,7 @@ namespace SerialLoops.Utility
             {
                 link.ClickUnique += GetFileLinkClickHandler(description, editorTabs, log);
             }
-            return new StackLayout
-            {
-                Orientation = Orientation.Horizontal,
-                HorizontalContentAlignment = HorizontalAlignment.Left,
-                VerticalContentAlignment = VerticalAlignment.Center,
-                Spacing = 5,
-                Items =
-                {
-                    new ImageView { Image = new Bitmap(GetItemIcon(description.Type, log)) },
-                    link
-                }
-            };
+            return GetControlWithIcon(link, description.Type.ToString(), log);
         }
 
         public static EventHandler<EventArgs> GetFileLinkClickHandler(ItemDescription description, EditorTabsPanel editorTabs, ILogger log)
@@ -91,6 +80,22 @@ namespace SerialLoops.Utility
                 log.LogWarning($"Failed to load icon.\n{exc.Message}\n\n{exc.StackTrace}");
                 return null;
             }
+        }
+
+        public static StackLayout GetControlWithIcon(Control control, string iconName, ILogger log)
+        {
+            return new StackLayout
+            {
+                Orientation = Orientation.Horizontal,
+                HorizontalContentAlignment = HorizontalAlignment.Left,
+                VerticalContentAlignment = VerticalAlignment.Center,
+                Spacing = 5,
+                Items =
+                {
+                    new ImageView { Image = new Bitmap(GetIcon(iconName, log)) },
+                    control
+                }
+            };
         }
 
         public static ButtonToolItem GetToolBarItem(Command command)
