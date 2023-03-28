@@ -121,7 +121,7 @@ namespace SerialLoops.Editors
                     {
                         ScriptCommand scriptCommand = CommandsAvailable
                                 .Find(command => command.Mnemonic.Equals(verbSelecter.SelectedKey));
-                        if (scriptCommand == null)
+                        if (scriptCommand is null)
                         {
                             _log.LogError($"Invalid or unavailable script command selected: {verbSelecter.SelectedKey}");
                             return;
@@ -131,13 +131,27 @@ namespace SerialLoops.Editors
                         try
                         {
                             ScriptCommandSectionTreeItem item = treeGridView.SelectedCommandTreeItem;
-                            ScriptCommandSectionEntry section = item.Section;
-                            int index = ((ScriptCommandSectionTreeItem)item.Parent).IndexOf(item);
+                            if (item is null) return;
+
+                            string sectionName = item.Text;
+                            if (treeGridView.SelectedCommandTreeItem.Parent is ScriptCommandSectionTreeItem parent && !parent.Text.Equals("Top"))
+                            {
+                                sectionName = parent.Text;
+                            }
+
+                            ScriptSection scriptSection = _script.Event.ScriptSections.Find(section => section.Name.Equals(sectionName));
+                            if (scriptSection is null)
+                            {
+                                _log.LogError($"Unable to find script section: {sectionName}");
+                                return;
+                            }
+
+                            int index = item.Parent is not null ? ((ScriptCommandSectionTreeItem)item.Parent).IndexOf(item) : 0;
                             ScriptItemCommand command = ScriptItemCommand.FromInvocation(
                                 new(scriptCommand),
-                                section.Command.Section,
+                                scriptSection,
                                 index == -1 ? 0 : index,
-                                section.ScriptFile,
+                                _script.Event,
                                 _project
                             );
 

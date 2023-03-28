@@ -110,14 +110,6 @@ namespace SerialLoops.Controls
             }
         }
 
-        public ScriptCommandSectionEntry SelecteSection
-        {
-            get
-            {
-                return SelectedCommandTreeItem?.Section; 
-            }
-        }
-
         ITreeGridItem FindItem(ScriptCommandSectionTreeItem node, ISection section)
         {
             foreach (var item in node)
@@ -212,32 +204,39 @@ namespace SerialLoops.Controls
             parent.Remove(item);
             DeleteCommand?.Invoke(this, EventArgs.Empty);
             _treeView.DataStore = _treeView.DataStore;
+            if (newIndex >= parent.Count)
+            {
+                newIndex = parent.Count - 1;
+            }
+            if (newIndex < 0) return;
             _treeView.SelectedItem = parent[newIndex];
         }
 
         internal void AddItem(ScriptCommandSectionTreeItem item)
         {
-            if (SelectedCommandTreeItem is null) return;
-            if (SelectedCommandTreeItem.Parent is not ScriptCommandSectionTreeItem parent) return;
-            var index = parent.IndexOf(SelectedCommandTreeItem);
-            if (index == -1) return;
-            parent.Insert(index + 1, item);
-            item.Parent = parent;
+            if (SelectedCommandTreeItem == null) return;
+            if (SelectedCommandTreeItem.Parent is ScriptCommandSectionTreeItem parent && !parent.Text.Equals("Top"))
+            {
+                int index = parent.IndexOf(SelectedCommandTreeItem);
+                if (index == -1) return;
+                parent.Insert(index + 1, item);
+            }
+            else
+            {
+                SelectedCommandTreeItem.Insert(0, item);
+            }
+            
             AddCommand?.Invoke(this, EventArgs.Empty); //todo invoke this with the new item args
             _treeView.DataStore = _treeView.DataStore;
         }
 
         internal void AddSection(ScriptCommandSectionTreeItem section)
         {
-            // add a new top node
-            if (SelectedCommandTreeItem is null) return;
-            if (SelectedCommandTreeItem.Parent is not ScriptCommandSectionTreeItem parent) return;
-            var index = parent.IndexOf(SelectedCommandTreeItem);
-            if (index == -1) return;
-            parent.Insert(index + 1, section);
-            section.Parent = parent;
-            AddCommand?.Invoke(this, EventArgs.Empty); //todo invoke this with the new item args
-            _treeView.DataStore = _treeView.DataStore;
+            ScriptCommandSectionTreeItem rootNode = (ScriptCommandSectionTreeItem)_treeView.DataStore;
+            if (rootNode is null) return;
+            rootNode.Add(section);
+            _treeView.SelectedItem = section;
+            _treeView.DataStore = rootNode;
         }
 
         public void SetContents(IEnumerable<ScriptCommandSectionEntry> topNodes, bool expanded)
@@ -245,5 +244,10 @@ namespace SerialLoops.Controls
             _treeView.DataStore = new ScriptCommandSectionTreeItem(new ScriptCommandSectionEntry("Top", topNodes, null), expanded);
         }
 
+        public ScriptCommandSectionEntry FindSection(string text)
+        {
+            ScriptCommandSectionTreeItem rootNode = (ScriptCommandSectionTreeItem)_treeView.DataStore;
+            return rootNode.Find(s => s.Text.Equals(text))?.Section;
+        }
     }
 }
