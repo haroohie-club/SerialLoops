@@ -242,6 +242,10 @@ namespace SerialLoops.Lib
             string bgmCache = Path.Combine(cachesDirectory, "bgm");
             log.Log("Creating BGM cache...");
             Directory.CreateDirectory(bgmCache);
+
+            string vceCache = Path.Combine(cachesDirectory, "vce");
+            log.Log("Creating voice file cache...");
+            Directory.CreateDirectory(vceCache);
         }
 
         public ItemDescription FindItem(string name)

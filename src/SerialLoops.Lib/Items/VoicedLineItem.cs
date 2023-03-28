@@ -4,6 +4,7 @@ using HaruhiChokuretsuLib.Util;
 using NAudio.Flac;
 using NAudio.Vorbis;
 using NAudio.Wave;
+using NAudio.Wave.SampleProviders;
 using NLayer.NAudioSupport;
 using System;
 using System.IO;
@@ -90,7 +91,37 @@ namespace SerialLoops.Lib.Items
                 log.LogError($"Invalid audio file '{audioFile}' selected.");
                 return;
             }
-            AdxUtil.EncodeAudio(audio, Path.Combine(baseDirectory, VoiceFile), true);
+            if (audio.WaveFormat.Channels > 1 || audio.WaveFormat.SampleRate > SoundItem.MAX_SAMPLERATE)
+            {
+                string newAudioFile = "";
+                if (audio.WaveFormat.Channels > 1)
+                {
+                    log.Log($"Downmixing audio from stereo to mono for AHX conversion...");
+                    newAudioFile = Path.Combine(Path.GetDirectoryName(vceCachedFile), $"{Path.GetFileNameWithoutExtension(vceCachedFile)}-downmixed.wav");
+                    WaveFileWriter.CreateWaveFile(newAudioFile, audio.ToSampleProvider().ToMono().ToWaveProvider16());
+                }
+                if (audio.WaveFormat.SampleRate > SoundItem.MAX_SAMPLERATE)
+                {
+                    log.Log($"Downsampling audio from {audio.WaveFormat.SampleRate} to NDS max sample rate {SoundItem.MAX_SAMPLERATE}...");
+                    string prevAudioFile = $"{newAudioFile}";
+                    newAudioFile = Path.Combine(Path.GetDirectoryName(vceCachedFile), $"{Path.GetFileNameWithoutExtension(vceCachedFile)}-downsampled.wav");
+                    if (!string.IsNullOrEmpty(prevAudioFile))
+                    {
+                        using WaveFileReader newAudio = new(prevAudioFile);
+                        WaveFileWriter.CreateWaveFile(newAudioFile, new WdlResamplingSampleProvider(newAudio.ToSampleProvider(), SoundItem.MAX_SAMPLERATE).ToWaveProvider16());
+                    }
+                    else
+                    {
+                        WaveFileWriter.CreateWaveFile(newAudioFile, new WdlResamplingSampleProvider(audio.ToSampleProvider(), SoundItem.MAX_SAMPLERATE).ToWaveProvider16());
+                    }
+                }
+
+                AdxUtil.EncodeWav(newAudioFile, Path.Combine(baseDirectory, VoiceFile), true);
+            }
+            else
+            {
+                AdxUtil.EncodeAudio(audio, Path.Combine(baseDirectory, VoiceFile), true);
+            }
             File.Copy(Path.Combine(baseDirectory, VoiceFile), Path.Combine(iterativeDirectory, VoiceFile), true);
         }
 

@@ -4,6 +4,7 @@ using HaruhiChokuretsuLib.Util;
 using NAudio.Flac;
 using NAudio.Vorbis;
 using NAudio.Wave;
+using NAudio.Wave.SampleProviders;
 using NLayer.NAudioSupport;
 using SerialLoops.Lib.Util;
 using System;
@@ -52,6 +53,7 @@ namespace SerialLoops.Lib.Items
             // So we just convert to WAV AOT
             if (Path.GetExtension(audioFile).Equals(".mp3", StringComparison.OrdinalIgnoreCase))
             {
+                log.Log($"Converting {audioFile} to WAV...");
                 using Mp3FileReaderBase mp3Reader = new(audioFile, new Mp3FileReaderBase.FrameDecompressorBuilder(wf => new Mp3FrameDecompressor(wf)));
                 WaveFileWriter.CreateWaveFile(bgmCachedFile, mp3Reader.ToSampleProvider().ToWaveProvider16());
                 audioFile = bgmCachedFile;
@@ -59,6 +61,7 @@ namespace SerialLoops.Lib.Items
             // Ditto the Vorbis decoder
             else if (Path.GetExtension(audioFile).Equals(".ogg", StringComparison.OrdinalIgnoreCase))
             {
+                log.Log($"Converting {audioFile} to WAV...");
                 using VorbisWaveReader vorbisReader = new(audioFile);
                 WaveFileWriter.CreateWaveFile(bgmCachedFile, vorbisReader.ToSampleProvider().ToWaveProvider16());
                 audioFile = bgmCachedFile;
@@ -74,7 +77,17 @@ namespace SerialLoops.Lib.Items
                 log.LogError($"Invalid audio file '{audioFile}' selected.");
                 return;
             }
-            AdxUtil.EncodeAudio(audio, Path.Combine(baseDirectory, BgmFile), loopEnabled, loopStartSample, loopEndSample);
+            if (audio.WaveFormat.SampleRate > SoundItem.MAX_SAMPLERATE)
+            {
+                log.Log($"Downsampling audio from {audio.WaveFormat.SampleRate} to NDS max sample rate {SoundItem.MAX_SAMPLERATE}...");
+                string newAudioFile = Path.Combine(Path.GetDirectoryName(bgmCachedFile), $"{Path.GetFileNameWithoutExtension(bgmCachedFile)}-downsampled.wav");
+                WaveFileWriter.CreateWaveFile(newAudioFile, new WdlResamplingSampleProvider(audio.ToSampleProvider(), SoundItem.MAX_SAMPLERATE).ToWaveProvider16());
+                AdxUtil.EncodeWav(newAudioFile, Path.Combine(baseDirectory, BgmFile), loopEnabled, loopStartSample, loopEndSample);
+            }
+            else
+            {
+                AdxUtil.EncodeAudio(audio, Path.Combine(baseDirectory, BgmFile), loopEnabled, loopStartSample, loopEndSample);
+            }
             File.Copy(Path.Combine(baseDirectory, BgmFile), Path.Combine(iterativeDirectory, BgmFile), true);
             if (!string.Equals(audioFile, bgmCachedFile))
             {

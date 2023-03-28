@@ -8,7 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="BunLabs.NAudio.Flac" Version="2.0.1" />
-    <PackageReference Include="HaruhiChokuretsuLib" Version="0.23.9" />
+    <PackageReference Include="HaruhiChokuretsuLib" Version="0.23.10" />
     <PackageReference Include="NAudio.Vorbis" Version="1.5.0" />
     <PackageReference Include="NitroPacker.Core" Version="2.0.1" />
     <PackageReference Include="NLayer" Version="1.14.0" />
