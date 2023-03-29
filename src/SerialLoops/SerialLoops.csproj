@@ -20,6 +20,7 @@
     <None Remove="Icons\Character_Sprite.png" />
     <None Remove="Icons\Chess.png" />
     <None Remove="Icons\Chibi.png" />
+    <None Remove="Icons\Clear.png" />
     <None Remove="Icons\Dialogue_Config.png" />
     <None Remove="Icons\Group_Selection.png" />
     <None Remove="Icons\Map.png" />
