@@ -60,24 +60,42 @@ namespace SerialLoops.Editors
 
         private Container GetCommandsContainer()
         {
-            TableLayout layout = new()
-            {
-                Spacing = new Size(5, 5),
-            };
-
-            TableRow mainRow = new();
-
+            TableLayout layout = new() { Spacing = new Size(5, 5) };
             ContextMenu contextMenu = new();
 
             _commandsPanel = new(_commands, new Size(280, 185), expandItems: true, this, _log);
             ScriptCommandSectionTreeGridView treeGridView = _commandsPanel.Viewer;
             treeGridView.SelectedItemChanged += CommandsPanel_SelectedItemChanged;
 
-            _addCommandButton = new() { 
+            TableRow mainRow = new();
+            mainRow.Cells.Add(new TableLayout(GetEditorButtons(treeGridView), _commandsPanel));
+            
+            _detailsLayout = new() { Spacing = new Size(5, 5) };
+            _editorControls = new() { Orientation = Orientation.Horizontal };
+
+            TabControl propertiesTabs = GetPropertiesTabs();
+            if (propertiesTabs.Pages.Count > 0)
+            {
+                _scriptProperties = new() { Items = { GetPropertiesTabs() } };
+            }
+
+            _detailsLayout.Rows.Add(new(new TableLayout(new TableRow(_preview, _scriptProperties))));
+            _detailsLayout.Rows.Add(new(new Scrollable { Content = _editorControls }));
+
+            mainRow.Cells.Add(new(_detailsLayout));
+            layout.Rows.Add(mainRow);
+
+            return layout;
+        }
+
+        private StackLayout GetEditorButtons(ScriptCommandSectionTreeGridView treeGridView)
+        {
+            _addCommandButton = new()
+            {
                 Image = ControlGenerator.GetIcon("Add", _log),
                 ToolTip = "New Command",
                 Width = 22,
-                Enabled = treeGridView.SelectedCommandTreeItem is not null 
+                Enabled = treeGridView.SelectedCommandTreeItem is not null
             };
             _addCommandButton.Click += (sender, args) =>
             {
@@ -95,11 +113,12 @@ namespace SerialLoops.Editors
 
                     Button createButton = new() { Text = "Create" };
                     Button cancelButton = new() { Text = "Cancel" };
-                    Dialog dialog = new() {
+                    Dialog dialog = new()
+                    {
                         Title = "Add Command",
                         MinimumSize = new(250, 150),
                         Content = new TableLayout(
-                            new TableRow(new StackLayout { Padding = 10, Items = { "Command Type:", verbSelecter } }), 
+                            new TableRow(new StackLayout { Padding = 10, Items = { "Command Type:", verbSelecter } }),
                             new TableRow(new StackLayout
                             {
                                 Padding = 10,
@@ -207,7 +226,8 @@ namespace SerialLoops.Editors
                 };
                 createButton.Click += (sender, args) =>
                 {
-                    if (string.IsNullOrWhiteSpace(labelBox.Text)) {
+                    if (string.IsNullOrWhiteSpace(labelBox.Text))
+                    {
                         MessageBox.Show("Please enter a value for the label name", MessageBoxType.Error);
                         return;
                     }
@@ -220,7 +240,8 @@ namespace SerialLoops.Editors
                 dialog.ShowModal(this);
             };
 
-            _deleteButton = new() {
+            _deleteButton = new()
+            {
                 Image = ControlGenerator.GetIcon("Remove", _log),
                 ToolTip = "Remove Command/Section",
                 Width = 22,
@@ -234,7 +255,8 @@ namespace SerialLoops.Editors
                 }
             };
 
-            StackLayout commandPanelButtons = new() { 
+            return new()
+            {
                 Orientation = Orientation.Horizontal,
                 HorizontalContentAlignment = HorizontalAlignment.Right,
                 Width = _commandsPanel.Width,
@@ -242,32 +264,6 @@ namespace SerialLoops.Editors
                 Padding = 5,
                 Items = { _addCommandButton, _addSectionButton, _deleteButton }
             };
-
-            mainRow.Cells.Add(new TableLayout(commandPanelButtons, _commandsPanel));
-
-            _detailsLayout = new()
-            {
-                Spacing = new Size(5, 5),
-            };
-
-            _editorControls = new()
-            {
-                Orientation = Orientation.Horizontal
-            };
-
-            TabControl propertiesTabs = GetPropertiesTabs();
-            if (propertiesTabs.Pages.Count > 0)
-            {
-                _scriptProperties = new() { Items = { GetPropertiesTabs() } };
-            }
-
-            _detailsLayout.Rows.Add(new(new TableLayout(new TableRow(_preview, _scriptProperties))));
-            _detailsLayout.Rows.Add(new(new Scrollable { Content = _editorControls }));
-
-            mainRow.Cells.Add(new(_detailsLayout));
-            layout.Rows.Add(mainRow);
-
-            return layout;
         }
 
         private TabControl GetPropertiesTabs()
