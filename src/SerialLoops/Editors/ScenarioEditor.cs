@@ -15,7 +15,14 @@ namespace SerialLoops.Editors
     public class ScenarioEditor : Editor
     {
         private ScenarioItem _scenario;
-        private Scrollable _scrollable;
+        private StackLayout _editorControls;
+        private ScenarioCommandListPanel _commandsPanel;
+
+        private Button _addButton;
+        private Button _deleteButton;
+        private Button _clearButton;
+
+        private readonly IEnumerable<ListItem> verbs = Enum.GetNames<ScenarioVerb>().Select(v => new ListItem() { Text = v, Key = v });
 
         public ScenarioEditor(ScenarioItem item, ILogger log, Project project, EditorTabsPanel tabs) : base(item, log, project, tabs)
         {
@@ -24,112 +31,146 @@ namespace SerialLoops.Editors
         public override Container GetEditorPanel()
         {
             _scenario = (ScenarioItem)Description;
-
-            _scrollable = new() { Content = GetTable() };
-            return _scrollable;
+            return GetCommandsContainer();
         }
 
-        private TableLayout GetTable()
+        private Container GetCommandsContainer()
         {
-            TableLayout table = new()
-            {
-                Spacing = new Size(5, 5)
+            TableLayout layout = new() { Spacing = new Size(5, 5) };
+
+            _commandsPanel = new(_scenario.ScenarioCommands, new Size(280, 185), _log);
+            ListBox commandsList = _commandsPanel.Viewer;
+            commandsList.SelectedIndexChanged += CommandsPanel_SelectedItemChanged;
+            _editorControls = new() 
+            { 
+                Orientation = Orientation.Vertical,
+                VerticalContentAlignment = VerticalAlignment.Center,
+                Padding = 10,
+                Spacing = 5
             };
 
-            IEnumerable<ListItem> verbs = Enum.GetNames<ScenarioVerb>().Select(v => new ListItem() { Text = v, Key = v });
+            TableRow mainRow = new();
+            mainRow.Cells.Add(new TableLayout(GetEditorButtons(), _commandsPanel));
+            mainRow.Cells.Add(new(new Scrollable { Content = _editorControls }));
 
-            int commandIndex = 0;
-            foreach ((ScenarioVerb verb, string parameter) in _scenario.ScenarioCommands)
+            layout.Rows.Add(mainRow);
+            return layout;
+        }
+
+        private StackLayout GetEditorButtons()
+        {
+            _addButton = new()
             {
-                TableRow row = new();
+                Image = ControlGenerator.GetIcon("Add", _log),
+                ToolTip = "Add Command",
+                Width = 22
+            };
+            _addButton.Click += AddButton_Click;
 
-                ScenarioCommandButton addAfterButton = new() { Text = "+", CommandIndex = commandIndex };
-                ScenarioCommandButton deleteButton = new() { Text = "x", CommandIndex = commandIndex };
-                addAfterButton.Click += AddAfterButton_Click;
-                deleteButton.Click += DeleteButton_Click;
+            _deleteButton = new()
+            {
+                Image = ControlGenerator.GetIcon("Remove", _log),
+                ToolTip = "Remove Command",
+                Width = 22,
+                Enabled = _commandsPanel.SelectedCommand is not null
+            };
+            _deleteButton.Click += DeleteButton_Click;
 
-                ScenarioCommandDropDown commandDropDown = new() { CommandIndex = commandIndex, ModifyCommand = true };
-                commandDropDown.Items.AddRange(verbs);
-                commandDropDown.SelectedKey = verb.ToString();
-                commandDropDown.SelectedKeyChanged += CommandDropDown_SelectedKeyChanged;
-                row.Cells.Add(new TableCell(commandDropDown));
+            _clearButton = new()
+            {
+                Image = ControlGenerator.GetIcon("Clear", _log),
+                ToolTip = "Clear Scenario",
+                Width = 22
+            };
+            _clearButton.Click += ClearButton_Click;
 
-                Item parameterItem = null;
-                StackLayout parameterLink = null;
-                ScenarioCommandDropDown parameterDropDown = new() { CommandIndex = commandIndex, ModifyCommand = false };
+            return new()
+            {
+                Orientation = Orientation.Horizontal,
+                HorizontalContentAlignment = HorizontalAlignment.Right,
+                Width = _commandsPanel.Width,
+                Spacing = 5,
+                Padding = 5,
+                Items = { _addButton, _deleteButton, _clearButton }
+            };
+        }
 
-                switch (verb)
-                {
-                    case ScenarioVerb.LOAD_SCENE:
-                        parameterItem = (ScriptItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Script && i.DisplayName == parameter);
-                        parameterDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Script).Select(p => new ListItem { Key = p.DisplayName, Text = p.DisplayName }));
-                        break;
+        private void CommandsPanel_SelectedItemChanged(object sender, EventArgs e)
+        {
+            var command = _commandsPanel.SelectedCommand;
+            int commandIndex = _commandsPanel.Viewer.SelectedIndex;
+            _editorControls.Items.Clear();
 
-                    case ScenarioVerb.PUZZLE_PHASE:
-                        parameterItem = (PuzzleItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Puzzle && i.DisplayName == parameter);
-                        parameterDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Puzzle).Select(p => new ListItem { Key = p.DisplayName, Text = p.DisplayName }));
-                        break;
+            _addButton.Enabled = true;
+            _deleteButton.Enabled = true;
 
-                    case ScenarioVerb.ROUTE_SELECT:
-                        parameterItem = (GroupSelectionItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Group_Selection && ((GroupSelectionItem)i).Index == short.Parse(parameter));
-                        parameterDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Group_Selection).Select(p => new ListItem { Key = p.DisplayName, Text = p.DisplayName }));
-                        break;
-                }
-
-                if (parameterItem is not null)
-                {
-                    parameterDropDown.SelectedKey = parameterItem.DisplayName;
-                    parameterDropDown.SelectedKeyChanged += CommandDropDown_SelectedKeyChanged;
-                    parameterLink = ControlGenerator.GetFileLink(parameterItem, _tabs, _log);
-                    parameterDropDown.Link = (ClearableLinkButton)parameterLink.Items[1].Control;
-                    StackLayout parameterLayout = new()
-                    {
-                        Orientation = Orientation.Horizontal,
-                        Spacing = 5,
-                        Items =
-                        {
-                            parameterDropDown,
-                            parameterLink,
-                        },
-                    };
-                    commandDropDown.ParameterLayout = parameterLayout;
-                    row.Cells.Add(parameterLayout);
-                }
-                else
-                {
-                    ScenarioCommandTextBox parameterBox = new() { Text = parameter, CommandIndex = commandIndex };
-                    parameterBox.TextChanged += ParameterBox_TextChanged;
-                    StackLayout parameterLayout = new()
-                    {
-                        Orientation = Orientation.Horizontal,
-                        Spacing = 5,
-                        Items =
-                        {
-                            parameterBox
-                        },
-                    };
-                    commandDropDown.ParameterLayout = parameterLayout;
-                    row.Cells.Add(parameterLayout);
-                }
-
-                row.Cells.Add(addAfterButton);
-                row.Cells.Add(deleteButton);
-                row.Cells.Add(new());
-
-                table.Rows.Add(row);
-                commandIndex++;
+            if (command is null)
+            {
+                return;
             }
 
-            return table;
+            ScenarioCommandDropDown commandDropDown = new() { CommandIndex = commandIndex, ModifyCommand = true };
+            commandDropDown.Items.AddRange(verbs);
+            commandDropDown.SelectedKey = command.Value.Verb.ToString();
+            commandDropDown.SelectedKeyChanged += CommandDropDown_SelectedKeyChanged;
+            _editorControls.Items.Add(ControlGenerator.GetControlWithLabel("Command", commandDropDown));
+
+            Item parameterItem = null;
+            StackLayout parameterLink = null;
+            ScenarioCommandDropDown parameterDropDown = new() { CommandIndex = commandIndex, ModifyCommand = false };
+
+            switch (command.Value.Verb)
+            {
+                case ScenarioVerb.LOAD_SCENE:
+                    parameterItem = (ScriptItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Script && i.DisplayName == command.Value.Parameter);
+                    parameterDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Script).Select(p => new ListItem { Key = p.DisplayName, Text = p.DisplayName }));
+                    break;
+
+                case ScenarioVerb.PUZZLE_PHASE:
+                    parameterItem = (PuzzleItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Puzzle && i.DisplayName == command.Value.Parameter);
+                    parameterDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Puzzle).Select(p => new ListItem { Key = p.DisplayName, Text = p.DisplayName }));
+                    break;
+
+                case ScenarioVerb.ROUTE_SELECT:
+                    parameterItem = (GroupSelectionItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Group_Selection && ((GroupSelectionItem)i).Index == short.Parse(command.Value.Parameter));
+                    parameterDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Group_Selection).Select(p => new ListItem { Key = p.DisplayName, Text = p.DisplayName }));
+                    break;
+            }
+
+            if (parameterItem is not null)
+            {
+                parameterDropDown.SelectedKey = parameterItem.DisplayName;
+                parameterDropDown.SelectedKeyChanged += CommandDropDown_SelectedKeyChanged;
+                parameterLink = ControlGenerator.GetFileLink(parameterItem, _tabs, _log);
+                parameterDropDown.Link = (ClearableLinkButton)parameterLink.Items[1].Control;
+                StackLayout parameterLayout = new()
+                {
+                    Orientation = Orientation.Horizontal,
+                    Spacing = 5,
+                    Items = { parameterDropDown, parameterLink }
+                };
+                commandDropDown.ParameterLayout = parameterLayout;
+                _editorControls.Items.Add(ControlGenerator.GetControlWithLabel(parameterItem.Type.ToString().Replace("_", " "), parameterLayout));
+            }
+            else
+            {
+                ScenarioCommandTextBox parameterBox = new() { Text = command.Value.Parameter, CommandIndex = commandIndex };
+                parameterBox.TextChanged += ParameterBox_TextChanged;
+                StackLayout parameterLayout = new()
+                {
+                    Orientation = Orientation.Horizontal,
+                    Spacing = 5,
+                    Items = { parameterBox }
+                };
+                commandDropDown.ParameterLayout = parameterLayout;
+                _editorControls.Items.Add(ControlGenerator.GetControlWithLabel($"Parameter Value", parameterLayout));
+            }
         }
 
         private void CommandDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
             ScenarioCommandDropDown dropDown = (ScenarioCommandDropDown)sender;
-            if (string.IsNullOrEmpty(dropDown.SelectedKey))
-            {
-                return;
-            }
+            if (string.IsNullOrEmpty(dropDown.SelectedKey)) return;
 
             if (dropDown.ModifyCommand)
             {
@@ -152,6 +193,7 @@ namespace SerialLoops.Editors
                         parameterDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Group_Selection).Select(p => new ListItem { Key = p.DisplayName, Text = p.DisplayName }));
                         break;
                 }
+
                 if (parameterDropDown.Items.Count > 0)
                 {
                     parameterDropDown.SelectedKeyChanged += CommandDropDown_SelectedKeyChanged;
@@ -168,8 +210,6 @@ namespace SerialLoops.Editors
                     parameterBox.TextChanged += ParameterBox_TextChanged;
                     dropDown.ParameterLayout.Items.Add(parameterBox);
                 }
-
-                _scenario.Refresh(_project);
             }
             else
             {
@@ -191,13 +231,13 @@ namespace SerialLoops.Editors
                         _scenario.ScenarioCommands[dropDown.CommandIndex] = (_scenario.ScenarioCommands[dropDown.CommandIndex].Command, item.DisplayName);
                         break;
                 }
-                _scenario.Refresh(_project);
 
                 dropDown.Link.RemoveAllClickEvents();
                 dropDown.Link.Text = item.DisplayName;
                 dropDown.Link.ClickUnique += ControlGenerator.GetFileLinkClickHandler(item, _tabs, _log);
             }
 
+            RefreshCommands();
             UpdateTabTitle(false);
         }
 
@@ -209,30 +249,60 @@ namespace SerialLoops.Editors
                 _scenario.Scenario.Commands[parameterBox.CommandIndex].Parameter = parameter;
                 _scenario.ScenarioCommands[parameterBox.CommandIndex] = (_scenario.ScenarioCommands[parameterBox.CommandIndex].Command, parameter.ToString());
 
+                RefreshCommands();
                 UpdateTabTitle(false);
             }
         }
 
-        private void AddAfterButton_Click(object sender, EventArgs e)
+        private void AddButton_Click(object sender, EventArgs e)
         {
-            ScenarioCommandButton addAfterButton = (ScenarioCommandButton)sender;
+            int selectedIndex = Math.Min(_scenario.Scenario.Commands.Count - 1, _commandsPanel.Viewer.SelectedIndex);
+            _scenario.Scenario.Commands.Insert(selectedIndex + 1, new(ScenarioVerb.LOAD_SCENE, 1));
+            _scenario.ScenarioCommands.Insert(selectedIndex + 1, (ScenarioVerb.LOAD_SCENE, "BGTEST"));
 
-            _scenario.Scenario.Commands.Insert(addAfterButton.CommandIndex + 1, new(ScenarioVerb.LOAD_SCENE, 1));
-            _scenario.ScenarioCommands.Insert(addAfterButton.CommandIndex + 1, (ScenarioVerb.LOAD_SCENE, "BGTEST"));
-
-            _scrollable.Content = GetTable();
+            RefreshCommands();
             UpdateTabTitle(false);
         }
 
         private void DeleteButton_Click(object sender, EventArgs e)
         {
-            ScenarioCommandButton deleteButton = (ScenarioCommandButton)sender;
+            int selectedIndex = _commandsPanel.Viewer.SelectedIndex;
+            if (selectedIndex < 0 || selectedIndex >= _scenario.Scenario.Commands.Count) return;
 
-            _scenario.Scenario.Commands.RemoveAt(deleteButton.CommandIndex);
-            _scenario.ScenarioCommands.RemoveAt(deleteButton.CommandIndex);
+            _scenario.Scenario.Commands.RemoveAt(selectedIndex);
+            _scenario.ScenarioCommands.RemoveAt(selectedIndex);
 
-            _scrollable.Content = GetTable();
+            RefreshCommands();
             UpdateTabTitle(false);
+        }
+        
+        private void ClearButton_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show(
+                "Clear all commands from the game scenario?\nThis action is irreversible.",
+                "Clear Scenario",
+                MessageBoxButtons.OKCancel,
+                MessageBoxType.Warning
+            );
+            if (result != DialogResult.Ok) return;
+
+            _scenario.Scenario.Commands.Clear();
+            _scenario.ScenarioCommands.Clear();
+
+            RefreshCommands();
+            UpdateTabTitle(false);
+        }
+
+        private void RefreshCommands()
+        {
+            int index = _commandsPanel.Viewer.SelectedIndex;
+            _commandsPanel.Commands = _scenario.ScenarioCommands;
+            if (index < 0) index = 0;
+            if (_commandsPanel.Commands.Count > index)
+            {
+                _commandsPanel.Viewer.SelectedIndex = index;
+            }
+            _deleteButton.Enabled = _commandsPanel.SelectedCommand is not null;
         }
     }
 }
