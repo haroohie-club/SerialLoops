@@ -20,7 +20,7 @@ namespace SerialLoops.Controls
             }
         }
         public ListBox Viewer { get; private set; }
-        public (ScenarioVerb, string)? SelectedCommand { get => Viewer.SelectedIndex != -1 ? _commands[Viewer.SelectedIndex] : null; }
+        public (ScenarioVerb Verb, string Parameter)? SelectedCommand { get => Viewer.SelectedIndex != -1 ? _commands[Viewer.SelectedIndex] : null; }
 
         private List<(ScenarioVerb, string)> _commands;
         protected ILogger _log;

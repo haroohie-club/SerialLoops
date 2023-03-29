@@ -97,7 +97,7 @@ namespace SerialLoops.Editors
 
         private void CommandsPanel_SelectedItemChanged(object sender, EventArgs e)
         {
-            (ScenarioVerb, string)? command = _commandsPanel.SelectedCommand;
+            var command = _commandsPanel.SelectedCommand;
             int commandIndex = _commandsPanel.Viewer.SelectedIndex;
             _editorControls.Items.Clear();
 
@@ -108,12 +108,10 @@ namespace SerialLoops.Editors
             {
                 return;
             }
-            ScenarioVerb verb = command.Value.Item1;
-            string parameter = command.Value.Item2;
 
             ScenarioCommandDropDown commandDropDown = new() { CommandIndex = commandIndex, ModifyCommand = true };
             commandDropDown.Items.AddRange(verbs);
-            commandDropDown.SelectedKey = verb.ToString();
+            commandDropDown.SelectedKey = command.Value.Verb.ToString();
             commandDropDown.SelectedKeyChanged += CommandDropDown_SelectedKeyChanged;
             _editorControls.Items.Add(ControlGenerator.GetControlWithLabel("Command", commandDropDown));
 
@@ -121,20 +119,20 @@ namespace SerialLoops.Editors
             StackLayout parameterLink = null;
             ScenarioCommandDropDown parameterDropDown = new() { CommandIndex = commandIndex, ModifyCommand = false };
 
-            switch (verb)
+            switch (command.Value.Verb)
             {
                 case ScenarioVerb.LOAD_SCENE:
-                    parameterItem = (ScriptItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Script && i.DisplayName == parameter);
+                    parameterItem = (ScriptItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Script && i.DisplayName == command.Value.Parameter);
                     parameterDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Script).Select(p => new ListItem { Key = p.DisplayName, Text = p.DisplayName }));
                     break;
 
                 case ScenarioVerb.PUZZLE_PHASE:
-                    parameterItem = (PuzzleItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Puzzle && i.DisplayName == parameter);
+                    parameterItem = (PuzzleItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Puzzle && i.DisplayName == command.Value.Parameter);
                     parameterDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Puzzle).Select(p => new ListItem { Key = p.DisplayName, Text = p.DisplayName }));
                     break;
 
                 case ScenarioVerb.ROUTE_SELECT:
-                    parameterItem = (GroupSelectionItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Group_Selection && ((GroupSelectionItem)i).Index == short.Parse(parameter));
+                    parameterItem = (GroupSelectionItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Group_Selection && ((GroupSelectionItem)i).Index == short.Parse(command.Value.Parameter));
                     parameterDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Group_Selection).Select(p => new ListItem { Key = p.DisplayName, Text = p.DisplayName }));
                     break;
             }
@@ -156,7 +154,7 @@ namespace SerialLoops.Editors
             }
             else
             {
-                ScenarioCommandTextBox parameterBox = new() { Text = parameter, CommandIndex = commandIndex };
+                ScenarioCommandTextBox parameterBox = new() { Text = command.Value.Parameter, CommandIndex = commandIndex };
                 parameterBox.TextChanged += ParameterBox_TextChanged;
                 StackLayout parameterLayout = new()
                 {
@@ -280,7 +278,12 @@ namespace SerialLoops.Editors
         
         private void ClearButton_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show("Clear all commands from the game scenario?\nThis action is irreversible.", MessageBoxButtons.OKCancel);
+            DialogResult result = MessageBox.Show(
+                "Clear all commands from the game scenario?\nThis action is irreversible.",
+                "Clear Scenario",
+                MessageBoxButtons.OKCancel,
+                MessageBoxType.Warning
+            );
             if (result != DialogResult.Ok) return;
 
             _scenario.Scenario.Commands.Clear();
