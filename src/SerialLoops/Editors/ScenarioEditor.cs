@@ -38,7 +38,7 @@ namespace SerialLoops.Editors
         {
             TableLayout layout = new() { Spacing = new Size(5, 5) };
 
-            _commandsPanel = new(_scenario.ScenarioCommands, new Size(280, 185), this, _log);
+            _commandsPanel = new(_scenario.ScenarioCommands, new Size(280, 185), _log);
             ListBox commandsList = _commandsPanel.Viewer;
             commandsList.SelectedIndexChanged += CommandsPanel_SelectedItemChanged;
             _editorControls = new() 
