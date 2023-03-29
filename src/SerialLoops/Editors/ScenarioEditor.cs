@@ -8,8 +8,6 @@ using SerialLoops.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Metadata;
-using System.Windows.Input;
 using static HaruhiChokuretsuLib.Archive.Event.ScenarioCommand;
 
 namespace SerialLoops.Editors
