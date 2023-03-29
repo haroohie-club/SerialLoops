@@ -6,6 +6,7 @@ using SerialLoops.Editors;
 using SerialLoops.Lib.Script;
 using System.Collections.Generic;
 using System.Linq;
+using static System.Collections.Specialized.BitVector32;
 
 namespace SerialLoops.Controls
 {
@@ -115,7 +116,24 @@ namespace SerialLoops.Controls
             };
             Viewer.AddCommand += (o, e) =>
             {
-                // todo
+                var treeGridView = (ScriptCommandSectionTreeGridView)o;
+                var entry = (ScriptCommandSectionEntry)treeGridView.SelectedItem;
+
+                if (string.IsNullOrEmpty(e.SectionTitle))
+                {
+                    e.Command.Script.ScriptSections[e.Command.Script.ScriptSections.IndexOf(e.Command.Section)].Objects.Insert(e.Command.Index, e.Invocation);
+                    _commands[e.Command.Section].Insert(e.Command.Index, e.Command);
+                    for (int i = e.Command.Section.Objects.IndexOf(e.Invocation) + 1; i < e.Command.Section.Objects.Count; i++)
+                    {
+                        _commands[e.Command.Section][i].Index++;
+                    }
+                }
+                else
+                {
+                    entry.ScriptFile.ScriptSections.Add(new() { Name = $"NONE/{e.SectionTitle[4..]}" });
+                }
+
+                _editor.UpdateTabTitle(false);
             };
         }
 

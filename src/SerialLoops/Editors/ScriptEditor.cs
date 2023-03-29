@@ -147,15 +147,16 @@ namespace SerialLoops.Editors
                             }
 
                             int index = item.Parent is not null ? ((ScriptCommandSectionTreeItem)item.Parent).IndexOf(item) : 0;
+                            ScriptCommandInvocation invocation = new(scriptCommand);
                             ScriptItemCommand command = ScriptItemCommand.FromInvocation(
-                                new(scriptCommand),
+                                invocation,
                                 scriptSection,
                                 index == -1 ? 0 : index,
                                 _script.Event,
                                 _project
                             );
 
-                            treeGridView.AddItem(new(new(command), false));
+                            treeGridView.AddItem(new(new(command), false), command, invocation);
                         }
                         catch (Exception ex)
                         {

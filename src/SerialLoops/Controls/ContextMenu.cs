@@ -162,7 +162,7 @@ namespace SerialLoops.Controls
             {
                 _treeView.DeleteItem(_clipboard);
             }
-            _treeView.AddItem(_clipboard);
+            //_treeView.AddItem(_clipboard);
         }
 
         private void OnCopyItem(object sender, EventArgs e)

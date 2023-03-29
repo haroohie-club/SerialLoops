@@ -79,7 +79,7 @@ namespace SerialLoops.Controls
         private ScriptCommandSectionTreeItem _cursorItem;
         public event EventHandler RepositionCommand;
         public event EventHandler DeleteCommand;
-        public event EventHandler AddCommand;
+        public event EventHandler<CommandEventArgs> AddCommand;
         public override Control Control => _treeView;
 
         public override void Focus()
@@ -212,7 +212,7 @@ namespace SerialLoops.Controls
             _treeView.SelectedItem = parent[newIndex];
         }
 
-        internal void AddItem(ScriptCommandSectionTreeItem item)
+        internal void AddItem(ScriptCommandSectionTreeItem item, ScriptItemCommand command, ScriptCommandInvocation invocation)
         {
             if (SelectedCommandTreeItem is null) return;
             if (SelectedCommandTreeItem.Parent is ScriptCommandSectionTreeItem parent && !parent.Text.Equals("Top"))
@@ -226,7 +226,7 @@ namespace SerialLoops.Controls
                 SelectedCommandTreeItem.Insert(0, item);
             }
             
-            AddCommand?.Invoke(this, EventArgs.Empty); //todo invoke this with the new item args
+            AddCommand?.Invoke(this, new(command, invocation)); //todo invoke this with the new item args
             _treeView.SelectedItem = item;
             _treeView.DataStore = _treeView.DataStore;
         }
@@ -237,7 +237,7 @@ namespace SerialLoops.Controls
             if (rootNode is null) return;
             rootNode.Add(section);
 
-            AddCommand?.Invoke(this, EventArgs.Empty); //todo invoke this with the new script section args
+            AddCommand?.Invoke(this, new(section.Text)); //todo invoke this with the new script section args
             _treeView.SelectedItem = section;
             _treeView.DataStore = rootNode;
         }
@@ -251,6 +251,23 @@ namespace SerialLoops.Controls
         {
             ScriptCommandSectionTreeItem rootNode = (ScriptCommandSectionTreeItem)_treeView.DataStore;
             return rootNode.Find(s => s.Text.Equals(text))?.Section;
+        }
+    }
+
+    public class CommandEventArgs : EventArgs
+    {
+        public ScriptItemCommand Command { get; set; }
+        public ScriptCommandInvocation Invocation { get; set; }
+        public string SectionTitle { get; set; }
+
+        public CommandEventArgs(ScriptItemCommand command, ScriptCommandInvocation invocation)
+        {
+            Command = command;
+            Invocation = invocation;
+        }
+        public CommandEventArgs(string sectionTitle)
+        {
+            SectionTitle = sectionTitle;
         }
     }
 }
