@@ -154,7 +154,7 @@ namespace SerialLoops.Editors
                     Items = { parameterDropDown, parameterLink }
                 };
                 commandDropDown.ParameterLayout = parameterLayout;
-                _editorControls.Items.Add(ControlGenerator.GetControlWithLabel(parameterItem.Type.ToString().Replace("_", " ") + $"(cmd index: {commandIndex})", parameterLayout));
+                _editorControls.Items.Add(ControlGenerator.GetControlWithLabel(parameterItem.Type.ToString().Replace("_", " "), parameterLayout));
             }
             else
             {
@@ -167,7 +167,7 @@ namespace SerialLoops.Editors
                     Items = { parameterBox }
                 };
                 commandDropDown.ParameterLayout = parameterLayout;
-                _editorControls.Items.Add(ControlGenerator.GetControlWithLabel($"Parameter Value (cmd index: {commandIndex})", parameterLayout));
+                _editorControls.Items.Add(ControlGenerator.GetControlWithLabel($"Parameter Value", parameterLayout));
             }
         }
 
