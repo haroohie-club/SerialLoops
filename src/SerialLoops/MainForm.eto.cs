@@ -74,8 +74,6 @@ namespace SerialLoops
                 ToolBar = null;
             }
 
-            GC.Collect();
-
             InitializeBaseMenu();
             ProjectsCache.HadProjectOpenOnLastClose = false;
             UpdateRecentProjects();
