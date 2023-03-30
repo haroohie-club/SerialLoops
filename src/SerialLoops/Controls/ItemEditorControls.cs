@@ -15,6 +15,7 @@ namespace SerialLoops.Controls
     {
         public ScriptItemCommand Command { get; set; }
         public int ParameterIndex { get; set; }
+        public int CurrentShort { get; set; }
         public ClearableLinkButton Link { get; set; }
     }
     public class ScriptCommandCheckBox : CheckBox

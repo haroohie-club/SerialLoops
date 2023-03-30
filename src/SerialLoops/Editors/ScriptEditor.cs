@@ -716,7 +716,7 @@ namespace SerialLoops.Editors
             controlsTable.Rows.Add(new(new TableLayout { Spacing = new Size(5, 5) }));
             ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows.Add(new());
 
-            int currentRow = 0, currentCol = 0;
+            int currentRow = 0, currentCol = 0, currentShort = 0;
             for (int i = 0; i < command.Parameters.Count; i++)
             {
                 ScriptParameter parameter = command.Parameters[i];
@@ -737,20 +737,20 @@ namespace SerialLoops.Editors
                         // Hence, this switch to make sure you don't accidentally crash the game
                         switch (command.Verb)
                         {
-                            case EventFile.CommandVerb.BG_DISP:
-                            case EventFile.CommandVerb.BG_DISP2:
-                            case EventFile.CommandVerb.BG_FADE:
+                            case CommandVerb.BG_DISP:
+                            case CommandVerb.BG_DISP2:
+                            case CommandVerb.BG_FADE:
                                 bgSelectionButton.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background &&
                                     (((BackgroundItem)i).BackgroundType == BgType.TEX_BOTTOM || ((BackgroundItem)i).BackgroundType == BgType.TEX_BOTTOM_TEMP))
                                     .Select(b => b as IPreviewableGraphic));
                                 break;
 
-                            case EventFile.CommandVerb.BG_DISPTEMP:
+                            case CommandVerb.BG_DISPTEMP:
                                 bgSelectionButton.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background &&
                                     ((BackgroundItem)i).BackgroundType != BgType.KINETIC_SCREEN).Select(b => b as IPreviewableGraphic));
                                 break;
 
-                            case EventFile.CommandVerb.KBG_DISP:
+                            case CommandVerb.KBG_DISP:
                                 bgSelectionButton.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background &&
                                     ((BackgroundItem)i).BackgroundType == BgType.KINETIC_SCREEN).Select(b => b as IPreviewableGraphic));
                                 break;
@@ -869,6 +869,7 @@ namespace SerialLoops.Editors
                             ParameterIndex = i,
                         };
                         colorPicker.ValueChanged += ColorPicker_ValueChanged;
+                        currentShort += 2;
 
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
                             ControlGenerator.GetControlWithLabel(parameter.Name, colorPicker));
@@ -883,7 +884,7 @@ namespace SerialLoops.Editors
                         break;
 
                     case ScriptParameter.ParameterType.COLOR_MONOCHROME:
-                        ScriptCommandDropDown colorMonochromeDropDown = new() { Command = command, ParameterIndex = i };
+                        ScriptCommandDropDown colorMonochromeDropDown = new() { Command = command, ParameterIndex = i, CurrentShort = currentShort };
                         colorMonochromeDropDown.Items.AddRange(Enum.GetNames<ColorMonochromeScriptParameter.ColorMonochrome>().Select(i => new ListItem { Text = i, Key = i }));
                         colorMonochromeDropDown.SelectedKey = ((ColorMonochromeScriptParameter)parameter).ColorType.ToString();
                         colorMonochromeDropDown.SelectedKeyChanged += ColorMonochromeDropDown_SelectedKeyChanged;
@@ -1018,7 +1019,7 @@ namespace SerialLoops.Editors
                         break;
 
                     case ScriptParameter.ParameterType.SCREEN:
-                        ScriptCommandDropDown screenDropDown = new() { Command = command, ParameterIndex = i };
+                        ScriptCommandDropDown screenDropDown = new() { Command = command, ParameterIndex = i, CurrentShort = currentShort };
                         screenDropDown.Items.AddRange(Enum.GetNames<ScreenScriptParameter.DsScreen>().Select(t => new ListItem { Text = t, Key = t }));
                         screenDropDown.SelectedKey = ((ScreenScriptParameter)parameter).Screen.ToString();
                         screenDropDown.SelectedKeyChanged += ScreenDropDown_SelectedKeyChanged;
@@ -1225,6 +1226,7 @@ namespace SerialLoops.Editors
                     controlsTable.Rows.Add(new(new TableLayout { Spacing = new Size(5, 5) }));
                     ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows.Add(new());
                 }
+                currentShort++;
             }
 
             _editorControls.Items.Add(new StackLayoutItem(controlsTable, expand: true));
@@ -1499,7 +1501,7 @@ namespace SerialLoops.Editors
                             }
                         }
                     }
-                    else if (command.Verb == EventFile.CommandVerb.INVEST_START || command.Verb == EventFile.CommandVerb.SCREEN_FADEOUT)
+                    else if (command.Verb == EventFile.CommandVerb.INVEST_START)
                     {
                         sprites.Clear();
                     }
@@ -1739,7 +1741,7 @@ namespace SerialLoops.Editors
             ((ColorMonochromeScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).ColorType =
                 Enum.Parse<ColorMonochromeScriptParameter.ColorMonochrome>(dropDown.SelectedKey);
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
-                .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
+                .Objects[dropDown.Command.Index].Parameters[dropDown.CurrentShort] =
                 (short)Enum.Parse<ColorMonochromeScriptParameter.ColorMonochrome>(dropDown.SelectedKey);
             UpdateTabTitle(false);
             Application.Instance.Invoke(() => UpdatePreview());
@@ -1927,7 +1929,7 @@ namespace SerialLoops.Editors
             ((ScreenScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Screen =
                 Enum.Parse<ScreenScriptParameter.DsScreen>(dropDown.SelectedKey);
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
-                .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
+                .Objects[dropDown.Command.Index].Parameters[dropDown.CurrentShort] =
                 (short)Enum.Parse<ScreenScriptParameter.DsScreen>(dropDown.SelectedKey);
             UpdateTabTitle(false);
             Application.Instance.Invoke(() => UpdatePreview());
