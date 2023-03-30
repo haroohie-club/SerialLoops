@@ -394,7 +394,7 @@ namespace SerialLoops
             {
                 bool buildSucceeded = true; // imo it's better to have a false negative than a false positive here
                 LoopyProgressTracker tracker = new("Building:");
-                ProgressDialog loadingDialog = new(async () => buildSucceeded = await Build.BuildIterative(OpenProject, CurrentConfig, _log, tracker), () =>
+                ProgressDialog loadingDialog = new(() => buildSucceeded = Build.BuildIterative(OpenProject, CurrentConfig, _log, tracker), () =>
                 {
                     if (buildSucceeded)
                     {
@@ -415,7 +415,7 @@ namespace SerialLoops
             {
                 bool buildSucceeded = true;
                 LoopyProgressTracker tracker = new("Building:");
-                ProgressDialog loadingDialog = new(async () => buildSucceeded = await Build.BuildBase(OpenProject, CurrentConfig, _log, tracker), () =>
+                ProgressDialog loadingDialog = new(() => buildSucceeded = Build.BuildBase(OpenProject, CurrentConfig, _log, tracker), () =>
                 {
                     if (buildSucceeded)
                     {
@@ -443,7 +443,7 @@ namespace SerialLoops
 
                 bool buildSucceeded = true;
                 LoopyProgressTracker tracker = new("Building:");
-                ProgressDialog loadingDialog = new(async () => buildSucceeded = await Build.BuildIterative(OpenProject, CurrentConfig, _log, tracker), () =>
+                ProgressDialog loadingDialog = new(() => buildSucceeded = Build.BuildIterative(OpenProject, CurrentConfig, _log, tracker), () =>
                 {
                     if (buildSucceeded)
                     {

@@ -21,9 +21,9 @@ namespace SerialLoops.Lib
 {
     public static class Build
     {
-        public static async Task<bool> BuildIterative(Project project, Config config, ILogger log, IProgressTracker tracker)
+        public static bool BuildIterative(Project project, Config config, ILogger log, IProgressTracker tracker)
         {
-            bool result = await DoBuild(project.IterativeDirectory, project, config, log, tracker);
+            bool result = DoBuild(project.IterativeDirectory, project, config, log, tracker);
             CopyToArchivesToIterativeOriginal(Path.Combine(project.IterativeDirectory, "rom", "data"),
                 Path.Combine(project.IterativeDirectory, "original", "archives"), log, tracker);
             if (result)
@@ -33,9 +33,9 @@ namespace SerialLoops.Lib
             return result;
         }
 
-        public static async Task<bool> BuildBase(Project project, Config config, ILogger log, IProgressTracker tracker)
+        public static bool BuildBase(Project project, Config config, ILogger log, IProgressTracker tracker)
         {
-            bool result = await DoBuild(project.BaseDirectory, project, config, log, tracker);
+            bool result = DoBuild(project.BaseDirectory, project, config, log, tracker);
             CopyToArchivesToIterativeOriginal(Path.Combine(project.BaseDirectory, "rom", "data"),
                 Path.Combine(project.IterativeDirectory, "original", "archives"), log, tracker);
             if (result)
@@ -67,7 +67,7 @@ namespace SerialLoops.Lib
             }
         }
 
-        private static async Task<bool> DoBuild(string directory, Project project, Config config, ILogger log, IProgressTracker tracker)
+        private static bool DoBuild(string directory, Project project, Config config, ILogger log, IProgressTracker tracker)
         {
             // Export includes
             StringBuilder commandsIncSb = new();
@@ -128,11 +128,11 @@ namespace SerialLoops.Lib
                             }
                             if (file.Contains("events"))
                             {
-                                await ReplaceSingleSourceFileAsync(evt, file, index, config.DevkitArmPath, directory, log);
+                                ReplaceSingleSourceFile(evt, file, index, config.DevkitArmPath, directory, log);
                             }
                             else if (file.Contains("data"))
                             {
-                                await ReplaceSingleSourceFileAsync(dat, file, index, config.DevkitArmPath, directory, log);
+                                ReplaceSingleSourceFile(dat, file, index, config.DevkitArmPath, directory, log);
                             }
                             else
                             {
@@ -239,9 +239,9 @@ namespace SerialLoops.Lib
             grp.Files[grp.Files.IndexOf(grpFile)] = grpFile;
         }
 
-        private static async Task<bool> ReplaceSingleSourceFileAsync(ArchiveFile<EventFile> archive, string filePath, int index, string devkitArm, string workingDirectory, ILogger log)
+        private static bool ReplaceSingleSourceFile(ArchiveFile<EventFile> archive, string filePath, int index, string devkitArm, string workingDirectory, ILogger log)
         {
-            (string objFile, string binFile) = await CompileSourceFileAsync(filePath, devkitArm, workingDirectory, log);
+            (string objFile, string binFile) = CompileSourceFile(filePath, devkitArm, workingDirectory, log);
             if (!File.Exists(binFile))
             {
                 log.LogError($"Compiled file {binFile} does not exist!");
@@ -252,9 +252,9 @@ namespace SerialLoops.Lib
             File.Delete(binFile);
             return true;
         }
-        private static async Task<bool> ReplaceSingleSourceFileAsync(ArchiveFile<DataFile> archive, string filePath, int index, string devkitArm, string workingDirectory, ILogger log)
+        private static bool ReplaceSingleSourceFile(ArchiveFile<DataFile> archive, string filePath, int index, string devkitArm, string workingDirectory, ILogger log)
         {
-            (string objFile, string binFile) = await CompileSourceFileAsync(filePath, devkitArm, workingDirectory, log);
+            (string objFile, string binFile) = CompileSourceFile(filePath, devkitArm, workingDirectory, log);
             if (!File.Exists(binFile))
             {
                 log.LogError($"Compiled file {binFile} does not exist!");
@@ -266,7 +266,7 @@ namespace SerialLoops.Lib
             return true;
         }
 
-        private static async Task<(string, string)> CompileSourceFileAsync(string filePath, string devkitArm, string workingDirectory, ILogger log)
+        private static (string, string) CompileSourceFile(string filePath, string devkitArm, string workingDirectory, ILogger log)
         {
             string exeExtension = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? ".exe" : string.Empty;
 
@@ -289,8 +289,8 @@ namespace SerialLoops.Lib
             gcc.OutputDataReceived += (object sender, DataReceivedEventArgs e) => log.Log(e.Data);
             gcc.ErrorDataReceived += (object sender, DataReceivedEventArgs e) => log.LogWarning(e.Data);
             gcc.Start();
-            await gcc.WaitForExitAsync();
-            await Task.Delay(50); // ensures process is actually complete
+            gcc.WaitForExitAsync();
+            Task.Delay(50); // ensures process is actually complete
             ProcessStartInfo objcopyStartInfo = new(Path.Combine(devkitArm, "bin", $"arm-none-eabi-objcopy{exeExtension}"), $"-O binary \"{objFile}\" \"{binFile}")
             {
                 CreateNoWindow = true,
@@ -308,8 +308,8 @@ namespace SerialLoops.Lib
             objcopy.OutputDataReceived += (object sender, DataReceivedEventArgs e) => log.Log(e.Data);
             objcopy.ErrorDataReceived += (object sender, DataReceivedEventArgs e) => log.LogWarning(e.Data);
             objcopy.Start();
-            await objcopy.WaitForExitAsync();
-            await Task.Delay(50); // ensures process is actually complete
+            objcopy.WaitForExitAsync();
+            Task.Delay(50); // ensures process is actually complete
 
             return (objFile, binFile);
         }
