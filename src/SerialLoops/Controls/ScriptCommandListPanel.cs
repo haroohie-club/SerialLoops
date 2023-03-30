@@ -101,6 +101,7 @@ namespace SerialLoops.Controls
                     {
                         entry.ScriptFile.LabelsSection.Objects.Remove(label);
                     }
+                    entry.ScriptFile.NumSections--;
                 }
                 else
                 {
@@ -112,8 +113,6 @@ namespace SerialLoops.Controls
                     }
                     entry.Command.Section.Objects.Remove(command);
                     _commands[entry.Command.Section].Remove(entry.Command);
-                    entry.Command.Script.ScriptSections.Remove(entry.Command.Section);
-                    entry.Command.Script.NumSections--;
                 }
                 _editor.UpdateTabTitle(false);
             };

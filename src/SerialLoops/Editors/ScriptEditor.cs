@@ -172,11 +172,25 @@ namespace SerialLoops.Editors
                             // Some special case initialization of new commands
                             switch (Enum.Parse<CommandVerb>(scriptCommand.Mnemonic))
                             {
+                                case CommandVerb.CHIBI_ENTEREXIT:
+                                    invocation.Parameters[0] = (short)((ChibiItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Chibi)).ChibiIndex;
+                                    break;
+
                                 case CommandVerb.DIALOGUE:
                                     invocation.Parameters[0] = (short)_script.Event.DialogueLines.Count;
                                     DialogueLine line = new("Replace me".GetOriginalString(_project), _script.Event);
                                     _script.Event.DialogueLines.Add(line);
                                     _script.Event.DialogueSection.Objects.Insert(_script.Event.DialogueSection.Objects.Count - 1, line);
+                                    break;
+
+                                case CommandVerb.KBG_DISP:
+                                    invocation.Parameters[0] = (short)((BackgroundItem)_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).BackgroundType == BgType.KINETIC_SCREEN).First()).Id;
+                                    break;
+
+                                case CommandVerb.BG_DISP:
+                                case CommandVerb.BG_DISP2:
+                                case CommandVerb.BG_DISPTEMP:
+                                    invocation.Parameters[0] = (short)((BackgroundItem)_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).BackgroundType != BgType.KINETIC_SCREEN).First()).Id;
                                     break;
                             }
 
@@ -189,12 +203,9 @@ namespace SerialLoops.Editors
                             );
 
                             treeGridView.AddItem(new(new(command), false), command, invocation);
-                            // Regenerate the command tree for commands that do that
-                            if (new CommandVerb[] { CommandVerb.GOTO, CommandVerb.VGOTO, CommandVerb.CHESS_VGOTO }.Contains(command.Verb))
-                            {
-                                _script.Refresh(_project);
-                                PopulateScriptCommands();
-                            }
+                            // Regenerate the command tree
+                            _script.Refresh(_project);
+                            PopulateScriptCommands();
                         }
                         catch (Exception ex)
                         {
@@ -1635,13 +1646,13 @@ namespace SerialLoops.Editors
         {
             ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
             _log.Log($"Attempting to modify parameter {dropDown.ParameterIndex} to BGM {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
-            ((BgmScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Bgm =
-                (BackgroundMusicItem)_project.Items.FirstOrDefault(i => i.Name == dropDown.SelectedKey);
+            BackgroundMusicItem bgm = (BackgroundMusicItem)_project.Items.FirstOrDefault(i => i.Name == dropDown.SelectedKey);
+            ((BgmScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Bgm = bgm;
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
                 .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
                 (short)((BackgroundMusicItem)_project.Items.First(i => i.Name == dropDown.SelectedKey)).Index;
 
-            dropDown.Link.Text = dropDown.SelectedKey;
+            dropDown.Link.Text = bgm.DisplayName;
             dropDown.Link.RemoveAllClickEvents();
             dropDown.Link.ClickUnique += (s, e) => { _tabs.OpenTab(_project.Items.FirstOrDefault(i => i.Name == dropDown.SelectedKey), _log); };
 
