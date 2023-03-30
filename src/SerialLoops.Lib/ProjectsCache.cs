@@ -13,6 +13,7 @@ namespace SerialLoops.Lib
         public string CacheFilePath { get; set; }
         public List<string> RecentProjects { get; set; }
         public Dictionary<string, List<string>> RecentWorkspaces { get; set; }
+        public bool HadProjectOpenOnLastClose { get; set; }
 
         public async void Save(ILogger log)
         {
