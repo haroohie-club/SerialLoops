@@ -64,7 +64,17 @@ namespace SerialLoops
             OpenProject = null;
             EditorTabs = null;
             ItemExplorer = null;
-            ToolBar = null;
+
+            // Setting a toolbar to null on Mac triggers a crash, and clearing the items doesn't hide it on Windows.
+            if (Application.Instance.Platform.IsMac)
+            {
+                ToolBar?.Items.Clear();
+            }
+            else
+            {
+                ToolBar = null;
+            }
+
             GC.Collect();
 
             InitializeBaseMenu();
