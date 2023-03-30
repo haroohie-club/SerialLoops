@@ -100,7 +100,7 @@ namespace SerialLoops.Controls
             }
         }
 
-        public ScriptCommandSectionTreeItem? SelectedCommandTreeItem
+        public ScriptCommandSectionTreeItem SelectedCommandTreeItem
         {
             get
             {
@@ -217,13 +217,17 @@ namespace SerialLoops.Controls
             if (SelectedCommandTreeItem is null) return;
             if (SelectedCommandTreeItem.Parent is ScriptCommandSectionTreeItem parent && !parent.Text.Equals("Top"))
             {
+                item.Parent = parent;
                 int index = parent.IndexOf(SelectedCommandTreeItem);
                 if (index == -1) return;
                 parent.Insert(index + 1, item);
+                command.Index = index + 1;
             }
-            else
+            else if (SelectedCommandTreeItem.Parent is ScriptCommandSectionTreeItem top)
             {
+                item.Parent = SelectedCommandTreeItem;
                 SelectedCommandTreeItem.Insert(0, item);
+                command.Index = 0;
             }
             
             AddCommand?.Invoke(this, new(command, invocation)); //todo invoke this with the new item args
@@ -236,6 +240,7 @@ namespace SerialLoops.Controls
             ScriptCommandSectionTreeItem rootNode = (ScriptCommandSectionTreeItem)_treeView.DataStore;
             if (rootNode is null) return;
             rootNode.Add(section);
+            section.Parent = rootNode;
 
             AddCommand?.Invoke(this, new(section.Text)); //todo invoke this with the new script section args
             _treeView.SelectedItem = section;

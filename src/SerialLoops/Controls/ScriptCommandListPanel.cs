@@ -3,6 +3,7 @@ using Eto.Forms;
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Editors;
+using SerialLoops.Lib;
 using SerialLoops.Lib.Script;
 using System.Collections.Generic;
 using System.Linq;
@@ -92,7 +93,7 @@ namespace SerialLoops.Controls
                 var treeGridView = (ScriptCommandSectionTreeGridView)o;
                 var entry = (ScriptCommandSectionEntry)treeGridView.SelectedItem;
                 
-                if (entry.Count > 0)
+                if (entry.Text.StartsWith("NONE") || entry.Text.StartsWith("SCRIPT"))
                 {
                     entry.ScriptFile.ScriptSections.Remove(entry.ScriptFile.ScriptSections.First(s => s.Name.Replace("/", "") == entry.Text));
                     LabelsSectionEntry label = entry.ScriptFile.LabelsSection.Objects.FirstOrDefault(l => l.Name.Replace("/", "") == entry.Text);
@@ -130,7 +131,22 @@ namespace SerialLoops.Controls
                 }
                 else
                 {
-                    entry.ScriptFile.ScriptSections.Add(new() { Name = $"NONE/{e.SectionTitle[4..]}" });
+                    string sectionName = e.SectionTitle;
+                    EventFile scriptFile = entry.ScriptFile is null ? entry.Command.Script : entry.ScriptFile;
+                    scriptFile.ScriptSections.Add(new()
+                    {
+                        Name = sectionName,
+                        CommandsAvailable = EventFile.CommandsAvailable,
+                        Objects = new(),
+                        SectionType = typeof(ScriptSection),
+                        ObjectType = typeof(ScriptCommandInvocation),
+                    });
+                    scriptFile.LabelsSection.Objects.Add(new()
+                    {
+                        Name = sectionName,
+                        Id = (short)(scriptFile.LabelsSection.Objects.Last().Id + 1)
+                    });
+                    _commands.Add(scriptFile.ScriptSections.Last(), new());
                 }
 
                 _editor.UpdateTabTitle(false);

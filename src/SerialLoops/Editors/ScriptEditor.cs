@@ -176,6 +176,11 @@ namespace SerialLoops.Editors
                             );
 
                             treeGridView.AddItem(new(new(command), false), command, invocation);
+                            if (new CommandVerb[] { CommandVerb.GOTO, CommandVerb.VGOTO }.Contains(command.Verb))
+                            {
+                                _script.Refresh(_project);
+                                PopulateScriptCommands();
+                            }
                         }
                         catch (Exception ex)
                         {
@@ -206,7 +211,7 @@ namespace SerialLoops.Editors
                     Title = "Add Section",
                     MinimumSize = new(250, 150),
                     Content = new TableLayout(
-                        new TableRow(new StackLayout { Padding = 10, Items = { "Section Name:", labelBox } }),
+                        new TableRow(new StackLayout { Padding = 10, Items = { "Section Name:", ControlGenerator.GetControlWithLabel("NONE/", labelBox) } }),
                         new TableRow(new StackLayout
                         {
                             Padding = 10,
@@ -233,8 +238,10 @@ namespace SerialLoops.Editors
                     }
 
                     dialog.Close();
-                    ScriptCommandSectionEntry section = new(labelBox.Text.ToUpper(), new List<ScriptCommandSectionEntry>(), _script.Event);
+                    ScriptCommandSectionEntry section = new($"NONE{labelBox.Text.ToUpper()}", new List<ScriptCommandSectionEntry>(), _script.Event);
                     treeGridView.AddSection(new(section, true));
+                    _script.Refresh(_project); // Have to recreate the command graph
+                    PopulateScriptCommands();
                 };
 
                 dialog.ShowModal(this);
@@ -252,6 +259,8 @@ namespace SerialLoops.Editors
                 if (treeGridView.SelectedCommandTreeItem is not null)
                 {
                     treeGridView.DeleteItem(treeGridView.SelectedCommandTreeItem);
+                    _script.Refresh(_project); // Have to recreate the command graph
+                    PopulateScriptCommands();
                 }
             };
 
@@ -995,7 +1004,7 @@ namespace SerialLoops.Editors
 
                     case ScriptParameter.ParameterType.SCRIPT_SECTION:
                         ScriptCommandDropDown scriptSectionDropDown = new() { Command = command, ParameterIndex = i };
-                        scriptSectionDropDown.Items.AddRange(_script.Event.ScriptSections.Select(s => new ListItem { Text = s.Name, Key = s.Name }));
+                        scriptSectionDropDown.Items.AddRange(_script.Event.ScriptSections.Where(s => (_script.Event.LabelsSection.Objects.FirstOrDefault(l => l.Name == s.Name)?.Id ?? 0) != 0).Select(s => new ListItem { Text = s.Name, Key = s.Name }));
                         scriptSectionDropDown.SelectedKey = ((ScriptSectionScriptParameter)parameter)?.Section?.Name ?? "NONE";
                         scriptSectionDropDown.SelectedKeyChanged += ScriptSectionDropDown_SelectedKeyChanged;
 
@@ -1906,6 +1915,8 @@ namespace SerialLoops.Editors
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
                 .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
                 _script.Event.LabelsSection.Objects.First(l => ((ScriptSectionScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Section.Name.Replace("/", "") == dropDown.SelectedKey).Id;
+            _script.Refresh(_project); // Update command graph
+            PopulateScriptCommands();
             UpdateTabTitle(false);
         }
         private void SfxModeDropDown_SelectedKeyChanged(object sender, EventArgs e)

@@ -10,20 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using static HaruhiChokuretsuLib.Archive.Event.EventFile;
-using static SerialLoops.Lib.Script.Parameters.BgmModeScriptParameter;
-using static SerialLoops.Lib.Script.Parameters.BgScrollDirectionScriptParameter;
-using static SerialLoops.Lib.Script.Parameters.ChibiEmoteScriptParameter;
-using static SerialLoops.Lib.Script.Parameters.ChibiEnterExitScriptParameter;
-using static SerialLoops.Lib.Script.Parameters.ColorMonochromeScriptParameter;
-using static SerialLoops.Lib.Script.Parameters.EpisodeHeaderScriptParameter;
-using static SerialLoops.Lib.Script.Parameters.PaletteEffectScriptParameter;
-using static SerialLoops.Lib.Script.Parameters.ScreenScriptParameter;
-using static SerialLoops.Lib.Script.Parameters.SfxModeScriptParameter;
-using static SerialLoops.Lib.Script.Parameters.SpriteEntranceScriptParameter;
-using static SerialLoops.Lib.Script.Parameters.SpriteExitScriptParameter;
-using static SerialLoops.Lib.Script.Parameters.SpriteShakeScriptParameter;
-using static SerialLoops.Lib.Script.Parameters.TextEntranceEffectScriptParameter;
-using static SerialLoops.Lib.Script.Parameters.TransitionScriptParameter;
 
 namespace SerialLoops.Lib.Script
 {
@@ -78,7 +64,7 @@ namespace SerialLoops.Lib.Script
                     commands.AddRange(commandTree[edge.Source]);
                 }
             }
-            commands.AddRange(commandTree[Section].TakeWhile(c => c != this));
+            commands.AddRange(commandTree[Section].TakeWhile(c => c.Index != Index));
             commands.Add(this);
 
             return commands;
@@ -336,6 +322,14 @@ namespace SerialLoops.Lib.Script
                     case CommandVerb.GOTO:
                         if (i == 0)
                         {
+                            if (parameter == 0)
+                            {
+                                parameter = eventFile.LabelsSection.Objects.FirstOrDefault(l => l.Id != 00)?.Id ?? 0;
+                                if (parameter == 0)
+                                {
+                                    throw new ArgumentException("Adding GOTO command failed: no section with a label exists");
+                                }
+                            }
                             parameters.Add(new ScriptSectionScriptParameter("Script Section", eventFile.ScriptSections.First(s => s.Name == eventFile.LabelsSection.Objects.First(l => l.Id == parameter).Name.Replace("/", ""))));
                         }
                         break;
