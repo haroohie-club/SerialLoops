@@ -289,7 +289,7 @@ namespace SerialLoops.Lib
             gcc.OutputDataReceived += (object sender, DataReceivedEventArgs e) => log.Log(e.Data);
             gcc.ErrorDataReceived += (object sender, DataReceivedEventArgs e) => log.LogWarning(e.Data);
             gcc.Start();
-            gcc.WaitForExitAsync();
+            gcc.WaitForExit();
             Task.Delay(50); // ensures process is actually complete
             ProcessStartInfo objcopyStartInfo = new(Path.Combine(devkitArm, "bin", $"arm-none-eabi-objcopy{exeExtension}"), $"-O binary \"{objFile}\" \"{binFile}")
             {
@@ -308,7 +308,7 @@ namespace SerialLoops.Lib
             objcopy.OutputDataReceived += (object sender, DataReceivedEventArgs e) => log.Log(e.Data);
             objcopy.ErrorDataReceived += (object sender, DataReceivedEventArgs e) => log.LogWarning(e.Data);
             objcopy.Start();
-            objcopy.WaitForExitAsync();
+            objcopy.WaitForExit();
             Task.Delay(50); // ensures process is actually complete
 
             return (objFile, binFile);
