@@ -110,6 +110,7 @@ namespace SerialLoops.Editors
                     {
                         verbSelecter.Items.Add(new ListItem { Key = verb, Text = verb });
                     }
+                    verbSelecter.Items.Sort((c1, c2) => c1.Key.CompareTo(c2.Key));
 
                     Button createButton = new() { Text = "Create" };
                     Button cancelButton = new() { Text = "Cancel" };
@@ -167,6 +168,18 @@ namespace SerialLoops.Editors
 
                             int index = item.Parent is not null ? ((ScriptCommandSectionTreeItem)item.Parent).IndexOf(item) : 0;
                             ScriptCommandInvocation invocation = new(scriptCommand);
+
+                            // Some special case initialization of new commands
+                            switch (Enum.Parse<CommandVerb>(scriptCommand.Mnemonic))
+                            {
+                                case CommandVerb.DIALOGUE:
+                                    invocation.Parameters[0] = (short)_script.Event.DialogueLines.Count;
+                                    DialogueLine line = new("Replace me".GetOriginalString(_project), _script.Event);
+                                    _script.Event.DialogueLines.Add(line);
+                                    _script.Event.DialogueSection.Objects.Insert(_script.Event.DialogueSection.Objects.Count - 1, line);
+                                    break;
+                            }
+
                             ScriptItemCommand command = ScriptItemCommand.FromInvocation(
                                 invocation,
                                 scriptSection,
@@ -176,7 +189,8 @@ namespace SerialLoops.Editors
                             );
 
                             treeGridView.AddItem(new(new(command), false), command, invocation);
-                            if (new CommandVerb[] { CommandVerb.GOTO, CommandVerb.VGOTO }.Contains(command.Verb))
+                            // Regenerate the command tree for commands that do that
+                            if (new CommandVerb[] { CommandVerb.GOTO, CommandVerb.VGOTO, CommandVerb.CHESS_VGOTO }.Contains(command.Verb))
                             {
                                 _script.Refresh(_project);
                                 PopulateScriptCommands();
@@ -238,7 +252,7 @@ namespace SerialLoops.Editors
                     }
 
                     dialog.Close();
-                    ScriptCommandSectionEntry section = new($"NONE{labelBox.Text.ToUpper()}", new List<ScriptCommandSectionEntry>(), _script.Event);
+                    ScriptCommandSectionEntry section = new($"NONE{labelBox.Text}", new List<ScriptCommandSectionEntry>(), _script.Event);
                     treeGridView.AddSection(new(section, true));
                     _script.Refresh(_project); // Have to recreate the command graph
                     PopulateScriptCommands();

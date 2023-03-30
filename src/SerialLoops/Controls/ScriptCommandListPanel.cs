@@ -112,6 +112,8 @@ namespace SerialLoops.Controls
                     }
                     entry.Command.Section.Objects.Remove(command);
                     _commands[entry.Command.Section].Remove(entry.Command);
+                    entry.Command.Script.ScriptSections.Remove(entry.Command.Section);
+                    entry.Command.Script.NumSections--;
                 }
                 _editor.UpdateTabTitle(false);
             };
@@ -141,10 +143,11 @@ namespace SerialLoops.Controls
                         SectionType = typeof(ScriptSection),
                         ObjectType = typeof(ScriptCommandInvocation),
                     });
-                    scriptFile.LabelsSection.Objects.Add(new()
+                    scriptFile.NumSections++;
+                    scriptFile.LabelsSection.Objects.Insert(scriptFile.LabelsSection.Objects.Count - 1, new()
                     {
-                        Name = sectionName,
-                        Id = (short)(scriptFile.LabelsSection.Objects.Last().Id + 1)
+                        Name = $"NONE/{sectionName[4..]}",
+                        Id = (short)(scriptFile.LabelsSection.Objects.Max(l => l.Id) + 1)
                     });
                     _commands.Add(scriptFile.ScriptSections.Last(), new());
                 }
