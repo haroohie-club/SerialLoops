@@ -14,6 +14,7 @@
   <ItemGroup>
     <None Remove="Icons\Add.png" />
     <None Remove="Icons\Add_Section.png" />
+    <None Remove="Icons\AppIcon.png" />
     <None Remove="Icons\Background.png" />
     <None Remove="Icons\BGM.png" />
     <None Remove="Icons\Camera.png" />
@@ -21,12 +22,18 @@
     <None Remove="Icons\Chess.png" />
     <None Remove="Icons\Chibi.png" />
     <None Remove="Icons\Clear.png" />
+    <None Remove="Icons\Close.png" />
     <None Remove="Icons\Dialogue_Config.png" />
     <None Remove="Icons\Group_Selection.png" />
     <None Remove="Icons\Map.png" />
+    <None Remove="Icons\New.png" />
+    <None Remove="Icons\Open.png" />
+    <None Remove="Icons\Options.png" />
     <None Remove="Icons\Pathing.png" />
+    <None Remove="Icons\Project_Options.png" />
     <None Remove="Icons\Puzzle.png" />
     <None Remove="Icons\Remove.png" />
+    <None Remove="Icons\Save.png" />
     <None Remove="Icons\Scenario.png" />
     <None Remove="Icons\Script.png" />
     <None Remove="Icons\System_Texture.png" />

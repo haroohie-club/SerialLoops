@@ -69,11 +69,11 @@ namespace SerialLoops.Utility
             return GetIcon(type.ToString(), log);
         }
         
-        public static Icon GetIcon(string iconName, ILogger log)
+        public static Icon GetIcon(string iconName, ILogger log, int size = 16)
         {
             try
             {
-                return Icon.FromResource($"SerialLoops.Icons.{iconName}.png").WithSize(16, 16);
+                return Icon.FromResource($"SerialLoops.Icons.{iconName}.png").WithSize(size, size);
             }
             catch (Exception exc)
             {
@@ -129,6 +129,11 @@ namespace SerialLoops.Utility
                     details
                 }
             };
+        }
+
+        internal static Label GetTextHeader(string text, int size = 14)
+        {
+            return new Label { Text = text, Font = new Font(SystemFont.Bold, size) };
         }
     }
 }

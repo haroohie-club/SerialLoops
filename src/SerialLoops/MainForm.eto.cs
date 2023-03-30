@@ -1,6 +1,5 @@
 using Eto.Forms;
 using HaruhiChokuretsuLib.Archive;
-using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
 using SerialLoops.Controls;
 using SerialLoops.Dialogs;
@@ -22,14 +21,13 @@ namespace SerialLoops
     {
         private const string BASE_TITLE = "Serial Loops";
 
-        private LoopyLogger _log;
         public ProjectsCache ProjectsCache { get; set; }
         public Config CurrentConfig { get; set; }
         public Project OpenProject { get; set; }
         public EditorTabsPanel EditorTabs { get; set; }
         public ItemExplorerPanel ItemExplorer { get; set; }
-        
-        private readonly SubMenuItem _recentProjects = new() { Text = "Recent Projects" };
+        private SubMenuItem _recentProjects;
+        private LoopyLogger _log;
 
         void InitializeComponent()
         {
@@ -37,27 +35,103 @@ namespace SerialLoops
             ClientSize = new(1000, 600);
             MinimumSize = new(769, 420);
             Padding = 10;
-            Closing += MainForm_Closed;
+            Closing += CloseProject_Executed;
 
-            // Commands
+            InitializeBaseMenu();
+        }
+
+        private void OpenProjectView(Project project, IProgressTracker tracker)
+        {
+            EditorTabs = new(project, _log);
+            ItemExplorer = new(project, EditorTabs, _log);
+            Title = $"{BASE_TITLE} - {project.Name}";
+            Content = new TableLayout(new TableRow(ItemExplorer, EditorTabs));
+
+            InitializeProjectMenu();
+            LoadCachedData(project, tracker);
+        }
+
+        private void CloseProjectView()
+        {
+            CancelEventArgs cancelEvent = new();
+            CloseProject_Executed(this, cancelEvent);
+            if (cancelEvent.Cancel) { return; }
+
+            Title = BASE_TITLE;
+            Content = new HomePanel(this, _log);
+
+            OpenProject = null;
+            EditorTabs = null;
+            ItemExplorer = null;
+
+            // Setting a toolbar to null on Mac triggers a crash, and clearing the items doesn't hide it on Windows.
+            if (Application.Instance.Platform.IsMac)
+            {
+                ToolBar?.Items.Clear();
+            }
+            else
+            {
+                ToolBar = null;
+            }
+
+            InitializeBaseMenu();
+            ProjectsCache.HadProjectOpenOnLastClose = false;
+            UpdateRecentProjects();
+        }
+
+        private void InitializeBaseMenu()
+        {
             // File
-            Command newProject = new() { MenuText = "New Project", ToolBarText = "New Project" };
+            Command newProject = new() { MenuText = "New Project...", ToolBarText = "New Project", Image = ControlGenerator.GetIcon("New", _log) };
             newProject.Executed += NewProjectCommand_Executed;
 
-            Command openProject = new() { MenuText = "Open Project", ToolBarText = "Open Project" };
+            Command openProject = new() { MenuText = "Open Project...", ToolBarText = "Open Project", Image = ControlGenerator.GetIcon("Open", _log) };
             openProject.Executed += OpenProject_Executed;
 
-            Command saveProject = new() { MenuText = "Save Project", ToolBarText = "Save Project", Shortcut = Application.Instance.CommonModifier | Keys.S };
+            // Application Items
+            Command preferencesCommand = new();
+            preferencesCommand.Executed += PreferencesCommand_Executed;
+
+            // About
+            Command aboutCommand = new() { MenuText = "About...", Image = ControlGenerator.GetIcon("Help", _log) };
+            AboutDialog aboutDialog = new() { ProgramName = "Serial Loops", Developers = new[] { "Jonko", "William" }, Copyright = "© Haroohie Translation Club, 2023", Website = new Uri("https://haroohie.club") };
+            aboutCommand.Executed += (sender, e) => aboutDialog.ShowDialog(this);
+
+            // Create Menu
+            _recentProjects = new() { Text = "Recent Projects" };
+            Menu = new MenuBar
+            {
+                Items =
+                {
+                    // File submenu
+                    new SubMenuItem { Text = "&File", Items = { newProject, openProject, _recentProjects } }
+                },
+                ApplicationItems =
+                {
+                    // application (OS X) or file menu (others)
+                    new ButtonMenuItem { Text = "&Preferences...", Command = preferencesCommand, Image = ControlGenerator.GetIcon("Options", _log) },
+                },
+                AboutItem = aboutCommand
+            };
+        }
+
+        private void InitializeProjectMenu()
+        {
+            // File
+            Command saveProject = new() { MenuText = "Save Project", ToolBarText = "Save Project", Shortcut = Application.Instance.CommonModifier | Keys.S, Image = ControlGenerator.GetIcon("Save", _log) };
             saveProject.Executed += SaveProject_Executed;
 
-            Command projectSettings = new() { MenuText = "Project Settings", ToolBarText = "Project Settings" };
+            Command projectSettings = new() { MenuText = "Project Settings...", ToolBarText = "Project Settings", Image = ControlGenerator.GetIcon("Project_Options", _log) };
             projectSettings.Executed += ProjectSettings_Executed;
 
+            Command closeProject = new() { MenuText = "Close Project", ToolBarText = "Close Project", Image = ControlGenerator.GetIcon("Close", _log) };
+            closeProject.Executed += (sender, args) => CloseProjectView();
+
             // Tools
-            Command searchProject = new() { MenuText = "Search", ToolBarText = "Search", Shortcut = Application.Instance.CommonModifier | Keys.F, Image = ControlGenerator.GetIcon("Search", _log) };
+            Command searchProject = new() { MenuText = "Search...", ToolBarText = "Search", Shortcut = Application.Instance.CommonModifier | Keys.F, Image = ControlGenerator.GetIcon("Search", _log) };
             searchProject.Executed += Search_Executed;
 
-            Command findOrphanedItems = new() { MenuText = "Find Orphaned Items" };
+            Command findOrphanedItems = new() { MenuText = "Find Orphaned Items..." };
             findOrphanedItems.Executed += FindOrphanedItems_Executed;
 
             // Build
@@ -66,39 +140,11 @@ namespace SerialLoops
 
             Command buildBaseProject = new() { MenuText = "Build from Scratch", ToolBarText = "Build from Scratch", Image = ControlGenerator.GetIcon("Build_Scratch", _log) };
             buildBaseProject.Executed += BuildBaseProject_Executed;
-            
+
             Command buildAndRunProject = new() { MenuText = "Build and Run", ToolBarText = "Run", Image = ControlGenerator.GetIcon("Build_Run", _log) };
             buildAndRunProject.Executed += BuildAndRunProject_Executed;
 
-            // Application Items
-            Command preferencesCommand = new();
-            preferencesCommand.Executed += PreferencesCommand_Executed;
-
-            // About
-            Command aboutCommand = new() { MenuText = "About..." };
-            AboutDialog aboutDialog = new() { ProgramName = "Serial Loops", Developers = new[] { "Jonko", "William" }, Copyright = "© Haroohie Translation Club, 2023", Website = new Uri("https://haroohie.club")  };
-            aboutCommand.Executed += (sender, e) => aboutDialog.ShowDialog(this);
-
-            // create menu
-            Menu = new MenuBar
-            {
-                Items =
-                {
-                    // File submenu
-                    new SubMenuItem { Text = "&File", Items = { newProject, openProject, _recentProjects, saveProject, projectSettings } },
-                    new SubMenuItem { Text = "&Tools", Items = { searchProject, findOrphanedItems } },
-                    // new SubMenuItem { Text = "&Edit", Items = { /* commands/items */ } },
-                    // new SubMenuItem { Text = "&View", Items = { /* commands/items */ } },
-                    new SubMenuItem { Text = "&Build", Items = { buildIterativeProject, buildBaseProject, buildAndRunProject } },
-                },
-                ApplicationItems =
-                {
-                    // application (OS X) or file menu (others)
-                    new ButtonMenuItem { Text = "&Preferences...", Command = preferencesCommand },
-                },
-                AboutItem = aboutCommand
-            };
-
+            // Add toolbar
             ToolBar = new ToolBar
             {
                 Style = "sl-toolbar",
@@ -109,15 +155,17 @@ namespace SerialLoops
                     ControlGenerator.GetToolBarItem(searchProject)
                 }
             };
-        }
 
-        private void OpenProjectView(Project project, IProgressTracker tracker)
-        {
-            EditorTabs = new(project, _log);
-            ItemExplorer = new(project, EditorTabs, _log);
-            Title = $"{BASE_TITLE} - {project.Name}";
-            Content = new TableLayout(new TableRow(ItemExplorer, EditorTabs));
-            LoadCachedData(project, tracker);    
+            // Add project items to menu
+            if (Menu.Items[0] is SubMenuItem fileMenu)
+            {
+                fileMenu.Items.Add(saveProject);
+                fileMenu.Items.Add(projectSettings);
+                fileMenu.Items.Add(closeProject);
+            }
+
+            Menu.Items.Add(new SubMenuItem { Text = "&Tools", Items = { searchProject, findOrphanedItems } });
+            Menu.Items.Add(new SubMenuItem { Text = "&Build", Items = { buildIterativeProject, buildBaseProject, buildAndRunProject } });
         }
 
         private void LoadCachedData(Project project, IProgressTracker tracker)
@@ -170,28 +218,45 @@ namespace SerialLoops
             if (CurrentConfig.AutoReopenLastProject && ProjectsCache.RecentProjects.Count > 0)
             {
                 OpenProjectFromPath(ProjectsCache.RecentProjects[0]);
+            } else
+            {
+                Content = new HomePanel(this, _log);
             }
         }
 
         private void UpdateRecentProjects()
         {
-            _recentProjects.Items.Clear();
+            _recentProjects?.Items.Clear();
+
+            List<string> projectsToRemove = new();
             foreach (string project in ProjectsCache.RecentProjects)
             {
                 Command recentProject = new() { MenuText = Path.GetFileNameWithoutExtension(project), ToolTip = project };
                 recentProject.Executed += OpenRecentProject_Executed;
                 if (!File.Exists(project))
                 {
+                    if (CurrentConfig.RemoveMissingProjects)
+                    {
+                        projectsToRemove.Add(project);
+                        continue;
+                    }
                     recentProject.Enabled = false;
                     recentProject.MenuText += " (Missing)";
                     recentProject.Image = ControlGenerator.GetIcon("Warning", _log);
                 }
-                _recentProjects.Items.Add(recentProject);
+                _recentProjects?.Items.Add(recentProject);
             }
-            _recentProjects.Enabled = _recentProjects.Items.Count > 0;
+            if (_recentProjects is not null) { _recentProjects.Enabled = _recentProjects.Items.Count > 0; }
+
+            projectsToRemove.ForEach(project =>
+            {
+                ProjectsCache.RecentProjects.Remove(project);
+                ProjectsCache.RecentWorkspaces.Remove(project);
+            });
+            ProjectsCache.Save(_log);
         }
 
-        private void NewProjectCommand_Executed(object sender, EventArgs e)
+        public void NewProjectCommand_Executed(object sender, EventArgs e)
         {
             ProjectCreationDialog projectCreationDialog = new() { Config = CurrentConfig, Log = _log };
             projectCreationDialog.ShowModal(this);
@@ -202,7 +267,7 @@ namespace SerialLoops
             }
         }
 
-        private void OpenProject_Executed(object sender, EventArgs e)
+        public void OpenProject_Executed(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new() { Directory = new Uri(CurrentConfig.ProjectsDirectory) };
             openFileDialog.Filters.Add(new("Serial Loops Project", $".{Project.PROJECT_FORMAT}"));
@@ -217,7 +282,7 @@ namespace SerialLoops
             OpenProjectFromPath(((Command)sender).ToolTip);
         }
 
-        private void OpenProjectFromPath(string path)
+        public void OpenProjectFromPath(string path)
         {
             LoopyProgressTracker tracker = new();
             _ = new ProgressDialog(() => OpenProject = Project.OpenProject(path, CurrentConfig, _log, tracker), () => 
@@ -329,7 +394,7 @@ namespace SerialLoops
             {
                 bool buildSucceeded = true; // imo it's better to have a false negative than a false positive here
                 LoopyProgressTracker tracker = new("Building:");
-                ProgressDialog loadingDialog = new(async () => buildSucceeded = await Build.BuildIterative(OpenProject, CurrentConfig, _log, tracker), () =>
+                ProgressDialog loadingDialog = new(() => buildSucceeded = Build.BuildIterative(OpenProject, CurrentConfig, _log, tracker), () =>
                 {
                     if (buildSucceeded)
                     {
@@ -350,7 +415,7 @@ namespace SerialLoops
             {
                 bool buildSucceeded = true;
                 LoopyProgressTracker tracker = new("Building:");
-                ProgressDialog loadingDialog = new(async () => buildSucceeded = await Build.BuildBase(OpenProject, CurrentConfig, _log, tracker), () =>
+                ProgressDialog loadingDialog = new(() => buildSucceeded = Build.BuildBase(OpenProject, CurrentConfig, _log, tracker), () =>
                 {
                     if (buildSucceeded)
                     {
@@ -378,7 +443,7 @@ namespace SerialLoops
 
                 bool buildSucceeded = true;
                 LoopyProgressTracker tracker = new("Building:");
-                ProgressDialog loadingDialog = new(async () => buildSucceeded = await Build.BuildIterative(OpenProject, CurrentConfig, _log, tracker), () =>
+                ProgressDialog loadingDialog = new(() => buildSucceeded = Build.BuildIterative(OpenProject, CurrentConfig, _log, tracker), () =>
                 {
                     if (buildSucceeded)
                     {
@@ -407,14 +472,14 @@ namespace SerialLoops
             }
         }
 
-        private void PreferencesCommand_Executed(object sender, EventArgs e)
+        public void PreferencesCommand_Executed(object sender, EventArgs e)
         {
             PreferencesDialog preferencesDialog = new(CurrentConfig, _log);
             preferencesDialog.ShowModal(this);
             CurrentConfig = preferencesDialog.Configuration;
         }
 
-        public void MainForm_Closed(object sender, EventArgs e)
+        public void CloseProject_Executed(object sender, EventArgs e)
         {
             if (OpenProject is not null)
             {
@@ -441,6 +506,7 @@ namespace SerialLoops
                     .Select(i => i.Name)
                     .ToList();
                 ProjectsCache.CacheRecentProject(OpenProject.ProjectFile, openItems);
+                ProjectsCache.HadProjectOpenOnLastClose = true;
                 ProjectsCache.Save(_log);
             }
         }

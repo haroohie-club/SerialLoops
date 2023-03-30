@@ -22,6 +22,7 @@ namespace SerialLoops.Lib
         public string EmulatorPath { get; set; }
         public bool AutoReopenLastProject { get; set; }
         public bool RememberProjectWorkspace { get; set; }
+        public bool RemoveMissingProjects { get; set; }
 
         public void Save(ILogger log)
         {
@@ -100,7 +101,8 @@ namespace SerialLoops.Lib
                 DevkitArmPath = devkitArmDir,
                 EmulatorPath = emulatorPath,
                 AutoReopenLastProject = true,
-                RememberProjectWorkspace = true
+                RememberProjectWorkspace = true,
+                RemoveMissingProjects = false
             };
         }
     }
