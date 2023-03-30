@@ -418,7 +418,7 @@ namespace SerialLoops.Lib.Script
                                 parameters.Add(new BoolScriptParameter("Display?", parameter == 1));
                                 break;
                             case 1:
-                                parameters.Add(new PlaceScriptParameter("Place", parameter));
+                                parameters.Add(new PlaceScriptParameter("Place", (PlaceItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Place && ((PlaceItem)i).Index == parameter)));
                                 break;
                         }
                         break;

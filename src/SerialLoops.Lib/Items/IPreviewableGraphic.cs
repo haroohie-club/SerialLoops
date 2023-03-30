@@ -20,6 +20,7 @@ namespace SerialLoops.Lib.Items
     {
         public static readonly NonePreviewableGraphic BACKGROUND = new(ItemType.Background);
         public static readonly NonePreviewableGraphic CHARACTER_SPRITE = new(ItemType.Character_Sprite);
+        public static readonly NonePreviewableGraphic PLACE = new(ItemType.Place);
 
         private NonePreviewableGraphic(ItemType type) : base("NONE", type, "NONE") { }
 

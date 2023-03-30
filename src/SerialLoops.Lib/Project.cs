@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -200,6 +201,15 @@ namespace SerialLoops.Lib
             Items.AddRange(Dat.Files
                 .Where(d => qmap.QMaps.Select(q => q.Name.Replace(".", "")).Contains(d.Name))
                 .Select(m => new MapItem(m.CastTo<MapFile>(), qmap.QMaps.FindIndex(q => q.Name.Replace(".", "") == m.Name), this)));
+            tracker.Finished++;
+
+            PlaceFile placeFile = Dat.Files.First(f => f.Name == "PLACES").CastTo<PlaceFile>();
+            tracker.Focus("Places", placeFile.PlaceGraphicIndices.Count);
+            for (int i = 0; i < placeFile.PlaceGraphicIndices.Count; i++)
+            {
+                GraphicsFile placeGrp = Grp.Files.First(g => g.Index == placeFile.PlaceGraphicIndices[i]);
+                Items.Add(new PlaceItem(i, placeGrp, this));
+            }
             tracker.Finished++;
 
             tracker.Focus("Puzzles", 1);

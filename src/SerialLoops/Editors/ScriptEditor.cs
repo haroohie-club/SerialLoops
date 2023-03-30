@@ -19,6 +19,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using static HaruhiChokuretsuLib.Archive.Event.EventFile;
+using static QuikGraph.Algorithms.Assignment.HungarianAlgorithm;
 
 namespace SerialLoops.Editors
 {
@@ -169,30 +170,35 @@ namespace SerialLoops.Editors
                             int index = item.Parent is not null ? ((ScriptCommandSectionTreeItem)item.Parent).IndexOf(item) : 0;
                             ScriptCommandInvocation invocation = new(scriptCommand);
 
-                            // Some special case initialization of new commands
-                            switch (Enum.Parse<CommandVerb>(scriptCommand.Mnemonic))
-                            {
-                                case CommandVerb.CHIBI_ENTEREXIT:
-                                    invocation.Parameters[0] = (short)((ChibiItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Chibi)).ChibiIndex;
-                                    break;
+                        // Some special case initialization of new commands
+                        switch (Enum.Parse<CommandVerb>(scriptCommand.Mnemonic))
+                        {
+                            case CommandVerb.CHIBI_ENTEREXIT:
+                            case CommandVerb.CHIBI_EMOTE:
+                                invocation.Parameters[0] = (short)((ChibiItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Chibi)).ChibiIndex;
+                                break;
 
-                                case CommandVerb.DIALOGUE:
-                                    invocation.Parameters[0] = (short)_script.Event.DialogueLines.Count;
-                                    DialogueLine line = new("Replace me".GetOriginalString(_project), _script.Event);
-                                    _script.Event.DialogueLines.Add(line);
-                                    _script.Event.DialogueSection.Objects.Insert(_script.Event.DialogueSection.Objects.Count - 1, line);
-                                    break;
+                            case CommandVerb.DIALOGUE:
+                                invocation.Parameters[0] = (short)_script.Event.DialogueLines.Count;
+                                DialogueLine line = new("Replace me".GetOriginalString(_project), _script.Event);
+                                _script.Event.DialogueLines.Add(line);
+                                _script.Event.DialogueSection.Objects.Insert(_script.Event.DialogueSection.Objects.Count - 1, line);
+                                break;
 
-                                case CommandVerb.KBG_DISP:
-                                    invocation.Parameters[0] = (short)((BackgroundItem)_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).BackgroundType == BgType.KINETIC_SCREEN).First()).Id;
-                                    break;
+                            case CommandVerb.KBG_DISP:
+                                invocation.Parameters[0] = (short)((BackgroundItem)_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).BackgroundType == BgType.KINETIC_SCREEN).First()).Id;
+                                break;
 
-                                case CommandVerb.BG_DISP:
-                                case CommandVerb.BG_DISP2:
-                                case CommandVerb.BG_DISPTEMP:
-                                    invocation.Parameters[0] = (short)((BackgroundItem)_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).BackgroundType != BgType.KINETIC_SCREEN).First()).Id;
+                            case CommandVerb.BG_DISP:
+                            case CommandVerb.BG_DISP2:
+                            case CommandVerb.BG_DISPTEMP:
+                                invocation.Parameters[0] = (short)((BackgroundItem)_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).BackgroundType != BgType.KINETIC_SCREEN).First()).Id;
+                                break;
+
+                            case CommandVerb.SCREEN_FADEOUT:
+                                    invocation.Parameters[1] = 100;
                                     break;
-                            }
+                        }
 
                             ScriptItemCommand command = ScriptItemCommand.FromInvocation(
                                 invocation,
@@ -741,13 +747,14 @@ namespace SerialLoops.Editors
                             case CommandVerb.BG_DISP2:
                             case CommandVerb.BG_FADE:
                                 bgSelectionButton.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background &&
-                                    (((BackgroundItem)i).BackgroundType == BgType.TEX_BOTTOM || ((BackgroundItem)i).BackgroundType == BgType.TEX_BOTTOM_TEMP))
+                                    (((BackgroundItem)i).BackgroundType == BgType.TEX_BOTTOM))
                                     .Select(b => b as IPreviewableGraphic));
                                 break;
 
                             case CommandVerb.BG_DISPTEMP:
                                 bgSelectionButton.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background &&
-                                    ((BackgroundItem)i).BackgroundType != BgType.KINETIC_SCREEN).Select(b => b as IPreviewableGraphic));
+                                    ((BackgroundItem)i).BackgroundType != BgType.KINETIC_SCREEN && ((BackgroundItem)i).BackgroundType != BgType.TEX_BOTTOM)
+                                    .Select(b => b as IPreviewableGraphic));
                                 break;
 
                             case CommandVerb.KBG_DISP:
@@ -1013,9 +1020,21 @@ namespace SerialLoops.Editors
                         break;
 
                     case ScriptParameter.ParameterType.PLACE:
+                        PlaceScriptParameter placeParam = (PlaceScriptParameter)parameter;
+                        CommandGraphicSelectionButton placeSelectionButton = new(placeParam.Place is not null ? placeParam.Place
+                            : NonePreviewableGraphic.PLACE, _tabs, _log)
+                        {
+                            Command = command,
+                            ParameterIndex = i,
+                            Project = _project,
+                        };
+                        placeSelectionButton.Items.Add(NonePreviewableGraphic.PLACE);
+                        placeSelectionButton.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Place)
+                            .Select(p => p as IPreviewableGraphic));
+                        placeSelectionButton.SelectedChanged.Executed += (obj, args) => PlaceSelectionButtonSelectedChanged_Executed(placeSelectionButton, args);
+
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
-                            ControlGenerator.GetControlWithLabel(parameter.Name,
-                            new TextBox { Text = ((PlaceScriptParameter)parameter).PlaceIndex.ToString() }));
+                            ControlGenerator.GetControlWithLabel(parameter.Name, placeSelectionButton));
                         break;
 
                     case ScriptParameter.ParameterType.SCREEN:
@@ -1254,9 +1273,22 @@ namespace SerialLoops.Editors
                 // Draw top screen "kinetic" background
                 for (int i = commands.Count - 1; i >= 0; i--)
                 {
-                    if (commands[i].Verb == EventFile.CommandVerb.KBG_DISP)
+                    if (commands[i].Verb == CommandVerb.KBG_DISP)
                     {
                         canvas.DrawBitmap(((BgScriptParameter)commands[i].Parameters[0]).Background.GetBackground(), new SKPoint(0, 0));
+                        break;
+                    }
+                }
+
+                // Draw Place
+                for (int i = commands.Count - 1; i >= 0; i--)
+                {
+                    if (commands[i].Verb == CommandVerb.SET_PLACE)
+                    {
+                        if (((BoolScriptParameter)commands[i].Parameters[0]).Value)
+                        {
+                            canvas.DrawBitmap(((PlaceScriptParameter)commands[i].Parameters[1]).Place.GetPreview(_project), new SKPoint(10, 10));
+                        }
                         break;
                     }
                 }
@@ -1919,6 +1951,28 @@ namespace SerialLoops.Editors
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
                 .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
                 (short)Enum.Parse<PaletteEffectScriptParameter.PaletteEffect>(dropDown.SelectedKey);
+            UpdateTabTitle(false);
+            Application.Instance.Invoke(() => UpdatePreview());
+        }
+        private void PlaceSelectionButtonSelectedChanged_Executed(object sender, EventArgs e)
+        {
+            CommandGraphicSelectionButton selection = (CommandGraphicSelectionButton)sender;
+            _log.Log($"Attempting to modify parameter {selection.ParameterIndex} to place {((ItemDescription)selection.Selected).Name} in {selection.Command.Index} in file {_script.Name}...");
+            if (((ItemDescription)selection.Selected).Name == "NONE")
+            {
+                ((PlaceScriptParameter)selection.Command.Parameters[selection.ParameterIndex]).Place =
+                    (PlaceItem)_project.Items.FirstOrDefault(i => i.Name == ((ItemDescription)selection.Selected).Name);
+                _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(selection.Command.Section)]
+                    .Objects[selection.Command.Index].Parameters[selection.ParameterIndex] = 0;
+            }
+            else
+            {
+                ((PlaceScriptParameter)selection.Command.Parameters[selection.ParameterIndex]).Place =
+                    (PlaceItem)_project.Items.FirstOrDefault(i => i.Name == ((ItemDescription)selection.Selected).Name);
+                _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(selection.Command.Section)]
+                    .Objects[selection.Command.Index].Parameters[selection.ParameterIndex] =
+                    (short)((PlaceItem)_project.Items.First(i => i.Name == ((ItemDescription)selection.Selected).Name)).Index;
+            }
             UpdateTabTitle(false);
             Application.Instance.Invoke(() => UpdatePreview());
         }
