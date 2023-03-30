@@ -1,6 +1,5 @@
 using Eto.Forms;
 using HaruhiChokuretsuLib.Archive;
-using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
 using SerialLoops.Controls;
 using SerialLoops.Dialogs;

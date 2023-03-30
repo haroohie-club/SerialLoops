@@ -1,15 +1,11 @@
 using Eto.Drawing;
 using Eto.Forms;
 using HaruhiChokuretsuLib.Util;
-using Microsoft.VisualBasic;
 using SerialLoops.Lib;
 using SerialLoops.Utility;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Xml.Linq;
-using static SerialLoops.Dialogs.PreferencesDialog;
 
 namespace SerialLoops.Dialogs
 {
