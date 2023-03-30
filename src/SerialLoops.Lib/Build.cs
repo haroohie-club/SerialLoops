@@ -291,6 +291,12 @@ namespace SerialLoops.Lib
             gcc.Start();
             gcc.WaitForExit();
             Task.Delay(50); // ensures process is actually complete
+            if (gcc.ExitCode != 0)
+            {
+                log.LogError($"gcc exited with code {gcc.ExitCode}");
+                return (string.Empty, string.Empty);
+            }
+
             ProcessStartInfo objcopyStartInfo = new(Path.Combine(devkitArm, "bin", $"arm-none-eabi-objcopy{exeExtension}"), $"-O binary \"{objFile}\" \"{binFile}")
             {
                 CreateNoWindow = true,
@@ -310,6 +316,11 @@ namespace SerialLoops.Lib
             objcopy.Start();
             objcopy.WaitForExit();
             Task.Delay(50); // ensures process is actually complete
+            if (objcopy.ExitCode != 0)
+            {
+                log.LogError($"objcopy exited with code {objcopy.ExitCode}");
+                return (string.Empty, string.Empty);
+            }
 
             return (objFile, binFile);
         }
