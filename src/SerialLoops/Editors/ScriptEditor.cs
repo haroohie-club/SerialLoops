@@ -185,9 +185,8 @@ namespace SerialLoops.Editors
                                     break;
 
                                 case CommandVerb.DIALOGUE:
-                                    invocation.Parameters[0] = (short)_script.Event.DialogueLines.Count;
+                                    invocation.Parameters[0] = (short)(_script.Event.DialogueSection.Objects.Count - 1);
                                     DialogueLine line = new("Replace me".GetOriginalString(_project), _script.Event);
-                                    _script.Event.DialogueLines.Add(line);
                                     _script.Event.DialogueSection.Objects.Insert(_script.Event.DialogueSection.Objects.Count - 1, line);
                                     invocation.Parameters[6] = (short)messInfos.MessageInfos.FindIndex(i => i.Character == line.Speaker);
                                     invocation.Parameters[7] = (short)messInfos.MessageInfos.FindIndex(i => i.Character == line.Speaker);
@@ -1901,7 +1900,7 @@ namespace SerialLoops.Editors
         {
             ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
             MessageInfoFile messInfoFile = _project.Dat.Files.First(d => d.Name == "MESSINFOS").CastTo<MessageInfoFile>();
-            MessageInfo messInfo = messInfoFile.MessageInfos.First(m => m.Character == Enum.Parse<Speaker>(dropDown.SelectedKey));
+            MessageInfo messInfo = messInfoFile.MessageInfos.FirstOrDefault(m => m.Character == Enum.Parse<Speaker>(dropDown.SelectedKey));
             _log.Log($"Attempting to modify dialogue property in parameter {dropDown.ParameterIndex} to dialogue {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
             ((DialoguePropertyScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).DialogueProperties = messInfo;
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)].Objects[dropDown.Command.Index]
