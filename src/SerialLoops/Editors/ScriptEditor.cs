@@ -209,6 +209,12 @@ namespace SerialLoops.Editors
                                     invocation.Parameters[4] = _script.Event.LabelsSection.Objects.First(l => l.Id > 0).Id;
                                     break;
 
+                                case CommandVerb.SCENE_GOTO:
+                                case CommandVerb.SCENE_GOTO2:
+                                    invocation.Parameters[0] = (short)_script.Event.ConditionalsSection.Objects.Count;
+                                    _script.Event.ConditionalsSection.Objects.Add(string.Empty);
+                                    break;
+
                                 case CommandVerb.SCREEN_FADEOUT:
                                     invocation.Parameters[1] = 100;
                                     break;
