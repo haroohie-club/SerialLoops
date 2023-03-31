@@ -192,8 +192,21 @@ namespace SerialLoops.Editors
                                     invocation.Parameters[7] = (short)messInfos.MessageInfos.FindIndex(i => i.Character == line.Speaker);
                                     break;
 
+                                case CommandVerb.FLAG:
+                                case CommandVerb.GLOBAL:
+                                    invocation.Parameters[0] = 1;
+                                    break;
+
                                 case CommandVerb.KBG_DISP:
                                     invocation.Parameters[0] = (short)((BackgroundItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).BackgroundType == BgType.KINETIC_SCREEN)).Id;
+                                    break;
+
+                                case CommandVerb.LOAD_ISOMAP:
+                                    invocation.Parameters[0] = (short)((MapItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Map)).Map.Index;
+                                    break;
+
+                                case CommandVerb.INVEST_START:
+                                    invocation.Parameters[4] = _script.Event.LabelsSection.Objects.First(l => l.Id > 0).Id;
                                     break;
 
                                 case CommandVerb.SCREEN_FADEOUT:
@@ -202,6 +215,12 @@ namespace SerialLoops.Editors
 
                                 case CommandVerb.VCE_PLAY:
                                     invocation.Parameters[0] = (short)((VoicedLineItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Voice)).Index;
+                                    break;
+
+                                case CommandVerb.VGOTO:
+                                    invocation.Parameters[0] = (short)_script.Event.ConditionalsSection.Objects.Count;
+                                    _script.Event.ConditionalsSection.Objects.Add(string.Empty);
+                                    invocation.Parameters[2] = _script.Event.LabelsSection.Objects.First(l => l.Id > 0).Id;
                                     break;
                             }
 
@@ -377,6 +396,7 @@ namespace SerialLoops.Editors
             removeButton.Click += (o, args) =>
             {
                 _script.Event.StartingChibisSection = null;
+                _script.Event.NumSections -= 2;
                 parent.Content = GetStartingChibisAddButton(parent);
                 UpdateTabTitle(false);
                 Application.Instance.Invoke(() => UpdatePreview());
@@ -409,6 +429,7 @@ namespace SerialLoops.Editors
             {
                 _script.Event.StartingChibisSection = new() { Name = "STARTINGCHIBIS" };
                 _script.Event.StartingChibisSection.Objects.Add(new()); // Blank chibi entry
+                _script.Event.NumSections += 2;
                 parent.Content = GetStartingChibisLayout(parent);
                 UpdateTabTitle(false);
                 Application.Instance.Invoke(() => UpdatePreview());
@@ -440,6 +461,7 @@ namespace SerialLoops.Editors
             removeButton.Click += (o, args) =>
             {
                 _script.Event.MapCharactersSection = null;
+                _script.Event.NumSections -= 2;
                 parent.Content = GetAddMapCharactersButton(parent);
                 UpdateTabTitle(false);
                 Application.Instance.Invoke(() => UpdatePreview());
@@ -681,6 +703,7 @@ namespace SerialLoops.Editors
             {
                 _script.Event.MapCharactersSection = new() { Name = "MAPCHARACTERS" };
                 _script.Event.MapCharactersSection.Objects.Add(new()); // Blank map characters entry
+                _script.Event.NumSections += 2;
                 parent.Content = GetMapCharactersLayout(parent);
                 UpdateTabTitle(false);
             };
@@ -1073,7 +1096,11 @@ namespace SerialLoops.Editors
                         break;
 
                     case ScriptParameter.ParameterType.SCRIPT_SECTION:
-                        ScriptCommandDropDown scriptSectionDropDown = new() { Command = command, ParameterIndex = i };
+                        ScriptCommandDropDown scriptSectionDropDown = new() { Command = command, ParameterIndex = i, CurrentShort = i };
+                        if (command.Verb == CommandVerb.VGOTO)
+                        {
+                            scriptSectionDropDown.CurrentShort = 2;
+                        }
                         scriptSectionDropDown.Items.AddRange(_script.Event.ScriptSections.Where(s => (_script.Event.LabelsSection.Objects.FirstOrDefault(l => l.Name.Replace("/", "") == s.Name)?.Id ?? 0) != 0).Select(s => new ListItem { Text = s.Name, Key = s.Name }));
                         scriptSectionDropDown.SelectedKey = ((ScriptSectionScriptParameter)parameter)?.Section?.Name ?? "NONE";
                         scriptSectionDropDown.SelectedKeyChanged += ScriptSectionDropDown_SelectedKeyChanged;
@@ -1291,7 +1318,7 @@ namespace SerialLoops.Editors
 
                 if (commands is null)
                 {
-                    _log.LogError($"Unable to render preview for command as commands list was null.");
+                    _log.LogError($"No path found to current command.");
                     return;
                 }
 
@@ -1924,6 +1951,7 @@ namespace SerialLoops.Editors
             ScriptCommandTextBox textBox = (ScriptCommandTextBox)sender;
             if ((textBox.Text.StartsWith("F", StringComparison.OrdinalIgnoreCase) || textBox.Text.StartsWith("G", StringComparison.OrdinalIgnoreCase)) && short.TryParse(textBox.Text[1..], out short flagId))
             {
+                flagId++;
                 _log.Log($"Attempting to modify parameter {textBox.ParameterIndex} to flag {textBox.Text} in {textBox.Command.Index} in file {_script.Name}...");
                 ((FlagScriptParameter)textBox.Command.Parameters[textBox.ParameterIndex]).Id = flagId;
                 _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(textBox.Command.Section)]
@@ -1936,6 +1964,7 @@ namespace SerialLoops.Editors
             ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
             _log.Log($"Attempting to modify parameter {dropDown.ParameterIndex} to map {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
             ((MapScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Map = (MapItem)_project.FindItem(dropDown.SelectedKey);
+            ((MapScriptParameter)_commands[dropDown.Command.Section][dropDown.Command.Index].Parameters[0]).Map = (MapItem)_project.FindItem(dropDown.SelectedKey);
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
                 .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] = (short)((MapScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Map.Map.Index;
             UpdateTabTitle(false);
@@ -2027,8 +2056,8 @@ namespace SerialLoops.Editors
             _log.Log($"Attempting to modify parameter {dropDown.ParameterIndex} to script section {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
             ((ScriptSectionScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Section = _script.Event.ScriptSections.First(s => s.Name.Replace("/", "") == dropDown.SelectedKey);
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
-                .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
-                _script.Event.LabelsSection.Objects.First(l => ((ScriptSectionScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Section.Name.Replace("/", "") == dropDown.SelectedKey).Id;
+                .Objects[dropDown.Command.Index].Parameters[dropDown.CurrentShort] =
+                _script.Event.LabelsSection.Objects.First(l => l.Name.Replace("/", "") == dropDown.SelectedKey).Id;
             _script.Refresh(_project); // Update command graph
             PopulateScriptCommands();
             UpdateTabTitle(false);

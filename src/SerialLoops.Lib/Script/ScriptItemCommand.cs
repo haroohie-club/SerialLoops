@@ -639,12 +639,7 @@ namespace SerialLoops.Lib.Script
 
         private static DialogueLine GetDialogueLine(short index, EventFile eventFile)
         {
-            return eventFile.DialogueLines[index];
-        }
-
-        private static DialogueLine CreateDialogueLine(EventFile eventFile)
-        {
-            return eventFile.DialogueLines[0]; // todo
+            return eventFile.DialogueSection.Objects[index];
         }
 
         public ScriptItemCommand Clone()
