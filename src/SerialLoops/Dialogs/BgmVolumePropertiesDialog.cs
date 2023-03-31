@@ -56,6 +56,7 @@ namespace SerialLoops.Dialogs
             {
                 _wav.Seek(0, SeekOrigin.Begin);
                 VolumePreview.SetVolume(volumeSlider.Value);
+                _wav.Seek(0, SeekOrigin.Begin);
                 Waveform = new(WaveformRenderer.Render(VolumePreview.Provider, _waveLength, WaveFormRendererSettings.StandardSettings));
                 _wav.Seek(0, SeekOrigin.Begin);
                 _waveformLayout.Items.Clear();
@@ -120,11 +121,13 @@ namespace SerialLoops.Dialogs
 
     public class BgmVolumePreviewItem : ISoundItem
     {
+        private WaveStream _wav;
         public VolumeSampleProvider Provider { get; set; }
 
         public BgmVolumePreviewItem(WaveStream wav)
         {
-            wav.Seek(0, SeekOrigin.Begin);
+            _wav = wav;
+            _wav.Seek(0, SeekOrigin.Begin);
             Provider = new(wav.ToSampleProvider());
         }
 
@@ -135,6 +138,7 @@ namespace SerialLoops.Dialogs
 
         public IWaveProvider GetWaveProvider(ILogger log, bool loop)
         {
+            _wav.Seek(0, SeekOrigin.Begin);
             return Provider.ToWaveProvider16();
         }
     }

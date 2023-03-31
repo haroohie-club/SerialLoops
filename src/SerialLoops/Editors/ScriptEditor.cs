@@ -19,7 +19,6 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using static HaruhiChokuretsuLib.Archive.Event.EventFile;
-using static QuikGraph.Algorithms.Assignment.HungarianAlgorithm;
 
 namespace SerialLoops.Editors
 {
@@ -39,6 +38,7 @@ namespace SerialLoops.Editors
         private CancellationTokenSource _dialogueCancellation, _optionCancellation;
         private System.Timers.Timer _dialogueRefreshTimer;
         private int _chibiHighlighted = -1;
+        private ScriptCommandDropDown _currentSpeakerDropDown; // This property is used for storing the speaker dropdown to append dialogue property dropdowns to
 
         public ScriptEditor(ScriptItem item, Project project, ILogger log, EditorTabsPanel tabs) : base(item, log, project, tabs)
         {
@@ -133,7 +133,7 @@ namespace SerialLoops.Editors
                         )),
                     };
 
-
+                    MessageInfoFile messInfos = _project.Dat.Files.First(d => d.Name == "MESSINFOS").CastTo<MessageInfoFile>();
                     cancelButton.Click += (sender, args) =>
                     {
                         dialog.Close();
@@ -189,6 +189,8 @@ namespace SerialLoops.Editors
                                     DialogueLine line = new("Replace me".GetOriginalString(_project), _script.Event);
                                     _script.Event.DialogueLines.Add(line);
                                     _script.Event.DialogueSection.Objects.Insert(_script.Event.DialogueSection.Objects.Count - 1, line);
+                                    invocation.Parameters[6] = (short)messInfos.MessageInfos.FindIndex(i => i.Character == line.Speaker);
+                                    invocation.Parameters[7] = (short)messInfos.MessageInfos.FindIndex(i => i.Character == line.Speaker);
                                     break;
 
                                 case CommandVerb.KBG_DISP:
@@ -745,26 +747,44 @@ namespace SerialLoops.Editors
 
                         // BGDISPTEMP is able to display a lot more kinds of backgrounds properly than the other BG commands
                         // Hence, this switch to make sure you don't accidentally crash the game
-                        switch (command.Verb)
+                        if (command.Verb == CommandVerb.BG_FADE)
                         {
-                            case CommandVerb.BG_DISP:
-                            case CommandVerb.BG_DISP2:
-                            case CommandVerb.BG_FADE:
-                                bgSelectionButton.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background &&
-                                    (((BackgroundItem)i).BackgroundType == BgType.TEX_BOTTOM))
-                                    .Select(b => b as IPreviewableGraphic));
-                                break;
+                            switch (i)
+                            {
+                                case 0:
+                                    bgSelectionButton.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background &&
+                                        ((BackgroundItem)i).BackgroundType != BgType.KINETIC_SCREEN && ((BackgroundItem)i).BackgroundType != BgType.TEX_BOTTOM)
+                                        .Select(b => b as IPreviewableGraphic));
+                                    break;
+                                case 1:
+                                    bgSelectionButton.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background &&
+                                        (((BackgroundItem)i).BackgroundType == BgType.TEX_BOTTOM))
+                                        .Select(b => b as IPreviewableGraphic));
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            switch (command.Verb)
+                            {
+                                case CommandVerb.BG_DISP:
+                                case CommandVerb.BG_DISP2:
+                                    bgSelectionButton.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background &&
+                                        (((BackgroundItem)i).BackgroundType == BgType.TEX_BOTTOM))
+                                        .Select(b => b as IPreviewableGraphic));
+                                    break;
 
-                            case CommandVerb.BG_DISPTEMP:
-                                bgSelectionButton.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background &&
-                                    ((BackgroundItem)i).BackgroundType != BgType.KINETIC_SCREEN && ((BackgroundItem)i).BackgroundType != BgType.TEX_BOTTOM)
-                                    .Select(b => b as IPreviewableGraphic));
-                                break;
+                                case CommandVerb.BG_DISPTEMP:
+                                    bgSelectionButton.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background &&
+                                        ((BackgroundItem)i).BackgroundType != BgType.KINETIC_SCREEN && ((BackgroundItem)i).BackgroundType != BgType.TEX_BOTTOM)
+                                        .Select(b => b as IPreviewableGraphic));
+                                    break;
 
-                            case CommandVerb.KBG_DISP:
-                                bgSelectionButton.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background &&
-                                    ((BackgroundItem)i).BackgroundType == BgType.KINETIC_SCREEN).Select(b => b as IPreviewableGraphic));
-                                break;
+                                case CommandVerb.KBG_DISP:
+                                    bgSelectionButton.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background &&
+                                        ((BackgroundItem)i).BackgroundType == BgType.KINETIC_SCREEN).Select(b => b as IPreviewableGraphic));
+                                    break;
+                            }
                         }
                         bgSelectionButton.SelectedChanged.Executed += (obj, args) => BgSelectionButton_SelectionMade(bgSelectionButton, args);
 
@@ -906,7 +926,7 @@ namespace SerialLoops.Editors
 
                     case ScriptParameter.ParameterType.DIALOGUE:
                         DialogueScriptParameter dialogueParam = (DialogueScriptParameter)parameter;
-                        ScriptCommandDropDown speakerDropDown = new() { Command = command, ParameterIndex = i };
+                        ScriptCommandDropDown speakerDropDown = new() { Command = command, ParameterIndex = i, OtherDropDowns = new() };
                         speakerDropDown.Items.AddRange(Enum.GetNames<Speaker>().Select(s => new ListItem { Text = s, Key = s }));
                         speakerDropDown.SelectedKey = dialogueParam.Line.Speaker.ToString();
                         speakerDropDown.SelectedKeyChanged += SpeakerDropDown_SelectedKeyChanged;
@@ -916,6 +936,7 @@ namespace SerialLoops.Editors
                             currentRow++;
                             currentCol = 0;
                         }
+                        _currentSpeakerDropDown = speakerDropDown;
 
                         ScriptCommandTextArea dialogueTextArea = new()
                         {
@@ -949,6 +970,7 @@ namespace SerialLoops.Editors
                         dialoguePropertyDropDown.Items.AddRange(Enum.GetNames<Speaker>().Select(t => new ListItem { Text = t, Key = t }));
                         dialoguePropertyDropDown.SelectedKey = ((DialoguePropertyScriptParameter)parameter).DialogueProperties.Character.ToString();
                         dialoguePropertyDropDown.SelectedKeyChanged += DialoguePropertyDropDown_SelectedKeyChanged;
+                        _currentSpeakerDropDown.OtherDropDowns.Add(dialoguePropertyDropDown);
 
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
                             ControlGenerator.GetControlWithLabel(parameter.Name, dialoguePropertyDropDown));
@@ -1309,7 +1331,7 @@ namespace SerialLoops.Editors
                 }
                 for (int i = 0; i < commands.Count; i++)
                 {
-                    if (commands[i].Verb == EventFile.CommandVerb.CHIBI_ENTEREXIT)
+                    if (commands[i].Verb == CommandVerb.CHIBI_ENTEREXIT)
                     {
                         if (((ChibiEnterExitScriptParameter)commands[i].Parameters[1]).Mode == ChibiEnterExitScriptParameter.ChibiEnterExitType.ENTER)
                         {
@@ -1409,16 +1431,16 @@ namespace SerialLoops.Editors
                 }
                 for (int i = commands.Count - 1; i >= 0; i--)
                 {
-                    if (commands[i].Verb == EventFile.CommandVerb.BG_REVERT)
+                    if (commands[i].Verb == CommandVerb.BG_REVERT)
                     {
                         bgReverted = true;
                         continue;
                     }
-                    if (commands[i].Verb == EventFile.CommandVerb.BG_DISP || commands[i].Verb == EventFile.CommandVerb.BG_DISP2 ||
-                        (commands[i].Verb == EventFile.CommandVerb.BG_FADE && (((BgScriptParameter)commands[i].Parameters[1]).Background is not null)) ||
-                        (!bgReverted && (commands[i].Verb == EventFile.CommandVerb.BG_DISPTEMP || commands[i].Verb == EventFile.CommandVerb.BG_FADE)))
+                    if (commands[i].Verb == CommandVerb.BG_DISP || commands[i].Verb == CommandVerb.BG_DISP2 ||
+                        (commands[i].Verb == CommandVerb.BG_FADE && (((BgScriptParameter)commands[i].Parameters[1]).Background is not null)) ||
+                        (!bgReverted && (commands[i].Verb == CommandVerb.BG_DISPTEMP || commands[i].Verb == EventFile.CommandVerb.BG_FADE)))
                     {
-                        BackgroundItem background = (commands[i].Verb == EventFile.CommandVerb.BG_FADE && ((BgScriptParameter)commands[i].Parameters[0]).Background is null) ?
+                        BackgroundItem background = (commands[i].Verb == CommandVerb.BG_FADE && ((BgScriptParameter)commands[i].Parameters[0]).Background is null) ?
                             ((BgScriptParameter)commands[i].Parameters[1]).Background : ((BgScriptParameter)commands[i].Parameters[0]).Background;
                         if (background is not null)
                         {
@@ -1429,7 +1451,7 @@ namespace SerialLoops.Editors
                                     break;
 
                                 case BgType.SINGLE_TEX:
-                                    if (commands[i].Verb == EventFile.CommandVerb.BG_DISPTEMP && ((BoolScriptParameter)commands[i].Parameters[1]).Value)
+                                    if (commands[i].Verb == CommandVerb.BG_DISPTEMP && ((BoolScriptParameter)commands[i].Parameters[1]).Value)
                                     {
                                         SKBitmap bgBitmap = background.GetBackground();
                                         canvas.DrawBitmap(bgBitmap, new SKRect(0, bgBitmap.Height - 194, bgBitmap.Width, bgBitmap.Height),
@@ -1456,7 +1478,7 @@ namespace SerialLoops.Editors
                 ScriptItemCommand previousCommand = null;
                 foreach (ScriptItemCommand command in commands)
                 {
-                    if (previousCommand?.Verb == EventFile.CommandVerb.DIALOGUE)
+                    if (previousCommand?.Verb == CommandVerb.DIALOGUE)
                     {
                         SpriteExitScriptParameter spriteExitMoveParam = (SpriteExitScriptParameter)previousCommand?.Parameters[3]; // exits/moves happen _after_ dialogue is advanced, so we check these at this point
                         if ((spriteExitMoveParam.ExitTransition) != SpriteExitScriptParameter.SpriteExitTransition.NO_EXIT)
@@ -1487,7 +1509,7 @@ namespace SerialLoops.Editors
                             }
                         }
                     }
-                    if (command.Verb == EventFile.CommandVerb.DIALOGUE)
+                    if (command.Verb == CommandVerb.DIALOGUE)
                     {
                         SpriteScriptParameter spriteParam = (SpriteScriptParameter)command.Parameters[1];
                         if (spriteParam.Sprite is not null)
@@ -1537,7 +1559,7 @@ namespace SerialLoops.Editors
                             }
                         }
                     }
-                    else if (command.Verb == EventFile.CommandVerb.INVEST_START)
+                    else if (command.Verb == CommandVerb.INVEST_START)
                     {
                         sprites.Clear();
                     }
@@ -1551,8 +1573,8 @@ namespace SerialLoops.Editors
                 }
 
                 // Draw dialogue
-                ScriptItemCommand lastDialogueCommand = commands.LastOrDefault(c => c.Verb == EventFile.CommandVerb.DIALOGUE);
-                if (commands.FindLastIndex(c => c.Verb == EventFile.CommandVerb.TOGGLE_DIALOGUE &&
+                ScriptItemCommand lastDialogueCommand = commands.LastOrDefault(c => c.Verb == CommandVerb.DIALOGUE);
+                if (commands.FindLastIndex(c => c.Verb == CommandVerb.TOGGLE_DIALOGUE &&
                     !((BoolScriptParameter)c.Parameters[0]).Value) < commands.IndexOf(lastDialogueCommand))
                 {
                     DialogueLine line = ((DialogueScriptParameter)lastDialogueCommand.Parameters[0]).Line;
@@ -1803,11 +1825,19 @@ namespace SerialLoops.Editors
         private void SpeakerDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
             ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
+            string originalSpeaker = ((DialogueScriptParameter)dropDown.Command.Parameters[0]).Line.Speaker.ToString();
             _log.Log($"Attempting to modify speaker in parameter {dropDown.ParameterIndex} to speaker {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
             ((DialogueScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Line.Speaker =
                 Enum.Parse<Speaker>(dropDown.SelectedKey);
             _script.Event.DialogueSection.Objects[dropDown.Command.Section.Objects[dropDown.Command.Index].Parameters[0]].Speaker =
                 Enum.Parse<Speaker>(dropDown.SelectedKey);
+            foreach (ScriptCommandDropDown otherDropDown in dropDown.OtherDropDowns)
+            {
+                if (otherDropDown.SelectedKey == originalSpeaker)
+                {
+                    otherDropDown.SelectedKey = dropDown.SelectedKey;
+                }
+            }
             UpdateTabTitle(false);
             Application.Instance.Invoke(() => UpdatePreview());
         }

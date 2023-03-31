@@ -126,7 +126,7 @@ namespace SerialLoops.Dialogs
             Label backgroundTypeLabel = new();
             if (_selector.SelectedValue is not null)
             {
-                if (((ItemDescription)_selector.SelectedValue).Type == ItemDescription.ItemType.Background)
+                if (((ItemDescription)_selector.SelectedValue).Type == ItemDescription.ItemType.Background && ((ItemDescription)_selector.SelectedValue).Name != "NONE")
                 {
                     backgroundTypeLabel.Text = ((BackgroundItem)_selector.SelectedValue).BackgroundType.ToString();
                 }
