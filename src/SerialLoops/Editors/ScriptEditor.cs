@@ -70,7 +70,7 @@ namespace SerialLoops.Editors
 
             TableRow mainRow = new();
             mainRow.Cells.Add(new TableLayout(GetEditorButtons(treeGridView), _commandsPanel));
-            
+
             _detailsLayout = new() { Spacing = new Size(5, 5) };
             _editorControls = new() { Orientation = Orientation.Horizontal };
 
@@ -170,35 +170,39 @@ namespace SerialLoops.Editors
                             int index = item.Parent is not null ? ((ScriptCommandSectionTreeItem)item.Parent).IndexOf(item) : 0;
                             ScriptCommandInvocation invocation = new(scriptCommand);
 
-                        // Some special case initialization of new commands
-                        switch (Enum.Parse<CommandVerb>(scriptCommand.Mnemonic))
-                        {
-                            case CommandVerb.CHIBI_ENTEREXIT:
-                            case CommandVerb.CHIBI_EMOTE:
-                                invocation.Parameters[0] = (short)((ChibiItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Chibi)).ChibiIndex;
-                                break;
+                            // Some special case initialization of new commands
+                            switch (Enum.Parse<CommandVerb>(scriptCommand.Mnemonic))
+                            {
+                                case CommandVerb.BG_DISP:
+                                case CommandVerb.BG_DISP2:
+                                case CommandVerb.BG_DISPTEMP:
+                                    invocation.Parameters[0] = (short)((BackgroundItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).BackgroundType != BgType.KINETIC_SCREEN)).Id;
+                                    break;
 
-                            case CommandVerb.DIALOGUE:
-                                invocation.Parameters[0] = (short)_script.Event.DialogueLines.Count;
-                                DialogueLine line = new("Replace me".GetOriginalString(_project), _script.Event);
-                                _script.Event.DialogueLines.Add(line);
-                                _script.Event.DialogueSection.Objects.Insert(_script.Event.DialogueSection.Objects.Count - 1, line);
-                                break;
+                                case CommandVerb.CHIBI_ENTEREXIT:
+                                case CommandVerb.CHIBI_EMOTE:
+                                    invocation.Parameters[0] = (short)((ChibiItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Chibi)).ChibiIndex;
+                                    break;
 
-                            case CommandVerb.KBG_DISP:
-                                invocation.Parameters[0] = (short)((BackgroundItem)_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).BackgroundType == BgType.KINETIC_SCREEN).First()).Id;
-                                break;
+                                case CommandVerb.DIALOGUE:
+                                    invocation.Parameters[0] = (short)_script.Event.DialogueLines.Count;
+                                    DialogueLine line = new("Replace me".GetOriginalString(_project), _script.Event);
+                                    _script.Event.DialogueLines.Add(line);
+                                    _script.Event.DialogueSection.Objects.Insert(_script.Event.DialogueSection.Objects.Count - 1, line);
+                                    break;
 
-                            case CommandVerb.BG_DISP:
-                            case CommandVerb.BG_DISP2:
-                            case CommandVerb.BG_DISPTEMP:
-                                invocation.Parameters[0] = (short)((BackgroundItem)_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).BackgroundType != BgType.KINETIC_SCREEN).First()).Id;
-                                break;
+                                case CommandVerb.KBG_DISP:
+                                    invocation.Parameters[0] = (short)((BackgroundItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).BackgroundType == BgType.KINETIC_SCREEN)).Id;
+                                    break;
 
-                            case CommandVerb.SCREEN_FADEOUT:
+                                case CommandVerb.SCREEN_FADEOUT:
                                     invocation.Parameters[1] = 100;
                                     break;
-                        }
+
+                                case CommandVerb.VCE_PLAY:
+                                    invocation.Parameters[0] = (short)((VoicedLineItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Voice)).Index;
+                                    break;
+                            }
 
                             ScriptItemCommand command = ScriptItemCommand.FromInvocation(
                                 invocation,
@@ -367,7 +371,7 @@ namespace SerialLoops.Editors
                 UpdateTabTitle(false);
                 Application.Instance.Invoke(() => UpdatePreview());
             };
-            
+
             Button removeButton = new() { Text = "Remove Starting Chibis" };
             removeButton.Click += (o, args) =>
             {
@@ -465,7 +469,7 @@ namespace SerialLoops.Editors
             mapLayout.Add(mapImage, 0, 0);
 
             SKPoint gridZero = maps[0].GetOrigin(_project.Grp);
-            Dictionary<PointF,Point> grid = new();
+            Dictionary<PointF, Point> grid = new();
             for (int y = 0; y < maps[0].Map.PathingMap.Length; y++)
             {
                 for (int x = 0; x < maps[0].Map.PathingMap[y].Length; x++)
@@ -551,7 +555,7 @@ namespace SerialLoops.Editors
                     mapAndDetailsLayout,
                     new StackLayout
                     {
-                        Orientation = Orientation.Horizontal,   
+                        Orientation = Orientation.Horizontal,
                         Spacing = 5,
                         Items =
                         {
@@ -620,7 +624,7 @@ namespace SerialLoops.Editors
                 void chibiEventHandler(object o, EventArgs args)
                 {
                     ChibiItem newChibi = (ChibiItem)_project.Items.First(i => i.Name == chibisSelectorDropDown.SelectedKey);
-                    if (newChibi.ChibiAnimations.Count <= (short) facingDirectionSelector.Direction)
+                    if (newChibi.ChibiAnimations.Count <= (short)facingDirectionSelector.Direction)
                     {
                         facingDirectionSelector.Direction = ChibiItem.Direction.DOWN_LEFT;
                     }
@@ -1049,7 +1053,7 @@ namespace SerialLoops.Editors
 
                     case ScriptParameter.ParameterType.SCRIPT_SECTION:
                         ScriptCommandDropDown scriptSectionDropDown = new() { Command = command, ParameterIndex = i };
-                        scriptSectionDropDown.Items.AddRange(_script.Event.ScriptSections.Where(s => (_script.Event.LabelsSection.Objects.FirstOrDefault(l => l.Name == s.Name)?.Id ?? 0) != 0).Select(s => new ListItem { Text = s.Name, Key = s.Name }));
+                        scriptSectionDropDown.Items.AddRange(_script.Event.ScriptSections.Where(s => (_script.Event.LabelsSection.Objects.FirstOrDefault(l => l.Name.Replace("/", "") == s.Name)?.Id ?? 0) != 0).Select(s => new ListItem { Text = s.Name, Key = s.Name }));
                         scriptSectionDropDown.SelectedKey = ((ScriptSectionScriptParameter)parameter)?.Section?.Name ?? "NONE";
                         scriptSectionDropDown.SelectedKeyChanged += ScriptSectionDropDown_SelectedKeyChanged;
 
@@ -1287,7 +1291,7 @@ namespace SerialLoops.Editors
                     {
                         if (((BoolScriptParameter)commands[i].Parameters[0]).Value)
                         {
-                            canvas.DrawBitmap(((PlaceScriptParameter)commands[i].Parameters[1]).Place.GetPreview(_project), new SKPoint(10, 10));
+                            canvas.DrawBitmap(((PlaceScriptParameter)commands[i].Parameters[1]).Place.GetPreview(_project), new SKPoint(5, 40));
                         }
                         break;
                     }

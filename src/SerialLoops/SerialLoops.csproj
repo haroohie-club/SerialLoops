@@ -30,7 +30,7 @@
     <None Remove="Icons\Open.png" />
     <None Remove="Icons\Options.png" />
     <None Remove="Icons\Pathing.png" />
-    <None Remove="Icons\Place_Icon.png" />
+    <None Remove="Icons\Place.png" />
     <None Remove="Icons\Project_Options.png" />
     <None Remove="Icons\Puzzle.png" />
     <None Remove="Icons\Remove.png" />
