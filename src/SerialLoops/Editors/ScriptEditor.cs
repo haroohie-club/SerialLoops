@@ -39,6 +39,7 @@ namespace SerialLoops.Editors
         private System.Timers.Timer _dialogueRefreshTimer;
         private int _chibiHighlighted = -1;
         private ScriptCommandDropDown _currentSpeakerDropDown; // This property is used for storing the speaker dropdown to append dialogue property dropdowns to
+        private Action _updateOptionDropDowns;
 
         public ScriptEditor(ScriptItem item, Project project, ILogger log, EditorTabsPanel tabs) : base(item, log, project, tabs)
         {
@@ -285,7 +286,6 @@ namespace SerialLoops.Editors
                     )),
                 };
 
-
                 cancelButton.Click += (sender, args) =>
                 {
                     dialog.Close();
@@ -303,6 +303,7 @@ namespace SerialLoops.Editors
                     treeGridView.AddSection(new(section, true));
                     _script.Refresh(_project); // Have to recreate the command graph
                     PopulateScriptCommands();
+                    _updateOptionDropDowns();
                 };
 
                 dialog.ShowModal(this);
@@ -322,6 +323,7 @@ namespace SerialLoops.Editors
                     treeGridView.DeleteItem(treeGridView.SelectedCommandTreeItem);
                     _script.Refresh(_project); // Have to recreate the command graph
                     PopulateScriptCommands();
+                    _updateOptionDropDowns();
                 }
             };
 
@@ -364,11 +366,16 @@ namespace SerialLoops.Editors
             TabPage choicesPage = new() { Text = "Choices" };
             if (_script.Event.ChoicesSection is not null)
             {
-                choicesPage.Content = GetChoicesStackLayout(mapCharactersPage);
+                choicesPage.Content = GetChoicesStackLayout(choicesPage);
+            }
+            else
+            {
+
             }
 
             propertiesTabs.Pages.Add(startingChibisPage);
             propertiesTabs.Pages.Add(mapCharactersPage);
+            propertiesTabs.Pages.Add(choicesPage);
 
             return propertiesTabs;
         }
@@ -739,22 +746,79 @@ namespace SerialLoops.Editors
                 Spacing = 3,
             };
 
-            foreach (ChoicesSectionEntry choice in _script.Event.ChoicesSection.Objects)
+            foreach (ChoicesSectionEntry choice in _script.Event.ChoicesSection.Objects.Skip(1).SkipLast(1))
             {
-                TextBox choiceTextBox = new() { Text = choice.Text.GetSubstitutedString(_project) };
-
-                choicesLayout.Items.Add(new StackLayout
-                {
-                    Orientation = Orientation.Horizontal,
-                    Spacing = 3,
-                    Items =
-                    {
-
-                    },
-                });
+                choicesLayout.Items.Add(GetChoiceLayout(choice, choicesLayout));
             }
 
+            Button addButton = new() { Image = ControlGenerator.GetIcon("Add", _log) };
+            addButton.Click += (obj, args) =>
+            {
+                ChoicesSectionEntry choice = new()
+                {
+                    Id = _script.Event.LabelsSection.Objects
+                        .FirstOrDefault(l => l.Id > 0 && _script.Event.ChoicesSection.Objects.All(c => c.Id != l.Id))?.Id ?? 0,
+                    Text = string.Empty,
+                };
+                _script.Event.ChoicesSection.Objects.Insert(_script.Event.ChoicesSection.Objects.Count - 1, choice);
+                choicesLayout.Items.Insert(choicesLayout.Items.Count - 1, GetChoiceLayout(choice, choicesLayout));
+                UpdateTabTitle(false);
+            };
+            choicesLayout.Items.Add(addButton);
+
+            _updateOptionDropDowns = () =>
+            {
+                parent.Content = GetChoicesStackLayout(parent);
+            };
+
             return choicesLayout;
+        }
+
+        private StackLayout GetChoiceLayout(ChoicesSectionEntry choice, StackLayout parent)
+        {
+            StackLayout choiceLayout = new()
+            {
+                Orientation = Orientation.Horizontal,
+                Spacing = 3,
+            };
+
+            TextBox choiceTextBox = new() { Text = choice.Text.GetSubstitutedString(_project) };
+            choiceTextBox.TextChanged += (obj, args) =>
+            {
+                choice.Text = choiceTextBox.Text.GetOriginalString(_project);
+                UpdateTabTitle(false);
+            };
+
+            DropDown scriptSectionDropDown = new();
+            scriptSectionDropDown.Items.Add(new ListItem { Key = "0", Text = "NONE" });
+            scriptSectionDropDown.Items.AddRange(_script.Event.LabelsSection.Objects.Where(l => l.Id > 0).Select(l => new ListItem { Key = l.Id.ToString(), Text = l.Name.Replace("/", "") }));
+            scriptSectionDropDown.SelectedKey = choice.Id.ToString();
+            scriptSectionDropDown.SelectedKeyChanged += (obj, args) =>
+            {
+                short newId = short.Parse(scriptSectionDropDown.SelectedKey);
+                if (_script.Event.ChoicesSection.Objects.Any(c => c.Id == newId))
+                {
+                    _script.Event.ChoicesSection.Objects.First(c => c.Id == newId).Id = choice.Id;
+                }
+                choice.Id = newId;
+                _updateOptionDropDowns();
+                UpdateTabTitle(false);
+            };
+
+            Button removeButton = new() { Image = ControlGenerator.GetIcon("Remove", _log) };
+            removeButton.Click += (obj, args) =>
+            {
+                _script.Event.ChoicesSection.Objects.Remove(choice);
+                parent.Items.Remove(choiceLayout);
+                _updateOptionDropDowns();
+                UpdateTabTitle(false);
+            };
+
+            choiceLayout.Items.Add(choiceTextBox);
+            choiceLayout.Items.Add(scriptSectionDropDown);
+            choiceLayout.Items.Add(removeButton);
+
+            return choiceLayout;
         }
 
         private void CommandsPanel_SelectedItemChanged(object sender, EventArgs e)
@@ -807,44 +871,26 @@ namespace SerialLoops.Editors
 
                         // BGDISPTEMP is able to display a lot more kinds of backgrounds properly than the other BG commands
                         // Hence, this switch to make sure you don't accidentally crash the game
-                        if (command.Verb == CommandVerb.BG_FADE)
+                        switch (command.Verb)
                         {
-                            switch (i)
-                            {
-                                case 0:
-                                    bgSelectionButton.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background &&
-                                        ((BackgroundItem)i).BackgroundType != BgType.KINETIC_SCREEN && ((BackgroundItem)i).BackgroundType != BgType.TEX_BOTTOM)
-                                        .Select(b => b as IPreviewableGraphic));
-                                    break;
-                                case 1:
-                                    bgSelectionButton.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background &&
-                                        (((BackgroundItem)i).BackgroundType == BgType.TEX_BOTTOM))
-                                        .Select(b => b as IPreviewableGraphic));
-                                    break;
-                            }
-                        }
-                        else
-                        {
-                            switch (command.Verb)
-                            {
-                                case CommandVerb.BG_DISP:
-                                case CommandVerb.BG_DISP2:
-                                    bgSelectionButton.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background &&
-                                        (((BackgroundItem)i).BackgroundType == BgType.TEX_BOTTOM))
-                                        .Select(b => b as IPreviewableGraphic));
-                                    break;
+                            case CommandVerb.BG_DISP:
+                            case CommandVerb.BG_DISP2:
+                                bgSelectionButton.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background &&
+                                    (((BackgroundItem)i).BackgroundType == BgType.TEX_BOTTOM))
+                                    .Select(b => b as IPreviewableGraphic));
+                                break;
 
-                                case CommandVerb.BG_DISPTEMP:
-                                    bgSelectionButton.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background &&
-                                        ((BackgroundItem)i).BackgroundType != BgType.KINETIC_SCREEN && ((BackgroundItem)i).BackgroundType != BgType.TEX_BOTTOM)
-                                        .Select(b => b as IPreviewableGraphic));
-                                    break;
+                            case CommandVerb.BG_DISPTEMP:
+                            case CommandVerb.BG_FADE:
+                                bgSelectionButton.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background &&
+                                    ((BackgroundItem)i).BackgroundType != BgType.KINETIC_SCREEN && ((BackgroundItem)i).BackgroundType != BgType.TEX_BOTTOM)
+                                    .Select(b => b as IPreviewableGraphic));
+                                break;
 
-                                case CommandVerb.KBG_DISP:
-                                    bgSelectionButton.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background &&
-                                        ((BackgroundItem)i).BackgroundType == BgType.KINETIC_SCREEN).Select(b => b as IPreviewableGraphic));
-                                    break;
-                            }
+                            case CommandVerb.KBG_DISP:
+                                bgSelectionButton.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background &&
+                                    ((BackgroundItem)i).BackgroundType == BgType.KINETIC_SCREEN).Select(b => b as IPreviewableGraphic));
+                                break;
                         }
                         bgSelectionButton.SelectedChanged.Executed += (obj, args) => BgSelectionButton_SelectionMade(bgSelectionButton, args);
 
@@ -1074,25 +1120,13 @@ namespace SerialLoops.Editors
 
                     case ScriptParameter.ParameterType.OPTION:
                         OptionScriptParameter optionParam = (OptionScriptParameter)parameter;
-                        ScriptCommandDropDown optionScriptSectionDropDown = new() { Command = command, ParameterIndex = i };
-                        optionScriptSectionDropDown.Items.Add(new ListItem { Text = "NONE", Key = "NONE" });
-                        optionScriptSectionDropDown.Items.AddRange(_script.Event.ScriptSections.Skip(1).Select(s => new ListItem { Text = s.Name, Key = s.Name }));
-                        optionScriptSectionDropDown.SelectedKey = optionParam.Option.Id == 0 ? "NONE" : _script.Event.LabelsSection.Objects.First(l => l.Id == optionParam.Option.Id).Name.Replace("/", "");
-                        optionScriptSectionDropDown.SelectedKeyChanged += OptionScriptSectionDropDown_SelectedKeyChanged;
-
-                        ScriptCommandTextBox optionTextBox = new() { Command = command, ParameterIndex = i, Text = optionParam.Option.Text.GetSubstitutedString(_project) };
-                        optionTextBox.TextChanged += OptionTextBox_TextChanged;
+                        ScriptCommandDropDown optionDropDown = new() { Command = command, ParameterIndex = i };
+                        optionDropDown.Items.AddRange(_script.Event.ChoicesSection.Objects.Skip(1).SkipLast(1).Select(c => new ListItem { Text = c.Text.GetSubstitutedString(_project), Key = c.Id.ToString() }));
+                        optionDropDown.SelectedKey = optionParam.Option.Id.ToString();
+                        optionDropDown.SelectedKeyChanged += OptionDropDown_SelectedKeyChanged;
 
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
-                            ControlGenerator.GetControlWithLabel(parameter.Name, new StackLayout
-                            {
-                                Orientation = Orientation.Horizontal,
-                                Items =
-                                {
-                                    optionScriptSectionDropDown,
-                                    new StackLayoutItem(optionTextBox, expand: true),
-                                }
-                            }));
+                            ControlGenerator.GetControlWithLabel(parameter.Name, optionDropDown));
                         break;
 
                     case ScriptParameter.ParameterType.PALETTE_EFFECT:
@@ -2017,40 +2051,17 @@ namespace SerialLoops.Editors
                 .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] = (short)((MapScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Map.Map.Index;
             UpdateTabTitle(false);
         }
-        private void OptionScriptSectionDropDown_SelectedKeyChanged(object sender, EventArgs e)
+        private void OptionDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
             ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
-            _log.Log($"Attempting to modify script section in parameter {dropDown.ParameterIndex} to script section {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
-            short newScriptSectionId = _script.Event.LabelsSection.Objects.First(l => ((OptionScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Option.Text.Replace("/", "") == dropDown.SelectedKey).Id;
-            ((OptionScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Option.Id = newScriptSectionId;
-            _script.Event.ChoicesSection.Objects[dropDown.ParameterIndex].Id = newScriptSectionId;
+            _log.Log($"Attempting to modify option in parameter {dropDown.ParameterIndex} to option {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
+            ChoicesSectionEntry choice = _script.Event.ChoicesSection.Objects.First(c => c.Id.ToString() == dropDown.SelectedKey);
+            ((OptionScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Option = choice;
+            _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
+                .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] = (short)_script.Event.ChoicesSection.Objects.IndexOf(choice);
             UpdateTabTitle(false);
-        }
-        private void OptionTextBox_TextChanged(object sender, EventArgs e)
-        {
-            ScriptCommandTextBox textBox = (ScriptCommandTextBox)sender;
-
-            textBox.Text = Regex.Replace(textBox.Text, @"^""", "“");
-            textBox.Text = Regex.Replace(textBox.Text, @"""\s", "“");
-            textBox.Text = textBox.Text.Replace('"', '”');
-
-            _log.Log($"Attempting to modify option text in parameter {textBox.ParameterIndex} to text '{textBox.Text}' in '{textBox.Command.Index}' in file {_script.Name}...");
-
-            _optionCancellation?.Cancel();
-            _optionCancellation = new();
-
-            string text = textBox.Text;
-            ScriptItemCommand command = textBox.Command;
-            int parameterIndex = textBox.ParameterIndex;
-            Task task = new(() =>
-            {
-                string originalText = text.GetOriginalString(_project);
-                ((OptionScriptParameter)command.Parameters[parameterIndex]).Option.Text = originalText;
-                _script.Event.ChoicesSection.Objects[command.Section.Objects[command.Index].Parameters[0]].Text = originalText;
-                _optionCancellation = null;
-            }, _optionCancellation.Token);
-            task.Start();
-            UpdateTabTitle(false);
+            _script.Refresh(_project);
+            PopulateScriptCommands();
         }
         private void PaletteEffectDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {

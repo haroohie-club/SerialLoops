@@ -144,6 +144,9 @@ namespace SerialLoops
             Command buildAndRunProject = new() { MenuText = "Build and Run", ToolBarText = "Run", Image = ControlGenerator.GetIcon("Build_Run", _log) };
             buildAndRunProject.Executed += BuildAndRunProject_Executed;
 
+            Command patch = new() { MenuText = "Patch", ToolBarText = "Patch" };
+            patch.Executed += Patch_Executed;
+
             // Add toolbar
             ToolBar = new ToolBar
             {
@@ -469,6 +472,23 @@ namespace SerialLoops
                         _log.LogError("Build failed!");
                     }
                 }, tracker, "Building and Running");
+            }
+        }
+
+        private void Patch_Executed(object sender, EventArgs e)
+        {
+            OpenFileDialog baseRomDialog = new() { Title = "Select base ROM" };
+            baseRomDialog.Filters.Add(new() { Name = "NDS ROM", Extensions = new string[] { ".nds" } });
+            if (baseRomDialog.ShowAndReportIfFileSelected(this))
+            {
+                string currentRom = Path.Combine(OpenProject.MainDirectory, $"{OpenProject.Name}.nds");
+
+                SaveFileDialog outputPatchDialog = new() { Title = "Output patch location" };
+                outputPatchDialog.Filters.Add(new() { Name = "XDelta patch", Extensions = new string[] { ".xdelta" } });
+                if (outputPatchDialog.ShowAndReportIfFileSelected(this))
+                {
+                    MessageBox.Show("Patching is not currently implemented.");
+                }
             }
         }
 
