@@ -88,6 +88,9 @@ namespace SerialLoops
             Command openProject = new() { MenuText = "Open Project...", ToolBarText = "Open Project", Image = ControlGenerator.GetIcon("Open", _log) };
             openProject.Executed += OpenProject_Executed;
 
+            Command exportPatch = new() { MenuText = "Export Patch", ToolBarText = "Export Patch" };
+            exportPatch.Executed += Patch_Executed;
+
             // Application Items
             Command preferencesCommand = new();
             preferencesCommand.Executed += PreferencesCommand_Executed;
@@ -104,7 +107,7 @@ namespace SerialLoops
                 Items =
                 {
                     // File submenu
-                    new SubMenuItem { Text = "&File", Items = { newProject, openProject, _recentProjects } }
+                    new SubMenuItem { Text = "&File", Items = { newProject, openProject, _recentProjects, exportPatch } }
                 },
                 ApplicationItems =
                 {
@@ -144,9 +147,6 @@ namespace SerialLoops
             Command buildAndRunProject = new() { MenuText = "Build and Run", ToolBarText = "Run", Image = ControlGenerator.GetIcon("Build_Run", _log) };
             buildAndRunProject.Executed += BuildAndRunProject_Executed;
 
-            Command patch = new() { MenuText = "Patch", ToolBarText = "Patch" };
-            patch.Executed += Patch_Executed;
-
             // Add toolbar
             ToolBar = new ToolBar
             {
@@ -168,7 +168,7 @@ namespace SerialLoops
             }
 
             Menu.Items.Add(new SubMenuItem { Text = "&Tools", Items = { searchProject, findOrphanedItems } });
-            Menu.Items.Add(new SubMenuItem { Text = "&Build", Items = { buildIterativeProject, buildBaseProject, buildAndRunProject, patch } });
+            Menu.Items.Add(new SubMenuItem { Text = "&Build", Items = { buildIterativeProject, buildBaseProject, buildAndRunProject } });
         }
 
         private void LoadCachedData(Project project, IProgressTracker tracker)
