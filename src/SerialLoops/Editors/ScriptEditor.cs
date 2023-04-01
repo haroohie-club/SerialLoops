@@ -198,6 +198,10 @@ namespace SerialLoops.Editors
                                     invocation.Parameters[0] = 1;
                                     break;
 
+                                case CommandVerb.GOTO:
+                                    invocation.Parameters[0] = _script.Event.LabelsSection.Objects.First(l => l.Id > 0).Id;
+                                    break;
+
                                 case CommandVerb.KBG_DISP:
                                     invocation.Parameters[0] = (short)((BackgroundItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).BackgroundType == BgType.KINETIC_SCREEN)).Id;
                                     break;
