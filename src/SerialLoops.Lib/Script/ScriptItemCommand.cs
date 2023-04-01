@@ -15,6 +15,7 @@ namespace SerialLoops.Lib.Script
 {
     public class ScriptItemCommand
     {
+        public ScriptCommandInvocation Invocation { get; set; }
         public CommandVerb Verb { get; set; }
         public List<ScriptParameter> Parameters { get; set; }
         public ScriptSection Section { get; set; }
@@ -26,6 +27,7 @@ namespace SerialLoops.Lib.Script
         {
             return new()
             {
+                Invocation = invocation,
                 Verb = (CommandVerb)Enum.Parse(typeof(CommandVerb), invocation.Command.Mnemonic),
                 Parameters = GetScriptParameters(invocation, eventFile, project),
                 Section = section,
@@ -646,10 +648,12 @@ namespace SerialLoops.Lib.Script
         {
             return new()
             {
+                Invocation = Invocation,
                 Verb = Verb,
                 Parameters = Parameters.Select(p => p.Clone()).ToList(),
                 Section = Section,
                 Index = Index,
+                Script = Script,
                 Project = Project,
             };
         }

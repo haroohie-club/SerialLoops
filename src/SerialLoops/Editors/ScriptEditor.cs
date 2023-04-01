@@ -250,7 +250,7 @@ namespace SerialLoops.Editors
                                 _project
                             );
 
-                            treeGridView.AddItem(new(new(command), false), command, invocation);
+                            treeGridView.AddItem(new(new(command), scriptSection, command, false));
                             // Regenerate the command tree
                             _script.Refresh(_project);
                             PopulateScriptCommands();
@@ -311,7 +311,7 @@ namespace SerialLoops.Editors
 
                     dialog.Close();
                     ScriptCommandSectionEntry section = new($"NONE{labelBox.Text}", new List<ScriptCommandSectionEntry>(), _script.Event);
-                    treeGridView.AddSection(new(section, true));
+                    treeGridView.AddSection(new(section, null, null, true));
                     _script.Refresh(_project); // Have to recreate the command graph
                     PopulateScriptCommands();
                     _updateOptionDropDowns();

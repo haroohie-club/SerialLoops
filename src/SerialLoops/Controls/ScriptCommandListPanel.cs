@@ -3,11 +3,9 @@ using Eto.Forms;
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Editors;
-using SerialLoops.Lib;
 using SerialLoops.Lib.Script;
 using System.Collections.Generic;
 using System.Linq;
-using static System.Collections.Specialized.BitVector32;
 
 namespace SerialLoops.Controls
 {
@@ -123,9 +121,9 @@ namespace SerialLoops.Controls
 
                 if (string.IsNullOrEmpty(e.SectionTitle))
                 {
-                    e.Command.Script.ScriptSections[e.Command.Script.ScriptSections.IndexOf(e.Command.Section)].Objects.Insert(e.Command.Index, e.Invocation);
+                    e.Command.Script.ScriptSections[e.Command.Script.ScriptSections.IndexOf(e.Command.Section)].Objects.Insert(e.Command.Index, e.Command.Invocation);
                     _commands[e.Command.Section].Insert(e.Command.Index, e.Command);
-                    for (int i = e.Command.Section.Objects.IndexOf(e.Invocation) + 1; i < e.Command.Section.Objects.Count; i++)
+                    for (int i = e.Command.Section.Objects.IndexOf(e.Command.Invocation) + 1; i < e.Command.Section.Objects.Count; i++)
                     {
                         _commands[e.Command.Section][i].Index++;
                     }
@@ -164,9 +162,9 @@ namespace SerialLoops.Controls
                 {
                     commands.Add(new(command));
                 }
-                ScriptCommandSectionEntry s = new(section.Name, commands, Commands.Values.First().First().Script);
+                ScriptCommandSectionEntry s = new(section, commands, Commands.Values.First().First().Script);
             }
-            return Commands.Select(s => new ScriptCommandSectionEntry(s.Key.Name, s.Value.Select(c => new ScriptCommandSectionEntry(c)), Commands.Values.First().First().Script));
+            return Commands.Select(s => new ScriptCommandSectionEntry(s.Key, s.Value.Select(c => new ScriptCommandSectionEntry(c)), Commands.Values.First().First().Script));
         }
     }
 }

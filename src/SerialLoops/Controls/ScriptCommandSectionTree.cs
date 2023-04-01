@@ -1,7 +1,6 @@
 ﻿using Eto.Drawing;
 using Eto.Forms;
 using HaruhiChokuretsuLib.Archive.Event;
-using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
 using System;
 using System.Collections.Generic;
@@ -13,6 +12,7 @@ namespace SerialLoops.Controls
     {
         public EventFile ScriptFile { get; set; }
         public ScriptItemCommand Command { get; set; }
+        public ScriptSection Section { get; set; }
         public string Text { get; set; }
 
         public ScriptCommandSectionEntry(ScriptItemCommand command)
@@ -22,10 +22,18 @@ namespace SerialLoops.Controls
             Text = Command.ToString();
         }
 
-        public ScriptCommandSectionEntry(string text, IEnumerable<ScriptCommandSectionEntry> commands, EventFile scriptFile)
+        public ScriptCommandSectionEntry(ScriptSection section, IEnumerable<ScriptCommandSectionEntry> commands, EventFile scriptFile)
             : base(commands.ToArray())
         {
-            Text = text;
+            Section = section;
+            Text = section.Name;
+            ScriptFile = scriptFile;
+        }
+
+        public ScriptCommandSectionEntry(string name, IEnumerable<ScriptCommandSectionEntry> commands, EventFile scriptFile)
+            : base(commands.ToArray())
+        {
+            Text = name;
             ScriptFile = scriptFile;
         }
 
@@ -49,21 +57,34 @@ namespace SerialLoops.Controls
         public bool Expandable => Count > 0;
         public ITreeGridItem Parent { get; set; }
 
-        public ScriptCommandSectionTreeItem(ScriptCommandSectionEntry section, bool expanded)
+        public ScriptSection ScriptSection { get; set; }
+        public ScriptItemCommand Command { get; set; }
+
+        public ScriptCommandSectionTreeItem(ScriptCommandSectionEntry section, ScriptSection scriptSection, ScriptItemCommand command, bool expanded)
         {
             Section = section;
             Expanded = expanded;
+            ScriptSection = scriptSection;
+            Command = command;
             
             foreach (var child in section)
             {
-                ScriptCommandSectionTreeItem temp = new(child, expanded) { Parent = this };
+                ScriptCommandSectionTreeItem temp = new(child, child.Section, child.Command, expanded) { Parent = this };
                 Add(temp); // recursive
             }
         }
 
         internal ScriptCommandSectionTreeItem Clone()
         {
-            return new(Section.Clone(), Expanded);
+            return new(Section.Clone(),
+                ScriptSection is null ? null : new() 
+                { 
+                    Name = ScriptSection.Name,
+                    CommandsAvailable = ScriptSection.CommandsAvailable,
+                    Objects = ScriptSection.Objects.ToList(),
+                    SectionType = ScriptSection.SectionType,
+                    ObjectType = ScriptSection.ObjectType,
+                }, Command?.Clone(), Expanded);
         }
     }
 
@@ -77,6 +98,7 @@ namespace SerialLoops.Controls
     {
         private TreeGridView _treeView;
         private ScriptCommandSectionTreeItem _cursorItem;
+        private Dictionary<ScriptSection, List<ScriptItemCommand>> _commands;
         public event EventHandler RepositionCommand;
         public event EventHandler DeleteCommand;
         public event EventHandler<CommandEventArgs> AddCommand;
@@ -212,7 +234,7 @@ namespace SerialLoops.Controls
             _treeView.SelectedItem = parent[newIndex];
         }
 
-        internal void AddItem(ScriptCommandSectionTreeItem item, ScriptItemCommand command, ScriptCommandInvocation invocation)
+        internal void AddItem(ScriptCommandSectionTreeItem item)
         {
             if (SelectedCommandTreeItem is null) return;
             if (SelectedCommandTreeItem.Parent is ScriptCommandSectionTreeItem parent && !parent.Text.Equals("Top"))
@@ -221,16 +243,16 @@ namespace SerialLoops.Controls
                 int index = parent.IndexOf(SelectedCommandTreeItem);
                 if (index == -1) return;
                 parent.Insert(index + 1, item);
-                command.Index = index + 1;
+                item.Command.Index = index + 1;
             }
             else if (SelectedCommandTreeItem.Parent is ScriptCommandSectionTreeItem top)
             {
                 item.Parent = SelectedCommandTreeItem;
                 SelectedCommandTreeItem.Insert(0, item);
-                command.Index = 0;
+                item.Command.Index = 0;
             }
             
-            AddCommand?.Invoke(this, new(command, invocation)); //todo invoke this with the new item args
+            AddCommand?.Invoke(this, new(item.Command)); //todo invoke this with the new item args
             _treeView.SelectedItem = item;
             _treeView.DataStore = _treeView.DataStore;
         }
@@ -249,7 +271,7 @@ namespace SerialLoops.Controls
 
         public void SetContents(IEnumerable<ScriptCommandSectionEntry> topNodes, bool expanded)
         {
-            _treeView.DataStore = new ScriptCommandSectionTreeItem(new ScriptCommandSectionEntry("Top", topNodes, null), expanded);
+            _treeView.DataStore = new ScriptCommandSectionTreeItem(new ScriptCommandSectionEntry("Top", topNodes, null), null, null, expanded);
         }
 
         public ScriptCommandSectionEntry FindSection(string text)
@@ -262,13 +284,11 @@ namespace SerialLoops.Controls
     public class CommandEventArgs : EventArgs
     {
         public ScriptItemCommand Command { get; set; }
-        public ScriptCommandInvocation Invocation { get; set; }
         public string SectionTitle { get; set; }
 
-        public CommandEventArgs(ScriptItemCommand command, ScriptCommandInvocation invocation)
+        public CommandEventArgs(ScriptItemCommand command)
         {
             Command = command;
-            Invocation = invocation;
         }
         public CommandEventArgs(string sectionTitle)
         {
