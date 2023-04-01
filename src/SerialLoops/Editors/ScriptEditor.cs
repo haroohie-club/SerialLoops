@@ -1540,7 +1540,6 @@ namespace SerialLoops.Editors
                         continue;
                     }
                     if (commands[i].Verb == CommandVerb.BG_DISP || commands[i].Verb == CommandVerb.BG_DISP2 ||
-                        (commands[i].Verb == CommandVerb.BG_FADE && (((BgScriptParameter)commands[i].Parameters[1]).Background is not null)) ||
                         (!bgReverted && (commands[i].Verb == CommandVerb.BG_DISPTEMP || commands[i].Verb == CommandVerb.BG_FADE)))
                     {
                         BackgroundItem background = (commands[i].Verb == CommandVerb.BG_FADE && ((BgScriptParameter)commands[i].Parameters[0]).Background is null) ?
