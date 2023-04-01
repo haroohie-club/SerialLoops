@@ -361,6 +361,12 @@ namespace SerialLoops.Editors
                 mapCharactersPage.Content = GetAddMapCharactersButton(mapCharactersPage);
             }
 
+            TabPage choicesPage = new() { Text = "Choices" };
+            if (_script.Event.ChoicesSection is not null)
+            {
+                choicesPage.Content = GetChoicesStackLayout(mapCharactersPage);
+            }
+
             propertiesTabs.Pages.Add(startingChibisPage);
             propertiesTabs.Pages.Add(mapCharactersPage);
 
@@ -723,6 +729,32 @@ namespace SerialLoops.Editors
                     addButton
                 }
             };
+        }
+
+        private StackLayout GetChoicesStackLayout(TabPage parent)
+        {
+            StackLayout choicesLayout = new()
+            {
+                Orientation = Orientation.Vertical,
+                Spacing = 3,
+            };
+
+            foreach (ChoicesSectionEntry choice in _script.Event.ChoicesSection.Objects)
+            {
+                TextBox choiceTextBox = new() { Text = choice.Text.GetSubstitutedString(_project) };
+
+                choicesLayout.Items.Add(new StackLayout
+                {
+                    Orientation = Orientation.Horizontal,
+                    Spacing = 3,
+                    Items =
+                    {
+
+                    },
+                });
+            }
+
+            return choicesLayout;
         }
 
         private void CommandsPanel_SelectedItemChanged(object sender, EventArgs e)
@@ -1116,9 +1148,10 @@ namespace SerialLoops.Editors
                         break;
 
                     case ScriptParameter.ParameterType.SFX:
+                        ScriptCommandNumericStepper sfxNumericStepper = new() { Command = command, ParameterIndex = i, Value = ((SfxScriptParameter)parameter).SfxIndex };
+                        sfxNumericStepper.ValueChanged += SfxNumericStepper_ValueChanged;
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
-                            ControlGenerator.GetControlWithLabel(parameter.Name,
-                            new TextBox { Text = ((SfxScriptParameter)parameter).SfxIndex.ToString() }));
+                            ControlGenerator.GetControlWithLabel(parameter.Name, sfxNumericStepper));
                         break;
 
                     case ScriptParameter.ParameterType.SFX_MODE:
@@ -1141,6 +1174,10 @@ namespace SerialLoops.Editors
                             DecimalPlaces = 0,
                             Value = ((ShortScriptParameter)parameter).Value
                         };
+                        if (command.Verb == CommandVerb.SND_PLAY && parameter.Name == "Crossfade Time (Frames)")
+                        {
+                            shortNumericStepper.SecondIndex = 4;
+                        }
                         shortNumericStepper.ValueChanged += ShortNumericStepper_ValueChanged;
 
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
@@ -1435,29 +1472,29 @@ namespace SerialLoops.Editors
 
                 // Draw background
                 bool bgReverted = false;
-                ScriptItemCommand bgPalCommand = commands.LastOrDefault(c => c.Verb == EventFile.CommandVerb.BG_PALEFFECT);
-                ScriptItemCommand lastBgCommand = commands.LastOrDefault(c => c.Verb == EventFile.CommandVerb.BG_DISP ||
-                    c.Verb == EventFile.CommandVerb.BG_DISP2 || c.Verb == EventFile.CommandVerb.BG_DISPTEMP || c.Verb == EventFile.CommandVerb.BG_FADE ||
-                    c.Verb == EventFile.CommandVerb.BG_REVERT);
-                SKPaint bgEffectPaint = PaletteEffectScriptParameter.IdentityPaint;
-                if (bgPalCommand is not null && lastBgCommand is not null && commands.IndexOf(bgPalCommand) > commands.IndexOf(lastBgCommand))
+                ScriptItemCommand palCommand = commands.LastOrDefault(c => c.Verb == CommandVerb.BG_PALEFFECT);
+                ScriptItemCommand lastBgCommand = commands.LastOrDefault(c => c.Verb == CommandVerb.BG_DISP ||
+                    c.Verb == CommandVerb.BG_DISP2 || c.Verb == CommandVerb.BG_DISPTEMP || c.Verb == CommandVerb.BG_FADE ||
+                    c.Verb == CommandVerb.BG_REVERT);
+                SKPaint palEffectPaint = PaletteEffectScriptParameter.IdentityPaint;
+                if (palCommand is not null && lastBgCommand is not null && commands.IndexOf(palCommand) > commands.IndexOf(lastBgCommand))
                 {
-                    switch (((PaletteEffectScriptParameter)bgPalCommand.Parameters[0]).Effect)
+                    switch (((PaletteEffectScriptParameter)palCommand.Parameters[0]).Effect)
                     {
                         case PaletteEffectScriptParameter.PaletteEffect.INVERTED:
-                            bgEffectPaint = PaletteEffectScriptParameter.InvertedPaint;
+                            palEffectPaint = PaletteEffectScriptParameter.InvertedPaint;
                             break;
 
                         case PaletteEffectScriptParameter.PaletteEffect.GRAYSCALE:
-                            bgEffectPaint = PaletteEffectScriptParameter.GrayscalePaint;
+                            palEffectPaint = PaletteEffectScriptParameter.GrayscalePaint;
                             break;
 
                         case PaletteEffectScriptParameter.PaletteEffect.SEPIA:
-                            bgEffectPaint = PaletteEffectScriptParameter.SepiaPaint;
+                            palEffectPaint = PaletteEffectScriptParameter.SepiaPaint;
                             break;
 
                         case PaletteEffectScriptParameter.PaletteEffect.DIMMED:
-                            bgEffectPaint = PaletteEffectScriptParameter.DimmedPaint;
+                            palEffectPaint = PaletteEffectScriptParameter.DimmedPaint;
                             break;
                     }
                 }
@@ -1470,7 +1507,7 @@ namespace SerialLoops.Editors
                     }
                     if (commands[i].Verb == CommandVerb.BG_DISP || commands[i].Verb == CommandVerb.BG_DISP2 ||
                         (commands[i].Verb == CommandVerb.BG_FADE && (((BgScriptParameter)commands[i].Parameters[1]).Background is not null)) ||
-                        (!bgReverted && (commands[i].Verb == CommandVerb.BG_DISPTEMP || commands[i].Verb == EventFile.CommandVerb.BG_FADE)))
+                        (!bgReverted && (commands[i].Verb == CommandVerb.BG_DISPTEMP || commands[i].Verb == CommandVerb.BG_FADE)))
                     {
                         BackgroundItem background = (commands[i].Verb == CommandVerb.BG_FADE && ((BgScriptParameter)commands[i].Parameters[0]).Background is null) ?
                             ((BgScriptParameter)commands[i].Parameters[1]).Background : ((BgScriptParameter)commands[i].Parameters[0]).Background;
@@ -1479,7 +1516,7 @@ namespace SerialLoops.Editors
                             switch (background.BackgroundType)
                             {
                                 case BgType.TEX_DUAL:
-                                    canvas.DrawBitmap(background.GetBackground(), new SKPoint(0, 0), bgEffectPaint);
+                                    canvas.DrawBitmap(background.GetBackground(), new SKPoint(0, 0));
                                     break;
 
                                 case BgType.SINGLE_TEX:
@@ -1487,16 +1524,21 @@ namespace SerialLoops.Editors
                                     {
                                         SKBitmap bgBitmap = background.GetBackground();
                                         canvas.DrawBitmap(bgBitmap, new SKRect(0, bgBitmap.Height - 194, bgBitmap.Width, bgBitmap.Height),
-                                            new SKRect(0, 194, 256, 388), bgEffectPaint);
+                                            new SKRect(0, 194, 256, 388));
                                     }
                                     else
                                     {
-                                        canvas.DrawBitmap(background.GetBackground(), new SKPoint(0, 194), bgEffectPaint);
+                                        canvas.DrawBitmap(background.GetBackground(), new SKPoint(0, 194));
                                     }
                                     break;
 
+                                case BgType.TEX_WIDE:
+                                case BgType.TEX_BOTTOM_TEMP:
+                                    canvas.DrawBitmap(background.GetBackground(), new SKPoint(0, 194));
+                                    break;
+
                                 default:
-                                    canvas.DrawBitmap(background.GetBackground(), new SKPoint(0, 194), bgEffectPaint);
+                                    canvas.DrawBitmap(background.GetBackground(), new SKPoint(0, 194), palEffectPaint);
                                     break;
                             }
                             break;
@@ -2068,6 +2110,16 @@ namespace SerialLoops.Editors
             PopulateScriptCommands();
             UpdateTabTitle(false);
         }
+        private void SfxNumericStepper_ValueChanged(object sender, EventArgs e)
+        {
+            ScriptCommandNumericStepper numericStepper = (ScriptCommandNumericStepper)sender;
+            _log.Log($"Attempting to modify parameter {numericStepper.ParameterIndex} to SFX {numericStepper.Value} in {numericStepper.Command.Index} in file {_script.Name}...");
+            ((SfxScriptParameter)numericStepper.Command.Parameters[numericStepper.ParameterIndex]).SfxIndex = (short)numericStepper.Value;
+            _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(numericStepper.Command.Section)]
+                .Objects[numericStepper.Command.Index].Parameters[numericStepper.ParameterIndex] = (short)numericStepper.Value;
+
+            UpdateTabTitle(false);
+        }
         private void SfxModeDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
             ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
@@ -2082,10 +2134,15 @@ namespace SerialLoops.Editors
         private void ShortNumericStepper_ValueChanged(object sender, EventArgs e)
         {
             ScriptCommandNumericStepper numericStepper = (ScriptCommandNumericStepper)sender;
-            _log.Log($"Attempting to modify parameter {numericStepper.ParameterIndex} to SFX mode {numericStepper.Value} in {numericStepper.Command.Index} in file {_script.Name}...");
+            _log.Log($"Attempting to modify parameter {numericStepper.ParameterIndex} to short {numericStepper.Value} in {numericStepper.Command.Index} in file {_script.Name}...");
             ((ShortScriptParameter)numericStepper.Command.Parameters[numericStepper.ParameterIndex]).Value = (short)numericStepper.Value;
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(numericStepper.Command.Section)]
                 .Objects[numericStepper.Command.Index].Parameters[numericStepper.ParameterIndex] = (short)numericStepper.Value;
+            if (numericStepper.SecondIndex >= 0)
+            {
+                _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(numericStepper.Command.Section)]
+                    .Objects[numericStepper.Command.Index].Parameters[numericStepper.SecondIndex] = (short)numericStepper.Value;
+            }
             UpdateTabTitle(false);
         }
         private void SpriteEntranceDropDown_SelectedKeyChanged(object sender, EventArgs e)

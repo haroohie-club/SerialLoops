@@ -43,6 +43,7 @@ namespace SerialLoops.Controls
     {
         public ScriptItemCommand Command { get; set; }
         public int ParameterIndex { get; set; }
+        public int SecondIndex { get; set; } = -1;
     }
     public class TopicSelectButton : Button
     {
