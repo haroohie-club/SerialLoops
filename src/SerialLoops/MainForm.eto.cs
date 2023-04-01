@@ -168,7 +168,7 @@ namespace SerialLoops
             }
 
             Menu.Items.Add(new SubMenuItem { Text = "&Tools", Items = { searchProject, findOrphanedItems } });
-            Menu.Items.Add(new SubMenuItem { Text = "&Build", Items = { buildIterativeProject, buildBaseProject, buildAndRunProject } });
+            Menu.Items.Add(new SubMenuItem { Text = "&Build", Items = { buildIterativeProject, buildBaseProject, buildAndRunProject, patch } });
         }
 
         private void LoadCachedData(Project project, IProgressTracker tracker)
@@ -487,7 +487,9 @@ namespace SerialLoops
                 outputPatchDialog.Filters.Add(new() { Name = "XDelta patch", Extensions = new string[] { ".xdelta" } });
                 if (outputPatchDialog.ShowAndReportIfFileSelected(this))
                 {
-                    MessageBox.Show("Patching is not currently implemented.");
+                    LoopyProgressTracker tracker = new();
+                    _ = new ProgressDialog(() => Patch.CreatePatch(baseRomDialog.FileName, currentRom, outputPatchDialog.FileName),
+                        () => MessageBox.Show("Patch Created!", "Success!", MessageBoxType.Information), tracker, "Creating Patch");
                 }
             }
         }

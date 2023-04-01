@@ -220,6 +220,13 @@ namespace SerialLoops.Editors
                                     invocation.Parameters[1] = 100;
                                     break;
 
+                                case CommandVerb.SELECT:
+                                    invocation.Parameters[4] = -1;
+                                    invocation.Parameters[5] = -1;
+                                    invocation.Parameters[6] = -1;
+                                    invocation.Parameters[7] = -1;
+                                    break;
+
                                 case CommandVerb.VCE_PLAY:
                                     invocation.Parameters[0] = (short)((VoicedLineItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Voice)).Index;
                                     break;
@@ -1121,6 +1128,7 @@ namespace SerialLoops.Editors
                     case ScriptParameter.ParameterType.OPTION:
                         OptionScriptParameter optionParam = (OptionScriptParameter)parameter;
                         ScriptCommandDropDown optionDropDown = new() { Command = command, ParameterIndex = i };
+                        optionDropDown.Items.Add(new ListItem { Text = "NONE", Key = "0" });
                         optionDropDown.Items.AddRange(_script.Event.ChoicesSection.Objects.Skip(1).SkipLast(1).Select(c => new ListItem { Text = c.Text.GetSubstitutedString(_project), Key = c.Id.ToString() }));
                         optionDropDown.SelectedKey = optionParam.Option.Id.ToString();
                         optionDropDown.SelectedKeyChanged += OptionDropDown_SelectedKeyChanged;
