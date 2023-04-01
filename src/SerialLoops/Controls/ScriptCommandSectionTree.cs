@@ -252,7 +252,7 @@ namespace SerialLoops.Controls
                 item.Command.Index = 0;
             }
             
-            AddCommand?.Invoke(this, new(item.Command)); //todo invoke this with the new item args
+            AddCommand?.Invoke(this, new(item.Command));
             _treeView.SelectedItem = item;
             _treeView.DataStore = _treeView.DataStore;
         }
@@ -264,7 +264,7 @@ namespace SerialLoops.Controls
             rootNode.Add(section);
             section.Parent = rootNode;
 
-            AddCommand?.Invoke(this, new(section.Text)); //todo invoke this with the new script section args
+            AddCommand?.Invoke(this, new(section.Text));
             _treeView.SelectedItem = section;
             _treeView.DataStore = rootNode;
         }

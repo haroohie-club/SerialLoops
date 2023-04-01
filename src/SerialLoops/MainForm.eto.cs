@@ -88,9 +88,6 @@ namespace SerialLoops
             Command openProject = new() { MenuText = "Open Project...", ToolBarText = "Open Project", Image = ControlGenerator.GetIcon("Open", _log) };
             openProject.Executed += OpenProject_Executed;
 
-            Command exportPatch = new() { MenuText = "Export Patch", ToolBarText = "Export Patch" };
-            exportPatch.Executed += Patch_Executed;
-
             // Application Items
             Command preferencesCommand = new();
             preferencesCommand.Executed += PreferencesCommand_Executed;
@@ -107,7 +104,7 @@ namespace SerialLoops
                 Items =
                 {
                     // File submenu
-                    new SubMenuItem { Text = "&File", Items = { newProject, openProject, _recentProjects, exportPatch } }
+                    new SubMenuItem { Text = "&File", Items = { newProject, openProject, _recentProjects } }
                 },
                 ApplicationItems =
                 {
@@ -129,6 +126,9 @@ namespace SerialLoops
 
             Command closeProject = new() { MenuText = "Close Project", ToolBarText = "Close Project", Image = ControlGenerator.GetIcon("Close", _log) };
             closeProject.Executed += (sender, args) => CloseProjectView();
+
+            Command exportPatch = new() { MenuText = "Export Patch", ToolBarText = "Export Patch" };
+            exportPatch.Executed += Patch_Executed;
 
             // Tools
             Command searchProject = new() { MenuText = "Search...", ToolBarText = "Search", Shortcut = Application.Instance.CommonModifier | Keys.F, Image = ControlGenerator.GetIcon("Search", _log) };
@@ -165,6 +165,7 @@ namespace SerialLoops
                 fileMenu.Items.Add(saveProject);
                 fileMenu.Items.Add(projectSettings);
                 fileMenu.Items.Add(closeProject);
+                fileMenu.Items.Add(exportPatch);
             }
 
             Menu.Items.Add(new SubMenuItem { Text = "&Tools", Items = { searchProject, findOrphanedItems } });

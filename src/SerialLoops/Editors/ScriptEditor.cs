@@ -375,14 +375,7 @@ namespace SerialLoops.Editors
             }
 
             TabPage choicesPage = new() { Text = "Choices" };
-            if (_script.Event.ChoicesSection is not null)
-            {
-                choicesPage.Content = GetChoicesStackLayout(choicesPage);
-            }
-            else
-            {
-
-            }
+            choicesPage.Content = GetChoicesStackLayout(choicesPage);
 
             propertiesTabs.Pages.Add(startingChibisPage);
             propertiesTabs.Pages.Add(mapCharactersPage);
