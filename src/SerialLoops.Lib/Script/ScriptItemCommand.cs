@@ -394,10 +394,10 @@ namespace SerialLoops.Lib.Script
                         switch (i)
                         {
                             case 0:
-                                parameters.Add(new BgScriptParameter("Background (Temp)", (BackgroundItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == parameter), kinetic: false));
+                                parameters.Add(new BgScriptParameter("Background", (BackgroundItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == parameter), kinetic: false));
                                 break;
                             case 1:
-                                parameters.Add(new BgScriptParameter("Background (Permanent)", (BackgroundItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == parameter), kinetic: false));
+                                parameters.Add(new BgScriptParameter("Background (Temp/CG)", (BackgroundItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == parameter), kinetic: false));
                                 break;
                             case 2:
                                 parameters.Add(new ShortScriptParameter("Fade Time (Frames)", parameter));

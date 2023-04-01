@@ -882,26 +882,44 @@ namespace SerialLoops.Editors
 
                         // BGDISPTEMP is able to display a lot more kinds of backgrounds properly than the other BG commands
                         // Hence, this switch to make sure you don't accidentally crash the game
-                        switch (command.Verb)
+                        if (command.Verb == CommandVerb.BG_FADE)
                         {
-                            case CommandVerb.BG_DISP:
-                            case CommandVerb.BG_DISP2:
-                                bgSelectionButton.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background &&
-                                    (((BackgroundItem)i).BackgroundType == BgType.TEX_BOTTOM))
-                                    .Select(b => b as IPreviewableGraphic));
-                                break;
+                            switch (i)
+                            {
+                                case 0:
+                                    bgSelectionButton.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background &&
+                                        (((BackgroundItem)i).BackgroundType == BgType.TEX_BOTTOM))
+                                        .Select(b => b as IPreviewableGraphic));
+                                    break;
+                                case 1:
+                                    bgSelectionButton.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background &&
+                                        ((BackgroundItem)i).BackgroundType != BgType.KINETIC_SCREEN && ((BackgroundItem)i).BackgroundType != BgType.TEX_BOTTOM)
+                                        .Select(b => b as IPreviewableGraphic));
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            switch (command.Verb)
+                            {
+                                case CommandVerb.BG_DISP:
+                                case CommandVerb.BG_DISP2:
+                                    bgSelectionButton.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background &&
+                                        (((BackgroundItem)i).BackgroundType == BgType.TEX_BOTTOM))
+                                        .Select(b => b as IPreviewableGraphic));
+                                    break;
 
-                            case CommandVerb.BG_DISPTEMP:
-                            case CommandVerb.BG_FADE:
-                                bgSelectionButton.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background &&
-                                    ((BackgroundItem)i).BackgroundType != BgType.KINETIC_SCREEN && ((BackgroundItem)i).BackgroundType != BgType.TEX_BOTTOM)
-                                    .Select(b => b as IPreviewableGraphic));
-                                break;
+                                case CommandVerb.BG_DISPTEMP:
+                                    bgSelectionButton.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background &&
+                                        ((BackgroundItem)i).BackgroundType != BgType.KINETIC_SCREEN && ((BackgroundItem)i).BackgroundType != BgType.TEX_BOTTOM)
+                                        .Select(b => b as IPreviewableGraphic));
+                                    break;
 
-                            case CommandVerb.KBG_DISP:
-                                bgSelectionButton.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background &&
-                                    ((BackgroundItem)i).BackgroundType == BgType.KINETIC_SCREEN).Select(b => b as IPreviewableGraphic));
-                                break;
+                                case CommandVerb.KBG_DISP:
+                                    bgSelectionButton.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background &&
+                                        ((BackgroundItem)i).BackgroundType == BgType.KINETIC_SCREEN).Select(b => b as IPreviewableGraphic));
+                                    break;
+                            }
                         }
                         bgSelectionButton.SelectedChanged.Executed += (obj, args) => BgSelectionButton_SelectionMade(bgSelectionButton, args);
 
@@ -1499,7 +1517,7 @@ namespace SerialLoops.Editors
                 }
 
                 // Draw top screen chibi emotes
-                if (currentCommand.Verb == EventFile.CommandVerb.CHIBI_EMOTE)
+                if (currentCommand.Verb == CommandVerb.CHIBI_EMOTE)
                 {
                     ChibiItem chibi = ((ChibiScriptParameter)currentCommand.Parameters[0]).Chibi;
                     if (chibis.Contains(chibi))
@@ -1551,7 +1569,9 @@ namespace SerialLoops.Editors
                         bgReverted = true;
                         continue;
                     }
+                    // Checks to see if this is one of the commands that sets a BG_REVERT immune background or if BG_REVERT hasn't been called
                     if (commands[i].Verb == CommandVerb.BG_DISP || commands[i].Verb == CommandVerb.BG_DISP2 ||
+                        (commands[i].Verb == CommandVerb.BG_FADE && (((BgScriptParameter)commands[i].Parameters[0]).Background is not null)) ||
                         (!bgReverted && (commands[i].Verb == CommandVerb.BG_DISPTEMP || commands[i].Verb == CommandVerb.BG_FADE)))
                     {
                         BackgroundItem background = (commands[i].Verb == CommandVerb.BG_FADE && ((BgScriptParameter)commands[i].Parameters[0]).Background is null) ?
@@ -1631,6 +1651,18 @@ namespace SerialLoops.Editors
                     if (command.Verb == CommandVerb.DIALOGUE)
                     {
                         SpriteScriptParameter spriteParam = (SpriteScriptParameter)command.Parameters[1];
+                        SKPaint spritePaint = PaletteEffectScriptParameter.IdentityPaint;
+                        if (commands.IndexOf(palCommand) > commands.IndexOf(command))
+                        {
+                            spritePaint = ((PaletteEffectScriptParameter)palCommand.Parameters[0]).Effect switch
+                            {
+                                PaletteEffectScriptParameter.PaletteEffect.INVERTED => PaletteEffectScriptParameter.InvertedPaint,
+                                PaletteEffectScriptParameter.PaletteEffect.GRAYSCALE => PaletteEffectScriptParameter.GrayscalePaint,
+                                PaletteEffectScriptParameter.PaletteEffect.SEPIA => PaletteEffectScriptParameter.SepiaPaint,
+                                PaletteEffectScriptParameter.PaletteEffect.DIMMED => PaletteEffectScriptParameter.DimmedPaint,
+                                _ => PaletteEffectScriptParameter.IdentityPaint,
+                            };
+                        }
                         if (spriteParam.Sprite is not null)
                         {
                             Speaker speaker = ((DialogueScriptParameter)command.Parameters[0]).Line.Speaker;
@@ -1648,7 +1680,7 @@ namespace SerialLoops.Editors
                                     case SpriteEntranceScriptParameter.SpriteEntranceTransition.FADE_TO_CENTER:
                                     case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_CENTER:
                                     case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_CENTER:
-                                        sprites[speaker] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.CENTER, Layer = layer } };
+                                        sprites[speaker] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.CENTER, Layer = layer }, PalEffect = spritePaint };
                                         break;
 
                                     case SpriteEntranceScriptParameter.SpriteEntranceTransition.FADE_IN_LEFT:
@@ -1656,13 +1688,13 @@ namespace SerialLoops.Editors
                                     case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_LEFT:
                                     case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_LEFT_FAST:
                                     case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_LEFT_SLOW:
-                                        sprites[speaker] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.LEFT, Layer = layer } };
+                                        sprites[speaker] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.LEFT, Layer = layer }, PalEffect = spritePaint };
                                         break;
 
                                     case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_RIGHT:
                                     case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_RIGHT_FAST:
                                     case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_RIGHT_SLOW:
-                                        sprites[speaker] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.RIGHT, Layer = layer } };
+                                        sprites[speaker] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.RIGHT, Layer = layer }, PalEffect = spritePaint };
                                         break;
                                 }
                             }
@@ -1674,7 +1706,7 @@ namespace SerialLoops.Editors
                                 }
                                 SpritePositioning.SpritePosition position = sprites[speaker].Positioning?.Position ?? SpritePositioning.SpritePosition.CENTER;
 
-                                sprites[speaker] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = position, Layer = layer } };
+                                sprites[speaker] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = position, Layer = layer }, PalEffect = spritePaint };
                             }
                         }
                     }
@@ -1688,7 +1720,7 @@ namespace SerialLoops.Editors
                 foreach (PositionedSprite sprite in sprites.Values.OrderBy(p => p.Positioning.Layer))
                 {
                     SKBitmap spriteBitmap = sprite.Sprite.GetClosedMouthAnimation(_project)[0].frame;
-                    canvas.DrawBitmap(spriteBitmap, sprite.Positioning.GetSpritePosition(spriteBitmap));
+                    canvas.DrawBitmap(spriteBitmap, sprite.Positioning.GetSpritePosition(spriteBitmap), sprite.PalEffect);
                 }
 
                 // Draw dialogue
