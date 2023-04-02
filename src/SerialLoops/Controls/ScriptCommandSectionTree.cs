@@ -223,8 +223,8 @@ namespace SerialLoops.Controls
         {
             if (item.Parent is not ScriptCommandSectionTreeItem parent) return;
             int newIndex = parent.IndexOf(item);
-            parent.Remove(item);
             DeleteCommand?.Invoke(this, EventArgs.Empty);
+            parent.Remove(item);
             _treeView.DataStore = _treeView.DataStore;
             if (newIndex >= parent.Count)
             {
