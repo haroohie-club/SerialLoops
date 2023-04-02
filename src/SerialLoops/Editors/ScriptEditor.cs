@@ -796,6 +796,7 @@ namespace SerialLoops.Editors
             {
                 choice.Text = choiceTextBox.Text.GetOriginalString(_project);
                 UpdateTabTitle(false);
+                choiceTextBox.Focus();
             };
 
             DropDown scriptSectionDropDown = new();
@@ -1079,7 +1080,6 @@ namespace SerialLoops.Editors
                             ParameterIndex = i,
                         };
                         dialogueTextArea.TextChanged += DialogueTextArea_TextChanged;
-                        dialogueTextArea.LostFocus += DialogueTextArea_LostFocus;
 
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
                             ControlGenerator.GetControlWithLabelTable(parameter.Name,
@@ -1970,6 +1970,7 @@ namespace SerialLoops.Editors
                 _script.Event.ConditionalsSection.Objects.Add(textBox.Text);
             }
             UpdateTabTitle(false);
+            textBox.Focus();
         }
         private void SpeakerDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
@@ -2042,10 +2043,7 @@ namespace SerialLoops.Editors
             _dialogueRefreshTimer.Stop();
             _dialogueRefreshTimer.Start();
             UpdateTabTitle(false);
-        }
-        private void DialogueTextArea_LostFocus(object sender, EventArgs e)
-        {
-            UpdatePreview();
+            textArea.Focus();
         }
         private void DialogueRefreshTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
@@ -2087,6 +2085,7 @@ namespace SerialLoops.Editors
                     .Objects[textBox.Command.Index].Parameters[textBox.ParameterIndex] = ((FlagScriptParameter)textBox.Command.Parameters[textBox.ParameterIndex]).Id;
                 UpdateTabTitle(false);
             }
+            textBox.Focus();
         }
         private void MapDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
@@ -2177,6 +2176,7 @@ namespace SerialLoops.Editors
                 .Objects[numericStepper.Command.Index].Parameters[numericStepper.ParameterIndex] = (short)numericStepper.Value;
 
             UpdateTabTitle(false);
+            numericStepper.Focus();
         }
         private void SfxModeDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
@@ -2202,6 +2202,7 @@ namespace SerialLoops.Editors
                     .Objects[numericStepper.Command.Index].Parameters[numericStepper.SecondIndex] = (short)numericStepper.Value;
             }
             UpdateTabTitle(false);
+            numericStepper.Focus();
         }
         private void SpriteEntranceDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {

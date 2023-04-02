@@ -252,6 +252,7 @@ namespace SerialLoops.Editors
                 RefreshCommands();
                 UpdateTabTitle(false);
             }
+            parameterBox.Focus();
         }
 
         private void AddButton_Click(object sender, EventArgs e)
