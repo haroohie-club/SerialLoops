@@ -10,7 +10,7 @@ namespace SerialLoops.Lib
             using FileStream baseRomStream = File.OpenRead(baseRom);
             using FileStream currentRomStream = File.OpenRead(currentRom);
             using FileStream outputFileStream = File.Create(outputFile);
-            using VcEncoder encoder = new(baseRomStream, currentRomStream, outputFileStream);
+            VcEncoder encoder = new(baseRomStream, currentRomStream, outputFileStream);
             encoder.Encode();
         }
     }
