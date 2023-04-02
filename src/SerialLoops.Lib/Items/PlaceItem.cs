@@ -28,21 +28,26 @@ namespace SerialLoops.Lib.Items
         public SKBitmap GetPreview(Project project)
         {
             SKBitmap placeGraphic = PlaceGraphic.GetImage(transparentIndex: 0);
-            SKBitmap adjustedPlace = new(placeGraphic.Width, placeGraphic.Height / 2);
+            SKBitmap adjustedPlace = new(placeGraphic.Width, placeGraphic.Height);
             SKCanvas canvas = new(adjustedPlace);
 
-            canvas.DrawBitmap(placeGraphic,
-                new SKRect(placeGraphic.Width / 2, 0, placeGraphic.Width, placeGraphic.Height / 4),
-                new SKRect(0, 0, adjustedPlace.Width / 2, adjustedPlace.Height / 2));
-            canvas.DrawBitmap(placeGraphic,
-                new SKRect(0, placeGraphic.Height / 4, placeGraphic.Width / 2, placeGraphic.Height / 2),
-                new SKRect(0, adjustedPlace.Height / 2, adjustedPlace.Width / 2, adjustedPlace.Height));
-            canvas.DrawBitmap(placeGraphic,
-                new SKRect(placeGraphic.Width / 2, placeGraphic.Height / 2, placeGraphic.Width, (int)(3.0 / 4 * placeGraphic.Height)),
-                new SKRect(adjustedPlace.Width / 2, 0, adjustedPlace.Width, adjustedPlace.Height / 2));
-            canvas.DrawBitmap(placeGraphic,
-                new SKRect(0, (int)(3.0 / 4 * placeGraphic.Height), placeGraphic.Width / 2, placeGraphic.Height),
-                new SKRect(adjustedPlace.Width / 2, adjustedPlace.Height / 2, adjustedPlace.Width, adjustedPlace.Height));
+            int col = 0, row = 0;
+            for (int y = 0; y < 4; y++)
+            {
+                for (int x = 0; x < 2; x++)
+                {
+                    canvas.DrawBitmap(placeGraphic,
+                        new SKRect(x * placeGraphic.Width / 2, y * placeGraphic.Height / 4, (x + 1) * placeGraphic.Width / 2, (y + 1) * placeGraphic.Height / 4),
+                        new SKRect(col * placeGraphic.Width / 2, row * placeGraphic.Height / 4, (col + 1) * placeGraphic.Width / 2, (row + 1) * placeGraphic.Height / 4));
+                    row++;
+                    if (row >= 4)
+                    {
+                        row = 0;
+                        col++;
+                    }
+                }
+            }
+
             canvas.Flush();
 
             return adjustedPlace;
