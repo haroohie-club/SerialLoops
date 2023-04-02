@@ -134,6 +134,11 @@ namespace SerialLoops.Editors
                         )),
                     };
 
+                    dialog.Shown += (o, e) =>
+                    {
+                        verbSelecter.Focus();
+                    };
+
                     MessageInfoFile messInfos = _project.Dat.Files.First(d => d.Name == "MESSINFOS").CastTo<MessageInfoFile>();
                     cancelButton.Click += (sender, args) =>
                     {
