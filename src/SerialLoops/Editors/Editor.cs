@@ -35,6 +35,11 @@ namespace SerialLoops.Editors
 
         public void UpdateTabTitle(bool saved, Control caller = null)
         {
+            if (Description.UnsavedChanges == !saved)
+            {
+                // no need to update then, let's save on perf
+                return;
+            }
             int caretIndex = 0;
             if (caller is not null && caller is TextBox textBox)
             {
