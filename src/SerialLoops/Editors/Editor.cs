@@ -33,10 +33,11 @@ namespace SerialLoops.Editors
 
         public abstract Container GetEditorPanel();
         
-        public void UpdateTabTitle(bool saved)
+        public void UpdateTabTitle(bool saved, Control caller = null)
         {
             Description.UnsavedChanges = !saved;
             Text = Description.DisplayNameWithStatus;
+            caller?.Focus();
         }
     }
 }

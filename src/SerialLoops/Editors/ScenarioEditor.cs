@@ -238,7 +238,7 @@ namespace SerialLoops.Editors
             }
 
             RefreshCommands();
-            UpdateTabTitle(false);
+            UpdateTabTitle(false, dropDown);
         }
 
         private void ParameterBox_TextChanged(object sender, EventArgs e)
@@ -250,7 +250,7 @@ namespace SerialLoops.Editors
                 _scenario.ScenarioCommands[parameterBox.CommandIndex] = (_scenario.ScenarioCommands[parameterBox.CommandIndex].Command, parameter.ToString());
 
                 RefreshCommands();
-                UpdateTabTitle(false);
+                UpdateTabTitle(false, parameterBox);
             }
             parameterBox.Focus();
         }

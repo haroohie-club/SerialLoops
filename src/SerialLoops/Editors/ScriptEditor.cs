@@ -697,7 +697,7 @@ namespace SerialLoops.Editors
                 talkScriptBlockDropDown.SelectedKeyChanged += (o, args) =>
                 {
                     _script.Event.MapCharactersSection.Objects[chibiLayout.ChibiIndex].TalkScriptBlock = short.Parse(talkScriptBlockDropDown.SelectedKey);
-                    UpdateTabTitle(false);
+                    UpdateTabTitle(false, talkScriptBlockDropDown);
                 };
 
                 Button removeButton = new() { Text = "Remove Chibi" };
@@ -795,8 +795,7 @@ namespace SerialLoops.Editors
             choiceTextBox.TextChanged += (obj, args) =>
             {
                 choice.Text = choiceTextBox.Text.GetOriginalString(_project);
-                UpdateTabTitle(false);
-                choiceTextBox.Focus();
+                UpdateTabTitle(false, choiceTextBox);
             };
 
             DropDown scriptSectionDropDown = new();
@@ -812,7 +811,7 @@ namespace SerialLoops.Editors
                 }
                 choice.Id = newId;
                 _updateOptionDropDowns();
-                UpdateTabTitle(false);
+                UpdateTabTitle(false, scriptSectionDropDown);
             };
 
             Button removeButton = new() { Image = ControlGenerator.GetIcon("Remove", _log) };
@@ -1849,7 +1848,7 @@ namespace SerialLoops.Editors
                 .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
                 (short)Enum.Parse<BgScrollDirectionScriptParameter.BgScrollDirection>(dropDown.SelectedKey);
 
-            UpdateTabTitle(false);
+            UpdateTabTitle(false, dropDown);
         }
         private void BgmDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
@@ -1865,7 +1864,7 @@ namespace SerialLoops.Editors
             dropDown.Link.RemoveAllClickEvents();
             dropDown.Link.ClickUnique += (s, e) => { _tabs.OpenTab(_project.Items.FirstOrDefault(i => i.Name == dropDown.SelectedKey), _log); };
 
-            UpdateTabTitle(false);
+            UpdateTabTitle(false, dropDown);
         }
         private void BgmModeDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
@@ -1877,7 +1876,7 @@ namespace SerialLoops.Editors
                 .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
                 (short)Enum.Parse<BgmModeScriptParameter.BgmMode>(dropDown.SelectedKey);
 
-            UpdateTabTitle(false);
+            UpdateTabTitle(false, dropDown);
         }
         private void BoolParameterCheckbox_CheckedChanged(object sender, EventArgs e)
         {
@@ -1899,7 +1898,7 @@ namespace SerialLoops.Editors
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
                 .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
                 (short)((ChibiItem)_project.Items.First(i => i.Name == dropDown.SelectedKey)).ChibiIndex;
-            UpdateTabTitle(false);
+            UpdateTabTitle(false, dropDown);
             Application.Instance.Invoke(() => UpdatePreview());
         }
         private void ChibiEmoteDropDown_SelectedKeyChanged(object sender, EventArgs e)
@@ -1911,7 +1910,7 @@ namespace SerialLoops.Editors
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
                 .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
                 (short)Enum.Parse<ChibiEmoteScriptParameter.ChibiEmote>(dropDown.SelectedKey);
-            UpdateTabTitle(false);
+            UpdateTabTitle(false, dropDown);
             Application.Instance.Invoke(() => UpdatePreview());
         }
         private void ChibiEnterExitDropDown_SelectedKeyChanged(object sender, EventArgs e)
@@ -1923,7 +1922,7 @@ namespace SerialLoops.Editors
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
                 .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
                 (short)Enum.Parse<ChibiEnterExitScriptParameter.ChibiEnterExitType>(dropDown.SelectedKey);
-            UpdateTabTitle(false);
+            UpdateTabTitle(false, dropDown);
             Application.Instance.Invoke(() => UpdatePreview());
         }
         private void ColorPicker_ValueChanged(object sender, EventArgs e)
@@ -1950,7 +1949,7 @@ namespace SerialLoops.Editors
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
                 .Objects[dropDown.Command.Index].Parameters[dropDown.CurrentShort] =
                 (short)Enum.Parse<ColorMonochromeScriptParameter.ColorMonochrome>(dropDown.SelectedKey);
-            UpdateTabTitle(false);
+            UpdateTabTitle(false, dropDown);
             Application.Instance.Invoke(() => UpdatePreview());
         }
         private void ConditionalBox_TextChanged(object sender, EventArgs e)
@@ -1969,8 +1968,7 @@ namespace SerialLoops.Editors
                     .Objects[textBox.Command.Index].Parameters[textBox.ParameterIndex] = (short)_script.Event.ConditionalsSection.Objects.Count;
                 _script.Event.ConditionalsSection.Objects.Add(textBox.Text);
             }
-            UpdateTabTitle(false);
-            textBox.Focus();
+            UpdateTabTitle(false, textBox);
         }
         private void SpeakerDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
@@ -2042,8 +2040,7 @@ namespace SerialLoops.Editors
             task.Start();
             _dialogueRefreshTimer.Stop();
             _dialogueRefreshTimer.Start();
-            UpdateTabTitle(false);
-            textArea.Focus();
+            UpdateTabTitle(false, textArea);
         }
         private void DialogueRefreshTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
@@ -2059,7 +2056,7 @@ namespace SerialLoops.Editors
             ((DialoguePropertyScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).DialogueProperties = messInfo;
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)].Objects[dropDown.Command.Index]
                 .Parameters[dropDown.ParameterIndex] = (short)messInfoFile.MessageInfos.IndexOf(messInfo);
-            UpdateTabTitle(false);
+            UpdateTabTitle(false, dropDown);
         }
         private void EpHeaderDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
@@ -2070,7 +2067,7 @@ namespace SerialLoops.Editors
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
                 .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
                 (short)Enum.Parse<EpisodeHeaderScriptParameter.Episode>(dropDown.SelectedKey);
-            UpdateTabTitle(false);
+            UpdateTabTitle(false, dropDown);
             Application.Instance.Invoke(() => UpdatePreview());
         }
         private void FlagTextBox_TextChanged(object sender, EventArgs e)
@@ -2083,9 +2080,8 @@ namespace SerialLoops.Editors
                 ((FlagScriptParameter)textBox.Command.Parameters[textBox.ParameterIndex]).Id = flagId;
                 _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(textBox.Command.Section)]
                     .Objects[textBox.Command.Index].Parameters[textBox.ParameterIndex] = ((FlagScriptParameter)textBox.Command.Parameters[textBox.ParameterIndex]).Id;
-                UpdateTabTitle(false);
+                UpdateTabTitle(false, textBox);
             }
-            textBox.Focus();
         }
         private void MapDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
@@ -2095,7 +2091,7 @@ namespace SerialLoops.Editors
             ((MapScriptParameter)_commands[dropDown.Command.Section][dropDown.Command.Index].Parameters[0]).Map = (MapItem)_project.FindItem(dropDown.SelectedKey);
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
                 .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] = (short)((MapScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Map.Map.Index;
-            UpdateTabTitle(false);
+            UpdateTabTitle(false, dropDown);
         }
         private void OptionDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
@@ -2105,7 +2101,7 @@ namespace SerialLoops.Editors
             ((OptionScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Option = choice;
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
                 .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] = (short)_script.Event.ChoicesSection.Objects.IndexOf(choice);
-            UpdateTabTitle(false);
+            UpdateTabTitle(false, dropDown);
             _script.Refresh(_project);
             PopulateScriptCommands();
         }
@@ -2118,7 +2114,7 @@ namespace SerialLoops.Editors
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
                 .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
                 (short)Enum.Parse<PaletteEffectScriptParameter.PaletteEffect>(dropDown.SelectedKey);
-            UpdateTabTitle(false);
+            UpdateTabTitle(false, dropDown);
             Application.Instance.Invoke(() => UpdatePreview());
         }
         private void PlaceSelectionButtonSelectedChanged_Executed(object sender, EventArgs e)
@@ -2152,7 +2148,7 @@ namespace SerialLoops.Editors
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
                 .Objects[dropDown.Command.Index].Parameters[dropDown.CurrentShort] =
                 (short)Enum.Parse<ScreenScriptParameter.DsScreen>(dropDown.SelectedKey);
-            UpdateTabTitle(false);
+            UpdateTabTitle(false, dropDown);
             Application.Instance.Invoke(() => UpdatePreview());
         }
         private void ScriptSectionDropDown_SelectedKeyChanged(object sender, EventArgs e)
@@ -2165,7 +2161,7 @@ namespace SerialLoops.Editors
                 _script.Event.LabelsSection.Objects.First(l => l.Name.Replace("/", "") == dropDown.SelectedKey).Id;
             _script.Refresh(_project); // Update command graph
             PopulateScriptCommands();
-            UpdateTabTitle(false);
+            UpdateTabTitle(false, dropDown);
         }
         private void SfxNumericStepper_ValueChanged(object sender, EventArgs e)
         {
@@ -2175,8 +2171,7 @@ namespace SerialLoops.Editors
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(numericStepper.Command.Section)]
                 .Objects[numericStepper.Command.Index].Parameters[numericStepper.ParameterIndex] = (short)numericStepper.Value;
 
-            UpdateTabTitle(false);
-            numericStepper.Focus();
+            UpdateTabTitle(false, numericStepper);
         }
         private void SfxModeDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
@@ -2187,7 +2182,7 @@ namespace SerialLoops.Editors
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
                 .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
                 (short)Enum.Parse<SfxModeScriptParameter.SfxMode>(dropDown.SelectedKey);
-            UpdateTabTitle(false);
+            UpdateTabTitle(false, dropDown);
         }
         private void ShortNumericStepper_ValueChanged(object sender, EventArgs e)
         {
@@ -2201,8 +2196,7 @@ namespace SerialLoops.Editors
                 _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(numericStepper.Command.Section)]
                     .Objects[numericStepper.Command.Index].Parameters[numericStepper.SecondIndex] = (short)numericStepper.Value;
             }
-            UpdateTabTitle(false);
-            numericStepper.Focus();
+            UpdateTabTitle(false, numericStepper);
         }
         private void SpriteEntranceDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
@@ -2213,7 +2207,7 @@ namespace SerialLoops.Editors
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
                 .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
                 (short)Enum.Parse<SpriteEntranceScriptParameter.SpriteEntranceTransition>(dropDown.SelectedKey);
-            UpdateTabTitle(false);
+            UpdateTabTitle(false, dropDown);
             Application.Instance.Invoke(() => UpdatePreview());
         }
         private void SpriteExitDropDown_SelectedKeyChanged(object sender, EventArgs e)
@@ -2225,7 +2219,7 @@ namespace SerialLoops.Editors
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
                 .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
                 (short)Enum.Parse<SpriteExitScriptParameter.SpriteExitTransition>(dropDown.SelectedKey);
-            UpdateTabTitle(false);
+            UpdateTabTitle(false, dropDown);
         }
         private void SpriteShakeDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
@@ -2236,7 +2230,7 @@ namespace SerialLoops.Editors
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
                 .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
                 (short)Enum.Parse<SpriteShakeScriptParameter.SpriteShakeEffect>(dropDown.SelectedKey);
-            UpdateTabTitle(false);
+            UpdateTabTitle(false, dropDown);
         }
         private void SpriteSelectionButton_SelectionMade(object sender, EventArgs e)
         {
@@ -2270,7 +2264,7 @@ namespace SerialLoops.Editors
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
                 .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
                 (short)Enum.Parse<TextEntranceEffectScriptParameter.TextEntranceEffect>(dropDown.SelectedKey);
-            UpdateTabTitle(false);
+            UpdateTabTitle(false, dropDown);
         }
 
         private void TopicDropDown_SelectedIndexChanged(object sender, EventArgs e)
@@ -2287,7 +2281,7 @@ namespace SerialLoops.Editors
             dropDown.Link.RemoveAllClickEvents();
             dropDown.Link.ClickUnique += (s, e) => { _tabs.OpenTab(_project.Items.FirstOrDefault(i => i.Name == dropDown.SelectedKey), _log); };
 
-            UpdateTabTitle(false);
+            UpdateTabTitle(false, dropDown);
         }
         private void SetUpTopicControlButton_Click(object sender, EventArgs e)
         {
@@ -2323,7 +2317,7 @@ namespace SerialLoops.Editors
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
                 .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
                 (short)Enum.Parse<TransitionScriptParameter.TransitionEffect>(dropDown.SelectedKey);
-            UpdateTabTitle(false);
+            UpdateTabTitle(false, dropDown);
         }
         private void VceDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
@@ -2347,7 +2341,7 @@ namespace SerialLoops.Editors
             dropDown.Link.RemoveAllClickEvents();
             dropDown.Link.ClickUnique += (s, e) => { _tabs.OpenTab(_project.Items.FirstOrDefault(i => i.Name == dropDown.SelectedKey), _log); };
 
-            UpdateTabTitle(false);
+            UpdateTabTitle(false, dropDown);
         }
     }
 }
