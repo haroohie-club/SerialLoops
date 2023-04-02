@@ -22,6 +22,8 @@ namespace SerialLoops.Editors
         private Button _deleteButton;
         private Button _clearButton;
 
+        private bool _triggerRefresh = true;
+
         private readonly IEnumerable<ListItem> verbs = Enum.GetNames<ScenarioVerb>().Select(v => new ListItem() { Text = v, Key = v });
 
         public ScenarioEditor(ScenarioItem item, ILogger log, Project project, EditorTabsPanel tabs) : base(item, log, project, tabs)
@@ -97,6 +99,15 @@ namespace SerialLoops.Editors
 
         private void CommandsPanel_SelectedItemChanged(object sender, EventArgs e)
         {
+            if (!_triggerRefresh)
+            {
+                return;
+            }
+
+            _triggerRefresh = false;
+            RefreshCommands();
+            _triggerRefresh = true;
+
             var command = _commandsPanel.SelectedCommand;
             int commandIndex = _commandsPanel.Viewer.SelectedIndex;
             _editorControls.Items.Clear();
@@ -237,7 +248,6 @@ namespace SerialLoops.Editors
                 dropDown.Link.ClickUnique += ControlGenerator.GetFileLinkClickHandler(item, _tabs, _log);
             }
 
-            RefreshCommands();
             UpdateTabTitle(false, dropDown);
         }
 
@@ -249,10 +259,8 @@ namespace SerialLoops.Editors
                 _scenario.Scenario.Commands[parameterBox.CommandIndex].Parameter = parameter;
                 _scenario.ScenarioCommands[parameterBox.CommandIndex] = (_scenario.ScenarioCommands[parameterBox.CommandIndex].Command, parameter.ToString());
 
-                RefreshCommands();
                 UpdateTabTitle(false, parameterBox);
             }
-            parameterBox.Focus();
         }
 
         private void AddButton_Click(object sender, EventArgs e)
