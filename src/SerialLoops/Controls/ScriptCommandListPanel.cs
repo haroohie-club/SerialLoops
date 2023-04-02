@@ -91,7 +91,7 @@ namespace SerialLoops.Controls
                 var treeGridView = (ScriptCommandSectionTreeGridView)o;
                 var entry = (ScriptCommandSectionEntry)treeGridView.SelectedItem;
                 
-                if (entry.Count > 0)
+                if (entry.Text.StartsWith("NONE") || entry.Text.StartsWith("SCRIPT"))
                 {
                     entry.ScriptFile.ScriptSections.Remove(entry.ScriptFile.ScriptSections.First(s => s.Name.Replace("/", "") == entry.Text));
                     LabelsSectionEntry label = entry.ScriptFile.LabelsSection.Objects.FirstOrDefault(l => l.Name.Replace("/", "") == entry.Text);
@@ -99,6 +99,7 @@ namespace SerialLoops.Controls
                     {
                         entry.ScriptFile.LabelsSection.Objects.Remove(label);
                     }
+                    entry.ScriptFile.NumSections--;
                 }
                 else
                 {
@@ -115,7 +116,40 @@ namespace SerialLoops.Controls
             };
             Viewer.AddCommand += (o, e) =>
             {
-                // todo
+                var treeGridView = (ScriptCommandSectionTreeGridView)o;
+                var entry = (ScriptCommandSectionEntry)treeGridView.SelectedItem;
+
+                if (string.IsNullOrEmpty(e.SectionTitle))
+                {
+                    e.Command.Script.ScriptSections[e.Command.Script.ScriptSections.IndexOf(e.Command.Section)].Objects.Insert(e.Command.Index, e.Command.Invocation);
+                    _commands[e.Command.Section].Insert(e.Command.Index, e.Command);
+                    for (int i = e.Command.Section.Objects.IndexOf(e.Command.Invocation) + 1; i < e.Command.Section.Objects.Count; i++)
+                    {
+                        _commands[e.Command.Section][i].Index++;
+                    }
+                }
+                else
+                {
+                    string sectionName = e.SectionTitle;
+                    EventFile scriptFile = entry.ScriptFile is null ? entry.Command.Script : entry.ScriptFile;
+                    scriptFile.ScriptSections.Add(new()
+                    {
+                        Name = sectionName,
+                        CommandsAvailable = EventFile.CommandsAvailable,
+                        Objects = new(),
+                        SectionType = typeof(ScriptSection),
+                        ObjectType = typeof(ScriptCommandInvocation),
+                    });
+                    scriptFile.NumSections++;
+                    scriptFile.LabelsSection.Objects.Insert(scriptFile.LabelsSection.Objects.Count - 1, new()
+                    {
+                        Name = $"NONE/{sectionName[4..]}",
+                        Id = (short)(scriptFile.LabelsSection.Objects.Max(l => l.Id) + 1)
+                    });
+                    _commands.Add(scriptFile.ScriptSections.Last(), new());
+                }
+
+                _editor.UpdateTabTitle(false);
             };
         }
 
@@ -128,9 +162,9 @@ namespace SerialLoops.Controls
                 {
                     commands.Add(new(command));
                 }
-                ScriptCommandSectionEntry s = new(section.Name, commands, Commands.Values.First().First().Script);
+                ScriptCommandSectionEntry s = new(section, commands, Commands.Values.First().First().Script);
             }
-            return Commands.Select(s => new ScriptCommandSectionEntry(s.Key.Name, s.Value.Select(c => new ScriptCommandSectionEntry(c)), Commands.Values.First().First().Script));
+            return Commands.Select(s => new ScriptCommandSectionEntry(s.Key, s.Value.Select(c => new ScriptCommandSectionEntry(c)), Commands.Values.First().First().Script));
         }
     }
 }

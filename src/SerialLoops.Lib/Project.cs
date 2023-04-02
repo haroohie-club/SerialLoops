@@ -202,6 +202,15 @@ namespace SerialLoops.Lib
                 .Select(m => new MapItem(m.CastTo<MapFile>(), qmap.QMaps.FindIndex(q => q.Name.Replace(".", "") == m.Name), this)));
             tracker.Finished++;
 
+            PlaceFile placeFile = Dat.Files.First(f => f.Name == "PLACES").CastTo<PlaceFile>();
+            tracker.Focus("Places", placeFile.PlaceGraphicIndices.Count);
+            for (int i = 0; i < placeFile.PlaceGraphicIndices.Count; i++)
+            {
+                GraphicsFile placeGrp = Grp.Files.First(g => g.Index == placeFile.PlaceGraphicIndices[i]);
+                Items.Add(new PlaceItem(i, placeGrp, this));
+            }
+            tracker.Finished++;
+
             tracker.Focus("Puzzles", 1);
             Items.AddRange(Dat.Files
                 .Where(d => d.Name.StartsWith("SLG"))

@@ -127,6 +127,9 @@ namespace SerialLoops
             Command closeProject = new() { MenuText = "Close Project", ToolBarText = "Close Project", Image = ControlGenerator.GetIcon("Close", _log) };
             closeProject.Executed += (sender, args) => CloseProjectView();
 
+            Command exportPatch = new() { MenuText = "Export Patch", ToolBarText = "Export Patch" };
+            exportPatch.Executed += Patch_Executed;
+
             // Tools
             Command searchProject = new() { MenuText = "Search...", ToolBarText = "Search", Shortcut = Application.Instance.CommonModifier | Keys.F, Image = ControlGenerator.GetIcon("Search", _log) };
             searchProject.Executed += Search_Executed;
@@ -162,6 +165,7 @@ namespace SerialLoops
                 fileMenu.Items.Add(saveProject);
                 fileMenu.Items.Add(projectSettings);
                 fileMenu.Items.Add(closeProject);
+                fileMenu.Items.Add(exportPatch);
             }
 
             Menu.Items.Add(new SubMenuItem { Text = "&Tools", Items = { searchProject, findOrphanedItems } });
@@ -469,6 +473,25 @@ namespace SerialLoops
                         _log.LogError("Build failed!");
                     }
                 }, tracker, "Building and Running");
+            }
+        }
+
+        private void Patch_Executed(object sender, EventArgs e)
+        {
+            OpenFileDialog baseRomDialog = new() { Title = "Select base ROM" };
+            baseRomDialog.Filters.Add(new() { Name = "NDS ROM", Extensions = new string[] { ".nds" } });
+            if (baseRomDialog.ShowAndReportIfFileSelected(this))
+            {
+                string currentRom = Path.Combine(OpenProject.MainDirectory, $"{OpenProject.Name}.nds");
+
+                SaveFileDialog outputPatchDialog = new() { Title = "Output patch location" };
+                outputPatchDialog.Filters.Add(new() { Name = "XDelta patch", Extensions = new string[] { ".xdelta" } });
+                if (outputPatchDialog.ShowAndReportIfFileSelected(this))
+                {
+                    LoopyProgressTracker tracker = new();
+                    _ = new ProgressDialog(() => Patch.CreatePatch(baseRomDialog.FileName, currentRom, outputPatchDialog.FileName),
+                        () => MessageBox.Show("Patch Created!", "Success!", MessageBoxType.Information), tracker, "Creating Patch");
+                }
             }
         }
 

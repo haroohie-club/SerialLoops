@@ -40,6 +40,7 @@ namespace SerialLoops.Lib.Items
             Dialogue_Config,
             Group_Selection,
             Map,
+            Place,
             Puzzle,
             Scenario,
             Script,
@@ -73,6 +74,9 @@ namespace SerialLoops.Lib.Items
                     MapItem map = (MapItem)this;
                     return project.Items.Where(i => i.Type == ItemType.Puzzle && ((PuzzleItem)i).Puzzle.Settings.MapId == map.QmapIndex)
                         .Concat(project.Items.Where(i => map.ScriptUses.Select(s => s.ScriptName).Contains(i.Name))).ToList();
+                case ItemType.Place:
+                    PlaceItem place = (PlaceItem)this;
+                    return project.Items.Where(i => place.ScriptUses.Select(s => s.ScriptName).Contains(i.Name)).ToList();
                 case ItemType.Puzzle:
                     PuzzleItem puzzle = (PuzzleItem)this;
                     if (scenario.Scenario.Commands.Any(c => c.Verb == ScenarioCommand.ScenarioVerb.PUZZLE_PHASE && c.Parameter == puzzle.Puzzle.Index))

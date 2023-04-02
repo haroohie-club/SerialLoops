@@ -10,25 +10,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using static HaruhiChokuretsuLib.Archive.Event.EventFile;
-using static SerialLoops.Lib.Script.Parameters.BgmModeScriptParameter;
-using static SerialLoops.Lib.Script.Parameters.BgScrollDirectionScriptParameter;
-using static SerialLoops.Lib.Script.Parameters.ChibiEmoteScriptParameter;
-using static SerialLoops.Lib.Script.Parameters.ChibiEnterExitScriptParameter;
-using static SerialLoops.Lib.Script.Parameters.ColorMonochromeScriptParameter;
-using static SerialLoops.Lib.Script.Parameters.EpisodeHeaderScriptParameter;
-using static SerialLoops.Lib.Script.Parameters.PaletteEffectScriptParameter;
-using static SerialLoops.Lib.Script.Parameters.ScreenScriptParameter;
-using static SerialLoops.Lib.Script.Parameters.SfxModeScriptParameter;
-using static SerialLoops.Lib.Script.Parameters.SpriteEntranceScriptParameter;
-using static SerialLoops.Lib.Script.Parameters.SpriteExitScriptParameter;
-using static SerialLoops.Lib.Script.Parameters.SpriteShakeScriptParameter;
-using static SerialLoops.Lib.Script.Parameters.TextEntranceEffectScriptParameter;
-using static SerialLoops.Lib.Script.Parameters.TransitionScriptParameter;
 
 namespace SerialLoops.Lib.Script
 {
     public class ScriptItemCommand
     {
+        public ScriptCommandInvocation Invocation { get; set; }
         public CommandVerb Verb { get; set; }
         public List<ScriptParameter> Parameters { get; set; }
         public ScriptSection Section { get; set; }
@@ -40,6 +27,7 @@ namespace SerialLoops.Lib.Script
         {
             return new()
             {
+                Invocation = invocation,
                 Verb = (CommandVerb)Enum.Parse(typeof(CommandVerb), invocation.Command.Mnemonic),
                 Parameters = GetScriptParameters(invocation, eventFile, project),
                 Section = section,
@@ -78,7 +66,7 @@ namespace SerialLoops.Lib.Script
                     commands.AddRange(commandTree[edge.Source]);
                 }
             }
-            commands.AddRange(commandTree[Section].TakeWhile(c => c != this));
+            commands.AddRange(commandTree[Section].TakeWhile(c => c.Index != Index));
             commands.Add(this);
 
             return commands;
@@ -245,7 +233,7 @@ namespace SerialLoops.Lib.Script
                         switch (i)
                         {
                             case 0:
-                                parameters.Add(new BgmScriptParameter("bgmIndex", (BackgroundMusicItem)project.Items.First(i => i.Type == ItemDescription.ItemType.BGM && ((BackgroundMusicItem)i).Index == parameter)));
+                                parameters.Add(new BgmScriptParameter("Music", (BackgroundMusicItem)project.Items.First(i => i.Type == ItemDescription.ItemType.BGM && ((BackgroundMusicItem)i).Index == parameter)));
                                 break;
                             case 1:
                                 parameters.Add(new BgmModeScriptParameter("Mode", parameter));
@@ -336,6 +324,14 @@ namespace SerialLoops.Lib.Script
                     case CommandVerb.GOTO:
                         if (i == 0)
                         {
+                            if (parameter == 0)
+                            {
+                                parameter = eventFile.LabelsSection.Objects.FirstOrDefault(l => l.Id != 00)?.Id ?? 0;
+                                if (parameter == 0)
+                                {
+                                    throw new ArgumentException("Adding GOTO command failed: no section with a label exists");
+                                }
+                            }
                             parameters.Add(new ScriptSectionScriptParameter("Script Section", eventFile.ScriptSections.First(s => s.Name == eventFile.LabelsSection.Objects.First(l => l.Id == parameter).Name.Replace("/", ""))));
                         }
                         break;
@@ -400,10 +396,10 @@ namespace SerialLoops.Lib.Script
                         switch (i)
                         {
                             case 0:
-                                parameters.Add(new BgScriptParameter("Background (Temp)", (BackgroundItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == parameter), kinetic: false));
+                                parameters.Add(new BgScriptParameter("Background", (BackgroundItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == parameter), kinetic: false));
                                 break;
                             case 1:
-                                parameters.Add(new BgScriptParameter("Background (Permanent)", (BackgroundItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == parameter), kinetic: false));
+                                parameters.Add(new BgScriptParameter("Background (Temp/CG)", (BackgroundItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == parameter), kinetic: false));
                                 break;
                             case 2:
                                 parameters.Add(new ShortScriptParameter("Fade Time (Frames)", parameter));
@@ -424,7 +420,7 @@ namespace SerialLoops.Lib.Script
                                 parameters.Add(new BoolScriptParameter("Display?", parameter == 1));
                                 break;
                             case 1:
-                                parameters.Add(new PlaceScriptParameter("Place", parameter));
+                                parameters.Add(new PlaceScriptParameter("Place", (PlaceItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Place && ((PlaceItem)i).Index == parameter)));
                                 break;
                         }
                         break;
@@ -645,22 +641,19 @@ namespace SerialLoops.Lib.Script
 
         private static DialogueLine GetDialogueLine(short index, EventFile eventFile)
         {
-            return eventFile.DialogueLines[index];
-        }
-
-        private static DialogueLine CreateDialogueLine(EventFile eventFile)
-        {
-            return eventFile.DialogueLines[0]; // todo
+            return eventFile.DialogueSection.Objects[index];
         }
 
         public ScriptItemCommand Clone()
         {
             return new()
             {
+                Invocation = Invocation,
                 Verb = Verb,
                 Parameters = Parameters.Select(p => p.Clone()).ToList(),
                 Section = Section,
                 Index = Index,
+                Script = Script,
                 Project = Project,
             };
         }
