@@ -42,7 +42,7 @@ namespace SerialLoops.Editors
                 {
                     _project.Extra.Bgms[_project.Extra.Bgms.IndexOf(_project.Extra.Bgms.First(b => b.Name.GetSubstitutedString(_project) == _bgm.BgmName))].Name = bgmTitleBox.Text.GetOriginalString(_project);
                     _bgm.BgmName = bgmTitleBox.Text;
-                    UpdateTabTitle(false);
+                    UpdateTabTitle(false, bgmTitleBox);
                 };
             }
 
