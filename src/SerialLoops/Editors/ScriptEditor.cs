@@ -1988,11 +1988,17 @@ namespace SerialLoops.Editors
         private void DialogueTextArea_TextChanged(object sender, EventArgs e)
         {
             ScriptCommandTextArea textArea = (ScriptCommandTextArea)sender;
+            if (!textArea.FireTextChanged)
+            {
+                return;
+            }
 
             int currentCaretIndex = textArea.CaretIndex;
+            textArea.FireTextChanged = false;
             textArea.Text = Regex.Replace(textArea.Text, @"^""", "“");
             textArea.Text = Regex.Replace(textArea.Text, @"\s""", "“");
             textArea.Text = textArea.Text.Replace('"', '”');
+            textArea.FireTextChanged = true;
             textArea.CaretIndex = currentCaretIndex;
 
             _log.Log($"Attempting to modify dialogue in parameter {textArea.ParameterIndex} to dialogue '{textArea.Text}' in {textArea.Command.Index} in file {_script.Name}...");

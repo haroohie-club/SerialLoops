@@ -38,6 +38,7 @@ namespace SerialLoops.Controls
     {
         public ScriptItemCommand Command { get; set; }
         public int ParameterIndex { get; set; }
+        public bool FireTextChanged { get; set; } = true;
     }
     public class ScriptCommandNumericStepper : NumericStepper
     {
