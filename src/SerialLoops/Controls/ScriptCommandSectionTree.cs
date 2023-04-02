@@ -253,8 +253,8 @@ namespace SerialLoops.Controls
             }
             
             AddCommand?.Invoke(this, new(item.Command));
-            _treeView.SelectedItem = item;
             _treeView.DataStore = _treeView.DataStore;
+            _treeView.SelectedItem = item;
         }
 
         internal void AddSection(ScriptCommandSectionTreeItem section)
@@ -265,8 +265,8 @@ namespace SerialLoops.Controls
             section.Parent = rootNode;
 
             AddCommand?.Invoke(this, new(section.Text));
-            _treeView.SelectedItem = section;
             _treeView.DataStore = rootNode;
+            _treeView.SelectedItem = section;
         }
 
         public void SetContents(IEnumerable<ScriptCommandSectionEntry> topNodes, bool expanded)
