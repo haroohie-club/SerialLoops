@@ -32,11 +32,31 @@ namespace SerialLoops.Editors
         }
 
         public abstract Container GetEditorPanel();
-        
-        public void UpdateTabTitle(bool saved)
+
+        public void UpdateTabTitle(bool saved, Control caller = null)
         {
+            if (Description.UnsavedChanges == !saved)
+            {
+                // no need to update then, let's save on perf
+                return;
+            }
+            int caretIndex = 0;
+            if (caller is not null && caller is TextBox textBox)
+            {
+                // This hack is necessary because macOS handles .Focus by selecting all text in the textbox
+                caretIndex = textBox.CaretIndex;
+            }
             Description.UnsavedChanges = !saved;
             Text = Description.DisplayNameWithStatus;
+            if (caller is not null && caller is TextBox box)
+            {
+                box.Focus();
+                box.CaretIndex = caretIndex;
+            }
+            else
+            {
+                caller?.Focus();
+            }
         }
     }
 }
