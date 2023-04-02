@@ -16,7 +16,7 @@
   </ItemGroup>
 	
   <ItemGroup>
-    <PackageReference Include="Eto.Platform.Mac64" Version="2.7.2-ci-20230201.4059880747" />
+    <PackageReference Include="Eto.Platform.Mac64" Version="2.7.4" />
     <PackageReference Include="OpenTK" Version="4.7.5" />
   </ItemGroup>
 	
