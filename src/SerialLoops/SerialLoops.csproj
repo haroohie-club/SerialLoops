@@ -60,7 +60,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Eto.Forms" Version="2.7.2-ci-20230201.4059880747" />
+    <PackageReference Include="Eto.Forms" Version="2.7.4" />
     <PackageReference Include="System.Text.Json" Version="7.0.2" />
   </ItemGroup>
 
