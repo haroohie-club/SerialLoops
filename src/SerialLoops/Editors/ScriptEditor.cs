@@ -791,10 +791,17 @@ namespace SerialLoops.Editors
                 Spacing = 3,
             };
 
-            TextBox choiceTextBox = new() { Text = choice.Text.GetSubstitutedString(_project) };
+            ScriptCommandTextBox choiceTextBox = new() { Text = choice.Text.GetSubstitutedString(_project) };
             choiceTextBox.TextChanged += (obj, args) =>
             {
+                if (!choiceTextBox.FireTextChanged)
+                {
+                    return;
+                }
+
+                choiceTextBox.FireTextChanged = false;
                 choice.Text = choiceTextBox.Text.GetOriginalString(_project);
+                choiceTextBox.FireTextChanged = true;
                 UpdateTabTitle(false, choiceTextBox);
             };
 
