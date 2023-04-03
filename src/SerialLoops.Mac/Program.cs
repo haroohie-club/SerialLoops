@@ -12,6 +12,12 @@ namespace SerialLoops.Mac
             var platform = new Eto.Mac.Platform();
             platform.Add<SoundPlayer.ISoundPlayer>(() => new SoundPlayerHandler());
 
+            Eto.Style.Add<Eto.Mac.Forms.ApplicationHandler>(null, handler =>
+            {
+                handler.EnableNativeCrashReport = true;
+                handler.EnableNativeExceptionTranslation = true;
+            });
+
             Application application = new(platform);
             MainForm mainForm = new();
             try
