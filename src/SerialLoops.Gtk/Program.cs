@@ -12,7 +12,16 @@ namespace SerialLoops.Gtk
             var platform = new Eto.GtkSharp.Platform();
             platform.Add<SoundPlayer.ISoundPlayer>(() => new SoundPlayerHandler());
 
-            new Application(platform).Run(new MainForm());
+            Application application = new(platform);
+            MainForm mainForm = new();
+            try
+            {
+                application.Run(mainForm);
+            }
+            catch (Exception ex)
+            {
+                mainForm.Log.LogError($"{ex.Message}\n\n{ex.StackTrace}");
+            }
         }
     }
 }

@@ -43,7 +43,16 @@ namespace SerialLoops.Wpf
                 button.Control.Content = stackPanel;
             });
 
-            new Application(platform).Run(new MainForm());
+            Application application = new(platform);
+            MainForm mainForm = new();
+            try
+            {
+                application.Run(mainForm);
+            }
+            catch (Exception ex)
+            {
+                mainForm.Log.LogError($"{ex.Message}\n\n{ex.StackTrace}");
+            }
         }
     }
 }
