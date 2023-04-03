@@ -525,6 +525,7 @@ namespace SerialLoops
                     {
                         case DialogResult.Yes:
                             SaveProject_Executed(sender, e);
+                            BuildIterativeProject_Executed(sender, e); // make sure we lock in the changes
                             break;
                         case DialogResult.Cancel:
                             ((CancelEventArgs)e).Cancel = true;
