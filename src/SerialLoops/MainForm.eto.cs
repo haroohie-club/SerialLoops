@@ -299,6 +299,10 @@ namespace SerialLoops
                 if (OpenProject is not null)
                 {
                     OpenProjectView(OpenProject, tracker);
+                } 
+                else
+                {
+                    CloseProjectView();
                 }
             }, tracker, "Loading Project");
         }
