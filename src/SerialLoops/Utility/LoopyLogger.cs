@@ -57,7 +57,7 @@ namespace SerialLoops.Utility
         {
             if (_writer is not null)
             {
-                _writer.WriteLine($"{DateTimeOffset.Now} - ERROR: {ex.Message}\n\n{ex.StackTrace}");
+                _writer.WriteLine($"{DateTimeOffset.Now} - SERIAL LOOPS CRASH: {ex.Message}\n\n{ex.StackTrace}");
                 _writer.Flush();
             }
         }
