@@ -203,6 +203,10 @@ namespace SerialLoops
                         }
                         tracker.Finished++;
                     }
+                    if (EditorTabs.Tabs.Pages.Count > 0)
+                    {
+                        EditorTabs.Tabs.SelectedIndex = 0;
+                    }
                 }
             }
             catch (Exception e)
