@@ -94,8 +94,13 @@ namespace SerialLoops
 
             // About
             Command aboutCommand = new() { MenuText = "About...", Image = ControlGenerator.GetIcon("Help", Log) };
-            AboutDialog aboutDialog = new() { ProgramName = "Serial Loops", Developers = new[] { "Jonko", "William" }, Copyright = "© Haroohie Translation Club, 2023", Website = new Uri("https://haroohie.club") };
-            aboutCommand.Executed += (sender, e) => aboutDialog.ShowDialog(this);
+            aboutCommand.Executed += (sender, e) => new AboutDialog()
+            {
+                ProgramName = "Serial Loops",
+                Developers = new[] { "Jonko", "William278" },
+                Copyright = "© Haroohie Translation Club, 2023",
+                Website = new Uri("https://haroohie.club")
+            }.ShowDialog(this);
 
             // Create Menu
             _recentProjects = new() { Text = "Recent Projects" };
