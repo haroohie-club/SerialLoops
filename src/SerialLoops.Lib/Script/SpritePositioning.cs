@@ -36,5 +36,6 @@ namespace SerialLoops.Lib.Script
     {
         public CharacterSpriteItem Sprite { get; set; }
         public SpritePositioning Positioning { get; set; }
+        public SKPaint PalEffect { get; set; }
     }
 }

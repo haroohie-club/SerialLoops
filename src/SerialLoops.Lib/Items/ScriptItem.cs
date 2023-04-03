@@ -117,6 +117,9 @@ namespace SerialLoops.Lib.Items
 
         public override void Refresh(Project project)
         {
+            Graph = new();
+            Graph.AddVertexRange(Event.ScriptSections);
+            CalculateGraphEdges(GetScriptCommandTree(project));
         }
     }
 }

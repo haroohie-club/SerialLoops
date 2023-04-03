@@ -31,6 +31,8 @@ namespace SerialLoops.Lib
         [JsonIgnore]
         public string ProjectFile => Path.Combine(MainDirectory, $"{Name}.{PROJECT_FORMAT}");
         [JsonIgnore]
+        public Config Config { get; private set; }
+        [JsonIgnore]
         public ProjectSettings Settings { get; set; }
         [JsonIgnore]
         public List<ItemDescription> Items { get; set; } = new();
@@ -53,6 +55,9 @@ namespace SerialLoops.Lib
         [JsonIgnore]
         public SKBitmap FontBitmap { get; set; }
 
+        [JsonIgnore]
+        public ExtraFile Extra { get; set; }
+
         public Project()
         {
         }
@@ -62,6 +67,7 @@ namespace SerialLoops.Lib
             Name = name;
             LangCode = langCode;
             MainDirectory = Path.Combine(config.ProjectsDirectory, name);
+            Config = config;
             log.Log("Creating project directories...");
             try
             {
@@ -78,9 +84,11 @@ namespace SerialLoops.Lib
             }
         }
         
-        public void Load(ILogger log, IProgressTracker tracker)
+        public void Load(Config config, ILogger log, IProgressTracker tracker)
         {
+            Config = config;
             LoadProjectSettings(log, tracker);
+            ClearOrCreateCaches(config.CachesDirectory, log);
             LoadArchives(log, tracker);
         }
 
@@ -128,7 +136,7 @@ namespace SerialLoops.Lib
             tracker.Finished++;
 
             tracker.Focus("Extras", 1);
-            ExtraFile extras = Dat.Files.First(f => f.Name == "EXTRAS").CastTo<ExtraFile>();
+            Extra = Dat.Files.First(f => f.Name == "EXTRAS").CastTo<ExtraFile>();
             tracker.Finished++;
 
             BgTableFile bgTable = Dat.Files.First(f => f.Name == "BGTBLS").CastTo<BgTableFile>();
@@ -145,7 +153,7 @@ namespace SerialLoops.Lib
                     {
                         name = $"{bgNameBackup}{j:D2}";
                     }
-                    Items.Add(new BackgroundItem(name, i, entry, this, extras));
+                    Items.Add(new BackgroundItem(name, i, entry, this));
                 }
                 tracker.Finished++;
             }
@@ -154,7 +162,7 @@ namespace SerialLoops.Lib
             tracker.Focus("BGM Tracks", bgmFiles.Length);
             for (int i = 0; i < bgmFiles.Length; i++)
             {
-                Items.Add(new BackgroundMusicItem(bgmFiles[i], i, extras, this));
+                Items.Add(new BackgroundMusicItem(bgmFiles[i], i, this));
                 tracker.Finished++;
             }
 
@@ -194,6 +202,15 @@ namespace SerialLoops.Lib
                 .Select(m => new MapItem(m.CastTo<MapFile>(), qmap.QMaps.FindIndex(q => q.Name.Replace(".", "") == m.Name), this)));
             tracker.Finished++;
 
+            PlaceFile placeFile = Dat.Files.First(f => f.Name == "PLACES").CastTo<PlaceFile>();
+            tracker.Focus("Places", placeFile.PlaceGraphicIndices.Count);
+            for (int i = 0; i < placeFile.PlaceGraphicIndices.Count; i++)
+            {
+                GraphicsFile placeGrp = Grp.Files.First(g => g.Index == placeFile.PlaceGraphicIndices[i]);
+                Items.Add(new PlaceItem(i, placeGrp, this));
+            }
+            tracker.Finished++;
+
             tracker.Focus("Puzzles", 1);
             Items.AddRange(Dat.Files
                 .Where(d => d.Name.StartsWith("SLG"))
@@ -221,6 +238,25 @@ namespace SerialLoops.Lib
             }
         }
 
+        public static void ClearOrCreateCaches(string cachesDirectory, ILogger log)
+        {
+            if (Directory.Exists(cachesDirectory))
+            {
+                Directory.Delete(cachesDirectory, true);
+            }
+
+            log.Log("Creating cache directory...");
+            Directory.CreateDirectory(cachesDirectory);
+
+            string bgmCache = Path.Combine(cachesDirectory, "bgm");
+            log.Log("Creating BGM cache...");
+            Directory.CreateDirectory(bgmCache);
+
+            string vceCache = Path.Combine(cachesDirectory, "vce");
+            log.Log("Creating voice file cache...");
+            Directory.CreateDirectory(vceCache);
+        }
+
         public ItemDescription FindItem(string name)
         {
             return Items.FirstOrDefault(i => i.Name == name.Split(" - ")[0]);
@@ -239,7 +275,7 @@ namespace SerialLoops.Lib
                 tracker.Focus($"{Path.GetFileNameWithoutExtension(projFile)} Project Data", 1);
                 Project project = JsonSerializer.Deserialize<Project>(File.ReadAllText(projFile));
                 tracker.Finished++;
-                project.Load(log, tracker);
+                project.Load(config, log, tracker);
                 return project;
             }
             catch (Exception exc)

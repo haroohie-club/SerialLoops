@@ -1,5 +1,6 @@
 ﻿using Eto.Wpf;
 using Eto.Wpf.Forms.ToolBar;
+using SerialLoops.Utility;
 using System;
 using System.Windows.Controls;
 using Application = Eto.Forms.Application;
@@ -42,7 +43,16 @@ namespace SerialLoops.Wpf
                 button.Control.Content = stackPanel;
             });
 
-            new Application(platform).Run(new MainForm());
+            Application application = new(platform);
+            MainForm mainForm = new();
+            try
+            {
+                application.Run(mainForm);
+            }
+            catch (Exception ex)
+            {
+                mainForm.Log.LogCrash(ex);
+            }
         }
     }
 }

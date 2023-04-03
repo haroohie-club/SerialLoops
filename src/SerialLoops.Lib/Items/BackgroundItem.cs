@@ -22,14 +22,14 @@ namespace SerialLoops.Lib.Items
         public BackgroundItem(string name) : base(name, ItemType.Background)
         {
         }
-        public BackgroundItem(string name, int id, BgTableEntry entry, Project project, ExtraFile extras) : base(name, ItemType.Background)
+        public BackgroundItem(string name, int id, BgTableEntry entry, Project project) : base(name, ItemType.Background)
         {
             Id = id;
             BackgroundType = entry.Type;
             Graphic1 = project.Grp.Files.First(g => g.Index == entry.BgIndex1);
             Graphic2 = project.Grp.Files.FirstOrDefault(g => g.Index == entry.BgIndex2); // can be null if type is SINGLE_TEX
-            CgStruct? cgEntry = extras.Cgs.FirstOrDefault(c => c.BgId == Id);
-            if (cgEntry.HasValue)
+            CgStruct cgEntry = project.Extra.Cgs.FirstOrDefault(c => c.BgId == Id);
+            if (cgEntry is not null)
             {
                 CgName = cgEntry?.Name?.GetSubstitutedString(project);
                 ExtrasShort = cgEntry?.Unknown02 ?? 0;

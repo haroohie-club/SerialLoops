@@ -54,7 +54,7 @@ namespace SerialLoops.Lib
             }
         }
 
-        public static void OpenRom(Project project, string romPath, bool includeFontHack, IProgressTracker tracker)
+        public static void OpenRom(Project project, string romPath, IProgressTracker tracker)
         {
             // Unpack the ROM, creating the two project directories
             tracker.Focus("Creating Directories", 8);
@@ -103,13 +103,6 @@ namespace SerialLoops.Lib
             assetsDirectoryTree.Create(project.BaseDirectory);
             assetsDirectoryTree.Create(project.IterativeDirectory);
             tracker.Finished += 6;
-
-            if (includeFontHack)
-            {
-                tracker.Focus("Applying Hacks", 1);
-                SetUpLocalizedHacks(project);
-                tracker.Finished++;
-            }
 
             // Copy out the files we need to build the ROM
             tracker.Focus("Copying Files", 4);

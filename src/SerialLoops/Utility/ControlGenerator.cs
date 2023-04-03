@@ -56,18 +56,7 @@ namespace SerialLoops.Utility
             {
                 link.ClickUnique += GetFileLinkClickHandler(description, editorTabs, log);
             }
-            return new StackLayout
-            {
-                Orientation = Orientation.Horizontal,
-                HorizontalContentAlignment = HorizontalAlignment.Left,
-                VerticalContentAlignment = VerticalAlignment.Center,
-                Spacing = 5,
-                Items =
-                {
-                    new ImageView { Image = new Bitmap(GetItemIcon(description.Type, log)) },
-                    link
-                }
-            };
+            return GetControlWithIcon(link, description.Type.ToString(), log);
         }
 
         public static EventHandler<EventArgs> GetFileLinkClickHandler(ItemDescription description, EditorTabsPanel editorTabs, ILogger log)
@@ -80,11 +69,11 @@ namespace SerialLoops.Utility
             return GetIcon(type.ToString(), log);
         }
         
-        public static Icon GetIcon(string iconName, ILogger log)
+        public static Icon GetIcon(string iconName, ILogger log, int size = 16)
         {
             try
             {
-                return Icon.FromResource($"SerialLoops.Icons.{iconName}.png").WithSize(16, 16);
+                return Icon.FromResource($"SerialLoops.Icons.{iconName}.png").WithSize(size, size);
             }
             catch (Exception exc)
             {
@@ -93,19 +82,35 @@ namespace SerialLoops.Utility
             }
         }
 
+        public static StackLayout GetControlWithIcon(Control control, string iconName, ILogger log)
+        {
+            return new StackLayout
+            {
+                Orientation = Orientation.Horizontal,
+                HorizontalContentAlignment = HorizontalAlignment.Left,
+                VerticalContentAlignment = VerticalAlignment.Center,
+                Spacing = 5,
+                Items =
+                {
+                    new ImageView { Image = new Bitmap(GetIcon(iconName, log)) },
+                    control
+                }
+            };
+        }
+
         public static ButtonToolItem GetToolBarItem(Command command)
         {
             return new(command) { Style = "sl-toolbar-button" };
         }
 
-        internal static StackLayout GetPlayerStackLayout(SoundPlayerPanel soundPlayer, string trackName, string trackDetails)
+        internal static StackLayout GetPlayerStackLayout(SoundPlayerPanel soundPlayer, Control trackName, string trackDetails)
         {
             StackLayout details = new()
             {
                 Orientation = Orientation.Vertical,
                 Spacing = 5,
             };
-            if (!string.IsNullOrEmpty(trackName)) {
+            if (trackName is not null) {
                 details.Items.Add(trackName);
             }
             if (!string.IsNullOrEmpty(trackDetails))
@@ -118,8 +123,17 @@ namespace SerialLoops.Utility
                 Orientation = Orientation.Horizontal,
                 VerticalContentAlignment = VerticalAlignment.Center,
                 Spacing = 10,
-                Items = { soundPlayer, details }
+                Items =
+                {
+                    soundPlayer,
+                    details
+                }
             };
+        }
+
+        internal static Label GetTextHeader(string text, int size = 14)
+        {
+            return new Label { Text = text, Font = new Font(SystemFont.Bold, size) };
         }
     }
 }

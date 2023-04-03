@@ -1,17 +1,20 @@
-﻿namespace SerialLoops.Lib.Script.Parameters
+﻿using SerialLoops.Lib.Items;
+using System.Linq;
+
+namespace SerialLoops.Lib.Script.Parameters
 {
     public class PlaceScriptParameter : ScriptParameter
     {
-        public short PlaceIndex { get; set; }
+        public PlaceItem Place { get; set; }
 
-        public PlaceScriptParameter(string name, short placeIndex) : base(name, ParameterType.PLACE)
+        public PlaceScriptParameter(string name, PlaceItem place) : base(name, ParameterType.PLACE)
         {
-            PlaceIndex = placeIndex;
+            Place = place;
         }
 
         public override PlaceScriptParameter Clone()
         {
-            return new(Name, PlaceIndex);
+            return new(Name, Place);
         }
     }
 }

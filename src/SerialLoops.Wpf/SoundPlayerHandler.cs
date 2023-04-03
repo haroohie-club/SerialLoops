@@ -1,5 +1,6 @@
 ﻿using Eto.Wpf.Forms;
 using NAudio.Wave;
+using SerialLoops.Utility;
 using System.Windows.Controls;
 
 namespace SerialLoops.Wpf

@@ -44,8 +44,9 @@ namespace SerialLoops.Editors
                 Items =
                 {
                     mapLayout,
-                    drawPathingMapBox,
-                    drawStartingPointBox,
+                    ControlGenerator.GetControlWithIcon(drawPathingMapBox, "Pathing", _log),
+                    ControlGenerator.GetControlWithIcon(drawStartingPointBox, "Camera", _log)
+,
                 }
             };
         }

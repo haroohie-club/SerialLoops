@@ -1,5 +1,6 @@
 ﻿using Eto.Drawing;
 using HaruhiChokuretsuLib.Util;
+using SerialLoops.Dialogs;
 using SerialLoops.Lib.Items;
 using System;
 using System.Collections.Generic;

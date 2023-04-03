@@ -1,9 +1,13 @@
 ﻿using Eto.Forms;
+using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
+using SerialLoops.Dialogs;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
+using SerialLoops.Lib.Script;
 using SerialLoops.Utility;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -98,8 +102,9 @@ namespace SerialLoops.Controls
     public class ScriptCommandListContextMenu : ContextMenu
     {
         private readonly ScriptCommandSectionTreeGridView _treeView;
-        private ScriptCommandSectionTreeItem _clipboard = null;
+        private ScriptCommandSectionTreeItem _clipboard;
         private bool _clipboardIsCut = false;
+        private Dictionary<ScriptSection, List<ScriptItemCommand>> _commands;
 
         public ScriptCommandListContextMenu(ScriptCommandSectionTreeGridView treeView)
         {

@@ -12,15 +12,29 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Icons\Add.png" />
+    <None Remove="Icons\Add_Section.png" />
+    <None Remove="Icons\AppIcon.png" />
     <None Remove="Icons\Background.png" />
     <None Remove="Icons\BGM.png" />
+    <None Remove="Icons\Camera.png" />
     <None Remove="Icons\Character_Sprite.png" />
     <None Remove="Icons\Chess.png" />
     <None Remove="Icons\Chibi.png" />
+    <None Remove="Icons\Clear.png" />
+    <None Remove="Icons\Close.png" />
     <None Remove="Icons\Dialogue_Config.png" />
     <None Remove="Icons\Group_Selection.png" />
     <None Remove="Icons\Map.png" />
+    <None Remove="Icons\New.png" />
+    <None Remove="Icons\Open.png" />
+    <None Remove="Icons\Options.png" />
+    <None Remove="Icons\Pathing.png" />
+    <None Remove="Icons\Place.png" />
+    <None Remove="Icons\Project_Options.png" />
     <None Remove="Icons\Puzzle.png" />
+    <None Remove="Icons\Remove.png" />
+    <None Remove="Icons\Save.png" />
     <None Remove="Icons\Scenario.png" />
     <None Remove="Icons\Script.png" />
     <None Remove="Icons\System_Texture.png" />
@@ -46,7 +60,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Eto.Forms" Version="2.7.2-ci-20230201.4059880747" />
+    <PackageReference Include="Eto.Forms" Version="2.7.4" />
     <PackageReference Include="System.Text.Json" Version="7.0.2" />
   </ItemGroup>
 
@@ -58,10 +72,10 @@
     <Compile Update="ProjectCreationDialog - Copy.eto.cs">
       <DependentUpon>$([System.String]::Copy('%(Filename)').Replace('.eto', ''))%(Extension)</DependentUpon>
     </Compile>
-    <Compile Update="SearchDialog.eto.cs">
+    <Compile Update="Dialogs\SearchDialog.eto.cs">
       <DependentUpon>$([System.String]::Copy('%(Filename)').Replace('.eto', ''))%(Extension)</DependentUpon>
     </Compile>
-    <Compile Update="ProjectCreationDialog.eto.cs">
+    <Compile Update="Dialogs\ProjectCreationDialog.eto.cs">
       <DependentUpon>ProjectCreationDialog.cs</DependentUpon>
     </Compile>
   </ItemGroup>

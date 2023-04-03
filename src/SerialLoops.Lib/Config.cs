@@ -16,10 +16,13 @@ namespace SerialLoops.Lib
         public string ProjectsDirectory => Path.Combine(UserDirectory, "Projects");
         [JsonIgnore]
         public string LogsDirectory => Path.Combine(UserDirectory, "Logs");
+        [JsonIgnore]
+        public string CachesDirectory => Path.Combine(UserDirectory, "Caches");
         public string DevkitArmPath { get; set; }
         public string EmulatorPath { get; set; }
         public bool AutoReopenLastProject { get; set; }
         public bool RememberProjectWorkspace { get; set; }
+        public bool RemoveMissingProjects { get; set; }
 
         public void Save(ILogger log)
         {
@@ -98,7 +101,8 @@ namespace SerialLoops.Lib
                 DevkitArmPath = devkitArmDir,
                 EmulatorPath = emulatorPath,
                 AutoReopenLastProject = true,
-                RememberProjectWorkspace = true
+                RememberProjectWorkspace = true,
+                RemoveMissingProjects = false
             };
         }
     }

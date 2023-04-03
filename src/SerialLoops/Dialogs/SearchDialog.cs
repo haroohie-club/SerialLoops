@@ -1,4 +1,5 @@
 using HaruhiChokuretsuLib.Util;
+using SerialLoops.Dialogs;
 
 namespace SerialLoops
 {

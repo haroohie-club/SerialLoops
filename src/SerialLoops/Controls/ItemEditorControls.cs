@@ -1,5 +1,6 @@
 ﻿using Eto.Forms;
 using HaruhiChokuretsuLib.Util;
+using SerialLoops.Dialogs;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
@@ -14,6 +15,8 @@ namespace SerialLoops.Controls
     {
         public ScriptItemCommand Command { get; set; }
         public int ParameterIndex { get; set; }
+        public int CurrentShort { get; set; }
+        public List<ScriptCommandDropDown> OtherDropDowns { get; set; }
         public ClearableLinkButton Link { get; set; }
     }
     public class ScriptCommandCheckBox : CheckBox
@@ -30,16 +33,19 @@ namespace SerialLoops.Controls
     {
         public ScriptItemCommand Command { get; set; }
         public int ParameterIndex { get; set; }
+        public bool FireTextChanged { get; set; } = true;
     }
     public class ScriptCommandTextArea : TextArea
     {
         public ScriptItemCommand Command { get; set; }
         public int ParameterIndex { get; set; }
+        public bool FireTextChanged { get; set; } = true;
     }
     public class ScriptCommandNumericStepper : NumericStepper
     {
         public ScriptItemCommand Command { get; set; }
         public int ParameterIndex { get; set; }
+        public int SecondIndex { get; set; } = -1;
     }
     public class TopicSelectButton : Button
     {

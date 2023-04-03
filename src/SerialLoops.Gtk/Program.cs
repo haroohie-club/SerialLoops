@@ -1,4 +1,5 @@
 ﻿using Eto.Forms;
+using SerialLoops.Utility;
 using System;
 
 namespace SerialLoops.Gtk
@@ -10,6 +11,11 @@ namespace SerialLoops.Gtk
         {
             var platform = new Eto.GtkSharp.Platform();
             platform.Add<SoundPlayer.ISoundPlayer>(() => new SoundPlayerHandler());
+
+            Eto.Style.Add<Eto.GtkSharp.Forms.ApplicationHandler>(null, handler =>
+            {
+                handler.BadgeLabel = "Serial Loops";
+            });
 
             new Application(platform).Run(new MainForm());
         }
