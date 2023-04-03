@@ -378,7 +378,7 @@ namespace SerialLoops.Lib.Script
                             parameters.Add(new ShortScriptParameter("Add", parameter));
                         }
                         break;
-                    case CommandVerb.BG_PALEFFECT:
+                    case CommandVerb.PALEFFECT:
                         switch (i)
                         {
                             case 0:
@@ -587,7 +587,7 @@ namespace SerialLoops.Lib.Script
                             parameters.Add(new BoolScriptParameter("Visible?", parameter == 1));
                         }
                         break;
-                    case CommandVerb.BG_DISPTEMP:
+                    case CommandVerb.BG_DISPCG:
                         switch (i)
                         {
                             case 0:

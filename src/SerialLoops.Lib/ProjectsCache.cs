@@ -15,7 +15,7 @@ namespace SerialLoops.Lib
         public Dictionary<string, List<string>> RecentWorkspaces { get; set; }
         public bool HadProjectOpenOnLastClose { get; set; }
 
-        public async void Save(ILogger log)
+        public void Save(ILogger log)
         {
             log.Log($"Caching recent projects and workspaces to '{CacheFilePath}'...");
             IO.WriteStringFile(CacheFilePath, JsonSerializer.Serialize(this), log);

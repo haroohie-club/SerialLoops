@@ -35,7 +35,7 @@ namespace SerialLoops.Editors
         private Button _addCommandButton;
         private Button _addSectionButton;
         private Button _deleteButton;
-        private CancellationTokenSource _dialogueCancellation, _optionCancellation;
+        private CancellationTokenSource _dialogueCancellation;
         private System.Timers.Timer _dialogueRefreshTimer;
         private int _chibiHighlighted = -1;
         private ScriptCommandDropDown _currentSpeakerDropDown; // This property is used for storing the speaker dropdown to append dialogue property dropdowns to
@@ -181,7 +181,7 @@ namespace SerialLoops.Editors
                             {
                                 case CommandVerb.BG_DISP:
                                 case CommandVerb.BG_DISP2:
-                                case CommandVerb.BG_DISPTEMP:
+                                case CommandVerb.BG_DISPCG:
                                     invocation.Parameters[0] = (short)((BackgroundItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).BackgroundType != BgType.KINETIC_SCREEN)).Id;
                                     break;
 
@@ -893,12 +893,12 @@ namespace SerialLoops.Editors
                             {
                                 case 0:
                                     bgSelectionButton.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background &&
-                                        (((BackgroundItem)i).BackgroundType == BgType.TEX_BOTTOM))
+                                        (((BackgroundItem)i).BackgroundType == BgType.TEX_BG))
                                         .Select(b => b as IPreviewableGraphic));
                                     break;
                                 case 1:
                                     bgSelectionButton.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background &&
-                                        ((BackgroundItem)i).BackgroundType != BgType.KINETIC_SCREEN && ((BackgroundItem)i).BackgroundType != BgType.TEX_BOTTOM)
+                                        ((BackgroundItem)i).BackgroundType != BgType.KINETIC_SCREEN && ((BackgroundItem)i).BackgroundType != BgType.TEX_BG)
                                         .Select(b => b as IPreviewableGraphic));
                                     break;
                             }
@@ -910,13 +910,13 @@ namespace SerialLoops.Editors
                                 case CommandVerb.BG_DISP:
                                 case CommandVerb.BG_DISP2:
                                     bgSelectionButton.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background &&
-                                        (((BackgroundItem)i).BackgroundType == BgType.TEX_BOTTOM))
+                                        (((BackgroundItem)i).BackgroundType == BgType.TEX_BG))
                                         .Select(b => b as IPreviewableGraphic));
                                     break;
 
-                                case CommandVerb.BG_DISPTEMP:
+                                case CommandVerb.BG_DISPCG:
                                     bgSelectionButton.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background &&
-                                        ((BackgroundItem)i).BackgroundType != BgType.KINETIC_SCREEN && ((BackgroundItem)i).BackgroundType != BgType.TEX_BOTTOM)
+                                        ((BackgroundItem)i).BackgroundType != BgType.KINETIC_SCREEN && ((BackgroundItem)i).BackgroundType != BgType.TEX_BG)
                                         .Select(b => b as IPreviewableGraphic));
                                     break;
 
@@ -1481,7 +1481,7 @@ namespace SerialLoops.Editors
                                 }
                                 else
                                 {
-                                    _log.LogWarning($"Chibi {chibi.Name} set to join");
+                                    _log.LogWarning($"Chibi {chibi.Name} set to join, but already was present");
                                 }
                             }
                         }
@@ -1540,9 +1540,9 @@ namespace SerialLoops.Editors
 
                 // Draw background
                 bool bgReverted = false;
-                ScriptItemCommand palCommand = commands.LastOrDefault(c => c.Verb == CommandVerb.BG_PALEFFECT);
+                ScriptItemCommand palCommand = commands.LastOrDefault(c => c.Verb == CommandVerb.PALEFFECT);
                 ScriptItemCommand lastBgCommand = commands.LastOrDefault(c => c.Verb == CommandVerb.BG_DISP ||
-                    c.Verb == CommandVerb.BG_DISP2 || c.Verb == CommandVerb.BG_DISPTEMP || c.Verb == CommandVerb.BG_FADE ||
+                    c.Verb == CommandVerb.BG_DISP2 || c.Verb == CommandVerb.BG_DISPCG || c.Verb == CommandVerb.BG_FADE ||
                     c.Verb == CommandVerb.BG_REVERT);
                 SKPaint palEffectPaint = PaletteEffectScriptParameter.IdentityPaint;
                 if (palCommand is not null && lastBgCommand is not null && commands.IndexOf(palCommand) > commands.IndexOf(lastBgCommand))
@@ -1576,7 +1576,7 @@ namespace SerialLoops.Editors
                     // Checks to see if this is one of the commands that sets a BG_REVERT immune background or if BG_REVERT hasn't been called
                     if (commands[i].Verb == CommandVerb.BG_DISP || commands[i].Verb == CommandVerb.BG_DISP2 ||
                         (commands[i].Verb == CommandVerb.BG_FADE && (((BgScriptParameter)commands[i].Parameters[0]).Background is not null)) ||
-                        (!bgReverted && (commands[i].Verb == CommandVerb.BG_DISPTEMP || commands[i].Verb == CommandVerb.BG_FADE)))
+                        (!bgReverted && (commands[i].Verb == CommandVerb.BG_DISPCG || commands[i].Verb == CommandVerb.BG_FADE)))
                     {
                         BackgroundItem background = (commands[i].Verb == CommandVerb.BG_FADE && ((BgScriptParameter)commands[i].Parameters[0]).Background is null) ?
                             ((BgScriptParameter)commands[i].Parameters[1]).Background : ((BgScriptParameter)commands[i].Parameters[0]).Background;
@@ -1584,12 +1584,12 @@ namespace SerialLoops.Editors
                         {
                             switch (background.BackgroundType)
                             {
-                                case BgType.TEX_DUAL:
+                                case BgType.TEX_CG_DUAL_SCREEN:
                                     canvas.DrawBitmap(background.GetBackground(), new SKPoint(0, 0));
                                     break;
 
-                                case BgType.SINGLE_TEX:
-                                    if (commands[i].Verb == CommandVerb.BG_DISPTEMP && ((BoolScriptParameter)commands[i].Parameters[1]).Value)
+                                case BgType.TEX_CG_SINGLE:
+                                    if (commands[i].Verb == CommandVerb.BG_DISPCG && ((BoolScriptParameter)commands[i].Parameters[1]).Value)
                                     {
                                         SKBitmap bgBitmap = background.GetBackground();
                                         canvas.DrawBitmap(bgBitmap, new SKRect(0, bgBitmap.Height - 194, bgBitmap.Width, bgBitmap.Height),
@@ -1601,8 +1601,8 @@ namespace SerialLoops.Editors
                                     }
                                     break;
 
-                                case BgType.TEX_WIDE:
-                                case BgType.TEX_BOTTOM_TEMP:
+                                case BgType.TEX_CG_WIDE:
+                                case BgType.TEX_CG:
                                     canvas.DrawBitmap(background.GetBackground(), new SKPoint(0, 194));
                                     break;
 

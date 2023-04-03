@@ -104,7 +104,6 @@ namespace SerialLoops.Controls
         private readonly ScriptCommandSectionTreeGridView _treeView;
         private ScriptCommandSectionTreeItem _clipboard;
         private bool _clipboardIsCut = false;
-        private Dictionary<ScriptSection, List<ScriptItemCommand>> _commands;
 
         public ScriptCommandListContextMenu(ScriptCommandSectionTreeGridView treeView)
         {

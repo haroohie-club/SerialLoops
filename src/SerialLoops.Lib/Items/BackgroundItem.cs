@@ -45,11 +45,11 @@ namespace SerialLoops.Lib.Items
 
         public SKBitmap GetBackground()
         {
-            if (BackgroundType == BgType.SINGLE_TEX)
+            if (BackgroundType == BgType.TEX_CG_SINGLE)
             {
                 return Graphic1.GetImage();
             }
-            else if (BackgroundType == BgType.TEX_DUAL)
+            else if (BackgroundType == BgType.TEX_CG_DUAL_SCREEN)
             {
                 SKBitmap bitmap = new(Graphic1.Width, Graphic1.Height + Graphic2.Height);
                 SKCanvas canvas = new(bitmap);
