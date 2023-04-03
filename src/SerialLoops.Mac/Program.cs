@@ -16,18 +16,10 @@ namespace SerialLoops.Mac
             {
                 handler.EnableNativeCrashReport = true;
                 handler.EnableNativeExceptionTranslation = true;
+                handler.BadgeLabel = "Serial Loops";
             });
 
-            Application application = new(platform);
-            MainForm mainForm = new();
-            try
-            {
-                application.Run(mainForm);
-            }
-            catch (Exception ex)
-            {
-                mainForm.Log.LogError($"{ex.Message}\n\n{ex.StackTrace}");
-            }
+            new Application(platform).Run(new MainForm());
         }
     }
 }

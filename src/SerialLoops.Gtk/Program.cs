@@ -12,16 +12,12 @@ namespace SerialLoops.Gtk
             var platform = new Eto.GtkSharp.Platform();
             platform.Add<SoundPlayer.ISoundPlayer>(() => new SoundPlayerHandler());
 
-            Application application = new(platform);
-            MainForm mainForm = new();
-            try
+            Eto.Style.Add<Eto.GtkSharp.Forms.ApplicationHandler>(null, handler =>
             {
-                application.Run(mainForm);
-            }
-            catch (Exception ex)
-            {
-                mainForm.Log.LogError($"{ex.Message}\n\n{ex.StackTrace}");
-            }
+                handler.BadgeLabel = "Serial Loops";
+            });
+
+            new Application(platform).Run(new MainForm());
         }
     }
 }
