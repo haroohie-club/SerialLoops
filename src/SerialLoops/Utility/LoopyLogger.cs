@@ -52,5 +52,14 @@ namespace SerialLoops.Utility
                 _writer.Flush();
             }
         }
+
+        public void LogCrash(Exception ex)
+        {
+            if (_writer is not null)
+            {
+                _writer.WriteLine($"{DateTimeOffset.Now} - ERROR: {ex.Message}\n\n{ex.StackTrace}");
+                _writer.Flush();
+            }
+        }
     }
 }

@@ -51,7 +51,7 @@ namespace SerialLoops.Wpf
             }
             catch (Exception ex)
             {
-                mainForm.Log.LogError($"{ex.Message}\n\n{ex.StackTrace}");
+                mainForm.Log.LogCrash(ex);
             }
         }
     }
