@@ -16,7 +16,6 @@ namespace SerialLoops.Mac
             {
                 handler.EnableNativeCrashReport = true;
                 handler.EnableNativeExceptionTranslation = true;
-                handler.BadgeLabel = "Serial Loops";
             });
 
             new Application(platform).Run(new MainForm());
