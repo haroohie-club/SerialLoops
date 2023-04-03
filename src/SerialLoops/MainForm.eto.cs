@@ -26,8 +26,8 @@ namespace SerialLoops
         public Project OpenProject { get; set; }
         public EditorTabsPanel EditorTabs { get; set; }
         public ItemExplorerPanel ItemExplorer { get; set; }
+        public LoopyLogger Log { get; set; }
         private SubMenuItem _recentProjects;
-        private LoopyLogger _log;
 
         void InitializeComponent()
         {
@@ -42,8 +42,8 @@ namespace SerialLoops
 
         private void OpenProjectView(Project project, IProgressTracker tracker)
         {
-            EditorTabs = new(project, _log);
-            ItemExplorer = new(project, EditorTabs, _log);
+            EditorTabs = new(project, Log);
+            ItemExplorer = new(project, EditorTabs, Log);
             Title = $"{BASE_TITLE} - {project.Name}";
             Content = new TableLayout(new TableRow(ItemExplorer, EditorTabs));
 
@@ -58,7 +58,7 @@ namespace SerialLoops
             if (cancelEvent.Cancel) { return; }
 
             Title = BASE_TITLE;
-            Content = new HomePanel(this, _log);
+            Content = new HomePanel(this, Log);
 
             OpenProject = null;
             EditorTabs = null;
@@ -82,10 +82,10 @@ namespace SerialLoops
         private void InitializeBaseMenu()
         {
             // File
-            Command newProject = new() { MenuText = "New Project...", ToolBarText = "New Project", Image = ControlGenerator.GetIcon("New", _log) };
+            Command newProject = new() { MenuText = "New Project...", ToolBarText = "New Project", Image = ControlGenerator.GetIcon("New", Log) };
             newProject.Executed += NewProjectCommand_Executed;
 
-            Command openProject = new() { MenuText = "Open Project...", ToolBarText = "Open Project", Image = ControlGenerator.GetIcon("Open", _log) };
+            Command openProject = new() { MenuText = "Open Project...", ToolBarText = "Open Project", Image = ControlGenerator.GetIcon("Open", Log) };
             openProject.Executed += OpenProject_Executed;
 
             // Application Items
@@ -93,7 +93,7 @@ namespace SerialLoops
             preferencesCommand.Executed += PreferencesCommand_Executed;
 
             // About
-            Command aboutCommand = new() { MenuText = "About...", Image = ControlGenerator.GetIcon("Help", _log) };
+            Command aboutCommand = new() { MenuText = "About...", Image = ControlGenerator.GetIcon("Help", Log) };
             aboutCommand.Executed += (sender, e) => new AboutDialog()
             {
                 ProgramName = "Serial Loops",
@@ -114,7 +114,7 @@ namespace SerialLoops
                 ApplicationItems =
                 {
                     // application (OS X) or file menu (others)
-                    new ButtonMenuItem { Text = "&Preferences...", Command = preferencesCommand, Image = ControlGenerator.GetIcon("Options", _log) },
+                    new ButtonMenuItem { Text = "&Preferences...", Command = preferencesCommand, Image = ControlGenerator.GetIcon("Options", Log) },
                 },
                 AboutItem = aboutCommand
             };
@@ -123,33 +123,33 @@ namespace SerialLoops
         private void InitializeProjectMenu()
         {
             // File
-            Command saveProject = new() { MenuText = "Save Project", ToolBarText = "Save Project", Shortcut = Application.Instance.CommonModifier | Keys.S, Image = ControlGenerator.GetIcon("Save", _log) };
+            Command saveProject = new() { MenuText = "Save Project", ToolBarText = "Save Project", Shortcut = Application.Instance.CommonModifier | Keys.S, Image = ControlGenerator.GetIcon("Save", Log) };
             saveProject.Executed += SaveProject_Executed;
 
-            Command projectSettings = new() { MenuText = "Project Settings...", ToolBarText = "Project Settings", Image = ControlGenerator.GetIcon("Project_Options", _log) };
+            Command projectSettings = new() { MenuText = "Project Settings...", ToolBarText = "Project Settings", Image = ControlGenerator.GetIcon("Project_Options", Log) };
             projectSettings.Executed += ProjectSettings_Executed;
 
-            Command closeProject = new() { MenuText = "Close Project", ToolBarText = "Close Project", Image = ControlGenerator.GetIcon("Close", _log) };
+            Command closeProject = new() { MenuText = "Close Project", ToolBarText = "Close Project", Image = ControlGenerator.GetIcon("Close", Log) };
             closeProject.Executed += (sender, args) => CloseProjectView();
 
             Command exportPatch = new() { MenuText = "Export Patch", ToolBarText = "Export Patch" };
             exportPatch.Executed += Patch_Executed;
 
             // Tools
-            Command searchProject = new() { MenuText = "Search...", ToolBarText = "Search", Shortcut = Application.Instance.CommonModifier | Keys.F, Image = ControlGenerator.GetIcon("Search", _log) };
+            Command searchProject = new() { MenuText = "Search...", ToolBarText = "Search", Shortcut = Application.Instance.CommonModifier | Keys.F, Image = ControlGenerator.GetIcon("Search", Log) };
             searchProject.Executed += Search_Executed;
 
             Command findOrphanedItems = new() { MenuText = "Find Orphaned Items..." };
             findOrphanedItems.Executed += FindOrphanedItems_Executed;
 
             // Build
-            Command buildIterativeProject = new() { MenuText = "Build", ToolBarText = "Build", Image = ControlGenerator.GetIcon("Build", _log) };
+            Command buildIterativeProject = new() { MenuText = "Build", ToolBarText = "Build", Image = ControlGenerator.GetIcon("Build", Log) };
             buildIterativeProject.Executed += BuildIterativeProject_Executed;
 
-            Command buildBaseProject = new() { MenuText = "Build from Scratch", ToolBarText = "Build from Scratch", Image = ControlGenerator.GetIcon("Build_Scratch", _log) };
+            Command buildBaseProject = new() { MenuText = "Build from Scratch", ToolBarText = "Build from Scratch", Image = ControlGenerator.GetIcon("Build_Scratch", Log) };
             buildBaseProject.Executed += BuildBaseProject_Executed;
 
-            Command buildAndRunProject = new() { MenuText = "Build and Run", ToolBarText = "Run", Image = ControlGenerator.GetIcon("Build_Run", _log) };
+            Command buildAndRunProject = new() { MenuText = "Build and Run", ToolBarText = "Run", Image = ControlGenerator.GetIcon("Build_Run", Log) };
             buildAndRunProject.Executed += BuildAndRunProject_Executed;
 
             // Add toolbar
@@ -188,7 +188,7 @@ namespace SerialLoops
                 }
 
                 ProjectsCache.CacheRecentProject(project.ProjectFile, openTabs);
-                ProjectsCache.Save(_log);
+                ProjectsCache.Save(Log);
                 UpdateRecentProjects();
 
                 if (CurrentConfig.RememberProjectWorkspace)
@@ -199,7 +199,7 @@ namespace SerialLoops
                         ItemDescription item = project.FindItem(itemName);
                         if (item is not null)
                         {
-                            Application.Instance.Invoke(() => EditorTabs.OpenTab(item, _log));
+                            Application.Instance.Invoke(() => EditorTabs.OpenTab(item, Log));
                         }
                         tracker.Finished++;
                     }
@@ -207,21 +207,21 @@ namespace SerialLoops
             }
             catch (Exception e)
             {
-                _log.LogError($"Failed to load cached data: {e.Message}");
+                Log.LogError($"Failed to load cached data: {e.Message}");
                 string projectFile = project.ProjectFile;
                 ProjectsCache.RecentWorkspaces.Remove(projectFile);
                 ProjectsCache.RecentProjects.Remove(projectFile);
-                ProjectsCache.Save(_log);
+                ProjectsCache.Save(Log);
             }
         }
 
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            _log = new();
-            CurrentConfig = Config.LoadConfig(_log);
-            _log.Initialize(CurrentConfig);            
-            ProjectsCache = ProjectsCache.LoadCache(CurrentConfig, _log);
+            Log = new();
+            CurrentConfig = Config.LoadConfig(Log);
+            Log.Initialize(CurrentConfig);            
+            ProjectsCache = ProjectsCache.LoadCache(CurrentConfig, Log);
             UpdateRecentProjects();
 
             if (CurrentConfig.AutoReopenLastProject && ProjectsCache.RecentProjects.Count > 0)
@@ -229,7 +229,7 @@ namespace SerialLoops
                 OpenProjectFromPath(ProjectsCache.RecentProjects[0]);
             } else
             {
-                Content = new HomePanel(this, _log);
+                Content = new HomePanel(this, Log);
             }
         }
 
@@ -251,7 +251,7 @@ namespace SerialLoops
                     }
                     recentProject.Enabled = false;
                     recentProject.MenuText += " (Missing)";
-                    recentProject.Image = ControlGenerator.GetIcon("Warning", _log);
+                    recentProject.Image = ControlGenerator.GetIcon("Warning", Log);
                 }
                 _recentProjects?.Items.Add(recentProject);
             }
@@ -262,12 +262,12 @@ namespace SerialLoops
                 ProjectsCache.RecentProjects.Remove(project);
                 ProjectsCache.RecentWorkspaces.Remove(project);
             });
-            ProjectsCache.Save(_log);
+            ProjectsCache.Save(Log);
         }
 
         public void NewProjectCommand_Executed(object sender, EventArgs e)
         {
-            ProjectCreationDialog projectCreationDialog = new() { Config = CurrentConfig, Log = _log };
+            ProjectCreationDialog projectCreationDialog = new() { Config = CurrentConfig, Log = Log };
             projectCreationDialog.ShowModal(this);
             if (projectCreationDialog.NewProject is not null)
             {
@@ -294,7 +294,7 @@ namespace SerialLoops
         public void OpenProjectFromPath(string path)
         {
             LoopyProgressTracker tracker = new();
-            _ = new ProgressDialog(() => OpenProject = Project.OpenProject(path, CurrentConfig, _log, tracker), () => 
+            _ = new ProgressDialog(() => OpenProject = Project.OpenProject(path, CurrentConfig, Log, tracker), () => 
             {
                 if (OpenProject is not null)
                 {
@@ -319,7 +319,7 @@ namespace SerialLoops
                     case ItemDescription.ItemType.BGM:
                         if (!savedExtra)
                         {
-                            IO.WriteStringFile(Path.Combine("assets", "data", $"{OpenProject.Extra.Index:X3}.s"), OpenProject.Extra.GetSource(new()), OpenProject, _log);
+                            IO.WriteStringFile(Path.Combine("assets", "data", $"{OpenProject.Extra.Index:X3}.s"), OpenProject.Extra.GetSource(new()), OpenProject, Log);
                             savedExtra = true;
                         }
                         break;
@@ -331,17 +331,17 @@ namespace SerialLoops
                             {
                                 { "DATBIN", OpenProject.Dat.GetSourceInclude().Split('\n').Where(s => !string.IsNullOrEmpty(s)).Select(i => new IncludeEntry(i)).ToArray() },
                                 { "EVTBIN", OpenProject.Evt.GetSourceInclude().Split('\n').Where(s => !string.IsNullOrEmpty(s)).Select(i => new IncludeEntry(i)).ToArray() }
-                            }, _log),
-                            OpenProject, _log);
+                            }, Log),
+                            OpenProject, Log);
                         break;
                     case ItemDescription.ItemType.Script:
                         EventFile evt = ((ScriptItem)item).Event;
                         evt.CollectGarbage();
-                        IO.WriteStringFile(Path.Combine("assets", "events", $"{evt.Index:X3}.s"), evt.GetSource(new()), OpenProject, _log);
+                        IO.WriteStringFile(Path.Combine("assets", "events", $"{evt.Index:X3}.s"), evt.GetSource(new()), OpenProject, Log);
                         break;
 
                     default:
-                        _log.LogWarning($"Saving for {item.Type}s not yet implemented.");
+                        Log.LogWarning($"Saving for {item.Type}s not yet implemented.");
                         break;
                 }
             }
@@ -355,7 +355,7 @@ namespace SerialLoops
         {
             if (OpenProject is not null)
             {
-                ProjectSettingsDialog projectSettingsDialog = new(OpenProject, _log);
+                ProjectSettingsDialog projectSettingsDialog = new(OpenProject, Log);
                 projectSettingsDialog.ShowModal(this);
             }
         }
@@ -364,7 +364,7 @@ namespace SerialLoops
         {
             if (OpenProject is not null)
             {
-                SearchDialog searchDialog = new(_log)
+                SearchDialog searchDialog = new(Log)
                 {
                     Project = OpenProject,
                     Tabs = EditorTabs,
@@ -385,7 +385,7 @@ namespace SerialLoops
                 {
                     Application.Instance.Invoke(() =>
                     {
-                        orphanedItemsDialog = new(OpenProject, ItemExplorer, EditorTabs, _log);
+                        orphanedItemsDialog = new(OpenProject, ItemExplorer, EditorTabs, Log);
                         tracker.Finished++;
                     });
                 }, () => {
@@ -403,16 +403,16 @@ namespace SerialLoops
             {
                 bool buildSucceeded = true; // imo it's better to have a false negative than a false positive here
                 LoopyProgressTracker tracker = new("Building:");
-                ProgressDialog loadingDialog = new(() => buildSucceeded = Build.BuildIterative(OpenProject, CurrentConfig, _log, tracker), () =>
+                ProgressDialog loadingDialog = new(() => buildSucceeded = Build.BuildIterative(OpenProject, CurrentConfig, Log, tracker), () =>
                 {
                     if (buildSucceeded)
                     {
-                        _log.Log("Build succeeded!");
+                        Log.Log("Build succeeded!");
                         MessageBox.Show("Build succeeded!", "Build Result", MessageBoxType.Information);
                     }
                     else
                     {
-                        _log.LogError("Build failed!");
+                        Log.LogError("Build failed!");
                     }
                 }, tracker, "Building Iteratively");
             }
@@ -424,16 +424,16 @@ namespace SerialLoops
             {
                 bool buildSucceeded = true;
                 LoopyProgressTracker tracker = new("Building:");
-                ProgressDialog loadingDialog = new(() => buildSucceeded = Build.BuildBase(OpenProject, CurrentConfig, _log, tracker), () =>
+                ProgressDialog loadingDialog = new(() => buildSucceeded = Build.BuildBase(OpenProject, CurrentConfig, Log, tracker), () =>
                 {
                     if (buildSucceeded)
                     {
-                        _log.Log("Build succeeded!");
+                        Log.Log("Build succeeded!");
                         MessageBox.Show("Build succeeded!", "Build Result", MessageBoxType.Information);
                     }
                     else
                     {
-                        _log.LogError("Build failed!");
+                        Log.LogError("Build failed!");
                     }
                 }, tracker, "Building from Scratch");
             }
@@ -446,17 +446,17 @@ namespace SerialLoops
                 if (CurrentConfig.EmulatorPath is null)
                 {
                     MessageBox.Show("No emulator path set. Please set the path to your emulator.", "No Emulator Path", MessageBoxType.Warning);
-                    _log.LogWarning("No emulator path set. Please set the path to your emulator.");
+                    Log.LogWarning("No emulator path set. Please set the path to your emulator.");
                     return;
                 }
 
                 bool buildSucceeded = true;
                 LoopyProgressTracker tracker = new("Building:");
-                ProgressDialog loadingDialog = new(() => buildSucceeded = Build.BuildIterative(OpenProject, CurrentConfig, _log, tracker), () =>
+                ProgressDialog loadingDialog = new(() => buildSucceeded = Build.BuildIterative(OpenProject, CurrentConfig, Log, tracker), () =>
                 {
                     if (buildSucceeded)
                     {
-                        _log.Log("Build succeeded!");
+                        Log.Log("Build succeeded!");
                         try
                         {
                             // If the EmulatorPath is an .app bundle, we need to run the executable inside it
@@ -470,12 +470,12 @@ namespace SerialLoops
                         }
                         catch (Exception ex)
                         {
-                            _log.LogError($"Failed to start emulator: {ex.Message}");
+                            Log.LogError($"Failed to start emulator: {ex.Message}");
                         }
                     }
                     else
                     {
-                        _log.LogError("Build failed!");
+                        Log.LogError("Build failed!");
                     }
                 }, tracker, "Building and Running");
             }
@@ -502,7 +502,7 @@ namespace SerialLoops
 
         public void PreferencesCommand_Executed(object sender, EventArgs e)
         {
-            PreferencesDialog preferencesDialog = new(CurrentConfig, _log);
+            PreferencesDialog preferencesDialog = new(CurrentConfig, Log);
             preferencesDialog.ShowModal(this);
             CurrentConfig = preferencesDialog.Configuration;
         }
@@ -535,7 +535,7 @@ namespace SerialLoops
                     .ToList();
                 ProjectsCache.CacheRecentProject(OpenProject.ProjectFile, openItems);
                 ProjectsCache.HadProjectOpenOnLastClose = true;
-                ProjectsCache.Save(_log);
+                ProjectsCache.Save(Log);
             }
         }
     }
