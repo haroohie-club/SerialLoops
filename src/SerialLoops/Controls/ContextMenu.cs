@@ -166,11 +166,15 @@ namespace SerialLoops.Controls
         {
             if (_treeView.SelectedCommandTreeItem is null) return;
             if (_clipboard is null) return;
-
-            _treeView.AddItem(_clipboard.Clone());
+            
+            ScriptCommandSectionTreeItem newItem = _clipboard.Clone();
+            _treeView.AddItem(newItem);
+            
             if (_clipboardIsCut)
             {
                 _treeView.DeleteItem(_clipboard);
+                _clipboard = newItem;
+                _clipboardIsCut = false;
             }
         }
 
