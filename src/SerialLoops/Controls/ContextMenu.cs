@@ -118,7 +118,7 @@ namespace SerialLoops.Controls
                 MenuText = "Cut",
                 ToolBarText = "Cut",
                 Image = ControlGenerator.GetIcon("Cut", log),
-                Shortcut = Keys.ModifierMask | Keys.X
+                Shortcut = Keys.LeftControl | Keys.X
             };
             CutCommand.Executed += OnCutItem;
 
@@ -127,7 +127,7 @@ namespace SerialLoops.Controls
                 MenuText = "Copy",
                 ToolBarText = "Copy",
                 Image = ControlGenerator.GetIcon("Copy", log),
-                Shortcut = Keys.ModifierMask | Keys.C
+                Shortcut = Keys.LeftControl | Keys.C
             };
             CopyCommand.Executed += OnCopyItem;
 
@@ -136,7 +136,7 @@ namespace SerialLoops.Controls
                 MenuText = "Paste",
                 ToolBarText = "Paste",
                 Image = ControlGenerator.GetIcon("Paste", log),
-                Shortcut = Keys.ModifierMask | Keys.V
+                Shortcut = Keys.LeftControl | Keys.V
             };
             PasteCommand.Executed += OnPasteItem;
             
