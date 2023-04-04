@@ -6,6 +6,8 @@ using SerialLoops.Lib.Script;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using HaruhiChokuretsuLib.Util;
+using SerialLoops.Editors;
 
 namespace SerialLoops.Controls
 {
@@ -20,7 +22,7 @@ namespace SerialLoops.Controls
             : base(Array.Empty<ScriptCommandSectionEntry>())
         {
             Command = command;
-            Text = Command.ToString();
+            Text = Command?.ToString();
         }
 
         public ScriptCommandSectionEntry(ScriptSection section, IEnumerable<ScriptCommandSectionEntry> commands, EventFile scriptFile)
@@ -40,11 +42,13 @@ namespace SerialLoops.Controls
 
         internal ScriptCommandSectionEntry Clone()
         {
-            ScriptCommandSectionEntry temp = new(Command.Clone());
+            ScriptCommandSectionEntry temp = new(Command?.Clone());
             foreach (var child in this)
             {
                 temp.Add(child.Clone());
             }
+            temp.Text = Text;
+            temp.ScriptFile = ScriptFile;
             return temp;
         }
     }
@@ -99,7 +103,6 @@ namespace SerialLoops.Controls
     {
         private TreeGridView _treeView;
         private ScriptCommandSectionTreeItem _cursorItem;
-        private Dictionary<ScriptSection, List<ScriptItemCommand>> _commands;
         public event EventHandler RepositionCommand;
         public event EventHandler DeleteCommand;
         public event EventHandler<CommandEventArgs> AddCommand;
@@ -149,7 +152,7 @@ namespace SerialLoops.Controls
             return null;
         }
 
-        public ScriptCommandSectionTreeGridView(IEnumerable<ScriptCommandSectionEntry> topNodes, Size size, bool expanded)
+        public ScriptCommandSectionTreeGridView(IEnumerable<ScriptCommandSectionEntry> topNodes, Editor editor, Size size, bool expanded, ILogger log)
         {
             _treeView = new TreeGridView
             {
@@ -174,7 +177,15 @@ namespace SerialLoops.Controls
             _treeView.DragOver += OnDragOver;
             _treeView.DragDrop += OnDragDrop;
 
-            _treeView.ContextMenu = new ScriptCommandListContextMenu(this);
+            ScriptCommandListContextMenu contextMenu = new(this, log);
+            _treeView.ContextMenu = contextMenu;
+            editor.EditorCommands = new List<Command>
+            {
+                contextMenu.DeleteCommand,
+                contextMenu.PasteCommand,
+                contextMenu.CopyCommand,
+                contextMenu.CutCommand
+            };
         }
 
         private void OnMouseMove(object sender, MouseEventArgs e)
@@ -238,6 +249,7 @@ namespace SerialLoops.Controls
         internal void AddItem(ScriptCommandSectionTreeItem item)
         {
             if (SelectedCommandTreeItem is null) return;
+            if (item.Command is null) return;
             if (SelectedCommandTreeItem.Parent is ScriptCommandSectionTreeItem parent && !parent.Text.Equals("Top"))
             {
                 item.Parent = parent;

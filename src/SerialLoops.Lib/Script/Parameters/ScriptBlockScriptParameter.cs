@@ -11,7 +11,7 @@ namespace SerialLoops.Lib.Script.Parameters
             Section = section;
         }
 
-        public override ScriptSectionScriptParameter Clone()
+        public override ScriptSectionScriptParameter Clone(Project project, EventFile eventFile)
         {
             return new(Name, Section);
         }

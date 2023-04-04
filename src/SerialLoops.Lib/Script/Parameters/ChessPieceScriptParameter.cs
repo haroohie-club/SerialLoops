@@ -1,4 +1,6 @@
-﻿namespace SerialLoops.Lib.Script.Parameters
+﻿using HaruhiChokuretsuLib.Archive.Event;
+
+namespace SerialLoops.Lib.Script.Parameters
 {
     public class ChessPieceScriptParameter : ScriptParameter
     {
@@ -9,7 +11,7 @@
             ChessPiece = chessPiece;
         }
 
-        public override ChessPieceScriptParameter Clone()
+        public override ChessPieceScriptParameter Clone(Project project, EventFile eventFile)
         {
             return new(Name, ChessPiece);
         }

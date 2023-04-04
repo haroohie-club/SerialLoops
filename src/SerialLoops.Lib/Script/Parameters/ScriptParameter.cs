@@ -1,4 +1,6 @@
-﻿namespace SerialLoops.Lib.Script.Parameters
+﻿using HaruhiChokuretsuLib.Archive.Event;
+
+namespace SerialLoops.Lib.Script.Parameters
 {
     public abstract class ScriptParameter
     {
@@ -11,7 +13,7 @@
             Type = type;
         }
 
-        public abstract ScriptParameter Clone();
+        public abstract ScriptParameter Clone(Project project, EventFile eventFile);
 
         public enum ParameterType
         {

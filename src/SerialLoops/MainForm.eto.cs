@@ -42,12 +42,14 @@ namespace SerialLoops
 
         private void OpenProjectView(Project project, IProgressTracker tracker)
         {
-            EditorTabs = new(project, Log);
+            InitializeProjectMenu();
+            
+            EditorTabs = new(project, this, Log);
             ItemExplorer = new(project, EditorTabs, Log);
             Title = $"{BASE_TITLE} - {project.Name}";
             Content = new TableLayout(new TableRow(ItemExplorer, EditorTabs));
+            EditorTabs.Tabs_PageChanged(this, EventArgs.Empty);
 
-            InitializeProjectMenu();
             LoadCachedData(project, tracker);
         }
 
@@ -94,7 +96,7 @@ namespace SerialLoops
 
             // About
             Command aboutCommand = new() { MenuText = "About...", Image = ControlGenerator.GetIcon("Help", Log) };
-            aboutCommand.Executed += (sender, e) => new AboutDialog()
+            aboutCommand.Executed += (sender, e) => new AboutDialog
             {
                 ProgramName = "Serial Loops",
                 Developers = new[] { "Jonko", "William278" },

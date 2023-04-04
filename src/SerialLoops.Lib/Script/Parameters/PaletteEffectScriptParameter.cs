@@ -1,4 +1,5 @@
 ﻿using SkiaSharp;
+using HaruhiChokuretsuLib.Archive.Event;
 
 namespace SerialLoops.Lib.Script.Parameters
 {
@@ -11,7 +12,7 @@ namespace SerialLoops.Lib.Script.Parameters
             Effect = (PaletteEffect)effect;
         }
 
-        public override PaletteEffectScriptParameter Clone()
+        public override PaletteEffectScriptParameter Clone(Project project, EventFile eventFile)
         {
             return new(Name, (short)Effect);
         }

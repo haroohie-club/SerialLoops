@@ -11,7 +11,7 @@ namespace SerialLoops.Lib.Script.Parameters
             Option = option;
         }
 
-        public override OptionScriptParameter Clone()
+        public override OptionScriptParameter Clone(Project project, EventFile eventFile)
         {
             return new(Name, Option);
         }

@@ -1,4 +1,6 @@
-﻿namespace SerialLoops.Lib.Script.Parameters
+﻿using HaruhiChokuretsuLib.Archive.Event;
+
+namespace SerialLoops.Lib.Script.Parameters
 {
     public class ColorMonochromeScriptParameter : ScriptParameter
     {
@@ -9,7 +11,7 @@
             ColorType = (ColorMonochrome)colorType;
         }
 
-        public override ColorMonochromeScriptParameter Clone()
+        public override ColorMonochromeScriptParameter Clone(Project project, EventFile eventFile)
         {
             return new(Name, (short)ColorType);
         }

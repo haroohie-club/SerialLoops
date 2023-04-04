@@ -1,4 +1,6 @@
-﻿namespace SerialLoops.Lib.Script.Parameters
+﻿using HaruhiChokuretsuLib.Archive.Event;
+
+namespace SerialLoops.Lib.Script.Parameters
 {
     public class SpriteExitScriptParameter : ScriptParameter
     {
@@ -9,7 +11,7 @@
             ExitTransition = (SpriteExitTransition)exitTransition;
         }
 
-        public override SpriteExitScriptParameter Clone()
+        public override SpriteExitScriptParameter Clone(Project project, EventFile eventFile)
         {
             return new(Name, (short)ExitTransition);
         }

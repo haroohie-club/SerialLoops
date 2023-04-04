@@ -1,4 +1,6 @@
-﻿namespace SerialLoops.Lib.Script.Parameters
+﻿using HaruhiChokuretsuLib.Archive.Event;
+
+namespace SerialLoops.Lib.Script.Parameters
 {
     public class ShortScriptParameter : ScriptParameter
     {
@@ -9,7 +11,7 @@
             Value = value;
         }
 
-        public override ShortScriptParameter Clone()
+        public override ShortScriptParameter Clone(Project project, EventFile eventFile)
         {
             return new(Name, Value);
         }
