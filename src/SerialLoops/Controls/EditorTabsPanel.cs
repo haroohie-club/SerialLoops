@@ -36,6 +36,8 @@ namespace SerialLoops.Controls
                 AllowReordering = true,
                 Enabled = true
             };
+            Tabs.PageClosed += Tabs_PageClosed;
+            Tabs.SelectedIndexChanged += Tabs_PageChanged;
             Content = new TableLayout(Tabs);
             ContextMenu = new TabContextMenu(this, _log);
         }
@@ -65,9 +67,8 @@ namespace SerialLoops.Controls
 
             Tabs.Pages.Add(newPage);
             Tabs.SelectedPage = newPage;
-            Tabs.PageClosed += Tabs_PageClosed;
-            Tabs.SelectedIndexChanged += Tabs_PageChanged;
             newPage.Closed += Tabs_PageChanged;
+            Tabs_PageChanged(this, EventArgs.Empty);
         }
 
         private DocumentPage CreateTab(ItemDescription item, Project project, ILogger log)
