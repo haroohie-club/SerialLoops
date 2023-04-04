@@ -1,4 +1,6 @@
-﻿namespace SerialLoops.Lib.Script.Parameters
+﻿using HaruhiChokuretsuLib.Archive.Event;
+
+namespace SerialLoops.Lib.Script.Parameters
 {
     public class FlagScriptParameter : ScriptParameter
     {
@@ -14,7 +16,7 @@
             Global = global;
         }
 
-        public override FlagScriptParameter Clone()
+        public override FlagScriptParameter Clone(Project project, EventFile eventFile)
         {
             return new(Name, Id, Global);
         }

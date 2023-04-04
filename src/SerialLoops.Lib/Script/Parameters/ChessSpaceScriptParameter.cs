@@ -1,4 +1,6 @@
-﻿namespace SerialLoops.Lib.Script.Parameters
+﻿using HaruhiChokuretsuLib.Archive.Event;
+
+namespace SerialLoops.Lib.Script.Parameters
 {
     public class ChessSpaceScriptParameter : ScriptParameter
     {
@@ -9,7 +11,7 @@
             SpaceIndex = spaceIndex;
         }
 
-        public override ChessSpaceScriptParameter Clone()
+        public override ChessSpaceScriptParameter Clone(Project project, EventFile eventFile)
         {
             return new(Name, SpaceIndex);
         }

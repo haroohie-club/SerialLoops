@@ -1,4 +1,5 @@
-﻿using SerialLoops.Lib.Items;
+﻿using HaruhiChokuretsuLib.Archive.Event;
+using SerialLoops.Lib.Items;
 
 namespace SerialLoops.Lib.Script.Parameters
 {
@@ -13,7 +14,7 @@ namespace SerialLoops.Lib.Script.Parameters
             Kinetic = kinetic;
         }
 
-        public override BgScriptParameter Clone()
+        public override BgScriptParameter Clone(Project project, EventFile eventFile)
         {
             return new(Name, Background, Kinetic);
         }

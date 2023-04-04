@@ -1,4 +1,6 @@
-﻿namespace SerialLoops.Lib.Script.Parameters
+﻿using HaruhiChokuretsuLib.Archive.Event;
+
+namespace SerialLoops.Lib.Script.Parameters
 {
     public class SfxScriptParameter : ScriptParameter
     {
@@ -9,7 +11,7 @@
             SfxIndex = sfxIndex;
         }
 
-        public override SfxScriptParameter Clone()
+        public override SfxScriptParameter Clone(Project project, EventFile eventFile)
         {
             return new(Name, SfxIndex);
         }

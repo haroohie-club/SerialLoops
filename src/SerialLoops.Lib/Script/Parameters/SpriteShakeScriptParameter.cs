@@ -1,4 +1,6 @@
-﻿namespace SerialLoops.Lib.Script.Parameters
+﻿using HaruhiChokuretsuLib.Archive.Event;
+
+namespace SerialLoops.Lib.Script.Parameters
 {
     public class SpriteShakeScriptParameter : ScriptParameter
     {
@@ -9,7 +11,7 @@
             ShakeEffect = (SpriteShakeEffect)shakeEffect;
         }
 
-        public override SpriteShakeScriptParameter Clone()
+        public override SpriteShakeScriptParameter Clone(Project project, EventFile eventFile)
         {
             return new(Name, (short)ShakeEffect);
         }

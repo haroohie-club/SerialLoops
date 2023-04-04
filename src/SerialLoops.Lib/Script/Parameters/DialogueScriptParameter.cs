@@ -1,4 +1,7 @@
 ﻿using HaruhiChokuretsuLib.Archive.Event;
+using HaruhiChokuretsuLib.Archive.Event;
+using SerialLoops.Lib.Items;
+using SerialLoops.Lib.Util;
 using SkiaSharp;
 
 namespace SerialLoops.Lib.Script.Parameters
@@ -12,9 +15,11 @@ namespace SerialLoops.Lib.Script.Parameters
             Line = line;
         }
 
-        public override DialogueScriptParameter Clone()
+        public override DialogueScriptParameter Clone(Project project, EventFile eventFile)
         {
-            return new(Name, Line); //todo Need to create a new dialogueline with the same text, adjust data file accordingly?
+            DialogueLine line = new(Line.Text.GetOriginalString(project), eventFile);
+            eventFile.DialogueSection.Objects.Insert(eventFile.DialogueSection.Objects.Count - 1, line);
+            return new(Name, line);
         }
 
         public static SKPaint Paint00 { get; } = new()

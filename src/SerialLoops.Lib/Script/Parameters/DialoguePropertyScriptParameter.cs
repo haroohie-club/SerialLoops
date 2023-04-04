@@ -1,4 +1,5 @@
 ﻿using HaruhiChokuretsuLib.Archive.Data;
+using HaruhiChokuretsuLib.Archive.Event;
 
 namespace SerialLoops.Lib.Script.Parameters
 {
@@ -11,7 +12,7 @@ namespace SerialLoops.Lib.Script.Parameters
             DialogueProperties = dialogueProperties;
         }
 
-        public override DialoguePropertyScriptParameter Clone()
+        public override DialoguePropertyScriptParameter Clone(Project project, EventFile eventFile)
         {
             return new(Name, DialogueProperties);
         }

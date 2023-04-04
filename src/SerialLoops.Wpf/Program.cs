@@ -27,7 +27,7 @@ namespace SerialLoops.Wpf
                 toolbar.Control.Padding = new(5, 0, 5, 0);
             });
 
-            // Windows toolbar button styling
+            // Windows toolbar button & separator styling
             Eto.Style.Add<ButtonToolItemHandler>("sl-toolbar-button", button =>
             {
                 button.Control.Width = 50;
@@ -41,6 +41,11 @@ namespace SerialLoops.Wpf
                 stackPanel.Children.Add(image);
                 stackPanel.Children.Add(textBlock);
                 button.Control.Content = stackPanel;
+            });
+            Eto.Style.Add<SeparatorToolItemHandler>("sl-toolbar-separator", separator =>
+            {
+                separator.Control.Padding = new(5, 0, 5, 0);
+                separator.Control.Margin = new(5, 0, 5, 0);
             });
 
             Application application = new(platform);

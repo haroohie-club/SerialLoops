@@ -41,7 +41,7 @@ namespace SerialLoops.Editors
         private ScriptCommandDropDown _currentSpeakerDropDown; // This property is used for storing the speaker dropdown to append dialogue property dropdowns to
         private Action _updateOptionDropDowns;
 
-        public ScriptEditor(ScriptItem item, Project project, ILogger log, EditorTabsPanel tabs) : base(item, log, project, tabs)
+        public ScriptEditor(ScriptItem item, ILogger log, Project project, EditorTabsPanel tabs) : base(item, log, project, tabs)
         {
         }
 
@@ -63,11 +63,19 @@ namespace SerialLoops.Editors
         private Container GetCommandsContainer()
         {
             TableLayout layout = new() { Spacing = new Size(5, 5) };
-            ContextMenu contextMenu = new();
 
             _commandsPanel = new(_commands, new Size(280, 185), expandItems: true, this, _log);
             ScriptCommandSectionTreeGridView treeGridView = _commandsPanel.Viewer;
             treeGridView.SelectedItemChanged += CommandsPanel_SelectedItemChanged;
+            
+            foreach (string command in treeGridView.Control.SupportedPlatformCommands)
+            {
+                var barCommand = EditorCommands.Find(barCommand => barCommand.ToolBarText.ToLower().Equals(command));
+                if (barCommand is not null)
+                {
+                    treeGridView.Control.MapPlatformCommand(command, barCommand);
+                }
+            }
 
             TableRow mainRow = new();
             mainRow.Cells.Add(new TableLayout(GetEditorButtons(treeGridView), _commandsPanel));
@@ -86,7 +94,6 @@ namespace SerialLoops.Editors
 
             mainRow.Cells.Add(new(_detailsLayout));
             layout.Rows.Add(mainRow);
-
             return layout;
         }
 
@@ -97,7 +104,7 @@ namespace SerialLoops.Editors
                 Image = ControlGenerator.GetIcon("Add", _log),
                 ToolTip = "New Command",
                 Width = 22,
-                Enabled = treeGridView.SelectedCommandTreeItem is not null
+                Enabled = treeGridView.SelectedCommandTreeItem is not null,
             };
             _addCommandButton.Click += (sender, args) =>
             {
@@ -280,7 +287,7 @@ namespace SerialLoops.Editors
                 Image = ControlGenerator.GetIcon("Add_Section", _log),
                 ToolTip = "New Section",
                 Width = 22,
-                Enabled = true
+                Enabled = treeGridView.SelectedCommandTreeItem is not null,
             };
             _addSectionButton.Click += (sender, args) =>
             {
@@ -334,7 +341,7 @@ namespace SerialLoops.Editors
                 Image = ControlGenerator.GetIcon("Remove", _log),
                 ToolTip = "Remove Command/Section",
                 Width = 22,
-                Enabled = treeGridView.SelectedCommandTreeItem is not null
+                Enabled = treeGridView.SelectedCommandTreeItem is not null,
             };
             _deleteButton.Click += (sender, args) =>
             {
@@ -847,6 +854,7 @@ namespace SerialLoops.Editors
             _editorControls.Items.Clear();
 
             _addCommandButton.Enabled = true;
+            _addSectionButton.Enabled = true;
             _deleteButton.Enabled = true;
 
             // if we've selected a script section header

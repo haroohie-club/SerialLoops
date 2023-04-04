@@ -1,10 +1,13 @@
-﻿using Eto.Drawing;
+﻿using Eto;
+using Eto.Drawing;
 using Eto.Forms;
 using HaruhiChokuretsuLib.Archive.Event;
 using SerialLoops.Lib.Script;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using HaruhiChokuretsuLib.Util;
+using SerialLoops.Editors;
 
 namespace SerialLoops.Controls
 {
@@ -19,7 +22,7 @@ namespace SerialLoops.Controls
             : base(Array.Empty<ScriptCommandSectionEntry>())
         {
             Command = command;
-            Text = Command.ToString();
+            Text = Command?.ToString();
         }
 
         public ScriptCommandSectionEntry(ScriptSection section, IEnumerable<ScriptCommandSectionEntry> commands, EventFile scriptFile)
@@ -39,11 +42,13 @@ namespace SerialLoops.Controls
 
         internal ScriptCommandSectionEntry Clone()
         {
-            ScriptCommandSectionEntry temp = new(Command.Clone());
+            ScriptCommandSectionEntry temp = new(Command?.Clone());
             foreach (var child in this)
             {
                 temp.Add(child.Clone());
             }
+            temp.Text = Text;
+            temp.ScriptFile = ScriptFile;
             return temp;
         }
     }
@@ -147,7 +152,7 @@ namespace SerialLoops.Controls
             return null;
         }
 
-        public ScriptCommandSectionTreeGridView(IEnumerable<ScriptCommandSectionEntry> topNodes, Size size, bool expanded)
+        public ScriptCommandSectionTreeGridView(IEnumerable<ScriptCommandSectionEntry> topNodes, Editor editor, Size size, bool expanded, ILogger log)
         {
             _treeView = new TreeGridView
             {
@@ -172,7 +177,15 @@ namespace SerialLoops.Controls
             _treeView.DragOver += OnDragOver;
             _treeView.DragDrop += OnDragDrop;
 
-            _treeView.ContextMenu = new ScriptCommandListContextMenu(this);
+            ScriptCommandListContextMenu contextMenu = new(this, log);
+            _treeView.ContextMenu = contextMenu;
+            editor.EditorCommands = new List<Command>
+            {
+                contextMenu.DeleteCommand,
+                contextMenu.PasteCommand,
+                contextMenu.CopyCommand,
+                contextMenu.CutCommand
+            };
         }
 
         private void OnMouseMove(object sender, MouseEventArgs e)
@@ -236,6 +249,7 @@ namespace SerialLoops.Controls
         internal void AddItem(ScriptCommandSectionTreeItem item)
         {
             if (SelectedCommandTreeItem is null) return;
+            if (item.Command is null) return;
             if (SelectedCommandTreeItem.Parent is ScriptCommandSectionTreeItem parent && !parent.Text.Equals("Top"))
             {
                 item.Parent = parent;
@@ -252,8 +266,21 @@ namespace SerialLoops.Controls
             }
             
             AddCommand?.Invoke(this, new(item.Command));
-            _treeView.DataStore = _treeView.DataStore;
-            _treeView.SelectedItem = item;
+
+            // https://github.com/haroohie-club/SerialLoops/issues/109
+            // In WPF, the selection of the tree item happens automatically, so doing it this way
+            // ends up doubling the selection it seems causing multiple invocations in case of an error
+            // which crashes the LoopyLogger. Wild, I know.
+            if (!Platform.Instance.IsWpf)
+            {
+                _treeView.DataStore = _treeView.DataStore;
+                _treeView.SelectedItem = item;
+            }
+            else
+            {
+                _treeView.SelectedItem = item;
+                _treeView.DataStore = _treeView.DataStore;
+            }
         }
 
         internal void AddSection(ScriptCommandSectionTreeItem section)
@@ -264,8 +291,21 @@ namespace SerialLoops.Controls
             section.Parent = rootNode;
 
             AddCommand?.Invoke(this, new(section.Text));
-            _treeView.DataStore = rootNode;
-            _treeView.SelectedItem = section;
+
+            // https://github.com/haroohie-club/SerialLoops/issues/109
+            // In WPF, the selection of the tree item happens automatically, so doing it this way
+            // ends up doubling the selection it seems causing multiple invocations in case of an error
+            // which crashes the LoopyLogger. Wild, I know.
+            if (!Platform.Instance.IsWpf)
+            {
+                _treeView.DataStore = rootNode;
+                _treeView.SelectedItem = section;
+            }
+            else
+            {
+                _treeView.SelectedItem = section;
+                _treeView.DataStore = rootNode;
+            }
         }
 
         public void SetContents(IEnumerable<ScriptCommandSectionEntry> topNodes, bool expanded)

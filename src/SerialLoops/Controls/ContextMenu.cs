@@ -1,13 +1,10 @@
 ﻿using Eto.Forms;
-using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Dialogs;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
-using SerialLoops.Lib.Script;
 using SerialLoops.Utility;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -83,12 +80,14 @@ namespace SerialLoops.Controls
             ItemDescription.ItemType type;
             if (item is null && _explorer.Viewer.SelectedItem is not null)
             {
-                type = Enum.Parse<ItemDescription.ItemType>(_explorer.Viewer.SelectedItem.Text[0..^1].Replace(' ', '_'));
+                type = Enum.Parse<ItemDescription.ItemType>(_explorer.Viewer.SelectedItem.Text[0..^1]
+                    .Replace(' ', '_'));
             }
             else
             {
                 type = item.Type;
             }
+
             string[] names = _project.Items.Where(i => i.Type == type).Select(i => i.Name).ToArray();
             SaveFileDialog saveFileDialog = new();
             saveFileDialog.Filters.Add(new("File Names List", ".txt"));
@@ -103,52 +102,58 @@ namespace SerialLoops.Controls
     {
         private readonly ScriptCommandSectionTreeGridView _treeView;
         private ScriptCommandSectionTreeItem _clipboard;
-        private bool _clipboardIsCut = false;
+        private bool _clipboardIsCut;
 
-        public ScriptCommandListContextMenu(ScriptCommandSectionTreeGridView treeView)
+        public Command CutCommand { get; }
+        public Command CopyCommand { get; }
+        public Command PasteCommand { get; }
+        public Command DeleteCommand { get; }
+
+        public ScriptCommandListContextMenu(ScriptCommandSectionTreeGridView treeView, ILogger log)
         {
             _treeView = treeView;
 
-            Command cutCommand = new();
-            cutCommand.Executed += (sender, args) => { };
-            Items.Add(new ButtonMenuItem
+            CutCommand = new()
             {
-                Text = "Cut",
-                Command = cutCommand,
-                Shortcut = Keys.Control | Keys.X
-            });
+                MenuText = "Cut",
+                ToolBarText = "Cut",
+                Image = ControlGenerator.GetIcon("Cut", log),
+                Shortcut = Keys.Control | Keys.X,
+            };
+            CutCommand.Executed += OnCutItem;
 
-            Command copyCommand = new();
-            copyCommand.Executed += (sender, args) => { };
-            Items.Add(new ButtonMenuItem
+            CopyCommand = new()
             {
-                Text = "Copy",
-                Command = copyCommand,
+                MenuText = "Copy",
+                ToolBarText = "Copy",
+                Image = ControlGenerator.GetIcon("Copy", log),
                 Shortcut = Keys.Control | Keys.C
-            });
+            };
+            CopyCommand.Executed += OnCopyItem;
 
-            Command pasteCommand = new();
-            pasteCommand.Executed += (sender, args) => { };
-            Items.Add(new ButtonMenuItem
+            PasteCommand = new()
             {
-                Text = "Paste",
-                Command = pasteCommand,
+                MenuText = "Paste",
+                ToolBarText = "Paste",
+                Image = ControlGenerator.GetIcon("Paste", log),
                 Shortcut = Keys.Control | Keys.V
-            });
+            };
+            PasteCommand.Executed += OnPasteItem;
 
-            Command deleteCommand = new();
-            deleteCommand.Executed += (sender, args) => { };
-            Items.Add(new ButtonMenuItem
+
+            DeleteCommand = new()
             {
-                Text = "Delete",
-                Command = deleteCommand,
+                MenuText = "Delete",
+                ToolBarText = "Delete",
+                Image = ControlGenerator.GetIcon("Remove", log),
                 Shortcut = Keys.Delete
-            });
+            };
+            DeleteCommand.Executed += OnDeleteItem;
 
-            cutCommand.Executed += OnCutItem;
-            copyCommand.Executed += OnCopyItem;
-            pasteCommand.Executed += OnPasteItem;
-            deleteCommand.Executed += OnDeleteItem;
+            Items.Add(new ButtonMenuItem(CutCommand));
+            Items.Add(new ButtonMenuItem(CopyCommand));
+            Items.Add(new ButtonMenuItem(PasteCommand));
+            Items.Add(new ButtonMenuItem(DeleteCommand));
         }
 
         private void OnDeleteItem(object sender, EventArgs e)
@@ -161,11 +166,17 @@ namespace SerialLoops.Controls
         {
             if (_treeView.SelectedCommandTreeItem is null) return;
             if (_clipboard is null) return;
+
+            ScriptCommandSectionTreeItem newItem = _clipboard.Clone();
+            _treeView.AddItem(newItem);
+            
             if (_clipboardIsCut)
             {
                 _treeView.DeleteItem(_clipboard);
+                _clipboard = newItem;
+                _clipboardIsCut = false;
+                _treeView.SelectedItem = newItem.Section;
             }
-            _treeView.AddItem(_clipboard);
         }
 
         private void OnCopyItem(object sender, EventArgs e)
@@ -181,9 +192,8 @@ namespace SerialLoops.Controls
         private void CopyItem(bool cut)
         {
             if (_treeView.SelectedCommandTreeItem is null) return;
-            _clipboard = _treeView.SelectedCommandTreeItem.Clone();
+            _clipboard = _treeView.SelectedCommandTreeItem;
             _clipboardIsCut = cut;
         }
     }
-
 }

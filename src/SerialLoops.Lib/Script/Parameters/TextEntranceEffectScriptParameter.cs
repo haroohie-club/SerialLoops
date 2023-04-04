@@ -1,4 +1,6 @@
-﻿namespace SerialLoops.Lib.Script.Parameters
+﻿using HaruhiChokuretsuLib.Archive.Event;
+
+namespace SerialLoops.Lib.Script.Parameters
 {
     public class TextEntranceEffectScriptParameter : ScriptParameter
     {
@@ -9,7 +11,7 @@
             EntranceEffect = (TextEntranceEffect)entranceEffect;
         }
 
-        public override TextEntranceEffectScriptParameter Clone()
+        public override TextEntranceEffectScriptParameter Clone(Project project, EventFile eventFile)
         {
             return new(Name, (short)EntranceEffect);
         }

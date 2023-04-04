@@ -1,4 +1,6 @@
-﻿namespace SerialLoops.Lib.Script.Parameters
+﻿using HaruhiChokuretsuLib.Archive.Event;
+
+namespace SerialLoops.Lib.Script.Parameters
 {
     public class SpriteEntranceScriptParameter : ScriptParameter
     {
@@ -9,7 +11,7 @@
             EntranceTransition = (SpriteEntranceTransition)entranceTransition;
         }
 
-        public override SpriteEntranceScriptParameter Clone()
+        public override SpriteEntranceScriptParameter Clone(Project project, EventFile eventFile)
         {
             return new(Name, (short)EntranceTransition);
         }

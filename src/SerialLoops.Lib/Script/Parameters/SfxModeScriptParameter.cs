@@ -1,4 +1,6 @@
-﻿namespace SerialLoops.Lib.Script.Parameters
+﻿using HaruhiChokuretsuLib.Archive.Event;
+
+namespace SerialLoops.Lib.Script.Parameters
 {
     public class SfxModeScriptParameter : ScriptParameter
     {
@@ -9,7 +11,7 @@
             Mode = (SfxMode)mode;
         }
 
-        public override SfxModeScriptParameter Clone()
+        public override SfxModeScriptParameter Clone(Project project, EventFile eventFile)
         {
             return new(Name, (short)Mode);
         }

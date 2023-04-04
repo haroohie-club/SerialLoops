@@ -1,4 +1,6 @@
-﻿namespace SerialLoops.Lib.Script.Parameters
+﻿using HaruhiChokuretsuLib.Archive.Event;
+
+namespace SerialLoops.Lib.Script.Parameters
 {
     public class ScreenScriptParameter : ScriptParameter
     {
@@ -9,7 +11,7 @@
             Screen = (DsScreen)screen;
         }
 
-        public override ScreenScriptParameter Clone()
+        public override ScreenScriptParameter Clone(Project project, EventFile eventFile)
         {
             return new(Name, (short)Screen);
         }

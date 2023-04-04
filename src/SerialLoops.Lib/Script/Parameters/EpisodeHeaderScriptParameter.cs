@@ -1,4 +1,6 @@
-﻿namespace SerialLoops.Lib.Script.Parameters
+﻿using HaruhiChokuretsuLib.Archive.Event;
+
+namespace SerialLoops.Lib.Script.Parameters
 {
     public class EpisodeHeaderScriptParameter : ScriptParameter
     {
@@ -9,7 +11,7 @@
             EpisodeHeaderIndex = (Episode)epHeaderIndex;
         }
 
-        public override EpisodeHeaderScriptParameter Clone()
+        public override EpisodeHeaderScriptParameter Clone(Project project, EventFile eventFile)
         {
             return new(Name, (short)EpisodeHeaderIndex);
         }

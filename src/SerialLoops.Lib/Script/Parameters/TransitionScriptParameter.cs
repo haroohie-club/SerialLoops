@@ -1,4 +1,6 @@
-﻿namespace SerialLoops.Lib.Script.Parameters
+﻿using HaruhiChokuretsuLib.Archive.Event;
+
+namespace SerialLoops.Lib.Script.Parameters
 {
     public class TransitionScriptParameter : ScriptParameter
     {
@@ -9,7 +11,7 @@
             Transition = (TransitionEffect)transition;
         }
 
-        public override TransitionScriptParameter Clone()
+        public override TransitionScriptParameter Clone(Project project, EventFile eventFile)
         {
             return new(Name, (short)Transition);
         }

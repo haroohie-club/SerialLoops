@@ -1,4 +1,6 @@
-﻿namespace SerialLoops.Lib.Script.Parameters
+﻿using HaruhiChokuretsuLib.Archive.Event;
+
+namespace SerialLoops.Lib.Script.Parameters
 {
     public class BoolScriptParameter : ScriptParameter
     {
@@ -9,7 +11,7 @@
             Value = value;
         }
 
-        public override BoolScriptParameter Clone()
+        public override BoolScriptParameter Clone(Project project, EventFile eventFile)
         {
             return new(Name, Value);
         }

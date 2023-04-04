@@ -1,4 +1,5 @@
 ﻿using SkiaSharp;
+using HaruhiChokuretsuLib.Archive.Event;
 
 namespace SerialLoops.Lib.Script.Parameters
 {
@@ -15,7 +16,7 @@ namespace SerialLoops.Lib.Script.Parameters
             _red = (byte)red;
         }
 
-        public override ColorScriptParameter Clone()
+        public override ColorScriptParameter Clone(Project project, EventFile eventFile)
         {
             return new(Name, _red);
         }

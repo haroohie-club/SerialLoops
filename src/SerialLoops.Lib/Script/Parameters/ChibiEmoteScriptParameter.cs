@@ -1,4 +1,6 @@
-﻿namespace SerialLoops.Lib.Script.Parameters
+﻿using HaruhiChokuretsuLib.Archive.Event;
+
+namespace SerialLoops.Lib.Script.Parameters
 {
     public class ChibiEmoteScriptParameter : ScriptParameter
     {
@@ -9,7 +11,7 @@
             Emote = (ChibiEmote)emote;
         }
 
-        public override ChibiEmoteScriptParameter Clone()
+        public override ChibiEmoteScriptParameter Clone(Project project, EventFile eventFile)
         {
             return new(Name, (short)Emote);
         }

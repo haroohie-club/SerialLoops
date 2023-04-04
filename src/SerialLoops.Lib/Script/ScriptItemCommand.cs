@@ -650,7 +650,7 @@ namespace SerialLoops.Lib.Script
             {
                 Invocation = Invocation,
                 Verb = Verb,
-                Parameters = Parameters.Select(p => p.Clone()).ToList(),
+                Parameters = Parameters.Select(p => p.Clone(Project, Script)).ToList(),
                 Section = Section,
                 Index = Index,
                 Script = Script,

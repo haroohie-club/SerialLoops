@@ -1,4 +1,5 @@
-﻿using SerialLoops.Lib.Items;
+﻿using HaruhiChokuretsuLib.Archive.Event;
+using SerialLoops.Lib.Items;
 
 namespace SerialLoops.Lib.Script.Parameters
 {
@@ -11,7 +12,7 @@ namespace SerialLoops.Lib.Script.Parameters
             VoiceLine = vce;
         }
 
-        public override VoicedLineScriptParameter Clone()
+        public override VoicedLineScriptParameter Clone(Project project, EventFile eventFile)
         {
             return new(Name, VoiceLine);
         }
