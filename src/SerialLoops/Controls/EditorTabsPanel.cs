@@ -12,13 +12,13 @@ namespace SerialLoops.Controls
     public class EditorTabsPanel : Panel
     {
         public DocumentControl Tabs { get; private set; }
-        
+
         private readonly Project _project;
         private readonly ILogger _log;
         private readonly MainForm _mainForm;
         private ToolBar _toolBar => _mainForm.ToolBar;
         private MenuBar _menuBar => _mainForm.Menu;
-        
+
         public EditorTabsPanel(Project project, MainForm mainForm, ILogger log)
         {
             _project = project;

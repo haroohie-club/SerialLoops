@@ -27,11 +27,11 @@ namespace SerialLoops.Controls
 
             Command openCommand = new();
             openCommand.Executed += OpenCommand_OnClick;
-            Items.Add(new ButtonMenuItem {Text = "Open", Command = openCommand});
+            Items.Add(new ButtonMenuItem { Text = "Open", Command = openCommand });
 
             Command findReferences = new();
             findReferences.Executed += FindReferences_OnClick;
-            Items.Add(new ButtonMenuItem {Text = "Find References...", Command = findReferences});
+            Items.Add(new ButtonMenuItem { Text = "Find References...", Command = findReferences });
         }
 
         private void OpenCommand_OnClick(object sender, EventArgs args)
@@ -71,7 +71,7 @@ namespace SerialLoops.Controls
 
             Command exportNames = new();
             exportNames.Executed += ExportNames_OnClick;
-            Items.Add(new ButtonMenuItem {Text = "Export Item Names", Command = exportNames});
+            Items.Add(new ButtonMenuItem { Text = "Export Item Names", Command = exportNames });
         }
 
         private void ExportNames_OnClick(object sender, EventArgs e)
@@ -103,7 +103,7 @@ namespace SerialLoops.Controls
         private readonly ScriptCommandSectionTreeGridView _treeView;
         private ScriptCommandSectionTreeItem _clipboard;
         private bool _clipboardIsCut;
-        
+
         public Command CutCommand { get; }
         public Command CopyCommand { get; }
         public Command PasteCommand { get; }
@@ -139,7 +139,7 @@ namespace SerialLoops.Controls
                 Shortcut = Keys.Control | Keys.V
             };
             PasteCommand.Executed += OnPasteItem;
-            
+
 
             DeleteCommand = new()
             {
@@ -149,7 +149,7 @@ namespace SerialLoops.Controls
                 Shortcut = Keys.Delete
             };
             DeleteCommand.Executed += OnDeleteItem;
-            
+
             Items.Add(new ButtonMenuItem(CutCommand));
             Items.Add(new ButtonMenuItem(CopyCommand));
             Items.Add(new ButtonMenuItem(PasteCommand));
@@ -166,7 +166,7 @@ namespace SerialLoops.Controls
         {
             if (_treeView.SelectedCommandTreeItem is null) return;
             if (_clipboard is null) return;
-            
+
             ScriptCommandSectionTreeItem newItem = _clipboard.Clone();
             if (_clipboardIsCut)
             {
@@ -174,7 +174,7 @@ namespace SerialLoops.Controls
                 _clipboard = newItem;
                 _clipboardIsCut = false;
             }
-            
+
             _treeView.AddItem(newItem);
         }
 
