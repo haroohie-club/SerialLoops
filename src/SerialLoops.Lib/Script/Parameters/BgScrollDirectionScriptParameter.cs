@@ -18,8 +18,8 @@
         {
             DOWN = 1,
             UP = 2,
-            LEFT = 3,
-            RIGHT = 4,
+            RIGHT = 3,
+            LEFT = 4,
             DIAGONAL_RIGHT_DOWN = 5,
             DIAGONAL_LEFT_UP = 6,
         }

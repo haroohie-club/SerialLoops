@@ -185,6 +185,10 @@ namespace SerialLoops.Editors
                                     invocation.Parameters[0] = (short)((BackgroundItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).BackgroundType != BgType.KINETIC_SCREEN)).Id;
                                     break;
 
+                                case CommandVerb.BG_SCROLL:
+                                    invocation.Parameters[1] = 1;
+                                    break;
+
                                 case CommandVerb.CHIBI_ENTEREXIT:
                                 case CommandVerb.CHIBI_EMOTE:
                                     invocation.Parameters[0] = (short)((ChibiItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Chibi)).ChibiIndex;
@@ -1566,6 +1570,7 @@ namespace SerialLoops.Editors
                             break;
                     }
                 }
+                ScriptItemCommand bgScrollCommand = null;
                 for (int i = commands.Count - 1; i >= 0; i--)
                 {
                     if (commands[i].Verb == CommandVerb.BG_REVERT)
@@ -1573,6 +1578,11 @@ namespace SerialLoops.Editors
                         bgReverted = true;
                         continue;
                     }
+                    if (commands[i].Verb == CommandVerb.BG_SCROLL)
+                    {
+                        bgScrollCommand = commands[i];
+                        continue;
+                    } 
                     // Checks to see if this is one of the commands that sets a BG_REVERT immune background or if BG_REVERT hasn't been called
                     if (commands[i].Verb == CommandVerb.BG_DISP || commands[i].Verb == CommandVerb.BG_DISP2 ||
                         (commands[i].Verb == CommandVerb.BG_FADE && (((BgScriptParameter)commands[i].Parameters[0]).Background is not null)) ||
@@ -1580,16 +1590,29 @@ namespace SerialLoops.Editors
                     {
                         BackgroundItem background = (commands[i].Verb == CommandVerb.BG_FADE && ((BgScriptParameter)commands[i].Parameters[0]).Background is null) ?
                             ((BgScriptParameter)commands[i].Parameters[1]).Background : ((BgScriptParameter)commands[i].Parameters[0]).Background;
+
                         if (background is not null)
                         {
                             switch (background.BackgroundType)
                             {
                                 case BgType.TEX_CG_DUAL_SCREEN:
-                                    canvas.DrawBitmap(background.GetBackground(), new SKPoint(0, 0));
+                                    SKBitmap dualScreenBg = background.GetBackground();
+                                    if (bgScrollCommand is not null && ((BgScrollDirectionScriptParameter)bgScrollCommand.Parameters[0]).ScrollDirection == BgScrollDirectionScriptParameter.BgScrollDirection.DOWN)
+                                    {
+                                        canvas.DrawBitmap(dualScreenBg, new SKRect(0, background.Graphic2.Height - 194, 256, background.Graphic2.Height), new SKRect(0, 0, 256, 194));
+                                        int bottomScreenX = dualScreenBg.Height - 194;
+                                        canvas.DrawBitmap(dualScreenBg, new SKRect(0, bottomScreenX, 256, bottomScreenX + 194), new SKRect(0, 194, 256, 388));
+                                    }
+                                    else
+                                    {
+                                        canvas.DrawBitmap(dualScreenBg, new SKRect(0, 0, 256, 194), new SKRect(0, 0, 256, 194));
+                                        canvas.DrawBitmap(dualScreenBg, new SKRect(0, background.Graphic2.Height, 256, background.Graphic2.Height + 194), new SKRect(0, 194, 256, 388));
+                                    }
                                     break;
 
                                 case BgType.TEX_CG_SINGLE:
-                                    if (commands[i].Verb == CommandVerb.BG_DISPCG && ((BoolScriptParameter)commands[i].Parameters[1]).Value)
+                                    if (((BoolScriptParameter)commands[i].Parameters[1]).Value
+                                        || (bgScrollCommand is not null && ((BgScrollDirectionScriptParameter)bgScrollCommand.Parameters[0]).ScrollDirection == BgScrollDirectionScriptParameter.BgScrollDirection.DOWN))
                                     {
                                         SKBitmap bgBitmap = background.GetBackground();
                                         canvas.DrawBitmap(bgBitmap, new SKRect(0, bgBitmap.Height - 194, bgBitmap.Width, bgBitmap.Height),
@@ -1602,6 +1625,17 @@ namespace SerialLoops.Editors
                                     break;
 
                                 case BgType.TEX_CG_WIDE:
+                                    if (bgScrollCommand is not null && ((BgScrollDirectionScriptParameter)bgScrollCommand.Parameters[0]).ScrollDirection == BgScrollDirectionScriptParameter.BgScrollDirection.RIGHT)
+                                    {
+                                        SKBitmap bgBitmap = background.GetBackground();
+                                        canvas.DrawBitmap(bgBitmap, new SKRect(bgBitmap.Width - 256, 0, bgBitmap.Width, 194), new SKRect(0, 194, 256, 388));
+                                    }
+                                    else
+                                    {
+                                        canvas.DrawBitmap(background.GetBackground(), new SKPoint(0, 194));
+                                    }
+                                    break;
+
                                 case BgType.TEX_CG:
                                     canvas.DrawBitmap(background.GetBackground(), new SKPoint(0, 194));
                                     break;
@@ -1856,6 +1890,7 @@ namespace SerialLoops.Editors
                 (short)Enum.Parse<BgScrollDirectionScriptParameter.BgScrollDirection>(dropDown.SelectedKey);
 
             UpdateTabTitle(false, dropDown);
+            Application.Instance.Invoke(() => UpdatePreview());
         }
         private void BgmDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
