@@ -1,5 +1,4 @@
-﻿using Eto.Containers;
-using Eto.Forms;
+﻿using Eto.Forms;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Utility;
 using SkiaSharp;
