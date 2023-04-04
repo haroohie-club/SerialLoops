@@ -100,7 +100,6 @@ namespace SerialLoops.Controls
     {
         private TreeGridView _treeView;
         private ScriptCommandSectionTreeItem _cursorItem;
-        private Dictionary<ScriptSection, List<ScriptItemCommand>> _commands;
         public event EventHandler RepositionCommand;
         public event EventHandler DeleteCommand;
         public event EventHandler<CommandEventArgs> AddCommand;

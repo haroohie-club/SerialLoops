@@ -1,4 +1,6 @@
-﻿namespace SerialLoops.Lib.Script.Parameters
+﻿using HaruhiChokuretsuLib.Archive.Event;
+
+namespace SerialLoops.Lib.Script.Parameters
 {
     public class BgmModeScriptParameter : ScriptParameter
     {
@@ -15,7 +17,7 @@
             STOP = 4,
         }
 
-        public override BgmModeScriptParameter Clone()
+        public override BgmModeScriptParameter Clone(Project project, EventFile eventFile)
         {
             return new(Name, (short)Mode);
         }

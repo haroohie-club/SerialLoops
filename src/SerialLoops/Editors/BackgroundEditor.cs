@@ -3,7 +3,6 @@ using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib.Items;
 using SerialLoops.Utility;
 using System.IO;
-using SerialLoops.Controls;
 
 namespace SerialLoops.Editors
 {
@@ -11,7 +10,7 @@ namespace SerialLoops.Editors
     {
         private BackgroundItem _bg;
 
-        public BackgroundEditor(BackgroundItem item, EditorTabsPanel tabs, ILogger log) : base(item, tabs, log)
+        public BackgroundEditor(BackgroundItem item, ILogger log) : base(item, log)
         {
         }
 

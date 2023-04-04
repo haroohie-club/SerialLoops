@@ -26,7 +26,7 @@ namespace SerialLoops.Editors
 
         private readonly IEnumerable<ListItem> verbs = Enum.GetNames<ScenarioVerb>().Select(v => new ListItem() { Text = v, Key = v });
 
-        public ScenarioEditor(ScenarioItem item, EditorTabsPanel tabs, Project project, ILogger log) : base(item, tabs, log, project)
+        public ScenarioEditor(ScenarioItem item, ILogger log, Project project, EditorTabsPanel tabs) : base(item, log, project, tabs)
         {
         }
 

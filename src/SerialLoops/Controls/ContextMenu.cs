@@ -118,7 +118,7 @@ namespace SerialLoops.Controls
                 MenuText = "Cut",
                 ToolBarText = "Cut",
                 Image = ControlGenerator.GetIcon("Cut", log),
-                Shortcut = Keys.Control | Keys.X
+                Shortcut = Keys.ModifierMask | Keys.X
             };
             CutCommand.Executed += OnCutItem;
 
@@ -127,7 +127,7 @@ namespace SerialLoops.Controls
                 MenuText = "Copy",
                 ToolBarText = "Copy",
                 Image = ControlGenerator.GetIcon("Copy", log),
-                Shortcut = Keys.Control | Keys.C
+                Shortcut = Keys.ModifierMask | Keys.C
             };
             CopyCommand.Executed += OnCopyItem;
 
@@ -136,7 +136,7 @@ namespace SerialLoops.Controls
                 MenuText = "Paste",
                 ToolBarText = "Paste",
                 Image = ControlGenerator.GetIcon("Paste", log),
-                Shortcut = Keys.Control | Keys.V
+                Shortcut = Keys.ModifierMask | Keys.V
             };
             PasteCommand.Executed += OnPasteItem;
             
@@ -166,12 +166,12 @@ namespace SerialLoops.Controls
         {
             if (_treeView.SelectedCommandTreeItem is null) return;
             if (_clipboard is null) return;
+
+            _treeView.AddItem(_clipboard.Clone());
             if (_clipboardIsCut)
             {
                 _treeView.DeleteItem(_clipboard);
             }
-
-            _treeView.AddItem(_clipboard);
         }
 
         private void OnCopyItem(object sender, EventArgs e)
@@ -187,7 +187,7 @@ namespace SerialLoops.Controls
         private void CopyItem(bool cut)
         {
             if (_treeView.SelectedCommandTreeItem is null) return;
-            _clipboard = _treeView.SelectedCommandTreeItem.Clone();
+            _clipboard = _treeView.SelectedCommandTreeItem;
             _clipboardIsCut = cut;
         }
     }

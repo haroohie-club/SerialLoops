@@ -1,4 +1,6 @@
-﻿namespace SerialLoops.Lib.Script.Parameters
+﻿using HaruhiChokuretsuLib.Archive.Event;
+
+namespace SerialLoops.Lib.Script.Parameters
 {
     public class BgScrollDirectionScriptParameter : ScriptParameter
     {
@@ -9,7 +11,7 @@
             ScrollDirection = (BgScrollDirection)scrollDirection;
         }
 
-        public override BgScrollDirectionScriptParameter Clone()
+        public override BgScrollDirectionScriptParameter Clone(Project project, EventFile eventFile)
         {
             return new(Name, (short)ScrollDirection);
         }

@@ -1,4 +1,6 @@
-﻿namespace SerialLoops.Lib.Script.Parameters
+﻿using HaruhiChokuretsuLib.Archive.Event;
+
+namespace SerialLoops.Lib.Script.Parameters
 {
     public class ChibiEnterExitScriptParameter : ScriptParameter
     {
@@ -9,7 +11,7 @@
             Mode = (ChibiEnterExitType)mode;
         }
 
-        public override ChibiEnterExitScriptParameter Clone()
+        public override ChibiEnterExitScriptParameter Clone(Project project, EventFile eventFile)
         {
             return new(Name, (short)Mode);
         }

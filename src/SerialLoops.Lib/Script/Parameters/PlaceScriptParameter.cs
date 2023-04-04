@@ -1,4 +1,5 @@
-﻿using SerialLoops.Lib.Items;
+﻿using HaruhiChokuretsuLib.Archive.Event;
+using SerialLoops.Lib.Items;
 using System.Linq;
 
 namespace SerialLoops.Lib.Script.Parameters
@@ -12,7 +13,7 @@ namespace SerialLoops.Lib.Script.Parameters
             Place = place;
         }
 
-        public override PlaceScriptParameter Clone()
+        public override PlaceScriptParameter Clone(Project project, EventFile eventFile)
         {
             return new(Name, Place);
         }

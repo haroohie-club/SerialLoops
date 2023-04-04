@@ -1,4 +1,6 @@
-﻿namespace SerialLoops.Lib.Script.Parameters
+﻿using HaruhiChokuretsuLib.Archive.Event;
+
+namespace SerialLoops.Lib.Script.Parameters
 {
     public class ItemScriptParameter : ScriptParameter
     {
@@ -9,7 +11,7 @@
             ItemIndex = itemIndex;
         }
 
-        public override ItemScriptParameter Clone()
+        public override ItemScriptParameter Clone(Project project, EventFile eventFile)
         {
             return new(Name, ItemIndex);
         }

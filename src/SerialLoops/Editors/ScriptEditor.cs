@@ -41,7 +41,7 @@ namespace SerialLoops.Editors
         private ScriptCommandDropDown _currentSpeakerDropDown; // This property is used for storing the speaker dropdown to append dialogue property dropdowns to
         private Action _updateOptionDropDowns;
 
-        public ScriptEditor(ScriptItem item, EditorTabsPanel tabs, Project project, ILogger log) : base(item, tabs, log, project)
+        public ScriptEditor(ScriptItem item, ILogger log, Project project, EditorTabsPanel tabs) : base(item, log, project, tabs)
         {
         }
 
@@ -67,6 +67,15 @@ namespace SerialLoops.Editors
             _commandsPanel = new(_commands, new Size(280, 185), expandItems: true, this, _log);
             ScriptCommandSectionTreeGridView treeGridView = _commandsPanel.Viewer;
             treeGridView.SelectedItemChanged += CommandsPanel_SelectedItemChanged;
+            
+            foreach (string command in treeGridView.Control.SupportedPlatformCommands)
+            {
+                var barCommand = ToolBarCommands.Find(barCommand => barCommand.ToolBarText.ToLower().Equals(command));
+                if (barCommand is not null)
+                {
+                    treeGridView.Control.MapPlatformCommand(command, barCommand);
+                }
+            }
 
             TableRow mainRow = new();
             mainRow.Cells.Add(new TableLayout(GetEditorButtons(treeGridView), _commandsPanel));
@@ -85,7 +94,6 @@ namespace SerialLoops.Editors
 
             mainRow.Cells.Add(new(_detailsLayout));
             layout.Rows.Add(mainRow);
-
             return layout;
         }
 

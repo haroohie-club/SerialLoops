@@ -17,7 +17,7 @@ namespace SerialLoops.Editors
         private AnimatedImage _animatedImage;
         private StackLayout _framesStack;
 
-        public ChibiEditor(ChibiItem chibi, EditorTabsPanel tabs, ILogger log) : base(chibi, tabs, log)
+        public ChibiEditor(ChibiItem chibi, ILogger log) : base(chibi, log)
         {
         }
 

@@ -14,7 +14,7 @@ namespace SerialLoops.Editors
     {
         private PuzzleItem _puzzle;
 
-        public PuzzleEditor(PuzzleItem item, EditorTabsPanel tabs, Project project, ILogger log) : base(item, tabs, log, project)
+        public PuzzleEditor(PuzzleItem item, Project project, EditorTabsPanel tabs, ILogger log) : base(item, log, project, tabs)
         {
         }
 

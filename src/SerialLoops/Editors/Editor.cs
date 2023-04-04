@@ -19,7 +19,7 @@ namespace SerialLoops.Editors
         public List<Command> ToolBarCommands { get; set; } = new();
         public ItemDescription Description { get; }
 
-        protected Editor(ItemDescription description, EditorTabsPanel tabs, ILogger log, Project project = null)
+        protected Editor(ItemDescription description, ILogger log, Project project = null, EditorTabsPanel tabs = null)
         {
             Description = description;
             _project = project;

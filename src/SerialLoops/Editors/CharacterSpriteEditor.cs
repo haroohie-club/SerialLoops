@@ -1,6 +1,5 @@
 ﻿using Eto.Forms;
 using HaruhiChokuretsuLib.Util;
-using SerialLoops.Controls;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Utility;
@@ -12,7 +11,7 @@ namespace SerialLoops.Editors
         private CharacterSpriteItem _sprite;
         private AnimatedImage _animatedImage;
 
-        public CharacterSpriteEditor(CharacterSpriteItem item, EditorTabsPanel tabs, Project project, ILogger log) : base(item, tabs, log, project)
+        public CharacterSpriteEditor(CharacterSpriteItem item, Project project, ILogger log) : base(item, log, project)
         {
         }
 
