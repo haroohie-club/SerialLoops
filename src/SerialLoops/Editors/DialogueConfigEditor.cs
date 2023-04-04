@@ -5,6 +5,7 @@ using SerialLoops.Lib.Items;
 using SerialLoops.Utility;
 using System;
 using System.Linq;
+using SerialLoops.Controls;
 
 namespace SerialLoops.Editors
 {
@@ -12,7 +13,7 @@ namespace SerialLoops.Editors
     {
         private DialogueConfigItem _dialogueConfig;
 
-        public DialogueConfigEditor(DialogueConfigItem dialogueConfig, ILogger log) : base(dialogueConfig, log)
+        public DialogueConfigEditor(DialogueConfigItem dialogueConfig, EditorTabsPanel tabs, ILogger log) : base(dialogueConfig, tabs, log)
         {
         }
 

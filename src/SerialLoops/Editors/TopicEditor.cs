@@ -5,6 +5,7 @@ using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Util;
 using SerialLoops.Utility;
 using System.Linq;
+using SerialLoops.Controls;
 
 namespace SerialLoops.Editors
 {
@@ -22,7 +23,7 @@ namespace SerialLoops.Editors
         private TextBox _koizumiTimeBox;
         private Label _koizumiTimeLabel;
 
-        public TopicEditor(TopicItem topic, Project project, ILogger log) : base(topic, log, project)
+        public TopicEditor(TopicItem topic, EditorTabsPanel tabs, Project project, ILogger log) : base(topic, tabs, log, project)
         {
         }
 

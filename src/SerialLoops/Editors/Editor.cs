@@ -1,4 +1,5 @@
-﻿using Eto.Forms;
+﻿using System.Collections.Generic;
+using Eto.Forms;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Controls;
 using SerialLoops.Lib;
@@ -9,12 +10,16 @@ namespace SerialLoops.Editors
 {
     public abstract class Editor : DocumentPage
     {
+        public const string EDITOR_TOOLBAR_TAG = "editor";
+
         protected ILogger _log;
         protected Project _project;
         protected EditorTabsPanel _tabs;
-        public ItemDescription Description { get; private set; }
 
-        public Editor(ItemDescription description, ILogger log, Project project = null, EditorTabsPanel tabs = null)
+        public List<Command> ToolBarCommands { get; set; } = new();
+        public ItemDescription Description { get; }
+
+        protected Editor(ItemDescription description, EditorTabsPanel tabs, ILogger log, Project project = null)
         {
             Description = description;
             _project = project;

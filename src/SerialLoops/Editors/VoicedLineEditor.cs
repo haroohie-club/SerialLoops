@@ -15,7 +15,7 @@ namespace SerialLoops.Editors
         private VoicedLineItem _vce;
         public SoundPlayerPanel VcePlayer { get; set; }
 
-        public VoicedLineEditor(VoicedLineItem vce, Project project, ILogger log) : base(vce, log, project)
+        public VoicedLineEditor(VoicedLineItem vce, EditorTabsPanel tabs, Project project, ILogger log) : base(vce, tabs, log, project)
         {
         }
 

@@ -1,4 +1,6 @@
-﻿using Eto.Forms;
+﻿using System;
+using System.Collections.Generic;
+using Eto.Forms;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Editors;
 using SerialLoops.Lib;
@@ -10,14 +12,16 @@ namespace SerialLoops.Controls
     public class EditorTabsPanel : Panel
     {
         public DocumentControl Tabs { get; private set; }
-
+        public ToolBar ToolBar { get; }
+        
         private readonly Project _project;
         private readonly ILogger _log;
 
-        public EditorTabsPanel(Project project, ILogger log)
+        public EditorTabsPanel(Project project, ToolBar toolBar, ILogger log)
         {
             _project = project;
             _log = log;
+            ToolBar = toolBar;
             InitializeComponent();
         }
 
@@ -60,38 +64,39 @@ namespace SerialLoops.Controls
             Tabs.Pages.Add(newPage);
             Tabs.SelectedPage = newPage;
             Tabs.PageClosed += Tabs_PageClosed;
+            Tabs.SelectedIndexChanged += Tabs_PageOpened;
         }
 
-        internal DocumentPage CreateTab(ItemDescription item, Project project, ILogger log)
+        private DocumentPage CreateTab(ItemDescription item, Project project, ILogger log)
         {
             switch (item.Type)
             {
                 case ItemDescription.ItemType.Background:
-                    return new BackgroundEditor((BackgroundItem)project.Items.First(i => i.Name == item.Name), log);
+                    return new BackgroundEditor((BackgroundItem)project.Items.First(i => i.Name == item.Name), this, log);
                 case ItemDescription.ItemType.BGM:
-                    return new BackgroundMusicEditor((BackgroundMusicItem)project.Items.First(i => i.Name == item.Name), project, log);
+                    return new BackgroundMusicEditor((BackgroundMusicItem)project.Items.First(i => i.Name == item.Name), this, project, log);
                 case ItemDescription.ItemType.Character_Sprite:
-                    return new CharacterSpriteEditor((CharacterSpriteItem)project.Items.First(i => i.Name == item.Name), project, log);
+                    return new CharacterSpriteEditor((CharacterSpriteItem)project.Items.First(i => i.Name == item.Name), this, project, log);
                 case ItemDescription.ItemType.Chibi:
-                    return new ChibiEditor((ChibiItem)project.Items.First(i => i.Name == item.Name), log);
+                    return new ChibiEditor((ChibiItem)project.Items.First(i => i.Name == item.Name), this, log);
                 case ItemDescription.ItemType.Dialogue_Config:
-                    return new DialogueConfigEditor((DialogueConfigItem)project.Items.First(i => i.Name == item.Name), log);
+                    return new DialogueConfigEditor((DialogueConfigItem)project.Items.First(i => i.Name == item.Name), this, log);
                 case ItemDescription.ItemType.Group_Selection:
-                    return new GroupSelectionEditor((GroupSelectionItem)project.Items.First(i => i.Name == item.Name), log, project, this);
+                    return new GroupSelectionEditor((GroupSelectionItem)project.Items.First(i => i.Name == item.Name), this, project, log);
                 case ItemDescription.ItemType.Map:
-                    return new MapEditor((MapItem)project.Items.First(i => i.Name == item.Name), project, log);
+                    return new MapEditor((MapItem)project.Items.First(i => i.Name == item.Name), this, project, log);
                 case ItemDescription.ItemType.Place:
-                    return new PlaceEditor((PlaceItem)project.Items.First(i => i.Name == item.Name), project, log);
+                    return new PlaceEditor((PlaceItem)project.Items.First(i => i.Name == item.Name), this, project, log);
                 case ItemDescription.ItemType.Puzzle:
-                    return new PuzzleEditor((PuzzleItem)project.Items.First(i => i.Name == item.Name), project, this, log);
+                    return new PuzzleEditor((PuzzleItem)project.Items.First(i => i.Name == item.Name), this, project, log);
                 case ItemDescription.ItemType.Scenario:
-                    return new ScenarioEditor((ScenarioItem)project.Items.First(i => i.Name == item.Name), log, project, this);
+                    return new ScenarioEditor((ScenarioItem)project.Items.First(i => i.Name == item.Name), this, project, log);
                 case ItemDescription.ItemType.Script:
-                    return new ScriptEditor((ScriptItem)project.Items.First(i => i.Name == item.Name), project, log, this);
+                    return new ScriptEditor((ScriptItem)project.Items.First(i => i.Name == item.Name), this, project, log);
                 case ItemDescription.ItemType.Topic:
-                    return new TopicEditor((TopicItem)project.Items.First(i => i.Name == item.Name), project, log);
+                    return new TopicEditor((TopicItem)project.Items.First(i => i.Name == item.Name), this, project, log);
                 case ItemDescription.ItemType.Voice:
-                    return new VoicedLineEditor((VoicedLineItem)project.Items.First(i => i.Name == item.Name), project, log);
+                    return new VoicedLineEditor((VoicedLineItem)project.Items.First(i => i.Name == item.Name), this, project, log);
                 default:
                     log.LogError("Invalid item type!");
                     return null;
@@ -108,6 +113,28 @@ namespace SerialLoops.Controls
             {
                 ((VoicedLineEditor)e.Page).VcePlayer.Stop();
             }
+            ToolBar?.Items
+                .Where(toolItem => toolItem.Tag != null && toolItem.Tag.Equals(Editor.EDITOR_TOOLBAR_TAG)).ToList()
+                .ForEach(toolItem => ToolBar.Items.Remove(toolItem));
+        }
+
+        private void Tabs_PageOpened(object sender, EventArgs e)
+        {
+            // Add editor-specific toolbar commands
+            ToolBar?.Items
+                .Where(toolItem => toolItem.Tag != null && toolItem.Tag.Equals(Editor.EDITOR_TOOLBAR_TAG)).ToList()
+                .ForEach(toolItem => ToolBar.Items.Remove(toolItem));
+
+            List<Command> commands = ((Editor) Tabs.SelectedPage)?.ToolBarCommands;
+            if (commands is {Count: <= 0}) return;
+            
+            SeparatorToolItem separator = new() { Tag = Editor.EDITOR_TOOLBAR_TAG };
+            ToolBar?.Items.Insert(0, separator);
+            commands?.ForEach(command =>
+            {
+                ButtonToolItem toolButton = new(command) { Tag = Editor.EDITOR_TOOLBAR_TAG };
+                ToolBar?.Items.Insert(0, toolButton);
+            });
         }
     }
 }

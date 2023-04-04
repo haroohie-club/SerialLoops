@@ -5,6 +5,8 @@ using SerialLoops.Lib.Script;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using HaruhiChokuretsuLib.Util;
+using SerialLoops.Editors;
 
 namespace SerialLoops.Controls
 {
@@ -148,7 +150,7 @@ namespace SerialLoops.Controls
             return null;
         }
 
-        public ScriptCommandSectionTreeGridView(IEnumerable<ScriptCommandSectionEntry> topNodes, Size size, bool expanded)
+        public ScriptCommandSectionTreeGridView(IEnumerable<ScriptCommandSectionEntry> topNodes, Editor editor, Size size, bool expanded, ILogger log)
         {
             _treeView = new TreeGridView
             {
@@ -173,7 +175,15 @@ namespace SerialLoops.Controls
             _treeView.DragOver += OnDragOver;
             _treeView.DragDrop += OnDragDrop;
 
-            _treeView.ContextMenu = new ScriptCommandListContextMenu(this);
+            ScriptCommandListContextMenu contextMenu = new(this, log);
+            _treeView.ContextMenu = contextMenu;
+            editor.ToolBarCommands = new List<Command>
+            {
+                contextMenu.DeleteCommand,
+                contextMenu.PasteCommand,
+                contextMenu.CopyCommand,
+                contextMenu.CutCommand
+            };
         }
 
         private void OnMouseMove(object sender, MouseEventArgs e)

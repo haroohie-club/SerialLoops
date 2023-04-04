@@ -4,6 +4,7 @@ using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Utility;
 using System;
+using SerialLoops.Controls;
 
 namespace SerialLoops.Editors
 {
@@ -11,7 +12,7 @@ namespace SerialLoops.Editors
     {
         private MapItem _map;
 
-        public MapEditor(MapItem map, Project project, ILogger log) : base(map, log, project)
+        public MapEditor(MapItem map, EditorTabsPanel tabs, Project project, ILogger log) : base(map, tabs, log, project)
         {
         }
 

@@ -24,7 +24,7 @@ namespace SerialLoops.Editors
 
         private string _bgmCachedFile;
 
-        public BackgroundMusicEditor(BackgroundMusicItem item, Project project, ILogger log) : base(item, log, project)
+        public BackgroundMusicEditor(BackgroundMusicItem item, EditorTabsPanel tabs, Project project, ILogger log) : base(item, tabs, log, project)
         {
             _bgmCachedFile = Path.Combine(project.Config.CachesDirectory, "bgm", $"{_bgm.Name}.wav");
         }

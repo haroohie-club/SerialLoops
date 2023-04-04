@@ -1,5 +1,6 @@
 ﻿using Eto.Forms;
 using HaruhiChokuretsuLib.Util;
+using SerialLoops.Controls;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Utility;
@@ -10,7 +11,7 @@ namespace SerialLoops.Editors
     {
         private PlaceItem _place;
 
-        public PlaceEditor(PlaceItem placeItem, Project project, ILogger log) : base(placeItem, log, project)
+        public PlaceEditor(PlaceItem placeItem, EditorTabsPanel tabs, Project project, ILogger log) : base(placeItem, tabs, log, project)
         {
         }
 

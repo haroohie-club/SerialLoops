@@ -26,7 +26,7 @@ namespace SerialLoops.Controls
         private readonly Size _size;
         private Dictionary<ScriptSection, List<ScriptItemCommand>> _commands;
         private readonly bool _expandItems;
-        private Editor _editor;
+        private readonly Editor _editor;
 
         public ScriptCommandListPanel(Dictionary<ScriptSection, List<ScriptItemCommand>> commands, Size size, bool expandItems, Editor editor, ILogger log)
         {
@@ -40,7 +40,7 @@ namespace SerialLoops.Controls
 
         void InitializeComponent()
         {
-            Viewer = new ScriptCommandSectionTreeGridView(GetSections(), _size, _expandItems);
+            Viewer = new ScriptCommandSectionTreeGridView(GetSections(), _editor, _size, _expandItems, _log);
             MinimumSize = _size;
             Padding = 0;
             Content = new TableLayout(Viewer.Control);

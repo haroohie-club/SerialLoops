@@ -15,7 +15,7 @@ namespace SerialLoops.Editors
     {
         private GroupSelectionItem _selection;
 
-        public GroupSelectionEditor(GroupSelectionItem selection, ILogger log, Project project, EditorTabsPanel tabs) : base(selection, log, project, tabs)
+        public GroupSelectionEditor(GroupSelectionItem selection, EditorTabsPanel tabs, Project project, ILogger log) : base(selection, tabs, log, project)
         {
         }
 
