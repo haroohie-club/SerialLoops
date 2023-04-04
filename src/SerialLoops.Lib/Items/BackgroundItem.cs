@@ -6,6 +6,7 @@ using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib.Util;
 using SkiaSharp;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace SerialLoops.Lib.Items
@@ -97,6 +98,7 @@ namespace SerialLoops.Lib.Items
 
         public void SetBackground(SKBitmap image, IProgressTracker tracker)
         {
+            int transparentIndex = Graphic1.Palette[0] == new SKColor(0, 248, 0) ? 0 : -1;
             switch (BackgroundType)
             {
                 case BgType.KINETIC_SCREEN:
@@ -107,7 +109,7 @@ namespace SerialLoops.Lib.Items
 
                 case BgType.TEX_CG_SINGLE:
                     tracker.Focus("Setting CG single image...", 1);
-                    Graphic1.SetImage(image, setPalette: true);
+                    Graphic1.SetImage(image, setPalette: true, transparentIndex);
                     tracker.Finished++;
                     break;
 
@@ -142,10 +144,21 @@ namespace SerialLoops.Lib.Items
                     }
                     tileCanvas.Flush();
 
-                    tracker.Focus("Setting graphics...", 2);
-                    Graphic1.SetImage(newTextureBitmap, setPalette: true);
+                    tracker.Focus("Setting palettes and images...", 5);
+                    List<SKColor> tilePalette = Helpers.GetPaletteFromImages(new List<SKBitmap>() { newTileBitmap, newTextureBitmap },
+                        transparentIndex == 0 ? 256 : 255);
+                    if (tilePalette.Count == 255)
+                    {
+                        tilePalette.Insert(0, new SKColor(0, 248, 0));
+                    }
                     tracker.Finished++;
-                    Graphic2.SetImage(newTileBitmap, setPalette: true);
+                    Graphic1.SetPalette(tilePalette, transparentIndex);
+                    tracker.Finished++;
+                    Graphic2.SetPalette(tilePalette, transparentIndex);
+                    tracker.Finished++;
+                    Graphic1.SetImage(newTextureBitmap);
+                    tracker.Finished++;
+                    Graphic2.SetImage(newTileBitmap);
                     tracker.Finished++;
                     break;
 
@@ -165,17 +178,40 @@ namespace SerialLoops.Lib.Items
                     tracker.Finished++;
 
                     tracker.Focus("Setting palettes and images...", 5);
-                    List<SKColor> texPalette = Helpers.GetPaletteFromImages(new List<SKBitmap>() { newGraphic1, newGraphic2 }, 256);
+                    List<SKColor> texPalette = Helpers.GetPaletteFromImages(new List<SKBitmap>() { newGraphic1, newGraphic2 },
+                        transparentIndex == 0 ? 256 : 255);
+                    if (texPalette.Count == 255)
+                    {
+                        texPalette.Insert(0, new SKColor(0, 248, 0));
+                    }
                     tracker.Finished++;
-                    Graphic1.SetPalette(texPalette);
+                    Graphic1.SetPalette(texPalette, transparentIndex);
                     tracker.Finished++;
-                    Graphic2.SetPalette(texPalette);
+                    Graphic2.SetPalette(texPalette, transparentIndex);
                     tracker.Finished++;
                     Graphic1.SetImage(newGraphic1);
                     tracker.Finished++;
                     Graphic2.SetImage(newGraphic2);
                     tracker.Finished++;
                     break;
+            }
+        }
+
+        public void Write(Project project, ILogger log)
+        {
+            using MemoryStream grp1Stream = new();
+            Graphic1.GetImage().Encode(grp1Stream, SKEncodedImageFormat.Png, 1);
+            IO.WriteBinaryFile(Path.Combine("assets", "graphics", $"{Graphic1.Index:X3}.png"), grp1Stream.ToArray(), project, log);
+            IO.WriteStringFile(Path.Combine("assets", "graphics", $"{Graphic1.Index:X3}_pal.csv"),
+                string.Join(',', Graphic1.Palette.Select(c => c.ToString())), project, log);
+
+            if (BackgroundType != BgType.KINETIC_SCREEN && BackgroundType != BgType.TEX_CG_SINGLE)
+            {
+                using MemoryStream grp2Stream = new();
+                Graphic2.GetImage().Encode(grp2Stream, SKEncodedImageFormat.Png, 1);
+                IO.WriteBinaryFile(Path.Combine("assets", "graphics", $"{Graphic2.Index:X3}.png"), grp2Stream.ToArray(), project, log);
+                IO.WriteStringFile(Path.Combine("assets", "graphics", $"{Graphic2.Index:X3}_pal.csv"),
+                    string.Join(',', Graphic1.Palette.Select(c => c.ToString())), project, log);
             }
         }
 

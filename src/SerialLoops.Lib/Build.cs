@@ -7,14 +7,12 @@ using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib.Util;
 using SkiaSharp;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace SerialLoops.Lib
@@ -117,7 +115,11 @@ namespace SerialLoops.Lib
                     {
                         if (Path.GetExtension(file).Equals(".png", StringComparison.OrdinalIgnoreCase))
                         {
-                            ReplaceSingleGraphicsFile(grp, file, index, new());
+                            ReplaceSingleGraphicsFile(grp, file, index);
+                        }
+                        else if (file.EndsWith("_pal.csv", StringComparison.OrdinalIgnoreCase))
+                        {
+                            // ignore palette files as they will be handled by the PNGs above
                         }
                         else if (Path.GetExtension(file).Equals(".s", StringComparison.OrdinalIgnoreCase))
                         {
@@ -212,7 +214,7 @@ namespace SerialLoops.Lib
             tracker.Finished+= 3;
         }
 
-        private static void ReplaceSingleGraphicsFile(ArchiveFile<GraphicsFile> grp, string filePath, int index, Dictionary<int, List<SKColor>> sharedPalettes)
+        private static void ReplaceSingleGraphicsFile(ArchiveFile<GraphicsFile> grp, string filePath, int index)
         {
             GraphicsFile grpFile = grp.Files.FirstOrDefault(f => f.Index == index);
 
@@ -221,20 +223,13 @@ namespace SerialLoops.Lib
                 grpFile.InitializeFontFile();
             }
 
-            int transparentIndex = -1;
-            Match transparentIndexMatch = Regex.Match(filePath, @"tidx(?<transparentIndex>\d+)", RegexOptions.IgnoreCase);
-            if (transparentIndexMatch.Success)
+            string paletteFile = Path.Combine(Path.GetDirectoryName(filePath), $"{Path.GetFileNameWithoutExtension(filePath)}_pal.csv");
+            if (File.Exists(paletteFile))
             {
-                transparentIndex = int.Parse(transparentIndexMatch.Groups["transparentIndex"].Value);
+                grpFile.SetPalette(File.ReadAllText(paletteFile).Split(',').Select(c => SKColor.Parse(c)).ToList());
             }
-            Match sharedPaletteMatch = Regex.Match(filePath, @"sharedpal(?<index>\d+)", RegexOptions.IgnoreCase);
-            if (sharedPaletteMatch.Success)
-            {
-                grpFile.SetPalette(sharedPalettes[int.Parse(sharedPaletteMatch.Groups["index"].Value)]);
-            }
-            bool newSize = filePath.Contains("newsize");
 
-            grpFile.SetImage(filePath, setPalette: Path.GetFileNameWithoutExtension(filePath).Contains("newpal", StringComparison.OrdinalIgnoreCase), transparentIndex: transparentIndex, newSize: newSize);
+            grpFile.SetImage(filePath);
 
             grp.Files[grp.Files.IndexOf(grpFile)] = grpFile;
         }

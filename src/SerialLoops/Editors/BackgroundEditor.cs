@@ -2,7 +2,6 @@
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Dialogs;
 using SerialLoops.Lib.Items;
-using SerialLoops.Lib.Util;
 using SerialLoops.Utility;
 using SkiaSharp;
 using System;
@@ -91,13 +90,13 @@ namespace SerialLoops.Editors
                     LoopyProgressTracker tracker = new();
                     _ = new ProgressDialog(() => _bg.SetBackground(SKBitmap.Decode(openFileDialog.FileName), tracker),
                         () => Content = GetEditorPanel(), tracker, $"Replacing {_bg.DisplayName}...");
+                    UpdateTabTitle(false);
                 }
                 catch (Exception ex)
                 {
                     _log.LogError($"Failed to replace background {_bg.DisplayName} with file {openFileDialog.FileName}: {ex.Message}\n\n{ex.StackTrace}");
                 }
             }
-            UpdateTabTitle(false);
         }
     }
 }
