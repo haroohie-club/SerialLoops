@@ -70,7 +70,7 @@ namespace SerialLoops.Editors
             
             foreach (string command in treeGridView.Control.SupportedPlatformCommands)
             {
-                var barCommand = ToolBarCommands.Find(barCommand => barCommand.ToolBarText.ToLower().Equals(command));
+                var barCommand = EditorCommands.Find(barCommand => barCommand.ToolBarText.ToLower().Equals(command));
                 if (barCommand is not null)
                 {
                     treeGridView.Control.MapPlatformCommand(command, barCommand);

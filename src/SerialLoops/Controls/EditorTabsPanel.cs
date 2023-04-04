@@ -15,13 +15,15 @@ namespace SerialLoops.Controls
         
         private readonly Project _project;
         private readonly ILogger _log;
-        private readonly ToolBar _toolBar;
+        private readonly MainForm _mainForm;
+        private ToolBar _toolBar => _mainForm.ToolBar;
+        private MenuBar _menuBar => _mainForm.Menu;
         
-        public EditorTabsPanel(Project project, ToolBar toolBar, ILogger log)
+        public EditorTabsPanel(Project project, MainForm mainForm, ILogger log)
         {
             _project = project;
             _log = log;
-            _toolBar = toolBar;
+            _mainForm = mainForm;
             InitializeComponent();
         }
 
@@ -119,32 +121,38 @@ namespace SerialLoops.Controls
 
             if (Tabs.SelectedPage is null)
             {
-                ClearToolBarCommands();
+                ClearEditorCommands();
             }
         }
 
         private void Tabs_PageOpened(object sender, EventArgs e)
         {
-            ClearToolBarCommands();
+            ClearEditorCommands();
 
             // Add editor-specific toolbar commands
-            List<Command> commands = ((Editor) Tabs.SelectedPage)?.ToolBarCommands;
+            List<Command> commands = ((Editor) Tabs.SelectedPage)?.EditorCommands;
             if (commands is null || commands.Count == 0) return;
 
+            SubMenuItem editItem = new() { Text = "&Edit", Tag = Editor.EDITOR_TOOLBAR_TAG };
             SeparatorToolItem separator = new() { Tag = Editor.EDITOR_TOOLBAR_TAG, Style = "sl-toolbar-separator" };
             _toolBar?.Items.Insert(0, separator);
             commands.ForEach(command =>
             {
                 ButtonToolItem toolButton = new(command) { Tag = Editor.EDITOR_TOOLBAR_TAG, Style = "sl-toolbar-button" };
                 _toolBar?.Items.Insert(0, toolButton);
+                editItem?.Items.Insert(0, command);
             });
+            _menuBar?.Items.Add(editItem);
         }
 
-        private void ClearToolBarCommands()
+        private void ClearEditorCommands()
         {
             _toolBar?.Items
                 .Where(toolItem => toolItem.Tag != null && toolItem.Tag.Equals(Editor.EDITOR_TOOLBAR_TAG)).ToList()
                 .ForEach(toolItem => _toolBar.Items.Remove(toolItem));
+            _menuBar?.Items
+                .Where(menuItem => menuItem.Tag != null && menuItem.Tag.Equals(Editor.EDITOR_TOOLBAR_TAG)).ToList()
+                .ForEach(menuItem => _menuBar.Items.Remove(menuItem));
         }
     }
 }

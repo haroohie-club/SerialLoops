@@ -118,7 +118,7 @@ namespace SerialLoops.Controls
                 MenuText = "Cut",
                 ToolBarText = "Cut",
                 Image = ControlGenerator.GetIcon("Cut", log),
-                Shortcut = Keys.Control | Keys.X
+                Shortcut = Keys.Control | Keys.X,
             };
             CutCommand.Executed += OnCutItem;
 

@@ -176,7 +176,7 @@ namespace SerialLoops.Controls
 
             ScriptCommandListContextMenu contextMenu = new(this, log);
             _treeView.ContextMenu = contextMenu;
-            editor.ToolBarCommands = new List<Command>
+            editor.EditorCommands = new List<Command>
             {
                 contextMenu.DeleteCommand,
                 contextMenu.PasteCommand,

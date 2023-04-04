@@ -44,7 +44,7 @@ namespace SerialLoops
         {
             InitializeProjectMenu();
             
-            EditorTabs = new(project, ToolBar, Log);
+            EditorTabs = new(project, this, Log);
             ItemExplorer = new(project, EditorTabs, Log);
             Title = $"{BASE_TITLE} - {project.Name}";
             Content = new TableLayout(new TableRow(ItemExplorer, EditorTabs));
