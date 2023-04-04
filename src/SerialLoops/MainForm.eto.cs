@@ -48,6 +48,7 @@ namespace SerialLoops
             ItemExplorer = new(project, EditorTabs, Log);
             Title = $"{BASE_TITLE} - {project.Name}";
             Content = new TableLayout(new TableRow(ItemExplorer, EditorTabs));
+            EditorTabs.Tabs_PageChanged(this, EventArgs.Empty);
 
             LoadCachedData(project, tracker);
         }

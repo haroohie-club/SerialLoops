@@ -66,7 +66,8 @@ namespace SerialLoops.Controls
             Tabs.Pages.Add(newPage);
             Tabs.SelectedPage = newPage;
             Tabs.PageClosed += Tabs_PageClosed;
-            Tabs.SelectedIndexChanged += Tabs_PageOpened;
+            Tabs.SelectedIndexChanged += Tabs_PageChanged;
+            newPage.Closed += Tabs_PageChanged;
         }
 
         private DocumentPage CreateTab(ItemDescription item, Project project, ILogger log)
@@ -125,7 +126,7 @@ namespace SerialLoops.Controls
             }
         }
 
-        private void Tabs_PageOpened(object sender, EventArgs e)
+        public void Tabs_PageChanged(object sender, EventArgs e)
         {
             ClearEditorCommands();
 
