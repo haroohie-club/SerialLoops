@@ -22,7 +22,7 @@ namespace SerialLoops.Controls
             : base(Array.Empty<ScriptCommandSectionEntry>())
         {
             Command = command;
-            Text = Command.ToString();
+            Text = Command?.ToString();
         }
 
         public ScriptCommandSectionEntry(ScriptSection section, IEnumerable<ScriptCommandSectionEntry> commands, EventFile scriptFile)
@@ -42,11 +42,13 @@ namespace SerialLoops.Controls
 
         internal ScriptCommandSectionEntry Clone()
         {
-            ScriptCommandSectionEntry temp = new(Command.Clone());
+            ScriptCommandSectionEntry temp = new(Command?.Clone());
             foreach (var child in this)
             {
                 temp.Add(child.Clone());
             }
+            temp.Text = Text;
+            temp.ScriptFile = ScriptFile;
             return temp;
         }
     }
@@ -247,6 +249,7 @@ namespace SerialLoops.Controls
         internal void AddItem(ScriptCommandSectionTreeItem item)
         {
             if (SelectedCommandTreeItem is null) return;
+            if (item.Command is null) return;
             if (SelectedCommandTreeItem.Parent is ScriptCommandSectionTreeItem parent && !parent.Text.Equals("Top"))
             {
                 item.Parent = parent;

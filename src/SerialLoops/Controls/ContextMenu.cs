@@ -168,14 +168,15 @@ namespace SerialLoops.Controls
             if (_clipboard is null) return;
 
             ScriptCommandSectionTreeItem newItem = _clipboard.Clone();
+            _treeView.AddItem(newItem);
+            
             if (_clipboardIsCut)
             {
                 _treeView.DeleteItem(_clipboard);
                 _clipboard = newItem;
                 _clipboardIsCut = false;
+                _treeView.SelectedItem = newItem.Section;
             }
-
-            _treeView.AddItem(newItem);
         }
 
         private void OnCopyItem(object sender, EventArgs e)
