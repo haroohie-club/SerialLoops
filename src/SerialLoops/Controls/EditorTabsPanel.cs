@@ -131,11 +131,11 @@ namespace SerialLoops.Controls
             List<Command> commands = ((Editor) Tabs.SelectedPage)?.ToolBarCommands;
             if (commands is null || commands.Count == 0) return;
 
-            SeparatorToolItem separator = new() {Tag = Editor.EDITOR_TOOLBAR_TAG};
+            SeparatorToolItem separator = new() { Tag = Editor.EDITOR_TOOLBAR_TAG, Style = "sl-toolbar-separator" };
             _toolBar?.Items.Insert(0, separator);
             commands.ForEach(command =>
             {
-                ButtonToolItem toolButton = new(command) {Tag = Editor.EDITOR_TOOLBAR_TAG};
+                ButtonToolItem toolButton = new(command) { Tag = Editor.EDITOR_TOOLBAR_TAG, Style = "sl-toolbar-button" };
                 _toolBar?.Items.Insert(0, toolButton);
             });
         }
