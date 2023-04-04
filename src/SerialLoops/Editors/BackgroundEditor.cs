@@ -70,7 +70,7 @@ namespace SerialLoops.Editors
                 try
                 {
                     using FileStream fs = File.Create(saveFileDialog.FileName);
-                    _bg.GetBackground().Encode(fs, SkiaSharp.SKEncodedImageFormat.Png, 1);
+                    _bg.GetBackground().Encode(fs, SKEncodedImageFormat.Png, 1);
                 }
                 catch (Exception ex)
                 {
@@ -83,23 +83,28 @@ namespace SerialLoops.Editors
         {
             OpenFileDialog openFileDialog = new();
             SKBitmap original = _bg.GetBackground();
-            openFileDialog.Filters.Add(new() { Name = "PNG Image", Extensions = new string[] { ".png" } });
+            openFileDialog.Filters.Add(new() { Name = "Supported Images", Extensions = new string[] { ".bmp", ".gif", ".heif", ".jpg", ".jpeg", ".png", ".webp", } });
             if (openFileDialog.ShowAndReportIfFileSelected(this))
             {
                 BackgroundCropResizeDialog bgResizeDialog = new(SKBitmap.Decode(openFileDialog.FileName), original.Width, original.Height, _log);
+                bgResizeDialog.Closed += (sender, args) =>
+                {
+                    if (bgResizeDialog.SaveChanges)
+                    {
+                        try
+                        {
+                            LoopyProgressTracker tracker = new();
+                            _ = new ProgressDialog(() => _bg.SetBackground(bgResizeDialog.FinalImage, tracker),
+                                () => Content = GetEditorPanel(), tracker, $"Replacing {_bg.DisplayName}...");
+                            UpdateTabTitle(false);
+                        }
+                        catch (Exception ex)
+                        {
+                            _log.LogError($"Failed to replace background {_bg.DisplayName} with file {openFileDialog.FileName}: {ex.Message}\n\n{ex.StackTrace}");
+                        }
+                    }
+                };
                 bgResizeDialog.ShowModal();
-
-                //try
-                //{
-                //    LoopyProgressTracker tracker = new();
-                //    _ = new ProgressDialog(() => _bg.SetBackground(, tracker),
-                //        () => Content = GetEditorPanel(), tracker, $"Replacing {_bg.DisplayName}...");
-                //    UpdateTabTitle(false);
-                //}
-                //catch (Exception ex)
-                //{
-                //    _log.LogError($"Failed to replace background {_bg.DisplayName} with file {openFileDialog.FileName}: {ex.Message}\n\n{ex.StackTrace}");
-                //}
             }
         }
     }

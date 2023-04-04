@@ -145,8 +145,7 @@ namespace SerialLoops.Lib.Items
                     tileCanvas.Flush();
 
                     tracker.Focus("Setting palettes and images...", 5);
-                    List<SKColor> tilePalette = Helpers.GetPaletteFromImages(new List<SKBitmap>() { newTileBitmap, newTextureBitmap },
-                        transparentIndex == 0 ? 256 : 255);
+                    List<SKColor> tilePalette = Helpers.GetPaletteFromImage(image, transparentIndex == 0 ? 255 : 256);
                     if (tilePalette.Count == 255)
                     {
                         tilePalette.Insert(0, new SKColor(0, 248, 0));
@@ -178,8 +177,7 @@ namespace SerialLoops.Lib.Items
                     tracker.Finished++;
 
                     tracker.Focus("Setting palettes and images...", 5);
-                    List<SKColor> texPalette = Helpers.GetPaletteFromImages(new List<SKBitmap>() { newGraphic1, newGraphic2 },
-                        transparentIndex == 0 ? 256 : 255);
+                    List<SKColor> texPalette = Helpers.GetPaletteFromImage(image, transparentIndex == 0 ? 255 : 256);
                     if (texPalette.Count == 255)
                     {
                         texPalette.Insert(0, new SKColor(0, 248, 0));

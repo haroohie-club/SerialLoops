@@ -9,7 +9,6 @@ namespace SerialLoops.Dialogs
     public class BackgroundCropResizeDialog : Dialog
     {
         private ILogger _log;
-        private DragZoomImageView _imageView;
         public SKBitmap StartImage { get; set; }
 
         public bool SaveChanges { get; set; }
@@ -20,15 +19,45 @@ namespace SerialLoops.Dialogs
             _log = log;
             StartImage = startImage;
 
-            _imageView = new() { Image = new SKGuiImage(StartImage), Width = width, Height = height };
+            FinalImage = new(width, height);
+            SKCanvas finalCanvas = new(FinalImage);
 
-            Content = _imageView;
-            Closed += BackgroundCropResizeDialog_Closed;
-        }
+            finalCanvas.DrawBitmap(StartImage, new SKRect(0, 0, StartImage.Width, StartImage.Height), new SKRect(0, 0, FinalImage.Width, FinalImage.Height));
 
-        private void BackgroundCropResizeDialog_Closed(object sender, System.EventArgs e)
-        {
-            MessageBox.Show($"{_imageView.Image.Width}, {_imageView.Image.Height}");
+            ImageView imageView = new() { Image = new SKGuiImage(FinalImage), Width = width, Height = height };
+
+            Button saveButton = new() { Text = "Save" };
+            Button cancelButton = new() { Text = "Cancel" };
+            saveButton.Click += (sender, args) =>
+            {
+                SaveChanges = true;
+                Close();
+            };
+            cancelButton.Click += (sender, args) =>
+            {
+                Close();
+            };
+
+            Content = new StackLayout
+            {
+                Orientation = Orientation.Vertical,
+                Spacing = 5,
+                HorizontalContentAlignment = HorizontalAlignment.Center,
+                Items =
+                {
+                    imageView,
+                    new StackLayout
+                    {
+                        Orientation = Orientation.Horizontal,
+                        Spacing = 3,
+                        Items =
+                        {
+                            saveButton,
+                            cancelButton,
+                        }
+                    }
+                }
+            };
         }
     }
 }
