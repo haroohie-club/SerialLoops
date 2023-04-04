@@ -2,8 +2,10 @@
 using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Archive.Graphics;
+using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib.Util;
 using SkiaSharp;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SerialLoops.Lib.Items
@@ -93,7 +95,89 @@ namespace SerialLoops.Lib.Items
             }
         }
 
+        public void SetBackground(SKBitmap image, IProgressTracker tracker)
+        {
+            switch (BackgroundType)
+            {
+                case BgType.KINETIC_SCREEN:
+                    tracker.Focus("Setting screen image...", 1);
+                    Graphic2.SetScreenImage(image, Graphic1);
+                    tracker.Finished++;
+                    break;
 
+                case BgType.TEX_CG_SINGLE:
+                    tracker.Focus("Setting CG single image...", 1);
+                    Graphic1.SetImage(image, setPalette: true);
+                    tracker.Finished++;
+                    break;
+
+                case BgType.TEX_CG_DUAL_SCREEN:
+                    SKBitmap newTextureBitmap = new(Graphic1.Width, Graphic1.Height);
+                    SKBitmap newTileBitmap = new(64, Graphic2.Height * Graphic2.Width / 64);
+                    SKBitmap tileSource = new(image.Width, image.Height - Graphic1.Height);
+
+                    tracker.Focus("Drawing bottom screen texture...", 1);
+                    SKCanvas textureCanvas = new(newTextureBitmap);
+                    textureCanvas.DrawBitmap(image, new SKRect(0, image.Height - newTextureBitmap.Height, newTextureBitmap.Width, image.Height), new SKRect(0, 0, newTextureBitmap.Width, newTextureBitmap.Height));
+                    textureCanvas.Flush();
+                    tracker.Finished++;
+
+                    SKCanvas tileSourceCanvas = new(tileSource);
+                    tileSourceCanvas.DrawBitmap(image, 0, 0);
+                    tileSourceCanvas.Flush();
+
+                    tracker.Focus("Drawing top screen tiles...", newTileBitmap.Height / 64 * newTileBitmap.Width / 64);
+                    SKCanvas tileCanvas = new(newTileBitmap);
+                    int currentTile = 0;
+                    for (int y = 0; y < tileSource.Height; y += 64)
+                    {
+                        for (int x = 0; x < tileSource.Width; x += 64)
+                        {
+                            SKRect crop = new(x, y, x + 64, y + 64);
+                            SKRect dest = new(0, currentTile * 64, 64, (currentTile + 1) * 64);
+                            tileCanvas.DrawBitmap(tileSource, crop, dest);
+                            currentTile++;
+                            tracker.Finished++;
+                        }
+                    }
+                    tileCanvas.Flush();
+
+                    tracker.Focus("Setting graphics...", 2);
+                    Graphic1.SetImage(newTextureBitmap, setPalette: true);
+                    tracker.Finished++;
+                    Graphic2.SetImage(newTileBitmap, setPalette: true);
+                    tracker.Finished++;
+                    break;
+
+                default:
+                    SKBitmap newGraphic1 = new(Graphic1.Width, Graphic1.Height);
+                    SKBitmap newGraphic2 = new(Graphic2.Width, Graphic2.Height);
+
+                    tracker.Focus("Drawing textures...", 2);
+                    SKCanvas canvas1 = new(newGraphic1);
+                    canvas1.DrawBitmap(image, new SKRect(0, 0, newGraphic1.Width, newGraphic1.Height), new SKRect(0, 0, newGraphic1.Width, newGraphic1.Height));
+                    canvas1.Flush();
+                    tracker.Finished++;
+
+                    SKCanvas canvas2 = new(newGraphic2);
+                    canvas2.DrawBitmap(image, new SKRect(0, newGraphic1.Height, newGraphic2.Width, newGraphic1.Height + newGraphic2.Height), new SKRect(0, 0, newGraphic2.Width, newGraphic2.Height));
+                    canvas2.Flush();
+                    tracker.Finished++;
+
+                    tracker.Focus("Setting palettes and images...", 5);
+                    List<SKColor> texPalette = Helpers.GetPaletteFromImages(new List<SKBitmap>() { newGraphic1, newGraphic2 }, 256);
+                    tracker.Finished++;
+                    Graphic1.SetPalette(texPalette);
+                    tracker.Finished++;
+                    Graphic2.SetPalette(texPalette);
+                    tracker.Finished++;
+                    Graphic1.SetImage(newGraphic1);
+                    tracker.Finished++;
+                    Graphic2.SetImage(newGraphic2);
+                    tracker.Finished++;
+                    break;
+            }
+        }
 
         public void PopulateScriptUses(ArchiveFile<EventFile> evt)
         {
