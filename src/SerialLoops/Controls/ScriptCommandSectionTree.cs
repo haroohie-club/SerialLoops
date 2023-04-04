@@ -1,4 +1,5 @@
-﻿using Eto.Drawing;
+﻿using Eto;
+using Eto.Drawing;
 using Eto.Forms;
 using HaruhiChokuretsuLib.Archive.Event;
 using SerialLoops.Lib.Script;
@@ -262,8 +263,21 @@ namespace SerialLoops.Controls
             }
             
             AddCommand?.Invoke(this, new(item.Command));
-            _treeView.DataStore = _treeView.DataStore;
-            _treeView.SelectedItem = item;
+
+            // https://github.com/haroohie-club/SerialLoops/issues/109
+            // In WPF, the selection of the tree item happens automatically, so doing it this way
+            // ends up doubling the selection it seems causing multiple invocations in case of an error
+            // which crashes the LoopyLogger. Wild, I know.
+            if (!Platform.Instance.IsWpf)
+            {
+                _treeView.DataStore = _treeView.DataStore;
+                _treeView.SelectedItem = item;
+            }
+            else
+            {
+                _treeView.SelectedItem = item;
+                _treeView.DataStore = _treeView.DataStore;
+            }
         }
 
         internal void AddSection(ScriptCommandSectionTreeItem section)
@@ -274,8 +288,21 @@ namespace SerialLoops.Controls
             section.Parent = rootNode;
 
             AddCommand?.Invoke(this, new(section.Text));
-            _treeView.DataStore = rootNode;
-            _treeView.SelectedItem = section;
+
+            // https://github.com/haroohie-club/SerialLoops/issues/109
+            // In WPF, the selection of the tree item happens automatically, so doing it this way
+            // ends up doubling the selection it seems causing multiple invocations in case of an error
+            // which crashes the LoopyLogger. Wild, I know.
+            if (!Platform.Instance.IsWpf)
+            {
+                _treeView.DataStore = rootNode;
+                _treeView.SelectedItem = section;
+            }
+            else
+            {
+                _treeView.SelectedItem = section;
+                _treeView.DataStore = rootNode;
+            }
         }
 
         public void SetContents(IEnumerable<ScriptCommandSectionEntry> topNodes, bool expanded)
