@@ -97,7 +97,7 @@ namespace SerialLoops.Editors
                 Image = ControlGenerator.GetIcon("Add", _log),
                 ToolTip = "New Command",
                 Width = 22,
-                Enabled = treeGridView.SelectedCommandTreeItem is not null
+                Enabled = treeGridView.SelectedCommandTreeItem is not null,
             };
             _addCommandButton.Click += (sender, args) =>
             {
@@ -276,7 +276,7 @@ namespace SerialLoops.Editors
                 Image = ControlGenerator.GetIcon("Add_Section", _log),
                 ToolTip = "New Section",
                 Width = 22,
-                Enabled = true
+                Enabled = treeGridView.SelectedCommandTreeItem is not null,
             };
             _addSectionButton.Click += (sender, args) =>
             {
@@ -330,7 +330,7 @@ namespace SerialLoops.Editors
                 Image = ControlGenerator.GetIcon("Remove", _log),
                 ToolTip = "Remove Command/Section",
                 Width = 22,
-                Enabled = treeGridView.SelectedCommandTreeItem is not null
+                Enabled = treeGridView.SelectedCommandTreeItem is not null,
             };
             _deleteButton.Click += (sender, args) =>
             {
@@ -843,6 +843,7 @@ namespace SerialLoops.Editors
             _editorControls.Items.Clear();
 
             _addCommandButton.Enabled = true;
+            _addSectionButton.Enabled = true;
             _deleteButton.Enabled = true;
 
             // if we've selected a script section header
