@@ -12,14 +12,14 @@ namespace SerialLoops.Editors
     {
         private TopicItem _topic;
 
-        private TextBox _baseTimeBox;
-        private TextBox _kyonTimeBox;
+        private NumericStepper _baseTimeBox;
+        private NumericStepper _kyonTimeBox;
         private Label _kyonTimeLabel;
-        private TextBox _mikuruTimeBox;
+        private NumericStepper _mikuruTimeBox;
         private Label _mikuruTimeLabel;
-        private TextBox _nagatoTimeBox;
+        private NumericStepper _nagatoTimeBox;
         private Label _nagatoTimeLabel;
-        private TextBox _koizumiTimeBox;
+        private NumericStepper _koizumiTimeBox;
         private Label _koizumiTimeLabel;
 
         public TopicEditor(TopicItem topic, Project project, ILogger log) : base(topic, log, project)
@@ -39,24 +39,42 @@ namespace SerialLoops.Editors
             linkedScriptDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Script).Select(s => new ListItem { Key = s.Name, Text = s.Name }));
             linkedScriptDropDown.SelectedKey = _project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Script && ((ScriptItem)i).Event.Index == _topic.Topic.EventIndex)?.Name ?? "NONE";
 
-            _baseTimeBox = new() { Text = _topic.Topic.BaseTimeGain.ToString() };
-            _baseTimeBox.TextChanged += BaseTimeBox_TextChanged;
+            _baseTimeBox = new() { Value = _topic.Topic.BaseTimeGain, MaxValue = short.MaxValue, MinValue = 0 };
+            _baseTimeBox.ValueChanged += (sender, args) =>
+            {
+                TryUpdateKyonTime();
+                TryUpdateMikuruTime();
+                TryUpdateNagatoTime();
+                TryUpdateKoizumiTime();
+            };
 
-            _kyonTimeBox = new() { Text = _topic.Topic.KyonTimePercentage.ToString() };
+            _kyonTimeBox = new() { Value = _topic.Topic.KyonTimePercentage, MaxValue = short.MaxValue, MinValue = 0 };
             _kyonTimeLabel = new() { Text = ((int)(_topic.Topic.BaseTimeGain * _topic.Topic.KyonTimePercentage / 100.0)).ToString() };
-            _kyonTimeBox.TextChanged += KyonTimeBox_TextChanged;
+            _kyonTimeBox.ValueChanged += (sender, args) =>
+            {
+                TryUpdateKyonTime();
+            };
 
-            _mikuruTimeBox = new() { Text = _topic.Topic.MikuruTimePercentage.ToString() };
+            _mikuruTimeBox = new() { Value = _topic.Topic.MikuruTimePercentage, MaxValue = short.MaxValue, MinValue = 0 };
             _mikuruTimeLabel = new() { Text = ((int)(_topic.Topic.BaseTimeGain * _topic.Topic.MikuruTimePercentage / 100.0)).ToString() };
-            _mikuruTimeBox.TextChanged += MikuruTimeBox_TextChanged;
+            _mikuruTimeBox.ValueChanged += (sender, args) =>
+            {
+                TryUpdateMikuruTime();
+            };
 
-            _nagatoTimeBox = new() { Text = _topic.Topic.NagatoTimePercentage.ToString() };
+            _nagatoTimeBox = new() { Value = _topic.Topic.NagatoTimePercentage, MaxValue = short.MaxValue, MinValue = 0 };
             _nagatoTimeLabel = new() { Text = ((int)(_topic.Topic.BaseTimeGain * _topic.Topic.NagatoTimePercentage / 100.0)).ToString() };
-            _nagatoTimeBox.TextChanged += NagatoTimeBox_TextChanged;
+            _nagatoTimeBox.ValueChanged += (sender, args) =>
+            {
+                TryUpdateNagatoTime();
+            };
 
-            _koizumiTimeBox = new() { Text = _topic.Topic.KoizumiTimePercentage.ToString() };
+            _koizumiTimeBox = new() { Value = _topic.Topic.KoizumiTimePercentage, MaxValue = short.MaxValue, MinValue = 0 };
             _koizumiTimeLabel = new() { Text = ((int)(_topic.Topic.BaseTimeGain * _topic.Topic.KoizumiTimePercentage / 100.0)).ToString() };
-            _koizumiTimeBox.TextChanged += KoizumiTimeBox_TextChanged; ;
+            _koizumiTimeBox.ValueChanged += (sender, args) =>
+            {
+                TryUpdateKoizumiTime();
+            };
 
             StackLayout timesLayout = new()
             {
@@ -141,73 +159,21 @@ namespace SerialLoops.Editors
                 unknownsLayout);
         }
 
-
-        private void BaseTimeBox_TextChanged(object sender, System.EventArgs e)
+        private void TryUpdateKyonTime()
         {
-            if (short.TryParse(_baseTimeBox.Text, out short newBaseTime))
-            {
-                TryUpdateKyonTime(newBaseTime);
-                TryUpdateMikuruTime(newBaseTime);
-                TryUpdateNagatoTime(newBaseTime);
-                TryUpdateKoizumiTime(newBaseTime);
-            }
+            _kyonTimeLabel.Text = (_baseTimeBox.Value * _kyonTimeBox.Value / 100.0).ToString();
         }
-        private void KyonTimeBox_TextChanged(object sender, System.EventArgs e)
+        private void TryUpdateMikuruTime()
         {
-            if (short.TryParse(_baseTimeBox.Text, out short newBaseTime))
-            {
-                TryUpdateKyonTime(newBaseTime);
-            }
+            _mikuruTimeLabel.Text = (_baseTimeBox.Value * _mikuruTimeBox.Value / 100.0).ToString();
         }
-        private void MikuruTimeBox_TextChanged(object sender, System.EventArgs e)
+        private void TryUpdateNagatoTime()
         {
-            if (short.TryParse(_baseTimeBox.Text, out short newBaseTime))
-            {
-                TryUpdateMikuruTime(newBaseTime);
-            }
+            _nagatoTimeLabel.Text = (_baseTimeBox.Value * _nagatoTimeBox.Value / 100.0).ToString();
         }
-        private void NagatoTimeBox_TextChanged(object sender, System.EventArgs e)
+        private void TryUpdateKoizumiTime()
         {
-            if (short.TryParse(_baseTimeBox.Text, out short newBaseTime))
-            {
-                TryUpdateNagatoTime(newBaseTime);
-            }
-        }
-        private void KoizumiTimeBox_TextChanged(object sender, System.EventArgs e)
-        {
-            if (short.TryParse(_baseTimeBox.Text, out short newBaseTime))
-            {
-                TryUpdateKoizumiTime(newBaseTime);
-            }
-        }
-
-        private void TryUpdateKyonTime(short baseTime)
-        {
-            if (short.TryParse(_kyonTimeBox.Text, out short newKyonPercentage))
-            {
-                _kyonTimeLabel.Text = (baseTime * newKyonPercentage / 100.0).ToString();
-            }
-        }
-        private void TryUpdateMikuruTime(short baseTime)
-        {
-            if (short.TryParse(_mikuruTimeBox.Text, out short newMikuruPercentage))
-            {
-                _mikuruTimeLabel.Text = (baseTime * newMikuruPercentage / 100.0).ToString();
-            }
-        }
-        private void TryUpdateNagatoTime(short baseTime)
-        {
-            if (short.TryParse(_nagatoTimeBox.Text, out short newNagatoPercentage))
-            {
-                _nagatoTimeLabel.Text = (baseTime * newNagatoPercentage / 100.0).ToString();
-            }
-        }
-        private void TryUpdateKoizumiTime(short baseTime)
-        {
-            if (short.TryParse(_koizumiTimeBox.Text, out short newKoizumiPercentage))
-            {
-                _koizumiTimeLabel.Text = (baseTime * newKoizumiPercentage / 100.0).ToString();
-            }
+            _koizumiTimeLabel.Text = (_baseTimeBox.Value * _koizumiTimeBox.Value / 100.0).ToString();
         }
     }
 }
