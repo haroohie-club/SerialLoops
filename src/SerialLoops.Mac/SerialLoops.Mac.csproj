@@ -7,6 +7,10 @@
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
 
+  <PropertyGroup Condition="$(Configuration) == 'Release'">
+    <EnableDmgBuild>True</EnableDmgBuild>
+  </PropertyGroup>
+
   <ItemGroup>
     <Content Include="MacIcon.icns" />
   </ItemGroup>
