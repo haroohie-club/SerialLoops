@@ -1,5 +1,4 @@
 ﻿using Eto.Forms;
-using Eto.IO;
 using SerialLoops.Utility;
 using System;
 
