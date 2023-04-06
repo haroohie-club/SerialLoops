@@ -20,7 +20,8 @@ stages:
           artifactName: 'Linux-v$(Version)'
           framework: 'net6.0'
           rid: 'linux-x64'
-          artifactPath: '$(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Gtk/Release/net6.0/SerialLoops.Gtk'
+          artifactPath: '$(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Gtk/Release/net6.0/SerialLoops'
+          extraPublishParams: ''
         macOS-x64:
           imageName: 'macOS-latest'
           platformName: 'Mac'
@@ -28,6 +29,7 @@ stages:
           framework: 'net6.0'
           rid: 'osx-x64'
           artifactPath: '$(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Mac/Release/net6.0/SerialLoops.Mac.dmg'
+          extraPublishParams: '/p:EnableDmgBuild=true'
         macOS-arm64:
           imageName: 'macOS-latest'
           platformName: 'Mac'
@@ -35,13 +37,15 @@ stages:
           framework: 'net6.0'
           rid: 'osx-arm64'
           artifactPath: '$(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Mac/Release/net6.0/SerialLoops.Mac.dmg'
+          extraPublishParams: '/p:EnableDmgBuild=true'
         Windows:
           imageName: 'windows-latest'
           platformName: 'Wpf'
           artifactName: 'Windows-v$(Version)'
           framework: 'net6.0-windows'
           rid: 'win-x64'
-          artifactPath: '$(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Wpf/Release/net6.0/SerialLoops.Wpf.exe'
+          artifactPath: '$(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Wpf/Release/net6.0/SerialLoops.exe'
+          extraPublishParams: ''
     displayName: Build & Publish
     pool:
       vmImage: $(imageName)
@@ -53,7 +57,7 @@ stages:
       inputs:
         command: 'publish'
         projects: $(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/SerialLoops.$(platformName).csproj
-        arguments: '-c Release -f $(framework) -r $(rid) --self-contained /p:PublishSingleFile=true'
+        arguments: '-c Release -f $(framework) -r $(rid) --self-contained /p:PublishSingleFile=true $(extraPublishParams)'
         publishWebProjects: false
       displayName: Build & Publish Serial Loops
 
