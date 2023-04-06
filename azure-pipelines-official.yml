@@ -48,13 +48,13 @@ stages:
         publishLocation: 'Container'
       displayName: Publish build artifacts
 
-    - {{ if eq(variables['platformName', 'Mac']) }}:
+    - ${{ if eq(variables['platformName', 'Mac']) }}:
       - task: PublishBuildArtifacts@1
         inputs:
           PathtoPublish: '$(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Release/net6.0/SerialLoops.dmg'
           ArtifactName: '$(artifactName)-dmg'
           publishLocation: 'Container'
-        displayName: Publish build artifacts
+        displayName: Publish macOS dmg
 - stage: Publish
   dependsOn: Build
   jobs:    
