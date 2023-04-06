@@ -20,7 +20,7 @@ stages:
           artifactName: 'Linux-v$(Version)'
           framework: 'net6.0'
           rid: 'linux-x64'
-          artifactPath: '$(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Gtk/Release/net6.0/SerialLoops'
+          artifactPath: '$(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Gtk/Release/net6.0/linux-x64/SerialLoops'
           extraPublishParams: ''
         macOS-x64:
           imageName: 'macOS-latest'
@@ -28,7 +28,7 @@ stages:
           artifactName: 'macOS-x64-v$(Version)'
           framework: 'net6.0'
           rid: 'osx-x64'
-          artifactPath: '$(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Mac/Release/net6.0/SerialLoops.Mac.dmg'
+          artifactPath: '$(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Mac/Release/net6.0/osx-x64/SerialLoops.Mac.dmg'
           extraPublishParams: '/p:EnableDmgBuild=true'
         macOS-arm64:
           imageName: 'macOS-latest'
@@ -36,7 +36,7 @@ stages:
           artifactName: 'macOS-arm-v$(Version)'
           framework: 'net6.0'
           rid: 'osx-arm64'
-          artifactPath: '$(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Mac/Release/net6.0/SerialLoops.Mac.dmg'
+          artifactPath: '$(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Mac/Release/net6.0/osx-arm64/SerialLoops.Mac.dmg'
           extraPublishParams: '/p:EnableDmgBuild=true'
         Windows:
           imageName: 'windows-latest'
@@ -44,7 +44,7 @@ stages:
           artifactName: 'Windows-v$(Version)'
           framework: 'net6.0-windows'
           rid: 'win-x64'
-          artifactPath: '$(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Wpf/Release/net6.0/SerialLoops.exe'
+          artifactPath: '$(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Wpf/Release/net6.0-windows/win-x64/SerialLoops.exe'
           extraPublishParams: ''
     displayName: Build & Publish
     pool:
@@ -57,9 +57,18 @@ stages:
       inputs:
         command: 'publish'
         projects: $(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/SerialLoops.$(platformName).csproj
-        arguments: '-c Release -f $(framework) -r $(rid) --self-contained /p:PublishSingleFile=true $(extraPublishParams)'
+        arguments: '-c Release -f $(framework) -r $(rid) --self-contained /p:PublishSingleFile=true'
         publishWebProjects: false
       displayName: Build & Publish Serial Loops
+      
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'publish'
+        projects: $(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/SerialLoops.$(platformName).csproj
+        arguments: '-c Release -f $(framework) -r $(rid) --self-contained /p:PublishSingleFile=true $(extraPublishParams)'
+        publishWebProjects: false
+      displayName: Publishing Second Round
+      condition: ne(variables['extraPublishParams'], '')
 
     - task: PublishBuildArtifacts@1
       inputs:
