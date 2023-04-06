@@ -84,6 +84,7 @@ namespace SerialLoops.Controls
                         _commands[entry.Command.Section][i].Index++;
                     }
                 }
+                ((ScriptEditor)_editor).PopulateScriptCommands(true);
                 _editor.UpdateTabTitle(false);
             };
             Viewer.DeleteCommand += (o, e) =>
@@ -112,20 +113,22 @@ namespace SerialLoops.Controls
                     entry.Command.Section.Objects.Remove(command);
                     _commands[entry.Command.Section].Remove(entry.Command);
                 }
+                ((ScriptEditor)_editor).PopulateScriptCommands(true);
                 _editor.UpdateTabTitle(false);
             };
             Viewer.AddCommand += (o, e) =>
             {
                 var treeGridView = (ScriptCommandSectionTreeGridView)o;
                 var entry = (ScriptCommandSectionEntry)treeGridView.SelectedItem;
+                ScriptSection section = entry.Command.Section ?? e.Command.Section;
 
                 if (string.IsNullOrEmpty(e.SectionTitle))
                 {
-                    e.Command.Script.ScriptSections[e.Command.Script.ScriptSections.IndexOf(e.Command.Section)].Objects.Insert(e.Command.Index, e.Command.Invocation);
-                    _commands[e.Command.Section].Insert(e.Command.Index, e.Command);
-                    for (int i = e.Command.Section.Objects.IndexOf(e.Command.Invocation) + 1; i < e.Command.Section.Objects.Count; i++)
+                    e.Command.Script.ScriptSections[e.Command.Script.ScriptSections.IndexOf(section)].Objects.Insert(e.Command.Index, e.Command.Invocation);
+                    _commands[section].Insert(e.Command.Index, e.Command);
+                    for (int i = section.Objects.IndexOf(e.Command.Invocation) + 1; i < section.Objects.Count; i++)
                     {
-                        _commands[e.Command.Section][i].Index++;
+                        _commands[section][i].Index++;
                     }
                 }
                 else
@@ -149,6 +152,7 @@ namespace SerialLoops.Controls
                     _commands.Add(scriptFile.ScriptSections.Last(), new());
                 }
 
+                ((ScriptEditor)_editor).PopulateScriptCommands(true);
                 _editor.UpdateTabTitle(false);
             };
         }

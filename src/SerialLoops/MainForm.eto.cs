@@ -1,5 +1,6 @@
 using Eto.Forms;
 using HaruhiChokuretsuLib.Archive;
+using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
 using SerialLoops.Controls;
 using SerialLoops.Dialogs;
@@ -8,12 +9,14 @@ using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Util;
 using SerialLoops.Utility;
+using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Reflection;
 
 namespace SerialLoops
@@ -328,6 +331,14 @@ namespace SerialLoops
             {
                 switch (item.Type)
                 {
+                    case ItemDescription.ItemType.Background:
+                        if (!savedExtra)
+                        {
+                            IO.WriteStringFile(Path.Combine("assets", "data", $"{OpenProject.Extra.Index:X3}.s"), OpenProject.Extra.GetSource(new()), OpenProject, Log);
+                            savedExtra = true;
+                        }
+                        ((BackgroundItem)item).Write(OpenProject, Log);
+                        break;
                     case ItemDescription.ItemType.BGM:
                         if (!savedExtra)
                         {
