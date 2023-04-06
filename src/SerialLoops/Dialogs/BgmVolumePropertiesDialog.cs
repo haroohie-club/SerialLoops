@@ -49,6 +49,7 @@ namespace SerialLoops.Dialogs
             {
                 MinValue = 0,
                 MaxValue = 200,
+                Height = Waveform.Height,
                 Value = 100,
                 Orientation = Orientation.Vertical,
             };
