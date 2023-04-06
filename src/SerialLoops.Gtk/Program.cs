@@ -12,7 +12,6 @@ namespace SerialLoops.Gtk
         {
             var platform = new Eto.GtkSharp.Platform();
             platform.Add<SoundPlayer.ISoundPlayer>(() => new SoundPlayerHandler());
-            platform.Add<SystemIcons.IHandler>(() => new GtkIconHandler());
 
             new Application(platform).Run(new MainForm());
         }

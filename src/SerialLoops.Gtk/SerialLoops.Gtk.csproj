@@ -6,16 +6,6 @@
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <AssemblyName>SerialLoops</AssemblyName>
   </PropertyGroup>
-	
-  <ItemGroup>
-    <None Remove="AppIcon.png" />
-  </ItemGroup>
-	
-  <ItemGroup>
-    <EmbeddedResource Include="AppIcon.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\SerialLoops\SerialLoops.csproj" />
