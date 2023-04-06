@@ -20,8 +20,9 @@ stages:
           artifactName: 'Linux-v$(Version)'
           framework: 'net6.0'
           rid: 'linux-x64'
-          artifactPath: '$(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Gtk/Release/net6.0/linux-x64/SerialLoops'
+          artifactPath: '$(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Gtk/Release/net6.0/linux-x64/publish/'
           extraPublishParams: ''
+          tar: true
         macOS-x64:
           imageName: 'macOS-latest'
           platformName: 'Mac'
@@ -30,6 +31,7 @@ stages:
           rid: 'osx-x64'
           artifactPath: '$(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Mac/Release/net6.0/osx-x64/SerialLoops.Mac.dmg'
           extraPublishParams: '/p:EnableDmgBuild=true'
+          tar: false
         macOS-arm64:
           imageName: 'macOS-latest'
           platformName: 'Mac'
@@ -38,14 +40,16 @@ stages:
           rid: 'osx-arm64'
           artifactPath: '$(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Mac/Release/net6.0/osx-arm64/SerialLoops.Mac.dmg'
           extraPublishParams: '/p:EnableDmgBuild=true'
+          tar: false
         Windows:
           imageName: 'windows-latest'
           platformName: 'Wpf'
           artifactName: 'Windows-v$(Version)'
           framework: 'net6.0-windows'
           rid: 'win-x64'
-          artifactPath: '$(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Wpf/Release/net6.0-windows/win-x64/SerialLoops.exe'
+          artifactPath: '$(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Wpf/Release/net6.0-windows/win-x64/publish/'
           extraPublishParams: ''
+          tar: false
     displayName: Build & Publish
     pool:
       vmImage: $(imageName)
@@ -76,6 +80,7 @@ stages:
         PathtoPublish: '$(artifactPath)'
         ArtifactName: '$(artifactName)'
         publishLocation: 'Container'
+        StoreAsTar: $(tar)
       displayName: Publish build artifact
 - stage: Publish
   dependsOn: Build
@@ -115,12 +120,10 @@ stages:
         artifactName: 'Linux-v$(Version)'
         downloadPath: '$(Build.ArtifactStagingDirectory)'
     - pwsh: |
-        Compress-Archive -Path $(Build.ArtifactStagingDirectory)/Windows-v$(Version)/SerialLoops.exe -DestinationPath $(Build.ArtifactStagingDirectory)/SerialLoops-windows-v$(Version).zip
-        Remove-Item -Path $(Build.ArtifactStagingDirectory)/Windows-v$(Version)/SerialLoops.exe
+        Move-Item -Path $(Build.ArtifactStagingDirectory)/Linux-v$(Version)/publish.tar.gz -Destination $(Build.ArtifactStagingDirectory)/SerialLoops-linux-x64-v$(Version).tar.gz
         Move-Item -Path $(Build.ArtifactStagingDirectory)/macOS-x64-v$(Version)/SerialLoops.Mac.dmg -Destination $(Build.ArtifactStagingDirectory)/SerialLoops-macOS-x64-v$(Version).dmg
         Move-Item -Path $(Build.ArtifactStagingDirectory)/macOS-arm-v$(Version)/SerialLoops.Mac.dmg -Destination $(Build.ArtifactStagingDirectory)/SerialLoops-macOS-arm-v$(Version).dmg
-        tar -czvf $(Build.ArtifactStagingDirectory)/SerialLoops-linux-v$(Version).tar.gz $(Build.ArtifactStagingDirectory)/Linux-v$(Version)/SerialLoops
-        Remove-Item -Path $(Build.ArtifactStagingDirectory)/Linux-v$(Version)/SerialLoops
+        Move-Item -Path $(Build.ArtifactStagingDirectory)/Windows-v$(Version)/publish.zip -Destination $(Build.ArtifactStagingDirectory)/SerialLoops-windows-x64-v$(Version).zip
       displayName: Move and rename artifacts
     - task: GitHubRelease@1
       displayName: 'Create GitHub Pre-Release'
