@@ -98,7 +98,7 @@ namespace SerialLoops.Lib.Items
 
         public void SetBackground(SKBitmap image, IProgressTracker tracker)
         {
-            int transparentIndex = Graphic1.Palette[0] == new SKColor(0, 248, 0) ? 0 : -1;
+            int transparentIndex = BackgroundType != BgType.TEX_BG ? 0 : -1;
             switch (BackgroundType)
             {
                 case BgType.KINETIC_SCREEN:
@@ -151,9 +151,9 @@ namespace SerialLoops.Lib.Items
                         tilePalette.Insert(0, new SKColor(0, 248, 0));
                     }
                     tracker.Finished++;
-                    Graphic1.SetPalette(tilePalette, transparentIndex);
+                    Graphic1.SetPalette(tilePalette);
                     tracker.Finished++;
-                    Graphic2.SetPalette(tilePalette, transparentIndex);
+                    Graphic2.SetPalette(tilePalette);
                     tracker.Finished++;
                     Graphic1.SetImage(newTextureBitmap);
                     tracker.Finished++;
@@ -183,9 +183,9 @@ namespace SerialLoops.Lib.Items
                         texPalette.Insert(0, new SKColor(0, 248, 0));
                     }
                     tracker.Finished++;
-                    Graphic1.SetPalette(texPalette, transparentIndex);
+                    Graphic1.SetPalette(texPalette);
                     tracker.Finished++;
-                    Graphic2.SetPalette(texPalette, transparentIndex);
+                    Graphic2.SetPalette(texPalette);
                     tracker.Finished++;
                     Graphic1.SetImage(newGraphic1);
                     tracker.Finished++;
