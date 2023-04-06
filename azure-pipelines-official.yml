@@ -47,7 +47,7 @@ stages:
           artifactName: 'Windows-v$(Version)'
           framework: 'net6.0-windows'
           rid: 'win-x64'
-          artifactPath: '$(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Wpf/Release/net6.0-windows/win-x64/publish'
+          artifactPath: '$(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Wpf/Release/net6.0-windows/win-x64/publish.zip'
           extraPublishParams: ''
           tar: false
     displayName: Build & Publish
@@ -65,10 +65,11 @@ stages:
         publishWebProjects: false
       displayName: Build & Publish Serial Loops
       
-    # TEMP, REMOVE
     - pwsh: |
-        Get-ChildItem $(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/$(platformName)/Release/$(framework)/$(rid)/
-      displayName: ls directory
+        Expand-Archive $(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Gtk/Release/net6.0/linux-x64/publish.zip
+        chmod +x $(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Gtk/Release/net6.0/linux-x64/SerialLoops
+      displayName: Give Linux executable proper permissions
+      condition: eq(variables['tar'], true)
 
     # We need a second round of publishing to get dmg packing to work. Idk why, but it works if we do it this way lol
     - task: DotNetCoreCLI@2
