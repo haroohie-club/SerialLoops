@@ -55,8 +55,12 @@ namespace SerialLoops.Editors
             return GetCommandsContainer();
         }
 
-        private void PopulateScriptCommands()
+        public void PopulateScriptCommands(bool refresh = false)
         {
+            if (refresh)
+            {
+                _script.Refresh(_project);
+            }
             _commands = _script.GetScriptCommandTree(_project);
         }
 
@@ -267,9 +271,6 @@ namespace SerialLoops.Editors
                             );
 
                             treeGridView.AddItem(new(new(command), scriptSection, command, false));
-                            // Regenerate the command tree
-                            _script.Refresh(_project);
-                            PopulateScriptCommands();
                         }
                         catch (Exception ex)
                         {
@@ -328,8 +329,7 @@ namespace SerialLoops.Editors
                     dialog.Close();
                     ScriptCommandSectionEntry section = new($"NONE{labelBox.Text}", new List<ScriptCommandSectionEntry>(), _script.Event);
                     treeGridView.AddSection(new(section, null, null, true));
-                    _script.Refresh(_project); // Have to recreate the command graph
-                    PopulateScriptCommands();
+                    
                     _updateOptionDropDowns();
                 };
 
@@ -348,8 +348,6 @@ namespace SerialLoops.Editors
                 if (treeGridView.SelectedCommandTreeItem is not null)
                 {
                     treeGridView.DeleteItem(treeGridView.SelectedCommandTreeItem);
-                    _script.Refresh(_project); // Have to recreate the command graph
-                    PopulateScriptCommands();
                     _updateOptionDropDowns();
                 }
             };
@@ -2152,8 +2150,7 @@ namespace SerialLoops.Editors
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
                 .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] = (short)_script.Event.ChoicesSection.Objects.IndexOf(choice);
             UpdateTabTitle(false, dropDown);
-            _script.Refresh(_project);
-            PopulateScriptCommands();
+            PopulateScriptCommands(true);
         }
         private void PaletteEffectDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
@@ -2209,8 +2206,7 @@ namespace SerialLoops.Editors
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
                 .Objects[dropDown.Command.Index].Parameters[dropDown.CurrentShort] =
                 _script.Event.LabelsSection.Objects.First(l => l.Name.Replace("/", "") == dropDown.SelectedKey).Id;
-            _script.Refresh(_project); // Update command graph
-            PopulateScriptCommands();
+            PopulateScriptCommands(true);
             UpdateTabTitle(false, dropDown);
         }
         private void SfxNumericStepper_ValueChanged(object sender, EventArgs e)
