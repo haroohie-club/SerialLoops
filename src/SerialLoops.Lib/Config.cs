@@ -23,6 +23,7 @@ namespace SerialLoops.Lib
         public bool AutoReopenLastProject { get; set; }
         public bool RememberProjectWorkspace { get; set; }
         public bool RemoveMissingProjects { get; set; }
+        public bool AutomaticUpdates { get; set; }
 
         public void Save(ILogger log)
         {

@@ -96,6 +96,18 @@ namespace SerialLoops.Dialogs
                                 OnChange = (value) => Configuration.RemoveMissingProjects = value
                             }
                         }
+                    ),
+                    new OptionsGroup(
+                        "Serial Loops",
+                        new()
+                        {
+                            new BooleanOption
+                            {
+                                Name = "Automatic Updates",
+                                Value = Configuration.AutomaticUpdates,
+                                OnChange = (value) => Configuration.AutomaticUpdates = value
+                            }
+                        }
                     )
                 }
             };

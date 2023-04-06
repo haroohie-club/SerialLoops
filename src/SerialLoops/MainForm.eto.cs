@@ -14,6 +14,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 
 namespace SerialLoops
 {
@@ -36,6 +37,7 @@ namespace SerialLoops
             MinimumSize = new(769, 420);
             Padding = 10;
             Closing += CloseProject_Executed;
+            Closed += AppClosed_Executed;
 
             InitializeBaseMenu();
         }
@@ -549,5 +551,15 @@ namespace SerialLoops
                 ProjectsCache.Save(Log);
             }
         }
+
+        public void AppClosed_Executed(object sender, EventArgs e)
+        {
+            if (!CurrentConfig.AutomaticUpdates) return;
+            
+            string currentVersion = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "0.1";
+            string executableDirectory = Path.GetFullPath(Assembly.GetExecutingAssembly().Location);
+            //todo execute LoopyUpdater
+        }
+        
     }
 }
