@@ -76,8 +76,8 @@ stages:
         mkdir -p dpkg-build/SerialLoops/usr/lib/SerialLoops
         mkdir -p dpkg-build/SerialLoops/usr/share/applications
         Push-Location dpkg-build/SerialLoops
-        Write-Output "Package: SerialLoops`nVersion: $env:Version`nSection: custom`nPriority: optional`nArchitecture: all`nEssential: no`nInstalled-Size: 1024`nMaintainer: haroohie-club`nDescription: Editor for Suzumiya Haruhi no Chokuretsu`n" | Out-File -FilePath DEBIAN/control
-        Write-Output "[Desktop Entry]`nVersion=$env:Version`nName=Serial Loops`nComment=Editor for Suzumiya Haruhi no Chokuretsu`nExec=/usr/bin/SerialLoops`nIcon=/usr/lib/SerialLoops/Icons/AppIcon.png`nTerminal=false`nType=Application`nCategories=Utility;Application;`n" | Out-File -FilePath usr/share/applications/SerialLoops.desktop
+        Write-Output "Package: SerialLoops`nVersion: $(Version)`nSection: custom`nPriority: optional`nArchitecture: all`nEssential: no`nInstalled-Size: 1024`nMaintainer: haroohie-club`nDescription: Editor for Suzumiya Haruhi no Chokuretsu`n" | Out-File -FilePath DEBIAN/control
+        Write-Output "[Desktop Entry]`nVersion=$(Version)`nName=Serial Loops`nComment=Editor for Suzumiya Haruhi no Chokuretsu`nExec=/usr/bin/SerialLoops`nIcon=/usr/lib/SerialLoops/Icons/AppIcon.png`nTerminal=false`nType=Application`nCategories=Utility;Application;`n" | Out-File -FilePath usr/share/applications/SerialLoops.desktop
         chmod +x usr/share/applications/SerialLoops.desktop
         ln -s /usr/bin/SerialLoops usr/lib/SerialLoops/SerialLoops
         cd ..
