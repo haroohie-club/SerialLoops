@@ -21,6 +21,7 @@ stages:
           framework: 'net6.0'
           rid: 'linux-x64'
           artifactPath: '$(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Gtk/Release/net6.0/linux-x64/publish.tar.gz'
+          secondArtifactPath: '$(Build.SourcesDirectory)/dpkg-build/SerialLoops.dpkg'
           extraPublishParams: ''
         macOS-x64:
           imageName: 'macOS-latest'
@@ -29,6 +30,7 @@ stages:
           framework: 'net6.0'
           rid: 'osx-x64'
           artifactPath: '$(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Mac/Release/net6.0/osx-x64/SerialLoops.Mac.dmg'
+          secondArtifactPath: ''
           extraPublishParams: '/p:EnableDmgBuild=true'
         macOS-arm64:
           imageName: 'macOS-latest'
@@ -37,6 +39,7 @@ stages:
           framework: 'net6.0'
           rid: 'osx-arm64'
           artifactPath: '$(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Mac/Release/net6.0/osx-arm64/SerialLoops.Mac.dmg'
+          secondArtifactPath: ''
           extraPublishParams: '/p:EnableDmgBuild=true'
         Windows:
           imageName: 'windows-latest'
@@ -45,6 +48,7 @@ stages:
           framework: 'net6.0-windows'
           rid: 'win-x64'
           artifactPath: '$(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Wpf/Release/net6.0-windows/win-x64/publish.zip'
+          secondArtifactPath: ''
           extraPublishParams: ''
     displayName: Build & Publish
     pool:
@@ -67,7 +71,17 @@ stages:
         Push-Location $(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Gtk/Release/net6.0/linux-x64/publish
         tar -czvf ../publish.tar.gz --transform 's,^\.\/,,' .
         Pop-Location
-      displayName: Give Linux executable proper permissions
+        mkdir -p dpkg-build/SerialLoops/DEBIAN
+        mkdir -p dpkg-build/SerialLoops/usr/bin
+        mkdir -p dpkg-build/SerialLoops/usr/lib/SerialLoops
+        mkdir -p dpkg-build/SerialLoops/usr/share/applications
+        Push-Location dpkg-build/SerialLoops
+        Write-Output "Package: SerialLoops`nVersion: $(Version)`nSection: custom`nPriority: optional`nArchitecture: all`nEssential: no`nInstalled-Size: 1024`nMaintainer: haroohie-club`nDescription: Editor for Suzumiya Haruhi no Chokuretsu`n" | Out-File -FilePath DEBIAN/content
+        Write-Output "[Desktop Entry]`nVersion=$(Version)`nName=Serial Loops`nComment=Editor for Suzumiya Haruhi no Chokuretsu`nExec=/usr/bin/SerialLoops`nIcon=/usr/lib/SerialLoops/Icons/AppIcon.png"`nTerminal=false`nType=Application`nCategories=Utility;Application;`n" | Out-File -FilePath usr/share/applications/SerialLoops.desktop
+        chmod +x usr/share/applications/SerialLoops.desktop
+        cd ..
+        dpkg-deb --build SerialLoops
+      displayName: Create Linux tar and dpkg
       condition: eq(variables['rid'], 'linux-x64')
 
     # We need a second round of publishing to get dmg packing to work. Idk why, but it works if we do it this way lol
@@ -86,6 +100,14 @@ stages:
         ArtifactName: '$(artifactName)'
         publishLocation: 'Container'
       displayName: Publish build artifact
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(secondArtifactPath)'
+        ArtifactName: '$(artifactName)-2'
+        publishLocation: 'Container'
+      displayName: Publish secondary build artifact
+      condition: ne(variables['secondArtifactPath'], '')
 - stage: Publish
   dependsOn: Build
   jobs:
@@ -96,11 +118,18 @@ stages:
     dependsOn: 
     steps:
     - task: DownloadBuildArtifacts@0
-      displayName: Download Windows artifacts
+      displayName: Download Linux artifacts
       inputs:
         buildType: 'current'
         downloadType: 'single'
-        artifactName: 'Windows-v$(Version)'
+        artifactName: 'Linux-v$(Version)'
+        downloadPath: '$(Build.ArtifactStagingDirectory)'
+    - task: DownloadBuildArtifacts@0
+      displayName: Download Linux dpkg
+      inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: 'Linux-v$(Version)-2'
         downloadPath: '$(Build.ArtifactStagingDirectory)'
     - task: DownloadBuildArtifacts@0
       displayName: Download macOS x64 artifacts
@@ -117,14 +146,15 @@ stages:
         artifactName: 'macOS-arm-v$(Version)'
         downloadPath: '$(Build.ArtifactStagingDirectory)'
     - task: DownloadBuildArtifacts@0
-      displayName: Download Linux artifacts
+      displayName: Download Windows artifacts
       inputs:
         buildType: 'current'
         downloadType: 'single'
-        artifactName: 'Linux-v$(Version)'
+        artifactName: 'Windows-v$(Version)'
         downloadPath: '$(Build.ArtifactStagingDirectory)'
     - pwsh: |
         Move-Item -Path $(Build.ArtifactStagingDirectory)/Linux-v$(Version)/publish.tar.gz -Destination $(Build.ArtifactStagingDirectory)/SerialLoops-linux-x64-v$(Version).tar.gz
+        Move-Item -Path $(Build.ArtifactStagingDirectory)/Linux-v$(Version)/SerialLoops.dpkg -Destination $(Build.ArtifactStagingDirectory)/SerialLoops-$(Version)_amd64.dpkg
         Move-Item -Path $(Build.ArtifactStagingDirectory)/macOS-x64-v$(Version)/SerialLoops.Mac.dmg -Destination $(Build.ArtifactStagingDirectory)/SerialLoops-macOS-x64-v$(Version).dmg
         Move-Item -Path $(Build.ArtifactStagingDirectory)/macOS-arm-v$(Version)/SerialLoops.Mac.dmg -Destination $(Build.ArtifactStagingDirectory)/SerialLoops-macOS-arm-v$(Version).dmg
         Move-Item -Path $(Build.ArtifactStagingDirectory)/Windows-v$(Version)/publish.zip -Destination $(Build.ArtifactStagingDirectory)/SerialLoops-windows-x64-v$(Version).zip
