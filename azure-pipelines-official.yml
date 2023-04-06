@@ -52,7 +52,7 @@ stages:
       - task: PublishBuildArtifacts@1
         inputs:
           PathtoPublish: '$(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Release/net6.0/SerialLoops.dmg'
-          ArtifactName: '$(artifactName)'
+          ArtifactName: '$(artifactName)-dmg'
           publishLocation: 'Container'
         displayName: Publish build artifacts
 - stage: Publish
@@ -77,6 +77,13 @@ stages:
         artifactName: 'macOS-v$(Version)'
         downloadPath: '$(Build.ArtifactStagingDirectory)'
     - task: DownloadBuildArtifacts@0
+      displayName: Download macOS dmg
+      inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: 'macOS-v$(Version)-dmg'
+        downloadPath: '$(Build.ArtifactStagingDirectory)'
+    - task: DownloadBuildArtifacts@0
       displayName: Download Linux artifacts
       inputs:
         buildType: 'current'
@@ -86,6 +93,7 @@ stages:
     - pwsh: |
         Move-Item -Path $(Build.ArtifactStagingDirectory)/Windows-v$(Version)/SerialLoops.Wpf.zip -Destination $(Build.ArtifactStagingDirectory)/SerialLoops-windows-v$(Version).zip
         Move-Item -Path $(Build.ArtifactStagingDirectory)/macOS-v$(Version)/SerialLoops.Mac.zip -Destination $(Build.ArtifactStagingDirectory)/SerialLoops-macOS-v$(Version).zip
+        Move-Item -Path $(Build.ArtifactStagingDirectory)/macOS-v$(Version)-dmg/SerialLoops.Mac.dmg -Destination $(Build.ArtifactStagingDirectory)/SerialLoops-macOS-v$(Version).dmg
         Move-Item -Path $(Build.ArtifactStagingDirectory)/Linux-v$(Version)/SerialLoops.Gtk.zip -Destination $(Build.ArtifactStagingDirectory)/SerialLoops-linux-v$(Version).zip
       displayName: Move and rename artifacts
     - task: GitHubRelease@1
