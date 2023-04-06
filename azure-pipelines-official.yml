@@ -66,8 +66,8 @@ stages:
       displayName: Build & Publish Serial Loops
       
     - pwsh: |
-        Expand-Archive $(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Gtk/Release/net6.0/linux-x64/publish.zip
-        chmod +x $(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Gtk/Release/net6.0/linux-x64/SerialLoops
+        Expand-Archive $(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Gtk/Release/net6.0/linux-x64/publish.zip -DestinationPath $(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Gtk/Release/net6.0/linux-x64/publish/
+        chmod +x $(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Gtk/Release/net6.0/linux-x64/publish/SerialLoops
       displayName: Give Linux executable proper permissions
       condition: eq(variables['tar'], true)
 
