@@ -18,14 +18,30 @@ stages:
           imageName: 'ubuntu-latest'
           platformName: 'Gtk'
           artifactName: 'Linux-v$(Version)'
-        macOS:
+          framework: 'net6.0'
+          rid: 'linux-x64'
+          artifactPath: '$(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Gtk/Release/net6.0/SerialLoops.Gtk'
+        macOS-x64:
           imageName: 'macOS-latest'
           platformName: 'Mac'
-          artifactName: 'macOS-v$(Version)'
+          artifactName: 'macOS-x64-v$(Version)'
+          framework: 'net6.0'
+          rid: 'osx-x64'
+          artifactPath: '$(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Mac/Release/net6.0/SerialLoops.Mac.dmg'
+        macOS-arm64:
+          imageName: 'macOS-latest'
+          platformName: 'Mac'
+          artifactName: 'macOS-arm-v$(Version)'
+          framework: 'net6.0'
+          rid: 'osx-arm64'
+          artifactPath: '$(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Mac/Release/net6.0/SerialLoops.Mac.dmg'
         Windows:
           imageName: 'windows-latest'
           platformName: 'Wpf'
           artifactName: 'Windows-v$(Version)'
+          framework: 'net6.0-windows'
+          rid: 'win-x64'
+          artifactPath: '$(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Wpf/Release/net6.0/SerialLoops.Wpf.exe'
     displayName: Build & Publish
     pool:
       vmImage: $(imageName)
@@ -37,24 +53,16 @@ stages:
       inputs:
         command: 'publish'
         projects: $(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/SerialLoops.$(platformName).csproj
-        arguments: '-c Release -o $(Build.ArtifactStagingDirectory)'
+        arguments: '-c Release -f $(framework) -r $(rid) --self-contained /p:PublishSingleFile=true'
         publishWebProjects: false
       displayName: Build & Publish Serial Loops
 
     - task: PublishBuildArtifacts@1
       inputs:
-        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        PathtoPublish: '$(artifactPath)'
         ArtifactName: '$(artifactName)'
         publishLocation: 'Container'
-      displayName: Publish build artifacts
-
-    - task: PublishBuildArtifacts@1
-      inputs:
-        PathtoPublish: '$(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Mac/Release/net6.0/SerialLoops.Mac.dmg'
-        ArtifactName: '$(artifactName)-dmg'
-        publishLocation: 'Container'
-      displayName: Publish macOS dmg
-      condition: eq(variables['platformName'], 'Mac')
+      displayName: Publish build artifact
 - stage: Publish
   dependsOn: Build
   jobs:    
