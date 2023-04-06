@@ -64,8 +64,8 @@ stages:
     - pwsh: |
         Expand-Archive $(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Gtk/Release/net6.0/linux-x64/publish.zip -DestinationPath $(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Gtk/Release/net6.0/linux-x64/publish/
         chmod +x $(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Gtk/Release/net6.0/linux-x64/publish/SerialLoops
-        Push-Location $(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Gtk/Release/net6.0/linux-x64/
-        tar -czvf publish.tar.gz ./publish/
+        Push-Location $(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Gtk/Release/net6.0/linux-x64/publish
+        tar -czvf ../publish.tar.gz --transform 's,^\.\/,,' .
         Pop-Location
       displayName: Give Linux executable proper permissions
       condition: eq(variables['rid'], 'linux-x64')
