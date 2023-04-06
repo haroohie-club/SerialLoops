@@ -21,7 +21,7 @@ stages:
           framework: 'net6.0'
           rid: 'linux-x64'
           artifactPath: '$(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Gtk/Release/net6.0/linux-x64/publish.tar.gz'
-          secondArtifactPath: '$(Build.SourcesDirectory)/dpkg-build/SerialLoops.dpkg'
+          secondArtifactPath: '$(Build.SourcesDirectory)/dpkg-build/SerialLoops.deb'
           extraPublishParams: ''
         macOS-x64:
           imageName: 'macOS-latest'
@@ -155,7 +155,7 @@ stages:
         downloadPath: '$(Build.ArtifactStagingDirectory)'
     - pwsh: |
         Move-Item -Path $(Build.ArtifactStagingDirectory)/Linux-v$(Version)/publish.tar.gz -Destination $(Build.ArtifactStagingDirectory)/SerialLoops-linux-x64-v$(Version).tar.gz
-        Move-Item -Path $(Build.ArtifactStagingDirectory)/Linux-v$(Version)/SerialLoops.dpkg -Destination $(Build.ArtifactStagingDirectory)/SerialLoops-$(Version)_amd64.dpkg
+        Move-Item -Path $(Build.ArtifactStagingDirectory)/Linux-v$(Version)/SerialLoops.deb -Destination $(Build.ArtifactStagingDirectory)/SerialLoops-$(Version)_amd64.deb
         Move-Item -Path $(Build.ArtifactStagingDirectory)/macOS-x64-v$(Version)/SerialLoops.Mac.dmg -Destination $(Build.ArtifactStagingDirectory)/SerialLoops-macOS-x64-v$(Version).dmg
         Move-Item -Path $(Build.ArtifactStagingDirectory)/macOS-arm-v$(Version)/SerialLoops.Mac.dmg -Destination $(Build.ArtifactStagingDirectory)/SerialLoops-macOS-arm-v$(Version).dmg
         Move-Item -Path $(Build.ArtifactStagingDirectory)/Windows-v$(Version)/publish.zip -Destination $(Build.ArtifactStagingDirectory)/SerialLoops-windows-x64-v$(Version).zip
