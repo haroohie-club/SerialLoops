@@ -5,7 +5,7 @@ pr:
 - none
 
 variables:
-  - name: Version
+  - name: ReleaseVersion
     value: v0.1-pre$(Build.BuildNumber)
 
 stages:
@@ -17,15 +17,15 @@ stages:
         Linux:
           imageName: 'ubuntu-latest'
           platformName: 'Gtk'
-          artifactName: 'Linux-$(Version)'
+          artifactName: 'Linux-$(ReleaseVersion)'
         macOS:
           imageName: 'macOS-latest'
           platformName: 'Mac'
-          artifactName: 'macOS-$(Version)'
+          artifactName: 'macOS-$(ReleaseVersion)'
         Windows:
           imageName: 'windows-latest'
           platformName: 'Wpf'
-          artifactName: 'Windows-$(Version)'
+          artifactName: 'Windows-$(ReleaseVersion)'
     displayName: Build & Publish
     pool:
       vmImage: $(imageName)
@@ -59,21 +59,21 @@ stages:
       inputs:
         buildType: 'current'
         downloadType: 'single'
-        artifactName: 'Windows-$(Version)'
+        artifactName: 'Windows-$(ReleaseVersion)'
         downloadPath: '$(Build.ArtifactStagingDirectory)'
     - task: DownloadBuildArtifacts@0
       displayName: Download macOS artifacts
       inputs:
         buildType: 'current'
         downloadType: 'single'
-        artifactName: 'macOS-$(Version)'
+        artifactName: 'macOS-$(ReleaseVersion)'
         downloadPath: '$(Build.ArtifactStagingDirectory)'
     - task: DownloadBuildArtifacts@0
       displayName: Download Linux artifacts
       inputs:
         buildType: 'current'
         downloadType: 'single'
-        artifactName: 'Linux-$(Version)'
+        artifactName: 'Linux-$(ReleaseVersion)'
         downloadPath: '$(Build.ArtifactStagingDirectory)'
     - task: GitHubRelease@1
       displayName: 'Create GitHub Pre-Release'
