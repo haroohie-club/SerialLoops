@@ -20,9 +20,8 @@ stages:
           artifactName: 'Linux-v$(Version)'
           framework: 'net6.0'
           rid: 'linux-x64'
-          artifactPath: '$(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Gtk/Release/net6.0/linux-x64/publish'
+          artifactPath: '$(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Gtk/Release/net6.0/linux-x64/publish.tar.gz'
           extraPublishParams: ''
-          tar: true
         macOS-x64:
           imageName: 'macOS-latest'
           platformName: 'Mac'
@@ -31,7 +30,6 @@ stages:
           rid: 'osx-x64'
           artifactPath: '$(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Mac/Release/net6.0/osx-x64/SerialLoops.Mac.dmg'
           extraPublishParams: '/p:EnableDmgBuild=true'
-          tar: false
         macOS-arm64:
           imageName: 'macOS-latest'
           platformName: 'Mac'
@@ -40,7 +38,6 @@ stages:
           rid: 'osx-arm64'
           artifactPath: '$(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Mac/Release/net6.0/osx-arm64/SerialLoops.Mac.dmg'
           extraPublishParams: '/p:EnableDmgBuild=true'
-          tar: false
         Windows:
           imageName: 'windows-latest'
           platformName: 'Wpf'
@@ -49,7 +46,6 @@ stages:
           rid: 'win-x64'
           artifactPath: '$(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Wpf/Release/net6.0-windows/win-x64/publish.zip'
           extraPublishParams: ''
-          tar: false
     displayName: Build & Publish
     pool:
       vmImage: $(imageName)
@@ -68,8 +64,11 @@ stages:
     - pwsh: |
         Expand-Archive $(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Gtk/Release/net6.0/linux-x64/publish.zip -DestinationPath $(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Gtk/Release/net6.0/linux-x64/publish/
         chmod +x $(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Gtk/Release/net6.0/linux-x64/publish/SerialLoops
+        Push-Directory $(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Gtk/Release/net6.0/linux-x64/
+        tar -czvf publish.tar.gz ./publish/
+        Pop-Directory
       displayName: Give Linux executable proper permissions
-      condition: eq(variables['tar'], true)
+      condition: eq(variables['rid'], 'linux-x64')
 
     # We need a second round of publishing to get dmg packing to work. Idk why, but it works if we do it this way lol
     - task: DotNetCoreCLI@2
@@ -86,7 +85,6 @@ stages:
         PathtoPublish: '$(artifactPath)'
         ArtifactName: '$(artifactName)'
         publishLocation: 'Container'
-        StoreAsTar: $(tar)
       displayName: Publish build artifact
 - stage: Publish
   dependsOn: Build
