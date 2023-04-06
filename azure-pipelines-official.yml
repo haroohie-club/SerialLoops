@@ -37,7 +37,7 @@ stages:
       inputs:
         command: 'publish'
         projects: $(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/SerialLoops.$(platformName).csproj
-        arguments: '-c Release -o $(Build.ArtifactStagingDirectory)'
+        arguments: '-c Release'
         publishWebProjects: false
       displayName: Build & Publish Serial Loops
 
@@ -47,6 +47,14 @@ stages:
         ArtifactName: '$(artifactName)'
         publishLocation: 'Container'
       displayName: Publish build artifacts
+
+    - {{ if eq(variables['platformName', 'Mac']) }}:
+      - task: PublishBuildArtifacts@1
+        inputs:
+          PathtoPublish: '$(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Release/net6.0/SerialLoops.dmg'
+          ArtifactName: '$(artifactName)'
+          publishLocation: 'Container'
+        displayName: Publish build artifacts
 - stage: Publish
   dependsOn: Build
   jobs:    
