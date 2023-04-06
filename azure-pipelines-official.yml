@@ -5,8 +5,7 @@ pr:
 - none
 
 stages:
-- stage:
-  displayName: Build
+- stage: Build
   jobs:
   - job:
     strategy:
@@ -44,8 +43,7 @@ stages:
         ArtifactName: '$(artifactName)'
         publishLocation: 'Container'
       displayName: Publish build artifacts
-- stage:
-  displayName: Publish
+- stage: Publish
   dependsOn: Build
   jobs:    
   - job:
