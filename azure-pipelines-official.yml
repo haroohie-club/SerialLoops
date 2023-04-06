@@ -5,8 +5,8 @@ pr:
 - none
 
 variables:
-  - name: ReleaseVersion
-    value: v0.1-pre$(Build.BuildNumber)
+  - name: Version
+    value: 0.1-pre$(Build.BuildNumber)
 
 stages:
 - stage: Build
@@ -17,15 +17,15 @@ stages:
         Linux:
           imageName: 'ubuntu-latest'
           platformName: 'Gtk'
-          artifactName: 'Linux-$(ReleaseVersion)'
+          artifactName: 'Linux-v$(Version)'
         macOS:
           imageName: 'macOS-latest'
           platformName: 'Mac'
-          artifactName: 'macOS-$(ReleaseVersion)'
+          artifactName: 'macOS-v$(Version)'
         Windows:
           imageName: 'windows-latest'
           platformName: 'Wpf'
-          artifactName: 'Windows-$(ReleaseVersion)'
+          artifactName: 'Windows-v$(Version)'
     displayName: Build & Publish
     pool:
       vmImage: $(imageName)
@@ -59,29 +59,34 @@ stages:
       inputs:
         buildType: 'current'
         downloadType: 'single'
-        artifactName: 'Windows-$(ReleaseVersion)'
+        artifactName: 'Windows-v$(Version)'
         downloadPath: '$(Build.ArtifactStagingDirectory)'
     - task: DownloadBuildArtifacts@0
       displayName: Download macOS artifacts
       inputs:
         buildType: 'current'
         downloadType: 'single'
-        artifactName: 'macOS-$(ReleaseVersion)'
+        artifactName: 'macOS-v$(Version)'
         downloadPath: '$(Build.ArtifactStagingDirectory)'
     - task: DownloadBuildArtifacts@0
       displayName: Download Linux artifacts
       inputs:
         buildType: 'current'
         downloadType: 'single'
-        artifactName: 'Linux-$(ReleaseVersion)'
+        artifactName: 'Linux-v$(Version)'
         downloadPath: '$(Build.ArtifactStagingDirectory)'
+    - pwsh: |
+        Move-Item -Path $(Build.ArtifactStagingDirectory)/Windows-v$(Version)/SerialLoops.Wpf.zip -Destination $(Build.ArtifactStagingDirectory)/SerialLoops-windows-v$(Version).zip
+        Move-Item -Path $(Build.ArtifactStagingDirectory)/macOS-v$(Version)/SerialLoops.Mac.zip -Destination $(Build.ArtifactStagingDirectory)/SerialLoops-macOS-v$(Version).zip
+        Move-Item -Path $(Build.ArtifactStagingDirectory)/Linux-v$(Version)/SerialLoops.Gtk.zip -Destination $(Build.ArtifactStagingDirectory)/SerialLoops-linux-v$(Version).zip
+      displayName: Move and rename artifacts
     - task: GitHubRelease@1
       displayName: 'Create GitHub Pre-Release'
       inputs:
         gitHubConnection: 'GitHub Connection (Jonko)'
         tagSource: userSpecifiedTag
-        tag: '$(Build.BuildNumber)'
-        title: 'Serial Loops v0.1-pre$(Build.BuildNumber)'
+        tag: '$(Version)'
+        title: 'Serial Loops $(Version)'
         releaseNotesSource: inline
         releaseNotesInline: 'Latest build based on main!'
         isPreRelease: true
