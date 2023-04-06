@@ -79,8 +79,10 @@ stages:
       displayName: Publish build artifact
 - stage: Publish
   dependsOn: Build
-  jobs:    
+  jobs:
   - job:
+    pool:
+      vmImage: ubuntu-latest
     displayName: Create Pre-Release
     dependsOn: 
     steps:
@@ -92,18 +94,18 @@ stages:
         artifactName: 'Windows-v$(Version)'
         downloadPath: '$(Build.ArtifactStagingDirectory)'
     - task: DownloadBuildArtifacts@0
-      displayName: Download macOS artifacts
+      displayName: Download macOS x64 artifacts
       inputs:
         buildType: 'current'
         downloadType: 'single'
-        artifactName: 'macOS-v$(Version)'
+        artifactName: 'macOS-x64-v$(Version)'
         downloadPath: '$(Build.ArtifactStagingDirectory)'
     - task: DownloadBuildArtifacts@0
-      displayName: Download macOS dmg
+      displayName: Download macOS ARM artifacts
       inputs:
         buildType: 'current'
         downloadType: 'single'
-        artifactName: 'macOS-v$(Version)-dmg'
+        artifactName: 'macOS-arm-v$(Version)'
         downloadPath: '$(Build.ArtifactStagingDirectory)'
     - task: DownloadBuildArtifacts@0
       displayName: Download Linux artifacts
@@ -113,10 +115,11 @@ stages:
         artifactName: 'Linux-v$(Version)'
         downloadPath: '$(Build.ArtifactStagingDirectory)'
     - pwsh: |
-        Move-Item -Path $(Build.ArtifactStagingDirectory)/Windows-v$(Version)/SerialLoops.Wpf.zip -Destination $(Build.ArtifactStagingDirectory)/SerialLoops-windows-v$(Version).zip
-        Move-Item -Path $(Build.ArtifactStagingDirectory)/macOS-v$(Version)/SerialLoops.Mac.zip -Destination $(Build.ArtifactStagingDirectory)/SerialLoops-macOS-v$(Version).zip
+        Compress-Archive -Path $(Build.ArtifactStagingDirectory)/Windows-v$(Version)/SerialLoops.exe -DestinationPath $(Build.ArtifactStagingDirectory)/SerialLoops-windows-v$(Version).zip
+        Remove-Item -Path $(Build.ArtifactStagingDirectory)/Windows-v$(Version)/SerialLoops.exe
         Move-Item -Path $(Build.ArtifactStagingDirectory)/macOS-v$(Version)-dmg/SerialLoops.Mac.dmg -Destination $(Build.ArtifactStagingDirectory)/SerialLoops-macOS-v$(Version).dmg
-        Move-Item -Path $(Build.ArtifactStagingDirectory)/Linux-v$(Version)/SerialLoops.Gtk.zip -Destination $(Build.ArtifactStagingDirectory)/SerialLoops-linux-v$(Version).zip
+        tar -czvf $(Build.ArtifactStagingDirectory)/SerialLoops-linux-v$(Version).tar.gz $(Build.ArtifactStagingDirectory)/Linux-v$(Version)/SerialLoops
+        Remove-Item -Path $(Build.ArtifactStagingDirectory)/Linux-v$(Version)/SerialLoops
       displayName: Move and rename artifacts
     - task: GitHubRelease@1
       displayName: 'Create GitHub Pre-Release'
