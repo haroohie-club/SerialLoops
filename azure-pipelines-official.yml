@@ -117,7 +117,8 @@ stages:
     - pwsh: |
         Compress-Archive -Path $(Build.ArtifactStagingDirectory)/Windows-v$(Version)/SerialLoops.exe -DestinationPath $(Build.ArtifactStagingDirectory)/SerialLoops-windows-v$(Version).zip
         Remove-Item -Path $(Build.ArtifactStagingDirectory)/Windows-v$(Version)/SerialLoops.exe
-        Move-Item -Path $(Build.ArtifactStagingDirectory)/macOS-v$(Version)-dmg/SerialLoops.Mac.dmg -Destination $(Build.ArtifactStagingDirectory)/SerialLoops-macOS-v$(Version).dmg
+        Move-Item -Path $(Build.ArtifactStagingDirectory)/macOS-x64-v$(Version)/SerialLoops.Mac.dmg -Destination $(Build.ArtifactStagingDirectory)/SerialLoops-macOS-x64-v$(Version).dmg
+        Move-Item -Path $(Build.ArtifactStagingDirectory)/macOS-arm-v$(Version)/SerialLoops.Mac.dmg -Destination $(Build.ArtifactStagingDirectory)/SerialLoops-macOS-arm-v$(Version).dmg
         tar -czvf $(Build.ArtifactStagingDirectory)/SerialLoops-linux-v$(Version).tar.gz $(Build.ArtifactStagingDirectory)/Linux-v$(Version)/SerialLoops
         Remove-Item -Path $(Build.ArtifactStagingDirectory)/Linux-v$(Version)/SerialLoops
       displayName: Move and rename artifacts
