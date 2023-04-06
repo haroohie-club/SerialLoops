@@ -14,9 +14,9 @@ namespace SerialLoops.Gtk
             var platform = new Eto.GtkSharp.Platform();
             platform.Add<SoundPlayer.ISoundPlayer>(() => new SoundPlayerHandler());
 
-            platform.Add<LinuxTrayIndicatorHandler>(() => new()
+            Eto.Style.Add<Window>(null, handler =>
             {
-                Image = new Bitmap("Icons/AppIcon.png")
+                handler.Icon = Icon.FromResource($"SerialLoops.AppIcon.png").WithSize(64, 64);
             });
 
             new Application(platform).Run(new MainForm());
