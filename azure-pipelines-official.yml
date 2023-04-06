@@ -61,6 +61,7 @@ stages:
         publishWebProjects: false
       displayName: Build & Publish Serial Loops
       
+      # We need a second round of publishing to get dmg packing to work. Idk why, but it works if we do it this way lol
     - task: DotNetCoreCLI@2
       inputs:
         command: 'publish'
