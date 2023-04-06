@@ -4,61 +4,68 @@ trigger:
 pr:
 - none
 
-jobs:
-- job:
-  strategy:
-    matrix:
-      Linux:
-        imageName: 'ubuntu-latest'
-        platformName: 'Gtk'
-        artifactName: 'Linux-v0.1-$(Build.BuildNumber)'
-      macOS:
-        imageName: 'macOS-latest'
-        platformName: 'Mac'
-        artifactName: 'macOS-v0.1-$(Build.BuildNumber)'
-      Windows:
-        imageName: 'windows-latest'
-        platformName: 'Wpf'
-        artifactName: 'Windows-v0.1-$(Build.BuildNumber)'
-  displayName: Build & Publish
-  pool:
-    vmImage: $(imageName)
-  steps:
-  - checkout: self
-    clean: true
-    
-  - task: DotNetCoreCLI@2
-    inputs:
-      command: 'publish'
-      projects: $(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/SerialLoops.$(platformName).csproj
-      arguments: '-c Release -o $(Build.ArtifactStagingDirectory)'
-      publishWebProjects: false
-    displayName: Build & Publish Serial Loops
+stages:
+- stage:
+  displayName: Build
+  jobs:
+  - job:
+    strategy:
+      matrix:
+        Linux:
+          imageName: 'ubuntu-latest'
+          platformName: 'Gtk'
+          artifactName: 'Linux-v0.1-$(Build.BuildNumber)'
+        macOS:
+          imageName: 'macOS-latest'
+          platformName: 'Mac'
+          artifactName: 'macOS-v0.1-$(Build.BuildNumber)'
+        Windows:
+          imageName: 'windows-latest'
+          platformName: 'Wpf'
+          artifactName: 'Windows-v0.1-$(Build.BuildNumber)'
+    displayName: Build & Publish
+    pool:
+      vmImage: $(imageName)
+    steps:
+    - checkout: self
+      clean: true
+      
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'publish'
+        projects: $(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/SerialLoops.$(platformName).csproj
+        arguments: '-c Release -o $(Build.ArtifactStagingDirectory)'
+        publishWebProjects: false
+      displayName: Build & Publish Serial Loops
 
-  - task: PublishBuildArtifacts@1
-    inputs:
-      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-      ArtifactName: '$(artifactName)'
-      publishLocation: 'Container'
-    displayName: Publish build artifacts
-  
-- job:
-  displayName: Create Pre-Release
-  steps:
-  - task: DownloadBuildArtifacts@0
-    displayName: Download build artifacts
-    inputs:
-      buildType: 'current'
-      downloadType: 'single'
-      artifactName: 'drop'
-      downloadPath: '$(Build.ArtifactStagingDirectory)'
-  - task: GitHubRelease@1
-    displayName: 'Create GitHub Pre-Release'
-    inputs:
-      gitHubConnection: 'GitHub Connection (Jonko)'
-      tagSource: userSpecifiedTag
-      tag: '$(Build.BuildNumber)'
-      title: 'Serial Loops'
-      releaseNotesSource: inline
-      releaseNotesInline: 'Latest build based on main!'
-      isPreRelease: true
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: '$(artifactName)'
+        publishLocation: 'Container'
+      displayName: Publish build artifacts
+- stage:
+  displayName: Publish
+  dependsOn: Build
+  jobs:    
+  - job:
+    displayName: Create Pre-Release
+    dependsOn: 
+    steps:
+    - task: DownloadBuildArtifacts@0
+      displayName: Download build artifacts
+      inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: 'drop'
+        downloadPath: '$(Build.ArtifactStagingDirectory)'
+    - task: GitHubRelease@1
+      displayName: 'Create GitHub Pre-Release'
+      inputs:
+        gitHubConnection: 'GitHub Connection (Jonko)'
+        tagSource: userSpecifiedTag
+        tag: '$(Build.BuildNumber)'
+        title: 'Serial Loops'
+        releaseNotesSource: inline
+        releaseNotesInline: 'Latest build based on main!'
+        isPreRelease: true
