@@ -1,6 +1,5 @@
-﻿using Eto.Drawing;
-using Eto.Forms;
-using Eto.GtkSharp.Forms;
+﻿using Eto.Forms;
+using Eto.IO;
 using SerialLoops.Utility;
 using System;
 
@@ -13,11 +12,7 @@ namespace SerialLoops.Gtk
         {
             var platform = new Eto.GtkSharp.Platform();
             platform.Add<SoundPlayer.ISoundPlayer>(() => new SoundPlayerHandler());
-
-            Eto.Style.Add<Window>(null, handler =>
-            {
-                handler.Icon = Icon.FromResource($"SerialLoops.AppIcon.png").WithSize(64, 64);
-            });
+            platform.Add<SystemIcons.IHandler>(() => new GtkIconHandler());
 
             new Application(platform).Run(new MainForm());
         }
