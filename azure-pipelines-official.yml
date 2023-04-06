@@ -135,7 +135,7 @@ stages:
         gitHubConnection: 'GitHub Connection (Jonko)'
         tagSource: userSpecifiedTag
         tag: '$(Version)'
-        title: 'Serial Loops $(Version)'
+        title: 'Serial Loops v$(Version)'
         releaseNotesSource: inline
         releaseNotesInline: 'Latest build based on main!'
         isPreRelease: true
