@@ -172,7 +172,7 @@ stages:
         releaseNotesInline: |
           Latest build from main. Note that this is likely to have bugs and we recommend you use a regular release instead!
 
-          On macOS, after dragging the app from the dmg into Applications, please run `xattr -cr /Applications/SerialLoops.app` from the Terminal in order to be able to run the app.
+          On macOS, after dragging the app from the dmg into Applications, please run `xattr -cr /Applications/SerialLoops.Mac.app` from the Terminal in order to be able to run the app.
 
           The `.deb` package can only be used on Debian-based systems (e.g. Ubuntu).
         isPreRelease: true
