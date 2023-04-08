@@ -5,6 +5,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <RuntimeIdentifiers>osx-x64;osx-arm64</RuntimeIdentifiers>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <AssemblyName>SerialLoops</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
