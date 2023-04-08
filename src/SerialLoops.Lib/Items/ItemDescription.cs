@@ -10,7 +10,8 @@ namespace SerialLoops.Lib.Items
     {
         public string Name { get; protected set; }
         public string DisplayName { get; protected set; }
-        public string DisplayNameWithStatus => UnsavedChanges ? $"{Name} - {DisplayName} *" : $"{Name} - {DisplayName}";
+        private string _trueDisplayName => Name == DisplayName ? DisplayName : $"{Name} - {DisplayName}";
+        public string DisplayNameWithStatus => UnsavedChanges ? $"{_trueDisplayName} *" : _trueDisplayName;
         public string SearchableText { get; set; }
         public ItemType Type { get; private set; }
         public bool UnsavedChanges { get; set; } = false;

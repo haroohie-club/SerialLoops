@@ -12,14 +12,14 @@ namespace SerialLoops.Editors
     {
         private TopicItem _topic;
 
-        private NumericStepper _baseTimeBox;
-        private NumericStepper _kyonTimeBox;
+        private NumericStepper _baseTimeStepper;
+        private NumericStepper _kyonTimeStepper;
         private Label _kyonTimeLabel;
-        private NumericStepper _mikuruTimeBox;
+        private NumericStepper _mikuruTimeStepper;
         private Label _mikuruTimeLabel;
-        private NumericStepper _nagatoTimeBox;
+        private NumericStepper _nagatoTimeStepper;
         private Label _nagatoTimeLabel;
-        private NumericStepper _koizumiTimeBox;
+        private NumericStepper _koizumiTimeStepper;
         private Label _koizumiTimeLabel;
 
         public TopicEditor(TopicItem topic, Project project, ILogger log) : base(topic, log, project)
@@ -39,8 +39,8 @@ namespace SerialLoops.Editors
             linkedScriptDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Script).Select(s => new ListItem { Key = s.Name, Text = s.Name }));
             linkedScriptDropDown.SelectedKey = _project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Script && ((ScriptItem)i).Event.Index == _topic.Topic.EventIndex)?.Name ?? "NONE";
 
-            _baseTimeBox = new() { Value = _topic.Topic.BaseTimeGain, MaxValue = short.MaxValue, MinValue = 0 };
-            _baseTimeBox.ValueChanged += (sender, args) =>
+            _baseTimeStepper = new() { Value = _topic.Topic.BaseTimeGain, MaxValue = short.MaxValue, MinValue = 0, MaximumDecimalPlaces = 0 };
+            _baseTimeStepper.ValueChanged += (sender, args) =>
             {
                 TryUpdateKyonTime();
                 TryUpdateMikuruTime();
@@ -48,30 +48,30 @@ namespace SerialLoops.Editors
                 TryUpdateKoizumiTime();
             };
 
-            _kyonTimeBox = new() { Value = _topic.Topic.KyonTimePercentage, MaxValue = short.MaxValue, MinValue = 0 };
+            _kyonTimeStepper = new() { Value = _topic.Topic.KyonTimePercentage, MaxValue = short.MaxValue, MinValue = 0, MaximumDecimalPlaces = 0 };
             _kyonTimeLabel = new() { Text = ((int)(_topic.Topic.BaseTimeGain * _topic.Topic.KyonTimePercentage / 100.0)).ToString() };
-            _kyonTimeBox.ValueChanged += (sender, args) =>
+            _kyonTimeStepper.ValueChanged += (sender, args) =>
             {
                 TryUpdateKyonTime();
             };
 
-            _mikuruTimeBox = new() { Value = _topic.Topic.MikuruTimePercentage, MaxValue = short.MaxValue, MinValue = 0 };
+            _mikuruTimeStepper = new() { Value = _topic.Topic.MikuruTimePercentage, MaxValue = short.MaxValue, MinValue = 0, MaximumDecimalPlaces = 0 };
             _mikuruTimeLabel = new() { Text = ((int)(_topic.Topic.BaseTimeGain * _topic.Topic.MikuruTimePercentage / 100.0)).ToString() };
-            _mikuruTimeBox.ValueChanged += (sender, args) =>
+            _mikuruTimeStepper.ValueChanged += (sender, args) =>
             {
                 TryUpdateMikuruTime();
             };
 
-            _nagatoTimeBox = new() { Value = _topic.Topic.NagatoTimePercentage, MaxValue = short.MaxValue, MinValue = 0 };
+            _nagatoTimeStepper = new() { Value = _topic.Topic.NagatoTimePercentage, MaxValue = short.MaxValue, MinValue = 0, MaximumDecimalPlaces = 0 };
             _nagatoTimeLabel = new() { Text = ((int)(_topic.Topic.BaseTimeGain * _topic.Topic.NagatoTimePercentage / 100.0)).ToString() };
-            _nagatoTimeBox.ValueChanged += (sender, args) =>
+            _nagatoTimeStepper.ValueChanged += (sender, args) =>
             {
                 TryUpdateNagatoTime();
             };
 
-            _koizumiTimeBox = new() { Value = _topic.Topic.KoizumiTimePercentage, MaxValue = short.MaxValue, MinValue = 0 };
+            _koizumiTimeStepper = new() { Value = _topic.Topic.KoizumiTimePercentage, MaxValue = short.MaxValue, MinValue = 0, MaximumDecimalPlaces = 0 };
             _koizumiTimeLabel = new() { Text = ((int)(_topic.Topic.BaseTimeGain * _topic.Topic.KoizumiTimePercentage / 100.0)).ToString() };
-            _koizumiTimeBox.ValueChanged += (sender, args) =>
+            _koizumiTimeStepper.ValueChanged += (sender, args) =>
             {
                 TryUpdateKoizumiTime();
             };
@@ -82,7 +82,7 @@ namespace SerialLoops.Editors
                 Spacing = 10,
                 Items =
                 {
-                    ControlGenerator.GetControlWithLabel("Base Time Gain", ControlGenerator.GetControlWithSuffix(_baseTimeBox, "sec")),
+                    ControlGenerator.GetControlWithLabel("Base Time Gain", ControlGenerator.GetControlWithSuffix(_baseTimeStepper, "sec")),
                     new StackLayout
                     {
                         Orientation = Orientation.Horizontal,
@@ -90,7 +90,7 @@ namespace SerialLoops.Editors
                         VerticalContentAlignment = VerticalAlignment.Center,
                         Items =
                         {
-                            ControlGenerator.GetControlWithLabel("Kyon Time Percentage", ControlGenerator.GetControlWithSuffix(_kyonTimeBox, "%")),
+                            ControlGenerator.GetControlWithLabel("Kyon Time Percentage", ControlGenerator.GetControlWithSuffix(_kyonTimeStepper, "%")),
                             ControlGenerator.GetControlWithSuffix(_kyonTimeLabel, "sec"),
                         }
                     },
@@ -101,7 +101,7 @@ namespace SerialLoops.Editors
                         VerticalContentAlignment = VerticalAlignment.Center,
                         Items =
                         {
-                            ControlGenerator.GetControlWithLabel("Mikuru Time Percentage", ControlGenerator.GetControlWithSuffix(_mikuruTimeBox, "%")),
+                            ControlGenerator.GetControlWithLabel("Mikuru Time Percentage", ControlGenerator.GetControlWithSuffix(_mikuruTimeStepper, "%")),
                             ControlGenerator.GetControlWithSuffix(_mikuruTimeLabel, "sec"),
                         }
                     },
@@ -112,7 +112,7 @@ namespace SerialLoops.Editors
                         VerticalContentAlignment = VerticalAlignment.Center,
                         Items =
                         {
-                            ControlGenerator.GetControlWithLabel("Nagato Time Percentage", ControlGenerator.GetControlWithSuffix(_nagatoTimeBox, "%")),
+                            ControlGenerator.GetControlWithLabel("Nagato Time Percentage", ControlGenerator.GetControlWithSuffix(_nagatoTimeStepper, "%")),
                             ControlGenerator.GetControlWithSuffix(_nagatoTimeLabel, "sec"),
                         }
                     },
@@ -123,7 +123,7 @@ namespace SerialLoops.Editors
                         VerticalContentAlignment = VerticalAlignment.Center,
                         Items =
                         {
-                            ControlGenerator.GetControlWithLabel("Koizumi Time Percentage", ControlGenerator.GetControlWithSuffix(_koizumiTimeBox, "%")),
+                            ControlGenerator.GetControlWithLabel("Koizumi Time Percentage", ControlGenerator.GetControlWithSuffix(_koizumiTimeStepper, "%")),
                             ControlGenerator.GetControlWithSuffix(_koizumiTimeLabel, "sec"),
                         }
                     },
@@ -161,19 +161,19 @@ namespace SerialLoops.Editors
 
         private void TryUpdateKyonTime()
         {
-            _kyonTimeLabel.Text = (_baseTimeBox.Value * _kyonTimeBox.Value / 100.0).ToString();
+            _kyonTimeLabel.Text = (_baseTimeStepper.Value * _kyonTimeStepper.Value / 100.0).ToString();
         }
         private void TryUpdateMikuruTime()
         {
-            _mikuruTimeLabel.Text = (_baseTimeBox.Value * _mikuruTimeBox.Value / 100.0).ToString();
+            _mikuruTimeLabel.Text = (_baseTimeStepper.Value * _mikuruTimeStepper.Value / 100.0).ToString();
         }
         private void TryUpdateNagatoTime()
         {
-            _nagatoTimeLabel.Text = (_baseTimeBox.Value * _nagatoTimeBox.Value / 100.0).ToString();
+            _nagatoTimeLabel.Text = (_baseTimeStepper.Value * _nagatoTimeStepper.Value / 100.0).ToString();
         }
         private void TryUpdateKoizumiTime()
         {
-            _koizumiTimeLabel.Text = (_baseTimeBox.Value * _koizumiTimeBox.Value / 100.0).ToString();
+            _koizumiTimeLabel.Text = (_baseTimeStepper.Value * _koizumiTimeStepper.Value / 100.0).ToString();
         }
     }
 }
