@@ -4,9 +4,23 @@ trigger:
 pr:
 - none
 
+parameters:
+- name: version
+  displayName: Release Version
+  type: string
+  default: ''
+- name: releaseNotes
+  displayName: Release Notes
+  type: string
+  default: 'Latest build from main. Note that this is likely to have bugs and we recommend you use a regular release instead!'
+
+
 variables:
   - name: Version
-    value: 0.1-pre$(Build.BuildNumber)
+    ${{ if ne(parameters['version'], '') }}:
+      value: ${{ parameters.version }}
+    ${{ if eq(parameters['version'], '') }}:
+      value: 0.1-pre$(Build.BuildNumber)
 
 stages:
 - stage: Build
@@ -117,7 +131,6 @@ stages:
     pool:
       vmImage: ubuntu-latest
     displayName: Create Pre-Release
-    dependsOn: 
     steps:
     - task: DownloadBuildArtifacts@0
       displayName: Download Linux artifacts
@@ -170,7 +183,7 @@ stages:
         title: 'Serial Loops v$(Version)'
         releaseNotesSource: inline
         releaseNotesInline: |
-          Latest build from main. Note that this is likely to have bugs and we recommend you use a regular release instead!
+          ${{ parameters.releaseNotes }}
 
           ## Installation Notes
           On macOS, after dragging the app from the dmg into Applications, please run `xattr -cr /Applications/SerialLoops.Mac.app` from the Terminal in order to be able to run the app.
