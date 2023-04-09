@@ -30,7 +30,7 @@ namespace SerialLoops.Controls
                 HorizontalContentAlignment = HorizontalAlignment.Center,
                 Items =
                 {
-                    ControlGenerator.GetIcon("AppIcon", _log, 64),
+                    new ImageView { Image = ControlGenerator.GetIcon("AppIcon", _log, 64) },
                     ControlGenerator.GetTextHeader("Serial Loops", 18)
                 }
             };
