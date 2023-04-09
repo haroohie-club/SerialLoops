@@ -303,11 +303,11 @@ namespace SerialLoops
 
         public void OpenProjectFromPath(string path)
         {
-            bool archivesLoaded = false;
+            Project.LoadProjectResult result = new(Project.LoadProjectState.FAILED); // start us off with a failure
             LoopyProgressTracker tracker = new();
-            _ = new ProgressDialog(() => (OpenProject, archivesLoaded) = Project.OpenProject(path, CurrentConfig, Log, tracker), () => 
+            _ = new ProgressDialog(() => (OpenProject, result) = Project.OpenProject(path, CurrentConfig, Log, tracker), () =>
             {
-                if (OpenProject is not null && !archivesLoaded)
+                if (OpenProject is not null && result.State == Project.LoadProjectState.LOOSELEAF_FILES)
                 {
                     if (MessageBox.Show("Saved but unbuilt files were detected in the project directory. " +
                         "Would you like to build before loading the project? " +
@@ -321,8 +321,43 @@ namespace SerialLoops
                             () => { }, tracker, "Loading Project");
                     }
 
-                    _ = new ProgressDialog(() =>  OpenProject.LoadArchives(Log, tracker), () => { }, tracker, "Loading Project");
+                    _ = new ProgressDialog(() => OpenProject.LoadArchives(Log, tracker), () => { }, tracker, "Loading Project");
                 }
+                else if (result.State == Project.LoadProjectState.CORRUPTED_FILE)
+                {
+                    if (MessageBox.Show($"While attempting to build,  file #{result.BadFileIndex:X3} in archive {result.BadArchive} was " +
+                        $"found to be corrupted. We can delete this file from your base directory automatically which may allow you to load the rest of the " +
+                        $"project, but will erase all changes to that file. Alternatively, you can attempt to edit the file manually to fix it. How would " +
+                        $"you like to proceed? Press OK to proceed with deleting the file and Cancel to attempt to deal with it manually.", 
+                        "Corrupted File Detected!",
+                        MessageBoxButtons.OKCancel,
+                        MessageBoxType.Warning,
+                        MessageBoxDefaultButton.Cancel) == DialogResult.Ok)
+                    {
+                        switch (result.BadArchive)
+                        {
+                            case "dat.bin":
+                                File.Delete(Path.Combine(OpenProject.BaseDirectory, "assets", "data", $"{result.BadFileIndex:X3}.s"));
+                                break;
+
+                            case "grp.bin":
+                                File.Delete(Path.Combine(OpenProject.BaseDirectory, "assets", "graphics", $"{result.BadFileIndex:X3}.png"));
+                                File.Delete(Path.Combine(OpenProject.BaseDirectory, "assets", "graphics", $"{result.BadFileIndex:X3}_pal.csv"));
+                                break;
+
+                            case "evt.bin":
+                                File.Delete(Path.Combine(OpenProject.BaseDirectory, "assets", "events", $"{result.BadFileIndex:X3}.s"));
+                                break;
+                        }
+                        OpenProjectFromPath(path);
+                        return;
+                    }
+                    else
+                    {
+                        OpenProject = null;
+                    }
+                }
+
                 if (OpenProject is not null)
                 {
                     OpenProjectView(OpenProject, tracker);
