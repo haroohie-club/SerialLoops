@@ -131,11 +131,14 @@ namespace SerialLoops
             Command projectSettings = new() { MenuText = "Project Settings...", ToolBarText = "Project Settings", Image = ControlGenerator.GetIcon("Project_Options", Log) };
             projectSettings.Executed += ProjectSettings_Executed;
 
-            Command closeProject = new() { MenuText = "Close Project", ToolBarText = "Close Project", Image = ControlGenerator.GetIcon("Close", Log) };
-            closeProject.Executed += (sender, args) => CloseProjectView();
+            Command migrateProject = new() { MenuText = "Migrate to new ROM", ToolBarText = "Migrate Project" };
+            migrateProject.Executed += MigrateProject_Executed;
 
             Command exportPatch = new() { MenuText = "Export Patch", ToolBarText = "Export Patch" };
             exportPatch.Executed += Patch_Executed;
+
+            Command closeProject = new() { MenuText = "Close Project", ToolBarText = "Close Project", Image = ControlGenerator.GetIcon("Close", Log) };
+            closeProject.Executed += (sender, args) => CloseProjectView();
 
             // Tools
             Command searchProject = new() { MenuText = "Search...", ToolBarText = "Search", Shortcut = Application.Instance.CommonModifier | Keys.F, Image = ControlGenerator.GetIcon("Search", Log) };
@@ -171,8 +174,9 @@ namespace SerialLoops
             {
                 fileMenu.Items.Add(saveProject);
                 fileMenu.Items.Add(projectSettings);
-                fileMenu.Items.Add(closeProject);
+                fileMenu.Items.Add(migrateProject);
                 fileMenu.Items.Add(exportPatch);
+                fileMenu.Items.Add(closeProject);
             }
 
             Menu.Items.Add(new SubMenuItem { Text = "&Tools", Items = { searchProject, findOrphanedItems } });
@@ -513,6 +517,24 @@ namespace SerialLoops
                         Log.LogError("Build failed!");
                     }
                 }, tracker, "Building and Running");
+            }
+        }
+
+        private void MigrateProject_Executed(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new() { Title = "New Base ROM" };
+            openFileDialog.Filters.Add(new("Chokuretsu ROM", ".nds"));
+
+            if (openFileDialog.ShowAndReportIfFileSelected(this))
+            {
+                LoopyProgressTracker tracker = new();
+                _ = new ProgressDialog(() =>
+                {
+                    OpenProject.MigrateProject(openFileDialog.FileName, Log, tracker);
+                    OpenProject.Load(CurrentConfig, Log, tracker);
+                },
+                () => MessageBox.Show("Migrated to new ROM!", "Migration Complete!", MessageBoxType.Information),
+                tracker, "Migrating to new ROM");
             }
         }
 

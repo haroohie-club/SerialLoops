@@ -197,7 +197,7 @@ namespace SerialLoops.Lib
             tracker.Focus("Event Files", 1);
             Items.AddRange(Evt.Files
                 .Where(e => !new string[] { "CHESSS", "EVTTBLS", "TOPICS", "SCENARIOS", "TUTORIALS", "VOICEMAPS" }.Contains(e.Name))
-                .Select(e => new ScriptItem(e)));
+                .Select(e => new ScriptItem(e, log)));
             tracker.Finished++;
 
             tracker.Focus("Maps", 1);
@@ -241,6 +241,21 @@ namespace SerialLoops.Lib
                 Items.Add(new GroupSelectionItem(scenarioFile.Scenario.Selects[i], i, this));
                 tracker.Finished++;
             }
+        }
+
+        public void MigrateProject(string newRom, ILogger log, IProgressTracker tracker)
+        {
+            log.Log($"Attempting to migrate to new ROM {newRom}");
+
+            string tempDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+            NdsProjectFile.Create("temp", newRom, tempDir);
+            IO.CopyFiles(Path.Combine(tempDir, "data"), Path.Combine(BaseDirectory, "original", "archives"), "*.bin");
+            IO.CopyFiles(Path.Combine(tempDir, "data", "bgm"), Path.Combine(BaseDirectory, "original", "bgm"), "*.bin");
+            IO.CopyFiles(Path.Combine(tempDir, "data", "vce"), Path.Combine(BaseDirectory, "original", "vce"), "*.bin");
+            IO.CopyFiles(Path.Combine(tempDir, "overlay"), Path.Combine(BaseDirectory, "original", "overlay"), "*.bin");
+            IO.CopyFiles(Path.Combine(tempDir, "data", "movie"), Path.Combine(BaseDirectory, "rom", "data", "movie"), "*.mods");
+
+            Directory.Delete(tempDir, true);
         }
 
         public static void ClearOrCreateCaches(string cachesDirectory, ILogger log)
