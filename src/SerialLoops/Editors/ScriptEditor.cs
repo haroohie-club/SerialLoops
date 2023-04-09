@@ -1432,7 +1432,7 @@ namespace SerialLoops.Editors
             SKCanvas canvas = new(previewBitmap);
             canvas.DrawColor(SKColors.Black);
 
-            ScriptItemCommand currentCommand = ((ScriptCommandSectionEntry)_commandsPanel.Viewer.SelectedItem).Command;
+            ScriptItemCommand currentCommand = ((ScriptCommandSectionEntry)_commandsPanel.Viewer.SelectedItem)?.Command;
             if (currentCommand is not null)
             {
                 List<ScriptItemCommand> commands = currentCommand.WalkCommandGraph(_commands, _script.Graph);
