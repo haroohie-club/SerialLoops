@@ -31,7 +31,7 @@ namespace SerialLoops.Controls
                 Items =
                 {
                     // Doing this image manually bc otherwise it breaks on Gtk for some unknown reason
-                    new ImageView { Image = Icon.FromResource($"SerialLoops.Icons.AppIcon.png") },
+                    new ImageView { Image = Icon.FromResource($"SerialLoops.Icons.AppIcon.png"), Height = 64, Width = 64 },
                     ControlGenerator.GetTextHeader("Serial Loops", 18)
                 }
             };
