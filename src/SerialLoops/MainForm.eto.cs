@@ -299,13 +299,30 @@ namespace SerialLoops
 
         public void OpenProjectFromPath(string path)
         {
+            bool archivesLoaded = false;
             LoopyProgressTracker tracker = new();
-            _ = new ProgressDialog(() => OpenProject = Project.OpenProject(path, CurrentConfig, Log, tracker), () => 
+            _ = new ProgressDialog(() => (OpenProject, archivesLoaded) = Project.OpenProject(path, CurrentConfig, Log, tracker), () => 
             {
+                if (OpenProject is not null && !archivesLoaded)
+                {
+                    if (MessageBox.Show("Saved but unbuilt files were detected in the project directory. " +
+                        "Would you like to build before loading the project? " +
+                        "Not building could result in these files being overwritten.",
+                        "Build Unbuilt Files?",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxType.Question,
+                        MessageBoxDefaultButton.Yes) == DialogResult.Yes)
+                    {
+                        _ = new ProgressDialog(() => Build.BuildIterative(OpenProject, CurrentConfig, Log, tracker),
+                            () => { }, tracker, "Loading Project");
+                    }
+
+                    _ = new ProgressDialog(() =>  OpenProject.LoadArchives(Log, tracker), () => { }, tracker, "Loading Project");
+                }
                 if (OpenProject is not null)
                 {
                     OpenProjectView(OpenProject, tracker);
-                } 
+                }
                 else
                 {
                     CloseProjectView();

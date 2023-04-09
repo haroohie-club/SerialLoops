@@ -84,12 +84,17 @@ namespace SerialLoops.Lib
             }
         }
         
-        public void Load(Config config, ILogger log, IProgressTracker tracker)
+        public bool Load(Config config, ILogger log, IProgressTracker tracker)
         {
             Config = config;
             LoadProjectSettings(log, tracker);
             ClearOrCreateCaches(config.CachesDirectory, log);
+            if (Directory.GetFiles(Path.Combine(IterativeDirectory, "assets"), "*", SearchOption.AllDirectories).Length > 0)
+            {
+                return false;
+            }
             LoadArchives(log, tracker);
+            return true;
         }
 
         public void LoadProjectSettings(ILogger log, IProgressTracker tracker)
@@ -262,28 +267,33 @@ namespace SerialLoops.Lib
             return Items.FirstOrDefault(i => i.Name == name.Split(" - ")[0]);
         }
 
-        public static Project OpenProject(string projFile, Config config, ILogger log, IProgressTracker tracker)
+        public static (Project Project, bool ArchivesLoaded) OpenProject(string projFile, Config config, ILogger log, IProgressTracker tracker)
         {
             log.Log($"Loading project from '{projFile}'...");
             if (!File.Exists(projFile))
             {
                 log.LogError($"Project file {projFile} not found -- has it been deleted?");
-                return null;
+                return (null, false);
             }
             try
             {
                 tracker.Focus($"{Path.GetFileNameWithoutExtension(projFile)} Project Data", 1);
                 Project project = JsonSerializer.Deserialize<Project>(File.ReadAllText(projFile));
                 tracker.Finished++;
-                project.Load(config, log, tracker);
-                return project;
+                if (!project.Load(config, log, tracker))
+                {
+                    log.LogWarning("Found looseleaf files in iterative directory; prompting user for build before loading archives...");
+                    return (project, false);
+                }
+                return (project, true);
             }
             catch (Exception exc)
             {
                 log.LogError($"Error while loading project: {exc.Message}\n\n{exc.StackTrace}");
-                return null;
+                return (null, false);
             }
         }
+
         public List<ItemDescription> GetSearchResults(string searchTerm, bool titlesOnly = true)
         {
             if (titlesOnly)
