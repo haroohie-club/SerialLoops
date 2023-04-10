@@ -16,7 +16,7 @@ parameters:
 - name: releaseNotes
   displayName: Release Notes
   type: string
-  default: 'Latest build from main. **Note that this is likely to have bugs and we recommend you use a regular release instead!**'
+  default: 'Latest nightly build. **Note that this is likely to have bugs and we recommend you use a regular release instead!**'
 
 
 variables:
