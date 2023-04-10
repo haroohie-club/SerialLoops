@@ -106,7 +106,7 @@ namespace SerialLoops.Lib
                 RememberProjectWorkspace = true,
                 RemoveMissingProjects = false,
                 CheckForUpdates = true,
-                PreReleaseChannel = true
+                PreReleaseChannel = false,
             };
         }
     }

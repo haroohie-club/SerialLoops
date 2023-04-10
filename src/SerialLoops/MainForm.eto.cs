@@ -649,7 +649,7 @@ namespace SerialLoops
         {
             if (ShutdownUpdateUrl is not null)
             {
-                string updaterExecutable = "LoopyUpdater.exe";
+                const string updaterExecutable = "LoopyUpdater.exe";
                 if (!File.Exists(updaterExecutable))
                 {
                     Log.LogError($"Could not start updater: Missing executable ({updaterExecutable})");

@@ -46,6 +46,9 @@ namespace SerialLoops.Dialogs
             Button updateOnCloseButton = new() { Text = "Update On Close" };
             updateOnCloseButton.Click += (s, e) => { PrepareUpdater(false); };
 
+            Button downloadButton = new() { Text = "Download From GitHub " };
+            downloadButton.Click += (s, e) => { Process.Start(_url); };
+
             Button skipButton = new() { Text = "Skip Update" };
             skipButton.Click += (sender, args) => Close();
 
@@ -69,8 +72,9 @@ namespace SerialLoops.Dialogs
                         VerticalContentAlignment = VerticalAlignment.Center,
                         Items =
                         {
-                            updateButton,
-                            updateOnCloseButton,
+                            //updateButton,
+                            //updateOnCloseButton,
+                            downloadButton,
                             skipButton,
                             checkForUpdates,
                             preReleaseChannel
