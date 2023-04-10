@@ -1,4 +1,5 @@
 ﻿using HaruhiChokuretsuLib.Archive.Data;
+using HaruhiChokuretsuLib.Util;
 
 namespace SerialLoops.Lib.Items
 {
@@ -11,7 +12,7 @@ namespace SerialLoops.Lib.Items
             DialogueConfig = messageInfo;
         }
 
-        public override void Refresh(Project project)
+        public override void Refresh(Project project, ILogger log)
         {
         }
     }

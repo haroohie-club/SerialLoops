@@ -1,5 +1,6 @@
 ﻿using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
+using HaruhiChokuretsuLib.Util;
 using QuikGraph;
 using QuikGraph.Algorithms.Observers;
 using QuikGraph.Algorithms.Search;
@@ -23,13 +24,13 @@ namespace SerialLoops.Lib.Script
         public int Index { get; set; }
         public Project Project { get; set; }
 
-        public static ScriptItemCommand FromInvocation(ScriptCommandInvocation invocation, ScriptSection section, int index, EventFile eventFile, Project project)
+        public static ScriptItemCommand FromInvocation(ScriptCommandInvocation invocation, ScriptSection section, int index, EventFile eventFile, Project project, ILogger log)
         {
             return new()
             {
                 Invocation = invocation,
                 Verb = (CommandVerb)Enum.Parse(typeof(CommandVerb), invocation.Command.Mnemonic),
-                Parameters = GetScriptParameters(invocation, eventFile, project),
+                Parameters = GetScriptParameters(invocation, section, eventFile, project, log),
                 Section = section,
                 Index = index,
                 Script = eventFile,
@@ -72,7 +73,7 @@ namespace SerialLoops.Lib.Script
             return commands;
         }
 
-        private static List<ScriptParameter> GetScriptParameters(ScriptCommandInvocation invocation, EventFile eventFile, Project project)
+        private static List<ScriptParameter> GetScriptParameters(ScriptCommandInvocation invocation, ScriptSection section, EventFile eventFile, Project project, ILogger log)
         {
             List<ScriptParameter> parameters = new();
             MessageInfoFile messageInfo = project.Dat.Files.First(f => f.Name == "MESSINFOS").CastTo<MessageInfoFile>();
@@ -329,10 +330,26 @@ namespace SerialLoops.Lib.Script
                                 parameter = eventFile.LabelsSection.Objects.FirstOrDefault(l => l.Id != 00)?.Id ?? 0;
                                 if (parameter == 0)
                                 {
-                                    throw new ArgumentException("Adding GOTO command failed: no section with a label exists");
+                                    log.LogError($"Adding GOTO command in section {section.Name} failed: no section with a label exists");
                                 }
                             }
-                            parameters.Add(new ScriptSectionScriptParameter("Script Section", eventFile.ScriptSections.First(s => s.Name == eventFile.LabelsSection.Objects.First(l => l.Id == parameter).Name.Replace("/", ""))));
+                            try
+                            {
+                                parameters.Add(new ScriptSectionScriptParameter("Script Section", eventFile.ScriptSections.First(s => s.Name == eventFile.LabelsSection.Objects.First(l => l.Id == parameter).Name.Replace("/", ""))));
+                            }
+                            catch (InvalidOperationException)
+                            {
+                                log.LogWarning($"Failed to evaluate script section for GOTO command in section {section.Name}: references a non-existent section. Resetting!");
+                                parameter = eventFile.LabelsSection.Objects.FirstOrDefault(l => l.Id != 00)?.Id ?? 0;
+                                if (parameter == 0)
+                                {
+                                    log.LogError($"Adding GOTO command in section {section.Name} failed: no section with a label exists!");
+                                }
+                                else
+                                {
+                                    parameters.Add(new ScriptSectionScriptParameter("Script Section", eventFile.ScriptSections.First(s => s.Name == eventFile.LabelsSection.Objects.First(l => l.Id == parameter).Name.Replace("/", ""))));
+                                }
+                            }
                         }
                         break;
                     case CommandVerb.SCENE_GOTO:
@@ -356,7 +373,31 @@ namespace SerialLoops.Lib.Script
                                 break;
                             // 1 is unused
                             case 2:
-                                parameters.Add(new ScriptSectionScriptParameter("Script Section", eventFile.ScriptSections.First(s => s.Name == eventFile.LabelsSection.Objects.First(l => l.Id == parameter).Name.Replace("/", ""))));
+                                if (parameter == 0)
+                                {
+                                    parameter = eventFile.LabelsSection.Objects.FirstOrDefault(l => l.Id != 00)?.Id ?? 0;
+                                    if (parameter == 0)
+                                    {
+                                        log.LogError($"Adding VGOTO command in section {section.Name} failed: no section with a label exists");
+                                    }
+                                }
+                                try
+                                {
+                                    parameters.Add(new ScriptSectionScriptParameter("Script Section", eventFile.ScriptSections.First(s => s.Name == eventFile.LabelsSection.Objects.First(l => l.Id == parameter).Name.Replace("/", ""))));
+                                }
+                                catch (InvalidOperationException)
+                                {
+                                    log.LogWarning($"Failed to evaluate script section for VGOTO command in section {section.Name}: references a non-existent section. Resetting!");
+                                    parameter = eventFile.LabelsSection.Objects.FirstOrDefault(l => l.Id != 00)?.Id ?? 0;
+                                    if (parameter == 0)
+                                    {
+                                        log.LogError($"Adding GOTO command in section {section.Name} failed: no section with a label exists!");
+                                    }
+                                    else
+                                    {
+                                        parameters.Add(new ScriptSectionScriptParameter("Script Section", eventFile.ScriptSections.First(s => s.Name == eventFile.LabelsSection.Objects.First(l => l.Id == parameter).Name.Replace("/", ""))));
+                                    }
+                                }
                                 break;
                         }
                         break;

@@ -14,7 +14,9 @@ using SerialLoops.Utility;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -35,6 +37,7 @@ namespace SerialLoops.Editors
         private Button _addCommandButton;
         private Button _addSectionButton;
         private Button _deleteButton;
+        private Button _clearButton;
         private CancellationTokenSource _dialogueCancellation;
         private System.Timers.Timer _dialogueRefreshTimer;
         private int _chibiHighlighted = -1;
@@ -49,7 +52,7 @@ namespace SerialLoops.Editors
         {
             _script = (ScriptItem)Description;
             PopulateScriptCommands();
-            _script.CalculateGraphEdges(_commands);
+            _script.CalculateGraphEdges(_commands, _log);
             _dialogueRefreshTimer = new(500) { AutoReset = false };
             _dialogueRefreshTimer.Elapsed += DialogueRefreshTimer_Elapsed;
             return GetCommandsContainer();
@@ -59,9 +62,9 @@ namespace SerialLoops.Editors
         {
             if (refresh)
             {
-                _script.Refresh(_project);
+                _script.Refresh(_project, _log);
             }
-            _commands = _script.GetScriptCommandTree(_project);
+            _commands = _script.GetScriptCommandTree(_project, _log);
         }
 
         private Container GetCommandsContainer()
@@ -267,10 +270,11 @@ namespace SerialLoops.Editors
                                 scriptSection,
                                 index == -1 ? 0 : index,
                                 _script.Event,
-                                _project
+                                _project,
+                                _log
                             );
 
-                            treeGridView.AddItem(new(new(command), scriptSection, command, false));
+                            treeGridView.AddItem(new(new(command), scriptSection, command, _script.Event, false));
                         }
                         catch (Exception ex)
                         {
@@ -328,7 +332,7 @@ namespace SerialLoops.Editors
 
                     dialog.Close();
                     ScriptCommandSectionEntry section = new($"NONE{labelBox.Text}", new List<ScriptCommandSectionEntry>(), _script.Event);
-                    treeGridView.AddSection(new(section, null, null, true));
+                    treeGridView.AddSection(new(section, null, null, _script.Event, true));
                     
                     _updateOptionDropDowns();
                 };
@@ -352,6 +356,17 @@ namespace SerialLoops.Editors
                 }
             };
 
+            _clearButton = new()
+            {
+                Image = ControlGenerator.GetIcon("Clear", _log),
+                ToolTip = "Clear Script",
+                Width = 22,
+            };
+            _clearButton.Click += (sender, args) =>
+            {
+                treeGridView.Clear();
+            };
+
             return new()
             {
                 Orientation = Orientation.Horizontal,
@@ -359,7 +374,7 @@ namespace SerialLoops.Editors
                 Width = _commandsPanel.Width,
                 Spacing = 5,
                 Padding = 5,
-                Items = { _addCommandButton, _addSectionButton, _deleteButton }
+                Items = { _addCommandButton, _addSectionButton, _deleteButton, _clearButton }
             };
         }
 
@@ -1432,14 +1447,18 @@ namespace SerialLoops.Editors
             SKCanvas canvas = new(previewBitmap);
             canvas.DrawColor(SKColors.Black);
 
-            ScriptItemCommand currentCommand = ((ScriptCommandSectionEntry)_commandsPanel.Viewer.SelectedItem).Command;
+            ScriptItemCommand currentCommand = ((ScriptCommandSectionEntry)_commandsPanel.Viewer.SelectedItem)?.Command;
             if (currentCommand is not null)
             {
                 List<ScriptItemCommand> commands = currentCommand.WalkCommandGraph(_commands, _script.Graph);
 
                 if (commands is null)
                 {
-                    _log.LogError($"No path found to current command.");
+                    _log.LogWarning($"No path found to current command.");
+                    using Stream noPreviewStream = Assembly.GetCallingAssembly().GetManifestResourceStream("SerialLoops.Graphics.ScriptPreviewError.png");
+                    canvas.DrawImage(SKImage.FromEncodedData(noPreviewStream), new SKPoint(0, 0));
+                    canvas.Flush();
+                    _preview.Items.Add(new SKGuiImage(previewBitmap));
                     return;
                 }
 

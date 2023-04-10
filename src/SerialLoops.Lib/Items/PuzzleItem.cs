@@ -1,5 +1,6 @@
 ﻿using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Graphics;
+using HaruhiChokuretsuLib.Util;
 using SkiaSharp;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,13 +12,13 @@ namespace SerialLoops.Lib.Items
         public PuzzleFile Puzzle { get; set; }
         public SKBitmap SingularityImage { get; set; }
 
-        public PuzzleItem(PuzzleFile puzzleFile, Project project) : base(puzzleFile.Name[0..^1], ItemType.Puzzle)
+        public PuzzleItem(PuzzleFile puzzleFile, Project project, ILogger log) : base(puzzleFile.Name[0..^1], ItemType.Puzzle)
         {
             Puzzle = puzzleFile;
-            Refresh(project);
+            Refresh(project, log);
         }
 
-        public override void Refresh(Project project)
+        public override void Refresh(Project project, ILogger log)
         {
             GraphicsFile singularityLayout = project.Grp.Files.First(f => f.Index == Puzzle.Settings.SingularityLayout);
             GraphicsFile singularityTexture = project.Grp.Files.First(f => f.Index == Puzzle.Settings.SingularityTexture);

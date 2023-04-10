@@ -153,8 +153,8 @@ namespace SerialLoops.Tests
         {
             var script = (ScriptItem)_project.FindItem(scriptName);
 
-            var commandTree = script.GetScriptCommandTree(_project);
-            script.CalculateGraphEdges(commandTree);
+            var commandTree = script.GetScriptCommandTree(_project, _log);
+            script.CalculateGraphEdges(commandTree, _log);
             Assert.That(script.Graph, Is.Not.Null);
             foreach (ScriptItemCommand command in commandTree.Values.SelectMany(c => c))
             {
