@@ -1,4 +1,5 @@
 ﻿using HaruhiChokuretsuLib.Archive.Event;
+using HaruhiChokuretsuLib.Util;
 
 namespace SerialLoops.Lib.Items
 {
@@ -11,10 +12,9 @@ namespace SerialLoops.Lib.Items
         {
             Selection = selection;
             Index = index;
-            Refresh(project);
         }
 
-        public override void Refresh(Project project)
+        public override void Refresh(Project project, ILogger log)
         {
         }
     }

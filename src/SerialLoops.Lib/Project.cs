@@ -302,7 +302,7 @@ namespace SerialLoops.Lib
             tracker.Focus("Puzzles", 1);
             Items.AddRange(Dat.Files
                 .Where(d => d.Name.StartsWith("SLG"))
-                .Select(d => new PuzzleItem(d.CastTo<PuzzleFile>(), this)));
+                .Select(d => new PuzzleItem(d.CastTo<PuzzleFile>(), this, log)));
             tracker.Finished++;
 
             tracker.Focus("Topics", 2);
@@ -315,7 +315,7 @@ namespace SerialLoops.Lib
             tracker.Focus("Scenario", 1);
             EventFile scenarioFile = Evt.Files.First(f => f.Name == "SCENARIOS");
             scenarioFile.InitializeScenarioFile();
-            Items.Add(new ScenarioItem(scenarioFile.Scenario, this));
+            Items.Add(new ScenarioItem(scenarioFile.Scenario, this, log));
             tracker.Finished++;
 
             tracker.Focus("Group Selections", scenarioFile.Scenario.Selects.Count);

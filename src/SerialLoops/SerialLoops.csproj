@@ -13,6 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Graphics\ScriptPreviewError.png" />
     <None Remove="Icons\Add.png" />
     <None Remove="Icons\Add_Section.png" />
     <None Remove="Icons\AppIcon.png" />
@@ -56,6 +57,12 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Icons\*.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Graphics\ScriptPreviewError.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>

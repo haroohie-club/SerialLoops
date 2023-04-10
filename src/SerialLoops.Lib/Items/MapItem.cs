@@ -2,6 +2,7 @@
 using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Archive.Graphics;
+using HaruhiChokuretsuLib.Util;
 using SkiaSharp;
 using System.Linq;
 
@@ -138,7 +139,7 @@ namespace SerialLoops.Lib.Items
             return icon;
         }
 
-        public override void Refresh(Project project)
+        public override void Refresh(Project project, ILogger log)
         {
             PopulateScriptUses(project.Evt);
         }

@@ -41,7 +41,7 @@ namespace SerialLoops.Lib.Items
             PopulateScriptUses(project.Evt);
         }
 
-        public override void Refresh(Project project)
+        public override void Refresh(Project project, ILogger log)
         {
             PopulateScriptUses(project.Evt);
         }
