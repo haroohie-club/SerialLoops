@@ -47,7 +47,7 @@ namespace SerialLoops.Dialogs
             updateOnCloseButton.Click += (s, e) => { PrepareUpdater(false); };
 
             Button downloadButton = new() { Text = "Download From GitHub " };
-            downloadButton.Click += (s, e) => { Process.Start(_url); };
+            downloadButton.Click += (s, e) => { Process.Start(new ProcessStartInfo(_url) { UseShellExecute = true }); };
 
             Button skipButton = new() { Text = "Skip Update" };
             skipButton.Click += (sender, args) => Close();
@@ -86,7 +86,7 @@ namespace SerialLoops.Dialogs
         private StackLayout GetUpdatePreview()
         {
             LinkButton urlLink = new() { Text = "Download release from GitHub" };
-            urlLink.Click += (sender, args) => { Process.Start(_url); };
+            urlLink.Click += (sender, args) => { Process.Start(new ProcessStartInfo(_url) { UseShellExecute = true }); };
 
             return new StackLayout
             {
