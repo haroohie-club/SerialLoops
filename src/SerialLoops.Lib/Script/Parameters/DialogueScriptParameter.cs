@@ -1,6 +1,4 @@
 ﻿using HaruhiChokuretsuLib.Archive.Event;
-using HaruhiChokuretsuLib.Archive.Event;
-using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Util;
 using SkiaSharp;
 

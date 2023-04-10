@@ -4,6 +4,7 @@ using HaruhiChokuretsuLib.Archive.Graphics;
 using SkiaSharp;
 using System.Linq;
 using HaruhiChokuretsuLib.Archive.Data;
+using HaruhiChokuretsuLib.Util;
 
 namespace SerialLoops.Lib.Items
 {
@@ -20,7 +21,7 @@ namespace SerialLoops.Lib.Items
             PopulateScriptUses(project.Evt);
         }
 
-        public override void Refresh(Project project)
+        public override void Refresh(Project project, ILogger log)
         {
             PopulateScriptUses(project.Evt);
         }

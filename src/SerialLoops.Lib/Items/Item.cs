@@ -1,4 +1,6 @@
-﻿namespace SerialLoops.Lib.Items
+﻿using HaruhiChokuretsuLib.Util;
+
+namespace SerialLoops.Lib.Items
 {
     public abstract class Item : ItemDescription
     {
@@ -7,7 +9,7 @@
         {
         }
 
-        public abstract void Refresh(Project project);
+        public abstract void Refresh(Project project, ILogger log);
     }
 
     public class NoneItem : Item
@@ -18,7 +20,7 @@
         {
         }
 
-        public override void Refresh(Project project)
+        public override void Refresh(Project project, ILogger log)
         {
         }
     }

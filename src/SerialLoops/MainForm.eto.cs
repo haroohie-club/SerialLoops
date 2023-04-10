@@ -139,11 +139,14 @@ namespace SerialLoops
             Command projectSettings = new() { MenuText = "Project Settings...", ToolBarText = "Project Settings", Image = ControlGenerator.GetIcon("Project_Options", Log) };
             projectSettings.Executed += ProjectSettings_Executed;
 
-            Command closeProject = new() { MenuText = "Close Project", ToolBarText = "Close Project", Image = ControlGenerator.GetIcon("Close", Log) };
-            closeProject.Executed += (sender, args) => CloseProjectView();
+            Command migrateProject = new() { MenuText = "Migrate to new ROM", ToolBarText = "Migrate Project" };
+            migrateProject.Executed += MigrateProject_Executed;
 
             Command exportPatch = new() { MenuText = "Export Patch", ToolBarText = "Export Patch" };
             exportPatch.Executed += Patch_Executed;
+
+            Command closeProject = new() { MenuText = "Close Project", ToolBarText = "Close Project", Image = ControlGenerator.GetIcon("Close", Log) };
+            closeProject.Executed += (sender, args) => CloseProjectView();
 
             // Tools
             Command searchProject = new() { MenuText = "Search...", ToolBarText = "Search", Shortcut = Application.Instance.CommonModifier | Keys.F, Image = ControlGenerator.GetIcon("Search", Log) };
@@ -179,8 +182,9 @@ namespace SerialLoops
             {
                 fileMenu.Items.Add(saveProject);
                 fileMenu.Items.Add(projectSettings);
-                fileMenu.Items.Add(closeProject);
+                fileMenu.Items.Add(migrateProject);
                 fileMenu.Items.Add(exportPatch);
+                fileMenu.Items.Add(closeProject);
             }
 
             Menu.Items.Add(new SubMenuItem { Text = "&Tools", Items = { searchProject, findOrphanedItems } });
@@ -312,13 +316,65 @@ namespace SerialLoops
 
         public void OpenProjectFromPath(string path)
         {
+            Project.LoadProjectResult result = new(Project.LoadProjectState.FAILED); // start us off with a failure
             LoopyProgressTracker tracker = new();
-            _ = new ProgressDialog(() => OpenProject = Project.OpenProject(path, CurrentConfig, Log, tracker), () => 
+            _ = new ProgressDialog(() => (OpenProject, result) = Project.OpenProject(path, CurrentConfig, Log, tracker), () =>
             {
+                if (OpenProject is not null && result.State == Project.LoadProjectState.LOOSELEAF_FILES)
+                {
+                    if (MessageBox.Show("Saved but unbuilt files were detected in the project directory. " +
+                        "Would you like to build before loading the project? " +
+                        "Not building could result in these files being overwritten.",
+                        "Build Unbuilt Files?",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxType.Question,
+                        MessageBoxDefaultButton.Yes) == DialogResult.Yes)
+                    {
+                        _ = new ProgressDialog(() => Build.BuildIterative(OpenProject, CurrentConfig, Log, tracker),
+                            () => { }, tracker, "Loading Project");
+                    }
+
+                    _ = new ProgressDialog(() => OpenProject.LoadArchives(Log, tracker), () => { }, tracker, "Loading Project");
+                }
+                else if (result.State == Project.LoadProjectState.CORRUPTED_FILE)
+                {
+                    if (MessageBox.Show($"While attempting to build,  file #{result.BadFileIndex:X3} in archive {result.BadArchive} was " +
+                        $"found to be corrupt. Serial Loops can delete this file from your base directory automatically which may allow you to load the rest of the " +
+                        $"project, but any changes made to that file will be lost. Alternatively, you can attempt to edit the file manually to fix it. How would " +
+                        $"you like to proceed? Press OK to proceed with deleting the file and Cancel to attempt to deal with it manually.", 
+                        "Corrupted File Detected!",
+                        MessageBoxButtons.OKCancel,
+                        MessageBoxType.Warning,
+                        MessageBoxDefaultButton.Cancel) == DialogResult.Ok)
+                    {
+                        switch (result.BadArchive)
+                        {
+                            case "dat.bin":
+                                File.Delete(Path.Combine(OpenProject.BaseDirectory, "assets", "data", $"{result.BadFileIndex:X3}.s"));
+                                break;
+
+                            case "grp.bin":
+                                File.Delete(Path.Combine(OpenProject.BaseDirectory, "assets", "graphics", $"{result.BadFileIndex:X3}.png"));
+                                File.Delete(Path.Combine(OpenProject.BaseDirectory, "assets", "graphics", $"{result.BadFileIndex:X3}_pal.csv"));
+                                break;
+
+                            case "evt.bin":
+                                File.Delete(Path.Combine(OpenProject.BaseDirectory, "assets", "events", $"{result.BadFileIndex:X3}.s"));
+                                break;
+                        }
+                        OpenProjectFromPath(path);
+                        return;
+                    }
+                    else
+                    {
+                        OpenProject = null;
+                    }
+                }
+
                 if (OpenProject is not null)
                 {
                     OpenProjectView(OpenProject, tracker);
-                } 
+                }
                 else
                 {
                     CloseProjectView();
@@ -509,6 +565,24 @@ namespace SerialLoops
                         Log.LogError("Build failed!");
                     }
                 }, tracker, "Building and Running");
+            }
+        }
+
+        private void MigrateProject_Executed(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new() { Title = "New Base ROM" };
+            openFileDialog.Filters.Add(new("Chokuretsu ROM", ".nds"));
+
+            if (openFileDialog.ShowAndReportIfFileSelected(this))
+            {
+                LoopyProgressTracker tracker = new();
+                _ = new ProgressDialog(() =>
+                {
+                    OpenProject.MigrateProject(openFileDialog.FileName, Log, tracker);
+                    OpenProject.Load(CurrentConfig, Log, tracker);
+                },
+                () => MessageBox.Show("Migrated to new ROM!", "Migration Complete!", MessageBoxType.Information),
+                tracker, "Migrating to new ROM");
             }
         }
 
