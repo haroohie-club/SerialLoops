@@ -1,12 +1,30 @@
-trigger:
-- main
-- release/*
-pr:
-- none
+trigger: none
+pr: none
+
+schedules:
+- cron: "0 0 * * *"
+  displayName: Nightly build
+  branches:
+    include:
+    - main
+
+parameters:
+- name: version
+  displayName: Release Version
+  type: string
+  default: ''
+- name: releaseNotes
+  displayName: Release Notes
+  type: string
+  default: 'Latest nightly build. **Note that this is likely to have bugs and we recommend you use a regular release instead!**'
+
 
 variables:
   - name: Version
-    value: 0.1-pre$(Build.BuildNumber)
+    ${{ if ne(parameters['version'], '') }}:
+      value: ${{ parameters.version }}
+    ${{ if eq(parameters['version'], '') }}:
+      value: 0.1-pre$(Build.BuildNumber)
 
 stages:
 - stage: Build
@@ -117,7 +135,6 @@ stages:
     pool:
       vmImage: ubuntu-latest
     displayName: Create Pre-Release
-    dependsOn: 
     steps:
     - task: DownloadBuildArtifacts@0
       displayName: Download Linux artifacts
@@ -170,7 +187,7 @@ stages:
         title: 'Serial Loops v$(Version)'
         releaseNotesSource: inline
         releaseNotesInline: |
-          Latest build from main. Note that this is likely to have bugs and we recommend you use a regular release instead!
+          ${{ parameters.releaseNotes }}
 
           ## Installation Notes
           On macOS, after dragging the app from the dmg into Applications, please run `xattr -cr /Applications/SerialLoops.Mac.app` from the Terminal in order to be able to run the app.
@@ -185,4 +202,7 @@ stages:
           ### Which macOS dmg should I choose?
           If your Mac is newer, you will probably want the ARM dmg. If it is older, you will want the x64 one. If unsure, download the ARM one first and attempt to run it &ndash; it will throw
           an error saying it can't be run on this computer if your computer is not able to run it. If that's the case, download the x64 one instead.
-        isPreRelease: true
+        ${{ if eq(parameters['version'], '') }}:
+          isPreRelease: true
+        ${{ if ne(parameters['version'], '') }}:
+          isPreRelease: false
