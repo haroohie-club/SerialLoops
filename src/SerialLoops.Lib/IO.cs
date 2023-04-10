@@ -140,7 +140,7 @@ namespace SerialLoops.Lib
         {
             foreach (string file in Directory.GetFiles(sourceDirectory, filter))
             {
-                File.Copy(file, Path.Combine(destinationDirectory, Path.GetFileName(file)));
+                File.Copy(file, Path.Combine(destinationDirectory, Path.GetFileName(file)), overwrite: true);
             }
         }
 

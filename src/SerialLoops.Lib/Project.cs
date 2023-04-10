@@ -5,6 +5,7 @@ using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Archive.Graphics;
 using HaruhiChokuretsuLib.Font;
 using HaruhiChokuretsuLib.Util;
+using HaruhiChokuretsuLib.Util.Exceptions;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Util;
 using SkiaSharp;
@@ -83,13 +84,46 @@ namespace SerialLoops.Lib
                 log.LogError($"Exception occurred while attempting to create project directories.\n{exc.Message}\n\n{exc.StackTrace}");
             }
         }
+
+        public enum LoadProjectState
+        {
+            SUCCESS,
+            LOOSELEAF_FILES,
+            CORRUPTED_FILE,
+            NOT_FOUND,
+            FAILED,
+        }
+
+        public struct LoadProjectResult
+        {
+            public LoadProjectState State { get; set; }
+            public string BadArchive { get; set; }
+            public int BadFileIndex { get; set; }
+
+            public LoadProjectResult(LoadProjectState state, string badArchive, int badFileIndex)
+            {
+                State = state;
+                BadArchive = badArchive;
+                BadFileIndex = badFileIndex;
+            }
+            public LoadProjectResult(LoadProjectState state)
+            {
+                State = state;
+                BadArchive = string.Empty;
+                BadFileIndex = -1;
+            }
+        }
         
-        public void Load(Config config, ILogger log, IProgressTracker tracker)
+        public LoadProjectResult Load(Config config, ILogger log, IProgressTracker tracker)
         {
             Config = config;
             LoadProjectSettings(log, tracker);
             ClearOrCreateCaches(config.CachesDirectory, log);
-            LoadArchives(log, tracker);
+            if (Directory.GetFiles(Path.Combine(IterativeDirectory, "assets"), "*", SearchOption.AllDirectories).Length > 0)
+            {
+                return new(LoadProjectState.LOOSELEAF_FILES);
+            }
+            return LoadArchives(log, tracker);
         }
 
         public void LoadProjectSettings(ILogger log, IProgressTracker tracker)
@@ -100,18 +134,72 @@ namespace SerialLoops.Lib
             tracker.Finished++;
         }
         
-        public void LoadArchives(ILogger log, IProgressTracker tracker)
+        public LoadProjectResult LoadArchives(ILogger log, IProgressTracker tracker)
         {
             tracker.Focus("dat.bin", 3);
-            Dat = ArchiveFile<DataFile>.FromFile(Path.Combine(IterativeDirectory, "original", "archives", "dat.bin"), log);
+            try
+            {
+                Dat = ArchiveFile<DataFile>.FromFile(Path.Combine(IterativeDirectory, "original", "archives", "dat.bin"), log, false);
+            }
+            catch (ArchiveLoadException ex)
+            {
+                if (Directory.GetFiles(Path.Combine(BaseDirectory, "assets", "data")).Any(f => Path.GetFileNameWithoutExtension(f) == $"{ex.Index:X3}"))
+                {
+                    log.LogError($"File {ex.Index:4} (0x{ex.Index:X3}) '{ex.Filename}' in dat.bin was detected as corrupt.");
+                    return new(LoadProjectState.CORRUPTED_FILE, "dat.bin", ex.Index);
+                }
+                else
+                {
+                    // If it's not a file they've modified, then they're using a bad base ROM
+                    log.LogError($"File {ex.Index:4} (0x{ex.Index:X3}) '{ex.Filename}' in dat.bin was detected as corrupt. " +
+                        $"Please use a different base ROM as this one is corrupted.");
+                    return new(LoadProjectState.CORRUPTED_FILE, "dat.bin", -1);
+                }
+            }
             tracker.Finished++;
 
             tracker.CurrentlyLoading = "grp.bin";
-            Grp = ArchiveFile<GraphicsFile>.FromFile(Path.Combine(IterativeDirectory, "original", "archives", "grp.bin"), log);
+            try
+            {
+                Grp = ArchiveFile<GraphicsFile>.FromFile(Path.Combine(IterativeDirectory, "original", "archives", "grp.bin"), log);
+            }
+            catch (ArchiveLoadException ex)
+            {
+                if (Directory.GetFiles(Path.Combine(BaseDirectory, "assets", "graphics")).Any(f => Path.GetFileNameWithoutExtension(f) == $"{ex.Index:X3}"))
+                {
+                    log.LogError($"File {ex.Index:4} (0x{ex.Index:X3}) '{ex.Filename}' in grp.bin was detected as corrupt.");
+                    return new(LoadProjectState.CORRUPTED_FILE, "grp.bin", ex.Index);
+                }
+                else
+                {
+                    // If it's not a file they've modified, then they're using a bad base ROM
+                    log.LogError($"File {ex.Index:4} (0x{ex.Index:X3}) '{ex.Filename}' in grp.bin was detected as corrupt. " +
+                        $"Please use a different base ROM as this one is corrupted.");
+                    return new(LoadProjectState.CORRUPTED_FILE, "grp.bin", -1);
+                }
+            }
             tracker.Finished++;
 
             tracker.CurrentlyLoading = "evt.bin";
-            Evt = ArchiveFile<EventFile>.FromFile(Path.Combine(IterativeDirectory, "original", "archives", "evt.bin"), log);
+            try
+            {
+                Evt = ArchiveFile<EventFile>.FromFile(Path.Combine(IterativeDirectory, "original", "archives", "evt.bin"), log);
+            }
+            catch (ArchiveLoadException ex)
+            {
+                if (Directory.GetFiles(Path.Combine(BaseDirectory, "assets", "events")).Any(f => Path.GetFileNameWithoutExtension(f) == $"{ex.Index:X3}"))
+                {
+                    log.LogError($"File {ex.Index:4} (0x{ex.Index:X3}) '{ex.Filename}' in evt.bin was detected as corrupt.");
+                    return new(LoadProjectState.CORRUPTED_FILE, "evt.bin", ex.Index);
+                }
+                else
+                {
+                    // If it's not a file they've modified, then they're using a bad base ROM
+                    log.LogError($"File {ex.Index:4} (0x{ex.Index:X3}) '{ex.Filename}' in evt.bin was detected as corrupt. " +
+                        $"Please use a different base ROM as this one is corrupted.");
+                    return new(LoadProjectState.CORRUPTED_FILE, "evt.bin", -1);
+                }
+            }
             tracker.Finished++;
 
             tracker.Focus("Font", 5);
@@ -192,7 +280,7 @@ namespace SerialLoops.Lib
             tracker.Focus("Event Files", 1);
             Items.AddRange(Evt.Files
                 .Where(e => !new string[] { "CHESSS", "EVTTBLS", "TOPICS", "SCENARIOS", "TUTORIALS", "VOICEMAPS" }.Contains(e.Name))
-                .Select(e => new ScriptItem(e)));
+                .Select(e => new ScriptItem(e, log)));
             tracker.Finished++;
 
             tracker.Focus("Maps", 1);
@@ -236,6 +324,23 @@ namespace SerialLoops.Lib
                 Items.Add(new GroupSelectionItem(scenarioFile.Scenario.Selects[i], i, this));
                 tracker.Finished++;
             }
+
+            return new(LoadProjectState.SUCCESS);
+        }
+
+        public void MigrateProject(string newRom, ILogger log, IProgressTracker tracker)
+        {
+            log.Log($"Attempting to migrate base ROM to {newRom}");
+
+            string tempDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+            NdsProjectFile.Create("temp", newRom, tempDir);
+            IO.CopyFiles(Path.Combine(tempDir, "data"), Path.Combine(BaseDirectory, "original", "archives"), "*.bin");
+            IO.CopyFiles(Path.Combine(tempDir, "data", "bgm"), Path.Combine(BaseDirectory, "original", "bgm"), "*.bin");
+            IO.CopyFiles(Path.Combine(tempDir, "data", "vce"), Path.Combine(BaseDirectory, "original", "vce"), "*.bin");
+            IO.CopyFiles(Path.Combine(tempDir, "overlay"), Path.Combine(BaseDirectory, "original", "overlay"), "*.bin");
+            IO.CopyFiles(Path.Combine(tempDir, "data", "movie"), Path.Combine(BaseDirectory, "rom", "data", "movie"), "*.mods");
+
+            Directory.Delete(tempDir, true);
         }
 
         public static void ClearOrCreateCaches(string cachesDirectory, ILogger log)
@@ -262,28 +367,37 @@ namespace SerialLoops.Lib
             return Items.FirstOrDefault(i => i.Name == name.Split(" - ")[0]);
         }
 
-        public static Project OpenProject(string projFile, Config config, ILogger log, IProgressTracker tracker)
+        public static (Project Project, LoadProjectResult Result) OpenProject(string projFile, Config config, ILogger log, IProgressTracker tracker)
         {
             log.Log($"Loading project from '{projFile}'...");
             if (!File.Exists(projFile))
             {
                 log.LogError($"Project file {projFile} not found -- has it been deleted?");
-                return null;
+                return (null, new(LoadProjectState.NOT_FOUND));
             }
             try
             {
                 tracker.Focus($"{Path.GetFileNameWithoutExtension(projFile)} Project Data", 1);
                 Project project = JsonSerializer.Deserialize<Project>(File.ReadAllText(projFile));
                 tracker.Finished++;
-                project.Load(config, log, tracker);
-                return project;
+                LoadProjectResult result = project.Load(config, log, tracker);
+                if (result.State == LoadProjectState.LOOSELEAF_FILES)
+                {
+                    log.LogWarning("Found looseleaf files in iterative directory; prompting user for build before loading archives...");
+                }
+                else if (result.State == LoadProjectState.CORRUPTED_FILE)
+                {
+                    log.LogWarning("Found corrupted file in archive; prompting user for action before continuing...");
+                }
+                return (project, result);
             }
             catch (Exception exc)
             {
                 log.LogError($"Error while loading project: {exc.Message}\n\n{exc.StackTrace}");
-                return null;
+                return (null, new(LoadProjectState.FAILED));
             }
         }
+
         public List<ItemDescription> GetSearchResults(string searchTerm, bool titlesOnly = true)
         {
             if (titlesOnly)
