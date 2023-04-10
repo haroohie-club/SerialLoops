@@ -1,8 +1,12 @@
-trigger:
-- main
-- release/*
-pr:
-- none
+trigger: none
+pr: none
+
+schedules:
+- cron: "0 0 * * *"
+  displayName: Nightly build
+  branches:
+    include:
+    - main
 
 parameters:
 - name: version
@@ -12,7 +16,7 @@ parameters:
 - name: releaseNotes
   displayName: Release Notes
   type: string
-  default: 'Latest build from main. Note that this is likely to have bugs and we recommend you use a regular release instead!'
+  default: 'Latest build from main. **Note that this is likely to have bugs and we recommend you use a regular release instead!**'
 
 
 variables:
@@ -198,4 +202,7 @@ stages:
           ### Which macOS dmg should I choose?
           If your Mac is newer, you will probably want the ARM dmg. If it is older, you will want the x64 one. If unsure, download the ARM one first and attempt to run it &ndash; it will throw
           an error saying it can't be run on this computer if your computer is not able to run it. If that's the case, download the x64 one instead.
-        isPreRelease: true
+        ${{ if eq(parameters['version'], '') }}:
+          isPreRelease: true
+        ${{ if ne(parameters['version'], '') }}:
+          isPreRelease: false
