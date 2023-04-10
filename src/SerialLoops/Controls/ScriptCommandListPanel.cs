@@ -90,28 +90,27 @@ namespace SerialLoops.Controls
             Viewer.DeleteCommand += (o, e) =>
             {
                 var treeGridView = (ScriptCommandSectionTreeGridView)o;
-                var entry = (ScriptCommandSectionEntry)treeGridView.SelectedItem;
                 
-                if (entry.Text.StartsWith("NONE") || entry.Text.StartsWith("SCRIPT"))
+                if (e.Item.Text.StartsWith("NONE") || e.Item.Text.StartsWith("SCRIPT"))
                 {
-                    entry.ScriptFile.ScriptSections.Remove(entry.ScriptFile.ScriptSections.First(s => s.Name.Replace("/", "") == entry.Text));
-                    LabelsSectionEntry label = entry.ScriptFile.LabelsSection.Objects.FirstOrDefault(l => l.Name.Replace("/", "") == entry.Text);
+                    e.Item.Script.ScriptSections.Remove(e.Item.Script.ScriptSections.First(s => s.Name.Replace("/", "") == e.Item.Text));
+                    LabelsSectionEntry label = e.Item.Script.LabelsSection.Objects.FirstOrDefault(l => l.Name.Replace("/", "") == e.Item.Text);
                     if (label is not null)
                     {
-                        entry.ScriptFile.LabelsSection.Objects.Remove(label);
+                        e.Item.Script.LabelsSection.Objects.Remove(label);
                     }
-                    entry.ScriptFile.NumSections--;
+                    e.Item.Script.NumSections--;
                 }
                 else
                 {
-                    ScriptCommandInvocation command = entry.Command.Script.ScriptSections[entry.Command.Script.ScriptSections.IndexOf(entry.Command.Section)]
-                        .Objects[entry.Command.Index];
-                    for (int i = entry.Command.Section.Objects.IndexOf(command); i < entry.Command.Section.Objects.Count; i++)
+                    ScriptCommandInvocation command = e.Item.Command.Script.ScriptSections[e.Item.Command.Script.ScriptSections.IndexOf(e.Item.Command.Section)]
+                        .Objects[e.Item.Command.Index];
+                    for (int i = e.Item.Command.Section.Objects.IndexOf(command); i < e.Item.Command.Section.Objects.Count; i++)
                     {
-                        _commands[entry.Command.Section][i].Index--;
+                        _commands[e.Item.Command.Section][i].Index--;
                     }
-                    entry.Command.Section.Objects.Remove(command);
-                    _commands[entry.Command.Section].Remove(entry.Command);
+                    e.Item.Command.Section.Objects.Remove(command);
+                    _commands[e.Item.Command.Section].Remove(e.Item.Command);
                 }
                 ((ScriptEditor)_editor).PopulateScriptCommands(true);
                 _editor.UpdateTabTitle(false);

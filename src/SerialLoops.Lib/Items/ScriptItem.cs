@@ -39,7 +39,7 @@ namespace SerialLoops.Lib.Items
             }
         }
 
-        public Dictionary<ScriptSection, List<ScriptItemCommand>> GetScriptCommandTree(Project project)
+        public Dictionary<ScriptSection, List<ScriptItemCommand>> GetScriptCommandTree(Project project, ILogger log)
         {
             Dictionary<ScriptSection, List<ScriptItemCommand>> commands = new();
             foreach (ScriptSection section in Event.ScriptSections)
@@ -47,13 +47,13 @@ namespace SerialLoops.Lib.Items
                 commands.Add(section, new());
                 foreach (ScriptCommandInvocation command in section.Objects)
                 {
-                    commands[section].Add(ScriptItemCommand.FromInvocation(command, section, commands[section].Count, Event, project));
+                    commands[section].Add(ScriptItemCommand.FromInvocation(command, section, commands[section].Count, Event, project, log));
                 }
             }
             return commands;
         }
 
-        public void CalculateGraphEdges(Dictionary<ScriptSection, List<ScriptItemCommand>> commandTree)
+        public void CalculateGraphEdges(Dictionary<ScriptSection, List<ScriptItemCommand>> commandTree, ILogger log)
         {
             foreach (ScriptSection section in commandTree.Keys)
             {
@@ -75,12 +75,26 @@ namespace SerialLoops.Lib.Items
                     }
                     else if (command.Verb == CommandVerb.GOTO)
                     {
-                        Graph.AddEdge(new() { Source = section, Target = ((ScriptSectionScriptParameter)command.Parameters[0]).Section });
+                        try
+                        {
+                            Graph.AddEdge(new() { Source = section, Target = ((ScriptSectionScriptParameter)command.Parameters[0]).Section });
+                        }
+                        catch (ArgumentOutOfRangeException)
+                        {
+                            log.LogWarning("Failed to add graph edge for GOTO command as script section parameter was out of range.");
+                        }
                         @continue = true;
                     }
                     else if (command.Verb == CommandVerb.VGOTO)
                     {
-                        Graph.AddEdge(new() { Source = section, Target = ((ScriptSectionScriptParameter)command.Parameters[1]).Section });
+                        try
+                        {
+                            Graph.AddEdge(new() { Source = section, Target = ((ScriptSectionScriptParameter)command.Parameters[1]).Section });
+                        }
+                        catch (ArgumentOutOfRangeException)
+                        {
+                            log.LogWarning("Failed to add graph edge for VGOTO command as script section parameter was out of range.");
+                        }
                     }
                     else if (command.Verb == CommandVerb.CHESS_VGOTO)
                     {
@@ -125,11 +139,11 @@ namespace SerialLoops.Lib.Items
             }
         }
 
-        public override void Refresh(Project project)
+        public override void Refresh(Project project, ILogger log)
         {
             Graph = new();
             Graph.AddVertexRange(Event.ScriptSections);
-            CalculateGraphEdges(GetScriptCommandTree(project));
+            CalculateGraphEdges(GetScriptCommandTree(project, log), log);
         }
     }
 }

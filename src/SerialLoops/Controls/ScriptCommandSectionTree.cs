@@ -62,19 +62,21 @@ namespace SerialLoops.Controls
         public bool Expandable => Count > 0;
         public ITreeGridItem Parent { get; set; }
 
+        public EventFile Script { get; set; }
         public ScriptSection ScriptSection { get; set; }
         public ScriptItemCommand Command { get; set; }
 
-        public ScriptCommandSectionTreeItem(ScriptCommandSectionEntry section, ScriptSection scriptSection, ScriptItemCommand command, bool expanded)
+        public ScriptCommandSectionTreeItem(ScriptCommandSectionEntry section, ScriptSection scriptSection, ScriptItemCommand command, EventFile script, bool expanded)
         {
             Section = section;
             Expanded = expanded;
+            Script = script;
             ScriptSection = scriptSection;
             Command = command;
             
-            foreach (var child in section)
+            foreach (ScriptCommandSectionEntry child in section)
             {
-                ScriptCommandSectionTreeItem temp = new(child, child.Section, child.Command, expanded) { Parent = this };
+                ScriptCommandSectionTreeItem temp = new(child, child.Section, child.Command, child.ScriptFile, expanded) { Parent = this };
                 Add(temp); // recursive
             }
         }
@@ -89,7 +91,7 @@ namespace SerialLoops.Controls
                     Objects = ScriptSection.Objects.ToList(),
                     SectionType = ScriptSection.SectionType,
                     ObjectType = ScriptSection.ObjectType,
-                }, Command?.Clone(), Expanded);
+                }, Command?.Clone(), Script, Expanded);
         }
     }
 
@@ -104,7 +106,7 @@ namespace SerialLoops.Controls
         private TreeGridView _treeView;
         private ScriptCommandSectionTreeItem _cursorItem;
         public event EventHandler RepositionCommand;
-        public event EventHandler DeleteCommand;
+        public event EventHandler<DeleteItemEventArgs> DeleteCommand;
         public event EventHandler<CommandEventArgs> AddCommand;
         public override Control Control => _treeView;
 
@@ -234,8 +236,12 @@ namespace SerialLoops.Controls
         internal void DeleteItem(ScriptCommandSectionTreeItem item)
         {
             if (item.Parent is not ScriptCommandSectionTreeItem parent) return;
+            if (item.Text == "SCRIPT00")
+            {
+                return;
+            }
             int newIndex = parent.IndexOf(item);
-            DeleteCommand?.Invoke(this, EventArgs.Empty);
+            DeleteCommand?.Invoke(this, new(item));
             parent.Remove(item);
             _treeView.DataStore = _treeView.DataStore;
             if (newIndex >= parent.Count)
@@ -308,9 +314,24 @@ namespace SerialLoops.Controls
             }
         }
 
+        internal void Clear()
+        {
+            ScriptCommandSectionTreeItem rootNode = (ScriptCommandSectionTreeItem)_treeView.DataStore;
+            if (rootNode is null) return;
+
+            while (rootNode[0].Count > 0)
+            {
+                DeleteItem(rootNode[0][0]);
+            }
+            while (rootNode.Count > 1)
+            {
+                DeleteItem(rootNode[1]);
+            }
+        }
+
         public void SetContents(IEnumerable<ScriptCommandSectionEntry> topNodes, bool expanded)
         {
-            _treeView.DataStore = new ScriptCommandSectionTreeItem(new ScriptCommandSectionEntry("Top", topNodes, null), null, null, expanded);
+            _treeView.DataStore = new ScriptCommandSectionTreeItem(new ScriptCommandSectionEntry("Top", topNodes, null), null, null, null, expanded);
         }
 
         public ScriptCommandSectionEntry FindSection(string text)
@@ -332,6 +353,16 @@ namespace SerialLoops.Controls
         public CommandEventArgs(string sectionTitle)
         {
             SectionTitle = sectionTitle;
+        }
+    }
+
+    public class DeleteItemEventArgs : EventArgs
+    {
+        public ScriptCommandSectionTreeItem Item { get; set; }
+
+        public DeleteItemEventArgs(ScriptCommandSectionTreeItem item)
+        {
+            Item = item;
         }
     }
 }
