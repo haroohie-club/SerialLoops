@@ -326,8 +326,8 @@ namespace SerialLoops
                 else if (result.State == Project.LoadProjectState.CORRUPTED_FILE)
                 {
                     if (MessageBox.Show($"While attempting to build,  file #{result.BadFileIndex:X3} in archive {result.BadArchive} was " +
-                        $"found to be corrupted. We can delete this file from your base directory automatically which may allow you to load the rest of the " +
-                        $"project, but will erase all changes to that file. Alternatively, you can attempt to edit the file manually to fix it. How would " +
+                        $"found to be corrupt. Serial Loops can delete this file from your base directory automatically which may allow you to load the rest of the " +
+                        $"project, but any changes made to that file will be lost. Alternatively, you can attempt to edit the file manually to fix it. How would " +
                         $"you like to proceed? Press OK to proceed with deleting the file and Cancel to attempt to deal with it manually.", 
                         "Corrupted File Detected!",
                         MessageBoxButtons.OKCancel,

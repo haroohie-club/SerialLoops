@@ -110,7 +110,7 @@ namespace SerialLoops.Lib
             {
                 State = state;
                 BadArchive = string.Empty;
-                BadFileIndex= -1;
+                BadFileIndex = -1;
             }
         }
         
@@ -145,13 +145,13 @@ namespace SerialLoops.Lib
             {
                 if (Directory.GetFiles(Path.Combine(BaseDirectory, "assets", "data")).Any(f => Path.GetFileNameWithoutExtension(f) == $"{ex.Index:X3}"))
                 {
-                    log.LogError($"File {ex.Index:4} (0x{ex.Index:X3}) '{ex.Filename}' in dat.bin was detected to be corrupted.");
+                    log.LogError($"File {ex.Index:4} (0x{ex.Index:X3}) '{ex.Filename}' in dat.bin was detected as corrupt.");
                     return new(LoadProjectState.CORRUPTED_FILE, "dat.bin", ex.Index);
                 }
                 else
                 {
                     // If it's not a file they've modified, then they're using a bad base ROM
-                    log.LogError($"File {ex.Index:4} (0x{ex.Index:X3}) '{ex.Filename}' in dat.bin was detected to be corrupted. " +
+                    log.LogError($"File {ex.Index:4} (0x{ex.Index:X3}) '{ex.Filename}' in dat.bin was detected as corrupt. " +
                         $"Please use a different base ROM as this one is corrupted.");
                     return new(LoadProjectState.CORRUPTED_FILE, "dat.bin", -1);
                 }
@@ -167,13 +167,13 @@ namespace SerialLoops.Lib
             {
                 if (Directory.GetFiles(Path.Combine(BaseDirectory, "assets", "graphics")).Any(f => Path.GetFileNameWithoutExtension(f) == $"{ex.Index:X3}"))
                 {
-                    log.LogError($"File {ex.Index:4} (0x{ex.Index:X3}) '{ex.Filename}' in grp.bin was detected to be corrupted.");
+                    log.LogError($"File {ex.Index:4} (0x{ex.Index:X3}) '{ex.Filename}' in grp.bin was detected as corrupt.");
                     return new(LoadProjectState.CORRUPTED_FILE, "grp.bin", ex.Index);
                 }
                 else
                 {
                     // If it's not a file they've modified, then they're using a bad base ROM
-                    log.LogError($"File {ex.Index:4} (0x{ex.Index:X3}) '{ex.Filename}' in grp.bin was detected to be corrupted. " +
+                    log.LogError($"File {ex.Index:4} (0x{ex.Index:X3}) '{ex.Filename}' in grp.bin was detected as corrupt. " +
                         $"Please use a different base ROM as this one is corrupted.");
                     return new(LoadProjectState.CORRUPTED_FILE, "grp.bin", -1);
                 }
@@ -189,13 +189,13 @@ namespace SerialLoops.Lib
             {
                 if (Directory.GetFiles(Path.Combine(BaseDirectory, "assets", "events")).Any(f => Path.GetFileNameWithoutExtension(f) == $"{ex.Index:X3}"))
                 {
-                    log.LogError($"File {ex.Index:4} (0x{ex.Index:X3}) '{ex.Filename}' in evt.bin was detected to be corrupted.");
+                    log.LogError($"File {ex.Index:4} (0x{ex.Index:X3}) '{ex.Filename}' in evt.bin was detected as corrupt.");
                     return new(LoadProjectState.CORRUPTED_FILE, "evt.bin", ex.Index);
                 }
                 else
                 {
                     // If it's not a file they've modified, then they're using a bad base ROM
-                    log.LogError($"File {ex.Index:4} (0x{ex.Index:X3}) '{ex.Filename}' in evt.bin was detected to be corrupted. " +
+                    log.LogError($"File {ex.Index:4} (0x{ex.Index:X3}) '{ex.Filename}' in evt.bin was detected as corrupt. " +
                         $"Please use a different base ROM as this one is corrupted.");
                     return new(LoadProjectState.CORRUPTED_FILE, "evt.bin", -1);
                 }
@@ -330,7 +330,7 @@ namespace SerialLoops.Lib
 
         public void MigrateProject(string newRom, ILogger log, IProgressTracker tracker)
         {
-            log.Log($"Attempting to migrate to new ROM {newRom}");
+            log.Log($"Attempting to migrate base ROM to {newRom}");
 
             string tempDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
             NdsProjectFile.Create("temp", newRom, tempDir);
