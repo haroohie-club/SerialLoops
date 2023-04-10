@@ -14,7 +14,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 
 namespace SerialLoops
 {
@@ -29,6 +28,8 @@ namespace SerialLoops
         public ItemExplorerPanel ItemExplorer { get; set; }
         public LoopyLogger Log { get; set; }
         private SubMenuItem _recentProjects;
+
+        public string ShutdownUpdateUrl = null;
 
         void InitializeComponent()
         {
@@ -96,6 +97,10 @@ namespace SerialLoops
             Command preferencesCommand = new();
             preferencesCommand.Executed += PreferencesCommand_Executed;
 
+            // Check For Updates
+            Command checkForUpdatesCommand = new();
+            checkForUpdatesCommand.Executed += (sender, e) => new UpdateChecker(this).Check();
+
             // About
             Command aboutCommand = new() { MenuText = "About...", Image = ControlGenerator.GetIcon("Help", Log) };
             aboutCommand.Executed += (sender, e) => new AboutDialog
@@ -119,6 +124,7 @@ namespace SerialLoops
                 {
                     // application (OS X) or file menu (others)
                     new ButtonMenuItem { Text = "&Preferences...", Command = preferencesCommand, Image = ControlGenerator.GetIcon("Options", Log) },
+                    new ButtonMenuItem { Text = "&Check For Updates...", Command = checkForUpdatesCommand, Image = ControlGenerator.GetIcon("Update", Log) }
                 },
                 AboutItem = aboutCommand
             };
@@ -231,6 +237,11 @@ namespace SerialLoops
             Log.Initialize(CurrentConfig);            
             ProjectsCache = ProjectsCache.LoadCache(CurrentConfig, Log);
             UpdateRecentProjects();
+
+            if (CurrentConfig.CheckForUpdates)
+            {
+                new UpdateChecker(this).Check();
+            }
 
             if (CurrentConfig.AutoReopenLastProject && ProjectsCache.RecentProjects.Count > 0)
             {
@@ -562,11 +573,17 @@ namespace SerialLoops
 
         public void AppClosed_Executed(object sender, EventArgs e)
         {
-            if (!CurrentConfig.AutomaticUpdates) return;
-            
-            string currentVersion = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "0.1";
-            string executableDirectory = Path.GetFullPath(Assembly.GetExecutingAssembly().Location);
-            //todo execute LoopyUpdater
+            if (ShutdownUpdateUrl is not null)
+            {
+                string updaterExecutable = "LoopyUpdater.exe";
+                if (!File.Exists(updaterExecutable))
+                {
+                    Log.LogError($"Could not start updater: Missing executable ({updaterExecutable})");
+                    return;
+                }
+
+                Process.Start($"{updaterExecutable} {ShutdownUpdateUrl}");
+            }
         }
         
     }

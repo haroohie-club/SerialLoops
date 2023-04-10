@@ -103,9 +103,15 @@ namespace SerialLoops.Dialogs
                         {
                             new BooleanOption
                             {
-                                Name = "Automatic Updates",
-                                Value = Configuration.AutomaticUpdates,
-                                OnChange = (value) => Configuration.AutomaticUpdates = value
+                                Name = "Check For Updates On Startup",
+                                Value = Configuration.CheckForUpdates,
+                                OnChange = (value) => Configuration.CheckForUpdates = value
+                            },
+                            new BooleanOption
+                            {
+                                Name = "Use Pre-Release Update Channel",
+                                Value = Configuration.PreReleaseChannel,
+                                OnChange = (value) => Configuration.PreReleaseChannel = value
                             }
                         }
                     )

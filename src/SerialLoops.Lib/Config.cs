@@ -23,7 +23,8 @@ namespace SerialLoops.Lib
         public bool AutoReopenLastProject { get; set; }
         public bool RememberProjectWorkspace { get; set; }
         public bool RemoveMissingProjects { get; set; }
-        public bool AutomaticUpdates { get; set; }
+        public bool CheckForUpdates { get; set; }
+        public bool PreReleaseChannel { get; set; }
 
         public void Save(ILogger log)
         {
@@ -103,7 +104,9 @@ namespace SerialLoops.Lib
                 EmulatorPath = emulatorPath,
                 AutoReopenLastProject = true,
                 RememberProjectWorkspace = true,
-                RemoveMissingProjects = false
+                RemoveMissingProjects = false,
+                CheckForUpdates = true,
+                PreReleaseChannel = true
             };
         }
     }
