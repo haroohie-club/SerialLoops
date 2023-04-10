@@ -1,7 +1,9 @@
 ﻿using HaruhiChokuretsuLib.Archive.Event;
+using HaruhiChokuretsuLib.Util;
 using QuikGraph;
 using SerialLoops.Lib.Script;
 using SerialLoops.Lib.Script.Parameters;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -17,16 +19,24 @@ namespace SerialLoops.Lib.Items
         public ScriptItem(string name) : base(name, ItemType.Script)
         {
         }
-        public ScriptItem(EventFile evt) : base(evt.Name[0..^1], ItemType.Script)
+        public ScriptItem(EventFile evt, ILogger log) : base(evt.Name[0..^1], ItemType.Script)
         {
             Event = evt;
 
             Graph.AddVertexRange(Event.ScriptSections);
 
-            SearchableText = string.Join('\n', evt.ScriptSections.SelectMany(s => s.Objects.Select(c => c.Command.Mnemonic))
-                .Concat(evt.ConditionalsSection.Objects));
+            try
+            {
+                SearchableText = string.Join('\n', evt.ScriptSections.SelectMany(s => s.Objects.Select(c => c.Command.Mnemonic))
+                    .Concat(evt.ConditionalsSection.Objects));
                 //.Concat(evt.LabelsSection.Objects.Select(l => l.Name))
                 //.Concat(evt.DialogueLines.Select(l => l.Text)));
+            }
+            catch (Exception ex)
+            {
+                log.LogError($"Exception encountered while creating searchable text for script {Name}: {ex.Message}");
+                log.Log(ex.StackTrace);
+            }
         }
 
         public Dictionary<ScriptSection, List<ScriptItemCommand>> GetScriptCommandTree(Project project)
