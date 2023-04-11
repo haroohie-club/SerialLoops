@@ -1683,7 +1683,7 @@ namespace SerialLoops.Editors
                     if (previousCommand?.Verb == CommandVerb.DIALOGUE)
                     {
                         SpriteExitScriptParameter spriteExitMoveParam = (SpriteExitScriptParameter)previousCommand?.Parameters[3]; // exits/moves happen _after_ dialogue is advanced, so we check these at this point
-                        if ((spriteExitMoveParam.ExitTransition) != SpriteExitScriptParameter.SpriteExitTransition.NO_EXIT)
+                        if (spriteExitMoveParam.ExitTransition != SpriteExitScriptParameter.SpriteExitTransition.NO_EXIT)
                         {
                             Speaker prevSpeaker = ((DialogueScriptParameter)previousCommand.Parameters[0]).Line.Speaker;
                             SpriteScriptParameter previousSpriteParam = (SpriteScriptParameter)previousCommand.Parameters[1];
@@ -1732,11 +1732,11 @@ namespace SerialLoops.Editors
                             SpriteEntranceScriptParameter spriteEntranceParam = (SpriteEntranceScriptParameter)command.Parameters[2];
                             short layer = ((ShortScriptParameter)command.Parameters[9]).Value;
 
-                            if (!sprites.ContainsKey(speaker))
+                            if (!sprites.ContainsKey(speaker) && spriteEntranceParam.EntranceTransition != SpriteEntranceScriptParameter.SpriteEntranceTransition.NO_TRANSITION)
                             {
                                 sprites.Add(speaker, new());
                             }
-                            if (spriteEntranceParam.EntranceTransition != SpriteEntranceScriptParameter.SpriteEntranceTransition.NO_TRANSITION)
+                            else if (spriteEntranceParam.EntranceTransition != SpriteEntranceScriptParameter.SpriteEntranceTransition.NO_TRANSITION)
                             {
                                 switch (spriteEntranceParam.EntranceTransition)
                                 {
@@ -1763,13 +1763,14 @@ namespace SerialLoops.Editors
                             }
                             else
                             {
-                                if (sprites[speaker].Positioning is null)
-                                {
-                                    _log.LogWarning($"Sprite {sprites[speaker]} has null positioning data!");
-                                }
-                                SpritePositioning.SpritePosition position = sprites[speaker].Positioning?.Position ?? SpritePositioning.SpritePosition.CENTER;
+                                continue;
+                                //if (sprites[speaker].Positioning is null)
+                                //{
+                                //    _log.LogWarning($"Sprite {sprites[speaker]} has null positioning data!");
+                                //}
+                                //SpritePositioning.SpritePosition position = sprites[speaker].Positioning?.Position ?? SpritePositioning.SpritePosition.CENTER;
 
-                                sprites[speaker] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = position, Layer = layer }, PalEffect = spritePaint };
+                                //sprites[speaker] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = position, Layer = layer }, PalEffect = spritePaint };
                             }
                         }
                     }
