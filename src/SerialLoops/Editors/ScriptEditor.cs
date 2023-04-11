@@ -1676,6 +1676,7 @@ namespace SerialLoops.Editors
 
                 // Draw character sprites
                 Dictionary<Speaker, PositionedSprite> sprites = new();
+                Dictionary<Speaker, PositionedSprite> previousSprites = new();
 
                 ScriptItemCommand previousCommand = null;
                 foreach (ScriptItemCommand command in commands)
@@ -1683,7 +1684,7 @@ namespace SerialLoops.Editors
                     if (previousCommand?.Verb == CommandVerb.DIALOGUE)
                     {
                         SpriteExitScriptParameter spriteExitMoveParam = (SpriteExitScriptParameter)previousCommand?.Parameters[3]; // exits/moves happen _after_ dialogue is advanced, so we check these at this point
-                        if ((spriteExitMoveParam.ExitTransition) != SpriteExitScriptParameter.SpriteExitTransition.NO_EXIT)
+                        if (spriteExitMoveParam.ExitTransition != SpriteExitScriptParameter.SpriteExitTransition.NO_EXIT)
                         {
                             Speaker prevSpeaker = ((DialogueScriptParameter)previousCommand.Parameters[0]).Line.Speaker;
                             SpriteScriptParameter previousSpriteParam = (SpriteScriptParameter)previousCommand.Parameters[1];
@@ -1696,7 +1697,11 @@ namespace SerialLoops.Editors
                                 case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_FROM_CENTER_TO_RIGHT_FADE_OUT:
                                 case SpriteExitScriptParameter.SpriteExitTransition.FADE_OUT_CENTER:
                                 case SpriteExitScriptParameter.SpriteExitTransition.FADE_OUT_LEFT:
-                                    sprites.Remove(prevSpeaker);
+                                    if (sprites[prevSpeaker].Sprite == previousSprites[prevSpeaker].Sprite || ((SpriteEntranceScriptParameter)previousCommand.Parameters[2]).EntranceTransition != SpriteEntranceScriptParameter.SpriteEntranceTransition.NO_TRANSITION)
+                                    {
+                                        sprites.Remove(prevSpeaker);
+                                        previousSprites.Remove(prevSpeaker);
+                                    }
                                     break;
 
                                 case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_CENTER_TO_LEFT_AND_STAY:
@@ -1732,9 +1737,14 @@ namespace SerialLoops.Editors
                             SpriteEntranceScriptParameter spriteEntranceParam = (SpriteEntranceScriptParameter)command.Parameters[2];
                             short layer = ((ShortScriptParameter)command.Parameters[9]).Value;
 
-                            if (!sprites.ContainsKey(speaker))
+                            if (!sprites.ContainsKey(speaker) && spriteEntranceParam.EntranceTransition != SpriteEntranceScriptParameter.SpriteEntranceTransition.NO_TRANSITION)
                             {
                                 sprites.Add(speaker, new());
+                                previousSprites.Add(speaker, new());
+                            }
+                            if (sprites.ContainsKey(speaker))
+                            {
+                                previousSprites[speaker] = sprites[speaker];
                             }
                             if (spriteEntranceParam.EntranceTransition != SpriteEntranceScriptParameter.SpriteEntranceTransition.NO_TRANSITION)
                             {
@@ -1760,16 +1770,6 @@ namespace SerialLoops.Editors
                                         sprites[speaker] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.RIGHT, Layer = layer }, PalEffect = spritePaint };
                                         break;
                                 }
-                            }
-                            else
-                            {
-                                if (sprites[speaker].Positioning is null)
-                                {
-                                    _log.LogWarning($"Sprite {sprites[speaker]} has null positioning data!");
-                                }
-                                SpritePositioning.SpritePosition position = sprites[speaker].Positioning?.Position ?? SpritePositioning.SpritePosition.CENTER;
-
-                                sprites[speaker] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = position, Layer = layer }, PalEffect = spritePaint };
                             }
                         }
                     }
