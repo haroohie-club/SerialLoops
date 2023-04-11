@@ -36,7 +36,7 @@ namespace SerialLoops.Lib.Script
             new TemplateSection("SCRIPT00", CommandsPosition.TOP,
                 new ScriptItemCommand(CommandVerb.KBG_DISP, new BgScriptParameter(
                     "Kinetic Background",
-                    (BackgroundItem)project.Items.First(b => b.Type == ItemType.Background && ((BackgroundItem)b).BackgroundType == HaruhiChokuretsuLib.Archive.Data.BgType.KINETIC_SCREEN),
+                    (BackgroundItem)project.Items.First(b => b.Type == ItemType.Background && b.Name == "BG_KBG01"),
                     true)),
                 new ScriptItemCommand(CommandVerb.BG_DISP, new BgScriptParameter(
                     "Background",
