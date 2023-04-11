@@ -1,4 +1,5 @@
-﻿using SerialLoops.Lib.Items;
+﻿using HaruhiChokuretsuLib.Archive.Event;
+using SerialLoops.Lib.Items;
 
 namespace SerialLoops.Lib.Script
 {
@@ -12,16 +13,31 @@ namespace SerialLoops.Lib.Script
             Sections = sections;
         }
 
-        public void Apply(ScriptItem script)
+        public void Apply(ScriptItem script, Project project)
         {
             foreach (TemplateSection section in Sections)
             {
                 int sectionIndex = script.Event.ScriptSections.FindIndex(s => s.Name == section.Name);
-                if (sectionIndex >= 0)
+                if (sectionIndex < 0)
                 {
-                    if (section.CommandsPosition == CommandsPosition.TOP)
+                    sectionIndex = script.Event.ScriptSections.Count;
+                    script.Event.ScriptSections.Add(new() { Name = section.Name, CommandsAvailable = EventFile.CommandsAvailable });
+                }
+
+                if (section.CommandsPosition == CommandsPosition.TOP)
+                {
+                    for (int i = 0; i < section.Commands.Length; i++)
                     {
-                        new ScriptItemCommand() {  }
+                        script.Event.ScriptSections[sectionIndex].Objects.Insert(i,
+                            new ScriptItemCommand(script.Event.ScriptSections[sectionIndex], script.Event, i, project, section.Commands[i].Verb, section.Commands[i].Parameters.ToArray()).Invocation);
+                    }
+                }
+                else
+                {
+                    for (int i = section.Commands.Length - 1; i >= 0; i--)
+                    {
+                        script.Event.ScriptSections[sectionIndex].Objects.Insert(script.Event.ScriptSections[sectionIndex].Objects.Count - 1,
+                            new ScriptItemCommand(script.Event.ScriptSections[sectionIndex], script.Event, i, project, section.Commands[i].Verb, section.Commands[i].Parameters.ToArray()).Invocation);
                     }
                 }
             }

@@ -5,6 +5,7 @@ using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Font;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Controls;
+using SerialLoops.Dialogs;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
@@ -77,12 +78,27 @@ namespace SerialLoops.Editors
             
             foreach (string command in treeGridView.Control.SupportedPlatformCommands)
             {
-                var barCommand = EditorCommands.Find(barCommand => barCommand.ToolBarText.ToLower().Equals(command));
+                var barCommand = EditorCommands.Find(bc => bc.ToolBarText.ToLower().Equals(command));
                 if (barCommand is not null)
                 {
                     treeGridView.Control.MapPlatformCommand(command, barCommand);
                 }
             }
+
+            Command applyTemplate = new() { MenuText = "Apply Template", ToolBarText = "Apply Template", Image = ControlGenerator.GetIcon("AppIcon", _log) };
+            applyTemplate.Executed += (sender, args) =>
+            {
+                ScriptTemplateSelectorDialog scriptTemplateSelector = new(_project, _log);
+                ScriptTemplate template = scriptTemplateSelector.ShowModal();
+                if (template is not null)
+                {
+                    template.Apply(_script, _project);
+                    _script.Refresh(_project, _log);
+                    Content = GetEditorPanel();
+                }
+            };
+
+            EditorCommands.Add(applyTemplate);
 
             TableRow mainRow = new();
             mainRow.Cells.Add(new TableLayout(GetEditorButtons(treeGridView), _commandsPanel));

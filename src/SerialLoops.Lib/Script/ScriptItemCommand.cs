@@ -52,23 +52,20 @@ namespace SerialLoops.Lib.Script
 
             List<short> shortParams = parameters.SelectMany(p =>
             {
-                switch (p.Type)
+                return p.Type switch
                 {
-                    case ScriptParameter.ParameterType.DIALOGUE_PROPERTY:
-                        return p.GetValues(project.MessInfo);
-
-                    case ScriptParameter.ParameterType.CONDITIONAL:
-                    case ScriptParameter.ParameterType.DIALOGUE:
-                    case ScriptParameter.ParameterType.OPTION:
-                    case ScriptParameter.ParameterType.SCRIPT_SECTION:
-                        return p.GetValues(script);
-
-                    default:
-                        return p.GetValues();
-                }
+                    ScriptParameter.ParameterType.DIALOGUE_PROPERTY => p.GetValues(project.MessInfo),
+                    ScriptParameter.ParameterType.CONDITIONAL or ScriptParameter.ParameterType.DIALOGUE or ScriptParameter.ParameterType.OPTION or ScriptParameter.ParameterType.SCRIPT_SECTION => p.GetValues(script),
+                    _ => p.GetValues(),
+                };
             }).ToList();
             shortParams.AddRange(new short[16 - shortParams.Count]);
             Invocation = new(CommandsAvailable.First(c => c.Mnemonic == verb.ToString())) { Parameters = shortParams };
+        }
+        public ScriptItemCommand(CommandVerb verb, params ScriptParameter[] parameters)
+        {
+            Verb = verb;
+            Parameters = parameters.ToList();
         }
 
         public List<ScriptItemCommand> WalkCommandGraph(Dictionary<ScriptSection, List<ScriptItemCommand>> commandTree, AdjacencyGraph<ScriptSection, ScriptSectionEdge> graph)
