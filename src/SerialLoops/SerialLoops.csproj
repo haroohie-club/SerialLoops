@@ -43,6 +43,7 @@
     <None Remove="Icons\Topic.png" />
     <None Remove="Icons\Transition.png" />
     <None Remove="Icons\Tutorial.png" />
+    <None Remove="Icons\Update.png" />
     <None Remove="Icons\Voice.png" />
     <None Remove="Icons\Build.png" />
     <None Remove="Icons\Build_Scratch.png" />
