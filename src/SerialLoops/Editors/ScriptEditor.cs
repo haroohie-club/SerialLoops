@@ -95,6 +95,7 @@ namespace SerialLoops.Editors
                     template.Apply(_script, _project);
                     _script.Refresh(_project, _log);
                     Content = GetEditorPanel();
+                    UpdateTabTitle(false);
                 }
             };
 
