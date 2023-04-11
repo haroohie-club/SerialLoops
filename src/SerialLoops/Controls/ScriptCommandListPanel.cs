@@ -119,10 +119,10 @@ namespace SerialLoops.Controls
             {
                 var treeGridView = (ScriptCommandSectionTreeGridView)o;
                 var entry = (ScriptCommandSectionEntry)treeGridView.SelectedItem;
-                ScriptSection section = entry.Command?.Section ?? e.Command.Section;
 
                 if (string.IsNullOrEmpty(e.SectionTitle))
                 {
+                    ScriptSection section = entry.Command?.Section ?? e.Command.Section;
                     e.Command.Script.ScriptSections[e.Command.Script.ScriptSections.IndexOf(section)].Objects.Insert(e.Command.Index, e.Command.Invocation);
                     _commands[section].Insert(e.Command.Index, e.Command);
                     for (int i = section.Objects.IndexOf(e.Command.Invocation) + 1; i < section.Objects.Count; i++)

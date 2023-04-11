@@ -58,6 +58,10 @@ namespace SerialLoops.Lib
 
         [JsonIgnore]
         public ExtraFile Extra { get; set; }
+        [JsonIgnore]
+        public ScenarioStruct Scenario { get; set; }
+        [JsonIgnore]
+        public MessageInfoFile MessInfo { get; set; }
 
         public Project()
         {
@@ -223,8 +227,14 @@ namespace SerialLoops.Lib
             FontBitmap = Grp.Files.First(f => f.Name == "ZENFONTBNF").GetImage(transparentIndex: 0);
             tracker.Finished++;
 
-            tracker.Focus("Extras", 1);
+            tracker.Focus("Static Files", 3);
             Extra = Dat.Files.First(f => f.Name == "EXTRAS").CastTo<ExtraFile>();
+            tracker.Finished++;
+            EventFile scenario = Evt.Files.First(f => f.Name == "SCENARIOS");
+            scenario.InitializeScenarioFile();
+            Scenario = scenario.Scenario;
+            tracker.Finished++;
+            MessInfo = Dat.Files.First(f => f.Name == "MESSINFOS").CastTo<MessageInfoFile>();
             tracker.Finished++;
 
             BgTableFile bgTable = Dat.Files.First(f => f.Name == "BGTBLS").CastTo<BgTableFile>();

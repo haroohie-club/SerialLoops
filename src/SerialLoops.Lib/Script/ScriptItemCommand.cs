@@ -38,6 +38,36 @@ namespace SerialLoops.Lib.Script
             };
         }
 
+        public ScriptItemCommand()
+        {
+        }
+        public ScriptItemCommand(ScriptSection section, EventFile script, int index, Project project, CommandVerb verb, params ScriptParameter[] parameters)
+        {
+            Section = section;
+            Script = script;
+            Index = index;
+            Project = project;
+            Verb = verb;
+            Parameters = parameters.ToList();
+
+            List<short> shortParams = parameters.SelectMany(p =>
+            {
+                return p.Type switch
+                {
+                    ScriptParameter.ParameterType.DIALOGUE_PROPERTY => p.GetValues(project.MessInfo),
+                    ScriptParameter.ParameterType.CONDITIONAL or ScriptParameter.ParameterType.DIALOGUE or ScriptParameter.ParameterType.OPTION or ScriptParameter.ParameterType.SCRIPT_SECTION => p.GetValues(script),
+                    _ => p.GetValues(),
+                };
+            }).ToList();
+            shortParams.AddRange(new short[16 - shortParams.Count]);
+            Invocation = new(CommandsAvailable.First(c => c.Mnemonic == verb.ToString())) { Parameters = shortParams };
+        }
+        public ScriptItemCommand(CommandVerb verb, params ScriptParameter[] parameters)
+        {
+            Verb = verb;
+            Parameters = parameters.ToList();
+        }
+
         public List<ScriptItemCommand> WalkCommandGraph(Dictionary<ScriptSection, List<ScriptItemCommand>> commandTree, AdjacencyGraph<ScriptSection, ScriptSectionEdge> graph)
         {
             List<ScriptItemCommand> commands = new();
@@ -675,7 +705,7 @@ namespace SerialLoops.Lib.Script
             }
             else if (Verb == CommandVerb.VGOTO)
             {
-                str += $" {((ConditionalScriptParameter)Parameters[0]).Value}, {((ScriptSectionScriptParameter)Parameters[1]).Section.Name}";
+                str += $" {((ConditionalScriptParameter)Parameters[0]).Conditional}, {((ScriptSectionScriptParameter)Parameters[1]).Section.Name}";
             }
             return str;
         }

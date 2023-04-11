@@ -6,6 +6,7 @@ namespace SerialLoops.Lib.Script.Parameters
     {
         public ParameterType Type { get; protected set; }
         public string Name { get; protected set; }
+        public abstract short[] GetValues(object obj = null);
 
         protected ScriptParameter(string name, ParameterType type)
         {

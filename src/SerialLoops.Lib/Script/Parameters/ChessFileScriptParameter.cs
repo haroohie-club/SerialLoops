@@ -5,6 +5,7 @@ namespace SerialLoops.Lib.Script.Parameters
     public class ChessFileScriptParameter : ScriptParameter
     {
         public short ChessFileIndex { get; set; }
+        public override short[] GetValues(object obj = null) => new short[] { ChessFileIndex };
 
         public ChessFileScriptParameter(string name, short chessFileIndex) : base(name, ParameterType.CHESS_FILE)
         {

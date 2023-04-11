@@ -7,6 +7,7 @@ namespace SerialLoops.Lib.Script.Parameters
     public class PlaceScriptParameter : ScriptParameter
     {
         public PlaceItem Place { get; set; }
+        public override short[] GetValues(object obj = null) => new short[] { (short)Place.Index };
 
         public PlaceScriptParameter(string name, PlaceItem place) : base(name, ParameterType.PLACE)
         {

@@ -6,6 +6,7 @@ namespace SerialLoops.Lib.Script.Parameters
     public class PaletteEffectScriptParameter : ScriptParameter
     {
         public PaletteEffect Effect { get; set; }
+        public override short[] GetValues(object obj = null) => new short[] { (short)Effect };
 
         public PaletteEffectScriptParameter(string name, short effect) : base(name, ParameterType.PALETTE_EFFECT)
         {

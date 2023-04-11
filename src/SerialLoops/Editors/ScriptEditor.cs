@@ -5,6 +5,7 @@ using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Font;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Controls;
+using SerialLoops.Dialogs;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
@@ -77,12 +78,28 @@ namespace SerialLoops.Editors
             
             foreach (string command in treeGridView.Control.SupportedPlatformCommands)
             {
-                var barCommand = EditorCommands.Find(barCommand => barCommand.ToolBarText.ToLower().Equals(command));
+                var barCommand = EditorCommands.Find(bc => bc.ToolBarText.ToLower().Equals(command));
                 if (barCommand is not null)
                 {
                     treeGridView.Control.MapPlatformCommand(command, barCommand);
                 }
             }
+
+            Command applyTemplate = new() { MenuText = "Apply Template", ToolBarText = "Template", Image = ControlGenerator.GetIcon("AppIcon", _log) };
+            applyTemplate.Executed += (sender, args) =>
+            {
+                ScriptTemplateSelectorDialog scriptTemplateSelector = new(_project, _script.Event, _log);
+                ScriptTemplate template = scriptTemplateSelector.ShowModal();
+                if (template is not null)
+                {
+                    template.Apply(_script, _project);
+                    _script.Refresh(_project, _log);
+                    Content = GetEditorPanel();
+                    UpdateTabTitle(false);
+                }
+            };
+
+            EditorCommands.Add(applyTemplate);
 
             TableRow mainRow = new();
             mainRow.Cells.Add(new TableLayout(GetEditorButtons(treeGridView), _commandsPanel));
@@ -1072,7 +1089,7 @@ namespace SerialLoops.Editors
                         break;
 
                     case ScriptParameter.ParameterType.CONDITIONAL:
-                        ScriptCommandTextBox conditionalBox = new() { Text = ((ConditionalScriptParameter)parameter).Value, Command = command, ParameterIndex = i };
+                        ScriptCommandTextBox conditionalBox = new() { Text = ((ConditionalScriptParameter)parameter).Conditional, Command = command, ParameterIndex = i };
                         conditionalBox.TextChanged += ConditionalBox_TextChanged;
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
                             ControlGenerator.GetControlWithLabel(parameter.Name,
@@ -2023,7 +2040,7 @@ namespace SerialLoops.Editors
         {
             ScriptCommandTextBox textBox = (ScriptCommandTextBox)sender;
             _log.Log($"Attempting to modify parameter {textBox.ParameterIndex} to conditional {textBox.Text} in {textBox.Command.Index} in file {_script.Name}...");
-            ((ConditionalScriptParameter)textBox.Command.Parameters[textBox.ParameterIndex]).Value = textBox.Text;
+            ((ConditionalScriptParameter)textBox.Command.Parameters[textBox.ParameterIndex]).Conditional = textBox.Text;
             if (_script.Event.ConditionalsSection.Objects.Contains(textBox.Text))
             {
                 _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(textBox.Command.Section)]

@@ -45,7 +45,7 @@ namespace SerialLoops.Dialogs
             _filter.TextChanged += (sender, args) =>
             {
                 _selector.DataStore = new ObservableCollection<IPreviewableGraphic>(_items
-                    .Where(i => ((ItemDescription)i).Name.ToLower().Contains(_filter.Text.ToLower())));
+                    .Where(i => ((ItemDescription)i).Name.Contains(_filter.Text, StringComparison.OrdinalIgnoreCase)));
             };
 
             _selector = new ListBox
