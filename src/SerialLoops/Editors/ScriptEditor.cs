@@ -85,10 +85,10 @@ namespace SerialLoops.Editors
                 }
             }
 
-            Command applyTemplate = new() { MenuText = "Apply Template", ToolBarText = "Apply Template", Image = ControlGenerator.GetIcon("AppIcon", _log) };
+            Command applyTemplate = new() { MenuText = "Apply Template", ToolBarText = "Template", Image = ControlGenerator.GetIcon("AppIcon", _log) };
             applyTemplate.Executed += (sender, args) =>
             {
-                ScriptTemplateSelectorDialog scriptTemplateSelector = new(_project, _log);
+                ScriptTemplateSelectorDialog scriptTemplateSelector = new(_project, _script.Event, _log);
                 ScriptTemplate template = scriptTemplateSelector.ShowModal();
                 if (template is not null)
                 {

@@ -1,8 +1,8 @@
 ﻿using Eto.Drawing;
 using Eto.Forms;
+using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib;
-using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
 using System;
 using System.Collections.ObjectModel;
@@ -14,15 +14,17 @@ namespace SerialLoops.Dialogs
     {
         private readonly ILogger _log;
         private readonly Project _project;
+        private readonly EventFile _script;
         private ScriptTemplates.TemplateOption _currentSelection;
         private TextBox _filter;
         private ListBox _selector;
         private Panel _description;
 
-        public ScriptTemplateSelectorDialog(Project project, ILogger log)
+        public ScriptTemplateSelectorDialog(Project project, EventFile script, ILogger log)
         {
             _log = log;
             _project = project;
+            _script = script;
             InitializeComponent();
         }
 
@@ -81,8 +83,8 @@ namespace SerialLoops.Dialogs
                 };
             };
 
-            Button closeButton = new() { Text = "Confirm" };
-            closeButton.Click += (sender, args) => Close(_currentSelection?.Template(_project));
+            Button confirmButton = new() { Text = "Confirm" };
+            confirmButton.Click += (sender, args) => Close(_currentSelection?.Template(_project, _script));
             Button cancelButton = new() { Text = "Cancel" };
             cancelButton.Click += (sender, args) => Close(null);
 
@@ -119,7 +121,7 @@ namespace SerialLoops.Dialogs
                         HorizontalContentAlignment = HorizontalAlignment.Center,
                         Items =
                         {
-                            closeButton,
+                            confirmButton,
                             cancelButton
                         }
                     }
