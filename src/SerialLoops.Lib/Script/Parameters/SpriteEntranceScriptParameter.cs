@@ -5,6 +5,7 @@ namespace SerialLoops.Lib.Script.Parameters
     public class SpriteEntranceScriptParameter : ScriptParameter
     {
         public SpriteEntranceTransition EntranceTransition { get; set; }
+        public override short[] GetValues(object obj = null) => new short[] { (short)EntranceTransition };
 
         public SpriteEntranceScriptParameter(string name, short entranceTransition) : base(name, ParameterType.SPRITE_ENTRANCE)
         {

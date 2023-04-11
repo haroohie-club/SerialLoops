@@ -1072,7 +1072,7 @@ namespace SerialLoops.Editors
                         break;
 
                     case ScriptParameter.ParameterType.CONDITIONAL:
-                        ScriptCommandTextBox conditionalBox = new() { Text = ((ConditionalScriptParameter)parameter).Value, Command = command, ParameterIndex = i };
+                        ScriptCommandTextBox conditionalBox = new() { Text = ((ConditionalScriptParameter)parameter).Conditional, Command = command, ParameterIndex = i };
                         conditionalBox.TextChanged += ConditionalBox_TextChanged;
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
                             ControlGenerator.GetControlWithLabel(parameter.Name,
@@ -2023,7 +2023,7 @@ namespace SerialLoops.Editors
         {
             ScriptCommandTextBox textBox = (ScriptCommandTextBox)sender;
             _log.Log($"Attempting to modify parameter {textBox.ParameterIndex} to conditional {textBox.Text} in {textBox.Command.Index} in file {_script.Name}...");
-            ((ConditionalScriptParameter)textBox.Command.Parameters[textBox.ParameterIndex]).Value = textBox.Text;
+            ((ConditionalScriptParameter)textBox.Command.Parameters[textBox.ParameterIndex]).Conditional = textBox.Text;
             if (_script.Event.ConditionalsSection.Objects.Contains(textBox.Text))
             {
                 _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(textBox.Command.Section)]

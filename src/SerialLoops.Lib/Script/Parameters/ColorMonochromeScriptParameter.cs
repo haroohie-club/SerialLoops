@@ -5,6 +5,7 @@ namespace SerialLoops.Lib.Script.Parameters
     public class ColorMonochromeScriptParameter : ScriptParameter
     {
         public ColorMonochrome ColorType { get; set; }
+        public override short[] GetValues(object obj = null) => new short[] { (short)ColorType };
 
         public ColorMonochromeScriptParameter(string name, short colorType) : base(name, ParameterType.COLOR_MONOCHROME)
         {

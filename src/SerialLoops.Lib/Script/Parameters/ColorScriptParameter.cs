@@ -10,6 +10,7 @@ namespace SerialLoops.Lib.Script.Parameters
         private byte _blue;
 
         public SKColor Color { get; set; }
+        public override short[] GetValues(object obj = null) => new short[] { _red, _green, _blue };
 
         public ColorScriptParameter(string name, short red) : base(name, ParameterType.COLOR)
         {

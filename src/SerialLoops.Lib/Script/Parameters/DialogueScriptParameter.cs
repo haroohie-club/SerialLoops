@@ -7,6 +7,7 @@ namespace SerialLoops.Lib.Script.Parameters
     public class DialogueScriptParameter : ScriptParameter
     {
         public DialogueLine Line { get; set; }
+        public override short[] GetValues(object obj = null) => new short[] { (short)((EventFile)obj).DialogueSection.Objects.FindIndex(l => l == Line) };
 
         public DialogueScriptParameter(string name, DialogueLine line) : base(name, ParameterType.DIALOGUE)
         {
