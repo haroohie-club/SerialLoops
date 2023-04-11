@@ -1736,7 +1736,7 @@ namespace SerialLoops.Editors
                             {
                                 sprites.Add(speaker, new());
                             }
-                            else if (spriteEntranceParam.EntranceTransition != SpriteEntranceScriptParameter.SpriteEntranceTransition.NO_TRANSITION)
+                            if (spriteEntranceParam.EntranceTransition != SpriteEntranceScriptParameter.SpriteEntranceTransition.NO_TRANSITION)
                             {
                                 switch (spriteEntranceParam.EntranceTransition)
                                 {
