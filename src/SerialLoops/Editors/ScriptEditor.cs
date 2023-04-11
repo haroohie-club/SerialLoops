@@ -1771,16 +1771,6 @@ namespace SerialLoops.Editors
                                         break;
                                 }
                             }
-                            //else
-                            //{
-                            //    if (sprites[speaker].Positioning is null)
-                            //    {
-                            //        _log.LogWarning($"Sprite {sprites[speaker]} has null positioning data!");
-                            //    }
-                            //    SpritePositioning.SpritePosition position = sprites[speaker].Positioning?.Position ?? SpritePositioning.SpritePosition.CENTER;
-
-                            //    sprites[speaker] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = position, Layer = layer }, PalEffect = spritePaint };
-                            //}
                         }
                     }
                     else if (command.Verb == CommandVerb.INVEST_START)
