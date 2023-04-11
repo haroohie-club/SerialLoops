@@ -1676,6 +1676,7 @@ namespace SerialLoops.Editors
 
                 // Draw character sprites
                 Dictionary<Speaker, PositionedSprite> sprites = new();
+                Dictionary<Speaker, PositionedSprite> previousSprites = new();
 
                 ScriptItemCommand previousCommand = null;
                 foreach (ScriptItemCommand command in commands)
@@ -1696,7 +1697,11 @@ namespace SerialLoops.Editors
                                 case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_FROM_CENTER_TO_RIGHT_FADE_OUT:
                                 case SpriteExitScriptParameter.SpriteExitTransition.FADE_OUT_CENTER:
                                 case SpriteExitScriptParameter.SpriteExitTransition.FADE_OUT_LEFT:
-                                    sprites.Remove(prevSpeaker);
+                                    if (sprites[prevSpeaker].Sprite == previousSprites[prevSpeaker].Sprite || ((SpriteEntranceScriptParameter)previousCommand.Parameters[2]).EntranceTransition != SpriteEntranceScriptParameter.SpriteEntranceTransition.NO_TRANSITION)
+                                    {
+                                        sprites.Remove(prevSpeaker);
+                                        previousSprites.Remove(prevSpeaker);
+                                    }
                                     break;
 
                                 case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_CENTER_TO_LEFT_AND_STAY:
@@ -1735,6 +1740,11 @@ namespace SerialLoops.Editors
                             if (!sprites.ContainsKey(speaker) && spriteEntranceParam.EntranceTransition != SpriteEntranceScriptParameter.SpriteEntranceTransition.NO_TRANSITION)
                             {
                                 sprites.Add(speaker, new());
+                                previousSprites.Add(speaker, new());
+                            }
+                            if (sprites.ContainsKey(speaker))
+                            {
+                                previousSprites[speaker] = sprites[speaker];
                             }
                             if (spriteEntranceParam.EntranceTransition != SpriteEntranceScriptParameter.SpriteEntranceTransition.NO_TRANSITION)
                             {
@@ -1761,17 +1771,16 @@ namespace SerialLoops.Editors
                                         break;
                                 }
                             }
-                            else
-                            {
-                                continue;
-                                //if (sprites[speaker].Positioning is null)
-                                //{
-                                //    _log.LogWarning($"Sprite {sprites[speaker]} has null positioning data!");
-                                //}
-                                //SpritePositioning.SpritePosition position = sprites[speaker].Positioning?.Position ?? SpritePositioning.SpritePosition.CENTER;
+                            //else
+                            //{
+                            //    if (sprites[speaker].Positioning is null)
+                            //    {
+                            //        _log.LogWarning($"Sprite {sprites[speaker]} has null positioning data!");
+                            //    }
+                            //    SpritePositioning.SpritePosition position = sprites[speaker].Positioning?.Position ?? SpritePositioning.SpritePosition.CENTER;
 
-                                //sprites[speaker] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = position, Layer = layer }, PalEffect = spritePaint };
-                            }
+                            //    sprites[speaker] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = position, Layer = layer }, PalEffect = spritePaint };
+                            //}
                         }
                     }
                     else if (command.Verb == CommandVerb.INVEST_START)
