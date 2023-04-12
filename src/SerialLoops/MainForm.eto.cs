@@ -313,68 +313,66 @@ namespace SerialLoops
         {
             Project.LoadProjectResult result = new(Project.LoadProjectState.FAILED); // start us off with a failure
             LoopyProgressTracker tracker = new();
-            _ = new ProgressDialog(() => (OpenProject, result) = Project.OpenProject(path, CurrentConfig, Log, tracker), () =>
+            _ = new ProgressDialog(() => (OpenProject, result) = Project.OpenProject(path, CurrentConfig, Log, tracker), () => { }, tracker, "Loading Project");
+            if (OpenProject is not null && result.State == Project.LoadProjectState.LOOSELEAF_FILES)
             {
-                if (OpenProject is not null && result.State == Project.LoadProjectState.LOOSELEAF_FILES)
+                if (MessageBox.Show("Saved but unbuilt files were detected in the project directory. " +
+                    "Would you like to build before loading the project? " +
+                    "Not building could result in these files being overwritten.",
+                    "Build Unbuilt Files?",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxType.Question,
+                    MessageBoxDefaultButton.Yes) == DialogResult.Yes)
                 {
-                    if (MessageBox.Show("Saved but unbuilt files were detected in the project directory. " +
-                        "Would you like to build before loading the project? " +
-                        "Not building could result in these files being overwritten.",
-                        "Build Unbuilt Files?",
-                        MessageBoxButtons.YesNo,
-                        MessageBoxType.Question,
-                        MessageBoxDefaultButton.Yes) == DialogResult.Yes)
-                    {
-                        _ = new ProgressDialog(() => Build.BuildIterative(OpenProject, CurrentConfig, Log, tracker),
-                            () => { }, tracker, "Loading Project");
-                    }
-
-                    _ = new ProgressDialog(() => OpenProject.LoadArchives(Log, tracker), () => { }, tracker, "Loading Project");
-                }
-                else if (result.State == Project.LoadProjectState.CORRUPTED_FILE)
-                {
-                    if (MessageBox.Show($"While attempting to build,  file #{result.BadFileIndex:X3} in archive {result.BadArchive} was " +
-                        $"found to be corrupt. Serial Loops can delete this file from your base directory automatically which may allow you to load the rest of the " +
-                        $"project, but any changes made to that file will be lost. Alternatively, you can attempt to edit the file manually to fix it. How would " +
-                        $"you like to proceed? Press OK to proceed with deleting the file and Cancel to attempt to deal with it manually.", 
-                        "Corrupted File Detected!",
-                        MessageBoxButtons.OKCancel,
-                        MessageBoxType.Warning,
-                        MessageBoxDefaultButton.Cancel) == DialogResult.Ok)
-                    {
-                        switch (result.BadArchive)
-                        {
-                            case "dat.bin":
-                                File.Delete(Path.Combine(OpenProject.BaseDirectory, "assets", "data", $"{result.BadFileIndex:X3}.s"));
-                                break;
-
-                            case "grp.bin":
-                                File.Delete(Path.Combine(OpenProject.BaseDirectory, "assets", "graphics", $"{result.BadFileIndex:X3}.png"));
-                                File.Delete(Path.Combine(OpenProject.BaseDirectory, "assets", "graphics", $"{result.BadFileIndex:X3}_pal.csv"));
-                                break;
-
-                            case "evt.bin":
-                                File.Delete(Path.Combine(OpenProject.BaseDirectory, "assets", "events", $"{result.BadFileIndex:X3}.s"));
-                                break;
-                        }
-                        OpenProjectFromPath(path);
-                        return;
-                    }
-                    else
-                    {
-                        OpenProject = null;
-                    }
+                    _ = new ProgressDialog(() => Build.BuildIterative(OpenProject, CurrentConfig, Log, tracker),
+                        () => { }, tracker, "Loading Project");
                 }
 
-                if (OpenProject is not null)
+                _ = new ProgressDialog(() => OpenProject.LoadArchives(Log, tracker), () => { }, tracker, "Loading Project");
+            }
+            else if (result.State == Project.LoadProjectState.CORRUPTED_FILE)
+            {
+                if (MessageBox.Show($"While attempting to build,  file #{result.BadFileIndex:X3} in archive {result.BadArchive} was " +
+                    $"found to be corrupt. Serial Loops can delete this file from your base directory automatically which may allow you to load the rest of the " +
+                    $"project, but any changes made to that file will be lost. Alternatively, you can attempt to edit the file manually to fix it. How would " +
+                    $"you like to proceed? Press OK to proceed with deleting the file and Cancel to attempt to deal with it manually.",
+                    "Corrupted File Detected!",
+                    MessageBoxButtons.OKCancel,
+                    MessageBoxType.Warning,
+                    MessageBoxDefaultButton.Cancel) == DialogResult.Ok)
                 {
-                    OpenProjectView(OpenProject, tracker);
+                    switch (result.BadArchive)
+                    {
+                        case "dat.bin":
+                            File.Delete(Path.Combine(OpenProject.BaseDirectory, "assets", "data", $"{result.BadFileIndex:X3}.s"));
+                            break;
+
+                        case "grp.bin":
+                            File.Delete(Path.Combine(OpenProject.BaseDirectory, "assets", "graphics", $"{result.BadFileIndex:X3}.png"));
+                            File.Delete(Path.Combine(OpenProject.BaseDirectory, "assets", "graphics", $"{result.BadFileIndex:X3}_pal.csv"));
+                            break;
+
+                        case "evt.bin":
+                            File.Delete(Path.Combine(OpenProject.BaseDirectory, "assets", "events", $"{result.BadFileIndex:X3}.s"));
+                            break;
+                    }
+                    OpenProjectFromPath(path);
+                    return;
                 }
                 else
                 {
-                    CloseProjectView();
+                    OpenProject = null;
                 }
-            }, tracker, "Loading Project");
+            }
+
+            if (OpenProject is not null)
+            {
+                OpenProjectView(OpenProject, tracker);
+            }
+            else
+            {
+                CloseProjectView();
+            }
         }
 
         private void SaveProject_Executed(object sender, EventArgs e)
