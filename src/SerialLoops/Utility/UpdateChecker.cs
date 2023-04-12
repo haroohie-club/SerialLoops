@@ -46,7 +46,7 @@ namespace SerialLoops.Utility
 
             _logger.Log($"An update for Serial Loops is available! ({version})");
             UpdateAvailableDialog updateDisplay = new(_mainForm, version, assets, url, changelog);
-            updateDisplay.ShowModal(_mainForm);
+            updateDisplay.ShowModal();
         }
 
         private async Task<(string, string, JsonArray, string)> GetLatestVersion(string currentVersion)
