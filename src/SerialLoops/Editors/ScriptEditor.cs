@@ -1882,7 +1882,7 @@ namespace SerialLoops.Editors
                             {
                                 i += 4;
                             }
-                            else if (i < line.Text.Length - 43&& line.Text[i..(i + 3)] == "#sk")
+                            else if (i < line.Text.Length - 3 && line.Text[i..(i + 3)] == "#sk")
                             {
                                 i += 3;
                             }
