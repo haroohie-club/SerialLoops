@@ -75,7 +75,7 @@ namespace SerialLoops.Editors
             _commandsPanel = new(_commands, new Size(280, 185), expandItems: true, this, _log);
             ScriptCommandSectionTreeGridView treeGridView = _commandsPanel.Viewer;
             treeGridView.SelectedItemChanged += CommandsPanel_SelectedItemChanged;
-            
+
             foreach (string command in treeGridView.Control.SupportedPlatformCommands)
             {
                 var barCommand = EditorCommands.Find(bc => bc.ToolBarText.ToLower().Equals(command));
@@ -350,7 +350,7 @@ namespace SerialLoops.Editors
                     dialog.Close();
                     ScriptCommandSectionEntry section = new($"NONE{labelBox.Text}", new List<ScriptCommandSectionEntry>(), _script.Event);
                     treeGridView.AddSection(new(section, null, null, _script.Event, true));
-                    
+
                     _updateOptionDropDowns();
                 };
 
@@ -1624,7 +1624,7 @@ namespace SerialLoops.Editors
                     {
                         bgScrollCommand = commands[i];
                         continue;
-                    } 
+                    }
                     // Checks to see if this is one of the commands that sets a BG_REVERT immune background or if BG_REVERT hasn't been called
                     if (commands[i].Verb == CommandVerb.BG_DISP || commands[i].Verb == CommandVerb.BG_DISP2 ||
                         (commands[i].Verb == CommandVerb.BG_FADE && (((BgScriptParameter)commands[i].Parameters[0]).Background is not null)) ||
@@ -1869,6 +1869,22 @@ namespace SerialLoops.Editors
                                 };
                                 i += 3;
                                 continue;
+                            }
+                            else if (i < line.Text.Length - 3 && line.Text[i..(i + 3)] == "#DP")
+                            {
+                                i += 3;
+                            }
+                            else if (i < line.Text.Length - 6 && Regex.IsMatch(line.Text[i..(i + 6)], @"#SE\d{3}"))
+                            {
+                                i += 6;
+                            }
+                            else if (i < line.Text.Length - 4 && line.Text[i..(i + 4)] == "#SK0")
+                            {
+                                i += 4;
+                            }
+                            else if (i < line.Text.Length - 3 && line.Text[i..(i + 3)] == "#sk")
+                            {
+                                i += 3;
                             }
 
                             if (line.Text[i] != '　') // if it's a space, we just skip drawing
