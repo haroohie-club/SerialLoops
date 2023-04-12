@@ -177,16 +177,11 @@ namespace SerialLoops
                 }
             };
 
-            // Add project items to menu
-            if (Menu.Items[0] is SubMenuItem fileMenu)
+            // Add project items to existing File menu
+            if (Menu.Items.FirstOrDefault(x => x.Text == "&File") is SubMenuItem fileMenu)
             {
-                fileMenu.Items.Add(saveProject);
-                fileMenu.Items.Add(projectSettings);
-                fileMenu.Items.Add(migrateProject);
-                fileMenu.Items.Add(exportPatch);
-                fileMenu.Items.Add(closeProject);
+                fileMenu.Items.AddRange(new[] { saveProject, projectSettings, migrateProject, exportPatch, closeProject });
             }
-
             Menu.Items.Add(new SubMenuItem { Text = "&Tools", Items = { searchProject, findOrphanedItems } });
             Menu.Items.Add(new SubMenuItem { Text = "&Build", Items = { buildIterativeProject, buildBaseProject, buildAndRunProject } });
         }
