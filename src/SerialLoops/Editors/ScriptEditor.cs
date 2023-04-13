@@ -1288,6 +1288,10 @@ namespace SerialLoops.Editors
                         {
                             shortNumericStepper.SecondIndex = 4;
                         }
+                        if (command.Verb == CommandVerb.HARUHI_METER)
+                        {
+                            shortNumericStepper.ParameterIndex++;
+                        }
                         shortNumericStepper.ValueChanged += ShortNumericStepper_ValueChanged;
 
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
