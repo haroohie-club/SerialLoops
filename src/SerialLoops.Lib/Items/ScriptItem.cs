@@ -65,7 +65,7 @@ namespace SerialLoops.Lib.Items
                         Graph.AddEdge(new() { Source = section, Target = ((ScriptSectionScriptParameter)command.Parameters[4]).Section });
                         Graph.AddEdgeRange(Event.ScriptSections.Where(s =>
                             Event.LabelsSection.Objects.Where(l =>
-                            Event.MapCharactersSection.Objects.Select(c => c.TalkScriptBlock).Contains(l.Id))
+                            Event.MapCharactersSection?.Objects.Select(c => c.TalkScriptBlock).Contains(l.Id) ?? false)
                             .Select(l => l.Name.Replace("/", "")).Contains(s.Name)).Select(s => new ScriptSectionEdge() { Source = section, Target = s }));
                         Graph.AddEdgeRange(Event.ScriptSections.Where(s =>
                             Event.LabelsSection.Objects.Where(l =>

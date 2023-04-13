@@ -386,7 +386,7 @@ namespace SerialLoops.Lib.Script
                     case CommandVerb.SCENE_GOTO2:
                         if (i == 0)
                         {
-                            parameters.Add(new ConditionalScriptParameter("Conditional", eventFile.ConditionalsSection.Objects[parameter]));
+                            parameters.Add(new ConditionalScriptParameter("Scene", eventFile.ConditionalsSection.Objects[parameter]));
                         }
                         break;
                     case CommandVerb.WAIT:
