@@ -36,12 +36,12 @@ namespace SerialLoops.Editors
                 TextBox cgNameBox = new() { Text = _bg.CgName, Width = 200 };
                 cgNameBox.TextChanged += (sender, args) =>
                 {
-                    _project.Extra.Bgms[_project.Extra.Cgs.IndexOf(_project.Extra.Cgs.First(b => b.Name.GetSubstitutedString(_project) == _bg.CgName))].Name = cgNameBox.Text.GetOriginalString(_project);
+                    _project.Extra.Cgs[_project.Extra.Cgs.IndexOf(_project.Extra.Cgs.First(b => b.Name.GetSubstitutedString(_project).Equals(_bg.CgName)))].Name = cgNameBox.Text.GetOriginalString(_project);
                     _bg.CgName = cgNameBox.Text;
                     UpdateTabTitle(false, cgNameBox);
                 };
 
-                extrasInfo.Items.Add(_bg.CgName);
+                extrasInfo.Items.Add(cgNameBox);
                 extrasInfo.Items.Add($"Unknown Extras Short: {_bg.ExtrasShort}");
                 extrasInfo.Items.Add($"Unknown Extras Integer: {_bg.ExtrasInt}");
             }
