@@ -35,7 +35,7 @@ namespace SerialLoops.Utility
         public async void Check()
         {
             (string version, string url, JsonArray assets, string changelog) = await GetLatestVersion(_currentVersion);
-            if (version.StartsWith(_currentVersion))
+            if (_currentVersion.StartsWith(version)) // version might be something like 0.1.1, but current version will always be 4 digits
             {
                 return;
             }
