@@ -24,7 +24,7 @@ variables:
     ${{ if ne(parameters['version'], '') }}:
       value: ${{ parameters.version }}
     ${{ if eq(parameters['version'], '') }}:
-      value: 0.1-pre$(Build.BuildNumber)
+      value: 0.2.$(Build.BuildNumber)
 
 stages:
 - stage: Build
@@ -79,8 +79,10 @@ stages:
       inputs:
         command: 'publish'
         projects: $(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/SerialLoops.$(platformName).csproj
-        arguments: '-c Release -f $(framework) -r $(rid) --self-contained /p:PublishSingleFile=true'
+        arguments: '-c Release -f $(framework) -r $(rid) --self-contained /p:DebugType=None /p:DebugSymbols=None /p:PublishSingleFile=true'
         publishWebProjects: false
+      env:
+        SLVersion: $(Version)
       displayName: Build & Publish Serial Loops
       
     - pwsh: |
@@ -110,8 +112,10 @@ stages:
       inputs:
         command: 'publish'
         projects: $(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/SerialLoops.$(platformName).csproj
-        arguments: '-c Release -f $(framework) -r $(rid) --self-contained /p:PublishSingleFile=true $(extraPublishParams)'
+        arguments: '-c Release -f $(framework) -r $(rid) --self-contained /p:DebugType=None /p:DebugSymbols=None /p:PublishSingleFile=true $(extraPublishParams)'
         publishWebProjects: false
+      env:
+        SLVersion: $(Version)
       displayName: Publishing Second Round
       condition: ne(variables['extraPublishParams'], '')
 
