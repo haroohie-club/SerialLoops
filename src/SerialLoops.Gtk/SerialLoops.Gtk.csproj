@@ -4,6 +4,7 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <Version>$(SLVersion)</Version>
     <AssemblyName>SerialLoops</AssemblyName>
   </PropertyGroup>
 

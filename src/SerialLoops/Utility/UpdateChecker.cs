@@ -1,15 +1,11 @@
-﻿using System;
-using System.IO;
-using System.Net.Http.Headers;
-using System.Net.Http;
-using System.Reflection;
-using System.Threading.Tasks;
-using System.Text.Json.Nodes;
-using HaruhiChokuretsuLib.Util;
+﻿using HaruhiChokuretsuLib.Util;
 using SerialLoops.Dialogs;
-using System.Diagnostics;
-using Eto.Forms;
-using System.Runtime.InteropServices;
+using System;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Reflection;
+using System.Text.Json.Nodes;
+using System.Threading.Tasks;
 
 namespace SerialLoops.Utility
 {
@@ -33,13 +29,13 @@ namespace SerialLoops.Utility
         public UpdateChecker(MainForm mainForm)
         {
             _mainForm = mainForm;
-            _currentVersion = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "0.1";
+            _currentVersion = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "0.1.0.0";
         }
 
         public async void Check()
         {
             (string version, string url, JsonArray assets, string changelog) = await GetLatestVersion(_currentVersion);
-            if (version.Equals(_currentVersion))
+            if (_currentVersion.StartsWith(version)) // version might be something like 0.1.1, but current version will always be 4 digits
             {
                 return;
             }
@@ -77,6 +73,5 @@ namespace SerialLoops.Utility
 
             return (currentVersion, "https://github.com/haroohie-club/SerialLoops/releases/latest", new(), "N/A");
         }
-
     }
 }
