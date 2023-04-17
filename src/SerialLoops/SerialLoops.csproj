@@ -40,6 +40,7 @@
     <None Remove="Icons\Scenario.png" />
     <None Remove="Icons\Script.png" />
     <None Remove="Icons\System_Texture.png" />
+    <None Remove="Icons\Template.png" />
     <None Remove="Icons\Topic.png" />
     <None Remove="Icons\Transition.png" />
     <None Remove="Icons\Tutorial.png" />

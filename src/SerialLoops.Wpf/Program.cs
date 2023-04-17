@@ -30,8 +30,8 @@ namespace SerialLoops.Wpf
             // Windows toolbar button & separator styling
             Eto.Style.Add<ButtonToolItemHandler>("sl-toolbar-button", button =>
             {
-                button.Control.Width = 50;
-                button.Control.Height = 40;
+                button.Control.Width = 60;
+                button.Control.Height = 45;
 
                 StackPanel stackPanel = new() { Orientation = Orientation.Vertical };
                 TextBlock textBlock = new() { Text = button.Text, TextAlignment = System.Windows.TextAlignment.Center };
