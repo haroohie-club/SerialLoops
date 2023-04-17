@@ -4,6 +4,7 @@ using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Script;
+using SerialLoops.Utility;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -37,13 +38,13 @@ namespace SerialLoops.Dialogs
         private void InitializeComponent()
         {
             Title = "Select Template to Apply";
-            MinimumSize = new Size(450, 400);
+            MinimumSize = new Size(600, 350);
             Padding = 10;
 
             _filter = new TextBox
             {
                 PlaceholderText = "Filter by name",
-                Width = 150,
+                Width = 200,
             };
             _filter.TextChanged += (sender, args) =>
             {
@@ -53,7 +54,7 @@ namespace SerialLoops.Dialogs
 
             _selector = new ListBox
             {
-                Size = new Size(150, 390),
+                Size = new Size(200, 330),
                 DataStore = ScriptTemplates.AvailableTemplates,
                 SelectedIndex = ScriptTemplates.AvailableTemplates.IndexOf(_currentSelection),
                 ItemTextBinding = Binding.Delegate<ScriptTemplates.TemplateOption, string>(t => t.Name),
@@ -62,25 +63,45 @@ namespace SerialLoops.Dialogs
 
             _description = new StackLayout
             {
+                MinimumSize = new(480, 330),
+                Padding = 10,
                 HorizontalContentAlignment = HorizontalAlignment.Center,
                 VerticalContentAlignment = VerticalAlignment.Center,
-                Padding = 10
+                Items =
+                {
+                    ControlGenerator.GetControlWithIcon("Please select a template", "Template", _log)
+                }
             };
             _selector.SelectedValueChanged += (sender, args) =>
             {
                 _currentSelection = (ScriptTemplates.TemplateOption)_selector.SelectedValue;
-                _description.Content = new StackLayout
+                if (_currentSelection is not null)
                 {
-                    Orientation = Orientation.Vertical,
-                    VerticalContentAlignment = VerticalAlignment.Center,
-                    HorizontalContentAlignment = HorizontalAlignment.Center,
-                    Spacing = 10,
-                    Items =
+                    _description.Content = new StackLayout
                     {
-                        _currentSelection.Name,
-                        _currentSelection.Description,
-                    }
-                };
+                        Orientation = Orientation.Vertical,
+                        Spacing = 10,
+                        Items =
+                        {
+                            ControlGenerator.GetTextHeader(_currentSelection.Name),
+                            _currentSelection.Description,
+                        }
+                    };
+                } 
+                else
+                {
+                    _description.Content = new StackLayout
+                    {
+                        Orientation = Orientation.Vertical,
+                        Spacing = 10,
+                        HorizontalContentAlignment = HorizontalAlignment.Center,
+                        VerticalContentAlignment = VerticalAlignment.Center,
+                        Items =
+                        {
+                            ControlGenerator.GetControlWithIcon("Please select a template", "Template", _log)
+                        }
+                    };
+                }
             };
 
             Button confirmButton = new() { Text = "Confirm" };
