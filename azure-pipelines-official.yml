@@ -79,7 +79,7 @@ stages:
       inputs:
         command: 'publish'
         projects: $(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/SerialLoops.$(platformName).csproj
-        arguments: '-c Release -f $(framework) -r $(rid) --self-contained /p:DebugType=None /p:DebugSymbols=None /p:PublishSingleFile=true'
+        arguments: '-c Release -f $(framework) -r $(rid) --self-contained /p:DebugType=None /p:DebugSymbols=false /p:PublishSingleFile=true'
         publishWebProjects: false
       env:
         SLVersion: $(Version)
@@ -112,7 +112,7 @@ stages:
       inputs:
         command: 'publish'
         projects: $(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/SerialLoops.$(platformName).csproj
-        arguments: '-c Release -f $(framework) -r $(rid) --self-contained /p:DebugType=None /p:DebugSymbols=None /p:PublishSingleFile=true $(extraPublishParams)'
+        arguments: '-c Release -f $(framework) -r $(rid) --self-contained /p:DebugType=None /p:DebugSymbols=false /p:PublishSingleFile=true $(extraPublishParams)'
         publishWebProjects: false
       env:
         SLVersion: $(Version)
