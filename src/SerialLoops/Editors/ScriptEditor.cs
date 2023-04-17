@@ -89,7 +89,7 @@ namespace SerialLoops.Editors
             applyTemplate.Executed += (sender, args) =>
             {
                 ScriptTemplateSelectorDialog scriptTemplateSelector = new(_project, _script.Event, _log);
-                ScriptTemplate template = scriptTemplateSelector.ShowModal();
+                ScriptTemplate template = scriptTemplateSelector.ShowModal(this);
                 if (template is not null)
                 {
                     template.Apply(_script, _project);
