@@ -18,13 +18,14 @@ parameters:
   type: string
   default: 'Latest nightly build. **Note that this is likely to have bugs and we recommend you use a regular release instead!**'
 
+name: $(Year:yy).$(Date:MMdd).$(Rev:r)
 
 variables:
   - name: Version
     ${{ if ne(parameters['version'], '') }}:
       value: ${{ parameters.version }}
     ${{ if eq(parameters['version'], '') }}:
-      value: 0.2.$(Build.BuildNumber)
+      value: 0.$(Build.BuildNumber)
 
 stages:
 - stage: Build
