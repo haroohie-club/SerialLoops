@@ -9,6 +9,7 @@ namespace SerialLoops.Lib.Items
     public class ItemDescription
     {
         public string Name { get; protected set; }
+        public bool CanRename { get; set; }
         public string DisplayName { get; protected set; }
         public string DisplayNameWithStatus => UnsavedChanges ? $"{DisplayName} *" : DisplayName;
         public string SearchableText { get; set; }
@@ -21,10 +22,12 @@ namespace SerialLoops.Lib.Items
             Type = type;
             if (!string.IsNullOrEmpty(displayName))
             {
+                CanRename = false;
                 DisplayName = displayName;
             }
             else
             {
+                CanRename = true;
                 DisplayName = Name;
             }
         }
