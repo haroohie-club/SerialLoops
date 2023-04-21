@@ -31,6 +31,7 @@ namespace SerialLoops.Lib.Items
             Index = index;
             BgmName = project.Extra.Bgms.FirstOrDefault(b => b.Index == Index)?.Name?.GetSubstitutedString(project) ?? "";
             DisplayName = string.IsNullOrEmpty(BgmName) ? Name : BgmName;
+            CanRename = string.IsNullOrEmpty(BgmName);
             PopulateScriptUses(project);
         }
 
