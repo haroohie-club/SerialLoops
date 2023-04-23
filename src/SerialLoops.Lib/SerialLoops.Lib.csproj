@@ -4,12 +4,13 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>disable</ImplicitUsings>
     <Nullable>disable</Nullable>
-    <Version>$(SLVersion)</Version>
+    <Version>$(SLAssemblyVersion)</Version>
+    <InformationalVersion>$(SLVersion)</InformationalVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="BunLabs.NAudio.Flac" Version="2.0.1" />
-    <PackageReference Include="HaruhiChokuretsuLib" Version="0.25.0" />
+    <PackageReference Include="HaruhiChokuretsuLib" Version="0.26.3" />
     <PackageReference Include="NAudio.Vorbis" Version="1.5.0" />
     <PackageReference Include="NitroPacker.Core" Version="2.1.0" />
     <PackageReference Include="NLayer" Version="1.14.0" />

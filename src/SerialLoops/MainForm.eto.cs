@@ -14,6 +14,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 
 namespace SerialLoops
 {
@@ -108,7 +109,8 @@ namespace SerialLoops
                 ProgramName = "Serial Loops",
                 Developers = new[] { "Jonko", "William278" },
                 Copyright = "© Haroohie Translation Club, 2023",
-                Website = new Uri("https://haroohie.club")
+                Website = new Uri("https://haroohie.club"),
+                Version = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion,
             }.ShowDialog(this);
 
             // Create Menu
