@@ -219,7 +219,7 @@ namespace SerialLoops.Lib.Items
             }
             else if (BackgroundType == BgType.KINETIC_SCREEN)
             {
-                //File.WriteAllBytes()
+                // TODO: Export screen information for KBGs
             }
         }
 
