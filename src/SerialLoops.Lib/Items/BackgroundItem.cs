@@ -109,7 +109,13 @@ namespace SerialLoops.Lib.Items
 
                 case BgType.TEX_CG_SINGLE:
                     tracker.Focus("Setting CG single image...", 1);
-                    Graphic1.SetImage(image, setPalette: true, transparentIndex);
+                    List<SKColor> singlePalette = Helpers.GetPaletteFromImage(image, transparentIndex == 0 ? 255 : 256);
+                    if (singlePalette.Count == 255)
+                    {
+                        singlePalette.Insert(0, new SKColor(0, 248, 0));
+                    }
+                    Graphic1.SetPalette(singlePalette);
+                    Graphic1.SetImage(image);
                     tracker.Finished++;
                     break;
 
@@ -210,6 +216,10 @@ namespace SerialLoops.Lib.Items
                 IO.WriteBinaryFile(Path.Combine("assets", "graphics", $"{Graphic2.Index:X3}.png"), grp2Stream.ToArray(), project, log);
                 IO.WriteStringFile(Path.Combine("assets", "graphics", $"{Graphic2.Index:X3}_pal.csv"),
                     string.Join(',', Graphic1.Palette.Select(c => c.ToString())), project, log);
+            }
+            else if (BackgroundType == BgType.KINETIC_SCREEN)
+            {
+                //File.WriteAllBytes()
             }
         }
 
