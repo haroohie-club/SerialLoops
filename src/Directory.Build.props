@@ -2,7 +2,8 @@
 <Project>
 
   <PropertyGroup Condition="'$(SLVersion)' == ''">
-    <SLVersion>0.2.9999</SLVersion>
+    <SLVersion>0.2.local</SLVersion>
+    <SLAssemblyVersion>0.2.9999.9999</SLAssemblyVersion>
   </PropertyGroup>
 
 </Project>
