@@ -30,7 +30,7 @@ variables:
     ${{ if ne(parameters['version'], '') }}:
       value: ${{ parameters.version }}
     ${{ if eq(parameters['version'], '') }}:
-      value: ${{ replace($(Build.BuildNumber), 'pre', '9999' }}
+      value: ${{ replace(variables['Build.BuildNumber'], 'pre', '9999') }}
 
 stages:
 - stage: Build
