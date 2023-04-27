@@ -96,20 +96,21 @@ namespace SerialLoops.Lib.Items
             }
         }
 
-        public void SetBackground(SKBitmap image, IProgressTracker tracker)
+        public void SetBackground(SKBitmap image, IProgressTracker tracker, ILogger log)
         {
+            PnnQuantizer quantizer = new();
             int transparentIndex = BackgroundType != BgType.TEX_BG ? 0 : -1;
             switch (BackgroundType)
             {
                 case BgType.KINETIC_SCREEN:
                     tracker.Focus("Setting screen image...", 1);
-                    Graphic2.SetScreenImage(image, Graphic1);
+                    Graphic2.SetScreenImage(image, quantizer, Graphic1);
                     tracker.Finished++;
                     break;
 
                 case BgType.TEX_CG_SINGLE:
                     tracker.Focus("Setting CG single image...", 1);
-                    List<SKColor> singlePalette = Helpers.GetPaletteFromImage(image, transparentIndex == 0 ? 255 : 256);
+                    List<SKColor> singlePalette = Helpers.GetPaletteFromImage(image, transparentIndex == 0 ? 255 : 256, log);
                     if (singlePalette.Count == 255)
                     {
                         singlePalette.Insert(0, new SKColor(0, 248, 0));
@@ -151,7 +152,7 @@ namespace SerialLoops.Lib.Items
                     tileCanvas.Flush();
 
                     tracker.Focus("Setting palettes and images...", 5);
-                    List<SKColor> tilePalette = Helpers.GetPaletteFromImage(image, transparentIndex == 0 ? 255 : 256);
+                    List<SKColor> tilePalette = Helpers.GetPaletteFromImage(image, transparentIndex == 0 ? 255 : 256, log);
                     if (tilePalette.Count == 255)
                     {
                         tilePalette.Insert(0, new SKColor(0, 248, 0));
@@ -183,7 +184,7 @@ namespace SerialLoops.Lib.Items
                     tracker.Finished++;
 
                     tracker.Focus("Setting palettes and images...", 5);
-                    List<SKColor> texPalette = Helpers.GetPaletteFromImage(image, transparentIndex == 0 ? 255 : 256);
+                    List<SKColor> texPalette = Helpers.GetPaletteFromImage(image, transparentIndex == 0 ? 255 : 256, log);
                     if (texPalette.Count == 255)
                     {
                         texPalette.Insert(0, new SKColor(0, 248, 0));

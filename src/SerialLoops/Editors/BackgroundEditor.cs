@@ -105,7 +105,7 @@ namespace SerialLoops.Editors
                         try
                         {
                             LoopyProgressTracker tracker = new();
-                            _ = new ProgressDialog(() => _bg.SetBackground(bgResizeDialog.FinalImage, tracker),
+                            _ = new ProgressDialog(() => _bg.SetBackground(bgResizeDialog.FinalImage, tracker, _log),
                                 () => Content = GetEditorPanel(), tracker, $"Replacing {_bg.DisplayName}...");
                             UpdateTabTitle(false);
                         }
