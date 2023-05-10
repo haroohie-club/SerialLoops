@@ -33,6 +33,7 @@ namespace SerialLoops.Dialogs
             string prefix = _item.Type switch
             {
                 ItemDescription.ItemType.Background => "BG_",
+                ItemDescription.ItemType.BGM => "BGM_",
                 ItemDescription.ItemType.Character_Sprite => "SPR_",
                 ItemDescription.ItemType.Chess => "CHESS_",
                 ItemDescription.ItemType.Chibi => "CHB_",
@@ -42,7 +43,6 @@ namespace SerialLoops.Dialogs
                 ItemDescription.ItemType.Place => "PLC_",
                 ItemDescription.ItemType.Puzzle => "PZL_",
                 ItemDescription.ItemType.Sfx => "SFX_",
-                ItemDescription.ItemType.Topic => "TP_",
                 ItemDescription.ItemType.Transition => "TRN_",
                 ItemDescription.ItemType.Tutorial => "TUT_",
                 _ => "",

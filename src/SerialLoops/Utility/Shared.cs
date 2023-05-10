@@ -10,12 +10,12 @@ namespace SerialLoops.Utility
 {
     public static class Shared
     {
-        public static void RenameItem(Project project, ItemExplorerPanel explorer, EditorTabsPanel tabs, ILogger log)
+        public static void RenameItem(Project project, ItemExplorerPanel explorer, EditorTabsPanel tabs, ILogger log, bool overrideRename = false)
         {
             ItemDescription item = project.FindItem(explorer.Viewer.SelectedItem?.Text);
             if (item is not null)
             {
-                if (!item.CanRename)
+                if (!item.CanRename && !overrideRename)
                 {
                     MessageBox.Show("Can't rename this item directly -- open it to rename it!", "Can't Rename Item", MessageBoxType.Warning);
                     return;
@@ -29,6 +29,8 @@ namespace SerialLoops.Utility
                     openTab.Text = item.DisplayNameWithStatus;
                 }
                 explorer.Invalidate();
+                project.ItemNames[item.Name] = item.DisplayName;
+                project.Save();
             }
         }
     }
