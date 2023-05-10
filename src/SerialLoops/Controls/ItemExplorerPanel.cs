@@ -10,7 +10,6 @@ namespace SerialLoops.Controls
 {
     public class ItemExplorerPanel : ItemListPanel
     {
-
         private readonly Project _project;
         private readonly EditorTabsPanel _tabs;
         
@@ -23,6 +22,13 @@ namespace SerialLoops.Controls
             {
                 ((TreeGridView)Viewer.Control).ContextMenu = Viewer.SelectedItem.Text.GetContextMenu(_project, this, _tabs, _log);
             }
+            KeyUp += (sender, args) =>
+            {
+                if (args.Control && args.KeyData.HasFlag(Keys.R))
+                {
+                    Shared.RenameItem(_project, this, _tabs, _log);
+                }
+            };
         }
 
         private void Viewer_SelectedItemChanged(object sender, EventArgs e)

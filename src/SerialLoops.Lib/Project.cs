@@ -413,7 +413,6 @@ namespace SerialLoops.Lib
             if (titlesOnly)
             {
                 return Items.Where(item =>
-                    item.Name.Contains(searchTerm.Trim(), StringComparison.OrdinalIgnoreCase) ||
                     item.DisplayName.Contains(searchTerm.Trim(), StringComparison.OrdinalIgnoreCase)).ToList();
             }
             else
