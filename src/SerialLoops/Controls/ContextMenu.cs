@@ -57,9 +57,15 @@ namespace SerialLoops.Controls
                     MessageBox.Show("Can't rename this item directly -- open it to rename it!", "Can't Rename Item", MessageBoxType.Warning);
                     return;
                 }
+                DocumentPage openTab = _tabs.Tabs.Pages.FirstOrDefault(p => p.Text == item.DisplayNameWithStatus);
                 ItemRenameDialog renameDialog = new(item, _project, _log);
                 renameDialog.ShowModal();
                 _explorer.Viewer.SelectedItem.Text = item.DisplayName;
+                if (openTab is not null)
+                {
+                    openTab.Text = item.DisplayNameWithStatus;
+                }
+                _explorer.Invalidate();
             }
         }
 

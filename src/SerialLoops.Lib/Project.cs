@@ -374,7 +374,7 @@ namespace SerialLoops.Lib
 
         public ItemDescription FindItem(string name)
         {
-            return Items.FirstOrDefault(i => i.Name == name.Split(" - ")[0]);
+            return Items.FirstOrDefault(i => i.DisplayName == name.Split(" - ")[0]);
         }
 
         public static (Project Project, LoadProjectResult Result) OpenProject(string projFile, Config config, ILogger log, IProgressTracker tracker)

@@ -40,7 +40,7 @@ namespace SerialLoops.Controls
 {
     public interface ISection
     {
-        string Text { get; }
+        string Text { get; set; }
     }
 
     /// <summary>
@@ -56,6 +56,7 @@ namespace SerialLoops.Controls
     {
         public Icon SectionIcon { get; set; }
         public string Text { get; set; }
+        public SectionTreeItem Parent { get; internal set; }
 
         public Section()
         {
@@ -84,6 +85,7 @@ namespace SerialLoops.Controls
         public SectionTreeItem(Section section, bool expanded)
         {
             Section = section;
+            Section.Parent = this;
             Expanded = expanded;
             foreach (var child in section)
             {
