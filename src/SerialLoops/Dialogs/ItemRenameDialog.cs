@@ -2,6 +2,7 @@
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
+using SerialLoops.Utility;
 using System;
 using System.Linq;
 
@@ -29,9 +30,26 @@ namespace SerialLoops.Dialogs
 
             Button renameButton = new() { Text = "Rename" };
             Button cancelButton = new() { Text = "Cancel" };
-            renameButton.Click += (sender, args) =>
+            string prefix = _item.Type switch
             {
-                string name = nameBox.Text.Trim();
+                ItemDescription.ItemType.Background => "BG_",
+                ItemDescription.ItemType.Character_Sprite => "SPR_",
+                ItemDescription.ItemType.Chess => "CHESS_",
+                ItemDescription.ItemType.Chibi => "CHB_",
+                ItemDescription.ItemType.Dialogue_Config => "CHR_",
+                ItemDescription.ItemType.Group_Selection => "GRP_",
+                ItemDescription.ItemType.Map => "MAP_",
+                ItemDescription.ItemType.Place => "PLC_",
+                ItemDescription.ItemType.Puzzle => "PZL_",
+                ItemDescription.ItemType.Sfx => "SFX_",
+                ItemDescription.ItemType.Topic => "TP_",
+                ItemDescription.ItemType.Transition => "TRN_",
+                ItemDescription.ItemType.Tutorial => "TUT_",
+                _ => "",
+            };
+            void renameItem()
+            {
+                string name = $"{prefix}{nameBox.Text.Trim()}";
                 if (_project.Items.All(i => !i.DisplayName.Equals(name, StringComparison.OrdinalIgnoreCase)))
                 {
                     _item.Rename(name);
@@ -40,6 +58,17 @@ namespace SerialLoops.Dialogs
                 else
                 {
                     _log.LogError($"Name '{name}' is already in use!");
+                }
+            }
+            renameButton.Click += (sender, args) =>
+            {
+                renameItem();
+            };
+            nameBox.KeyUp += (sender, args) =>
+            {
+                if (args.KeyData == Keys.Enter)
+                {
+                    renameItem();
                 }
             };
             cancelButton.Click += (sender, args) =>
@@ -56,7 +85,7 @@ namespace SerialLoops.Dialogs
                 Items =
                 {
                     new Label { Text = "New Name" },
-                    new StackLayoutItem { Control = nameBox },
+                    ControlGenerator.GetControlWithLabel(prefix, nameBox),
                     new StackLayoutItem
                     {
                         HorizontalAlignment = HorizontalAlignment.Right,
