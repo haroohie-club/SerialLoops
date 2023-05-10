@@ -338,10 +338,13 @@ namespace SerialLoops.Lib
 
             if (ItemNames is null)
             {
-                ItemNames = new();
+                ItemNames = JsonSerializer.Deserialize<Dictionary<string, string>>(File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "DefaultNames.json")));
                 foreach (ItemDescription item in Items)
                 {
-                    ItemNames.Add(item.Name, item.DisplayName);
+                    if (!ItemNames.ContainsKey(item.Name))
+                    {
+                        ItemNames.Add(item.Name, item.DisplayName);
+                    }
                 }
             }
 
