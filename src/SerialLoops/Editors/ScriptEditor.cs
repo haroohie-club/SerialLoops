@@ -1486,7 +1486,7 @@ namespace SerialLoops.Editors
                 // Draw top screen "kinetic" background
                 for (int i = commands.Count - 1; i >= 0; i--)
                 {
-                    if (commands[i].Verb == CommandVerb.KBG_DISP)
+                    if (commands[i].Verb == CommandVerb.KBG_DISP && ((BgScriptParameter)commands[i].Parameters[0]).Background is not null)
                     {
                         canvas.DrawBitmap(((BgScriptParameter)commands[i].Parameters[0]).Background.GetBackground(), new SKPoint(0, 0));
                         break;
