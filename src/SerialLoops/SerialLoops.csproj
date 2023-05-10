@@ -8,7 +8,8 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <Version>$(SLVersion)</Version>
+    <Version>$(SLAssemblyVersion)</Version>
+    <InformationalVersion>$(SLVersion)</InformationalVersion>
     <AssemblyName>SerialLoops.Eto</AssemblyName>
   </PropertyGroup>
 

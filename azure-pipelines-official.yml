@@ -18,13 +18,19 @@ parameters:
   type: string
   default: 'Latest nightly build. **Note that this is likely to have bugs and we recommend you use a regular release instead!**'
 
+name: 0.2.pre.$(Rev:r)
 
 variables:
   - name: Version
     ${{ if ne(parameters['version'], '') }}:
       value: ${{ parameters.version }}
     ${{ if eq(parameters['version'], '') }}:
-      value: 0.2.$(Build.BuildNumber)
+      value: $(Build.BuildNumber)
+  - name: AssemblyVersion
+    ${{ if ne(parameters['version'], '') }}:
+      value: ${{ parameters.version }}
+    ${{ if eq(parameters['version'], '') }}:
+      value: ${{ replace(variables['Build.BuildNumber'], 'pre', '9999') }}
 
 stages:
 - stage: Build
@@ -83,6 +89,7 @@ stages:
         publishWebProjects: false
       env:
         SLVersion: $(Version)
+        SLAssemblyVersion: $(AssemblyVersion)
       displayName: Build & Publish Serial Loops
       
     - pwsh: |
@@ -116,6 +123,7 @@ stages:
         publishWebProjects: false
       env:
         SLVersion: $(Version)
+        SLAssemblyVersion: $(AssemblyVersion)
       displayName: Publishing Second Round
       condition: ne(variables['extraPublishParams'], '')
 

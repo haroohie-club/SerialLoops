@@ -1498,7 +1498,7 @@ namespace SerialLoops.Editors
                 {
                     if (commands[i].Verb == CommandVerb.SET_PLACE)
                     {
-                        if (((BoolScriptParameter)commands[i].Parameters[0]).Value)
+                        if (((BoolScriptParameter)commands[i].Parameters[0]).Value && (((PlaceScriptParameter)commands[i].Parameters[1]).Place is not null))
                         {
                             canvas.DrawBitmap(((PlaceScriptParameter)commands[i].Parameters[1]).Place.GetPreview(_project), new SKPoint(5, 40));
                         }
@@ -1645,14 +1645,14 @@ namespace SerialLoops.Editors
                                     SKBitmap dualScreenBg = background.GetBackground();
                                     if (bgScrollCommand is not null && ((BgScrollDirectionScriptParameter)bgScrollCommand.Parameters[0]).ScrollDirection == BgScrollDirectionScriptParameter.BgScrollDirection.DOWN)
                                     {
-                                        canvas.DrawBitmap(dualScreenBg, new SKRect(0, background.Graphic2.Height - 194, 256, background.Graphic2.Height), new SKRect(0, 0, 256, 194));
-                                        int bottomScreenX = dualScreenBg.Height - 194;
-                                        canvas.DrawBitmap(dualScreenBg, new SKRect(0, bottomScreenX, 256, bottomScreenX + 194), new SKRect(0, 194, 256, 388));
+                                        canvas.DrawBitmap(dualScreenBg, new SKRect(0, background.Graphic2.Height - 192, 256, background.Graphic2.Height), new SKRect(0, 0, 256, 192));
+                                        int bottomScreenX = dualScreenBg.Height - 192;
+                                        canvas.DrawBitmap(dualScreenBg, new SKRect(0, bottomScreenX, 256, bottomScreenX + 192), new SKRect(0, 192, 256, 384));
                                     }
                                     else
                                     {
-                                        canvas.DrawBitmap(dualScreenBg, new SKRect(0, 0, 256, 194), new SKRect(0, 0, 256, 194));
-                                        canvas.DrawBitmap(dualScreenBg, new SKRect(0, background.Graphic2.Height, 256, background.Graphic2.Height + 194), new SKRect(0, 194, 256, 388));
+                                        canvas.DrawBitmap(dualScreenBg, new SKRect(0, 0, 256, 192), new SKRect(0, 0, 256, 192));
+                                        canvas.DrawBitmap(dualScreenBg, new SKRect(0, background.Graphic2.Height, 256, background.Graphic2.Height + 192), new SKRect(0, 192, 256, 384));
                                     }
                                     break;
 
@@ -1661,12 +1661,12 @@ namespace SerialLoops.Editors
                                         || (bgScrollCommand is not null && ((BgScrollDirectionScriptParameter)bgScrollCommand.Parameters[0]).ScrollDirection == BgScrollDirectionScriptParameter.BgScrollDirection.DOWN))
                                     {
                                         SKBitmap bgBitmap = background.GetBackground();
-                                        canvas.DrawBitmap(bgBitmap, new SKRect(0, bgBitmap.Height - 194, bgBitmap.Width, bgBitmap.Height),
-                                            new SKRect(0, 194, 256, 388));
+                                        canvas.DrawBitmap(bgBitmap, new SKRect(0, bgBitmap.Height - 192, bgBitmap.Width, bgBitmap.Height),
+                                            new SKRect(0, 192, 256, 384));
                                     }
                                     else
                                     {
-                                        canvas.DrawBitmap(background.GetBackground(), new SKPoint(0, 194));
+                                        canvas.DrawBitmap(background.GetBackground(), new SKPoint(0, 192));
                                     }
                                     break;
 
@@ -1674,20 +1674,20 @@ namespace SerialLoops.Editors
                                     if (bgScrollCommand is not null && ((BgScrollDirectionScriptParameter)bgScrollCommand.Parameters[0]).ScrollDirection == BgScrollDirectionScriptParameter.BgScrollDirection.RIGHT)
                                     {
                                         SKBitmap bgBitmap = background.GetBackground();
-                                        canvas.DrawBitmap(bgBitmap, new SKRect(bgBitmap.Width - 256, 0, bgBitmap.Width, 194), new SKRect(0, 194, 256, 388));
+                                        canvas.DrawBitmap(bgBitmap, new SKRect(bgBitmap.Width - 256, 0, bgBitmap.Width, 192), new SKRect(0, 192, 256, 384));
                                     }
                                     else
                                     {
-                                        canvas.DrawBitmap(background.GetBackground(), new SKPoint(0, 194));
+                                        canvas.DrawBitmap(background.GetBackground(), new SKPoint(0, 192));
                                     }
                                     break;
 
                                 case BgType.TEX_CG:
-                                    canvas.DrawBitmap(background.GetBackground(), new SKPoint(0, 194));
+                                    canvas.DrawBitmap(background.GetBackground(), new SKPoint(0, 192));
                                     break;
 
                                 default:
-                                    canvas.DrawBitmap(background.GetBackground(), new SKPoint(0, 194), palEffectPaint);
+                                    canvas.DrawBitmap(background.GetBackground(), new SKPoint(0, 192), palEffectPaint);
                                     break;
                             }
                             break;
