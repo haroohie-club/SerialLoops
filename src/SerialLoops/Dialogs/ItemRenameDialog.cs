@@ -26,10 +26,6 @@ namespace SerialLoops.Dialogs
         {
             MinimumSize = new(256, 100);
 
-            TextBox nameBox = new();
-
-            Button renameButton = new() { Text = "Rename" };
-            Button cancelButton = new() { Text = "Cancel" };
             string prefix = _item.Type switch
             {
                 ItemDescription.ItemType.Background => "BG_",
@@ -47,6 +43,21 @@ namespace SerialLoops.Dialogs
                 ItemDescription.ItemType.Tutorial => "TUT_",
                 _ => "",
             };
+
+            TextBox nameBox = new();
+            if (_item.DisplayName.StartsWith(prefix))
+            {
+                nameBox.Text = _item.DisplayName[prefix.Length..];
+            }
+            else
+            {
+                nameBox.Text = _item.DisplayName;
+            }
+            nameBox.SelectAll();
+
+            Button renameButton = new() { Text = "Rename" };
+            Button cancelButton = new() { Text = "Cancel" };
+
             void renameItem()
             {
                 string name = $"{prefix}{nameBox.Text.Trim()}";
