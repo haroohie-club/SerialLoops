@@ -22,13 +22,6 @@ namespace SerialLoops.Controls
             {
                 ((TreeGridView)Viewer.Control).ContextMenu = Viewer.SelectedItem.Text.GetContextMenu(_project, this, _tabs, _log);
             }
-            KeyUp += (sender, args) =>
-            {
-                if (args.Control && args.KeyData.HasFlag(Keys.R))
-                {
-                    Shared.RenameItem(_project, this, _tabs, _log);
-                }
-            };
         }
 
         private void Viewer_SelectedItemChanged(object sender, EventArgs e)
@@ -36,6 +29,7 @@ namespace SerialLoops.Controls
             if (Viewer.SelectedItem is not null)
             {
                 ((TreeGridView)Viewer.Control).ContextMenu = Viewer.SelectedItem.Text.GetContextMenu(_project, this, _tabs, _log);
+                
             }
         }
 

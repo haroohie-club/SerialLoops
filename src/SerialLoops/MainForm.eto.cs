@@ -28,7 +28,7 @@ namespace SerialLoops
         public EditorTabsPanel EditorTabs { get; set; }
         public ItemExplorerPanel ItemExplorer { get; set; }
         public LoopyLogger Log { get; set; }
-        private SubMenuItem _recentProjects;
+        private SubMenuItem _recentProjectsCommand;
 
         public string ShutdownUpdateUrl = null;
 
@@ -88,11 +88,11 @@ namespace SerialLoops
         private void InitializeBaseMenu()
         {
             // File
-            Command newProject = new() { MenuText = "New Project...", ToolBarText = "New Project", Image = ControlGenerator.GetIcon("New", Log) };
-            newProject.Executed += NewProjectCommand_Executed;
+            Command newProjectCommand = new() { MenuText = "New Project...", ToolBarText = "New Project", Image = ControlGenerator.GetIcon("New", Log) };
+            newProjectCommand.Executed += NewProjectCommand_Executed;
 
-            Command openProject = new() { MenuText = "Open Project...", ToolBarText = "Open Project", Image = ControlGenerator.GetIcon("Open", Log) };
-            openProject.Executed += OpenProject_Executed;
+            Command openProjectCommand = new() { MenuText = "Open Project...", ToolBarText = "Open Project", Image = ControlGenerator.GetIcon("Open", Log) };
+            openProjectCommand.Executed += OpenProject_Executed;
 
             // Application Items
             Command preferencesCommand = new();
@@ -114,13 +114,13 @@ namespace SerialLoops
             }.ShowDialog(this);
 
             // Create Menu
-            _recentProjects = new() { Text = "Recent Projects" };
+            _recentProjectsCommand = new() { Text = "Recent Projects" };
             Menu = new MenuBar
             {
                 Items =
                 {
                     // File submenu
-                    new SubMenuItem { Text = "&File", Items = { newProject, openProject, _recentProjects } }
+                    new SubMenuItem { Text = "&File", Items = { newProjectCommand, openProjectCommand, _recentProjectsCommand } }
                 },
                 ApplicationItems =
                 {
@@ -135,37 +135,40 @@ namespace SerialLoops
         private void InitializeProjectMenu()
         {
             // File
-            Command saveProject = new() { MenuText = "Save Project", ToolBarText = "Save Project", Shortcut = Application.Instance.CommonModifier | Keys.S, Image = ControlGenerator.GetIcon("Save", Log) };
-            saveProject.Executed += SaveProject_Executed;
+            Command saveProjectCommand = new() { MenuText = "Save Project", ToolBarText = "Save Project", Shortcut = Application.Instance.CommonModifier | Keys.S, Image = ControlGenerator.GetIcon("Save", Log) };
+            saveProjectCommand.Executed += SaveProject_Executed;
 
-            Command projectSettings = new() { MenuText = "Project Settings...", ToolBarText = "Project Settings", Image = ControlGenerator.GetIcon("Project_Options", Log) };
-            projectSettings.Executed += ProjectSettings_Executed;
+            Command projectSettingsCommand = new() { MenuText = "Project Settings...", ToolBarText = "Project Settings", Image = ControlGenerator.GetIcon("Project_Options", Log) };
+            projectSettingsCommand.Executed += ProjectSettings_Executed;
 
-            Command migrateProject = new() { MenuText = "Migrate to new ROM", ToolBarText = "Migrate Project" };
-            migrateProject.Executed += MigrateProject_Executed;
+            Command migrateProjectCommand = new() { MenuText = "Migrate to new ROM", ToolBarText = "Migrate Project" };
+            migrateProjectCommand.Executed += MigrateProject_Executed;
 
-            Command exportPatch = new() { MenuText = "Export Patch", ToolBarText = "Export Patch" };
-            exportPatch.Executed += Patch_Executed;
+            Command exportPatchCommand = new() { MenuText = "Export Patch", ToolBarText = "Export Patch" };
+            exportPatchCommand.Executed += Patch_Executed;
 
-            Command closeProject = new() { MenuText = "Close Project", ToolBarText = "Close Project", Image = ControlGenerator.GetIcon("Close", Log) };
-            closeProject.Executed += (sender, args) => CloseProjectView();
+            Command closeProjectCommand = new() { MenuText = "Close Project", ToolBarText = "Close Project", Image = ControlGenerator.GetIcon("Close", Log) };
+            closeProjectCommand.Executed += (sender, args) => CloseProjectView();
 
             // Tools
-            Command searchProject = new() { MenuText = "Search...", ToolBarText = "Search", Shortcut = Application.Instance.CommonModifier | Keys.F, Image = ControlGenerator.GetIcon("Search", Log) };
-            searchProject.Executed += Search_Executed;
+            Command renameItemCommand = new() { MenuText = "Rename Item", Shortcut = Keys.F2 };
+            renameItemCommand.Executed += (sender, args) => Shared.RenameItem(OpenProject, ItemExplorer, EditorTabs, Log);
 
-            Command findOrphanedItems = new() { MenuText = "Find Orphaned Items..." };
-            findOrphanedItems.Executed += FindOrphanedItems_Executed;
+            Command searchProjectCommand = new() { MenuText = "Search...", ToolBarText = "Search", Shortcut = Application.Instance.CommonModifier | Keys.F, Image = ControlGenerator.GetIcon("Search", Log) };
+            searchProjectCommand.Executed += Search_Executed;
+
+            Command findOrphanedItemsCommand = new() { MenuText = "Find Orphaned Items..." };
+            findOrphanedItemsCommand.Executed += FindOrphanedItems_Executed;
 
             // Build
-            Command buildIterativeProject = new() { MenuText = "Build", ToolBarText = "Build", Image = ControlGenerator.GetIcon("Build", Log) };
-            buildIterativeProject.Executed += BuildIterativeProject_Executed;
+            Command buildIterativeProjectCommand = new() { MenuText = "Build", ToolBarText = "Build", Image = ControlGenerator.GetIcon("Build", Log) };
+            buildIterativeProjectCommand.Executed += BuildIterativeProject_Executed;
 
-            Command buildBaseProject = new() { MenuText = "Build from Scratch", ToolBarText = "Build from Scratch", Image = ControlGenerator.GetIcon("Build_Scratch", Log) };
-            buildBaseProject.Executed += BuildBaseProject_Executed;
+            Command buildBaseProjectCommand = new() { MenuText = "Build from Scratch", ToolBarText = "Build from Scratch", Image = ControlGenerator.GetIcon("Build_Scratch", Log) };
+            buildBaseProjectCommand.Executed += BuildBaseProject_Executed;
 
-            Command buildAndRunProject = new() { MenuText = "Build and Run", ToolBarText = "Run", Image = ControlGenerator.GetIcon("Build_Run", Log) };
-            buildAndRunProject.Executed += BuildAndRunProject_Executed;
+            Command buildAndRunProjectCommand = new() { MenuText = "Build and Run", ToolBarText = "Run", Image = ControlGenerator.GetIcon("Build_Run", Log) };
+            buildAndRunProjectCommand.Executed += BuildAndRunProject_Executed;
 
             // Add toolbar
             ToolBar = new ToolBar
@@ -173,19 +176,19 @@ namespace SerialLoops
                 Style = "sl-toolbar",
                 Items =
                 {
-                    ControlGenerator.GetToolBarItem(buildIterativeProject),
-                    ControlGenerator.GetToolBarItem(buildAndRunProject),
-                    ControlGenerator.GetToolBarItem(searchProject)
+                    ControlGenerator.GetToolBarItem(buildIterativeProjectCommand),
+                    ControlGenerator.GetToolBarItem(buildAndRunProjectCommand),
+                    ControlGenerator.GetToolBarItem(searchProjectCommand)
                 }
             };
 
             // Add project items to existing File menu
             if (Menu.Items.FirstOrDefault(x => x.Text == "&File") is SubMenuItem fileMenu)
             {
-                fileMenu.Items.AddRange(new[] { saveProject, projectSettings, migrateProject, exportPatch, closeProject });
+                fileMenu.Items.AddRange(new[] { saveProjectCommand, projectSettingsCommand, migrateProjectCommand, exportPatchCommand, closeProjectCommand });
             }
-            Menu.Items.Add(new SubMenuItem { Text = "&Tools", Items = { searchProject, findOrphanedItems } });
-            Menu.Items.Add(new SubMenuItem { Text = "&Build", Items = { buildIterativeProject, buildBaseProject, buildAndRunProject } });
+            Menu.Items.Add(new SubMenuItem { Text = "&Tools", Items = { renameItemCommand, searchProjectCommand, findOrphanedItemsCommand } });
+            Menu.Items.Add(new SubMenuItem { Text = "&Build", Items = { buildIterativeProjectCommand, buildBaseProjectCommand, buildAndRunProjectCommand } });
         }
 
         private void LoadCachedData(Project project, IProgressTracker tracker)
@@ -255,7 +258,7 @@ namespace SerialLoops
 
         private void UpdateRecentProjects()
         {
-            _recentProjects?.Items.Clear();
+            _recentProjectsCommand?.Items.Clear();
 
             List<string> projectsToRemove = new();
             foreach (string project in ProjectsCache.RecentProjects)
@@ -273,9 +276,9 @@ namespace SerialLoops
                     recentProject.MenuText += " (Missing)";
                     recentProject.Image = ControlGenerator.GetIcon("Warning", Log);
                 }
-                _recentProjects?.Items.Add(recentProject);
+                _recentProjectsCommand?.Items.Add(recentProject);
             }
-            if (_recentProjects is not null) { _recentProjects.Enabled = _recentProjects.Items.Count > 0; }
+            if (_recentProjectsCommand is not null) { _recentProjectsCommand.Enabled = _recentProjectsCommand.Items.Count > 0; }
 
             projectsToRemove.ForEach(project =>
             {
