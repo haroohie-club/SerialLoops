@@ -395,6 +395,10 @@ namespace SerialLoops.Lib
 
         public ItemDescription FindItem(string name)
         {
+            if (string.IsNullOrEmpty(name))
+            {
+                return null;
+            }
             return Items.FirstOrDefault(i => name.Contains(" - ") ? i.Name == name.Split(" - ")[0] : i.DisplayName == name);
         }
 
