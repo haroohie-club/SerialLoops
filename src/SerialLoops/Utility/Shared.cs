@@ -28,7 +28,7 @@ namespace SerialLoops.Utility
                 {
                     openTab.Text = item.DisplayNameWithStatus;
                 }
-                explorer.Invalidate();
+                ((TreeGridView)explorer.Viewer.Control).ReloadData();
                 project.ItemNames[item.Name] = item.DisplayName;
                 project.Save();
             }
