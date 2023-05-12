@@ -12,7 +12,8 @@ namespace SerialLoops.Lib.Items
 
         public TopicItem(TopicStruct topicStruct, Project project) : base($"{topicStruct.Id}", ItemType.Topic)
         {
-            DisplayName = $"{topicStruct.Title.GetSubstitutedString(project)}";
+            DisplayName = $"{topicStruct.Id} - {topicStruct.Title.GetSubstitutedString(project)}";
+            CanRename = false;
             Topic = topicStruct;
             PopulateScriptUses(project);
         }

@@ -30,7 +30,8 @@ namespace SerialLoops.Lib.Items
             _bgmFile = bgmFile;
             Index = index;
             BgmName = project.Extra.Bgms.FirstOrDefault(b => b.Index == Index)?.Name?.GetSubstitutedString(project) ?? "";
-            DisplayName = string.IsNullOrEmpty(BgmName) ? Name : BgmName;
+            DisplayName = string.IsNullOrEmpty(BgmName) ? Name : $"{Name} - {BgmName}";
+            CanRename = string.IsNullOrEmpty(BgmName);
             PopulateScriptUses(project);
         }
 

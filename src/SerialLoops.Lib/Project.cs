@@ -25,6 +25,7 @@ namespace SerialLoops.Lib
         public string Name { get; set; }
         public string LangCode { get; set; }
         public string MainDirectory { get; set; }
+        public Dictionary<string, string> ItemNames { get; set; }
         [JsonIgnore]
         public string BaseDirectory => Path.Combine(MainDirectory, "base");
         [JsonIgnore]
@@ -77,7 +78,7 @@ namespace SerialLoops.Lib
             try
             {
                 Directory.CreateDirectory(MainDirectory);
-                File.WriteAllText(Path.Combine(MainDirectory, $"{Name}.{PROJECT_FORMAT}"), JsonSerializer.Serialize(this));
+                Save();
                 Directory.CreateDirectory(BaseDirectory);
                 Directory.CreateDirectory(IterativeDirectory);
                 Directory.CreateDirectory(Path.Combine(MainDirectory, "font"));
@@ -335,6 +336,26 @@ namespace SerialLoops.Lib
                 tracker.Finished++;
             }
 
+            if (ItemNames is null)
+            {
+                ItemNames = JsonSerializer.Deserialize<Dictionary<string, string>>(File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "DefaultNames.json")));
+                foreach (ItemDescription item in Items)
+                {
+                    if (!ItemNames.ContainsKey(item.Name))
+                    {
+                        ItemNames.Add(item.Name, item.DisplayName);
+                    }
+                }
+            }
+
+            for (int i = 0; i < Items.Count; i++)
+            {
+                if (Items[i].CanRename)
+                {
+                    Items[i].Rename(ItemNames[Items[i].Name]);
+                }
+            }
+
             return new(LoadProjectState.SUCCESS);
         }
 
@@ -374,7 +395,11 @@ namespace SerialLoops.Lib
 
         public ItemDescription FindItem(string name)
         {
-            return Items.FirstOrDefault(i => i.Name == name.Split(" - ")[0]);
+            if (string.IsNullOrEmpty(name))
+            {
+                return null;
+            }
+            return Items.FirstOrDefault(i => name.Contains(" - ") ? i.Name == name.Split(" - ")[0] : i.DisplayName == name);
         }
 
         public static (Project Project, LoadProjectResult Result) OpenProject(string projFile, Config config, ILogger log, IProgressTracker tracker)
@@ -408,12 +433,16 @@ namespace SerialLoops.Lib
             }
         }
 
+        public void Save()
+        {
+            File.WriteAllText(Path.Combine(MainDirectory, $"{Name}.{PROJECT_FORMAT}"), JsonSerializer.Serialize(this));
+        }
+
         public List<ItemDescription> GetSearchResults(string searchTerm, bool titlesOnly = true)
         {
             if (titlesOnly)
             {
                 return Items.Where(item =>
-                    item.Name.Contains(searchTerm.Trim(), StringComparison.OrdinalIgnoreCase) ||
                     item.DisplayName.Contains(searchTerm.Trim(), StringComparison.OrdinalIgnoreCase)).ToList();
             }
             else
