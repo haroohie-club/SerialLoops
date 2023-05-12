@@ -26,6 +26,8 @@ namespace SerialLoops.Lib
         public string LangCode { get; set; }
         public string MainDirectory { get; set; }
         public Dictionary<string, string> ItemNames { get; set; }
+        public Dictionary<int, string> Characters { get; set; }
+
         [JsonIgnore]
         public string BaseDirectory => Path.Combine(MainDirectory, "base");
         [JsonIgnore]
@@ -207,6 +209,8 @@ namespace SerialLoops.Lib
             }
             tracker.Finished++;
 
+            Characters ??= JsonSerializer.Deserialize<Dictionary<int, string>>(File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "DefaultCharacters.json")));
+
             tracker.Focus("Font", 5);
             if (IO.TryReadStringFile(Path.Combine(MainDirectory, "font", "charset.json"), out string json, log))
             {
@@ -285,7 +289,7 @@ namespace SerialLoops.Lib
 
             tracker.Focus("Dialogue Configs", 1);
             Items.AddRange(Dat.Files.First(d => d.Name == "MESSINFOS").CastTo<MessageInfoFile>()
-                .MessageInfos.Where(m => (int)m.Character > 0).Select(m => new DialogueConfigItem(m)));
+                .MessageInfos.Where(m => (int)m.Character > 0).Select(m => new CharacterItem(m)));
             tracker.Finished++;
 
             tracker.Focus("Event Files", 1);
@@ -341,7 +345,7 @@ namespace SerialLoops.Lib
                 ItemNames = JsonSerializer.Deserialize<Dictionary<string, string>>(File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "DefaultNames.json")));
                 foreach (ItemDescription item in Items)
                 {
-                    if (!ItemNames.ContainsKey(item.Name))
+                    if (!ItemNames.ContainsKey(item.Name) && item.CanRename)
                     {
                         ItemNames.Add(item.Name, item.DisplayName);
                     }
@@ -352,7 +356,14 @@ namespace SerialLoops.Lib
             {
                 if (Items[i].CanRename)
                 {
-                    Items[i].Rename(ItemNames[Items[i].Name]);
+                    try
+                    {
+                        Items[i].Rename(ItemNames[Items[i].Name]);
+                    }
+                    catch
+                    {
+                        ItemNames.Add(Items[i].Name, Items[i].DisplayName);
+                    }
                 }
             }
 

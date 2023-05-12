@@ -32,6 +32,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="DefaultCharacters.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="DefaultNames.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

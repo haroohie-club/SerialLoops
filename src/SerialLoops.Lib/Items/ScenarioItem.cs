@@ -13,6 +13,7 @@ namespace SerialLoops.Lib.Items
         public ScenarioItem(ScenarioStruct scenario, Project project, ILogger log) : base("Scenario", ItemType.Scenario)
         {
             Scenario = scenario;
+            CanRename = false;
             Refresh(project, log);
         }
 

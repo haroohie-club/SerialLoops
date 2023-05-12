@@ -50,7 +50,7 @@ namespace SerialLoops.Dialogs
     {
         private static readonly ItemDescription.ItemType[] IGNORED_ORPHAN_TYPES = {
             ItemDescription.ItemType.Scenario,
-            ItemDescription.ItemType.Dialogue_Config
+            ItemDescription.ItemType.Character
         };
 
         public OrphanedItemsDialog(Project project, ItemExplorerPanel explorer, EditorTabsPanel tabs, ILogger log)
