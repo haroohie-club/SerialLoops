@@ -29,12 +29,12 @@ namespace SerialLoops.Editors
         {
             _character = (CharacterItem)Description;
 
-            TextBox characterBox = new() { Text = _character.CharacterInfo.Name };
+            TextBox characterBox = new() { Text = _character.NameplateProperties.Name };
 
-            ColorPicker textColorPicker = new() { Value = _character.CharacterInfo.NameColor.ToEtoDrawingColor() };
-            ColorPicker plateColorPicker = new() { Value = _character.CharacterInfo.PlateColor.ToEtoDrawingColor() };
-            ColorPicker outlineColorPicker = new() { Value = _character.CharacterInfo.OutlineColor.ToEtoDrawingColor() };
-            CheckBox outlineCheckBox = new() { Checked = _character.CharacterInfo.HasOutline };
+            ColorPicker textColorPicker = new() { Value = _character.NameplateProperties.NameColor.ToEtoDrawingColor() };
+            ColorPicker plateColorPicker = new() { Value = _character.NameplateProperties.PlateColor.ToEtoDrawingColor() };
+            ColorPicker outlineColorPicker = new() { Value = _character.NameplateProperties.OutlineColor.ToEtoDrawingColor() };
+            CheckBox outlineCheckBox = new() { Checked = _character.NameplateProperties.HasOutline };
 
             DropDown defaultTextColorsDropDown = new();
             DropDown defaultPlateColorsDropDown = new();
@@ -60,19 +60,19 @@ namespace SerialLoops.Editors
 
             characterBox.TextChanged += (sender, args) =>
             {
-                _character.CharacterInfo.Name = characterBox.Text;
+                _character.NameplateProperties.Name = characterBox.Text;
                 UpdatePreview(nameplatePreviewLayout, blankNameplate, blankNameplateBaseArrow);
                 UpdateTabTitle(false);
             };
             textColorPicker.ValueChanged += (sender, args) =>
             {
-                _character.CharacterInfo.NameColor = textColorPicker.Value.ToSKColor();
+                _character.NameplateProperties.NameColor = textColorPicker.Value.ToSKColor();
                 UpdatePreview(nameplatePreviewLayout, blankNameplate, blankNameplateBaseArrow);
                 UpdateTabTitle(false);
             };
             plateColorPicker.ValueChanged += (sender, args) =>
             {
-                _character.CharacterInfo.PlateColor = plateColorPicker.Value.ToSKColor();
+                _character.NameplateProperties.PlateColor = plateColorPicker.Value.ToSKColor();
                 UpdatePreview(nameplatePreviewLayout, blankNameplate, blankNameplateBaseArrow);
                 UpdateTabTitle(false);
             };
@@ -86,13 +86,13 @@ namespace SerialLoops.Editors
             };
             outlineColorPicker.ValueChanged += (sender, args) =>
             {
-                _character.CharacterInfo.OutlineColor = outlineColorPicker.Value.ToSKColor();
+                _character.NameplateProperties.OutlineColor = outlineColorPicker.Value.ToSKColor();
                 UpdatePreview(nameplatePreviewLayout, blankNameplate, blankNameplateBaseArrow);
                 UpdateTabTitle(false);
             };
             outlineCheckBox.CheckedChanged += (sender, args) =>
             {
-                _character.CharacterInfo.HasOutline = outlineCheckBox.Checked ?? true;
+                _character.NameplateProperties.HasOutline = outlineCheckBox.Checked ?? true;
                 UpdatePreview(nameplatePreviewLayout, blankNameplate, blankNameplateBaseArrow);
                 UpdateTabTitle(false);
             };

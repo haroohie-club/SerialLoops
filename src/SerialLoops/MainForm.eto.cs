@@ -415,9 +415,9 @@ namespace SerialLoops
                         break;
                     case ItemDescription.ItemType.Character:
                         CharacterItem characterItem = (CharacterItem)item;
-                        if (characterItem.CharacterInfo.Name != item.Name[4..])
+                        if (characterItem.NameplateProperties.Name != item.Name[4..])
                         {
-                            Shared.RenameItem(OpenProject, ItemExplorer, EditorTabs, Log, $"CHR_{characterItem.CharacterInfo.Name}");
+                            Shared.RenameItem(OpenProject, ItemExplorer, EditorTabs, Log, $"CHR_{characterItem.NameplateProperties.Name}");
                         }
                         nameplateCanvas.DrawBitmap(characterItem.GetNewNameplate(_blankNameplate, _blankNameplateBaseArrow, OpenProject), new SKRect(0, 16 * ((int)characterItem.MessageInfo.Character - 1), 64, 16 * ((int)characterItem.MessageInfo.Character)));
                         speakerCanvas.DrawBitmap(characterItem.GetNewNameplate(_blankNameplate, _blankNameplateBaseArrow, OpenProject, transparent: true), new SKRect(0, 16 * ((int)characterItem.MessageInfo.Character - 1), 64, 16 * ((int)characterItem.MessageInfo.Character)));

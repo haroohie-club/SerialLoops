@@ -27,7 +27,7 @@ namespace SerialLoops.Lib
         public string LangCode { get; set; }
         public string MainDirectory { get; set; }
         public Dictionary<string, string> ItemNames { get; set; }
-        public Dictionary<int, CharacterInfo> Characters { get; set; }
+        public Dictionary<int, NameplateProperties> Characters { get; set; }
 
         [JsonIgnore]
         public string BaseDirectory => Path.Combine(MainDirectory, "base");
@@ -217,7 +217,7 @@ namespace SerialLoops.Lib
                 "ja" => "DefaultCharacters.ja.json",
                 _ => "DefaultCharacters.en.json"
             };
-            Characters ??= JsonSerializer.Deserialize<Dictionary<int, CharacterInfo>>(File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, charactersFile)), SERIALIZER_OPTIONS);
+            Characters ??= JsonSerializer.Deserialize<Dictionary<int, NameplateProperties>>(File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, charactersFile)), SERIALIZER_OPTIONS);
 
             tracker.Focus("Font", 5);
             if (IO.TryReadStringFile(Path.Combine(MainDirectory, "font", "charset.json"), out string json, log))

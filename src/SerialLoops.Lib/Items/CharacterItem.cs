@@ -11,13 +11,13 @@ namespace SerialLoops.Lib.Items
     public class CharacterItem : Item
     {
         public MessageInfo MessageInfo { get; set; }
-        public CharacterInfo CharacterInfo { get; set; }
+        public NameplateProperties NameplateProperties { get; set; }
 
-        public CharacterItem(MessageInfo character, CharacterInfo characterInfo, Project project) : base($"CHR_{project.Characters[(int)character.Character].Name}", ItemType.Character)
+        public CharacterItem(MessageInfo character, NameplateProperties nameplateProperties, Project project) : base($"CHR_{project.Characters[(int)character.Character].Name}", ItemType.Character)
         {
             CanRename = false;
             MessageInfo = character;
-            CharacterInfo = characterInfo;
+            NameplateProperties = nameplateProperties;
         }
 
         public override void Refresh(Project project, ILogger log)
@@ -51,7 +51,7 @@ namespace SerialLoops.Lib.Items
             newCanvas.DrawBitmap(blankNameplate, new SKPoint(0, 0));
 
             double widthFactor = 1.0;
-            int totalWidth = CharacterInfo.Name.Sum(c =>
+            int totalWidth = NameplateProperties.Name.Sum(c =>
             {
                 project.FontReplacement.TryGetValue(c, out FontReplacement fr);
                 return fr is not null ? fr.Offset : 15;
@@ -62,11 +62,11 @@ namespace SerialLoops.Lib.Items
                 totalWidth = 53;
             }
             int currentX = (53 - totalWidth) / 2 + 6, currentY = 1;
-            for (int i = 0; i < CharacterInfo.Name.Length; i++)
+            for (int i = 0; i < NameplateProperties.Name.Length; i++)
             {
-                if (CharacterInfo.Name[i] != '　') // if it's a space, we just skip drawing
+                if (NameplateProperties.Name[i] != '　') // if it's a space, we just skip drawing
                 {
-                    int charIndex = project.FontMap.CharMap.IndexOf(CharacterInfo.Name.GetOriginalString(project)[i]);
+                    int charIndex = project.FontMap.CharMap.IndexOf(NameplateProperties.Name.GetOriginalString(project)[i]);
                     if ((charIndex + 1) * 16 <= project.FontBitmap.Height)
                     {
                         newCanvas.DrawBitmap(project.FontBitmap, new SKRect(0, charIndex * 16, 16, (charIndex + 1) * 16),
@@ -74,16 +74,16 @@ namespace SerialLoops.Lib.Items
                             {
                                 ColorFilter = SKColorFilter.CreateColorMatrix(new float[]
                                 {
-                                    CharacterInfo.NameColor.Red / 255.0f, 0.0f, 0.0f, 0.0f, 0.0f,
-                                    0.0f, CharacterInfo.NameColor.Green / 255.0f, 0.0f, 0.0f, 0.0f,
-                                    0.0f, 0.0f, CharacterInfo.NameColor.Blue / 255.0f, 0.0f, 0.0f,
+                                    NameplateProperties.NameColor.Red / 255.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+                                    0.0f, NameplateProperties.NameColor.Green / 255.0f, 0.0f, 0.0f, 0.0f,
+                                    0.0f, 0.0f, NameplateProperties.NameColor.Blue / 255.0f, 0.0f, 0.0f,
                                     0.0f, 0.0f, 0.0f, 1.0f, 0.0f,
                                 })
                             }
                         );
                     }
                 }
-                project.FontReplacement.TryGetValue(CharacterInfo.Name[i], out FontReplacement replacement);
+                project.FontReplacement.TryGetValue(NameplateProperties.Name[i], out FontReplacement replacement);
                 if (replacement is not null && project.LangCode != "ja")
                 {
                     currentX += (int)(replacement.Offset * widthFactor);
@@ -96,7 +96,7 @@ namespace SerialLoops.Lib.Items
             newCanvas.Flush();
 
             // Add an outline around the text
-            if (CharacterInfo.HasOutline)
+            if (NameplateProperties.HasOutline)
             {
                 for (int y = 0; y < newNameplate.Height; y++)
                 {
@@ -114,9 +114,9 @@ namespace SerialLoops.Lib.Items
                         newNameplate.GetPixel(x + 1, y - 1),
                         newNameplate.GetPixel(x - 1, y - 1),
                         };
-                        if (Helpers.ColorDistance(pixel, CharacterInfo.NameColor) > 50 && neighborPixels.Any(p => Helpers.ColorDistance(p, CharacterInfo.NameColor) < 50))
+                        if (Helpers.ColorDistance(pixel, NameplateProperties.NameColor) > 50 && neighborPixels.Any(p => Helpers.ColorDistance(p, NameplateProperties.NameColor) < 50))
                         {
-                            newNameplate.SetPixel(x, y, CharacterInfo.OutlineColor);
+                            newNameplate.SetPixel(x, y, NameplateProperties.OutlineColor);
                         }
                         if (transparent && pixel.Red == 0 && pixel.Green == 128 && pixel.Blue == 0)
                         {
@@ -132,19 +132,19 @@ namespace SerialLoops.Lib.Items
                 {
                     ColorFilter = SKColorFilter.CreateColorMatrix(new float[]
                     {
-                        CharacterInfo.PlateColor.Red / 255.0f, 0.0f, 0.0f, 0.0f, 0.0f,
-                        0.0f, CharacterInfo.PlateColor.Green / 255.0f, 0.0f, 0.0f, 0.0f,
-                        0.0f, 0.0f, CharacterInfo.PlateColor.Blue / 255.0f, 0.0f, 0.0f,
+                        NameplateProperties.PlateColor.Red / 255.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+                        0.0f, NameplateProperties.PlateColor.Green / 255.0f, 0.0f, 0.0f, 0.0f,
+                        0.0f, 0.0f, NameplateProperties.PlateColor.Blue / 255.0f, 0.0f, 0.0f,
                         0.0f, 0.0f, 0.0f, 1.0f, 0.0f,
                     })
                 });
-            newCanvas.DrawLine(new(0, 15), new(59, 15), new() { Color = CharacterInfo.PlateColor });
+            newCanvas.DrawLine(new(0, 15), new(59, 15), new() { Color = NameplateProperties.PlateColor });
             newCanvas.Flush();
             return newNameplate;
         }
     }
 
-    public class CharacterInfo
+    public class NameplateProperties
     {
         public string Name { get; set; }
         public SKColor NameColor { get; set; }
@@ -152,7 +152,7 @@ namespace SerialLoops.Lib.Items
         public SKColor OutlineColor { get; set; }
         public bool HasOutline { get; set; }
 
-        public CharacterInfo(string name, SKColor nameColor, SKColor plateColor, SKColor outlineColor, bool hasOutline)
+        public NameplateProperties(string name, SKColor nameColor, SKColor plateColor, SKColor outlineColor, bool hasOutline)
         {
             Name = name;
             NameColor = nameColor;
