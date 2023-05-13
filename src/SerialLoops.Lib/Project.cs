@@ -56,6 +56,8 @@ namespace SerialLoops.Lib
         [JsonIgnore]
         public SKBitmap SpeakerBitmap { get; set; }
         [JsonIgnore]
+        public SKBitmap NameplateBitmap { get; set; }
+        [JsonIgnore]
         public SKBitmap DialogueBitmap { get; set; }
         [JsonIgnore]
         public SKBitmap FontBitmap { get; set; }
@@ -210,7 +212,12 @@ namespace SerialLoops.Lib
             }
             tracker.Finished++;
 
-            Characters ??= JsonSerializer.Deserialize<Dictionary<int, CharacterInfo>>(File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "DefaultCharacters.json")), SERIALIZER_OPTIONS);
+            string charactersFile = LangCode switch
+            {
+                "ja" => "DefaultCharacters.ja.json",
+                _ => "DefaultCharacters.en.json"
+            };
+            Characters ??= JsonSerializer.Deserialize<Dictionary<int, CharacterInfo>>(File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, charactersFile)), SERIALIZER_OPTIONS);
 
             tracker.Focus("Font", 5);
             if (IO.TryReadStringFile(Path.Combine(MainDirectory, "font", "charset.json"), out string json, log))
@@ -225,6 +232,7 @@ namespace SerialLoops.Lib
             FontMap = Dat.Files.First(f => f.Name == "FONTS").CastTo<FontFile>();
             tracker.Finished++;
             SpeakerBitmap = Grp.Files.First(f => f.Name == "SYS_CMN_B12DNX").GetImage(transparentIndex: 0);
+            NameplateBitmap = Grp.Files.First(f => f.Name == "SYS_CMN_B12DNX").GetImage();
             tracker.Finished++;
             DialogueBitmap = Grp.Files.First(f => f.Name == "SYS_CMN_B02DNX").GetImage(transparentIndex: 0);
             tracker.Finished++;

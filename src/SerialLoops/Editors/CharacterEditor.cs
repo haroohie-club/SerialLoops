@@ -1,13 +1,18 @@
 ﻿using Eto.Forms;
+using HaruhiChokuretsuLib.Font;
 using HaruhiChokuretsuLib.Util;
+using SerialLoops.Controls;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
+using SerialLoops.Lib.Util;
 using SerialLoops.Utility;
 using SkiaSharp;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Xml.Linq;
 using Topten.RichTextKit;
 
 namespace SerialLoops.Editors
@@ -28,10 +33,17 @@ namespace SerialLoops.Editors
 
             ColorPicker textColorPicker = new() { Value = _character.CharacterInfo.NameColor.ToEtoDrawingColor() };
             ColorPicker plateColorPicker = new() { Value = _character.CharacterInfo.PlateColor.ToEtoDrawingColor() };
+            ColorPicker outlineColorPicker = new() { Value = _character.CharacterInfo.OutlineColor.ToEtoDrawingColor() };
+            CheckBox outlineCheckBox = new() { Checked = _character.CharacterInfo.HasOutline };
+
+            DropDown defaultTextColorsDropDown = new();
+            DropDown defaultPlateColorsDropDown = new();
+            defaultTextColorsDropDown.Items.AddRange(CharacterItem.BuiltInColors.Keys.Select(c => new ListItem { Key = c, Text = c }));
+            defaultPlateColorsDropDown.Items.AddRange(CharacterItem.BuiltInColors.Keys.Select(c => new ListItem { Key = c, Text = c }));
 
             SKBitmap nameplatePreview = new(64, 16);
             using SKCanvas baseCanvas = new(nameplatePreview);
-            baseCanvas.DrawBitmap(_project.SpeakerBitmap, new SKRect(0, 16 * ((int)_character.MessageInfo.Character - 1), 64, 16 * ((int)_character.MessageInfo.Character)), new SKRect(0, 0, 64, 16));
+            baseCanvas.DrawBitmap(_project.NameplateBitmap, new SKRect(0, 16 * ((int)_character.MessageInfo.Character - 1), 64, 16 * ((int)_character.MessageInfo.Character)), new SKRect(0, 0, 64, 16));
             baseCanvas.Flush();
             StackLayout nameplatePreviewLayout = new()
             {
@@ -41,13 +53,6 @@ namespace SerialLoops.Editors
                 },
             };
 
-            using Stream fontStream = Assembly.GetCallingAssembly().GetManifestResourceStream("SerialLoops.Graphics.MS-Gothic-Haruhi.ttf");
-            SKTypeface font = SKTypeface.FromStream(fontStream);
-            if (!CustomFontMapper.HasFont())
-            {
-                CustomFontMapper.AddFont(font);
-            }
-
             using Stream blankNameplateStream = Assembly.GetCallingAssembly().GetManifestResourceStream("SerialLoops.Graphics.BlankNameplate.png");
             SKBitmap blankNameplate = SKBitmap.Decode(blankNameplateStream);
             using Stream blankNameplateBaseArrowStream = Assembly.GetCallingAssembly().GetManifestResourceStream("SerialLoops.Graphics.BlankNameplateBaseArrow.png");
@@ -55,7 +60,41 @@ namespace SerialLoops.Editors
 
             characterBox.TextChanged += (sender, args) =>
             {
-                UpdatePreview(nameplatePreviewLayout, characterBox.Text, font, blankNameplate, blankNameplateBaseArrow, textColorPicker.Value.ToSKColor(), plateColorPicker.Value.ToSKColor());
+                _character.CharacterInfo.Name = characterBox.Text;
+                UpdatePreview(nameplatePreviewLayout, blankNameplate, blankNameplateBaseArrow);
+                UpdateTabTitle(false);
+            };
+            textColorPicker.ValueChanged += (sender, args) =>
+            {
+                _character.CharacterInfo.NameColor = textColorPicker.Value.ToSKColor();
+                UpdatePreview(nameplatePreviewLayout, blankNameplate, blankNameplateBaseArrow);
+                UpdateTabTitle(false);
+            };
+            plateColorPicker.ValueChanged += (sender, args) =>
+            {
+                _character.CharacterInfo.PlateColor = plateColorPicker.Value.ToSKColor();
+                UpdatePreview(nameplatePreviewLayout, blankNameplate, blankNameplateBaseArrow);
+                UpdateTabTitle(false);
+            };
+            defaultTextColorsDropDown.SelectedKeyChanged += (sender, args) =>
+            {
+                textColorPicker.Value = CharacterItem.BuiltInColors[defaultTextColorsDropDown.SelectedKey].ToEtoDrawingColor();
+            };
+            defaultPlateColorsDropDown.SelectedKeyChanged += (sender, args) =>
+            {
+                plateColorPicker.Value = CharacterItem.BuiltInColors[defaultPlateColorsDropDown.SelectedKey].ToEtoDrawingColor();
+            };
+            outlineColorPicker.ValueChanged += (sender, args) =>
+            {
+                _character.CharacterInfo.OutlineColor = outlineColorPicker.Value.ToSKColor();
+                UpdatePreview(nameplatePreviewLayout, blankNameplate, blankNameplateBaseArrow);
+                UpdateTabTitle(false);
+            };
+            outlineCheckBox.CheckedChanged += (sender, args) =>
+            {
+                _character.CharacterInfo.HasOutline = outlineCheckBox.Checked ?? true;
+                UpdatePreview(nameplatePreviewLayout, blankNameplate, blankNameplateBaseArrow);
+                UpdateTabTitle(false);
             };
 
             return new StackLayout
@@ -64,6 +103,36 @@ namespace SerialLoops.Editors
                 Items =
                 {
                     ControlGenerator.GetControlWithLabel("Character", characterBox),
+                    ControlGenerator.GetControlWithLabel("Text Color", new StackLayout
+                    {
+                        Orientation = Orientation.Horizontal,
+                        Spacing = 3,
+                        Items =
+                        {
+                            textColorPicker,
+                            ControlGenerator.GetControlWithLabel("Defaults", defaultTextColorsDropDown),
+                        }
+                    }),
+                    ControlGenerator.GetControlWithLabel("Plate Color", new StackLayout
+                    {
+                        Orientation = Orientation.Horizontal,
+                        Spacing = 3,
+                        Items =
+                        {
+                            plateColorPicker,
+                            ControlGenerator.GetControlWithLabel("Defaults", defaultPlateColorsDropDown),
+                        }
+                    }),
+                    ControlGenerator.GetControlWithLabel("Outline Color", new StackLayout
+                    {
+                        Orientation = Orientation.Horizontal,
+                        Spacing = 3,
+                        Items =
+                        {
+                            outlineColorPicker,
+                            ControlGenerator.GetControlWithLabel("Has Outline?", outlineCheckBox),
+                        }
+                    }),
                     nameplatePreviewLayout,
                     ControlGenerator.GetControlWithLabel("Voice Font", new NumericStepper { Value = _character.MessageInfo.VoiceFont }),
                     ControlGenerator.GetControlWithLabel("Text Timer", new NumericStepper { Value = _character.MessageInfo.TextTimer }),
@@ -71,39 +140,11 @@ namespace SerialLoops.Editors
             };
         }
 
-        private void UpdatePreview(StackLayout nameplatePreviewLayout, string name, SKTypeface font, SKBitmap blankNameplate, SKBitmap blankNameplateBaseArrow, SKColor textColor, SKColor plateColor)
+        private void UpdatePreview(StackLayout nameplatePreviewLayout, SKBitmap blankNameplate, SKBitmap blankNameplateBaseArrow)
         {
-            SKBitmap newNameplate = new(64, 16);
-            SKCanvas newCanvas = new(newNameplate);
-            newCanvas.DrawBitmap(blankNameplate, new SKPoint(0, 0));
-            newCanvas.DrawBitmap(blankNameplateBaseArrow, new SKPoint(0, 3),
-                new SKPaint()
-                {
-                    ColorFilter = SKColorFilter.CreateColorMatrix(new float[]
-                    {
-                        plateColor.Red / 255.0f, 0.0f, 0.0f, 0.0f, 0.0f,
-                        0.0f, plateColor.Green / 255.0f, 0.0f, 0.0f, 0.0f,
-                        0.0f, 0.0f, plateColor.Blue / 255.0f, 0.0f, 0.0f,
-                        0.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-                    })
-                });
-            newCanvas.DrawLine(new(0, 15), new(59, 15), new() { Color = plateColor });
-            TextBlock textBlock = new() { Alignment = Topten.RichTextKit.TextAlignment.Center, FontMapper = new CustomFontMapper(), MaxWidth = 52, MaxHeight = 13 };
-            textBlock.AddText(name,
-                new Style()
-                {
-                    TextColor = textColor,
-                    FontFamily = font.FamilyName,
-                    FontSize = 13.0f,
-                    HaloWidth = 0.5f,
-                    HaloColor = new SKColor(128, 128, 128),
-                });
-            textBlock.Paint(newCanvas, new SKPoint(7, 2), new() { Edging = SKFontEdging.SubpixelAntialias, SubpixelPositioning = true });
-            newCanvas.Flush();
             nameplatePreviewLayout.Items.Clear();
-            nameplatePreviewLayout.Items.Add(new SKGuiImage(newNameplate));
+            nameplatePreviewLayout.Items.Add(new SKGuiImage(_character.GetNewNameplate(blankNameplate, blankNameplateBaseArrow, _project)));
         }
-
         private class CustomFontMapper : FontMapper
         {
             private static readonly Dictionary<string, SKTypeface> _fonts = new();
@@ -122,11 +163,6 @@ namespace SerialLoops.Editors
             {
                 return _fonts[style.FontFamily];
             }
-        }
-
-        private class CustomStyle : Style
-        {
-
         }
     }
 }

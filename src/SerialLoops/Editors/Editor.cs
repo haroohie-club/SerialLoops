@@ -15,15 +15,17 @@ namespace SerialLoops.Editors
         protected ILogger _log;
         protected Project _project;
         protected EditorTabsPanel _tabs;
+        protected ItemExplorerPanel _explorer;
 
         public List<Command> EditorCommands { get; set; } = new();
         public ItemDescription Description { get; }
 
-        protected Editor(ItemDescription description, ILogger log, Project project = null, EditorTabsPanel tabs = null)
+        protected Editor(ItemDescription description, ILogger log, Project project = null, EditorTabsPanel tabs = null, ItemExplorerPanel explorer = null)
         {
             Description = description;
             _project = project;
             _tabs = tabs;
+            _explorer = explorer;
             _log = log;
             InitializeComponent();
         }

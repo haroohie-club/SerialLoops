@@ -8,6 +8,7 @@ using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Util;
 using SerialLoops.Utility;
+using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -30,6 +31,8 @@ namespace SerialLoops
         public LoopyLogger Log { get; set; }
         private SubMenuItem _recentProjectsCommand;
 
+        private SKBitmap _blankNameplate, _blankNameplateBaseArrow;
+
         public string ShutdownUpdateUrl = null;
 
         void InitializeComponent()
@@ -47,7 +50,12 @@ namespace SerialLoops
         private void OpenProjectView(Project project, IProgressTracker tracker)
         {
             InitializeProjectMenu();
-            
+
+            using Stream blankNameplateStream = Assembly.GetCallingAssembly().GetManifestResourceStream("SerialLoops.Graphics.BlankNameplate.png");
+            _blankNameplate = SKBitmap.Decode(blankNameplateStream);
+            using Stream blankNameplateBaseArrowStream = Assembly.GetCallingAssembly().GetManifestResourceStream("SerialLoops.Graphics.BlankNameplateBaseArrow.png");
+            _blankNameplateBaseArrow = SKBitmap.Decode(blankNameplateBaseArrowStream);
+
             EditorTabs = new(project, this, Log);
             ItemExplorer = new(project, EditorTabs, Log);
             Title = $"{BASE_TITLE} - {project.Name}";
@@ -389,6 +397,10 @@ namespace SerialLoops
 
             IEnumerable<ItemDescription> unsavedItems = OpenProject.Items.Where(i => i.UnsavedChanges);
             bool savedExtra = false;
+            bool changedNameplates = false;
+            SKCanvas nameplateCanvas = new(OpenProject.NameplateBitmap);
+            SKCanvas speakerCanvas = new(OpenProject.SpeakerBitmap);
+
             foreach (ItemDescription item in unsavedItems)
             {
                 switch (item.Type)
@@ -400,6 +412,16 @@ namespace SerialLoops
                             savedExtra = true;
                         }
                         ((BackgroundItem)item).Write(OpenProject, Log);
+                        break;
+                    case ItemDescription.ItemType.Character:
+                        CharacterItem characterItem = (CharacterItem)item;
+                        if (characterItem.CharacterInfo.Name != item.Name[4..])
+                        {
+                            Shared.RenameItem(OpenProject, ItemExplorer, EditorTabs, Log, $"CHR_{characterItem.CharacterInfo.Name}");
+                        }
+                        nameplateCanvas.DrawBitmap(characterItem.GetNewNameplate(_blankNameplate, _blankNameplateBaseArrow, OpenProject), new SKRect(0, 16 * ((int)characterItem.MessageInfo.Character - 1), 64, 16 * ((int)characterItem.MessageInfo.Character)));
+                        speakerCanvas.DrawBitmap(characterItem.GetNewNameplate(_blankNameplate, _blankNameplateBaseArrow, OpenProject, transparent: true), new SKRect(0, 16 * ((int)characterItem.MessageInfo.Character - 1), 64, 16 * ((int)characterItem.MessageInfo.Character)));
+                        changedNameplates = true;
                         break;
                     case ItemDescription.ItemType.BGM:
                         if (!savedExtra)
@@ -429,6 +451,14 @@ namespace SerialLoops
                         Log.LogWarning($"Saving for {item.Type}s not yet implemented.");
                         break;
                 }
+            }
+            if (changedNameplates)
+            {
+                nameplateCanvas.Flush();
+                speakerCanvas.Flush();
+                MemoryStream nameplateStream = new();
+                OpenProject.NameplateBitmap.Encode(nameplateStream, SKEncodedImageFormat.Png, 1);
+                IO.WriteBinaryFile(Path.Combine("assets", "graphics", "B87.png"), nameplateStream.ToArray(), OpenProject, Log);
             }
             foreach (Editor editor in EditorTabs.Tabs.Pages.Cast<Editor>())
             {
