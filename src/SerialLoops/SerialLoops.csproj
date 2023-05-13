@@ -16,6 +16,7 @@
   <ItemGroup>
     <None Remove="Graphics\BlankNameplate.png" />
     <None Remove="Graphics\BlankNameplateBaseArrow.png" />
+    <None Remove="Graphics\MS-Gothic-Haruhi.ttf" />
     <None Remove="Graphics\msgothic-variablewidth.ttf" />
     <None Remove="Graphics\ScriptPreviewError.png" />
     <None Remove="Icons\Add.png" />
@@ -74,7 +75,7 @@
     <EmbeddedResource Include="Graphics\BlankNameplateBaseArrow.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Graphics\msgothic-variablewidth.ttf">
+    <EmbeddedResource Include="Graphics\MS-Gothic-Haruhi.ttf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Graphics\ScriptPreviewError.png">
