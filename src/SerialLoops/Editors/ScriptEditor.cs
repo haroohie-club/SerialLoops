@@ -1025,6 +1025,18 @@ namespace SerialLoops.Editors
                             ControlGenerator.GetControlWithLabel(parameter.Name, boolParameterCheckbox));
                         break;
 
+                    case ScriptParameter.ParameterType.CHARACTER:
+                        ScriptCommandDropDown dialoguePropertyDropDown = new() { Command = command, ParameterIndex = i };
+                        dialoguePropertyDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Character)
+                            .Select(c => new ListItem { Key = c.Name, Text = c.Name[4..] }));
+                        dialoguePropertyDropDown.SelectedKey = ((DialoguePropertyScriptParameter)parameter).Character.Name;
+                        dialoguePropertyDropDown.SelectedKeyChanged += DialoguePropertyDropDown_SelectedKeyChanged;
+                        _currentSpeakerDropDown.OtherDropDowns.Add(dialoguePropertyDropDown);
+
+                        ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
+                            ControlGenerator.GetControlWithLabel(parameter.Name, dialoguePropertyDropDown));
+                        break;
+
                     case ScriptParameter.ParameterType.CHESS_FILE:
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
                             ControlGenerator.GetControlWithLabel(parameter.Name,
@@ -1109,8 +1121,8 @@ namespace SerialLoops.Editors
                     case ScriptParameter.ParameterType.DIALOGUE:
                         DialogueScriptParameter dialogueParam = (DialogueScriptParameter)parameter;
                         ScriptCommandDropDown speakerDropDown = new() { Command = command, ParameterIndex = i, OtherDropDowns = new() };
-                        speakerDropDown.Items.AddRange(Enum.GetNames<Speaker>().Select(s => new ListItem { Text = s, Key = s }));
-                        speakerDropDown.SelectedKey = dialogueParam.Line.Speaker.ToString();
+                        speakerDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Character).Select(c => new ListItem { Key = c.Name, Text = c.Name[4..] }));
+                        speakerDropDown.SelectedKey = _project.Items.First(i => i.Type == ItemDescription.ItemType.Character && i.Name == $"CHR_{_project.Characters[(int)dialogueParam.Line.Speaker].Name}").Name;
                         speakerDropDown.SelectedKeyChanged += SpeakerDropDown_SelectedKeyChanged;
                         if (currentCol > 0)
                         {
@@ -1144,17 +1156,6 @@ namespace SerialLoops.Editors
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows.Add(new());
                         currentRow++;
                         currentCol = 0;
-                        break;
-
-                    case ScriptParameter.ParameterType.DIALOGUE_PROPERTY:
-                        ScriptCommandDropDown dialoguePropertyDropDown = new() { Command = command, ParameterIndex = i };
-                        dialoguePropertyDropDown.Items.AddRange(Enum.GetNames<Speaker>().Select(t => new ListItem { Text = t, Key = t }));
-                        dialoguePropertyDropDown.SelectedKey = ((DialoguePropertyScriptParameter)parameter).DialogueProperties.Character.ToString();
-                        dialoguePropertyDropDown.SelectedKeyChanged += DialoguePropertyDropDown_SelectedKeyChanged;
-                        _currentSpeakerDropDown.OtherDropDowns.Add(dialoguePropertyDropDown);
-
-                        ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
-                            ControlGenerator.GetControlWithLabel(parameter.Name, dialoguePropertyDropDown));
                         break;
 
                     case ScriptParameter.ParameterType.EPISODE_HEADER:
@@ -1696,8 +1697,8 @@ namespace SerialLoops.Editors
                 }
 
                 // Draw character sprites
-                Dictionary<Speaker, PositionedSprite> sprites = new();
-                Dictionary<Speaker, PositionedSprite> previousSprites = new();
+                Dictionary<CharacterItem, PositionedSprite> sprites = new();
+                Dictionary<CharacterItem, PositionedSprite> previousSprites = new();
 
                 ScriptItemCommand previousCommand = null;
                 foreach (ScriptItemCommand command in commands)
@@ -1707,7 +1708,8 @@ namespace SerialLoops.Editors
                         SpriteExitScriptParameter spriteExitMoveParam = (SpriteExitScriptParameter)previousCommand?.Parameters[3]; // exits/moves happen _after_ dialogue is advanced, so we check these at this point
                         if (spriteExitMoveParam.ExitTransition != SpriteExitScriptParameter.SpriteExitTransition.NO_EXIT)
                         {
-                            Speaker prevSpeaker = ((DialogueScriptParameter)previousCommand.Parameters[0]).Line.Speaker;
+                            CharacterItem prevCharacter = (CharacterItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Character &&
+                                i.Name == $"CHR_{_project.Characters[(int)((DialogueScriptParameter)previousCommand.Parameters[0]).Line.Speaker].Name}");
                             SpriteScriptParameter previousSpriteParam = (SpriteScriptParameter)previousCommand.Parameters[1];
                             short layer = ((ShortScriptParameter)previousCommand.Parameters[9]).Value;
                             switch (spriteExitMoveParam.ExitTransition)
@@ -1718,21 +1720,21 @@ namespace SerialLoops.Editors
                                 case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_FROM_CENTER_TO_RIGHT_FADE_OUT:
                                 case SpriteExitScriptParameter.SpriteExitTransition.FADE_OUT_CENTER:
                                 case SpriteExitScriptParameter.SpriteExitTransition.FADE_OUT_LEFT:
-                                    if (sprites[prevSpeaker].Sprite == previousSprites[prevSpeaker].Sprite || ((SpriteEntranceScriptParameter)previousCommand.Parameters[2]).EntranceTransition != SpriteEntranceScriptParameter.SpriteEntranceTransition.NO_TRANSITION)
+                                    if (sprites[prevCharacter].Sprite == previousSprites[prevCharacter].Sprite || ((SpriteEntranceScriptParameter)previousCommand.Parameters[2]).EntranceTransition != SpriteEntranceScriptParameter.SpriteEntranceTransition.NO_TRANSITION)
                                     {
-                                        sprites.Remove(prevSpeaker);
-                                        previousSprites.Remove(prevSpeaker);
+                                        sprites.Remove(prevCharacter);
+                                        previousSprites.Remove(prevCharacter);
                                     }
                                     break;
 
                                 case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_CENTER_TO_LEFT_AND_STAY:
                                 case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_RIGHT_TO_LEFT_AND_STAY:
-                                    sprites[prevSpeaker] = new() { Sprite = previousSpriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.LEFT, Layer = layer } };
+                                    sprites[prevCharacter] = new() { Sprite = previousSpriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.LEFT, Layer = layer } };
                                     break;
 
                                 case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_CENTER_TO_RIGHT_AND_STAY:
                                 case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_LEFT_TO_RIGHT_AND_STAY:
-                                    sprites[prevSpeaker] = new() { Sprite = previousSpriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.RIGHT, Layer = layer } };
+                                    sprites[prevCharacter] = new() { Sprite = previousSpriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.RIGHT, Layer = layer } };
                                     break;
                             }
                         }
@@ -1754,18 +1756,19 @@ namespace SerialLoops.Editors
                         }
                         if (spriteParam.Sprite is not null)
                         {
-                            Speaker speaker = ((DialogueScriptParameter)command.Parameters[0]).Line.Speaker;
+                            CharacterItem character = (CharacterItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Character &&
+                                i.Name == $"CHR_{_project.Characters[(int)((DialogueScriptParameter)command.Parameters[0]).Line.Speaker].Name}");
                             SpriteEntranceScriptParameter spriteEntranceParam = (SpriteEntranceScriptParameter)command.Parameters[2];
                             short layer = ((ShortScriptParameter)command.Parameters[9]).Value;
 
-                            if (!sprites.ContainsKey(speaker) && spriteEntranceParam.EntranceTransition != SpriteEntranceScriptParameter.SpriteEntranceTransition.NO_TRANSITION)
+                            if (!sprites.ContainsKey(character) && spriteEntranceParam.EntranceTransition != SpriteEntranceScriptParameter.SpriteEntranceTransition.NO_TRANSITION)
                             {
-                                sprites.Add(speaker, new());
-                                previousSprites.Add(speaker, new());
+                                sprites.Add(character, new());
+                                previousSprites.Add(character, new());
                             }
-                            if (sprites.ContainsKey(speaker))
+                            if (sprites.ContainsKey(character))
                             {
-                                previousSprites[speaker] = sprites[speaker];
+                                previousSprites[character] = sprites[character];
                             }
                             if (spriteEntranceParam.EntranceTransition != SpriteEntranceScriptParameter.SpriteEntranceTransition.NO_TRANSITION)
                             {
@@ -1774,7 +1777,7 @@ namespace SerialLoops.Editors
                                     case SpriteEntranceScriptParameter.SpriteEntranceTransition.FADE_TO_CENTER:
                                     case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_CENTER:
                                     case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_CENTER:
-                                        sprites[speaker] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.CENTER, Layer = layer }, PalEffect = spritePaint };
+                                        sprites[character] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.CENTER, Layer = layer }, PalEffect = spritePaint };
                                         break;
 
                                     case SpriteEntranceScriptParameter.SpriteEntranceTransition.FADE_IN_LEFT:
@@ -1782,13 +1785,13 @@ namespace SerialLoops.Editors
                                     case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_LEFT:
                                     case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_LEFT_FAST:
                                     case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_LEFT_SLOW:
-                                        sprites[speaker] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.LEFT, Layer = layer }, PalEffect = spritePaint };
+                                        sprites[character] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.LEFT, Layer = layer }, PalEffect = spritePaint };
                                         break;
 
                                     case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_RIGHT:
                                     case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_RIGHT_FAST:
                                     case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_RIGHT_SLOW:
-                                        sprites[speaker] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.RIGHT, Layer = layer }, PalEffect = spritePaint };
+                                        sprites[character] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.RIGHT, Layer = layer }, PalEffect = spritePaint };
                                         break;
                                 }
                             }
@@ -2077,15 +2080,15 @@ namespace SerialLoops.Editors
         private void SpeakerDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
             ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
-            string originalSpeaker = ((DialogueScriptParameter)dropDown.Command.Parameters[0]).Line.Speaker.ToString();
-            _log.Log($"Attempting to modify speaker in parameter {dropDown.ParameterIndex} to speaker {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
+            string originalSpeaker = _project.Characters[(int)((DialogueScriptParameter)dropDown.Command.Parameters[0]).Line.Speaker].Name;
+            _log.Log($"Attempting to modify speaker in parameter {dropDown.ParameterIndex} to character {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
             ((DialogueScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Line.Speaker =
-                Enum.Parse<Speaker>(dropDown.SelectedKey);
+                (Speaker)_project.Characters.FirstOrDefault(c => c.Value.Name == dropDown.SelectedValue.ToString()).Key;
             _script.Event.DialogueSection.Objects[dropDown.Command.Section.Objects[dropDown.Command.Index].Parameters[0]].Speaker =
-                Enum.Parse<Speaker>(dropDown.SelectedKey);
+                (Speaker)_project.Characters.FirstOrDefault(c => c.Value.Name == dropDown.SelectedValue.ToString()).Key;
             foreach (ScriptCommandDropDown otherDropDown in dropDown.OtherDropDowns)
             {
-                if (otherDropDown.SelectedKey == originalSpeaker)
+                if (otherDropDown.SelectedValue.ToString() == originalSpeaker)
                 {
                     otherDropDown.SelectedKey = dropDown.SelectedKey;
                 }
@@ -2154,12 +2157,11 @@ namespace SerialLoops.Editors
         private void DialoguePropertyDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
             ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
-            MessageInfoFile messInfoFile = _project.Dat.Files.First(d => d.Name == "MESSINFOS").CastTo<MessageInfoFile>();
-            MessageInfo messInfo = messInfoFile.MessageInfos.FirstOrDefault(m => m.Character == Enum.Parse<Speaker>(dropDown.SelectedKey));
+            CharacterItem character = (CharacterItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Character && i.Name == dropDown.SelectedKey);
             _log.Log($"Attempting to modify dialogue property in parameter {dropDown.ParameterIndex} to dialogue {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
-            ((DialoguePropertyScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).DialogueProperties = messInfo;
+            ((DialoguePropertyScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Character = character;
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)].Objects[dropDown.Command.Index]
-                .Parameters[dropDown.ParameterIndex] = (short)messInfoFile.MessageInfos.IndexOf(messInfo);
+                .Parameters[dropDown.ParameterIndex] = (short)_project.MessInfo.MessageInfos.IndexOf(character.MessageInfo);
             UpdateTabTitle(false, dropDown);
         }
         private void EpHeaderDropDown_SelectedKeyChanged(object sender, EventArgs e)

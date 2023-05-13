@@ -1,0 +1,177 @@
+{
+  "1": {
+    "Name": "キョン",
+    "NameColor": "FFF0F000",
+    "PlateColor": "FFF0F000",
+    "OutlineColor": "FF353535",
+    "HasOutline": true
+  },
+  "2": {
+    "Name": "ハルヒ",
+    "NameColor": "FFF00068",
+    "PlateColor": "FFF00068",
+    "OutlineColor": "FF353535",
+    "HasOutline": true
+  },
+  "3": {
+    "Name": "朝比奈さん",
+    "NameColor": "FFF07000",
+    "PlateColor": "FFF07000",
+    "OutlineColor": "FF353535",
+    "HasOutline": true
+  },
+  "4": {
+    "Name": "長門",
+    "NameColor": "FF00C0F0",
+    "PlateColor": "FF00C0F0",
+    "OutlineColor": "FF353535",
+    "HasOutline": true
+  },
+  "5": {
+    "Name": "小泉",
+    "NameColor": "FFAC60F8",
+    "PlateColor": "FFAC60F8",
+    "OutlineColor": "FF353535",
+    "HasOutline": true
+  },
+  "6": {
+    "Name": "妹",
+    "NameColor": "FFE000F0",
+    "PlateColor": "FFE000F0",
+    "OutlineColor": "FF353535",
+    "HasOutline": true
+  },
+  "7": {
+    "Name": "鶴屋さん",
+    "NameColor": "FF00C000",
+    "PlateColor": "FF00C000",
+    "OutlineColor": "FF353535",
+    "HasOutline": true
+  },
+  "8": {
+    "Name": "谷口",
+    "NameColor": "FFC86868",
+    "PlateColor": "FFC86868",
+    "OutlineColor": "FF353535",
+    "HasOutline": true
+  },
+  "9": {
+    "Name": "国木田",
+    "NameColor": "FFC86800",
+    "PlateColor": "FFC86800",
+    "OutlineColor": "FF353535",
+    "HasOutline": true
+  },
+  "10": {
+    "Name": "コンピ研部長",
+    "NameColor": "FFC0C000",
+    "PlateColor": "FFC0C000",
+    "OutlineColor": "FF353535",
+    "HasOutline": true
+  },
+  "11": {
+    "Name": "部員A",
+    "NameColor": "FF505050",
+    "PlateColor": "FF505050",
+    "OutlineColor": "FF353535",
+    "HasOutline": true
+  },
+  "12": {
+    "Name": "部員B",
+    "NameColor": "FF505050",
+    "PlateColor": "FF505050",
+    "OutlineColor": "FF353535",
+    "HasOutline": true
+  },
+  "13": {
+    "Name": "部員C",
+    "NameColor": "FF505050",
+    "PlateColor": "FF505050",
+    "OutlineColor": "FF353535",
+    "HasOutline": true
+  },
+  "14": {
+    "Name": "部員D",
+    "NameColor": "FF505050",
+    "PlateColor": "FF505050",
+    "OutlineColor": "FF353535",
+    "HasOutline": true
+  },
+  "15": {
+    "Name": "岡部教諭",
+    "NameColor": "FF905850",
+    "PlateColor": "FF905850",
+    "OutlineColor": "FF353535",
+    "HasOutline": true
+  },
+  "16": {
+    "Name": "野球部将",
+    "NameColor": "FF505050",
+    "PlateColor": "FF505050",
+    "OutlineColor": "FF353535",
+    "HasOutline": true
+  },
+  "17": {
+    "Name": "生花店店主",
+    "NameColor": "FF505050",
+    "PlateColor": "FF505050",
+    "OutlineColor": "FF353535",
+    "HasOutline": true
+  },
+  "18": {
+    "Name": "少女",
+    "NameColor": "FF30F098",
+    "PlateColor": "FF30F098",
+    "OutlineColor": "FF353535",
+    "HasOutline": true
+  },
+  "19": {
+    "Name": "オバさん",
+    "NameColor": "FF707070",
+    "PlateColor": "FF707070",
+    "OutlineColor": "FF353535",
+    "HasOutline": true
+  },
+  "20": {
+    "Name": "偽ハルヒ",
+    "NameColor": "FF707070",
+    "PlateColor": "FF707070",
+    "OutlineColor": "FF353535",
+    "HasOutline": true
+  },
+  "21": {
+    "Name": "猫",
+    "NameColor": "FF707070",
+    "PlateColor": "FF707070",
+    "OutlineColor": "FF353535",
+    "HasOutline": true
+  },
+  "22": {
+    "Name": "？？？",
+    "NameColor": "FF707070",
+    "PlateColor": "FF707070",
+    "OutlineColor": "FF353535",
+    "HasOutline": true
+  },
+  "23": {
+    "Name": "インフォ",
+    "NameColor": "00000000",
+    "PlateColor": "00000000",
+    "OutlineColor": "FF353535",
+    "HasOutline": true
+  },
+  "24": {
+    "Name": "モノローグ",
+    "NameColor": "00000000",
+    "PlateColor": "00000000",
+    "OutlineColor": "FF353535",
+    "HasOutline": true
+  },
+  "25": {
+    "Name": "メール",
+    "NameColor": "FF00F090",
+    "PlateColor": "FF707070",
+    "OutlineColor": "FF353535",
+    "HasOutline": true
+  }
+}

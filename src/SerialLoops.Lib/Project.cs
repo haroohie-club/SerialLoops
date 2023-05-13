@@ -21,11 +21,14 @@ namespace SerialLoops.Lib
     public class Project
     {
         public const string PROJECT_FORMAT = "slproj";
+        public static readonly JsonSerializerOptions SERIALIZER_OPTIONS = new() { Converters = { new SKColorJsonConverter() } };
 
         public string Name { get; set; }
         public string LangCode { get; set; }
         public string MainDirectory { get; set; }
         public Dictionary<string, string> ItemNames { get; set; }
+        public Dictionary<int, NameplateProperties> Characters { get; set; }
+
         [JsonIgnore]
         public string BaseDirectory => Path.Combine(MainDirectory, "base");
         [JsonIgnore]
@@ -52,6 +55,8 @@ namespace SerialLoops.Lib
         public FontFile FontMap { get; set; } = new();
         [JsonIgnore]
         public SKBitmap SpeakerBitmap { get; set; }
+        [JsonIgnore]
+        public SKBitmap NameplateBitmap { get; set; }
         [JsonIgnore]
         public SKBitmap DialogueBitmap { get; set; }
         [JsonIgnore]
@@ -207,6 +212,13 @@ namespace SerialLoops.Lib
             }
             tracker.Finished++;
 
+            string charactersFile = LangCode switch
+            {
+                "ja" => "DefaultCharacters.ja.json",
+                _ => "DefaultCharacters.en.json"
+            };
+            Characters ??= JsonSerializer.Deserialize<Dictionary<int, NameplateProperties>>(File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Defaults", charactersFile)), SERIALIZER_OPTIONS);
+
             tracker.Focus("Font", 5);
             if (IO.TryReadStringFile(Path.Combine(MainDirectory, "font", "charset.json"), out string json, log))
             {
@@ -220,6 +232,7 @@ namespace SerialLoops.Lib
             FontMap = Dat.Files.First(f => f.Name == "FONTS").CastTo<FontFile>();
             tracker.Finished++;
             SpeakerBitmap = Grp.Files.First(f => f.Name == "SYS_CMN_B12DNX").GetImage(transparentIndex: 0);
+            NameplateBitmap = Grp.Files.First(f => f.Name == "SYS_CMN_B12DNX").GetImage();
             tracker.Finished++;
             DialogueBitmap = Grp.Files.First(f => f.Name == "SYS_CMN_B02DNX").GetImage(transparentIndex: 0);
             tracker.Finished++;
@@ -285,7 +298,7 @@ namespace SerialLoops.Lib
 
             tracker.Focus("Dialogue Configs", 1);
             Items.AddRange(Dat.Files.First(d => d.Name == "MESSINFOS").CastTo<MessageInfoFile>()
-                .MessageInfos.Where(m => (int)m.Character > 0).Select(m => new DialogueConfigItem(m)));
+                .MessageInfos.Where(m => (int)m.Character > 0).Select(m => new CharacterItem(m, Characters[(int)m.Character], this)));
             tracker.Finished++;
 
             tracker.Focus("Event Files", 1);
@@ -338,10 +351,10 @@ namespace SerialLoops.Lib
 
             if (ItemNames is null)
             {
-                ItemNames = JsonSerializer.Deserialize<Dictionary<string, string>>(File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "DefaultNames.json")));
+                ItemNames = JsonSerializer.Deserialize<Dictionary<string, string>>(File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Defaults", "DefaultNames.json")));
                 foreach (ItemDescription item in Items)
                 {
-                    if (!ItemNames.ContainsKey(item.Name))
+                    if (!ItemNames.ContainsKey(item.Name) && item.CanRename)
                     {
                         ItemNames.Add(item.Name, item.DisplayName);
                     }
@@ -352,7 +365,14 @@ namespace SerialLoops.Lib
             {
                 if (Items[i].CanRename)
                 {
-                    Items[i].Rename(ItemNames[Items[i].Name]);
+                    try
+                    {
+                        Items[i].Rename(ItemNames[Items[i].Name]);
+                    }
+                    catch
+                    {
+                        ItemNames.Add(Items[i].Name, Items[i].DisplayName);
+                    }
                 }
             }
 
@@ -413,7 +433,7 @@ namespace SerialLoops.Lib
             try
             {
                 tracker.Focus($"{Path.GetFileNameWithoutExtension(projFile)} Project Data", 1);
-                Project project = JsonSerializer.Deserialize<Project>(File.ReadAllText(projFile));
+                Project project = JsonSerializer.Deserialize<Project>(File.ReadAllText(projFile), SERIALIZER_OPTIONS);
                 tracker.Finished++;
                 LoadProjectResult result = project.Load(config, log, tracker);
                 if (result.State == LoadProjectState.LOOSELEAF_FILES)
@@ -435,7 +455,7 @@ namespace SerialLoops.Lib
 
         public void Save()
         {
-            File.WriteAllText(Path.Combine(MainDirectory, $"{Name}.{PROJECT_FORMAT}"), JsonSerializer.Serialize(this));
+            File.WriteAllText(Path.Combine(MainDirectory, $"{Name}.{PROJECT_FORMAT}"), JsonSerializer.Serialize<Project>(this, SERIALIZER_OPTIONS));
         }
 
         public List<ItemDescription> GetSearchResults(string searchTerm, bool titlesOnly = true)

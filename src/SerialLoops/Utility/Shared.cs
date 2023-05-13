@@ -33,5 +33,22 @@ namespace SerialLoops.Utility
                 project.Save();
             }
         }
+        public static void RenameItem(Project project, ItemExplorerPanel explorer, EditorTabsPanel tabs, ILogger log, string newName)
+        {
+            ItemDescription item = project.FindItem(explorer.Viewer.SelectedItem?.Text);
+            if (item is not null)
+            {
+                DocumentPage openTab = tabs.Tabs.Pages.FirstOrDefault(p => p.Text == item.DisplayNameWithStatus);
+                item.Rename(newName);
+                explorer.Viewer.SelectedItem.Text = item.DisplayName;
+                if (openTab is not null)
+                {
+                    openTab.Text = item.DisplayNameWithStatus;
+                }
+                ((TreeGridView)explorer.Viewer.Control).ReloadData();
+                project.ItemNames[item.Name] = item.DisplayName;
+                project.Save();
+            }
+        }
     }
 }

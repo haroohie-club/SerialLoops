@@ -33,7 +33,7 @@ namespace SerialLoops.Dialogs
                 ItemDescription.ItemType.Character_Sprite => "SPR_",
                 ItemDescription.ItemType.Chess => "CHESS_",
                 ItemDescription.ItemType.Chibi => "CHB_",
-                ItemDescription.ItemType.Dialogue_Config => "CHR_",
+                ItemDescription.ItemType.Character => "CHR_",
                 ItemDescription.ItemType.Group_Selection => "GRP_",
                 ItemDescription.ItemType.Map => "MAP_",
                 ItemDescription.ItemType.Place => "PLC_",

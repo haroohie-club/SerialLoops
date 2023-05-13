@@ -81,13 +81,13 @@ namespace SerialLoops.Controls
                 case ItemDescription.ItemType.BGM:
                     return new BackgroundMusicEditor(
                         (BackgroundMusicItem)project.Items.First(i => i.Name == item.Name), project, log);
+                case ItemDescription.ItemType.Character:
+                    return new CharacterEditor((CharacterItem)project.Items.First(i => i.Name == item.Name), project, log);
                 case ItemDescription.ItemType.Character_Sprite:
                     return new CharacterSpriteEditor(
                         (CharacterSpriteItem)project.Items.First(i => i.Name == item.Name), project, log);
                 case ItemDescription.ItemType.Chibi:
                     return new ChibiEditor((ChibiItem)project.Items.First(i => i.Name == item.Name), log);
-                case ItemDescription.ItemType.Dialogue_Config:
-                    return new DialogueConfigEditor((DialogueConfigItem)project.Items.First(i => i.Name == item.Name), log);
                 case ItemDescription.ItemType.Group_Selection:
                     return new GroupSelectionEditor((GroupSelectionItem)project.Items.First(i => i.Name == item.Name), log, project, this);
                 case ItemDescription.ItemType.Map:

@@ -1,0 +1,177 @@
+{
+  "1": {
+    "Name": "Kyon",
+    "NameColor": "FFF0F000",
+    "PlateColor": "FFF0F000",
+    "OutlineColor": "FF353535",
+    "HasOutline": true
+  },
+  "2": {
+    "Name": "Haruhi",
+    "NameColor": "FFF00068",
+    "PlateColor": "FFF00068",
+    "OutlineColor": "FF353535",
+    "HasOutline": true
+  },
+  "3": {
+    "Name": "Asahina",
+    "NameColor": "FFF07000",
+    "PlateColor": "FFF07000",
+    "OutlineColor": "FF353535",
+    "HasOutline": true
+  },
+  "4": {
+    "Name": "Nagato",
+    "NameColor": "FF00C0F0",
+    "PlateColor": "FF00C0F0",
+    "OutlineColor": "FF353535",
+    "HasOutline": true
+  },
+  "5": {
+    "Name": "Koizumi",
+    "NameColor": "FFAC60F8",
+    "PlateColor": "FFAC60F8",
+    "OutlineColor": "FF353535",
+    "HasOutline": true
+  },
+  "6": {
+    "Name": "Sister",
+    "NameColor": "FFE000F0",
+    "PlateColor": "FFE000F0",
+    "OutlineColor": "FF353535",
+    "HasOutline": true
+  },
+  "7": {
+    "Name": "Tsuruya",
+    "NameColor": "FF00C000",
+    "PlateColor": "FF00C000",
+    "OutlineColor": "FF353535",
+    "HasOutline": true
+  },
+  "8": {
+    "Name": "Taniguchi",
+    "NameColor": "FFC86868",
+    "PlateColor": "FFC86868",
+    "OutlineColor": "FF353535",
+    "HasOutline": true
+  },
+  "9": {
+    "Name": "Kunikida",
+    "NameColor": "FFC86800",
+    "PlateColor": "FFC86800",
+    "OutlineColor": "FF353535",
+    "HasOutline": true
+  },
+  "10": {
+    "Name": "President",
+    "NameColor": "FFC0C000",
+    "PlateColor": "FFC0C000",
+    "OutlineColor": "FF353535",
+    "HasOutline": true
+  },
+  "11": {
+    "Name": "Member A",
+    "NameColor": "FF505050",
+    "PlateColor": "FF505050",
+    "OutlineColor": "FF353535",
+    "HasOutline": true
+  },
+  "12": {
+    "Name": "Member B",
+    "NameColor": "FF505050",
+    "PlateColor": "FF505050",
+    "OutlineColor": "FF353535",
+    "HasOutline": true
+  },
+  "13": {
+    "Name": "Member C",
+    "NameColor": "FF505050",
+    "PlateColor": "FF505050",
+    "OutlineColor": "FF353535",
+    "HasOutline": true
+  },
+  "14": {
+    "Name": "Member D",
+    "NameColor": "FF505050",
+    "PlateColor": "FF505050",
+    "OutlineColor": "FF353535",
+    "HasOutline": true
+  },
+  "15": {
+    "Name": "Okabe",
+    "NameColor": "FF905850",
+    "PlateColor": "FF905850",
+    "OutlineColor": "FF353535",
+    "HasOutline": true
+  },
+  "16": {
+    "Name": "Captain",
+    "NameColor": "FF505050",
+    "PlateColor": "FF505050",
+    "OutlineColor": "FF353535",
+    "HasOutline": true
+  },
+  "17": {
+    "Name": "Grocer",
+    "NameColor": "FF505050",
+    "PlateColor": "FF505050",
+    "OutlineColor": "FF353535",
+    "HasOutline": true
+  },
+  "18": {
+    "Name": "Girl",
+    "NameColor": "FF30F098",
+    "PlateColor": "FF30F098",
+    "OutlineColor": "FF353535",
+    "HasOutline": true
+  },
+  "19": {
+    "Name": "Old Lady",
+    "NameColor": "FF707070",
+    "PlateColor": "FF707070",
+    "OutlineColor": "FF353535",
+    "HasOutline": true
+  },
+  "20": {
+    "Name": "Fake Haruhi",
+    "NameColor": "FF707070",
+    "PlateColor": "FF707070",
+    "OutlineColor": "FF353535",
+    "HasOutline": true
+  },
+  "21": {
+    "Name": "Cat",
+    "NameColor": "FF707070",
+    "PlateColor": "FF707070",
+    "OutlineColor": "FF353535",
+    "HasOutline": true
+  },
+  "22": {
+    "Name": "???",
+    "NameColor": "FF707070",
+    "PlateColor": "FF707070",
+    "OutlineColor": "FF353535",
+    "HasOutline": true
+  },
+  "23": {
+    "Name": "Information",
+    "NameColor": "00000000",
+    "PlateColor": "00000000",
+    "OutlineColor": "FF353535",
+    "HasOutline": true
+  },
+  "24": {
+    "Name": "Monologue",
+    "NameColor": "00000000",
+    "PlateColor": "00000000",
+    "OutlineColor": "FF353535",
+    "HasOutline": true
+  },
+  "25": {
+    "Name": "Email",
+    "NameColor": "FF00F090",
+    "PlateColor": "FF707070",
+    "OutlineColor": "FF353535",
+    "HasOutline": true
+  }
+}

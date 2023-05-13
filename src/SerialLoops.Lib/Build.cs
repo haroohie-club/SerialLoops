@@ -195,6 +195,7 @@ namespace SerialLoops.Lib
                 return false;
             }
             tracker.Finished++;
+
             return true;
         }
 
