@@ -40,10 +40,10 @@ namespace SerialLoops.Lib.Items
         {
             Background,
             BGM,
+            Character,
             Character_Sprite,
             Chess,
             Chibi,
-            Dialogue_Config,
             Group_Selection,
             Map,
             Place,

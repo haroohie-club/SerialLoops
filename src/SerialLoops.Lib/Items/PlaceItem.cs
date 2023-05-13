@@ -16,6 +16,7 @@ namespace SerialLoops.Lib.Items
         public PlaceItem(int index, GraphicsFile placeGrp, Project project) : base(placeGrp.Name[0..^3], ItemType.Place)
         {
             Index = index;
+            CanRename = false;
             PlaceGraphic = placeGrp;
             PopulateScriptUses(project.Evt);
         }

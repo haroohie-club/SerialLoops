@@ -54,7 +54,7 @@ namespace SerialLoops.Lib.Script
             {
                 return p.Type switch
                 {
-                    ScriptParameter.ParameterType.DIALOGUE_PROPERTY => p.GetValues(project.MessInfo),
+                    ScriptParameter.ParameterType.CHARACTER => p.GetValues(project.MessInfo),
                     ScriptParameter.ParameterType.CONDITIONAL or ScriptParameter.ParameterType.DIALOGUE or ScriptParameter.ParameterType.OPTION or ScriptParameter.ParameterType.SCRIPT_SECTION => p.GetValues(script),
                     _ => p.GetValues(),
                 };
@@ -106,7 +106,6 @@ namespace SerialLoops.Lib.Script
         private static List<ScriptParameter> GetScriptParameters(ScriptCommandInvocation invocation, ScriptSection section, EventFile eventFile, Project project, ILogger log)
         {
             List<ScriptParameter> parameters = new();
-            MessageInfoFile messageInfo = project.Dat.Files.First(f => f.Name == "MESSINFOS").CastTo<MessageInfoFile>();
 
             for (int i = 0; i < invocation.Parameters.Count; i++)
             {
@@ -135,10 +134,10 @@ namespace SerialLoops.Lib.Script
                                 parameters.Add(new VoicedLineScriptParameter("Voice Line", (VoicedLineItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Voice && parameter == ((VoicedLineItem)i).Index)));
                                 break;
                             case 6:
-                                parameters.Add(new DialoguePropertyScriptParameter("Text Voice Font", messageInfo.MessageInfos[parameter]));
+                                parameters.Add(new DialoguePropertyScriptParameter("Text Voice Font", (CharacterItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Character && ((CharacterItem)i).MessageInfo.Character == project.MessInfo.MessageInfos[parameter].Character)));
                                 break;
                             case 7:
-                                parameters.Add(new DialoguePropertyScriptParameter("Text Speed", messageInfo.MessageInfos[parameter]));
+                                parameters.Add(new DialoguePropertyScriptParameter("Text Speed", (CharacterItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Character && ((CharacterItem)i).MessageInfo.Character == project.MessInfo.MessageInfos[parameter].Character)));
                                 break;
                             case 8:
                                 parameters.Add(new TextEntranceEffectScriptParameter("Text Entrance Effect", parameter));

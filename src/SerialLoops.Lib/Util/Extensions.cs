@@ -1,8 +1,13 @@
 ﻿using HaruhiChokuretsuLib.Archive.Event;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using static HaruhiChokuretsuLib.Archive.Event.EventFile;
+using SkiaSharp;
+using VCDiff.Shared;
 
 namespace SerialLoops.Lib.Util
 {
@@ -86,5 +91,21 @@ namespace SerialLoops.Lib.Util
             public ScriptCommandInvocation Command { get; set; }
             public short Index { get; set; }
         }
+    }
+
+    public class SKColorJsonConverter : JsonConverter<SKColor>
+    {
+        public override SKColor Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            string html = reader.GetString();
+            return new(
+                byte.Parse(html[2..4], System.Globalization.NumberStyles.HexNumber),
+                byte.Parse(html[4..6], System.Globalization.NumberStyles.HexNumber),
+                byte.Parse(html[6..8], System.Globalization.NumberStyles.HexNumber),
+                byte.Parse(html[0..2], System.Globalization.NumberStyles.HexNumber)
+                );
+        }
+
+        public override void Write(Utf8JsonWriter writer, SKColor value, JsonSerializerOptions options) => writer.WriteStringValue($"{value.Alpha:X2}{value.Red:X2}{value.Green:X2}{value.Blue:X2}");
     }
 }

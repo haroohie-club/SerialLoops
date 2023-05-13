@@ -33,7 +33,7 @@ namespace SerialLoops.Lib.Script.Parameters
             COLOR_MONOCHROME,
             CONDITIONAL,
             DIALOGUE,
-            DIALOGUE_PROPERTY,    // MESSINFO stuff, voice font & text speed
+            CHARACTER,    // MESSINFO stuff, voice font & text speed
             EPISODE_HEADER,
             FLAG,
             ITEM,
