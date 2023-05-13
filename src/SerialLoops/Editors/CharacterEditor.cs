@@ -97,6 +97,17 @@ namespace SerialLoops.Editors
                 UpdateTabTitle(false);
             };
 
+            if (_character.MessageInfo.Character == HaruhiChokuretsuLib.Archive.Event.Speaker.MONOLOGUE || _character.MessageInfo.Character == HaruhiChokuretsuLib.Archive.Event.Speaker.INFO)
+            {
+                characterBox.Enabled = false;
+                textColorPicker.Enabled = false;
+                plateColorPicker.Enabled = false;
+                defaultTextColorsDropDown.Enabled = false;
+                defaultPlateColorsDropDown.Enabled = false;
+                outlineColorPicker.Enabled = false;
+                outlineCheckBox.Enabled = false;
+            }
+
             return new StackLayout
             {
                 Spacing = 5,

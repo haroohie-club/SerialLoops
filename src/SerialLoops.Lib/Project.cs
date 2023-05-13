@@ -217,7 +217,7 @@ namespace SerialLoops.Lib
                 "ja" => "DefaultCharacters.ja.json",
                 _ => "DefaultCharacters.en.json"
             };
-            Characters ??= JsonSerializer.Deserialize<Dictionary<int, NameplateProperties>>(File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, charactersFile)), SERIALIZER_OPTIONS);
+            Characters ??= JsonSerializer.Deserialize<Dictionary<int, NameplateProperties>>(File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Defaults", charactersFile)), SERIALIZER_OPTIONS);
 
             tracker.Focus("Font", 5);
             if (IO.TryReadStringFile(Path.Combine(MainDirectory, "font", "charset.json"), out string json, log))
@@ -351,7 +351,7 @@ namespace SerialLoops.Lib
 
             if (ItemNames is null)
             {
-                ItemNames = JsonSerializer.Deserialize<Dictionary<string, string>>(File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "DefaultNames.json")));
+                ItemNames = JsonSerializer.Deserialize<Dictionary<string, string>>(File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Defaults", "DefaultNames.json")));
                 foreach (ItemDescription item in Items)
                 {
                     if (!ItemNames.ContainsKey(item.Name) && item.CanRename)

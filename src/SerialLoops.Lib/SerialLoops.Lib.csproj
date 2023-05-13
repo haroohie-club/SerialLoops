@@ -32,16 +32,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="DefaultCharacters.en.json">
+    <None Update="Defaults\DefaultCharacters.en.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="DefaultCharacters.ja.json">
+    <None Update="Defaults\DefaultCharacters.ja.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="DefaultCharacters.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="DefaultNames.json">
+    <None Update="Defaults\DefaultNames.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
