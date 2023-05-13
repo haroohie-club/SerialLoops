@@ -1,10 +1,9 @@
-﻿using HaruhiChokuretsuLib.Archive.Event;
-using HaruhiChokuretsuLib.Archive;
+﻿using HaruhiChokuretsuLib.Archive;
+using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Archive.Graphics;
+using HaruhiChokuretsuLib.Util;
 using SkiaSharp;
 using System.Linq;
-using HaruhiChokuretsuLib.Archive.Data;
-using HaruhiChokuretsuLib.Util;
 
 namespace SerialLoops.Lib.Items
 {

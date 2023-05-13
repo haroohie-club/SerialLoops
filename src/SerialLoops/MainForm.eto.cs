@@ -408,6 +408,9 @@ namespace SerialLoops
                             savedExtra = true;
                         }
                         break;
+                    case ItemDescription.ItemType.Place:
+                        PlaceItem placeItem = (PlaceItem)item;
+                        break;
                     case ItemDescription.ItemType.Scenario:
                         ScenarioStruct scenario = ((ScenarioItem)item).Scenario;
                         IO.WriteStringFile(Path.Combine("assets", "events", $"{OpenProject.Evt.Files.First(f => f.Name == "SCENARIOS").Index:X3}.s"),
