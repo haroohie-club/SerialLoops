@@ -32,6 +32,7 @@ namespace SerialLoops
         private SubMenuItem _recentProjectsCommand;
 
         private SKBitmap _blankNameplate, _blankNameplateBaseArrow;
+        private SKTypeface _msGothicHaruhi;
 
         public string ShutdownUpdateUrl = null;
 
@@ -55,6 +56,8 @@ namespace SerialLoops
             _blankNameplate = SKBitmap.Decode(blankNameplateStream);
             using Stream blankNameplateBaseArrowStream = Assembly.GetCallingAssembly().GetManifestResourceStream("SerialLoops.Graphics.BlankNameplateBaseArrow.png");
             _blankNameplateBaseArrow = SKBitmap.Decode(blankNameplateBaseArrowStream);
+            using Stream typefaceStream = Assembly.GetCallingAssembly().GetManifestResourceStream("SerialLoops.Graphics.MS-Gothic-Haruhi.ttf");
+            _msGothicHaruhi = SKTypeface.FromStream(typefaceStream);
 
             EditorTabs = new(project, this, Log);
             ItemExplorer = new(project, EditorTabs, Log);
@@ -415,7 +418,7 @@ namespace SerialLoops
                         break;
                     case ItemDescription.ItemType.Character:
                         CharacterItem characterItem = (CharacterItem)item;
-                        if (characterItem.NameplateProperties.Name != item.Name[4..])
+                        if (characterItem.NameplateProperties.Name != item.DisplayName[4..])
                         {
                             Shared.RenameItem(OpenProject, ItemExplorer, EditorTabs, Log, $"CHR_{characterItem.NameplateProperties.Name}");
                         }
@@ -429,6 +432,18 @@ namespace SerialLoops
                             IO.WriteStringFile(Path.Combine("assets", "data", $"{OpenProject.Extra.Index:X3}.s"), OpenProject.Extra.GetSource(new()), OpenProject, Log);
                             savedExtra = true;
                         }
+                        break;
+                    case ItemDescription.ItemType.Place:
+                        PlaceItem placeItem = (PlaceItem)item;
+                        if (placeItem.PlaceName != item.DisplayName[4..])
+                        {
+                            Shared.RenameItem(OpenProject, ItemExplorer, EditorTabs, Log, $"PLC_{placeItem.PlaceName}");
+                        }
+                        MemoryStream placeStream = new();
+                        SKBitmap newPlaceImage = PlaceItem.Unscramble(PlaceItem.Unscramble(placeItem.GetNewPlaceGraphic(_msGothicHaruhi)));
+                        placeItem.PlaceGraphic.SetImage(newPlaceImage);
+                        newPlaceImage.Encode(placeStream, SKEncodedImageFormat.Png, 1);
+                        IO.WriteBinaryFile(Path.Combine("assets", "graphics", $"{placeItem.PlaceGraphic.Index:X3}.png"), placeStream.ToArray(), OpenProject, Log);
                         break;
                     case ItemDescription.ItemType.Scenario:
                         ScenarioStruct scenario = ((ScenarioItem)item).Scenario;

@@ -45,7 +45,7 @@ namespace SerialLoops.Dialogs
             _filter.TextChanged += (sender, args) =>
             {
                 _selector.DataStore = new ObservableCollection<IPreviewableGraphic>(_items
-                    .Where(i => ((ItemDescription)i).Name.Contains(_filter.Text, StringComparison.OrdinalIgnoreCase)));
+                    .Where(i => ((ItemDescription)i).DisplayName.Contains(_filter.Text, StringComparison.OrdinalIgnoreCase)));
             };
 
             _selector = new ListBox
@@ -53,7 +53,7 @@ namespace SerialLoops.Dialogs
                 Size = new Size(150, 390),
                 DataStore = _items,
                 SelectedIndex = _items.IndexOf(_currentSelection),
-                ItemTextBinding = Binding.Delegate<IPreviewableGraphic, string>(i => ((ItemDescription)i).Name),
+                ItemTextBinding = Binding.Delegate<IPreviewableGraphic, string>(i => ((ItemDescription)i).DisplayName),
                 ItemKeyBinding = Binding.Delegate<IPreviewableGraphic, string>(i => ((ItemDescription)i).Name),
             };
 
@@ -126,7 +126,7 @@ namespace SerialLoops.Dialogs
             Label backgroundTypeLabel = new();
             if (_selector.SelectedValue is not null)
             {
-                if (((ItemDescription)_selector.SelectedValue).Type == ItemDescription.ItemType.Background && ((ItemDescription)_selector.SelectedValue).Name != "NONE")
+                if (((ItemDescription)_selector.SelectedValue).Type == ItemDescription.ItemType.Background && ((ItemDescription)_selector.SelectedValue).DisplayName != "NONE")
                 {
                     backgroundTypeLabel.Text = ((BackgroundItem)_selector.SelectedValue).BackgroundType.ToString();
                 }
@@ -139,7 +139,7 @@ namespace SerialLoops.Dialogs
                 Spacing = 10,
                 Items =
                 {
-                    new Label { Text = _selector.SelectedValue == null ? "No preview available" : ((ItemDescription)_selector.SelectedValue).Name },
+                    new Label { Text = _selector.SelectedValue == null ? "No preview available" : ((ItemDescription)_selector.SelectedValue).DisplayName },
                     new SKGuiImage(_selector.SelectedValue == null ? new SKBitmap(64, 64) :
                         ((IPreviewableGraphic) _selector.SelectedValue).GetPreview(_project, 250, 350)),
                     backgroundTypeLabel,
