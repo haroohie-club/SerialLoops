@@ -363,7 +363,7 @@ namespace SerialLoops.Lib
 
             for (int i = 0; i < Items.Count; i++)
             {
-                if (Items[i].CanRename)
+                if (Items[i].CanRename || Items[i].Type == ItemDescription.ItemType.Place) // We don't want to manually rename places, but they do use the display name pattern
                 {
                     try
                     {

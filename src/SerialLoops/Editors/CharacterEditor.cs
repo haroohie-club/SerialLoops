@@ -156,24 +156,5 @@ namespace SerialLoops.Editors
             nameplatePreviewLayout.Items.Clear();
             nameplatePreviewLayout.Items.Add(new SKGuiImage(_character.GetNewNameplate(blankNameplate, blankNameplateBaseArrow, _project)));
         }
-        private class CustomFontMapper : FontMapper
-        {
-            private static readonly Dictionary<string, SKTypeface> _fonts = new();
-
-            public static void AddFont(SKTypeface typeface)
-            {
-                _fonts.Add(typeface.FamilyName, typeface);
-            }
-
-            public static bool HasFont()
-            {
-                return _fonts.Count > 0;
-            }
-
-            public override SKTypeface TypefaceFromStyle(IStyle style, bool ignoreFontVariants)
-            {
-                return _fonts[style.FontFamily];
-            }
-        }
     }
 }

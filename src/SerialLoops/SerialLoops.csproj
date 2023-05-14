@@ -14,6 +14,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Graphics\MS-Gothic-Haruhi.ttf" />
     <None Remove="Graphics\BlankNameplate.png" />
     <None Remove="Graphics\BlankNameplateBaseArrow.png" />
     <None Remove="Graphics\msgothic-variablewidth.ttf" />
@@ -68,6 +69,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Graphics\MS-Gothic-Haruhi.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="Graphics\BlankNameplate.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
@@ -82,7 +86,6 @@
   <ItemGroup>
     <PackageReference Include="Eto.Forms" Version="2.7.5" />
     <PackageReference Include="System.Text.Json" Version="7.0.2" />
-    <PackageReference Include="Topten.RichTextKit" Version="0.4.165" />
   </ItemGroup>
 
   <ItemGroup>
