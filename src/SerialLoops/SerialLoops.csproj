@@ -85,9 +85,7 @@
 
   <ItemGroup>
     <PackageReference Include="Eto.Forms" Version="2.7.5" />
-    <PackageReference Include="HarfBuzzSharp.NativeAssets.Linux" Version="2.8.2.3" />
     <PackageReference Include="System.Text.Json" Version="7.0.2" />
-    <PackageReference Include="Topten.RichTextKit" Version="0.4.165" />
   </ItemGroup>
 
   <ItemGroup>

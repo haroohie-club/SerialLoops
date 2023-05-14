@@ -1800,6 +1800,7 @@ namespace SerialLoops.Editors
                     else if (command.Verb == CommandVerb.INVEST_START)
                     {
                         sprites.Clear();
+                        previousSprites.Clear();
                     }
                     previousCommand = command;
                 }

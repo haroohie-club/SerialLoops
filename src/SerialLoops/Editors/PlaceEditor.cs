@@ -22,6 +22,10 @@ namespace SerialLoops.Editors
         public override Container GetEditorPanel()
         {
             _place = (PlaceItem)Description;
+            if (string.IsNullOrEmpty(_place.PlaceName))
+            {
+                _place.PlaceName = _place.DisplayName[4..];
+            }
 
             TextBox placeTextBox = new() { Text = _place.DisplayName[4..] };
 
@@ -35,58 +39,18 @@ namespace SerialLoops.Editors
 
             using Stream typefaceStream = Assembly.GetCallingAssembly().GetManifestResourceStream("SerialLoops.Graphics.MS-Gothic-Haruhi.ttf");
             SKTypeface msGothicHaruhi = SKTypeface.FromStream(typefaceStream);
-            if (!CustomFontMapper.HasFont())
+            if (!PlaceItem.CustomFontMapper.HasFont())
             {
-                CustomFontMapper.AddFont(msGothicHaruhi);
+                PlaceItem.CustomFontMapper.AddFont(msGothicHaruhi);
             }
 
             placeTextBox.TextChanged += (sender, args) =>
             {
-                string spaceAdjustedText = placeTextBox.Text.Replace(" ", "   ");
-                SKBitmap newPlaceBitmap = new(_place.PlaceGraphic.Width, _place.PlaceGraphic.Height);
-                SKCanvas canvas = new(newPlaceBitmap);
-                canvas.DrawRegion(new(new SKRectI(0, 0, newPlaceBitmap.Width, newPlaceBitmap.Height)), new SKPaint { Color = new SKColor(0, 249, 0) });
-                TextBlock placeText = new()
-                {
-                    Alignment = Topten.RichTextKit.TextAlignment.Left,
-                    FontMapper = new CustomFontMapper(),
-                    MaxWidth = newPlaceBitmap.Width - 2,
-                    MaxHeight = newPlaceBitmap.Height - 12,
-                };
-                placeText.AddText(spaceAdjustedText, new Style()
-                {
-                    TextColor = SKColors.Black,
-                    FontFamily = msGothicHaruhi.FamilyName,
-                    FontSize = 15.0f,
-                    LetterSpacing = -1,
-                    HaloColor = new SKColor(160, 160, 160),
-                    HaloBlur = 0,
-                    HaloWidth = 4,
-                });
-                TextBlock placeTextShadow = new()
-                {
-                    Alignment = Topten.RichTextKit.TextAlignment.Left,
-                    FontMapper = new CustomFontMapper(),
-                    MaxWidth = newPlaceBitmap.Width - 2,
-                    MaxHeight = newPlaceBitmap.Height - 12,
-                };
-                placeTextShadow.AddText(spaceAdjustedText, new Style()
-                {
-                    TextColor = SKColors.Black,
-                    FontFamily = msGothicHaruhi.FamilyName,
-                    FontSize = 15.0f,
-                    LetterSpacing = -1,
-                    HaloColor = new SKColor(88, 88, 88),
-                    HaloBlur = 0,
-                    HaloWidth = 4,
-                });
-                placeTextShadow.Paint(canvas, new SKPoint(2, 7), new() { Edging = SKFontEdging.Alias });
-                placeText.Paint(canvas, new SKPoint(1, 6), new() { Edging = SKFontEdging.Antialias });
-                canvas.Flush();
+                _place.PlaceName = placeTextBox.Text;
 
                 previewPanel.Items.Clear();
-                previewPanel.Items.Add(new SKGuiImage(newPlaceBitmap));
-
+                previewPanel.Items.Add(new SKGuiImage(_place.GetNewPlaceGraphic(msGothicHaruhi)));
+                
                 UpdateTabTitle(false);
             };
 
@@ -100,26 +64,6 @@ namespace SerialLoops.Editors
                     previewPanel,
                 }
             };
-        }
-
-        private class CustomFontMapper : FontMapper
-        {
-            private static Dictionary<string, SKTypeface> _fonts = new();
-
-            public static void AddFont(SKTypeface typeface)
-            {
-                _fonts.Add(typeface.FamilyName, typeface);
-            }
-
-            public static bool HasFont()
-            {
-                return _fonts.Count > 0;
-            }
-
-            public override SKTypeface TypefaceFromStyle(IStyle style, bool ignoreFontVariants)
-            {
-                return _fonts[style.FontFamily];
-            }
         }
     }
 }
