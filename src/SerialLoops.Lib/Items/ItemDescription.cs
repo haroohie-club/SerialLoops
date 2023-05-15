@@ -1,5 +1,4 @@
-﻿using HaruhiChokuretsuLib.Archive.Data;
-using HaruhiChokuretsuLib.Archive.Event;
+﻿using HaruhiChokuretsuLib.Archive.Event;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +8,7 @@ namespace SerialLoops.Lib.Items
     public class ItemDescription
     {
         public string Name { get; protected set; }
+        public bool CanRename { get; set; }
         public string DisplayName { get; protected set; }
         private string _trueDisplayName => Name == DisplayName ? DisplayName : $"{Name} - {DisplayName}";
         public string DisplayNameWithStatus => UnsavedChanges ? $"{_trueDisplayName} *" : _trueDisplayName;
@@ -20,6 +20,7 @@ namespace SerialLoops.Lib.Items
         {
             Name = name;
             Type = type;
+            CanRename = true;
             if (!string.IsNullOrEmpty(displayName))
             {
                 DisplayName = displayName;
@@ -30,15 +31,20 @@ namespace SerialLoops.Lib.Items
             }
         }
 
+        public void Rename(string newName)
+        {
+            DisplayName = newName;
+        }
+
         // Enum with values for each type of item
         public enum ItemType
         {
             Background,
             BGM,
+            Character,
             Character_Sprite,
             Chess,
             Chibi,
-            Dialogue_Config,
             Group_Selection,
             Map,
             Place,

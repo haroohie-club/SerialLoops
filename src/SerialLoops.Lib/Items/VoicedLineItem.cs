@@ -128,7 +128,7 @@ namespace SerialLoops.Lib.Items
             File.Copy(Path.Combine(baseDirectory, VoiceFile), Path.Combine(iterativeDirectory, VoiceFile), true);
         }
 
-        public override void Refresh(Project project)
+        public override void Refresh(Project project, ILogger log)
         {
             PopulateScriptUses(project);
         }

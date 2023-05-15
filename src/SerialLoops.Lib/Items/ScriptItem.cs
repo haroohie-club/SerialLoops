@@ -1,7 +1,9 @@
 ﻿using HaruhiChokuretsuLib.Archive.Event;
+using HaruhiChokuretsuLib.Util;
 using QuikGraph;
 using SerialLoops.Lib.Script;
 using SerialLoops.Lib.Script.Parameters;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -17,19 +19,27 @@ namespace SerialLoops.Lib.Items
         public ScriptItem(string name) : base(name, ItemType.Script)
         {
         }
-        public ScriptItem(EventFile evt) : base(evt.Name[0..^1], ItemType.Script)
+        public ScriptItem(EventFile evt, ILogger log) : base(evt.Name[0..^1], ItemType.Script)
         {
             Event = evt;
 
             Graph.AddVertexRange(Event.ScriptSections);
 
-            SearchableText = string.Join('\n', evt.ScriptSections.SelectMany(s => s.Objects.Select(c => c.Command.Mnemonic))
-                .Concat(evt.ConditionalsSection.Objects));
+            try
+            {
+                SearchableText = string.Join('\n', evt.ScriptSections.SelectMany(s => s.Objects.Select(c => c.Command.Mnemonic))
+                    .Concat(evt.ConditionalsSection.Objects));
                 //.Concat(evt.LabelsSection.Objects.Select(l => l.Name))
                 //.Concat(evt.DialogueLines.Select(l => l.Text)));
+            }
+            catch (Exception ex)
+            {
+                log.LogError($"Exception encountered while creating searchable text for script {Name}: {ex.Message}");
+                log.Log(ex.StackTrace);
+            }
         }
 
-        public Dictionary<ScriptSection, List<ScriptItemCommand>> GetScriptCommandTree(Project project)
+        public Dictionary<ScriptSection, List<ScriptItemCommand>> GetScriptCommandTree(Project project, ILogger log)
         {
             Dictionary<ScriptSection, List<ScriptItemCommand>> commands = new();
             foreach (ScriptSection section in Event.ScriptSections)
@@ -37,13 +47,13 @@ namespace SerialLoops.Lib.Items
                 commands.Add(section, new());
                 foreach (ScriptCommandInvocation command in section.Objects)
                 {
-                    commands[section].Add(ScriptItemCommand.FromInvocation(command, section, commands[section].Count, Event, project));
+                    commands[section].Add(ScriptItemCommand.FromInvocation(command, section, commands[section].Count, Event, project, log));
                 }
             }
             return commands;
         }
 
-        public void CalculateGraphEdges(Dictionary<ScriptSection, List<ScriptItemCommand>> commandTree)
+        public void CalculateGraphEdges(Dictionary<ScriptSection, List<ScriptItemCommand>> commandTree, ILogger log)
         {
             foreach (ScriptSection section in commandTree.Keys)
             {
@@ -55,7 +65,7 @@ namespace SerialLoops.Lib.Items
                         Graph.AddEdge(new() { Source = section, Target = ((ScriptSectionScriptParameter)command.Parameters[4]).Section });
                         Graph.AddEdgeRange(Event.ScriptSections.Where(s =>
                             Event.LabelsSection.Objects.Where(l =>
-                            Event.MapCharactersSection.Objects.Select(c => c.TalkScriptBlock).Contains(l.Id))
+                            Event.MapCharactersSection?.Objects.Select(c => c.TalkScriptBlock).Contains(l.Id) ?? false)
                             .Select(l => l.Name.Replace("/", "")).Contains(s.Name)).Select(s => new ScriptSectionEdge() { Source = section, Target = s }));
                         Graph.AddEdgeRange(Event.ScriptSections.Where(s =>
                             Event.LabelsSection.Objects.Where(l =>
@@ -65,12 +75,26 @@ namespace SerialLoops.Lib.Items
                     }
                     else if (command.Verb == CommandVerb.GOTO)
                     {
-                        Graph.AddEdge(new() { Source = section, Target = ((ScriptSectionScriptParameter)command.Parameters[0]).Section });
+                        try
+                        {
+                            Graph.AddEdge(new() { Source = section, Target = ((ScriptSectionScriptParameter)command.Parameters[0]).Section });
+                        }
+                        catch (ArgumentOutOfRangeException)
+                        {
+                            log.LogWarning("Failed to add graph edge for GOTO command as script section parameter was out of range.");
+                        }
                         @continue = true;
                     }
                     else if (command.Verb == CommandVerb.VGOTO)
                     {
-                        Graph.AddEdge(new() { Source = section, Target = ((ScriptSectionScriptParameter)command.Parameters[1]).Section });
+                        try
+                        {
+                            Graph.AddEdge(new() { Source = section, Target = ((ScriptSectionScriptParameter)command.Parameters[1]).Section });
+                        }
+                        catch (ArgumentOutOfRangeException)
+                        {
+                            log.LogWarning("Failed to add graph edge for VGOTO command as script section parameter was out of range.");
+                        }
                     }
                     else if (command.Verb == CommandVerb.CHESS_VGOTO)
                     {
@@ -115,11 +139,11 @@ namespace SerialLoops.Lib.Items
             }
         }
 
-        public override void Refresh(Project project)
+        public override void Refresh(Project project, ILogger log)
         {
             Graph = new();
             Graph.AddVertexRange(Event.ScriptSections);
-            CalculateGraphEdges(GetScriptCommandTree(project));
+            CalculateGraphEdges(GetScriptCommandTree(project, log), log);
         }
     }
 }

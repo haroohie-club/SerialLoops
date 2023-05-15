@@ -1,6 +1,7 @@
 ﻿using HaruhiChokuretsuLib.Archive;
 using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
+using HaruhiChokuretsuLib.Util;
 using SkiaSharp;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,21 +21,19 @@ namespace SerialLoops.Lib.Items
             PopulateScriptUses(project.Evt);
         }
 
-        public override void Refresh(Project project)
+        public override void Refresh(Project project, ILogger log)
         {
             PopulateScriptUses(project.Evt);
         }
 
         public List<(SKBitmap frame, int timing)> GetClosedMouthAnimation(Project project)
         {
-            MessageInfoFile messageInfo = project.Dat.Files.First(f => f.Name == "MESSINFOS").CastTo<MessageInfoFile>();
-            return Sprite.GetClosedMouthAnimation(project.Grp, messageInfo);
+            return Sprite.GetClosedMouthAnimation(project.Grp, project.MessInfo);
         }
 
         public List<(SKBitmap frame, int timing)> GetLipFlapAnimation(Project project)
         {
-            MessageInfoFile messageInfo = project.Dat.Files.First(f => f.Name == "MESSINFOS").CastTo<MessageInfoFile>();
-            return Sprite.GetLipFlapAnimation(project.Grp, messageInfo);
+            return Sprite.GetLipFlapAnimation(project.Grp, project.MessInfo);
         }
 
         public void PopulateScriptUses(ArchiveFile<EventFile> evt)

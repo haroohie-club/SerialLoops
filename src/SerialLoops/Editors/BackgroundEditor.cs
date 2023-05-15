@@ -1,11 +1,14 @@
 ﻿using Eto.Forms;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Dialogs;
+using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
+using SerialLoops.Lib.Util;
 using SerialLoops.Utility;
 using SkiaSharp;
 using System;
 using System.IO;
+using System.Linq;
 
 namespace SerialLoops.Editors
 {
@@ -13,7 +16,7 @@ namespace SerialLoops.Editors
     {
         private BackgroundItem _bg;
 
-        public BackgroundEditor(BackgroundItem item, ILogger log) : base(item, log)
+        public BackgroundEditor(BackgroundItem item, Project project, ILogger log) : base(item, log, project)
         {
         }
 
@@ -30,7 +33,15 @@ namespace SerialLoops.Editors
 
             if (!string.IsNullOrEmpty(_bg.CgName))
             {
-                extrasInfo.Items.Add(_bg.CgName);
+                TextBox cgNameBox = new() { Text = _bg.CgName, Width = 200 };
+                cgNameBox.TextChanged += (sender, args) =>
+                {
+                    _project.Extra.Cgs[_project.Extra.Cgs.IndexOf(_project.Extra.Cgs.First(b => b.Name.GetSubstitutedString(_project).Equals(_bg.CgName)))].Name = cgNameBox.Text.GetOriginalString(_project);
+                    _bg.CgName = cgNameBox.Text;
+                    UpdateTabTitle(false, cgNameBox);
+                };
+
+                extrasInfo.Items.Add(cgNameBox);
                 extrasInfo.Items.Add($"Unknown Extras Short: {_bg.ExtrasShort}");
                 extrasInfo.Items.Add($"Unknown Extras Integer: {_bg.ExtrasInt}");
             }
@@ -94,7 +105,7 @@ namespace SerialLoops.Editors
                         try
                         {
                             LoopyProgressTracker tracker = new();
-                            _ = new ProgressDialog(() => _bg.SetBackground(bgResizeDialog.FinalImage, tracker),
+                            _ = new ProgressDialog(() => _bg.SetBackground(bgResizeDialog.FinalImage, tracker, _log),
                                 () => Content = GetEditorPanel(), tracker, $"Replacing {_bg.DisplayName}...");
                             UpdateTabTitle(false);
                         }

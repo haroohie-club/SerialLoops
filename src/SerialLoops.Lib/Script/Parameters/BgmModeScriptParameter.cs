@@ -5,6 +5,7 @@ namespace SerialLoops.Lib.Script.Parameters
     public class BgmModeScriptParameter : ScriptParameter
     {
         public BgmMode Mode { get; set; }
+        public override short[] GetValues(object obj = null) => new short[] { (short)Mode };
 
         public BgmModeScriptParameter(string name, short mode) : base(name, ParameterType.BGM_MODE)
         {

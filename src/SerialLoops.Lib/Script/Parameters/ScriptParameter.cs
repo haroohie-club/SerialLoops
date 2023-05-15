@@ -6,6 +6,7 @@ namespace SerialLoops.Lib.Script.Parameters
     {
         public ParameterType Type { get; protected set; }
         public string Name { get; protected set; }
+        public abstract short[] GetValues(object obj = null);
 
         protected ScriptParameter(string name, ParameterType type)
         {
@@ -32,7 +33,7 @@ namespace SerialLoops.Lib.Script.Parameters
             COLOR_MONOCHROME,
             CONDITIONAL,
             DIALOGUE,
-            DIALOGUE_PROPERTY,    // MESSINFO stuff, voice font & text speed
+            CHARACTER,    // MESSINFO stuff, voice font & text speed
             EPISODE_HEADER,
             FLAG,
             ITEM,

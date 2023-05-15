@@ -5,6 +5,7 @@ namespace SerialLoops.Lib.Script.Parameters
     public class ChibiEnterExitScriptParameter : ScriptParameter
     {
         public ChibiEnterExitType Mode { get; set; }
+        public override short[] GetValues(object obj = null) => new short[] { (short)Mode };
 
         public ChibiEnterExitScriptParameter(string name, short mode) : base(name, ParameterType.CHIBI_ENTER_EXIT)
         {

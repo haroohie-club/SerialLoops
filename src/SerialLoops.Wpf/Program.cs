@@ -23,15 +23,15 @@ namespace SerialLoops.Wpf
 
                 toolbar.Control.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
                 toolbar.Control.VerticalAlignment = System.Windows.VerticalAlignment.Center;
-                toolbar.Control.Margin = new(5, 0, 5, 0);
-                toolbar.Control.Padding = new(5, 0, 5, 0);
+                toolbar.Control.Margin = new(3, 0, 3, 0);
+                toolbar.Control.Padding = new(3, 0, 3, 0);
             });
 
             // Windows toolbar button & separator styling
             Eto.Style.Add<ButtonToolItemHandler>("sl-toolbar-button", button =>
             {
-                button.Control.Width = 50;
-                button.Control.Height = 40;
+                button.Control.Width = 55;
+                button.Control.Height = 45;
 
                 StackPanel stackPanel = new() { Orientation = Orientation.Vertical };
                 TextBlock textBlock = new() { Text = button.Text, TextAlignment = System.Windows.TextAlignment.Center };

@@ -96,6 +96,24 @@ namespace SerialLoops.Dialogs
                                 OnChange = (value) => Configuration.RemoveMissingProjects = value
                             }
                         }
+                    ),
+                    new OptionsGroup(
+                        "Serial Loops",
+                        new()
+                        {
+                            new BooleanOption
+                            {
+                                Name = "Check For Updates On Startup",
+                                Value = Configuration.CheckForUpdates,
+                                OnChange = (value) => Configuration.CheckForUpdates = value
+                            },
+                            new BooleanOption
+                            {
+                                Name = "Use Pre-Release Update Channel",
+                                Value = Configuration.PreReleaseChannel,
+                                OnChange = (value) => Configuration.PreReleaseChannel = value
+                            }
+                        }
                     )
                 }
             };

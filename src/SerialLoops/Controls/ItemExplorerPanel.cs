@@ -10,7 +10,6 @@ namespace SerialLoops.Controls
 {
     public class ItemExplorerPanel : ItemListPanel
     {
-
         private readonly Project _project;
         private readonly EditorTabsPanel _tabs;
         
@@ -30,6 +29,7 @@ namespace SerialLoops.Controls
             if (Viewer.SelectedItem is not null)
             {
                 ((TreeGridView)Viewer.Control).ContextMenu = Viewer.SelectedItem.Text.GetContextMenu(_project, this, _tabs, _log);
+                
             }
         }
 

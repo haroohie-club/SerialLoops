@@ -5,6 +5,9 @@
     <TargetFramework>net6.0</TargetFramework>
     <RuntimeIdentifiers>osx-x64;osx-arm64</RuntimeIdentifiers>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <Version>$(SLAssemblyVersion)</Version>
+    <InformationalVersion>$(SLVersion)</InformationalVersion>
+    <AssemblyName>SerialLoops</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,7 +19,7 @@
   </ItemGroup>
 	
   <ItemGroup>
-    <PackageReference Include="Eto.Platform.Mac64" Version="2.7.4" />
+    <PackageReference Include="Eto.Platform.Mac64" Version="2.7.5" />
     <PackageReference Include="OpenTK" Version="4.7.5" />
   </ItemGroup>
 	

@@ -1,6 +1,5 @@
 using Eto.Forms;
 using HaruhiChokuretsuLib.Archive;
-using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
 using SerialLoops.Controls;
 using SerialLoops.Dialogs;
@@ -16,7 +15,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text.Json;
+using System.Reflection;
 
 namespace SerialLoops
 {
@@ -30,7 +29,12 @@ namespace SerialLoops
         public EditorTabsPanel EditorTabs { get; set; }
         public ItemExplorerPanel ItemExplorer { get; set; }
         public LoopyLogger Log { get; set; }
-        private SubMenuItem _recentProjects;
+        private SubMenuItem _recentProjectsCommand;
+
+        private SKBitmap _blankNameplate, _blankNameplateBaseArrow;
+        private SKTypeface _msGothicHaruhi;
+
+        public string ShutdownUpdateUrl = null;
 
         void InitializeComponent()
         {
@@ -39,6 +43,7 @@ namespace SerialLoops
             MinimumSize = new(769, 420);
             Padding = 10;
             Closing += CloseProject_Executed;
+            Closed += AppClosed_Executed;
 
             InitializeBaseMenu();
         }
@@ -46,7 +51,14 @@ namespace SerialLoops
         private void OpenProjectView(Project project, IProgressTracker tracker)
         {
             InitializeProjectMenu();
-            
+
+            using Stream blankNameplateStream = Assembly.GetCallingAssembly().GetManifestResourceStream("SerialLoops.Graphics.BlankNameplate.png");
+            _blankNameplate = SKBitmap.Decode(blankNameplateStream);
+            using Stream blankNameplateBaseArrowStream = Assembly.GetCallingAssembly().GetManifestResourceStream("SerialLoops.Graphics.BlankNameplateBaseArrow.png");
+            _blankNameplateBaseArrow = SKBitmap.Decode(blankNameplateBaseArrowStream);
+            using Stream typefaceStream = Assembly.GetCallingAssembly().GetManifestResourceStream("SerialLoops.Graphics.MS-Gothic-Haruhi.ttf");
+            _msGothicHaruhi = SKTypeface.FromStream(typefaceStream);
+
             EditorTabs = new(project, this, Log);
             ItemExplorer = new(project, EditorTabs, Log);
             Title = $"{BASE_TITLE} - {project.Name}";
@@ -87,15 +99,19 @@ namespace SerialLoops
         private void InitializeBaseMenu()
         {
             // File
-            Command newProject = new() { MenuText = "New Project...", ToolBarText = "New Project", Image = ControlGenerator.GetIcon("New", Log) };
-            newProject.Executed += NewProjectCommand_Executed;
+            Command newProjectCommand = new() { MenuText = "New Project...", ToolBarText = "New Project", Image = ControlGenerator.GetIcon("New", Log) };
+            newProjectCommand.Executed += NewProjectCommand_Executed;
 
-            Command openProject = new() { MenuText = "Open Project...", ToolBarText = "Open Project", Image = ControlGenerator.GetIcon("Open", Log) };
-            openProject.Executed += OpenProject_Executed;
+            Command openProjectCommand = new() { MenuText = "Open Project...", ToolBarText = "Open Project", Image = ControlGenerator.GetIcon("Open", Log) };
+            openProjectCommand.Executed += OpenProject_Executed;
 
             // Application Items
             Command preferencesCommand = new();
             preferencesCommand.Executed += PreferencesCommand_Executed;
+
+            // Check For Updates
+            Command checkForUpdatesCommand = new();
+            checkForUpdatesCommand.Executed += (sender, e) => new UpdateChecker(this).Check();
 
             // About
             Command aboutCommand = new() { MenuText = "About...", Image = ControlGenerator.GetIcon("Help", Log) };
@@ -104,22 +120,24 @@ namespace SerialLoops
                 ProgramName = "Serial Loops",
                 Developers = new[] { "Jonko", "William278" },
                 Copyright = "© Haroohie Translation Club, 2023",
-                Website = new Uri("https://haroohie.club")
+                Website = new Uri("https://haroohie.club"),
+                Version = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion,
             }.ShowDialog(this);
 
             // Create Menu
-            _recentProjects = new() { Text = "Recent Projects" };
+            _recentProjectsCommand = new() { Text = "Recent Projects" };
             Menu = new MenuBar
             {
                 Items =
                 {
                     // File submenu
-                    new SubMenuItem { Text = "&File", Items = { newProject, openProject, _recentProjects } }
+                    new SubMenuItem { Text = "&File", Items = { newProjectCommand, openProjectCommand, _recentProjectsCommand } }
                 },
                 ApplicationItems =
                 {
                     // application (OS X) or file menu (others)
                     new ButtonMenuItem { Text = "&Preferences...", Command = preferencesCommand, Image = ControlGenerator.GetIcon("Options", Log) },
+                    new ButtonMenuItem { Text = "&Check For Updates...", Command = checkForUpdatesCommand, Image = ControlGenerator.GetIcon("Update", Log) }
                 },
                 AboutItem = aboutCommand
             };
@@ -128,34 +146,40 @@ namespace SerialLoops
         private void InitializeProjectMenu()
         {
             // File
-            Command saveProject = new() { MenuText = "Save Project", ToolBarText = "Save Project", Shortcut = Application.Instance.CommonModifier | Keys.S, Image = ControlGenerator.GetIcon("Save", Log) };
-            saveProject.Executed += SaveProject_Executed;
+            Command saveProjectCommand = new() { MenuText = "Save Project", ToolBarText = "Save Project", Shortcut = Application.Instance.CommonModifier | Keys.S, Image = ControlGenerator.GetIcon("Save", Log) };
+            saveProjectCommand.Executed += SaveProject_Executed;
 
-            Command projectSettings = new() { MenuText = "Project Settings...", ToolBarText = "Project Settings", Image = ControlGenerator.GetIcon("Project_Options", Log) };
-            projectSettings.Executed += ProjectSettings_Executed;
+            Command projectSettingsCommand = new() { MenuText = "Project Settings...", ToolBarText = "Project Settings", Image = ControlGenerator.GetIcon("Project_Options", Log) };
+            projectSettingsCommand.Executed += ProjectSettings_Executed;
 
-            Command closeProject = new() { MenuText = "Close Project", ToolBarText = "Close Project", Image = ControlGenerator.GetIcon("Close", Log) };
-            closeProject.Executed += (sender, args) => CloseProjectView();
+            Command migrateProjectCommand = new() { MenuText = "Migrate to new ROM", ToolBarText = "Migrate Project" };
+            migrateProjectCommand.Executed += MigrateProject_Executed;
 
-            Command exportPatch = new() { MenuText = "Export Patch", ToolBarText = "Export Patch" };
-            exportPatch.Executed += Patch_Executed;
+            Command exportPatchCommand = new() { MenuText = "Export Patch", ToolBarText = "Export Patch" };
+            exportPatchCommand.Executed += Patch_Executed;
+
+            Command closeProjectCommand = new() { MenuText = "Close Project", ToolBarText = "Close Project", Image = ControlGenerator.GetIcon("Close", Log) };
+            closeProjectCommand.Executed += (sender, args) => CloseProjectView();
 
             // Tools
-            Command searchProject = new() { MenuText = "Search...", ToolBarText = "Search", Shortcut = Application.Instance.CommonModifier | Keys.F, Image = ControlGenerator.GetIcon("Search", Log) };
-            searchProject.Executed += Search_Executed;
+            Command renameItemCommand = new() { MenuText = "Rename Item", Shortcut = Keys.F2 };
+            renameItemCommand.Executed += (sender, args) => Shared.RenameItem(OpenProject, ItemExplorer, EditorTabs, Log);
 
-            Command findOrphanedItems = new() { MenuText = "Find Orphaned Items..." };
-            findOrphanedItems.Executed += FindOrphanedItems_Executed;
+            Command searchProjectCommand = new() { MenuText = "Search...", ToolBarText = "Search", Shortcut = Application.Instance.CommonModifier | Keys.F, Image = ControlGenerator.GetIcon("Search", Log) };
+            searchProjectCommand.Executed += Search_Executed;
+
+            Command findOrphanedItemsCommand = new() { MenuText = "Find Orphaned Items..." };
+            findOrphanedItemsCommand.Executed += FindOrphanedItems_Executed;
 
             // Build
-            Command buildIterativeProject = new() { MenuText = "Build", ToolBarText = "Build", Image = ControlGenerator.GetIcon("Build", Log) };
-            buildIterativeProject.Executed += BuildIterativeProject_Executed;
+            Command buildIterativeProjectCommand = new() { MenuText = "Build", ToolBarText = "Build", Image = ControlGenerator.GetIcon("Build", Log) };
+            buildIterativeProjectCommand.Executed += BuildIterativeProject_Executed;
 
-            Command buildBaseProject = new() { MenuText = "Build from Scratch", ToolBarText = "Build from Scratch", Image = ControlGenerator.GetIcon("Build_Scratch", Log) };
-            buildBaseProject.Executed += BuildBaseProject_Executed;
+            Command buildBaseProjectCommand = new() { MenuText = "Build from Scratch", ToolBarText = "Build from Scratch", Image = ControlGenerator.GetIcon("Build_Scratch", Log) };
+            buildBaseProjectCommand.Executed += BuildBaseProject_Executed;
 
-            Command buildAndRunProject = new() { MenuText = "Build and Run", ToolBarText = "Run", Image = ControlGenerator.GetIcon("Build_Run", Log) };
-            buildAndRunProject.Executed += BuildAndRunProject_Executed;
+            Command buildAndRunProjectCommand = new() { MenuText = "Build and Run", ToolBarText = "Run", Image = ControlGenerator.GetIcon("Build_Run", Log) };
+            buildAndRunProjectCommand.Executed += BuildAndRunProject_Executed;
 
             // Add toolbar
             ToolBar = new ToolBar
@@ -163,23 +187,19 @@ namespace SerialLoops
                 Style = "sl-toolbar",
                 Items =
                 {
-                    ControlGenerator.GetToolBarItem(buildIterativeProject),
-                    ControlGenerator.GetToolBarItem(buildAndRunProject),
-                    ControlGenerator.GetToolBarItem(searchProject)
+                    ControlGenerator.GetToolBarItem(buildIterativeProjectCommand),
+                    ControlGenerator.GetToolBarItem(buildAndRunProjectCommand),
+                    ControlGenerator.GetToolBarItem(searchProjectCommand)
                 }
             };
 
-            // Add project items to menu
-            if (Menu.Items[0] is SubMenuItem fileMenu)
+            // Add project items to existing File menu
+            if (Menu.Items.FirstOrDefault(x => x.Text == "&File") is SubMenuItem fileMenu)
             {
-                fileMenu.Items.Add(saveProject);
-                fileMenu.Items.Add(projectSettings);
-                fileMenu.Items.Add(closeProject);
-                fileMenu.Items.Add(exportPatch);
+                fileMenu.Items.AddRange(new[] { saveProjectCommand, projectSettingsCommand, migrateProjectCommand, exportPatchCommand, closeProjectCommand });
             }
-
-            Menu.Items.Add(new SubMenuItem { Text = "&Tools", Items = { searchProject, findOrphanedItems } });
-            Menu.Items.Add(new SubMenuItem { Text = "&Build", Items = { buildIterativeProject, buildBaseProject, buildAndRunProject } });
+            Menu.Items.Add(new SubMenuItem { Text = "&Tools", Items = { renameItemCommand, searchProjectCommand, findOrphanedItemsCommand } });
+            Menu.Items.Add(new SubMenuItem { Text = "&Build", Items = { buildIterativeProjectCommand, buildBaseProjectCommand, buildAndRunProjectCommand } });
         }
 
         private void LoadCachedData(Project project, IProgressTracker tracker)
@@ -233,6 +253,11 @@ namespace SerialLoops
             ProjectsCache = ProjectsCache.LoadCache(CurrentConfig, Log);
             UpdateRecentProjects();
 
+            if (CurrentConfig.CheckForUpdates)
+            {
+                new UpdateChecker(this).Check();
+            }
+
             if (CurrentConfig.AutoReopenLastProject && ProjectsCache.RecentProjects.Count > 0)
             {
                 OpenProjectFromPath(ProjectsCache.RecentProjects[0]);
@@ -244,7 +269,7 @@ namespace SerialLoops
 
         private void UpdateRecentProjects()
         {
-            _recentProjects?.Items.Clear();
+            _recentProjectsCommand?.Items.Clear();
 
             List<string> projectsToRemove = new();
             foreach (string project in ProjectsCache.RecentProjects)
@@ -262,9 +287,9 @@ namespace SerialLoops
                     recentProject.MenuText += " (Missing)";
                     recentProject.Image = ControlGenerator.GetIcon("Warning", Log);
                 }
-                _recentProjects?.Items.Add(recentProject);
+                _recentProjectsCommand?.Items.Add(recentProject);
             }
-            if (_recentProjects is not null) { _recentProjects.Enabled = _recentProjects.Items.Count > 0; }
+            if (_recentProjectsCommand is not null) { _recentProjectsCommand.Enabled = _recentProjectsCommand.Items.Count > 0; }
 
             projectsToRemove.ForEach(project =>
             {
@@ -302,18 +327,68 @@ namespace SerialLoops
 
         public void OpenProjectFromPath(string path)
         {
+            Project.LoadProjectResult result = new(Project.LoadProjectState.FAILED); // start us off with a failure
             LoopyProgressTracker tracker = new();
-            _ = new ProgressDialog(() => OpenProject = Project.OpenProject(path, CurrentConfig, Log, tracker), () => 
+            _ = new ProgressDialog(() => (OpenProject, result) = Project.OpenProject(path, CurrentConfig, Log, tracker), () => { }, tracker, "Loading Project");
+            if (OpenProject is not null && result.State == Project.LoadProjectState.LOOSELEAF_FILES)
             {
-                if (OpenProject is not null)
+                if (MessageBox.Show("Saved but unbuilt files were detected in the project directory. " +
+                    "Would you like to build before loading the project? " +
+                    "Not building could result in these files being overwritten.",
+                    "Build Unbuilt Files?",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxType.Question,
+                    MessageBoxDefaultButton.Yes) == DialogResult.Yes)
                 {
-                    OpenProjectView(OpenProject, tracker);
-                } 
+                    _ = new ProgressDialog(() => Build.BuildIterative(OpenProject, CurrentConfig, Log, tracker),
+                        () => { }, tracker, "Loading Project");
+                }
+
+                _ = new ProgressDialog(() => OpenProject.LoadArchives(Log, tracker), () => { }, tracker, "Loading Project");
+            }
+            else if (result.State == Project.LoadProjectState.CORRUPTED_FILE)
+            {
+                if (MessageBox.Show($"While attempting to build,  file #{result.BadFileIndex:X3} in archive {result.BadArchive} was " +
+                    $"found to be corrupt. Serial Loops can delete this file from your base directory automatically which may allow you to load the rest of the " +
+                    $"project, but any changes made to that file will be lost. Alternatively, you can attempt to edit the file manually to fix it. How would " +
+                    $"you like to proceed? Press OK to proceed with deleting the file and Cancel to attempt to deal with it manually.",
+                    "Corrupted File Detected!",
+                    MessageBoxButtons.OKCancel,
+                    MessageBoxType.Warning,
+                    MessageBoxDefaultButton.Cancel) == DialogResult.Ok)
+                {
+                    switch (result.BadArchive)
+                    {
+                        case "dat.bin":
+                            File.Delete(Path.Combine(OpenProject.BaseDirectory, "assets", "data", $"{result.BadFileIndex:X3}.s"));
+                            break;
+
+                        case "grp.bin":
+                            File.Delete(Path.Combine(OpenProject.BaseDirectory, "assets", "graphics", $"{result.BadFileIndex:X3}.png"));
+                            File.Delete(Path.Combine(OpenProject.BaseDirectory, "assets", "graphics", $"{result.BadFileIndex:X3}_pal.csv"));
+                            break;
+
+                        case "evt.bin":
+                            File.Delete(Path.Combine(OpenProject.BaseDirectory, "assets", "events", $"{result.BadFileIndex:X3}.s"));
+                            break;
+                    }
+                    OpenProjectFromPath(path);
+                    return;
+                }
                 else
                 {
-                    CloseProjectView();
+                    OpenProject = null;
                 }
-            }, tracker, "Loading Project");
+            }
+
+            if (OpenProject is not null)
+            {
+                OpenProjectView(OpenProject, tracker);
+            }
+            else
+            {
+                CloseProjectView();
+            }
         }
 
         private void SaveProject_Executed(object sender, EventArgs e)
@@ -325,12 +400,31 @@ namespace SerialLoops
 
             IEnumerable<ItemDescription> unsavedItems = OpenProject.Items.Where(i => i.UnsavedChanges);
             bool savedExtra = false;
+            bool changedNameplates = false;
+            SKCanvas nameplateCanvas = new(OpenProject.NameplateBitmap);
+            SKCanvas speakerCanvas = new(OpenProject.SpeakerBitmap);
+
             foreach (ItemDescription item in unsavedItems)
             {
                 switch (item.Type)
                 {
                     case ItemDescription.ItemType.Background:
+                        if (!savedExtra)
+                        {
+                            IO.WriteStringFile(Path.Combine("assets", "data", $"{OpenProject.Extra.Index:X3}.s"), OpenProject.Extra.GetSource(new()), OpenProject, Log);
+                            savedExtra = true;
+                        }
                         ((BackgroundItem)item).Write(OpenProject, Log);
+                        break;
+                    case ItemDescription.ItemType.Character:
+                        CharacterItem characterItem = (CharacterItem)item;
+                        if (characterItem.NameplateProperties.Name != item.DisplayName[4..])
+                        {
+                            Shared.RenameItem(OpenProject, ItemExplorer, EditorTabs, Log, $"CHR_{characterItem.NameplateProperties.Name}");
+                        }
+                        nameplateCanvas.DrawBitmap(characterItem.GetNewNameplate(_blankNameplate, _blankNameplateBaseArrow, OpenProject), new SKRect(0, 16 * ((int)characterItem.MessageInfo.Character - 1), 64, 16 * ((int)characterItem.MessageInfo.Character)));
+                        speakerCanvas.DrawBitmap(characterItem.GetNewNameplate(_blankNameplate, _blankNameplateBaseArrow, OpenProject, transparent: true), new SKRect(0, 16 * ((int)characterItem.MessageInfo.Character - 1), 64, 16 * ((int)characterItem.MessageInfo.Character)));
+                        changedNameplates = true;
                         break;
                     case ItemDescription.ItemType.BGM:
                         if (!savedExtra)
@@ -338,6 +432,18 @@ namespace SerialLoops
                             IO.WriteStringFile(Path.Combine("assets", "data", $"{OpenProject.Extra.Index:X3}.s"), OpenProject.Extra.GetSource(new()), OpenProject, Log);
                             savedExtra = true;
                         }
+                        break;
+                    case ItemDescription.ItemType.Place:
+                        PlaceItem placeItem = (PlaceItem)item;
+                        if (placeItem.PlaceName != item.DisplayName[4..])
+                        {
+                            Shared.RenameItem(OpenProject, ItemExplorer, EditorTabs, Log, $"PLC_{placeItem.PlaceName}");
+                        }
+                        MemoryStream placeStream = new();
+                        SKBitmap newPlaceImage = PlaceItem.Unscramble(PlaceItem.Unscramble(placeItem.GetNewPlaceGraphic(_msGothicHaruhi)));
+                        placeItem.PlaceGraphic.SetImage(newPlaceImage);
+                        newPlaceImage.Encode(placeStream, SKEncodedImageFormat.Png, 1);
+                        IO.WriteBinaryFile(Path.Combine("assets", "graphics", $"{placeItem.PlaceGraphic.Index:X3}.png"), placeStream.ToArray(), OpenProject, Log);
                         break;
                     case ItemDescription.ItemType.Scenario:
                         ScenarioStruct scenario = ((ScenarioItem)item).Scenario;
@@ -360,6 +466,14 @@ namespace SerialLoops
                         Log.LogWarning($"Saving for {item.Type}s not yet implemented.");
                         break;
                 }
+            }
+            if (changedNameplates)
+            {
+                nameplateCanvas.Flush();
+                speakerCanvas.Flush();
+                MemoryStream nameplateStream = new();
+                OpenProject.NameplateBitmap.Encode(nameplateStream, SKEncodedImageFormat.Png, 1);
+                IO.WriteBinaryFile(Path.Combine("assets", "graphics", "B87.png"), nameplateStream.ToArray(), OpenProject, Log);
             }
             foreach (Editor editor in EditorTabs.Tabs.Pages.Cast<Editor>())
             {
@@ -497,6 +611,24 @@ namespace SerialLoops
             }
         }
 
+        private void MigrateProject_Executed(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new() { Title = "New Base ROM" };
+            openFileDialog.Filters.Add(new("Chokuretsu ROM", ".nds"));
+
+            if (openFileDialog.ShowAndReportIfFileSelected(this))
+            {
+                LoopyProgressTracker tracker = new();
+                _ = new ProgressDialog(() =>
+                {
+                    OpenProject.MigrateProject(openFileDialog.FileName, Log, tracker);
+                    OpenProject.Load(CurrentConfig, Log, tracker);
+                },
+                () => MessageBox.Show("Migrated to new ROM!", "Migration Complete!", MessageBoxType.Information),
+                tracker, "Migrating to new ROM");
+            }
+        }
+
         private void Patch_Executed(object sender, EventArgs e)
         {
             OpenFileDialog baseRomDialog = new() { Title = "Select base ROM" };
@@ -555,5 +687,21 @@ namespace SerialLoops
                 ProjectsCache.Save(Log);
             }
         }
+
+        public void AppClosed_Executed(object sender, EventArgs e)
+        {
+            if (ShutdownUpdateUrl is not null)
+            {
+                const string updaterExecutable = "LoopyUpdater.exe";
+                if (!File.Exists(updaterExecutable))
+                {
+                    Log.LogError($"Could not start updater: Missing executable ({updaterExecutable})");
+                    return;
+                }
+
+                Process.Start($"{updaterExecutable} {ShutdownUpdateUrl}");
+            }
+        }
+        
     }
 }

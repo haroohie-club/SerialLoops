@@ -1,5 +1,6 @@
 ﻿using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
+using HaruhiChokuretsuLib.Util;
 using QuikGraph;
 using QuikGraph.Algorithms.Observers;
 using QuikGraph.Algorithms.Search;
@@ -23,18 +24,48 @@ namespace SerialLoops.Lib.Script
         public int Index { get; set; }
         public Project Project { get; set; }
 
-        public static ScriptItemCommand FromInvocation(ScriptCommandInvocation invocation, ScriptSection section, int index, EventFile eventFile, Project project)
+        public static ScriptItemCommand FromInvocation(ScriptCommandInvocation invocation, ScriptSection section, int index, EventFile eventFile, Project project, ILogger log)
         {
             return new()
             {
                 Invocation = invocation,
                 Verb = (CommandVerb)Enum.Parse(typeof(CommandVerb), invocation.Command.Mnemonic),
-                Parameters = GetScriptParameters(invocation, eventFile, project),
+                Parameters = GetScriptParameters(invocation, section, eventFile, project, log),
                 Section = section,
                 Index = index,
                 Script = eventFile,
                 Project = project,
             };
+        }
+
+        public ScriptItemCommand()
+        {
+        }
+        public ScriptItemCommand(ScriptSection section, EventFile script, int index, Project project, CommandVerb verb, params ScriptParameter[] parameters)
+        {
+            Section = section;
+            Script = script;
+            Index = index;
+            Project = project;
+            Verb = verb;
+            Parameters = parameters.ToList();
+
+            List<short> shortParams = parameters.SelectMany(p =>
+            {
+                return p.Type switch
+                {
+                    ScriptParameter.ParameterType.CHARACTER => p.GetValues(project.MessInfo),
+                    ScriptParameter.ParameterType.CONDITIONAL or ScriptParameter.ParameterType.DIALOGUE or ScriptParameter.ParameterType.OPTION or ScriptParameter.ParameterType.SCRIPT_SECTION => p.GetValues(script),
+                    _ => p.GetValues(),
+                };
+            }).ToList();
+            shortParams.AddRange(new short[16 - shortParams.Count]);
+            Invocation = new(CommandsAvailable.First(c => c.Mnemonic == verb.ToString())) { Parameters = shortParams };
+        }
+        public ScriptItemCommand(CommandVerb verb, params ScriptParameter[] parameters)
+        {
+            Verb = verb;
+            Parameters = parameters.ToList();
         }
 
         public List<ScriptItemCommand> WalkCommandGraph(Dictionary<ScriptSection, List<ScriptItemCommand>> commandTree, AdjacencyGraph<ScriptSection, ScriptSectionEdge> graph)
@@ -72,10 +103,9 @@ namespace SerialLoops.Lib.Script
             return commands;
         }
 
-        private static List<ScriptParameter> GetScriptParameters(ScriptCommandInvocation invocation, EventFile eventFile, Project project)
+        private static List<ScriptParameter> GetScriptParameters(ScriptCommandInvocation invocation, ScriptSection section, EventFile eventFile, Project project, ILogger log)
         {
             List<ScriptParameter> parameters = new();
-            MessageInfoFile messageInfo = project.Dat.Files.First(f => f.Name == "MESSINFOS").CastTo<MessageInfoFile>();
 
             for (int i = 0; i < invocation.Parameters.Count; i++)
             {
@@ -104,10 +134,10 @@ namespace SerialLoops.Lib.Script
                                 parameters.Add(new VoicedLineScriptParameter("Voice Line", (VoicedLineItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Voice && parameter == ((VoicedLineItem)i).Index)));
                                 break;
                             case 6:
-                                parameters.Add(new DialoguePropertyScriptParameter("Text Voice Font", messageInfo.MessageInfos[parameter]));
+                                parameters.Add(new DialoguePropertyScriptParameter("Text Voice Font", (CharacterItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Character && ((CharacterItem)i).MessageInfo.Character == project.MessInfo.MessageInfos[parameter].Character)));
                                 break;
                             case 7:
-                                parameters.Add(new DialoguePropertyScriptParameter("Text Speed", messageInfo.MessageInfos[parameter]));
+                                parameters.Add(new DialoguePropertyScriptParameter("Text Speed", (CharacterItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Character && ((CharacterItem)i).MessageInfo.Character == project.MessInfo.MessageInfos[parameter].Character)));
                                 break;
                             case 8:
                                 parameters.Add(new TextEntranceEffectScriptParameter("Text Entrance Effect", parameter));
@@ -329,17 +359,33 @@ namespace SerialLoops.Lib.Script
                                 parameter = eventFile.LabelsSection.Objects.FirstOrDefault(l => l.Id != 00)?.Id ?? 0;
                                 if (parameter == 0)
                                 {
-                                    throw new ArgumentException("Adding GOTO command failed: no section with a label exists");
+                                    log.LogError($"Adding GOTO command in section {section.Name} failed: no section with a label exists");
                                 }
                             }
-                            parameters.Add(new ScriptSectionScriptParameter("Script Section", eventFile.ScriptSections.First(s => s.Name == eventFile.LabelsSection.Objects.First(l => l.Id == parameter).Name.Replace("/", ""))));
+                            try
+                            {
+                                parameters.Add(new ScriptSectionScriptParameter("Script Section", eventFile.ScriptSections.First(s => s.Name == eventFile.LabelsSection.Objects.First(l => l.Id == parameter).Name.Replace("/", ""))));
+                            }
+                            catch (InvalidOperationException)
+                            {
+                                log.LogWarning($"Failed to evaluate script section for GOTO command in section {section.Name}: references a non-existent section. Resetting!");
+                                parameter = eventFile.LabelsSection.Objects.FirstOrDefault(l => l.Id != 00)?.Id ?? 0;
+                                if (parameter == 0)
+                                {
+                                    log.LogError($"Adding GOTO command in section {section.Name} failed: no section with a label exists!");
+                                }
+                                else
+                                {
+                                    parameters.Add(new ScriptSectionScriptParameter("Script Section", eventFile.ScriptSections.First(s => s.Name == eventFile.LabelsSection.Objects.First(l => l.Id == parameter).Name.Replace("/", ""))));
+                                }
+                            }
                         }
                         break;
                     case CommandVerb.SCENE_GOTO:
                     case CommandVerb.SCENE_GOTO2:
                         if (i == 0)
                         {
-                            parameters.Add(new ConditionalScriptParameter("Conditional", eventFile.ConditionalsSection.Objects[parameter]));
+                            parameters.Add(new ConditionalScriptParameter("Scene", eventFile.ConditionalsSection.Objects[parameter]));
                         }
                         break;
                     case CommandVerb.WAIT:
@@ -356,7 +402,31 @@ namespace SerialLoops.Lib.Script
                                 break;
                             // 1 is unused
                             case 2:
-                                parameters.Add(new ScriptSectionScriptParameter("Script Section", eventFile.ScriptSections.First(s => s.Name == eventFile.LabelsSection.Objects.First(l => l.Id == parameter).Name.Replace("/", ""))));
+                                if (parameter == 0)
+                                {
+                                    parameter = eventFile.LabelsSection.Objects.FirstOrDefault(l => l.Id != 00)?.Id ?? 0;
+                                    if (parameter == 0)
+                                    {
+                                        log.LogError($"Adding VGOTO command in section {section.Name} failed: no section with a label exists");
+                                    }
+                                }
+                                try
+                                {
+                                    parameters.Add(new ScriptSectionScriptParameter("Script Section", eventFile.ScriptSections.First(s => s.Name == eventFile.LabelsSection.Objects.First(l => l.Id == parameter).Name.Replace("/", ""))));
+                                }
+                                catch (InvalidOperationException)
+                                {
+                                    log.LogWarning($"Failed to evaluate script section for VGOTO command in section {section.Name}: references a non-existent section. Resetting!");
+                                    parameter = eventFile.LabelsSection.Objects.FirstOrDefault(l => l.Id != 00)?.Id ?? 0;
+                                    if (parameter == 0)
+                                    {
+                                        log.LogError($"Adding GOTO command in section {section.Name} failed: no section with a label exists!");
+                                    }
+                                    else
+                                    {
+                                        parameters.Add(new ScriptSectionScriptParameter("Script Section", eventFile.ScriptSections.First(s => s.Name == eventFile.LabelsSection.Objects.First(l => l.Id == parameter).Name.Replace("/", ""))));
+                                    }
+                                }
                                 break;
                         }
                         break;
@@ -634,7 +704,7 @@ namespace SerialLoops.Lib.Script
             }
             else if (Verb == CommandVerb.VGOTO)
             {
-                str += $" {((ConditionalScriptParameter)Parameters[0]).Value}, {((ScriptSectionScriptParameter)Parameters[1]).Section.Name}";
+                str += $" {((ConditionalScriptParameter)Parameters[0]).Conditional}, {((ScriptSectionScriptParameter)Parameters[1]).Section.Name}";
             }
             return str;
         }

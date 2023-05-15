@@ -5,6 +5,7 @@ namespace SerialLoops.Lib.Script.Parameters
     public class EpisodeHeaderScriptParameter : ScriptParameter
     {
         public Episode EpisodeHeaderIndex { get; set; }
+        public override short[] GetValues(object obj = null) => new short[] { (short)EpisodeHeaderIndex };
 
         public EpisodeHeaderScriptParameter(string name, short epHeaderIndex) : base(name, ParameterType.EPISODE_HEADER)
         {

@@ -8,10 +8,17 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <Version>0.1.0</Version>
+    <Version>$(SLAssemblyVersion)</Version>
+    <InformationalVersion>$(SLVersion)</InformationalVersion>
+    <AssemblyName>SerialLoops.Eto</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Graphics\MS-Gothic-Haruhi.ttf" />
+    <None Remove="Graphics\BlankNameplate.png" />
+    <None Remove="Graphics\BlankNameplateBaseArrow.png" />
+    <None Remove="Graphics\msgothic-variablewidth.ttf" />
+    <None Remove="Graphics\ScriptPreviewError.png" />
     <None Remove="Icons\Add.png" />
     <None Remove="Icons\Add_Section.png" />
     <None Remove="Icons\AppIcon.png" />
@@ -38,9 +45,11 @@
     <None Remove="Icons\Scenario.png" />
     <None Remove="Icons\Script.png" />
     <None Remove="Icons\System_Texture.png" />
+    <None Remove="Icons\Template.png" />
     <None Remove="Icons\Topic.png" />
     <None Remove="Icons\Transition.png" />
     <None Remove="Icons\Tutorial.png" />
+    <None Remove="Icons\Update.png" />
     <None Remove="Icons\Voice.png" />
     <None Remove="Icons\Build.png" />
     <None Remove="Icons\Build_Scratch.png" />
@@ -60,7 +69,22 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Eto.Forms" Version="2.7.4" />
+    <EmbeddedResource Include="Graphics\MS-Gothic-Haruhi.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Graphics\BlankNameplate.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Graphics\BlankNameplateBaseArrow.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Graphics\ScriptPreviewError.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Eto.Forms" Version="2.7.5" />
     <PackageReference Include="System.Text.Json" Version="7.0.2" />
   </ItemGroup>
 

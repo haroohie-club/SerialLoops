@@ -40,7 +40,7 @@ namespace SerialLoops.Controls
 {
     public interface ISection
     {
-        string Text { get; }
+        string Text { get; set; }
     }
 
     /// <summary>

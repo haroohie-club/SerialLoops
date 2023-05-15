@@ -29,9 +29,13 @@ namespace SerialLoops.Controls
             openCommand.Executed += OpenCommand_OnClick;
             Items.Add(new ButtonMenuItem { Text = "Open", Command = openCommand });
 
-            Command findReferences = new();
-            findReferences.Executed += FindReferences_OnClick;
-            Items.Add(new ButtonMenuItem { Text = "Find References...", Command = findReferences });
+            Command renameCommand = new();
+            renameCommand.Executed += RenameCommand_Executed;
+            Items.Add(new ButtonMenuItem { Text = "Rename", Command = renameCommand });
+
+            Command findReferencesCommand = new();
+            findReferencesCommand.Executed += FindReferencesCommand_OnClick;
+            Items.Add(new ButtonMenuItem { Text = "Find References...", Command = findReferencesCommand });
         }
 
         private void OpenCommand_OnClick(object sender, EventArgs args)
@@ -43,10 +47,15 @@ namespace SerialLoops.Controls
             }
         }
 
-        private void FindReferences_OnClick(object sender, EventArgs args)
+        private void RenameCommand_Executed(object sender, EventArgs e)
+        {
+            Shared.RenameItem(_project, _explorer, _tabs, _log);
+        }
+
+        private void FindReferencesCommand_OnClick(object sender, EventArgs args)
         {
             ItemDescription item = _project.FindItem(_explorer.Viewer.SelectedItem?.Text);
-            if (item != null)
+            if (item is not null)
             {
                 ReferencesDialog referenceDialog = new(item, _project, _explorer, _tabs, _log);
                 referenceDialog.ShowModal(_explorer);

@@ -30,7 +30,8 @@ namespace SerialLoops.Controls
                 HorizontalContentAlignment = HorizontalAlignment.Center,
                 Items =
                 {
-                    ControlGenerator.GetIcon("AppIcon", _log, 64),
+                    // Doing this image manually bc otherwise it breaks on Gtk for some unknown reason
+                    new ImageView { Image = Icon.FromResource($"SerialLoops.Icons.AppIcon.png"), Height = 64, Width = 64 },
                     ControlGenerator.GetTextHeader("Serial Loops", 18)
                 }
             };

@@ -1,20 +1,22 @@
 ﻿using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
+using SerialLoops.Lib.Items;
 
 namespace SerialLoops.Lib.Script.Parameters
 {
     public class DialoguePropertyScriptParameter : ScriptParameter
     {
-        public MessageInfo DialogueProperties { get; set; }
+        public CharacterItem Character { get; set; }
+        public override short[] GetValues(object obj = null) => new short[] { (short)((MessageInfoFile)obj).MessageInfos.FindIndex(m => m.Character == Character.MessageInfo.Character) };
 
-        public DialoguePropertyScriptParameter(string name, MessageInfo dialogueProperties) : base(name, ParameterType.DIALOGUE_PROPERTY)
+        public DialoguePropertyScriptParameter(string name, CharacterItem character) : base(name, ParameterType.CHARACTER)
         {
-            DialogueProperties = dialogueProperties;
+            Character = character;
         }
 
         public override DialoguePropertyScriptParameter Clone(Project project, EventFile eventFile)
         {
-            return new(Name, DialogueProperties);
+            return new(Name, Character);
         }
     }
 }

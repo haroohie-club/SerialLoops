@@ -5,6 +5,7 @@ using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Archive.Graphics;
 using HaruhiChokuretsuLib.Font;
 using HaruhiChokuretsuLib.Util;
+using HaruhiChokuretsuLib.Util.Exceptions;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Util;
 using SkiaSharp;
@@ -20,10 +21,14 @@ namespace SerialLoops.Lib
     public class Project
     {
         public const string PROJECT_FORMAT = "slproj";
+        public static readonly JsonSerializerOptions SERIALIZER_OPTIONS = new() { Converters = { new SKColorJsonConverter() } };
 
         public string Name { get; set; }
         public string LangCode { get; set; }
         public string MainDirectory { get; set; }
+        public Dictionary<string, string> ItemNames { get; set; }
+        public Dictionary<int, NameplateProperties> Characters { get; set; }
+
         [JsonIgnore]
         public string BaseDirectory => Path.Combine(MainDirectory, "base");
         [JsonIgnore]
@@ -51,12 +56,18 @@ namespace SerialLoops.Lib
         [JsonIgnore]
         public SKBitmap SpeakerBitmap { get; set; }
         [JsonIgnore]
+        public SKBitmap NameplateBitmap { get; set; }
+        [JsonIgnore]
         public SKBitmap DialogueBitmap { get; set; }
         [JsonIgnore]
         public SKBitmap FontBitmap { get; set; }
 
         [JsonIgnore]
         public ExtraFile Extra { get; set; }
+        [JsonIgnore]
+        public ScenarioStruct Scenario { get; set; }
+        [JsonIgnore]
+        public MessageInfoFile MessInfo { get; set; }
 
         public Project()
         {
@@ -72,7 +83,7 @@ namespace SerialLoops.Lib
             try
             {
                 Directory.CreateDirectory(MainDirectory);
-                File.WriteAllText(Path.Combine(MainDirectory, $"{Name}.{PROJECT_FORMAT}"), JsonSerializer.Serialize(this));
+                Save();
                 Directory.CreateDirectory(BaseDirectory);
                 Directory.CreateDirectory(IterativeDirectory);
                 Directory.CreateDirectory(Path.Combine(MainDirectory, "font"));
@@ -83,13 +94,46 @@ namespace SerialLoops.Lib
                 log.LogError($"Exception occurred while attempting to create project directories.\n{exc.Message}\n\n{exc.StackTrace}");
             }
         }
+
+        public enum LoadProjectState
+        {
+            SUCCESS,
+            LOOSELEAF_FILES,
+            CORRUPTED_FILE,
+            NOT_FOUND,
+            FAILED,
+        }
+
+        public struct LoadProjectResult
+        {
+            public LoadProjectState State { get; set; }
+            public string BadArchive { get; set; }
+            public int BadFileIndex { get; set; }
+
+            public LoadProjectResult(LoadProjectState state, string badArchive, int badFileIndex)
+            {
+                State = state;
+                BadArchive = badArchive;
+                BadFileIndex = badFileIndex;
+            }
+            public LoadProjectResult(LoadProjectState state)
+            {
+                State = state;
+                BadArchive = string.Empty;
+                BadFileIndex = -1;
+            }
+        }
         
-        public void Load(Config config, ILogger log, IProgressTracker tracker)
+        public LoadProjectResult Load(Config config, ILogger log, IProgressTracker tracker)
         {
             Config = config;
             LoadProjectSettings(log, tracker);
             ClearOrCreateCaches(config.CachesDirectory, log);
-            LoadArchives(log, tracker);
+            if (Directory.GetFiles(Path.Combine(IterativeDirectory, "assets"), "*", SearchOption.AllDirectories).Length > 0)
+            {
+                return new(LoadProjectState.LOOSELEAF_FILES);
+            }
+            return LoadArchives(log, tracker);
         }
 
         public void LoadProjectSettings(ILogger log, IProgressTracker tracker)
@@ -100,19 +144,80 @@ namespace SerialLoops.Lib
             tracker.Finished++;
         }
         
-        public void LoadArchives(ILogger log, IProgressTracker tracker)
+        public LoadProjectResult LoadArchives(ILogger log, IProgressTracker tracker)
         {
             tracker.Focus("dat.bin", 3);
-            Dat = ArchiveFile<DataFile>.FromFile(Path.Combine(IterativeDirectory, "original", "archives", "dat.bin"), log);
+            try
+            {
+                Dat = ArchiveFile<DataFile>.FromFile(Path.Combine(IterativeDirectory, "original", "archives", "dat.bin"), log, false);
+            }
+            catch (ArchiveLoadException ex)
+            {
+                if (Directory.GetFiles(Path.Combine(BaseDirectory, "assets", "data")).Any(f => Path.GetFileNameWithoutExtension(f) == $"{ex.Index:X3}"))
+                {
+                    log.LogError($"File {ex.Index:4} (0x{ex.Index:X3}) '{ex.Filename}' in dat.bin was detected as corrupt.");
+                    return new(LoadProjectState.CORRUPTED_FILE, "dat.bin", ex.Index);
+                }
+                else
+                {
+                    // If it's not a file they've modified, then they're using a bad base ROM
+                    log.LogError($"File {ex.Index:4} (0x{ex.Index:X3}) '{ex.Filename}' in dat.bin was detected as corrupt. " +
+                        $"Please use a different base ROM as this one is corrupted.");
+                    return new(LoadProjectState.CORRUPTED_FILE, "dat.bin", -1);
+                }
+            }
             tracker.Finished++;
 
             tracker.CurrentlyLoading = "grp.bin";
-            Grp = ArchiveFile<GraphicsFile>.FromFile(Path.Combine(IterativeDirectory, "original", "archives", "grp.bin"), log);
+            try
+            {
+                Grp = ArchiveFile<GraphicsFile>.FromFile(Path.Combine(IterativeDirectory, "original", "archives", "grp.bin"), log);
+            }
+            catch (ArchiveLoadException ex)
+            {
+                if (Directory.GetFiles(Path.Combine(BaseDirectory, "assets", "graphics")).Any(f => Path.GetFileNameWithoutExtension(f) == $"{ex.Index:X3}"))
+                {
+                    log.LogError($"File {ex.Index:4} (0x{ex.Index:X3}) '{ex.Filename}' in grp.bin was detected as corrupt.");
+                    return new(LoadProjectState.CORRUPTED_FILE, "grp.bin", ex.Index);
+                }
+                else
+                {
+                    // If it's not a file they've modified, then they're using a bad base ROM
+                    log.LogError($"File {ex.Index:4} (0x{ex.Index:X3}) '{ex.Filename}' in grp.bin was detected as corrupt. " +
+                        $"Please use a different base ROM as this one is corrupted.");
+                    return new(LoadProjectState.CORRUPTED_FILE, "grp.bin", -1);
+                }
+            }
             tracker.Finished++;
 
             tracker.CurrentlyLoading = "evt.bin";
-            Evt = ArchiveFile<EventFile>.FromFile(Path.Combine(IterativeDirectory, "original", "archives", "evt.bin"), log);
+            try
+            {
+                Evt = ArchiveFile<EventFile>.FromFile(Path.Combine(IterativeDirectory, "original", "archives", "evt.bin"), log);
+            }
+            catch (ArchiveLoadException ex)
+            {
+                if (Directory.GetFiles(Path.Combine(BaseDirectory, "assets", "events")).Any(f => Path.GetFileNameWithoutExtension(f) == $"{ex.Index:X3}"))
+                {
+                    log.LogError($"File {ex.Index:4} (0x{ex.Index:X3}) '{ex.Filename}' in evt.bin was detected as corrupt.");
+                    return new(LoadProjectState.CORRUPTED_FILE, "evt.bin", ex.Index);
+                }
+                else
+                {
+                    // If it's not a file they've modified, then they're using a bad base ROM
+                    log.LogError($"File {ex.Index:4} (0x{ex.Index:X3}) '{ex.Filename}' in evt.bin was detected as corrupt. " +
+                        $"Please use a different base ROM as this one is corrupted.");
+                    return new(LoadProjectState.CORRUPTED_FILE, "evt.bin", -1);
+                }
+            }
             tracker.Finished++;
+
+            string charactersFile = LangCode switch
+            {
+                "ja" => "DefaultCharacters.ja.json",
+                _ => "DefaultCharacters.en.json"
+            };
+            Characters ??= JsonSerializer.Deserialize<Dictionary<int, NameplateProperties>>(File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Defaults", charactersFile)), SERIALIZER_OPTIONS);
 
             tracker.Focus("Font", 5);
             if (IO.TryReadStringFile(Path.Combine(MainDirectory, "font", "charset.json"), out string json, log))
@@ -127,6 +232,7 @@ namespace SerialLoops.Lib
             FontMap = Dat.Files.First(f => f.Name == "FONTS").CastTo<FontFile>();
             tracker.Finished++;
             SpeakerBitmap = Grp.Files.First(f => f.Name == "SYS_CMN_B12DNX").GetImage(transparentIndex: 0);
+            NameplateBitmap = Grp.Files.First(f => f.Name == "SYS_CMN_B12DNX").GetImage();
             tracker.Finished++;
             DialogueBitmap = Grp.Files.First(f => f.Name == "SYS_CMN_B02DNX").GetImage(transparentIndex: 0);
             tracker.Finished++;
@@ -135,8 +241,14 @@ namespace SerialLoops.Lib
             FontBitmap = Grp.Files.First(f => f.Name == "ZENFONTBNF").GetImage(transparentIndex: 0);
             tracker.Finished++;
 
-            tracker.Focus("Extras", 1);
+            tracker.Focus("Static Files", 3);
             Extra = Dat.Files.First(f => f.Name == "EXTRAS").CastTo<ExtraFile>();
+            tracker.Finished++;
+            EventFile scenario = Evt.Files.First(f => f.Name == "SCENARIOS");
+            scenario.InitializeScenarioFile();
+            Scenario = scenario.Scenario;
+            tracker.Finished++;
+            MessInfo = Dat.Files.First(f => f.Name == "MESSINFOS").CastTo<MessageInfoFile>();
             tracker.Finished++;
 
             BgTableFile bgTable = Dat.Files.First(f => f.Name == "BGTBLS").CastTo<BgTableFile>();
@@ -186,13 +298,13 @@ namespace SerialLoops.Lib
 
             tracker.Focus("Dialogue Configs", 1);
             Items.AddRange(Dat.Files.First(d => d.Name == "MESSINFOS").CastTo<MessageInfoFile>()
-                .MessageInfos.Where(m => (int)m.Character > 0).Select(m => new DialogueConfigItem(m)));
+                .MessageInfos.Where(m => (int)m.Character > 0).Select(m => new CharacterItem(m, Characters[(int)m.Character], this)));
             tracker.Finished++;
 
             tracker.Focus("Event Files", 1);
             Items.AddRange(Evt.Files
                 .Where(e => !new string[] { "CHESSS", "EVTTBLS", "TOPICS", "SCENARIOS", "TUTORIALS", "VOICEMAPS" }.Contains(e.Name))
-                .Select(e => new ScriptItem(e)));
+                .Select(e => new ScriptItem(e, log)));
             tracker.Finished++;
 
             tracker.Focus("Maps", 1);
@@ -214,7 +326,7 @@ namespace SerialLoops.Lib
             tracker.Focus("Puzzles", 1);
             Items.AddRange(Dat.Files
                 .Where(d => d.Name.StartsWith("SLG"))
-                .Select(d => new PuzzleItem(d.CastTo<PuzzleFile>(), this)));
+                .Select(d => new PuzzleItem(d.CastTo<PuzzleFile>(), this, log)));
             tracker.Finished++;
 
             tracker.Focus("Topics", 2);
@@ -227,7 +339,7 @@ namespace SerialLoops.Lib
             tracker.Focus("Scenario", 1);
             EventFile scenarioFile = Evt.Files.First(f => f.Name == "SCENARIOS");
             scenarioFile.InitializeScenarioFile();
-            Items.Add(new ScenarioItem(scenarioFile.Scenario, this));
+            Items.Add(new ScenarioItem(scenarioFile.Scenario, this, log));
             tracker.Finished++;
 
             tracker.Focus("Group Selections", scenarioFile.Scenario.Selects.Count);
@@ -236,6 +348,50 @@ namespace SerialLoops.Lib
                 Items.Add(new GroupSelectionItem(scenarioFile.Scenario.Selects[i], i, this));
                 tracker.Finished++;
             }
+
+            if (ItemNames is null)
+            {
+                ItemNames = JsonSerializer.Deserialize<Dictionary<string, string>>(File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Defaults", "DefaultNames.json")));
+                foreach (ItemDescription item in Items)
+                {
+                    if (!ItemNames.ContainsKey(item.Name) && item.CanRename)
+                    {
+                        ItemNames.Add(item.Name, item.DisplayName);
+                    }
+                }
+            }
+
+            for (int i = 0; i < Items.Count; i++)
+            {
+                if (Items[i].CanRename || Items[i].Type == ItemDescription.ItemType.Place) // We don't want to manually rename places, but they do use the display name pattern
+                {
+                    try
+                    {
+                        Items[i].Rename(ItemNames[Items[i].Name]);
+                    }
+                    catch
+                    {
+                        ItemNames.Add(Items[i].Name, Items[i].DisplayName);
+                    }
+                }
+            }
+
+            return new(LoadProjectState.SUCCESS);
+        }
+
+        public void MigrateProject(string newRom, ILogger log, IProgressTracker tracker)
+        {
+            log.Log($"Attempting to migrate base ROM to {newRom}");
+
+            string tempDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+            NdsProjectFile.Create("temp", newRom, tempDir);
+            IO.CopyFiles(Path.Combine(tempDir, "data"), Path.Combine(BaseDirectory, "original", "archives"), "*.bin");
+            IO.CopyFiles(Path.Combine(tempDir, "data", "bgm"), Path.Combine(BaseDirectory, "original", "bgm"), "*.bin");
+            IO.CopyFiles(Path.Combine(tempDir, "data", "vce"), Path.Combine(BaseDirectory, "original", "vce"), "*.bin");
+            IO.CopyFiles(Path.Combine(tempDir, "overlay"), Path.Combine(BaseDirectory, "original", "overlay"), "*.bin");
+            IO.CopyFiles(Path.Combine(tempDir, "data", "movie"), Path.Combine(BaseDirectory, "rom", "data", "movie"), "*.mods");
+
+            Directory.Delete(tempDir, true);
         }
 
         public static void ClearOrCreateCaches(string cachesDirectory, ILogger log)
@@ -259,37 +415,54 @@ namespace SerialLoops.Lib
 
         public ItemDescription FindItem(string name)
         {
-            return Items.FirstOrDefault(i => i.Name == name.Split(" - ")[0]);
+            if (string.IsNullOrEmpty(name))
+            {
+                return null;
+            }
+            return Items.FirstOrDefault(i => name.Contains(" - ") ? i.Name == name.Split(" - ")[0] : i.DisplayName == name);
         }
 
-        public static Project OpenProject(string projFile, Config config, ILogger log, IProgressTracker tracker)
+        public static (Project Project, LoadProjectResult Result) OpenProject(string projFile, Config config, ILogger log, IProgressTracker tracker)
         {
             log.Log($"Loading project from '{projFile}'...");
             if (!File.Exists(projFile))
             {
                 log.LogError($"Project file {projFile} not found -- has it been deleted?");
-                return null;
+                return (null, new(LoadProjectState.NOT_FOUND));
             }
             try
             {
                 tracker.Focus($"{Path.GetFileNameWithoutExtension(projFile)} Project Data", 1);
-                Project project = JsonSerializer.Deserialize<Project>(File.ReadAllText(projFile));
+                Project project = JsonSerializer.Deserialize<Project>(File.ReadAllText(projFile), SERIALIZER_OPTIONS);
                 tracker.Finished++;
-                project.Load(config, log, tracker);
-                return project;
+                LoadProjectResult result = project.Load(config, log, tracker);
+                if (result.State == LoadProjectState.LOOSELEAF_FILES)
+                {
+                    log.LogWarning("Found looseleaf files in iterative directory; prompting user for build before loading archives...");
+                }
+                else if (result.State == LoadProjectState.CORRUPTED_FILE)
+                {
+                    log.LogWarning("Found corrupted file in archive; prompting user for action before continuing...");
+                }
+                return (project, result);
             }
             catch (Exception exc)
             {
                 log.LogError($"Error while loading project: {exc.Message}\n\n{exc.StackTrace}");
-                return null;
+                return (null, new(LoadProjectState.FAILED));
             }
         }
+
+        public void Save()
+        {
+            File.WriteAllText(Path.Combine(MainDirectory, $"{Name}.{PROJECT_FORMAT}"), JsonSerializer.Serialize<Project>(this, SERIALIZER_OPTIONS));
+        }
+
         public List<ItemDescription> GetSearchResults(string searchTerm, bool titlesOnly = true)
         {
             if (titlesOnly)
             {
                 return Items.Where(item =>
-                    item.Name.Contains(searchTerm.Trim(), StringComparison.OrdinalIgnoreCase) ||
                     item.DisplayName.Contains(searchTerm.Trim(), StringComparison.OrdinalIgnoreCase)).ToList();
             }
             else

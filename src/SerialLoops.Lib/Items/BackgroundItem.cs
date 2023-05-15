@@ -41,7 +41,7 @@ namespace SerialLoops.Lib.Items
             PopulateScriptUses(project.Evt);
         }
 
-        public override void Refresh(Project project)
+        public override void Refresh(Project project, ILogger log)
         {
             PopulateScriptUses(project.Evt);
         }
@@ -96,20 +96,27 @@ namespace SerialLoops.Lib.Items
             }
         }
 
-        public void SetBackground(SKBitmap image, IProgressTracker tracker)
+        public void SetBackground(SKBitmap image, IProgressTracker tracker, ILogger log)
         {
-            int transparentIndex = Graphic1.Palette[0] == new SKColor(0, 248, 0) ? 0 : -1;
+            PnnQuantizer quantizer = new();
+            int transparentIndex = BackgroundType != BgType.TEX_BG ? 0 : -1;
             switch (BackgroundType)
             {
                 case BgType.KINETIC_SCREEN:
                     tracker.Focus("Setting screen image...", 1);
-                    Graphic2.SetScreenImage(image, Graphic1);
+                    Graphic2.SetScreenImage(image, quantizer, Graphic1);
                     tracker.Finished++;
                     break;
 
                 case BgType.TEX_CG_SINGLE:
                     tracker.Focus("Setting CG single image...", 1);
-                    Graphic1.SetImage(image, setPalette: true, transparentIndex);
+                    List<SKColor> singlePalette = Helpers.GetPaletteFromImage(image, transparentIndex == 0 ? 255 : 256, log);
+                    if (singlePalette.Count == 255)
+                    {
+                        singlePalette.Insert(0, new SKColor(0, 248, 0));
+                    }
+                    Graphic1.SetPalette(singlePalette);
+                    Graphic1.SetImage(image);
                     tracker.Finished++;
                     break;
 
@@ -145,15 +152,15 @@ namespace SerialLoops.Lib.Items
                     tileCanvas.Flush();
 
                     tracker.Focus("Setting palettes and images...", 5);
-                    List<SKColor> tilePalette = Helpers.GetPaletteFromImage(image, transparentIndex == 0 ? 255 : 256);
+                    List<SKColor> tilePalette = Helpers.GetPaletteFromImage(image, transparentIndex == 0 ? 255 : 256, log);
                     if (tilePalette.Count == 255)
                     {
                         tilePalette.Insert(0, new SKColor(0, 248, 0));
                     }
                     tracker.Finished++;
-                    Graphic1.SetPalette(tilePalette, transparentIndex);
+                    Graphic1.SetPalette(tilePalette);
                     tracker.Finished++;
-                    Graphic2.SetPalette(tilePalette, transparentIndex);
+                    Graphic2.SetPalette(tilePalette);
                     tracker.Finished++;
                     Graphic1.SetImage(newTextureBitmap);
                     tracker.Finished++;
@@ -177,15 +184,15 @@ namespace SerialLoops.Lib.Items
                     tracker.Finished++;
 
                     tracker.Focus("Setting palettes and images...", 5);
-                    List<SKColor> texPalette = Helpers.GetPaletteFromImage(image, transparentIndex == 0 ? 255 : 256);
+                    List<SKColor> texPalette = Helpers.GetPaletteFromImage(image, transparentIndex == 0 ? 255 : 256, log);
                     if (texPalette.Count == 255)
                     {
                         texPalette.Insert(0, new SKColor(0, 248, 0));
                     }
                     tracker.Finished++;
-                    Graphic1.SetPalette(texPalette, transparentIndex);
+                    Graphic1.SetPalette(texPalette);
                     tracker.Finished++;
-                    Graphic2.SetPalette(texPalette, transparentIndex);
+                    Graphic2.SetPalette(texPalette);
                     tracker.Finished++;
                     Graphic1.SetImage(newGraphic1);
                     tracker.Finished++;
@@ -210,6 +217,10 @@ namespace SerialLoops.Lib.Items
                 IO.WriteBinaryFile(Path.Combine("assets", "graphics", $"{Graphic2.Index:X3}.png"), grp2Stream.ToArray(), project, log);
                 IO.WriteStringFile(Path.Combine("assets", "graphics", $"{Graphic2.Index:X3}_pal.csv"),
                     string.Join(',', Graphic1.Palette.Select(c => c.ToString())), project, log);
+            }
+            else if (BackgroundType == BgType.KINETIC_SCREEN)
+            {
+                // TODO: Export screen information for KBGs
             }
         }
 

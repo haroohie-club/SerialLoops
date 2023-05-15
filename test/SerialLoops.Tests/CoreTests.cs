@@ -83,7 +83,7 @@ namespace SerialLoops.Tests
         [Test, TestCaseSource(nameof(BackgroundNames)), Parallelizable(ParallelScope.All)]
         public void BackgroundTest(string bgName)
         {
-            var bg = (BackgroundItem)_project.FindItem(bgName);
+            var bg = (BackgroundItem)_project.Items.First(i => i.Name == bgName);
             Assert.Multiple(() =>
             {
                 Assert.That(bg.Graphic1, Is.Not.Null);
@@ -95,7 +95,7 @@ namespace SerialLoops.Tests
         [Test, TestCaseSource(nameof(BgmNames)), Parallelizable(ParallelScope.All)]
         public void BackgroundMusicItemTest(string bgmName)
         {
-            var bgm = (BackgroundMusicItem)_project.FindItem(bgmName);
+            var bgm = (BackgroundMusicItem)_project.Items.First(i => i.Name == bgmName);
             Assert.Multiple(() =>
             {
                 Assert.That(bgm.BgmFile, Does.Contain(bgm.Name));
@@ -119,7 +119,7 @@ namespace SerialLoops.Tests
         [Test, TestCaseSource(nameof(ChibiNames)), Parallelizable(ParallelScope.All)]
         public void ChibiItemTest(string chibiName)
         {
-            var chibi = (ChibiItem)_project.FindItem(chibiName);
+            var chibi = (ChibiItem)_project.Items.First(i => i.Name == chibiName);
             Assert.Multiple(() =>
             {
                 Assert.That(chibi.Chibi, Is.Not.Null);
@@ -153,8 +153,8 @@ namespace SerialLoops.Tests
         {
             var script = (ScriptItem)_project.FindItem(scriptName);
 
-            var commandTree = script.GetScriptCommandTree(_project);
-            script.CalculateGraphEdges(commandTree);
+            var commandTree = script.GetScriptCommandTree(_project, _log);
+            script.CalculateGraphEdges(commandTree, _log);
             Assert.That(script.Graph, Is.Not.Null);
             foreach (ScriptItemCommand command in commandTree.Values.SelectMany(c => c))
             {
@@ -210,7 +210,7 @@ namespace SerialLoops.Tests
                 Assert.That(_project.GetSearchResults("ANZ"), Has.Count.EqualTo(26), "Failed on ANZ");
                 Assert.That(_project.GetSearchResults("BG_"), Has.Count.EqualTo(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background).Count()), "Failed on BG_");
                 Assert.That(_project.GetSearchResults("BGM0"), Has.Count.EqualTo(_project.Items.Where(i => i.Type == ItemDescription.ItemType.BGM).Count()), "Failed on BGM");
-                Assert.That(_project.GetSearchResults("SLG"), Has.Count.EqualTo(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Puzzle).Count() + 3), "Failed on SLG");
+                Assert.That(_project.GetSearchResults("SLG"), Has.Count.EqualTo(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Puzzle).Count()), "Failed on SLG");
                 Assert.That(_project.GetSearchResults("SPR_"), Has.Count.EqualTo(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Character_Sprite).Count()), "Failed on SPR_");
             });
         }
