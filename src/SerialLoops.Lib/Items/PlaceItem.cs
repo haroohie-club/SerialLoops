@@ -66,7 +66,7 @@ namespace SerialLoops.Lib.Items
             string spaceAdjustedText = PlaceName.Replace(" ", "   ");
             SKBitmap newPlaceBitmap = new(PlaceGraphic.Width, PlaceGraphic.Height);
             SKCanvas canvas = new(newPlaceBitmap);
-            SKColor bgColor = new SKColor(0, 249, 0);
+            SKColor bgColor = new(0, 249, 0);
             canvas.DrawRegion(new(new SKRectI(0, 0, newPlaceBitmap.Width, newPlaceBitmap.Height)), new SKPaint { Color = bgColor });
             TextBlock placeText = new()
             {
