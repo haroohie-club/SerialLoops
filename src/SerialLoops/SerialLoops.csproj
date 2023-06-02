@@ -24,6 +24,7 @@
     <None Remove="Icons\AppIcon.png" />
     <None Remove="Icons\Background.png" />
     <None Remove="Icons\BGM.png" />
+    <None Remove="Icons\Bottom_Screen.png" />
     <None Remove="Icons\Camera.png" />
     <None Remove="Icons\Character_Sprite.png" />
     <None Remove="Icons\Chess.png" />
@@ -47,6 +48,7 @@
     <None Remove="Icons\System_Texture.png" />
     <None Remove="Icons\Template.png" />
     <None Remove="Icons\Topic.png" />
+    <None Remove="Icons\Top_Screen.png" />
     <None Remove="Icons\Transition.png" />
     <None Remove="Icons\Tutorial.png" />
     <None Remove="Icons\Update.png" />
