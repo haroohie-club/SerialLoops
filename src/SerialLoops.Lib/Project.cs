@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -68,6 +69,8 @@ namespace SerialLoops.Lib
         public ScenarioStruct Scenario { get; set; }
         [JsonIgnore]
         public MessageInfoFile MessInfo { get; set; }
+        [JsonIgnore]
+        public VoiceMapFile VoiceMap { get; set; }
 
         public Project()
         {
@@ -270,6 +273,11 @@ namespace SerialLoops.Lib
                 tracker.Finished++;
             }
 
+            if (VoiceMapIsV06OrHigher())
+            {
+                VoiceMap = Evt.Files.First(v => v.Name == "VOICEMAPS").CastTo<VoiceMapFile>();
+            }
+
             string[] bgmFiles = Directory.GetFiles(Path.Combine(IterativeDirectory, "rom", "data", "bgm")).OrderBy(s => s).ToArray();
             tracker.Focus("BGM Tracks", bgmFiles.Length);
             for (int i = 0; i < bgmFiles.Length; i++)
@@ -377,6 +385,11 @@ namespace SerialLoops.Lib
             }
 
             return new(LoadProjectState.SUCCESS);
+        }
+
+        public bool VoiceMapIsV06OrHigher()
+        {
+            return Evt.Files.Any(f => f.Name == "VOICEMAPS") && Encoding.ASCII.GetString(Evt.Files.First(f => f.Name == "VOICEMAPS").Data.Skip(0x08).Take(4).ToArray()) == "SUBS";
         }
 
         public void MigrateProject(string newRom, ILogger log, IProgressTracker tracker)
