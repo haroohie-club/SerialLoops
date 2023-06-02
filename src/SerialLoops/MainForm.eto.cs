@@ -401,6 +401,7 @@ namespace SerialLoops
             IEnumerable<ItemDescription> unsavedItems = OpenProject.Items.Where(i => i.UnsavedChanges);
             bool savedExtra = false;
             bool changedNameplates = false;
+            bool changedSubs = false;
             SKCanvas nameplateCanvas = new(OpenProject.NameplateBitmap);
             SKCanvas speakerCanvas = new(OpenProject.SpeakerBitmap);
 
@@ -461,6 +462,13 @@ namespace SerialLoops
                         evt.CollectGarbage();
                         IO.WriteStringFile(Path.Combine("assets", "events", $"{evt.Index:X3}.s"), evt.GetSource(new()), OpenProject, Log);
                         break;
+                    case ItemDescription.ItemType.Voice:
+                        VoicedLineItem vce = (VoicedLineItem)item;
+                        if (OpenProject.VoiceMap is not null)
+                        {
+                            changedSubs = true;
+                        }
+                        break;
 
                     default:
                         Log.LogWarning($"Saving for {item.Type}s not yet implemented.");
@@ -474,6 +482,10 @@ namespace SerialLoops
                 MemoryStream nameplateStream = new();
                 OpenProject.NameplateBitmap.Encode(nameplateStream, SKEncodedImageFormat.Png, 1);
                 IO.WriteBinaryFile(Path.Combine("assets", "graphics", "B87.png"), nameplateStream.ToArray(), OpenProject, Log);
+            }
+            if (changedSubs)
+            {
+                IO.WriteStringFile(Path.Combine("assets", "events", $"{OpenProject.VoiceMap.Index:X3}.s"), OpenProject.VoiceMap.GetSource(), OpenProject, Log);
             }
             foreach (Editor editor in EditorTabs.Tabs.Pages.Cast<Editor>())
             {

@@ -1,12 +1,16 @@
 ﻿using Eto.Forms;
+using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
 using NAudio.Wave;
 using SerialLoops.Controls;
 using SerialLoops.Dialogs;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
+using SerialLoops.Lib.Util;
 using SerialLoops.Utility;
+using System;
 using System.IO;
+using System.Linq;
 
 namespace SerialLoops.Editors
 {
@@ -64,6 +68,99 @@ namespace SerialLoops.Editors
                 Content = GetEditorPanel();
             };
 
+            StackLayout subtitleLayout = new();
+            if (_project.VoiceMap is not null)
+            {
+                TextBox subtitleBox = new()
+                {
+                    Width = 400,
+                };
+                RadioButtonList screenSelectionList = new()
+                {
+                    Orientation = Orientation.Horizontal,
+                    Items =
+                    {
+                        VoiceMapFile.VoiceMapStruct.Screen.TOP.ToString(),
+                        VoiceMapFile.VoiceMapStruct.Screen.BOTTOM.ToString(),
+                    },
+                    SelectedKey = VoiceMapFile.VoiceMapStruct.Screen.BOTTOM.ToString(),
+                };
+                RadioButtonList yPosSelectionList = new()
+                {
+                    Orientation = Orientation.Horizontal,
+                    Items =
+                    {
+                        VoiceMapFile.VoiceMapStruct.YPosition.TOP.ToString(),
+                        VoiceMapFile.VoiceMapStruct.YPosition.BELOW_TOP.ToString(),
+                        VoiceMapFile.VoiceMapStruct.YPosition.ABOVE_BOTTOM.ToString(),
+                        VoiceMapFile.VoiceMapStruct.YPosition.BOTTOM.ToString(),
+                    },
+                    SelectedKey = VoiceMapFile.VoiceMapStruct.YPosition.ABOVE_BOTTOM.ToString(),
+                };
+                var voiceMapStruct = _project.VoiceMap.VoiceMapStructs.FirstOrDefault(v => v.VoiceFileName == Path.GetFileNameWithoutExtension(_vce.VoiceFile));
+                if (voiceMapStruct is not null)
+                {
+                    if (_project.LangCode != "ja")
+                    {
+                        subtitleBox.Text = voiceMapStruct.Subtitle.GetSubstitutedString(_project);
+                    }
+                    else
+                    {
+                        subtitleBox.Text = voiceMapStruct.Subtitle;
+                    }
+
+                    screenSelectionList.SelectedKey = voiceMapStruct.TargetScreen.ToString();
+                    yPosSelectionList.SelectedKey = voiceMapStruct.YPos.ToString();
+                }
+
+                subtitleBox.TextChanged += (sender, args) =>
+                {
+                    string subtitle = _project.LangCode != "ja" ? subtitleBox.Text.GetOriginalString(_project) : subtitleBox.Text;
+                    var voiceMapStruct = _project.VoiceMap.VoiceMapStructs.FirstOrDefault(v => v.VoiceFileName == Path.GetFileNameWithoutExtension(_vce.VoiceFile));
+                    if (voiceMapStruct is null)
+                    {
+                        _project.VoiceMap.VoiceMapStructs.Add(new()
+                        {
+                            VoiceFileName = Path.GetFileNameWithoutExtension(_vce.VoiceFile),
+                            FontSize = 100,
+                            TargetScreen = Enum.Parse<VoiceMapFile.VoiceMapStruct.Screen>(screenSelectionList.SelectedKey),
+                            Timer = 350,
+                        });
+                        _project.VoiceMap.VoiceMapStructs[_project.VoiceMap.VoiceMapStructs.Count - 1].SetSubtitle(subtitle, _project.FontReplacement);
+                        _project.VoiceMap.VoiceMapStructs[_project.VoiceMap.VoiceMapStructs.Count - 1].YPos = Enum.Parse<VoiceMapFile.VoiceMapStruct.YPosition>(yPosSelectionList.SelectedKey);
+                    }
+                    else
+                    {
+                        voiceMapStruct.SetSubtitle(subtitle, _project.FontReplacement);
+                    }
+                    UpdateTabTitle(false, subtitleBox);
+                };
+
+                screenSelectionList.SelectedKeyChanged += (sender, args) =>
+                {
+                    var voiceMapStruct = _project.VoiceMap.VoiceMapStructs.FirstOrDefault(v => v.VoiceFileName == Path.GetFileNameWithoutExtension(_vce.VoiceFile));
+                    if (voiceMapStruct is not null)
+                    {
+                        voiceMapStruct.TargetScreen = Enum.Parse<VoiceMapFile.VoiceMapStruct.Screen>(screenSelectionList.SelectedKey);
+                        UpdateTabTitle(false);
+                    }
+                };
+
+                yPosSelectionList.SelectedKeyChanged += (sender, args) =>
+                {
+                    var voiceMapStruct = _project.VoiceMap.VoiceMapStructs.FirstOrDefault(v => v.VoiceFileName == Path.GetFileNameWithoutExtension(_vce.VoiceFile));
+                    if (voiceMapStruct is not null)
+                    {
+                        voiceMapStruct.YPos = Enum.Parse<VoiceMapFile.VoiceMapStruct.YPosition>(yPosSelectionList.SelectedKey);
+                        UpdateTabTitle(false);
+                    }
+                };
+
+                subtitleLayout.Items.Add(ControlGenerator.GetControlWithLabel("Subtitle", subtitleBox));
+                subtitleLayout.Items.Add(ControlGenerator.GetControlWithLabel("Target Screen", screenSelectionList));
+                subtitleLayout.Items.Add(ControlGenerator.GetControlWithLabel("Y Position", yPosSelectionList));
+            }
+
             return new TableLayout(
                 new TableRow(ControlGenerator.GetPlayerStackLayout(VcePlayer, _vce.Name, _vce.AdxType.ToString())),
                 new TableRow(new StackLayout
@@ -77,6 +174,7 @@ namespace SerialLoops.Editors
                         restoreButton,
                     }
                 }),
+                new TableRow(subtitleLayout),
                 new TableRow()
                 );
         }
