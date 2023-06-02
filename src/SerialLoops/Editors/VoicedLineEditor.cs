@@ -215,15 +215,18 @@ namespace SerialLoops.Editors
             bool bottomScreen = voiceMapStruct.TargetScreen == VoiceMapFile.VoiceMapStruct.Screen.BOTTOM;
             if (bottomScreen)
             {
-                ScriptEditor.DrawText(
-                    _subtitle,
-                    canvas,
-                    DialogueScriptParameter.Paint07,
-                    _project,
-                    1 + voiceMapStruct.X,
-                    1 + voiceMapStruct.Y + (bottomScreen ? 192 : 0),
-                    false
-                );
+                for (int i = 0; i <= 1; i++)
+                {
+                    ScriptEditor.DrawText(
+                        _subtitle,
+                        canvas,
+                        DialogueScriptParameter.Paint07,
+                        _project,
+                        i + voiceMapStruct.X,
+                        1 + voiceMapStruct.Y + (bottomScreen ? 192 : 0),
+                        false
+                    );
+                }
             }
 
             ScriptEditor.DrawText(
