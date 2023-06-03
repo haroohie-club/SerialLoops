@@ -1829,7 +1829,7 @@ namespace SerialLoops.Editors
                     !((BoolScriptParameter)c.Parameters[0]).Value) < commands.IndexOf(lastDialogueCommand))
                 {
                     DialogueLine line = ((DialogueScriptParameter)lastDialogueCommand.Parameters[0]).Line;
-                    SKPaint currentDialoguePaint = line.Speaker switch
+                    SKPaint dialoguePaint = line.Speaker switch
                     {
                         Speaker.MONOLOGUE => DialogueScriptParameter.Paint01,
                         Speaker.INFO => DialogueScriptParameter.Paint04,
@@ -1844,88 +1844,7 @@ namespace SerialLoops.Editors
                         canvas.DrawBitmap(_project.SpeakerBitmap, new SKRect(0, 16 * ((int)line.Speaker - 1), 64, 16 * ((int)line.Speaker)),
                             new SKRect(0, 332, 64, 348));
 
-                        int currentX = 10;
-                        int currentY = 352;
-                        for (int i = 0; i < line.Text.Length; i++)
-                        {
-                            // handle newlines
-                            if (line.Text[i] == '\n')
-                            {
-                                currentX = 10;
-                                currentY += 14;
-                                continue;
-                            }
-                            // handle operators
-                            if (i < line.Text.Length - 2 && Regex.IsMatch(line.Text[i..(i + 2)], @"\$\d"))
-                            {
-                                if (i < line.Text.Length - 3 && Regex.IsMatch(line.Text[i..(i + 3)], @"\$\d{2}"))
-                                {
-                                    i++;
-                                }
-                                i++;
-                                continue;
-                            }
-                            else if (i < line.Text.Length - 3 && Regex.IsMatch(line.Text[i..(i + 3)], @"#W\d"))
-                            {
-                                if (i < line.Text.Length - 4 && Regex.IsMatch(line.Text[i..(i + 4)], @"#W\d{2}"))
-                                {
-                                    i++;
-                                }
-                                i += 2;
-                                continue;
-                            }
-                            else if (i < line.Text.Length - 4 && Regex.IsMatch(line.Text[i..(i + 4)], @"#P\d{2}"))
-                            {
-                                currentDialoguePaint = int.Parse(Regex.Match(line.Text[i..(i + 4)], @"#P(?<id>\d{2})").Groups["id"].Value) switch
-                                {
-                                    1 => DialogueScriptParameter.Paint01,
-                                    2 => DialogueScriptParameter.Paint02,
-                                    3 => DialogueScriptParameter.Paint03,
-                                    4 => DialogueScriptParameter.Paint04,
-                                    5 => DialogueScriptParameter.Paint05,
-                                    6 => DialogueScriptParameter.Paint06,
-                                    7 => DialogueScriptParameter.Paint07,
-                                    _ => DialogueScriptParameter.Paint00,
-                                };
-                                i += 3;
-                                continue;
-                            }
-                            else if (i < line.Text.Length - 3 && line.Text[i..(i + 3)] == "#DP")
-                            {
-                                i += 3;
-                            }
-                            else if (i < line.Text.Length - 6 && Regex.IsMatch(line.Text[i..(i + 6)], @"#SE\d{3}"))
-                            {
-                                i += 6;
-                            }
-                            else if (i < line.Text.Length - 4 && line.Text[i..(i + 4)] == "#SK0")
-                            {
-                                i += 4;
-                            }
-                            else if (i < line.Text.Length - 3 && line.Text[i..(i + 3)] == "#sk")
-                            {
-                                i += 3;
-                            }
-
-                            if (line.Text[i] != '　') // if it's a space, we just skip drawing
-                            {
-                                int charIndex = _project.FontMap.CharMap.IndexOf(line.Text[i]);
-                                if ((charIndex + 1) * 16 <= _project.FontBitmap.Height)
-                                {
-                                    canvas.DrawBitmap(_project.FontBitmap, new SKRect(0, charIndex * 16, 16, (charIndex + 1) * 16),
-                                        new SKRect(currentX, currentY, currentX + 16, currentY + 16), currentDialoguePaint);
-                                }
-                            }
-                            FontReplacement replacement = _project.FontReplacement.ReverseLookup(line.Text[i]);
-                            if (replacement is not null && _project.LangCode != "ja")
-                            {
-                                currentX += replacement.Offset;
-                            }
-                            else
-                            {
-                                currentX += 14;
-                            }
-                        }
+                        DrawText(line.Text, canvas, dialoguePaint, _project);
                     }
                 }
             }
@@ -1933,6 +1852,97 @@ namespace SerialLoops.Editors
             canvas.Flush();
 
             _preview.Items.Add(new SKGuiImage(previewBitmap));
+        }
+
+        public static void DrawText(string text, SKCanvas canvas, SKPaint color, Project project, int x = 10, int y = 352, bool formatting = true)
+        {
+            int currentX = x;
+            int currentY = y;
+
+            for (int i = 0; i < text.Length; i++)
+            {
+                // handle newlines
+                if (text[i] == '\n')
+                {
+                    currentX = 10;
+                    currentY += 14;
+                    continue;
+                }
+
+                // handle operators
+                if (formatting)
+                {
+                    if (i < text.Length - 2 && Regex.IsMatch(text[i..(i + 2)], @"\$\d"))
+                    {
+                        if (i < text.Length - 3 && Regex.IsMatch(text[i..(i + 3)], @"\$\d{2}"))
+                        {
+                            i++;
+                        }
+                        i++;
+                        continue;
+                    }
+                    else if (i < text.Length - 3 && Regex.IsMatch(text[i..(i + 3)], @"#W\d"))
+                    {
+                        if (i < text.Length - 4 && Regex.IsMatch(text[i..(i + 4)], @"#W\d{2}"))
+                        {
+                            i++;
+                        }
+                        i += 2;
+                        continue;
+                    }
+                    else if (i < text.Length - 4 && Regex.IsMatch(text[i..(i + 4)], @"#P\d{2}"))
+                    {
+                        color = int.Parse(Regex.Match(text[i..(i + 4)], @"#P(?<id>\d{2})").Groups["id"].Value) switch
+                        {
+                            1 => DialogueScriptParameter.Paint01,
+                            2 => DialogueScriptParameter.Paint02,
+                            3 => DialogueScriptParameter.Paint03,
+                            4 => DialogueScriptParameter.Paint04,
+                            5 => DialogueScriptParameter.Paint05,
+                            6 => DialogueScriptParameter.Paint06,
+                            7 => DialogueScriptParameter.Paint07,
+                            _ => DialogueScriptParameter.Paint00,
+                        };
+                        i += 3;
+                        continue;
+                    }
+                    else if (i < text.Length - 3 && text[i..(i + 3)] == "#DP")
+                    {
+                        i += 3;
+                    }
+                    else if (i < text.Length - 6 && Regex.IsMatch(text[i..(i + 6)], @"#SE\d{3}"))
+                    {
+                        i += 6;
+                    }
+                    else if (i < text.Length - 4 && text[i..(i + 4)] == "#SK0")
+                    {
+                        i += 4;
+                    }
+                    else if (i < text.Length - 3 && text[i..(i + 3)] == "#sk")
+                    {
+                        i += 3;
+                    }
+                }
+
+                if (text[i] != '　') // if it's a space, we just skip drawing
+                {
+                    int charIndex = project.FontMap.CharMap.IndexOf(text[i]);
+                    if ((charIndex + 1) * 16 <= project.FontBitmap.Height)
+                    {
+                        canvas.DrawBitmap(project.FontBitmap, new SKRect(0, charIndex * 16, 16, (charIndex + 1) * 16),
+                            new SKRect(currentX, currentY, currentX + 16, currentY + 16), color);
+                    }
+                }
+                FontReplacement replacement = project.FontReplacement.ReverseLookup(text[i]);
+                if (replacement is not null && project.LangCode != "ja")
+                {
+                    currentX += replacement.Offset;
+                }
+                else
+                {
+                    currentX += 14;
+                }
+            }
         }
 
         private void BgSelectionButton_SelectionMade(object sender, EventArgs e)
