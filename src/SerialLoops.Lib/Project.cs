@@ -344,6 +344,9 @@ namespace SerialLoops.Lib
             tracker.Focus("Topics", TopicFile.TopicStructs.Count);
             foreach (TopicStruct topic in  TopicFile.TopicStructs)
             {
+                // Main topics have shadow topics that are located at ID + 40 (this is actually how the game finds them)
+                // So if we're a main topic and we see another topic 40 back, we know we're one of these shadow topics and should really be
+                // rolled into the original main topic
                 if (topic.Type == TopicType.Main && Items.Any(i => i.Type == ItemDescription.ItemType.Topic && ((TopicItem)i).Topic.Id == topic.Id - 40))
                 {
                     ((TopicItem)Items.First(i => i.Type == ItemDescription.ItemType.Topic && ((TopicItem)i).Topic.Id == topic.Id - 40)).HiddenMainTopic = topic;

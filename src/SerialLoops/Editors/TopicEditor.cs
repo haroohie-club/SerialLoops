@@ -212,6 +212,7 @@ namespace SerialLoops.Editors
                 Value = _topic.Topic.GroupSelection,
                 DecimalPlaces = 0,
                 MinValue = 0,
+                MaxValue = 8,
             };
             puzzlePhaseGroupStepper.ValueChanged += (sender, args) =>
             {
@@ -246,7 +247,8 @@ namespace SerialLoops.Editors
                 ControlGenerator.GetControlWithLabel("Type", _topic.Topic.CardType.ToString()),
                 ControlGenerator.GetControlWithLabel("Associated Script", linkedScriptDropDown),
                 groupsLayout,
-                new GroupBox() { Text = "Times", Content = timesLayout });
+                new GroupBox() { Text = "Times", Content = timesLayout },
+                new TableRow());
         }
 
         private ItemDescription GetAssociatedScript()
