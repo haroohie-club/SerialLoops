@@ -305,6 +305,10 @@ namespace SerialLoops
             projectCreationDialog.ShowModal(this);
             if (projectCreationDialog.NewProject is not null)
             {
+                CancelEventArgs cancelEvent = new();
+                CloseProject_Executed(this, cancelEvent);
+                if (cancelEvent.Cancel) { return; }
+
                 OpenProject = projectCreationDialog.NewProject;
                 OpenProjectView(OpenProject, new LoopyProgressTracker());
             }
@@ -316,6 +320,10 @@ namespace SerialLoops
             openFileDialog.Filters.Add(new("Serial Loops Project", $".{Project.PROJECT_FORMAT}"));
             if (openFileDialog.ShowAndReportIfFileSelected(this))
             {
+                CancelEventArgs cancelEvent = new();
+                CloseProject_Executed(this, cancelEvent);
+                if (cancelEvent.Cancel) { return; }
+
                 OpenProjectFromPath(openFileDialog.FileName);
             }
         }
@@ -676,7 +684,11 @@ namespace SerialLoops
                 if (unsavedItems.Any())
                 {
                     // message box with yes no cancel buttons
-                    DialogResult result = MessageBox.Show($"You have unsaved changes in {unsavedItems.Count()} item(s). Would you like to save before quitting?", MessageBoxButtons.YesNoCancel, MessageBoxType.Warning);
+                    DialogResult result = MessageBox.Show(
+                        $"You have unsaved changes in {unsavedItems.Count()} item(s)." +
+                        $"Would you like to save before closing the project?", 
+                        MessageBoxButtons.YesNoCancel, MessageBoxType.Warning
+                    );
                     switch (result)
                     {
                         case DialogResult.Yes:
