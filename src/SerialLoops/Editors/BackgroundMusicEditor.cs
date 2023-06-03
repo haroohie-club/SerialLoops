@@ -163,7 +163,7 @@ namespace SerialLoops.Editors
             };
 
             return new TableLayout(
-                new TableRow(ControlGenerator.GetPlayerStackLayout(BgmPlayer, bgmTitleBox, _bgm.Name)),
+                new TableRow(ControlGenerator.GetPlayerStackLayout(BgmPlayer, bgmTitleBox, _bgm.Name, _bgm.Flag)),
                 new TableRow(new StackLayout
                 {
                     Orientation = Orientation.Horizontal,

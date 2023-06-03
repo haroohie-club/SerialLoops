@@ -234,7 +234,6 @@ namespace SerialLoops.Editors
                                     break;
 
                                 case CommandVerb.FLAG:
-                                case CommandVerb.GLOBAL:
                                     invocation.Parameters[0] = 1;
                                     break;
 
@@ -252,6 +251,10 @@ namespace SerialLoops.Editors
 
                                 case CommandVerb.INVEST_START:
                                     invocation.Parameters[4] = _script.Event.LabelsSection.Objects.First(l => l.Id > 0).Id;
+                                    break;
+
+                                case CommandVerb.MODIFY_FRIENDSHIP:
+                                    invocation.Parameters[0] = 2;
                                     break;
 
                                 case CommandVerb.SCENE_GOTO:
@@ -1176,6 +1179,16 @@ namespace SerialLoops.Editors
                             ControlGenerator.GetControlWithLabel(parameter.Name, flagTextBox));
                         break;
 
+                    case ScriptParameter.ParameterType.FRIENDSHIP_LEVEL:
+                        ScriptCommandDropDown friendshipLevelDropDown = new() { Command = command, ParameterIndex = i };
+                        friendshipLevelDropDown.Items.AddRange(Enum.GetNames<FriendshipLevelScriptParameter.FriendshipCharacter>().Select(f => new ListItem { Key = f, Text = f }));
+                        friendshipLevelDropDown.SelectedKey = ((FriendshipLevelScriptParameter)parameter).Character.ToString();
+                        friendshipLevelDropDown.SelectedIndexChanged += FriendshipLevelDropDown_SelectedIndexChanged;
+
+                        ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
+                            ControlGenerator.GetControlWithLabel(parameter.Name, friendshipLevelDropDown));
+                        break;
+
                     case ScriptParameter.ParameterType.ITEM:
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
                             ControlGenerator.GetControlWithLabel(parameter.Name,
@@ -1383,13 +1396,12 @@ namespace SerialLoops.Editors
                         }
                         else
                         {
-                            topicName = $"{_project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Topic && ((TopicItem)i).Topic.Id == ((TopicScriptParameter)parameter).TopicId)?.Name} - {topicName}";
                             StackLayout topicLink = ControlGenerator.GetFileLink(_project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Topic &&
                                 ((TopicItem)i).Topic.Id == ((TopicScriptParameter)parameter).TopicId), _tabs, _log);
 
                             ScriptCommandDropDown topicDropDown = new() { Command = command, ParameterIndex = i, Link = (ClearableLinkButton)topicLink.Items[1].Control };
                             topicDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Topic)
-                                .Select(t => new ListItem { Key = $"{t.Name} - {t.DisplayName}", Text = $"{t.Name} - {t.DisplayName}" }));
+                                .Select(t => new ListItem { Key = t.DisplayName, Text = t.DisplayName }));
                             topicDropDown.SelectedKey = topicName;
                             topicDropDown.SelectedIndexChanged += TopicDropDown_SelectedIndexChanged;
 
@@ -1720,7 +1732,7 @@ namespace SerialLoops.Editors
                                 case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_FROM_CENTER_TO_RIGHT_FADE_OUT:
                                 case SpriteExitScriptParameter.SpriteExitTransition.FADE_OUT_CENTER:
                                 case SpriteExitScriptParameter.SpriteExitTransition.FADE_OUT_LEFT:
-                                    if (sprites[prevCharacter].Sprite == previousSprites[prevCharacter].Sprite || ((SpriteEntranceScriptParameter)previousCommand.Parameters[2]).EntranceTransition != SpriteEntranceScriptParameter.SpriteEntranceTransition.NO_TRANSITION)
+                                    if (sprites.ContainsKey(prevCharacter) && previousSprites.ContainsKey(prevCharacter) && (sprites[prevCharacter].Sprite == previousSprites[prevCharacter].Sprite || ((SpriteEntranceScriptParameter)previousCommand.Parameters[2]).EntranceTransition != SpriteEntranceScriptParameter.SpriteEntranceTransition.NO_TRANSITION))
                                     {
                                         sprites.Remove(prevCharacter);
                                         previousSprites.Remove(prevCharacter);
@@ -2192,13 +2204,24 @@ namespace SerialLoops.Editors
             ScriptCommandTextBox textBox = (ScriptCommandTextBox)sender;
             if ((textBox.Text.StartsWith("F", StringComparison.OrdinalIgnoreCase) || textBox.Text.StartsWith("G", StringComparison.OrdinalIgnoreCase)) && short.TryParse(textBox.Text[1..], out short flagId))
             {
-                flagId++;
                 _log.Log($"Attempting to modify parameter {textBox.ParameterIndex} to flag {textBox.Text} in {textBox.Command.Index} in file {_script.Name}...");
-                ((FlagScriptParameter)textBox.Command.Parameters[textBox.ParameterIndex]).Id = flagId;
+                bool global = textBox.Text.StartsWith("G", StringComparison.OrdinalIgnoreCase);
+                ((FlagScriptParameter)textBox.Command.Parameters[textBox.ParameterIndex]).Id = global ? (short)(flagId + 100) : flagId;
                 _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(textBox.Command.Section)]
                     .Objects[textBox.Command.Index].Parameters[textBox.ParameterIndex] = ((FlagScriptParameter)textBox.Command.Parameters[textBox.ParameterIndex]).Id;
                 UpdateTabTitle(false, textBox);
             }
+        }
+        private void FriendshipLevelDropDown_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
+            _log.Log($"Attempting to modify episode header in parameter {dropDown.ParameterIndex} to speaker {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
+            ((FriendshipLevelScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Character =
+                Enum.Parse<FriendshipLevelScriptParameter.FriendshipCharacter>(dropDown.SelectedKey);
+            _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
+                .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
+                (short)Enum.Parse<FriendshipLevelScriptParameter.FriendshipCharacter>(dropDown.SelectedKey);
+            UpdateTabTitle(false, dropDown);
         }
         private void MapDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
@@ -2387,10 +2410,10 @@ namespace SerialLoops.Editors
             ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
             _log.Log($"Attempting to modify parameter {dropDown.ParameterIndex} to topic {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
             ((TopicScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).TopicId =
-                ((TopicItem)_project.Items.FirstOrDefault(i => dropDown.SelectedKey == $"{i.Name} - {i.DisplayName}")).Topic.Id;
+                ((TopicItem)_project.Items.FirstOrDefault(i => dropDown.SelectedKey == i.DisplayName)).Topic.Id;
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
                 .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
-                ((TopicItem)_project.Items.First(i => dropDown.SelectedKey == $"{i.Name} - {i.DisplayName}")).Topic.Id;
+                ((TopicItem)_project.Items.First(i => dropDown.SelectedKey == i.DisplayName)).Topic.Id;
 
             dropDown.Link.Text = dropDown.SelectedKey;
             dropDown.Link.RemoveAllClickEvents();
@@ -2404,7 +2427,7 @@ namespace SerialLoops.Editors
 
             ScriptCommandDropDown topicDropDown = new() { Command = button.ScriptCommand, ParameterIndex = button.ParameterIndex };
             topicDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Topic)
-                .Select(t => new ListItem { Key = $"{t.Name} - {t.DisplayName}", Text = $"{t.Name} - {t.DisplayName}" }));
+                .Select(t => new ListItem { Key = t.DisplayName, Text = t.DisplayName }));
             topicDropDown.SelectedIndex = 0;
             topicDropDown.SelectedIndexChanged += TopicDropDown_SelectedIndexChanged;
 

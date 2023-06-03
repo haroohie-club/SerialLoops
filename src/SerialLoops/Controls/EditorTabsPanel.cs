@@ -101,7 +101,7 @@ namespace SerialLoops.Controls
                 case ItemDescription.ItemType.Script:
                     return new ScriptEditor((ScriptItem)project.Items.First(i => i.Name == item.Name), log, project, this);
                 case ItemDescription.ItemType.Topic:
-                    return new TopicEditor((TopicItem)project.Items.First(i => i.Name == item.Name), project, log);
+                    return new TopicEditor((TopicItem)project.Items.First(i => i.Name == item.Name), project, this, log);
                 case ItemDescription.ItemType.Voice:
                     return new VoicedLineEditor((VoicedLineItem)project.Items.First(i => i.Name == item.Name), project, log);
                 default:

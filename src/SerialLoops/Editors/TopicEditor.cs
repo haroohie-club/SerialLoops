@@ -1,5 +1,6 @@
 ﻿using Eto.Forms;
 using HaruhiChokuretsuLib.Util;
+using SerialLoops.Controls;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Util;
@@ -12,17 +13,17 @@ namespace SerialLoops.Editors
     {
         private TopicItem _topic;
 
-        private TextBox _baseTimeBox;
-        private TextBox _kyonTimeBox;
+        private NumericStepper _baseTimeStepper;
+        private NumericStepper _kyonTimeStepper;
         private Label _kyonTimeLabel;
-        private TextBox _mikuruTimeBox;
+        private NumericStepper _mikuruTimeStepper;
         private Label _mikuruTimeLabel;
-        private TextBox _nagatoTimeBox;
+        private NumericStepper _nagatoTimeStepper;
         private Label _nagatoTimeLabel;
-        private TextBox _koizumiTimeBox;
+        private NumericStepper _koizumiTimeStepper;
         private Label _koizumiTimeLabel;
 
-        public TopicEditor(TopicItem topic, Project project, ILogger log) : base(topic, log, project)
+        public TopicEditor(TopicItem topic, Project project, EditorTabsPanel tabs, ILogger log) : base(topic, log, project, tabs)
         {
         }
 
@@ -30,33 +31,131 @@ namespace SerialLoops.Editors
         {
             _topic = (TopicItem)Description;
 
-            Label idLabel = new() { Text = _topic.Topic.Id.ToString() };
+            TableLayout idLayout = new()
+            {
+                Spacing = new(3, 3),
+                Rows =
+                {
+                    ControlGenerator.GetControlWithLabelTable("ID", new Label { Text = _topic.Topic.Id.ToString() }),
+                }
+            };
+            if (_topic.HiddenMainTopic is not null)
+            {
+                idLayout.Rows.Add(ControlGenerator.GetControlWithLabelTable("Hidden ID", new Label { Text = _topic.HiddenMainTopic.Id.ToString() }));
+            }
 
-            TextBox titleTextBox = new() { Text = _topic.Topic.Title.GetSubstitutedString(_project), Width = 200 };
+            TextBox titleTextBox = new() { Text = _topic.Topic.Title.GetSubstitutedString(_project), Width = 300 };
+            titleTextBox.TextChanged += (sender, args) =>
+            {
+                _topic.Topic.Title = titleTextBox.Text.GetOriginalString(_project);
+                _topic.Rename($"{_topic.Topic.Id} - {titleTextBox.Text}");
+                UpdateTabTitle(false, titleTextBox);
+            };
 
             DropDown linkedScriptDropDown = new();
             linkedScriptDropDown.Items.Add(new ListItem { Key = "NONE", Text = "NONE" });
-            linkedScriptDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Script).Select(s => new ListItem { Key = s.Name, Text = s.Name }));
-            linkedScriptDropDown.SelectedKey = _project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Script && ((ScriptItem)i).Event.Index == _topic.Topic.EventIndex)?.Name ?? "NONE";
+            linkedScriptDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Script).Select(s => new ListItem { Key = s.Name, Text = s.Name, Tag = (short)((ScriptItem)s).Event.Index }));
+            linkedScriptDropDown.SelectedKey = GetAssociatedScript()?.Name ?? "NONE";
 
-            _baseTimeBox = new() { Text = _topic.Topic.BaseTimeGain.ToString() };
-            _baseTimeBox.TextChanged += BaseTimeBox_TextChanged;
+            StackLayout linkedScriptLink = new()
+            {
+                Items =
+                {
+                    ControlGenerator.GetFileLink(GetAssociatedScript(), _tabs, _log)
+                },
+            };
 
-            _kyonTimeBox = new() { Text = _topic.Topic.KyonTimePercentage.ToString() };
+            linkedScriptDropDown.SelectedKeyChanged += (sender, args) =>
+            {
+                if (linkedScriptDropDown.SelectedKey == "NONE")
+                {
+                    if (_topic.HiddenMainTopic is not null)
+                    {
+                        _topic.HiddenMainTopic.EventIndex = 0;
+                    }
+                    else
+                    {
+                        _topic.Topic.EventIndex = 0;
+                    }
+                }
+                else
+                {
+                    if (_topic.HiddenMainTopic is not null)
+                    {
+                        _topic.HiddenMainTopic.EventIndex = (short)((ListItem)linkedScriptDropDown.Items[linkedScriptDropDown.SelectedIndex]).Tag;
+                    }
+                    else
+                    {
+                        _topic.Topic.EventIndex = (short)((ListItem)linkedScriptDropDown.Items[linkedScriptDropDown.SelectedIndex]).Tag;
+                    }
+                }
+                linkedScriptLink.Items.Clear();
+                linkedScriptLink.Items.Add(ControlGenerator.GetFileLink(GetAssociatedScript(), _tabs, _log));
+                UpdateTabTitle(false);
+            };
+
+            StackLayout linkedScriptLayout = new()
+            {
+                Orientation = Orientation.Horizontal,
+                Spacing = 5,
+                Items =
+                {
+                    linkedScriptDropDown,
+                    linkedScriptLink,
+                },
+            };
+
+            _baseTimeStepper = new() { Value = _topic.Topic.BaseTimeGain, MaxValue = short.MaxValue, MinValue = 0, MaximumDecimalPlaces = 0 };
+            _baseTimeStepper.ValueChanged += (sender, args) =>
+            {
+                _topic.Topic.BaseTimeGain = (short)_baseTimeStepper.Value;
+
+                UpdateKyonTime();
+                UpdateMikuruTime();
+                UpdateNagatoTime();
+                UpdateKoizumiTime();
+                UpdateTabTitle(false);
+            };
+
+            _kyonTimeStepper = new() { Value = _topic.Topic.KyonTimePercentage, MaxValue = short.MaxValue, MinValue = 0, MaximumDecimalPlaces = 0 };
             _kyonTimeLabel = new() { Text = ((int)(_topic.Topic.BaseTimeGain * _topic.Topic.KyonTimePercentage / 100.0)).ToString() };
-            _kyonTimeBox.TextChanged += KyonTimeBox_TextChanged;
+            _kyonTimeStepper.ValueChanged += (sender, args) =>
+            {
+                _topic.Topic.KyonTimePercentage = (short)_kyonTimeStepper.Value;
 
-            _mikuruTimeBox = new() { Text = _topic.Topic.MikuruTimePercentage.ToString() };
+                UpdateKyonTime();
+                UpdateTabTitle(false);
+            };
+
+            _mikuruTimeStepper = new() { Value = _topic.Topic.MikuruTimePercentage, MaxValue = short.MaxValue, MinValue = 0, MaximumDecimalPlaces = 0 };
             _mikuruTimeLabel = new() { Text = ((int)(_topic.Topic.BaseTimeGain * _topic.Topic.MikuruTimePercentage / 100.0)).ToString() };
-            _mikuruTimeBox.TextChanged += MikuruTimeBox_TextChanged;
+            _mikuruTimeStepper.ValueChanged += (sender, args) =>
+            {
+                _topic.Topic.MikuruTimePercentage = (short)_mikuruTimeStepper.Value;
 
-            _nagatoTimeBox = new() { Text = _topic.Topic.NagatoTimePercentage.ToString() };
+                UpdateMikuruTime();
+                UpdateTabTitle(false);
+            };
+
+            _nagatoTimeStepper = new() { Value = _topic.Topic.NagatoTimePercentage, MaxValue = short.MaxValue, MinValue = 0, MaximumDecimalPlaces = 0 };
             _nagatoTimeLabel = new() { Text = ((int)(_topic.Topic.BaseTimeGain * _topic.Topic.NagatoTimePercentage / 100.0)).ToString() };
-            _nagatoTimeBox.TextChanged += NagatoTimeBox_TextChanged;
+            _nagatoTimeStepper.ValueChanged += (sender, args) =>
+            {
+                _topic.Topic.NagatoTimePercentage = (short)_nagatoTimeStepper.Value;
 
-            _koizumiTimeBox = new() { Text = _topic.Topic.KoizumiTimePercentage.ToString() };
+                UpdateNagatoTime();
+                UpdateTabTitle(false);
+            };
+
+            _koizumiTimeStepper = new() { Value = _topic.Topic.KoizumiTimePercentage, MaxValue = short.MaxValue, MinValue = 0, MaximumDecimalPlaces = 0 };
             _koizumiTimeLabel = new() { Text = ((int)(_topic.Topic.BaseTimeGain * _topic.Topic.KoizumiTimePercentage / 100.0)).ToString() };
-            _koizumiTimeBox.TextChanged += KoizumiTimeBox_TextChanged; ;
+            _koizumiTimeStepper.ValueChanged += (sender, args) =>
+            {
+                _topic.Topic.KoizumiTimePercentage = (short)_koizumiTimeStepper.Value;
+
+                UpdateKoizumiTime();
+                UpdateTabTitle(false);
+            };
 
             StackLayout timesLayout = new()
             {
@@ -64,7 +163,7 @@ namespace SerialLoops.Editors
                 Spacing = 10,
                 Items =
                 {
-                    ControlGenerator.GetControlWithLabel("Base Time Gain", ControlGenerator.GetControlWithSuffix(_baseTimeBox, "sec")),
+                    ControlGenerator.GetControlWithLabel("Base Time Gain", ControlGenerator.GetControlWithSuffix(_baseTimeStepper, "sec")),
                     new StackLayout
                     {
                         Orientation = Orientation.Horizontal,
@@ -72,7 +171,7 @@ namespace SerialLoops.Editors
                         VerticalContentAlignment = VerticalAlignment.Center,
                         Items =
                         {
-                            ControlGenerator.GetControlWithLabel("Kyon Time Percentage", ControlGenerator.GetControlWithSuffix(_kyonTimeBox, "%")),
+                            ControlGenerator.GetControlWithLabel("Kyon Time Percentage", ControlGenerator.GetControlWithSuffix(_kyonTimeStepper, "%")),
                             ControlGenerator.GetControlWithSuffix(_kyonTimeLabel, "sec"),
                         }
                     },
@@ -83,7 +182,7 @@ namespace SerialLoops.Editors
                         VerticalContentAlignment = VerticalAlignment.Center,
                         Items =
                         {
-                            ControlGenerator.GetControlWithLabel("Mikuru Time Percentage", ControlGenerator.GetControlWithSuffix(_mikuruTimeBox, "%")),
+                            ControlGenerator.GetControlWithLabel("Mikuru Time Percentage", ControlGenerator.GetControlWithSuffix(_mikuruTimeStepper, "%")),
                             ControlGenerator.GetControlWithSuffix(_mikuruTimeLabel, "sec"),
                         }
                     },
@@ -94,7 +193,7 @@ namespace SerialLoops.Editors
                         VerticalContentAlignment = VerticalAlignment.Center,
                         Items =
                         {
-                            ControlGenerator.GetControlWithLabel("Nagato Time Percentage", ControlGenerator.GetControlWithSuffix(_nagatoTimeBox, "%")),
+                            ControlGenerator.GetControlWithLabel("Nagato Time Percentage", ControlGenerator.GetControlWithSuffix(_nagatoTimeStepper, "%")),
                             ControlGenerator.GetControlWithSuffix(_nagatoTimeLabel, "sec"),
                         }
                     },
@@ -105,109 +204,104 @@ namespace SerialLoops.Editors
                         VerticalContentAlignment = VerticalAlignment.Center,
                         Items =
                         {
-                            ControlGenerator.GetControlWithLabel("Koizumi Time Percentage", ControlGenerator.GetControlWithSuffix(_koizumiTimeBox, "%")),
+                            ControlGenerator.GetControlWithLabel("Koizumi Time Percentage", ControlGenerator.GetControlWithSuffix(_koizumiTimeStepper, "%")),
                             ControlGenerator.GetControlWithSuffix(_koizumiTimeLabel, "sec"),
                         }
                     },
                 }
             };
 
-            StackLayout unknownsLayout = new()
+            DropDown episodeGroupDropDown = new()
+            {
+                Items =
+                {
+                    new ListItem { Key = "1", Text = "Episode 1" },
+                    new ListItem { Key = "2", Text = "Episode 2" },
+                    new ListItem { Key = "3", Text = "Episode 3" },
+                    new ListItem { Key = "4", Text = "Episode 4" },
+                    new ListItem { Key = "5", Text = "Episode 5" },
+                },
+                SelectedKey = _topic.Topic.EpisodeGroup.ToString(),
+            };
+            episodeGroupDropDown.SelectedKeyChanged += (sender, args) =>
+            {
+                _topic.Topic.EpisodeGroup = byte.Parse(episodeGroupDropDown.SelectedKey);
+                UpdateTabTitle(false);
+            };
+
+            NumericStepper puzzlePhaseGroupStepper = new()
+            {
+                Value = _topic.Topic.GroupSelection,
+                DecimalPlaces = 0,
+                MinValue = 0,
+                MaxValue = 8,
+            };
+            puzzlePhaseGroupStepper.ValueChanged += (sender, args) =>
+            {
+                _topic.Topic.GroupSelection = (byte)puzzlePhaseGroupStepper.Value;
+                UpdateTabTitle(false);
+            };
+
+            StackLayout groupsLayout = new()
             {
                 Orientation = Orientation.Vertical,
                 Spacing = 5,
                 Items =
                 {
-                    ControlGenerator.GetControlWithLabel("Type", new TextBox { Text = _topic.Topic.Type.ToString() }),
-                    ControlGenerator.GetControlWithLabel("Episode Group", new TextBox { Text = _topic.Topic.EpisodeGroup.ToString() }),
-                    ControlGenerator.GetControlWithLabel("Group Selection", new TextBox { Text = _topic.Topic.GroupSelection.ToString() }),
-                    ControlGenerator.GetControlWithLabel("Unknown 03", new TextBox { Text = _topic.Topic.UnknownShort03.ToString() }),
-                    ControlGenerator.GetControlWithLabel("Unknown 04", new TextBox { Text = _topic.Topic.UnknownShort04.ToString() }),
-                    ControlGenerator.GetControlWithLabel("Unknown 09", new TextBox { Text = _topic.Topic.UnknownShort09.ToString() }),
-                    ControlGenerator.GetControlWithLabel("Unknown 10", new TextBox { Text = _topic.Topic.UnknownShort10.ToString() }),
-                    ControlGenerator.GetControlWithLabel("Unknown 11", new TextBox { Text = _topic.Topic.UnknownShort11.ToString() }),
-                    ControlGenerator.GetControlWithLabel("Unknown 12", new TextBox { Text = _topic.Topic.UnknownShort12.ToString() }),
-                    ControlGenerator.GetControlWithLabel("Unknown 13", new TextBox { Text = _topic.Topic.UnknownShort13.ToString() }),
-                    ControlGenerator.GetControlWithLabel("Unknown 14", new TextBox { Text = _topic.Topic.UnknownShort14.ToString() }),
-                    ControlGenerator.GetControlWithLabel("Unknown 15", new TextBox { Text = _topic.Topic.UnknownShort15.ToString() }),
-                }
+                    ControlGenerator.GetControlWithLabel("Episode Group", episodeGroupDropDown),
+                    ControlGenerator.GetControlWithLabel("Puzzle Phase Group", puzzlePhaseGroupStepper),
+                },
             };
 
+            //StackLayout unknownsLayout = new()
+            //{
+            //    Orientation = Orientation.Vertical,
+            //    Spacing = 5,
+            //    Items =
+            //    {
+            //        ControlGenerator.GetControlWithLabel("Unknown 03", new TextBox { Text = _topic.Topic.UnknownShort03.ToString() }),
+            //        ControlGenerator.GetControlWithLabel("Unknown 04", new TextBox { Text = _topic.Topic.UnknownShort04.ToString() }),
+            //    }
+            //};
 
-            return new TableLayout(ControlGenerator.GetControlWithLabelTable("ID", idLabel),
+            return new TableLayout(idLayout,
                 ControlGenerator.GetControlWithLabel("Title", titleTextBox),
-                ControlGenerator.GetControlWithLabel("Associated Script", linkedScriptDropDown),
+                ControlGenerator.GetControlWithLabel("Type", _topic.Topic.CardType.ToString()),
+                ControlGenerator.GetControlWithLabel("Associated Script", linkedScriptLayout),
+                groupsLayout,
                 new GroupBox() { Text = "Times", Content = timesLayout },
-                unknownsLayout);
+                new TableRow());
         }
 
-
-        private void BaseTimeBox_TextChanged(object sender, System.EventArgs e)
+        private ItemDescription GetAssociatedScript()
         {
-            if (short.TryParse(_baseTimeBox.Text, out short newBaseTime))
+            ItemDescription associatedScript;
+            if (_topic.HiddenMainTopic is not null)
             {
-                TryUpdateKyonTime(newBaseTime);
-                TryUpdateMikuruTime(newBaseTime);
-                TryUpdateNagatoTime(newBaseTime);
-                TryUpdateKoizumiTime(newBaseTime);
+                associatedScript = _project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Script && ((ScriptItem)i).Event.Index == _topic.HiddenMainTopic.EventIndex);
             }
-        }
-        private void KyonTimeBox_TextChanged(object sender, System.EventArgs e)
-        {
-            if (short.TryParse(_baseTimeBox.Text, out short newBaseTime))
+            else
             {
-                TryUpdateKyonTime(newBaseTime);
+                associatedScript = _project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Script && ((ScriptItem)i).Event.Index == _topic.Topic.EventIndex);
             }
-        }
-        private void MikuruTimeBox_TextChanged(object sender, System.EventArgs e)
-        {
-            if (short.TryParse(_baseTimeBox.Text, out short newBaseTime))
-            {
-                TryUpdateMikuruTime(newBaseTime);
-            }
-        }
-        private void NagatoTimeBox_TextChanged(object sender, System.EventArgs e)
-        {
-            if (short.TryParse(_baseTimeBox.Text, out short newBaseTime))
-            {
-                TryUpdateNagatoTime(newBaseTime);
-            }
-        }
-        private void KoizumiTimeBox_TextChanged(object sender, System.EventArgs e)
-        {
-            if (short.TryParse(_baseTimeBox.Text, out short newBaseTime))
-            {
-                TryUpdateKoizumiTime(newBaseTime);
-            }
+            return associatedScript;
         }
 
-        private void TryUpdateKyonTime(short baseTime)
+        private void UpdateKyonTime()
         {
-            if (short.TryParse(_kyonTimeBox.Text, out short newKyonPercentage))
-            {
-                _kyonTimeLabel.Text = (baseTime * newKyonPercentage / 100.0).ToString();
-            }
+            _kyonTimeLabel.Text = (_baseTimeStepper.Value * _kyonTimeStepper.Value / 100.0).ToString();
         }
-        private void TryUpdateMikuruTime(short baseTime)
+        private void UpdateMikuruTime()
         {
-            if (short.TryParse(_mikuruTimeBox.Text, out short newMikuruPercentage))
-            {
-                _mikuruTimeLabel.Text = (baseTime * newMikuruPercentage / 100.0).ToString();
-            }
+            _mikuruTimeLabel.Text = (_baseTimeStepper.Value * _mikuruTimeStepper.Value / 100.0).ToString();
         }
-        private void TryUpdateNagatoTime(short baseTime)
+        private void UpdateNagatoTime()
         {
-            if (short.TryParse(_nagatoTimeBox.Text, out short newNagatoPercentage))
-            {
-                _nagatoTimeLabel.Text = (baseTime * newNagatoPercentage / 100.0).ToString();
-            }
+            _nagatoTimeLabel.Text = (_baseTimeStepper.Value * _nagatoTimeStepper.Value / 100.0).ToString();
         }
-        private void TryUpdateKoizumiTime(short baseTime)
+        private void UpdateKoizumiTime()
         {
-            if (short.TryParse(_koizumiTimeBox.Text, out short newKoizumiPercentage))
-            {
-                _koizumiTimeLabel.Text = (baseTime * newKoizumiPercentage / 100.0).ToString();
-            }
+            _koizumiTimeLabel.Text = (_baseTimeStepper.Value * _koizumiTimeStepper.Value / 100.0).ToString();
         }
     }
 }

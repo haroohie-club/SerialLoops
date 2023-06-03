@@ -20,7 +20,7 @@ namespace SerialLoops.Lib.Items
         public string BgmFile { get; set; }
         public int Index { get; set; }
         public string BgmName { get; set; }
-        public string ExtrasShort { get; set; }
+        public short? Flag { get; set; }
         public string CachedWaveFile { get; set; }
         public (string ScriptName, ScriptCommandInvocation command)[] ScriptUses { get; set; }
 
@@ -30,6 +30,7 @@ namespace SerialLoops.Lib.Items
             _bgmFile = bgmFile;
             Index = index;
             BgmName = project.Extra.Bgms.FirstOrDefault(b => b.Index == Index)?.Name?.GetSubstitutedString(project) ?? "";
+            Flag = project.Extra.Bgms.FirstOrDefault(b => b.Index == Index)?.Flag;
             DisplayName = string.IsNullOrEmpty(BgmName) ? Name : $"{Name} - {BgmName}";
             CanRename = string.IsNullOrEmpty(BgmName);
             PopulateScriptUses(project);

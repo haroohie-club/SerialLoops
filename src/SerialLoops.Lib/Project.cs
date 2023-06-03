@@ -68,6 +68,8 @@ namespace SerialLoops.Lib
         [JsonIgnore]
         public ScenarioStruct Scenario { get; set; }
         [JsonIgnore]
+        public EventFile TopicFile { get; set; }
+        [JsonIgnore]
         public MessageInfoFile MessInfo { get; set; }
         [JsonIgnore]
         public VoiceMapFile VoiceMap { get; set; }
@@ -337,11 +339,24 @@ namespace SerialLoops.Lib
                 .Select(d => new PuzzleItem(d.CastTo<PuzzleFile>(), this, log)));
             tracker.Finished++;
 
-            tracker.Focus("Topics", 2);
             Evt.Files.First(f => f.Name == "TOPICS").InitializeTopicFile();
-            tracker.Finished++;
-            Items.AddRange(Evt.Files.First(f => f.Name == "TOPICS").TopicStructs.Select(t => new TopicItem(t, this)));
-            tracker.Finished++;
+            TopicFile = Evt.Files.First(f => f.Name == "TOPICS");
+            tracker.Focus("Topics", TopicFile.TopicStructs.Count);
+            foreach (TopicStruct topic in  TopicFile.TopicStructs)
+            {
+                // Main topics have shadow topics that are located at ID + 40 (this is actually how the game finds them)
+                // So if we're a main topic and we see another topic 40 back, we know we're one of these shadow topics and should really be
+                // rolled into the original main topic
+                if (topic.Type == TopicType.Main && Items.Any(i => i.Type == ItemDescription.ItemType.Topic && ((TopicItem)i).Topic.Id == topic.Id - 40))
+                {
+                    ((TopicItem)Items.First(i => i.Type == ItemDescription.ItemType.Topic && ((TopicItem)i).Topic.Id == topic.Id - 40)).HiddenMainTopic = topic;
+                }
+                else
+                {
+                    Items.Add(new TopicItem(topic, this));
+                }
+                tracker.Finished++;
+            }
 
             // Scenario item must be created after script and puzzle items are constructed
             tracker.Focus("Scenario", 1);

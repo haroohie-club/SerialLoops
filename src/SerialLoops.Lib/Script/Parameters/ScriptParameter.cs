@@ -36,6 +36,7 @@ namespace SerialLoops.Lib.Script.Parameters
             CHARACTER,    // MESSINFO stuff, voice font & text speed
             EPISODE_HEADER,
             FLAG,
+            FRIENDSHIP_LEVEL,
             ITEM,
             MAP,
             OPTION,

@@ -289,7 +289,7 @@ namespace SerialLoops.Lib.Script
                         switch (i)
                         {
                             case 0:
-                                parameters.Add(new FlagScriptParameter("Flag", parameter, global: false));
+                                parameters.Add(new FlagScriptParameter("Flag", parameter));
                                 break;
                             case 1:
                                 parameters.Add(new BoolScriptParameter("Set/Clear", parameter == 1));
@@ -545,14 +545,14 @@ namespace SerialLoops.Lib.Script
                             parameters.Add(new ShortScriptParameter("Scenes to Skip", parameter));
                         }
                         break;
-                    case CommandVerb.GLOBAL:
+                    case CommandVerb.MODIFY_FRIENDSHIP:
                         switch (i)
                         {
                             case 0:
-                                parameters.Add(new FlagScriptParameter("Global", parameter, global: true));
+                                parameters.Add(new FriendshipLevelScriptParameter("Character", parameter));
                                 break;
                             case 1:
-                                parameters.Add(new ShortScriptParameter("Value", parameter));
+                                parameters.Add(new ShortScriptParameter("Modify by", parameter));
                                 break;
                         }
                         break;
