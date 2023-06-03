@@ -10,6 +10,7 @@ namespace SerialLoops.Lib.Script.Parameters
             Mikuru = 3,
             Nagato = 4,
             Koizumi = 5,
+            // 6th slot is unreferenceable in the game itself
             Tsuruya = 7,
         }
 

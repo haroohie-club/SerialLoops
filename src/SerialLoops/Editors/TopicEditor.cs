@@ -1,5 +1,6 @@
 ﻿using Eto.Forms;
 using HaruhiChokuretsuLib.Util;
+using SerialLoops.Controls;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Util;
@@ -22,7 +23,7 @@ namespace SerialLoops.Editors
         private NumericStepper _koizumiTimeStepper;
         private Label _koizumiTimeLabel;
 
-        public TopicEditor(TopicItem topic, Project project, ILogger log) : base(topic, log, project)
+        public TopicEditor(TopicItem topic, Project project, EditorTabsPanel tabs, ILogger log) : base(topic, log, project, tabs)
         {
         }
 
@@ -56,6 +57,14 @@ namespace SerialLoops.Editors
             linkedScriptDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Script).Select(s => new ListItem { Key = s.Name, Text = s.Name, Tag = (short)((ScriptItem)s).Event.Index }));
             linkedScriptDropDown.SelectedKey = GetAssociatedScript()?.Name ?? "NONE";
 
+            StackLayout linkedScriptLink = new()
+            {
+                Items =
+                {
+                    ControlGenerator.GetFileLink(GetAssociatedScript(), _tabs, _log)
+                },
+            };
+
             linkedScriptDropDown.SelectedKeyChanged += (sender, args) =>
             {
                 if (linkedScriptDropDown.SelectedKey == "NONE")
@@ -80,7 +89,20 @@ namespace SerialLoops.Editors
                         _topic.Topic.EventIndex = (short)((ListItem)linkedScriptDropDown.Items[linkedScriptDropDown.SelectedIndex]).Tag;
                     }
                 }
+                linkedScriptLink.Items.Clear();
+                linkedScriptLink.Items.Add(ControlGenerator.GetFileLink(GetAssociatedScript(), _tabs, _log));
                 UpdateTabTitle(false);
+            };
+
+            StackLayout linkedScriptLayout = new()
+            {
+                Orientation = Orientation.Horizontal,
+                Spacing = 5,
+                Items =
+                {
+                    linkedScriptDropDown,
+                    linkedScriptLink,
+                },
             };
 
             _baseTimeStepper = new() { Value = _topic.Topic.BaseTimeGain, MaxValue = short.MaxValue, MinValue = 0, MaximumDecimalPlaces = 0 };
@@ -245,7 +267,7 @@ namespace SerialLoops.Editors
             return new TableLayout(idLayout,
                 ControlGenerator.GetControlWithLabel("Title", titleTextBox),
                 ControlGenerator.GetControlWithLabel("Type", _topic.Topic.CardType.ToString()),
-                ControlGenerator.GetControlWithLabel("Associated Script", linkedScriptDropDown),
+                ControlGenerator.GetControlWithLabel("Associated Script", linkedScriptLayout),
                 groupsLayout,
                 new GroupBox() { Text = "Times", Content = timesLayout },
                 new TableRow());
