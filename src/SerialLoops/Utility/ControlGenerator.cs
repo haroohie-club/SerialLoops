@@ -103,20 +103,31 @@ namespace SerialLoops.Utility
             return new(command) { Style = "sl-toolbar-button" };
         }
 
-        internal static StackLayout GetPlayerStackLayout(SoundPlayerPanel soundPlayer, Control trackName, string trackDetails)
+        internal static StackLayout GetPlayerStackLayout(SoundPlayerPanel soundPlayer, Control trackName, string trackDetails, short? trackId = null)
         {
             StackLayout details = new()
             {
                 Orientation = Orientation.Vertical,
                 Spacing = 5,
             };
-            if (trackName is not null) {
+            if (trackName is not null)
+            {
                 details.Items.Add(trackName);
             }
+            StackLayout extraDetails = new()
+            {
+                Orientation = Orientation.Horizontal,
+                Spacing = 5,
+            };
             if (!string.IsNullOrEmpty(trackDetails))
             {
-                details.Items.Add(trackDetails);
+                extraDetails.Items.Add(trackDetails);
             }
+            if (trackId is not null)
+            {
+                extraDetails.Items.Add($"{trackId}");
+            }
+            details.Items.Add(extraDetails);
 
             return new StackLayout
             {

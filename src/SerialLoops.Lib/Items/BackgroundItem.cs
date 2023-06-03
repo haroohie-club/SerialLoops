@@ -35,7 +35,7 @@ namespace SerialLoops.Lib.Items
             if (cgEntry is not null)
             {
                 CgName = cgEntry?.Name?.GetSubstitutedString(project);
-                ExtrasShort = cgEntry?.Unknown02 ?? 0;
+                ExtrasShort = cgEntry?.Flag ?? 0;
                 ExtrasInt = cgEntry?.Unknown04 ?? 0;
             }
             PopulateScriptUses(project.Evt);

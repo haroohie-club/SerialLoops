@@ -28,9 +28,9 @@ namespace SerialLoops.Lib.Items
             try
             {
                 SearchableText = string.Join('\n', evt.ScriptSections.SelectMany(s => s.Objects.Select(c => c.Command.Mnemonic))
-                    .Concat(evt.ConditionalsSection.Objects));
-                //.Concat(evt.LabelsSection.Objects.Select(l => l.Name))
-                //.Concat(evt.DialogueLines.Select(l => l.Text)));
+                    .Concat(evt.ConditionalsSection.Objects)
+                    .Concat(evt.LabelsSection.Objects.Select(l => l.Name)));
+                    //.Concat(evt.DialogueLines.Select(l => l.Text)));
             }
             catch (Exception ex)
             {

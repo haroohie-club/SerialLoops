@@ -66,6 +66,17 @@ namespace SerialLoops.Editors
                 foreach (ScenarioRouteStruct route in routeSelection.Routes)
                 {
                     GroupBox routeBox = new() { Text = route.Title.GetSubstitutedString(_project) };
+                    IEnumerable<TopicItem> kyonlessTopics = route.KyonlessTopics.Select(t => (TopicItem)_project.Items
+                        .FirstOrDefault(i => i.Type == ItemDescription.ItemType.Topic && ((TopicItem)i).Topic.Id == t));
+                    StackLayout kyonlessTopicsLayout = new();
+                    foreach (TopicItem topicItem in kyonlessTopics)
+                    {
+                        if (topicItem is not null)
+                        {
+                            kyonlessTopicsLayout.Items.Add(ControlGenerator.GetFileLink(topicItem, _tabs, _log));
+                        }
+                    }
+                    GroupBox kyonlessTopicsBox = new() { Text = "Kyonless Topics", Content = kyonlessTopicsLayout };
                     StackLayout routeLayout = new()
                     {
                         Orientation = Orientation.Vertical,
@@ -74,6 +85,7 @@ namespace SerialLoops.Editors
                         {
                             ControlGenerator.GetControlWithLabel("Script", ControlGenerator.GetFileLink(_project.Items.First(i => i.Type == ItemDescription.ItemType.Script && ((ScriptItem)i).Event.Index == route.ScriptIndex), _tabs, _log)),
                             ControlGenerator.GetControlWithLabel("Characters Involved", new Label { Text = string.Join(", ", route.CharactersInvolved) }),
+                            kyonlessTopicsBox,
                         },
                     };
                     routeBox.Content = routeLayout;

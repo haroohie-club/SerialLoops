@@ -234,7 +234,6 @@ namespace SerialLoops.Editors
                                     break;
 
                                 case CommandVerb.FLAG:
-                                case CommandVerb.GLOBAL:
                                     invocation.Parameters[0] = 1;
                                     break;
 
@@ -252,6 +251,10 @@ namespace SerialLoops.Editors
 
                                 case CommandVerb.INVEST_START:
                                     invocation.Parameters[4] = _script.Event.LabelsSection.Objects.First(l => l.Id > 0).Id;
+                                    break;
+
+                                case CommandVerb.MODIFY_FRIENDSHIP:
+                                    invocation.Parameters[0] = 2;
                                     break;
 
                                 case CommandVerb.SCENE_GOTO:
@@ -1174,6 +1177,16 @@ namespace SerialLoops.Editors
                         flagTextBox.TextChanged += FlagTextBox_TextChanged;
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
                             ControlGenerator.GetControlWithLabel(parameter.Name, flagTextBox));
+                        break;
+
+                    case ScriptParameter.ParameterType.FRIENDSHIP_LEVEL:
+                        ScriptCommandDropDown friendshipLevelDropDown = new() { Command = command, ParameterIndex = i };
+                        friendshipLevelDropDown.Items.AddRange(Enum.GetNames<FriendshipLevelScriptParameter.FriendshipCharacter>().Select(f => new ListItem { Key = f, Text = f }));
+                        friendshipLevelDropDown.SelectedKey = ((FriendshipLevelScriptParameter)parameter).Character.ToString();
+                        friendshipLevelDropDown.SelectedIndexChanged += FriendshipLevelDropDown_SelectedIndexChanged;
+
+                        ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
+                            ControlGenerator.GetControlWithLabel(parameter.Name, friendshipLevelDropDown));
                         break;
 
                     case ScriptParameter.ParameterType.ITEM:
@@ -2182,11 +2195,23 @@ namespace SerialLoops.Editors
             if ((textBox.Text.StartsWith("F", StringComparison.OrdinalIgnoreCase) || textBox.Text.StartsWith("G", StringComparison.OrdinalIgnoreCase)) && short.TryParse(textBox.Text[1..], out short flagId))
             {
                 _log.Log($"Attempting to modify parameter {textBox.ParameterIndex} to flag {textBox.Text} in {textBox.Command.Index} in file {_script.Name}...");
-                ((FlagScriptParameter)textBox.Command.Parameters[textBox.ParameterIndex]).Id = flagId;
+                bool global = textBox.Text.StartsWith("G", StringComparison.OrdinalIgnoreCase);
+                ((FlagScriptParameter)textBox.Command.Parameters[textBox.ParameterIndex]).Id = global ? (short)(flagId + 100) : flagId;
                 _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(textBox.Command.Section)]
                     .Objects[textBox.Command.Index].Parameters[textBox.ParameterIndex] = ((FlagScriptParameter)textBox.Command.Parameters[textBox.ParameterIndex]).Id;
                 UpdateTabTitle(false, textBox);
             }
+        }
+        private void FriendshipLevelDropDown_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
+            _log.Log($"Attempting to modify episode header in parameter {dropDown.ParameterIndex} to speaker {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
+            ((FriendshipLevelScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Character =
+                Enum.Parse<FriendshipLevelScriptParameter.FriendshipCharacter>(dropDown.SelectedKey);
+            _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
+                .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
+                (short)Enum.Parse<FriendshipLevelScriptParameter.FriendshipCharacter>(dropDown.SelectedKey);
+            UpdateTabTitle(false, dropDown);
         }
         private void MapDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {

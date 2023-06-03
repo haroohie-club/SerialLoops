@@ -8,6 +8,7 @@ namespace SerialLoops.Lib.Items
     public class TopicItem : Item
     {
         public TopicStruct Topic { get; set; }
+        public TopicStruct HiddenMainTopic { get; set; }
         public (string ScriptName, ScriptCommandInvocation command)[] ScriptUses { get; set; }
 
         public TopicItem(TopicStruct topicStruct, Project project) : base($"{topicStruct.Id}", ItemType.Topic)
