@@ -32,9 +32,15 @@ namespace SerialLoops.Dialogs
             _log = log;
             Title = "Crop & Scale";
             MinimumSize = new(900, 650);
+            Padding = 10;
             StartImage = startImage;
             FinalImage = new(width, height);
             
+            InitializeComponent();
+        }
+
+        private void InitializeComponent()
+        {
             // Save / Close
             Button saveButton = new() { Text = "Save" };
             Button cancelButton = new() { Text = "Cancel" };
@@ -50,11 +56,8 @@ namespace SerialLoops.Dialogs
             
             // Preview
             _preview = new SKBitmap(650, 550);
-            _previewLayout = new()
-            {
-                Padding = 10,
-                Content = new ImageView { Image = new SKGuiImage(_preview) }
-            };
+            _previewLayout = new() { Padding = 10 };
+            _previewLayout.Invalidate();
 
             // Size controls
             _widthStepper = new() { Value = StartImage.Width, MinValue = 1, Width = 55 };
@@ -142,6 +145,7 @@ namespace SerialLoops.Dialogs
                                     new GroupBox
                                     {
                                         Text = "Scale Image",
+                                        Width = 200,
                                         Padding = 5,
                                         Content = new StackLayout
                                         {
@@ -169,6 +173,7 @@ namespace SerialLoops.Dialogs
                                     new GroupBox
                                     {
                                         Text = "Position Image",
+                                        Width = 200,
                                         Padding = 5,
                                         Content = new StackLayout
                                         {
@@ -177,7 +182,7 @@ namespace SerialLoops.Dialogs
                                             Padding = 5,
                                             Items =
                                             {
-                                                ControlGenerator.GetControlWithLabel("Location:",
+                                                ControlGenerator.GetControlWithLabel("Position:",
                                                     new StackLayout
                                                     {
                                                         Orientation = Orientation.Vertical,
@@ -189,6 +194,17 @@ namespace SerialLoops.Dialogs
                                                     }),
                                                 ControlGenerator.GetControlWithLabel("Reset:", resetPositionButton),
                                             }
+                                        }
+                                    },
+                                    new StackLayout
+                                    {
+                                        Orientation = Orientation.Vertical,
+                                        HorizontalContentAlignment = HorizontalAlignment.Center,
+                                        Padding = 5,
+                                        Items =
+                                        {
+                                            "Ctrl+Scroll — Scale Image",
+                                            "Arrow Keys — Move Image"
                                         }
                                     }
                                 }
@@ -208,7 +224,11 @@ namespace SerialLoops.Dialogs
                     }
                 }
             };
-            scaleToFitButton.PerformClick();
+        }
+
+        protected override void OnShown(EventArgs e)
+        {
+            UpdateImage();
         }
 
         private void OnKeyDown(object sender, KeyEventArgs e)
