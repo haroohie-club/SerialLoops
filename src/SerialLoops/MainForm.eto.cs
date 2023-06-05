@@ -194,7 +194,7 @@ namespace SerialLoops
             };
 
             // Add project items to existing File menu
-            if (Menu.Items.FirstOrDefault(x => x.Text == "&File") is SubMenuItem fileMenu)
+            if (Menu.Items.FirstOrDefault(x => x.Text.Contains("File")) is SubMenuItem fileMenu)
             {
                 fileMenu.Items.AddRange(new[] { saveProjectCommand, projectSettingsCommand, migrateProjectCommand, exportPatchCommand, closeProjectCommand });
             }
