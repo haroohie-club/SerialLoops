@@ -21,9 +21,10 @@ namespace SerialLoops.Dialogs
 
         private NumericStepper _widthStepper;
         private NumericStepper _heightStepper;
-        private SKPoint _selectionAreaLocation = new();
-        private SKPoint _imageLocation = new();
-        
+        private SKPoint _selectionAreaLocation;
+        private SKPoint _imageLocation;
+        private NumericStepper _imageXStepper;
+        private NumericStepper _imageYStepper;
         private PointF? _lastCursorPoint;
 
         public BackgroundCropResizeDialog(SKBitmap startImage, int width, int height, ILogger log)
@@ -33,28 +34,35 @@ namespace SerialLoops.Dialogs
             MinimumSize = new(900, 650);
             StartImage = startImage;
             FinalImage = new(width, height);
-
-            _preview = new SKBitmap(650, 550);
-            _previewLayout = new() { Padding = 10 };
             
+            // Save / Close
             Button saveButton = new() { Text = "Save" };
             Button cancelButton = new() { Text = "Cancel" };
-            saveButton.Click += (sender, args) =>
+            saveButton.Click += (sender, e) =>
             {
                 SaveChanges = true;
                 Close();
             };
-            cancelButton.Click += (sender, args) =>
+            cancelButton.Click += (sender, e) =>
             {
                 Close();
             };
+            
+            // Preview
+            _preview = new SKBitmap(650, 550);
+            _previewLayout = new()
+            {
+                Padding = 10,
+                Content = new ImageView { Image = new SKGuiImage(_preview) }
+            };
 
+            // Size controls
             _widthStepper = new() { Value = StartImage.Width, MinValue = 1, Width = 55 };
             _heightStepper = new() { Value = StartImage.Height, MinValue = 1, Width = 55 };
             _aspectRatio = (float) _widthStepper.Value / (float) _heightStepper.Value;
             Button scaleToFitButton = new() { Text = "Apply" };
             CheckBox preserveAspectRatioCheckbox = new() { Checked = true };
-            scaleToFitButton.Click += (sender, args) =>
+            scaleToFitButton.Click += (sender, e) =>
             {
                 _widthStepper.Value = FinalImage.Width;
                 _heightStepper.Value = FinalImage.Height;
@@ -84,12 +92,33 @@ namespace SerialLoops.Dialogs
                 }
                 UpdateImage();
             };
-
-
             MouseWheel += OnMouseWheelUpdate;
+            
+            // Position controls
+            _imageXStepper = new() { Value = _imageLocation.X, Width = 55 };
+            _imageYStepper = new() { Value = _imageLocation.Y, Width = 55 };
+            Button resetPositionButton = new() { Text = "Apply" };
+            _imageXStepper.ValueChanged += (sender, e) =>
+            {
+                _imageLocation.X = (int) _imageXStepper.Value;
+                UpdateImage();
+            };
+            _imageYStepper.ValueChanged += (sender, e) =>
+            {
+                _imageLocation.Y = (int) _imageYStepper.Value;
+                UpdateImage();
+            };
+            resetPositionButton.Click += (sender, e) =>
+            {
+                _imageLocation = new SKPoint(); 
+                _imageXStepper.Value = 0;
+                _imageYStepper.Value = 0;
+                UpdateImage();
+            };
             KeyDown += OnKeyDown;
             _previewLayout.MouseMove += OnMouseMove;
 
+            // Set content
             Content = new StackLayout
             {
                 Orientation = Orientation.Vertical,
@@ -104,30 +133,63 @@ namespace SerialLoops.Dialogs
                         Items =
                         {
                             _previewLayout,
-                            new GroupBox
+                            new StackLayout
                             {
-                                Text = "Scale Image",
-                                Padding = 5,
-                                Content = new StackLayout
+                                Orientation = Orientation.Vertical,
+                                Spacing = 5,
+                                Items =
                                 {
-                                    Orientation = Orientation.Vertical,
-                                    Spacing = 5,
-                                    Padding = 5,
-                                    Items =
+                                    new GroupBox
                                     {
-                                        ControlGenerator.GetControlWithLabel("Size:",
-                                            new StackLayout
+                                        Text = "Scale Image",
+                                        Padding = 5,
+                                        Content = new StackLayout
+                                        {
+                                            Orientation = Orientation.Vertical,
+                                            Spacing = 5,
+                                            Padding = 5,
+                                            Items =
                                             {
-                                                Orientation = Orientation.Vertical,
-                                                Items =
-                                                {
-                                                    _widthStepper,
-                                                    _heightStepper,
-                                                }
-                                            }),
-                                        ControlGenerator.GetControlWithLabel("Preserve Aspect Ratio:",
-                                            preserveAspectRatioCheckbox),
-                                        ControlGenerator.GetControlWithLabel("Scale To Fit:", scaleToFitButton),
+                                                ControlGenerator.GetControlWithLabel("Size:",
+                                                    new StackLayout
+                                                    {
+                                                        Orientation = Orientation.Vertical,
+                                                        Items =
+                                                        {
+                                                            _widthStepper,
+                                                            _heightStepper,
+                                                        }
+                                                    }),
+                                                ControlGenerator.GetControlWithLabel("Preserve Aspect Ratio:",
+                                                    preserveAspectRatioCheckbox),
+                                                ControlGenerator.GetControlWithLabel("Scale To Fit:", scaleToFitButton),
+                                            }
+                                        }
+                                    },
+                                    new GroupBox
+                                    {
+                                        Text = "Position Image",
+                                        Padding = 5,
+                                        Content = new StackLayout
+                                        {
+                                            Orientation = Orientation.Vertical,
+                                            Spacing = 5,
+                                            Padding = 5,
+                                            Items =
+                                            {
+                                                ControlGenerator.GetControlWithLabel("Location:",
+                                                    new StackLayout
+                                                    {
+                                                        Orientation = Orientation.Vertical,
+                                                        Items =
+                                                        {
+                                                            _imageXStepper,
+                                                            _imageYStepper
+                                                        }
+                                                    }),
+                                                ControlGenerator.GetControlWithLabel("Reset:", resetPositionButton),
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -146,8 +208,7 @@ namespace SerialLoops.Dialogs
                     }
                 }
             };
-
-            UpdateImage();
+            scaleToFitButton.PerformClick();
         }
 
         private void OnKeyDown(object sender, KeyEventArgs e)
@@ -184,6 +245,8 @@ namespace SerialLoops.Dialogs
             {
                 _imageLocation.Offset(xChange, yChange);
             }
+            _imageXStepper.Value = _imageLocation.X;
+            _imageYStepper.Value = _imageLocation.Y;
             UpdateImage();
         }
 
@@ -225,6 +288,8 @@ namespace SerialLoops.Dialogs
                 _selectionAreaLocation.Y = Math.Max(0, Math.Min(_preview.Height - FinalImage.Height, _selectionAreaLocation.Y));
             }
             _lastCursorPoint = e.Location;
+            _imageXStepper.Value = _imageLocation.X;
+            _imageYStepper.Value = _imageLocation.Y;
             UpdateImage();
         }
 
@@ -256,18 +321,17 @@ namespace SerialLoops.Dialogs
                     _selectionAreaLocation.Y + FinalImage.Height
             );
             finalCanvas.DrawBitmap(_preview, areaRect, new SKRect(0, 0, FinalImage.Width, FinalImage.Height));
-
-            // Draw UI, update image view
-            SKBitmap uiBitmap = new(_preview.Width, _preview.Height);
-            SKCanvas uiCanvas = new(uiBitmap);
-            uiCanvas.Clear();
-            uiCanvas.DrawRect(new SKRect(0, 0, _preview.Width, _preview.Height), new() { Color = new(0x00, 0x00, 0x00, 0x00) });
-            uiCanvas.ClipRect(areaRect);
-            uiCanvas.Flush();
-            previewCanvas.DrawBitmap(uiBitmap, 0, 0);
             
+            // Draw UI
+            SKPath uiPath = new();
+            uiPath.AddRect(new SKRect(0, 0, _preview.Width, _preview.Height));
+            uiPath.AddRect(areaRect);
+            uiPath.FillType = SKPathFillType.EvenOdd;
+            previewCanvas.DrawPath(uiPath, new SKPaint {Color = new SKColor(0, 0, 0, 0x55)});
+
+            // Update ImageView
             previewCanvas.Flush();
-            _previewLayout.Content = new ImageView() { Image = new SKGuiImage(_preview) };
+            _previewLayout.Content = new ImageView { Image = new SKGuiImage(_preview) };
         }
     }
 }
