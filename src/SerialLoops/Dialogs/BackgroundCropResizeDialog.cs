@@ -55,7 +55,7 @@ namespace SerialLoops.Dialogs
             };
             
             // Preview
-            _preview = new SKBitmap(650, 550);
+            _preview = new SKBitmap(650, 500);
             _previewLayout = new() { Padding = 10 };
             _previewLayout.Invalidate();
 
@@ -200,6 +200,7 @@ namespace SerialLoops.Dialogs
                                     {
                                         Orientation = Orientation.Vertical,
                                         HorizontalContentAlignment = HorizontalAlignment.Center,
+                                        Width = 200,
                                         Padding = 5,
                                         Items =
                                         {
