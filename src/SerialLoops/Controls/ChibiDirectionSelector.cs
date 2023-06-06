@@ -62,7 +62,9 @@ public class ChibiDirectionSelector : Panel
                 Image = ControlGenerator.GetIcon($"Chibi_{direction}", _log),
                 Enabled = AvailableDirections.Contains(direction),
                 Tag = direction,
-                Size = new(35, 35)
+                Size = new(35, 35),
+                MinimumSize = new(35, 35),
+                ToolTip = direction.ToString(),
             };
             button.Click += (sender, e) => { Direction = direction; };
             _grid.Add(button, x, y);

@@ -49,6 +49,8 @@ namespace SerialLoops.Controls
             {
                 Image = ControlGenerator.GetIcon("Top_Screen", _log),
                 Size = new(35, 20),
+                MinimumSize = new(35, 20),
+                ToolTip = "Top Screen",
                 Enabled = _selectedScreen is not (DsScreen.TOP or DsScreen.BOTH)
             };
             _topScreenButton.Click += TopScreenButton_Click;
@@ -57,6 +59,8 @@ namespace SerialLoops.Controls
             {
                 Image = ControlGenerator.GetIcon("Bottom_Screen", _log),
                 Size = new(35, 20),
+                MinimumSize = new(35, 20),
+                ToolTip = "Bottom Screen",
                 Enabled = _selectedScreen is not (DsScreen.BOTTOM or DsScreen.BOTH)
             };
             _bottomScreenButton.Click += BottomScreenButton_Click;
@@ -72,7 +76,8 @@ namespace SerialLoops.Controls
                         Orientation = Orientation.Vertical,
                         Items = { _topScreenButton, _bottomScreenButton },
                         Spacing = 2,
-                        Padding = 0
+                        Padding = 0,
+                        ToolTip = "Both Screens",
                     }
                 },
                 Spacing = 5,
