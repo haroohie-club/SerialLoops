@@ -12,16 +12,25 @@ namespace SerialLoops.Controls
     {
         private readonly Project _project;
         private readonly EditorTabsPanel _tabs;
+        private readonly SearchBox _searchBox;
         
-        public ItemExplorerPanel(Project project, EditorTabsPanel tabs, ILogger log) : base(project.Items, new Size(200, 420), false, log)
+        public ItemExplorerPanel(Project project, EditorTabsPanel tabs, SearchBox searchBox, ILogger log) : base(project.Items, new Size(200, 420), false, log)
         {
             _project = project;
             _tabs = tabs;
+            _searchBox = searchBox;
+            _searchBox.TextChanged += SearchBox_TextChanged;
             Viewer.SelectedItemChanged += Viewer_SelectedItemChanged;
             if (Viewer.SelectedItem is not null)
             {
                 ((TreeGridView)Viewer.Control).ContextMenu = Viewer.SelectedItem.Text.GetContextMenu(_project, this, _tabs, _log);
             }
+        }
+
+        private void SearchBox_TextChanged(object sender, EventArgs e)
+        {
+            var searchTerm = _searchBox.Text;
+            Items = !string.IsNullOrWhiteSpace(searchTerm) ? _project.GetSearchResults(searchTerm) : _project.Items;
         }
 
         private void Viewer_SelectedItemChanged(object sender, EventArgs e)
