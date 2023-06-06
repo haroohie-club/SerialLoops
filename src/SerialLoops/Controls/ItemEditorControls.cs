@@ -8,6 +8,7 @@ using SerialLoops.Utility;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
+using SerialLoops.Lib.Script.Parameters;
 
 namespace SerialLoops.Controls
 {
@@ -64,6 +65,16 @@ namespace SerialLoops.Controls
     public class ScenarioCommandTextBox : TextBox
     {
         public int CommandIndex { get; set; }
+    }
+    public class ScriptCommandScreenSelector : ScreenSelector
+    {
+        public ScriptCommandScreenSelector(ILogger log, ScreenScriptParameter.DsScreen selectedScreen, bool allowSelectingBoth) : base(log, selectedScreen, allowSelectingBoth)
+        {
+        }
+        
+        public ScriptItemCommand Command { get; set; }
+        public int ParameterIndex { get; set; }
+        public int CurrentShort { get; set; }
     }
     public class ScenarioCommandButton : Button
     {
