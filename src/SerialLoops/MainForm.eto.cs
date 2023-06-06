@@ -833,7 +833,7 @@ namespace SerialLoops
                             BuildIterativeProject_Executed(sender, e); // make sure we lock in the changes
                             break;
                         case DialogResult.Cancel:
-                            ((CancelEventArgs) e).Cancel = true;
+                            ((CancelEventArgs)e).Cancel = true;
                             break;
                     }
                 }
