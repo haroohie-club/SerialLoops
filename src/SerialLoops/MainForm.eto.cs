@@ -165,6 +165,9 @@ namespace SerialLoops
             Command renameItemCommand = new() { MenuText = "Rename Item", Shortcut = Keys.F2 };
             renameItemCommand.Executed += (sender, args) => Shared.RenameItem(OpenProject, ItemExplorer, EditorTabs, Log);
 
+            Command editUiTextCommand = new() { MenuText = "Edit UI Text" };
+            editUiTextCommand.Executed += EditUiTextCommand_Executed;
+
             Command searchProjectCommand = new() { MenuText = "Search...", ToolBarText = "Search", Shortcut = Application.Instance.CommonModifier | Keys.F, Image = ControlGenerator.GetIcon("Search", Log) };
             searchProjectCommand.Executed += Search_Executed;
 
@@ -198,7 +201,7 @@ namespace SerialLoops
             {
                 fileMenu.Items.AddRange(new[] { saveProjectCommand, projectSettingsCommand, migrateProjectCommand, exportPatchCommand, closeProjectCommand });
             }
-            Menu.Items.Add(new SubMenuItem { Text = "&Tools", Items = { renameItemCommand, searchProjectCommand, findOrphanedItemsCommand } });
+            Menu.Items.Add(new SubMenuItem { Text = "&Tools", Items = { renameItemCommand, editUiTextCommand, searchProjectCommand, findOrphanedItemsCommand } });
             Menu.Items.Add(new SubMenuItem { Text = "&Build", Items = { buildIterativeProjectCommand, buildBaseProjectCommand, buildAndRunProjectCommand } });
         }
 
@@ -515,6 +518,15 @@ namespace SerialLoops
             {
                 ProjectSettingsDialog projectSettingsDialog = new(OpenProject, Log);
                 projectSettingsDialog.ShowModal(this);
+            }
+        }
+
+        private void EditUiTextCommand_Executed(object sender, EventArgs e)
+        {
+            if (OpenProject is not null)
+            {
+                EditUiTextDialog editUiTextDialog = new(OpenProject, Log);
+                editUiTextDialog.ShowModal(this);
             }
         }
 
