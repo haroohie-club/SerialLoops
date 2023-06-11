@@ -128,7 +128,7 @@ namespace SerialLoops.Lib
                 BadFileIndex = -1;
             }
         }
-        
+
         public LoadProjectResult Load(Config config, ILogger log, IProgressTracker tracker)
         {
             Config = config;
@@ -148,7 +148,7 @@ namespace SerialLoops.Lib
             Settings = new(NdsProjectFile.FromByteArray<NdsProjectFile>(projectFile), log);
             tracker.Finished++;
         }
-        
+
         public LoadProjectResult LoadArchives(ILogger log, IProgressTracker tracker)
         {
             tracker.Focus("dat.bin", 3);
@@ -342,7 +342,7 @@ namespace SerialLoops.Lib
             Evt.Files.First(f => f.Name == "TOPICS").InitializeTopicFile();
             TopicFile = Evt.Files.First(f => f.Name == "TOPICS");
             tracker.Focus("Topics", TopicFile.TopicStructs.Count);
-            foreach (TopicStruct topic in  TopicFile.TopicStructs)
+            foreach (TopicStruct topic in TopicFile.TopicStructs)
             {
                 // Main topics have shadow topics that are located at ID + 40 (this is actually how the game finds them)
                 // So if we're a main topic and we see another topic 40 back, we know we're one of these shadow topics and should really be
@@ -356,6 +356,22 @@ namespace SerialLoops.Lib
                     Items.Add(new TopicItem(topic, this));
                 }
                 tracker.Finished++;
+            }
+
+            tracker.Focus("System Textures", 4);
+            SystemTextureFile systemTextureFile = Dat.Files.First(f => f.Name == "SYSTEXS").CastTo<SystemTextureFile>();
+            Items.Add(new SystemTextureItem(systemTextureFile.SystemTextures.First(s => s.GrpIndex == Grp.Files.First(g => g.Name == "LOGO_CO_SEGDNX").Index), this, "SYSTEX_SEGA_LOGO", true, 0, height: 192));
+            tracker.Finished++;
+            Items.Add(new SystemTextureItem(systemTextureFile.SystemTextures.First(s => s.GrpIndex == Grp.Files.First(g => g.Name == "LOGO_CO_AQIDNX").Index), this, "SYSTEX_AQI_LOGO", true, 0, height: 192));
+            tracker.Finished++;
+            Items.Add(new SystemTextureItem(systemTextureFile.SystemTextures.First(s => s.GrpIndex == Grp.Files.First(g => g.Name == "LOGO_MW_ACTDNX").Index), this, "SYSTEX_MOBICLIP_LOGO", true, 0, height: 192));
+            tracker.Finished++;
+            string criLogoName = Grp.Files.Any(f => f.Name == "CREDITS") ? "SYSTEX_HAROOHIE_LOGO" : "SYSTEX_CRIWARE_LOGO";
+            Items.Add(new SystemTextureItem(systemTextureFile.SystemTextures.First(s => s.GrpIndex == Grp.Files.First(g => g.Name == "LOGO_MW_CRIDNX").Index), this, criLogoName, true, 0, height: 192));
+            tracker.Finished++;
+            if (Grp.Files.Any(f => f.Name == "CREDITS"))
+            {
+                Items.Add(new SystemTextureItem(systemTextureFile.SystemTextures.First(s => s.GrpIndex == Grp.Files.First(g => g.Name == "CREDITS").Index), this, "SYSTEX_HAROOHIE_CREDITS", true, 0, height: 192));
             }
 
             // Scenario item must be created after script and puzzle items are constructed
@@ -495,8 +511,8 @@ namespace SerialLoops.Lib
             }
             else
             {
-                return Items.Where(item => 
-                    item.Name.Contains(searchTerm.Trim(), StringComparison.OrdinalIgnoreCase) || 
+                return Items.Where(item =>
+                    item.Name.Contains(searchTerm.Trim(), StringComparison.OrdinalIgnoreCase) ||
                     item.DisplayName.Contains(searchTerm.Trim(), StringComparison.OrdinalIgnoreCase) ||
                     (!string.IsNullOrEmpty(item.SearchableText) &&
                     item.SearchableText.Contains(searchTerm.Trim(), StringComparison.OrdinalIgnoreCase))).ToList();
