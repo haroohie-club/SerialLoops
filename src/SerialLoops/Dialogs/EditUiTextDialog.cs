@@ -12,11 +12,9 @@ namespace SerialLoops.Dialogs
     {
         private ILogger _log;
         private Project _project;
-        private MessageFile _uiTextFile { get; set; }
 
         public EditUiTextDialog(Project project, ILogger log)
         {
-            _uiTextFile = project.Dat.Files.First(f => f.Name == "MESSS").CastTo<MessageFile>();
             _project = project;
             _log = log;
 
@@ -34,16 +32,16 @@ namespace SerialLoops.Dialogs
                 Orientation = Orientation.Vertical,
                 Spacing = 10,
             };
-            for (int i = 0; i < _uiTextFile.Messages.Count; i++)
+            for (int i = 0; i < _project.UiText.Messages.Count; i++)
             {
                 TextBox uiTextBox = new() { Width = 400 };
                 if (_project.LangCode == "ja")
                 {
-                    uiTextBox.Text = _uiTextFile.Messages[i];
+                    uiTextBox.Text = _project.UiText.Messages[i];
                 }
                 else
                 {
-                    uiTextBox.Text = _uiTextFile.Messages[i].GetSubstitutedString(_project);
+                    uiTextBox.Text = _project.UiText.Messages[i].GetSubstitutedString(_project);
                 }
 
                 int currentIndex = i;
@@ -51,11 +49,11 @@ namespace SerialLoops.Dialogs
                 {
                     if (_project.LangCode == "ja")
                     {
-                        _uiTextFile.Messages[currentIndex] = uiTextBox.Text;
+                        _project.UiText.Messages[currentIndex] = uiTextBox.Text;
                     }
                     else
                     {
-                        _uiTextFile.Messages[currentIndex] = uiTextBox.Text.GetOriginalString(_project);
+                        _project.UiText.Messages[currentIndex] = uiTextBox.Text.GetOriginalString(_project);
                     }
                 };
 
@@ -71,7 +69,7 @@ namespace SerialLoops.Dialogs
             saveButton.Click += (sender, args) =>
             {
                 _log.Log("Attempting to save UI text...");
-                Lib.IO.WriteStringFile(Path.Combine("assets", "data", $"{_uiTextFile.Index:X3}.s"), _uiTextFile.GetSource(new()), _project, _log);
+                Lib.IO.WriteStringFile(Path.Combine("assets", "data", $"{_project.UiText.Index:X3}.s"), _project.UiText.GetSource(new()), _project, _log);
                 Close();
             };
 
