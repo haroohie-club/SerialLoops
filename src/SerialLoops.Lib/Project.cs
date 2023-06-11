@@ -358,8 +358,8 @@ namespace SerialLoops.Lib
                 tracker.Finished++;
             }
 
-            tracker.Focus("System Textures", 4);
             SystemTextureFile systemTextureFile = Dat.Files.First(f => f.Name == "SYSTEXS").CastTo<SystemTextureFile>();
+            tracker.Focus("System Textures", 5 + systemTextureFile.SystemTextures.Count(s => Grp.Files.Where(g => g.Name.StartsWith("XTR")).Select(g => g.Index).Contains(s.GrpIndex)));
             Items.Add(new SystemTextureItem(systemTextureFile.SystemTextures.First(s => s.GrpIndex == Grp.Files.First(g => g.Name == "LOGO_CO_SEGDNX").Index), this, "SYSTEX_SEGA_LOGO", true, 0, height: 192));
             tracker.Finished++;
             Items.Add(new SystemTextureItem(systemTextureFile.SystemTextures.First(s => s.GrpIndex == Grp.Files.First(g => g.Name == "LOGO_CO_AQIDNX").Index), this, "SYSTEX_AQI_LOGO", true, 0, height: 192));
@@ -372,6 +372,12 @@ namespace SerialLoops.Lib
             if (Grp.Files.Any(f => f.Name == "CREDITS"))
             {
                 Items.Add(new SystemTextureItem(systemTextureFile.SystemTextures.First(s => s.GrpIndex == Grp.Files.First(g => g.Name == "CREDITS").Index), this, "SYSTEX_HAROOHIE_CREDITS", true, 0, height: 192));
+            }
+            tracker.Finished++;
+            foreach (SystemTexture extraSysTex in systemTextureFile.SystemTextures.Where(s => Grp.Files.Where(g => g.Name.StartsWith("XTR")).Select(g => g.Index).Contains(s.GrpIndex)))
+            {
+                Items.Add(new SystemTextureItem(extraSysTex, this, $"SYSTEX_{Grp.Files.First(g => g.Index == extraSysTex.GrpIndex).Name[0..^3]}", false, -1));
+                tracker.Finished++;
             }
 
             // Scenario item must be created after script and puzzle items are constructed
