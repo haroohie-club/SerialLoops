@@ -7,7 +7,7 @@ using System;
 
 namespace SerialLoops.Dialogs
 {
-    public class BackgroundCropResizeDialog : Dialog
+    public class ImageCropResizeDialog : Dialog
     {
         private ILogger _log;
         public SKBitmap StartImage { get; set; }
@@ -27,7 +27,7 @@ namespace SerialLoops.Dialogs
         private NumericStepper _imageYStepper;
         private PointF? _lastCursorPoint;
 
-        public BackgroundCropResizeDialog(SKBitmap startImage, int width, int height, ILogger log)
+        public ImageCropResizeDialog(SKBitmap startImage, int width, int height, ILogger log)
         {
             _log = log;
             Title = "Crop & Scale";

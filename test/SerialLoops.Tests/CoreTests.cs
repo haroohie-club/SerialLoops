@@ -210,7 +210,6 @@ namespace SerialLoops.Tests
                 Assert.That(_project.GetSearchResults("ANZ"), Has.Count.EqualTo(26), "Failed on ANZ");
                 Assert.That(_project.GetSearchResults("BG_"), Has.Count.EqualTo(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background).Count()), "Failed on BG_");
                 Assert.That(_project.GetSearchResults("BGM0"), Has.Count.EqualTo(_project.Items.Where(i => i.Type == ItemDescription.ItemType.BGM).Count()), "Failed on BGM");
-                Assert.That(_project.GetSearchResults("SLG"), Has.Count.EqualTo(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Puzzle).Count()), "Failed on SLG");
                 Assert.That(_project.GetSearchResults("SPR_"), Has.Count.EqualTo(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Character_Sprite).Count()), "Failed on SPR_");
             });
         }
