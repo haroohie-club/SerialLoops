@@ -382,7 +382,7 @@ namespace SerialLoops.Lib
             }
             // Exclude B12 as that's the nameplates we replace in the character items and PPT_001 as that's the puzzle phase singularity we'll be replacing in the puzzle items
             // We also exclude the "special" graphics as they do not include all of them in the SYSTEX file (should be made to be edited manually)
-            foreach (SystemTexture sysSysTex in systemTextureFile.SystemTextures.Where(s => Grp.Files.Where(g => g.Name.StartsWith("SYS") && !g.Name.Contains("_SPC_") && g.Name != "SYS_CMN_B12DNX" && g.Name != "SYS_PPT_001DNX").Select(g => g.Index).Distinct().Contains(s.GrpIndex)))
+            foreach (SystemTexture sysSysTex in systemTextureFile.SystemTextures.Where(s => Grp.Files.Where(g => g.Name.StartsWith("SYS") && !g.Name.Contains("_SPC_") && g.Name != "SYS_CMN_B12DNX" && g.Name != "SYS_PPT_001DNX").Select(g => g.Index).Contains(s.GrpIndex)).DistinctBy(s => s.GrpIndex))
             {
                 if (Grp.Files.First(g => g.Index == sysSysTex.GrpIndex).Name[0..^4].EndsWith("T6"))
                 {
