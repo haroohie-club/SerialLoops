@@ -100,6 +100,8 @@ namespace SerialLoops.Controls
                     return new ScenarioEditor((ScenarioItem)project.Items.First(i => i.Name == item.Name), log, project, this);
                 case ItemDescription.ItemType.Script:
                     return new ScriptEditor((ScriptItem)project.Items.First(i => i.Name == item.Name), log, project, this);
+                case ItemDescription.ItemType.System_Texture:
+                    return new SystemTextureEditor((SystemTextureItem)project.Items.First(i => i.Name == item.Name), project, log);
                 case ItemDescription.ItemType.Topic:
                     return new TopicEditor((TopicItem)project.Items.First(i => i.Name == item.Name), project, this, log);
                 case ItemDescription.ItemType.Voice:

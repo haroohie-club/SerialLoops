@@ -474,6 +474,9 @@ namespace SerialLoops
                         evt.CollectGarbage();
                         IO.WriteStringFile(Path.Combine("assets", "events", $"{evt.Index:X3}.s"), evt.GetSource(new()), OpenProject, Log);
                         break;
+                    case ItemDescription.ItemType.System_Texture:
+                        ((SystemTextureItem)item).Write(OpenProject, Log);
+                        break;
                     case ItemDescription.ItemType.Topic:
                         changedTopics = true;
                         break;
