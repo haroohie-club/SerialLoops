@@ -97,7 +97,7 @@ namespace SerialLoops.Editors
             openFileDialog.Filters.Add(new() { Name = "Supported Images", Extensions = new string[] { ".bmp", ".gif", ".heif", ".jpg", ".jpeg", ".png", ".webp", } });
             if (openFileDialog.ShowAndReportIfFileSelected(this))
             {
-                BackgroundCropResizeDialog bgResizeDialog = new(SKBitmap.Decode(openFileDialog.FileName), original.Width, original.Height, _log);
+                ImageCropResizeDialog bgResizeDialog = new(SKBitmap.Decode(openFileDialog.FileName), original.Width, original.Height, _log);
                 bgResizeDialog.Closed += (sender, args) =>
                 {
                     if (bgResizeDialog.SaveChanges)
