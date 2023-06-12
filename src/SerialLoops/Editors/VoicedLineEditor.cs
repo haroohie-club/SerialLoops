@@ -81,7 +81,7 @@ namespace SerialLoops.Editors
                     PlaceholderText = "Enter subtitle text..."
                 };
 
-                ScreenSelector screenSelector = new(_log, false);
+                ScreenSelector screenSelector = new(_log, ScreenScriptParameter.DsScreen.BOTTOM, false);
                 RadioButtonList yPosSelectionList = new()
                 {
                     Orientation = Orientation.Vertical,
@@ -107,7 +107,8 @@ namespace SerialLoops.Editors
                     }
                     _subtitle = subtitleBox.Text;
 
-                    screenSelector.TopScreenSelected = voiceMapStruct.TargetScreen == VoiceMapFile.VoiceMapStruct.Screen.TOP;
+                    screenSelector.SelectedScreen = voiceMapStruct.TargetScreen == VoiceMapFile.VoiceMapStruct.Screen.TOP 
+                        ? ScreenScriptParameter.DsScreen.TOP : ScreenScriptParameter.DsScreen.BOTTOM;
                     yPosSelectionList.SelectedKey = voiceMapStruct.YPos.ToString();
                 }
 
@@ -121,11 +122,12 @@ namespace SerialLoops.Editors
                         {
                             VoiceFileName = Path.GetFileNameWithoutExtension(_vce.VoiceFile),
                             FontSize = 100,
-                            TargetScreen = screenSelector.TopScreenSelected ? VoiceMapFile.VoiceMapStruct.Screen.TOP : VoiceMapFile.VoiceMapStruct.Screen.BOTTOM,
+                            TargetScreen = screenSelector.SelectedScreen == ScreenScriptParameter.DsScreen.TOP
+                                ? VoiceMapFile.VoiceMapStruct.Screen.TOP : VoiceMapFile.VoiceMapStruct.Screen.BOTTOM,
                             Timer = 350,
                         });
-                        _project.VoiceMap.VoiceMapStructs[_project.VoiceMap.VoiceMapStructs.Count - 1].SetSubtitle(_subtitle, _project.FontReplacement);
-                        _project.VoiceMap.VoiceMapStructs[_project.VoiceMap.VoiceMapStructs.Count - 1].YPos = Enum.Parse<VoiceMapFile.VoiceMapStruct.YPosition>(yPosSelectionList.SelectedKey);
+                        _project.VoiceMap.VoiceMapStructs[^1].SetSubtitle(_subtitle, _project.FontReplacement);
+                        _project.VoiceMap.VoiceMapStructs[^1].YPos = Enum.Parse<VoiceMapFile.VoiceMapStruct.YPosition>(yPosSelectionList.SelectedKey);
                     }
                     else
                     {
@@ -140,7 +142,8 @@ namespace SerialLoops.Editors
                     var voiceMapStruct = _project.VoiceMap.VoiceMapStructs.FirstOrDefault(v => v.VoiceFileName == Path.GetFileNameWithoutExtension(_vce.VoiceFile));
                     if (voiceMapStruct is not null)
                     {
-                        voiceMapStruct.TargetScreen = screenSelector.TopScreenSelected ? VoiceMapFile.VoiceMapStruct.Screen.TOP : VoiceMapFile.VoiceMapStruct.Screen.BOTTOM;
+                        voiceMapStruct.TargetScreen = screenSelector.SelectedScreen == ScreenScriptParameter.DsScreen.TOP
+                            ? VoiceMapFile.VoiceMapStruct.Screen.TOP : VoiceMapFile.VoiceMapStruct.Screen.BOTTOM;
                         UpdateTabTitle(false);
                         UpdatePreview();
                     }
@@ -171,30 +174,30 @@ namespace SerialLoops.Editors
                 });
             }
             
-        return new TableLayout(
-            new TableRow(new TableLayout(
-                new TableRow(ControlGenerator.GetPlayerStackLayout(VcePlayer, _vce.Name, _vce.AdxType.ToString())),
-                new TableRow(new StackLayout
-                {
-                    Orientation = Orientation.Horizontal,
-                    Spacing = 3,
-                    Padding = 5,
-                    Items =
-                    {
-                        replaceButton,
-                        extractButton,
-                        restoreButton,
-                    }
-                }),
-                new TableRow(new GroupBox
-                {
-                    Text = "Edit Subtitle",
-                    Padding = 5,
-                    Content = subtitleLayout
-                }),
-                new TableRow()
-                ), 
-            new TableRow(_subtitlesPreview))
+            return new TableLayout(
+                new TableRow(new TableLayout(
+                        new TableRow(ControlGenerator.GetPlayerStackLayout(VcePlayer, _vce.Name, _vce.AdxType.ToString())),
+                        new TableRow(new StackLayout
+                        {
+                            Orientation = Orientation.Horizontal,
+                            Spacing = 3,
+                            Padding = 5,
+                            Items =
+                            {
+                                replaceButton,
+                                extractButton,
+                                restoreButton,
+                            }
+                        }),
+                        new TableRow(new GroupBox
+                        {
+                            Text = "Edit Subtitle",
+                            Padding = 5,
+                            Content = subtitleLayout
+                        }),
+                        new TableRow()
+                    ), 
+                    new TableRow(_subtitlesPreview))
             );
         }
 
