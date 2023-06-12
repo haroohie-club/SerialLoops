@@ -361,18 +361,18 @@ namespace SerialLoops.Lib
             SystemTextureFile systemTextureFile = Dat.Files.First(f => f.Name == "SYSTEXS").CastTo<SystemTextureFile>();
             tracker.Focus("System Textures",
                 5 + systemTextureFile.SystemTextures.Count(s => Grp.Files.Where(g => g.Name.StartsWith("XTR") || g.Name.StartsWith("SYS") && !g.Name.Contains("_SPC_") && g.Name != "SYS_CMN_B12DNX" && g.Name != "SYS_PPT_001DNX").Select(g => g.Index).Distinct().Contains(s.GrpIndex)));
-            Items.Add(new SystemTextureItem(systemTextureFile.SystemTextures.First(s => s.GrpIndex == Grp.Files.First(g => g.Name == "LOGO_CO_SEGDNX").Index), this, "SYSTEX_SEGA_LOGO", true, 0, height: 192));
+            Items.Add(new SystemTextureItem(systemTextureFile.SystemTextures.First(s => s.GrpIndex == Grp.Files.First(g => g.Name == "LOGO_CO_SEGDNX").Index), this, "SYSTEX_SPLASH_SEGA", true, 0, height: 192));
             tracker.Finished++;
-            Items.Add(new SystemTextureItem(systemTextureFile.SystemTextures.First(s => s.GrpIndex == Grp.Files.First(g => g.Name == "LOGO_CO_AQIDNX").Index), this, "SYSTEX_AQI_LOGO", true, 0, height: 192));
+            Items.Add(new SystemTextureItem(systemTextureFile.SystemTextures.First(s => s.GrpIndex == Grp.Files.First(g => g.Name == "LOGO_CO_AQIDNX").Index), this, "SYSTEX_SPLASH_AQI", true, 0, height: 192));
             tracker.Finished++;
-            Items.Add(new SystemTextureItem(systemTextureFile.SystemTextures.First(s => s.GrpIndex == Grp.Files.First(g => g.Name == "LOGO_MW_ACTDNX").Index), this, "SYSTEX_MOBICLIP_LOGO", true, 0, height: 192));
+            Items.Add(new SystemTextureItem(systemTextureFile.SystemTextures.First(s => s.GrpIndex == Grp.Files.First(g => g.Name == "LOGO_MW_ACTDNX").Index), this, "SYSTEX_SPLASH_MOBICLIP", true, 0, height: 192));
             tracker.Finished++;
-            string criLogoName = Grp.Files.Any(f => f.Name == "CREDITS") ? "SYSTEX_HAROOHIE_LOGO" : "SYSTEX_CRIWARE_LOGO";
+            string criLogoName = Grp.Files.Any(f => f.Name == "CREDITS") ? "SYSTEX_SPLASH_HAROOHIE" : "SYSTEX_SPLASH_CRIWARE";
             Items.Add(new SystemTextureItem(systemTextureFile.SystemTextures.First(s => s.GrpIndex == Grp.Files.First(g => g.Name == "LOGO_MW_CRIDNX").Index), this, criLogoName, true, 0, height: 192));
             tracker.Finished++;
             if (Grp.Files.Any(f => f.Name == "CREDITS"))
             {
-                Items.Add(new SystemTextureItem(systemTextureFile.SystemTextures.First(s => s.GrpIndex == Grp.Files.First(g => g.Name == "CREDITS").Index), this, "SYSTEX_HAROOHIE_CREDITS", true, 0, height: 192));
+                Items.Add(new SystemTextureItem(systemTextureFile.SystemTextures.First(s => s.GrpIndex == Grp.Files.First(g => g.Name == "CREDITS").Index), this, "SYSTEX_SPLASH_CREDITS", true, 0, height: 192));
             }
             tracker.Finished++;
             foreach (SystemTexture extraSysTex in systemTextureFile.SystemTextures.Where(s => Grp.Files.Where(g => g.Name.StartsWith("XTR")).Distinct().Select(g => g.Index).Contains(s.GrpIndex)))
