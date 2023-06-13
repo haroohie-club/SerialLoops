@@ -2,6 +2,7 @@
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Utility;
 using System;
+using static SerialLoops.Lib.Script.Parameters.ScreenScriptParameter;
 
 namespace SerialLoops.Controls
 {
@@ -13,24 +14,31 @@ namespace SerialLoops.Controls
         private ILogger _log;
         private Button _topScreenButton;
         private Button _bottomScreenButton;
+        private CheckBox _bothScreensCheckbox;
 
-        private bool _topScreenSelected;
-        public bool TopScreenSelected 
+        private bool _allowSelectingBoth;
+        private DsScreen _selectedScreen;
+        public DsScreen SelectedScreen 
         {
-            get => _topScreenSelected;
+            get => _selectedScreen;
             set
             {
-                _topScreenSelected = value;
-                _topScreenButton.Enabled = !value;
-                _bottomScreenButton.Enabled = value;
+                _selectedScreen = value;
+                _topScreenButton.Enabled = value is not (DsScreen.TOP or DsScreen.BOTH);
+                _bottomScreenButton.Enabled = value is not (DsScreen.BOTTOM or DsScreen.BOTH);
+                if (_allowSelectingBoth)
+                {
+                    _bothScreensCheckbox.Checked = value == DsScreen.BOTH;
+                }
                 ScreenChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 
-        public ScreenSelector(ILogger log, bool topScreenSelected = true)
+        public ScreenSelector(ILogger log, DsScreen selectedScreen, bool allowSelectingBoth)
         {
             _log = log;
-            _topScreenSelected = topScreenSelected;
+            _allowSelectingBoth = allowSelectingBoth;
+            _selectedScreen = selectedScreen;
 
             InitializeComponent();
         }
@@ -40,36 +48,69 @@ namespace SerialLoops.Controls
             _topScreenButton = new Button
             {
                 Image = ControlGenerator.GetIcon("Top_Screen", _log),
-                Size = new(35, 21),
-                Enabled = !_topScreenSelected
+                Size = new(35, 20),
+                MinimumSize = new(35, 20),
+                ToolTip = "Top Screen",
+                Enabled = _selectedScreen is not (DsScreen.TOP or DsScreen.BOTH)
             };
             _topScreenButton.Click += TopScreenButton_Click;
 
             _bottomScreenButton = new Button
             {
                 Image = ControlGenerator.GetIcon("Bottom_Screen", _log),
-                Size = new(35, 21),
-                Enabled = _topScreenSelected
+                Size = new(35, 20),
+                MinimumSize = new(35, 20),
+                ToolTip = "Bottom Screen",
+                Enabled = _selectedScreen is not (DsScreen.BOTTOM or DsScreen.BOTH)
             };
             _bottomScreenButton.Click += BottomScreenButton_Click;
 
-            Content = new StackLayout
+            StackLayout layout = new()
             {
-                Orientation = Orientation.Vertical,
-                Items = { _topScreenButton, _bottomScreenButton },
-                Spacing = 2,
+                Orientation = Orientation.Horizontal,
+                VerticalContentAlignment = VerticalAlignment.Center,
+                Items =
+                {
+                    new StackLayout
+                    {
+                        Orientation = Orientation.Vertical,
+                        Items = { _topScreenButton, _bottomScreenButton },
+                        Spacing = 2,
+                        Padding = 0,
+                        ToolTip = "Both Screens",
+                    }
+                },
+                Spacing = 5,
                 Padding = 0,
             };
+            
+            if (_allowSelectingBoth)
+            {
+                _bothScreensCheckbox = new CheckBox
+                {
+                    Text = "Both",
+                    Checked = _selectedScreen == DsScreen.BOTH
+                };
+                _bothScreensCheckbox.CheckedChanged += BothScreensCheckbox_CheckedChanged;
+                layout.Items.Add(_bothScreensCheckbox);
+            }
+            
+            Content = layout;
+        }
+
+        private void BothScreensCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            SelectedScreen = _bothScreensCheckbox.Checked is true ? DsScreen.BOTH : DsScreen.TOP;
         }
 
         private void TopScreenButton_Click(object sender, EventArgs e)
         {
-            TopScreenSelected = true;
+            SelectedScreen = DsScreen.TOP;
         }
 
         private void BottomScreenButton_Click(object sender, EventArgs e)
         {
-            TopScreenSelected = false;
+            SelectedScreen = DsScreen.BOTTOM;
         }
     }
 }

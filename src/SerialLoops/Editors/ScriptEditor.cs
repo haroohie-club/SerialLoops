@@ -1248,13 +1248,16 @@ namespace SerialLoops.Editors
                         break;
 
                     case ScriptParameter.ParameterType.SCREEN:
-                        ScriptCommandDropDown screenDropDown = new() { Command = command, ParameterIndex = i, CurrentShort = currentShort };
-                        screenDropDown.Items.AddRange(Enum.GetNames<ScreenScriptParameter.DsScreen>().Select(t => new ListItem { Text = t, Key = t }));
-                        screenDropDown.SelectedKey = ((ScreenScriptParameter)parameter).Screen.ToString();
-                        screenDropDown.SelectedKeyChanged += ScreenDropDown_SelectedKeyChanged;
+                        ScriptCommandScreenSelector screenSelector = new(_log, ((ScreenScriptParameter) parameter).Screen, true)
+                        {
+                            Command = command,
+                            ParameterIndex = i,
+                            CurrentShort = i
+                        };
+                        screenSelector.ScreenChanged += ScreenSelector_ScreenChanged;
 
                         ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
-                            ControlGenerator.GetControlWithLabel(parameter.Name, screenDropDown));
+                            ControlGenerator.GetControlWithLabel(parameter.Name, screenSelector));
                         break;
 
                     case ScriptParameter.ParameterType.SCRIPT_SECTION:
@@ -2278,16 +2281,14 @@ namespace SerialLoops.Editors
             UpdateTabTitle(false);
             Application.Instance.Invoke(() => UpdatePreview());
         }
-        private void ScreenDropDown_SelectedKeyChanged(object sender, EventArgs e)
+        private void ScreenSelector_ScreenChanged(object sender, EventArgs e)
         {
-            ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
-            _log.Log($"Attempting to modify parameter {dropDown.ParameterIndex} to screen {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
-            ((ScreenScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Screen =
-                Enum.Parse<ScreenScriptParameter.DsScreen>(dropDown.SelectedKey);
-            _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
-                .Objects[dropDown.Command.Index].Parameters[dropDown.CurrentShort] =
-                (short)Enum.Parse<ScreenScriptParameter.DsScreen>(dropDown.SelectedKey);
-            UpdateTabTitle(false, dropDown);
+            ScriptCommandScreenSelector selector = (ScriptCommandScreenSelector)sender;
+            _log.Log($"Attempting to modify parameter {selector.ParameterIndex} to screen {selector.SelectedScreen} in {selector.Command.Index} in file {_script.Name}...");
+            ((ScreenScriptParameter) selector.Command.Parameters[selector.ParameterIndex]).Screen = selector.SelectedScreen;
+            _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(selector.Command.Section)]
+                .Objects[selector.Command.Index].Parameters[selector.CurrentShort] = (short) selector.SelectedScreen;
+            UpdateTabTitle(false, selector);
             Application.Instance.Invoke(() => UpdatePreview());
         }
         private void ScriptSectionDropDown_SelectedKeyChanged(object sender, EventArgs e)

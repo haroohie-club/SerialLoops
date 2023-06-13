@@ -14,8 +14,9 @@ namespace SerialLoops
     partial class SearchDialog : FindItemsDialog
     {
         private ItemResultsPanel _results;
-        private TextBox _searchInput;
+        private SearchBox _searchInput;
         private bool _titlesOnly = true;
+        public string Text { get => _searchInput.Text; set => _searchInput.Text = value; }
 
         void InitializeComponent()
         {
