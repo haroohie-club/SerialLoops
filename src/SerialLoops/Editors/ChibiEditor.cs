@@ -1,9 +1,13 @@
 ﻿using Eto.Forms;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Controls;
+using SerialLoops.Dialogs;
 using SerialLoops.Lib.Items;
 using SerialLoops.Utility;
+using SkiaSharp;
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace SerialLoops.Editors
@@ -50,9 +54,58 @@ namespace SerialLoops.Editors
 
             _directionSelector = new(_log)
             {
-                Direction = ChibiItem.Direction.DOWN_RIGHT
+                Direction = ChibiItem.Direction.DOWN_LEFT
             };
             _directionSelector.DirectionChanged += ChibiSelection_SelectedKeyChanged;
+
+            Button exportGifButton = new() { Text = "Export GIF" };
+            exportGifButton.Click += (sender, args) =>
+            {
+                SaveFileDialog saveFileDialog = new()
+                {
+                    Title = "Save chibi GIF",
+                };
+                saveFileDialog.Filters.Add(new("GIF file", ".gif"));
+
+                if (saveFileDialog.ShowAndReportIfFileSelected(this))
+                {
+                    List<SKBitmap> frames = new();
+                    foreach ((SKGuiImage frame, int timing) in _animatedImage.FramesWithTimings)
+                    {
+                        for (int i = 0; i < timing; i++)
+                        {
+                            frames.Add(frame.SkBitmap);
+                        }
+                    }
+
+                    LoopyProgressTracker tracker = new();
+                    _ = new ProgressDialog(() => frames.SaveGif(saveFileDialog.FileName, tracker), () => MessageBox.Show("GIF exported!"), tracker, "Exporting GIF...");
+                }
+            };
+            Button exportSpritesButton = new() { Text = "Export Sprites" };
+            exportSpritesButton.Click += (sender, args) =>
+            {
+                SelectFolderDialog folderDialog = new()
+                {
+                    Title = "Select chibi export folder"
+                };
+                if (folderDialog.ShowAndReportIfFolderSelected(this))
+                {
+                    int i = 0;
+                    foreach ((SKGuiImage frame, int timing) in _animatedImage.FramesWithTimings)
+                    {
+                        try
+                        {
+                            using FileStream frameStream = File.Create(Path.Combine(folderDialog.Directory, $"{_chibi.DisplayName}_{_animationSelection.SelectedKey}_{_directionSelector.Direction}_{i++:D3}_{timing}f.png"));
+                            frame.SkBitmap.Encode(frameStream, SKEncodedImageFormat.Png, 1);
+                        }
+                        catch (Exception ex)
+                        {
+                            _log.LogError($"Failed to export chibi animation {i} for chibi {_chibi.DisplayName} to file: {ex.Message}\n\n{ex.StackTrace}");
+                        }
+                    }
+                }
+            };
 
             return new TableLayout
             {
@@ -81,7 +134,19 @@ namespace SerialLoops.Editors
                             Padding = 10,
                             Content = new Scrollable { Content = GetFramesStack() }
                         }
-                    )
+                    ),
+                    new(
+                        new StackLayout
+                        {
+                            Orientation = Orientation.Horizontal,
+                            Spacing = 3,
+                            Items =
+                            {
+                                exportSpritesButton,
+                                exportGifButton,
+                            }
+                        }
+                    ),
                 }
             };
         }
@@ -100,9 +165,20 @@ namespace SerialLoops.Editors
         private void UpdateFramesStack()
         {
             _framesStack.Items.Clear();
-            foreach (SKGuiImage image in _animatedImage.FramesWithTimings.Select(f => f.Frame))
+            foreach ((SKGuiImage image, int timing) in _animatedImage.FramesWithTimings)
             {
-                _framesStack.Items.Add(image);
+                StackLayout frameLayout = new()
+                {
+                    Orientation = Orientation.Vertical,
+                    Spacing = 3,
+                    HorizontalContentAlignment = HorizontalAlignment.Center,
+                    Items =
+                    {
+                        image,
+                        $"{timing} frames",
+                    }
+                };
+                _framesStack.Items.Add(frameLayout);
             }
         }
 

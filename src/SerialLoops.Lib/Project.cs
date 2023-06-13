@@ -305,10 +305,13 @@ namespace SerialLoops.Lib
             Items.AddRange(chrdata.Sprites.Where(s => (int)s.Character > 0).Select(s => new CharacterSpriteItem(s, chrdata, this)));
             tracker.Finished++;
 
-            tracker.Focus("Chibis", 1);
-            Items.AddRange(Dat.Files.First(d => d.Name == "CHIBIS").CastTo<ChibiFile>()
-                .Chibis.Select(c => new ChibiItem(c, this)));
-            tracker.Finished++;
+            ChibiFile chibiFile = Dat.Files.First(d => d.Name == "CHIBIS").CastTo<ChibiFile>();
+            tracker.Focus("Chibis", chibiFile.Chibis.Count);
+            foreach (Chibi chibi in chibiFile.Chibis)
+            {
+                Items.Add(new ChibiItem(chibi, this));
+                tracker.Finished++;
+            }
 
             tracker.Focus("Dialogue Configs", 1);
             Items.AddRange(Dat.Files.First(d => d.Name == "MESSINFOS").CastTo<MessageInfoFile>()
