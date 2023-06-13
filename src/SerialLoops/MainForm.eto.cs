@@ -67,15 +67,15 @@ namespace SerialLoops
             SearchBox = new()
             {
                 PlaceholderText = "Search...",
-                ToolTip = "Search for items by name, ID, or type."
+                ToolTip = "Search for items by name, ID, or type.",
             };
             ItemExplorer = new(project, EditorTabs, SearchBox, Log);
             Title = $"{BASE_TITLE} - {project.Name}";
             Content = new TableLayout(new TableRow
             (
-                new TableLayout(SearchBox, ItemExplorer),
+                new TableLayout(SearchBox, ItemExplorer) { Spacing = new(0, 5) },
                 EditorTabs
-            ));
+            )) { Spacing = new(0, 5) };
             EditorTabs.Tabs_PageChanged(this, EventArgs.Empty);
 
             LoadCachedData(project, tracker);
