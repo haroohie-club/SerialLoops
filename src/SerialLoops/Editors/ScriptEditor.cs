@@ -1822,7 +1822,7 @@ namespace SerialLoops.Editors
 
                 foreach (PositionedSprite sprite in sprites.Values.OrderBy(p => p.Positioning.Layer))
                 {
-                    SKBitmap spriteBitmap = sprite.Sprite.GetClosedMouthAnimation(_project)[0].frame;
+                    SKBitmap spriteBitmap = sprite.Sprite.GetClosedMouthAnimation(_project)[0].Frame;
                     canvas.DrawBitmap(spriteBitmap, sprite.Positioning.GetSpritePosition(spriteBitmap), sprite.PalEffect);
                 }
 

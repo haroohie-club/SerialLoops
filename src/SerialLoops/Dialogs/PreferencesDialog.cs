@@ -201,7 +201,7 @@ namespace SerialLoops.Dialogs
             protected override void SelectButton_OnClick(object sender, EventArgs e)
             {
                 SelectFolderDialog selectFolderDialog = new();
-                if (selectFolderDialog.ShowAndReportIfFileSelected(GetControl()))
+                if (selectFolderDialog.ShowAndReportIfFolderSelected(GetControl()))
                 {
                     _pathBox.Text = selectFolderDialog.Directory;
                 }
