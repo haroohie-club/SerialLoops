@@ -1,29 +1,29 @@
-<center>
-<h1>
-  <img alt="Serial Loops app icon; the letters 'SL' emblazoned above four translucent gray rings within a rounded square box colored with a blue-to-green gradient along the negative X-Z axis" src="src/SerialLoops/Icons/AppIcon.png" width="135px" />
-  <br/>
-  Serial Loops
+<h1 align="center">
+    <img alt="Serial Loops app icon; the letters 'SL' emblazoned above four translucent gray rings within a rounded square box colored with a blue-to-green gradient along the negative X-Z axis" src="src/SerialLoops/Icons/AppIcon.png" width="135px" />
+    <br/>
+    Serial Loops
 </h1>
-<a href="https://dev.azure.com/jonko0493/haroohie-private/_apis/build/status%2FSerialLoops-Official?branchName=main">
-  <img alt="Azure Pipelines build status badge" src="https://dev.azure.com/jonko0493/haroohie-private/_apis/build/status%2FSerialLoops-Official?branchName=main" />
-</a>
-<a href="https://discord.gg/nesRSbpeFM">
-  <img alt="Haroohie Translation Club Discord Server badge " src="https://img.shields.io/discord/904791358609424436.svg?label=&logo=discord&logoColor=fff&color=7389D8&labelColor=6A7EC2" />
-</a>
-<a href="https://haroohie.club/chokuretsu/serial-loops/docs">
-  <img alt="Serial Loops documentation link badge" src="https://img.shields.io/badge/docs-haroohie.club-00C4F5?logo=github" />
-</a>
-</center>
+<p align="center">
+    <a href="https://dev.azure.com/jonko0493/haroohie-private/_apis/build/status%2FSerialLoops-Official?branchName=main">
+        <img alt="Azure Pipelines build status badge" src="https://dev.azure.com/jonko0493/haroohie-private/_apis/build/status%2FSerialLoops-Official?branchName=main" />
+    </a>
+    <a href="https://discord.gg/nesRSbpeFM">
+        <img alt="Haroohie Translation Club Discord Server badge " src="https://img.shields.io/discord/904791358609424436.svg?label=&logo=discord&logoColor=fff&color=7389D8&labelColor=6A7EC2" />
+    </a>
+    <a href="https://haroohie.club/chokuretsu/serial-loops/docs">
+        <img alt="Serial Loops documentation link badge" src="https://img.shields.io/badge/docs-haroohie.club-00C4F5?logo=github" />
+    </a>
+</p>
 
 **Serial Loops** is a fully-fledged editor for the Nintendo DS game, _Suzumiya Haruhi no Chokuretsu_ (The Series of Haruhi Suzumiya).
 
 ## Screenshots
-<center>
+<p align="center">
   <img width="325px" src="https://haroohie.club/images/chokuretsu/serial-loops/script-editor.png" alt="Screenshot of the Serial Loops script editor, featuring the 'EV2_029' script being edited. A list of commands is displayed in a list view panel, with buttons to add, remove and clear commands, with information about the currently selected command displayed on the right. Haruhi and Tsuruya are displayed on a preview of the Nintendo DS screen." />
   <img width="325px" src="https://haroohie.club/images/chokuretsu/serial-loops/map-editing.png" alt="Screenshot of the Serial Loops map editor, featuring the 'SLD1' map open with checkboxes to show/hide the camera position and collision grid" />
   <img width="325px" src="https://haroohie.club/images/chokuretsu/serial-loops/sound-editing.png" alt="Screenshot of the Serial Loops sound editor, featuring a modal widget with a sound wave graph. Buttons to start and stop playback are present, as are sliders and a checkbox to enable looping and adjust the track loop start and end points." />
   <img width="325px" src="https://haroohie.club/images/chokuretsu/serial-loops/home-screen.png" alt="Screenshot of the Serial Loops home screen. The Serial Loops logo and title sits at the top of the menu. Below that, under 'Start' on the left hand side, options to create a project, open an existing project, and modify preferences are present. An empty list of 'Recents' is visible on the right hand side, where recent projects would appear." />
-</center>
+</p>
 
 ## Installation
 ### Prerequisites
