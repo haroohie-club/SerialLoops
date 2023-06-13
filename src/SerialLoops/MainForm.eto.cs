@@ -51,6 +51,7 @@ namespace SerialLoops
 
         private void OpenProjectView(Project project, IProgressTracker tracker)
         {
+            InitializeBaseMenu();
             InitializeProjectMenu();
 
             using Stream blankNameplateStream = Assembly.GetCallingAssembly()
