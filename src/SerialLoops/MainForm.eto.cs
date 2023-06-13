@@ -727,11 +727,12 @@ namespace SerialLoops
         {
             if (OpenProject is not null)
             {
-                if (CurrentConfig.EmulatorPath is null)
+                if (string.IsNullOrWhiteSpace(CurrentConfig.EmulatorPath))
                 {
-                    MessageBox.Show("No emulator path set. Please set the path to your emulator.", "No Emulator Path",
-                        MessageBoxType.Warning);
-                    Log.LogWarning("No emulator path set. Please set the path to your emulator.");
+                    MessageBox.Show("No emulator path has been set.\nPlease set the path to a Nintendo DS emulator in Preferences to use Build & Run.", 
+                        "No Emulator Path", MessageBoxType.Warning);
+                    Log.LogWarning("Attempted to build and run project while no emulator path was set.");
+                    PreferencesCommand_Executed(sender, e);
                     return;
                 }
 
