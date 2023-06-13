@@ -117,13 +117,16 @@ namespace SerialLoops
             // File
             Command newProjectCommand = new()
             {
-                MenuText = "New Project...", ToolBarText = "New Project", Image = ControlGenerator.GetIcon("New", Log)
+                MenuText = "New Project...",
+                ToolBarText = "New Project",
+                Image = ControlGenerator.GetIcon("New", Log)
             };
             newProjectCommand.Executed += NewProjectCommand_Executed;
 
             Command openProjectCommand = new()
             {
-                MenuText = "Open Project...", ToolBarText = "Open Project",
+                MenuText = "Open Project...",
+                ToolBarText = "Open Project",
                 Image = ControlGenerator.GetIcon("Open", Log)
             };
             openProjectCommand.Executed += OpenProject_Executed;
@@ -137,11 +140,11 @@ namespace SerialLoops
             checkForUpdatesCommand.Executed += (sender, e) => new UpdateChecker(this).Check();
 
             // About
-            Command aboutCommand = new() {MenuText = "About...", Image = ControlGenerator.GetIcon("Help", Log)};
+            Command aboutCommand = new() { MenuText = "About...", Image = ControlGenerator.GetIcon("Help", Log) };
             aboutCommand.Executed += (sender, e) => new AboutDialog
             {
                 ProgramName = "Serial Loops",
-                Developers = new[] {"Jonko", "William278"},
+                Developers = new[] { "Jonko", "William278" },
                 Copyright = "© Haroohie Translation Club, 2023",
                 Website = new Uri("https://haroohie.club"),
                 Version = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>()
@@ -149,7 +152,7 @@ namespace SerialLoops
             }.ShowDialog(this);
 
             // Create Menu
-            _recentProjectsCommand = new() {Text = "Recent Projects"};
+            _recentProjectsCommand = new() { Text = "Recent Projects" };
             Menu = new MenuBar
             {
                 Items =
@@ -181,60 +184,70 @@ namespace SerialLoops
             // File
             Command saveProjectCommand = new()
             {
-                MenuText = "Save Project", ToolBarText = "Save Project",
-                Shortcut = Application.Instance.CommonModifier | Keys.S, Image = ControlGenerator.GetIcon("Save", Log)
+                MenuText = "Save Project",
+                ToolBarText = "Save Project",
+                Shortcut = Application.Instance.CommonModifier | Keys.S,
+                Image = ControlGenerator.GetIcon("Save", Log)
             };
             saveProjectCommand.Executed += SaveProject_Executed;
 
             Command projectSettingsCommand = new()
             {
-                MenuText = "Project Settings...", ToolBarText = "Project Settings",
-                Image = ControlGenerator.GetIcon("Project_Options", Log)
+                MenuText = "Project Settings...",
+                ToolBarText = "Project Settings",
+                Image = ControlGenerator.GetIcon("Project_Options", Log),
             };
             projectSettingsCommand.Executed += ProjectSettings_Executed;
 
-            Command migrateProjectCommand = new() {MenuText = "Migrate to new ROM", ToolBarText = "Migrate Project"};
+            Command migrateProjectCommand = new() { MenuText = "Migrate to new ROM", ToolBarText = "Migrate Project" };
             migrateProjectCommand.Executed += MigrateProject_Executed;
 
-            Command exportPatchCommand = new() {MenuText = "Export Patch", ToolBarText = "Export Patch"};
+            Command exportPatchCommand = new() { MenuText = "Export Patch", ToolBarText = "Export Patch" };
             exportPatchCommand.Executed += Patch_Executed;
 
             Command closeProjectCommand = new()
             {
-                MenuText = "Close Project", ToolBarText = "Close Project",
+                MenuText = "Close Project",
+                ToolBarText = "Close Project",
                 Image = ControlGenerator.GetIcon("Close", Log)
             };
             closeProjectCommand.Executed += (sender, args) => CloseProjectView();
 
             // Tools
-            Command renameItemCommand = new() {MenuText = "Rename Item", Shortcut = Keys.F2};
+            Command renameItemCommand = new() { MenuText = "Rename Item", Shortcut = Keys.F2 };
             renameItemCommand.Executed +=
                 (sender, args) => Shared.RenameItem(OpenProject, ItemExplorer, EditorTabs, Log);
 
+            Command editUiTextCommand = new() { MenuText = "Edit UI Text" };
+            editUiTextCommand.Executed += EditUiTextCommand_Executed;
+
             Command searchProjectCommand = new()
             {
-                MenuText = "Search...", ToolBarText = "Search", Shortcut = Application.Instance.CommonModifier | Keys.F,
+                MenuText = "Search...",
+                ToolBarText = "Search",
+                Shortcut = Application.Instance.CommonModifier | Keys.F,
                 Image = ControlGenerator.GetIcon("Search", Log)
             };
             searchProjectCommand.Executed += Search_Executed;
 
-            Command findOrphanedItemsCommand = new() {MenuText = "Find Orphaned Items..."};
+            Command findOrphanedItemsCommand = new() { MenuText = "Find Orphaned Items..." };
             findOrphanedItemsCommand.Executed += FindOrphanedItems_Executed;
 
             // Build
             Command buildIterativeProjectCommand = new()
-                {MenuText = "Build", ToolBarText = "Build", Image = ControlGenerator.GetIcon("Build", Log)};
+            { MenuText = "Build", ToolBarText = "Build", Image = ControlGenerator.GetIcon("Build", Log) };
             buildIterativeProjectCommand.Executed += BuildIterativeProject_Executed;
 
             Command buildBaseProjectCommand = new()
             {
-                MenuText = "Build from Scratch", ToolBarText = "Build from Scratch",
+                MenuText = "Build from Scratch",
+                ToolBarText = "Build from Scratch",
                 Image = ControlGenerator.GetIcon("Build_Scratch", Log)
             };
             buildBaseProjectCommand.Executed += BuildBaseProject_Executed;
 
             Command buildAndRunProjectCommand = new()
-                {MenuText = "Build and Run", ToolBarText = "Run", Image = ControlGenerator.GetIcon("Build_Run", Log)};
+            { MenuText = "Build and Run", ToolBarText = "Run", Image = ControlGenerator.GetIcon("Build_Run", Log) };
             buildAndRunProjectCommand.Executed += BuildAndRunProject_Executed;
 
             // Add toolbar
@@ -254,17 +267,34 @@ namespace SerialLoops
             {
                 fileMenu.Items.AddRange(new[]
                 {
-                    saveProjectCommand, projectSettingsCommand, migrateProjectCommand, exportPatchCommand,
+                    saveProjectCommand,
+                    projectSettingsCommand,
+                    migrateProjectCommand,
+                    exportPatchCommand,
                     closeProjectCommand
                 });
             }
 
             Menu.Items.Add(new SubMenuItem
-                {Text = "&Tools", Items = {renameItemCommand, searchProjectCommand, findOrphanedItemsCommand}});
+            { 
+                Text = "&Tools",
+                Items = 
+                {
+                    renameItemCommand,
+                    editUiTextCommand,
+                    searchProjectCommand,
+                    findOrphanedItemsCommand,
+                } 
+            });
             Menu.Items.Add(new SubMenuItem
             {
                 Text = "&Build",
-                Items = {buildIterativeProjectCommand, buildBaseProjectCommand, buildAndRunProjectCommand}
+                Items =
+                {
+                    buildIterativeProjectCommand,
+                    buildBaseProjectCommand,
+                    buildAndRunProjectCommand
+                }
             });
         }
 
@@ -343,7 +373,7 @@ namespace SerialLoops
             List<string> projectsToRemove = new();
             foreach (string project in ProjectsCache.RecentProjects)
             {
-                Command recentProject = new() {MenuText = Path.GetFileNameWithoutExtension(project), ToolTip = project};
+                Command recentProject = new() { MenuText = Path.GetFileNameWithoutExtension(project), ToolTip = project };
                 recentProject.Executed += OpenRecentProject_Executed;
                 if (!File.Exists(project))
                 {
@@ -376,7 +406,7 @@ namespace SerialLoops
 
         public void NewProjectCommand_Executed(object sender, EventArgs e)
         {
-            ProjectCreationDialog projectCreationDialog = new() {Config = CurrentConfig, Log = Log};
+            ProjectCreationDialog projectCreationDialog = new() { Config = CurrentConfig, Log = Log };
             projectCreationDialog.ShowModal(this);
             if (projectCreationDialog.NewProject is not null)
             {
@@ -394,7 +424,7 @@ namespace SerialLoops
 
         public void OpenProject_Executed(object sender, EventArgs e)
         {
-            OpenFileDialog openFileDialog = new() {Directory = new Uri(CurrentConfig.ProjectsDirectory)};
+            OpenFileDialog openFileDialog = new() { Directory = new Uri(CurrentConfig.ProjectsDirectory) };
             openFileDialog.Filters.Add(new("Serial Loops Project", $".{Project.PROJECT_FORMAT}"));
             if (openFileDialog.ShowAndReportIfFileSelected(this))
             {
@@ -411,7 +441,7 @@ namespace SerialLoops
 
         private void OpenRecentProject_Executed(object sender, EventArgs e)
         {
-            OpenProjectFromPath(((Command) sender).ToolTip);
+            OpenProjectFromPath(((Command)sender).ToolTip);
         }
 
         public void OpenProjectFromPath(string path)
@@ -515,10 +545,10 @@ namespace SerialLoops
                             savedExtra = true;
                         }
 
-                        ((BackgroundItem) item).Write(OpenProject, Log);
+                        ((BackgroundItem)item).Write(OpenProject, Log);
                         break;
                     case ItemDescription.ItemType.Character:
-                        CharacterItem characterItem = (CharacterItem) item;
+                        CharacterItem characterItem = (CharacterItem)item;
                         if (characterItem.NameplateProperties.Name != item.DisplayName[4..])
                         {
                             Shared.RenameItem(OpenProject, ItemExplorer, EditorTabs, Log,
@@ -527,13 +557,13 @@ namespace SerialLoops
 
                         nameplateCanvas.DrawBitmap(
                             characterItem.GetNewNameplate(_blankNameplate, _blankNameplateBaseArrow, OpenProject),
-                            new SKRect(0, 16 * ((int) characterItem.MessageInfo.Character - 1), 64,
-                                16 * ((int) characterItem.MessageInfo.Character)));
+                            new SKRect(0, 16 * ((int)characterItem.MessageInfo.Character - 1), 64,
+                                16 * ((int)characterItem.MessageInfo.Character)));
                         speakerCanvas.DrawBitmap(
                             characterItem.GetNewNameplate(_blankNameplate, _blankNameplateBaseArrow, OpenProject,
                                 transparent: true),
-                            new SKRect(0, 16 * ((int) characterItem.MessageInfo.Character - 1), 64,
-                                16 * ((int) characterItem.MessageInfo.Character)));
+                            new SKRect(0, 16 * ((int)characterItem.MessageInfo.Character - 1), 64,
+                                16 * ((int)characterItem.MessageInfo.Character)));
                         changedNameplates = true;
                         break;
                     case ItemDescription.ItemType.BGM:
@@ -546,7 +576,7 @@ namespace SerialLoops
 
                         break;
                     case ItemDescription.ItemType.Place:
-                        PlaceItem placeItem = (PlaceItem) item;
+                        PlaceItem placeItem = (PlaceItem)item;
                         if (placeItem.PlaceName != item.DisplayName[4..])
                         {
                             Shared.RenameItem(OpenProject, ItemExplorer, EditorTabs, Log, $"PLC_{placeItem.PlaceName}");
@@ -561,7 +591,7 @@ namespace SerialLoops
                             placeStream.ToArray(), OpenProject, Log);
                         break;
                     case ItemDescription.ItemType.Scenario:
-                        ScenarioStruct scenario = ((ScenarioItem) item).Scenario;
+                        ScenarioStruct scenario = ((ScenarioItem)item).Scenario;
                         IO.WriteStringFile(
                             Path.Combine("assets", "events",
                                 $"{OpenProject.Evt.Files.First(f => f.Name == "SCENARIOS").Index:X3}.s"),
@@ -582,7 +612,7 @@ namespace SerialLoops
                             OpenProject, Log);
                         break;
                     case ItemDescription.ItemType.Script:
-                        EventFile evt = ((ScriptItem) item).Event;
+                        EventFile evt = ((ScriptItem)item).Event;
                         evt.CollectGarbage();
                         IO.WriteStringFile(Path.Combine("assets", "events", $"{evt.Index:X3}.s"), evt.GetSource(new()),
                             OpenProject, Log);
@@ -594,14 +624,12 @@ namespace SerialLoops
                         changedTopics = true;
                         break;
                     case ItemDescription.ItemType.Voice:
-                        VoicedLineItem vce = (VoicedLineItem) item;
+                        VoicedLineItem vce = (VoicedLineItem)item;
                         if (OpenProject.VoiceMap is not null)
                         {
                             changedSubs = true;
                         }
-
                         break;
-
                     default:
                         Log.LogWarning($"Saving for {item.Type}s not yet implemented.");
                         break;
@@ -645,6 +673,15 @@ namespace SerialLoops
             }
         }
 
+        private void EditUiTextCommand_Executed(object sender, EventArgs e)
+        {
+            if (OpenProject is not null)
+            {
+                EditUiTextDialog editUiTextDialog = new(OpenProject, Log);
+                editUiTextDialog.ShowModal(this);
+            }
+        }
+
         private void Search_Executed(object sender, EventArgs e)
         {
             if (OpenProject is not null)
@@ -665,7 +702,7 @@ namespace SerialLoops
             {
                 OrphanedItemsDialog orphanedItemsDialog = null;
                 LoopyProgressTracker tracker = new("");
-                ((IProgressTracker) tracker).Focus("Finding orphaned items...", 1);
+                ((IProgressTracker)tracker).Focus("Finding orphaned items...", 1);
 
                 ProgressDialog _ = new(() =>
                     {
@@ -729,7 +766,7 @@ namespace SerialLoops
             {
                 if (string.IsNullOrWhiteSpace(CurrentConfig.EmulatorPath))
                 {
-                    MessageBox.Show("No emulator path has been set.\nPlease set the path to a Nintendo DS emulator in Preferences to use Build & Run.", 
+                    MessageBox.Show("No emulator path has been set.\nPlease set the path to a Nintendo DS emulator in Preferences to use Build & Run.",
                         "No Emulator Path", MessageBoxType.Warning);
                     Log.LogWarning("Attempted to build and run project while no emulator path was set.");
                     PreferencesCommand_Executed(sender, e);
@@ -772,7 +809,7 @@ namespace SerialLoops
 
         private void MigrateProject_Executed(object sender, EventArgs e)
         {
-            OpenFileDialog openFileDialog = new() {Title = "New Base ROM"};
+            OpenFileDialog openFileDialog = new() { Title = "New Base ROM" };
             openFileDialog.Filters.Add(new("Chokuretsu ROM", ".nds"));
 
             if (openFileDialog.ShowAndReportIfFileSelected(this))
@@ -790,14 +827,14 @@ namespace SerialLoops
 
         private void Patch_Executed(object sender, EventArgs e)
         {
-            OpenFileDialog baseRomDialog = new() {Title = "Select base ROM"};
-            baseRomDialog.Filters.Add(new() {Name = "NDS ROM", Extensions = new string[] {".nds"}});
+            OpenFileDialog baseRomDialog = new() { Title = "Select base ROM" };
+            baseRomDialog.Filters.Add(new() { Name = "NDS ROM", Extensions = new string[] { ".nds" } });
             if (baseRomDialog.ShowAndReportIfFileSelected(this))
             {
                 string currentRom = Path.Combine(OpenProject.MainDirectory, $"{OpenProject.Name}.nds");
 
-                SaveFileDialog outputPatchDialog = new() {Title = "Output patch location"};
-                outputPatchDialog.Filters.Add(new() {Name = "XDelta patch", Extensions = new string[] {".xdelta"}});
+                SaveFileDialog outputPatchDialog = new() { Title = "Output patch location" };
+                outputPatchDialog.Filters.Add(new() { Name = "XDelta patch", Extensions = new string[] { ".xdelta" } });
                 if (outputPatchDialog.ShowAndReportIfFileSelected(this))
                 {
                     LoopyProgressTracker tracker = new();

@@ -231,14 +231,14 @@ namespace SerialLoops.Editors
 
             NumericStepper puzzlePhaseGroupStepper = new()
             {
-                Value = _topic.Topic.GroupSelection,
+                Value = _topic.Topic.PuzzlePhaseGroup,
                 DecimalPlaces = 0,
                 MinValue = 0,
                 MaxValue = 8,
             };
             puzzlePhaseGroupStepper.ValueChanged += (sender, args) =>
             {
-                _topic.Topic.GroupSelection = (byte)puzzlePhaseGroupStepper.Value;
+                _topic.Topic.PuzzlePhaseGroup = (byte)puzzlePhaseGroupStepper.Value;
                 UpdateTabTitle(false);
             };
 

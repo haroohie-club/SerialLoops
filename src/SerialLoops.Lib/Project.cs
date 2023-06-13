@@ -70,6 +70,8 @@ namespace SerialLoops.Lib
         [JsonIgnore]
         public EventFile TopicFile { get; set; }
         [JsonIgnore]
+        public MessageFile UiText { get; set; }
+        [JsonIgnore]
         public MessageInfoFile MessInfo { get; set; }
         [JsonIgnore]
         public VoiceMapFile VoiceMap { get; set; }
@@ -246,7 +248,7 @@ namespace SerialLoops.Lib
             FontBitmap = Grp.Files.First(f => f.Name == "ZENFONTBNF").GetImage(transparentIndex: 0);
             tracker.Finished++;
 
-            tracker.Focus("Static Files", 3);
+            tracker.Focus("Static Files", 4);
             Extra = Dat.Files.First(f => f.Name == "EXTRAS").CastTo<ExtraFile>();
             tracker.Finished++;
             EventFile scenario = Evt.Files.First(f => f.Name == "SCENARIOS");
@@ -254,6 +256,8 @@ namespace SerialLoops.Lib
             Scenario = scenario.Scenario;
             tracker.Finished++;
             MessInfo = Dat.Files.First(f => f.Name == "MESSINFOS").CastTo<MessageInfoFile>();
+            tracker.Finished++;
+            UiText = Dat.Files.First(f => f.Name == "MESSS").CastTo<MessageFile>();
             tracker.Finished++;
 
             BgTableFile bgTable = Dat.Files.First(f => f.Name == "BGTBLS").CastTo<BgTableFile>();
