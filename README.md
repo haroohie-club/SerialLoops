@@ -59,8 +59,7 @@ Serial Loops is licensed under the GPLv3. See [LICENSE](LICENSE) for more inform
 Serial Loops requires the .NET 6.0 SDK to build. You can download it [here](https://dotnet.microsoft.com/download/dotnet/6.0). To build Serial Loops for your platform, run:
 
 ```bash
-cd src/platforms/PLATFORM
-dotnet build
+dotnet build src/PLATFORM
 ```
 
 Remember to replace `PLATFORM` with the platform you're on:
