@@ -4,10 +4,10 @@ using SerialLoops.Controls;
 using SerialLoops.Dialogs;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
-using SerialLoops.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using SerialLoops.Utility;
 
 namespace SerialLoops
 {
@@ -15,13 +15,26 @@ namespace SerialLoops
     {
         private ItemResultsPanel _results;
         private SearchBox _searchInput;
-        private bool _titlesOnly = true;
+        
         public string Text { get => _searchInput.Text; set => _searchInput.Text = value; }
+        private Dictionary<SearchQuery.Filter, string> _filters = new();
+        private HashSet<SearchQuery.Flag> _flags = new();
+        private HashSet<ItemDescription.ItemType> _types = Enum.GetValues<ItemDescription.ItemType>().ToHashSet();
+        private SearchQuery _query
+        {
+            get => new()
+            {
+                Text = Text,
+                Filters = _filters,
+                Flags = _flags,
+                Types = _types
+            };
+        }
 
         void InitializeComponent()
         {
             Title = "Find in Project";
-            MinimumSize = new Size(300, 200);
+            MinimumSize = new Size(425, 600);
             Padding = 10;
 
             _results = new(new List<ItemDescription>(), Log)
@@ -31,60 +44,101 @@ namespace SerialLoops
             _searchInput = new()
             {
                 PlaceholderText = "Search...",
-                Size = new Size(200, 25)
+                Size = new Size(250, 25)
             };
             _searchInput.TextChanged += SearchInput_OnTextChanged;
-            
-            CheckBox titlesOnlyBox = new() { Checked = _titlesOnly };
-            titlesOnlyBox.CheckedChanged += TitlesOnlyBox_CheckedChanged;
 
-            Content = new StackLayout
-            {
-                Orientation = Orientation.Vertical,
-                HorizontalContentAlignment = HorizontalAlignment.Center,
-                Spacing = 10,
-                Padding = 10,
-                Items =
-                {
-                    new GroupBox
-                    {
-                        Text = "Search",
-                        Padding = 10,
-                        Content = new StackLayout
-                        {
-                            Orientation = Orientation.Horizontal,
-                            Spacing = 10,
-                            Items =
-                            {
-                                "Find: ",
-                                _searchInput,
-                                ControlGenerator.GetControlWithLabel("Titles Only?", titlesOnlyBox),
-                            }
-                        }
-                    },
-                    _results
-                }
-            };
-
+            Content = new TableLayout(_searchInput, GetFiltersPanel(), _results) { Spacing = new(10, 10) };
             _searchInput.Focus();
         }
         
         private void Search()
         {
-            var searchTerm = _searchInput.Text;
-            _results.Items = !string.IsNullOrWhiteSpace(searchTerm) ? Project.GetSearchResults(searchTerm, _titlesOnly) 
+            _results.Items = !string.IsNullOrWhiteSpace(_query.Text)
+                ? Project.GetSearchResults(_query.Text, _query.IsFlagSet(SearchQuery.Flag.Only_Titles)) 
                 : Enumerable.Empty<ItemDescription>().ToList();
+        }
+
+        private Container GetFiltersPanel()
+        {
+            List<Option> filterOptions = new();
+            foreach (SearchQuery.Filter filter in Enum.GetValues(typeof(SearchQuery.Filter)))
+            {
+                filterOptions.Add(new TextOption
+                {
+                    Name = filter.ToString().ToLower(),
+                    OnChange = text =>
+                    {
+                        if (string.IsNullOrWhiteSpace(text))
+                        {
+                            _filters.Remove(filter);
+                        }
+                        else
+                        {
+                            _filters[filter] = text;
+                        }
+                    },
+                    Value = _filters.TryGetValue(filter, out var value) ? value : ""
+                });
+            }
+            
+            List<Option> flagOptions = new();
+            foreach (SearchQuery.Flag flag in Enum.GetValues(typeof(SearchQuery.Flag)))
+            {
+                flagOptions.Add(new BooleanOption
+                {
+                    Name = flag.ToString().ToLower(),
+                    OnChange = value =>
+                    {
+                        if (value)
+                        {
+                            _flags.Add(flag);
+                        }
+                        else
+                        {
+                            _flags.Remove(flag);
+                        }
+                    },
+                    Value = _flags.Contains(flag)
+                });
+            }
+            
+            List<Option> typeOptions = new();
+            foreach (ItemDescription.ItemType type in Enum.GetValues(typeof(ItemDescription.ItemType)))
+            {
+                typeOptions.Add(new BooleanOption
+                {
+                    Name = type.ToString().ToLower(),
+                    OnChange = value =>
+                    {
+                        if (value)
+                        {
+                            _types.Add(type);
+                        }
+                        else
+                        {
+                            _types.Remove(type);
+                        }
+                    },
+                    Value = _types.Contains(type)
+                });
+            }
+            
+            var layout = new TableLayout(new TableLayout(new TableRow(
+                    new OptionsGroup("Filters", filterOptions),
+                    new OptionsGroup("Flags", flagOptions)
+                )),
+                new OptionsGroup("Items", typeOptions, 3)
+            );
+            
+            // return a collapsible panel containing the layout
+            return new CollapsiblePanel("Advanced...", layout);
         }
 
         private void SearchInput_OnTextChanged(object sender, EventArgs e)
         {
             Search();
         }
-
-        private void TitlesOnlyBox_CheckedChanged(object sender, EventArgs e)
-        {
-            _titlesOnly = ((CheckBox)sender).Checked ?? false;
-            Search();
-        }
+        
     }
 }
