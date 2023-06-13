@@ -19,7 +19,7 @@ namespace SerialLoops.Controls
             _project = project;
             _tabs = tabs;
             _searchBox = searchBox;
-            _searchBox.TextChanging += SearchBox_TextChanging;
+            _searchBox.TextChanged += SearchBox_TextChanged;
             Viewer.SelectedItemChanged += Viewer_SelectedItemChanged;
             if (Viewer.SelectedItem is not null)
             {
@@ -27,11 +27,11 @@ namespace SerialLoops.Controls
             }
         }
 
-        private void SearchBox_TextChanging(object sender, TextChangingEventArgs e)
+        private void SearchBox_TextChanged(object sender, EventArgs e)
         {
-            var searchTerm = e.NewText;
-            Items = !string.IsNullOrWhiteSpace(searchTerm) ? _project.GetSearchResults(searchTerm) : _project.Items;
+            var searchTerm = _searchBox.Text;
             ExpandItems = !string.IsNullOrEmpty(searchTerm);
+            Items = !string.IsNullOrEmpty(searchTerm) ? _project.GetSearchResults(searchTerm) : _project.Items;
         }
 
         private void Viewer_SelectedItemChanged(object sender, EventArgs e)

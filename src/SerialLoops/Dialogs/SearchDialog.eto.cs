@@ -33,7 +33,7 @@ namespace SerialLoops
                 PlaceholderText = "Search...",
                 Size = new Size(200, 25)
             };
-            _searchInput.TextChanging += SearchInput_OnTextChanging;
+            _searchInput.TextChanged += SearchInput_OnTextChanged;
             
             CheckBox titlesOnlyBox = new() { Checked = _titlesOnly };
             titlesOnlyBox.CheckedChanged += TitlesOnlyBox_CheckedChanged;
@@ -69,21 +69,22 @@ namespace SerialLoops
             _searchInput.Focus();
         }
         
-        private void Search(string searchTerm)
+        private void Search()
         {
+            var searchTerm = _searchInput.Text;
             _results.Items = !string.IsNullOrWhiteSpace(searchTerm) ? Project.GetSearchResults(searchTerm, _titlesOnly) 
                 : Enumerable.Empty<ItemDescription>().ToList();
         }
 
-        private void SearchInput_OnTextChanging(object sender, TextChangingEventArgs e)
+        private void SearchInput_OnTextChanged(object sender, EventArgs e)
         {
-            Search(e.NewText);
+            Search();
         }
 
         private void TitlesOnlyBox_CheckedChanged(object sender, EventArgs e)
         {
             _titlesOnly = ((CheckBox)sender).Checked ?? false;
-            Search(_searchInput.Text);
+            Search();
         }
     }
 }
