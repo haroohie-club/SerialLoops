@@ -42,10 +42,10 @@ namespace SerialLoops.Dialogs
                 PlaceholderText = "Filter by name",
                 Width = 150,
             };
-            _filter.TextChanged += (sender, args) =>
+            _filter.TextChanging += (sender, args) =>
             {
                 _selector.DataStore = new ObservableCollection<IPreviewableGraphic>(_items
-                    .Where(i => ((ItemDescription)i).DisplayName.Contains(_filter.Text, StringComparison.OrdinalIgnoreCase)));
+                    .Where(i => ((ItemDescription)i).DisplayName.Contains(args.NewText, StringComparison.OrdinalIgnoreCase)));
             };
 
             _selector = new ListBox
