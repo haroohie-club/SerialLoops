@@ -9,7 +9,7 @@ public class SearchQuery {
 
     public string Text;
     public Dictionary<Filter, string> Filters = new();
-    public HashSet<Flag> Flags = new();
+    public HashSet<Flag> Flags = new() { Flag.Only_Titles };
     public HashSet<ItemDescription.ItemType> Types = Enum.GetValues<ItemDescription.ItemType>().ToHashSet();
 
     public enum Filter {
@@ -26,7 +26,7 @@ public class SearchQuery {
 
     public static SearchQuery Create(string text)
     {
-        return new() {Text = text};
+        return new() { Text = text };
     }
 
     public static Filter? GetFilter(string text)

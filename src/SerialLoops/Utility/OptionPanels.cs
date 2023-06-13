@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Eto.Forms;
+using HaruhiChokuretsuLib.Util;
+using SerialLoops.Lib.Items;
 
 namespace SerialLoops.Utility {
     
@@ -15,7 +17,7 @@ namespace SerialLoops.Utility {
             List<TableLayout> columnTables = new();
             for (int i = 0; i < columns; i++)
             {
-                columnTables.Add(new TableLayout { Spacing = new(2, 2) });
+                columnTables.Add(new TableLayout { Spacing = new(1, 1) });
             }
             
             // Populate the tables with the options
@@ -32,12 +34,14 @@ namespace SerialLoops.Utility {
 
         protected abstract Control GetControl();
 
+        protected virtual Control GetLabel()
+        {
+            return new Label { Text = Name, VerticalAlignment = VerticalAlignment.Center };
+        }
+
         public TableRow GetOptionRow()
         {
-            return new TableRow(
-                new Label { Text = Name, VerticalAlignment = VerticalAlignment.Center }, 
-                GetControl()
-            );
+            return new TableRow(GetLabel(), GetControl());
         }
     }
 
@@ -53,7 +57,7 @@ namespace SerialLoops.Utility {
 
         public TextOption()
         {
-            _textBox = new TextBox() {Text = "", Width = 225};
+            _textBox = new TextBox { Text = "", Width = 225 };
             _textBox.TextChanged += (sender, args) => { OnChange?.Invoke(Value); };
         }
 
@@ -98,6 +102,28 @@ namespace SerialLoops.Utility {
                 VerticalContentAlignment = VerticalAlignment.Center,
             };
         }
+    }
+
+    internal class ItemBooleanOption : BooleanOption {
+
+        private readonly ILogger _logger;
+
+        public ItemBooleanOption(ILogger logger) : base()
+        {
+            _logger = logger;
+        }
+        
+        public ItemDescription.ItemType Type
+        {
+            get => Enum.Parse<ItemDescription.ItemType>(Name);
+            set => Name = value.ToString();
+        }
+
+        protected override Control GetLabel()
+        {
+            return ControlGenerator.GetControlWithIcon(Name.Replace("_", " "), Name, _logger);
+        }
+        
     }
 
     internal class FolderOption : FileOption {

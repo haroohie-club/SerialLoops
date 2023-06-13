@@ -34,7 +34,7 @@ namespace SerialLoops
         void InitializeComponent()
         {
             Title = "Find in Project";
-            MinimumSize = new Size(425, 600);
+            MinimumSize = new Size(500, 600);
             Padding = 10;
 
             _results = new(new List<ItemDescription>(), Log)
@@ -55,39 +55,20 @@ namespace SerialLoops
         private void Search()
         {
             _results.Items = !string.IsNullOrWhiteSpace(_query.Text)
-                ? Project.GetSearchResults(_query.Text, _query.IsFlagSet(SearchQuery.Flag.Only_Titles)) 
+                ? Project.GetSearchResults(_query) 
                 : Enumerable.Empty<ItemDescription>().ToList();
         }
 
         private Container GetFiltersPanel()
         {
-            List<Option> filterOptions = new();
-            foreach (SearchQuery.Filter filter in Enum.GetValues(typeof(SearchQuery.Filter)))
-            {
-                filterOptions.Add(new TextOption
-                {
-                    Name = filter.ToString().ToLower(),
-                    OnChange = text =>
-                    {
-                        if (string.IsNullOrWhiteSpace(text))
-                        {
-                            _filters.Remove(filter);
-                        }
-                        else
-                        {
-                            _filters[filter] = text;
-                        }
-                    },
-                    Value = _filters.TryGetValue(filter, out var value) ? value : ""
-                });
-            }
+            
             
             List<Option> flagOptions = new();
             foreach (SearchQuery.Flag flag in Enum.GetValues(typeof(SearchQuery.Flag)))
             {
                 flagOptions.Add(new BooleanOption
                 {
-                    Name = flag.ToString().ToLower(),
+                    Name = flag.ToString().Replace("_", " "),
                     OnChange = value =>
                     {
                         if (value)
@@ -98,6 +79,7 @@ namespace SerialLoops
                         {
                             _flags.Remove(flag);
                         }
+                        Search();
                     },
                     Value = _flags.Contains(flag)
                 });
@@ -106,9 +88,10 @@ namespace SerialLoops
             List<Option> typeOptions = new();
             foreach (ItemDescription.ItemType type in Enum.GetValues(typeof(ItemDescription.ItemType)))
             {
-                typeOptions.Add(new BooleanOption
+                typeOptions.Add(new ItemBooleanOption(Log)
                 {
-                    Name = type.ToString().ToLower(),
+                    Name = type.ToString(),
+                    Type = type,
                     OnChange = value =>
                     {
                         if (value)
@@ -119,20 +102,16 @@ namespace SerialLoops
                         {
                             _types.Remove(type);
                         }
+                        Search();
                     },
                     Value = _types.Contains(type)
                 });
             }
             
-            var layout = new TableLayout(new TableLayout(new TableRow(
-                    new OptionsGroup("Filters", filterOptions),
-                    new OptionsGroup("Flags", flagOptions)
-                )),
-                new OptionsGroup("Items", typeOptions, 3)
-            );
-            
-            // return a collapsible panel containing the layout
-            return new CollapsiblePanel("Advanced...", layout);
+            return new TableLayout(new TableRow(
+                new OptionsGroup("Search Options", flagOptions),
+                new OptionsGroup("Item Filter", typeOptions, 3)
+            ));
         }
 
         private void SearchInput_OnTextChanged(object sender, EventArgs e)

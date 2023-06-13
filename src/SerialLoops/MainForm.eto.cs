@@ -65,16 +65,21 @@ namespace SerialLoops
             _msGothicHaruhi = SKTypeface.FromStream(typefaceStream);
 
             EditorTabs = new(project, this, Log);
+            
             SearchBox = new()
             {
                 PlaceholderText = "Search...",
                 ToolTip = "Search for items by name, ID, or type.",
             };
+            Button advancedSearchButton = new() { Text = "...", Width = 25};
+            advancedSearchButton.Click += Search_Executed;
+            TableLayout searchBarLayout = new(new TableRow(SearchBox, advancedSearchButton)) { Spacing = new(5, 0) };
+            
             ItemExplorer = new(project, EditorTabs, SearchBox, Log);
             Title = $"{BASE_TITLE} - {project.Name}";
             Content = new TableLayout(new TableRow
             (
-                new TableLayout(SearchBox, ItemExplorer) { Spacing = new(0, 5) },
+                new TableLayout(searchBarLayout, ItemExplorer) { Spacing = new(0, 5) },
                 EditorTabs
             )) { Spacing = new(0, 5) };
             EditorTabs.Tabs_PageChanged(this, EventArgs.Empty);

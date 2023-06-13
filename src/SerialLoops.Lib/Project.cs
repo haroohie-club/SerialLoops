@@ -528,21 +528,21 @@ namespace SerialLoops.Lib
             File.WriteAllText(Path.Combine(MainDirectory, $"{Name}.{PROJECT_FORMAT}"), JsonSerializer.Serialize<Project>(this, SERIALIZER_OPTIONS));
         }
 
-        public List<ItemDescription> GetSearchResults(string searchTerm, bool titlesOnly = true)
+        public List<ItemDescription> GetSearchResults(string query)
         {
-            if (titlesOnly)
-            {
-                return Items.Where(item =>
-                    item.DisplayName.Contains(searchTerm.Trim(), StringComparison.OrdinalIgnoreCase)).ToList();
-            }
-            else
-            {
-                return Items.Where(item =>
-                    item.Name.Contains(searchTerm.Trim(), StringComparison.OrdinalIgnoreCase) ||
-                    item.DisplayName.Contains(searchTerm.Trim(), StringComparison.OrdinalIgnoreCase) ||
-                    (!string.IsNullOrEmpty(item.SearchableText) &&
-                    item.SearchableText.Contains(searchTerm.Trim(), StringComparison.OrdinalIgnoreCase))).ToList();
-            }
+            return GetSearchResults(SearchQuery.Create(query));
+        }
+        
+        public List<ItemDescription> GetSearchResults(SearchQuery query)
+        {
+            var trimmedText = query.Text.Trim();
+            return Items.Where(item =>
+                query.Types.Contains(item.Type) &&
+                (item.Name.Contains(trimmedText, StringComparison.OrdinalIgnoreCase) ||
+                item.DisplayName.Contains(trimmedText, StringComparison.OrdinalIgnoreCase) ||
+                (!query.IsFlagSet(SearchQuery.Flag.Only_Titles) && !string.IsNullOrEmpty(item.SearchableText) &&
+                    item.SearchableText.Contains(trimmedText, StringComparison.OrdinalIgnoreCase))))
+                .ToList();
         }
 
     }
