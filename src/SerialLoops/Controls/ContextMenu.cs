@@ -58,7 +58,7 @@ namespace SerialLoops.Controls
             if (item is not null)
             {
                 ReferencesDialog referenceDialog = new(item, _project, _explorer, _tabs, _log);
-                referenceDialog.ShowModal(_explorer);
+                referenceDialog.Show();
             }
         }
     }
