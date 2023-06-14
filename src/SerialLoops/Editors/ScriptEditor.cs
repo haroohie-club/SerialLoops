@@ -711,7 +711,7 @@ namespace SerialLoops.Editors
                 chibisSelectorDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Chibi).Select(c => new ListItem { Key = c.Name, Text = c.Name }));
                 chibisSelectorDropDown.SelectedKey = chibi.Name;
 
-                ChibiDirectionSelector facingDirectionSelector = new(_log)
+                ChibiDirectionSelector facingDirectionSelector = new(chibi, chibi.ChibiEntries.First().Name[^2..], _log)
                 {
                     Direction = (ChibiItem.Direction)_script.Event.MapCharactersSection.Objects[chibiLayout.ChibiIndex].FacingDirection
                 };
@@ -1248,7 +1248,7 @@ namespace SerialLoops.Editors
                         break;
 
                     case ScriptParameter.ParameterType.SCREEN:
-                        ScriptCommandScreenSelector screenSelector = new(_log, ((ScreenScriptParameter) parameter).Screen, true)
+                        ScriptCommandScreenSelector screenSelector = new(_log, ((ScreenScriptParameter)parameter).Screen, true)
                         {
                             Command = command,
                             ParameterIndex = i,
@@ -1822,7 +1822,7 @@ namespace SerialLoops.Editors
 
                 foreach (PositionedSprite sprite in sprites.Values.OrderBy(p => p.Positioning.Layer))
                 {
-                    SKBitmap spriteBitmap = sprite.Sprite.GetClosedMouthAnimation(_project)[0].frame;
+                    SKBitmap spriteBitmap = sprite.Sprite.GetClosedMouthAnimation(_project)[0].Frame;
                     canvas.DrawBitmap(spriteBitmap, sprite.Positioning.GetSpritePosition(spriteBitmap), sprite.PalEffect);
                 }
 
@@ -2285,9 +2285,9 @@ namespace SerialLoops.Editors
         {
             ScriptCommandScreenSelector selector = (ScriptCommandScreenSelector)sender;
             _log.Log($"Attempting to modify parameter {selector.ParameterIndex} to screen {selector.SelectedScreen} in {selector.Command.Index} in file {_script.Name}...");
-            ((ScreenScriptParameter) selector.Command.Parameters[selector.ParameterIndex]).Screen = selector.SelectedScreen;
+            ((ScreenScriptParameter)selector.Command.Parameters[selector.ParameterIndex]).Screen = selector.SelectedScreen;
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(selector.Command.Section)]
-                .Objects[selector.Command.Index].Parameters[selector.CurrentShort] = (short) selector.SelectedScreen;
+                .Objects[selector.Command.Index].Parameters[selector.CurrentShort] = (short)selector.SelectedScreen;
             UpdateTabTitle(false, selector);
             Application.Instance.Invoke(() => UpdatePreview());
         }
