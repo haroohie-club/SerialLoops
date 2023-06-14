@@ -1248,7 +1248,7 @@ namespace SerialLoops.Editors
                         break;
 
                     case ScriptParameter.ParameterType.SCREEN:
-                        ScriptCommandScreenSelector screenSelector = new(_log, ((ScreenScriptParameter) parameter).Screen, true)
+                        ScriptCommandScreenSelector screenSelector = new(_log, ((ScreenScriptParameter)parameter).Screen, true)
                         {
                             Command = command,
                             ParameterIndex = i,
@@ -2285,9 +2285,9 @@ namespace SerialLoops.Editors
         {
             ScriptCommandScreenSelector selector = (ScriptCommandScreenSelector)sender;
             _log.Log($"Attempting to modify parameter {selector.ParameterIndex} to screen {selector.SelectedScreen} in {selector.Command.Index} in file {_script.Name}...");
-            ((ScreenScriptParameter) selector.Command.Parameters[selector.ParameterIndex]).Screen = selector.SelectedScreen;
+            ((ScreenScriptParameter)selector.Command.Parameters[selector.ParameterIndex]).Screen = selector.SelectedScreen;
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(selector.Command.Section)]
-                .Objects[selector.Command.Index].Parameters[selector.CurrentShort] = (short) selector.SelectedScreen;
+                .Objects[selector.Command.Index].Parameters[selector.CurrentShort] = (short)selector.SelectedScreen;
             UpdateTabTitle(false, selector);
             Application.Instance.Invoke(() => UpdatePreview());
         }

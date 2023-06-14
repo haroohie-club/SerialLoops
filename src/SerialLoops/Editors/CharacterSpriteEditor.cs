@@ -75,6 +75,7 @@ namespace SerialLoops.Editors
                             _log.LogError($"Failed to export mouth animation {i} for sprite {_sprite.DisplayName} to file: {ex.Message}\n\n{ex.StackTrace}");
                         }
                     }
+                    MessageBox.Show("Character sprite frames exported!!", "Success!", MessageBoxType.Information);
                 }
             };
 
@@ -109,7 +110,7 @@ namespace SerialLoops.Editors
                     }
 
                     LoopyProgressTracker tracker = new();
-                    _ = new ProgressDialog(() => frames.SaveGif(saveFileDialog.FileName, tracker), () => MessageBox.Show("GIF exported!"), tracker, "Exporting GIF...");
+                    _ = new ProgressDialog(() => frames.SaveGif(saveFileDialog.FileName, tracker), () => MessageBox.Show("GIF exported!", "Success!", MessageBoxType.Information), tracker, "Exporting GIF...");
                 }
             };
 

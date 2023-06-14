@@ -48,7 +48,7 @@ namespace SerialLoops.Editors
         {
             _animationSelection = new();
             _animationSelection.Items.AddRange(_chibi.ChibiEntries
-                .Select(c => c.Name.Substring(0, c.Name.Length - 3)).Distinct().Select(c => new ListItem() { Text = c, Key = c }));
+                .Select(c => c.Name[..^3]).Distinct().Select(c => new ListItem() { Text = c, Key = c }));
             _animationSelection.SelectedIndex = 0;
             _animationSelection.SelectedKeyChanged += ChibiSelection_SelectedKeyChanged;
 
@@ -79,7 +79,7 @@ namespace SerialLoops.Editors
                     }
 
                     LoopyProgressTracker tracker = new();
-                    _ = new ProgressDialog(() => frames.SaveGif(saveFileDialog.FileName, tracker), () => MessageBox.Show("GIF exported!"), tracker, "Exporting GIF...");
+                    _ = new ProgressDialog(() => frames.SaveGif(saveFileDialog.FileName, tracker), () => MessageBox.Show("GIF exported!", "Success!", MessageBoxType.Information), tracker, "Exporting GIF...");
                 }
             };
             Button exportSpritesButton = new() { Text = "Export Sprites" };
@@ -104,6 +104,7 @@ namespace SerialLoops.Editors
                             _log.LogError($"Failed to export chibi animation {i} for chibi {_chibi.DisplayName} to file: {ex.Message}\n\n{ex.StackTrace}");
                         }
                     }
+                    MessageBox.Show("Chibi frames exported!!", "Success!", MessageBoxType.Information);
                 }
             };
 
@@ -123,7 +124,7 @@ namespace SerialLoops.Editors
                                 Spacing = 10,
                                 Items =
                                 {
-                                    _animationSelection, 
+                                    _animationSelection,
                                     _directionSelector
                                 }
                             }
@@ -174,10 +175,13 @@ namespace SerialLoops.Editors
                     HorizontalContentAlignment = HorizontalAlignment.Center,
                     Items =
                     {
-                        image,
-                        $"{timing} frames",
+                        image
                     }
                 };
+                if (timing >= 0)
+                {
+                    frameLayout.Items.Add($"{timing} frames");
+                }
                 _framesStack.Items.Add(frameLayout);
             }
         }
@@ -187,8 +191,9 @@ namespace SerialLoops.Editors
             string selectedAnimationKey = GetSelectedAnimationKey();
             if (!_chibi.ChibiAnimations.ContainsKey(selectedAnimationKey))
             {
-                _animatedImage.FramesWithTimings = new() { (new SKGuiImage(new SkiaSharp.SKBitmap(32, 32)), 1) };
-            } else
+                _animatedImage.FramesWithTimings = new() { (new SKGuiImage(new SKBitmap(32, 32)), -1) };
+            }
+            else
             {
                 AnimatedImage newImage = new(_chibi.ChibiAnimations[selectedAnimationKey]);
                 _animatedImage.FramesWithTimings = newImage.FramesWithTimings;
@@ -218,6 +223,5 @@ namespace SerialLoops.Editors
             }
             return $"{_animationSelection.SelectedKey.Trim()}_{direction}";
         }
-
     }
 }
