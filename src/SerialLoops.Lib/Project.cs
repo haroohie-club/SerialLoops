@@ -1,5 +1,4 @@
-﻿#nullable enable
-using HaroohieClub.NitroPacker.Core;
+﻿using HaroohieClub.NitroPacker.Core;
 using HaruhiChokuretsuLib.Archive;
 using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
