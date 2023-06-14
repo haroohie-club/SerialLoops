@@ -17,6 +17,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using SerialLoops.Lib.Script.Parameters;
 
 namespace SerialLoops.Lib
 {
@@ -529,12 +530,12 @@ namespace SerialLoops.Lib
             File.WriteAllText(Path.Combine(MainDirectory, $"{Name}.{PROJECT_FORMAT}"), JsonSerializer.Serialize<Project>(this, SERIALIZER_OPTIONS));
         }
 
-        public List<ItemDescription> GetSearchResults(string query)
+        public List<ItemDescription> GetSearchResults(string query, ILogger logger)
         {
-            return GetSearchResults(SearchQuery.Create(query));
+            return GetSearchResults(SearchQuery.Create(query), logger);
         }
         
-        public List<ItemDescription> GetSearchResults(SearchQuery query, IProgressTracker? tracker = null)
+        public List<ItemDescription> GetSearchResults(SearchQuery query, ILogger logger, IProgressTracker? tracker = null)
         {
             var term = query.Term.Trim();
             var searchable = Items.Where(i => query.Types.Contains(i.Type)).ToList();
@@ -542,21 +543,61 @@ namespace SerialLoops.Lib
             
             return searchable.Where(item =>
                 {
-                    var valid = 
-                                (query.Scopes.Contains(SearchQuery.DataHolder.Title) &&
-                                    (
-                                        item.Name.Contains(term, StringComparison.OrdinalIgnoreCase) || 
-                                        item.DisplayName.Contains(term, StringComparison.OrdinalIgnoreCase)
-                                    )) ||
-                                (query.Scopes.Contains(SearchQuery.DataHolder.Cached_Text) && 
-                                    (
-                                        !string.IsNullOrEmpty(item.SearchableText) && 
-                                        item.SearchableText.Contains(term, StringComparison.OrdinalIgnoreCase)
-                                    ));
+                    bool hit = query.Scopes.Aggregate(
+                        false,
+                        (current, scope) => current || ItemMatches(item, term, scope, logger)
+                    );
                     if (tracker is not null) tracker.Finished++;
-                    return valid;
+                    return hit;
                 })
                 .ToList();
+        }
+
+        private bool ItemMatches(ItemDescription item, string term, SearchQuery.DataHolder scope, ILogger logger)
+        {
+            switch (scope)
+            {
+                case SearchQuery.DataHolder.Title:
+                    return item.Name.Contains(term, StringComparison.OrdinalIgnoreCase) ||
+                           item.DisplayName.Contains(term, StringComparison.OrdinalIgnoreCase);
+                
+                case SearchQuery.DataHolder.Cached_Text:
+                    return !string.IsNullOrEmpty(item.SearchableText) &&
+                           item.SearchableText.Contains(term, StringComparison.OrdinalIgnoreCase);
+                
+                case SearchQuery.DataHolder.Dialogue_Text:
+                    if (item is ScriptItem dialogueScript)
+                    {
+                        return dialogueScript.GetScriptCommandTree(this, logger)
+                            .Any(s => s.Value.Any(c => c.Parameters
+                                .Where(p => p.Type == ScriptParameter.ParameterType.DIALOGUE)
+                                .Any(p => ((DialogueScriptParameter) p).Line.Text
+                                    .GetSubstitutedString(this).Contains(term, StringComparison.OrdinalIgnoreCase))));
+                    }
+                    return false;
+                
+                case SearchQuery.DataHolder.Speaker_Name:
+                    if (item is ScriptItem speakerScript)
+                    {
+                        return speakerScript.GetScriptCommandTree(this, logger)
+                            .Any(s => s.Value.Any(c => c.Parameters
+                                .Where(p => p.Type == ScriptParameter.ParameterType.DIALOGUE)
+                                .Any(p => ((DialogueScriptParameter) p).Line.Speaker.ToString()
+                                    .Contains(term, StringComparison.OrdinalIgnoreCase))));
+                    }
+                    return false;
+                
+                case SearchQuery.DataHolder.Background_Type:
+                    if (item is BackgroundItem bg)
+                    {
+                        return bg.BackgroundType.ToString().Contains(term, StringComparison.OrdinalIgnoreCase);
+                    }
+                    return false;
+
+                default:
+                    logger.LogError($"Unimplemented search scope: {scope}");
+                    return false;
+            }
         }
 
     }

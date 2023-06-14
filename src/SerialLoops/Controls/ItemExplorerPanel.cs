@@ -31,7 +31,7 @@ namespace SerialLoops.Controls
         {
             var searchTerm = _searchBox.Text;
             ExpandItems = !string.IsNullOrEmpty(searchTerm);
-            Items = !string.IsNullOrEmpty(searchTerm) ? _project.GetSearchResults(searchTerm) : _project.Items;
+            Items = !string.IsNullOrEmpty(searchTerm) ? _project.GetSearchResults(searchTerm, _log) : _project.Items;
         }
 
         private void Viewer_SelectedItemChanged(object sender, EventArgs e)

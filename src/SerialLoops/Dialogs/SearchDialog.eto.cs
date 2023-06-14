@@ -21,10 +21,17 @@ namespace SerialLoops
         private HashSet<ItemDescription.ItemType> _types = Enum.GetValues<ItemDescription.ItemType>().ToHashSet();
         private Label _searchWarningLabel = new()
         {
-            Text = "Press ENTER to search items.",
+            Text = "Press ENTER to execute search.",
             TextAlignment = TextAlignment.Center,
             VerticalAlignment = VerticalAlignment.Center,
-            Visible = false
+            Visible = false,
+        };
+        private Label _resultsLabel = new()
+        {
+            Text = "Results",
+            TextAlignment = TextAlignment.Center,
+            VerticalAlignment = VerticalAlignment.Center,
+            Visible = false,
         };
         
         private SearchQuery _query
@@ -55,7 +62,10 @@ namespace SerialLoops
             _searchInput.TextChanged += SearchInput_OnTextChanged;
             _searchInput.KeyDown += SearchInput_OnKeyDown;
 
-            Content = new TableLayout(_searchInput, GetFiltersPanel(), _searchWarningLabel, _results) { Spacing = new(5, 5) };
+            Content = new TableLayout(_searchInput, GetFiltersPanel(), _searchWarningLabel, _resultsLabel, _results)
+            {
+                Spacing = new(5, 5)
+            };
             _searchInput.Focus();
         }
 
@@ -63,6 +73,7 @@ namespace SerialLoops
         {
             var query = _query;
             _searchWarningLabel.Visible = !query.QuickSearch;
+            _resultsLabel.Visible = false;
             if (!query.QuickSearch && !force)
             {
                 _results.Items = Enumerable.Empty<ItemDescription>().ToList();
@@ -75,15 +86,27 @@ namespace SerialLoops
 
             if (query.QuickSearch)
             {
-                // MessageBox.Show(query.Scopes.Count.ToString());
-                _results.Items = Project.GetSearchResults(query);
+                var results = Project.GetSearchResults(query, Log);
+                _results.Items = results;
+                _resultsLabel.Text = $"{results.Count} results found";
+                _resultsLabel.Visible = true;
             }
             else
             {
+                if (query.Scopes.Count is 0 || query.Types.Count is 0)
+                {
+                    MessageBox.Show("Please select at least one search scope and item filter.", "Invalid search terms", MessageBoxType.Error);
+                    return;
+                }
                 LoopyProgressTracker tracker = new("Searching");
                 List<ItemDescription> results = new();
-                _ = new ProgressDialog(() => results = Project.GetSearchResults(query, tracker),
-                    () => _results.Items = results, tracker, $"Searching {Project.Name}...");
+                _ = new ProgressDialog(() => results = Project.GetSearchResults(query, Log, tracker),
+                    () =>
+                    {
+                        _results.Items = results;
+                        _resultsLabel.Text = $"{results.Count} results found";
+                        _resultsLabel.Visible = true;
+                    }, tracker, $"Searching {Project.Name}...");
             }
         }
 
@@ -145,8 +168,8 @@ namespace SerialLoops
 
             return new TableLayout(
                 new TableRow(
-                    new OptionsGroup("Search Scope", searchScopes, 2),
-                    new OptionsGroup("Item Filter", typeOptions, 3)
+                    new OptionsGroup("Search Scope", searchScopes),
+                    new OptionsGroup("Filter by Item", typeOptions, 3)
                 )
             );
         }
