@@ -284,7 +284,7 @@ namespace SerialLoops.Editors
             {
                 associatedScript = _project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Script && ((ScriptItem)i).Event.Index == _topic.Topic.EventIndex);
             }
-            return associatedScript;
+            return associatedScript ?? NoneItem.SCRIPT;
         }
 
         private void UpdateKyonTime()
