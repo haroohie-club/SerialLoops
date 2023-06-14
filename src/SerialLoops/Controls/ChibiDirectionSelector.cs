@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Eto.Forms;
+using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib.Items;
 using SerialLoops.Utility;
@@ -37,11 +38,12 @@ public class ChibiDirectionSelector : Panel
     private readonly ILogger _log;
     private TableLayout _grid;
     
-    public ChibiDirectionSelector(ILogger log)
+    public ChibiDirectionSelector(ChibiItem chibi, string currentPrefix, ILogger log)
     {
         _availableDirections = Enum.GetValues<ChibiItem.Direction>().ToList();
         _log = log;
         InitializeComponent();
+        UpdateAvailableDirections(chibi, currentPrefix);
     }
     
     private void InitializeComponent()
@@ -75,6 +77,16 @@ public class ChibiDirectionSelector : Panel
             y++;
         }
         Content = _grid;
+    }
+
+    public void UpdateAvailableDirections(ChibiItem chibi, string prefix)
+    {
+        _availableDirections.Clear();
+        foreach ((string name, ChibiEntry entry) in chibi.ChibiEntries.Where(c => c.Name.StartsWith(prefix)))
+        {
+            _availableDirections.Add(ChibiItem.CodeToDirection(name[^2..]));
+        }
+        UpdateSelected();
     }
 
     private void UpdateSelected()

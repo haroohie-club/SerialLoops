@@ -52,7 +52,7 @@ namespace SerialLoops.Editors
             _animationSelection.SelectedIndex = 0;
             _animationSelection.SelectedKeyChanged += ChibiSelection_SelectedKeyChanged;
 
-            _directionSelector = new(_log)
+            _directionSelector = new(_chibi, _animationSelection.SelectedKey.Trim(), _log)
             {
                 Direction = ChibiItem.Direction.DOWN_LEFT
             };
@@ -188,16 +188,15 @@ namespace SerialLoops.Editors
 
         private void ChibiSelection_SelectedKeyChanged(object sender, EventArgs e)
         {
+            _directionSelector.UpdateAvailableDirections(_chibi, _animationSelection.SelectedKey.Trim());
             string selectedAnimationKey = GetSelectedAnimationKey();
             if (!_chibi.ChibiAnimations.ContainsKey(selectedAnimationKey))
             {
-                _animatedImage.FramesWithTimings = new() { (new SKGuiImage(new SKBitmap(32, 32)), -1) };
+                selectedAnimationKey = _chibi.ChibiAnimations.Keys.First();
+                _directionSelector.Direction = ChibiItem.CodeToDirection(selectedAnimationKey[^2..]);
             }
-            else
-            {
-                AnimatedImage newImage = new(_chibi.ChibiAnimations[selectedAnimationKey]);
-                _animatedImage.FramesWithTimings = newImage.FramesWithTimings;
-            }
+            AnimatedImage newImage = new(_chibi.ChibiAnimations[selectedAnimationKey]);
+            _animatedImage.FramesWithTimings = newImage.FramesWithTimings;
             _animatedImage.CurrentFrame = 0;
             _animatedImage.UpdateImage();
             UpdateFramesStack();

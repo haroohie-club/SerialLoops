@@ -92,5 +92,16 @@ namespace SerialLoops.Lib.Items
             UP_LEFT = 2,
             UP_RIGHT = 3
         }
+
+        public static Direction CodeToDirection(string code)
+        {
+            return code switch
+            {
+                "BR" => Direction.DOWN_RIGHT,
+                "UL" => Direction.UP_LEFT,
+                "UR" => Direction.UP_RIGHT,
+                _ => Direction.DOWN_LEFT,
+            };
+        }
     }
 }

@@ -711,7 +711,7 @@ namespace SerialLoops.Editors
                 chibisSelectorDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Chibi).Select(c => new ListItem { Key = c.Name, Text = c.Name }));
                 chibisSelectorDropDown.SelectedKey = chibi.Name;
 
-                ChibiDirectionSelector facingDirectionSelector = new(_log)
+                ChibiDirectionSelector facingDirectionSelector = new(chibi, chibi.ChibiEntries.First().Name[^2..], _log)
                 {
                     Direction = (ChibiItem.Direction)_script.Event.MapCharactersSection.Objects[chibiLayout.ChibiIndex].FacingDirection
                 };
