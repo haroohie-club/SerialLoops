@@ -197,7 +197,6 @@ namespace SerialLoops.Tests
             });
         }
 
-        //todo rewrite this test to use the new search functionality
         [Test, Parallelizable]
         public void SearchTest()
         {
