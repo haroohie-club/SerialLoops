@@ -71,7 +71,7 @@ namespace SerialLoops
                 PlaceholderText = "Search...",
                 ToolTip = "Search for items by name, ID, or type.",
             };
-            Button advancedSearchButton = new() { Text = "...", Width = 25};
+            Button advancedSearchButton = new() { Text = "...", Width = 15 };
             advancedSearchButton.Click += Search_Executed;
             TableLayout searchBarLayout = new(new TableRow(SearchBox, advancedSearchButton)) { Spacing = new(5, 0) };
             

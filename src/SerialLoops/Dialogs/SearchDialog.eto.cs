@@ -17,16 +17,22 @@ namespace SerialLoops
         private SearchBox _searchInput;
         
         public string Text { get => _searchInput.Text; set => _searchInput.Text = value; }
-        private Dictionary<SearchQuery.Filter, string> _filters = new();
-        private HashSet<SearchQuery.Flag> _flags = new();
+        private HashSet<SearchQuery.DataHolder> _scopes = new() { SearchQuery.DataHolder.Title, SearchQuery.DataHolder.Cached_Text };
         private HashSet<ItemDescription.ItemType> _types = Enum.GetValues<ItemDescription.ItemType>().ToHashSet();
+        private Label _searchWarningLabel = new()
+        {
+            Text = "Press ENTER to search items.",
+            TextAlignment = TextAlignment.Center,
+            VerticalAlignment = VerticalAlignment.Center,
+            Visible = false
+        };
+        
         private SearchQuery _query
         {
             get => new()
             {
-                Text = Text,
-                Filters = _filters,
-                Flags = _flags,
+                Term = Text,
+                Scopes = _scopes,
                 Types = _types
             };
         }
@@ -47,41 +53,61 @@ namespace SerialLoops
                 Size = new Size(250, 25)
             };
             _searchInput.TextChanged += SearchInput_OnTextChanged;
+            _searchInput.KeyDown += SearchInput_OnKeyDown;
 
-            Content = new TableLayout(_searchInput, GetFiltersPanel(), _results) { Spacing = new(10, 10) };
+            Content = new TableLayout(_searchInput, GetFiltersPanel(), _searchWarningLabel, _results) { Spacing = new(5, 5) };
             _searchInput.Focus();
         }
-        
-        private void Search()
+
+        private void Search(bool force = false)
         {
-            _results.Items = !string.IsNullOrWhiteSpace(_query.Text)
-                ? Project.GetSearchResults(_query) 
-                : Enumerable.Empty<ItemDescription>().ToList();
+            var query = _query;
+            _searchWarningLabel.Visible = !query.QuickSearch;
+            if (!query.QuickSearch && !force)
+            {
+                _results.Items = Enumerable.Empty<ItemDescription>().ToList();
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(query.Term))
+            {
+                return;
+            }
+
+            if (query.QuickSearch)
+            {
+                // MessageBox.Show(query.Scopes.Count.ToString());
+                _results.Items = Project.GetSearchResults(query);
+            }
+            else
+            {
+                LoopyProgressTracker tracker = new("Searching");
+                List<ItemDescription> results = new();
+                _ = new ProgressDialog(() => results = Project.GetSearchResults(query, tracker),
+                    () => _results.Items = results, tracker, $"Searching {Project.Name}...");
+            }
         }
 
         private Container GetFiltersPanel()
         {
-            
-            
-            List<Option> flagOptions = new();
-            foreach (SearchQuery.Flag flag in Enum.GetValues(typeof(SearchQuery.Flag)))
+            List<Option> searchScopes = new();
+            foreach (SearchQuery.DataHolder scope in Enum.GetValues(typeof(SearchQuery.DataHolder)))
             {
-                flagOptions.Add(new BooleanOption
+                searchScopes.Add(new BooleanOption
                 {
-                    Name = flag.ToString().Replace("_", " "),
+                    Name = scope.ToString().Replace("_", " "),
                     OnChange = value =>
                     {
                         if (value)
                         {
-                            _flags.Add(flag);
+                            _scopes.Add(scope);
                         }
                         else
                         {
-                            _flags.Remove(flag);
+                            _scopes.Remove(scope);
                         }
                         Search();
                     },
-                    Value = _flags.Contains(flag)
+                    Value = _scopes.Contains(scope)
                 });
             }
             
@@ -108,16 +134,43 @@ namespace SerialLoops
                 });
             }
             
-            return new TableLayout(new TableRow(
-                new OptionsGroup("Search Options", flagOptions),
-                new OptionsGroup("Item Filter", typeOptions, 3)
-            ));
+            // Add a toggle for item filters
+            typeOptions.Add(new BooleanToggleOption(typeOptions) { Name = "Quick Toggle" });
+            
+            // Ensure the number of items is divisible by 3, add blank columns if not
+            while (typeOptions.Count % 3 != 0)
+            {
+                typeOptions.Add(new BlankOption());
+            }
+
+            return new TableLayout(
+                new TableRow(
+                    new OptionsGroup("Search Scope", searchScopes, 2),
+                    new OptionsGroup("Item Filter", typeOptions, 3)
+                )
+            );
         }
 
         private void SearchInput_OnTextChanged(object sender, EventArgs e)
         {
             Search();
         }
+
+        private void SearchInput_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key is Keys.Enter)
+            {
+                Search(true);
+            }
+        }
         
     }
+
+    internal class BlankOption : Option {
+        protected override Control GetControl()
+        {
+            return new Panel();
+        }
+    }
+    
 }

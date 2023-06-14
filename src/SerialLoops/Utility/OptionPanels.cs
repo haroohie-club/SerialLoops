@@ -8,6 +8,7 @@ using SerialLoops.Lib.Items;
 namespace SerialLoops.Utility {
     
     internal class OptionsGroup : GroupBox {
+        
         public OptionsGroup(string name, List<Option> options, int columns = 1)
         {
             Text = name;
@@ -123,7 +124,28 @@ namespace SerialLoops.Utility {
         {
             return ControlGenerator.GetControlWithIcon(Name.Replace("_", " "), Name, _logger);
         }
+    }
+
+    internal class BooleanToggleOption : BooleanOption {
+
+        public LinkButton ToggleButton;
+        private string _buttonText => Value ? "All On" : "All Off";
         
+        public BooleanToggleOption(List<Option> options)
+        {
+            ToggleButton = new LinkButton {Text = _buttonText};
+            ToggleButton.Click += (sender, args) =>
+            {
+                options.OfType<BooleanOption>().ToList().ForEach(option => option.Value = Value);
+                Value = !Value;
+                ToggleButton.Text = _buttonText;
+            };
+        }
+
+        protected override Control GetControl()
+        {
+            return ToggleButton;
+        }
     }
 
     internal class FolderOption : FileOption {

@@ -1,4 +1,5 @@
-﻿using HaroohieClub.NitroPacker.Core;
+﻿#nullable enable
+using HaroohieClub.NitroPacker.Core;
 using HaruhiChokuretsuLib.Archive;
 using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
@@ -533,15 +534,28 @@ namespace SerialLoops.Lib
             return GetSearchResults(SearchQuery.Create(query));
         }
         
-        public List<ItemDescription> GetSearchResults(SearchQuery query)
+        public List<ItemDescription> GetSearchResults(SearchQuery query, IProgressTracker? tracker = null)
         {
-            var trimmedText = query.Text.Trim();
-            return Items.Where(item =>
-                query.Types.Contains(item.Type) &&
-                (item.Name.Contains(trimmedText, StringComparison.OrdinalIgnoreCase) ||
-                item.DisplayName.Contains(trimmedText, StringComparison.OrdinalIgnoreCase) ||
-                (!query.IsFlagSet(SearchQuery.Flag.Only_Titles) && !string.IsNullOrEmpty(item.SearchableText) &&
-                    item.SearchableText.Contains(trimmedText, StringComparison.OrdinalIgnoreCase))))
+            var term = query.Term.Trim();
+            var searchable = Items.Where(i => query.Types.Contains(i.Type)).ToList();
+            tracker?.Focus($"{searchable.Count} Items", searchable.Count);
+            
+            return searchable.Where(item =>
+                {
+                    var valid = 
+                                (query.Scopes.Contains(SearchQuery.DataHolder.Title) &&
+                                    (
+                                        item.Name.Contains(term, StringComparison.OrdinalIgnoreCase) || 
+                                        item.DisplayName.Contains(term, StringComparison.OrdinalIgnoreCase)
+                                    )) ||
+                                (query.Scopes.Contains(SearchQuery.DataHolder.Cached_Text) && 
+                                    (
+                                        !string.IsNullOrEmpty(item.SearchableText) && 
+                                        item.SearchableText.Contains(term, StringComparison.OrdinalIgnoreCase)
+                                    ));
+                    if (tracker is not null) tracker.Finished++;
+                    return valid;
+                })
                 .ToList();
         }
 

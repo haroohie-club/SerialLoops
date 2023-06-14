@@ -7,43 +7,27 @@ namespace SerialLoops.Lib;
 
 public class SearchQuery {
 
-    public string Text;
-    public Dictionary<Filter, string> Filters = new();
-    public HashSet<Flag> Flags = new() { Flag.Only_Titles };
-    public HashSet<ItemDescription.ItemType> Types = Enum.GetValues<ItemDescription.ItemType>().ToHashSet();
+    public string Term { get; set; }
+    public HashSet<DataHolder> Scopes { get; set; } = new() { DataHolder.Title };
+    public HashSet<ItemDescription.ItemType> Types { get; set; } = Enum.GetValues<ItemDescription.ItemType>().ToHashSet();
+    public bool QuickSearch => !Scopes.Any(scope => (int) scope > 2);
 
-    public enum Filter {
-        Title,
-        Dialogue_Text,
-        Speaker_Name,
-        Conditional,
-        Background_Type
-    }
-
-    public enum Flag {
-        Only_Titles
+    public enum DataHolder {
+        // Quick search filters
+        Title = 1,
+        Cached_Text = 2,
+        
+        // Deep search filters
+        Dialogue_Text = 3,
+        Script_Flag = 4,
+        Speaker_Name = 5,
+        Conditional = 6,
+        Background_Type = 7
     }
 
     public static SearchQuery Create(string text)
     {
-        return new() { Text = text };
-    }
-
-    public static Filter? GetFilter(string text)
-    {
-        Enum.TryParse(text, true, out Filter filter);
-        return filter;
-    }
-
-    public static Flag? GetFlag(string text)
-    {
-        Enum.TryParse(text, true, out Flag flag);
-        return flag;
-    }
-
-    public bool IsFlagSet(Flag flag)
-    {
-        return Flags.Contains(flag);
+        return new() { Term = text };
     }
 
 }
