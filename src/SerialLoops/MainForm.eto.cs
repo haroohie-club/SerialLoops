@@ -70,10 +70,14 @@ namespace SerialLoops
             {
                 PlaceholderText = "Search...",
                 ToolTip = "Search for items by name, ID, or type.",
+                Width = 200,
             };
-            Button advancedSearchButton = new() { Text = "...", Width = 15 };
+            Button advancedSearchButton = new() { Text = "...", Width = 25 };
             advancedSearchButton.Click += Search_Executed;
-            TableLayout searchBarLayout = new(new TableRow(SearchBox, advancedSearchButton)) { Spacing = new(5, 0) };
+            TableLayout searchBarLayout = new(new TableRow(
+                SearchBox, 
+                new StackLayout { Items = {advancedSearchButton}, Width = 25 }
+            )) { Spacing = new(5, 0) };
             
             ItemExplorer = new(project, EditorTabs, SearchBox, Log);
             Title = $"{BASE_TITLE} - {project.Name}";
