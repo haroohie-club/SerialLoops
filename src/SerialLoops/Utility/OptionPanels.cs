@@ -5,10 +5,12 @@ using Eto.Forms;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib.Items;
 
-namespace SerialLoops.Utility {
-    
-    internal class OptionsGroup : GroupBox {
-        
+namespace SerialLoops.Utility
+{
+
+    internal class OptionsGroup : GroupBox
+    {
+
         public OptionsGroup(string name, List<Option> options, int columns = 1)
         {
             Text = name;
@@ -20,7 +22,7 @@ namespace SerialLoops.Utility {
             {
                 columnTables.Add(new TableLayout { Spacing = new(1, 1) });
             }
-            
+
             // Populate the tables with the options
             options.ForEach(option => columnTables[options.IndexOf(option) % columns].Rows.Add(option.GetOptionRow()));
             Content = new TableLayout(new TableRow(columnTables.Select(t => new TableCell(t)).ToArray()))
@@ -30,7 +32,8 @@ namespace SerialLoops.Utility {
         }
     }
 
-    internal abstract class Option {
+    internal abstract class Option
+    {
         public string Name { get; set; }
 
         protected abstract Control GetControl();
@@ -46,7 +49,8 @@ namespace SerialLoops.Utility {
         }
     }
 
-    internal class TextOption : Option {
+    internal class TextOption : Option
+    {
         public Action<string> OnChange { get; set; }
         protected TextBox _textBox;
 
@@ -70,12 +74,13 @@ namespace SerialLoops.Utility {
                 Spacing = 5,
                 Orientation = Orientation.Horizontal,
                 VerticalContentAlignment = VerticalAlignment.Center,
-                Items = {_textBox}
+                Items = { _textBox }
             };
         }
     }
 
-    internal class BooleanOption : Option {
+    internal class BooleanOption : Option
+    {
         public Action<bool> OnChange { get; set; }
 
         public bool Value
@@ -88,8 +93,7 @@ namespace SerialLoops.Utility {
 
         public BooleanOption()
         {
-            _checkBox = new CheckBox
-                {Checked = false};
+            _checkBox = new CheckBox { Checked = false };
             _checkBox.CheckedChanged += (sender, e) => OnChange?.Invoke(Value);
         }
 
@@ -98,14 +102,15 @@ namespace SerialLoops.Utility {
             return new StackLayout
             {
                 Padding = 5,
-                Items = {_checkBox},
+                Items = { _checkBox },
                 Orientation = Orientation.Horizontal,
                 VerticalContentAlignment = VerticalAlignment.Center,
             };
         }
     }
 
-    internal class ItemBooleanOption : BooleanOption {
+    internal class ItemBooleanOption : BooleanOption
+    {
 
         private readonly ILogger _logger;
 
@@ -113,7 +118,7 @@ namespace SerialLoops.Utility {
         {
             _logger = logger;
         }
-        
+
         public ItemDescription.ItemType Type
         {
             get => Enum.Parse<ItemDescription.ItemType>(Name);
@@ -126,14 +131,15 @@ namespace SerialLoops.Utility {
         }
     }
 
-    internal class BooleanToggleOption : BooleanOption {
+    internal class BooleanToggleOption : BooleanOption
+    {
 
         public LinkButton ToggleButton;
         private string _buttonText => Value ? "All On" : "All Off";
-        
+
         public BooleanToggleOption(List<Option> options)
         {
-            ToggleButton = new LinkButton {Text = _buttonText};
+            ToggleButton = new LinkButton { Text = _buttonText };
             ToggleButton.Click += (sender, args) =>
             {
                 options.OfType<BooleanOption>().ToList().ForEach(option => option.Value = Value);
@@ -148,18 +154,20 @@ namespace SerialLoops.Utility {
         }
     }
 
-    internal class FolderOption : FileOption {
+    internal class FolderOption : FileOption
+    {
         protected override void SelectButton_OnClick(object sender, EventArgs e)
         {
             SelectFolderDialog selectFolderDialog = new();
-            if (selectFolderDialog.ShowAndReportIfFileSelected(GetControl()))
+            if (selectFolderDialog.ShowAndReportIfFolderSelected(GetControl()))
             {
                 _pathBox.Text = selectFolderDialog.Directory;
             }
         }
     }
 
-    internal class FileOption : Option {
+    internal class FileOption : Option
+    {
         public Action<string> OnChange { get; set; }
 
         public string Path
@@ -176,11 +184,10 @@ namespace SerialLoops.Utility {
 
         public FileOption()
         {
-            _pathBox = new TextBox
-                {Text = "", Width = 225};
+            _pathBox = new TextBox { Text = "", Width = 225 };
             _pathBox.TextChanged += (sender, args) => { OnChange?.Invoke(Path); };
 
-            _pickerButton = new Button() {Text = "Select..."};
+            _pickerButton = new Button() { Text = "Select..." };
             _pickerButton.Click += SelectButton_OnClick;
         }
 
@@ -192,7 +199,7 @@ namespace SerialLoops.Utility {
                 Spacing = 5,
                 Orientation = Orientation.Horizontal,
                 VerticalContentAlignment = VerticalAlignment.Center,
-                Items = {_pathBox, _pickerButton}
+                Items = { _pathBox, _pickerButton }
             };
         }
 
@@ -205,5 +212,5 @@ namespace SerialLoops.Utility {
             }
         }
     }
-    
+
 }

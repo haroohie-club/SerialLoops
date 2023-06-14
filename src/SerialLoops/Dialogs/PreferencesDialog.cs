@@ -123,6 +123,5 @@ namespace SerialLoops.Dialogs
             Configuration.Save(_log);
             Close();
         }
-
     }
 }

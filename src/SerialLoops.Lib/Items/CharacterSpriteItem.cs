@@ -1,6 +1,7 @@
 ﻿using HaruhiChokuretsuLib.Archive;
 using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
+using HaruhiChokuretsuLib.Archive.Graphics;
 using HaruhiChokuretsuLib.Util;
 using SkiaSharp;
 using System.Collections.Generic;
@@ -26,14 +27,39 @@ namespace SerialLoops.Lib.Items
             PopulateScriptUses(project.Evt);
         }
 
-        public List<(SKBitmap frame, int timing)> GetClosedMouthAnimation(Project project)
+        public List<(SKBitmap Frame, int Timing)> GetClosedMouthAnimation(Project project)
         {
             return Sprite.GetClosedMouthAnimation(project.Grp, project.MessInfo);
         }
 
-        public List<(SKBitmap frame, int timing)> GetLipFlapAnimation(Project project)
+        public List<(SKBitmap Frame, int Timing)> GetLipFlapAnimation(Project project)
         {
             return Sprite.GetLipFlapAnimation(project.Grp, project.MessInfo);
+        }
+
+        public SKBitmap GetBaseLayout(Project project)
+        {
+            List<GraphicsFile> textures = new() { project.Grp.Files.First(f => f.Index == Sprite.TextureIndex1), project.Grp.Files.First(f => f.Index == Sprite.TextureIndex2), project.Grp.Files.First(f => f.Index == Sprite.TextureIndex3) };
+            GraphicsFile layout = project.Grp.Files.First(g => g.Index == Sprite.LayoutIndex);
+            (SKBitmap spriteBitmap, _) = layout.GetLayout(textures, 0, layout.LayoutEntries.Count, darkMode: false, preprocessedList: true);
+
+            return spriteBitmap;
+        }
+
+        public List<(SKBitmap Frame, short Timing)> GetEyeFrames(Project project)
+        {
+            GraphicsFile eyeTexture = project.Grp.Files.First(f => f.Index == Sprite.EyeTextureIndex);
+            GraphicsFile eyeAnimation = project.Grp.Files.First(f => f.Index == Sprite.EyeAnimationIndex);
+
+            return eyeAnimation.GetAnimationFrames(eyeTexture).Select(g => g.GetImage()).Zip(eyeAnimation.AnimationEntries.Select(a => ((FrameAnimationEntry)a).Time)).ToList();
+        }
+
+        public List<(SKBitmap Frame, short Timing)> GetMouthFrames(Project project)
+        {
+            GraphicsFile mouthTexture = project.Grp.Files.First(f => f.Index == Sprite.MouthTextureIndex);
+            GraphicsFile mouthAnimation = project.Grp.Files.First(f => f.Index == Sprite.MouthAnimationIndex);
+
+            return mouthAnimation.GetAnimationFrames(mouthTexture).Select(g => g.GetImage()).ToList().Zip(mouthAnimation.AnimationEntries.Select(a => ((FrameAnimationEntry)a).Time)).ToList();
         }
 
         public void PopulateScriptUses(ArchiveFile<EventFile> evt)
@@ -46,7 +72,7 @@ namespace SerialLoops.Lib.Items
         
         public SKBitmap GetPreview(Project project)
         {
-            return GetClosedMouthAnimation(project).First().frame;
+            return GetClosedMouthAnimation(project).First().Frame;
         }
     }
 }
