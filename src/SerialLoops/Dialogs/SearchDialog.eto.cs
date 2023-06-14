@@ -17,7 +17,7 @@ namespace SerialLoops
         private SearchBox _searchInput;
         
         public string Text { get => _searchInput.Text; set => _searchInput.Text = value; }
-        private HashSet<SearchQuery.DataHolder> _scopes = new() { SearchQuery.DataHolder.Title, SearchQuery.DataHolder.Cached_Text };
+        private HashSet<SearchQuery.DataHolder> _scopes = new() { SearchQuery.DataHolder.Title };
         private HashSet<ItemDescription.ItemType> _types = Enum.GetValues<ItemDescription.ItemType>().ToHashSet();
         private Label _searchWarningLabel = new()
         {

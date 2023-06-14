@@ -24,19 +24,6 @@ namespace SerialLoops.Lib.Items
             Event = evt;
 
             Graph.AddVertexRange(Event.ScriptSections);
-
-            try
-            {
-                SearchableText = string.Join('\n', evt.ScriptSections.SelectMany(s => s.Objects.Select(c => c.Command.Mnemonic))
-                    .Concat(evt.ConditionalsSection.Objects)
-                    .Concat(evt.LabelsSection.Objects.Select(l => l.Name)));
-                    //.Concat(evt.DialogueLines.Select(l => l.Text)));
-            }
-            catch (Exception ex)
-            {
-                log.LogError($"Exception encountered while creating searchable text for script {Name}: {ex.Message}");
-                log.Log(ex.StackTrace);
-            }
         }
 
         public Dictionary<ScriptSection, List<ScriptItemCommand>> GetScriptCommandTree(Project project, ILogger log)
