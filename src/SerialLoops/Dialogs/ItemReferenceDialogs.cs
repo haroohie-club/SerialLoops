@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace SerialLoops.Dialogs
 {
-    public class ReferencesDialog : FindItemsDialog
+    public class ReferencesDialog : FindItemsWindow
     {
         public ItemDescription Item;
 
@@ -39,14 +39,14 @@ namespace SerialLoops.Dialogs
                 Items =
                 {
                     $"{results.Count} items that reference {Item.Name}:",
-                    new ItemResultsPanel(results, Log) { Dialog = this }
+                    new ItemResultsPanel(results, Log) { Window = this }
                 }
             };
         }
 
     }
 
-    public class OrphanedItemsDialog : FindItemsDialog
+    public class OrphanedItemsDialog : FindItemsWindow
     {
         private static readonly ItemDescription.ItemType[] IGNORED_ORPHAN_TYPES = {
             ItemDescription.ItemType.Scenario,
@@ -78,7 +78,7 @@ namespace SerialLoops.Dialogs
                 Items =
                 {
                     $"{results.Count} items found that are not referenced by other items:",
-                    new ItemResultsPanel(results, Log, false) { Dialog = this }
+                    new ItemResultsPanel(results, Log, false) { Window = this }
                 }
             };
         }

@@ -9,19 +9,18 @@ namespace SerialLoops.Controls
 {
     public class ItemResultsPanel : ItemListPanel
     {
-        public FindItemsDialog Dialog;
+        public FindItemsWindow Window { get; set; }
         public ItemResultsPanel(List<ItemDescription> results, ILogger log, bool expandItems = true) : base(results, new Size(280, 185), expandItems, log) { }
 
         protected override void ItemList_ItemClicked(object sender, EventArgs e)
         {
             if (sender is SectionListTreeGridView view)
             {
-                ItemDescription item = Dialog.Project.FindItem(view.SelectedItem?.Text);
+                ItemDescription item = Window.Project.FindItem(view.SelectedItem?.Text);
                 if (item != null)
                 {
-                    Dialog.Tabs.OpenTab(item, _log);
+                    Window.Tabs.OpenTab(item, _log);
                 }
-                Dialog.Close();
             }
         }
     }

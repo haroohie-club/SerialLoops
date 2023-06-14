@@ -7,7 +7,7 @@ using System;
 
 namespace SerialLoops.Dialogs
 {
-    public abstract class FindItemsDialog : Dialog
+    public abstract class FindItemsWindow : Form
     {
         public ILogger Log { get; set; }
         public EditorTabsPanel Tabs { get; set; }
@@ -16,6 +16,7 @@ namespace SerialLoops.Dialogs
 
         protected override void OnLoad(EventArgs e)
         {
+            Topmost = true;
             if (Log is null)
             {
                 // We can't log that log is null, so we have to throw

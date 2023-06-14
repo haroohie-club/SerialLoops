@@ -11,7 +11,7 @@ using SerialLoops.Utility;
 
 namespace SerialLoops
 {
-    partial class SearchDialog : FindItemsDialog
+    partial class SearchDialog : FindItemsWindow
     {
         private ItemResultsPanel _results;
         private SearchBox _searchInput;
@@ -52,7 +52,7 @@ namespace SerialLoops
 
             _results = new(new List<ItemDescription>(), Log)
             {
-                Dialog = this
+                Window = this
             };
             _searchInput = new()
             {

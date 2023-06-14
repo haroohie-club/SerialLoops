@@ -702,7 +702,7 @@ namespace SerialLoops
                     Tabs = EditorTabs,
                     Text = SearchBox.Text,
                 };
-                searchDialog.ShowModal(this);
+                searchDialog.Show();
             }
         }
 
@@ -721,7 +721,7 @@ namespace SerialLoops
                             orphanedItemsDialog = new(OpenProject, ItemExplorer, EditorTabs, Log);
                             tracker.Finished++;
                         });
-                    }, () => { Application.Instance.Invoke(() => { orphanedItemsDialog?.ShowModal(this); }); }, tracker,
+                    }, () => { Application.Instance.Invoke(() => { orphanedItemsDialog?.Show(); }); }, tracker,
                     "Finding orphaned items");
             }
         }
