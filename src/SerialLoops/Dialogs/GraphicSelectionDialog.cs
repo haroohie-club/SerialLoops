@@ -18,7 +18,7 @@ namespace SerialLoops.Dialogs
         private readonly Project _project;
         private readonly ILogger _log;
 
-        private TextBox _filter;
+        private SearchBox _filter;
         private ListBox _selector;
         private Panel _preview;
 
@@ -37,7 +37,7 @@ namespace SerialLoops.Dialogs
             MinimumSize = new Size(450, 400);
             Padding = 10;
 
-            _filter = new TextBox
+            _filter = new SearchBox
             {
                 PlaceholderText = "Filter by name",
                 Width = 150,

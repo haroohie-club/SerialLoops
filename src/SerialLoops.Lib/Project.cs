@@ -16,6 +16,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using SerialLoops.Lib.Script.Parameters;
 
 namespace SerialLoops.Lib
 {
@@ -531,20 +532,99 @@ namespace SerialLoops.Lib
             File.WriteAllText(Path.Combine(MainDirectory, $"{Name}.{PROJECT_FORMAT}"), JsonSerializer.Serialize<Project>(this, SERIALIZER_OPTIONS));
         }
 
-        public List<ItemDescription> GetSearchResults(string searchTerm, bool titlesOnly = true)
+        public List<ItemDescription> GetSearchResults(string query, ILogger logger)
         {
-            if (titlesOnly)
+            return GetSearchResults(SearchQuery.Create(query), logger);
+        }
+
+        public List<ItemDescription> GetSearchResults(SearchQuery query, ILogger logger, IProgressTracker? tracker = null)
+        {
+            var term = query.Term.Trim();
+            var searchable = Items.Where(i => query.Types.Contains(i.Type)).ToList();
+            tracker?.Focus($"{searchable.Count} Items", searchable.Count);
+
+            return searchable.Where(item =>
+                {
+                    bool hit = query.Scopes.Aggregate(
+                        false,
+                        (current, scope) => current || ItemMatches(item, term, scope, logger)
+                    );
+                    if (tracker is not null) tracker.Finished++;
+                    return hit;
+                })
+                .ToList();
+        }
+
+        private bool ItemMatches(ItemDescription item, string term, SearchQuery.DataHolder scope, ILogger logger)
+        {
+            switch (scope)
             {
-                return Items.Where(item =>
-                    item.DisplayName.Contains(searchTerm.Trim(), StringComparison.OrdinalIgnoreCase)).ToList();
-            }
-            else
-            {
-                return Items.Where(item =>
-                    item.Name.Contains(searchTerm.Trim(), StringComparison.OrdinalIgnoreCase) ||
-                    item.DisplayName.Contains(searchTerm.Trim(), StringComparison.OrdinalIgnoreCase) ||
-                    (!string.IsNullOrEmpty(item.SearchableText) &&
-                    item.SearchableText.Contains(searchTerm.Trim(), StringComparison.OrdinalIgnoreCase))).ToList();
+                case SearchQuery.DataHolder.Title:
+                    return item.Name.Contains(term, StringComparison.OrdinalIgnoreCase) ||
+                           item.DisplayName.Contains(term, StringComparison.OrdinalIgnoreCase);
+
+                case SearchQuery.DataHolder.Dialogue_Text:
+                    if (item is ScriptItem dialogueScript)
+                    {
+                        if (LangCode.Equals("ja", StringComparison.OrdinalIgnoreCase))
+                        {
+                            return dialogueScript.GetScriptCommandTree(this, logger)
+                                .Any(s => s.Value.Any(c => c.Parameters
+                                    .Where(p => p.Type == ScriptParameter.ParameterType.DIALOGUE)
+                                    .Any(p => ((DialogueScriptParameter)p).Line.Text
+                                        .Contains(term, StringComparison.OrdinalIgnoreCase))));
+                        }
+                        else
+                        {
+                            return dialogueScript.GetScriptCommandTree(this, logger)
+                                .Any(s => s.Value.Any(c => c.Parameters
+                                    .Where(p => p.Type == ScriptParameter.ParameterType.DIALOGUE)
+                                    .Any(p => ((DialogueScriptParameter)p).Line.Text
+                                        .GetSubstitutedString(this).Contains(term, StringComparison.OrdinalIgnoreCase))));
+                        }
+                    }
+                    return false;
+
+                case SearchQuery.DataHolder.Script_Flag:
+                    if (item is ScriptItem flagScript)
+                    {
+                        return flagScript.GetScriptCommandTree(this, logger)
+                            .Any(s => s.Value.Any(c => c.Parameters
+                                .Where(p => p.Type == ScriptParameter.ParameterType.FLAG)
+                                .Any(p => ((FlagScriptParameter)p).FlagName
+                                    .Contains(term, StringComparison.OrdinalIgnoreCase))));
+                    }
+                    return false;
+
+                case SearchQuery.DataHolder.Conditional:
+                    if (item is ScriptItem conditionalScript)
+                    {
+                        return conditionalScript.Event.ConditionalsSection?.Objects?
+                            .Any(c => !string.IsNullOrEmpty(c) && c.Contains(term, StringComparison.OrdinalIgnoreCase)) ?? false;
+                    }
+                    return false;
+
+                case SearchQuery.DataHolder.Speaker_Name:
+                    if (item is ScriptItem speakerScript)
+                    {
+                        return speakerScript.GetScriptCommandTree(this, logger)
+                            .Any(s => s.Value.Any(c => c.Parameters
+                                .Where(p => p.Type == ScriptParameter.ParameterType.DIALOGUE)
+                                .Any(p => Characters[(int)((DialogueScriptParameter)p).Line.Speaker].Name
+                                    .Contains(term, StringComparison.OrdinalIgnoreCase))));
+                    }
+                    return false;
+
+                case SearchQuery.DataHolder.Background_Type:
+                    if (item is BackgroundItem bg)
+                    {
+                        return bg.BackgroundType.ToString().Contains(term, StringComparison.OrdinalIgnoreCase);
+                    }
+                    return false;
+
+                default:
+                    logger.LogError($"Unimplemented search scope: {scope}");
+                    return false;
             }
         }
 

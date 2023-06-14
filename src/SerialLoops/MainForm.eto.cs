@@ -51,6 +51,7 @@ namespace SerialLoops
 
         private void OpenProjectView(Project project, IProgressTracker tracker)
         {
+            InitializeBaseMenu();
             InitializeProjectMenu();
 
             using Stream blankNameplateStream = Assembly.GetCallingAssembly()
@@ -64,18 +65,27 @@ namespace SerialLoops
             _msGothicHaruhi = SKTypeface.FromStream(typefaceStream);
 
             EditorTabs = new(project, this, Log);
+            
             SearchBox = new()
             {
                 PlaceholderText = "Search...",
-                ToolTip = "Search for items by name, ID, or type."
+                ToolTip = "Search for items by name, ID, or type.",
+                Width = 200,
             };
+            Button advancedSearchButton = new() { Text = "...", Width = 25 };
+            advancedSearchButton.Click += Search_Executed;
+            TableLayout searchBarLayout = new(new TableRow(
+                SearchBox, 
+                new StackLayout { Items = {advancedSearchButton}, Width = 25 }
+            )) { Spacing = new(5, 0) };
+            
             ItemExplorer = new(project, EditorTabs, SearchBox, Log);
             Title = $"{BASE_TITLE} - {project.Name}";
             Content = new TableLayout(new TableRow
             (
-                new TableLayout(SearchBox, ItemExplorer),
+                new TableLayout(searchBarLayout, ItemExplorer) { Spacing = new(0, 5) },
                 EditorTabs
-            ));
+            )) { Spacing = new(0, 5) };
             EditorTabs.Tabs_PageChanged(this, EventArgs.Empty);
 
             LoadCachedData(project, tracker);

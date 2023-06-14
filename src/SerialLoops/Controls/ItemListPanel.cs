@@ -17,7 +17,7 @@ namespace SerialLoops.Controls
             set
             {
                 _items = value;
-                Viewer?.SetContents(GetSections(), _expandItems);
+                Viewer?.SetContents(GetSections(), ExpandItems);
             }
         }
         public SectionListTreeGridView Viewer { get; private set; }
@@ -25,20 +25,20 @@ namespace SerialLoops.Controls
         protected ILogger _log;
         private readonly Size _size;
         private List<ItemDescription> _items;
-        private readonly bool _expandItems;
+        protected bool ExpandItems { get; set; }
 
         protected ItemListPanel(List<ItemDescription> items, Size size, bool expandItems, ILogger log)
         {
             Items = items;
             _log = log;
             _size = size;
-            _expandItems = expandItems;
+            ExpandItems = expandItems;
             InitializeComponent();
         }
 
         void InitializeComponent()
         {
-            Viewer = new SectionListTreeGridView(GetSections(), _size, _expandItems);
+            Viewer = new SectionListTreeGridView(GetSections(), _size, ExpandItems);
             MinimumSize = _size;
             Padding = 0;
             Content = new TableLayout(Viewer.Control);

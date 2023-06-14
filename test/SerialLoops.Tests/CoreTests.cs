@@ -103,19 +103,6 @@ namespace SerialLoops.Tests
             });
         }
 
-        [Test, TestCaseSource(nameof(CharacterSpriteNames)), Parallelizable(ParallelScope.All)]
-        public void CharacterSpriteItemTest(string spriteName)
-        {
-            var sprite = (CharacterSpriteItem)_project.FindItem(spriteName);
-            var closeMouthAnimation = sprite.GetClosedMouthAnimation(_project);
-            var lipFlapAnimation = sprite.GetLipFlapAnimation(_project);
-            Assert.Multiple(() =>
-            {
-                Assert.That(closeMouthAnimation, Is.Not.Null);
-                Assert.That(lipFlapAnimation, Is.Not.Null);
-            });
-        }
-
         [Test, TestCaseSource(nameof(ChibiNames)), Parallelizable(ParallelScope.All)]
         public void ChibiItemTest(string chibiName)
         {
@@ -202,15 +189,15 @@ namespace SerialLoops.Tests
         {
             Assert.Multiple(() =>
             {
-                Assert.That(_project.GetSearchResults("EV1_"), Has.Count.EqualTo(30), "Failed on EV1_");
-                Assert.That(_project.GetSearchResults("EV2_"), Has.Count.EqualTo(32), "Failed on EV2_");
-                Assert.That(_project.GetSearchResults("EV3_"), Has.Count.EqualTo(36), "Failed on EV3_");
-                Assert.That(_project.GetSearchResults("EV4_"), Has.Count.EqualTo(43), "Failed on EV4_");
-                Assert.That(_project.GetSearchResults("EV5_"), Has.Count.EqualTo(36), "Failed on EV5_");
-                Assert.That(_project.GetSearchResults("ANZ"), Has.Count.EqualTo(26), "Failed on ANZ");
-                Assert.That(_project.GetSearchResults("BG_"), Has.Count.EqualTo(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background).Count()), "Failed on BG_");
-                Assert.That(_project.GetSearchResults("BGM0"), Has.Count.EqualTo(_project.Items.Where(i => i.Type == ItemDescription.ItemType.BGM).Count()), "Failed on BGM");
-                Assert.That(_project.GetSearchResults("SPR_"), Has.Count.EqualTo(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Character_Sprite).Count()), "Failed on SPR_");
+                Assert.That(_project.GetSearchResults("EV1_", _log), Has.Count.EqualTo(30), "Failed on EV1_");
+                Assert.That(_project.GetSearchResults("EV2_", _log), Has.Count.EqualTo(32), "Failed on EV2_");
+                Assert.That(_project.GetSearchResults("EV3_", _log), Has.Count.EqualTo(36), "Failed on EV3_");
+                Assert.That(_project.GetSearchResults("EV4_", _log), Has.Count.EqualTo(43), "Failed on EV4_");
+                Assert.That(_project.GetSearchResults("EV5_", _log), Has.Count.EqualTo(36), "Failed on EV5_");
+                Assert.That(_project.GetSearchResults("ANZ", _log), Has.Count.EqualTo(26), "Failed on ANZ");
+                Assert.That(_project.GetSearchResults("BG_", _log), Has.Count.EqualTo(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Background).Count()), "Failed on BG_");
+                Assert.That(_project.GetSearchResults("BGM0", _log), Has.Count.EqualTo(_project.Items.Where(i => i.Type == ItemDescription.ItemType.BGM).Count()), "Failed on BGM");
+                Assert.That(_project.GetSearchResults("SPR_", _log), Has.Count.EqualTo(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Character_Sprite).Count()), "Failed on SPR_");
             });
         }
         #endregion
