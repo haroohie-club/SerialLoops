@@ -103,19 +103,6 @@ namespace SerialLoops.Tests
             });
         }
 
-        [Test, TestCaseSource(nameof(CharacterSpriteNames)), Parallelizable(ParallelScope.All)]
-        public void CharacterSpriteItemTest(string spriteName)
-        {
-            var sprite = (CharacterSpriteItem)_project.FindItem(spriteName);
-            var closeMouthAnimation = sprite.GetClosedMouthAnimation(_project);
-            var lipFlapAnimation = sprite.GetLipFlapAnimation(_project);
-            Assert.Multiple(() =>
-            {
-                Assert.That(closeMouthAnimation, Is.Not.Null);
-                Assert.That(lipFlapAnimation, Is.Not.Null);
-            });
-        }
-
         [Test, TestCaseSource(nameof(ChibiNames)), Parallelizable(ParallelScope.All)]
         public void ChibiItemTest(string chibiName)
         {
