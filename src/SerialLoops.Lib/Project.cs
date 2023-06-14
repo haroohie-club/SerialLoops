@@ -582,7 +582,7 @@ namespace SerialLoops.Lib
                         return speakerScript.GetScriptCommandTree(this, logger)
                             .Any(s => s.Value.Any(c => c.Parameters
                                 .Where(p => p.Type == ScriptParameter.ParameterType.DIALOGUE)
-                                .Any(p => ((DialogueScriptParameter) p).Line.Speaker.ToString()
+                                .Any(p => Characters[(int)((DialogueScriptParameter) p).Line.Speaker].Name
                                     .Contains(term, StringComparison.OrdinalIgnoreCase))));
                     }
                     return false;
