@@ -34,10 +34,7 @@
 * On macOS and Linux, run `sudo dkp-pacman -S nds-dev` from the terminal after installing the devkitPro pacman distribution.
 
 #### Installing OpenAL (Linux)
-If you're running on Linux, you will also need to install OpenAL, needed for audio processing. On Ubuntu/Debian (which are the distros we test on), it can be installed in a single command:
-```bash
-sudo apt install libopenal-dev
-```
+If you're running on Linux and _not using one of the package releases_ (the `.deb` or `.rpm`), you will also need to install OpenAL which is used for audio processing.
 
 ### Download & Install
 Once you have installed any necessary prerequisites, to install Serial Loops, download the latest release for your platform from the [Releases tab](https://github.com/haroohie-club/SerialLoops/releases).

@@ -21,7 +21,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{1F8886B6-C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "platforms", "platforms", "{D63057DD-B2DB-49A0-8680-0CDBE6268550}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoopyUpdater", "LoopyUpdater\LoopyUpdater.csproj", "{1335EA86-D7F4-4779-84DC-A8A52E2571AC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoopyUpdater", "install\LoopyUpdater\LoopyUpdater.csproj", "{1335EA86-D7F4-4779-84DC-A8A52E2571AC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
