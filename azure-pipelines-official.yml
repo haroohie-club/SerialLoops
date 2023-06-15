@@ -46,6 +46,7 @@ stages:
           rid: 'linux-x64'
           artifactPath: '$(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Gtk/Release/net6.0/linux-x64/publish.tar.gz'
           secondArtifactPath: '$(Build.SourcesDirectory)/dpkg-build/SerialLoops.deb'
+          thirdArtifactPath: '$(Build.SourcesDirectory)/rpmbuild/RPMS/x86_64/SerialLoops-$(Version)-1.fc38.x86_64.rpm'
           extraPublishParams: ''
         macOS-x64:
           imageName: 'macOS-latest'
@@ -55,6 +56,7 @@ stages:
           rid: 'osx-x64'
           artifactPath: '$(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Mac/Release/net6.0/osx-x64/SerialLoops.Mac.dmg'
           secondArtifactPath: ''
+          thirdArtifactPath: ''
           extraPublishParams: '/p:EnableDmgBuild=true'
         macOS-arm64:
           imageName: 'macOS-latest'
@@ -64,6 +66,7 @@ stages:
           rid: 'osx-arm64'
           artifactPath: '$(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Mac/Release/net6.0/osx-arm64/SerialLoops.Mac.dmg'
           secondArtifactPath: ''
+          thirdArtifactPath: ''
           extraPublishParams: '/p:EnableDmgBuild=true'
         Windows:
           imageName: 'windows-latest'
@@ -73,6 +76,7 @@ stages:
           rid: 'win-x64'
           artifactPath: '$(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Wpf/Release/net6.0-windows/win-x64/publish.zip'
           secondArtifactPath: ''
+          thirdArtifactPath: ''
           extraPublishParams: ''
     displayName: Build & Publish
     pool:
@@ -80,7 +84,15 @@ stages:
     steps:
     - checkout: self
       clean: true
-      
+
+    - pwsh: |
+        Push-Location ..
+        Move-Item s SerialLoops-$(Version)
+        tar -czvf SerialLoops-$(Version).tar.gz SerialLoops-$(Version)
+        Move-Item SerialLoops-$(Version) s
+        Pop-Location
+      condition: eq(variables['rid'], 'linux-x64')
+    
     - task: DotNetCoreCLI@2
       inputs:
         command: 'publish'
@@ -111,7 +123,16 @@ stages:
         ln -s /usr/lib/SerialLoops/SerialLoops usr/bin/SerialLoops
         cd ..
         dpkg-deb --build SerialLoops
-      displayName: Create Linux tar and dpkg
+        Pop-Location
+        mkdir -p rpmbuild/BUILD
+        mkdir -p rpmbuild/RPMS
+        mkdir -p rpmbuild/SOURCES
+        mkdir -p rpmbuild/SPECS
+        mkdir -p rpmbuild/SRPMS
+        mv $(Build.SourcesDirectory)/../SerialLoops-$(Version).tar.gz $(Build.SourcesDirectory)/rpmbuild/SOURCES/
+        Write-Output "Name:           SerialLoops`nVersion:        $(Version)`Release:        1%{?dist}`Summary:        Editor for Suzumiya Haruhi no Chokuretsu`ExclusiveArch:  x86_64``License:        GPLv3`URL:            https://haroohie.club/chokuretsu/serial-loops`Source0:        %{name}-%{version}.tar.gz`Source1:        https://github.com/haroohie-club/SerialLoops``BuildRequires:  dotnet-sdk-6.0`Requires:       openal-soft``%global debug_package %{nil}``%description`An editor for the Nintendo DS game Suzumiya Haruhi no Chokuretsu (The Series of Haruhi Suzumiya)``%prep`%setup``%build`dotnet publish src/SerialLoops.Gtk/SerialLoops.Gtk.csproj -c Release -f net6.0 -r linux-x64 --self-contained /p:DebugType=None /p:DebugSymbols=false /p:PublishSingleFile=true``%install`rm -rf $RPM_BUILD_ROOT`mkdir -p $RPM_BUILD_ROOT/%{_bindir}`mkdir -p $RPM_BUILD_ROOT/%{_libdir}/SerialLoops`cp -r src/SerialLoops.Gtk/bin/Release/net6.0/linux-x64/publish/* $RPM_BUILD_ROOT/%{_libdir}/SerialLoops/`ln -s %{_libdir}/SerialLoops/SerialLoops $RPM_BUILD_ROOT/%{_bindir}/SerialLoops``%files`%dir %{_libdir}/SerialLoops`%{_bindir}/SerialLoops`%{_libdir}/SerialLoops`" | Out-File -FilePath rpmbuild/SPECS/SerialLoops.spec
+        docker run -v $(Build.SourcesDirectory)/install/rpm-scripts:/rpm-scripts -v $(Build.SourcesDirectory)/rpmbuild:/rpmbuild -e VERSION=$(Version) fedora /rpm-scripts/rpm-make.sh
+      displayName: Create Linux tar, dpkg, and rpm
       condition: eq(variables['rid'], 'linux-x64')
 
     # We need a second round of publishing to get dmg packing to work. Idk why, but it works if we do it this way lol
@@ -141,6 +162,14 @@ stages:
         publishLocation: 'Container'
       displayName: Publish secondary build artifact
       condition: ne(variables['secondArtifactPath'], '')
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(secondArtifactPath)'
+        ArtifactName: '$(artifactName)-3'
+        publishLocation: 'Container'
+      displayName: Publish tertiary build artifact
+      condition: ne(variables['thirdArtifactPath'], '')
 - stage: Publish
   dependsOn: Build
   jobs:
@@ -157,11 +186,17 @@ stages:
         artifactName: 'Linux-v$(Version)'
         downloadPath: '$(Build.ArtifactStagingDirectory)'
     - task: DownloadBuildArtifacts@0
-      displayName: Download Linux dpkg
+      displayName: Download Linux deb
       inputs:
         buildType: 'current'
         downloadType: 'single'
         artifactName: 'Linux-v$(Version)-2'
+        downloadPath: '$(Build.ArtifactStagingDirectory)'
+      displayName: Download Linux rpm
+      inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: 'Linux-v$(Version)-3'
         downloadPath: '$(Build.ArtifactStagingDirectory)'
     - task: DownloadBuildArtifacts@0
       displayName: Download macOS x64 artifacts
