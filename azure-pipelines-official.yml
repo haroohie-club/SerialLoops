@@ -103,7 +103,7 @@ stages:
         mkdir -p dpkg-build/SerialLoops/usr/lib/SerialLoops
         mkdir -p dpkg-build/SerialLoops/usr/share/applications
         Push-Location dpkg-build/SerialLoops
-        Write-Output "Package: SerialLoops`nVersion: $(Version)`nSection: custom`nPriority: optional`nArchitecture: all`nEssential: no`nMaintainer: The Haroohie Translation Club <haroohietranslation@gmail.com>`nHomepage: https://haroohie.club/`nDescription: Editor for Suzumiya Haruhi no Chokuretsu`n" | Out-File -FilePath DEBIAN/control
+        Write-Output "Package: SerialLoops`nVersion: $(Version)`nSection: custom`nPriority: optional`nArchitecture: all`nEssential: no`nDepends: libopenal-dev`nMaintainer: The Haroohie Translation Club <haroohietranslation@gmail.com>`nHomepage: https://haroohie.club/`nDescription: Editor for Suzumiya Haruhi no Chokuretsu`n" | Out-File -FilePath DEBIAN/control
         Write-Output "[Desktop Entry]`nVersion=$(Version)`nName=Serial Loops`nComment=Editor for Suzumiya Haruhi no Chokuretsu`nExec=/usr/bin/SerialLoops`nIcon=/usr/lib/SerialLoops/Icons/AppIcon.png`nTerminal=false`nType=Application`nCategories=Utility;Application;`n" | Out-File -FilePath usr/share/applications/SerialLoops.desktop
         chmod 777 usr/lib/SerialLoops
         chmod +x usr/share/applications/SerialLoops.desktop
@@ -205,7 +205,7 @@ stages:
           ## Installation Notes
           On macOS, after dragging the app from the dmg into Applications, please run `xattr -cr /Applications/SerialLoops.Mac.app` from the Terminal in order to be able to run the app. This is required because we currently don't codesign the application, meaning macOS will refuse to run it without explicit approval from you.
 
-          The `.deb` package can only be used on Debian-based systems (e.g. Ubuntu). Install it with `sudo dpkg -i SerialLoops-$(Version)_amd64.deb`. For other Linux distros, please use the binaries packaged in the `.tar.gz` archive. Regardless of your distro, ensure you install the OpenAL binaries so audio playback works &ndash; on Ubuntu, this can be done with `sudo apt install libopenal-dev`.
+          The `.deb` package can only be used on Debian-based systems (e.g. Ubuntu). Install it with `sudo apt install -f ./SerialLoops-$(Version)_amd64.deb`. For other Linux distros, please use the binaries packaged in the `.tar.gz` archive; if using the archive, ensure you install the OpenAL binaries so audio playback works.
 
           Please ensure you have installed [devkitARM from devkitPro](https://devkitpro.org/wiki/Getting_Started) before using the program.
 
