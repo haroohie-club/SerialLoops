@@ -245,7 +245,9 @@ stages:
           ## Installation Notes
           On macOS, after dragging the app from the dmg into Applications, please run `xattr -cr /Applications/SerialLoops.Mac.app` from the Terminal in order to be able to run the app. This is required because we currently don't codesign the application, meaning macOS will refuse to run it without explicit approval from you.
 
-          The `.deb` package can only be used on Debian-based systems (e.g. Ubuntu). Install it with `sudo apt install -f ./SerialLoops-$(Version)_amd64.deb`. For other Linux distros, please use the binaries packaged in the `.tar.gz` archive; if using the archive, ensure you install the OpenAL binaries so audio playback works.
+          The `.deb` package is intended for Debian-based distros (e.g. Ubuntu). Install it with `sudo apt install -f ./SerialLoops-$(Version)_amd64.deb`.
+          The `.rpm` package is intended for Red Hat distros (e.g. Fedora). Install it with `sudo dnf install ./SerialLoops-$(Version)-1.fc38.x86_64.rpm`.
+          For other Linux distros, please use the binaries packaged in the `.tar.gz` archive; when doing so, ensure you install the OpenAL binaries so audio playback works.
 
           Please ensure you have installed [devkitARM from devkitPro](https://devkitpro.org/wiki/Getting_Started) before using the program.
 
