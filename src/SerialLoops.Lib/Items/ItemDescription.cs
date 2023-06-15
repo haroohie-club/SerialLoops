@@ -74,7 +74,17 @@ namespace SerialLoops.Lib.Items
                     return project.Items.Where(i => sprite.ScriptUses.Select(s => s.ScriptName).Contains(i.Name)).ToList();
                 case ItemType.Chibi:
                     ChibiItem chibi = (ChibiItem)this;
-                    return project.Items.Where(i => chibi.ScriptUses.Select(s => s.ScriptName).Contains(i.Name)).ToList();
+                    references.AddRange(project.Items.Where(i => i.Type == ItemType.Script && project.Evt.Files.Where(e =>
+                        e.MapCharactersSection?.Objects?.Any(t => t.CharacterIndex == chibi.ChibiIndex) ?? false).Select(e => e.Index).Contains(((ScriptItem)i).Event.Index)));
+                    references.AddRange(project.Items.Where(i => chibi.ScriptUses.Select(s => s.ScriptName).Contains(i.Name)));
+                    return references;
+                case ItemType.Group_Selection:
+                    GroupSelectionItem groupSelection = (GroupSelectionItem)this;
+                    if (scenario.Scenario.Commands.Any(c => c.Verb == ScenarioCommand.ScenarioVerb.ROUTE_SELECT && c.Parameter == groupSelection.Index))
+                    {
+                        references.Add(scenario);
+                    }
+                    return references;
                 case ItemType.Map:
                     MapItem map = (MapItem)this;
                     return project.Items.Where(i => i.Type == ItemType.Puzzle && ((PuzzleItem)i).Puzzle.Settings.MapId == map.QmapIndex)
@@ -96,7 +106,9 @@ namespace SerialLoops.Lib.Items
                         references.Add(scenario);
                     }
                     references.AddRange(project.Items.Where(i => i.Type == ItemType.Group_Selection && ((GroupSelectionItem)i).Selection.RouteSelections.Where(s => s is not null).Any(s => s.Routes.Any(r => r.ScriptIndex == script.Event.Index))));
-                    references.AddRange(project.Items.Where(i => i.Type == ItemType.Topic && ((TopicItem)i).Topic.EventIndex == script.Event.Index));
+                    references.AddRange(project.Items.Where(i => i.Type == ItemType.Topic &&
+                        (((TopicItem)i).Topic.CardType != TopicCardType.Main && ((TopicItem)i).Topic.EventIndex == script.Event.Index ||
+                        (((TopicItem)i).HiddenMainTopic?.EventIndex ?? -1) == script.Event.Index)));
                     references.AddRange(project.Items.Where(i => i.Type == ItemType.Script && ((ScriptItem)i).Event.ConditionalsSection.Objects.Contains(Name)));
                     return references;
                 case ItemType.Topic:
