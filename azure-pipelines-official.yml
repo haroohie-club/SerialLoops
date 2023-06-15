@@ -192,6 +192,7 @@ stages:
         downloadType: 'single'
         artifactName: 'Linux-v$(Version)-2'
         downloadPath: '$(Build.ArtifactStagingDirectory)'
+    - task: DownloadBuildArtifacts@0
       displayName: Download Linux rpm
       inputs:
         buildType: 'current'
