@@ -1124,8 +1124,17 @@ namespace SerialLoops.Editors
                     case ScriptParameter.ParameterType.DIALOGUE:
                         DialogueScriptParameter dialogueParam = (DialogueScriptParameter)parameter;
                         ScriptCommandDropDown speakerDropDown = new() { Command = command, ParameterIndex = i, OtherDropDowns = new() };
-                        speakerDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Character).Select(c => new ListItem { Key = c.Name, Text = c.Name[4..] }));
-                        speakerDropDown.SelectedKey = _project.Items.First(i => i.Type == ItemDescription.ItemType.Character && i.Name == $"CHR_{_project.Characters[(int)dialogueParam.Line.Speaker].Name}").Name;
+                        speakerDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Character).Select(c => new ListItem { Key = c.DisplayName, Text = c.DisplayName[4..] }));
+                        try
+                        {
+                            speakerDropDown.SelectedKey = _project.Items.First(i => i.Type == ItemDescription.ItemType.Character && i.DisplayName == $"CHR_{_project.Characters[(int)dialogueParam.Line.Speaker].Name}").DisplayName;
+                        }
+                        catch (InvalidOperationException)
+                        {
+                            _log.LogError("Failed to find character item -- have you saved all of your changes to character names?");
+                            return;
+                        }
+
                         speakerDropDown.SelectedKeyChanged += SpeakerDropDown_SelectedKeyChanged;
                         if (currentCol > 0)
                         {
@@ -1771,8 +1780,20 @@ namespace SerialLoops.Editors
                         }
                         if (spriteParam.Sprite is not null)
                         {
-                            CharacterItem character = (CharacterItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Character &&
-                                i.Name == $"CHR_{_project.Characters[(int)((DialogueScriptParameter)command.Parameters[0]).Line.Speaker].Name}");
+                            CharacterItem character;
+                            try
+                            {
+                                character = (CharacterItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Character &&
+                                i.DisplayName == $"CHR_{_project.Characters[(int)((DialogueScriptParameter)command.Parameters[0]).Line.Speaker].Name}");
+                            }
+                            catch (InvalidOperationException)
+                            {
+                                using Stream noPreviewStream = Assembly.GetCallingAssembly().GetManifestResourceStream("SerialLoops.Graphics.ScriptPreviewError.png");
+                                canvas.DrawImage(SKImage.FromEncodedData(noPreviewStream), new SKPoint(0, 0));
+                                canvas.Flush();
+                                _preview.Items.Add(new SKGuiImage(previewBitmap));
+                                return;
+                            }
                             SpriteEntranceScriptParameter spriteEntranceParam = (SpriteEntranceScriptParameter)command.Parameters[2];
                             short layer = ((ShortScriptParameter)command.Parameters[9]).Value;
 
