@@ -68,6 +68,10 @@ public class ChibiDirectionSelector : Panel
                 MinimumSize = new(35, 35),
                 ToolTip = direction.ToString(),
             };
+            if (Platform.IsGtk)
+            {
+                button.Width = 0;
+            }
             button.Click += (sender, e) => { Direction = direction; };
             _grid.Add(button, x, y);
             
