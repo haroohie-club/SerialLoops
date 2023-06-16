@@ -1124,8 +1124,9 @@ namespace SerialLoops.Editors
                     case ScriptParameter.ParameterType.DIALOGUE:
                         DialogueScriptParameter dialogueParam = (DialogueScriptParameter)parameter;
                         ScriptCommandDropDown speakerDropDown = new() { Command = command, ParameterIndex = i, OtherDropDowns = new() };
-                        speakerDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Character).Select(c => new ListItem { Key = c.Name, Text = c.Name[4..] }));
-                        speakerDropDown.SelectedKey = _project.Items.First(i => i.Type == ItemDescription.ItemType.Character && i.Name == $"CHR_{_project.Characters[(int)dialogueParam.Line.Speaker].Name}").Name;
+                        speakerDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Character).Select(c => new ListItem { Key = c.DisplayName, Text = c.DisplayName[4..] }));
+                        speakerDropDown.SelectedKey = _project.Items.First(i => i.Type == ItemDescription.ItemType.Character && i.DisplayName == $"CHR_{_project.Characters[(int)dialogueParam.Line.Speaker].Name}").DisplayName;
+
                         speakerDropDown.SelectedKeyChanged += SpeakerDropDown_SelectedKeyChanged;
                         if (currentCol > 0)
                         {
@@ -1772,7 +1773,7 @@ namespace SerialLoops.Editors
                         if (spriteParam.Sprite is not null)
                         {
                             CharacterItem character = (CharacterItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Character &&
-                                i.Name == $"CHR_{_project.Characters[(int)((DialogueScriptParameter)command.Parameters[0]).Line.Speaker].Name}");
+                                i.DisplayName == $"CHR_{_project.Characters[(int)((DialogueScriptParameter)command.Parameters[0]).Line.Speaker].Name}");
                             SpriteEntranceScriptParameter spriteEntranceParam = (SpriteEntranceScriptParameter)command.Parameters[2];
                             short layer = ((ShortScriptParameter)command.Parameters[9]).Value;
 
