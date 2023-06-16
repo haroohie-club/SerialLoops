@@ -173,9 +173,10 @@ namespace SerialLoops.Tests
             Assert.Multiple(() =>
             {
                 Assert.That(_project.Items.First(i => i.Name == "BG_BG_AKID0").GetReferencesTo(_project), Has.Count.EqualTo(14));
+                Assert.That(_project.Items.First(i => i.Name == "BG_EV020").GetReferencesTo(_project), Has.Count.EqualTo(1));
                 Assert.That(_project.Items.First(i => i.Name == "BGM001").GetReferencesTo(_project), Has.Count.EqualTo(9));
                 Assert.That(_project.Items.First(i => i.Name == "SPR_CLUB_MEM_A_234").GetReferencesTo(_project), Has.Count.EqualTo(12));
-                Assert.That(_project.Items.First(i => i.Name == "CHIBI_HAL").GetReferencesTo(_project), Has.Count.EqualTo(59));
+                Assert.That(_project.Items.First(i => i.Name == "CHIBI_HAL").GetReferencesTo(_project), Has.Count.EqualTo(63));
                 Assert.That(_project.Items.First(i => i.Name == "SLG01").GetReferencesTo(_project), Has.Count.EqualTo(1));
                 Assert.That(_project.Items.First(i => i.Name == "CA01").GetReferencesTo(_project), Has.Count.EqualTo(1));
                 Assert.That(_project.Items.First(i => i.Name == "EV0_000").GetReferencesTo(_project), Has.Count.EqualTo(1));
