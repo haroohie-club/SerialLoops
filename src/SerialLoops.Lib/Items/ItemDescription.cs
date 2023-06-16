@@ -74,10 +74,11 @@ namespace SerialLoops.Lib.Items
                     return project.Items.Where(i => sprite.ScriptUses.Select(s => s.ScriptName).Contains(i.Name)).ToList();
                 case ItemType.Chibi:
                     ChibiItem chibi = (ChibiItem)this;
+                    int chibiIndex = project.Items.Where(i => i.Type == ItemType.Chibi).ToList().IndexOf(chibi) + 1;
                     references.AddRange(project.Items.Where(i => i.Type == ItemType.Script && project.Evt.Files.Where(e =>
-                        e.MapCharactersSection?.Objects?.Any(t => t.CharacterIndex == chibi.ChibiIndex) ?? false).Select(e => e.Index).Contains(((ScriptItem)i).Event.Index)));
+                        e.MapCharactersSection?.Objects?.Any(t => t.CharacterIndex == chibiIndex) ?? false).Select(e => e.Index).Contains(((ScriptItem)i).Event.Index)));
                     references.AddRange(project.Items.Where(i => chibi.ScriptUses.Select(s => s.ScriptName).Contains(i.Name)));
-                    return references;
+                    return references.Distinct().ToList();
                 case ItemType.Group_Selection:
                     GroupSelectionItem groupSelection = (GroupSelectionItem)this;
                     if (scenario.Scenario.Commands.Any(c => c.Verb == ScenarioCommand.ScenarioVerb.ROUTE_SELECT && c.Parameter == groupSelection.Index))
