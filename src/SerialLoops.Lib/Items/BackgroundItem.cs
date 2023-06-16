@@ -226,12 +226,19 @@ namespace SerialLoops.Lib.Items
 
         public void PopulateScriptUses(ArchiveFile<EventFile> evt)
         {
-            string[] bgCommands = new string[] { "KBG_DISP", "BG_DISP", "BG_DISP2", "BG_DISPTEMP", "BG_FADE" };
+            string[] bgCommands = new string[]
+            {
+                EventFile.CommandVerb.KBG_DISP.ToString(),
+                EventFile.CommandVerb.BG_DISP.ToString(),
+                EventFile.CommandVerb.BG_DISP2.ToString(),
+                EventFile.CommandVerb.BG_DISPCG.ToString(),
+                EventFile.CommandVerb.BG_FADE.ToString(),
+            };
 
             ScriptUses = evt.Files.SelectMany(e =>
                 e.ScriptSections.SelectMany(sec =>
                     sec.Objects.Where(c => bgCommands.Contains(c.Command.Mnemonic)).Select(c => (e.Name[0..^1], c))))
-                .Where(t => t.c.Parameters[0] == Id || t.c.Command.Mnemonic == "BG_FADE" && t.c.Parameters[1] == Id).ToArray();
+                .Where(t => t.c.Parameters[0] == Id || t.c.Command.Mnemonic == EventFile.CommandVerb.BG_FADE.ToString() && t.c.Parameters[1] == Id).ToArray();
         }
 
         public SKBitmap GetPreview(Project project)
