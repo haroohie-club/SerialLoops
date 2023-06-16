@@ -1547,17 +1547,34 @@ namespace SerialLoops.Editors
                     {
                         if (((ChibiEnterExitScriptParameter)commands[i].Parameters[1]).Mode == ChibiEnterExitScriptParameter.ChibiEnterExitType.ENTER)
                         {
-                            if (!chibis.Contains(((ChibiScriptParameter)commands[i].Parameters[0]).Chibi))
+                            ChibiItem chibi = ((ChibiScriptParameter)commands[i].Parameters[0]).Chibi;
+                            if (!chibis.Contains(chibi))
                             {
-                                ChibiItem chibi = ((ChibiScriptParameter)commands[i].Parameters[0]).Chibi;
-                                if (!chibis.Contains(chibi))
+                                if (chibi.ChibiIndex < 1 || chibis.Count == 0)
                                 {
                                     chibis.Add(chibi);
                                 }
                                 else
                                 {
-                                    _log.LogWarning($"Chibi {chibi.Name} set to join, but already was present");
+                                    bool inserted = false;
+                                    for (int j = 0; j < chibis.Count; j++)
+                                    {
+                                        if (chibis[j].ChibiIndex > chibi.ChibiIndex)
+                                        {
+                                            chibis.Insert(j, chibi);
+                                            inserted = true;
+                                            break;
+                                        }
+                                    }
+                                    if (!inserted)
+                                    {
+                                        chibis.Add(chibi);
+                                    }
                                 }
+                            }
+                            else
+                            {
+                                _log.LogWarning($"Chibi {chibi.Name} set to join, but already was present");
                             }
                         }
                         else
