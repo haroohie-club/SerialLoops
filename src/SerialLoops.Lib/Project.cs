@@ -7,6 +7,7 @@ using HaruhiChokuretsuLib.Font;
 using HaruhiChokuretsuLib.Util;
 using HaruhiChokuretsuLib.Util.Exceptions;
 using SerialLoops.Lib.Items;
+using SerialLoops.Lib.Script.Parameters;
 using SerialLoops.Lib.Util;
 using SkiaSharp;
 using System;
@@ -16,7 +17,6 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using SerialLoops.Lib.Script.Parameters;
 
 namespace SerialLoops.Lib
 {
