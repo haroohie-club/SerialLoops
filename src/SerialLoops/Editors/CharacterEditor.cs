@@ -1,19 +1,12 @@
 ﻿using Eto.Forms;
-using HaruhiChokuretsuLib.Font;
 using HaruhiChokuretsuLib.Util;
-using SerialLoops.Controls;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
-using SerialLoops.Lib.Util;
 using SerialLoops.Utility;
 using SkiaSharp;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Xml.Linq;
-using Topten.RichTextKit;
 
 namespace SerialLoops.Editors
 {
