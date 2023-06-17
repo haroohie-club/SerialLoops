@@ -1,0 +1,18 @@
+{
+    "Hacks": [
+        {
+            "Name": "Skip OP",
+            "InjectionSites": [
+                {
+                    "Code": "01",
+                    "Location": "20C7888"
+                }
+            ],
+            "Files": [
+                {
+                    "File": "Hacks/skipOp_asm.s"
+                }
+            ]
+        }
+    ]
+}

@@ -136,6 +136,12 @@ namespace SerialLoops.Lib
             File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Hacks", "fontOffset_asm.s"), Path.Combine(project.IterativeDirectory, "src", "source", "fontOffset_asm.s"));
         }
 
+        public static void CopyFileToDirectories(Project project, string sourceFile, string relativePath)
+        {
+            File.Copy(sourceFile, Path.Combine(project.BaseDirectory, relativePath));
+            File.Copy(sourceFile, Path.Combine(project.IterativeDirectory, relativePath));
+        }
+
         public static void CopyFiles(string sourceDirectory, string destinationDirectory, string filter = "*")
         {
             foreach (string file in Directory.GetFiles(sourceDirectory, filter))
