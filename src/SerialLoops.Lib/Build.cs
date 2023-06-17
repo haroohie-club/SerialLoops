@@ -171,7 +171,8 @@ namespace SerialLoops.Lib
             }
             tracker.Finished+= 3;
 
-            var ndsProjectFile = Path.Combine(directory, "rom", $"{project.Name}.xml");
+            // Save project file to disk
+            string ndsProjectFile = Path.Combine(directory, "rom", $"{project.Name}.xml");
             tracker.Focus("Writing NitroPacker Project File", 1);
             try
             {

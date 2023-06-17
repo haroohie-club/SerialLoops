@@ -1,5 +1,4 @@
 ﻿using HaruhiChokuretsuLib.Util;
-using SerialLoops.Lib.Util;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -21,6 +20,7 @@ namespace SerialLoops.Lib.Hacks
                 {
                     FileStream arm9 = File.OpenRead(Path.Combine(project.IterativeDirectory, "rom", "arm9.bin"));
                     arm9.Seek(site.Offset + 3, SeekOrigin.Begin);
+                    // All BL functions start with 0xEB
                     if (arm9.ReadByte() == 0xEB)
                     {
                         return true;
@@ -39,7 +39,7 @@ namespace SerialLoops.Lib.Hacks
             return false;
         }
 
-        public void Apply(Project project, ILogger log)
+        public void Apply(Project project, Config config, ILogger log)
         {
             if (Applied(project))
             {
@@ -49,15 +49,18 @@ namespace SerialLoops.Lib.Hacks
 
             foreach (HackFile file in Files)
             {
-                IO.CopyFileToDirectories(project, file.File, Path.Combine("src", file.Destination));
+                string destination = Path.Combine(project.BaseDirectory, "src", file.Destination);
+                if (!Directory.Exists(Path.GetDirectoryName(destination)))
+                {
+                    Directory.CreateDirectory(Path.GetDirectoryName(destination));
+                }
+                File.Copy(Path.Combine(config.HacksDirectory, file.File), destination, true);
             }
         }
 
-        public void Revert(Project project, Config config, ILogger log, IProgressTracker tracker)
+        public void Revert(Project project)
         {
             IO.DeleteFiles(project, Files.Select(f => f.Destination));
-            log.Log($"Deleted hack '{Name}'; building from base...");
-            Build.BuildBase(project, config, log, tracker);
         }
     }
 
