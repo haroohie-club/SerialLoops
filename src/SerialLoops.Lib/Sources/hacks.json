@@ -10,7 +10,8 @@
         "Files": [
             {
                 "File": "skipOp_asm.s",
-                "Destination": "overlays/main_0001/skipOp_asm.s"
+                "Destination": "overlays/main_0001/source/skipOp_asm.s",
+                "Symbols": []
             }
         ]
     }

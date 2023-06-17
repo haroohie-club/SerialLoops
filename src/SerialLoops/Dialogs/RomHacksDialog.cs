@@ -89,6 +89,7 @@ namespace SerialLoops.Dialogs
             {
                 LoopyProgressTracker tracker = new();
 
+                List<AsmHack> appliedHacks = new();
                 foreach (CheckBox checkBox in hacksLayout.Items.Select(s => s.Control).Cast<CheckBox>())
                 {
                     AsmHack hack = config.Hacks.First(f => f.Name == checkBox.Text);
@@ -96,44 +97,94 @@ namespace SerialLoops.Dialogs
 
                     if (applied && (!checkBox.Checked ?? false))
                     {
-                        hack.Revert(project);
+                        hack.Revert(project, log);
+                    }
+                    else if (applied)
+                    {
+                        appliedHacks.Add(hack);
                     }
                     else
                     {
                         hack.Apply(project, config, log);
+                        appliedHacks.Add(hack);
                     }
                 }
 
-                ARM9 arm9 = new(File.ReadAllBytes(Path.Combine(project.BaseDirectory, "src", "arm9.bin")), 0x02000000);
-                ARM9AsmHack.Insert(Path.Combine(project.BaseDirectory, "src"), arm9, 0x02005ECC,
-                    (object sender, DataReceivedEventArgs e) => log.Log(e.Data),
-                    (object sender, DataReceivedEventArgs e) => log.LogWarning(e.Data, lookForErrors: true));
-                Lib.IO.WriteBinaryFile(Path.Combine("rom", "arm9.bin"), arm9.GetBytes(), project, log);
-
-                List<Overlay> overlays = new();
-                string overlaySourceDir = Path.Combine(project.BaseDirectory, "original", "overlay");
-                string romInfoPath = Path.Combine(project.BaseDirectory, "rom", $"{project.Name}.xml");
-                foreach (string file in Directory.GetFiles(overlaySourceDir))
+                File.WriteAllLines(Path.Combine(project.BaseDirectory, "src", "symbols.x"), appliedHacks.SelectMany(h => h.Files.Where(f => !f.Destination.Contains("overlays", System.StringComparison.OrdinalIgnoreCase)).SelectMany(f => f.Symbols)));
+                for (int i = 0; i < 26; i++)
                 {
-                    overlays.Add(new(file, romInfoPath));
+                    if (appliedHacks.Any(h => h.Files.Any(f => f.Destination.Contains($"main_{i:X4}", System.StringComparison.OrdinalIgnoreCase))))
+                    {
+                        File.WriteAllLines(Path.Combine(project.BaseDirectory, "src", "overlays", $"main_{i:X4}", "symbols.x"), appliedHacks.SelectMany(h => h.Files.Where(f => f.Destination.Contains($"main_{i:X4}", System.StringComparison.OrdinalIgnoreCase)).SelectMany(f => f.Symbols)));
+                    }
                 }
 
-                foreach (Overlay overlay in overlays)
+                if (appliedHacks.Any(h => h.Files.Any(f => !f.Destination.Contains("overlays", System.StringComparison.OrdinalIgnoreCase))))
                 {
-                    if (Directory.GetDirectories(overlaySourceDir).Contains(Path.Combine(overlaySourceDir, overlay.Name)))
+                    ARM9 arm9 = new(File.ReadAllBytes(Path.Combine(project.BaseDirectory, "src", "arm9.bin")), 0x02000000);
+                    ARM9AsmHack.Insert(Path.Combine(project.BaseDirectory, "src"), arm9, 0x02005ECC,
+                        (object sender, DataReceivedEventArgs e) => log.Log(e.Data),
+                        (object sender, DataReceivedEventArgs e) => log.LogWarning(e.Data, lookForErrors: true));
+                    Lib.IO.WriteBinaryFile(Path.Combine("rom", "arm9.bin"), arm9.GetBytes(), project, log);
+                }
+                else
+                {
+                    // Overlay compilation relies on the presence of an arm9_newcode.x containing the symbols of the newly compiled ARM9 code
+                    // If there is no ARM9 code, we'll need to provide an empty file
+                    foreach (string overlayDirectory in Directory.GetDirectories(Path.Combine(project.BaseDirectory, "src", "overlays")))
                     {
-                        OverlayAsmHack.Insert(overlaySourceDir, overlay, romInfoPath,
+                        File.WriteAllText(Path.Combine(overlayDirectory, "arm9_newcode.x"), string.Empty);
+                    }
+                }
+
+                List<Overlay> overlays = new();
+                string originalOverlaysDir = Path.Combine(project.BaseDirectory, "original", "overlay");
+                string romInfoPath = Path.Combine(project.BaseDirectory, "original", $"{project.Name}.xml");
+                string newRomInfoPath = Path.Combine(project.BaseDirectory, "rom", $"{project.Name}.xml");
+                foreach (string file in Directory.GetFiles(originalOverlaysDir))
+                {
+                    overlays.Add(new(file, newRomInfoPath));
+                }
+
+                string overlaySourceDir = Path.Combine(project.BaseDirectory, "src", "overlays");
+                for (int i = 0; i < overlays.Count; i++)
+                {
+                    if (Directory.GetDirectories(overlaySourceDir).Contains(Path.Combine(overlaySourceDir, overlays[i].Name)))
+                    {
+                        OverlayAsmHack.Insert(overlaySourceDir, overlays[i], newRomInfoPath,
                             (object sender, DataReceivedEventArgs e) => log.Log(e.Data),
                             (object sender, DataReceivedEventArgs e) => log.LogWarning(e.Data, lookForErrors: true));
                     }
+                    else
+                    {
+                        overlays.RemoveAt(i);
+                        i--;
+                    }
                 }
-
-                Thread.Sleep(3000);
 
                 foreach (Overlay overlay in overlays)
                 {
-                    overlay.Save(Path.Combine(project.BaseDirectory, "rom", "overlay", $"{overlay.Name}.bin"));
-                    overlay.Save(Path.Combine(project.IterativeDirectory, "rom", "overlay", $"{overlay.Name}.bin"));
+                    bool baseSuccess = false, iterativeSuccess = false;
+                    while (!baseSuccess || !iterativeSuccess)
+                    {
+                        try
+                        {
+                            if (!baseSuccess)
+                            {
+                                overlay.Save(Path.Combine(project.BaseDirectory, "rom", "overlay", $"{overlay.Name}.bin"));
+                                baseSuccess = true;
+                            }
+                            if (!iterativeSuccess)
+                            {
+                                overlay.Save(Path.Combine(project.IterativeDirectory, "rom", "overlay", $"{overlay.Name}.bin"));
+                                iterativeSuccess = true;
+                            }
+                        }
+                        catch (IOException)
+                        {
+                            continue;
+                        }
+                    }
                 }
 
                 Close();

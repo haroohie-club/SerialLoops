@@ -58,9 +58,16 @@ namespace SerialLoops.Lib.Hacks
             }
         }
 
-        public void Revert(Project project)
+        public void Revert(Project project, ILogger log)
         {
-            IO.DeleteFiles(project, Files.Select(f => f.Destination));
+            try
+            {
+                IO.DeleteFiles(project, Files.Select(f => f.Destination));
+            }
+            catch (IOException)
+            {
+                log.LogError($"Failed to delete files for hack '{Name}' -- this hack is likely applied in the ROM base and can't be disabled.");
+            }
         }
     }
 
@@ -104,5 +111,6 @@ namespace SerialLoops.Lib.Hacks
     {
         public string File { get; set; }
         public string Destination { get; set; }
+        public string[] Symbols { get; set; }
     }
 }
