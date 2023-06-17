@@ -10,7 +10,8 @@
             ],
             "Files": [
                 {
-                    "File": "Hacks/skipOp_asm.s"
+                    "File": "Hacks/skipOp_asm.s",
+                    "Destination": "overlays/main_0001/skipOp_asm.s"
                 }
             ]
         }

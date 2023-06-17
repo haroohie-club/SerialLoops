@@ -2,6 +2,7 @@
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib.Util;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace SerialLoops.Lib
@@ -140,6 +141,15 @@ namespace SerialLoops.Lib
         {
             File.Copy(sourceFile, Path.Combine(project.BaseDirectory, relativePath));
             File.Copy(sourceFile, Path.Combine(project.IterativeDirectory, relativePath));
+        }
+
+        public static void DeleteFiles(Project project, IEnumerable<string> files)
+        {
+            foreach (string file in files)
+            {
+                File.Delete(Path.Combine(project.IterativeDirectory, file));
+                File.Delete(Path.Combine(project.BaseDirectory, file));
+            }
         }
 
         public static void CopyFiles(string sourceDirectory, string destinationDirectory, string filter = "*")

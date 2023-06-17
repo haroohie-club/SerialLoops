@@ -1,16 +1,17 @@
 ﻿using HaruhiChokuretsuLib.Util;
+using SerialLoops.Lib.Util;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json.Serialization;
-using System.Threading;
 
 namespace SerialLoops.Lib.Hacks
 {
-    public class Hack
+    public class AsmHack
     {
         public string Name { get; set; }
         public List<InjectionSite> InjectionSites { get; set; }
-        public List<string> Files { get; set; }
+        public List<HackFile> Files { get; set; }
 
         public bool Applied(Project project)
         {
@@ -46,10 +47,17 @@ namespace SerialLoops.Lib.Hacks
                 return;
             }
 
-            foreach (string file in Files)
+            foreach (HackFile file in Files)
             {
-                IO.CopyFileToDirectories(project, file, Path.Combine("rom", ))
+                IO.CopyFileToDirectories(project, file.File, Path.Combine("src", file.Destination));
             }
+        }
+
+        public void Revert(Project project, Config config, ILogger log, IProgressTracker tracker)
+        {
+            IO.DeleteFiles(project, Files.Select(f => f.Destination));
+            log.Log($"Deleted hack '{Name}'; building from base...");
+            Build.BuildBase(project, config, log, tracker);
         }
     }
 
@@ -91,6 +99,7 @@ namespace SerialLoops.Lib.Hacks
 
     public class HackFile
     {
-
+        public string File { get; set; }
+        public string Destination { get; set; }
     }
 }
