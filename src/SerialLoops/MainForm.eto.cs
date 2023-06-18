@@ -226,14 +226,14 @@ namespace SerialLoops
             closeProjectCommand.Executed += (sender, args) => CloseProjectView();
 
             // Tools
-            Command applyHacksCommand = new() { MenuText = "Apply Hacks" };
+            Command applyHacksCommand = new() { MenuText = "Apply Hacks..." };
             applyHacksCommand.Executed += (sender, args) => new RomHacksDialog(OpenProject, CurrentConfig, Log).ShowModal();
 
             Command renameItemCommand = new() { MenuText = "Rename Item", Shortcut = Keys.F2 };
             renameItemCommand.Executed +=
                 (sender, args) => Shared.RenameItem(OpenProject, ItemExplorer, EditorTabs, Log);
 
-            Command editUiTextCommand = new() { MenuText = "Edit UI Text" };
+            Command editUiTextCommand = new() { MenuText = "Edit UI Text..." };
             editUiTextCommand.Executed += EditUiTextCommand_Executed;
 
             Command searchProjectCommand = new()

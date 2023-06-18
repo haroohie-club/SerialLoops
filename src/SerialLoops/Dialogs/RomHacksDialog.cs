@@ -5,6 +5,7 @@ using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Hacks;
 using SerialLoops.Utility;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -152,6 +153,9 @@ namespace SerialLoops.Dialogs
                 if (!File.Exists(romInfoPath))
                 {
                     File.Copy(newRomInfoPath, romInfoPath);
+                    // If it's an old project, they also have the old makefiles. So we copy over those as well just to fix this
+                    Lib.IO.CopyFileToDirectories(project, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Makefile_main"), Path.Combine("src", "Makefile"));
+                    Lib.IO.CopyFileToDirectories(project, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Makefile_overlay"), Path.Combine("src", "overlays", "Makefile"));
                 }
                 foreach (string file in Directory.GetFiles(originalOverlaysDir))
                 {
