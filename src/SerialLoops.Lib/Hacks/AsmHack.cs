@@ -18,7 +18,7 @@ namespace SerialLoops.Lib.Hacks
             {
                 if (site.Equals("ARM9"))
                 {
-                    FileStream arm9 = File.OpenRead(Path.Combine(project.IterativeDirectory, "rom", "arm9.bin"));
+                    using FileStream arm9 = File.OpenRead(Path.Combine(project.IterativeDirectory, "rom", "arm9.bin"));
                     arm9.Seek(site.Offset + 3, SeekOrigin.Begin);
                     // All BL functions start with 0xEB
                     if (arm9.ReadByte() == 0xEB)
@@ -28,7 +28,7 @@ namespace SerialLoops.Lib.Hacks
                 }
                 else
                 {
-                    FileStream overlay = File.OpenRead(Path.Combine(project.IterativeDirectory, "rom", "overlay", $"main_{int.Parse(site.Code):X4}.bin"));
+                    using FileStream overlay = File.OpenRead(Path.Combine(project.IterativeDirectory, "rom", "overlay", $"main_{int.Parse(site.Code):X4}.bin"));
                     overlay.Seek(site.Offset + 3, SeekOrigin.Begin);
                     if (overlay.ReadByte() == 0xEB)
                     {
@@ -62,7 +62,10 @@ namespace SerialLoops.Lib.Hacks
         {
             try
             {
-                IO.DeleteFiles(project, Files.Select(f => f.Destination));
+                foreach (HackFile file in Files)
+                {
+                    File.Delete(Path.Combine(project.BaseDirectory, "src", file.Destination));
+                }
             }
             catch (IOException)
             {

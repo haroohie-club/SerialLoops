@@ -70,7 +70,11 @@ namespace SerialLoops.Lib
                 new("overlay", Array.Empty<IODirectory>(), Array.Empty<IOFile>()),
                 new("bgm", Array.Empty<IODirectory>(), Array.Empty<IOFile>()),
                 new("vce", Array.Empty<IODirectory>(), Array.Empty<IOFile>()),
-            }, Array.Empty<IOFile>());
+            },
+            new IOFile[]
+            {
+                new(Path.Combine(project.BaseDirectory, "rom", $"{project.Name}.xml")),
+            });
             IODirectory srcDirectoryTree = new("src", new IODirectory[]
             {
                 new("source", Array.Empty<IODirectory>(), Array.Empty<IOFile>()),

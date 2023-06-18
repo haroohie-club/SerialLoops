@@ -25,6 +25,8 @@ namespace SerialLoops.Lib
         [JsonIgnore]
         public List<AsmHack> Hacks { get; set; }
         public string DevkitArmPath { get; set; }
+        public bool UseDocker { get; set; }
+        public string DevkitArmDockerTag { get; set; }
         public string EmulatorPath { get; set; }
         public bool AutoReopenLastProject { get; set; }
         public bool RememberProjectWorkspace { get; set; }
@@ -122,6 +124,8 @@ namespace SerialLoops.Lib
                 UserDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "SerialLoops"),
                 DevkitArmPath = devkitArmDir,
                 EmulatorPath = emulatorPath,
+                UseDocker = false,
+                DevkitArmDockerTag = "20221115",
                 AutoReopenLastProject = true,
                 RememberProjectWorkspace = true,
                 RemoveMissingProjects = false,

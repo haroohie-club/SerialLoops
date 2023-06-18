@@ -10,7 +10,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
-using System.Threading;
 
 namespace SerialLoops.Dialogs
 {
@@ -87,8 +86,6 @@ namespace SerialLoops.Dialogs
             };
             saveButton.Click += (sender, args) =>
             {
-                LoopyProgressTracker tracker = new();
-
                 List<AsmHack> appliedHacks = new();
                 foreach (CheckBox checkBox in hacksLayout.Items.Select(s => s.Control).Cast<CheckBox>())
                 {
@@ -122,9 +119,9 @@ namespace SerialLoops.Dialogs
                 if (appliedHacks.Any(h => h.Files.Any(f => !f.Destination.Contains("overlays", System.StringComparison.OrdinalIgnoreCase))))
                 {
                     ARM9 arm9 = new(File.ReadAllBytes(Path.Combine(project.BaseDirectory, "src", "arm9.bin")), 0x02000000);
-                    ARM9AsmHack.Insert(Path.Combine(project.BaseDirectory, "src"), arm9, 0x02005ECC,
+                    ARM9AsmHack.Insert(Path.Combine(project.BaseDirectory, "src"), arm9, 0x02005ECC, config.UseDocker ? config.DevkitArmDockerTag : string.Empty,
                         (object sender, DataReceivedEventArgs e) => log.Log(e.Data),
-                        (object sender, DataReceivedEventArgs e) => log.LogWarning(e.Data, lookForErrors: true));
+                        (object sender, DataReceivedEventArgs e) => log.LogWarning(e.Data));
                     Lib.IO.WriteBinaryFile(Path.Combine("rom", "arm9.bin"), arm9.GetBytes(), project, log);
                 }
                 else
@@ -143,7 +140,7 @@ namespace SerialLoops.Dialogs
                 string newRomInfoPath = Path.Combine(project.BaseDirectory, "rom", $"{project.Name}.xml");
                 foreach (string file in Directory.GetFiles(originalOverlaysDir))
                 {
-                    overlays.Add(new(file, newRomInfoPath));
+                    overlays.Add(new(file, romInfoPath));
                 }
 
                 string overlaySourceDir = Path.Combine(project.BaseDirectory, "src", "overlays");
@@ -151,40 +148,31 @@ namespace SerialLoops.Dialogs
                 {
                     if (Directory.GetDirectories(overlaySourceDir).Contains(Path.Combine(overlaySourceDir, overlays[i].Name)))
                     {
-                        OverlayAsmHack.Insert(overlaySourceDir, overlays[i], newRomInfoPath,
-                            (object sender, DataReceivedEventArgs e) => log.Log(e.Data),
-                            (object sender, DataReceivedEventArgs e) => log.LogWarning(e.Data, lookForErrors: true));
-                    }
-                    else
-                    {
-                        overlays.RemoveAt(i);
-                        i--;
+                        if (!Directory.GetFiles(Path.Combine(overlaySourceDir, overlays[i].Name, "source")).Any())
+                        {
+                            Directory.Delete(Path.Combine(overlaySourceDir, overlays[i].Name, "source"), true);
+                        }
+                        else
+                        {
+                            OverlayAsmHack.Insert(overlaySourceDir, overlays[i], newRomInfoPath, config.UseDocker ? config.DevkitArmDockerTag : string.Empty,
+                                (object sender, DataReceivedEventArgs e) => log.Log(e.Data),
+                                (object sender, DataReceivedEventArgs e) => log.LogWarning(e.Data));
+                        }
                     }
                 }
 
                 foreach (Overlay overlay in overlays)
                 {
-                    bool baseSuccess = false, iterativeSuccess = false;
-                    while (!baseSuccess || !iterativeSuccess)
-                    {
-                        try
-                        {
-                            if (!baseSuccess)
-                            {
-                                overlay.Save(Path.Combine(project.BaseDirectory, "rom", "overlay", $"{overlay.Name}.bin"));
-                                baseSuccess = true;
-                            }
-                            if (!iterativeSuccess)
-                            {
-                                overlay.Save(Path.Combine(project.IterativeDirectory, "rom", "overlay", $"{overlay.Name}.bin"));
-                                iterativeSuccess = true;
-                            }
-                        }
-                        catch (IOException)
-                        {
-                            continue;
-                        }
-                    }
+                    overlay.Save(Path.Combine(project.BaseDirectory, "rom", "overlay", $"{overlay.Name}.bin"));
+                    File.Copy(Path.Combine(project.BaseDirectory, "rom", "overlay", $"{overlay.Name}.bin"),
+                        Path.Combine(project.IterativeDirectory, "rom", "overlay", $"{overlay.Name}.bin"), true);
+                    project.Settings.File.RomInfo.ARM9Ovt.First(o => o.Id == overlay.Id).RamSize = (uint)overlay.Length;
+                }
+
+                IEnumerable<string> failedHackNames = appliedHacks.Where(h => !h.Applied(project)).Select(h => h.Name);
+                if (failedHackNames.Any())
+                {
+                    log.LogError($"Some hacks ({string.Join(", ", failedHackNames)}) failed to apply -- check logs to see why.");
                 }
 
                 Close();
