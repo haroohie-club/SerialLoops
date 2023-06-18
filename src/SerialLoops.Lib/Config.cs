@@ -3,6 +3,7 @@ using SerialLoops.Lib.Hacks;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -88,6 +89,15 @@ namespace SerialLoops.Lib
             }
 
             Hacks = JsonSerializer.Deserialize<List<AsmHack>>(File.ReadAllText(Path.Combine(HacksDirectory, "hacks.json")));
+            
+            // Pull in new hacks in case we've updated the program with more
+            List<AsmHack> builtinHacks = JsonSerializer.Deserialize<List<AsmHack>>(File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "hacks.json")));
+            IEnumerable<AsmHack> missingHacks = builtinHacks.Where(h => !Hacks.Contains(h));
+            if (missingHacks.Any())
+            {
+                IO.CopyFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Hacks"), HacksDirectory);
+                Hacks.AddRange(missingHacks);
+            }
         }
 
         private static Config GetDefault(ILogger log)

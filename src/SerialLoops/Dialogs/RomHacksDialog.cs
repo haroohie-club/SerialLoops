@@ -15,6 +15,8 @@ namespace SerialLoops.Dialogs
 {
     public class RomHacksDialog : Dialog
     {
+        private const int NUM_OVERLAYS = 26;
+
         public RomHacksDialog(Project project, Config config, ILogger log)
         {
             StackLayout hacksLayout = new()
@@ -107,8 +109,9 @@ namespace SerialLoops.Dialogs
                     }
                 }
 
+                // Write the symbols file based on what the hacks say they need
                 File.WriteAllLines(Path.Combine(project.BaseDirectory, "src", "symbols.x"), appliedHacks.SelectMany(h => h.Files.Where(f => !f.Destination.Contains("overlays", System.StringComparison.OrdinalIgnoreCase)).SelectMany(f => f.Symbols)));
-                for (int i = 0; i < 26; i++)
+                for (int i = 0; i < NUM_OVERLAYS; i++)
                 {
                     if (appliedHacks.Any(h => h.Files.Any(f => f.Destination.Contains($"main_{i:X4}", System.StringComparison.OrdinalIgnoreCase))))
                     {
@@ -116,6 +119,7 @@ namespace SerialLoops.Dialogs
                     }
                 }
 
+                // Build and insert ARM9 hacks
                 if (appliedHacks.Any(h => h.Files.Any(f => !f.Destination.Contains("overlays", System.StringComparison.OrdinalIgnoreCase))))
                 {
                     ARM9 arm9 = new(File.ReadAllBytes(Path.Combine(project.BaseDirectory, "src", "arm9.bin")), 0x02000000);
@@ -134,6 +138,7 @@ namespace SerialLoops.Dialogs
                     }
                 }
 
+                // Get the overlays
                 List<Overlay> overlays = new();
                 string originalOverlaysDir = Path.Combine(project.BaseDirectory, "original", "overlay");
                 string romInfoPath = Path.Combine(project.BaseDirectory, "original", $"{project.Name}.xml");
@@ -143,14 +148,16 @@ namespace SerialLoops.Dialogs
                     overlays.Add(new(file, romInfoPath));
                 }
 
+                // Patch the overlays
                 string overlaySourceDir = Path.Combine(project.BaseDirectory, "src", "overlays");
                 for (int i = 0; i < overlays.Count; i++)
                 {
                     if (Directory.GetDirectories(overlaySourceDir).Contains(Path.Combine(overlaySourceDir, overlays[i].Name)))
                     {
+                        // If the overlay directory is empty, we've reverted all the hacks in it and should clean it up
                         if (!Directory.GetFiles(Path.Combine(overlaySourceDir, overlays[i].Name, "source")).Any())
                         {
-                            Directory.Delete(Path.Combine(overlaySourceDir, overlays[i].Name, "source"), true);
+                            Directory.Delete(Path.Combine(overlaySourceDir, overlays[i].Name), true);
                         }
                         else
                         {
@@ -161,6 +168,7 @@ namespace SerialLoops.Dialogs
                     }
                 }
 
+                // Save all the overlays in case we've reverted all hacks on one
                 foreach (Overlay overlay in overlays)
                 {
                     overlay.Save(Path.Combine(project.BaseDirectory, "rom", "overlay", $"{overlay.Name}.bin"));
@@ -169,6 +177,9 @@ namespace SerialLoops.Dialogs
                     project.Settings.File.RomInfo.ARM9Ovt.First(o => o.Id == overlay.Id).RamSize = (uint)overlay.Length;
                 }
 
+                // We don't provide visible errors during the compilation of the hacks because it will deadlock the threads
+                // So at the end, we should check if any of the hacks that were supposed to be applied are not applied,
+                // and if there are some then we should let the user know.
                 IEnumerable<string> failedHackNames = appliedHacks.Where(h => !h.Applied(project)).Select(h => h.Name);
                 if (failedHackNames.Any())
                 {
