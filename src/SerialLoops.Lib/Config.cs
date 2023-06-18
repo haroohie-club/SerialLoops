@@ -97,6 +97,7 @@ namespace SerialLoops.Lib
             {
                 IO.CopyFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Hacks"), HacksDirectory);
                 Hacks.AddRange(missingHacks);
+                File.WriteAllText(Path.Combine(HacksDirectory, "hacks.json"), JsonSerializer.Serialize(Hacks));
             }
         }
 

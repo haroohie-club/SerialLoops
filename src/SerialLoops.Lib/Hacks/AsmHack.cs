@@ -72,6 +72,11 @@ namespace SerialLoops.Lib.Hacks
                 log.LogError($"Failed to delete files for hack '{Name}' -- this hack is likely applied in the ROM base and can't be disabled.");
             }
         }
+
+        public override bool Equals(object obj)
+        {
+            return ((AsmHack)obj).Name.Equals(Name);
+        }
     }
 
     public class InjectionSite
