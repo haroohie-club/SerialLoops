@@ -1508,125 +1508,152 @@ namespace SerialLoops.Editors
                     return;
                 }
 
-                // Draw top screen "kinetic" background
-                for (int i = commands.Count - 1; i >= 0; i--)
+                if (commands.Any(c => c.Verb == CommandVerb.EPHEADER)
+                    && ((EpisodeHeaderScriptParameter)commands.Last(c => c.Verb == CommandVerb.EPHEADER).Parameters[0])
+                        .EpisodeHeaderIndex != EpisodeHeaderScriptParameter.Episode.None)
                 {
-                    if (commands[i].Verb == CommandVerb.KBG_DISP && ((BgScriptParameter)commands[i].Parameters[0]).Background is not null)
+                    // We use names here because display names can change but names cannot
+                    SystemTextureItem systexItem = ((EpisodeHeaderScriptParameter)commands.Last(c => c.Verb == CommandVerb.EPHEADER).Parameters[0]).EpisodeHeaderIndex switch
                     {
-                        canvas.DrawBitmap(((BgScriptParameter)commands[i].Parameters[0]).Background.GetBackground(), new SKPoint(0, 0));
-                        break;
-                    }
-                }
+                        EpisodeHeaderScriptParameter.Episode.EPISODE_1 => 
+                            (SystemTextureItem)_project.Items.First(i => i.Name == "SYSTEX_SYS_CMN_T60"),
+                        EpisodeHeaderScriptParameter.Episode.EPISODE_2 =>
+                            (SystemTextureItem)_project.Items.First(i => i.Name == "SYSTEX_SYS_CMN_T61"),
+                        EpisodeHeaderScriptParameter.Episode.EPISODE_3 =>
+                            (SystemTextureItem)_project.Items.First(i => i.Name == "SYSTEX_SYS_CMN_T62"),
+                        EpisodeHeaderScriptParameter.Episode.EPISODE_4 =>
+                            (SystemTextureItem)_project.Items.First(i => i.Name == "SYSTEX_SYS_CMN_T63"),
+                        EpisodeHeaderScriptParameter.Episode.EPISODE_5 =>
+                            (SystemTextureItem)_project.Items.First(i => i.Name == "SYSTEX_SYS_CMN_T64"),
+                        EpisodeHeaderScriptParameter.Episode.EPILOGUE =>
+                            (SystemTextureItem)_project.Items.First(i => i.Name == "SYSTEX_SYS_CMN_T66"),
+                        _ => null,
+                    };
 
-                // Draw Place
-                for (int i = commands.Count - 1; i >= 0; i--)
+                    canvas.DrawBitmap(systexItem.GetTexture(), new SKPoint(0, 0));
+                }
+                else
                 {
-                    if (commands[i].Verb == CommandVerb.SET_PLACE)
+                    // Draw top screen "kinetic" background
+                    for (int i = commands.Count - 1; i >= 0; i--)
                     {
-                        if (((BoolScriptParameter)commands[i].Parameters[0]).Value && (((PlaceScriptParameter)commands[i].Parameters[1]).Place is not null))
+                        if (commands[i].Verb == CommandVerb.KBG_DISP && ((BgScriptParameter)commands[i].Parameters[0]).Background is not null)
                         {
-                            canvas.DrawBitmap(((PlaceScriptParameter)commands[i].Parameters[1]).Place.GetPreview(_project), new SKPoint(5, 40));
+                            canvas.DrawBitmap(((BgScriptParameter)commands[i].Parameters[0]).Background.GetBackground(), new SKPoint(0, 0));
+                            break;
                         }
-                        break;
                     }
-                }
 
-                // Draw top screen chibis
-                List<ChibiItem> chibis = new();
-
-                foreach (StartingChibiEntry chibi in _script.Event.StartingChibisSection?.Objects ?? new List<StartingChibiEntry>())
-                {
-                    if (chibi.ChibiIndex > 0)
+                    // Draw Place
+                    for (int i = commands.Count - 1; i >= 0; i--)
                     {
-                        chibis.Add((ChibiItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Chibi && ((ChibiItem)i).ChibiIndex == chibi.ChibiIndex));
-                    }
-                }
-                for (int i = 0; i < commands.Count; i++)
-                {
-                    if (commands[i].Verb == CommandVerb.CHIBI_ENTEREXIT)
-                    {
-                        if (((ChibiEnterExitScriptParameter)commands[i].Parameters[1]).Mode == ChibiEnterExitScriptParameter.ChibiEnterExitType.ENTER)
+                        if (commands[i].Verb == CommandVerb.SET_PLACE)
                         {
-                            ChibiItem chibi = ((ChibiScriptParameter)commands[i].Parameters[0]).Chibi;
-                            if (!chibis.Contains(chibi))
+                            if (((BoolScriptParameter)commands[i].Parameters[0]).Value && (((PlaceScriptParameter)commands[i].Parameters[1]).Place is not null))
                             {
-                                if (chibi.ChibiIndex < 1 || chibis.Count == 0)
+                                canvas.DrawBitmap(((PlaceScriptParameter)commands[i].Parameters[1]).Place.GetPreview(_project), new SKPoint(5, 40));
+                            }
+                            break;
+                        }
+                    }
+
+                    // Draw top screen chibis
+                    List<ChibiItem> chibis = new();
+
+                    foreach (StartingChibiEntry chibi in _script.Event.StartingChibisSection?.Objects ?? new List<StartingChibiEntry>())
+                    {
+                        if (chibi.ChibiIndex > 0)
+                        {
+                            chibis.Add((ChibiItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Chibi && ((ChibiItem)i).ChibiIndex == chibi.ChibiIndex));
+                        }
+                    }
+                    for (int i = 0; i < commands.Count; i++)
+                    {
+                        if (commands[i].Verb == CommandVerb.CHIBI_ENTEREXIT)
+                        {
+                            if (((ChibiEnterExitScriptParameter)commands[i].Parameters[1]).Mode == ChibiEnterExitScriptParameter.ChibiEnterExitType.ENTER)
+                            {
+                                ChibiItem chibi = ((ChibiScriptParameter)commands[i].Parameters[0]).Chibi;
+                                if (!chibis.Contains(chibi))
                                 {
-                                    chibis.Add(chibi);
-                                }
-                                else
-                                {
-                                    bool inserted = false;
-                                    for (int j = 0; j < chibis.Count; j++)
-                                    {
-                                        if (chibis[j].ChibiIndex > chibi.ChibiIndex)
-                                        {
-                                            chibis.Insert(j, chibi);
-                                            inserted = true;
-                                            break;
-                                        }
-                                    }
-                                    if (!inserted)
+                                    if (chibi.ChibiIndex < 1 || chibis.Count == 0)
                                     {
                                         chibis.Add(chibi);
                                     }
+                                    else
+                                    {
+                                        bool inserted = false;
+                                        for (int j = 0; j < chibis.Count; j++)
+                                        {
+                                            if (chibis[j].ChibiIndex > chibi.ChibiIndex)
+                                            {
+                                                chibis.Insert(j, chibi);
+                                                inserted = true;
+                                                break;
+                                            }
+                                        }
+                                        if (!inserted)
+                                        {
+                                            chibis.Add(chibi);
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    _log.LogWarning($"Chibi {chibi.Name} set to join, but already was present");
                                 }
                             }
                             else
                             {
-                                _log.LogWarning($"Chibi {chibi.Name} set to join, but already was present");
-                            }
-                        }
-                        else
-                        {
-                            try
-                            {
-                                chibis.Remove(((ChibiScriptParameter)commands[i].Parameters[0]).Chibi);
-                            }
-                            catch (Exception)
-                            {
-                                _log.LogWarning($"Chibi set to leave was not present.");
+                                try
+                                {
+                                    chibis.Remove(((ChibiScriptParameter)commands[i].Parameters[0]).Chibi);
+                                }
+                                catch (Exception)
+                                {
+                                    _log.LogWarning($"Chibi set to leave was not present.");
+                                }
                             }
                         }
                     }
-                }
 
-                int chibiStartX, chibiY;
-                if (commands.Any(c => c.Verb == EventFile.CommandVerb.OP_MODE))
-                {
-                    chibiStartX = 100;
-                    chibiY = 50;
-                }
-                else
-                {
-                    chibiStartX = 44;
-                    chibiY = 100;
-                }
-                int chibiCurrentX = chibiStartX;
-                int chibiWidth = 0;
-                foreach (ChibiItem chibi in chibis)
-                {
-                    SKBitmap chibiFrame = chibi.ChibiAnimations.First().Value.ElementAt(0).Frame;
-                    canvas.DrawBitmap(chibiFrame, new SKPoint(chibiCurrentX, chibiY));
-                    chibiWidth = chibiFrame.Width - 10;
-                    chibiCurrentX += chibiWidth;
-                }
-
-                // Draw top screen chibi emotes
-                if (currentCommand.Verb == CommandVerb.CHIBI_EMOTE)
-                {
-                    ChibiItem chibi = ((ChibiScriptParameter)currentCommand.Parameters[0]).Chibi;
-                    if (chibis.Contains(chibi))
+                    int chibiStartX, chibiY;
+                    if (commands.Any(c => c.Verb == EventFile.CommandVerb.OP_MODE))
                     {
-                        int chibiIndex = chibis.IndexOf(chibi);
-                        SKBitmap emotes = _project.Grp.Files.First(f => f.Name == "SYS_ADV_T08DNX").GetImage(width: 32, transparentIndex: 0);
-                        int internalYOffset = ((int)((ChibiEmoteScriptParameter)currentCommand.Parameters[1]).Emote - 1) * 32;
-                        int externalXOffset = chibiStartX + chibiWidth * chibiIndex;
-                        canvas.DrawBitmap(emotes, new SKRect(0, internalYOffset, 32, internalYOffset + 32), new SKRect(externalXOffset + 16, chibiY - 32, externalXOffset + 48, chibiY));
+                        chibiStartX = 100;
+                        chibiY = 50;
                     }
                     else
                     {
-                        _log.LogWarning($"Chibi {chibi.Name} not currently on screen; cannot display emote.");
+                        chibiStartX = 44;
+                        chibiY = 100;
+                    }
+                    int chibiCurrentX = chibiStartX;
+                    int chibiWidth = 0;
+                    foreach (ChibiItem chibi in chibis)
+                    {
+                        SKBitmap chibiFrame = chibi.ChibiAnimations.First().Value.ElementAt(0).Frame;
+                        canvas.DrawBitmap(chibiFrame, new SKPoint(chibiCurrentX, chibiY));
+                        chibiWidth = chibiFrame.Width - 10;
+                        chibiCurrentX += chibiWidth;
+                    }
+
+                    // Draw top screen chibi emotes
+                    if (currentCommand.Verb == CommandVerb.CHIBI_EMOTE)
+                    {
+                        ChibiItem chibi = ((ChibiScriptParameter)currentCommand.Parameters[0]).Chibi;
+                        if (chibis.Contains(chibi))
+                        {
+                            int chibiIndex = chibis.IndexOf(chibi);
+                            SKBitmap emotes = _project.Grp.Files.First(f => f.Name == "SYS_ADV_T08DNX").GetImage(width: 32, transparentIndex: 0);
+                            int internalYOffset = ((int)((ChibiEmoteScriptParameter)currentCommand.Parameters[1]).Emote - 1) * 32;
+                            int externalXOffset = chibiStartX + chibiWidth * chibiIndex;
+                            canvas.DrawBitmap(emotes, new SKRect(0, internalYOffset, 32, internalYOffset + 32), new SKRect(externalXOffset + 16, chibiY - 32, externalXOffset + 48, chibiY));
+                        }
+                        else
+                        {
+                            _log.LogWarning($"Chibi {chibi.Name} not currently on screen; cannot display emote.");
+                        }
                     }
                 }
 
