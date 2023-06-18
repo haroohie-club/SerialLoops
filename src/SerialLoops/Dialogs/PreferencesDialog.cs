@@ -79,7 +79,7 @@ namespace SerialLoops.Dialogs
                             },
                             new TextOption
                             {
-                                Name = "DevkitARM Docker Tag (for use with ASM Hacks)",
+                                Name = "DevkitARM Docker Tag",
                                 Value = Configuration.DevkitArmDockerTag,
                                 OnChange = (value) => Configuration.DevkitArmDockerTag = value
                             },

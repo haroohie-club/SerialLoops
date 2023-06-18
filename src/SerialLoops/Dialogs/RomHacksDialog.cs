@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using System.Xml.Linq;
 
 namespace SerialLoops.Dialogs
 {
@@ -19,6 +20,9 @@ namespace SerialLoops.Dialogs
 
         public RomHacksDialog(Project project, Config config, ILogger log)
         {
+            Title = "Apply ROM Hacks";
+            Padding = 5;
+
             StackLayout hacksLayout = new()
             {
                 Orientation = Orientation.Vertical,
@@ -143,6 +147,12 @@ namespace SerialLoops.Dialogs
                 string originalOverlaysDir = Path.Combine(project.BaseDirectory, "original", "overlay");
                 string romInfoPath = Path.Combine(project.BaseDirectory, "original", $"{project.Name}.xml");
                 string newRomInfoPath = Path.Combine(project.BaseDirectory, "rom", $"{project.Name}.xml");
+                // We need the project file in the original directory, but in previous versions we didn't have it
+                // This prevents crashes by copying it in if it doesn't exist
+                if (!File.Exists(romInfoPath))
+                {
+                    File.Copy(newRomInfoPath, romInfoPath);
+                }
                 foreach (string file in Directory.GetFiles(originalOverlaysDir))
                 {
                     overlays.Add(new(file, romInfoPath));
@@ -193,6 +203,7 @@ namespace SerialLoops.Dialogs
             {
                 Orientation = Orientation.Horizontal,
                 Spacing = 3,
+                Padding = 5,
                 Items =
                 {
                     importButton,
