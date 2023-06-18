@@ -147,8 +147,8 @@ namespace SerialLoops.Lib
                 Directory.CreateDirectory(Path.GetDirectoryName(iterativeFile));
             }
 
-            File.Copy(sourceFile, baseFile);
-            File.Copy(sourceFile, iterativeFile);
+            File.Copy(sourceFile, baseFile, true);
+            File.Copy(sourceFile, iterativeFile, true);
         }
 
         public static void DeleteFiles(Project project, IEnumerable<string> files)
