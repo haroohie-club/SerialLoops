@@ -193,7 +193,7 @@ namespace SerialLoops.Dialogs
                 IEnumerable<string> failedHackNames = appliedHacks.Where(h => !h.Applied(project)).Select(h => h.Name);
                 if (failedHackNames.Any())
                 {
-                    log.LogError($"Some hacks ({string.Join(", ", failedHackNames)}) failed to apply -- check logs to see why.");
+                    log.LogError($"Failed to apply the following hacks to the ROM:\n{string.Join(", ", failedHackNames)}\n\nPlease check the log file for more information.");
                 }
 
                 Close();
@@ -207,8 +207,8 @@ namespace SerialLoops.Dialogs
                 Items =
                 {
                     importButton,
-                    cancelButton,
                     saveButton,
+                    cancelButton,
                 },
             };
 
