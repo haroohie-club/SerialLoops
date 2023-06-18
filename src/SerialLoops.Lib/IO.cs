@@ -2,6 +2,7 @@
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib.Util;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace SerialLoops.Lib
@@ -69,7 +70,11 @@ namespace SerialLoops.Lib
                 new("overlay", Array.Empty<IODirectory>(), Array.Empty<IOFile>()),
                 new("bgm", Array.Empty<IODirectory>(), Array.Empty<IOFile>()),
                 new("vce", Array.Empty<IODirectory>(), Array.Empty<IOFile>()),
-            }, Array.Empty<IOFile>());
+            },
+            new IOFile[]
+            {
+                new(Path.Combine(project.BaseDirectory, "rom", $"{project.Name}.xml")),
+            });
             IODirectory srcDirectoryTree = new("src", new IODirectory[]
             {
                 new("source", Array.Empty<IODirectory>(), Array.Empty<IOFile>()),
@@ -128,12 +133,31 @@ namespace SerialLoops.Lib
             }
         }
 
-        public static void SetUpLocalizedHacks(Project project)
+        public static void CopyFileToDirectories(Project project, string sourceFile, string relativePath)
         {
-            File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Hacks", "fontOffset.c"), Path.Combine(project.BaseDirectory, "src", "source", "fontOffset.c"));
-            File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Hacks", "fontOffset.c"), Path.Combine(project.IterativeDirectory, "src", "source", "fontOffset.c"));
-            File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Hacks", "fontOffset_asm.s"), Path.Combine(project.BaseDirectory, "src", "source", "fontOffset_asm.s"));
-            File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Hacks", "fontOffset_asm.s"), Path.Combine(project.IterativeDirectory, "src", "source", "fontOffset_asm.s"));
+            string baseFile = Path.Combine(project.BaseDirectory, relativePath);
+            string iterativeFile = Path.Combine(project.IterativeDirectory, relativePath);
+
+            if (!Directory.Exists(Path.GetDirectoryName(baseFile)))
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(baseFile));
+            }
+            if (!Directory.Exists(Path.GetDirectoryName(iterativeFile)))
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(iterativeFile));
+            }
+
+            File.Copy(sourceFile, baseFile, true);
+            File.Copy(sourceFile, iterativeFile, true);
+        }
+
+        public static void DeleteFiles(Project project, IEnumerable<string> files)
+        {
+            foreach (string file in files)
+            {
+                File.Delete(Path.Combine(project.IterativeDirectory, file));
+                File.Delete(Path.Combine(project.BaseDirectory, file));
+            }
         }
 
         public static void CopyFiles(string sourceDirectory, string destinationDirectory, string filter = "*")

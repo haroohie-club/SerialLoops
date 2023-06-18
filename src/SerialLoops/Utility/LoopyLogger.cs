@@ -27,7 +27,7 @@ namespace SerialLoops.Utility
 
         public void Log(string message)
         {
-            if (_writer is not null)
+            if (_writer is not null && !string.IsNullOrEmpty(message))
             {
                 _writer.WriteLine($"{DateTimeOffset.Now} - {message}");
                 _writer.Flush();
@@ -37,7 +37,7 @@ namespace SerialLoops.Utility
         public void LogError(string message, bool lookForWarnings = false)
         {
             Application.Instance.Invoke(() => MessageBox.Show($"ERROR: {message}", "Error", MessageBoxType.Error));
-            if (_writer is not null)
+            if (_writer is not null && !string.IsNullOrEmpty(message))
             {
                 _writer.WriteLine($"{DateTimeOffset.Now} - ERROR: {message}");
                 _writer.Flush();
@@ -46,7 +46,7 @@ namespace SerialLoops.Utility
 
         public void LogWarning(string message, bool lookForErrors = false)
         {
-            if (_writer is not null)
+            if (_writer is not null && !string.IsNullOrEmpty(message))
             {
                 _writer.WriteLine($"{DateTimeOffset.Now} - WARNING: {message}");
                 _writer.Flush();

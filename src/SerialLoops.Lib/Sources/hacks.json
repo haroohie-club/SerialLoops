@@ -1,0 +1,18 @@
+[
+    {
+        "Name": "Skip OP",
+        "InjectionSites": [
+            {
+                "Code": "01",
+                "Location": "20C7888"
+            }
+        ],
+        "Files": [
+            {
+                "File": "skipOp_asm.s",
+                "Destination": "overlays/main_0001/source/skipOp_asm.s",
+                "Symbols": []
+            }
+        ]
+    }
+]

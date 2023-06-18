@@ -65,7 +65,7 @@ namespace SerialLoops
             _msGothicHaruhi = SKTypeface.FromStream(typefaceStream);
 
             EditorTabs = new(project, this, Log);
-            
+
             SearchBox = new()
             {
                 PlaceholderText = "Search...",
@@ -75,17 +75,19 @@ namespace SerialLoops
             Button advancedSearchButton = new() { Text = "...", Width = 25 };
             advancedSearchButton.Click += Search_Executed;
             TableLayout searchBarLayout = new(new TableRow(
-                SearchBox, 
-                new StackLayout { Items = {advancedSearchButton}, Width = 25 }
-            )) { Spacing = new(5, 0) };
-            
+                SearchBox,
+                new StackLayout { Items = { advancedSearchButton }, Width = 25 }
+            ))
+            { Spacing = new(5, 0) };
+
             ItemExplorer = new(project, EditorTabs, SearchBox, Log);
             Title = $"{BASE_TITLE} - {project.Name}";
             Content = new TableLayout(new TableRow
             (
                 new TableLayout(searchBarLayout, ItemExplorer) { Spacing = new(0, 5) },
                 EditorTabs
-            )) { Spacing = new(0, 5) };
+            ))
+            { Spacing = new(0, 5) };
             EditorTabs.Tabs_PageChanged(this, EventArgs.Empty);
 
             LoadCachedData(project, tracker);
@@ -209,10 +211,18 @@ namespace SerialLoops
             };
             projectSettingsCommand.Executed += ProjectSettings_Executed;
 
-            Command migrateProjectCommand = new() { MenuText = "Migrate to new ROM", ToolBarText = "Migrate Project" };
+            Command migrateProjectCommand = new() { 
+                MenuText = "Migrate to new ROM", 
+                ToolBarText = "Migrate Project",
+                Image = ControlGenerator.GetIcon("Migrate_ROM", Log)
+            };
             migrateProjectCommand.Executed += MigrateProject_Executed;
 
-            Command exportPatchCommand = new() { MenuText = "Export Patch", ToolBarText = "Export Patch" };
+            Command exportPatchCommand = new() { 
+                MenuText = "Export Patch", 
+                ToolBarText = "Export Patch", 
+                Image = ControlGenerator.GetIcon("Export_Patch", Log)
+            };
             exportPatchCommand.Executed += Patch_Executed;
 
             Command closeProjectCommand = new()
@@ -224,11 +234,14 @@ namespace SerialLoops
             closeProjectCommand.Executed += (sender, args) => CloseProjectView();
 
             // Tools
-            Command renameItemCommand = new() { MenuText = "Rename Item", Shortcut = Keys.F2 };
+            Command applyHacksCommand = new() { MenuText = "Apply Hacks...", Image = ControlGenerator.GetIcon("Apply_Hacks", Log) };
+            applyHacksCommand.Executed += (sender, args) => new RomHacksDialog(OpenProject, CurrentConfig, Log).ShowModal();
+
+            Command renameItemCommand = new() { MenuText = "Rename Item", Shortcut = Keys.F2, Image = ControlGenerator.GetIcon("Rename_Item", Log)};
             renameItemCommand.Executed +=
                 (sender, args) => Shared.RenameItem(OpenProject, ItemExplorer, EditorTabs, Log);
 
-            Command editUiTextCommand = new() { MenuText = "Edit UI Text" };
+            Command editUiTextCommand = new() { MenuText = "Edit UI Text...", Image = ControlGenerator.GetIcon("Edit_UI_Text", Log) };
             editUiTextCommand.Executed += EditUiTextCommand_Executed;
 
             Command searchProjectCommand = new()
@@ -240,12 +253,16 @@ namespace SerialLoops
             };
             searchProjectCommand.Executed += Search_Executed;
 
-            Command findOrphanedItemsCommand = new() { MenuText = "Find Orphaned Items..." };
+            Command findOrphanedItemsCommand = new() { MenuText = "Find Orphaned Items...", Image = ControlGenerator.GetIcon("Orphan_Search", Log) };
             findOrphanedItemsCommand.Executed += FindOrphanedItems_Executed;
 
             // Build
             Command buildIterativeProjectCommand = new()
-            { MenuText = "Build", ToolBarText = "Build", Image = ControlGenerator.GetIcon("Build", Log) };
+            {
+                MenuText = "Build",
+                ToolBarText = "Build",
+                Image = ControlGenerator.GetIcon("Build", Log)
+            };
             buildIterativeProjectCommand.Executed += BuildIterativeProject_Executed;
 
             Command buildBaseProjectCommand = new()
@@ -257,7 +274,11 @@ namespace SerialLoops
             buildBaseProjectCommand.Executed += BuildBaseProject_Executed;
 
             Command buildAndRunProjectCommand = new()
-            { MenuText = "Build and Run", ToolBarText = "Run", Image = ControlGenerator.GetIcon("Build_Run", Log) };
+            { 
+                MenuText = "Build and Run",
+                ToolBarText = "Run",
+                Image = ControlGenerator.GetIcon("Build_Run", Log)
+            };
             buildAndRunProjectCommand.Executed += BuildAndRunProject_Executed;
 
             // Add toolbar
@@ -286,15 +307,16 @@ namespace SerialLoops
             }
 
             Menu.Items.Add(new SubMenuItem
-            { 
+            {
                 Text = "&Tools",
-                Items = 
+                Items =
                 {
+                    applyHacksCommand,
                     renameItemCommand,
                     editUiTextCommand,
                     searchProjectCommand,
                     findOrphanedItemsCommand,
-                } 
+                }
             });
             Menu.Items.Add(new SubMenuItem
             {

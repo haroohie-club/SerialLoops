@@ -2,8 +2,8 @@ using Eto.Drawing;
 using Eto.Forms;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib;
-using System;
 using SerialLoops.Utility;
+using System;
 
 namespace SerialLoops.Dialogs
 {
@@ -15,8 +15,9 @@ namespace SerialLoops.Dialogs
         public PreferencesDialog(Config config, ILogger log)
         {
             Title = "Preferences";
-            MinimumSize = new Size(450, 300);
-            Size = new Size(450, 300);
+            MinimumSize = new Size(550, 600);
+            Size = new Size(550, 600);
+            Resizable = true;
             Configuration = config;
             _log = log;
 
@@ -69,7 +70,19 @@ namespace SerialLoops.Dialogs
                                 Name = "Emulator Path",
                                 Path = Configuration.EmulatorPath,
                                 OnChange = (path) => Configuration.EmulatorPath = path
-                            }
+                            },
+                            new BooleanOption
+                            {
+                                Name = "Use Docker for ASM Hacks",
+                                Value = Configuration.UseDocker,
+                                OnChange = (value) => Configuration.UseDocker = value
+                            },
+                            new TextOption
+                            {
+                                Name = "DevkitARM Docker Tag",
+                                Value = Configuration.DevkitArmDockerTag,
+                                OnChange = (value) => Configuration.DevkitArmDockerTag = value
+                            },
                         }
                     ),
                     new OptionsGroup(

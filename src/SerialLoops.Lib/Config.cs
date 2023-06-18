@@ -1,6 +1,9 @@
 ﻿using HaruhiChokuretsuLib.Util;
+using SerialLoops.Lib.Hacks;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -18,7 +21,13 @@ namespace SerialLoops.Lib
         public string LogsDirectory => Path.Combine(UserDirectory, "Logs");
         [JsonIgnore]
         public string CachesDirectory => Path.Combine(UserDirectory, "Caches");
+        [JsonIgnore]
+        public string HacksDirectory => Path.Combine(UserDirectory, "Hacks");
+        [JsonIgnore]
+        public List<AsmHack> Hacks { get; set; }
         public string DevkitArmPath { get; set; }
+        public bool UseDocker { get; set; }
+        public string DevkitArmDockerTag { get; set; }
         public string EmulatorPath { get; set; }
         public bool AutoReopenLastProject { get; set; }
         public bool RememberProjectWorkspace { get; set; }
@@ -39,6 +48,7 @@ namespace SerialLoops.Lib
                 Config defaultConfig = GetDefault(log);
                 defaultConfig.ValidateConfig(log);
                 defaultConfig.ConfigPath = configJson;
+                defaultConfig.InitializeHacks();
                 IO.WriteStringFile(configJson, JsonSerializer.Serialize(defaultConfig), log);
                 return defaultConfig;
             }
@@ -48,6 +58,7 @@ namespace SerialLoops.Lib
                 Config config = JsonSerializer.Deserialize<Config>(File.ReadAllText(configJson));
                 config.ValidateConfig(log);
                 config.ConfigPath = configJson;
+                config.InitializeHacks();
                 return config;
             }
             catch (JsonException exc)
@@ -65,6 +76,28 @@ namespace SerialLoops.Lib
             if (string.IsNullOrWhiteSpace(DevkitArmPath))
             {
                 log.LogError("devkitARM is not detected at the default or specified install location. Please set devkitPro path.");
+            }
+        }
+
+        private void InitializeHacks()
+        {
+            if (!Directory.Exists(HacksDirectory))
+            {
+                Directory.CreateDirectory(HacksDirectory);
+                IO.CopyFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Hacks"), HacksDirectory);
+                File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "hacks.json"), Path.Combine(HacksDirectory, "hacks.json"));
+            }
+
+            Hacks = JsonSerializer.Deserialize<List<AsmHack>>(File.ReadAllText(Path.Combine(HacksDirectory, "hacks.json")));
+            
+            // Pull in new hacks in case we've updated the program with more
+            List<AsmHack> builtinHacks = JsonSerializer.Deserialize<List<AsmHack>>(File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "hacks.json")));
+            IEnumerable<AsmHack> missingHacks = builtinHacks.Where(h => !Hacks.Contains(h));
+            if (missingHacks.Any())
+            {
+                IO.CopyFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Hacks"), HacksDirectory);
+                Hacks.AddRange(missingHacks);
+                File.WriteAllText(Path.Combine(HacksDirectory, "hacks.json"), JsonSerializer.Serialize(Hacks));
             }
         }
 
@@ -102,6 +135,8 @@ namespace SerialLoops.Lib
                 UserDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "SerialLoops"),
                 DevkitArmPath = devkitArmDir,
                 EmulatorPath = emulatorPath,
+                UseDocker = false,
+                DevkitArmDockerTag = "20221115",
                 AutoReopenLastProject = true,
                 RememberProjectWorkspace = true,
                 RemoveMissingProjects = false,
