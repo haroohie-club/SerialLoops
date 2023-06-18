@@ -199,6 +199,17 @@ namespace SerialLoops.Dialogs
                 {
                     log.LogError($"Failed to apply the following hacks to the ROM:\n{string.Join(", ", failedHackNames)}\n\nPlease check the log file for more information.");
                 }
+                else
+                {
+                    if (appliedHacks.Any())
+                    {
+                        MessageBox.Show($"Successfully applied the following hacks:\n{string.Join(", ", appliedHacks.Select(h => h.Name))}", "Successfully applied hacks!", MessageBoxType.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show("No hacks applied!", "Success!", MessageBoxType.Information);
+                    }
+                }
 
                 Close();
             };
