@@ -33,7 +33,7 @@
 * Using the Windows graphical installer, you can simply select the devkitARM (Nintendo DS) workloads
 * On macOS and Linux, run `sudo dkp-pacman -S nds-dev` from the terminal after installing the devkitPro pacman distribution.
 
-### Installing Make or Docker
+#### Installing Make or Docker
 To assemble ASM hacks you want to apply, you will need to decide whether to use Make or Docker.
 
 * [Make](https://www.gnu.org/software/make/) is the software used to assemble assembly hacks. Installing Make allows you to build the hacks
