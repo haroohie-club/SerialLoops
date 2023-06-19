@@ -304,13 +304,7 @@ namespace SerialLoops.Editors
 
         private void RefreshCommands()
         {
-            int index = _commandsPanel.Viewer.SelectedIndex;
             _commandsPanel.Commands = _scenario.ScenarioCommands;
-            if (index < 0) index = 0;
-            if (_commandsPanel.Commands.Count > index)
-            {
-                _commandsPanel.Viewer.SelectedIndex = index;
-            }
             _deleteButton.Enabled = _commandsPanel.SelectedCommand is not null;
         }
     }

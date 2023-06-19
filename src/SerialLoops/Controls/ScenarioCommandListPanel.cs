@@ -2,20 +2,35 @@
 using Eto.Forms;
 using HaruhiChokuretsuLib.Util;
 using System.Collections.Generic;
+using System.Linq;
 using static HaruhiChokuretsuLib.Archive.Event.ScenarioCommand;
 
 namespace SerialLoops.Controls
 {
     public class ScenarioCommandListPanel : Panel
     {
-        public List<(ScenarioVerb Verb, string Parameter)> Commands 
+        public List<(ScenarioVerb Verb, string Parameter)> Commands
         {
-            get => _commands; 
+            get => _commands;
             set
             {
                 _commands = value;
-                Viewer?.Items.Clear();
-                _commands.ForEach(c => Viewer?.Items.Add($"{c.Verb} {c.Parameter}"));
+                int selectedIndex = -1;
+                if (Viewer is not null)
+                {
+                    selectedIndex = Viewer.SelectedIndex;
+                    Viewer.Items.Clear();
+                    Viewer.Items.AddRange(_commands.Select(c => new ListItem { Text = $"{c.Verb} {c.Parameter}" }));
+                    if (selectedIndex < 0)
+                    {
+                        selectedIndex = 0;
+                    }
+                    if (_commands.Count > selectedIndex)
+                    {
+                        Viewer.SelectedIndex = selectedIndex;
+                        Viewer.Focus();
+                    }
+                }
             }
         }
         public ListBox Viewer { get; private set; }
