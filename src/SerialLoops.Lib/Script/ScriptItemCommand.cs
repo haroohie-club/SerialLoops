@@ -645,7 +645,6 @@ namespace SerialLoops.Lib.Script
                         break;
                     case CommandVerb.EPHEADER:
                         if (i == 0)
-
                         {
                             parameters.Add(new EpisodeHeaderScriptParameter("Episode Header", parameter));
                         }
