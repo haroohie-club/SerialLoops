@@ -8,6 +8,7 @@ using SerialLoops.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace SerialLoops
 {
@@ -22,7 +23,7 @@ namespace SerialLoops
         private Label _romPath;
 
         private const string NO_ROM_TEXT = "None Selected";
-        private const string ALLOWED_CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_.~";
+        private static readonly Regex ALLOWED_CHARACTERS_REGEX = new(@"[A-z\d-_\.]");
 
         void InitializeComponent()
         {
@@ -37,7 +38,7 @@ namespace SerialLoops
             };
             _nameBox.TextChanging += (sender, args) =>
             {
-                if (args.NewText.Any(c => !ALLOWED_CHARACTERS.Contains(c)))
+                if (args.NewText.Any(c => !ALLOWED_CHARACTERS_REGEX.IsMatch(c.ToString())))
                 {
                     args.Cancel = true;
                 }
