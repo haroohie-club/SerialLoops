@@ -147,6 +147,28 @@ namespace SerialLoops
             Command preferencesCommand = new();
             preferencesCommand.Executed += PreferencesCommand_Executed;
 
+            Command viewLogsCommand = new()
+            {
+                MenuText = "View Logs",
+                ToolBarText = "View Logs",
+            };
+            viewLogsCommand.Executed += (sender, args) =>
+            {
+                try
+                {
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = Path.Combine(CurrentConfig.UserDirectory, "Logs", "SerialLoops.log"),
+                        UseShellExecute = true,
+                    });
+                }
+                catch (Exception)
+                {
+                    Log.LogError("Failed to open log file directly. " +
+                        $"Logs can be found at {Path.Combine(CurrentConfig.UserDirectory, "Logs", "SerialLoops.log")}");
+                }
+            };
+
             // Check For Updates
             Command checkForUpdatesCommand = new();
             checkForUpdatesCommand.Executed += (sender, e) => new UpdateChecker(this).Check();
@@ -171,7 +193,15 @@ namespace SerialLoops
                 {
                     // File submenu
                     new SubMenuItem
-                        {Text = "&File", Items = {newProjectCommand, openProjectCommand, _recentProjectsCommand}}
+                    {
+                        Text = "&File",
+                        Items =
+                        {
+                            newProjectCommand,
+                            openProjectCommand,
+                            _recentProjectsCommand
+                        }
+                    }
                 },
                 ApplicationItems =
                 {
@@ -185,7 +215,11 @@ namespace SerialLoops
                     {
                         Text = "&Check For Updates...", Command = checkForUpdatesCommand,
                         Image = ControlGenerator.GetIcon("Update", Log)
-                    }
+                    },
+                    new ButtonMenuItem
+                    {
+                        Text = "View &Logs", Command = viewLogsCommand,
+                    },
                 },
                 AboutItem = aboutCommand
             };
@@ -197,7 +231,7 @@ namespace SerialLoops
             Command saveProjectCommand = new()
             {
                 MenuText = "Save Project",
-                ToolBarText = "Save Project",
+                ToolBarText = "Save",
                 Shortcut = Application.Instance.CommonModifier | Keys.S,
                 Image = ControlGenerator.GetIcon("Save", Log)
             };
@@ -211,16 +245,18 @@ namespace SerialLoops
             };
             projectSettingsCommand.Executed += ProjectSettings_Executed;
 
-            Command migrateProjectCommand = new() { 
-                MenuText = "Migrate to new ROM", 
+            Command migrateProjectCommand = new()
+            {
+                MenuText = "Migrate to new ROM",
                 ToolBarText = "Migrate Project",
                 Image = ControlGenerator.GetIcon("Migrate_ROM", Log)
             };
             migrateProjectCommand.Executed += MigrateProject_Executed;
 
-            Command exportPatchCommand = new() { 
-                MenuText = "Export Patch", 
-                ToolBarText = "Export Patch", 
+            Command exportPatchCommand = new()
+            {
+                MenuText = "Export Patch",
+                ToolBarText = "Export Patch",
                 Image = ControlGenerator.GetIcon("Export_Patch", Log)
             };
             exportPatchCommand.Executed += Patch_Executed;
@@ -237,7 +273,7 @@ namespace SerialLoops
             Command applyHacksCommand = new() { MenuText = "Apply Hacks...", Image = ControlGenerator.GetIcon("Apply_Hacks", Log) };
             applyHacksCommand.Executed += (sender, args) => new RomHacksDialog(OpenProject, CurrentConfig, Log).ShowModal();
 
-            Command renameItemCommand = new() { MenuText = "Rename Item", Shortcut = Keys.F2, Image = ControlGenerator.GetIcon("Rename_Item", Log)};
+            Command renameItemCommand = new() { MenuText = "Rename Item", Shortcut = Keys.F2, Image = ControlGenerator.GetIcon("Rename_Item", Log) };
             renameItemCommand.Executed +=
                 (sender, args) => Shared.RenameItem(OpenProject, ItemExplorer, EditorTabs, Log);
 
@@ -274,7 +310,7 @@ namespace SerialLoops
             buildBaseProjectCommand.Executed += BuildBaseProject_Executed;
 
             Command buildAndRunProjectCommand = new()
-            { 
+            {
                 MenuText = "Build and Run",
                 ToolBarText = "Run",
                 Image = ControlGenerator.GetIcon("Build_Run", Log)
@@ -287,6 +323,7 @@ namespace SerialLoops
                 Style = "sl-toolbar",
                 Items =
                 {
+                    ControlGenerator.GetToolBarItem(saveProjectCommand),
                     ControlGenerator.GetToolBarItem(buildIterativeProjectCommand),
                     ControlGenerator.GetToolBarItem(buildAndRunProjectCommand),
                     ControlGenerator.GetToolBarItem(searchProjectCommand)
