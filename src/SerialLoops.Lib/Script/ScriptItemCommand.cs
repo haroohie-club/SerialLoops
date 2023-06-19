@@ -1,5 +1,4 @@
-﻿using HaruhiChokuretsuLib.Archive.Data;
-using HaruhiChokuretsuLib.Archive.Event;
+﻿using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
 using QuikGraph;
 using QuikGraph.Algorithms.Observers;
