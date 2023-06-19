@@ -197,7 +197,7 @@ namespace SerialLoops
             Command saveProjectCommand = new()
             {
                 MenuText = "Save Project",
-                ToolBarText = "Save Project",
+                ToolBarText = "Save",
                 Shortcut = Application.Instance.CommonModifier | Keys.S,
                 Image = ControlGenerator.GetIcon("Save", Log)
             };
@@ -287,6 +287,7 @@ namespace SerialLoops
                 Style = "sl-toolbar",
                 Items =
                 {
+                    ControlGenerator.GetToolBarItem(saveProjectCommand),
                     ControlGenerator.GetToolBarItem(buildIterativeProjectCommand),
                     ControlGenerator.GetToolBarItem(buildAndRunProjectCommand),
                     ControlGenerator.GetToolBarItem(searchProjectCommand)

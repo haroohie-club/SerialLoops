@@ -22,8 +22,7 @@ namespace SerialLoops
         private Label _romPath;
 
         private const string NO_ROM_TEXT = "None Selected";
-        private const string ASSETS_URL = "https://github.com/haroohie-club/ChokuretsuTranslationAssets/archive/refs/heads/main.zip";
-        private const string STRINGS_URL = "https://github.com/haroohie-club/ChokuretsuTranslationStrings/archive/refs/heads/main.zip";
+        private const string ALLOWED_CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_.~";
 
         void InitializeComponent()
         {
@@ -34,7 +33,14 @@ namespace SerialLoops
             _nameBox = new()
             {
                 PlaceholderText = "Haroohie",
-                Size = new Size(150, 25)
+                Size = new Size(150, 25),
+            };
+            _nameBox.TextChanging += (sender, args) =>
+            {
+                if (args.NewText.Any(c => !ALLOWED_CHARACTERS.Contains(c)))
+                {
+                    args.Cancel = true;
+                }
             };
             _languageDropDown = new();
             _languageDropDown.Items.AddRange(_availableLanguages.Select(a => new ListItem() { Text = a.Key, Key = a.Value }));
