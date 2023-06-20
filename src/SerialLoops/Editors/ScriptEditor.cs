@@ -992,8 +992,8 @@ namespace SerialLoops.Editors
                         StackLayout bgmLink = ControlGenerator.GetFileLink(bgmParam.Bgm, _tabs, _log);
 
                         ScriptCommandDropDown bgmDropDown = new() { Command = command, ParameterIndex = i, Link = (ClearableLinkButton)bgmLink.Items[1].Control };
-                        bgmDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.BGM).Select(i => new ListItem { Text = i.Name, Key = i.Name }));
-                        bgmDropDown.SelectedKey = bgmParam.Bgm.Name;
+                        bgmDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.BGM).Select(i => new ListItem { Text = i.DisplayName, Key = i.DisplayName }));
+                        bgmDropDown.SelectedKey = bgmParam.Bgm.DisplayName;
                         bgmDropDown.SelectedKeyChanged += BgmDropDown_SelectedKeyChanged;
 
                         StackLayout bgmLayout = new()
@@ -2057,11 +2057,11 @@ namespace SerialLoops.Editors
         {
             ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
             _log.Log($"Attempting to modify parameter {dropDown.ParameterIndex} to BGM {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
-            BackgroundMusicItem bgm = (BackgroundMusicItem)_project.Items.FirstOrDefault(i => i.Name == dropDown.SelectedKey);
+            BackgroundMusicItem bgm = (BackgroundMusicItem)_project.Items.FirstOrDefault(i => i.DisplayName == dropDown.SelectedKey);
             ((BgmScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Bgm = bgm;
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
                 .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
-                (short)((BackgroundMusicItem)_project.Items.First(i => i.Name == dropDown.SelectedKey)).Index;
+                (short)((BackgroundMusicItem)_project.Items.First(i => i.DisplayName == dropDown.SelectedKey)).Index;
 
             dropDown.Link.Text = bgm.DisplayName;
             dropDown.Link.RemoveAllClickEvents();
@@ -2488,7 +2488,7 @@ namespace SerialLoops.Editors
 
             dropDown.Link.Text = dropDown.SelectedKey;
             dropDown.Link.RemoveAllClickEvents();
-            dropDown.Link.ClickUnique += (s, e) => { _tabs.OpenTab(_project.Items.FirstOrDefault(i => i.Name == dropDown.SelectedKey), _log); };
+            dropDown.Link.ClickUnique += (s, e) => { _tabs.OpenTab(_project.Items.FirstOrDefault(i => i.DisplayName == dropDown.SelectedKey), _log); };
 
             UpdateTabTitle(false, dropDown);
         }
