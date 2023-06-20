@@ -1788,7 +1788,7 @@ namespace SerialLoops.Editors
                                 case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_FROM_CENTER_TO_RIGHT_FADE_OUT:
                                 case SpriteExitScriptParameter.SpriteExitTransition.FADE_OUT_CENTER:
                                 case SpriteExitScriptParameter.SpriteExitTransition.FADE_OUT_LEFT:
-                                    if (sprites.ContainsKey(prevCharacter) && previousSprites.ContainsKey(prevCharacter))
+                                    if (sprites.ContainsKey(prevCharacter) && previousSprites.ContainsKey(prevCharacter) && previousSprites[prevCharacter].Sprite.Sprite.Character == prevCharacter.MessageInfo.Character)
                                     {
                                         sprites.Remove(prevCharacter);
                                         previousSprites.Remove(prevCharacter);
