@@ -139,19 +139,6 @@ namespace SerialLoops.Dialogs
                     }
                 }
 
-                // Get make and docker paths
-                string makePath = string.Empty, dockerPath = string.Empty;
-                string pathVariable = Environment.GetEnvironmentVariable("PATH") ?? "";
-                string[] paths;
-                if (Platform.IsWpf)
-                {
-                    paths = pathVariable.Split(';');
-                }
-                else
-                {
-                    paths = pathVariable.Split(':');
-                }
-
                 // Build and insert ARM9 hacks
                 if (appliedHacks.Any(h => h.Files.Any(f => !f.Destination.Contains("overlays", StringComparison.OrdinalIgnoreCase))))
                 {
