@@ -55,18 +55,20 @@ namespace SerialLoops.Lib.Items
             // So we just convert to WAV AOT
             if (Path.GetExtension(audioFile).Equals(".mp3", StringComparison.OrdinalIgnoreCase))
             {
+                string mp3ConvertedFile = Path.Combine(Path.GetDirectoryName(bgmCachedFile), $"{Path.GetFileNameWithoutExtension(bgmCachedFile)}-converted.wav");
                 log.Log($"Converting {audioFile} to WAV...");
                 using Mp3FileReaderBase mp3Reader = new(audioFile, new Mp3FileReaderBase.FrameDecompressorBuilder(wf => new Mp3FrameDecompressor(wf)));
-                WaveFileWriter.CreateWaveFile(bgmCachedFile, mp3Reader.ToSampleProvider().ToWaveProvider16());
-                audioFile = bgmCachedFile;
+                WaveFileWriter.CreateWaveFile(mp3ConvertedFile, mp3Reader.ToSampleProvider().ToWaveProvider16());
+                audioFile = mp3ConvertedFile;
             }
             // Ditto the Vorbis decoder
             else if (Path.GetExtension(audioFile).Equals(".ogg", StringComparison.OrdinalIgnoreCase))
             {
+                string oggConvertedFile = Path.Combine(Path.GetDirectoryName(bgmCachedFile), $"{Path.GetFileNameWithoutExtension(bgmCachedFile)}-converted.wav");
                 log.Log($"Converting {audioFile} to WAV...");
                 using VorbisWaveReader vorbisReader = new(audioFile);
-                WaveFileWriter.CreateWaveFile(bgmCachedFile, vorbisReader.ToSampleProvider().ToWaveProvider16());
-                audioFile = bgmCachedFile;
+                WaveFileWriter.CreateWaveFile(oggConvertedFile, vorbisReader.ToSampleProvider().ToWaveProvider16());
+                audioFile = oggConvertedFile;
             }
             using WaveStream audio = Path.GetExtension(audioFile).ToLower() switch
             {
