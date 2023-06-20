@@ -47,7 +47,7 @@ namespace SerialLoops.Dialogs
                 hackCheckBox.MouseEnter += (sender, args) =>
                 {
                     descriptionLayout.Items.Clear();
-                    descriptionLayout.Items.Add(new Label { Text = hack.Name, Font = SystemFonts.Bold() });
+                    descriptionLayout.Items.Add(ControlGenerator.GetTextHeader(hack.Name));
                     descriptionLayout.Items.Add(new Label { Text = hack.Description, Wrap = WrapMode.Word });
                 };
                 hacksLayout.Items.Add(hackCheckBox);
