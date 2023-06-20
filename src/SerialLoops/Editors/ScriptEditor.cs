@@ -1832,6 +1832,7 @@ namespace SerialLoops.Editors
                             }
                             catch (InvalidOperationException)
                             {
+                                _log.LogWarning($"Unable to determine speaking character in DIALOGUE command in {_script.DisplayName}.");
                                 using Stream noPreviewStream = Assembly.GetCallingAssembly().GetManifestResourceStream("SerialLoops.Graphics.ScriptPreviewError.png");
                                 canvas.DrawImage(SKImage.FromEncodedData(noPreviewStream), new SKPoint(0, 0));
                                 canvas.Flush();
@@ -1874,6 +1875,10 @@ namespace SerialLoops.Editors
                                         sprites[character] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.RIGHT, Layer = layer }, PalEffect = spritePaint };
                                         break;
                                 }
+                            }
+                            else if (sprites.ContainsKey(character))
+                            {
+                                sprites[character] = new() { Sprite = spriteParam.Sprite, Positioning = sprites[character].Positioning, PalEffect = spritePaint };
                             }
                         }
                     }
