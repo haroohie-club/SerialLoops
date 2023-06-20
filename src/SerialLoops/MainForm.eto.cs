@@ -415,10 +415,10 @@ namespace SerialLoops
         {
             base.OnLoad(e);
             Log = new();
-            CurrentConfig = Config.LoadConfig(!Platform.IsWpf, Log);
-            if (!Platform.IsWpf)
+            CurrentConfig = Config.LoadConfig(Platform.IsMac, Log);
+            if (Platform.IsMac)
             {
-                Environment.SetEnvironmentVariable("PATH", CurrentConfig.UnixPath);
+                Environment.SetEnvironmentVariable("PATH", CurrentConfig.MacOSPath);
             }
             Log.Initialize(CurrentConfig);
             ProjectsCache = ProjectsCache.LoadCache(CurrentConfig, Log);

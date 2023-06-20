@@ -37,14 +37,14 @@ namespace SerialLoops.Lib
         public bool RemoveMissingProjects { get; set; }
         public bool CheckForUpdates { get; set; }
         public bool PreReleaseChannel { get; set; }
-        public string UnixPath { get; set; }
+        public string MacOSPath { get; set; }
 
         public void Save(ILogger log)
         {
             IO.WriteStringFile(ConfigPath, JsonSerializer.Serialize(this), log);
         }
 
-        public static Config LoadConfig(bool isUnix, ILogger log)
+        public static Config LoadConfig(bool isMacOS, ILogger log)
         {
             string configDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "SerialLoops");
             if (!Directory.Exists(configDirectory))
@@ -60,9 +60,9 @@ namespace SerialLoops.Lib
                 defaultConfig.ValidateConfig(log);
                 defaultConfig.ConfigDirectory = configDirectory;
                 defaultConfig.ConfigPath = configJson;
-                if (isUnix)
+                if (isMacOS)
                 {
-                    defaultConfig.InitializeUnixPath();
+                    defaultConfig.InitializeMacOSPath();
                 }
                 defaultConfig.InitializeHacks();
                 IO.WriteStringFile(configJson, JsonSerializer.Serialize(defaultConfig), log);
@@ -74,9 +74,9 @@ namespace SerialLoops.Lib
                 Config config = JsonSerializer.Deserialize<Config>(File.ReadAllText(configJson));
                 config.ValidateConfig(log);
                 config.ConfigPath = configJson;
-                if (isUnix && string.IsNullOrEmpty(config.UnixPath))
+                if (isMacOS && string.IsNullOrEmpty(config.MacOSPath))
                 {
-                    config.InitializeUnixPath();
+                    config.InitializeMacOSPath();
                 }
                 config.InitializeHacks();
                 return config;
@@ -132,7 +132,7 @@ namespace SerialLoops.Lib
             }
         }
 
-        private void InitializeUnixPath()
+        private void InitializeMacOSPath()
         {
             string unixPathFile = Path.Combine(ConfigDirectory, "unix-path.txt");
             ProcessStartInfo psi = new()
@@ -141,7 +141,7 @@ namespace SerialLoops.Lib
                 Arguments = $"echo \"$PATH\" > \"{unixPathFile}\"",
                 UseShellExecute = true,
             };
-            UnixPath = File.ReadAllText(unixPathFile).Trim();
+            MacOSPath = File.ReadAllText(unixPathFile).Trim();
         }
 
         private static Config GetDefault(ILogger log)
