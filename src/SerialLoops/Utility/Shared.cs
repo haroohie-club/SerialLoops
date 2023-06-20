@@ -42,11 +42,20 @@ namespace SerialLoops.Utility
         public static void RenameItem(Project project, ItemExplorerPanel explorer, EditorTabsPanel tabs, ILogger log, string newName)
         {
             ItemDescription item = project.FindItem(explorer.Viewer.SelectedItem?.Text);
+            RenameItem(item, project, explorer, tabs, log, newName);
+        }
+        public static void RenameItem(ItemDescription item, Project project, ItemExplorerPanel explorer, EditorTabsPanel tabs, ILogger log, string newName)
+        {
             if (item is not null)
             {
+                string oldName = item.DisplayName;
                 DocumentPage openTab = tabs.Tabs.Pages.FirstOrDefault(p => p.Text == item.DisplayNameWithStatus);
                 item.Rename(newName);
-                explorer.Viewer.SelectedItem.Text = item.DisplayName;
+                if (explorer.Viewer.SelectedItem.Text.Equals(oldName))
+                {
+                    // Unfortunately, there doesn't seem to be a good way to ensure the item gets rename if we've selected a different item
+                    explorer.Viewer.SelectedItem.Text = item.DisplayName;
+                }
                 if (openTab is not null)
                 {
                     openTab.Text = item.DisplayNameWithStatus;

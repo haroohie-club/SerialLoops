@@ -620,7 +620,7 @@ namespace SerialLoops
                         CharacterItem characterItem = (CharacterItem)item;
                         if (characterItem.NameplateProperties.Name != item.DisplayName[4..])
                         {
-                            Shared.RenameItem(OpenProject, ItemExplorer, EditorTabs, Log,
+                            Shared.RenameItem(characterItem, OpenProject, ItemExplorer, EditorTabs, Log,
                                 $"CHR_{characterItem.NameplateProperties.Name}");
                         }
 
@@ -648,7 +648,7 @@ namespace SerialLoops
                         PlaceItem placeItem = (PlaceItem)item;
                         if (placeItem.PlaceName != item.DisplayName[4..])
                         {
-                            Shared.RenameItem(OpenProject, ItemExplorer, EditorTabs, Log, $"PLC_{placeItem.PlaceName}");
+                            Shared.RenameItem(placeItem, OpenProject, ItemExplorer, EditorTabs, Log, $"PLC_{placeItem.PlaceName}");
                         }
 
                         MemoryStream placeStream = new();
