@@ -415,7 +415,11 @@ namespace SerialLoops
         {
             base.OnLoad(e);
             Log = new();
-            CurrentConfig = Config.LoadConfig(Log);
+            CurrentConfig = Config.LoadConfig(Platform.IsMac, Log);
+            if (Platform.IsMac)
+            {
+                Environment.SetEnvironmentVariable("PATH", CurrentConfig.MacOSPath);
+            }
             Log.Initialize(CurrentConfig);
             ProjectsCache = ProjectsCache.LoadCache(CurrentConfig, Log);
             UpdateRecentProjects();
