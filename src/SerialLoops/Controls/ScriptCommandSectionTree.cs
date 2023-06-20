@@ -2,12 +2,12 @@
 using Eto.Drawing;
 using Eto.Forms;
 using HaruhiChokuretsuLib.Archive.Event;
+using HaruhiChokuretsuLib.Util;
+using SerialLoops.Editors;
 using SerialLoops.Lib.Script;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using HaruhiChokuretsuLib.Util;
-using SerialLoops.Editors;
 
 namespace SerialLoops.Controls
 {
@@ -105,6 +105,7 @@ namespace SerialLoops.Controls
     {
         private TreeGridView _treeView;
         private ScriptCommandSectionTreeItem _cursorItem;
+        private bool _clickedOnCommand = false;
         public event EventHandler RepositionCommand;
         public event EventHandler<DeleteItemEventArgs> DeleteCommand;
         public event EventHandler<CommandEventArgs> AddCommand;
@@ -175,6 +176,8 @@ namespace SerialLoops.Controls
             _treeView.Size = size;
             SetContents(topNodes, expanded);
 
+            _treeView.MouseDown += OnMouseDown;
+            _treeView.MouseUp += OnMouseUp;
             _treeView.MouseMove += OnMouseMove;
             _treeView.DragOver += OnDragOver;
             _treeView.DragDrop += OnDragDrop;
@@ -190,10 +193,23 @@ namespace SerialLoops.Controls
             };
         }
 
+        private void OnMouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Buttons != MouseButtons.Primary) return;
+            if (_treeView.GetCellAt(e.Location).Item is not ScriptCommandSectionTreeItem { Parent: ScriptCommandSectionTreeItem parent } item) return;
+            _clickedOnCommand = true;
+        }
+
+        private void OnMouseUp(object sender, MouseEventArgs e)
+        {
+            _clickedOnCommand = false;
+        }
+
         private void OnMouseMove(object sender, MouseEventArgs e)
         {
             if (e.Buttons != MouseButtons.Primary) return;
             if (_treeView.GetCellAt(e.Location).Item is not ScriptCommandSectionTreeItem {Parent: ScriptCommandSectionTreeItem parent} item) return;
+            if (!_clickedOnCommand) return;
             _cursorItem = item;
                 
             var data = new DataObject();
