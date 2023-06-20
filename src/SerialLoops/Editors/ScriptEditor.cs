@@ -212,8 +212,11 @@ namespace SerialLoops.Editors
                             {
                                 case CommandVerb.BG_DISP:
                                 case CommandVerb.BG_DISP2:
+                                    invocation.Parameters[0] = (short)((BackgroundItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).BackgroundType == BgType.TEX_BG)).Id;
+                                    break;
+
                                 case CommandVerb.BG_DISPCG:
-                                    invocation.Parameters[0] = (short)((BackgroundItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).BackgroundType != BgType.KINETIC_SCREEN)).Id;
+                                    invocation.Parameters[0] = (short)((BackgroundItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).BackgroundType != BgType.KINETIC_SCREEN && ((BackgroundItem)i).BackgroundType != BgType.TEX_BG).Id;
                                     break;
 
                                 case CommandVerb.BG_SCROLL:
