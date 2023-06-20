@@ -1,6 +1,5 @@
-﻿using HaruhiChokuretsuLib.Audio;
-using NAudio.Wave;
-using NUnit.Framework;
+﻿using NUnit.Framework;
+using NUnit.Framework.Internal;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
@@ -47,7 +46,7 @@ namespace SerialLoops.Tests
 
             // Create a project using the extracted data
             _log.Log("Creating project...");
-            _config = Config.LoadConfig(_log);
+            _config = Config.LoadConfig(OSPlatform.CurrentPlatform.Platform == OSPlatform.MacOSXPlatformID || OSPlatform.CurrentPlatform.Platform == OSPlatform.UnixPlatformID_Microsoft, _log);
             _project = new("Tester", "en", _config, _log);
             
             string archivesDir = Path.Combine("original", "archives");

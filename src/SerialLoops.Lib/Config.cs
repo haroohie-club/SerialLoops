@@ -2,6 +2,7 @@
 using SerialLoops.Lib.Hacks;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -12,6 +13,8 @@ namespace SerialLoops.Lib
 {
     public class Config
     {
+        [JsonIgnore]
+        public string ConfigDirectory { get; set; }
         [JsonIgnore]
         public string ConfigPath { get; set; }
         public string UserDirectory { get; set; }
@@ -34,20 +37,33 @@ namespace SerialLoops.Lib
         public bool RemoveMissingProjects { get; set; }
         public bool CheckForUpdates { get; set; }
         public bool PreReleaseChannel { get; set; }
+        public string UnixPath { get; set; }
 
         public void Save(ILogger log)
         {
             IO.WriteStringFile(ConfigPath, JsonSerializer.Serialize(this), log);
         }
 
-        public static Config LoadConfig(ILogger log)
+        public static Config LoadConfig(bool isUnix, ILogger log)
         {
+            string configDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "SerialLoops");
+            if (!Directory.Exists(configDirectory))
+            {
+                Directory.CreateDirectory(configDirectory);
+            }
+
             string configJson = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.json");
+
             if (!File.Exists(configJson))
             {
                 Config defaultConfig = GetDefault(log);
                 defaultConfig.ValidateConfig(log);
+                defaultConfig.ConfigDirectory = configDirectory;
                 defaultConfig.ConfigPath = configJson;
+                if (isUnix)
+                {
+                    defaultConfig.InitializeUnixPath();
+                }
                 defaultConfig.InitializeHacks();
                 IO.WriteStringFile(configJson, JsonSerializer.Serialize(defaultConfig), log);
                 return defaultConfig;
@@ -58,6 +74,10 @@ namespace SerialLoops.Lib
                 Config config = JsonSerializer.Deserialize<Config>(File.ReadAllText(configJson));
                 config.ValidateConfig(log);
                 config.ConfigPath = configJson;
+                if (isUnix && string.IsNullOrEmpty(config.UnixPath))
+                {
+                    config.InitializeUnixPath();
+                }
                 config.InitializeHacks();
                 return config;
             }
@@ -110,6 +130,18 @@ namespace SerialLoops.Lib
                 }
                 File.WriteAllText(Path.Combine(HacksDirectory, "hacks.json"), JsonSerializer.Serialize(Hacks));
             }
+        }
+
+        private void InitializeUnixPath()
+        {
+            string unixPathFile = Path.Combine(ConfigDirectory, "unix-path.txt");
+            ProcessStartInfo psi = new()
+            {
+                FileName = "/bin/bash",
+                Arguments = $"echo \"$PATH\" > \"{unixPathFile}\"",
+                UseShellExecute = true,
+            };
+            UnixPath = File.ReadAllText(unixPathFile).Trim();
         }
 
         private static Config GetDefault(ILogger log)

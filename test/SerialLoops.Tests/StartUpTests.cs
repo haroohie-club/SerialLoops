@@ -1,5 +1,6 @@
 using HaruhiChokuretsuLib.Util;
 using NUnit.Framework;
+using NUnit.Framework.Internal;
 using SerialLoops.Lib;
 using System.IO;
 using System.Net.Http;
@@ -19,7 +20,7 @@ namespace SerialLoops.Tests
 
         private async Task<Project> DownloadTestRom()
         {
-            Config config = Config.LoadConfig(_log);
+            Config config = Config.LoadConfig(OSPlatform.CurrentPlatform.Platform == OSPlatform.MacOSXPlatformID || OSPlatform.CurrentPlatform.Platform == OSPlatform.UnixPlatformID_Microsoft, _log);
             Project project = new("Test", "en", config, _log);
 
             string romPath = Path.Combine(project.MainDirectory, "bcsds.nds");
@@ -35,7 +36,7 @@ namespace SerialLoops.Tests
         public void ConfigCreationTest()
         {
             // Create default config
-            Config config = Config.LoadConfig(_log);
+            Config config = Config.LoadConfig(OSPlatform.CurrentPlatform.Platform == OSPlatform.MacOSXPlatformID || OSPlatform.CurrentPlatform.Platform == OSPlatform.UnixPlatformID_Microsoft, _log);
             Assert.Multiple(() =>
             {
                 Assert.That(File.Exists(config.ConfigPath), $"Config file not found at '{config.ConfigPath}'");
@@ -48,7 +49,7 @@ namespace SerialLoops.Tests
             config.Save(_log);
 
             // Load config from disk
-            Config newConfig = Config.LoadConfig(_log);
+            Config newConfig = Config.LoadConfig(OSPlatform.CurrentPlatform.Platform == OSPlatform.MacOSXPlatformID || OSPlatform.CurrentPlatform.Platform == OSPlatform.UnixPlatformID_Microsoft, _log);
             Assert.That(newConfig.UserDirectory, Is.EqualTo(config.UserDirectory));
 
             File.Delete(config.ConfigPath);
@@ -57,7 +58,7 @@ namespace SerialLoops.Tests
         [Test]
         public void ProjectCreationTest()
         {
-            Config config = Config.LoadConfig(_log);
+            Config config = Config.LoadConfig(OSPlatform.CurrentPlatform.Platform == OSPlatform.MacOSXPlatformID || OSPlatform.CurrentPlatform.Platform == OSPlatform.UnixPlatformID_Microsoft, _log);
             Project project = new("Test", "en", config, _log);
 
             Assert.Multiple(() =>

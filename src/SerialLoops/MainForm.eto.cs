@@ -415,7 +415,11 @@ namespace SerialLoops
         {
             base.OnLoad(e);
             Log = new();
-            CurrentConfig = Config.LoadConfig(Log);
+            CurrentConfig = Config.LoadConfig(!Platform.IsWpf, Log);
+            if (!Platform.IsWpf)
+            {
+                Environment.SetEnvironmentVariable("PATH", CurrentConfig.UnixPath);
+            }
             Log.Initialize(CurrentConfig);
             ProjectsCache = ProjectsCache.LoadCache(CurrentConfig, Log);
             UpdateRecentProjects();
