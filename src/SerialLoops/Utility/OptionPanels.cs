@@ -36,6 +36,8 @@ namespace SerialLoops.Utility
     {
         public string Name { get; set; }
 
+        public bool Enabled { get; set; }
+
         protected abstract Control GetControl();
 
         protected virtual Control GetLabel()
@@ -74,7 +76,8 @@ namespace SerialLoops.Utility
                 Spacing = 5,
                 Orientation = Orientation.Horizontal,
                 VerticalContentAlignment = VerticalAlignment.Center,
-                Items = { _textBox }
+                Items = { _textBox },
+                Enabled = Enabled,
             };
         }
     }
@@ -105,6 +108,7 @@ namespace SerialLoops.Utility
                 Items = { _checkBox },
                 Orientation = Orientation.Horizontal,
                 VerticalContentAlignment = VerticalAlignment.Center,
+                Enabled = Enabled,
             };
         }
     }
@@ -139,7 +143,7 @@ namespace SerialLoops.Utility
 
         public BooleanToggleOption(List<Option> options)
         {
-            ToggleButton = new LinkButton { Text = _buttonText };
+            ToggleButton = new LinkButton { Text = _buttonText, Enabled = Enabled };
             ToggleButton.Click += (sender, args) =>
             {
                 options.OfType<BooleanOption>().ToList().ForEach(option => option.Value = Value);
@@ -186,8 +190,9 @@ namespace SerialLoops.Utility
         {
             _pathBox = new TextBox { Text = "", Width = 225 };
             _pathBox.TextChanged += (sender, args) => { OnChange?.Invoke(Path); };
+            _pathBox.Enabled = Enabled;
 
-            _pickerButton = new Button() { Text = "Select..." };
+            _pickerButton = new Button() { Text = "Select...", Enabled = Enabled };
             _pickerButton.Click += SelectButton_OnClick;
         }
 

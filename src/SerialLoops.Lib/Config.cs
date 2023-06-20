@@ -159,7 +159,7 @@ namespace SerialLoops.Lib
                 EmulatorPath = emulatorPath,
                 UseDocker = false,
                 DevkitArmDockerTag = "latest",
-                AutoReopenLastProject = true,
+                AutoReopenLastProject = false,
                 RememberProjectWorkspace = true,
                 RemoveMissingProjects = false,
                 CheckForUpdates = true,

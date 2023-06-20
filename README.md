@@ -36,6 +36,10 @@
 #### Installing Make or Docker
 To assemble ASM hacks you want to apply, you will need to decide whether to use Make or Docker.
 
+Currently, the Docker path is **only supported on Windows** due to operating system and framework limitations. It is possible to get Docker running
+just fine on Linux distros by running SerialLoops as root (e.g. `sudo SerialLoops`), but it's easier to just use Make. On macOS, there is no known
+way of getting the Docker path to work, so you will have to use Make.
+
 * [Make](https://www.gnu.org/software/make/) is the software used to assemble assembly hacks. Installing Make allows you to build the hacks
   directly on your system.
     - To install on Windows, you will have to use a terminal and a package manager. Your options are Winget (installed by default on Win10+) or
@@ -43,18 +47,17 @@ To assemble ASM hacks you want to apply, you will need to decide whether to use 
       for Winget or `choco install make` for Chocolatey. If using Winget, you will then have to go into system preferences and add Make to the path.
     - Installation on macOS can be done through Xcode or Homebrew. If using Xcode, open a terminal and type `xcode-select --install`. If you would
       rather use Homebrew, open a terminal after installing Homebrew and type `brew install make`.
-    - Make comes preinstalled on many Linux distributions. If it is not installed on yours, you will likely be able to install it with your package
-      as simply as `[packagemanger] install make` from a terminal.
+    - Make comes preinstalled on many Linux distributions, and if you're using the Debian or RPM package, it was definitely installed when you installed
+      Serial Loops. If you're using the tar.gz it is not installed on yours, you will likely be able to install it as simply as
+      `[packagemanger] install make` from a terminal.
   
   To test if make is installed properly, type `make --verison` into a terminal and see if it produces the version of make.
 * If you would rather not install Make, or if it is not working properly, you can instead run it through a Docker container. To do this, you should
   install [Docker Desktop](https://www.docker.com/products/docker-desktop/) or the Docker Engine. Ensure the Docker engine is running and make sure
   to check the "Use Docker for ASM Hacks" option in Preferences. You may want to occasionally clean up containers created by Serial Loops, as it will
   create many of them.
-    - On Windows, though, you will additionally need to install [Windows Subsystem for Linux (WSL)](https://learn.microsoft.com/en-us/windows/wsl/install).
+    - On Windows, you will additionally need to install [Windows Subsystem for Linux (WSL)](https://learn.microsoft.com/en-us/windows/wsl/install).
       From an admin PowerShell or Terminal window (Winkey + X + A), simply type `wsl --install` to install it.
-
-In general, Make is recommended, but it can be more difficult to get working on Windows systems sometimes. In this case, feel free to use Docker.
 
 #### Installing OpenAL (Linux)
 If you're running on Linux and _not using one of the package releases_ (the `.deb` or `.rpm`), you will also need to install OpenAL which is used for audio processing.
