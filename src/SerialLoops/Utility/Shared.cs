@@ -51,7 +51,7 @@ namespace SerialLoops.Utility
                 string oldName = item.DisplayName;
                 DocumentPage openTab = tabs.Tabs.Pages.FirstOrDefault(p => p.Text == item.DisplayNameWithStatus);
                 item.Rename(newName);
-                if (explorer.Viewer.SelectedItem.Text.Equals(oldName))
+                if (explorer.Viewer.SelectedItem?.Text.Equals(oldName) ?? false)
                 {
                     // Unfortunately, there doesn't seem to be a good way to ensure the item gets rename if we've selected a different item
                     explorer.Viewer.SelectedItem.Text = item.DisplayName;

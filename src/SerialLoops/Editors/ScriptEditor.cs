@@ -2065,7 +2065,7 @@ namespace SerialLoops.Editors
 
             dropDown.Link.Text = bgm.DisplayName;
             dropDown.Link.RemoveAllClickEvents();
-            dropDown.Link.ClickUnique += (s, e) => { _tabs.OpenTab(_project.Items.FirstOrDefault(i => i.Name == dropDown.SelectedKey), _log); };
+            dropDown.Link.ClickUnique += (s, e) => { _tabs.OpenTab(_project.Items.FirstOrDefault(i => i.DisplayName == dropDown.SelectedKey), _log); };
 
             UpdateTabTitle(false, dropDown);
         }
@@ -2541,14 +2541,14 @@ namespace SerialLoops.Editors
             else
             {
                 ((VoicedLineScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).VoiceLine =
-                    (VoicedLineItem)_project.Items.FirstOrDefault(i => i.Name == dropDown.SelectedKey);
+                    (VoicedLineItem)_project.Items.FirstOrDefault(i => i.DisplayName == dropDown.SelectedKey);
                 _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
                     .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
-                    (short)((VoicedLineItem)_project.Items.First(i => i.Name == dropDown.SelectedKey)).Index;
+                    (short)((VoicedLineItem)_project.Items.First(i => i.DisplayName == dropDown.SelectedKey)).Index;
             }
             dropDown.Link.Text = dropDown.SelectedKey;
             dropDown.Link.RemoveAllClickEvents();
-            dropDown.Link.ClickUnique += (s, e) => { _tabs.OpenTab(_project.Items.FirstOrDefault(i => i.Name == dropDown.SelectedKey), _log); };
+            dropDown.Link.ClickUnique += (s, e) => { _tabs.OpenTab(_project.Items.FirstOrDefault(i => i.DisplayName == dropDown.SelectedKey), _log); };
 
             UpdateTabTitle(false, dropDown);
         }
