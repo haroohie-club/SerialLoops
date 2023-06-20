@@ -152,34 +152,6 @@ namespace SerialLoops.Dialogs
                     paths = pathVariable.Split(':');
                 }
 
-                string makeExe = Platform.IsWpf ? "make.exe" : "make";
-                string dockerExe = Platform.IsWpf ? "docker.exe" : "docker";
-                foreach (string path in paths)
-                {
-                    if (File.Exists(Path.Combine(path, makeExe)))
-                    {
-                        makePath = Path.Combine(path, makeExe);
-                    }
-                    if (File.Exists(Path.Combine(path, dockerExe)))
-                    {
-                        dockerPath = Path.Combine(path, dockerExe);
-                    }
-                    if (!string.IsNullOrEmpty(makePath) && !string.IsNullOrEmpty(dockerPath))
-                    {
-                        break;
-                    }
-                }
-                if (string.IsNullOrEmpty(makePath))
-                {
-                    log.LogWarning("Failed to find make executable on path; defaulting to 'make'...");
-                    makePath = makeExe;
-                }
-                if (string.IsNullOrEmpty(dockerPath))
-                {
-                    log.LogWarning("Failed to find docker executable on path; defaulting to 'docker'...");
-                    dockerPath = dockerExe;
-                }
-
                 // Build and insert ARM9 hacks
                 if (appliedHacks.Any(h => h.Files.Any(f => !f.Destination.Contains("overlays", StringComparison.OrdinalIgnoreCase))))
                 {
@@ -199,8 +171,7 @@ namespace SerialLoops.Dialogs
                     {
                         ARM9AsmHack.Insert(Path.Combine(project.BaseDirectory, "src"), arm9, 0x02005ECC, config.UseDocker ? config.DevkitArmDockerTag : string.Empty,
                             (object sender, DataReceivedEventArgs e) => log.Log(e.Data),
-                            (object sender, DataReceivedEventArgs e) => log.LogWarning(e.Data),
-                            makePath, dockerPath);
+                            (object sender, DataReceivedEventArgs e) => log.LogWarning(e.Data));
                     }
                     catch (Exception ex)
                     {
@@ -256,8 +227,7 @@ namespace SerialLoops.Dialogs
                             {
                                 OverlayAsmHack.Insert(overlaySourceDir, overlays[i], newRomInfoPath, config.UseDocker ? config.DevkitArmDockerTag : string.Empty,
                                     (object sender, DataReceivedEventArgs e) => log.Log(e.Data),
-                                    (object sender, DataReceivedEventArgs e) => log.LogWarning(e.Data),
-                                    makePath, dockerPath);
+                                    (object sender, DataReceivedEventArgs e) => log.LogWarning(e.Data));
                             }
                             catch (Exception ex)
                             {
