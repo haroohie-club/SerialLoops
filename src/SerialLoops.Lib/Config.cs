@@ -99,6 +99,17 @@ namespace SerialLoops.Lib
                 Hacks.AddRange(missingHacks);
                 File.WriteAllText(Path.Combine(HacksDirectory, "hacks.json"), JsonSerializer.Serialize(Hacks));
             }
+
+            IEnumerable<AsmHack> updatedHacks = builtinHacks.Where(h => !Hacks.FirstOrDefault(o => h.Name == o.Name)?.DeepEquals(h) ?? false);
+            if (updatedHacks.Any())
+            {
+                IO.CopyFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Hacks"), HacksDirectory);
+                foreach (AsmHack updatedHack in updatedHacks)
+                {
+                    Hacks[Hacks.FindIndex(h => h.Name == updatedHack.Name)] = updatedHack;
+                }
+                File.WriteAllText(Path.Combine(HacksDirectory, "hacks.json"), JsonSerializer.Serialize(Hacks));
+            }
         }
 
         private static Config GetDefault(ILogger log)
@@ -136,7 +147,7 @@ namespace SerialLoops.Lib
                 DevkitArmPath = devkitArmDir,
                 EmulatorPath = emulatorPath,
                 UseDocker = false,
-                DevkitArmDockerTag = "20221115",
+                DevkitArmDockerTag = "latest",
                 AutoReopenLastProject = true,
                 RememberProjectWorkspace = true,
                 RemoveMissingProjects = false,

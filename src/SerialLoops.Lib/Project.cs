@@ -108,6 +108,7 @@ namespace SerialLoops.Lib
             SUCCESS,
             LOOSELEAF_FILES,
             CORRUPTED_FILE,
+            DEVKITARM_OUTOFDATE,
             NOT_FOUND,
             FAILED,
         }
@@ -137,6 +138,26 @@ namespace SerialLoops.Lib
             Config = config;
             LoadProjectSettings(log, tracker);
             ClearOrCreateCaches(config.CachesDirectory, log);
+            string makefile = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Makefile_main"));
+            if (!makefile.Equals(File.ReadAllText(Path.Combine(BaseDirectory, "src", "Makefile"))))
+            {
+                IO.CopyFileToDirectories(this, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Makefile_main"), Path.Combine("src", "Makefile"));
+                IO.CopyFileToDirectories(this, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Makefile_overlay"), Path.Combine("src", "overlays", "Makefile"));
+            }
+            if (!string.IsNullOrEmpty(config.DevkitArmPath))
+            {
+                string devkitARMVersionish = Path.GetFileNameWithoutExtension(Directory.GetDirectories(Path.Combine(config.DevkitArmPath, "lib", "gcc", "arm-none-eabi"))[0]);
+
+                if (!makefile.Contains(devkitARMVersionish))
+                {
+                    log.LogError($"DevkitARM is most likely out of date! (Or, possibly, we are!) If you haven't installed devkitARM recently, consider upgrading.");
+                    return new(LoadProjectState.DEVKITARM_OUTOFDATE);
+                }
+                else
+                {
+                    log.Log($"DevkitARM version detected as {devkitARMVersionish}");
+                }
+            }
             if (Directory.GetFiles(Path.Combine(IterativeDirectory, "assets"), "*", SearchOption.AllDirectories).Length > 0)
             {
                 return new(LoadProjectState.LOOSELEAF_FILES);
