@@ -271,7 +271,7 @@ namespace SerialLoops
 
             // Tools
             Command applyHacksCommand = new() { MenuText = "Apply Hacks...", Image = ControlGenerator.GetIcon("Apply_Hacks", Log) };
-            applyHacksCommand.Executed += (sender, args) => new RomHacksDialog(OpenProject, CurrentConfig, Log).ShowModal();
+            applyHacksCommand.Executed += (sender, args) => new AsmHacksDialog(OpenProject, CurrentConfig, Log).ShowModal();
 
             Command renameItemCommand = new() { MenuText = "Rename Item", Shortcut = Keys.F2, Image = ControlGenerator.GetIcon("Rename_Item", Log) };
             renameItemCommand.Executed +=

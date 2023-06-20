@@ -1,4 +1,5 @@
-﻿using Eto.Forms;
+﻿using Eto.Drawing;
+using Eto.Forms;
 using HaroohieClub.NitroPacker.Patcher.Nitro;
 using HaroohieClub.NitroPacker.Patcher.Overlay;
 using HaruhiChokuretsuLib.Util;
@@ -14,25 +15,41 @@ using System.Text.Json;
 
 namespace SerialLoops.Dialogs
 {
-    public class RomHacksDialog : Dialog
+    public class AsmHacksDialog : Dialog
     {
         private const int NUM_OVERLAYS = 26;
 
-        public RomHacksDialog(Project project, Config config, ILogger log)
+        public AsmHacksDialog(Project project, Config config, ILogger log)
         {
-            Title = "Apply ROM Hacks";
+            Title = "Apply Assembly Hacks";
             Padding = 5;
+
 
             StackLayout hacksLayout = new()
             {
                 Orientation = Orientation.Vertical,
                 Spacing = 5,
-                Size = new(200, 300),
+                Padding = 3,
+                Size = new(200, 400),
+            };
+
+            StackLayout descriptionLayout = new()
+            {
+                Orientation = Orientation.Vertical,
+                Spacing = 5,
+                Padding = 3,
+                Size = new(300, 400),
             };
 
             foreach (AsmHack hack in config.Hacks)
             {
                 CheckBox hackCheckBox = new() { Text = hack.Name, Checked = hack.Applied(project) };
+                hackCheckBox.MouseEnter += (sender, args) =>
+                {
+                    descriptionLayout.Items.Clear();
+                    descriptionLayout.Items.Add(new Label { Text = hack.Name, Font = SystemFonts.Bold() });
+                    descriptionLayout.Items.Add(new Label { Text = hack.Description, Wrap = WrapMode.Word });
+                };
                 hacksLayout.Items.Add(hackCheckBox);
             }
 
@@ -231,7 +248,8 @@ namespace SerialLoops.Dialogs
                     new Scrollable
                     {
                         Content = hacksLayout,
-                    }
+                    },
+                    descriptionLayout
                     ),
                 new TableRow(
                     buttonsLayout

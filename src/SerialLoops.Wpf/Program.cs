@@ -1,4 +1,5 @@
 ﻿using Eto.Wpf;
+using Eto.Wpf.Forms.Controls;
 using Eto.Wpf.Forms.ToolBar;
 using SerialLoops.Utility;
 using System;
