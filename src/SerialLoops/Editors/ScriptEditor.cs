@@ -1788,7 +1788,7 @@ namespace SerialLoops.Editors
                                 case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_FROM_CENTER_TO_RIGHT_FADE_OUT:
                                 case SpriteExitScriptParameter.SpriteExitTransition.FADE_OUT_CENTER:
                                 case SpriteExitScriptParameter.SpriteExitTransition.FADE_OUT_LEFT:
-                                    if (sprites.ContainsKey(prevCharacter) && previousSprites.ContainsKey(prevCharacter) && (sprites[prevCharacter].Sprite == previousSprites[prevCharacter].Sprite || ((SpriteEntranceScriptParameter)previousCommand.Parameters[2]).EntranceTransition != SpriteEntranceScriptParameter.SpriteEntranceTransition.NO_TRANSITION))
+                                    if (sprites.ContainsKey(prevCharacter) && previousSprites.ContainsKey(prevCharacter))
                                     {
                                         sprites.Remove(prevCharacter);
                                         previousSprites.Remove(prevCharacter);
@@ -2203,7 +2203,7 @@ namespace SerialLoops.Editors
             int currentCaretIndex = textArea.CaretIndex;
             textArea.FireTextChanged = false;
             textArea.Text = Regex.Replace(textArea.Text, @"^""", "“");
-            textArea.Text = Regex.Replace(textArea.Text, @"\s""", "“");
+            textArea.Text = Regex.Replace(textArea.Text, @"(\s)""", "$1“");
             textArea.Text = textArea.Text.Replace('"', '”');
             textArea.FireTextChanged = true;
             textArea.CaretIndex = currentCaretIndex;
