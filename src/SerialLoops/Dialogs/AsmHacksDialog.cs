@@ -254,7 +254,10 @@ namespace SerialLoops.Dialogs
                 new TableRow(
                     buttonsLayout
                     )
-                );
+                )
+            {
+                Spacing = new(10, 0),
+            };
         }
     }
 }
