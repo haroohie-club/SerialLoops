@@ -18,7 +18,7 @@ namespace SerialLoops.Lib.Hacks
         {
             foreach (InjectionSite site in InjectionSites)
             {
-                if (site.Equals("ARM9"))
+                if (site.Code.Equals("ARM9"))
                 {
                     using FileStream arm9 = File.OpenRead(Path.Combine(project.IterativeDirectory, "rom", "arm9.bin"));
                     arm9.Seek(site.Offset + 3, SeekOrigin.Begin);
@@ -62,16 +62,22 @@ namespace SerialLoops.Lib.Hacks
 
         public void Revert(Project project, ILogger log)
         {
+            bool oneSuccess = false;
             try
             {
                 foreach (HackFile file in Files)
                 {
                     File.Delete(Path.Combine(project.BaseDirectory, "src", file.Destination));
+                    oneSuccess = true;
                 }
             }
             catch (IOException)
             {
-                log.LogError($"Failed to delete files for hack '{Name}' -- this hack is likely applied in the ROM base and can't be disabled.");
+                // If there's at least one success, we assume that an older version of the hack was applied and we've now rolled it back
+                if (!oneSuccess)
+                {
+                    log.LogError($"Failed to delete files for hack '{Name}' -- this hack is likely applied in the ROM base and can't be disabled.");
+                }
             }
         }
 

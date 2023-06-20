@@ -6,12 +6,21 @@
             {
                 "Code": "01",
                 "Location": "020C7888"
+            },
+            {
+                "Code": "02",
+                "Location": "020C77FC"
             }
         ],
         "Files": [
             {
                 "File": "skipOp_asm.s",
                 "Destination": "overlays/main_0001/source/skipOp_asm.s",
+                "Symbols": []
+            },
+            {
+                "File": "nullifyAttractSequenceTimer_asm.s",
+                "Destination": "overlays/main_0002/source/nullifyAttractSequenceTimer_asm.s",
                 "Symbols": []
             }
         ]
