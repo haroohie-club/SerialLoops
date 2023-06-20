@@ -142,7 +142,6 @@ namespace SerialLoops.Lib.Items
                         Event.LabelsSection.Objects.RemoveAt(i);
                         i--;
                     }
-                    Event.LabelsSection.Objects = Event.LabelsSection.Objects.DistinctBy(s => s.Name).ToList();
                 }
             }
         }
