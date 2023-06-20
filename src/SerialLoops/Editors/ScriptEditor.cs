@@ -1034,7 +1034,7 @@ namespace SerialLoops.Editors
                     case ScriptParameter.ParameterType.CHARACTER:
                         ScriptCommandDropDown dialoguePropertyDropDown = new() { Command = command, ParameterIndex = i };
                         dialoguePropertyDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Character)
-                            .Select(c => new ListItem { Key = c.Name, Text = c.Name[4..] }));
+                            .Select(c => new ListItem { Key = c.DisplayName, Text = c.DisplayName[4..] }));
                         dialoguePropertyDropDown.SelectedKey = ((DialoguePropertyScriptParameter)parameter).Character.Name;
                         dialoguePropertyDropDown.SelectedKeyChanged += DialoguePropertyDropDown_SelectedKeyChanged;
                         _currentSpeakerDropDown.OtherDropDowns.Add(dialoguePropertyDropDown);
@@ -2256,7 +2256,7 @@ namespace SerialLoops.Editors
         private void DialoguePropertyDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
             ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
-            CharacterItem character = (CharacterItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Character && i.Name == dropDown.SelectedKey);
+            CharacterItem character = (CharacterItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Character && i.DisplayName.Equals(dropDown.SelectedKey));
             _log.Log($"Attempting to modify dialogue property in parameter {dropDown.ParameterIndex} to dialogue {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
             ((DialoguePropertyScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Character = character;
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)].Objects[dropDown.Command.Index]
