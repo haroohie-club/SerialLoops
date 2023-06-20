@@ -1264,7 +1264,7 @@ namespace SerialLoops.Editors
                         {
                             Command = command,
                             ParameterIndex = i,
-                            CurrentShort = i
+                            CurrentShort = currentShort,
                         };
                         screenSelector.ScreenChanged += ScreenSelector_ScreenChanged;
 
