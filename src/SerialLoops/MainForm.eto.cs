@@ -519,10 +519,6 @@ namespace SerialLoops
             LoopyProgressTracker tracker = new();
             _ = new ProgressDialog(() => (OpenProject, result) = Project.OpenProject(path, CurrentConfig, Log, tracker),
                 () => { }, tracker, "Loading Project");
-            if (result.State == Project.LoadProjectState.DEVKITARM_OUTOFDATE)
-            {
-                OpenProject = null;
-            }
             if (OpenProject is not null && result.State == Project.LoadProjectState.LOOSELEAF_FILES)
             {
                 if (MessageBox.Show("Saved but unbuilt files were detected in the project directory. " +
