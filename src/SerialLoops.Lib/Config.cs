@@ -2,6 +2,7 @@
 using SerialLoops.Lib.Hacks;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -43,6 +44,7 @@ namespace SerialLoops.Lib
         public static Config LoadConfig(ILogger log)
         {
             string configJson = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.json");
+
             if (!File.Exists(configJson))
             {
                 Config defaultConfig = GetDefault(log);
@@ -135,6 +137,10 @@ namespace SerialLoops.Lib
             {
                 emulatorPath = Path.Combine("/Applications", "melonDS.app");
             }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                emulatorPath = Path.Combine("/snap", "melonds", "current", "usr", "local", "bin", "melonDS");
+            }
             if (!Directory.Exists(emulatorPath))
             {
                 emulatorPath = "";
@@ -148,7 +154,7 @@ namespace SerialLoops.Lib
                 EmulatorPath = emulatorPath,
                 UseDocker = false,
                 DevkitArmDockerTag = "latest",
-                AutoReopenLastProject = true,
+                AutoReopenLastProject = false,
                 RememberProjectWorkspace = true,
                 RemoveMissingProjects = false,
                 CheckForUpdates = true,

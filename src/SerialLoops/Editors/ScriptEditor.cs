@@ -212,8 +212,11 @@ namespace SerialLoops.Editors
                             {
                                 case CommandVerb.BG_DISP:
                                 case CommandVerb.BG_DISP2:
+                                    invocation.Parameters[0] = (short)((BackgroundItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).BackgroundType == BgType.TEX_BG)).Id;
+                                    break;
+
                                 case CommandVerb.BG_DISPCG:
-                                    invocation.Parameters[0] = (short)((BackgroundItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).BackgroundType != BgType.KINETIC_SCREEN)).Id;
+                                    invocation.Parameters[0] = (short)((BackgroundItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).BackgroundType != BgType.KINETIC_SCREEN && ((BackgroundItem)i).BackgroundType != BgType.TEX_BG)).Id;
                                     break;
 
                                 case CommandVerb.BG_SCROLL:
@@ -928,12 +931,12 @@ namespace SerialLoops.Editors
                             ParameterIndex = i,
                             Project = _project,
                         };
-                        bgSelectionButton.Items.Add(NonePreviewableGraphic.BACKGROUND);
 
                         // BGDISPTEMP is able to display a lot more kinds of backgrounds properly than the other BG commands
                         // Hence, this switch to make sure you don't accidentally crash the game
                         if (command.Verb == CommandVerb.BG_FADE)
                         {
+                            bgSelectionButton.Items.Add(NonePreviewableGraphic.BACKGROUND);
                             switch (i)
                             {
                                 case 0:
@@ -992,8 +995,8 @@ namespace SerialLoops.Editors
                         StackLayout bgmLink = ControlGenerator.GetFileLink(bgmParam.Bgm, _tabs, _log);
 
                         ScriptCommandDropDown bgmDropDown = new() { Command = command, ParameterIndex = i, Link = (ClearableLinkButton)bgmLink.Items[1].Control };
-                        bgmDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.BGM).Select(i => new ListItem { Text = i.Name, Key = i.Name }));
-                        bgmDropDown.SelectedKey = bgmParam.Bgm.Name;
+                        bgmDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.BGM).Select(i => new ListItem { Text = i.DisplayName, Key = i.DisplayName }));
+                        bgmDropDown.SelectedKey = bgmParam.Bgm.DisplayName;
                         bgmDropDown.SelectedKeyChanged += BgmDropDown_SelectedKeyChanged;
 
                         StackLayout bgmLayout = new()
@@ -1031,7 +1034,7 @@ namespace SerialLoops.Editors
                     case ScriptParameter.ParameterType.CHARACTER:
                         ScriptCommandDropDown dialoguePropertyDropDown = new() { Command = command, ParameterIndex = i };
                         dialoguePropertyDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Character)
-                            .Select(c => new ListItem { Key = c.Name, Text = c.Name[4..] }));
+                            .Select(c => new ListItem { Key = c.DisplayName, Text = c.DisplayName[4..] }));
                         dialoguePropertyDropDown.SelectedKey = ((DialoguePropertyScriptParameter)parameter).Character.Name;
                         dialoguePropertyDropDown.SelectedKeyChanged += DialoguePropertyDropDown_SelectedKeyChanged;
                         _currentSpeakerDropDown.OtherDropDowns.Add(dialoguePropertyDropDown);
@@ -1261,7 +1264,7 @@ namespace SerialLoops.Editors
                         {
                             Command = command,
                             ParameterIndex = i,
-                            CurrentShort = i
+                            CurrentShort = currentShort,
                         };
                         screenSelector.ScreenChanged += ScreenSelector_ScreenChanged;
 
@@ -1788,7 +1791,7 @@ namespace SerialLoops.Editors
                                 case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_FROM_CENTER_TO_RIGHT_FADE_OUT:
                                 case SpriteExitScriptParameter.SpriteExitTransition.FADE_OUT_CENTER:
                                 case SpriteExitScriptParameter.SpriteExitTransition.FADE_OUT_LEFT:
-                                    if (sprites.ContainsKey(prevCharacter) && previousSprites.ContainsKey(prevCharacter) && (sprites[prevCharacter].Sprite == previousSprites[prevCharacter].Sprite || ((SpriteEntranceScriptParameter)previousCommand.Parameters[2]).EntranceTransition != SpriteEntranceScriptParameter.SpriteEntranceTransition.NO_TRANSITION))
+                                    if (sprites.ContainsKey(prevCharacter) && previousSprites.ContainsKey(prevCharacter) && ((SpriteScriptParameter)previousCommand.Parameters[1]).Sprite?.Sprite?.Character == prevCharacter.MessageInfo.Character)
                                     {
                                         sprites.Remove(prevCharacter);
                                         previousSprites.Remove(prevCharacter);
@@ -2057,15 +2060,15 @@ namespace SerialLoops.Editors
         {
             ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
             _log.Log($"Attempting to modify parameter {dropDown.ParameterIndex} to BGM {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
-            BackgroundMusicItem bgm = (BackgroundMusicItem)_project.Items.FirstOrDefault(i => i.Name == dropDown.SelectedKey);
+            BackgroundMusicItem bgm = (BackgroundMusicItem)_project.Items.FirstOrDefault(i => i.DisplayName == dropDown.SelectedKey);
             ((BgmScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Bgm = bgm;
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
                 .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
-                (short)((BackgroundMusicItem)_project.Items.First(i => i.Name == dropDown.SelectedKey)).Index;
+                (short)((BackgroundMusicItem)_project.Items.First(i => i.DisplayName == dropDown.SelectedKey)).Index;
 
             dropDown.Link.Text = bgm.DisplayName;
             dropDown.Link.RemoveAllClickEvents();
-            dropDown.Link.ClickUnique += (s, e) => { _tabs.OpenTab(_project.Items.FirstOrDefault(i => i.Name == dropDown.SelectedKey), _log); };
+            dropDown.Link.ClickUnique += (s, e) => { _tabs.OpenTab(_project.Items.FirstOrDefault(i => i.DisplayName == dropDown.SelectedKey), _log); };
 
             UpdateTabTitle(false, dropDown);
         }
@@ -2203,7 +2206,7 @@ namespace SerialLoops.Editors
             int currentCaretIndex = textArea.CaretIndex;
             textArea.FireTextChanged = false;
             textArea.Text = Regex.Replace(textArea.Text, @"^""", "“");
-            textArea.Text = Regex.Replace(textArea.Text, @"\s""", "“");
+            textArea.Text = Regex.Replace(textArea.Text, @"(\s)""", "$1“");
             textArea.Text = textArea.Text.Replace('"', '”');
             textArea.FireTextChanged = true;
             textArea.CaretIndex = currentCaretIndex;
@@ -2253,7 +2256,7 @@ namespace SerialLoops.Editors
         private void DialoguePropertyDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
             ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
-            CharacterItem character = (CharacterItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Character && i.Name == dropDown.SelectedKey);
+            CharacterItem character = (CharacterItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Character && i.DisplayName.Equals(dropDown.SelectedKey));
             _log.Log($"Attempting to modify dialogue property in parameter {dropDown.ParameterIndex} to dialogue {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
             ((DialoguePropertyScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Character = character;
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)].Objects[dropDown.Command.Index]
@@ -2488,7 +2491,7 @@ namespace SerialLoops.Editors
 
             dropDown.Link.Text = dropDown.SelectedKey;
             dropDown.Link.RemoveAllClickEvents();
-            dropDown.Link.ClickUnique += (s, e) => { _tabs.OpenTab(_project.Items.FirstOrDefault(i => i.Name == dropDown.SelectedKey), _log); };
+            dropDown.Link.ClickUnique += (s, e) => { _tabs.OpenTab(_project.Items.FirstOrDefault(i => i.DisplayName == dropDown.SelectedKey), _log); };
 
             UpdateTabTitle(false, dropDown);
         }
@@ -2541,14 +2544,14 @@ namespace SerialLoops.Editors
             else
             {
                 ((VoicedLineScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).VoiceLine =
-                    (VoicedLineItem)_project.Items.FirstOrDefault(i => i.Name == dropDown.SelectedKey);
+                    (VoicedLineItem)_project.Items.FirstOrDefault(i => i.DisplayName == dropDown.SelectedKey);
                 _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
                     .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
-                    (short)((VoicedLineItem)_project.Items.First(i => i.Name == dropDown.SelectedKey)).Index;
+                    (short)((VoicedLineItem)_project.Items.First(i => i.DisplayName == dropDown.SelectedKey)).Index;
             }
             dropDown.Link.Text = dropDown.SelectedKey;
             dropDown.Link.RemoveAllClickEvents();
-            dropDown.Link.ClickUnique += (s, e) => { _tabs.OpenTab(_project.Items.FirstOrDefault(i => i.Name == dropDown.SelectedKey), _log); };
+            dropDown.Link.ClickUnique += (s, e) => { _tabs.OpenTab(_project.Items.FirstOrDefault(i => i.DisplayName == dropDown.SelectedKey), _log); };
 
             UpdateTabTitle(false, dropDown);
         }

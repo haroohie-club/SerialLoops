@@ -4,10 +4,8 @@ using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Utility;
 using SkiaSharp;
-using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using Topten.RichTextKit;
 
 namespace SerialLoops.Editors
 {
