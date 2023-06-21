@@ -62,13 +62,13 @@ namespace SerialLoops.Editors
             
             mainLayout.Items.Add(panel1);
             
-            DropDown accompanyingCharacterDropdown = new();
+            DropDown accompanyingCharacterDropdown = new() { Enabled = false };
             accompanyingCharacterDropdown.Items.AddRange(PuzzleItem.Characters.Select(c => new ListItem() { Text = c, Key = c }));
             accompanyingCharacterDropdown.SelectedIndex = PuzzleItem.Characters.IndexOf(_puzzle.Puzzle.Settings.AccompanyingCharacter);
-            DropDown powerCharacter1Dropdown = new();
+            DropDown powerCharacter1Dropdown = new() { Enabled = false };
             powerCharacter1Dropdown.Items.AddRange(PuzzleItem.Characters.Select(c => new ListItem() { Text = c, Key = c }));
             powerCharacter1Dropdown.SelectedIndex = PuzzleItem.Characters.IndexOf(_puzzle.Puzzle.Settings.PowerCharacter1);
-            DropDown powerCharacter2Dropdown = new();
+            DropDown powerCharacter2Dropdown = new() { Enabled = false };
             powerCharacter2Dropdown.Items.AddRange(PuzzleItem.Characters.Select(c => new ListItem() { Text = c, Key = c }));
             powerCharacter2Dropdown.SelectedIndex = PuzzleItem.Characters.IndexOf(_puzzle.Puzzle.Settings.PowerCharacter2);
 
@@ -90,19 +90,19 @@ namespace SerialLoops.Editors
                             Items =
                             {
                                 ControlGenerator.GetControlWithLabel("Map", ControlGenerator.GetFileLink(map, _tabs, _log)),
-                                ControlGenerator.GetControlWithLabel("Base Time", new TextBox { Text = _puzzle.Puzzle.Settings.BaseTime.ToString() }),
-                                ControlGenerator.GetControlWithLabel("Number of Singularities", new TextBox { Text = _puzzle.Puzzle.Settings.NumSingularities.ToString() }),
-                                ControlGenerator.GetControlWithLabel("Unknown 04", new TextBox { Text = _puzzle.Puzzle.Settings.Unknown04.ToString() }),
-                                ControlGenerator.GetControlWithLabel("Target Number", new TextBox { Text = _puzzle.Puzzle.Settings.TargetNumber.ToString() }),
-                                ControlGenerator.GetControlWithLabel("Continue on Failure", new CheckBox { Checked = _puzzle.Puzzle.Settings.ContinueOnFailure }),
+                                ControlGenerator.GetControlWithLabel("Base Time", new TextBox { Text = _puzzle.Puzzle.Settings.BaseTime.ToString(), Enabled = false }),
+                                ControlGenerator.GetControlWithLabel("Number of Singularities", new TextBox { Text = _puzzle.Puzzle.Settings.NumSingularities.ToString(), Enabled = false }),
+                                ControlGenerator.GetControlWithLabel("Unknown 04", new TextBox { Text = _puzzle.Puzzle.Settings.Unknown04.ToString(), Enabled = false }),
+                                ControlGenerator.GetControlWithLabel("Target Number", new TextBox { Text = _puzzle.Puzzle.Settings.TargetNumber.ToString(), Enabled = false }),
+                                ControlGenerator.GetControlWithLabel("Continue on Failure", new CheckBox { Checked = _puzzle.Puzzle.Settings.ContinueOnFailure, Enabled = false }),
                                 ControlGenerator.GetControlWithLabel("Accompanying Character", accompanyingCharacterDropdown),
                                 ControlGenerator.GetControlWithLabel("Power Character 1", powerCharacter1Dropdown),
                                 ControlGenerator.GetControlWithLabel("Power Character 2", powerCharacter2Dropdown),
                                 ControlGenerator.GetControlWithLabel("Singularity", new SKGuiImage(_puzzle.SingularityImage)),
-                                ControlGenerator.GetControlWithLabel("Topic Set", new TextBox { Text = _puzzle.Puzzle.Settings.TopicSet.ToString() }),
-                                ControlGenerator.GetControlWithLabel("Unknown 15", new TextBox { Text = _puzzle.Puzzle.Settings.Unknown15.ToString() }),
-                                ControlGenerator.GetControlWithLabel("Unknown 16", new TextBox { Text = _puzzle.Puzzle.Settings.Unknown16.ToString() }),
-                                ControlGenerator.GetControlWithLabel("Unknown 17", new TextBox { Text = _puzzle.Puzzle.Settings.Unknown17.ToString() }),
+                                ControlGenerator.GetControlWithLabel("Topic Set", new TextBox { Text = _puzzle.Puzzle.Settings.TopicSet.ToString(), Enabled = false }),
+                                ControlGenerator.GetControlWithLabel("Unknown 15", new TextBox { Text = _puzzle.Puzzle.Settings.Unknown15.ToString(), Enabled = false }),
+                                ControlGenerator.GetControlWithLabel("Unknown 16", new TextBox { Text = _puzzle.Puzzle.Settings.Unknown16.ToString(), Enabled = false }),
+                                ControlGenerator.GetControlWithLabel("Unknown 17", new TextBox { Text = _puzzle.Puzzle.Settings.Unknown17.ToString(), Enabled = false }),
                             },
                         },
                     },

@@ -23,6 +23,7 @@ namespace SerialLoops.Lib.Items
         {
             Event = evt;
 
+            PruneLabelsSection();
             Graph.AddVertexRange(Event.ScriptSections);
         }
 
@@ -122,6 +123,25 @@ namespace SerialLoops.Lib.Items
                 if (section != commandTree.Keys.Last())
                 {
                     Graph.AddEdge(new() { Source = section, Target = commandTree.Keys.ElementAt(commandTree.Keys.ToList().IndexOf(section) + 1) });
+                }
+            }
+        }
+
+        public void PruneLabelsSection()
+        {
+            if (Event.LabelsSection.Objects.Count - 1 > Event.ScriptSections.Count)
+            {
+                for (int i = 0; i < Event.LabelsSection.Objects.Count; i++)
+                {
+                    if (Event.LabelsSection.Objects[i].Id == 0)
+                    {
+                        continue;
+                    }
+                    if (!Event.ScriptSections.Select(s => s.Name).Contains(Event.LabelsSection.Objects[i].Name.Replace("/", "")))
+                    {
+                        Event.LabelsSection.Objects.RemoveAt(i);
+                        i--;
+                    }
                 }
             }
         }

@@ -108,7 +108,6 @@ namespace SerialLoops.Lib
             SUCCESS,
             LOOSELEAF_FILES,
             CORRUPTED_FILE,
-            DEVKITARM_OUTOFDATE,
             NOT_FOUND,
             FAILED,
         }
@@ -148,14 +147,10 @@ namespace SerialLoops.Lib
             {
                 string devkitARMVersionish = Path.GetFileNameWithoutExtension(Directory.GetDirectories(Path.Combine(config.DevkitArmPath, "lib", "gcc", "arm-none-eabi"))[0]);
 
+                log.Log($"DevkitARM version detected as {devkitARMVersionish}");
                 if (!makefile.Contains(devkitARMVersionish))
                 {
                     log.LogError($"DevkitARM is most likely out of date! (Or, possibly, we are!) If you haven't installed devkitARM recently, consider upgrading.");
-                    return new(LoadProjectState.DEVKITARM_OUTOFDATE);
-                }
-                else
-                {
-                    log.Log($"DevkitARM version detected as {devkitARMVersionish}");
                 }
             }
             if (Directory.GetFiles(Path.Combine(IterativeDirectory, "assets"), "*", SearchOption.AllDirectories).Length > 0)

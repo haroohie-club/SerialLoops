@@ -138,8 +138,8 @@ namespace SerialLoops.Editors
                         }
                     }),
                     nameplatePreviewLayout,
-                    ControlGenerator.GetControlWithLabel("Voice Font", new NumericStepper { Value = _character.MessageInfo.VoiceFont }),
-                    ControlGenerator.GetControlWithLabel("Text Timer", new NumericStepper { Value = _character.MessageInfo.TextTimer }),
+                    ControlGenerator.GetControlWithLabel("Voice Font", new NumericStepper { Value = _character.MessageInfo.VoiceFont, Enabled = false }),
+                    ControlGenerator.GetControlWithLabel("Text Timer", new NumericStepper { Value = _character.MessageInfo.TextTimer, Enabled = false }),
                 },
             };
         }

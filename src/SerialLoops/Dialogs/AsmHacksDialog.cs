@@ -1,5 +1,4 @@
-﻿using Eto.Drawing;
-using Eto.Forms;
+﻿using Eto.Forms;
 using HaroohieClub.NitroPacker.Patcher.Nitro;
 using HaroohieClub.NitroPacker.Patcher.Overlay;
 using HaruhiChokuretsuLib.Util;
@@ -141,13 +140,42 @@ namespace SerialLoops.Dialogs
                 }
 
                 // Build and insert ARM9 hacks
-                if (appliedHacks.Any(h => h.Files.Any(f => !f.Destination.Contains("overlays", System.StringComparison.OrdinalIgnoreCase))))
+                if (appliedHacks.Any(h => h.Files.Any(f => !f.Destination.Contains("overlays", StringComparison.OrdinalIgnoreCase))))
                 {
-                    ARM9 arm9 = new(File.ReadAllBytes(Path.Combine(project.BaseDirectory, "src", "arm9.bin")), 0x02000000);
-                    ARM9AsmHack.Insert(Path.Combine(project.BaseDirectory, "src"), arm9, 0x02005ECC, config.UseDocker ? config.DevkitArmDockerTag : string.Empty,
-                        (object sender, DataReceivedEventArgs e) => log.Log(e.Data),
-                        (object sender, DataReceivedEventArgs e) => log.LogWarning(e.Data));
-                    Lib.IO.WriteBinaryFile(Path.Combine("rom", "arm9.bin"), arm9.GetBytes(), project, log);
+                    string arm9Path = Path.Combine(project.BaseDirectory, "src", "arm9.bin");
+                    ARM9 arm9 = null;
+                    try
+                    {
+                        arm9 = new(File.ReadAllBytes(arm9Path), 0x02000000);
+                    }
+                    catch (Exception ex)
+                    {
+                        log.LogError($"Failed to read ARM9 from '{arm9Path}'");
+                        log.LogWarning($"{ex.Message}\n\n{ex.StackTrace}");
+                    }
+
+                    try
+                    {
+                        ARM9AsmHack.Insert(Path.Combine(project.BaseDirectory, "src"), arm9, 0x02005ECC, config.UseDocker ? config.DevkitArmDockerTag : string.Empty,
+                            (object sender, DataReceivedEventArgs e) => log.Log(e.Data),
+                            (object sender, DataReceivedEventArgs e) => log.LogWarning(e.Data),
+                            devkitArmPath: config.DevkitArmPath);
+                    }
+                    catch (Exception ex)
+                    {
+                        log.LogError("Failed to insert ARM9 assembly hacks");
+                        log.LogWarning($"{ex.Message}\n\n{ex.StackTrace}");
+                    }
+
+                    try
+                    {
+                        Lib.IO.WriteBinaryFile(Path.Combine("rom", "arm9.bin"), arm9.GetBytes(), project, log);
+                    }
+                    catch (Exception ex)
+                    {
+                        log.LogError("Failed to write ARM9 to disk");
+                        log.LogWarning($"{ex.Message}\n\n{ex.StackTrace}");
+                    }
                 }
                 else
                 {
@@ -164,15 +192,7 @@ namespace SerialLoops.Dialogs
                 string originalOverlaysDir = Path.Combine(project.BaseDirectory, "original", "overlay");
                 string romInfoPath = Path.Combine(project.BaseDirectory, "original", $"{project.Name}.xml");
                 string newRomInfoPath = Path.Combine(project.BaseDirectory, "rom", $"{project.Name}.xml");
-                // We need the project file in the original directory, but in previous versions we didn't have it
-                // This prevents crashes by copying it in if it doesn't exist
-                if (!File.Exists(romInfoPath))
-                {
-                    File.Copy(newRomInfoPath, romInfoPath);
-                    // If it's an old project, they also have the old makefiles. So we copy over those as well just to fix this
-                    Lib.IO.CopyFileToDirectories(project, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Makefile_main"), Path.Combine("src", "Makefile"));
-                    Lib.IO.CopyFileToDirectories(project, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Makefile_overlay"), Path.Combine("src", "overlays", "Makefile"));
-                }
+
                 foreach (string file in Directory.GetFiles(originalOverlaysDir))
                 {
                     overlays.Add(new(file, romInfoPath));
@@ -191,9 +211,18 @@ namespace SerialLoops.Dialogs
                         }
                         else
                         {
-                            OverlayAsmHack.Insert(overlaySourceDir, overlays[i], newRomInfoPath, config.UseDocker ? config.DevkitArmDockerTag : string.Empty,
-                                (object sender, DataReceivedEventArgs e) => log.Log(e.Data),
-                                (object sender, DataReceivedEventArgs e) => log.LogWarning(e.Data));
+                            try
+                            {
+                                OverlayAsmHack.Insert(overlaySourceDir, overlays[i], newRomInfoPath, config.UseDocker ? config.DevkitArmDockerTag : string.Empty,
+                                    (object sender, DataReceivedEventArgs e) => log.Log(e.Data),
+                                    (object sender, DataReceivedEventArgs e) => log.LogWarning(e.Data),
+                                    devkitArmPath: config.DevkitArmPath);
+                            }
+                            catch (Exception ex)
+                            {
+                                log.LogError($"Failed to insert hacks into overlay {overlays[i].Name}");
+                                log.LogWarning($"{ex.Message}\n\n{ex.StackTrace}");
+                            }
                         }
                     }
                 }
@@ -201,10 +230,18 @@ namespace SerialLoops.Dialogs
                 // Save all the overlays in case we've reverted all hacks on one
                 foreach (Overlay overlay in overlays)
                 {
-                    overlay.Save(Path.Combine(project.BaseDirectory, "rom", "overlay", $"{overlay.Name}.bin"));
-                    File.Copy(Path.Combine(project.BaseDirectory, "rom", "overlay", $"{overlay.Name}.bin"),
-                        Path.Combine(project.IterativeDirectory, "rom", "overlay", $"{overlay.Name}.bin"), true);
-                    project.Settings.File.RomInfo.ARM9Ovt.First(o => o.Id == overlay.Id).RamSize = (uint)overlay.Length;
+                    try
+                    {
+                        overlay.Save(Path.Combine(project.BaseDirectory, "rom", "overlay", $"{overlay.Name}.bin"));
+                        File.Copy(Path.Combine(project.BaseDirectory, "rom", "overlay", $"{overlay.Name}.bin"),
+                            Path.Combine(project.IterativeDirectory, "rom", "overlay", $"{overlay.Name}.bin"), true);
+                        project.Settings.File.RomInfo.ARM9Ovt.First(o => o.Id == overlay.Id).RamSize = (uint)overlay.Length;
+                    }
+                    catch (Exception ex)
+                    {
+                        log.LogError($"Failed saving overlay {overlay.Name} to disk");
+                        log.LogWarning($"{ex.Message}\n\n{ex.StackTrace}");
+                    }
                 }
 
                 // We don't provide visible errors during the compilation of the hacks because it will deadlock the threads
