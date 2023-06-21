@@ -14,8 +14,6 @@ namespace SerialLoops.Lib
     public class Config
     {
         [JsonIgnore]
-        public string ConfigDirectory { get; set; }
-        [JsonIgnore]
         public string ConfigPath { get; set; }
         public string UserDirectory { get; set; }
         [JsonIgnore]
@@ -45,19 +43,12 @@ namespace SerialLoops.Lib
 
         public static Config LoadConfig(ILogger log)
         {
-            string configDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "SerialLoops");
-            if (!Directory.Exists(configDirectory))
-            {
-                Directory.CreateDirectory(configDirectory);
-            }
-
             string configJson = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.json");
 
             if (!File.Exists(configJson))
             {
                 Config defaultConfig = GetDefault(log);
                 defaultConfig.ValidateConfig(log);
-                defaultConfig.ConfigDirectory = configDirectory;
                 defaultConfig.ConfigPath = configJson;
                 defaultConfig.InitializeHacks();
                 IO.WriteStringFile(configJson, JsonSerializer.Serialize(defaultConfig), log);

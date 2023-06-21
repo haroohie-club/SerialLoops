@@ -36,7 +36,7 @@ namespace SerialLoops.Utility
     {
         public string Name { get; set; }
 
-        public bool Enabled { get; set; }
+        public bool Enabled { get; set; } = true;
 
         protected abstract Control GetControl();
 

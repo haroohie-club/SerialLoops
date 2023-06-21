@@ -158,7 +158,8 @@ namespace SerialLoops.Dialogs
                     {
                         ARM9AsmHack.Insert(Path.Combine(project.BaseDirectory, "src"), arm9, 0x02005ECC, config.UseDocker ? config.DevkitArmDockerTag : string.Empty,
                             (object sender, DataReceivedEventArgs e) => log.Log(e.Data),
-                            (object sender, DataReceivedEventArgs e) => log.LogWarning(e.Data));
+                            (object sender, DataReceivedEventArgs e) => log.LogWarning(e.Data),
+                            devkitArmPath: config.DevkitArmPath);
                     }
                     catch (Exception ex)
                     {
@@ -214,7 +215,8 @@ namespace SerialLoops.Dialogs
                             {
                                 OverlayAsmHack.Insert(overlaySourceDir, overlays[i], newRomInfoPath, config.UseDocker ? config.DevkitArmDockerTag : string.Empty,
                                     (object sender, DataReceivedEventArgs e) => log.Log(e.Data),
-                                    (object sender, DataReceivedEventArgs e) => log.LogWarning(e.Data));
+                                    (object sender, DataReceivedEventArgs e) => log.LogWarning(e.Data),
+                                    devkitArmPath: config.DevkitArmPath);
                             }
                             catch (Exception ex)
                             {
