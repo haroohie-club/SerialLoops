@@ -137,6 +137,10 @@ namespace SerialLoops.Lib
             {
                 emulatorPath = Path.Combine("/Applications", "melonDS.app");
             }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                emulatorPath = Path.Combine("/snap", "melonds", "current", "usr", "local", "bin", "melonDS");
+            }
             if (!Directory.Exists(emulatorPath))
             {
                 emulatorPath = "";
