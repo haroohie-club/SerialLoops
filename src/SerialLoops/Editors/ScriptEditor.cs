@@ -931,12 +931,12 @@ namespace SerialLoops.Editors
                             ParameterIndex = i,
                             Project = _project,
                         };
-                        bgSelectionButton.Items.Add(NonePreviewableGraphic.BACKGROUND);
 
                         // BGDISPTEMP is able to display a lot more kinds of backgrounds properly than the other BG commands
                         // Hence, this switch to make sure you don't accidentally crash the game
                         if (command.Verb == CommandVerb.BG_FADE)
                         {
+                            bgSelectionButton.Items.Add(NonePreviewableGraphic.BACKGROUND);
                             switch (i)
                             {
                                 case 0:

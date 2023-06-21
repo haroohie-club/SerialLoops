@@ -169,7 +169,9 @@ namespace SerialLoops.Lib.Script
                     case CommandVerb.BG_DISP2:
                         if (i == 0)
                         {
-                            parameters.Add(new BgScriptParameter("Background", (BackgroundItem)project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == parameter), kinetic: false));
+                            ItemDescription bgItem = project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == parameter)
+                                ?? project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).BackgroundType == HaruhiChokuretsuLib.Archive.Data.BgType.TEX_BG);
+                            parameters.Add(new BgScriptParameter("Background", (BackgroundItem)bgItem, kinetic: false));
                         }
                         break;
                     case CommandVerb.SCREEN_FADEIN:
@@ -659,7 +661,10 @@ namespace SerialLoops.Lib.Script
                         switch (i)
                         {
                             case 0:
-                                parameters.Add(new BgScriptParameter("Background", (BackgroundItem)project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == parameter), kinetic: false));
+                                ItemDescription cgItem = project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == parameter)
+                                    ?? project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).BackgroundType == HaruhiChokuretsuLib.Archive.Data.BgType.TEX_CG);
+
+                                parameters.Add(new BgScriptParameter("Background", (BackgroundItem)cgItem, kinetic: false));
                                 break;
                             case 1:
                                 parameters.Add(new BoolScriptParameter("Display from Bottom", parameter == 1));
