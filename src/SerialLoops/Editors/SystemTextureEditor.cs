@@ -28,6 +28,9 @@ namespace SerialLoops.Editors
             Button replaceButton = new() { Text = "Replace" };
             replaceButton.Click += ReplaceButton_Click;
 
+            Button replaceWithPaletteButton = new() { Text = "Replace with Palette" };
+            replaceWithPaletteButton.Click += ReplaceWithPaletteButton_Click;
+
             return new StackLayout
             {
                 Orientation = Orientation.Vertical,
@@ -43,6 +46,7 @@ namespace SerialLoops.Editors
                         {
                             exportButton,
                             replaceButton,
+                            replaceWithPaletteButton,
                         },
                     },
                     new GroupBox
@@ -74,6 +78,16 @@ namespace SerialLoops.Editors
 
         private void ReplaceButton_Click(object sender, EventArgs e)
         {
+            ReplaceImage(false);
+        }
+
+        private void ReplaceWithPaletteButton_Click(object sender, EventArgs e)
+        {
+            ReplaceImage(true);
+        }
+
+        private void ReplaceImage(bool replacePalette)
+        {
             OpenFileDialog openFileDialog = new();
             SKBitmap original = _systemTexture.GetTexture();
             openFileDialog.Filters.Add(new() { Name = "Supported Images", Extensions = new string[] { ".bmp", ".gif", ".heif", ".jpg", ".jpeg", ".png", ".webp", } });
@@ -87,7 +101,7 @@ namespace SerialLoops.Editors
                         try
                         {
                             LoopyProgressTracker tracker = new();
-                            _ = new ProgressDialog(() => _systemTexture.SetTexture(systemTextureResizeDialog.FinalImage),
+                            _ = new ProgressDialog(() => _systemTexture.SetTexture(systemTextureResizeDialog.FinalImage, replacePalette),
                                 () => Content = GetEditorPanel(), tracker, $"Replacing {_systemTexture.DisplayName}...");
                             UpdateTabTitle(false);
                         }
