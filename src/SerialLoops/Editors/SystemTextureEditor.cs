@@ -45,6 +45,11 @@ namespace SerialLoops.Editors
                             replaceButton,
                         },
                     },
+                    new GroupBox
+                    {
+                        Text = "Palette",
+                        Content = new SKGuiImage(_systemTexture.Grp.GetPalette()),
+                    }
                 }
             };
         }
