@@ -488,7 +488,6 @@ namespace SerialLoops.Lib
         {
             if (Directory.Exists(cachesDirectory))
             {
-                IO.DeleteFilesKeepDirectories(cachesDirectory);
                 Directory.Delete(cachesDirectory, true);
             }
 
