@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection.Emit;
 using System.Text.Json.Serialization;
 
 namespace SerialLoops.Lib.Hacks

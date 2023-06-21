@@ -19,8 +19,8 @@
                 "Symbols": []
             },
             {
-                "File": "nullifyAttractSequenceTimer_asm.s",
-                "Destination": "overlays/main_0002/source/nullifyAttractSequenceTimer_asm.s",
+                "File": "disableAttractSequenceTimer_asm.s",
+                "Destination": "overlays/main_0002/source/disableAttractSequenceTimer_asm.s",
                 "Symbols": []
             }
         ]

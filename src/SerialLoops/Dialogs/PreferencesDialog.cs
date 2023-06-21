@@ -75,13 +75,15 @@ namespace SerialLoops.Dialogs
                             {
                                 Name = "Use Docker for ASM Hacks",
                                 Value = Configuration.UseDocker,
-                                OnChange = (value) => Configuration.UseDocker = value
+                                OnChange = (value) => Configuration.UseDocker = value,
+                                Enabled = !Platform.IsMac,
                             },
                             new TextOption
                             {
                                 Name = "DevkitARM Docker Tag",
                                 Value = Configuration.DevkitArmDockerTag,
-                                OnChange = (value) => Configuration.DevkitArmDockerTag = value
+                                OnChange = (value) => Configuration.DevkitArmDockerTag = value,
+                                Enabled = !Platform.IsMac,
                             },
                         }
                     ),

@@ -1,5 +1,6 @@
 using HaruhiChokuretsuLib.Util;
 using NUnit.Framework;
+using NUnit.Framework.Internal;
 using SerialLoops.Lib;
 using System.IO;
 using System.Net.Http;
