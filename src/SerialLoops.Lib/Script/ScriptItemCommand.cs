@@ -169,7 +169,7 @@ namespace SerialLoops.Lib.Script
                     case CommandVerb.BG_DISP2:
                         if (i == 0)
                         {
-                            ItemDescription bgItem = project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == parameter)
+                            ItemDescription bgItem = project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == parameter)
                                 ?? project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).BackgroundType == HaruhiChokuretsuLib.Archive.Data.BgType.TEX_BG);
                             parameters.Add(new BgScriptParameter("Background", (BackgroundItem)bgItem, kinetic: false));
                         }
@@ -661,7 +661,7 @@ namespace SerialLoops.Lib.Script
                         switch (i)
                         {
                             case 0:
-                                ItemDescription cgItem = project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == parameter)
+                                ItemDescription cgItem = project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == parameter)
                                     ?? project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).BackgroundType == HaruhiChokuretsuLib.Archive.Data.BgType.TEX_CG);
 
                                 parameters.Add(new BgScriptParameter("Background", (BackgroundItem)cgItem, kinetic: false));
