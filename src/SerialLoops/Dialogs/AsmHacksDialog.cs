@@ -47,7 +47,14 @@ namespace SerialLoops.Dialogs
                 hack.ValueChanged = false;
                 foreach (HackFile file in hack.Files)
                 {
-                    _selectedHackParameters.Add(file, file.Parameters.Select(p => new SelectedHackParameter { Parameter = p, Selection = 0 }).ToArray());
+                    try
+                    {
+                        _selectedHackParameters.Add(file, file.Parameters.Select(p => new SelectedHackParameter { Parameter = p, Selection = 0 }).ToArray());
+                    }
+                    catch (Exception ex)
+                    {
+                        log.LogException($"Failed to add parameters for hack file {file.File} in hack {hack.Name}", ex);
+                    }
                 }
 
                 CheckBox hackCheckBox = new() { Text = hack.Name, Checked = hack.Applied(project) };
