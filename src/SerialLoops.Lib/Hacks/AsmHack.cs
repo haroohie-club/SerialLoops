@@ -158,7 +158,7 @@ namespace SerialLoops.Lib.Hacks
 
         public override bool Equals(object obj)
         {
-            return ((HackFile)obj).File.Equals(File) && ((HackFile)obj).Destination.Equals(Destination) && ((HackFile)obj).Symbols.SequenceEqual(Symbols);
+            return ((HackFile)obj).File.Equals(File) && ((HackFile)obj).Destination.Equals(Destination) && ((HackFile)obj).Symbols.SequenceEqual(Symbols) && ((HackFile)obj).Parameters.SequenceEqual(Parameters);
         }
 
         public override int GetHashCode()
@@ -178,12 +178,27 @@ namespace SerialLoops.Lib.Hacks
     {
         public string Name { get; set; }
         public string DescriptiveName { get; set; }
-        public HackParameterValues[] Values { get; set; }
+        public HackParameterValue[] Values { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            return ((HackParameter)obj).Name == Name && ((HackParameter)obj).DescriptiveName == DescriptiveName && ((HackParameter)obj).Values.SequenceEqual(Values);
+        }
+
+        public override int GetHashCode()
+        {
+            return Name.GetHashCode();
+        }
     }
 
-    public class HackParameterValues
+    public class HackParameterValue
     {
         public string Name { get; set; }
         public string Value { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            return ((HackParameterValue)obj).Name == Name && ((HackParameterValue)obj).Value == Value;
+        }
     }
 }
