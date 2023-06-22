@@ -44,6 +44,12 @@ namespace SerialLoops.Utility
             }
         }
 
+        public void LogException(string message, Exception exception)
+        {
+            LogError(message);
+            LogWarning($"{exception.Message}\n\n{exception.StackTrace}");
+        }
+
         public void LogWarning(string message, bool lookForErrors = false)
         {
             if (_writer is not null && !string.IsNullOrEmpty(message))

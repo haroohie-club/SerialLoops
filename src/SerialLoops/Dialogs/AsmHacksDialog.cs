@@ -150,8 +150,7 @@ namespace SerialLoops.Dialogs
                     }
                     catch (Exception ex)
                     {
-                        log.LogError($"Failed to read ARM9 from '{arm9Path}'");
-                        log.LogWarning($"{ex.Message}\n\n{ex.StackTrace}");
+                        log.LogException($"Failed to read ARM9 from '{arm9Path}'", ex);
                     }
 
                     try
@@ -163,8 +162,7 @@ namespace SerialLoops.Dialogs
                     }
                     catch (Exception ex)
                     {
-                        log.LogError("Failed to insert ARM9 assembly hacks");
-                        log.LogWarning($"{ex.Message}\n\n{ex.StackTrace}");
+                        log.LogException("Failed to insert ARM9 assembly hacks", ex);
                     }
 
                     try
@@ -173,8 +171,7 @@ namespace SerialLoops.Dialogs
                     }
                     catch (Exception ex)
                     {
-                        log.LogError("Failed to write ARM9 to disk");
-                        log.LogWarning($"{ex.Message}\n\n{ex.StackTrace}");
+                        log.LogException("Failed to write ARM9 to disk", ex);
                     }
                 }
                 else
@@ -220,8 +217,7 @@ namespace SerialLoops.Dialogs
                             }
                             catch (Exception ex)
                             {
-                                log.LogError($"Failed to insert hacks into overlay {overlays[i].Name}");
-                                log.LogWarning($"{ex.Message}\n\n{ex.StackTrace}");
+                                log.LogException($"Failed to insert hacks into overlay {overlays[i].Name}", ex);
                             }
                         }
                     }
@@ -240,7 +236,7 @@ namespace SerialLoops.Dialogs
                     catch (Exception ex)
                     {
                         log.LogError($"Failed saving overlay {overlay.Name} to disk");
-                        log.LogWarning($"{ex.Message}\n\n{ex.StackTrace}");
+                        log.LogException($"{ex.Message}\n\n{ex.StackTrace}", ex);
                     }
                 }
 
