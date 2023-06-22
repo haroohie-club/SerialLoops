@@ -13,11 +13,10 @@ namespace SerialLoops.Lib.Items
     {
         public SystemTexture SysTex { get; set; }
         public GraphicsFile Grp { get; set; }
-        public int TransparentIndex { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
 
-        public SystemTextureItem(SystemTexture sysTex, Project project, string name, int transparentIndex, int width = -1, int height = -1) : base(name, ItemType.System_Texture)
+        public SystemTextureItem(SystemTexture sysTex, Project project, string name, int width = -1, int height = -1) : base(name, ItemType.System_Texture)
         {
             SysTex = sysTex;
             Grp = project.Grp.Files.First(f => f.Index == sysTex.GrpIndex);
@@ -29,7 +28,6 @@ namespace SerialLoops.Lib.Items
             {
                 Grp.ImageForm = GraphicsFile.Form.TILE;
             }
-            TransparentIndex = transparentIndex;
             Width = width < 0 ? Grp.Width : width;
             Height = height < 0 ? Grp.Height : height;
         }
@@ -42,12 +40,12 @@ namespace SerialLoops.Lib.Items
         {
             if (SysTex.Screen == SysTexScreen.BOTTOM_SCREEN)
             {
-                return Grp.GetImage();
+                return Grp.GetImage(transparentIndex: 0);
             }
             else
             {
                 SKBitmap tileBitmap = new(Width, Height);
-                SKBitmap tiles = Grp.GetImage(width: SysTex.TileWidth);
+                SKBitmap tiles = Grp.GetImage(width: SysTex.TileWidth, transparentIndex: 0);
                 SKCanvas tileCanvas = new(tileBitmap);
                 int currentTile = 0;
                 for (int y = 0; y < tileBitmap.Height; y += SysTex.TileHeight)
@@ -68,9 +66,13 @@ namespace SerialLoops.Lib.Items
 
         public void SetTexture(SKBitmap bitmap, bool replacePalette)
         {
+            if (replacePalette == false)
+            {
+                Grp.Palette[0] = SKColors.Transparent;
+            }
             if (SysTex.Screen == SysTexScreen.BOTTOM_SCREEN)
             {
-                Grp.SetImage(bitmap, replacePalette, TransparentIndex);
+                Grp.SetImage(bitmap, replacePalette, transparentIndex: replacePalette ? 0 : -1);
             }
             else
             {
@@ -90,7 +92,7 @@ namespace SerialLoops.Lib.Items
                 }
                 tileCanvas.Flush();
 
-                Grp.SetImage(tileBitmap, replacePalette, TransparentIndex);
+                Grp.SetImage(tileBitmap, replacePalette, transparentIndex: replacePalette ? 0 : -1);
             }
         }
 

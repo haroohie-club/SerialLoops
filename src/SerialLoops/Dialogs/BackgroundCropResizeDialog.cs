@@ -317,10 +317,7 @@ namespace SerialLoops.Dialogs
         private void UpdateImage()
         {
             SKCanvas previewCanvas = new(_preview);
-            
-            // Draw background
             previewCanvas.Clear();
-            previewCanvas.DrawColor(SKColors.DarkGray);
             
             // Draw image
             previewCanvas.DrawBitmap(StartImage,
