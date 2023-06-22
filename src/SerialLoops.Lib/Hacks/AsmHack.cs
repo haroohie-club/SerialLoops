@@ -158,7 +158,7 @@ namespace SerialLoops.Lib.Hacks
 
         public override bool Equals(object obj)
         {
-            return ((HackFile)obj).File.Equals(File) && ((HackFile)obj).Destination.Equals(Destination) && ((HackFile)obj).Symbols.SequenceEqual(Symbols) && ((HackFile)obj).Parameters.SequenceEqual(Parameters);
+            return (((HackFile)obj).File?.Equals(File) ?? false) && (((HackFile)obj).Destination?.Equals(Destination) ?? false) && (((HackFile)obj)?.Symbols.SequenceEqual(Symbols) ?? false) && (((HackFile)obj).Parameters?.SequenceEqual(Parameters) ?? false);
         }
 
         public override int GetHashCode()
@@ -182,7 +182,7 @@ namespace SerialLoops.Lib.Hacks
 
         public override bool Equals(object obj)
         {
-            return ((HackParameter)obj).Name == Name && ((HackParameter)obj).DescriptiveName == DescriptiveName && ((HackParameter)obj).Values.SequenceEqual(Values);
+            return (((HackParameter)obj).Name?.Equals(Name) ?? false) && (((HackParameter)obj).DescriptiveName?.Equals(DescriptiveName) ?? false) && (((HackParameter)obj).Values?.Equals(Values) ?? false);
         }
 
         public override int GetHashCode()
@@ -198,7 +198,11 @@ namespace SerialLoops.Lib.Hacks
 
         public override bool Equals(object obj)
         {
-            return ((HackParameterValue)obj).Name == Name && ((HackParameterValue)obj).Value == Value;
+            return (((HackParameterValue)obj).Name?.Equals(Name) ?? false) && (((HackParameterValue)obj).Value?.Equals(Value) ?? false);
+        }
+        public override int GetHashCode()
+        {
+            return Name.GetHashCode();
         }
     }
 }
