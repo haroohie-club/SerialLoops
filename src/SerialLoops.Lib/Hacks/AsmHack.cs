@@ -1,5 +1,6 @@
 ﻿using HaruhiChokuretsuLib.Util;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Text.Json.Serialization;
@@ -12,6 +13,8 @@ namespace SerialLoops.Lib.Hacks
         public string Description { get; set; }
         public List<InjectionSite> InjectionSites { get; set; }
         public List<HackFile> Files { get; set; }
+        [JsonIgnore]
+        public bool ValueChanged { get; set; }
 
         public bool Applied(Project project)
         {
@@ -40,7 +43,7 @@ namespace SerialLoops.Lib.Hacks
             return false;
         }
 
-        public void Apply(Project project, Config config, ILogger log)
+        public void Apply(Project project, Config config, Dictionary<HackFile, SelectedHackParameter[]> selectedParameters, ILogger log)
         {
             if (Applied(project))
             {
@@ -55,7 +58,12 @@ namespace SerialLoops.Lib.Hacks
                 {
                     Directory.CreateDirectory(Path.GetDirectoryName(destination));
                 }
-                File.Copy(Path.Combine(config.HacksDirectory, file.File), destination, true);
+                string fileText = File.ReadAllText(Path.Combine(config.HacksDirectory, file.File));
+                foreach (SelectedHackParameter parameter in selectedParameters[file])
+                {
+                    fileText = fileText.Replace($"{{{{{parameter.Parameter.Name}}}}}", parameter.Value);
+                }
+                File.WriteAllText(destination, fileText);
             }
         }
 
@@ -106,26 +114,26 @@ namespace SerialLoops.Lib.Hacks
             get
             {
                 int startAddress;
-                if (!Code.Equals("ARM"))
+                if (!Code.Equals("ARM9"))
                 {
                     startAddress = 0x020C7660;
                 }
                 else
                 {
-                    startAddress = 0x01FF8000;
+                    startAddress = 0x02000000;
                 }
                 return $"{(uint)(Offset + startAddress):X8}";
             }
             set
             {
                 int startAddress;
-                if (!Code.Equals("ARM"))
+                if (!Code.Equals("ARM9"))
                 {
                     startAddress = 0x020C7660;
                 }
                 else
                 {
-                    startAddress = 0x01FF8000;
+                    startAddress = 0x02000000;
                 }
                 Offset = (uint)(uint.Parse(value, System.Globalization.NumberStyles.HexNumber) - startAddress);
             }
@@ -147,6 +155,7 @@ namespace SerialLoops.Lib.Hacks
         public string File { get; set; }
         public string Destination { get; set; }
         public string[] Symbols { get; set; }
+        public HackParameter[] Parameters { get; set; }
 
         public override bool Equals(object obj)
         {
@@ -157,5 +166,25 @@ namespace SerialLoops.Lib.Hacks
         {
             return File.GetHashCode();
         }
+    }
+
+    public class SelectedHackParameter
+    {
+        public HackParameter Parameter { get; set; }
+        public int Selection { get; set; } = -1;
+        public string Value => Parameter.Values[Selection].Value;
+    }
+
+    public class HackParameter
+    {
+        public string Name { get; set; }
+        public string DescriptiveName { get; set; }
+        public HackParameterValues[] Values { get; set; }
+    }
+
+    public class HackParameterValues
+    {
+        public string Name { get; set; }
+        public string Value { get; set; }
     }
 }

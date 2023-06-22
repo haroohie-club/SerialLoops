@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text.Json;
 
 namespace SerialLoops.Dialogs
@@ -18,11 +19,13 @@ namespace SerialLoops.Dialogs
     {
         private const int NUM_OVERLAYS = 26;
 
+        private Dictionary<HackFile, SelectedHackParameter[]> _selectedHackParameters = new();
+        private AsmHack _currentHack;
+
         public AsmHacksDialog(Project project, Config config, ILogger log)
         {
             Title = "Apply Assembly Hacks";
             Padding = 5;
-
 
             StackLayout hacksLayout = new()
             {
@@ -42,12 +45,51 @@ namespace SerialLoops.Dialogs
 
             foreach (AsmHack hack in config.Hacks)
             {
-                CheckBox hackCheckBox = new() { Text = hack.Name, Checked = hack.Applied(project) };
-                hackCheckBox.MouseEnter += (sender, args) =>
+                hack.ValueChanged = false;
+                foreach (HackFile file in hack.Files)
                 {
+                    _selectedHackParameters.Add(file, file.Parameters.Select(p => new SelectedHackParameter { Parameter = p, Selection = 0 }).ToArray());
+                }
+
+                CheckBox hackCheckBox = new() { Text = hack.Name, Checked = hack.Applied(project) };
+                hackCheckBox.MouseMove += (sender, args) =>
+                {
+                    if (hack == _currentHack)
+                    {
+                        return;
+                    }
+
+                    _currentHack = hack;
                     descriptionLayout.Items.Clear();
                     descriptionLayout.Items.Add(ControlGenerator.GetTextHeader(hack.Name));
                     descriptionLayout.Items.Add(new Label { Text = hack.Description, Wrap = WrapMode.Word });
+                    StackLayout parametersLayout = new()
+                    {
+                        Spacing = 5,
+                        Padding = 3,
+                    };
+                    GroupBox parametersBox = new()
+                    {
+                        Text = "Parameters",
+                        Content = parametersLayout,
+                    };
+                    foreach (HackFile file in hack.Files)
+                    {
+                        for (int i = 0; i < _selectedHackParameters[file].Length; i++)
+                        {
+                            int currentParam = i; // need this as i increments and will mess up the SelectedIndexChanged method
+                            ComboBox parameterListBox = new();
+                            parameterListBox.Items.AddRange(_selectedHackParameters[file][currentParam].Parameter.Values.Select(v => new ListItem { Key = v.Name, Tag = file, Text = v.Name }));
+                            parameterListBox.SelectedIndex = _selectedHackParameters[file][currentParam].Selection;
+                            parameterListBox.SelectedIndexChanged += (sender, args) =>
+                            {
+                                hack.ValueChanged = true;
+                                _selectedHackParameters[file][currentParam].Selection = parameterListBox.SelectedIndex;
+                            };
+                            parametersLayout.Items.Add(ControlGenerator.GetControlWithLabel(_selectedHackParameters[file][currentParam].Parameter.DescriptiveName, parameterListBox));
+                        }
+                    }
+                    descriptionLayout.Items.Add(parametersBox);
                 };
                 hacksLayout.Items.Add(hackCheckBox);
             }
@@ -118,63 +160,60 @@ namespace SerialLoops.Dialogs
                     {
                         hack.Revert(project, log);
                     }
-                    else if (applied)
+                    else if (applied && !hack.ValueChanged)
                     {
                         appliedHacks.Add(hack);
                     }
-                    else
+                    else if (checkBox.Checked ?? true)
                     {
-                        hack.Apply(project, config, log);
+                        hack.Apply(project, config, _selectedHackParameters.Where(kv => hack.Files.Contains(kv.Key)).ToDictionary(kv => kv.Key, kv => kv.Value), log);
                         appliedHacks.Add(hack);
                     }
                 }
 
                 // Write the symbols file based on what the hacks say they need
-                File.WriteAllLines(Path.Combine(project.BaseDirectory, "src", "symbols.x"), appliedHacks.SelectMany(h => h.Files.Where(f => !f.Destination.Contains("overlays", System.StringComparison.OrdinalIgnoreCase)).SelectMany(f => f.Symbols)));
+                File.WriteAllLines(Path.Combine(project.BaseDirectory, "src", "symbols.x"), appliedHacks.SelectMany(h => h.Files.Where(f => !f.Destination.Contains("overlays", StringComparison.OrdinalIgnoreCase)).SelectMany(f => f.Symbols)));
                 for (int i = 0; i < NUM_OVERLAYS; i++)
                 {
-                    if (appliedHacks.Any(h => h.Files.Any(f => f.Destination.Contains($"main_{i:X4}", System.StringComparison.OrdinalIgnoreCase))))
+                    if (appliedHacks.Any(h => h.Files.Any(f => f.Destination.Contains($"main_{i:X4}", StringComparison.OrdinalIgnoreCase))))
                     {
-                        File.WriteAllLines(Path.Combine(project.BaseDirectory, "src", "overlays", $"main_{i:X4}", "symbols.x"), appliedHacks.SelectMany(h => h.Files.Where(f => f.Destination.Contains($"main_{i:X4}", System.StringComparison.OrdinalIgnoreCase)).SelectMany(f => f.Symbols)));
+                        File.WriteAllLines(Path.Combine(project.BaseDirectory, "src", "overlays", $"main_{i:X4}", "symbols.x"), appliedHacks.SelectMany(h => h.Files.Where(f => f.Destination.Contains($"main_{i:X4}", StringComparison.OrdinalIgnoreCase)).SelectMany(f => f.Symbols)));
                     }
                 }
 
                 // Build and insert ARM9 hacks
-                if (appliedHacks.Any(h => h.Files.Any(f => !f.Destination.Contains("overlays", StringComparison.OrdinalIgnoreCase))))
+                string arm9Path = Path.Combine(project.BaseDirectory, "src", "arm9.bin");
+                ARM9 arm9 = null;
+                try
                 {
-                    string arm9Path = Path.Combine(project.BaseDirectory, "src", "arm9.bin");
-                    ARM9 arm9 = null;
-                    try
-                    {
-                        arm9 = new(File.ReadAllBytes(arm9Path), 0x02000000);
-                    }
-                    catch (Exception ex)
-                    {
-                        log.LogException($"Failed to read ARM9 from '{arm9Path}'", ex);
-                    }
-
-                    try
-                    {
-                        ARM9AsmHack.Insert(Path.Combine(project.BaseDirectory, "src"), arm9, 0x02005ECC, config.UseDocker ? config.DevkitArmDockerTag : string.Empty,
-                            (object sender, DataReceivedEventArgs e) => log.Log(e.Data),
-                            (object sender, DataReceivedEventArgs e) => log.LogWarning(e.Data),
-                            devkitArmPath: config.DevkitArmPath);
-                    }
-                    catch (Exception ex)
-                    {
-                        log.LogException("Failed to insert ARM9 assembly hacks", ex);
-                    }
-
-                    try
-                    {
-                        Lib.IO.WriteBinaryFile(Path.Combine("rom", "arm9.bin"), arm9.GetBytes(), project, log);
-                    }
-                    catch (Exception ex)
-                    {
-                        log.LogException("Failed to write ARM9 to disk", ex);
-                    }
+                    arm9 = new(File.ReadAllBytes(arm9Path), 0x02000000);
                 }
-                else
+                catch (Exception ex)
+                {
+                    log.LogException($"Failed to read ARM9 from '{arm9Path}'", ex);
+                }
+
+                try
+                {
+                    ARM9AsmHack.Insert(Path.Combine(project.BaseDirectory, "src"), arm9, 0x02005ECC, config.UseDocker ? config.DevkitArmDockerTag : string.Empty,
+                        (object sender, DataReceivedEventArgs e) => log.Log(e.Data),
+                        (object sender, DataReceivedEventArgs e) => log.LogWarning(e.Data),
+                        devkitArmPath: config.DevkitArmPath);
+                }
+                catch (Exception ex)
+                {
+                    log.LogException("Failed to insert ARM9 assembly hacks", ex);
+                }
+
+                try
+                {
+                    Lib.IO.WriteBinaryFile(Path.Combine("rom", "arm9.bin"), arm9.GetBytes(), project, log);
+                }
+                catch (Exception ex)
+                {
+                    log.LogException("Failed to write ARM9 to disk", ex);
+                }
+                if (appliedHacks.All(h => h.Files.Any(f => f.Destination.Contains("overlays", StringComparison.OrdinalIgnoreCase))))
                 {
                     // Overlay compilation relies on the presence of an arm9_newcode.x containing the symbols of the newly compiled ARM9 code
                     // If there is no ARM9 code, we'll need to provide an empty file
