@@ -12,6 +12,8 @@ namespace SerialLoops.Lib.Hacks
         public string Description { get; set; }
         public List<InjectionSite> InjectionSites { get; set; }
         public List<HackFile> Files { get; set; }
+        [JsonIgnore]
+        public bool ValueChanged { get; set; }
 
         public bool Applied(Project project)
         {
@@ -40,7 +42,7 @@ namespace SerialLoops.Lib.Hacks
             return false;
         }
 
-        public void Apply(Project project, Config config, ILogger log)
+        public void Apply(Project project, Config config, Dictionary<HackFile, SelectedHackParameter[]> selectedParameters, ILogger log)
         {
             if (Applied(project))
             {
@@ -55,7 +57,12 @@ namespace SerialLoops.Lib.Hacks
                 {
                     Directory.CreateDirectory(Path.GetDirectoryName(destination));
                 }
-                File.Copy(Path.Combine(config.HacksDirectory, file.File), destination, true);
+                string fileText = File.ReadAllText(Path.Combine(config.HacksDirectory, file.File));
+                foreach (SelectedHackParameter parameter in selectedParameters[file])
+                {
+                    fileText = fileText.Replace($"{{{{{parameter.Parameter.Name}}}}}", parameter.Value);
+                }
+                File.WriteAllText(destination, fileText);
             }
         }
 
@@ -106,26 +113,26 @@ namespace SerialLoops.Lib.Hacks
             get
             {
                 int startAddress;
-                if (!Code.Equals("ARM"))
+                if (!Code.Equals("ARM9"))
                 {
                     startAddress = 0x020C7660;
                 }
                 else
                 {
-                    startAddress = 0x01FF8000;
+                    startAddress = 0x02000000;
                 }
                 return $"{(uint)(Offset + startAddress):X8}";
             }
             set
             {
                 int startAddress;
-                if (!Code.Equals("ARM"))
+                if (!Code.Equals("ARM9"))
                 {
                     startAddress = 0x020C7660;
                 }
                 else
                 {
-                    startAddress = 0x01FF8000;
+                    startAddress = 0x02000000;
                 }
                 Offset = (uint)(uint.Parse(value, System.Globalization.NumberStyles.HexNumber) - startAddress);
             }
@@ -147,15 +154,55 @@ namespace SerialLoops.Lib.Hacks
         public string File { get; set; }
         public string Destination { get; set; }
         public string[] Symbols { get; set; }
+        public HackParameter[] Parameters { get; set; }
 
         public override bool Equals(object obj)
         {
-            return ((HackFile)obj).File.Equals(File) && ((HackFile)obj).Destination.Equals(Destination) && ((HackFile)obj).Symbols.SequenceEqual(Symbols);
+            return (((HackFile)obj).File?.Equals(File) ?? false) && (((HackFile)obj).Destination?.Equals(Destination) ?? false) && (((HackFile)obj)?.Symbols.SequenceEqual(Symbols) ?? false) && (((HackFile)obj).Parameters?.SequenceEqual(Parameters) ?? false);
         }
 
         public override int GetHashCode()
         {
             return File.GetHashCode();
+        }
+    }
+
+    public class SelectedHackParameter
+    {
+        public HackParameter Parameter { get; set; }
+        public int Selection { get; set; } = -1;
+        public string Value => Parameter.Values[Selection].Value;
+    }
+
+    public class HackParameter
+    {
+        public string Name { get; set; }
+        public string DescriptiveName { get; set; }
+        public HackParameterValue[] Values { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            return (((HackParameter)obj).Name?.Equals(Name) ?? false) && (((HackParameter)obj).DescriptiveName?.Equals(DescriptiveName) ?? false) && (((HackParameter)obj).Values?.Equals(Values) ?? false);
+        }
+
+        public override int GetHashCode()
+        {
+            return Name.GetHashCode();
+        }
+    }
+
+    public class HackParameterValue
+    {
+        public string Name { get; set; }
+        public string Value { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            return (((HackParameterValue)obj).Name?.Equals(Name) ?? false) && (((HackParameterValue)obj).Value?.Equals(Value) ?? false);
+        }
+        public override int GetHashCode()
+        {
+            return Name.GetHashCode();
         }
     }
 }
