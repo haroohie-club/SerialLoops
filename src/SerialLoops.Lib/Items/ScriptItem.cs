@@ -23,22 +23,30 @@ namespace SerialLoops.Lib.Items
         {
             Event = evt;
 
-            PruneLabelsSection();
+            PruneLabelsSection(log);
             Graph.AddVertexRange(Event.ScriptSections);
         }
 
         public Dictionary<ScriptSection, List<ScriptItemCommand>> GetScriptCommandTree(Project project, ILogger log)
         {
-            Dictionary<ScriptSection, List<ScriptItemCommand>> commands = new();
-            foreach (ScriptSection section in Event.ScriptSections)
+            try
             {
-                commands.Add(section, new());
-                foreach (ScriptCommandInvocation command in section.Objects)
+                Dictionary<ScriptSection, List<ScriptItemCommand>> commands = new();
+                foreach (ScriptSection section in Event.ScriptSections)
                 {
-                    commands[section].Add(ScriptItemCommand.FromInvocation(command, section, commands[section].Count, Event, project, log));
+                    commands.Add(section, new());
+                    foreach (ScriptCommandInvocation command in section.Objects)
+                    {
+                        commands[section].Add(ScriptItemCommand.FromInvocation(command, section, commands[section].Count, Event, project, log));
+                    }
                 }
+                return commands;
             }
-            return commands;
+            catch (Exception ex)
+            {
+                log.LogException($"Error getting script command tree for script {DisplayName} ({Name})", ex);
+                return null;
+            }
         }
 
         public void CalculateGraphEdges(Dictionary<ScriptSection, List<ScriptItemCommand>> commandTree, ILogger log)
@@ -127,21 +135,28 @@ namespace SerialLoops.Lib.Items
             }
         }
 
-        public void PruneLabelsSection()
+        public void PruneLabelsSection(ILogger log)
         {
-            if (Event.LabelsSection.Objects.Count - 1 > Event.ScriptSections.Count)
+            if ((Event.LabelsSection?.Objects?.Count ?? 0) - 1 > Event.ScriptSections.Count)
             {
-                for (int i = 0; i < Event.LabelsSection.Objects.Count; i++)
+                try
                 {
-                    if (Event.LabelsSection.Objects[i].Id == 0)
+                    for (int i = 0; i < Event.LabelsSection.Objects.Count; i++)
                     {
-                        continue;
+                        if (Event.LabelsSection.Objects[i].Id == 0)
+                        {
+                            continue;
+                        }
+                        if (!Event.ScriptSections.Select(s => s.Name).Contains(Event.LabelsSection.Objects[i].Name.Replace("/", "")))
+                        {
+                            Event.LabelsSection.Objects.RemoveAt(i);
+                            i--;
+                        }
                     }
-                    if (!Event.ScriptSections.Select(s => s.Name).Contains(Event.LabelsSection.Objects[i].Name.Replace("/", "")))
-                    {
-                        Event.LabelsSection.Objects.RemoveAt(i);
-                        i--;
-                    }
+                }
+                catch (Exception ex)
+                {
+                    log.LogException($"Error pruning labels for script {DisplayName} ({Name})", ex);
                 }
             }
         }

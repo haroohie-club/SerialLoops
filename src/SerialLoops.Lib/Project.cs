@@ -91,15 +91,15 @@ namespace SerialLoops.Lib
             try
             {
                 Directory.CreateDirectory(MainDirectory);
-                Save();
+                Save(log);
                 Directory.CreateDirectory(BaseDirectory);
                 Directory.CreateDirectory(IterativeDirectory);
                 Directory.CreateDirectory(Path.Combine(MainDirectory, "font"));
                 File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "charset.json"), Path.Combine(MainDirectory, "font", "charset.json"));
             }
-            catch (Exception exc)
+            catch (Exception ex)
             {
-                log.LogError($"Exception occurred while attempting to create project directories.\n{exc.Message}\n\n{exc.StackTrace}");
+                log.LogException("Exception occurred while attempting to create project directories.", ex);
             }
         }
 
@@ -140,8 +140,8 @@ namespace SerialLoops.Lib
             string makefile = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Makefile_main"));
             if (!makefile.Equals(File.ReadAllText(Path.Combine(BaseDirectory, "src", "Makefile"))))
             {
-                IO.CopyFileToDirectories(this, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Makefile_main"), Path.Combine("src", "Makefile"));
-                IO.CopyFileToDirectories(this, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Makefile_overlay"), Path.Combine("src", "overlays", "Makefile"));
+                IO.CopyFileToDirectories(this, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Makefile_main"), Path.Combine("src", "Makefile"), log);
+                IO.CopyFileToDirectories(this, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Makefile_overlay"), Path.Combine("src", "overlays", "Makefile"), log);
             }
             if (!string.IsNullOrEmpty(config.DevkitArmPath))
             {
@@ -163,8 +163,16 @@ namespace SerialLoops.Lib
         public void LoadProjectSettings(ILogger log, IProgressTracker tracker)
         {
             tracker.Focus("Project Settings", 1);
-            byte[] projectFile = File.ReadAllBytes(Path.Combine(IterativeDirectory, "rom", $"{Name}.xml"));
-            Settings = new(NdsProjectFile.FromByteArray<NdsProjectFile>(projectFile), log);
+            string projPath = Path.Combine(IterativeDirectory, "rom", $"{Name}.xml");
+            try
+            {
+                byte[] projectFile = File.ReadAllBytes(projPath);
+                Settings = new(NdsProjectFile.FromByteArray<NdsProjectFile>(projectFile), log);
+            }
+            catch (Exception ex)
+            {
+                log.LogException($"Failed to load project from {projPath}", ex);
+            }
             tracker.Finished++;
         }
 
@@ -190,6 +198,11 @@ namespace SerialLoops.Lib
                     return new(LoadProjectState.CORRUPTED_FILE, "dat.bin", -1);
                 }
             }
+            catch (Exception ex)
+            {
+                log.LogException("Error occurred while loading dat.bin", ex);
+                return new(LoadProjectState.FAILED);
+            }
             tracker.Finished++;
 
             tracker.CurrentlyLoading = "grp.bin";
@@ -211,6 +224,11 @@ namespace SerialLoops.Lib
                         $"Please use a different base ROM as this one is corrupted.");
                     return new(LoadProjectState.CORRUPTED_FILE, "grp.bin", -1);
                 }
+            }
+            catch (Exception ex)
+            {
+                log.LogException("Error occurred while loading grp.bin", ex);
+                return new(LoadProjectState.FAILED);
             }
             tracker.Finished++;
 
@@ -234,6 +252,11 @@ namespace SerialLoops.Lib
                     return new(LoadProjectState.CORRUPTED_FILE, "evt.bin", -1);
                 }
             }
+            catch (Exception ex)
+            {
+                log.LogException("Error occurred while loading evt.bin", ex);
+                return new(LoadProjectState.FAILED);
+            }
             tracker.Finished++;
 
             string charactersFile = LangCode switch
@@ -241,7 +264,15 @@ namespace SerialLoops.Lib
                 "ja" => "DefaultCharacters.ja.json",
                 _ => "DefaultCharacters.en.json"
             };
-            Characters ??= JsonSerializer.Deserialize<Dictionary<int, NameplateProperties>>(File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Defaults", charactersFile)), SERIALIZER_OPTIONS);
+            try
+            {
+                Characters ??= JsonSerializer.Deserialize<Dictionary<int, NameplateProperties>>(File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Defaults", charactersFile)), SERIALIZER_OPTIONS);
+            }
+            catch (Exception ex)
+            {
+                log.LogException($"Failed to load DefaultCharacters file", ex);
+                return new(LoadProjectState.FAILED);
+            }
 
             tracker.Focus("Font", 5);
             if (IO.TryReadStringFile(Path.Combine(MainDirectory, "font", "charset.json"), out string json, log))
@@ -253,196 +284,397 @@ namespace SerialLoops.Lib
                 log.LogError("Failed to load font replacement dictionary.");
             }
             tracker.Finished++;
-            FontMap = Dat.Files.First(f => f.Name == "FONTS").CastTo<FontFile>();
+            try
+            {
+                FontMap = Dat.Files.First(f => f.Name == "FONTS").CastTo<FontFile>();
+            }
+            catch (Exception ex)
+            {
+                log.LogException($"Failed to load font map", ex);
+                return new(LoadProjectState.FAILED);
+            }
             tracker.Finished++;
-            SpeakerBitmap = Grp.Files.First(f => f.Name == "SYS_CMN_B12DNX").GetImage(transparentIndex: 0);
-            NameplateBitmap = Grp.Files.First(f => f.Name == "SYS_CMN_B12DNX").GetImage();
+            try
+            {
+                SpeakerBitmap = Grp.Files.First(f => f.Name == "SYS_CMN_B12DNX").GetImage(transparentIndex: 0);
+            }
+            catch (Exception ex)
+            {
+                log.LogException($"Failed to load speaker bitmap", ex);
+                return new(LoadProjectState.FAILED);
+            }
+            try
+            {
+                NameplateBitmap = Grp.Files.First(f => f.Name == "SYS_CMN_B12DNX").GetImage();
+            }
+            catch (Exception ex)
+            {
+                log.LogException($"Failed to load nameplate bitmap", ex);
+                return new(LoadProjectState.FAILED);
+            }
             tracker.Finished++;
-            DialogueBitmap = Grp.Files.First(f => f.Name == "SYS_CMN_B02DNX").GetImage(transparentIndex: 0);
+            try
+            {
+                DialogueBitmap = Grp.Files.First(f => f.Name == "SYS_CMN_B02DNX").GetImage(transparentIndex: 0);
+            }
+            catch (Exception ex)
+            {
+                log.LogException($"Failed to load dialogue bitmap", ex);
+                return new(LoadProjectState.FAILED);
+            }
             tracker.Finished++;
-            GraphicsFile fontFile = Grp.Files.First(f => f.Name == "ZENFONTBNF");
-            fontFile.InitializeFontFile();
-            FontBitmap = Grp.Files.First(f => f.Name == "ZENFONTBNF").GetImage(transparentIndex: 0);
+            try
+            {
+                GraphicsFile fontFile = Grp.Files.First(f => f.Name == "ZENFONTBNF");
+                fontFile.InitializeFontFile();
+                FontBitmap = Grp.Files.First(f => f.Name == "ZENFONTBNF").GetImage(transparentIndex: 0);
+            }
+            catch (Exception ex)
+            {
+                log.LogException($"Failed to load font bitmap", ex);
+                return new(LoadProjectState.FAILED);
+            }
             tracker.Finished++;
 
             tracker.Focus("Static Files", 4);
-            Extra = Dat.Files.First(f => f.Name == "EXTRAS").CastTo<ExtraFile>();
+            try
+            {
+                Extra = Dat.Files.First(f => f.Name == "EXTRAS").CastTo<ExtraFile>();
+            }
+            catch (Exception ex)
+            {
+                log.LogException($"Failed to load extra file", ex);
+                return new(LoadProjectState.FAILED);
+            }
             tracker.Finished++;
-            EventFile scenario = Evt.Files.First(f => f.Name == "SCENARIOS");
-            scenario.InitializeScenarioFile();
-            Scenario = scenario.Scenario;
+            try
+            {
+                EventFile scenario = Evt.Files.First(f => f.Name == "SCENARIOS");
+                scenario.InitializeScenarioFile();
+                Scenario = scenario.Scenario;
+            }
+            catch (Exception ex)
+            {
+                log.LogException($"Failed to load scenario file", ex);
+                return new(LoadProjectState.FAILED);
+            }
             tracker.Finished++;
-            MessInfo = Dat.Files.First(f => f.Name == "MESSINFOS").CastTo<MessageInfoFile>();
+            try
+            {
+                MessInfo = Dat.Files.First(f => f.Name == "MESSINFOS").CastTo<MessageInfoFile>();
+            }
+            catch (Exception ex)
+            {
+                log.LogException($"Failed to load message info file", ex);
+                return new(LoadProjectState.FAILED);
+            }
             tracker.Finished++;
-            UiText = Dat.Files.First(f => f.Name == "MESSS").CastTo<MessageFile>();
+            try
+            {
+                UiText = Dat.Files.First(f => f.Name == "MESSS").CastTo<MessageFile>();
+            }
+            catch (Exception ex)
+            {
+                log.LogException($"Failed to load UI text file", ex);
+                return new(LoadProjectState.FAILED);
+            }
             tracker.Finished++;
 
-            BgTableFile bgTable = Dat.Files.First(f => f.Name == "BGTBLS").CastTo<BgTableFile>();
-            tracker.Focus("Backgrounds", bgTable.BgTableEntries.Count);
-            for (int i = 0; i < bgTable.BgTableEntries.Count; i++)
+            try
             {
-                BgTableEntry entry = bgTable.BgTableEntries[i];
-                if (entry.BgIndex1 > 0)
+                BgTableFile bgTable = Dat.Files.First(f => f.Name == "BGTBLS").CastTo<BgTableFile>();
+                tracker.Focus("Backgrounds", bgTable.BgTableEntries.Count);
+                for (int i = 0; i < bgTable.BgTableEntries.Count; i++)
                 {
-                    GraphicsFile nameGraphic = Grp.Files.First(g => g.Index == entry.BgIndex1);
-                    string name = $"BG_{nameGraphic.Name[0..(nameGraphic.Name.LastIndexOf('_'))]}";
-                    string bgNameBackup = name;
-                    for (int j = 1; Items.Select(i => i.Name).Contains(name); j++)
+                    BgTableEntry entry = bgTable.BgTableEntries[i];
+                    if (entry.BgIndex1 > 0)
                     {
-                        name = $"{bgNameBackup}{j:D2}";
+                        GraphicsFile nameGraphic = Grp.Files.First(g => g.Index == entry.BgIndex1);
+                        string name = $"BG_{nameGraphic.Name[0..(nameGraphic.Name.LastIndexOf('_'))]}";
+                        string bgNameBackup = name;
+                        for (int j = 1; Items.Select(i => i.Name).Contains(name); j++)
+                        {
+                            name = $"{bgNameBackup}{j:D2}";
+                        }
+                        Items.Add(new BackgroundItem(name, i, entry, this));
                     }
-                    Items.Add(new BackgroundItem(name, i, entry, this));
+                    tracker.Finished++;
                 }
-                tracker.Finished++;
+            }
+            catch (Exception ex)
+            {
+                log.LogException($"Failed to background items", ex);
+                return new(LoadProjectState.FAILED);
             }
 
-            if (VoiceMapIsV06OrHigher())
+            try
             {
-                VoiceMap = Evt.Files.First(v => v.Name == "VOICEMAPS").CastTo<VoiceMapFile>();
-            }
-
-            string[] bgmFiles = Directory.GetFiles(Path.Combine(IterativeDirectory, "rom", "data", "bgm")).OrderBy(s => s).ToArray();
-            tracker.Focus("BGM Tracks", bgmFiles.Length);
-            for (int i = 0; i < bgmFiles.Length; i++)
-            {
-                Items.Add(new BackgroundMusicItem(bgmFiles[i], i, this));
-                tracker.Finished++;
-            }
-
-            string[] voiceFiles = Directory.GetFiles(Path.Combine(IterativeDirectory, "rom", "data", "vce")).OrderBy(s => s).ToArray();
-            tracker.Focus("Voiced Lines", voiceFiles.Length);
-            for (int i = 0; i < voiceFiles.Length; i++)
-            {
-                Items.Add(new VoicedLineItem(voiceFiles[i], i + 1, this));
-                tracker.Finished++;
-            }
-
-            tracker.Focus("Character Sprites", 1);
-            CharacterDataFile chrdata = Dat.Files.First(d => d.Name == "CHRDATAS").CastTo<CharacterDataFile>();
-            Items.AddRange(chrdata.Sprites.Where(s => (int)s.Character > 0).Select(s => new CharacterSpriteItem(s, chrdata, this)));
-            tracker.Finished++;
-
-            ChibiFile chibiFile = Dat.Files.First(d => d.Name == "CHIBIS").CastTo<ChibiFile>();
-            tracker.Focus("Chibis", chibiFile.Chibis.Count);
-            foreach (Chibi chibi in chibiFile.Chibis)
-            {
-                Items.Add(new ChibiItem(chibi, this));
-                tracker.Finished++;
-            }
-
-            tracker.Focus("Dialogue Configs", 1);
-            Items.AddRange(Dat.Files.First(d => d.Name == "MESSINFOS").CastTo<MessageInfoFile>()
-                .MessageInfos.Where(m => (int)m.Character > 0).Select(m => new CharacterItem(m, Characters[(int)m.Character], this)));
-            tracker.Finished++;
-
-            tracker.Focus("Event Files", 1);
-            Items.AddRange(Evt.Files
-                .Where(e => !new string[] { "CHESSS", "EVTTBLS", "TOPICS", "SCENARIOS", "TUTORIALS", "VOICEMAPS" }.Contains(e.Name))
-                .Select(e => new ScriptItem(e, log)));
-            tracker.Finished++;
-
-            tracker.Focus("Maps", 1);
-            QMapFile qmap = Dat.Files.First(f => f.Name == "QMAPS").CastTo<QMapFile>();
-            Items.AddRange(Dat.Files
-                .Where(d => qmap.QMaps.Select(q => q.Name.Replace(".", "")).Contains(d.Name))
-                .Select(m => new MapItem(m.CastTo<MapFile>(), qmap.QMaps.FindIndex(q => q.Name.Replace(".", "") == m.Name), this)));
-            tracker.Finished++;
-
-            PlaceFile placeFile = Dat.Files.First(f => f.Name == "PLACES").CastTo<PlaceFile>();
-            tracker.Focus("Places", placeFile.PlaceGraphicIndices.Count);
-            for (int i = 0; i < placeFile.PlaceGraphicIndices.Count; i++)
-            {
-                GraphicsFile placeGrp = Grp.Files.First(g => g.Index == placeFile.PlaceGraphicIndices[i]);
-                Items.Add(new PlaceItem(i, placeGrp, this));
-            }
-            tracker.Finished++;
-
-            tracker.Focus("Puzzles", 1);
-            Items.AddRange(Dat.Files
-                .Where(d => d.Name.StartsWith("SLG"))
-                .Select(d => new PuzzleItem(d.CastTo<PuzzleFile>(), this, log)));
-            tracker.Finished++;
-
-            Evt.Files.First(f => f.Name == "TOPICS").InitializeTopicFile();
-            TopicFile = Evt.Files.First(f => f.Name == "TOPICS");
-            tracker.Focus("Topics", TopicFile.TopicStructs.Count);
-            foreach (TopicStruct topic in TopicFile.TopicStructs)
-            {
-                // Main topics have shadow topics that are located at ID + 40 (this is actually how the game finds them)
-                // So if we're a main topic and we see another topic 40 back, we know we're one of these shadow topics and should really be
-                // rolled into the original main topic
-                if (topic.Type == TopicType.Main && Items.Any(i => i.Type == ItemDescription.ItemType.Topic && ((TopicItem)i).Topic.Id == topic.Id - 40))
+                if (VoiceMapIsV06OrHigher())
                 {
-                    ((TopicItem)Items.First(i => i.Type == ItemDescription.ItemType.Topic && ((TopicItem)i).Topic.Id == topic.Id - 40)).HiddenMainTopic = topic;
+                    VoiceMap = Evt.Files.First(v => v.Name == "VOICEMAPS").CastTo<VoiceMapFile>();
                 }
-                else
-                {
-                    Items.Add(new TopicItem(topic, this));
-                }
-                tracker.Finished++;
+            }
+            catch (Exception ex)
+            {
+                log.LogException($"Failed to load voice map", ex);
+                return new(LoadProjectState.FAILED);
             }
 
-            SystemTextureFile systemTextureFile = Dat.Files.First(f => f.Name == "SYSTEXS").CastTo<SystemTextureFile>();
-            tracker.Focus("System Textures",
-                5 + systemTextureFile.SystemTextures.Count(s => Grp.Files.Where(g => g.Name.StartsWith("XTR") || g.Name.StartsWith("SYS") && !g.Name.Contains("_SPC_") && g.Name != "SYS_CMN_B12DNX" && g.Name != "SYS_PPT_001DNX").Select(g => g.Index).Distinct().Contains(s.GrpIndex)));
-            Items.Add(new SystemTextureItem(systemTextureFile.SystemTextures.First(s => s.GrpIndex == Grp.Files.First(g => g.Name == "LOGO_CO_SEGDNX").Index), this, "SYSTEX_SPLASH_SEGA", height: 192));
-            tracker.Finished++;
-            Items.Add(new SystemTextureItem(systemTextureFile.SystemTextures.First(s => s.GrpIndex == Grp.Files.First(g => g.Name == "LOGO_CO_AQIDNX").Index), this, "SYSTEX_SPLASH_AQI", height: 192));
-            tracker.Finished++;
-            Items.Add(new SystemTextureItem(systemTextureFile.SystemTextures.First(s => s.GrpIndex == Grp.Files.First(g => g.Name == "LOGO_MW_ACTDNX").Index), this, "SYSTEX_SPLASH_MOBICLIP", height: 192));
-            tracker.Finished++;
-            string criLogoName = Grp.Files.Any(f => f.Name == "CREDITS") ? "SYSTEX_SPLASH_HAROOHIE" : "SYSTEX_SPLASH_CRIWARE";
-            Items.Add(new SystemTextureItem(systemTextureFile.SystemTextures.First(s => s.GrpIndex == Grp.Files.First(g => g.Name == "LOGO_MW_CRIDNX").Index), this, criLogoName, height: 192));
-            tracker.Finished++;
-            if (Grp.Files.Any(f => f.Name == "CREDITS"))
+            try
             {
-                Items.Add(new SystemTextureItem(systemTextureFile.SystemTextures.First(s => s.GrpIndex == Grp.Files.First(g => g.Name == "CREDITS").Index), this, "SYSTEX_SPLASH_CREDITS", height: 192));
-            }
-            tracker.Finished++;
-            foreach (SystemTexture extraSysTex in systemTextureFile.SystemTextures.Where(s => Grp.Files.Where(g => g.Name.StartsWith("XTR")).Distinct().Select(g => g.Index).Contains(s.GrpIndex)))
-            {
-                Items.Add(new SystemTextureItem(extraSysTex, this, $"SYSTEX_{Grp.Files.First(g => g.Index == extraSysTex.GrpIndex).Name[0..^3]}"));
-                tracker.Finished++;
-            }
-            // Exclude B12 as that's the nameplates we replace in the character items and PPT_001 as that's the puzzle phase singularity we'll be replacing in the puzzle items
-            // We also exclude the "special" graphics as they do not include all of them in the SYSTEX file (should be made to be edited manually)
-            foreach (SystemTexture sysSysTex in systemTextureFile.SystemTextures.Where(s => Grp.Files.Where(g => g.Name.StartsWith("SYS") && !g.Name.Contains("_SPC_") && g.Name != "SYS_CMN_B12DNX" && g.Name != "SYS_PPT_001DNX").Select(g => g.Index).Contains(s.GrpIndex)).DistinctBy(s => s.GrpIndex))
-            {
-                if (Grp.Files.First(g => g.Index == sysSysTex.GrpIndex).Name[0..^4].EndsWith("T6"))
+                string[] bgmFiles = Directory.GetFiles(Path.Combine(IterativeDirectory, "rom", "data", "bgm")).OrderBy(s => s).ToArray();
+                tracker.Focus("BGM Tracks", bgmFiles.Length);
+                for (int i = 0; i < bgmFiles.Length; i++)
                 {
-                    // special case the ep headers
-                    Items.Add(new SystemTextureItem(sysSysTex, this, $"SYSTEX_{Grp.Files.First(g => g.Index == sysSysTex.GrpIndex).Name[0..^3]}", height: 192));
+                    Items.Add(new BackgroundMusicItem(bgmFiles[i], i, this));
+                    tracker.Finished++;
                 }
-                else
-                {
-                    Items.Add(new SystemTextureItem(sysSysTex, this, $"SYSTEX_{Grp.Files.First(g => g.Index == sysSysTex.GrpIndex).Name[0..^3]}"));
-                }
-                tracker.Finished++;
+            }
+            catch (Exception ex)
+            {
+                log.LogException($"Failed to load BGM tracks", ex);
+                return new(LoadProjectState.FAILED);
             }
 
-            // Scenario item must be created after script and puzzle items are constructed
-            tracker.Focus("Scenario", 1);
-            EventFile scenarioFile = Evt.Files.First(f => f.Name == "SCENARIOS");
-            scenarioFile.InitializeScenarioFile();
-            Items.Add(new ScenarioItem(scenarioFile.Scenario, this, log));
-            tracker.Finished++;
-
-            tracker.Focus("Group Selections", scenarioFile.Scenario.Selects.Count);
-            for (int i = 0; i < scenarioFile.Scenario.Selects.Count; i++)
+            try
             {
-                Items.Add(new GroupSelectionItem(scenarioFile.Scenario.Selects[i], i, this));
+                string[] voiceFiles = Directory.GetFiles(Path.Combine(IterativeDirectory, "rom", "data", "vce")).OrderBy(s => s).ToArray();
+                tracker.Focus("Voiced Lines", voiceFiles.Length);
+                for (int i = 0; i < voiceFiles.Length; i++)
+                {
+                    Items.Add(new VoicedLineItem(voiceFiles[i], i + 1, this));
+                    tracker.Finished++;
+                }
+            }
+            catch (Exception ex)
+            {
+                log.LogException($"Failed to load voiced lines", ex);
+                return new(LoadProjectState.FAILED);
+            }
+
+            try
+            {
+                tracker.Focus("Character Sprites", 1);
+                CharacterDataFile chrdata = Dat.Files.First(d => d.Name == "CHRDATAS").CastTo<CharacterDataFile>();
+                Items.AddRange(chrdata.Sprites.Where(s => (int)s.Character > 0).Select(s => new CharacterSpriteItem(s, chrdata, this)));
                 tracker.Finished++;
+            }
+            catch (Exception ex)
+            {
+                log.LogException($"Failed to load character sprites", ex);
+                return new(LoadProjectState.FAILED);
+            }
+
+            try
+            {
+                ChibiFile chibiFile = Dat.Files.First(d => d.Name == "CHIBIS").CastTo<ChibiFile>();
+                tracker.Focus("Chibis", chibiFile.Chibis.Count);
+                foreach (Chibi chibi in chibiFile.Chibis)
+                {
+                    Items.Add(new ChibiItem(chibi, this));
+                    tracker.Finished++;
+                }
+            }
+            catch (Exception ex)
+            {
+                log.LogException($"Failed to load chibis", ex);
+                return new(LoadProjectState.FAILED);
+            }
+
+            try
+            {
+                tracker.Focus("Characters", 1);
+                Items.AddRange(Dat.Files.First(d => d.Name == "MESSINFOS").CastTo<MessageInfoFile>()
+                    .MessageInfos.Where(m => (int)m.Character > 0).Select(m => new CharacterItem(m, Characters[(int)m.Character], this)));
+                tracker.Finished++;
+            }
+            catch (Exception ex)
+            {
+                log.LogException($"Failed to load characters", ex);
+                return new(LoadProjectState.FAILED);
+            }
+
+            try
+            {
+                tracker.Focus("Scripts", 1);
+                Items.AddRange(Evt.Files
+                    .Where(e => !new string[] { "CHESSS", "EVTTBLS", "TOPICS", "SCENARIOS", "TUTORIALS", "VOICEMAPS" }.Contains(e.Name))
+                    .Select(e => new ScriptItem(e, log)));
+                tracker.Finished++;
+            }
+            catch (Exception ex)
+            {
+                log.LogException($"Failed to load scripts", ex);
+                return new(LoadProjectState.FAILED);
+            }
+
+            try
+            {
+                tracker.Focus("Maps", 1);
+                QMapFile qmap = Dat.Files.First(f => f.Name == "QMAPS").CastTo<QMapFile>();
+                Items.AddRange(Dat.Files
+                    .Where(d => qmap.QMaps.Select(q => q.Name.Replace(".", "")).Contains(d.Name))
+                    .Select(m => new MapItem(m.CastTo<MapFile>(), qmap.QMaps.FindIndex(q => q.Name.Replace(".", "") == m.Name), this)));
+                tracker.Finished++;
+            }
+            catch (Exception ex)
+            {
+                log.LogException($"Failed to load maps", ex);
+                return new(LoadProjectState.FAILED);
+            }
+
+            try
+            {
+                PlaceFile placeFile = Dat.Files.First(f => f.Name == "PLACES").CastTo<PlaceFile>();
+                tracker.Focus("Places", placeFile.PlaceGraphicIndices.Count);
+                for (int i = 0; i < placeFile.PlaceGraphicIndices.Count; i++)
+                {
+                    GraphicsFile placeGrp = Grp.Files.First(g => g.Index == placeFile.PlaceGraphicIndices[i]);
+                    Items.Add(new PlaceItem(i, placeGrp, this));
+                }
+                tracker.Finished++;
+            }
+            catch (Exception ex)
+            {
+                log.LogException($"Failed to load place items", ex);
+                return new(LoadProjectState.FAILED);
+            }
+
+            try
+            {
+                tracker.Focus("Puzzles", 1);
+                Items.AddRange(Dat.Files
+                    .Where(d => d.Name.StartsWith("SLG"))
+                    .Select(d => new PuzzleItem(d.CastTo<PuzzleFile>(), this, log)));
+                tracker.Finished++;
+            }
+            catch (Exception ex)
+            {
+                log.LogException($"Failed to load puzzle items", ex);
+                return new(LoadProjectState.FAILED);
+            }
+
+            try
+            {
+                Evt.Files.First(f => f.Name == "TOPICS").InitializeTopicFile();
+                TopicFile = Evt.Files.First(f => f.Name == "TOPICS");
+                tracker.Focus("Topics", TopicFile.TopicStructs.Count);
+                foreach (TopicStruct topic in TopicFile.TopicStructs)
+                {
+                    // Main topics have shadow topics that are located at ID + 40 (this is actually how the game finds them)
+                    // So if we're a main topic and we see another topic 40 back, we know we're one of these shadow topics and should really be
+                    // rolled into the original main topic
+                    if (topic.Type == TopicType.Main && Items.Any(i => i.Type == ItemDescription.ItemType.Topic && ((TopicItem)i).Topic.Id == topic.Id - 40))
+                    {
+                        ((TopicItem)Items.First(i => i.Type == ItemDescription.ItemType.Topic && ((TopicItem)i).Topic.Id == topic.Id - 40)).HiddenMainTopic = topic;
+                    }
+                    else
+                    {
+                        Items.Add(new TopicItem(topic, this));
+                    }
+                    tracker.Finished++;
+                }
+            }
+            catch (Exception ex)
+            {
+                log.LogException($"Failed to load topics", ex);
+                return new(LoadProjectState.FAILED);
+            }
+
+            try
+            {
+                SystemTextureFile systemTextureFile = Dat.Files.First(f => f.Name == "SYSTEXS").CastTo<SystemTextureFile>();
+                tracker.Focus("System Textures",
+                    5 + systemTextureFile.SystemTextures.Count(s => Grp.Files.Where(g => g.Name.StartsWith("XTR") || g.Name.StartsWith("SYS") && !g.Name.Contains("_SPC_") && g.Name != "SYS_CMN_B12DNX" && g.Name != "SYS_PPT_001DNX").Select(g => g.Index).Distinct().Contains(s.GrpIndex)));
+                Items.Add(new SystemTextureItem(systemTextureFile.SystemTextures.First(s => s.GrpIndex == Grp.Files.First(g => g.Name == "LOGO_CO_SEGDNX").Index), this, "SYSTEX_LOGO_SEGA", 0, height: 192));
+                tracker.Finished++;
+                Items.Add(new SystemTextureItem(systemTextureFile.SystemTextures.First(s => s.GrpIndex == Grp.Files.First(g => g.Name == "LOGO_CO_AQIDNX").Index), this, "SYSTEX_LOGO_AQI", 0, height: 192));
+                tracker.Finished++;
+                Items.Add(new SystemTextureItem(systemTextureFile.SystemTextures.First(s => s.GrpIndex == Grp.Files.First(g => g.Name == "LOGO_MW_ACTDNX").Index), this, "SYSTEX_LOGO_MOBICLIP", 0, height: 192));
+                tracker.Finished++;
+                string criLogoName = Grp.Files.Any(f => f.Name == "CREDITS") ? "SYSTEX_LOGO_HAROOHIE" : "SYSTEX_LOGO_CRIWARE";
+                Items.Add(new SystemTextureItem(systemTextureFile.SystemTextures.First(s => s.GrpIndex == Grp.Files.First(g => g.Name == "LOGO_MW_CRIDNX").Index), this, criLogoName, 0, height: 192));
+                tracker.Finished++;
+                if (Grp.Files.Any(f => f.Name == "CREDITS"))
+                {
+                    Items.Add(new SystemTextureItem(systemTextureFile.SystemTextures.First(s => s.GrpIndex == Grp.Files.First(g => g.Name == "CREDITS").Index), this, "SYSTEX_LOGO_CREDITS", 0, height: 192));
+                }
+                tracker.Finished++;
+                foreach (SystemTexture extraSysTex in systemTextureFile.SystemTextures.Where(s => Grp.Files.Where(g => g.Name.StartsWith("XTR")).Distinct().Select(g => g.Index).Contains(s.GrpIndex)))
+                {
+                    Items.Add(new SystemTextureItem(extraSysTex, this, $"SYSTEX_{Grp.Files.First(g => g.Index == extraSysTex.GrpIndex).Name[0..^3]}", -1));
+                    tracker.Finished++;
+                }
+                // Exclude B12 as that's the nameplates we replace in the character items and PPT_001 as that's the puzzle phase singularity we'll be replacing in the puzzle items
+                // We also exclude the "special" graphics as they do not include all of them in the SYSTEX file (should be made to be edited manually)
+                foreach (SystemTexture sysSysTex in systemTextureFile.SystemTextures.Where(s => Grp.Files.Where(g => g.Name.StartsWith("SYS") && !g.Name.Contains("_SPC_") && g.Name != "SYS_CMN_B12DNX" && g.Name != "SYS_PPT_001DNX").Select(g => g.Index).Contains(s.GrpIndex)).DistinctBy(s => s.GrpIndex))
+                {
+                    if (Grp.Files.First(g => g.Index == sysSysTex.GrpIndex).Name[0..^4].EndsWith("T6"))
+                    {
+                        // special case the ep headers
+                        Items.Add(new SystemTextureItem(sysSysTex, this, $"SYSTEX_{Grp.Files.First(g => g.Index == sysSysTex.GrpIndex).Name[0..^3]}", -1, height: 192));
+                    }
+                    else
+                    {
+                        Items.Add(new SystemTextureItem(sysSysTex, this, $"SYSTEX_{Grp.Files.First(g => g.Index == sysSysTex.GrpIndex).Name[0..^3]}", -1));
+                    }
+                    tracker.Finished++;
+                }
+            }
+            catch (Exception ex)
+            {
+                log.LogException($"Failed to load system textures", ex);
+                return new(LoadProjectState.FAILED);
+            }
+
+            EventFile scenarioFile;
+            try
+            {
+                // Scenario item must be created after script and puzzle items are constructed
+                tracker.Focus("Scenario", 1);
+                scenarioFile = Evt.Files.First(f => f.Name == "SCENARIOS");
+                scenarioFile.InitializeScenarioFile();
+                Items.Add(new ScenarioItem(scenarioFile.Scenario, this, log));
+                tracker.Finished++;
+            }
+            catch (Exception ex)
+            {
+                log.LogException($"Failed to load scenario", ex);
+                return new(LoadProjectState.FAILED);
+            }
+
+            try
+            {
+                tracker.Focus("Group Selections", scenarioFile.Scenario.Selects.Count);
+                for (int i = 0; i < scenarioFile.Scenario.Selects.Count; i++)
+                {
+                    Items.Add(new GroupSelectionItem(scenarioFile.Scenario.Selects[i], i, this));
+                    tracker.Finished++;
+                }
+            }
+            catch (Exception ex)
+            {
+                log.LogException($"Failed to load group selections", ex);
+                return new(LoadProjectState.FAILED);
             }
 
             if (ItemNames is null)
             {
-                ItemNames = JsonSerializer.Deserialize<Dictionary<string, string>>(File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Defaults", "DefaultNames.json")));
-                foreach (ItemDescription item in Items)
+                try
                 {
-                    if (!ItemNames.ContainsKey(item.Name) && item.CanRename)
+                    ItemNames = JsonSerializer.Deserialize<Dictionary<string, string>>(File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Defaults", "DefaultNames.json")));
+                    foreach (ItemDescription item in Items)
                     {
-                        ItemNames.Add(item.Name, item.DisplayName);
+                        if (!ItemNames.ContainsKey(item.Name) && item.CanRename)
+                        {
+                            ItemNames.Add(item.Name, item.DisplayName);
+                        }
                     }
+                }
+                catch (Exception ex)
+                {
+                    log.LogException($"Failed to load item names", ex);
+                    return new(LoadProjectState.FAILED);
                 }
             }
 
@@ -450,11 +682,11 @@ namespace SerialLoops.Lib
             {
                 if (Items[i].CanRename || Items[i].Type == ItemDescription.ItemType.Place) // We don't want to manually rename places, but they do use the display name pattern
                 {
-                    try
+                    if (ItemNames.ContainsKey(Items[i].Name))
                     {
                         Items[i].Rename(ItemNames[Items[i].Name]);
                     }
-                    catch
+                    else
                     {
                         ItemNames.Add(Items[i].Name, Items[i].DisplayName);
                     }
@@ -475,11 +707,11 @@ namespace SerialLoops.Lib
 
             string tempDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
             NdsProjectFile.Create("temp", newRom, tempDir);
-            IO.CopyFiles(Path.Combine(tempDir, "data"), Path.Combine(BaseDirectory, "original", "archives"), "*.bin");
-            IO.CopyFiles(Path.Combine(tempDir, "data", "bgm"), Path.Combine(BaseDirectory, "original", "bgm"), "*.bin");
-            IO.CopyFiles(Path.Combine(tempDir, "data", "vce"), Path.Combine(BaseDirectory, "original", "vce"), "*.bin");
-            IO.CopyFiles(Path.Combine(tempDir, "overlay"), Path.Combine(BaseDirectory, "original", "overlay"), "*.bin");
-            IO.CopyFiles(Path.Combine(tempDir, "data", "movie"), Path.Combine(BaseDirectory, "rom", "data", "movie"), "*.mods");
+            IO.CopyFiles(Path.Combine(tempDir, "data"), Path.Combine(BaseDirectory, "original", "archives"), log, "*.bin");
+            IO.CopyFiles(Path.Combine(tempDir, "data", "bgm"), Path.Combine(BaseDirectory, "original", "bgm"), log, "*.bin");
+            IO.CopyFiles(Path.Combine(tempDir, "data", "vce"), Path.Combine(BaseDirectory, "original", "vce"), log, "*.bin");
+            IO.CopyFiles(Path.Combine(tempDir, "overlay"), Path.Combine(BaseDirectory, "original", "overlay"), log, "*.bin");
+            IO.CopyFiles(Path.Combine(tempDir, "data", "movie"), Path.Combine(BaseDirectory, "rom", "data", "movie"), log, "*.mods");
 
             Directory.Delete(tempDir, true);
         }
@@ -543,9 +775,16 @@ namespace SerialLoops.Lib
             }
         }
 
-        public void Save()
+        public void Save(ILogger log)
         {
-            File.WriteAllText(Path.Combine(MainDirectory, $"{Name}.{PROJECT_FORMAT}"), JsonSerializer.Serialize<Project>(this, SERIALIZER_OPTIONS));
+            try
+            {
+                File.WriteAllText(Path.Combine(MainDirectory, $"{Name}.{PROJECT_FORMAT}"), JsonSerializer.Serialize<Project>(this, SERIALIZER_OPTIONS));
+            }
+            catch (Exception ex)
+            {
+                log.LogException("Failed to save project file! Check logs for more information.", ex);
+            }
         }
 
         public List<ItemDescription> GetSearchResults(string query, ILogger logger)
@@ -553,22 +792,30 @@ namespace SerialLoops.Lib
             return GetSearchResults(SearchQuery.Create(query), logger);
         }
 
-        public List<ItemDescription> GetSearchResults(SearchQuery query, ILogger logger, IProgressTracker? tracker = null)
+        public List<ItemDescription> GetSearchResults(SearchQuery query, ILogger log, IProgressTracker? tracker = null)
         {
             var term = query.Term.Trim();
             var searchable = Items.Where(i => query.Types.Contains(i.Type)).ToList();
             tracker?.Focus($"{searchable.Count} Items", searchable.Count);
 
-            return searchable.Where(item =>
+            try
+            {
+                return searchable.Where(item =>
                 {
                     bool hit = query.Scopes.Aggregate(
                         false,
-                        (current, scope) => current || ItemMatches(item, term, scope, logger)
+                        (current, scope) => current || ItemMatches(item, term, scope, log)
                     );
                     if (tracker is not null) tracker.Finished++;
                     return hit;
                 })
-                .ToList();
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                log.LogException("Failed to get search results!", ex);
+                return Array.Empty<ItemDescription>().ToList();
+            }
         }
 
         private bool ItemMatches(ItemDescription item, string term, SearchQuery.DataHolder scope, ILogger logger)

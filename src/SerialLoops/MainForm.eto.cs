@@ -908,7 +908,7 @@ namespace SerialLoops
                 {
                     LoopyProgressTracker tracker = new();
                     _ = new ProgressDialog(
-                        () => Patch.CreatePatch(baseRomDialog.FileName, currentRom, outputPatchDialog.FileName),
+                        () => Patch.CreatePatch(baseRomDialog.FileName, currentRom, outputPatchDialog.FileName, Log),
                         () => MessageBox.Show("Patch Created!", "Success!", MessageBoxType.Information), tracker,
                         "Creating Patch");
                 }

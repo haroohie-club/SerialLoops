@@ -59,12 +59,12 @@ namespace SerialLoops.Tests
             Directory.CreateDirectory(Path.Combine(_project.BaseDirectory, vceDir));
             Directory.CreateDirectory(Path.Combine(_project.IterativeDirectory, vceDir));
 
-            IO.CopyFiles(_dataDir, Path.Combine(_project.BaseDirectory, archivesDir));
-            IO.CopyFiles(_dataDir, Path.Combine(_project.IterativeDirectory, archivesDir));
-            IO.CopyFiles(Path.Combine(_dataDir, "bgm"), Path.Combine(_project.BaseDirectory, bgmDir));
-            IO.CopyFiles(Path.Combine(_dataDir, "bgm"), Path.Combine(_project.IterativeDirectory, bgmDir));
-            IO.CopyFiles(Path.Combine(_dataDir, "vce"), Path.Combine(_project.BaseDirectory, vceDir));
-            IO.CopyFiles(Path.Combine(_dataDir, "vce"), Path.Combine(_project.IterativeDirectory, vceDir));
+            IO.CopyFiles(_dataDir, Path.Combine(_project.BaseDirectory, archivesDir), _log);
+            IO.CopyFiles(_dataDir, Path.Combine(_project.IterativeDirectory, archivesDir), _log);
+            IO.CopyFiles(Path.Combine(_dataDir, "bgm"), Path.Combine(_project.BaseDirectory, bgmDir), _log);
+            IO.CopyFiles(Path.Combine(_dataDir, "bgm"), Path.Combine(_project.IterativeDirectory, bgmDir), _log);
+            IO.CopyFiles(Path.Combine(_dataDir, "vce"), Path.Combine(_project.BaseDirectory, vceDir), _log);
+            IO.CopyFiles(Path.Combine(_dataDir, "vce"), Path.Combine(_project.IterativeDirectory, vceDir), _log);
 
             // Load the project archives
             _project.LoadArchives(_log, _progressTracker);
