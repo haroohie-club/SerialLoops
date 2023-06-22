@@ -84,8 +84,8 @@ namespace SerialLoops.Lib.Items
                 {
                     for (int x = 0; x < bitmap.Width; x += SysTex.TileWidth)
                     {
-                        SKRect crop = new(x, y, x + 64, y + 64);
-                        SKRect dest = new(0, currentTile * 64, 64, (currentTile + 1) * 64);
+                        SKRect crop = new(x, y, x + SysTex.TileWidth, y + SysTex.TileHeight);
+                        SKRect dest = new(0, currentTile * SysTex.TileHeight, SysTex.TileWidth, (currentTile + 1) * SysTex.TileHeight);
                         tileCanvas.DrawBitmap(bitmap, crop, dest);
                         currentTile++;
                     }
