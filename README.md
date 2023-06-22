@@ -15,7 +15,7 @@
     </a>
 </p>
 
-**Serial Loops** is a fully-fledged editor for the Nintendo DS game, _Suzumiya Haruhi no Chokuretsu_ (The Series of Haruhi Suzumiya).
+**Serial Loops** is a fully-fledged editor for the Nintendo DS game _Suzumiya Haruhi no Chokuretsu_ (The Series of Haruhi Suzumiya).
 
 ## Screenshots
 <p align="center">
@@ -24,6 +24,9 @@
   <img width="325px" src="https://haroohie.club/images/chokuretsu/serial-loops/sound-editing.png" alt="Screenshot of the Serial Loops sound editor, featuring a modal widget with a sound wave graph. Buttons to start and stop playback are present, as are sliders and a checkbox to enable looping and adjust the track loop start and end points." />
   <img width="325px" src="https://haroohie.club/images/chokuretsu/serial-loops/home-screen.png" alt="Screenshot of the Serial Loops home screen. The Serial Loops logo and title sits at the top of the menu. Below that, under 'Start' on the left hand side, options to create a project, open an existing project, and modify preferences are present. An empty list of 'Recents' is visible on the right hand side, where recent projects would appear." />
 </p>
+
+## Documentation
+Documentation for how to use Serial Loops can be found on [our website](https://haroohie.club/chokuretsu/serial-loops/).
 
 ## Installation
 ### Prerequisites
@@ -34,7 +37,8 @@
 * On macOS and Linux, run `sudo dkp-pacman -S nds-dev` from the terminal after installing the devkitPro pacman distribution.
 
 #### Installing Make or Docker
-To assemble ASM hacks you want to apply, you will need to decide whether to use Make or Docker.
+To assemble ASM hacks you want to apply, you will need to decide whether to use Make or Docker. Make is automatically installed when using the Debian and RPM
+packages we distribute, so you don't need to worry about this step if you're using either of those.
 
 Currently, the Docker path is **only supported on Windows** due to operating system and framework limitations. It is possible to get Docker running
 just fine on Linux distros by running SerialLoops as root (e.g. `sudo SerialLoops`), but it's easier to just use Make. On macOS, there is no known
