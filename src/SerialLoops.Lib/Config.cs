@@ -50,7 +50,7 @@ namespace SerialLoops.Lib
                 Config defaultConfig = GetDefault(log);
                 defaultConfig.ValidateConfig(log);
                 defaultConfig.ConfigPath = configJson;
-                defaultConfig.InitializeHacks();
+                defaultConfig.InitializeHacks(log);
                 IO.WriteStringFile(configJson, JsonSerializer.Serialize(defaultConfig), log);
                 return defaultConfig;
             }
@@ -60,7 +60,7 @@ namespace SerialLoops.Lib
                 Config config = JsonSerializer.Deserialize<Config>(File.ReadAllText(configJson));
                 config.ValidateConfig(log);
                 config.ConfigPath = configJson;
-                config.InitializeHacks();
+                config.InitializeHacks(log);
                 return config;
             }
             catch (JsonException exc)
@@ -81,12 +81,12 @@ namespace SerialLoops.Lib
             }
         }
 
-        private void InitializeHacks()
+        private void InitializeHacks(ILogger log)
         {
             if (!Directory.Exists(HacksDirectory))
             {
                 Directory.CreateDirectory(HacksDirectory);
-                IO.CopyFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Hacks"), HacksDirectory);
+                IO.CopyFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Hacks"), HacksDirectory, log);
                 File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "hacks.json"), Path.Combine(HacksDirectory, "hacks.json"));
             }
 
@@ -97,7 +97,7 @@ namespace SerialLoops.Lib
             IEnumerable<AsmHack> missingHacks = builtinHacks.Where(h => !Hacks.Contains(h));
             if (missingHacks.Any())
             {
-                IO.CopyFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Hacks"), HacksDirectory);
+                IO.CopyFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Hacks"), HacksDirectory, log);
                 Hacks.AddRange(missingHacks);
                 File.WriteAllText(Path.Combine(HacksDirectory, "hacks.json"), JsonSerializer.Serialize(Hacks));
             }
@@ -105,7 +105,7 @@ namespace SerialLoops.Lib
             IEnumerable<AsmHack> updatedHacks = builtinHacks.Where(h => !Hacks.FirstOrDefault(o => h.Name == o.Name)?.DeepEquals(h) ?? false);
             if (updatedHacks.Any())
             {
-                IO.CopyFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Hacks"), HacksDirectory);
+                IO.CopyFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Hacks"), HacksDirectory, log);
                 foreach (AsmHack updatedHack in updatedHacks)
                 {
                     Hacks[Hacks.FindIndex(h => h.Name == updatedHack.Name)] = updatedHack;
@@ -141,7 +141,7 @@ namespace SerialLoops.Lib
             {
                 emulatorPath = Path.Combine("/snap", "melonds", "current", "usr", "local", "bin", "melonDS");
             }
-            if (!Directory.Exists(emulatorPath))
+            if (!Directory.Exists(emulatorPath) && !File.Exists(emulatorPath))
             {
                 emulatorPath = "";
                 log.LogWarning("Valid emulator path not found in config.json.");

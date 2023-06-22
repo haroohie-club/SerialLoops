@@ -36,7 +36,7 @@ namespace SerialLoops.Utility
                 }
                 ((TreeGridView)explorer.Viewer.Control).ReloadData();
                 project.ItemNames[item.Name] = item.DisplayName;
-                project.Save();
+                project.Save(log);
             }
         }
         public static void RenameItem(Project project, ItemExplorerPanel explorer, EditorTabsPanel tabs, ILogger log, string newName)
@@ -62,7 +62,7 @@ namespace SerialLoops.Utility
                 }
                 ((TreeGridView)explorer.Viewer.Control).ReloadData();
                 project.ItemNames[item.Name] = item.DisplayName;
-                project.Save();
+                project.Save(log);
             }
         }
 

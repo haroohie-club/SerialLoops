@@ -74,13 +74,13 @@ namespace SerialLoops.Lib
                 commandsIncSb.AppendLine(command.GetMacro());
             }
 
-            tracker.Focus("Compressing Archives (dat.bin)", 3);
+            tracker.Focus("Loading Archives (dat.bin)", 3);
             var dat = ArchiveFile<DataFile>.FromFile(Path.Combine(directory, "original", "archives", "dat.bin"), log);
             tracker.Finished++;
-            tracker.CurrentlyLoading = "Compressing Archives (evt.bin)";
+            tracker.CurrentlyLoading = "Loading Archives (evt.bin)";
             var evt = ArchiveFile<EventFile>.FromFile(Path.Combine(directory, "original", "archives", "evt.bin"), log);
             tracker.Finished++;
-            tracker.CurrentlyLoading = "Compressing Archives (grp.bin)";
+            tracker.CurrentlyLoading = "Loading Archives (grp.bin)";
             var grp = ArchiveFile<GraphicsFile>.FromFile(Path.Combine(directory, "original", "archives", "grp.bin"), log);
 
             if (dat is null || evt is null || grp is null)
@@ -115,7 +115,7 @@ namespace SerialLoops.Lib
                     {
                         if (Path.GetExtension(file).Equals(".png", StringComparison.OrdinalIgnoreCase))
                         {
-                            ReplaceSingleGraphicsFile(grp, file, index);
+                            ReplaceSingleGraphicsFile(grp, file, index, log);
                         }
                         else if (file.EndsWith("_pal.csv", StringComparison.OrdinalIgnoreCase))
                         {
@@ -216,51 +216,74 @@ namespace SerialLoops.Lib
             tracker.Finished+= 3;
         }
 
-        private static void ReplaceSingleGraphicsFile(ArchiveFile<GraphicsFile> grp, string filePath, int index)
+        private static void ReplaceSingleGraphicsFile(ArchiveFile<GraphicsFile> grp, string filePath, int index, ILogger log)
         {
-            GraphicsFile grpFile = grp.Files.FirstOrDefault(f => f.Index == index);
-
-            if (index == 0xE50)
+            try
             {
-                grpFile.InitializeFontFile();
-            }
+                GraphicsFile grpFile = grp.Files.FirstOrDefault(f => f.Index == index);
 
-            string paletteFile = Path.Combine(Path.GetDirectoryName(filePath), $"{Path.GetFileNameWithoutExtension(filePath)}_pal.csv");
-            if (File.Exists(paletteFile))
+                if (index == 0xE50)
+                {
+                    grpFile.InitializeFontFile();
+                }
+
+                string paletteFile = Path.Combine(Path.GetDirectoryName(filePath), $"{Path.GetFileNameWithoutExtension(filePath)}_pal.csv");
+                if (File.Exists(paletteFile))
+                {
+                    grpFile.SetPalette(File.ReadAllText(paletteFile).Split(',').Select(c => SKColor.Parse(c)).ToList());
+                }
+
+                grpFile.SetImage(filePath);
+
+                grp.Files[grp.Files.IndexOf(grpFile)] = grpFile;
+            }
+            catch (Exception ex)
             {
-                grpFile.SetPalette(File.ReadAllText(paletteFile).Split(',').Select(c => SKColor.Parse(c)).ToList());
+                log.LogException($"Failed replacing graphics file {index} with file '{filePath}'", ex);
             }
-
-            grpFile.SetImage(filePath);
-
-            grp.Files[grp.Files.IndexOf(grpFile)] = grpFile;
         }
 
         private static bool ReplaceSingleSourceFile(ArchiveFile<EventFile> archive, string filePath, int index, string devkitArm, string workingDirectory, ILogger log)
         {
-            (string objFile, string binFile) = CompileSourceFile(filePath, devkitArm, workingDirectory, log);
-            if (!File.Exists(binFile))
+            try
             {
-                log.LogError($"Compiled file {binFile} does not exist!");
+                (string objFile, string binFile) = CompileSourceFile(filePath, devkitArm, workingDirectory, log);
+                if (!File.Exists(binFile))
+                {
+                    log.LogError($"Compiled file {binFile} does not exist!");
+                    return false;
+                }
+                ReplaceSingleFile(archive, binFile, index, log);
+                File.Delete(objFile);
+                File.Delete(binFile);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                log.LogException($"Failed replacing source file {index} in evt.bin with file '{filePath}'", ex);
                 return false;
             }
-            ReplaceSingleFile(archive, binFile, index);
-            File.Delete(objFile);
-            File.Delete(binFile);
-            return true;
         }
         private static bool ReplaceSingleSourceFile(ArchiveFile<DataFile> archive, string filePath, int index, string devkitArm, string workingDirectory, ILogger log)
         {
-            (string objFile, string binFile) = CompileSourceFile(filePath, devkitArm, workingDirectory, log);
-            if (!File.Exists(binFile))
+            try
             {
-                log.LogError($"Compiled file {binFile} does not exist!");
+                (string objFile, string binFile) = CompileSourceFile(filePath, devkitArm, workingDirectory, log);
+                if (!File.Exists(binFile))
+                {
+                    log.LogError($"Compiled file {binFile} does not exist!");
+                    return false;
+                }
+                ReplaceSingleFile(archive, binFile, index, log);
+                File.Delete(objFile);
+                File.Delete(binFile);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                log.LogException($"Failed replacing source file {index} in dat.bin with file '{filePath}'", ex);
                 return false;
             }
-            ReplaceSingleFile(archive, binFile, index);
-            File.Delete(objFile);
-            File.Delete(binFile);
-            return true;
         }
 
         private static (string, string) CompileSourceFile(string filePath, string devkitArm, string workingDirectory, ILogger log)
@@ -322,19 +345,33 @@ namespace SerialLoops.Lib
             return (objFile, binFile);
         }
 
-        private static void ReplaceSingleFile(ArchiveFile<EventFile> archive, string filePath, int index)
+        private static void ReplaceSingleFile(ArchiveFile<EventFile> archive, string filePath, int index, ILogger log)
         {
-            EventFile file = archive.Files.FirstOrDefault(f => f.Index == index);
-            file.Data = File.ReadAllBytes(filePath).ToList();
-            file.Edited = true;
-            archive.Files[archive.Files.IndexOf(file)] = file;
+            try
+            {
+                EventFile file = archive.Files.FirstOrDefault(f => f.Index == index);
+                file.Data = File.ReadAllBytes(filePath).ToList();
+                file.Edited = true;
+                archive.Files[archive.Files.IndexOf(file)] = file;
+            }
+            catch (Exception ex)
+            {
+                log.LogException($"Failed replacing source file {index} in evt.bin with file '{filePath}'", ex);
+            }
         }
-        private static void ReplaceSingleFile(ArchiveFile<DataFile> archive, string filePath, int index)
+        private static void ReplaceSingleFile(ArchiveFile<DataFile> archive, string filePath, int index, ILogger log)
         {
-            DataFile file = archive.Files.FirstOrDefault(f => f.Index == index);
-            file.Data = File.ReadAllBytes(filePath).ToList();
-            file.Edited = true;
-            archive.Files[archive.Files.IndexOf(file)] = file;
+            try
+            {
+                DataFile file = archive.Files.FirstOrDefault(f => f.Index == index);
+                file.Data = File.ReadAllBytes(filePath).ToList();
+                file.Edited = true;
+                archive.Files[archive.Files.IndexOf(file)] = file;
+            }
+            catch (Exception ex)
+            {
+                log.LogException($"Failed replacing source file {index} in dat.bin with file '{filePath}'", ex);
+            }
         }
     }
 }
