@@ -31,7 +31,7 @@ namespace SerialLoops.Dialogs
         {
             _log = log;
             Title = "Crop & Scale";
-            MinimumSize = new(900, 650);
+            MinimumSize = new(900, 750);
             Padding = 10;
             StartImage = startImage;
             FinalImage = new(width, height);
@@ -55,7 +55,7 @@ namespace SerialLoops.Dialogs
             };
             
             // Preview
-            _preview = new SKBitmap(650, 500);
+            _preview = new SKBitmap(650, 600);
             _previewLayout = new() { Padding = 10 };
             _previewLayout.Invalidate();
 
