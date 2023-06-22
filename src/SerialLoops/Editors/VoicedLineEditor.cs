@@ -222,7 +222,7 @@ namespace SerialLoops.Editors
             {
                 for (int i = 0; i <= 1; i++)
                 {
-                    ScriptEditor.DrawText(
+                    Shared.DrawText(
                         _subtitle,
                         canvas,
                         DialogueScriptParameter.Paint07,
@@ -234,7 +234,7 @@ namespace SerialLoops.Editors
                 }
             }
 
-            ScriptEditor.DrawText(
+            Shared.DrawText(
                 _subtitle,
                 canvas,
                 DialogueScriptParameter.Paint00, 

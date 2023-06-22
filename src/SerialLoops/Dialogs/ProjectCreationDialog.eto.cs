@@ -176,7 +176,7 @@ namespace SerialLoops
                 ProgressDialog _ = new(() => 
                 {
                     ((IProgressTracker)tracker).Focus("Creating Project", 1);
-                    IO.OpenRom(NewProject, romPath, tracker);
+                    IO.OpenRom(NewProject, romPath, Log, tracker);
                     tracker.Finished++;
                     NewProject.Load(Config, Log, tracker);
                 }, Close, tracker, "Creating Project");
