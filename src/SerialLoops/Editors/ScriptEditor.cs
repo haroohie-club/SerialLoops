@@ -1581,6 +1581,15 @@ namespace SerialLoops.Editors
                         }
                         for (int i = 0; i < commands.Count; i++)
                         {
+                            if (commands[i].Verb == CommandVerb.OP_MODE)
+                            {
+                                // Kyon auto-added by OP_MODE command
+                                ChibiItem chibi = ((ChibiItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Chibi && ((ChibiItem)i).ChibiIndex == 1));
+                                if (!chibis.Contains(chibi))
+                                {
+                                    chibis.Add(chibi);
+                                }
+                            }
                             if (commands[i].Verb == CommandVerb.CHIBI_ENTEREXIT)
                             {
                                 if (((ChibiEnterExitScriptParameter)commands[i].Parameters[1]).Mode == ChibiEnterExitScriptParameter.ChibiEnterExitType.ENTER)
@@ -1630,14 +1639,14 @@ namespace SerialLoops.Editors
                         }
 
                         int chibiStartX, chibiY;
-                        if (commands.Any(c => c.Verb == EventFile.CommandVerb.OP_MODE))
+                        if (commands.Any(c => c.Verb == CommandVerb.OP_MODE))
                         {
                             chibiStartX = 100;
                             chibiY = 50;
                         }
                         else
                         {
-                            chibiStartX = 44;
+                            chibiStartX = 80;
                             chibiY = 100;
                         }
                         int chibiCurrentX = chibiStartX;
@@ -1646,8 +1655,16 @@ namespace SerialLoops.Editors
                         {
                             SKBitmap chibiFrame = chibi.ChibiAnimations.First().Value.ElementAt(0).Frame;
                             canvas.DrawBitmap(chibiFrame, new SKPoint(chibiCurrentX, chibiY));
-                            chibiWidth = chibiFrame.Width - 10;
-                            chibiCurrentX += chibiWidth;
+                            chibiWidth = chibiFrame.Width - 16;
+                            if (chibiY == 50)
+                            {
+                                chibiY = 100;
+                                chibiCurrentX = 80;
+                            }
+                            else
+                            {
+                                chibiCurrentX += chibiWidth;
+                            }
                         }
 
                         // Draw top screen chibi emotes
