@@ -105,7 +105,7 @@ namespace SerialLoops.Editors
                     {
                         subtitleBox.Text = voiceMapStruct.Subtitle;
                     }
-                    _subtitle = subtitleBox.Text;
+                    _subtitle = _project.LangCode != "ja" ? subtitleBox.Text.GetOriginalString(_project) : subtitleBox.Text;
 
                     screenSelector.SelectedScreen = voiceMapStruct.TargetScreen == VoiceMapFile.VoiceMapStruct.Screen.TOP 
                         ? ScreenScriptParameter.DsScreen.TOP : ScreenScriptParameter.DsScreen.BOTTOM;
@@ -173,6 +173,8 @@ namespace SerialLoops.Editors
                     }
                 });
             }
+
+            UpdatePreview();
             
             return new TableLayout(
                 new TableRow(new TableLayout(
