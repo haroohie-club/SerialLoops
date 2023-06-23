@@ -276,7 +276,7 @@ namespace SerialLoops.Editors
         private void DeleteButton_Click(object sender, EventArgs e)
         {
             int selectedIndex = _commandsPanel.Viewer.SelectedIndex;
-            if (selectedIndex <= 0 || selectedIndex >= _scenario.Scenario.Commands.Count) return;
+            if (selectedIndex < 0 || selectedIndex >= _scenario.Scenario.Commands.Count) return;
 
             _scenario.Scenario.Commands.RemoveAt(selectedIndex);
             _scenario.ScenarioCommands.RemoveAt(selectedIndex);
@@ -295,8 +295,8 @@ namespace SerialLoops.Editors
             );
             if (result != DialogResult.Ok) return;
 
-            _scenario.Scenario.Commands.RemoveRange(1, _scenario.Scenario.Commands.Count - 1);
-            _scenario.ScenarioCommands.RemoveRange(1, _scenario.ScenarioCommands.Count - 1);
+            _scenario.Scenario.Commands.Clear();
+            _scenario.ScenarioCommands.Clear();
 
             RefreshCommands();
             UpdateTabTitle(false);
