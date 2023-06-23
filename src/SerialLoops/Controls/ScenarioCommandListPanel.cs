@@ -15,6 +15,7 @@ namespace SerialLoops.Controls
             get => _commands;
             set
             {
+                // Prevents duplicate commands from being added
                 if (_alreadySetting)
                 {
                     return;
