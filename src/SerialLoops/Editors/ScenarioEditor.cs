@@ -297,6 +297,8 @@ namespace SerialLoops.Editors
 
             _scenario.Scenario.Commands.Clear();
             _scenario.ScenarioCommands.Clear();
+            _scenario.Scenario.Commands.Add(new(ScenarioVerb.NEW_GAME, 1));
+            _scenario.ScenarioCommands.Add((ScenarioVerb.NEW_GAME, "1"));
 
             RefreshCommands();
             UpdateTabTitle(false);
