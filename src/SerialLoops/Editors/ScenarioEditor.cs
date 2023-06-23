@@ -295,8 +295,10 @@ namespace SerialLoops.Editors
             );
             if (result != DialogResult.Ok) return;
 
+            _commandsPanel.IgnoreCommandsUpdates = true;
             _scenario.Scenario.Commands.Clear();
             _scenario.ScenarioCommands.Clear();
+            _commandsPanel.IgnoreCommandsUpdates = false;
             _scenario.Scenario.Commands.Add(new(ScenarioVerb.NEW_GAME, 1));
             _scenario.ScenarioCommands.Add((ScenarioVerb.NEW_GAME, "1"));
 

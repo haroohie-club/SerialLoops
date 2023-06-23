@@ -9,26 +9,30 @@ namespace SerialLoops.Controls
 {
     public class ScenarioCommandListPanel : Panel
     {
+        public bool IgnoreCommandsUpdates { get; set; } = false;
         public List<(ScenarioVerb Verb, string Parameter)> Commands
         {
             get => _commands;
             set
             {
                 _commands = value;
-                int selectedIndex = -1;
-                if (Viewer is not null)
+                if (!IgnoreCommandsUpdates)
                 {
-                    selectedIndex = Viewer.SelectedIndex;
-                    Viewer.Items.Clear();
-                    Viewer.Items.AddRange(_commands.Select(c => new ListItem { Text = $"{c.Verb} {c.Parameter}" }));
-                    if (selectedIndex < 0)
+                    int selectedIndex = -1;
+                    if (Viewer is not null)
                     {
-                        selectedIndex = 0;
-                    }
-                    if (_commands.Count > selectedIndex)
-                    {
-                        Viewer.SelectedIndex = selectedIndex;
-                        Viewer.Focus();
+                        selectedIndex = Viewer.SelectedIndex;
+                        Viewer.Items.Clear();
+                        Viewer.Items.AddRange(_commands.Select(c => new ListItem { Text = $"{c.Verb} {c.Parameter}" }));
+                        if (selectedIndex < 0)
+                        {
+                            selectedIndex = 0;
+                        }
+                        if (_commands.Count > selectedIndex)
+                        {
+                            Viewer.SelectedIndex = selectedIndex;
+                            Viewer.Focus();
+                        }
                     }
                 }
             }
