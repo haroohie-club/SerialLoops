@@ -101,6 +101,20 @@ namespace SerialLoops.Editors
                 outlineCheckBox.Enabled = false;
             }
 
+            NumericStepper voiceFontStepper = new()
+            {
+                Value = _character.MessageInfo.VoiceFont,
+                MinValue = 0,
+                MaxValue = short.MaxValue,
+                DecimalPlaces = 0,
+            };
+            voiceFontStepper.ValueChanged += (sender, args) =>
+            {
+                _character.MessageInfo.VoiceFont = (short)voiceFontStepper.Value;
+                _project.MessInfo.MessageInfos.FirstOrDefault(m => _character.MessageInfo.Character == m.Character).VoiceFont = (short)voiceFontStepper.Value;
+                UpdateTabTitle(false);
+            };
+
             return new StackLayout
             {
                 Spacing = 5,
@@ -138,7 +152,7 @@ namespace SerialLoops.Editors
                         }
                     }),
                     nameplatePreviewLayout,
-                    ControlGenerator.GetControlWithLabel("Voice Font", new NumericStepper { Value = _character.MessageInfo.VoiceFont, Enabled = false }),
+                    ControlGenerator.GetControlWithLabel("Voice Font", voiceFontStepper),
                     ControlGenerator.GetControlWithLabel("Text Timer", new NumericStepper { Value = _character.MessageInfo.TextTimer, Enabled = false }),
                 },
             };

@@ -596,6 +596,7 @@ namespace SerialLoops
 
             IEnumerable<ItemDescription> unsavedItems = OpenProject.Items.Where(i => i.UnsavedChanges);
             bool savedExtra = false;
+            bool savedMessInfo = false;
             bool changedNameplates = false;
             bool changedTopics = false;
             bool changedSubs = false;
@@ -622,18 +623,25 @@ namespace SerialLoops
                         {
                             Shared.RenameItem(characterItem, OpenProject, ItemExplorer, EditorTabs, Log,
                                 $"CHR_{characterItem.NameplateProperties.Name}");
+
+                            nameplateCanvas.DrawBitmap(
+                                characterItem.GetNewNameplate(_blankNameplate, _blankNameplateBaseArrow, OpenProject),
+                                new SKRect(0, 16 * ((int)characterItem.MessageInfo.Character - 1), 64,
+                                    16 * ((int)characterItem.MessageInfo.Character)));
+                            speakerCanvas.DrawBitmap(
+                                characterItem.GetNewNameplate(_blankNameplate, _blankNameplateBaseArrow, OpenProject,
+                                    transparent: true),
+                                new SKRect(0, 16 * ((int)characterItem.MessageInfo.Character - 1), 64,
+                                    16 * ((int)characterItem.MessageInfo.Character)));
+                            changedNameplates = true;
                         }
 
-                        nameplateCanvas.DrawBitmap(
-                            characterItem.GetNewNameplate(_blankNameplate, _blankNameplateBaseArrow, OpenProject),
-                            new SKRect(0, 16 * ((int)characterItem.MessageInfo.Character - 1), 64,
-                                16 * ((int)characterItem.MessageInfo.Character)));
-                        speakerCanvas.DrawBitmap(
-                            characterItem.GetNewNameplate(_blankNameplate, _blankNameplateBaseArrow, OpenProject,
-                                transparent: true),
-                            new SKRect(0, 16 * ((int)characterItem.MessageInfo.Character - 1), 64,
-                                16 * ((int)characterItem.MessageInfo.Character)));
-                        changedNameplates = true;
+                        if (!savedMessInfo)
+                        {
+                            IO.WriteStringFile(Path.Combine("assets", "data", $"{OpenProject.MessInfo.Index:X3}.s"),
+                                OpenProject.MessInfo.GetSource(new()), OpenProject, Log);
+                            savedMessInfo = true;
+                        }
                         break;
                     case ItemDescription.ItemType.BGM:
                         if (!savedExtra)
