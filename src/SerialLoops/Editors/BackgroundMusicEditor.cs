@@ -50,7 +50,7 @@ namespace SerialLoops.Editors
             loopSettingsButton.Click += (obj, args) =>
             {
                 BgmPlayer.Stop();
-                LoopyProgressTracker tracker = new();
+                LoopyProgressTracker tracker = new("Adjusting Loop Info");
                 if (!File.Exists(_bgmCachedFile))
                 {
                     _ = new ProgressDialog(() => WaveFileWriter.CreateWaveFile(_bgmCachedFile, _bgm.GetWaveProvider(_log, false)), () => { }, tracker, "Caching BGM");
@@ -88,7 +88,7 @@ namespace SerialLoops.Editors
             volumeSettingsButton.Click += (obj, args) =>
             {
                 BgmPlayer.Stop();
-                LoopyProgressTracker tracker = new();
+                LoopyProgressTracker tracker = new("Adjusting Volume");
                 if (!File.Exists(_bgmCachedFile))
                 {
                     _ = new ProgressDialog(() => WaveFileWriter.CreateWaveFile(_bgmCachedFile, _bgm.GetWaveProvider(_log, false)), () => { }, tracker, "Caching BGM");
@@ -147,7 +147,7 @@ namespace SerialLoops.Editors
                 openFileDialog.Filters.Add(new() { Name = "Vorbis files", Extensions = new string[] { ".ogg" } });
                 if (openFileDialog.ShowAndReportIfFileSelected(this))
                 {
-                    LoopyProgressTracker tracker = new();
+                    LoopyProgressTracker tracker = new("Replacing BGM");
                     BgmPlayer.Stop();
                     Shared.AudioReplacementCancellation.Cancel();
                     Shared.AudioReplacementCancellation = new();
