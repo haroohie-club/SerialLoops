@@ -1804,6 +1804,7 @@ namespace SerialLoops.Editors
                     Dictionary<CharacterItem, PositionedSprite> sprites = new();
                     Dictionary<CharacterItem, PositionedSprite> previousSprites = new();
 
+                    CharacterItem previousCharacter = null;
                     ScriptItemCommand previousCommand = null;
                     foreach (ScriptItemCommand command in commands)
                     {
@@ -1876,9 +1877,11 @@ namespace SerialLoops.Editors
                                     return;
                                 }
                                 SpriteEntranceScriptParameter spriteEntranceParam = (SpriteEntranceScriptParameter)command.Parameters[2];
+                                SpriteShakeScriptParameter spriteShakeParam = (SpriteShakeScriptParameter)command.Parameters[4];
                                 short layer = ((ShortScriptParameter)command.Parameters[9]).Value;
 
-                                if (!sprites.ContainsKey(character) && spriteEntranceParam.EntranceTransition != SpriteEntranceScriptParameter.SpriteEntranceTransition.NO_TRANSITION)
+                                bool spriteIsNew = !sprites.ContainsKey(character);
+                                if (spriteIsNew && spriteEntranceParam.EntranceTransition != SpriteEntranceScriptParameter.SpriteEntranceTransition.NO_TRANSITION)
                                 {
                                     sprites.Add(character, new());
                                     previousSprites.Add(character, new());
@@ -1891,10 +1894,17 @@ namespace SerialLoops.Editors
                                 {
                                     switch (spriteEntranceParam.EntranceTransition)
                                     {
-                                        case SpriteEntranceScriptParameter.SpriteEntranceTransition.FADE_TO_CENTER:
+                                        // These ones will do their thing no matter what
                                         case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_CENTER:
                                         case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_CENTER:
                                             sprites[character] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.CENTER, Layer = layer }, PalEffect = spritePaint };
+                                            break;
+
+                                        case SpriteEntranceScriptParameter.SpriteEntranceTransition.FADE_TO_CENTER:
+                                            if (spriteIsNew)
+                                            {
+                                                sprites[character] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.CENTER, Layer = layer }, PalEffect = spritePaint };
+                                            }
                                             break;
 
                                         case SpriteEntranceScriptParameter.SpriteEntranceTransition.FADE_IN_LEFT:
@@ -1902,13 +1912,27 @@ namespace SerialLoops.Editors
                                         case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_LEFT:
                                         case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_LEFT_FAST:
                                         case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_LEFT_SLOW:
-                                            sprites[character] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.LEFT, Layer = layer }, PalEffect = spritePaint };
+                                            if (spriteIsNew)
+                                            {
+                                                sprites[character] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.LEFT, Layer = layer }, PalEffect = spritePaint };
+                                            }
+                                            else if (previousCharacter != character && (spriteEntranceParam.EntranceTransition == SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_LEFT_FAST))
+                                            {
+                                                sprites[character] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.CENTER, Layer = layer }, PalEffect = spritePaint };
+                                            }
                                             break;
 
                                         case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_RIGHT:
                                         case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_RIGHT_FAST:
                                         case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_RIGHT_SLOW:
-                                            sprites[character] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.RIGHT, Layer = layer }, PalEffect = spritePaint };
+                                            if (spriteIsNew)
+                                            {
+                                                sprites[character] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.RIGHT, Layer = layer }, PalEffect = spritePaint };
+                                            }
+                                            else if (previousCharacter != character && (spriteEntranceParam.EntranceTransition == SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_RIGHT_FAST))
+                                            {
+                                                sprites[character] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.CENTER, Layer = layer }, PalEffect = spritePaint };
+                                            }
                                             break;
                                     }
                                 }
@@ -1916,6 +1940,28 @@ namespace SerialLoops.Editors
                                 {
                                     sprites[character] = new() { Sprite = spriteParam.Sprite, Positioning = sprites[character].Positioning, PalEffect = spritePaint };
                                 }
+
+                                if (spriteShakeParam.ShakeEffect != SpriteShakeScriptParameter.SpriteShakeEffect.NONE && sprites.ContainsKey(character))
+                                {
+                                    switch (spriteShakeParam.ShakeEffect)
+                                    {
+                                        case SpriteShakeScriptParameter.SpriteShakeEffect.SHAKE_LEFT:
+                                            sprites[character] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.LEFT, Layer = layer }, PalEffect = spritePaint };
+                                            break;
+
+                                        case SpriteShakeScriptParameter.SpriteShakeEffect.SHAKE_RIGHT:
+                                            sprites[character] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.RIGHT, Layer = layer }, PalEffect = spritePaint };
+                                            break;
+
+                                        case SpriteShakeScriptParameter.SpriteShakeEffect.SHAKE_CENTER:
+                                        case SpriteShakeScriptParameter.SpriteShakeEffect.BOUNCE_HORIZONTAL_CENTER:
+                                        case SpriteShakeScriptParameter.SpriteShakeEffect.BOUNCE_HORIZONTAL_CENTER_WITH_SMALL_SHAKES:
+                                            sprites[character] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.CENTER, Layer = layer }, PalEffect = spritePaint };
+                                            break;
+                                    }
+                                }
+
+                                previousCharacter = character;
                             }
                         }
                         else if (command.Verb == CommandVerb.INVEST_START)
@@ -2207,7 +2253,7 @@ namespace SerialLoops.Editors
             _log.Log($"Attempting to modify dialogue property in parameter {dropDown.ParameterIndex} to dialogue {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
             ((DialoguePropertyScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Character = character;
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)].Objects[dropDown.Command.Index]
-                .Parameters[dropDown.ParameterIndex] = (short)_project.MessInfo.MessageInfos.IndexOf(character.MessageInfo);
+                .Parameters[dropDown.ParameterIndex] = (short)_project.MessInfo.MessageInfos.FindIndex(m => m.Character == character.MessageInfo.Character);
             UpdateTabTitle(false, dropDown);
         }
         private void EpHeaderDropDown_SelectedKeyChanged(object sender, EventArgs e)
