@@ -14,11 +14,14 @@ using SkiaSharp;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace SerialLoops.Utility
 {
     public static class Shared
     {
+        public static CancellationTokenSource AudioReplacementCancellation { get; set; } = new();
+
         public static void RenameItem(Project project, ItemExplorerPanel explorer, EditorTabsPanel tabs, ILogger log, bool overrideRename = false)
         {
             ItemDescription item = project.FindItem(explorer.Viewer.SelectedItem?.Text);
