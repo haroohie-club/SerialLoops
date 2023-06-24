@@ -103,6 +103,7 @@ namespace SerialLoops.Lib.Items
             }
             if (audio.WaveFormat.SampleRate > SoundItem.MAX_SAMPLERATE)
             {
+                tracker.Focus("Downsampling...", 1);
                 string newAudioFile = string.Empty;
                 try
                 {
@@ -115,6 +116,8 @@ namespace SerialLoops.Lib.Items
                     log.LogException("Failed downsampling audio file.", ex);
                     return;
                 }
+                tracker.Finished++;
+                tracker.Focus("Encoding", 1);
                 try
                 {
                     log.Log($"Encoding audio to ADX...");
@@ -126,9 +129,11 @@ namespace SerialLoops.Lib.Items
                     log.LogException("Failed encoding audio file to ADX.", ex);
                     return;
                 }
+                tracker.Finished++;
             }
             else
             {
+                tracker.Focus("Encoding", 1);
                 try
                 {
                     log.Log($"Encoding audio to ADX...");
@@ -139,8 +144,11 @@ namespace SerialLoops.Lib.Items
                     log.LogException("Failed encoding audio file to ADX.", ex);
                     return;
                 }
+                tracker.Finished++;
             }
+            tracker.Focus("Caching", 2);
             File.Copy(Path.Combine(baseDirectory, BgmFile), Path.Combine(iterativeDirectory, BgmFile), true);
+            tracker.Finished++;
             if (!string.Equals(audioFile, bgmCachedFile))
             {
                 try
@@ -161,6 +169,7 @@ namespace SerialLoops.Lib.Items
                     log.LogException("Failed attempting to cache audio file", ex);
                 }
             }
+            tracker.Finished++;
         }
 
         public IWaveProvider GetWaveProvider(ILogger log, bool loop)
