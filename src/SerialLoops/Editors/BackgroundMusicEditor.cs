@@ -1,5 +1,5 @@
 ﻿using Eto.Forms;
-using HaruhiChokuretsuLib.Audio;
+using HaruhiChokuretsuLib.Audio.ADX;
 using HaruhiChokuretsuLib.Util;
 using NAudio.Wave;
 using SerialLoops.Controls;
