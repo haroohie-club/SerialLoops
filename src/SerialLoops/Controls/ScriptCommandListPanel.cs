@@ -4,6 +4,7 @@ using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Editors;
 using SerialLoops.Lib.Script;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -17,7 +18,14 @@ namespace SerialLoops.Controls
             set
             {
                 _commands = value;
-                Viewer?.SetContents(GetSections(), _expandItems);
+                try
+                {
+                    Viewer?.SetContents(GetSections(), _expandItems);
+                }
+                catch (Exception ex)
+                {
+                    _log.LogException("Failed to set script command list panel section content.", ex);
+                }
             }
         }
         public ScriptCommandSectionTreeGridView Viewer { get; private set; }
@@ -40,7 +48,14 @@ namespace SerialLoops.Controls
 
         void InitializeComponent()
         {
-            Viewer = new ScriptCommandSectionTreeGridView(GetSections(), _editor, _size, _expandItems, _log);
+            try
+            {
+                Viewer = new ScriptCommandSectionTreeGridView(GetSections(), _editor, _size, _expandItems, _log);
+            }
+            catch (Exception ex)
+            {
+                _log.LogException("Failed to set viewr contents for script command list panel.", ex);
+            }
             MinimumSize = _size;
             Padding = 0;
             Content = new TableLayout(Viewer.Control);
@@ -158,16 +173,7 @@ namespace SerialLoops.Controls
 
         private IEnumerable<ScriptCommandSectionEntry> GetSections()
         {
-            foreach (ScriptSection section in Commands.Keys)
-            {
-                List<ScriptCommandSectionEntry> commands = new();
-                foreach (ScriptItemCommand command in Commands[section])
-                {
-                    commands.Add(new(command));
-                }
-                ScriptCommandSectionEntry s = new(section, commands, Commands.Values.First().First().Script);
-            }
-            return Commands.Select(s => new ScriptCommandSectionEntry(s.Key, s.Value.Select(c => new ScriptCommandSectionEntry(c)), Commands.Values.First().First().Script));
+            return Commands.Select(s => new ScriptCommandSectionEntry(s.Key, s.Value.Select(c => new ScriptCommandSectionEntry(c)), Commands.Values.First().FirstOrDefault().Script));
         }
     }
 }
