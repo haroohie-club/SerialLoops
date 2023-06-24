@@ -242,16 +242,24 @@ stages:
           ${{ parameters.releaseNotes }}
 
           ## Installation Notes
-          On macOS, after dragging the app from the dmg into Applications, please run `xattr -cr /Applications/SerialLoops.Mac.app` from the Terminal in order to be able to run the app. This is required because we currently don't codesign the application, meaning macOS will refuse to run it without explicit approval from you.
+          Please ensure you have installed [devkitARM from devkitPro](https://devkitpro.org/wiki/Getting_Started) before using the program. Select the NDS Development workload when installing to do this.
 
+          Additionally, to test the game you will need to have a Nintendo DS emulator installed. We recommend [melonDS](https://melonds.kuribo64.net/) for its accuracy.
+
+          ### Windows
+          There is currently no Windows installer; instead, you simply download the zip and run the application directly. Because our application contacts GitHub's servers to check for new releases on lauch, it is possible it will get flagged by
+          firewall software &ndash; please allow it through so it can function correctly.
+
+          ### macOS
+          On macOS, after dragging the app from the dmg into Applications, please run `xattr -cr /Applications/SerialLoops.Mac.app` from the Terminal in order to be able to run the app. This is required because we currently don't codesign the application, meaning macOS will refuse to run it without explicit approval from you.
+          
+          #### Which macOS dmg should I choose?
+          If your Mac is newer, you will probably want the ARM dmg. If it is older, you will want the x64 one. If unsure, download the ARM one first and attempt to run it &ndash; it will throw an error saying it can't be run on this computer if your computer is not able to run it. If that's the case, download the x64 one instead.
+
+          ### Linux
           The `.deb` package is intended for Debian-based distros (e.g. Ubuntu). Install it with `sudo apt install -f ./SerialLoops-$(Version)_amd64.deb`.
           The `.rpm` package is intended for Red Hat distros (e.g. Fedora). Install it with `sudo dnf install ./SerialLoops-$(Version)-1.fc38.x86_64.rpm`.
           For other Linux distros, please use the binaries packaged in the `.tar.gz` archive; when doing so, ensure you install the OpenAL binaries so audio playback works.
-
-          Please ensure you have installed [devkitARM from devkitPro](https://devkitpro.org/wiki/Getting_Started) before using the program.
-
-          ### Which macOS dmg should I choose?
-          If your Mac is newer, you will probably want the ARM dmg. If it is older, you will want the x64 one. If unsure, download the ARM one first and attempt to run it &ndash; it will throw an error saying it can't be run on this computer if your computer is not able to run it. If that's the case, download the x64 one instead.
         ${{ if eq(parameters['version'], '') }}:
           isPreRelease: true
         ${{ if ne(parameters['version'], '') }}:
