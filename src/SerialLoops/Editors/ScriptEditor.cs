@@ -1296,7 +1296,7 @@ namespace SerialLoops.Editors
                             break;
 
                         case ScriptParameter.ParameterType.SFX:
-                            ScriptCommandNumericStepper sfxNumericStepper = new() { Command = command, ParameterIndex = i, Value = ((SfxScriptParameter)parameter).SfxIndex };
+                            ScriptCommandNumericStepper sfxNumericStepper = new() { Command = command, ParameterIndex = i, Value = ((SfxScriptParameter)parameter).SfxIndex, MinValue = 0, MaxValue = 241, DecimalPlaces = 0 };
                             sfxNumericStepper.ValueChanged += SfxNumericStepper_ValueChanged;
                             ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
                                 ControlGenerator.GetControlWithLabel(parameter.Name, sfxNumericStepper));
@@ -1322,6 +1322,15 @@ namespace SerialLoops.Editors
                                 DecimalPlaces = 0,
                                 Value = ((ShortScriptParameter)parameter).Value
                             };
+                            if (parameter.Name.Contains("Frames"))
+                            {
+                                shortNumericStepper.MinValue = 0;
+                            }
+                            if (parameter.Name.Contains("Volume"))
+                            {
+                                shortNumericStepper.MinValue = 0;
+                                shortNumericStepper.MaxValue = 100;
+                            }
                             if (command.Verb == CommandVerb.SND_PLAY && parameter.Name == "Crossfade Time (Frames)")
                             {
                                 shortNumericStepper.SecondIndex = 4;
