@@ -448,6 +448,10 @@ namespace SerialLoops.Editors
 
             availableChibisBox.MouseDoubleClick += (o, args) =>
             {
+                if (allChibis.Count == usedChibis.Count)
+                {
+                    return;
+                }
                 IListItem chibiSelected = (IListItem)availableChibisBox.SelectedValue;
                 availableChibisBox.Items.Remove(chibiSelected);
                 usedChibisBox.Items.Add(chibiSelected);
@@ -457,6 +461,10 @@ namespace SerialLoops.Editors
             };
             usedChibisBox.MouseDoubleClick += (o, args) =>
             {
+                if (!usedChibis.Any())
+                {
+                    return;
+                }
                 IListItem chibiSelected = (IListItem)usedChibisBox.SelectedValue;
                 usedChibisBox.Items.Remove(chibiSelected);
                 availableChibisBox.Items.Add(chibiSelected);
