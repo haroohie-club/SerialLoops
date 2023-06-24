@@ -9,16 +9,23 @@ namespace SerialLoops.Controls
 {
     public class ScenarioCommandListPanel : Panel
     {
+        private bool _alreadySetting = false;
         public List<(ScenarioVerb Verb, string Parameter)> Commands
         {
             get => _commands;
             set
             {
+                // Prevents duplicate commands from being added
+                if (_alreadySetting)
+                {
+                    return;
+                }
+
+                _alreadySetting = true;
                 _commands = value;
-                int selectedIndex = -1;
                 if (Viewer is not null)
                 {
-                    selectedIndex = Viewer.SelectedIndex;
+                    int selectedIndex = Viewer.SelectedIndex;
                     Viewer.Items.Clear();
                     Viewer.Items.AddRange(_commands.Select(c => new ListItem { Text = $"{c.Verb} {c.Parameter}" }));
                     if (selectedIndex < 0)
@@ -30,7 +37,12 @@ namespace SerialLoops.Controls
                         Viewer.SelectedIndex = selectedIndex;
                         Viewer.Focus();
                     }
+                    else
+                    {
+                        Viewer.SelectedIndex = -1;
+                    }
                 }
+                _alreadySetting = false;
             }
         }
         public ListBox Viewer { get; private set; }
