@@ -4,6 +4,7 @@ using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Editors;
 using SerialLoops.Lib.Script;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -17,7 +18,14 @@ namespace SerialLoops.Controls
             set
             {
                 _commands = value;
-                Viewer?.SetContents(GetSections(), _expandItems);
+                try
+                {
+                    Viewer?.SetContents(GetSections(), _expandItems);
+                }
+                catch (Exception ex)
+                {
+                    _log.LogException("Failed to set script command list panel section content.", ex);
+                }
             }
         }
         public ScriptCommandSectionTreeGridView Viewer { get; private set; }
@@ -40,7 +48,14 @@ namespace SerialLoops.Controls
 
         void InitializeComponent()
         {
-            Viewer = new ScriptCommandSectionTreeGridView(GetSections(), _editor, _size, _expandItems, _log);
+            try
+            {
+                Viewer = new ScriptCommandSectionTreeGridView(GetSections(), _editor, _size, _expandItems, _log);
+            }
+            catch (Exception ex)
+            {
+                _log.LogException("Failed to set viewr contents for script command list panel.", ex);
+            }
             MinimumSize = _size;
             Padding = 0;
             Content = new TableLayout(Viewer.Control);
@@ -90,30 +105,37 @@ namespace SerialLoops.Controls
             Viewer.DeleteCommand += (o, e) =>
             {
                 var treeGridView = (ScriptCommandSectionTreeGridView)o;
-                
-                if (e.Item.Text.StartsWith("NONE") || e.Item.Text.StartsWith("SCRIPT"))
+                try
                 {
-                    e.Item.Script.ScriptSections.Remove(e.Item.Script.ScriptSections.First(s => s.Name.Replace("/", "") == e.Item.Text));
-                    LabelsSectionEntry label = e.Item.Script.LabelsSection.Objects.FirstOrDefault(l => l.Name.Replace("/", "") == e.Item.Text);
-                    if (label is not null)
+                    if (e.Item.Text.StartsWith("NONE") || e.Item.Text.StartsWith("SCRIPT"))
                     {
-                        e.Item.Script.LabelsSection.Objects.Remove(label);
+                        e.Item.Script.ScriptSections.Remove(e.Item.Script.ScriptSections.First(s => s.Name.Replace("/", "") == e.Item.Text));
+                        LabelsSectionEntry label = e.Item.Script.LabelsSection.Objects.FirstOrDefault(l => l.Name.Replace("/", "") == e.Item.Text);
+                        if (label is not null)
+                        {
+                            e.Item.Script.LabelsSection.Objects.Remove(label);
+                        }
+                        e.Item.Script.NumSections--;
                     }
-                    e.Item.Script.NumSections--;
+                    else
+                    {
+                        ScriptCommandInvocation command = e.Item.Command.Script.ScriptSections[e.Item.Command.Script.ScriptSections.IndexOf(e.Item.Command.Section)]
+                            .Objects[e.Item.Command.Index];
+                        for (int i = e.Item.Command.Section.Objects.IndexOf(command); i < e.Item.Command.Section.Objects.Count; i++)
+                        {
+                            _commands[e.Item.Command.Section][i].Index--;
+                        }
+                        e.Item.Command.Section.Objects.Remove(command);
+                        _commands[e.Item.Command.Section].Remove(e.Item.Command);
+                    }
+                    ((ScriptEditor)_editor).PopulateScriptCommands(true);
+                        _editor.UpdateTabTitle(false);
                 }
-                else
+                catch (Exception ex)
                 {
-                    ScriptCommandInvocation command = e.Item.Command.Script.ScriptSections[e.Item.Command.Script.ScriptSections.IndexOf(e.Item.Command.Section)]
-                        .Objects[e.Item.Command.Index];
-                    for (int i = e.Item.Command.Section.Objects.IndexOf(command); i < e.Item.Command.Section.Objects.Count; i++)
-                    {
-                        _commands[e.Item.Command.Section][i].Index--;
-                    }
-                    e.Item.Command.Section.Objects.Remove(command);
-                    _commands[e.Item.Command.Section].Remove(e.Item.Command);
+                    // Don't log exception here as we want to fail silently
+                    _log.LogWarning($"Failed to delete command or section: {ex.Message}\n\n{ex.StackTrace}");
                 }
-                ((ScriptEditor)_editor).PopulateScriptCommands(true);
-                _editor.UpdateTabTitle(false);
             };
             Viewer.AddCommand += (o, e) =>
             {
@@ -158,16 +180,7 @@ namespace SerialLoops.Controls
 
         private IEnumerable<ScriptCommandSectionEntry> GetSections()
         {
-            foreach (ScriptSection section in Commands.Keys)
-            {
-                List<ScriptCommandSectionEntry> commands = new();
-                foreach (ScriptItemCommand command in Commands[section])
-                {
-                    commands.Add(new(command));
-                }
-                ScriptCommandSectionEntry s = new(section, commands, Commands.Values.First().First().Script);
-            }
-            return Commands.Select(s => new ScriptCommandSectionEntry(s.Key, s.Value.Select(c => new ScriptCommandSectionEntry(c)), Commands.Values.First().First().Script));
+            return Commands.Select(s => new ScriptCommandSectionEntry(s.Key, s.Value.Select(c => new ScriptCommandSectionEntry(c)), Commands.Values.First().FirstOrDefault().Script));
         }
     }
 }

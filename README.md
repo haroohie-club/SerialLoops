@@ -30,7 +30,10 @@ Documentation for how to use Serial Loops can be found on [our website](https://
 
 ## Installation
 ### Prerequisites
-#### Installing devKitARM
+#### A Nintendo DS Emulator
+To test the game easily, you will want to have a Nintendo DS emulator installed. We recommend using [melonDS](https://melonds.kuribo64.net/) for its accuracy.
+
+#### Installing devkitARM
 [devkitARM](https://devkitpro.org/wiki/Getting_Started) is required to use Serial Loops on all platforms.
 
 * Using the Windows graphical installer, you can simply select the devkitARM (Nintendo DS) workloads
