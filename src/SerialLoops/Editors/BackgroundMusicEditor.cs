@@ -1,5 +1,5 @@
 ﻿using Eto.Forms;
-using HaruhiChokuretsuLib.Audio;
+using HaruhiChokuretsuLib.Audio.ADX;
 using HaruhiChokuretsuLib.Util;
 using NAudio.Wave;
 using SerialLoops.Controls;
@@ -50,7 +50,7 @@ namespace SerialLoops.Editors
             loopSettingsButton.Click += (obj, args) =>
             {
                 BgmPlayer.Stop();
-                LoopyProgressTracker tracker = new();
+                LoopyProgressTracker tracker = new("Adjusting Loop Info");
                 if (!File.Exists(_bgmCachedFile))
                 {
                     _ = new ProgressDialog(() => WaveFileWriter.CreateWaveFile(_bgmCachedFile, _bgm.GetWaveProvider(_log, false)), () => { }, tracker, "Caching BGM");
@@ -68,9 +68,11 @@ namespace SerialLoops.Editors
                         _loopEndSample = loopDialog.LoopPreview.EndSample;
                         LoopyProgressTracker tracker = new();
                         BgmPlayer.Stop();
+                        Shared.AudioReplacementCancellation.Cancel();
+                        Shared.AudioReplacementCancellation = new();
                         _ = new ProgressDialog(() =>
                         {
-                            _bgm.Replace(_bgmCachedFile, _project.BaseDirectory, _project.IterativeDirectory, _bgmCachedFile, _loopEnabled, _loopStartSample, _loopEndSample, _log);
+                            _bgm.Replace(_bgmCachedFile, _project.BaseDirectory, _project.IterativeDirectory, _bgmCachedFile, _loopEnabled, _loopStartSample, _loopEndSample, _log, tracker, Shared.AudioReplacementCancellation.Token);
                             reader.Dispose();
                             File.Delete(loopAdjustedWav);
                         },
@@ -86,7 +88,7 @@ namespace SerialLoops.Editors
             volumeSettingsButton.Click += (obj, args) =>
             {
                 BgmPlayer.Stop();
-                LoopyProgressTracker tracker = new();
+                LoopyProgressTracker tracker = new("Adjusting Volume");
                 if (!File.Exists(_bgmCachedFile))
                 {
                     _ = new ProgressDialog(() => WaveFileWriter.CreateWaveFile(_bgmCachedFile, _bgm.GetWaveProvider(_log, false)), () => { }, tracker, "Caching BGM");
@@ -101,11 +103,13 @@ namespace SerialLoops.Editors
                     {
                         LoopyProgressTracker tracker = new() { Total = 2 };
                         BgmPlayer.Stop();
+                        Shared.AudioReplacementCancellation.Cancel();
+                        Shared.AudioReplacementCancellation = new();
                         _ = new ProgressDialog(() =>
                         {
                             WaveFileWriter.CreateWaveFile(_bgmCachedFile, volumeDialog.VolumePreview.GetWaveProvider(_log, false));
                             tracker.Finished++;
-                            _bgm.Replace(_bgmCachedFile, _project.BaseDirectory, _project.IterativeDirectory, _bgmCachedFile, _loopEnabled, _loopStartSample, _loopEndSample, _log);
+                            _bgm.Replace(_bgmCachedFile, _project.BaseDirectory, _project.IterativeDirectory, _bgmCachedFile, _loopEnabled, _loopStartSample, _loopEndSample, _log, tracker, Shared.AudioReplacementCancellation.Token);
                             tracker.Finished++;
                             reader.Dispose();
                             File.Delete(volumeAdjustedWav);
@@ -143,9 +147,11 @@ namespace SerialLoops.Editors
                 openFileDialog.Filters.Add(new() { Name = "Vorbis files", Extensions = new string[] { ".ogg" } });
                 if (openFileDialog.ShowAndReportIfFileSelected(this))
                 {
-                    LoopyProgressTracker tracker = new();
+                    LoopyProgressTracker tracker = new("Replacing BGM");
                     BgmPlayer.Stop();
-                    _ = new ProgressDialog(() => _bgm.Replace(openFileDialog.FileName, _project.BaseDirectory, _project.IterativeDirectory, _bgmCachedFile, _loopEnabled, _loopStartSample, _loopEndSample, _log), () =>
+                    Shared.AudioReplacementCancellation.Cancel();
+                    Shared.AudioReplacementCancellation = new();
+                    _ = new ProgressDialog(() => _bgm.Replace(openFileDialog.FileName, _project.BaseDirectory, _project.IterativeDirectory, _bgmCachedFile, _loopEnabled, _loopStartSample, _loopEndSample, _log, tracker, Shared.AudioReplacementCancellation.Token), () =>
                     {
                         Content = GetEditorPanel();
                     }, tracker, "Replace BGM track");

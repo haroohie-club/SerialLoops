@@ -13,14 +13,14 @@ namespace SerialLoops.Lib.Script
             switch (Position)
             {
                 case SpritePosition.LEFT:
-                    return new SKPoint(-50, 384 - sprite.Height);
+                    return new SKPoint(-65, 384 - sprite.Height);
 
                 default:
                 case SpritePosition.CENTER:
                     return new SKPoint(0, 384 - sprite.Height);
 
                 case SpritePosition.RIGHT:
-                    return new SKPoint(50, 384 - sprite.Height);
+                    return new SKPoint(65, 384 - sprite.Height);
             }
         }
 

@@ -1,5 +1,5 @@
 ﻿using HaruhiChokuretsuLib.Archive.Event;
-using HaruhiChokuretsuLib.Audio;
+using HaruhiChokuretsuLib.Audio.ADX;
 using HaruhiChokuretsuLib.Util;
 using NAudio.Flac;
 using NAudio.Vorbis;
@@ -10,6 +10,7 @@ using SerialLoops.Lib.Util;
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading;
 
 namespace SerialLoops.Lib.Items
 {
@@ -49,27 +50,46 @@ namespace SerialLoops.Lib.Items
                 .Where(t => t.c.Parameters[0] == Index).ToArray();
         }
 
-        public void Replace(string audioFile, string baseDirectory, string iterativeDirectory, string bgmCachedFile, bool loopEnabled, uint loopStartSample, uint loopEndSample, ILogger log)
+        public void Replace(string audioFile, string baseDirectory, string iterativeDirectory, string bgmCachedFile, bool loopEnabled, uint loopStartSample, uint loopEndSample, ILogger log, IProgressTracker tracker, CancellationToken cancellationToken)
         {
-            // The MP3 reader is able to create wave files but for whatever reason messes with the ADX encoder
-            // So we just convert to WAV AOT
-            if (Path.GetExtension(audioFile).Equals(".mp3", StringComparison.OrdinalIgnoreCase))
+            try
             {
-                string mp3ConvertedFile = Path.Combine(Path.GetDirectoryName(bgmCachedFile), $"{Path.GetFileNameWithoutExtension(bgmCachedFile)}-converted.wav");
-                log.Log($"Converting {audioFile} to WAV...");
-                using Mp3FileReaderBase mp3Reader = new(audioFile, new Mp3FileReaderBase.FrameDecompressorBuilder(wf => new Mp3FrameDecompressor(wf)));
-                WaveFileWriter.CreateWaveFile(mp3ConvertedFile, mp3Reader.ToSampleProvider().ToWaveProvider16());
-                audioFile = mp3ConvertedFile;
+                // The MP3 reader is able to create wave files but for whatever reason messes with the ADX encoder
+                // So we just convert to WAV AOT
+                if (Path.GetExtension(audioFile).Equals(".mp3", StringComparison.OrdinalIgnoreCase))
+                {
+                    string mp3ConvertedFile = Path.Combine(Path.GetDirectoryName(bgmCachedFile), $"{Path.GetFileNameWithoutExtension(bgmCachedFile)}-converted.wav");
+                    log.Log($"Converting {audioFile} to WAV...");
+                    tracker.Focus("Converting from MP3...", 1);
+                    using Mp3FileReaderBase mp3Reader = new(audioFile, new Mp3FileReaderBase.FrameDecompressorBuilder(wf => new Mp3FrameDecompressor(wf)));
+                    WaveFileWriter.CreateWaveFile(mp3ConvertedFile, mp3Reader.ToSampleProvider().ToWaveProvider16());
+                    audioFile = mp3ConvertedFile;
+                    tracker.Finished++;
+                }
+                // Ditto the Vorbis decoder
+                else if (Path.GetExtension(audioFile).Equals(".ogg", StringComparison.OrdinalIgnoreCase))
+                {
+                    string oggConvertedFile = Path.Combine(Path.GetDirectoryName(bgmCachedFile), $"{Path.GetFileNameWithoutExtension(bgmCachedFile)}-converted.wav");
+                    log.Log($"Converting {audioFile} to WAV...");
+                    tracker.Focus("Converting from Vorbis...", 1);
+                    using VorbisWaveReader vorbisReader = new(audioFile);
+                    WaveFileWriter.CreateWaveFile(oggConvertedFile, vorbisReader.ToSampleProvider().ToWaveProvider16());
+                    audioFile = oggConvertedFile;
+                    tracker.Finished++;
+                }
             }
-            // Ditto the Vorbis decoder
-            else if (Path.GetExtension(audioFile).Equals(".ogg", StringComparison.OrdinalIgnoreCase))
+            catch (Exception ex)
             {
-                string oggConvertedFile = Path.Combine(Path.GetDirectoryName(bgmCachedFile), $"{Path.GetFileNameWithoutExtension(bgmCachedFile)}-converted.wav");
-                log.Log($"Converting {audioFile} to WAV...");
-                using VorbisWaveReader vorbisReader = new(audioFile);
-                WaveFileWriter.CreateWaveFile(oggConvertedFile, vorbisReader.ToSampleProvider().ToWaveProvider16());
-                audioFile = oggConvertedFile;
+                log.LogException($"Failed converting audio file to WAV.", ex);
+                return;
             }
+
+            if (cancellationToken.IsCancellationRequested)
+            {
+                log.Log("BGM replacement task canceled.");
+                return;
+            }
+
             using WaveStream audio = Path.GetExtension(audioFile).ToLower() switch
             {
                 ".wav" => new WaveFileReader(audioFile),
@@ -83,32 +103,73 @@ namespace SerialLoops.Lib.Items
             }
             if (audio.WaveFormat.SampleRate > SoundItem.MAX_SAMPLERATE)
             {
-                log.Log($"Downsampling audio from {audio.WaveFormat.SampleRate} to NDS max sample rate {SoundItem.MAX_SAMPLERATE}...");
-                string newAudioFile = Path.Combine(Path.GetDirectoryName(bgmCachedFile), $"{Path.GetFileNameWithoutExtension(bgmCachedFile)}-downsampled.wav");
-                WaveFileWriter.CreateWaveFile(newAudioFile, new WdlResamplingSampleProvider(audio.ToSampleProvider(), SoundItem.MAX_SAMPLERATE).ToWaveProvider16());
-                log.Log($"Encoding audio to ADX...");
-                AdxUtil.EncodeWav(newAudioFile, Path.Combine(baseDirectory, BgmFile), loopEnabled, loopStartSample, loopEndSample);
-                audioFile = newAudioFile;
+                tracker.Focus("Downsampling...", 1);
+                string newAudioFile = string.Empty;
+                try
+                {
+                    log.Log($"Downsampling audio from {audio.WaveFormat.SampleRate} to NDS max sample rate {SoundItem.MAX_SAMPLERATE}...");
+                    newAudioFile = Path.Combine(Path.GetDirectoryName(bgmCachedFile), $"{Path.GetFileNameWithoutExtension(bgmCachedFile)}-downsampled.wav");
+                    WaveFileWriter.CreateWaveFile(newAudioFile, new WdlResamplingSampleProvider(audio.ToSampleProvider(), SoundItem.MAX_SAMPLERATE).ToWaveProvider16());
+                }
+                catch (Exception ex)
+                {
+                    log.LogException("Failed downsampling audio file.", ex);
+                    return;
+                }
+                tracker.Finished++;
+                tracker.Focus("Encoding", 1);
+                try
+                {
+                    log.Log($"Encoding audio to ADX...");
+                    AdxUtil.EncodeWav(newAudioFile, Path.Combine(baseDirectory, BgmFile), loopEnabled, loopStartSample, loopEndSample, cancellationToken);
+                    audioFile = newAudioFile;
+                }
+                catch (Exception ex)
+                {
+                    log.LogException("Failed encoding audio file to ADX.", ex);
+                    return;
+                }
+                tracker.Finished++;
             }
             else
             {
-                log.Log($"Encoding audio to ADX...");
-                AdxUtil.EncodeAudio(audio, Path.Combine(baseDirectory, BgmFile), loopEnabled, loopStartSample, loopEndSample);
+                tracker.Focus("Encoding", 1);
+                try
+                {
+                    log.Log($"Encoding audio to ADX...");
+                    AdxUtil.EncodeAudio(audio, Path.Combine(baseDirectory, BgmFile), loopEnabled, loopStartSample, loopEndSample, cancellationToken);
+                }
+                catch (Exception ex)
+                {
+                    log.LogException("Failed encoding audio file to ADX.", ex);
+                    return;
+                }
+                tracker.Finished++;
             }
+            tracker.Focus("Caching", 2);
             File.Copy(Path.Combine(baseDirectory, BgmFile), Path.Combine(iterativeDirectory, BgmFile), true);
+            tracker.Finished++;
             if (!string.Equals(audioFile, bgmCachedFile))
             {
-                log.Log($"Attempting to cache audio file from {audioFile} to {bgmCachedFile}...");
-                if (Path.GetExtension(audioFile).Equals(".wav", StringComparison.OrdinalIgnoreCase))
+                try
                 {
-                    File.Copy(audioFile, bgmCachedFile, true);
+                    log.Log($"Attempting to cache audio file from {audioFile} to {bgmCachedFile}...");
+                    if (Path.GetExtension(audioFile).Equals(".wav", StringComparison.OrdinalIgnoreCase))
+                    {
+                        File.Copy(audioFile, bgmCachedFile, true);
+                    }
+                    else
+                    {
+                        audio.Seek(0, SeekOrigin.Begin);
+                        WaveFileWriter.CreateWaveFile(bgmCachedFile, audio.ToSampleProvider().ToWaveProvider16());
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    audio.Seek(0, SeekOrigin.Begin);
-                    WaveFileWriter.CreateWaveFile(bgmCachedFile, audio.ToSampleProvider().ToWaveProvider16());
+                    log.LogException("Failed attempting to cache audio file", ex);
                 }
             }
+            tracker.Finished++;
         }
 
         public IWaveProvider GetWaveProvider(ILogger log, bool loop)
@@ -129,9 +190,36 @@ namespace SerialLoops.Lib.Items
                     log.LogError($"Failed to load BGM file {_bgmFile}: file invalid.");
                 }
             }
+            try
+            {
+                AdxDecoder decoder = new(adxBytes, log) { DoLoop = loop };
+                return new AdxWaveProvider(decoder, decoder.Header.LoopInfo.EnabledInt == 1, decoder.LoopInfo.StartSample, decoder.LoopInfo.EndSample);
+            }
+            catch (Exception ex)
+            {
+                log.LogException($"Failed to read BGM file {_bgmFile}; falling back to original...", ex);
 
-            AdxDecoder decoder = new(adxBytes, log) { DoLoop = loop };
-            return new AdxWaveProvider(decoder, decoder.Header.LoopInfo.EnabledInt == 1, decoder.LoopInfo.StartSample, decoder.LoopInfo.EndSample);
+                try
+                {
+                    File.Copy(_bgmFile.Replace(Path.Combine("rom", "data"), Path.Combine("original")), _bgmFile, true);
+                    adxBytes = File.ReadAllBytes(_bgmFile);
+                }
+                catch (Exception nestedException)
+                {
+                    log.LogException("Failed restoring BGM file.", nestedException);
+                    return null;
+                }
+                try
+                {
+                    AdxDecoder decoder = new(adxBytes, log) { DoLoop = loop };
+                    return new AdxWaveProvider(decoder, decoder.Header.LoopInfo.EnabledInt == 1, decoder.LoopInfo.StartSample, decoder.LoopInfo.EndSample);
+                }
+                catch (Exception nestedException)
+                {
+                    log.LogException($"Failed to decode original file too, giving up!", nestedException);
+                    return null;
+                }
+            }
         }
     }
 }

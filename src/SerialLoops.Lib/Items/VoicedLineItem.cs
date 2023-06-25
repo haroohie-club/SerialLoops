@@ -1,5 +1,5 @@
 ﻿using HaruhiChokuretsuLib.Archive.Event;
-using HaruhiChokuretsuLib.Audio;
+using HaruhiChokuretsuLib.Audio.ADX;
 using HaruhiChokuretsuLib.Util;
 using NAudio.Flac;
 using NAudio.Vorbis;

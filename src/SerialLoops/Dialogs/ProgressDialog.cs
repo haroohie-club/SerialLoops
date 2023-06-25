@@ -25,6 +25,7 @@ namespace SerialLoops.Dialogs
             Resizable = false;
             MinimumSize = new Size(300, 100);
             Content = tracker;
+            Topmost = true;
 
             ShowModal();
         }

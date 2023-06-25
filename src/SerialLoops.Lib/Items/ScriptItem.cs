@@ -51,87 +51,94 @@ namespace SerialLoops.Lib.Items
 
         public void CalculateGraphEdges(Dictionary<ScriptSection, List<ScriptItemCommand>> commandTree, ILogger log)
         {
-            foreach (ScriptSection section in commandTree.Keys)
+            try
             {
-                bool @continue = false;
-                foreach (ScriptItemCommand command in commandTree[section])
+                foreach (ScriptSection section in commandTree.Keys)
                 {
-                    if (command.Verb == CommandVerb.INVEST_START)
+                    bool @continue = false;
+                    foreach (ScriptItemCommand command in commandTree[section])
                     {
-                        Graph.AddEdge(new() { Source = section, Target = ((ScriptSectionScriptParameter)command.Parameters[4]).Section });
-                        Graph.AddEdgeRange(Event.ScriptSections.Where(s =>
-                            Event.LabelsSection.Objects.Where(l =>
-                            Event.MapCharactersSection?.Objects.Select(c => c.TalkScriptBlock).Contains(l.Id) ?? false)
-                            .Select(l => l.Name.Replace("/", "")).Contains(s.Name)).Select(s => new ScriptSectionEdge() { Source = section, Target = s }));
-                        Graph.AddEdgeRange(Event.ScriptSections.Where(s =>
-                            Event.LabelsSection.Objects.Where(l =>
-                            Event.InteractableObjectsSection.Objects.Select(o => o.ScriptBlock).Contains(l.Id))
-                            .Select(l => l.Name.Replace("/", "")).Contains(s.Name)).Select(s => new ScriptSectionEdge() { Source = section, Target = s }));
-                        @continue = true;
-                    }
-                    else if (command.Verb == CommandVerb.GOTO)
-                    {
-                        try
+                        if (command.Verb == CommandVerb.INVEST_START)
                         {
-                            Graph.AddEdge(new() { Source = section, Target = ((ScriptSectionScriptParameter)command.Parameters[0]).Section });
+                            Graph.AddEdge(new() { Source = section, Target = ((ScriptSectionScriptParameter)command.Parameters[4]).Section });
+                            Graph.AddEdgeRange(Event.ScriptSections.Where(s =>
+                                Event.LabelsSection.Objects.Where(l =>
+                                Event.MapCharactersSection?.Objects.Select(c => c.TalkScriptBlock).Contains(l.Id) ?? false)
+                                .Select(l => l.Name.Replace("/", "")).Contains(s.Name)).Select(s => new ScriptSectionEdge() { Source = section, Target = s }));
+                            Graph.AddEdgeRange(Event.ScriptSections.Where(s =>
+                                Event.LabelsSection.Objects.Where(l =>
+                                Event.InteractableObjectsSection.Objects.Select(o => o.ScriptBlock).Contains(l.Id))
+                                .Select(l => l.Name.Replace("/", "")).Contains(s.Name)).Select(s => new ScriptSectionEdge() { Source = section, Target = s }));
+                            @continue = true;
                         }
-                        catch (ArgumentOutOfRangeException)
+                        else if (command.Verb == CommandVerb.GOTO)
                         {
-                            log.LogWarning("Failed to add graph edge for GOTO command as script section parameter was out of range.");
+                            try
+                            {
+                                Graph.AddEdge(new() { Source = section, Target = ((ScriptSectionScriptParameter)command.Parameters[0]).Section });
+                            }
+                            catch (ArgumentOutOfRangeException)
+                            {
+                                log.LogWarning("Failed to add graph edge for GOTO command as script section parameter was out of range.");
+                            }
+                            @continue = true;
                         }
-                        @continue = true;
-                    }
-                    else if (command.Verb == CommandVerb.VGOTO)
-                    {
-                        try
+                        else if (command.Verb == CommandVerb.VGOTO)
                         {
-                            Graph.AddEdge(new() { Source = section, Target = ((ScriptSectionScriptParameter)command.Parameters[1]).Section });
+                            try
+                            {
+                                Graph.AddEdge(new() { Source = section, Target = ((ScriptSectionScriptParameter)command.Parameters[1]).Section });
+                            }
+                            catch (ArgumentOutOfRangeException)
+                            {
+                                log.LogWarning("Failed to add graph edge for VGOTO command as script section parameter was out of range.");
+                            }
                         }
-                        catch (ArgumentOutOfRangeException)
+                        else if (command.Verb == CommandVerb.CHESS_VGOTO)
                         {
-                            log.LogWarning("Failed to add graph edge for VGOTO command as script section parameter was out of range.");
+                            Graph.AddEdgeRange(command.Parameters.Cast<ScriptSectionScriptParameter>()
+                                .Where(p => p.Section is not null).Select(p => new ScriptSectionEdge() { Source = section, Target = p.Section }));
+                            ScriptSection miss2Section = Event.ScriptSections.FirstOrDefault(s => s.Name == "NONEMiss2");
+                            if (miss2Section is not null)
+                            {
+                                Graph.AddEdge(new() { Source = section, Target = Event.ScriptSections.First(s => s.Name == "NONEMiss2") }); // hardcode this section, even tho you can't get to it
+                            }
                         }
-                    }
-                    else if (command.Verb == CommandVerb.CHESS_VGOTO)
-                    {
-                        Graph.AddEdgeRange(command.Parameters.Cast<ScriptSectionScriptParameter>()
-                            .Where(p => p.Section is not null).Select(p => new ScriptSectionEdge() { Source = section, Target = p.Section }));
-                        ScriptSection miss2Section = Event.ScriptSections.FirstOrDefault(s => s.Name == "NONEMiss2");
-                        if (miss2Section is not null)
+                        else if (command.Verb == CommandVerb.SELECT)
                         {
-                            Graph.AddEdge(new() { Source = section, Target = Event.ScriptSections.First(s => s.Name == "NONEMiss2") }); // hardcode this section, even tho you can't get to it
+                            Graph.AddEdgeRange(Event.ScriptSections.Where(s =>
+                                Event.LabelsSection.Objects.Where(l =>
+                                command.Parameters.Where(p => p.Type == ScriptParameter.ParameterType.OPTION).Cast<OptionScriptParameter>()
+                                .Where(p => p.Option.Id > 0).Select(p => p.Option.Id).Contains(l.Id)).Select(l => l.Name.Replace("/", "")).Contains(s.Name))
+                                .Select(s => new ScriptSectionEdge() { Source = section, Target = s }));
+                            @continue = true;
+                        }
+                        else if (command.Verb == CommandVerb.NEXT_SCENE)
+                        {
+                            @continue = true;
+                        }
+                        else if (command.Verb == CommandVerb.BACK && section.Name != "SCRIPT00")
+                        {
+                            @continue = true;
+                        }
+                        else if (Name.StartsWith("CHS") && Name.EndsWith("90") && commandTree.Keys.ToList().IndexOf(section) > 1 && command.Index == 0)
+                        {
+                            Graph.AddEdge(new() { Source = Event.ScriptSections[1], Target = section }); // these particular chess files have no VGOTOs, so uh... we manually hardcode them
                         }
                     }
-                    else if (command.Verb == CommandVerb.SELECT)
+                    if (@continue)
                     {
-                        Graph.AddEdgeRange(Event.ScriptSections.Where(s =>
-                            Event.LabelsSection.Objects.Where(l =>
-                            command.Parameters.Where(p => p.Type == ScriptParameter.ParameterType.OPTION).Cast<OptionScriptParameter>()
-                            .Where(p => p.Option.Id > 0).Select(p => p.Option.Id).Contains(l.Id)).Select(l => l.Name.Replace("/", "")).Contains(s.Name))
-                            .Select(s => new ScriptSectionEdge() { Source = section, Target = s }));
-                        @continue = true;
+                        continue;
                     }
-                    else if (command.Verb == CommandVerb.NEXT_SCENE)
+                    if (section != commandTree.Keys.Last())
                     {
-                        @continue = true;
-                    }
-                    else if (command.Verb == CommandVerb.BACK && section.Name != "SCRIPT00")
-                    {
-                        @continue = true;
-                    }
-                    else if (Name.StartsWith("CHS") && Name.EndsWith("90") && commandTree.Keys.ToList().IndexOf(section) > 1 && command.Index == 0)
-                    {
-                        Graph.AddEdge(new() { Source = Event.ScriptSections[1], Target = section }); // these particular chess files have no VGOTOs, so uh... we manually hardcode them
+                        Graph.AddEdge(new() { Source = section, Target = commandTree.Keys.ElementAt(commandTree.Keys.ToList().IndexOf(section) + 1) });
                     }
                 }
-                if (@continue)
-                {
-                    continue;
-                }
-                if (section != commandTree.Keys.Last())
-                {
-                    Graph.AddEdge(new() { Source = section, Target = commandTree.Keys.ElementAt(commandTree.Keys.ToList().IndexOf(section) + 1) });
-                }
+            }
+            catch (Exception ex)
+            {
+                log.LogException($"Failed to calculate graph edges for script {DisplayName} ({Name}).", ex);
             }
         }
 
