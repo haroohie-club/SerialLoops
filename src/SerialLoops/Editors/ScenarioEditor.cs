@@ -21,6 +21,8 @@ namespace SerialLoops.Editors
         private Button _addButton;
         private Button _deleteButton;
         private Button _clearButton;
+        private Button _upButton;
+        private Button _downButton;
 
         private bool _triggerRefresh = true;
 
@@ -86,6 +88,25 @@ namespace SerialLoops.Editors
             };
             _clearButton.Click += ClearButton_Click;
 
+            _upButton = new()
+            {
+                Text = "Up",
+                ToolTip = "Move Command Up",
+                Width = 22,
+                Enabled = _commandsPanel.SelectedCommand is not null
+            };
+            _upButton.Click += UpButton_Click;
+
+            _downButton = new()
+            {
+                Text = "Down",
+                ToolTip = "Move Command Down",
+                Width = 22,
+                Enabled = _commandsPanel.SelectedCommand is not null
+            };
+            _downButton.Click += DownButton_Click;
+
+
             return new()
             {
                 Orientation = Orientation.Horizontal,
@@ -93,7 +114,7 @@ namespace SerialLoops.Editors
                 Width = _commandsPanel.Width,
                 Spacing = 5,
                 Padding = 5,
-                Items = { _addButton, _deleteButton, _clearButton }
+                Items = { _addButton, _deleteButton, _clearButton, _upButton, _downButton }
             };
         }
 
@@ -114,6 +135,8 @@ namespace SerialLoops.Editors
 
             _addButton.Enabled = true;
             _deleteButton.Enabled = true;
+            _upButton.Enabled = true;
+            _downButton.Enabled = true;
 
             if (command is null)
             {
@@ -302,10 +325,38 @@ namespace SerialLoops.Editors
             UpdateTabTitle(false);
         }
 
+        private void UpButton_Click(object sender, EventArgs e)
+        {
+            int selectedIndex = _commandsPanel.Viewer.SelectedIndex;
+            if (selectedIndex <= 0 || selectedIndex >= _scenario.Scenario.Commands.Count) return;
+
+            _scenario.Scenario.Commands.Swap(selectedIndex, selectedIndex - 1);
+            _scenario.ScenarioCommands.Swap(selectedIndex, selectedIndex - 1);
+            _commandsPanel.Viewer.SelectedIndex--;
+
+            RefreshCommands();
+            UpdateTabTitle(false);
+        }
+
+        private void DownButton_Click(object sender, EventArgs e)
+        {
+            int selectedIndex = _commandsPanel.Viewer.SelectedIndex;
+            if (selectedIndex < 0 || selectedIndex >= _scenario.Scenario.Commands.Count - 1) return;
+
+            _scenario.Scenario.Commands.Swap(selectedIndex, selectedIndex + 1);
+            _scenario.ScenarioCommands.Swap(selectedIndex, selectedIndex + 1);
+            _commandsPanel.Viewer.SelectedIndex++;
+
+            RefreshCommands();
+            UpdateTabTitle(false);
+        }
+
         private void RefreshCommands()
         {
             _commandsPanel.Commands = _scenario.ScenarioCommands;
             _deleteButton.Enabled = _commandsPanel.SelectedCommand is not null;
+            _upButton.Enabled = _commandsPanel.SelectedCommand is not null;
+            _downButton.Enabled = _commandsPanel.SelectedCommand is not null;
         }
     }
 }
