@@ -76,7 +76,6 @@ namespace SerialLoops
             _resultsLabel.Visible = false;
             if (!query.QuickSearch && !force)
             {
-                _results.Items = Enumerable.Empty<ItemDescription>().ToList();
                 return;
             }
             if (string.IsNullOrWhiteSpace(query.Term))
