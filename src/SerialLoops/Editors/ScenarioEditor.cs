@@ -90,7 +90,7 @@ namespace SerialLoops.Editors
 
             _upButton = new()
             {
-                Text = "Up",
+                Image = ControlGenerator.GetIcon("Move_Up", _log),
                 ToolTip = "Move Command Up",
                 Width = 22,
                 Enabled = _commandsPanel.SelectedCommand is not null
@@ -99,7 +99,7 @@ namespace SerialLoops.Editors
 
             _downButton = new()
             {
-                Text = "Down",
+                Image = ControlGenerator.GetIcon("Move_Down", _log),
                 ToolTip = "Move Command Down",
                 Width = 22,
                 Enabled = _commandsPanel.SelectedCommand is not null
