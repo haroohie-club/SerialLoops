@@ -55,6 +55,7 @@ namespace SerialLoops.Editors
             return new StackLayout
             {
                 Orientation = Orientation.Vertical,
+                Spacing = 5,
                 Items =
                 {
                     new StackLayout
@@ -65,6 +66,23 @@ namespace SerialLoops.Editors
                         {
                             SfxPlayer,
                             _sfx.Name,
+                        }
+                    },
+                    new StackLayout
+                    {
+                        Orientation = Orientation.Vertical,
+                        Spacing = 3,
+                        Items =
+                        {
+                            ControlGenerator.GetTextHeader("Bank"),
+                            new Label { Text = $"{_sfx.AssociatedBank}" },
+                            ControlGenerator.GetTextHeader("Groups"),
+                            new Label
+                            {
+                                Text = $"Groups: {string.Join(", ", _sfx.AssociatedGroups)}",
+                                Wrap = WrapMode.Word,
+                                Width = 600,
+                            },
                         }
                     },
                     new StackLayout

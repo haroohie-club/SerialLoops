@@ -487,7 +487,7 @@ namespace SerialLoops.Lib
                         string name = Snd.SequenceArchives[SoundDS.SfxSection[i].SequenceArchive].File.Sequences[SoundDS.SfxSection[i].Index].Name;
                         if (!name.Equals("SE_DUMMY"))
                         {
-                            Items.Add(new SfxItem(SoundDS.SfxSection[i], name, i));
+                            Items.Add(new SfxItem(SoundDS.SfxSection[i], name, i, Snd));
                         }
                     }
                     tracker.Finished++;

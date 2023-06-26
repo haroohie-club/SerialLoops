@@ -137,6 +137,7 @@ namespace SerialLoops.Editors
                 MaxValue = short.MaxValue,
                 DecimalPlaces = 0,
                 MaximumDecimalPlaces = 0,
+                Value = _character.MessageInfo.TextTimer,
             };
             textTimerNumericStepper.ValueChanged += (sender, args) =>
             {
@@ -185,7 +186,7 @@ namespace SerialLoops.Editors
                     }),
                     nameplatePreviewLayout,
                     ControlGenerator.GetControlWithLabel("Voice Font", voiceFontLayout),
-                    ControlGenerator.GetControlWithLabel("Text Timer", new NumericStepper { Value = _character.MessageInfo.TextTimer, Enabled = false }),
+                    ControlGenerator.GetControlWithLabel("Text Timer", textTimerNumericStepper),
                 },
             };
         }
