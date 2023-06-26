@@ -1,20 +1,21 @@
 ﻿using HaruhiChokuretsuLib.Archive.Event;
+using SerialLoops.Lib.Items;
 
 namespace SerialLoops.Lib.Script.Parameters
 {
     public class SfxScriptParameter : ScriptParameter
     {
-        public short SfxIndex { get; set; }
-        public override short[] GetValues(object obj = null) => new short[] { SfxIndex };
+        public SfxItem Sfx { get; set; }
+        public override short[] GetValues(object obj = null) => new short[] { Sfx.Index };
 
-        public SfxScriptParameter(string name, short sfxIndex) : base(name, ParameterType.SFX)
+        public SfxScriptParameter(string name, SfxItem sfx) : base(name, ParameterType.SFX)
         {
-            SfxIndex = sfxIndex;
+            Sfx = sfx;
         }
 
         public override SfxScriptParameter Clone(Project project, EventFile eventFile)
         {
-            return new(Name, SfxIndex);
+            return new(Name, Sfx);
         }
     }
 }

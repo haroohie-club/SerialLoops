@@ -244,7 +244,7 @@ namespace SerialLoops.Lib.Script
                         switch (i)
                         {
                             case 0:
-                                parameters.Add(new SfxScriptParameter("Sound", parameter));
+                                parameters.Add(new SfxScriptParameter("Sound", (SfxItem)project.Items.First(s => s.Type == ItemDescription.ItemType.SFX && ((SfxItem)s).Index == parameter)));
                                 break;
                             case 1:
                                 parameters.Add(new SfxModeScriptParameter("Mode", parameter));

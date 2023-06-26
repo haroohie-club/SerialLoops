@@ -36,14 +36,46 @@ namespace SerialLoops.Editors
 
             SfxPlayer = new(Player, _log);
 
+            Button extractButton = new() { Text = "Extract" };
+            extractButton.Click += (sender, args) =>
+            {
+                Player.Stop();
+                SaveFileDialog saveFileDialog = new()
+                {
+                    Title = "Export SFX",
+                };
+                saveFileDialog.Filters.Add(new("WAV file", ".wav"));
+
+                if (saveFileDialog.ShowAndReportIfFileSelected(this))
+                {
+                    Player.Record(saveFileDialog.FileName);
+                }
+            };
+
             return new StackLayout
             {
-                Orientation = Orientation.Horizontal,
-                Spacing = 5,
+                Orientation = Orientation.Vertical,
                 Items =
                 {
-                    SfxPlayer,
-                    _sfx.Name,
+                    new StackLayout
+                    {
+                        Orientation = Orientation.Horizontal,
+                        Spacing = 5,
+                        Items =
+                        {
+                            SfxPlayer,
+                            _sfx.Name,
+                        }
+                    },
+                    new StackLayout
+                    {
+                        Orientation = Orientation.Horizontal,
+                        Spacing = 3,
+                        Items =
+                        {
+                            extractButton
+                        }
+                    }
                 }
             };
         }

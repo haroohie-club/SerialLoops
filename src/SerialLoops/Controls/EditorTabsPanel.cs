@@ -124,6 +124,10 @@ namespace SerialLoops.Controls
             {
                 ((VoicedLineEditor)e.Page).VcePlayer.Stop();
             }
+            else if (e.Page.GetType() == typeof(SfxEditor))
+            {
+                ((SfxEditor)e.Page).Player.Dispose();
+            }
 
             if (Tabs.SelectedPage is null)
             {

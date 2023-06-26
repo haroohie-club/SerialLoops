@@ -1,8 +1,6 @@
 ﻿using Eto.Forms;
 using GotaSequenceLib.Playback;
 using HaruhiChokuretsuLib.Util;
-using NAudio.Wave;
-using SerialLoops.Lib.Items;
 using SerialLoops.Utility;
 using System;
 

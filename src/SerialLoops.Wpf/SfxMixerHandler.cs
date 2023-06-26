@@ -7,7 +7,7 @@ namespace SerialLoops.Wpf
 {
     public class SfxMixerHandler : WpfControl<Control, SfxMixer, SfxMixer.ICallback>, SfxMixer.ISfxMixer
     {
-        private WasapiOut _player;
+        private DirectSoundOut _player;
 
         public IWavePlayer Player => _player;
 

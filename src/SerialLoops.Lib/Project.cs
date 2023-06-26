@@ -480,7 +480,7 @@ namespace SerialLoops.Lib
             try
             {
                 tracker.Focus("Sound Effects", SoundDS.SfxSection.Count);
-                for (int i = 0; i < SoundDS.SfxSection.Count; i++)
+                for (short i = 0; i < SoundDS.SfxSection.Count; i++)
                 {
                     if (SoundDS.SfxSection[i].Index < Snd.SequenceArchives[SoundDS.SfxSection[i].SequenceArchive].File.Sequences.Count)
                     {
