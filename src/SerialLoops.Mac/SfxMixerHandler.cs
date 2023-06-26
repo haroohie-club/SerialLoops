@@ -14,7 +14,7 @@ namespace SerialLoops.Mac
         public SfxMixerHandler()
         {
             Control = new NSControl();
-            _player = new(new(), 8192);
+            _player = new(new(), 16384);
         }
     }
 }

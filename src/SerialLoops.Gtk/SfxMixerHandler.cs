@@ -14,7 +14,7 @@ namespace SerialLoops.Gtk
         public SfxMixerHandler()
         {
             Control = new Button();
-            _player = new(new(), 8192);
+            _player = new(new(), 16384);
         }
     }
 }
