@@ -1,5 +1,6 @@
 ﻿using Eto.Forms;
 using HaruhiChokuretsuLib.Util;
+using SerialLoops.Controls;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Utility;
@@ -14,7 +15,7 @@ namespace SerialLoops.Editors
     {
         private CharacterItem _character;
 
-        public CharacterEditor(CharacterItem dialogueConfig, Project project, ILogger log) : base(dialogueConfig, log, project)
+        public CharacterEditor(CharacterItem dialogueConfig, Project project, EditorTabsPanel tabs, ILogger log) : base(dialogueConfig, log, project, tabs)
         {
         }
 
@@ -101,17 +102,48 @@ namespace SerialLoops.Editors
                 outlineCheckBox.Enabled = false;
             }
 
-            NumericStepper voiceFontStepper = new()
+            DropDown voiceFontDropDown = new();
+            voiceFontDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.SFX).Select(s => new ListItem { Key = s.DisplayName, Text = s.DisplayName }));
+            SfxItem selectedSfx = (SfxItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.SFX && ((SfxItem)i).Index == _character.MessageInfo.VoiceFont);
+            voiceFontDropDown.SelectedKey = selectedSfx.DisplayName;
+            StackLayout voiceFontLinkLayout = ControlGenerator.GetFileLink(selectedSfx, _tabs, _log);
+            voiceFontDropDown.SelectedKeyChanged += (sender, args) =>
             {
-                Value = _character.MessageInfo.VoiceFont,
+                SfxItem sfx = (SfxItem)_project.Items.First(s => s.DisplayName == voiceFontDropDown.SelectedKey);
+                _character.MessageInfo.VoiceFont = sfx.Index;
+                _project.MessInfo.MessageInfos.FirstOrDefault(m => _character.MessageInfo.Character == m.Character).VoiceFont = sfx.Index;
+
+                ClearableLinkButton voiceFontLink = (ClearableLinkButton)voiceFontLinkLayout.Items[1].Control;
+                voiceFontLink.Text = sfx.DisplayName;
+                voiceFontLink.RemoveAllClickEvents();
+                voiceFontLink.ClickUnique += (s, e) => { _tabs.OpenTab(_project.Items.FirstOrDefault(i => i.DisplayName == voiceFontDropDown.SelectedKey), _log); };
+
+                UpdateTabTitle(false);
+            };
+            StackLayout voiceFontLayout = new()
+            {
+                Orientation = Orientation.Horizontal,
+                Spacing = 3,
+                Items =
+                {
+                    voiceFontDropDown,
+                    voiceFontLinkLayout,
+                }
+            };
+
+            NumericStepper textTimerNumericStepper = new()
+            {
                 MinValue = 0,
                 MaxValue = short.MaxValue,
                 DecimalPlaces = 0,
+                MaximumDecimalPlaces = 0,
             };
-            voiceFontStepper.ValueChanged += (sender, args) =>
+            textTimerNumericStepper.ValueChanged += (sender, args) =>
             {
-                _character.MessageInfo.VoiceFont = (short)voiceFontStepper.Value;
-                _project.MessInfo.MessageInfos.FirstOrDefault(m => _character.MessageInfo.Character == m.Character).VoiceFont = (short)voiceFontStepper.Value;
+                _character.MessageInfo.TextTimer = (short)textTimerNumericStepper.Value;
+                _project.MessInfo.MessageInfos.FirstOrDefault(m => _character.MessageInfo.Character == m.Character).TextTimer = (short)textTimerNumericStepper.Value;
+                _project.MessInfo.MessageInfos.FirstOrDefault(m => _character.MessageInfo.Character == m.Character).TextTimer = (short)textTimerNumericStepper.Value;
+
                 UpdateTabTitle(false);
             };
 
@@ -152,7 +184,7 @@ namespace SerialLoops.Editors
                         }
                     }),
                     nameplatePreviewLayout,
-                    ControlGenerator.GetControlWithLabel("Voice Font", voiceFontStepper),
+                    ControlGenerator.GetControlWithLabel("Voice Font", voiceFontLayout),
                     ControlGenerator.GetControlWithLabel("Text Timer", new NumericStepper { Value = _character.MessageInfo.TextTimer, Enabled = false }),
                 },
             };

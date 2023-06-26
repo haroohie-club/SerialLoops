@@ -82,7 +82,7 @@ namespace SerialLoops.Controls
                     return new BackgroundMusicEditor(
                         (BackgroundMusicItem)project.Items.First(i => i.Name == item.Name), project, log);
                 case ItemDescription.ItemType.Character:
-                    return new CharacterEditor((CharacterItem)project.Items.First(i => i.Name == item.Name), project, log);
+                    return new CharacterEditor((CharacterItem)project.Items.First(i => i.Name == item.Name), project, this, log);
                 case ItemDescription.ItemType.Character_Sprite:
                     return new CharacterSpriteEditor(
                         (CharacterSpriteItem)project.Items.First(i => i.Name == item.Name), project, log);

@@ -1297,9 +1297,11 @@ namespace SerialLoops.Editors
 
                         case ScriptParameter.ParameterType.SFX:
                             SfxScriptParameter sfxParam = (SfxScriptParameter)parameter;
-                            ScriptCommandNumericStepper sfxNumericStepper = new() { Command = command, ParameterIndex = i, Value = sfxParam.Sfx.Index, MinValue = 0, MaxValue = 241, DecimalPlaces = 0 };
-                            sfxNumericStepper.ValueChanged += SfxNumericStepper_ValueChanged;
                             StackLayout sfxLink = ControlGenerator.GetFileLink(sfxParam.Sfx, _tabs, _log);
+                            ScriptCommandDropDown sfxDropDown = new() { Command = command, ParameterIndex = i, Link = (ClearableLinkButton)sfxLink.Items[1].Control };
+                            sfxDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.SFX).Select(s => new ListItem { Key = s.DisplayName, Text = s.DisplayName }));
+                            sfxDropDown.SelectedKey = sfxParam.Sfx.DisplayName;
+                            sfxDropDown.SelectedKeyChanged += SfxDropDown_SelectedKeyChanged;
 
                             StackLayout sfxLayout = new()
                             {
@@ -1307,7 +1309,7 @@ namespace SerialLoops.Editors
                                 VerticalContentAlignment = VerticalAlignment.Center,
                                 Items =
                                 {
-                                    ControlGenerator.GetControlWithLabel(parameter.Name, sfxNumericStepper),
+                                    ControlGenerator.GetControlWithLabel(parameter.Name, sfxDropDown),
                                     sfxLink,
                                 }
                             };
@@ -2390,15 +2392,20 @@ namespace SerialLoops.Editors
             PopulateScriptCommands(true);
             UpdateTabTitle(false, dropDown);
         }
-        private void SfxNumericStepper_ValueChanged(object sender, EventArgs e)
+        private void SfxDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
-            ScriptCommandNumericStepper numericStepper = (ScriptCommandNumericStepper)sender;
-            _log.Log($"Attempting to modify parameter {numericStepper.ParameterIndex} to SFX {numericStepper.Value} in {numericStepper.Command.Index} in file {_script.Name}...");
-            ((SfxScriptParameter)numericStepper.Command.Parameters[numericStepper.ParameterIndex]).Sfx = (SfxItem)_project.Items.FirstOrDefault(s => s.Type == ItemDescription.ItemType.SFX && ((SfxItem)s).Index == (short)numericStepper.Value);
-            _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(numericStepper.Command.Section)]
-                .Objects[numericStepper.Command.Index].Parameters[numericStepper.ParameterIndex] = (short)numericStepper.Value;
+            ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
+            _log.Log($"Attempting to modify parameter {dropDown.ParameterIndex} to SFX {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
+            SfxItem sfx = (SfxItem)_project.Items.FirstOrDefault(s => s.DisplayName == dropDown.SelectedKey);
+            ((SfxScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Sfx = sfx;
+            _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
+                .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] = sfx.Index;
 
-            UpdateTabTitle(false, numericStepper);
+            dropDown.Link.Text = sfx.DisplayName;
+            dropDown.Link.RemoveAllClickEvents();
+            dropDown.Link.ClickUnique += (s, e) => { _tabs.OpenTab(_project.Items.FirstOrDefault(i => i.DisplayName == dropDown.SelectedKey), _log); };
+
+            UpdateTabTitle(false, dropDown);
         }
         private void SfxModeDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
