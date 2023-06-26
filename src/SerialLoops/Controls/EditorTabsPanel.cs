@@ -82,7 +82,7 @@ namespace SerialLoops.Controls
                     return new BackgroundMusicEditor(
                         (BackgroundMusicItem)project.Items.First(i => i.Name == item.Name), project, log);
                 case ItemDescription.ItemType.Character:
-                    return new CharacterEditor((CharacterItem)project.Items.First(i => i.Name == item.Name), project, log);
+                    return new CharacterEditor((CharacterItem)project.Items.First(i => i.Name == item.Name), project, this, log);
                 case ItemDescription.ItemType.Character_Sprite:
                     return new CharacterSpriteEditor(
                         (CharacterSpriteItem)project.Items.First(i => i.Name == item.Name), project, log);
@@ -100,6 +100,8 @@ namespace SerialLoops.Controls
                     return new ScenarioEditor((ScenarioItem)project.Items.First(i => i.Name == item.Name), log, project, this);
                 case ItemDescription.ItemType.Script:
                     return new ScriptEditor((ScriptItem)project.Items.First(i => i.Name == item.Name), log, project, this);
+                case ItemDescription.ItemType.SFX:
+                    return new SfxEditor((SfxItem)project.Items.First(i => i.Name == item.Name), project, log);
                 case ItemDescription.ItemType.System_Texture:
                     return new SystemTextureEditor((SystemTextureItem)project.Items.First(i => i.Name == item.Name), project, log);
                 case ItemDescription.ItemType.Topic:
@@ -121,6 +123,10 @@ namespace SerialLoops.Controls
             else if (e.Page.GetType() == typeof(VoicedLineEditor))
             {
                 ((VoicedLineEditor)e.Page).VcePlayer.Stop();
+            }
+            else if (e.Page.GetType() == typeof(SfxEditor))
+            {
+                ((SfxEditor)e.Page).Player.Dispose();
             }
 
             if (Tabs.SelectedPage is null)

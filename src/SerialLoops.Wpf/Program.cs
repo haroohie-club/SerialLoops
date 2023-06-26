@@ -1,5 +1,4 @@
 ﻿using Eto.Wpf;
-using Eto.Wpf.Forms.Controls;
 using Eto.Wpf.Forms.ToolBar;
 using SerialLoops.Utility;
 using System;
@@ -15,6 +14,7 @@ namespace SerialLoops.Wpf
         {
             var platform = new Platform();
             platform.Add<SoundPlayer.ISoundPlayer>(() => new SoundPlayerHandler());
+            platform.Add<SfxMixer.ISfxMixer>(() => new SfxMixerHandler());
 
             // Windows toolbar styling
             Eto.Style.Add<ToolBarHandler>("sl-toolbar", toolbar =>

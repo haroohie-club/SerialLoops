@@ -11,6 +11,7 @@ namespace SerialLoops.Gtk
         {
             var platform = new Eto.GtkSharp.Platform();
             platform.Add<SoundPlayer.ISoundPlayer>(() => new SoundPlayerHandler());
+            platform.Add<SfxMixer.ISfxMixer>(() => new SfxMixerHandler());
 
             new Application(platform).Run(new MainForm());
         }

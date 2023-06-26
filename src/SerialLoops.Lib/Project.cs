@@ -3,6 +3,7 @@ using HaruhiChokuretsuLib.Archive;
 using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Archive.Graphics;
+using HaruhiChokuretsuLib.Audio.SDAT;
 using HaruhiChokuretsuLib.Font;
 using HaruhiChokuretsuLib.Util;
 using HaruhiChokuretsuLib.Util.Exceptions;
@@ -50,6 +51,8 @@ namespace SerialLoops.Lib
         public ArchiveFile<GraphicsFile> Grp { get; set; }
         [JsonIgnore]
         public ArchiveFile<EventFile> Evt { get; set; }
+        [JsonIgnore]
+        public SoundArchive Snd { get; set; }
 
         [JsonIgnore]
         public FontReplacementDictionary FontReplacement { get; set; } = new();
@@ -68,6 +71,8 @@ namespace SerialLoops.Lib
         public ExtraFile Extra { get; set; }
         [JsonIgnore]
         public ScenarioStruct Scenario { get; set; }
+        [JsonIgnore]
+        public SoundDSFile SoundDS { get; set; }
         [JsonIgnore]
         public EventFile TopicFile { get; set; }
         [JsonIgnore]
@@ -178,7 +183,7 @@ namespace SerialLoops.Lib
 
         public LoadProjectResult LoadArchives(ILogger log, IProgressTracker tracker)
         {
-            tracker.Focus("dat.bin", 3);
+            tracker.Focus("dat.bin", 4);
             try
             {
                 Dat = ArchiveFile<DataFile>.FromFile(Path.Combine(IterativeDirectory, "original", "archives", "dat.bin"), log, false);
@@ -255,6 +260,18 @@ namespace SerialLoops.Lib
             catch (Exception ex)
             {
                 log.LogException("Error occurred while loading evt.bin", ex);
+                return new(LoadProjectState.FAILED);
+            }
+            tracker.Finished++;
+
+            tracker.CurrentlyLoading = "snd.bin";
+            try
+            {
+                Snd = new(Path.Combine(IterativeDirectory, "original", "archives", "snd.bin"));
+            }
+            catch (Exception ex)
+            {
+                log.LogException("Error occurred while loading snd.bin", ex);
                 return new(LoadProjectState.FAILED);
             }
             tracker.Finished++;
@@ -403,10 +420,18 @@ namespace SerialLoops.Lib
             }
             catch (Exception ex)
             {
-                log.LogException($"Failed to background items", ex);
+                log.LogException("Failed to background items", ex);
                 return new(LoadProjectState.FAILED);
             }
 
+            try
+            {
+                SoundDS = Dat.Files.First(s => s.Name == "SND_DSS").CastTo<SoundDSFile>();
+            }
+            catch (Exception ex)
+            {
+                log.LogException("Failed to load DS sound file.", ex);
+            }
             try
             {
                 if (VoiceMapIsV06OrHigher())
@@ -416,13 +441,13 @@ namespace SerialLoops.Lib
             }
             catch (Exception ex)
             {
-                log.LogException($"Failed to load voice map", ex);
+                log.LogException("Failed to load voice map", ex);
                 return new(LoadProjectState.FAILED);
             }
 
             try
             {
-                string[] bgmFiles = Directory.GetFiles(Path.Combine(IterativeDirectory, "rom", "data", "bgm")).OrderBy(s => s).ToArray();
+                string[] bgmFiles = SoundDS.BgmSection.Where(bgm => bgm is not null).Select(bgm => Path.Combine(IterativeDirectory, "rom", "data", bgm)).ToArray(); /*Directory.GetFiles(Path.Combine(IterativeDirectory, "rom", "data", "bgm")).OrderBy(s => s).ToArray();*/
                 tracker.Focus("BGM Tracks", bgmFiles.Length);
                 for (int i = 0; i < bgmFiles.Length; i++)
                 {
@@ -438,7 +463,7 @@ namespace SerialLoops.Lib
 
             try
             {
-                string[] voiceFiles = Directory.GetFiles(Path.Combine(IterativeDirectory, "rom", "data", "vce")).OrderBy(s => s).ToArray();
+                string[] voiceFiles = SoundDS.VoiceSection.Where(vce => vce is not null).Select(vce => Path.Combine(IterativeDirectory, "rom", "data", vce)).ToArray(); /*Directory.GetFiles(Path.Combine(IterativeDirectory, "rom", "data", "vce")).OrderBy(s => s).ToArray();*/
                 tracker.Focus("Voiced Lines", voiceFiles.Length);
                 for (int i = 0; i < voiceFiles.Length; i++)
                 {
@@ -449,6 +474,28 @@ namespace SerialLoops.Lib
             catch (Exception ex)
             {
                 log.LogException($"Failed to load voiced lines", ex);
+                return new(LoadProjectState.FAILED);
+            }
+
+            try
+            {
+                tracker.Focus("Sound Effects", SoundDS.SfxSection.Count);
+                for (short i = 0; i < SoundDS.SfxSection.Count; i++)
+                {
+                    if (SoundDS.SfxSection[i].Index < Snd.SequenceArchives[SoundDS.SfxSection[i].SequenceArchive].File.Sequences.Count)
+                    {
+                        string name = Snd.SequenceArchives[SoundDS.SfxSection[i].SequenceArchive].File.Sequences[SoundDS.SfxSection[i].Index].Name;
+                        if (!name.Equals("SE_DUMMY"))
+                        {
+                            Items.Add(new SfxItem(SoundDS.SfxSection[i], name, i, this));
+                        }
+                    }
+                    tracker.Finished++;
+                }
+            }
+            catch (Exception ex)
+            {
+                log.LogException("Failed to load sound effects", ex);
                 return new(LoadProjectState.FAILED);
             }
 
