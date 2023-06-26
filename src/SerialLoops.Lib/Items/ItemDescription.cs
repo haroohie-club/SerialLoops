@@ -112,6 +112,11 @@ namespace SerialLoops.Lib.Items
                         (((TopicItem)i).HiddenMainTopic?.EventIndex ?? -1) == script.Event.Index)));
                     references.AddRange(project.Items.Where(i => i.Type == ItemType.Script && ((ScriptItem)i).Event.ConditionalsSection.Objects.Contains(Name)));
                     return references;
+                case ItemType.SFX:
+                    SfxItem sfx = (SfxItem)this;
+                    references.AddRange(project.Items.Where(i => sfx.ScriptUses.Select(s => s.ScriptName).Contains(i.Name)));
+                    references.AddRange(project.Items.Where(c => c.Type == ItemType.Character && ((CharacterItem)c).MessageInfo.VoiceFont == sfx.Index));
+                    return references;
                 case ItemType.Topic:
                     TopicItem topic = (TopicItem)this;
                     return project.Items.Where(i => topic.ScriptUses.Select(s => s.ScriptName).Contains(i.Name)).ToList();
