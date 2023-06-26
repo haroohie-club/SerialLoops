@@ -480,14 +480,14 @@ namespace SerialLoops.Lib
             try
             {
                 tracker.Focus("Sound Effects", SoundDS.SfxSection.Count);
-                foreach (SfxEntry sfx in SoundDS.SfxSection)
+                for (int i = 0; i < SoundDS.SfxSection.Count; i++)
                 {
-                    if (sfx.Index < Snd.SequenceArchives[sfx.SequenceArchive].File.Sequences.Count)
+                    if (SoundDS.SfxSection[i].Index < Snd.SequenceArchives[SoundDS.SfxSection[i].SequenceArchive].File.Sequences.Count)
                     {
-                        string name = Snd.SequenceArchives[sfx.SequenceArchive].File.Sequences[sfx.Index].Name;
+                        string name = Snd.SequenceArchives[SoundDS.SfxSection[i].SequenceArchive].File.Sequences[SoundDS.SfxSection[i].Index].Name;
                         if (!name.Equals("SE_DUMMY"))
                         {
-                            Items.Add(new SfxItem(sfx, name));
+                            Items.Add(new SfxItem(SoundDS.SfxSection[i], name, i));
                         }
                     }
                     tracker.Finished++;
