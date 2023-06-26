@@ -3,6 +3,7 @@ using HaruhiChokuretsuLib.Archive;
 using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Archive.Graphics;
+using HaruhiChokuretsuLib.Audio.SDAT;
 using HaruhiChokuretsuLib.Font;
 using HaruhiChokuretsuLib.Util;
 using HaruhiChokuretsuLib.Util.Exceptions;
@@ -50,6 +51,8 @@ namespace SerialLoops.Lib
         public ArchiveFile<GraphicsFile> Grp { get; set; }
         [JsonIgnore]
         public ArchiveFile<EventFile> Evt { get; set; }
+        [JsonIgnore]
+        public SoundArchive Snd { get; set; }
 
         [JsonIgnore]
         public FontReplacementDictionary FontReplacement { get; set; } = new();
@@ -180,7 +183,7 @@ namespace SerialLoops.Lib
 
         public LoadProjectResult LoadArchives(ILogger log, IProgressTracker tracker)
         {
-            tracker.Focus("dat.bin", 3);
+            tracker.Focus("dat.bin", 4);
             try
             {
                 Dat = ArchiveFile<DataFile>.FromFile(Path.Combine(IterativeDirectory, "original", "archives", "dat.bin"), log, false);
@@ -257,6 +260,18 @@ namespace SerialLoops.Lib
             catch (Exception ex)
             {
                 log.LogException("Error occurred while loading evt.bin", ex);
+                return new(LoadProjectState.FAILED);
+            }
+            tracker.Finished++;
+
+            tracker.CurrentlyLoading = "snd.bin";
+            try
+            {
+                Snd = new(Path.Combine(IterativeDirectory, "original", "archives", "snd.bin"));
+            }
+            catch (Exception ex)
+            {
+                log.LogException("Error occurred while loading snd.bin", ex);
                 return new(LoadProjectState.FAILED);
             }
             tracker.Finished++;
@@ -459,6 +474,28 @@ namespace SerialLoops.Lib
             catch (Exception ex)
             {
                 log.LogException($"Failed to load voiced lines", ex);
+                return new(LoadProjectState.FAILED);
+            }
+
+            try
+            {
+                tracker.Focus("Sound Effects", SoundDS.SfxSection.Count);
+                foreach (SfxEntry sfx in SoundDS.SfxSection)
+                {
+                    if (sfx.Index < Snd.SequenceArchives[sfx.SequenceArchive].File.Sequences.Count)
+                    {
+                        string name = Snd.SequenceArchives[sfx.SequenceArchive].File.Sequences[sfx.Index].Name;
+                        if (!name.Equals("SE_DUMMY"))
+                        {
+                            Items.Add(new SfxItem(sfx, name));
+                        }
+                    }
+                    tracker.Finished++;
+                }
+            }
+            catch (Exception ex)
+            {
+                log.LogException("Failed to load sound effects", ex);
                 return new(LoadProjectState.FAILED);
             }
 

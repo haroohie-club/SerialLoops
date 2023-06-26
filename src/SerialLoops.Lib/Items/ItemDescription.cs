@@ -49,7 +49,7 @@ namespace SerialLoops.Lib.Items
             Puzzle,
             Scenario,
             Script,
-            Sfx,
+            SFX,
             System_Texture,
             Topic,
             Transition,

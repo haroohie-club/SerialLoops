@@ -1,4 +1,5 @@
 ﻿using Eto.Forms;
+using GotaSequenceLib.Playback;
 using HaruhiChokuretsuLib.Util;
 using NAudio.Wave;
 using SerialLoops.Lib.Items;
@@ -7,33 +8,19 @@ using System;
 
 namespace SerialLoops.Controls
 {
-    public class SoundPlayerPanel : Panel
+    public class SfxPlayerPanel : Panel
     {
         private ILogger _log;
-        private ISoundItem _item;
-        private SoundPlayer _player;
+        private Player _player;
         private Button _playPauseButton;
         private Button _stopButton;
 
-        public IWaveProvider Sound { get; private set; }
-        public SKGuiImage Waveform { get; private set; }
-
-        public SoundPlayerPanel(ISoundItem item, ILogger log)
+        public SfxPlayerPanel(Player player, ILogger log)
         {
             _log = log;
-            _item = item;
+            _player = player;
 
-            InitializePlayer();
             InitializeComponent();
-        }
-
-        private void InitializePlayer()
-        {
-            _log.Log("Attempting to initialize sound player...");
-            _player = new();
-            Sound = _item.GetWaveProvider(_log, true);
-            _player.Initialize(Sound);
-            _log.Log("Sound player successfully initialized.");
         }
 
         public void InitializeComponent()
@@ -51,7 +38,6 @@ namespace SerialLoops.Controls
                 {
                     _playPauseButton,
                     _stopButton,
-                    Waveform,
                 }
             };
         }
@@ -61,13 +47,12 @@ namespace SerialLoops.Controls
             _stopButton.Enabled = false;
             _playPauseButton.Image = ControlGenerator.GetIcon("Play", _log);
             _player.Stop();
-            InitializePlayer();
         }
 
         private void PlayPauseButton_Click(object sender, EventArgs e)
         {
             _stopButton.Enabled = true;
-            if (_player.PlaybackState == PlaybackState.Playing)
+            if (_player.State == PlayerState.Playing)
             {
                 _player.Pause();
                 _playPauseButton.Image = ControlGenerator.GetIcon("Play", _log);

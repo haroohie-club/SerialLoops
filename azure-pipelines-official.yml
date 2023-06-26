@@ -18,7 +18,7 @@ parameters:
   type: string
   default: 'Latest nightly build. **Note that this is likely to have bugs and we recommend you use a regular release instead!**'
 
-name: 0.2.pre.$(Rev:r)
+name: 0.3.pre.$(Rev:r)
 
 variables:
   - name: Version

@@ -38,7 +38,7 @@ namespace SerialLoops.Dialogs
                 ItemDescription.ItemType.Map => "MAP_",
                 ItemDescription.ItemType.Place => "PLC_",
                 ItemDescription.ItemType.Puzzle => "PZL_",
-                ItemDescription.ItemType.Sfx => "SFX_",
+                ItemDescription.ItemType.SFX => "SFX_",
                 ItemDescription.ItemType.Transition => "TRN_",
                 ItemDescription.ItemType.Tutorial => "TUT_",
                 _ => "",
