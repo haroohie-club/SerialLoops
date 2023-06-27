@@ -192,7 +192,8 @@ namespace SerialLoops.Lib.Items
             }
             try
             {
-                AdxDecoder decoder = new(adxBytes, log) { DoLoop = loop };
+                AdxDecoder decoder = new(adxBytes, log);
+                decoder.DoLoop = decoder.DoLoop && loop; // We manually handle looping here so that we can disable it when trying to export WAV files
                 return new AdxWaveProvider(decoder, decoder.Header.LoopInfo.EnabledInt == 1, decoder.LoopInfo.StartSample, decoder.LoopInfo.EndSample);
             }
             catch (Exception ex)
@@ -211,7 +212,8 @@ namespace SerialLoops.Lib.Items
                 }
                 try
                 {
-                    AdxDecoder decoder = new(adxBytes, log) { DoLoop = loop };
+                    AdxDecoder decoder = new(adxBytes, log);
+                    decoder.DoLoop = decoder.DoLoop && loop;
                     return new AdxWaveProvider(decoder, decoder.Header.LoopInfo.EnabledInt == 1, decoder.LoopInfo.StartSample, decoder.LoopInfo.EndSample);
                 }
                 catch (Exception nestedException)

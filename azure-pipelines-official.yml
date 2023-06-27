@@ -247,8 +247,7 @@ stages:
           Additionally, to test the game you will need to have a Nintendo DS emulator installed. We recommend [melonDS](https://melonds.kuribo64.net/) for its accuracy.
 
           ### Windows
-          There is currently no Windows installer; instead, you simply download the zip and run the application directly. Because our application contacts GitHub's servers to check for new releases on lauch, it is possible it will get flagged by
-          firewall software &ndash; please allow it through so it can function correctly.
+          There is currently no Windows installer; instead, you simply download the zip and run the application directly. Because our application contacts GitHub's servers to check for new releases on lauch, it is possible it will get flagged by firewall software &ndash; please allow it through so it can function correctly.
 
           ### macOS
           On macOS, after dragging the app from the dmg into Applications, please run `xattr -cr /Applications/SerialLoops.Mac.app` from the Terminal in order to be able to run the app. This is required because we currently don't codesign the application, meaning macOS will refuse to run it without explicit approval from you.
