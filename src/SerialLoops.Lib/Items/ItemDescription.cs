@@ -69,6 +69,9 @@ namespace SerialLoops.Lib.Items
                 case ItemType.BGM:
                     BackgroundMusicItem bgm = (BackgroundMusicItem)this;
                     return project.Items.Where(i => bgm.ScriptUses.Select(s => s.ScriptName).Contains(i.Name)).ToList();
+                case ItemType.Character:
+                    CharacterItem character = (CharacterItem)this;
+                    return project.Items.Where(i => i.Type == ItemType.Script && ((ScriptItem)i).Event.DialogueSection.Objects.Any(l => l.Speaker == character.MessageInfo.Character)).ToList();
                 case ItemType.Character_Sprite:
                     CharacterSpriteItem sprite = (CharacterSpriteItem)this;
                     return project.Items.Where(i => sprite.ScriptUses.Select(s => s.ScriptName).Contains(i.Name)).ToList();
@@ -111,6 +114,7 @@ namespace SerialLoops.Lib.Items
                         (((TopicItem)i).Topic.CardType != TopicCardType.Main && ((TopicItem)i).Topic.EventIndex == script.Event.Index ||
                         (((TopicItem)i).HiddenMainTopic?.EventIndex ?? -1) == script.Event.Index)));
                     references.AddRange(project.Items.Where(i => i.Type == ItemType.Script && ((ScriptItem)i).Event.ConditionalsSection.Objects.Contains(Name)));
+                    references.AddRange(project.Items.Where(i => i.Type == ItemType.Tutorial && ((TutorialItem)i).Tutorial.AssociatedScript == script.Event.Index));
                     return references;
                 case ItemType.SFX:
                     SfxItem sfx = (SfxItem)this;

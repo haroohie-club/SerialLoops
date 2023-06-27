@@ -106,6 +106,8 @@ namespace SerialLoops.Controls
                     return new SystemTextureEditor((SystemTextureItem)project.Items.First(i => i.Name == item.Name), project, log);
                 case ItemDescription.ItemType.Topic:
                     return new TopicEditor((TopicItem)project.Items.First(i => i.Name == item.Name), project, this, log);
+                case ItemDescription.ItemType.Tutorial:
+                    return new TutorialEditor((TutorialItem)project.Items.First(i => i.Name == item.Name), project, this, log);
                 case ItemDescription.ItemType.Voice:
                     return new VoicedLineEditor((VoicedLineItem)project.Items.First(i => i.Name == item.Name), project, log);
                 default:

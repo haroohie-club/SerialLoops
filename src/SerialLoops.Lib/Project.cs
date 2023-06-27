@@ -76,6 +76,8 @@ namespace SerialLoops.Lib
         [JsonIgnore]
         public EventFile TopicFile { get; set; }
         [JsonIgnore]
+        public EventFile TutorialFile { get; set; }
+        [JsonIgnore]
         public MessageFile UiText { get; set; }
         [JsonIgnore]
         public MessageInfoFile MessInfo { get; set; }
@@ -552,6 +554,20 @@ namespace SerialLoops.Lib
             catch (Exception ex)
             {
                 log.LogException($"Failed to load scripts", ex);
+                return new(LoadProjectState.FAILED);
+            }
+
+            try
+            {
+                TutorialFile = Evt.Files.First(t => t.Name == "TUTORIALS");
+                TutorialFile.InitializeTutorialFile();
+                tracker.Focus("Tutorials", 1);
+                Items.AddRange(TutorialFile.Tutorials.Where(t => t.Id > 0).Select(t => new TutorialItem(t)));
+                tracker.Finished++;
+            }
+            catch (Exception ex)
+            {
+                log.LogException("Failed to load tutorials", ex);
                 return new(LoadProjectState.FAILED);
             }
 
