@@ -8,6 +8,7 @@
     <Version>$(SLAssemblyVersion)</Version>
     <InformationalVersion>$(SLVersion)</InformationalVersion>
     <AssemblyName>SerialLoops</AssemblyName>
+    <MacBundleName>Serial Loops.app</MacBundleName>
   </PropertyGroup>
 
   <ItemGroup>
