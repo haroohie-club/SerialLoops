@@ -37,26 +37,7 @@ namespace SerialLoops.Lib.Items
             ChibiEntry entry = ChibiEntries.First(c => c.Name == entryName).Chibi;
             GraphicsFile animation = grp.Files.First(f => f.Index == entry.Animation);
 
-            IEnumerable<SKBitmap> rawFrames = animation.GetAnimationFrames(grp.Files.First(f => f.Index == entry.Texture)).Select(f => f.GetImage());
-            int maxWidth = rawFrames.Max(r => r.Width);
-            int maxHeight = rawFrames.Max(r => r.Height);
-            // Frames need to be resized to have a constant width/height
-            List<SKBitmap> frames = new();
-            if (rawFrames.Any(f => f.Width != maxWidth || f.Height != maxHeight))
-            {
-                foreach (SKBitmap rawFrame in rawFrames)
-                {
-                    SKBitmap frame = new(maxWidth, maxHeight);
-                    using SKCanvas canvas = new(frame);
-                    canvas.DrawBitmap(rawFrame, 0, 0);
-                    canvas.Flush();
-                    frames.Add(frame);
-                }
-            }
-            else
-            {
-                frames.AddRange(rawFrames);
-            }
+            IEnumerable<SKBitmap> frames = animation.GetAnimationFrames(grp.Files.First(f => f.Index == entry.Texture)).Select(f => f.GetImage());
             IEnumerable<int> timings = animation.AnimationEntries.Select(a => (int)((FrameAnimationEntry)a).Time);
 
             return frames.Zip(timings);
