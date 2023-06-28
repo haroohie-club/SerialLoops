@@ -32,6 +32,16 @@ namespace SerialLoops.Lib.Items
             PopulateScriptUses(project.Evt);
         }
 
+        public (GraphicsFile Texture, GraphicsFile Animation) SetChibiAnimation(string entryName, List<(SKBitmap, short)> framesAndTimings, ArchiveFile<GraphicsFile> grp)
+        {
+            ChibiEntry entry = ChibiEntries.First(c => c.Name == entryName).Chibi;
+            GraphicsFile animation = grp.Files.First(f => f.Index == entry.Animation);
+            GraphicsFile texture = animation.SetFrameAnimationAndGetTexture(framesAndTimings);
+            texture.Index = entry.Texture;
+
+            return (texture, animation);
+        }
+
         private IEnumerable<(SKBitmap Frame, int Timing)> GetChibiAnimation(string entryName, ArchiveFile<GraphicsFile> grp)
         {
             ChibiEntry entry = ChibiEntries.First(c => c.Name == entryName).Chibi;
@@ -45,7 +55,8 @@ namespace SerialLoops.Lib.Items
 
         public override void Refresh(Project project, ILogger log)
         {
-            GetChibiAnimation(Name, project.Grp);
+            ChibiAnimations.Clear();
+            ChibiEntries.ForEach(e => ChibiAnimations.Add(e.Name, GetChibiAnimation(e.Name, project.Grp)));
             PopulateScriptUses(project.Evt);
         }
 
