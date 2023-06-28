@@ -211,7 +211,6 @@ namespace SerialLoops.Editors
                     {
                         frameStackTimer.Stop();
                         frameStackTimer.Start();
-                        UpdateTabTitle(false, timingStepper);
                     };
                     frameStackTimer.Elapsed += (sender, args) =>
                     {
@@ -225,6 +224,7 @@ namespace SerialLoops.Editors
                             _animatedImage.CurrentFrame = 0;
                             _animatedImage.UpdateImage();
                             UpdateFramesStack();
+                            UpdateTabTitle(false);
                         });
                     };
                     frameLayout.Items.Add(ControlGenerator.GetControlWithLabel("Frames", timingStepper));

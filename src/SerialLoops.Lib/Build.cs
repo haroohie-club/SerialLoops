@@ -143,7 +143,7 @@ namespace SerialLoops.Lib
                         }
                         else if (Path.GetExtension(file).Equals(".bna", StringComparison.OrdinalIgnoreCase))
                         {
-                            ReplaceSingleFile(grp, file, index, log);
+                            ReplaceSingleAnimationFile(grp, file, index, log);
                         }
                         else
                         {
@@ -377,18 +377,23 @@ namespace SerialLoops.Lib
                 log.LogException($"Failed replacing source file {index} in dat.bin with file '{filePath}'", ex);
             }
         }
-        private static void ReplaceSingleFile(ArchiveFile<GraphicsFile> archive, string filePath, int index, ILogger log)
+        private static void ReplaceSingleAnimationFile(ArchiveFile<GraphicsFile> archive, string filePath, int index, ILogger log)
         {
             try
             {
                 GraphicsFile file = archive.Files.FirstOrDefault(f => f.Index == index);
-                file.Data = File.ReadAllBytes(filePath).ToList();
-                file.Edited = true;
-                archive.Files[archive.Files.IndexOf(file)] = file;
+                GraphicsFile newFile = new()
+                {
+                    Name = file.Name,
+                    Index = file.Index,
+                };
+                newFile.Initialize(File.ReadAllBytes(filePath), file.Offset, log);
+                newFile.Edited = true;
+                archive.Files[archive.Files.IndexOf(file)] = newFile;
             }
             catch (Exception ex)
             {
-                log.LogException($"Failed replacing source file {index} in evt.bin with file '{filePath}'", ex);
+                log.LogException($"Failed replacing file {index} in grp.bin with file '{filePath}'", ex);
             }
         }
     }

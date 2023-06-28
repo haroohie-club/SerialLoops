@@ -39,7 +39,7 @@ namespace SerialLoops.Lib.Items
         {
             ChibiGraphics chibiGraphics = ChibiEntries.First(c => c.Name == entryName).Chibi;
             ChibiEntryModifications[entryName] = true;
-            GraphicsFile texture = chibiGraphics.Animation.SetFrameAnimationAndGetTexture(framesAndTimings);
+            GraphicsFile texture = chibiGraphics.Animation.SetFrameAnimationAndGetTexture(framesAndTimings, chibiGraphics.Texture.Palette);
             texture.Index = chibiGraphics.Texture.Index;
             chibiGraphics.Texture = texture;
         }
