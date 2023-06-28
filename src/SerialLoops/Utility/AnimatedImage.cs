@@ -17,6 +17,11 @@ namespace SerialLoops.Utility
             FramesWithTimings = framesWithTimings.Select(f => (new SKGuiImage(f.Frame), f.Timing)).ToList();
             InitializeComponent();
         }
+        public AnimatedImage(IEnumerable<(SKBitmap Frame, short Timing)> framesWithTimings)
+        {
+            FramesWithTimings = framesWithTimings.Select(f => (new SKGuiImage(f.Frame), (int)f.Timing)).ToList();
+            InitializeComponent();
+        }
 
         private void InitializeComponent()
         {

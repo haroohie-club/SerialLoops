@@ -5,6 +5,7 @@ using HaruhiChokuretsuLib.Archive.Graphics;
 using HaruhiChokuretsuLib.Util;
 using SkiaSharp;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace SerialLoops.Lib.Items
@@ -13,8 +14,9 @@ namespace SerialLoops.Lib.Items
     {
         public Chibi Chibi { get; set; }
         public int ChibiIndex { get; set; }
-        public List<(string Name, ChibiEntry Chibi)> ChibiEntries { get; set; } = new();
-        public Dictionary<string, IEnumerable<(SKBitmap Frame, int Timing)>> ChibiAnimations { get; set; } = new();
+        public List<(string Name, ChibiGraphics Chibi)> ChibiEntries { get; set; } = new();
+        public Dictionary<string, bool> ChibiEntryModifications { get; set; } = new();
+        public Dictionary<string, List<(SKBitmap Frame, short Timing)>> ChibiAnimations { get; set; } = new();
         public (string ScriptName, ScriptCommandInvocation command)[] ScriptUses { get; set; }
 
         public ChibiItem(Chibi chibi, Project project) : base($"CHIBI{chibi.ChibiEntries[0].Animation}", ItemType.Chibi)
@@ -27,30 +29,30 @@ namespace SerialLoops.Lib.Items
             DisplayName = $"CHIBI_{firstAnimationName[0..firstAnimationName.IndexOf('_')]}";
             ChibiIndex = chibiIndices.IndexOf(firstAnimationName[0..3]);
             ChibiEntries.AddRange(Chibi.ChibiEntries.Where(c => c.Animation > 0)
-                .Select(c => (project.Grp.Files.First(f => f.Index == c.Animation).Name[0..^3], c)));
+                .Select(c => (project.Grp.Files.First(f => f.Index == c.Animation).Name[0..^3], new ChibiGraphics(c, project))));
+            ChibiEntries.ForEach(e => ChibiEntryModifications.Add(e.Name, false));
             ChibiEntries.ForEach(e => ChibiAnimations.Add(e.Name, GetChibiAnimation(e.Name, project.Grp)));
             PopulateScriptUses(project.Evt);
         }
 
-        public (GraphicsFile Texture, GraphicsFile Animation) SetChibiAnimation(string entryName, List<(SKBitmap, short)> framesAndTimings, ArchiveFile<GraphicsFile> grp)
+        public void SetChibiAnimation(string entryName, List<(SKBitmap, short)> framesAndTimings)
         {
-            ChibiEntry entry = ChibiEntries.First(c => c.Name == entryName).Chibi;
-            GraphicsFile animation = grp.Files.First(f => f.Index == entry.Animation);
-            GraphicsFile texture = animation.SetFrameAnimationAndGetTexture(framesAndTimings);
-            texture.Index = entry.Texture;
-
-            return (texture, animation);
+            ChibiGraphics chibiGraphics = ChibiEntries.First(c => c.Name == entryName).Chibi;
+            ChibiEntryModifications[entryName] = true;
+            GraphicsFile texture = chibiGraphics.Animation.SetFrameAnimationAndGetTexture(framesAndTimings);
+            texture.Index = chibiGraphics.Texture.Index;
+            chibiGraphics.Texture = texture;
         }
 
-        private IEnumerable<(SKBitmap Frame, int Timing)> GetChibiAnimation(string entryName, ArchiveFile<GraphicsFile> grp)
+        private List<(SKBitmap Frame, short Timing)> GetChibiAnimation(string entryName, ArchiveFile<GraphicsFile> grp)
         {
-            ChibiEntry entry = ChibiEntries.First(c => c.Name == entryName).Chibi;
-            GraphicsFile animation = grp.Files.First(f => f.Index == entry.Animation);
+            ChibiGraphics chibiGraphics = ChibiEntries.First(c => c.Name == entryName).Chibi;
+            GraphicsFile animation = chibiGraphics.Animation;
 
-            IEnumerable<SKBitmap> frames = animation.GetAnimationFrames(grp.Files.First(f => f.Index == entry.Texture)).Select(f => f.GetImage());
-            IEnumerable<int> timings = animation.AnimationEntries.Select(a => (int)((FrameAnimationEntry)a).Time);
+            IEnumerable<SKBitmap> frames = animation.GetAnimationFrames(chibiGraphics.Texture).Select(f => f.GetImage());
+            IEnumerable<short> timings = animation.AnimationEntries.Select(a => ((FrameAnimationEntry)a).Time);
 
-            return frames.Zip(timings);
+            return frames.Zip(timings).ToList();
         }
 
         public override void Refresh(Project project, ILogger log)
@@ -94,6 +96,28 @@ namespace SerialLoops.Lib.Items
                 "UR" => Direction.UP_RIGHT,
                 _ => Direction.DOWN_LEFT,
             };
+        }
+
+        public class ChibiGraphics
+        {
+            public GraphicsFile Texture { get; set; }
+            public GraphicsFile Animation { get; set; }
+
+            public ChibiGraphics(ChibiEntry entry, Project project)
+            {
+                Texture = project.Grp.Files.First(g => g.Index == entry.Texture);
+                Animation = project.Grp.Files.First(g => g.Index == entry.Animation);
+            }
+
+            public void Write(Project project, ILogger log)
+            {
+                using MemoryStream textureStream = new();
+                Texture.GetImage().Encode(textureStream, SKEncodedImageFormat.Png, 1);
+                IO.WriteBinaryFile(Path.Combine("assets", "graphics", $"{Texture.Index:X3}.png"), textureStream.ToArray(), project, log);
+                IO.WriteStringFile(Path.Combine("assets", "graphics", $"{Texture.Index:X3}_pal.csv"), string.Join(',', Texture.Palette.Select(c => c.ToString())), project, log);
+
+                IO.WriteBinaryFile(Path.Combine("assets", "graphics", $"{Animation.Index:X3}.bna"), Animation.GetBytes(), project, log);
+            }
         }
     }
 }

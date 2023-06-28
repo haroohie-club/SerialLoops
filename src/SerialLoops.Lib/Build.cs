@@ -125,7 +125,7 @@ namespace SerialLoops.Lib
                         {
                             if (string.IsNullOrEmpty(config.DevkitArmPath))
                             {
-                                log.LogError("DevkitARM must be supplied in order to build");
+                                log.LogError("DevkitARM must be supplied in order to build!");
                                 return false;
                             }
                             if (file.Contains("events"))
@@ -140,6 +140,10 @@ namespace SerialLoops.Lib
                             {
                                 log.LogWarning($"Source file found at '{file}', outside of data and events directory; skipping...");
                             }
+                        }
+                        else if (Path.GetExtension(file).Equals(".bna", StringComparison.OrdinalIgnoreCase))
+                        {
+                            ReplaceSingleFile(grp, file, index, log);
                         }
                         else
                         {
@@ -371,6 +375,20 @@ namespace SerialLoops.Lib
             catch (Exception ex)
             {
                 log.LogException($"Failed replacing source file {index} in dat.bin with file '{filePath}'", ex);
+            }
+        }
+        private static void ReplaceSingleFile(ArchiveFile<GraphicsFile> archive, string filePath, int index, ILogger log)
+        {
+            try
+            {
+                GraphicsFile file = archive.Files.FirstOrDefault(f => f.Index == index);
+                file.Data = File.ReadAllBytes(filePath).ToList();
+                file.Edited = true;
+                archive.Files[archive.Files.IndexOf(file)] = file;
+            }
+            catch (Exception ex)
+            {
+                log.LogException($"Failed replacing source file {index} in evt.bin with file '{filePath}'", ex);
             }
         }
     }
