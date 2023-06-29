@@ -557,13 +557,11 @@ namespace SerialLoops.Lib
                 return new(LoadProjectState.FAILED);
             }
 
+
             try
             {
                 TutorialFile = Evt.Files.First(t => t.Name == "TUTORIALS");
                 TutorialFile.InitializeTutorialFile();
-                tracker.Focus("Tutorials", 1);
-                Items.AddRange(TutorialFile.Tutorials.Where(t => t.Id > 0).Select(t => new TutorialItem(t)));
-                tracker.Finished++;
             }
             catch (Exception ex)
             {

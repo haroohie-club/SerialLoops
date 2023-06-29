@@ -280,6 +280,9 @@ namespace SerialLoops
             Command editUiTextCommand = new() { MenuText = "Edit UI Text...", Image = ControlGenerator.GetIcon("Edit_UI_Text", Log) };
             editUiTextCommand.Executed += EditUiTextCommand_Executed;
 
+            Command editTutorialMappingsCommand = new() { MenuText = "Edit Tutorial Mappings...", Image = ControlGenerator.GetIcon("Tutorial", Log) };
+            editTutorialMappingsCommand.Executed += EditTutorialMappingsCommand_Executed;
+
             Command searchProjectCommand = new()
             {
                 MenuText = "Search...",
@@ -351,6 +354,7 @@ namespace SerialLoops
                     applyHacksCommand,
                     renameItemCommand,
                     editUiTextCommand,
+                    editTutorialMappingsCommand,
                     searchProjectCommand,
                     findOrphanedItemsCommand,
                 }
@@ -599,7 +603,6 @@ namespace SerialLoops
             bool savedMessInfo = false;
             bool changedNameplates = false;
             bool changedTopics = false;
-            bool changedTutorials = false;
             bool changedSubs = false;
             SKCanvas nameplateCanvas = new(OpenProject.NameplateBitmap);
             SKCanvas speakerCanvas = new(OpenProject.SpeakerBitmap);
@@ -701,11 +704,6 @@ namespace SerialLoops
                     case ItemDescription.ItemType.Topic:
                         changedTopics = true;
                         break;
-                    case ItemDescription.ItemType.Tutorial:
-                        TutorialItem tutorialItem = ((TutorialItem)item);
-                        OpenProject.TutorialFile.Tutorials[tutorialItem.Tutorial.Id - OpenProject.TutorialFile.Tutorials.First().Id] = tutorialItem.Tutorial;
-                        changedTutorials = true;
-                        break;
                     case ItemDescription.ItemType.Voice:
                         VoicedLineItem vce = (VoicedLineItem)item;
                         if (OpenProject.VoiceMap is not null)
@@ -735,12 +733,6 @@ namespace SerialLoops
                     OpenProject.TopicFile.GetSource(new()), OpenProject, Log);
             }
 
-            if (changedTutorials)
-            {
-                IO.WriteStringFile(Path.Combine("assets", "events", $"{OpenProject.TutorialFile.Index:X3}.s"),
-                    OpenProject.TutorialFile.GetSource(new()), OpenProject, Log);
-            }
-
             if (changedSubs)
             {
                 IO.WriteStringFile(Path.Combine("assets", "events", $"{OpenProject.VoiceMap.Index:X3}.s"),
@@ -768,6 +760,15 @@ namespace SerialLoops
             {
                 EditUiTextDialog editUiTextDialog = new(OpenProject, Log);
                 editUiTextDialog.ShowModal(this);
+            }
+        }
+
+        private void EditTutorialMappingsCommand_Executed(object sender, EventArgs e)
+        {
+            if (OpenProject is not null)
+            {
+                EditTutorialMappingsDialog editTutorialMappingsDialog = new(OpenProject, EditorTabs, Log);
+                editTutorialMappingsDialog.Show();
             }
         }
 

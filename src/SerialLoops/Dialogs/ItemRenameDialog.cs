@@ -40,7 +40,6 @@ namespace SerialLoops.Dialogs
                 ItemDescription.ItemType.Puzzle => "PZL_",
                 ItemDescription.ItemType.SFX => "SFX_",
                 ItemDescription.ItemType.Transition => "TRN_",
-                ItemDescription.ItemType.Tutorial => "TUT_",
                 _ => "",
             };
 

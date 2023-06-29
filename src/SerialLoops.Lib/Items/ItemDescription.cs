@@ -53,7 +53,6 @@ namespace SerialLoops.Lib.Items
             System_Texture,
             Topic,
             Transition,
-            Tutorial,
             Voice,
         }
 
@@ -114,7 +113,6 @@ namespace SerialLoops.Lib.Items
                         (((TopicItem)i).Topic.CardType != TopicCardType.Main && ((TopicItem)i).Topic.EventIndex == script.Event.Index ||
                         (((TopicItem)i).HiddenMainTopic?.EventIndex ?? -1) == script.Event.Index)));
                     references.AddRange(project.Items.Where(i => i.Type == ItemType.Script && ((ScriptItem)i).Event.ConditionalsSection.Objects.Contains(Name)));
-                    references.AddRange(project.Items.Where(i => i.Type == ItemType.Tutorial && ((TutorialItem)i).Tutorial.AssociatedScript == script.Event.Index));
                     return references;
                 case ItemType.SFX:
                     SfxItem sfx = (SfxItem)this;
