@@ -44,7 +44,7 @@ namespace SerialLoops.Lib.Items
             chibiGraphics.Texture = texture;
         }
 
-        private List<(SKBitmap Frame, short Timing)> GetChibiAnimation(string entryName, ArchiveFile<GraphicsFile> grp)
+        public List<(SKBitmap Frame, short Timing)> GetChibiAnimation(string entryName, ArchiveFile<GraphicsFile> grp)
         {
             ChibiGraphics chibiGraphics = ChibiEntries.First(c => c.Name == entryName).Chibi;
             GraphicsFile animation = chibiGraphics.Animation;
