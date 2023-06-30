@@ -54,7 +54,7 @@ stages:
           artifactName: 'macOS-x64-v$(Version)'
           framework: 'net6.0'
           rid: 'osx-x64'
-          artifactPath: '$(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Mac/Release/net6.0/osx-x64/Serial\ Loops.dmg'
+          artifactPath: '$(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Mac/Release/net6.0/osx-x64/Serial Loops.dmg'
           secondArtifactPath: ''
           thirdArtifactPath: ''
           extraPublishParams: '/p:EnableDmgBuild=true'
@@ -64,7 +64,7 @@ stages:
           artifactName: 'macOS-arm-v$(Version)'
           framework: 'net6.0'
           rid: 'osx-arm64'
-          artifactPath: '$(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Mac/Release/net6.0/osx-arm64/Serial\ Loops.Mac.dmg'
+          artifactPath: '$(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/bin/Mac/Release/net6.0/osx-arm64/Serial Loops.dmg'
           secondArtifactPath: ''
           thirdArtifactPath: ''
           extraPublishParams: '/p:EnableDmgBuild=true'
@@ -226,8 +226,8 @@ stages:
         Move-Item -Path $(Build.ArtifactStagingDirectory)/Linux-v$(Version)/publish.tar.gz -Destination $(Build.ArtifactStagingDirectory)/SerialLoops-linux-x64-v$(Version).tar.gz
         Move-Item -Path $(Build.ArtifactStagingDirectory)/Linux-v$(Version)-2/SerialLoops.deb -Destination $(Build.ArtifactStagingDirectory)/SerialLoops-$(Version)_amd64.deb
         Move-Item -Path $(Build.ArtifactStagingDirectory)/Linux-v$(Version)-3/SerialLoops-$(Version)-1.fc38.x86_64.rpm -Destination $(Build.ArtifactStagingDirectory)/SerialLoops-$(Version)-1.fc38.x86_64.rpm
-        Move-Item -Path $(Build.ArtifactStagingDirectory)/macOS-x64-v$(Version)/Serial\ Loops.dmg -Destination $(Build.ArtifactStagingDirectory)/SerialLoops-macOS-x64-v$(Version).dmg
-        Move-Item -Path $(Build.ArtifactStagingDirectory)/macOS-arm-v$(Version)/Serial\ Loops.dmg -Destination $(Build.ArtifactStagingDirectory)/SerialLoops-macOS-arm-v$(Version).dmg
+        Move-Item -Path "$(Build.ArtifactStagingDirectory)/macOS-x64-v$(Version)/Serial Loops.dmg" -Destination $(Build.ArtifactStagingDirectory)/SerialLoops-macOS-x64-v$(Version).dmg
+        Move-Item -Path "$(Build.ArtifactStagingDirectory)/macOS-arm-v$(Version)/Serial Loops.dmg" -Destination $(Build.ArtifactStagingDirectory)/SerialLoops-macOS-arm-v$(Version).dmg
         Move-Item -Path $(Build.ArtifactStagingDirectory)/Windows-v$(Version)/publish.zip -Destination $(Build.ArtifactStagingDirectory)/SerialLoops-windows-x64-v$(Version).zip
       displayName: Move and rename artifacts
     - task: GitHubRelease@1
