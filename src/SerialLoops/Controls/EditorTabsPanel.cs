@@ -87,7 +87,7 @@ namespace SerialLoops.Controls
                     return new CharacterSpriteEditor(
                         (CharacterSpriteItem)project.Items.First(i => i.Name == item.Name), project, log);
                 case ItemDescription.ItemType.Chibi:
-                    return new ChibiEditor((ChibiItem)project.Items.First(i => i.Name == item.Name), log);
+                    return new ChibiEditor((ChibiItem)project.Items.First(i => i.Name == item.Name), project, log);
                 case ItemDescription.ItemType.Group_Selection:
                     return new GroupSelectionEditor((GroupSelectionItem)project.Items.First(i => i.Name == item.Name), log, project, this);
                 case ItemDescription.ItemType.Map:

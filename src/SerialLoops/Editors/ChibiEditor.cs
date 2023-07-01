@@ -3,6 +3,7 @@ using HaruhiChokuretsuLib.Archive.Graphics;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Controls;
 using SerialLoops.Dialogs;
+using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Utility;
 using SkiaSharp;
@@ -24,7 +25,7 @@ namespace SerialLoops.Editors
         private AnimatedImage _animatedImage;
         private StackLayout _framesStack;
 
-        public ChibiEditor(ChibiItem chibi, ILogger log) : base(chibi, log)
+        public ChibiEditor(ChibiItem chibi, Project project, ILogger log) : base(chibi, log, project)
         {
         }
 
@@ -111,6 +112,45 @@ namespace SerialLoops.Editors
                     MessageBox.Show("Chibi frames exported!!", "Success!", MessageBoxType.Information);
                 }
             };
+            Button replaceFramesButton = new() { Text = "Replace Frames" };
+            replaceFramesButton.Click += (sender, args) =>
+            {
+                OpenFileDialog openFileDialog = new()
+                {
+                    Title = "Select frames",
+                    CheckFileExists = true,
+                    MultiSelect = true,
+                    Filters = { new("Image Files", ".png", ".jpg", ".jpeg", ".bmp", ".gif") },
+                };
+                if (openFileDialog.ShowAndReportIfFileSelected(this))
+                {
+                    List<SKBitmap> frames = openFileDialog.Filenames.Select(f => SKBitmap.Decode(f)).ToList();
+                    short[] timings = new short[frames.Count];
+                    Array.Fill<short>(timings, 32);
+                    List<(SKBitmap Frame, short Timing)> framesAndTimings = frames.Zip(timings).ToList();
+                    UpdateChibiFrames(framesAndTimings);
+                }
+            };
+            Button addFramesButton = new() { Text = "Add Frames" };
+            addFramesButton.Click += (sender, args) =>
+            {
+                OpenFileDialog openFileDialog = new()
+                {
+                    Title = "Select frames",
+                    CheckFileExists = true,
+                    MultiSelect = true,
+                    Filters = { new("Image Files", ".png", ".jpg", ".jpeg", ".bmp", ".gif") },
+                };
+                if (openFileDialog.ShowAndReportIfFileSelected(this))
+                {
+                    List<SKBitmap> frames = openFileDialog.Filenames.Select(f => SKBitmap.Decode(f)).ToList();
+                    short[] timings = new short[frames.Count];
+                    Array.Fill<short>(timings, 32);
+                    List<(SKBitmap Frame, short Timing)> newFramesAndTimings = frames.Zip(timings).ToList();
+                    _chibi.ChibiAnimations[_currentChibiEntry].AddRange(newFramesAndTimings);
+                    UpdateChibiFrames(_chibi.ChibiAnimations[_currentChibiEntry]);
+                }
+            };
 
             return new TableLayout
             {
@@ -149,22 +189,29 @@ namespace SerialLoops.Editors
                             {
                                 exportSpritesButton,
                                 exportGifButton,
-                            }
-                        }
-                    ),
-                    new(
-                        new StackLayout
-                        {
-                            Orientation = Orientation.Horizontal,
-                            Spacing = 3,
-                            Items =
-                            {
-
+                                replaceFramesButton,
                             }
                         }
                     ),
                 }
             };
+        }
+
+        private void UpdateChibiFrames(List<(SKBitmap Frame, short Timing)> framesAndTimings)
+        {
+            Application.Instance.Invoke(() =>
+            {
+                GraphicsFile animation = _chibi.ChibiEntries.First(c => c.Name == _currentChibiEntry).Chibi.Animation;
+                _chibi.SetChibiAnimation(_currentChibiEntry, framesAndTimings);
+                _chibi.ChibiAnimations[_currentChibiEntry].Clear();
+                _chibi.ChibiAnimations[_currentChibiEntry].AddRange(_chibi.GetChibiAnimation(_currentChibiEntry, _project.Grp));
+                AnimatedImage newImage = new(_chibi.ChibiAnimations[_currentChibiEntry]);
+                _animatedImage.FramesWithTimings = newImage.FramesWithTimings;
+                _animatedImage.CurrentFrame = 0;
+                _animatedImage.UpdateImage();
+                UpdateFramesStack();
+                UpdateTabTitle(false);
+            });
         }
 
         private StackLayout GetFramesStack()
