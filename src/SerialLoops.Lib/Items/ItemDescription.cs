@@ -53,7 +53,6 @@ namespace SerialLoops.Lib.Items
             System_Texture,
             Topic,
             Transition,
-            Tutorial,
             Voice,
         }
 
@@ -69,6 +68,9 @@ namespace SerialLoops.Lib.Items
                 case ItemType.BGM:
                     BackgroundMusicItem bgm = (BackgroundMusicItem)this;
                     return project.Items.Where(i => bgm.ScriptUses.Select(s => s.ScriptName).Contains(i.Name)).ToList();
+                case ItemType.Character:
+                    CharacterItem character = (CharacterItem)this;
+                    return project.Items.Where(i => i.Type == ItemType.Script && ((ScriptItem)i).Event.DialogueSection.Objects.Any(l => l.Speaker == character.MessageInfo.Character)).ToList();
                 case ItemType.Character_Sprite:
                     CharacterSpriteItem sprite = (CharacterSpriteItem)this;
                     return project.Items.Where(i => sprite.ScriptUses.Select(s => s.ScriptName).Contains(i.Name)).ToList();

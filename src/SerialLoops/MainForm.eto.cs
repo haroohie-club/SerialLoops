@@ -281,6 +281,9 @@ namespace SerialLoops
             Command editUiTextCommand = new() { MenuText = "Edit UI Text...", Image = ControlGenerator.GetIcon("Edit_UI_Text", Log) };
             editUiTextCommand.Executed += EditUiTextCommand_Executed;
 
+            Command editTutorialMappingsCommand = new() { MenuText = "Edit Tutorial Mappings...", Image = ControlGenerator.GetIcon("Tutorial", Log) };
+            editTutorialMappingsCommand.Executed += EditTutorialMappingsCommand_Executed;
+
             Command searchProjectCommand = new()
             {
                 MenuText = "Search...",
@@ -352,6 +355,7 @@ namespace SerialLoops
                     applyHacksCommand,
                     renameItemCommand,
                     editUiTextCommand,
+                    editTutorialMappingsCommand,
                     searchProjectCommand,
                     findOrphanedItemsCommand,
                 }
@@ -764,6 +768,15 @@ namespace SerialLoops
             {
                 EditUiTextDialog editUiTextDialog = new(OpenProject, Log);
                 editUiTextDialog.ShowModal(this);
+            }
+        }
+
+        private void EditTutorialMappingsCommand_Executed(object sender, EventArgs e)
+        {
+            if (OpenProject is not null)
+            {
+                EditTutorialMappingsDialog editTutorialMappingsDialog = new(OpenProject, EditorTabs, Log);
+                editTutorialMappingsDialog.Show();
             }
         }
 
