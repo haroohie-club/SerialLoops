@@ -17,6 +17,11 @@ namespace SerialLoops.Utility
             FramesWithTimings = framesWithTimings.Select(f => (new SKGuiImage(f.Frame), f.Timing)).ToList();
             InitializeComponent();
         }
+        public AnimatedImage(IEnumerable<(SKBitmap Frame, short Timing)> framesWithTimings)
+        {
+            FramesWithTimings = framesWithTimings.Select(f => (new SKGuiImage(f.Frame), (int)f.Timing)).ToList();
+            InitializeComponent();
+        }
 
         private void InitializeComponent()
         {
@@ -27,7 +32,14 @@ namespace SerialLoops.Utility
 
         public void UpdateImage()
         {
-            Content = FramesWithTimings[CurrentFrame].Frame;
+            if (FramesWithTimings.Any())
+            {
+                Content = FramesWithTimings[CurrentFrame].Frame;
+            }
+            else
+            {
+                Content = null;
+            }
         }
 
         public void Play()

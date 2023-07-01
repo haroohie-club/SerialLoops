@@ -1,5 +1,6 @@
 using Eto.Forms;
 using HaruhiChokuretsuLib.Archive;
+using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
 using SerialLoops.Controls;
 using SerialLoops.Dialogs;
@@ -621,6 +622,14 @@ namespace SerialLoops
 
                         ((BackgroundItem)item).Write(OpenProject, Log);
                         break;
+                    case ItemDescription.ItemType.BGM:
+                        if (!savedExtra)
+                        {
+                            IO.WriteStringFile(Path.Combine("assets", "data", $"{OpenProject.Extra.Index:X3}.s"),
+                                OpenProject.Extra.GetSource(new()), OpenProject, Log);
+                            savedExtra = true;
+                        }
+                        break;
                     case ItemDescription.ItemType.Character:
                         CharacterItem characterItem = (CharacterItem)item;
                         if (characterItem.NameplateProperties.Name != item.DisplayName[4..])
@@ -647,14 +656,13 @@ namespace SerialLoops
                             savedMessInfo = true;
                         }
                         break;
-                    case ItemDescription.ItemType.BGM:
-                        if (!savedExtra)
+                    case ItemDescription.ItemType.Chibi:
+                        ChibiItem chibiItem = (ChibiItem)item;
+                        foreach (string modifiedEntryName in chibiItem.ChibiEntryModifications.Where(e => e.Value).Select(e => e.Key))
                         {
-                            IO.WriteStringFile(Path.Combine("assets", "data", $"{OpenProject.Extra.Index:X3}.s"),
-                                OpenProject.Extra.GetSource(new()), OpenProject, Log);
-                            savedExtra = true;
+                            chibiItem.ChibiEntries.First(e => e.Name == modifiedEntryName).Chibi.Write(OpenProject, Log);
+                            chibiItem.ChibiEntryModifications[modifiedEntryName] = false;
                         }
-
                         break;
                     case ItemDescription.ItemType.Place:
                         PlaceItem placeItem = (PlaceItem)item;

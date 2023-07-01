@@ -86,7 +86,7 @@ public class ChibiDirectionSelector : Panel
     public void UpdateAvailableDirections(ChibiItem chibi, string prefix)
     {
         _availableDirections.Clear();
-        foreach ((string name, ChibiEntry entry) in chibi.ChibiEntries.Where(c => c.Name.StartsWith(prefix)))
+        foreach ((string name, ChibiItem.ChibiGraphics entry) in chibi.ChibiEntries.Where(c => c.Name.StartsWith(prefix)))
         {
             _availableDirections.Add(ChibiItem.CodeToDirection(name[^2..]));
         }
