@@ -22,7 +22,9 @@ public class SearchQuery
         Script_Flag = 12,
         Speaker_Name = 13,
         Conditional = 14,
-        Background_Type = 15
+        Background_Type = 15,
+        Episode_Number = 16,
+        Episode_Unique = 17,
     }
 
     public static SearchQuery Create(string text)

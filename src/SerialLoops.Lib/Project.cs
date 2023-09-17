@@ -946,11 +946,73 @@ namespace SerialLoops.Lib
                     }
                     return false;
 
+                case SearchQuery.DataHolder.Episode_Number:
+                    if (int.TryParse(term, out int episodeNum))
+                    {
+                        return ItemIsInEpisode(item, episodeNum, unique: false);
+                    }
+                    return false;
+
+                case SearchQuery.DataHolder.Episode_Unique:
+                    if (int.TryParse(term, out int episodeNumUnique))
+                    {
+                        return ItemIsInEpisode(item, episodeNumUnique, unique: true);
+                    }
+                    return false;
+
                 default:
                     logger.LogError($"Unimplemented search scope: {scope}");
                     return false;
             }
         }
 
+        private bool ItemIsInEpisode(ItemDescription item, int episodeNum, bool unique)
+        {
+            int scenarioEpIndex = Scenario.Commands.FindIndex(c => c.Verb == ScenarioCommand.ScenarioVerb.NEW_GAME && c.Parameter == episodeNum);
+            if (scenarioEpIndex >= 0)
+            {
+                int scenarioNextEpIndex = Scenario.Commands.FindIndex(c => c.Verb == ScenarioCommand.ScenarioVerb.NEW_GAME && c.Parameter == episodeNum + 1);
+                if (item is ScriptItem script)
+                {
+                    return ScriptIsInEpisode(script, scenarioEpIndex, scenarioNextEpIndex);
+                }
+                else
+                {
+                    List<ItemDescription> references = item.GetReferencesTo(this);
+                    if (unique)
+                    {
+
+                        return references.Where(r => r.Type == ItemDescription.ItemType.Script).Any() &&
+                            references.Where(r => r.Type == ItemDescription.ItemType.Script)
+                            .All(r => ScriptIsInEpisode((ScriptItem)r, scenarioEpIndex, scenarioNextEpIndex));
+                    }
+                    else
+                    {
+                        return references.Any(r => r.Type == ItemDescription.ItemType.Script && ScriptIsInEpisode((ScriptItem)r, scenarioEpIndex, scenarioNextEpIndex));
+                    }
+                }
+            }
+            return false;
+        }
+
+        private bool ScriptIsInEpisode(ScriptItem script, int scenarioEpIndex, int scenarioNextEpIndex)
+        {
+            int scriptFileScenarioIndex = Scenario.Commands.FindIndex(c => c.Verb == ScenarioCommand.ScenarioVerb.LOAD_SCENE && c.Parameter == script.Event.Index);
+            if (scriptFileScenarioIndex < 0)
+            {
+                List<ItemDescription> references = script.GetReferencesTo(this);
+                ItemDescription groupSelection = references.Find(r => r.Type == ItemDescription.ItemType.Group_Selection);
+                if (groupSelection is not null)
+                {
+                    scriptFileScenarioIndex = Scenario.Commands.FindIndex(c => c.Verb == ScenarioCommand.ScenarioVerb.ROUTE_SELECT && c.Parameter == ((GroupSelectionItem)groupSelection).Index);
+                }
+            }
+            if (scenarioNextEpIndex < 0)
+            {
+                scenarioNextEpIndex = int.MaxValue;
+            }
+
+            return scriptFileScenarioIndex > scenarioEpIndex && scriptFileScenarioIndex < scenarioNextEpIndex;
+        }
     }
 }
