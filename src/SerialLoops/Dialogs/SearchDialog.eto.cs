@@ -17,9 +17,9 @@ namespace SerialLoops
         private SearchBox _searchInput;
         
         public string Text { get => _searchInput.Text; set => _searchInput.Text = value; }
-        private HashSet<SearchQuery.DataHolder> _scopes = new() { SearchQuery.DataHolder.Title };
-        private HashSet<ItemDescription.ItemType> _types = Enum.GetValues<ItemDescription.ItemType>().ToHashSet();
-        private Label _searchWarningLabel = new()
+        private readonly HashSet<SearchQuery.DataHolder> _scopes = new() { SearchQuery.DataHolder.Title };
+        private readonly HashSet<ItemDescription.ItemType> _types = Enum.GetValues<ItemDescription.ItemType>().ToHashSet();
+        private readonly Label _searchWarningLabel = new()
         {
             Text = "Press ENTER to execute search.",
             TextAlignment = TextAlignment.Center,
@@ -33,10 +33,10 @@ namespace SerialLoops
             VerticalAlignment = VerticalAlignment.Center,
             Visible = false,
         };
-        
-        private SearchQuery _query
+
+        private SearchQuery GetQuery()
         {
-            get => new()
+            return new()
             {
                 Term = Text,
                 Scopes = _scopes,
@@ -71,7 +71,7 @@ namespace SerialLoops
 
         private void Search(bool force = false)
         {
-            var query = _query;
+            SearchQuery query = GetQuery();
             _searchWarningLabel.Visible = !query.QuickSearch;
             _resultsLabel.Visible = false;
             if (!query.QuickSearch && !force)
