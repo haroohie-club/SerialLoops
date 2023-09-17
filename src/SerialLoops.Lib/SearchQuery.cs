@@ -23,7 +23,7 @@ public class SearchQuery
         Speaker_Name = 13,
         Conditional = 14,
         Background_Type = 15,
-        Episode = 16,
+        Episode_Number = 16,
         Episode_Unique = 17,
     }
 

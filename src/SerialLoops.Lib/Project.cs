@@ -946,7 +946,7 @@ namespace SerialLoops.Lib
                     }
                     return false;
 
-                case SearchQuery.DataHolder.Episode:
+                case SearchQuery.DataHolder.Episode_Number:
                     if (int.TryParse(term, out int episodeNum))
                     {
                         return ItemIsInEpisode(item, episodeNum, unique: false);
@@ -982,7 +982,7 @@ namespace SerialLoops.Lib
                     if (unique)
                     {
 
-                        return references.Where(r => r.Type == ItemDescription.ItemType.Script).Count() > 0 &&
+                        return references.Where(r => r.Type == ItemDescription.ItemType.Script).Any() &&
                             references.Where(r => r.Type == ItemDescription.ItemType.Script)
                             .All(r => ScriptIsInEpisode((ScriptItem)r, scenarioEpIndex, scenarioNextEpIndex));
                     }
