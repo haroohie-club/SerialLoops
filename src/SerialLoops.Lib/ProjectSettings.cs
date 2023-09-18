@@ -22,7 +22,7 @@ namespace SerialLoops.Lib
                 string name = value.Length > 128 ? value[..63] : value;
                 for (int i = 0; i < Banner.GameName.Length; i++)
                 {
-                    Banner.GameName[i] = name;
+                    Banner.GameName[i] = name.Replace("\r\n", "\n");
                 }
             }
         }
