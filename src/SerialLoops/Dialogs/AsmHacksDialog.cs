@@ -325,16 +325,14 @@ namespace SerialLoops.Dialogs
 
                 if (config.UseDocker)
                 {
-                    ProcessStartInfo dockerRmProcess = new()
+                    Process.Start(new ProcessStartInfo
                     {
                         FileName = "docker",
+                        Arguments = $"rm {string.Join(' ', dockerContainerNames)}",
                         UseShellExecute = false,
                         RedirectStandardError = true,
                         RedirectStandardOutput = true,
-                    };
-                    dockerRmProcess.ArgumentList.Add("rm");
-                    dockerRmProcess.ArgumentList.Concat(dockerContainerNames);
-                    Process.Start(dockerRmProcess);
+                    });
                 }
 
                 Close();
