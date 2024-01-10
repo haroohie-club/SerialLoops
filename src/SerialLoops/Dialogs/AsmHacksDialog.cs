@@ -291,7 +291,22 @@ namespace SerialLoops.Dialogs
                 IEnumerable<string> failedHackNames = appliedHacks.Where(h => !h.Applied(project)).Select(h => h.Name);
                 if (failedHackNames.Any())
                 {
-                    log.LogError($"Failed to apply the following hacks to the ROM:\n{string.Join(", ", failedHackNames)}\n\nPlease check the log file for more information.");
+                    log.LogError($"Failed to apply the following hacks to the ROM:\n{string.Join(", ", failedHackNames)}\n\nPlease check the log file for more information.\n\nIn order to preserve state, no hacks were applied.");
+                    foreach (AsmHack hack in appliedHacks)
+                    {
+                        hack.Revert(project, log);
+                    }
+                    IEnumerable<string> dirsToDelete = Directory.GetDirectories(Path.Combine(project.BaseDirectory, "src"), "-p", SearchOption.AllDirectories)
+                        .Concat(Directory.GetDirectories(Path.Combine(project.BaseDirectory, "src"), "build", SearchOption.AllDirectories));
+                    foreach (string dir in dirsToDelete)
+                    {
+                        Directory.Delete(dir, recursive: true);
+                    }
+                    string[] filesToDelete = Directory.GetFiles(Path.Combine(project.BaseDirectory, "src"), "arm9_newcode.x", SearchOption.AllDirectories);
+                    foreach (string file in filesToDelete)
+                    {
+                        File.Delete(file);
+                    }
                 }
                 else
                 {
