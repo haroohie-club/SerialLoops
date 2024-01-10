@@ -36,8 +36,8 @@ namespace SerialLoops.Editors
             StackLayout topics = new() { Orientation = Orientation.Vertical, Spacing = 5 };
             foreach (var (topicId, _) in _puzzle.Puzzle.AssociatedTopics.Take(_puzzle.Puzzle.AssociatedTopics.Count - 1))
             {
-                TopicItem topic = (TopicItem)_project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Topic && ((TopicItem)i).Topic.Id == topicId);
-                LinkButton topicButton = new() { Text = topic?.Topic.Title.GetSubstitutedString(_project) ?? topicId.ToString() };
+                TopicItem topic = (TopicItem)_project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Topic && ((TopicItem)i).TopicEntry.Id == topicId);
+                LinkButton topicButton = new() { Text = topic?.TopicEntry.Title.GetSubstitutedString(_project) ?? topicId.ToString() };
                 if (topic is not null)
                 {
                     topicButton.Click += (s, e) => _tabs.OpenTab(topic, _log);

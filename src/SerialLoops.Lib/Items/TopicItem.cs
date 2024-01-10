@@ -7,15 +7,15 @@ namespace SerialLoops.Lib.Items
 {
     public class TopicItem : Item
     {
-        public Topic Topic { get; set; }
+        public Topic TopicEntry { get; set; }
         public Topic HiddenMainTopic { get; set; }
         public (string ScriptName, ScriptCommandInvocation command)[] ScriptUses { get; set; }
 
-        public TopicItem(Topic Topic, Project project) : base($"{Topic.Id}", ItemType.Topic)
+        public TopicItem(Topic topic, Project project) : base($"{topic.Id}", ItemType.Topic)
         {
-            DisplayName = $"{Topic.Id} - {Topic.Title.GetSubstitutedString(project)}";
+            DisplayName = $"{topic.Id} - {topic.Title.GetSubstitutedString(project)}";
             CanRename = false;
-            Topic = Topic;
+            TopicEntry = topic;
             PopulateScriptUses(project);
         }
 
@@ -29,7 +29,7 @@ namespace SerialLoops.Lib.Items
             ScriptUses = project.Evt.Files.SelectMany(e =>
                 e.ScriptSections.SelectMany(sec =>
                     sec.Objects.Where(c => c.Command.Mnemonic == EventFile.CommandVerb.TOPIC_GET.ToString()).Select(c => (e.Name[0..^1], c))))
-                .Where(t => t.c.Parameters[0] == Topic.Id).ToArray();
+                .Where(t => t.c.Parameters[0] == TopicEntry.Id).ToArray();
         }
     }
 }

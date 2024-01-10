@@ -67,7 +67,7 @@ namespace SerialLoops.Editors
                 {
                     GroupBox routeBox = new() { Text = route.Title.GetSubstitutedString(_project) };
                     IEnumerable<TopicItem> kyonlessTopics = route.KyonlessTopics.Select(t => (TopicItem)_project.Items
-                        .FirstOrDefault(i => i.Type == ItemDescription.ItemType.Topic && ((TopicItem)i).Topic.Id == t));
+                        .FirstOrDefault(i => i.Type == ItemDescription.ItemType.Topic && ((TopicItem)i).TopicEntry.Id == t));
                     StackLayout kyonlessTopicsLayout = new();
                     foreach (TopicItem topicItem in kyonlessTopics)
                     {

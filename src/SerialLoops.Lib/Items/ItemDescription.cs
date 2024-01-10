@@ -110,7 +110,7 @@ namespace SerialLoops.Lib.Items
                     }
                     references.AddRange(project.Items.Where(i => i.Type == ItemType.Group_Selection && ((GroupSelectionItem)i).Selection.Activities.Where(s => s is not null).Any(s => s.Routes.Any(r => r.ScriptIndex == script.Event.Index))));
                     references.AddRange(project.Items.Where(i => i.Type == ItemType.Topic &&
-                        (((TopicItem)i).Topic.CardType != TopicCardType.Main && ((TopicItem)i).Topic.EventIndex == script.Event.Index ||
+                        (((TopicItem)i).TopicEntry.CardType != TopicCardType.Main && ((TopicItem)i).TopicEntry.EventIndex == script.Event.Index ||
                         (((TopicItem)i).HiddenMainTopic?.EventIndex ?? -1) == script.Event.Index)));
                     references.AddRange(project.Items.Where(i => i.Type == ItemType.Script && ((ScriptItem)i).Event.ConditionalsSection.Objects.Contains(Name)));
                     return references;

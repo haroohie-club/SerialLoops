@@ -156,7 +156,7 @@ namespace SerialLoops.Dialogs
             };
             saveButton.Click += (sender, args) =>
             {
-                List<AsmHack> appliedHacks = new();
+                List<AsmHack> appliedHacks = [];
                 foreach (CheckBox checkBox in hacksLayout.Items.Select(s => s.Control).Cast<CheckBox>())
                 {
                     AsmHack hack = config.Hacks.First(f => f.Name == checkBox.Text);
@@ -199,12 +199,14 @@ namespace SerialLoops.Dialogs
                     log.LogException($"Failed to read ARM9 from '{arm9Path}'", ex);
                 }
 
+                List<string> dockerContainerNames = ["sl-arm9-container"];
+
                 try
                 {
                     ARM9AsmHack.Insert(Path.Combine(project.BaseDirectory, "src"), arm9, 0x02005ECC, config.UseDocker ? config.DevkitArmDockerTag : string.Empty,
                         (object sender, DataReceivedEventArgs e) => log.Log(e.Data),
                         (object sender, DataReceivedEventArgs e) => log.LogWarning(e.Data),
-                        devkitArmPath: config.DevkitArmPath);
+                        devkitArmPath: config.DevkitArmPath, dockerContainerName: dockerContainerNames.Last());
                 }
                 catch (Exception ex)
                 {
@@ -247,7 +249,7 @@ namespace SerialLoops.Dialogs
                     if (Directory.GetDirectories(overlaySourceDir).Contains(Path.Combine(overlaySourceDir, overlays[i].Name)))
                     {
                         // If the overlay directory is empty, we've reverted all the hacks in it and should clean it up
-                        if (!Directory.GetFiles(Path.Combine(overlaySourceDir, overlays[i].Name, "source")).Any())
+                        if (Directory.GetFiles(Path.Combine(overlaySourceDir, overlays[i].Name, "source")).Length == 0)
                         {
                             Directory.Delete(Path.Combine(overlaySourceDir, overlays[i].Name), true);
                         }
@@ -255,10 +257,11 @@ namespace SerialLoops.Dialogs
                         {
                             try
                             {
+                                dockerContainerNames.Add($"sl-overlay-container{i}");
                                 OverlayAsmHack.Insert(overlaySourceDir, overlays[i], newRomInfoPath, config.UseDocker ? config.DevkitArmDockerTag : string.Empty,
                                     (object sender, DataReceivedEventArgs e) => log.Log(e.Data),
                                     (object sender, DataReceivedEventArgs e) => log.LogWarning(e.Data),
-                                    devkitArmPath: config.DevkitArmPath);
+                                    devkitArmPath: config.DevkitArmPath, dockerContainerName: dockerContainerNames.Last());
                             }
                             catch (Exception ex)
                             {
@@ -310,7 +313,7 @@ namespace SerialLoops.Dialogs
                 }
                 else
                 {
-                    if (appliedHacks.Any())
+                    if (appliedHacks.Count != 0)
                     {
                         MessageBox.Show($"Successfully applied the following hacks:\n{string.Join(", ", appliedHacks.Select(h => h.Name))}", "Successfully applied hacks!", MessageBoxType.Information);
                     }
@@ -322,7 +325,16 @@ namespace SerialLoops.Dialogs
 
                 if (config.UseDocker)
                 {
-
+                    ProcessStartInfo dockerRmProcess = new()
+                    {
+                        FileName = "docker",
+                        UseShellExecute = false,
+                        RedirectStandardError = true,
+                        RedirectStandardOutput = true,
+                    };
+                    dockerRmProcess.ArgumentList.Add("rm");
+                    dockerRmProcess.ArgumentList.Concat(dockerContainerNames);
+                    Process.Start(dockerRmProcess);
                 }
 
                 Close();
