@@ -7,15 +7,15 @@ namespace SerialLoops.Lib.Items
 {
     public class TopicItem : Item
     {
-        public TopicStruct Topic { get; set; }
-        public TopicStruct HiddenMainTopic { get; set; }
+        public Topic Topic { get; set; }
+        public Topic HiddenMainTopic { get; set; }
         public (string ScriptName, ScriptCommandInvocation command)[] ScriptUses { get; set; }
 
-        public TopicItem(TopicStruct topicStruct, Project project) : base($"{topicStruct.Id}", ItemType.Topic)
+        public TopicItem(Topic Topic, Project project) : base($"{Topic.Id}", ItemType.Topic)
         {
-            DisplayName = $"{topicStruct.Id} - {topicStruct.Title.GetSubstitutedString(project)}";
+            DisplayName = $"{Topic.Id} - {Topic.Title.GetSubstitutedString(project)}";
             CanRename = false;
-            Topic = topicStruct;
+            Topic = Topic;
             PopulateScriptUses(project);
         }
 

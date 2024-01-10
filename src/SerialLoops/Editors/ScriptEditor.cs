@@ -24,7 +24,7 @@ using static HaruhiChokuretsuLib.Archive.Event.EventFile;
 
 namespace SerialLoops.Editors
 {
-    public class ScriptEditor : Editor
+    public class ScriptEditor(ScriptItem item, ILogger log, Project project, EditorTabsPanel tabs) : Editor(item, log, project, tabs)
     {
         private ScriptItem _script;
         private Dictionary<ScriptSection, List<ScriptItemCommand>> _commands = new();
@@ -43,10 +43,6 @@ namespace SerialLoops.Editors
         private int _chibiHighlighted = -1;
         private ScriptCommandDropDown _currentSpeakerDropDown; // This property is used for storing the speaker dropdown to append dialogue property dropdowns to
         private Action _updateOptionDropDowns;
-
-        public ScriptEditor(ScriptItem item, ILogger log, Project project, EditorTabsPanel tabs) : base(item, log, project, tabs)
-        {
-        }
 
         public override Container GetEditorPanel()
         {

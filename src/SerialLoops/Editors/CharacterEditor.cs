@@ -11,13 +11,9 @@ using System.Reflection;
 
 namespace SerialLoops.Editors
 {
-    public class CharacterEditor : Editor
+    public class CharacterEditor(CharacterItem dialogueConfig, Project project, EditorTabsPanel tabs, ILogger log) : Editor(dialogueConfig, log, project, tabs)
     {
         private CharacterItem _character;
-
-        public CharacterEditor(CharacterItem dialogueConfig, Project project, EditorTabsPanel tabs, ILogger log) : base(dialogueConfig, log, project, tabs)
-        {
-        }
 
         public override Container GetEditorPanel()
         {

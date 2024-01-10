@@ -31,7 +31,7 @@ namespace SerialLoops.Lib.Items
             BackgroundType = entry.Type;
             Graphic1 = project.Grp.Files.First(g => g.Index == entry.BgIndex1);
             Graphic2 = project.Grp.Files.FirstOrDefault(g => g.Index == entry.BgIndex2); // can be null if type is SINGLE_TEX
-            CgStruct cgEntry = project.Extra.Cgs.FirstOrDefault(c => c.BgId == Id);
+            CgExtraData cgEntry = project.Extra.Cgs.FirstOrDefault(c => c.BgId == Id);
             if (cgEntry is not null)
             {
                 CgName = cgEntry?.Name?.GetSubstitutedString(project);

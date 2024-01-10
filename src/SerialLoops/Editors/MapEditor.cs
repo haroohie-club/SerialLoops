@@ -7,13 +7,9 @@ using System;
 
 namespace SerialLoops.Editors
 {
-    public class MapEditor : Editor
+    public class MapEditor(MapItem map, Project project, ILogger log) : Editor(map, log, project)
     {
         private MapItem _map;
-
-        public MapEditor(MapItem map, Project project, ILogger log) : base(map, log, project)
-        {
-        }
 
         public override Container GetEditorPanel()
         {

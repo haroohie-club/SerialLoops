@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace SerialLoops.Editors
 {
-    public class TopicEditor : Editor
+    public class TopicEditor(TopicItem topic, Project project, EditorTabsPanel tabs, ILogger log) : Editor(topic, log, project, tabs)
     {
         private TopicItem _topic;
 
@@ -22,10 +22,6 @@ namespace SerialLoops.Editors
         private Label _nagatoTimeLabel;
         private NumericStepper _koizumiTimeStepper;
         private Label _koizumiTimeLabel;
-
-        public TopicEditor(TopicItem topic, Project project, EditorTabsPanel tabs, ILogger log) : base(topic, log, project, tabs)
-        {
-        }
 
         public override Container GetEditorPanel()
         {

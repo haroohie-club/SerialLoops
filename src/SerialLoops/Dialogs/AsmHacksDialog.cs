@@ -320,6 +320,11 @@ namespace SerialLoops.Dialogs
                     }
                 }
 
+                if (config.UseDocker)
+                {
+
+                }
+
                 Close();
             };
 

@@ -609,8 +609,8 @@ namespace SerialLoops.Lib
             {
                 Evt.Files.First(f => f.Name == "TOPICS").InitializeTopicFile();
                 TopicFile = Evt.Files.First(f => f.Name == "TOPICS");
-                tracker.Focus("Topics", TopicFile.TopicStructs.Count);
-                foreach (TopicStruct topic in TopicFile.TopicStructs)
+                tracker.Focus("Topics", TopicFile.Topics.Count);
+                foreach (Topic topic in TopicFile.Topics)
                 {
                     // Main topics have shadow topics that are located at ID + 40 (this is actually how the game finds them)
                     // So if we're a main topic and we see another topic 40 back, we know we're one of these shadow topics and should really be
