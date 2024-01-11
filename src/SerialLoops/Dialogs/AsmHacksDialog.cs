@@ -4,6 +4,7 @@ using HaroohieClub.NitroPacker.Patcher.Overlay;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Hacks;
+using SerialLoops.Lib.Util;
 using SerialLoops.Utility;
 using System;
 using System.Collections.Generic;
@@ -203,10 +204,14 @@ namespace SerialLoops.Dialogs
 
                 try
                 {
-                    ARM9AsmHack.Insert(Path.Combine(project.BaseDirectory, "src"), arm9, 0x02005ECC, config.UseDocker ? config.DevkitArmDockerTag : string.Empty,
-                        (object sender, DataReceivedEventArgs e) => log.Log(e.Data),
-                        (object sender, DataReceivedEventArgs e) => log.LogWarning(e.Data),
-                        devkitArmPath: config.DevkitArmPath, dockerContainerName: dockerContainerNames.Last());
+                    LoopyProgressTracker tracker = new();
+                    ProgressDialog _ = new(() =>
+                    {
+                        ARM9AsmHack.Insert(Path.Combine(project.BaseDirectory, "src"), arm9, 0x02005ECC, config.UseDocker ? config.DevkitArmDockerTag : string.Empty,
+                            (object sender, DataReceivedEventArgs e) => { log.Log(e.Data); ((IProgressTracker)tracker).Focus(e.Data, 1); },
+                            (object sender, DataReceivedEventArgs e) => log.LogWarning(e.Data),
+                            devkitArmPath: config.DevkitArmPath, dockerContainerName: dockerContainerNames.Last());
+                    }, () => {}, tracker, "Patching ARM9");
                 }
                 catch (Exception ex)
                 {
@@ -232,7 +237,7 @@ namespace SerialLoops.Dialogs
                 }
 
                 // Get the overlays
-                List<Overlay> overlays = new();
+                List<Overlay> overlays = [];
                 string originalOverlaysDir = Path.Combine(project.BaseDirectory, "original", "overlay");
                 string romInfoPath = Path.Combine(project.BaseDirectory, "original", $"{project.Name}.xml");
                 string newRomInfoPath = Path.Combine(project.BaseDirectory, "rom", $"{project.Name}.xml");
@@ -258,10 +263,15 @@ namespace SerialLoops.Dialogs
                             try
                             {
                                 dockerContainerNames.Add($"sl-overlay-container{i}");
-                                OverlayAsmHack.Insert(overlaySourceDir, overlays[i], newRomInfoPath, config.UseDocker ? config.DevkitArmDockerTag : string.Empty,
-                                    (object sender, DataReceivedEventArgs e) => log.Log(e.Data),
+
+                                LoopyProgressTracker tracker = new();
+                                ProgressDialog _ = new(() =>
+                                {
+                                    OverlayAsmHack.Insert(overlaySourceDir, overlays[i], newRomInfoPath, config.UseDocker ? config.DevkitArmDockerTag : string.Empty,
+                                    (object sender, DataReceivedEventArgs e) => { log.Log(e.Data); ((IProgressTracker)tracker).Focus(e.Data, 1); },
                                     (object sender, DataReceivedEventArgs e) => log.LogWarning(e.Data),
                                     devkitArmPath: config.DevkitArmPath, dockerContainerName: dockerContainerNames.Last());
+                                }, () => { }, tracker, $"Patching Overlay {overlays[i].Name}");
                             }
                             catch (Exception ex)
                             {
