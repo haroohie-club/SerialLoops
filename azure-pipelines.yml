@@ -54,7 +54,7 @@ jobs:
     displayName: Pull devkitpro/devkitarm in advance
     inputs:
       command: pull
-      arguments: devkitpro/devkitarmour
+      arguments: devkitpro/devkitarm
   - task: WinAppDriver.winappdriver-pipelines-task.winappdriver-pipelines-task.Windows Application Driver@0
     displayName: 'Start WinAppDriver'
   - task: VSTest@3
