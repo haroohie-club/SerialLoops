@@ -50,6 +50,14 @@ jobs:
       command: 'build'
       projects: $(Build.SourcesDirectory)/src/SerialLoops.Wpf/SerialLoops.Wpf.csproj
     displayName: Build SerialLoops.Wpf
+  - pwsh: |
+      net stop com.docker.service
+      taskkill /IM "Docker Desktop.exe" /F
+      $dockerSettings = Get-Content $env:APPDATA\Docker\settings.json | ConvertFrom-Json
+      $dockerSettings.wslEngineEnabled = $True
+      Set-Content -Path $env:APPDATA\DOCKER\settings.json -Value $(ConvertTo-Json $dockerSettings)
+      net start com.docker.service
+      & "$env:ProgramFiles\Docker\Docker\Docker Desktop.exe"
   - task: Docker@2
     displayName: Pull devkitpro/devkitarm in advance
     inputs:
