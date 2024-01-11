@@ -3,6 +3,9 @@ trigger:
 pr:
 - main
 
+variables:
+  - group: SerialLoopsPublic
+
 jobs:
 - job:
   strategy:
@@ -35,4 +38,41 @@ jobs:
       projects: $(Build.SourcesDirectory)/test/SerialLoops.Tests/SerialLoops.Tests.csproj
       publishTestResults: true
     displayName: Run tests
-
+- job:
+  displayName: UI Tests (Windows)
+  pool:
+    vmImage: 'windows-latest'
+  steps:
+  - checkout: self
+    clean: publishTestResults
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: 'build'
+      projects: $(Build.SourcesDirectory)/src/SerialLoops.Wpf/SerialLoops.Wpf.csproj
+    displayName: Build SerialLoops.Wpf
+  - task: Docker@2
+    displayName: Pull devkitpro/devkitarm in advance
+    inputs:
+      command: pull
+      arguments: devkitpro/devkitarmour
+  - task: WinAppDriver.winappdriver-pipelines-task.winappdriver-pipelines-task.Windows Application Driver@0
+    displayName: 'Start WinAppDriver'
+  - task: VSTest@3
+    displayName: 'VsTest - Run UI Tests'
+    inputs:
+      testAssemblyVer2: |
+        **\*Tests.dll
+        !**\*TestAdapter.dll
+        !**\obj\**
+      searchFolder: '$(Build.SourcesDirectory)/test/ui/SerialLoops.Wpf.Tests'
+      uiTests: true
+    env:
+      APP_LOCATION: $(Build.SourcesDirectory)/src/SerialLoops.Wpf/bin/Debug/net8.0/SerialLoops.exe
+      PROJECT_NAME: WinUITest
+      ROM_URI: $(ChokuRomUri)
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: '$(Build.ArtifactsStagingDirectory)/SerialLoops.log'
+      ArtifactName: 'SerialLoops_Logs'
+      publishLocation: 'Container'
+    displayName: Publish Serial Loops logs
