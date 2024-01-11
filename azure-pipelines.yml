@@ -50,13 +50,12 @@ jobs:
     inputs:
       command: ps
   - pwsh: |
-      ls C:\Windows\system32
-      # taskkill /IM "Docker Desktop.exe" /F
+      Get-ChildItem -Path C:\ -Recurse -Include *docker*
+      # taskkill /IM "dockerd.exe" /F
       # $dockerSettings = Get-Content $env:APPDATA\Docker\settings.json | ConvertFrom-Json
       # $dockerSettings.wslEngineEnabled = $True
       # Set-Content -Path $env:APPDATA\DOCKER\settings.json -Value $(ConvertTo-Json $dockerSettings)
-      # net start com.docker.service
-      # & "$env:ProgramFiles\Docker\Docker\Docker Desktop.exe"
+      # & 'C:\Windows\system32\dockerd.exe'
     displayName: Switch Docker to Linux-based containers
   - task: DotNetCoreCLI@2
     inputs:
