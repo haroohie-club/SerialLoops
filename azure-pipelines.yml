@@ -45,6 +45,10 @@ jobs:
   steps:
   - checkout: self
     clean: publishTestResults
+  - task: Docker@2
+    displayName: Stat Docker
+    inputs:
+      command: ps
   - pwsh: |
       net stop com.docker.service
       taskkill /IM "Docker Desktop.exe" /F
