@@ -50,7 +50,7 @@ jobs:
     inputs:
       command: ps
   - pwsh: |
-      Get-ChildItem -Path C:\ -Recurse -Include *docker*
+      Get-ChildItem -Path C:\ -Recurse -Filter *docker*
       # taskkill /IM "dockerd.exe" /F
       # $dockerSettings = Get-Content $env:APPDATA\Docker\settings.json | ConvertFrom-Json
       # $dockerSettings.wslEngineEnabled = $True
