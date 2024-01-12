@@ -87,6 +87,7 @@ namespace SerialLoops.Wpf.Tests
 
             Thread.Sleep(TimeSpan.FromSeconds(3));
             _driver.SwitchTo().Window(_driver.WindowHandles.First()); // Switch to the update available dialog
+            Thread.Sleep(200); // Give it time
             _driver.FindElementByName("Skip Update").Click(); // close the dialog
 
             _driver.SwitchTo().Window(_driver.WindowHandles.First());
