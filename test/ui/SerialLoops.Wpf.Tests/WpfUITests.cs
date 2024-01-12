@@ -89,7 +89,6 @@ namespace SerialLoops.Wpf.Tests
             _driver.FindElementByName("Skip Update").Click(); // close the dialog
 
             _driver.SwitchTo().Window(_driver.WindowHandles.First());
-            Thread.Sleep(500); // give it a sec to load the window before we screenshot it
             _driver.GetScreenshot().SaveAsFile(Path.Combine(_uiVals.ArtifactsDir, "start.png"));
             _driver.FindElementByClassName("Hyperlink").Click();
             Actions actions = new(_driver);
@@ -108,6 +107,7 @@ namespace SerialLoops.Wpf.Tests
             _driver.GetScreenshot().SaveAsFile(Path.Combine(_uiVals.ArtifactsDir, "project_open.png"));
 
             _driver.FindElementByName("File").Click();
+            _driver.GetScreenshot().SaveAsFile(Path.Combine(_uiVals!.ArtifactsDir, "file_menu.png"));
             _driver.FindElementByName("Preferences...").Click();
             actions = new(_driver);
             actions.MoveToElement(_driver.FindElementByName("Use Docker for ASM Hacks"));
@@ -157,6 +157,7 @@ namespace SerialLoops.Wpf.Tests
             _driver.FindElementByName(hackToApply).Click();
             _driver.FindElementByName("Save").Click();
             Thread.Sleep(TimeSpan.FromSeconds(15));
+            _driver.SwitchTo().Window(_driver.WindowHandles.First());
             _driver.GetScreenshot().SaveAsFile(Path.Combine(_uiVals!.ArtifactsDir, "success_dialog.png"));
             TestContext.AddTestAttachment(Path.Combine(_uiVals!.ArtifactsDir, "success_dialog.png"), "The dialog indicating whether the hack application succeeded or not");
             Actions actions = new(_driver);
