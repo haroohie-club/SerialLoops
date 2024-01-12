@@ -56,10 +56,9 @@ namespace SerialLoops.Mac.Tests
 
             _driver = new(appiumOptions);
             _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1.5);
-            _driver.FindElement("iOSNsPredicateString", "label BEGINSWITH 'Skip'").Click();
 
             Thread.Sleep(TimeSpan.FromSeconds(5));
-            _driver.FindElement(By.("Skip Update")).Click(); // close the dialog
+            _driver.FindElement("iOSNsPredicateString", "label BEGINSWITH 'Skip'").Click();
         }
 
         [OneTimeTearDown] 
