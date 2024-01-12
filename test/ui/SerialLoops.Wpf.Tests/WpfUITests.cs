@@ -118,7 +118,7 @@ namespace SerialLoops.Wpf.Tests
             _logger.Log("Loading project...");
             (_project, _) = Project.OpenProject(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "SerialLoops", "Projects", _uiVals.ProjectName, $"{_uiVals.ProjectName}.slproj"),
                 Config.LoadConfig(_logger), _logger, _tracker);
-            _logger.Log($"Project loaded from '{_project.BaseDirectory}'");
+            _logger.Log($"Project loaded from '{_project.ProjectFile}'");
         }
 
         [OneTimeTearDown]
@@ -157,7 +157,7 @@ namespace SerialLoops.Wpf.Tests
             _driver.FindElementByName(hackToApply).Click();
             _driver.FindElementByName("Save").Click();
             Thread.Sleep(TimeSpan.FromSeconds(15));
-            _driver.SwitchTo().Window(_driver.WindowHandles.First());
+            //_driver.SwitchTo().Window(_driver.WindowHandles.First());
             _driver.GetScreenshot().SaveAsFile(Path.Combine(_uiVals!.ArtifactsDir, "success_dialog.png"));
             TestContext.AddTestAttachment(Path.Combine(_uiVals!.ArtifactsDir, "success_dialog.png"), "The dialog indicating whether the hack application succeeded or not");
             Actions actions = new(_driver);
