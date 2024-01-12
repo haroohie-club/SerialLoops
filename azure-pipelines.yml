@@ -57,10 +57,8 @@ jobs:
     inputs:
       command: pull
       arguments: devkitpro/devkitarm
-  - task: WinAppDriver.winappdriver-pipelines-task.winappdriver-pipelines-task.Windows Application Driver@0
-    displayName: 'Start WinAppDriver'
-    inputs:
-      WADArguments: '127.0.0.1:4723'
+  # - task: WinAppDriver.winappdriver-pipelines-task.winappdriver-pipelines-task.Windows Application Driver@0
+  #   displayName: 'Start WinAppDriver'
   - task: VSTest@3
     displayName: 'VsTest - Run UI Tests'
     inputs:
@@ -70,12 +68,13 @@ jobs:
     env:
       APP_LOCATION: $(Build.SourcesDirectory)/src/SerialLoops.Wpf/bin/Debug/net8.0/SerialLoops.exe
       PROJECT_NAME: WinUITest
+      WINAPPDRIVER_LOC: 'C:\Program Files (x86)\Windows Application Driver\WinAppDriver.exe'
       ROM_URI: $(ChokuRomUri)
-  - task: WinAppDriver.winappdriver-pipelines-task.winappdriver-pipelines-task.Windows Application Driver@0
-    displayName: 'Close WinAppDriver'
-    inputs:
-      OperationType: Stop
-    condition: always()
+  # - task: WinAppDriver.winappdriver-pipelines-task.winappdriver-pipelines-task.Windows Application Driver@0
+  #   displayName: 'Close WinAppDriver'
+  #   inputs:
+  #     OperationType: Stop
+  #   condition: always()
   - task: PublishBuildArtifacts@1
     inputs:
       PathtoPublish: $(Build.ArtifactStagingDirectory)/SerialLoops.log
