@@ -35,4 +35,3 @@ jobs:
       projects: $(Build.SourcesDirectory)/test/SerialLoops.Tests/SerialLoops.Tests.csproj
       publishTestResults: true
     displayName: Run tests
-

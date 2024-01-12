@@ -98,3 +98,31 @@ Remember to replace `PLATFORM` with the platform you're on:
 * `SerialLoops.Wpf` for Windows
 
 We recommend [Visual Studio 2022](https://visualstudio.microsoft.com/) on Windows or [Rider](https://www.jetbrains.com/rider/) on Linux/Mac for development. If you'd like to contribute new features or fixes, we recommend [getting in touch on Discord first](https://discord.gg/nesRSbpeFM) before submitting a pull request!
+
+### Testing
+The `SerialLoops.Tests` project can be run from inside Visual Studio, Rider, or with `dotnet test` as normal. However, our UI tests (currently only runnable on Windows) are a bit more involved.
+
+Our UI tests rely on [Appium](https://appium.io/).
+#### Windows
+1. You will need to install nodejs and then use it to [install Appium](https://appium.io/docs/en/2.4/quickstart/install/).
+  - The easiest way to install nodejs is to first install [NVM for Windows](https://github.com/coreybutler/nvm-windows) and then run `nvm install latest` followed by `nvm use latest` (you can sub latest for any version)
+2. You will then need to install the [Appium Windows Driver](https://github.com/appium/appium-windows-driver) with `appium driver install --source=npm appium-windows-driver`.
+3. Next, download and install [WinAppDriver](https://github.com/microsoft/WinAppDriver).
+
+
+Once you've installed all the prerequisites, build the `SerialLoops.Wpf.Tests` project from Visual Studio or with `dotnet build test\ui\SerialLoops.Wpf.Tests\SerialLoops.Wpf.Tests.csproj`.
+Then, inside `test\ui\SerialLoops.Wpf.Tests\bin\Debug\net8.0`, create a new text file called `ui_vals.json`. Inside this file place the following text, replacing necessary values:
+```json
+{
+    "AppLoc": "PATH\\TO\\SerialLoops.exe",
+    "ProjectName": "WinUITest",
+    "WinAppDriverLoc": "PATH\\TO\\WinAppDriver.exe",
+    "RomLoc": "PATH\\TO\\HaruhiChokuretsu.nds",
+    "ArtifactsDir": "PATH\\TO\\artifacts"
+}
+```
+Ensure you escape your backslashes (`\\` rather than `\`). WinAppDriver is usually installed to `C:\Program Files (x86)\Windows Application Driver\WinAppDriver.exe`. The artifacts directory can
+be any arbitrary directory, but ensure it exists before running the tests. The project name by default is WinUITest, but it can be anything you'd like. Have fun.
+
+Finally, you can then open the solution inside Visual Studio and run the tests from the Test Explorer. Alternatively, running `dotnet test test\ui\SerialLoops.Wpf.Tests\SerialLoops.Wpf.Tests.csproj`
+may also work.
