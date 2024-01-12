@@ -119,7 +119,17 @@ namespace SerialLoops.Wpf.Tests
         {
             _driver.Quit();
             Directory.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "SerialLoops", "Projects", _uiVals!.ProjectName), true);
-            File.Copy(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "SerialLoops", "Logs", "SerialLoops.log"), Path.Combine(_uiVals.ArtifactsDir, "SerialLoops.log"), overwrite: true);
+            string logFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "SerialLoops", "Logs", "SerialLoops.log");
+            if (File.Exists(logFile))
+            {
+                File.Copy(logFile, Path.Combine(_uiVals.ArtifactsDir, "SerialLoops.log"), overwrite: true);
+            }
+            else
+            {
+                using FileStream fs = File.Create(Path.Combine(_uiVals.ArtifactsDir, "SerialLoops.log"));
+                using StreamWriter sw = new(fs);
+                sw.WriteLine("Log was not created");
+            }
         }
 
         [Test]
