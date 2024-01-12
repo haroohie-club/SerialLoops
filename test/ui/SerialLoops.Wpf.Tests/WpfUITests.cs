@@ -159,6 +159,7 @@ namespace SerialLoops.Wpf.Tests
             Thread.Sleep(TimeSpan.FromSeconds(7.5)); // Allow time for hacks to be assembled
             if (Helpers.OnWindows11())
             {
+                // Dialogs count as windows on Win11 but are part of the same window on Win10, from basic testing
                 _driver.SwitchToWindowWithName("Successfully applied hacks!", "Success!", "Error");
             }
             _driver.TakeScreenshot().SaveAsFile(Path.Combine(_uiVals!.ArtifactsDir, "hack_apply_result_dialog.png"));
