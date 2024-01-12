@@ -66,7 +66,7 @@ jobs:
         **\*SerialLoops.Wpf.Tests.dll
       uiTests: true
     env:
-      APP_LOCATION: $(Build.SourcesDirectory)/src/SerialLoops.Wpf/bin/Debug/net8.0-windows/SerialLoops.exe
+      APP_LOCATION: $(Build.SourcesDirectory)\src\SerialLoops.Wpf\bin\Debug\net8.0-windows\SerialLoops.exe
       PROJECT_NAME: WinUITest
       WINAPPDRIVER_LOC: 'C:\Program Files (x86)\Windows Application Driver\WinAppDriver.exe'
       ROM_URI: $(ChokuRomUri)
