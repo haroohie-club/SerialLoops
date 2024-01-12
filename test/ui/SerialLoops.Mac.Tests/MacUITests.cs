@@ -56,6 +56,7 @@ namespace SerialLoops.Mac.Tests
 
             _driver = new(appiumOptions);
             _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1.5);
+            _driver.ActivateApp(_uiVals.AppLoc);
 
             _driver.SwitchTo().Window(_driver.WindowHandles.First());
             Thread.Sleep(100); // Give it time
