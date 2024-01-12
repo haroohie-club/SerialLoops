@@ -72,6 +72,7 @@ jobs:
         **\*SerialLoops.Wpf.Tests.dll
         !**\obj\**
       uiTests: true
+      otherConsoleOptions: '/logger:console;verbosity=detailed'
     env:
       APP_LOCATION: $(Build.SourcesDirectory)\src\SerialLoops.Wpf\bin\Debug\net8.0-windows\SerialLoops.exe
       PROJECT_NAME: WinUITest
