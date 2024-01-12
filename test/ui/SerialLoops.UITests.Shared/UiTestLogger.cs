@@ -6,19 +6,19 @@ namespace SerialLoops.UITests.Shared
 {
     public class UiTestLogger(string logFile) : ILogger
     {
-        private string _logFile = logFile;
+        public readonly string LogFile = logFile;
 
         public void Log(string message)
         {
-            FileStream fs = File.OpenWrite(_logFile);
-            StreamWriter sw = new(fs);
+            using FileStream fs = File.OpenWrite(LogFile);
+            using StreamWriter sw = new(fs);
             sw.WriteLine(message);
         }
 
         public void LogError(string message, bool lookForWarnings = false)
         {
-            FileStream fs = File.OpenWrite(_logFile);
-            StreamWriter sw = new(fs);
+            using FileStream fs = File.OpenWrite(LogFile);
+            using StreamWriter sw = new(fs);
             sw.WriteLine($"ERROR: {message}");
         }
 
@@ -29,8 +29,8 @@ namespace SerialLoops.UITests.Shared
 
         public void LogWarning(string message, bool lookForErrors = false)
         {
-            FileStream fs = File.OpenWrite(_logFile);
-            StreamWriter sw = new(fs);
+            using FileStream fs = File.OpenWrite(LogFile);
+            using StreamWriter sw = new(fs);
             sw.WriteLine($"WARNING: {message}");
         }
     }

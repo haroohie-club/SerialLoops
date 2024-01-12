@@ -24,8 +24,7 @@ namespace SerialLoops.Wpf.Tests
         private WindowsDriver<WindowsElement> _driver;
         private UiVals? _uiVals;
         private Project? _project;
-        private const string LOG_FILE = "testrun_console.log";
-        private readonly UiTestLogger _logger = new(LOG_FILE);
+        private readonly UiTestLogger _logger = new(Environment.GetEnvironmentVariable("LOG_FILE") ?? "testlog_console.log");
         private readonly ConsoleProgressTracker _tracker = new();
         private Process? _wad;
 
@@ -62,7 +61,7 @@ namespace SerialLoops.Wpf.Tests
                     ArtifactsDir = Environment.GetEnvironmentVariable("BUILD_ARTIFACTSSTAGINGDIRECTORY") ?? "artifacts",
                 };
             }
-            _logger.Log(JsonSerializer.Serialize(_uiVals));
+            _logger.Log(JsonSerializer.Serialize<UiVals>(_uiVals, new JsonSerializerOptions { WriteIndented = true }));
 
             if (!string.IsNullOrEmpty(_uiVals.WinAppDriverLoc))
             {
@@ -126,7 +125,7 @@ namespace SerialLoops.Wpf.Tests
         [OneTimeTearDown]
         public void Teardown()
         {
-            TestContext.AddTestAttachment(LOG_FILE);
+            TestContext.AddTestAttachment(_logger.LogFile);
             _driver.Quit();
             Directory.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "SerialLoops", "Projects", _uiVals!.ProjectName), true);
             string logFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "SerialLoops", "Logs", "SerialLoops.log");

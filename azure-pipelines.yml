@@ -57,8 +57,6 @@ jobs:
     inputs:
       command: pull
       arguments: devkitpro/devkitarm
-  # - task: WinAppDriver.winappdriver-pipelines-task.winappdriver-pipelines-task.Windows Application Driver@0
-  #   displayName: 'Start WinAppDriver'
   - task: ms-autotest.screen-resolution-utility-task.screen-resolution-utlity-task.ScreenResolutionUtility@1
     displayName: 'Set Screen Resolution'
     inputs:
@@ -77,14 +75,17 @@ jobs:
       PROJECT_NAME: WinUITest
       WINAPPDRIVER_LOC: 'C:\Program Files (x86)\Windows Application Driver\WinAppDriver.exe'
       ROM_URI: $(ChokuRomUri)
-  # - task: WinAppDriver.winappdriver-pipelines-task.winappdriver-pipelines-task.Windows Application Driver@0
-  #   displayName: 'Close WinAppDriver'
-  #   inputs:
-  #     OperationType: Stop
-  #   condition: always()
+      LOG_FILE: $(Build.ArtifactStagingDirectory)/TestConsole.log
   - task: PublishBuildArtifacts@1
     inputs:
       PathtoPublish: $(Build.ArtifactStagingDirectory)/SerialLoops.log
       ArtifactName: SerialLoops_Logs
       publishLocation: Container
     displayName: Publish Serial Loops logs
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: $(Build.ArtifactStagingDirectory)/TestConsole.log
+      ArtifactName: SerialLoops_Logs
+      publishLocation: Container
+    displayName: Publish Serial Loops logs
+    condition: always()
