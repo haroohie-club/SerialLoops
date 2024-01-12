@@ -1,14 +1,13 @@
 using NUnit.Framework;
-using System.IO;
-using System.Net.Http;
-using System;
-using SerialLoops.UITests.Shared;
-using System.Text.Json;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.Mac;
-using System.Linq;
+using SerialLoops.UITests.Shared;
+using System;
+using System.IO;
+using System.Net.Http;
+using System.Text.Json;
 using System.Threading;
-using OpenQA.Selenium;
 
 namespace SerialLoops.Mac.Tests
 {
@@ -46,7 +45,7 @@ namespace SerialLoops.Mac.Tests
                     ArtifactsDir = Environment.GetEnvironmentVariable("BUILD_ARTIFACTSTAGINGDIRECTORY") ?? "artifacts",
                 };
             }
-
+            
             AppiumOptions appiumOptions = new()
             {
                 PlatformName = "mac",
@@ -57,8 +56,10 @@ namespace SerialLoops.Mac.Tests
 
             _driver = new(appiumOptions);
             _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1.5);
+            _driver.FindElement("iOSNsPredicateString", "label BEGINSWITH 'Skip'").Click();
 
-            _driver.FindElement(By.Name("Skip Update")).Click(); // close the dialog
+            Thread.Sleep(TimeSpan.FromSeconds(5));
+            _driver.FindElement(By.("Skip Update")).Click(); // close the dialog
         }
 
         [OneTimeTearDown] 
