@@ -108,15 +108,6 @@ namespace SerialLoops.Wpf.Tests
             } while (_driver.WindowHandles.Count > 1);
             _driver.TakeScreenshot().SaveAsFile(Path.Combine(_uiVals.ArtifactsDir, "project_open.png"));
 
-            _driver.FindElementByName("File").Click();
-            _driver.TakeScreenshot().SaveAsFile(Path.Combine(_uiVals!.ArtifactsDir, "file_menu.png"));
-            _driver.FindElementByName("Preferences...").Click();
-            actions = new(_driver);
-            actions.MoveToElement(_driver.FindElementByName("Use Docker for ASM Hacks"));
-            actions.Build().Perform();
-            _driver.FindElementByClassName("CheckBox").Click();
-            _driver.FindElementByName("Save").Click();
-
             _logger.Log("Loading project...");
             (_project, _) = Project.OpenProject(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "SerialLoops", "Projects", _uiVals.ProjectName, $"{_uiVals.ProjectName}.slproj"),
                 Config.LoadConfig(_logger), _logger, _tracker);
@@ -144,12 +135,45 @@ namespace SerialLoops.Wpf.Tests
             }
         }
 
+        [TearDown]
+        public void AfterTest()
+        {
+            _driver.SwitchTo().Window(_driver.WindowHandles.First());
+        }
+
+        [Test]
+        public void CanOpenAboutDialogTwice()
+        {
+            for (int i = 0; i < 2; i++)
+            {
+                _logger.Log($"Attempting to open about dialog time {i + 1}...");
+                _driver.FindElementByName("Help").Click();
+                Thread.Sleep(200);
+                _driver.FindElementByName("About...").Click();
+                Thread.Sleep(200);
+                _driver.FindElementByName("About").FindElementByName("Close").Click();
+                Thread.Sleep(200);
+            }
+        }
+
         [Test]
         public void TestAsmHackApplicationAndReversion()
         {
+            if (!(_project?.Config.UseDocker ?? true))
+            {
+                _driver.FindElementByName("File").Click();
+                _driver.TakeScreenshot().SaveAsFile(Path.Combine(_uiVals!.ArtifactsDir, "file_menu.png"));
+                _driver.FindElementByName("Preferences...").Click();
+                Actions actions = new(_driver);
+                actions.MoveToElement(_driver.FindElementByName("Use Docker for ASM Hacks"));
+                actions.Build().Perform();
+                _driver.FindElementByClassName("CheckBox").Click();
+                _driver.FindElementByName("Save").Click();
+            }
+
             string hackToApply = "Skip OP";
 
-            // Apply hack
+            _logger.Log("Applying hack...");
             _driver.FindElementByName("Tools").Click();
             _driver.TakeScreenshot().SaveAsFile(Path.Combine(_uiVals!.ArtifactsDir, "tools_clicked.png"));
             TestContext.AddTestAttachment(Path.Combine(_uiVals!.ArtifactsDir, "tools_clicked.png"), "The app after the tools menu was clicked but before clicking Apply Hacks");
@@ -159,7 +183,7 @@ namespace SerialLoops.Wpf.Tests
             TestContext.AddTestAttachment(Path.Combine(_uiVals!.ArtifactsDir, "available_hacks.png"), "The available hacks dialog");
             _driver.FindElementByName(hackToApply).Click();
             _driver.FindElementByName("Save").Click();
-            Thread.Sleep(TimeSpan.FromSeconds(7.5)); // Allow time for hacks to be assembled
+            Thread.Sleep(TimeSpan.FromSeconds(10)); // Allow time for hacks to be assembled
             if (Helpers.OnWindows11())
             {
                 // Dialogs count as windows on Win11 but are part of the same window on Win10, from basic testing
@@ -172,7 +196,7 @@ namespace SerialLoops.Wpf.Tests
             List<AsmHack> hacks = JsonSerializer.Deserialize<List<AsmHack>>(File.ReadAllText(Path.Combine("Sources", "hacks.json"))) ?? [];
             Assert.That(hacks.First(h => h.Name == hackToApply).Applied(_project), Is.True);
 
-            // Revert hack
+            _logger.Log("Reverting hack...");
             _driver.SwitchTo().Window(_driver.WindowHandles.First());
             Thread.Sleep(100);
             _driver.FindElementByName("Tools").Click();
