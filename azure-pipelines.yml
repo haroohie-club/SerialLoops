@@ -63,8 +63,7 @@ jobs:
     displayName: 'VsTest - Run UI Tests'
     inputs:
       testAssemblyVer2: |
-        **\SerialLoops.Wpf.Tests.dll
-      searchFolder: $(Build.SourcesDirectory)/test/ui/SerialLoops.Wpf.Tests
+        **\*SerialLoops.Wpf.Tests.dll
       uiTests: true
     env:
       APP_LOCATION: $(Build.SourcesDirectory)/src/SerialLoops.Wpf/bin/Debug/net8.0/SerialLoops.exe
@@ -72,7 +71,7 @@ jobs:
       ROM_URI: $(ChokuRomUri)
   - task: PublishBuildArtifacts@1
     inputs:
-      PathtoPublish: $(Build.ArtifactsStagingDirectory)/SerialLoops.log
+      PathtoPublish: $(Build.ArtifactStagingDirectory)/SerialLoops.log
       ArtifactName: SerialLoops_Logs
       publishLocation: Container
     displayName: Publish Serial Loops logs
