@@ -150,6 +150,8 @@ namespace SerialLoops.Wpf.Tests
             TestContext.AddTestAttachment(Path.Combine(_uiVals!.ArtifactsDir, "tools_clicked.png"), "The app after the tools menu was clicked but before clicking Apply Hacks");
             _driver.FindElementByName("Apply Hacks...").Click();
             _driver.SwitchTo().Window(_driver.WindowHandles.First());
+            _driver.GetScreenshot().SaveAsFile(Path.Combine(_uiVals!.ArtifactsDir, "available_hacks.png"));
+            TestContext.AddTestAttachment(Path.Combine(_uiVals!.ArtifactsDir, "available_hacks.png"), "The available hacks dialog");
             _driver.FindElementByName(hackToApply).Click();
             _driver.FindElementByName("Save").Click();
             Thread.Sleep(TimeSpan.FromSeconds(15));
@@ -157,6 +159,7 @@ namespace SerialLoops.Wpf.Tests
             Actions actions = new(_driver);
             actions.SendKeys(Keys.Enter);
             actions.Build().Perform();
+            Thread.Sleep(TimeSpan.FromSeconds(2));
             _driver.SwitchTo().Window(_driver.WindowHandles.First());
             _driver.FindElementByName("Close").Click();
             List<AsmHack> hacks = JsonSerializer.Deserialize<List<AsmHack>>(File.ReadAllText(Path.Combine("Sources", "hacks.json"))) ?? [];
