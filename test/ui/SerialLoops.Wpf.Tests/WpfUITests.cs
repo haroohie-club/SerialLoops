@@ -4,6 +4,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.Windows;
 using OpenQA.Selenium.Interactions;
+using OpenQA.Selenium.Support.Extensions;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Hacks;
 using SerialLoops.Tests;
@@ -89,7 +90,7 @@ namespace SerialLoops.Wpf.Tests
             _driver.FindElementByName("Skip Update").Click(); // close the dialog
 
             _driver.SwitchTo().Window(_driver.WindowHandles.First());
-            _driver.GetScreenshot().SaveAsFile(Path.Combine(_uiVals.ArtifactsDir, "start.png"));
+            _driver.TakeScreenshot().SaveAsFile(Path.Combine(_uiVals.ArtifactsDir, "start.png"));
             _driver.FindElementByClassName("Hyperlink").Click();
             Actions actions = new(_driver);
             actions.SendKeys(_uiVals.ProjectName);
@@ -104,10 +105,10 @@ namespace SerialLoops.Wpf.Tests
             {
                 Thread.Sleep(TimeSpan.FromSeconds(5));
             } while (_driver.WindowHandles.Count > 1);
-            _driver.GetScreenshot().SaveAsFile(Path.Combine(_uiVals.ArtifactsDir, "project_open.png"));
+            _driver.TakeScreenshot().SaveAsFile(Path.Combine(_uiVals.ArtifactsDir, "project_open.png"));
 
             _driver.FindElementByName("File").Click();
-            _driver.GetScreenshot().SaveAsFile(Path.Combine(_uiVals!.ArtifactsDir, "file_menu.png"));
+            _driver.TakeScreenshot().SaveAsFile(Path.Combine(_uiVals!.ArtifactsDir, "file_menu.png"));
             _driver.FindElementByName("Preferences...").Click();
             actions = new(_driver);
             actions.MoveToElement(_driver.FindElementByName("Use Docker for ASM Hacks"));
@@ -147,25 +148,26 @@ namespace SerialLoops.Wpf.Tests
         {
             string hackToApply = "Skip OP";
             _driver.FindElementByName("Tools").Click();
-            _driver.GetScreenshot().SaveAsFile(Path.Combine(_uiVals!.ArtifactsDir, "tools_clicked.png"));
+            _driver.TakeScreenshot().SaveAsFile(Path.Combine(_uiVals!.ArtifactsDir, "tools_clicked.png"));
             TestContext.AddTestAttachment(Path.Combine(_uiVals!.ArtifactsDir, "tools_clicked.png"), "The app after the tools menu was clicked but before clicking Apply Hacks");
             _driver.FindElementByName("Apply Hacks...").Click();
             _driver.SwitchTo().Window(_driver.WindowHandles.First());
-            Thread.Sleep(500); // give it a sec to load the window before we screenshot it
-            _driver.GetScreenshot().SaveAsFile(Path.Combine(_uiVals!.ArtifactsDir, "available_hacks.png"));
+            _driver.TakeScreenshot().SaveAsFile(Path.Combine(_uiVals!.ArtifactsDir, "available_hacks.png"));
             TestContext.AddTestAttachment(Path.Combine(_uiVals!.ArtifactsDir, "available_hacks.png"), "The available hacks dialog");
             _driver.FindElementByName(hackToApply).Click();
             _driver.FindElementByName("Save").Click();
             Thread.Sleep(TimeSpan.FromSeconds(15));
-            _driver.GetScreenshot().SaveAsFile(Path.Combine(_uiVals!.ArtifactsDir, "success_dialog.png"));
-            TestContext.AddTestAttachment(Path.Combine(_uiVals!.ArtifactsDir, "success_dialog.png"), "The dialog indicating whether the hack application succeeded or not");
-            _driver.SwitchTo().Alert().Accept();
-            Thread.Sleep(200);
+            _driver.SwitchToWindowWithName("Successfully applied hacks!", "Success!", "Error");
+            _driver.TakeScreenshot().SaveAsFile(Path.Combine(_uiVals!.ArtifactsDir, "hack_apply_result_dialog.png"));
+            TestContext.AddTestAttachment(Path.Combine(_uiVals!.ArtifactsDir, "hack_apply_result_dialog.png"), "The dialog indicating whether the hack application succeeded or not");
+            Actions actions = new(_driver);
+            actions.SendKeys(Keys.Escape);
+            actions.Build().Perform();
+            Thread.Sleep(TimeSpan.FromSeconds(1)); // Allow time to clean up the containers
             _driver.SwitchTo().Window(_driver.WindowHandles.First());
             _driver.FindElementByName("Close").Click();
             List<AsmHack> hacks = JsonSerializer.Deserialize<List<AsmHack>>(File.ReadAllText(Path.Combine("Sources", "hacks.json"))) ?? [];
             Assert.That(hacks.First(h => h.Name == hackToApply).Applied(_project));
-            Thread.Sleep(TimeSpan.FromSeconds(2)); // Allow time to clean up the containers
         }
     }
 }
