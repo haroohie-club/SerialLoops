@@ -75,7 +75,7 @@ jobs:
     displayName: 'Close WinAppDriver'
     inputs:
       OperationType: Stop
-    condition: always
+    condition: always()
   - task: PublishBuildArtifacts@1
     inputs:
       PathtoPublish: $(Build.ArtifactStagingDirectory)/SerialLoops.log
