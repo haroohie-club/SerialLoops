@@ -47,18 +47,6 @@ jobs:
   steps:
   - checkout: self
     clean: publishTestResults
-  - task: Docker@2
-    displayName: Stat Docker
-    inputs:
-      command: ps
-  - pwsh: |
-      Get-ChildItem -Path C:\ -Recurse -Filter *docker*
-      # taskkill /IM "dockerd.exe" /F
-      # $dockerSettings = Get-Content $env:APPDATA\Docker\settings.json | ConvertFrom-Json
-      # $dockerSettings.wslEngineEnabled = $True
-      # Set-Content -Path $env:APPDATA\DOCKER\settings.json -Value $(ConvertTo-Json $dockerSettings)
-      # & 'C:\Windows\system32\dockerd.exe'
-    displayName: Switch Docker to Linux-based containers
   - task: DotNetCoreCLI@2
     inputs:
       command: 'build'
