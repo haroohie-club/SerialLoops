@@ -23,6 +23,11 @@ jobs:
   pool:
     vmImage: $(imageName)
   steps:
+  - pwsh: |
+      Remove-Item -Recurse -Force $(Build.SourcesDirectory)/*
+    displayName: Clean sources directory
+    continueOnError: true
+
   - checkout: self
     clean: true
     
