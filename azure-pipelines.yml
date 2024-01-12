@@ -59,6 +59,8 @@ jobs:
       arguments: devkitpro/devkitarm
   - task: WinAppDriver.winappdriver-pipelines-task.winappdriver-pipelines-task.Windows Application Driver@0
     displayName: 'Start WinAppDriver'
+    inputs:
+      WADArguments: '127.0.0.1:4723'
   - task: VSTest@3
     displayName: 'VsTest - Run UI Tests'
     inputs:
