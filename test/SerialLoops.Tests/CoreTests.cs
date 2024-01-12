@@ -3,6 +3,7 @@ using NUnit.Framework.Internal;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
+using SerialLoops.Tests.Shared;
 using SkiaSharp;
 using System;
 using System.IO;

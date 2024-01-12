@@ -1,6 +1,6 @@
 ﻿using SerialLoops.Lib.Util;
 
-namespace SerialLoops.Tests
+namespace SerialLoops.Tests.Shared
 {
     public class ConsoleProgressTracker : IProgressTracker
     {
