@@ -70,6 +70,7 @@ namespace SerialLoops.Wpf.Tests
                     Arguments = $"/k \"{_uiVals.WinAppDriverLoc}\"",
                     UseShellExecute = true,
                 });
+                Thread.Sleep(TimeSpan.FromSeconds(2)); // Give WAD time to boot up before continuing
             }
 
             Uri serverUri = new(Environment.GetEnvironmentVariable("APPIUM_HOST") ?? "http://127.0.0.1:4723/");
