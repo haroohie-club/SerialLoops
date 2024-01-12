@@ -24,7 +24,7 @@ namespace SerialLoops.Wpf.Tests
         private WindowsDriver<WindowsElement> _driver;
         private UiVals? _uiVals;
         private Project? _project;
-        private readonly ConsoleLogger _logger = new();
+        private readonly UiTestLogger _logger = new(TestContext.Out);
         private readonly ConsoleProgressTracker _tracker = new();
         private Process? _wad;
 
