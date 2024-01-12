@@ -70,6 +70,7 @@ jobs:
     inputs:
       testAssemblyVer2: |
         **\*SerialLoops.Wpf.Tests.dll
+        !**\obj\**
       uiTests: true
     env:
       APP_LOCATION: $(Build.SourcesDirectory)\src\SerialLoops.Wpf\bin\Debug\net8.0-windows\SerialLoops.exe

@@ -61,11 +61,11 @@ namespace SerialLoops.Wpf.Tests
                     ArtifactsDir = Environment.GetEnvironmentVariable("BUILD_ARTIFACTSSTAGINGDIRECTORY") ?? "artifacts",
                 };
             }
-            _logger.Log(JsonSerializer.Serialize(_uiVals));
+            Console.WriteLine(JsonSerializer.Serialize(_uiVals));
 
             if (!string.IsNullOrEmpty(_uiVals.WinAppDriverLoc))
             {
-                _logger.Log($"Attempting to launch WinAppDriver from '{_uiVals.WinAppDriverLoc}'");
+                Console.WriteLine($"Attempting to launch WinAppDriver from '{_uiVals.WinAppDriverLoc}'");
                 _wad = Process.Start(new ProcessStartInfo
                 {
                     FileName = "cmd.exe",
