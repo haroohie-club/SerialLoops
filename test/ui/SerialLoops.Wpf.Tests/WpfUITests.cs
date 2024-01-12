@@ -87,7 +87,7 @@ namespace SerialLoops.Wpf.Tests
 
             Thread.Sleep(TimeSpan.FromSeconds(3));
             _driver.SwitchTo().Window(_driver.WindowHandles.First()); // Switch to the update available dialog
-            Thread.Sleep(200); // Give it time
+            Thread.Sleep(100); // Give it time
             _driver.FindElementByName("Skip Update").Click(); // close the dialog
 
             _driver.SwitchTo().Window(_driver.WindowHandles.First());
@@ -173,6 +173,8 @@ namespace SerialLoops.Wpf.Tests
             Assert.That(hacks.First(h => h.Name == hackToApply).Applied(_project), Is.True);
 
             // Revert hack
+            _driver.SwitchTo().Window(_driver.WindowHandles.First());
+            Thread.Sleep(100);
             _driver.FindElementByName("Tools").Click();
             Thread.Sleep(100);
             _driver.FindElementByName("Apply Hacks...").Click();
