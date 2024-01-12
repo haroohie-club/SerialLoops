@@ -146,6 +146,8 @@ namespace SerialLoops.Wpf.Tests
         {
             string hackToApply = "Skip OP";
             _driver.FindElementByName("Tools").Click();
+            _driver.GetScreenshot().SaveAsFile(Path.Combine(_uiVals!.ArtifactsDir, "tools_clicked.png"));
+            TestContext.AddTestAttachment(Path.Combine(_uiVals!.ArtifactsDir, "tools_clicked.png"), "The app after the tools menu was clicked but before clicking Apply Hacks");
             _driver.FindElementByName("Apply Hacks...").Click();
             _driver.SwitchTo().Window(_driver.WindowHandles.First());
             _driver.FindElementByName(hackToApply).Click();
