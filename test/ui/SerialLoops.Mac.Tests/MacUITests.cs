@@ -54,7 +54,7 @@ namespace SerialLoops.Mac.Tests
             };
             appiumOptions.AddAdditionalAppiumOption("appPath", _uiVals.AppLoc);
 
-            _driver = new(appiumOptions);
+            _driver = new(new Uri("http://127.0.0.1:10100"), appiumOptions);
             _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1.5);
             _driver.ActivateApp(_uiVals.AppLoc);
 
