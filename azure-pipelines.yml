@@ -71,8 +71,8 @@ jobs:
     displayName: 'Set Screen Resolution'
     inputs:
       displaySettings: specific
-      width: 3840
-      height: 2160
+      width: 2048
+      height: 1536
   - task: VSTest@3
     displayName: 'VsTest - Run UI Tests'
     inputs:
@@ -88,14 +88,7 @@ jobs:
       LOG_FILE: $(Build.ArtifactStagingDirectory)/TestConsole.log
   - task: PublishBuildArtifacts@1
     inputs:
-      PathtoPublish: $(Build.ArtifactStagingDirectory)/SerialLoops.log
-      ArtifactName: SerialLoops_Logs
+      PathtoPublish: $(Build.ArtifactStagingDirectory)
+      ArtifactName: WindowsTestArtifacts
       publishLocation: Container
-    displayName: Publish Serial Loops logs
-  - task: PublishBuildArtifacts@1
-    inputs:
-      PathtoPublish: $(Build.ArtifactStagingDirectory)/TestConsole.log
-      ArtifactName: ConsoleLogs
-      publishLocation: Container
-    displayName: Publish console logs
-    condition: always()
+    displayName: Publish Windows Test Artifacts

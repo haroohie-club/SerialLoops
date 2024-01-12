@@ -92,7 +92,6 @@ namespace SerialLoops.Wpf.Tests
 
             _driver.SwitchTo().Window(_driver.WindowHandles.First());
             _driver.GetScreenshot().SaveAsFile(Path.Combine(_uiVals.ArtifactsDir, "start.png"));
-            TestContext.AddTestAttachment(Path.Combine(_uiVals.ArtifactsDir, "start.png"), "Initial screen after project creation");
             _driver.FindElementByClassName("Hyperlink").Click();
             Actions actions = new(_driver);
             actions.SendKeys(_uiVals.ProjectName);
@@ -108,7 +107,6 @@ namespace SerialLoops.Wpf.Tests
                 Thread.Sleep(TimeSpan.FromSeconds(5));
             } while (_driver.WindowHandles.Count > 1);
             _driver.GetScreenshot().SaveAsFile(Path.Combine(_uiVals.ArtifactsDir, "project_open.png"));
-            TestContext.AddTestAttachment(Path.Combine(_uiVals.ArtifactsDir, "project_open.png"), "Initial screen after project creation");
 
             _driver.FindElementByName("File").Click();
             _driver.FindElementByName("Preferences...").Click();
