@@ -58,8 +58,6 @@ jobs:
       command: pull
       arguments: devkitpro/devkitarm
   - task: WinAppDriver.winappdriver-pipelines-task.winappdriver-pipelines-task.Windows Application Driver@0
-    inputs:
-      AgentResolution: 1080p
     displayName: 'Start WinAppDriver'
   - task: VSTest@3
     displayName: 'VsTest - Run UI Tests'
