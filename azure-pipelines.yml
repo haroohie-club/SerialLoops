@@ -58,6 +58,8 @@ jobs:
       command: pull
       arguments: devkitpro/devkitarm
   - task: WinAppDriver.winappdriver-pipelines-task.winappdriver-pipelines-task.Windows Application Driver@0
+    inputs:
+      AgentResolution: 1080p
     displayName: 'Start WinAppDriver'
   - task: VSTest@3
     displayName: 'VsTest - Run UI Tests'
@@ -69,6 +71,11 @@ jobs:
       APP_LOCATION: $(Build.SourcesDirectory)/src/SerialLoops.Wpf/bin/Debug/net8.0/SerialLoops.exe
       PROJECT_NAME: WinUITest
       ROM_URI: $(ChokuRomUri)
+  - task: WinAppDriver.winappdriver-pipelines-task.winappdriver-pipelines-task.Windows Application Driver@0
+    displayName: 'Close WinAppDriver'
+    inputs:
+      OperationType: Stop
+    condition: always
   - task: PublishBuildArtifacts@1
     inputs:
       PathtoPublish: $(Build.ArtifactStagingDirectory)/SerialLoops.log
