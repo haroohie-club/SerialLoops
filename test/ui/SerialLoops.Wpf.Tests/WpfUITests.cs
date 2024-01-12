@@ -109,8 +109,10 @@ namespace SerialLoops.Wpf.Tests
             _driver.TakeScreenshot().SaveAsFile(Path.Combine(_uiVals.ArtifactsDir, "project_open.png"));
 
             _logger.Log("Loading project...");
+            string configPath = Path.Combine(Path.GetDirectoryName(_uiVals.AppLoc) ?? string.Empty, "config.json");
+            Config config = File.Exists(configPath) ? (JsonSerializer.Deserialize<Config>(File.ReadAllText(configPath)) ?? Config.LoadConfig(_logger)) : Config.LoadConfig(_logger); 
             (_project, _) = Project.OpenProject(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "SerialLoops", "Projects", _uiVals.ProjectName, $"{_uiVals.ProjectName}.slproj"),
-                Config.LoadConfig(_logger), _logger, _tracker);
+                config, _logger, _tracker);
             _logger.Log($"Project loaded from '{_project.ProjectFile}'");
         }
 
