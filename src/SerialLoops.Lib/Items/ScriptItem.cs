@@ -31,10 +31,10 @@ namespace SerialLoops.Lib.Items
         {
             try
             {
-                Dictionary<ScriptSection, List<ScriptItemCommand>> commands = new();
+                Dictionary<ScriptSection, List<ScriptItemCommand>> commands = [];
                 foreach (ScriptSection section in Event.ScriptSections)
                 {
-                    commands.Add(section, new());
+                    commands.Add(section, []);
                     foreach (ScriptCommandInvocation command in section.Objects)
                     {
                         commands[section].Add(ScriptItemCommand.FromInvocation(command, section, commands[section].Count, Event, project, log));

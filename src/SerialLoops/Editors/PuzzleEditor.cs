@@ -10,13 +10,9 @@ using System.Linq;
 
 namespace SerialLoops.Editors
 {
-    public class PuzzleEditor : Editor
+    public class PuzzleEditor(PuzzleItem item, Project project, EditorTabsPanel tabs, ILogger log) : Editor(item, log, project, tabs)
     {
         private PuzzleItem _puzzle;
-
-        public PuzzleEditor(PuzzleItem item, Project project, EditorTabsPanel tabs, ILogger log) : base(item, log, project, tabs)
-        {
-        }
 
         public override Container GetEditorPanel()
         {
@@ -40,8 +36,8 @@ namespace SerialLoops.Editors
             StackLayout topics = new() { Orientation = Orientation.Vertical, Spacing = 5 };
             foreach (var (topicId, _) in _puzzle.Puzzle.AssociatedTopics.Take(_puzzle.Puzzle.AssociatedTopics.Count - 1))
             {
-                TopicItem topic = (TopicItem)_project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Topic && ((TopicItem)i).Topic.Id == topicId);
-                LinkButton topicButton = new() { Text = topic?.Topic.Title.GetSubstitutedString(_project) ?? topicId.ToString() };
+                TopicItem topic = (TopicItem)_project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Topic && ((TopicItem)i).TopicEntry.Id == topicId);
+                LinkButton topicButton = new() { Text = topic?.TopicEntry.Title.GetSubstitutedString(_project) ?? topicId.ToString() };
                 if (topic is not null)
                 {
                     topicButton.Click += (s, e) => _tabs.OpenTab(topic, _log);
@@ -64,13 +60,13 @@ namespace SerialLoops.Editors
             
             DropDown accompanyingCharacterDropdown = new() { Enabled = false };
             accompanyingCharacterDropdown.Items.AddRange(PuzzleItem.Characters.Select(c => new ListItem() { Text = c, Key = c }));
-            accompanyingCharacterDropdown.SelectedIndex = PuzzleItem.Characters.IndexOf(_puzzle.Puzzle.Settings.AccompanyingCharacter);
+            accompanyingCharacterDropdown.SelectedIndex = PuzzleItem.Characters.IndexOf(_puzzle.Puzzle.Settings.AccompanyingCharacterName);
             DropDown powerCharacter1Dropdown = new() { Enabled = false };
             powerCharacter1Dropdown.Items.AddRange(PuzzleItem.Characters.Select(c => new ListItem() { Text = c, Key = c }));
-            powerCharacter1Dropdown.SelectedIndex = PuzzleItem.Characters.IndexOf(_puzzle.Puzzle.Settings.PowerCharacter1);
+            powerCharacter1Dropdown.SelectedIndex = PuzzleItem.Characters.IndexOf(_puzzle.Puzzle.Settings.PowerCharacter1Name);
             DropDown powerCharacter2Dropdown = new() { Enabled = false };
             powerCharacter2Dropdown.Items.AddRange(PuzzleItem.Characters.Select(c => new ListItem() { Text = c, Key = c }));
-            powerCharacter2Dropdown.SelectedIndex = PuzzleItem.Characters.IndexOf(_puzzle.Puzzle.Settings.PowerCharacter2);
+            powerCharacter2Dropdown.SelectedIndex = PuzzleItem.Characters.IndexOf(_puzzle.Puzzle.Settings.PowerCharacter2Name);
 
             mainLayout.Items.Add(new StackLayout()
             {

@@ -32,7 +32,7 @@ namespace SerialLoops.Utility
 
         public void UpdateImage()
         {
-            if (FramesWithTimings.Any())
+            if (FramesWithTimings.Count != 0)
             {
                 Content = FramesWithTimings[CurrentFrame].Frame;
             }

@@ -23,15 +23,15 @@ namespace SerialLoops.Lib.Items
             GraphicsFile singularityLayout = project.Grp.Files.First(f => f.Index == Puzzle.Settings.SingularityLayout);
             GraphicsFile singularityTexture = project.Grp.Files.First(f => f.Index == Puzzle.Settings.SingularityTexture);
             SingularityImage = singularityLayout.GetLayout(
-                    new List<GraphicsFile>() { singularityTexture },
+                    [singularityTexture],
                     0,
                     singularityLayout.LayoutEntries.Count,
                     false,
                     true).bitmap;
         }
 
-        public static readonly List<string> Characters = new()
-        {
+        public static readonly List<string> Characters =
+        [
             "UNKNOWN (0)",
             "KYON",
             "HARUHI",
@@ -39,6 +39,6 @@ namespace SerialLoops.Lib.Items
             "NAGATO",
             "KOIZUMI",
             "ANY",
-        };
+        ];
     }
 }

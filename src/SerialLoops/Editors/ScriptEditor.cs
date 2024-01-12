@@ -24,7 +24,7 @@ using static HaruhiChokuretsuLib.Archive.Event.EventFile;
 
 namespace SerialLoops.Editors
 {
-    public class ScriptEditor : Editor
+    public class ScriptEditor(ScriptItem item, ILogger log, Project project, EditorTabsPanel tabs) : Editor(item, log, project, tabs)
     {
         private ScriptItem _script;
         private Dictionary<ScriptSection, List<ScriptItemCommand>> _commands = new();
@@ -43,10 +43,6 @@ namespace SerialLoops.Editors
         private int _chibiHighlighted = -1;
         private ScriptCommandDropDown _currentSpeakerDropDown; // This property is used for storing the speaker dropdown to append dialogue property dropdowns to
         private Action _updateOptionDropDowns;
-
-        public ScriptEditor(ScriptItem item, ILogger log, Project project, EditorTabsPanel tabs) : base(item, log, project, tabs)
-        {
-        }
 
         public override Container GetEditorPanel()
         {
@@ -1419,7 +1415,7 @@ namespace SerialLoops.Editors
 
                         case ScriptParameter.ParameterType.TOPIC:
                             string topicName = _project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Topic &&
-                                ((TopicItem)i).Topic.Id == ((TopicScriptParameter)parameter).TopicId)?.DisplayName;
+                                ((TopicItem)i).TopicEntry.Id == ((TopicScriptParameter)parameter).TopicId)?.DisplayName;
                             if (string.IsNullOrEmpty(topicName))
                             {
                                 // If the topic has been deleted, we will just display the index in a textbox
@@ -1445,7 +1441,7 @@ namespace SerialLoops.Editors
                             else
                             {
                                 StackLayout topicLink = ControlGenerator.GetFileLink(_project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Topic &&
-                                    ((TopicItem)i).Topic.Id == ((TopicScriptParameter)parameter).TopicId), _tabs, _log);
+                                    ((TopicItem)i).TopicEntry.Id == ((TopicScriptParameter)parameter).TopicId), _tabs, _log);
 
                                 ScriptCommandDropDown topicDropDown = new() { Command = command, ParameterIndex = i, Link = (ClearableLinkButton)topicLink.Items[1].Control };
                                 topicDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Topic)
@@ -2506,10 +2502,10 @@ namespace SerialLoops.Editors
             ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
             _log.Log($"Attempting to modify parameter {dropDown.ParameterIndex} to topic {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
             ((TopicScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).TopicId =
-                ((TopicItem)_project.Items.FirstOrDefault(i => dropDown.SelectedKey == i.DisplayName)).Topic.Id;
+                ((TopicItem)_project.Items.FirstOrDefault(i => dropDown.SelectedKey == i.DisplayName)).TopicEntry.Id;
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
                 .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
-                ((TopicItem)_project.Items.First(i => dropDown.SelectedKey == i.DisplayName)).Topic.Id;
+                ((TopicItem)_project.Items.First(i => dropDown.SelectedKey == i.DisplayName)).TopicEntry.Id;
 
             dropDown.Link.Text = dropDown.SelectedKey;
             dropDown.Link.RemoveAllClickEvents();

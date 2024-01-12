@@ -12,7 +12,7 @@ using static HaruhiChokuretsuLib.Archive.Event.ScenarioCommand;
 
 namespace SerialLoops.Editors
 {
-    public class ScenarioEditor : Editor
+    public class ScenarioEditor(ScenarioItem item, ILogger log, Project project, EditorTabsPanel tabs) : Editor(item, log, project, tabs)
     {
         private ScenarioItem _scenario;
         private StackLayout _editorControls;
@@ -27,10 +27,6 @@ namespace SerialLoops.Editors
         private bool _triggerRefresh = true;
 
         private readonly IEnumerable<ListItem> verbs = Enum.GetNames<ScenarioVerb>().Select(v => new ListItem() { Text = v, Key = v });
-
-        public ScenarioEditor(ScenarioItem item, ILogger log, Project project, EditorTabsPanel tabs) : base(item, log, project, tabs)
-        {
-        }
 
         public override Container GetEditorPanel()
         {

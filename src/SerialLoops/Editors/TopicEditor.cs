@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace SerialLoops.Editors
 {
-    public class TopicEditor : Editor
+    public class TopicEditor(TopicItem topic, Project project, EditorTabsPanel tabs, ILogger log) : Editor(topic, log, project, tabs)
     {
         private TopicItem _topic;
 
@@ -23,10 +23,6 @@ namespace SerialLoops.Editors
         private NumericStepper _koizumiTimeStepper;
         private Label _koizumiTimeLabel;
 
-        public TopicEditor(TopicItem topic, Project project, EditorTabsPanel tabs, ILogger log) : base(topic, log, project, tabs)
-        {
-        }
-
         public override Container GetEditorPanel()
         {
             _topic = (TopicItem)Description;
@@ -36,7 +32,7 @@ namespace SerialLoops.Editors
                 Spacing = new(3, 3),
                 Rows =
                 {
-                    ControlGenerator.GetControlWithLabelTable("ID", new Label { Text = _topic.Topic.Id.ToString() }),
+                    ControlGenerator.GetControlWithLabelTable("ID", new Label { Text = _topic.TopicEntry.Id.ToString() }),
                 }
             };
             if (_topic.HiddenMainTopic is not null)
@@ -44,11 +40,11 @@ namespace SerialLoops.Editors
                 idLayout.Rows.Add(ControlGenerator.GetControlWithLabelTable("Hidden ID", new Label { Text = _topic.HiddenMainTopic.Id.ToString() }));
             }
 
-            TextBox titleTextBox = new() { Text = _topic.Topic.Title.GetSubstitutedString(_project), Width = 300 };
+            TextBox titleTextBox = new() { Text = _topic.TopicEntry.Title.GetSubstitutedString(_project), Width = 300 };
             titleTextBox.TextChanged += (sender, args) =>
             {
-                _topic.Topic.Title = titleTextBox.Text.GetOriginalString(_project);
-                _topic.Rename($"{_topic.Topic.Id} - {titleTextBox.Text}");
+                _topic.TopicEntry.Title = titleTextBox.Text.GetOriginalString(_project);
+                _topic.Rename($"{_topic.TopicEntry.Id} - {titleTextBox.Text}");
                 UpdateTabTitle(false, titleTextBox);
             };
 
@@ -75,7 +71,7 @@ namespace SerialLoops.Editors
                     }
                     else
                     {
-                        _topic.Topic.EventIndex = 0;
+                        _topic.TopicEntry.EventIndex = 0;
                     }
                 }
                 else
@@ -86,7 +82,7 @@ namespace SerialLoops.Editors
                     }
                     else
                     {
-                        _topic.Topic.EventIndex = (short)((ListItem)linkedScriptDropDown.Items[linkedScriptDropDown.SelectedIndex]).Tag;
+                        _topic.TopicEntry.EventIndex = (short)((ListItem)linkedScriptDropDown.Items[linkedScriptDropDown.SelectedIndex]).Tag;
                     }
                 }
                 linkedScriptLink.Items.Clear();
@@ -105,10 +101,10 @@ namespace SerialLoops.Editors
                 },
             };
 
-            _baseTimeStepper = new() { Value = _topic.Topic.BaseTimeGain, MaxValue = short.MaxValue, MinValue = 0, MaximumDecimalPlaces = 0 };
+            _baseTimeStepper = new() { Value = _topic.TopicEntry.BaseTimeGain, MaxValue = short.MaxValue, MinValue = 0, MaximumDecimalPlaces = 0 };
             _baseTimeStepper.ValueChanged += (sender, args) =>
             {
-                _topic.Topic.BaseTimeGain = (short)_baseTimeStepper.Value;
+                _topic.TopicEntry.BaseTimeGain = (short)_baseTimeStepper.Value;
 
                 UpdateKyonTime();
                 UpdateMikuruTime();
@@ -117,41 +113,41 @@ namespace SerialLoops.Editors
                 UpdateTabTitle(false);
             };
 
-            _kyonTimeStepper = new() { Value = _topic.Topic.KyonTimePercentage, MaxValue = short.MaxValue, MinValue = 0, MaximumDecimalPlaces = 0 };
-            _kyonTimeLabel = new() { Text = ((int)(_topic.Topic.BaseTimeGain * _topic.Topic.KyonTimePercentage / 100.0)).ToString() };
+            _kyonTimeStepper = new() { Value = _topic.TopicEntry.KyonTimePercentage, MaxValue = short.MaxValue, MinValue = 0, MaximumDecimalPlaces = 0 };
+            _kyonTimeLabel = new() { Text = ((int)(_topic.TopicEntry.BaseTimeGain * _topic.TopicEntry.KyonTimePercentage / 100.0)).ToString() };
             _kyonTimeStepper.ValueChanged += (sender, args) =>
             {
-                _topic.Topic.KyonTimePercentage = (short)_kyonTimeStepper.Value;
+                _topic.TopicEntry.KyonTimePercentage = (short)_kyonTimeStepper.Value;
 
                 UpdateKyonTime();
                 UpdateTabTitle(false);
             };
 
-            _mikuruTimeStepper = new() { Value = _topic.Topic.MikuruTimePercentage, MaxValue = short.MaxValue, MinValue = 0, MaximumDecimalPlaces = 0 };
-            _mikuruTimeLabel = new() { Text = ((int)(_topic.Topic.BaseTimeGain * _topic.Topic.MikuruTimePercentage / 100.0)).ToString() };
+            _mikuruTimeStepper = new() { Value = _topic.TopicEntry.MikuruTimePercentage, MaxValue = short.MaxValue, MinValue = 0, MaximumDecimalPlaces = 0 };
+            _mikuruTimeLabel = new() { Text = ((int)(_topic.TopicEntry.BaseTimeGain * _topic.TopicEntry.MikuruTimePercentage / 100.0)).ToString() };
             _mikuruTimeStepper.ValueChanged += (sender, args) =>
             {
-                _topic.Topic.MikuruTimePercentage = (short)_mikuruTimeStepper.Value;
+                _topic.TopicEntry.MikuruTimePercentage = (short)_mikuruTimeStepper.Value;
 
                 UpdateMikuruTime();
                 UpdateTabTitle(false);
             };
 
-            _nagatoTimeStepper = new() { Value = _topic.Topic.NagatoTimePercentage, MaxValue = short.MaxValue, MinValue = 0, MaximumDecimalPlaces = 0 };
-            _nagatoTimeLabel = new() { Text = ((int)(_topic.Topic.BaseTimeGain * _topic.Topic.NagatoTimePercentage / 100.0)).ToString() };
+            _nagatoTimeStepper = new() { Value = _topic.TopicEntry.NagatoTimePercentage, MaxValue = short.MaxValue, MinValue = 0, MaximumDecimalPlaces = 0 };
+            _nagatoTimeLabel = new() { Text = ((int)(_topic.TopicEntry.BaseTimeGain * _topic.TopicEntry.NagatoTimePercentage / 100.0)).ToString() };
             _nagatoTimeStepper.ValueChanged += (sender, args) =>
             {
-                _topic.Topic.NagatoTimePercentage = (short)_nagatoTimeStepper.Value;
+                _topic.TopicEntry.NagatoTimePercentage = (short)_nagatoTimeStepper.Value;
 
                 UpdateNagatoTime();
                 UpdateTabTitle(false);
             };
 
-            _koizumiTimeStepper = new() { Value = _topic.Topic.KoizumiTimePercentage, MaxValue = short.MaxValue, MinValue = 0, MaximumDecimalPlaces = 0 };
-            _koizumiTimeLabel = new() { Text = ((int)(_topic.Topic.BaseTimeGain * _topic.Topic.KoizumiTimePercentage / 100.0)).ToString() };
+            _koizumiTimeStepper = new() { Value = _topic.TopicEntry.KoizumiTimePercentage, MaxValue = short.MaxValue, MinValue = 0, MaximumDecimalPlaces = 0 };
+            _koizumiTimeLabel = new() { Text = ((int)(_topic.TopicEntry.BaseTimeGain * _topic.TopicEntry.KoizumiTimePercentage / 100.0)).ToString() };
             _koizumiTimeStepper.ValueChanged += (sender, args) =>
             {
-                _topic.Topic.KoizumiTimePercentage = (short)_koizumiTimeStepper.Value;
+                _topic.TopicEntry.KoizumiTimePercentage = (short)_koizumiTimeStepper.Value;
 
                 UpdateKoizumiTime();
                 UpdateTabTitle(false);
@@ -221,24 +217,24 @@ namespace SerialLoops.Editors
                     new ListItem { Key = "4", Text = "Episode 4" },
                     new ListItem { Key = "5", Text = "Episode 5" },
                 },
-                SelectedKey = _topic.Topic.EpisodeGroup.ToString(),
+                SelectedKey = _topic.TopicEntry.EpisodeGroup.ToString(),
             };
             episodeGroupDropDown.SelectedKeyChanged += (sender, args) =>
             {
-                _topic.Topic.EpisodeGroup = byte.Parse(episodeGroupDropDown.SelectedKey);
+                _topic.TopicEntry.EpisodeGroup = byte.Parse(episodeGroupDropDown.SelectedKey);
                 UpdateTabTitle(false);
             };
 
             NumericStepper puzzlePhaseGroupStepper = new()
             {
-                Value = _topic.Topic.PuzzlePhaseGroup,
+                Value = _topic.TopicEntry.PuzzlePhaseGroup,
                 DecimalPlaces = 0,
                 MinValue = 0,
                 MaxValue = 8,
             };
             puzzlePhaseGroupStepper.ValueChanged += (sender, args) =>
             {
-                _topic.Topic.PuzzlePhaseGroup = (byte)puzzlePhaseGroupStepper.Value;
+                _topic.TopicEntry.PuzzlePhaseGroup = (byte)puzzlePhaseGroupStepper.Value;
                 UpdateTabTitle(false);
             };
 
@@ -266,7 +262,7 @@ namespace SerialLoops.Editors
 
             return new TableLayout(idLayout,
                 ControlGenerator.GetControlWithLabel("Title", titleTextBox),
-                ControlGenerator.GetControlWithLabel("Type", _topic.Topic.CardType.ToString()),
+                ControlGenerator.GetControlWithLabel("Type", _topic.TopicEntry.CardType.ToString()),
                 ControlGenerator.GetControlWithLabel("Associated Script", linkedScriptLayout),
                 groupsLayout,
                 new GroupBox() { Text = "Times", Content = timesLayout },
@@ -282,7 +278,7 @@ namespace SerialLoops.Editors
             }
             else
             {
-                associatedScript = _project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Script && ((ScriptItem)i).Event.Index == _topic.Topic.EventIndex);
+                associatedScript = _project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Script && ((ScriptItem)i).Event.Index == _topic.TopicEntry.EventIndex);
             }
             return associatedScript ?? NoneItem.SCRIPT;
         }

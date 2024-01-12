@@ -609,15 +609,15 @@ namespace SerialLoops.Lib
             {
                 Evt.Files.First(f => f.Name == "TOPICS").InitializeTopicFile();
                 TopicFile = Evt.Files.First(f => f.Name == "TOPICS");
-                tracker.Focus("Topics", TopicFile.TopicStructs.Count);
-                foreach (TopicStruct topic in TopicFile.TopicStructs)
+                tracker.Focus("Topics", TopicFile.Topics.Count);
+                foreach (Topic topic in TopicFile.Topics)
                 {
                     // Main topics have shadow topics that are located at ID + 40 (this is actually how the game finds them)
                     // So if we're a main topic and we see another topic 40 back, we know we're one of these shadow topics and should really be
                     // rolled into the original main topic
-                    if (topic.Type == TopicType.Main && Items.Any(i => i.Type == ItemDescription.ItemType.Topic && ((TopicItem)i).Topic.Id == topic.Id - 40))
+                    if (topic.Type == TopicType.Main && Items.Any(i => i.Type == ItemDescription.ItemType.Topic && ((TopicItem)i).TopicEntry.Id == topic.Id - 40))
                     {
-                        ((TopicItem)Items.First(i => i.Type == ItemDescription.ItemType.Topic && ((TopicItem)i).Topic.Id == topic.Id - 40)).HiddenMainTopic = topic;
+                        ((TopicItem)Items.First(i => i.Type == ItemDescription.ItemType.Topic && ((TopicItem)i).TopicEntry.Id == topic.Id - 40)).HiddenMainTopic = topic;
                     }
                     else
                     {

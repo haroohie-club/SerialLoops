@@ -16,16 +16,12 @@ using System.Linq;
 
 namespace SerialLoops.Editors
 {
-    public class VoicedLineEditor : Editor
+    public class VoicedLineEditor(VoicedLineItem vce, Project project, ILogger log) : Editor(vce, log, project)
     {
         private VoicedLineItem _vce;
         public SoundPlayerPanel VcePlayer { get; set; }
         private readonly StackLayout _subtitlesPreview = new() { Items = { new SKGuiImage(new(256, 384)) } };
         private string _subtitle;
-
-        public VoicedLineEditor(VoicedLineItem vce, Project project, ILogger log) : base(vce, log, project)
-        {
-        }
 
         public override Container GetEditorPanel()
         {
@@ -36,7 +32,7 @@ namespace SerialLoops.Editors
             extractButton.Click += (obj, args) =>
             {
                 SaveFileDialog saveFileDialog = new() { Title = "Save voiced line as WAV" };
-                saveFileDialog.Filters.Add(new() { Name = "WAV File", Extensions = new string[] { ".wav" } });
+                saveFileDialog.Filters.Add(new() { Name = "WAV File", Extensions = [".wav"] });
                 if (saveFileDialog.ShowAndReportIfFileSelected(this))
                 {
                     WaveFileWriter.CreateWaveFile(saveFileDialog.FileName, _vce.GetWaveProvider(_log));
@@ -47,11 +43,11 @@ namespace SerialLoops.Editors
             replaceButton.Click += (obj, args) =>
             {
                 OpenFileDialog openFileDialog = new() { Title = "Replace voiced line" };
-                openFileDialog.Filters.Add(new() { Name = "Supported Audio Files", Extensions = new string[] { ".wav", ".flac", ".mp3", ".ogg" } });
-                openFileDialog.Filters.Add(new() { Name = "WAV files", Extensions = new string[] { ".wav" } });
-                openFileDialog.Filters.Add(new() { Name = "FLAC files", Extensions = new string[] { ".flac" } });
-                openFileDialog.Filters.Add(new() { Name = "MP3 files", Extensions = new string[] { ".mp3" } });
-                openFileDialog.Filters.Add(new() { Name = "Vorbis files", Extensions = new string[] { ".ogg" } });
+                openFileDialog.Filters.Add(new() { Name = "Supported Audio Files", Extensions = [".wav", ".flac", ".mp3", ".ogg"] });
+                openFileDialog.Filters.Add(new() { Name = "WAV files", Extensions = [".wav"] });
+                openFileDialog.Filters.Add(new() { Name = "FLAC files", Extensions = [".flac"] });
+                openFileDialog.Filters.Add(new() { Name = "MP3 files", Extensions = [".mp3"] });
+                openFileDialog.Filters.Add(new() { Name = "Vorbis files", Extensions = [".ogg"] });
                 if (openFileDialog.ShowAndReportIfFileSelected(this))
                 {
                     LoopyProgressTracker tracker = new();
@@ -87,51 +83,51 @@ namespace SerialLoops.Editors
                     Orientation = Orientation.Vertical,
                     Items =
                     {
-                        VoiceMapFile.VoiceMapStruct.YPosition.TOP.ToString(),
-                        VoiceMapFile.VoiceMapStruct.YPosition.BELOW_TOP.ToString(),
-                        VoiceMapFile.VoiceMapStruct.YPosition.ABOVE_BOTTOM.ToString(),
-                        VoiceMapFile.VoiceMapStruct.YPosition.BOTTOM.ToString(),
+                        VoiceMapFile.VoiceMapEntry.YPosition.TOP.ToString(),
+                        VoiceMapFile.VoiceMapEntry.YPosition.BELOW_TOP.ToString(),
+                        VoiceMapFile.VoiceMapEntry.YPosition.ABOVE_BOTTOM.ToString(),
+                        VoiceMapFile.VoiceMapEntry.YPosition.BOTTOM.ToString(),
                     },
-                    SelectedKey = VoiceMapFile.VoiceMapStruct.YPosition.ABOVE_BOTTOM.ToString(),
+                    SelectedKey = VoiceMapFile.VoiceMapEntry.YPosition.ABOVE_BOTTOM.ToString(),
                 };
-                var voiceMapStruct = _project.VoiceMap.VoiceMapStructs.FirstOrDefault(v => v.VoiceFileName == Path.GetFileNameWithoutExtension(_vce.VoiceFile));
-                if (voiceMapStruct is not null)
+                var VoiceMapEntry = _project.VoiceMap.VoiceMapEntries.FirstOrDefault(v => v.VoiceFileName == Path.GetFileNameWithoutExtension(_vce.VoiceFile));
+                if (VoiceMapEntry is not null)
                 {
                     if (_project.LangCode != "ja")
                     {
-                        subtitleBox.Text = voiceMapStruct.Subtitle.GetSubstitutedString(_project);
+                        subtitleBox.Text = VoiceMapEntry.Subtitle.GetSubstitutedString(_project);
                     }
                     else
                     {
-                        subtitleBox.Text = voiceMapStruct.Subtitle;
+                        subtitleBox.Text = VoiceMapEntry.Subtitle;
                     }
                     _subtitle = _project.LangCode != "ja" ? subtitleBox.Text.GetOriginalString(_project) : subtitleBox.Text;
 
-                    screenSelector.SelectedScreen = voiceMapStruct.TargetScreen == VoiceMapFile.VoiceMapStruct.Screen.TOP 
+                    screenSelector.SelectedScreen = VoiceMapEntry.TargetScreen == VoiceMapFile.VoiceMapEntry.Screen.TOP 
                         ? ScreenScriptParameter.DsScreen.TOP : ScreenScriptParameter.DsScreen.BOTTOM;
-                    yPosSelectionList.SelectedKey = voiceMapStruct.YPos.ToString();
+                    yPosSelectionList.SelectedKey = VoiceMapEntry.YPos.ToString();
                 }
 
                 subtitleBox.TextChanged += (sender, args) =>
                 {
                     _subtitle = _project.LangCode != "ja" ? subtitleBox.Text.GetOriginalString(_project) : subtitleBox.Text;
-                    var voiceMapStruct = _project.VoiceMap.VoiceMapStructs.FirstOrDefault(v => v.VoiceFileName == Path.GetFileNameWithoutExtension(_vce.VoiceFile));
-                    if (voiceMapStruct is null)
+                    var VoiceMapEntry = _project.VoiceMap.VoiceMapEntries.FirstOrDefault(v => v.VoiceFileName == Path.GetFileNameWithoutExtension(_vce.VoiceFile));
+                    if (VoiceMapEntry is null)
                     {
-                        _project.VoiceMap.VoiceMapStructs.Add(new()
+                        _project.VoiceMap.VoiceMapEntries.Add(new()
                         {
                             VoiceFileName = Path.GetFileNameWithoutExtension(_vce.VoiceFile),
                             FontSize = 100,
                             TargetScreen = screenSelector.SelectedScreen == ScreenScriptParameter.DsScreen.TOP
-                                ? VoiceMapFile.VoiceMapStruct.Screen.TOP : VoiceMapFile.VoiceMapStruct.Screen.BOTTOM,
+                                ? VoiceMapFile.VoiceMapEntry.Screen.TOP : VoiceMapFile.VoiceMapEntry.Screen.BOTTOM,
                             Timer = 350,
                         });
-                        _project.VoiceMap.VoiceMapStructs[^1].SetSubtitle(_subtitle, _project.FontReplacement);
-                        _project.VoiceMap.VoiceMapStructs[^1].YPos = Enum.Parse<VoiceMapFile.VoiceMapStruct.YPosition>(yPosSelectionList.SelectedKey);
+                        _project.VoiceMap.VoiceMapEntries[^1].SetSubtitle(_subtitle, _project.FontReplacement);
+                        _project.VoiceMap.VoiceMapEntries[^1].YPos = Enum.Parse<VoiceMapFile.VoiceMapEntry.YPosition>(yPosSelectionList.SelectedKey);
                     }
                     else
                     {
-                        voiceMapStruct.SetSubtitle(_subtitle, _project.FontReplacement);
+                        VoiceMapEntry.SetSubtitle(_subtitle, _project.FontReplacement);
                     }
                     UpdateTabTitle(false, subtitleBox);
                     UpdatePreview();
@@ -139,11 +135,11 @@ namespace SerialLoops.Editors
 
                 screenSelector.ScreenChanged += (sender, args) =>
                 {
-                    var voiceMapStruct = _project.VoiceMap.VoiceMapStructs.FirstOrDefault(v => v.VoiceFileName == Path.GetFileNameWithoutExtension(_vce.VoiceFile));
-                    if (voiceMapStruct is not null)
+                    var VoiceMapEntry = _project.VoiceMap.VoiceMapEntries.FirstOrDefault(v => v.VoiceFileName == Path.GetFileNameWithoutExtension(_vce.VoiceFile));
+                    if (VoiceMapEntry is not null)
                     {
-                        voiceMapStruct.TargetScreen = screenSelector.SelectedScreen == ScreenScriptParameter.DsScreen.TOP
-                            ? VoiceMapFile.VoiceMapStruct.Screen.TOP : VoiceMapFile.VoiceMapStruct.Screen.BOTTOM;
+                        VoiceMapEntry.TargetScreen = screenSelector.SelectedScreen == ScreenScriptParameter.DsScreen.TOP
+                            ? VoiceMapFile.VoiceMapEntry.Screen.TOP : VoiceMapFile.VoiceMapEntry.Screen.BOTTOM;
                         UpdateTabTitle(false);
                         UpdatePreview();
                     }
@@ -151,10 +147,10 @@ namespace SerialLoops.Editors
 
                 yPosSelectionList.SelectedKeyChanged += (sender, args) =>
                 {
-                    var voiceMapStruct = _project.VoiceMap.VoiceMapStructs.FirstOrDefault(v => v.VoiceFileName == Path.GetFileNameWithoutExtension(_vce.VoiceFile));
-                    if (voiceMapStruct is not null)
+                    var VoiceMapEntry = _project.VoiceMap.VoiceMapEntries.FirstOrDefault(v => v.VoiceFileName == Path.GetFileNameWithoutExtension(_vce.VoiceFile));
+                    if (VoiceMapEntry is not null)
                     {
-                        voiceMapStruct.YPos = Enum.Parse<VoiceMapFile.VoiceMapStruct.YPosition>(yPosSelectionList.SelectedKey);
+                        VoiceMapEntry.YPos = Enum.Parse<VoiceMapFile.VoiceMapEntry.YPosition>(yPosSelectionList.SelectedKey);
                         UpdateTabTitle(false);
                         UpdatePreview();
                     }
@@ -216,8 +212,8 @@ namespace SerialLoops.Editors
             canvas.DrawColor(SKColors.DarkGray);
             canvas.DrawLine(new SKPoint { X = 0, Y = 192 }, new SKPoint { X = 256, Y = 192 }, DialogueScriptParameter.Paint00);
 
-            var voiceMapStruct = _project.VoiceMap.VoiceMapStructs.FirstOrDefault(v => v.VoiceFileName == Path.GetFileNameWithoutExtension(_vce.VoiceFile));
-            bool bottomScreen = voiceMapStruct.TargetScreen == VoiceMapFile.VoiceMapStruct.Screen.BOTTOM;
+            var VoiceMapEntry = _project.VoiceMap.VoiceMapEntries.FirstOrDefault(v => v.VoiceFileName == Path.GetFileNameWithoutExtension(_vce.VoiceFile));
+            bool bottomScreen = VoiceMapEntry.TargetScreen == VoiceMapFile.VoiceMapEntry.Screen.BOTTOM;
             if (bottomScreen)
             {
                 for (int i = 0; i <= 1; i++)
@@ -227,8 +223,8 @@ namespace SerialLoops.Editors
                         canvas,
                         DialogueScriptParameter.Paint07,
                         _project,
-                        i + voiceMapStruct.X,
-                        1 + voiceMapStruct.Y + (bottomScreen ? 192 : 0),
+                        i + VoiceMapEntry.X,
+                        1 + VoiceMapEntry.Y + (bottomScreen ? 192 : 0),
                         false
                     );
                 }
@@ -239,8 +235,8 @@ namespace SerialLoops.Editors
                 canvas,
                 DialogueScriptParameter.Paint00, 
                 _project,
-                voiceMapStruct.X,
-                voiceMapStruct.Y + (bottomScreen ? 192 : 0),
+                VoiceMapEntry.X,
+                VoiceMapEntry.Y + (bottomScreen ? 192 : 0),
                 false
             );
 

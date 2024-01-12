@@ -12,13 +12,9 @@ using System.Linq;
 
 namespace SerialLoops.Editors
 {
-    public class BackgroundEditor : Editor
+    public class BackgroundEditor(BackgroundItem item, Project project, ILogger log) : Editor(item, log, project)
     {
         private BackgroundItem _bg;
-
-        public BackgroundEditor(BackgroundItem item, Project project, ILogger log) : base(item, log, project)
-        {
-        }
 
         public override Container GetEditorPanel()
         {
