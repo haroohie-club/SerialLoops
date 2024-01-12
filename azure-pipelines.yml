@@ -66,8 +66,8 @@ jobs:
     displayName: 'Set Screen Resolution'
     inputs:
       displaySettings: specific
-      width: 1920
-      height: 1080
+      width: 3840
+      height: 2160
   - task: VSTest@3
     displayName: 'VsTest - Run UI Tests'
     inputs:
