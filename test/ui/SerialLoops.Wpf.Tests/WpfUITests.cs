@@ -24,7 +24,8 @@ namespace SerialLoops.Wpf.Tests
         private WindowsDriver<WindowsElement> _driver;
         private UiVals? _uiVals;
         private Project? _project;
-        private readonly UiTestLogger _logger = new(TestContext.Out);
+        private const string LOG_FILE = "testrun_console.log";
+        private readonly UiTestLogger _logger = new(LOG_FILE);
         private readonly ConsoleProgressTracker _tracker = new();
         private Process? _wad;
 
@@ -125,6 +126,7 @@ namespace SerialLoops.Wpf.Tests
         [OneTimeTearDown]
         public void Teardown()
         {
+            TestContext.AddTestAttachment(LOG_FILE);
             _driver.Quit();
             Directory.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "SerialLoops", "Projects", _uiVals!.ProjectName), true);
             string logFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "SerialLoops", "Logs", "SerialLoops.log");
