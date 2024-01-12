@@ -10,16 +10,12 @@ namespace SerialLoops.UITests.Shared
 
         public void Log(string message)
         {
-            using FileStream fs = File.OpenWrite(LogFile);
-            using StreamWriter sw = new(fs);
-            sw.WriteLine(message);
+            File.AppendAllText(LogFile, message);
         }
 
         public void LogError(string message, bool lookForWarnings = false)
         {
-            using FileStream fs = File.OpenWrite(LogFile);
-            using StreamWriter sw = new(fs);
-            sw.WriteLine($"ERROR: {message}");
+            File.AppendAllText(LogFile, $"ERROR: {message}");
         }
 
         public void LogException(string message, Exception exception)
@@ -29,9 +25,7 @@ namespace SerialLoops.UITests.Shared
 
         public void LogWarning(string message, bool lookForErrors = false)
         {
-            using FileStream fs = File.OpenWrite(LogFile);
-            using StreamWriter sw = new(fs);
-            sw.WriteLine($"WARNING: {message}");
+            File.AppendAllText(LogFile, $"WARNING: {message}");
         }
     }
 }

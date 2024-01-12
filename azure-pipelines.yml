@@ -85,7 +85,7 @@ jobs:
   - task: PublishBuildArtifacts@1
     inputs:
       PathtoPublish: $(Build.ArtifactStagingDirectory)/TestConsole.log
-      ArtifactName: SerialLoops_Logs
+      ArtifactName: ConsoleLogs
       publishLocation: Container
-    displayName: Publish Serial Loops logs
+    displayName: Publish console logs
     condition: always()

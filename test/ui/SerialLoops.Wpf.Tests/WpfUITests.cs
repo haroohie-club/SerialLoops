@@ -58,10 +58,10 @@ namespace SerialLoops.Wpf.Tests
                     ProjectName = Environment.GetEnvironmentVariable("PROJECT_NAME") ?? "WinUITest",
                     WinAppDriverLoc = Environment.GetEnvironmentVariable("WINAPPDRIVER_LOC") ?? string.Empty,
                     RomLoc = romPath,
-                    ArtifactsDir = Environment.GetEnvironmentVariable("BUILD_ARTIFACTSSTAGINGDIRECTORY") ?? "artifacts",
+                    ArtifactsDir = Environment.GetEnvironmentVariable("BUILD_ARTIFACTSTAGINGDIRECTORY") ?? "artifacts",
                 };
             }
-            _logger.Log(JsonSerializer.Serialize<UiVals>(_uiVals, new JsonSerializerOptions { WriteIndented = true }));
+            _logger.Log(JsonSerializer.Serialize(_uiVals, new JsonSerializerOptions { WriteIndented = true }));
 
             if (!string.IsNullOrEmpty(_uiVals.WinAppDriverLoc))
             {
