@@ -59,6 +59,12 @@ jobs:
       arguments: devkitpro/devkitarm
   # - task: WinAppDriver.winappdriver-pipelines-task.winappdriver-pipelines-task.Windows Application Driver@0
   #   displayName: 'Start WinAppDriver'
+  - task: ms-autotest.screen-resolution-utility-task.screen-resolution-utlity-task.ScreenResolutionUtility@1
+    displayName: 'Set Screen Resolution'
+    inputs:
+      displaySettings: specific
+      width: 1920
+      height: 1080
   - task: VSTest@3
     displayName: 'VsTest - Run UI Tests'
     inputs:

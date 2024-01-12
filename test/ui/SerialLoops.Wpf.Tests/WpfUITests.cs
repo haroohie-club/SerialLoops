@@ -61,16 +61,18 @@ namespace SerialLoops.Wpf.Tests
                     ArtifactsDir = Environment.GetEnvironmentVariable("BUILD_ARTIFACTSSTAGINGDIRECTORY") ?? "artifacts",
                 };
             }
+            _logger.Log(JsonSerializer.Serialize(_uiVals));
 
             if (!string.IsNullOrEmpty(_uiVals.WinAppDriverLoc))
             {
+                _logger.Log($"Attempting to launch WinAppDriver from '{_uiVals.WinAppDriverLoc}'");
                 _wad = Process.Start(new ProcessStartInfo
                 {
                     FileName = "cmd.exe",
                     Arguments = $"/k \"{_uiVals.WinAppDriverLoc}\"",
                     UseShellExecute = true,
                 });
-                Thread.Sleep(TimeSpan.FromSeconds(2)); // Give WAD time to boot up before continuing
+                Thread.Sleep(TimeSpan.FromSeconds(2)); // Give WAD time to launch before continuing
             }
 
             Uri serverUri = new(Environment.GetEnvironmentVariable("APPIUM_HOST") ?? "http://127.0.0.1:4723/");
@@ -124,10 +126,10 @@ namespace SerialLoops.Wpf.Tests
         public void Teardown()
         {
             _driver.Quit();
-            _wad?.Kill();
-            _wad?.Dispose();
             Directory.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "SerialLoops", "Projects", _uiVals!.ProjectName), true);
             string logFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "SerialLoops", "Logs", "SerialLoops.log");
+            _wad?.Kill();
+            _wad?.Dispose();
             if (File.Exists(logFile))
             {
                 File.Copy(logFile, Path.Combine(_uiVals.ArtifactsDir, "SerialLoops.log"), overwrite: true);
