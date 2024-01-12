@@ -47,7 +47,10 @@ jobs:
   steps:
   - checkout: self
     clean: true
-
+  - pwsh: |
+      Remove-Item -Path $env:USERPROFILE\SerialLoops\Logs\SerialLoops.log
+    displayName: Delete SL logs if they exist
+    continueOnError: true
   - task: DotNetCoreCLI@2
     inputs:
       command: 'build'
