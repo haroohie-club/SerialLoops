@@ -156,7 +156,11 @@ namespace SerialLoops.Wpf.Tests
             TestContext.AddTestAttachment(Path.Combine(_uiVals!.ArtifactsDir, "available_hacks.png"), "The available hacks dialog");
             _driver.FindElementByName(hackToApply).Click();
             _driver.FindElementByName("Save").Click();
-            Thread.Sleep(TimeSpan.FromSeconds(15));
+            Thread.Sleep(TimeSpan.FromSeconds(7.5)); // Allow time for hacks to be assembled
+            if (Helpers.OnWindows11())
+            {
+                _driver.SwitchToWindowWithName("Successfully applied hacks!", "Success!", "Error");
+            }
             _driver.TakeScreenshot().SaveAsFile(Path.Combine(_uiVals!.ArtifactsDir, "hack_apply_result_dialog.png"));
             TestContext.AddTestAttachment(Path.Combine(_uiVals!.ArtifactsDir, "hack_apply_result_dialog.png"), "The dialog indicating whether the hack application succeeded or not");
             _driver.FindElementByName("OK").Click();

@@ -21,5 +21,11 @@ namespace SerialLoops.Wpf.Tests
                 }
             }
         }
+
+        public static bool OnWindows11()
+        {
+            // A reasonable enough approximation; it could be wrong if we're running on Server but we're not soooo
+            return Environment.OSVersion.Version.Build >= 22000;
+        }
     }
 }
