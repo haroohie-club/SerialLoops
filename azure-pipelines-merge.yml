@@ -28,7 +28,8 @@ jobs:
   - script: |
       npm i -g appium
       appium driver install mac2
-    displayName: Install Appium Driver
+      appium &
+    displayName: Install and Run Appium Driver
   - task: ms-autotest.screen-resolution-utility-task.screen-resolution-utlity-task.ScreenResolutionUtility@1
     displayName: 'Set Screen Resolution'
     inputs:
@@ -40,7 +41,7 @@ jobs:
       command: 'test'
       projects: $(Build.SourcesDirectory)/test/ui/SerialLoops.Mac.Tests/SerialLoops.Mac.Tests.csproj
     env:
-      APP_LOCATION: $(Build.SourcesDirectory)/src/SerialLoops.Wpf/bin/Debug/net8.0-windows/SerialLoops.app
+      APP_LOCATION: "$(Build.SourcesDirectory)/src/SerialLoops.Mac/bin/Debug/net8.0/Serial Loops.app"
       PROJECT_NAME: MacUITest
       ROM_URI: $(ChokuRomUri)
       LOG_FILE: $(Build.ArtifactStagingDirectory)/TestConsole.log

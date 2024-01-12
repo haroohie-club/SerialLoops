@@ -6,6 +6,9 @@ using SerialLoops.UITests.Shared;
 using System.Text.Json;
 using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.Mac;
+using System.Linq;
+using System.Threading;
+using OpenQA.Selenium;
 
 namespace SerialLoops.Mac.Tests
 {
@@ -49,7 +52,14 @@ namespace SerialLoops.Mac.Tests
                 PlatformName = "mac",
                 AutomationName = "mac2",
             };
+            appiumOptions.AddAdditionalAppiumOption("appPath", _uiVals.AppLoc);
 
+            _driver = new(appiumOptions);
+            _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1.5);
+
+            _driver.SwitchTo().Window(_driver.WindowHandles.First());
+            Thread.Sleep(100); // Give it time
+            _driver.FindElement(By.Name("Skip Update")).Click(); // close the dialog
         }
 
         [OneTimeTearDown] 
