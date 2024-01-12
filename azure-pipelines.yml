@@ -50,6 +50,11 @@ jobs:
   - task: DotNetCoreCLI@2
     inputs:
       command: 'build'
+      projects: $(Build.SourcesDirectory)/src/SerialLoops.Wpf/SerialLoops.Wpf.csproj
+    displayName: Build SerialLoops.Wpf
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: 'build'
       projects: $(Build.SourcesDirectory)/test/ui/SerialLoops.Wpf.Tests/SerialLoops.Wpf.Tests.csproj
     displayName: Build SerialLoops.Wpf.Tests
   - task: Docker@2

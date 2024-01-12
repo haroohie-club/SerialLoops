@@ -10,12 +10,12 @@ namespace SerialLoops.UITests.Shared
 
         public void Log(string message)
         {
-            File.AppendAllText(LogFile, message);
+            File.AppendAllText(LogFile, $"{message}\n");
         }
 
         public void LogError(string message, bool lookForWarnings = false)
         {
-            File.AppendAllText(LogFile, $"ERROR: {message}");
+            File.AppendAllText(LogFile, $"ERROR: {message}\n");
         }
 
         public void LogException(string message, Exception exception)
@@ -25,7 +25,7 @@ namespace SerialLoops.UITests.Shared
 
         public void LogWarning(string message, bool lookForErrors = false)
         {
-            File.AppendAllText(LogFile, $"WARNING: {message}");
+            File.AppendAllText(LogFile, $"WARNING: {message}\n");
         }
     }
 }
