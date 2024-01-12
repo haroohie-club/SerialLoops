@@ -177,9 +177,7 @@ stages:
   jobs:
   - job:
     pool:
-      name: LoopyPool
-      demands:
-        - Agent.OS -equals Windows_NT
+      vmImage: ubuntu-latest
     displayName: Create Pre-Release
     steps:
     - task: DownloadBuildArtifacts@0

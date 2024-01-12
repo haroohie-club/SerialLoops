@@ -41,7 +41,9 @@ jobs:
 - job:
   displayName: UI Tests (Windows)
   pool:
-    vmImage: 'windows-latest'
+    name: LoopyPool
+    demands:
+      - Agent.OS -equals Windows_NT
   steps:
   - checkout: self
     clean: publishTestResults

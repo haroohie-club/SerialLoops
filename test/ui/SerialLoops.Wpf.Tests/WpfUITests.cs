@@ -31,6 +31,7 @@ namespace SerialLoops.Wpf.Tests
         public void Setup()
         {
             // To run these tests locally, you can create a file called 'ui_vals.json' and place it next to the test assembly (in the output folder)
+            // These tests assume default config for Serial Loops i.e. fresh install; some tests may fail if default config is not used
 
             if (File.Exists("ui_vals.json"))
             {
@@ -94,7 +95,10 @@ namespace SerialLoops.Wpf.Tests
             actions.SendKeys(Keys.Enter);
             actions.Build().Perform();
             _driver.FindElementByName("Create").Click();
-            Thread.Sleep(TimeSpan.FromSeconds(20));
+            do
+            {
+                Thread.Sleep(TimeSpan.FromSeconds(5));
+            } while (_driver.WindowHandles.Count > 1);
             _driver.GetScreenshot().SaveAsFile(Path.Combine(_uiVals.ArtifactsDir, "project_open.png"));
             TestContext.AddTestAttachment(Path.Combine(_uiVals.ArtifactsDir, "project_open.png"), "Initial screen after project creation");
 
@@ -121,10 +125,11 @@ namespace SerialLoops.Wpf.Tests
         [Test]
         public void TestAsmHackApplication()
         {
+            string hackToApply = "Skip OP";
             _driver.FindElementByName("Tools").Click();
             _driver.FindElementByName("Apply Hacks...").Click();
             _driver.SwitchTo().Window(_driver.WindowHandles.First());
-            _driver.FindElementByName("Skip OP").Click();
+            _driver.FindElementByName(hackToApply).Click();
             _driver.FindElementByName("Save").Click();
             Thread.Sleep(TimeSpan.FromSeconds(15));
             _driver.SwitchTo().Window(_driver.WindowHandles.First());
@@ -134,7 +139,7 @@ namespace SerialLoops.Wpf.Tests
             _driver.SwitchTo().Window(_driver.WindowHandles.First());
             _driver.FindElementByName("Close").Click();
             List<AsmHack> hacks = JsonSerializer.Deserialize<List<AsmHack>>(File.ReadAllText(Path.Combine("Sources", "hacks.json"))) ?? [];
-            Assert.That(hacks[0].Applied(_project));
+            Assert.That(hacks.First(h => h.Name == hackToApply).Applied(_project));
         }
     }
 }
