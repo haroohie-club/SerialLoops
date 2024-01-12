@@ -26,6 +26,7 @@ namespace SerialLoops.Wpf.Tests
         private Project? _project;
         private readonly ConsoleLogger _logger = new();
         private readonly ConsoleProgressTracker _tracker = new();
+        private Process? _wad;
 
         [OneTimeSetUp]
         public void Setup()
@@ -63,9 +64,11 @@ namespace SerialLoops.Wpf.Tests
 
             if (!string.IsNullOrEmpty(_uiVals.WinAppDriverLoc))
             {
-                Process.Start(new ProcessStartInfo
+                _wad = Process.Start(new ProcessStartInfo
                 {
-                    FileName = _uiVals.WinAppDriverLoc
+                    FileName = "cmd.exe",
+                    Arguments = $"/k \"{_uiVals.WinAppDriverLoc}\"",
+                    UseShellExecute = true,
                 });
             }
 
@@ -118,6 +121,8 @@ namespace SerialLoops.Wpf.Tests
         public void Teardown()
         {
             _driver.Quit();
+            _wad?.Kill();
+            _wad?.Dispose();
             Directory.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "SerialLoops", "Projects", _uiVals!.ProjectName), true);
             string logFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "SerialLoops", "Logs", "SerialLoops.log");
             if (File.Exists(logFile))
