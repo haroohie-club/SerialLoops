@@ -52,11 +52,11 @@ namespace SerialLoops.Mac.Tests
                 PlatformName = "mac",
                 AutomationName = "mac2",
             };
+            appiumOptions.AddAdditionalAppiumOption("bundleId", "club.haroohie.SerialLoops");
             appiumOptions.AddAdditionalAppiumOption("appPath", _uiVals.AppLoc);
 
             _driver = new(appiumOptions);
             _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1.5);
-            _driver.ActivateApp(_uiVals.AppLoc);
 
             _driver.SwitchTo().Window(_driver.WindowHandles.First());
             Thread.Sleep(100); // Give it time

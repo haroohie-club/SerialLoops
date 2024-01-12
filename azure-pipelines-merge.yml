@@ -28,6 +28,7 @@ jobs:
   - script: |
       npm i -g appium
       appium driver install mac2
+      automationmodetool enable-automationmode-without-authentication
       appium &
     displayName: Install and Run Appium Driver
   - task: ms-autotest.screen-resolution-utility-task.screen-resolution-utlity-task.ScreenResolutionUtility@1
