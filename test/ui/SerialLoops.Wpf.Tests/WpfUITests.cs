@@ -144,9 +144,11 @@ namespace SerialLoops.Wpf.Tests
         }
 
         [Test]
-        public void TestAsmHackApplication()
+        public void TestAsmHackApplicationAndReversion()
         {
             string hackToApply = "Skip OP";
+
+            // Apply hack
             _driver.FindElementByName("Tools").Click();
             _driver.TakeScreenshot().SaveAsFile(Path.Combine(_uiVals!.ArtifactsDir, "tools_clicked.png"));
             TestContext.AddTestAttachment(Path.Combine(_uiVals!.ArtifactsDir, "tools_clicked.png"), "The app after the tools menu was clicked but before clicking Apply Hacks");
@@ -167,7 +169,24 @@ namespace SerialLoops.Wpf.Tests
             _driver.FindElementByName("OK").Click();
             Thread.Sleep(TimeSpan.FromSeconds(1)); // Allow time to clean up the containers
             List<AsmHack> hacks = JsonSerializer.Deserialize<List<AsmHack>>(File.ReadAllText(Path.Combine("Sources", "hacks.json"))) ?? [];
-            Assert.That(hacks.First(h => h.Name == hackToApply).Applied(_project));
+            Assert.That(hacks.First(h => h.Name == hackToApply).Applied(_project), Is.True);
+
+            // Revert hack
+            _driver.FindElementByName("Tools").Click();
+            Thread.Sleep(100);
+            _driver.FindElementByName("Apply Hacks...").Click();
+            _driver.SwitchTo().Window(_driver.WindowHandles.First());
+            _driver.FindElementByName(hackToApply).Click();
+            _driver.FindElementByName("Save").Click();
+            Thread.Sleep(TimeSpan.FromSeconds(3)); // Allow time for hacks to be disabled
+            if (Helpers.OnWindows11())
+            {
+                // Dialogs count as windows on Win11 but are part of the same window on Win10, from basic testing
+                _driver.SwitchToWindowWithName("Successfully applied hacks!", "Success!", "Error");
+            }
+            _driver.FindElementByName("OK").Click();
+            Thread.Sleep(TimeSpan.FromSeconds(1)); // Allow time to clean up the containers
+            Assert.That(hacks.First(h => h.Name == hackToApply).Applied(_project), Is.False);
         }
     }
 }
