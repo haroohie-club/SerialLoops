@@ -45,7 +45,7 @@ namespace SerialLoops.Mac.Tests
                     ArtifactsDir = Environment.GetEnvironmentVariable("BUILD_ARTIFACTSTAGINGDIRECTORY") ?? "artifacts",
                 };
             }
-            
+
             AppiumOptions appiumOptions = new()
             {
                 PlatformName = "mac",
@@ -58,7 +58,7 @@ namespace SerialLoops.Mac.Tests
             _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1.5);
 
             Thread.Sleep(TimeSpan.FromSeconds(5));
-            _driver.FindElement("iOSNsPredicateString", "label BEGINSWITH 'Skip'").Click();
+            _driver.FindElement(By.Name("Skip Update")).Click(); // close the dialog
         }
 
         [OneTimeTearDown] 
