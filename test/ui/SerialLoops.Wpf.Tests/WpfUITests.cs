@@ -84,8 +84,6 @@ namespace SerialLoops.Wpf.Tests
             _driver = new(serverUri, driverOptions);
             _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1.5);
 
-            _driver.LaunchApp();
-
             Thread.Sleep(TimeSpan.FromSeconds(3));
             _driver.SwitchTo().Window(_driver.WindowHandles.First()); // Switch to the update available dialog
             _driver.FindElementByName("Skip Update").Click(); // close the dialog
@@ -158,6 +156,7 @@ namespace SerialLoops.Wpf.Tests
             _driver.FindElementByName("Save").Click();
             Thread.Sleep(TimeSpan.FromSeconds(15));
             _driver.SwitchTo().Window(_driver.WindowHandles.First());
+            Thread.Sleep(500);
             _driver.GetScreenshot().SaveAsFile(Path.Combine(_uiVals!.ArtifactsDir, "success_dialog.png"));
             TestContext.AddTestAttachment(Path.Combine(_uiVals!.ArtifactsDir, "success_dialog.png"), "The dialog indicating whether the hack application succeeded or not");
             Actions actions = new(_driver);
