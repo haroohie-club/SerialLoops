@@ -14,7 +14,7 @@ namespace SerialLoops.Mac.Tests
 {
     public class MacUITests
     {
-        private MacDriver<MacElement> _driver;
+        private MacDriver? _driver;
         private UiVals? _uiVals;
 
         [OneTimeSetUp]
@@ -50,22 +50,23 @@ namespace SerialLoops.Mac.Tests
             AppiumOptions appiumOptions = new()
             {
                 PlatformName = "mac",
+                AutomationName = "mac2",
             };
-            appiumOptions.AddAdditionalCapability("automationName", "mac2");
-            appiumOptions.AddAdditionalCapability("appium:bundleId", "club.haroohie.SerialLoops");
-            appiumOptions.AddAdditionalCapability("appium:appPath", _uiVals.AppLoc);
+            appiumOptions.AddAdditionalAppiumOption("bundleId", "club.haroohie.SerialLoops");
+            appiumOptions.AddAdditionalAppiumOption("appPath", _uiVals.AppLoc);
 
             _driver = new(appiumOptions);
             _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1.5);
 
             Thread.Sleep(TimeSpan.FromSeconds(5));
             _driver.SwitchTo().Window(_driver.WindowHandles.First());
-            _driver.FindElementByName("Skip Update").Click(); // close the dialog
+            _driver.GetScreenshot().SaveAsFile("test.png");
         }
 
         [OneTimeTearDown] 
         public void Teardown() 
         {
+            _driver?.Quit();
         }
 
         [Test]
