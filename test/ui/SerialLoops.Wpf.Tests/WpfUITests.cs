@@ -157,13 +157,10 @@ namespace SerialLoops.Wpf.Tests
             _driver.FindElementByName(hackToApply).Click();
             _driver.FindElementByName("Save").Click();
             Thread.Sleep(TimeSpan.FromSeconds(15));
-            //_driver.SwitchTo().Window(_driver.WindowHandles.First());
             _driver.GetScreenshot().SaveAsFile(Path.Combine(_uiVals!.ArtifactsDir, "success_dialog.png"));
             TestContext.AddTestAttachment(Path.Combine(_uiVals!.ArtifactsDir, "success_dialog.png"), "The dialog indicating whether the hack application succeeded or not");
-            Actions actions = new(_driver);
-            actions.SendKeys(Keys.Enter);
-            actions.Build().Perform();
-            Thread.Sleep(TimeSpan.FromSeconds(2));
+            _driver.SwitchTo().Alert().Accept();
+            Thread.Sleep(200);
             _driver.SwitchTo().Window(_driver.WindowHandles.First());
             _driver.FindElementByName("Close").Click();
             List<AsmHack> hacks = JsonSerializer.Deserialize<List<AsmHack>>(File.ReadAllText(Path.Combine("Sources", "hacks.json"))) ?? [];
