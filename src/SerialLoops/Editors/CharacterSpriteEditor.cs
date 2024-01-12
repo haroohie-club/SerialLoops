@@ -11,14 +11,10 @@ using System.IO;
 
 namespace SerialLoops.Editors
 {
-    public class CharacterSpriteEditor : Editor
+    public class CharacterSpriteEditor(CharacterSpriteItem item, Project project, ILogger log) : Editor(item, log, project)
     {
         private CharacterSpriteItem _sprite;
         private AnimatedImage _animatedImage;
-
-        public CharacterSpriteEditor(CharacterSpriteItem item, Project project, ILogger log) : base(item, log, project)
-        {
-        }
 
         public override Container GetEditorPanel()
         {

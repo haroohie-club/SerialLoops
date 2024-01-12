@@ -9,13 +9,9 @@ using System.Reflection;
 
 namespace SerialLoops.Editors
 {
-    public class PlaceEditor : Editor
+    public class PlaceEditor(PlaceItem placeItem, Project project, ILogger log) : Editor(placeItem, log, project)
     {
         private PlaceItem _place;
-
-        public PlaceEditor(PlaceItem placeItem, Project project, ILogger log) : base(placeItem, log, project)
-        {
-        }
 
         public override Container GetEditorPanel()
         {

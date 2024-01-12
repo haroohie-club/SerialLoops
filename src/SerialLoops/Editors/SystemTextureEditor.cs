@@ -10,13 +10,9 @@ using System.IO;
 
 namespace SerialLoops.Editors
 {
-    public class SystemTextureEditor : Editor
+    public class SystemTextureEditor(SystemTextureItem systemTexture, Project project, ILogger log) : Editor(systemTexture, log, project)
     {
         private SystemTextureItem _systemTexture;
-
-        public SystemTextureEditor(SystemTextureItem systemTexture, Project project, ILogger log) : base(systemTexture, log, project)
-        {
-        }
 
         public override Container GetEditorPanel()
         {
@@ -61,7 +57,7 @@ namespace SerialLoops.Editors
         private void ExportButton_Click(object sender, EventArgs e)
         {
             SaveFileDialog saveFileDialog = new();
-            saveFileDialog.Filters.Add(new() { Name = "PNG Image", Extensions = new string[] { ".png" } });
+            saveFileDialog.Filters.Add(new() { Name = "PNG Image", Extensions = [".png"] });
             if (saveFileDialog.ShowAndReportIfFileSelected(this))
             {
                 try
@@ -90,7 +86,7 @@ namespace SerialLoops.Editors
         {
             OpenFileDialog openFileDialog = new();
             SKBitmap original = _systemTexture.GetTexture();
-            openFileDialog.Filters.Add(new() { Name = "Supported Images", Extensions = new string[] { ".bmp", ".gif", ".heif", ".jpg", ".jpeg", ".png", ".webp", } });
+            openFileDialog.Filters.Add(new() { Name = "Supported Images", Extensions = [".bmp", ".gif", ".heif", ".jpg", ".jpeg", ".png", ".webp",] });
             if (openFileDialog.ShowAndReportIfFileSelected(this))
             {
                 ImageCropResizeDialog systemTextureResizeDialog = new(SKBitmap.Decode(openFileDialog.FileName), original.Width, original.Height, _log);

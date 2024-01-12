@@ -22,7 +22,7 @@ namespace SerialLoops.Editors
 
         public SoundPlayerPanel BgmPlayer { get; set; }
 
-        private string _bgmCachedFile;
+        private readonly string _bgmCachedFile;
 
         public BackgroundMusicEditor(BackgroundMusicItem item, Project project, ILogger log) : base(item, log, project)
         {
@@ -127,7 +127,7 @@ namespace SerialLoops.Editors
             extractButton.Click += (obj, args) =>
             {
                 SaveFileDialog saveFileDialog = new() { Title = "Save BGM as WAV" };
-                saveFileDialog.Filters.Add(new() { Name = "WAV File", Extensions = new string[] { ".wav" } });
+                saveFileDialog.Filters.Add(new() { Name = "WAV File", Extensions = [".wav"] });
                 if (saveFileDialog.ShowAndReportIfFileSelected(this))
                 {
                     LoopyProgressTracker tracker = new();
@@ -140,11 +140,11 @@ namespace SerialLoops.Editors
             replaceButton.Click += (obj, args) =>
             {
                 OpenFileDialog openFileDialog = new() { Title = "Replace BGM" };
-                openFileDialog.Filters.Add(new() { Name = "Supported Audio Files", Extensions = new string[] { ".wav", ".flac", ".mp3", ".ogg" } });
-                openFileDialog.Filters.Add(new() { Name = "WAV files", Extensions = new string[] { ".wav" } });
-                openFileDialog.Filters.Add(new() { Name = "FLAC files", Extensions = new string[] { ".flac" } });
-                openFileDialog.Filters.Add(new() { Name = "MP3 files", Extensions = new string[] { ".mp3" } });
-                openFileDialog.Filters.Add(new() { Name = "Vorbis files", Extensions = new string[] { ".ogg" } });
+                openFileDialog.Filters.Add(new() { Name = "Supported Audio Files", Extensions = [".wav", ".flac", ".mp3", ".ogg"] });
+                openFileDialog.Filters.Add(new() { Name = "WAV files", Extensions = [".wav"] });
+                openFileDialog.Filters.Add(new() { Name = "FLAC files", Extensions = [".flac"] });
+                openFileDialog.Filters.Add(new() { Name = "MP3 files", Extensions = [".mp3"] });
+                openFileDialog.Filters.Add(new() { Name = "Vorbis files", Extensions = [".ogg"] });
                 if (openFileDialog.ShowAndReportIfFileSelected(this))
                 {
                     LoopyProgressTracker tracker = new("Replacing BGM");

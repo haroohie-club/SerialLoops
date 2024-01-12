@@ -14,7 +14,7 @@ namespace SerialLoops.Lib.Items
 {
     public class VoicedLineItem : Item, ISoundItem
     {
-        private string _vceFile;
+        private readonly string _vceFile;
 
         public string VoiceFile { get; set; }
         public int Index { get; set; }
@@ -31,7 +31,7 @@ namespace SerialLoops.Lib.Items
         
         public IWaveProvider GetWaveProvider(ILogger log, bool loop = false)
         {
-            byte[] adxBytes = Array.Empty<byte>();
+            byte[] adxBytes = [];
             try
             {
                 adxBytes = File.ReadAllBytes(_vceFile);

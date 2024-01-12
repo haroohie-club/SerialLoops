@@ -118,7 +118,7 @@ namespace SerialLoops.Tests
         public void GroupSelectionItemTest(string groupSelectionName)
         {
             var groupSelection = (GroupSelectionItem)_project.FindItem(groupSelectionName);
-            Assert.That(groupSelection.Selection.RouteSelections, Is.Not.Empty);
+            Assert.That(groupSelection.Selection.Activities, Is.Not.Empty);
         }
 
         [Test, TestCaseSource(nameof(MapNames)), Parallelizable(ParallelScope.All)]

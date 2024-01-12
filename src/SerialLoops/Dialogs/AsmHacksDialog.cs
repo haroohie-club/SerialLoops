@@ -4,6 +4,7 @@ using HaroohieClub.NitroPacker.Patcher.Overlay;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Hacks;
+using SerialLoops.Lib.Util;
 using SerialLoops.Utility;
 using System;
 using System.Collections.Generic;
@@ -156,7 +157,7 @@ namespace SerialLoops.Dialogs
             };
             saveButton.Click += (sender, args) =>
             {
-                List<AsmHack> appliedHacks = new();
+                List<AsmHack> appliedHacks = [];
                 foreach (CheckBox checkBox in hacksLayout.Items.Select(s => s.Control).Cast<CheckBox>())
                 {
                     AsmHack hack = config.Hacks.First(f => f.Name == checkBox.Text);
@@ -199,12 +200,18 @@ namespace SerialLoops.Dialogs
                     log.LogException($"Failed to read ARM9 from '{arm9Path}'", ex);
                 }
 
+                List<string> dockerContainerNames = ["sl-arm9-container"];
+
                 try
                 {
-                    ARM9AsmHack.Insert(Path.Combine(project.BaseDirectory, "src"), arm9, 0x02005ECC, config.UseDocker ? config.DevkitArmDockerTag : string.Empty,
-                        (object sender, DataReceivedEventArgs e) => log.Log(e.Data),
-                        (object sender, DataReceivedEventArgs e) => log.LogWarning(e.Data),
-                        devkitArmPath: config.DevkitArmPath);
+                    LoopyProgressTracker tracker = new();
+                    ProgressDialog _ = new(() =>
+                    {
+                        ARM9AsmHack.Insert(Path.Combine(project.BaseDirectory, "src"), arm9, 0x02005ECC, config.UseDocker ? config.DevkitArmDockerTag : string.Empty,
+                            (object sender, DataReceivedEventArgs e) => { log.Log(e.Data); ((IProgressTracker)tracker).Focus(e.Data, 1); },
+                            (object sender, DataReceivedEventArgs e) => log.LogWarning(e.Data),
+                            devkitArmPath: config.DevkitArmPath, dockerContainerName: dockerContainerNames.Last());
+                    }, () => {}, tracker, "Patching ARM9");
                 }
                 catch (Exception ex)
                 {
@@ -230,7 +237,7 @@ namespace SerialLoops.Dialogs
                 }
 
                 // Get the overlays
-                List<Overlay> overlays = new();
+                List<Overlay> overlays = [];
                 string originalOverlaysDir = Path.Combine(project.BaseDirectory, "original", "overlay");
                 string romInfoPath = Path.Combine(project.BaseDirectory, "original", $"{project.Name}.xml");
                 string newRomInfoPath = Path.Combine(project.BaseDirectory, "rom", $"{project.Name}.xml");
@@ -247,7 +254,7 @@ namespace SerialLoops.Dialogs
                     if (Directory.GetDirectories(overlaySourceDir).Contains(Path.Combine(overlaySourceDir, overlays[i].Name)))
                     {
                         // If the overlay directory is empty, we've reverted all the hacks in it and should clean it up
-                        if (!Directory.GetFiles(Path.Combine(overlaySourceDir, overlays[i].Name, "source")).Any())
+                        if (Directory.GetFiles(Path.Combine(overlaySourceDir, overlays[i].Name, "source")).Length == 0)
                         {
                             Directory.Delete(Path.Combine(overlaySourceDir, overlays[i].Name), true);
                         }
@@ -255,10 +262,16 @@ namespace SerialLoops.Dialogs
                         {
                             try
                             {
-                                OverlayAsmHack.Insert(overlaySourceDir, overlays[i], newRomInfoPath, config.UseDocker ? config.DevkitArmDockerTag : string.Empty,
-                                    (object sender, DataReceivedEventArgs e) => log.Log(e.Data),
+                                dockerContainerNames.Add($"sl-overlay-container{i}");
+
+                                LoopyProgressTracker tracker = new();
+                                ProgressDialog _ = new(() =>
+                                {
+                                    OverlayAsmHack.Insert(overlaySourceDir, overlays[i], newRomInfoPath, config.UseDocker ? config.DevkitArmDockerTag : string.Empty,
+                                    (object sender, DataReceivedEventArgs e) => { log.Log(e.Data); ((IProgressTracker)tracker).Focus(e.Data, 1); },
                                     (object sender, DataReceivedEventArgs e) => log.LogWarning(e.Data),
-                                    devkitArmPath: config.DevkitArmPath);
+                                    devkitArmPath: config.DevkitArmPath, dockerContainerName: dockerContainerNames.Last());
+                                }, () => { }, tracker, $"Patching Overlay {overlays[i].Name}");
                             }
                             catch (Exception ex)
                             {
@@ -291,11 +304,26 @@ namespace SerialLoops.Dialogs
                 IEnumerable<string> failedHackNames = appliedHacks.Where(h => !h.Applied(project)).Select(h => h.Name);
                 if (failedHackNames.Any())
                 {
-                    log.LogError($"Failed to apply the following hacks to the ROM:\n{string.Join(", ", failedHackNames)}\n\nPlease check the log file for more information.");
+                    log.LogError($"Failed to apply the following hacks to the ROM:\n{string.Join(", ", failedHackNames)}\n\nPlease check the log file for more information.\n\nIn order to preserve state, no hacks were applied.");
+                    foreach (AsmHack hack in appliedHacks)
+                    {
+                        hack.Revert(project, log);
+                    }
+                    IEnumerable<string> dirsToDelete = Directory.GetDirectories(Path.Combine(project.BaseDirectory, "src"), "-p", SearchOption.AllDirectories)
+                        .Concat(Directory.GetDirectories(Path.Combine(project.BaseDirectory, "src"), "build", SearchOption.AllDirectories));
+                    foreach (string dir in dirsToDelete)
+                    {
+                        Directory.Delete(dir, recursive: true);
+                    }
+                    string[] filesToDelete = Directory.GetFiles(Path.Combine(project.BaseDirectory, "src"), "arm9_newcode.x", SearchOption.AllDirectories);
+                    foreach (string file in filesToDelete)
+                    {
+                        File.Delete(file);
+                    }
                 }
                 else
                 {
-                    if (appliedHacks.Any())
+                    if (appliedHacks.Count != 0)
                     {
                         MessageBox.Show($"Successfully applied the following hacks:\n{string.Join(", ", appliedHacks.Select(h => h.Name))}", "Successfully applied hacks!", MessageBoxType.Information);
                     }
@@ -303,6 +331,18 @@ namespace SerialLoops.Dialogs
                     {
                         MessageBox.Show("No hacks applied!", "Success!", MessageBoxType.Information);
                     }
+                }
+
+                if (config.UseDocker)
+                {
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = "docker",
+                        Arguments = $"rm {string.Join(' ', dockerContainerNames)}",
+                        UseShellExecute = false,
+                        RedirectStandardError = true,
+                        RedirectStandardOutput = true,
+                    });
                 }
 
                 Close();

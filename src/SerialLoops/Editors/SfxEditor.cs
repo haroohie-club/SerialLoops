@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace SerialLoops.Editors
 {
-    public class SfxEditor : Editor
+    public class SfxEditor(SfxItem sfx, Project project, ILogger log) : Editor(sfx, log, project)
     {
         private SfxItem _sfx;
         private SequenceArchive _archive;
@@ -19,10 +19,6 @@ namespace SerialLoops.Editors
 
         public SfxPlayerPanel SfxPlayer { get; set; }
 
-        public SfxEditor(SfxItem sfx, Project project, ILogger log) : base(sfx, log, project)
-        {
-        }
-
         public override Container GetEditorPanel()
         {
             _sfx = (SfxItem)Description;
@@ -30,7 +26,7 @@ namespace SerialLoops.Editors
             _sequence = _archive.Sequences[_sfx.Entry.Index];
 
             Player = new(new(new SfxMixer().WavePlayer));
-            Player.PrepareForSong(new IPlayableBank[] { _sequence.Bank.File }, _sequence.Bank.GetAssociatedWaves());
+            Player.PrepareForSong([_sequence.Bank.File], _sequence.Bank.GetAssociatedWaves());
             _archive.ReadCommandData();
             Player.LoadSong(_archive.Commands, _archive.PublicLabels.ElementAt(_archive.Sequences.IndexOf(_sequence)).Value);
 

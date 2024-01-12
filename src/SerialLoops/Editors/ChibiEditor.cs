@@ -15,7 +15,7 @@ using System.Timers;
 
 namespace SerialLoops.Editors
 {
-    public class ChibiEditor : Editor
+    public class ChibiEditor(ChibiItem chibi, Project project, ILogger log) : Editor(chibi, log, project)
     {
         private ChibiItem _chibi;
         private DropDown _animationSelection;
@@ -24,10 +24,6 @@ namespace SerialLoops.Editors
 
         private AnimatedImage _animatedImage;
         private StackLayout _framesStack;
-
-        public ChibiEditor(ChibiItem chibi, Project project, ILogger log) : base(chibi, log, project)
-        {
-        }
 
         public override Container GetEditorPanel()
         {

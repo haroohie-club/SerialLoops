@@ -86,7 +86,7 @@ Please file bugs in the Issues tab in this repository. Please include the follow
 Serial Loops is licensed under the GPLv3. See [LICENSE](LICENSE) for more information.
 
 ### Building
-Serial Loops requires the .NET 6.0 SDK to build. You can download it [here](https://dotnet.microsoft.com/download/dotnet/6.0). To build Serial Loops for your platform, run:
+Serial Loops requires the .NET 8.0 SDK to build. You can download it [here](https://dotnet.microsoft.com/download/dotnet/8.0). To build Serial Loops for your platform, run:
 
 ```bash
 dotnet build src/PLATFORM
@@ -97,4 +97,4 @@ Remember to replace `PLATFORM` with the platform you're on:
 * `SerialLoops.Mac` for macOS
 * `SerialLoops.Wpf` for Windows
 
-We recommend Visual Studio 2022 for development. If you'd like to contribute new features or fixes, we recommend [getting in touch on Discord first](https://discord.gg/nesRSbpeFM) before submitting a Pull Request!
+We recommend [Visual Studio 2022](https://visualstudio.microsoft.com/) on Windows or [Rider](https://www.jetbrains.com/rider/) on Linux/Mac for development. If you'd like to contribute new features or fixes, we recommend [getting in touch on Discord first](https://discord.gg/nesRSbpeFM) before submitting a pull request!

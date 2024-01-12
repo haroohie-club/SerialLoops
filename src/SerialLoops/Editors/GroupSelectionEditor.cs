@@ -23,15 +23,15 @@ namespace SerialLoops.Editors
         {
             _selection = (GroupSelectionItem)Description;
 
-            List<GroupBox> groups = new();
-            foreach (ScenarioRouteSelectionStruct routeSelection in _selection.Selection.RouteSelections)
+            List<GroupBox> groups = [];
+            foreach (ScenarioActivity scenarioActivity in _selection.Selection.Activities)
             {
-                if (routeSelection is null)
+                if (scenarioActivity is null)
                 {
                     continue;
                 }
 
-                GroupBox selectionBox = new() { Text = routeSelection.Title.GetSubstitutedString(_project) };
+                GroupBox selectionBox = new() { Text = scenarioActivity.Title.GetSubstitutedString(_project) };
 
                 GroupBox optimalGroupBox = new() { Text = "Optimal Group" };
                 StackLayout optimalGroupLayout = new()
@@ -40,9 +40,9 @@ namespace SerialLoops.Editors
                     Spacing = 10,
                     Items =
                     {
-                        routeSelection.OptimalGroup.Item1.ToString(),
-                        routeSelection.OptimalGroup.Item2.ToString(),
-                        routeSelection.OptimalGroup.Item3.ToString(),
+                        scenarioActivity.OptimalGroup.Item1.ToString(),
+                        scenarioActivity.OptimalGroup.Item2.ToString(),
+                        scenarioActivity.OptimalGroup.Item3.ToString(),
                     }
                 };
                 optimalGroupBox.Content = optimalGroupLayout;
@@ -54,20 +54,20 @@ namespace SerialLoops.Editors
                     Spacing = 10,
                     Items =
                     {
-                        routeSelection.WorstGroup.Item1.ToString(),
-                        routeSelection.WorstGroup.Item2.ToString(),
-                        routeSelection.WorstGroup.Item3.ToString(),
+                        scenarioActivity.WorstGroup.Item1.ToString(),
+                        scenarioActivity.WorstGroup.Item2.ToString(),
+                        scenarioActivity.WorstGroup.Item3.ToString(),
                     }
                 };
                 worstGroupBox.Content = worstGroupLayout;
 
                 GroupBox routesBox = new() { Text = "Routes" };
                 StackLayout routesLayout = new() { Orientation = Orientation.Vertical, Spacing = 2 };
-                foreach (ScenarioRouteStruct route in routeSelection.Routes)
+                foreach (ScenarioRoute route in scenarioActivity.Routes)
                 {
                     GroupBox routeBox = new() { Text = route.Title.GetSubstitutedString(_project) };
                     IEnumerable<TopicItem> kyonlessTopics = route.KyonlessTopics.Select(t => (TopicItem)_project.Items
-                        .FirstOrDefault(i => i.Type == ItemDescription.ItemType.Topic && ((TopicItem)i).Topic.Id == t));
+                        .FirstOrDefault(i => i.Type == ItemDescription.ItemType.Topic && ((TopicItem)i).TopicEntry.Id == t));
                     StackLayout kyonlessTopicsLayout = new();
                     foreach (TopicItem topicItem in kyonlessTopics)
                     {
@@ -99,10 +99,10 @@ namespace SerialLoops.Editors
                     Spacing = 3,
                     Items =
                     {
-                        ControlGenerator.GetControlWithLabel("Haruhi Present", new CheckBox { Checked = routeSelection.HaruhiPresent }),
-                        ControlGenerator.GetControlWithLabel("Required Brigade Member", new Label { Text = routeSelection.RequiredBrigadeMember.ToString() }),
-                        ControlGenerator.GetControlWithLabel("Future Description", new TextBox { Text = routeSelection.FutureDesc.GetSubstitutedString(_project), Width = 400 }),
-                        ControlGenerator.GetControlWithLabel("Past Description", new TextBox { Text = routeSelection.PastDesc.GetSubstitutedString(_project), Width = 400 }),
+                        ControlGenerator.GetControlWithLabel("Haruhi Present", new CheckBox { Checked = scenarioActivity.HaruhiPresent }),
+                        ControlGenerator.GetControlWithLabel("Required Brigade Member", new Label { Text = scenarioActivity.RequiredBrigadeMember.ToString() }),
+                        ControlGenerator.GetControlWithLabel("Future Description", new TextBox { Text = scenarioActivity.FutureDesc.GetSubstitutedString(_project), Width = 400 }),
+                        ControlGenerator.GetControlWithLabel("Past Description", new TextBox { Text = scenarioActivity.PastDesc.GetSubstitutedString(_project), Width = 400 }),
                         optimalGroupBox,
                         worstGroupBox,
                         routesBox,
