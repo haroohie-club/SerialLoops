@@ -81,6 +81,8 @@ namespace SerialLoops.Wpf.Tests
             _driver = new(serverUri, driverOptions);
             _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1.5);
 
+            _driver.LaunchApp();
+
             Thread.Sleep(TimeSpan.FromSeconds(3));
             _driver.SwitchTo().Window(_driver.WindowHandles.First()); // Switch to the update available dialog
             _driver.FindElementByName("Skip Update").Click(); // close the dialog
