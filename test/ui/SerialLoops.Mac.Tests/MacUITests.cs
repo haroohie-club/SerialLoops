@@ -66,11 +66,17 @@ namespace SerialLoops.Mac.Tests
             _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeStaticText[`value == \"New Project\"`]")).Click();
             _driver.FindElement(MobileBy.IosClassChain("XCUIElementTypeDialog/**/XCUIElementTypeTextField[1]")).SendKeys(_uiVals.ProjectName);
             _driver.FindElement(MobileBy.IosClassChain("XCUIElementTypeDialog/**/XCUIElementTypeButton[`title == \"Open ROM\"`]")).Click();
-            _driver.FindElement(MobileBy.IosNSPredicate("label == \"open\"")).SendKeys($"{Keys.Command}{Keys.Shift}G/U");
-            _driver.FindElement(MobileBy.IosNSPredicate("label == \"open\"")).SendKeys(_uiVals.RomLoc[1..]);
-            _driver.FindElement(MobileBy.IosNSPredicate("label == \"open\"")).FindElement(MobileBy.IosClassChain("**/XCUIElementTypeSheet")).SendKeys(Keys.Return);
+            AppiumElement openFileDialog = _driver.FindElement(MobileBy.IosNSPredicate("label == \"open\""));
+            openFileDialog.SendKeys($"{Keys.Command}{Keys.Shift}g/");
+            openFileDialog.SendKeys(_uiVals.RomLoc[1..]);
+            AppiumElement fileField = _driver.FindElement(MobileBy.IosClassChain($"**/XCUIElementTypeTextField[`value == \"{_uiVals.RomLoc}\"`]"));
+            _driver.ExecuteScript("macos: doubleClick", new Dictionary<string, object>
+            {
+                { "x", fileField.Location.X },
+                { "y", fileField.Location.Y + 16 },
+            });
             Thread.Sleep(500);
-            _driver.FindElement(MobileBy.IosNSPredicate("label == \"open\"")).SendKeys(Keys.Return);
+            openFileDialog.SendKeys(Keys.Return);
             Thread.Sleep(TimeSpan.FromSeconds(5));
         }
 
