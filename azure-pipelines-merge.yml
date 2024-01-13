@@ -26,9 +26,9 @@ jobs:
       projects: $(Build.SourcesDirectory)/test/ui/SerialLoops.Mac.Tests/SerialLoops.Mac.Tests.csproj
     displayName: Build SerialLoops.Mac.Tests
   - pwsh: |
-      mkdir /opt/devkitpro
+      mkdir /devkitpro
       Invoke-WebRequest -Uri $env:DOWNLOAD_URI -OutFile devkitpro.zip
-      Expand-Archive -Path devkitpro.zip -DestinationPath /opt/devkitpro
+      Expand-Archive -Path devkitpro.zip -DestinationPath /devkitpro
     displayName: Bootstrap devkitARM
     env:
       DOWNLOAD_URI: $(DevkitARMUri)
@@ -47,6 +47,7 @@ jobs:
       PROJECT_NAME: MacUITest
       ROM_URI: $(ChokuRomUri)
       LOG_FILE: $(Build.ArtifactStagingDirectory)/TestConsole.log
+      DEVKITARM: /devkitpro/devkitARM
   - task: PublishBuildArtifacts@1
     inputs:
       PathtoPublish: $(Build.ArtifactStagingDirectory)
