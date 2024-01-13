@@ -80,7 +80,7 @@ namespace SerialLoops.Mac.Tests
             _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeSheet[`label == \"open\"`]/**/XCUIElementTypeButton[`title == \"Open\"`]")).Click();
             Thread.Sleep(TimeSpan.FromSeconds(1));
             _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeButton[`title == \"Create\"`]")).Click();
-            while (_driver.FindElements(MobileBy.IosClassChain("**/XCUIElementTypeWindow")).Count > 1)
+            while (_driver.FindElements(MobileBy.IosClassChain("**/XCUIElementTypeDialog")).Count >= 1)
             {
                 Thread.Sleep(TimeSpan.FromSeconds(5));
             }
