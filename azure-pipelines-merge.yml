@@ -36,7 +36,7 @@ jobs:
       export DEVKITARM=$AGENT_BUILDDIRECTORY/devkitpro/devkitARM
       npm i -g appium
       appium driver install mac2
-      appium &
+      nohup appium
     displayName: Install and Run Appium Driver
   - task: DotNetCoreCLI@2
     displayName: Run macOS UI tests
@@ -56,7 +56,6 @@ jobs:
       publishLocation: Container
     displayName: Publish macOS Test Artifacts
     condition: always()
-  
 # - job:
 #   displayName: UI Tests (Windows)
 #   pool:
