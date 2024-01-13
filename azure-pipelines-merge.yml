@@ -25,6 +25,12 @@ jobs:
       command: 'build'
       projects: $(Build.SourcesDirectory)/test/ui/SerialLoops.Mac.Tests/SerialLoops.Mac.Tests.csproj
     displayName: Build SerialLoops.Mac.Tests
+  - pwsh: |
+      Invoke-WebRequest -Uri $env:DOWNLOAD_URI -OutFile devkitpro.zip
+      Expand-Archive -Path devkitpro.zip -DestinationPath /opt
+    displayName: Bootstrap devkitARM
+    env:
+      DOWNLOAD_URI: $(DevkitARMUri)
   - script: |
       npm i -g appium
       appium driver install mac2
