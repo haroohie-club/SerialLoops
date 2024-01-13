@@ -61,7 +61,7 @@ namespace SerialLoops.Mac.Tests
             _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1.5);
 
             Thread.Sleep(TimeSpan.FromSeconds(5));
-            _driver.SwitchTo().Window("New Update Available: 0.2.0");
+            _driver.FindElement(MobileBy.ClassName("NSWindow"));
             _driver.FindElement(MobileBy.IosNSPredicate("label BEGINSWITH 'Skip'")).Click();
         }
 
