@@ -116,14 +116,17 @@ namespace SerialLoops.Lib
 
         private static Config GetDefault(ILogger log)
         {
-            string devkitArmDir;
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            string devkitArmDir = Environment.GetEnvironmentVariable("DEVKITARM") ?? string.Empty;
+            if (string.IsNullOrEmpty(devkitArmDir))
             {
-                devkitArmDir = Path.Combine("C:", "devkitPro", "devkitARM");
-            }
-            else
-            {
-                devkitArmDir = Path.Combine("/opt", "devkitpro", "devkitARM");
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    devkitArmDir = Path.Combine("C:", "devkitPro", "devkitARM");
+                }
+                else
+                {
+                    devkitArmDir = Path.Combine("/opt", "devkitpro", "devkitARM");
+                }
             }
             if (!Directory.Exists(devkitArmDir))
             {
