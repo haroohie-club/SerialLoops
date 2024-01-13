@@ -72,12 +72,18 @@ namespace SerialLoops.Mac.Tests
             AppiumElement fileField = _driver.FindElement(MobileBy.IosClassChain($"**/XCUIElementTypeTextField[`value == \"{_uiVals.RomLoc}\"`]"));
             _driver.ExecuteScript("macos: doubleClick", new Dictionary<string, object>
             {
-                { "x", fileField.Location.X },
-                { "y", fileField.Location.Y + 16 },
+                { "x", fileField.Location.X + 30 },
+                { "y", fileField.Location.Y + 60 },
             });
             Thread.Sleep(500);
-            openFileDialog.SendKeys(Keys.Return);
-            Thread.Sleep(TimeSpan.FromSeconds(5));
+            _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeSheet[`label == \"open\"`]/**/XCUIElementTypeButton[`title == \"Open\"`]")).Click();
+            Thread.Sleep(TimeSpan.FromSeconds(1));
+            _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeButton[`title == \"Create\"`]")).Click();
+            while (_driver.FindElements(MobileBy.IosClassChain("**/XCUIElementTypeWindow")).Count > 1)
+            {
+                Thread.Sleep(TimeSpan.FromSeconds(5));
+            }
+            _driver.GetScreenshot().SaveAsFile(Path.Combine(_uiVals.ArtifactsDir, "loaded_project.png"));
         }
 
         [OneTimeTearDown] 
