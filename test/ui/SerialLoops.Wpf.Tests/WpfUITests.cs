@@ -156,8 +156,9 @@ namespace SerialLoops.Wpf.Tests
             }
         }
 
-        [Test]
-        public void TestAsmHackApplicationAndReversion()
+        private readonly static string[] HacksToTest = ["Skip OP", "Change OP_MODE Chibi"];
+        [Test, TestCaseSource(nameof(HacksToTest))]
+        public void TestAsmHackApplicationAndReversion(string hackToApply)
         {
             if (!(_project?.Config.UseDocker ?? true))
             {
@@ -170,8 +171,6 @@ namespace SerialLoops.Wpf.Tests
                 _driver.FindElementByClassName("CheckBox").Click();
                 _driver.FindElementByName("Save").Click();
             }
-
-            string hackToApply = "Skip OP";
 
             _logger.Log("Applying hack...");
             _driver.FindElementByName("Tools").Click();
