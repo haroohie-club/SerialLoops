@@ -6,6 +6,7 @@ using OpenQA.Selenium.Appium.Mac;
 using OpenQA.Selenium.Interactions;
 using SerialLoops.UITests.Shared;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -61,11 +62,16 @@ namespace SerialLoops.Mac.Tests
             _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1.5);
 
             Thread.Sleep(TimeSpan.FromSeconds(5));
-            _driver.FindElement(MobileBy.IosClassChain("XCUIElementTypeDialog/**/XCUIElementTypeButton[`title == \"SkipUpdate\"`]")).Click();
+            _driver.FindElement(MobileBy.IosClassChain("XCUIElementTypeDialog/**/XCUIElementTypeButton[`title == \"Skip Update\"`]")).Click();
             _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeStaticText[`value == \"New Project\"`]")).Click();
             _driver.FindElement(MobileBy.IosClassChain("XCUIElementTypeDialog/**/XCUIElementTypeTextField[1]")).SendKeys(_uiVals.ProjectName);
             _driver.FindElement(MobileBy.IosClassChain("XCUIElementTypeDialog/**/XCUIElementTypeButton[`title == \"Open ROM\"`]")).Click();
-            _driver.FindElement(MobileBy.IosNSPredicate("name == \"open\"")).SendKeys($"{Keys.Command}{Keys.Shift}G{_uiVals.RomLoc}{Keys.Enter}{Keys.Enter}");
+            _driver.FindElement(MobileBy.IosNSPredicate("label == \"open\"")).SendKeys($"{Keys.Command}{Keys.Shift}G{_uiVals.RomLoc}");
+            AppiumElement fileCell = _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeSheet[`label == \"open\"`]/**/XCUIElementTypeCell[2]"));
+            _driver.ExecuteScript("macos: doubleClick", new Dictionary<string, object>
+            {
+                { "elementId", fileCell.Id }
+            });
         }
 
         [OneTimeTearDown] 
