@@ -29,7 +29,7 @@ jobs:
       npm i -g appium
       appium driver install mac2
       automationmodetool enable-automationmode-without-authentication
-      appium &
+      bash -c "nohup sh -c 'appium' &"
     displayName: Install and Run Appium Driver
   - task: ms-autotest.screen-resolution-utility-task.screen-resolution-utlity-task.ScreenResolutionUtility@1
     displayName: 'Set Screen Resolution'
@@ -38,6 +38,7 @@ jobs:
       width: 2048
       height: 1536
   - task: DotNetCoreCLI@2
+    displayName: Run macOS UI tests
     inputs:
       command: 'test'
       projects: $(Build.SourcesDirectory)/test/ui/SerialLoops.Mac.Tests/SerialLoops.Mac.Tests.csproj
