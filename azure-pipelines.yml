@@ -27,7 +27,7 @@ jobs:
     inputs:
       command: 'build'
       projects: $(Build.SourcesDirectory)/src/SerialLoops.$(platformName)/SerialLoops.$(platformName).csproj
-    displayName: Build solution
+    displayName: Build project
 
   - task: DotNetCoreCLI@2
     inputs:
