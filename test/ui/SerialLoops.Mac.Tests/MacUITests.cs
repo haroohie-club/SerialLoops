@@ -1,3 +1,4 @@
+using GotaSoundIO.IO;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
@@ -90,6 +91,16 @@ namespace SerialLoops.Mac.Tests
         public void Teardown() 
         {
             _driver?.Quit();
+            string projectDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "SerialLoops", "Projects", _uiVals!.ProjectName);
+            if (Directory.Exists(projectDirectory))
+            {
+                Directory.Delete(projectDirectory, true);
+            }
+            string logFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "SerialLoops", "Logs", "SerialLoops.log");
+            if (File.Exists(logFile))
+            {
+                File.Copy(logFile, Path.Combine(_uiVals.ArtifactsDir, "SerialLoops.log"), overwrite: true);
+            }
         }
 
         [Test]
