@@ -52,11 +52,11 @@ namespace SerialLoops.Mac.Tests
             {
                 PlatformName = "mac",
             };
-            appiumOptions.AddAdditionalCapability(MobileCapabilityType.AutomationName, "mac2");
-            appiumOptions.AddAdditionalCapability("bundleId", "club.haroohie.SerialLoops");
-            appiumOptions.AddAdditionalCapability("appPath", _uiVals.AppLoc);
+            appiumOptions.AddAdditionalCapability("automationName", "mac2");
+            appiumOptions.AddAdditionalCapability("appium:bundleId", "club.haroohie.SerialLoops");
+            appiumOptions.AddAdditionalCapability("appium:appPath", _uiVals.AppLoc);
 
-            _driver = new(new Uri("http://127.0.0.1:4723/wd/hub"), appiumOptions);
+            _driver = new(new Uri("http://127.0.0.1:4723/"), appiumOptions);
             _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1.5);
 
             Thread.Sleep(TimeSpan.FromSeconds(5));
