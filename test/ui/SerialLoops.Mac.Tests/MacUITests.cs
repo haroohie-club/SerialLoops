@@ -52,7 +52,7 @@ namespace SerialLoops.Mac.Tests
             {
                 PlatformName = "mac",
             };
-            appiumOptions.AddAdditionalCapability("automationName", "mac2");
+            appiumOptions.AddAdditionalCapability("appium:automationName", "mac2");
             appiumOptions.AddAdditionalCapability("appium:bundleId", "club.haroohie.SerialLoops");
             appiumOptions.AddAdditionalCapability("appium:appPath", _uiVals.AppLoc);
 
@@ -60,8 +60,8 @@ namespace SerialLoops.Mac.Tests
             _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1.5);
 
             Thread.Sleep(TimeSpan.FromSeconds(5));
-            _driver.SwitchTo().Window(_driver.WindowHandles.First());
-            _driver.FindElementByAccessibilityId("Skip Button").Click();
+            //_driver.SwitchTo().Window(_driver.WindowHandles.First());
+            _driver.FindElementByName("Skip Button").Click();
         }
 
         [OneTimeTearDown] 
