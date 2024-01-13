@@ -77,7 +77,7 @@ namespace SerialLoops.Lib
         {
             if (string.IsNullOrWhiteSpace(DevkitArmPath))
             {
-                log.LogError("devkitARM is not detected at the default or specified install location. Please set devkitPro path.");
+                log.LogError("devkitARM is not detected at the default or specified install location. Please set devkitARM path.");
             }
         }
 
@@ -117,6 +117,10 @@ namespace SerialLoops.Lib
         private static Config GetDefault(ILogger log)
         {
             string devkitArmDir = Environment.GetEnvironmentVariable("DEVKITARM") ?? string.Empty;
+            if (!string.IsNullOrEmpty(devkitArmDir) && !Directory.Exists(devkitArmDir))
+            {
+                devkitArmDir = "";
+            }
             if (string.IsNullOrEmpty(devkitArmDir))
             {
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))

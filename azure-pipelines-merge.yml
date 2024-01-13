@@ -33,6 +33,7 @@ jobs:
     env:
       DOWNLOAD_URI: $(DevkitARMUri)
   - script: |
+      export DEVKITARM=$AGENT_BUILDDIRECTORY/devkitpro/devkitARM
       npm i -g appium
       appium driver install mac2
       appium &
