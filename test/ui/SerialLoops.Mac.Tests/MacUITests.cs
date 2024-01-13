@@ -3,6 +3,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.Enums;
 using OpenQA.Selenium.Appium.Mac;
+using OpenQA.Selenium.Interactions;
 using SerialLoops.UITests.Shared;
 using System;
 using System.IO;
@@ -15,7 +16,7 @@ namespace SerialLoops.Mac.Tests
 {
     public class MacUITests
     {
-        private MacDriver<MacElement> _driver;
+        private MacDriver _driver;
         private UiVals? _uiVals;
 
         [OneTimeSetUp]
@@ -51,17 +52,16 @@ namespace SerialLoops.Mac.Tests
             AppiumOptions appiumOptions = new()
             {
                 PlatformName = "mac",
+                AutomationName = "mac2",
             };
-            appiumOptions.AddAdditionalCapability("appium:automationName", "mac2");
-            appiumOptions.AddAdditionalCapability("appium:bundleId", "club.haroohie.SerialLoops");
-            appiumOptions.AddAdditionalCapability("appium:appPath", _uiVals.AppLoc);
+            appiumOptions.AddAdditionalAppiumOption("bundleId", "club.haroohie.SerialLoops");
+            appiumOptions.AddAdditionalAppiumOption("appPath", _uiVals.AppLoc);
 
-            _driver = new(new Uri("http://127.0.0.1:4723/"), appiumOptions);
+            _driver = new(appiumOptions);
             _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1.5);
 
             Thread.Sleep(TimeSpan.FromSeconds(5));
-            //_driver.SwitchTo().Window(_driver.WindowHandles.First());
-            _driver.FindElementByName("Skip Button").Click();
+            _driver.FindElement(By.Id("Skip Button")).Click();
         }
 
         [OneTimeTearDown] 
