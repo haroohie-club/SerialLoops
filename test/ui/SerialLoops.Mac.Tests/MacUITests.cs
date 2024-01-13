@@ -111,7 +111,7 @@ namespace SerialLoops.Mac.Tests
             {
                 _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeMenuBarItem[`title=\"SerialLoops\"`]")).Click();
                 Thread.Sleep(200);
-                _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeMenuItem[`title=\"About\"`]")).Click();
+                _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeMenuItem[`title=\"About...\"`]")).Click();
                 Thread.Sleep(200);
                 _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeDialog[`title=\"About\"`]/**/XCUIElementTypeButton[1]")).Click();
                 Thread.Sleep(200);
