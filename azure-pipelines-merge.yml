@@ -30,12 +30,6 @@ jobs:
       appium driver install mac2
       appium &
     displayName: Install and Run Appium Driver
-  - task: ms-autotest.screen-resolution-utility-task.screen-resolution-utlity-task.ScreenResolutionUtility@1
-    displayName: 'Set Screen Resolution'
-    inputs:
-      displaySettings: specific
-      width: 2048
-      height: 1536
   - task: DotNetCoreCLI@2
     displayName: Run macOS UI tests
     inputs:
