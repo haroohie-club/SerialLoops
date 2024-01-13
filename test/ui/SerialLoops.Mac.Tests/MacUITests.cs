@@ -115,6 +115,8 @@ namespace SerialLoops.Mac.Tests
                 Thread.Sleep(200);
                 _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeDialog[`title=\"About\"`]/**/XCUIElementTypeButton[1]")).Click();
                 Thread.Sleep(200);
+                _driver.GetScreenshot().SaveAsFile(Path.Combine(_uiVals!.ArtifactsDir, $"about_dialog{i}.png"));
+                TestContext.AddTestAttachment(Path.Combine(_uiVals!.ArtifactsDir, $"about_dialog{i}.png"));
             }
         }
     }
