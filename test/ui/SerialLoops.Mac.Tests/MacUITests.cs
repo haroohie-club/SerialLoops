@@ -61,7 +61,7 @@ namespace SerialLoops.Mac.Tests
             _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1.5);
 
             Thread.Sleep(TimeSpan.FromSeconds(5));
-            _driver.FindElement(By.Id("Skip Button")).Click();
+            _driver.FindElement(MobileBy.IosNSPredicate("label BEGINSWITH 'Skip'")).Click();
         }
 
         [OneTimeTearDown] 
