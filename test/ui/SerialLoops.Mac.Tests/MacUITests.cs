@@ -61,8 +61,11 @@ namespace SerialLoops.Mac.Tests
             _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1.5);
 
             Thread.Sleep(TimeSpan.FromSeconds(5));
-            _driver.FindElement(MobileBy.ClassName("NSWindow"));
-            _driver.FindElement(MobileBy.IosNSPredicate("label BEGINSWITH 'Skip'")).Click();
+            _driver.FindElement(MobileBy.IosClassChain("XCUIElementTypeDialog/**/XCUIElementTypeButton[`title == \"SkipUpdate\"`]")).Click();
+            _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeStaticText[`value == \"New Project\"`]")).Click();
+            _driver.FindElement(MobileBy.IosClassChain("XCUIElementTypeDialog/**/XCUIElementTypeTextField[1]")).SendKeys(_uiVals.ProjectName);
+            _driver.FindElement(MobileBy.IosClassChain("XCUIElementTypeDialog/**/XCUIElementTypeButton[`title == \"Open ROM\"`]")).Click();
+            _driver.FindElement(MobileBy.IosNSPredicate("name == \"open\"")).SendKeys($"{Keys.Command}{Keys.Shift}G{_uiVals.RomLoc}{Keys.Enter}{Keys.Enter}");
         }
 
         [OneTimeTearDown] 
