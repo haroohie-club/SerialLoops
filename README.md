@@ -103,15 +103,36 @@ We recommend [Visual Studio 2022](https://visualstudio.microsoft.com/) on Window
 The `SerialLoops.Tests` project can be run from inside Visual Studio, Rider, or with `dotnet test` as normal. However, our UI tests (currently only runnable on Windows) are a bit more involved.
 
 Our UI tests rely on [Appium](https://appium.io/).
+#### macOS
+1. You will need to install nodejs and then use it to [install Appium](https://appium.io/docs/en/2.4/quickstart/install/).
+  - The easiest way to install nodejs is to first install [nvm](https://github.com/nvm-sh/nvm) and then run `nvm install <version>` followed by `nvm use <version>` (you can use `16` as the version)
+2. You will then need to install the Mac2 driver with `appium driver install mac2`
+3. Follow [these instructions](https://github.com/appium/appium-mac2-driver?tab=readme-ov-file#requirements) for installing the prerequisites for the Mac2 driver to work
+
+Once you've installed the prerequisites, build the `SerialLoops.Mac` and `SerialLoops.Mac.Tests` projects with `dotnet build src/SerialLoops.Mac/SerialLoops.Mac.csproj` and `dotnet build test/ui/SerialLoops.Mac.Tests/SerialLoops.Mac.Tests.csproj`,
+respectively. Then, inside `test\ui\SerialLoops.Mac.Tests\bin\Debug\net8.0`, create a new text file called `ui_vals.json`. Inside this file, place the following text, replacing necessary values:
+```json
+{
+    "AppLoc": "PATH/TO/Serial Loops.app",
+    "ProjectName": "MacUITest",
+    "RomLoc": "PATH/TO/HaruhiChokuretsu.nds",
+    "ArtifactsDir": "PATH/TO/artifacts"
+}
+```
+The artifacts directory can be any arbitrary directory, but ensure it exists before running the tests. The project name by default is WinUITest, but it can be anything you'd like. Have fun.
+
+Finally, you can then run the tests with `dotnet test test\ui\SerialLoops.Mac.Tests\SerialLoops.Mac.Tests.csproj`. However, it may be better to run `appium` from a different terminal first so you
+can see the server output as well.
+
 #### Windows
 1. You will need to install nodejs and then use it to [install Appium](https://appium.io/docs/en/2.4/quickstart/install/).
   - The easiest way to install nodejs is to first install [NVM for Windows](https://github.com/coreybutler/nvm-windows) and then run `nvm install latest` followed by `nvm use latest` (you can sub latest for any version)
 2. You will then need to install the [Appium Windows Driver](https://github.com/appium/appium-windows-driver) with `appium driver install --source=npm appium-windows-driver`.
 3. Next, download and install [WinAppDriver](https://github.com/microsoft/WinAppDriver).
 
-
-Once you've installed all the prerequisites, build the `SerialLoops.Wpf.Tests` project from Visual Studio or with `dotnet build test\ui\SerialLoops.Wpf.Tests\SerialLoops.Wpf.Tests.csproj`.
-Then, inside `test\ui\SerialLoops.Wpf.Tests\bin\Debug\net8.0`, create a new text file called `ui_vals.json`. Inside this file place the following text, replacing necessary values:
+Once you've installed all the prerequisites, build the `SerialLoops.Wpf` and `SerialLoops.Wpf.Tests` projects from Visual Studio or with `dotnet build src\ui\SerialLoops.Wpf\SerialLoops.Wpf.csproj` and
+`dotnet build test\ui\SerialLoops.Wpf.Tests\SerialLoops.Wpf.Tests.csproj`, respectively. Then, inside `test\ui\SerialLoops.Wpf.Tests\bin\Debug\net8.0`, create a new text file called `ui_vals.json`.
+Inside this file place the following text, replacing necessary values:
 ```json
 {
     "AppLoc": "PATH\\TO\\SerialLoops.exe",
