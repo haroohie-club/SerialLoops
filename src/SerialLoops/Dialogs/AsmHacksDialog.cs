@@ -19,7 +19,7 @@ namespace SerialLoops.Dialogs
     {
         private const int NUM_OVERLAYS = 26;
 
-        private Dictionary<HackFile, SelectedHackParameter[]> _selectedHackParameters = new();
+        private Dictionary<HackFile, SelectedHackParameter[]> _selectedHackParameters = [];
         private AsmHack _currentHack;
 
         public AsmHacksDialog(Project project, Config config, ILogger log)
@@ -200,8 +200,6 @@ namespace SerialLoops.Dialogs
                     log.LogException($"Failed to read ARM9 from '{arm9Path}'", ex);
                 }
 
-                List<string> dockerContainerNames = ["sl-arm9-container"];
-
                 try
                 {
                     LoopyProgressTracker tracker = new();
@@ -210,7 +208,7 @@ namespace SerialLoops.Dialogs
                         ARM9AsmHack.Insert(Path.Combine(project.BaseDirectory, "src"), arm9, 0x02005ECC, config.UseDocker ? config.DevkitArmDockerTag : string.Empty,
                             (object sender, DataReceivedEventArgs e) => { log.Log(e.Data); ((IProgressTracker)tracker).Focus(e.Data, 1); },
                             (object sender, DataReceivedEventArgs e) => log.LogWarning(e.Data),
-                            devkitArmPath: config.DevkitArmPath, dockerContainerName: dockerContainerNames.Last());
+                            devkitArmPath: config.DevkitArmPath);
                     }, () => {}, tracker, "Patching ARM9");
                 }
                 catch (Exception ex)
@@ -262,15 +260,13 @@ namespace SerialLoops.Dialogs
                         {
                             try
                             {
-                                dockerContainerNames.Add($"sl-overlay-container{i}");
-
                                 LoopyProgressTracker tracker = new();
                                 ProgressDialog _ = new(() =>
                                 {
                                     OverlayAsmHack.Insert(overlaySourceDir, overlays[i], newRomInfoPath, config.UseDocker ? config.DevkitArmDockerTag : string.Empty,
                                     (object sender, DataReceivedEventArgs e) => { log.Log(e.Data); ((IProgressTracker)tracker).Focus(e.Data, 1); },
                                     (object sender, DataReceivedEventArgs e) => log.LogWarning(e.Data),
-                                    devkitArmPath: config.DevkitArmPath, dockerContainerName: dockerContainerNames.Last());
+                                    devkitArmPath: config.DevkitArmPath);
                                 }, () => { }, tracker, $"Patching Overlay {overlays[i].Name}");
                             }
                             catch (Exception ex)
@@ -331,18 +327,6 @@ namespace SerialLoops.Dialogs
                     {
                         MessageBox.Show("No hacks applied!", "Success!", MessageBoxType.Information);
                     }
-                }
-
-                if (config.UseDocker)
-                {
-                    Process.Start(new ProcessStartInfo
-                    {
-                        FileName = "docker",
-                        Arguments = $"rm {string.Join(' ', dockerContainerNames)}",
-                        UseShellExecute = false,
-                        RedirectStandardError = true,
-                        RedirectStandardOutput = true,
-                    });
                 }
 
                 Close();
