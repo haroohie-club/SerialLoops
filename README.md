@@ -107,7 +107,7 @@ Our UI tests rely on [Appium](https://appium.io/).
 1. You will need to install nodejs and then use it to [install Appium](https://appium.io/docs/en/2.4/quickstart/install/).
   - The easiest way to install nodejs is to first install [nvm](https://github.com/nvm-sh/nvm) and then run `nvm install <version>` followed by `nvm use <version>` (you can use `16` as the version)
 2. You will then need to install the Mac2 driver with `appium driver install mac2`
-3. Follow [these instructions](https://github.com/appium/appium-mac2-driver?tab=readme-ov-file#requirements) for installing the prerequisites for the Mac2 driver to work
+3. Follow [these instructions](https://github.com/appium/appium-mac2-driver?tab=readme-ov-file#requirements) for installing and setting up the necessary prerequisites for the Mac2 driver to work
 
 Once you've installed the prerequisites, build the `SerialLoops.Mac` and `SerialLoops.Mac.Tests` projects with `dotnet build src/SerialLoops.Mac/SerialLoops.Mac.csproj` and `dotnet build test/ui/SerialLoops.Mac.Tests/SerialLoops.Mac.Tests.csproj`,
 respectively. Then, inside `test\ui\SerialLoops.Mac.Tests\bin\Debug\net8.0`, create a new text file called `ui_vals.json`. Inside this file, place the following text, replacing necessary values:
