@@ -1,12 +1,11 @@
 using NUnit.Framework;
-using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
+using OpenQA.Selenium.Appium.ImageComparison;
 using OpenQA.Selenium.Appium.Mac;
 using OpenQA.Selenium.Support.Extensions;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Hacks;
 using SerialLoops.Tests.Shared;
-using SerialLoops.UITests.Shared;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -24,6 +23,10 @@ namespace SerialLoops.Mac.Tests
         private Project? _project;
         private readonly UiTestLogger _logger = new(Environment.GetEnvironmentVariable("LOG_FILE") ?? "testlog_console.log");
         private readonly ConsoleProgressTracker _tracker = new();
+        private string _testAssets = string.Empty;
+
+        private const string TEST_BG_ASSET = "lizmelo-painting.png";
+
 
         [OneTimeSetUp]
         public void Setup()
@@ -56,6 +59,8 @@ namespace SerialLoops.Mac.Tests
             }
             _logger.Log(JsonSerializer.Serialize(_uiVals, new JsonSerializerOptions { WriteIndented = true }));
 
+            _testAssets = TestAssetsDownloader.DownloadTestAssets().GetAwaiter().GetResult();
+
             AppiumOptions appiumOptions = new()
             {
                 PlatformName = "mac",
@@ -70,21 +75,12 @@ namespace SerialLoops.Mac.Tests
             Thread.Sleep(TimeSpan.FromSeconds(5));
             _driver.GetScreenshot().SaveAsFile(Path.Combine(_uiVals.ArtifactsDir, "start.png"));
             _driver.FindElement(MobileBy.IosClassChain("XCUIElementTypeDialog/**/XCUIElementTypeButton[`title == \"Skip Update\"`]")).Click();
+            _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeButton[2]")).Click(); // hit the full screen button so we have more room to work with
+            Thread.Sleep(TimeSpan.FromSeconds(2));
             _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeStaticText[`value == \"New Project\"`]")).Click();
             _driver.FindElement(MobileBy.IosClassChain("XCUIElementTypeDialog/**/XCUIElementTypeTextField[1]")).SendKeys(_uiVals.ProjectName);
             _driver.FindElement(MobileBy.IosClassChain("XCUIElementTypeDialog/**/XCUIElementTypeButton[`title == \"Open ROM\"`]")).Click();
-            AppiumElement openFileDialog = _driver.FindElement(MobileBy.IosNSPredicate("label == \"open\""));
-            openFileDialog.SendKeys($"{Keys.Command}{Keys.Shift}g/");
-            openFileDialog.SendKeys(_uiVals.RomLoc[1..]);
-            AppiumElement fileField = _driver.FindElement(MobileBy.IosClassChain($"**/XCUIElementTypeTextField[`value == \"{_uiVals.RomLoc}\"`]"));
-            _driver.ExecuteScript("macos: doubleClick", new Dictionary<string, object>
-            {
-                { "x", fileField.Location.X + 30 },
-                { "y", fileField.Location.Y + 60 },
-            });
-            Thread.Sleep(500);
-            _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeSheet[`label == \"open\"`]/**/XCUIElementTypeButton[`title == \"Open\"`]")).Click();
-            Thread.Sleep(TimeSpan.FromSeconds(1));
+            _driver.HandleFileDialog(_uiVals.RomLoc);
             _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeButton[`title == \"Create\"`]")).Click();
             while (_driver.FindElements(MobileBy.IosClassChain("**/XCUIElementTypeDialog")).Count >= 1)
             {
@@ -176,6 +172,42 @@ namespace SerialLoops.Mac.Tests
             _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeDialog[`label=\"alert\"`]/**/XCUIElementTypeButton[`title=\"OK\"`]")).Click();
             Thread.Sleep(TimeSpan.FromSeconds(1)); // Allow time to clean up the containers
             Assert.That(hacks.First(h => h.Name == hackToApply).Applied(_project), Is.False);
+        }
+
+        // Add KBG00 (KINETIC_SCREEN) to this as part of https://github.com/haroohie-club/SerialLoops/issues/225
+        // TEX_BG, TEX_CG, TEX_CG_DUAL, TEX_CG_WIDE, TEX_CG_SINGLE
+        private readonly static object[][] BackgroundsToTest = [["BG_BRIDGE_DAY", 0x027, 0x028], ["BG_EV020", 0x2CD, 0x2CE], ["BG_EV150_D", 0x317, 0x318], ["BG_EV550", 0x3F3, 0x3F4], ["BG_EV060", 0x2EC, -1]];
+        [Test, TestCaseSource(nameof(BackgroundsToTest))]
+        public void TestEditBackgrounds(string bgName, int bgIdx1, int bgIdx2)
+        {
+            string testArtifactsFolder = Path.Combine(_uiVals!.ArtifactsDir, TestContext.CurrentContext.Test.Name.Replace(' ', '_').Replace(',', '_').Replace("\"", ""));
+            if (Directory.Exists(testArtifactsFolder))
+            {
+                Directory.Delete(testArtifactsFolder, true);
+            }
+            Directory.CreateDirectory(testArtifactsFolder);
+
+            _driver.OpenItem(bgName);
+            Thread.Sleep(100);
+            _driver.GetScreenshot().SaveAsFile(Path.Combine(testArtifactsFolder, $"{bgName}_openTab.png"));
+            TestContext.AddTestAttachment(Path.Combine(testArtifactsFolder, $"{bgName}_openTab.png"));
+            
+            _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeButton[`title == \"Export\"`]")).Click();
+            string exportedImagePath = Path.Combine(testArtifactsFolder, $"{bgName}.png");
+            _driver.HandleFileDialog(exportedImagePath);
+            Thread.Sleep(500);
+            SimilarityMatchingResult exportedImageMatch = _driver.GetImagesSimilarity(_testAssets, $"{bgName}.png", exportedImagePath);
+            exportedImageMatch.SaveVisualizationAsFile(Path.Combine(testArtifactsFolder, "exported.png"));
+            Assert.That(exportedImageMatch.Score, Is.GreaterThanOrEqualTo(0.99));
+
+            _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeButton[`title == \"Replace\"`]")).Click();
+            Thread.Sleep(200);
+            _driver.HandleFileDialog(Path.Combine(_testAssets, TEST_BG_ASSET));
+
+            Thread.Sleep(500);
+            _driver.GetScreenshot().SaveAsFile(Path.Combine(testArtifactsFolder, $"{bgName}_nocropnoscale.png"));
+            TestContext.AddTestAttachment(Path.Combine(testArtifactsFolder, $"{bgName}_nocropnoscale.png"));
+            Thread.Sleep(200);
         }
     }
 }

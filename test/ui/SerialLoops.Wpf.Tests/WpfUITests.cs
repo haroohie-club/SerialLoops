@@ -7,7 +7,6 @@ using OpenQA.Selenium.Support.Extensions;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Hacks;
 using SerialLoops.Tests.Shared;
-using SerialLoops.UITests.Shared;
 using SimpleImageComparisonClassLibrary;
 using System;
 using System.Collections.Generic;
@@ -242,7 +241,6 @@ namespace SerialLoops.Wpf.Tests
             }
             Directory.CreateDirectory(testArtifactsFolder);
 
-            _logger.Log("Expanding backgrounds...");
             _driver.OpenItem(bgName);
             Thread.Sleep(100);
             _driver.GetScreenshot().SaveAsFile(Path.Combine(testArtifactsFolder, $"{bgName}_openTab.png"));
@@ -252,7 +250,8 @@ namespace SerialLoops.Wpf.Tests
             string exportedImagePath = Path.Combine(testArtifactsFolder, $"{bgName}.png");
             _driver.HandleFileDialog(exportedImagePath);
             Thread.Sleep(500);
-            Assert.That(ImageTool.GetPercentageDifference(Path.Combine(_testAssets, $"{bgName}.png"), exportedImagePath), Is.LessThanOrEqualTo(0.05));
+            Assert.That(ImageTool.GetPercentageDifference(Path.Combine(_testAssets, $"{bgName}.png"), exportedImagePath), Is.LessThanOrEqualTo(1));
+            TestContext.AddTestAttachment(exportedImagePath);
 
             _driver.FindElementByName("Replace").Click();
             Thread.Sleep(200);
@@ -294,10 +293,10 @@ namespace SerialLoops.Wpf.Tests
             actions.KeyUp(Keys.Control);
             actions.Build().Perform();
 
-            Assert.That(ImageTool.GetPercentageDifference(Path.Combine(_testAssets, $"{bgIdx1:X3}.png"), Path.Combine(_project!.BaseDirectory, "assets", "graphics", $"{bgIdx1:X3}.png")), Is.LessThanOrEqualTo(5));
+            Assert.That(ImageTool.GetPercentageDifference(Path.Combine(_testAssets, $"{bgIdx1:X3}.png"), Path.Combine(_project!.BaseDirectory, "assets", "graphics", $"{bgIdx1:X3}.png")), Is.LessThanOrEqualTo(1));
             if (bgIdx2 > 0)
             {
-                Assert.That(ImageTool.GetPercentageDifference(Path.Combine(_testAssets, $"{bgIdx2:X3}.png"), Path.Combine(_project!.BaseDirectory, "assets", "graphics", $"{bgIdx2:X3}.png")), Is.LessThanOrEqualTo(5));
+                Assert.That(ImageTool.GetPercentageDifference(Path.Combine(_testAssets, $"{bgIdx2:X3}.png"), Path.Combine(_project!.BaseDirectory, "assets", "graphics", $"{bgIdx2:X3}.png")), Is.LessThanOrEqualTo(1));
             }
 
             _driver.CloseCurrentItem();

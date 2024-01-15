@@ -1,4 +1,4 @@
-﻿namespace SerialLoops.UITests.Shared
+﻿namespace SerialLoops.Tests.Shared
 {
     public class UiVals
     {

@@ -1,5 +1,7 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
+using OpenQA.Selenium.Appium.ImageComparison;
+using OpenQA.Selenium.Appium.Mac;
 using OpenQA.Selenium.Appium.Windows;
 using OpenQA.Selenium.Interactions;
 using System;
@@ -51,9 +53,9 @@ namespace SerialLoops.Wpf.Tests
             Actions typeAction = new(driver);
             typeAction.SendKeys(itemName);
             typeAction.Build().Perform();
-            WindowsElement bgItem = driver.FindElementByName(itemName);
+            WindowsElement item = driver.FindElementByName(itemName);
             Actions doubleClickAction = new(driver);
-            doubleClickAction.DoubleClick(bgItem);
+            doubleClickAction.DoubleClick(item);
             doubleClickAction.Build().Perform();
             searchBox.FindElementByClassName("Button").Click();
         }
