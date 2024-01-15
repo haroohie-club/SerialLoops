@@ -267,6 +267,7 @@ namespace SerialLoops.Wpf.Tests
             actions.DoubleClick(numericStepperText);
             actions.SendKeys("750");
             actions.Build().Perform();
+            Thread.Sleep(200);
             _driver.GetScreenshot().SaveAsFile(Path.Combine(testArtifactsFolder, $"{bgName}_scale.png"));
             TestContext.AddTestAttachment(Path.Combine(testArtifactsFolder, $"{bgName}_scale.png"));
 
@@ -276,12 +277,14 @@ namespace SerialLoops.Wpf.Tests
             actions.MoveByOffset(300, 60);
             actions.Release();
             actions.Build().Perform();
+            Thread.Sleep(200);
             _driver.GetScreenshot().SaveAsFile(Path.Combine(testArtifactsFolder, $"{bgName}_moved.png"));
             TestContext.AddTestAttachment(Path.Combine(testArtifactsFolder, $"{bgName}_moved.png"));
 
             _driver.FindElementByName("Save").Click();
             Thread.Sleep(200);
             _driver.SwitchToWindowWithName($"Serial Loops - {_uiVals.ProjectName}");
+            Thread.Sleep(200);
             _driver.GetScreenshot().SaveAsFile(Path.Combine(testArtifactsFolder, $"{bgName}_saved.png"));
             TestContext.AddTestAttachment(Path.Combine(testArtifactsFolder, $"{bgName}_saved.png"));
 
