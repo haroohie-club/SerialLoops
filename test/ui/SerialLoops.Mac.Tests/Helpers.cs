@@ -41,6 +41,7 @@ namespace SerialLoops.Mac.Tests
             Actions actions = new(driver);
             actions.MoveToLocation(0, 0);
             actions.Build().Perform();
+            Thread.Sleep(200);
             driver.FindElement(MobileBy.IosClassChain($"**/XCUIElementTypeMenuBarItem[`title=\"{menuBarItemTitle}\"`]")).Click();
         }
 
