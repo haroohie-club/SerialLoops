@@ -187,10 +187,9 @@ namespace SerialLoops.Mac.Tests
             }
             Directory.CreateDirectory(testArtifactsFolder);
 
-            _driver.OpenItem(bgName);
+            _driver.OpenItem(bgName, _uiVals.ArtifactsDir);
             Thread.Sleep(100);
-            _driver.GetScreenshot().SaveAsFile(Path.Combine(testArtifactsFolder, $"{bgName}_openTab.png"));
-            TestContext.AddTestAttachment(Path.Combine(testArtifactsFolder, $"{bgName}_openTab.png"));
+            _driver.GetAndSaveScreenshot(Path.Combine(testArtifactsFolder, $"{bgName}_openTab.png"));
             
             _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeButton[`title == \"Export\"`]")).Click();
             string exportedImagePath = Path.Combine(testArtifactsFolder, $"{bgName}.png");
@@ -205,8 +204,7 @@ namespace SerialLoops.Mac.Tests
             _driver.HandleFileDialog(Path.Combine(_testAssets, TEST_BG_ASSET));
 
             Thread.Sleep(500);
-            _driver.GetScreenshot().SaveAsFile(Path.Combine(testArtifactsFolder, $"{bgName}_nocropnoscale.png"));
-            TestContext.AddTestAttachment(Path.Combine(testArtifactsFolder, $"{bgName}_nocropnoscale.png"));
+            _driver.GetAndSaveScreenshot(Path.Combine(testArtifactsFolder, $"{bgName}_nocropnoscale.png"));
             Thread.Sleep(200);
         }
     }

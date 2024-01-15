@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using NUnit.Framework;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.ImageComparison;
 using OpenQA.Selenium.Appium.Mac;
@@ -9,11 +10,18 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Xml.Linq;
 
 namespace SerialLoops.Mac.Tests
 {
     public static class Helpers
     {
+        public static void GetAndSaveScreenshot(this MacDriver driver, string screenshotLocation)
+        {
+            driver.GetScreenshot().SaveAsFile(screenshotLocation);
+            TestContext.AddTestAttachment(screenshotLocation);
+        }
+
         public static void HandleFileDialog(this MacDriver driver, string fileLoc)
         {
             AppiumElement openFileDialog = driver.FindElement(MobileBy.IosNSPredicate("label == \"open\""));
@@ -29,6 +37,7 @@ namespace SerialLoops.Mac.Tests
             driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeSheet[`label == \"open\"`]/**/XCUIElementTypeButton[`title == \"Open\"`]")).Click();
             Thread.Sleep(TimeSpan.FromSeconds(1));
         }
+
         public static SimilarityMatchingResult GetImagesSimilarity(this MacDriver driver, string assetDir, string assetName, string compareFile, bool visualize = true)
         {
             string originalBase64 = TestAssetsDownloader.GetAssetBase64(assetDir, assetName);
@@ -46,13 +55,15 @@ namespace SerialLoops.Mac.Tests
             driver.FindElement(MobileBy.IosClassChain($"**/XCUIElementTypeMenuBarItem[`title=\"{menuBarItemTitle}\"`]")).Click();
         }
 
-        public static void OpenItem(this MacDriver driver, string itemName)
+        public static void OpenItem(this MacDriver driver, string itemName, string artifactsDir)
         {
             AppiumElement searchField = driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeSearchField[2]")); // the built-in search field is [1], so we need to access the second (ours)
             searchField.Click();
             searchField.SendKeys(itemName);
-            AppiumElement item = driver.FindElement(MobileBy.IosNSPredicate($"value == \"{itemName}\""));
+            driver.GetAndSaveScreenshot(Path.Combine(artifactsDir, $"{itemName}_search.png"));
+            AppiumElement item = driver.FindElement(MobileBy.IosClassChain($"value == \"{itemName}\""));
             Actions actions = new(driver);
+            actions.MoveToElement(item);
             actions.DoubleClick(item);
             actions.Build().Perform();
             driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeSearchField/**/XCUIElementTypeButton[`label == \"cancel\"`]")).Click();
