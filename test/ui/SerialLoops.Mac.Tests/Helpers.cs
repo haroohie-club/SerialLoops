@@ -61,7 +61,7 @@ namespace SerialLoops.Mac.Tests
             searchField.Click();
             searchField.SendKeys(itemName);
             driver.GetAndSaveScreenshot(Path.Combine(artifactsDir, $"{itemName}_search.png"));
-            AppiumElement item = driver.FindElement(MobileBy.IosClassChain($"**/XCUIElementStaticText[`value == \"{itemName}\"`]"));
+            AppiumElement item = driver.FindElement(MobileBy.IosClassChain($"**/XCUIElementTypeStaticText[`value == \"{itemName}\"`]"));
             driver.ExecuteScript("macos: doubleClick", new Dictionary<string, object>
             {
                 { "elementId", item.Id },
