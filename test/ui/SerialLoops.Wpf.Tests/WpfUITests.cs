@@ -8,6 +8,7 @@ using SerialLoops.Lib;
 using SerialLoops.Lib.Hacks;
 using SerialLoops.Tests.Shared;
 using SerialLoops.UITests.Shared;
+using SimpleImageComparisonClassLibrary;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -27,6 +28,9 @@ namespace SerialLoops.Wpf.Tests
         private readonly UiTestLogger _logger = new(Environment.GetEnvironmentVariable("LOG_FILE") ?? "testlog_console.log");
         private readonly ConsoleProgressTracker _tracker = new();
         private Process? _wad;
+        private string _testAssets = string.Empty;
+
+        private const string TEST_BG_ASSET = "lizmelo-painting.png";
 
         [OneTimeSetUp]
         public void Setup()
@@ -62,6 +66,8 @@ namespace SerialLoops.Wpf.Tests
             }
             _logger.Log(JsonSerializer.Serialize(_uiVals, new JsonSerializerOptions { WriteIndented = true }));
 
+            _testAssets = TestAssetsDownloader.DownloadTestAssets().GetAwaiter().GetResult();
+
             if (!string.IsNullOrEmpty(_uiVals.WinAppDriverLoc))
             {
                 _logger.Log($"Attempting to launch WinAppDriver from '{_uiVals.WinAppDriverLoc}'");
@@ -75,7 +81,7 @@ namespace SerialLoops.Wpf.Tests
             }
 
             Uri serverUri = new(Environment.GetEnvironmentVariable("APPIUM_HOST") ?? "http://127.0.0.1:4723/");
-            
+
             AppiumOptions driverOptions = new();
             driverOptions.AddAdditionalCapability("app", _uiVals!.AppLoc);
             driverOptions.AddAdditionalCapability("deviceName", "WindowsPC");
@@ -89,6 +95,7 @@ namespace SerialLoops.Wpf.Tests
             _driver.FindElementByName("Skip Update").Click(); // close the dialog
 
             _driver.SwitchTo().Window(_driver.WindowHandles.First());
+            _driver.FindElementByName("Maximize").Click();
             _driver.TakeScreenshot().SaveAsFile(Path.Combine(_uiVals.ArtifactsDir, "start.png"));
             _driver.FindElementByClassName("Hyperlink").Click();
             Actions actions = new(_driver);
@@ -108,7 +115,7 @@ namespace SerialLoops.Wpf.Tests
 
             _logger.Log("Loading project...");
             string configPath = Path.Combine(Path.GetDirectoryName(_uiVals.AppLoc) ?? string.Empty, "config.json");
-            Config config = File.Exists(configPath) ? (JsonSerializer.Deserialize<Config>(File.ReadAllText(configPath)) ?? Config.LoadConfig(_logger)) : Config.LoadConfig(_logger); 
+            Config config = File.Exists(configPath) ? (JsonSerializer.Deserialize<Config>(File.ReadAllText(configPath)) ?? Config.LoadConfig(_logger)) : Config.LoadConfig(_logger);
             (_project, _) = Project.OpenProject(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "SerialLoops", "Projects", _uiVals.ProjectName, $"{_uiVals.ProjectName}.slproj"),
                 config, _logger, _tracker);
             _logger.Log($"Project loaded from '{_project.ProjectFile}'");
@@ -119,7 +126,14 @@ namespace SerialLoops.Wpf.Tests
         {
             TestContext.AddTestAttachment(_logger.LogFile);
             _driver.Quit();
-            Directory.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "SerialLoops", "Projects", _uiVals!.ProjectName), true);
+            string artifactsAssetsDir = Path.Combine(_uiVals!.ArtifactsDir, "assets");
+            if (Directory.Exists(artifactsAssetsDir))
+            {
+                Directory.Delete(artifactsAssetsDir, true);
+            }
+            Directory.CreateDirectory(artifactsAssetsDir);
+            IO.CopyFiles(Path.Combine(_project!.BaseDirectory, "assets"), artifactsAssetsDir, _logger, recurse: true);
+            Directory.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "SerialLoops", "Projects", _uiVals.ProjectName), true);
             string logFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "SerialLoops", "Logs", "SerialLoops.log");
             _wad?.Kill();
             _wad?.Dispose();
@@ -213,6 +227,77 @@ namespace SerialLoops.Wpf.Tests
             _driver.FindElementByName("OK").Click();
             Thread.Sleep(TimeSpan.FromSeconds(1)); // Allow time to clean up the containers
             Assert.That(hacks.First(h => h.Name == hackToApply).Applied(_project), Is.False);
+        }
+
+        // Add KBG00 (KINETIC_SCREEN) to this as part of https://github.com/haroohie-club/SerialLoops/issues/225
+        // TEX_BG, TEX_CG, TEX_CG_DUAL, TEX_CG_WIDE, TEX_CG_SINGLE
+        private readonly static object[][] BackgroundsToTest = [["BG_BRIDGE_DAY", 0x027, 0x028], ["BG_EV020", 0x2CD, 0x2CE], ["BG_EV150_D", 0x317, 0x318], ["BG_EV550", 0x3F3, 0x3F4], ["BG_EV060", 0x2EC, -1]];
+        [Test, TestCaseSource(nameof(BackgroundsToTest))]
+        public void TestEditBackgrounds(string bgName, int bgIdx1, int bgIdx2)
+        {
+            string testArtifactsFolder = Path.Combine(_uiVals!.ArtifactsDir, TestContext.CurrentContext.Test.Name.Replace(' ', '_').Replace(',', '_').Replace("\"", ""));
+            if (Directory.Exists(testArtifactsFolder))
+            {
+                Directory.Delete(testArtifactsFolder, true);
+            }
+            Directory.CreateDirectory(testArtifactsFolder);
+
+            _logger.Log("Expanding backgrounds...");
+            _driver.OpenItem(bgName);
+            Thread.Sleep(100);
+            _driver.GetScreenshot().SaveAsFile(Path.Combine(testArtifactsFolder, $"{bgName}_openTab.png"));
+            TestContext.AddTestAttachment(Path.Combine(testArtifactsFolder, $"{bgName}_openTab.png"));
+
+            _driver.FindElementByName("Export").Click();
+            string exportedImagePath = Path.Combine(testArtifactsFolder, $"{bgName}.png");
+            _driver.HandleFileDialog(exportedImagePath);
+            Thread.Sleep(500);
+            Assert.That(ImageTool.GetPercentageDifference(Path.Combine(_testAssets, $"{bgName}.png"), exportedImagePath), Is.LessThanOrEqualTo(0.05));
+
+            _driver.FindElementByName("Replace").Click();
+            Thread.Sleep(200);
+            _driver.HandleFileDialog(Path.Combine(_testAssets, TEST_BG_ASSET));
+
+            _driver.SwitchToWindowWithName("Crop & Scale");
+            _driver.GetScreenshot().SaveAsFile(Path.Combine(testArtifactsFolder, $"{bgName}_nocropnoscale.png"));
+            TestContext.AddTestAttachment(Path.Combine(testArtifactsFolder, $"{bgName}_nocropnoscale.png"));
+            Thread.Sleep(200);
+            WindowsElement numericStepperText = _driver.FindElementByAccessibilityId("PART_TextBox");
+            Actions actions = new(_driver);
+            actions.DoubleClick(numericStepperText);
+            actions.SendKeys("750");
+            actions.Build().Perform();
+            _driver.GetScreenshot().SaveAsFile(Path.Combine(testArtifactsFolder, $"{bgName}_scale.png"));
+            TestContext.AddTestAttachment(Path.Combine(testArtifactsFolder, $"{bgName}_scale.png"));
+
+            WindowsElement image = _driver.FindElementByClassName("Image");
+            actions = new(_driver);
+            actions.ClickAndHold(image);
+            actions.MoveByOffset(300, 60);
+            actions.Release();
+            actions.Build().Perform();
+            _driver.GetScreenshot().SaveAsFile(Path.Combine(testArtifactsFolder, $"{bgName}_moved.png"));
+            TestContext.AddTestAttachment(Path.Combine(testArtifactsFolder, $"{bgName}_moved.png"));
+
+            _driver.FindElementByName("Save").Click();
+            Thread.Sleep(200);
+            _driver.SwitchTo().Window(_driver.WindowHandles.First());
+            _driver.GetScreenshot().SaveAsFile(Path.Combine(testArtifactsFolder, $"{bgName}_saved.png"));
+            TestContext.AddTestAttachment(Path.Combine(testArtifactsFolder, $"{bgName}_saved.png"));
+
+            actions = new(_driver);
+            actions.KeyDown(Keys.Control);
+            actions.SendKeys("s");
+            actions.KeyUp(Keys.Control);
+            actions.Build().Perform();
+
+            Assert.That(ImageTool.GetPercentageDifference(Path.Combine(_testAssets, $"{bgIdx1:X3}.png"), Path.Combine(_project!.BaseDirectory, "assets", "graphics", $"{bgIdx1:X3}.png")), Is.LessThanOrEqualTo(5));
+            if (bgIdx2 > 0)
+            {
+                Assert.That(ImageTool.GetPercentageDifference(Path.Combine(_testAssets, $"{bgIdx2:X3}.png"), Path.Combine(_project!.BaseDirectory, "assets", "graphics", $"{bgIdx2:X3}.png")), Is.LessThanOrEqualTo(5));
+            }
+
+            _driver.CloseCurrentItem();
         }
     }
 }

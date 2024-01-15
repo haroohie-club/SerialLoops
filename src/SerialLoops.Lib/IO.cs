@@ -188,8 +188,20 @@ namespace SerialLoops.Lib
             }
         }
 
-        public static void CopyFiles(string sourceDirectory, string destinationDirectory, ILogger log, string filter = "*")
+        public static void CopyFiles(string sourceDirectory, string destinationDirectory, ILogger log, string filter = "*", bool recurse = false)
         {
+            if (recurse)
+            {
+                foreach (string dir in Directory.GetDirectories(sourceDirectory))
+                {
+                    string destSubDir = Path.Combine(destinationDirectory, Path.GetFileName(dir));
+                    if (!Directory.Exists(destSubDir))
+                    {
+                        Directory.CreateDirectory(destSubDir);
+                    }
+                    CopyFiles(dir, destSubDir, log, filter, recurse);
+                }
+            }
             foreach (string file in Directory.GetFiles(sourceDirectory, filter))
             {
                 try
