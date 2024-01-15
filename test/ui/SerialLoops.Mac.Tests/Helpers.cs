@@ -7,6 +7,7 @@ using SerialLoops.Tests.Shared;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 
 namespace SerialLoops.Mac.Tests
@@ -41,15 +42,12 @@ namespace SerialLoops.Mac.Tests
             Actions actions = new(driver);
             actions.MoveToLocation(0, 0);
             actions.Build().Perform();
-            if (driver.FindElements(MobileBy.IosClassChain("**/XCUIElementTypeMenuItem")).Count > 0)
-            {
-                actions = new(driver);
-                actions.MoveToLocation(0, 0);
-                actions.Click();
-                actions.Build().Perform();
-            }
             Thread.Sleep(200);
-            driver.FindElement(MobileBy.IosClassChain($"**/XCUIElementTypeMenuBarItem[`title=\"{menuBarItemTitle}\"`]")).Click();
+            AppiumElement menuBarItem = driver.FindElement(MobileBy.IosClassChain($"**/XCUIElementTypeMenuBarItem[`title=\"{menuBarItemTitle}\"`]"));
+            if (driver.FindElements(MobileBy.IosClassChain("**/XCUIElementTypeMenuItem")).Count == 0)
+            {
+                menuBarItem.Click();
+            }
         }
 
         public static void OpenItem(this MacDriver driver, string itemName)
