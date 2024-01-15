@@ -284,7 +284,7 @@ namespace SerialLoops.Wpf.Tests
             _driver.FindElementByName("Save").Click();
             Thread.Sleep(TimeSpan.FromSeconds(1));
             _driver.SwitchToWindowWithName($"Serial Loops - {_uiVals.ProjectName}");
-            Thread.Sleep(200);
+            Thread.Sleep(500);
             _driver.GetScreenshot().SaveAsFile(Path.Combine(testArtifactsFolder, $"{bgName}_saved.png"));
             TestContext.AddTestAttachment(Path.Combine(testArtifactsFolder, $"{bgName}_saved.png"));
 
