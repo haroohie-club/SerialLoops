@@ -48,6 +48,12 @@ namespace SerialLoops.Mac.Tests
             {
                 menuBarItem.Click();
             }
+            else
+            {
+                actions = new(driver);
+                actions.MoveToElement(menuBarItem);
+                actions.Build().Perform();
+            }
         }
 
         public static void OpenItem(this MacDriver driver, string itemName)
