@@ -2,6 +2,7 @@ using HaruhiChokuretsuLib.Util;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
 using SerialLoops.Lib;
+using SerialLoops.Tests.Shared;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;

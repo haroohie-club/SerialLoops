@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SerialLoops.UITests.Shared\SerialLoops.UITests.Shared.csproj" />
+    <ProjectReference Include="..\..\SerialLoops.Tests.Shared\SerialLoops.Tests.Shared.csproj" />
   </ItemGroup>
 
 </Project>

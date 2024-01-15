@@ -9,6 +9,53 @@ variables:
 
 jobs:
 - job:
+  displayName: UI Tests (macOS)
+  pool:
+    vmImage: macOS-latest
+  steps:
+  - checkout: self
+    clean: true
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: 'build'
+      projects: $(Build.SourcesDirectory)/src/SerialLoops.Mac/SerialLoops.Mac.csproj
+    displayName: Build SerialLoops.Mac
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: 'build'
+      projects: $(Build.SourcesDirectory)/test/ui/SerialLoops.Mac.Tests/SerialLoops.Mac.Tests.csproj
+    displayName: Build SerialLoops.Mac.Tests
+  - pwsh: |
+      mkdir $env:AGENT_BUILDDIRECTORY/devkitpro
+      Invoke-WebRequest -Uri $env:DOWNLOAD_URI -OutFile devkitpro.zip
+      Expand-Archive -Path devkitpro.zip -DestinationPath $env:AGENT_BUILDDIRECTORY/devkitpro
+    displayName: Bootstrap devkitARM
+    env:
+      DOWNLOAD_URI: $(DevkitARMUri)
+  - script: |
+      export DEVKITARM=$AGENT_BUILDDIRECTORY/devkitpro/devkitARM
+      npm i -g appium
+      appium driver install mac2
+    displayName: Install and Run Appium Driver
+  - task: DotNetCoreCLI@2
+    displayName: Run macOS UI tests
+    inputs:
+      command: 'test'
+      projects: $(Build.SourcesDirectory)/test/ui/SerialLoops.Mac.Tests/SerialLoops.Mac.Tests.csproj
+    env:
+      APP_LOCATION: "$(Build.SourcesDirectory)/src/SerialLoops.Mac/bin/Debug/net8.0/Serial Loops.app"
+      PROJECT_NAME: MacUITest
+      ROM_URI: $(ChokuRomUri)
+      LOG_FILE: $(Build.ArtifactStagingDirectory)/TestConsole.log
+      DEVKITARM: $(Agent.BuildDirectory)/devkitpro/devkitARM
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: $(Build.ArtifactStagingDirectory)
+      ArtifactName: MacTestArtifacts
+      publishLocation: Container
+    displayName: Publish macOS Test Artifacts
+    condition: always()
+- job:
   displayName: UI Tests (Windows)
   pool:
     name: LoopyPool

@@ -1,4 +1,3 @@
-using HaruhiChokuretsuLib.Util;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
@@ -7,7 +6,7 @@ using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.Extensions;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Hacks;
-using SerialLoops.Tests;
+using SerialLoops.Tests.Shared;
 using SerialLoops.UITests.Shared;
 using System;
 using System.Collections.Generic;
@@ -33,7 +32,6 @@ namespace SerialLoops.Wpf.Tests
         public void Setup()
         {
             // To run these tests locally, you can create a file called 'ui_vals.json' and place it next to the test assembly (in the output folder)
-            // These tests assume default config for Serial Loops i.e. fresh install; some tests may fail if default config is not used
 
             if (File.Exists("ui_vals.json"))
             {
@@ -158,8 +156,9 @@ namespace SerialLoops.Wpf.Tests
             }
         }
 
-        [Test]
-        public void TestAsmHackApplicationAndReversion()
+        private readonly static string[] HacksToTest = ["Skip OP", "Change OP_MODE Chibi"];
+        [Test, TestCaseSource(nameof(HacksToTest))]
+        public void TestAsmHackApplicationAndReversion(string hackToApply)
         {
             if (!(_project?.Config.UseDocker ?? true))
             {
@@ -172,8 +171,6 @@ namespace SerialLoops.Wpf.Tests
                 _driver.FindElementByClassName("CheckBox").Click();
                 _driver.FindElementByName("Save").Click();
             }
-
-            string hackToApply = "Skip OP";
 
             _logger.Log("Applying hack...");
             _driver.FindElementByName("Tools").Click();

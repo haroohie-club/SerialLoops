@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SerialLoops.Tests.Shared\SerialLoops.Tests.Shared.csproj" />
     <ProjectReference Include="..\..\src\SerialLoops.Lib\SerialLoops.Lib.csproj" />
     <ProjectReference Include="..\..\src\SerialLoops\SerialLoops.csproj" />
   </ItemGroup>
