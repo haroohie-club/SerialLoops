@@ -9,11 +9,11 @@ using static HaroohieClub.NitroPacker.Nitro.Card.Rom.RomBanner;
 
 namespace SerialLoops.Lib
 {
-    public class ProjectSettings
+    public class ProjectSettings(NdsProjectFile file, ILogger log)
     {
-        public NdsProjectFile File { get; }
+        public NdsProjectFile File { get; } = file;
         private BannerV1 Banner => File.RomInfo.Banner.Banner;
-        private readonly ILogger _log;
+        private readonly ILogger _log = log;
         
         public string Name {
             get => Banner.GameName[0];
@@ -58,11 +58,5 @@ namespace SerialLoops.Lib
                 Banner.Pltt = grp.PaletteData.ToArray();
             }
         }
-        public ProjectSettings(NdsProjectFile file, ILogger log)
-        {
-            File = file;
-            _log = log;
-        }
-
     }
 }
