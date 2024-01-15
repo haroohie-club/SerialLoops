@@ -35,6 +35,15 @@ namespace SerialLoops.Mac.Tests
             return driver.GetImagesSimilarity(originalBase64, compareBase64, new() { Visualize = true });
         }
 
+        public static void OpenMenu(this MacDriver driver, string menuBarItemTitle)
+        {
+            // handles popping the menu when we're in full screen mode
+            Actions actions = new(driver);
+            actions.MoveToLocation(0, 0);
+            actions.Build().Perform();
+            driver.FindElement(MobileBy.IosClassChain($"**/XCUIElementTypeMenuBarItem[`title=\"{menuBarItemTitle}\"`]")).Click();
+        }
+
         public static void OpenItem(this MacDriver driver, string itemName)
         {
             AppiumElement searchField = driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeSearchField"));

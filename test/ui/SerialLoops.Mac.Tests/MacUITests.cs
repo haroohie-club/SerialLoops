@@ -117,7 +117,7 @@ namespace SerialLoops.Mac.Tests
         {
             for (int i = 0; i < 2; i++)
             {
-                _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeMenuBarItem[`title=\"SerialLoops\"`]")).Click();
+                _driver.OpenMenu("SerialLoops");
                 Thread.Sleep(200);
                 _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeMenuItem[`title=\"About...\"`]")).Click();
                 Thread.Sleep(200);
@@ -132,7 +132,7 @@ namespace SerialLoops.Mac.Tests
         [Test, TestCaseSource(nameof(HacksToTest))]
         public void TestAsmHackApplicationAndReversion(string hackToApply)
         {
-            _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeMenuBarItem[`title=\"Tools\"`]")).Click();
+            _driver.OpenMenu("Tools");
             Thread.Sleep(200);
             _driver.TakeScreenshot().SaveAsFile(Path.Combine(_uiVals!.ArtifactsDir, "tools_clicked.png"));
             TestContext.AddTestAttachment(Path.Combine(_uiVals.ArtifactsDir, "tools_clicked.png"), "The app after the tools menu was clicked but before clicking Apply Hacks");
