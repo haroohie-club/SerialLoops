@@ -48,7 +48,7 @@ namespace SerialLoops.Mac.Tests
 
         public static void OpenItem(this MacDriver driver, string itemName)
         {
-            AppiumElement searchField = driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeSearchField"));
+            AppiumElement searchField = driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeSearchField[2]")); // the built-in search field is [1], so we need to access the second (ours)
             searchField.Click();
             searchField.SendKeys(itemName);
             AppiumElement item = driver.FindElement(MobileBy.IosNSPredicate($"value == \"{itemName}\""));
