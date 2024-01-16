@@ -37,7 +37,7 @@ namespace SerialLoops.Mac.Tests
             Thread.Sleep(TimeSpan.FromSeconds(1));
         }
 
-        private static readonly string[] keysToSend = ["XCUIKeyboardKeyReturn"];
+        private static readonly string[] keysToSend = ["XCUIKeyboardKeyEnter"];
         public static void HandleSaveFileDialog(this MacDriver driver, string fileLoc)
         {
             AppiumElement saveFileTextField = driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeSheet[`label == \"save\"`]/**/XCUIElementTypeTextField"));
