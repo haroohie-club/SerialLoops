@@ -36,6 +36,10 @@ jobs:
       export DEVKITARM=$AGENT_BUILDDIRECTORY/devkitpro/devkitARM
       npm i -g appium
       appium driver install mac2
+      brew update
+      brew install opencv@3
+      brew link --force opencv@3
+      appium --use-plugins=images &
     displayName: Install and Run Appium Driver
   - task: DotNetCoreCLI@2
     displayName: Run macOS UI tests
