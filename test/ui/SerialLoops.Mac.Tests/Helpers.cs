@@ -44,7 +44,7 @@ namespace SerialLoops.Mac.Tests
             saveFileTextField.SendKeys("///");
             Thread.Sleep(300);
             AppiumElement saveFilePathField = driver.FindElement(MobileBy.IosClassChain($"**/XCUIElementTypeTextField[`value == \"/\"`]"));
-            saveFilePathField.SendKeys(fileLoc[1..]);
+            saveFilePathField.SendKeys(fileLoc);
             Thread.Sleep(200);
             driver.ExecuteScript("macos: keys", new Dictionary<string, object>
             {
