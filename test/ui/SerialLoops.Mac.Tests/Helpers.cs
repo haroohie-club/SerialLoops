@@ -22,7 +22,7 @@ namespace SerialLoops.Mac.Tests
             TestContext.AddTestAttachment(screenshotLocation);
         }
 
-        public static void HandleFileDialog(this MacDriver driver, string fileLoc)
+        public static void HandleOpenFileDialog(this MacDriver driver, string fileLoc)
         {
             AppiumElement openFileDialog = driver.FindElement(MobileBy.IosNSPredicate("label == \"open\""));
             openFileDialog.SendKeys($"{Keys.Command}{Keys.Shift}g/");
@@ -35,6 +35,16 @@ namespace SerialLoops.Mac.Tests
             });
             Thread.Sleep(500);
             driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeSheet[`label == \"open\"`]/**/XCUIElementTypeButton[`title == \"Open\"`]")).Click();
+            Thread.Sleep(TimeSpan.FromSeconds(1));
+        }
+
+        public static void HandleSaveFileDialog(this MacDriver driver, string fileLoc)
+        {
+            AppiumElement saveFileDialog = driver.FindElement(MobileBy.IosNSPredicate("label == \"save\""));
+            saveFileDialog.SendKeys(fileLoc);
+            saveFileDialog.SendKeys(Keys.Enter);
+            Thread.Sleep(500);
+            driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeSheet[`label == \"save\"`]/**/XCUIElementTypeButton[`title == \"Save\"`]")).Click();
             Thread.Sleep(TimeSpan.FromSeconds(1));
         }
 

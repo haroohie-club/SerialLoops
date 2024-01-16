@@ -80,7 +80,7 @@ namespace SerialLoops.Mac.Tests
             _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeStaticText[`value == \"New Project\"`]")).Click();
             _driver.FindElement(MobileBy.IosClassChain("XCUIElementTypeDialog/**/XCUIElementTypeTextField[1]")).SendKeys(_uiVals.ProjectName);
             _driver.FindElement(MobileBy.IosClassChain("XCUIElementTypeDialog/**/XCUIElementTypeButton[`title == \"Open ROM\"`]")).Click();
-            _driver.HandleFileDialog(_uiVals.RomLoc);
+            _driver.HandleOpenFileDialog(_uiVals.RomLoc);
             _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeButton[`title == \"Create\"`]")).Click();
             while (_driver.FindElements(MobileBy.IosClassChain("**/XCUIElementTypeDialog")).Count >= 1)
             {
@@ -193,7 +193,7 @@ namespace SerialLoops.Mac.Tests
             
             _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeButton[`title == \"Export\"`]")).Click();
             string exportedImagePath = Path.Combine(testArtifactsFolder, $"{bgName}.png");
-            _driver.HandleFileDialog(exportedImagePath);
+            _driver.HandleSaveFileDialog(exportedImagePath);
             Thread.Sleep(500);
             SimilarityMatchingResult exportedImageMatch = _driver.GetImagesSimilarity(_testAssets, $"{bgName}.png", exportedImagePath);
             exportedImageMatch.SaveVisualizationAsFile(Path.Combine(testArtifactsFolder, "exported.png"));
@@ -201,7 +201,7 @@ namespace SerialLoops.Mac.Tests
 
             _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeButton[`title == \"Replace\"`]")).Click();
             Thread.Sleep(200);
-            _driver.HandleFileDialog(Path.Combine(_testAssets, TEST_BG_ASSET));
+            _driver.HandleOpenFileDialog(Path.Combine(_testAssets, TEST_BG_ASSET));
 
             Thread.Sleep(500);
             _driver.GetAndSaveScreenshot(Path.Combine(testArtifactsFolder, $"{bgName}_nocropnoscale.png"));
