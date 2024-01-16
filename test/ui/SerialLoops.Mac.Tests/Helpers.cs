@@ -40,10 +40,11 @@ namespace SerialLoops.Mac.Tests
         public static void HandleSaveFileDialog(this MacDriver driver, string fileLoc)
         {
             AppiumElement saveFileTextField = driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeSheet[`label == \"save\"`]/**/XCUIElementTypeTextField[`value == \"Untitled\"`]"));
-            saveFileTextField.SendKeys("//");
-            saveFileTextField.SendKeys(fileLoc[1..]);
-            Thread.Sleep(100);
-            AppiumElement saveFilePathField = driver.FindElement(MobileBy.IosClassChain($"**/XCUIElementTypeTextField[`value == \"{fileLoc}\"`]"));
+            saveFileTextField.SendKeys("///");
+            Thread.Sleep(300);
+            AppiumElement saveFilePathField = driver.FindElement(MobileBy.IosClassChain($"**/XCUIElementTypeTextField[`value == \"/\"`]"));
+            saveFilePathField.SendKeys(fileLoc[1..]);
+            Thread.Sleep(200);
             saveFilePathField.Submit();
             Thread.Sleep(500);
             driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeSheet[`label == \"save\"`]/**/XCUIElementTypeButton[`title == \"Save\"`]")).Click();
