@@ -35,7 +35,7 @@ namespace SerialLoops.Tests
             // Download data archive
             _log.Log("Downloading data archive...");
             using HttpClient client = new();
-            HttpRequestMessage request = new(HttpMethod.Get, "https://haroohie.blob.core.windows.net/serial-loops/choku_data.zip");
+            HttpRequestMessage request = new(HttpMethod.Get, "https://haroohie.blob.core.windows.net/serial-loops/choku_data.zip?sp=r&st=2024-01-15T09:04:19Z&se=2030-01-15T17:04:19Z&spr=https&sv=2022-11-02&sr=b&sig=1WvNbRiH6HAwoR7Mm4kz8lNMCgHobKxPwJLL7oNGCX0%3D");
             HttpResponseMessage response = client.SendAsync(request).GetAwaiter().GetResult().EnsureSuccessStatusCode(); // Setup methods can't be async so...
             File.WriteAllBytes(_zipPath, response.Content.ReadAsByteArrayAsync().GetAwaiter().GetResult()); // i'm so sorry
 
