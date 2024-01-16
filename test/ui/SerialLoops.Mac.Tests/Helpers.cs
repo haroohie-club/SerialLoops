@@ -37,8 +37,7 @@ namespace SerialLoops.Mac.Tests
             Thread.Sleep(TimeSpan.FromSeconds(1));
         }
 
-        private static readonly string[] enterKey = ["XCUIKeyboardKeyEnter"];
-        private static readonly string[] escapeKey = ["XCUIKeyboardKeyEscape"];
+        private static readonly string[] enterSequence = ["XCUIKeyboardKeyEnter", "XCUIKeyboardKeyEnter", "XCUIKeyboardKeyEnter", "XCUIKeyboardKeyEnter", "XCUIKeyboardKeyEnter", "XCUIKeyboardKeyEnter", "XCUIKeyboardKeyEnter"];
         public static void HandleSaveFileDialog(this MacDriver driver, string fileLoc)
         {
             AppiumElement saveFileTextField = driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeSheet[`label == \"save\"`]/**/XCUIElementTypeTextField"));
@@ -49,12 +48,7 @@ namespace SerialLoops.Mac.Tests
             Thread.Sleep(200);
             driver.ExecuteScript("macos: keys", new Dictionary<string, object>
             {
-                { "keys", enterKey },
-            });
-            Thread.Sleep(300);
-            driver.ExecuteScript("macos: keys", new Dictionary<string, object>
-            {
-                { "keys", escapeKey },
+                { "keys", enterSequence },
             });
             Thread.Sleep(500);
             driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeSheet[`label == \"save\"`]/**/XCUIElementTypeButton[`title == \"Save\"`]")).Click();
