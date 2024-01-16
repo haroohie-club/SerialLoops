@@ -38,7 +38,7 @@ namespace SerialLoops.Mac.Tests
         }
 
         private static readonly string[] enterSequence = ["XCUIKeyboardKeyEnter"];
-        private static readonly string[] slashSequence = ["/", "/", "/"];
+        private static readonly string[] slashSequence = ["/", "/"];
         public static void HandleSaveFileDialog(this MacDriver driver, string fileLoc)
         {
             driver.ExecuteScript("macos: keys", new Dictionary<string, object>
@@ -48,7 +48,7 @@ namespace SerialLoops.Mac.Tests
             Thread.Sleep(300);
             driver.ExecuteScript("macos: keys", new Dictionary<string, object>
             {
-                { "keys", fileLoc.Split("") },
+                { "keys", fileLoc.Select(c => $"{c}").ToArray() },
             });
             Thread.Sleep(200);
             driver.ExecuteScript("macos: keys", new Dictionary<string, object>
