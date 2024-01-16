@@ -37,14 +37,19 @@ namespace SerialLoops.Mac.Tests
             Thread.Sleep(TimeSpan.FromSeconds(1));
         }
 
-        private static readonly string[] enterSequence = ["XCUIKeyboardKeyEnter", "XCUIKeyboardKeyEnter", "XCUIKeyboardKeyEnter", "XCUIKeyboardKeyEnter", "XCUIKeyboardKeyEnter", "XCUIKeyboardKeyEnter", "XCUIKeyboardKeyEnter"];
+        private static readonly string[] enterSequence = ["XCUIKeyboardKeyEnter"];
+        private static readonly string[] slashSequence = ["/", "/", "/"];
         public static void HandleSaveFileDialog(this MacDriver driver, string fileLoc)
         {
-            AppiumElement saveFileTextField = driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeSheet[`label == \"save\"`]/**/XCUIElementTypeTextField"));
-            saveFileTextField.SendKeys("///");
+            driver.ExecuteScript("macos: keys", new Dictionary<string, object>
+            {
+                { "keys", slashSequence },
+            });
             Thread.Sleep(300);
-            AppiumElement saveFilePathField = driver.FindElement(MobileBy.IosClassChain($"**/XCUIElementTypeTextField[`value == \"/\"`]"));
-            saveFilePathField.SendKeys(fileLoc);
+            driver.ExecuteScript("macos: keys", new Dictionary<string, object>
+            {
+                { "keys", fileLoc.Split("") },
+            });
             Thread.Sleep(200);
             driver.ExecuteScript("macos: keys", new Dictionary<string, object>
             {
