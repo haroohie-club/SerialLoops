@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using System.Xml.Linq;
 
 namespace SerialLoops.Mac.Tests
 {
@@ -41,10 +40,11 @@ namespace SerialLoops.Mac.Tests
         public static void HandleSaveFileDialog(this MacDriver driver, string fileLoc)
         {
             AppiumElement saveFileTextField = driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeSheet[`label == \"save\"`]/**/XCUIElementTypeTextField[`value == \"Untitled\"`]"));
-            saveFileTextField.SendKeys(fileLoc);
-            Actions action = new(driver);
-            action.SendKeys(Keys.Return);
-            action.Build().Perform();
+            saveFileTextField.SendKeys("/");
+            Thread.Sleep(100);
+            AppiumElement saveFilePathField = driver.FindElement(MobileBy.IosClassChain($"**/XCUIElementTypeTextField[`value == \"{fileLoc}\"`]"));
+            saveFilePathField.SendKeys(fileLoc[1..]);
+            saveFilePathField.Submit();
             Thread.Sleep(500);
             driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeSheet[`label == \"save\"`]/**/XCUIElementTypeButton[`title == \"Save\"`]")).Click();
             Thread.Sleep(TimeSpan.FromSeconds(1));
