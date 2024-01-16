@@ -48,7 +48,6 @@ namespace SerialLoops.Mac.Tests
             Thread.Sleep(200);
             driver.ExecuteScript("macos: keys", new Dictionary<string, object>
             {
-                { "elementId", saveFilePathField.Id },
                 { "keys", keysToSend },
             });
             Thread.Sleep(500);
