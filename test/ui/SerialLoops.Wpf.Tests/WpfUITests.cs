@@ -173,10 +173,17 @@ namespace SerialLoops.Wpf.Tests
         [Test, TestCaseSource(nameof(HacksToTest))]
         public void TestAsmHackApplicationAndReversion(string hackToApply)
         {
+            string testArtifactsFolder = Path.Combine(_uiVals!.ArtifactsDir, TestContext.CurrentContext.Test.Name.Replace(' ', '_').Replace(',', '_').Replace("\"", ""));
+            if (Directory.Exists(testArtifactsFolder))
+            {
+                Directory.Delete(testArtifactsFolder, true);
+            }
+            Directory.CreateDirectory(testArtifactsFolder);
+
             if (!(_project?.Config.UseDocker ?? true))
             {
                 _driver.FindElementByName("File").Click();
-                _driver.TakeScreenshot().SaveAsFile(Path.Combine(_uiVals!.ArtifactsDir, "file_menu.png"));
+                _driver.GetAndSaveScreenshot(Path.Combine(testArtifactsFolder, "file_menu.png"));
                 _driver.FindElementByName("Preferences...").Click();
                 Actions actions = new(_driver);
                 actions.MoveToElement(_driver.FindElementByName("Use Docker for ASM Hacks"));
@@ -187,12 +194,10 @@ namespace SerialLoops.Wpf.Tests
 
             _logger.Log("Applying hack...");
             _driver.FindElementByName("Tools").Click();
-            _driver.TakeScreenshot().SaveAsFile(Path.Combine(_uiVals!.ArtifactsDir, "tools_clicked.png"));
-            TestContext.AddTestAttachment(Path.Combine(_uiVals!.ArtifactsDir, "tools_clicked.png"), "The app after the tools menu was clicked but before clicking Apply Hacks");
+            _driver.GetAndSaveScreenshot(Path.Combine(testArtifactsFolder, "tools_clicked.png"));
             _driver.FindElementByName("Apply Hacks...").Click();
             _driver.SwitchTo().Window(_driver.WindowHandles.First());
-            _driver.TakeScreenshot().SaveAsFile(Path.Combine(_uiVals!.ArtifactsDir, "available_hacks.png"));
-            TestContext.AddTestAttachment(Path.Combine(_uiVals!.ArtifactsDir, "available_hacks.png"), "The available hacks dialog");
+            _driver.GetAndSaveScreenshot(Path.Combine(testArtifactsFolder, "available_hacks.png"));
             _driver.FindElementByName(hackToApply).Click();
             _driver.FindElementByName("Save").Click();
             Thread.Sleep(TimeSpan.FromSeconds(10)); // Allow time for hacks to be assembled
@@ -201,8 +206,7 @@ namespace SerialLoops.Wpf.Tests
                 // Dialogs count as windows on Win11 but are part of the same window on Win10, from basic testing
                 _driver.SwitchToWindowWithName("Successfully applied hacks!", "Success!", "Error");
             }
-            _driver.TakeScreenshot().SaveAsFile(Path.Combine(_uiVals!.ArtifactsDir, "hack_apply_result_dialog.png"));
-            TestContext.AddTestAttachment(Path.Combine(_uiVals!.ArtifactsDir, "hack_apply_result_dialog.png"), "The dialog indicating whether the hack application succeeded or not");
+            _driver.GetAndSaveScreenshot(Path.Combine(testArtifactsFolder, "hack_apply_result_dialog.png"));
             _driver.FindElementByName("OK").Click();
             Thread.Sleep(TimeSpan.FromSeconds(1)); // Allow time to clean up the containers
             List<AsmHack> hacks = JsonSerializer.Deserialize<List<AsmHack>>(File.ReadAllText(Path.Combine("Sources", "hacks.json"))) ?? [];
@@ -243,8 +247,7 @@ namespace SerialLoops.Wpf.Tests
 
             _driver.OpenItem(bgName);
             Thread.Sleep(100);
-            _driver.GetScreenshot().SaveAsFile(Path.Combine(testArtifactsFolder, $"{bgName}_openTab.png"));
-            TestContext.AddTestAttachment(Path.Combine(testArtifactsFolder, $"{bgName}_openTab.png"));
+            _driver.GetAndSaveScreenshot(Path.Combine(testArtifactsFolder, $"{bgName}_openTab.png"));
 
             _driver.FindElementByName("Export").Click();
             string exportedImagePath = Path.Combine(testArtifactsFolder, $"{bgName}.png");
@@ -258,17 +261,15 @@ namespace SerialLoops.Wpf.Tests
             _driver.HandleFileDialog(Path.Combine(_testAssets, TEST_BG_ASSET));
 
             _driver.SwitchToWindowWithName("Crop & Scale");
-            _driver.GetScreenshot().SaveAsFile(Path.Combine(testArtifactsFolder, $"{bgName}_nocropnoscale.png"));
-            TestContext.AddTestAttachment(Path.Combine(testArtifactsFolder, $"{bgName}_nocropnoscale.png"));
+            _driver.GetAndSaveScreenshot(Path.Combine(testArtifactsFolder, $"{bgName}_nocropnoscale.png"));
             Thread.Sleep(200);
-            WindowsElement numericStepperText = _driver.FindElementByAccessibilityId("PART_TextBox");
+            WindowsElement widthStepperTextField = _driver.FindElementByAccessibilityId("PART_TextBox");
             Actions actions = new(_driver);
-            actions.DoubleClick(numericStepperText);
+            actions.DoubleClick(widthStepperTextField);
             actions.SendKeys("750");
             actions.Build().Perform();
             Thread.Sleep(200);
-            _driver.GetScreenshot().SaveAsFile(Path.Combine(testArtifactsFolder, $"{bgName}_scale.png"));
-            TestContext.AddTestAttachment(Path.Combine(testArtifactsFolder, $"{bgName}_scale.png"));
+            _driver.GetAndSaveScreenshot(Path.Combine(testArtifactsFolder, $"{bgName}_scale.png"));
 
             WindowsElement image = _driver.FindElementByClassName("Image");
             actions = new(_driver);
@@ -277,15 +278,13 @@ namespace SerialLoops.Wpf.Tests
             actions.Release();
             actions.Build().Perform();
             Thread.Sleep(200);
-            _driver.GetScreenshot().SaveAsFile(Path.Combine(testArtifactsFolder, $"{bgName}_moved.png"));
-            TestContext.AddTestAttachment(Path.Combine(testArtifactsFolder, $"{bgName}_moved.png"));
+            _driver.GetAndSaveScreenshot(Path.Combine(testArtifactsFolder, $"{bgName}_moved.png"));
 
             _driver.FindElementByName("Save").Click();
             Thread.Sleep(TimeSpan.FromSeconds(1));
             _driver.SwitchToWindowWithName($"Serial Loops - {_uiVals.ProjectName}");
             Thread.Sleep(500);
-            _driver.GetScreenshot().SaveAsFile(Path.Combine(testArtifactsFolder, $"{bgName}_saved.png"));
-            TestContext.AddTestAttachment(Path.Combine(testArtifactsFolder, $"{bgName}_saved.png"));
+            _driver.GetAndSaveScreenshot(Path.Combine(testArtifactsFolder, $"{bgName}_saved.png"));
 
             actions = new(_driver);
             actions.KeyDown(Keys.Control);

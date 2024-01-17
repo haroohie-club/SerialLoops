@@ -1,7 +1,6 @@
-﻿using OpenQA.Selenium;
+﻿using NUnit.Framework;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
-using OpenQA.Selenium.Appium.ImageComparison;
-using OpenQA.Selenium.Appium.Mac;
 using OpenQA.Selenium.Appium.Windows;
 using OpenQA.Selenium.Interactions;
 using System;
@@ -11,6 +10,12 @@ namespace SerialLoops.Wpf.Tests
 {
     public static class Helpers
     {
+        public static void GetAndSaveScreenshot(this WindowsDriver<WindowsElement> driver, string screenshotLocation)
+        {
+            driver.GetScreenshot().SaveAsFile(screenshotLocation);
+            TestContext.AddTestAttachment(screenshotLocation);
+        }
+
         public static void SwitchToWindowWithName(this WindowsDriver<WindowsElement> driver, params string[] validTitles)
         {
             for (int i = 0; i < driver.WindowHandles.Count; i++)

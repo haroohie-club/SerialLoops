@@ -1,7 +1,9 @@
 using NUnit.Framework;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.ImageComparison;
 using OpenQA.Selenium.Appium.Mac;
+using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.Extensions;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Hacks;
@@ -202,8 +204,8 @@ namespace SerialLoops.Mac.Tests
             TestContext.AddTestAttachment(exportedImagePath);
             Thread.Sleep(500);
             SimilarityMatchingResult exportedImageMatch = _driver.GetImagesSimilarity(_testAssets, $"{bgName}.png", exportedImagePath);
-            exportedImageMatch.SaveVisualizationAsFile(Path.Combine(testArtifactsFolder, $"{bgName}_exported.png"));
-            TestContext.AddTestAttachment(Path.Combine(testArtifactsFolder, $"{bgName}_exported.png"));
+            exportedImageMatch.SaveVisualizationAsFile(Path.Combine(testArtifactsFolder, $"{bgName}_exported_comparison.png"));
+            TestContext.AddTestAttachment(Path.Combine(testArtifactsFolder, $"{bgName}_exported_comparison.png"));
             Assert.That(exportedImageMatch.Score, Is.GreaterThanOrEqualTo(0.99));
 
             _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeButton[`title == \"Replace\"`]")).Click();
@@ -212,6 +214,47 @@ namespace SerialLoops.Mac.Tests
             Thread.Sleep(500);
             _driver.GetAndSaveScreenshot(Path.Combine(testArtifactsFolder, $"{bgName}_nocropnoscale.png"));
             Thread.Sleep(200);
+
+            AppiumElement widthStepperTextField = _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeTextField"));
+            Actions actions = new(_driver);
+            actions.DoubleClick(widthStepperTextField);
+            actions.SendKeys("750");
+            actions.Build().Perform();
+            Thread.Sleep(200);
+            _driver.GetAndSaveScreenshot(Path.Combine(testArtifactsFolder, $"{bgName}_scale.png"));
+
+            AppiumElement image = _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeImage"));
+            actions = new(_driver);
+            actions.ClickAndHold(image);
+            actions.MoveByOffset(300, 60);
+            actions.Release();
+            actions.Build().Perform();
+            Thread.Sleep(200);
+            _driver.GetAndSaveScreenshot(Path.Combine(testArtifactsFolder, $"{bgName}_moved.png"));
+
+            _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeButton[`title == \"Save\"`]")).Click();
+            Thread.Sleep(TimeSpan.FromSeconds(1));
+            _driver.GetAndSaveScreenshot(Path.Combine(testArtifactsFolder, $"{bgName}_saved.png"));
+
+            actions = new(_driver);
+            actions.KeyDown(Keys.Command);
+            actions.SendKeys("s");
+            actions.KeyUp(Keys.Command);
+            actions.Build().Perform();
+
+            SimilarityMatchingResult bg1Match = _driver.GetImagesSimilarity(Path.Combine(_testAssets, $"{bgIdx1:X3}.png"), Path.Combine(_project!.BaseDirectory, "assets", "graphics", $"{bgIdx1:X3}.png"));
+            bg1Match.SaveVisualizationAsFile(Path.Combine(testArtifactsFolder, $"{bgName}_1_comparison.png"));
+            TestContext.AddTestAttachment(Path.Combine(testArtifactsFolder, $"{bgName}_1_comparison.png"));
+            Assert.That(bg1Match.Score, Is.GreaterThanOrEqualTo(0.99));
+            if (bgIdx2 > 0)
+            {
+                SimilarityMatchingResult bg2Match = _driver.GetImagesSimilarity(Path.Combine(_testAssets, $"{bgIdx2:X3}.png"), Path.Combine(_project!.BaseDirectory, "assets", "graphics", $"{bgIdx2:X3}.png"));
+                bg2Match.SaveVisualizationAsFile(Path.Combine(testArtifactsFolder, $"{bgName}_2_comparison.png"));
+                TestContext.AddTestAttachment(Path.Combine(testArtifactsFolder, $"{bgName}_2_comparison.png"));
+                Assert.That(bg2Match.Score, Is.GreaterThanOrEqualTo(0.99));
+            }
+
+            _driver.CloseCurrentItem();
         }
     }
 }
