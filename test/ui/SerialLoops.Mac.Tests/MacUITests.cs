@@ -220,11 +220,12 @@ namespace SerialLoops.Mac.Tests
             AppiumElement image = _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeImage"));
             Actions actions = new(_driver);
             actions.MoveToElement(image); // this is the center of the image
+            actions.Build().Perform();
+            actions = new(_driver);
             actions.MoveByOffset(-image.Size.Width / 2 - 30, -image.Size.Height / 2 - 30); // we move to the top left corner, subtracted so we're slightly closer to the center
             actions.ClickAndHold();
             actions.MoveByOffset(300, 60);
             actions.Release();
-            actions.Build().Perform();
             Thread.Sleep(200);
             _driver.GetAndSaveScreenshot(Path.Combine(testArtifactsFolder, $"{bgName}_moved.png"));
 
