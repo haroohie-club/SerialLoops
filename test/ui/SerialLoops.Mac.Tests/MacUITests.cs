@@ -244,13 +244,13 @@ namespace SerialLoops.Mac.Tests
                 { "keys", new object[] { new Dictionary<string, object> { { "key", "s" }, { "modifierFlags", 1 << 4 } } } },
             });
 
-            SimilarityMatchingResult bg1Match = _driver.GetImagesSimilarity(Path.Combine(_testAssets, $"{bgIdx1:X3}.png"), Path.Combine(_project!.BaseDirectory, "assets", "graphics", $"{bgIdx1:X3}.png"));
+            SimilarityMatchingResult bg1Match = _driver.GetImagesSimilarity(_testAssets, $"{bgIdx1:X3}.png", Path.Combine(_project!.BaseDirectory, "assets", "graphics", $"{bgIdx1:X3}.png"));
             bg1Match.SaveVisualizationAsFile(Path.Combine(testArtifactsFolder, $"{bgName}_1_comparison.png"));
             TestContext.AddTestAttachment(Path.Combine(testArtifactsFolder, $"{bgName}_1_comparison.png"));
             Assert.That(bg1Match.Score, Is.GreaterThanOrEqualTo(0.99));
             if (bgIdx2 > 0)
             {
-                SimilarityMatchingResult bg2Match = _driver.GetImagesSimilarity(Path.Combine(_testAssets, $"{bgIdx2:X3}.png"), Path.Combine(_project!.BaseDirectory, "assets", "graphics", $"{bgIdx2:X3}.png"));
+                SimilarityMatchingResult bg2Match = _driver.GetImagesSimilarity(_testAssets, $"{bgIdx2:X3}.png", Path.Combine(_project!.BaseDirectory, "assets", "graphics", $"{bgIdx2:X3}.png"));
                 bg2Match.SaveVisualizationAsFile(Path.Combine(testArtifactsFolder, $"{bgName}_2_comparison.png"));
                 TestContext.AddTestAttachment(Path.Combine(testArtifactsFolder, $"{bgName}_2_comparison.png"));
                 Assert.That(bg2Match.Score, Is.GreaterThanOrEqualTo(0.99));
