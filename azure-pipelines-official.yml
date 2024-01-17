@@ -257,7 +257,7 @@ stages:
 
           ### Linux
           The `.deb` package is intended for Debian-based distros (e.g. Ubuntu). Install it with `sudo apt install -f ./SerialLoops-$(Version)_amd64.deb`.
-          The `.rpm` package is intended for Red Hat distros (e.g. Fedora). Install it with `sudo dnf install ./SerialLoops-$(Version)-1.fc38.x86_64.rpm`.
+          The `.rpm` package is intended for Red Hat distros (e.g. Fedora). Install it with `sudo dnf install ./SerialLoops-$(Version)-1.fc39.x86_64.rpm`.
           For other Linux distros, please use the binaries packaged in the `.tar.gz` archive; when doing so, ensure you install the OpenAL binaries so audio playback works.
         ${{ if eq(parameters['version'], '') }}:
           isPreRelease: true
