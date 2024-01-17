@@ -23,7 +23,7 @@ namespace SerialLoops.Mac.Tests
             TestContext.AddTestAttachment(screenshotLocation);
         }
 
-        public static void HandleOpenFileDialog(this MacDriver driver, string fileLoc)
+        public static void HandleOpenFileDialog(this MacDriver driver, string fileLoc, bool pressEnter = true)
         {
             AppiumElement openFileDialog = driver.FindElement(MobileBy.IosNSPredicate("label == \"open\""));
             openFileDialog.SendKeys($"{Keys.Command}{Keys.Shift}g/");
@@ -31,10 +31,22 @@ namespace SerialLoops.Mac.Tests
             {
                 { "keys", fileLoc[1..].Select(c => $"{c}").ToArray() },
             });
-            driver.ExecuteScript("macos: keys", new Dictionary<string, object>
+            if (pressEnter)
             {
-                { "keys", enterSequence },
-            });
+                driver.ExecuteScript("macos: keys", new Dictionary<string, object>
+                {
+                    { "keys", enterSequence },
+                });
+            }
+            else
+            {
+                AppiumElement fileField = driver.FindElement(MobileBy.IosClassChain($"**/XCUIElementTypeTextField[`value == \"{fileLoc}\"`]"));
+                driver.ExecuteScript("macos: doubleClick", new Dictionary<string, object>
+                {
+                    { "x", fileField.Location.X + 30 },
+                    { "y", fileField.Location.Y + 60 },
+                });
+            }
             Thread.Sleep(500);
             driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeSheet[`label == \"open\"`]/**/XCUIElementTypeButton[`title == \"Open\"`]")).Click();
             Thread.Sleep(TimeSpan.FromSeconds(1));

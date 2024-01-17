@@ -6,6 +6,7 @@ using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.Extensions;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Hacks;
+using SerialLoops.Lib.Items;
 using SerialLoops.Tests.Shared;
 using SimpleImageComparisonClassLibrary;
 using System;
@@ -16,6 +17,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading;
+using System.Xml.Linq;
 
 namespace SerialLoops.Wpf.Tests
 {
@@ -173,12 +175,7 @@ namespace SerialLoops.Wpf.Tests
         [Test, TestCaseSource(nameof(HacksToTest))]
         public void TestAsmHackApplicationAndReversion(string hackToApply)
         {
-            string testArtifactsFolder = Path.Combine(_uiVals!.ArtifactsDir, TestContext.CurrentContext.Test.Name.Replace(' ', '_').Replace(',', '_').Replace("\"", ""));
-            if (Directory.Exists(testArtifactsFolder))
-            {
-                Directory.Delete(testArtifactsFolder, true);
-            }
-            Directory.CreateDirectory(testArtifactsFolder);
+            string testArtifactsFolder = CommonHelpers.CreateTestArtifactsFolder(TestContext.CurrentContext.Test.Name, _uiVals!.ArtifactsDir);
 
             if (!(_project?.Config.UseDocker ?? true))
             {
@@ -238,12 +235,7 @@ namespace SerialLoops.Wpf.Tests
         [Test, TestCaseSource(nameof(BackgroundsToTest))]
         public void TestEditBackgrounds(string bgName, int bgIdx1, int bgIdx2)
         {
-            string testArtifactsFolder = Path.Combine(_uiVals!.ArtifactsDir, TestContext.CurrentContext.Test.Name.Replace(' ', '_').Replace(',', '_').Replace("\"", ""));
-            if (Directory.Exists(testArtifactsFolder))
-            {
-                Directory.Delete(testArtifactsFolder, true);
-            }
-            Directory.CreateDirectory(testArtifactsFolder);
+            string testArtifactsFolder = CommonHelpers.CreateTestArtifactsFolder(TestContext.CurrentContext.Test.Name, _uiVals!.ArtifactsDir);
 
             _driver.OpenItem(bgName);
             Thread.Sleep(100);
@@ -301,11 +293,17 @@ namespace SerialLoops.Wpf.Tests
             _driver.CloseCurrentItem();
         }
 
-        private readonly static string[] BGMsToTest = ["BGM001 - Another Wonderful Day!", "BGM027 - You Can Do It!"];
+        private readonly static object[][] BGMsToTest = [["BGM001 - Another Wonderful Day!", 0], ["BGM027 - You Can Do It!", 19]];
         [Test, TestCaseSource(nameof(BGMsToTest))]
-        public void TestEditBGMs(string bgmName)
+        public void TestEditBGMs(string bgmName, int bgmIndex)
         {
+            string testArtifactsFolder = CommonHelpers.CreateTestArtifactsFolder(TestContext.CurrentContext.Test.Name, _uiVals!.ArtifactsDir);
 
+            _driver.OpenItem(bgmName);
+            Thread.Sleep(100);
+            _driver.GetAndSaveScreenshot(Path.Combine(testArtifactsFolder, $"{bgmName}_openTab.png"));
+
+            BackgroundMusicItem bgmItem = new(Path.Combine(_project!.BaseDirectory, "original", "bgm", $"{bgmName.Split(' ')[0]}.bin"), bgmIndex, _project); 
         }
     }
 }
