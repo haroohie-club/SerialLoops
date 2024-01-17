@@ -236,16 +236,10 @@ namespace SerialLoops.Mac.Tests
             Thread.Sleep(TimeSpan.FromSeconds(1));
             _driver.GetAndSaveScreenshot(Path.Combine(testArtifactsFolder, $"{bgName}_saved.png"));
 
-            actions = new(_driver);
-            actions.KeyDown(Keys.Command);
-            actions.Build().Perform();
             _driver.ExecuteScript("macos: keys", new Dictionary<string, object>
             {
-                { "keys", new object[] { "s" } },
+                { "keys", new object[] { new Dictionary<string, object> { { "key", "s" }, { "modifierFlags", 1 << 4 } } } },
             });
-            actions = new(_driver);
-            actions.KeyUp(Keys.Command);
-            actions.Build().Perform();
 
             SimilarityMatchingResult bg1Match = _driver.GetImagesSimilarity(Path.Combine(_testAssets, $"{bgIdx1:X3}.png"), Path.Combine(_project!.BaseDirectory, "assets", "graphics", $"{bgIdx1:X3}.png"));
             bg1Match.SaveVisualizationAsFile(Path.Combine(testArtifactsFolder, $"{bgName}_1_comparison.png"));
