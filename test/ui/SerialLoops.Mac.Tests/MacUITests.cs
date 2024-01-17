@@ -222,20 +222,16 @@ namespace SerialLoops.Mac.Tests
             AppiumElement image = _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeImage"));
             Actions actions = new(_driver);
             int currentX = image.Location.X + 30, currentY = image.Location.Y + 30;
-            actions.MoveToLocation(currentX, currentY);
-            actions.ClickAndHold();
-            actions.Build().Perform();
             for (int i = 0; i < 60; i++)
             {
+                actions = new(_driver);
+                actions.ClickAndHold();
+                actions.MoveToLocation(currentX, currentY);
+                actions.Release();
+                actions.Build().Perform();
                 currentX += 5;
                 currentY++;
-                actions = new(_driver);
-                actions.MoveToLocation(currentX, currentY);
-                actions.Build().Perform();
             }
-            actions = new(_driver);
-            actions.Release();
-            actions.Build().Perform();
             //_driver.ExecuteScript("macos: clickAndDragAndHold", new Dictionary<string, object>
             //{
             //    { "startX", image.Location.X + 30 },
