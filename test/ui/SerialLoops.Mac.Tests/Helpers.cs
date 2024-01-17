@@ -15,46 +15,39 @@ namespace SerialLoops.Mac.Tests
 {
     public static class Helpers
     {
+        private static readonly string[] enterSequence = ["XCUIKeyboardKeyEnter"];
+
         public static void GetAndSaveScreenshot(this MacDriver driver, string screenshotLocation)
         {
             driver.GetScreenshot().SaveAsFile(screenshotLocation);
             TestContext.AddTestAttachment(screenshotLocation);
         }
 
-        public static void HandleOpenFileDialog(this MacDriver driver, string fileLoc)
+        private static void HandleFileDialog(this MacDriver driver, string method, string fileLoc)
         {
-            AppiumElement openFileDialog = driver.FindElement(MobileBy.IosNSPredicate("label == \"open\""));
+            AppiumElement openFileDialog = driver.FindElement(MobileBy.IosNSPredicate($"label == \"{method.ToLower()}\""));
             openFileDialog.SendKeys($"{Keys.Command}{Keys.Shift}g/");
             driver.ExecuteScript("macos: keys", new Dictionary<string, object>
             {
                 { "keys", fileLoc[1..].Select(c => $"{c}").ToArray() },
             });
-            AppiumElement fileField = driver.FindElement(MobileBy.IosClassChain($"**/XCUIElementTypeTextField[`value == \"{fileLoc}\"`]"));
-            driver.ExecuteScript("macos: doubleClick", new Dictionary<string, object>
-            {
-                { "x", fileField.Location.X + 30 },
-                { "y", fileField.Location.Y + 60 },
-            });
-            Thread.Sleep(500);
-            driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeSheet[`label == \"open\"`]/**/XCUIElementTypeButton[`title == \"Open\"`]")).Click();
-            Thread.Sleep(TimeSpan.FromSeconds(1));
-        }
-
-        private static readonly string[] enterSequence = ["XCUIKeyboardKeyEnter"];
-        public static void HandleSaveFileDialog(this MacDriver driver, string fileLoc)
-        {
-            driver.ExecuteScript("macos: keys", new Dictionary<string, object>
-            {
-                { "keys", fileLoc.Select(c => $"{c}").ToArray() },
-            });
-            Thread.Sleep(200);
             driver.ExecuteScript("macos: keys", new Dictionary<string, object>
             {
                 { "keys", enterSequence },
             });
             Thread.Sleep(500);
-            driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeSheet[`label == \"save\"`]/**/XCUIElementTypeButton[`title == \"Save\"`]")).Click();
+            driver.FindElement(MobileBy.IosClassChain($"**/XCUIElementTypeSheet[`label == \"{method.ToLower()}\"`]/**/XCUIElementTypeButton[`title == \"{method}\"`]")).Click();
             Thread.Sleep(TimeSpan.FromSeconds(1));
+        }
+
+        public static void HandleOpenFileDialog(this MacDriver driver, string fileLoc)
+        {
+            HandleFileDialog(driver, "Open", fileLoc);
+        }
+
+        public static void HandleSaveFileDialog(this MacDriver driver, string fileLoc)
+        {
+            HandleFileDialog(driver, "Save", fileLoc);
         }
 
         public static SimilarityMatchingResult GetImagesSimilarity(this MacDriver driver, string assetDir, string assetName, string compareFile, bool visualize = true)

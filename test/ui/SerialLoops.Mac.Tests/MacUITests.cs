@@ -1,10 +1,8 @@
 using NUnit.Framework;
-using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.ImageComparison;
 using OpenQA.Selenium.Appium.Mac;
 using OpenQA.Selenium.Interactions;
-using OpenQA.Selenium.Support.Extensions;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Hacks;
 using SerialLoops.Tests.Shared;
@@ -98,8 +96,8 @@ namespace SerialLoops.Mac.Tests
             _logger.Log($"Project loaded from '{_project.ProjectFile}'");
         }
 
-        [OneTimeTearDown] 
-        public void Teardown() 
+        [OneTimeTearDown]
+        public void Teardown()
         {
             _driver?.Quit();
             string projectDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "SerialLoops", "Projects", _uiVals!.ProjectName);
@@ -197,7 +195,7 @@ namespace SerialLoops.Mac.Tests
             _driver.OpenItem(bgName, testArtifactsFolder);
             Thread.Sleep(100);
             _driver.GetAndSaveScreenshot(Path.Combine(testArtifactsFolder, $"{bgName}_openTab.png"));
-            
+
             _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeButton[`title == \"Export\"`]")).Click();
             string exportedImagePath = Path.Combine(testArtifactsFolder, $"{bgName}.png");
             _driver.HandleSaveFileDialog(exportedImagePath);
@@ -253,6 +251,13 @@ namespace SerialLoops.Mac.Tests
             }
 
             _driver.CloseCurrentItem();
+        }
+
+        private readonly static string[] BGMsToTest = ["BGM001 - Another Wonderful Day!", "BGM027 - You Can Do It!"];
+        [Test]
+        public void TestEditBGMs()
+        {
+
         }
     }
 }
