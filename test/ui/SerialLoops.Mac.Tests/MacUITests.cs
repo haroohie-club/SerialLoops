@@ -217,7 +217,7 @@ namespace SerialLoops.Mac.Tests
 
             AppiumElement widthStepperTextField = _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeTextField"));
             Actions actions = new(_driver);
-            actions.DoubleClick(widthStepperTextField);
+            actions.Click(widthStepperTextField);
             actions.Build().Perform();
             _driver.ExecuteScript("macos: keys", new Dictionary<string, object>
             {
