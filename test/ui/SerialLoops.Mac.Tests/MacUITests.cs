@@ -227,8 +227,8 @@ namespace SerialLoops.Mac.Tests
                 { "endX", image.Location.X + 330 },
                 { "endY", image.Location.Y + 90 },
                 { "duration", 1 },
-                { "holdDuration", 6 },
-                { "velocity", 500 },
+                { "holdDuration", 1 },
+                { "velocity", 100 },
             });
             Thread.Sleep(200);
             _driver.GetAndSaveScreenshot(Path.Combine(testArtifactsFolder, $"{bgName}_moved.png"));
