@@ -220,16 +220,29 @@ namespace SerialLoops.Mac.Tests
             _driver.GetAndSaveScreenshot(Path.Combine(testArtifactsFolder, $"{bgName}_scale.png"));
 
             AppiumElement image = _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeImage"));
-            _driver.ExecuteScript("macos: clickAndDragAndHold", new Dictionary<string, object>
+            Actions actions = new(_driver);
+            actions.MoveToLocation(image.Location.X + 30, image.Location.Y + 30);
+            actions.ClickAndHold();
+            actions.Build().Perform();
+            for (int i = 0; i < 60; i++)
             {
-                { "startX", image.Location.X + 30 },
-                { "startY", image.Location.Y + 30 },
-                { "endX", image.Location.X + 330 },
-                { "endY", image.Location.Y + 90 },
-                { "duration", 1 },
-                { "holdDuration", 1 },
-                { "velocity", 100 },
-            });
+                actions = new(_driver);
+                actions.MoveByOffset(5, 1);
+                actions.Build().Perform();
+            }
+            actions = new(_driver);
+            actions.Release();
+            actions.Build().Perform();
+            //_driver.ExecuteScript("macos: clickAndDragAndHold", new Dictionary<string, object>
+            //{
+            //    { "startX", image.Location.X + 30 },
+            //    { "startY", image.Location.Y + 30 },
+            //    { "endX", image.Location.X + 330 },
+            //    { "endY", image.Location.Y + 90 },
+            //    { "duration", 1 },
+            //    { "holdDuration", 1 },
+            //    { "velocity", 100 },
+            //});
             Thread.Sleep(200);
             _driver.GetAndSaveScreenshot(Path.Combine(testArtifactsFolder, $"{bgName}_moved.png"));
 
