@@ -15,6 +15,10 @@ namespace SerialLoops.Mac.Tests
 {
     public static class Helpers
     {
+        private static readonly object[] pasteSequence = [new Dictionary<string, object>
+        {
+            { "key", "v" }, { "modifierFlags", 1 << 4 } // Command+V for paste
+        }];
         private static readonly string[] enterSequence = ["XCUIKeyboardKeyEnter"];
 
         public static void GetAndSaveScreenshot(this MacDriver driver, string screenshotLocation)
@@ -27,9 +31,13 @@ namespace SerialLoops.Mac.Tests
         {
             AppiumElement openFileDialog = driver.FindElement(MobileBy.IosNSPredicate("label == \"open\""));
             openFileDialog.SendKeys($"{Keys.Command}{Keys.Shift}g/");
+            driver.ExecuteScript("macos: appleScript", new Dictionary<string, object>
+            {
+                { "command", $"set the clipboard to \"{fileLoc[1..]}\"" }
+            });
             driver.ExecuteScript("macos: keys", new Dictionary<string, object>
             {
-                { "keys", fileLoc[1..].Select(c => $"{c}").ToArray() },
+                { "keys", pasteSequence },
             });
             if (pressEnter)
             {
@@ -56,7 +64,15 @@ namespace SerialLoops.Mac.Tests
         {
             driver.ExecuteScript("macos: keys", new Dictionary<string, object>
             {
-                { "keys", fileLoc.Select(c => $"{c}").ToArray() },
+                { "keys", "/" },
+            });
+            driver.ExecuteScript("macos: appleScript", new Dictionary<string, object>
+            {
+                { "command", $"set the clipboard to \"{fileLoc[1..]}\"" }
+            });
+            driver.ExecuteScript("macos: keys", new Dictionary<string, object>
+            {
+                { "keys", pasteSequence },
             });
             Thread.Sleep(200);
             driver.ExecuteScript("macos: keys", new Dictionary<string, object>

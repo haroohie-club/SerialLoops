@@ -1,3 +1,5 @@
+using HaruhiChokuretsuLib.Archive.Graphics;
+using NAudio.Wave;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
@@ -7,6 +9,7 @@ using OpenQA.Selenium.Support.Extensions;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Hacks;
 using SerialLoops.Lib.Items;
+using SerialLoops.Lib.Util.WaveformRenderer;
 using SerialLoops.Tests.Shared;
 using SimpleImageComparisonClassLibrary;
 using System;
@@ -303,7 +306,16 @@ namespace SerialLoops.Wpf.Tests
             Thread.Sleep(100);
             _driver.GetAndSaveScreenshot(Path.Combine(testArtifactsFolder, $"{bgmName}_openTab.png"));
 
-            BackgroundMusicItem bgmItem = new(Path.Combine(_project!.BaseDirectory, "original", "bgm", $"{bgmName.Split(' ')[0]}.bin"), bgmIndex, _project); 
+            BackgroundMusicItem bgmItem = new(Path.Combine(_project!.BaseDirectory, "original", "bgm", $"{bgmName.Split(' ')[0]}.bin"), bgmIndex, _project);
+            string wavFilePath = Path.Combine(testArtifactsFolder, $"{bgmName.Replace(' ', '_')}.wav");
+            WaveFileWriter.CreateWaveFile(wavFilePath, bgmItem.GetWaveProvider(_logger, false));
+            TestContext.AddTestAttachment(wavFilePath);
+            using WaveFileReader waveReader = new(wavFilePath);
+            string initialWaveformFile = Path.Combine(testArtifactsFolder, $"{bgmName.Replace(' ', '_')}_original_waveform.png");
+            using FileStream initialWaveformFileStream = File.Create(initialWaveformFile);
+            WaveformRenderer.Render(waveReader, WaveFormRendererSettings.StandardSettings).Encode(initialWaveformFileStream, SkiaSharp.SKEncodedImageFormat.Png, GraphicsFile.PNG_QUALITY);
+
+            
         }
     }
 }
