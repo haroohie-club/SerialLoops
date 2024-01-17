@@ -18,6 +18,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Security.Cryptography;
 using System.Text.Json;
 using System.Threading;
 using System.Xml.Linq;
@@ -306,14 +307,25 @@ namespace SerialLoops.Wpf.Tests
             Thread.Sleep(100);
             _driver.GetAndSaveScreenshot(Path.Combine(testArtifactsFolder, $"{bgmName}_openTab.png"));
 
-            BackgroundMusicItem bgmItem = new(Path.Combine(_project!.BaseDirectory, "original", "bgm", $"{bgmName.Split(' ')[0]}.bin"), bgmIndex, _project);
-            string wavFilePath = Path.Combine(testArtifactsFolder, $"{bgmName.Replace(' ', '_')}.wav");
-            WaveFileWriter.CreateWaveFile(wavFilePath, bgmItem.GetWaveProvider(_logger, false));
-            TestContext.AddTestAttachment(wavFilePath);
-            using WaveFileReader waveReader = new(wavFilePath);
-            string initialWaveformFile = Path.Combine(testArtifactsFolder, $"{bgmName.Replace(' ', '_')}_original_waveform.png");
-            using FileStream initialWaveformFileStream = File.Create(initialWaveformFile);
-            WaveformRenderer.Render(waveReader, WaveFormRendererSettings.StandardSettings).Encode(initialWaveformFileStream, SkiaSharp.SKEncodedImageFormat.Png, GraphicsFile.PNG_QUALITY);            
+            _driver.FindElementByName("Extract").Click();
+            Thread.Sleep(200);
+            string extractedWavPath = Path.Combine(testArtifactsFolder, $"{bgmName.Split(' ')[0]}.wav");
+            _driver.HandleFileDialog(extractedWavPath);
+            Thread.Sleep(200);
+            _driver.FindElementByName("Replace");
+            Thread.Sleep(200);
+            _driver.HandleFileDialog(extractedWavPath);
+            Thread.Sleep(200);
+            _driver.FindElementByName("Restore").Click();
+            string dupeExtractedWavPath = Path.Combine(testArtifactsFolder, $"{bgmName.Split(' ')[0]}-dupe.wav");
+            _driver.FindElementByName("Extract").Click();
+            Thread.Sleep(200);
+            _driver.HandleFileDialog(dupeExtractedWavPath);
+            Thread.Sleep(200);
+
+            byte[] originalmd5 = MD5.HashData(File.ReadAllBytes(extractedWavPath));
+            byte[] dupemd5 = MD5.HashData(File.ReadAllBytes(dupeExtractedWavPath));
+            Assert.That(originalmd5, Is.EquivalentTo(dupemd5));
         }
     }
 }

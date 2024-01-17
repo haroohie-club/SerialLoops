@@ -223,7 +223,12 @@ namespace SerialLoops.Mac.Tests
             Actions actions = new(_driver);
             actions.MoveToLocation(image.Location.X + 30, image.Location.Y + 30);
             actions.ClickAndHold();
-            actions.MoveByOffset(300, 60);
+            // Move a total of (300, 60) but in segments
+            for (int i = 0; i <= 60; i++)
+            {
+                actions.MoveByOffset(5, 1);
+                actions.Pause(TimeSpan.FromMilliseconds(50));
+            }
             actions.Release();
             actions.Build().Perform();
             Thread.Sleep(200);
