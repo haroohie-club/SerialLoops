@@ -215,19 +215,12 @@ namespace SerialLoops.Mac.Tests
             _driver.GetAndSaveScreenshot(Path.Combine(testArtifactsFolder, $"{bgName}_nocropnoscale.png"));
             Thread.Sleep(200);
 
-            AppiumElement widthStepperTextField = _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeTextField"));
-            Actions actions = new(_driver);
-            actions.Click(widthStepperTextField);
-            actions.Build().Perform();
-            _driver.ExecuteScript("macos: keys", new Dictionary<string, object>
-            {
-                { "keys", "750".Select(c => $"{c}").ToArray() },
-            });
+            _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeDialog/**/XCUIElementTypeTextField")).SendKeys("750");
             Thread.Sleep(200);
             _driver.GetAndSaveScreenshot(Path.Combine(testArtifactsFolder, $"{bgName}_scale.png"));
 
             AppiumElement image = _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeImage"));
-            actions = new(_driver);
+            Actions actions = new(_driver);
             actions.ClickAndHold(image);
             actions.MoveByOffset(300, 60);
             actions.Release();
@@ -239,6 +232,7 @@ namespace SerialLoops.Mac.Tests
             Thread.Sleep(TimeSpan.FromSeconds(1));
             _driver.GetAndSaveScreenshot(Path.Combine(testArtifactsFolder, $"{bgName}_saved.png"));
 
+            // This hits Command+S
             _driver.ExecuteScript("macos: keys", new Dictionary<string, object>
             {
                 { "keys", new object[] { new Dictionary<string, object> { { "key", "s" }, { "modifierFlags", 1 << 4 } } } },
