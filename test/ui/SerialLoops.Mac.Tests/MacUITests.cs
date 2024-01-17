@@ -238,7 +238,12 @@ namespace SerialLoops.Mac.Tests
 
             actions = new(_driver);
             actions.KeyDown(Keys.Command);
-            actions.SendKeys("s");
+            actions.Build().Perform();
+            _driver.ExecuteScript("macos: keys", new Dictionary<string, object>
+            {
+                { "keys", new object[] { "s" } },
+            });
+            actions = new(_driver);
             actions.KeyUp(Keys.Command);
             actions.Build().Perform();
 
