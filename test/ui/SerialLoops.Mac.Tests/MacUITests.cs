@@ -192,22 +192,23 @@ namespace SerialLoops.Mac.Tests
             }
             Directory.CreateDirectory(testArtifactsFolder);
 
-            _driver.OpenItem(bgName, _uiVals.ArtifactsDir);
+            _driver.OpenItem(bgName, testArtifactsFolder);
             Thread.Sleep(100);
             _driver.GetAndSaveScreenshot(Path.Combine(testArtifactsFolder, $"{bgName}_openTab.png"));
             
             _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeButton[`title == \"Export\"`]")).Click();
             string exportedImagePath = Path.Combine(testArtifactsFolder, $"{bgName}.png");
             _driver.HandleSaveFileDialog(exportedImagePath);
+            TestContext.AddTestAttachment(exportedImagePath);
             Thread.Sleep(500);
             SimilarityMatchingResult exportedImageMatch = _driver.GetImagesSimilarity(_testAssets, $"{bgName}.png", exportedImagePath);
-            exportedImageMatch.SaveVisualizationAsFile(Path.Combine(testArtifactsFolder, "exported.png"));
+            exportedImageMatch.SaveVisualizationAsFile(Path.Combine(testArtifactsFolder, $"{bgName}_exported.png"));
+            TestContext.AddTestAttachment(Path.Combine(testArtifactsFolder, $"{bgName}_exported.png"));
             Assert.That(exportedImageMatch.Score, Is.GreaterThanOrEqualTo(0.99));
 
             _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeButton[`title == \"Replace\"`]")).Click();
             Thread.Sleep(200);
             _driver.HandleOpenFileDialog(Path.Combine(_testAssets, TEST_BG_ASSET));
-
             Thread.Sleep(500);
             _driver.GetAndSaveScreenshot(Path.Combine(testArtifactsFolder, $"{bgName}_nocropnoscale.png"));
             Thread.Sleep(200);
