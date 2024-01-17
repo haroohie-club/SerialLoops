@@ -23,9 +23,9 @@ namespace SerialLoops.Mac.Tests
             TestContext.AddTestAttachment(screenshotLocation);
         }
 
-        private static void HandleFileDialog(this MacDriver driver, string method, string fileLoc)
+        public static void HandleOpenFileDialog(this MacDriver driver, string fileLoc)
         {
-            AppiumElement openFileDialog = driver.FindElement(MobileBy.IosNSPredicate($"label == \"{method.ToLower()}\""));
+            AppiumElement openFileDialog = driver.FindElement(MobileBy.IosNSPredicate("label == \"open\""));
             openFileDialog.SendKeys($"{Keys.Command}{Keys.Shift}g/");
             driver.ExecuteScript("macos: keys", new Dictionary<string, object>
             {
@@ -36,18 +36,24 @@ namespace SerialLoops.Mac.Tests
                 { "keys", enterSequence },
             });
             Thread.Sleep(500);
-            driver.FindElement(MobileBy.IosClassChain($"**/XCUIElementTypeSheet[`label == \"{method.ToLower()}\"`]/**/XCUIElementTypeButton[`title == \"{method}\"`]")).Click();
+            driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeSheet[`label == \"open\"`]/**/XCUIElementTypeButton[`title == \"Open\"`]")).Click();
             Thread.Sleep(TimeSpan.FromSeconds(1));
-        }
-
-        public static void HandleOpenFileDialog(this MacDriver driver, string fileLoc)
-        {
-            HandleFileDialog(driver, "Open", fileLoc);
         }
 
         public static void HandleSaveFileDialog(this MacDriver driver, string fileLoc)
         {
-            HandleFileDialog(driver, "Save", fileLoc);
+            driver.ExecuteScript("macos: keys", new Dictionary<string, object>
+            {
+                { "keys", fileLoc.Select(c => $"{c}").ToArray() },
+            });
+            Thread.Sleep(200);
+            driver.ExecuteScript("macos: keys", new Dictionary<string, object>
+            {
+                { "keys", enterSequence },
+            });
+            Thread.Sleep(500);
+            driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeSheet[`label == \"save\"`]/**/XCUIElementTypeButton[`title == \"Save\"`]")).Click();
+            Thread.Sleep(TimeSpan.FromSeconds(1));
         }
 
         public static SimilarityMatchingResult GetImagesSimilarity(this MacDriver driver, string assetDir, string assetName, string compareFile, bool visualize = true)

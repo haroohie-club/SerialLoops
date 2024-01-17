@@ -88,12 +88,12 @@ jobs:
     inputs:
       command: pull
       arguments: devkitpro/devkitarm
-  - task: ms-autotest.screen-resolution-utility-task.screen-resolution-utlity-task.ScreenResolutionUtility@1
-    displayName: 'Set Screen Resolution'
-    inputs:
-      displaySettings: specific
-      width: 2048
-      height: 1536
+  # - task: ms-autotest.screen-resolution-utility-task.screen-resolution-utlity-task.ScreenResolutionUtility@1
+  #   displayName: 'Set Screen Resolution'
+  #   inputs:
+  #     displaySettings: specific
+  #     width: 2048
+  #     height: 1536
   - task: VSTest@3
     displayName: 'VsTest - Run UI Tests'
     inputs:

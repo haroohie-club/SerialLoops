@@ -252,12 +252,5 @@ namespace SerialLoops.Mac.Tests
 
             _driver.CloseCurrentItem();
         }
-
-        private readonly static string[] BGMsToTest = ["BGM001 - Another Wonderful Day!", "BGM027 - You Can Do It!"];
-        [Test]
-        public void TestEditBGMs()
-        {
-
-        }
     }
 }
