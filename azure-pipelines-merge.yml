@@ -40,7 +40,7 @@ jobs:
       brew update
       brew install opencv@3
       brew link --force opencv@3
-      appium --use-plugins=images &
+      appium --use-plugins=images --allow-insecure=apple_script &
     displayName: Install and Run Appium Driver
   - task: DotNetCoreCLI@2
     displayName: Run macOS UI tests
