@@ -221,13 +221,16 @@ namespace SerialLoops.Mac.Tests
 
             AppiumElement image = _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeImage"));
             Actions actions = new(_driver);
-            actions.MoveToLocation(image.Location.X + 30, image.Location.Y + 30);
+            int currentX = image.Location.X + 30, currentY = image.Location.Y + 30;
+            actions.MoveToLocation(currentX, currentY);
             actions.ClickAndHold();
             actions.Build().Perform();
             for (int i = 0; i < 60; i++)
             {
+                currentX += 5;
+                currentY++;
                 actions = new(_driver);
-                actions.MoveByOffset(5, 1);
+                actions.MoveToLocation(currentX, currentY);
                 actions.Build().Perform();
             }
             actions = new(_driver);
