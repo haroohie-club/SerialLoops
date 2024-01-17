@@ -225,12 +225,13 @@ namespace SerialLoops.Mac.Tests
             for (int i = 0; i < 60; i++)
             {
                 actions = new(_driver);
+                actions.MoveToLocation(currentX, currentY);
                 actions.ClickAndHold();
+                currentX += 5;
+                currentY++;
                 actions.MoveToLocation(currentX, currentY);
                 actions.Release();
                 actions.Build().Perform();
-                currentX += 5;
-                currentY++;
             }
             //_driver.ExecuteScript("macos: clickAndDragAndHold", new Dictionary<string, object>
             //{
