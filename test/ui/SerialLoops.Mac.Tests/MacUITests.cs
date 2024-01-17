@@ -179,6 +179,8 @@ namespace SerialLoops.Mac.Tests
             Assert.That(hacks.First(h => h.Name == hackToApply).Applied(_project), Is.False);
         }
 
+        private const int BG_CROP_RESIZE_PREVIEW_WIDTH = 650;
+        private const int BG_CROP_RESIZE_PREVIEW_HEIGHT = 600;
         // Add KBG00 (KINETIC_SCREEN) to this as part of https://github.com/haroohie-club/SerialLoops/issues/225
         // TEX_BG, TEX_CG, TEX_CG_DUAL, TEX_CG_WIDE, TEX_CG_SINGLE
         private readonly static object[][] BackgroundsToTest = [["BG_BRIDGE_DAY", 0x027, 0x028], ["BG_EV020", 0x2CD, 0x2CE], ["BG_EV150_D", 0x317, 0x318], ["BG_EV550", 0x3F3, 0x3F4], ["BG_EV060", 0x2EC, -1]];
@@ -222,7 +224,7 @@ namespace SerialLoops.Mac.Tests
             actions.MoveToElement(image); // this is the center of the image
             actions.Build().Perform();
             actions = new(_driver);
-            actions.MoveByOffset(-image.Size.Width / 2 + 30, -image.Size.Height / 2 + 30); // we move to the top left corner, subtracted so we're slightly closer to the center
+            actions.MoveByOffset(-BG_CROP_RESIZE_PREVIEW_WIDTH / 2 + 30, -BG_CROP_RESIZE_PREVIEW_HEIGHT / 2 + 30); // we move to the top left corner, subtracted so we're slightly closer to the center
             actions.ClickAndHold();
             actions.MoveByOffset(300, 60);
             actions.Release();

@@ -313,9 +313,7 @@ namespace SerialLoops.Wpf.Tests
             using WaveFileReader waveReader = new(wavFilePath);
             string initialWaveformFile = Path.Combine(testArtifactsFolder, $"{bgmName.Replace(' ', '_')}_original_waveform.png");
             using FileStream initialWaveformFileStream = File.Create(initialWaveformFile);
-            WaveformRenderer.Render(waveReader, WaveFormRendererSettings.StandardSettings).Encode(initialWaveformFileStream, SkiaSharp.SKEncodedImageFormat.Png, GraphicsFile.PNG_QUALITY);
-
-            
+            WaveformRenderer.Render(waveReader, WaveFormRendererSettings.StandardSettings).Encode(initialWaveformFileStream, SkiaSharp.SKEncodedImageFormat.Png, GraphicsFile.PNG_QUALITY);            
         }
     }
 }
