@@ -20,6 +20,7 @@ namespace SerialLoops.Mac.Tests
             { "key", "v" }, { "modifierFlags", 1 << 4 } // Command+V for paste
         }];
         private static readonly string[] enterSequence = ["XCUIKeyboardKeyEnter"];
+        private static readonly string[] slashSequence = ["/"];
 
         public static void GetAndSaveScreenshot(this MacDriver driver, string screenshotLocation)
         {
@@ -64,7 +65,7 @@ namespace SerialLoops.Mac.Tests
         {
             driver.ExecuteScript("macos: keys", new Dictionary<string, object>
             {
-                { "keys", "/" },
+                { "keys", slashSequence },
             });
             driver.ExecuteScript("macos: appleScript", new Dictionary<string, object>
             {
