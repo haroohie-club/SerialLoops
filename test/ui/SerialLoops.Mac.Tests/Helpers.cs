@@ -25,7 +25,10 @@ namespace SerialLoops.Mac.Tests
         {
             AppiumElement openFileDialog = driver.FindElement(MobileBy.IosNSPredicate("label == \"open\""));
             openFileDialog.SendKeys($"{Keys.Command}{Keys.Shift}g/");
-            openFileDialog.SendKeys(fileLoc[1..]);
+            driver.ExecuteScript("macos: keys", new Dictionary<string, object>
+            {
+                { "keys", fileLoc[1..].Select(c => $"{c}").ToArray() },
+            });
             AppiumElement fileField = driver.FindElement(MobileBy.IosClassChain($"**/XCUIElementTypeTextField[`value == \"{fileLoc}\"`]"));
             driver.ExecuteScript("macos: doubleClick", new Dictionary<string, object>
             {
