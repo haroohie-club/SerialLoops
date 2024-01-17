@@ -220,17 +220,14 @@ namespace SerialLoops.Mac.Tests
             _driver.GetAndSaveScreenshot(Path.Combine(testArtifactsFolder, $"{bgName}_scale.png"));
 
             AppiumElement image = _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeImage"));
-            Actions actions = new(_driver);
-            actions.MoveToLocation(image.Location.X + 30, image.Location.Y + 30);
-            actions.ClickAndHold();
-            // Move a total of (300, 60) but in segments
-            for (int i = 0; i <= 60; i++)
+            _driver.ExecuteScript("macos: clickAndDrag", new Dictionary<string, object>
             {
-                actions.MoveByOffset(5, 1);
-                actions.Pause(TimeSpan.FromMilliseconds(50));
-            }
-            actions.Release();
-            actions.Build().Perform();
+                { "startX", image.Location.X + 30 },
+                { "startY", image.Location.Y + 30 },
+                { "endX", image.Location.X + 330 },
+                { "endY", image.Location.Y + 90 },
+                { "duration", 6 },
+            });
             Thread.Sleep(200);
             _driver.GetAndSaveScreenshot(Path.Combine(testArtifactsFolder, $"{bgName}_moved.png"));
 
