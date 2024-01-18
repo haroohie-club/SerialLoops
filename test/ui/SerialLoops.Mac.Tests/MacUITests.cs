@@ -184,7 +184,7 @@ namespace SerialLoops.Mac.Tests
         // TEX_BG, TEX_CG, TEX_CG_DUAL, TEX_CG_WIDE, TEX_CG_SINGLE
         private readonly static object[][] BackgroundsToTest = [["BG_BRIDGE_DAY", 0x027, 0x028], ["BG_EV020", 0x2CD, 0x2CE], ["BG_EV150_D", 0x317, 0x318], ["BG_EV550", 0x3F3, 0x3F4], ["BG_EV060", 0x2EC, -1]];
         [Test, TestCaseSource(nameof(BackgroundsToTest))]
-        public void TestEditBackgrounds(string bgName, int bgIdx1, int bgIdx2)
+        public void TestBackgrounds_ExtractReplaceCropScale(string bgName, int bgIdx1, int bgIdx2)
         {
             string testArtifactsFolder = Path.Combine(_uiVals!.ArtifactsDir, TestContext.CurrentContext.Test.Name.Replace(' ', '_').Replace(',', '_').Replace("\"", ""));
             if (Directory.Exists(testArtifactsFolder))
@@ -259,7 +259,7 @@ namespace SerialLoops.Mac.Tests
 
         private readonly static object[][] BGMsToTest = [["BGM001 - Another Wonderful Day!", 0], ["BGM027 - You Can Do It!", 19]];
         [Test, TestCaseSource(nameof(BGMsToTest))]
-        public void TestBGMs_ExtracrReplaceRestore(string bgmName, int bgmIndex)
+        public void TestBGMs_ExtractReplaceRestore(string bgmName, int bgmIndex)
         {
             string testArtifactsFolder = CommonHelpers.CreateTestArtifactsFolder(TestContext.CurrentContext.Test.Name, _uiVals!.ArtifactsDir);
 
@@ -275,7 +275,7 @@ namespace SerialLoops.Mac.Tests
             Assert.That(File.ReadAllBytes(extractedWavPath), Is.Not.Empty);
             _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeButton[`title == \"Replace\"`]")).Click();
             Thread.Sleep(200);
-            _driver.HandleSaveFileDialog(extractedWavPath);
+            _driver.HandleOpenFileDialog(extractedWavPath);
             Thread.Sleep(TimeSpan.FromSeconds(5)); // Wait for replacement
             _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeButton[`title == \"Restore\"`]")).Click();
             Thread.Sleep(200);
@@ -320,8 +320,8 @@ namespace SerialLoops.Mac.Tests
             ALCaptureDevice loopbackDevice = ALC.CaptureOpenDevice(captureDeviceName, sampleRate, ALFormat.Mono8, sampleRate * secondsToCapture);
             byte[] buffer = new byte[sampleRate * secondsToCapture];
 
-            AppiumElement playButton = _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeButton[5]"));
-            AppiumElement stopButton = _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeButton[6]"));
+            AppiumElement playButton = _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeButton[2]"));
+            AppiumElement stopButton = _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeButton[3]"));
 
             ALC.CaptureStart(loopbackDevice);
             playButton.Click();

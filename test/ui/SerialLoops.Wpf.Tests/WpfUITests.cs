@@ -299,7 +299,7 @@ namespace SerialLoops.Wpf.Tests
 
         private readonly static object[][] BGMsToTest = [["BGM001 - Another Wonderful Day!", 0], ["BGM027 - You Can Do It!", 19]];
         [Test, TestCaseSource(nameof(BGMsToTest))]
-        public void TestBGMs_ExtracrReplaceRestore(string bgmName, int bgmIndex)
+        public void TestBGMs_ExtractReplaceRestore(string bgmName, int bgmIndex)
         {
             string testArtifactsFolder = CommonHelpers.CreateTestArtifactsFolder(TestContext.CurrentContext.Test.Name, _uiVals!.ArtifactsDir);
 
