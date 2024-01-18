@@ -114,7 +114,7 @@ namespace SerialLoops.Controls
             }
         }
 
-        private void Tabs_PageClosed(object sender, DocumentPageEventArgs e)
+        public void Tabs_PageClosed(object sender, DocumentPageEventArgs e)
         {
             if (e.Page.GetType() == typeof(BackgroundMusicEditor))
             {

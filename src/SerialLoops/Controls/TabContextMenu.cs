@@ -18,7 +18,11 @@ namespace SerialLoops.Controls
             Opening += ContextMenu_OnOpen;
 
             Command closeTabCommand = new();
-            closeTabCommand.Executed += (sender, args) => _tabs.Tabs.Remove(_tabs.Tabs.SelectedPage);
+            closeTabCommand.Executed += (sender, args) =>
+            {
+                _tabs.Tabs_PageClosed(sender, new(_tabs.Tabs.SelectedPage));
+                _tabs.Tabs.Remove(_tabs.Tabs.SelectedPage);
+            };
             Items.Add(new ButtonMenuItem
             {
                 Text = "Close",
@@ -43,6 +47,10 @@ namespace SerialLoops.Controls
             Command closeAllTabsCommand = new();
             closeAllTabsCommand.Executed += (sender, args) =>
             {
+                foreach (var tab in _tabs.Tabs.Pages)
+                {
+                    _tabs.Tabs_PageClosed(sender, new(tab));
+                }
                 _tabs.Tabs.Pages.Clear();
             };
             Items.Add(new ButtonMenuItem

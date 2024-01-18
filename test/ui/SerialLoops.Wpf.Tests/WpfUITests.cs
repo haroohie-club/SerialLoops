@@ -237,7 +237,7 @@ namespace SerialLoops.Wpf.Tests
         // TEX_BG, TEX_CG, TEX_CG_DUAL, TEX_CG_WIDE, TEX_CG_SINGLE
         private readonly static object[][] BackgroundsToTest = [["BG_BRIDGE_DAY", 0x027, 0x028], ["BG_EV020", 0x2CD, 0x2CE], ["BG_EV150_D", 0x317, 0x318], ["BG_EV550", 0x3F3, 0x3F4], ["BG_EV060", 0x2EC, -1]];
         [Test, TestCaseSource(nameof(BackgroundsToTest))]
-        public void TestEditBackgrounds(string bgName, int bgIdx1, int bgIdx2)
+        public void TestBackgrounds_ExtractReplaceCropScale(string bgName, int bgIdx1, int bgIdx2)
         {
             string testArtifactsFolder = CommonHelpers.CreateTestArtifactsFolder(TestContext.CurrentContext.Test.Name, _uiVals!.ArtifactsDir);
 
@@ -299,7 +299,7 @@ namespace SerialLoops.Wpf.Tests
 
         private readonly static object[][] BGMsToTest = [["BGM001 - Another Wonderful Day!", 0], ["BGM027 - You Can Do It!", 19]];
         [Test, TestCaseSource(nameof(BGMsToTest))]
-        public void TestEditBGMs(string bgmName, int bgmIndex)
+        public void TestBGMs_ExtracrReplaceRestore(string bgmName, int bgmIndex)
         {
             string testArtifactsFolder = CommonHelpers.CreateTestArtifactsFolder(TestContext.CurrentContext.Test.Name, _uiVals!.ArtifactsDir);
 
@@ -311,21 +311,81 @@ namespace SerialLoops.Wpf.Tests
             Thread.Sleep(200);
             string extractedWavPath = Path.Combine(testArtifactsFolder, $"{bgmName.Split(' ')[0]}.wav");
             _driver.HandleFileDialog(extractedWavPath);
-            Thread.Sleep(200);
-            _driver.FindElementByName("Replace");
+            Thread.Sleep(TimeSpan.FromSeconds(5)); // Wait for extraction
+            Assert.That(File.ReadAllBytes(extractedWavPath), Is.Not.Empty);
+            _driver.FindElementByName("Replace").Click();
             Thread.Sleep(200);
             _driver.HandleFileDialog(extractedWavPath);
-            Thread.Sleep(200);
+            Thread.Sleep(TimeSpan.FromSeconds(5)); // Wait for replacement
             _driver.FindElementByName("Restore").Click();
+            Thread.Sleep(200);
             string dupeExtractedWavPath = Path.Combine(testArtifactsFolder, $"{bgmName.Split(' ')[0]}-dupe.wav");
             _driver.FindElementByName("Extract").Click();
             Thread.Sleep(200);
             _driver.HandleFileDialog(dupeExtractedWavPath);
-            Thread.Sleep(200);
+            Thread.Sleep(TimeSpan.FromSeconds(5)); // Wait for extraction
 
             byte[] originalmd5 = MD5.HashData(File.ReadAllBytes(extractedWavPath));
             byte[] dupemd5 = MD5.HashData(File.ReadAllBytes(dupeExtractedWavPath));
             Assert.That(originalmd5, Is.EquivalentTo(dupemd5));
+        }
+
+        [Test, TestCaseSource(nameof(BGMsToTest))]
+        public void TestBGMs_SoundPlaying(string bgmName, int bgmIndex)
+        {
+            _driver.OpenItem(bgmName);
+            Thread.Sleep(100);
+
+            WasapiLoopbackCapture loopback = new();
+            bool soundPlaying = false;
+            loopback.DataAvailable += (sender, args) =>
+            {
+                if (args.Buffer.Any(b => b != 0))
+                {
+                    soundPlaying = true;
+                }
+            };
+            WindowsElement playButton = _driver.FindElementsByClassName("Button")[1];
+            WindowsElement stopButton = _driver.FindElementsByClassName("Button")[2];
+            loopback.StartRecording();
+            playButton.Click();
+            Thread.Sleep(TimeSpan.FromSeconds(2));
+            Assert.That(soundPlaying, Is.True);
+            playButton.Click();
+            Thread.Sleep(TimeSpan.FromSeconds(1));
+            soundPlaying = false;
+            Thread.Sleep(TimeSpan.FromSeconds(1));
+            Assert.That(soundPlaying, Is.False);
+            playButton.Click();
+            Thread.Sleep(TimeSpan.FromSeconds(2));
+            Assert.That(soundPlaying, Is.True);
+            stopButton.Click();
+            Thread.Sleep(TimeSpan.FromSeconds(1));
+            soundPlaying = false;
+            Thread.Sleep(TimeSpan.FromSeconds(1));
+            Assert.That(soundPlaying, Is.False);
+            playButton.Click();
+            Thread.Sleep(TimeSpan.FromSeconds(2));
+            Assert.That(soundPlaying, Is.True);
+            _driver.CloseCurrentItem();
+            Thread.Sleep(TimeSpan.FromSeconds(1));
+            soundPlaying = false;
+            Thread.Sleep(TimeSpan.FromSeconds(1));
+            Assert.That(soundPlaying, Is.False);
+            _driver.OpenItem(bgmName);
+            _driver.FindElementsByClassName("Button")[1].Click();
+            _driver.OpenItem((string)BGMsToTest.First(b => (string)b[0] != bgmName)[0]);
+            WindowsElement window = _driver.FindElementByClassName("Window");
+            Actions actions = new(_driver);
+            actions.MoveToElement(window);
+            actions.ContextClick();
+            actions.Build().Perform();
+            _driver.FindElementByName("Close All").Click();
+            Thread.Sleep(TimeSpan.FromSeconds(1));
+            soundPlaying = false;
+            Thread.Sleep(TimeSpan.FromSeconds(1));
+            Assert.That(soundPlaying, Is.False);
+            loopback.StopRecording();
         }
     }
 }
