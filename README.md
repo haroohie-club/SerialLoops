@@ -113,7 +113,7 @@ Our UI tests rely on [Appium](https://appium.io/).
 6. After you've installed OpenCV, you can install the `images` plugin with `appium plugin install images`.
 
 Once you've installed the prerequisites, build the `SerialLoops.Mac` and `SerialLoops.Mac.Tests` projects with `dotnet build src/SerialLoops.Mac/SerialLoops.Mac.csproj` and `dotnet build test/ui/SerialLoops.Mac.Tests/SerialLoops.Mac.Tests.csproj`,
-respectively. Then, inside `test\ui\SerialLoops.Mac.Tests\bin\Debug\net8.0`, create a new text file called `ui_vals.json`. Inside this file, place the following text, replacing necessary values:
+respectively. Then, inside `test/ui/SerialLoops.Mac.Tests/bin/Debug/net8.0`, create a new text file called `ui_vals.json`. Inside this file, place the following text, replacing necessary values:
 ```json
 {
     "AppLoc": "PATH/TO/Serial Loops.app",
@@ -124,7 +124,7 @@ respectively. Then, inside `test\ui\SerialLoops.Mac.Tests\bin\Debug\net8.0`, cre
 ```
 The artifacts directory can be any arbitrary directory, but ensure it exists before running the tests. The project name by default is WinUITest, but it can be anything you'd like. Have fun.
 
-Finally, you must run `appium --use-plugins=images --allow-insecure=apple_script` in a terminal and then you can run the tests with `dotnet test test\ui\SerialLoops.Mac.Tests\SerialLoops.Mac.Tests.csproj`.
+Finally, you must run `appium --use-plugins=images --allow-insecure=apple_script` in a terminal and then you can run the tests with `dotnet test test/ui/SerialLoops.Mac.Tests/SerialLoops.Mac.Tests.csproj`.
 
 #### Windows
 1. You will need to install nodejs and then use it to [install Appium](https://appium.io/docs/en/2.4/quickstart/install/).
