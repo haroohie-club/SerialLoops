@@ -328,6 +328,8 @@ namespace SerialLoops.Wpf.Tests
             byte[] originalmd5 = MD5.HashData(File.ReadAllBytes(extractedWavPath));
             byte[] dupemd5 = MD5.HashData(File.ReadAllBytes(dupeExtractedWavPath));
             Assert.That(originalmd5, Is.EquivalentTo(dupemd5));
+
+            _driver.CloseCurrentItem();
         }
 
         [Test, TestCaseSource(nameof(BGMsToTest))]

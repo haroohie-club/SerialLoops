@@ -3,14 +3,17 @@ using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.ImageComparison;
 using OpenQA.Selenium.Appium.Mac;
 using OpenQA.Selenium.Interactions;
+using OpenTK.Audio.OpenAL;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Hacks;
+using SerialLoops.Lib.Items;
 using SerialLoops.Tests.Shared;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Security.Cryptography;
 using System.Text.Json;
 using System.Threading;
 
@@ -179,8 +182,6 @@ namespace SerialLoops.Mac.Tests
             Assert.That(hacks.First(h => h.Name == hackToApply).Applied(_project), Is.False);
         }
 
-        private const int BG_CROP_RESIZE_PREVIEW_WIDTH = 650;
-        private const int BG_CROP_RESIZE_PREVIEW_HEIGHT = 600;
         // Add KBG00 (KINETIC_SCREEN) to this as part of https://github.com/haroohie-club/SerialLoops/issues/225
         // TEX_BG, TEX_CG, TEX_CG_DUAL, TEX_CG_WIDE, TEX_CG_SINGLE
         private readonly static object[][] BackgroundsToTest = [["BG_BRIDGE_DAY", 0x027, 0x028], ["BG_EV020", 0x2CD, 0x2CE], ["BG_EV150_D", 0x317, 0x318], ["BG_EV550", 0x3F3, 0x3F4], ["BG_EV060", 0x2EC, -1]];
@@ -256,6 +257,116 @@ namespace SerialLoops.Mac.Tests
             }
 
             _driver.CloseCurrentItem();
+        }
+
+        private readonly static object[][] BGMsToTest = [["BGM001 - Another Wonderful Day!", 0], ["BGM027 - You Can Do It!", 19]];
+        [Test, TestCaseSource(nameof(BGMsToTest))]
+        public void TestBGMs_ExtracrReplaceRestore(string bgmName, int bgmIndex)
+        {
+            string testArtifactsFolder = CommonHelpers.CreateTestArtifactsFolder(TestContext.CurrentContext.Test.Name, _uiVals!.ArtifactsDir);
+
+            _driver.OpenItem(bgmName, testArtifactsFolder);
+            Thread.Sleep(100);
+            _driver.GetAndSaveScreenshot(Path.Combine(testArtifactsFolder, $"{bgmName}_openTab.png"));
+
+            _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeButton[`title == \"Extract\"`]")).Click();
+            Thread.Sleep(200);
+            string extractedWavPath = Path.Combine(testArtifactsFolder, $"{bgmName.Split(' ')[0]}.wav");
+            _driver.HandleSaveFileDialog(extractedWavPath);
+            Thread.Sleep(TimeSpan.FromSeconds(5)); // Wait for extraction
+            Assert.That(File.ReadAllBytes(extractedWavPath), Is.Not.Empty);
+            _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeButton[`title == \"Replace\"`]")).Click();
+            Thread.Sleep(200);
+            _driver.HandleSaveFileDialog(extractedWavPath);
+            Thread.Sleep(TimeSpan.FromSeconds(5)); // Wait for replacement
+            _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeButton[`title == \"Restore\"`]")).Click();
+            Thread.Sleep(200);
+            string dupeExtractedWavPath = Path.Combine(testArtifactsFolder, $"{bgmName.Split(' ')[0]}-dupe.wav");
+            _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeButton[`title == \"Extract\"`]")).Click();
+            Thread.Sleep(200);
+            _driver.HandleSaveFileDialog(dupeExtractedWavPath);
+            Thread.Sleep(TimeSpan.FromSeconds(5)); // Wait for extraction
+
+            byte[] originalmd5 = MD5.HashData(File.ReadAllBytes(extractedWavPath));
+            byte[] dupemd5 = MD5.HashData(File.ReadAllBytes(dupeExtractedWavPath));
+            Assert.That(originalmd5, Is.EquivalentTo(dupemd5));
+
+            _driver.CloseCurrentItem();
+        }
+        
+        [Test, TestCaseSource(nameof(BGMsToTest))]
+        public void TestBGMs_SoundPlaying(string bgmName, int bgmIndex)
+        {
+            string testArtifactsFolder = CommonHelpers.CreateTestArtifactsFolder(TestContext.CurrentContext.Test.Name, _uiVals!.ArtifactsDir);
+
+            _driver.OpenItem(bgmName, testArtifactsFolder);
+            Thread.Sleep(100);
+
+            string driverDeviceName = ALC.GetString(ALDevice.Null, AlcGetString.DefaultDeviceSpecifier);
+            foreach (var deviceName in ALC.GetStringList(GetEnumerationStringList.DeviceSpecifier))
+            {
+                if (deviceName.Contains("OpenAL Soft"))
+                {
+                    driverDeviceName = deviceName;
+                    break;
+                }
+            }
+
+            ALDevice device = ALC.OpenDevice(driverDeviceName);
+            ALContext context = ALC.CreateContext(device, new ALContextAttributes());
+            ALC.MakeContextCurrent(context);
+
+            string captureDeviceName = ALC.GetString(device, AlcGetString.DefaultDeviceSpecifier);
+            int sampleRate = 16000;
+            int secondsToCapture = 2;
+            ALCaptureDevice loopbackDevice = ALC.CaptureOpenDevice(captureDeviceName, sampleRate, ALFormat.Mono8, sampleRate * secondsToCapture);
+            byte[] buffer = new byte[sampleRate * secondsToCapture];
+
+            AppiumElement playButton = _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeButton[5]"));
+            AppiumElement stopButton = _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeButton[6]"));
+
+            ALC.CaptureStart(loopbackDevice);
+            playButton.Click();
+            for (int i = 0; i < secondsToCapture * 10; i++)
+            {
+                Thread.Sleep(100);
+                int samplesAvailable = ALC.GetAvailableSamples(loopbackDevice);
+                ALC.CaptureSamples(loopbackDevice, buffer, samplesAvailable);
+                Assert.That(buffer.Any(s => s != 0), Is.True);
+            }
+            ALC.CaptureStop(loopbackDevice);
+            playButton.Click();
+            Thread.Sleep(100);
+            ALC.CaptureStart(loopbackDevice);
+            for (int i = 0; i < secondsToCapture * 10; i++)
+            {
+                Thread.Sleep(100);
+                int samplesAvailable = ALC.GetAvailableSamples(loopbackDevice);
+                ALC.CaptureSamples(loopbackDevice, buffer, samplesAvailable);
+                Assert.That(buffer.All(s => s == 0), Is.True);
+            }
+            ALC.CaptureStart(loopbackDevice);
+            playButton.Click();
+            for (int i = 0; i < secondsToCapture * 10; i++)
+            {
+                Thread.Sleep(100);
+                int samplesAvailable = ALC.GetAvailableSamples(loopbackDevice);
+                ALC.CaptureSamples(loopbackDevice, buffer, samplesAvailable);
+                Assert.That(buffer.Any(s => s != 0), Is.True);
+            }
+            ALC.CaptureStop(loopbackDevice);
+            stopButton.Click();
+            Thread.Sleep(100);
+            ALC.CaptureStart(loopbackDevice);
+            for (int i = 0; i < secondsToCapture * 10; i++)
+            {
+                Thread.Sleep(100);
+                int samplesAvailable = ALC.GetAvailableSamples(loopbackDevice);
+                ALC.CaptureSamples(loopbackDevice, buffer, samplesAvailable);
+                Assert.That(buffer.All(s => s == 0), Is.True);
+            }
+
+            ALC.CaptureCloseDevice(loopbackDevice);
         }
     }
 }
