@@ -616,7 +616,7 @@ namespace SerialLoops
                         if (!savedExtra)
                         {
                             IO.WriteStringFile(Path.Combine("assets", "data", $"{OpenProject.Extra.Index:X3}.s"),
-                                OpenProject.Extra.GetSource(new()), OpenProject, Log);
+                                OpenProject.Extra.GetSource([]), OpenProject, Log);
                             savedExtra = true;
                         }
 
@@ -626,7 +626,7 @@ namespace SerialLoops
                         if (!savedExtra)
                         {
                             IO.WriteStringFile(Path.Combine("assets", "data", $"{OpenProject.Extra.Index:X3}.s"),
-                                OpenProject.Extra.GetSource(new()), OpenProject, Log);
+                                OpenProject.Extra.GetSource([]), OpenProject, Log);
                             savedExtra = true;
                         }
                         break;
@@ -652,7 +652,7 @@ namespace SerialLoops
                         if (!savedMessInfo)
                         {
                             IO.WriteStringFile(Path.Combine("assets", "data", $"{OpenProject.MessInfo.Index:X3}.s"),
-                                OpenProject.MessInfo.GetSource(new()), OpenProject, Log);
+                                OpenProject.MessInfo.GetSource([]), OpenProject, Log);
                             savedMessInfo = true;
                         }
                         break;
