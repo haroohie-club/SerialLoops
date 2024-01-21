@@ -899,7 +899,7 @@ namespace SerialLoops.Lib
                     }
                     return false;
 
-                case SearchQuery.DataHolder.Script_Flag:
+                case SearchQuery.DataHolder.Flag:
                     if (item is ScriptItem flagScript)
                     {
                         return flagScript.GetScriptCommandTree(this, logger)
@@ -907,6 +907,29 @@ namespace SerialLoops.Lib
                                 .Where(p => p.Type == ScriptParameter.ParameterType.FLAG)
                                 .Any(p => ((FlagScriptParameter)p).FlagName
                                     .Contains(term, StringComparison.OrdinalIgnoreCase))));
+                    }
+                    else if (short.TryParse(term, out short flagTerm))
+                    {
+                        if (item is BackgroundMusicItem flagBgm)
+                        {
+                            return flagBgm.Flag == flagTerm;
+                        }
+                        else if (item is BackgroundItem flagBg)
+                        {
+                            return flagBg.Flag == flagTerm;
+                        }
+                        else if (item is TopicItem flagTopic)
+                        {
+                            return flagTopic.TopicEntry.Id == flagTerm;
+                        }
+                        else if (item is PuzzleItem flagPuzzle)
+                        {
+                            return flagPuzzle.Puzzle.Settings.Unknown15 == flagTerm || flagPuzzle.Puzzle.Settings.Unknown16 == flagTerm;
+                        }
+                        else if (item is GroupSelectionItem flagGroupSelection)
+                        {
+                            return flagGroupSelection.Selection.Activities.Any(a => a?.Routes.Any(r => r?.Flag == flagTerm) ?? false);
+                        }
                     }
                     return false;
 

@@ -7,7 +7,7 @@ using System;
 
 namespace SerialLoops.Dialogs
 {
-    public abstract class FindItemsWindow : FloatingForm
+    public abstract class FindItemsDialog : FloatingForm
     {
         public ILogger Log { get; set; }
         public EditorTabsPanel Tabs { get; set; }

@@ -11,13 +11,9 @@ using System.Linq;
 
 namespace SerialLoops.Editors
 {
-    public class GroupSelectionEditor : Editor
+    public class GroupSelectionEditor(GroupSelectionItem selection, ILogger log, Project project, EditorTabsPanel tabs) : Editor(selection, log, project, tabs)
     {
         private GroupSelectionItem _selection;
-
-        public GroupSelectionEditor(GroupSelectionItem selection, ILogger log, Project project, EditorTabsPanel tabs) : base(selection, log, project, tabs)
-        {
-        }
 
         public override Container GetEditorPanel()
         {
@@ -65,7 +61,7 @@ namespace SerialLoops.Editors
                 StackLayout routesLayout = new() { Orientation = Orientation.Vertical, Spacing = 2 };
                 foreach (ScenarioRoute route in scenarioActivity.Routes)
                 {
-                    GroupBox routeBox = new() { Text = route.Title.GetSubstitutedString(_project) };
+                    GroupBox routeBox = new() { Text = $"{route.Title.GetSubstitutedString(_project)} ({route.Flag})" };
                     IEnumerable<TopicItem> kyonlessTopics = route.KyonlessTopics.Select(t => (TopicItem)_project.Items
                         .FirstOrDefault(i => i.Type == ItemDescription.ItemType.Topic && ((TopicItem)i).TopicEntry.Id == t));
                     StackLayout kyonlessTopicsLayout = new();
