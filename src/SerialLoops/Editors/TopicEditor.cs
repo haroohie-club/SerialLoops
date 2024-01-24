@@ -249,16 +249,16 @@ namespace SerialLoops.Editors
                 },
             };
 
-            //StackLayout unknownsLayout = new()
-            //{
-            //    Orientation = Orientation.Vertical,
-            //    Spacing = 5,
-            //    Items =
-            //    {
-            //        ControlGenerator.GetControlWithLabel("Unknown 03", new TextBox { Text = _topic.Topic.UnknownShort03.ToString() }),
-            //        ControlGenerator.GetControlWithLabel("Unknown 04", new TextBox { Text = _topic.Topic.UnknownShort04.ToString() }),
-            //    }
-            //};
+            StackLayout unknownsLayout = new()
+            {
+                Orientation = Orientation.Vertical,
+                Spacing = 5,
+                Items =
+                {
+                    ControlGenerator.GetControlWithLabel("Unknown 03", new TextBox { Text = _topic.TopicEntry.UnknownShort03.ToString() }),
+                    ControlGenerator.GetControlWithLabel("Unknown 04", new TextBox { Text = _topic.TopicEntry.UnknownShort04.ToString() }),
+                }
+            };
 
             return new TableLayout(idLayout,
                 ControlGenerator.GetControlWithLabel("Title", titleTextBox),

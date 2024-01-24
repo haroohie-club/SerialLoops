@@ -733,9 +733,9 @@ namespace SerialLoops.Lib
             {
                 if (Items[i].CanRename || Items[i].Type == ItemDescription.ItemType.Place) // We don't want to manually rename places, but they do use the display name pattern
                 {
-                    if (ItemNames.ContainsKey(Items[i].Name))
+                    if (ItemNames.TryGetValue(Items[i].Name, out string value))
                     {
-                        Items[i].Rename(ItemNames[Items[i].Name]);
+                        Items[i].Rename(value);
                     }
                     else
                     {

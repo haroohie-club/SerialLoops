@@ -1,6 +1,7 @@
 ﻿using Eto.Forms;
 using HaruhiChokuretsuLib.Save;
 using HaruhiChokuretsuLib.Util;
+using SerialLoops.Controls;
 using SerialLoops.Lib;
 using System;
 using System.IO;
@@ -8,20 +9,22 @@ using System.Linq;
 
 namespace SerialLoops.Dialogs
 {
-    public class SaveEditorDialog : Dialog
+    public class SaveEditorDialog : FloatingForm
     {
         private ILogger _log;
         private string _saveLoc;
         private SaveFile _save;
         private Project _project;
+        private EditorTabsPanel _tabs;
 
         public bool LoadedSuccessfully = true;
 
-        public SaveEditorDialog(ILogger log, Project project, string saveLoc)
+        public SaveEditorDialog(ILogger log, Project project, EditorTabsPanel tabs, string saveLoc)
         {
             _log = log;
             _saveLoc = saveLoc;
             _project = project;
+            _tabs = tabs;
             try
             {
                 _save = new(File.ReadAllBytes(saveLoc));
@@ -39,13 +42,14 @@ namespace SerialLoops.Dialogs
 
         void InitializeComponent()
         {
+            Title = $"Save Editor - {Path.GetFileName(_saveLoc)}";
             Width = 400;
             Height = 400;
             Button saveCommonButton = new() { Text = "Common Save Data", Height = 64 };
             saveCommonButton.Click += (sender, args) =>
             {
-                SaveSlotEditorDialog saveSlotEditorDialog = new(_log, _save.CommonData, _project);
-                saveSlotEditorDialog.ShowModal();
+                SaveSlotEditorDialog saveSlotEditorDialog = new(_log, _save.CommonData, _project, _tabs);
+                saveSlotEditorDialog.Show();
             };
 
             Button saveButton = new() { Text = "Save" };
@@ -87,9 +91,9 @@ namespace SerialLoops.Dialogs
                 Rows =
                 {
                     new(saveCommonButton),
-                    new(GetSaveSlotPreviewButton(_save.StaticSaveSlots[0])),
-                    new(GetSaveSlotPreviewButton(_save.StaticSaveSlots[1])),
-                    new(GetSaveSlotPreviewButton(_save.DynamicSaveSlot)),
+                    new(GetSaveSlotPreviewButton(_save.CheckpointSaveSlots[0])),
+                    new(GetSaveSlotPreviewButton(_save.CheckpointSaveSlots[1])),
+                    new(GetSaveSlotPreviewButton(_save.QuickSaveSlot)),
                     new(),
                     new(buttonsLayout),
                 },
@@ -102,15 +106,15 @@ namespace SerialLoops.Dialogs
             slotButton.Click += (sender, args) =>
             {
                 SaveSlotEditorDialog saveSlotEditorDialog;
-                if (slot is DynamicSaveSlotData dynamicSave)
+                if (slot is QuickSaveSlotData quickSave)
                 {
-                    saveSlotEditorDialog = new(_log, dynamicSave, _project);
+                    saveSlotEditorDialog = new(_log, quickSave, _project, _tabs);
                 }
                 else
                 {
-                    saveSlotEditorDialog = new(_log, slot, _project);
+                    saveSlotEditorDialog = new(_log, slot, _project, _tabs);
                 }
-                saveSlotEditorDialog.ShowModal();
+                saveSlotEditorDialog.Show();
             };
             return slotButton;
         }

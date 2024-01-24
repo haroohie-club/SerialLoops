@@ -8,7 +8,7 @@ namespace SerialLoops.Lib.Items
         public ScenarioSelection Selection { get; set; }
         public int Index { get; set; }
 
-        public GroupSelectionItem(ScenarioSelection selection, int index, Project project) : base($"Selection {index}", ItemType.Group_Selection)
+        public GroupSelectionItem(ScenarioSelection selection, int index, Project project) : base($"Selection {index + 1}", ItemType.Group_Selection)
         {
             Selection = selection;
             Index = index;

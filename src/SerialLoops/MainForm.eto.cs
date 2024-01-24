@@ -827,10 +827,10 @@ namespace SerialLoops
                 openFileDialog.Filters.Add(new("Chokuretsu Save File", ["*.sav"]));
                 if (openFileDialog.ShowAndReportIfFileSelected(this))
                 {
-                    SaveEditorDialog saveEditorDialog = new(Log, OpenProject, openFileDialog.FileName);
+                    SaveEditorDialog saveEditorDialog = new(Log, OpenProject, EditorTabs, openFileDialog.FileName);
                     if (saveEditorDialog.LoadedSuccessfully)
                     {
-                        saveEditorDialog.ShowModal();
+                        saveEditorDialog.Show();
                     }
                 }
             }
@@ -984,7 +984,7 @@ namespace SerialLoops
                 {
                     // message box with yes no cancel buttons
                     DialogResult result = MessageBox.Show(
-                        $"You have unsaved changes in {unsavedItems.Count()} item(s)." +
+                        $"You have unsaved changes in {unsavedItems.Count()} item(s). " +
                         $"Would you like to save before closing the project?",
                         MessageBoxButtons.YesNoCancel, MessageBoxType.Warning
                     );
