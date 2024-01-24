@@ -9,6 +9,11 @@
     <AssemblyName>SerialLoops</AssemblyName>
   </PropertyGroup>
 
+  <!-- This should be removed once https://github.com/picoe/Eto/issues/2607 is fully solved -->
+  <PropertyGroup>
+    <EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
+  </PropertyGroup>
+
   <ItemGroup>
     <Content Include="WindowsIcon.ico" />
   </ItemGroup>
