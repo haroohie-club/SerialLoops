@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Eto.Platform.Wpf" Version="2.7.5" />
+    <PackageReference Include="Eto.Platform.Wpf" Version="2.7.2-ci-20240118.7563443893" />
     <PackageReference Include="NAudio" Version="2.1.0" />
   </ItemGroup>
 
