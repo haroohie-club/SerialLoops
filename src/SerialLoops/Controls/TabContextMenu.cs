@@ -1,7 +1,6 @@
 ﻿using Eto.Forms;
 using HaruhiChokuretsuLib.Util;
 using System;
-using System.Reflection;
 
 namespace SerialLoops.Controls
 {
