@@ -1,12 +1,21 @@
 ﻿using Eto.Forms;
+using HaruhiChokuretsuLib.Archive.Data;
+using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Save;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Controls;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
+using SerialLoops.Lib.Script;
+using SerialLoops.Lib.Script.Parameters;
 using SerialLoops.Utility;
+using SkiaSharp;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
+using static SerialLoops.Lib.Items.ItemDescription;
 
 namespace SerialLoops.Dialogs
 {
@@ -19,6 +28,8 @@ namespace SerialLoops.Dialogs
 
         private readonly Dictionary<int, bool> _flagModifications = [];
         private readonly List<Control> _modifierControls = [];
+        private ScriptItem _quickSaveScript;
+        private ScriptPreview _quickSaveScriptPreview;
 
         public SaveSlotEditorDialog(ILogger log, SaveSection saveSection, Project project, EditorTabsPanel tabs)
         {
@@ -202,6 +213,10 @@ namespace SerialLoops.Dialogs
             {
                 SaveSlotData slotSave = (SaveSlotData)_saveSection;
 
+                DateTimePicker dateTimePicker = new() { Mode = DateTimePickerMode.DateTime, Value = slotSave.SaveTime.DateTime, ID = "DateTime" };
+                layout.Rows.Add(ControlGenerator.GetControlWithLabel("Save Time: ", dateTimePicker));
+                _modifierControls.Add(dateTimePicker);
+
                 NumericStepper scenarioPositionStepper = new() { Value = slotSave.ScenarioPosition, Increment = 1, MaximumDecimalPlaces = 0, MinValue = 1, MaxValue = _project.Scenario.Commands.Count, ID = "ScenarioPosition" };
                 layout.Rows.Add(ControlGenerator.GetControlWithLabel("Scenario Command Index: ", scenarioPositionStepper));
                 _modifierControls.Add(scenarioPositionStepper);
@@ -239,12 +254,16 @@ namespace SerialLoops.Dialogs
 
                 if (slotSave is QuickSaveSlotData quickSave)
                 {
-                    NumericMaskedTextBox<int> scriptCommandIndexBox = new() { ID = "ScriptCommandIndex", Value = quickSave.CurrentScriptCommand };
-                    _modifierControls.Add(scriptCommandIndexBox);
+                    StackLayout previewLayout = new();
 
-                    ScriptItem script = (ScriptItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Script && ((ScriptItem)i).Event.Index == quickSave.CurrentScript);
+                    NumericMaskedTextBox<int> scriptCommandIndexBox = new() { ID = "ScriptCommandIndex", Value = quickSave.CurrentScriptCommand };
+
+                    _quickSaveScript = (ScriptItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Script && ((ScriptItem)i).Event.Index == quickSave.CurrentScript);
+                    Dictionary<ScriptSection, List<ScriptItemCommand>> commands = _quickSaveScript.GetScriptCommandTree(_project, _log);
+                    _quickSaveScript.CalculateGraphEdges(commands, _log);
+
                     DropDown scriptBlockSelector = new() { ID = "CurrentScriptBlock" };
-                    scriptBlockSelector.Items.AddRange(script.Event.ScriptSections.Select(s => new ListItem { Key = s.Name, Text = s.Name }));
+                    scriptBlockSelector.Items.AddRange(_quickSaveScript.Event.ScriptSections.Select(s => new ListItem { Key = s.Name, Text = s.Name }));
                     scriptBlockSelector.SelectedIndex = quickSave.CurrentScriptBlock;
                     scriptBlockSelector.SelectedIndexChanged += (sender, args) =>
                     {
@@ -262,23 +281,100 @@ namespace SerialLoops.Dialogs
                         Items =
                         {
                             ControlGenerator.GetControlWithLabel("Current Script: ", scriptSelector),
-                            ControlGenerator.GetFileLink(script, _tabs, _log),
+                            ControlGenerator.GetFileLink(_quickSaveScript, _tabs, _log),
                         }
                     };
                     scriptSelector.SelectedKeyChanged += (sender, args) =>
                     {
-                        ScriptItem newScript = (ScriptItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Script && ((ScriptItem)i).Event.Index == int.Parse(scriptSelector.SelectedKey));
+                        _quickSaveScript = (ScriptItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Script && ((ScriptItem)i).Event.Index == int.Parse(scriptSelector.SelectedKey));
+                        Dictionary<ScriptSection, List<ScriptItemCommand>> commands = _quickSaveScript.GetScriptCommandTree(_project, _log);
+                        _quickSaveScript.CalculateGraphEdges(commands, _log);
                         scriptBlockSelector.Items.Clear();
-                        scriptBlockSelector.Items.AddRange(newScript.Event.ScriptSections.Select(s => new ListItem { Key = s.Name, Text = s.Name }));
+                        scriptBlockSelector.Items.AddRange(_quickSaveScript.Event.ScriptSections.Select(s => new ListItem { Key = s.Name, Text = s.Name }));
                         scriptBlockSelector.SelectedIndex = 0;
                         scriptSelectorWithLink.Items.RemoveAt(1);
-                        scriptSelectorWithLink.Items.Add(ControlGenerator.GetFileLink(newScript, _tabs, _log));
+                        scriptSelectorWithLink.Items.Add(ControlGenerator.GetFileLink(_quickSaveScript, _tabs, _log));
                     };
                     _modifierControls.Add(scriptSelector);
+
+
+                    scriptCommandIndexBox.ValueChanged += (sender, args) =>
+                    {
+                        previewLayout.Items.Clear();
+                        Dictionary<ScriptSection, List<ScriptItemCommand>> commands = _quickSaveScript.GetScriptCommandTree(_project, _log);
+                        _quickSaveScriptPreview = _quickSaveScript.GetScriptPreview(commands, commands[_quickSaveScript.Event.ScriptSections[scriptBlockSelector.SelectedIndex < 0 ? 0 : scriptBlockSelector.SelectedIndex]][scriptCommandIndexBox.Value], _project, _log);
+                        (SKBitmap scriptPreviewImage, string errorImage) = ScriptItem.GeneratePreviewImage(_quickSaveScriptPreview, _project);
+                        if (scriptPreviewImage is null)
+                        {
+                            scriptPreviewImage = new(256, 384);
+                            SKCanvas canvas = new(scriptPreviewImage);
+                            canvas.DrawColor(SKColors.Black);
+                            using Stream noPreviewStream = Assembly.GetCallingAssembly().GetManifestResourceStream(errorImage);
+                            canvas.DrawImage(SKImage.FromEncodedData(noPreviewStream), new SKPoint(0, 0));
+                            canvas.Flush();
+                            previewLayout.Items.Add(new SKGuiImage(scriptPreviewImage));
+                        }
+                        previewLayout.Items.Add(new SKGuiImage(scriptPreviewImage));
+                    };
+                    _modifierControls.Add(scriptCommandIndexBox);
 
                     layout.Rows.Add(scriptSelectorWithLink);
                     layout.Rows.Add(ControlGenerator.GetControlWithLabel("Current Script Block: ", scriptBlockSelector));
                     layout.Rows.Add(ControlGenerator.GetControlWithLabel("Current Script Command Index: ", scriptCommandIndexBox));
+
+                    List<(ChibiItem Chibi, int X, int Y)> topScreenChibis = [];
+                    int chibiCurrentX = 80;
+                    int chibiY = 100;
+                    for (int i = 1; i <= 5; i++)
+                    {
+                        if (quickSave.TopScreenChibis.HasFlag((CharacterMask)(1 << i)))
+                        {
+                            ChibiItem chibi = (ChibiItem)_project.Items.First(it => it.Type == ItemType.Chibi && ((ChibiItem)it).ChibiIndex == i);
+                            topScreenChibis.Add((chibi, chibiCurrentX, chibiY));
+                            chibiCurrentX += chibi.ChibiAnimations.First().Value.ElementAt(0).Frame.Width - 16;
+                        }
+                    }
+
+                    _quickSaveScriptPreview = new()
+                    {
+                        Background = (BackgroundItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == (quickSave.CgIndex != 0 ? quickSave.CgIndex : quickSave.BgIndex)),
+                        BgPalEffect = (PaletteEffectScriptParameter.PaletteEffect)quickSave.BgPalEffect,
+                        EpisodeHeader = quickSave.EpisodeHeader,
+                        Kbg = (BackgroundItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == quickSave.KbgIndex),
+                        Place = (PlaceItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Place && ((PlaceItem)i).Index == quickSave.Place),
+                        TopScreenChibis = topScreenChibis,
+                        Sprites =
+                        [
+                                new() 
+                                {
+                                    Sprite = (CharacterSpriteItem)_project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Character_Sprite && ((CharacterSpriteItem)i).Index == quickSave.FirstCharacterSprite),
+                                    Positioning = new() { X = quickSave.Sprite1XOffset, Layer = 2 }
+                                },
+                                new()
+                                {
+                                    Sprite = (CharacterSpriteItem)_project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Character_Sprite && ((CharacterSpriteItem)i).Index == quickSave.SecondCharacterSprite),
+                                    Positioning = new() { X = quickSave.Sprite2XOffset, Layer = 1 }
+                                },
+                                new()
+                                {
+                                    Sprite = (CharacterSpriteItem)_project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Character_Sprite && ((CharacterSpriteItem)i).Index == quickSave.ThirdCharacterSprite),
+                                    Positioning = new() { X = quickSave.Sprite3XOffset, Layer = 0 }
+                                },
+                        ],
+                    };
+                    (SKBitmap previewBitmap, string previewErrorImage) = ScriptItem.GeneratePreviewImage(_quickSaveScriptPreview, _project);
+                    if (previewBitmap is null)
+                    {
+                        previewBitmap = new(256, 384);
+                        SKCanvas canvas = new(previewBitmap);
+                        canvas.DrawColor(SKColors.Black);
+                        using Stream noPreviewStream = Assembly.GetCallingAssembly().GetManifestResourceStream(previewErrorImage);
+                        canvas.DrawImage(SKImage.FromEncodedData(noPreviewStream), new SKPoint(0, 0));
+                        canvas.Flush();
+                        previewLayout.Items.Add(new SKGuiImage(previewBitmap));
+                    }
+                    previewLayout.Items.Add(new SKGuiImage(previewBitmap));
+                    layout.Rows.Add(previewLayout);
                 }
             }
 
@@ -328,6 +424,7 @@ namespace SerialLoops.Dialogs
                 {
                     SaveSlotData slotSave = (SaveSlotData)_saveSection;
 
+                    slotSave.SaveTime = ((DateTimePicker)_modifierControls.First(c => c.ID == "DateTime")).Value ?? DateTime.Now;
                     slotSave.ScenarioPosition = (short)((NumericStepper)_modifierControls.First(c => c.ID == "ScenarioPosition")).Value;
                     slotSave.EpisodeNumber = (short)((NumericStepper)_modifierControls.First(c => c.ID == "EpisodeNumber")).Value;
                     slotSave.HaruhiFriendshipLevel = (byte)((NumericStepper)_modifierControls.First(c => c.ID == "HFL")).Value;
@@ -339,6 +436,41 @@ namespace SerialLoops.Dialogs
 
                     if (slotSave is QuickSaveSlotData quickSave)
                     {
+                        quickSave.KbgIndex = (short)_quickSaveScriptPreview.Kbg.Id;
+                        quickSave.Place = (short)_quickSaveScriptPreview.Place.Index;
+                        if (_quickSaveScriptPreview.Background.BackgroundType == HaruhiChokuretsuLib.Archive.Data.BgType.TEX_BG)
+                        {
+                            quickSave.BgIndex = (short)_quickSaveScriptPreview.Background.Id;
+                        }
+                        else
+                        {
+                            Dictionary<ScriptSection, List<ScriptItemCommand>> commandTree = _quickSaveScript.GetScriptCommandTree(_project, _log);
+                            ScriptItemCommand currentCommand = commandTree[_quickSaveScript.Event.ScriptSections[((DropDown)_modifierControls.First(c => c.ID == "CurrentScriptBlock")).SelectedIndex]][((NumericMaskedTextBox<int>)_modifierControls.First(c => c.ID == "ScriptCommandIndex")).Value];
+                            List<ScriptItemCommand> commands = currentCommand.WalkCommandGraph(commandTree, _quickSaveScript.Graph);
+                            for (int i = commands.Count - 1; i >= 0; i--)
+                            {
+                                if (commands[i].Verb == EventFile.CommandVerb.BG_DISP || commands[i].Verb == EventFile.CommandVerb.BG_DISP2 || (commands[i].Verb == EventFile.CommandVerb.BG_FADE && (((BgScriptParameter)commands[i].Parameters[0]).Background is not null)))
+                                {
+                                    quickSave.BgIndex = (short)((BgScriptParameter)commands[i].Parameters[0]).Background.Id;
+                                }
+                            }
+                            quickSave.CgIndex = (short)_quickSaveScriptPreview.Background.Id;
+                        }
+                        quickSave.BgPalEffect = (short)_quickSaveScriptPreview.BgPalEffect;
+                        quickSave.EpisodeHeader = _quickSaveScriptPreview.EpisodeHeader;
+                        for (int i = 1; i <= 5; i++)
+                        {
+                            if (_quickSaveScriptPreview.TopScreenChibis.Any(c => c.Chibi.ChibiIndex == i))
+                            {
+                                quickSave.TopScreenChibis |= (CharacterMask)(1 << i);
+                            }
+                        }
+                        quickSave.FirstCharacterSprite = _quickSaveScriptPreview.Sprites.ElementAtOrDefault(0).Sprite?.Index ?? 0;
+                        quickSave.SecondCharacterSprite = _quickSaveScriptPreview.Sprites.ElementAtOrDefault(1).Sprite?.Index ?? 0;
+                        quickSave.ThirdCharacterSprite = _quickSaveScriptPreview.Sprites.ElementAtOrDefault(2).Sprite?.Index ?? 0;
+                        quickSave.Sprite1XOffset = (short)(_quickSaveScriptPreview.Sprites.ElementAtOrDefault(0).Positioning?.X ?? 0);
+                        quickSave.Sprite2XOffset = (short)(_quickSaveScriptPreview.Sprites.ElementAtOrDefault(1).Positioning?.X ?? 0);
+                        quickSave.Sprite3XOffset = (short)(_quickSaveScriptPreview.Sprites.ElementAtOrDefault(2).Positioning?.X ?? 0);
                         quickSave.CurrentScript = int.Parse(((DropDown)_modifierControls.First(c => c.ID == "CurrentScript")).SelectedKey);
                         quickSave.CurrentScriptBlock = ((DropDown)_modifierControls.First(c => c.ID == "CurrentScriptBlock")).SelectedIndex;
                         quickSave.CurrentScriptCommand = ((NumericMaskedTextBox<int>)_modifierControls.First(c => c.ID == "ScriptCommandIndex")).Value;
@@ -368,7 +500,7 @@ namespace SerialLoops.Dialogs
 
             layout.Rows.Add(buttonsLayout);
 
-            Content = layout;
+            Content = new Scrollable { Content = layout };
         }
     }
 }

@@ -877,6 +877,13 @@ namespace SerialLoops.Lib
                     return item.Name.Contains(term, StringComparison.OrdinalIgnoreCase) ||
                            item.DisplayName.Contains(term, StringComparison.OrdinalIgnoreCase);
 
+                case SearchQuery.DataHolder.Background_ID:
+                    if (int.TryParse(term, out int backgroundId))
+                    {
+                        return item.Type == ItemDescription.ItemType.Background && ((BackgroundItem)item).Id == backgroundId;
+                    }
+                    return false;
+
                 case SearchQuery.DataHolder.Dialogue_Text:
                     if (item is ScriptItem dialogueScript)
                     {

@@ -5,7 +5,6 @@ using SerialLoops.Controls;
 using SerialLoops.Lib;
 using System;
 using System.IO;
-using System.Linq;
 
 namespace SerialLoops.Dialogs
 {

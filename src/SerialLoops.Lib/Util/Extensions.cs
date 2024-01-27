@@ -1,18 +1,31 @@
 ﻿using HaruhiChokuretsuLib.Archive.Event;
+using HaruhiChokuretsuLib.Font;
+using SerialLoops.Lib.Script.Parameters;
+using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json.Serialization;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using static HaruhiChokuretsuLib.Archive.Event.EventFile;
-using SkiaSharp;
-using VCDiff.Shared;
+using static SerialLoops.Lib.Script.SpritePositioning;
 
 namespace SerialLoops.Lib.Util
 {
     public static class Extensions
     {
+        public static int GetSpriteX(this SpritePosition position)
+        {
+            return position switch
+            {
+                SpritePosition.LEFT => -64,
+                SpritePosition.CENTER => 0,
+                SpritePosition.RIGHT => 64,
+                _ => 0,
+            };
+        }
+
         public static string GetSubstitutedString(this string line, Project project)
         {
             if (project.LangCode != "ja")
@@ -90,6 +103,97 @@ namespace SerialLoops.Lib.Util
         {
             public ScriptCommandInvocation Command { get; set; }
             public short Index { get; set; }
+        }
+
+        public static void DrawHaroohieText(this SKCanvas canvas, string text, SKPaint color, Project project, int x = 10, int y = 352, bool formatting = true)
+        {
+            int currentX = x;
+            int currentY = y;
+
+            for (int i = 0; i < text.Length; i++)
+            {
+                // handle newlines
+                if (text[i] == '\n')
+                {
+                    currentX = 10;
+                    currentY += 14;
+                    continue;
+                }
+
+                // handle operators
+                if (formatting)
+                {
+                    if (i < text.Length - 2 && Regex.IsMatch(text[i..(i + 2)], @"\$\d"))
+                    {
+                        if (i < text.Length - 3 && Regex.IsMatch(text[i..(i + 3)], @"\$\d{2}"))
+                        {
+                            i++;
+                        }
+                        i++;
+                        continue;
+                    }
+                    else if (i < text.Length - 3 && Regex.IsMatch(text[i..(i + 3)], @"#W\d"))
+                    {
+                        if (i < text.Length - 4 && Regex.IsMatch(text[i..(i + 4)], @"#W\d{2}"))
+                        {
+                            i++;
+                        }
+                        i += 2;
+                        continue;
+                    }
+                    else if (i < text.Length - 4 && Regex.IsMatch(text[i..(i + 4)], @"#P\d{2}"))
+                    {
+                        color = int.Parse(Regex.Match(text[i..(i + 4)], @"#P(?<id>\d{2})").Groups["id"].Value) switch
+                        {
+                            1 => DialogueScriptParameter.Paint01,
+                            2 => DialogueScriptParameter.Paint02,
+                            3 => DialogueScriptParameter.Paint03,
+                            4 => DialogueScriptParameter.Paint04,
+                            5 => DialogueScriptParameter.Paint05,
+                            6 => DialogueScriptParameter.Paint06,
+                            7 => DialogueScriptParameter.Paint07,
+                            _ => DialogueScriptParameter.Paint00,
+                        };
+                        i += 3;
+                        continue;
+                    }
+                    else if (i < text.Length - 3 && text[i..(i + 3)] == "#DP")
+                    {
+                        i += 3;
+                    }
+                    else if (i < text.Length - 6 && Regex.IsMatch(text[i..(i + 6)], @"#SE\d{3}"))
+                    {
+                        i += 6;
+                    }
+                    else if (i < text.Length - 4 && text[i..(i + 4)] == "#SK0")
+                    {
+                        i += 4;
+                    }
+                    else if (i < text.Length - 3 && text[i..(i + 3)] == "#sk")
+                    {
+                        i += 3;
+                    }
+                }
+
+                if (text[i] != '　') // if it's a space, we just skip drawing
+                {
+                    int charIndex = project.FontMap.CharMap.IndexOf(text[i]);
+                    if ((charIndex + 1) * 16 <= project.FontBitmap.Height)
+                    {
+                        canvas.DrawBitmap(project.FontBitmap, new SKRect(0, charIndex * 16, 16, (charIndex + 1) * 16),
+                            new SKRect(currentX, currentY, currentX + 16, currentY + 16), color);
+                    }
+                }
+                FontReplacement replacement = project.FontReplacement.ReverseLookup(text[i]);
+                if (replacement is not null && project.LangCode != "ja")
+                {
+                    currentX += replacement.Offset;
+                }
+                else
+                {
+                    currentX += 14;
+                }
+            }
         }
     }
 
