@@ -18,7 +18,11 @@ namespace SerialLoops.Controls
             Opening += ContextMenu_OnOpen;
 
             Command closeTabCommand = new();
-            closeTabCommand.Executed += (sender, args) => _tabs.Tabs.Remove(_tabs.Tabs.SelectedPage);
+            closeTabCommand.Executed += (sender, args) =>
+            {
+                _tabs.Tabs_PageClosed(_tabs, new(_tabs.Tabs.SelectedPage));
+                _tabs.Tabs.Remove(_tabs.Tabs.SelectedPage);
+            };
             Items.Add(new ButtonMenuItem
             {
                 Text = "Close",
@@ -31,6 +35,7 @@ namespace SerialLoops.Controls
                 int index = _tabs.Tabs.SelectedIndex;
                 for (int i = _tabs.Tabs.Pages.Count - 1; i > index; i--)
                 {
+                    _tabs.Tabs_PageClosed(_tabs, new(_tabs.Tabs.Pages[i]));
                     _tabs.Tabs.Remove(_tabs.Tabs.Pages[i]);
                 }
             };
@@ -43,7 +48,11 @@ namespace SerialLoops.Controls
             Command closeAllTabsCommand = new();
             closeAllTabsCommand.Executed += (sender, args) =>
             {
-                _tabs.Tabs.Pages.Clear();
+                for (int i = _tabs.Tabs.Pages.Count - 1; i >= 0; i--)
+                {
+                    _tabs.Tabs_PageClosed(_tabs, new(_tabs.Tabs.Pages[i]));
+                    _tabs.Tabs.Remove(_tabs.Tabs.Pages[i]);
+                }
             };
             Items.Add(new ButtonMenuItem
             {
@@ -55,7 +64,11 @@ namespace SerialLoops.Controls
             closeAllTabsButThisCommand.Executed += (sender, args) =>
             {
                 DocumentPage @this = _tabs.Tabs.SelectedPage;
-                _tabs.Tabs.Pages.Clear();
+                for (int i = _tabs.Tabs.Pages.Count - 1; i >= 0; i--)
+                {
+                    _tabs.Tabs_PageClosed(_tabs, new(_tabs.Tabs.Pages[i]));
+                    _tabs.Tabs.Remove(_tabs.Tabs.Pages[i]);
+                }
                 _tabs.Tabs.Pages.Add(@this);
             };
             Items.Add(new ButtonMenuItem
