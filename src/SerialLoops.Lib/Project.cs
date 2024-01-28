@@ -452,7 +452,6 @@ namespace SerialLoops.Lib
                 log.LogException($"Failed to load BGM tracks", ex);
                 return new(LoadProjectState.FAILED);
             }
-
             try
             {
                 string[] voiceFiles = SoundDS.VoiceSection.Where(vce => vce is not null).Select(vce => Path.Combine(IterativeDirectory, "rom", "data", vce)).ToArray(); /*Directory.GetFiles(Path.Combine(IterativeDirectory, "rom", "data", "vce")).OrderBy(s => s).ToArray();*/
@@ -488,6 +487,18 @@ namespace SerialLoops.Lib
             catch (Exception ex)
             {
                 log.LogException("Failed to load sound effects", ex);
+                return new(LoadProjectState.FAILED);
+            }
+
+            try
+            {
+                ItemFile itemFile = Dat.Files.First(f => f.Name == "ITEMS").CastTo<ItemFile>();
+                tracker.Focus("Items", 1);
+                Items.AddRange(itemFile.Items.Where(i => i > 0).Select((i, idx) => new ItemItem(Grp.Files[i - 1].Name, idx, i, this)));
+            }
+            catch (Exception ex)
+            {
+                log.LogException($"Failed to load item file", ex);
                 return new(LoadProjectState.FAILED);
             }
 

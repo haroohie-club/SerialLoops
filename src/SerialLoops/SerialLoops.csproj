@@ -33,6 +33,7 @@
     <None Remove="Icons\Close.png" />
     <None Remove="Icons\Dialogue_Config.png" />
     <None Remove="Icons\Group_Selection.png" />
+    <None Remove="Icons\Item.png" />
     <None Remove="Icons\Map.png" />
     <None Remove="Icons\New.png" />
     <None Remove="Icons\Open.png" />
