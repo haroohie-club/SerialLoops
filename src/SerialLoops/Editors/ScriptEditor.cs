@@ -1846,6 +1846,35 @@ namespace SerialLoops.Editors
                         }
                     }
 
+                    // Draw items
+                    ScriptItemCommand lastItemCommand = commands.LastOrDefault(c => c.Verb == CommandVerb.ITEM_DISPIMG);
+                    if (lastItemCommand is not null)
+                    {
+                        ItemItem item = (ItemItem)_project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Item && ((ItemScriptParameter)lastItemCommand.Parameters[0]).ItemIndex == ((ItemItem)i).ItemIndex);
+                        if (item is not null)
+                        {
+                            int width = item.ItemGraphic.Width;
+                            switch (((ItemLocationScriptParameter)lastItemCommand.Parameters[1]).Location)
+                            {
+                                case ItemItem.ItemLocation.Left:
+                                    canvas.DrawBitmap(item.ItemGraphic.GetImage(transparentIndex: 0), 128 - width, 204);
+                                    break;
+
+                                case ItemItem.ItemLocation.Center:
+                                    canvas.DrawBitmap(item.ItemGraphic.GetImage(transparentIndex: 0), 128 - width / 2, 204);
+                                    break;
+
+                                case ItemItem.ItemLocation.Right:
+                                    canvas.DrawBitmap(item.ItemGraphic.GetImage(transparentIndex: 0), 128, 204);
+                                    break;
+
+                                default:
+                                case ItemItem.ItemLocation.Exit:
+                                    break;
+                            }
+                        }
+                    }
+
                     // Draw character sprites
                     Dictionary<CharacterItem, PositionedSprite> sprites = new();
                     Dictionary<CharacterItem, PositionedSprite> previousSprites = new();
@@ -2022,35 +2051,6 @@ namespace SerialLoops.Editors
                     {
                         SKBitmap spriteBitmap = sprite.Sprite.GetClosedMouthAnimation(_project)[0].Frame;
                         canvas.DrawBitmap(spriteBitmap, sprite.Positioning.GetSpritePosition(spriteBitmap), sprite.PalEffect);
-                    }
-
-                    // Draw items
-                    ScriptItemCommand lastItemCommand = commands.LastOrDefault(c => c.Verb == CommandVerb.ITEM_DISPIMG);
-                    if (lastItemCommand is not null)
-                    {
-                        ItemItem item = (ItemItem)_project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Item && ((ItemScriptParameter)lastItemCommand.Parameters[0]).ItemIndex == ((ItemItem)i).ItemIndex);
-                        if (item is not null)
-                        {
-                            int width = item.ItemGraphic.Width;
-                            switch (((ItemLocationScriptParameter)lastItemCommand.Parameters[1]).Location)
-                            {
-                                case ItemItem.ItemLocation.Left:
-                                    canvas.DrawBitmap(item.ItemGraphic.GetImage(transparentIndex: 0), 128 - width, 204);
-                                    break;
-
-                                case ItemItem.ItemLocation.Center:
-                                    canvas.DrawBitmap(item.ItemGraphic.GetImage(transparentIndex: 0), 128 - width / 2, 204);
-                                    break;
-
-                                case ItemItem.ItemLocation.Right:
-                                    canvas.DrawBitmap(item.ItemGraphic.GetImage(transparentIndex: 0), 128, 204);
-                                    break;
-
-                                default:
-                                case ItemItem.ItemLocation.Exit:
-                                    break;
-                            }
-                        }
                     }
 
                     // Draw dialogue
