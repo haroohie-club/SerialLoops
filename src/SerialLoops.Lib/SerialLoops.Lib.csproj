@@ -44,6 +44,9 @@
     <None Update="DefaultCharacters.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Defaults\DefaultFlags.en.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Defaults\DefaultNames.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

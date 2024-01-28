@@ -101,7 +101,7 @@ namespace SerialLoops.Dialogs
 
         private Button GetSaveSlotPreviewButton(SaveSlotData slot)
         {
-            Button slotButton = new() { Text = $"EPISODE: {slot.EpisodeNumber}\n\n{slot.SaveTime:yyyy/MM/dd H:mm:ss}", Height = 64 };
+            Button slotButton = new() { Text = slot.EpisodeNumber == 0 ? "New Save" : $"EPISODE: {slot.EpisodeNumber}\n\n{slot.SaveTime:yyyy/MM/dd H:mm:ss}", Height = 64 };
             slotButton.Click += (sender, args) =>
             {
                 SaveSlotEditorDialog saveSlotEditorDialog;

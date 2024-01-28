@@ -213,7 +213,7 @@ namespace SerialLoops.Dialogs
             {
                 SaveSlotData slotSave = (SaveSlotData)_saveSection;
 
-                DateTimePicker dateTimePicker = new() { Mode = DateTimePickerMode.DateTime, Value = slotSave.SaveTime.DateTime, ID = "DateTime" };
+                DateTimePicker dateTimePicker = new() { Mode = DateTimePickerMode.DateTime, Value = slotSave.SaveTime.DateTime, ID = "DateTime", MinDate = new DateTime(2000, 1, 1, 0, 0, 0) };
                 layout.Rows.Add(ControlGenerator.GetControlWithLabel("Save Time: ", dateTimePicker));
                 _modifierControls.Add(dateTimePicker);
 
