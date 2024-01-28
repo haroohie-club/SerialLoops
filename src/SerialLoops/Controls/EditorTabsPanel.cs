@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using Eto.Forms;
+﻿using Eto.Forms;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Editors;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SerialLoops.Controls
@@ -114,7 +114,7 @@ namespace SerialLoops.Controls
             }
         }
 
-        private void Tabs_PageClosed(object sender, DocumentPageEventArgs e)
+        public void Tabs_PageClosed(object sender, DocumentPageEventArgs e)
         {
             if (e.Page.GetType() == typeof(BackgroundMusicEditor))
             {
@@ -141,7 +141,10 @@ namespace SerialLoops.Controls
 
             // Add editor-specific toolbar commands
             List<Command> commands = ((Editor)Tabs.SelectedPage)?.EditorCommands;
-            if (commands is null || commands.Count == 0) return;
+            if (commands is null || commands.Count == 0)
+            {
+                return;
+            }
 
             SubMenuItem editItem = new() { Text = "&Edit", Tag = Editor.EDITOR_TOOLBAR_TAG };
             SeparatorToolItem separator = new() { Tag = Editor.EDITOR_TOOLBAR_TAG, Style = "sl-toolbar-separator" };
