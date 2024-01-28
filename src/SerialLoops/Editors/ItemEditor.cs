@@ -33,7 +33,6 @@ namespace SerialLoops.Editors
                     Items =
                     {
                         new ImageView() { Image = new SKGuiImage(_item.GetImage()) },
-                        $"{_item.ItemGraphic.Index}",
                         new StackLayout
                         {
                             Orientation = Orientation.Horizontal,
