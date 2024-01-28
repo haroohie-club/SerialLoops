@@ -17,6 +17,7 @@ namespace SerialLoops.Lib.Script
         public PaletteEffectScriptParameter.PaletteEffect BgPalEffect { get; set; }
         public ScriptItemCommand BgScrollCommand { get; set; }
         public bool BgPositionBool { get; set; }
+        public (ItemItem Item, ItemItem.ItemLocation Location) Item { get; set; }
         public List<PositionedSprite> Sprites { get; set; } = [];
         public ScriptItemCommand LastDialogueCommand { get; set; }
         public string ErrorImage { get; set; }

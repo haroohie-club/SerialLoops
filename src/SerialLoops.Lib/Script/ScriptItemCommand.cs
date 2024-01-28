@@ -502,10 +502,10 @@ namespace SerialLoops.Lib.Script
                                 parameters.Add(new ItemScriptParameter("Item", parameter));
                                 break;
                             case 1:
-                                parameters.Add(new ShortScriptParameter("X", parameter));
+                                parameters.Add(new ItemLocationScriptParameter("Location", parameter));
                                 break;
                             case 2:
-                                parameters.Add(new ShortScriptParameter("Y", parameter));
+                                parameters.Add(new ItemTransitionScriptParameter("Transition", parameter));
                                 break;
                         }
                         break;

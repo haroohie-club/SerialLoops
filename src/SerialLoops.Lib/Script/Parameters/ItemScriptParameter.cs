@@ -2,15 +2,10 @@
 
 namespace SerialLoops.Lib.Script.Parameters
 {
-    public class ItemScriptParameter : ScriptParameter
+    public class ItemScriptParameter(string name, short itemIndex) : ScriptParameter(name, ParameterType.ITEM)
     {
-        public short ItemIndex { get; set; }
+        public short ItemIndex { get; set; } = itemIndex;
         public override short[] GetValues(object obj = null) => new short[] { ItemIndex };
-
-        public ItemScriptParameter(string name, short itemIndex) : base(name, ParameterType.ITEM)
-        {
-            ItemIndex = itemIndex;
-        }
 
         public override ItemScriptParameter Clone(Project project, EventFile eventFile)
         {

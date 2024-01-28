@@ -133,7 +133,7 @@ namespace SerialLoops.Controls
             _log = log;
 
             SelectedChanged = new();
-            Items = new List<IPreviewableGraphic>();
+            Items = [];
             InitializeComponent();
         }
 
@@ -144,7 +144,7 @@ namespace SerialLoops.Controls
             Selected = selected;
             
             SelectedChanged = new();
-            Items = new List<IPreviewableGraphic>();
+            Items = [];
             InitializeComponent();
         }
 
@@ -199,7 +199,7 @@ namespace SerialLoops.Controls
             _text = text;
 
             SelectedChanged = new();
-            Items = new List<IPreviewableGraphic>();
+            Items = [];
             InitializeComponent();
         }
 

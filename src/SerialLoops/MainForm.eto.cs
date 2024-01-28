@@ -669,6 +669,9 @@ namespace SerialLoops
                             chibiItem.ChibiEntryModifications[modifiedEntryName] = false;
                         }
                         break;
+                    case ItemDescription.ItemType.Item:
+                        ((ItemItem)item).Write(OpenProject, Log);
+                        break;
                     case ItemDescription.ItemType.Place:
                         PlaceItem placeItem = (PlaceItem)item;
                         if (placeItem.PlaceName != item.DisplayName[4..])

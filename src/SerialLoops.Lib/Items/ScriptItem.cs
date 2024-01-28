@@ -370,6 +370,17 @@ namespace SerialLoops.Lib.Items
                     }
                 }
 
+                // Draw items
+                ScriptItemCommand lastItemCommand = commands.LastOrDefault(c => c.Verb == CommandVerb.ITEM_DISPIMG);
+                if (lastItemCommand is not null)
+                {
+                    ItemItem item = (ItemItem)project.Items.FirstOrDefault(i => i.Type == ItemType.Item && ((ItemScriptParameter)lastItemCommand.Parameters[0]).ItemIndex == ((ItemItem)i).ItemIndex);
+                    if (item is not null && ((ItemLocationScriptParameter)lastItemCommand.Parameters[1]).Location != ItemItem.ItemLocation.Exit)
+                    {
+                        preview.Item = (item, ((ItemLocationScriptParameter)lastItemCommand.Parameters[1]).Location);
+                    }
+                }
+
                 // Draw character sprites
                 Dictionary<CharacterItem, PositionedSprite> sprites = [];
                 Dictionary<CharacterItem, PositionedSprite> previousSprites = [];
@@ -655,6 +666,29 @@ namespace SerialLoops.Lib.Items
 
                         default:
                             canvas.DrawBitmap(preview.Background.GetBackground(), new SKPoint(0, 192), PaletteEffectScriptParameter.GetPaletteEffectPaint(preview.BgPalEffect));
+                            break;
+                    }
+                }
+
+                if (preview.Item.Item is not null)
+                {
+                    int width = preview.Item.Item.ItemGraphic.Width;
+                    switch (preview.Item.Location)
+                    {
+                        case ItemItem.ItemLocation.Left:
+                            canvas.DrawBitmap(preview.Item.Item.ItemGraphic.GetImage(transparentIndex: 0), 128 - width, 204);
+                            break;
+
+                        case ItemItem.ItemLocation.Center:
+                            canvas.DrawBitmap(preview.Item.Item.ItemGraphic.GetImage(transparentIndex: 0), 128 - width / 2, 204);
+                            break;
+
+                        case ItemItem.ItemLocation.Right:
+                            canvas.DrawBitmap(preview.Item.Item.ItemGraphic.GetImage(transparentIndex: 0), 128, 204);
+                            break;
+
+                        default:
+                        case ItemItem.ItemLocation.Exit:
                             break;
                     }
                 }
