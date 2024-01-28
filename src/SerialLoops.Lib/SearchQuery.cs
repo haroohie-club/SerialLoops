@@ -16,10 +16,11 @@ public class SearchQuery
     {
         // Quick search filters
         Title = 1,
+        Background_ID = 2,
 
         // Deep search filters
         Dialogue_Text = 11,
-        Script_Flag = 12,
+        Flag = 12,
         Speaker_Name = 13,
         Conditional = 14,
         Background_Type = 15,

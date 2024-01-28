@@ -5,23 +5,12 @@ namespace SerialLoops.Lib.Script
 {
     public class SpritePositioning
     {
-        public SpritePosition Position { get; set; }
+        public int X { get; set; }
         public int Layer { get; set; }
 
         public SKPoint GetSpritePosition(SKBitmap sprite)
         {
-            switch (Position)
-            {
-                case SpritePosition.LEFT:
-                    return new SKPoint(-65, 384 - sprite.Height);
-
-                default:
-                case SpritePosition.CENTER:
-                    return new SKPoint(0, 384 - sprite.Height);
-
-                case SpritePosition.RIGHT:
-                    return new SKPoint(65, 384 - sprite.Height);
-            }
+            return new SKPoint(X, 384 - sprite.Height);
         }
 
         public enum SpritePosition

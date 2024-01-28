@@ -4,21 +4,20 @@ using SerialLoops.Controls;
 using SerialLoops.Dialogs;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
+using SerialLoops.Utility;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using SerialLoops.Utility;
 
 namespace SerialLoops
 {
-    partial class SearchDialog : FindItemsWindow
+    partial class SearchDialog : FindItemsDialog
     {
         private ItemResultsPanel _results;
         private SearchBox _searchInput;
         
         public string Text { get => _searchInput.Text; set => _searchInput.Text = value; }
-        private readonly HashSet<SearchQuery.DataHolder> _scopes = new() { SearchQuery.DataHolder.Title };
-        private readonly HashSet<ItemDescription.ItemType> _types = Enum.GetValues<ItemDescription.ItemType>().ToHashSet();
+        private readonly HashSet<SearchQuery.DataHolder> _scopes = [SearchQuery.DataHolder.Title];
+        private readonly HashSet<ItemDescription.ItemType> _types = [.. Enum.GetValues<ItemDescription.ItemType>()];
         private readonly Label _searchWarningLabel = new()
         {
             Text = "Press ENTER to execute search.",
@@ -26,7 +25,7 @@ namespace SerialLoops
             VerticalAlignment = VerticalAlignment.Center,
             Visible = false,
         };
-        private Label _resultsLabel = new()
+        private readonly Label _resultsLabel = new()
         {
             Text = "Results",
             TextAlignment = TextAlignment.Center,
@@ -109,9 +108,9 @@ namespace SerialLoops
             }
         }
 
-        private Container GetFiltersPanel()
+        private TableLayout GetFiltersPanel()
         {
-            List<Option> searchScopes = new();
+            List<Option> searchScopes = [];
             foreach (SearchQuery.DataHolder scope in Enum.GetValues(typeof(SearchQuery.DataHolder)))
             {
                 searchScopes.Add(new BooleanOption
@@ -133,7 +132,7 @@ namespace SerialLoops
                 });
             }
             
-            List<Option> typeOptions = new();
+            List<Option> typeOptions = [];
             foreach (ItemDescription.ItemType type in Enum.GetValues(typeof(ItemDescription.ItemType)))
             {
                 typeOptions.Add(new ItemBooleanOption(Log)

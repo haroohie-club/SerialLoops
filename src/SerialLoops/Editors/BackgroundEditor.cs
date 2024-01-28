@@ -38,8 +38,9 @@ namespace SerialLoops.Editors
                 };
 
                 extrasInfo.Items.Add(cgNameBox);
+                extrasInfo.Items.Add($"Flag: {_bg.Flag}");
                 extrasInfo.Items.Add($"Unknown Extras Short: {_bg.ExtrasShort}");
-                extrasInfo.Items.Add($"Unknown Extras Integer: {_bg.ExtrasInt}");
+                extrasInfo.Items.Add($"Unknown Extras Byte: {_bg.ExtrasByte}");
             }
 
             return new Scrollable

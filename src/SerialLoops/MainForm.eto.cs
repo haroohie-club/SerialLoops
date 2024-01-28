@@ -1,6 +1,5 @@
 using Eto.Forms;
 using HaruhiChokuretsuLib.Archive;
-using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
 using SerialLoops.Controls;
 using SerialLoops.Dialogs;
@@ -296,6 +295,9 @@ namespace SerialLoops
             Command findOrphanedItemsCommand = new() { MenuText = "Find Orphaned Items...", Image = ControlGenerator.GetIcon("Orphan_Search", Log) };
             findOrphanedItemsCommand.Executed += FindOrphanedItems_Executed;
 
+            Command editSaveFileCommand = new() { MenuText = "Edit Save File..." };
+            editSaveFileCommand.Executed += EditSaveFileCommand_Executed;
+
             // Build
             Command buildIterativeProjectCommand = new()
             {
@@ -358,6 +360,8 @@ namespace SerialLoops
                     editTutorialMappingsCommand,
                     searchProjectCommand,
                     findOrphanedItemsCommand,
+                    new SeparatorMenuItem(),
+                    editSaveFileCommand,
                 }
             });
             Menu.Items.Add(new SubMenuItem
@@ -806,16 +810,34 @@ namespace SerialLoops
                 ((IProgressTracker)tracker).Focus("Finding orphaned items...", 1);
 
                 ProgressDialog _ = new(() =>
+                {
+                    Application.Instance.Invoke(() =>
                     {
-                        Application.Instance.Invoke(() =>
-                        {
-                            orphanedItemsDialog = new(OpenProject, ItemExplorer, EditorTabs, Log);
-                            tracker.Finished++;
-                        });
-                    }, () => { Application.Instance.Invoke(() => { orphanedItemsDialog?.Show(); }); }, tracker,
-                    "Finding orphaned items");
+                        orphanedItemsDialog = new(OpenProject, ItemExplorer, EditorTabs, Log);
+                        tracker.Finished++;
+                    });
+                }, () => { Application.Instance.Invoke(() => { orphanedItemsDialog?.Show(); }); }, tracker,
+                "Finding orphaned items");
             }
         }
+
+        private void EditSaveFileCommand_Executed(object sender, EventArgs e)
+        {
+            if (OpenProject is not null)
+            {
+                OpenFileDialog openFileDialog = new() { Title = "Open Chokuretsu save file" };
+                openFileDialog.Filters.Add(new("Chokuretsu Save File", ["*.sav"]));
+                if (openFileDialog.ShowAndReportIfFileSelected(this))
+                {
+                    SaveEditorDialog saveEditorDialog = new(Log, OpenProject, EditorTabs, openFileDialog.FileName);
+                    if (saveEditorDialog.LoadedSuccessfully)
+                    {
+                        saveEditorDialog.Show();
+                    }
+                }
+            }
+        }
+
 
         private void BuildIterativeProject_Executed(object sender, EventArgs e)
         {
@@ -964,7 +986,7 @@ namespace SerialLoops
                 {
                     // message box with yes no cancel buttons
                     DialogResult result = MessageBox.Show(
-                        $"You have unsaved changes in {unsavedItems.Count()} item(s)." +
+                        $"You have unsaved changes in {unsavedItems.Count()} item(s). " +
                         $"Would you like to save before closing the project?",
                         MessageBoxButtons.YesNoCancel, MessageBoxType.Warning
                     );

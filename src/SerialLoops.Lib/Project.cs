@@ -744,9 +744,9 @@ namespace SerialLoops.Lib
             {
                 if (Items[i].CanRename || Items[i].Type == ItemDescription.ItemType.Place) // We don't want to manually rename places, but they do use the display name pattern
                 {
-                    if (ItemNames.ContainsKey(Items[i].Name))
+                    if (ItemNames.TryGetValue(Items[i].Name, out string value))
                     {
-                        Items[i].Rename(ItemNames[Items[i].Name]);
+                        Items[i].Rename(value);
                     }
                     else
                     {
@@ -888,6 +888,13 @@ namespace SerialLoops.Lib
                     return item.Name.Contains(term, StringComparison.OrdinalIgnoreCase) ||
                            item.DisplayName.Contains(term, StringComparison.OrdinalIgnoreCase);
 
+                case SearchQuery.DataHolder.Background_ID:
+                    if (int.TryParse(term, out int backgroundId))
+                    {
+                        return item.Type == ItemDescription.ItemType.Background && ((BackgroundItem)item).Id == backgroundId;
+                    }
+                    return false;
+
                 case SearchQuery.DataHolder.Dialogue_Text:
                     if (item is ScriptItem dialogueScript)
                     {
@@ -910,7 +917,7 @@ namespace SerialLoops.Lib
                     }
                     return false;
 
-                case SearchQuery.DataHolder.Script_Flag:
+                case SearchQuery.DataHolder.Flag:
                     if (item is ScriptItem flagScript)
                     {
                         return flagScript.GetScriptCommandTree(this, logger)
@@ -918,6 +925,29 @@ namespace SerialLoops.Lib
                                 .Where(p => p.Type == ScriptParameter.ParameterType.FLAG)
                                 .Any(p => ((FlagScriptParameter)p).FlagName
                                     .Contains(term, StringComparison.OrdinalIgnoreCase))));
+                    }
+                    else if (short.TryParse(term, out short flagTerm))
+                    {
+                        if (item is BackgroundMusicItem flagBgm)
+                        {
+                            return flagBgm.Flag == flagTerm;
+                        }
+                        else if (item is BackgroundItem flagBg)
+                        {
+                            return flagBg.Flag == flagTerm;
+                        }
+                        else if (item is TopicItem flagTopic)
+                        {
+                            return flagTopic.TopicEntry.Id == flagTerm;
+                        }
+                        else if (item is PuzzleItem flagPuzzle)
+                        {
+                            return flagPuzzle.Puzzle.Settings.Unknown15 == flagTerm || flagPuzzle.Puzzle.Settings.Unknown16 == flagTerm;
+                        }
+                        else if (item is GroupSelectionItem flagGroupSelection)
+                        {
+                            return flagGroupSelection.Selection.Activities.Any(a => a?.Routes.Any(r => r?.Flag == flagTerm) ?? false);
+                        }
                     }
                     return false;
 

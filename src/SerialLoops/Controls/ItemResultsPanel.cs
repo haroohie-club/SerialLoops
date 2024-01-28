@@ -9,7 +9,7 @@ namespace SerialLoops.Controls
 {
     public class ItemResultsPanel : ItemListPanel
     {
-        public FindItemsWindow Window { get; set; }
+        public FindItemsDialog Window { get; set; }
         public ItemResultsPanel(List<ItemDescription> results, ILogger log, bool expandItems = true) : base(results, new Size(280, 185), expandItems, log) { }
 
         protected override void ItemList_ItemClicked(object sender, EventArgs e)
