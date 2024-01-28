@@ -3,44 +3,26 @@ using HaruhiChokuretsuLib.Util;
 using SerialLoops.Dialogs;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
-using SerialLoops.Lib.Util;
 using SerialLoops.Utility;
 using SkiaSharp;
 using System;
 using System.IO;
-using System.Linq;
 
 namespace SerialLoops.Editors
 {
-    public class BackgroundEditor(BackgroundItem item, Project project, ILogger log) : Editor(item, log, project)
+    public class ItemEditor(ItemItem item, Project project, ILogger log) : Editor(item,log, project)
     {
-        private BackgroundItem _bg;
+        private ItemItem _item;
 
         public override Container GetEditorPanel()
         {
-            _bg = (BackgroundItem)Description;
-            StackLayout extrasInfo = new();
+            _item = (ItemItem)Description;
 
             Button exportButton = new() { Text = "Export" };
             exportButton.Click += ExportButton_Click;
 
             Button replaceButton = new() { Text = "Replace" };
             replaceButton.Click += ReplaceButton_Click;
-
-            if (!string.IsNullOrEmpty(_bg.CgName))
-            {
-                TextBox cgNameBox = new() { Text = _bg.CgName, Width = 200 };
-                cgNameBox.TextChanged += (sender, args) =>
-                {
-                    _project.Extra.Cgs[_project.Extra.Cgs.IndexOf(_project.Extra.Cgs.First(b => b.Name.GetSubstitutedString(_project).Equals(_bg.CgName)))].Name = cgNameBox.Text.GetOriginalString(_project);
-                    _bg.CgName = cgNameBox.Text;
-                    UpdateTabTitle(false, cgNameBox);
-                };
-
-                extrasInfo.Items.Add(cgNameBox);
-                extrasInfo.Items.Add($"Unknown Extras Short: {_bg.ExtrasShort}");
-                extrasInfo.Items.Add($"Unknown Extras Integer: {_bg.ExtrasInt}");
-            }
 
             return new Scrollable
             {
@@ -50,8 +32,7 @@ namespace SerialLoops.Editors
                     Spacing = 5,
                     Items =
                     {
-                        new ImageView() { Image = new SKGuiImage(_bg.GetBackground()) },
-                        $"{_bg.Id} (0x{_bg.Id:X3}); {_bg.BackgroundType}",
+                        new ImageView() { Image = new SKGuiImage(_item.GetImage()) },
                         new StackLayout
                         {
                             Orientation = Orientation.Horizontal,
@@ -62,7 +43,6 @@ namespace SerialLoops.Editors
                                 replaceButton,
                             }
                         },
-                        extrasInfo,
                     }
                 }
             };
@@ -77,11 +57,11 @@ namespace SerialLoops.Editors
                 try
                 {
                     using FileStream fs = File.Create(saveFileDialog.FileName);
-                    _bg.GetBackground().Encode(fs, SKEncodedImageFormat.Png, 1);
+                    _item.GetImage().Encode(fs, SKEncodedImageFormat.Png, 1);
                 }
                 catch (Exception ex)
                 {
-                    _log.LogError($"Failed to export background {_bg.DisplayName} to file {saveFileDialog.FileName}: {ex.Message}\n\n{ex.StackTrace}");
+                    _log.LogError($"Failed to export background {_item.DisplayName} to file {saveFileDialog.FileName}: {ex.Message}\n\n{ex.StackTrace}");
                 }
             }
         }
@@ -89,29 +69,29 @@ namespace SerialLoops.Editors
         private void ReplaceButton_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new();
-            SKBitmap original = _bg.GetBackground();
+            SKBitmap original = _item.GetImage();
             openFileDialog.Filters.Add(new() { Name = "Supported Images", Extensions = [".bmp", ".gif", ".heif", ".jpg", ".jpeg", ".png", ".webp",] });
             if (openFileDialog.ShowAndReportIfFileSelected(this))
             {
-                ImageCropResizeDialog bgResizeDialog = new(SKBitmap.Decode(openFileDialog.FileName), original.Width, original.Height, _log);
-                bgResizeDialog.Closed += (sender, args) =>
+                ImageCropResizeDialog itemResizeDialog = new(SKBitmap.Decode(openFileDialog.FileName), original.Width, original.Height, _log);
+                itemResizeDialog.Closed += (sender, args) =>
                 {
-                    if (bgResizeDialog.SaveChanges)
+                    if (itemResizeDialog.SaveChanges)
                     {
                         try
                         {
                             LoopyProgressTracker tracker = new();
-                            _ = new ProgressDialog(() => _bg.SetBackground(bgResizeDialog.FinalImage, tracker, _log),
-                                () => Content = GetEditorPanel(), tracker, $"Replacing {_bg.DisplayName}...");
+                            _ = new ProgressDialog(() => _item.SetImage(itemResizeDialog.FinalImage, tracker, _log),
+                                () => Content = GetEditorPanel(), tracker, $"Replacing {_item.DisplayName}...");
                             UpdateTabTitle(false);
                         }
                         catch (Exception ex)
                         {
-                            _log.LogError($"Failed to replace background {_bg.DisplayName} with file {openFileDialog.FileName}: {ex.Message}\n\n{ex.StackTrace}");
+                            _log.LogError($"Failed to replace background {_item.DisplayName} with file {openFileDialog.FileName}: {ex.Message}\n\n{ex.StackTrace}");
                         }
                     }
                 };
-                bgResizeDialog.ShowModal();
+                itemResizeDialog.ShowModal();
             }
         }
     }

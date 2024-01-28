@@ -526,7 +526,7 @@ namespace SerialLoops.Editors
 
         private StackLayout GetMapCharactersLayout(TabPage parent)
         {
-            MapItem[] maps = _commands.Values.SelectMany(c => c).Where(c => c.Verb == EventFile.CommandVerb.LOAD_ISOMAP)
+            MapItem[] maps = _commands.Values.SelectMany(c => c).Where(c => c.Verb == CommandVerb.LOAD_ISOMAP)
                 .Select(c => ((MapScriptParameter)c.Parameters[0]).Map).ToArray();
 
             Button refreshMapListButton = new() { Text = "Refresh Maps List" };
@@ -937,8 +937,7 @@ namespace SerialLoops.Editors
                                 Project = _project,
                             };
 
-                            // BGDISPTEMP is able to display a lot more kinds of backgrounds properly than the other BG commands
-                            // Hence, this switch to make sure you don't accidentally crash the game
+                            // Distinguish between CGs and BGs
                             if (command.Verb == CommandVerb.BG_FADE)
                             {
                                 bgSelectionButton.Items.Add(NonePreviewableGraphic.BACKGROUND);
@@ -1207,9 +1206,36 @@ namespace SerialLoops.Editors
                             break;
 
                         case ScriptParameter.ParameterType.ITEM:
+                            CommandGraphicSelectionButton itemSelectionButton = new(
+                                (ItemItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Item && ((ItemItem)i).ItemIndex == ((ItemScriptParameter)parameter).ItemIndex),
+                                _tabs,
+                                _log)
+                            {
+                                Command = command,
+                                ParameterIndex = i,
+                            };
+                            itemSelectionButton.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Item).Cast<ItemItem>());
+                            itemSelectionButton.SelectedChanged.Executed += (obj, args) => ItemSelectionButton_SelectedChanged(itemSelectionButton, args);
                             ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
-                                ControlGenerator.GetControlWithLabel(parameter.Name,
-                                new TextBox { Text = ((ItemScriptParameter)parameter).ItemIndex.ToString() }));
+                                ControlGenerator.GetControlWithLabel(parameter.Name, itemSelectionButton));
+                            break;
+
+                        case ScriptParameter.ParameterType.ITEM_LOCATION:
+                            ScriptCommandDropDown itemLocationDropDown = new() { Command = command, ParameterIndex = i };
+                            itemLocationDropDown.Items.AddRange(Enum.GetNames<ItemItem.ItemLocation>().Select(l => new ListItem { Key = l, Text = l }));
+                            itemLocationDropDown.SelectedKey = ((ItemLocationScriptParameter)parameter).Location.ToString();
+                            itemLocationDropDown.SelectedKeyChanged += ItemLocationDropDown_SelectedKeyChanged;
+                            ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
+                                ControlGenerator.GetControlWithLabel(parameter.Name, itemLocationDropDown));
+                            break;
+
+                        case ScriptParameter.ParameterType.ITEM_TRANSITION:
+                            ScriptCommandDropDown itemTransitionDropDown = new() { Command = command, ParameterIndex = i };
+                            itemTransitionDropDown.Items.AddRange(Enum.GetNames<ItemItem.ItemTransition>().Select(l => new ListItem { Key = l, Text = l }));
+                            itemTransitionDropDown.SelectedKey = ((ItemTransitionScriptParameter)parameter).Transition.ToString();
+                            itemTransitionDropDown.SelectedKeyChanged += ItemTransitionDropDown_SelectedKeyChanged;
+                            ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
+                                ControlGenerator.GetControlWithLabel(parameter.Name, itemTransitionDropDown));
                             break;
 
                         case ScriptParameter.ParameterType.MAP:
@@ -1820,6 +1846,35 @@ namespace SerialLoops.Editors
                         }
                     }
 
+                    // Draw items
+                    ScriptItemCommand lastItemCommand = commands.LastOrDefault(c => c.Verb == CommandVerb.ITEM_DISPIMG);
+                    if (lastItemCommand is not null)
+                    {
+                        ItemItem item = (ItemItem)_project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Item && ((ItemScriptParameter)lastItemCommand.Parameters[0]).ItemIndex == ((ItemItem)i).ItemIndex);
+                        if (item is not null)
+                        {
+                            int width = item.ItemGraphic.Width;
+                            switch (((ItemLocationScriptParameter)lastItemCommand.Parameters[1]).Location)
+                            {
+                                case ItemItem.ItemLocation.Left:
+                                    canvas.DrawBitmap(item.ItemGraphic.GetImage(transparentIndex: 0), 128 - width, 204);
+                                    break;
+
+                                case ItemItem.ItemLocation.Center:
+                                    canvas.DrawBitmap(item.ItemGraphic.GetImage(transparentIndex: 0), 128 - width / 2, 204);
+                                    break;
+
+                                case ItemItem.ItemLocation.Right:
+                                    canvas.DrawBitmap(item.ItemGraphic.GetImage(transparentIndex: 0), 128, 204);
+                                    break;
+
+                                default:
+                                case ItemItem.ItemLocation.Exit:
+                                    break;
+                            }
+                        }
+                    }
+
                     // Draw character sprites
                     Dictionary<CharacterItem, PositionedSprite> sprites = new();
                     Dictionary<CharacterItem, PositionedSprite> previousSprites = new();
@@ -2312,12 +2367,43 @@ namespace SerialLoops.Editors
                 (short)Enum.Parse<FriendshipLevelScriptParameter.FriendshipCharacter>(dropDown.SelectedKey);
             UpdateTabTitle(false, dropDown);
         }
+        private void ItemSelectionButton_SelectedChanged(object sender, EventArgs e)
+        {
+            CommandGraphicSelectionButton selectionButton = (CommandGraphicSelectionButton)sender;
+            ItemItem selectedItem = (ItemItem)selectionButton.Selected;
+            _log.Log($"Attempting to modify parameter {selectionButton.ParameterIndex} to item {((ItemItem)selectionButton.Selected).Name} in {selectionButton.Command.Index} in file {_script.Name}...");
+            ((ItemScriptParameter)selectionButton.Command.Parameters[selectionButton.ParameterIndex]).ItemIndex = (short)selectedItem.ItemIndex;
+            _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(selectionButton.Command.Section)].Objects[selectionButton.Command.Index].Parameters[selectionButton.ParameterIndex] = (short)selectedItem.ItemIndex;
+            UpdateTabTitle(false, selectionButton);
+            Application.Instance.Invoke(() => UpdatePreview());
+        }
+        private void ItemLocationDropDown_SelectedKeyChanged(object sender, EventArgs e)
+        {
+            ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
+            _log.Log($"Attempting to modify parameter {dropDown.ParameterIndex} to map {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
+            ((ItemLocationScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Location = Enum.Parse<ItemItem.ItemLocation>(dropDown.SelectedKey);
+            ((ItemLocationScriptParameter)_commands[dropDown.Command.Section][dropDown.Command.Index].Parameters[dropDown.ParameterIndex]).Location = Enum.Parse<ItemItem.ItemLocation>(dropDown.SelectedKey);
+            _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
+                .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] = (short)((ItemLocationScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Location;
+            UpdateTabTitle(false, dropDown);
+            Application.Instance.Invoke(() => UpdatePreview());
+        }
+        private void ItemTransitionDropDown_SelectedKeyChanged(object sender, EventArgs e)
+        {
+            ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
+            _log.Log($"Attempting to modify parameter {dropDown.ParameterIndex} to map {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
+            ((ItemTransitionScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Transition = Enum.Parse<ItemItem.ItemTransition>(dropDown.SelectedKey);
+            ((ItemTransitionScriptParameter)_commands[dropDown.Command.Section][dropDown.Command.Index].Parameters[dropDown.ParameterIndex]).Transition = Enum.Parse<ItemItem.ItemTransition>(dropDown.SelectedKey);
+            _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
+                .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] = (short)((ItemTransitionScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Transition;
+            UpdateTabTitle(false, dropDown);
+        }
         private void MapDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
             ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
             _log.Log($"Attempting to modify parameter {dropDown.ParameterIndex} to map {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
             ((MapScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Map = (MapItem)_project.FindItem(dropDown.SelectedKey);
-            ((MapScriptParameter)_commands[dropDown.Command.Section][dropDown.Command.Index].Parameters[0]).Map = (MapItem)_project.FindItem(dropDown.SelectedKey);
+            ((MapScriptParameter)_commands[dropDown.Command.Section][dropDown.Command.Index].Parameters[dropDown.ParameterIndex]).Map = (MapItem)_project.FindItem(dropDown.SelectedKey);
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
                 .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] = (short)((MapScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Map.Map.Index;
             UpdateTabTitle(false, dropDown);

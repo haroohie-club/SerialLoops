@@ -44,6 +44,7 @@ namespace SerialLoops.Lib.Items
             Chess,
             Chibi,
             Group_Selection,
+            Item,
             Map,
             Place,
             Puzzle,

@@ -38,6 +38,8 @@ namespace SerialLoops.Lib.Script.Parameters
             FLAG,
             FRIENDSHIP_LEVEL,
             ITEM,
+            ITEM_LOCATION,
+            ITEM_TRANSITION,
             MAP,
             OPTION,
             PALETTE_EFFECT,
