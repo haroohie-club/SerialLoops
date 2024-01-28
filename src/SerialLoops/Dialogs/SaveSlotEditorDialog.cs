@@ -23,27 +23,34 @@ namespace SerialLoops.Dialogs
     {
         private readonly ILogger _log;
         private readonly SaveSection _saveSection;
+        private readonly string _fileName;
+        private readonly string _slotName;
         private readonly Project _project;
         private readonly EditorTabsPanel _tabs;
+        private readonly Action _callback;
 
         private readonly Dictionary<int, bool> _flagModifications = [];
         private readonly List<Control> _modifierControls = [];
         private ScriptItem _quickSaveScript;
         private ScriptPreview _quickSaveScriptPreview;
 
-        public SaveSlotEditorDialog(ILogger log, SaveSection saveSection, Project project, EditorTabsPanel tabs)
+        public SaveSlotEditorDialog(ILogger log, SaveSection saveSection, string fileName, string slotName,
+                                    Project project, EditorTabsPanel tabs, Action callback)
         {
             _log = log;
             _saveSection = saveSection;
+            _fileName = fileName;
+            _slotName = slotName;
             _project = project;
             _tabs = tabs;
+            _callback = callback;
 
             InitializeComponent();
         }
 
         private void InitializeComponent()
         {
-            Title = "Save Slot Editor";
+            Title = $"Edit Save File - {_fileName} - {_slotName}";
             Width = 500;
             Height = 800;
 
@@ -501,6 +508,7 @@ namespace SerialLoops.Dialogs
             layout.Rows.Add(buttonsLayout);
 
             Content = new Scrollable { Content = layout };
+            Closed += (sender, args) => _callback();
         }
     }
 }

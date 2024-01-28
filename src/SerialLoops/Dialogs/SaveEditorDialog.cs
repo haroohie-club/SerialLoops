@@ -5,6 +5,8 @@ using SerialLoops.Controls;
 using SerialLoops.Lib;
 using System;
 using System.IO;
+using SerialLoops.Lib.SaveFile;
+using SerialLoops.Utility;
 
 namespace SerialLoops.Dialogs
 {
@@ -41,15 +43,36 @@ namespace SerialLoops.Dialogs
 
         void InitializeComponent()
         {
-            Title = $"Save Editor - {Path.GetFileName(_saveLoc)}";
-            Width = 400;
-            Height = 400;
-            Button saveCommonButton = new() { Text = "Common Save Data", Height = 64 };
+            Title = $"Edit Save File - {Path.GetFileName(_saveLoc)}";
+            Width = 500;
+            Height = 395;
+            Resizable = false;
+            Padding = 10;
+            Content = GetContent();
+        }
+
+        private TableLayout GetContent()
+        {
+            
+            Button saveCommonButton = new()
+            {
+                Text = "Common Save Data...", 
+                Image = ControlGenerator.GetIcon("Edit_Save", _log)
+            };
             saveCommonButton.Click += (sender, args) =>
             {
-                SaveSlotEditorDialog saveSlotEditorDialog = new(_log, _save.CommonData, _project, _tabs);
+                SaveSlotEditorDialog saveSlotEditorDialog = new(
+                    _log,
+                    _save.CommonData,
+                    Path.GetFileName(_saveLoc), 
+                    "Common Save Data",
+                    _project,
+                    _tabs,
+                    () => { Content = GetContent(); }
+                );
                 saveSlotEditorDialog.Show();
             };
+            StackLayout commonDataRow = new(saveCommonButton) { HorizontalContentAlignment = HorizontalAlignment.Center };
 
             Button saveButton = new() { Text = "Save" };
             saveButton.Click += (sender, args) =>
@@ -84,36 +107,99 @@ namespace SerialLoops.Dialogs
                 }
             };
 
-            Content = new TableLayout
+            StackLayout title = new StackLayout(ControlGenerator.GetTextHeader("Save Files"))
+            {
+                HorizontalContentAlignment = HorizontalAlignment.Center
+            };
+            
+            return new TableLayout
             {
                 Spacing = new(5, 5),
                 Rows =
                 {
-                    new(saveCommonButton),
-                    new(GetSaveSlotPreviewButton(_save.CheckpointSaveSlots[0])),
-                    new(GetSaveSlotPreviewButton(_save.CheckpointSaveSlots[1])),
-                    new(GetSaveSlotPreviewButton(_save.QuickSaveSlot)),
-                    new(),
+                    title,
+                    new StackLayout { Height = 5 },
+                    GetSaveSlotPreview(_save.CheckpointSaveSlots[0], 1),
+                    GetSaveSlotPreview(_save.CheckpointSaveSlots[1], 2),
+                    GetSaveSlotPreview(_save.QuickSaveSlot, 3),
+                    new StackLayout { Height = 5 },
+                    commonDataRow,
+                    new StackLayout { Height = 20 },
                     new(buttonsLayout),
                 },
             };
         }
 
-        private Button GetSaveSlotPreviewButton(SaveSlotData slot)
+        private TableRow GetSaveSlotPreview(SaveSlotData data, int slotNum)
         {
-            Button slotButton = new() { Text = slot.EpisodeNumber == 0 ? "New Save" : $"EPISODE: {slot.EpisodeNumber}\n\n{slot.SaveTime:yyyy/MM/dd H:mm:ss}", Height = 64 };
+            return new TableLayout
+            {
+                Size = new(430, 64),
+                Spacing = new(6, 6),
+                Rows =
+                {
+                    new TableRow(
+                        new SKGuiImage(
+                            new SaveFilePreview
+                            {
+                                SlotData = data,
+                                Project = _project
+                            }.DrawPreview()
+                        ),
+                        new StackLayout(
+                            slotNum == 3 ? "Quick Save" : $"File {slotNum}",
+                            new StackLayout(
+                                GetSlotEditButton(data, Path.GetFileName(_saveLoc), slotNum),
+                                GetSlotClearButton(data, Path.GetFileName(_saveLoc), slotNum)
+                            )
+                            {
+                                Orientation = Orientation.Horizontal,
+                                Spacing = 5,
+                            }
+                        )
+                        { 
+                            Orientation = Orientation.Vertical, 
+                            HorizontalContentAlignment = HorizontalAlignment.Center, 
+                            VerticalContentAlignment = VerticalAlignment.Center,
+                            Padding = 5,
+                            Spacing = 5,
+                        }
+                    )
+                }
+            };
+        }
+
+        private Button GetSlotEditButton(SaveSlotData slot, string fileName, int slotNumber)
+        {
+            Button slotButton = new() { Width = 22, Image = ControlGenerator.GetIcon("Edit_Save", _log) };
             slotButton.Click += (sender, args) =>
             {
                 SaveSlotEditorDialog saveSlotEditorDialog;
                 if (slot is QuickSaveSlotData quickSave)
                 {
-                    saveSlotEditorDialog = new(_log, quickSave, _project, _tabs);
+                    saveSlotEditorDialog = new(_log, quickSave, fileName, "Quick Save Data", _project, _tabs, () => { Content = GetContent(); });
                 }
                 else
                 {
-                    saveSlotEditorDialog = new(_log, slot, _project, _tabs);
+                    saveSlotEditorDialog = new(_log, slot, fileName, $"File {slotNumber}", _project, _tabs, () => { Content = GetContent(); });
                 }
                 saveSlotEditorDialog.Show();
+            };
+            return slotButton;
+        }
+        
+        private Button GetSlotClearButton(SaveSlotData slot, string fileName, int slotNumber)
+        {
+            Button slotButton = new() 
+            { 
+                Width = 22, 
+                Image = ControlGenerator.GetIcon("Clear", _log),
+                Enabled = slot.EpisodeNumber > 0 
+            };
+            slotButton.Click += (sender, args) =>
+            {
+                slot.EpisodeNumber = 0;
+                _log.Log($"Cleared Save File {slotNumber}.");
             };
             return slotButton;
         }

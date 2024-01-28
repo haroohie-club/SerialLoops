@@ -143,6 +143,14 @@ namespace SerialLoops
             };
             openProjectCommand.Executed += OpenProject_Executed;
 
+            Command editSaveFileCommand = new()
+            {
+                MenuText = "Edit Save File...",
+                ToolBarText = "Edit Save File",
+                Image = ControlGenerator.GetIcon("Edit_Save", Log)
+            };
+            editSaveFileCommand.Executed += EditSaveFileCommand_Executed;
+
             // Application Items
             Command preferencesCommand = new();
             preferencesCommand.Executed += PreferencesCommand_Executed;
@@ -175,15 +183,7 @@ namespace SerialLoops
 
             // About
             Command aboutCommand = new() { MenuText = "About...", Image = ControlGenerator.GetIcon("Help", Log) };
-            aboutCommand.Executed += (sender, e) => new AboutDialog
-            {
-                ProgramName = "Serial Loops",
-                Developers = new[] { "Jonko", "William278" },
-                Copyright = "© Haroohie Translation Club, 2023",
-                Website = new Uri("https://haroohie.club"),
-                Version = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>()
-                    .InformationalVersion,
-            }.ShowDialog(this);
+            aboutCommand.Executed += AboutCommand_Executed;
 
             // Create Menu
             _recentProjectsCommand = new() { Text = "Recent Projects" };
@@ -199,7 +199,9 @@ namespace SerialLoops
                         {
                             newProjectCommand,
                             openProjectCommand,
-                            _recentProjectsCommand
+                            _recentProjectsCommand,
+                            new SeparatorMenuItem(),
+                            editSaveFileCommand
                         }
                     }
                 },
@@ -295,9 +297,6 @@ namespace SerialLoops
             Command findOrphanedItemsCommand = new() { MenuText = "Find Orphaned Items...", Image = ControlGenerator.GetIcon("Orphan_Search", Log) };
             findOrphanedItemsCommand.Executed += FindOrphanedItems_Executed;
 
-            Command editSaveFileCommand = new() { MenuText = "Edit Save File..." };
-            editSaveFileCommand.Executed += EditSaveFileCommand_Executed;
-
             // Build
             Command buildIterativeProjectCommand = new()
             {
@@ -339,14 +338,17 @@ namespace SerialLoops
             // Add project items to existing File menu
             if (Menu.Items.FirstOrDefault(x => x.Text.Contains("File")) is SubMenuItem fileMenu)
             {
-                fileMenu.Items.AddRange(new[]
+                foreach (var command in new[]
+                     {
+                         saveProjectCommand,
+                         projectSettingsCommand,
+                         migrateProjectCommand,
+                         exportPatchCommand,
+                         closeProjectCommand
+                     })
                 {
-                    saveProjectCommand,
-                    projectSettingsCommand,
-                    migrateProjectCommand,
-                    exportPatchCommand,
-                    closeProjectCommand
-                });
+                    fileMenu.Items.Insert(3, command);
+                }
             }
 
             Menu.Items.Add(new SubMenuItem
@@ -360,8 +362,6 @@ namespace SerialLoops
                     editTutorialMappingsCommand,
                     searchProjectCommand,
                     findOrphanedItemsCommand,
-                    new SeparatorMenuItem(),
-                    editSaveFileCommand,
                 }
             });
             Menu.Items.Add(new SubMenuItem
@@ -480,6 +480,19 @@ namespace SerialLoops
                 ProjectsCache.RecentWorkspaces.Remove(project);
             });
             ProjectsCache.Save(Log);
+        }
+        
+        public void AboutCommand_Executed(object sender, EventArgs e)
+        {
+            new AboutDialog
+            {
+                ProgramName = "Serial Loops",
+                Developers = new[] { "Jonko", "William278" },
+                Copyright = "© Haroohie Translation Club, 2023",
+                Website = new Uri("https://haroohie.club"),
+                Version = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>()
+                    .InformationalVersion,
+            }.ShowDialog(this);
         }
 
         public void NewProjectCommand_Executed(object sender, EventArgs e)
@@ -821,11 +834,11 @@ namespace SerialLoops
             }
         }
 
-        private void EditSaveFileCommand_Executed(object sender, EventArgs e)
+        public void EditSaveFileCommand_Executed(object sender, EventArgs e)
         {
-            if (OpenProject is not null)
+            var openEditor = () =>
             {
-                OpenFileDialog openFileDialog = new() { Title = "Open Chokuretsu save file" };
+                OpenFileDialog openFileDialog = new() {Title = "Open Chokuretsu Save File"};
                 openFileDialog.Filters.Add(new("Chokuretsu Save File", ["*.sav"]));
                 if (openFileDialog.ShowAndReportIfFileSelected(this))
                 {
@@ -834,6 +847,24 @@ namespace SerialLoops
                     {
                         saveEditorDialog.Show();
                     }
+                }
+            };
+            if (OpenProject is not null)
+            {
+                openEditor.Invoke();
+                return;
+            }
+            
+            // Ask user if they wish to create a project
+            if (MessageBox.Show("To edit Save Files, you need to have a project open.\n" +
+                                "No project is currently open. Would you like to create a new project?",
+                "No Project Open", MessageBoxButtons.YesNo, MessageBoxType.Question,
+                MessageBoxDefaultButton.Yes) == DialogResult.Yes)
+            {
+                NewProjectCommand_Executed(sender, e);
+                if (OpenProject is not null)
+                {
+                    openEditor.Invoke();
                 }
             }
         }
