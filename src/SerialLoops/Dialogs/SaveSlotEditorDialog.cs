@@ -248,6 +248,13 @@ namespace SerialLoops.Dialogs
             Button applyFiltersButton = new() { Image = ControlGenerator.GetIcon("Search", _log), Text = "Filter"};
             Label totalPagesLabel = new() { Text = $" / {totalPages}" };
             Label totalResultsLabel = new() { Text = $"{_flags.Count} results" };
+            filterBox.KeyDown += (sender, args) =>
+            {
+                if (args.Key == Keys.Enter)
+                {
+                    applyFiltersButton.PerformClick();
+                }
+            };
             applyFiltersButton.Click += ((sender, args) =>  {
                 _flags = GetFilteredFlags(filterBox.Text, showSetFlagsCheckbox.Checked ?? true);
                 flagPageBox.Value = _flagPage = 1;

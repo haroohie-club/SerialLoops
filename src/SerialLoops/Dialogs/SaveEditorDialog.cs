@@ -70,7 +70,7 @@ namespace SerialLoops.Dialogs
             };
 
             Button cancelButton = new() { Text = "Cancel" };
-            cancelButton.Click += (sender, args) => { Close(); };
+            cancelButton.Click += (sender, args) => Close();
             
             StackLayout buttonsLayout = new()
             {
@@ -152,11 +152,7 @@ namespace SerialLoops.Dialogs
                 {
                     new TableRow(
                         new SKGuiImage(
-                            new SaveFilePreview
-                            {
-                                SlotData = data,
-                                Project = _project
-                            }.DrawPreview()
+                            new SaveFilePreview(data, _project).DrawPreview()
                         ),
                         new StackLayout(
                             slotNum == 3 ? "Quick Save" : $"File {slotNum}",
