@@ -18,6 +18,7 @@ namespace SerialLoops.Dialogs
         private Project _project;
         private EditorTabsPanel _tabs;
 
+        private Control _fileContainer;
         public bool LoadedSuccessfully = true;
 
         public SaveEditorDialog(ILogger log, Project project, EditorTabsPanel tabs, string saveLoc)
@@ -44,36 +45,11 @@ namespace SerialLoops.Dialogs
         void InitializeComponent()
         {
             Title = $"Edit Save File - {Path.GetFileName(_saveLoc)}";
-            Width = 500;
-            Height = 395;
+            Width = 600;
+            Height = 380;
             Resizable = false;
             Padding = 10;
-            Content = GetContent();
-        }
-
-        private TableLayout GetContent()
-        {
             
-            Button saveCommonButton = new()
-            {
-                Text = "Common Save Data...", 
-                Image = ControlGenerator.GetIcon("Edit_Save", _log)
-            };
-            saveCommonButton.Click += (sender, args) =>
-            {
-                SaveSlotEditorDialog saveSlotEditorDialog = new(
-                    _log,
-                    _save.CommonData,
-                    Path.GetFileName(_saveLoc), 
-                    "Common Save Data",
-                    _project,
-                    _tabs,
-                    () => { Content = GetContent(); }
-                );
-                saveSlotEditorDialog.Show();
-            };
-            StackLayout commonDataRow = new(saveCommonButton) { HorizontalContentAlignment = HorizontalAlignment.Center };
-
             Button saveButton = new() { Text = "Save" };
             saveButton.Click += (sender, args) =>
             {
@@ -90,11 +66,8 @@ namespace SerialLoops.Dialogs
             };
 
             Button cancelButton = new() { Text = "Cancel" };
-            cancelButton.Click += (sender, args) =>
-            {
-                Close();
-            };
-
+            cancelButton.Click += (sender, args) => { Close(); };
+            
             StackLayout buttonsLayout = new()
             {
                 Orientation = Orientation.Horizontal,
@@ -107,26 +80,63 @@ namespace SerialLoops.Dialogs
                 }
             };
 
-            StackLayout title = new StackLayout(ControlGenerator.GetTextHeader("Save Files"))
+            _fileContainer = GetSaveFiles();
+            Content = new TableLayout
             {
-                HorizontalContentAlignment = HorizontalAlignment.Center
-            };
-            
-            return new TableLayout
-            {
-                Spacing = new(5, 5),
                 Rows =
                 {
-                    title,
-                    new StackLayout { Height = 5 },
-                    GetSaveSlotPreview(_save.CheckpointSaveSlots[0], 1),
-                    GetSaveSlotPreview(_save.CheckpointSaveSlots[1], 2),
-                    GetSaveSlotPreview(_save.QuickSaveSlot, 3),
-                    new StackLayout { Height = 5 },
-                    commonDataRow,
-                    new StackLayout { Height = 20 },
-                    new(buttonsLayout),
+                    _fileContainer,
+                    buttonsLayout
                 },
+                Spacing = new(0, 20)
+            };
+        }
+
+        private Control GetSaveFiles()
+        {
+            
+            Button saveCommonButton = new()
+            {
+                Text = "Common Save Data...", 
+                Image = ControlGenerator.GetIcon("Edit_Save", _log)
+            };
+            saveCommonButton.Click += (sender, args) =>
+            {
+                SaveSlotEditorDialog saveSlotEditorDialog = new(
+                    _log,
+                    _save.CommonData,
+                    Path.GetFileName(_saveLoc), 
+                    "Common Save Data",
+                    _project,
+                    _tabs,
+                    () => { _fileContainer = GetSaveFiles(); }
+                );
+                saveSlotEditorDialog.Show();
+            };
+            StackLayout commonDataRow = new(saveCommonButton) { HorizontalContentAlignment = HorizontalAlignment.Center };
+
+            return new TableLayout
+            {
+                Rows =
+                {
+                    new GroupBox
+                    {
+                        Text = "Save Files",
+                        Padding = 5,
+                        Content = new TableLayout
+                        {
+                            Spacing = new(0, 10),
+                            Rows =
+                            {
+                                GetSaveSlotPreview(_save.CheckpointSaveSlots[0], 1),
+                                GetSaveSlotPreview(_save.CheckpointSaveSlots[1], 2),
+                                GetSaveSlotPreview(_save.QuickSaveSlot, 3),
+                            },
+                        }
+                    },
+                    commonDataRow,
+                },
+                Spacing = new(0, 15)
             };
         }
 
@@ -158,10 +168,9 @@ namespace SerialLoops.Dialogs
                             }
                         )
                         { 
-                            Orientation = Orientation.Vertical, 
-                            HorizontalContentAlignment = HorizontalAlignment.Center, 
+                            Orientation = Orientation.Vertical,
+                            HorizontalContentAlignment = HorizontalAlignment.Center,
                             VerticalContentAlignment = VerticalAlignment.Center,
-                            Padding = 5,
                             Spacing = 5,
                         }
                     )
@@ -177,11 +186,13 @@ namespace SerialLoops.Dialogs
                 SaveSlotEditorDialog saveSlotEditorDialog;
                 if (slot is QuickSaveSlotData quickSave)
                 {
-                    saveSlotEditorDialog = new(_log, quickSave, fileName, "Quick Save Data", _project, _tabs, () => { Content = GetContent(); });
+                    saveSlotEditorDialog = new(_log, quickSave, fileName, "Quick Save Data", _project, _tabs, 
+                        () => { _fileContainer = GetSaveFiles(); });
                 }
                 else
                 {
-                    saveSlotEditorDialog = new(_log, slot, fileName, $"File {slotNumber}", _project, _tabs, () => { Content = GetContent(); });
+                    saveSlotEditorDialog = new(_log, slot, fileName, $"File {slotNumber}", _project, _tabs, 
+                        () => { _fileContainer = GetSaveFiles(); });
                 }
                 saveSlotEditorDialog.Show();
             };
