@@ -1,5 +1,4 @@
 ﻿using Eto.Forms;
-using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Save;
 using HaruhiChokuretsuLib.Util;
@@ -12,12 +11,9 @@ using SerialLoops.Utility;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
-using SerialLoops.Lib.SaveFile;
 using static SerialLoops.Lib.Items.ItemDescription;
 
 namespace SerialLoops.Dialogs
@@ -61,7 +57,7 @@ namespace SerialLoops.Dialogs
         {
             Title = $"Edit Save File - {_fileName} - {_slotName}";
             Width = 550;
-            Height = 580;
+            Height = 560;
             Padding = 10;
 
             TabControl menuTabs = new();
@@ -78,7 +74,7 @@ namespace SerialLoops.Dialogs
 
             if (_saveSection is CommonSaveData commonSave)
             {
-                menuTabs.Pages.Add(new TabPage { Content = GetCommonDataBox(commonSave), Text = "Common Data"});
+                menuTabs.Pages.Add(new TabPage { Content = GetCommonDataBox(commonSave), Text = "Config Data"});
             }
             else
             {
@@ -263,7 +259,7 @@ namespace SerialLoops.Dialogs
             
             return new()
             {
-                Height = 420,
+                Height = 400,
                 Spacing = new(0, 10),
                 Padding = 10,
                 Rows =
@@ -273,9 +269,7 @@ namespace SerialLoops.Dialogs
                         filterBox,
                         applyFiltersButton,
                     ]),
-                    new TableRow(),
                     _checkBoxContainer,
-                    new TableRow(),
                     GetCenteredLayout([totalResultsLabel]),
                     GetCenteredLayout([
                         lastPageButton,
@@ -484,7 +478,7 @@ namespace SerialLoops.Dialogs
             
             return new TableLayout
             {
-                Height = 420,
+                Height = 400,
                 Spacing = new (10, 0),
                 Padding = 10,
                 Rows =
@@ -511,7 +505,7 @@ namespace SerialLoops.Dialogs
         {
             TableLayout layout = new()
             {
-                Height = 420,
+                Height = 400,
                 Spacing = new(5, 5),
                 Padding = 10
             };
@@ -545,14 +539,25 @@ namespace SerialLoops.Dialogs
                 Content = new TableLayout
                 {
                     Spacing = new(5, 5),
+                    Padding = 10,
                     Rows =
                     {
-                        new(ControlGenerator.GetControlWithLabel("Haruhi", hflStepper), ControlGenerator.GetControlWithLabel("Mikuru", mflStepper), ControlGenerator.GetControlWithLabel("Nagato", nflStepper)),
-                        new(ControlGenerator.GetControlWithLabel("Koizumi", kflStepper), ControlGenerator.GetControlWithLabel("Unknown", uflStepper), ControlGenerator.GetControlWithLabel("Tsuruya", tflStepper)),
+                        new(
+                            ControlGenerator.GetCharacterProgressControl(hflStepper, _project, _log, ControlGenerator.ProgressPortraitCharacter.Haruhi), 
+                            ControlGenerator.GetCharacterProgressControl(mflStepper, _project, _log, ControlGenerator.ProgressPortraitCharacter.Mikuru)
+                        ),
+                        new(
+                            ControlGenerator.GetCharacterProgressControl(nflStepper, _project, _log, ControlGenerator.ProgressPortraitCharacter.Nagato),
+                            ControlGenerator.GetCharacterProgressControl(kflStepper, _project, _log, ControlGenerator.ProgressPortraitCharacter.Koizumi)
+                        ),
+                        new TableRow(
+                            ControlGenerator.GetCharacterProgressControl(tflStepper, _project, _log, ControlGenerator.ProgressPortraitCharacter.Tsuruya),
+                            ControlGenerator.GetCharacterProgressControl(uflStepper, _project, _log, ControlGenerator.ProgressPortraitCharacter.Unknown)
+                        )
                     }
                 }
             };
-            layout.Rows.Add(friendshipLevelSteppersGroupBox);
+            layout.Rows.Add(new StackLayout(friendshipLevelSteppersGroupBox));
             return layout;
         }
         
@@ -560,7 +565,7 @@ namespace SerialLoops.Dialogs
         {
             TableLayout layout = new()
             {
-                Height = 420,
+                Height = 400,
                 Spacing = new(5, 5),
                 Padding = 10
             };
@@ -570,18 +575,19 @@ namespace SerialLoops.Dialogs
             layout.Rows.Add(ControlGenerator.GetControlWithLabel("Number of Saves: ", numSavesStepper));
             _modifierControls.Add(numSavesStepper);
 
+            TableLayout volumeLayout = new() {Spacing = new(5, 5), Padding = 10};
             NumericStepper bgmVolumeStepper = new()
             {
                 Value = commonSave.Options.BgmVolume / 10, MinValue = 0, MaxValue = 100, MaximumDecimalPlaces = 0, ID = "BgmVolume"
             };
-            layout.Rows.Add(ControlGenerator.GetControlWithLabel("BGM Volume: ", bgmVolumeStepper));
+            volumeLayout.Rows.Add(ControlGenerator.GetControlWithLabel("Music: ", bgmVolumeStepper));
             _modifierControls.Add(bgmVolumeStepper);
 
             NumericStepper sfxVolumeStepper = new()
             {
                 Value = commonSave.Options.SfxVolume / 10, MinValue = 0, MaxValue = 100, MaximumDecimalPlaces = 0, ID = "SfxVolume"
             };
-            layout.Rows.Add(ControlGenerator.GetControlWithLabel("SFX Volume: ", sfxVolumeStepper));
+            volumeLayout.Rows.Add(ControlGenerator.GetControlWithLabel("Sound Effects: ", sfxVolumeStepper));
             _modifierControls.Add(sfxVolumeStepper);
 
             NumericStepper wordsVolumeStepper = new()
@@ -589,7 +595,7 @@ namespace SerialLoops.Dialogs
                 Value = commonSave.Options.WordsVolume / 10, MinValue = 0, MaxValue = 100, MaximumDecimalPlaces = 0,
                 ID = "WordsVolume"
             };
-            layout.Rows.Add(ControlGenerator.GetControlWithLabel("Words Volume: ", wordsVolumeStepper));
+            volumeLayout.Rows.Add(ControlGenerator.GetControlWithLabel("Dialogue: ", wordsVolumeStepper));
             _modifierControls.Add(wordsVolumeStepper);
 
             NumericStepper voiceVolumeStepper = new()
@@ -597,7 +603,7 @@ namespace SerialLoops.Dialogs
                 Value = commonSave.Options.VoiceVolume / 10, MinValue = 0, MaxValue = 100, MaximumDecimalPlaces = 0,
                 ID = "VoiceVolume"
             };
-            layout.Rows.Add(ControlGenerator.GetControlWithLabel("Voice Volume: ", voiceVolumeStepper));
+            volumeLayout.Rows.Add(ControlGenerator.GetControlWithLabel("Voices: ", voiceVolumeStepper));
             _modifierControls.Add(voiceVolumeStepper);
 
             CheckBox kyonVoiceCheckBox = new()
@@ -625,25 +631,35 @@ namespace SerialLoops.Dialogs
                 Checked = commonSave.Options.VoiceToggles.HasFlag(SaveOptions.VoiceOptions.MYSTERY_GIRL),
                 ID = "MysteryGirlVoiceToggle"
             };
-            TableLayout voiceToggleLayout = new()
+            TableLayout voiceToggleLayout = new TableLayout
             {
-                Spacing = new(3, 3),
+                Spacing = new(5, 5),
+                Padding = 10,
                 Rows =
                 {
-                    new(ControlGenerator.GetControlWithLabel("Kyon", kyonVoiceCheckBox),
-                        ControlGenerator.GetControlWithLabel("Haruhi", haruhiVoiceCheckBox),
-                        ControlGenerator.GetControlWithLabel("Mikuru", mikuruVoiceCheckBox),
-                        ControlGenerator.GetControlWithLabel("Nagato", nagatoVoiceCheckBox),
-                        ControlGenerator.GetControlWithLabel("Koizumi", koizumiVoiceCheckBox)),
-                    new(ControlGenerator.GetControlWithLabel("Kyon's Sister", sisterVoiceCheckBox),
-                        ControlGenerator.GetControlWithLabel("Tsuruya", tsuruyaVoiceCheckBox),
-                        ControlGenerator.GetControlWithLabel("Taniguchi", taniguchiVoiceCheckBox),
-                        ControlGenerator.GetControlWithLabel("Kunikida", kunikidaVoiceCheckBox),
-                        ControlGenerator.GetControlWithLabel("Mystery Girl", mysteryGirlVoiceCheckBox))
+                    new(
+                        ControlGenerator.GetCharacterVoiceControl(kyonVoiceCheckBox, _project, _log, ControlGenerator.VoicePortraitCharacter.Kyon),
+                        ControlGenerator.GetCharacterVoiceControl(haruhiVoiceCheckBox, _project, _log, ControlGenerator.VoicePortraitCharacter.Haruhi)
+                    ),
+                    new(
+                        ControlGenerator.GetCharacterVoiceControl(mikuruVoiceCheckBox, _project, _log, ControlGenerator.VoicePortraitCharacter.Mikuru),
+                        ControlGenerator.GetCharacterVoiceControl(nagatoVoiceCheckBox, _project, _log, ControlGenerator.VoicePortraitCharacter.Nagato)
+                    ),
+                    new(
+                        ControlGenerator.GetCharacterVoiceControl(tsuruyaVoiceCheckBox, _project, _log, ControlGenerator.VoicePortraitCharacter.Tsuruya),
+                        ControlGenerator.GetCharacterVoiceControl(koizumiVoiceCheckBox, _project, _log, ControlGenerator.VoicePortraitCharacter.Koizumi)
+                    ),
+                    new(
+                        ControlGenerator.GetCharacterVoiceControl(taniguchiVoiceCheckBox, _project, _log, ControlGenerator.VoicePortraitCharacter.Taniguchi),
+                        ControlGenerator.GetCharacterVoiceControl(sisterVoiceCheckBox, _project, _log, ControlGenerator.VoicePortraitCharacter.Sister)
+                    ),
+                    new(
+                        ControlGenerator.GetCharacterVoiceControl(kunikidaVoiceCheckBox, _project, _log, ControlGenerator.VoicePortraitCharacter.Kunikida),
+                        ControlGenerator.GetCharacterVoiceControl(mysteryGirlVoiceCheckBox, _project, _log, ControlGenerator.VoicePortraitCharacter.Mystery_Girl)
+                    )
                 }
             };
-            layout.Rows.Add("Voice Toggles");
-            layout.Rows.Add(voiceToggleLayout);
+            
             _modifierControls.AddRange(
             [
                 kyonVoiceCheckBox,
@@ -657,6 +673,25 @@ namespace SerialLoops.Dialogs
                 kunikidaVoiceCheckBox,
                 mysteryGirlVoiceCheckBox
             ]);
+            
+            RadioButtonList dialogueSkipping = new()
+            {
+                Items =
+                {
+                    "Fast Forward",
+                    "Skip Already Read"
+                },
+                SelectedValue =
+                    commonSave.Options.StoryOptions.HasFlag(SaveOptions.PuzzleInvestigationOptions
+                        .DIALOGUE_SKIPPING_SKIP_ALREADY_READ)
+                        ? "Skip Already Read"
+                        : "Fast Forward",
+                Orientation = Orientation.Vertical,
+                Padding = 10,
+                Spacing = new(0, 5),
+                ID = "DialogueSkipping",
+            };
+            _modifierControls.Add(dialogueSkipping);
 
             RadioButtonList batchDialogueDisplay = new()
             {
@@ -669,10 +704,11 @@ namespace SerialLoops.Dialogs
                     commonSave.Options.StoryOptions.HasFlag(SaveOptions.PuzzleInvestigationOptions.BATCH_DIALOGUE_DISPLAY_ON)
                         ? "On"
                         : "Off",
-                Orientation = Orientation.Horizontal,
+                Orientation = Orientation.Vertical,
+                Padding = 10,
+                Spacing = new(0, 5),
                 ID = "BatchDialogueDisplay",
             };
-            layout.Rows.Add(ControlGenerator.GetControlWithLabel("Batch Dialogue Display", batchDialogueDisplay));
             _modifierControls.Add(batchDialogueDisplay);
 
             RadioButtonList puzzleInterruptScenes = new()
@@ -690,10 +726,11 @@ namespace SerialLoops.Dialogs
                             .PUZZLE_INTERRUPT_SCENES_UNSEEN_ONLY)
                             ? "Unseen Only"
                             : "Off"),
-                Orientation = Orientation.Horizontal,
+                Orientation = Orientation.Vertical,
+                Padding = 10,
+                Spacing = new(0, 5),
                 ID = "PuzzleInterruptScenes",
             };
-            layout.Rows.Add(ControlGenerator.GetControlWithLabel("Puzzle Interrupt Scenes", puzzleInterruptScenes));
             _modifierControls.Add(puzzleInterruptScenes);
 
             RadioButtonList topicStockMode = new()
@@ -706,29 +743,30 @@ namespace SerialLoops.Dialogs
                 SelectedValue = commonSave.Options.StoryOptions.HasFlag(SaveOptions.PuzzleInvestigationOptions.TOPIC_STOCK_MODE_ON)
                     ? "On"
                     : "Off",
-                Orientation = Orientation.Horizontal,
+                Orientation = Orientation.Vertical,
+                Padding = 10,
+                Spacing = new(0, 5),
                 ID = "TopicStockMode",
             };
-            layout.Rows.Add(ControlGenerator.GetControlWithLabel("Topic Stock Mode", topicStockMode));
             _modifierControls.Add(topicStockMode);
-
-            RadioButtonList dialogueSkipping = new()
-            {
-                Items =
-                {
-                    "Fast Forward",
-                    "Skip Already Read"
-                },
-                SelectedValue =
-                    commonSave.Options.StoryOptions.HasFlag(SaveOptions.PuzzleInvestigationOptions
-                        .DIALOGUE_SKIPPING_SKIP_ALREADY_READ)
-                        ? "Skip Already Read"
-                        : "Fast Forward",
-                Orientation = Orientation.Horizontal,
-                ID = "DialogueSkipping",
-            };
-            layout.Rows.Add(ControlGenerator.GetControlWithLabel("Dialogue Skipping", dialogueSkipping));
-            _modifierControls.Add(dialogueSkipping);
+            
+            
+            layout.Rows.Add(new TableLayout(
+                new TableRow(
+                    new GroupBox { Text = "Volume Config", Content = volumeLayout },
+                    new GroupBox { Text = "Voices Config", Content = voiceToggleLayout }
+                ),
+                new TableRow(
+                    new GroupBox { Text = "Puzzle Interrupt Scenes", Content = puzzleInterruptScenes},
+                    new GroupBox { Text = "Topic Stock Mode", Content = topicStockMode}
+                ),
+                new TableRow(
+                    new GroupBox { Text = "Dialogue Skipping", Content = dialogueSkipping},
+                    new GroupBox { Text = "Batch Dialogue Display", Content = batchDialogueDisplay}
+                ),
+                new TableRow()
+            ) { Spacing = new(10, 0) });
+            
             return layout;
         }
     }

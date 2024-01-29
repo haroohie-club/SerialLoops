@@ -18,7 +18,6 @@ namespace SerialLoops.Dialogs
         private Project _project;
         private EditorTabsPanel _tabs;
 
-        private Control _fileContainer;
         public bool LoadedSuccessfully = true;
 
         public SaveEditorDialog(ILogger log, Project project, EditorTabsPanel tabs, string saveLoc)
@@ -50,6 +49,11 @@ namespace SerialLoops.Dialogs
             Resizable = false;
             Padding = 10;
             
+            UpdateContent();
+        }
+
+        private void UpdateContent()
+        {
             Button saveButton = new() { Text = "Save" };
             saveButton.Click += (sender, args) =>
             {
@@ -80,12 +84,11 @@ namespace SerialLoops.Dialogs
                 }
             };
 
-            _fileContainer = GetSaveFiles();
             Content = new TableLayout
             {
                 Rows =
                 {
-                    _fileContainer,
+                    GetSaveFiles(),
                     buttonsLayout
                 },
                 Spacing = new(0, 20)
@@ -94,7 +97,6 @@ namespace SerialLoops.Dialogs
 
         private Control GetSaveFiles()
         {
-            
             Button saveCommonButton = new()
             {
                 Text = "Common Save Data...", 
@@ -109,7 +111,7 @@ namespace SerialLoops.Dialogs
                     "Common Save Data",
                     _project,
                     _tabs,
-                    () => { _fileContainer = GetSaveFiles(); }
+                    UpdateContent
                 );
                 saveSlotEditorDialog.Show();
             };
@@ -158,13 +160,15 @@ namespace SerialLoops.Dialogs
                         ),
                         new StackLayout(
                             slotNum == 3 ? "Quick Save" : $"File {slotNum}",
-                            new StackLayout(
-                                GetSlotEditButton(data, Path.GetFileName(_saveLoc), slotNum),
-                                GetSlotClearButton(data, Path.GetFileName(_saveLoc), slotNum)
-                            )
+                            new StackLayout
                             {
                                 Orientation = Orientation.Horizontal,
                                 Spacing = 5,
+                                Items =
+                                {
+                                    GetSlotEditButton(data, Path.GetFileName(_saveLoc), slotNum),
+                                    // GetSlotClearButton(data, Path.GetFileName(_saveLoc), slotNum) TODO
+                                },
                             }
                         )
                         { 
@@ -186,13 +190,11 @@ namespace SerialLoops.Dialogs
                 SaveSlotEditorDialog saveSlotEditorDialog;
                 if (slot is QuickSaveSlotData quickSave)
                 {
-                    saveSlotEditorDialog = new(_log, quickSave, fileName, "Quick Save Data", _project, _tabs, 
-                        () => { _fileContainer = GetSaveFiles(); });
+                    saveSlotEditorDialog = new(_log, quickSave, fileName, "Quick Save Data", _project, _tabs, UpdateContent);
                 }
                 else
                 {
-                    saveSlotEditorDialog = new(_log, slot, fileName, $"File {slotNumber}", _project, _tabs, 
-                        () => { _fileContainer = GetSaveFiles(); });
+                    saveSlotEditorDialog = new(_log, slot, fileName, $"File {slotNumber}", _project, _tabs, UpdateContent);
                 }
                 saveSlotEditorDialog.Show();
             };
