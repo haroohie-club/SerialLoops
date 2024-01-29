@@ -46,7 +46,7 @@ namespace SerialLoops.Dialogs
         {
             Title = $"Edit Save File - {Path.GetFileName(_saveLoc)}";
             Width = 600;
-            Height = 380;
+            Height = 390;
             Resizable = false;
             Padding = 10;
             
@@ -71,7 +71,7 @@ namespace SerialLoops.Dialogs
             StackLayout buttonsLayout = new()
             {
                 Orientation = Orientation.Horizontal,
-                Spacing = 3,
+                Spacing = 5,
                 HorizontalContentAlignment = HorizontalAlignment.Right,
                 Items =
                 {

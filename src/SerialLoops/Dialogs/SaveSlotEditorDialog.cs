@@ -12,9 +12,12 @@ using SerialLoops.Utility;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
+using SerialLoops.Lib.SaveFile;
 using static SerialLoops.Lib.Items.ItemDescription;
 
 namespace SerialLoops.Dialogs
@@ -34,6 +37,11 @@ namespace SerialLoops.Dialogs
         private ScriptItem _quickSaveScript;
         private ScriptPreview _quickSaveScriptPreview;
 
+        private const int FLAGS_PER_PAGE = 12;
+        private StackLayout _checkBoxContainer = new();
+        private int _flagPage = 1;
+        private List<int> _flags = new();
+
         public SaveSlotEditorDialog(ILogger log, SaveSection saveSection, string fileName, string slotName,
                                     Project project, EditorTabsPanel tabs, Action callback)
         {
@@ -44,346 +52,48 @@ namespace SerialLoops.Dialogs
             _project = project;
             _tabs = tabs;
             _callback = callback;
-
+            _flags = GetFilteredFlags();
+            
             InitializeComponent();
         }
 
         private void InitializeComponent()
         {
             Title = $"Edit Save File - {_fileName} - {_slotName}";
-            Width = 500;
-            Height = 800;
+            Width = 550;
+            Height = 580;
+            Padding = 10;
 
-            StackLayout flagsLayout = new()
-            {
-                Orientation = Orientation.Vertical,
-                Padding = 4,
-                Spacing = 4,
-                Width = 500,
-            };
-            for (int i = 0; i < 5120; i++)
-            {
-                int flagId = i;
-                CheckBox flagCheckBox = new() { Checked = _saveSection.IsFlagSet(flagId) };
-                flagCheckBox.CheckedChanged += (sender, args) =>
-                {
-                    if (_flagModifications.ContainsKey(flagId))
-                    {
-                        _flagModifications[flagId] = flagCheckBox.Checked ?? true;
-                    }
-                    else
-                    {
-                        _flagModifications.Add(flagId, flagCheckBox.Checked ?? true);
-                    }
-                };
-                StackLayout checkboxLayout = new()
-                {
-                    Orientation = Orientation.Horizontal,
-                    Spacing = 2,
-                    Items =
-                    {
-                        flagCheckBox,
-                        Flags.GetFlagNickname(flagId, _project),
-                    }
-                };
-
-                flagsLayout.Items.Add(checkboxLayout);
-            }
-
+            TabControl menuTabs = new();
             TableLayout layout = new()
             {
-                Spacing = new(5, 5),
+                Spacing = new(5, 10),
+                Height = 500,
                 Rows =
                 {
-                    new TableRow(new Scrollable { Content = flagsLayout, Height = 400 }),
+                    ControlGenerator.GetTextHeader($"{_slotName}"),
+                    menuTabs,
                 }
             };
 
             if (_saveSection is CommonSaveData commonSave)
             {
-                NumericStepper numSavesStepper = new() { Value = commonSave.NumSaves, Increment = 1, MaximumDecimalPlaces = 0, ID = "NumSaves" };
-                layout.Rows.Add(ControlGenerator.GetControlWithLabel("Number of Saves: ", numSavesStepper));
-                _modifierControls.Add(numSavesStepper);
-
-                NumericStepper bgmVolumeStepper = new() { Value = commonSave.Options.BgmVolume / 10, MinValue = 0, MaxValue = 100, MaximumDecimalPlaces = 0, ID = "BgmVolume" };
-                layout.Rows.Add(ControlGenerator.GetControlWithLabel("BGM Volume: ", bgmVolumeStepper));
-                _modifierControls.Add(bgmVolumeStepper);
-
-                NumericStepper sfxVolumeStepper = new() { Value = commonSave.Options.SfxVolume / 10, MinValue = 0, MaxValue = 100, MaximumDecimalPlaces = 0, ID = "SfxVolume" };
-                layout.Rows.Add(ControlGenerator.GetControlWithLabel("SFX Volume: ", sfxVolumeStepper));
-                _modifierControls.Add(sfxVolumeStepper);
-
-                NumericStepper wordsVolumeStepper = new() { Value = commonSave.Options.WordsVolume / 10, MinValue = 0, MaxValue = 100, MaximumDecimalPlaces = 0, ID = "WordsVolume" };
-                layout.Rows.Add(ControlGenerator.GetControlWithLabel("Words Volume: ", wordsVolumeStepper));
-                _modifierControls.Add(wordsVolumeStepper);
-
-                NumericStepper voiceVolumeStepper = new() { Value = commonSave.Options.VoiceVolume / 10, MinValue = 0, MaxValue = 100, MaximumDecimalPlaces = 0, ID = "VoiceVolume" };
-                layout.Rows.Add(ControlGenerator.GetControlWithLabel("Voice Volume: ", voiceVolumeStepper));
-                _modifierControls.Add(voiceVolumeStepper);
-
-                CheckBox kyonVoiceCheckBox = new() { Checked = commonSave.Options.VoiceToggles.HasFlag(SaveOptions.VoiceOptions.KYON), ID = "KyonVoiceToggle" };
-                CheckBox haruhiVoiceCheckBox = new() { Checked = commonSave.Options.VoiceToggles.HasFlag(SaveOptions.VoiceOptions.HARUHI), ID = "HaruhiVoiceToggle" };
-                CheckBox mikuruVoiceCheckBox = new() { Checked = commonSave.Options.VoiceToggles.HasFlag(SaveOptions.VoiceOptions.MIKURU), ID = "MikuruVoiceToggle" };
-                CheckBox nagatoVoiceCheckBox = new() { Checked = commonSave.Options.VoiceToggles.HasFlag(SaveOptions.VoiceOptions.NAGATO), ID = "NagatoVoiceToggle" };
-                CheckBox koizumiVoiceCheckBox = new() { Checked = commonSave.Options.VoiceToggles.HasFlag(SaveOptions.VoiceOptions.KOIZUMI), ID = "KoizumiVoiceToggle" };
-                CheckBox sisterVoiceCheckBox = new() { Checked = commonSave.Options.VoiceToggles.HasFlag(SaveOptions.VoiceOptions.SISTER), ID = "SisterVoiceToggle" };
-                CheckBox tsuruyaVoiceCheckBox = new() { Checked = commonSave.Options.VoiceToggles.HasFlag(SaveOptions.VoiceOptions.TSURUYA), ID = "TsuruyaVoiceToggle" };
-                CheckBox taniguchiVoiceCheckBox = new() { Checked = commonSave.Options.VoiceToggles.HasFlag(SaveOptions.VoiceOptions.TANIGUCHI), ID = "TaniguchiVoiceToggle" };
-                CheckBox kunikidaVoiceCheckBox = new() { Checked = commonSave.Options.VoiceToggles.HasFlag(SaveOptions.VoiceOptions.KUNIKIDA), ID = "KunikidaVoiceToggle" };
-                CheckBox mysteryGirlVoiceCheckBox = new() { Checked = commonSave.Options.VoiceToggles.HasFlag(SaveOptions.VoiceOptions.MYSTERY_GIRL), ID = "MysteryGirlVoiceToggle" };
-                TableLayout voiceToggleLayout = new()
-                {
-                    Spacing = new(3, 3),
-                    Rows =
-                    {
-                        new(ControlGenerator.GetControlWithLabel("Kyon", kyonVoiceCheckBox), ControlGenerator.GetControlWithLabel("Haruhi", haruhiVoiceCheckBox),
-                            ControlGenerator.GetControlWithLabel("Mikuru", mikuruVoiceCheckBox), ControlGenerator.GetControlWithLabel("Nagato", nagatoVoiceCheckBox),
-                            ControlGenerator.GetControlWithLabel("Koizumi", koizumiVoiceCheckBox)),
-                        new(ControlGenerator.GetControlWithLabel("Kyon's Sister", sisterVoiceCheckBox), ControlGenerator.GetControlWithLabel("Tsuruya", tsuruyaVoiceCheckBox),
-                            ControlGenerator.GetControlWithLabel("Taniguchi", taniguchiVoiceCheckBox), ControlGenerator.GetControlWithLabel("Kunikida", kunikidaVoiceCheckBox),
-                            ControlGenerator.GetControlWithLabel("Mystery Girl", mysteryGirlVoiceCheckBox))
-                    }
-                };
-                layout.Rows.Add("Voice Toggles");
-                layout.Rows.Add(voiceToggleLayout);
-                _modifierControls.AddRange(
-                    [kyonVoiceCheckBox,
-                    haruhiVoiceCheckBox,
-                    mikuruVoiceCheckBox,
-                    nagatoVoiceCheckBox,
-                    koizumiVoiceCheckBox,
-                    sisterVoiceCheckBox,
-                    tsuruyaVoiceCheckBox,
-                    taniguchiVoiceCheckBox,
-                    kunikidaVoiceCheckBox,
-                    mysteryGirlVoiceCheckBox]);
-
-                RadioButtonList batchDialogueDisplay = new()
-                {
-                    Items =
-                    {
-                        "Off",
-                        "On"
-                    },
-                    SelectedValue = commonSave.Options.StoryOptions.HasFlag(SaveOptions.PuzzleInvestigationOptions.BATCH_DIALOGUE_DISPLAY_ON) ? "On" : "Off",
-                    Orientation = Orientation.Horizontal,
-                    ID = "BatchDialogueDisplay",
-                };
-                layout.Rows.Add(ControlGenerator.GetControlWithLabel("Batch Dialogue Display", batchDialogueDisplay));
-                _modifierControls.Add(batchDialogueDisplay);
-
-                RadioButtonList puzzleInterruptScenes = new()
-                {
-                    Items =
-                    {
-                        "Off",
-                        "Unseen Only",
-                        "On"
-                    },
-                    SelectedValue = commonSave.Options.StoryOptions.HasFlag(SaveOptions.PuzzleInvestigationOptions.PUZZLE_INTERRUPTE_SCENES_ON) ? "On" : 
-                        (commonSave.Options.StoryOptions.HasFlag(SaveOptions.PuzzleInvestigationOptions.PUZZLE_INTERRUPT_SCENES_UNSEEN_ONLY) ? "Unseen Only" : "Off"),
-                    Orientation = Orientation.Horizontal,
-                    ID = "PuzzleInterruptScenes",
-                };
-                layout.Rows.Add(ControlGenerator.GetControlWithLabel("Puzzle Interrupt Scenes", puzzleInterruptScenes));
-                _modifierControls.Add(puzzleInterruptScenes);
-
-                RadioButtonList topicStockMode = new()
-                {
-                    Items =
-                    {
-                        "Off",
-                        "On"
-                    },
-                    SelectedValue = commonSave.Options.StoryOptions.HasFlag(SaveOptions.PuzzleInvestigationOptions.TOPIC_STOCK_MODE_ON) ? "On" : "Off",
-                    Orientation = Orientation.Horizontal,
-                    ID = "TopicStockMode",
-                };
-                layout.Rows.Add(ControlGenerator.GetControlWithLabel("Topic Stock Mode", topicStockMode));
-                _modifierControls.Add(topicStockMode);
-
-                RadioButtonList dialogueSkipping = new()
-                {
-                    Items =
-                    {
-                        "Fast Forward",
-                        "Skip Already Read"
-                    },
-                    SelectedValue = commonSave.Options.StoryOptions.HasFlag(SaveOptions.PuzzleInvestigationOptions.DIALOGUE_SKIPPING_SKIP_ALREADY_READ) ? "Skip Already Read" : "Fast Forward",
-                    Orientation = Orientation.Horizontal,
-                    ID = "DialogueSkipping",
-                };
-                layout.Rows.Add(ControlGenerator.GetControlWithLabel("Dialogue Skipping", dialogueSkipping));
-                _modifierControls.Add(dialogueSkipping);
+                menuTabs.Pages.Add(new TabPage { Content = GetCommonDataBox(commonSave), Text = "Common Data"});
             }
             else
             {
                 SaveSlotData slotSave = (SaveSlotData)_saveSection;
-
-                DateTimePicker dateTimePicker = new() { Mode = DateTimePickerMode.DateTime, Value = slotSave.SaveTime.DateTime, ID = "DateTime", MinDate = new DateTime(2000, 1, 1, 0, 0, 0) };
-                layout.Rows.Add(ControlGenerator.GetControlWithLabel("Save Time: ", dateTimePicker));
-                _modifierControls.Add(dateTimePicker);
-
-                NumericStepper scenarioPositionStepper = new() { Value = slotSave.ScenarioPosition, Increment = 1, MaximumDecimalPlaces = 0, MinValue = 1, MaxValue = _project.Scenario.Commands.Count, ID = "ScenarioPosition" };
-                layout.Rows.Add(ControlGenerator.GetControlWithLabel("Scenario Command Index: ", scenarioPositionStepper));
-                _modifierControls.Add(scenarioPositionStepper);
-
-                NumericStepper episodeNumberStepper = new() { Value = slotSave.EpisodeNumber, Increment = 1, MaximumDecimalPlaces = 0, MinValue = 1, MaxValue = 5, ID = "EpisodeNumber" };
-                layout.Rows.Add(ControlGenerator.GetControlWithLabel("Episode: ", episodeNumberStepper));
-                _modifierControls.Add(episodeNumberStepper);
-
-                NumericStepper hflStepper = new() { Value = slotSave.HaruhiFriendshipLevel, Increment = 1, MaximumDecimalPlaces = 0, MinValue = 1, MaxValue = 64, ID = "HFL" };
-                _modifierControls.Add(hflStepper);
-                NumericStepper mflStepper = new() { Value = slotSave.MikuruFriendshipLevel, Increment = 1, MaximumDecimalPlaces = 0, MinValue = 1, MaxValue = 64, ID = "MFL" };
-                _modifierControls.Add(mflStepper);
-                NumericStepper nflStepper = new() { Value = slotSave.NagatoFriendshipLevel, Increment = 1, MaximumDecimalPlaces = 0, MinValue = 1, MaxValue = 64, ID = "NFL" };
-                _modifierControls.Add(nflStepper);
-                NumericStepper kflStepper = new() { Value = slotSave.KoizumiFriendshipLevel, Increment = 1, MaximumDecimalPlaces = 0, MinValue = 1, MaxValue = 64, ID = "KFL" };
-                _modifierControls.Add(kflStepper);
-                NumericStepper uflStepper = new() { Value = slotSave.UnknownFriendshipLevel, Increment = 1, MaximumDecimalPlaces = 0, MinValue = 1, MaxValue = 64, ID = "UFL" };
-                _modifierControls.Add(uflStepper);
-                NumericStepper tflStepper = new() { Value = slotSave.TsuruyaFriendshipLevel, Increment = 1, MaximumDecimalPlaces = 0, MinValue = 1, MaxValue = 64, ID = "TFL" };
-                _modifierControls.Add(tflStepper);
-                GroupBox friendshipLevelSteppersGroupBox = new()
-                {
-                    Text = "Friendship Levels",
-                    Content = new TableLayout
-                    {
-                        Spacing = new(5, 5),
-                        Rows =
-                        {
-                            new(ControlGenerator.GetControlWithLabel("Haruhi", hflStepper), ControlGenerator.GetControlWithLabel("Mikuru", mflStepper), ControlGenerator.GetControlWithLabel("Nagato", nflStepper)),
-                            new(ControlGenerator.GetControlWithLabel("Koizumi", kflStepper), ControlGenerator.GetControlWithLabel("Unknown", uflStepper), ControlGenerator.GetControlWithLabel("Tsuruya", tflStepper)),
-                        }
-                    }
-                };
-                layout.Rows.Add(friendshipLevelSteppersGroupBox);
-
+                menuTabs.Pages.Add(new TabPage { Content = GetSlotDataBox(slotSave), Text = "Save Data"});
+                
                 if (slotSave is QuickSaveSlotData quickSave)
                 {
-                    StackLayout previewLayout = new();
-
-                    NumericMaskedTextBox<int> scriptCommandIndexBox = new() { ID = "ScriptCommandIndex", Value = quickSave.CurrentScriptCommand };
-
-                    _quickSaveScript = (ScriptItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Script && ((ScriptItem)i).Event.Index == quickSave.CurrentScript);
-                    Dictionary<ScriptSection, List<ScriptItemCommand>> commands = _quickSaveScript.GetScriptCommandTree(_project, _log);
-                    _quickSaveScript.CalculateGraphEdges(commands, _log);
-
-                    DropDown scriptBlockSelector = new() { ID = "CurrentScriptBlock" };
-                    scriptBlockSelector.Items.AddRange(_quickSaveScript.Event.ScriptSections.Select(s => new ListItem { Key = s.Name, Text = s.Name }));
-                    scriptBlockSelector.SelectedIndex = quickSave.CurrentScriptBlock;
-                    scriptBlockSelector.SelectedIndexChanged += (sender, args) =>
-                    {
-                        scriptCommandIndexBox.Value = 0;
-                    };
-                    _modifierControls.Add(scriptBlockSelector);
-
-                    DropDown scriptSelector = new() { ID = "CurrentScript" };
-                    scriptSelector.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Script).Select(s => new ListItem { Text = s.DisplayName, Key = ((ScriptItem)s).Event.Index.ToString() }));
-                    scriptSelector.SelectedKey = quickSave.CurrentScript.ToString();
-                    StackLayout scriptSelectorWithLink = new()
-                    {
-                        Orientation = Orientation.Horizontal,
-                        Spacing = 2,
-                        Items =
-                        {
-                            ControlGenerator.GetControlWithLabel("Current Script: ", scriptSelector),
-                            ControlGenerator.GetFileLink(_quickSaveScript, _tabs, _log),
-                        }
-                    };
-                    scriptSelector.SelectedKeyChanged += (sender, args) =>
-                    {
-                        _quickSaveScript = (ScriptItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Script && ((ScriptItem)i).Event.Index == int.Parse(scriptSelector.SelectedKey));
-                        Dictionary<ScriptSection, List<ScriptItemCommand>> commands = _quickSaveScript.GetScriptCommandTree(_project, _log);
-                        _quickSaveScript.CalculateGraphEdges(commands, _log);
-                        scriptBlockSelector.Items.Clear();
-                        scriptBlockSelector.Items.AddRange(_quickSaveScript.Event.ScriptSections.Select(s => new ListItem { Key = s.Name, Text = s.Name }));
-                        scriptBlockSelector.SelectedIndex = 0;
-                        scriptSelectorWithLink.Items.RemoveAt(1);
-                        scriptSelectorWithLink.Items.Add(ControlGenerator.GetFileLink(_quickSaveScript, _tabs, _log));
-                    };
-                    _modifierControls.Add(scriptSelector);
-
-
-                    scriptCommandIndexBox.ValueChanged += (sender, args) =>
-                    {
-                        previewLayout.Items.Clear();
-                        Dictionary<ScriptSection, List<ScriptItemCommand>> commands = _quickSaveScript.GetScriptCommandTree(_project, _log);
-                        _quickSaveScriptPreview = _quickSaveScript.GetScriptPreview(commands, commands[_quickSaveScript.Event.ScriptSections[scriptBlockSelector.SelectedIndex < 0 ? 0 : scriptBlockSelector.SelectedIndex]][scriptCommandIndexBox.Value], _project, _log);
-                        (SKBitmap scriptPreviewImage, string errorImage) = ScriptItem.GeneratePreviewImage(_quickSaveScriptPreview, _project);
-                        if (scriptPreviewImage is null)
-                        {
-                            scriptPreviewImage = new(256, 384);
-                            SKCanvas canvas = new(scriptPreviewImage);
-                            canvas.DrawColor(SKColors.Black);
-                            using Stream noPreviewStream = Assembly.GetCallingAssembly().GetManifestResourceStream(errorImage);
-                            canvas.DrawImage(SKImage.FromEncodedData(noPreviewStream), new SKPoint(0, 0));
-                            canvas.Flush();
-                            previewLayout.Items.Add(new SKGuiImage(scriptPreviewImage));
-                        }
-                        previewLayout.Items.Add(new SKGuiImage(scriptPreviewImage));
-                    };
-                    _modifierControls.Add(scriptCommandIndexBox);
-
-                    layout.Rows.Add(scriptSelectorWithLink);
-                    layout.Rows.Add(ControlGenerator.GetControlWithLabel("Current Script Block: ", scriptBlockSelector));
-                    layout.Rows.Add(ControlGenerator.GetControlWithLabel("Current Script Command Index: ", scriptCommandIndexBox));
-
-                    List<(ChibiItem Chibi, int X, int Y)> topScreenChibis = [];
-                    int chibiCurrentX = 80;
-                    int chibiY = 100;
-                    for (int i = 1; i <= 5; i++)
-                    {
-                        if (quickSave.TopScreenChibis.HasFlag((CharacterMask)(1 << i)))
-                        {
-                            ChibiItem chibi = (ChibiItem)_project.Items.First(it => it.Type == ItemType.Chibi && ((ChibiItem)it).ChibiIndex == i);
-                            topScreenChibis.Add((chibi, chibiCurrentX, chibiY));
-                            chibiCurrentX += chibi.ChibiAnimations.First().Value.ElementAt(0).Frame.Width - 16;
-                        }
-                    }
-
-                    _quickSaveScriptPreview = new()
-                    {
-                        Background = (BackgroundItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == (quickSave.CgIndex != 0 ? quickSave.CgIndex : quickSave.BgIndex)),
-                        BgPalEffect = (PaletteEffectScriptParameter.PaletteEffect)quickSave.BgPalEffect,
-                        EpisodeHeader = quickSave.EpisodeHeader,
-                        Kbg = (BackgroundItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == quickSave.KbgIndex),
-                        Place = (PlaceItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Place && ((PlaceItem)i).Index == quickSave.Place),
-                        TopScreenChibis = topScreenChibis,
-                        Sprites =
-                        [
-                                new() 
-                                {
-                                    Sprite = (CharacterSpriteItem)_project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Character_Sprite && ((CharacterSpriteItem)i).Index == quickSave.FirstCharacterSprite),
-                                    Positioning = new() { X = quickSave.Sprite1XOffset, Layer = 2 }
-                                },
-                                new()
-                                {
-                                    Sprite = (CharacterSpriteItem)_project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Character_Sprite && ((CharacterSpriteItem)i).Index == quickSave.SecondCharacterSprite),
-                                    Positioning = new() { X = quickSave.Sprite2XOffset, Layer = 1 }
-                                },
-                                new()
-                                {
-                                    Sprite = (CharacterSpriteItem)_project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Character_Sprite && ((CharacterSpriteItem)i).Index == quickSave.ThirdCharacterSprite),
-                                    Positioning = new() { X = quickSave.Sprite3XOffset, Layer = 0 }
-                                },
-                        ],
-                    };
-                    (SKBitmap previewBitmap, string previewErrorImage) = ScriptItem.GeneratePreviewImage(_quickSaveScriptPreview, _project);
-                    if (previewBitmap is null)
-                    {
-                        previewBitmap = new(256, 384);
-                        SKCanvas canvas = new(previewBitmap);
-                        canvas.DrawColor(SKColors.Black);
-                        using Stream noPreviewStream = Assembly.GetCallingAssembly().GetManifestResourceStream(previewErrorImage);
-                        canvas.DrawImage(SKImage.FromEncodedData(noPreviewStream), new SKPoint(0, 0));
-                        canvas.Flush();
-                        previewLayout.Items.Add(new SKGuiImage(previewBitmap));
-                    }
-                    previewLayout.Items.Add(new SKGuiImage(previewBitmap));
-                    layout.Rows.Add(previewLayout);
+                    menuTabs.Pages.Add(new TabPage { Content = GetQuickSaveDataBox(quickSave), Text = "Script Position"});
                 }
             }
+            TabPage flagsTab = new TabPage {Content = GetFlagsBox(), Text = "Flags" };
+            flagsTab.Shown += (sender, args) => UpdateFlagList(_flagPage);
+            menuTabs.Pages.Add(flagsTab);
+            
 
             Button saveButton = new() { Text = "Save" };
             saveButton.Click += (sender, args) =>
@@ -483,7 +193,7 @@ namespace SerialLoops.Dialogs
                         quickSave.CurrentScriptCommand = ((NumericMaskedTextBox<int>)_modifierControls.First(c => c.ID == "ScriptCommandIndex")).Value;
                     }
                 }
-
+                
                 Close();
             };
 
@@ -496,7 +206,7 @@ namespace SerialLoops.Dialogs
             StackLayout buttonsLayout = new()
             {
                 Orientation = Orientation.Horizontal,
-                Spacing = 3,
+                Spacing = 5,
                 HorizontalContentAlignment = HorizontalAlignment.Right,
                 Items =
                 {
@@ -506,9 +216,521 @@ namespace SerialLoops.Dialogs
             };
 
             layout.Rows.Add(buttonsLayout);
-
-            Content = new Scrollable { Content = layout };
+            Content = layout;
             Closed += (sender, args) => _callback();
         }
+
+        private TableLayout GetFlagsBox()
+        {
+            // Add page buttons
+            int totalPages = (_flags.Count / FLAGS_PER_PAGE) + 1;
+            NumericMaskedTextBox<int> flagPageBox = new()
+            {
+                Value = _flagPage, 
+                Width = 30,
+            };
+            Button lastPageButton = new() { Image = ControlGenerator.GetIcon("Previous_Page", _log), Width = 22, Enabled = _flagPage > 1, };
+            lastPageButton.Click += (sender, args) =>
+            {
+                flagPageBox.Value = _flagPage - 1;
+            };
+            Button nextPageButton = new() { Image = ControlGenerator.GetIcon("Next_Page", _log), Width = 22, Enabled = _flagPage < totalPages, };
+            nextPageButton.Click += (sender, args) =>
+            {
+                flagPageBox.Value = _flagPage + 1;
+            };
+            flagPageBox.ValueChanged += (sender, args) =>
+            {
+                _flagPage = flagPageBox.Value = Math.Max(1, Math.Min(totalPages, flagPageBox.Value));
+                lastPageButton.Enabled = _flagPage > 1;
+                nextPageButton.Enabled = _flagPage < totalPages;
+                UpdateFlagList(_flagPage);
+            };
+
+            SearchBox filterBox = new() { PlaceholderText = "Filter by Name", Width = 200 };
+            CheckBox showSetFlagsCheckbox = new() { Text = "Hide Unset Flags", Checked = false };
+            Button applyFiltersButton = new() { Image = ControlGenerator.GetIcon("Search", _log), Text = "Filter"};
+            Label totalPagesLabel = new() { Text = $" / {totalPages}" };
+            Label totalResultsLabel = new() { Text = $"{_flags.Count} results" };
+            applyFiltersButton.Click += ((sender, args) =>  {
+                _flags = GetFilteredFlags(filterBox.Text, showSetFlagsCheckbox.Checked ?? true);
+                flagPageBox.Value = _flagPage = 1;
+                totalPages = (_flags.Count / FLAGS_PER_PAGE) + 1;
+                totalPagesLabel.Text = $" / {totalPages}";
+                totalResultsLabel.Text = $"{_flags.Count} results";
+                UpdateFlagList(_flagPage);
+            });
+            
+            return new()
+            {
+                Height = 420,
+                Spacing = new(0, 10),
+                Padding = 10,
+                Rows =
+                {
+                    GetCenteredLayout([
+                        showSetFlagsCheckbox,
+                        filterBox,
+                        applyFiltersButton,
+                    ]),
+                    new TableRow(),
+                    _checkBoxContainer,
+                    new TableRow(),
+                    GetCenteredLayout([totalResultsLabel]),
+                    GetCenteredLayout([
+                        lastPageButton,
+                        flagPageBox,
+                        totalPagesLabel,
+                        nextPageButton
+                    ])
+                }
+            };
+        }
+
+        private StackLayout GetCenteredLayout(StackLayoutItem[] items)
+        {
+            return new StackLayout
+            {
+                Orientation = Orientation.Vertical,
+                HorizontalContentAlignment = HorizontalAlignment.Center,
+                Items =
+                {
+                    new StackLayout(items)
+                    {
+                        Orientation = Orientation.Horizontal,
+                        VerticalContentAlignment = VerticalAlignment.Center,
+                        Spacing = 5
+                    }
+                }
+            };
+        }
+
+        private void UpdateFlagList(int page)
+        {
+            TableLayout rows = new TableLayout { Spacing = new(15, 5)};
+            if (_flags.Count > 0)
+            {
+                rows.Rows.Add(new TableRow { 
+                    Cells =
+                    {
+                        ControlGenerator.GetTextHeader("Value", 10), 
+                        ControlGenerator.GetTextHeader("Flag Description", 10)
+                    }
+                });
+            }
+            GetFlagBoxes((page - 1) * FLAGS_PER_PAGE, page * FLAGS_PER_PAGE).ToList().ForEach(c => rows.Rows.Add(c));
+            _checkBoxContainer.Content = rows;
+        }
+        
+        private IEnumerable<TableRow> GetFlagBoxes(int start, int end)
+        {
+            List<TableRow> flagBoxes = new();
+            foreach (int flag in _flags.GetRange(start, Math.Min(end - start, _flags.Count - start)))
+            {
+                CheckBox flagCheckBox = new() { Checked = _saveSection.IsFlagSet(flag) };
+                flagCheckBox.CheckedChanged += (sender, args) => { _flagModifications[flag] = flagCheckBox.Checked ?? true; };
+                TableRow checkboxLayout = new()
+                {
+                    Cells = 
+                    {
+                        flagCheckBox,
+                        Flags.GetFlagNickname(flag, _project),
+                    }
+                };
+                flagBoxes.Add(checkboxLayout);
+            }
+            return flagBoxes;
+        }
+
+        private List<int> GetFilteredFlags(string term = null, bool onlyShowSet = false)
+        {
+            List<int> filtered = new();
+            for (int i = 0; i < 5120; i++)
+            {
+                if (onlyShowSet && !(_flagModifications.TryGetValue(i, out var set) ? set : _saveSection.IsFlagSet(i)))
+                {
+                    continue;
+                }
+                
+                if (!string.IsNullOrWhiteSpace(term) && !Flags.GetFlagNickname(i, _project).ToLower().Contains(term.ToLower().Trim()))
+                {
+                    continue;
+                }
+                
+                filtered.Add(i);
+            }
+            return filtered;
+        }
+
+        private Container GetQuickSaveDataBox(QuickSaveSlotData quickSave)
+        {
+            StackLayout previewLayout = new();
+
+            NumericMaskedTextBox<int> scriptCommandIndexBox = new() { ID = "ScriptCommandIndex", Value = quickSave.CurrentScriptCommand, Width = 30 };
+            _quickSaveScript = (ScriptItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Script && ((ScriptItem)i).Event.Index == quickSave.CurrentScript);
+            Dictionary<ScriptSection, List<ScriptItemCommand>> commands = _quickSaveScript.GetScriptCommandTree(_project, _log);
+            _quickSaveScript.CalculateGraphEdges(commands, _log);
+
+            DropDown scriptBlockSelector = new() { ID = "CurrentScriptBlock" };
+            scriptBlockSelector.Items.AddRange(_quickSaveScript.Event.ScriptSections.Select(s => new ListItem { Key = s.Name, Text = s.Name }));
+            scriptBlockSelector.SelectedIndex = quickSave.CurrentScriptBlock;
+            scriptBlockSelector.SelectedIndexChanged += (sender, args) =>
+            {
+                scriptCommandIndexBox.Value = 0;
+            };
+            _modifierControls.Add(scriptBlockSelector);
+
+            DropDown scriptSelector = new() { ID = "CurrentScript" };
+            scriptSelector.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Script).Select(s => new ListItem { Text = s.DisplayName, Key = ((ScriptItem)s).Event.Index.ToString() }));
+            scriptSelector.SelectedKey = quickSave.CurrentScript.ToString();
+            StackLayout scriptSelectorWithLink = new()
+            {
+                Orientation = Orientation.Horizontal,
+                Spacing = 2,
+                Items =
+                {
+                    ControlGenerator.GetControlWithLabel("Script: ", scriptSelector),
+                    ControlGenerator.GetFileLink(_quickSaveScript, _tabs, _log),
+                }
+            };
+            scriptSelector.SelectedKeyChanged += (sender, args) =>
+            {
+                _quickSaveScript = (ScriptItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Script && ((ScriptItem)i).Event.Index == int.Parse(scriptSelector.SelectedKey));
+                Dictionary<ScriptSection, List<ScriptItemCommand>> commands = _quickSaveScript.GetScriptCommandTree(_project, _log);
+                _quickSaveScript.CalculateGraphEdges(commands, _log);
+                scriptBlockSelector.Items.Clear();
+                scriptBlockSelector.Items.AddRange(_quickSaveScript.Event.ScriptSections.Select(s => new ListItem { Key = s.Name, Text = s.Name }));
+                scriptBlockSelector.SelectedIndex = 0;
+                scriptSelectorWithLink.Items.RemoveAt(1);
+                scriptSelectorWithLink.Items.Add(ControlGenerator.GetFileLink(_quickSaveScript, _tabs, _log));
+            };
+            _modifierControls.Add(scriptSelector);
+
+
+            scriptCommandIndexBox.ValueChanged += (sender, args) =>
+            {
+                previewLayout.Items.Clear();
+                Dictionary<ScriptSection, List<ScriptItemCommand>> commands = _quickSaveScript.GetScriptCommandTree(_project, _log);
+                List<ScriptItemCommand> block = commands[_quickSaveScript.Event.ScriptSections[scriptBlockSelector.SelectedIndex < 0 ? 0 : scriptBlockSelector.SelectedIndex]];
+                int index = Math.Max(0, Math.Min(block.Count - 1, scriptCommandIndexBox.Value));
+                _quickSaveScriptPreview = _quickSaveScript.GetScriptPreview(commands, block[index], _project, _log);
+                (SKBitmap scriptPreviewImage, string errorImage) = ScriptItem.GeneratePreviewImage(_quickSaveScriptPreview, _project);
+                if (scriptPreviewImage is null)
+                {
+                    scriptPreviewImage = new(256, 384);
+                    SKCanvas canvas = new(scriptPreviewImage);
+                    canvas.DrawColor(SKColors.Black);
+                    using Stream noPreviewStream = Assembly.GetCallingAssembly().GetManifestResourceStream(errorImage);
+                    canvas.DrawImage(SKImage.FromEncodedData(noPreviewStream), new SKPoint(0, 0));
+                    canvas.Flush();
+                    previewLayout.Items.Add(new SKGuiImage(scriptPreviewImage));
+                }
+                previewLayout.Items.Add(new SKGuiImage(scriptPreviewImage));
+            };
+            _modifierControls.Add(scriptCommandIndexBox);
+
+            List<(ChibiItem Chibi, int X, int Y)> topScreenChibis = [];
+            int chibiCurrentX = 80;
+            int chibiY = 100;
+            for (int i = 1; i <= 5; i++)
+            {
+                if (quickSave.TopScreenChibis.HasFlag((CharacterMask)(1 << i)))
+                {
+                    ChibiItem chibi = (ChibiItem)_project.Items.First(it => it.Type == ItemType.Chibi && ((ChibiItem)it).ChibiIndex == i);
+                    topScreenChibis.Add((chibi, chibiCurrentX, chibiY));
+                    chibiCurrentX += chibi.ChibiAnimations.First().Value.ElementAt(0).Frame.Width - 16;
+                }
+            }
+
+            _quickSaveScriptPreview = new()
+            {
+                Background = (BackgroundItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == (quickSave.CgIndex != 0 ? quickSave.CgIndex : quickSave.BgIndex)),
+                BgPalEffect = (PaletteEffectScriptParameter.PaletteEffect)quickSave.BgPalEffect,
+                EpisodeHeader = quickSave.EpisodeHeader,
+                Kbg = (BackgroundItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == quickSave.KbgIndex),
+                Place = (PlaceItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Place && ((PlaceItem)i).Index == quickSave.Place),
+                TopScreenChibis = topScreenChibis,
+                Sprites =
+                [
+                        new() 
+                        {
+                            Sprite = (CharacterSpriteItem)_project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Character_Sprite && ((CharacterSpriteItem)i).Index == quickSave.FirstCharacterSprite),
+                            Positioning = new() { X = quickSave.Sprite1XOffset, Layer = 2 }
+                        },
+                        new()
+                        {
+                            Sprite = (CharacterSpriteItem)_project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Character_Sprite && ((CharacterSpriteItem)i).Index == quickSave.SecondCharacterSprite),
+                            Positioning = new() { X = quickSave.Sprite2XOffset, Layer = 1 }
+                        },
+                        new()
+                        {
+                            Sprite = (CharacterSpriteItem)_project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Character_Sprite && ((CharacterSpriteItem)i).Index == quickSave.ThirdCharacterSprite),
+                            Positioning = new() { X = quickSave.Sprite3XOffset, Layer = 0 }
+                        },
+                ],
+            };
+            (SKBitmap previewBitmap, string previewErrorImage) = ScriptItem.GeneratePreviewImage(_quickSaveScriptPreview, _project);
+            if (previewBitmap is null)
+            {
+                previewBitmap = new(256, 384);
+                SKCanvas canvas = new(previewBitmap);
+                canvas.DrawColor(SKColors.Black);
+                using Stream noPreviewStream = Assembly.GetCallingAssembly().GetManifestResourceStream(previewErrorImage);
+                canvas.DrawImage(SKImage.FromEncodedData(noPreviewStream), new SKPoint(0, 0));
+                canvas.Flush();
+                previewLayout.Items.Add(new SKGuiImage(previewBitmap));
+            }
+            previewLayout.Items.Add(new SKGuiImage(previewBitmap));
+            
+            return new TableLayout
+            {
+                Height = 420,
+                Spacing = new (10, 0),
+                Padding = 10,
+                Rows =
+                {
+                    new TableRow(
+                        new StackLayout()
+                        {
+                            Orientation = Orientation.Vertical,
+                            Spacing = 10,
+                            Items =
+                            {
+                                scriptSelectorWithLink,
+                                ControlGenerator.GetControlWithLabel("Block: ", scriptBlockSelector),
+                                ControlGenerator.GetControlWithLabel("Command Index: ", scriptCommandIndexBox)
+                            }
+                        },
+                        previewLayout
+                    )
+                },
+            };
+        }
+        
+        private Container GetSlotDataBox(SaveSlotData slotSave)
+        {
+            TableLayout layout = new()
+            {
+                Height = 420,
+                Spacing = new(5, 5),
+                Padding = 10
+            };
+            DateTimePicker dateTimePicker = new() { Mode = DateTimePickerMode.DateTime, Value = slotSave.SaveTime.DateTime, ID = "DateTime", MinDate = new DateTime(2000, 1, 1, 0, 0, 0) };
+            layout.Rows.Add(ControlGenerator.GetControlWithLabel("Save Time: ", dateTimePicker));
+            _modifierControls.Add(dateTimePicker);
+
+            NumericStepper scenarioPositionStepper = new() { Value = slotSave.ScenarioPosition, Increment = 1, MaximumDecimalPlaces = 0, MinValue = 1, MaxValue = _project.Scenario.Commands.Count, ID = "ScenarioPosition" };
+            layout.Rows.Add(ControlGenerator.GetControlWithLabel("Scenario Command Index: ", scenarioPositionStepper));
+            _modifierControls.Add(scenarioPositionStepper);
+
+            NumericStepper episodeNumberStepper = new() { Value = slotSave.EpisodeNumber, Increment = 1, MaximumDecimalPlaces = 0, MinValue = 1, MaxValue = 5, ID = "EpisodeNumber" };
+            layout.Rows.Add(ControlGenerator.GetControlWithLabel("Episode: ", episodeNumberStepper));
+            _modifierControls.Add(episodeNumberStepper);
+
+            NumericStepper hflStepper = new() { Value = slotSave.HaruhiFriendshipLevel, Increment = 1, MaximumDecimalPlaces = 0, MinValue = 1, MaxValue = 64, ID = "HFL" };
+            _modifierControls.Add(hflStepper);
+            NumericStepper mflStepper = new() { Value = slotSave.MikuruFriendshipLevel, Increment = 1, MaximumDecimalPlaces = 0, MinValue = 1, MaxValue = 64, ID = "MFL" };
+            _modifierControls.Add(mflStepper);
+            NumericStepper nflStepper = new() { Value = slotSave.NagatoFriendshipLevel, Increment = 1, MaximumDecimalPlaces = 0, MinValue = 1, MaxValue = 64, ID = "NFL" };
+            _modifierControls.Add(nflStepper);
+            NumericStepper kflStepper = new() { Value = slotSave.KoizumiFriendshipLevel, Increment = 1, MaximumDecimalPlaces = 0, MinValue = 1, MaxValue = 64, ID = "KFL" };
+            _modifierControls.Add(kflStepper);
+            NumericStepper uflStepper = new() { Value = slotSave.UnknownFriendshipLevel, Increment = 1, MaximumDecimalPlaces = 0, MinValue = 1, MaxValue = 64, ID = "UFL" };
+            _modifierControls.Add(uflStepper);
+            NumericStepper tflStepper = new() { Value = slotSave.TsuruyaFriendshipLevel, Increment = 1, MaximumDecimalPlaces = 0, MinValue = 1, MaxValue = 64, ID = "TFL" };
+            _modifierControls.Add(tflStepper);
+            GroupBox friendshipLevelSteppersGroupBox = new()
+            {
+                Text = "Friendship Levels",
+                Content = new TableLayout
+                {
+                    Spacing = new(5, 5),
+                    Rows =
+                    {
+                        new(ControlGenerator.GetControlWithLabel("Haruhi", hflStepper), ControlGenerator.GetControlWithLabel("Mikuru", mflStepper), ControlGenerator.GetControlWithLabel("Nagato", nflStepper)),
+                        new(ControlGenerator.GetControlWithLabel("Koizumi", kflStepper), ControlGenerator.GetControlWithLabel("Unknown", uflStepper), ControlGenerator.GetControlWithLabel("Tsuruya", tflStepper)),
+                    }
+                }
+            };
+            layout.Rows.Add(friendshipLevelSteppersGroupBox);
+            return layout;
+        }
+        
+        private Container GetCommonDataBox(CommonSaveData commonSave)
+        {
+            TableLayout layout = new()
+            {
+                Height = 420,
+                Spacing = new(5, 5),
+                Padding = 10
+            };
+
+            NumericStepper numSavesStepper = new()
+                {Value = commonSave.NumSaves, Increment = 1, MaximumDecimalPlaces = 0, ID = "NumSaves"};
+            layout.Rows.Add(ControlGenerator.GetControlWithLabel("Number of Saves: ", numSavesStepper));
+            _modifierControls.Add(numSavesStepper);
+
+            NumericStepper bgmVolumeStepper = new()
+            {
+                Value = commonSave.Options.BgmVolume / 10, MinValue = 0, MaxValue = 100, MaximumDecimalPlaces = 0, ID = "BgmVolume"
+            };
+            layout.Rows.Add(ControlGenerator.GetControlWithLabel("BGM Volume: ", bgmVolumeStepper));
+            _modifierControls.Add(bgmVolumeStepper);
+
+            NumericStepper sfxVolumeStepper = new()
+            {
+                Value = commonSave.Options.SfxVolume / 10, MinValue = 0, MaxValue = 100, MaximumDecimalPlaces = 0, ID = "SfxVolume"
+            };
+            layout.Rows.Add(ControlGenerator.GetControlWithLabel("SFX Volume: ", sfxVolumeStepper));
+            _modifierControls.Add(sfxVolumeStepper);
+
+            NumericStepper wordsVolumeStepper = new()
+            {
+                Value = commonSave.Options.WordsVolume / 10, MinValue = 0, MaxValue = 100, MaximumDecimalPlaces = 0,
+                ID = "WordsVolume"
+            };
+            layout.Rows.Add(ControlGenerator.GetControlWithLabel("Words Volume: ", wordsVolumeStepper));
+            _modifierControls.Add(wordsVolumeStepper);
+
+            NumericStepper voiceVolumeStepper = new()
+            {
+                Value = commonSave.Options.VoiceVolume / 10, MinValue = 0, MaxValue = 100, MaximumDecimalPlaces = 0,
+                ID = "VoiceVolume"
+            };
+            layout.Rows.Add(ControlGenerator.GetControlWithLabel("Voice Volume: ", voiceVolumeStepper));
+            _modifierControls.Add(voiceVolumeStepper);
+
+            CheckBox kyonVoiceCheckBox = new()
+                {Checked = commonSave.Options.VoiceToggles.HasFlag(SaveOptions.VoiceOptions.KYON), ID = "KyonVoiceToggle"};
+            CheckBox haruhiVoiceCheckBox = new()
+                {Checked = commonSave.Options.VoiceToggles.HasFlag(SaveOptions.VoiceOptions.HARUHI), ID = "HaruhiVoiceToggle"};
+            CheckBox mikuruVoiceCheckBox = new()
+                {Checked = commonSave.Options.VoiceToggles.HasFlag(SaveOptions.VoiceOptions.MIKURU), ID = "MikuruVoiceToggle"};
+            CheckBox nagatoVoiceCheckBox = new()
+                {Checked = commonSave.Options.VoiceToggles.HasFlag(SaveOptions.VoiceOptions.NAGATO), ID = "NagatoVoiceToggle"};
+            CheckBox koizumiVoiceCheckBox = new()
+                {Checked = commonSave.Options.VoiceToggles.HasFlag(SaveOptions.VoiceOptions.KOIZUMI), ID = "KoizumiVoiceToggle"};
+            CheckBox sisterVoiceCheckBox = new()
+                {Checked = commonSave.Options.VoiceToggles.HasFlag(SaveOptions.VoiceOptions.SISTER), ID = "SisterVoiceToggle"};
+            CheckBox tsuruyaVoiceCheckBox = new()
+                {Checked = commonSave.Options.VoiceToggles.HasFlag(SaveOptions.VoiceOptions.TSURUYA), ID = "TsuruyaVoiceToggle"};
+            CheckBox taniguchiVoiceCheckBox = new()
+            {
+                Checked = commonSave.Options.VoiceToggles.HasFlag(SaveOptions.VoiceOptions.TANIGUCHI), ID = "TaniguchiVoiceToggle"
+            };
+            CheckBox kunikidaVoiceCheckBox = new()
+                {Checked = commonSave.Options.VoiceToggles.HasFlag(SaveOptions.VoiceOptions.KUNIKIDA), ID = "KunikidaVoiceToggle"};
+            CheckBox mysteryGirlVoiceCheckBox = new()
+            {
+                Checked = commonSave.Options.VoiceToggles.HasFlag(SaveOptions.VoiceOptions.MYSTERY_GIRL),
+                ID = "MysteryGirlVoiceToggle"
+            };
+            TableLayout voiceToggleLayout = new()
+            {
+                Spacing = new(3, 3),
+                Rows =
+                {
+                    new(ControlGenerator.GetControlWithLabel("Kyon", kyonVoiceCheckBox),
+                        ControlGenerator.GetControlWithLabel("Haruhi", haruhiVoiceCheckBox),
+                        ControlGenerator.GetControlWithLabel("Mikuru", mikuruVoiceCheckBox),
+                        ControlGenerator.GetControlWithLabel("Nagato", nagatoVoiceCheckBox),
+                        ControlGenerator.GetControlWithLabel("Koizumi", koizumiVoiceCheckBox)),
+                    new(ControlGenerator.GetControlWithLabel("Kyon's Sister", sisterVoiceCheckBox),
+                        ControlGenerator.GetControlWithLabel("Tsuruya", tsuruyaVoiceCheckBox),
+                        ControlGenerator.GetControlWithLabel("Taniguchi", taniguchiVoiceCheckBox),
+                        ControlGenerator.GetControlWithLabel("Kunikida", kunikidaVoiceCheckBox),
+                        ControlGenerator.GetControlWithLabel("Mystery Girl", mysteryGirlVoiceCheckBox))
+                }
+            };
+            layout.Rows.Add("Voice Toggles");
+            layout.Rows.Add(voiceToggleLayout);
+            _modifierControls.AddRange(
+            [
+                kyonVoiceCheckBox,
+                haruhiVoiceCheckBox,
+                mikuruVoiceCheckBox,
+                nagatoVoiceCheckBox,
+                koizumiVoiceCheckBox,
+                sisterVoiceCheckBox,
+                tsuruyaVoiceCheckBox,
+                taniguchiVoiceCheckBox,
+                kunikidaVoiceCheckBox,
+                mysteryGirlVoiceCheckBox
+            ]);
+
+            RadioButtonList batchDialogueDisplay = new()
+            {
+                Items =
+                {
+                    "Off",
+                    "On"
+                },
+                SelectedValue =
+                    commonSave.Options.StoryOptions.HasFlag(SaveOptions.PuzzleInvestigationOptions.BATCH_DIALOGUE_DISPLAY_ON)
+                        ? "On"
+                        : "Off",
+                Orientation = Orientation.Horizontal,
+                ID = "BatchDialogueDisplay",
+            };
+            layout.Rows.Add(ControlGenerator.GetControlWithLabel("Batch Dialogue Display", batchDialogueDisplay));
+            _modifierControls.Add(batchDialogueDisplay);
+
+            RadioButtonList puzzleInterruptScenes = new()
+            {
+                Items =
+                {
+                    "Off",
+                    "Unseen Only",
+                    "On"
+                },
+                SelectedValue =
+                    commonSave.Options.StoryOptions.HasFlag(SaveOptions.PuzzleInvestigationOptions.PUZZLE_INTERRUPTE_SCENES_ON)
+                        ? "On"
+                        : (commonSave.Options.StoryOptions.HasFlag(SaveOptions.PuzzleInvestigationOptions
+                            .PUZZLE_INTERRUPT_SCENES_UNSEEN_ONLY)
+                            ? "Unseen Only"
+                            : "Off"),
+                Orientation = Orientation.Horizontal,
+                ID = "PuzzleInterruptScenes",
+            };
+            layout.Rows.Add(ControlGenerator.GetControlWithLabel("Puzzle Interrupt Scenes", puzzleInterruptScenes));
+            _modifierControls.Add(puzzleInterruptScenes);
+
+            RadioButtonList topicStockMode = new()
+            {
+                Items =
+                {
+                    "Off",
+                    "On"
+                },
+                SelectedValue = commonSave.Options.StoryOptions.HasFlag(SaveOptions.PuzzleInvestigationOptions.TOPIC_STOCK_MODE_ON)
+                    ? "On"
+                    : "Off",
+                Orientation = Orientation.Horizontal,
+                ID = "TopicStockMode",
+            };
+            layout.Rows.Add(ControlGenerator.GetControlWithLabel("Topic Stock Mode", topicStockMode));
+            _modifierControls.Add(topicStockMode);
+
+            RadioButtonList dialogueSkipping = new()
+            {
+                Items =
+                {
+                    "Fast Forward",
+                    "Skip Already Read"
+                },
+                SelectedValue =
+                    commonSave.Options.StoryOptions.HasFlag(SaveOptions.PuzzleInvestigationOptions
+                        .DIALOGUE_SKIPPING_SKIP_ALREADY_READ)
+                        ? "Skip Already Read"
+                        : "Fast Forward",
+                Orientation = Orientation.Horizontal,
+                ID = "DialogueSkipping",
+            };
+            layout.Rows.Add(ControlGenerator.GetControlWithLabel("Dialogue Skipping", dialogueSkipping));
+            _modifierControls.Add(dialogueSkipping);
+            return layout;
+        }
     }
+    
 }
