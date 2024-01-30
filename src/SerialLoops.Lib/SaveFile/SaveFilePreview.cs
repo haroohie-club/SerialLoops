@@ -1,10 +1,16 @@
-using System;
 using HaruhiChokuretsuLib.Save;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script.Parameters;
 using SerialLoops.Lib.Util;
 using SkiaSharp;
+using System;
 
+namespace SerialLoops.Lib.SaveFile
+{
+    public class SaveFilePreview
+    {
+
+<<<<<<< Updated upstream
 namespace SerialLoops.Lib.SaveFile {
     public class SaveFilePreview {
 
@@ -21,6 +27,15 @@ namespace SerialLoops.Lib.SaveFile {
             _project = project;
         }
 
+=======
+        private const int WIDTH = 250;
+        private const int HEIGHT = 42;
+        private const float SCALE = 2f;
+
+        public SaveSlotData SlotData { get; set; }
+        public Project Project { get; set; }
+
+>>>>>>> Stashed changes
         public SKBitmap DrawPreview()
         {
             SKBitmap bitmap = new(WIDTH, HEIGHT);
@@ -41,8 +56,13 @@ namespace SerialLoops.Lib.SaveFile {
             canvas.Flush();
             return bitmap.Resize(
                 new SKImageInfo(
+<<<<<<< Updated upstream
                     (int) (WIDTH * SCALE),
                     (int) (HEIGHT * SCALE)
+=======
+                (int)(WIDTH * SCALE),
+                (int)(HEIGHT * SCALE)
+>>>>>>> Stashed changes
                 ),
                 SKFilterQuality.None
             );
@@ -51,15 +71,25 @@ namespace SerialLoops.Lib.SaveFile {
         private void DrawText(SKCanvas canvas, string text, int x = 10, int y = 5, SKPaint paint = null)
         {
             canvas.DrawHaroohieText(
+<<<<<<< Updated upstream
                 _project.LangCode != "ja" ? text.GetOriginalString(_project) : text,
                 paint ?? DialogueScriptParameter.Paint00,
                 _project,
+=======
+                Project.LangCode != "ja" ? text.GetOriginalString(Project) : text,
+                paint ?? DialogueScriptParameter.Paint00,
+                Project,
+>>>>>>> Stashed changes
                 x,
                 y
             );
         }
 
+<<<<<<< Updated upstream
         private void DrawBox(SKCanvas canvas)
+=======
+        private static void DrawBox(SKCanvas canvas)
+>>>>>>> Stashed changes
         {
             // Draw outer dark gray outline
             canvas.Clear(new(93, 93, 93));
@@ -132,12 +162,28 @@ namespace SerialLoops.Lib.SaveFile {
             canvas.DrawBitmap(timeBitmap, 0, 23);
         }
 
+<<<<<<< Updated upstream
         private void DrawLargeGlyph(char glyph, SKCanvas canvas, SKBitmap bitmap, int x, int y = 0)
+=======
+        private static void DrawLargeGlyph(char glyph, SKCanvas canvas, SKBitmap bitmap, int x, int y = 0)
+>>>>>>> Stashed changes
         {
             int offset = glyph switch
             {
-                '0' => 0, '1' => 8, '2' => 16, '3' => 24, '4' => 32, '5' => 40, '6' => 48,
-                '7' => 56, '8' => 64, '9' => 72, ':' => 80, '/' => 88, '%' => 96, _ => 104
+                '0' => 0,
+                '1' => 8,
+                '2' => 16,
+                '3' => 24,
+                '4' => 32,
+                '5' => 40,
+                '6' => 48,
+                '7' => 56,
+                '8' => 64,
+                '9' => 72,
+                ':' => 80,
+                '/' => 88,
+                '%' => 96,
+                _ => 104
             };
             canvas.DrawBitmap(
                 bitmap,

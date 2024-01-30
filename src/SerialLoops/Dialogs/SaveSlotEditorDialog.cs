@@ -14,7 +14,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using static SerialLoops.Lib.Items.ItemDescription;
 
 namespace SerialLoops.Dialogs
 {
@@ -34,9 +33,9 @@ namespace SerialLoops.Dialogs
         private ScriptPreview _quickSaveScriptPreview;
 
         private const int FLAGS_PER_PAGE = 12;
-        private StackLayout _checkBoxContainer = new();
+        private readonly StackLayout _checkBoxContainer = new();
         private int _flagPage = 1;
-        private List<int> _flags = new();
+        private List<int> _flags = [];
 
         public SaveSlotEditorDialog(ILogger log, SaveSection saveSection, string fileName, string slotName,
                                     Project project, EditorTabsPanel tabs, Action callback)
@@ -49,7 +48,7 @@ namespace SerialLoops.Dialogs
             _tabs = tabs;
             _callback = callback;
             _flags = GetFilteredFlags();
-            
+
             InitializeComponent();
         }
 
@@ -74,22 +73,22 @@ namespace SerialLoops.Dialogs
 
             if (_saveSection is CommonSaveData commonSave)
             {
-                menuTabs.Pages.Add(new TabPage { Content = GetCommonDataBox(commonSave), Text = "Config Data"});
+                menuTabs.Pages.Add(new TabPage { Content = GetCommonDataBox(commonSave), Text = "Config Data" });
             }
             else
             {
                 SaveSlotData slotSave = (SaveSlotData)_saveSection;
-                menuTabs.Pages.Add(new TabPage { Content = GetSlotDataBox(slotSave), Text = "Save Data"});
-                
+                menuTabs.Pages.Add(new TabPage { Content = GetSlotDataBox(slotSave), Text = "Save Data" });
+
                 if (slotSave is QuickSaveSlotData quickSave)
                 {
-                    menuTabs.Pages.Add(new TabPage { Content = GetQuickSaveDataBox(quickSave), Text = "Script Position"});
+                    menuTabs.Pages.Add(new TabPage { Content = GetQuickSaveDataBox(quickSave), Text = "Script Position" });
                 }
             }
-            TabPage flagsTab = new TabPage {Content = GetFlagsBox(), Text = "Flags" };
+            TabPage flagsTab = new() { Content = GetFlagsBox(), Text = "Flags" };
             flagsTab.Shown += (sender, args) => UpdateFlagList(_flagPage);
             menuTabs.Pages.Add(flagsTab);
-            
+
 
             Button saveButton = new() { Text = "Save" };
             saveButton.Click += (sender, args) =>
@@ -149,8 +148,8 @@ namespace SerialLoops.Dialogs
 
                     if (slotSave is QuickSaveSlotData quickSave)
                     {
-                        quickSave.KbgIndex = (short)_quickSaveScriptPreview.Kbg.Id;
-                        quickSave.Place = (short)_quickSaveScriptPreview.Place.Index;
+                        quickSave.KbgIndex = (short)(_quickSaveScriptPreview.Kbg?.Id ?? 0);
+                        quickSave.Place = (short)(_quickSaveScriptPreview.Place?.Index ?? 0);
                         if (_quickSaveScriptPreview.Background.BackgroundType == HaruhiChokuretsuLib.Archive.Data.BgType.TEX_BG)
                         {
                             quickSave.BgIndex = (short)_quickSaveScriptPreview.Background.Id;
@@ -189,7 +188,7 @@ namespace SerialLoops.Dialogs
                         quickSave.CurrentScriptCommand = ((NumericMaskedTextBox<int>)_modifierControls.First(c => c.ID == "ScriptCommandIndex")).Value;
                     }
                 }
-                
+
                 Close();
             };
 
@@ -222,7 +221,7 @@ namespace SerialLoops.Dialogs
             int totalPages = (_flags.Count / FLAGS_PER_PAGE) + 1;
             NumericMaskedTextBox<int> flagPageBox = new()
             {
-                Value = _flagPage, 
+                Value = _flagPage,
                 Width = 30,
             };
             Button lastPageButton = new() { Image = ControlGenerator.GetIcon("Previous_Page", _log), Width = 22, Enabled = _flagPage > 1, };
@@ -245,9 +244,10 @@ namespace SerialLoops.Dialogs
 
             SearchBox filterBox = new() { PlaceholderText = "Filter by Name", Width = 200 };
             CheckBox showSetFlagsCheckbox = new() { Text = "Hide Unset Flags", Checked = false };
-            Button applyFiltersButton = new() { Image = ControlGenerator.GetIcon("Search", _log), Text = "Filter"};
+            Button applyFiltersButton = new() { Image = ControlGenerator.GetIcon("Search", _log), Text = "Filter" };
             Label totalPagesLabel = new() { Text = $" / {totalPages}" };
             Label totalResultsLabel = new() { Text = $"{_flags.Count} results" };
+<<<<<<< Updated upstream
             filterBox.KeyDown += (sender, args) =>
             {
                 if (args.Key == Keys.Enter)
@@ -256,6 +256,10 @@ namespace SerialLoops.Dialogs
                 }
             };
             applyFiltersButton.Click += ((sender, args) =>  {
+=======
+            applyFiltersButton.Click += ((sender, args) =>
+            {
+>>>>>>> Stashed changes
                 _flags = GetFilteredFlags(filterBox.Text, showSetFlagsCheckbox.Checked ?? true);
                 flagPageBox.Value = _flagPage = 1;
                 totalPages = (_flags.Count / FLAGS_PER_PAGE) + 1;
@@ -263,7 +267,7 @@ namespace SerialLoops.Dialogs
                 totalResultsLabel.Text = $"{_flags.Count} results";
                 UpdateFlagList(_flagPage);
             });
-            
+
             return new()
             {
                 Height = 400,
@@ -288,7 +292,7 @@ namespace SerialLoops.Dialogs
             };
         }
 
-        private StackLayout GetCenteredLayout(StackLayoutItem[] items)
+        private static StackLayout GetCenteredLayout(StackLayoutItem[] items)
         {
             return new StackLayout
             {
@@ -308,13 +312,14 @@ namespace SerialLoops.Dialogs
 
         private void UpdateFlagList(int page)
         {
-            TableLayout rows = new TableLayout { Spacing = new(15, 5)};
+            TableLayout rows = new TableLayout { Spacing = new(15, 5) };
             if (_flags.Count > 0)
             {
-                rows.Rows.Add(new TableRow { 
+                rows.Rows.Add(new TableRow
+                {
                     Cells =
                     {
-                        ControlGenerator.GetTextHeader("Value", 10), 
+                        ControlGenerator.GetTextHeader("Value", 10),
                         ControlGenerator.GetTextHeader("Flag Description", 10)
                     }
                 });
@@ -322,7 +327,7 @@ namespace SerialLoops.Dialogs
             GetFlagBoxes((page - 1) * FLAGS_PER_PAGE, page * FLAGS_PER_PAGE).ToList().ForEach(c => rows.Rows.Add(c));
             _checkBoxContainer.Content = rows;
         }
-        
+
         private IEnumerable<TableRow> GetFlagBoxes(int start, int end)
         {
             List<TableRow> flagBoxes = new();
@@ -332,7 +337,7 @@ namespace SerialLoops.Dialogs
                 flagCheckBox.CheckedChanged += (sender, args) => { _flagModifications[flag] = flagCheckBox.Checked ?? true; };
                 TableRow checkboxLayout = new()
                 {
-                    Cells = 
+                    Cells =
                     {
                         flagCheckBox,
                         Flags.GetFlagNickname(flag, _project),
@@ -352,23 +357,23 @@ namespace SerialLoops.Dialogs
                 {
                     continue;
                 }
-                
+
                 if (!string.IsNullOrWhiteSpace(term) && !Flags.GetFlagNickname(i, _project).ToLower().Contains(term.ToLower().Trim()))
                 {
                     continue;
                 }
-                
+
                 filtered.Add(i);
             }
             return filtered;
         }
 
-        private Container GetQuickSaveDataBox(QuickSaveSlotData quickSave)
+        private TableLayout GetQuickSaveDataBox(QuickSaveSlotData quickSave)
         {
             StackLayout previewLayout = new();
 
             NumericMaskedTextBox<int> scriptCommandIndexBox = new() { ID = "ScriptCommandIndex", Value = quickSave.CurrentScriptCommand, Width = 30 };
-            _quickSaveScript = (ScriptItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Script && ((ScriptItem)i).Event.Index == quickSave.CurrentScript);
+            _quickSaveScript = (ScriptItem)_project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Script && ((ScriptItem)i).Event.Index == quickSave.CurrentScript) ?? (ScriptItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Script);
             Dictionary<ScriptSection, List<ScriptItemCommand>> commands = _quickSaveScript.GetScriptCommandTree(_project, _log);
             _quickSaveScript.CalculateGraphEdges(commands, _log);
 
@@ -407,7 +412,6 @@ namespace SerialLoops.Dialogs
             };
             _modifierControls.Add(scriptSelector);
 
-
             scriptCommandIndexBox.ValueChanged += (sender, args) =>
             {
                 previewLayout.Items.Clear();
@@ -437,27 +441,29 @@ namespace SerialLoops.Dialogs
             {
                 if (quickSave.TopScreenChibis.HasFlag((CharacterMask)(1 << i)))
                 {
-                    ChibiItem chibi = (ChibiItem)_project.Items.First(it => it.Type == ItemType.Chibi && ((ChibiItem)it).ChibiIndex == i);
+                    ChibiItem chibi = (ChibiItem)_project.Items.First(it => it.Type == ItemDescription.ItemType.Chibi && ((ChibiItem)it).ChibiIndex == i);
                     topScreenChibis.Add((chibi, chibiCurrentX, chibiY));
                     chibiCurrentX += chibi.ChibiAnimations.First().Value.ElementAt(0).Frame.Width - 16;
                 }
             }
 
-            _quickSaveScriptPreview = new()
+            try
             {
-                Background = (BackgroundItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == (quickSave.CgIndex != 0 ? quickSave.CgIndex : quickSave.BgIndex)),
-                BgPalEffect = (PaletteEffectScriptParameter.PaletteEffect)quickSave.BgPalEffect,
-                EpisodeHeader = quickSave.EpisodeHeader,
-                Kbg = (BackgroundItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == quickSave.KbgIndex),
-                Place = (PlaceItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Place && ((PlaceItem)i).Index == quickSave.Place),
-                TopScreenChibis = topScreenChibis,
-                Sprites =
-                [
-                        new() 
-                        {
-                            Sprite = (CharacterSpriteItem)_project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Character_Sprite && ((CharacterSpriteItem)i).Index == quickSave.FirstCharacterSprite),
-                            Positioning = new() { X = quickSave.Sprite1XOffset, Layer = 2 }
-                        },
+                _quickSaveScriptPreview = new()
+                {
+                    Background = (BackgroundItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == (quickSave.CgIndex != 0 ? quickSave.CgIndex : quickSave.BgIndex)),
+                    BgPalEffect = (PaletteEffectScriptParameter.PaletteEffect)quickSave.BgPalEffect,
+                    EpisodeHeader = quickSave.EpisodeHeader,
+                    Kbg = (BackgroundItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == quickSave.KbgIndex),
+                    Place = (PlaceItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Place && ((PlaceItem)i).Index == quickSave.Place),
+                    TopScreenChibis = topScreenChibis,
+                    Sprites =
+                    [
+                            new()
+                            {
+                                Sprite = (CharacterSpriteItem)_project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Character_Sprite && ((CharacterSpriteItem)i).Index == quickSave.FirstCharacterSprite),
+                                Positioning = new() { X = quickSave.Sprite1XOffset, Layer = 2 }
+                            },
                         new()
                         {
                             Sprite = (CharacterSpriteItem)_project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Character_Sprite && ((CharacterSpriteItem)i).Index == quickSave.SecondCharacterSprite),
@@ -468,25 +474,30 @@ namespace SerialLoops.Dialogs
                             Sprite = (CharacterSpriteItem)_project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Character_Sprite && ((CharacterSpriteItem)i).Index == quickSave.ThirdCharacterSprite),
                             Positioning = new() { X = quickSave.Sprite3XOffset, Layer = 0 }
                         },
-                ],
-            };
-            (SKBitmap previewBitmap, string previewErrorImage) = ScriptItem.GeneratePreviewImage(_quickSaveScriptPreview, _project);
-            if (previewBitmap is null)
-            {
-                previewBitmap = new(256, 384);
-                SKCanvas canvas = new(previewBitmap);
-                canvas.DrawColor(SKColors.Black);
-                using Stream noPreviewStream = Assembly.GetCallingAssembly().GetManifestResourceStream(previewErrorImage);
-                canvas.DrawImage(SKImage.FromEncodedData(noPreviewStream), new SKPoint(0, 0));
-                canvas.Flush();
+                    ],
+                };
+                (SKBitmap previewBitmap, string previewErrorImage) = ScriptItem.GeneratePreviewImage(_quickSaveScriptPreview, _project);
+                if (previewBitmap is null)
+                {
+                    previewBitmap = new(256, 384);
+                    SKCanvas canvas = new(previewBitmap);
+                    canvas.DrawColor(SKColors.Black);
+                    using Stream noPreviewStream = Assembly.GetCallingAssembly().GetManifestResourceStream(previewErrorImage);
+                    canvas.DrawImage(SKImage.FromEncodedData(noPreviewStream), new SKPoint(0, 0));
+                    canvas.Flush();
+                    previewLayout.Items.Add(new SKGuiImage(previewBitmap));
+                }
                 previewLayout.Items.Add(new SKGuiImage(previewBitmap));
             }
-            previewLayout.Items.Add(new SKGuiImage(previewBitmap));
-            
+            catch (InvalidOperationException)
+            {
+                _log.LogWarning("InvalidOperationException encountered while trying to generate quicksave preview; most likely invalid or new save data has been picked...");
+            }
+
             return new TableLayout
             {
                 Height = 400,
-                Spacing = new (10, 0),
+                Spacing = new(10, 0),
                 Padding = 10,
                 Rows =
                 {
@@ -507,8 +518,8 @@ namespace SerialLoops.Dialogs
                 },
             };
         }
-        
-        private Container GetSlotDataBox(SaveSlotData slotSave)
+
+        private TableLayout GetSlotDataBox(SaveSlotData slotSave)
         {
             TableLayout layout = new()
             {
@@ -550,7 +561,7 @@ namespace SerialLoops.Dialogs
                     Rows =
                     {
                         new(
-                            ControlGenerator.GetCharacterProgressControl(hflStepper, _project, _log, ControlGenerator.ProgressPortraitCharacter.Haruhi), 
+                            ControlGenerator.GetCharacterProgressControl(hflStepper, _project, _log, ControlGenerator.ProgressPortraitCharacter.Haruhi),
                             ControlGenerator.GetCharacterProgressControl(mflStepper, _project, _log, ControlGenerator.ProgressPortraitCharacter.Mikuru)
                         ),
                         new(
@@ -567,8 +578,8 @@ namespace SerialLoops.Dialogs
             layout.Rows.Add(new StackLayout(friendshipLevelSteppersGroupBox));
             return layout;
         }
-        
-        private Container GetCommonDataBox(CommonSaveData commonSave)
+
+        private TableLayout GetCommonDataBox(CommonSaveData commonSave)
         {
             TableLayout layout = new()
             {
@@ -578,28 +589,39 @@ namespace SerialLoops.Dialogs
             };
 
             NumericStepper numSavesStepper = new()
-                {Value = commonSave.NumSaves, Increment = 1, MaximumDecimalPlaces = 0, ID = "NumSaves"};
+            { Value = commonSave.NumSaves, Increment = 1, MaximumDecimalPlaces = 0, ID = "NumSaves" };
             layout.Rows.Add(ControlGenerator.GetControlWithLabel("Number of Saves: ", numSavesStepper));
             _modifierControls.Add(numSavesStepper);
 
-            TableLayout volumeLayout = new() {Spacing = new(5, 5), Padding = 10};
+            TableLayout volumeLayout = new() { Spacing = new(5, 5), Padding = 10 };
             NumericStepper bgmVolumeStepper = new()
             {
-                Value = commonSave.Options.BgmVolume / 10, MinValue = 0, MaxValue = 100, MaximumDecimalPlaces = 0, ID = "BgmVolume"
+                Value = commonSave.Options.BgmVolume / 10,
+                MinValue = 0,
+                MaxValue = 100,
+                MaximumDecimalPlaces = 0,
+                ID = "BgmVolume"
             };
             volumeLayout.Rows.Add(ControlGenerator.GetControlWithLabel("Music: ", bgmVolumeStepper));
             _modifierControls.Add(bgmVolumeStepper);
 
             NumericStepper sfxVolumeStepper = new()
             {
-                Value = commonSave.Options.SfxVolume / 10, MinValue = 0, MaxValue = 100, MaximumDecimalPlaces = 0, ID = "SfxVolume"
+                Value = commonSave.Options.SfxVolume / 10,
+                MinValue = 0,
+                MaxValue = 100,
+                MaximumDecimalPlaces = 0,
+                ID = "SfxVolume"
             };
             volumeLayout.Rows.Add(ControlGenerator.GetControlWithLabel("Sound Effects: ", sfxVolumeStepper));
             _modifierControls.Add(sfxVolumeStepper);
 
             NumericStepper wordsVolumeStepper = new()
             {
-                Value = commonSave.Options.WordsVolume / 10, MinValue = 0, MaxValue = 100, MaximumDecimalPlaces = 0,
+                Value = commonSave.Options.WordsVolume / 10,
+                MinValue = 0,
+                MaxValue = 100,
+                MaximumDecimalPlaces = 0,
                 ID = "WordsVolume"
             };
             volumeLayout.Rows.Add(ControlGenerator.GetControlWithLabel("Dialogue: ", wordsVolumeStepper));
@@ -607,32 +629,36 @@ namespace SerialLoops.Dialogs
 
             NumericStepper voiceVolumeStepper = new()
             {
-                Value = commonSave.Options.VoiceVolume / 10, MinValue = 0, MaxValue = 100, MaximumDecimalPlaces = 0,
+                Value = commonSave.Options.VoiceVolume / 10,
+                MinValue = 0,
+                MaxValue = 100,
+                MaximumDecimalPlaces = 0,
                 ID = "VoiceVolume"
             };
             volumeLayout.Rows.Add(ControlGenerator.GetControlWithLabel("Voices: ", voiceVolumeStepper));
             _modifierControls.Add(voiceVolumeStepper);
 
             CheckBox kyonVoiceCheckBox = new()
-                {Checked = commonSave.Options.VoiceToggles.HasFlag(SaveOptions.VoiceOptions.KYON), ID = "KyonVoiceToggle"};
+            { Checked = commonSave.Options.VoiceToggles.HasFlag(SaveOptions.VoiceOptions.KYON), ID = "KyonVoiceToggle" };
             CheckBox haruhiVoiceCheckBox = new()
-                {Checked = commonSave.Options.VoiceToggles.HasFlag(SaveOptions.VoiceOptions.HARUHI), ID = "HaruhiVoiceToggle"};
+            { Checked = commonSave.Options.VoiceToggles.HasFlag(SaveOptions.VoiceOptions.HARUHI), ID = "HaruhiVoiceToggle" };
             CheckBox mikuruVoiceCheckBox = new()
-                {Checked = commonSave.Options.VoiceToggles.HasFlag(SaveOptions.VoiceOptions.MIKURU), ID = "MikuruVoiceToggle"};
+            { Checked = commonSave.Options.VoiceToggles.HasFlag(SaveOptions.VoiceOptions.MIKURU), ID = "MikuruVoiceToggle" };
             CheckBox nagatoVoiceCheckBox = new()
-                {Checked = commonSave.Options.VoiceToggles.HasFlag(SaveOptions.VoiceOptions.NAGATO), ID = "NagatoVoiceToggle"};
+            { Checked = commonSave.Options.VoiceToggles.HasFlag(SaveOptions.VoiceOptions.NAGATO), ID = "NagatoVoiceToggle" };
             CheckBox koizumiVoiceCheckBox = new()
-                {Checked = commonSave.Options.VoiceToggles.HasFlag(SaveOptions.VoiceOptions.KOIZUMI), ID = "KoizumiVoiceToggle"};
+            { Checked = commonSave.Options.VoiceToggles.HasFlag(SaveOptions.VoiceOptions.KOIZUMI), ID = "KoizumiVoiceToggle" };
             CheckBox sisterVoiceCheckBox = new()
-                {Checked = commonSave.Options.VoiceToggles.HasFlag(SaveOptions.VoiceOptions.SISTER), ID = "SisterVoiceToggle"};
+            { Checked = commonSave.Options.VoiceToggles.HasFlag(SaveOptions.VoiceOptions.SISTER), ID = "SisterVoiceToggle" };
             CheckBox tsuruyaVoiceCheckBox = new()
-                {Checked = commonSave.Options.VoiceToggles.HasFlag(SaveOptions.VoiceOptions.TSURUYA), ID = "TsuruyaVoiceToggle"};
+            { Checked = commonSave.Options.VoiceToggles.HasFlag(SaveOptions.VoiceOptions.TSURUYA), ID = "TsuruyaVoiceToggle" };
             CheckBox taniguchiVoiceCheckBox = new()
             {
-                Checked = commonSave.Options.VoiceToggles.HasFlag(SaveOptions.VoiceOptions.TANIGUCHI), ID = "TaniguchiVoiceToggle"
+                Checked = commonSave.Options.VoiceToggles.HasFlag(SaveOptions.VoiceOptions.TANIGUCHI),
+                ID = "TaniguchiVoiceToggle"
             };
             CheckBox kunikidaVoiceCheckBox = new()
-                {Checked = commonSave.Options.VoiceToggles.HasFlag(SaveOptions.VoiceOptions.KUNIKIDA), ID = "KunikidaVoiceToggle"};
+            { Checked = commonSave.Options.VoiceToggles.HasFlag(SaveOptions.VoiceOptions.KUNIKIDA), ID = "KunikidaVoiceToggle" };
             CheckBox mysteryGirlVoiceCheckBox = new()
             {
                 Checked = commonSave.Options.VoiceToggles.HasFlag(SaveOptions.VoiceOptions.MYSTERY_GIRL),
@@ -666,7 +692,7 @@ namespace SerialLoops.Dialogs
                     )
                 }
             };
-            
+
             _modifierControls.AddRange(
             [
                 kyonVoiceCheckBox,
@@ -680,7 +706,7 @@ namespace SerialLoops.Dialogs
                 kunikidaVoiceCheckBox,
                 mysteryGirlVoiceCheckBox
             ]);
-            
+
             RadioButtonList dialogueSkipping = new()
             {
                 Items =
@@ -756,26 +782,27 @@ namespace SerialLoops.Dialogs
                 ID = "TopicStockMode",
             };
             _modifierControls.Add(topicStockMode);
-            
-            
+
+
             layout.Rows.Add(new TableLayout(
                 new TableRow(
                     new GroupBox { Text = "Volume Config", Content = volumeLayout },
                     new GroupBox { Text = "Voices Config", Content = voiceToggleLayout }
                 ),
                 new TableRow(
-                    new GroupBox { Text = "Puzzle Interrupt Scenes", Content = puzzleInterruptScenes},
-                    new GroupBox { Text = "Topic Stock Mode", Content = topicStockMode}
+                    new GroupBox { Text = "Puzzle Interrupt Scenes", Content = puzzleInterruptScenes },
+                    new GroupBox { Text = "Topic Stock Mode", Content = topicStockMode }
                 ),
                 new TableRow(
-                    new GroupBox { Text = "Dialogue Skipping", Content = dialogueSkipping},
-                    new GroupBox { Text = "Batch Dialogue Display", Content = batchDialogueDisplay}
+                    new GroupBox { Text = "Dialogue Skipping", Content = dialogueSkipping },
+                    new GroupBox { Text = "Batch Dialogue Display", Content = batchDialogueDisplay }
                 ),
                 new TableRow()
-            ) { Spacing = new(10, 0) });
-            
+            )
+            { Spacing = new(10, 0) });
+
             return layout;
         }
     }
-    
+
 }

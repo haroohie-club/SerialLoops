@@ -48,7 +48,7 @@ namespace SerialLoops.Dialogs
             Height = 390;
             Resizable = false;
             Padding = 10;
-            
+
             UpdateContent();
         }
 
@@ -70,8 +70,13 @@ namespace SerialLoops.Dialogs
             };
 
             Button cancelButton = new() { Text = "Cancel" };
+<<<<<<< Updated upstream
             cancelButton.Click += (sender, args) => Close();
             
+=======
+            cancelButton.Click += (sender, args) => { Close(); };
+
+>>>>>>> Stashed changes
             StackLayout buttonsLayout = new()
             {
                 Orientation = Orientation.Horizontal,
@@ -95,11 +100,11 @@ namespace SerialLoops.Dialogs
             };
         }
 
-        private Control GetSaveFiles()
+        private TableLayout GetSaveFiles()
         {
             Button saveCommonButton = new()
             {
-                Text = "Common Save Data...", 
+                Text = "Common Save Data...",
                 Image = ControlGenerator.GetIcon("Edit_Save", _log)
             };
             saveCommonButton.Click += (sender, args) =>
@@ -107,7 +112,7 @@ namespace SerialLoops.Dialogs
                 SaveSlotEditorDialog saveSlotEditorDialog = new(
                     _log,
                     _save.CommonData,
-                    Path.GetFileName(_saveLoc), 
+                    Path.GetFileName(_saveLoc),
                     "Common Save Data",
                     _project,
                     _tabs,
@@ -163,11 +168,11 @@ namespace SerialLoops.Dialogs
                                 Items =
                                 {
                                     GetSlotEditButton(data, Path.GetFileName(_saveLoc), slotNum),
-                                    // GetSlotClearButton(data, Path.GetFileName(_saveLoc), slotNum) TODO
+                                    GetSlotClearButton(data, Path.GetFileName(_saveLoc), slotNum),
                                 },
                             }
                         )
-                        { 
+                        {
                             Orientation = Orientation.Vertical,
                             HorizontalContentAlignment = HorizontalAlignment.Center,
                             VerticalContentAlignment = VerticalAlignment.Center,
@@ -196,19 +201,20 @@ namespace SerialLoops.Dialogs
             };
             return slotButton;
         }
-        
+
         private Button GetSlotClearButton(SaveSlotData slot, string fileName, int slotNumber)
         {
-            Button slotButton = new() 
-            { 
-                Width = 22, 
+            Button slotButton = new()
+            {
+                Width = 22,
                 Image = ControlGenerator.GetIcon("Clear", _log),
-                Enabled = slot.EpisodeNumber > 0 
+                Enabled = slot.EpisodeNumber > 0
             };
             slotButton.Click += (sender, args) =>
             {
-                slot.EpisodeNumber = 0;
+                slot.Clear();
                 _log.Log($"Cleared Save File {slotNumber}.");
+                UpdateContent();
             };
             return slotButton;
         }
