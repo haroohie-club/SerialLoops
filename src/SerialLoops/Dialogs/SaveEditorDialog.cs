@@ -70,13 +70,8 @@ namespace SerialLoops.Dialogs
             };
 
             Button cancelButton = new() { Text = "Cancel" };
-<<<<<<< Updated upstream
             cancelButton.Click += (sender, args) => Close();
             
-=======
-            cancelButton.Click += (sender, args) => { Close(); };
-
->>>>>>> Stashed changes
             StackLayout buttonsLayout = new()
             {
                 Orientation = Orientation.Horizontal,

@@ -247,7 +247,6 @@ namespace SerialLoops.Dialogs
             Button applyFiltersButton = new() { Image = ControlGenerator.GetIcon("Search", _log), Text = "Filter" };
             Label totalPagesLabel = new() { Text = $" / {totalPages}" };
             Label totalResultsLabel = new() { Text = $"{_flags.Count} results" };
-<<<<<<< Updated upstream
             filterBox.KeyDown += (sender, args) =>
             {
                 if (args.Key == Keys.Enter)
@@ -256,10 +255,6 @@ namespace SerialLoops.Dialogs
                 }
             };
             applyFiltersButton.Click += ((sender, args) =>  {
-=======
-            applyFiltersButton.Click += ((sender, args) =>
-            {
->>>>>>> Stashed changes
                 _flags = GetFilteredFlags(filterBox.Text, showSetFlagsCheckbox.Checked ?? true);
                 flagPageBox.Value = _flagPage = 1;
                 totalPages = (_flags.Count / FLAGS_PER_PAGE) + 1;
