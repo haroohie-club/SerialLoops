@@ -9,17 +9,13 @@ namespace SerialLoops.Lib.SaveFile
 {
     public class SaveFilePreview
     {
-
-namespace SerialLoops.Lib.SaveFile {
-    public class SaveFilePreview {
-
         private const int WIDTH = 250;
         private const int HEIGHT = 42;
         private const float SCALE = 2f;
 
         private SaveSlotData _slotData;
         private Project _project;
-        
+
         public SaveFilePreview(SaveSlotData slotData, Project project)
         {
             _slotData = slotData;
@@ -46,8 +42,8 @@ namespace SerialLoops.Lib.SaveFile {
             canvas.Flush();
             return bitmap.Resize(
                 new SKImageInfo(
-                    (int) (WIDTH * SCALE),
-                    (int) (HEIGHT * SCALE)
+                    (int)(WIDTH * SCALE),
+                    (int)(HEIGHT * SCALE)
                 ),
                 SKFilterQuality.None
             );
