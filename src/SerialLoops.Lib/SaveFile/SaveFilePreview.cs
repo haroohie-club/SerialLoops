@@ -1,20 +1,21 @@
-using System;
 using HaruhiChokuretsuLib.Save;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script.Parameters;
 using SerialLoops.Lib.Util;
 using SkiaSharp;
+using System;
 
-namespace SerialLoops.Lib.SaveFile {
-    public class SaveFilePreview {
-
+namespace SerialLoops.Lib.SaveFile
+{
+    public class SaveFilePreview
+    {
         private const int WIDTH = 250;
         private const int HEIGHT = 42;
         private const float SCALE = 2f;
 
         private SaveSlotData _slotData;
         private Project _project;
-        
+
         public SaveFilePreview(SaveSlotData slotData, Project project)
         {
             _slotData = slotData;
@@ -41,8 +42,8 @@ namespace SerialLoops.Lib.SaveFile {
             canvas.Flush();
             return bitmap.Resize(
                 new SKImageInfo(
-                    (int) (WIDTH * SCALE),
-                    (int) (HEIGHT * SCALE)
+                    (int)(WIDTH * SCALE),
+                    (int)(HEIGHT * SCALE)
                 ),
                 SKFilterQuality.None
             );
@@ -136,8 +137,20 @@ namespace SerialLoops.Lib.SaveFile {
         {
             int offset = glyph switch
             {
-                '0' => 0, '1' => 8, '2' => 16, '3' => 24, '4' => 32, '5' => 40, '6' => 48,
-                '7' => 56, '8' => 64, '9' => 72, ':' => 80, '/' => 88, '%' => 96, _ => 104
+                '0' => 0,
+                '1' => 8,
+                '2' => 16,
+                '3' => 24,
+                '4' => 32,
+                '5' => 40,
+                '6' => 48,
+                '7' => 56,
+                '8' => 64,
+                '9' => 72,
+                ':' => 80,
+                '/' => 88,
+                '%' => 96,
+                _ => 104
             };
             canvas.DrawBitmap(
                 bitmap,
