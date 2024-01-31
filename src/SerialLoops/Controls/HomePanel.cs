@@ -41,6 +41,12 @@ namespace SerialLoops.Controls
 
             LinkButton openProjectLink = new() { Text = "Open Project" };
             openProjectLink.Click += _mainForm.OpenProject_Executed;
+            
+            LinkButton editSaveLink = new() { Text = "Edit Save File" };
+            editSaveLink.Click += _mainForm.EditSaveFileCommand_Executed;
+            
+            LinkButton aboutLink = new() { Text = "About" };
+            aboutLink.Click += _mainForm.AboutCommand_Executed;
 
             LinkButton preferencesLink = new() { Text = "Preferences" };
             preferencesLink.Click += _mainForm.PreferencesCommand_Executed;
@@ -55,7 +61,9 @@ namespace SerialLoops.Controls
                     ControlGenerator.GetTextHeader("Start"),
                     ControlGenerator.GetControlWithIcon(newProjectLink, "New", _log),
                     ControlGenerator.GetControlWithIcon(openProjectLink, "Open", _log),
-                    ControlGenerator.GetControlWithIcon(preferencesLink, "Options", _log)
+                    ControlGenerator.GetControlWithIcon(editSaveLink, "Edit_Save", _log),
+                    ControlGenerator.GetControlWithIcon(preferencesLink, "Options", _log),
+                    ControlGenerator.GetControlWithIcon(aboutLink, "Help", _log),
                 }
             };
 

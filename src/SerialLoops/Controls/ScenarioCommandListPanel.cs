@@ -27,7 +27,7 @@ namespace SerialLoops.Controls
                 {
                     int selectedIndex = Viewer.SelectedIndex;
                     Viewer.Items.Clear();
-                    Viewer.Items.AddRange(_commands.Select(c => new ListItem { Text = $"{c.Verb} {c.Parameter}" }));
+                    Viewer.Items.AddRange(_commands.Select((c, i) => new ListItem { Text = $"[{i + 1:D3}] {c.Verb} {c.Parameter}" }));
                     if (selectedIndex < 0)
                     {
                         selectedIndex = 0;
@@ -69,7 +69,10 @@ namespace SerialLoops.Controls
             MinimumSize = _size;
             Padding = 0;
             Content = new TableLayout(Viewer);
-            Commands.ForEach(c => Viewer.Items.Add($"{c.Verb} {c.Parameter}"));
+            for (int i = 0; i < Commands.Count; i++)
+            {
+                Viewer.Items.Add($"[{i + 1:D3}] {Commands[i].Verb} {Commands[i].Parameter}");
+            }
         }
 
     }

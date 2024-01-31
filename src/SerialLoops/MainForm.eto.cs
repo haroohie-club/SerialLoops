@@ -1,6 +1,5 @@
 using Eto.Forms;
 using HaruhiChokuretsuLib.Archive;
-using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
 using SerialLoops.Controls;
 using SerialLoops.Dialogs;
@@ -144,6 +143,14 @@ namespace SerialLoops
             };
             openProjectCommand.Executed += OpenProject_Executed;
 
+            Command editSaveFileCommand = new()
+            {
+                MenuText = "Edit Save File...",
+                ToolBarText = "Edit Save File",
+                Image = ControlGenerator.GetIcon("Edit_Save", Log)
+            };
+            editSaveFileCommand.Executed += EditSaveFileCommand_Executed;
+
             // Application Items
             Command preferencesCommand = new();
             preferencesCommand.Executed += PreferencesCommand_Executed;
@@ -176,15 +183,7 @@ namespace SerialLoops
 
             // About
             Command aboutCommand = new() { MenuText = "About...", Image = ControlGenerator.GetIcon("Help", Log) };
-            aboutCommand.Executed += (sender, e) => new AboutDialog
-            {
-                ProgramName = "Serial Loops",
-                Developers = new[] { "Jonko", "William278" },
-                Copyright = "© Haroohie Translation Club, 2023",
-                Website = new Uri("https://haroohie.club"),
-                Version = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>()
-                    .InformationalVersion,
-            }.ShowDialog(this);
+            aboutCommand.Executed += AboutCommand_Executed;
 
             // Create Menu
             _recentProjectsCommand = new() { Text = "Recent Projects" };
@@ -200,7 +199,9 @@ namespace SerialLoops
                         {
                             newProjectCommand,
                             openProjectCommand,
-                            _recentProjectsCommand
+                            _recentProjectsCommand,
+                            new SeparatorMenuItem(),
+                            editSaveFileCommand
                         }
                     }
                 },
@@ -337,14 +338,17 @@ namespace SerialLoops
             // Add project items to existing File menu
             if (Menu.Items.FirstOrDefault(x => x.Text.Contains("File")) is SubMenuItem fileMenu)
             {
-                fileMenu.Items.AddRange(new[]
+                foreach (var command in new[]
+                     {
+                         saveProjectCommand,
+                         projectSettingsCommand,
+                         migrateProjectCommand,
+                         exportPatchCommand,
+                         closeProjectCommand
+                     })
                 {
-                    saveProjectCommand,
-                    projectSettingsCommand,
-                    migrateProjectCommand,
-                    exportPatchCommand,
-                    closeProjectCommand
-                });
+                    fileMenu.Items.Insert(3, command);
+                }
             }
 
             Menu.Items.Add(new SubMenuItem
@@ -476,6 +480,19 @@ namespace SerialLoops
                 ProjectsCache.RecentWorkspaces.Remove(project);
             });
             ProjectsCache.Save(Log);
+        }
+        
+        public void AboutCommand_Executed(object sender, EventArgs e)
+        {
+            new AboutDialog
+            {
+                ProgramName = "Serial Loops",
+                Developers = new[] { "Jonko", "William278" },
+                Copyright = "© Haroohie Translation Club, 2023",
+                Website = new Uri("https://haroohie.club"),
+                Version = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>()
+                    .InformationalVersion,
+            }.ShowDialog(this);
         }
 
         public void NewProjectCommand_Executed(object sender, EventArgs e)
@@ -664,6 +681,9 @@ namespace SerialLoops
                             chibiItem.ChibiEntryModifications[modifiedEntryName] = false;
                         }
                         break;
+                    case ItemDescription.ItemType.Item:
+                        ((ItemItem)item).Write(OpenProject, Log);
+                        break;
                     case ItemDescription.ItemType.Place:
                         PlaceItem placeItem = (PlaceItem)item;
                         if (placeItem.PlaceName != item.DisplayName[4..])
@@ -803,16 +823,52 @@ namespace SerialLoops
                 ((IProgressTracker)tracker).Focus("Finding orphaned items...", 1);
 
                 ProgressDialog _ = new(() =>
+                {
+                    Application.Instance.Invoke(() =>
                     {
-                        Application.Instance.Invoke(() =>
-                        {
-                            orphanedItemsDialog = new(OpenProject, ItemExplorer, EditorTabs, Log);
-                            tracker.Finished++;
-                        });
-                    }, () => { Application.Instance.Invoke(() => { orphanedItemsDialog?.Show(); }); }, tracker,
-                    "Finding orphaned items");
+                        orphanedItemsDialog = new(OpenProject, ItemExplorer, EditorTabs, Log);
+                        tracker.Finished++;
+                    });
+                }, () => { Application.Instance.Invoke(() => { orphanedItemsDialog?.Show(); }); }, tracker,
+                "Finding orphaned items");
             }
         }
+
+        public void EditSaveFileCommand_Executed(object sender, EventArgs e)
+        {
+            var openEditor = () =>
+            {
+                OpenFileDialog openFileDialog = new() {Title = "Open Chokuretsu Save File"};
+                openFileDialog.Filters.Add(new("Chokuretsu Save File", ["*.sav"]));
+                if (openFileDialog.ShowAndReportIfFileSelected(this))
+                {
+                    SaveEditorDialog saveEditorDialog = new(Log, OpenProject, EditorTabs, openFileDialog.FileName);
+                    if (saveEditorDialog.LoadedSuccessfully)
+                    {
+                        saveEditorDialog.Show();
+                    }
+                }
+            };
+            if (OpenProject is not null)
+            {
+                openEditor.Invoke();
+                return;
+            }
+            
+            // Ask user if they wish to create a project
+            if (MessageBox.Show("To edit Save Files, you need to have a project open.\n" +
+                                "No project is currently open. Would you like to create a new project?",
+                "No Project Open", MessageBoxButtons.YesNo, MessageBoxType.Question,
+                MessageBoxDefaultButton.Yes) == DialogResult.Yes)
+            {
+                NewProjectCommand_Executed(sender, e);
+                if (OpenProject is not null)
+                {
+                    openEditor.Invoke();
+                }
+            }
+        }
+
 
         private void BuildIterativeProject_Executed(object sender, EventArgs e)
         {
@@ -961,7 +1017,7 @@ namespace SerialLoops
                 {
                     // message box with yes no cancel buttons
                     DialogResult result = MessageBox.Show(
-                        $"You have unsaved changes in {unsavedItems.Count()} item(s)." +
+                        $"You have unsaved changes in {unsavedItems.Count()} item(s). " +
                         $"Would you like to save before closing the project?",
                         MessageBoxButtons.YesNoCancel, MessageBoxType.Warning
                     );

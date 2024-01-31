@@ -3,7 +3,7 @@ using SerialLoops.Dialogs;
 
 namespace SerialLoops
 {
-    public partial class SearchDialog : FindItemsWindow
+    public partial class SearchDialog : FindItemsDialog
     {
         public SearchDialog(ILogger log)
         {

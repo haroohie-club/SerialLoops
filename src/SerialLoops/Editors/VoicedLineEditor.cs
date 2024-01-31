@@ -218,9 +218,8 @@ namespace SerialLoops.Editors
             {
                 for (int i = 0; i <= 1; i++)
                 {
-                    Shared.DrawText(
+                    canvas.DrawHaroohieText(
                         _subtitle,
-                        canvas,
                         DialogueScriptParameter.Paint07,
                         _project,
                         i + VoiceMapEntry.X,
@@ -230,9 +229,8 @@ namespace SerialLoops.Editors
                 }
             }
 
-            Shared.DrawText(
+            canvas.DrawHaroohieText(
                 _subtitle,
-                canvas,
                 DialogueScriptParameter.Paint00, 
                 _project,
                 VoiceMapEntry.X,

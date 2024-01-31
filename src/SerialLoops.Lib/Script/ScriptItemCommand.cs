@@ -47,7 +47,7 @@ namespace SerialLoops.Lib.Script
             Index = index;
             Project = project;
             Verb = verb;
-            Parameters = parameters.ToList();
+            Parameters = [.. parameters];
 
             List<short> shortParams = parameters.SelectMany(p =>
             {
@@ -69,7 +69,7 @@ namespace SerialLoops.Lib.Script
 
         public List<ScriptItemCommand> WalkCommandGraph(Dictionary<ScriptSection, List<ScriptItemCommand>> commandTree, AdjacencyGraph<ScriptSection, ScriptSectionEdge> graph)
         {
-            List<ScriptItemCommand> commands = new();
+            List<ScriptItemCommand> commands = [];
 
             Func<ScriptSectionEdge, double> weightFunction = new((ScriptSectionEdge edge) =>
             {
@@ -104,7 +104,7 @@ namespace SerialLoops.Lib.Script
 
         private static List<ScriptParameter> GetScriptParameters(ScriptCommandInvocation invocation, ScriptSection section, EventFile eventFile, Project project, ILogger log)
         {
-            List<ScriptParameter> parameters = new();
+            List<ScriptParameter> parameters = [];
 
             for (int i = 0; i < invocation.Parameters.Count; i++)
             {
@@ -502,10 +502,10 @@ namespace SerialLoops.Lib.Script
                                 parameters.Add(new ItemScriptParameter("Item", parameter));
                                 break;
                             case 1:
-                                parameters.Add(new ShortScriptParameter("X", parameter));
+                                parameters.Add(new ItemLocationScriptParameter("Location", parameter));
                                 break;
                             case 2:
-                                parameters.Add(new ShortScriptParameter("Y", parameter));
+                                parameters.Add(new ItemTransitionScriptParameter("Transition", parameter));
                                 break;
                         }
                         break;

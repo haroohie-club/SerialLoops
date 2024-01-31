@@ -18,8 +18,9 @@ namespace SerialLoops.Lib.Items
         public GraphicsFile Graphic2 { get; set; }
         public BgType BackgroundType { get; set; }
         public string CgName { get; set; }
+        public int Flag { get; set; }
         public short ExtrasShort { get; set; }
-        public int ExtrasInt { get; set; }
+        public byte ExtrasByte { get; set; }
         public (string ScriptName, ScriptCommandInvocation command)[] ScriptUses { get; set; }
 
         public BackgroundItem(string name) : base(name, ItemType.Background)
@@ -35,8 +36,9 @@ namespace SerialLoops.Lib.Items
             if (cgEntry is not null)
             {
                 CgName = cgEntry?.Name?.GetSubstitutedString(project);
-                ExtrasShort = cgEntry?.Flag ?? 0;
-                ExtrasInt = cgEntry?.Unknown04 ?? 0;
+                Flag = cgEntry?.Flag ?? 0;
+                ExtrasShort = cgEntry?.Unknown02 ?? 0;
+                ExtrasByte = cgEntry?.Unknown04 ?? 0;
             }
             PopulateScriptUses(project.Evt);
         }

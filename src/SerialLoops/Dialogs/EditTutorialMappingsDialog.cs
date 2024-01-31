@@ -85,7 +85,7 @@ namespace SerialLoops.Dialogs
             saveButton.Click += (sender, args) =>
             {
                 _log.Log("Attempting to save tutorial mappings...");
-                Lib.IO.WriteStringFile(Path.Combine("assets", "events", $"{_project.TutorialFile.Index:X3}.s"), _project.TutorialFile.GetSource(new()), _project, _log);
+                Lib.IO.WriteStringFile(Path.Combine("assets", "events", $"{_project.TutorialFile.Index:X3}.s"), _project.TutorialFile.GetSource([]), _project, _log);
                 Close();
             };
 

@@ -46,8 +46,8 @@ namespace SerialLoops.Utility
 
         public void LogException(string message, Exception exception)
         {
-            LogError(message);
-            LogWarning($"{exception.Message}\n\n{exception.StackTrace}");
+            LogError($"{message}\n{exception.Message}");
+            LogWarning($"\n{exception.StackTrace}");
         }
 
         public void LogWarning(string message, bool lookForErrors = false)

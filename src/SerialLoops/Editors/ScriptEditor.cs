@@ -456,7 +456,7 @@ namespace SerialLoops.Editors
             };
             usedChibisBox.MouseDoubleClick += (o, args) =>
             {
-                if (!usedChibis.Any())
+                if (usedChibis.Count == 0)
                 {
                     return;
                 }
@@ -526,7 +526,7 @@ namespace SerialLoops.Editors
 
         private StackLayout GetMapCharactersLayout(TabPage parent)
         {
-            MapItem[] maps = _commands.Values.SelectMany(c => c).Where(c => c.Verb == EventFile.CommandVerb.LOAD_ISOMAP)
+            MapItem[] maps = _commands.Values.SelectMany(c => c).Where(c => c.Verb == CommandVerb.LOAD_ISOMAP)
                 .Select(c => ((MapScriptParameter)c.Parameters[0]).Map).ToArray();
 
             Button refreshMapListButton = new() { Text = "Refresh Maps List" };
@@ -937,8 +937,7 @@ namespace SerialLoops.Editors
                                 Project = _project,
                             };
 
-                            // BGDISPTEMP is able to display a lot more kinds of backgrounds properly than the other BG commands
-                            // Hence, this switch to make sure you don't accidentally crash the game
+                            // Distinguish between CGs and BGs
                             if (command.Verb == CommandVerb.BG_FADE)
                             {
                                 bgSelectionButton.Items.Add(NonePreviewableGraphic.BACKGROUND);
@@ -1207,9 +1206,36 @@ namespace SerialLoops.Editors
                             break;
 
                         case ScriptParameter.ParameterType.ITEM:
+                            CommandGraphicSelectionButton itemSelectionButton = new(
+                                (ItemItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Item && ((ItemItem)i).ItemIndex == ((ItemScriptParameter)parameter).ItemIndex),
+                                _tabs,
+                                _log)
+                            {
+                                Command = command,
+                                ParameterIndex = i,
+                            };
+                            itemSelectionButton.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Item).Cast<ItemItem>());
+                            itemSelectionButton.SelectedChanged.Executed += (obj, args) => ItemSelectionButton_SelectedChanged(itemSelectionButton, args);
                             ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
-                                ControlGenerator.GetControlWithLabel(parameter.Name,
-                                new TextBox { Text = ((ItemScriptParameter)parameter).ItemIndex.ToString() }));
+                                ControlGenerator.GetControlWithLabel(parameter.Name, itemSelectionButton));
+                            break;
+
+                        case ScriptParameter.ParameterType.ITEM_LOCATION:
+                            ScriptCommandDropDown itemLocationDropDown = new() { Command = command, ParameterIndex = i };
+                            itemLocationDropDown.Items.AddRange(Enum.GetNames<ItemItem.ItemLocation>().Select(l => new ListItem { Key = l, Text = l }));
+                            itemLocationDropDown.SelectedKey = ((ItemLocationScriptParameter)parameter).Location.ToString();
+                            itemLocationDropDown.SelectedKeyChanged += ItemLocationDropDown_SelectedKeyChanged;
+                            ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
+                                ControlGenerator.GetControlWithLabel(parameter.Name, itemLocationDropDown));
+                            break;
+
+                        case ScriptParameter.ParameterType.ITEM_TRANSITION:
+                            ScriptCommandDropDown itemTransitionDropDown = new() { Command = command, ParameterIndex = i };
+                            itemTransitionDropDown.Items.AddRange(Enum.GetNames<ItemItem.ItemTransition>().Select(l => new ListItem { Key = l, Text = l }));
+                            itemTransitionDropDown.SelectedKey = ((ItemTransitionScriptParameter)parameter).Transition.ToString();
+                            itemTransitionDropDown.SelectedKeyChanged += ItemTransitionDropDown_SelectedKeyChanged;
+                            ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
+                                ControlGenerator.GetControlWithLabel(parameter.Name, itemTransitionDropDown));
                             break;
 
                         case ScriptParameter.ParameterType.MAP:
@@ -1527,505 +1553,18 @@ namespace SerialLoops.Editors
             try
             {
                 _preview.Items.Clear();
-
-                SKBitmap previewBitmap = new(256, 384);
-                SKCanvas canvas = new(previewBitmap);
-                canvas.DrawColor(SKColors.Black);
-
                 ScriptItemCommand currentCommand = ((ScriptCommandSectionEntry)_commandsPanel.Viewer.SelectedItem)?.Command;
-                if (currentCommand is not null)
+                (SKBitmap previewBitmap, string errorImage) = _script.GeneratePreviewImage(_commands, currentCommand, _project, _log);
+                if (previewBitmap is null)
                 {
-                    List<ScriptItemCommand> commands = currentCommand.WalkCommandGraph(_commands, _script.Graph);
-
-                    if (commands is null)
-                    {
-                        _log.LogWarning($"No path found to current command.");
-                        using Stream noPreviewStream = Assembly.GetCallingAssembly().GetManifestResourceStream("SerialLoops.Graphics.ScriptPreviewError.png");
-                        canvas.DrawImage(SKImage.FromEncodedData(noPreviewStream), new SKPoint(0, 0));
-                        canvas.Flush();
-                        _preview.Items.Add(new SKGuiImage(previewBitmap));
-                        return;
-                    }
-
-                    if (commands.Any(c => c.Verb == CommandVerb.EPHEADER)
-                        && ((EpisodeHeaderScriptParameter)commands.Last(c => c.Verb == CommandVerb.EPHEADER).Parameters[0])
-                            .EpisodeHeaderIndex != EpisodeHeaderScriptParameter.Episode.None)
-                    {
-                        // We use names here because display names can change but names cannot
-                        SystemTextureItem systexItem = ((EpisodeHeaderScriptParameter)commands.Last(c => c.Verb == CommandVerb.EPHEADER).Parameters[0]).EpisodeHeaderIndex switch
-                        {
-                            EpisodeHeaderScriptParameter.Episode.EPISODE_1 =>
-                                (SystemTextureItem)_project.Items.First(i => i.Name == "SYSTEX_SYS_CMN_T60"),
-                            EpisodeHeaderScriptParameter.Episode.EPISODE_2 =>
-                                (SystemTextureItem)_project.Items.First(i => i.Name == "SYSTEX_SYS_CMN_T61"),
-                            EpisodeHeaderScriptParameter.Episode.EPISODE_3 =>
-                                (SystemTextureItem)_project.Items.First(i => i.Name == "SYSTEX_SYS_CMN_T62"),
-                            EpisodeHeaderScriptParameter.Episode.EPISODE_4 =>
-                                (SystemTextureItem)_project.Items.First(i => i.Name == "SYSTEX_SYS_CMN_T63"),
-                            EpisodeHeaderScriptParameter.Episode.EPISODE_5 =>
-                                (SystemTextureItem)_project.Items.First(i => i.Name == "SYSTEX_SYS_CMN_T64"),
-                            EpisodeHeaderScriptParameter.Episode.EPILOGUE =>
-                                (SystemTextureItem)_project.Items.First(i => i.Name == "SYSTEX_SYS_CMN_T66"),
-                            _ => null,
-                        };
-
-                        canvas.DrawBitmap(systexItem.GetTexture(), new SKPoint(0, 0));
-                    }
-                    else
-                    {
-                        // Draw top screen "kinetic" background
-                        for (int i = commands.Count - 1; i >= 0; i--)
-                        {
-                            if (commands[i].Verb == CommandVerb.KBG_DISP && ((BgScriptParameter)commands[i].Parameters[0]).Background is not null)
-                            {
-                                canvas.DrawBitmap(((BgScriptParameter)commands[i].Parameters[0]).Background.GetBackground(), new SKPoint(0, 0));
-                                break;
-                            }
-                        }
-
-                        // Draw Place
-                        for (int i = commands.Count - 1; i >= 0; i--)
-                        {
-                            if (commands[i].Verb == CommandVerb.SET_PLACE)
-                            {
-                                if (((BoolScriptParameter)commands[i].Parameters[0]).Value && (((PlaceScriptParameter)commands[i].Parameters[1]).Place is not null))
-                                {
-                                    canvas.DrawBitmap(((PlaceScriptParameter)commands[i].Parameters[1]).Place.GetPreview(_project), new SKPoint(5, 40));
-                                }
-                                break;
-                            }
-                        }
-
-                        // Draw top screen chibis
-                        List<ChibiItem> chibis = new();
-
-                        foreach (StartingChibiEntry chibi in _script.Event.StartingChibisSection?.Objects ?? new List<StartingChibiEntry>())
-                        {
-                            if (chibi.ChibiIndex > 0)
-                            {
-                                chibis.Add((ChibiItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Chibi && ((ChibiItem)i).ChibiIndex == chibi.ChibiIndex));
-                            }
-                        }
-                        for (int i = 0; i < commands.Count; i++)
-                        {
-                            if (commands[i].Verb == CommandVerb.OP_MODE)
-                            {
-                                // Kyon auto-added by OP_MODE command
-                                ChibiItem chibi = ((ChibiItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Chibi && ((ChibiItem)i).ChibiIndex == 1));
-                                if (!chibis.Contains(chibi))
-                                {
-                                    chibis.Add(chibi);
-                                }
-                            }
-                            if (commands[i].Verb == CommandVerb.CHIBI_ENTEREXIT)
-                            {
-                                if (((ChibiEnterExitScriptParameter)commands[i].Parameters[1]).Mode == ChibiEnterExitScriptParameter.ChibiEnterExitType.ENTER)
-                                {
-                                    ChibiItem chibi = ((ChibiScriptParameter)commands[i].Parameters[0]).Chibi;
-                                    if (!chibis.Contains(chibi))
-                                    {
-                                        if (chibi.ChibiIndex < 1 || chibis.Count == 0)
-                                        {
-                                            chibis.Add(chibi);
-                                        }
-                                        else
-                                        {
-                                            bool inserted = false;
-                                            for (int j = 0; j < chibis.Count; j++)
-                                            {
-                                                if (chibis[j].ChibiIndex > chibi.ChibiIndex)
-                                                {
-                                                    chibis.Insert(j, chibi);
-                                                    inserted = true;
-                                                    break;
-                                                }
-                                            }
-                                            if (!inserted)
-                                            {
-                                                chibis.Add(chibi);
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        _log.LogWarning($"Chibi {chibi.Name} set to join, but already was present");
-                                    }
-                                }
-                                else
-                                {
-                                    try
-                                    {
-                                        chibis.Remove(((ChibiScriptParameter)commands[i].Parameters[0]).Chibi);
-                                    }
-                                    catch (Exception)
-                                    {
-                                        _log.LogWarning($"Chibi set to leave was not present.");
-                                    }
-                                }
-                            }
-                        }
-
-                        int chibiStartX, chibiY;
-                        if (commands.Any(c => c.Verb == CommandVerb.OP_MODE))
-                        {
-                            chibiStartX = 100;
-                            chibiY = 50;
-                        }
-                        else
-                        {
-                            chibiStartX = 80;
-                            chibiY = 100;
-                        }
-                        int chibiCurrentX = chibiStartX;
-                        int chibiWidth = 0;
-                        foreach (ChibiItem chibi in chibis)
-                        {
-                            SKBitmap chibiFrame = chibi.ChibiAnimations.First().Value.ElementAt(0).Frame;
-                            canvas.DrawBitmap(chibiFrame, new SKPoint(chibiCurrentX, chibiY));
-                            chibiWidth = chibiFrame.Width - 16;
-                            if (chibiY == 50)
-                            {
-                                chibiY = 100;
-                                chibiCurrentX = 80;
-                            }
-                            else
-                            {
-                                chibiCurrentX += chibiWidth;
-                            }
-                        }
-
-                        // Draw top screen chibi emotes
-                        if (currentCommand.Verb == CommandVerb.CHIBI_EMOTE)
-                        {
-                            ChibiItem chibi = ((ChibiScriptParameter)currentCommand.Parameters[0]).Chibi;
-                            if (chibis.Contains(chibi))
-                            {
-                                int chibiIndex = chibis.IndexOf(chibi);
-                                SKBitmap emotes = _project.Grp.Files.First(f => f.Name == "SYS_ADV_T08DNX").GetImage(width: 32, transparentIndex: 0);
-                                int internalYOffset = ((int)((ChibiEmoteScriptParameter)currentCommand.Parameters[1]).Emote - 1) * 32;
-                                int externalXOffset = chibiStartX + chibiWidth * chibiIndex;
-                                canvas.DrawBitmap(emotes, new SKRect(0, internalYOffset, 32, internalYOffset + 32), new SKRect(externalXOffset + 16, chibiY - 32, externalXOffset + 48, chibiY));
-                            }
-                            else
-                            {
-                                _log.LogWarning($"Chibi {chibi.Name} not currently on screen; cannot display emote.");
-                            }
-                        }
-                    }
-
-                    // Draw background
-                    bool bgReverted = false;
-                    ScriptItemCommand palCommand = commands.LastOrDefault(c => c.Verb == CommandVerb.PALEFFECT);
-                    ScriptItemCommand lastBgCommand = commands.LastOrDefault(c => c.Verb == CommandVerb.BG_DISP ||
-                        c.Verb == CommandVerb.BG_DISP2 || c.Verb == CommandVerb.BG_DISPCG || c.Verb == CommandVerb.BG_FADE ||
-                        c.Verb == CommandVerb.BG_REVERT);
-                    SKPaint palEffectPaint = PaletteEffectScriptParameter.IdentityPaint;
-                    if (palCommand is not null && lastBgCommand is not null && commands.IndexOf(palCommand) > commands.IndexOf(lastBgCommand))
-                    {
-                        switch (((PaletteEffectScriptParameter)palCommand.Parameters[0]).Effect)
-                        {
-                            case PaletteEffectScriptParameter.PaletteEffect.INVERTED:
-                                palEffectPaint = PaletteEffectScriptParameter.InvertedPaint;
-                                break;
-
-                            case PaletteEffectScriptParameter.PaletteEffect.GRAYSCALE:
-                                palEffectPaint = PaletteEffectScriptParameter.GrayscalePaint;
-                                break;
-
-                            case PaletteEffectScriptParameter.PaletteEffect.SEPIA:
-                                palEffectPaint = PaletteEffectScriptParameter.SepiaPaint;
-                                break;
-
-                            case PaletteEffectScriptParameter.PaletteEffect.DIMMED:
-                                palEffectPaint = PaletteEffectScriptParameter.DimmedPaint;
-                                break;
-                        }
-                    }
-                    ScriptItemCommand bgScrollCommand = null;
-                    for (int i = commands.Count - 1; i >= 0; i--)
-                    {
-                        if (commands[i].Verb == CommandVerb.BG_REVERT)
-                        {
-                            bgReverted = true;
-                            continue;
-                        }
-                        if (commands[i].Verb == CommandVerb.BG_SCROLL)
-                        {
-                            bgScrollCommand = commands[i];
-                            continue;
-                        }
-                        // Checks to see if this is one of the commands that sets a BG_REVERT immune background or if BG_REVERT hasn't been called
-                        if (commands[i].Verb == CommandVerb.BG_DISP || commands[i].Verb == CommandVerb.BG_DISP2 ||
-                            (commands[i].Verb == CommandVerb.BG_FADE && (((BgScriptParameter)commands[i].Parameters[0]).Background is not null)) ||
-                            (!bgReverted && (commands[i].Verb == CommandVerb.BG_DISPCG || commands[i].Verb == CommandVerb.BG_FADE)))
-                        {
-                            BackgroundItem background = (commands[i].Verb == CommandVerb.BG_FADE && ((BgScriptParameter)commands[i].Parameters[0]).Background is null) ?
-                                ((BgScriptParameter)commands[i].Parameters[1]).Background : ((BgScriptParameter)commands[i].Parameters[0]).Background;
-
-                            if (background is not null)
-                            {
-                                switch (background.BackgroundType)
-                                {
-                                    case BgType.TEX_CG_DUAL_SCREEN:
-                                        SKBitmap dualScreenBg = background.GetBackground();
-                                        if (bgScrollCommand is not null && ((BgScrollDirectionScriptParameter)bgScrollCommand.Parameters[0]).ScrollDirection == BgScrollDirectionScriptParameter.BgScrollDirection.DOWN)
-                                        {
-                                            canvas.DrawBitmap(dualScreenBg, new SKRect(0, background.Graphic2.Height - 192, 256, background.Graphic2.Height), new SKRect(0, 0, 256, 192));
-                                            int bottomScreenX = dualScreenBg.Height - 192;
-                                            canvas.DrawBitmap(dualScreenBg, new SKRect(0, bottomScreenX, 256, bottomScreenX + 192), new SKRect(0, 192, 256, 384));
-                                        }
-                                        else
-                                        {
-                                            canvas.DrawBitmap(dualScreenBg, new SKRect(0, 0, 256, 192), new SKRect(0, 0, 256, 192));
-                                            canvas.DrawBitmap(dualScreenBg, new SKRect(0, background.Graphic2.Height, 256, background.Graphic2.Height + 192), new SKRect(0, 192, 256, 384));
-                                        }
-                                        break;
-
-                                    case BgType.TEX_CG_SINGLE:
-                                        if (((BoolScriptParameter)commands[i].Parameters[1]).Value
-                                            || (bgScrollCommand is not null && ((BgScrollDirectionScriptParameter)bgScrollCommand.Parameters[0]).ScrollDirection == BgScrollDirectionScriptParameter.BgScrollDirection.DOWN))
-                                        {
-                                            SKBitmap bgBitmap = background.GetBackground();
-                                            canvas.DrawBitmap(bgBitmap, new SKRect(0, bgBitmap.Height - 192, bgBitmap.Width, bgBitmap.Height),
-                                                new SKRect(0, 192, 256, 384));
-                                        }
-                                        else
-                                        {
-                                            canvas.DrawBitmap(background.GetBackground(), new SKPoint(0, 192));
-                                        }
-                                        break;
-
-                                    case BgType.TEX_CG_WIDE:
-                                        if (bgScrollCommand is not null && ((BgScrollDirectionScriptParameter)bgScrollCommand.Parameters[0]).ScrollDirection == BgScrollDirectionScriptParameter.BgScrollDirection.RIGHT)
-                                        {
-                                            SKBitmap bgBitmap = background.GetBackground();
-                                            canvas.DrawBitmap(bgBitmap, new SKRect(bgBitmap.Width - 256, 0, bgBitmap.Width, 192), new SKRect(0, 192, 256, 384));
-                                        }
-                                        else
-                                        {
-                                            canvas.DrawBitmap(background.GetBackground(), new SKPoint(0, 192));
-                                        }
-                                        break;
-
-                                    case BgType.TEX_CG:
-                                        canvas.DrawBitmap(background.GetBackground(), new SKPoint(0, 192));
-                                        break;
-
-                                    default:
-                                        canvas.DrawBitmap(background.GetBackground(), new SKPoint(0, 192), palEffectPaint);
-                                        break;
-                                }
-                                break;
-                            }
-                        }
-                    }
-
-                    // Draw character sprites
-                    Dictionary<CharacterItem, PositionedSprite> sprites = new();
-                    Dictionary<CharacterItem, PositionedSprite> previousSprites = new();
-
-                    CharacterItem previousCharacter = null;
-                    ScriptItemCommand previousCommand = null;
-                    foreach (ScriptItemCommand command in commands)
-                    {
-                        if (previousCommand?.Verb == CommandVerb.DIALOGUE)
-                        {
-                            SpriteExitScriptParameter spriteExitMoveParam = (SpriteExitScriptParameter)previousCommand?.Parameters[3]; // exits/moves happen _after_ dialogue is advanced, so we check these at this point
-                            if (spriteExitMoveParam.ExitTransition != SpriteExitScriptParameter.SpriteExitTransition.NO_EXIT)
-                            {
-                                CharacterItem prevCharacter = (CharacterItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Character &&
-                                    i.Name == $"CHR_{_project.Characters[(int)((DialogueScriptParameter)previousCommand.Parameters[0]).Line.Speaker].Name}");
-                                SpriteScriptParameter previousSpriteParam = (SpriteScriptParameter)previousCommand.Parameters[1];
-                                short layer = ((ShortScriptParameter)previousCommand.Parameters[9]).Value;
-                                switch (spriteExitMoveParam.ExitTransition)
-                                {
-                                    case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_LEFT_TO_LEFT_FADE_OUT:
-                                    case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_LEFT_TO_RIGHT_FADE_OUT:
-                                    case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_FROM_CENTER_TO_LEFT_FADE_OUT:
-                                    case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_FROM_CENTER_TO_RIGHT_FADE_OUT:
-                                    case SpriteExitScriptParameter.SpriteExitTransition.FADE_OUT_CENTER:
-                                    case SpriteExitScriptParameter.SpriteExitTransition.FADE_OUT_LEFT:
-                                        if (sprites.ContainsKey(prevCharacter) && previousSprites.ContainsKey(prevCharacter) && ((SpriteScriptParameter)previousCommand.Parameters[1]).Sprite?.Sprite?.Character == prevCharacter.MessageInfo.Character)
-                                        {
-                                            sprites.Remove(prevCharacter);
-                                            previousSprites.Remove(prevCharacter);
-                                        }
-                                        break;
-
-                                    case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_CENTER_TO_LEFT_AND_STAY:
-                                    case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_RIGHT_TO_LEFT_AND_STAY:
-                                        sprites[prevCharacter] = new() { Sprite = previousSpriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.LEFT, Layer = layer } };
-                                        break;
-
-                                    case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_CENTER_TO_RIGHT_AND_STAY:
-                                    case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_LEFT_TO_RIGHT_AND_STAY:
-                                        sprites[prevCharacter] = new() { Sprite = previousSpriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.RIGHT, Layer = layer } };
-                                        break;
-                                }
-                            }
-                        }
-                        if (command.Verb == CommandVerb.DIALOGUE)
-                        {
-                            SpriteScriptParameter spriteParam = (SpriteScriptParameter)command.Parameters[1];
-                            SKPaint spritePaint = PaletteEffectScriptParameter.IdentityPaint;
-                            if (commands.IndexOf(palCommand) > commands.IndexOf(command))
-                            {
-                                spritePaint = ((PaletteEffectScriptParameter)palCommand.Parameters[0]).Effect switch
-                                {
-                                    PaletteEffectScriptParameter.PaletteEffect.INVERTED => PaletteEffectScriptParameter.InvertedPaint,
-                                    PaletteEffectScriptParameter.PaletteEffect.GRAYSCALE => PaletteEffectScriptParameter.GrayscalePaint,
-                                    PaletteEffectScriptParameter.PaletteEffect.SEPIA => PaletteEffectScriptParameter.SepiaPaint,
-                                    PaletteEffectScriptParameter.PaletteEffect.DIMMED => PaletteEffectScriptParameter.DimmedPaint,
-                                    _ => PaletteEffectScriptParameter.IdentityPaint,
-                                };
-                            }
-                            if (spriteParam.Sprite is not null)
-                            {
-                                CharacterItem character;
-                                try
-                                {
-                                    character = (CharacterItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Character &&
-                                    i.DisplayName == $"CHR_{_project.Characters[(int)((DialogueScriptParameter)command.Parameters[0]).Line.Speaker].Name}");
-                                }
-                                catch (InvalidOperationException)
-                                {
-                                    _log.LogWarning($"Unable to determine speaking character in DIALOGUE command in {_script.DisplayName}.");
-                                    using Stream noPreviewStream = Assembly.GetCallingAssembly().GetManifestResourceStream("SerialLoops.Graphics.ScriptPreviewError.png");
-                                    canvas.DrawImage(SKImage.FromEncodedData(noPreviewStream), new SKPoint(0, 0));
-                                    canvas.Flush();
-                                    _preview.Items.Add(new SKGuiImage(previewBitmap));
-                                    return;
-                                }
-                                SpriteEntranceScriptParameter spriteEntranceParam = (SpriteEntranceScriptParameter)command.Parameters[2];
-                                SpriteShakeScriptParameter spriteShakeParam = (SpriteShakeScriptParameter)command.Parameters[4];
-                                short layer = ((ShortScriptParameter)command.Parameters[9]).Value;
-
-                                bool spriteIsNew = !sprites.ContainsKey(character);
-                                if (spriteIsNew && spriteEntranceParam.EntranceTransition != SpriteEntranceScriptParameter.SpriteEntranceTransition.NO_TRANSITION)
-                                {
-                                    sprites.Add(character, new());
-                                    previousSprites.Add(character, new());
-                                }
-                                if (sprites.ContainsKey(character))
-                                {
-                                    previousSprites[character] = sprites[character];
-                                }
-                                if (spriteEntranceParam.EntranceTransition != SpriteEntranceScriptParameter.SpriteEntranceTransition.NO_TRANSITION)
-                                {
-                                    switch (spriteEntranceParam.EntranceTransition)
-                                    {
-                                        // These ones will do their thing no matter what
-                                        case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_CENTER:
-                                        case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_CENTER:
-                                            sprites[character] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.CENTER, Layer = layer }, PalEffect = spritePaint };
-                                            break;
-
-                                        case SpriteEntranceScriptParameter.SpriteEntranceTransition.FADE_TO_CENTER:
-                                            if (spriteIsNew)
-                                            {
-                                                sprites[character] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.CENTER, Layer = layer }, PalEffect = spritePaint };
-                                            }
-                                            break;
-
-                                        case SpriteEntranceScriptParameter.SpriteEntranceTransition.FADE_IN_LEFT:
-                                        case SpriteEntranceScriptParameter.SpriteEntranceTransition.PEEK_RIGHT_TO_LEFT:
-                                        case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_LEFT:
-                                        case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_LEFT_FAST:
-                                        case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_LEFT_SLOW:
-                                            if (spriteIsNew)
-                                            {
-                                                sprites[character] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.LEFT, Layer = layer }, PalEffect = spritePaint };
-                                            }
-                                            else if (previousCharacter != character && (spriteEntranceParam.EntranceTransition == SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_LEFT_FAST))
-                                            {
-                                                sprites[character] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.CENTER, Layer = layer }, PalEffect = spritePaint };
-                                            }
-                                            break;
-
-                                        case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_RIGHT:
-                                        case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_RIGHT_FAST:
-                                        case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_RIGHT_SLOW:
-                                            if (spriteIsNew)
-                                            {
-                                                sprites[character] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.RIGHT, Layer = layer }, PalEffect = spritePaint };
-                                            }
-                                            else if (previousCharacter != character && (spriteEntranceParam.EntranceTransition == SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_RIGHT_FAST))
-                                            {
-                                                sprites[character] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.CENTER, Layer = layer }, PalEffect = spritePaint };
-                                            }
-                                            break;
-                                    }
-                                }
-                                else if (sprites.ContainsKey(character))
-                                {
-                                    sprites[character] = new() { Sprite = spriteParam.Sprite, Positioning = sprites[character].Positioning, PalEffect = spritePaint };
-                                }
-
-                                if (spriteShakeParam.ShakeEffect != SpriteShakeScriptParameter.SpriteShakeEffect.NONE && sprites.ContainsKey(character))
-                                {
-                                    switch (spriteShakeParam.ShakeEffect)
-                                    {
-                                        case SpriteShakeScriptParameter.SpriteShakeEffect.SHAKE_LEFT:
-                                            sprites[character] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.LEFT, Layer = layer }, PalEffect = spritePaint };
-                                            break;
-
-                                        case SpriteShakeScriptParameter.SpriteShakeEffect.SHAKE_RIGHT:
-                                            sprites[character] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.RIGHT, Layer = layer }, PalEffect = spritePaint };
-                                            break;
-
-                                        case SpriteShakeScriptParameter.SpriteShakeEffect.SHAKE_CENTER:
-                                        case SpriteShakeScriptParameter.SpriteShakeEffect.BOUNCE_HORIZONTAL_CENTER:
-                                        case SpriteShakeScriptParameter.SpriteShakeEffect.BOUNCE_HORIZONTAL_CENTER_WITH_SMALL_SHAKES:
-                                            sprites[character] = new() { Sprite = spriteParam.Sprite, Positioning = new() { Position = SpritePositioning.SpritePosition.CENTER, Layer = layer }, PalEffect = spritePaint };
-                                            break;
-                                    }
-                                }
-
-                                previousCharacter = character;
-                            }
-                        }
-                        else if (command.Verb == CommandVerb.INVEST_START)
-                        {
-                            sprites.Clear();
-                            previousSprites.Clear();
-                        }
-                        previousCommand = command;
-                    }
-
-                    foreach (PositionedSprite sprite in sprites.Values.OrderBy(p => p.Positioning.Layer))
-                    {
-                        SKBitmap spriteBitmap = sprite.Sprite.GetClosedMouthAnimation(_project)[0].Frame;
-                        canvas.DrawBitmap(spriteBitmap, sprite.Positioning.GetSpritePosition(spriteBitmap), sprite.PalEffect);
-                    }
-
-                    // Draw dialogue
-                    ScriptItemCommand lastDialogueCommand = commands.LastOrDefault(c => c.Verb == CommandVerb.DIALOGUE);
-                    if (commands.FindLastIndex(c => c.Verb == CommandVerb.TOGGLE_DIALOGUE &&
-                        !((BoolScriptParameter)c.Parameters[0]).Value) < commands.IndexOf(lastDialogueCommand))
-                    {
-                        DialogueLine line = ((DialogueScriptParameter)lastDialogueCommand.Parameters[0]).Line;
-                        SKPaint dialoguePaint = line.Speaker switch
-                        {
-                            Speaker.MONOLOGUE => DialogueScriptParameter.Paint01,
-                            Speaker.INFO => DialogueScriptParameter.Paint04,
-                            _ => DialogueScriptParameter.Paint00,
-                        };
-                        if (!string.IsNullOrEmpty(line.Text))
-                        {
-                            canvas.DrawBitmap(_project.DialogueBitmap, new SKRect(0, 24, 32, 36), new SKRect(0, 344, 256, 356));
-                            SKColor dialogueBoxColor = _project.DialogueBitmap.GetPixel(0, 28);
-                            canvas.DrawRect(0, 356, 224, 384, new() { Color = dialogueBoxColor });
-                            canvas.DrawBitmap(_project.DialogueBitmap, new SKRect(0, 37, 32, 64), new SKRect(224, 356, 256, 384));
-                            canvas.DrawBitmap(_project.SpeakerBitmap, new SKRect(0, 16 * ((int)line.Speaker - 1), 64, 16 * ((int)line.Speaker)),
-                                new SKRect(0, 332, 64, 348));
-
-                            Shared.DrawText(line.Text, canvas, dialoguePaint, _project);
-                        }
-                    }
+                    previewBitmap = new(256, 384);
+                    SKCanvas canvas = new(previewBitmap);
+                    canvas.DrawColor(SKColors.Black);
+                    using Stream noPreviewStream = Assembly.GetCallingAssembly().GetManifestResourceStream(errorImage);
+                    canvas.DrawImage(SKImage.FromEncodedData(noPreviewStream), new SKPoint(0, 0));
+                    canvas.Flush();
+                    _preview.Items.Add(new SKGuiImage(previewBitmap));
                 }
-
-                canvas.Flush();
-
                 _preview.Items.Add(new SKGuiImage(previewBitmap));
             }
             catch (Exception ex)
@@ -2312,12 +1851,43 @@ namespace SerialLoops.Editors
                 (short)Enum.Parse<FriendshipLevelScriptParameter.FriendshipCharacter>(dropDown.SelectedKey);
             UpdateTabTitle(false, dropDown);
         }
+        private void ItemSelectionButton_SelectedChanged(object sender, EventArgs e)
+        {
+            CommandGraphicSelectionButton selectionButton = (CommandGraphicSelectionButton)sender;
+            ItemItem selectedItem = (ItemItem)selectionButton.Selected;
+            _log.Log($"Attempting to modify parameter {selectionButton.ParameterIndex} to item {((ItemItem)selectionButton.Selected).Name} in {selectionButton.Command.Index} in file {_script.Name}...");
+            ((ItemScriptParameter)selectionButton.Command.Parameters[selectionButton.ParameterIndex]).ItemIndex = (short)selectedItem.ItemIndex;
+            _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(selectionButton.Command.Section)].Objects[selectionButton.Command.Index].Parameters[selectionButton.ParameterIndex] = (short)selectedItem.ItemIndex;
+            UpdateTabTitle(false, selectionButton);
+            Application.Instance.Invoke(() => UpdatePreview());
+        }
+        private void ItemLocationDropDown_SelectedKeyChanged(object sender, EventArgs e)
+        {
+            ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
+            _log.Log($"Attempting to modify parameter {dropDown.ParameterIndex} to map {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
+            ((ItemLocationScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Location = Enum.Parse<ItemItem.ItemLocation>(dropDown.SelectedKey);
+            ((ItemLocationScriptParameter)_commands[dropDown.Command.Section][dropDown.Command.Index].Parameters[dropDown.ParameterIndex]).Location = Enum.Parse<ItemItem.ItemLocation>(dropDown.SelectedKey);
+            _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
+                .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] = (short)((ItemLocationScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Location;
+            UpdateTabTitle(false, dropDown);
+            Application.Instance.Invoke(() => UpdatePreview());
+        }
+        private void ItemTransitionDropDown_SelectedKeyChanged(object sender, EventArgs e)
+        {
+            ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
+            _log.Log($"Attempting to modify parameter {dropDown.ParameterIndex} to map {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
+            ((ItemTransitionScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Transition = Enum.Parse<ItemItem.ItemTransition>(dropDown.SelectedKey);
+            ((ItemTransitionScriptParameter)_commands[dropDown.Command.Section][dropDown.Command.Index].Parameters[dropDown.ParameterIndex]).Transition = Enum.Parse<ItemItem.ItemTransition>(dropDown.SelectedKey);
+            _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
+                .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] = (short)((ItemTransitionScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Transition;
+            UpdateTabTitle(false, dropDown);
+        }
         private void MapDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
             ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
             _log.Log($"Attempting to modify parameter {dropDown.ParameterIndex} to map {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
             ((MapScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Map = (MapItem)_project.FindItem(dropDown.SelectedKey);
-            ((MapScriptParameter)_commands[dropDown.Command.Section][dropDown.Command.Index].Parameters[0]).Map = (MapItem)_project.FindItem(dropDown.SelectedKey);
+            ((MapScriptParameter)_commands[dropDown.Command.Section][dropDown.Command.Index].Parameters[dropDown.ParameterIndex]).Map = (MapItem)_project.FindItem(dropDown.SelectedKey);
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
                 .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] = (short)((MapScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Map.Map.Index;
             UpdateTabTitle(false, dropDown);

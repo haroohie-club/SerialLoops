@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
@@ -7,6 +7,11 @@
     <Version>$(SLAssemblyVersion)</Version>
     <InformationalVersion>$(SLVersion)</InformationalVersion>
     <AssemblyName>SerialLoops</AssemblyName>
+  </PropertyGroup>
+
+  <!-- This should be removed once https://github.com/picoe/Eto/issues/2607 is fully solved -->
+  <PropertyGroup>
+    <EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Eto.Platform.Wpf" Version="2.7.5" />
+    <PackageReference Include="Eto.Platform.Wpf" Version="2.7.2-ci-20240118.7563443893" />
     <PackageReference Include="NAudio" Version="2.1.0" />
   </ItemGroup>
 

@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using Eto.Forms;
+﻿using Eto.Forms;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Editors;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SerialLoops.Controls
@@ -90,6 +90,8 @@ namespace SerialLoops.Controls
                     return new ChibiEditor((ChibiItem)project.Items.First(i => i.Name == item.Name), project, log);
                 case ItemDescription.ItemType.Group_Selection:
                     return new GroupSelectionEditor((GroupSelectionItem)project.Items.First(i => i.Name == item.Name), log, project, this);
+                case ItemDescription.ItemType.Item:
+                    return new ItemEditor((ItemItem)project.Items.First(i => i.Name == item.Name), project, log);
                 case ItemDescription.ItemType.Map:
                     return new MapEditor((MapItem)project.Items.First(i => i.Name == item.Name), project, log);
                 case ItemDescription.ItemType.Place:
@@ -141,7 +143,10 @@ namespace SerialLoops.Controls
 
             // Add editor-specific toolbar commands
             List<Command> commands = ((Editor)Tabs.SelectedPage)?.EditorCommands;
-            if (commands is null || commands.Count == 0) return;
+            if (commands is null || commands.Count == 0)
+            {
+                return;
+            }
 
             SubMenuItem editItem = new() { Text = "&Edit", Tag = Editor.EDITOR_TOOLBAR_TAG };
             SeparatorToolItem separator = new() { Tag = Editor.EDITOR_TOOLBAR_TAG, Style = "sl-toolbar-separator" };

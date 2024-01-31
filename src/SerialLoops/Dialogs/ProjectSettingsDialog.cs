@@ -34,7 +34,7 @@ namespace SerialLoops.Dialogs
             applyButton.Click += ApplyButton_OnClick;
 
             Button cancelButton = new() { Text = "Cancel" };
-            cancelButton.Click += (sender, e) => { Close(); };
+            cancelButton.Click += (sender, e) => Close();
 
             Content = new TableLayout(
                 new TableRow(
