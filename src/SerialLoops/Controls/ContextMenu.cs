@@ -27,15 +27,15 @@ namespace SerialLoops.Controls
 
             Command openCommand = new();
             openCommand.Executed += OpenCommand_OnClick;
-            Items.Add(new ButtonMenuItem { Text = "Open", Command = openCommand });
+            Items.Add(new ButtonMenuItem { Text = Application.Instance.Localize(this, "Open"), Command = openCommand });
 
             Command renameCommand = new();
             renameCommand.Executed += RenameCommand_Executed;
-            Items.Add(new ButtonMenuItem { Text = "Rename", Command = renameCommand });
+            Items.Add(new ButtonMenuItem { Text = Application.Instance.Localize(this, "Rename"), Command = renameCommand });
 
             Command findReferencesCommand = new();
             findReferencesCommand.Executed += FindReferencesCommand_OnClick;
-            Items.Add(new ButtonMenuItem { Text = "Find References...", Command = findReferencesCommand });
+            Items.Add(new ButtonMenuItem { Text = Application.Instance.Localize(this, "Find References..."), Command = findReferencesCommand });
         }
 
         private void OpenCommand_OnClick(object sender, EventArgs args)
@@ -80,7 +80,7 @@ namespace SerialLoops.Controls
 
             Command exportNames = new();
             exportNames.Executed += ExportNames_OnClick;
-            Items.Add(new ButtonMenuItem { Text = "Export Item Names", Command = exportNames });
+            Items.Add(new ButtonMenuItem { Text = Application.Instance.Localize(this, "Export Item Names"), Command = exportNames });
         }
 
         private void ExportNames_OnClick(object sender, EventArgs e)
@@ -99,7 +99,7 @@ namespace SerialLoops.Controls
 
             string[] names = _project.Items.Where(i => i.Type == type).Select(i => i.Name).ToArray();
             SaveFileDialog saveFileDialog = new();
-            saveFileDialog.Filters.Add(new("File Names List", ".txt"));
+            saveFileDialog.Filters.Add(new(Application.Instance.Localize(this, "Item Names List"), ".txt"));
             if (saveFileDialog.ShowAndReportIfFileSelected(_tabs))
             {
                 File.WriteAllLines(saveFileDialog.FileName, names);
@@ -124,8 +124,8 @@ namespace SerialLoops.Controls
 
             CutCommand = new()
             {
-                MenuText = "Cut",
-                ToolBarText = "Cut",
+                MenuText = Application.Instance.Localize(this, "Cut"),
+                ToolBarText = Application.Instance.Localize(this, "Cut"),
                 Image = ControlGenerator.GetIcon("Cut", log),
                 Shortcut = Keys.Control | Keys.X,
             };
@@ -133,8 +133,8 @@ namespace SerialLoops.Controls
 
             CopyCommand = new()
             {
-                MenuText = "Copy",
-                ToolBarText = "Copy",
+                MenuText = Application.Instance.Localize(this, "Copy"),
+                ToolBarText = Application.Instance.Localize(this, "Copy"),
                 Image = ControlGenerator.GetIcon("Copy", log),
                 Shortcut = Keys.Control | Keys.C
             };
@@ -142,8 +142,8 @@ namespace SerialLoops.Controls
 
             PasteCommand = new()
             {
-                MenuText = "Paste",
-                ToolBarText = "Paste",
+                MenuText = Application.Instance.Localize(this, "Paste"),
+                ToolBarText = Application.Instance.Localize(this, "Paste"),
                 Image = ControlGenerator.GetIcon("Paste", log),
                 Shortcut = Keys.Control | Keys.V
             };
@@ -152,8 +152,8 @@ namespace SerialLoops.Controls
 
             DeleteCommand = new()
             {
-                MenuText = "Delete",
-                ToolBarText = "Delete",
+                MenuText = Application.Instance.Localize(this, "Delete"),
+                ToolBarText = Application.Instance.Localize(this, "Delete"),
                 Image = ControlGenerator.GetIcon("Remove", log),
                 Shortcut = Keys.Delete
             };

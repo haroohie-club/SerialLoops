@@ -59,18 +59,18 @@ namespace SerialLoops.Editors
             };
             _directionSelector.DirectionChanged += ChibiSelection_SelectedKeyChanged;
 
-            Button exportGifButton = new() { Text = "Export GIF" };
+            Button exportGifButton = new() { Text = Application.Instance.Localize(this, "Export GIF") };
             exportGifButton.Click += (sender, args) =>
             {
                 SaveFileDialog saveFileDialog = new()
                 {
-                    Title = "Save chibi GIF",
+                    Title = Application.Instance.Localize(this, "Save chibi GIF"),
                 };
-                saveFileDialog.Filters.Add(new("GIF file", ".gif"));
+                saveFileDialog.Filters.Add(new(Application.Instance.Localize(this, "GIF file"), ".gif"));
 
                 if (saveFileDialog.ShowAndReportIfFileSelected(this))
                 {
-                    List<SKBitmap> frames = new();
+                    List<SKBitmap> frames = [];
                     foreach ((SKGuiImage frame, int timing) in _animatedImage.FramesWithTimings)
                     {
                         for (int i = 0; i < timing; i++)
@@ -80,15 +80,15 @@ namespace SerialLoops.Editors
                     }
 
                     LoopyProgressTracker tracker = new();
-                    _ = new ProgressDialog(() => frames.SaveGif(saveFileDialog.FileName, tracker), () => MessageBox.Show("GIF exported!", "Success!", MessageBoxType.Information), tracker, "Exporting GIF...");
+                    _ = new ProgressDialog(() => frames.SaveGif(saveFileDialog.FileName, tracker), () => MessageBox.Show(Application.Instance.Localize(this, "GIF exported!"), Application.Instance.Localize(this, "Success!"), MessageBoxType.Information), tracker, Application.Instance.Localize(this, "Exporting GIF..."));
                 }
             };
-            Button exportSpritesButton = new() { Text = "Export Sprites" };
+            Button exportSpritesButton = new() { Text = Application.Instance.Localize(this, "Export Sprites") };
             exportSpritesButton.Click += (sender, args) =>
             {
                 SelectFolderDialog folderDialog = new()
                 {
-                    Title = "Select chibi export folder"
+                    Title = Application.Instance.Localize(this, "Select chibi export folder")
                 };
                 if (folderDialog.ShowAndReportIfFolderSelected(this))
                 {
@@ -102,21 +102,21 @@ namespace SerialLoops.Editors
                         }
                         catch (Exception ex)
                         {
-                            _log.LogError($"Failed to export chibi animation {i} for chibi {_chibi.DisplayName} to file: {ex.Message}\n\n{ex.StackTrace}");
+                            _log.LogException(string.Format(Application.Instance.Localize(this, "Failed to export chibi animation {0} for chibi {1} to file"), i, _chibi.DisplayName), ex);
                         }
                     }
-                    MessageBox.Show("Chibi frames exported!!", "Success!", MessageBoxType.Information);
+                    MessageBox.Show(Application.Instance.Localize(this, "Chibi frames exported!"), Application.Instance.Localize(this, "Success!"), MessageBoxType.Information);
                 }
             };
-            Button replaceFramesButton = new() { Text = "Replace Frames" };
+            Button replaceFramesButton = new() { Text = Application.Instance.Localize(this, "Replace Frames") };
             replaceFramesButton.Click += (sender, args) =>
             {
                 OpenFileDialog openFileDialog = new()
                 {
-                    Title = "Select frames",
+                    Title = Application.Instance.Localize(this, "Select frames"),
                     CheckFileExists = true,
                     MultiSelect = true,
-                    Filters = { new("Image Files", ".png", ".jpg", ".jpeg", ".bmp", ".gif") },
+                    Filters = { new(Application.Instance.Localize(this, "Image Files"), ".png", ".jpg", ".jpeg", ".bmp", ".gif") },
                 };
                 if (openFileDialog.ShowAndReportIfFileSelected(this))
                 {
@@ -127,15 +127,15 @@ namespace SerialLoops.Editors
                     UpdateChibiFrames(framesAndTimings);
                 }
             };
-            Button addFramesButton = new() { Text = "Add Frames" };
+            Button addFramesButton = new() { Text = Application.Instance.Localize(this, "Add Frames") };
             addFramesButton.Click += (sender, args) =>
             {
                 OpenFileDialog openFileDialog = new()
                 {
-                    Title = "Select frames",
+                    Title = Application.Instance.Localize(this, "Select frames"),
                     CheckFileExists = true,
                     MultiSelect = true,
-                    Filters = { new("Image Files", ".png", ".jpg", ".jpeg", ".bmp", ".gif") },
+                    Filters = { new(Application.Instance.Localize(this, "Image Files"), ".png", ".jpg", ".jpeg", ".bmp", ".gif") },
                 };
                 if (openFileDialog.ShowAndReportIfFileSelected(this))
                 {
@@ -157,7 +157,7 @@ namespace SerialLoops.Editors
                     new(
                         new GroupBox
                         {
-                            Text = "Animation",
+                            Text = Application.Instance.Localize(this, "Animation"),
                             Padding = 10,
                             Content = new StackLayout
                             {
@@ -171,7 +171,7 @@ namespace SerialLoops.Editors
                         },
                         new GroupBox
                         {
-                            Text = "Frames",
+                            Text = Application.Instance.Localize(this, "Frames"),
                             Padding = 10,
                             Content = new Scrollable { Content = GetFramesStack() }
                         }
@@ -270,7 +270,7 @@ namespace SerialLoops.Editors
                             UpdateTabTitle(false);
                         });
                     };
-                    frameLayout.Items.Add(ControlGenerator.GetControlWithLabel("Frames", timingStepper));
+                    frameLayout.Items.Add(ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Frames"), timingStepper));
                 }
                 _framesStack.Items.Add(frameLayout);
                 i++;

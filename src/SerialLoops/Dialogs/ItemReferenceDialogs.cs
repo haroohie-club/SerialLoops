@@ -25,7 +25,7 @@ namespace SerialLoops.Dialogs
 
         private void InitializeComponent()
         {
-            Title = $"References to {Item.DisplayName}";
+            Title = string.Format(Application.Instance.Localize(this, "References to {0}"), Item.DisplayName);
             MinimumSize = new Size(400, 275);
             Padding = 10;
 
@@ -38,7 +38,7 @@ namespace SerialLoops.Dialogs
                 Padding = 10,
                 Items =
                 {
-                    $"{results.Count} items that reference {Item.Name}:",
+                    string.Format(Application.Instance.Localize(this, "{0} items that reference {1}:"), results.Count, Item.Name),
                     new ItemResultsPanel(results, Log) { Window = this }
                 }
             };
@@ -63,7 +63,7 @@ namespace SerialLoops.Dialogs
 
         private void InitializeComponent()
         {
-            Title = "Orphaned Items";
+            Title = Application.Instance.Localize(this, "Orphaned Items");
             MinimumSize = new Size(400, 275);
             Padding = 10;
 
@@ -76,7 +76,7 @@ namespace SerialLoops.Dialogs
                 Padding = 10,
                 Items =
                 {
-                    $"{results.Count} items found that are not referenced by other items:",
+                    string.Format(Application.Instance.Localize(this, "{0} items found that are not referenced by other items:"), results.Count),
                     new ItemResultsPanel(results, Log, false) { Window = this }
                 }
             };

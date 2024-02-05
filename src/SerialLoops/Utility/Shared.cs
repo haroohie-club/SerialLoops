@@ -1,11 +1,9 @@
 ﻿using Eto.Forms;
-using HaruhiChokuretsuLib.Font;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Controls;
 using SerialLoops.Dialogs;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
-using SerialLoops.Lib.Script.Parameters;
 using SerialLoops.Lib.Util;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Gif;
@@ -13,7 +11,6 @@ using SixLabors.ImageSharp.PixelFormats;
 using SkiaSharp;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading;
 
 namespace SerialLoops.Utility
@@ -29,7 +26,7 @@ namespace SerialLoops.Utility
             {
                 if (!item.CanRename && !overrideRename)
                 {
-                    MessageBox.Show("Can't rename this item directly -- open it to rename it!", "Can't Rename Item", MessageBoxType.Warning);
+                    MessageBox.Show(Application.Instance.Localize(null, "Can't rename this item directly -- open it to rename it!"), Application.Instance.Localize(null, "Can't Rename Item"), MessageBoxType.Warning);
                     return;
                 }
                 DocumentPage openTab = tabs.Tabs.Pages.FirstOrDefault(p => p.Text == item.DisplayNameWithStatus);
@@ -77,10 +74,10 @@ namespace SerialLoops.Utility
             using Image<Rgba32> gif = new(frames.Max(f => f.Width), frames.Max(f => f.Height));
             gif.Metadata.GetGifMetadata().RepeatCount = 0;
 
-            tracker.Focus("Converting frames...", 1);
+            tracker.Focus(Application.Instance.Localize(null, "Converting frames..."), 1);
             IEnumerable<Image<Rgba32>> gifFrames = frames.Select(f => Image.LoadPixelData<Rgba32>(f.Pixels.Select(c => new Rgba32(c.Red, c.Green, c.Blue, c.Alpha)).ToArray(), f.Width, f.Height));
             tracker.Finished++;
-            tracker.Focus("Adding frames to GIF...", gifFrames.Count());
+            tracker.Focus(Application.Instance.Localize(null, "Adding frames to GIF..."), gifFrames.Count());
             foreach (Image<Rgba32> gifFrame in gifFrames)
             {
                 GifFrameMetadata metadata = gifFrame.Frames.RootFrame.Metadata.GetGifMetadata();
@@ -91,7 +88,7 @@ namespace SerialLoops.Utility
             }
             gif.Frames.RemoveFrame(0);
 
-            tracker.Focus("Saving GIF...", 1);
+            tracker.Focus(Application.Instance.Localize(null, "Saving GIF..."), 1);
             gif.SaveAsGif(fileName);
             tracker.Finished++;
         }

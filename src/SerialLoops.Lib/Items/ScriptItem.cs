@@ -1,5 +1,4 @@
-﻿using GotaSequenceLib;
-using HaruhiChokuretsuLib.Archive.Data;
+﻿using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
 using QuikGraph;
@@ -19,13 +18,15 @@ namespace SerialLoops.Lib.Items
     {
         public EventFile Event { get; set; }
         public AdjacencyGraph<ScriptSection, ScriptSectionEdge> Graph { get; set; } = new();
+        private readonly Func<string, string> _localize;
 
         public ScriptItem(string name) : base(name, ItemType.Script)
         {
         }
-        public ScriptItem(EventFile evt, ILogger log) : base(evt.Name[0..^1], ItemType.Script)
+        public ScriptItem(EventFile evt, Func<string, string> localize, ILogger log) : base(evt.Name[0..^1], ItemType.Script)
         {
             Event = evt;
+            _localize = localize;
 
             PruneLabelsSection(log);
             Graph.AddVertexRange(Event.ScriptSections);
@@ -41,7 +42,7 @@ namespace SerialLoops.Lib.Items
                     commands.Add(section, []);
                     foreach (ScriptCommandInvocation command in section.Objects)
                     {
-                        commands[section].Add(ScriptItemCommand.FromInvocation(command, section, commands[section].Count, Event, project, log));
+                        commands[section].Add(ScriptItemCommand.FromInvocation(command, section, commands[section].Count, Event, project, _localize, log));
                     }
                 }
                 return commands;

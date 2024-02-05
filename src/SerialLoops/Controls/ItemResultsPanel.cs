@@ -7,10 +7,9 @@ using System.Collections.Generic;
 
 namespace SerialLoops.Controls
 {
-    public class ItemResultsPanel : ItemListPanel
+    public class ItemResultsPanel(List<ItemDescription> results, ILogger log, bool expandItems = true) : ItemListPanel(results, new Size(280, 185), expandItems, log)
     {
         public FindItemsDialog Window { get; set; }
-        public ItemResultsPanel(List<ItemDescription> results, ILogger log, bool expandItems = true) : base(results, new Size(280, 185), expandItems, log) { }
 
         protected override void ItemList_ItemClicked(object sender, EventArgs e)
         {

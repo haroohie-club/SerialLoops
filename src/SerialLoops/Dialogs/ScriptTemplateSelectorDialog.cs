@@ -37,13 +37,13 @@ namespace SerialLoops.Dialogs
 
         private void InitializeComponent()
         {
-            Title = "Select Template to Apply";
+            Title = Application.Instance.Localize(this, "Select Template to Apply");
             MinimumSize = new Size(600, 350);
             Padding = 10;
 
             _filter = new TextBox
             {
-                PlaceholderText = "Filter by name",
+                PlaceholderText = Application.Instance.Localize(this, "Filter by name"),
                 Width = 200,
             };
             _filter.TextChanged += (sender, args) =>
@@ -69,7 +69,7 @@ namespace SerialLoops.Dialogs
                 VerticalContentAlignment = VerticalAlignment.Center,
                 Items =
                 {
-                    ControlGenerator.GetControlWithIcon("Please select a template", "Template", _log)
+                    ControlGenerator.GetControlWithIcon(Application.Instance.Localize(this, "Please select a template"), "Template", _log)
                 }
             };
             _selector.SelectedValueChanged += (sender, args) =>
@@ -98,15 +98,15 @@ namespace SerialLoops.Dialogs
                         VerticalContentAlignment = VerticalAlignment.Center,
                         Items =
                         {
-                            ControlGenerator.GetControlWithIcon("Please select a template", "Template", _log)
+                            ControlGenerator.GetControlWithIcon(Application.Instance.Localize(this, "Please select a template"), "Template", _log)
                         }
                     };
                 }
             };
 
-            Button confirmButton = new() { Text = "Confirm" };
+            Button confirmButton = new() { Text = Application.Instance.Localize(this, "Confirm") };
             confirmButton.Click += (sender, args) => Close(_currentSelection?.Template(_project, _script));
-            Button cancelButton = new() { Text = "Cancel" };
+            Button cancelButton = new() { Text = Application.Instance.Localize(this, "Cancel") };
             cancelButton.Click += (sender, args) => Close(null);
 
             Content = new StackLayout

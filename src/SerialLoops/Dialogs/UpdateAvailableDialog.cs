@@ -32,24 +32,24 @@ namespace SerialLoops.Dialogs
 
         private void InitializeComponent()
         {
-            Title = $"New Update Available: {_version}";
+            Title = string.Format(Application.Instance.Localize(this, "New Update Available: {0}"), _version);
             MinimumSize = new(600, 375);
             Resizable = false;
 
-            Button updateButton = new() { Text = "Update Now" };
+            Button updateButton = new() { Text = Application.Instance.Localize(this, "Update Now") };
             updateButton.Click += (s, e) => { PrepareUpdater(); };
 
-            Button updateOnCloseButton = new() { Text = "Update On Close" };
+            Button updateOnCloseButton = new() { Text = Application.Instance.Localize(this, "Update on Close") };
             updateOnCloseButton.Click += (s, e) => { PrepareUpdater(false); };
 
-            Button downloadButton = new() { Text = "Download From GitHub " };
+            Button downloadButton = new() { Text = Application.Instance.Localize(this, "Download from GitHub ") };
             downloadButton.Click += (s, e) => { Process.Start(new ProcessStartInfo(_url) { UseShellExecute = true }); };
 
-            Button skipButton = new() { Text = "Skip Update" };
+            Button skipButton = new() { Text = Application.Instance.Localize(this, "Skip Update") };
             skipButton.Click += (sender, args) => Close();
 
-            CheckBox checkForUpdates = new() { Text = "Check For Updates", Checked = _config.CheckForUpdates };
-            CheckBox preReleaseChannel = new() { Text = "Pre-Release Channel", Checked = _config.PreReleaseChannel };
+            CheckBox checkForUpdates = new() { Text = Application.Instance.Localize(this, "Check for Updates"), Checked = _config.CheckForUpdates };
+            CheckBox preReleaseChannel = new() { Text = Application.Instance.Localize(this, "Pre-Release Channel"), Checked = _config.PreReleaseChannel };
             Closed += (sender, args) =>
             {
                 _config.CheckForUpdates = checkForUpdates.Checked == true;
@@ -81,7 +81,7 @@ namespace SerialLoops.Dialogs
 
         private StackLayout GetUpdatePreview()
         {
-            LinkButton urlLink = new() { Text = "Download release from GitHub" };
+            LinkButton urlLink = new() { Text = Application.Instance.Localize(this, "Download release from GitHub") };
             urlLink.Click += (sender, args) => { Process.Start(new ProcessStartInfo(_url) { UseShellExecute = true }); };
 
             return new StackLayout
@@ -91,8 +91,8 @@ namespace SerialLoops.Dialogs
                 Spacing = 10,
                 Items =
                 {
-                    ControlGenerator.GetTextHeader($"Serial Loops v{_version}"),
-                    ControlGenerator.GetControlWithIcon("A new update for Serial Loops is available!", "Update", _log),
+                    ControlGenerator.GetTextHeader(string.Format(Application.Instance.Localize(this, "Serial Loops v{0}"), _version)),
+                    ControlGenerator.GetControlWithIcon(Application.Instance.Localize(this, "A new update for Serial Loops is available!"), "Update", _log),
                     new Scrollable
                     {
                         Content = new RichTextArea

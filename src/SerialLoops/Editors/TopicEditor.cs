@@ -32,12 +32,12 @@ namespace SerialLoops.Editors
                 Spacing = new(3, 3),
                 Rows =
                 {
-                    ControlGenerator.GetControlWithLabelTable("ID", new Label { Text = _topic.TopicEntry.Id.ToString() }),
+                    ControlGenerator.GetControlWithLabelTable(Application.Instance.Localize(this, "ID"), new Label { Text = _topic.TopicEntry.Id.ToString() }),
                 }
             };
             if (_topic.HiddenMainTopic is not null)
             {
-                idLayout.Rows.Add(ControlGenerator.GetControlWithLabelTable("Hidden ID", new Label { Text = _topic.HiddenMainTopic.Id.ToString() }));
+                idLayout.Rows.Add(ControlGenerator.GetControlWithLabelTable(Application.Instance.Localize(this, "Hidden ID"), new Label { Text = _topic.HiddenMainTopic.Id.ToString() }));
             }
 
             TextBox titleTextBox = new() { Text = _topic.TopicEntry.Title.GetSubstitutedString(_project), Width = 300 };
@@ -159,7 +159,7 @@ namespace SerialLoops.Editors
                 Spacing = 10,
                 Items =
                 {
-                    ControlGenerator.GetControlWithLabel("Base Time Gain", ControlGenerator.GetControlWithSuffix(_baseTimeStepper, "sec")),
+                    ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Base Time Gain"), ControlGenerator.GetControlWithSuffix(_baseTimeStepper, Application.Instance.Localize(this, "sec"))),
                     new StackLayout
                     {
                         Orientation = Orientation.Horizontal,
@@ -167,8 +167,8 @@ namespace SerialLoops.Editors
                         VerticalContentAlignment = VerticalAlignment.Center,
                         Items =
                         {
-                            ControlGenerator.GetControlWithLabel("Kyon Time Percentage", ControlGenerator.GetControlWithSuffix(_kyonTimeStepper, "%")),
-                            ControlGenerator.GetControlWithSuffix(_kyonTimeLabel, "sec"),
+                            ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Kyon Time Percentage"), ControlGenerator.GetControlWithSuffix(_kyonTimeStepper, Application.Instance.Localize(this, "%"))),
+                            ControlGenerator.GetControlWithSuffix(_kyonTimeLabel, Application.Instance.Localize(this, "sec")),
                         }
                     },
                     new StackLayout
@@ -178,8 +178,8 @@ namespace SerialLoops.Editors
                         VerticalContentAlignment = VerticalAlignment.Center,
                         Items =
                         {
-                            ControlGenerator.GetControlWithLabel("Mikuru Time Percentage", ControlGenerator.GetControlWithSuffix(_mikuruTimeStepper, "%")),
-                            ControlGenerator.GetControlWithSuffix(_mikuruTimeLabel, "sec"),
+                            ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Mikuru Time Percentage"), ControlGenerator.GetControlWithSuffix(_mikuruTimeStepper, Application.Instance.Localize(this, "%"))),
+                            ControlGenerator.GetControlWithSuffix(_mikuruTimeLabel, Application.Instance.Localize(this, "sec")),
                         }
                     },
                     new StackLayout
@@ -189,8 +189,8 @@ namespace SerialLoops.Editors
                         VerticalContentAlignment = VerticalAlignment.Center,
                         Items =
                         {
-                            ControlGenerator.GetControlWithLabel("Nagato Time Percentage", ControlGenerator.GetControlWithSuffix(_nagatoTimeStepper, "%")),
-                            ControlGenerator.GetControlWithSuffix(_nagatoTimeLabel, "sec"),
+                            ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Nagato Time Percentage"), ControlGenerator.GetControlWithSuffix(_nagatoTimeStepper, Application.Instance.Localize(this, "%"))),
+                            ControlGenerator.GetControlWithSuffix(_nagatoTimeLabel, Application.Instance.Localize(this, "sec")),
                         }
                     },
                     new StackLayout
@@ -200,8 +200,8 @@ namespace SerialLoops.Editors
                         VerticalContentAlignment = VerticalAlignment.Center,
                         Items =
                         {
-                            ControlGenerator.GetControlWithLabel("Koizumi Time Percentage", ControlGenerator.GetControlWithSuffix(_koizumiTimeStepper, "%")),
-                            ControlGenerator.GetControlWithSuffix(_koizumiTimeLabel, "sec"),
+                            ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Koizumi Time Percentage"), ControlGenerator.GetControlWithSuffix(_koizumiTimeStepper, Application.Instance.Localize(this, "%"))),
+                            ControlGenerator.GetControlWithSuffix(_koizumiTimeLabel, Application.Instance.Localize(this, "sec")),
                         }
                     },
                 }
@@ -211,11 +211,11 @@ namespace SerialLoops.Editors
             {
                 Items =
                 {
-                    new ListItem { Key = "1", Text = "Episode 1" },
-                    new ListItem { Key = "2", Text = "Episode 2" },
-                    new ListItem { Key = "3", Text = "Episode 3" },
-                    new ListItem { Key = "4", Text = "Episode 4" },
-                    new ListItem { Key = "5", Text = "Episode 5" },
+                    new ListItem { Key = "1", Text = Application.Instance.Localize(this, "Episode 1") },
+                    new ListItem { Key = "2", Text = Application.Instance.Localize(this, "Episode 2") },
+                    new ListItem { Key = "3", Text = Application.Instance.Localize(this, "Episode 3") },
+                    new ListItem { Key = "4", Text = Application.Instance.Localize(this, "Episode 4") },
+                    new ListItem { Key = "5", Text = Application.Instance.Localize(this, "Episode 5") },
                 },
                 SelectedKey = _topic.TopicEntry.EpisodeGroup.ToString(),
             };
@@ -244,8 +244,8 @@ namespace SerialLoops.Editors
                 Spacing = 5,
                 Items =
                 {
-                    ControlGenerator.GetControlWithLabel("Episode Group", episodeGroupDropDown),
-                    ControlGenerator.GetControlWithLabel("Puzzle Phase Group", puzzlePhaseGroupStepper),
+                    ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Episode Group"), episodeGroupDropDown),
+                    ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Puzzle Phase Group"), puzzlePhaseGroupStepper),
                 },
             };
 
@@ -255,17 +255,17 @@ namespace SerialLoops.Editors
                 Spacing = 5,
                 Items =
                 {
-                    ControlGenerator.GetControlWithLabel("Unknown 03", new TextBox { Text = _topic.TopicEntry.UnknownShort03.ToString() }),
-                    ControlGenerator.GetControlWithLabel("Unknown 04", new TextBox { Text = _topic.TopicEntry.UnknownShort04.ToString() }),
+                    ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Unknown 03"), new TextBox { Text = _topic.TopicEntry.UnknownShort03.ToString() }),
+                    ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Unknown 04"), new TextBox { Text = _topic.TopicEntry.UnknownShort04.ToString() }),
                 }
             };
 
             return new TableLayout(idLayout,
-                ControlGenerator.GetControlWithLabel("Title", titleTextBox),
-                ControlGenerator.GetControlWithLabel("Type", _topic.TopicEntry.CardType.ToString()),
-                ControlGenerator.GetControlWithLabel("Associated Script", linkedScriptLayout),
+                ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Title"), titleTextBox),
+                ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Type"), _topic.TopicEntry.CardType.ToString()),
+                ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Associated Script"), linkedScriptLayout),
                 groupsLayout,
-                new GroupBox() { Text = "Times", Content = timesLayout },
+                new GroupBox() { Text = Application.Instance.Localize(this, "Times"), Content = timesLayout },
                 new TableRow());
         }
 

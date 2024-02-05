@@ -80,7 +80,7 @@ namespace SerialLoops.Editors
                 }
             }
 
-            Command applyTemplate = new() { MenuText = "Apply Template", ToolBarText = "Template", Image = ControlGenerator.GetIcon("Template", _log) };
+            Command applyTemplate = new() { MenuText = Application.Instance.Localize(this, "Apply Template"), ToolBarText = Application.Instance.Localize(this, "Template"), Image = ControlGenerator.GetIcon("Template", _log) };
             applyTemplate.Executed += (sender, args) =>
             {
                 ScriptTemplateSelectorDialog scriptTemplateSelector = new(_project, _script.Event, _log);
@@ -121,7 +121,7 @@ namespace SerialLoops.Editors
             _addCommandButton = new()
             {
                 Image = ControlGenerator.GetIcon("Add", _log),
-                ToolTip = "New Command",
+                ToolTip = Application.Instance.Localize(this, "New Command"),
                 Width = 22,
                 Enabled = treeGridView.SelectedCommandTreeItem is not null,
             };
@@ -132,7 +132,7 @@ namespace SerialLoops.Editors
                     DropDown verbSelecter = new()
                     {
                         SelectedIndex = 0,
-                        ToolTip = "Select Command Type"
+                        ToolTip = Application.Instance.Localize(this, "Select Command Type")
                     };
                     foreach (string verb in CommandsAvailable.Select(command => command.Mnemonic))
                     {
@@ -140,14 +140,14 @@ namespace SerialLoops.Editors
                     }
                     verbSelecter.Items.Sort((c1, c2) => c1.Key.CompareTo(c2.Key));
 
-                    Button createButton = new() { Text = "Create" };
-                    Button cancelButton = new() { Text = "Cancel" };
+                    Button createButton = new() { Text = Application.Instance.Localize(this, "Create") };
+                    Button cancelButton = new() { Text = Application.Instance.Localize(this, "Cancel") };
                     Dialog dialog = new()
                     {
-                        Title = "Add Command",
+                        Title = Application.Instance.Localize(this, "Add Command"),
                         MinimumSize = new(250, 150),
                         Content = new TableLayout(
-                            new TableRow(new StackLayout { Padding = 10, Items = { "Command Type:", verbSelecter } }),
+                            new TableRow(new StackLayout { Padding = 10, Items = { Application.Instance.Localize(this, "Command Type:"), verbSelecter } }),
                             new TableRow(new StackLayout
                             {
                                 Padding = 10,
@@ -176,7 +176,7 @@ namespace SerialLoops.Editors
                                 .Find(command => command.Mnemonic.Equals(verbSelecter.SelectedKey));
                         if (scriptCommand is null)
                         {
-                            _log.LogError($"Invalid or unavailable script command selected: {verbSelecter.SelectedKey}");
+                            _log.LogError(string.Format(Application.Instance.Localize(this, "Invalid or unavailable script command selected: {0}"), verbSelecter.SelectedKey));
                             return;
                         }
                         dialog.Close();
@@ -195,7 +195,7 @@ namespace SerialLoops.Editors
                             ScriptSection scriptSection = _script.Event.ScriptSections.Find(section => section.Name.Equals(sectionName));
                             if (scriptSection is null)
                             {
-                                _log.LogError($"Unable to find script section: {sectionName}");
+                                _log.LogError(string.Format(Application.Instance.Localize(this, "Unable to find script section: {0}"), sectionName));
                                 return;
                             }
 
@@ -225,7 +225,7 @@ namespace SerialLoops.Editors
 
                                 case CommandVerb.DIALOGUE:
                                     invocation.Parameters[0] = (short)(_script.Event.DialogueSection.Objects.Count - 1);
-                                    DialogueLine line = new("Replace me".GetOriginalString(_project), _script.Event);
+                                    DialogueLine line = new(Application.Instance.Localize(this, "Replace me").GetOriginalString(_project), _script.Event);
                                     _script.Event.DialogueSection.Objects.Insert(_script.Event.DialogueSection.Objects.Count - 1, line);
                                     invocation.Parameters[6] = (short)messInfos.MessageInfos.FindIndex(i => i.Character == line.Speaker);
                                     invocation.Parameters[7] = (short)messInfos.MessageInfos.FindIndex(i => i.Character == line.Speaker);
@@ -289,6 +289,7 @@ namespace SerialLoops.Editors
                                 index == -1 ? 0 : index,
                                 _script.Event,
                                 _project,
+                                s => Application.Instance.Localize(null, s),
                                 _log
                             );
 
@@ -296,7 +297,7 @@ namespace SerialLoops.Editors
                         }
                         catch (Exception ex)
                         {
-                            _log.LogError($"Unable to create command: {ex.Message}");
+                            _log.LogException("Unable to create command", ex);
                             return;
                         }
                     };
@@ -308,22 +309,22 @@ namespace SerialLoops.Editors
             _addSectionButton = new()
             {
                 Image = ControlGenerator.GetIcon("Add_Section", _log),
-                ToolTip = "New Section",
+                ToolTip = Application.Instance.Localize(this, "New Section"),
                 Width = 22,
                 Enabled = treeGridView.SelectedCommandTreeItem is not null,
             };
             _addSectionButton.Click += (sender, args) =>
             {
-                TextBox labelBox = new() { PlaceholderText = "Section Label" };
+                TextBox labelBox = new() { PlaceholderText = Application.Instance.Localize(this, "Section Label") };
 
-                Button createButton = new() { Text = "Create" };
-                Button cancelButton = new() { Text = "Cancel" };
+                Button createButton = new() { Text = Application.Instance.Localize(this, "Create") };
+                Button cancelButton = new() { Text = Application.Instance.Localize(this, "Cancel") };
                 Dialog dialog = new()
                 {
-                    Title = "Add Section",
+                    Title = Application.Instance.Localize(this, "Add Section"),
                     MinimumSize = new(250, 150),
                     Content = new TableLayout(
-                        new TableRow(new StackLayout { Padding = 10, Items = { "Section Name:", ControlGenerator.GetControlWithLabel("NONE/", labelBox) } }),
+                        new TableRow(new StackLayout { Padding = 10, Items = { Application.Instance.Localize(this, "Section Name:"), ControlGenerator.GetControlWithLabel("NONE/", labelBox) } }),
                         new TableRow(new StackLayout
                         {
                             Padding = 10,
@@ -344,7 +345,7 @@ namespace SerialLoops.Editors
                 {
                     if (string.IsNullOrWhiteSpace(labelBox.Text))
                     {
-                        MessageBox.Show("Please enter a value for the label name", MessageBoxType.Error);
+                        MessageBox.Show(Application.Instance.Localize(this, "Please enter a value for the section name"), MessageBoxType.Error);
                         return;
                     }
 
@@ -361,7 +362,7 @@ namespace SerialLoops.Editors
             _deleteButton = new()
             {
                 Image = ControlGenerator.GetIcon("Remove", _log),
-                ToolTip = "Remove Command/Section",
+                ToolTip = Application.Instance.Localize(this, "Remove Command/Section"),
                 Width = 22,
                 Enabled = treeGridView.SelectedCommandTreeItem is not null,
             };
@@ -377,7 +378,7 @@ namespace SerialLoops.Editors
             _clearButton = new()
             {
                 Image = ControlGenerator.GetIcon("Clear", _log),
-                ToolTip = "Clear Script",
+                ToolTip = Application.Instance.Localize(this, "Clear Script"),
                 Width = 22,
             };
             _clearButton.Click += (sender, args) =>
@@ -401,7 +402,7 @@ namespace SerialLoops.Editors
             TabControl propertiesTabs = new();
 
             // Starting Chibis Properties
-            TabPage startingChibisPage = new() { Text = "Starting Chibis" };
+            TabPage startingChibisPage = new() { Text = Application.Instance.Localize(this, "Starting Chibis") };
             if (_script.Event.StartingChibisSection is not null)
             {
                 startingChibisPage.Content = GetStartingChibisLayout(startingChibisPage);
@@ -411,7 +412,7 @@ namespace SerialLoops.Editors
                 startingChibisPage.Content = GetStartingChibisAddButton(startingChibisPage);
             }
 
-            TabPage mapCharactersPage = new() { Text = "Map Characters" };
+            TabPage mapCharactersPage = new() { Text = Application.Instance.Localize(this, "Map Characters") };
             if (_script.Event.MapCharactersSection is not null)
             {
                 mapCharactersPage.Content = GetMapCharactersLayout(mapCharactersPage);
@@ -421,7 +422,7 @@ namespace SerialLoops.Editors
                 mapCharactersPage.Content = GetAddMapCharactersButton(mapCharactersPage);
             }
 
-            TabPage choicesPage = new() { Text = "Choices" };
+            TabPage choicesPage = new() { Text = Application.Instance.Localize(this, "Choices") };
             choicesPage.Content = GetChoicesStackLayout(choicesPage);
 
             propertiesTabs.Pages.Add(startingChibisPage);
@@ -470,7 +471,7 @@ namespace SerialLoops.Editors
                 Application.Instance.Invoke(() => UpdatePreview());
             };
 
-            Button removeButton = new() { Text = "Remove Starting Chibis" };
+            Button removeButton = new() { Text = Application.Instance.Localize(this, "Remove Starting Chibis") };
             removeButton.Click += (o, args) =>
             {
                 _script.Event.StartingChibisSection = null;
@@ -502,7 +503,7 @@ namespace SerialLoops.Editors
 
         private StackLayout GetStartingChibisAddButton(TabPage parent)
         {
-            Button addButton = new() { Text = "Add Starting Chibis" };
+            Button addButton = new() { Text = Application.Instance.Localize(this, "Add Starting Chibis") };
             addButton.Click += (o, args) =>
             {
                 _script.Event.StartingChibisSection = new() { Name = "STARTINGCHIBIS" };
@@ -529,13 +530,13 @@ namespace SerialLoops.Editors
             MapItem[] maps = _commands.Values.SelectMany(c => c).Where(c => c.Verb == CommandVerb.LOAD_ISOMAP)
                 .Select(c => ((MapScriptParameter)c.Parameters[0]).Map).ToArray();
 
-            Button refreshMapListButton = new() { Text = "Refresh Maps List" };
+            Button refreshMapListButton = new() { Text = Application.Instance.Localize(this, "Refresh Maps List") };
             refreshMapListButton.Click += (o, args) =>
             {
                 parent.Content = GetMapCharactersLayout(parent);
             };
 
-            Button removeButton = new() { Text = "Remove Map Characters", AllowDrop = true };
+            Button removeButton = new() { Text = Application.Instance.Localize(this, "Remove Map Characters"), AllowDrop = true };
             removeButton.Click += (o, args) =>
             {
                 _script.Event.MapCharactersSection = null;
@@ -553,7 +554,7 @@ namespace SerialLoops.Editors
                     Spacing = 5,
                     Items =
                     {
-                        "No valid maps found.",
+                        Application.Instance.Localize(this, "No valid maps found."),
                         refreshMapListButton,
                         removeButton,
                     }
@@ -570,7 +571,7 @@ namespace SerialLoops.Editors
             mapLayout.Add(mapImage, 0, 0);
 
             SKPoint gridZero = maps[0].GetOrigin(_project.Grp);
-            Dictionary<PointF, Point> grid = new();
+            Dictionary<PointF, Point> grid = [];
             for (int y = 0; y < maps[0].Map.PathingMap.Length; y++)
             {
                 for (int x = 0; x < maps[0].Map.PathingMap[y].Length; x++)
@@ -750,7 +751,7 @@ namespace SerialLoops.Editors
                     UpdateTabTitle(false, talkScriptBlockDropDown);
                 };
 
-                Button removeButton = new() { Text = "Remove Chibi" };
+                Button removeButton = new() { Text = Application.Instance.Localize(this, "Remove Chibi") };
                 removeButton.Click += (o, args) =>
                 {
                     _script.Event.MapCharactersSection.Objects.RemoveAt(chibiLayout.ChibiIndex);
@@ -776,7 +777,7 @@ namespace SerialLoops.Editors
 
         private StackLayout GetAddMapCharactersButton(TabPage parent)
         {
-            Button addButton = new() { Text = "Add Map Characters" };
+            Button addButton = new() { Text = Application.Instance.Localize(this, "Add Map Characters") };
             addButton.Click += (o, args) =>
             {
                 _script.Event.MapCharactersSection = new() { Name = "MAPCHARACTERS" };
@@ -1138,7 +1139,7 @@ namespace SerialLoops.Editors
                             }
                             catch (InvalidOperationException)
                             {
-                                _log.LogError("Failed to find character item -- have you saved all of your changes to character names?");
+                                _log.LogError(Application.Instance.Localize(this, "Failed to find character item -- have you saved all of your changes to character names?"));
                                 return;
                             }
 
@@ -1359,16 +1360,16 @@ namespace SerialLoops.Editors
                                 DecimalPlaces = 0,
                                 Value = ((ShortScriptParameter)parameter).Value
                             };
-                            if (parameter.Name.Contains("Frames"))
+                            if (parameter.Name.Contains(Application.Instance.Localize(this, "Frames")))
                             {
                                 shortNumericStepper.MinValue = 0;
                             }
-                            if (parameter.Name.Contains("Volume"))
+                            if (parameter.Name.Contains(Application.Instance.Localize(this, "Volume")))
                             {
                                 shortNumericStepper.MinValue = 0;
                                 shortNumericStepper.MaxValue = 100;
                             }
-                            if (command.Verb == CommandVerb.SND_PLAY && parameter.Name == "Crossfade Time (Frames)")
+                            if (command.Verb == CommandVerb.SND_PLAY && parameter.Name == Application.Instance.Localize(this, "Crossfade Time (Frames)"))
                             {
                                 shortNumericStepper.SecondIndex = 4;
                             }
@@ -1445,7 +1446,7 @@ namespace SerialLoops.Editors
                             if (string.IsNullOrEmpty(topicName))
                             {
                                 // If the topic has been deleted, we will just display the index in a textbox
-                                TopicSelectButton setUpTopicControlButton = new() { Text = "Select a Topic", ScriptCommand = command, ParameterIndex = i };
+                                TopicSelectButton setUpTopicControlButton = new() { Text = Application.Instance.Localize(this, "Select a Topic"), ScriptCommand = command, ParameterIndex = i };
 
                                 StackLayout deletedTopicLayout = new()
                                 {
@@ -1526,7 +1527,7 @@ namespace SerialLoops.Editors
                             break;
 
                         default:
-                            _log.LogError($"Invalid parameter detected in script {_script.Name} parameter {parameter.Name}");
+                            _log.LogError(string.Format(Application.Instance.Localize(this, "Invalid parameter detected in script {0} parameter {1}"), _script.Name, parameter.Name));
                             break;
                     }
                     currentCol++;

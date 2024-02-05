@@ -149,40 +149,40 @@ namespace SerialLoops.Editors
                 Spacing = 5,
                 Items =
                 {
-                    ControlGenerator.GetControlWithLabel("Character", characterBox),
-                    ControlGenerator.GetControlWithLabel("Text Color", new StackLayout
+                    ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Character"), characterBox),
+                    ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Text Color"), new StackLayout
                     {
                         Orientation = Orientation.Horizontal,
                         Spacing = 3,
                         Items =
                         {
                             textColorPicker,
-                            ControlGenerator.GetControlWithLabel("Defaults", defaultTextColorsDropDown),
+                            ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Defaults"), defaultTextColorsDropDown),
                         }
                     }),
-                    ControlGenerator.GetControlWithLabel("Plate Color", new StackLayout
+                    ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Plate Color"), new StackLayout
                     {
                         Orientation = Orientation.Horizontal,
                         Spacing = 3,
                         Items =
                         {
                             plateColorPicker,
-                            ControlGenerator.GetControlWithLabel("Defaults", defaultPlateColorsDropDown),
+                            ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Defaults"), defaultPlateColorsDropDown),
                         }
                     }),
-                    ControlGenerator.GetControlWithLabel("Outline Color", new StackLayout
+                    ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Outline Color"), new StackLayout
                     {
                         Orientation = Orientation.Horizontal,
                         Spacing = 3,
                         Items =
                         {
                             outlineColorPicker,
-                            ControlGenerator.GetControlWithLabel("Has Outline?", outlineCheckBox),
+                            ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Has Outline?"), outlineCheckBox),
                         }
                     }),
                     nameplatePreviewLayout,
-                    ControlGenerator.GetControlWithLabel("Voice Font", voiceFontLayout),
-                    ControlGenerator.GetControlWithLabel("Text Timer", textTimerNumericStepper),
+                    ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Voice Font"), voiceFontLayout),
+                    ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Text Timer"), textTimerNumericStepper),
                 },
             };
         }

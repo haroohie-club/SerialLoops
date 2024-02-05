@@ -89,7 +89,7 @@ namespace SerialLoops.Utility
             ItemDescription id = project.Items.Find(i => i.Name.Equals("SYSTEX_SYS_CMN_B46"));
             if (id is not SystemTextureItem tex)
             {
-                log.LogError($"Failed to load character progress voice for {character}.");
+                log.LogError(string.Format(Application.Instance.Localize(null, "Failed to load character progress voice for {0}."), character));
                 return null;
             }
             SKBitmap bitmap = tex.Grp.GetImage(transparentIndex: 0);
@@ -140,7 +140,7 @@ namespace SerialLoops.Utility
             ItemDescription id = project.Items.Find(i => i.Name.Equals("SYSTEX_XTR_PRG_T08"));
             if (id is not SystemTextureItem tex)
             {
-                log.LogError($"Failed to load character progress portrait for {character}.");
+                log.LogError(string.Format(Application.Instance.Localize(null, "Failed to load character progress portrait for {0}."), character));
                 return null;
             }
             SKBitmap bitmap = tex.Grp.GetImage(transparentIndex: 0, width: 16);

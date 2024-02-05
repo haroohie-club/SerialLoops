@@ -1,4 +1,5 @@
-﻿using HaruhiChokuretsuLib.Util;
+﻿using Eto.Forms;
+using HaruhiChokuretsuLib.Util;
 using SerialLoops.Dialogs;
 using System;
 using System.Net.Http;
@@ -68,10 +69,10 @@ namespace SerialLoops.Utility
             }
             catch (Exception e)
             {
-                _logger.LogError($"Failed to check for updates! (Endpoint: {GET_RELEASES}, Error: {e.Message})");
+                _logger.LogException(string.Format(Application.Instance.Localize(null, "Failed to check for updates! (Endpoint: {0})"), GET_RELEASES), e);
             }
 
-            return (currentVersion, "https://github.com/haroohie-club/SerialLoops/releases/latest", new(), "N/A");
+            return (currentVersion, "https://github.com/haroohie-club/SerialLoops/releases/latest", [], "N/A");
         }
     }
 }

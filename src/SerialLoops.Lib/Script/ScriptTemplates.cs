@@ -26,11 +26,11 @@ namespace SerialLoops.Lib.Script
             }
         }
 
-        public static readonly ObservableCollection<TemplateOption> AvailableTemplates = new()
-        {
+        public static readonly ObservableCollection<TemplateOption> AvailableTemplates =
+        [
             new("Standard Story Script Intro", "A standard intro for a story script (i.e. EVX_XXX)", (Project p, EventFile evt) => StandardStoryScriptIntro(p)),
-            new("Standard Chess Script Skeleton", "An outline for a standard chess file script", (Project p, EventFile evt) => StandardChessFile(p, evt))
-        };
+            new("Standard Chess Script Skeleton", "An outline for a standard chess file script", StandardChessFile)
+        ];
 
         private static ScriptTemplate StandardStoryScriptIntro(Project project) => new(
             new TemplateSection("SCRIPT00", CommandsPosition.TOP,

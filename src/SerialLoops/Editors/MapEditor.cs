@@ -23,8 +23,8 @@ namespace SerialLoops.Editors
                 }
             };
 
-            CheckBox drawPathingMapBox = new() { Text = "Draw Pathing Map", Checked = false };
-            CheckBox drawStartingPointBox = new() { Text = "Draw Starting Point", Checked = false };
+            CheckBox drawPathingMapBox = new() { Text = Application.Instance.Localize(this, "Draw Pathing Map"), Checked = false };
+            CheckBox drawStartingPointBox = new() { Text = Application.Instance.Localize(this, "Draw Starting Point"), Checked = false };
 
             void redrawMap(object obj, EventArgs args)
             {

@@ -1,11 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Eto.Forms;
-using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib.Items;
 using SerialLoops.Utility;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SerialLoops.Controls;
 

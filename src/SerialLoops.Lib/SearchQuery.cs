@@ -8,8 +8,8 @@ namespace SerialLoops.Lib;
 public class SearchQuery
 {
     public string Term { get; set; }
-    public HashSet<DataHolder> Scopes { get; set; } = new() { DataHolder.Title };
-    public HashSet<ItemDescription.ItemType> Types { get; set; } = Enum.GetValues<ItemDescription.ItemType>().ToHashSet();
+    public HashSet<DataHolder> Scopes { get; set; } = [DataHolder.Title];
+    public HashSet<ItemDescription.ItemType> Types { get; set; } = [.. Enum.GetValues<ItemDescription.ItemType>()];
     public bool QuickSearch => !Scopes.Any(scope => (int)scope > 10);
 
     public enum DataHolder

@@ -148,7 +148,7 @@ namespace SerialLoops.Controls
                 return;
             }
 
-            SubMenuItem editItem = new() { Text = "&Edit", Tag = Editor.EDITOR_TOOLBAR_TAG };
+            SubMenuItem editItem = new() { Text = Application.Instance.Localize(this, "&Edit"), Tag = Editor.EDITOR_TOOLBAR_TAG };
             SeparatorToolItem separator = new() { Tag = Editor.EDITOR_TOOLBAR_TAG, Style = "sl-toolbar-separator" };
             _toolBar?.Items.Insert(0, separator);
             commands.ForEach(command =>

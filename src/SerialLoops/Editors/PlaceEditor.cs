@@ -54,7 +54,7 @@ namespace SerialLoops.Editors
                 Spacing = 5,
                 Items =
                 {
-                    ControlGenerator.GetControlWithLabel("Place Name", placeTextBox),
+                    ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Place Name"), placeTextBox),
                     previewPanel,
                 }
             };

@@ -36,7 +36,7 @@ namespace SerialLoops.Utility
 
         public void LogError(string message, bool lookForWarnings = false)
         {
-            Application.Instance.Invoke(() => MessageBox.Show($"ERROR: {message}", "Error", MessageBoxType.Error));
+            Application.Instance.Invoke(() => MessageBox.Show(string.Format("ERROR: {0}", Application.Instance.Localize(this, message)), "Error", MessageBoxType.Error));
             if (_writer is not null && !string.IsNullOrEmpty(message))
             {
                 _writer.WriteLine($"{DateTimeOffset.Now} - ERROR: {message}");
@@ -46,7 +46,7 @@ namespace SerialLoops.Utility
 
         public void LogException(string message, Exception exception)
         {
-            LogError($"{message}\n{exception.Message}");
+            LogError($"{Application.Instance.Localize(this, message)}\n{exception.Message}");
             LogWarning($"\n{exception.StackTrace}");
         }
 
