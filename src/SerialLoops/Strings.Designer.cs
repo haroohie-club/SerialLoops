@@ -151,6 +151,15 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &quot;Kinetic&quot; Background.
+        /// </summary>
+        public static string _Kinetic__Background {
+            get {
+                return ResourceManager.GetString("\"Kinetic\" Background", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to  (Missing).
         /// </summary>
         public static string _Missing_ {
@@ -219,6 +228,15 @@ namespace SerialLoops {
         public static string Accompanying_Character {
             get {
                 return ResourceManager.GetString("Accompanying Character", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add.
+        /// </summary>
+        public static string Add {
+            get {
+                return ResourceManager.GetString("Add", resourceCulture);
             }
         }
         
@@ -439,6 +457,15 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Background (CG).
+        /// </summary>
+        public static string Background__CG_ {
+            get {
+                return ResourceManager.GetString("Background (CG)", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Background ID.
         /// </summary>
         public static string Background_ID {
@@ -561,6 +588,24 @@ namespace SerialLoops {
         public static string BGMs {
             get {
                 return ResourceManager.GetString("BGMs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Black Space Begin.
+        /// </summary>
+        public static string Black_Space_Begin {
+            get {
+                return ResourceManager.GetString("Black Space Begin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Black Space End.
+        /// </summary>
+        public static string Black_Space_End {
+            get {
+                return ResourceManager.GetString("Black Space End", resourceCulture);
             }
         }
         
@@ -826,6 +871,15 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Chess File.
+        /// </summary>
+        public static string Chess_File {
+            get {
+                return ResourceManager.GetString("Chess File", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Chess Mode Unlocked message box.
         /// </summary>
         public static string Chess_Mode_Unlocked_message_box {
@@ -921,6 +975,15 @@ namespace SerialLoops {
         public static string Clear_all_commands_from_the_game_scenario__nThis_action_is_irreversible_ {
             get {
                 return ResourceManager.GetString("Clear all commands from the game scenario?\\nThis action is irreversible.", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear Block.
+        /// </summary>
+        public static string Clear_Block {
+            get {
+                return ResourceManager.GetString("Clear Block", resourceCulture);
             }
         }
         
@@ -1029,6 +1092,15 @@ namespace SerialLoops {
         public static string Collected_all_Nagato_topics_message_box {
             get {
                 return ResourceManager.GetString("Collected all Nagato topics message box", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Color.
+        /// </summary>
+        public static string Color {
+            get {
+                return ResourceManager.GetString("Color", resourceCulture);
             }
         }
         
@@ -1204,6 +1276,15 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cross Space {0}&quot;.
+        /// </summary>
+        public static string Cross_Space__0__ {
+            get {
+                return ResourceManager.GetString("Cross Space {0}\"", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Crossfade Time (Frames).
         /// </summary>
         public static string Crossfade_Time__Frames_ {
@@ -1218,6 +1299,15 @@ namespace SerialLoops {
         public static string Ctrl_Scroll___Scale_Image {
             get {
                 return ResourceManager.GetString("Ctrl+Scroll - Scale Image", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Custom Color.
+        /// </summary>
+        public static string Custom_Color {
+            get {
+                return ResourceManager.GetString("Custom Color", resourceCulture);
             }
         }
         
@@ -1245,6 +1335,15 @@ namespace SerialLoops {
         public static string Defaults {
             get {
                 return ResourceManager.GetString("Defaults", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delay (Frames).
+        /// </summary>
+        public static string Delay__Frames_ {
+            get {
+                return ResourceManager.GetString("Delay (Frames)", resourceCulture);
             }
         }
         
@@ -1357,6 +1456,78 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Disable Lip Flap.
+        /// </summary>
+        public static string Disable_Lip_Flap {
+            get {
+                return ResourceManager.GetString("Disable Lip Flap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Display?.
+        /// </summary>
+        public static string Display_ {
+            get {
+                return ResourceManager.GetString("Display?", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Display Flag 1.
+        /// </summary>
+        public static string Display_Flag_1 {
+            get {
+                return ResourceManager.GetString("Display Flag 1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Display Flag 2.
+        /// </summary>
+        public static string Display_Flag_2 {
+            get {
+                return ResourceManager.GetString("Display Flag 2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Display Flag 3.
+        /// </summary>
+        public static string Display_Flag_3 {
+            get {
+                return ResourceManager.GetString("Display Flag 3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Display Flag 4.
+        /// </summary>
+        public static string Display_Flag_4 {
+            get {
+                return ResourceManager.GetString("Display Flag 4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Display from Bottom.
+        /// </summary>
+        public static string Display_from_Bottom {
+            get {
+                return ResourceManager.GetString("Display from Bottom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Don&apos;t Clear Text.
+        /// </summary>
+        public static string Don_t_Clear_Text {
+            get {
+                return ResourceManager.GetString("Don\'t Clear Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Download from GitHub.
         /// </summary>
         public static string Download_from_GitHub {
@@ -1389,6 +1560,15 @@ namespace SerialLoops {
         public static string Draw_Starting_Point {
             get {
                 return ResourceManager.GetString("Draw Starting Point", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Duration (Frames).
+        /// </summary>
+        public static string Duration__Frames_ {
+            get {
+                return ResourceManager.GetString("Duration (Frames)", resourceCulture);
             }
         }
         
@@ -1474,6 +1654,15 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Emote.
+        /// </summary>
+        public static string Emote {
+            get {
+                return ResourceManager.GetString("Emote", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Emulator Path.
         /// </summary>
         public static string Emulator_Path {
@@ -1492,11 +1681,29 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to End Script Section.
+        /// </summary>
+        public static string End_Script_Section {
+            get {
+                return ResourceManager.GetString("End Script Section", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to English.
         /// </summary>
         public static string English {
             get {
                 return ResourceManager.GetString("English", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter/Exit.
+        /// </summary>
+        public static string Enter_Exit {
+            get {
+                return ResourceManager.GetString("Enter/Exit", resourceCulture);
             }
         }
         
@@ -1663,6 +1870,15 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Episode Header.
+        /// </summary>
+        public static string Episode_Header {
+            get {
+                return ResourceManager.GetString("Episode Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Episode Number.
         /// </summary>
         public static string Episode_Number {
@@ -1823,6 +2039,51 @@ namespace SerialLoops {
         public static string Extras_unlocked_message_box {
             get {
                 return ResourceManager.GetString("Extras unlocked message box", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fade In Percentage.
+        /// </summary>
+        public static string Fade_In_Percentage {
+            get {
+                return ResourceManager.GetString("Fade In Percentage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fade In Time (Frames).
+        /// </summary>
+        public static string Fade_In_Time__Frames_ {
+            get {
+                return ResourceManager.GetString("Fade In Time (Frames)", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fade Out Percentage.
+        /// </summary>
+        public static string Fade_Out_Percentage {
+            get {
+                return ResourceManager.GetString("Fade Out Percentage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fade Out Time (Frames).
+        /// </summary>
+        public static string Fade_Out_Time__Frames_ {
+            get {
+                return ResourceManager.GetString("Fade Out Time (Frames)", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fade Time (Frames).
+        /// </summary>
+        public static string Fade_Time__Frames_ {
+            get {
+                return ResourceManager.GetString("Fade Time (Frames)", resourceCulture);
             }
         }
         
@@ -2423,6 +2684,33 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Highlight Space {0}.
+        /// </summary>
+        public static string Highlight_Space__0_ {
+            get {
+                return ResourceManager.GetString("Highlight Space {0}", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hold Time (Frames).
+        /// </summary>
+        public static string Hold_Time__Frames_ {
+            get {
+                return ResourceManager.GetString("Hold Time (Frames)", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Horizontal Intensity.
+        /// </summary>
+        public static string Horizontal_Intensity {
+            get {
+                return ResourceManager.GetString("Horizontal Intensity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ID.
         /// </summary>
         public static string ID {
@@ -2693,6 +2981,15 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Location.
+        /// </summary>
+        public static string Location {
+            get {
+                return ResourceManager.GetString("Location", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Loop?.
         /// </summary>
         public static string Loop_ {
@@ -2810,11 +3107,47 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Miss 2 Block.
+        /// </summary>
+        public static string Miss_2_Block {
+            get {
+                return ResourceManager.GetString("Miss 2 Block", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Miss Block.
+        /// </summary>
+        public static string Miss_Block {
+            get {
+                return ResourceManager.GetString("Miss Block", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Missing: .
         /// </summary>
         public static string Missing_ {
             get {
                 return ResourceManager.GetString("Missing:", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mode.
+        /// </summary>
+        public static string Mode {
+            get {
+                return ResourceManager.GetString("Mode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Modify by.
+        /// </summary>
+        public static string Modify_by {
+            get {
+                return ResourceManager.GetString("Modify by", resourceCulture);
             }
         }
         
@@ -2842,6 +3175,15 @@ namespace SerialLoops {
         public static string MP3_files {
             get {
                 return ResourceManager.GetString("MP3 files", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Music.
+        /// </summary>
+        public static string Music {
+            get {
+                return ResourceManager.GetString("Music", resourceCulture);
             }
         }
         
@@ -3153,6 +3495,42 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Option 1.
+        /// </summary>
+        public static string Option_1 {
+            get {
+                return ResourceManager.GetString("Option 1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Option 2.
+        /// </summary>
+        public static string Option_2 {
+            get {
+                return ResourceManager.GetString("Option 2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Option 3.
+        /// </summary>
+        public static string Option_3 {
+            get {
+                return ResourceManager.GetString("Option 3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Option 4.
+        /// </summary>
+        public static string Option_4 {
+            get {
+                return ResourceManager.GetString("Option 4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Orphaned Items.
         /// </summary>
         public static string Orphaned_Items {
@@ -3275,6 +3653,42 @@ namespace SerialLoops {
         public static string Pause_menu_Title_ticker_tape {
             get {
                 return ResourceManager.GetString("Pause menu Title ticker tape", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Piece 1.
+        /// </summary>
+        public static string Piece_1 {
+            get {
+                return ResourceManager.GetString("Piece 1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Piece 2.
+        /// </summary>
+        public static string Piece_2 {
+            get {
+                return ResourceManager.GetString("Piece 2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Piece 3.
+        /// </summary>
+        public static string Piece_3 {
+            get {
+                return ResourceManager.GetString("Piece 3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Piece 4.
+        /// </summary>
+        public static string Piece_4 {
+            get {
+                return ResourceManager.GetString("Piece 4", resourceCulture);
             }
         }
         
@@ -4199,6 +4613,24 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Scene.
+        /// </summary>
+        public static string Scene {
+            get {
+                return ResourceManager.GetString("Scene", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scenes to Skip.
+        /// </summary>
+        public static string Scenes_to_Skip {
+            get {
+                return ResourceManager.GetString("Scenes to Skip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Screen Position.
         /// </summary>
         public static string Screen_Position {
@@ -4244,11 +4676,38 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Script Section.
+        /// </summary>
+        public static string Script_Section {
+            get {
+                return ResourceManager.GetString("Script Section", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Scripts.
         /// </summary>
         public static string Scripts {
             get {
                 return ResourceManager.GetString("Scripts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scroll Direction.
+        /// </summary>
+        public static string Scroll_Direction {
+            get {
+                return ResourceManager.GetString("Scroll Direction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scroll Speed.
+        /// </summary>
+        public static string Scroll_Speed {
+            get {
+                return ResourceManager.GetString("Scroll Speed", resourceCulture);
             }
         }
         
@@ -4469,6 +4928,15 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Set.
+        /// </summary>
+        public static string Set {
+            get {
+                return ResourceManager.GetString("Set", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Set BGM loop info.
         /// </summary>
         public static string Set_BGM_loop_info {
@@ -4483,6 +4951,15 @@ namespace SerialLoops {
         public static string Set_BGM_volume {
             get {
                 return ResourceManager.GetString("Set BGM volume", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set/Clear.
+        /// </summary>
+        public static string Set_Clear {
+            get {
+                return ResourceManager.GetString("Set/Clear", resourceCulture);
             }
         }
         
@@ -4510,6 +4987,15 @@ namespace SerialLoops {
         public static string SFXs {
             get {
                 return ResourceManager.GetString("SFXs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show.
+        /// </summary>
+        public static string Show {
+            get {
+                return ResourceManager.GetString("Show", resourceCulture);
             }
         }
         
@@ -4546,6 +5032,15 @@ namespace SerialLoops {
         public static string Skip_Update {
             get {
                 return ResourceManager.GetString("Skip Update", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sound.
+        /// </summary>
+        public static string Sound {
+            get {
+                return ResourceManager.GetString("Sound", resourceCulture);
             }
         }
         
@@ -4609,6 +5104,42 @@ namespace SerialLoops {
         public static string Sprite {
             get {
                 return ResourceManager.GetString("Sprite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sprite Entrance Transition.
+        /// </summary>
+        public static string Sprite_Entrance_Transition {
+            get {
+                return ResourceManager.GetString("Sprite Entrance Transition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sprite Exit/Move Transition.
+        /// </summary>
+        public static string Sprite_Exit_Move_Transition {
+            get {
+                return ResourceManager.GetString("Sprite Exit/Move Transition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sprite Layer.
+        /// </summary>
+        public static string Sprite_Layer {
+            get {
+                return ResourceManager.GetString("Sprite Layer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sprite Shake.
+        /// </summary>
+        public static string Sprite_Shake {
+            get {
+                return ResourceManager.GetString("Sprite Shake", resourceCulture);
             }
         }
         
@@ -4757,6 +5288,24 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Text Entrance Effect.
+        /// </summary>
+        public static string Text_Entrance_Effect {
+            get {
+                return ResourceManager.GetString("Text Entrance Effect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Text Speed.
+        /// </summary>
+        public static string Text_Speed {
+            get {
+                return ResourceManager.GetString("Text Speed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Text Timer.
         /// </summary>
         public static string Text_Timer {
@@ -4766,11 +5315,29 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Text Voice Font.
+        /// </summary>
+        public static string Text_Voice_Font {
+            get {
+                return ResourceManager.GetString("Text Voice Font", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The changes made will require Serial Loops to be restarted. Is that okay?.
         /// </summary>
         public static string The_changes_made_will_require_Serial_Loops_to_be_restarted__Is_that_okay_ {
             get {
                 return ResourceManager.GetString("The changes made will require Serial Loops to be restarted. Is that okay?", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Time (Frames).
+        /// </summary>
+        public static string Time__Frames_ {
+            get {
+                return ResourceManager.GetString("Time (Frames)", resourceCulture);
             }
         }
         
@@ -5073,6 +5640,15 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unknown.
+        /// </summary>
+        public static string Unknown {
+            get {
+                return ResourceManager.GetString("Unknown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unknown 03.
         /// </summary>
         public static string Unknown_03 {
@@ -5132,6 +5708,42 @@ namespace SerialLoops {
         public static string Unknown_Extras_Short___0_ {
             get {
                 return ResourceManager.GetString("Unknown Extras Short: {0}", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to unknown01.
+        /// </summary>
+        public static string unknown01 {
+            get {
+                return ResourceManager.GetString("unknown01", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to unknown02.
+        /// </summary>
+        public static string unknown02 {
+            get {
+                return ResourceManager.GetString("unknown02", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to unknown03.
+        /// </summary>
+        public static string unknown03 {
+            get {
+                return ResourceManager.GetString("unknown03", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to unknown04.
+        /// </summary>
+        public static string unknown04 {
+            get {
+                return ResourceManager.GetString("unknown04", resourceCulture);
             }
         }
         
@@ -5199,6 +5811,15 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Vertical Intensity.
+        /// </summary>
+        public static string Vertical_Intensity {
+            get {
+                return ResourceManager.GetString("Vertical Intensity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to View &amp;Logs.
         /// </summary>
         public static string View__Logs {
@@ -5217,6 +5838,15 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Visible?.
+        /// </summary>
+        public static string Visible_ {
+            get {
+                return ResourceManager.GetString("Visible?", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Voice.
         /// </summary>
         public static string Voice {
@@ -5231,6 +5861,15 @@ namespace SerialLoops {
         public static string Voice_Font {
             get {
                 return ResourceManager.GetString("Voice Font", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Voice Line.
+        /// </summary>
+        public static string Voice_Line {
+            get {
+                return ResourceManager.GetString("Voice Line", resourceCulture);
             }
         }
         
@@ -5298,6 +5937,15 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Wait Time (Frames).
+        /// </summary>
+        public static string Wait_Time__Frames_ {
+            get {
+                return ResourceManager.GetString("Wait Time (Frames)", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to WAV File.
         /// </summary>
         public static string WAV_File {
@@ -5321,6 +5969,24 @@ namespace SerialLoops {
         public static string While_attempting_to_build___file___0_X3__in_archive__1__was_found_to_be_corrupt__Serial_Loops_can_delete_this_file_from_your_base_directory_automatically_which_may_allow_you_to_load_the_rest_of_the_project__but_any_changes_made_to_that_file_will_be_lost__Alternatively__you_can_attempt_to_edit_the_file_manually_to_fix_it__How_would_you_like_to_proceed__Press_OK_to_proceed_with_deleting_the_file_and_Cancel_to_attempt_to_deal_with_it_manually_ {
             get {
                 return ResourceManager.GetString(@"While attempting to build,  file #{0:X3} in archive {1} was found to be corrupt. Serial Loops can delete this file from your base directory automatically which may allow you to load the rest of the project, but any changes made to that file will be lost. Alternatively, you can attempt to edit the file manually to fix it. How would you like to proceed? Press OK to proceed with deleting the file and Cancel to attempt to deal with it manually.", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to White Space Begin.
+        /// </summary>
+        public static string White_Space_Begin {
+            get {
+                return ResourceManager.GetString("White Space Begin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to White Space End.
+        /// </summary>
+        public static string White_Space_End {
+            get {
+                return ResourceManager.GetString("White Space End", resourceCulture);
             }
         }
         

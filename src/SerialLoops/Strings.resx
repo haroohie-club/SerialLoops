@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="&quot;Kinetic&quot; Background" xml:space="preserve">
+    <value>"Kinetic" Background</value>
+  </data>
   <data name="%" xml:space="preserve">
     <value>%</value>
   </data>
@@ -158,6 +161,10 @@
   </data>
   <data name="Accompanying Character" xml:space="preserve">
     <value>Accompanying Character</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Add</value>
+    <comment>As in add/subtract</comment>
   </data>
   <data name="Add Command" xml:space="preserve">
     <value>Add Command</value>
@@ -231,6 +238,9 @@
   <data name="Background" xml:space="preserve">
     <value>Background</value>
   </data>
+  <data name="Background (CG)" xml:space="preserve">
+    <value>Background (CG)</value>
+  </data>
   <data name="Background music volume options ticker tape" xml:space="preserve">
     <value>Background music volume options ticker tape</value>
   </data>
@@ -273,6 +283,14 @@
   </data>
   <data name="BGMs" xml:space="preserve">
     <value>BGMs</value>
+  </data>
+  <data name="Black Space Begin" xml:space="preserve">
+    <value>Black Space Begin</value>
+    <comment>As on a chessboard</comment>
+  </data>
+  <data name="Black Space End" xml:space="preserve">
+    <value>Black Space End</value>
+    <comment>As on a chessboard</comment>
   </data>
   <data name="Both" xml:space="preserve">
     <value>Both</value>
@@ -362,6 +380,9 @@
   <data name="Check for Updates on Startup" xml:space="preserve">
     <value>Check for Updates on Startup</value>
   </data>
+  <data name="Chess File" xml:space="preserve">
+    <value>Chess File</value>
+  </data>
   <data name="Chess Mode Unlocked message box" xml:space="preserve">
     <value>Chess Mode Unlocked message box</value>
   </data>
@@ -394,6 +415,9 @@
   </data>
   <data name="Clear all commands from the game scenario?\nThis action is irreversible." xml:space="preserve">
     <value>Clear all commands from the game scenario?\nThis action is irreversible.</value>
+  </data>
+  <data name="Clear Block" xml:space="preserve">
+    <value>Clear Block</value>
   </data>
   <data name="Clear Scenario" xml:space="preserve">
     <value>Clear Scenario</value>
@@ -430,6 +454,9 @@
   </data>
   <data name="Collected all Nagato topics message box" xml:space="preserve">
     <value>Collected all Nagato topics message box</value>
+  </data>
+  <data name="Color" xml:space="preserve">
+    <value>Color</value>
   </data>
   <data name="Command" xml:space="preserve">
     <value>Command</value>
@@ -488,11 +515,18 @@
   <data name="Crop &amp; Scale" xml:space="preserve">
     <value>Crop &amp; Scale</value>
   </data>
+  <data name="Cross Space {0}&quot;" xml:space="preserve">
+    <value>Cross Space {0}"</value>
+    <comment>As on a chessboard</comment>
+  </data>
   <data name="Crossfade Time (Frames)" xml:space="preserve">
     <value>Crossfade Time (Frames)</value>
   </data>
   <data name="Ctrl+Scroll - Scale Image" xml:space="preserve">
     <value>Ctrl+Scroll - Scale Image</value>
+  </data>
+  <data name="Custom Color" xml:space="preserve">
+    <value>Custom Color</value>
   </data>
   <data name="Cut" xml:space="preserve">
     <value>Cut</value>
@@ -502,6 +536,9 @@
   </data>
   <data name="Defaults" xml:space="preserve">
     <value>Defaults</value>
+  </data>
+  <data name="Delay (Frames)" xml:space="preserve">
+    <value>Delay (Frames)</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
@@ -539,6 +576,30 @@
   <data name="Dialogue_Text" xml:space="preserve">
     <value>Dialogue Text</value>
   </data>
+  <data name="Disable Lip Flap" xml:space="preserve">
+    <value>Disable Lip Flap</value>
+  </data>
+  <data name="Display Flag 1" xml:space="preserve">
+    <value>Display Flag 1</value>
+  </data>
+  <data name="Display Flag 2" xml:space="preserve">
+    <value>Display Flag 2</value>
+  </data>
+  <data name="Display Flag 3" xml:space="preserve">
+    <value>Display Flag 3</value>
+  </data>
+  <data name="Display Flag 4" xml:space="preserve">
+    <value>Display Flag 4</value>
+  </data>
+  <data name="Display from Bottom" xml:space="preserve">
+    <value>Display from Bottom</value>
+  </data>
+  <data name="Display?" xml:space="preserve">
+    <value>Display?</value>
+  </data>
+  <data name="Don't Clear Text" xml:space="preserve">
+    <value>Don't Clear Text</value>
+  </data>
   <data name="Download from GitHub" xml:space="preserve">
     <value>Download from GitHub</value>
   </data>
@@ -550,6 +611,9 @@
   </data>
   <data name="Draw Starting Point" xml:space="preserve">
     <value>Draw Starting Point</value>
+  </data>
+  <data name="Duration (Frames)" xml:space="preserve">
+    <value>Duration (Frames)</value>
   </data>
   <data name="Edit Save File" xml:space="preserve">
     <value>Edit Save File</value>
@@ -578,17 +642,26 @@
   <data name="Editor Tabs not provided to project creation dialog" xml:space="preserve">
     <value>Editor Tabs not provided to project creation dialog</value>
   </data>
+  <data name="Emote" xml:space="preserve">
+    <value>Emote</value>
+  </data>
   <data name="Emulator Path" xml:space="preserve">
     <value>Emulator Path</value>
   </data>
   <data name="End" xml:space="preserve">
     <value>End</value>
   </data>
+  <data name="End Script Section" xml:space="preserve">
+    <value>End Script Section</value>
+  </data>
   <data name="English" xml:space="preserve">
     <value>English</value>
   </data>
   <data name="Enter subtitle text..." xml:space="preserve">
     <value>Enter subtitle text...</value>
+  </data>
+  <data name="Enter/Exit" xml:space="preserve">
+    <value>Enter/Exit</value>
   </data>
   <data name="Episode 1" xml:space="preserve">
     <value>Episode 1</value>
@@ -637,6 +710,9 @@
   </data>
   <data name="Episode Group" xml:space="preserve">
     <value>Episode Group</value>
+  </data>
+  <data name="Episode Header" xml:space="preserve">
+    <value>Episode Header</value>
   </data>
   <data name="Episode:" xml:space="preserve">
     <value>Episode: </value>
@@ -694,6 +770,21 @@
   </data>
   <data name="Extras unlocked message box" xml:space="preserve">
     <value>Extras unlocked message box</value>
+  </data>
+  <data name="Fade In Percentage" xml:space="preserve">
+    <value>Fade In Percentage</value>
+  </data>
+  <data name="Fade In Time (Frames)" xml:space="preserve">
+    <value>Fade In Time (Frames)</value>
+  </data>
+  <data name="Fade Out Percentage" xml:space="preserve">
+    <value>Fade Out Percentage</value>
+  </data>
+  <data name="Fade Out Time (Frames)" xml:space="preserve">
+    <value>Fade Out Time (Frames)</value>
+  </data>
+  <data name="Fade Time (Frames)" xml:space="preserve">
+    <value>Fade Time (Frames)</value>
   </data>
   <data name="Failed to add parameters for hack file {0} in hack {1}" xml:space="preserve">
     <value>Failed to add parameters for hack file {0} in hack {1}</value>
@@ -896,6 +987,16 @@
   <data name="Hide Unset Flags" xml:space="preserve">
     <value>Hide Unset Flags</value>
   </data>
+  <data name="Highlight Space {0}" xml:space="preserve">
+    <value>Highlight Space {0}</value>
+    <comment>As on a chessboard</comment>
+  </data>
+  <data name="Hold Time (Frames)" xml:space="preserve">
+    <value>Hold Time (Frames)</value>
+  </data>
+  <data name="Horizontal Intensity" xml:space="preserve">
+    <value>Horizontal Intensity</value>
+  </data>
   <data name="ID" xml:space="preserve">
     <value>ID</value>
   </data>
@@ -986,6 +1087,9 @@
   <data name="Loading prompt message box" xml:space="preserve">
     <value>Loading prompt message box</value>
   </data>
+  <data name="Location" xml:space="preserve">
+    <value>Location</value>
+  </data>
   <data name="Loop?" xml:space="preserve">
     <value>Loop?</value>
   </data>
@@ -1025,8 +1129,22 @@
   <data name="Mikuru Time Percentage" xml:space="preserve">
     <value>Mikuru Time Percentage</value>
   </data>
+  <data name="Miss 2 Block" xml:space="preserve">
+    <value>Miss 2 Block</value>
+  </data>
+  <data name="Miss Block" xml:space="preserve">
+    <value>Miss Block</value>
+  </data>
   <data name="Missing:" xml:space="preserve">
     <value>Missing: </value>
+  </data>
+  <data name="Mode" xml:space="preserve">
+    <value>Mode</value>
+    <comment>Sound play mode (start/stop)</comment>
+  </data>
+  <data name="Modify by" xml:space="preserve">
+    <value>Modify by</value>
+    <comment>Expects an amount, i.e. "Modify by +5"</comment>
   </data>
   <data name="Move Command Down" xml:space="preserve">
     <value>Move Command Down</value>
@@ -1036,6 +1154,9 @@
   </data>
   <data name="MP3 files" xml:space="preserve">
     <value>MP3 files</value>
+  </data>
+  <data name="Music" xml:space="preserve">
+    <value>Music</value>
   </data>
   <data name="Music:" xml:space="preserve">
     <value>Music: </value>
@@ -1139,6 +1260,18 @@
   <data name="Optimal Group" xml:space="preserve">
     <value>Optimal Group</value>
   </data>
+  <data name="Option 1" xml:space="preserve">
+    <value>Option 1</value>
+  </data>
+  <data name="Option 2" xml:space="preserve">
+    <value>Option 2</value>
+  </data>
+  <data name="Option 3" xml:space="preserve">
+    <value>Option 3</value>
+  </data>
+  <data name="Option 4" xml:space="preserve">
+    <value>Option 4</value>
+  </data>
   <data name="Orphaned Items" xml:space="preserve">
     <value>Orphaned Items</value>
   </data>
@@ -1180,6 +1313,22 @@
   </data>
   <data name="Pause menu Title ticker tape" xml:space="preserve">
     <value>Pause menu Title ticker tape</value>
+  </data>
+  <data name="Piece 1" xml:space="preserve">
+    <value>Piece 1</value>
+    <comment>Chesspiece</comment>
+  </data>
+  <data name="Piece 2" xml:space="preserve">
+    <value>Piece 2</value>
+    <comment>Chesspiece</comment>
+  </data>
+  <data name="Piece 3" xml:space="preserve">
+    <value>Piece 3</value>
+    <comment>Chesspiece</comment>
+  </data>
+  <data name="Piece 4" xml:space="preserve">
+    <value>Piece 4</value>
+    <comment>Chesspiece</comment>
   </data>
   <data name="Place" xml:space="preserve">
     <value>Place</value>
@@ -1487,6 +1636,12 @@
   <data name="Scenarios" xml:space="preserve">
     <value>Scenarios</value>
   </data>
+  <data name="Scene" xml:space="preserve">
+    <value>Scene</value>
+  </data>
+  <data name="Scenes to Skip" xml:space="preserve">
+    <value>Scenes to Skip</value>
+  </data>
   <data name="Screen Position" xml:space="preserve">
     <value>Screen Position</value>
   </data>
@@ -1499,11 +1654,20 @@
   <data name="Script Position" xml:space="preserve">
     <value>Script Position</value>
   </data>
+  <data name="Script Section" xml:space="preserve">
+    <value>Script Section</value>
+  </data>
   <data name="Script:" xml:space="preserve">
     <value>Script: </value>
   </data>
   <data name="Scripts" xml:space="preserve">
     <value>Scripts</value>
+  </data>
+  <data name="Scroll Direction" xml:space="preserve">
+    <value>Scroll Direction</value>
+  </data>
+  <data name="Scroll Speed" xml:space="preserve">
+    <value>Scroll Speed</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Search</value>
@@ -1578,11 +1742,18 @@
   <data name="Serialized ASM hack" xml:space="preserve">
     <value>Serialized ASM hack</value>
   </data>
+  <data name="Set" xml:space="preserve">
+    <value>Set</value>
+    <comment>As in "set value to"</comment>
+  </data>
   <data name="Set BGM loop info" xml:space="preserve">
     <value>Set BGM loop info</value>
   </data>
   <data name="Set BGM volume" xml:space="preserve">
     <value>Set BGM volume</value>
+  </data>
+  <data name="Set/Clear" xml:space="preserve">
+    <value>Set/Clear</value>
   </data>
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>
@@ -1592,6 +1763,10 @@
   </data>
   <data name="SFXs" xml:space="preserve">
     <value>SFXs</value>
+  </data>
+  <data name="Show" xml:space="preserve">
+    <value>Show</value>
+    <comment>As in show/hide</comment>
   </data>
   <data name="Singularity" xml:space="preserve">
     <value>Singularity</value>
@@ -1604,6 +1779,9 @@
   </data>
   <data name="Skip Update" xml:space="preserve">
     <value>Skip Update</value>
+  </data>
+  <data name="Sound" xml:space="preserve">
+    <value>Sound</value>
   </data>
   <data name="Sound (Options)" xml:space="preserve">
     <value>Sound (Options)</value>
@@ -1625,6 +1803,18 @@
   </data>
   <data name="Sprite" xml:space="preserve">
     <value>Sprite</value>
+  </data>
+  <data name="Sprite Entrance Transition" xml:space="preserve">
+    <value>Sprite Entrance Transition</value>
+  </data>
+  <data name="Sprite Exit/Move Transition" xml:space="preserve">
+    <value>Sprite Exit/Move Transition</value>
+  </data>
+  <data name="Sprite Layer" xml:space="preserve">
+    <value>Sprite Layer</value>
+  </data>
+  <data name="Sprite Shake" xml:space="preserve">
+    <value>Sprite Shake</value>
   </data>
   <data name="Start" xml:space="preserve">
     <value>Start</value>
@@ -1674,11 +1864,23 @@
   <data name="Text Color" xml:space="preserve">
     <value>Text Color</value>
   </data>
+  <data name="Text Entrance Effect" xml:space="preserve">
+    <value>Text Entrance Effect</value>
+  </data>
+  <data name="Text Speed" xml:space="preserve">
+    <value>Text Speed</value>
+  </data>
   <data name="Text Timer" xml:space="preserve">
     <value>Text Timer</value>
   </data>
+  <data name="Text Voice Font" xml:space="preserve">
+    <value>Text Voice Font</value>
+  </data>
   <data name="The changes made will require Serial Loops to be restarted. Is that okay?" xml:space="preserve">
     <value>The changes made will require Serial Loops to be restarted. Is that okay?</value>
+  </data>
+  <data name="Time (Frames)" xml:space="preserve">
+    <value>Time (Frames)</value>
   </data>
   <data name="Times" xml:space="preserve">
     <value>Times</value>
@@ -1779,6 +1981,9 @@
   <data name="Unable to select asset URL for download" xml:space="preserve">
     <value>Unable to select asset URL for download</value>
   </data>
+  <data name="Unknown" xml:space="preserve">
+    <value>Unknown</value>
+  </data>
   <data name="Unknown 03" xml:space="preserve">
     <value>Unknown 03</value>
   </data>
@@ -1799,6 +2004,18 @@
   </data>
   <data name="Unknown Extras Short: {0}" xml:space="preserve">
     <value>Unknown Extras Short: {0}</value>
+  </data>
+  <data name="unknown01" xml:space="preserve">
+    <value>unknown01</value>
+  </data>
+  <data name="unknown02" xml:space="preserve">
+    <value>unknown02</value>
+  </data>
+  <data name="unknown03" xml:space="preserve">
+    <value>unknown03</value>
+  </data>
+  <data name="unknown04" xml:space="preserve">
+    <value>unknown04</value>
   </data>
   <data name="Unseen Only" xml:space="preserve">
     <value>Unseen Only</value>
@@ -1821,17 +2038,26 @@
   <data name="Value" xml:space="preserve">
     <value>Value</value>
   </data>
+  <data name="Vertical Intensity" xml:space="preserve">
+    <value>Vertical Intensity</value>
+  </data>
   <data name="View &amp;Logs" xml:space="preserve">
     <value>View &amp;Logs</value>
   </data>
   <data name="View Logs" xml:space="preserve">
     <value>View Logs</value>
   </data>
+  <data name="Visible?" xml:space="preserve">
+    <value>Visible?</value>
+  </data>
   <data name="Voice" xml:space="preserve">
     <value>Voice</value>
   </data>
   <data name="Voice Font" xml:space="preserve">
     <value>Voice Font</value>
+  </data>
+  <data name="Voice Line" xml:space="preserve">
+    <value>Voice Line</value>
   </data>
   <data name="Voiced dialogue volume options ticker tape" xml:space="preserve">
     <value>Voiced dialogue volume options ticker tape</value>
@@ -1854,6 +2080,9 @@
   <data name="Vorbis files" xml:space="preserve">
     <value>Vorbis files</value>
   </data>
+  <data name="Wait Time (Frames)" xml:space="preserve">
+    <value>Wait Time (Frames)</value>
+  </data>
   <data name="WAV File" xml:space="preserve">
     <value>WAV File</value>
   </data>
@@ -1862,6 +2091,14 @@
   </data>
   <data name="While attempting to build,  file #{0:X3} in archive {1} was found to be corrupt. Serial Loops can delete this file from your base directory automatically which may allow you to load the rest of the project, but any changes made to that file will be lost. Alternatively, you can attempt to edit the file manually to fix it. How would you like to proceed? Press OK to proceed with deleting the file and Cancel to attempt to deal with it manually." xml:space="preserve">
     <value>While attempting to build,  file #{0:X3} in archive {1} was found to be corrupt. Serial Loops can delete this file from your base directory automatically which may allow you to load the rest of the project, but any changes made to that file will be lost. Alternatively, you can attempt to edit the file manually to fix it. How would you like to proceed? Press OK to proceed with deleting the file and Cancel to attempt to deal with it manually.</value>
+  </data>
+  <data name="White Space Begin" xml:space="preserve">
+    <value>White Space Begin</value>
+    <comment>As on a chessboard</comment>
+  </data>
+  <data name="White Space End" xml:space="preserve">
+    <value>White Space End</value>
+    <comment>As on a chessboard</comment>
   </data>
   <data name="Worst Group" xml:space="preserve">
     <value>Worst Group</value>

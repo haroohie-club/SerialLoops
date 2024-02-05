@@ -325,16 +325,16 @@ namespace SerialLoops.Lib.Script
                                 parameters.Add(new OptionScriptParameter(localize("Option 4"), eventFile.ChoicesSection.Objects[parameter]));
                                 break;
                             case 4:
-                                parameters.Add(new ShortScriptParameter(localize("unknown08"), parameter));
+                                parameters.Add(new ShortScriptParameter(localize("Display Flag 1"), parameter));
                                 break;
                             case 5:
-                                parameters.Add(new ShortScriptParameter(localize("unknown0A"), parameter));
+                                parameters.Add(new ShortScriptParameter(localize("Display Flag 2"), parameter));
                                 break;
                             case 6:
-                                parameters.Add(new ShortScriptParameter(localize("unknown0C"), parameter));
+                                parameters.Add(new ShortScriptParameter(localize("Display Flag 3"), parameter));
                                 break;
                             case 7:
-                                parameters.Add(new ShortScriptParameter(localize("unknown0E"), parameter));
+                                parameters.Add(new ShortScriptParameter(localize("Display Flag 4"), parameter));
                                 break;
                         }
                         break;
@@ -470,7 +470,7 @@ namespace SerialLoops.Lib.Script
                                 parameters.Add(new BgScriptParameter(localize("Background"), (BackgroundItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == parameter), kinetic: false));
                                 break;
                             case 1:
-                                parameters.Add(new BgScriptParameter(localize("Background (Temp/CG)"), (BackgroundItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == parameter), kinetic: false));
+                                parameters.Add(new BgScriptParameter(localize("Background (CG)"), (BackgroundItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == parameter), kinetic: false));
                                 break;
                             case 2:
                                 parameters.Add(new ShortScriptParameter(localize("Fade Time (Frames)"), parameter));
@@ -635,13 +635,13 @@ namespace SerialLoops.Lib.Script
                     case CommandVerb.CHESS_TOGGLE_HIGHLIGHT:
                         if (parameter != -1)
                         {
-                            parameters.Add(new ChessSpaceScriptParameter(localize($"Highlight Space {i}"), parameter));
+                            parameters.Add(new ChessSpaceScriptParameter(string.Format(localize("Highlight Space {0}"), i), parameter));
                         }
                         break;
                     case CommandVerb.CHESS_TOGGLE_CROSS:
                         if (parameter != -1)
                         {
-                            parameters.Add(new ChessSpaceScriptParameter(localize($"Cross Space {i}"), parameter));
+                            parameters.Add(new ChessSpaceScriptParameter(string.Format(localize("Cross Space {0}"), i), parameter));
                         }
                         break;
                     case CommandVerb.EPHEADER:

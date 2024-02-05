@@ -810,7 +810,7 @@ namespace SerialLoops.Lib
             return Items.FirstOrDefault(i => name.Contains(" - ") ? i.Name == name.Split(" - ")[0] : i.DisplayName == name);
         }
 
-        public static (Project Project, LoadProjectResult Result) OpenProject(string projFile, Config config, ILogger log, IProgressTracker tracker)
+        public static (Project Project, LoadProjectResult Result) OpenProject(string projFile, Config config, Func<string, string> localize, ILogger log, IProgressTracker tracker)
         {
             log.Log($"Loading project from '{projFile}'...");
             if (!File.Exists(projFile))
@@ -822,6 +822,7 @@ namespace SerialLoops.Lib
             {
                 tracker.Focus($"{Path.GetFileNameWithoutExtension(projFile)} Project Data", 1);
                 Project project = JsonSerializer.Deserialize<Project>(File.ReadAllText(projFile), SERIALIZER_OPTIONS);
+                project.Localize = localize;
                 tracker.Finished++;
                 LoadProjectResult result = project.Load(config, log, tracker);
                 if (result.State == LoadProjectState.LOOSELEAF_FILES)

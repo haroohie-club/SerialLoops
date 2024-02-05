@@ -546,7 +546,7 @@ namespace SerialLoops
         {
             Project.LoadProjectResult result = new(Project.LoadProjectState.FAILED); // start us off with a failure
             LoopyProgressTracker tracker = new();
-            _ = new ProgressDialog(() => (OpenProject, result) = Project.OpenProject(path, CurrentConfig, Log, tracker),
+            _ = new ProgressDialog(() => (OpenProject, result) = Project.OpenProject(path, CurrentConfig, s => Application.Instance.Localize(null, s), Log, tracker),
                 () => { }, tracker, Application.Instance.Localize(this, "Loading Project"));
             if (OpenProject is not null && result.State == Project.LoadProjectState.LOOSELEAF_FILES)
             {
