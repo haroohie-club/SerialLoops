@@ -117,12 +117,12 @@ namespace SerialLoops.Dialogs
                         [
                             new DropDownOption(
                                 [
-                                    ("en-US", "English (United States)"),
                                     ("de", "Deutsch"),
                                     ("en-GB", "English (United Kingdom)"),
+                                    ("en-US", "English (United States)"),
                                     ("it", "Italiano"),
-                                    ("ja", "日本語"),
                                     ("pt-BR", "Português brasileiro"),
+                                    ("ja", "日本語"),
                                     ("zh-Hans", "中文（简化字）"),
                                 ])
                             {
