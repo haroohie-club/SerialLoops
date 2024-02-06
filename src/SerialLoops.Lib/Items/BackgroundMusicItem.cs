@@ -80,7 +80,8 @@ namespace SerialLoops.Lib.Items
             }
             catch (Exception ex)
             {
-                log.LogException($"Failed converting audio file to WAV.", ex);
+                log.LogException("Failed converting audio file to WAV.", ex);
+                log.LogWarning(audioFile);
                 return;
             }
 
@@ -98,7 +99,8 @@ namespace SerialLoops.Lib.Items
             };
             if (audio is null)
             {
-                log.LogError($"Invalid audio file '{audioFile}' selected.");
+                log.LogError("Invalid audio file selected.");
+                log.LogWarning(audioFile);
                 return;
             }
             if (audio.WaveFormat.SampleRate > SoundItem.MAX_SAMPLERATE)
@@ -174,7 +176,7 @@ namespace SerialLoops.Lib.Items
 
         public IWaveProvider GetWaveProvider(ILogger log, bool loop)
         {
-            byte[] adxBytes = Array.Empty<byte>();
+            byte[] adxBytes = [];
             try
             {
                 adxBytes = File.ReadAllBytes(_bgmFile);
@@ -183,11 +185,13 @@ namespace SerialLoops.Lib.Items
             {
                 if (!File.Exists(_bgmFile))
                 {
-                    log.LogError($"Failed to load BGM file {_bgmFile}: file not found.");
+                    log.LogError("Failed to load BGM file: file not found.");
+                    log.LogWarning(BgmFile);
                 }
                 else
                 {
-                    log.LogError($"Failed to load BGM file {_bgmFile}: file invalid.");
+                    log.LogError("Failed to load BGM file: file invalid.");
+                    log.LogWarning(BgmFile);
                 }
             }
             try
@@ -198,7 +202,8 @@ namespace SerialLoops.Lib.Items
             }
             catch (Exception ex)
             {
-                log.LogException($"Failed to read BGM file {_bgmFile}; falling back to original...", ex);
+                log.LogException($"Failed to read BGM file; falling back to original...", ex);
+                log.LogWarning(BgmFile);
 
                 try
                 {
@@ -218,7 +223,7 @@ namespace SerialLoops.Lib.Items
                 }
                 catch (Exception nestedException)
                 {
-                    log.LogException($"Failed to decode original file too, giving up!", nestedException);
+                    log.LogException("Failed to decode original file too, giving up!", nestedException);
                     return null;
                 }
             }

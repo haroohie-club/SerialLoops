@@ -332,6 +332,9 @@
   <data name="Building:" xml:space="preserve">
     <value>Building:</value>
   </data>
+  <data name="Caching" xml:space="preserve">
+    <value>Caching</value>
+  </data>
   <data name="Caching BGM" xml:space="preserve">
     <value>Caching BGM</value>
   </data>
@@ -413,6 +416,9 @@
   <data name="Chokuretsu Save File" xml:space="preserve">
     <value>Chokuretsu Save File</value>
   </data>
+  <data name="Cleaning Iterative Directory" xml:space="preserve">
+    <value>Cleaning Iterative Directory</value>
+  </data>
   <data name="Clear all commands from the game scenario?\nThis action is irreversible." xml:space="preserve">
     <value>Clear all commands from the game scenario?\nThis action is irreversible.</value>
   </data>
@@ -479,6 +485,9 @@
   <data name="Companion selection description" xml:space="preserve">
     <value>Companion selection description</value>
   </data>
+  <data name="Compiled file {0} does not exist!" xml:space="preserve">
+    <value>Compiled file {0} does not exist!</value>
+  </data>
   <data name="Conditional" xml:space="preserve">
     <value>Conditional</value>
   </data>
@@ -494,8 +503,20 @@
   <data name="Converting frames..." xml:space="preserve">
     <value>Converting frames...</value>
   </data>
+  <data name="Converting from MP3..." xml:space="preserve">
+    <value>Converting from MP3...</value>
+  </data>
+  <data name="Converting from Vorbis..." xml:space="preserve">
+    <value>Converting from Vorbis...</value>
+  </data>
   <data name="Copy" xml:space="preserve">
     <value>Copy</value>
+  </data>
+  <data name="Copying Archives to Iterative Originals" xml:space="preserve">
+    <value>Copying Archives to Iterative Originals</value>
+  </data>
+  <data name="Copying Files" xml:space="preserve">
+    <value>Copying Files</value>
   </data>
   <data name="Corrupted File Detected!" xml:space="preserve">
     <value>Corrupted File Detected!</value>
@@ -505,6 +526,9 @@
   </data>
   <data name="Create New Project" xml:space="preserve">
     <value>Create New Project</value>
+  </data>
+  <data name="Creating Directories" xml:space="preserve">
+    <value>Creating Directories</value>
   </data>
   <data name="Creating Patch" xml:space="preserve">
     <value>Creating Patch</value>
@@ -548,6 +572,9 @@
   </data>
   <data name="devkitARM Docker Tag" xml:space="preserve">
     <value>devkitARM Docker Tag</value>
+  </data>
+  <data name="DevkitARM must be supplied in order to build!" xml:space="preserve">
+    <value>DevkitARM must be supplied in order to build!</value>
   </data>
   <data name="devkitARM Path" xml:space="preserve">
     <value>devkitARM Path</value>
@@ -606,11 +633,23 @@
   <data name="Download release from GitHub" xml:space="preserve">
     <value>Download release from GitHub</value>
   </data>
+  <data name="Downsampling..." xml:space="preserve">
+    <value>Downsampling...</value>
+  </data>
   <data name="Draw Pathing Map" xml:space="preserve">
     <value>Draw Pathing Map</value>
   </data>
   <data name="Draw Starting Point" xml:space="preserve">
     <value>Draw Starting Point</value>
+  </data>
+  <data name="Drawing bottom screen texture..." xml:space="preserve">
+    <value>Drawing bottom screen texture...</value>
+  </data>
+  <data name="Drawing textures..." xml:space="preserve">
+    <value>Drawing textures...</value>
+  </data>
+  <data name="Drawing top screen tiles..." xml:space="preserve">
+    <value>Drawing top screen tiles...</value>
   </data>
   <data name="Duration (Frames)" xml:space="preserve">
     <value>Duration (Frames)</value>
@@ -647,6 +686,9 @@
   </data>
   <data name="Emulator Path" xml:space="preserve">
     <value>Emulator Path</value>
+  </data>
+  <data name="Encoding" xml:space="preserve">
+    <value>Encoding</value>
   </data>
   <data name="End" xml:space="preserve">
     <value>End</value>
@@ -717,6 +759,10 @@
   <data name="Episode:" xml:space="preserve">
     <value>Episode: </value>
   </data>
+  <data name="EPISODE: {0}" xml:space="preserve">
+    <value>EPISODE: {0}</value>
+    <comment>Should match the game's translation for this (e.g. for Japanese this should still be EPISODE: {0})</comment>
+  </data>
   <data name="Episode_Number" xml:space="preserve">
     <value>Episode Number</value>
   </data>
@@ -729,6 +775,12 @@
   <data name="Erase data options title" xml:space="preserve">
     <value>Erase data options title</value>
   </data>
+  <data name="Error getting script command tree for script {0} ({1})" xml:space="preserve">
+    <value>Error getting script command tree for script {0} ({1})</value>
+  </data>
+  <data name="Error pruning labels!" xml:space="preserve">
+    <value>Error pruning labels!</value>
+  </data>
   <data name="Error reading save file." xml:space="preserve">
     <value>Error reading save file.</value>
   </data>
@@ -737,6 +789,9 @@
   </data>
   <data name="Error: duplicate hack detected! A hack with the same name has already been imported." xml:space="preserve">
     <value>Error: duplicate hack detected! A hack with the same name has already been imported.</value>
+  </data>
+  <data name="Exception occurred while parsing projects_cache.json!" xml:space="preserve">
+    <value>Exception occurred while parsing projects_cache.json!</value>
   </data>
   <data name="Export" xml:space="preserve">
     <value>Export</value>
@@ -786,14 +841,68 @@
   <data name="Fade Time (Frames)" xml:space="preserve">
     <value>Fade Time (Frames)</value>
   </data>
+  <data name="Failed attempting to cache audio file" xml:space="preserve">
+    <value>Failed attempting to cache audio file</value>
+  </data>
+  <data name="Failed converting audio file to WAV." xml:space="preserve">
+    <value>Failed converting audio file to WAV.</value>
+  </data>
+  <data name="Failed copying file '{0}' to base and iterative directories at path '{1}'" xml:space="preserve">
+    <value>Failed copying file '{0}' to base and iterative directories at path '{1}'</value>
+  </data>
+  <data name="Failed downsampling audio file." xml:space="preserve">
+    <value>Failed downsampling audio file.</value>
+  </data>
+  <data name="Failed encoding audio file to ADX." xml:space="preserve">
+    <value>Failed encoding audio file to ADX.</value>
+  </data>
+  <data name="Failed replacing animation file {0} in grp.bin with file '{1}'" xml:space="preserve">
+    <value>Failed replacing animation file {0} in grp.bin with file '{1}'</value>
+  </data>
+  <data name="Failed replacing file {0} in evt.bin with file '{1}'" xml:space="preserve">
+    <value>Failed replacing file {0} in evt.bin with file '{1}'</value>
+  </data>
+  <data name="Failed replacing graphics file {0} with file '{1}'" xml:space="preserve">
+    <value>Failed replacing graphics file {0} with file '{1}'</value>
+  </data>
+  <data name="Failed replacing source file {0} in dat.bin with file '{1}'" xml:space="preserve">
+    <value>Failed replacing source file {0} in dat.bin with file '{1}'</value>
+  </data>
+  <data name="Failed replacing source file {0} in evt.bin with file '{1}'" xml:space="preserve">
+    <value>Failed replacing source file {0} in evt.bin with file '{1}'</value>
+  </data>
+  <data name="Failed restoring BGM file." xml:space="preserve">
+    <value>Failed restoring BGM file.</value>
+  </data>
   <data name="Failed to add parameters for hack file {0} in hack {1}" xml:space="preserve">
     <value>Failed to add parameters for hack file {0} in hack {1}</value>
   </data>
   <data name="Failed to apply the following hacks to the ROM:\n{0}\n\nPlease check the log file for more information.\n\nIn order to preserve state, no hacks were applied." xml:space="preserve">
     <value>Failed to apply the following hacks to the ROM:\n{0}\n\nPlease check the log file for more information.\n\nIn order to preserve state, no hacks were applied.</value>
   </data>
+  <data name="Failed to calculate graph edges!" xml:space="preserve">
+    <value>Failed to calculate graph edges!</value>
+  </data>
   <data name="Failed to check for updates! (Endpoint: {0})" xml:space="preserve">
     <value>Failed to check for updates! (Endpoint: {0})</value>
+  </data>
+  <data name="Failed to clean iterative directory" xml:space="preserve">
+    <value>Failed to clean iterative directory</value>
+  </data>
+  <data name="Failed to copy newly built archives to the iterative originals directory" xml:space="preserve">
+    <value>Failed to copy newly built archives to the iterative originals directory</value>
+  </data>
+  <data name="Failed to create directory on specified path!" xml:space="preserve">
+    <value>Failed to create directory on specified path!</value>
+  </data>
+  <data name="Failed to decode original file too, giving up!" xml:space="preserve">
+    <value>Failed to decode original file too, giving up!</value>
+  </data>
+  <data name="Failed to delete file '{0}'" xml:space="preserve">
+    <value>Failed to delete file '{0}'</value>
+  </data>
+  <data name="Failed to delete files for hack '{0}' -- this hack is likely applied in the ROM base and can't be disabled." xml:space="preserve">
+    <value>Failed to delete files for hack '{0}' -- this hack is likely applied in the ROM base and can't be disabled.</value>
   </data>
   <data name="Failed to export background {0} to file {1}" xml:space="preserve">
     <value>Failed to export background {0} to file {1}</value>
@@ -819,6 +928,12 @@
   <data name="Failed to insert ARM9 assembly hacks" xml:space="preserve">
     <value>Failed to insert ARM9 assembly hacks</value>
   </data>
+  <data name="Failed to load BGM file: file invalid." xml:space="preserve">
+    <value>Failed to load BGM file: file invalid.</value>
+  </data>
+  <data name="Failed to load BGM file: file not found." xml:space="preserve">
+    <value>Failed to load BGM file: file not found.</value>
+  </data>
   <data name="Failed to load cached data" xml:space="preserve">
     <value>Failed to load cached data</value>
   </data>
@@ -828,8 +943,17 @@
   <data name="Failed to load editor controls!" xml:space="preserve">
     <value>Failed to load editor controls!</value>
   </data>
+  <data name="Failed to load voice file: file invalid." xml:space="preserve">
+    <value>Failed to load voice file: file invalid.</value>
+  </data>
+  <data name="Failed to load voice file: file not found." xml:space="preserve">
+    <value>Failed to load voice file: file not found.</value>
+  </data>
   <data name="Failed to read ARM9 from '{0}'" xml:space="preserve">
     <value>Failed to read ARM9 from '{0}'</value>
+  </data>
+  <data name="Failed to read BGM file; falling back to original..." xml:space="preserve">
+    <value>Failed to read BGM file; falling back to original...</value>
   </data>
   <data name="Failed to replace background {0} with file {1}" xml:space="preserve">
     <value>Failed to replace background {0} with file {1}</value>
@@ -852,11 +976,20 @@
   <data name="Failed to start emulator" xml:space="preserve">
     <value>Failed to start emulator</value>
   </data>
+  <data name="Failed to unpack ROM" xml:space="preserve">
+    <value>Failed to unpack ROM</value>
+  </data>
   <data name="Failed to update preview!" xml:space="preserve">
     <value>Failed to update preview!</value>
   </data>
   <data name="Failed to write ARM9 to disk" xml:space="preserve">
     <value>Failed to write ARM9 to disk</value>
+  </data>
+  <data name="Failed to write include files to disk." xml:space="preserve">
+    <value>Failed to write include files to disk.</value>
+  </data>
+  <data name="Failed to write NitroPacker NDS project file to disk" xml:space="preserve">
+    <value>Failed to write NitroPacker NDS project file to disk</value>
   </data>
   <data name="Fast Forward" xml:space="preserve">
     <value>Fast Forward</value>
@@ -933,6 +1066,12 @@
   </data>
   <data name="Game Title" xml:space="preserve">
     <value>Game Title</value>
+  </data>
+  <data name="gcc exited with code {0}" xml:space="preserve">
+    <value>gcc exited with code {0}</value>
+  </data>
+  <data name="gcc not found at '{0}'" xml:space="preserve">
+    <value>gcc not found at '{0}'</value>
   </data>
   <data name="German" xml:space="preserve">
     <value>German</value>
@@ -1012,6 +1151,9 @@
   <data name="Include lip flap animation?" xml:space="preserve">
     <value>Include lip flap animation?</value>
   </data>
+  <data name="Invalid audio file selected." xml:space="preserve">
+    <value>Invalid audio file selected.</value>
+  </data>
   <data name="Invalid item type!" xml:space="preserve">
     <value>Invalid item type!</value>
   </data>
@@ -1081,11 +1223,23 @@
   <data name="Load this save prompt" xml:space="preserve">
     <value>Load this save prompt</value>
   </data>
+  <data name="Loading Archives (dat.bin)" xml:space="preserve">
+    <value>Loading Archives (dat.bin)</value>
+  </data>
+  <data name="Loading Archives (evt.bin)" xml:space="preserve">
+    <value>Loading Archives (evt.bin)</value>
+  </data>
+  <data name="Loading Archives (grp.bin)" xml:space="preserve">
+    <value>Loading Archives (grp.bin)</value>
+  </data>
   <data name="Loading Project" xml:space="preserve">
     <value>Loading Project</value>
   </data>
   <data name="Loading prompt message box" xml:space="preserve">
     <value>Loading prompt message box</value>
+  </data>
+  <data name="Loading:" xml:space="preserve">
+    <value>Loading: </value>
   </data>
   <data name="Location" xml:space="preserve">
     <value>Location</value>
@@ -1203,6 +1357,9 @@
   <data name="New Update Available: {0}" xml:space="preserve">
     <value>New Update Available: {0}</value>
   </data>
+  <data name="NitroPacker failed to pack ROM with exception" xml:space="preserve">
+    <value>NitroPacker failed to pack ROM with exception</value>
+  </data>
   <data name="No" xml:space="preserve">
     <value>No</value>
   </data>
@@ -1242,11 +1399,20 @@
   <data name="Number of Singularities" xml:space="preserve">
     <value>Number of Singularities</value>
   </data>
+  <data name="objcopy exited with code {0}" xml:space="preserve">
+    <value>objcopy exited with code {0}</value>
+  </data>
+  <data name="objcopy not found at '{0}'" xml:space="preserve">
+    <value>objcopy not found at '{0}'</value>
+  </data>
   <data name="Off" xml:space="preserve">
     <value>Off</value>
   </data>
   <data name="On" xml:space="preserve">
     <value>On</value>
+  </data>
+  <data name="One or more archives is null." xml:space="preserve">
+    <value>One or more archives is null.</value>
   </data>
   <data name="Open Chokuretsu Save File" xml:space="preserve">
     <value>Open Chokuretsu Save File</value>
@@ -1283,6 +1449,9 @@
   </data>
   <data name="Overwrite save prompt message box" xml:space="preserve">
     <value>Overwrite save prompt message box</value>
+  </data>
+  <data name="Packing ROM" xml:space="preserve">
+    <value>Packing ROM</value>
   </data>
   <data name="Palette" xml:space="preserve">
     <value>Palette</value>
@@ -1519,6 +1688,9 @@
   <data name="Replacing BGM" xml:space="preserve">
     <value>Replacing BGM</value>
   </data>
+  <data name="Replacing Files" xml:space="preserve">
+    <value>Replacing Files</value>
+  </data>
   <data name="Replacing {0}..." xml:space="preserve">
     <value>Replacing {0}...</value>
   </data>
@@ -1754,6 +1926,18 @@
   </data>
   <data name="Set/Clear" xml:space="preserve">
     <value>Set/Clear</value>
+  </data>
+  <data name="Setting CG single image..." xml:space="preserve">
+    <value>Setting CG single image...</value>
+  </data>
+  <data name="Setting item image..." xml:space="preserve">
+    <value>Setting item image...</value>
+  </data>
+  <data name="Setting palettes and images..." xml:space="preserve">
+    <value>Setting palettes and images...</value>
+  </data>
+  <data name="Setting screen image..." xml:space="preserve">
+    <value>Setting screen image...</value>
   </data>
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>
@@ -2020,6 +2204,9 @@
   <data name="Unseen Only" xml:space="preserve">
     <value>Unseen Only</value>
   </data>
+  <data name="Unsure what to do with file '{0}'" xml:space="preserve">
+    <value>Unsure what to do with file '{0}'</value>
+  </data>
   <data name="Unvoiced dialogue volume options ticker tape" xml:space="preserve">
     <value>Unvoiced dialogue volume options ticker tape</value>
   </data>
@@ -2102,6 +2289,16 @@
   </data>
   <data name="Worst Group" xml:space="preserve">
     <value>Worst Group</value>
+  </data>
+  <data name="Writing Includes" xml:space="preserve">
+    <value>Writing Includes</value>
+    <comment>"Includes" here is a noun, as in "an 'includes' file"</comment>
+  </data>
+  <data name="Writing NitroPacker Project File" xml:space="preserve">
+    <value>Writing NitroPacker Project File</value>
+  </data>
+  <data name="Writing Replaced Archives" xml:space="preserve">
+    <value>Writing Replaced Archives</value>
   </data>
   <data name="XDelta patch" xml:space="preserve">
     <value>XDelta patch</value>

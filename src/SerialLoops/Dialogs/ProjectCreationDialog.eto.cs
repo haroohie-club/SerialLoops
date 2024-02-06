@@ -172,7 +172,7 @@ namespace SerialLoops
             {
                 NewProject = new(_nameBox.Text, _languageDropDown.Items[_languageDropDown.SelectedIndex].Key, Config, s => Application.Instance.Localize(null, s), Log);
                 string romPath = _romPath.Text;
-                LoopyProgressTracker tracker = new();
+                LoopyProgressTracker tracker = new(s => Application.Instance.Localize(null, s));
                 ProgressDialog _ = new(() => 
                 {
                     ((IProgressTracker)tracker).Focus(Application.Instance.Localize(this, "Creating Project"), 1);

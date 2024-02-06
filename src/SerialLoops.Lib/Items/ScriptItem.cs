@@ -49,7 +49,7 @@ namespace SerialLoops.Lib.Items
             }
             catch (Exception ex)
             {
-                log.LogException($"Error getting script command tree for script {DisplayName} ({Name})", ex);
+                log.LogException(string.Format(project.Localize("Error getting script command tree for script {0} ({1})"), DisplayName, Name), ex);
                 return null;
             }
         }
@@ -143,7 +143,8 @@ namespace SerialLoops.Lib.Items
             }
             catch (Exception ex)
             {
-                log.LogException($"Failed to calculate graph edges for script {DisplayName} ({Name}).", ex);
+                log.LogException("Failed to calculate graph edges!", ex);
+                log.Log($"Script: {Name}, DisplayName: {DisplayName}");
             }
         }
 
@@ -755,7 +756,8 @@ namespace SerialLoops.Lib.Items
                 }
                 catch (Exception ex)
                 {
-                    log.LogException($"Error pruning labels for script {DisplayName} ({Name})", ex);
+                    log.LogException("Error pruning labels!", ex);
+                    log.LogWarning($"Script: {Name}, DisplayName: {DisplayName}");
                 }
             }
         }

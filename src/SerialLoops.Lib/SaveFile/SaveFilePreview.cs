@@ -7,20 +7,14 @@ using System;
 
 namespace SerialLoops.Lib.SaveFile
 {
-    public class SaveFilePreview
+    public class SaveFilePreview(SaveSlotData slotData, Project project)
     {
         private const int WIDTH = 250;
         private const int HEIGHT = 42;
         private const float SCALE = 2f;
 
-        private SaveSlotData _slotData;
-        private Project _project;
-
-        public SaveFilePreview(SaveSlotData slotData, Project project)
-        {
-            _slotData = slotData;
-            _project = project;
-        }
+        private readonly SaveSlotData _slotData = slotData;
+        private readonly Project _project = project;
 
         public SKBitmap DrawPreview()
         {
@@ -84,7 +78,7 @@ namespace SerialLoops.Lib.SaveFile
             if (_project.Items.Find(item => item.Type == ItemDescription.ItemType.System_Texture
                                            && item.Name == "SYSTEX_SYS_CMN_B38") is not SystemTextureItem graphic)
             {
-                DrawText(canvas, $"EPISODE: {number}");
+                DrawText(canvas, string.Format(_project.Localize("EPISODE: {0}"), number));
                 return;
             }
 
@@ -133,7 +127,7 @@ namespace SerialLoops.Lib.SaveFile
             canvas.DrawBitmap(timeBitmap, 0, 23);
         }
 
-        private void DrawLargeGlyph(char glyph, SKCanvas canvas, SKBitmap bitmap, int x, int y = 0)
+        private static void DrawLargeGlyph(char glyph, SKCanvas canvas, SKBitmap bitmap, int x, int y = 0)
         {
             int offset = glyph switch
             {

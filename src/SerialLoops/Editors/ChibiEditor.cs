@@ -79,7 +79,7 @@ namespace SerialLoops.Editors
                         }
                     }
 
-                    LoopyProgressTracker tracker = new();
+                    LoopyProgressTracker tracker = new(s => Application.Instance.Localize(null, s));
                     _ = new ProgressDialog(() => frames.SaveGif(saveFileDialog.FileName, tracker), () => MessageBox.Show(Application.Instance.Localize(this, "GIF exported!"), Application.Instance.Localize(this, "Success!"), MessageBoxType.Information), tracker, Application.Instance.Localize(this, "Exporting GIF..."));
                 }
             };

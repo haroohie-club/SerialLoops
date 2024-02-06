@@ -80,7 +80,7 @@ namespace SerialLoops.Editors
                     {
                         try
                         {
-                            LoopyProgressTracker tracker = new();
+                            LoopyProgressTracker tracker = new(s => Application.Instance.Localize(null, s));
                             _ = new ProgressDialog(() => _item.SetImage(itemResizeDialog.FinalImage, tracker, _log),
                                 () => Content = GetEditorPanel(), tracker, string.Format(Application.Instance.Localize(this, "Replacing {0}..."), _item.DisplayName));
                             UpdateTabTitle(false);

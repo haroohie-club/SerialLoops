@@ -96,7 +96,7 @@ namespace SerialLoops
                     MessageBox.Show(Application.Instance.Localize(this, "Please select at least one search scope and item filter."), Application.Instance.Localize(this, "Invalid search terms"), MessageBoxType.Error);
                     return;
                 }
-                LoopyProgressTracker tracker = new(Application.Instance.Localize(this, "Searching"));
+                LoopyProgressTracker tracker = new(s => Application.Instance.Localize(null, s), "Searching");
                 List<ItemDescription> results = [];
                 _ = new ProgressDialog(() => results = Project.GetSearchResults(query, Log, tracker),
                     () =>

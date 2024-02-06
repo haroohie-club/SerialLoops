@@ -28,15 +28,9 @@ namespace SerialLoops.Lib.Util.WaveformRenderer
         public abstract PeakInfo GetNextPeak();
     }
 
-    public class PeakInfo
+    public class PeakInfo(float min, float max)
     {
-        public PeakInfo(float min, float max)
-        {
-            Max = max;
-            Min = min;
-        }
-
-        public float Min { get; private set; }
-        public float Max { get; private set; }
+        public float Min { get; private set; } = min;
+        public float Max { get; private set; } = max;
     }
 }

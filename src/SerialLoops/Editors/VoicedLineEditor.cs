@@ -50,7 +50,7 @@ namespace SerialLoops.Editors
                 openFileDialog.Filters.Add(new() { Name = Application.Instance.Localize(this, "Vorbis files"), Extensions = [".ogg"] });
                 if (openFileDialog.ShowAndReportIfFileSelected(this))
                 {
-                    LoopyProgressTracker tracker = new();
+                    LoopyProgressTracker tracker = new(s => Application.Instance.Localize(null, s));
                     VcePlayer.Stop();
                     _ = new ProgressDialog(() => _vce.Replace(openFileDialog.FileName, _project.BaseDirectory, _project.IterativeDirectory, Path.Combine(_project.Config.CachesDirectory, "vce", $"{_vce.Name}.wav"), _log), () =>
                     {

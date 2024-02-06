@@ -96,7 +96,7 @@ namespace SerialLoops.Editors
                     {
                         try
                         {
-                            LoopyProgressTracker tracker = new();
+                            LoopyProgressTracker tracker = new(s => Application.Instance.Localize(null, s));
                             _ = new ProgressDialog(() => _systemTexture.SetTexture(systemTextureResizeDialog.FinalImage, replacePalette),
                                 () => Content = GetEditorPanel(), tracker, string.Format(Application.Instance.Localize(this, $"Replacing {0}..."), _systemTexture.DisplayName));
                             UpdateTabTitle(false);

@@ -45,7 +45,7 @@ namespace SerialLoops.Lib
 
         private static void CleanIterative(Project project, ILogger log, IProgressTracker tracker)
         {
-            string[] preservedFiles = Array.Empty<string>();
+            string[] preservedFiles = [];
             string[] cleanableFiles = Directory.GetFiles(Path.Combine(project.IterativeDirectory, "assets"), "*", SearchOption.AllDirectories);
             tracker.Focus("Cleaning Iterative Directory", cleanableFiles.Length);
             foreach (string file in cleanableFiles)
@@ -58,7 +58,7 @@ namespace SerialLoops.Lib
                     }
                     catch (IOException exc)
                     {
-                        log.LogError($"Failed to clean iterative directory: {exc.Message}\n\n{exc.StackTrace}");
+                        log.LogException("Failed to clean iterative directory", exc);
                     }
                 }
                 tracker.Finished++;
@@ -99,7 +99,7 @@ namespace SerialLoops.Lib
             }
             catch (IOException exc)
             {
-                log.LogError($"Failed to write include files to disk: {exc.Message}\n\n{exc.StackTrace}");
+                log.LogException("Failed to write include files to disk.", exc);
                 return false;
             }
             tracker.Finished+= 4;
@@ -115,7 +115,7 @@ namespace SerialLoops.Lib
                     {
                         if (Path.GetExtension(file).Equals(".png", StringComparison.OrdinalIgnoreCase))
                         {
-                            ReplaceSingleGraphicsFile(grp, file, index, log);
+                            ReplaceSingleGraphicsFile(grp, file, index, project.Localize, log);
                         }
                         else if (file.EndsWith("_pal.csv", StringComparison.OrdinalIgnoreCase))
                         {
@@ -130,11 +130,11 @@ namespace SerialLoops.Lib
                             }
                             if (file.Contains("events"))
                             {
-                                ReplaceSingleSourceFile(evt, file, index, config.DevkitArmPath, directory, log);
+                                ReplaceSingleSourceFile(evt, file, index, config.DevkitArmPath, directory, project.Localize, log);
                             }
                             else if (file.Contains("data"))
                             {
-                                ReplaceSingleSourceFile(dat, file, index, config.DevkitArmPath, directory, log);
+                                ReplaceSingleSourceFile(dat, file, index, config.DevkitArmPath, directory, project.Localize, log);
                             }
                             else
                             {
@@ -143,11 +143,11 @@ namespace SerialLoops.Lib
                         }
                         else if (Path.GetExtension(file).Equals(".bna", StringComparison.OrdinalIgnoreCase))
                         {
-                            ReplaceSingleAnimationFile(grp, file, index, log);
+                            ReplaceSingleAnimationFile(grp, file, index, project.Localize, log);
                         }
                         else
                         {
-                            log.LogError($"Unsure what to do with file '{Path.GetFileName(file)}'");
+                            log.LogError(string.Format(project.Localize("Unsure what to do with file '{0}'"), Path.GetFileName(file)));
                             return false;
                         }
                     }
@@ -184,7 +184,7 @@ namespace SerialLoops.Lib
             } 
             catch (IOException exc)
             {
-                log.LogError($"Failed to write NitroPacker NDS project file to disk: {exc.Message}\n\n{exc.StackTrace}");
+                log.LogException("Failed to write NitroPacker NDS project file to disk", exc);
                 return false;
             }
             tracker.Finished++;
@@ -196,7 +196,7 @@ namespace SerialLoops.Lib
             }
             catch (Exception exc)
             {
-                log.LogError($"NitroPacker failed to pack ROM with exception '{exc.Message}'\n\n{exc.StackTrace}");
+                log.LogException("NitroPacker failed to pack ROM with exception", exc);
                 return false;
             }
             tracker.Finished++;
@@ -215,12 +215,12 @@ namespace SerialLoops.Lib
             }
             catch (IOException exc)
             {
-                log.LogError($"Failed to copy newly built archives to the iterative originals directory.\n{exc.Message}\n\n{exc.StackTrace}");
+                log.LogException($"Failed to copy newly built archives to the iterative originals directory", exc);
             }
             tracker.Finished+= 3;
         }
 
-        private static void ReplaceSingleGraphicsFile(ArchiveFile<GraphicsFile> grp, string filePath, int index, ILogger log)
+        private static void ReplaceSingleGraphicsFile(ArchiveFile<GraphicsFile> grp, string filePath, int index, Func<string, string> localize, ILogger log)
         {
             try
             {
@@ -243,54 +243,54 @@ namespace SerialLoops.Lib
             }
             catch (Exception ex)
             {
-                log.LogException($"Failed replacing graphics file {index} with file '{filePath}'", ex);
+                log.LogException(string.Format(localize("Failed replacing graphics file {0} with file '{1}'"), index, filePath), ex);
             }
         }
 
-        private static bool ReplaceSingleSourceFile(ArchiveFile<EventFile> archive, string filePath, int index, string devkitArm, string workingDirectory, ILogger log)
+        private static bool ReplaceSingleSourceFile(ArchiveFile<EventFile> archive, string filePath, int index, string devkitArm, string workingDirectory, Func<string, string> localize, ILogger log)
         {
             try
             {
-                (string objFile, string binFile) = CompileSourceFile(filePath, devkitArm, workingDirectory, log);
+                (string objFile, string binFile) = CompileSourceFile(filePath, devkitArm, workingDirectory, localize, log);
                 if (!File.Exists(binFile))
                 {
-                    log.LogError($"Compiled file {binFile} does not exist!");
+                    log.LogError(string.Format(localize("Compiled file {0} does not exist!"), binFile));
                     return false;
                 }
-                ReplaceSingleFile(archive, binFile, index, log);
+                ReplaceSingleFile(archive, binFile, index, localize, log);
                 File.Delete(objFile);
                 File.Delete(binFile);
                 return true;
             }
             catch (Exception ex)
             {
-                log.LogException($"Failed replacing source file {index} in evt.bin with file '{filePath}'", ex);
+                log.LogException(string.Format(localize("Failed replacing source file {0} in evt.bin with file '{1}'"), index, filePath), ex);
                 return false;
             }
         }
-        private static bool ReplaceSingleSourceFile(ArchiveFile<DataFile> archive, string filePath, int index, string devkitArm, string workingDirectory, ILogger log)
+        private static bool ReplaceSingleSourceFile(ArchiveFile<DataFile> archive, string filePath, int index, string devkitArm, string workingDirectory, Func<string, string> localize, ILogger log)
         {
             try
             {
-                (string objFile, string binFile) = CompileSourceFile(filePath, devkitArm, workingDirectory, log);
+                (string objFile, string binFile) = CompileSourceFile(filePath, devkitArm, workingDirectory, localize, log);
                 if (!File.Exists(binFile))
                 {
-                    log.LogError($"Compiled file {binFile} does not exist!");
+                    log.LogError(string.Format(localize("Compiled file {0} does not exist!"), binFile));
                     return false;
                 }
-                ReplaceSingleFile(archive, binFile, index, log);
+                ReplaceSingleFile(archive, binFile, index, localize, log);
                 File.Delete(objFile);
                 File.Delete(binFile);
                 return true;
             }
             catch (Exception ex)
             {
-                log.LogException($"Failed replacing source file {index} in dat.bin with file '{filePath}'", ex);
+                log.LogException(string.Format(localize("Failed replacing source file {0} in dat.bin with file '{1}'"), index, filePath), ex);
                 return false;
             }
         }
 
-        private static (string, string) CompileSourceFile(string filePath, string devkitArm, string workingDirectory, ILogger log)
+        private static (string, string) CompileSourceFile(string filePath, string devkitArm, string workingDirectory, Func<string, string> localize, ILogger log)
         {
             string exeExtension = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? ".exe" : string.Empty;
 
@@ -305,7 +305,7 @@ namespace SerialLoops.Lib
             };
             if (!File.Exists(gccStartInfo.FileName))
             {
-                log.LogError($"gcc not found at '{gccStartInfo.FileName}'");
+                log.LogError(string.Format(localize("gcc not found at '{0}'"), gccStartInfo.FileName));
                 return (string.Empty, string.Empty);
             }
             log.Log($"Compiling '{filePath}' to '{objFile}' with '{gccStartInfo.FileName}'...");
@@ -317,7 +317,7 @@ namespace SerialLoops.Lib
             Task.Delay(50); // ensures process is actually complete
             if (gcc.ExitCode != 0)
             {
-                log.LogError($"gcc exited with code {gcc.ExitCode}");
+                log.LogError(string.Format(localize("gcc exited with code {0}"), gcc.ExitCode));
                 return (string.Empty, string.Empty);
             }
 
@@ -330,7 +330,7 @@ namespace SerialLoops.Lib
             };
             if (!File.Exists(objcopyStartInfo.FileName))
             {
-                log.LogError($"objcopy not found at '{objcopyStartInfo.FileName}'");
+                log.LogError(string.Format(localize("objcopy not found at '{0}'"), objcopyStartInfo.FileName));
                 return (string.Empty, string.Empty);
             }
             log.Log($"Objcopying '{objFile}' to '{binFile}' with '{objcopyStartInfo.FileName}'...");
@@ -342,14 +342,14 @@ namespace SerialLoops.Lib
             Task.Delay(50); // ensures process is actually complete
             if (objcopy.ExitCode != 0)
             {
-                log.LogError($"objcopy exited with code {objcopy.ExitCode}");
+                log.LogError(string.Format(localize("objcopy exited with code {0}"), objcopy.ExitCode));
                 return (string.Empty, string.Empty);
             }
 
             return (objFile, binFile);
         }
 
-        private static void ReplaceSingleFile(ArchiveFile<EventFile> archive, string filePath, int index, ILogger log)
+        private static void ReplaceSingleFile(ArchiveFile<EventFile> archive, string filePath, int index, Func<string, string> localize, ILogger log)
         {
             try
             {
@@ -360,10 +360,10 @@ namespace SerialLoops.Lib
             }
             catch (Exception ex)
             {
-                log.LogException($"Failed replacing source file {index} in evt.bin with file '{filePath}'", ex);
+                log.LogException(string.Format(localize("Failed replacing file {0} in evt.bin with file '{1}'"), index, filePath), ex);
             }
         }
-        private static void ReplaceSingleFile(ArchiveFile<DataFile> archive, string filePath, int index, ILogger log)
+        private static void ReplaceSingleFile(ArchiveFile<DataFile> archive, string filePath, int index, Func<string, string> localize, ILogger log)
         {
             try
             {
@@ -374,10 +374,10 @@ namespace SerialLoops.Lib
             }
             catch (Exception ex)
             {
-                log.LogException($"Failed replacing source file {index} in dat.bin with file '{filePath}'", ex);
+                log.LogException(string.Format(localize("Failed replacing source file {0} in dat.bin with file '{1}'"), index, filePath), ex);
             }
         }
-        private static void ReplaceSingleAnimationFile(ArchiveFile<GraphicsFile> archive, string filePath, int index, ILogger log)
+        private static void ReplaceSingleAnimationFile(ArchiveFile<GraphicsFile> archive, string filePath, int index, Func<string, string> localize, ILogger log)
         {
             try
             {
@@ -393,7 +393,7 @@ namespace SerialLoops.Lib
             }
             catch (Exception ex)
             {
-                log.LogException($"Failed replacing file {index} in grp.bin with file '{filePath}'", ex);
+                log.LogException(string.Format(localize("Failed replacing animation file {0} in grp.bin with file '{1}'"), index, filePath), ex);
             }
         }
     }

@@ -727,6 +727,15 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Caching.
+        /// </summary>
+        public static string Caching {
+            get {
+                return ResourceManager.GetString("Caching", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Caching BGM.
         /// </summary>
         public static string Caching_BGM {
@@ -970,6 +979,15 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cleaning Iterative Directory.
+        /// </summary>
+        public static string Cleaning_Iterative_Directory {
+            get {
+                return ResourceManager.GetString("Cleaning Iterative Directory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Clear all commands from the game scenario?\nThis action is irreversible..
         /// </summary>
         public static string Clear_all_commands_from_the_game_scenario__nThis_action_is_irreversible_ {
@@ -1168,6 +1186,15 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Compiled file {0} does not exist!.
+        /// </summary>
+        public static string Compiled_file__0__does_not_exist_ {
+            get {
+                return ResourceManager.GetString("Compiled file {0} does not exist!", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Conditional.
         /// </summary>
         public static string Conditional {
@@ -1213,11 +1240,47 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Converting from MP3....
+        /// </summary>
+        public static string Converting_from_MP3___ {
+            get {
+                return ResourceManager.GetString("Converting from MP3...", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Converting from Vorbis....
+        /// </summary>
+        public static string Converting_from_Vorbis___ {
+            get {
+                return ResourceManager.GetString("Converting from Vorbis...", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copy.
         /// </summary>
         public static string Copy {
             get {
                 return ResourceManager.GetString("Copy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copying Archives to Iterative Originals.
+        /// </summary>
+        public static string Copying_Archives_to_Iterative_Originals {
+            get {
+                return ResourceManager.GetString("Copying Archives to Iterative Originals", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copying Files.
+        /// </summary>
+        public static string Copying_Files {
+            get {
+                return ResourceManager.GetString("Copying Files", resourceCulture);
             }
         }
         
@@ -1245,6 +1308,15 @@ namespace SerialLoops {
         public static string Create_New_Project {
             get {
                 return ResourceManager.GetString("Create New Project", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Creating Directories.
+        /// </summary>
+        public static string Creating_Directories {
+            get {
+                return ResourceManager.GetString("Creating Directories", resourceCulture);
             }
         }
         
@@ -1371,6 +1443,15 @@ namespace SerialLoops {
         public static string devkitARM_Docker_Tag {
             get {
                 return ResourceManager.GetString("devkitARM Docker Tag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DevkitARM must be supplied in order to build!.
+        /// </summary>
+        public static string DevkitARM_must_be_supplied_in_order_to_build_ {
+            get {
+                return ResourceManager.GetString("DevkitARM must be supplied in order to build!", resourceCulture);
             }
         }
         
@@ -1546,6 +1627,15 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Downsampling....
+        /// </summary>
+        public static string Downsampling___ {
+            get {
+                return ResourceManager.GetString("Downsampling...", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Draw Pathing Map.
         /// </summary>
         public static string Draw_Pathing_Map {
@@ -1560,6 +1650,33 @@ namespace SerialLoops {
         public static string Draw_Starting_Point {
             get {
                 return ResourceManager.GetString("Draw Starting Point", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Drawing bottom screen texture....
+        /// </summary>
+        public static string Drawing_bottom_screen_texture___ {
+            get {
+                return ResourceManager.GetString("Drawing bottom screen texture...", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Drawing textures....
+        /// </summary>
+        public static string Drawing_textures___ {
+            get {
+                return ResourceManager.GetString("Drawing textures...", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Drawing top screen tiles....
+        /// </summary>
+        public static string Drawing_top_screen_tiles___ {
+            get {
+                return ResourceManager.GetString("Drawing top screen tiles...", resourceCulture);
             }
         }
         
@@ -1672,6 +1789,15 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Encoding.
+        /// </summary>
+        public static string Encoding {
+            get {
+                return ResourceManager.GetString("Encoding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to End.
         /// </summary>
         public static string End {
@@ -1722,6 +1848,15 @@ namespace SerialLoops {
         public static string Episode_ {
             get {
                 return ResourceManager.GetString("Episode:", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to EPISODE: {0}.
+        /// </summary>
+        public static string EPISODE___0_ {
+            get {
+                return ResourceManager.GetString("EPISODE: {0}", resourceCulture);
             }
         }
         
@@ -1935,11 +2070,38 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error getting script command tree for script {0} ({1}).
+        /// </summary>
+        public static string Error_getting_script_command_tree_for_script__0____1__ {
+            get {
+                return ResourceManager.GetString("Error getting script command tree for script {0} ({1})", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error pruning labels!.
+        /// </summary>
+        public static string Error_pruning_labels_ {
+            get {
+                return ResourceManager.GetString("Error pruning labels!", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error reading save file..
         /// </summary>
         public static string Error_reading_save_file_ {
             get {
                 return ResourceManager.GetString("Error reading save file.", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exception occurred while parsing projects_cache.json!.
+        /// </summary>
+        public static string Exception_occurred_while_parsing_projects_cache_json_ {
+            get {
+                return ResourceManager.GetString("Exception occurred while parsing projects_cache.json!", resourceCulture);
             }
         }
         
@@ -2088,6 +2250,105 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed attempting to cache audio file.
+        /// </summary>
+        public static string Failed_attempting_to_cache_audio_file {
+            get {
+                return ResourceManager.GetString("Failed attempting to cache audio file", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed converting audio file to WAV..
+        /// </summary>
+        public static string Failed_converting_audio_file_to_WAV_ {
+            get {
+                return ResourceManager.GetString("Failed converting audio file to WAV.", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed copying file &apos;{0}&apos; to base and iterative directories at path &apos;{1}&apos;.
+        /// </summary>
+        public static string Failed_copying_file___0___to_base_and_iterative_directories_at_path___1__ {
+            get {
+                return ResourceManager.GetString("Failed copying file \'{0}\' to base and iterative directories at path \'{1}\'", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed downsampling audio file..
+        /// </summary>
+        public static string Failed_downsampling_audio_file_ {
+            get {
+                return ResourceManager.GetString("Failed downsampling audio file.", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed encoding audio file to ADX..
+        /// </summary>
+        public static string Failed_encoding_audio_file_to_ADX_ {
+            get {
+                return ResourceManager.GetString("Failed encoding audio file to ADX.", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed replacing animation file {0} in grp.bin with file &apos;{1}&apos;.
+        /// </summary>
+        public static string Failed_replacing_animation_file__0__in_grp_bin_with_file___1__ {
+            get {
+                return ResourceManager.GetString("Failed replacing animation file {0} in grp.bin with file \'{1}\'", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed replacing file {0} in evt.bin with file &apos;{1}&apos;.
+        /// </summary>
+        public static string Failed_replacing_file__0__in_evt_bin_with_file___1__ {
+            get {
+                return ResourceManager.GetString("Failed replacing file {0} in evt.bin with file \'{1}\'", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed replacing graphics file {0} with file &apos;{1}&apos;.
+        /// </summary>
+        public static string Failed_replacing_graphics_file__0__with_file___1__ {
+            get {
+                return ResourceManager.GetString("Failed replacing graphics file {0} with file \'{1}\'", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed replacing source file {0} in dat.bin with file &apos;{1}&apos;.
+        /// </summary>
+        public static string Failed_replacing_source_file__0__in_dat_bin_with_file___1__ {
+            get {
+                return ResourceManager.GetString("Failed replacing source file {0} in dat.bin with file \'{1}\'", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed replacing source file {0} in evt.bin with file &apos;{1}&apos;.
+        /// </summary>
+        public static string Failed_replacing_source_file__0__in_evt_bin_with_file___1__ {
+            get {
+                return ResourceManager.GetString("Failed replacing source file {0} in evt.bin with file \'{1}\'", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed restoring BGM file..
+        /// </summary>
+        public static string Failed_restoring_BGM_file_ {
+            get {
+                return ResourceManager.GetString("Failed restoring BGM file.", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to add parameters for hack file {0} in hack {1}.
         /// </summary>
         public static string Failed_to_add_parameters_for_hack_file__0__in_hack__1_ {
@@ -2107,11 +2368,75 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to calculate graph edges!.
+        /// </summary>
+        public static string Failed_to_calculate_graph_edges_ {
+            get {
+                return ResourceManager.GetString("Failed to calculate graph edges!", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to check for updates! (Endpoint: {0}).
         /// </summary>
         public static string Failed_to_check_for_updates___Endpoint___0__ {
             get {
                 return ResourceManager.GetString("Failed to check for updates! (Endpoint: {0})", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to clean iterative directory.
+        /// </summary>
+        public static string Failed_to_clean_iterative_directory {
+            get {
+                return ResourceManager.GetString("Failed to clean iterative directory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to copy newly built archives to the iterative originals directory.
+        /// </summary>
+        public static string Failed_to_copy_newly_built_archives_to_the_iterative_originals_directory {
+            get {
+                return ResourceManager.GetString("Failed to copy newly built archives to the iterative originals directory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to create directory on specified path!.
+        /// </summary>
+        public static string Failed_to_create_directory_on_specified_path_ {
+            get {
+                return ResourceManager.GetString("Failed to create directory on specified path!", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to decode original file too, giving up!.
+        /// </summary>
+        public static string Failed_to_decode_original_file_too__giving_up_ {
+            get {
+                return ResourceManager.GetString("Failed to decode original file too, giving up!", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to delete file &apos;{0}&apos;.
+        /// </summary>
+        public static string Failed_to_delete_file___0__ {
+            get {
+                return ResourceManager.GetString("Failed to delete file \'{0}\'", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to delete files for hack &apos;{0}&apos; -- this hack is likely applied in the ROM base and can&apos;t be disabled..
+        /// </summary>
+        public static string Failed_to_delete_files_for_hack___0______this_hack_is_likely_applied_in_the_ROM_base_and_can_t_be_disabled_ {
+            get {
+                return ResourceManager.GetString("Failed to delete files for hack \'{0}\' -- this hack is likely applied in the ROM b" +
+                        "ase and can\'t be disabled.", resourceCulture);
             }
         }
         
@@ -2189,6 +2514,24 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to load BGM file: file invalid..
+        /// </summary>
+        public static string Failed_to_load_BGM_file__file_invalid_ {
+            get {
+                return ResourceManager.GetString("Failed to load BGM file: file invalid.", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to load BGM file: file not found..
+        /// </summary>
+        public static string Failed_to_load_BGM_file__file_not_found_ {
+            get {
+                return ResourceManager.GetString("Failed to load BGM file: file not found.", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to load cached data.
         /// </summary>
         public static string Failed_to_load_cached_data {
@@ -2216,11 +2559,38 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to load voice file: file invalid..
+        /// </summary>
+        public static string Failed_to_load_voice_file__file_invalid_ {
+            get {
+                return ResourceManager.GetString("Failed to load voice file: file invalid.", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to load voice file: file not found..
+        /// </summary>
+        public static string Failed_to_load_voice_file__file_not_found_ {
+            get {
+                return ResourceManager.GetString("Failed to load voice file: file not found.", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to read ARM9 from &apos;{0}&apos;.
         /// </summary>
         public static string Failed_to_read_ARM9_from___0__ {
             get {
                 return ResourceManager.GetString("Failed to read ARM9 from \'{0}\'", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to read BGM file; falling back to original....
+        /// </summary>
+        public static string Failed_to_read_BGM_file__falling_back_to_original___ {
+            get {
+                return ResourceManager.GetString("Failed to read BGM file; falling back to original...", resourceCulture);
             }
         }
         
@@ -2288,6 +2658,15 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to unpack ROM.
+        /// </summary>
+        public static string Failed_to_unpack_ROM {
+            get {
+                return ResourceManager.GetString("Failed to unpack ROM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to update preview!.
         /// </summary>
         public static string Failed_to_update_preview_ {
@@ -2302,6 +2681,24 @@ namespace SerialLoops {
         public static string Failed_to_write_ARM9_to_disk {
             get {
                 return ResourceManager.GetString("Failed to write ARM9 to disk", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to write include files to disk..
+        /// </summary>
+        public static string Failed_to_write_include_files_to_disk_ {
+            get {
+                return ResourceManager.GetString("Failed to write include files to disk.", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to write NitroPacker NDS project file to disk.
+        /// </summary>
+        public static string Failed_to_write_NitroPacker_NDS_project_file_to_disk {
+            get {
+                return ResourceManager.GetString("Failed to write NitroPacker NDS project file to disk", resourceCulture);
             }
         }
         
@@ -2531,6 +2928,24 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to gcc exited with code {0}.
+        /// </summary>
+        public static string gcc_exited_with_code__0_ {
+            get {
+                return ResourceManager.GetString("gcc exited with code {0}", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to gcc not found at &apos;{0}&apos;.
+        /// </summary>
+        public static string gcc_not_found_at___0__ {
+            get {
+                return ResourceManager.GetString("gcc not found at \'{0}\'", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to German.
         /// </summary>
         public static string German {
@@ -2756,6 +3171,15 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid audio file selected..
+        /// </summary>
+        public static string Invalid_audio_file_selected_ {
+            get {
+                return ResourceManager.GetString("Invalid audio file selected.", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid item type!.
         /// </summary>
         public static string Invalid_item_type_ {
@@ -2959,6 +3383,42 @@ namespace SerialLoops {
         public static string Load_this_save_prompt {
             get {
                 return ResourceManager.GetString("Load this save prompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loading: .
+        /// </summary>
+        public static string Loading_ {
+            get {
+                return ResourceManager.GetString("Loading:", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loading Archives (dat.bin).
+        /// </summary>
+        public static string Loading_Archives__dat_bin_ {
+            get {
+                return ResourceManager.GetString("Loading Archives (dat.bin)", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loading Archives (evt.bin).
+        /// </summary>
+        public static string Loading_Archives__evt_bin_ {
+            get {
+                return ResourceManager.GetString("Loading Archives (evt.bin)", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loading Archives (grp.bin).
+        /// </summary>
+        public static string Loading_Archives__grp_bin_ {
+            get {
+                return ResourceManager.GetString("Loading Archives (grp.bin)", resourceCulture);
             }
         }
         
@@ -3323,6 +3783,15 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to NitroPacker failed to pack ROM with exception.
+        /// </summary>
+        public static string NitroPacker_failed_to_pack_ROM_with_exception {
+            get {
+                return ResourceManager.GetString("NitroPacker failed to pack ROM with exception", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No.
         /// </summary>
         public static string No {
@@ -3441,6 +3910,24 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to objcopy exited with code {0}.
+        /// </summary>
+        public static string objcopy_exited_with_code__0_ {
+            get {
+                return ResourceManager.GetString("objcopy exited with code {0}", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to objcopy not found at &apos;{0}&apos;.
+        /// </summary>
+        public static string objcopy_not_found_at___0__ {
+            get {
+                return ResourceManager.GetString("objcopy not found at \'{0}\'", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Off.
         /// </summary>
         public static string Off {
@@ -3455,6 +3942,15 @@ namespace SerialLoops {
         public static string On {
             get {
                 return ResourceManager.GetString("On", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to One or more archives is null..
+        /// </summary>
+        public static string One_or_more_archives_is_null_ {
+            get {
+                return ResourceManager.GetString("One or more archives is null.", resourceCulture);
             }
         }
         
@@ -3563,6 +4059,15 @@ namespace SerialLoops {
         public static string Overwrite_save_prompt_message_box {
             get {
                 return ResourceManager.GetString("Overwrite save prompt message box", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Packing ROM.
+        /// </summary>
+        public static string Packing_ROM {
+            get {
+                return ResourceManager.GetString("Packing ROM", resourceCulture);
             }
         }
         
@@ -4269,6 +4774,15 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Replacing Files.
+        /// </summary>
+        public static string Replacing_Files {
+            get {
+                return ResourceManager.GetString("Replacing Files", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Required Brigade Member.
         /// </summary>
         public static string Required_Brigade_Member {
@@ -4960,6 +5474,42 @@ namespace SerialLoops {
         public static string Set_Clear {
             get {
                 return ResourceManager.GetString("Set/Clear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Setting CG single image....
+        /// </summary>
+        public static string Setting_CG_single_image___ {
+            get {
+                return ResourceManager.GetString("Setting CG single image...", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Setting item image....
+        /// </summary>
+        public static string Setting_item_image___ {
+            get {
+                return ResourceManager.GetString("Setting item image...", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Setting palettes and images....
+        /// </summary>
+        public static string Setting_palettes_and_images___ {
+            get {
+                return ResourceManager.GetString("Setting palettes and images...", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Setting screen image....
+        /// </summary>
+        public static string Setting_screen_image___ {
+            get {
+                return ResourceManager.GetString("Setting screen image...", resourceCulture);
             }
         }
         
@@ -5757,6 +6307,15 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unsure what to do with file &apos;{0}&apos;.
+        /// </summary>
+        public static string Unsure_what_to_do_with_file___0__ {
+            get {
+                return ResourceManager.GetString("Unsure what to do with file \'{0}\'", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unvoiced dialogue volume options ticker tape.
         /// </summary>
         public static string Unvoiced_dialogue_volume_options_ticker_tape {
@@ -5996,6 +6555,33 @@ namespace SerialLoops {
         public static string Worst_Group {
             get {
                 return ResourceManager.GetString("Worst Group", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Writing Includes.
+        /// </summary>
+        public static string Writing_Includes {
+            get {
+                return ResourceManager.GetString("Writing Includes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Writing NitroPacker Project File.
+        /// </summary>
+        public static string Writing_NitroPacker_Project_File {
+            get {
+                return ResourceManager.GetString("Writing NitroPacker Project File", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Writing Replaced Archives.
+        /// </summary>
+        public static string Writing_Replaced_Archives {
+            get {
+                return ResourceManager.GetString("Writing Replaced Archives", resourceCulture);
             }
         }
         

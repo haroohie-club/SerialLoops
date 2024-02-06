@@ -50,7 +50,7 @@ namespace SerialLoops.Editors
             loopSettingsButton.Click += (obj, args) =>
             {
                 BgmPlayer.Stop();
-                LoopyProgressTracker tracker = new(Application.Instance.Localize(this, "Adjusting Loop Info"));
+                LoopyProgressTracker tracker = new(s => Application.Instance.Localize(null, s), "Adjusting Loop Info");
                 if (!File.Exists(_bgmCachedFile))
                 {
                     _ = new ProgressDialog(() => WaveFileWriter.CreateWaveFile(_bgmCachedFile, _bgm.GetWaveProvider(_log, false)), () => { }, tracker, Application.Instance.Localize(this, "Caching BGM"));
@@ -66,7 +66,7 @@ namespace SerialLoops.Editors
                         _loopEnabled = loopDialog.LoopPreview.LoopEnabled;
                         _loopStartSample = loopDialog.LoopPreview.StartSample;
                         _loopEndSample = loopDialog.LoopPreview.EndSample;
-                        LoopyProgressTracker tracker = new();
+                        LoopyProgressTracker tracker = new(s => Application.Instance.Localize(null, s));
                         BgmPlayer.Stop();
                         Shared.AudioReplacementCancellation.Cancel();
                         Shared.AudioReplacementCancellation = new();
@@ -88,7 +88,7 @@ namespace SerialLoops.Editors
             volumeSettingsButton.Click += (obj, args) =>
             {
                 BgmPlayer.Stop();
-                LoopyProgressTracker tracker = new(Application.Instance.Localize(this, "Adjusting Volume"));
+                LoopyProgressTracker tracker = new(s => Application.Instance.Localize(null, s), "Adjusting Volume");
                 if (!File.Exists(_bgmCachedFile))
                 {
                     _ = new ProgressDialog(() => WaveFileWriter.CreateWaveFile(_bgmCachedFile, _bgm.GetWaveProvider(_log, false)), () => { }, tracker, Application.Instance.Localize(this, "Caching BGM"));
@@ -101,7 +101,7 @@ namespace SerialLoops.Editors
                 {
                     if (volumeDialog.SaveChanges)
                     {
-                        LoopyProgressTracker tracker = new() { Total = 2 };
+                        LoopyProgressTracker tracker = new(s => Application.Instance.Localize(null, s)) { Total = 2 };
                         BgmPlayer.Stop();
                         Shared.AudioReplacementCancellation.Cancel();
                         Shared.AudioReplacementCancellation = new();
@@ -130,7 +130,7 @@ namespace SerialLoops.Editors
                 saveFileDialog.Filters.Add(new() { Name = Application.Instance.Localize(this, "WAV File"), Extensions = [".wav"] });
                 if (saveFileDialog.ShowAndReportIfFileSelected(this))
                 {
-                    LoopyProgressTracker tracker = new();
+                    LoopyProgressTracker tracker = new(s => Application.Instance.Localize(null, s));
                     _ = new ProgressDialog(() => WaveFileWriter.CreateWaveFile(saveFileDialog.FileName, _bgm.GetWaveProvider(_log, false)),
                         () => { }, tracker, Application.Instance.Localize(this, "Exporting BGM"));
                 }
@@ -147,7 +147,7 @@ namespace SerialLoops.Editors
                 openFileDialog.Filters.Add(new() { Name = Application.Instance.Localize(this, "Vorbis files"), Extensions = [".ogg"] });
                 if (openFileDialog.ShowAndReportIfFileSelected(this))
                 {
-                    LoopyProgressTracker tracker = new(Application.Instance.Localize(this, "Replacing BGM"));
+                    LoopyProgressTracker tracker = new(s => Application.Instance.Localize(null, s), "Replacing BGM");
                     BgmPlayer.Stop();
                     Shared.AudioReplacementCancellation.Cancel();
                     Shared.AudioReplacementCancellation = new();

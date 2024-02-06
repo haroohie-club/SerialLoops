@@ -517,7 +517,7 @@ namespace SerialLoops
                 }
 
                 OpenProject = projectCreationDialog.NewProject;
-                OpenProjectView(OpenProject, new LoopyProgressTracker());
+                OpenProjectView(OpenProject, new LoopyProgressTracker(s => Application.Instance.Localize(null, s)));
             }
         }
 
@@ -546,7 +546,7 @@ namespace SerialLoops
         public void OpenProjectFromPath(string path)
         {
             Project.LoadProjectResult result = new(Project.LoadProjectState.FAILED); // start us off with a failure
-            LoopyProgressTracker tracker = new();
+            LoopyProgressTracker tracker = new(s => Application.Instance.Localize(null, s));
             _ = new ProgressDialog(() => (OpenProject, result) = Project.OpenProject(path, CurrentConfig, s => Application.Instance.Localize(null, s), Log, tracker),
                 () => { }, tracker, Application.Instance.Localize(this, "Loading Project"));
             if (OpenProject is not null && result.State == Project.LoadProjectState.LOOSELEAF_FILES)
@@ -827,7 +827,7 @@ namespace SerialLoops
             if (OpenProject is not null)
             {
                 OrphanedItemsDialog orphanedItemsDialog = null;
-                LoopyProgressTracker tracker = new("");
+                LoopyProgressTracker tracker = new(s => Application.Instance.Localize(null, s), string.Empty);
                 ((IProgressTracker)tracker).Focus(Application.Instance.Localize(this, "Finding orphaned items..."), 1);
 
                 ProgressDialog _ = new(() =>
@@ -883,7 +883,7 @@ namespace SerialLoops
             if (OpenProject is not null)
             {
                 bool buildSucceeded = true; // imo it's better to have a false negative than a false positive here
-                LoopyProgressTracker tracker = new(Application.Instance.Localize(this, "Building:"));
+                LoopyProgressTracker tracker = new(s => Application.Instance.Localize(null, s), "Building:");
                 ProgressDialog loadingDialog = new(
                     () => buildSucceeded = Build.BuildIterative(OpenProject, CurrentConfig, Log, tracker), () =>
                     {
@@ -905,7 +905,7 @@ namespace SerialLoops
             if (OpenProject is not null)
             {
                 bool buildSucceeded = true;
-                LoopyProgressTracker tracker = new(Application.Instance.Localize(this, "Building:"));
+                LoopyProgressTracker tracker = new(s => Application.Instance.Localize(null, s), "Building:");
                 ProgressDialog loadingDialog = new(
                     () => buildSucceeded = Build.BuildBase(OpenProject, CurrentConfig, Log, tracker), () =>
                     {
@@ -936,7 +936,7 @@ namespace SerialLoops
                 }
 
                 bool buildSucceeded = true;
-                LoopyProgressTracker tracker = new(Application.Instance.Localize(this, "Building:"));
+                LoopyProgressTracker tracker = new(s => Application.Instance.Localize(null, s), "Building:");
                 ProgressDialog loadingDialog = new(
                     () => buildSucceeded = Build.BuildIterative(OpenProject, CurrentConfig, Log, tracker), () =>
                     {
@@ -976,7 +976,7 @@ namespace SerialLoops
 
             if (openFileDialog.ShowAndReportIfFileSelected(this))
             {
-                LoopyProgressTracker tracker = new();
+                LoopyProgressTracker tracker = new(s => Application.Instance.Localize(null, s));
                 _ = new ProgressDialog(() =>
                     {
                         OpenProject.MigrateProject(openFileDialog.FileName, Log, tracker);
@@ -999,7 +999,7 @@ namespace SerialLoops
                 outputPatchDialog.Filters.Add(new() { Name = Application.Instance.Localize(this, "XDelta patch"), Extensions = [".xdelta"] });
                 if (outputPatchDialog.ShowAndReportIfFileSelected(this))
                 {
-                    LoopyProgressTracker tracker = new();
+                    LoopyProgressTracker tracker = new(s => Application.Instance.Localize(null, s));
                     _ = new ProgressDialog(
                         () => Patch.CreatePatch(baseRomDialog.FileName, currentRom, outputPatchDialog.FileName, Log),
                         () => MessageBox.Show(Application.Instance.Localize(this, "Patch Created!"), Application.Instance.Localize(this, "Success!"), MessageBoxType.Information), tracker,

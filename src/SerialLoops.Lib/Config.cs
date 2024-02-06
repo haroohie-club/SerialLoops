@@ -1,9 +1,7 @@
 ﻿using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib.Hacks;
-using SerialLoops.Lib.Util;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;

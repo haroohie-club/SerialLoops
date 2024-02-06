@@ -202,7 +202,7 @@ namespace SerialLoops.Dialogs
 
                 try
                 {
-                    LoopyProgressTracker tracker = new();
+                    LoopyProgressTracker tracker = new(project.Localize);
                     ProgressDialog _ = new(() =>
                     {
                         ARM9AsmHack.Insert(Path.Combine(project.BaseDirectory, "src"), arm9, 0x02005ECC, config.UseDocker ? config.DevkitArmDockerTag : string.Empty,
@@ -260,7 +260,7 @@ namespace SerialLoops.Dialogs
                         {
                             try
                             {
-                                LoopyProgressTracker tracker = new();
+                                LoopyProgressTracker tracker = new(s => Application.Instance.Localize(null, s));
                                 ProgressDialog _ = new(() =>
                                 {
                                     OverlayAsmHack.Insert(overlaySourceDir, overlays[i], newRomInfoPath, config.UseDocker ? config.DevkitArmDockerTag : string.Empty,
