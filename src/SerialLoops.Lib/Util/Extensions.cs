@@ -4,6 +4,8 @@ using SerialLoops.Lib.Script.Parameters;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -194,6 +196,38 @@ namespace SerialLoops.Lib.Util
                     currentX += 14;
                 }
             }
+        }
+
+        public static string GetLocalizedFilePath(string path, string extension)
+        {
+            string cultureName = $"{path}.{CultureInfo.CurrentCulture.Name}.{extension}";
+            string languageName = $"{path}.{CultureInfo.CurrentCulture.TwoLetterISOLanguageName}.{extension}";
+            if (File.Exists(cultureName))
+            {
+                return cultureName;
+            }
+            else if (File.Exists(languageName))
+            {
+                return languageName;
+            }
+            else
+            {
+                string enUSName = $"{path}.en-US.{extension}";
+                string enLangName = $"{path}.en.{extension}";
+                if (File.Exists(enUSName))
+                {
+                    return enUSName;
+                }
+                else if (File.Exists(enLangName))
+                {
+                    return enLangName;
+                }
+                else if (File.Exists($"{path}.{extension}"))
+                {
+                    return $"{path}.{extension}";
+                }
+            }
+            return string.Empty;
         }
     }
 

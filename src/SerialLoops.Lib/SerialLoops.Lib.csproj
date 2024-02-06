@@ -47,7 +47,7 @@
     <None Update="Defaults\DefaultFlags.en.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Defaults\DefaultNames.json">
+    <None Update="Defaults\DefaultNames.en-US.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

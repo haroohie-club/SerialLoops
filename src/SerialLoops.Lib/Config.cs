@@ -1,5 +1,6 @@
 ﻿using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib.Hacks;
+using SerialLoops.Lib.Util;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -27,7 +28,7 @@ namespace SerialLoops.Lib
         public string HacksDirectory => Path.Combine(UserDirectory, "Hacks");
         [JsonIgnore]
         public List<AsmHack> Hacks { get; set; }
-        public CultureInfo CurrentCulture { get; set; }
+        public string CurrentCultureName { get; set; }
         public string DevkitArmPath { get; set; }
         public bool UseDocker { get; set; }
         public string DevkitArmDockerTag { get; set; }
@@ -40,29 +41,12 @@ namespace SerialLoops.Lib
 
         public void Save(ILogger log)
         {
-            JsonSerializerOptions options = new();
-            options.Converters.Add(new CultureJsonConverter());
-            IO.WriteStringFile(ConfigPath, JsonSerializer.Serialize(this, options: options), log);
-        }
-
-        public class CultureJsonConverter : JsonConverter<CultureInfo>
-        {
-            public override CultureInfo Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-            {
-                return new CultureInfo(reader.GetString());
-            }
-
-            public override void Write(Utf8JsonWriter writer, CultureInfo value, JsonSerializerOptions options)
-            {
-                writer.WriteStringValue(value.Name);
-            }
+            IO.WriteStringFile(ConfigPath, JsonSerializer.Serialize(this), log);
         }
 
         public static Config LoadConfig(ILogger log)
         {
             string configJson = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.json");
-            JsonSerializerOptions options = new();
-            options.Converters.Add(new CultureJsonConverter());
 
             if (!File.Exists(configJson))
             {
@@ -70,13 +54,13 @@ namespace SerialLoops.Lib
                 defaultConfig.ValidateConfig(log);
                 defaultConfig.ConfigPath = configJson;
                 defaultConfig.InitializeHacks(log);
-                IO.WriteStringFile(configJson, JsonSerializer.Serialize(defaultConfig, options: options), log);
+                IO.WriteStringFile(configJson, JsonSerializer.Serialize(defaultConfig), log);
                 return defaultConfig;
             }
 
             try
             {
-                Config config = JsonSerializer.Deserialize<Config>(File.ReadAllText(configJson), options: options);
+                Config config = JsonSerializer.Deserialize<Config>(File.ReadAllText(configJson));
                 config.ValidateConfig(log);
                 config.ConfigPath = configJson;
                 config.InitializeHacks(log);
@@ -87,7 +71,7 @@ namespace SerialLoops.Lib
                 log.LogError($"Exception occurred while parsing config.json!\n{exc.Message}\n\n{exc.StackTrace}");
                 Config defaultConfig = GetDefault(log);
                 defaultConfig.ValidateConfig(log);
-                IO.WriteStringFile(configJson, JsonSerializer.Serialize(defaultConfig, options: options), log);
+                IO.WriteStringFile(configJson, JsonSerializer.Serialize(defaultConfig), log);
                 return defaultConfig;
             }
         }
@@ -98,7 +82,14 @@ namespace SerialLoops.Lib
             {
                 log.LogError("devkitARM is not detected at the default or specified install location. Please set devkitARM path.");
             }
-            CurrentCulture ??= new("en-US");
+            if (CurrentCultureName is null)
+            {
+                CurrentCultureName = CultureInfo.CurrentCulture.Name;
+            }
+            else
+            {
+                CultureInfo.CurrentCulture = new(CurrentCultureName);
+            }
         }
 
         private void InitializeHacks(ILogger log)
@@ -177,7 +168,7 @@ namespace SerialLoops.Lib
             return new Config
             {
                 UserDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "SerialLoops"),
-                CurrentCulture = new("en-US"),
+                CurrentCultureName = CultureInfo.CurrentCulture.Name,
                 DevkitArmPath = devkitArmDir,
                 EmulatorPath = emulatorPath,
                 UseDocker = false,

@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -448,7 +449,7 @@ namespace SerialLoops
 
         private void Application_LocalizeString(object sender, LocalizeEventArgs e)
         {
-            e.LocalizedText = Strings.ResourceManager.GetString(e.Text, CurrentConfig.CurrentCulture);
+            e.LocalizedText = Strings.ResourceManager.GetString(e.Text, CultureInfo.CurrentCulture);
         }
 
         private void UpdateRecentProjects()

@@ -13,6 +13,7 @@ using SerialLoops.Lib.Util;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -272,14 +273,10 @@ namespace SerialLoops.Lib
             }
             tracker.Finished++;
 
-            string charactersFile = LangCode switch
-            {
-                "ja" => "DefaultCharacters.ja.json",
-                _ => "DefaultCharacters.en.json"
-            };
             try
             {
-                Characters ??= JsonSerializer.Deserialize<Dictionary<int, NameplateProperties>>(File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Defaults", charactersFile)), SERIALIZER_OPTIONS);
+                // Note that the nameplates are not localized by program locale but by selected project language
+                Characters ??= JsonSerializer.Deserialize<Dictionary<int, NameplateProperties>>(File.ReadAllText($"{Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Defaults", "DefaultCharacters")}.{LangCode}.json"), SERIALIZER_OPTIONS);
             }
             catch (Exception ex)
             {
@@ -728,7 +725,7 @@ namespace SerialLoops.Lib
             {
                 try
                 {
-                    ItemNames = JsonSerializer.Deserialize<Dictionary<string, string>>(File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Defaults", "DefaultNames.json")));
+                    ItemNames = JsonSerializer.Deserialize<Dictionary<string, string>>(File.ReadAllText(Extensions.GetLocalizedFilePath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Defaults", "DefaultNames"), "json")));
                     foreach (ItemDescription item in Items)
                     {
                         if (!ItemNames.ContainsKey(item.Name) && item.CanRename)

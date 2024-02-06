@@ -4,6 +4,7 @@ using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib;
 using SerialLoops.Utility;
 using System;
+using System.Globalization;
 
 namespace SerialLoops.Dialogs
 {
@@ -117,16 +118,20 @@ namespace SerialLoops.Dialogs
                             new DropDownOption(
                                 [
                                     ("en-US", "English (United States)"),
+                                    ("de", "Deutsch"),
                                     ("en-GB", "English (United Kingdom)"),
+                                    ("it", "Italiano"),
                                     ("ja", "日本語"),
+                                    ("pt-BR", "Português brasileiro"),
                                     ("zh-Hans", "中文（简化字）"),
                                 ])
                             {
                                 Name = Application.Instance.Localize(this, "Language"),
-                                Value = Configuration.CurrentCulture.Name,
+                                Value = CultureInfo.CurrentCulture.Name,
                                 OnChange = (value) =>
                                 {
-                                    Configuration.CurrentCulture = new(value);
+                                    CultureInfo.CurrentCulture = new(value);
+                                    Configuration.CurrentCultureName = value;
                                     RequireRestart = true;
                                 }
                             },
