@@ -1217,6 +1217,9 @@
   <data name="Language" xml:space="preserve">
     <value>Language</value>
   </data>
+  <data name="Language Template" xml:space="preserve">
+    <value>Language Template</value>
+  </data>
   <data name="Load Game menu ticker tape" xml:space="preserve">
     <value>Load Game menu ticker tape</value>
   </data>
