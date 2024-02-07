@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -58,4 +58,306 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Build and Run" xml:space="preserve">
+    <value>构建并运行</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>关于</value>
+  </data>
+  <data name="Auto Re-Open Last Project" xml:space="preserve">
+    <value>自动重新打开上一个项目</value>
+  </data>
+  <data name="Batch Dialogue Display" xml:space="preserve">
+    <value>批量对话显示</value>
+  </data>
+  <data name="Bank" xml:space="preserve">
+    <value>库</value>
+    <comment>As in "Sound Bank"</comment>
+  </data>
+  <data name="100%'d game message box" xml:space="preserve">
+    <value>100% 游戏消息框</value>
+  </data>
+  <data name="All data will be erased prompt message box" xml:space="preserve">
+    <value>“所有数据将被清除提示”消息框</value>
+  </data>
+  <data name="Caching" xml:space="preserve">
+    <value>缓存</value>
+  </data>
+  <data name="Accompanying Character" xml:space="preserve">
+    <value>同行的角色</value>
+  </data>
+  <data name="Animation Export Option" xml:space="preserve">
+    <value>动画导出选项</value>
+  </data>
+  <data name="Background music volume options ticker tape" xml:space="preserve">
+    <value>“背景音乐选项”滚动条</value>
+  </data>
+  <data name="&amp;Tools" xml:space="preserve">
+    <value>工具 (&amp;T)</value>
+  </data>
+  <data name="Add Command" xml:space="preserve">
+    <value>增加命令</value>
+  </data>
+  <data name="Characters Involved" xml:space="preserve">
+    <value>涉及的角色</value>
+  </data>
+  <data name="Associated Main Topics" xml:space="preserve">
+    <value>相关的主要话题</value>
+  </data>
+  <data name="Apply Hacks..." xml:space="preserve">
+    <value>应用修改…</value>
+  </data>
+  <data name="Add Section" xml:space="preserve">
+    <value>添加小节</value>
+  </data>
+  <data name="Adding frames to GIF..." xml:space="preserve">
+    <value>将帧添加到 GIF…</value>
+  </data>
+  <data name="BGM" xml:space="preserve">
+    <value>BGM</value>
+  </data>
+  <data name="Character distribution instructions" xml:space="preserve">
+    <value>角色分配指令</value>
+  </data>
+  <data name="Choices" xml:space="preserve">
+    <value>选项</value>
+  </data>
+  <data name="Adjusting Volume" xml:space="preserve">
+    <value>调整音量</value>
+  </data>
+  <data name="About..." xml:space="preserve">
+    <value>关于…</value>
+  </data>
+  <data name="All data erased message box" xml:space="preserve">
+    <value>“所有数据已清除”消息框</value>
+  </data>
+  <data name="Chinese (Simplified)" xml:space="preserve">
+    <value>简体中文</value>
+  </data>
+  <data name="Building:" xml:space="preserve">
+    <value>构建：</value>
+  </data>
+  <data name="Add Starting Chibis" xml:space="preserve">
+    <value>添加开始的 Q 版人物</value>
+  </data>
+  <data name="Batch Dialogue Display option" xml:space="preserve">
+    <value>批量对话显示选项</value>
+  </data>
+  <data name="Arrow Keys - Move Image" xml:space="preserve">
+    <value>方向键 - 移动图像</value>
+  </data>
+  <data name="Building Iteratively" xml:space="preserve">
+    <value>反复构建</value>
+  </data>
+  <data name="Chess_Puzzles" xml:space="preserve">
+    <value>国际象棋谜题</value>
+  </data>
+  <data name="Building from Scratch" xml:space="preserve">
+    <value>从头开始构建</value>
+  </data>
+  <data name="Can't Rename Item" xml:space="preserve">
+    <value>无法重命名项目</value>
+  </data>
+  <data name="Apply Assembly Hack" xml:space="preserve">
+    <value>应用汇编修改</value>
+  </data>
+  <data name="&quot;Kinetic&quot; Background" xml:space="preserve">
+    <value>“动态”背景</value>
+  </data>
+  <data name="Black Space End" xml:space="preserve">
+    <value>黑格结束</value>
+    <comment>As on a chessboard</comment>
+  </data>
+  <data name="Adjusting Loop Info" xml:space="preserve">
+    <value>调整循环信息</value>
+  </data>
+  <data name="Asahina companion selected description" xml:space="preserve">
+    <value>选择“和朝比奈同行”描述</value>
+  </data>
+  <data name="Character sprite frames exported!" xml:space="preserve">
+    <value>已导出角色精灵帧！</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="Chibi" xml:space="preserve">
+    <value>Q 版人物</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>添加</value>
+    <comment>As in add/subtract</comment>
+  </data>
+  <data name="&amp;File" xml:space="preserve">
+    <value>文件 (&amp;F)</value>
+  </data>
+  <data name="Both" xml:space="preserve">
+    <value>两个</value>
+    <comment>Checkbox for "Both Screens"</comment>
+  </data>
+  <data name="Backgrounds" xml:space="preserve">
+    <value>背景</value>
+  </data>
+  <data name="Accessing save data prompt message box" xml:space="preserve">
+    <value>“访问保存数据提示”消息框</value>
+  </data>
+  <data name="(Missing)" xml:space="preserve">
+    <value> （缺失）</value>
+  </data>
+  <data name="Batch Dialogue Display On" xml:space="preserve">
+    <value>批量对话显示开</value>
+  </data>
+  <data name="&amp;Build" xml:space="preserve">
+    <value>构建 (&amp;B)</value>
+  </data>
+  <data name="Build succeeded!" xml:space="preserve">
+    <value>构建成功！</value>
+  </data>
+  <data name="BGMs" xml:space="preserve">
+    <value>BGM</value>
+  </data>
+  <data name="Character_Sprite" xml:space="preserve">
+    <value>角色精灵图</value>
+  </data>
+  <data name="Character_Sprites" xml:space="preserve">
+    <value>角色精灵图</value>
+  </data>
+  <data name="Chess Mode Unlocked message box" xml:space="preserve">
+    <value>“国际象棋模式已解锁”消息框</value>
+  </data>
+  <data name="Batch Dialogue Display Off" xml:space="preserve">
+    <value>批量对话显示关</value>
+  </data>
+  <data name="Build from Scratch" xml:space="preserve">
+    <value>从头开始构建</value>
+  </data>
+  <data name="Base Time" xml:space="preserve">
+    <value>基本时间</value>
+  </data>
+  <data name="A new update for Serial Loops is available!" xml:space="preserve">
+    <value>Serial Loops 的新更新可用！</value>
+  </data>
+  <data name="Bottom Screen" xml:space="preserve">
+    <value>下屏幕</value>
+  </data>
+  <data name="Add Map Characters" xml:space="preserve">
+    <value>添加地图角色</value>
+  </data>
+  <data name="Chibi frames exported!" xml:space="preserve">
+    <value>已导出 Q 版帧！</value>
+  </data>
+  <data name="Check for Updates on Startup" xml:space="preserve">
+    <value>在启动时检查更新</value>
+  </data>
+  <data name="Cleaning Iterative Directory" xml:space="preserve">
+    <value>清理迭代目录</value>
+  </data>
+  <data name="Build Unbuilt Files?" xml:space="preserve">
+    <value>构建尚未构建的文件？</value>
+  </data>
+  <data name="Batch Dialogue Display ticker tape" xml:space="preserve">
+    <value>“批量对话显示”滚动条</value>
+  </data>
+  <data name="Adjust Volume" xml:space="preserve">
+    <value>调整音量</value>
+  </data>
+  <data name="Apply Template" xml:space="preserve">
+    <value>应用模板</value>
+  </data>
+  <data name="Check for Updates" xml:space="preserve">
+    <value>检查更新</value>
+  </data>
+  <data name="Character Distribution" xml:space="preserve">
+    <value>角色分配</value>
+  </data>
+  <data name="Chess File" xml:space="preserve">
+    <value>国际象棋档案</value>
+  </data>
+  <data name="%" xml:space="preserve">
+    <value>%</value>
+  </data>
+  <data name="Background (CG)" xml:space="preserve">
+    <value>背景（CG）</value>
+  </data>
+  <data name="Chibis" xml:space="preserve">
+    <value>Q 版人物</value>
+  </data>
+  <data name="Chokuretsu ROM" xml:space="preserve">
+    <value>《串联》ROM</value>
+  </data>
+  <data name="Build" xml:space="preserve">
+    <value>构建</value>
+  </data>
+  <data name="&amp;Edit" xml:space="preserve">
+    <value>编辑 (&amp;E)</value>
+  </data>
+  <data name="Both Screens" xml:space="preserve">
+    <value>两个屏幕</value>
+  </data>
+  <data name="Caching BGM" xml:space="preserve">
+    <value>缓存 BGM</value>
+  </data>
+  <data name="Chess_Puzzle" xml:space="preserve">
+    <value>国际象棋谜题</value>
+  </data>
+  <data name="Character voice toggle options ticker tape" xml:space="preserve">
+    <value>“角色语音切换选项”滚动条</value>
+  </data>
+  <data name="Black Space Begin" xml:space="preserve">
+    <value>黑格开始</value>
+    <comment>As on a chessboard</comment>
+  </data>
+  <data name="Can't rename this item directly -- open it to rename it!" xml:space="preserve">
+    <value>无法直接重命名此项目——请打开它进行重命名！</value>
+  </data>
+  <data name="Background_Type" xml:space="preserve">
+    <value>背景类型</value>
+  </data>
+  <data name="&amp;Check for Updates..." xml:space="preserve">
+    <value>检查更新 (&amp;C)…</value>
+  </data>
+  <data name="Background" xml:space="preserve">
+    <value>背景</value>
+  </data>
+  <data name="Asahina puzzle phase selected description" xml:space="preserve">
+    <value>选择“朝比奈解谜阶段”描述</value>
+  </data>
+  <data name="Characters" xml:space="preserve">
+    <value>角色</value>
+  </data>
+  <data name="Build failed!" xml:space="preserve">
+    <value>构建失败！</value>
+  </data>
+  <data name="Character" xml:space="preserve">
+    <value>角色</value>
+  </data>
+  <data name="Building and Running" xml:space="preserve">
+    <value>构建并运行</value>
+  </data>
+  <data name="Associated Script" xml:space="preserve">
+    <value>相关的脚本</value>
+  </data>
+  <data name="Background_ID" xml:space="preserve">
+    <value>背景 ID</value>
+  </data>
+  <data name="Base Time Gain" xml:space="preserve">
+    <value>基本时间加成</value>
+  </data>
+  <data name="Character Topic" xml:space="preserve">
+    <value>角色话题</value>
+  </data>
+  <data name="Animation" xml:space="preserve">
+    <value>动画</value>
+  </data>
+  <data name="&amp;Preferences..." xml:space="preserve">
+    <value>设置 (&amp;P)…</value>
+  </data>
+  <data name="Add Frames" xml:space="preserve">
+    <value>添加帧</value>
+  </data>
+  <data name="Apply" xml:space="preserve">
+    <value>应用</value>
+  </data>
+  <data name="Chokuretsu Save File" xml:space="preserve">
+    <value>《串联》存档文件</value>
+  </data>
 </root>
