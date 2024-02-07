@@ -54,7 +54,7 @@ namespace SerialLoops.Dialogs
 
         private void InitializeComponent()
         {
-            Title = $"Edit Save File - {_fileName} - {_slotName}";
+            Title = $"Edit Save File - {_fileName} - {_slotName}"; // already loc'd these on input, so this is fine
             Width = 550;
             Height = 560;
             Padding = 10;
@@ -73,24 +73,24 @@ namespace SerialLoops.Dialogs
 
             if (_saveSection is CommonSaveData commonSave)
             {
-                menuTabs.Pages.Add(new TabPage { Content = GetCommonDataBox(commonSave), Text = "Config Data" });
+                menuTabs.Pages.Add(new TabPage { Content = GetCommonDataBox(commonSave), Text = Application.Instance.Localize(this, "Config Data") });
             }
             else
             {
                 SaveSlotData slotSave = (SaveSlotData)_saveSection;
-                menuTabs.Pages.Add(new TabPage { Content = GetSlotDataBox(slotSave), Text = "Save Data" });
+                menuTabs.Pages.Add(new TabPage { Content = GetSlotDataBox(slotSave), Text = Application.Instance.Localize(this, "Save Data") });
 
                 if (slotSave is QuickSaveSlotData quickSave)
                 {
-                    menuTabs.Pages.Add(new TabPage { Content = GetQuickSaveDataBox(quickSave), Text = "Script Position" });
+                    menuTabs.Pages.Add(new TabPage { Content = GetQuickSaveDataBox(quickSave), Text = Application.Instance.Localize(this, "Script Position") });
                 }
             }
-            TabPage flagsTab = new() { Content = GetFlagsBox(), Text = "Flags" };
+            TabPage flagsTab = new() { Content = GetFlagsBox(), Text = Application.Instance.Localize(this, "Flags") };
             flagsTab.Shown += (sender, args) => UpdateFlagList(_flagPage);
             menuTabs.Pages.Add(flagsTab);
 
 
-            Button saveButton = new() { Text = "Save" };
+            Button saveButton = new() { Text = Application.Instance.Localize(this, "Save") };
             saveButton.Click += (sender, args) =>
             {
                 foreach (int flag in _flagModifications.Keys)
@@ -125,11 +125,11 @@ namespace SerialLoops.Dialogs
                         ((((CheckBox)_modifierControls.First(c => c.ID == "MysteryGirlVoiceToggle")).Checked ?? true) ? (short)SaveOptions.VoiceOptions.MYSTERY_GIRL : 0)
                         );
                     commonSave.Options.StoryOptions = (SaveOptions.PuzzleInvestigationOptions)(
-                        (((ListItem)((RadioButtonList)_modifierControls.First(c => c.ID == "BatchDialogueDisplay")).SelectedValue).Text == "On" ? (short)SaveOptions.PuzzleInvestigationOptions.BATCH_DIALOGUE_DISPLAY_ON : 0) |
-                        (((ListItem)((RadioButtonList)_modifierControls.First(c => c.ID == "PuzzleInterruptScenes")).SelectedValue).Text == "Unseen Only" ? (short)SaveOptions.PuzzleInvestigationOptions.PUZZLE_INTERRUPT_SCENES_UNSEEN_ONLY : 0) |
-                        (((ListItem)((RadioButtonList)_modifierControls.First(c => c.ID == "PuzzleInterruptScenes")).SelectedValue).Text == "On" ? (short)SaveOptions.PuzzleInvestigationOptions.PUZZLE_INTERRUPTE_SCENES_ON : 0) |
-                        (((ListItem)((RadioButtonList)_modifierControls.First(c => c.ID == "TopicStockMode")).SelectedValue).Text == "On" ? (short)SaveOptions.PuzzleInvestigationOptions.TOPIC_STOCK_MODE_ON : 0) |
-                        (((ListItem)((RadioButtonList)_modifierControls.First(c => c.ID == "DialogueSkipping")).SelectedValue).Text == "Skip Already Read" ? (short)SaveOptions.PuzzleInvestigationOptions.DIALOGUE_SKIPPING_SKIP_ALREADY_READ : 0)
+                        (((ListItem)((RadioButtonList)_modifierControls.First(c => c.ID == "BatchDialogueDisplay")).SelectedValue).Text == Application.Instance.Localize(this, "On") ? (short)SaveOptions.PuzzleInvestigationOptions.BATCH_DIALOGUE_DISPLAY_ON : 0) |
+                        (((ListItem)((RadioButtonList)_modifierControls.First(c => c.ID == "PuzzleInterruptScenes")).SelectedValue).Text == Application.Instance.Localize(this, "Unseen Only") ? (short)SaveOptions.PuzzleInvestigationOptions.PUZZLE_INTERRUPT_SCENES_UNSEEN_ONLY : 0) |
+                        (((ListItem)((RadioButtonList)_modifierControls.First(c => c.ID == "PuzzleInterruptScenes")).SelectedValue).Text == Application.Instance.Localize(this, "On") ? (short)SaveOptions.PuzzleInvestigationOptions.PUZZLE_INTERRUPTE_SCENES_ON : 0) |
+                        (((ListItem)((RadioButtonList)_modifierControls.First(c => c.ID == "TopicStockMode")).SelectedValue).Text == Application.Instance.Localize(this, "On") ? (short)SaveOptions.PuzzleInvestigationOptions.TOPIC_STOCK_MODE_ON : 0) |
+                        (((ListItem)((RadioButtonList)_modifierControls.First(c => c.ID == "DialogueSkipping")).SelectedValue).Text == Application.Instance.Localize(this, "Skip Already Read") ? (short)SaveOptions.PuzzleInvestigationOptions.DIALOGUE_SKIPPING_SKIP_ALREADY_READ : 0)
                         );
                 }
                 else
@@ -192,7 +192,7 @@ namespace SerialLoops.Dialogs
                 Close();
             };
 
-            Button cancelButton = new() { Text = "Cancel" };
+            Button cancelButton = new() { Text = Application.Instance.Localize(this, "Cancel") };
             cancelButton.Click += (sender, args) =>
             {
                 Close();
@@ -242,11 +242,11 @@ namespace SerialLoops.Dialogs
                 UpdateFlagList(_flagPage);
             };
 
-            SearchBox filterBox = new() { PlaceholderText = "Filter by Name", Width = 200 };
-            CheckBox showSetFlagsCheckbox = new() { Text = "Hide Unset Flags", Checked = false };
-            Button applyFiltersButton = new() { Image = ControlGenerator.GetIcon("Search", _log), Text = "Filter" };
+            SearchBox filterBox = new() { PlaceholderText = Application.Instance.Localize(this, "Filter by Name"), Width = 200 };
+            CheckBox showSetFlagsCheckbox = new() { Text = Application.Instance.Localize(this, "Hide Unset Flags"), Checked = false };
+            Button applyFiltersButton = new() { Image = ControlGenerator.GetIcon("Search", _log), Text = Application.Instance.Localize(this, "Filter") };
             Label totalPagesLabel = new() { Text = $" / {totalPages}" };
-            Label totalResultsLabel = new() { Text = $"{_flags.Count} results" };
+            Label totalResultsLabel = new() { Text = string.Format(Application.Instance.Localize(this, "{0} results"), _flags.Count) };
             filterBox.KeyDown += (sender, args) =>
             {
                 if (args.Key == Keys.Enter)
@@ -259,7 +259,7 @@ namespace SerialLoops.Dialogs
                 flagPageBox.Value = _flagPage = 1;
                 totalPages = (_flags.Count / FLAGS_PER_PAGE) + 1;
                 totalPagesLabel.Text = $" / {totalPages}";
-                totalResultsLabel.Text = $"{_flags.Count} results";
+                totalResultsLabel.Text = string.Format(Application.Instance.Localize(this, "{0} results"), _flags.Count);
                 UpdateFlagList(_flagPage);
             });
 
@@ -307,15 +307,15 @@ namespace SerialLoops.Dialogs
 
         private void UpdateFlagList(int page)
         {
-            TableLayout rows = new TableLayout { Spacing = new(15, 5) };
+            TableLayout rows = new() { Spacing = new(15, 5) };
             if (_flags.Count > 0)
             {
                 rows.Rows.Add(new TableRow
                 {
                     Cells =
                     {
-                        ControlGenerator.GetTextHeader("Value", 10),
-                        ControlGenerator.GetTextHeader("Flag Description", 10)
+                        ControlGenerator.GetTextHeader(Application.Instance.Localize(this, "Value"), 10),
+                        ControlGenerator.GetTextHeader(Application.Instance.Localize(this, "Flag Description"), 10)
                     }
                 });
             }
@@ -323,9 +323,9 @@ namespace SerialLoops.Dialogs
             _checkBoxContainer.Content = rows;
         }
 
-        private IEnumerable<TableRow> GetFlagBoxes(int start, int end)
+        private List<TableRow> GetFlagBoxes(int start, int end)
         {
-            List<TableRow> flagBoxes = new();
+            List<TableRow> flagBoxes = [];
             foreach (int flag in _flags.GetRange(start, Math.Min(end - start, _flags.Count - start)))
             {
                 CheckBox flagCheckBox = new() { Checked = _saveSection.IsFlagSet(flag) };
@@ -345,7 +345,7 @@ namespace SerialLoops.Dialogs
 
         private List<int> GetFilteredFlags(string term = null, bool onlyShowSet = false)
         {
-            List<int> filtered = new();
+            List<int> filtered = [];
             for (int i = 0; i < 5120; i++)
             {
                 if (onlyShowSet && !(_flagModifications.TryGetValue(i, out var set) ? set : _saveSection.IsFlagSet(i)))
@@ -390,7 +390,7 @@ namespace SerialLoops.Dialogs
                 Spacing = 2,
                 Items =
                 {
-                    ControlGenerator.GetControlWithLabel("Script: ", scriptSelector),
+                    ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Script:"), scriptSelector),
                     ControlGenerator.GetFileLink(_quickSaveScript, _tabs, _log),
                 }
             };
@@ -504,8 +504,8 @@ namespace SerialLoops.Dialogs
                             Items =
                             {
                                 scriptSelectorWithLink,
-                                ControlGenerator.GetControlWithLabel("Block: ", scriptBlockSelector),
-                                ControlGenerator.GetControlWithLabel("Command Index: ", scriptCommandIndexBox)
+                                ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Script Block:"), scriptBlockSelector),
+                                ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Command Index:"), scriptCommandIndexBox)
                             }
                         },
                         previewLayout
@@ -523,15 +523,15 @@ namespace SerialLoops.Dialogs
                 Padding = 10
             };
             DateTimePicker dateTimePicker = new() { Mode = DateTimePickerMode.DateTime, Value = slotSave.SaveTime.DateTime, ID = "DateTime", MinDate = new DateTime(2000, 1, 1, 0, 0, 0) };
-            layout.Rows.Add(ControlGenerator.GetControlWithLabel("Save Time: ", dateTimePicker));
+            layout.Rows.Add(ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Save Time:"), dateTimePicker));
             _modifierControls.Add(dateTimePicker);
 
             NumericStepper scenarioPositionStepper = new() { Value = slotSave.ScenarioPosition, Increment = 1, MaximumDecimalPlaces = 0, MinValue = 1, MaxValue = _project.Scenario.Commands.Count, ID = "ScenarioPosition" };
-            layout.Rows.Add(ControlGenerator.GetControlWithLabel("Scenario Command Index: ", scenarioPositionStepper));
+            layout.Rows.Add(ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Scenario Command Index:"), scenarioPositionStepper));
             _modifierControls.Add(scenarioPositionStepper);
 
             NumericStepper episodeNumberStepper = new() { Value = slotSave.EpisodeNumber, Increment = 1, MaximumDecimalPlaces = 0, MinValue = 1, MaxValue = 5, ID = "EpisodeNumber" };
-            layout.Rows.Add(ControlGenerator.GetControlWithLabel("Episode: ", episodeNumberStepper));
+            layout.Rows.Add(ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Episode:"), episodeNumberStepper));
             _modifierControls.Add(episodeNumberStepper);
 
             NumericStepper hflStepper = new() { Value = slotSave.HaruhiFriendshipLevel, Increment = 1, MaximumDecimalPlaces = 0, MinValue = 1, MaxValue = 64, ID = "HFL" };
@@ -585,7 +585,7 @@ namespace SerialLoops.Dialogs
 
             NumericStepper numSavesStepper = new()
             { Value = commonSave.NumSaves, Increment = 1, MaximumDecimalPlaces = 0, ID = "NumSaves" };
-            layout.Rows.Add(ControlGenerator.GetControlWithLabel("Number of Saves: ", numSavesStepper));
+            layout.Rows.Add(ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Number of Saves:"), numSavesStepper));
             _modifierControls.Add(numSavesStepper);
 
             TableLayout volumeLayout = new() { Spacing = new(5, 5), Padding = 10 };
@@ -597,7 +597,7 @@ namespace SerialLoops.Dialogs
                 MaximumDecimalPlaces = 0,
                 ID = "BgmVolume"
             };
-            volumeLayout.Rows.Add(ControlGenerator.GetControlWithLabel("Music: ", bgmVolumeStepper));
+            volumeLayout.Rows.Add(ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Music:"), bgmVolumeStepper));
             _modifierControls.Add(bgmVolumeStepper);
 
             NumericStepper sfxVolumeStepper = new()
@@ -608,7 +608,7 @@ namespace SerialLoops.Dialogs
                 MaximumDecimalPlaces = 0,
                 ID = "SfxVolume"
             };
-            volumeLayout.Rows.Add(ControlGenerator.GetControlWithLabel("Sound Effects: ", sfxVolumeStepper));
+            volumeLayout.Rows.Add(ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Sound Effects:"), sfxVolumeStepper));
             _modifierControls.Add(sfxVolumeStepper);
 
             NumericStepper wordsVolumeStepper = new()
@@ -619,7 +619,7 @@ namespace SerialLoops.Dialogs
                 MaximumDecimalPlaces = 0,
                 ID = "WordsVolume"
             };
-            volumeLayout.Rows.Add(ControlGenerator.GetControlWithLabel("Dialogue: ", wordsVolumeStepper));
+            volumeLayout.Rows.Add(ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Dialogue:"), wordsVolumeStepper));
             _modifierControls.Add(wordsVolumeStepper);
 
             NumericStepper voiceVolumeStepper = new()
@@ -630,7 +630,7 @@ namespace SerialLoops.Dialogs
                 MaximumDecimalPlaces = 0,
                 ID = "VoiceVolume"
             };
-            volumeLayout.Rows.Add(ControlGenerator.GetControlWithLabel("Voices: ", voiceVolumeStepper));
+            volumeLayout.Rows.Add(ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Voices:"), voiceVolumeStepper));
             _modifierControls.Add(voiceVolumeStepper);
 
             CheckBox kyonVoiceCheckBox = new()
@@ -706,14 +706,14 @@ namespace SerialLoops.Dialogs
             {
                 Items =
                 {
-                    "Fast Forward",
-                    "Skip Already Read"
+                    Application.Instance.Localize(this, "Fast Forward"),
+                    Application.Instance.Localize(this, "Skip Already Read")
                 },
                 SelectedValue =
                     commonSave.Options.StoryOptions.HasFlag(SaveOptions.PuzzleInvestigationOptions
                         .DIALOGUE_SKIPPING_SKIP_ALREADY_READ)
-                        ? "Skip Already Read"
-                        : "Fast Forward",
+                        ? Application.Instance.Localize(this, "Skip Already Read")
+                        : Application.Instance.Localize(this, "Fast Forward"),
                 Orientation = Orientation.Vertical,
                 Padding = 10,
                 Spacing = new(0, 5),
@@ -725,13 +725,13 @@ namespace SerialLoops.Dialogs
             {
                 Items =
                 {
-                    "Off",
-                    "On"
+                    Application.Instance.Localize(this, "Off"),
+                    Application.Instance.Localize(this, "On")
                 },
                 SelectedValue =
                     commonSave.Options.StoryOptions.HasFlag(SaveOptions.PuzzleInvestigationOptions.BATCH_DIALOGUE_DISPLAY_ON)
-                        ? "On"
-                        : "Off",
+                        ? Application.Instance.Localize(this, "On")
+                        : Application.Instance.Localize(this, "Off"),
                 Orientation = Orientation.Vertical,
                 Padding = 10,
                 Spacing = new(0, 5),
@@ -743,17 +743,17 @@ namespace SerialLoops.Dialogs
             {
                 Items =
                 {
-                    "Off",
-                    "Unseen Only",
-                    "On"
+                    Application.Instance.Localize(this, "Off"),
+                    Application.Instance.Localize(this, "Unseen Only"),
+                    Application.Instance.Localize(this, "On")
                 },
                 SelectedValue =
                     commonSave.Options.StoryOptions.HasFlag(SaveOptions.PuzzleInvestigationOptions.PUZZLE_INTERRUPTE_SCENES_ON)
-                        ? "On"
+                        ? Application.Instance.Localize(this, "On")
                         : (commonSave.Options.StoryOptions.HasFlag(SaveOptions.PuzzleInvestigationOptions
                             .PUZZLE_INTERRUPT_SCENES_UNSEEN_ONLY)
-                            ? "Unseen Only"
-                            : "Off"),
+                            ? Application.Instance.Localize(this, "Unseen Only")
+                            : Application.Instance.Localize(this, "Off")),
                 Orientation = Orientation.Vertical,
                 Padding = 10,
                 Spacing = new(0, 5),
@@ -765,12 +765,12 @@ namespace SerialLoops.Dialogs
             {
                 Items =
                 {
-                    "Off",
-                    "On"
+                    Application.Instance.Localize(this, "Off"),
+                    Application.Instance.Localize(this, "On")
                 },
                 SelectedValue = commonSave.Options.StoryOptions.HasFlag(SaveOptions.PuzzleInvestigationOptions.TOPIC_STOCK_MODE_ON)
-                    ? "On"
-                    : "Off",
+                    ? Application.Instance.Localize(this, "On")
+                    : Application.Instance.Localize(this, "Off"),
                 Orientation = Orientation.Vertical,
                 Padding = 10,
                 Spacing = new(0, 5),
@@ -781,16 +781,16 @@ namespace SerialLoops.Dialogs
 
             layout.Rows.Add(new TableLayout(
                 new TableRow(
-                    new GroupBox { Text = "Volume Config", Content = volumeLayout },
-                    new GroupBox { Text = "Voices Config", Content = voiceToggleLayout }
+                    new GroupBox { Text = Application.Instance.Localize(this, "Volume Config"), Content = volumeLayout },
+                    new GroupBox { Text = Application.Instance.Localize(this, "Voices Config"), Content = voiceToggleLayout }
                 ),
                 new TableRow(
-                    new GroupBox { Text = "Puzzle Interrupt Scenes", Content = puzzleInterruptScenes },
-                    new GroupBox { Text = "Topic Stock Mode", Content = topicStockMode }
+                    new GroupBox { Text = Application.Instance.Localize(this, "Puzzle Interrupt Scenes"), Content = puzzleInterruptScenes },
+                    new GroupBox { Text = Application.Instance.Localize(this, "Topic Stock Mode"), Content = topicStockMode }
                 ),
                 new TableRow(
-                    new GroupBox { Text = "Dialogue Skipping", Content = dialogueSkipping },
-                    new GroupBox { Text = "Batch Dialogue Display", Content = batchDialogueDisplay }
+                    new GroupBox { Text = Application.Instance.Localize(this, "Dialogue Skipping"), Content = dialogueSkipping },
+                    new GroupBox { Text = Application.Instance.Localize(this, "Batch Dialogue Display"), Content = batchDialogueDisplay }
                 ),
                 new TableRow()
             )

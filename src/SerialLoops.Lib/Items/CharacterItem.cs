@@ -144,21 +144,12 @@ namespace SerialLoops.Lib.Items
         }
     }
 
-    public class NameplateProperties
+    public class NameplateProperties(string name, SKColor nameColor, SKColor plateColor, SKColor outlineColor, bool hasOutline)
     {
-        public string Name { get; set; }
-        public SKColor NameColor { get; set; }
-        public SKColor PlateColor { get; set; }
-        public SKColor OutlineColor { get; set; }
-        public bool HasOutline { get; set; }
-
-        public NameplateProperties(string name, SKColor nameColor, SKColor plateColor, SKColor outlineColor, bool hasOutline)
-        {
-            Name = name;
-            NameColor = nameColor;
-            PlateColor = plateColor;
-            OutlineColor = outlineColor;
-            HasOutline = hasOutline;
-        }
+        public string Name { get; set; } = name;
+        public SKColor NameColor { get; set; } = nameColor;
+        public SKColor PlateColor { get; set; } = plateColor;
+        public SKColor OutlineColor { get; set; } = outlineColor;
+        public bool HasOutline { get; set; } = hasOutline;
     }
 }

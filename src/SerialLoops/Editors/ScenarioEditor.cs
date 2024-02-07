@@ -62,7 +62,7 @@ namespace SerialLoops.Editors
             _addButton = new()
             {
                 Image = ControlGenerator.GetIcon("Add", _log),
-                ToolTip = "Add Command",
+                ToolTip = Application.Instance.Localize(this, "Add Command"),
                 Width = 22
             };
             _addButton.Click += AddButton_Click;
@@ -70,7 +70,7 @@ namespace SerialLoops.Editors
             _deleteButton = new()
             {
                 Image = ControlGenerator.GetIcon("Remove", _log),
-                ToolTip = "Remove Command",
+                ToolTip = Application.Instance.Localize(this, "Remove Command"),
                 Width = 22,
                 Enabled = _commandsPanel.SelectedCommand is not null
             };
@@ -79,7 +79,7 @@ namespace SerialLoops.Editors
             _clearButton = new()
             {
                 Image = ControlGenerator.GetIcon("Clear", _log),
-                ToolTip = "Clear Scenario",
+                ToolTip = Application.Instance.Localize(this, "Clear Scenario"),
                 Width = 22
             };
             _clearButton.Click += ClearButton_Click;
@@ -87,7 +87,7 @@ namespace SerialLoops.Editors
             _upButton = new()
             {
                 Image = ControlGenerator.GetIcon("Move_Up", _log),
-                ToolTip = "Move Command Up",
+                ToolTip = Application.Instance.Localize(this, "Move Command Up"),
                 Width = 22,
                 Enabled = _commandsPanel.SelectedCommand is not null
             };
@@ -96,7 +96,7 @@ namespace SerialLoops.Editors
             _downButton = new()
             {
                 Image = ControlGenerator.GetIcon("Move_Down", _log),
-                ToolTip = "Move Command Down",
+                ToolTip = Application.Instance.Localize(this, "Move Command Down"),
                 Width = 22,
                 Enabled = _commandsPanel.SelectedCommand is not null
             };
@@ -143,7 +143,7 @@ namespace SerialLoops.Editors
             commandDropDown.Items.AddRange(verbs);
             commandDropDown.SelectedKey = command.Value.Verb.ToString();
             commandDropDown.SelectedKeyChanged += CommandDropDown_SelectedKeyChanged;
-            _editorControls.Items.Add(ControlGenerator.GetControlWithLabel("Command", commandDropDown));
+            _editorControls.Items.Add(ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Command"), commandDropDown));
 
             Item parameterItem = null;
             StackLayout parameterLink = null;
@@ -180,7 +180,7 @@ namespace SerialLoops.Editors
                     Items = { parameterDropDown, parameterLink }
                 };
                 commandDropDown.ParameterLayout = parameterLayout;
-                _editorControls.Items.Add(ControlGenerator.GetControlWithLabel(parameterItem.Type.ToString().Replace("_", " "), parameterLayout));
+                _editorControls.Items.Add(ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, parameterItem.Type.ToString()), parameterLayout));
             }
             else
             {
@@ -193,7 +193,7 @@ namespace SerialLoops.Editors
                     Items = { parameterBox }
                 };
                 commandDropDown.ParameterLayout = parameterLayout;
-                _editorControls.Items.Add(ControlGenerator.GetControlWithLabel($"Parameter Value", parameterLayout));
+                _editorControls.Items.Add(ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Parameter Value"), parameterLayout));
             }
         }
 
@@ -307,8 +307,8 @@ namespace SerialLoops.Editors
         private void ClearButton_Click(object sender, EventArgs e)
         {
             DialogResult result = MessageBox.Show(
-                "Clear all commands from the game scenario?\nThis action is irreversible.",
-                "Clear Scenario",
+                Application.Instance.Localize(this, "Clear all commands from the game scenario?\nThis action is irreversible."),
+                Application.Instance.Localize(this, "Clear Scenario"),
                 MessageBoxButtons.OKCancel,
                 MessageBoxType.Warning
             );

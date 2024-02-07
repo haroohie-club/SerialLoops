@@ -82,6 +82,38 @@ namespace SerialLoops.Utility
         }
     }
 
+    internal class DropDownOption : Option
+    {
+        public Action<string> OnChange { get; set; }
+        protected DropDown _dropDown { get; set; }
+
+        public string Value
+        {
+            get => _dropDown.SelectedKey;
+            set => _dropDown.SelectedKey = value;
+        }
+
+        public DropDownOption(List<(string Key, string Value)> options)
+        {
+            _dropDown = new DropDown();
+            _dropDown.Items.AddRange(options.Select(o => new ListItem { Key = o.Key, Text = o.Value }));
+            _dropDown.SelectedKeyChanged += (sender, args) => { OnChange?.Invoke(Value); };
+        }
+
+        protected override Control GetControl()
+        {
+            return new StackLayout
+            {
+                Padding = 5,
+                Spacing = 5,
+                Orientation = Orientation.Horizontal,
+                VerticalContentAlignment = VerticalAlignment.Center,
+                Items = { _dropDown },
+                Enabled = Enabled,
+            };
+        }
+    }
+
     internal class BooleanOption : Option
     {
         public Action<bool> OnChange { get; set; }

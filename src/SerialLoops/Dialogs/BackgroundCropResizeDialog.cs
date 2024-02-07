@@ -30,7 +30,7 @@ namespace SerialLoops.Dialogs
         public ImageCropResizeDialog(SKBitmap startImage, int width, int height, ILogger log)
         {
             _log = log;
-            Title = "Crop & Scale";
+            Title = Application.Instance.Localize(this, "Crop & Scale");
             MinimumSize = new(900, 750);
             Padding = 10;
             StartImage = startImage;
@@ -42,8 +42,8 @@ namespace SerialLoops.Dialogs
         private void InitializeComponent()
         {
             // Save / Close
-            Button saveButton = new() { Text = "Save" };
-            Button cancelButton = new() { Text = "Cancel" };
+            Button saveButton = new() { Text = Application.Instance.Localize(this, "Save") };
+            Button cancelButton = new() { Text = Application.Instance.Localize(this, "Cancel") };
             saveButton.Click += (sender, e) =>
             {
                 SaveChanges = true;
@@ -63,7 +63,7 @@ namespace SerialLoops.Dialogs
             _widthStepper = new() { Value = StartImage.Width, MinValue = 1, Width = 55 };
             _heightStepper = new() { Value = StartImage.Height, MinValue = 1, Width = 55 };
             _aspectRatio = (float) _widthStepper.Value / (float) _heightStepper.Value;
-            Button scaleToFitButton = new() { Text = "Apply" };
+            Button scaleToFitButton = new() { Text = Application.Instance.Localize(this, "Apply") };
             CheckBox preserveAspectRatioCheckbox = new() { Checked = true };
             scaleToFitButton.Click += (sender, e) =>
             {
@@ -100,7 +100,7 @@ namespace SerialLoops.Dialogs
             // Position controls
             _imageXStepper = new() { Value = _imageLocation.X, Width = 55 };
             _imageYStepper = new() { Value = _imageLocation.Y, Width = 55 };
-            Button resetPositionButton = new() { Text = "Apply" };
+            Button resetPositionButton = new() { Text = Application.Instance.Localize(this, "Apply") };
             _imageXStepper.ValueChanged += (sender, e) =>
             {
                 _imageLocation.X = (int) _imageXStepper.Value;
@@ -144,7 +144,7 @@ namespace SerialLoops.Dialogs
                                 {
                                     new GroupBox
                                     {
-                                        Text = "Scale Image",
+                                        Text = Application.Instance.Localize(this, "Scale Image"),
                                         Width = 200,
                                         Padding = 5,
                                         Content = new StackLayout
@@ -154,7 +154,7 @@ namespace SerialLoops.Dialogs
                                             Padding = 5,
                                             Items =
                                             {
-                                                ControlGenerator.GetControlWithLabel("Size:",
+                                                ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Size:"),
                                                     new StackLayout
                                                     {
                                                         Orientation = Orientation.Vertical,
@@ -164,15 +164,15 @@ namespace SerialLoops.Dialogs
                                                             _heightStepper,
                                                         }
                                                     }),
-                                                ControlGenerator.GetControlWithLabel("Preserve Aspect Ratio:",
+                                                ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Preserve Aspect Ratio:"),
                                                     preserveAspectRatioCheckbox),
-                                                ControlGenerator.GetControlWithLabel("Scale To Fit:", scaleToFitButton),
+                                                ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Scale To Fit:"), scaleToFitButton),
                                             }
                                         }
                                     },
                                     new GroupBox
                                     {
-                                        Text = "Position Image",
+                                        Text = Application.Instance.Localize(this, "Position Image"),
                                         Width = 200,
                                         Padding = 5,
                                         Content = new StackLayout
@@ -182,7 +182,7 @@ namespace SerialLoops.Dialogs
                                             Padding = 5,
                                             Items =
                                             {
-                                                ControlGenerator.GetControlWithLabel("Position:",
+                                                ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Position:"),
                                                     new StackLayout
                                                     {
                                                         Orientation = Orientation.Vertical,
@@ -192,7 +192,7 @@ namespace SerialLoops.Dialogs
                                                             _imageYStepper
                                                         }
                                                     }),
-                                                ControlGenerator.GetControlWithLabel("Reset:", resetPositionButton),
+                                                ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Reset:"), resetPositionButton),
                                             }
                                         }
                                     },
@@ -204,8 +204,8 @@ namespace SerialLoops.Dialogs
                                         Padding = 5,
                                         Items =
                                         {
-                                            "Ctrl+Scroll — Scale Image",
-                                            "Arrow Keys — Move Image"
+                                            Application.Instance.Localize(this, "Ctrl+Scroll — Scale Image"),
+                                            Application.Instance.Localize(this, "Arrow Keys — Move Image")
                                         }
                                     }
                                 }

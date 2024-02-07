@@ -41,7 +41,7 @@ namespace SerialLoops.Lib.Items
             BGM,
             Character,
             Character_Sprite,
-            Chess,
+            Chess_Puzzle,
             Chibi,
             Group_Selection,
             Item,

@@ -40,11 +40,13 @@ namespace SerialLoops.Lib.Items
             {
                 if (!File.Exists(_vceFile))
                 {
-                    log.LogError($"Failed to load voice file {_vceFile}: file not found.");
+                    log.LogError("Failed to load voice file: file not found.");
+                    log.LogWarning(_vceFile);
                 }
                 else
                 {
-                    log.LogError($"Failed to load voice file {_vceFile}: file invalid.");
+                    log.LogError("Failed to load voice file: file invalid.");
+                    log.LogWarning(_vceFile);
                 }
             }
 
@@ -88,7 +90,8 @@ namespace SerialLoops.Lib.Items
             };
             if (audio is null)
             {
-                log.LogError($"Invalid audio file '{audioFile}' selected.");
+                log.LogError("Invalid audio file selected.");
+                log.LogWarning(audioFile);
                 return;
             }
             if (audio.WaveFormat.Channels > 1 || audio.WaveFormat.SampleRate > SoundItem.MAX_SAMPLERATE)
@@ -96,7 +99,7 @@ namespace SerialLoops.Lib.Items
                 string newAudioFile = "";
                 if (audio.WaveFormat.Channels > 1)
                 {
-                    log.Log($"Downmixing audio from stereo to mono for AHX conversion...");
+                    log.Log("Downmixing audio from stereo to mono for AHX conversion...");
                     newAudioFile = Path.Combine(Path.GetDirectoryName(vceCachedFile), $"{Path.GetFileNameWithoutExtension(vceCachedFile)}-downmixed.wav");
                     WaveFileWriter.CreateWaveFile(newAudioFile, audio.ToSampleProvider().ToMono().ToWaveProvider16());
                 }

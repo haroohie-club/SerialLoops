@@ -22,7 +22,7 @@ namespace SerialLoops.Dialogs
         public BgmLoopPropertiesDialog(WaveStream wav, string title, ILogger log, bool loopEnabled, uint startSample = 0, uint endSample = 0)
         {
             _log = log;
-            Title = $"{title} - Manage Loop";
+            Title = string.Format(Application.Instance.Localize(this, "{0} - Manage Loop"), title);
             Waveform = new(WaveformRenderer.Render(wav, WaveFormRendererSettings.StandardSettings));
             if (endSample == 0)
             {
@@ -38,7 +38,7 @@ namespace SerialLoops.Dialogs
         {
             CheckBox loopEnabledCheckBox = new()
             {
-                Text = "Loop?",
+                Text = Application.Instance.Localize(this, "Loop?"),
                 Checked = LoopPreview.LoopEnabled,
             };
             loopEnabledCheckBox.CheckedChanged += (obj, args) =>
@@ -116,8 +116,8 @@ namespace SerialLoops.Dialogs
                 LoopPreviewPlayer.Stop();
             };
 
-            Button saveButton = new() { Text = "Save" };
-            Button cancelButton = new() { Text = "Cancel" };
+            Button saveButton = new() { Text = Application.Instance.Localize(this, "Save") };
+            Button cancelButton = new() { Text = Application.Instance.Localize(this, "Cancel") };
             saveButton.Click += (obj, args) =>
             {
                 SaveChanges = true;
@@ -145,8 +145,8 @@ namespace SerialLoops.Dialogs
                             LoopPreviewPlayer,
                             loopEnabledCheckBox,
                             new StackLayout { Height = Waveform.Height - 65 },
-                            ControlGenerator.GetControlWithLabel("Start", startSampleBox),
-                            ControlGenerator.GetControlWithLabel("End", endSampleBox),
+                            ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Start"), startSampleBox),
+                            ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "End"), endSampleBox),
                         }
                     },
                     new StackLayout

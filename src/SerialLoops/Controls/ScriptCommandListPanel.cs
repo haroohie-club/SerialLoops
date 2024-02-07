@@ -160,7 +160,7 @@ namespace SerialLoops.Controls
                     {
                         Name = sectionName,
                         CommandsAvailable = EventFile.CommandsAvailable,
-                        Objects = new(),
+                        Objects = [],
                         SectionType = typeof(ScriptSection),
                         ObjectType = typeof(ScriptCommandInvocation),
                     });

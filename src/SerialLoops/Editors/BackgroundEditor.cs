@@ -21,10 +21,10 @@ namespace SerialLoops.Editors
             _bg = (BackgroundItem)Description;
             StackLayout extrasInfo = new();
 
-            Button exportButton = new() { Text = "Export" };
+            Button exportButton = new() { Text = Application.Instance.Localize(this, "Export") };
             exportButton.Click += ExportButton_Click;
 
-            Button replaceButton = new() { Text = "Replace" };
+            Button replaceButton = new() { Text = Application.Instance.Localize(this, "Replace") };
             replaceButton.Click += ReplaceButton_Click;
 
             if (!string.IsNullOrEmpty(_bg.CgName))
@@ -38,9 +38,9 @@ namespace SerialLoops.Editors
                 };
 
                 extrasInfo.Items.Add(cgNameBox);
-                extrasInfo.Items.Add($"Flag: {_bg.Flag}");
-                extrasInfo.Items.Add($"Unknown Extras Short: {_bg.ExtrasShort}");
-                extrasInfo.Items.Add($"Unknown Extras Byte: {_bg.ExtrasByte}");
+                extrasInfo.Items.Add(string.Format(Application.Instance.Localize(this, "Flag: {0}"), _bg.Flag));
+                extrasInfo.Items.Add(string.Format(Application.Instance.Localize(this, "Unknown Extras Short: {0}"), _bg.ExtrasShort));
+                extrasInfo.Items.Add(string.Format(Application.Instance.Localize(this, "Unknown Extras Byte: {0}"), _bg.ExtrasByte));
             }
 
             return new Scrollable
@@ -72,7 +72,7 @@ namespace SerialLoops.Editors
         private void ExportButton_Click(object sender, EventArgs e)
         {
             SaveFileDialog saveFileDialog = new();
-            saveFileDialog.Filters.Add(new() { Name = "PNG Image", Extensions = [".png"] });
+            saveFileDialog.Filters.Add(new() { Name = Application.Instance.Localize(this, "PNG Image"), Extensions = [".png"] });
             if (saveFileDialog.ShowAndReportIfFileSelected(this))
             {
                 try
@@ -82,7 +82,7 @@ namespace SerialLoops.Editors
                 }
                 catch (Exception ex)
                 {
-                    _log.LogError($"Failed to export background {_bg.DisplayName} to file {saveFileDialog.FileName}: {ex.Message}\n\n{ex.StackTrace}");
+                    _log.LogException(string.Format(Application.Instance.Localize(this, "Failed to export background {0} to file {1}"), _bg.DisplayName, saveFileDialog.FileName), ex);
                 }
             }
         }
@@ -91,7 +91,7 @@ namespace SerialLoops.Editors
         {
             OpenFileDialog openFileDialog = new();
             SKBitmap original = _bg.GetBackground();
-            openFileDialog.Filters.Add(new() { Name = "Supported Images", Extensions = [".bmp", ".gif", ".heif", ".jpg", ".jpeg", ".png", ".webp",] });
+            openFileDialog.Filters.Add(new() { Name = Application.Instance.Localize(this, "Supported Images"), Extensions = [".bmp", ".gif", ".heif", ".jpg", ".jpeg", ".png", ".webp",] });
             if (openFileDialog.ShowAndReportIfFileSelected(this))
             {
                 ImageCropResizeDialog bgResizeDialog = new(SKBitmap.Decode(openFileDialog.FileName), original.Width, original.Height, _log);
@@ -101,14 +101,14 @@ namespace SerialLoops.Editors
                     {
                         try
                         {
-                            LoopyProgressTracker tracker = new();
+                            LoopyProgressTracker tracker = new(s => Application.Instance.Localize(null, s));
                             _ = new ProgressDialog(() => _bg.SetBackground(bgResizeDialog.FinalImage, tracker, _log),
-                                () => Content = GetEditorPanel(), tracker, $"Replacing {_bg.DisplayName}...");
+                                () => Content = GetEditorPanel(), tracker, string.Format(Application.Instance.Localize(this, "Replacing {0}..."), _bg.DisplayName));
                             UpdateTabTitle(false);
                         }
                         catch (Exception ex)
                         {
-                            _log.LogError($"Failed to replace background {_bg.DisplayName} with file {openFileDialog.FileName}: {ex.Message}\n\n{ex.StackTrace}");
+                            _log.LogException(string.Format(Application.Instance.Localize(this, "Failed to replace background {0} with file {1}"), _bg.DisplayName, openFileDialog.FileName), ex);
                         }
                     }
                 };

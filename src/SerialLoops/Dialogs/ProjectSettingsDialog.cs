@@ -26,21 +26,21 @@ namespace SerialLoops.Dialogs
 
         private void InitializeComponent()
         {
-            Title = "Project Settings";
+            Title = Application.Instance.Localize(this, "Project Settings");
             Padding = 10;
             MinimumSize = new(300, 250);
 
-            Button applyButton = new() { Text = "Apply" };
+            Button applyButton = new() { Text = Application.Instance.Localize(this, "Apply") };
             applyButton.Click += ApplyButton_OnClick;
 
-            Button cancelButton = new() { Text = "Cancel" };
+            Button cancelButton = new() { Text = Application.Instance.Localize(this, "Cancel") };
             cancelButton.Click += (sender, e) => Close();
 
             Content = new TableLayout(
                 new TableRow(
                     new GroupBox
                     {
-                        Text = "Game Banner",
+                        Text = Application.Instance.Localize(this, "Game Banner"),
                         Padding = 10,
                         Content = new StackLayout
                         {
@@ -71,13 +71,13 @@ namespace SerialLoops.Dialogs
             {
                 Content = GetPreview(Settings.Icon)
             };
-            Button replaceButton = new() { Text = "Replace..." };
+            Button replaceButton = new() { Text = Application.Instance.Localize(this, "Replace...") };
             replaceButton.Click += (sender, e) =>
             {
                 OpenFileDialog dialog = new()
                 {
-                    Title = "Select Icon",
-                    Filters = { new FileFilter("Image Files", ".png", ".jpg", ".jpeg", ".bmp", ".gif") }
+                    Title = Application.Instance.Localize(this, "Select Icon"),
+                    Filters = { new FileFilter(Application.Instance.Localize(this, "Image Files"), ".png", ".jpg", ".jpeg", ".bmp", ".gif") }
                 };
 
                 if (dialog.ShowDialog(this) == DialogResult.Ok)
@@ -126,7 +126,7 @@ namespace SerialLoops.Dialogs
                 Spacing = 5,
                 HorizontalContentAlignment = HorizontalAlignment.Center,
                 VerticalContentAlignment = VerticalAlignment.Center,
-                Items = { "Game Title", _nameBox }
+                Items = { Application.Instance.Localize(this, "Game Title"), _nameBox }
             };
         }
 
@@ -135,13 +135,13 @@ namespace SerialLoops.Dialogs
             string text = _nameBox.Text;
             if (text.Length is < 1 or > 127)
             {
-                MessageBox.Show("Please enter a game name for the banner, between 1 and 128 characters.", MessageBoxType.Warning);
+                MessageBox.Show(Application.Instance.Localize(this, "Please enter a game name for the banner, between 1 and 128 characters."), MessageBoxType.Warning);
                 return;
             }
 
             if (text.Split('\n').Length > 3)
             {
-                MessageBox.Show("Game banner can only contain up to three lines.", MessageBoxType.Error);
+                MessageBox.Show(Application.Instance.Localize(this, "Game banner can only contain up to three lines."), MessageBoxType.Error);
                 return;
             }
             Settings.Name = text;

@@ -24,7 +24,7 @@ namespace SerialLoops.Dialogs
 
         public AsmHacksDialog(Project project, Config config, ILogger log)
         {
-            Title = "Apply Assembly Hacks";
+            Title = Application.Instance.Localize(this, "Apply Assembly Hacks");
             Padding = 5;
 
             StackLayout hacksLayout = new()
@@ -54,7 +54,7 @@ namespace SerialLoops.Dialogs
                     }
                     catch (Exception ex)
                     {
-                        log.LogException($"Failed to add parameters for hack file {file.File} in hack {hack.Name}", ex);
+                        log.LogException(string.Format(Application.Instance.Localize(this, "Failed to add parameters for hack file {0} in hack {1}"), file.File, hack.Name), ex);
                     }
                 }
 
@@ -103,15 +103,15 @@ namespace SerialLoops.Dialogs
 
             Button importButton = new()
             {
-                Text = "Import Hack",
+                Text = Application.Instance.Localize(this, "Import Hack"),
             };
             importButton.Click += (sender, args) =>
             {
                 OpenFileDialog openFileDialog = new()
                 {
-                    Title = "Import a Hack"
+                    Title = Application.Instance.Localize(this, "Import a Hack")
                 };
-                openFileDialog.Filters.Add(new("Serialized ASM hack", ".slhack"));
+                openFileDialog.Filters.Add(new(Application.Instance.Localize(this, "Serialized ASM hack"), ".slhack"));
 
                 if (openFileDialog.ShowAndReportIfFileSelected(this))
                 {
@@ -119,12 +119,12 @@ namespace SerialLoops.Dialogs
 
                     if (config.Hacks.Any(h => h.Files.Any(f => hack.Files.Contains(f))))
                     {
-                        log.LogError($"Error: duplicate hack detected! A file with the same name as a file in this hack has already been imported.");
+                        log.LogError("Error: duplicate hack detected! A file with the same name as a file in this hack has already been imported.");
                         return;
                     }
                     else if (config.Hacks.Any(h => h.Name == hack.Name))
                     {
-                        log.LogError($"Error: duplicate hack detected! A hack with the same name has already been imported.");
+                        log.LogError("Error: duplicate hack detected! A hack with the same name has already been imported.");
                         return;
                     }
 
@@ -144,7 +144,7 @@ namespace SerialLoops.Dialogs
 
             Button cancelButton = new()
             {
-                Text = "Cancel",
+                Text = Application.Instance.Localize(this, "Cancel"),
             };
             cancelButton.Click += (sender, args) =>
             {
@@ -153,7 +153,7 @@ namespace SerialLoops.Dialogs
 
             Button saveButton = new()
             {
-                Text = "Save",
+                Text = Application.Instance.Localize(this, "Save"),
             };
             saveButton.Click += (sender, args) =>
             {
@@ -197,19 +197,19 @@ namespace SerialLoops.Dialogs
                 }
                 catch (Exception ex)
                 {
-                    log.LogException($"Failed to read ARM9 from '{arm9Path}'", ex);
+                    log.LogException(string.Format(Application.Instance.Localize(this, "Failed to read ARM9 from '{0}'"), arm9Path), ex);
                 }
 
                 try
                 {
-                    LoopyProgressTracker tracker = new();
+                    LoopyProgressTracker tracker = new(project.Localize);
                     ProgressDialog _ = new(() =>
                     {
                         ARM9AsmHack.Insert(Path.Combine(project.BaseDirectory, "src"), arm9, 0x02005ECC, config.UseDocker ? config.DevkitArmDockerTag : string.Empty,
                             (object sender, DataReceivedEventArgs e) => { log.Log(e.Data); ((IProgressTracker)tracker).Focus(e.Data, 1); },
                             (object sender, DataReceivedEventArgs e) => log.LogWarning(e.Data),
                             devkitArmPath: config.DevkitArmPath);
-                    }, () => {}, tracker, "Patching ARM9");
+                    }, () => {}, tracker, Application.Instance.Localize(this, "Patching ARM9"));
                 }
                 catch (Exception ex)
                 {
@@ -260,18 +260,18 @@ namespace SerialLoops.Dialogs
                         {
                             try
                             {
-                                LoopyProgressTracker tracker = new();
+                                LoopyProgressTracker tracker = new(s => Application.Instance.Localize(null, s));
                                 ProgressDialog _ = new(() =>
                                 {
                                     OverlayAsmHack.Insert(overlaySourceDir, overlays[i], newRomInfoPath, config.UseDocker ? config.DevkitArmDockerTag : string.Empty,
                                     (object sender, DataReceivedEventArgs e) => { log.Log(e.Data); ((IProgressTracker)tracker).Focus(e.Data, 1); },
                                     (object sender, DataReceivedEventArgs e) => log.LogWarning(e.Data),
                                     devkitArmPath: config.DevkitArmPath);
-                                }, () => { }, tracker, $"Patching Overlay {overlays[i].Name}");
+                                }, () => { }, tracker, string.Format(Application.Instance.Localize(this, "Patching Overlay {0}"), overlays[i].Name));
                             }
                             catch (Exception ex)
                             {
-                                log.LogException($"Failed to insert hacks into overlay {overlays[i].Name}", ex);
+                                log.LogException(string.Format(Application.Instance.Localize(this, "Failed to insert hacks into overlay {0}"), overlays[i].Name), ex);
                             }
                         }
                     }
@@ -289,8 +289,7 @@ namespace SerialLoops.Dialogs
                     }
                     catch (Exception ex)
                     {
-                        log.LogError($"Failed saving overlay {overlay.Name} to disk");
-                        log.LogException($"{ex.Message}\n\n{ex.StackTrace}", ex);
+                        log.LogException(string.Format(Application.Instance.Localize(this, "Failed saving overlay {0} to disk"), overlay.Name), ex);
                     }
                 }
 
@@ -300,7 +299,7 @@ namespace SerialLoops.Dialogs
                 IEnumerable<string> failedHackNames = appliedHacks.Where(h => !h.Applied(project)).Select(h => h.Name);
                 if (failedHackNames.Any())
                 {
-                    log.LogError($"Failed to apply the following hacks to the ROM:\n{string.Join(", ", failedHackNames)}\n\nPlease check the log file for more information.\n\nIn order to preserve state, no hacks were applied.");
+                    log.LogError(string.Format(Application.Instance.Localize("Failed to apply the following hacks to the ROM:\n{0}\n\nPlease check the log file for more information.\n\nIn order to preserve state, no hacks were applied.", string.Join(", ", failedHackNames))));
                     foreach (AsmHack hack in appliedHacks)
                     {
                         hack.Revert(project, log);
@@ -321,11 +320,11 @@ namespace SerialLoops.Dialogs
                 {
                     if (appliedHacks.Count != 0)
                     {
-                        MessageBox.Show($"Successfully applied the following hacks:\n{string.Join(", ", appliedHacks.Select(h => h.Name))}", "Successfully applied hacks!", MessageBoxType.Information);
+                        MessageBox.Show(string.Format(Application.Instance.Localize(this, "Successfully applied the following hacks:\n{0}"), string.Join(", ", appliedHacks.Select(h => h.Name))), Application.Instance.Localize(this, "Successfully applied hacks!"), MessageBoxType.Information);
                     }
                     else
                     {
-                        MessageBox.Show("No hacks applied!", "Success!", MessageBoxType.Information);
+                        MessageBox.Show(Application.Instance.Localize(this, "No hacks applied!"), Application.Instance.Localize(this, "Success!"), MessageBoxType.Information);
                     }
                 }
 

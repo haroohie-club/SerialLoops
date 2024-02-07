@@ -28,38 +28,38 @@ namespace SerialLoops.Editors
             _vce = (VoicedLineItem)Description;
             VcePlayer = new(_vce, _log);
 
-            Button extractButton = new() { Text = "Extract" };
+            Button extractButton = new() { Text = Application.Instance.Localize(this, "Extract") };
             extractButton.Click += (obj, args) =>
             {
-                SaveFileDialog saveFileDialog = new() { Title = "Save voiced line as WAV" };
-                saveFileDialog.Filters.Add(new() { Name = "WAV File", Extensions = [".wav"] });
+                SaveFileDialog saveFileDialog = new() { Title = Application.Instance.Localize(this, "Save voiced line as WAV") };
+                saveFileDialog.Filters.Add(new() { Name = Application.Instance.Localize(this, "WAV File"), Extensions = [".wav"] });
                 if (saveFileDialog.ShowAndReportIfFileSelected(this))
                 {
                     WaveFileWriter.CreateWaveFile(saveFileDialog.FileName, _vce.GetWaveProvider(_log));
                 }
             };
 
-            Button replaceButton = new() { Text = "Replace" };
+            Button replaceButton = new() { Text = Application.Instance.Localize(this, "Replace") };
             replaceButton.Click += (obj, args) =>
             {
-                OpenFileDialog openFileDialog = new() { Title = "Replace voiced line" };
-                openFileDialog.Filters.Add(new() { Name = "Supported Audio Files", Extensions = [".wav", ".flac", ".mp3", ".ogg"] });
-                openFileDialog.Filters.Add(new() { Name = "WAV files", Extensions = [".wav"] });
-                openFileDialog.Filters.Add(new() { Name = "FLAC files", Extensions = [".flac"] });
-                openFileDialog.Filters.Add(new() { Name = "MP3 files", Extensions = [".mp3"] });
-                openFileDialog.Filters.Add(new() { Name = "Vorbis files", Extensions = [".ogg"] });
+                OpenFileDialog openFileDialog = new() { Title = Application.Instance.Localize(this, "Replace voiced line") };
+                openFileDialog.Filters.Add(new() { Name = Application.Instance.Localize(this, "Supported Audio Files"), Extensions = [".wav", ".flac", ".mp3", ".ogg"] });
+                openFileDialog.Filters.Add(new() { Name = Application.Instance.Localize(this, "WAV files"), Extensions = [".wav"] });
+                openFileDialog.Filters.Add(new() { Name = Application.Instance.Localize(this, "FLAC files"), Extensions = [".flac"] });
+                openFileDialog.Filters.Add(new() { Name = Application.Instance.Localize(this, "MP3 files"), Extensions = [".mp3"] });
+                openFileDialog.Filters.Add(new() { Name = Application.Instance.Localize(this, "Vorbis files"), Extensions = [".ogg"] });
                 if (openFileDialog.ShowAndReportIfFileSelected(this))
                 {
-                    LoopyProgressTracker tracker = new();
+                    LoopyProgressTracker tracker = new(s => Application.Instance.Localize(null, s));
                     VcePlayer.Stop();
                     _ = new ProgressDialog(() => _vce.Replace(openFileDialog.FileName, _project.BaseDirectory, _project.IterativeDirectory, Path.Combine(_project.Config.CachesDirectory, "vce", $"{_vce.Name}.wav"), _log), () =>
                     {
                         Content = GetEditorPanel();
-                    }, tracker, "Replace voiced line");
+                    }, tracker, Application.Instance.Localize(this, "Replace voiced line"));
                 }
             };
 
-            Button restoreButton = new() { Text = "Restore" };
+            Button restoreButton = new() { Text = Application.Instance.Localize(this, "Restore") };
             restoreButton.Click += (obj, args) =>
             {
                 VcePlayer.Stop();
@@ -74,7 +74,7 @@ namespace SerialLoops.Editors
                 TextBox subtitleBox = new()
                 {
                     Width = 400,
-                    PlaceholderText = "Enter subtitle text..."
+                    PlaceholderText = Application.Instance.Localize(this, "Enter subtitle text...")
                 };
 
                 ScreenSelector screenSelector = new(_log, ScreenScriptParameter.DsScreen.BOTTOM, false);
@@ -156,7 +156,7 @@ namespace SerialLoops.Editors
                     }
                 };
 
-                subtitleLayout.Items.Add(ControlGenerator.GetControlWithLabel("Subtitle Text", subtitleBox));
+                subtitleLayout.Items.Add(ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Subtitle Text"), subtitleBox));
                 subtitleLayout.Items.Add(new StackLayout
                 {
                     Orientation = Orientation.Horizontal,
@@ -164,8 +164,8 @@ namespace SerialLoops.Editors
                     Spacing = 20,
                     Items =
                     {
-                        ControlGenerator.GetControlWithLabel("Target Screen", screenSelector),
-                        ControlGenerator.GetControlWithLabel("Screen Position", yPosSelectionList)
+                        ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Target Screen"), screenSelector),
+                        ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Screen Position"), yPosSelectionList)
                     }
                 });
             }
@@ -189,7 +189,7 @@ namespace SerialLoops.Editors
                         }),
                         new TableRow(new GroupBox
                         {
-                            Text = "Edit Subtitle",
+                            Text = Application.Instance.Localize(this, "Edit Subtitle"),
                             Padding = 5,
                             Content = subtitleLayout
                         }),

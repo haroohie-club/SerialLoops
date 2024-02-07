@@ -21,7 +21,7 @@ namespace SerialLoops.Dialogs
             _tabs = tabs;
             _log = log;
 
-            Title = "Edit Tutorial Mappings";
+            Title = Application.Instance.Localize(this, "Edit Tutorial Mappings");
             MinimumSize = new(400, 600);
             Size = new(400, 600);
             Padding = 10;
@@ -52,7 +52,7 @@ namespace SerialLoops.Dialogs
                     Spacing = 3,
                     Items =
                     {
-                        ControlGenerator.GetControlWithLabel("Associated Script", associatedScriptDropDown),
+                        ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Associated Script"), associatedScriptDropDown),
                         associatedLink,
                     }
                 };
@@ -67,21 +67,21 @@ namespace SerialLoops.Dialogs
 
                 tutorialsLayout.Items.Add(new GroupBox
                 {
-                    Text = $"Tutorial {idLabel.Text}",
+                    Text = string.Format(Application.Instance.Localize(this, "Tutorial {0}"), idLabel.Text),
                     Content = new StackLayout
                     {
                         Orientation = Orientation.Vertical,
                         Spacing = 5,
                         Items =
                         {
-                            ControlGenerator.GetControlWithLabel("ID", idLabel),
+                            ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "ID"), idLabel),
                             scriptLayout,
                         }
                     }
                 });
             }
 
-            Button saveButton = new() { Text = "Save" };
+            Button saveButton = new() { Text = Application.Instance.Localize(this, "Save") };
             saveButton.Click += (sender, args) =>
             {
                 _log.Log("Attempting to save tutorial mappings...");

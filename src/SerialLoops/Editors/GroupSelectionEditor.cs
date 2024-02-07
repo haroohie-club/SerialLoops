@@ -29,7 +29,7 @@ namespace SerialLoops.Editors
 
                 GroupBox selectionBox = new() { Text = scenarioActivity.Title.GetSubstitutedString(_project) };
 
-                GroupBox optimalGroupBox = new() { Text = "Optimal Group" };
+                GroupBox optimalGroupBox = new() { Text = Application.Instance.Localize(this, "Optimal Group") };
                 StackLayout optimalGroupLayout = new()
                 {
                     Orientation = Orientation.Horizontal,
@@ -43,7 +43,7 @@ namespace SerialLoops.Editors
                 };
                 optimalGroupBox.Content = optimalGroupLayout;
 
-                GroupBox worstGroupBox = new() { Text = "Worst Group" };
+                GroupBox worstGroupBox = new() { Text = Application.Instance.Localize(this, "Worst Group") };
                 StackLayout worstGroupLayout = new()
                 {
                     Orientation = Orientation.Horizontal,
@@ -57,7 +57,7 @@ namespace SerialLoops.Editors
                 };
                 worstGroupBox.Content = worstGroupLayout;
 
-                GroupBox routesBox = new() { Text = "Routes" };
+                GroupBox routesBox = new() { Text = Application.Instance.Localize(this, "Routes") };
                 StackLayout routesLayout = new() { Orientation = Orientation.Vertical, Spacing = 2 };
                 foreach (ScenarioRoute route in scenarioActivity.Routes)
                 {
@@ -72,15 +72,15 @@ namespace SerialLoops.Editors
                             kyonlessTopicsLayout.Items.Add(ControlGenerator.GetFileLink(topicItem, _tabs, _log));
                         }
                     }
-                    GroupBox kyonlessTopicsBox = new() { Text = "Kyonless Topics", Content = kyonlessTopicsLayout };
+                    GroupBox kyonlessTopicsBox = new() { Text = Application.Instance.Localize(this, "Kyonless Topics"), Content = kyonlessTopicsLayout };
                     StackLayout routeLayout = new()
                     {
                         Orientation = Orientation.Vertical,
                         Spacing = 2,
                         Items =
                         {
-                            ControlGenerator.GetControlWithLabel("Script", ControlGenerator.GetFileLink(_project.Items.First(i => i.Type == ItemDescription.ItemType.Script && ((ScriptItem)i).Event.Index == route.ScriptIndex), _tabs, _log)),
-                            ControlGenerator.GetControlWithLabel("Characters Involved", new Label { Text = string.Join(", ", route.CharactersInvolved) }),
+                            ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Script"), ControlGenerator.GetFileLink(_project.Items.First(i => i.Type == ItemDescription.ItemType.Script && ((ScriptItem)i).Event.Index == route.ScriptIndex), _tabs, _log)),
+                            ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Characters Involved"), new Label { Text = string.Join(", ", route.CharactersInvolved) }),
                             kyonlessTopicsBox,
                         },
                     };
@@ -95,10 +95,10 @@ namespace SerialLoops.Editors
                     Spacing = 3,
                     Items =
                     {
-                        ControlGenerator.GetControlWithLabel("Haruhi Present", new CheckBox { Checked = scenarioActivity.HaruhiPresent }),
-                        ControlGenerator.GetControlWithLabel("Required Brigade Member", new Label { Text = scenarioActivity.RequiredBrigadeMember.ToString() }),
-                        ControlGenerator.GetControlWithLabel("Future Description", new TextBox { Text = scenarioActivity.FutureDesc.GetSubstitutedString(_project), Width = 400 }),
-                        ControlGenerator.GetControlWithLabel("Past Description", new TextBox { Text = scenarioActivity.PastDesc.GetSubstitutedString(_project), Width = 400 }),
+                        ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Haruhi Present"), new CheckBox { Checked = scenarioActivity.HaruhiPresent }),
+                        ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Required Brigade Member"), new Label { Text = scenarioActivity.RequiredBrigadeMember.ToString() }),
+                        ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Future Description"), new TextBox { Text = scenarioActivity.FutureDesc.GetSubstitutedString(_project), Width = 400 }),
+                        ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Past Description"), new TextBox { Text = scenarioActivity.PastDesc.GetSubstitutedString(_project), Width = 400 }),
                         optimalGroupBox,
                         worstGroupBox,
                         routesBox,

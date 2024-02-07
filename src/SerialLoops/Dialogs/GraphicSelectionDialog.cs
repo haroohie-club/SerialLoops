@@ -33,13 +33,13 @@ namespace SerialLoops.Dialogs
 
         private void InitializeComponent()
         {
-            Title = "Select Graphic";
+            Title = Application.Instance.Localize(this, "Select Graphic");
             MinimumSize = new Size(450, 400);
             Padding = 10;
 
             _filter = new SearchBox
             {
-                PlaceholderText = "Filter by name",
+                PlaceholderText = Application.Instance.Localize(this, "Filter by name"),
                 Width = 150,
             };
             _filter.TextChanged += (sender, args) =>
@@ -68,9 +68,9 @@ namespace SerialLoops.Dialogs
                 _preview.Content = GeneratePreview();
             };
 
-            Button closeButton = new() { Text = "Confirm" };
+            Button closeButton = new() { Text = Application.Instance.Localize(this, "Confirm") };
             closeButton.Click += (sender, args) => Close(_selector.SelectedValue as IPreviewableGraphic);
-            Button cancelButton = new() { Text = "Cancel" };
+            Button cancelButton = new() { Text = Application.Instance.Localize(this, "Cancel") };
             cancelButton.Click += (sender, args) => Close(_currentSelection);
 
             Content = new StackLayout
@@ -139,7 +139,7 @@ namespace SerialLoops.Dialogs
                 Spacing = 10,
                 Items =
                 {
-                    new Label { Text = _selector.SelectedValue == null ? "No preview available" : ((ItemDescription)_selector.SelectedValue).DisplayName },
+                    new Label { Text = _selector.SelectedValue == null ? Application.Instance.Localize(this, "No preview available") : ((ItemDescription)_selector.SelectedValue).DisplayName },
                     new SKGuiImage(_selector.SelectedValue == null ? new SKBitmap(64, 64) :
                         ((IPreviewableGraphic) _selector.SelectedValue).GetPreview(_project, 250, 350)),
                     backgroundTypeLabel,

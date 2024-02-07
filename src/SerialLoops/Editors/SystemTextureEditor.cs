@@ -18,13 +18,13 @@ namespace SerialLoops.Editors
         {
             _systemTexture = (SystemTextureItem)Description;
 
-            Button exportButton = new() { Text = "Export" };
+            Button exportButton = new() { Text = Application.Instance.Localize(this, "Export") };
             exportButton.Click += ExportButton_Click;
 
-            Button replaceButton = new() { Text = "Replace" };
+            Button replaceButton = new() { Text = Application.Instance.Localize(this, "Replace") };
             replaceButton.Click += ReplaceButton_Click;
 
-            Button replaceWithPaletteButton = new() { Text = "Replace with Palette" };
+            Button replaceWithPaletteButton = new() { Text = Application.Instance.Localize(this, "Replace with Palette") };
             replaceWithPaletteButton.Click += ReplaceWithPaletteButton_Click;
 
             return new StackLayout
@@ -47,7 +47,7 @@ namespace SerialLoops.Editors
                     },
                     new GroupBox
                     {
-                        Text = "Palette",
+                        Text = Application.Instance.Localize(this, "Palette"),
                         Content = new SKGuiImage(_systemTexture.Grp.GetPalette()),
                     }
                 }
@@ -57,7 +57,7 @@ namespace SerialLoops.Editors
         private void ExportButton_Click(object sender, EventArgs e)
         {
             SaveFileDialog saveFileDialog = new();
-            saveFileDialog.Filters.Add(new() { Name = "PNG Image", Extensions = [".png"] });
+            saveFileDialog.Filters.Add(new() { Name = Application.Instance.Localize(this, "PNG Image"), Extensions = [".png"] });
             if (saveFileDialog.ShowAndReportIfFileSelected(this))
             {
                 try
@@ -67,7 +67,7 @@ namespace SerialLoops.Editors
                 }
                 catch (Exception ex)
                 {
-                    _log.LogError($"Failed to export system texture {_systemTexture.DisplayName} to file {saveFileDialog.FileName}: {ex.Message}\n\n{ex.StackTrace}");
+                    _log.LogException(string.Format(Application.Instance.Localize(this, "Failed to export system texture {0} to file {1}"), _systemTexture.DisplayName, saveFileDialog.FileName), ex);
                 }
             }
         }
@@ -86,7 +86,7 @@ namespace SerialLoops.Editors
         {
             OpenFileDialog openFileDialog = new();
             SKBitmap original = _systemTexture.GetTexture();
-            openFileDialog.Filters.Add(new() { Name = "Supported Images", Extensions = [".bmp", ".gif", ".heif", ".jpg", ".jpeg", ".png", ".webp",] });
+            openFileDialog.Filters.Add(new() { Name = Application.Instance.Localize(this, "Supported Images"), Extensions = [".bmp", ".gif", ".heif", ".jpg", ".jpeg", ".png", ".webp",] });
             if (openFileDialog.ShowAndReportIfFileSelected(this))
             {
                 ImageCropResizeDialog systemTextureResizeDialog = new(SKBitmap.Decode(openFileDialog.FileName), original.Width, original.Height, _log);
@@ -96,14 +96,14 @@ namespace SerialLoops.Editors
                     {
                         try
                         {
-                            LoopyProgressTracker tracker = new();
+                            LoopyProgressTracker tracker = new(s => Application.Instance.Localize(null, s));
                             _ = new ProgressDialog(() => _systemTexture.SetTexture(systemTextureResizeDialog.FinalImage, replacePalette),
-                                () => Content = GetEditorPanel(), tracker, $"Replacing {_systemTexture.DisplayName}...");
+                                () => Content = GetEditorPanel(), tracker, string.Format(Application.Instance.Localize(this, $"Replacing {0}..."), _systemTexture.DisplayName));
                             UpdateTabTitle(false);
                         }
                         catch (Exception ex)
                         {
-                            _log.LogError($"Failed to replace system texture {_systemTexture.DisplayName} with file {openFileDialog.FileName}: {ex.Message}\n\n{ex.StackTrace}");
+                            _log.LogException(string.Format(Application.Instance.Localize(this, "Failed to replace system texture {0} with file {1}"), _systemTexture.DisplayName, openFileDialog.FileName), ex);
                         }
                     }
                 };

@@ -2,7 +2,7 @@
 using SerialLoops.Lib.Hacks;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -26,6 +26,7 @@ namespace SerialLoops.Lib
         public string HacksDirectory => Path.Combine(UserDirectory, "Hacks");
         [JsonIgnore]
         public List<AsmHack> Hacks { get; set; }
+        public string CurrentCultureName { get; set; }
         public string DevkitArmPath { get; set; }
         public bool UseDocker { get; set; }
         public string DevkitArmDockerTag { get; set; }
@@ -78,6 +79,14 @@ namespace SerialLoops.Lib
             if (string.IsNullOrWhiteSpace(DevkitArmPath))
             {
                 log.LogError("devkitARM is not detected at the default or specified install location. Please set devkitARM path.");
+            }
+            if (CurrentCultureName is null)
+            {
+                CurrentCultureName = CultureInfo.CurrentCulture.Name;
+            }
+            else
+            {
+                CultureInfo.CurrentCulture = new(CurrentCultureName);
             }
         }
 
@@ -157,6 +166,7 @@ namespace SerialLoops.Lib
             return new Config
             {
                 UserDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "SerialLoops"),
+                CurrentCultureName = CultureInfo.CurrentCulture.Name,
                 DevkitArmPath = devkitArmDir,
                 EmulatorPath = emulatorPath,
                 UseDocker = false,

@@ -32,15 +32,15 @@ namespace SerialLoops.Editors
 
             SfxPlayer = new(Player, _log);
 
-            Button extractButton = new() { Text = "Extract" };
+            Button extractButton = new() { Text = Application.Instance.Localize(this, "Extract") };
             extractButton.Click += (sender, args) =>
             {
                 Player.Stop();
                 SaveFileDialog saveFileDialog = new()
                 {
-                    Title = "Export SFX",
+                    Title = Application.Instance.Localize(this, "Export SFX"),
                 };
-                saveFileDialog.Filters.Add(new("WAV file", ".wav"));
+                saveFileDialog.Filters.Add(new(Application.Instance.Localize(this, "WAV file"), ".wav"));
 
                 if (saveFileDialog.ShowAndReportIfFileSelected(this))
                 {
@@ -70,12 +70,12 @@ namespace SerialLoops.Editors
                         Spacing = 3,
                         Items =
                         {
-                            ControlGenerator.GetTextHeader("Bank"),
+                            ControlGenerator.GetTextHeader(Application.Instance.Localize(this, "Bank")),
                             new Label { Text = $"{_sfx.AssociatedBank}" },
-                            ControlGenerator.GetTextHeader("Groups"),
+                            ControlGenerator.GetTextHeader(Application.Instance.Localize(this, "Groups")),
                             new Label
                             {
-                                Text = $"Groups: {string.Join(", ", _sfx.AssociatedGroups)}",
+                                Text = string.Format(Application.Instance.Localize(this, "Groups: {0}"), string.Join(", ", _sfx.AssociatedGroups)),
                                 Wrap = WrapMode.Word,
                                 Width = 600,
                             },
