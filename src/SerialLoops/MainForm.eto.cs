@@ -449,7 +449,10 @@ namespace SerialLoops
 
         private void Application_LocalizeString(object sender, LocalizeEventArgs e)
         {
-            e.LocalizedText = Strings.ResourceManager.GetString(e.Text, CultureInfo.CurrentCulture);
+            if (!string.IsNullOrEmpty(e.Text))
+            {
+                e.LocalizedText = Strings.ResourceManager.GetString(e.Text, CultureInfo.CurrentCulture);
+            }
         }
 
         private void UpdateRecentProjects()
