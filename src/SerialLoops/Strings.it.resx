@@ -490,4 +490,13 @@
   <data name="Fast Forward" xml:space="preserve">
     <value>Avanti Veloce</value>
   </data>
+  <data name="Filter" xml:space="preserve">
+    <value>Filtra</value>
+  </data>
+  <data name="Filter by name" xml:space="preserve">
+    <value>Filtra per nome</value>
+  </data>
+  <data name="Filter by Item" xml:space="preserve">
+    <value>Filtra per oggetti</value>
+  </data>
 </root>
