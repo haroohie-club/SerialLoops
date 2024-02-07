@@ -275,7 +275,12 @@ namespace SerialLoops.Lib
             try
             {
                 // Note that the nameplates are not localized by program locale but by selected project language
-                Characters ??= JsonSerializer.Deserialize<Dictionary<int, NameplateProperties>>(File.ReadAllText($"{Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Defaults", "DefaultCharacters")}.{LangCode}.json"), SERIALIZER_OPTIONS);
+                string defaultCharactersJson = $"{Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Defaults", "DefaultCharacters")}.{LangCode}.json";
+                if (!File.Exists(defaultCharactersJson))
+                {
+                    defaultCharactersJson = $"{Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Defaults", "DefaultCharacters")}.en.json";
+                }
+                Characters ??= JsonSerializer.Deserialize<Dictionary<int, NameplateProperties>>(File.ReadAllText(defaultCharactersJson), SERIALIZER_OPTIONS);
             }
             catch (Exception ex)
             {
