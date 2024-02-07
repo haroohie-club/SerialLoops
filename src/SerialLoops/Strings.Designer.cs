@@ -3369,6 +3369,15 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Language Template.
+        /// </summary>
+        public static string Language_Template {
+            get {
+                return ResourceManager.GetString("Language Template", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Load Game menu ticker tape.
         /// </summary>
         public static string Load_Game_menu_ticker_tape {
