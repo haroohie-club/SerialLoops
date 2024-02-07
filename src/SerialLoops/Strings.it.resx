@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Build and Run" xml:space="preserve">
+    <value>Ricostruisci e riavvia</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>Informazioni</value>
+  </data>
+  <data name="Auto Re-Open Last Project" xml:space="preserve">
+    <value>Avvia automaticamente ultimo progetto</value>
+  </data>
+  <data name="Command" xml:space="preserve">
+    <value>Comando</value>
+  </data>
+  <data name="Bank" xml:space="preserve">
+    <value>Archivio suoni</value>
+    <comment>As in "Sound Bank"</comment>
+  </data>
+  <data name="100%'d game message box" xml:space="preserve">
+    <value>Casella di messaggio del gioco al 100%</value>
+  </data>
+  <data name="All data will be erased prompt message box" xml:space="preserve">
+    <value>Accesso alla finestra del messaggio sulla cancellazione dei dati</value>
+  </data>
+  <data name="Accompanying Character" xml:space="preserve">
+    <value>Accompagnatore</value>
+  </data>
+  <data name="Animation Export Option" xml:space="preserve">
+    <value>Opzioni sul l'esportare animazioni</value>
+  </data>
+  <data name="Close Project" xml:space="preserve">
+    <value>Chiudi Progetto</value>
+  </data>
+  <data name="&amp;Tools" xml:space="preserve">
+    <value>&amp;Strumenti</value>
+  </data>
+  <data name="Add Command" xml:space="preserve">
+    <value>Aggiungi Comando</value>
+  </data>
+  <data name="Characters Involved" xml:space="preserve">
+    <value>Personaggi Coinvolti</value>
+  </data>
+  <data name="Associated Main Topics" xml:space="preserve">
+    <value>Discussioni principali associati</value>
+  </data>
+  <data name="Apply Hacks..." xml:space="preserve">
+    <value>Applicazione Hacks in corso…</value>
+  </data>
+  <data name="Collected all Mikuru topics message box" xml:space="preserve">
+    <value>Messaggio sul aver raccolto tutte le discussioni su Mikuru</value>
+  </data>
+  <data name="Add Section" xml:space="preserve">
+    <value>Aggiungi Sezione</value>
+  </data>
+  <data name="BGM" xml:space="preserve">
+    <value>BGM</value>
+  </data>
+  <data name="Clear all commands from the game scenario?\nThis action is irreversible." xml:space="preserve">
+    <value>Cancellare tutti i comandi impostati?\nQuest'azione è irreversibile.</value>
+  </data>
+  <data name="Choices" xml:space="preserve">
+    <value>Scelte</value>
+  </data>
+  <data name="Adjusting Volume" xml:space="preserve">
+    <value>Configurazione Volume</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Copia</value>
+  </data>
+  <data name="Collected all main topics message box" xml:space="preserve">
+    <value>Messaggio sul aver raccolto tutte le discussioni principali</value>
+  </data>
+  <data name="About..." xml:space="preserve">
+    <value>Informazioni…</value>
+  </data>
+  <data name="All data erased message box" xml:space="preserve">
+    <value>Casella di messaggio Tutti i dati cancellati</value>
+  </data>
+  <data name="Chinese (Simplified)" xml:space="preserve">
+    <value>Cinese (Semplificato)</value>
+  </data>
+  <data name="Add Starting Chibis" xml:space="preserve">
+    <value>Aggiungi Chibi</value>
+  </data>
+  <data name="Arrow Keys - Move Image" xml:space="preserve">
+    <value>Freccette - Sposta immagine</value>
+  </data>
+  <data name="Apply Assembly Hack" xml:space="preserve">
+    <value>Applica Assembly Hacks</value>
+  </data>
+  <data name="&quot;Kinetic&quot; Background" xml:space="preserve">
+    <value>"Kinetic" Sfondo</value>
+  </data>
+  <data name="Black Space End" xml:space="preserve">
+    <value>Spazio Nero Finale</value>
+    <comment>As on a chessboard</comment>
+  </data>
+  <data name="Adjusting Loop Info" xml:space="preserve">
+    <value>Configura info Loop</value>
+  </data>
+  <data name="Asahina companion selected description" xml:space="preserve">
+    <value>Descrizione di Asahina Mikuru come compagna</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancella</value>
+  </data>
+  <data name="Chibi" xml:space="preserve">
+    <value>Chibi</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Aggiungi</value>
+    <comment>As in add/subtract</comment>
+  </data>
+  <data name="&amp;File" xml:space="preserve">
+    <value>&amp;File</value>
+  </data>
+  <data name="Both" xml:space="preserve">
+    <value>Entrambi</value>
+    <comment>Checkbox for "Both Screens"</comment>
+  </data>
+  <data name="Backgrounds" xml:space="preserve">
+    <value>Sfondi</value>
+  </data>
+  <data name="Accessing save data prompt message box" xml:space="preserve">
+    <value>Accesso alla finestra di messaggio di richiesta di salvataggio dei dati</value>
+  </data>
+  <data name="&amp;Build" xml:space="preserve">
+    <value>&amp;Costruisci</value>
+  </data>
+  <data name="Build succeeded!" xml:space="preserve">
+    <value>Ricostruzione completata!</value>
+  </data>
+  <data name="BGMs" xml:space="preserve">
+    <value>BGMs</value>
+  </data>
+  <data name="Character_Sprite" xml:space="preserve">
+    <value>Sprite dei Personaggi</value>
+  </data>
+  <data name="Chess Mode Unlocked message box" xml:space="preserve">
+    <value>Messaggio sul aver sbloccato gli scacchi</value>
+  </data>
+  <data name="Build from Scratch" xml:space="preserve">
+    <value>Ricostruisci da zero</value>
+  </data>
+  <data name="Base Time" xml:space="preserve">
+    <value>Tempo Base</value>
+  </data>
+  <data name="A new update for Serial Loops is available!" xml:space="preserve">
+    <value>è disponibile un nuovo aggiornamento!</value>
+  </data>
+  <data name="Bottom Screen" xml:space="preserve">
+    <value>Schermo Inferiore</value>
+  </data>
+  <data name="Add Map Characters" xml:space="preserve">
+    <value>Aggiungi Personaggi per la Mappa</value>
+  </data>
+  <data name="Chibi frames exported!" xml:space="preserve">
+    <value>Frames dei Chibi esportati!</value>
+  </data>
+  <data name="Collected all Nagato topics message box" xml:space="preserve">
+    <value>Messaggio sul aver raccolto tutte le discussioni su Nagato</value>
+  </data>
+  <data name="Check for Updates on Startup" xml:space="preserve">
+    <value>Verifica presenza di aggiornamenti all'avvio</value>
+  </data>
+  <data name="Cleaning Iterative Directory" xml:space="preserve">
+    <value>Pulizia dell'elenco iterativo</value>
+  </data>
+  <data name="Build Unbuilt Files?" xml:space="preserve">
+    <value>Creare file non costruiti?</value>
+  </data>
+  <data name="Adjust Volume" xml:space="preserve">
+    <value>Aggiusta Volume</value>
+  </data>
+  <data name="Apply Template" xml:space="preserve">
+    <value>Applica Template</value>
+  </data>
+  <data name="Check for Updates" xml:space="preserve">
+    <value>Verifica aggiornamenti</value>
+  </data>
+  <data name="Chess File" xml:space="preserve">
+    <value>File Scacchi</value>
+  </data>
+  <data name="%" xml:space="preserve">
+    <value>%</value>
+  </data>
+  <data name="Background (CG)" xml:space="preserve">
+    <value>Sfondo (CG)</value>
+  </data>
+  <data name="Chibis" xml:space="preserve">
+    <value>Chibis</value>
+  </data>
+  <data name="Collected all Koizumi topics message box" xml:space="preserve">
+    <value>Messaggio sul aver raccolto tutte le discussioni su Koizumi</value>
+  </data>
+  <data name="Chokuretsu ROM" xml:space="preserve">
+    <value>ROM di Chokuretsu</value>
+  </data>
+  <data name="Build" xml:space="preserve">
+    <value>Ricostruisci</value>
+  </data>
+  <data name="&amp;Edit" xml:space="preserve">
+    <value>&amp;Modifica</value>
+  </data>
+  <data name="Both Screens" xml:space="preserve">
+    <value>Entrambi Gli Schermi</value>
+  </data>
+  <data name="Chess_Puzzle" xml:space="preserve">
+    <value>Scacchi</value>
+  </data>
+  <data name="Black Space Begin" xml:space="preserve">
+    <value>Spazio Nero Iniziale</value>
+    <comment>As on a chessboard</comment>
+  </data>
+  <data name="Color" xml:space="preserve">
+    <value>Colore</value>
+  </data>
+  <data name="Background_Type" xml:space="preserve">
+    <value>Tipi di sfondo</value>
+  </data>
+  <data name="&amp;Check for Updates..." xml:space="preserve">
+    <value>&amp;Cercando aggiornamenti…</value>
+  </data>
+  <data name="Background" xml:space="preserve">
+    <value>Sfondo</value>
+  </data>
+  <data name="Asahina puzzle phase selected description" xml:space="preserve">
+    <value>Descrizione di Asahina Mikuru durante le fasi puzzle</value>
+  </data>
+  <data name="Characters" xml:space="preserve">
+    <value>Personaggi</value>
+  </data>
+  <data name="Build failed!" xml:space="preserve">
+    <value>Ricostruzione fallita!</value>
+  </data>
+  <data name="Cut" xml:space="preserve">
+    <value>Taglia</value>
+  </data>
+  <data name="Character" xml:space="preserve">
+    <value>Personaggio</value>
+  </data>
+  <data name="Building and Running" xml:space="preserve">
+    <value>Ricostruisci e avvia adesso</value>
+  </data>
+  <data name="Associated Script" xml:space="preserve">
+    <value>Script associati</value>
+  </data>
+  <data name="Background_ID" xml:space="preserve">
+    <value>ID Sfondi</value>
+  </data>
+  <data name="Base Time Gain" xml:space="preserve">
+    <value>Guadagno Tempo Base</value>
+  </data>
+  <data name="Character Topic" xml:space="preserve">
+    <value>Discussioni sui Personaggi</value>
+  </data>
+  <data name="Animation" xml:space="preserve">
+    <value>Animazioni</value>
+  </data>
+  <data name="&amp;Preferences..." xml:space="preserve">
+    <value>&amp;Preferenze…</value>
+  </data>
+  <data name="Add Frames" xml:space="preserve">
+    <value>Aggiungi Frames</value>
+  </data>
+  <data name="Collected all Haruhi topics message box" xml:space="preserve">
+    <value>Messaggio sul aver raccolto tutte le discussioni su Haruhi</value>
+  </data>
+  <data name="Apply" xml:space="preserve">
+    <value>Applica</value>
+  </data>
+  <data name="Chokuretsu Save File" xml:space="preserve">
+    <value>Salvataggio di Chokuretsu</value>
+  </data>
+</root>
