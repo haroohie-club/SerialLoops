@@ -36,6 +36,11 @@ jobs:
       export DEVKITARM=$AGENT_BUILDDIRECTORY/devkitpro/devkitARM
       npm i -g appium
       appium driver install mac2
+      appium plugin install images
+      brew update
+      brew install opencv@3
+      brew link --force opencv@3
+      appium --use-plugins=images --allow-insecure=apple_script &
     displayName: Install and Run Appium Driver
   - task: DotNetCoreCLI@2
     displayName: Run macOS UI tests
@@ -83,12 +88,12 @@ jobs:
     inputs:
       command: pull
       arguments: devkitpro/devkitarm
-  - task: ms-autotest.screen-resolution-utility-task.screen-resolution-utlity-task.ScreenResolutionUtility@1
-    displayName: 'Set Screen Resolution'
-    inputs:
-      displaySettings: specific
-      width: 2048
-      height: 1536
+  # - task: ms-autotest.screen-resolution-utility-task.screen-resolution-utlity-task.ScreenResolutionUtility@1
+  #   displayName: 'Set Screen Resolution'
+  #   inputs:
+  #     displaySettings: specific
+  #     width: 2048
+  #     height: 1536
   - task: VSTest@3
     displayName: 'VsTest - Run UI Tests'
     inputs:

@@ -1,17 +1,17 @@
 using NUnit.Framework;
-using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
+using OpenQA.Selenium.Appium.ImageComparison;
 using OpenQA.Selenium.Appium.Mac;
-using OpenQA.Selenium.Support.Extensions;
+using OpenTK.Audio.OpenAL;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Hacks;
 using SerialLoops.Tests.Shared;
-using SerialLoops.UITests.Shared;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Security.Cryptography;
 using System.Text.Json;
 using System.Threading;
 
@@ -24,6 +24,10 @@ namespace SerialLoops.Mac.Tests
         private Project? _project;
         private readonly UiTestLogger _logger = new(Environment.GetEnvironmentVariable("LOG_FILE") ?? "testlog_console.log");
         private readonly ConsoleProgressTracker _tracker = new();
+        private string _testAssets = string.Empty;
+
+        private const string TEST_BG_ASSET = "lizmelo-painting.png";
+
 
         [OneTimeSetUp]
         public void Setup()
@@ -56,6 +60,8 @@ namespace SerialLoops.Mac.Tests
             }
             _logger.Log(JsonSerializer.Serialize(_uiVals, new JsonSerializerOptions { WriteIndented = true }));
 
+            _testAssets = TestAssetsDownloader.DownloadTestAssets().GetAwaiter().GetResult();
+
             AppiumOptions appiumOptions = new()
             {
                 PlatformName = "mac",
@@ -70,21 +76,12 @@ namespace SerialLoops.Mac.Tests
             Thread.Sleep(TimeSpan.FromSeconds(5));
             _driver.GetScreenshot().SaveAsFile(Path.Combine(_uiVals.ArtifactsDir, "start.png"));
             _driver.FindElement(MobileBy.IosClassChain("XCUIElementTypeDialog/**/XCUIElementTypeButton[`title == \"Skip Update\"`]")).Click();
+            _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeButton[2]")).Click(); // hit the full screen button so we have more room to work with
+            Thread.Sleep(TimeSpan.FromSeconds(2));
             _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeStaticText[`value == \"New Project\"`]")).Click();
             _driver.FindElement(MobileBy.IosClassChain("XCUIElementTypeDialog/**/XCUIElementTypeTextField[1]")).SendKeys(_uiVals.ProjectName);
             _driver.FindElement(MobileBy.IosClassChain("XCUIElementTypeDialog/**/XCUIElementTypeButton[`title == \"Open ROM\"`]")).Click();
-            AppiumElement openFileDialog = _driver.FindElement(MobileBy.IosNSPredicate("label == \"open\""));
-            openFileDialog.SendKeys($"{Keys.Command}{Keys.Shift}g/");
-            openFileDialog.SendKeys(_uiVals.RomLoc[1..]);
-            AppiumElement fileField = _driver.FindElement(MobileBy.IosClassChain($"**/XCUIElementTypeTextField[`value == \"{_uiVals.RomLoc}\"`]"));
-            _driver.ExecuteScript("macos: doubleClick", new Dictionary<string, object>
-            {
-                { "x", fileField.Location.X + 30 },
-                { "y", fileField.Location.Y + 60 },
-            });
-            Thread.Sleep(500);
-            _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeSheet[`label == \"open\"`]/**/XCUIElementTypeButton[`title == \"Open\"`]")).Click();
-            Thread.Sleep(TimeSpan.FromSeconds(1));
+            _driver.HandleOpenFileDialog(_uiVals.RomLoc, pressEnter: false);
             _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeButton[`title == \"Create\"`]")).Click();
             while (_driver.FindElements(MobileBy.IosClassChain("**/XCUIElementTypeDialog")).Count >= 1)
             {
@@ -100,8 +97,8 @@ namespace SerialLoops.Mac.Tests
             _logger.Log($"Project loaded from '{_project.ProjectFile}'");
         }
 
-        [OneTimeTearDown] 
-        public void Teardown() 
+        [OneTimeTearDown]
+        public void Teardown()
         {
             _driver?.Quit();
             string projectDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "SerialLoops", "Projects", _uiVals!.ProjectName);
@@ -119,16 +116,22 @@ namespace SerialLoops.Mac.Tests
         [Test]
         public void CanOpenAboutDialogTwice()
         {
+            string testArtifactsFolder = Path.Combine(_uiVals!.ArtifactsDir, TestContext.CurrentContext.Test.Name.Replace(' ', '_').Replace(',', '_').Replace("\"", ""));
+            if (Directory.Exists(testArtifactsFolder))
+            {
+                Directory.Delete(testArtifactsFolder, true);
+            }
+            Directory.CreateDirectory(testArtifactsFolder);
+
             for (int i = 0; i < 2; i++)
             {
-                _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeMenuBarItem[`title=\"SerialLoops\"`]")).Click();
+                _driver.OpenMenu("SerialLoops");
                 Thread.Sleep(200);
                 _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeMenuItem[`title=\"About...\"`]")).Click();
                 Thread.Sleep(200);
                 _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeDialog[`title=\"About\"`]/**/XCUIElementTypeButton[1]")).Click();
                 Thread.Sleep(200);
-                _driver.GetScreenshot().SaveAsFile(Path.Combine(_uiVals!.ArtifactsDir, $"about_dialog{i}.png"));
-                TestContext.AddTestAttachment(Path.Combine(_uiVals.ArtifactsDir, $"about_dialog{i}.png"));
+                _driver.GetAndSaveScreenshot(Path.Combine(testArtifactsFolder, $"about_dialog{i}.png"));
             }
         }
 
@@ -136,46 +139,157 @@ namespace SerialLoops.Mac.Tests
         [Test, TestCaseSource(nameof(HacksToTest))]
         public void TestAsmHackApplicationAndReversion(string hackToApply)
         {
-            _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeMenuBarItem[`title=\"Tools\"`]")).Click();
+            string testArtifactsFolder = Path.Combine(_uiVals!.ArtifactsDir, TestContext.CurrentContext.Test.Name.Replace(' ', '_').Replace(',', '_').Replace("\"", ""));
+            if (Directory.Exists(testArtifactsFolder))
+            {
+                Directory.Delete(testArtifactsFolder, true);
+            }
+            Directory.CreateDirectory(testArtifactsFolder);
+
+            _driver.OpenMenu("Tools");
             Thread.Sleep(200);
-            _driver.TakeScreenshot().SaveAsFile(Path.Combine(_uiVals!.ArtifactsDir, "tools_clicked.png"));
-            TestContext.AddTestAttachment(Path.Combine(_uiVals.ArtifactsDir, "tools_clicked.png"), "The app after the tools menu was clicked but before clicking Apply Hacks");
+            _driver.GetAndSaveScreenshot(Path.Combine(testArtifactsFolder, "tools_clicked.png"));
             _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeMenuItem[`title=\"Apply Hacks...\"`]")).Click();
             Thread.Sleep(200);
-            _driver.TakeScreenshot().SaveAsFile(Path.Combine(_uiVals!.ArtifactsDir, "available_hacks.png"));
-            TestContext.AddTestAttachment(Path.Combine(_uiVals!.ArtifactsDir, "available_hacks.png"), "The available hacks dialog");
+            _driver.GetAndSaveScreenshot(Path.Combine(testArtifactsFolder, "available_hacks.png"));
             _driver.FindElement(MobileBy.IosClassChain($"**/XCUIElementTypeCheckBox[`title=\"{hackToApply}\"`]")).Click();
             Thread.Sleep(200);
-            _driver.TakeScreenshot().SaveAsFile(Path.Combine(_uiVals!.ArtifactsDir, $"applying_hack_{hackToApply.Replace(' ', '_')}.png"));
-            TestContext.AddTestAttachment(Path.Combine(_uiVals!.ArtifactsDir, $"applying_hack_{hackToApply.Replace(' ', '_')}.png"), $"Applying the hack {hackToApply}");
+            _driver.GetAndSaveScreenshot(Path.Combine(testArtifactsFolder, $"applying_hack_{hackToApply.Replace(' ', '_')}.png"));
             _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeDialog[`title=\"Apply Assembly Hacks\"`]/**/XCUIElementTypeButton[`title=\"Save\"`]")).Click();
             Thread.Sleep(TimeSpan.FromSeconds(10)); // Allow time for hacks to be assembled
-            _driver.TakeScreenshot().SaveAsFile(Path.Combine(_uiVals!.ArtifactsDir, "hack_apply_result_dialog.png"));
-            TestContext.AddTestAttachment(Path.Combine(_uiVals!.ArtifactsDir, "hack_apply_result_dialog.png"), "The alert indicating whether the hack application succeeded or not");
+            _driver.GetAndSaveScreenshot(Path.Combine(testArtifactsFolder, "hack_apply_result_dialog.png"));
             _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeDialog[`label=\"alert\"`]/**/XCUIElementTypeButton[`title=\"OK\"`]")).Click();
             Thread.Sleep(TimeSpan.FromSeconds(1)); // Allow time to clean up the containers
             List<AsmHack> hacks = JsonSerializer.Deserialize<List<AsmHack>>(File.ReadAllText(Path.Combine("Sources", "hacks.json"))) ?? [];
             Assert.That(hacks.First(h => h.Name == hackToApply).Applied(_project), Is.True);
 
-            _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeMenuBarItem[`title=\"Tools\"`]")).Click();
+            _driver.OpenMenu("Tools");
             Thread.Sleep(200);
-            _driver.TakeScreenshot().SaveAsFile(Path.Combine(_uiVals!.ArtifactsDir, "tools_clicked.png"));
-            TestContext.AddTestAttachment(Path.Combine(_uiVals.ArtifactsDir, "tools_clicked.png"), "The app after the tools menu was clicked but before clicking Apply Hacks");
+            _driver.GetAndSaveScreenshot(Path.Combine(testArtifactsFolder, "tools_clicked_revert.png"));
             _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeMenuItem[`title=\"Apply Hacks...\"`]")).Click();
             Thread.Sleep(200);
-            _driver.TakeScreenshot().SaveAsFile(Path.Combine(_uiVals!.ArtifactsDir, "available_hacks.png"));
-            TestContext.AddTestAttachment(Path.Combine(_uiVals!.ArtifactsDir, "available_hacks.png"), "The available hacks dialog");
+            _driver.GetAndSaveScreenshot(Path.Combine(_uiVals!.ArtifactsDir, "available_hacks_revert.png"));
             _driver.FindElement(MobileBy.IosClassChain($"**/XCUIElementTypeCheckBox[`title=\"{hackToApply}\"`]")).Click();
             Thread.Sleep(200);
-            _driver.TakeScreenshot().SaveAsFile(Path.Combine(_uiVals!.ArtifactsDir, $"applying_hack_{hackToApply.Replace(' ', '_')}.png"));
-            TestContext.AddTestAttachment(Path.Combine(_uiVals!.ArtifactsDir, $"applying_hack_{hackToApply.Replace(' ', '_')}.png"), $"Applying the hack {hackToApply}");
+            _driver.GetAndSaveScreenshot(Path.Combine(testArtifactsFolder, $"applying_hack_{hackToApply.Replace(' ', '_')}_revert.png"));
             _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeDialog[`title=\"Apply Assembly Hacks\"`]/**/XCUIElementTypeButton[`title=\"Save\"`]")).Click();
             Thread.Sleep(TimeSpan.FromSeconds(5)); // Allow time for hacks to be reverted
-            _driver.TakeScreenshot().SaveAsFile(Path.Combine(_uiVals!.ArtifactsDir, "hack_apply_result_dialog.png"));
-            TestContext.AddTestAttachment(Path.Combine(_uiVals!.ArtifactsDir, "hack_apply_result_dialog.png"), "The alert indicating whether the hack application succeeded or not");
+            _driver.GetAndSaveScreenshot(Path.Combine(testArtifactsFolder, "hack_apply_result_dialog_revert.png"));
             _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeDialog[`label=\"alert\"`]/**/XCUIElementTypeButton[`title=\"OK\"`]")).Click();
             Thread.Sleep(TimeSpan.FromSeconds(1)); // Allow time to clean up the containers
             Assert.That(hacks.First(h => h.Name == hackToApply).Applied(_project), Is.False);
+        }
+
+        // Add KBG00 (KINETIC_SCREEN) to this as part of https://github.com/haroohie-club/SerialLoops/issues/225
+        // TEX_BG, TEX_CG, TEX_CG_DUAL, TEX_CG_WIDE, TEX_CG_SINGLE
+        private readonly static object[][] BackgroundsToTest = [["BG_BRIDGE_DAY", 0x027, 0x028], ["BG_EV020", 0x2CD, 0x2CE], ["BG_EV150_D", 0x317, 0x318], ["BG_EV550", 0x3F3, 0x3F4], ["BG_EV060", 0x2EC, -1]];
+        [Test, TestCaseSource(nameof(BackgroundsToTest))]
+        public void TestBackgrounds_ExtractReplaceCropScale(string bgName, int bgIdx1, int bgIdx2)
+        {
+            string testArtifactsFolder = Path.Combine(_uiVals!.ArtifactsDir, TestContext.CurrentContext.Test.Name.Replace(' ', '_').Replace(',', '_').Replace("\"", ""));
+            if (Directory.Exists(testArtifactsFolder))
+            {
+                Directory.Delete(testArtifactsFolder, true);
+            }
+            Directory.CreateDirectory(testArtifactsFolder);
+
+            _driver.OpenItem(bgName, testArtifactsFolder);
+            Thread.Sleep(100);
+            _driver.GetAndSaveScreenshot(Path.Combine(testArtifactsFolder, $"{bgName}_openTab.png"));
+
+            _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeButton[`title == \"Export\"`]")).Click();
+            string exportedImagePath = Path.Combine(testArtifactsFolder, $"{bgName}.png");
+            _driver.HandleSaveFileDialog(exportedImagePath);
+            TestContext.AddTestAttachment(exportedImagePath);
+            Thread.Sleep(500);
+            SimilarityMatchingResult exportedImageMatch = _driver.GetImagesSimilarity(_testAssets, $"{bgName}.png", exportedImagePath);
+            exportedImageMatch.SaveVisualizationAsFile(Path.Combine(testArtifactsFolder, $"{bgName}_exported_comparison.png"));
+            TestContext.AddTestAttachment(Path.Combine(testArtifactsFolder, $"{bgName}_exported_comparison.png"));
+            Assert.That(exportedImageMatch.Score, Is.GreaterThanOrEqualTo(0.99));
+
+            _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeButton[`title == \"Replace\"`]")).Click();
+            Thread.Sleep(200);
+            _driver.HandleOpenFileDialog(Path.Combine(_testAssets, TEST_BG_ASSET));
+            Thread.Sleep(500);
+            _driver.GetAndSaveScreenshot(Path.Combine(testArtifactsFolder, $"{bgName}_nocropnoscale.png"));
+            Thread.Sleep(200);
+
+            _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeDialog/**/XCUIElementTypeTextField")).SendKeys("750");
+            Thread.Sleep(200);
+            _driver.GetAndSaveScreenshot(Path.Combine(testArtifactsFolder, $"{bgName}_scale.png"));
+
+            AppiumElement image = _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeImage"));
+            _driver.ExecuteScript("macos: clickAndDragAndHold", new Dictionary<string, object>
+            {
+                { "startX", image.Location.X + 30 },
+                { "startY", image.Location.Y + 30 },
+                { "endX", image.Location.X + 330 },
+                { "endY", image.Location.Y + 90 },
+                { "duration", 1 },
+                { "holdDuration", 1 },
+                { "velocity", 50 },
+            });
+            Thread.Sleep(200);
+            _driver.GetAndSaveScreenshot(Path.Combine(testArtifactsFolder, $"{bgName}_moved.png"));
+
+            _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeButton[`title == \"Save\"`]")).Click();
+            Thread.Sleep(TimeSpan.FromSeconds(1));
+            _driver.GetAndSaveScreenshot(Path.Combine(testArtifactsFolder, $"{bgName}_saved.png"));
+
+            // This hits Command+S
+            _driver.ExecuteScript("macos: keys", new Dictionary<string, object>
+            {
+                { "keys", new object[] { new Dictionary<string, object> { { "key", "s" }, { "modifierFlags", 1 << 4 } } } },
+            });
+
+            SimilarityMatchingResult bg1Match = _driver.GetImagesSimilarity(_testAssets, $"{bgIdx1:X3}.png", Path.Combine(_project!.BaseDirectory, "assets", "graphics", $"{bgIdx1:X3}.png"));
+            bg1Match.SaveVisualizationAsFile(Path.Combine(testArtifactsFolder, $"{bgName}_1_comparison.png"));
+            TestContext.AddTestAttachment(Path.Combine(testArtifactsFolder, $"{bgName}_1_comparison.png"));
+            Assert.That(bg1Match.Score, Is.GreaterThanOrEqualTo(0.99));
+            if (bgIdx2 > 0)
+            {
+                SimilarityMatchingResult bg2Match = _driver.GetImagesSimilarity(_testAssets, $"{bgIdx2:X3}.png", Path.Combine(_project!.BaseDirectory, "assets", "graphics", $"{bgIdx2:X3}.png"));
+                bg2Match.SaveVisualizationAsFile(Path.Combine(testArtifactsFolder, $"{bgName}_2_comparison.png"));
+                TestContext.AddTestAttachment(Path.Combine(testArtifactsFolder, $"{bgName}_2_comparison.png"));
+                Assert.That(bg2Match.Score, Is.GreaterThanOrEqualTo(0.99));
+            }
+
+            _driver.CloseCurrentItem();
+        }
+
+        private readonly static object[][] BGMsToTest = [["BGM001 - Another Wonderful Day!", 0], ["BGM027 - You Can Do It!", 19]];
+        [Test, TestCaseSource(nameof(BGMsToTest))]
+        public void TestBGMs_ExtractReplaceRestore(string bgmName, int bgmIndex)
+        {
+            string testArtifactsFolder = CommonHelpers.CreateTestArtifactsFolder(TestContext.CurrentContext.Test.Name, _uiVals!.ArtifactsDir);
+
+            _driver.OpenItem(bgmName, testArtifactsFolder);
+            Thread.Sleep(100);
+            _driver.GetAndSaveScreenshot(Path.Combine(testArtifactsFolder, $"{bgmName}_openTab.png"));
+
+            _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeButton[`title == \"Extract\"`]")).Click();
+            Thread.Sleep(200);
+            string extractedWavPath = Path.Combine(testArtifactsFolder, $"{bgmName.Split(' ')[0]}.wav");
+            _driver.HandleSaveFileDialog(extractedWavPath);
+            Thread.Sleep(TimeSpan.FromSeconds(5)); // Wait for extraction
+            Assert.That(File.ReadAllBytes(extractedWavPath), Is.Not.Empty);
+            _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeButton[`title == \"Replace\"`]")).Click();
+            Thread.Sleep(200);
+            _driver.HandleOpenFileDialog(extractedWavPath);
+            Thread.Sleep(TimeSpan.FromSeconds(5)); // Wait for replacement
+            _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeButton[`title == \"Restore\"`]")).Click();
+            Thread.Sleep(200);
+            string dupeExtractedWavPath = Path.Combine(testArtifactsFolder, $"{bgmName.Split(' ')[0]}-dupe.wav");
+            _driver.FindElement(MobileBy.IosClassChain("**/XCUIElementTypeButton[`title == \"Extract\"`]")).Click();
+            Thread.Sleep(200);
+            _driver.HandleSaveFileDialog(dupeExtractedWavPath);
+            Thread.Sleep(TimeSpan.FromSeconds(5)); // Wait for extraction
+
+            byte[] originalmd5 = MD5.HashData(File.ReadAllBytes(extractedWavPath));
+            byte[] dupemd5 = MD5.HashData(File.ReadAllBytes(dupeExtractedWavPath));
+            Assert.That(originalmd5, Is.EquivalentTo(dupemd5));
+
+            _driver.CloseCurrentItem();
         }
     }
 }

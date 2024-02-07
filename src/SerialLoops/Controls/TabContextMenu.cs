@@ -20,7 +20,7 @@ namespace SerialLoops.Controls
             Command closeTabCommand = new();
             closeTabCommand.Executed += (sender, args) =>
             {
-                _tabs.Tabs_PageClosed(_tabs, new(_tabs.Tabs.SelectedPage));
+                _tabs.Tabs_PageClosed(sender, new(_tabs.Tabs.SelectedPage));
                 _tabs.Tabs.Remove(_tabs.Tabs.SelectedPage);
             };
             Items.Add(new ButtonMenuItem

@@ -2,7 +2,7 @@
 using System;
 using System.IO;
 
-namespace SerialLoops.UITests.Shared
+namespace SerialLoops.Tests.Shared
 {
     public class UiTestLogger(string logFile) : ILogger
     {
