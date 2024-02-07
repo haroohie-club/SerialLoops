@@ -89,7 +89,7 @@ namespace SerialLoops
                                     Spacing = 10,
                                     Items =
                                     {
-                                        Application.Instance.Localize(this, "Language"),
+                                        Application.Instance.Localize(this, "Language Template"),
                                         _languageDropDown,
                                     }
                                 }
