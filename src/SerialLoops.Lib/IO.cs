@@ -39,7 +39,8 @@ namespace SerialLoops.Lib
                 }
                 catch (Exception ex)
                 {
-                    log.LogException($"Failed to create directory on path '{basePath}'", ex);
+                    log.LogException($"Failed to create directory on specified path!", ex);
+                    log.LogWarning(basePath);
                 }
             }
         }
@@ -79,42 +80,40 @@ namespace SerialLoops.Lib
             tracker.Finished += 2;
 
             // Create our structure for building the ROM
-            IODirectory originalDirectoryTree = new("original", new IODirectory[]
-            {
-                new("archives", Array.Empty<IODirectory>(), Array.Empty<IOFile>()),
-                new("overlay", Array.Empty<IODirectory>(), Array.Empty<IOFile>()),
-                new("bgm", Array.Empty<IODirectory>(), Array.Empty<IOFile>()),
-                new("vce", Array.Empty<IODirectory>(), Array.Empty<IOFile>()),
-            },
-            new IOFile[]
-            {
+            IODirectory originalDirectoryTree = new("original",
+            [
+                new("archives", [], []),
+                new("overlay", [], []),
+                new("bgm", [], []),
+                new("vce", [], []),
+            ],
+            [
                 new(Path.Combine(project.BaseDirectory, "rom", $"{project.Name}.xml")),
-            });
-            IODirectory srcDirectoryTree = new("src", new IODirectory[]
-            {
-                new("source", Array.Empty<IODirectory>(), Array.Empty<IOFile>()),
-                new("replSource", Array.Empty<IODirectory>(), Array.Empty<IOFile>()),
-                new("overlays", Array.Empty<IODirectory>(), new IOFile[]
-                {
+            ]);
+            IODirectory srcDirectoryTree = new("src",
+            [
+                new("source", [], []),
+                new("replSource", [], []),
+                new("overlays", [],
+                [
                     new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "linker.x")),
                     new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Makefile_overlay"), "Makefile"),
-                }),
-            },
-            new IOFile[]
-            {
+                ]),
+            ],
+            [
                 new(Path.Combine(project.BaseDirectory, "rom", "arm9.bin")),
                 new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "linker.x")),
                 new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Makefile_main"), "Makefile"),
-            });
-            IODirectory assetsDirectoryTree = new("assets", new IODirectory[]
-            {
-                new("data", Array.Empty<IODirectory>(), Array.Empty<IOFile>()),
-                new("events", Array.Empty<IODirectory>(), Array.Empty<IOFile>()),
-                new("graphics", Array.Empty<IODirectory>(), Array.Empty<IOFile>()),
-                new("misc", Array.Empty<IODirectory>(), Array.Empty<IOFile>()),
-                new("movie", Array.Empty<IODirectory>(), Array.Empty<IOFile>()),
-                new("scn", Array.Empty<IODirectory>(), Array.Empty<IOFile>()),
-            }, Array.Empty<IOFile>());
+            ]);
+            IODirectory assetsDirectoryTree = new("assets",
+            [
+                new("data", [], []),
+                new("events", [], []),
+                new("graphics", [], []),
+                new("misc", [], []),
+                new("movie", [], []),
+                new("scn", [], []),
+            ], []);
 
             originalDirectoryTree.Create(project.BaseDirectory, log);
             originalDirectoryTree.Create(project.IterativeDirectory, log);
@@ -168,7 +167,7 @@ namespace SerialLoops.Lib
             }
             catch (Exception ex)
             {
-                log.LogException($"Failed copying file '{sourceFile}' to base and iterative directories at path '{relativePath}'", ex);
+                log.LogException(string.Format(project.Localize("Failed copying file '{0}' to base and iterative directories at path '{1}'"), sourceFile, relativePath), ex);
             }
         }
 
@@ -183,7 +182,7 @@ namespace SerialLoops.Lib
                 }
                 catch (Exception ex)
                 {
-                    log.LogException($"Failed to delete file '{file}'", ex);
+                    log.LogException(string.Format(project.Localize("Failed to delete file '{0}'"), file), ex);
                 }
             }
         }

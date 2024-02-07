@@ -155,7 +155,7 @@ namespace SerialLoops.Controls
 
         private StackLayout GetButtonPanel()
         {
-            Button button = new() { Text = "Select..." };
+            Button button = new() { Text = Application.Instance.Localize(this, "Select...") };
             button.Click += GraphicSelectionButton_Click;
 
             return new StackLayout

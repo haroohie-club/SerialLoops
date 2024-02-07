@@ -18,10 +18,10 @@ namespace SerialLoops.Editors
         {
             _item = (ItemItem)Description;
 
-            Button exportButton = new() { Text = "Export" };
+            Button exportButton = new() { Text = Application.Instance.Localize(this, "Export") };
             exportButton.Click += ExportButton_Click;
 
-            Button replaceButton = new() { Text = "Replace" };
+            Button replaceButton = new() { Text = Application.Instance.Localize(this, "Replace") };
             replaceButton.Click += ReplaceButton_Click;
 
             return new Scrollable
@@ -51,7 +51,7 @@ namespace SerialLoops.Editors
         private void ExportButton_Click(object sender, EventArgs e)
         {
             SaveFileDialog saveFileDialog = new();
-            saveFileDialog.Filters.Add(new() { Name = "PNG Image", Extensions = [".png"] });
+            saveFileDialog.Filters.Add(new() { Name = Application.Instance.Localize(this, "PNG Image"), Extensions = [".png"] });
             if (saveFileDialog.ShowAndReportIfFileSelected(this))
             {
                 try
@@ -61,7 +61,7 @@ namespace SerialLoops.Editors
                 }
                 catch (Exception ex)
                 {
-                    _log.LogError($"Failed to export background {_item.DisplayName} to file {saveFileDialog.FileName}: {ex.Message}\n\n{ex.StackTrace}");
+                    _log.LogException(string.Format(Application.Instance.Localize(this, "Failed to export item {0} to file {1}"), _item.DisplayName, saveFileDialog.FileName), ex);
                 }
             }
         }
@@ -70,7 +70,7 @@ namespace SerialLoops.Editors
         {
             OpenFileDialog openFileDialog = new();
             SKBitmap original = _item.GetImage();
-            openFileDialog.Filters.Add(new() { Name = "Supported Images", Extensions = [".bmp", ".gif", ".heif", ".jpg", ".jpeg", ".png", ".webp",] });
+            openFileDialog.Filters.Add(new() { Name = Application.Instance.Localize(this, "Supported Images"), Extensions = [".bmp", ".gif", ".heif", ".jpg", ".jpeg", ".png", ".webp",] });
             if (openFileDialog.ShowAndReportIfFileSelected(this))
             {
                 ImageCropResizeDialog itemResizeDialog = new(SKBitmap.Decode(openFileDialog.FileName), original.Width, original.Height, _log);
@@ -80,14 +80,14 @@ namespace SerialLoops.Editors
                     {
                         try
                         {
-                            LoopyProgressTracker tracker = new();
+                            LoopyProgressTracker tracker = new(s => Application.Instance.Localize(null, s));
                             _ = new ProgressDialog(() => _item.SetImage(itemResizeDialog.FinalImage, tracker, _log),
-                                () => Content = GetEditorPanel(), tracker, $"Replacing {_item.DisplayName}...");
+                                () => Content = GetEditorPanel(), tracker, string.Format(Application.Instance.Localize(this, "Replacing {0}..."), _item.DisplayName));
                             UpdateTabTitle(false);
                         }
                         catch (Exception ex)
                         {
-                            _log.LogError($"Failed to replace background {_item.DisplayName} with file {openFileDialog.FileName}: {ex.Message}\n\n{ex.StackTrace}");
+                            _log.LogException(string.Format(Application.Instance.Localize(this, "Failed to replace item {0} with file {1}"), _item.DisplayName, openFileDialog.FileName), ex);
                         }
                     }
                 };

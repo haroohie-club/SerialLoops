@@ -84,16 +84,20 @@ namespace SerialLoops.Lib
         [JsonIgnore]
         public VoiceMapFile VoiceMap { get; set; }
 
+        [JsonIgnore]
+        public Func<string, string> Localize { get; set; }
+
         public Project()
         {
         }
 
-        public Project(string name, string langCode, Config config, ILogger log)
+        public Project(string name, string langCode, Config config, Func<string, string> localize, ILogger log)
         {
             Name = name;
             LangCode = langCode;
             MainDirectory = Path.Combine(config.ProjectsDirectory, name);
             Config = config;
+            Localize = localize;
             log.Log("Creating project directories...");
             try
             {
@@ -268,14 +272,10 @@ namespace SerialLoops.Lib
             }
             tracker.Finished++;
 
-            string charactersFile = LangCode switch
-            {
-                "ja" => "DefaultCharacters.ja.json",
-                _ => "DefaultCharacters.en.json"
-            };
             try
             {
-                Characters ??= JsonSerializer.Deserialize<Dictionary<int, NameplateProperties>>(File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Defaults", charactersFile)), SERIALIZER_OPTIONS);
+                // Note that the nameplates are not localized by program locale but by selected project language
+                Characters ??= JsonSerializer.Deserialize<Dictionary<int, NameplateProperties>>(File.ReadAllText($"{Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Defaults", "DefaultCharacters")}.{LangCode}.json"), SERIALIZER_OPTIONS);
             }
             catch (Exception ex)
             {
@@ -549,7 +549,7 @@ namespace SerialLoops.Lib
                 tracker.Focus("Scripts", 1);
                 Items.AddRange(Evt.Files
                     .Where(e => !new string[] { "CHESSS", "EVTTBLS", "TOPICS", "SCENARIOS", "TUTORIALS", "VOICEMAPS" }.Contains(e.Name))
-                    .Select(e => new ScriptItem(e, log)));
+                    .Select(e => new ScriptItem(e, Localize, log)));
                 tracker.Finished++;
             }
             catch (Exception ex)
@@ -724,7 +724,7 @@ namespace SerialLoops.Lib
             {
                 try
                 {
-                    ItemNames = JsonSerializer.Deserialize<Dictionary<string, string>>(File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Defaults", "DefaultNames.json")));
+                    ItemNames = JsonSerializer.Deserialize<Dictionary<string, string>>(File.ReadAllText(Extensions.GetLocalizedFilePath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Defaults", "DefaultNames"), "json")));
                     foreach (ItemDescription item in Items)
                     {
                         if (!ItemNames.ContainsKey(item.Name) && item.CanRename)
@@ -806,7 +806,7 @@ namespace SerialLoops.Lib
             return Items.FirstOrDefault(i => name.Contains(" - ") ? i.Name == name.Split(" - ")[0] : i.DisplayName == name);
         }
 
-        public static (Project Project, LoadProjectResult Result) OpenProject(string projFile, Config config, ILogger log, IProgressTracker tracker)
+        public static (Project Project, LoadProjectResult Result) OpenProject(string projFile, Config config, Func<string, string> localize, ILogger log, IProgressTracker tracker)
         {
             log.Log($"Loading project from '{projFile}'...");
             if (!File.Exists(projFile))
@@ -818,6 +818,7 @@ namespace SerialLoops.Lib
             {
                 tracker.Focus($"{Path.GetFileNameWithoutExtension(projFile)} Project Data", 1);
                 Project project = JsonSerializer.Deserialize<Project>(File.ReadAllText(projFile), SERIALIZER_OPTIONS);
+                project.Localize = localize;
                 tracker.Finished++;
                 LoadProjectResult result = project.Load(config, log, tracker);
                 if (result.State == LoadProjectState.LOOSELEAF_FILES)

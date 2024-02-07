@@ -50,7 +50,7 @@ namespace SerialLoops.Controls
                 Image = ControlGenerator.GetIcon("Top_Screen", _log),
                 Size = new(35, 20),
                 MinimumSize = new(35, 20),
-                ToolTip = "Top Screen",
+                ToolTip = Application.Instance.Localize(this, "Top Screen"),
                 Enabled = _selectedScreen is not (DsScreen.TOP or DsScreen.BOTH)
             };
             _topScreenButton.Click += TopScreenButton_Click;
@@ -60,7 +60,7 @@ namespace SerialLoops.Controls
                 Image = ControlGenerator.GetIcon("Bottom_Screen", _log),
                 Size = new(35, 20),
                 MinimumSize = new(35, 20),
-                ToolTip = "Bottom Screen",
+                ToolTip = Application.Instance.Localize(this, "Bottom Screen"),
                 Enabled = _selectedScreen is not (DsScreen.BOTTOM or DsScreen.BOTH)
             };
             _bottomScreenButton.Click += BottomScreenButton_Click;
@@ -77,7 +77,7 @@ namespace SerialLoops.Controls
                         Items = { _topScreenButton, _bottomScreenButton },
                         Spacing = 2,
                         Padding = 0,
-                        ToolTip = "Both Screens",
+                        ToolTip = Application.Instance.Localize(this, "Both Screens"),
                     }
                 },
                 Spacing = 5,
@@ -88,7 +88,7 @@ namespace SerialLoops.Controls
             {
                 _bothScreensCheckbox = new CheckBox
                 {
-                    Text = "Both",
+                    Text = Application.Instance.Localize(this, "Both"),
                     Checked = _selectedScreen == DsScreen.BOTH
                 };
                 _bothScreensCheckbox.CheckedChanged += BothScreensCheckbox_CheckedChanged;

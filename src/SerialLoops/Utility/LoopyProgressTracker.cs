@@ -1,5 +1,6 @@
 ﻿using Eto.Forms;
 using SerialLoops.Lib.Util;
+using System;
 
 namespace SerialLoops.Utility
 {
@@ -9,10 +10,12 @@ namespace SerialLoops.Utility
         private readonly ProgressBar _loadingProgress;
         private readonly Label _loadingItem;
         private readonly string _processVerb;
+        private Func<string, string> _localize;
 
-        public LoopyProgressTracker(string processVerb = "Loading: ")
+        public LoopyProgressTracker(Func<string, string> localize, string processVerb = "Loading:")
         {
-            _processVerb = processVerb;
+            _localize = localize;
+            _processVerb = _localize(processVerb);
             _loadingProgress = new() { Width = 390 };
             _loadingItem = new();
 
@@ -50,7 +53,7 @@ namespace SerialLoops.Utility
             get => _currentlyLoading;
             set
             {
-                _currentlyLoading = $"{_processVerb} {value}...";
+                _currentlyLoading = $"{_processVerb} {_localize(value)}...";
                 Application.Instance.Invoke(() => _loadingItem.Text = _currentlyLoading);
             }
         }

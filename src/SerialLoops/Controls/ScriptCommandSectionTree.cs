@@ -372,13 +372,8 @@ namespace SerialLoops.Controls
         }
     }
 
-    public class DeleteItemEventArgs : EventArgs
+    public class DeleteItemEventArgs(ScriptCommandSectionTreeItem item) : EventArgs
     {
-        public ScriptCommandSectionTreeItem Item { get; set; }
-
-        public DeleteItemEventArgs(ScriptCommandSectionTreeItem item)
-        {
-            Item = item;
-        }
+        public ScriptCommandSectionTreeItem Item { get; set; } = item;
     }
 }

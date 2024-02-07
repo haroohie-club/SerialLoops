@@ -5,7 +5,6 @@ using HaruhiChokuretsuLib.Util;
 using SkiaSharp;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using Topten.RichTextKit;
 
 namespace SerialLoops.Lib.Items
@@ -132,7 +131,7 @@ namespace SerialLoops.Lib.Items
 
         public class CustomFontMapper : FontMapper
         {
-            private static Dictionary<string, SKTypeface> _fonts = new();
+            private static Dictionary<string, SKTypeface> _fonts = [];
 
             public static void AddFont(SKTypeface typeface)
             {

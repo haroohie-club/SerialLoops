@@ -27,13 +27,13 @@ namespace SerialLoops
 
         void InitializeComponent()
         {
-            Title = "Create New Project";
+            Title = Application.Instance.Localize(this, "Create New Project");
             MinimumSize = new Size(400, 275);
             Padding = 10;
 
             _nameBox = new()
             {
-                PlaceholderText = "Haroohie",
+                PlaceholderText = Application.Instance.Localize(this, "Haroohie"),
                 Size = new Size(150, 25),
             };
             _nameBox.TextChanging += (sender, args) =>
@@ -46,7 +46,7 @@ namespace SerialLoops
             _languageDropDown = new();
             _languageDropDown.Items.AddRange(_availableLanguages.Select(a => new ListItem() { Text = a.Key, Key = a.Value }));
             _languageDropDown.SelectedIndex = 0;
-            _romPath = new() { Text = NO_ROM_TEXT };
+            _romPath = new() { Text = Application.Instance.Localize(this, NO_ROM_TEXT) };
             Command pickRomCommand = new();
             pickRomCommand.Executed += PickRomCommand_Executed;
             Command createCommand = new();
@@ -62,7 +62,7 @@ namespace SerialLoops
                 {
                     new GroupBox
                     {
-                        Text = "Project Options",
+                        Text = Application.Instance.Localize(this, "Project Options"),
                         Padding = 5,
                         MinimumSize = new Size(300, 100),
                         Content = new StackLayout
@@ -78,7 +78,7 @@ namespace SerialLoops
                                     Spacing = 10,
                                     Items =
                                     {
-                                        "Name",
+                                        Application.Instance.Localize(this, "Name"),
                                         _nameBox,
                                     }
                                 },
@@ -89,7 +89,7 @@ namespace SerialLoops
                                     Spacing = 10,
                                     Items =
                                     {
-                                        "Language",
+                                        Application.Instance.Localize(this, "Language"),
                                         _languageDropDown,
                                     }
                                 }
@@ -98,7 +98,7 @@ namespace SerialLoops
                     },
                     new GroupBox
                     {
-                        Text = "Select ROM",
+                        Text = Application.Instance.Localize(this, "Select ROM"),
                         Padding = 5,
                         MinimumSize = new Size(300, 80),
                         Content = new StackLayout
@@ -108,7 +108,7 @@ namespace SerialLoops
                             VerticalContentAlignment = VerticalAlignment.Center,
                             Items =
                             {
-                                new Button { Text = "Open ROM", Command = pickRomCommand },
+                                new Button { Text = Application.Instance.Localize(this, "Open ROM"), Command = pickRomCommand },
                                 _romPath,
                             }
                         }
@@ -120,8 +120,8 @@ namespace SerialLoops
                         Spacing = 10,
                         Items =
                         {
-                            new Button { Text = "Create", Command = createCommand },
-                            new Button { Text = "Cancel", Command = cancelCommand }
+                            new Button { Text = Application.Instance.Localize(this, "Create"), Command = createCommand },
+                            new Button { Text = Application.Instance.Localize(this, "Cancel"), Command = cancelCommand }
                         }
                     },
                 }
@@ -145,8 +145,8 @@ namespace SerialLoops
         
         private void PickRomCommand_Executed(object sender, EventArgs e)
         {
-            OpenFileDialog openFileDialog = new() { Title = "Open ROM", CheckFileExists = true };
-            openFileDialog.Filters.Add(new("Chokuretsu ROM", ".nds"));
+            OpenFileDialog openFileDialog = new() { Title = Application.Instance.Localize(this, "Open ROM"), CheckFileExists = true };
+            openFileDialog.Filters.Add(new(Application.Instance.Localize(this, "Chokuretsu ROM"), ".nds"));
             if (openFileDialog.ShowAndReportIfFileSelected(this))
             {
                 _romPath.Text = openFileDialog.FileName;
@@ -162,38 +162,39 @@ namespace SerialLoops
         {
             if (_romPath.Text == NO_ROM_TEXT)
             {
-                MessageBox.Show("Please select a ROM before creating the project.", "Project Creation Warning", MessageBoxType.Warning);
+                MessageBox.Show(Application.Instance.Localize(this, "Please select a ROM before creating the project."), Application.Instance.Localize(this, "Project Creation Warning"), MessageBoxType.Warning);
             }
             else if (string.IsNullOrWhiteSpace(_nameBox.Text))
             {
-                MessageBox.Show("Please choose a project name before creating the project.", "Project Creation Warning", MessageBoxType.Warning);
+                MessageBox.Show(Application.Instance.Localize(this, "Please choose a project name before creating the project."), Application.Instance.Localize(this, "Project Creation Warning"), MessageBoxType.Warning);
             }
             else
             {
-                NewProject = new(_nameBox.Text, _languageDropDown.Items[_languageDropDown.SelectedIndex].Key, Config, Log);
+                NewProject = new(_nameBox.Text, _languageDropDown.Items[_languageDropDown.SelectedIndex].Key, Config, s => Application.Instance.Localize(null, s), Log);
                 string romPath = _romPath.Text;
-                LoopyProgressTracker tracker = new();
+                LoopyProgressTracker tracker = new(s => Application.Instance.Localize(null, s));
                 ProgressDialog _ = new(() => 
                 {
-                    ((IProgressTracker)tracker).Focus("Creating Project", 1);
+                    ((IProgressTracker)tracker).Focus(Application.Instance.Localize(this, "Creating Project"), 1);
                     IO.OpenRom(NewProject, romPath, Log, tracker);
                     tracker.Finished++;
                     NewProject.Load(Config, Log, tracker);
-                }, Close, tracker, "Creating Project");
+                }, Close, tracker, Application.Instance.Localize(this, "Creating Project"));
             }
         }
 
         private readonly static Dictionary<string, string> _availableLanguages = new()
         {
-            { "English", "en" },
-            { "Japanese", "ja" },
-            { "Russian", "ru" },
-            { "Spanish", "es" },
-            { "Portuguese (Brazilian)", "pt-BR" },
-            { "Italian", "it" },
-            { "French", "fr" },
-            { "German", "de" },
-            { "Greek", "el" },
+            { Application.Instance.Localize(null, "English"), "en" },
+            { Application.Instance.Localize(null, "Japanese"), "ja" },
+            { Application.Instance.Localize(null, "Chinese (Simplified)"), "zh-Hans" },
+            { Application.Instance.Localize(null, "Russian"), "ru" },
+            { Application.Instance.Localize(null, "Spanish"), "es" },
+            { Application.Instance.Localize(null, "Portuguese (Brazilian)"), "pt-BR" },
+            { Application.Instance.Localize(null, "Italian"), "it" },
+            { Application.Instance.Localize(null, "French"), "fr" },
+            { Application.Instance.Localize(null, "German"), "de" },
+            { Application.Instance.Localize(null, "Greek"), "el" },
         };
     }
 }

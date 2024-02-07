@@ -31,7 +31,7 @@ namespace SerialLoops.Dialogs
                 ItemDescription.ItemType.Background => "BG_",
                 ItemDescription.ItemType.BGM => "BGM_",
                 ItemDescription.ItemType.Character_Sprite => "SPR_",
-                ItemDescription.ItemType.Chess => "CHESS_",
+                ItemDescription.ItemType.Chess_Puzzle => "CHESS_",
                 ItemDescription.ItemType.Chibi => "CHB_",
                 ItemDescription.ItemType.Character => "CHR_",
                 ItemDescription.ItemType.Group_Selection => "GRP_",
@@ -54,8 +54,8 @@ namespace SerialLoops.Dialogs
             }
             nameBox.SelectAll();
 
-            Button renameButton = new() { Text = "Rename" };
-            Button cancelButton = new() { Text = "Cancel" };
+            Button renameButton = new() { Text = Application.Instance.Localize(this, "Rename") };
+            Button cancelButton = new() { Text = Application.Instance.Localize(this, "Cancel") };
 
             void renameItem()
             {
@@ -67,7 +67,7 @@ namespace SerialLoops.Dialogs
                 }
                 else
                 {
-                    _log.LogError($"Name '{name}' is already in use!");
+                    _log.LogError(string.Format(Application.Instance.Localize(this, "Name '{0}' is already in use!"), name));
                 }
             }
             renameButton.Click += (sender, args) =>
@@ -94,7 +94,7 @@ namespace SerialLoops.Dialogs
                 HorizontalContentAlignment = HorizontalAlignment.Center,
                 Items =
                 {
-                    new Label { Text = "New Name" },
+                    new Label { Text = Application.Instance.Localize(this, "New Name") },
                     ControlGenerator.GetControlWithLabel(prefix, nameBox),
                     new StackLayoutItem
                     {

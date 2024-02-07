@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -68,8 +69,8 @@ namespace SerialLoops
 
             SearchBox = new()
             {
-                PlaceholderText = "Search...",
-                ToolTip = "Search for items by name, ID, or type.",
+                PlaceholderText = Application.Instance.Localize(this, "Search..."),
+                ToolTip = Application.Instance.Localize(this, "Search for items by name, ID, or type."),
                 Width = 200,
             };
             Button advancedSearchButton = new() { Text = "...", Width = 25 };
@@ -129,24 +130,24 @@ namespace SerialLoops
             // File
             Command newProjectCommand = new()
             {
-                MenuText = "New Project...",
-                ToolBarText = "New Project",
+                MenuText = Application.Instance.Localize(this, "New Project..."),
+                ToolBarText = Application.Instance.Localize(this, "New Project"),
                 Image = ControlGenerator.GetIcon("New", Log)
             };
             newProjectCommand.Executed += NewProjectCommand_Executed;
 
             Command openProjectCommand = new()
             {
-                MenuText = "Open Project...",
-                ToolBarText = "Open Project",
+                MenuText = Application.Instance.Localize(this, "Open Project..."),
+                ToolBarText = Application.Instance.Localize(this, "Open Project"),
                 Image = ControlGenerator.GetIcon("Open", Log)
             };
             openProjectCommand.Executed += OpenProject_Executed;
 
             Command editSaveFileCommand = new()
             {
-                MenuText = "Edit Save File...",
-                ToolBarText = "Edit Save File",
+                MenuText = Application.Instance.Localize(this, "Edit Save File..."),
+                ToolBarText = Application.Instance.Localize(this, "Edit Save File"),
                 Image = ControlGenerator.GetIcon("Edit_Save", Log)
             };
             editSaveFileCommand.Executed += EditSaveFileCommand_Executed;
@@ -157,8 +158,8 @@ namespace SerialLoops
 
             Command viewLogsCommand = new()
             {
-                MenuText = "View Logs",
-                ToolBarText = "View Logs",
+                MenuText = Application.Instance.Localize(this, "View Logs"),
+                ToolBarText = Application.Instance.Localize(this, "View Logs"),
             };
             viewLogsCommand.Executed += (sender, args) =>
             {
@@ -182,11 +183,11 @@ namespace SerialLoops
             checkForUpdatesCommand.Executed += (sender, e) => new UpdateChecker(this).Check();
 
             // About
-            Command aboutCommand = new() { MenuText = "About...", Image = ControlGenerator.GetIcon("Help", Log) };
+            Command aboutCommand = new() { MenuText = Application.Instance.Localize(this, "About..."), Image = ControlGenerator.GetIcon("Help", Log) };
             aboutCommand.Executed += AboutCommand_Executed;
 
             // Create Menu
-            _recentProjectsCommand = new() { Text = "Recent Projects" };
+            _recentProjectsCommand = new() { Text = Application.Instance.Localize(this, "Recent Projects") };
             Menu = new MenuBar
             {
                 Items =
@@ -194,7 +195,7 @@ namespace SerialLoops
                     // File submenu
                     new SubMenuItem
                     {
-                        Text = "&File",
+                        Text = Application.Instance.Localize(this, "&File"),
                         Items =
                         {
                             newProjectCommand,
@@ -210,17 +211,17 @@ namespace SerialLoops
                     // application (OS X) or file menu (others)
                     new ButtonMenuItem
                     {
-                        Text = "&Preferences...", Command = preferencesCommand,
+                        Text = Application.Instance.Localize(this, "&Preferences..."), Command = preferencesCommand,
                         Image = ControlGenerator.GetIcon("Options", Log)
                     },
                     new ButtonMenuItem
                     {
-                        Text = "&Check For Updates...", Command = checkForUpdatesCommand,
+                        Text = Application.Instance.Localize(this, "&Check For Updates..."), Command = checkForUpdatesCommand,
                         Image = ControlGenerator.GetIcon("Update", Log)
                     },
                     new ButtonMenuItem
                     {
-                        Text = "View &Logs", Command = viewLogsCommand,
+                        Text = Application.Instance.Localize(this, "View &Logs"), Command = viewLogsCommand,
                     },
                 },
                 AboutItem = aboutCommand
@@ -232,8 +233,8 @@ namespace SerialLoops
             // File
             Command saveProjectCommand = new()
             {
-                MenuText = "Save Project",
-                ToolBarText = "Save",
+                MenuText = Application.Instance.Localize(this, "Save Project"),
+                ToolBarText = Application.Instance.Localize(this, "Save"),
                 Shortcut = Application.Instance.CommonModifier | Keys.S,
                 Image = ControlGenerator.GetIcon("Save", Log)
             };
@@ -241,83 +242,83 @@ namespace SerialLoops
 
             Command projectSettingsCommand = new()
             {
-                MenuText = "Project Settings...",
-                ToolBarText = "Project Settings",
+                MenuText = Application.Instance.Localize(this, "Project Settings..."),
+                ToolBarText = Application.Instance.Localize(this, "Project Settings"),
                 Image = ControlGenerator.GetIcon("Project_Options", Log),
             };
             projectSettingsCommand.Executed += ProjectSettings_Executed;
 
             Command migrateProjectCommand = new()
             {
-                MenuText = "Migrate to new ROM",
-                ToolBarText = "Migrate Project",
+                MenuText = Application.Instance.Localize(this, "Migrate to new ROM"),
+                ToolBarText = Application.Instance.Localize(this, "Migrate Project"),
                 Image = ControlGenerator.GetIcon("Migrate_ROM", Log)
             };
             migrateProjectCommand.Executed += MigrateProject_Executed;
 
             Command exportPatchCommand = new()
             {
-                MenuText = "Export Patch",
-                ToolBarText = "Export Patch",
+                MenuText = Application.Instance.Localize(this, "Export Patch"),
+                ToolBarText = Application.Instance.Localize(this, "Export Patch"),
                 Image = ControlGenerator.GetIcon("Export_Patch", Log)
             };
             exportPatchCommand.Executed += Patch_Executed;
 
             Command closeProjectCommand = new()
             {
-                MenuText = "Close Project",
-                ToolBarText = "Close Project",
+                MenuText = Application.Instance.Localize(this, "Close Project"),
+                ToolBarText = Application.Instance.Localize(this, "Close Project"),
                 Image = ControlGenerator.GetIcon("Close", Log)
             };
             closeProjectCommand.Executed += (sender, args) => CloseProjectView();
 
             // Tools
-            Command applyHacksCommand = new() { MenuText = "Apply Hacks...", Image = ControlGenerator.GetIcon("Apply_Hacks", Log) };
+            Command applyHacksCommand = new() { MenuText = Application.Instance.Localize(this, "Apply Hacks..."), Image = ControlGenerator.GetIcon("Apply_Hacks", Log) };
             applyHacksCommand.Executed += (sender, args) => new AsmHacksDialog(OpenProject, CurrentConfig, Log).ShowModal();
 
-            Command renameItemCommand = new() { MenuText = "Rename Item", Shortcut = Keys.F2, Image = ControlGenerator.GetIcon("Rename_Item", Log) };
+            Command renameItemCommand = new() { MenuText = Application.Instance.Localize(this, "Rename Item"), Shortcut = Keys.F2, Image = ControlGenerator.GetIcon("Rename_Item", Log) };
             renameItemCommand.Executed +=
                 (sender, args) => Shared.RenameItem(OpenProject, ItemExplorer, EditorTabs, Log);
 
-            Command editUiTextCommand = new() { MenuText = "Edit UI Text...", Image = ControlGenerator.GetIcon("Edit_UI_Text", Log) };
+            Command editUiTextCommand = new() { MenuText = Application.Instance.Localize(this, "Edit UI Text..."), Image = ControlGenerator.GetIcon("Edit_UI_Text", Log) };
             editUiTextCommand.Executed += EditUiTextCommand_Executed;
 
-            Command editTutorialMappingsCommand = new() { MenuText = "Edit Tutorial Mappings...", Image = ControlGenerator.GetIcon("Tutorial", Log) };
+            Command editTutorialMappingsCommand = new() { MenuText = Application.Instance.Localize(this, "Edit Tutorial Mappings..."), Image = ControlGenerator.GetIcon("Tutorial", Log) };
             editTutorialMappingsCommand.Executed += EditTutorialMappingsCommand_Executed;
 
             Command searchProjectCommand = new()
             {
-                MenuText = "Search...",
-                ToolBarText = "Search",
+                MenuText = Application.Instance.Localize(this, "Search..."),
+                ToolBarText = Application.Instance.Localize(this, "Search"),
                 Shortcut = Application.Instance.CommonModifier | Keys.F,
                 Image = ControlGenerator.GetIcon("Search", Log)
             };
             searchProjectCommand.Executed += Search_Executed;
 
-            Command findOrphanedItemsCommand = new() { MenuText = "Find Orphaned Items...", Image = ControlGenerator.GetIcon("Orphan_Search", Log) };
+            Command findOrphanedItemsCommand = new() { MenuText = Application.Instance.Localize(this, "Find Orphaned Items..."), Image = ControlGenerator.GetIcon("Orphan_Search", Log) };
             findOrphanedItemsCommand.Executed += FindOrphanedItems_Executed;
 
             // Build
             Command buildIterativeProjectCommand = new()
             {
-                MenuText = "Build",
-                ToolBarText = "Build",
+                MenuText = Application.Instance.Localize(this, "Build"),
+                ToolBarText = Application.Instance.Localize(this, "Build"),
                 Image = ControlGenerator.GetIcon("Build", Log)
             };
             buildIterativeProjectCommand.Executed += BuildIterativeProject_Executed;
 
             Command buildBaseProjectCommand = new()
             {
-                MenuText = "Build from Scratch",
-                ToolBarText = "Build from Scratch",
+                MenuText = Application.Instance.Localize(this, "Build from Scratch"),
+                ToolBarText = Application.Instance.Localize(this, "Build from Scratch"),
                 Image = ControlGenerator.GetIcon("Build_Scratch", Log)
             };
             buildBaseProjectCommand.Executed += BuildBaseProject_Executed;
 
             Command buildAndRunProjectCommand = new()
             {
-                MenuText = "Build and Run",
-                ToolBarText = "Run",
+                MenuText = Application.Instance.Localize(this, "Build and Run"),
+                ToolBarText = Application.Instance.Localize(this, "Run"),
                 Image = ControlGenerator.GetIcon("Build_Run", Log)
             };
             buildAndRunProjectCommand.Executed += BuildAndRunProject_Executed;
@@ -336,7 +337,7 @@ namespace SerialLoops
             };
 
             // Add project items to existing File menu
-            if (Menu.Items.FirstOrDefault(x => x.Text.Contains("File")) is SubMenuItem fileMenu)
+            if (Menu.Items.FirstOrDefault(x => x.Text.Contains(Application.Instance.Localize(this, "File"))) is SubMenuItem fileMenu)
             {
                 foreach (var command in new[]
                      {
@@ -353,7 +354,7 @@ namespace SerialLoops
 
             Menu.Items.Add(new SubMenuItem
             {
-                Text = "&Tools",
+                Text = Application.Instance.Localize(this, "&Tools"),
                 Items =
                 {
                     applyHacksCommand,
@@ -366,7 +367,7 @@ namespace SerialLoops
             });
             Menu.Items.Add(new SubMenuItem
             {
-                Text = "&Build",
+                Text = Application.Instance.Localize(this, "&Build"),
                 Items =
                 {
                     buildIterativeProjectCommand,
@@ -380,10 +381,10 @@ namespace SerialLoops
         {
             try
             {
-                List<string> openTabs = new();
-                if (ProjectsCache.RecentWorkspaces.ContainsKey(project.ProjectFile))
+                List<string> openTabs = [];
+                if (ProjectsCache.RecentWorkspaces.TryGetValue(project.ProjectFile, out List<string> previousTabs))
                 {
-                    openTabs = ProjectsCache.RecentWorkspaces[project.ProjectFile];
+                    openTabs = previousTabs;
                 }
 
                 ProjectsCache.CacheRecentProject(project.ProjectFile, openTabs);
@@ -392,7 +393,7 @@ namespace SerialLoops
 
                 if (CurrentConfig.RememberProjectWorkspace)
                 {
-                    tracker.Focus("Restoring Workspace", openTabs.Count);
+                    tracker.Focus(Application.Instance.Localize(this, "Restoring Workspace"), openTabs.Count);
                     foreach (string itemName in openTabs)
                     {
                         ItemDescription item = project.FindItem(itemName);
@@ -412,7 +413,7 @@ namespace SerialLoops
             }
             catch (Exception e)
             {
-                Log.LogError($"Failed to load cached data: {e.Message}");
+                Log.LogException(Application.Instance.Localize(this, "Failed to load cached data"), e);
                 string projectFile = project.ProjectFile;
                 ProjectsCache.RecentWorkspaces.Remove(projectFile);
                 ProjectsCache.RecentProjects.Remove(projectFile);
@@ -425,7 +426,9 @@ namespace SerialLoops
             base.OnLoad(e);
             Log = new();
             CurrentConfig = Config.LoadConfig(Log);
+            Application.Instance.LocalizeString += Application_LocalizeString;
             Log.Initialize(CurrentConfig);
+
             ProjectsCache = ProjectsCache.LoadCache(CurrentConfig, Log);
             UpdateRecentProjects();
 
@@ -444,11 +447,16 @@ namespace SerialLoops
             }
         }
 
+        private void Application_LocalizeString(object sender, LocalizeEventArgs e)
+        {
+            e.LocalizedText = Strings.ResourceManager.GetString(e.Text, CultureInfo.CurrentCulture);
+        }
+
         private void UpdateRecentProjects()
         {
             _recentProjectsCommand?.Items.Clear();
 
-            List<string> projectsToRemove = new();
+            List<string> projectsToRemove = [];
             foreach (string project in ProjectsCache.RecentProjects)
             {
                 Command recentProject = new() { MenuText = Path.GetFileNameWithoutExtension(project), ToolTip = project };
@@ -462,7 +470,7 @@ namespace SerialLoops
                     }
 
                     recentProject.Enabled = false;
-                    recentProject.MenuText += " (Missing)";
+                    recentProject.MenuText += Application.Instance.Localize(this, "(Missing)");
                     recentProject.Image = ControlGenerator.GetIcon("Warning", Log);
                 }
 
@@ -487,7 +495,7 @@ namespace SerialLoops
             new AboutDialog
             {
                 ProgramName = "Serial Loops",
-                Developers = new[] { "Jonko", "William278" },
+                Developers = ["Jonko", "William278"],
                 Copyright = "© Haroohie Translation Club, 2023",
                 Website = new Uri("https://haroohie.club"),
                 Version = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>()
@@ -509,14 +517,14 @@ namespace SerialLoops
                 }
 
                 OpenProject = projectCreationDialog.NewProject;
-                OpenProjectView(OpenProject, new LoopyProgressTracker());
+                OpenProjectView(OpenProject, new LoopyProgressTracker(s => Application.Instance.Localize(null, s)));
             }
         }
 
         public void OpenProject_Executed(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new() { Directory = new Uri(CurrentConfig.ProjectsDirectory) };
-            openFileDialog.Filters.Add(new("Serial Loops Project", $".{Project.PROJECT_FORMAT}"));
+            openFileDialog.Filters.Add(new(Application.Instance.Localize(this, "Serial Loops Project"), $".{Project.PROJECT_FORMAT}"));
             if (openFileDialog.ShowAndReportIfFileSelected(this))
             {
                 CancelEventArgs cancelEvent = new();
@@ -538,15 +546,15 @@ namespace SerialLoops
         public void OpenProjectFromPath(string path)
         {
             Project.LoadProjectResult result = new(Project.LoadProjectState.FAILED); // start us off with a failure
-            LoopyProgressTracker tracker = new();
-            _ = new ProgressDialog(() => (OpenProject, result) = Project.OpenProject(path, CurrentConfig, Log, tracker),
-                () => { }, tracker, "Loading Project");
+            LoopyProgressTracker tracker = new(s => Application.Instance.Localize(null, s));
+            _ = new ProgressDialog(() => (OpenProject, result) = Project.OpenProject(path, CurrentConfig, s => Application.Instance.Localize(null, s), Log, tracker),
+                () => { }, tracker, Application.Instance.Localize(this, "Loading Project"));
             if (OpenProject is not null && result.State == Project.LoadProjectState.LOOSELEAF_FILES)
             {
-                if (MessageBox.Show("Saved but unbuilt files were detected in the project directory. " +
+                if (MessageBox.Show(Application.Instance.Localize(this, "Saved but unbuilt files were detected in the project directory. " +
                                     "Would you like to build before loading the project? " +
-                                    "Not building could result in these files being overwritten.",
-                        "Build Unbuilt Files?",
+                                    "Not building could result in these files being overwritten."),
+                        Application.Instance.Localize(this, "Build Unbuilt Files?"),
                         MessageBoxButtons.YesNo,
                         MessageBoxType.Question,
                         MessageBoxDefaultButton.Yes) == DialogResult.Yes)
@@ -561,11 +569,11 @@ namespace SerialLoops
             else if (result.State == Project.LoadProjectState.CORRUPTED_FILE)
             {
                 if (MessageBox.Show(
-                        $"While attempting to build,  file #{result.BadFileIndex:X3} in archive {result.BadArchive} was " +
+                        string.Format(Application.Instance.Localize(this, "While attempting to build,  file #{0:X3} in archive {1} was " +
                         $"found to be corrupt. Serial Loops can delete this file from your base directory automatically which may allow you to load the rest of the " +
                         $"project, but any changes made to that file will be lost. Alternatively, you can attempt to edit the file manually to fix it. How would " +
-                        $"you like to proceed? Press OK to proceed with deleting the file and Cancel to attempt to deal with it manually.",
-                        "Corrupted File Detected!",
+                        $"you like to proceed? Press OK to proceed with deleting the file and Cancel to attempt to deal with it manually."), result.BadFileIndex, result.BadArchive),
+                        Application.Instance.Localize(this, "Corrupted File Detected!"),
                         MessageBoxButtons.OKCancel,
                         MessageBoxType.Warning,
                         MessageBoxDefaultButton.Cancel) == DialogResult.Ok)
@@ -723,7 +731,7 @@ namespace SerialLoops
                     case ItemDescription.ItemType.Script:
                         EventFile evt = ((ScriptItem)item).Event;
                         evt.CollectGarbage();
-                        IO.WriteStringFile(Path.Combine("assets", "events", $"{evt.Index:X3}.s"), evt.GetSource(new()),
+                        IO.WriteStringFile(Path.Combine("assets", "events", $"{evt.Index:X3}.s"), evt.GetSource([]),
                             OpenProject, Log);
                         break;
                     case ItemDescription.ItemType.System_Texture:
@@ -758,7 +766,7 @@ namespace SerialLoops
             if (changedTopics)
             {
                 IO.WriteStringFile(Path.Combine("assets", "events", $"{OpenProject.TopicFile.Index:X3}.s"),
-                    OpenProject.TopicFile.GetSource(new()), OpenProject, Log);
+                    OpenProject.TopicFile.GetSource([]), OpenProject, Log);
             }
 
             if (changedSubs)
@@ -819,8 +827,8 @@ namespace SerialLoops
             if (OpenProject is not null)
             {
                 OrphanedItemsDialog orphanedItemsDialog = null;
-                LoopyProgressTracker tracker = new("");
-                ((IProgressTracker)tracker).Focus("Finding orphaned items...", 1);
+                LoopyProgressTracker tracker = new(s => Application.Instance.Localize(null, s), string.Empty);
+                ((IProgressTracker)tracker).Focus(Application.Instance.Localize(this, "Finding orphaned items..."), 1);
 
                 ProgressDialog _ = new(() =>
                 {
@@ -830,7 +838,7 @@ namespace SerialLoops
                         tracker.Finished++;
                     });
                 }, () => { Application.Instance.Invoke(() => { orphanedItemsDialog?.Show(); }); }, tracker,
-                "Finding orphaned items");
+                Application.Instance.Localize(this, "Finding orphaned items"));
             }
         }
 
@@ -838,8 +846,8 @@ namespace SerialLoops
         {
             var openEditor = () =>
             {
-                OpenFileDialog openFileDialog = new() {Title = "Open Chokuretsu Save File"};
-                openFileDialog.Filters.Add(new("Chokuretsu Save File", ["*.sav"]));
+                OpenFileDialog openFileDialog = new() {Title = Application.Instance.Localize(this, "Open Chokuretsu Save File")};
+                openFileDialog.Filters.Add(new(Application.Instance.Localize(this, "Chokuretsu Save File"), ["*.sav"]));
                 if (openFileDialog.ShowAndReportIfFileSelected(this))
                 {
                     SaveEditorDialog saveEditorDialog = new(Log, OpenProject, EditorTabs, openFileDialog.FileName);
@@ -856,9 +864,9 @@ namespace SerialLoops
             }
             
             // Ask user if they wish to create a project
-            if (MessageBox.Show("To edit Save Files, you need to have a project open.\n" +
-                                "No project is currently open. Would you like to create a new project?",
-                "No Project Open", MessageBoxButtons.YesNo, MessageBoxType.Question,
+            if (MessageBox.Show(Application.Instance.Localize(this, "To edit Save Files, you need to have a project open.\n" +
+                                "No project is currently open. Would you like to create a new project?"),
+                Application.Instance.Localize(this, "No Project Open"), MessageBoxButtons.YesNo, MessageBoxType.Question,
                 MessageBoxDefaultButton.Yes) == DialogResult.Yes)
             {
                 NewProjectCommand_Executed(sender, e);
@@ -875,20 +883,20 @@ namespace SerialLoops
             if (OpenProject is not null)
             {
                 bool buildSucceeded = true; // imo it's better to have a false negative than a false positive here
-                LoopyProgressTracker tracker = new("Building:");
+                LoopyProgressTracker tracker = new(s => Application.Instance.Localize(null, s), "Building:");
                 ProgressDialog loadingDialog = new(
                     () => buildSucceeded = Build.BuildIterative(OpenProject, CurrentConfig, Log, tracker), () =>
                     {
                         if (buildSucceeded)
                         {
                             Log.Log("Build succeeded!");
-                            MessageBox.Show("Build succeeded!", "Build Result", MessageBoxType.Information);
+                            MessageBox.Show(Application.Instance.Localize(this, "Build succeeded!"), "Build Result", MessageBoxType.Information);
                         }
                         else
                         {
-                            Log.LogError("Build failed!");
+                            Log.LogError(Application.Instance.Localize(this, "Build failed!"));
                         }
-                    }, tracker, "Building Iteratively");
+                    }, tracker, Application.Instance.Localize(this, "Building Iteratively"));
             }
         }
 
@@ -897,20 +905,20 @@ namespace SerialLoops
             if (OpenProject is not null)
             {
                 bool buildSucceeded = true;
-                LoopyProgressTracker tracker = new("Building:");
+                LoopyProgressTracker tracker = new(s => Application.Instance.Localize(null, s), "Building:");
                 ProgressDialog loadingDialog = new(
                     () => buildSucceeded = Build.BuildBase(OpenProject, CurrentConfig, Log, tracker), () =>
                     {
                         if (buildSucceeded)
                         {
                             Log.Log("Build succeeded!");
-                            MessageBox.Show("Build succeeded!", "Build Result", MessageBoxType.Information);
+                            MessageBox.Show(Application.Instance.Localize(this, "Build succeeded!"), Application.Instance.Localize(this, "Build Result"), MessageBoxType.Information);
                         }
                         else
                         {
                             Log.LogError("Build failed!");
                         }
-                    }, tracker, "Building from Scratch");
+                    }, tracker, Application.Instance.Localize(this, "Building from Scratch"));
             }
         }
 
@@ -920,15 +928,15 @@ namespace SerialLoops
             {
                 if (string.IsNullOrWhiteSpace(CurrentConfig.EmulatorPath))
                 {
-                    MessageBox.Show("No emulator path has been set.\nPlease set the path to a Nintendo DS emulator in Preferences to use Build & Run.",
-                        "No Emulator Path", MessageBoxType.Warning);
+                    MessageBox.Show(Application.Instance.Localize(this, "No emulator path has been set.\nPlease set the path to a Nintendo DS emulator in Preferences to use Build & Run."),
+                        Application.Instance.Localize(this, "No Emulator Path"), MessageBoxType.Warning);
                     Log.LogWarning("Attempted to build and run project while no emulator path was set.");
                     PreferencesCommand_Executed(sender, e);
                     return;
                 }
 
                 bool buildSucceeded = true;
-                LoopyProgressTracker tracker = new("Building:");
+                LoopyProgressTracker tracker = new(s => Application.Instance.Localize(null, s), "Building:");
                 ProgressDialog loadingDialog = new(
                     () => buildSucceeded = Build.BuildIterative(OpenProject, CurrentConfig, Log, tracker), () =>
                     {
@@ -950,52 +958,52 @@ namespace SerialLoops
                             }
                             catch (Exception ex)
                             {
-                                Log.LogError($"Failed to start emulator: {ex.Message}");
+                                Log.LogException($"Failed to start emulator", ex);
                             }
                         }
                         else
                         {
                             Log.LogError("Build failed!");
                         }
-                    }, tracker, "Building and Running");
+                    }, tracker, Application.Instance.Localize(this, "Building and Running"));
             }
         }
 
         private void MigrateProject_Executed(object sender, EventArgs e)
         {
-            OpenFileDialog openFileDialog = new() { Title = "New Base ROM" };
-            openFileDialog.Filters.Add(new("Chokuretsu ROM", ".nds"));
+            OpenFileDialog openFileDialog = new() { Title = Application.Instance.Localize(this, "New Base ROM") };
+            openFileDialog.Filters.Add(new(Application.Instance.Localize(this, "Chokuretsu ROM"), ".nds"));
 
             if (openFileDialog.ShowAndReportIfFileSelected(this))
             {
-                LoopyProgressTracker tracker = new();
+                LoopyProgressTracker tracker = new(s => Application.Instance.Localize(null, s));
                 _ = new ProgressDialog(() =>
                     {
                         OpenProject.MigrateProject(openFileDialog.FileName, Log, tracker);
                         OpenProject.Load(CurrentConfig, Log, tracker);
                     },
-                    () => MessageBox.Show("Migrated to new ROM!", "Migration Complete!", MessageBoxType.Information),
-                    tracker, "Migrating to new ROM");
+                    () => MessageBox.Show(Application.Instance.Localize(this, "Migrated to new ROM!"), Application.Instance.Localize(this, "Migration Complete!"), MessageBoxType.Information),
+                    tracker, Application.Instance.Localize(this, "Migrating to new ROM"));
             }
         }
 
         private void Patch_Executed(object sender, EventArgs e)
         {
-            OpenFileDialog baseRomDialog = new() { Title = "Select base ROM" };
-            baseRomDialog.Filters.Add(new() { Name = "NDS ROM", Extensions = new string[] { ".nds" } });
+            OpenFileDialog baseRomDialog = new() { Title = Application.Instance.Localize(this, "Select base ROM") };
+            baseRomDialog.Filters.Add(new() { Name = Application.Instance.Localize(this, "NDS ROM"), Extensions = [".nds"] });
             if (baseRomDialog.ShowAndReportIfFileSelected(this))
             {
                 string currentRom = Path.Combine(OpenProject.MainDirectory, $"{OpenProject.Name}.nds");
 
-                SaveFileDialog outputPatchDialog = new() { Title = "Output patch location" };
-                outputPatchDialog.Filters.Add(new() { Name = "XDelta patch", Extensions = new string[] { ".xdelta" } });
+                SaveFileDialog outputPatchDialog = new() { Title = Application.Instance.Localize(this, "Output patch location") };
+                outputPatchDialog.Filters.Add(new() { Name = Application.Instance.Localize(this, "XDelta patch"), Extensions = [".xdelta"] });
                 if (outputPatchDialog.ShowAndReportIfFileSelected(this))
                 {
-                    LoopyProgressTracker tracker = new();
+                    LoopyProgressTracker tracker = new(s => Application.Instance.Localize(null, s));
                     _ = new ProgressDialog(
                         () => Patch.CreatePatch(baseRomDialog.FileName, currentRom, outputPatchDialog.FileName, Log),
-                        () => MessageBox.Show("Patch Created!", "Success!", MessageBoxType.Information), tracker,
-                        "Creating Patch");
+                        () => MessageBox.Show(Application.Instance.Localize(this, "Patch Created!"), Application.Instance.Localize(this, "Success!"), MessageBoxType.Information), tracker,
+                        Application.Instance.Localize(this, "Creating Patch"));
                 }
             }
         }
@@ -1005,6 +1013,13 @@ namespace SerialLoops
             PreferencesDialog preferencesDialog = new(CurrentConfig, Log);
             preferencesDialog.ShowModal(this);
             CurrentConfig = preferencesDialog.Configuration;
+            if (preferencesDialog.RequireRestart)
+            {
+                if (MessageBox.Show(Application.Instance.Localize(this, "The changes made will require Serial Loops to be restarted. Is that okay?"), MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    Application.Instance.Restart();
+                }
+            }
         }
 
         public void CloseProject_Executed(object sender, EventArgs e)
@@ -1017,8 +1032,8 @@ namespace SerialLoops
                 {
                     // message box with yes no cancel buttons
                     DialogResult result = MessageBox.Show(
-                        $"You have unsaved changes in {unsavedItems.Count()} item(s). " +
-                        $"Would you like to save before closing the project?",
+                        string.Format(Application.Instance.Localize(this, "You have unsaved changes in {0} item(s). " +
+                        "Would you like to save before closing the project?"), unsavedItems.Count()),
                         MessageBoxButtons.YesNoCancel, MessageBoxType.Warning
                     );
                     switch (result)

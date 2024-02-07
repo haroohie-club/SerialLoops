@@ -1,9 +1,10 @@
-using Eto.Drawing;
+﻿using Eto.Drawing;
 using Eto.Forms;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib;
 using SerialLoops.Utility;
 using System;
+using System.Globalization;
 
 namespace SerialLoops.Dialogs
 {
@@ -11,20 +12,22 @@ namespace SerialLoops.Dialogs
     {
         public Config Configuration { get; set; }
         private ILogger _log { get; set; }
+        public bool RequireRestart { get; set; } = false;
+
 
         public PreferencesDialog(Config config, ILogger log)
         {
-            Title = "Preferences";
+            Title = Application.Instance.Localize(this, "Preferences");
             MinimumSize = new Size(550, 600);
             Size = new Size(550, 600);
             Resizable = true;
             Configuration = config;
             _log = log;
 
-            Button saveButton = new() { Text = "Save" };
+            Button saveButton = new() { Text = Application.Instance.Localize(this, "Save") };
             saveButton.Click += SaveButton_Click;
 
-            Button cancelButton = new() { Text = "Cancel" };
+            Button cancelButton = new() { Text = Application.Instance.Localize(this, "Cancel") };
             cancelButton.Click += (sender, args) => Close();
 
             Content = new TableLayout(
@@ -56,78 +59,95 @@ namespace SerialLoops.Dialogs
                 {
                     new OptionsGroup
                     (
-                        "Build",
-                        new()
-                        {
+                        Application.Instance.Localize(this, "Build"),
+                        [
                             new FolderOption
                             {
-                                Name = "DevkitARM Path",
+                                Name = Application.Instance.Localize(this, "devkitARM Path"),
                                 Path = Configuration.DevkitArmPath,
                                 OnChange = (path) => Configuration.DevkitArmPath = path
                             },
                             new FileOption
                             {
-                                Name = "Emulator Path",
+                                Name = Application.Instance.Localize(this, "Emulator Path"),
                                 Path = Configuration.EmulatorPath,
                                 OnChange = (path) => Configuration.EmulatorPath = path
                             },
                             new BooleanOption
                             {
-                                Name = "Use Docker for ASM Hacks",
+                                Name = Application.Instance.Localize(this, "Use Docker for ASM Hacks"),
                                 Value = Configuration.UseDocker,
                                 OnChange = (value) => Configuration.UseDocker = value,
                                 Enabled = !Platform.IsMac,
                             },
                             new TextOption
                             {
-                                Name = "DevkitARM Docker Tag",
+                                Name = Application.Instance.Localize(this, "devkitARM Docker Tag"),
                                 Value = Configuration.DevkitArmDockerTag,
                                 OnChange = (value) => Configuration.DevkitArmDockerTag = value,
                                 Enabled = !Platform.IsMac,
                             },
-                        }
+                        ]
                     ),
                     new OptionsGroup(
-                        "Projects",
-                        new()
-                        {
+                        Application.Instance.Localize(this, "Projects"),
+                        [
                             new BooleanOption
                             {
-                                Name = "Auto Re-Open Last Project",
+                                Name = Application.Instance.Localize(this, "Auto Re-Open Last Project"),
                                 Value = Configuration.AutoReopenLastProject,
                                 OnChange = (value) => Configuration.AutoReopenLastProject = value
                             },
                             new BooleanOption
                             {
-                                Name = "Remember Project Workspace",
+                                Name = Application.Instance.Localize(this, "Remember Project Workspace"),
                                 Value = Configuration.RememberProjectWorkspace,
                                 OnChange = (value) => Configuration.RememberProjectWorkspace = value
                             },
                             new BooleanOption
                             {
-                                Name = "Remove Missing Projects",
+                                Name = Application.Instance.Localize(this, "Remove Missing Projects"),
                                 Value = Configuration.RemoveMissingProjects,
                                 OnChange = (value) => Configuration.RemoveMissingProjects = value
                             }
-                        }
+                        ]
                     ),
                     new OptionsGroup(
                         "Serial Loops",
-                        new()
-                        {
+                        [
+                            new DropDownOption(
+                                [
+                                    ("de", "Deutsch"),
+                                    ("en-GB", "English (United Kingdom)"),
+                                    ("en-US", "English (United States)"),
+                                    ("it", "Italiano"),
+                                    ("pt-BR", "Português brasileiro"),
+                                    ("ja", "日本語"),
+                                    ("zh-Hans", "中文（简化字）"),
+                                ])
+                            {
+                                Name = Application.Instance.Localize(this, "Language"),
+                                Value = CultureInfo.CurrentCulture.Name,
+                                OnChange = (value) =>
+                                {
+                                    CultureInfo.CurrentCulture = new(value);
+                                    Configuration.CurrentCultureName = value;
+                                    RequireRestart = true;
+                                }
+                            },
                             new BooleanOption
                             {
-                                Name = "Check For Updates On Startup",
+                                Name = Application.Instance.Localize(this, "Check for Updates on Startup"),
                                 Value = Configuration.CheckForUpdates,
                                 OnChange = (value) => Configuration.CheckForUpdates = value
                             },
                             new BooleanOption
                             {
-                                Name = "Use Pre-Release Update Channel",
+                                Name = Application.Instance.Localize(this, "Use Pre-Release Update Channel"),
                                 Value = Configuration.PreReleaseChannel,
                                 OnChange = (value) => Configuration.PreReleaseChannel = value
                             }
-                        }
+                        ]
                     )
                 }
             };

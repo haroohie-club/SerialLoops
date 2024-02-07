@@ -56,13 +56,13 @@ namespace SerialLoops.Lib.Items
                         {
                             SKPoint origin = new(gridZero.X - x * 32 + y * 32, gridZero.Y + x * 16 + y * 16);
                             SKPath diamond = new();
-                            diamond.AddPoly(new SKPoint[]
-                            {
+                            diamond.AddPoly(
+                            [
                                 origin,
-                                new SKPoint(origin.X - 32, origin.Y + 16),
-                                new SKPoint(origin.X, origin.Y + 32),
-                                new SKPoint(origin.X + 32, origin.Y + 16)
-                            });
+                                new(origin.X - 32, origin.Y + 16),
+                                new(origin.X, origin.Y + 32),
+                                new(origin.X + 32, origin.Y + 16)
+                            ]);
                             canvas.DrawRegion(new SKRegion(diamond), GetPathingCellPaint(x, y));
                         }
                     }
@@ -75,13 +75,13 @@ namespace SerialLoops.Lib.Items
                         {
                             SKPoint origin = new(gridZero.X - x * 16 + y * 16, gridZero.Y + x * 8 + y * 8);
                             SKPath diamond = new();
-                            diamond.AddPoly(new SKPoint[]
-                            {
+                            diamond.AddPoly(
+                            [
                                 origin,
-                                new SKPoint(origin.X - 16, origin.Y + 8),
-                                new SKPoint(origin.X, origin.Y + 16),
-                                new SKPoint(origin.X + 16, origin.Y + 8),
-                            });
+                                new(origin.X - 16, origin.Y + 8),
+                                new(origin.X, origin.Y + 16),
+                                new(origin.X + 16, origin.Y + 8),
+                            ]);
                             canvas.DrawRegion(new SKRegion(diamond), GetPathingCellPaint(x, y));
                         }
                     }
@@ -121,7 +121,7 @@ namespace SerialLoops.Lib.Items
 
         public void PopulateScriptUses(ArchiveFile<EventFile> evt)
         {
-            string[] chibiCommands = new string[] { "LOAD_ISOMAP" };
+            string[] chibiCommands = ["LOAD_ISOMAP"];
 
             var list = evt.Files.SelectMany(e =>
                 e.ScriptSections.SelectMany(sec =>

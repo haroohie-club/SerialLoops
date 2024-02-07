@@ -29,7 +29,7 @@ namespace SerialLoops.Lib.Items
 
         public void SetImage(SKBitmap image, IProgressTracker tracker, ILogger log)
         {
-            tracker.Focus("Setting CG single image...", 1);
+            tracker.Focus("Setting item image...", 1);
             List<SKColor> palette = Helpers.GetPaletteFromImage(image, 255, log);
             ItemGraphic.SetPalette(palette, 0);
             ItemGraphic.SetImage(image);

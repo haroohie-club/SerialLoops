@@ -36,19 +36,19 @@ namespace SerialLoops.Controls
                 }
             };
 
-            LinkButton newProjectLink = new() { Text = "New Project" };
+            LinkButton newProjectLink = new() { Text = Application.Instance.Localize(this, "New Project") };
             newProjectLink.Click += _mainForm.NewProjectCommand_Executed;
 
-            LinkButton openProjectLink = new() { Text = "Open Project" };
+            LinkButton openProjectLink = new() { Text = Application.Instance.Localize(this, "Open Project") };
             openProjectLink.Click += _mainForm.OpenProject_Executed;
             
-            LinkButton editSaveLink = new() { Text = "Edit Save File" };
+            LinkButton editSaveLink = new() { Text = Application.Instance.Localize(this, "Edit Save File") };
             editSaveLink.Click += _mainForm.EditSaveFileCommand_Executed;
             
-            LinkButton aboutLink = new() { Text = "About" };
+            LinkButton aboutLink = new() { Text = Application.Instance.Localize(this, "About") };
             aboutLink.Click += _mainForm.AboutCommand_Executed;
 
-            LinkButton preferencesLink = new() { Text = "Preferences" };
+            LinkButton preferencesLink = new() { Text = Application.Instance.Localize(this, "Preferences") };
             preferencesLink.Click += _mainForm.PreferencesCommand_Executed;
 
             StackLayout startPanel = new()
@@ -58,7 +58,7 @@ namespace SerialLoops.Controls
                 MinimumSize = new(150, 400),
                 Items =
                 {
-                    ControlGenerator.GetTextHeader("Start"),
+                    ControlGenerator.GetTextHeader(Application.Instance.Localize(this, "Start")),
                     ControlGenerator.GetControlWithIcon(newProjectLink, "New", _log),
                     ControlGenerator.GetControlWithIcon(openProjectLink, "Open", _log),
                     ControlGenerator.GetControlWithIcon(editSaveLink, "Edit_Save", _log),
@@ -85,7 +85,7 @@ namespace SerialLoops.Controls
                 Padding = 15,
                 Spacing = 10,
                 MinimumSize = new(350, 400),
-                Items = { ControlGenerator.GetTextHeader("Recents") }
+                Items = { ControlGenerator.GetTextHeader(Application.Instance.Localize(this, "Recents")) }
             };
 
             StackLayout projectList = new() { Spacing = 5 };
@@ -105,14 +105,14 @@ namespace SerialLoops.Controls
                     Items =
                     {
                         button,
-                        new Label() { Text = (missing ? "Missing: " : "") + project, TextColor = Color.FromGrayscale(0.5f) }
+                        new Label() { Text = (missing ? Application.Instance.Localize(this, "Missing:") : "") + project, TextColor = Color.FromGrayscale(0.5f) }
                     }
                 }, !missing ? "AppIcon" : "Warning", _log));
             }
 
             if (projectList.Items.Count is 0)
             {
-                recentProjects.Items.Add("No recent projects. Create one and it will appear here.");
+                recentProjects.Items.Add(Application.Instance.Localize(this, "No recent projects. Create one and it will appear here."));
             } 
             else
             {

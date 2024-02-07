@@ -23,12 +23,12 @@ namespace SerialLoops.Dialogs
             }
             if (Project is null)
             {
-                Log.LogError($"Project not provided to project creation dialog");
+                Log.LogError("Project not provided to project creation dialog");
                 Close();
             }
             if (Tabs is null)
             {
-                Log.LogError($"Editor Tabs not provided to project creation dialog");
+                Log.LogError("Editor Tabs not provided to project creation dialog");
                 Close();
             }
             base.OnLoad(e);

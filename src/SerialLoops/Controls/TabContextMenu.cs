@@ -25,7 +25,7 @@ namespace SerialLoops.Controls
             };
             Items.Add(new ButtonMenuItem
             {
-                Text = "Close",
+                Text = Application.Instance.Localize(this, "Close"),
                 Command = closeTabCommand
             });
 
@@ -41,7 +41,7 @@ namespace SerialLoops.Controls
             };
             Items.Add(new ButtonMenuItem
             {
-                Text = "Close All To Right",
+                Text = Application.Instance.Localize(this, "Close All To Right"),
                 Command = closeTabsToRightCommand
             });
 
@@ -56,7 +56,7 @@ namespace SerialLoops.Controls
             };
             Items.Add(new ButtonMenuItem
             {
-                Text = "Close All",
+                Text = Application.Instance.Localize(this, "Close All"),
                 Command = closeAllTabsCommand
             });
 
@@ -73,7 +73,7 @@ namespace SerialLoops.Controls
             };
             Items.Add(new ButtonMenuItem
             {
-                Text = "Close All But This",
+                Text = Application.Instance.Localize(this, "Close All But This"),
                 Command = closeAllTabsButThisCommand
             });
         }

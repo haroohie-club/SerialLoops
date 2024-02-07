@@ -20,14 +20,14 @@ namespace SerialLoops
         private readonly HashSet<ItemDescription.ItemType> _types = [.. Enum.GetValues<ItemDescription.ItemType>()];
         private readonly Label _searchWarningLabel = new()
         {
-            Text = "Press ENTER to execute search.",
+            Text = Application.Instance.Localize(null, "Press ENTER to execute search."),
             TextAlignment = TextAlignment.Center,
             VerticalAlignment = VerticalAlignment.Center,
             Visible = false,
         };
         private readonly Label _resultsLabel = new()
         {
-            Text = "Results",
+            Text = Application.Instance.Localize(null, "Results"),
             TextAlignment = TextAlignment.Center,
             VerticalAlignment = VerticalAlignment.Center,
             Visible = false,
@@ -45,7 +45,7 @@ namespace SerialLoops
 
         void InitializeComponent()
         {
-            Title = "Find in Project";
+            Title = Application.Instance.Localize(this, "Find in Project");
             MinimumSize = new Size(500, 600);
             Padding = 10;
 
@@ -55,7 +55,7 @@ namespace SerialLoops
             };
             _searchInput = new()
             {
-                PlaceholderText = "Search...",
+                PlaceholderText = Application.Instance.Localize(this, "Search..."),
                 Size = new Size(250, 25)
             };
             _searchInput.TextChanged += SearchInput_OnTextChanged;
@@ -86,25 +86,25 @@ namespace SerialLoops
             {
                 var results = Project.GetSearchResults(query, Log);
                 _results.Items = results;
-                _resultsLabel.Text = $"{results.Count} results found";
+                _resultsLabel.Text = string.Format(Application.Instance.Localize(this, "{0} results found"), results.Count);
                 _resultsLabel.Visible = true;
             }
             else
             {
                 if (query.Scopes.Count is 0 || query.Types.Count is 0)
                 {
-                    MessageBox.Show("Please select at least one search scope and item filter.", "Invalid search terms", MessageBoxType.Error);
+                    MessageBox.Show(Application.Instance.Localize(this, "Please select at least one search scope and item filter."), Application.Instance.Localize(this, "Invalid search terms"), MessageBoxType.Error);
                     return;
                 }
-                LoopyProgressTracker tracker = new("Searching");
-                List<ItemDescription> results = new();
+                LoopyProgressTracker tracker = new(s => Application.Instance.Localize(null, s), "Searching");
+                List<ItemDescription> results = [];
                 _ = new ProgressDialog(() => results = Project.GetSearchResults(query, Log, tracker),
                     () =>
                     {
                         _results.Items = results;
-                        _resultsLabel.Text = $"{results.Count} results found";
+                        _resultsLabel.Text = string.Format(Application.Instance.Localize(this, "{0} results found"), results.Count);
                         _resultsLabel.Visible = true;
-                    }, tracker, $"Searching {Project.Name}...");
+                    }, tracker, string.Format(Application.Instance.Localize(this, "Searching {0}..."), Project.Name));
             }
         }
 
@@ -115,7 +115,7 @@ namespace SerialLoops
             {
                 searchScopes.Add(new BooleanOption
                 {
-                    Name = scope.ToString().Replace("_", " "),
+                    Name = Application.Instance.Localize(this, scope.ToString()),
                     OnChange = value =>
                     {
                         if (value)
@@ -137,7 +137,7 @@ namespace SerialLoops
             {
                 typeOptions.Add(new ItemBooleanOption(Log)
                 {
-                    Name = type.ToString(),
+                    Name = Application.Instance.Localize(this, type.ToString()),
                     Type = type,
                     OnChange = value =>
                     {
@@ -156,7 +156,7 @@ namespace SerialLoops
             }
             
             // Add a toggle for item filters
-            typeOptions.Add(new BooleanToggleOption(typeOptions) { Name = "Quick Toggle" });
+            typeOptions.Add(new BooleanToggleOption(typeOptions) { Name = Application.Instance.Localize(this, "Quick Toggle") });
             
             // Ensure the number of items is divisible by 3, add blank columns if not
             while (typeOptions.Count % 3 != 0)
@@ -166,8 +166,8 @@ namespace SerialLoops
 
             return new TableLayout(
                 new TableRow(
-                    new OptionsGroup("Search Scope", searchScopes),
-                    new OptionsGroup("Filter by Item", typeOptions, 3)
+                    new OptionsGroup(Application.Instance.Localize(this, "Search Scope"), searchScopes),
+                    new OptionsGroup(Application.Instance.Localize(this, "Filter by Item"), typeOptions, 3)
                 )
             );
         }

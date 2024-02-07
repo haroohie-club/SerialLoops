@@ -22,12 +22,12 @@ namespace SerialLoops.Editors
             _animatedImage = new AnimatedImage(_sprite.GetLipFlapAnimation(_project));
             _animatedImage.Play();
 
-            Button exportFramesButton = new() { Text = "Export Frames" };
+            Button exportFramesButton = new() { Text = Application.Instance.Localize(this, "Export Frames") };
             exportFramesButton.Click += (sender, args) =>
             {
                 SelectFolderDialog folderDialog = new()
                 {
-                    Title = "Select character sprite export folder"
+                    Title = Application.Instance.Localize(this, "Select character sprite export folder")
                 };
                 if (folderDialog.ShowAndReportIfFolderSelected(this))
                 {
@@ -42,7 +42,7 @@ namespace SerialLoops.Editors
                     }
                     catch (Exception ex)
                     {
-                        _log.LogError($"Failed to export layout for sprite {_sprite.DisplayName} to file: {ex.Message}\n\n{ex.StackTrace}");
+                        _log.LogException(string.Format(Application.Instance.Localize(this, "Failed to export layout for sprite {0} to file"), _sprite.DisplayName), ex);
                     }
 
                     int i = 0;
@@ -55,7 +55,7 @@ namespace SerialLoops.Editors
                         }
                         catch (Exception ex)
                         {
-                            _log.LogError($"Failed to export eye animation {i} for sprite {_sprite.DisplayName} to file: {ex.Message}\n\n{ex.StackTrace}");
+                            _log.LogException(string.Format(Application.Instance.Localize(this, "Failed to export eye animation {0} for sprite {1} to file"), i, _sprite.DisplayName), ex);
                         }
                     }
                     i = 0;
@@ -68,18 +68,18 @@ namespace SerialLoops.Editors
                         }
                         catch (Exception ex)
                         {
-                            _log.LogError($"Failed to export mouth animation {i} for sprite {_sprite.DisplayName} to file: {ex.Message}\n\n{ex.StackTrace}");
+                            _log.LogException(string.Format(Application.Instance.Localize(this, "Failed to export mouth animation {0} for sprite {1} to file:"), i, _sprite.DisplayName), ex);
                         }
                     }
-                    MessageBox.Show("Character sprite frames exported!!", "Success!", MessageBoxType.Information);
+                    MessageBox.Show(Application.Instance.Localize(this, "Character sprite frames exported!"), Application.Instance.Localize(this, "Success!"), MessageBoxType.Information);
                 }
             };
 
-            Button exportGifButton = new() { Text = "Export GIF" };
+            Button exportGifButton = new() { Text = Application.Instance.Localize(this, "Export GIF") };
             exportGifButton.Click += (sender, args) =>
             {
                 List<(SKBitmap bitmap, int timing)> animationFrames;
-                if (MessageBox.Show("Include lip flap animation?", "Animation Export Option", MessageBoxButtons.YesNo, MessageBoxType.Question, MessageBoxDefaultButton.Yes) == DialogResult.Yes)
+                if (MessageBox.Show(Application.Instance.Localize(this, "Include lip flap animation?"), Application.Instance.Localize(this, "Animation Export Option"), MessageBoxButtons.YesNo, MessageBoxType.Question, MessageBoxDefaultButton.Yes) == DialogResult.Yes)
                 {
                     animationFrames = _sprite.GetLipFlapAnimation(_project);
                 }
@@ -90,9 +90,9 @@ namespace SerialLoops.Editors
 
                 SaveFileDialog saveFileDialog = new()
                 {
-                    Title = "Save character sprite GIF",
+                    Title = Application.Instance.Localize(this, "Save character sprite GIF"),
                 };
-                saveFileDialog.Filters.Add(new("GIF file", ".gif"));
+                saveFileDialog.Filters.Add(new(Application.Instance.Localize(this, "GIF file"), ".gif"));
 
                 if (saveFileDialog.ShowAndReportIfFileSelected(this))
                 {
@@ -105,8 +105,8 @@ namespace SerialLoops.Editors
                         }
                     }
 
-                    LoopyProgressTracker tracker = new();
-                    _ = new ProgressDialog(() => frames.SaveGif(saveFileDialog.FileName, tracker), () => MessageBox.Show("GIF exported!", "Success!", MessageBoxType.Information), tracker, "Exporting GIF...");
+                    LoopyProgressTracker tracker = new(s => Application.Instance.Localize(null, s));
+                    _ = new ProgressDialog(() => frames.SaveGif(saveFileDialog.FileName, tracker), () => MessageBox.Show(Application.Instance.Localize(this, "GIF exported!"), Application.Instance.Localize(this, "Success!"), MessageBoxType.Information), tracker, Application.Instance.Localize(this, "Exporting GIF..."));
                 }
             };
 

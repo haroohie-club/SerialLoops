@@ -43,7 +43,7 @@ namespace SerialLoops.Dialogs
 
         void InitializeComponent()
         {
-            Title = $"Edit Save File - {Path.GetFileName(_saveLoc)}";
+            Title = string.Format(Application.Instance.Localize(this, "Edit Save File - {0}"), Path.GetFileName(_saveLoc));
             Width = 600;
             Height = 390;
             Resizable = false;
@@ -54,7 +54,7 @@ namespace SerialLoops.Dialogs
 
         private void UpdateContent()
         {
-            Button saveButton = new() { Text = "Save" };
+            Button saveButton = new() { Text = Application.Instance.Localize(this, "Save") };
             saveButton.Click += (sender, args) =>
             {
                 _log.Log("Attempting to save Chokuretsu save file...");
@@ -69,7 +69,7 @@ namespace SerialLoops.Dialogs
                 }
             };
 
-            Button cancelButton = new() { Text = "Cancel" };
+            Button cancelButton = new() { Text = Application.Instance.Localize(this, "Cancel") };
             cancelButton.Click += (sender, args) => Close();
             
             StackLayout buttonsLayout = new()
@@ -99,7 +99,7 @@ namespace SerialLoops.Dialogs
         {
             Button saveCommonButton = new()
             {
-                Text = "Common Save Data...",
+                Text = Application.Instance.Localize(this, "Common Save Data..."),
                 Image = ControlGenerator.GetIcon("Edit_Save", _log)
             };
             saveCommonButton.Click += (sender, args) =>
@@ -108,7 +108,7 @@ namespace SerialLoops.Dialogs
                     _log,
                     _save.CommonData,
                     Path.GetFileName(_saveLoc),
-                    "Common Save Data",
+                    Application.Instance.Localize(this, "Common Save Data"),
                     _project,
                     _tabs,
                     UpdateContent
@@ -123,7 +123,7 @@ namespace SerialLoops.Dialogs
                 {
                     new GroupBox
                     {
-                        Text = "Save Files",
+                        Text = Application.Instance.Localize(this, "Save Files"),
                         Padding = 5,
                         Content = new TableLayout
                         {
@@ -155,7 +155,7 @@ namespace SerialLoops.Dialogs
                             new SaveFilePreview(data, _project).DrawPreview()
                         ),
                         new StackLayout(
-                            slotNum == 3 ? "Quick Save" : $"File {slotNum}",
+                            slotNum == 3 ? Application.Instance.Localize(this, "Quick Save") : string.Format(Application.Instance.Localize(this, "File {0}"), slotNum),
                             new StackLayout
                             {
                                 Orientation = Orientation.Horizontal,
@@ -186,11 +186,11 @@ namespace SerialLoops.Dialogs
                 SaveSlotEditorDialog saveSlotEditorDialog;
                 if (slot is QuickSaveSlotData quickSave)
                 {
-                    saveSlotEditorDialog = new(_log, quickSave, fileName, "Quick Save Data", _project, _tabs, UpdateContent);
+                    saveSlotEditorDialog = new(_log, quickSave, fileName, Application.Instance.Localize(this, "Quick Save Data"), _project, _tabs, UpdateContent);
                 }
                 else
                 {
-                    saveSlotEditorDialog = new(_log, slot, fileName, $"File {slotNumber}", _project, _tabs, UpdateContent);
+                    saveSlotEditorDialog = new(_log, slot, fileName, string.Format(Application.Instance.Localize(this, "File {0}"), slotNumber), _project, _tabs, UpdateContent);
                 }
                 saveSlotEditorDialog.Show();
             };

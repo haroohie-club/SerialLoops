@@ -41,7 +41,7 @@ namespace SerialLoops.Lib
             }
             catch (JsonException exc)
             {
-                log.LogError($"Exception occurred while parsing projects_cache.json!\n{exc.Message}\n\n{exc.StackTrace}");
+                log.LogException("Exception occurred while parsing projects_cache.json!", exc);
                 ProjectsCache defaultRecentProjects = GetDefault();
                 IO.WriteStringFile(recentProjectsJson, JsonSerializer.Serialize(defaultRecentProjects), log);
                 return defaultRecentProjects;
@@ -52,8 +52,8 @@ namespace SerialLoops.Lib
         {
             return new()
             {
-                RecentProjects = new(),
-                RecentWorkspaces = new()
+                RecentProjects = [],
+                RecentWorkspaces = []
             };
         }
 

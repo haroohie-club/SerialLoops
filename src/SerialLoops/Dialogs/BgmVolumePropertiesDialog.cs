@@ -25,7 +25,7 @@ namespace SerialLoops.Dialogs
         public BgmVolumePropertiesDialog(WaveStream wav, string title, ILogger log)
         {
             _log = log;
-            Title = $"{title} - Adjust Volume";
+            Title = string.Format(Application.Instance.Localize(this, "{0} - Adjust Volume"), title);
             _wav = wav;
             Waveform = new(WaveformRenderer.Render(wav, WaveFormRendererSettings.StandardSettings));
             _waveformLayout = new()
@@ -65,8 +65,8 @@ namespace SerialLoops.Dialogs
                 VolumePreviewPlayer.Stop();
             };
 
-            Button saveButton = new() { Text = "Save" };
-            Button cancelButton = new() { Text = "Cancel" };
+            Button saveButton = new() { Text = Application.Instance.Localize(this, "Save") };
+            Button cancelButton = new() { Text = Application.Instance.Localize(this, "Cancel") };
             saveButton.Click += (obj, args) =>
             {
                 SaveChanges = true;
