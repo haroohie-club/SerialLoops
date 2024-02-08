@@ -462,7 +462,7 @@
     <value>Collected all Nagato topics message box</value>
   </data>
   <data name="Color" xml:space="preserve">
-    <value>Color</value>
+    <value>Colour</value>
   </data>
   <data name="Command" xml:space="preserve">
     <value>Command</value>
@@ -550,7 +550,7 @@
     <value>Ctrl+Scroll - Scale Image</value>
   </data>
   <data name="Custom Color" xml:space="preserve">
-    <value>Custom Color</value>
+    <value>Custom Colour</value>
   </data>
   <data name="Cut" xml:space="preserve">
     <value>Cut</value>
@@ -1445,7 +1445,7 @@
     <value>Orphaned Items</value>
   </data>
   <data name="Outline Color" xml:space="preserve">
-    <value>Outline Color</value>
+    <value>Outline Colour</value>
   </data>
   <data name="Output patch location" xml:space="preserve">
     <value>Output patch location</value>
@@ -1512,7 +1512,7 @@
     <value>Places</value>
   </data>
   <data name="Plate Color" xml:space="preserve">
-    <value>Plate Color</value>
+    <value>Plate Colour</value>
   </data>
   <data name="Please choose a project name before creating the project." xml:space="preserve">
     <value>Please choose a project name before creating the project.</value>
@@ -1915,7 +1915,7 @@
     <value>Serial Loops v{0}</value>
   </data>
   <data name="Serialized ASM hack" xml:space="preserve">
-    <value>Serialized ASM hack</value>
+    <value>Serialised ASM hack</value>
   </data>
   <data name="Set" xml:space="preserve">
     <value>Set</value>
@@ -2049,7 +2049,7 @@
     <value>Template</value>
   </data>
   <data name="Text Color" xml:space="preserve">
-    <value>Text Color</value>
+    <value>Text Colour</value>
   </data>
   <data name="Text Entrance Effect" xml:space="preserve">
     <value>Text Entrance Effect</value>
