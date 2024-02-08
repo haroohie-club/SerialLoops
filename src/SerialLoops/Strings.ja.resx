@@ -139,7 +139,7 @@
     <value>同行者</value>
   </data>
   <data name="&amp;Tools" xml:space="preserve">
-    <value>&amp;ツール</value>
+    <value>ツール（&amp;T）</value>
   </data>
   <data name="Add Command" xml:space="preserve">
     <value>コマンドを追加</value>
@@ -170,7 +170,7 @@
     <value> (欠落)</value>
   </data>
   <data name="&amp;Build" xml:space="preserve">
-    <value>&amp;ビルド</value>
+    <value>ビルド（&amp;B）</value>
   </data>
   <data name="A new update for Serial Loops is available!" xml:space="preserve">
     <value>新しいバージョンがあります</value>
@@ -185,13 +185,13 @@
     <value>％</value>
   </data>
   <data name="&amp;Edit" xml:space="preserve">
-    <value>&amp;編集</value>
+    <value>編集（&amp;E）</value>
   </data>
   <data name="&amp;Check for Updates..." xml:space="preserve">
-    <value>&amp;更新を確認</value>
+    <value>更新を確認（&amp;C）</value>
   </data>
   <data name="&amp;Preferences..." xml:space="preserve">
-    <value>&amp;設定</value>
+    <value>設定（&amp;P）</value>
   </data>
   <data name="Add Frames" xml:space="preserve">
     <value>フレームを追加</value>
