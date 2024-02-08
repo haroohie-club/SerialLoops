@@ -171,6 +171,7 @@
   </data>
   <data name="Add Frames" xml:space="preserve">
     <value>Add Frames</value>
+    <comment>For Chibis/Character sprites</comment>
   </data>
   <data name="Add Map Characters" xml:space="preserve">
     <value>Add Map Characters</value>
@@ -186,12 +187,15 @@
   </data>
   <data name="Adjust Volume" xml:space="preserve">
     <value>Adjust Volume</value>
+    <comment>For BGM</comment>
   </data>
   <data name="Adjusting Loop Info" xml:space="preserve">
     <value>Adjusting Loop Info</value>
+    <comment>For BGM</comment>
   </data>
   <data name="Adjusting Volume" xml:space="preserve">
     <value>Adjusting Volume</value>
+    <comment>For BGM</comment>
   </data>
   <data name="All data erased message box" xml:space="preserve">
     <value>All data erased message box</value>
