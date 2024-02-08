@@ -499,4 +499,19 @@
   <data name="Filter by Item" xml:space="preserve">
     <value>Filtra per oggetti</value>
   </data>
+  <data name="French" xml:space="preserve">
+    <value>Francese</value>
+  </data>
+  <data name="GIF exported!" xml:space="preserve">
+    <value>GIF esportata!</value>
+  </data>
+  <data name="GIF file" xml:space="preserve">
+    <value>File GIF</value>
+  </data>
+  <data name="German" xml:space="preserve">
+    <value>Tedesco</value>
+  </data>
+  <data name="Greek" xml:space="preserve">
+    <value>Greco</value>
+  </data>
 </root>
