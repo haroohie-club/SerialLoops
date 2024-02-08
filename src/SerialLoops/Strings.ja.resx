@@ -196,4 +196,10 @@
   <data name="Add Frames" xml:space="preserve">
     <value>フレームを追加</value>
   </data>
+  <data name="Adjusting Volume" xml:space="preserve">
+    <value>音量を調整しています</value>
+  </data>
+  <data name="Adjusting Loop Info" xml:space="preserve">
+    <value>ループ情報を調整しています</value>
+  </data>
 </root>
