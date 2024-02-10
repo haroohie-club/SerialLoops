@@ -423,7 +423,7 @@
     <value>Clear all commands from the game scenario?\nThis action is irreversible.</value>
   </data>
   <data name="Clear Block" xml:space="preserve">
-    <value>Clear Block</value>
+    <value>Win Section</value>
   </data>
   <data name="Clear Scenario" xml:space="preserve">
     <value>Clear Scenario</value>
@@ -1287,10 +1287,10 @@
     <value>Mikuru Time Percentage</value>
   </data>
   <data name="Miss 2 Block" xml:space="preserve">
-    <value>Miss 2 Block</value>
+    <value>Lose 2 Section</value>
   </data>
   <data name="Miss Block" xml:space="preserve">
-    <value>Miss Block</value>
+    <value>Lose Section</value>
   </data>
   <data name="Missing:" xml:space="preserve">
     <value>Missing: </value>
