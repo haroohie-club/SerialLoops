@@ -1563,7 +1563,7 @@
     <value>Impossibile leggere file BGM; ripristinando originale…</value>
   </data>
   <data name="No valid maps found." xml:space="preserve">
-    <value>Non è stato possibile trovare una mappa valida.</value>
+    <value>Impossibile trovare mappa valida.</value>
   </data>
   <data name="Skip Update" xml:space="preserve">
     <value>Ignora aggiornamento</value>
@@ -1715,5 +1715,218 @@
   </data>
   <data name="Save Data" xml:space="preserve">
     <value>Salva dati</value>
+  </data>
+  <data name="Nagato companion selected description" xml:space="preserve">
+    <value>Descrizione compagno di Nagato</value>
+  </data>
+  <data name="Mystery girl voice added to config message box" xml:space="preserve">
+    <value>Messaggio Voce ragazza misteriosa sbloccata</value>
+  </data>
+  <data name="Migrated to new ROM!" xml:space="preserve">
+    <value>Spostato sulla nuova ROM!</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Località</value>
+  </data>
+  <data name="Loading prompt message box" xml:space="preserve">
+    <value>Messaggio Caricando Prompt</value>
+  </data>
+  <data name="Investigation Phase Results" xml:space="preserve">
+    <value>Risultati fase investigazione</value>
+  </data>
+  <data name="Failed replacing source file {0} in evt.bin with file '{1}'" xml:space="preserve">
+    <value>Impossibile sostituire file {0} dentro evt.bin con il file '{1}'</value>
+  </data>
+  <data name="Mikuru Asahina event unlocked message box" xml:space="preserve">
+    <value>Messaggio Mikuru Asahina sbloccata</value>
+  </data>
+  <data name="Hold Time (Frames)" xml:space="preserve">
+    <value>Hold Time (Frame)</value>
+  </data>
+  <data name="Loading Project" xml:space="preserve">
+    <value>Caricando Progetto</value>
+  </data>
+  <data name="Nagato Time Percentage" xml:space="preserve">
+    <value>Percentuale Tempo Nagato</value>
+  </data>
+  <data name="Failed to write NitroPacker NDS project file to disk" xml:space="preserve">
+    <value>Impossibile salvare progetto NitroPacker NDS su disco</value>
+  </data>
+  <data name="Failed to write ARM9 to disk" xml:space="preserve">
+    <value>Impossibile sovrascrivere ARM9 sul disco</value>
+  </data>
+  <data name="Manage Loop" xml:space="preserve">
+    <value>Gestisci Loop</value>
+  </data>
+  <data name="Nagato puzzle phase selected description" xml:space="preserve">
+    <value>Descrizione Nagato Fase Puzzle</value>
+  </data>
+  <data name="Output patch location" xml:space="preserve">
+    <value>Scegli dove salvare Patch</value>
+  </data>
+  <data name="Pre-Release Channel" xml:space="preserve">
+    <value>Canale Pre-Rilascio</value>
+  </data>
+  <data name="Maps" xml:space="preserve">
+    <value>Mappe</value>
+  </data>
+  <data name="Edit Tutorial Mappings" xml:space="preserve">
+    <value>Modifica Mappe Guida</value>
+  </data>
+  <data name="Kyon's Dialogue Box Companion Selection" xml:space="preserve">
+    <value>Dialoghi di Kyon scelta compagni</value>
+  </data>
+  <data name="Episode_Unique" xml:space="preserve">
+    <value>Unico Episodio</value>
+  </data>
+  <data name="Loop?" xml:space="preserve">
+    <value>Loopare?</value>
+  </data>
+  <data name="Loading Archives (evt.bin)" xml:space="preserve">
+    <value>Caricando archivio (evt.bin)</value>
+  </data>
+  <data name="Group_Selections" xml:space="preserve">
+    <value>Divisioni gruppi</value>
+  </data>
+  <data name="Power Character 1" xml:space="preserve">
+    <value>Potere Personaggio 1</value>
+  </data>
+  <data name="Group selection impossible selection made ticker tape" xml:space="preserve">
+    <value>Pannello Info Divisione gruppo impossibile</value>
+  </data>
+  <data name="objcopy not found at '{0}'" xml:space="preserve">
+    <value>objcopy non trovato in '{0}'</value>
+  </data>
+  <data name="Off" xml:space="preserve">
+    <value>Off</value>
+  </data>
+  <data name="Miss Block" xml:space="preserve">
+    <value>Sezione Persa</value>
+  </data>
+  <data name="Failed to set viewr contents for script command list panel." xml:space="preserve">
+    <value>Impossibile impostare i contenuti per il pannello script.</value>
+  </data>
+  <data name="One or more archives is null." xml:space="preserve">
+    <value>Uno o più archivi non sono validi.</value>
+  </data>
+  <data name="Main Topic" xml:space="preserve">
+    <value>Discussione Principale</value>
+  </data>
+  <data name="Edit Tutorial Mappings..." xml:space="preserve">
+    <value>Edit Mappe Guida…</value>
+  </data>
+  <data name="Loading:" xml:space="preserve">
+    <value>Caricando:</value>
+  </data>
+  <data name="Migration Complete!" xml:space="preserve">
+    <value>Trasferimento Completato!</value>
+  </data>
+  <data name="Migrating to new ROM" xml:space="preserve">
+    <value>Spostandosi verso nuova ROM</value>
+  </data>
+  <data name="Map Characters" xml:space="preserve">
+    <value>Personaggi Mappa</value>
+  </data>
+  <data name="Load this save prompt" xml:space="preserve">
+    <value>Carica prompt salvato</value>
+  </data>
+  <data name="Failed copying file '{0}' to base and iterative directories at path '{1}'" xml:space="preserve">
+    <value>Impossibile copiare file '{0}'nella cartella '{1}'</value>
+  </data>
+  <data name="Plate Color" xml:space="preserve">
+    <value>Colore Plate</value>
+  </data>
+  <data name="Itsuki Koizumi event unlocked message box" xml:space="preserve">
+    <value>Messaggio Itsuki Koizumi sbloccato</value>
+  </data>
+  <data name="Map" xml:space="preserve">
+    <value>Mappa</value>
+  </data>
+  <data name="Modify by" xml:space="preserve">
+    <value>Modificato di</value>
+    <comment>Expects an amount, i.e. "Modify by +5"</comment>
+  </data>
+  <data name="Crossfade Time (Frames)" xml:space="preserve">
+    <value>Crossfade Time (Frame)</value>
+  </data>
+  <data name="Load Game menu ticker tape" xml:space="preserve">
+    <value>Pannello Info Carica Partita</value>
+  </data>
+  <data name="Migrate to new ROM" xml:space="preserve">
+    <value>Spostati su una nuova ROM</value>
+  </data>
+  <data name="Investigation phase options ticker tape" xml:space="preserve">
+    <value>Pannello Info opzioni fase investigazione</value>
+  </data>
+  <data name="Finding orphaned items" xml:space="preserve">
+    <value>Trovando oggetti senza legami</value>
+  </data>
+  <data name="Move Command Up" xml:space="preserve">
+    <value>Sposta comando in alto</value>
+  </data>
+  <data name="Find References..." xml:space="preserve">
+    <value>Trova Impostazioni…</value>
+  </data>
+  <data name="Loading Archives (dat.bin)" xml:space="preserve">
+    <value>Caricando archivio (dat.bin)</value>
+  </data>
+  <data name="NitroPacker failed to pack ROM with exception" xml:space="preserve">
+    <value>NitroPacker non è riuscito a compilare la ROM</value>
+  </data>
+  <data name="Mode" xml:space="preserve">
+    <value>Mode</value>
+    <comment>Sound play mode (start/stop)</comment>
+  </data>
+  <data name="Loading Archives (grp.bin)" xml:space="preserve">
+    <value>Caricando archivio (grp.bin)</value>
+  </data>
+  <data name="Migrate Project" xml:space="preserve">
+    <value>Sposta Progetto</value>
+  </data>
+  <data name="Move Command Down" xml:space="preserve">
+    <value>Sposta comando in basso</value>
+  </data>
+  <data name="Power Character 2" xml:space="preserve">
+    <value>Potere Personaggio 2</value>
+  </data>
+  <data name="Kyon's Dialogue Box Group Selection" xml:space="preserve">
+    <value>Dialoghi di Kyon su divisione gruppo</value>
+  </data>
+  <data name="Missing:" xml:space="preserve">
+    <value>Mancante:</value>
+  </data>
+  <data name="Group_Selection" xml:space="preserve">
+    <value>Divisione gruppo</value>
+  </data>
+  <data name="Cross Space {0}&quot;" xml:space="preserve">
+    <value>Cross Spazio {0}"</value>
+    <comment>As on a chessboard</comment>
+  </data>
+  <data name="Miss 2 Block" xml:space="preserve">
+    <value>Perse 2 Sezioni</value>
+  </data>
+  <data name="No saves Load Game menu ticker tape" xml:space="preserve">
+    <value>Pannello Info Nessun dato salvato</value>
+  </data>
+  <data name="Horizontal Intensity" xml:space="preserve">
+    <value>Intensità Orizzontale</value>
+  </data>
+  <data name="On" xml:space="preserve">
+    <value>On</value>
+  </data>
+  <data name="Overwrite save prompt message box" xml:space="preserve">
+    <value>Messaggio sovrascrivi salvataggio</value>
+  </data>
+  <data name="Mikuru Time Percentage" xml:space="preserve">
+    <value>Percentuale Tempo Mikuru</value>
+  </data>
+  <data name="objcopy exited with code {0}" xml:space="preserve">
+    <value>objcopy exited with code {0}</value>
+  </data>
+  <data name="Failed to set script command list panel section content." xml:space="preserve">
+    <value>Impossibile impostare il contenuto nell'elenco script.</value>
+  </data>
+  <data name="Failed to write include files to disk." xml:space="preserve">
+    <value>Impossibile scrivere file su disco.</value>
   </data>
 </root>
