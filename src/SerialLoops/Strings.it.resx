@@ -603,7 +603,7 @@
     <value>Apri Progetto</value>
   </data>
   <data name="Select a Topic" xml:space="preserve">
-    <value>Seleziona una discussione</value>
+    <value>Seleziona discussione</value>
   </data>
   <data name="Hidden ID" xml:space="preserve">
     <value>ID Nascosto</value>
@@ -776,7 +776,7 @@
     <value>Spazi</value>
   </data>
   <data name="Project Options" xml:space="preserve">
-    <value>Opzioni del progetto</value>
+    <value>Opzioni progetto</value>
   </data>
   <data name="Past Description" xml:space="preserve">
     <value>Descrizione precedente</value>
@@ -1928,5 +1928,344 @@
   </data>
   <data name="Failed to write include files to disk." xml:space="preserve">
     <value>Impossibile scrivere file su disco.</value>
+  </data>
+  <data name="Unable to create command" xml:space="preserve">
+    <value>Impossibile creare comando</value>
+  </data>
+  <data name="References to {0}" xml:space="preserve">
+    <value>Collegato a {0}</value>
+  </data>
+  <data name="Update on Close" xml:space="preserve">
+    <value>Aggiorna mentre chiudi il programma</value>
+  </data>
+  <data name="Puzzle Interrupt Scenes setting" xml:space="preserve">
+    <value>Impostazioni scene interrotte Puzzle</value>
+  </data>
+  <data name="Title screen Options ticker tape" xml:space="preserve">
+    <value>Pannello Info Schermo Titolo Opzioni</value>
+  </data>
+  <data name="Voice Font" xml:space="preserve">
+    <value>Font Voce</value>
+  </data>
+  <data name="Title screen New Game ticker tape" xml:space="preserve">
+    <value>Pannello Info Schermo titolo nuova partita</value>
+  </data>
+  <data name="Scenario" xml:space="preserve">
+    <value>Scenario</value>
+  </data>
+  <data name="Unvoiced dialogue volume options ticker tape" xml:space="preserve">
+    <value>Pannello Info muta voci dialoghi</value>
+  </data>
+  <data name="Writing Includes" xml:space="preserve">
+    <value>Compila Includendo</value>
+    <comment>"Includes" here is a noun, as in "an 'includes' file"</comment>
+  </data>
+  <data name="Voices" xml:space="preserve">
+    <value>Voci</value>
+  </data>
+  <data name="Use Docker for ASM Hacks" xml:space="preserve">
+    <value>Usa Docker per ASM Hacks</value>
+  </data>
+  <data name="Vorbis files" xml:space="preserve">
+    <value>Vorbis files</value>
+  </data>
+  <data name="White Space End" xml:space="preserve">
+    <value>Spazio bianco finale</value>
+    <comment>As on a chessboard</comment>
+  </data>
+  <data name="Quicksave data damaged &amp; reset message box" xml:space="preserve">
+    <value>Messaggio Riparazione dati danneggiati e reset</value>
+  </data>
+  <data name="{0} results" xml:space="preserve">
+    <value>{0} risultati</value>
+  </data>
+  <data name="Skip Already Read" xml:space="preserve">
+    <value>Salta già letti</value>
+  </data>
+  <data name="{0} - Adjust Volume" xml:space="preserve">
+    <value>{0} - Sistema Volume</value>
+  </data>
+  <data name="Reset to default config ticker tape" xml:space="preserve">
+    <value>Pannello Info Impostazioni di fabbrica</value>
+  </data>
+  <data name="Yuki Nagato event unlocked message box" xml:space="preserve">
+    <value>Messaggio Evento sbloccato Yuki Nagato</value>
+  </data>
+  <data name="{0} - Manage Loop" xml:space="preserve">
+    <value>{0} - Gestisci Loop</value>
+  </data>
+  <data name="Puzzle Interrupt Scenes On" xml:space="preserve">
+    <value>Scene interrotte Puzzle On</value>
+  </data>
+  <data name="Vertical Intensity" xml:space="preserve">
+    <value>Intensità verticale</value>
+  </data>
+  <data name="Resetting save data message box" xml:space="preserve">
+    <value>Messaggio cancellazione dati salvati</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>Scrivi</value>
+  </data>
+  <data name="Puzzle Interrupt Scenes Off" xml:space="preserve">
+    <value>Scene interrotte Puzzle Off</value>
+  </data>
+  <data name="Sprite Exit/Move Transition" xml:space="preserve">
+    <value>Sprite transizione sposta/esci</value>
+  </data>
+  <data name="Voice" xml:space="preserve">
+    <value>Voce</value>
+  </data>
+  <data name="Puzzle Interrupt Scenes Unseen Only" xml:space="preserve">
+    <value>Non vedere scene interrotte Puzzle</value>
+  </data>
+  <data name="Title screen return unsaved progress lost prompt message box" xml:space="preserve">
+    <value>Messaggio prompt tornando al titolo i dati non salvati andranno perduti</value>
+  </data>
+  <data name="Writing NitroPacker Project File" xml:space="preserve">
+    <value>Compila File progetto NitroPacker</value>
+  </data>
+  <data name="Unknown 17" xml:space="preserve">
+    <value>Sconosciuto 17</value>
+  </data>
+  <data name="Replace me" xml:space="preserve">
+    <value>Sostituiscimi</value>
+  </data>
+  <data name="Visible?" xml:space="preserve">
+    <value>Rendere visibile?</value>
+  </data>
+  <data name="Unsure what to do with file '{0}'" xml:space="preserve">
+    <value>Cosa fare con il file '{0}'</value>
+  </data>
+  <data name="Unable to select asset URL for download" xml:space="preserve">
+    <value>Impossibile selezionare URL per scaricare risorse</value>
+  </data>
+  <data name="While attempting to build,  file #{0:X3} in archive {1} was found to be corrupt. Serial Loops can delete this file from your base directory automatically which may allow you to load the rest of the project, but any changes made to that file will be lost. Alternatively, you can attempt to edit the file manually to fix it. How would you like to proceed? Press OK to proceed with deleting the file and Cancel to attempt to deal with it manually." xml:space="preserve">
+    <value>Compilando il   file #{0:X3} nell'archivio {1} è stato trovato un file corrotto. Serial Loops cancellerà questo file dalla cartella, permettendoti di caricare il progetto senza problemi. Come vuoi proseguire? Clicca OK per cancellare il file o cancella per sistemare il problema da solo.</value>
+  </data>
+  <data name="WAV File" xml:space="preserve">
+    <value>File WAV</value>
+  </data>
+  <data name="WAV files" xml:space="preserve">
+    <value>File WAV</value>
+  </data>
+  <data name="Voices:" xml:space="preserve">
+    <value>Voci: </value>
+  </data>
+  <data name="Unknown 15" xml:space="preserve">
+    <value>Sconosciuto 15</value>
+  </data>
+  <data name="Quick Toggle" xml:space="preserve">
+    <value>Interruttori rapidi</value>
+  </data>
+  <data name="Unknown 16" xml:space="preserve">
+    <value>Sconosciuto 16</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Sì</value>
+  </data>
+  <data name="Save game ticker tape" xml:space="preserve">
+    <value>Pannello Info salvataggio dati gioco</value>
+  </data>
+  <data name="XDelta patch" xml:space="preserve">
+    <value>Patch XDelta</value>
+  </data>
+  <data name="Scale to Fit:" xml:space="preserve">
+    <value>Ridimensiona per adattare:</value>
+  </data>
+  <data name="Replace with Palette" xml:space="preserve">
+    <value>Sostituisci Palette</value>
+  </data>
+  <data name="Refresh Maps List" xml:space="preserve">
+    <value>Aggiorna lista mappe</value>
+  </data>
+  <data name="Scenarios" xml:space="preserve">
+    <value>Scenari</value>
+  </data>
+  <data name="{0} results found" xml:space="preserve">
+    <value>{0} risultati trovati</value>
+  </data>
+  <data name="Wait Time (Frames)" xml:space="preserve">
+    <value>Aspetta (frame)</value>
+  </data>
+  <data name="You have unsaved changes in {0} item(s). Would you like to save before closing the project?" xml:space="preserve">
+    <value>Sono presenti {0} cambiamento(i) non salvati. Salvare prima di chiudere?</value>
+  </data>
+  <data name="Scroll Direction" xml:space="preserve">
+    <value>Scorri direzione</value>
+  </data>
+  <data name="Volume Config" xml:space="preserve">
+    <value>Configura Volume</value>
+  </data>
+  <data name="Puzzle phase options ticker tape" xml:space="preserve">
+    <value>Pannello Info Opzioni fase puzzle</value>
+  </data>
+  <data name="unknown04" xml:space="preserve">
+    <value>Sconosciuto04</value>
+  </data>
+  <data name="Puzzle Phase Group" xml:space="preserve">
+    <value>Gruppo fase puzzle</value>
+  </data>
+  <data name="Unknown 04" xml:space="preserve">
+    <value>Sconosciuto 04</value>
+  </data>
+  <data name="unknown01" xml:space="preserve">
+    <value>Sconosciuto01</value>
+  </data>
+  <data name="Tutorial {0}" xml:space="preserve">
+    <value>Tutorial {0}</value>
+  </data>
+  <data name="Save progress prompt end game message box" xml:space="preserve">
+    <value>Messaggio prompt salvataggio dati fine gioco</value>
+  </data>
+  <data name="Save Time:" xml:space="preserve">
+    <value>Risparmia tempo:</value>
+  </data>
+  <data name="Title screen Load Game ticker tape" xml:space="preserve">
+    <value>Pannello Info Schermo titolo carica partita</value>
+  </data>
+  <data name="Section Label" xml:space="preserve">
+    <value>Sezione Etichetta</value>
+  </data>
+  <data name="unknown02" xml:space="preserve">
+    <value>Sconosciuto02</value>
+  </data>
+  <data name="Puzzle phase character description" xml:space="preserve">
+    <value>Descrizione personaggio fase puzzle</value>
+  </data>
+  <data name="Update Now" xml:space="preserve">
+    <value>Aggiorna adesso</value>
+  </data>
+  <data name="White Space Begin" xml:space="preserve">
+    <value>Spazio bianco inizio</value>
+    <comment>As on a chessboard</comment>
+  </data>
+  <data name="Scenario Command Index:" xml:space="preserve">
+    <value>Index comandi scenario:</value>
+  </data>
+  <data name="Voices Config" xml:space="preserve">
+    <value>Configura Voci</value>
+  </data>
+  <data name="Unknown Extras Short: {0}" xml:space="preserve">
+    <value>Sconosciuto Extras Short: {0}</value>
+  </data>
+  <data name="Puzzles" xml:space="preserve">
+    <value>Puzzles</value>
+  </data>
+  <data name="Unknown Extras Byte: {0}" xml:space="preserve">
+    <value>Sconosciuto Byte Extra: {0}</value>
+  </data>
+  <data name="Voiced dialogue volume options ticker tape" xml:space="preserve">
+    <value>Pannello Info volume voci dialogo</value>
+  </data>
+  <data name="Unseen Only" xml:space="preserve">
+    <value>Solo non vedere</value>
+  </data>
+  <data name="Script Block:" xml:space="preserve">
+    <value>Block: </value>
+  </data>
+  <data name="Saving prompt message box" xml:space="preserve">
+    <value>Messaggio prompt salvataggio</value>
+  </data>
+  <data name="Worst Group" xml:space="preserve">
+    <value>Gruppo Peggiore</value>
+  </data>
+  <data name="Quick Save Data" xml:space="preserve">
+    <value>Salva dati velocemente</value>
+  </data>
+  <data name="Volume" xml:space="preserve">
+    <value>Volume</value>
+  </data>
+  <data name="Voice Line" xml:space="preserve">
+    <value>Linea voce</value>
+  </data>
+  <data name="Sprite Shake" xml:space="preserve">
+    <value>Sprite Shake</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Valore</value>
+  </data>
+  <data name="unknown03" xml:space="preserve">
+    <value>Sconosciuto03</value>
+  </data>
+  <data name="Save game write fail message box" xml:space="preserve">
+    <value>Messaggio Salvataggio dati gioco fallito</value>
+  </data>
+  <data name="View Logs" xml:space="preserve">
+    <value>Leggi Logs</value>
+  </data>
+  <data name="Puzzle Interrupt Scenes ticker tape" xml:space="preserve">
+    <value>Pannello Info Scene interrotte Puzzle</value>
+  </data>
+  <data name="Puzzle Interrupt Scenes" xml:space="preserve">
+    <value>Scene interrotte Puzzle</value>
+  </data>
+  <data name="Section Name:" xml:space="preserve">
+    <value>Nome sezione:</value>
+  </data>
+  <data name="Scroll Speed" xml:space="preserve">
+    <value>Velocità scorri</value>
+  </data>
+  <data name="Text Entrance Effect" xml:space="preserve">
+    <value>Effetto testo entrata</value>
+  </data>
+  <data name="Writing Replaced Archives" xml:space="preserve">
+    <value>Compila sovrascrivendo archivi</value>
+  </data>
+  <data name="Second prompt on data being erased" xml:space="preserve">
+    <value>Secondo Prompt sui dati cancellati</value>
+  </data>
+  <data name="Unknown" xml:space="preserve">
+    <value>Sconosciuto</value>
+  </data>
+  <data name="Tsuruya event unlocked message box" xml:space="preserve">
+    <value>Messaggio evento sbloccato Tsuruya</value>
+  </data>
+  <data name="Save loaded message box" xml:space="preserve">
+    <value>Messaggio salvataggio caricato</value>
+  </data>
+  <data name="Sprite Layer" xml:space="preserve">
+    <value>Sprite Layer</value>
+  </data>
+  <data name="View &amp;Logs" xml:space="preserve">
+    <value>View &amp;Logs</value>
+  </data>
+  <data name="Starting Chibis" xml:space="preserve">
+    <value>Caricando Chibis</value>
+  </data>
+  <data name="Title screen Extra ticker tape" xml:space="preserve">
+    <value>Pannello Info Schermo titolo extra</value>
+  </data>
+  <data name="Unknown 03" xml:space="preserve">
+    <value>Sconosciuto 03</value>
+  </data>
+  <data name="Restoring Workspace" xml:space="preserve">
+    <value>Ripristina posto lavoro</value>
+  </data>
+  <data name="Save progress prompt message box" xml:space="preserve">
+    <value>Messaggio prompt salvataggio dati</value>
+  </data>
+  <data name="Sprite Entrance Transition" xml:space="preserve">
+    <value>Sprite transizione entrata</value>
+  </data>
+  <data name="Project not provided to project creation dialog" xml:space="preserve">
+    <value>Progetto non previsto di finestra per creazione</value>
+  </data>
+  <data name="Restore" xml:space="preserve">
+    <value>Ripristina</value>
+  </data>
+  <data name="Reset:" xml:space="preserve">
+    <value>Resetta:</value>
+  </data>
+  <data name="Use Pre-Release Update Channel" xml:space="preserve">
+    <value>Usa canale pre-rilascio per aggiornare</value>
+  </data>
+  <data name="Times" xml:space="preserve">
+    <value>Tentativi</value>
+  </data>
+  <data name="Try again prompt message box" xml:space="preserve">
+    <value>Messaggio prompt riprova</value>
+  </data>
+  <data name="Remember Project Workspace" xml:space="preserve">
+    <value>Ricorda spazio lavoro del progetto</value>
   </data>
 </root>
