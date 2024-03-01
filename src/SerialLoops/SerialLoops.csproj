@@ -27,7 +27,7 @@
     <None Remove="Icons\Bottom_Screen.png" />
     <None Remove="Icons\Camera.png" />
     <None Remove="Icons\Character_Sprite.png" />
-    <None Remove="Icons\Chess.png" />
+    <None Remove="Icons\Chess_Puzzle.png" />
     <None Remove="Icons\Chibi.png" />
     <None Remove="Icons\Clear.png" />
     <None Remove="Icons\Close.png" />
