@@ -714,7 +714,7 @@ namespace SerialLoops
                         ScenarioStruct scenario = ((ScenarioItem)item).Scenario;
                         IO.WriteStringFile(
                             Path.Combine("assets", "events",
-                                $"{OpenProject.Evt.Files.First(f => f.Name == "SCENARIOS").Index:X3}.s"),
+                                $"{OpenProject.Evt.GetFileByName("SCENARIOS").Index:X3}.s"),
                             // TODO: Refactor this logic into the chokuretsu library so that we don't end up with ugliness like this for all of our includes
                             scenario.GetSource(new()
                             {

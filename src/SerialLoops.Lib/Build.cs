@@ -224,7 +224,7 @@ namespace SerialLoops.Lib
         {
             try
             {
-                GraphicsFile grpFile = grp.Files.FirstOrDefault(f => f.Index == index);
+                GraphicsFile grpFile = grp.GetFileByIndex(index);
 
                 if (index == 0xE50)
                 {
@@ -353,8 +353,8 @@ namespace SerialLoops.Lib
         {
             try
             {
-                EventFile file = archive.Files.FirstOrDefault(f => f.Index == index);
-                file.Data = File.ReadAllBytes(filePath).ToList();
+                EventFile file = archive.GetFileByIndex(index);
+                file.Data = [.. File.ReadAllBytes(filePath)];
                 file.Edited = true;
                 archive.Files[archive.Files.IndexOf(file)] = file;
             }
@@ -367,7 +367,7 @@ namespace SerialLoops.Lib
         {
             try
             {
-                DataFile file = archive.Files.FirstOrDefault(f => f.Index == index);
+                DataFile file = archive.GetFileByIndex(index);
                 file.Data = File.ReadAllBytes(filePath).ToList();
                 file.Edited = true;
                 archive.Files[archive.Files.IndexOf(file)] = file;
@@ -381,7 +381,7 @@ namespace SerialLoops.Lib
         {
             try
             {
-                GraphicsFile file = archive.Files.FirstOrDefault(f => f.Index == index);
+                GraphicsFile file = archive.GetFileByIndex(index);
                 GraphicsFile newFile = new()
                 {
                     Name = file.Name,

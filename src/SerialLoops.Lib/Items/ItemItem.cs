@@ -18,7 +18,7 @@ namespace SerialLoops.Lib.Items
         }
         public ItemItem(string name, int itemIndex, short grpIndex, Project project) : base(name, ItemType.Item)
         {
-            ItemGraphic = project.Grp.Files[grpIndex - 1];
+            ItemGraphic = project.Grp.GetFileByIndex(grpIndex);
             ItemIndex = itemIndex;
         }
 
