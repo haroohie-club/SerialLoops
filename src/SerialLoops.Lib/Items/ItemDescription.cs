@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static HaruhiChokuretsuLib.Archive.Data.QMapFile;
 
 namespace SerialLoops.Lib.Items
 {
