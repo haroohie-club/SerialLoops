@@ -398,6 +398,7 @@ namespace SerialLoops.Lib
             {
                 BgTableFile bgTable = Dat.GetFileByName("BGTBLS").CastTo<BgTableFile>();
                 tracker.Focus("Backgrounds", bgTable.BgTableEntries.Count);
+                List<string> names = [];
                 Items.AddRange(bgTable.BgTableEntries.AsParallel().Select((entry, i) =>
                 {
                     if (entry.BgIndex1 > 0)
@@ -405,11 +406,12 @@ namespace SerialLoops.Lib
                         GraphicsFile nameGraphic = Grp.GetFileByIndex(entry.BgIndex1);
                         string name = $"BG_{nameGraphic.Name[0..nameGraphic.Name.LastIndexOf('_')]}";
                         string bgNameBackup = name;
-                        for (int j = 1; Items.Select(j => j.Name).Contains(name); j++)
+                        for (int j = 1; names.Contains(name); j++)
                         {
                             name = $"{bgNameBackup}{j:D2}";
                         }
                         tracker.Finished++;
+                        names.Add(name);
                         return new BackgroundItem(name, i, entry, this);
                     }
                     else
