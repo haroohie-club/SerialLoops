@@ -536,10 +536,10 @@ namespace SerialLoops.Lib
             {
                 ChibiFile chibiFile = Dat.GetFileByName("CHIBIS").CastTo<ChibiFile>();
                 tracker.Focus("Chibis", chibiFile.Chibis.Count);
-                Items.AddRange(chibiFile.Chibis.AsParallel().Select(c =>
+                Items.AddRange(chibiFile.Chibis.AsParallel().Select((c, i) =>
                 {
                     tracker.Finished++;
-                    return new ChibiItem(c, this);
+                    return new ChibiItem(c, i, this);
                 }));
             }
             catch (Exception ex)

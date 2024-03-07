@@ -220,7 +220,7 @@ namespace SerialLoops.Editors
 
                                 case CommandVerb.CHIBI_ENTEREXIT:
                                 case CommandVerb.CHIBI_EMOTE:
-                                    invocation.Parameters[0] = (short)((ChibiItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Chibi)).ChibiIndex;
+                                    invocation.Parameters[0] = (short)((ChibiItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Chibi)).TopScreenIndex;
                                     break;
 
                                 case CommandVerb.DIALOGUE:
@@ -436,7 +436,7 @@ namespace SerialLoops.Editors
         {
             List<ChibiItem> allChibis = _project.Items.Where(i => i.Type == ItemDescription.ItemType.Chibi && ((ChibiItem)i).ChibiAnimations.Any(c => c.Key.Contains("_01_"))).Cast<ChibiItem>().ToList();
             List<ChibiItem> usedChibis = allChibis.Where(c => _script.Event.StartingChibisSection.Objects
-                .Select(sc => sc.ChibiIndex).ToList().Contains((short)c.ChibiIndex)).Cast<ChibiItem>().ToList();
+                .Select(sc => sc.ChibiIndex).ToList().Contains((short)c.TopScreenIndex)).Cast<ChibiItem>().ToList();
             ListBox availableChibisBox = new();
             ListBox usedChibisBox = new();
             availableChibisBox.Items.AddRange(allChibis.Where(i => !usedChibis.Contains(i)).Select(c => new ListItem { Key = c.DisplayName, Text = c.DisplayName }));
@@ -451,7 +451,7 @@ namespace SerialLoops.Editors
                 IListItem chibiSelected = (IListItem)availableChibisBox.SelectedValue;
                 availableChibisBox.Items.Remove(chibiSelected);
                 usedChibisBox.Items.Add(chibiSelected);
-                _script.Event.StartingChibisSection.Objects.Insert(_script.Event.StartingChibisSection.Objects.Count - 1, new() { ChibiIndex = (short)allChibis.First(c => c.DisplayName == chibiSelected.Text).ChibiIndex });
+                _script.Event.StartingChibisSection.Objects.Insert(_script.Event.StartingChibisSection.Objects.Count - 1, new() { ChibiIndex = (short)allChibis.First(c => c.DisplayName == chibiSelected.Text).TopScreenIndex });
                 UpdateTabTitle(false);
                 Application.Instance.Invoke(() => UpdatePreview());
             };
@@ -464,9 +464,9 @@ namespace SerialLoops.Editors
                 IListItem chibiSelected = (IListItem)usedChibisBox.SelectedValue;
                 usedChibisBox.Items.Remove(chibiSelected);
                 availableChibisBox.Items.Add(chibiSelected);
-                availableChibisBox.Items.Sort((a, b) => allChibis.First(c => c.DisplayName == a.Key).ChibiIndex - allChibis.First(c => c.DisplayName == b.Key).ChibiIndex);
+                availableChibisBox.Items.Sort((a, b) => allChibis.First(c => c.DisplayName == a.Key).TopScreenIndex - allChibis.First(c => c.DisplayName == b.Key).TopScreenIndex);
                 _script.Event.StartingChibisSection.Objects.Remove(_script.Event.StartingChibisSection.Objects
-                    .First(c => c.ChibiIndex == (short)allChibis.First(c => c.DisplayName == chibiSelected.Text).ChibiIndex));
+                    .First(c => c.ChibiIndex == (short)allChibis.First(c => c.DisplayName == chibiSelected.Text).TopScreenIndex));
                 UpdateTabTitle(false);
                 Application.Instance.Invoke(() => UpdatePreview());
             };
@@ -1656,7 +1656,7 @@ namespace SerialLoops.Editors
                 (ChibiItem)_project.Items.First(i => i.Name == dropDown.SelectedKey);
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
                 .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
-                (short)((ChibiItem)_project.Items.First(i => i.Name == dropDown.SelectedKey)).ChibiIndex;
+                (short)((ChibiItem)_project.Items.First(i => i.Name == dropDown.SelectedKey)).TopScreenIndex;
             UpdateTabTitle(false, dropDown);
             Application.Instance.Invoke(() => UpdatePreview());
         }

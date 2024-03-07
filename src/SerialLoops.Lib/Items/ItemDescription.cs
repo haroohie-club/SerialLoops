@@ -101,13 +101,12 @@ namespace SerialLoops.Lib.Items
 
                 case ItemType.Chibi:
                     ChibiItem chibi = (ChibiItem)this;
-                    int chibiIndex = project.Items.Where(i => i.Type == ItemType.Chibi).ToList().IndexOf(chibi) + 1;
                     references.AddRange(project.Items.Where(i => i.Type == ItemType.Script && project.Evt.Files.Where(e =>
-                        e.MapCharactersSection?.Objects?.Any(t => t.CharacterIndex == chibiIndex) ?? false).Select(e => e.Index).Contains(((ScriptItem)i).Event.Index)));
+                        e.MapCharactersSection?.Objects?.Any(t => t.CharacterIndex == chibi.ChibiIndex) ?? false).Select(e => e.Index).Contains(((ScriptItem)i).Event.Index)));
                     (string ScriptName, ScriptCommandInvocation command)[] chibiScriptUses = project.Evt.Files.AsParallel().SelectMany(e =>
                         e.ScriptSections.SelectMany(sec =>
                             sec.Objects.Where(c => c.Command.Mnemonic == EventFile.CommandVerb.CHIBI_ENTEREXIT.ToString()).Select(c => (e.Name[0..^1], c))))
-                        .Where(t => t.c.Parameters[0] == chibi.ChibiIndex).ToArray();
+                        .Where(t => t.c.Parameters[0] == chibi.TopScreenIndex).ToArray();
                     references.AddRange(project.Items.Where(i => chibiScriptUses.Select(s => s.ScriptName).Contains(i.Name)));
                     return references.Distinct().ToList();
 
