@@ -23,7 +23,6 @@ namespace SerialLoops.Lib.Items
         public string BgmName { get; set; }
         public short? Flag { get; set; }
         public string CachedWaveFile { get; set; }
-        public (string ScriptName, ScriptCommandInvocation command)[] ScriptUses { get; set; }
 
         public BackgroundMusicItem(string bgmFile, int index, Project project) : base(Path.GetFileNameWithoutExtension(bgmFile), ItemType.BGM)
         {
@@ -34,20 +33,10 @@ namespace SerialLoops.Lib.Items
             Flag = project.Extra.Bgms.FirstOrDefault(b => b.Index == Index)?.Flag;
             DisplayName = string.IsNullOrEmpty(BgmName) ? Name : $"{Name} - {BgmName}";
             CanRename = string.IsNullOrEmpty(BgmName);
-            PopulateScriptUses(project);
         }
 
         public override void Refresh(Project project, ILogger log)
         {
-            PopulateScriptUses(project);
-        }
-
-        public void PopulateScriptUses(Project project)
-        {
-            ScriptUses = project.Evt.Files.SelectMany(e =>
-                e.ScriptSections.SelectMany(sec =>
-                    sec.Objects.Where(c => c.Command.Mnemonic == EventFile.CommandVerb.BGM_PLAY.ToString()).Select(c => (e.Name[0..^1], c))))
-                .Where(t => t.c.Parameters[0] == Index).ToArray();
         }
 
         public void Replace(string audioFile, string baseDirectory, string iterativeDirectory, string bgmCachedFile, bool loopEnabled, uint loopStartSample, uint loopEndSample, ILogger log, IProgressTracker tracker, CancellationToken cancellationToken)

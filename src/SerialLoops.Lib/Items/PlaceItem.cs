@@ -14,19 +14,16 @@ namespace SerialLoops.Lib.Items
         public int Index { get; set; }
         public GraphicsFile PlaceGraphic { get; set; }
         public string PlaceName { get; set; }
-        public (string ScriptName, ScriptCommandInvocation command)[] ScriptUses { get; set; }
 
-        public PlaceItem(int index, GraphicsFile placeGrp, Project project) : base(placeGrp.Name[0..^3], ItemType.Place)
+        public PlaceItem(int index, GraphicsFile placeGrp) : base(placeGrp.Name[0..^3], ItemType.Place)
         {
             Index = index;
             CanRename = false;
             PlaceGraphic = placeGrp;
-            PopulateScriptUses(project.Evt);
         }
 
         public override void Refresh(Project project, ILogger log)
         {
-            PopulateScriptUses(project.Evt);
         }
 
         public static SKBitmap Unscramble(SKBitmap placeGraphic)
@@ -119,14 +116,6 @@ namespace SerialLoops.Lib.Items
             }
 
             return newPlaceBitmap;
-        }
-
-        public void PopulateScriptUses(ArchiveFile<EventFile> evt)
-        {
-            ScriptUses = evt.Files.SelectMany(e =>
-                e.ScriptSections.SelectMany(sec =>
-                    sec.Objects.Where(c => c.Command.Mnemonic == "SET_PLACE").Select(c => (e.Name[0..^1], c))))
-                .Where(t => t.c.Parameters[1] == Index).ToArray();
         }
 
         public class CustomFontMapper : FontMapper

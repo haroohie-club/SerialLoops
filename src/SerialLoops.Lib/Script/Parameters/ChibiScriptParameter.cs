@@ -6,7 +6,7 @@ namespace SerialLoops.Lib.Script.Parameters
     public class ChibiScriptParameter : ScriptParameter
     {
         public ChibiItem Chibi { get; set; }
-        public override short[] GetValues(object obj = null) => new short[] { (short)Chibi.ChibiIndex };
+        public override short[] GetValues(object obj = null) => new short[] { (short)Chibi.TopScreenIndex };
 
         public ChibiScriptParameter(string name, ChibiItem chibi) : base(name, ParameterType.CHIBI)
         {

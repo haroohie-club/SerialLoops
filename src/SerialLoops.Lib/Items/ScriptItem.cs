@@ -200,7 +200,7 @@ namespace SerialLoops.Lib.Items
                 {
                     if (chibi.ChibiIndex > 0)
                     {
-                        chibis.Add((ChibiItem)project.Items.First(i => i.Type == ItemType.Chibi && ((ChibiItem)i).ChibiIndex == chibi.ChibiIndex));
+                        chibis.Add((ChibiItem)project.Items.First(i => i.Type == ItemType.Chibi && ((ChibiItem)i).TopScreenIndex == chibi.ChibiIndex));
                     }
                 }
                 for (int i = 0; i < commands.Count; i++)
@@ -208,7 +208,7 @@ namespace SerialLoops.Lib.Items
                     if (commands[i].Verb == CommandVerb.OP_MODE)
                     {
                         // Kyon auto-added by OP_MODE command
-                        ChibiItem chibi = (ChibiItem)project.Items.First(i => i.Type == ItemType.Chibi && ((ChibiItem)i).ChibiIndex == 1);
+                        ChibiItem chibi = (ChibiItem)project.Items.First(i => i.Type == ItemType.Chibi && ((ChibiItem)i).TopScreenIndex == 1);
                         if (!chibis.Contains(chibi))
                         {
                             chibis.Add(chibi);
@@ -221,7 +221,7 @@ namespace SerialLoops.Lib.Items
                             ChibiItem chibi = ((ChibiScriptParameter)commands[i].Parameters[0]).Chibi;
                             if (!chibis.Contains(chibi))
                             {
-                                if (chibi.ChibiIndex < 1 || chibis.Count == 0)
+                                if (chibi.TopScreenIndex < 1 || chibis.Count == 0)
                                 {
                                     chibis.Add(chibi);
                                 }
@@ -230,7 +230,7 @@ namespace SerialLoops.Lib.Items
                                     bool inserted = false;
                                     for (int j = 0; j < chibis.Count; j++)
                                     {
-                                        if (chibis[j].ChibiIndex > chibi.ChibiIndex)
+                                        if (chibis[j].TopScreenIndex > chibi.TopScreenIndex)
                                         {
                                             chibis.Insert(j, chibi);
                                             inserted = true;
@@ -609,7 +609,7 @@ namespace SerialLoops.Lib.Items
 
                 if (preview.ChibiEmote.EmotingChibi is not null)
                 {
-                    SKBitmap emotes = project.Grp.Files.First(f => f.Name == "SYS_ADV_T08DNX").GetImage(width: 32, transparentIndex: 0);
+                    SKBitmap emotes = project.Grp.GetFileByName("SYS_ADV_T08DNX").GetImage(width: 32, transparentIndex: 0);
                     int chibiY = preview.TopScreenChibis.First(c => c.Chibi == preview.ChibiEmote.EmotingChibi).Y;
                     canvas.DrawBitmap(emotes, new SKRect(0, preview.ChibiEmote.InternalYOffset, 32, preview.ChibiEmote.InternalYOffset + 32), new SKRect(preview.ChibiEmote.ExternalXOffset + 16, chibiY - 32, preview.ChibiEmote.ExternalXOffset + 48, chibiY));
                 }

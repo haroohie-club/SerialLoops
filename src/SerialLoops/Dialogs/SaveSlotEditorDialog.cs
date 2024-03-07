@@ -172,7 +172,7 @@ namespace SerialLoops.Dialogs
                         quickSave.EpisodeHeader = _quickSaveScriptPreview.EpisodeHeader;
                         for (int i = 1; i <= 5; i++)
                         {
-                            if (_quickSaveScriptPreview.TopScreenChibis.Any(c => c.Chibi.ChibiIndex == i))
+                            if (_quickSaveScriptPreview.TopScreenChibis.Any(c => c.Chibi.TopScreenIndex == i))
                             {
                                 quickSave.TopScreenChibis |= (CharacterMask)(1 << i);
                             }
@@ -436,7 +436,7 @@ namespace SerialLoops.Dialogs
             {
                 if (quickSave.TopScreenChibis.HasFlag((CharacterMask)(1 << i)))
                 {
-                    ChibiItem chibi = (ChibiItem)_project.Items.First(it => it.Type == ItemDescription.ItemType.Chibi && ((ChibiItem)it).ChibiIndex == i);
+                    ChibiItem chibi = (ChibiItem)_project.Items.First(it => it.Type == ItemDescription.ItemType.Chibi && ((ChibiItem)it).TopScreenIndex == i);
                     topScreenChibis.Add((chibi, chibiCurrentX, chibiY));
                     chibiCurrentX += chibi.ChibiAnimations.First().Value.ElementAt(0).Frame.Width - 16;
                 }

@@ -1,6 +1,5 @@
 ﻿using HaruhiChokuretsuLib.Archive;
 using HaruhiChokuretsuLib.Archive.Data;
-using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Archive.Graphics;
 using HaruhiChokuretsuLib.Util;
 using SkiaSharp;
@@ -13,26 +12,26 @@ namespace SerialLoops.Lib.Items
     public class ChibiItem : Item, IPreviewableGraphic
     {
         public Chibi Chibi { get; set; }
+        public int TopScreenIndex { get; set; }
         public int ChibiIndex { get; set; }
         public List<(string Name, ChibiGraphics Chibi)> ChibiEntries { get; set; } = new();
         public Dictionary<string, bool> ChibiEntryModifications { get; set; } = new();
         public Dictionary<string, List<(SKBitmap Frame, short Timing)>> ChibiAnimations { get; set; } = new();
-        public (string ScriptName, ScriptCommandInvocation command)[] ScriptUses { get; set; }
 
-        public ChibiItem(Chibi chibi, Project project) : base($"CHIBI{chibi.ChibiEntries[0].Animation}", ItemType.Chibi)
+        public ChibiItem(Chibi chibi, int chibiIndex, Project project) : base($"CHIBI{chibi.ChibiEntries[0].Animation}", ItemType.Chibi)
         {
-            List<string> chibiIndices = new() { "", "KYN", "HAL", "MIK", "NAG", "KOI" };
+            List<string> chibiIndices = ["", "KYN", "HAL", "MIK", "NAG", "KOI"];
 
             Chibi = chibi;
-            string firstAnimationName = project.Grp.Files.First(f => f.Index == Chibi.ChibiEntries[0].Animation).Name;
+            ChibiIndex = chibiIndex + 1;
+            string firstAnimationName = project.Grp.GetFileByIndex(Chibi.ChibiEntries[0].Animation).Name;
             Name = $"CHIBI_{firstAnimationName[0..firstAnimationName.IndexOf('_')]}";
             DisplayName = $"CHIBI_{firstAnimationName[0..firstAnimationName.IndexOf('_')]}";
-            ChibiIndex = chibiIndices.IndexOf(firstAnimationName[0..3]);
+            TopScreenIndex = chibiIndices.IndexOf(firstAnimationName[0..3]);
             ChibiEntries.AddRange(Chibi.ChibiEntries.Where(c => c.Animation > 0)
-                .Select(c => (project.Grp.Files.First(f => f.Index == c.Animation).Name[0..^3], new ChibiGraphics(c, project))));
+                .Select(c => (project.Grp.GetFileByIndex(c.Animation).Name[0..^3], new ChibiGraphics(c, project))));
             ChibiEntries.ForEach(e => ChibiEntryModifications.Add(e.Name, false));
             ChibiEntries.ForEach(e => ChibiAnimations.Add(e.Name, GetChibiAnimation(e.Name, project.Grp)));
-            PopulateScriptUses(project.Evt);
         }
 
         public void SetChibiAnimation(string entryName, List<(SKBitmap, short)> framesAndTimings)
@@ -59,19 +58,6 @@ namespace SerialLoops.Lib.Items
         {
             ChibiAnimations.Clear();
             ChibiEntries.ForEach(e => ChibiAnimations.Add(e.Name, GetChibiAnimation(e.Name, project.Grp)));
-            PopulateScriptUses(project.Evt);
-        }
-
-        public void PopulateScriptUses(ArchiveFile<EventFile> evt)
-        {
-            string[] chibiCommands = new string[] { "CHIBI_ENTEREXIT" };
-
-            var list = evt.Files.SelectMany(e =>
-                e.ScriptSections.SelectMany(sec =>
-                    sec.Objects.Where(c => chibiCommands.Contains(c.Command.Mnemonic)).Select(c => (e.Name[0..^1], c))))
-                .Where(t => t.c.Parameters[0] == ChibiIndex).ToList();
-
-            ScriptUses = list.ToArray();
         }
 
         SKBitmap IPreviewableGraphic.GetPreview(Project project)
@@ -105,8 +91,8 @@ namespace SerialLoops.Lib.Items
 
             public ChibiGraphics(ChibiEntry entry, Project project)
             {
-                Texture = project.Grp.Files.First(g => g.Index == entry.Texture);
-                Animation = project.Grp.Files.First(g => g.Index == entry.Animation);
+                Texture = project.Grp.GetFileByIndex(entry.Texture);
+                Animation = project.Grp.GetFileByIndex(entry.Animation);
             }
 
             public void Write(Project project, ILogger log)

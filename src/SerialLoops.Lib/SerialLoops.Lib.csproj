@@ -12,9 +12,9 @@
     <PackageReference Include="BunLabs.NAudio.Flac" Version="2.0.1" />
     <PackageReference Include="HarfBuzzSharp.NativeAssets.Linux" Version="7.3.0.1" />
     <PackageReference Include="HarfBuzzSharp.NativeAssets.macOS" Version="7.3.0.1" />
-    <PackageReference Include="HaruhiChokuretsuLib" Version="0.36.7" />
+    <PackageReference Include="HaruhiChokuretsuLib" Version="0.37.0" />
     <PackageReference Include="NAudio.Vorbis" Version="1.5.0" />
-    <PackageReference Include="NitroPacker.Core" Version="2.4.6" />
+    <PackageReference Include="NitroPacker.Core" Version="2.4.7" />
     <PackageReference Include="NLayer" Version="1.15.0" />
     <PackageReference Include="NLayer.NAudioSupport" Version="1.4.0" />
     <PackageReference Include="QuikGraph" Version="2.5.0" />
