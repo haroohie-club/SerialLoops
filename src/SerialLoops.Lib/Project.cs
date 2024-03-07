@@ -829,7 +829,7 @@ namespace SerialLoops.Lib
             {
                 return null;
             }
-            return Items.FirstOrDefault(i => name.Contains(" - ") ? i.Name == name.Split(" - ")[0] : i.DisplayName == name);
+            return Items.FirstOrDefault(i => i.DisplayName == name);
         }
 
         public static (Project Project, LoadProjectResult Result) OpenProject(string projFile, Config config, Func<string, string> localize, ILogger log, IProgressTracker tracker)
