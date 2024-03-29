@@ -533,7 +533,7 @@ namespace SerialLoops.Lib.Script
                         switch (i)
                         {
                             case 0:
-                                parameters.Add(new ChibiScriptParameter(localize("Chibi"), (ChibiItem)project.Items.First(i => i.Type == ItemDescription.ItemType.Chibi && (parameter) == ((ChibiItem)i).ChibiIndex)));
+                                parameters.Add(new ChibiScriptParameter(localize("Chibi"), (ChibiItem)project.Items.First(i => i.Type == ItemDescription.ItemType.Chibi && (parameter) == ((ChibiItem)i).TopScreenIndex)));
                                 break;
                             case 1:
                                 parameters.Add(new ChibiEmoteScriptParameter(localize("Emote"), parameter));
@@ -561,7 +561,7 @@ namespace SerialLoops.Lib.Script
                         switch (i)
                         {
                             case 0:
-                                parameters.Add(new ChibiScriptParameter(localize("Chibi"), (ChibiItem)project.Items.First(i => i.Type == ItemDescription.ItemType.Chibi && (parameter) == ((ChibiItem)i).ChibiIndex)));
+                                parameters.Add(new ChibiScriptParameter(localize("Chibi"), (ChibiItem)project.Items.First(i => i.Type == ItemDescription.ItemType.Chibi && (parameter) == ((ChibiItem)i).TopScreenIndex)));
                                 break;
                             case 1:
                                 parameters.Add(new ChibiEnterExitScriptParameter(localize("Enter/Exit"), parameter));
