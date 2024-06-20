@@ -24,7 +24,7 @@
 
   <ItemGroup>
     <PackageReference Include="Eto.Platform.Wpf" Version="2.7.2-ci-20240118.7563443893" />
-    <PackageReference Include="NAudio" Version="2.1.0" />
+    <PackageReference Include="NAudio" Version="2.2.1" />
   </ItemGroup>
 
 </Project>
