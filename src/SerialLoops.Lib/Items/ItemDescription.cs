@@ -45,6 +45,7 @@ namespace SerialLoops.Lib.Items
             Chibi,
             Group_Selection,
             Item,
+            Layout,
             Map,
             Place,
             Puzzle,

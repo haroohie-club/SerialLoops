@@ -2,10 +2,8 @@
 using HaruhiChokuretsuLib.Archive.Graphics;
 using HaruhiChokuretsuLib.Util;
 using SkiaSharp;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace SerialLoops.Lib.Items
 {
