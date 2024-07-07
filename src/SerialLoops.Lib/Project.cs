@@ -715,6 +715,61 @@ namespace SerialLoops.Lib
                 return new(LoadProjectState.FAILED);
             }
 
+            // We're gonna try to do more research on this later but for now we're going to hardcode these values
+            try
+            {
+                List<GraphicsFile> graphics = [
+                    Grp.GetFileByIndex(0xC49),
+                    Grp.GetFileByIndex(0xC4A),
+                    Grp.GetFileByIndex(0xC4C),
+                    Grp.GetFileByIndex(0xC4D),
+                    Grp.GetFileByIndex(0xC4F),
+                    Grp.GetFileByIndex(0xC50),
+                    Grp.GetFileByIndex(0xC52),
+                    Grp.GetFileByIndex(0xC54),
+                    Grp.GetFileByIndex(0xC55),
+                    Grp.GetFileByIndex(0xC57),
+                    Grp.GetFileByIndex(0xC59),
+                    Grp.GetFileByIndex(0xC5B),
+                    Grp.GetFileByIndex(0xC5D),
+                    Grp.GetFileByIndex(0xC60),
+                    Grp.GetFileByIndex(0xC61),
+                    Grp.GetFileByIndex(0xC62),
+                    Grp.GetFileByIndex(0xC63),
+                    Grp.GetFileByIndex(0xC64),
+                    Grp.GetFileByIndex(0xC65),
+                    Grp.GetFileByIndex(0xC66),
+                    Grp.GetFileByIndex(0xC67),
+                    ];
+
+                Items.Add(new LayoutItem(Grp.GetFileByIndex(0xC45), graphics, 54, 13, "LYT_ACCIDENT_OUTBREAK"));
+                Items.Add(new LayoutItem(Grp.GetFileByIndex(0xC45), graphics, 67, 5, "LYT_MAIN_TOPIC_DELAYED"));
+                Items.Add(new LayoutItem(Grp.GetFileByIndex(0xC45), graphics, 72, 12, "LYT_DELAY_CHANCE"));
+                Items.Add(new LayoutItem(Grp.GetFileByIndex(0xC45), graphics, 84, 2, "LYT_TOPIC_CHOOSE"));
+                Items.Add(new LayoutItem(Grp.GetFileByIndex(0xC45), graphics, 122, 8, "LYT_READY"));
+                Items.Add(new LayoutItem(Grp.GetFileByIndex(0xC45), graphics, 130, 3, "LYT_GO"));
+                Items.Add(new LayoutItem(Grp.GetFileByIndex(0xC45), graphics, 134, 4, "LYT_TIME_RESULT"));
+                Items.Add(new LayoutItem(Grp.GetFileByIndex(0xC45), graphics, 138, 2, "LYT_ACCIDENT_RESULT"));
+                Items.Add(new LayoutItem(Grp.GetFileByIndex(0xC45), graphics, 140, 2, "LYT_POWER_UP_RESULT"));
+                Items.Add(new LayoutItem(Grp.GetFileByIndex(0xC45), graphics, 142, 2, "LYT_BASE_TIME_LIMIT"));
+                Items.Add(new LayoutItem(Grp.GetFileByIndex(0xC45), graphics, 148, 2, "LYT_HRH_DISTRACTION_BONUS"));
+                Items.Add(new LayoutItem(Grp.GetFileByIndex(0xC45), graphics, 154, 5, "LYT_TOTAL_SCORE"));
+                Items.Add(new LayoutItem(Grp.GetFileByIndex(0xC45), graphics, 163, 3, "LYT_MAIN_TOPICS_OBTAINED"));
+                Items.Add(new LayoutItem(Grp.GetFileByIndex(0xC45), graphics, 163, 3, "LYT_ACCIDENT_BUTTON"));
+                Items.Add(new LayoutItem(Grp.GetFileByIndex(0xC45), graphics, 175, 2, "LYT_MAIN_TOPIC"));
+                Items.Add(new LayoutItem(Grp.GetFileByIndex(0xC45), graphics, 177, 1, "LYT_COUNTER"));
+                Items.Add(new LayoutItem(Grp.GetFileByIndex(0xC45), graphics, 199, 27, "LYT_CHARACTER_TOPICS_OBTAINED"));
+                Items.Add(new LayoutItem(Grp.GetFileByIndex(0xC45), graphics, 226, 4, "LYT_TIME_LIMIT"));
+                Items.Add(new LayoutItem(Grp.GetFileByIndex(0xC45), graphics, 235, 2, "LYT_ACCIDENT_AVOIDED"));
+                Items.Add(new LayoutItem(Grp.GetFileByIndex(0xC45), graphics, 286, 2, "LYT_SEARCH_BUTTON"));
+                Items.Add(new LayoutItem(Grp.GetFileByIndex(0xC45), graphics, 307, 1, "LYT_MIN_ERASED_GOAL"));
+            }
+            catch (Exception ex)
+            {
+                log.LogException($"Failed to load layouts", ex);
+                return new(LoadProjectState.FAILED);
+            }
+
             EventFile scenarioFile;
             try
             {

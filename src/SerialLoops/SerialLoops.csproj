@@ -34,6 +34,7 @@
     <None Remove="Icons\Dialogue_Config.png" />
     <None Remove="Icons\Group_Selection.png" />
     <None Remove="Icons\Item.png" />
+    <None Remove="Icons\Layout.png" />
     <None Remove="Icons\Map.png" />
     <None Remove="Icons\New.png" />
     <None Remove="Icons\Open.png" />
@@ -117,6 +118,12 @@
     <EmbeddedResource Update="Strings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Icons\Layout.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
 
