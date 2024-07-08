@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
@@ -228,6 +229,11 @@ namespace SerialLoops.Lib.Util
                 }
             }
             return string.Empty;
+        }
+
+        public static SKRectI ToSKRectI(this SKRect rect)
+        {
+            return new SKRectI((int)rect.Left, (int)rect.Top, (int)rect.Right, (int)rect.Bottom);
         }
     }
 

@@ -2,8 +2,11 @@
 using HaruhiChokuretsuLib.Archive.Graphics;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib.Items;
+using SerialLoops.Lib.Util;
 using SerialLoops.Utility;
+using SkiaSharp;
 using System;
+using System.IO;
 using System.Linq;
 
 namespace SerialLoops.Editors
@@ -11,6 +14,7 @@ namespace SerialLoops.Editors
     public class LayoutEditor(LayoutItem layoutItem, ILogger log) : Editor(layoutItem, log)
     {
         private LayoutItem _layout;
+        private SKBitmap _layoutSourcePreview;
         private ImageView _layoutScreen, _layoutSource;
 
         private const string SCREENX = "Screen X";
@@ -92,6 +96,36 @@ namespace SerialLoops.Editors
                 layoutEntriesTable.Rows.Add(new()); // prevent last row from stretching
             }
 
+            Button saveLayoutPreviewButton = new() { Text = Application.Instance.Localize(this, "Save Layout Preview") };
+            saveLayoutPreviewButton.Click += (sender, args) =>
+            {
+                SaveFileDialog saveFileDialog = new();
+                saveFileDialog.Filters.Add(new() { Name = Application.Instance.Localize(this, "PNG Image"), Extensions = [".png"] });
+                if (saveFileDialog.ShowAndReportIfFileSelected(this))
+                {
+                    using FileStream fs = File.Create(saveFileDialog.FileName);
+                    _layout.GetLayoutImage().Encode(fs, SKEncodedImageFormat.Png, GraphicsFile.PNG_QUALITY);
+                }
+            };
+            Button saveSourcePreviewButton = new() { Text = Application.Instance.Localize(this, "Save Source Preview") };
+            saveSourcePreviewButton.Click += (sender, args) =>
+            {
+                SaveFileDialog saveFileDialog = new();
+                saveFileDialog.Filters.Add(new() { Name = Application.Instance.Localize(this, "PNG Image"), Extensions = [".png"] });
+                if (_layoutSourcePreview is not null)
+                {
+                    if (saveFileDialog.ShowAndReportIfFileSelected(this))
+                    {
+                        using FileStream fs = File.Create(saveFileDialog.FileName);
+                        _layoutSourcePreview.Encode(fs, SKEncodedImageFormat.Png, GraphicsFile.PNG_QUALITY);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show(Application.Instance.Localize(this, "No source image selected!"), Application.Instance.Localize(this, "No source image!"), MessageBoxType.Warning);
+                }
+            };
+
             return new TableLayout
                 (
                     new TableRow(
@@ -103,6 +137,16 @@ namespace SerialLoops.Editors
                             {
                                 _layoutScreen,
                                 _layoutSource,
+                                new StackLayout
+                                {
+                                    Orientation = Orientation.Vertical,
+                                    Spacing = 3,
+                                    Items =
+                                    {
+                                        saveLayoutPreviewButton,
+                                        saveSourcePreviewButton,
+                                    }
+                                }
                             }
                         })
                     ),
@@ -140,10 +184,16 @@ namespace SerialLoops.Editors
             if (_layout.Layout.LayoutEntries[index].RelativeShtxIndex < 0)
             {
                 _layoutSource.Image = new SKGuiImage(new());
+                _layoutSourcePreview = null;
             }
             else
             {
-                _layoutSource.Image = new SKGuiImage(_layout.GraphicsFiles[_layout.Layout.LayoutEntries[index].RelativeShtxIndex].GetImage());
+                SKBitmap sourceBitmap = _layout.GraphicsFiles[_layout.Layout.LayoutEntries[index].RelativeShtxIndex].GetImage();
+                SKCanvas canvas = new(sourceBitmap);
+                canvas.DrawRect(_layout.Layout.LayoutEntries[index].GetTileBounds(), new() { Color = SKColors.Red, StrokeWidth = 2f, Style = SKPaintStyle.Stroke });
+                canvas.Flush();
+                _layoutSource.Image = new SKGuiImage(sourceBitmap);
+                _layoutSourcePreview = sourceBitmap;
             }
         }
 
@@ -188,18 +238,22 @@ namespace SerialLoops.Editors
                     break;
                 case SOURCEX:
                     _layout.Layout.LayoutEntries[index].TextureX = (short)stepper.Value;
+                    UpdateSourceLayout(index);
                     break;
                 case SOURCEY:
                     _layout.Layout.LayoutEntries[index].TextureY = (short)stepper.Value;
+                    UpdateSourceLayout(index);
                     break;
                 case SOURCEW:
                     _layout.Layout.LayoutEntries[index].TextureW = (short)stepper.Value;
+                    UpdateSourceLayout(index);
                     break;
                 case SOURCEH:
                     _layout.Layout.LayoutEntries[index].TextureH = (short)stepper.Value;
+                    UpdateSourceLayout(index);
                     break;
             }
-            
+
             UpdateScreenLayout();
         }
 
