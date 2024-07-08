@@ -60,16 +60,17 @@ namespace SerialLoops.Editors
                 tintColorPicker.ValueChanged += TintColorPicker_ValueChanged;
 
                 layoutEntriesTable.Rows.Add(new(
-                    new(screenXStepper),
-                    new(screenYStepper),
-                    new(screenWStepper),
-                    new(screenHStepper),
-                    new(sourceXStepper),
-                    new(sourceYStepper),
-                    new(sourceWStepper),
-                    new(sourceHStepper),
-                    new(tintColorPicker)
+                    new(screenXStepper, scaleWidth: true),
+                    new(screenYStepper, scaleWidth: true),
+                    new(screenWStepper, scaleWidth: true),
+                    new(screenHStepper, scaleWidth: true),
+                    new(sourceXStepper, scaleWidth: true),
+                    new(sourceYStepper, scaleWidth: true),
+                    new(sourceWStepper, scaleWidth: true),
+                    new(sourceHStepper, scaleWidth: true),
+                    new(tintColorPicker, scaleWidth: true)
                     ));
+                layoutEntriesTable.Rows.Add(new()); // prevent last row from stretching
             }
 
             return new TableLayout
@@ -86,6 +87,21 @@ namespace SerialLoops.Editors
                             }
                         })
                     ),
+                    new TableRow(
+                        new TableLayout(
+                            new TableRow(
+                                new TableCell(SCREENX, scaleWidth: true),
+                                new TableCell(SCREENY, scaleWidth: true),
+                                new TableCell(SCREENW, scaleWidth: true),
+                                new TableCell(SCREENH, scaleWidth: true),
+                                new TableCell(SOURCEX, scaleWidth: true),
+                                new TableCell(SOURCEY, scaleWidth: true),
+                                new TableCell(SOURCEW, scaleWidth: true),
+                                new TableCell(SOURCEH, scaleWidth: true),
+                                new TableCell("Tint", scaleWidth: true)
+                                )
+                            )
+                        ),
                     new TableRow(
                         new TableCell(new Scrollable
                         {
