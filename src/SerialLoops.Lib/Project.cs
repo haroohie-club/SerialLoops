@@ -719,7 +719,7 @@ namespace SerialLoops.Lib
             try
             {
                 List<GraphicsFile> graphics = [
-                    Grp.GetFileByIndex(0xC49),
+                    Grp.GetFileByIndex(0xC48),
                     Grp.GetFileByIndex(0xC4A),
                     Grp.GetFileByIndex(0xC4C),
                     Grp.GetFileByIndex(0xC4D),

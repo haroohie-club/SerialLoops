@@ -1,7 +1,10 @@
 ﻿using Eto.Forms;
+using HaruhiChokuretsuLib.Archive.Graphics;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib.Items;
 using SerialLoops.Utility;
+using System;
+using System.Linq;
 
 namespace SerialLoops.Editors
 {
@@ -10,14 +13,14 @@ namespace SerialLoops.Editors
         private LayoutItem _layout;
         private ImageView _layoutScreen, _layoutSource;
 
-        private const string SCREENX = "ScreenX";
-        private const string SCREENY = "ScreenY";
-        private const string SCREENW = "ScreenW";
-        private const string SCREENH = "ScreenH";
-        private const string SOURCEX = "SourceX";
-        private const string SOURCEY = "SourceY";
-        private const string SOURCEW = "SourceW";
-        private const string SOURCEH = "SourceH";
+        private const string SCREENX = "Screen X";
+        private const string SCREENY = "Screen Y";
+        private const string SCREENW = "Screen W";
+        private const string SCREENH = "Screen H";
+        private const string SOURCEX = "Source X";
+        private const string SOURCEY = "Source Y";
+        private const string SOURCEW = "Source W";
+        private const string SOURCEH = "Source H";
 
         public override Container GetEditorPanel()
         {
@@ -29,6 +32,21 @@ namespace SerialLoops.Editors
             TableLayout layoutEntriesTable = new();
             for (int i = _layout.StartEntry; i < _layout.StartEntry + _layout.NumEntries; i++)
             {
+                DropDown graphicSelector = new() { Tag = i };
+                graphicSelector.Items.Add(new ListItem
+                {
+                    Key = "-1",
+                    Text = "NONE",
+                });
+                graphicSelector.Items.AddRange(_layout.GraphicsFiles.Select((g, idx) => new ListItem
+                {
+                    Key = idx.ToString(),
+                    Text = g.Name,
+                }));
+                graphicSelector.SelectedKey = _layout.Layout.LayoutEntries[i].RelativeShtxIndex.ToString();
+                graphicSelector.GotFocus += LayoutControl_GotFocus;
+                graphicSelector.SelectedKeyChanged += GraphicSelector_SelectedKeyChanged;
+
                 NumericStepper screenXStepper = new() { Tag = i, ID = $"{SCREENX}{i}", MaximumDecimalPlaces = 0, Value = _layout.Layout.LayoutEntries[i].ScreenX };
                 NumericStepper screenYStepper = new() { Tag = i, ID = $"{SCREENY}{i}", MaximumDecimalPlaces = 0, Value = _layout.Layout.LayoutEntries[i].ScreenY };
                 NumericStepper screenWStepper = new() { Tag = i, ID = $"{SCREENW}{i}", MaximumDecimalPlaces = 0, Value = _layout.Layout.LayoutEntries[i].ScreenW };
@@ -60,6 +78,7 @@ namespace SerialLoops.Editors
                 tintColorPicker.ValueChanged += TintColorPicker_ValueChanged;
 
                 layoutEntriesTable.Rows.Add(new(
+                    new(graphicSelector, scaleWidth: true),
                     new(screenXStepper, scaleWidth: true),
                     new(screenYStepper, scaleWidth: true),
                     new(screenWStepper, scaleWidth: true),
@@ -90,6 +109,7 @@ namespace SerialLoops.Editors
                     new TableRow(
                         new TableLayout(
                             new TableRow(
+                                new TableCell("Graphic", scaleWidth: true),
                                 new TableCell(SCREENX, scaleWidth: true),
                                 new TableCell(SCREENY, scaleWidth: true),
                                 new TableCell(SCREENW, scaleWidth: true),
@@ -110,19 +130,41 @@ namespace SerialLoops.Editors
                     )
                 );
         }
-
         private void UpdateScreenLayout()
         {
             _layoutScreen.Image = new SKGuiImage(_layout.GetLayoutImage());
+        }
+
+        private void UpdateSourceLayout(int index)
+        {
+            if (_layout.Layout.LayoutEntries[index].RelativeShtxIndex < 0)
+            {
+                _layoutSource.Image = new SKGuiImage(new());
+            }
+            else
+            {
+                _layoutSource.Image = new SKGuiImage(_layout.GraphicsFiles[_layout.Layout.LayoutEntries[index].RelativeShtxIndex].GetImage());
+            }
         }
 
         private void LayoutControl_GotFocus(object sender, System.EventArgs e)
         {
             CommonControl control = (CommonControl)sender;
             int index = (int)control.Tag;
-
-            _layoutSource.Image = new SKGuiImage(_layout.GraphicsFiles[_layout.Layout.LayoutEntries[index].RelativeShtxIndex].GetImage());
+            UpdateSourceLayout(index);
         }
+
+        private void GraphicSelector_SelectedKeyChanged(object sender, System.EventArgs e)
+        {
+            DropDown dropDown = (DropDown)sender;
+            int layoutIndex = (int)dropDown.Tag;
+            short relativeGrpIndex = short.Parse(dropDown.SelectedKey);
+            _layout.Layout.LayoutEntries[layoutIndex].RelativeShtxIndex = relativeGrpIndex;
+
+            UpdateSourceLayout(layoutIndex);
+            UpdateScreenLayout();
+        }
+
 
         private void LayoutStepper_ValueChanged(object sender, System.EventArgs e)
         {
