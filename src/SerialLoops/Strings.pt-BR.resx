@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -58,4 +58,75 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="About" xml:space="preserve">
+    <value>Sobre</value>
+  </data>
+  <data name="100%'d game message box" xml:space="preserve">
+    <value>Caixa de mensagem 100% do jogo</value>
+  </data>
+  <data name="&amp;Tools" xml:space="preserve">
+    <value>&amp;Ferramentas</value>
+  </data>
+  <data name="Add Command" xml:space="preserve">
+    <value>Adicionar Comando</value>
+  </data>
+  <data name="Add Section" xml:space="preserve">
+    <value>Adicionar Seção</value>
+  </data>
+  <data name="Adding frames to GIF..." xml:space="preserve">
+    <value>Adicionando frames para GIF…</value>
+  </data>
+  <data name="Adjusting Volume" xml:space="preserve">
+    <value>Ajustando Volume</value>
+    <comment>For BGM</comment>
+  </data>
+  <data name="About..." xml:space="preserve">
+    <value>Sobre…</value>
+  </data>
+  <data name="All data erased message box" xml:space="preserve">
+    <value>Caixa de mensagem Todos os dados foram apagados</value>
+  </data>
+  <data name="Add Starting Chibis" xml:space="preserve">
+    <value>Adicionar Chibis</value>
+  </data>
+  <data name="Adjusting Loop Info" xml:space="preserve">
+    <value>Ajustando Info do Loop</value>
+    <comment>For BGM</comment>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Adicionar</value>
+    <comment>As in add/subtract</comment>
+  </data>
+  <data name="&amp;File" xml:space="preserve">
+    <value>&amp;Arquivo</value>
+  </data>
+  <data name="(Missing)" xml:space="preserve">
+    <value> (Faltando)</value>
+  </data>
+  <data name="&amp;Build" xml:space="preserve">
+    <value>&amp;Construir</value>
+  </data>
+  <data name="A new update for Serial Loops is available!" xml:space="preserve">
+    <value>Uma nova atualização está disponível!</value>
+  </data>
+  <data name="Adjust Volume" xml:space="preserve">
+    <value>Ajustar Volume</value>
+    <comment>For BGM</comment>
+  </data>
+  <data name="%" xml:space="preserve">
+    <value>%</value>
+  </data>
+  <data name="&amp;Edit" xml:space="preserve">
+    <value>&amp;Editar</value>
+  </data>
+  <data name="&amp;Check for Updates..." xml:space="preserve">
+    <value>&amp;Procurar por atualizações…</value>
+  </data>
+  <data name="&amp;Preferences..." xml:space="preserve">
+    <value>&amp;Configurações…</value>
+  </data>
+  <data name="Add Frames" xml:space="preserve">
+    <value>Adicionar Frames</value>
+    <comment>For Chibis/Character sprites</comment>
+  </data>
 </root>
