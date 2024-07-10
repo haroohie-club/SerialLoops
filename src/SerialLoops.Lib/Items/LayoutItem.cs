@@ -2,6 +2,7 @@
 using HaruhiChokuretsuLib.Util;
 using SkiaSharp;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace SerialLoops.Lib.Items
@@ -27,6 +28,11 @@ namespace SerialLoops.Lib.Items
         public (SKBitmap tile, SKRect dest) GetLayoutEntryRender(int index)
         {
             return (Layout.LayoutEntries[index].GetTileBitmap(_tilesDict), Layout.LayoutEntries[index].GetDestination()); 
+        }
+
+        public void Write(Project project, ILogger log)
+        {
+            IO.WriteBinaryFile(Path.Combine("assets", "graphics", $"{Layout.Index:X3}.lay"), Layout.GetBytes(), project, log);
         }
 
         SKBitmap IPreviewableGraphic.GetPreview(Project project)

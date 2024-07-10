@@ -945,7 +945,7 @@ namespace SerialLoops.Lib
         {
             try
             {
-                File.WriteAllText(Path.Combine(MainDirectory, $"{Name}.{PROJECT_FORMAT}"), JsonSerializer.Serialize<Project>(this, SERIALIZER_OPTIONS));
+                File.WriteAllText(Path.Combine(MainDirectory, $"{Name}.{PROJECT_FORMAT}"), JsonSerializer.Serialize(this, SERIALIZER_OPTIONS));
             }
             catch (Exception ex)
             {

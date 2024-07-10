@@ -14,6 +14,7 @@ namespace SerialLoops.Editors
     public class LayoutEditor(LayoutItem layoutItem, ILogger log) : Editor(layoutItem, log)
     {
         private LayoutItem _layout;
+        private int _currentSelectedEntryIndex;
         private SKBitmap _layoutSourcePreview;
         private SKGLControl _layoutScreen;
         private ImageView _layoutSource;
@@ -184,7 +185,12 @@ namespace SerialLoops.Editors
             {
                 (SKBitmap tile, SKRect dest) = _layout.GetLayoutEntryRender(i);
                 canvas.DrawBitmap(tile, dest);
+                if (_currentSelectedEntryIndex == i)
+                {
+                    canvas.DrawRect(dest, new() { Color = SKColors.Red, StrokeWidth = 2f, Style = SKPaintStyle.Stroke });
+                }
             }
+            canvas.Flush();
         }
 
         private void UpdateScreenLayout()
@@ -208,6 +214,7 @@ namespace SerialLoops.Editors
                 _layoutSource.Image = new SKGuiImage(sourceBitmap);
                 _layoutSourcePreview = sourceBitmap;
             }
+            _currentSelectedEntryIndex = index;
         }
 
         private void LayoutControl_GotFocus(object sender, EventArgs e)
@@ -215,6 +222,7 @@ namespace SerialLoops.Editors
             CommonControl control = (CommonControl)sender;
             int index = (int)control.Tag;
             UpdateSourceLayout(index);
+            UpdateScreenLayout();
         }
 
         private void GraphicSelector_SelectedKeyChanged(object sender, EventArgs e)
@@ -226,6 +234,7 @@ namespace SerialLoops.Editors
 
             UpdateSourceLayout(layoutIndex);
             UpdateScreenLayout();
+            UpdateTabTitle(false);
         }
 
 
@@ -267,6 +276,7 @@ namespace SerialLoops.Editors
                     break;
             }
             UpdateScreenLayout();
+            UpdateTabTitle(false);
         }
 
         private void TintColorPicker_ValueChanged(object sender, EventArgs e)
@@ -276,6 +286,7 @@ namespace SerialLoops.Editors
 
             _layout.Layout.LayoutEntries[index].Tint = colorPicker.Value.ToSKColor();
             UpdateScreenLayout();
+            UpdateTabTitle(false);
         }
     }
 }
