@@ -2,7 +2,6 @@
 using HaruhiChokuretsuLib.Archive.Graphics;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib.Items;
-using SerialLoops.Lib.Util;
 using SerialLoops.Utility;
 using SkiaSharp;
 using System;
@@ -176,7 +175,10 @@ namespace SerialLoops.Editors
         }
         private void UpdateScreenLayout()
         {
-            _layoutScreen.Image = new SKGuiImage(_layout.GetLayoutImage());
+            for (int i = _layout.StartEntry; i < _layout.StartEntry + _layout.NumEntries; i++)
+            {
+
+            }
         }
 
         private void UpdateSourceLayout(int index)
@@ -197,14 +199,14 @@ namespace SerialLoops.Editors
             }
         }
 
-        private void LayoutControl_GotFocus(object sender, System.EventArgs e)
+        private void LayoutControl_GotFocus(object sender, EventArgs e)
         {
             CommonControl control = (CommonControl)sender;
             int index = (int)control.Tag;
             UpdateSourceLayout(index);
         }
 
-        private void GraphicSelector_SelectedKeyChanged(object sender, System.EventArgs e)
+        private void GraphicSelector_SelectedKeyChanged(object sender, EventArgs e)
         {
             DropDown dropDown = (DropDown)sender;
             int layoutIndex = (int)dropDown.Tag;
@@ -216,7 +218,7 @@ namespace SerialLoops.Editors
         }
 
 
-        private void LayoutStepper_ValueChanged(object sender, System.EventArgs e)
+        private void LayoutStepper_ValueChanged(object sender, EventArgs e)
         {
             NumericStepper stepper = (NumericStepper)sender;
             int index = (int)stepper.Tag;
@@ -257,7 +259,7 @@ namespace SerialLoops.Editors
             UpdateScreenLayout();
         }
 
-        private void TintColorPicker_ValueChanged(object sender, System.EventArgs e)
+        private void TintColorPicker_ValueChanged(object sender, EventArgs e)
         {
             ColorPicker colorPicker = (ColorPicker)sender;
             int index = (int)colorPicker.Tag;

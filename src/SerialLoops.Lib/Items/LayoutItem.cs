@@ -13,6 +13,8 @@ namespace SerialLoops.Lib.Items
         public int StartEntry { get; set; } = startEntry;
         public int NumEntries { get; set; } = numEntries;
 
+        private readonly Dictionary<int, SKBitmap> _tilesDict = grps.Select((g, i) => (i, g.GetImage())).ToDictionary();
+
         public override void Refresh(Project project, ILogger log)
         {
         }
@@ -20,6 +22,11 @@ namespace SerialLoops.Lib.Items
         public SKBitmap GetLayoutImage()
         {
             return Layout.GetLayout(GraphicsFiles, Layout.LayoutEntries.Skip(StartEntry).Take(NumEntries).ToList(), darkMode: false, preprocessedList: true).bitmap;
+        }
+
+        public (SKBitmap tile, SKRect dest) GetLayoutEntryRender(int index)
+        {
+            return (Layout.LayoutEntries[index].GetTileBitmap(_tilesDict), Layout.LayoutEntries[index].GetDestination()); 
         }
 
         SKBitmap IPreviewableGraphic.GetPreview(Project project)
