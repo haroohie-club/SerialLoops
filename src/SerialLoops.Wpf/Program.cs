@@ -1,4 +1,7 @@
-﻿using Eto.Wpf;
+﻿using Eto.Forms.Controls.SkiaSharp.Shared;
+using Eto.Forms.Controls.SkiaSharp.WinForms;
+using Eto.Forms.Controls.SkiaSharp.Wpf;
+using Eto.Wpf;
 using Eto.Wpf.Forms.ToolBar;
 using SerialLoops.Utility;
 using System;
@@ -15,6 +18,8 @@ namespace SerialLoops.Wpf
             var platform = new Platform();
             platform.Add<SoundPlayer.ISoundPlayer>(() => new SoundPlayerHandler());
             platform.Add<SfxMixer.ISfxMixer>(() => new SfxMixerHandler());
+            platform.Add<SKControl.ISKControl>(() => new SKControlHandler());
+            platform.Add<SKGLControl.ISKGLControl>(() => new SKGLControlHandler());
 
             // Windows toolbar styling
             Eto.Style.Add<ToolBarHandler>("sl-toolbar", toolbar =>

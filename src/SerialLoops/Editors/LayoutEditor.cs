@@ -1,4 +1,5 @@
 ﻿using Eto.Forms;
+using Eto.Forms.Controls.SkiaSharp.Shared;
 using HaruhiChokuretsuLib.Archive.Graphics;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib.Items;
@@ -14,7 +15,8 @@ namespace SerialLoops.Editors
     {
         private LayoutItem _layout;
         private SKBitmap _layoutSourcePreview;
-        private ImageView _layoutScreen, _layoutSource;
+        private SKGLControl _layoutScreen;
+        private ImageView _layoutSource;
 
         private const string SCREENX = "Screen X";
         private const string SCREENY = "Screen Y";
@@ -29,7 +31,7 @@ namespace SerialLoops.Editors
         {
             _layout = (LayoutItem)Description;
 
-            _layoutScreen = new() { Image = new SKGuiImage(_layout.GetLayoutImage()) };
+            _layoutScreen = new() { Width = 256, Height = 192, PaintSurfaceAction = ScreenPaint };
             _layoutSource = new();
 
             TableLayout layoutEntriesTable = new();
@@ -173,12 +175,21 @@ namespace SerialLoops.Editors
                     )
                 );
         }
-        private void UpdateScreenLayout()
+        private void ScreenPaint(SKSurface surface)
         {
+            SKCanvas canvas = surface.Canvas;
+            canvas.Clear();
+
             for (int i = _layout.StartEntry; i < _layout.StartEntry + _layout.NumEntries; i++)
             {
-
+                (SKBitmap tile, SKRect dest) = _layout.GetLayoutEntryRender(i);
+                canvas.DrawBitmap(tile, dest);
             }
+        }
+
+        private void UpdateScreenLayout()
+        {
+            _layoutScreen.Invalidate();
         }
 
         private void UpdateSourceLayout(int index)
@@ -255,7 +266,6 @@ namespace SerialLoops.Editors
                     UpdateSourceLayout(index);
                     break;
             }
-
             UpdateScreenLayout();
         }
 

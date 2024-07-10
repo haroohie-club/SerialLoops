@@ -13,7 +13,7 @@ namespace SerialLoops.Lib.Items
         public int StartEntry { get; set; } = startEntry;
         public int NumEntries { get; set; } = numEntries;
 
-        private readonly Dictionary<int, SKBitmap> _tilesDict = grps.Select((g, i) => (i, g.GetImage())).ToDictionary();
+        private readonly Dictionary<int, SKBitmap> _tilesDict = grps.Select((g, i) => (i, g.GetImage(transparentIndex: 0))).ToDictionary();
 
         public override void Refresh(Project project, ILogger log)
         {
