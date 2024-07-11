@@ -16,12 +16,8 @@ namespace SerialLoops.Editors
         private LayoutItem _layout;
         private int _currentSelectedEntryIndex;
         private SKBitmap _layoutSourcePreview;
-        // For now, we're going to disable GL support on Linux until we can figure out how to make it work
-#if OS_LINUX
+        // If in the future we can make GL support work fully, we should switch this to an SKGLControl
         private SKControl _layoutScreen;
-#else
-        private SKGLControl _layoutScreen;
-#endif
         private ImageView _layoutSource;
 
         private const string SCREENX = "Screen X";

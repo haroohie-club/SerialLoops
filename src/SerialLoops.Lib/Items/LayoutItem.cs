@@ -7,9 +7,9 @@ using System.Linq;
 
 namespace SerialLoops.Lib.Items
 {
-    public class LayoutItem(GraphicsFile layoutFile, List<GraphicsFile> grps, int startEntry, int numEntries, string name) : Item(name, ItemType.Layout), IPreviewableGraphic
+    public class LayoutItem(int layoutIndex, List<GraphicsFile> grps, int startEntry, int numEntries, string name, Project project) : Item(name, ItemType.Layout), IPreviewableGraphic
     {
-        public GraphicsFile Layout { get; set; } = layoutFile;
+        public GraphicsFile Layout { get; set; } = project.LayoutFiles[layoutIndex];
         public List<GraphicsFile> GraphicsFiles { get; set; } = grps;
         public int StartEntry { get; set; } = startEntry;
         public int NumEntries { get; set; } = numEntries;
@@ -35,11 +35,6 @@ namespace SerialLoops.Lib.Items
             {
                 return (Layout.LayoutEntries[index].GetTileBitmap(_tilesDict), Layout.LayoutEntries[index].GetDestination());
             }
-        }
-
-        public void Write(Project project, ILogger log)
-        {
-            IO.WriteBinaryFile(Path.Combine("assets", "graphics", $"{Layout.Index:X3}.lay"), Layout.GetBytes(), project, log);
         }
 
         SKBitmap IPreviewableGraphic.GetPreview(Project project)

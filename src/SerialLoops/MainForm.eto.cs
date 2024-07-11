@@ -633,6 +633,7 @@ namespace SerialLoops
             bool changedNameplates = false;
             bool changedTopics = false;
             bool changedSubs = false;
+            List<int> changedLayouts = [];
             SKCanvas nameplateCanvas = new(OpenProject.NameplateBitmap);
             SKCanvas speakerCanvas = new(OpenProject.SpeakerBitmap);
 
@@ -696,7 +697,12 @@ namespace SerialLoops
                         ((ItemItem)item).Write(OpenProject, Log);
                         break;
                     case ItemDescription.ItemType.Layout:
-                        ((LayoutItem)item).Write(OpenProject, Log);
+                        int layoutIndex = ((LayoutItem)item).Layout.Index;
+                        if (!changedLayouts.Contains(layoutIndex))
+                        {
+                            changedLayouts.Add(layoutIndex);
+                            IO.WriteBinaryFile(Path.Combine("assets", "graphics", $"{layoutIndex:X3}.lay"), OpenProject.LayoutFiles[layoutIndex].GetBytes(), OpenProject, Log);
+                        }
                         break;
                     case ItemDescription.ItemType.Place:
                         PlaceItem placeItem = (PlaceItem)item;
