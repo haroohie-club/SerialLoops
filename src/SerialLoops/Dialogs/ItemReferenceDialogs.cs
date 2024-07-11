@@ -48,9 +48,10 @@ namespace SerialLoops.Dialogs
 
     public class OrphanedItemsDialog : FindItemsDialog
     {
-        private static readonly ItemDescription.ItemType[] IGNORED_ORPHAN_TYPES = {
-            ItemDescription.ItemType.Scenario
-        };
+        private static readonly ItemDescription.ItemType[] IGNORED_ORPHAN_TYPES = [
+            ItemDescription.ItemType.Layout,
+            ItemDescription.ItemType.Scenario,
+        ];
 
         public OrphanedItemsDialog(Project project, ItemExplorerPanel explorer, EditorTabsPanel tabs, ILogger log)
         {
