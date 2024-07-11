@@ -189,10 +189,13 @@ namespace SerialLoops.Editors
             for (int i = _layout.StartEntry; i < _layout.StartEntry + _layout.NumEntries; i++)
             {
                 (SKBitmap tile, SKRect dest) = _layout.GetLayoutEntryRender(i);
-                canvas.DrawBitmap(tile, dest);
-                if (_currentSelectedEntryIndex == i)
+                if (tile is not null)
                 {
-                    canvas.DrawRect(dest, new() { Color = SKColors.Red, StrokeWidth = 2f, Style = SKPaintStyle.Stroke });
+                    canvas.DrawBitmap(tile, dest);
+                    if (_currentSelectedEntryIndex == i)
+                    {
+                        canvas.DrawRect(dest, new() { Color = SKColors.Red, StrokeWidth = 2f, Style = SKPaintStyle.Stroke });
+                    }
                 }
             }
             canvas.Flush();

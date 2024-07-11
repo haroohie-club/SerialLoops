@@ -27,7 +27,14 @@ namespace SerialLoops.Lib.Items
 
         public (SKBitmap tile, SKRect dest) GetLayoutEntryRender(int index)
         {
-            return (Layout.LayoutEntries[index].GetTileBitmap(_tilesDict), Layout.LayoutEntries[index].GetDestination()); 
+            if (index < 0)
+            {
+                return (null, new());
+            }
+            else
+            {
+                return (Layout.LayoutEntries[index].GetTileBitmap(_tilesDict), Layout.LayoutEntries[index].GetDestination());
+            }
         }
 
         public void Write(Project project, ILogger log)
