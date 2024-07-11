@@ -27,7 +27,7 @@ namespace SerialLoops.Lib.Items
 
         public (SKBitmap tile, SKRect dest) GetLayoutEntryRender(int index)
         {
-            if (index < 0)
+            if (index < 0 || Layout.LayoutEntries[index].RelativeShtxIndex < 0)
             {
                 return (null, new());
             }

@@ -210,7 +210,7 @@ namespace SerialLoops.Editors
         {
             if (_layout.Layout.LayoutEntries[index].RelativeShtxIndex < 0)
             {
-                _layoutSource.Image = new SKGuiImage(new());
+                _layoutSource.Image = new SKGuiImage(new(1, 1));
                 _layoutSourcePreview = null;
             }
             else
