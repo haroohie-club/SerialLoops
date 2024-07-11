@@ -20,7 +20,7 @@
   </ItemGroup>
 	
   <ItemGroup>
-    <PackageReference Include="Eto.Forms.Controls.SkiaSharp.Mac" Version="2.0.0" />
+    <PackageReference Include="Eto.Forms.Controls.SkiaSharp.Mac" Version="2.0.1" />
     <PackageReference Include="Eto.Platform.Mac64" Version="2.8.3" />
     <PackageReference Include="OpenTK" Version="4.8.2" />
   </ItemGroup>
