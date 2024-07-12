@@ -141,9 +141,10 @@ namespace SerialLoops.Lib
                                 log.LogWarning($"Source file found at '{file}', outside of data and events directory; skipping...");
                             }
                         }
-                        else if (Path.GetExtension(file).Equals(".bna", StringComparison.OrdinalIgnoreCase))
+                        else if (Path.GetExtension(file).Equals(".bna", StringComparison.OrdinalIgnoreCase)
+                            || Path.GetExtension(file).Equals(".lay", StringComparison.OrdinalIgnoreCase))
                         {
-                            ReplaceSingleAnimationFile(grp, file, index, project.Localize, log);
+                            ReplaceSingleBinaryFile(grp, file, index, project.Localize, log);
                         }
                         else
                         {
@@ -377,7 +378,7 @@ namespace SerialLoops.Lib
                 log.LogException(string.Format(localize("Failed replacing source file {0} in dat.bin with file '{1}'"), index, filePath), ex);
             }
         }
-        private static void ReplaceSingleAnimationFile(ArchiveFile<GraphicsFile> archive, string filePath, int index, Func<string, string> localize, ILogger log)
+        private static void ReplaceSingleBinaryFile(ArchiveFile<GraphicsFile> archive, string filePath, int index, Func<string, string> localize, ILogger log)
         {
             try
             {
