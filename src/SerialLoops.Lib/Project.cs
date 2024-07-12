@@ -720,6 +720,7 @@ namespace SerialLoops.Lib
             // We're gonna try to do more research on this later but for now we're going to hardcode these values
             try
             {
+                LayoutFiles.Clear();
                 LayoutFiles.Add(0xC45, Grp.GetFileByIndex(0xC45));
 
                 tracker.Focus("Layouts", 22);
