@@ -39,7 +39,7 @@ namespace SerialLoops.Editors
             TableLayout layoutEntriesTable = new();
             for (int i = _layout.StartEntry; i < _layout.StartEntry + _layout.NumEntries; i++)
             {
-                DropDown graphicSelector = new() { Tag = i };
+                DropDown graphicSelector = new() { Tag = i, Enabled = false };
                 graphicSelector.Items.Add(new ListItem
                 {
                     Key = "-1",
