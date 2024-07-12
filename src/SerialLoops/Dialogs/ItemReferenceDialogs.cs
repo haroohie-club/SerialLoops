@@ -68,7 +68,8 @@ namespace SerialLoops.Dialogs
             MinimumSize = new Size(400, 275);
             Padding = 10;
 
-            List<ItemDescription> results = Project.Items.FindAll(i => !IGNORED_ORPHAN_TYPES.Contains(i.Type) && i.GetReferencesTo(Project).Count == 0);
+            List<ItemDescription> results = Project.Items.FindAll(i => !IGNORED_ORPHAN_TYPES.Contains(i.Type) && i.GetReferencesTo(Project).Count == 0
+            && !(i.Type == ItemDescription.ItemType.SFX && ((SfxItem)i).Name.Contains("SSE") && ((SfxItem)i).AssociatedGroups.Count > 0)); // assume SFX that are in groups are referenced in code
             Content = new StackLayout
             {
                 Orientation = Orientation.Vertical,
