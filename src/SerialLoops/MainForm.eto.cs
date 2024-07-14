@@ -685,6 +685,10 @@ namespace SerialLoops
                             savedMessInfo = true;
                         }
                         break;
+                    case ItemDescription.ItemType.Character_Sprite:
+                        CharacterSpriteItem characterSpriteItem = (CharacterSpriteItem)item;
+                        characterSpriteItem.Graphics.Write(OpenProject, Log);
+                        break;
                     case ItemDescription.ItemType.Chibi:
                         ChibiItem chibiItem = (ChibiItem)item;
                         foreach (string modifiedEntryName in chibiItem.ChibiEntryModifications.Where(e => e.Value).Select(e => e.Key))

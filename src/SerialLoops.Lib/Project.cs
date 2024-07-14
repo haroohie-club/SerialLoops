@@ -541,7 +541,7 @@ namespace SerialLoops.Lib
                 Items.AddRange(chrdata.Sprites.AsParallel().Where(s => (int)s.Character > 0).Select(s =>
                 {
                     tracker.Finished++;
-                    return new CharacterSpriteItem(s, chrdata, this);
+                    return new CharacterSpriteItem(s, chrdata, this, log);
                 }));
             }
             catch (Exception ex)

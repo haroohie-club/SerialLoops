@@ -84,16 +84,10 @@ namespace SerialLoops.Lib.Items
             };
         }
 
-        public class ChibiGraphics
+        public class ChibiGraphics(ChibiEntry entry, Project project)
         {
-            public GraphicsFile Texture { get; set; }
-            public GraphicsFile Animation { get; set; }
-
-            public ChibiGraphics(ChibiEntry entry, Project project)
-            {
-                Texture = project.Grp.GetFileByIndex(entry.Texture);
-                Animation = project.Grp.GetFileByIndex(entry.Animation);
-            }
+            public GraphicsFile Texture { get; set; } = project.Grp.GetFileByIndex(entry.Texture);
+            public GraphicsFile Animation { get; set; } = project.Grp.GetFileByIndex(entry.Animation);
 
             public void Write(Project project, ILogger log)
             {

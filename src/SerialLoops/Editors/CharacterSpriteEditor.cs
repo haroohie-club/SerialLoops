@@ -1,4 +1,5 @@
 ﻿using Eto.Forms;
+using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Dialogs;
 using SerialLoops.Lib;
@@ -8,6 +9,7 @@ using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace SerialLoops.Editors
 {
@@ -22,6 +24,87 @@ namespace SerialLoops.Editors
             _animatedImage = new AnimatedImage(_sprite.GetLipFlapAnimation(_project));
             _animatedImage.Play();
 
+            DropDown characterDropDown = new();
+            characterDropDown.Items.AddRange(_project.Characters.Select(c => new ListItem { Key = c.Key.ToString(), Text = c.Value.Name }));
+            characterDropDown.SelectedKey = ((int)_sprite.Sprite.Character).ToString();
+            characterDropDown.SelectedKeyChanged += (sender, args) =>
+            {
+                _sprite.Sprite.Character = (Speaker)int.Parse(characterDropDown.SelectedKey);
+                UpdateTabTitle(false, this);
+            };
+
+            CheckBox isLargeCheckBox = new()
+            {
+                Text = "Is Large",
+                Checked = _sprite.Sprite.IsLarge,
+            };
+            isLargeCheckBox.CheckedChanged += (sender, args) =>
+            {
+                _sprite.Sprite.IsLarge = isLargeCheckBox.Checked ?? true;
+                UpdateTabTitle(false, this);
+            };
+
+            Button replaceSpriteButton = new() { Text = Application.Instance.Localize(this, "Replace") };
+            replaceSpriteButton.Click += (sender, args) =>
+            {
+                OpenFileDialog baseFileDialog = new()
+                {
+                    Title = Application.Instance.Localize(this, "Select sprite base"),
+                    CheckFileExists = true,
+                    Filters = { new(Application.Instance.Localize(this, "Image Files"), ".png", ".jpg", ".jpeg", ".bmp", ".gif") },
+                };
+                if (baseFileDialog.ShowAndReportIfFileSelected(this))
+                {
+                    SKBitmap baseLayout = SKBitmap.Decode(baseFileDialog.FileName);
+                    OpenFileDialog eyeFileDialog = new()
+                    {
+                        Title = Application.Instance.Localize(this, "Select eye animation frames"),
+                        MultiSelect = true,
+                        CheckFileExists = true,
+                        Filters = { new(Application.Instance.Localize(this, "Image Files"), ".png", ".jpg", ".jpeg", ".bmp", ".gif") },
+                    };
+                    if (eyeFileDialog.ShowAndReportIfFileSelected(this))
+                    {
+                        List<SKBitmap> eyeFrames = eyeFileDialog.Filenames.Select(f => SKBitmap.Decode(f)).ToList();
+                        short[] eyeTimings = new short[eyeFrames.Count];
+                        Array.Fill<short>(eyeTimings, 32);
+                        for (int i = 0; i < eyeTimings.Length; i++)
+                        {
+                            if (Path.GetFileNameWithoutExtension(eyeFileDialog.Filenames.ElementAt(i)).EndsWith("f", StringComparison.OrdinalIgnoreCase))
+                            {
+                                eyeTimings[i] = short.Parse(Path.GetFileNameWithoutExtension(eyeFileDialog.Filenames.ElementAt(i)).Split('_').Last()[0..^1]);
+                            }
+                        }
+                        List<(SKBitmap Frame, short Timing)> eyeFramesAndTimings = eyeFrames.Zip(eyeTimings).ToList();
+
+                        OpenFileDialog mouthFileDialog = new()
+                        {
+                            Title = Application.Instance.Localize(this, "Select mouth animation frames"),
+                            MultiSelect = true,
+                            CheckFileExists = true,
+                            Filters = { new(Application.Instance.Localize(this, "Image Files"), ".png", ".jpg", ".jpeg", ".bmp", ".gif") },
+                        };
+                        if (mouthFileDialog.ShowAndReportIfFileSelected(this))
+                        {
+                            List<SKBitmap> mouthFrames = mouthFileDialog.Filenames.Select(f => SKBitmap.Decode(f)).ToList();
+                            short[] mouthTimings = new short[mouthFrames.Count];
+                            for (int i = 0; i < mouthTimings.Length; i++)
+                            {
+                                if (Path.GetFileNameWithoutExtension(mouthFileDialog.Filenames.ElementAt(i)).EndsWith("f", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    mouthTimings[i] = short.Parse(Path.GetFileNameWithoutExtension(mouthFileDialog.Filenames.ElementAt(i)).Split('_').Last()[0..^1]);
+                                }
+                            }
+                            Array.Fill<short>(mouthTimings, 32);
+                            List<(SKBitmap Frame, short Timing)> mouthFramesAndTimings = mouthFrames.Zip(mouthTimings).ToList();
+
+                            _sprite.SetSprite(baseLayout, eyeFramesAndTimings, mouthFramesAndTimings, 64, 64, 32, 32);
+                            UpdateTabTitle(false, this);
+                        }
+                    }
+                }
+            };
+
             Button exportFramesButton = new() { Text = Application.Instance.Localize(this, "Export Frames") };
             exportFramesButton.Click += (sender, args) =>
             {
@@ -32,8 +115,8 @@ namespace SerialLoops.Editors
                 if (folderDialog.ShowAndReportIfFolderSelected(this))
                 {
                     SKBitmap layout = _sprite.GetBaseLayout(_project);
-                    List<(SKBitmap frame, short timing)> eyeFrames = _sprite.GetEyeFrames(_project);
-                    List<(SKBitmap frame, short timing)> mouthFrames = _sprite.GetMouthFrames(_project);
+                    List<(SKBitmap frame, short timing)> eyeFrames = _sprite.GetEyeFrames();
+                    List<(SKBitmap frame, short timing)> mouthFrames = _sprite.GetMouthFrames();
 
                     try
                     {
@@ -96,7 +179,7 @@ namespace SerialLoops.Editors
 
                 if (saveFileDialog.ShowAndReportIfFileSelected(this))
                 {
-                    List<SKBitmap> frames = new();
+                    List<SKBitmap> frames = [];
                     foreach ((SKBitmap frame, int timing) in animationFrames)
                     {
                         for (int i = 0; i < timing; i++)
@@ -116,6 +199,17 @@ namespace SerialLoops.Editors
                 Items =
                 {
                     _animatedImage,
+                    new StackLayout
+                    {
+                        Orientation = Orientation.Horizontal,
+                        Spacing = 5,
+                        Items =
+                        {
+                            ControlGenerator.GetControlWithLabel("Character", characterDropDown),
+                            isLargeCheckBox,
+                        }
+                    },
+                    replaceSpriteButton,
                     new StackLayout
                     {
                         Orientation = Orientation.Horizontal,
