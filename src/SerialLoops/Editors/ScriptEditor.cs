@@ -562,7 +562,7 @@ namespace SerialLoops.Editors
             }
 
             DropDown mapsDropdown = new();
-            mapsDropdown.Items.AddRange(maps.Select(m => new ListItem { Key = m.Name, Text = m.Name }));
+            mapsDropdown.Items.AddRange(maps.Select(m => new ListItem { Key = m.DisplayName, Text = m.DisplayName }));
             mapsDropdown.SelectedIndex = 0;
 
             PixelLayout mapLayout = new() { AllowDrop = true };
@@ -1243,8 +1243,8 @@ namespace SerialLoops.Editors
                             MapScriptParameter mapParam = (MapScriptParameter)parameter;
                             ScriptCommandDropDown mapDropDown = new() { Command = command, ParameterIndex = i };
                             mapDropDown.Items.Add(new ListItem { Text = "NONE", Key = "NONE" });
-                            mapDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Map).Select(i => new ListItem { Text = i.Name, Key = i.Name }));
-                            mapDropDown.SelectedKey = mapParam.Map?.Name ?? "NONE";
+                            mapDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Map && !((MapItem)i).Map.Settings.SlgMode).Select(i => new ListItem { Text = i.DisplayName, Key = i.DisplayName }));
+                            mapDropDown.SelectedKey = mapParam.Map?.DisplayName ?? "NONE";
                             mapDropDown.SelectedKeyChanged += MapDropDown_SelectedKeyChanged;
 
                             ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
