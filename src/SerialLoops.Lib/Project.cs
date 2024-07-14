@@ -18,6 +18,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using static SerialLoops.Lib.Items.ItemDescription;
 
 namespace SerialLoops.Lib
 {
@@ -987,6 +988,11 @@ namespace SerialLoops.Lib
                 log.LogException("Failed to get search results!", ex);
                 return Array.Empty<ItemDescription>().ToList();
             }
+        }
+
+        public CharacterItem GetCharacterBySpeaker(Speaker speaker)
+        {
+            return (CharacterItem)Items.First(i => i.Type == ItemType.Character && i.DisplayName == $"CHR_{Characters[(int)speaker].Name}");
         }
 
         private bool ItemMatches(ItemDescription item, string term, SearchQuery.DataHolder scope, ILogger logger)

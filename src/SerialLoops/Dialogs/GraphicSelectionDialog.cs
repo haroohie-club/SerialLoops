@@ -17,17 +17,19 @@ namespace SerialLoops.Dialogs
         private readonly IPreviewableGraphic _currentSelection;
         private readonly Project _project;
         private readonly ILogger _log;
+        private Func<ItemDescription, bool> _specialPredicate;
 
         private SearchBox _filter;
         private ListBox _selector;
         private Panel _preview;
 
-        public GraphicSelectionDialog(ObservableCollection<IPreviewableGraphic> items, IPreviewableGraphic currentSelection, Project project, ILogger log)
+        public GraphicSelectionDialog(ObservableCollection<IPreviewableGraphic> items, IPreviewableGraphic currentSelection, Project project, ILogger log, Func<ItemDescription, bool> specialPredicate = null)
         {
             _items = items;
             _currentSelection = currentSelection;
             _project = project;
             _log = log;
+            _specialPredicate = specialPredicate ?? (i => true);
             InitializeComponent();
         }
 
@@ -45,13 +47,13 @@ namespace SerialLoops.Dialogs
             _filter.TextChanged += (sender, args) =>
             {
                 _selector.DataStore = new ObservableCollection<IPreviewableGraphic>(_items
-                    .Where(i => ((ItemDescription)i).DisplayName.Contains(_filter.Text, StringComparison.OrdinalIgnoreCase)));
+                    .Where(i => ((ItemDescription)i).DisplayName.Contains(_filter.Text, StringComparison.OrdinalIgnoreCase) && _specialPredicate((ItemDescription)i)));
             };
 
             _selector = new ListBox
             {
                 Size = new Size(150, 390),
-                DataStore = _items,
+                DataStore = _items.Where(i => _specialPredicate((ItemDescription)i)),
                 SelectedIndex = _items.IndexOf(_currentSelection),
                 ItemTextBinding = Binding.Delegate<IPreviewableGraphic, string>(i => ((ItemDescription)i).DisplayName),
                 ItemKeyBinding = Binding.Delegate<IPreviewableGraphic, string>(i => ((ItemDescription)i).Name),
@@ -68,8 +70,8 @@ namespace SerialLoops.Dialogs
                 _preview.Content = GeneratePreview();
             };
 
-            Button closeButton = new() { Text = Application.Instance.Localize(this, "Confirm") };
-            closeButton.Click += (sender, args) => Close(_selector.SelectedValue as IPreviewableGraphic);
+            Button confirmButton = new() { Text = Application.Instance.Localize(this, "Confirm") };
+            confirmButton.Click += (sender, args) => Close(_selector.SelectedValue as IPreviewableGraphic);
             Button cancelButton = new() { Text = Application.Instance.Localize(this, "Cancel") };
             cancelButton.Click += (sender, args) => Close(_currentSelection);
 
@@ -106,7 +108,7 @@ namespace SerialLoops.Dialogs
                         HorizontalContentAlignment = HorizontalAlignment.Center,
                         Items =
                         {
-                            closeButton,
+                            confirmButton,
                             cancelButton
                         }
                     }
