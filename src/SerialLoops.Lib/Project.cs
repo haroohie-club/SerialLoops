@@ -521,6 +521,21 @@ namespace SerialLoops.Lib
 
             try
             {
+                tracker.Focus("Characters", MessInfo.MessageInfos.Count);
+                Items.AddRange(MessInfo.MessageInfos.AsParallel().Where(m => (int)m.Character > 0).Select(m =>
+                {
+                    tracker.Finished++;
+                    return new CharacterItem(m, Characters[(int)m.Character], this);
+                }));
+            }
+            catch (Exception ex)
+            {
+                log.LogException($"Failed to load characters", ex);
+                return new(LoadProjectState.FAILED);
+            }
+
+            try
+            {
                 CharacterDataFile chrdata = Dat.GetFileByName("CHRDATAS").CastTo<CharacterDataFile>();
                 tracker.Focus("Character Sprites", chrdata.Sprites.Count);
                 Items.AddRange(chrdata.Sprites.AsParallel().Where(s => (int)s.Character > 0).Select(s =>
@@ -548,21 +563,6 @@ namespace SerialLoops.Lib
             catch (Exception ex)
             {
                 log.LogException($"Failed to load chibis", ex);
-                return new(LoadProjectState.FAILED);
-            }
-
-            try
-            {
-                tracker.Focus("Characters", MessInfo.MessageInfos.Count);
-                Items.AddRange(MessInfo.MessageInfos.AsParallel().Where(m => (int)m.Character > 0).Select(m =>
-                {
-                    tracker.Finished++;
-                    return new CharacterItem(m, Characters[(int)m.Character], this);
-                }));
-            }
-            catch (Exception ex)
-            {
-                log.LogException($"Failed to load characters", ex);
                 return new(LoadProjectState.FAILED);
             }
 

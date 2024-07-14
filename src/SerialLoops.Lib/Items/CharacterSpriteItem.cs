@@ -7,16 +7,10 @@ using System.Linq;
 
 namespace SerialLoops.Lib.Items
 {
-    public class CharacterSpriteItem : Item, IPreviewableGraphic
+    public class CharacterSpriteItem(CharacterSprite sprite, CharacterDataFile chrdata, Project project) : Item($"SPR_{project.Characters[(int)sprite.Character].Name}_{chrdata.Sprites.IndexOf(sprite):D3}{(sprite.IsLarge ? "_L" : "")}", ItemType.Character_Sprite), IPreviewableGraphic
     {
-        public CharacterSprite Sprite { get; set; }
-        public int Index { get; set; }
-
-        public CharacterSpriteItem(CharacterSprite sprite, CharacterDataFile chrdata, Project project) : base($"SPR_{sprite.Character}_{chrdata.Sprites.IndexOf(sprite):D3}", ItemType.Character_Sprite)
-        {
-            Sprite = sprite;
-            Index = chrdata.Sprites.IndexOf(sprite);
-        }
+        public CharacterSprite Sprite { get; set; } = sprite;
+        public int Index { get; set; } = chrdata.Sprites.IndexOf(sprite);
 
         public override void Refresh(Project project, ILogger log)
         {
