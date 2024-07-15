@@ -81,23 +81,7 @@ namespace SerialLoops.Lib.Items
                         continue;
                     }
 
-                    // Temporary hack until the lib is updated (i cannot update the lib rn bc i'm on a flight)
-                    layoutEntries.Add(new([
-                        .. BitConverter.GetBytes((short)0),
-                        .. BitConverter.GetBytes((short)0),
-                        .. BitConverter.GetBytes((short)0),
-                        .. BitConverter.GetBytes(srcX),
-                        .. BitConverter.GetBytes(srcY),
-                        .. BitConverter.GetBytes((short)32),
-                        .. BitConverter.GetBytes((short)32),
-                        .. BitConverter.GetBytes(x),
-                        .. BitConverter.GetBytes(y),
-                        .. BitConverter.GetBytes((short)32),
-                        .. BitConverter.GetBytes((short)32),
-                        .. BitConverter.GetBytes((short)0),
-                        .. BitConverter.GetBytes((uint)SKColors.White),
-                    ]));
-
+                    layoutEntries.Add(new(0, x, y, 32, 32, srcX, srcY, 32, 32, SKColors.White));
                     SKRect src = new(srcX, srcY, srcX + 32, srcY + 32);
                     srcX += 32;
                     if (srcX >= layoutBitmap.Width)
