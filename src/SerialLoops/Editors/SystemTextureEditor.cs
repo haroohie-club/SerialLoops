@@ -7,7 +7,6 @@ using SerialLoops.Utility;
 using SkiaSharp;
 using System;
 using System.IO;
-using System.Linq;
 
 namespace SerialLoops.Editors
 {
