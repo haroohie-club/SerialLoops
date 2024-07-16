@@ -628,6 +628,7 @@ namespace SerialLoops
             }
 
             IEnumerable<ItemDescription> unsavedItems = OpenProject.Items.Where(i => i.UnsavedChanges);
+            bool savedChrData = false;
             bool savedExtra = false;
             bool savedMessInfo = false;
             bool changedNameplates = false;
@@ -686,6 +687,15 @@ namespace SerialLoops
                         }
                         break;
                     case ItemDescription.ItemType.Character_Sprite:
+                        if (!savedChrData)
+                        {
+                            IO.WriteStringFile(Path.Combine("assets", "data", $"{OpenProject.ChrData.Index:X3}.s"),
+                                OpenProject.ChrData.GetSource(new Dictionary<string, IncludeEntry[]>()
+                                {
+                                    { "GRPBIN", OpenProject.Grp.GetSourceInclude().Split('\n').Where(l => !string.IsNullOrWhiteSpace(l)).Select(l => new IncludeEntry(l)).ToArray() }
+                                }), OpenProject, Log);
+                            savedChrData = true;
+                        }
                         CharacterSpriteItem characterSpriteItem = (CharacterSpriteItem)item;
                         characterSpriteItem.Graphics.Write(OpenProject, Log);
                         break;

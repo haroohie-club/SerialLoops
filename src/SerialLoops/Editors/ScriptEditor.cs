@@ -1132,7 +1132,7 @@ namespace SerialLoops.Editors
                         case ScriptParameter.ParameterType.DIALOGUE:
                             DialogueScriptParameter dialogueParam = (DialogueScriptParameter)parameter;
                             ScriptCommandDropDown speakerDropDown = new() { Command = command, ParameterIndex = i, OtherDropDowns = [], AssociatedGraphicsButtons = [] };
-                            speakerDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Character).Select(c => new ListItem { Key = c.DisplayName, Text = c.DisplayName[4..] }));
+                            speakerDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Character).OrderBy(c => c.DisplayName).Select(c => new ListItem { Key = c.DisplayName, Text = c.DisplayName[4..] }));
                             try
                             {
                                 speakerDropDown.SelectedKey = _project.GetCharacterBySpeaker(dialogueParam.Line.Speaker).DisplayName;

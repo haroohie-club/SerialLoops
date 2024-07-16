@@ -238,7 +238,7 @@ namespace SerialLoops.Lib
                     grpFile.SetPalette(File.ReadAllText(paletteFile).Split(',').Select(c => SKColor.Parse(c)).ToList());
                 }
 
-                grpFile.SetImage(filePath);
+                grpFile.SetImage(filePath, newSize: true);
 
                 grp.Files[grp.Files.IndexOf(grpFile)] = grpFile;
             }

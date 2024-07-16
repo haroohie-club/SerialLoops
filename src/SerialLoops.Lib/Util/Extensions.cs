@@ -28,6 +28,11 @@ namespace SerialLoops.Lib.Util
             };
         }
 
+        public static SKRectI ToSKRectI(this SKRect rect)
+        {
+            return new((int)rect.Left, (int)rect.Top, (int)rect.Right, (int)rect.Bottom);
+        }
+
         public static string GetSubstitutedString(this string line, Project project)
         {
             if (project.LangCode != "ja")

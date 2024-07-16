@@ -33,6 +33,7 @@ namespace SerialLoops.Lib
         public Dictionary<string, string> ItemNames { get; set; }
         public Dictionary<int, NameplateProperties> Characters { get; set; }
 
+        // SL settings
         [JsonIgnore]
         public string BaseDirectory => Path.Combine(MainDirectory, "base");
         [JsonIgnore]
@@ -46,6 +47,7 @@ namespace SerialLoops.Lib
         [JsonIgnore]
         public List<ItemDescription> Items { get; set; } = new();
 
+        // Archives
         [JsonIgnore]
         public ArchiveFile<DataFile> Dat { get; set; }
         [JsonIgnore]
@@ -55,6 +57,7 @@ namespace SerialLoops.Lib
         [JsonIgnore]
         public SoundArchive Snd { get; set; }
 
+        // Common graphics
         [JsonIgnore]
         public FontReplacementDictionary FontReplacement { get; set; } = new();
         [JsonIgnore]
@@ -68,6 +71,9 @@ namespace SerialLoops.Lib
         [JsonIgnore]
         public SKBitmap FontBitmap { get; set; }
 
+        // Files shared between items
+        [JsonIgnore]
+        public CharacterDataFile ChrData { get; set; }
         [JsonIgnore]
         public ExtraFile Extra { get; set; }
         [JsonIgnore]
@@ -87,6 +93,7 @@ namespace SerialLoops.Lib
         [JsonIgnore]
         public Dictionary<int, GraphicsFile> LayoutFiles { get; set; } = [];
 
+        // Localization function to make localizing accessible from the lib
         [JsonIgnore]
         public Func<string, string> Localize { get; set; }
 
@@ -353,7 +360,17 @@ namespace SerialLoops.Lib
             }
             tracker.Finished++;
 
-            tracker.Focus("Static Files", 4);
+            tracker.Focus("Static Files", 5);
+            try
+            {
+                ChrData = Dat.GetFileByName("CHRDATAS").CastTo<CharacterDataFile>();
+            }
+            catch (Exception ex)
+            {
+                log.LogException("Failed to load chrdata file", ex);
+                return new(LoadProjectState.FAILED);
+            }
+            tracker.Finished++;
             try
             {
                 Extra = Dat.GetFileByName("EXTRAS").CastTo<ExtraFile>();
@@ -536,12 +553,11 @@ namespace SerialLoops.Lib
 
             try
             {
-                CharacterDataFile chrdata = Dat.GetFileByName("CHRDATAS").CastTo<CharacterDataFile>();
-                tracker.Focus("Character Sprites", chrdata.Sprites.Count);
-                Items.AddRange(chrdata.Sprites.AsParallel().Where(s => (int)s.Character > 0).Select(s =>
+                tracker.Focus("Character Sprites", ChrData.Sprites.Count);
+                Items.AddRange(ChrData.Sprites.AsParallel().Where(s => (int)s.Character > 0).Select(s =>
                 {
                     tracker.Finished++;
-                    return new CharacterSpriteItem(s, chrdata, this, log);
+                    return new CharacterSpriteItem(s, ChrData, this, log);
                 }));
             }
             catch (Exception ex)

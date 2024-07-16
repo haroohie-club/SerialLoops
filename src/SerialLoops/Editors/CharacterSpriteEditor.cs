@@ -10,10 +10,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace SerialLoops.Editors
 {
-    public class CharacterSpriteEditor(CharacterSpriteItem item, Project project, ILogger log) : Editor(item, log, project)
+    public partial class CharacterSpriteEditor(CharacterSpriteItem item, Project project, ILogger log) : Editor(item, log, project)
     {
         private CharacterSpriteItem _sprite;
         private AnimatedImage _animatedImage;
@@ -56,6 +57,13 @@ namespace SerialLoops.Editors
                 if (baseFileDialog.ShowAndReportIfFileSelected(this))
                 {
                     SKBitmap baseLayout = SKBitmap.Decode(baseFileDialog.FileName);
+                    Match eyePosMatch = EyePosRegex().Match(Path.GetFileNameWithoutExtension(baseFileDialog.FileName));
+                    Match mouthPosMatch = MouthPosRegex().Match(Path.GetFileNameWithoutExtension(baseFileDialog.FileName));
+                    short eyePosX = eyePosMatch.Success ? short.Parse(eyePosMatch.Groups["x"].Value) : (short)0;
+                    short eyePosY = eyePosMatch.Success ? short.Parse(eyePosMatch.Groups["y"].Value) : (short)0;
+                    short mouthPosX = mouthPosMatch.Success ? short.Parse(mouthPosMatch.Groups["x"].Value) : (short)0;
+                    short mouthPosY = mouthPosMatch.Success ? short.Parse(mouthPosMatch.Groups["y"].Value) : (short)0;
+
                     OpenFileDialog eyeFileDialog = new()
                     {
                         Title = Application.Instance.Localize(this, "Select eye animation frames"),
@@ -65,7 +73,7 @@ namespace SerialLoops.Editors
                     };
                     if (eyeFileDialog.ShowAndReportIfFileSelected(this))
                     {
-                        List<SKBitmap> eyeFrames = eyeFileDialog.Filenames.Select(f => SKBitmap.Decode(f)).ToList();
+                        List<SKBitmap> eyeFrames = eyeFileDialog.Filenames.OrderBy(f => f).Select(f => SKBitmap.Decode(f)).ToList();
                         short[] eyeTimings = new short[eyeFrames.Count];
                         Array.Fill<short>(eyeTimings, 32);
                         for (int i = 0; i < eyeTimings.Length; i++)
@@ -86,19 +94,20 @@ namespace SerialLoops.Editors
                         };
                         if (mouthFileDialog.ShowAndReportIfFileSelected(this))
                         {
-                            List<SKBitmap> mouthFrames = mouthFileDialog.Filenames.Select(f => SKBitmap.Decode(f)).ToList();
+                            List<SKBitmap> mouthFrames = mouthFileDialog.Filenames.OrderBy(f => f).Select(f => SKBitmap.Decode(f)).ToList();
                             short[] mouthTimings = new short[mouthFrames.Count];
                             for (int i = 0; i < mouthTimings.Length; i++)
                             {
-                                if (Path.GetFileNameWithoutExtension(mouthFileDialog.Filenames.ElementAt(i)).EndsWith("f", StringComparison.OrdinalIgnoreCase))
+                                Match frameMatch = FrameCountRegex().Match(Path.GetFileNameWithoutExtension(mouthFileDialog.Filenames.ElementAt(i)));
+                                if (frameMatch.Success)
                                 {
-                                    mouthTimings[i] = short.Parse(Path.GetFileNameWithoutExtension(mouthFileDialog.Filenames.ElementAt(i)).Split('_').Last()[0..^1]);
+                                    mouthTimings[i] = short.Parse(frameMatch.Groups["frameCount"].Value);
                                 }
                             }
                             Array.Fill<short>(mouthTimings, 32);
                             List<(SKBitmap Frame, short Timing)> mouthFramesAndTimings = mouthFrames.Zip(mouthTimings).ToList();
 
-                            _sprite.SetSprite(baseLayout, eyeFramesAndTimings, mouthFramesAndTimings, 64, 64, 32, 32);
+                            _sprite.SetSprite(baseLayout, eyeFramesAndTimings, mouthFramesAndTimings, eyePosX, eyePosY, mouthPosX, mouthPosY);
                             UpdateTabTitle(false, this);
                         }
                     }
@@ -114,13 +123,15 @@ namespace SerialLoops.Editors
                 };
                 if (folderDialog.ShowAndReportIfFolderSelected(this))
                 {
-                    SKBitmap layout = _sprite.GetBaseLayout(_project);
+                    SKBitmap layout = _sprite.GetBaseLayout();
                     List<(SKBitmap frame, short timing)> eyeFrames = _sprite.GetEyeFrames();
                     List<(SKBitmap frame, short timing)> mouthFrames = _sprite.GetMouthFrames();
 
                     try
                     {
-                        using FileStream layoutStream = File.Create(Path.Combine(folderDialog.Directory, $"{_sprite.DisplayName}_BODY.png"));
+                        using FileStream layoutStream = File.Create(Path.Combine(folderDialog.Directory, $"{_sprite.DisplayName}_BODY" +
+                            $"_E{_sprite.Graphics.EyeAnimation.AnimationX},{_sprite.Graphics.EyeAnimation.AnimationY}" +
+                            $"_M{_sprite.Graphics.MouthAnimation.AnimationX},{_sprite.Graphics.MouthAnimation.AnimationY}.png"));
                         layout.Encode(layoutStream, SKEncodedImageFormat.Png, 1);
                     }
                     catch (Exception ex)
@@ -223,5 +234,12 @@ namespace SerialLoops.Editors
                 },
             };
         }
+
+        [GeneratedRegex(@"_(?<frameCount>\d{1,4})f(?:_|$)", RegexOptions.IgnoreCase, "en-US")]
+        private static partial Regex FrameCountRegex();
+        [GeneratedRegex(@"_E(?<x>\d{1,3}),(?<y>\d{1,3})(?:_|$)")]
+        private static partial Regex EyePosRegex();
+        [GeneratedRegex(@"_M(?<x>\d{1,3}),(?<y>\d{1,3})(?:_|$)")]
+        private static partial Regex MouthPosRegex();
     }
 }
