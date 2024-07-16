@@ -1386,7 +1386,7 @@ namespace SerialLoops.Editors
                         case ScriptParameter.ParameterType.SPRITE:
                             SpriteScriptParameter spriteParam = (SpriteScriptParameter)parameter;
                             CommandGraphicSelectionButton spriteSelectionButton = new(spriteParam.Sprite is not null ? spriteParam.Sprite
-                                : NonePreviewableGraphic.CHARACTER_SPRITE, _tabs, _log, i => i.Name != "NONE" && _project.GetCharacterBySpeaker(((CharacterSpriteItem)i).Sprite.Character).DisplayName == _currentSpeakerDropDown?.SelectedKey)
+                                : NonePreviewableGraphic.CHARACTER_SPRITE, _tabs, _log, i => i.Name == "NONE" || (i.Name != "NONE" && _project.GetCharacterBySpeaker(((CharacterSpriteItem)i).Sprite.Character).DisplayName == _currentSpeakerDropDown?.SelectedKey))
                             {
                                 Command = command,
                                 ParameterIndex = i,
