@@ -20,8 +20,8 @@ namespace SerialLoops.Lib.Items
 
         public override void Refresh(Project project, ILogger log)
         {
-            GraphicsFile singularityLayout = project.Grp.Files.First(f => f.Index == Puzzle.Settings.SingularityLayout);
-            GraphicsFile singularityTexture = project.Grp.Files.First(f => f.Index == Puzzle.Settings.SingularityTexture);
+            GraphicsFile singularityLayout = project.Grp.GetFileByIndex(Puzzle.Settings.SingularityLayout);
+            GraphicsFile singularityTexture = project.Grp.GetFileByIndex(Puzzle.Settings.SingularityTexture);
             SingularityImage = singularityLayout.GetLayout(
                     [singularityTexture],
                     0,

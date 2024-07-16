@@ -633,6 +633,7 @@ namespace SerialLoops
             bool changedNameplates = false;
             bool changedTopics = false;
             bool changedSubs = false;
+            List<int> changedLayouts = [];
             SKCanvas nameplateCanvas = new(OpenProject.NameplateBitmap);
             SKCanvas speakerCanvas = new(OpenProject.SpeakerBitmap);
 
@@ -695,6 +696,14 @@ namespace SerialLoops
                     case ItemDescription.ItemType.Item:
                         ((ItemItem)item).Write(OpenProject, Log);
                         break;
+                    case ItemDescription.ItemType.Layout:
+                        int layoutIndex = ((LayoutItem)item).Layout.Index;
+                        if (!changedLayouts.Contains(layoutIndex))
+                        {
+                            changedLayouts.Add(layoutIndex);
+                            IO.WriteBinaryFile(Path.Combine("assets", "graphics", $"{layoutIndex:X3}.lay"), OpenProject.LayoutFiles[layoutIndex].GetBytes(), OpenProject, Log);
+                        }
+                        break;
                     case ItemDescription.ItemType.Place:
                         PlaceItem placeItem = (PlaceItem)item;
                         if (placeItem.PlaceName != item.DisplayName[4..])
@@ -714,7 +723,7 @@ namespace SerialLoops
                         ScenarioStruct scenario = ((ScenarioItem)item).Scenario;
                         IO.WriteStringFile(
                             Path.Combine("assets", "events",
-                                $"{OpenProject.Evt.Files.First(f => f.Name == "SCENARIOS").Index:X3}.s"),
+                                $"{OpenProject.Evt.GetFileByName("SCENARIOS").Index:X3}.s"),
                             // TODO: Refactor this logic into the chokuretsu library so that we don't end up with ugliness like this for all of our includes
                             scenario.GetSource(new()
                             {

@@ -1,4 +1,5 @@
 ﻿using Eto.Forms;
+using HaruhiChokuretsuLib.Archive.Graphics;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Controls;
 using SerialLoops.Lib;
@@ -35,11 +36,25 @@ namespace SerialLoops.Editors
             using SKCanvas baseCanvas = new(nameplatePreview);
             baseCanvas.DrawBitmap(_project.NameplateBitmap, new SKRect(0, 16 * ((int)_character.MessageInfo.Character - 1), 64, 16 * ((int)_character.MessageInfo.Character)), new SKRect(0, 0, 64, 16));
             baseCanvas.Flush();
+            Button exportNameplatePreviewButton = new() { Text = "Export" };
+            exportNameplatePreviewButton.Click += (sender, args) =>
+            {
+                SaveFileDialog saveFileDialog = new();
+                saveFileDialog.Filters.Add(new() { Name = Application.Instance.Localize(this, "PNG image"), Extensions = [".png"] });
+                if (saveFileDialog.ShowAndReportIfFileSelected(this))
+                {
+                    using FileStream fs = new(saveFileDialog.FileName, FileMode.Create);
+                    nameplatePreview.Encode(fs, SKEncodedImageFormat.Png, GraphicsFile.PNG_QUALITY);
+                }
+            };
             StackLayout nameplatePreviewLayout = new()
             {
+                Orientation = Orientation.Horizontal,
+                Spacing = 5,
                 Items =
                 {
                     new SKGuiImage(nameplatePreview),
+                    exportNameplatePreviewButton,
                 },
             };
 

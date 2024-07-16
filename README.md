@@ -25,6 +25,18 @@
   <img width="325px" src="https://haroohie.club/images/chokuretsu/serial-loops/home-screen.png" alt="Screenshot of the Serial Loops home screen. The Serial Loops logo and title sits at the top of the menu. Below that, under 'Start' on the left hand side, options to create a project, open an existing project, and modify preferences are present. An empty list of 'Recents' is visible on the right hand side, where recent projects would appear." />
 </p>
 
+## Authors
+### Developers
+Serial Loops is developed by:
+* [Jonko](https://github.com/jonko0493) &ndash; Systems architect & reverse engineering work
+* [William278](https://william278.net) &ndash; UX architect & design work
+
+### Translators
+Serial Loops is translated into a variety of langauges thanks to the following contributors:
+* Chinese (Simplified/Traditional): [Xzonn](https://xzonn.top) (traditional is auto-generated via [OpenCC](https://github.com/BYVoid/OpenCC))
+* Italian: Oropuro_49 and Fuyuko Ayumu
+* Japanese: Amelia Chaplin
+
 ## Documentation
 Documentation for how to use Serial Loops can be found on [our website](https://haroohie.club/chokuretsu/serial-loops/).
 

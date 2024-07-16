@@ -83,6 +83,8 @@ namespace SerialLoops.Lib
         public MessageInfoFile MessInfo { get; set; }
         [JsonIgnore]
         public VoiceMapFile VoiceMap { get; set; }
+        [JsonIgnore]
+        public Dictionary<int, GraphicsFile> LayoutFiles { get; set; } = [];
 
         [JsonIgnore]
         public Func<string, string> Localize { get; set; }
@@ -300,7 +302,7 @@ namespace SerialLoops.Lib
             tracker.Finished++;
             try
             {
-                FontMap = Dat.Files.First(f => f.Name == "FONTS").CastTo<FontFile>();
+                FontMap = Dat.GetFileByName("FONTS").CastTo<FontFile>();
             }
             catch (Exception ex)
             {
@@ -310,7 +312,7 @@ namespace SerialLoops.Lib
             tracker.Finished++;
             try
             {
-                SpeakerBitmap = Grp.Files.First(f => f.Name == "SYS_CMN_B12DNX").GetImage(transparentIndex: 0);
+                SpeakerBitmap = Grp.GetFileByName("SYS_CMN_B12DNX").GetImage(transparentIndex: 0);
             }
             catch (Exception ex)
             {
@@ -319,7 +321,7 @@ namespace SerialLoops.Lib
             }
             try
             {
-                NameplateBitmap = Grp.Files.First(f => f.Name == "SYS_CMN_B12DNX").GetImage();
+                NameplateBitmap = Grp.GetFileByName("SYS_CMN_B12DNX").GetImage();
             }
             catch (Exception ex)
             {
@@ -329,7 +331,7 @@ namespace SerialLoops.Lib
             tracker.Finished++;
             try
             {
-                DialogueBitmap = Grp.Files.First(f => f.Name == "SYS_CMN_B02DNX").GetImage(transparentIndex: 0);
+                DialogueBitmap = Grp.GetFileByName("SYS_CMN_B02DNX").GetImage(transparentIndex: 0);
             }
             catch (Exception ex)
             {
@@ -339,9 +341,9 @@ namespace SerialLoops.Lib
             tracker.Finished++;
             try
             {
-                GraphicsFile fontFile = Grp.Files.First(f => f.Name == "ZENFONTBNF");
+                GraphicsFile fontFile = Grp.GetFileByName("ZENFONTBNF");
                 fontFile.InitializeFontFile();
-                FontBitmap = Grp.Files.First(f => f.Name == "ZENFONTBNF").GetImage(transparentIndex: 0);
+                FontBitmap = Grp.GetFileByName("ZENFONTBNF").GetImage(transparentIndex: 0);
             }
             catch (Exception ex)
             {
@@ -353,7 +355,7 @@ namespace SerialLoops.Lib
             tracker.Focus("Static Files", 4);
             try
             {
-                Extra = Dat.Files.First(f => f.Name == "EXTRAS").CastTo<ExtraFile>();
+                Extra = Dat.GetFileByName("EXTRAS").CastTo<ExtraFile>();
             }
             catch (Exception ex)
             {
@@ -363,7 +365,7 @@ namespace SerialLoops.Lib
             tracker.Finished++;
             try
             {
-                EventFile scenario = Evt.Files.First(f => f.Name == "SCENARIOS");
+                EventFile scenario = Evt.GetFileByName("SCENARIOS");
                 scenario.InitializeScenarioFile();
                 Scenario = scenario.Scenario;
             }
@@ -375,7 +377,7 @@ namespace SerialLoops.Lib
             tracker.Finished++;
             try
             {
-                MessInfo = Dat.Files.First(f => f.Name == "MESSINFOS").CastTo<MessageInfoFile>();
+                MessInfo = Dat.GetFileByName("MESSINFOS").CastTo<MessageInfoFile>();
             }
             catch (Exception ex)
             {
@@ -385,7 +387,7 @@ namespace SerialLoops.Lib
             tracker.Finished++;
             try
             {
-                UiText = Dat.Files.First(f => f.Name == "MESSS").CastTo<MessageFile>();
+                UiText = Dat.GetFileByName("MESSS").CastTo<MessageFile>();
             }
             catch (Exception ex)
             {
@@ -396,24 +398,29 @@ namespace SerialLoops.Lib
 
             try
             {
-                BgTableFile bgTable = Dat.Files.First(f => f.Name == "BGTBLS").CastTo<BgTableFile>();
+                BgTableFile bgTable = Dat.GetFileByName("BGTBLS").CastTo<BgTableFile>();
                 tracker.Focus("Backgrounds", bgTable.BgTableEntries.Count);
-                for (int i = 0; i < bgTable.BgTableEntries.Count; i++)
+                List<string> names = [];
+                Items.AddRange(bgTable.BgTableEntries.AsParallel().Select((entry, i) =>
                 {
-                    BgTableEntry entry = bgTable.BgTableEntries[i];
                     if (entry.BgIndex1 > 0)
                     {
-                        GraphicsFile nameGraphic = Grp.Files.First(g => g.Index == entry.BgIndex1);
-                        string name = $"BG_{nameGraphic.Name[0..(nameGraphic.Name.LastIndexOf('_'))]}";
+                        GraphicsFile nameGraphic = Grp.GetFileByIndex(entry.BgIndex1);
+                        string name = $"BG_{nameGraphic.Name[0..nameGraphic.Name.LastIndexOf('_')]}";
                         string bgNameBackup = name;
-                        for (int j = 1; Items.Select(i => i.Name).Contains(name); j++)
+                        for (int j = 1; names.Contains(name); j++)
                         {
                             name = $"{bgNameBackup}{j:D2}";
                         }
-                        Items.Add(new BackgroundItem(name, i, entry, this));
+                        tracker.Finished++;
+                        names.Add(name);
+                        return new BackgroundItem(name, i, entry, this);
                     }
-                    tracker.Finished++;
-                }
+                    else
+                    {
+                        return null;
+                    }
+                }).Where(b => b is not null));
             }
             catch (Exception ex)
             {
@@ -423,7 +430,7 @@ namespace SerialLoops.Lib
 
             try
             {
-                SoundDS = Dat.Files.First(s => s.Name == "SND_DSS").CastTo<SoundDSFile>();
+                SoundDS = Dat.GetFileByName("SND_DSS").CastTo<SoundDSFile>();
             }
             catch (Exception ex)
             {
@@ -433,7 +440,7 @@ namespace SerialLoops.Lib
             {
                 if (VoiceMapIsV06OrHigher())
                 {
-                    VoiceMap = Evt.Files.First(v => v.Name == "VOICEMAPS").CastTo<VoiceMapFile>();
+                    VoiceMap = Evt.GetFileByName("VOICEMAPS").CastTo<VoiceMapFile>();
                 }
             }
             catch (Exception ex)
@@ -444,13 +451,13 @@ namespace SerialLoops.Lib
 
             try
             {
-                string[] bgmFiles = SoundDS.BgmSection.Where(bgm => bgm is not null).Select(bgm => Path.Combine(IterativeDirectory, "rom", "data", bgm)).ToArray(); /*Directory.GetFiles(Path.Combine(IterativeDirectory, "rom", "data", "bgm")).OrderBy(s => s).ToArray();*/
+                string[] bgmFiles = SoundDS.BgmSection.AsParallel().Where(bgm => bgm is not null).Select(bgm => Path.Combine(IterativeDirectory, "rom", "data", bgm)).ToArray(); /*Directory.GetFiles(Path.Combine(IterativeDirectory, "rom", "data", "bgm")).OrderBy(s => s).ToArray();*/
                 tracker.Focus("BGM Tracks", bgmFiles.Length);
-                for (int i = 0; i < bgmFiles.Length; i++)
+                Items.AddRange(bgmFiles.AsParallel().Select((bgm, i) =>
                 {
-                    Items.Add(new BackgroundMusicItem(bgmFiles[i], i, this));
                     tracker.Finished++;
-                }
+                    return new BackgroundMusicItem(bgm, i, this);
+                }));
             }
             catch (Exception ex)
             {
@@ -459,13 +466,13 @@ namespace SerialLoops.Lib
             }
             try
             {
-                string[] voiceFiles = SoundDS.VoiceSection.Where(vce => vce is not null).Select(vce => Path.Combine(IterativeDirectory, "rom", "data", vce)).ToArray(); /*Directory.GetFiles(Path.Combine(IterativeDirectory, "rom", "data", "vce")).OrderBy(s => s).ToArray();*/
+                string[] voiceFiles = SoundDS.VoiceSection.AsParallel().Where(vce => vce is not null).Select(vce => Path.Combine(IterativeDirectory, "rom", "data", vce)).ToArray(); /*Directory.GetFiles(Path.Combine(IterativeDirectory, "rom", "data", "vce")).OrderBy(s => s).ToArray();*/
                 tracker.Focus("Voiced Lines", voiceFiles.Length);
-                for (int i = 0; i < voiceFiles.Length; i++)
+                Items.AddRange(voiceFiles.AsParallel().Select((vce, i) =>
                 {
-                    Items.Add(new VoicedLineItem(voiceFiles[i], i + 1, this));
                     tracker.Finished++;
-                }
+                    return new VoicedLineItem(vce, i + 1, this);
+                }));
             }
             catch (Exception ex)
             {
@@ -497,9 +504,13 @@ namespace SerialLoops.Lib
 
             try
             {
-                ItemFile itemFile = Dat.Files.First(f => f.Name == "ITEMS").CastTo<ItemFile>();
-                tracker.Focus("Items", 1);
-                Items.AddRange(itemFile.Items.Where(i => i > 0).Select((i, idx) => new ItemItem(Grp.Files[i - 1].Name, idx, i, this)));
+                ItemFile itemFile = Dat.GetFileByName("ITEMS").CastTo<ItemFile>();
+                tracker.Focus("Items", itemFile.Items.Count);
+                Items.AddRange(itemFile.Items.AsParallel().Where(i => i > 0).Select((i, idx) =>
+                {
+                    tracker.Finished++;
+                    return new ItemItem(Grp.GetFileByIndex(i).Name, idx, i, this);
+                }));
             }
             catch (Exception ex)
             {
@@ -509,10 +520,13 @@ namespace SerialLoops.Lib
 
             try
             {
-                tracker.Focus("Character Sprites", 1);
-                CharacterDataFile chrdata = Dat.Files.First(d => d.Name == "CHRDATAS").CastTo<CharacterDataFile>();
-                Items.AddRange(chrdata.Sprites.Where(s => (int)s.Character > 0).Select(s => new CharacterSpriteItem(s, chrdata, this)));
-                tracker.Finished++;
+                CharacterDataFile chrdata = Dat.GetFileByName("CHRDATAS").CastTo<CharacterDataFile>();
+                tracker.Focus("Character Sprites", chrdata.Sprites.Count);
+                Items.AddRange(chrdata.Sprites.AsParallel().Where(s => (int)s.Character > 0).Select(s =>
+                {
+                    tracker.Finished++;
+                    return new CharacterSpriteItem(s, chrdata, this);
+                }));
             }
             catch (Exception ex)
             {
@@ -522,13 +536,13 @@ namespace SerialLoops.Lib
 
             try
             {
-                ChibiFile chibiFile = Dat.Files.First(d => d.Name == "CHIBIS").CastTo<ChibiFile>();
+                ChibiFile chibiFile = Dat.GetFileByName("CHIBIS").CastTo<ChibiFile>();
                 tracker.Focus("Chibis", chibiFile.Chibis.Count);
-                foreach (Chibi chibi in chibiFile.Chibis)
+                Items.AddRange(chibiFile.Chibis.AsParallel().Select((c, i) =>
                 {
-                    Items.Add(new ChibiItem(chibi, this));
                     tracker.Finished++;
-                }
+                    return new ChibiItem(c, i, this);
+                }));
             }
             catch (Exception ex)
             {
@@ -538,10 +552,12 @@ namespace SerialLoops.Lib
 
             try
             {
-                tracker.Focus("Characters", 1);
-                Items.AddRange(Dat.Files.First(d => d.Name == "MESSINFOS").CastTo<MessageInfoFile>()
-                    .MessageInfos.Where(m => (int)m.Character > 0).Select(m => new CharacterItem(m, Characters[(int)m.Character], this)));
-                tracker.Finished++;
+                tracker.Focus("Characters", MessInfo.MessageInfos.Count);
+                Items.AddRange(MessInfo.MessageInfos.AsParallel().Where(m => (int)m.Character > 0).Select(m =>
+                {
+                    tracker.Finished++;
+                    return new CharacterItem(m, Characters[(int)m.Character], this);
+                }));
             }
             catch (Exception ex)
             {
@@ -551,11 +567,14 @@ namespace SerialLoops.Lib
 
             try
             {
-                tracker.Focus("Scripts", 1);
-                Items.AddRange(Evt.Files
+                tracker.Focus("Scripts", Evt.Files.Count - 5);
+                Items.AddRange(Evt.Files.AsParallel()
                     .Where(e => !new string[] { "CHESSS", "EVTTBLS", "TOPICS", "SCENARIOS", "TUTORIALS", "VOICEMAPS" }.Contains(e.Name))
-                    .Select(e => new ScriptItem(e, Localize, log)));
-                tracker.Finished++;
+                    .Select(e =>
+                    {
+                        tracker.Finished++;
+                        return new ScriptItem(e, Localize, log);
+                    }));
             }
             catch (Exception ex)
             {
@@ -563,10 +582,9 @@ namespace SerialLoops.Lib
                 return new(LoadProjectState.FAILED);
             }
 
-
             try
             {
-                TutorialFile = Evt.Files.First(t => t.Name == "TUTORIALS");
+                TutorialFile = Evt.GetFileByName("TUTORIALS");
                 TutorialFile.InitializeTutorialFile();
             }
             catch (Exception ex)
@@ -577,12 +595,15 @@ namespace SerialLoops.Lib
 
             try
             {
-                tracker.Focus("Maps", 1);
-                QMapFile qmap = Dat.Files.First(f => f.Name == "QMAPS").CastTo<QMapFile>();
-                Items.AddRange(Dat.Files
+                QMapFile qmap = Dat.GetFileByName("QMAPS").CastTo<QMapFile>();
+                tracker.Focus("Maps", qmap.QMaps.Count);
+                Items.AddRange(Dat.Files.AsParallel()
                     .Where(d => qmap.QMaps.Select(q => q.Name.Replace(".", "")).Contains(d.Name))
-                    .Select(m => new MapItem(m.CastTo<MapFile>(), qmap.QMaps.FindIndex(q => q.Name.Replace(".", "") == m.Name), this)));
-                tracker.Finished++;
+                    .Select(m =>
+                    {
+                        tracker.Finished++;
+                        return new MapItem(m.CastTo<MapFile>(), qmap.QMaps.FindIndex(q => q.Name.Replace(".", "") == m.Name), this);
+                    }));
             }
             catch (Exception ex)
             {
@@ -592,13 +613,13 @@ namespace SerialLoops.Lib
 
             try
             {
-                PlaceFile placeFile = Dat.Files.First(f => f.Name == "PLACES").CastTo<PlaceFile>();
+                PlaceFile placeFile = Dat.GetFileByName("PLACES").CastTo<PlaceFile>();
                 tracker.Focus("Places", placeFile.PlaceGraphicIndices.Count);
-                for (int i = 0; i < placeFile.PlaceGraphicIndices.Count; i++)
+                Items.AddRange(placeFile.PlaceGraphicIndices.Select((pidx, i) =>
                 {
-                    GraphicsFile placeGrp = Grp.Files.First(g => g.Index == placeFile.PlaceGraphicIndices[i]);
-                    Items.Add(new PlaceItem(i, placeGrp, this));
-                }
+                    tracker.Finished++;
+                    return new PlaceItem(i, Grp.GetFileByIndex(pidx));
+                }));
                 tracker.Finished++;
             }
             catch (Exception ex)
@@ -609,11 +630,13 @@ namespace SerialLoops.Lib
 
             try
             {
-                tracker.Focus("Puzzles", 1);
-                Items.AddRange(Dat.Files
-                    .Where(d => d.Name.StartsWith("SLG"))
-                    .Select(d => new PuzzleItem(d.CastTo<PuzzleFile>(), this, log)));
-                tracker.Finished++;
+                var puzzleDats = Dat.Files.AsParallel().Where(d => d.Name.StartsWith("SLG"));
+                tracker.Focus("Puzzles", puzzleDats.Count());
+                Items.AddRange(puzzleDats.Select(d =>
+                {
+                    tracker.Finished++;
+                    return new PuzzleItem(d.CastTo<PuzzleFile>(), this, log);
+                }));
             }
             catch (Exception ex)
             {
@@ -623,17 +646,17 @@ namespace SerialLoops.Lib
 
             try
             {
-                Evt.Files.First(f => f.Name == "TOPICS").InitializeTopicFile();
-                TopicFile = Evt.Files.First(f => f.Name == "TOPICS");
+                TopicFile = Evt.GetFileByName("TOPICS");
+                TopicFile.InitializeTopicFile();
                 tracker.Focus("Topics", TopicFile.Topics.Count);
                 foreach (Topic topic in TopicFile.Topics)
                 {
                     // Main topics have shadow topics that are located at ID + 40 (this is actually how the game finds them)
                     // So if we're a main topic and we see another topic 40 back, we know we're one of these shadow topics and should really be
                     // rolled into the original main topic
-                    if (topic.Type == TopicType.Main && Items.Any(i => i.Type == ItemDescription.ItemType.Topic && ((TopicItem)i).TopicEntry.Id == topic.Id - 40))
+                    if (topic.Type == TopicType.Main && Items.AsParallel().Any(i => i.Type == ItemDescription.ItemType.Topic && ((TopicItem)i).TopicEntry.Id == topic.Id - 40))
                     {
-                        ((TopicItem)Items.First(i => i.Type == ItemDescription.ItemType.Topic && ((TopicItem)i).TopicEntry.Id == topic.Id - 40)).HiddenMainTopic = topic;
+                        ((TopicItem)Items.AsParallel().First(i => i.Type == ItemDescription.ItemType.Topic && ((TopicItem)i).TopicEntry.Id == topic.Id - 40)).HiddenMainTopic = topic;
                     }
                     else
                     {
@@ -650,40 +673,40 @@ namespace SerialLoops.Lib
 
             try
             {
-                SystemTextureFile systemTextureFile = Dat.Files.First(f => f.Name == "SYSTEXS").CastTo<SystemTextureFile>();
+                SystemTextureFile systemTextureFile = Dat.GetFileByName("SYSTEXS").CastTo<SystemTextureFile>();
                 tracker.Focus("System Textures",
-                    5 + systemTextureFile.SystemTextures.Count(s => Grp.Files.Where(g => g.Name.StartsWith("XTR") || g.Name.StartsWith("SYS") && !g.Name.Contains("_SPC_") && g.Name != "SYS_CMN_B12DNX" && g.Name != "SYS_PPT_001DNX").Select(g => g.Index).Distinct().Contains(s.GrpIndex)));
-                Items.Add(new SystemTextureItem(systemTextureFile.SystemTextures.First(s => s.GrpIndex == Grp.Files.First(g => g.Name == "LOGO_CO_SEGDNX").Index), this, "SYSTEX_LOGO_SEGA", height: 192));
+                    5 + systemTextureFile.SystemTextures.Count(s => Grp.Files.AsParallel().Where(g => g.Name.StartsWith("XTR") || g.Name.StartsWith("SYS") && !g.Name.Contains("_SPC_") && g.Name != "SYS_CMN_B12DNX" && g.Name != "SYS_PPT_001DNX").Select(g => g.Index).Distinct().Contains(s.GrpIndex)));
+                Items.Add(new SystemTextureItem(systemTextureFile.SystemTextures.First(s => s.GrpIndex == Grp.GetFileByName("LOGO_CO_SEGDNX").Index), this, "SYSTEX_LOGO_SEGA", height: 192));
                 tracker.Finished++;
-                Items.Add(new SystemTextureItem(systemTextureFile.SystemTextures.First(s => s.GrpIndex == Grp.Files.First(g => g.Name == "LOGO_CO_AQIDNX").Index), this, "SYSTEX_LOGO_AQI", height: 192));
+                Items.Add(new SystemTextureItem(systemTextureFile.SystemTextures.First(s => s.GrpIndex == Grp.GetFileByName("LOGO_CO_AQIDNX").Index), this, "SYSTEX_LOGO_AQI", height: 192));
                 tracker.Finished++;
-                Items.Add(new SystemTextureItem(systemTextureFile.SystemTextures.First(s => s.GrpIndex == Grp.Files.First(g => g.Name == "LOGO_MW_ACTDNX").Index), this, "SYSTEX_LOGO_MOBICLIP", height: 192));
+                Items.Add(new SystemTextureItem(systemTextureFile.SystemTextures.First(s => s.GrpIndex == Grp.GetFileByName("LOGO_MW_ACTDNX").Index), this, "SYSTEX_LOGO_MOBICLIP", height: 192));
                 tracker.Finished++;
-                string criLogoName = Grp.Files.Any(f => f.Name == "CREDITS") ? "SYSTEX_LOGO_HAROOHIE" : "SYSTEX_LOGO_CRIWARE";
-                Items.Add(new SystemTextureItem(systemTextureFile.SystemTextures.First(s => s.GrpIndex == Grp.Files.First(g => g.Name == "LOGO_MW_CRIDNX").Index), this, criLogoName, height: 192));
+                string criLogoName = Grp.Files.AsParallel().Any(f => f.Name == "CREDITS") ? "SYSTEX_LOGO_HAROOHIE" : "SYSTEX_LOGO_CRIWARE";
+                Items.Add(new SystemTextureItem(systemTextureFile.SystemTextures.First(s => s.GrpIndex == Grp.GetFileByName("LOGO_MW_CRIDNX").Index), this, criLogoName, height: 192));
                 tracker.Finished++;
                 if (Grp.Files.Any(f => f.Name == "CREDITS"))
                 {
-                    Items.Add(new SystemTextureItem(systemTextureFile.SystemTextures.First(s => s.GrpIndex == Grp.Files.First(g => g.Name == "CREDITS").Index), this, "SYSTEX_LOGO_CREDITS", height: 192));
+                    Items.Add(new SystemTextureItem(systemTextureFile.SystemTextures.First(s => s.GrpIndex == Grp.GetFileByName("CREDITS").Index), this, "SYSTEX_LOGO_CREDITS", height: 192));
                 }
                 tracker.Finished++;
-                foreach (SystemTexture extraSysTex in systemTextureFile.SystemTextures.Where(s => Grp.Files.Where(g => g.Name.StartsWith("XTR")).Distinct().Select(g => g.Index).Contains(s.GrpIndex)))
+                foreach (SystemTexture extraSysTex in systemTextureFile.SystemTextures.Where(s => Grp.Files.AsParallel().Where(g => g.Name.StartsWith("XTR")).Distinct().Select(g => g.Index).Contains(s.GrpIndex)))
                 {
-                    Items.Add(new SystemTextureItem(extraSysTex, this, $"SYSTEX_{Grp.Files.First(g => g.Index == extraSysTex.GrpIndex).Name[0..^3]}"));
+                    Items.Add(new SystemTextureItem(extraSysTex, this, $"SYSTEX_{Grp.GetFileByIndex(extraSysTex.GrpIndex).Name[0..^3]}"));
                     tracker.Finished++;
                 }
                 // Exclude B12 as that's the nameplates we replace in the character items and PPT_001 as that's the puzzle phase singularity we'll be replacing in the puzzle items
                 // We also exclude the "special" graphics as they do not include all of them in the SYSTEX file (should be made to be edited manually)
-                foreach (SystemTexture sysSysTex in systemTextureFile.SystemTextures.Where(s => Grp.Files.Where(g => g.Name.StartsWith("SYS") && !g.Name.Contains("_SPC_") && g.Name != "SYS_CMN_B12DNX" && g.Name != "SYS_PPT_001DNX").Select(g => g.Index).Contains(s.GrpIndex)).DistinctBy(s => s.GrpIndex))
+                foreach (SystemTexture sysSysTex in systemTextureFile.SystemTextures.Where(s => Grp.Files.AsParallel().Where(g => g.Name.StartsWith("SYS") && !g.Name.Contains("_SPC_") && g.Name != "SYS_CMN_B12DNX" && g.Name != "SYS_PPT_001DNX").Select(g => g.Index).Contains(s.GrpIndex)).DistinctBy(s => s.GrpIndex))
                 {
-                    if (Grp.Files.First(g => g.Index == sysSysTex.GrpIndex).Name[0..^4].EndsWith("T6"))
+                    if (Grp.GetFileByIndex(sysSysTex.GrpIndex).Name[0..^4].EndsWith("T6"))
                     {
                         // special case the ep headers
-                        Items.Add(new SystemTextureItem(sysSysTex, this, $"SYSTEX_{Grp.Files.First(g => g.Index == sysSysTex.GrpIndex).Name[0..^3]}", height: 192));
+                        Items.Add(new SystemTextureItem(sysSysTex, this, $"SYSTEX_{Grp.GetFileByIndex(sysSysTex.GrpIndex).Name[0..^3]}", height: 192));
                     }
                     else
                     {
-                        Items.Add(new SystemTextureItem(sysSysTex, this, $"SYSTEX_{Grp.Files.First(g => g.Index == sysSysTex.GrpIndex).Name[0..^3]}"));
+                        Items.Add(new SystemTextureItem(sysSysTex, this, $"SYSTEX_{Grp.GetFileByIndex(sysSysTex.GrpIndex).Name[0..^3]}"));
                     }
                     tracker.Finished++;
                 }
@@ -694,12 +717,92 @@ namespace SerialLoops.Lib
                 return new(LoadProjectState.FAILED);
             }
 
+            // We're gonna try to do more research on this later but for now we're going to hardcode these values
+            try
+            {
+                LayoutFiles.Clear();
+                LayoutFiles.Add(0xC45, Grp.GetFileByIndex(0xC45));
+
+                tracker.Focus("Layouts", 22);
+                List <GraphicsFile> graphics = [
+                    Grp.GetFileByIndex(0xC48),
+                    Grp.GetFileByIndex(0xC4A),
+                    Grp.GetFileByIndex(0xC4C),
+                    Grp.GetFileByIndex(0xC4D),
+                    Grp.GetFileByIndex(0xC4F),
+                    Grp.GetFileByIndex(0xC50),
+                    Grp.GetFileByIndex(0xC52),
+                    Grp.GetFileByIndex(0xC54),
+                    Grp.GetFileByIndex(0xC55),
+                    Grp.GetFileByIndex(0xC57),
+                    Grp.GetFileByIndex(0xC59),
+                    Grp.GetFileByIndex(0xC5B),
+                    Grp.GetFileByIndex(0xC5D),
+                    Grp.GetFileByIndex(0xC60),
+                    Grp.GetFileByIndex(0xC61),
+                    Grp.GetFileByIndex(0xC62),
+                    Grp.GetFileByIndex(0xC63),
+                    Grp.GetFileByIndex(0xC64),
+                    Grp.GetFileByIndex(0xC65),
+                    Grp.GetFileByIndex(0xC66),
+                    Grp.GetFileByIndex(0xC67),
+                    ];
+
+                Items.Add(new LayoutItem(0xC45, graphics, 54, 13, "LYT_ACCIDENT_OUTBREAK", this));
+                tracker.Finished++;
+                Items.Add(new LayoutItem(0xC45, graphics, 67, 5, "LYT_MAIN_TOPIC_DELAYED", this));
+                tracker.Finished++;
+                Items.Add(new LayoutItem(0xC45, graphics, 72, 12, "LYT_DELAY_CHANCE", this));
+                tracker.Finished++;
+                Items.Add(new LayoutItem(0xC45, graphics, 84, 2, "LYT_TOPIC_CHOOSE", this));
+                tracker.Finished++;
+                Items.Add(new LayoutItem(0xC45, graphics, 122, 8, "LYT_READY", this));
+                tracker.Finished++;
+                Items.Add(new LayoutItem(0xC45, graphics, 130, 3, "LYT_GO", this));
+                tracker.Finished++;
+                Items.Add(new LayoutItem(0xC45, graphics, 134, 4, "LYT_TIME_RESULT", this));
+                tracker.Finished++;
+                Items.Add(new LayoutItem(0xC45, graphics, 138, 2, "LYT_ACCIDENT_RESULT", this));
+                tracker.Finished++;
+                Items.Add(new LayoutItem(0xC45, graphics, 140, 2, "LYT_POWER_UP_RESULT", this));
+                tracker.Finished++;
+                Items.Add(new LayoutItem(0xC45, graphics, 142, 2, "LYT_BASE_TIME_LIMIT", this));
+                tracker.Finished++;
+                Items.Add(new LayoutItem(0xC45, graphics, 148, 2, "LYT_HRH_DISTRACTION_BONUS", this));
+                tracker.Finished++;
+                Items.Add(new LayoutItem(0xC45, graphics, 154, 5, "LYT_TOTAL_SCORE", this));
+                tracker.Finished++;
+                Items.Add(new LayoutItem(0xC45, graphics, 163, 3, "LYT_MAIN_TOPICS_OBTAINED", this));
+                tracker.Finished++;
+                Items.Add(new LayoutItem(0xC45, graphics, 163, 3, "LYT_ACCIDENT_BUTTON", this));
+                tracker.Finished++;
+                Items.Add(new LayoutItem(0xC45, graphics, 175, 2, "LYT_MAIN_TOPIC", this));
+                tracker.Finished++;
+                Items.Add(new LayoutItem(0xC45, graphics, 177, 1, "LYT_COUNTER", this));
+                tracker.Finished++;
+                Items.Add(new LayoutItem(0xC45, graphics, 199, 27, "LYT_CHARACTER_TOPICS_OBTAINED", this));
+                tracker.Finished++;
+                Items.Add(new LayoutItem(0xC45, graphics, 226, 4, "LYT_TIME_LIMIT", this));
+                tracker.Finished++;
+                Items.Add(new LayoutItem(0xC45, graphics, 235, 2, "LYT_ACCIDENT_AVOIDED", this));
+                tracker.Finished++;
+                Items.Add(new LayoutItem(0xC45, graphics, 286, 2, "LYT_SEARCH_BUTTON", this));
+                tracker.Finished++;
+                Items.Add(new LayoutItem(0xC45, graphics, 307, 1, "LYT_MIN_ERASED_GOAL", this));
+                tracker.Finished++;
+            }
+            catch (Exception ex)
+            {
+                log.LogException($"Failed to load layouts", ex);
+                return new(LoadProjectState.FAILED);
+            }
+
             EventFile scenarioFile;
             try
             {
                 // Scenario item must be created after script and puzzle items are constructed
                 tracker.Focus("Scenario", 1);
-                scenarioFile = Evt.Files.First(f => f.Name == "SCENARIOS");
+                scenarioFile = Evt.GetFileByName("SCENARIOS");
                 scenarioFile.InitializeScenarioFile();
                 Items.Add(new ScenarioItem(scenarioFile.Scenario, this, log));
                 tracker.Finished++;
@@ -713,11 +816,11 @@ namespace SerialLoops.Lib
             try
             {
                 tracker.Focus("Group Selections", scenarioFile.Scenario.Selects.Count);
-                for (int i = 0; i < scenarioFile.Scenario.Selects.Count; i++)
+                Items.AddRange(scenarioFile.Scenario.Selects.Select((s, i) =>
                 {
-                    Items.Add(new GroupSelectionItem(scenarioFile.Scenario.Selects[i], i, this));
                     tracker.Finished++;
-                }
+                    return new GroupSelectionItem(s, i, this);
+                }));
             }
             catch (Exception ex)
             {
@@ -765,7 +868,7 @@ namespace SerialLoops.Lib
 
         public bool VoiceMapIsV06OrHigher()
         {
-            return Evt.Files.Any(f => f.Name == "VOICEMAPS") && Encoding.ASCII.GetString(Evt.Files.First(f => f.Name == "VOICEMAPS").Data.Skip(0x08).Take(4).ToArray()) == "SUBS";
+            return Evt.Files.AsParallel().Any(f => f.Name == "VOICEMAPS") && Encoding.ASCII.GetString(Evt.GetFileByName("VOICEMAPS").Data.Skip(0x08).Take(4).ToArray()) == "SUBS";
         }
 
         public void MigrateProject(string newRom, ILogger log, IProgressTracker tracker)
@@ -808,7 +911,7 @@ namespace SerialLoops.Lib
             {
                 return null;
             }
-            return Items.FirstOrDefault(i => name.Contains(" - ") ? i.Name == name.Split(" - ")[0] : i.DisplayName == name);
+            return Items.FirstOrDefault(i => i.DisplayName == name);
         }
 
         public static (Project Project, LoadProjectResult Result) OpenProject(string projFile, Config config, Func<string, string> localize, ILogger log, IProgressTracker tracker)
@@ -847,7 +950,7 @@ namespace SerialLoops.Lib
         {
             try
             {
-                File.WriteAllText(Path.Combine(MainDirectory, $"{Name}.{PROJECT_FORMAT}"), JsonSerializer.Serialize<Project>(this, SERIALIZER_OPTIONS));
+                File.WriteAllText(Path.Combine(MainDirectory, $"{Name}.{PROJECT_FORMAT}"), JsonSerializer.Serialize(this, SERIALIZER_OPTIONS));
             }
             catch (Exception ex)
             {

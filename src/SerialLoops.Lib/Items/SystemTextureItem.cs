@@ -2,10 +2,8 @@
 using HaruhiChokuretsuLib.Archive.Graphics;
 using HaruhiChokuretsuLib.Util;
 using SkiaSharp;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace SerialLoops.Lib.Items
 {
@@ -19,7 +17,7 @@ namespace SerialLoops.Lib.Items
         public SystemTextureItem(SystemTexture sysTex, Project project, string name, int width = -1, int height = -1) : base(name, ItemType.System_Texture)
         {
             SysTex = sysTex;
-            Grp = project.Grp.Files.First(f => f.Index == sysTex.GrpIndex);
+            Grp = project.Grp.GetFileByIndex(sysTex.GrpIndex);
             if (SysTex.Screen == SysTexScreen.BOTTOM_SCREEN)
             {
                 Grp.ImageForm = GraphicsFile.Form.TEXTURE;

@@ -30,7 +30,7 @@ namespace SerialLoops.Editors
             };
 
             MapItem map = (MapItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Map && i.Name ==
-                _project.Dat.Files.First(f => f.Name == "QMAPS").CastTo<QMapFile>().QMaps[_puzzle.Puzzle.Settings.MapId].Name[0..^2]);
+                _project.Dat.GetFileByName("QMAPS").CastTo<QMapFile>().QMaps[_puzzle.Puzzle.Settings.MapId].Name[0..^2]);
 
             GroupBox topicsBox = new() { Text = Application.Instance.Localize(this, "Associated Main Topics"), Padding = 5 };
             StackLayout topics = new() { Orientation = Orientation.Vertical, Spacing = 5 };
