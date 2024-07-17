@@ -1672,11 +1672,14 @@ namespace SerialLoops.Editors
             ((BoolScriptParameter)checkBox.Command.Parameters[checkBox.ParameterIndex]).Value = checkBox.Checked ?? false;
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(checkBox.Command.Section)]
                 .Objects[checkBox.Command.Index].Parameters[checkBox.ParameterIndex] = (checkBox.Checked ?? false) ? ((BoolScriptParameter)checkBox.Command.Parameters[checkBox.ParameterIndex]).TrueValue : ((BoolScriptParameter)checkBox.Command.Parameters[checkBox.ParameterIndex]).FalseValue;
-            foreach (ScriptCommandNumericStepper disableableStepper in checkBox.DisableableNumericSteppers)
+            if (checkBox.DisableableNumericSteppers is not null)
             {
-                disableableStepper.MinValue = (checkBox.Checked ?? false) ? -1 : 0;
-                disableableStepper.Value = (checkBox.Checked ?? false) ? -1 : 0;
-                disableableStepper.Enabled = !(checkBox.Checked ?? false);
+                foreach (ScriptCommandNumericStepper disableableStepper in checkBox.DisableableNumericSteppers)
+                {
+                    disableableStepper.MinValue = (checkBox.Checked ?? false) ? -1 : 0;
+                    disableableStepper.Value = (checkBox.Checked ?? false) ? -1 : 0;
+                    disableableStepper.Enabled = !(checkBox.Checked ?? false);
+                }
             }
 
             UpdateTabTitle(false);
