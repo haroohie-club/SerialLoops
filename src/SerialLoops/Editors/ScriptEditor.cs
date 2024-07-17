@@ -41,8 +41,8 @@ namespace SerialLoops.Editors
         private CancellationTokenSource _dialogueCancellation;
         private System.Timers.Timer _dialogueRefreshTimer;
         private int _chibiHighlighted = -1;
-        private ScriptCommandDropDown _currentSpeakerDropDown; // This property is used for storing the speaker dropdown to append dialogue property dropdowns to
-        private ScriptCommandCheckBox _currentLoadSoundCheckBox; // This property is used for storing the speaker dropdown to append dialogue property dropdowns to
+        private ScriptCommandDropDown _currentSpeakerDropDown; // This field is used to store the speaker dropdown to append dialogue property dropdowns to
+        private ScriptCommandCheckBox _currentLoadSoundCheckBox; // This field is used to store the "load sound" checkbox to append the crossfade time numeric stepper to
         private Action _updateOptionDropDowns;
 
         public override Container GetEditorPanel()
