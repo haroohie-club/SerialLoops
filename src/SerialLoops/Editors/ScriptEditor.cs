@@ -42,6 +42,7 @@ namespace SerialLoops.Editors
         private System.Timers.Timer _dialogueRefreshTimer;
         private int _chibiHighlighted = -1;
         private ScriptCommandDropDown _currentSpeakerDropDown; // This property is used for storing the speaker dropdown to append dialogue property dropdowns to
+        private ScriptCommandCheckBox _currentLoadSoundCheckBox; // This property is used for storing the speaker dropdown to append dialogue property dropdowns to
         private Action _updateOptionDropDowns;
 
         public override Container GetEditorPanel()
@@ -218,6 +219,11 @@ namespace SerialLoops.Editors
                                     invocation.Parameters[1] = 1;
                                     break;
 
+                                case CommandVerb.BGM_PLAY:
+                                    invocation.Parameters[1] = (short)BgmModeScriptParameter.BgmMode.START;
+                                    invocation.Parameters[2] = 100;
+                                    break;
+
                                 case CommandVerb.CHIBI_ENTEREXIT:
                                 case CommandVerb.CHIBI_EMOTE:
                                     invocation.Parameters[0] = (short)((ChibiItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Chibi)).TopScreenIndex;
@@ -263,6 +269,13 @@ namespace SerialLoops.Editors
 
                                 case CommandVerb.SCREEN_FADEOUT:
                                     invocation.Parameters[1] = 100;
+                                    break;
+
+                                case CommandVerb.SND_PLAY:
+                                    invocation.Parameters[1] = (short)SfxModeScriptParameter.SfxMode.START;
+                                    invocation.Parameters[2] = 100;
+                                    invocation.Parameters[3] = -1;
+                                    invocation.Parameters[4] = -1;
                                     break;
 
                                 case CommandVerb.SELECT:
@@ -1030,6 +1043,11 @@ namespace SerialLoops.Editors
 
                         case ScriptParameter.ParameterType.BOOL:
                             ScriptCommandCheckBox boolParameterCheckbox = new() { Command = command, ParameterIndex = i, Checked = ((BoolScriptParameter)parameter).Value };
+                            if (command.Verb == CommandVerb.SND_PLAY)
+                            {
+                                boolParameterCheckbox.DisableableNumericSteppers = [];
+                                _currentLoadSoundCheckBox = boolParameterCheckbox;
+                            }
                             boolParameterCheckbox.CheckedChanged += BoolParameterCheckbox_CheckedChanged;
 
                             ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
@@ -1131,7 +1149,7 @@ namespace SerialLoops.Editors
 
                         case ScriptParameter.ParameterType.DIALOGUE:
                             DialogueScriptParameter dialogueParam = (DialogueScriptParameter)parameter;
-                            ScriptCommandDropDown speakerDropDown = new() { Command = command, ParameterIndex = i, OtherDropDowns = new() };
+                            ScriptCommandDropDown speakerDropDown = new() { Command = command, ParameterIndex = i, OtherDropDowns = [] };
                             speakerDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Character).Select(c => new ListItem { Key = c.DisplayName, Text = c.DisplayName[4..] }));
                             try
                             {
@@ -1360,7 +1378,20 @@ namespace SerialLoops.Editors
                                 DecimalPlaces = 0,
                                 Value = ((ShortScriptParameter)parameter).Value
                             };
-                            if (parameter.Name.Contains(Application.Instance.Localize(this, "Frames")))
+                            if (command.Verb == CommandVerb.SND_PLAY && parameter.Name.Equals(Application.Instance.Localize(this, "Crossfade Time (Frames)"), StringComparison.OrdinalIgnoreCase))
+                            {
+                                _currentLoadSoundCheckBox.DisableableNumericSteppers.Add(shortNumericStepper);
+                                shortNumericStepper.MinValue = -1;
+                                if (((ShortScriptParameter)parameter).Value < 0 && (_currentLoadSoundCheckBox.Checked ?? false))
+                                {
+                                    shortNumericStepper.Enabled = false;
+                                }
+                                else
+                                {
+                                    _currentLoadSoundCheckBox.Checked = false;
+                                }
+                            }
+                            else if (parameter.Name.Contains(Application.Instance.Localize(this, "Frames")))
                             {
                                 shortNumericStepper.MinValue = 0;
                             }
@@ -1368,10 +1399,6 @@ namespace SerialLoops.Editors
                             {
                                 shortNumericStepper.MinValue = 0;
                                 shortNumericStepper.MaxValue = 100;
-                            }
-                            if (command.Verb == CommandVerb.SND_PLAY && parameter.Name == Application.Instance.Localize(this, "Crossfade Time (Frames)"))
-                            {
-                                shortNumericStepper.SecondIndex = 4;
                             }
                             if (command.Verb == CommandVerb.HARUHI_METER)
                             {
@@ -1640,10 +1667,15 @@ namespace SerialLoops.Editors
         private void BoolParameterCheckbox_CheckedChanged(object sender, EventArgs e)
         {
             ScriptCommandCheckBox checkBox = (ScriptCommandCheckBox)sender;
-            _log.Log($"Attempting to modify parameter {checkBox.ParameterIndex} to BGM mode {checkBox.Checked} in {checkBox.Command.Index} in file {_script.Name}...");
+            _log.Log($"Attempting to modify parameter {checkBox.ParameterIndex} to {checkBox.Checked} in {checkBox.Command.Index} in file {_script.Name}...");
             ((BoolScriptParameter)checkBox.Command.Parameters[checkBox.ParameterIndex]).Value = checkBox.Checked ?? false;
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(checkBox.Command.Section)]
-                .Objects[checkBox.Command.Index].Parameters[checkBox.ParameterIndex] = (short)((checkBox.Checked ?? false) ? 1 : 0);
+                .Objects[checkBox.Command.Index].Parameters[checkBox.ParameterIndex] = (checkBox.Checked ?? false) ? ((BoolScriptParameter)checkBox.Command.Parameters[checkBox.ParameterIndex]).TrueValue : ((BoolScriptParameter)checkBox.Command.Parameters[checkBox.ParameterIndex]).FalseValue;
+            foreach (ScriptCommandNumericStepper disableableStepper in checkBox.DisableableNumericSteppers)
+            {
+                disableableStepper.Value = (checkBox.Checked ?? false) ? -1 : 0;
+                disableableStepper.Enabled = !(checkBox.Checked ?? false);
+            }
 
             UpdateTabTitle(false);
             Application.Instance.Invoke(() => UpdatePreview());
