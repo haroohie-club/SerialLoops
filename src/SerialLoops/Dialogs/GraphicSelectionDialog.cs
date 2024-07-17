@@ -54,7 +54,7 @@ namespace SerialLoops.Dialogs
             {
                 Size = new Size(150, 390),
                 DataStore = _items.Where(i => _specialPredicate((ItemDescription)i)),
-                SelectedIndex = _items.IndexOf(_currentSelection),
+                SelectedIndex = _items.Where(i => _specialPredicate((ItemDescription)i)).ToList().IndexOf(_currentSelection),
                 ItemTextBinding = Binding.Delegate<IPreviewableGraphic, string>(i => ((ItemDescription)i).DisplayName),
                 ItemKeyBinding = Binding.Delegate<IPreviewableGraphic, string>(i => ((ItemDescription)i).Name),
             };

@@ -469,7 +469,7 @@ namespace SerialLoops.Lib
 
             try
             {
-                string[] bgmFiles = SoundDS.BgmSection.AsParallel().Where(bgm => bgm is not null).Select(bgm => Path.Combine(IterativeDirectory, "rom", "data", bgm)).ToArray(); /*Directory.GetFiles(Path.Combine(IterativeDirectory, "rom", "data", "bgm")).OrderBy(s => s).ToArray();*/
+                string[] bgmFiles = SoundDS.BgmSection.AsParallel().Where(bgm => bgm is not null).Select(bgm => Path.Combine(IterativeDirectory, "rom", "data", bgm)).ToArray();
                 tracker.Focus("BGM Tracks", bgmFiles.Length);
                 Items.AddRange(bgmFiles.AsParallel().Select((bgm, i) =>
                 {
@@ -484,7 +484,7 @@ namespace SerialLoops.Lib
             }
             try
             {
-                string[] voiceFiles = SoundDS.VoiceSection.AsParallel().Where(vce => vce is not null).Select(vce => Path.Combine(IterativeDirectory, "rom", "data", vce)).ToArray(); /*Directory.GetFiles(Path.Combine(IterativeDirectory, "rom", "data", "vce")).OrderBy(s => s).ToArray();*/
+                string[] voiceFiles = SoundDS.VoiceSection.AsParallel().Where(vce => vce is not null).Select(vce => Path.Combine(IterativeDirectory, "rom", "data", vce)).ToArray();
                 tracker.Focus("Voiced Lines", voiceFiles.Length);
                 Items.AddRange(voiceFiles.AsParallel().Select((vce, i) =>
                 {
@@ -867,7 +867,7 @@ namespace SerialLoops.Lib
 
             for (int i = 0; i < Items.Count; i++)
             {
-                if (Items[i].CanRename || Items[i].Type == ItemDescription.ItemType.Place) // We don't want to manually rename places, but they do use the display name pattern
+                if (Items[i].CanRename || Items[i].Type == ItemType.Place) // We don't want to manually rename places, but they do use the display name pattern
                 {
                     if (ItemNames.TryGetValue(Items[i].Name, out string value))
                     {
@@ -879,6 +879,8 @@ namespace SerialLoops.Lib
                     }
                 }
             }
+
+            Items = [.. Items.OrderBy(i => i.DisplayName)];
 
             return new(LoadProjectState.SUCCESS);
         }
