@@ -1381,14 +1381,15 @@ namespace SerialLoops.Editors
                             if (command.Verb == CommandVerb.SND_PLAY && parameter.Name.Equals(Application.Instance.Localize(this, "Crossfade Time (Frames)"), StringComparison.OrdinalIgnoreCase))
                             {
                                 _currentLoadSoundCheckBox.DisableableNumericSteppers.Add(shortNumericStepper);
-                                shortNumericStepper.MinValue = -1;
                                 if (((ShortScriptParameter)parameter).Value < 0 && (_currentLoadSoundCheckBox.Checked ?? false))
                                 {
                                     shortNumericStepper.Enabled = false;
+                                    shortNumericStepper.MinValue = -1;
                                 }
                                 else
                                 {
                                     _currentLoadSoundCheckBox.Checked = false;
+                                    shortNumericStepper.MinValue = 0;
                                 }
                             }
                             else if (parameter.Name.Contains(Application.Instance.Localize(this, "Frames")))
@@ -1673,6 +1674,7 @@ namespace SerialLoops.Editors
                 .Objects[checkBox.Command.Index].Parameters[checkBox.ParameterIndex] = (checkBox.Checked ?? false) ? ((BoolScriptParameter)checkBox.Command.Parameters[checkBox.ParameterIndex]).TrueValue : ((BoolScriptParameter)checkBox.Command.Parameters[checkBox.ParameterIndex]).FalseValue;
             foreach (ScriptCommandNumericStepper disableableStepper in checkBox.DisableableNumericSteppers)
             {
+                disableableStepper.MinValue = (checkBox.Checked ?? false) ? -1 : 0;
                 disableableStepper.Value = (checkBox.Checked ?? false) ? -1 : 0;
                 disableableStepper.Enabled = !(checkBox.Checked ?? false);
             }
