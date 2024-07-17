@@ -13,6 +13,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace SerialLoops.Lib
@@ -117,9 +118,9 @@ namespace SerialLoops.Lib
                         {
                             ReplaceSingleGraphicsFile(grp, file, index, project.Localize, log);
                         }
-                        else if (file.EndsWith("_pal.csv", StringComparison.OrdinalIgnoreCase))
+                        else if (file.EndsWith(".gi", StringComparison.OrdinalIgnoreCase))
                         {
-                            // ignore palette files as they will be handled by the PNGs above
+                            // ignore graphics info files as they will be handled by the PNGs above
                         }
                         else if (Path.GetExtension(file).Equals(".s", StringComparison.OrdinalIgnoreCase))
                         {
@@ -232,12 +233,9 @@ namespace SerialLoops.Lib
                     grpFile.InitializeFontFile();
                 }
 
-                string paletteFile = Path.Combine(Path.GetDirectoryName(filePath), $"{Path.GetFileNameWithoutExtension(filePath)}_pal.csv");
-                if (File.Exists(paletteFile))
-                {
-                    grpFile.SetPalette(File.ReadAllText(paletteFile).Split(',').Select(c => SKColor.Parse(c)).ToList());
-                }
+                GraphicInfo graphicInfo = JsonSerializer.Deserialize<GraphicInfo>(File.ReadAllText(Path.Combine(Path.GetDirectoryName(filePath), $"{Path.GetFileNameWithoutExtension(filePath)}.gi")));
 
+                graphicInfo.Set(grpFile);
                 grpFile.SetImage(filePath, newSize: true);
 
                 grp.Files[grp.Files.IndexOf(grpFile)] = grpFile;

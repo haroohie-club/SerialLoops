@@ -2,6 +2,7 @@
 using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Graphics;
 using HaruhiChokuretsuLib.Util;
+using SerialLoops.Lib.Util;
 using SkiaSharp;
 using System.Collections.Generic;
 using System.IO;
@@ -158,6 +159,8 @@ namespace SerialLoops.Lib.Items
         private void SetEyeAnimation(List<(SKBitmap Frame, short Time)> framesAndTimings, List<SKColor> palette)
         {
             GraphicsFile newEyeTexture = Graphics.EyeAnimation.SetFrameAnimationAndGetTexture(framesAndTimings, palette);
+            GraphicInfo eyeTexInfo = new(Graphics.EyeTexture);
+            eyeTexInfo.SetWithoutPalette(newEyeTexture);
             newEyeTexture.Index = Graphics.EyeTexture.Index;
             Graphics.EyeTexture = newEyeTexture;
         }
@@ -165,6 +168,8 @@ namespace SerialLoops.Lib.Items
         private void SetMouthAnimation(List<(SKBitmap Frame, short Time)> framesAndTimings, List<SKColor> palette)
         {
             GraphicsFile newMouthTexture = Graphics.MouthAnimation.SetFrameAnimationAndGetTexture(framesAndTimings, palette);
+            GraphicInfo mouthTexInfo = new(Graphics.MouthTexture);
+            mouthTexInfo.SetWithoutPalette(newMouthTexture);
             newMouthTexture.Index = Graphics.MouthTexture.Index;
             Graphics.MouthTexture = newMouthTexture;
         }
@@ -188,20 +193,20 @@ namespace SerialLoops.Lib.Items
                 using MemoryStream bodyTextureStream = new();
                 bodyTexture.GetImage().Encode(bodyTextureStream, SKEncodedImageFormat.Png, GraphicsFile.PNG_QUALITY);
                 IO.WriteBinaryFile(Path.Combine("assets", "graphics", $"{bodyTexture.Index:X3}.png"), bodyTextureStream.ToArray(), project, log);
-                IO.WriteStringFile(Path.Combine("assets", "graphics", $"{bodyTexture.Index:X3}_pal.csv"), string.Join(',', bodyTexture.Palette.Select(c => c.ToString())), project, log);
+                IO.WriteStringFile(Path.Combine("assets", "graphics", $"{bodyTexture.Index:X3}.gi"), bodyTexture.GetGraphicInfoFile(), project, log);
             }
 
             IO.WriteBinaryFile(Path.Combine("assets", "graphics", $"{EyeAnimation.Index:X3}.bna"), EyeAnimation.GetBytes(), project, log);
             using MemoryStream eyeTextureStream = new();
             EyeTexture.GetImage().Encode(eyeTextureStream, SKEncodedImageFormat.Png, GraphicsFile.PNG_QUALITY);
             IO.WriteBinaryFile(Path.Combine("assets", "graphics", $"{EyeTexture.Index:X3}.png"), eyeTextureStream.ToArray(), project, log);
-            IO.WriteStringFile(Path.Combine("assets", "graphics", $"{EyeTexture.Index:X3}_pal.csv"), string.Join(',', EyeTexture.Palette.Select(c => c.ToString())), project, log);
+            IO.WriteStringFile(Path.Combine("assets", "graphics", $"{EyeTexture.Index:X3}.gi"), EyeTexture.GetGraphicInfoFile(), project, log);
 
             IO.WriteBinaryFile(Path.Combine("assets", "graphics", $"{MouthAnimation.Index:X3}.bna"), MouthAnimation.GetBytes(), project, log);
             using MemoryStream mouthTextureStream = new();
             MouthTexture.GetImage().Encode(mouthTextureStream, SKEncodedImageFormat.Png, GraphicsFile.PNG_QUALITY);
             IO.WriteBinaryFile(Path.Combine("assets", "graphics", $"{MouthTexture.Index:X3}.png"), mouthTextureStream.ToArray(), project, log);
-            IO.WriteStringFile(Path.Combine("assets", "graphics", $"{MouthTexture.Index:X3}_pal.csv"), string.Join(',', MouthTexture.Palette.Select(c => c.ToString())), project, log);
+            IO.WriteStringFile(Path.Combine("assets", "graphics", $"{MouthTexture.Index:X3}.gi"), MouthTexture.GetGraphicInfoFile(), project, log);
         }
     }
 }

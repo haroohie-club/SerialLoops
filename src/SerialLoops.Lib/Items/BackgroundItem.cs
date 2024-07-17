@@ -204,16 +204,14 @@ namespace SerialLoops.Lib.Items
             using MemoryStream grp1Stream = new();
             Graphic1.GetImage().Encode(grp1Stream, SKEncodedImageFormat.Png, 1);
             IO.WriteBinaryFile(Path.Combine("assets", "graphics", $"{Graphic1.Index:X3}.png"), grp1Stream.ToArray(), project, log);
-            IO.WriteStringFile(Path.Combine("assets", "graphics", $"{Graphic1.Index:X3}_pal.csv"),
-                string.Join(',', Graphic1.Palette.Select(c => c.ToString())), project, log);
+            IO.WriteStringFile(Path.Combine("assets", "graphics", $"{Graphic1.Index:X3}.gi"), Graphic1.GetGraphicInfoFile(), project, log);
 
             if (BackgroundType != BgType.KINETIC_SCREEN && BackgroundType != BgType.TEX_CG_SINGLE)
             {
                 using MemoryStream grp2Stream = new();
                 Graphic2.GetImage().Encode(grp2Stream, SKEncodedImageFormat.Png, 1);
                 IO.WriteBinaryFile(Path.Combine("assets", "graphics", $"{Graphic2.Index:X3}.png"), grp2Stream.ToArray(), project, log);
-                IO.WriteStringFile(Path.Combine("assets", "graphics", $"{Graphic2.Index:X3}_pal.csv"),
-                    string.Join(',', Graphic1.Palette.Select(c => c.ToString())), project, log);
+                IO.WriteStringFile(Path.Combine("assets", "graphics", $"{Graphic2.Index:X3}.gi"), Graphic1.GetGraphicInfoFile(), project, log);
             }
             else if (BackgroundType == BgType.KINETIC_SCREEN)
             {

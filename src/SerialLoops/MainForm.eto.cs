@@ -592,7 +592,7 @@ namespace SerialLoops
                             File.Delete(Path.Combine(OpenProject.BaseDirectory, "assets", "graphics",
                                 $"{result.BadFileIndex:X3}.png"));
                             File.Delete(Path.Combine(OpenProject.BaseDirectory, "assets", "graphics",
-                                $"{result.BadFileIndex:X3}_pal.csv"));
+                                $"{result.BadFileIndex:X3}.gi"));
                             break;
 
                         case "evt.bin":

@@ -1,4 +1,5 @@
 ﻿using HaruhiChokuretsuLib.Archive.Event;
+using HaruhiChokuretsuLib.Archive.Graphics;
 using HaruhiChokuretsuLib.Font;
 using SerialLoops.Lib.Script.Parameters;
 using SkiaSharp;
@@ -28,9 +29,9 @@ namespace SerialLoops.Lib.Util
             };
         }
 
-        public static SKRectI ToSKRectI(this SKRect rect)
+        public static string GetGraphicInfoFile(this GraphicsFile grp)
         {
-            return new((int)rect.Left, (int)rect.Top, (int)rect.Right, (int)rect.Bottom);
+            return JsonSerializer.Serialize(new GraphicInfo(grp));
         }
 
         public static string GetSubstitutedString(this string line, Project project)
