@@ -265,7 +265,7 @@ namespace SerialLoops.Lib
             tracker.CurrentlyLoading = "snd.bin";
             try
             {
-                Snd = new(Path.Combine(IterativeDirectory, "rom", "data", "snd.bin"));
+                Snd = new(Path.Combine(IterativeDirectory, "original", "archives", "snd.bin"));
             }
             catch (Exception ex)
             {

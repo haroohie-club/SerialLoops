@@ -66,8 +66,6 @@ namespace SerialLoops.Tests
             IO.CopyFiles(Path.Combine(_dataDir, "bgm"), Path.Combine(_project.IterativeDirectory, bgmDir), _log);
             IO.CopyFiles(Path.Combine(_dataDir, "vce"), Path.Combine(_project.BaseDirectory, vceDir), _log);
             IO.CopyFiles(Path.Combine(_dataDir, "vce"), Path.Combine(_project.IterativeDirectory, vceDir), _log);
-            File.Copy(Path.Combine(_dataDir, "snd.bin"), Path.Combine(_project.BaseDirectory, "rom", "data", "snd.bin"));
-            File.Copy(Path.Combine(_dataDir, "snd.bin"), Path.Combine(_project.IterativeDirectory, "rom", "data", "snd.bin"));
 
             // Load the project archives
             _project.LoadArchives(_log, _progressTracker);

@@ -213,6 +213,7 @@ namespace SerialLoops.Lib
                 File.Copy(Path.Combine(newDataDir, "dat.bin"), Path.Combine(iterativeOriginalDir, "dat.bin"), overwrite: true);
                 File.Copy(Path.Combine(newDataDir, "evt.bin"), Path.Combine(iterativeOriginalDir, "evt.bin"), overwrite: true);
                 File.Copy(Path.Combine(newDataDir, "grp.bin"), Path.Combine(iterativeOriginalDir, "grp.bin"), overwrite: true);
+                File.Copy(Path.Combine(newDataDir, "snd.bin"), Path.Combine(iterativeOriginalDir, "snd.bin"), overwrite: true);
             }
             catch (IOException exc)
             {
