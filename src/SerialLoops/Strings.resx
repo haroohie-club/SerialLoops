@@ -176,11 +176,18 @@
   <data name="Add Map Characters" xml:space="preserve">
     <value>Add Map Characters</value>
   </data>
+  <data name="Add Read Flag" xml:space="preserve">
+    <value>Add Read Flag</value>
+    <comment>As in "add a read flag to the script"</comment>
+  </data>
   <data name="Add Section" xml:space="preserve">
     <value>Add Section</value>
   </data>
   <data name="Add Starting Chibis" xml:space="preserve">
     <value>Add Starting Chibis</value>
+  </data>
+  <data name="Add to Event Table" xml:space="preserve">
+    <value>Add to Event Table</value>
   </data>
   <data name="Adding frames to GIF..." xml:space="preserve">
     <value>Adding frames to GIF…</value>
@@ -1663,6 +1670,10 @@
   <data name="Remove Missing Projects" xml:space="preserve">
     <value>Remove Missing Projects</value>
   </data>
+  <data name="Remove Read Flag" xml:space="preserve">
+    <value>Remove Read Flag</value>
+    <comment>As in "remove this read flag from the script"</comment>
+  </data>
   <data name="Remove Starting Chibis" xml:space="preserve">
     <value>Remove Starting Chibis</value>
   </data>
@@ -1964,6 +1975,9 @@
   <data name="SFX" xml:space="preserve">
     <value>SFX</value>
   </data>
+  <data name="SFX Group" xml:space="preserve">
+    <value>SFX Group</value>
+  </data>
   <data name="SFXs" xml:space="preserve">
     <value>SFXs</value>
   </data>
@@ -2021,6 +2035,10 @@
   </data>
   <data name="Start" xml:space="preserve">
     <value>Start</value>
+  </data>
+  <data name="Start Read Flag" xml:space="preserve">
+    <value>Start Read Flag</value>
+    <comment>As in, the first read flag of the script file</comment>
   </data>
   <data name="Starting Chibis" xml:space="preserve">
     <value>Starting Chibis</value>
@@ -2081,6 +2099,9 @@
   </data>
   <data name="The changes made will require Serial Loops to be restarted. Is that okay?" xml:space="preserve">
     <value>The changes made will require Serial Loops to be restarted. Is that okay?</value>
+  </data>
+  <data name="This script is not included in the event table." xml:space="preserve">
+    <value>This script is not included in the event table.</value>
   </data>
   <data name="Time (Frames)" xml:space="preserve">
     <value>Time (Frames)</value>

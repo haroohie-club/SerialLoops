@@ -295,6 +295,15 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Read Flag.
+        /// </summary>
+        public static string Add_Read_Flag {
+            get {
+                return ResourceManager.GetString("Add Read Flag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add Section.
         /// </summary>
         public static string Add_Section {
@@ -309,6 +318,15 @@ namespace SerialLoops {
         public static string Add_Starting_Chibis {
             get {
                 return ResourceManager.GetString("Add Starting Chibis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add to Event Table.
+        /// </summary>
+        public static string Add_to_Event_Table {
+            get {
+                return ResourceManager.GetString("Add to Event Table", resourceCulture);
             }
         }
         
@@ -4702,6 +4720,15 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove Read Flag.
+        /// </summary>
+        public static string Remove_Read_Flag {
+            get {
+                return ResourceManager.GetString("Remove Read Flag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove Starting Chibis.
         /// </summary>
         public static string Remove_Starting_Chibis {
@@ -5595,6 +5622,15 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SFX Group.
+        /// </summary>
+        public static string SFX_Group {
+            get {
+                return ResourceManager.GetString("SFX Group", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SFXs.
         /// </summary>
         public static string SFXs {
@@ -5762,6 +5798,15 @@ namespace SerialLoops {
         public static string Start {
             get {
                 return ResourceManager.GetString("Start", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start Read Flag.
+        /// </summary>
+        public static string Start_Read_Flag {
+            get {
+                return ResourceManager.GetString("Start Read Flag", resourceCulture);
             }
         }
         
@@ -5942,6 +5987,15 @@ namespace SerialLoops {
         public static string The_changes_made_will_require_Serial_Loops_to_be_restarted__Is_that_okay_ {
             get {
                 return ResourceManager.GetString("The changes made will require Serial Loops to be restarted. Is that okay?", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This script is not included in the event table..
+        /// </summary>
+        public static string This_script_is_not_included_in_the_event_table_ {
+            get {
+                return ResourceManager.GetString("This script is not included in the event table.", resourceCulture);
             }
         }
         
