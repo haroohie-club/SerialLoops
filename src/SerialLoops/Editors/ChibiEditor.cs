@@ -45,7 +45,7 @@ namespace SerialLoops.Editors
             };
         }
 
-        private Container GetBottomPanel()
+        private TableLayout GetBottomPanel()
         {
             _animationSelection = new();
             _animationSelection.Items.AddRange(_chibi.ChibiEntries
