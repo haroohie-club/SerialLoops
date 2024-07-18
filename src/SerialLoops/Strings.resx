@@ -2070,6 +2070,9 @@
   <data name="The changes made will require Serial Loops to be restarted. Is that okay?" xml:space="preserve">
     <value>The changes made will require Serial Loops to be restarted. Is that okay?</value>
   </data>
+  <data name="This system texture uses a common palette, so palette replacement has been disabled" xml:space="preserve">
+    <value>This system texture uses a common palette, so palette replacement has been disabled</value>
+  </data>
   <data name="Time (Frames)" xml:space="preserve">
     <value>Time (Frames)</value>
   </data>
