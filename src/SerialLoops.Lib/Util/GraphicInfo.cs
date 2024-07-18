@@ -11,9 +11,8 @@ namespace SerialLoops.Lib.Util
         public string Determinant { get; set; }
         public GraphicsFile.TileForm TileForm { get; set; }
         public short Unknown08 { get; set; }
-        public short TileWidth { get; set; }
-        public short TileHeight { get; set; }
-        public short Unknown10 { get; set; }
+        public short RenderWidth { get; set; }
+        public short RenderHeight { get; set; }
         public short Unknown12 { get; set; }
         public string PaletteString { get; set; }
 
@@ -29,9 +28,8 @@ namespace SerialLoops.Lib.Util
             Determinant = file.Determinant;
             Unknown08 = file.Unknown08;
             TileForm = file.ImageTileForm;
-            TileWidth = file.TileWidth;
-            TileHeight = file.TileHeight;
-            Unknown10 = file.Unknown10;
+            RenderWidth = file.RenderWidth;
+            RenderHeight = file.RenderHeight;
             Unknown12 = file.Unknown12;
             PaletteString = string.Join(',', file.Palette.Select(c => c.ToString()));
         }
@@ -47,9 +45,8 @@ namespace SerialLoops.Lib.Util
             file.Determinant = Determinant;
             file.ImageTileForm = TileForm;
             file.Unknown08 = Unknown08;
-            file.TileWidth = TileWidth;
-            file.TileHeight = TileHeight;
-            file.Unknown10 = Unknown10;
+            file.RenderWidth = RenderWidth;
+            file.RenderHeight = RenderHeight;
             file.Unknown12 = Unknown12;
         }
     }

@@ -44,27 +44,21 @@ namespace SerialLoops.Editors
                 _sprite.Sprite.IsLarge = isLargeCheckBox.Checked ?? true;
                 if (_sprite.Sprite.IsLarge)
                 {
-                    _sprite.Graphics.BodyTextures[2].TileWidth *= 2;
-                    _sprite.Graphics.BodyTextures[2].TileHeight *= 2;
-                    _sprite.Graphics.BodyTextures[2].Unknown10 *= 4;
-                    _sprite.Graphics.EyeTexture.TileWidth *= 2;
-                    _sprite.Graphics.EyeTexture.TileHeight *= 2;
-                    _sprite.Graphics.EyeTexture.Unknown10 *= 4;
-                    _sprite.Graphics.MouthTexture.TileWidth *= 2;
-                    _sprite.Graphics.MouthTexture.TileHeight *= 2;
-                    _sprite.Graphics.MouthTexture.Unknown10 *= 4;
+                    _sprite.Graphics.BodyTextures[2].RenderHeight *= 2;
+                    _sprite.Graphics.BodyTextures[2].RenderWidth *= 2;
+                    _sprite.Graphics.EyeTexture.RenderWidth *= 2;
+                    _sprite.Graphics.EyeTexture.RenderHeight *= 2;
+                    _sprite.Graphics.MouthTexture.RenderWidth *= 2;
+                    _sprite.Graphics.MouthTexture.RenderHeight *= 2;
                 }
                 else
                 {
-                    _sprite.Graphics.BodyTextures[2].TileWidth /= 2;
-                    _sprite.Graphics.BodyTextures[2].TileHeight /= 2;
-                    _sprite.Graphics.BodyTextures[2].Unknown10 /= 4;
-                    _sprite.Graphics.EyeTexture.TileWidth /= 2;
-                    _sprite.Graphics.EyeTexture.TileHeight /= 2;
-                    _sprite.Graphics.EyeTexture.Unknown10 /= 4;
-                    _sprite.Graphics.MouthTexture.TileWidth /= 2;
-                    _sprite.Graphics.MouthTexture.TileHeight /= 2;
-                    _sprite.Graphics.MouthTexture.Unknown10 /= 4;
+                    _sprite.Graphics.BodyTextures[2].RenderWidth /= 2;
+                    _sprite.Graphics.BodyTextures[2].RenderHeight /= 2;
+                    _sprite.Graphics.EyeTexture.RenderWidth /= 2;
+                    _sprite.Graphics.EyeTexture.RenderHeight /= 2;
+                    _sprite.Graphics.MouthTexture.RenderWidth /= 2;
+                    _sprite.Graphics.MouthTexture.RenderHeight /= 2;
                 }
                 UpdateTabTitle(false, this);
             };
