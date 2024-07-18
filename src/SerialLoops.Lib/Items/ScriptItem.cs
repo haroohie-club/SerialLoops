@@ -553,7 +553,7 @@ namespace SerialLoops.Lib.Items
                     previousCommand = command;
                 }
 
-                preview.Sprites = sprites.Values.OrderBy(p => p.Positioning.Layer).ToList();
+                preview.Sprites = [.. sprites.Values.OrderBy(p => p.Positioning.Layer)];
 
                 // Draw dialogue
                 ScriptItemCommand lastDialogueCommand = commands.LastOrDefault(c => c.Verb == CommandVerb.DIALOGUE);

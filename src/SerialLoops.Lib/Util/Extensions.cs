@@ -1,4 +1,5 @@
 ﻿using HaruhiChokuretsuLib.Archive.Event;
+using HaruhiChokuretsuLib.Archive.Graphics;
 using HaruhiChokuretsuLib.Font;
 using SerialLoops.Lib.Script.Parameters;
 using SkiaSharp;
@@ -26,6 +27,11 @@ namespace SerialLoops.Lib.Util
                 SpritePosition.RIGHT => 64,
                 _ => 0,
             };
+        }
+
+        public static string GetGraphicInfoFile(this GraphicsFile grp)
+        {
+            return JsonSerializer.Serialize(new GraphicInfo(grp));
         }
 
         public static string GetSubstitutedString(this string line, Project project)

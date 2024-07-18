@@ -18,6 +18,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using static SerialLoops.Lib.Items.ItemDescription;
 
 namespace SerialLoops.Lib
 {
@@ -32,6 +33,7 @@ namespace SerialLoops.Lib
         public Dictionary<string, string> ItemNames { get; set; }
         public Dictionary<int, NameplateProperties> Characters { get; set; }
 
+        // SL settings
         [JsonIgnore]
         public string BaseDirectory => Path.Combine(MainDirectory, "base");
         [JsonIgnore]
@@ -45,6 +47,7 @@ namespace SerialLoops.Lib
         [JsonIgnore]
         public List<ItemDescription> Items { get; set; } = new();
 
+        // Archives
         [JsonIgnore]
         public ArchiveFile<DataFile> Dat { get; set; }
         [JsonIgnore]
@@ -54,6 +57,7 @@ namespace SerialLoops.Lib
         [JsonIgnore]
         public SoundArchive Snd { get; set; }
 
+        // Common graphics
         [JsonIgnore]
         public FontReplacementDictionary FontReplacement { get; set; } = new();
         [JsonIgnore]
@@ -67,6 +71,9 @@ namespace SerialLoops.Lib
         [JsonIgnore]
         public SKBitmap FontBitmap { get; set; }
 
+        // Files shared between items
+        [JsonIgnore]
+        public CharacterDataFile ChrData { get; set; }
         [JsonIgnore]
         public EventFile EventTableFile { get; set; }
         [JsonIgnore]
@@ -88,6 +95,7 @@ namespace SerialLoops.Lib
         [JsonIgnore]
         public Dictionary<int, GraphicsFile> LayoutFiles { get; set; } = [];
 
+        // Localization function to make localizing accessible from the lib
         [JsonIgnore]
         public Func<string, string> Localize { get; set; }
 
@@ -356,7 +364,7 @@ namespace SerialLoops.Lib
             }
             tracker.Finished++;
 
-            tracker.Focus("Static Files", 5);
+            tracker.Focus("Static Files", 6);
             try
             {
                 EventTableFile = Evt.GetFileByName("EVTTBLS");
@@ -365,6 +373,15 @@ namespace SerialLoops.Lib
             catch (Exception ex)
             {
                 log.LogException($"Failed to load event table file", ex);
+            }
+            tracker.Finished++;
+            try
+            {
+                ChrData = Dat.GetFileByName("CHRDATAS").CastTo<CharacterDataFile>();
+            }
+            catch (Exception ex)
+            {
+                log.LogException("Failed to load chrdata file", ex);
                 return new(LoadProjectState.FAILED);
             }
             tracker.Finished++;
@@ -466,7 +483,7 @@ namespace SerialLoops.Lib
 
             try
             {
-                string[] bgmFiles = SoundDS.BgmSection.AsParallel().Where(bgm => bgm is not null).Select(bgm => Path.Combine(IterativeDirectory, "rom", "data", bgm)).ToArray(); /*Directory.GetFiles(Path.Combine(IterativeDirectory, "rom", "data", "bgm")).OrderBy(s => s).ToArray();*/
+                string[] bgmFiles = SoundDS.BgmSection.AsParallel().Where(bgm => bgm is not null).Select(bgm => Path.Combine(IterativeDirectory, "rom", "data", bgm)).ToArray();
                 tracker.Focus("BGM Tracks", bgmFiles.Length);
                 Items.AddRange(bgmFiles.AsParallel().Select((bgm, i) =>
                 {
@@ -481,7 +498,7 @@ namespace SerialLoops.Lib
             }
             try
             {
-                string[] voiceFiles = SoundDS.VoiceSection.AsParallel().Where(vce => vce is not null).Select(vce => Path.Combine(IterativeDirectory, "rom", "data", vce)).ToArray(); /*Directory.GetFiles(Path.Combine(IterativeDirectory, "rom", "data", "vce")).OrderBy(s => s).ToArray();*/
+                string[] voiceFiles = SoundDS.VoiceSection.AsParallel().Where(vce => vce is not null).Select(vce => Path.Combine(IterativeDirectory, "rom", "data", vce)).ToArray();
                 tracker.Focus("Voiced Lines", voiceFiles.Length);
                 Items.AddRange(voiceFiles.AsParallel().Select((vce, i) =>
                 {
@@ -535,12 +552,26 @@ namespace SerialLoops.Lib
 
             try
             {
-                CharacterDataFile chrdata = Dat.GetFileByName("CHRDATAS").CastTo<CharacterDataFile>();
-                tracker.Focus("Character Sprites", chrdata.Sprites.Count);
-                Items.AddRange(chrdata.Sprites.AsParallel().Where(s => (int)s.Character > 0).Select(s =>
+                tracker.Focus("Characters", MessInfo.MessageInfos.Count);
+                Items.AddRange(MessInfo.MessageInfos.AsParallel().Where(m => (int)m.Character > 0).Select(m =>
                 {
                     tracker.Finished++;
-                    return new CharacterSpriteItem(s, chrdata, this);
+                    return new CharacterItem(m, Characters[(int)m.Character], this);
+                }));
+            }
+            catch (Exception ex)
+            {
+                log.LogException($"Failed to load characters", ex);
+                return new(LoadProjectState.FAILED);
+            }
+
+            try
+            {
+                tracker.Focus("Character Sprites", ChrData.Sprites.Count);
+                Items.AddRange(ChrData.Sprites.AsParallel().Where(s => (int)s.Character > 0).Select(s =>
+                {
+                    tracker.Finished++;
+                    return new CharacterSpriteItem(s, ChrData, this, log);
                 }));
             }
             catch (Exception ex)
@@ -562,21 +593,6 @@ namespace SerialLoops.Lib
             catch (Exception ex)
             {
                 log.LogException($"Failed to load chibis", ex);
-                return new(LoadProjectState.FAILED);
-            }
-
-            try
-            {
-                tracker.Focus("Characters", MessInfo.MessageInfos.Count);
-                Items.AddRange(MessInfo.MessageInfos.AsParallel().Where(m => (int)m.Character > 0).Select(m =>
-                {
-                    tracker.Finished++;
-                    return new CharacterItem(m, Characters[(int)m.Character], this);
-                }));
-            }
-            catch (Exception ex)
-            {
-                log.LogException($"Failed to load characters", ex);
                 return new(LoadProjectState.FAILED);
             }
 
@@ -865,7 +881,7 @@ namespace SerialLoops.Lib
 
             for (int i = 0; i < Items.Count; i++)
             {
-                if (Items[i].CanRename || Items[i].Type == ItemDescription.ItemType.Place) // We don't want to manually rename places, but they do use the display name pattern
+                if (Items[i].CanRename || Items[i].Type == ItemType.Place) // We don't want to manually rename places, but they do use the display name pattern
                 {
                     if (ItemNames.TryGetValue(Items[i].Name, out string value))
                     {
@@ -877,6 +893,8 @@ namespace SerialLoops.Lib
                     }
                 }
             }
+
+            Items = [.. Items.OrderBy(i => i.DisplayName)];
 
             return new(LoadProjectState.SUCCESS);
         }
@@ -1023,6 +1041,11 @@ namespace SerialLoops.Lib
                 log.LogException("Failed to get search results!", ex);
                 return Array.Empty<ItemDescription>().ToList();
             }
+        }
+
+        public CharacterItem GetCharacterBySpeaker(Speaker speaker)
+        {
+            return (CharacterItem)Items.First(i => i.Type == ItemType.Character && i.DisplayName == $"CHR_{Characters[(int)speaker].Name}");
         }
 
         private bool ItemMatches(ItemDescription item, string term, SearchQuery.DataHolder scope, ILogger logger)

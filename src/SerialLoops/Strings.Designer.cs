@@ -5998,6 +5998,14 @@ namespace SerialLoops {
                 return ResourceManager.GetString("This script is not included in the event table.", resourceCulture);
             }
         }
+        ///   Looks up a localized string similar to This system texture uses a common palette, so palette replacement has been disabled.
+        /// </summary>
+        public static string This_system_texture_uses_a_common_palette__so_palette_replacement_has_been_disabled {
+            get {
+                return ResourceManager.GetString("This system texture uses a common palette, so palette replacement has been disabl" +
+                        "ed", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to Time (Frames).

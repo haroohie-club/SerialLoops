@@ -650,7 +650,7 @@ namespace SerialLoops.Editors
             }
 
             DropDown mapsDropdown = new();
-            mapsDropdown.Items.AddRange(maps.Select(m => new ListItem { Key = m.Name, Text = m.Name }));
+            mapsDropdown.Items.AddRange(maps.Select(m => new ListItem { Key = m.DisplayName, Text = m.DisplayName }));
             mapsDropdown.SelectedIndex = 0;
 
             PixelLayout mapLayout = new() { AllowDrop = true };
@@ -993,7 +993,7 @@ namespace SerialLoops.Editors
                     return;
                 }
 
-                Application.Instance.Invoke(() => UpdatePreview());
+                Application.Instance.Invoke(UpdatePreview);
 
                 if (command.Parameters.Count == 0)
                 {
@@ -1219,11 +1219,11 @@ namespace SerialLoops.Editors
 
                         case ScriptParameter.ParameterType.DIALOGUE:
                             DialogueScriptParameter dialogueParam = (DialogueScriptParameter)parameter;
-                            ScriptCommandDropDown speakerDropDown = new() { Command = command, ParameterIndex = i, OtherDropDowns = new() };
-                            speakerDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Character).Select(c => new ListItem { Key = c.DisplayName, Text = c.DisplayName[4..] }));
+                            ScriptCommandDropDown speakerDropDown = new() { Command = command, ParameterIndex = i, OtherDropDowns = [], AssociatedGraphicsButtons = [] };
+                            speakerDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Character).OrderBy(c => c.DisplayName).Select(c => new ListItem { Key = c.DisplayName, Text = c.DisplayName[4..] }));
                             try
                             {
-                                speakerDropDown.SelectedKey = _project.Items.First(i => i.Type == ItemDescription.ItemType.Character && i.DisplayName == $"CHR_{_project.Characters[(int)dialogueParam.Line.Speaker].Name}").DisplayName;
+                                speakerDropDown.SelectedKey = _project.GetCharacterBySpeaker(dialogueParam.Line.Speaker).DisplayName;
                             }
                             catch (InvalidOperationException)
                             {
@@ -1331,8 +1331,8 @@ namespace SerialLoops.Editors
                             MapScriptParameter mapParam = (MapScriptParameter)parameter;
                             ScriptCommandDropDown mapDropDown = new() { Command = command, ParameterIndex = i };
                             mapDropDown.Items.Add(new ListItem { Text = "NONE", Key = "NONE" });
-                            mapDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Map).Select(i => new ListItem { Text = i.Name, Key = i.Name }));
-                            mapDropDown.SelectedKey = mapParam.Map?.Name ?? "NONE";
+                            mapDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Map && !((MapItem)i).Map.Settings.SlgMode).Select(i => new ListItem { Text = i.DisplayName, Key = i.DisplayName }));
+                            mapDropDown.SelectedKey = mapParam.Map?.DisplayName ?? "NONE";
                             mapDropDown.SelectedKeyChanged += MapDropDown_SelectedKeyChanged;
 
                             ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
@@ -1474,12 +1474,13 @@ namespace SerialLoops.Editors
                         case ScriptParameter.ParameterType.SPRITE:
                             SpriteScriptParameter spriteParam = (SpriteScriptParameter)parameter;
                             CommandGraphicSelectionButton spriteSelectionButton = new(spriteParam.Sprite is not null ? spriteParam.Sprite
-                                : NonePreviewableGraphic.CHARACTER_SPRITE, _tabs, _log)
+                                : NonePreviewableGraphic.CHARACTER_SPRITE, _tabs, _log, i => i.Name == "NONE" || (i.Name != "NONE" && _project.GetCharacterBySpeaker(((CharacterSpriteItem)i).Sprite.Character).DisplayName == _currentSpeakerDropDown?.SelectedKey))
                             {
                                 Command = command,
                                 ParameterIndex = i,
                                 Project = _project,
                             };
+                            _currentSpeakerDropDown.AssociatedGraphicsButtons.Add(spriteSelectionButton);
                             spriteSelectionButton.Items.Add(NonePreviewableGraphic.CHARACTER_SPRITE);
                             spriteSelectionButton.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Character_Sprite).Select(s => (IPreviewableGraphic)s));
                             spriteSelectionButton.SelectedChanged.Executed += (obj, args) => SpriteSelectionButton_SelectionMade(spriteSelectionButton, args);
@@ -1682,7 +1683,7 @@ namespace SerialLoops.Editors
                     (short)((BackgroundItem)_project.Items.First(i => i.Name == ((ItemDescription)selection.Selected).Name)).Id;
             }
             UpdateTabTitle(false);
-            Application.Instance.Invoke(() => UpdatePreview());
+            Application.Instance.Invoke(UpdatePreview);
         }
         private void BgScrollDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
@@ -1695,7 +1696,7 @@ namespace SerialLoops.Editors
                 (short)Enum.Parse<BgScrollDirectionScriptParameter.BgScrollDirection>(dropDown.SelectedKey);
 
             UpdateTabTitle(false, dropDown);
-            Application.Instance.Invoke(() => UpdatePreview());
+            Application.Instance.Invoke(UpdatePreview);
         }
         private void BgmDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
@@ -1734,7 +1735,7 @@ namespace SerialLoops.Editors
                 .Objects[checkBox.Command.Index].Parameters[checkBox.ParameterIndex] = (short)((checkBox.Checked ?? false) ? 1 : 0);
 
             UpdateTabTitle(false);
-            Application.Instance.Invoke(() => UpdatePreview());
+            Application.Instance.Invoke(UpdatePreview);
         }
         private void ChibiDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
@@ -1746,7 +1747,7 @@ namespace SerialLoops.Editors
                 .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
                 (short)((ChibiItem)_project.Items.First(i => i.Name == dropDown.SelectedKey)).TopScreenIndex;
             UpdateTabTitle(false, dropDown);
-            Application.Instance.Invoke(() => UpdatePreview());
+            Application.Instance.Invoke(UpdatePreview);
         }
         private void ChibiEmoteDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
@@ -1758,7 +1759,7 @@ namespace SerialLoops.Editors
                 .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
                 (short)Enum.Parse<ChibiEmoteScriptParameter.ChibiEmote>(dropDown.SelectedKey);
             UpdateTabTitle(false, dropDown);
-            Application.Instance.Invoke(() => UpdatePreview());
+            Application.Instance.Invoke(UpdatePreview);
         }
         private void ChibiEnterExitDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
@@ -1770,7 +1771,7 @@ namespace SerialLoops.Editors
                 .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
                 (short)Enum.Parse<ChibiEnterExitScriptParameter.ChibiEnterExitType>(dropDown.SelectedKey);
             UpdateTabTitle(false, dropDown);
-            Application.Instance.Invoke(() => UpdatePreview());
+            Application.Instance.Invoke(UpdatePreview);
         }
         private void ColorPicker_ValueChanged(object sender, EventArgs e)
         {
@@ -1785,7 +1786,7 @@ namespace SerialLoops.Editors
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(colorPicker.Command.Section)]
                 .Objects[colorPicker.Command.Index].Parameters[colorPicker.ParameterIndex + 2] = (short)color.Blue;
             UpdateTabTitle(false);
-            Application.Instance.Invoke(() => UpdatePreview());
+            Application.Instance.Invoke(UpdatePreview);
         }
         private void ColorMonochromeDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
@@ -1797,7 +1798,7 @@ namespace SerialLoops.Editors
                 .Objects[dropDown.Command.Index].Parameters[dropDown.CurrentShort] =
                 (short)Enum.Parse<ColorMonochromeScriptParameter.ColorMonochrome>(dropDown.SelectedKey);
             UpdateTabTitle(false, dropDown);
-            Application.Instance.Invoke(() => UpdatePreview());
+            Application.Instance.Invoke(UpdatePreview);
         }
         private void ConditionalBox_TextChanged(object sender, EventArgs e)
         {
@@ -1833,8 +1834,12 @@ namespace SerialLoops.Editors
                     otherDropDown.SelectedKey = dropDown.SelectedKey;
                 }
             }
+            foreach (CommandGraphicSelectionButton otherGraphicsButton in dropDown.AssociatedGraphicsButtons)
+            {
+                otherGraphicsButton.SpecialPredicate = i => i.Name != "NONE" && _project.GetCharacterBySpeaker(((CharacterSpriteItem)i).Sprite.Character).DisplayName == dropDown.SelectedKey;
+            }
             UpdateTabTitle(false);
-            Application.Instance.Invoke(() => UpdatePreview());
+            Application.Instance.Invoke(UpdatePreview);
         }
         private void DialogueTextArea_TextChanged(object sender, EventArgs e)
         {
@@ -1891,7 +1896,7 @@ namespace SerialLoops.Editors
         }
         private void DialogueRefreshTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            Application.Instance.Invoke(() => UpdatePreview());
+            Application.Instance.Invoke(UpdatePreview);
             _dialogueRefreshTimer.Stop();
         }
         private void DialoguePropertyDropDown_SelectedKeyChanged(object sender, EventArgs e)
@@ -1914,7 +1919,7 @@ namespace SerialLoops.Editors
                 .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
                 (short)Enum.Parse<EpisodeHeaderScriptParameter.Episode>(dropDown.SelectedKey);
             UpdateTabTitle(false, dropDown);
-            Application.Instance.Invoke(() => UpdatePreview());
+            Application.Instance.Invoke(UpdatePreview);
         }
         private void FlagTextBox_TextChanged(object sender, EventArgs e)
         {
@@ -1948,7 +1953,7 @@ namespace SerialLoops.Editors
             ((ItemScriptParameter)selectionButton.Command.Parameters[selectionButton.ParameterIndex]).ItemIndex = (short)selectedItem.ItemIndex;
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(selectionButton.Command.Section)].Objects[selectionButton.Command.Index].Parameters[selectionButton.ParameterIndex] = (short)selectedItem.ItemIndex;
             UpdateTabTitle(false, selectionButton);
-            Application.Instance.Invoke(() => UpdatePreview());
+            Application.Instance.Invoke(UpdatePreview);
         }
         private void ItemLocationDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
@@ -1959,7 +1964,7 @@ namespace SerialLoops.Editors
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
                 .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] = (short)((ItemLocationScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Location;
             UpdateTabTitle(false, dropDown);
-            Application.Instance.Invoke(() => UpdatePreview());
+            Application.Instance.Invoke(UpdatePreview);
         }
         private void ItemTransitionDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
@@ -2002,7 +2007,7 @@ namespace SerialLoops.Editors
                 .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
                 (short)Enum.Parse<PaletteEffectScriptParameter.PaletteEffect>(dropDown.SelectedKey);
             UpdateTabTitle(false, dropDown);
-            Application.Instance.Invoke(() => UpdatePreview());
+            Application.Instance.Invoke(UpdatePreview);
         }
         private void PlaceSelectionButtonSelectedChanged_Executed(object sender, EventArgs e)
         {
@@ -2024,7 +2029,7 @@ namespace SerialLoops.Editors
                     (short)((PlaceItem)_project.Items.First(i => i.Name == ((ItemDescription)selection.Selected).Name)).Index;
             }
             UpdateTabTitle(false);
-            Application.Instance.Invoke(() => UpdatePreview());
+            Application.Instance.Invoke(UpdatePreview);
         }
         private void ScreenSelector_ScreenChanged(object sender, EventArgs e)
         {
@@ -2034,7 +2039,7 @@ namespace SerialLoops.Editors
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(selector.Command.Section)]
                 .Objects[selector.Command.Index].Parameters[selector.CurrentShort] = (short)selector.SelectedScreen;
             UpdateTabTitle(false, selector);
-            Application.Instance.Invoke(() => UpdatePreview());
+            Application.Instance.Invoke(UpdatePreview);
         }
         private void ScriptSectionDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
@@ -2097,7 +2102,7 @@ namespace SerialLoops.Editors
                 .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
                 (short)Enum.Parse<SpriteEntranceScriptParameter.SpriteEntranceTransition>(dropDown.SelectedKey);
             UpdateTabTitle(false, dropDown);
-            Application.Instance.Invoke(() => UpdatePreview());
+            Application.Instance.Invoke(UpdatePreview);
         }
         private void SpriteExitDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {
@@ -2142,7 +2147,7 @@ namespace SerialLoops.Editors
                     (short)((CharacterSpriteItem)selection.Selected).Index;
             }
             UpdateTabTitle(false);
-            Application.Instance.Invoke(() => UpdatePreview());
+            Application.Instance.Invoke(UpdatePreview);
         }
         private void TextEntranceEffectDropDown_SelectedKeyChanged(object sender, EventArgs e)
         {

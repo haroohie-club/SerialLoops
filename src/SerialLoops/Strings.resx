@@ -2103,6 +2103,9 @@
   <data name="This script is not included in the event table." xml:space="preserve">
     <value>This script is not included in the event table.</value>
   </data>
+  <data name="This system texture uses a common palette, so palette replacement has been disabled" xml:space="preserve">
+    <value>This system texture uses a common palette, so palette replacement has been disabled</value>
+  </data>
   <data name="Time (Frames)" xml:space="preserve">
     <value>Time (Frames)</value>
   </data>

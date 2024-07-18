@@ -24,8 +24,11 @@ namespace SerialLoops.Editors
             Button replaceButton = new() { Text = Application.Instance.Localize(this, "Replace") };
             replaceButton.Click += ReplaceButton_Click;
 
-            Button replaceWithPaletteButton = new() { Text = Application.Instance.Localize(this, "Replace with Palette") };
+            // If the common palette is used, we don't want to allow users to replace it
+            Button replaceWithPaletteButton = new() { Text = Application.Instance.Localize(this, "Replace with Palette"), Enabled = !_systemTexture.UsesCommonPalette() };
             replaceWithPaletteButton.Click += ReplaceWithPaletteButton_Click;
+
+            Label usesCommonPaletteLabel = new() { Text = _systemTexture.UsesCommonPalette() ? Application.Instance.Localize(this, "This system texture uses a common palette, so palette replacement has been disabled") : string.Empty };
 
             return new StackLayout
             {
@@ -34,6 +37,7 @@ namespace SerialLoops.Editors
                 Items =
                 {
                     new SKGuiImage(_systemTexture.GetTexture()),
+                    usesCommonPaletteLabel,
                     new StackLayout
                     {
                         Orientation = Orientation.Horizontal,
@@ -97,7 +101,7 @@ namespace SerialLoops.Editors
                         try
                         {
                             LoopyProgressTracker tracker = new(s => Application.Instance.Localize(null, s));
-                            _ = new ProgressDialog(() => _systemTexture.SetTexture(systemTextureResizeDialog.FinalImage, replacePalette),
+                            _ = new ProgressDialog(() => _systemTexture.SetTexture(systemTextureResizeDialog.FinalImage, replacePalette, _log),
                                 () => Content = GetEditorPanel(), tracker, string.Format(Application.Instance.Localize(this, $"Replacing {0}..."), _systemTexture.DisplayName));
                             UpdateTabTitle(false);
                         }
