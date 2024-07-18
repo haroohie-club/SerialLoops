@@ -748,6 +748,7 @@ namespace SerialLoops
                     case ItemDescription.ItemType.Script:
                         if (!savedEventTable)
                         {
+                            OpenProject.RecalculateEventTable();
                             IO.WriteStringFile(Path.Combine("assets", "events", $"{OpenProject.EventTableFile.Index:X3}.s"), OpenProject.EventTableFile.GetSource(includes), OpenProject, Log);
                         }
                         EventFile evt = ((ScriptItem)item).Event;

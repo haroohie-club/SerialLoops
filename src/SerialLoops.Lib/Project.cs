@@ -886,6 +886,27 @@ namespace SerialLoops.Lib
             return Evt.Files.AsParallel().Any(f => f.Name == "VOICEMAPS") && Encoding.ASCII.GetString(Evt.GetFileByName("VOICEMAPS").Data.Skip(0x08).Take(4).ToArray()) == "SUBS";
         }
 
+        public void RecalculateEventTable()
+        {
+            short currentFlag = 0;
+            int prevScriptIndex = 0;
+            foreach (EventTableEntry entry in EventTableFile.EvtTbl.Entries)
+            {
+                if (currentFlag == 0)
+                {
+                    currentFlag = entry.FirstReadFlag;
+                    prevScriptIndex = entry.EventFileIndex;
+                }
+                else if (entry.FirstReadFlag > 0)
+                {
+                    currentFlag += (short)(Evt.GetFileByIndex(prevScriptIndex).ScriptSections.Count + 1);
+                    entry.FirstReadFlag = currentFlag;
+                    prevScriptIndex = entry.EventFileIndex;
+                }
+            }
+            Items.Where(i => i.Type == ItemDescription.ItemType.Script).Cast<ScriptItem>().ToList().ForEach(s => s.UpdateEventTableInfo(EventTableFile.EvtTbl));
+        }
+
         public void MigrateProject(string newRom, ILogger log, IProgressTracker tracker)
         {
             log.Log($"Attempting to migrate base ROM to {newRom}");

@@ -10,6 +10,7 @@ namespace SerialLoops.Lib
 {
     public class Flags
     {
+        public const int NUM_FLAGS = 5120;
         public static readonly Dictionary<int, string> _names = JsonSerializer.Deserialize<Dictionary<int, string>>(File.ReadAllText(Extensions.GetLocalizedFilePath(Path.Combine("Defaults", "DefaultFlags"), "json")));
 
         public static string GetFlagNickname(int flag, Project project)

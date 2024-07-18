@@ -28,12 +28,7 @@ namespace SerialLoops.Lib.Items
         public ScriptItem(EventFile evt, EventTable evtTbl, Func<string, string> localize, ILogger log) : base(evt.Name[0..^1], ItemType.Script)
         {
             Event = evt;
-            EventTableEntry entry = evtTbl.Entries.FirstOrDefault(e => e.EventFileIndex == evt.Index);
-            if (entry is not null)
-            {
-                StartReadFlag = entry.FirstReadFlag;
-                SfxGroupIndex = entry.SfxGroupIndex;
-            }
+            UpdateEventTableInfo(evtTbl);
             _localize = localize;
 
             PruneLabelsSection(log);
@@ -741,6 +736,16 @@ namespace SerialLoops.Lib.Items
         public (SKBitmap PreviewImage, string ErrorImage) GeneratePreviewImage(Dictionary<ScriptSection, List<ScriptItemCommand>> commandTree, ScriptItemCommand currentCommand, Project project, ILogger log)
         {
             return GeneratePreviewImage(GetScriptPreview(commandTree, currentCommand, project, log), project);
+        }
+
+        public void UpdateEventTableInfo(EventTable evtTbl)
+        {
+            EventTableEntry entry = evtTbl.Entries.FirstOrDefault(e => e.EventFileIndex == Event.Index);
+            if (entry is not null)
+            {
+                StartReadFlag = entry.FirstReadFlag;
+                SfxGroupIndex = entry.SfxGroupIndex;
+            }
         }
 
         public void PruneLabelsSection(ILogger log)
