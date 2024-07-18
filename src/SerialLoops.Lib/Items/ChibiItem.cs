@@ -2,6 +2,7 @@
 using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Graphics;
 using HaruhiChokuretsuLib.Util;
+using SerialLoops.Lib.Util;
 using SkiaSharp;
 using System.Collections.Generic;
 using System.IO;
@@ -84,23 +85,17 @@ namespace SerialLoops.Lib.Items
             };
         }
 
-        public class ChibiGraphics
+        public class ChibiGraphics(ChibiEntry entry, Project project)
         {
-            public GraphicsFile Texture { get; set; }
-            public GraphicsFile Animation { get; set; }
-
-            public ChibiGraphics(ChibiEntry entry, Project project)
-            {
-                Texture = project.Grp.GetFileByIndex(entry.Texture);
-                Animation = project.Grp.GetFileByIndex(entry.Animation);
-            }
+            public GraphicsFile Texture { get; set; } = project.Grp.GetFileByIndex(entry.Texture);
+            public GraphicsFile Animation { get; set; } = project.Grp.GetFileByIndex(entry.Animation);
 
             public void Write(Project project, ILogger log)
             {
                 using MemoryStream textureStream = new();
                 Texture.GetImage().Encode(textureStream, SKEncodedImageFormat.Png, 1);
                 IO.WriteBinaryFile(Path.Combine("assets", "graphics", $"{Texture.Index:X3}.png"), textureStream.ToArray(), project, log);
-                IO.WriteStringFile(Path.Combine("assets", "graphics", $"{Texture.Index:X3}_pal.csv"), string.Join(',', Texture.Palette.Select(c => c.ToString())), project, log);
+                IO.WriteStringFile(Path.Combine("assets", "graphics", $"{Texture.Index:X3}.gi"), Texture.GetGraphicInfoFile(), project, log);
 
                 IO.WriteBinaryFile(Path.Combine("assets", "graphics", $"{Animation.Index:X3}.bna"), Animation.GetBytes(), project, log);
             }

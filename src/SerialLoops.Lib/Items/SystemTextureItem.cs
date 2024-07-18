@@ -1,6 +1,7 @@
 ﻿using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Graphics;
 using HaruhiChokuretsuLib.Util;
+using SerialLoops.Lib.Util;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
@@ -113,8 +114,7 @@ namespace SerialLoops.Lib.Items
             using MemoryStream grpStream = new();
             Grp.GetImage().Encode(grpStream, SKEncodedImageFormat.Png, 1);
             IO.WriteBinaryFile(Path.Combine("assets", "graphics", $"{Grp.Index:X3}.png"), grpStream.ToArray(), project, log);
-            IO.WriteStringFile(Path.Combine("assets", "graphics", $"{Grp.Index:X3}_pal.csv"),
-                string.Join(',', Grp.Palette.Select(c => c.ToString())), project, log);
+            IO.WriteStringFile(Path.Combine("assets", "graphics", $"{Grp.Index:X3}.gi"), Grp.GetGraphicInfoFile(), project, log);
         }
 
         public bool UsesCommonPalette()
