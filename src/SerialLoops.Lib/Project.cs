@@ -892,7 +892,7 @@ namespace SerialLoops.Lib
             int prevScriptIndex = 0;
             foreach (EventTableEntry entry in EventTableFile.EvtTbl.Entries)
             {
-                if (currentFlag == 0)
+                if (currentFlag == 0 && entry.FirstReadFlag > 0)
                 {
                     currentFlag = entry.FirstReadFlag;
                     prevScriptIndex = entry.EventFileIndex;

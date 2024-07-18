@@ -746,6 +746,11 @@ namespace SerialLoops.Lib.Items
                 StartReadFlag = entry.FirstReadFlag;
                 SfxGroupIndex = entry.SfxGroupIndex;
             }
+            else
+            {
+                StartReadFlag = -1;
+                SfxGroupIndex = -1;
+            }
         }
 
         public void PruneLabelsSection(ILogger log)
