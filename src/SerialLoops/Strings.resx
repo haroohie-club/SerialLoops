@@ -59,7 +59,7 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -1224,6 +1224,10 @@
   <data name="Language Template" xml:space="preserve">
     <value>Language Template</value>
   </data>
+  <data name="Listened to {0}" xml:space="preserve">
+    <value>Listened to {0}</value>
+    <comment>{0} is the name of a BGM that's been encountered while playing the game</comment>
+  </data>
   <data name="Load Game menu ticker tape" xml:space="preserve">
     <value>Load Game menu ticker tape</value>
   </data>
@@ -1728,6 +1732,10 @@
   <data name="Results" xml:space="preserve">
     <value>Results</value>
   </data>
+  <data name="Route &quot;{0}&quot; Completed" xml:space="preserve">
+    <value>Route "{0}" Completed</value>
+    <comment>{0} is the name of a route following a group selection that has been completed</comment>
+  </data>
   <data name="Routes" xml:space="preserve">
     <value>Routes</value>
   </data>
@@ -1835,6 +1843,10 @@
   </data>
   <data name="Script Section" xml:space="preserve">
     <value>Script Section</value>
+  </data>
+  <data name="Script {0} Section {1} Completed" xml:space="preserve">
+    <value>Script {0} Section {1} Completed</value>
+    <comment>{0} is the display name of a script and {1} is the name of the section of that script that has been completed</comment>
   </data>
   <data name="Script:" xml:space="preserve">
     <value>Script: </value>
@@ -2319,16 +2331,28 @@
   <data name="Yuki Nagato event unlocked message box" xml:space="preserve">
     <value>Yuki Nagato event unlocked message box</value>
   </data>
+  <data name="{0} ({1}) Seen" xml:space="preserve">
+    <value>{0} ({1}) Seen</value>
+    <comment>{0} is the internal name and {1} is the display name of a CG that has been encountered during the game</comment>
+  </data>
   <data name="{0} - Adjust Volume" xml:space="preserve">
     <value>{0} - Adjust Volume</value>
   </data>
   <data name="{0} - Manage Loop" xml:space="preserve">
     <value>{0} - Manage Loop</value>
   </data>
+  <data name="{0} Obtained" xml:space="preserve">
+    <value>{0} Obtained</value>
+    <comment>{0} is the name of a topic that's been obtained</comment>
+  </data>
   <data name="{0} results" xml:space="preserve">
     <value>{0} results</value>
   </data>
   <data name="{0} results found" xml:space="preserve">
     <value>{0} results found</value>
+  </data>
+  <data name="{0} Watched in Extras" xml:space="preserve">
+    <value>{0} Watched in Extras</value>
+    <comment>{0} is the name of a topic that has had its associated scene watched in the Extras mode</comment>
   </data>
 </root>

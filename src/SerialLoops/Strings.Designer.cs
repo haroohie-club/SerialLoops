@@ -70,6 +70,15 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} ({1}) Seen.
+        /// </summary>
+        public static string _0____1___Seen {
+            get {
+                return ResourceManager.GetString("{0} ({1}) Seen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} - Adjust Volume.
         /// </summary>
         public static string _0____Adjust_Volume {
@@ -84,6 +93,15 @@ namespace SerialLoops {
         public static string _0____Manage_Loop {
             get {
                 return ResourceManager.GetString("{0} - Manage Loop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} Obtained.
+        /// </summary>
+        public static string _0__Obtained {
+            get {
+                return ResourceManager.GetString("{0} Obtained", resourceCulture);
             }
         }
         
@@ -106,6 +124,15 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} Watched in Extras.
+        /// </summary>
+        public static string _0__Watched_in_Extras {
+            get {
+                return ResourceManager.GetString("{0} Watched in Extras", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 100%&apos;d game message box.
         /// </summary>
         public static string _100__d_game_message_box {
@@ -124,7 +151,7 @@ namespace SerialLoops {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &amp;Check for Updates....
+        ///   Looks up a localized string similar to &amp;Check for Updates….
         /// </summary>
         public static string _Check_for_Updates___ {
             get {
@@ -169,7 +196,7 @@ namespace SerialLoops {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &amp;Preferences....
+        ///   Looks up a localized string similar to &amp;Preferences….
         /// </summary>
         public static string _Preferences___ {
             get {
@@ -205,7 +232,7 @@ namespace SerialLoops {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to About....
+        ///   Looks up a localized string similar to About….
         /// </summary>
         public static string About___ {
             get {
@@ -286,7 +313,7 @@ namespace SerialLoops {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Adding frames to GIF....
+        ///   Looks up a localized string similar to Adding frames to GIF….
         /// </summary>
         public static string Adding_frames_to_GIF___ {
             get {
@@ -376,7 +403,7 @@ namespace SerialLoops {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Apply Hacks....
+        ///   Looks up a localized string similar to Apply Hacks….
         /// </summary>
         public static string Apply_Hacks___ {
             get {
@@ -997,7 +1024,7 @@ namespace SerialLoops {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Clear Block.
+        ///   Looks up a localized string similar to Win Section.
         /// </summary>
         public static string Clear_Block {
             get {
@@ -1159,7 +1186,7 @@ namespace SerialLoops {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Common Save Data....
+        ///   Looks up a localized string similar to Common Save Data….
         /// </summary>
         public static string Common_Save_Data___ {
             get {
@@ -1231,7 +1258,7 @@ namespace SerialLoops {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Converting frames....
+        ///   Looks up a localized string similar to Converting frames….
         /// </summary>
         public static string Converting_frames___ {
             get {
@@ -1240,7 +1267,7 @@ namespace SerialLoops {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Converting from MP3....
+        ///   Looks up a localized string similar to Converting from MP3….
         /// </summary>
         public static string Converting_from_MP3___ {
             get {
@@ -1249,7 +1276,7 @@ namespace SerialLoops {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Converting from Vorbis....
+        ///   Looks up a localized string similar to Converting from Vorbis….
         /// </summary>
         public static string Converting_from_Vorbis___ {
             get {
@@ -1627,7 +1654,7 @@ namespace SerialLoops {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Downsampling....
+        ///   Looks up a localized string similar to Downsampling….
         /// </summary>
         public static string Downsampling___ {
             get {
@@ -1654,7 +1681,7 @@ namespace SerialLoops {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Drawing bottom screen texture....
+        ///   Looks up a localized string similar to Drawing bottom screen texture….
         /// </summary>
         public static string Drawing_bottom_screen_texture___ {
             get {
@@ -1663,7 +1690,7 @@ namespace SerialLoops {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Drawing textures....
+        ///   Looks up a localized string similar to Drawing textures….
         /// </summary>
         public static string Drawing_textures___ {
             get {
@@ -1672,7 +1699,7 @@ namespace SerialLoops {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Drawing top screen tiles....
+        ///   Looks up a localized string similar to Drawing top screen tiles….
         /// </summary>
         public static string Drawing_top_screen_tiles___ {
             get {
@@ -1699,7 +1726,7 @@ namespace SerialLoops {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Edit Save File....
+        ///   Looks up a localized string similar to Edit Save File….
         /// </summary>
         public static string Edit_Save_File___ {
             get {
@@ -1735,7 +1762,7 @@ namespace SerialLoops {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Edit Tutorial Mappings....
+        ///   Looks up a localized string similar to Edit Tutorial Mappings….
         /// </summary>
         public static string Edit_Tutorial_Mappings___ {
             get {
@@ -1753,7 +1780,7 @@ namespace SerialLoops {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Edit UI Text....
+        ///   Looks up a localized string similar to Edit UI Text….
         /// </summary>
         public static string Edit_UI_Text___ {
             get {
@@ -1834,7 +1861,7 @@ namespace SerialLoops {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter subtitle text....
+        ///   Looks up a localized string similar to Enter subtitle text….
         /// </summary>
         public static string Enter_subtitle_text___ {
             get {
@@ -2178,7 +2205,7 @@ namespace SerialLoops {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Exporting GIF....
+        ///   Looks up a localized string similar to Exporting GIF….
         /// </summary>
         public static string Exporting_GIF___ {
             get {
@@ -2586,7 +2613,7 @@ namespace SerialLoops {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to read BGM file; falling back to original....
+        ///   Looks up a localized string similar to Failed to read BGM file; falling back to original….
         /// </summary>
         public static string Failed_to_read_BGM_file__falling_back_to_original___ {
             get {
@@ -2766,7 +2793,7 @@ namespace SerialLoops {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Find Orphaned Items....
+        ///   Looks up a localized string similar to Find Orphaned Items….
         /// </summary>
         public static string Find_Orphaned_Items___ {
             get {
@@ -2775,7 +2802,7 @@ namespace SerialLoops {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Find References....
+        ///   Looks up a localized string similar to Find References….
         /// </summary>
         public static string Find_References___ {
             get {
@@ -2793,7 +2820,7 @@ namespace SerialLoops {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Finding orphaned items....
+        ///   Looks up a localized string similar to Finding orphaned items….
         /// </summary>
         public static string Finding_orphaned_items___ {
             get {
@@ -3378,6 +3405,15 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Listened to {0}.
+        /// </summary>
+        public static string Listened_to__0_ {
+            get {
+                return ResourceManager.GetString("Listened to {0}", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Load Game menu ticker tape.
         /// </summary>
         public static string Load_Game_menu_ticker_tape {
@@ -3576,7 +3612,7 @@ namespace SerialLoops {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Miss 2 Block.
+        ///   Looks up a localized string similar to Lose 2 Section.
         /// </summary>
         public static string Miss_2_Block {
             get {
@@ -3585,7 +3621,7 @@ namespace SerialLoops {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Miss Block.
+        ///   Looks up a localized string similar to Lose Section.
         /// </summary>
         public static string Miss_Block {
             get {
@@ -3765,7 +3801,7 @@ namespace SerialLoops {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to New Project....
+        ///   Looks up a localized string similar to New Project….
         /// </summary>
         public static string New_Project___ {
             get {
@@ -4423,7 +4459,7 @@ namespace SerialLoops {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Project Settings....
+        ///   Looks up a localized string similar to Project Settings….
         /// </summary>
         public static string Project_Settings___ {
             get {
@@ -4702,7 +4738,7 @@ namespace SerialLoops {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Replace....
+        ///   Looks up a localized string similar to Replace….
         /// </summary>
         public static string Replace___ {
             get {
@@ -4765,7 +4801,7 @@ namespace SerialLoops {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Replacing {0}....
+        ///   Looks up a localized string similar to Replacing {0}….
         /// </summary>
         public static string Replacing__0____ {
             get {
@@ -4869,6 +4905,15 @@ namespace SerialLoops {
         public static string Results {
             get {
                 return ResourceManager.GetString("Results", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Route &quot;{0}&quot; Completed.
+        /// </summary>
+        public static string Route___0___Completed {
+            get {
+                return ResourceManager.GetString("Route \"{0}\" Completed", resourceCulture);
             }
         }
         
@@ -5073,7 +5118,7 @@ namespace SerialLoops {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Saving GIF....
+        ///   Looks up a localized string similar to Saving GIF….
         /// </summary>
         public static string Saving_GIF___ {
             get {
@@ -5181,6 +5226,15 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Script {0} Section {1} Completed.
+        /// </summary>
+        public static string Script__0__Section__1__Completed {
+            get {
+                return ResourceManager.GetString("Script {0} Section {1} Completed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Block: .
         /// </summary>
         public static string Script_Block_ {
@@ -5244,7 +5298,7 @@ namespace SerialLoops {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Search....
+        ///   Looks up a localized string similar to Search….
         /// </summary>
         public static string Search___ {
             get {
@@ -5280,7 +5334,7 @@ namespace SerialLoops {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Searching {0}....
+        ///   Looks up a localized string similar to Searching {0}….
         /// </summary>
         public static string Searching__0____ {
             get {
@@ -5325,7 +5379,7 @@ namespace SerialLoops {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select....
+        ///   Looks up a localized string similar to Select….
         /// </summary>
         public static string Select___ {
             get {
@@ -5487,7 +5541,7 @@ namespace SerialLoops {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Setting CG single image....
+        ///   Looks up a localized string similar to Setting CG single image….
         /// </summary>
         public static string Setting_CG_single_image___ {
             get {
@@ -5496,7 +5550,7 @@ namespace SerialLoops {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Setting item image....
+        ///   Looks up a localized string similar to Setting item image….
         /// </summary>
         public static string Setting_item_image___ {
             get {
@@ -5505,7 +5559,7 @@ namespace SerialLoops {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Setting palettes and images....
+        ///   Looks up a localized string similar to Setting palettes and images….
         /// </summary>
         public static string Setting_palettes_and_images___ {
             get {
@@ -5514,7 +5568,7 @@ namespace SerialLoops {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Setting screen image....
+        ///   Looks up a localized string similar to Setting screen image….
         /// </summary>
         public static string Setting_screen_image___ {
             get {
