@@ -68,6 +68,8 @@ namespace SerialLoops.Lib
         public SKBitmap FontBitmap { get; set; }
 
         [JsonIgnore]
+        public EventFile EventTableFile { get; set; }
+        [JsonIgnore]
         public ExtraFile Extra { get; set; }
         [JsonIgnore]
         public ScenarioStruct Scenario { get; set; }
@@ -88,6 +90,8 @@ namespace SerialLoops.Lib
 
         [JsonIgnore]
         public Func<string, string> Localize { get; set; }
+
+        private static readonly string[] NON_SCRIPT_EVT_FILES = new string[] { "CHESSS", "EVTTBLS", "TOPICS", "SCENARIOS", "TUTORIALS", "VOICEMAPS" };
 
         public Project()
         {
@@ -352,7 +356,18 @@ namespace SerialLoops.Lib
             }
             tracker.Finished++;
 
-            tracker.Focus("Static Files", 4);
+            tracker.Focus("Static Files", 5);
+            try
+            {
+                EventTableFile = Evt.GetFileByName("EVTTBLS");
+                EventTableFile.InitializeEventTableFile();
+            }
+            catch (Exception ex)
+            {
+                log.LogException($"Failed to load event table file", ex);
+                return new(LoadProjectState.FAILED);
+            }
+            tracker.Finished++;
             try
             {
                 Extra = Dat.GetFileByName("EXTRAS").CastTo<ExtraFile>();
@@ -569,11 +584,11 @@ namespace SerialLoops.Lib
             {
                 tracker.Focus("Scripts", Evt.Files.Count - 5);
                 Items.AddRange(Evt.Files.AsParallel()
-                    .Where(e => !new string[] { "CHESSS", "EVTTBLS", "TOPICS", "SCENARIOS", "TUTORIALS", "VOICEMAPS" }.Contains(e.Name))
+                    .Where(e => !NON_SCRIPT_EVT_FILES.Contains(e.Name))
                     .Select(e =>
                     {
                         tracker.Finished++;
-                        return new ScriptItem(e, Localize, log);
+                        return new ScriptItem(e, EventTableFile.EvtTbl, Localize, log);
                     }));
             }
             catch (Exception ex)

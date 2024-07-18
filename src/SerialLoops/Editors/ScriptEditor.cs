@@ -32,6 +32,7 @@ namespace SerialLoops.Editors
         private TableLayout _detailsLayout = new();
         private readonly StackLayout _preview = new() { Items = { new SKGuiImage(new(256, 384)) } };
         private StackLayout _scriptProperties = new();
+        private StackLayout _eventTableProperties = new();
         private StackLayout _editorControls = new();
         private ScriptCommandListPanel _commandsPanel;
         private Button _addCommandButton;
@@ -102,10 +103,52 @@ namespace SerialLoops.Editors
             _detailsLayout = new() { Spacing = new Size(5, 5) };
             _editorControls = new() { Orientation = Orientation.Horizontal };
 
+            if (_script.StartReadFlag > 0)
+            {
+                DropDown sfxGroupDropDown = new();
+                sfxGroupDropDown.Items.AddRange(_project.Snd.Groups.Select(g => new ListItem { Key = g.Name, Text = g.Name }));
+                sfxGroupDropDown.SelectedIndex = _script.SfxGroupIndex;
+                sfxGroupDropDown.SelectedIndexChanged += (sender, args) =>
+                {
+                    _project.EventTableFile.EvtTbl.Entries.First(e => e.EventFileIndex == _script.Event.Index).SfxGroupIndex = (short)sfxGroupDropDown.SelectedIndex;
+                    UpdateTabTitle(false);
+                };
+
+                _eventTableProperties = new()
+                {
+                    Orientation = Orientation.Vertical,
+                    Spacing = 5,
+                    Items =
+                    {
+                        ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Start Read Flag"), _script.StartReadFlag.ToString()),
+                        ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "SFX Group"), sfxGroupDropDown),
+                    }
+                };
+            }
+            else
+            {
+                _eventTableProperties = new()
+                {
+                    Items =
+                    {
+                        new Label { Text = Application.Instance.Localize(this, "This script is not included in the event table.") }
+                    }
+                };
+            }
+
             TabControl propertiesTabs = GetPropertiesTabs();
             if (propertiesTabs.Pages.Count > 0)
             {
-                _scriptProperties = new() { Items = { GetPropertiesTabs() } };
+                _scriptProperties = new()
+                {
+                    Orientation = Orientation.Vertical,
+                    Spacing = 10,
+                    Items =
+                    {
+                        GetPropertiesTabs(),
+                        _eventTableProperties,
+                    },
+                };
             }
 
             _detailsLayout.Rows.Add(new(new TableLayout(new TableRow(_preview, _scriptProperties))));

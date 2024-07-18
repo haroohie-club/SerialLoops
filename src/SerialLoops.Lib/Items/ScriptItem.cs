@@ -17,15 +17,23 @@ namespace SerialLoops.Lib.Items
     public class ScriptItem : Item
     {
         public EventFile Event { get; set; }
+        public short StartReadFlag { get; set; }
+        public short SfxGroupIndex { get; set; }
         public AdjacencyGraph<ScriptSection, ScriptSectionEdge> Graph { get; set; } = new();
         private readonly Func<string, string> _localize;
 
         public ScriptItem(string name) : base(name, ItemType.Script)
         {
         }
-        public ScriptItem(EventFile evt, Func<string, string> localize, ILogger log) : base(evt.Name[0..^1], ItemType.Script)
+        public ScriptItem(EventFile evt, EventTable evtTbl, Func<string, string> localize, ILogger log) : base(evt.Name[0..^1], ItemType.Script)
         {
             Event = evt;
+            EventTableEntry entry = evtTbl.Entries.FirstOrDefault(e => e.EventFileIndex == evt.Index);
+            if (entry is not null)
+            {
+                StartReadFlag = entry.FirstReadFlag;
+                SfxGroupIndex = entry.SfxGroupIndex;
+            }
             _localize = localize;
 
             PruneLabelsSection(log);
