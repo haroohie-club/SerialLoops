@@ -592,7 +592,7 @@ namespace SerialLoops
                             File.Delete(Path.Combine(OpenProject.BaseDirectory, "assets", "graphics",
                                 $"{result.BadFileIndex:X3}.png"));
                             File.Delete(Path.Combine(OpenProject.BaseDirectory, "assets", "graphics",
-                                $"{result.BadFileIndex:X3}_pal.csv"));
+                                $"{result.BadFileIndex:X3}.gi"));
                             break;
 
                         case "evt.bin":
@@ -628,6 +628,7 @@ namespace SerialLoops
             }
 
             IEnumerable<ItemDescription> unsavedItems = OpenProject.Items.Where(i => i.UnsavedChanges);
+            bool savedChrData = false;
             bool savedExtra = false;
             bool savedMessInfo = false;
             bool changedNameplates = false;
@@ -684,6 +685,19 @@ namespace SerialLoops
                                 OpenProject.MessInfo.GetSource([]), OpenProject, Log);
                             savedMessInfo = true;
                         }
+                        break;
+                    case ItemDescription.ItemType.Character_Sprite:
+                        if (!savedChrData)
+                        {
+                            IO.WriteStringFile(Path.Combine("assets", "data", $"{OpenProject.ChrData.Index:X3}.s"),
+                                OpenProject.ChrData.GetSource(new Dictionary<string, IncludeEntry[]>()
+                                {
+                                    { "GRPBIN", OpenProject.Grp.GetSourceInclude().Split('\n').Where(l => !string.IsNullOrWhiteSpace(l)).Select(l => new IncludeEntry(l)).ToArray() }
+                                }), OpenProject, Log);
+                            savedChrData = true;
+                        }
+                        CharacterSpriteItem characterSpriteItem = (CharacterSpriteItem)item;
+                        characterSpriteItem.Graphics.Write(OpenProject, Log);
                         break;
                     case ItemDescription.ItemType.Chibi:
                         ChibiItem chibiItem = (ChibiItem)item;
