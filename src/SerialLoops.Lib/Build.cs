@@ -5,7 +5,6 @@ using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Archive.Graphics;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib.Util;
-using SkiaSharp;
 using System;
 using System.Diagnostics;
 using System.Globalization;

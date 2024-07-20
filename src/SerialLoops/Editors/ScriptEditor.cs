@@ -1058,7 +1058,7 @@ namespace SerialLoops.Editors
                             ScriptCommandDropDown dialoguePropertyDropDown = new() { Command = command, ParameterIndex = i };
                             dialoguePropertyDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Character)
                                 .Select(c => new ListItem { Key = c.DisplayName, Text = c.DisplayName[4..] }));
-                            dialoguePropertyDropDown.SelectedKey = ((DialoguePropertyScriptParameter)parameter).Character.Name;
+                            dialoguePropertyDropDown.SelectedKey = ((DialoguePropertyScriptParameter)parameter).Character.DisplayName;
                             dialoguePropertyDropDown.SelectedKeyChanged += DialoguePropertyDropDown_SelectedKeyChanged;
                             _currentSpeakerDropDown.OtherDropDowns.Add(dialoguePropertyDropDown);
 
@@ -1537,7 +1537,7 @@ namespace SerialLoops.Editors
 
                             ScriptCommandDropDown vceDropDown = new() { Command = command, ParameterIndex = i, Link = (ClearableLinkButton)vceLink.Items[1].Control };
                             vceDropDown.Items.Add(new ListItem { Key = "NONE", Text = "NONE" });
-                            vceDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Voice).Select(i => new ListItem { Text = i.Name, Key = i.Name }));
+                            vceDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Voice).OrderBy(i => i.DisplayName).Select(i => new ListItem { Text = i.DisplayName, Key = i.Name }));
                             vceDropDown.SelectedKey = vceParam.VoiceLine?.Name ?? "NONE";
                             vceDropDown.SelectedKeyChanged += VceDropDown_SelectedKeyChanged;
 
@@ -1852,7 +1852,7 @@ namespace SerialLoops.Editors
         {
             ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
             CharacterItem character = (CharacterItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Character && i.DisplayName.Equals(dropDown.SelectedKey));
-            _log.Log($"Attempting to modify dialogue property in parameter {dropDown.ParameterIndex} to dialogue {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
+            _log.Log($"Attempting to modify character in parameter {dropDown.ParameterIndex} to character {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
             ((DialoguePropertyScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Character = character;
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)].Objects[dropDown.Command.Index]
                 .Parameters[dropDown.ParameterIndex] = (short)_project.MessInfo.MessageInfos.FindIndex(m => m.Character == character.MessageInfo.Character);
@@ -2175,14 +2175,14 @@ namespace SerialLoops.Editors
             else
             {
                 ((VoicedLineScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).VoiceLine =
-                    (VoicedLineItem)_project.Items.FirstOrDefault(i => i.DisplayName == dropDown.SelectedKey);
+                    (VoicedLineItem)_project.Items.FirstOrDefault(i => i.Name == dropDown.SelectedKey);
                 _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
                     .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
-                    (short)((VoicedLineItem)_project.Items.First(i => i.DisplayName == dropDown.SelectedKey)).Index;
+                    (short)((VoicedLineItem)_project.Items.First(i => i.Name == dropDown.SelectedKey)).Index;
             }
-            dropDown.Link.Text = dropDown.SelectedKey;
+            dropDown.Link.Text = _project.Items.FirstOrDefault(i => i.Name == dropDown.SelectedKey).DisplayName;
             dropDown.Link.RemoveAllClickEvents();
-            dropDown.Link.ClickUnique += (s, e) => { _tabs.OpenTab(_project.Items.FirstOrDefault(i => i.DisplayName == dropDown.SelectedKey), _log); };
+            dropDown.Link.ClickUnique += (s, e) => { _tabs.OpenTab(_project.Items.FirstOrDefault(i => i.Name == dropDown.SelectedKey), _log); };
 
             UpdateTabTitle(false, dropDown);
         }
