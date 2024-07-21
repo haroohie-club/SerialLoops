@@ -519,6 +519,8 @@ namespace SerialLoops.Lib.Script
                         switch (i)
                         {
                             case 0:
+                                parameters.Add(new ShortScriptParameter(localize($"Map Character Set"), parameter));
+                                break;
                             case 1:
                             case 2:
                             case 3:
