@@ -17,6 +17,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.Json;
 
 namespace SerialLoops
 {
@@ -795,6 +796,8 @@ namespace SerialLoops
                 MemoryStream nameplateStream = new();
                 OpenProject.NameplateBitmap.Encode(nameplateStream, SKEncodedImageFormat.Png, 1);
                 IO.WriteBinaryFile(Path.Combine("assets", "graphics", "B87.png"), nameplateStream.ToArray(),
+                    OpenProject, Log);
+                IO.WriteStringFile(Path.Combine("assets", "graphics", "B87.gi"), JsonSerializer.Serialize(OpenProject.NameplateInfo),
                     OpenProject, Log);
             }
 

@@ -320,25 +320,9 @@ namespace SerialLoops.Lib.Items
                 SKPaint palEffectPaint = PaletteEffectScriptParameter.IdentityPaint;
                 if (palCommand is not null && lastBgCommand is not null && commands.IndexOf(palCommand) > commands.IndexOf(lastBgCommand))
                 {
-                    switch (((PaletteEffectScriptParameter)palCommand.Parameters[0]).Effect)
-                    {
-                        case PaletteEffectScriptParameter.PaletteEffect.INVERTED:
-                            palEffectPaint = PaletteEffectScriptParameter.InvertedPaint;
-                            break;
-
-                        case PaletteEffectScriptParameter.PaletteEffect.GRAYSCALE:
-                            palEffectPaint = PaletteEffectScriptParameter.GrayscalePaint;
-                            break;
-
-                        case PaletteEffectScriptParameter.PaletteEffect.SEPIA:
-                            palEffectPaint = PaletteEffectScriptParameter.SepiaPaint;
-                            break;
-
-                        case PaletteEffectScriptParameter.PaletteEffect.DIMMED:
-                            palEffectPaint = PaletteEffectScriptParameter.DimmedPaint;
-                            break;
-                    }
+                    preview.BgPalEffect = ((PaletteEffectScriptParameter)palCommand.Parameters[0]).Effect;
                 }
+
                 ScriptItemCommand bgScrollCommand = null;
                 for (int i = commands.Count - 1; i >= 0; i--)
                 {

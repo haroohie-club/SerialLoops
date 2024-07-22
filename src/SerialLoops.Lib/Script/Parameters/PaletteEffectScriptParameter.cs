@@ -73,9 +73,9 @@ namespace SerialLoops.Lib.Script.Parameters
         {
             ColorFilter = SKColorFilter.CreateColorMatrix(
             [
-                0.393f, 0.769f, 0.189f, 0.00f, 0.00f,
-                0.349f, 0.686f, 0.168f, 0.00f, 0.00f,
-                0.272f, 0.534f, 0.131f, 0.00f, 0.00f,
+                0.296f, 0.578f, 0.143f, 0.00f, 0.00f,
+                0.263f, 0.515f, 0.126f, 0.00f, 0.00f,
+                0.204f, 0.401f, 0.099f, 0.00f, 0.00f,
                 0.000f, 0.000f, 0.000f, 1.00f, 0.00f,
             ]),
         };
