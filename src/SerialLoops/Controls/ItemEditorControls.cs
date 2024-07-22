@@ -25,6 +25,7 @@ namespace SerialLoops.Controls
     {
         public ScriptItemCommand Command { get; set; }
         public int ParameterIndex { get; set; }
+        public List<ScriptCommandNumericStepper> DisableableNumericSteppers { get; set; }
     }
     public class ScriptCommandColorPicker : ColorPicker
     {

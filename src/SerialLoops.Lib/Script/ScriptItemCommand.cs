@@ -253,7 +253,7 @@ namespace SerialLoops.Lib.Script
                                 parameters.Add(new ShortScriptParameter(localize("Volume"), parameter));
                                 break;
                             case 3:
-                                //parameters.Add(new ShortScriptParameter(localize("crossfadeDupe"), parameter));
+                                parameters.Add(new BoolScriptParameter(localize("Load Sound"), parameter == -1, trueValue: -1));
                                 break;
                             case 4:
                                 parameters.Add(new ShortScriptParameter(localize("Crossfade Time (Frames)"), parameter));
@@ -519,6 +519,8 @@ namespace SerialLoops.Lib.Script
                         switch (i)
                         {
                             case 0:
+                                parameters.Add(new ShortScriptParameter(localize($"Map Character Set"), parameter));
+                                break;
                             case 1:
                             case 2:
                             case 3:

@@ -41,7 +41,8 @@ namespace SerialLoops.Editors
         private CancellationTokenSource _dialogueCancellation;
         private System.Timers.Timer _dialogueRefreshTimer;
         private int _chibiHighlighted = -1;
-        private ScriptCommandDropDown _currentSpeakerDropDown; // This property is used for storing the speaker dropdown to append dialogue property dropdowns to
+        private ScriptCommandDropDown _currentSpeakerDropDown; // This field is used to store the speaker dropdown to append dialogue property dropdowns to
+        private ScriptCommandCheckBox _currentLoadSoundCheckBox; // This field is used to store the "load sound" checkbox to append the crossfade time numeric stepper to
         private Action _updateOptionDropDowns;
 
         public override Container GetEditorPanel()
@@ -218,6 +219,11 @@ namespace SerialLoops.Editors
                                     invocation.Parameters[1] = 1;
                                     break;
 
+                                case CommandVerb.BGM_PLAY:
+                                    invocation.Parameters[1] = (short)BgmModeScriptParameter.BgmMode.START;
+                                    invocation.Parameters[2] = 100;
+                                    break;
+
                                 case CommandVerb.CHIBI_ENTEREXIT:
                                 case CommandVerb.CHIBI_EMOTE:
                                     invocation.Parameters[0] = (short)((ChibiItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Chibi)).TopScreenIndex;
@@ -263,6 +269,13 @@ namespace SerialLoops.Editors
 
                                 case CommandVerb.SCREEN_FADEOUT:
                                     invocation.Parameters[1] = 100;
+                                    break;
+
+                                case CommandVerb.SND_PLAY:
+                                    invocation.Parameters[1] = (short)SfxModeScriptParameter.SfxMode.START;
+                                    invocation.Parameters[2] = 100;
+                                    invocation.Parameters[3] = -1;
+                                    invocation.Parameters[4] = -1;
                                     break;
 
                                 case CommandVerb.SELECT:
@@ -621,7 +634,7 @@ namespace SerialLoops.Editors
                     continue;
                 }
 
-                mapLayout.Add(GetChibiStackLayout((ChibiItem)_project.Items.Where(i => i.Type == ItemDescription.ItemType.Chibi).ElementAt(_script.Event.MapCharactersSection.Objects[i].CharacterIndex - 1), i, mapDetailsLayout, mapLayout, out SKBitmap chibiBitmap),
+                mapLayout.Add(GetChibiStackLayout((ChibiItem)_project.Items.Where(i => i.Type == ItemDescription.ItemType.Chibi).First(c => ((ChibiItem)c).ChibiIndex == _script.Event.MapCharactersSection.Objects[i].CharacterIndex), i, mapDetailsLayout, mapLayout, out SKBitmap chibiBitmap),
                     ((int)gridZero.X - _script.Event.MapCharactersSection.Objects[i].Y * 16 + _script.Event.MapCharactersSection.Objects[i].X * 16 - chibiBitmap.Width / 2) / 2,
                     ((int)gridZero.Y + _script.Event.MapCharactersSection.Objects[i].X * 8 + _script.Event.MapCharactersSection.Objects[i].Y * 8 - chibiBitmap.Height / 2 - 24) / 2);
             }
@@ -632,7 +645,7 @@ namespace SerialLoops.Editors
             {
                 int index = _script.Event.MapCharactersSection.Objects.Count - 1;
                 _script.Event.MapCharactersSection.Objects.Insert(index, new() { CharacterIndex = addCharacterButton.SelectedIndex + 1 });
-                mapLayout.Add(GetChibiStackLayout((ChibiItem)_project.Items.Where(i => i.Type == ItemDescription.ItemType.Chibi).ElementAt(_script.Event.MapCharactersSection.Objects[index].CharacterIndex - 1), index, mapDetailsLayout, mapLayout, out SKBitmap chibiBitmap),
+                mapLayout.Add(GetChibiStackLayout((ChibiItem)_project.Items.Where(i => i.Type == ItemDescription.ItemType.Chibi).First(c => ((ChibiItem)c).ChibiIndex == _script.Event.MapCharactersSection.Objects[index].CharacterIndex), index, mapDetailsLayout, mapLayout, out SKBitmap chibiBitmap),
                     ((int)gridZero.X - _script.Event.MapCharactersSection.Objects[index].Y * 16 + _script.Event.MapCharactersSection.Objects[index].X * 16 - chibiBitmap.Width / 2) / 2,
                     ((int)gridZero.Y + _script.Event.MapCharactersSection.Objects[index].X * 8 + _script.Event.MapCharactersSection.Objects[index].Y * 8 - chibiBitmap.Height / 2 - 24) / 2);
                 UpdateTabTitle(false);
@@ -1030,6 +1043,11 @@ namespace SerialLoops.Editors
 
                         case ScriptParameter.ParameterType.BOOL:
                             ScriptCommandCheckBox boolParameterCheckbox = new() { Command = command, ParameterIndex = i, Checked = ((BoolScriptParameter)parameter).Value };
+                            if (command.Verb == CommandVerb.SND_PLAY)
+                            {
+                                boolParameterCheckbox.DisableableNumericSteppers = [];
+                                _currentLoadSoundCheckBox = boolParameterCheckbox;
+                            }
                             boolParameterCheckbox.CheckedChanged += BoolParameterCheckbox_CheckedChanged;
 
                             ((TableLayout)controlsTable.Rows.Last().Cells[0].Control).Rows[0].Cells.Add(
@@ -1040,7 +1058,7 @@ namespace SerialLoops.Editors
                             ScriptCommandDropDown dialoguePropertyDropDown = new() { Command = command, ParameterIndex = i };
                             dialoguePropertyDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Character)
                                 .Select(c => new ListItem { Key = c.DisplayName, Text = c.DisplayName[4..] }));
-                            dialoguePropertyDropDown.SelectedKey = ((DialoguePropertyScriptParameter)parameter).Character.Name;
+                            dialoguePropertyDropDown.SelectedKey = ((DialoguePropertyScriptParameter)parameter).Character.DisplayName;
                             dialoguePropertyDropDown.SelectedKeyChanged += DialoguePropertyDropDown_SelectedKeyChanged;
                             _currentSpeakerDropDown.OtherDropDowns.Add(dialoguePropertyDropDown);
 
@@ -1360,7 +1378,21 @@ namespace SerialLoops.Editors
                                 DecimalPlaces = 0,
                                 Value = ((ShortScriptParameter)parameter).Value
                             };
-                            if (parameter.Name.Contains(Application.Instance.Localize(this, "Frames")))
+                            if (command.Verb == CommandVerb.SND_PLAY && parameter.Name.Equals(Application.Instance.Localize(this, "Crossfade Time (Frames)"), StringComparison.OrdinalIgnoreCase))
+                            {
+                                _currentLoadSoundCheckBox.DisableableNumericSteppers.Add(shortNumericStepper);
+                                if (((ShortScriptParameter)parameter).Value < 0 && (_currentLoadSoundCheckBox.Checked ?? false))
+                                {
+                                    shortNumericStepper.Enabled = false;
+                                    shortNumericStepper.MinValue = -1;
+                                }
+                                else
+                                {
+                                    _currentLoadSoundCheckBox.Checked = false;
+                                    shortNumericStepper.MinValue = 0;
+                                }
+                            }
+                            else if (parameter.Name.Contains(Application.Instance.Localize(this, "Frames")))
                             {
                                 shortNumericStepper.MinValue = 0;
                             }
@@ -1368,10 +1400,6 @@ namespace SerialLoops.Editors
                             {
                                 shortNumericStepper.MinValue = 0;
                                 shortNumericStepper.MaxValue = 100;
-                            }
-                            if (command.Verb == CommandVerb.SND_PLAY && parameter.Name == Application.Instance.Localize(this, "Crossfade Time (Frames)"))
-                            {
-                                shortNumericStepper.SecondIndex = 4;
                             }
                             if (command.Verb == CommandVerb.HARUHI_METER)
                             {
@@ -1509,7 +1537,7 @@ namespace SerialLoops.Editors
 
                             ScriptCommandDropDown vceDropDown = new() { Command = command, ParameterIndex = i, Link = (ClearableLinkButton)vceLink.Items[1].Control };
                             vceDropDown.Items.Add(new ListItem { Key = "NONE", Text = "NONE" });
-                            vceDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Voice).Select(i => new ListItem { Text = i.Name, Key = i.Name }));
+                            vceDropDown.Items.AddRange(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Voice).OrderBy(i => i.DisplayName).Select(i => new ListItem { Text = i.DisplayName, Key = i.Name }));
                             vceDropDown.SelectedKey = vceParam.VoiceLine?.Name ?? "NONE";
                             vceDropDown.SelectedKeyChanged += VceDropDown_SelectedKeyChanged;
 
@@ -1641,10 +1669,19 @@ namespace SerialLoops.Editors
         private void BoolParameterCheckbox_CheckedChanged(object sender, EventArgs e)
         {
             ScriptCommandCheckBox checkBox = (ScriptCommandCheckBox)sender;
-            _log.Log($"Attempting to modify parameter {checkBox.ParameterIndex} to BGM mode {checkBox.Checked} in {checkBox.Command.Index} in file {_script.Name}...");
+            _log.Log($"Attempting to modify parameter {checkBox.ParameterIndex} to {checkBox.Checked} in {checkBox.Command.Index} in file {_script.Name}...");
             ((BoolScriptParameter)checkBox.Command.Parameters[checkBox.ParameterIndex]).Value = checkBox.Checked ?? false;
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(checkBox.Command.Section)]
-                .Objects[checkBox.Command.Index].Parameters[checkBox.ParameterIndex] = (short)((checkBox.Checked ?? false) ? 1 : 0);
+                .Objects[checkBox.Command.Index].Parameters[checkBox.ParameterIndex] = (checkBox.Checked ?? false) ? ((BoolScriptParameter)checkBox.Command.Parameters[checkBox.ParameterIndex]).TrueValue : ((BoolScriptParameter)checkBox.Command.Parameters[checkBox.ParameterIndex]).FalseValue;
+            if (checkBox.DisableableNumericSteppers is not null)
+            {
+                foreach (ScriptCommandNumericStepper disableableStepper in checkBox.DisableableNumericSteppers)
+                {
+                    disableableStepper.MinValue = (checkBox.Checked ?? false) ? -1 : 0;
+                    disableableStepper.Value = (checkBox.Checked ?? false) ? -1 : 0;
+                    disableableStepper.Enabled = !(checkBox.Checked ?? false);
+                }
+            }
 
             UpdateTabTitle(false);
             Application.Instance.Invoke(UpdatePreview);
@@ -1815,7 +1852,7 @@ namespace SerialLoops.Editors
         {
             ScriptCommandDropDown dropDown = (ScriptCommandDropDown)sender;
             CharacterItem character = (CharacterItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Character && i.DisplayName.Equals(dropDown.SelectedKey));
-            _log.Log($"Attempting to modify dialogue property in parameter {dropDown.ParameterIndex} to dialogue {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
+            _log.Log($"Attempting to modify character in parameter {dropDown.ParameterIndex} to character {dropDown.SelectedKey} in {dropDown.Command.Index} in file {_script.Name}...");
             ((DialoguePropertyScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).Character = character;
             _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)].Objects[dropDown.Command.Index]
                 .Parameters[dropDown.ParameterIndex] = (short)_project.MessInfo.MessageInfos.FindIndex(m => m.Character == character.MessageInfo.Character);
@@ -2138,14 +2175,14 @@ namespace SerialLoops.Editors
             else
             {
                 ((VoicedLineScriptParameter)dropDown.Command.Parameters[dropDown.ParameterIndex]).VoiceLine =
-                    (VoicedLineItem)_project.Items.FirstOrDefault(i => i.DisplayName == dropDown.SelectedKey);
+                    (VoicedLineItem)_project.Items.FirstOrDefault(i => i.Name == dropDown.SelectedKey);
                 _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(dropDown.Command.Section)]
                     .Objects[dropDown.Command.Index].Parameters[dropDown.ParameterIndex] =
-                    (short)((VoicedLineItem)_project.Items.First(i => i.DisplayName == dropDown.SelectedKey)).Index;
+                    (short)((VoicedLineItem)_project.Items.First(i => i.Name == dropDown.SelectedKey)).Index;
             }
-            dropDown.Link.Text = dropDown.SelectedKey;
+            dropDown.Link.Text = _project.Items.FirstOrDefault(i => i.Name == dropDown.SelectedKey).DisplayName;
             dropDown.Link.RemoveAllClickEvents();
-            dropDown.Link.ClickUnique += (s, e) => { _tabs.OpenTab(_project.Items.FirstOrDefault(i => i.DisplayName == dropDown.SelectedKey), _log); };
+            dropDown.Link.ClickUnique += (s, e) => { _tabs.OpenTab(_project.Items.FirstOrDefault(i => i.Name == dropDown.SelectedKey), _log); };
 
             UpdateTabTitle(false, dropDown);
         }

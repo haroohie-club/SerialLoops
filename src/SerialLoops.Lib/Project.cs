@@ -67,6 +67,8 @@ namespace SerialLoops.Lib
         [JsonIgnore]
         public SKBitmap NameplateBitmap { get; set; }
         [JsonIgnore]
+        public GraphicInfo NameplateInfo { get; set; }
+        [JsonIgnore]
         public SKBitmap DialogueBitmap { get; set; }
         [JsonIgnore]
         public SKBitmap FontBitmap { get; set; }
@@ -329,7 +331,9 @@ namespace SerialLoops.Lib
             }
             try
             {
-                NameplateBitmap = Grp.GetFileByName("SYS_CMN_B12DNX").GetImage();
+                GraphicsFile nameplate = Grp.GetFileByName("SYS_CMN_B12DNX");
+                NameplateBitmap = nameplate.GetImage();
+                NameplateInfo = new(nameplate);
             }
             catch (Exception ex)
             {
