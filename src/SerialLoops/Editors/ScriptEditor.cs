@@ -32,6 +32,7 @@ namespace SerialLoops.Editors
         private TableLayout _detailsLayout = new();
         private readonly StackLayout _preview = new() { Items = { new SKGuiImage(new(256, 384)) } };
         private StackLayout _scriptProperties = new();
+        private StackLayout _eventTableProperties = new();
         private StackLayout _editorControls = new();
         private ScriptCommandListPanel _commandsPanel;
         private Button _addCommandButton;
@@ -103,10 +104,42 @@ namespace SerialLoops.Editors
             _detailsLayout = new() { Spacing = new Size(5, 5) };
             _editorControls = new() { Orientation = Orientation.Horizontal };
 
+            _eventTableProperties = new()
+            {
+                Orientation = Orientation.Vertical,
+                Spacing = 5,
+            };
+            if (_script.SfxGroupIndex >= 0)
+            {
+                SetupEventTableProperties();
+            }
+            else
+            {
+                Button button = new() { Text = Application.Instance.Localize(this, "Add to Event Table") };
+                button.Click += (sender, args) =>
+                {
+                    // we insert before the last entry which is the "end of table" entry
+                    _project.EventTableFile.EvtTbl.Entries.Insert(_project.EventTableFile.EvtTbl.Entries.Count - 1, new((short)_script.Event.Index, 8, 1));
+                    SetupEventTableProperties();
+                };
+                _eventTableProperties.Items.Clear();
+                _eventTableProperties.Items.Add(new Label { Text = Application.Instance.Localize(this, "This script is not included in the event table.") });
+                _eventTableProperties.Items.Add(button);
+            }
+
             TabControl propertiesTabs = GetPropertiesTabs();
             if (propertiesTabs.Pages.Count > 0)
             {
-                _scriptProperties = new() { Items = { GetPropertiesTabs() } };
+                _scriptProperties = new()
+                {
+                    Orientation = Orientation.Vertical,
+                    Spacing = 10,
+                    Items =
+                    {
+                        GetPropertiesTabs(),
+                        _eventTableProperties,
+                    },
+                };
             }
 
             _detailsLayout.Rows.Add(new(new TableLayout(new TableRow(_preview, _scriptProperties))));
@@ -115,6 +148,61 @@ namespace SerialLoops.Editors
             mainRow.Cells.Add(new(_detailsLayout));
             layout.Rows.Add(mainRow);
             return layout;
+        }
+
+        private void SetupEventTableProperties()
+        {
+            DropDown sfxGroupDropDown = new();
+            sfxGroupDropDown.Items.AddRange(_project.Snd.Groups.Select(g => new ListItem { Key = g.Name, Text = g.Name }));
+            sfxGroupDropDown.SelectedIndex = _script.SfxGroupIndex;
+            sfxGroupDropDown.SelectedIndexChanged += (sender, args) =>
+            {
+                _project.EventTableFile.EvtTbl.Entries.First(e => e.EventFileIndex == _script.Event.Index).SfxGroupIndex = (short)sfxGroupDropDown.SelectedIndex;
+                UpdateTabTitle(false);
+            };
+
+            StackLayout readFlagLayout = new() { Orientation = Orientation.Horizontal, Spacing = 3 };
+            if (_script.StartReadFlag > 0)
+            {
+                SetupReadFlagLayout(readFlagLayout);
+            }
+            else
+            {
+                SetupAddReadFlagLayout(readFlagLayout);
+            }
+
+            _eventTableProperties.Items.Clear();
+            _eventTableProperties.Items.Add(readFlagLayout);
+            _eventTableProperties.Items.Add(ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "SFX Group"), sfxGroupDropDown));
+        }
+
+        private void SetupReadFlagLayout(StackLayout readFlagLayout)
+        {
+            readFlagLayout.Items.Add(ControlGenerator.GetControlWithLabel(Application.Instance.Localize(this, "Start Read Flag"), _script.StartReadFlag.ToString()));
+            Button button = new() { Text = Application.Instance.Localize(this, "Remove Read Flag") };
+            button.Click += (sender, args) =>
+            {
+                _project.EventTableFile.EvtTbl.Entries.First(e => e.EventFileIndex == _script.Event.Index).FirstReadFlag = -1;
+                _script.StartReadFlag = -1;
+                readFlagLayout.Items.Clear();
+                SetupAddReadFlagLayout(readFlagLayout);
+                UpdateTabTitle(false);
+            };
+            readFlagLayout.Items.Add(button);
+        }
+
+        private void SetupAddReadFlagLayout(StackLayout readFlagLayout)
+        {
+            Button button = new() { Text = Application.Instance.Localize(this, "Add Read Flag") };
+            button.Click += (sender, args) =>
+            {
+                _project.EventTableFile.EvtTbl.Entries.First(e => e.EventFileIndex == _script.Event.Index).FirstReadFlag = 1;
+                _script.StartReadFlag = 1;
+                readFlagLayout.Items.Clear();
+                SetupReadFlagLayout(readFlagLayout);
+                UpdateTabTitle(false);
+            };
+            readFlagLayout.Items.Add(button);
         }
 
         private StackLayout GetEditorButtons(ScriptCommandSectionTreeGridView treeGridView)

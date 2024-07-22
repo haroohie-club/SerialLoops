@@ -346,14 +346,14 @@ namespace SerialLoops.Dialogs
         private List<int> GetFilteredFlags(string term = null, bool onlyShowSet = false)
         {
             List<int> filtered = [];
-            for (int i = 0; i < 5120; i++)
+            for (int i = 0; i < Flags.NUM_FLAGS; i++)
             {
                 if (onlyShowSet && !(_flagModifications.TryGetValue(i, out var set) ? set : _saveSection.IsFlagSet(i)))
                 {
                     continue;
                 }
 
-                if (!string.IsNullOrWhiteSpace(term) && !Flags.GetFlagNickname(i, _project).ToLower().Contains(term.ToLower().Trim()))
+                if (!string.IsNullOrWhiteSpace(term) && !Flags.GetFlagNickname(i, _project).Contains(term.Trim(), StringComparison.CurrentCultureIgnoreCase))
                 {
                     continue;
                 }

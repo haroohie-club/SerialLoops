@@ -77,6 +77,8 @@ namespace SerialLoops.Lib
         [JsonIgnore]
         public CharacterDataFile ChrData { get; set; }
         [JsonIgnore]
+        public EventFile EventTableFile { get; set; }
+        [JsonIgnore]
         public ExtraFile Extra { get; set; }
         [JsonIgnore]
         public ScenarioStruct Scenario { get; set; }
@@ -98,6 +100,8 @@ namespace SerialLoops.Lib
         // Localization function to make localizing accessible from the lib
         [JsonIgnore]
         public Func<string, string> Localize { get; set; }
+
+        private static readonly string[] NON_SCRIPT_EVT_FILES = new string[] { "CHESSS", "EVTTBLS", "TOPICS", "SCENARIOS", "TUTORIALS", "VOICEMAPS" };
 
         public Project()
         {
@@ -364,7 +368,17 @@ namespace SerialLoops.Lib
             }
             tracker.Finished++;
 
-            tracker.Focus("Static Files", 5);
+            tracker.Focus("Static Files", 6);
+            try
+            {
+                EventTableFile = Evt.GetFileByName("EVTTBLS");
+                EventTableFile.InitializeEventTableFile();
+            }
+            catch (Exception ex)
+            {
+                log.LogException($"Failed to load event table file", ex);
+            }
+            tracker.Finished++;
             try
             {
                 ChrData = Dat.GetFileByName("CHRDATAS").CastTo<CharacterDataFile>();
@@ -590,11 +604,11 @@ namespace SerialLoops.Lib
             {
                 tracker.Focus("Scripts", Evt.Files.Count - 5);
                 Items.AddRange(Evt.Files.AsParallel()
-                    .Where(e => !new string[] { "CHESSS", "EVTTBLS", "TOPICS", "SCENARIOS", "TUTORIALS", "VOICEMAPS" }.Contains(e.Name))
+                    .Where(e => !NON_SCRIPT_EVT_FILES.Contains(e.Name))
                     .Select(e =>
                     {
                         tracker.Finished++;
-                        return new ScriptItem(e, Localize, log);
+                        return new ScriptItem(e, EventTableFile.EvtTbl, Localize, log);
                     }));
             }
             catch (Exception ex)
@@ -892,6 +906,27 @@ namespace SerialLoops.Lib
         public bool VoiceMapIsV06OrHigher()
         {
             return Evt.Files.AsParallel().Any(f => f.Name == "VOICEMAPS") && Encoding.ASCII.GetString(Evt.GetFileByName("VOICEMAPS").Data.Skip(0x08).Take(4).ToArray()) == "SUBS";
+        }
+
+        public void RecalculateEventTable()
+        {
+            short currentFlag = 0;
+            int prevScriptIndex = 0;
+            foreach (EventTableEntry entry in EventTableFile.EvtTbl.Entries)
+            {
+                if (currentFlag == 0 && entry.FirstReadFlag > 0)
+                {
+                    currentFlag = entry.FirstReadFlag;
+                    prevScriptIndex = entry.EventFileIndex;
+                }
+                else if (entry.FirstReadFlag > 0)
+                {
+                    currentFlag += (short)(Evt.GetFileByIndex(prevScriptIndex).ScriptSections.Count + 1);
+                    entry.FirstReadFlag = currentFlag;
+                    prevScriptIndex = entry.EventFileIndex;
+                }
+            }
+            Items.Where(i => i.Type == ItemDescription.ItemType.Script).Cast<ScriptItem>().ToList().ForEach(s => s.UpdateEventTableInfo(EventTableFile.EvtTbl));
         }
 
         public void MigrateProject(string newRom, ILogger log, IProgressTracker tracker)

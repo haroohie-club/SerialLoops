@@ -493,7 +493,7 @@ namespace SerialLoops
             });
             ProjectsCache.Save(Log);
         }
-        
+
         public void AboutCommand_Executed(object sender, EventArgs e)
         {
             new AboutDialog
@@ -629,6 +629,7 @@ namespace SerialLoops
             }
 
             IEnumerable<ItemDescription> unsavedItems = OpenProject.Items.Where(i => i.UnsavedChanges);
+            bool savedEventTable = false;
             bool savedChrData = false;
             bool savedExtra = false;
             bool savedMessInfo = false;
@@ -638,6 +639,25 @@ namespace SerialLoops
             List<int> changedLayouts = [];
             SKCanvas nameplateCanvas = new(OpenProject.NameplateBitmap);
             SKCanvas speakerCanvas = new(OpenProject.SpeakerBitmap);
+
+            Dictionary<string, IncludeEntry[]> includes = new()
+            {
+                {
+                    "GRPBIN",
+                    OpenProject.Grp.GetSourceInclude().Split('\n').Where(s => !string.IsNullOrEmpty(s))
+                        .Select(i => new IncludeEntry(i)).ToArray()
+                },
+                {
+                    "DATBIN",
+                    OpenProject.Dat.GetSourceInclude().Split('\n').Where(s => !string.IsNullOrEmpty(s))
+                        .Select(i => new IncludeEntry(i)).ToArray()
+                },
+                {
+                    "EVTBIN",
+                    OpenProject.Evt.GetSourceInclude().Split('\n').Where(s => !string.IsNullOrEmpty(s))
+                        .Select(i => new IncludeEntry(i)).ToArray()
+                }
+            };
 
             foreach (ItemDescription item in unsavedItems)
             {
@@ -737,29 +757,18 @@ namespace SerialLoops
                     case ItemDescription.ItemType.Scenario:
                         ScenarioStruct scenario = ((ScenarioItem)item).Scenario;
                         IO.WriteStringFile(
-                            Path.Combine("assets", "events",
-                                $"{OpenProject.Evt.GetFileByName("SCENARIOS").Index:X3}.s"),
-                            // TODO: Refactor this logic into the chokuretsu library so that we don't end up with ugliness like this for all of our includes
-                            scenario.GetSource(new()
-                            {
-                                {
-                                    "DATBIN",
-                                    OpenProject.Dat.GetSourceInclude().Split('\n').Where(s => !string.IsNullOrEmpty(s))
-                                        .Select(i => new IncludeEntry(i)).ToArray()
-                                },
-                                {
-                                    "EVTBIN",
-                                    OpenProject.Evt.GetSourceInclude().Split('\n').Where(s => !string.IsNullOrEmpty(s))
-                                        .Select(i => new IncludeEntry(i)).ToArray()
-                                }
-                            }, Log),
-                            OpenProject, Log);
+                            Path.Combine("assets", "events", $"{OpenProject.Evt.GetFileByName("SCENARIOS").Index:X3}.s"),
+                            scenario.GetSource(includes, Log), OpenProject, Log);
                         break;
                     case ItemDescription.ItemType.Script:
+                        if (!savedEventTable)
+                        {
+                            OpenProject.RecalculateEventTable();
+                            IO.WriteStringFile(Path.Combine("assets", "events", $"{OpenProject.EventTableFile.Index:X3}.s"), OpenProject.EventTableFile.GetSource(includes), OpenProject, Log);
+                        }
                         EventFile evt = ((ScriptItem)item).Event;
                         evt.CollectGarbage();
-                        IO.WriteStringFile(Path.Combine("assets", "events", $"{evt.Index:X3}.s"), evt.GetSource([]),
-                            OpenProject, Log);
+                        IO.WriteStringFile(Path.Combine("assets", "events", $"{evt.Index:X3}.s"), evt.GetSource(includes), OpenProject, Log);
                         break;
                     case ItemDescription.ItemType.System_Texture:
                         ((SystemTextureItem)item).Write(OpenProject, Log);
@@ -875,7 +884,7 @@ namespace SerialLoops
         {
             var openEditor = () =>
             {
-                OpenFileDialog openFileDialog = new() {Title = Application.Instance.Localize(this, "Open Chokuretsu Save File")};
+                OpenFileDialog openFileDialog = new() { Title = Application.Instance.Localize(this, "Open Chokuretsu Save File") };
                 openFileDialog.Filters.Add(new(Application.Instance.Localize(this, "Chokuretsu Save File"), ["*.sav"]));
                 if (openFileDialog.ShowAndReportIfFileSelected(this))
                 {
@@ -891,7 +900,7 @@ namespace SerialLoops
                 openEditor.Invoke();
                 return;
             }
-            
+
             // Ask user if they wish to create a project
             if (MessageBox.Show(Application.Instance.Localize(this, "To edit Save Files, you need to have a project open.\n" +
                                 "No project is currently open. Would you like to create a new project?"),
