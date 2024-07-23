@@ -201,7 +201,11 @@
     <value>“访问保存数据提示”消息框</value>
   </data>
   <data name="(Missing)" xml:space="preserve">
+<<<<<<< HEAD
     <value> （缺失）</value>
+=======
+    <value>（缺失）</value>
+>>>>>>> weblate/main
   </data>
   <data name="Batch Dialogue Display On" xml:space="preserve">
     <value>批量对话显示开</value>
