@@ -9,18 +9,11 @@ namespace SerialLoops.Lib
 {
     public static class IO
     {
-        private class IODirectory
+        private class IODirectory(string name, IODirectory[] subdirectories, IOFile[] files)
         {
-            public string Name { get; set; }
-            public IODirectory[] Subdirectories { get; set; }
-            public IOFile[] Files { get; set; }
-
-            public IODirectory(string name, IODirectory[] subdirectories, IOFile[] files)
-            {
-                Name = name;
-                Subdirectories = subdirectories;
-                Files = files;
-            }
+            public string Name { get; set; } = name;
+            public IODirectory[] Subdirectories { get; set; } = subdirectories;
+            public IOFile[] Files { get; set; } = files;
 
             public void Create(string basePath, ILogger log)
             {

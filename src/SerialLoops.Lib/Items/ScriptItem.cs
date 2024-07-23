@@ -17,15 +17,18 @@ namespace SerialLoops.Lib.Items
     public class ScriptItem : Item
     {
         public EventFile Event { get; set; }
+        public short StartReadFlag { get; set; }
+        public short SfxGroupIndex { get; set; }
         public AdjacencyGraph<ScriptSection, ScriptSectionEdge> Graph { get; set; } = new();
         private readonly Func<string, string> _localize;
 
         public ScriptItem(string name) : base(name, ItemType.Script)
         {
         }
-        public ScriptItem(EventFile evt, Func<string, string> localize, ILogger log) : base(evt.Name[0..^1], ItemType.Script)
+        public ScriptItem(EventFile evt, EventTable evtTbl, Func<string, string> localize, ILogger log) : base(evt.Name[0..^1], ItemType.Script)
         {
             Event = evt;
+            UpdateEventTableInfo(evtTbl);
             _localize = localize;
 
             PruneLabelsSection(log);
@@ -200,7 +203,7 @@ namespace SerialLoops.Lib.Items
                 {
                     if (chibi.ChibiIndex > 0)
                     {
-                        chibis.Add((ChibiItem)project.Items.First(i => i.Type == ItemType.Chibi && ((ChibiItem)i).ChibiIndex == chibi.ChibiIndex));
+                        chibis.Add((ChibiItem)project.Items.First(i => i.Type == ItemType.Chibi && ((ChibiItem)i).TopScreenIndex == chibi.ChibiIndex));
                     }
                 }
                 for (int i = 0; i < commands.Count; i++)
@@ -208,7 +211,7 @@ namespace SerialLoops.Lib.Items
                     if (commands[i].Verb == CommandVerb.OP_MODE)
                     {
                         // Kyon auto-added by OP_MODE command
-                        ChibiItem chibi = (ChibiItem)project.Items.First(i => i.Type == ItemType.Chibi && ((ChibiItem)i).ChibiIndex == 1);
+                        ChibiItem chibi = (ChibiItem)project.Items.First(i => i.Type == ItemType.Chibi && ((ChibiItem)i).TopScreenIndex == 1);
                         if (!chibis.Contains(chibi))
                         {
                             chibis.Add(chibi);
@@ -221,7 +224,7 @@ namespace SerialLoops.Lib.Items
                             ChibiItem chibi = ((ChibiScriptParameter)commands[i].Parameters[0]).Chibi;
                             if (!chibis.Contains(chibi))
                             {
-                                if (chibi.ChibiIndex < 1 || chibis.Count == 0)
+                                if (chibi.TopScreenIndex < 1 || chibis.Count == 0)
                                 {
                                     chibis.Add(chibi);
                                 }
@@ -230,7 +233,7 @@ namespace SerialLoops.Lib.Items
                                     bool inserted = false;
                                     for (int j = 0; j < chibis.Count; j++)
                                     {
-                                        if (chibis[j].ChibiIndex > chibi.ChibiIndex)
+                                        if (chibis[j].TopScreenIndex > chibi.TopScreenIndex)
                                         {
                                             chibis.Insert(j, chibi);
                                             inserted = true;
@@ -317,25 +320,9 @@ namespace SerialLoops.Lib.Items
                 SKPaint palEffectPaint = PaletteEffectScriptParameter.IdentityPaint;
                 if (palCommand is not null && lastBgCommand is not null && commands.IndexOf(palCommand) > commands.IndexOf(lastBgCommand))
                 {
-                    switch (((PaletteEffectScriptParameter)palCommand.Parameters[0]).Effect)
-                    {
-                        case PaletteEffectScriptParameter.PaletteEffect.INVERTED:
-                            palEffectPaint = PaletteEffectScriptParameter.InvertedPaint;
-                            break;
-
-                        case PaletteEffectScriptParameter.PaletteEffect.GRAYSCALE:
-                            palEffectPaint = PaletteEffectScriptParameter.GrayscalePaint;
-                            break;
-
-                        case PaletteEffectScriptParameter.PaletteEffect.SEPIA:
-                            palEffectPaint = PaletteEffectScriptParameter.SepiaPaint;
-                            break;
-
-                        case PaletteEffectScriptParameter.PaletteEffect.DIMMED:
-                            palEffectPaint = PaletteEffectScriptParameter.DimmedPaint;
-                            break;
-                    }
+                    preview.BgPalEffect = ((PaletteEffectScriptParameter)palCommand.Parameters[0]).Effect;
                 }
+
                 ScriptItemCommand bgScrollCommand = null;
                 for (int i = commands.Count - 1; i >= 0; i--)
                 {
@@ -550,7 +537,7 @@ namespace SerialLoops.Lib.Items
                     previousCommand = command;
                 }
 
-                preview.Sprites = sprites.Values.OrderBy(p => p.Positioning.Layer).ToList();
+                preview.Sprites = [.. sprites.Values.OrderBy(p => p.Positioning.Layer)];
 
                 // Draw dialogue
                 ScriptItemCommand lastDialogueCommand = commands.LastOrDefault(c => c.Verb == CommandVerb.DIALOGUE);
@@ -609,7 +596,7 @@ namespace SerialLoops.Lib.Items
 
                 if (preview.ChibiEmote.EmotingChibi is not null)
                 {
-                    SKBitmap emotes = project.Grp.Files.First(f => f.Name == "SYS_ADV_T08DNX").GetImage(width: 32, transparentIndex: 0);
+                    SKBitmap emotes = project.Grp.GetFileByName("SYS_ADV_T08DNX").GetImage(width: 32, transparentIndex: 0);
                     int chibiY = preview.TopScreenChibis.First(c => c.Chibi == preview.ChibiEmote.EmotingChibi).Y;
                     canvas.DrawBitmap(emotes, new SKRect(0, preview.ChibiEmote.InternalYOffset, 32, preview.ChibiEmote.InternalYOffset + 32), new SKRect(preview.ChibiEmote.ExternalXOffset + 16, chibiY - 32, preview.ChibiEmote.ExternalXOffset + 48, chibiY));
                 }
@@ -733,6 +720,21 @@ namespace SerialLoops.Lib.Items
         public (SKBitmap PreviewImage, string ErrorImage) GeneratePreviewImage(Dictionary<ScriptSection, List<ScriptItemCommand>> commandTree, ScriptItemCommand currentCommand, Project project, ILogger log)
         {
             return GeneratePreviewImage(GetScriptPreview(commandTree, currentCommand, project, log), project);
+        }
+
+        public void UpdateEventTableInfo(EventTable evtTbl)
+        {
+            EventTableEntry entry = evtTbl.Entries.FirstOrDefault(e => e.EventFileIndex == Event.Index);
+            if (entry is not null)
+            {
+                StartReadFlag = entry.FirstReadFlag;
+                SfxGroupIndex = entry.SfxGroupIndex;
+            }
+            else
+            {
+                StartReadFlag = -1;
+                SfxGroupIndex = -1;
+            }
         }
 
         public void PruneLabelsSection(ILogger log)

@@ -59,7 +59,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Build and Run" xml:space="preserve">
-    <value>Ricostruisci e riavvia</value>
+    <value>Compila e Avvia</value>
   </data>
   <data name="About" xml:space="preserve">
     <value>Informazioni</value>
@@ -160,7 +160,7 @@
     <value>Descrizione di Asahina Mikuru come compagna</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Cancella</value>
+    <value>Annulla</value>
   </data>
   <data name="Chibi" xml:space="preserve">
     <value>Chibi</value>
@@ -183,13 +183,13 @@
     <value>Accesso alla finestra di messaggio di richiesta di salvataggio dei dati</value>
   </data>
   <data name="(Missing)" xml:space="preserve">
-    <value> (Missing)</value>
+    <value> (Mancante)</value>
   </data>
   <data name="&amp;Build" xml:space="preserve">
     <value>&amp;Costruisci</value>
   </data>
   <data name="Build succeeded!" xml:space="preserve">
-    <value>Ricostruzione completata!</value>
+    <value>Compilazione completata!</value>
   </data>
   <data name="BGMs" xml:space="preserve">
     <value>BGMs</value>
@@ -201,7 +201,7 @@
     <value>Messaggio sul aver sbloccato gli scacchi</value>
   </data>
   <data name="Build from Scratch" xml:space="preserve">
-    <value>Ricostruisci da zero</value>
+    <value>Compila da Zero</value>
   </data>
   <data name="Base Time" xml:space="preserve">
     <value>Tempo Base</value>
@@ -228,10 +228,10 @@
     <value>Pulizia dell'elenco iterativo</value>
   </data>
   <data name="Build Unbuilt Files?" xml:space="preserve">
-    <value>Creare file non costruiti?</value>
+    <value>Creare file non Compilati?</value>
   </data>
   <data name="Adjust Volume" xml:space="preserve">
-    <value>Aggiusta Volume</value>
+    <value>Configura Volume</value>
   </data>
   <data name="Apply Template" xml:space="preserve">
     <value>Applica Template</value>
@@ -258,7 +258,7 @@
     <value>ROM di Chokuretsu</value>
   </data>
   <data name="Build" xml:space="preserve">
-    <value>Ricostruisci</value>
+    <value>Compila</value>
   </data>
   <data name="&amp;Edit" xml:space="preserve">
     <value>&amp;Modifica</value>
@@ -280,7 +280,7 @@
     <value>Tipi di sfondo</value>
   </data>
   <data name="&amp;Check for Updates..." xml:space="preserve">
-    <value>&amp;Cercando aggiornamenti…</value>
+    <value>Cercando &amp;aggiornamenti…</value>
   </data>
   <data name="Background" xml:space="preserve">
     <value>Sfondo</value>
@@ -292,7 +292,7 @@
     <value>Personaggi</value>
   </data>
   <data name="Build failed!" xml:space="preserve">
-    <value>Ricostruzione fallita!</value>
+    <value>Compilazione Fallita!</value>
   </data>
   <data name="Cut" xml:space="preserve">
     <value>Taglia</value>
@@ -301,7 +301,7 @@
     <value>Personaggio</value>
   </data>
   <data name="Building and Running" xml:space="preserve">
-    <value>Ricostruisci e avvia adesso</value>
+    <value>Compilando e Avviando</value>
   </data>
   <data name="Associated Script" xml:space="preserve">
     <value>Script associati</value>
@@ -322,7 +322,7 @@
     <value>&amp;Preferenze…</value>
   </data>
   <data name="Add Frames" xml:space="preserve">
-    <value>Aggiungi Frames</value>
+    <value>Aggiungi Frame</value>
   </data>
   <data name="Collected all Haruhi topics message box" xml:space="preserve">
     <value>Messaggio sul aver raccolto tutte le discussioni su Haruhi</value>
@@ -332,5 +332,1940 @@
   </data>
   <data name="Chokuretsu Save File" xml:space="preserve">
     <value>Salvataggio di Chokuretsu</value>
+  </data>
+  <data name="Extract" xml:space="preserve">
+    <value>Estratto</value>
+  </data>
+  <data name="Episode 5" xml:space="preserve">
+    <value>Episodio 5</value>
+  </data>
+  <data name="Failed to load voice file: file invalid." xml:space="preserve">
+    <value>Errore nel caricare il file voce: Formato non valido.</value>
+  </data>
+  <data name="Failed to delete file '{0}'" xml:space="preserve">
+    <value>Errore nel cancellare il file '{0}'</value>
+  </data>
+  <data name="Exporting GIF..." xml:space="preserve">
+    <value>Esportando una GIF…</value>
+  </data>
+  <data name="Episode 2 title" xml:space="preserve">
+    <value>Titolo del 2' episodio</value>
+  </data>
+  <data name="Caching" xml:space="preserve">
+    <value>Caching</value>
+  </data>
+  <data name="Create New Project" xml:space="preserve">
+    <value>Crea un nuovo progetto</value>
+  </data>
+  <data name="Episode 3" xml:space="preserve">
+    <value>Episodio 3</value>
+  </data>
+  <data name="Episode 5 title" xml:space="preserve">
+    <value>Titolo del 5' episodio</value>
+  </data>
+  <data name="Export SFX" xml:space="preserve">
+    <value>Esporta Effetti Sonori</value>
+  </data>
+  <data name="Creating Directories" xml:space="preserve">
+    <value>Creazione cartella progetto</value>
+  </data>
+  <data name="English" xml:space="preserve">
+    <value>Inglese</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Crea</value>
+  </data>
+  <data name="Building:" xml:space="preserve">
+    <value>Compilando:</value>
+  </data>
+  <data name="Corrupted File Detected!" xml:space="preserve">
+    <value>Individuati file corrotti!</value>
+  </data>
+  <data name="Building Iteratively" xml:space="preserve">
+    <value>Compilare in modo iterativo</value>
+  </data>
+  <data name="Export GIF" xml:space="preserve">
+    <value>Esporta GIF</value>
+  </data>
+  <data name="Chess_Puzzles" xml:space="preserve">
+    <value>Scacchi</value>
+  </data>
+  <data name="Building from Scratch" xml:space="preserve">
+    <value>Compilando da Zero</value>
+  </data>
+  <data name="Can't Rename Item" xml:space="preserve">
+    <value>Impossibile Rinominare Oggetto</value>
+  </data>
+  <data name="Export Item Names" xml:space="preserve">
+    <value>Esporta nome dell'oggetto</value>
+  </data>
+  <data name="Character sprite frames exported!" xml:space="preserve">
+    <value>I Frame degli sprites dei personaggi sono stati esportati!</value>
+  </data>
+  <data name="Exporting BGM" xml:space="preserve">
+    <value>Esporta BGM</value>
+  </data>
+  <data name="Failed to load voice file: file not found." xml:space="preserve">
+    <value>Errore nel caricare il file voce: File non trovato.</value>
+  </data>
+  <data name="Error: duplicate hack detected! A file with the same name as a file in this hack has already been imported." xml:space="preserve">
+    <value>Errore: rilevato un hack duplicato! Un file con lo stesso nome di questa hack è già stato importato.</value>
+  </data>
+  <data name="End" xml:space="preserve">
+    <value>Fine</value>
+  </data>
+  <data name="Dialogue" xml:space="preserve">
+    <value>Dialoghi</value>
+  </data>
+  <data name="Export Frames" xml:space="preserve">
+    <value>Esporta frames</value>
+  </data>
+  <data name="Failed to start emulator" xml:space="preserve">
+    <value>Impossibile avviare l'emulatore</value>
+  </data>
+  <data name="Episode 1" xml:space="preserve">
+    <value>Episodio 1</value>
+  </data>
+  <data name="Episode 2" xml:space="preserve">
+    <value>Episodio 2</value>
+  </data>
+  <data name="Failed to load BGM file: file not found." xml:space="preserve">
+    <value>Errore caricare file BGM: File non trovato.</value>
+  </data>
+  <data name="Export" xml:space="preserve">
+    <value>Esporta</value>
+  </data>
+  <data name="Download from GitHub" xml:space="preserve">
+    <value>Scarica da Github</value>
+  </data>
+  <data name="Export Patch" xml:space="preserve">
+    <value>Esporta Patch</value>
+  </data>
+  <data name="Enter subtitle text..." xml:space="preserve">
+    <value>Inserisci testo per i sottotitoli…</value>
+  </data>
+  <data name="Failed to load BGM file: file invalid." xml:space="preserve">
+    <value>Errore caricare file BGM: formato non valido.</value>
+  </data>
+  <data name="Caching BGM" xml:space="preserve">
+    <value>Caching BGM</value>
+  </data>
+  <data name="Export Sprites" xml:space="preserve">
+    <value>Esporta Sprites</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Cancella</value>
+  </data>
+  <data name="Episode 4" xml:space="preserve">
+    <value>Episodio 4</value>
+  </data>
+  <data name="Can't rename this item directly -- open it to rename it!" xml:space="preserve">
+    <value>Non è possibile rinominare direttamente questo elemento: aprirlo per rinominarlo!</value>
+  </data>
+  <data name="Copying Files" xml:space="preserve">
+    <value>Copiando files</value>
+  </data>
+  <data name="Episode 4 title" xml:space="preserve">
+    <value>Titolo del 4' episodio</value>
+  </data>
+  <data name="Episode 3 title" xml:space="preserve">
+    <value>Titolo del 3' episodio</value>
+  </data>
+  <data name="Error reading save file." xml:space="preserve">
+    <value>Errore nel leggere il salvataggio.</value>
+  </data>
+  <data name="File {0}" xml:space="preserve">
+    <value>File {0}</value>
+  </data>
+  <data name="Failed to unpack ROM" xml:space="preserve">
+    <value>Impossibile spacchettare la ROM</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>File</value>
+    <comment>Please make this the same as &amp;File, just without the ampersand</comment>
+  </data>
+  <data name="Failed to update preview!" xml:space="preserve">
+    <value>Impossibile aggiornare l'anteprima!</value>
+  </data>
+  <data name="Fast Forward" xml:space="preserve">
+    <value>Avanti Veloce</value>
+  </data>
+  <data name="Filter" xml:space="preserve">
+    <value>Filtra</value>
+  </data>
+  <data name="Filter by name" xml:space="preserve">
+    <value>Filtra per nome</value>
+  </data>
+  <data name="Filter by Item" xml:space="preserve">
+    <value>Filtra per oggetti</value>
+  </data>
+  <data name="French" xml:space="preserve">
+    <value>Francese</value>
+  </data>
+  <data name="GIF exported!" xml:space="preserve">
+    <value>GIF esportata!</value>
+  </data>
+  <data name="GIF file" xml:space="preserve">
+    <value>File GIF</value>
+  </data>
+  <data name="German" xml:space="preserve">
+    <value>Tedesco</value>
+  </data>
+  <data name="Greek" xml:space="preserve">
+    <value>Greco</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Conferma</value>
+  </data>
+  <data name="Koizumi Time Percentage" xml:space="preserve">
+    <value>Percentuale tempo Koizumi</value>
+  </data>
+  <data name="Companion selection description" xml:space="preserve">
+    <value>Descrizione compagno scelto</value>
+  </data>
+  <data name="Replace" xml:space="preserve">
+    <value>Sostituisci</value>
+  </data>
+  <data name="Fade In Percentage" xml:space="preserve">
+    <value>Fade In Percentage</value>
+  </data>
+  <data name="Topic Stock Mode" xml:space="preserve">
+    <value>Modalità Discussione generica</value>
+  </data>
+  <data name="Highlight Space {0}" xml:space="preserve">
+    <value>Seleziona spazio {0}</value>
+    <comment>As on a chessboard</comment>
+  </data>
+  <data name="Language Template" xml:space="preserve">
+    <value>Template Lingua</value>
+  </data>
+  <data name="Display Flag 3" xml:space="preserve">
+    <value>Display Flag 3</value>
+  </data>
+  <data name="Rename Item" xml:space="preserve">
+    <value>Rinomina oggetto</value>
+  </data>
+  <data name="Script Position" xml:space="preserve">
+    <value>Posizione Script</value>
+  </data>
+  <data name="Failed to insert ARM9 assembly hacks" xml:space="preserve">
+    <value>Impossibile inserire ARM9 assembly hacks</value>
+  </data>
+  <data name="Game Puzzle Phase (Options)" xml:space="preserve">
+    <value>Fase Puzzle (Opzioni)</value>
+  </data>
+  <data name="Text Speed" xml:space="preserve">
+    <value>Velocità testo</value>
+  </data>
+  <data name="Option 3" xml:space="preserve">
+    <value>Opzione 3</value>
+  </data>
+  <data name="Batch Dialogue Display" xml:space="preserve">
+    <value>Visualizza Dialogo</value>
+  </data>
+  <data name="Items" xml:space="preserve">
+    <value>Oggetti</value>
+  </data>
+  <data name="No hacks applied!" xml:space="preserve">
+    <value>Nessun hack è stata applicata!</value>
+  </data>
+  <data name="Game Title" xml:space="preserve">
+    <value>Titolo del Gioco</value>
+  </data>
+  <data name="Failed to clean iterative directory" xml:space="preserve">
+    <value>Impossibile cancellare cartella iterativa</value>
+  </data>
+  <data name="Episode 3 ticker tape" xml:space="preserve">
+    <value>Pannello info Episodio 3</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Impostazioni</value>
+  </data>
+  <data name="NDS ROM" xml:space="preserve">
+    <value>NDS ROM</value>
+  </data>
+  <data name="Name '{0}' is already in use!" xml:space="preserve">
+    <value>Nome '{0}' è già in uso!</value>
+  </data>
+  <data name="Failed replacing file {0} in evt.bin with file '{1}'" xml:space="preserve">
+    <value>Impossibile sostituire il file {0} in evt.bin con il file '{1}'</value>
+  </data>
+  <data name="Recents" xml:space="preserve">
+    <value>Recenti</value>
+  </data>
+  <data name="gcc not found at '{0}'" xml:space="preserve">
+    <value>gcc non trovato '{0}'</value>
+  </data>
+  <data name="Include lip flap animation?" xml:space="preserve">
+    <value>Ha un'animazione del labbiale?</value>
+  </data>
+  <data name="Open Project" xml:space="preserve">
+    <value>Apri Progetto</value>
+  </data>
+  <data name="Select a Topic" xml:space="preserve">
+    <value>Seleziona discussione</value>
+  </data>
+  <data name="Hidden ID" xml:space="preserve">
+    <value>ID Nascosto</value>
+  </data>
+  <data name="Fade Out Percentage" xml:space="preserve">
+    <value>Fade Out Percentage</value>
+  </data>
+  <data name="Patch Created!" xml:space="preserve">
+    <value>Patch creata!</value>
+  </data>
+  <data name="Failed replacing graphics file {0} with file '{1}'" xml:space="preserve">
+    <value>Impossibile sostituire il file grafico {0} con il file '{1}'</value>
+  </data>
+  <data name="Topic" xml:space="preserve">
+    <value>Discussione</value>
+  </data>
+  <data name="Scale Image" xml:space="preserve">
+    <value>Ridimensiona Immagine</value>
+  </data>
+  <data name="Select Icon" xml:space="preserve">
+    <value>Scegli Icona</value>
+  </data>
+  <data name="Failed encoding audio file to ADX." xml:space="preserve">
+    <value>Errore nel decodificare file audio in ADX.</value>
+  </data>
+  <data name="Subtitle Text" xml:space="preserve">
+    <value>Sottotitoli</value>
+  </data>
+  <data name="SFX" xml:space="preserve">
+    <value>SFX</value>
+  </data>
+  <data name="No save data ticker tape" xml:space="preserve">
+    <value>Pannello Info su nessun dato salvato</value>
+  </data>
+  <data name="Set" xml:space="preserve">
+    <value>Imposta</value>
+    <comment>As in "set value to"</comment>
+  </data>
+  <data name="Image Files" xml:space="preserve">
+    <value>File immagine</value>
+  </data>
+  <data name="Has Outline?" xml:space="preserve">
+    <value>Ha dei bordi?</value>
+  </data>
+  <data name="Please select a ROM before creating the project." xml:space="preserve">
+    <value>Seleziona una ROM prima di creare un progetto.</value>
+  </data>
+  <data name="Failed to apply the following hacks to the ROM:\n{0}\n\nPlease check the log file for more information.\n\nIn order to preserve state, no hacks were applied." xml:space="preserve">
+    <value>Errore nell'applicare hacks alla ROM:\n{0}\n\nControlla il file log per ulteriori informazioni.\n\nIn per evitare di danneggiare la ROM, nessuna hack è stata applicata.</value>
+  </data>
+  <data name="Haruhi Suzumiya event unlocked message box" xml:space="preserve">
+    <value>messaggio evento sbloccato di Haruhi Suzumiya</value>
+  </data>
+  <data name="Failed to load editor controls!" xml:space="preserve">
+    <value>Impossibile caricare controlli editor!</value>
+  </data>
+  <data name="Episode:" xml:space="preserve">
+    <value>Episodio:</value>
+  </data>
+  <data name="Topic Set" xml:space="preserve">
+    <value>Imposta discussione</value>
+  </data>
+  <data name="Erase data options ticker tape" xml:space="preserve">
+    <value>Messaggio opzioni cancella dati</value>
+  </data>
+  <data name="Failed to load cached data" xml:space="preserve">
+    <value>Impossibile caricare dati cache</value>
+  </data>
+  <data name="Background music volume options ticker tape" xml:space="preserve">
+    <value>Pannello info sul volume della musica di background</value>
+  </data>
+  <data name="Replace..." xml:space="preserve">
+    <value>Sostituisci…</value>
+  </data>
+  <data name="Failed replacing animation file {0} in grp.bin with file '{1}'" xml:space="preserve">
+    <value>Impossibile sostituire il file di animazione {0} in grp.bin con il file '{1}'</value>
+  </data>
+  <data name="Show" xml:space="preserve">
+    <value>Mostra</value>
+    <comment>As in show/hide</comment>
+  </data>
+  <data name="Toggle Tsuruya's voice ticker tape" xml:space="preserve">
+    <value>Pannello Info Attiva voce Tsuruya</value>
+  </data>
+  <data name="Game banner can only contain up to three lines." xml:space="preserve">
+    <value>Il Banner del Gioco può contenere massimo 3 linee.</value>
+  </data>
+  <data name="Target Number" xml:space="preserve">
+    <value>Numero di riferimento</value>
+  </data>
+  <data name="Converting from Vorbis..." xml:space="preserve">
+    <value>Conversione da Vorbis in corso…</value>
+  </data>
+  <data name="Remove Starting Chibis" xml:space="preserve">
+    <value>Rimuovi Chibi iniziali</value>
+  </data>
+  <data name="Failed restoring BGM file." xml:space="preserve">
+    <value>Impossibile ripristinare file BGM.</value>
+  </data>
+  <data name="Episode 1 ticker tape" xml:space="preserve">
+    <value>Pannello info Episodio 1</value>
+  </data>
+  <data name="Future Description" xml:space="preserve">
+    <value>Nuova descrizione</value>
+  </data>
+  <data name="Patching Overlay {0}" xml:space="preserve">
+    <value>Sovrascrivendo Patch {0}</value>
+  </data>
+  <data name="Cleared all chess puzzles message box" xml:space="preserve">
+    <value>Messaggio completamento partite scacchi</value>
+  </data>
+  <data name="Recent Projects" xml:space="preserve">
+    <value>Progetti recenti</value>
+  </data>
+  <data name="Save data 1 damaged &amp; reset message box" xml:space="preserve">
+    <value>Pannello Info sul salvataggio 1 danneggiato e ripristino</value>
+  </data>
+  <data name="Select Command Type" xml:space="preserve">
+    <value>Scegli tipo di comando</value>
+  </data>
+  <data name="Adding frames to GIF..." xml:space="preserve">
+    <value>Aggiungi frames alla GIF…</value>
+  </data>
+  <data name="Character distribution instructions" xml:space="preserve">
+    <value>Istruzioni sulla divisione dei personaggi</value>
+  </data>
+  <data name="Packing ROM" xml:space="preserve">
+    <value>Patchando la ROM</value>
+  </data>
+  <data name="PNG Image" xml:space="preserve">
+    <value>Immagine PNG</value>
+  </data>
+  <data name="Text Color" xml:space="preserve">
+    <value>Colore del testo</value>
+  </data>
+  <data name="Companion Selection" xml:space="preserve">
+    <value>Seleziona compagno</value>
+  </data>
+  <data name="Game Investigation Phase (Options)" xml:space="preserve">
+    <value>Fase Investigazione (Opzioni)</value>
+  </data>
+  <data name="Success!" xml:space="preserve">
+    <value>Successo!</value>
+  </data>
+  <data name="Project Creation Warning" xml:space="preserve">
+    <value>Avviso di creazione di un progetto</value>
+  </data>
+  <data name="Emulator Path" xml:space="preserve">
+    <value>Percorso Emulatore</value>
+  </data>
+  <data name="Results" xml:space="preserve">
+    <value>Risultati</value>
+  </data>
+  <data name="Topic Stock Mode ticker tape" xml:space="preserve">
+    <value>Pannello Info Modalità Discussione generica</value>
+  </data>
+  <data name="Save voiced line as WAV" xml:space="preserve">
+    <value>Salva File audio come WAV</value>
+  </data>
+  <data name="New Project..." xml:space="preserve">
+    <value>Nuovo Progetto…</value>
+  </data>
+  <data name="Extras unlocked message box" xml:space="preserve">
+    <value>Messaggio Extra Sbloccati</value>
+  </data>
+  <data name="Dialogue_Text" xml:space="preserve">
+    <value>Testo dialogo</value>
+  </data>
+  <data name="Places" xml:space="preserve">
+    <value>Spazi</value>
+  </data>
+  <data name="Project Options" xml:space="preserve">
+    <value>Opzioni progetto</value>
+  </data>
+  <data name="Past Description" xml:space="preserve">
+    <value>Descrizione precedente</value>
+  </data>
+  <data name="Successfully applied the following hacks:\n{0}" xml:space="preserve">
+    <value>Applicata con successo le seguenti hacks:\n{0}</value>
+  </data>
+  <data name="Remove Chibi" xml:space="preserve">
+    <value>Rimuovi Chibi</value>
+  </data>
+  <data name="Haruhi Present" xml:space="preserve">
+    <value>Haruhi è presente</value>
+  </data>
+  <data name="SFXs" xml:space="preserve">
+    <value>SFXs</value>
+  </data>
+  <data name="Time (Frames)" xml:space="preserve">
+    <value>Tempo (Frames)</value>
+  </data>
+  <data name="Close All But This" xml:space="preserve">
+    <value>Chiudi tutto tranne questo</value>
+  </data>
+  <data name="Required Brigade Member" xml:space="preserve">
+    <value>è richiesto un membro della brigata</value>
+  </data>
+  <data name="ID" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="Reset options to default title" xml:space="preserve">
+    <value>Formatta Impostazioni</value>
+  </data>
+  <data name="Dialogue Skipping setting" xml:space="preserve">
+    <value>Impostazioni salta dialoghi</value>
+  </data>
+  <data name="Failed to replace background {0} with file {1}" xml:space="preserve">
+    <value>Impossibile sostituire sfondo {0} con file {1}</value>
+  </data>
+  <data name="Routes" xml:space="preserve">
+    <value>Strade</value>
+  </data>
+  <data name="Invalid audio file selected." xml:space="preserve">
+    <value>File audio non valdio selezionato.</value>
+  </data>
+  <data name="Singularity" xml:space="preserve">
+    <value>Anomalie</value>
+  </data>
+  <data name="Encoding" xml:space="preserve">
+    <value>Encoding</value>
+  </data>
+  <data name="Select..." xml:space="preserve">
+    <value>Seleziona…</value>
+  </data>
+  <data name="Preserve Aspect Ratio:" xml:space="preserve">
+    <value>Mantieni Rapporto d'aspetto:</value>
+  </data>
+  <data name="Place" xml:space="preserve">
+    <value>Spazio</value>
+  </data>
+  <data name="New Project" xml:space="preserve">
+    <value>Nuovo Progetto</value>
+  </data>
+  <data name="Palette" xml:space="preserve">
+    <value>Palette</value>
+  </data>
+  <data name="Replace voiced line" xml:space="preserve">
+    <value>Sostituisci file audio</value>
+  </data>
+  <data name="Failed to save Chokuretsu save file!" xml:space="preserve">
+    <value>Impossibile sovrascrivere salvataggio di Chokuretsu!</value>
+  </data>
+  <data name="Episode 5 ticker tape" xml:space="preserve">
+    <value>Pannello info Episodio 5</value>
+  </data>
+  <data name="Clear Script" xml:space="preserve">
+    <value>Ripristina Script</value>
+  </data>
+  <data name="Batch Dialogue Display option" xml:space="preserve">
+    <value>Opzioni di visualizzazione dialogo</value>
+  </data>
+  <data name="Please select a template" xml:space="preserve">
+    <value>Seleziona un template</value>
+  </data>
+  <data name="Failed to replace item {0} with file {1}" xml:space="preserve">
+    <value>Impossibile sostituire oggetto {0} con file {1}</value>
+  </data>
+  <data name="Delay (Frames)" xml:space="preserve">
+    <value>Ritarda (Frames)</value>
+  </data>
+  <data name="Toggle Mysterious Girl's voice ticker tape" xml:space="preserve">
+    <value>Pannello Info Attiva voce Ragazza misteriosa</value>
+  </data>
+  <data name="Select frames" xml:space="preserve">
+    <value>Seleziona frames</value>
+  </data>
+  <data name="Episode_Number" xml:space="preserve">
+    <value>Numero Episodio</value>
+  </data>
+  <data name="Transition" xml:space="preserve">
+    <value>Transizione</value>
+  </data>
+  <data name="Saved but unbuilt files were detected in the project directory. Would you like to build before loading the project? Not building could result in these files being overwritten." xml:space="preserve">
+    <value>Nella cartella del progetto sono stati rilevati file salvati ma non compilati. Si desidera eseguire la compilazione prima di caricare il progetto? La mancata compilazione potrebbe causare la sovrascrittura di questi file.</value>
+  </data>
+  <data name="Edit Save File" xml:space="preserve">
+    <value>Modifica Salvataggio</value>
+  </data>
+  <data name="Please enter a value for the section name" xml:space="preserve">
+    <value>Inserisci un nome per questa sezione</value>
+  </data>
+  <data name="Flag: {0}" xml:space="preserve">
+    <value>Flag: {0}</value>
+  </data>
+  <data name="Invalid search terms" xml:space="preserve">
+    <value>Termine di ricerca invalido</value>
+  </data>
+  <data name="Quick Save" xml:space="preserve">
+    <value>Salvataggio rapido</value>
+  </data>
+  <data name="Sub-Topic" xml:space="preserve">
+    <value>Discussione generica</value>
+  </data>
+  <data name="To edit Save Files, you need to have a project open.\nNo project is currently open. Would you like to create a new project?" xml:space="preserve">
+    <value>Per modificare il salvataggio, devi aprire il progetto.\nNessun progetto aperto. Vuoi crearne uno nuovo?</value>
+  </data>
+  <data name="Episode Group" xml:space="preserve">
+    <value>Gruppo Episodi</value>
+  </data>
+  <data name="System_Texture" xml:space="preserve">
+    <value>Texture di sistema</value>
+  </data>
+  <data name="Error getting script command tree for script {0} ({1})" xml:space="preserve">
+    <value>Errore nell'ottenere command tree per lo script {0} ({1})</value>
+  </data>
+  <data name="Sound (Options)" xml:space="preserve">
+    <value>Audio (Opzioni)</value>
+  </data>
+  <data name="Copying Archives to Iterative Originals" xml:space="preserve">
+    <value>Copiare gli archivi negli originali iterativi</value>
+  </data>
+  <data name="Supported Audio Files" xml:space="preserve">
+    <value>File audio supportati</value>
+  </data>
+  <data name="Topics" xml:space="preserve">
+    <value>Discussioni</value>
+  </data>
+  <data name="System data damaged &amp; reset message box" xml:space="preserve">
+    <value>Messagio sul danneggiamento dei dati e reset del gioco</value>
+  </data>
+  <data name="Setting item image..." xml:space="preserve">
+    <value>Imposta Immagini degli oggetti…</value>
+  </data>
+  <data name="Text Timer" xml:space="preserve">
+    <value>Testo del timer</value>
+  </data>
+  <data name="Portuguese (Brazilian)" xml:space="preserve">
+    <value>Portoghese (Brasile)</value>
+  </data>
+  <data name="Creating Patch" xml:space="preserve">
+    <value>Creazione Patch</value>
+  </data>
+  <data name="Number of Saves:" xml:space="preserve">
+    <value>Numero di Salvataggi:</value>
+  </data>
+  <data name="Flag" xml:space="preserve">
+    <value>Flag</value>
+  </data>
+  <data name="Screen Position" xml:space="preserve">
+    <value>Posizione schermo</value>
+  </data>
+  <data name="Save prompt" xml:space="preserve">
+    <value>Salva prompt</value>
+  </data>
+  <data name="Toggle Haruhi's voice ticker tape" xml:space="preserve">
+    <value>Pannello Info Attiva voce Haruhi</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Option 4" xml:space="preserve">
+    <value>Opzione 4</value>
+  </data>
+  <data name="Serial Loops v{0}" xml:space="preserve">
+    <value>Serial Loops Ver{0}</value>
+  </data>
+  <data name="Kyon Time Percentage" xml:space="preserve">
+    <value>Percentuale tempo Kyon</value>
+  </data>
+  <data name="Replacing BGM" xml:space="preserve">
+    <value>Sostituendo BGM</value>
+  </data>
+  <data name="Text Voice Font" xml:space="preserve">
+    <value>Font per i dialoghi</value>
+  </data>
+  <data name="Item" xml:space="preserve">
+    <value>Oggetto</value>
+  </data>
+  <data name="MP3 files" xml:space="preserve">
+    <value>File MP3</value>
+  </data>
+  <data name="Toggle Kyon's voice ticker tape" xml:space="preserve">
+    <value>Pannello Info Attiva voce Kyon</value>
+  </data>
+  <data name="Save chibi GIF" xml:space="preserve">
+    <value>Salva Chibi come GIF</value>
+  </data>
+  <data name="Edit Save File - {0}" xml:space="preserve">
+    <value>Modifica Salvataggio - {0}</value>
+  </data>
+  <data name="Script Section" xml:space="preserve">
+    <value>Sezione Script</value>
+  </data>
+  <data name="Select Graphic" xml:space="preserve">
+    <value>Scegli grafica</value>
+  </data>
+  <data name="Setting screen image..." xml:space="preserve">
+    <value>imposta immagini su schermo…</value>
+  </data>
+  <data name="Dialogue Skipping Fast Forward" xml:space="preserve">
+    <value>Salta dialoghi velocemente</value>
+  </data>
+  <data name="Place Name" xml:space="preserve">
+    <value>Nome dello spazio</value>
+  </data>
+  <data name="Rename" xml:space="preserve">
+    <value>Rinomina</value>
+  </data>
+  <data name="Failed downsampling audio file." xml:space="preserve">
+    <value>Errore nel downsampling file audio.</value>
+  </data>
+  <data name="Replace BGM track" xml:space="preserve">
+    <value>Sostituisci traccia BGM</value>
+  </data>
+  <data name="Open ROM" xml:space="preserve">
+    <value>Apri ROM</value>
+  </data>
+  <data name="Kyonless Topics" xml:space="preserve">
+    <value>Discussioni senza Kyon</value>
+  </data>
+  <data name="Config Data" xml:space="preserve">
+    <value>Configurazione dati</value>
+  </data>
+  <data name="Remove Missing Projects" xml:space="preserve">
+    <value>Rimuovi progetti cancellati</value>
+  </data>
+  <data name="Item Names List" xml:space="preserve">
+    <value>Lista nome oggetti</value>
+  </data>
+  <data name="Episode Header" xml:space="preserve">
+    <value>Episode Header</value>
+  </data>
+  <data name="Invalid item type!" xml:space="preserve">
+    <value>Tipo di oggetto non valido!</value>
+  </data>
+  <data name="Failed to copy newly built archives to the iterative originals directory" xml:space="preserve">
+    <value>Impossibile copiare nuove cartelle in quella originale</value>
+  </data>
+  <data name="Game Banner" xml:space="preserve">
+    <value>Banner del Gioco</value>
+  </data>
+  <data name="Scripts" xml:space="preserve">
+    <value>Scripts</value>
+  </data>
+  <data name="Command Type:" xml:space="preserve">
+    <value>Tipo di Comando:</value>
+  </data>
+  <data name="Replacing Files" xml:space="preserve">
+    <value>Sostituendo Files</value>
+  </data>
+  <data name="Invalid parameter detected in script {0} parameter {1}" xml:space="preserve">
+    <value>Parametro non valido trovato nello script {0} parametro {1}</value>
+  </data>
+  <data name="Toggle Kunikida's voice ticker tape" xml:space="preserve">
+    <value>Pannello Info Attiva voce Kunikida</value>
+  </data>
+  <data name="Kyon companion selected description" xml:space="preserve">
+    <value>Descrizione compagno scelto Kyon</value>
+  </data>
+  <data name="Drawing textures..." xml:space="preserve">
+    <value>Caricando textures…</value>
+  </data>
+  <data name="Save Files" xml:space="preserve">
+    <value>Salva file</value>
+  </data>
+  <data name="Serial Loops Project" xml:space="preserve">
+    <value>Progetto Serial Loops</value>
+  </data>
+  <data name="Failed to load character progress voice for {0}." xml:space="preserve">
+    <value>Impossibile caricare voce personaggio {0}.</value>
+  </data>
+  <data name="Pause menu Title ticker tape" xml:space="preserve">
+    <value>Pannello Info del menu pausa</value>
+  </data>
+  <data name="Remove Map Characters" xml:space="preserve">
+    <value>Rimuovi personaggi dalla mappa</value>
+  </data>
+  <data name="Music:" xml:space="preserve">
+    <value>Musica:</value>
+  </data>
+  <data name="Save game read fail message box" xml:space="preserve">
+    <value>Messaggio sul fallimento nel leggere i dati salvati</value>
+  </data>
+  <data name="New Update Available: {0}" xml:space="preserve">
+    <value>Nuovo Aggiornamento Disponibile: {0}</value>
+  </data>
+  <data name="Fade Time (Frames)" xml:space="preserve">
+    <value>Fade Time (Frames)</value>
+  </data>
+  <data name="Duration (Frames)" xml:space="preserve">
+    <value>Durata (Frames)</value>
+  </data>
+  <data name="Batch Dialogue Display On" xml:space="preserve">
+    <value>Visualizza Dialogo On</value>
+  </data>
+  <data name="Error pruning labels!" xml:space="preserve">
+    <value>Errore pruning labels!</value>
+  </data>
+  <data name="Haroohie" xml:space="preserve">
+    <value>Haroohie</value>
+  </data>
+  <data name="Common Save Data..." xml:space="preserve">
+    <value>Salvataggi comuni…</value>
+  </data>
+  <data name="Invalid or unavailable script command selected: {0}" xml:space="preserve">
+    <value>è stato scelto uno script non disponibile o invalido: {0}</value>
+  </data>
+  <data name="Failed to decode original file too, giving up!" xml:space="preserve">
+    <value>Impossibile decriptare file originale, ci rinuncio!</value>
+  </data>
+  <data name="Russian" xml:space="preserve">
+    <value>Russo</value>
+  </data>
+  <data name="Sound" xml:space="preserve">
+    <value>Audio</value>
+  </data>
+  <data name="End Script Section" xml:space="preserve">
+    <value>Termina sezione script</value>
+  </data>
+  <data name="Pause menu Load ticker tape" xml:space="preserve">
+    <value>Pannello Info sul caricamento del menu pausa</value>
+  </data>
+  <data name="Close All To Right" xml:space="preserve">
+    <value>Chiudi tabella a destra</value>
+  </data>
+  <data name="Japanese" xml:space="preserve">
+    <value>Giapponese</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Titolo</value>
+  </data>
+  <data name="Failed attempting to cache audio file" xml:space="preserve">
+    <value>Errore nel creare cache per file audio</value>
+  </data>
+  <data name="Failed to read ARM9 from '{0}'" xml:space="preserve">
+    <value>Impossibile leggere ARM9 da '{0}'</value>
+  </data>
+  <data name="Speaker_Name" xml:space="preserve">
+    <value>Nome dell'interlocutore</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>Avvia</value>
+  </data>
+  <data name="Toggle Kyon's sister's voice ticker tape" xml:space="preserve">
+    <value>Pannello Info Attiva voce Sorella</value>
+  </data>
+  <data name="Character_Sprites" xml:space="preserve">
+    <value>Sprites dei Personaggi</value>
+  </data>
+  <data name="Toggle Nagato's voice ticker tape" xml:space="preserve">
+    <value>Pannello Info Attiva voce Nagato</value>
+  </data>
+  <data name="Haruhi Routes" xml:space="preserve">
+    <value>Percorsi Haruhi</value>
+  </data>
+  <data name="Batch Dialogue Display Off" xml:space="preserve">
+    <value>Visualizza Dialogo Off</value>
+  </data>
+  <data name="Deleting all data message box" xml:space="preserve">
+    <value>Messaggio sulla cancellazione dei dati</value>
+  </data>
+  <data name="Please select at least one search scope and item filter." xml:space="preserve">
+    <value>Seleziona almeno un ambito di ricerca e un filtro per gli oggetti.</value>
+  </data>
+  <data name="Edit UI Text..." xml:space="preserve">
+    <value>Modifica testo UI…</value>
+  </data>
+  <data name="Remove Command/Section" xml:space="preserve">
+    <value>Rimuovi Comando/Sezione</value>
+  </data>
+  <data name="No emulator path has been set.\nPlease set the path to a Nintendo DS emulator in Preferences to use Build &amp; Run." xml:space="preserve">
+    <value>Nessun emulatore è stato impostato.\nPer Compilare ed Avviare la ROM è necessario configurare un emulatore.</value>
+  </data>
+  <data name="Crop &amp; Scale" xml:space="preserve">
+    <value>Ridimensiona</value>
+  </data>
+  <data name="Flag Description" xml:space="preserve">
+    <value>Descrizione Flag</value>
+  </data>
+  <data name="Enter/Exit" xml:space="preserve">
+    <value>Entra/Esci</value>
+  </data>
+  <data name="Failed to export system texture {0} to file {1}" xml:space="preserve">
+    <value>Impossibile esportare system texture {0} come file {1}</value>
+  </data>
+  <data name="Common Save Data" xml:space="preserve">
+    <value>Salvataggi comuni</value>
+  </data>
+  <data name="Creating Project" xml:space="preserve">
+    <value>Creazione Progetto</value>
+  </data>
+  <data name="Save character sprite GIF" xml:space="preserve">
+    <value>Salva Sprite dei personaggi come GIF</value>
+  </data>
+  <data name="Replace BGM" xml:space="preserve">
+    <value>Sostituisci BGM</value>
+  </data>
+  <data name="Searching" xml:space="preserve">
+    <value>Cercando</value>
+  </data>
+  <data name="Converting frames..." xml:space="preserve">
+    <value>Conversione frames in corso…</value>
+  </data>
+  <data name="Episode 1 title" xml:space="preserve">
+    <value>Titolo del 1' Episodio</value>
+  </data>
+  <data name="Sound options ticker tape" xml:space="preserve">
+    <value>Pannello Informazioni Effetti sonori</value>
+  </data>
+  <data name="Clear Block" xml:space="preserve">
+    <value>Sezione Vittoria</value>
+  </data>
+  <data name="Set/Clear" xml:space="preserve">
+    <value>Imposta/Cancella</value>
+  </data>
+  <data name="Target Screen" xml:space="preserve">
+    <value>Schermo di riferimento</value>
+  </data>
+  <data name="No recent projects. Create one and it will appear here." xml:space="preserve">
+    <value>Nessun progetto recente. Quando ne verrà creato uno, apparirà qua.</value>
+  </data>
+  <data name="No Project Open" xml:space="preserve">
+    <value>Nessun progetto aperto</value>
+  </data>
+  <data name="Command Index:" xml:space="preserve">
+    <value>Index Comandi:  </value>
+  </data>
+  <data name="Successfully applied hacks!" xml:space="preserve">
+    <value>Hacks applicate con successo!</value>
+  </data>
+  <data name="None Selected" xml:space="preserve">
+    <value>Non è stato selezionato nulla</value>
+  </data>
+  <data name="Batch Dialogue Display ticker tape" xml:space="preserve">
+    <value>Pannello Info visualizzazione dialogo</value>
+  </data>
+  <data name="Download release from GitHub" xml:space="preserve">
+    <value>Scarica nuova versione da GitHub</value>
+  </data>
+  <data name="Display Flag 2" xml:space="preserve">
+    <value>Display Flag 2</value>
+  </data>
+  <data name="Toggle Taniguchi's voice ticker tape" xml:space="preserve">
+    <value>Pannello Info Attiva voce Taniguchi</value>
+  </data>
+  <data name="Character Distribution" xml:space="preserve">
+    <value>Dividi i personaggi</value>
+  </data>
+  <data name="Preferences" xml:space="preserve">
+    <value>Preferenze</value>
+  </data>
+  <data name="Dialogue:" xml:space="preserve">
+    <value>Dialogo:  </value>
+  </data>
+  <data name="Piece 3" xml:space="preserve">
+    <value>Pedina 3</value>
+    <comment>Chesspiece</comment>
+  </data>
+  <data name="Remove Command" xml:space="preserve">
+    <value>Rimuovi Comandi</value>
+  </data>
+  <data name="No preview available" xml:space="preserve">
+    <value>Nessuna anteprima impossibile</value>
+  </data>
+  <data name="Fade Out Time (Frames)" xml:space="preserve">
+    <value>Fade Out Time (Frames)</value>
+  </data>
+  <data name="Patching ARM9" xml:space="preserve">
+    <value>Patchando ARM9</value>
+  </data>
+  <data name="Serialized ASM hack" xml:space="preserve">
+    <value>Hack ASM serializzato</value>
+  </data>
+  <data name="Number of Singularities" xml:space="preserve">
+    <value>Numero di Anomalie</value>
+  </data>
+  <data name="Failed to export item {0} to file {1}" xml:space="preserve">
+    <value>Impossibile esportare oggetto {0} a file {1}</value>
+  </data>
+  <data name="New Section" xml:space="preserve">
+    <value>Nuova Sezione</value>
+  </data>
+  <data name="Drawing top screen tiles..." xml:space="preserve">
+    <value>Caricando tiles schermo superiore…</value>
+  </data>
+  <data name="Import Hack" xml:space="preserve">
+    <value>Importa hack</value>
+  </data>
+  <data name="Please enter a game name for the banner, between 1 and 128 characters." xml:space="preserve">
+    <value>Inserisci un nome per il banner, Massimo 128 caratteri.</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Cerca</value>
+  </data>
+  <data name="Episode 4 ticker tape" xml:space="preserve">
+    <value>Pannello info Episodio 4</value>
+  </data>
+  <data name="Failed to export chibi animation {0} for chibi {1} to file" xml:space="preserve">
+    <value>Impossibile esportare animazione {0} del chibi {1} come file</value>
+  </data>
+  <data name="Save Project" xml:space="preserve">
+    <value>Salva progetto</value>
+  </data>
+  <data name="Set BGM loop info" xml:space="preserve">
+    <value>Imposta informazioni del loop della BGM</value>
+  </data>
+  <data name="Setting CG single image..." xml:space="preserve">
+    <value>Imposta Immagine singola dei PG…</value>
+  </data>
+  <data name="Run" xml:space="preserve">
+    <value>Avvia</value>
+  </data>
+  <data name="Display?" xml:space="preserve">
+    <value>Mostrare?</value>
+  </data>
+  <data name="Select chibi export folder" xml:space="preserve">
+    <value>Seleziona cartella dove esportare Chibi</value>
+  </data>
+  <data name="The changes made will require Serial Loops to be restarted. Is that okay?" xml:space="preserve">
+    <value>Per applicare tali cambiamenti bisogna riavviare Serial Loops. Sei sicuro?</value>
+  </data>
+  <data name="Paste" xml:space="preserve">
+    <value>Incolla</value>
+  </data>
+  <data name="Downsampling..." xml:space="preserve">
+    <value>Downsampling…</value>
+  </data>
+  <data name="Reset settings to default ticker tape" xml:space="preserve">
+    <value>Pannello Info sulla formattazione delle impostazioni</value>
+  </data>
+  <data name="Flags" xml:space="preserve">
+    <value>Flags</value>
+  </data>
+  <data name="Save data damaged &amp; reset message box" xml:space="preserve">
+    <value>Pannello Info sul salvataggio danneggiato e ripristino</value>
+  </data>
+  <data name="Failed replacing source file {0} in dat.bin with file '{1}'" xml:space="preserve">
+    <value>Impossibile sostituire il file sorgente {0} in dat.bin con il file '{1}'</value>
+  </data>
+  <data name="Script:" xml:space="preserve">
+    <value>Script:</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Nome</value>
+  </data>
+  <data name="New Base ROM" xml:space="preserve">
+    <value>Usa un'altra ROM</value>
+  </data>
+  <data name="Music" xml:space="preserve">
+    <value>Musica</value>
+  </data>
+  <data name="Emote" xml:space="preserve">
+    <value>Emozione</value>
+  </data>
+  <data name="Groups: {0}" xml:space="preserve">
+    <value>Raccolte sonore: {0}</value>
+    <comment>As in "Sound Groups"</comment>
+  </data>
+  <data name="Sound Effects:" xml:space="preserve">
+    <value>Effetti Sonori: </value>
+  </data>
+  <data name="Don't Clear Text" xml:space="preserve">
+    <value>Non cancellare testo</value>
+  </data>
+  <data name="Edit Subtitle" xml:space="preserve">
+    <value>Modifica Sottotitoli</value>
+  </data>
+  <data name="Sound effect volume options ticker tape" xml:space="preserve">
+    <value>Pannello Informazioni sull'opzione per aggiustare il volume</value>
+  </data>
+  <data name="Find in Project" xml:space="preserve">
+    <value>Trova nel Progetto</value>
+  </data>
+  <data name="Dialogue Skipping ticker tape" xml:space="preserve">
+    <value>Pannello Info salta dialoghi</value>
+  </data>
+  <data name="Import a Hack" xml:space="preserve">
+    <value>Importa un hack</value>
+  </data>
+  <data name="Failed to export eye animation {0} for sprite {1} to file" xml:space="preserve">
+    <value>Impossibile esportare animazione occhio {0} da sprite {1} a file</value>
+  </data>
+  <data name="Pause menu Config ticker tape" xml:space="preserve">
+    <value>Pannello Info delle configurazioni del menu pausa</value>
+  </data>
+  <data name="Koizumi companion selected description" xml:space="preserve">
+    <value>Descrizione compagno scelto Koizumi</value>
+  </data>
+  <data name="Project Settings" xml:space="preserve">
+    <value>Impostazioni del progetto</value>
+  </data>
+  <data name="Find Orphaned Items..." xml:space="preserve">
+    <value>Cerca oggetto senza legami…</value>
+  </data>
+  <data name="Transitions" xml:space="preserve">
+    <value>Transizioni</value>
+  </data>
+  <data name="Search Scope" xml:space="preserve">
+    <value>Campo di Ricerca</value>
+  </data>
+  <data name="Editor Tabs not provided to project creation dialog" xml:space="preserve">
+    <value>Le schede dell'editor non vengono fornite nella finestra di dialogo di creazione del progetto</value>
+  </data>
+  <data name="Custom Color" xml:space="preserve">
+    <value>Colore personalizzato</value>
+  </data>
+  <data name="Outline Color" xml:space="preserve">
+    <value>Colore dei bordi</value>
+  </data>
+  <data name="Continue on Failure" xml:space="preserve">
+    <value>Continua a fallire</value>
+  </data>
+  <data name="Position Image" xml:space="preserve">
+    <value>Posizione Immagini</value>
+  </data>
+  <data name="Replace Frames" xml:space="preserve">
+    <value>Sostituisci Frames</value>
+  </data>
+  <data name="Close All" xml:space="preserve">
+    <value>Chiudi tutto</value>
+  </data>
+  <data name="devkitARM Docker Tag" xml:space="preserve">
+    <value>devkitARM Docker Tag</value>
+  </data>
+  <data name="Clear Scenario" xml:space="preserve">
+    <value>Ripristina Scenario</value>
+  </data>
+  <data name="Piece 2" xml:space="preserve">
+    <value>Pedina 2</value>
+    <comment>Chesspiece</comment>
+  </data>
+  <data name="Koizumi puzzle phase selected description" xml:space="preserve">
+    <value>Pannello Info descrizione di Koizumi fase investigazione</value>
+  </data>
+  <data name="Display Flag 1" xml:space="preserve">
+    <value>Display Flag 1</value>
+  </data>
+  <data name="Sprite" xml:space="preserve">
+    <value>Sprite</value>
+  </data>
+  <data name="Position:" xml:space="preserve">
+    <value>Posizione:</value>
+  </data>
+  <data name="Character voice toggle options ticker tape" xml:space="preserve">
+    <value>Pannello Info attivazione voce personaggi</value>
+  </data>
+  <data name="Failed to add parameters for hack file {0} in hack {1}" xml:space="preserve">
+    <value>Impossibile aggiungere parametri per file hack {0} nel hack {1}</value>
+  </data>
+  <data name="Display Flag 4" xml:space="preserve">
+    <value>Display Flag 4</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Salva</value>
+  </data>
+  <data name="Dialogue Skipping" xml:space="preserve">
+    <value>Saltare dialoghi</value>
+  </data>
+  <data name="Failed to export layout for sprite {0} to file" xml:space="preserve">
+    <value>Impossibile esportare layout da sprite {0} a file</value>
+  </data>
+  <data name="Select character sprite export folder" xml:space="preserve">
+    <value>Scegli cartella dove esportare gli sprite dei personaggi</value>
+  </data>
+  <data name="Groups" xml:space="preserve">
+    <value>Raccolte sonore</value>
+    <comment>As in "Sound Groups"</comment>
+  </data>
+  <data name="Fade In Time (Frames)" xml:space="preserve">
+    <value>Fade In Time (Frame)</value>
+  </data>
+  <data name="sec" xml:space="preserve">
+    <value>Secondi</value>
+    <comment>As in "seconds"</comment>
+  </data>
+  <data name="Defaults" xml:space="preserve">
+    <value>Impostazioni predefinite</value>
+  </data>
+  <data name="Scenes to Skip" xml:space="preserve">
+    <value>Scene da saltare</value>
+  </data>
+  <data name="Select ROM" xml:space="preserve">
+    <value>Scegli ROM</value>
+  </data>
+  <data name="Failed to find character item -- have you saved all of your changes to character names?" xml:space="preserve">
+    <value>Impossibile trovare personaggio -- Hai salvato tutte le modifiche ai nomi?</value>
+  </data>
+  <data name="Failed converting audio file to WAV." xml:space="preserve">
+    <value>Errore nel convertire file audio in WAV.</value>
+  </data>
+  <data name="Spanish" xml:space="preserve">
+    <value>Spagnolo</value>
+  </data>
+  <data name="Project Settings..." xml:space="preserve">
+    <value>Impostando il progetto…</value>
+  </data>
+  <data name="Setting palettes and images..." xml:space="preserve">
+    <value>Imposta pallette e immagini…</value>
+  </data>
+  <data name="Toggle Mikuru's voice ticker tape" xml:space="preserve">
+    <value>Pannello Info Attiva voce Mikuru</value>
+  </data>
+  <data name="Exception occurred while parsing projects_cache.json!" xml:space="preserve">
+    <value>Si è verificata un errore durante l'analisi di projects_cache.json!</value>
+  </data>
+  <data name="Piece 1" xml:space="preserve">
+    <value>Pedina 1</value>
+    <comment>Chesspiece</comment>
+  </data>
+  <data name="Frames" xml:space="preserve">
+    <value>Frame</value>
+  </data>
+  <data name="Parameter Value" xml:space="preserve">
+    <value>Valore del parametro</value>
+  </data>
+  <data name="Searching {0}..." xml:space="preserve">
+    <value>Cercando {0}…</value>
+  </data>
+  <data name="Failed to replace system texture {0} with file {1}" xml:space="preserve">
+    <value>Impossibile sostituire system texture {0} con file {1}</value>
+  </data>
+  <data name="Italian" xml:space="preserve">
+    <value>Italiano</value>
+  </data>
+  <data name="Failed to check for updates! (Endpoint: {0})" xml:space="preserve">
+    <value>Impossibile trovare aggiornamenti! (Endpoint: {0})</value>
+  </data>
+  <data name="gcc exited with code {0}" xml:space="preserve">
+    <value>gcc exited with code {0}</value>
+  </data>
+  <data name="Episode 2 ticker tape" xml:space="preserve">
+    <value>Pannello Info Episodio 2</value>
+  </data>
+  <data name="New Name" xml:space="preserve">
+    <value>Nuovo Nome</value>
+  </data>
+  <data name="Set BGM volume" xml:space="preserve">
+    <value>Imposta volume BGM</value>
+  </data>
+  <data name="Error: duplicate hack detected! A hack with the same name has already been imported." xml:space="preserve">
+    <value>Errore: Hack duplicata trovata! Un hack con lo stesso nome è già esistente.</value>
+  </data>
+  <data name="Open Chokuretsu Save File" xml:space="preserve">
+    <value>Apri Salvataggio di Chokuretsu</value>
+  </data>
+  <data name="Failed to calculate graph edges!" xml:space="preserve">
+    <value>Impossibile calcolare limiti grafici!</value>
+  </data>
+  <data name="Template" xml:space="preserve">
+    <value>Template</value>
+  </data>
+  <data name="Piece 4" xml:space="preserve">
+    <value>Pedina 4</value>
+    <comment>Chesspiece</comment>
+  </data>
+  <data name="Select base ROM" xml:space="preserve">
+    <value>Seleziona ROM di base</value>
+  </data>
+  <data name="Top Screen" xml:space="preserve">
+    <value>Schermo superiore</value>
+  </data>
+  <data name="Search..." xml:space="preserve">
+    <value>Cerca…</value>
+  </data>
+  <data name="Failed to read BGM file; falling back to original..." xml:space="preserve">
+    <value>Impossibile leggere file BGM; ripristinando originale…</value>
+  </data>
+  <data name="No valid maps found." xml:space="preserve">
+    <value>Impossibile trovare mappa valida.</value>
+  </data>
+  <data name="Skip Update" xml:space="preserve">
+    <value>Ignora aggiornamento</value>
+  </data>
+  <data name="Failed to delete files for hack '{0}' -- this hack is likely applied in the ROM base and can't be disabled." xml:space="preserve">
+    <value>Impossibile cancellare hack '{0}' -- è applicata sulla ROM e non si può disattivare.</value>
+  </data>
+  <data name="Disable Lip Flap" xml:space="preserve">
+    <value>Disattiva Labiale</value>
+  </data>
+  <data name="Save data 2 damaged &amp; reset message box" xml:space="preserve">
+    <value>Pannello Info sul salvataggio 2 danneggiato e ripristino</value>
+  </data>
+  <data name="Topic Stock Mode option" xml:space="preserve">
+    <value>Impostazioni modalità discussione generica</value>
+  </data>
+  <data name="Saving GIF..." xml:space="preserve">
+    <value>Salvando GIF…</value>
+  </data>
+  <data name="Size:" xml:space="preserve">
+    <value>Dimensioni:</value>
+  </data>
+  <data name="Game saved message box" xml:space="preserve">
+    <value>Messaggio sul salvataggio del gioco</value>
+  </data>
+  <data name="Puzzle" xml:space="preserve">
+    <value>Puzzle</value>
+  </data>
+  <data name="Finding orphaned items..." xml:space="preserve">
+    <value>Cercando oggetti senza legami…</value>
+  </data>
+  <data name="devkitARM Path" xml:space="preserve">
+    <value>Percorso devkitARM</value>
+  </data>
+  <data name="Select Template to Apply" xml:space="preserve">
+    <value>Scegli template da applicare</value>
+  </data>
+  <data name="Edit UI Text" xml:space="preserve">
+    <value>Modifica Testo UI</value>
+  </data>
+  <data name="Toggle Koizumi's voice ticker tape" xml:space="preserve">
+    <value>Pannello Info Attiva voce Koizumi</value>
+  </data>
+  <data name="Failed to create directory on specified path!" xml:space="preserve">
+    <value>Impossibile creare cartella in quel percorso!</value>
+  </data>
+  <data name="No Emulator Path" xml:space="preserve">
+    <value>Nessun Emulatore Impostato</value>
+  </data>
+  <data name="Display from Bottom" xml:space="preserve">
+    <value>Mostra dal basso</value>
+  </data>
+  <data name="Please choose a project name before creating the project." xml:space="preserve">
+    <value>Inserisci un nome al progetto prima di crearlo.</value>
+  </data>
+  <data name="Script" xml:space="preserve">
+    <value>Script</value>
+  </data>
+  <data name="Dialogue Skipping Skip Already Read" xml:space="preserve">
+    <value>Salta dialoghi già letti</value>
+  </data>
+  <data name="Conditional" xml:space="preserve">
+    <value>Condizionale</value>
+  </data>
+  <data name="Draw Starting Point" xml:space="preserve">
+    <value>Disegna partenza</value>
+  </data>
+  <data name="Supported Images" xml:space="preserve">
+    <value>Immagini supportate</value>
+  </data>
+  <data name="DevkitARM must be supplied in order to build!" xml:space="preserve">
+    <value>Per compilare DevKitARM deve essere installato!</value>
+  </data>
+  <data name="Erase data options title" xml:space="preserve">
+    <value>Titolo opzioni cancellazione dati</value>
+  </data>
+  <data name="Replacing {0}..." xml:space="preserve">
+    <value>Sostituendo {0}…</value>
+  </data>
+  <data name="Press ENTER to execute search" xml:space="preserve">
+    <value>Premi ENTER per iniziare la ricerca</value>
+  </data>
+  <data name="New Command" xml:space="preserve">
+    <value>Nuovo Comando</value>
+  </data>
+  <data name="Optimal Group" xml:space="preserve">
+    <value>Gruppo Migliore</value>
+  </data>
+  <data name="System_Textures" xml:space="preserve">
+    <value>Textures di sistema</value>
+  </data>
+  <data name="Option 2" xml:space="preserve">
+    <value>Opzione 2</value>
+  </data>
+  <data name="Drawing bottom screen texture..." xml:space="preserve">
+    <value>Caricando texture schermo inferiore…</value>
+  </data>
+  <data name="Compiled file {0} does not exist!" xml:space="preserve">
+    <value>Il file compilato {0} non esiste!</value>
+  </data>
+  <data name="Hide Unset Flags" xml:space="preserve">
+    <value>Nascondi flags non impostate</value>
+  </data>
+  <data name="Ctrl+Scroll - Scale Image" xml:space="preserve">
+    <value>Ctrl+Bloc Scorr - Ridimensiona Immagine</value>
+  </data>
+  <data name="Failed to export background {0} to file {1}" xml:space="preserve">
+    <value>Impossibile esportare sfondo {0} come file {1}</value>
+  </data>
+  <data name="FLAC files" xml:space="preserve">
+    <value>file FLAC</value>
+  </data>
+  <data name="Orphaned Items" xml:space="preserve">
+    <value>Oggetti senza collegamenti</value>
+  </data>
+  <data name="Search for items by name, ID, or type." xml:space="preserve">
+    <value>Cerca oggetto per Nome, ID o Tipo.</value>
+  </data>
+  <data name="Projects" xml:space="preserve">
+    <value>Progetti</value>
+  </data>
+  <data name="Haruhi Topic" xml:space="preserve">
+    <value>Discussione su Haruhi</value>
+  </data>
+  <data name="Converting from MP3..." xml:space="preserve">
+    <value>Conversione File MP3 in corso…</value>
+  </data>
+  <data name="Option 1" xml:space="preserve">
+    <value>Opzione 1</value>
+  </data>
+  <data name="Scene" xml:space="preserve">
+    <value>Scena</value>
+  </data>
+  <data name="EPISODE: {0}" xml:space="preserve">
+    <value>EPISODE: {0}</value>
+    <comment>Should match the game's translation for this (e.g. for Japanese this should still be EPISODE: {0})</comment>
+  </data>
+  <data name="Edit Save File..." xml:space="preserve">
+    <value>Modifica Salvataggio in corso…</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Lingua</value>
+  </data>
+  <data name="Data reset message box" xml:space="preserve">
+    <value>Messaggio cancellazione dati</value>
+  </data>
+  <data name="Draw Pathing Map" xml:space="preserve">
+    <value>Disegna percorsi mappa</value>
+  </data>
+  <data name="Save Data" xml:space="preserve">
+    <value>Salva dati</value>
+  </data>
+  <data name="Nagato companion selected description" xml:space="preserve">
+    <value>Descrizione compagno di Nagato</value>
+  </data>
+  <data name="Mystery girl voice added to config message box" xml:space="preserve">
+    <value>Messaggio Voce ragazza misteriosa sbloccata</value>
+  </data>
+  <data name="Migrated to new ROM!" xml:space="preserve">
+    <value>Spostato sulla nuova ROM!</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Località</value>
+  </data>
+  <data name="Loading prompt message box" xml:space="preserve">
+    <value>Messaggio Caricando Prompt</value>
+  </data>
+  <data name="Investigation Phase Results" xml:space="preserve">
+    <value>Risultati fase investigazione</value>
+  </data>
+  <data name="Failed replacing source file {0} in evt.bin with file '{1}'" xml:space="preserve">
+    <value>Impossibile sostituire file {0} dentro evt.bin con il file '{1}'</value>
+  </data>
+  <data name="Mikuru Asahina event unlocked message box" xml:space="preserve">
+    <value>Messaggio Mikuru Asahina sbloccata</value>
+  </data>
+  <data name="Hold Time (Frames)" xml:space="preserve">
+    <value>Hold Time (Frame)</value>
+  </data>
+  <data name="Loading Project" xml:space="preserve">
+    <value>Caricando Progetto</value>
+  </data>
+  <data name="Nagato Time Percentage" xml:space="preserve">
+    <value>Percentuale Tempo Nagato</value>
+  </data>
+  <data name="Failed to write NitroPacker NDS project file to disk" xml:space="preserve">
+    <value>Impossibile salvare progetto NitroPacker NDS su disco</value>
+  </data>
+  <data name="Failed to write ARM9 to disk" xml:space="preserve">
+    <value>Impossibile sovrascrivere ARM9 sul disco</value>
+  </data>
+  <data name="Manage Loop" xml:space="preserve">
+    <value>Gestisci Loop</value>
+  </data>
+  <data name="Nagato puzzle phase selected description" xml:space="preserve">
+    <value>Descrizione Nagato Fase Puzzle</value>
+  </data>
+  <data name="Output patch location" xml:space="preserve">
+    <value>Scegli dove salvare Patch</value>
+  </data>
+  <data name="Pre-Release Channel" xml:space="preserve">
+    <value>Canale Pre-Rilascio</value>
+  </data>
+  <data name="Maps" xml:space="preserve">
+    <value>Mappe</value>
+  </data>
+  <data name="Edit Tutorial Mappings" xml:space="preserve">
+    <value>Modifica Mappe Guida</value>
+  </data>
+  <data name="Kyon's Dialogue Box Companion Selection" xml:space="preserve">
+    <value>Dialoghi di Kyon scelta compagni</value>
+  </data>
+  <data name="Episode_Unique" xml:space="preserve">
+    <value>Unico Episodio</value>
+  </data>
+  <data name="Loop?" xml:space="preserve">
+    <value>Loopare?</value>
+  </data>
+  <data name="Loading Archives (evt.bin)" xml:space="preserve">
+    <value>Caricando archivio (evt.bin)</value>
+  </data>
+  <data name="Group_Selections" xml:space="preserve">
+    <value>Divisioni gruppi</value>
+  </data>
+  <data name="Power Character 1" xml:space="preserve">
+    <value>Potere Personaggio 1</value>
+  </data>
+  <data name="Group selection impossible selection made ticker tape" xml:space="preserve">
+    <value>Pannello Info Divisione gruppo impossibile</value>
+  </data>
+  <data name="objcopy not found at '{0}'" xml:space="preserve">
+    <value>objcopy non trovato in '{0}'</value>
+  </data>
+  <data name="Off" xml:space="preserve">
+    <value>Off</value>
+  </data>
+  <data name="Miss Block" xml:space="preserve">
+    <value>Sezione Persa</value>
+  </data>
+  <data name="Failed to set viewr contents for script command list panel." xml:space="preserve">
+    <value>Impossibile impostare i contenuti per il pannello script.</value>
+  </data>
+  <data name="One or more archives is null." xml:space="preserve">
+    <value>Uno o più archivi non sono validi.</value>
+  </data>
+  <data name="Main Topic" xml:space="preserve">
+    <value>Discussione Principale</value>
+  </data>
+  <data name="Edit Tutorial Mappings..." xml:space="preserve">
+    <value>Edit Mappe Guida…</value>
+  </data>
+  <data name="Loading:" xml:space="preserve">
+    <value>Caricando:</value>
+  </data>
+  <data name="Migration Complete!" xml:space="preserve">
+    <value>Trasferimento Completato!</value>
+  </data>
+  <data name="Migrating to new ROM" xml:space="preserve">
+    <value>Spostandosi verso nuova ROM</value>
+  </data>
+  <data name="Map Characters" xml:space="preserve">
+    <value>Personaggi Mappa</value>
+  </data>
+  <data name="Load this save prompt" xml:space="preserve">
+    <value>Carica prompt salvato</value>
+  </data>
+  <data name="Failed copying file '{0}' to base and iterative directories at path '{1}'" xml:space="preserve">
+    <value>Impossibile copiare file '{0}'nella cartella '{1}'</value>
+  </data>
+  <data name="Plate Color" xml:space="preserve">
+    <value>Colore Plate</value>
+  </data>
+  <data name="Itsuki Koizumi event unlocked message box" xml:space="preserve">
+    <value>Messaggio Itsuki Koizumi sbloccato</value>
+  </data>
+  <data name="Map" xml:space="preserve">
+    <value>Mappa</value>
+  </data>
+  <data name="Modify by" xml:space="preserve">
+    <value>Modificato di</value>
+    <comment>Expects an amount, i.e. "Modify by +5"</comment>
+  </data>
+  <data name="Crossfade Time (Frames)" xml:space="preserve">
+    <value>Crossfade Time (Frame)</value>
+  </data>
+  <data name="Load Game menu ticker tape" xml:space="preserve">
+    <value>Pannello Info Carica Partita</value>
+  </data>
+  <data name="Migrate to new ROM" xml:space="preserve">
+    <value>Spostati su una nuova ROM</value>
+  </data>
+  <data name="Investigation phase options ticker tape" xml:space="preserve">
+    <value>Pannello Info opzioni fase investigazione</value>
+  </data>
+  <data name="Finding orphaned items" xml:space="preserve">
+    <value>Trovando oggetti senza legami</value>
+  </data>
+  <data name="Move Command Up" xml:space="preserve">
+    <value>Sposta comando in alto</value>
+  </data>
+  <data name="Find References..." xml:space="preserve">
+    <value>Trova Impostazioni…</value>
+  </data>
+  <data name="Loading Archives (dat.bin)" xml:space="preserve">
+    <value>Caricando archivio (dat.bin)</value>
+  </data>
+  <data name="NitroPacker failed to pack ROM with exception" xml:space="preserve">
+    <value>NitroPacker non è riuscito a compilare la ROM</value>
+  </data>
+  <data name="Mode" xml:space="preserve">
+    <value>Mode</value>
+    <comment>Sound play mode (start/stop)</comment>
+  </data>
+  <data name="Loading Archives (grp.bin)" xml:space="preserve">
+    <value>Caricando archivio (grp.bin)</value>
+  </data>
+  <data name="Migrate Project" xml:space="preserve">
+    <value>Sposta Progetto</value>
+  </data>
+  <data name="Move Command Down" xml:space="preserve">
+    <value>Sposta comando in basso</value>
+  </data>
+  <data name="Power Character 2" xml:space="preserve">
+    <value>Potere Personaggio 2</value>
+  </data>
+  <data name="Kyon's Dialogue Box Group Selection" xml:space="preserve">
+    <value>Dialoghi di Kyon su divisione gruppo</value>
+  </data>
+  <data name="Missing:" xml:space="preserve">
+    <value>Mancante:</value>
+  </data>
+  <data name="Group_Selection" xml:space="preserve">
+    <value>Divisione gruppo</value>
+  </data>
+  <data name="Cross Space {0}&quot;" xml:space="preserve">
+    <value>Cross Spazio {0}"</value>
+    <comment>As on a chessboard</comment>
+  </data>
+  <data name="Miss 2 Block" xml:space="preserve">
+    <value>Perse 2 Sezioni</value>
+  </data>
+  <data name="No saves Load Game menu ticker tape" xml:space="preserve">
+    <value>Pannello Info Nessun dato salvato</value>
+  </data>
+  <data name="Horizontal Intensity" xml:space="preserve">
+    <value>Intensità Orizzontale</value>
+  </data>
+  <data name="On" xml:space="preserve">
+    <value>On</value>
+  </data>
+  <data name="Overwrite save prompt message box" xml:space="preserve">
+    <value>Messaggio sovrascrivi salvataggio</value>
+  </data>
+  <data name="Mikuru Time Percentage" xml:space="preserve">
+    <value>Percentuale Tempo Mikuru</value>
+  </data>
+  <data name="objcopy exited with code {0}" xml:space="preserve">
+    <value>objcopy exited with code {0}</value>
+  </data>
+  <data name="Failed to set script command list panel section content." xml:space="preserve">
+    <value>Impossibile impostare il contenuto nell'elenco script.</value>
+  </data>
+  <data name="Failed to write include files to disk." xml:space="preserve">
+    <value>Impossibile scrivere file su disco.</value>
+  </data>
+  <data name="Unable to create command" xml:space="preserve">
+    <value>Impossibile creare comando</value>
+  </data>
+  <data name="References to {0}" xml:space="preserve">
+    <value>Collegato a {0}</value>
+  </data>
+  <data name="Update on Close" xml:space="preserve">
+    <value>Aggiorna mentre chiudi il programma</value>
+  </data>
+  <data name="Puzzle Interrupt Scenes setting" xml:space="preserve">
+    <value>Impostazioni scene interrotte Puzzle</value>
+  </data>
+  <data name="Title screen Options ticker tape" xml:space="preserve">
+    <value>Pannello Info Schermo Titolo Opzioni</value>
+  </data>
+  <data name="Voice Font" xml:space="preserve">
+    <value>Font Voce</value>
+  </data>
+  <data name="Title screen New Game ticker tape" xml:space="preserve">
+    <value>Pannello Info Schermo titolo nuova partita</value>
+  </data>
+  <data name="Scenario" xml:space="preserve">
+    <value>Scenario</value>
+  </data>
+  <data name="Unvoiced dialogue volume options ticker tape" xml:space="preserve">
+    <value>Pannello Info muta voci dialoghi</value>
+  </data>
+  <data name="Writing Includes" xml:space="preserve">
+    <value>Compila Includendo</value>
+    <comment>"Includes" here is a noun, as in "an 'includes' file"</comment>
+  </data>
+  <data name="Voices" xml:space="preserve">
+    <value>Voci</value>
+  </data>
+  <data name="Use Docker for ASM Hacks" xml:space="preserve">
+    <value>Usa Docker per ASM Hacks</value>
+  </data>
+  <data name="Vorbis files" xml:space="preserve">
+    <value>Vorbis files</value>
+  </data>
+  <data name="White Space End" xml:space="preserve">
+    <value>Spazio bianco finale</value>
+    <comment>As on a chessboard</comment>
+  </data>
+  <data name="Quicksave data damaged &amp; reset message box" xml:space="preserve">
+    <value>Messaggio Riparazione dati danneggiati e reset</value>
+  </data>
+  <data name="{0} results" xml:space="preserve">
+    <value>{0} risultati</value>
+  </data>
+  <data name="Skip Already Read" xml:space="preserve">
+    <value>Salta già letti</value>
+  </data>
+  <data name="{0} - Adjust Volume" xml:space="preserve">
+    <value>{0} - Sistema Volume</value>
+  </data>
+  <data name="Reset to default config ticker tape" xml:space="preserve">
+    <value>Pannello Info Impostazioni di fabbrica</value>
+  </data>
+  <data name="Yuki Nagato event unlocked message box" xml:space="preserve">
+    <value>Messaggio Evento sbloccato Yuki Nagato</value>
+  </data>
+  <data name="{0} - Manage Loop" xml:space="preserve">
+    <value>{0} - Gestisci Loop</value>
+  </data>
+  <data name="Puzzle Interrupt Scenes On" xml:space="preserve">
+    <value>Scene interrotte Puzzle On</value>
+  </data>
+  <data name="Vertical Intensity" xml:space="preserve">
+    <value>Intensità verticale</value>
+  </data>
+  <data name="Resetting save data message box" xml:space="preserve">
+    <value>Messaggio cancellazione dati salvati</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>Scrivi</value>
+  </data>
+  <data name="Puzzle Interrupt Scenes Off" xml:space="preserve">
+    <value>Scene interrotte Puzzle Off</value>
+  </data>
+  <data name="Sprite Exit/Move Transition" xml:space="preserve">
+    <value>Sprite transizione sposta/esci</value>
+  </data>
+  <data name="Voice" xml:space="preserve">
+    <value>Voce</value>
+  </data>
+  <data name="Puzzle Interrupt Scenes Unseen Only" xml:space="preserve">
+    <value>Non vedere scene interrotte Puzzle</value>
+  </data>
+  <data name="Title screen return unsaved progress lost prompt message box" xml:space="preserve">
+    <value>Messaggio prompt tornando al titolo i dati non salvati andranno perduti</value>
+  </data>
+  <data name="Writing NitroPacker Project File" xml:space="preserve">
+    <value>Compila File progetto NitroPacker</value>
+  </data>
+  <data name="Unknown 17" xml:space="preserve">
+    <value>Sconosciuto 17</value>
+  </data>
+  <data name="Replace me" xml:space="preserve">
+    <value>Sostituiscimi</value>
+  </data>
+  <data name="Visible?" xml:space="preserve">
+    <value>Rendere visibile?</value>
+  </data>
+  <data name="Unsure what to do with file '{0}'" xml:space="preserve">
+    <value>Cosa fare con il file '{0}'</value>
+  </data>
+  <data name="Unable to select asset URL for download" xml:space="preserve">
+    <value>Impossibile selezionare URL per scaricare risorse</value>
+  </data>
+  <data name="While attempting to build,  file #{0:X3} in archive {1} was found to be corrupt. Serial Loops can delete this file from your base directory automatically which may allow you to load the rest of the project, but any changes made to that file will be lost. Alternatively, you can attempt to edit the file manually to fix it. How would you like to proceed? Press OK to proceed with deleting the file and Cancel to attempt to deal with it manually." xml:space="preserve">
+    <value>Compilando il   file #{0:X3} nell'archivio {1} è stato trovato un file corrotto. Serial Loops cancellerà questo file dalla cartella, permettendoti di caricare il progetto senza problemi. Come vuoi proseguire? Clicca OK per cancellare il file o cancella per sistemare il problema da solo.</value>
+  </data>
+  <data name="WAV File" xml:space="preserve">
+    <value>File WAV</value>
+  </data>
+  <data name="WAV files" xml:space="preserve">
+    <value>File WAV</value>
+  </data>
+  <data name="Voices:" xml:space="preserve">
+    <value>Voci: </value>
+  </data>
+  <data name="Unknown 15" xml:space="preserve">
+    <value>Sconosciuto 15</value>
+  </data>
+  <data name="Quick Toggle" xml:space="preserve">
+    <value>Interruttori rapidi</value>
+  </data>
+  <data name="Unknown 16" xml:space="preserve">
+    <value>Sconosciuto 16</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Sì</value>
+  </data>
+  <data name="Save game ticker tape" xml:space="preserve">
+    <value>Pannello Info salvataggio dati gioco</value>
+  </data>
+  <data name="XDelta patch" xml:space="preserve">
+    <value>Patch XDelta</value>
+  </data>
+  <data name="Scale to Fit:" xml:space="preserve">
+    <value>Ridimensiona per adattare:</value>
+  </data>
+  <data name="Replace with Palette" xml:space="preserve">
+    <value>Sostituisci Palette</value>
+  </data>
+  <data name="Refresh Maps List" xml:space="preserve">
+    <value>Aggiorna lista mappe</value>
+  </data>
+  <data name="Scenarios" xml:space="preserve">
+    <value>Scenari</value>
+  </data>
+  <data name="{0} results found" xml:space="preserve">
+    <value>{0} risultati trovati</value>
+  </data>
+  <data name="Wait Time (Frames)" xml:space="preserve">
+    <value>Aspetta (frame)</value>
+  </data>
+  <data name="You have unsaved changes in {0} item(s). Would you like to save before closing the project?" xml:space="preserve">
+    <value>Sono presenti {0} cambiamento(i) non salvati. Salvare prima di chiudere?</value>
+  </data>
+  <data name="Scroll Direction" xml:space="preserve">
+    <value>Scorri direzione</value>
+  </data>
+  <data name="Volume Config" xml:space="preserve">
+    <value>Configura Volume</value>
+  </data>
+  <data name="Puzzle phase options ticker tape" xml:space="preserve">
+    <value>Pannello Info Opzioni fase puzzle</value>
+  </data>
+  <data name="unknown04" xml:space="preserve">
+    <value>Sconosciuto04</value>
+  </data>
+  <data name="Puzzle Phase Group" xml:space="preserve">
+    <value>Gruppo fase puzzle</value>
+  </data>
+  <data name="Unknown 04" xml:space="preserve">
+    <value>Sconosciuto 04</value>
+  </data>
+  <data name="unknown01" xml:space="preserve">
+    <value>Sconosciuto01</value>
+  </data>
+  <data name="Tutorial {0}" xml:space="preserve">
+    <value>Tutorial {0}</value>
+  </data>
+  <data name="Save progress prompt end game message box" xml:space="preserve">
+    <value>Messaggio prompt salvataggio dati fine gioco</value>
+  </data>
+  <data name="Save Time:" xml:space="preserve">
+    <value>Risparmia tempo:</value>
+  </data>
+  <data name="Title screen Load Game ticker tape" xml:space="preserve">
+    <value>Pannello Info Schermo titolo carica partita</value>
+  </data>
+  <data name="Section Label" xml:space="preserve">
+    <value>Sezione Etichetta</value>
+  </data>
+  <data name="unknown02" xml:space="preserve">
+    <value>Sconosciuto02</value>
+  </data>
+  <data name="Puzzle phase character description" xml:space="preserve">
+    <value>Descrizione personaggio fase puzzle</value>
+  </data>
+  <data name="Update Now" xml:space="preserve">
+    <value>Aggiorna adesso</value>
+  </data>
+  <data name="White Space Begin" xml:space="preserve">
+    <value>Spazio bianco inizio</value>
+    <comment>As on a chessboard</comment>
+  </data>
+  <data name="Scenario Command Index:" xml:space="preserve">
+    <value>Index comandi scenario:</value>
+  </data>
+  <data name="Voices Config" xml:space="preserve">
+    <value>Configura Voci</value>
+  </data>
+  <data name="Unknown Extras Short: {0}" xml:space="preserve">
+    <value>Sconosciuto Extras Short: {0}</value>
+  </data>
+  <data name="Puzzles" xml:space="preserve">
+    <value>Puzzles</value>
+  </data>
+  <data name="Unknown Extras Byte: {0}" xml:space="preserve">
+    <value>Sconosciuto Byte Extra: {0}</value>
+  </data>
+  <data name="Voiced dialogue volume options ticker tape" xml:space="preserve">
+    <value>Pannello Info volume voci dialogo</value>
+  </data>
+  <data name="Unseen Only" xml:space="preserve">
+    <value>Solo non vedere</value>
+  </data>
+  <data name="Script Block:" xml:space="preserve">
+    <value>Block: </value>
+  </data>
+  <data name="Saving prompt message box" xml:space="preserve">
+    <value>Messaggio prompt salvataggio</value>
+  </data>
+  <data name="Worst Group" xml:space="preserve">
+    <value>Gruppo Peggiore</value>
+  </data>
+  <data name="Quick Save Data" xml:space="preserve">
+    <value>Salva dati velocemente</value>
+  </data>
+  <data name="Volume" xml:space="preserve">
+    <value>Volume</value>
+  </data>
+  <data name="Voice Line" xml:space="preserve">
+    <value>Linea voce</value>
+  </data>
+  <data name="Sprite Shake" xml:space="preserve">
+    <value>Sprite Shake</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Valore</value>
+  </data>
+  <data name="unknown03" xml:space="preserve">
+    <value>Sconosciuto03</value>
+  </data>
+  <data name="Save game write fail message box" xml:space="preserve">
+    <value>Messaggio Salvataggio dati gioco fallito</value>
+  </data>
+  <data name="View Logs" xml:space="preserve">
+    <value>Leggi Logs</value>
+  </data>
+  <data name="Puzzle Interrupt Scenes ticker tape" xml:space="preserve">
+    <value>Pannello Info Scene interrotte Puzzle</value>
+  </data>
+  <data name="Puzzle Interrupt Scenes" xml:space="preserve">
+    <value>Scene interrotte Puzzle</value>
+  </data>
+  <data name="Section Name:" xml:space="preserve">
+    <value>Nome sezione:</value>
+  </data>
+  <data name="Scroll Speed" xml:space="preserve">
+    <value>Velocità scorri</value>
+  </data>
+  <data name="Text Entrance Effect" xml:space="preserve">
+    <value>Effetto testo entrata</value>
+  </data>
+  <data name="Writing Replaced Archives" xml:space="preserve">
+    <value>Compila sovrascrivendo archivi</value>
+  </data>
+  <data name="Second prompt on data being erased" xml:space="preserve">
+    <value>Secondo Prompt sui dati cancellati</value>
+  </data>
+  <data name="Unknown" xml:space="preserve">
+    <value>Sconosciuto</value>
+  </data>
+  <data name="Tsuruya event unlocked message box" xml:space="preserve">
+    <value>Messaggio evento sbloccato Tsuruya</value>
+  </data>
+  <data name="Save loaded message box" xml:space="preserve">
+    <value>Messaggio salvataggio caricato</value>
+  </data>
+  <data name="Sprite Layer" xml:space="preserve">
+    <value>Sprite Layer</value>
+  </data>
+  <data name="View &amp;Logs" xml:space="preserve">
+    <value>View &amp;Logs</value>
+  </data>
+  <data name="Starting Chibis" xml:space="preserve">
+    <value>Caricando Chibis</value>
+  </data>
+  <data name="Title screen Extra ticker tape" xml:space="preserve">
+    <value>Pannello Info Schermo titolo extra</value>
+  </data>
+  <data name="Unknown 03" xml:space="preserve">
+    <value>Sconosciuto 03</value>
+  </data>
+  <data name="Restoring Workspace" xml:space="preserve">
+    <value>Ripristina posto lavoro</value>
+  </data>
+  <data name="Save progress prompt message box" xml:space="preserve">
+    <value>Messaggio prompt salvataggio dati</value>
+  </data>
+  <data name="Sprite Entrance Transition" xml:space="preserve">
+    <value>Sprite transizione entrata</value>
+  </data>
+  <data name="Project not provided to project creation dialog" xml:space="preserve">
+    <value>Progetto non previsto di finestra per creazione</value>
+  </data>
+  <data name="Restore" xml:space="preserve">
+    <value>Ripristina</value>
+  </data>
+  <data name="Reset:" xml:space="preserve">
+    <value>Resetta:</value>
+  </data>
+  <data name="Use Pre-Release Update Channel" xml:space="preserve">
+    <value>Usa canale pre-rilascio per aggiornare</value>
+  </data>
+  <data name="Times" xml:space="preserve">
+    <value>Tentativi</value>
+  </data>
+  <data name="Try again prompt message box" xml:space="preserve">
+    <value>Messaggio prompt riprova</value>
+  </data>
+  <data name="Remember Project Workspace" xml:space="preserve">
+    <value>Ricorda spazio lavoro del progetto</value>
   </data>
 </root>

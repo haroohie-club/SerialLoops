@@ -17,13 +17,15 @@ namespace SerialLoops.Controls
         public ScriptItemCommand Command { get; set; }
         public int ParameterIndex { get; set; }
         public int CurrentShort { get; set; }
-        public List<ScriptCommandDropDown> OtherDropDowns { get; set; }
+        public List<ScriptCommandDropDown> OtherDropDowns { get; set; } // not initialized to save memory (as its rarely used)
+        public List<CommandGraphicSelectionButton> AssociatedGraphicsButtons { get; set; } // not initalized to save memory (as its rarely used)
         public ClearableLinkButton Link { get; set; }
     }
     public class ScriptCommandCheckBox : CheckBox
     {
         public ScriptItemCommand Command { get; set; }
         public int ParameterIndex { get; set; }
+        public List<ScriptCommandNumericStepper> DisableableNumericSteppers { get; set; }
     }
     public class ScriptCommandColorPicker : ColorPicker
     {
@@ -125,19 +127,21 @@ namespace SerialLoops.Controls
         public int ParameterIndex { get; set; }
         public Command SelectedChanged { get; }
         public List<IPreviewableGraphic> Items { get; }
+        public Func<ItemDescription, bool> SpecialPredicate { get; set; }
         public Project Project { get; set; }
 
-        public CommandGraphicSelectionButton(EditorTabsPanel editorTabs, ILogger log)
+        public CommandGraphicSelectionButton(EditorTabsPanel editorTabs, ILogger log, Func<ItemDescription, bool> specialPredicate = null)
         {
             _editorTabs = editorTabs;
             _log = log;
 
             SelectedChanged = new();
             Items = [];
+            SpecialPredicate = specialPredicate;
             InitializeComponent();
         }
 
-        public CommandGraphicSelectionButton(IPreviewableGraphic selected, EditorTabsPanel editorTabs, ILogger log)
+        public CommandGraphicSelectionButton(IPreviewableGraphic selected, EditorTabsPanel editorTabs, ILogger log, Func<ItemDescription, bool> specialPredicate = null)
         {
             _editorTabs = editorTabs;
             _log = log;
@@ -145,6 +149,7 @@ namespace SerialLoops.Controls
             
             SelectedChanged = new();
             Items = [];
+            SpecialPredicate = specialPredicate;
             InitializeComponent();
         }
 
@@ -172,7 +177,7 @@ namespace SerialLoops.Controls
 
         private void GraphicSelectionButton_Click(object sender, EventArgs e)
         {
-            GraphicSelectionDialog dialog = new(new(Items), Selected, Project, _log);
+            GraphicSelectionDialog dialog = new(new(Items), Selected, Project, _log, SpecialPredicate);
             IPreviewableGraphic description = dialog.ShowModal(this);
             if (description == null) return;
             Selected = description;

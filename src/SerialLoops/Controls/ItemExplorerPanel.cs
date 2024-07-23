@@ -39,7 +39,6 @@ namespace SerialLoops.Controls
             if (Viewer.SelectedItem is not null)
             {
                 ((TreeGridView)Viewer.Control).ContextMenu = Viewer.SelectedItem.Text.GetContextMenu(_project, this, _tabs, _log);
-                
             }
         }
 

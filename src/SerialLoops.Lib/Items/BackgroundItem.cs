@@ -1,6 +1,4 @@
-﻿using HaruhiChokuretsuLib.Archive;
-using HaruhiChokuretsuLib.Archive.Data;
-using HaruhiChokuretsuLib.Archive.Event;
+﻿using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Graphics;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib.Util;
@@ -21,7 +19,6 @@ namespace SerialLoops.Lib.Items
         public int Flag { get; set; }
         public short ExtrasShort { get; set; }
         public byte ExtrasByte { get; set; }
-        public (string ScriptName, ScriptCommandInvocation command)[] ScriptUses { get; set; }
 
         public BackgroundItem(string name) : base(name, ItemType.Background)
         {
@@ -30,9 +27,9 @@ namespace SerialLoops.Lib.Items
         {
             Id = id;
             BackgroundType = entry.Type;
-            Graphic1 = project.Grp.Files.First(g => g.Index == entry.BgIndex1);
-            Graphic2 = project.Grp.Files.FirstOrDefault(g => g.Index == entry.BgIndex2); // can be null if type is SINGLE_TEX
-            CgExtraData cgEntry = project.Extra.Cgs.FirstOrDefault(c => c.BgId == Id);
+            Graphic1 = project.Grp.GetFileByIndex(entry.BgIndex1);
+            Graphic2 = project.Grp.GetFileByIndex(entry.BgIndex2); // can be null if type is SINGLE_TEX
+            CgExtraData cgEntry = project.Extra.Cgs.AsParallel().FirstOrDefault(c => c.BgId == Id);
             if (cgEntry is not null)
             {
                 CgName = cgEntry?.Name?.GetSubstitutedString(project);
@@ -40,12 +37,10 @@ namespace SerialLoops.Lib.Items
                 ExtrasShort = cgEntry?.Unknown02 ?? 0;
                 ExtrasByte = cgEntry?.Unknown04 ?? 0;
             }
-            PopulateScriptUses(project.Evt);
         }
 
         public override void Refresh(Project project, ILogger log)
         {
-            PopulateScriptUses(project.Evt);
         }
 
         public SKBitmap GetBackground()
@@ -209,38 +204,19 @@ namespace SerialLoops.Lib.Items
             using MemoryStream grp1Stream = new();
             Graphic1.GetImage().Encode(grp1Stream, SKEncodedImageFormat.Png, 1);
             IO.WriteBinaryFile(Path.Combine("assets", "graphics", $"{Graphic1.Index:X3}.png"), grp1Stream.ToArray(), project, log);
-            IO.WriteStringFile(Path.Combine("assets", "graphics", $"{Graphic1.Index:X3}_pal.csv"),
-                string.Join(',', Graphic1.Palette.Select(c => c.ToString())), project, log);
+            IO.WriteStringFile(Path.Combine("assets", "graphics", $"{Graphic1.Index:X3}.gi"), Graphic1.GetGraphicInfoFile(), project, log);
 
             if (BackgroundType != BgType.KINETIC_SCREEN && BackgroundType != BgType.TEX_CG_SINGLE)
             {
                 using MemoryStream grp2Stream = new();
                 Graphic2.GetImage().Encode(grp2Stream, SKEncodedImageFormat.Png, 1);
                 IO.WriteBinaryFile(Path.Combine("assets", "graphics", $"{Graphic2.Index:X3}.png"), grp2Stream.ToArray(), project, log);
-                IO.WriteStringFile(Path.Combine("assets", "graphics", $"{Graphic2.Index:X3}_pal.csv"),
-                    string.Join(',', Graphic1.Palette.Select(c => c.ToString())), project, log);
+                IO.WriteStringFile(Path.Combine("assets", "graphics", $"{Graphic2.Index:X3}.gi"), Graphic1.GetGraphicInfoFile(), project, log);
             }
             else if (BackgroundType == BgType.KINETIC_SCREEN)
             {
                 // TODO: Export screen information for KBGs
             }
-        }
-
-        public void PopulateScriptUses(ArchiveFile<EventFile> evt)
-        {
-            string[] bgCommands = new string[]
-            {
-                EventFile.CommandVerb.KBG_DISP.ToString(),
-                EventFile.CommandVerb.BG_DISP.ToString(),
-                EventFile.CommandVerb.BG_DISP2.ToString(),
-                EventFile.CommandVerb.BG_DISPCG.ToString(),
-                EventFile.CommandVerb.BG_FADE.ToString(),
-            };
-
-            ScriptUses = evt.Files.SelectMany(e =>
-                e.ScriptSections.SelectMany(sec =>
-                    sec.Objects.Where(c => bgCommands.Contains(c.Command.Mnemonic)).Select(c => (e.Name[0..^1], c))))
-                .Where(t => t.c.Parameters[0] == Id || t.c.Command.Mnemonic == EventFile.CommandVerb.BG_FADE.ToString() && t.c.Parameters[1] == Id).ToArray();
         }
 
         public SKBitmap GetPreview(Project project)

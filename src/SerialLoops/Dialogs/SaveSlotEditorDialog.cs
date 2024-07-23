@@ -172,7 +172,7 @@ namespace SerialLoops.Dialogs
                         quickSave.EpisodeHeader = _quickSaveScriptPreview.EpisodeHeader;
                         for (int i = 1; i <= 5; i++)
                         {
-                            if (_quickSaveScriptPreview.TopScreenChibis.Any(c => c.Chibi.ChibiIndex == i))
+                            if (_quickSaveScriptPreview.TopScreenChibis.Any(c => c.Chibi.TopScreenIndex == i))
                             {
                                 quickSave.TopScreenChibis |= (CharacterMask)(1 << i);
                             }
@@ -346,14 +346,14 @@ namespace SerialLoops.Dialogs
         private List<int> GetFilteredFlags(string term = null, bool onlyShowSet = false)
         {
             List<int> filtered = [];
-            for (int i = 0; i < 5120; i++)
+            for (int i = 0; i < Flags.NUM_FLAGS; i++)
             {
                 if (onlyShowSet && !(_flagModifications.TryGetValue(i, out var set) ? set : _saveSection.IsFlagSet(i)))
                 {
                     continue;
                 }
 
-                if (!string.IsNullOrWhiteSpace(term) && !Flags.GetFlagNickname(i, _project).ToLower().Contains(term.ToLower().Trim()))
+                if (!string.IsNullOrWhiteSpace(term) && !Flags.GetFlagNickname(i, _project).Contains(term.Trim(), StringComparison.CurrentCultureIgnoreCase))
                 {
                     continue;
                 }
@@ -436,7 +436,7 @@ namespace SerialLoops.Dialogs
             {
                 if (quickSave.TopScreenChibis.HasFlag((CharacterMask)(1 << i)))
                 {
-                    ChibiItem chibi = (ChibiItem)_project.Items.First(it => it.Type == ItemDescription.ItemType.Chibi && ((ChibiItem)it).ChibiIndex == i);
+                    ChibiItem chibi = (ChibiItem)_project.Items.First(it => it.Type == ItemDescription.ItemType.Chibi && ((ChibiItem)it).TopScreenIndex == i);
                     topScreenChibis.Add((chibi, chibiCurrentX, chibiY));
                     chibiCurrentX += chibi.ChibiAnimations.First().Value.ElementAt(0).Frame.Width - 16;
                 }

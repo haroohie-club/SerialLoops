@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -127,7 +127,7 @@
     <value>&amp;Build</value>
   </data>
   <data name="&amp;Check for Updates..." xml:space="preserve">
-    <value>&amp;Check for Updates...</value>
+    <value>&amp;Check for Updates…</value>
   </data>
   <data name="&amp;Edit" xml:space="preserve">
     <value>&amp;Edit</value>
@@ -136,7 +136,7 @@
     <value>&amp;File</value>
   </data>
   <data name="&amp;Preferences..." xml:space="preserve">
-    <value>&amp;Preferences...</value>
+    <value>&amp;Preferences…</value>
   </data>
   <data name="&amp;Tools" xml:space="preserve">
     <value>&amp;Tools</value>
@@ -154,7 +154,7 @@
     <value>About</value>
   </data>
   <data name="About..." xml:space="preserve">
-    <value>About...</value>
+    <value>About…</value>
   </data>
   <data name="Accessing save data prompt message box" xml:space="preserve">
     <value>Accessing save data prompt message box</value>
@@ -171,9 +171,14 @@
   </data>
   <data name="Add Frames" xml:space="preserve">
     <value>Add Frames</value>
+    <comment>For Chibis/Character sprites</comment>
   </data>
   <data name="Add Map Characters" xml:space="preserve">
     <value>Add Map Characters</value>
+  </data>
+  <data name="Add Read Flag" xml:space="preserve">
+    <value>Add Read Flag</value>
+    <comment>As in "add a read flag to the script"</comment>
   </data>
   <data name="Add Section" xml:space="preserve">
     <value>Add Section</value>
@@ -181,17 +186,23 @@
   <data name="Add Starting Chibis" xml:space="preserve">
     <value>Add Starting Chibis</value>
   </data>
+  <data name="Add to Event Table" xml:space="preserve">
+    <value>Add to Event Table</value>
+  </data>
   <data name="Adding frames to GIF..." xml:space="preserve">
-    <value>Adding frames to GIF...</value>
+    <value>Adding frames to GIF…</value>
   </data>
   <data name="Adjust Volume" xml:space="preserve">
     <value>Adjust Volume</value>
+    <comment>For BGM</comment>
   </data>
   <data name="Adjusting Loop Info" xml:space="preserve">
     <value>Adjusting Loop Info</value>
+    <comment>For BGM</comment>
   </data>
   <data name="Adjusting Volume" xml:space="preserve">
     <value>Adjusting Volume</value>
+    <comment>For BGM</comment>
   </data>
   <data name="All data erased message box" xml:space="preserve">
     <value>All data erased message box</value>
@@ -212,7 +223,7 @@
     <value>Apply Assembly Hacks</value>
   </data>
   <data name="Apply Hacks..." xml:space="preserve">
-    <value>Apply Hacks...</value>
+    <value>Apply Hacks…</value>
   </data>
   <data name="Apply Template" xml:space="preserve">
     <value>Apply Template</value>
@@ -423,7 +434,7 @@
     <value>Clear all commands from the game scenario?\nThis action is irreversible.</value>
   </data>
   <data name="Clear Block" xml:space="preserve">
-    <value>Clear Block</value>
+    <value>Win Section</value>
   </data>
   <data name="Clear Scenario" xml:space="preserve">
     <value>Clear Scenario</value>
@@ -477,7 +488,7 @@
     <value>Common Save Data</value>
   </data>
   <data name="Common Save Data..." xml:space="preserve">
-    <value>Common Save Data...</value>
+    <value>Common Save Data…</value>
   </data>
   <data name="Companion Selection" xml:space="preserve">
     <value>Companion Selection</value>
@@ -501,13 +512,13 @@
     <value>Continue on Failure</value>
   </data>
   <data name="Converting frames..." xml:space="preserve">
-    <value>Converting frames...</value>
+    <value>Converting frames…</value>
   </data>
   <data name="Converting from MP3..." xml:space="preserve">
-    <value>Converting from MP3...</value>
+    <value>Converting from MP3…</value>
   </data>
   <data name="Converting from Vorbis..." xml:space="preserve">
-    <value>Converting from Vorbis...</value>
+    <value>Converting from Vorbis…</value>
   </data>
   <data name="Copy" xml:space="preserve">
     <value>Copy</value>
@@ -634,7 +645,7 @@
     <value>Download release from GitHub</value>
   </data>
   <data name="Downsampling..." xml:space="preserve">
-    <value>Downsampling...</value>
+    <value>Downsampling…</value>
   </data>
   <data name="Draw Pathing Map" xml:space="preserve">
     <value>Draw Pathing Map</value>
@@ -643,13 +654,13 @@
     <value>Draw Starting Point</value>
   </data>
   <data name="Drawing bottom screen texture..." xml:space="preserve">
-    <value>Drawing bottom screen texture...</value>
+    <value>Drawing bottom screen texture…</value>
   </data>
   <data name="Drawing textures..." xml:space="preserve">
-    <value>Drawing textures...</value>
+    <value>Drawing textures…</value>
   </data>
   <data name="Drawing top screen tiles..." xml:space="preserve">
-    <value>Drawing top screen tiles...</value>
+    <value>Drawing top screen tiles…</value>
   </data>
   <data name="Duration (Frames)" xml:space="preserve">
     <value>Duration (Frames)</value>
@@ -661,7 +672,7 @@
     <value>Edit Save File - {0}</value>
   </data>
   <data name="Edit Save File..." xml:space="preserve">
-    <value>Edit Save File...</value>
+    <value>Edit Save File…</value>
   </data>
   <data name="Edit Subtitle" xml:space="preserve">
     <value>Edit Subtitle</value>
@@ -670,13 +681,13 @@
     <value>Edit Tutorial Mappings</value>
   </data>
   <data name="Edit Tutorial Mappings..." xml:space="preserve">
-    <value>Edit Tutorial Mappings...</value>
+    <value>Edit Tutorial Mappings…</value>
   </data>
   <data name="Edit UI Text" xml:space="preserve">
     <value>Edit UI Text</value>
   </data>
   <data name="Edit UI Text..." xml:space="preserve">
-    <value>Edit UI Text...</value>
+    <value>Edit UI Text…</value>
   </data>
   <data name="Editor Tabs not provided to project creation dialog" xml:space="preserve">
     <value>Editor Tabs not provided to project creation dialog</value>
@@ -700,7 +711,7 @@
     <value>English</value>
   </data>
   <data name="Enter subtitle text..." xml:space="preserve">
-    <value>Enter subtitle text...</value>
+    <value>Enter subtitle text…</value>
   </data>
   <data name="Enter/Exit" xml:space="preserve">
     <value>Enter/Exit</value>
@@ -818,7 +829,7 @@
     <value>Exporting BGM</value>
   </data>
   <data name="Exporting GIF..." xml:space="preserve">
-    <value>Exporting GIF...</value>
+    <value>Exporting GIF…</value>
   </data>
   <data name="Extract" xml:space="preserve">
     <value>Extract</value>
@@ -953,7 +964,7 @@
     <value>Failed to read ARM9 from '{0}'</value>
   </data>
   <data name="Failed to read BGM file; falling back to original..." xml:space="preserve">
-    <value>Failed to read BGM file; falling back to original...</value>
+    <value>Failed to read BGM file; falling back to original…</value>
   </data>
   <data name="Failed to replace background {0} with file {1}" xml:space="preserve">
     <value>Failed to replace background {0} with file {1}</value>
@@ -1014,16 +1025,16 @@
     <value>Find in Project</value>
   </data>
   <data name="Find Orphaned Items..." xml:space="preserve">
-    <value>Find Orphaned Items...</value>
+    <value>Find Orphaned Items…</value>
   </data>
   <data name="Find References..." xml:space="preserve">
-    <value>Find References...</value>
+    <value>Find References…</value>
   </data>
   <data name="Finding orphaned items" xml:space="preserve">
     <value>Finding orphaned items</value>
   </data>
   <data name="Finding orphaned items..." xml:space="preserve">
-    <value>Finding orphaned items...</value>
+    <value>Finding orphaned items…</value>
   </data>
   <data name="FLAC files" xml:space="preserve">
     <value>FLAC files</value>
@@ -1217,6 +1228,13 @@
   <data name="Language" xml:space="preserve">
     <value>Language</value>
   </data>
+  <data name="Language Template" xml:space="preserve">
+    <value>Language Template</value>
+  </data>
+  <data name="Listened to {0}" xml:space="preserve">
+    <value>Listened to {0}</value>
+    <comment>{0} is the name of a BGM that's been encountered while playing the game</comment>
+  </data>
   <data name="Load Game menu ticker tape" xml:space="preserve">
     <value>Load Game menu ticker tape</value>
   </data>
@@ -1284,10 +1302,10 @@
     <value>Mikuru Time Percentage</value>
   </data>
   <data name="Miss 2 Block" xml:space="preserve">
-    <value>Miss 2 Block</value>
+    <value>Lose 2 Section</value>
   </data>
   <data name="Miss Block" xml:space="preserve">
-    <value>Miss Block</value>
+    <value>Lose Section</value>
   </data>
   <data name="Missing:" xml:space="preserve">
     <value>Missing: </value>
@@ -1349,7 +1367,7 @@
     <value>New Project</value>
   </data>
   <data name="New Project..." xml:space="preserve">
-    <value>New Project...</value>
+    <value>New Project…</value>
   </data>
   <data name="New Section" xml:space="preserve">
     <value>New Section</value>
@@ -1572,7 +1590,7 @@
     <value>Project Settings</value>
   </data>
   <data name="Project Settings..." xml:space="preserve">
-    <value>Project Settings...</value>
+    <value>Project Settings…</value>
   </data>
   <data name="Projects" xml:space="preserve">
     <value>Projects</value>
@@ -1652,6 +1670,10 @@
   <data name="Remove Missing Projects" xml:space="preserve">
     <value>Remove Missing Projects</value>
   </data>
+  <data name="Remove Read Flag" xml:space="preserve">
+    <value>Remove Read Flag</value>
+    <comment>As in "remove this read flag from the script"</comment>
+  </data>
   <data name="Remove Starting Chibis" xml:space="preserve">
     <value>Remove Starting Chibis</value>
   </data>
@@ -1683,7 +1705,7 @@
     <value>Replace with Palette</value>
   </data>
   <data name="Replace..." xml:space="preserve">
-    <value>Replace...</value>
+    <value>Replace…</value>
   </data>
   <data name="Replacing BGM" xml:space="preserve">
     <value>Replacing BGM</value>
@@ -1692,7 +1714,7 @@
     <value>Replacing Files</value>
   </data>
   <data name="Replacing {0}..." xml:space="preserve">
-    <value>Replacing {0}...</value>
+    <value>Replacing {0}…</value>
   </data>
   <data name="Required Brigade Member" xml:space="preserve">
     <value>Required Brigade Member</value>
@@ -1720,6 +1742,10 @@
   </data>
   <data name="Results" xml:space="preserve">
     <value>Results</value>
+  </data>
+  <data name="Route &quot;{0}&quot; Completed" xml:space="preserve">
+    <value>Route "{0}" Completed</value>
+    <comment>{0} is the name of a route following a group selection that has been completed</comment>
   </data>
   <data name="Routes" xml:space="preserve">
     <value>Routes</value>
@@ -1788,7 +1814,7 @@
     <value>Saved but unbuilt files were detected in the project directory. Would you like to build before loading the project? Not building could result in these files being overwritten.</value>
   </data>
   <data name="Saving GIF..." xml:space="preserve">
-    <value>Saving GIF...</value>
+    <value>Saving GIF…</value>
   </data>
   <data name="Saving prompt message box" xml:space="preserve">
     <value>Saving prompt message box</value>
@@ -1829,6 +1855,10 @@
   <data name="Script Section" xml:space="preserve">
     <value>Script Section</value>
   </data>
+  <data name="Script {0} Section {1} Completed" xml:space="preserve">
+    <value>Script {0} Section {1} Completed</value>
+    <comment>{0} is the display name of a script and {1} is the name of the section of that script that has been completed</comment>
+  </data>
   <data name="Script:" xml:space="preserve">
     <value>Script: </value>
   </data>
@@ -1851,13 +1881,13 @@
     <value>Search Scope</value>
   </data>
   <data name="Search..." xml:space="preserve">
-    <value>Search...</value>
+    <value>Search…</value>
   </data>
   <data name="Searching" xml:space="preserve">
     <value>Searching</value>
   </data>
   <data name="Searching {0}..." xml:space="preserve">
-    <value>Searching {0}...</value>
+    <value>Searching {0}…</value>
   </data>
   <data name="sec" xml:space="preserve">
     <value>sec</value>
@@ -1903,7 +1933,7 @@
     <value>Select Template to Apply</value>
   </data>
   <data name="Select..." xml:space="preserve">
-    <value>Select...</value>
+    <value>Select…</value>
   </data>
   <data name="Serial Loops Project" xml:space="preserve">
     <value>Serial Loops Project</value>
@@ -1928,22 +1958,25 @@
     <value>Set/Clear</value>
   </data>
   <data name="Setting CG single image..." xml:space="preserve">
-    <value>Setting CG single image...</value>
+    <value>Setting CG single image…</value>
   </data>
   <data name="Setting item image..." xml:space="preserve">
-    <value>Setting item image...</value>
+    <value>Setting item image…</value>
   </data>
   <data name="Setting palettes and images..." xml:space="preserve">
-    <value>Setting palettes and images...</value>
+    <value>Setting palettes and images…</value>
   </data>
   <data name="Setting screen image..." xml:space="preserve">
-    <value>Setting screen image...</value>
+    <value>Setting screen image…</value>
   </data>
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>
   </data>
   <data name="SFX" xml:space="preserve">
     <value>SFX</value>
+  </data>
+  <data name="SFX Group" xml:space="preserve">
+    <value>SFX Group</value>
   </data>
   <data name="SFXs" xml:space="preserve">
     <value>SFXs</value>
@@ -2002,6 +2035,10 @@
   </data>
   <data name="Start" xml:space="preserve">
     <value>Start</value>
+  </data>
+  <data name="Start Read Flag" xml:space="preserve">
+    <value>Start Read Flag</value>
+    <comment>As in, the first read flag of the script file</comment>
   </data>
   <data name="Starting Chibis" xml:space="preserve">
     <value>Starting Chibis</value>
@@ -2062,6 +2099,12 @@
   </data>
   <data name="The changes made will require Serial Loops to be restarted. Is that okay?" xml:space="preserve">
     <value>The changes made will require Serial Loops to be restarted. Is that okay?</value>
+  </data>
+  <data name="This script is not included in the event table." xml:space="preserve">
+    <value>This script is not included in the event table.</value>
+  </data>
+  <data name="This system texture uses a common palette, so palette replacement has been disabled" xml:space="preserve">
+    <value>This system texture uses a common palette, so palette replacement has been disabled</value>
   </data>
   <data name="Time (Frames)" xml:space="preserve">
     <value>Time (Frames)</value>
@@ -2312,16 +2355,28 @@
   <data name="Yuki Nagato event unlocked message box" xml:space="preserve">
     <value>Yuki Nagato event unlocked message box</value>
   </data>
+  <data name="{0} ({1}) Seen" xml:space="preserve">
+    <value>{0} ({1}) Seen</value>
+    <comment>{0} is the internal name and {1} is the display name of a CG that has been encountered during the game</comment>
+  </data>
   <data name="{0} - Adjust Volume" xml:space="preserve">
     <value>{0} - Adjust Volume</value>
   </data>
   <data name="{0} - Manage Loop" xml:space="preserve">
     <value>{0} - Manage Loop</value>
   </data>
+  <data name="{0} Obtained" xml:space="preserve">
+    <value>{0} Obtained</value>
+    <comment>{0} is the name of a topic that's been obtained</comment>
+  </data>
   <data name="{0} results" xml:space="preserve">
     <value>{0} results</value>
   </data>
   <data name="{0} results found" xml:space="preserve">
     <value>{0} results found</value>
+  </data>
+  <data name="{0} Watched in Extras" xml:space="preserve">
+    <value>{0} Watched in Extras</value>
+    <comment>{0} is the name of a topic that has had its associated scene watched in the Extras mode</comment>
   </data>
 </root>

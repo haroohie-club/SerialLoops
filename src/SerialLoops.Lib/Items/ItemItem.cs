@@ -18,7 +18,7 @@ namespace SerialLoops.Lib.Items
         }
         public ItemItem(string name, int itemIndex, short grpIndex, Project project) : base(name, ItemType.Item)
         {
-            ItemGraphic = project.Grp.Files[grpIndex - 1];
+            ItemGraphic = project.Grp.GetFileByIndex(grpIndex);
             ItemIndex = itemIndex;
         }
 
@@ -41,8 +41,7 @@ namespace SerialLoops.Lib.Items
             using MemoryStream grp1Stream = new();
             ItemGraphic.GetImage().Encode(grp1Stream, SKEncodedImageFormat.Png, 1);
             IO.WriteBinaryFile(Path.Combine("assets", "graphics", $"{ItemGraphic.Index:X3}.png"), grp1Stream.ToArray(), project, log);
-            IO.WriteStringFile(Path.Combine("assets", "graphics", $"{ItemGraphic.Index:X3}_pal.csv"),
-                string.Join(',', ItemGraphic.Palette.Select(c => c.ToString())), project, log);
+            IO.WriteStringFile(Path.Combine("assets", "graphics", $"{ItemGraphic.Index:X3}.gi"), ItemGraphic.GetGraphicInfoFile(), project, log);
         }
 
         SKBitmap IPreviewableGraphic.GetPreview(Project project)

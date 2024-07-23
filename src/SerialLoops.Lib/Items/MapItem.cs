@@ -1,10 +1,8 @@
 ﻿using HaruhiChokuretsuLib.Archive;
 using HaruhiChokuretsuLib.Archive.Data;
-using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Archive.Graphics;
 using HaruhiChokuretsuLib.Util;
 using SkiaSharp;
-using System.Linq;
 
 namespace SerialLoops.Lib.Items
 {
@@ -12,7 +10,6 @@ namespace SerialLoops.Lib.Items
     {
         public MapFile Map { get; set; }
         public int QmapIndex { get; set; }
-        public (string ScriptName, ScriptCommandInvocation command)[] ScriptUses { get; set; }
 
         public MapItem(string name) : base(name, ItemType.Map)
         {
@@ -21,12 +18,11 @@ namespace SerialLoops.Lib.Items
         {
             Map = map;
             QmapIndex = qmapIndex;
-            PopulateScriptUses(project.Evt);
         }
 
         public SKPoint GetOrigin(ArchiveFile<GraphicsFile> grp)
         {
-            GraphicsFile layout = grp.Files.First(f => f.Index == Map.Settings.LayoutFileIndex);
+            GraphicsFile layout = grp.GetFileByIndex(Map.Settings.LayoutFileIndex);
             return new SKPoint(layout.LayoutEntries[Map.Settings.LayoutSizeDefinitionIndex].ScreenX, layout.LayoutEntries[Map.Settings.LayoutSizeDefinitionIndex].ScreenY);
         }
 
@@ -39,7 +35,7 @@ namespace SerialLoops.Lib.Items
             }
             else
             {
-                map = Map.GetMapImages(grp, 0, grp.Files.First(f => f.Index == Map.Settings.LayoutFileIndex).LayoutEntries.Count);
+                map = Map.GetMapImages(grp, 0, grp.GetFileByIndex(Map.Settings.LayoutFileIndex).LayoutEntries.Count);
             }
             SKBitmap mapWithGrid = new(map.Width, map.Height);
             SKCanvas canvas = new(mapWithGrid);
@@ -119,18 +115,6 @@ namespace SerialLoops.Lib.Items
             };
         }
 
-        public void PopulateScriptUses(ArchiveFile<EventFile> evt)
-        {
-            string[] chibiCommands = ["LOAD_ISOMAP"];
-
-            var list = evt.Files.SelectMany(e =>
-                e.ScriptSections.SelectMany(sec =>
-                    sec.Objects.Where(c => chibiCommands.Contains(c.Command.Mnemonic)).Select(c => (e.Name[0..^1], c))))
-                .Where(t => t.c.Parameters[0] == Map.Index).ToList();
-
-            ScriptUses = list.ToArray();
-        }
-
         private static SKBitmap GetMapIcon(string name, int size)
         {
             SKBitmap icon = new(size, size);
@@ -141,7 +125,6 @@ namespace SerialLoops.Lib.Items
 
         public override void Refresh(Project project, ILogger log)
         {
-            PopulateScriptUses(project.Evt);
         }
     }
 }

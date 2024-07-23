@@ -5,7 +5,6 @@ using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Archive.Graphics;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib.Util;
-using SkiaSharp;
 using System;
 using System.Diagnostics;
 using System.Globalization;
@@ -13,6 +12,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace SerialLoops.Lib
@@ -117,9 +117,9 @@ namespace SerialLoops.Lib
                         {
                             ReplaceSingleGraphicsFile(grp, file, index, project.Localize, log);
                         }
-                        else if (file.EndsWith("_pal.csv", StringComparison.OrdinalIgnoreCase))
+                        else if (file.EndsWith(".gi", StringComparison.OrdinalIgnoreCase))
                         {
-                            // ignore palette files as they will be handled by the PNGs above
+                            // ignore graphics info files as they will be handled by the PNGs above
                         }
                         else if (Path.GetExtension(file).Equals(".s", StringComparison.OrdinalIgnoreCase))
                         {
@@ -141,9 +141,10 @@ namespace SerialLoops.Lib
                                 log.LogWarning($"Source file found at '{file}', outside of data and events directory; skipping...");
                             }
                         }
-                        else if (Path.GetExtension(file).Equals(".bna", StringComparison.OrdinalIgnoreCase))
+                        else if (Path.GetExtension(file).Equals(".bna", StringComparison.OrdinalIgnoreCase)
+                            || Path.GetExtension(file).Equals(".lay", StringComparison.OrdinalIgnoreCase))
                         {
-                            ReplaceSingleAnimationFile(grp, file, index, project.Localize, log);
+                            ReplaceSingleBinaryFile(grp, file, index, project.Localize, log);
                         }
                         else
                         {
@@ -212,6 +213,7 @@ namespace SerialLoops.Lib
                 File.Copy(Path.Combine(newDataDir, "dat.bin"), Path.Combine(iterativeOriginalDir, "dat.bin"), overwrite: true);
                 File.Copy(Path.Combine(newDataDir, "evt.bin"), Path.Combine(iterativeOriginalDir, "evt.bin"), overwrite: true);
                 File.Copy(Path.Combine(newDataDir, "grp.bin"), Path.Combine(iterativeOriginalDir, "grp.bin"), overwrite: true);
+                File.Copy(Path.Combine(newDataDir, "snd.bin"), Path.Combine(iterativeOriginalDir, "snd.bin"), overwrite: true);
             }
             catch (IOException exc)
             {
@@ -224,20 +226,17 @@ namespace SerialLoops.Lib
         {
             try
             {
-                GraphicsFile grpFile = grp.Files.FirstOrDefault(f => f.Index == index);
+                GraphicsFile grpFile = grp.GetFileByIndex(index);
 
                 if (index == 0xE50)
                 {
                     grpFile.InitializeFontFile();
                 }
 
-                string paletteFile = Path.Combine(Path.GetDirectoryName(filePath), $"{Path.GetFileNameWithoutExtension(filePath)}_pal.csv");
-                if (File.Exists(paletteFile))
-                {
-                    grpFile.SetPalette(File.ReadAllText(paletteFile).Split(',').Select(c => SKColor.Parse(c)).ToList());
-                }
+                GraphicInfo graphicInfo = JsonSerializer.Deserialize<GraphicInfo>(File.ReadAllText(Path.Combine(Path.GetDirectoryName(filePath), $"{Path.GetFileNameWithoutExtension(filePath)}.gi")));
 
-                grpFile.SetImage(filePath);
+                graphicInfo.Set(grpFile);
+                grpFile.SetImage(filePath, newSize: true);
 
                 grp.Files[grp.Files.IndexOf(grpFile)] = grpFile;
             }
@@ -353,8 +352,8 @@ namespace SerialLoops.Lib
         {
             try
             {
-                EventFile file = archive.Files.FirstOrDefault(f => f.Index == index);
-                file.Data = File.ReadAllBytes(filePath).ToList();
+                EventFile file = archive.GetFileByIndex(index);
+                file.Data = [.. File.ReadAllBytes(filePath)];
                 file.Edited = true;
                 archive.Files[archive.Files.IndexOf(file)] = file;
             }
@@ -367,7 +366,7 @@ namespace SerialLoops.Lib
         {
             try
             {
-                DataFile file = archive.Files.FirstOrDefault(f => f.Index == index);
+                DataFile file = archive.GetFileByIndex(index);
                 file.Data = File.ReadAllBytes(filePath).ToList();
                 file.Edited = true;
                 archive.Files[archive.Files.IndexOf(file)] = file;
@@ -377,11 +376,11 @@ namespace SerialLoops.Lib
                 log.LogException(string.Format(localize("Failed replacing source file {0} in dat.bin with file '{1}'"), index, filePath), ex);
             }
         }
-        private static void ReplaceSingleAnimationFile(ArchiveFile<GraphicsFile> archive, string filePath, int index, Func<string, string> localize, ILogger log)
+        private static void ReplaceSingleBinaryFile(ArchiveFile<GraphicsFile> archive, string filePath, int index, Func<string, string> localize, ILogger log)
         {
             try
             {
-                GraphicsFile file = archive.Files.FirstOrDefault(f => f.Index == index);
+                GraphicsFile file = archive.GetFileByIndex(index);
                 GraphicsFile newFile = new()
                 {
                     Name = file.Name,

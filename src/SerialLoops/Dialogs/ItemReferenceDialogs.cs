@@ -48,9 +48,10 @@ namespace SerialLoops.Dialogs
 
     public class OrphanedItemsDialog : FindItemsDialog
     {
-        private static readonly ItemDescription.ItemType[] IGNORED_ORPHAN_TYPES = {
-            ItemDescription.ItemType.Scenario
-        };
+        private static readonly ItemDescription.ItemType[] IGNORED_ORPHAN_TYPES = [
+            ItemDescription.ItemType.Layout,
+            ItemDescription.ItemType.Scenario,
+        ];
 
         public OrphanedItemsDialog(Project project, ItemExplorerPanel explorer, EditorTabsPanel tabs, ILogger log)
         {
@@ -67,7 +68,8 @@ namespace SerialLoops.Dialogs
             MinimumSize = new Size(400, 275);
             Padding = 10;
 
-            List<ItemDescription> results = Project.Items.FindAll(i => !IGNORED_ORPHAN_TYPES.Contains(i.Type) && i.GetReferencesTo(Project).Count == 0);
+            List<ItemDescription> results = Project.Items.FindAll(i => !IGNORED_ORPHAN_TYPES.Contains(i.Type) && i.GetReferencesTo(Project).Count == 0
+            && !(i.Type == ItemDescription.ItemType.SFX && ((SfxItem)i).Name.Contains("SSE") && ((SfxItem)i).AssociatedGroups.Count > 0)); // assume SFX that are in groups are referenced in code
             Content = new StackLayout
             {
                 Orientation = Orientation.Vertical,
