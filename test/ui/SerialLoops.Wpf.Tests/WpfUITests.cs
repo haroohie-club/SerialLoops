@@ -43,8 +43,8 @@ namespace SerialLoops.Wpf.Tests
             }
             else
             {
-                string romUri = Environment.GetEnvironmentVariable("ROM_URI") ?? string.Empty;
-                string romPath = Path.Combine(Directory.GetCurrentDirectory(), "HaruhiChokuretsu.nds");
+                string romUri = Environment.GetEnvironmentVariable(UiVals.ROM_URI_ENV_VAR) ?? string.Empty;
+                string romPath = Path.Combine(Directory.GetCurrentDirectory(), UiVals.ROM_NAME);
                 HttpClient httpClient = new();
                 using Stream downloadStream = httpClient.Send(new() { Method = HttpMethod.Get, RequestUri = new(romUri) }).Content.ReadAsStream();
                 using FileStream fileStream = new(romPath, FileMode.Create);
@@ -53,11 +53,11 @@ namespace SerialLoops.Wpf.Tests
 
                 _uiVals = new()
                 {
-                    AppLoc = Environment.GetEnvironmentVariable("APP_LOCATION") ?? string.Empty,
-                    ProjectName = Environment.GetEnvironmentVariable("PROJECT_NAME") ?? "WinUITest",
+                    AppLoc = Environment.GetEnvironmentVariable(UiVals.APP_LOCATION_ENV_VAR) ?? string.Empty,
+                    ProjectName = Environment.GetEnvironmentVariable(UiVals.PROJECT_NAME_ENV_VAR) ?? "WinUITest",
                     WinAppDriverLoc = Environment.GetEnvironmentVariable("WINAPPDRIVER_LOC") ?? string.Empty,
                     RomLoc = romPath,
-                    ArtifactsDir = Environment.GetEnvironmentVariable("BUILD_ARTIFACTSTAGINGDIRECTORY") ?? "artifacts",
+                    ArtifactsDir = Environment.GetEnvironmentVariable(UiVals.ARTIFACTS_DIR_ENV_VAR) ?? "artifacts",
                 };
             }
             _logger.Log(JsonSerializer.Serialize(_uiVals, new JsonSerializerOptions { WriteIndented = true }));
@@ -74,7 +74,7 @@ namespace SerialLoops.Wpf.Tests
                 Thread.Sleep(TimeSpan.FromSeconds(2)); // Give WAD time to launch before continuing
             }
 
-            Uri serverUri = new(Environment.GetEnvironmentVariable("APPIUM_HOST") ?? "http://127.0.0.1:4723/");
+            Uri serverUri = new(Environment.GetEnvironmentVariable(UiVals.APP_LOCATION_ENV_VAR) ?? "http://127.0.0.1:4723/");
             
             AppiumOptions driverOptions = new();
             driverOptions.AddAdditionalCapability("app", _uiVals!.AppLoc);
@@ -86,7 +86,7 @@ namespace SerialLoops.Wpf.Tests
             Thread.Sleep(TimeSpan.FromSeconds(3));
             _driver.SwitchTo().Window(_driver.WindowHandles.First()); // Switch to the update available dialog
             Thread.Sleep(100); // Give it time
-            _driver.FindElementByName("Skip Update").Click(); // close the dialog
+            _driver.FindElementByName(UiVals.SKIP_UPDATE).Click(); // close the dialog
 
             _driver.SwitchTo().Window(_driver.WindowHandles.First());
             _driver.TakeScreenshot().SaveAsFile(Path.Combine(_uiVals.ArtifactsDir, "start.png"));
@@ -94,12 +94,12 @@ namespace SerialLoops.Wpf.Tests
             Actions actions = new(_driver);
             actions.SendKeys(_uiVals.ProjectName);
             actions.Build().Perform();
-            _driver.FindElementByName("Open ROM").Click();
+            _driver.FindElementByName(UiVals.OPEN_ROM).Click();
             actions = new(_driver);
             actions.SendKeys(_uiVals.RomLoc);
             actions.SendKeys(Keys.Enter);
             actions.Build().Perform();
-            _driver.FindElementByName("Create").Click();
+            _driver.FindElementByName(UiVals.CREATE).Click();
             do
             {
                 Thread.Sleep(TimeSpan.FromSeconds(5));
@@ -149,9 +149,9 @@ namespace SerialLoops.Wpf.Tests
                 _logger.Log($"Attempting to open about dialog time {i + 1}...");
                 _driver.FindElementByName("Help").Click();
                 Thread.Sleep(200);
-                _driver.FindElementByName("About...").Click();
+                _driver.FindElementByName(UiVals.ABOUT_ELLIPSIS).Click();
                 Thread.Sleep(200);
-                _driver.FindElementByName("About").FindElementByName("Close").Click();
+                _driver.FindElementByName(UiVals.ABOUT).FindElementByName("Close").Click();
                 Thread.Sleep(200);
             }
         }
@@ -162,26 +162,26 @@ namespace SerialLoops.Wpf.Tests
         {
             if (!(_project?.Config.UseDocker ?? true))
             {
-                _driver.FindElementByName("File").Click();
+                _driver.FindElementByName(UiVals.FILE).Click();
                 _driver.TakeScreenshot().SaveAsFile(Path.Combine(_uiVals!.ArtifactsDir, "file_menu.png"));
-                _driver.FindElementByName("Preferences...").Click();
+                _driver.FindElementByName(UiVals.PREFERENCES).Click();
                 Actions actions = new(_driver);
-                actions.MoveToElement(_driver.FindElementByName("Use Docker for ASM Hacks"));
+                actions.MoveToElement(_driver.FindElementByName(UiVals.USE_DOCKER_FOR_ASM_HACKS));
                 actions.Build().Perform();
                 _driver.FindElementByClassName("CheckBox").Click();
-                _driver.FindElementByName("Save").Click();
+                _driver.FindElementByName(UiVals.SAVE).Click();
             }
 
             _logger.Log("Applying hack...");
-            _driver.FindElementByName("Tools").Click();
+            _driver.FindElementByName(UiVals.TOOLS).Click();
             _driver.TakeScreenshot().SaveAsFile(Path.Combine(_uiVals!.ArtifactsDir, "tools_clicked.png"));
             TestContext.AddTestAttachment(Path.Combine(_uiVals!.ArtifactsDir, "tools_clicked.png"), "The app after the tools menu was clicked but before clicking Apply Hacks");
-            _driver.FindElementByName("Apply Hacks...").Click();
+            _driver.FindElementByName(UiVals.APPLY_HACKS).Click();
             _driver.SwitchTo().Window(_driver.WindowHandles.First());
             _driver.TakeScreenshot().SaveAsFile(Path.Combine(_uiVals!.ArtifactsDir, "available_hacks.png"));
             TestContext.AddTestAttachment(Path.Combine(_uiVals!.ArtifactsDir, "available_hacks.png"), "The available hacks dialog");
             _driver.FindElementByName(hackToApply).Click();
-            _driver.FindElementByName("Save").Click();
+            _driver.FindElementByName(UiVals.SAVE).Click();
             Thread.Sleep(TimeSpan.FromSeconds(10)); // Allow time for hacks to be assembled
             if (Helpers.OnWindows11())
             {
@@ -198,19 +198,19 @@ namespace SerialLoops.Wpf.Tests
             _logger.Log("Reverting hack...");
             _driver.SwitchTo().Window(_driver.WindowHandles.First());
             Thread.Sleep(100);
-            _driver.FindElementByName("Tools").Click();
+            _driver.FindElementByName(UiVals.TOOLS).Click();
             Thread.Sleep(100);
-            _driver.FindElementByName("Apply Hacks...").Click();
+            _driver.FindElementByName(UiVals.APPLY_HACKS).Click();
             _driver.SwitchTo().Window(_driver.WindowHandles.First());
             _driver.FindElementByName(hackToApply).Click();
-            _driver.FindElementByName("Save").Click();
+            _driver.FindElementByName(UiVals.SAVE).Click();
             Thread.Sleep(TimeSpan.FromSeconds(3)); // Allow time for hacks to be disabled
             if (Helpers.OnWindows11())
             {
                 // Dialogs count as windows on Win11 but are part of the same window on Win10, from basic testing
                 _driver.SwitchToWindowWithName("Successfully applied hacks!", "Success!", "Error");
             }
-            _driver.FindElementByName("OK").Click();
+            _driver.FindElementByName(UiVals.OK).Click();
             Thread.Sleep(TimeSpan.FromSeconds(1)); // Allow time to clean up the containers
             Assert.That(hacks.First(h => h.Name == hackToApply).Applied(_project), Is.False);
         }
