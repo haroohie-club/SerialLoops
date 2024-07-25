@@ -938,7 +938,7 @@
     <value>Creazione Patch</value>
   </data>
   <data name="Number of Saves:" xml:space="preserve">
-    <value>Numero di Salvataggi:</value>
+    <value>Numero di Salvataggi: </value>
   </data>
   <data name="Flag" xml:space="preserve">
     <value>Flag</value>
@@ -1073,7 +1073,7 @@
     <value>Rimuovi personaggi dalla mappa</value>
   </data>
   <data name="Music:" xml:space="preserve">
-    <value>Musica:</value>
+    <value>Musica: </value>
   </data>
   <data name="Save game read fail message box" xml:space="preserve">
     <value>Messaggio sul fallimento nel leggere i dati salvati</value>
@@ -1220,7 +1220,7 @@
     <value>Nessun progetto aperto</value>
   </data>
   <data name="Command Index:" xml:space="preserve">
-    <value>Index Comandi:  </value>
+    <value>Index Comandi: </value>
   </data>
   <data name="Successfully applied hacks!" xml:space="preserve">
     <value>Hacks applicate con successo!</value>
@@ -1247,7 +1247,7 @@
     <value>Preferenze</value>
   </data>
   <data name="Dialogue:" xml:space="preserve">
-    <value>Dialogo:  </value>
+    <value>Dialogo: </value>
   </data>
   <data name="Piece 3" xml:space="preserve">
     <value>Pedina 3</value>
@@ -1335,7 +1335,7 @@
     <value>Impossibile sostituire il file sorgente {0} in dat.bin con il file '{1}'</value>
   </data>
   <data name="Script:" xml:space="preserve">
-    <value>Script:</value>
+    <value>Script: </value>
   </data>
   <data name="Name" xml:space="preserve">
     <value>Nome</value>
@@ -1467,7 +1467,7 @@
     <value>Fade In Time (Frame)</value>
   </data>
   <data name="sec" xml:space="preserve">
-    <value>Secondi</value>
+    <value>secondi</value>
     <comment>As in "seconds"</comment>
   </data>
   <data name="Defaults" xml:space="preserve">
@@ -1816,7 +1816,7 @@
     <value>Edit Mappe Guida…</value>
   </data>
   <data name="Loading:" xml:space="preserve">
-    <value>Caricando:</value>
+    <value>Caricando: </value>
   </data>
   <data name="Migration Complete!" xml:space="preserve">
     <value>Trasferimento Completato!</value>
@@ -1893,7 +1893,7 @@
     <value>Dialoghi di Kyon su divisione gruppo</value>
   </data>
   <data name="Missing:" xml:space="preserve">
-    <value>Mancante:</value>
+    <value>Mancante: </value>
   </data>
   <data name="Group_Selection" xml:space="preserve">
     <value>Divisione gruppo</value>
@@ -2040,7 +2040,7 @@
     <value>Impossibile selezionare URL per scaricare risorse</value>
   </data>
   <data name="While attempting to build,  file #{0:X3} in archive {1} was found to be corrupt. Serial Loops can delete this file from your base directory automatically which may allow you to load the rest of the project, but any changes made to that file will be lost. Alternatively, you can attempt to edit the file manually to fix it. How would you like to proceed? Press OK to proceed with deleting the file and Cancel to attempt to deal with it manually." xml:space="preserve">
-    <value>Compilando il   file #{0:X3} nell'archivio {1} è stato trovato un file corrotto. Serial Loops cancellerà questo file dalla cartella, permettendoti di caricare il progetto senza problemi. Come vuoi proseguire? Clicca OK per cancellare il file o cancella per sistemare il problema da solo.</value>
+    <value>Compilando il file #{0:X3} nell'archivio {1} è stato trovato un file corrotto. Serial Loops cancellerà questo file dalla cartella, permettendoti di caricare il progetto senza problemi. Come vuoi proseguire? Clicca OK per cancellare il file o cancella per sistemare il problema da solo.</value>
   </data>
   <data name="WAV File" xml:space="preserve">
     <value>File WAV</value>
@@ -2118,7 +2118,7 @@
     <value>Messaggio prompt salvataggio dati fine gioco</value>
   </data>
   <data name="Save Time:" xml:space="preserve">
-    <value>Risparmia tempo:</value>
+    <value>Risparmia tempo: </value>
   </data>
   <data name="Title screen Load Game ticker tape" xml:space="preserve">
     <value>Pannello Info Schermo titolo carica partita</value>
@@ -2140,7 +2140,7 @@
     <comment>As on a chessboard</comment>
   </data>
   <data name="Scenario Command Index:" xml:space="preserve">
-    <value>Index comandi scenario:</value>
+    <value>Index comandi scenario: </value>
   </data>
   <data name="Voices Config" xml:space="preserve">
     <value>Configura Voci</value>
