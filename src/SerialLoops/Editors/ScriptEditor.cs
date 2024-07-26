@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -97,6 +98,20 @@ namespace SerialLoops.Editors
             };
 
             EditorCommands.Add(applyTemplate);
+
+            Command generateTemplate = new() { MenuText = Application.Instance.Localize(this, "Generate Template"), Image = ControlGenerator.GetIcon("Template", _log) };
+            generateTemplate.Executed += (sender, args) =>
+            {
+                ScriptTemplateCreationDialog scriptTemplateGenerator = new(_project, _commands, _log);
+                ScriptTemplate template = scriptTemplateGenerator.ShowModal(this);
+                if (template is not null)
+                {
+                    Lib.IO.WriteStringFile(Path.Combine(_project.Config.ScriptTemplatesDirectory, $"{template.Name.Replace(" ", "")}.slscr"), JsonSerializer.Serialize(template), _log);
+                    _project.Config.ScriptTemplates.Add(template);
+                }
+            };
+
+            EditorCommands.Add(generateTemplate);
 
             TableRow mainRow = new();
             mainRow.Cells.Add(new TableLayout(GetEditorButtons(treeGridView), _commandsPanel));

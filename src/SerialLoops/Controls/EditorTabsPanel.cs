@@ -155,8 +155,11 @@ namespace SerialLoops.Controls
             _toolBar?.Items.Insert(0, separator);
             commands.ForEach(command =>
             {
-                ButtonToolItem toolButton = new(command) { Tag = Editor.EDITOR_TOOLBAR_TAG, Style = "sl-toolbar-button" };
-                _toolBar?.Items.Insert(0, toolButton);
+                if (!string.IsNullOrEmpty(command.ToolBarText))
+                {
+                    ButtonToolItem toolButton = new(command) { Tag = Editor.EDITOR_TOOLBAR_TAG, Style = "sl-toolbar-button" };
+                    _toolBar?.Items.Insert(0, toolButton);
+                }
                 editItem?.Items.Insert(0, command);
             });
             _menuBar?.Items.Add(editItem);

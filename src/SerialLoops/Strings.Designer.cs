@@ -2578,6 +2578,15 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to generate script template!.
+        /// </summary>
+        public static string Failed_to_generate_script_template_ {
+            get {
+                return ResourceManager.GetString("Failed to generate script template!", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to insert ARM9 assembly hacks.
         /// </summary>
         public static string Failed_to_insert_ARM9_assembly_hacks {
@@ -3024,6 +3033,15 @@ namespace SerialLoops {
         public static string gcc_not_found_at___0__ {
             get {
                 return ResourceManager.GetString("gcc not found at \'{0}\'", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Generate Template.
+        /// </summary>
+        public static string Generate_Template {
+            get {
+                return ResourceManager.GetString("Generate Template", resourceCulture);
             }
         }
         
@@ -5970,6 +5988,24 @@ namespace SerialLoops {
         public static string Template {
             get {
                 return ResourceManager.GetString("Template", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Template Name.
+        /// </summary>
+        public static string Template_Name {
+            get {
+                return ResourceManager.GetString("Template Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Template Properties.
+        /// </summary>
+        public static string Template_Properties {
+            get {
+                return ResourceManager.GetString("Template Properties", resourceCulture);
             }
         }
         
