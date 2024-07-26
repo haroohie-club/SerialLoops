@@ -47,7 +47,7 @@ namespace SerialLoops.Tests
 
             // Create a project using the extracted data
             _log.Log("Creating project...");
-            _config = Config.LoadConfig(_log);
+            _config = Config.LoadConfig(s => s, _log);
             _project = new("Tester", "en", _config, s => s, _log);
             
             string archivesDir = Path.Combine("original", "archives");

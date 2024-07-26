@@ -94,7 +94,7 @@ namespace SerialLoops.Mac.Tests
 
             _logger.Log("Loading project...");
             string configPath = Path.Combine(Path.GetDirectoryName(_uiVals.AppLoc) ?? string.Empty, "Contents", "MacOS", "config.json");
-            Config config = File.Exists(configPath) ? (JsonSerializer.Deserialize<Config>(File.ReadAllText(configPath)) ?? Config.LoadConfig(_logger)) : Config.LoadConfig(_logger);
+            Config config = File.Exists(configPath) ? (JsonSerializer.Deserialize<Config>(File.ReadAllText(configPath)) ?? Config.LoadConfig(s => s, _logger)) : Config.LoadConfig(s => s, _logger);
             (_project, _) = Project.OpenProject(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "SerialLoops", "Projects", _uiVals.ProjectName, $"{_uiVals.ProjectName}.slproj"),
                 config, s => s, _logger, _tracker);
             _logger.Log($"Project loaded from '{_project.ProjectFile}'");

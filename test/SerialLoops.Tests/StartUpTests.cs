@@ -21,7 +21,7 @@ namespace SerialLoops.Tests
 
         private async Task<Project> DownloadTestRom()
         {
-            Config config = Config.LoadConfig(_log);
+            Config config = Config.LoadConfig(s => s, _log);
             Project project = new("Test", "en", config, s => s, _log);
 
             string romPath = Path.Combine(project.MainDirectory, "bcsds.nds");
@@ -37,7 +37,7 @@ namespace SerialLoops.Tests
         public void ConfigCreationTest()
         {
             // Create default config
-            Config config = Config.LoadConfig(_log);
+            Config config = Config.LoadConfig(s => s, _log);
             Assert.Multiple(() =>
             {
                 Assert.That(File.Exists(config.ConfigPath), $"Config file not found at '{config.ConfigPath}'");
@@ -50,7 +50,7 @@ namespace SerialLoops.Tests
             config.Save(_log);
 
             // Load config from disk
-            Config newConfig = Config.LoadConfig(_log);
+            Config newConfig = Config.LoadConfig(s => s, _log);
             Assert.That(newConfig.UserDirectory, Is.EqualTo(config.UserDirectory));
 
             File.Delete(config.ConfigPath);
@@ -59,7 +59,7 @@ namespace SerialLoops.Tests
         [Test]
         public void ProjectCreationTest()
         {
-            Config config = Config.LoadConfig(_log);
+            Config config = Config.LoadConfig(s => s, _log);
             Project project = new("Test", "en", config, s => s, _log);
 
             Assert.Multiple(() =>

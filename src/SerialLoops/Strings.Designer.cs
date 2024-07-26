@@ -1492,6 +1492,16 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to devkitARM is not detected at the default or specified install location. Please set devkitARM path..
+        /// </summary>
+        public static string devkitARM_is_not_detected_at_the_default_or_specified_install_location__Please_set_devkitARM_path_ {
+            get {
+                return ResourceManager.GetString("devkitARM is not detected at the default or specified install location. Please se" +
+                        "t devkitARM path.", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to DevkitARM must be supplied in order to build!.
         /// </summary>
         public static string DevkitARM_must_be_supplied_in_order_to_build_ {
@@ -2142,6 +2152,15 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Exception occurred while parsing config.json!.
+        /// </summary>
+        public static string Exception_occurred_while_parsing_config_json_ {
+            get {
+                return ResourceManager.GetString("Exception occurred while parsing config.json!", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exception occurred while parsing projects_cache.json!.
         /// </summary>
         public static string Exception_occurred_while_parsing_projects_cache_json_ {
@@ -2486,6 +2505,15 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to deserialize script template file &apos;{0}&apos;.
+        /// </summary>
+        public static string Failed_to_deserialize_script_template_file___0__ {
+            get {
+                return ResourceManager.GetString("Failed to deserialize script template file \'{0}\'", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to export background {0} to file {1}.
         /// </summary>
         public static string Failed_to_export_background__0__to_file__1_ {
@@ -2618,6 +2646,15 @@ namespace SerialLoops {
         public static string Failed_to_load_voice_file__file_not_found_ {
             get {
                 return ResourceManager.GetString("Failed to load voice file: file not found.", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to parse script parameter {0} of type {1} with parameter &apos;{2}&apos;!.
+        /// </summary>
+        public static string Failed_to_parse_script_parameter__0__of_type__1__with_parameter___2___ {
+            get {
+                return ResourceManager.GetString("Failed to parse script parameter {0} of type {1} with parameter \'{2}\'!", resourceCulture);
             }
         }
         
@@ -5998,6 +6035,8 @@ namespace SerialLoops {
                 return ResourceManager.GetString("This script is not included in the event table.", resourceCulture);
             }
         }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This system texture uses a common palette, so palette replacement has been disabled.
         /// </summary>
         public static string This_system_texture_uses_a_common_palette__so_palette_replacement_has_been_disabled {
