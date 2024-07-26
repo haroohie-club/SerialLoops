@@ -59,7 +59,7 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -122,6 +122,7 @@
   </data>
   <data name="%" xml:space="preserve">
     <value>%</value>
+    <comment>Just the percentage symbol</comment>
   </data>
   <data name="&amp;Build" xml:space="preserve">
     <value>&amp;Build</value>
@@ -143,6 +144,7 @@
   </data>
   <data name="(Missing)" xml:space="preserve">
     <value> (Missing)</value>
+    <comment>For when a project file has been deleted</comment>
   </data>
   <data name="100%'d game message box" xml:space="preserve">
     <value>100%'d game message box</value>
@@ -788,6 +790,7 @@
   </data>
   <data name="Error getting script command tree for script {0} ({1})" xml:space="preserve">
     <value>Error getting script command tree for script {0} ({1})</value>
+    <comment>{0} is the script display name, {1} is the script's underlying name</comment>
   </data>
   <data name="Error pruning labels!" xml:space="preserve">
     <value>Error pruning labels!</value>
@@ -1047,6 +1050,7 @@
   </data>
   <data name="Flag: {0}" xml:space="preserve">
     <value>Flag: {0}</value>
+    <comment>{0} is the ID of the flag</comment>
   </data>
   <data name="Flags" xml:space="preserve">
     <value>Flags</value>
@@ -1350,6 +1354,7 @@
   </data>
   <data name="Name '{0}' is already in use!" xml:space="preserve">
     <value>Name '{0}' is already in use!</value>
+    <comment>{0} is the name of an item (this appears when attempting to rename an item)</comment>
   </data>
   <data name="NDS ROM" xml:space="preserve">
     <value>NDS ROM</value>
@@ -1374,6 +1379,7 @@
   </data>
   <data name="New Update Available: {0}" xml:space="preserve">
     <value>New Update Available: {0}</value>
+    <comment>{0} is the version</comment>
   </data>
   <data name="NitroPacker failed to pack ROM with exception" xml:space="preserve">
     <value>NitroPacker failed to pack ROM with exception</value>
@@ -2361,9 +2367,11 @@
   </data>
   <data name="{0} - Adjust Volume" xml:space="preserve">
     <value>{0} - Adjust Volume</value>
+    <comment>{0} is the title of a BGM track</comment>
   </data>
   <data name="{0} - Manage Loop" xml:space="preserve">
     <value>{0} - Manage Loop</value>
+    <comment>{0} is the title of a BGM track</comment>
   </data>
   <data name="{0} Obtained" xml:space="preserve">
     <value>{0} Obtained</value>
@@ -2371,9 +2379,11 @@
   </data>
   <data name="{0} results" xml:space="preserve">
     <value>{0} results</value>
+    <comment>{0} is the number of flags found</comment>
   </data>
   <data name="{0} results found" xml:space="preserve">
     <value>{0} results found</value>
+    <comment>{0} is the number of search results</comment>
   </data>
   <data name="{0} Watched in Extras" xml:space="preserve">
     <value>{0} Watched in Extras</value>
