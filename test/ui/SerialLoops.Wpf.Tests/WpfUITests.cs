@@ -74,7 +74,7 @@ namespace SerialLoops.Wpf.Tests
                 Thread.Sleep(TimeSpan.FromSeconds(2)); // Give WAD time to launch before continuing
             }
 
-            Uri serverUri = new(Environment.GetEnvironmentVariable(UiVals.APP_LOCATION_ENV_VAR) ?? "http://127.0.0.1:4723/");
+            Uri serverUri = new(Environment.GetEnvironmentVariable(UiVals.APPIUM_HOST_ENV_VAR) ?? "http://127.0.0.1:4723/");
             
             AppiumOptions driverOptions = new();
             driverOptions.AddAdditionalCapability("app", _uiVals!.AppLoc);
