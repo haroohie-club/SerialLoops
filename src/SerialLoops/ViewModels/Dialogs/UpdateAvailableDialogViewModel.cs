@@ -10,7 +10,7 @@ using System.Windows.Input;
 
 namespace SerialLoops.ViewModels.Dialogs
 {
-    public class UpdateAvailableDialogViewModel
+    public class UpdateAvailableDialogViewModel : ViewModelBase
     {
         public Size MinSize => new(600, 375);
         public Size ClientSize { get; set; } = new(1000, 650);

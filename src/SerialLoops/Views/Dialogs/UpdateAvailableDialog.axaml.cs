@@ -18,9 +18,8 @@ namespace SerialLoops.Views.Dialogs
             ViewModel.OpenReleaseLink();
         }
 
-        protected override void OnClosed(EventArgs e)
+        private void DialogClosed(object? sender, EventArgs e)
         {
-            base.OnClosed(e);
             ViewModel.Config.CheckForUpdates = CheckForUpdatesBox.IsChecked ?? false;
             ViewModel.Config.PreReleaseChannel = PreReleaseChannelBox.IsChecked ?? false;
             ViewModel.Config.Save(ViewModel.Log);

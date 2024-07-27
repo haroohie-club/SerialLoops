@@ -1384,6 +1384,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Credits.
+        /// </summary>
+        public static string Credits {
+            get {
+                return ResourceManager.GetString("Credits", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Crop &amp; Scale.
         /// </summary>
         public static string Crop___Scale {
@@ -1479,6 +1488,15 @@ namespace SerialLoops.Assets {
         public static string Deleting_all_data_message_box {
             get {
                 return ResourceManager.GetString("Deleting all data message box", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Development.
+        /// </summary>
+        public static string Development {
+            get {
+                return ResourceManager.GetString("Development", resourceCulture);
             }
         }
         
@@ -5928,6 +5946,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Systems architect &amp; reverse engineering work.
+        /// </summary>
+        public static string Systems_architect___reverse_engineering_work {
+            get {
+                return ResourceManager.GetString("Systems architect & reverse engineering work", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Target Number.
         /// </summary>
         public static string Target_Number {
@@ -6281,6 +6308,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Translation.
+        /// </summary>
+        public static string Translation {
+            get {
+                return ResourceManager.GetString("Translation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Try again prompt message box.
         /// </summary>
         public static string Try_again_prompt_message_box {
@@ -6502,6 +6538,15 @@ namespace SerialLoops.Assets {
         public static string Use_Pre_Release_Update_Channel {
             get {
                 return ResourceManager.GetString("Use Pre-Release Update Channel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UX architect &amp; design work.
+        /// </summary>
+        public static string UX_architect___design_work {
+            get {
+                return ResourceManager.GetString("UX architect & design work", resourceCulture);
             }
         }
         

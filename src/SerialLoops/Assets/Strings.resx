@@ -549,6 +549,9 @@
   <data name="Creating Project" xml:space="preserve">
     <value>Creating Project</value>
   </data>
+  <data name="Credits" xml:space="preserve">
+    <value>Credits</value>
+  </data>
   <data name="Crop &amp; Scale" xml:space="preserve">
     <value>Crop &amp; Scale</value>
   </data>
@@ -582,6 +585,10 @@
   </data>
   <data name="Deleting all data message box" xml:space="preserve">
     <value>Deleting all data message box</value>
+  </data>
+  <data name="Development" xml:space="preserve">
+    <value>Development</value>
+    <comment>As in "software development"</comment>
   </data>
   <data name="devkitARM Docker Tag" xml:space="preserve">
     <value>devkitARM Docker Tag</value>
@@ -2080,6 +2087,9 @@
   <data name="System data damaged &amp; reset message box" xml:space="preserve">
     <value>System data damaged &amp; reset message box</value>
   </data>
+  <data name="Systems architect &amp; reverse engineering work" xml:space="preserve">
+    <value>Systems architect &amp; reverse engineering work</value>
+  </data>
   <data name="System_Texture" xml:space="preserve">
     <value>System Texture</value>
   </data>
@@ -2203,6 +2213,10 @@
   <data name="Transitions" xml:space="preserve">
     <value>Transitions</value>
   </data>
+  <data name="Translation" xml:space="preserve">
+    <value>Translation</value>
+    <comment>As in natural language translation</comment>
+  </data>
   <data name="Try again prompt message box" xml:space="preserve">
     <value>Try again prompt message box</value>
   </data>
@@ -2277,6 +2291,9 @@
   </data>
   <data name="Use Pre-Release Update Channel" xml:space="preserve">
     <value>Use Pre-Release Update Channel</value>
+  </data>
+  <data name="UX architect &amp; design work" xml:space="preserve">
+    <value>UX architect &amp; design work</value>
   </data>
   <data name="Value" xml:space="preserve">
     <value>Value</value>

@@ -6,12 +6,13 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:DataType="vm:UpdateAvailableDialogViewModel"
         x:Class="SerialLoops.Views.Dialogs.UpdateAvailableDialog"
-        xmlns:controls="using:SerialLoops.Controls"
         xmlns:assets="using:SerialLoops.Assets"
         MinWidth="{Binding MinSize.Width}"
         MinHeight="{Binding MinSize.Height}"
         Width="{Binding ClientSize.Width}"
         Height="{Binding ClientSize.Height}"
+        Icon="/Assets/serial-loops.ico"
+        Closed="DialogClosed"
         Title="{Binding Title}">
     
     <Design.DataContext>
@@ -21,7 +22,7 @@
     <Grid HorizontalAlignment="Left" VerticalAlignment="Top"
             RowDefinitions="Auto,Auto,Auto,Auto,*,Auto" ColumnDefinitions="Auto,Auto,Auto,Auto" Name="UpdateGrid"
             Margin="20" Height="{Binding GridSize.Height}">
-        <TextBlock Classes="header" Text="{Binding Header}" Grid.Row="0" Grid.Column="0"/>
+        <TextBlock Classes="h2" Text="{Binding Header}" Grid.Row="0" Grid.Column="0"/>
         <StackPanel Orientation="Horizontal" Spacing="5" Grid.Row="1" Grid.Column="0">
             <Image Source="resm:SerialLoops.Assets.Icons.Update.png?assembly=SerialLoops" Width="16" Height="16"/>
             <TextBlock Text="{x:Static assets:Strings.A_new_update_for_Serial_Loops_is_available_}"/>

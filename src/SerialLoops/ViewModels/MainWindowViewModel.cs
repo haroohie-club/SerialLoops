@@ -1,16 +1,22 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Dialogs;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
 using SerialLoops.Assets;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Utility;
+using SerialLoops.ViewModels.Dialogs;
+using SerialLoops.ViewModels.Panels;
 using SerialLoops.Views;
+using SerialLoops.Views.Dialogs;
+using SerialLoops.Views.Panels;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace SerialLoops.ViewModels
 {
@@ -28,6 +34,13 @@ namespace SerialLoops.ViewModels
         public NativeMenuItem RecentProjectsMenu { get; set; } = new(Strings.Recent_Projects);
         public LoopyLogger Log { get; set; }
 
+        public ICommand NewProjectCommand { get; private set; }
+        public ICommand OpenProjectCommand { get; private set; }
+        public ICommand OpenRecentProjectCommand { get; private set; }
+        public ICommand EditSaveCommand { get; private set; }
+        public ICommand AboutCommand { get; private set; }
+        public ICommand PreferencesCommand { get; private set; }
+
         public void Initialize(MainWindow window)
         {
             Window = window;
@@ -44,7 +57,16 @@ namespace SerialLoops.ViewModels
                 new UpdateChecker(this).Check();
             }
 
-
+            if (CurrentConfig.AutoReopenLastProject && ProjectsCache.RecentProjects.Count > 0)
+            {
+                // OpenProjectFromPath(ProjectsCache.RecentProjects[0]);
+            }
+            else
+            {
+                HomePanelViewModel homePanelViewModel = new() { MainWindow = this };
+                HomePanel homePanel = new() { ViewModel = homePanelViewModel };
+                Window.Content = homePanel;
+            }
         }
 
         public async Task CloseProject_Executed(WindowClosingEventArgs e)
@@ -127,6 +149,43 @@ namespace SerialLoops.ViewModels
                 ProjectsCache.RecentWorkspaces.Remove(project);
             });
             ProjectsCache.Save(Log);
+        }
+
+
+
+        public void AboutCommand_Executed()
+        {
+            AboutDialogViewModel aboutDialogViewModel = new();
+            AboutDialog aboutDialog = new()
+            {
+                DataContext = aboutDialogViewModel,
+            };
+            aboutDialog.ShowDialog(Window);
+        }
+
+        public void NewProjectCommand_Executed()
+        {
+
+        }
+
+        public void OpenProjectCommand_Executed()
+        {
+
+        }
+
+        public void OpenRecentProjectCommand_Executed()
+        {
+
+        }
+
+        public void PreferencesCommand_Executed()
+        {
+
+        }
+
+        public void EditSaveFileCommand_Executed()
+        {
+
         }
     }
 }
