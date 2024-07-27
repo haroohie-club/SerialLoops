@@ -1,0 +1,75 @@
+[
+    {
+        "Name": "Skip OP",
+        "Description": "Prevents the opening song/movie from playing. Logos fade directly to title screen and attract sequence timer is disabled.",
+        "InjectionSites": [
+            {
+                "Code": "01",
+                "Location": "020C7888"
+            },
+            {
+                "Code": "02",
+                "Location": "020C77FC"
+            }
+        ],
+        "Files": [
+            {
+                "File": "skipOp_asm.s",
+                "Destination": "overlays/main_0001/source/skipOp_asm.s",
+                "Symbols": [],
+                "Parameters": []
+            },
+            {
+                "File": "disableAttractSequenceTimer_asm.s",
+                "Destination": "overlays/main_0002/source/disableAttractSequenceTimer_asm.s",
+                "Symbols": [],
+                "Parameters": []
+            }
+        ]
+    },
+    {
+        "Name": "Change OP_MODE Chibi",
+        "Description": "Changes the chibi that walks out when using the OP_MODE command.\n\nNote: ensure you remove the CHIBI_ENTEREXIT command in EV0_000 when using this!",
+        "InjectionSites": [
+            {
+                "Code": "ARM9",
+                "Location": "0205F180"
+            }
+        ],
+        "Files": [
+            {
+                "File": "changeOpModeChibi_asm.s",
+                "Destination": "source/changeOpModeChibi_asm.s",
+                "Symbols": [],
+                "Parameters": [
+                    {
+                        "Name": "chibiOffset",
+                        "DescriptiveName": "Chibi",
+                        "Values": [
+                            {
+                                "Name": "Kyon",
+                                "Value": "4"
+                            },
+                            {
+                                "Name": "Haruhi",
+                                "Value": "8"
+                            },
+                            {
+                                "Name": "Asahina",
+                                "Value": "12"
+                            },
+                            {
+                                "Name": "Nagato",
+                                "Value": "16"
+                            },
+                            {
+                                "Name": "Koizumi",
+                                "Value": "20"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

@@ -1,0 +1,1424 @@
+[
+  {
+    "OriginalCharacter": "　",
+    "ReplacedCharacter": " ",
+    "Code": 33088,
+    "Offset": 3
+  },
+  {
+    "OriginalCharacter": "＠",
+    "ReplacedCharacter": "@",
+    "Code": 33175,
+    "Offset": 10
+  },
+  {
+    "OriginalCharacter": "、",
+    "ReplacedCharacter": ",",
+    "Code": 33089,
+    "Offset": 3
+  },
+  {
+    "OriginalCharacter": "。",
+    "ReplacedCharacter": "#",
+    "Code": 33090,
+    "Offset": 8
+  },
+  {
+    "OriginalCharacter": "．",
+    "ReplacedCharacter": ".",
+    "Code": 33092,
+    "Offset": 2
+  },
+  {
+    "OriginalCharacter": "・",
+    "ReplacedCharacter": ";",
+    "Code": 33093,
+    "Offset": 3
+  },
+  {
+    "OriginalCharacter": "：",
+    "ReplacedCharacter": ":",
+    "Code": 33094,
+    "Offset": 2
+  },
+  {
+    "OriginalCharacter": "？",
+    "ReplacedCharacter": "?",
+    "Code": 33096,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "！",
+    "ReplacedCharacter": "!",
+    "Code": 33097,
+    "Offset": 4
+  },
+  {
+    "OriginalCharacter": "＿",
+    "ReplacedCharacter": "_",
+    "Code": 33105,
+    "Offset": 8
+  },
+  {
+    "OriginalCharacter": "々",
+    "ReplacedCharacter": "*",
+    "Code": 33112,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ー",
+    "ReplacedCharacter": "—",
+    "Code": 33115,
+    "Offset": 13
+  },
+  {
+    "OriginalCharacter": "―",
+    "ReplacedCharacter": "-",
+    "Code": 33116,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "～",
+    "ReplacedCharacter": "~",
+    "Code": 33120,
+    "Offset": 7
+  },
+  {
+    "OriginalCharacter": "…",
+    "ReplacedCharacter": "…",
+    "Code": 33123,
+    "Offset": 7
+  },
+  {
+    "OriginalCharacter": "‘",
+    "ReplacedCharacter": "‘",
+    "Code": 33125,
+    "Offset": 2
+  },
+  {
+    "OriginalCharacter": "’",
+    "ReplacedCharacter": "'",
+    "Code": 33126,
+    "Offset": 2
+  },
+  {
+    "OriginalCharacter": "“",
+    "ReplacedCharacter": "\"",
+    "Code": 33127,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "”",
+    "ReplacedCharacter": "”",
+    "Code": 33128,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "（",
+    "ReplacedCharacter": "(",
+    "Code": 33129,
+    "Offset": 4
+  },
+  {
+    "OriginalCharacter": "）",
+    "ReplacedCharacter": ")",
+    "Code": 33130,
+    "Offset": 4
+  },
+  {
+    "OriginalCharacter": "《",
+    "ReplacedCharacter": "《",
+    "Code": 33139,
+    "Offset": 14
+  },
+  {
+    "OriginalCharacter": "》",
+    "ReplacedCharacter": "》",
+    "Code": 33140,
+    "Offset": 14
+  },
+  {
+    "OriginalCharacter": "「",
+    "ReplacedCharacter": "「",
+    "Code": 33141,
+    "Offset": 14
+  },
+  {
+    "OriginalCharacter": "」",
+    "ReplacedCharacter": "」",
+    "Code": 33142,
+    "Offset": 14
+  },
+  {
+    "OriginalCharacter": "『",
+    "ReplacedCharacter": "『",
+    "Code": 33143,
+    "Offset": 14
+  },
+  {
+    "OriginalCharacter": "』",
+    "ReplacedCharacter": "』",
+    "Code": 33144,
+    "Offset": 14
+  },
+  {
+    "OriginalCharacter": "【",
+    "ReplacedCharacter": "[",
+    "Code": 33145,
+    "Offset": 4
+  },
+  {
+    "OriginalCharacter": "】",
+    "ReplacedCharacter": "]",
+    "Code": 33146,
+    "Offset": 4
+  },
+  {
+    "OriginalCharacter": "＋",
+    "ReplacedCharacter": "+",
+    "Code": 33147,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "－",
+    "ReplacedCharacter": "-",
+    "Code": 33148,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "×",
+    "ReplacedCharacter": "×",
+    "Code": 33150,
+    "Offset": 10
+  },
+  {
+    "OriginalCharacter": "＝",
+    "ReplacedCharacter": "=",
+    "Code": 33153,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "°",
+    "ReplacedCharacter": "°",
+    "Code": 33163,
+    "Offset": 5
+  },
+  {
+    "OriginalCharacter": "％",
+    "ReplacedCharacter": "%",
+    "Code": 33171,
+    "Offset": 7
+  },
+  {
+    "OriginalCharacter": "＆",
+    "ReplacedCharacter": "&",
+    "Code": 33173,
+    "Offset": 7
+  },
+  {
+    "OriginalCharacter": "☆",
+    "ReplacedCharacter": "☆",
+    "Code": 33177,
+    "Offset": 14
+  },
+  {
+    "OriginalCharacter": "■",
+    "ReplacedCharacter": "■",
+    "Code": 33185,
+    "Offset": 14
+  },
+  {
+    "OriginalCharacter": "♪",
+    "ReplacedCharacter": "♪",
+    "Code": 33268,
+    "Offset": 9
+  },
+  {
+    "OriginalCharacter": "０",
+    "ReplacedCharacter": "0",
+    "Code": 33359,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "１",
+    "ReplacedCharacter": "1",
+    "Code": 33360,
+    "Offset": 3
+  },
+  {
+    "OriginalCharacter": "２",
+    "ReplacedCharacter": "2",
+    "Code": 33361,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "３",
+    "ReplacedCharacter": "3",
+    "Code": 33362,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "４",
+    "ReplacedCharacter": "4",
+    "Code": 33363,
+    "Offset": 7
+  },
+  {
+    "OriginalCharacter": "５",
+    "ReplacedCharacter": "5",
+    "Code": 33364,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "６",
+    "ReplacedCharacter": "6",
+    "Code": 33365,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "７",
+    "ReplacedCharacter": "7",
+    "Code": 33366,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "８",
+    "ReplacedCharacter": "8",
+    "Code": 33367,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "９",
+    "ReplacedCharacter": "9",
+    "Code": 33368,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "Ａ",
+    "ReplacedCharacter": "A",
+    "Code": 33376,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "Ｂ",
+    "ReplacedCharacter": "B",
+    "Code": 33377,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "Ｃ",
+    "ReplacedCharacter": "C",
+    "Code": 33378,
+    "Offset": 7
+  },
+  {
+    "OriginalCharacter": "Ｄ",
+    "ReplacedCharacter": "D",
+    "Code": 33379,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "Ｅ",
+    "ReplacedCharacter": "E",
+    "Code": 33380,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "Ｆ",
+    "ReplacedCharacter": "F",
+    "Code": 33381,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "Ｇ",
+    "ReplacedCharacter": "G",
+    "Code": 33382,
+    "Offset": 7
+  },
+  {
+    "OriginalCharacter": "Ｈ",
+    "ReplacedCharacter": "H",
+    "Code": 33383,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "Ｉ",
+    "ReplacedCharacter": "I",
+    "Code": 33384,
+    "Offset": 4
+  },
+  {
+    "OriginalCharacter": "Ｊ",
+    "ReplacedCharacter": "J",
+    "Code": 33385,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "Ｋ",
+    "ReplacedCharacter": "K",
+    "Code": 33386,
+    "Offset": 7
+  },
+  {
+    "OriginalCharacter": "Ｌ",
+    "ReplacedCharacter": "L",
+    "Code": 33387,
+    "Offset": 7
+  },
+  {
+    "OriginalCharacter": "Ｍ",
+    "ReplacedCharacter": "M",
+    "Code": 33388,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "Ｎ",
+    "ReplacedCharacter": "N",
+    "Code": 33389,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "Ｏ",
+    "ReplacedCharacter": "O",
+    "Code": 33390,
+    "Offset": 7
+  },
+  {
+    "OriginalCharacter": "Ｐ",
+    "ReplacedCharacter": "P",
+    "Code": 33391,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "Ｑ",
+    "ReplacedCharacter": "Q",
+    "Code": 33392,
+    "Offset": 7
+  },
+  {
+    "OriginalCharacter": "Ｒ",
+    "ReplacedCharacter": "R",
+    "Code": 33393,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "Ｓ",
+    "ReplacedCharacter": "S",
+    "Code": 33394,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "Ｔ",
+    "ReplacedCharacter": "T",
+    "Code": 33395,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "Ｕ",
+    "ReplacedCharacter": "U",
+    "Code": 33396,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "Ｖ",
+    "ReplacedCharacter": "V",
+    "Code": 33397,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "Ｗ",
+    "ReplacedCharacter": "W",
+    "Code": 33398,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "Ｘ",
+    "ReplacedCharacter": "X",
+    "Code": 33399,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "Ｙ",
+    "ReplacedCharacter": "Y",
+    "Code": 33400,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "Ｚ",
+    "ReplacedCharacter": "Z",
+    "Code": 33401,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ａ",
+    "ReplacedCharacter": "a",
+    "Code": 33409,
+    "Offset": 7
+  },
+  {
+    "OriginalCharacter": "ｂ",
+    "ReplacedCharacter": "b",
+    "Code": 33410,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ｃ",
+    "ReplacedCharacter": "c",
+    "Code": 33411,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ｄ",
+    "ReplacedCharacter": "d",
+    "Code": 33412,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ｅ",
+    "ReplacedCharacter": "e",
+    "Code": 33413,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ｆ",
+    "ReplacedCharacter": "f",
+    "Code": 33414,
+    "Offset": 5
+  },
+  {
+    "OriginalCharacter": "ｇ",
+    "ReplacedCharacter": "g",
+    "Code": 33415,
+    "Offset": 7
+  },
+  {
+    "OriginalCharacter": "ｈ",
+    "ReplacedCharacter": "h",
+    "Code": 33416,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ｉ",
+    "ReplacedCharacter": "i",
+    "Code": 33417,
+    "Offset": 2
+  },
+  {
+    "OriginalCharacter": "ｊ",
+    "ReplacedCharacter": "j",
+    "Code": 33418,
+    "Offset": 4
+  },
+  {
+    "OriginalCharacter": "ｋ",
+    "ReplacedCharacter": "k",
+    "Code": 33419,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ｌ",
+    "ReplacedCharacter": "l",
+    "Code": 33420,
+    "Offset": 2
+  },
+  {
+    "OriginalCharacter": "ｍ",
+    "ReplacedCharacter": "m",
+    "Code": 33421,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ｎ",
+    "ReplacedCharacter": "n",
+    "Code": 33422,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ｏ",
+    "ReplacedCharacter": "o",
+    "Code": 33423,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ｐ",
+    "ReplacedCharacter": "p",
+    "Code": 33424,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ｑ",
+    "ReplacedCharacter": "q",
+    "Code": 33425,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ｒ",
+    "ReplacedCharacter": "r",
+    "Code": 33426,
+    "Offset": 5
+  },
+  {
+    "OriginalCharacter": "ｓ",
+    "ReplacedCharacter": "s",
+    "Code": 33427,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ｔ",
+    "ReplacedCharacter": "t",
+    "Code": 33428,
+    "Offset": 5
+  },
+  {
+    "OriginalCharacter": "ｕ",
+    "ReplacedCharacter": "u",
+    "Code": 33429,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ｖ",
+    "ReplacedCharacter": "v",
+    "Code": 33430,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ｗ",
+    "ReplacedCharacter": "w",
+    "Code": 33431,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ｘ",
+    "ReplacedCharacter": "x",
+    "Code": 33432,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ｙ",
+    "ReplacedCharacter": "y",
+    "Code": 33433,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ｚ",
+    "ReplacedCharacter": "z",
+    "Code": 33434,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ぁ",
+    "ReplacedCharacter": "À",
+    "Code": 33439,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "あ",
+    "ReplacedCharacter": "Á",
+    "Code": 33440,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ぃ",
+    "ReplacedCharacter": "Â",
+    "Code": 33441,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "い",
+    "ReplacedCharacter": "Ã",
+    "Code": 33442,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ぅ",
+    "ReplacedCharacter": "Ä",
+    "Code": 33443,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "う",
+    "ReplacedCharacter": "Å",
+    "Code": 33444,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ぇ",
+    "ReplacedCharacter": "Æ",
+    "Code": 33445,
+    "Offset": 7
+  },
+  {
+    "OriginalCharacter": "え",
+    "ReplacedCharacter": "Ç",
+    "Code": 33446,
+    "Offset": 7
+  },
+  {
+    "OriginalCharacter": "ぉ",
+    "ReplacedCharacter": "È",
+    "Code": 33447,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "お",
+    "ReplacedCharacter": "É",
+    "Code": 33448,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "か",
+    "ReplacedCharacter": "Ê",
+    "Code": 33449,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "が",
+    "ReplacedCharacter": "Ë",
+    "Code": 33450,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "き",
+    "ReplacedCharacter": "Ì",
+    "Code": 33451,
+    "Offset": 4
+  },
+  {
+    "OriginalCharacter": "ぎ",
+    "ReplacedCharacter": "Í",
+    "Code": 33452,
+    "Offset": 4
+  },
+  {
+    "OriginalCharacter": "く",
+    "ReplacedCharacter": "Î",
+    "Code": 33453,
+    "Offset": 4
+  },
+  {
+    "OriginalCharacter": "ぐ",
+    "ReplacedCharacter": "Ï",
+    "Code": 33454,
+    "Offset": 4
+  },
+  {
+    "OriginalCharacter": "け",
+    "ReplacedCharacter": "Ð",
+    "Code": 33455,
+    "Offset": 7
+  },
+  {
+    "OriginalCharacter": "げ",
+    "ReplacedCharacter": "Ñ",
+    "Code": 33456,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "こ",
+    "ReplacedCharacter": "Ò",
+    "Code": 33457,
+    "Offset": 7
+  },
+  {
+    "OriginalCharacter": "ご",
+    "ReplacedCharacter": "Ó",
+    "Code": 33458,
+    "Offset": 7
+  },
+  {
+    "OriginalCharacter": "さ",
+    "ReplacedCharacter": "Ô",
+    "Code": 33459,
+    "Offset": 7
+  },
+  {
+    "OriginalCharacter": "ざ",
+    "ReplacedCharacter": "Õ",
+    "Code": 33460,
+    "Offset": 7
+  },
+  {
+    "OriginalCharacter": "し",
+    "ReplacedCharacter": "Ö",
+    "Code": 33461,
+    "Offset": 7
+  },
+  {
+    "OriginalCharacter": "じ",
+    "ReplacedCharacter": "Ø",
+    "Code": 33462,
+    "Offset": 7
+  },
+  {
+    "OriginalCharacter": "す",
+    "ReplacedCharacter": "Ù",
+    "Code": 33463,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ず",
+    "ReplacedCharacter": "Ú",
+    "Code": 33464,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "せ",
+    "ReplacedCharacter": "Û",
+    "Code": 33465,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ぜ",
+    "ReplacedCharacter": "Ü",
+    "Code": 33466,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "そ",
+    "ReplacedCharacter": "Ý",
+    "Code": 33467,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ぞ",
+    "ReplacedCharacter": "Þ",
+    "Code": 33468,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "た",
+    "ReplacedCharacter": "ß",
+    "Code": 33469,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "だ",
+    "ReplacedCharacter": "à",
+    "Code": 33470,
+    "Offset": 7
+  },
+  {
+    "OriginalCharacter": "ち",
+    "ReplacedCharacter": "á",
+    "Code": 33471,
+    "Offset": 7
+  },
+  {
+    "OriginalCharacter": "ぢ",
+    "ReplacedCharacter": "â",
+    "Code": 33472,
+    "Offset": 7
+  },
+  {
+    "OriginalCharacter": "っ",
+    "ReplacedCharacter": "ã",
+    "Code": 33473,
+    "Offset": 7
+  },
+  {
+    "OriginalCharacter": "つ",
+    "ReplacedCharacter": "ä",
+    "Code": 33474,
+    "Offset": 7
+  },
+  {
+    "OriginalCharacter": "づ",
+    "ReplacedCharacter": "å",
+    "Code": 33475,
+    "Offset": 7
+  },
+  {
+    "OriginalCharacter": "て",
+    "ReplacedCharacter": "æ",
+    "Code": 33476,
+    "Offset": 7
+  },
+  {
+    "OriginalCharacter": "で",
+    "ReplacedCharacter": "ç",
+    "Code": 33477,
+    "Offset": 7
+  },
+  {
+    "OriginalCharacter": "と",
+    "ReplacedCharacter": "è",
+    "Code": 33478,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ど",
+    "ReplacedCharacter": "é",
+    "Code": 33479,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "な",
+    "ReplacedCharacter": "ê",
+    "Code": 33480,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "に",
+    "ReplacedCharacter": "ë",
+    "Code": 33481,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ぬ",
+    "ReplacedCharacter": "ì",
+    "Code": 33482,
+    "Offset": 3
+  },
+  {
+    "OriginalCharacter": "ね",
+    "ReplacedCharacter": "í",
+    "Code": 33483,
+    "Offset": 3
+  },
+  {
+    "OriginalCharacter": "の",
+    "ReplacedCharacter": "î",
+    "Code": 33484,
+    "Offset": 4
+  },
+  {
+    "OriginalCharacter": "は",
+    "ReplacedCharacter": "ï",
+    "Code": 33485,
+    "Offset": 4
+  },
+  {
+    "OriginalCharacter": "ば",
+    "ReplacedCharacter": "ð",
+    "Code": 33486,
+    "Offset": 7
+  },
+  {
+    "OriginalCharacter": "ぱ",
+    "ReplacedCharacter": "ñ",
+    "Code": 33487,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ひ",
+    "ReplacedCharacter": "ò",
+    "Code": 33488,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "び",
+    "ReplacedCharacter": "ó",
+    "Code": 33489,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ぴ",
+    "ReplacedCharacter": "ô",
+    "Code": 33490,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ふ",
+    "ReplacedCharacter": "õ",
+    "Code": 33491,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ぶ",
+    "ReplacedCharacter": "ö",
+    "Code": 33492,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ぷ",
+    "ReplacedCharacter": "ø",
+    "Code": 33493,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "へ",
+    "ReplacedCharacter": "ù",
+    "Code": 33494,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "べ",
+    "ReplacedCharacter": "ú",
+    "Code": 33495,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ぺ",
+    "ReplacedCharacter": "û",
+    "Code": 33496,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ほ",
+    "ReplacedCharacter": "ü",
+    "Code": 33497,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ぼ",
+    "ReplacedCharacter": "ý",
+    "Code": 33498,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ぽ",
+    "ReplacedCharacter": "þ",
+    "Code": 33499,
+    "Offset": 5
+  },
+  {
+    "OriginalCharacter": "ま",
+    "ReplacedCharacter": "ÿ",
+    "Code": 33500,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "み",
+    "ReplacedCharacter": "ı",
+    "Code": 33501,
+    "Offset": 2
+  },
+  {
+    "OriginalCharacter": "む",
+    "ReplacedCharacter": "Œ",
+    "Code": 33502,
+    "Offset": 7
+  },
+  {
+    "OriginalCharacter": "め",
+    "ReplacedCharacter": "œ",
+    "Code": 33503,
+    "Offset": 7
+  },
+  {
+    "OriginalCharacter": "も",
+    "ReplacedCharacter": "Š",
+    "Code": 33504,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ゃ",
+    "ReplacedCharacter": "š",
+    "Code": 33505,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "や",
+    "ReplacedCharacter": "Ÿ",
+    "Code": 33506,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ゅ",
+    "ReplacedCharacter": "Ž",
+    "Code": 33507,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ゆ",
+    "ReplacedCharacter": "ž",
+    "Code": 33508,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ょ",
+    "ReplacedCharacter": "ю",
+    "Code": 33509,
+    "Offset": 9
+  },
+  {
+    "OriginalCharacter": "よ",
+    "ReplacedCharacter": "а",
+    "Code": 33510,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ら",
+    "ReplacedCharacter": "б",
+    "Code": 33511,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "り",
+    "ReplacedCharacter": "ц",
+    "Code": 33512,
+    "Offset": 7
+  },
+  {
+    "OriginalCharacter": "る",
+    "ReplacedCharacter": "д",
+    "Code": 33513,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "れ",
+    "ReplacedCharacter": "е",
+    "Code": 33514,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ろ",
+    "ReplacedCharacter": "ф",
+    "Code": 33515,
+    "Offset": 8
+  },
+  {
+    "OriginalCharacter": "わ",
+    "ReplacedCharacter": "г",
+    "Code": 33517,
+    "Offset": 5
+  },
+  {
+    "OriginalCharacter": "を",
+    "ReplacedCharacter": "х",
+    "Code": 33520,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ん",
+    "ReplacedCharacter": "и",
+    "Code": 33521,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ァ",
+    "ReplacedCharacter": "й",
+    "Code": 33600,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ア",
+    "ReplacedCharacter": "к",
+    "Code": 33601,
+    "Offset": 7
+  },
+  {
+    "OriginalCharacter": "ィ",
+    "ReplacedCharacter": "л",
+    "Code": 33602,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "イ",
+    "ReplacedCharacter": "м",
+    "Code": 33603,
+    "Offset": 9
+  },
+  {
+    "OriginalCharacter": "ゥ",
+    "ReplacedCharacter": "н",
+    "Code": 33604,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ウ",
+    "ReplacedCharacter": "о",
+    "Code": 33605,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ェ",
+    "ReplacedCharacter": "п",
+    "Code": 33606,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "エ",
+    "ReplacedCharacter": "я",
+    "Code": 33607,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ォ",
+    "ReplacedCharacter": "р",
+    "Code": 33608,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "オ",
+    "ReplacedCharacter": "с",
+    "Code": 33609,
+    "Offset": 5
+  },
+  {
+    "OriginalCharacter": "カ",
+    "ReplacedCharacter": "т",
+    "Code": 33610,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ガ",
+    "ReplacedCharacter": "у",
+    "Code": 33611,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "キ",
+    "ReplacedCharacter": "ж",
+    "Code": 33612,
+    "Offset": 9
+  },
+  {
+    "OriginalCharacter": "ギ",
+    "ReplacedCharacter": "в",
+    "Code": 33613,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ク",
+    "ReplacedCharacter": "ь",
+    "Code": 33614,
+    "Offset": 5
+  },
+  {
+    "OriginalCharacter": "グ",
+    "ReplacedCharacter": "ы",
+    "Code": 33615,
+    "Offset": 8
+  },
+  {
+    "OriginalCharacter": "ケ",
+    "ReplacedCharacter": "з",
+    "Code": 33616,
+    "Offset": 5
+  },
+  {
+    "OriginalCharacter": "ゲ",
+    "ReplacedCharacter": "ш",
+    "Code": 33617,
+    "Offset": 9
+  },
+  {
+    "OriginalCharacter": "コ",
+    "ReplacedCharacter": "э",
+    "Code": 33618,
+    "Offset": 5
+  },
+  {
+    "OriginalCharacter": "ゴ",
+    "ReplacedCharacter": "щ",
+    "Code": 33619,
+    "Offset": 10
+  },
+  {
+    "OriginalCharacter": "サ",
+    "ReplacedCharacter": "ч",
+    "Code": 33620,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ザ",
+    "ReplacedCharacter": "ъ",
+    "Code": 33621,
+    "Offset": 7
+  },
+  {
+    "OriginalCharacter": "シ",
+    "ReplacedCharacter": "Ю",
+    "Code": 33622,
+    "Offset": 11
+  },
+  {
+    "OriginalCharacter": "ジ",
+    "ReplacedCharacter": "А",
+    "Code": 33623,
+    "Offset": 9
+  },
+  {
+    "OriginalCharacter": "ス",
+    "ReplacedCharacter": "Б",
+    "Code": 33624,
+    "Offset": 7
+  },
+  {
+    "OriginalCharacter": "ズ",
+    "ReplacedCharacter": "Ц",
+    "Code": 33625,
+    "Offset": 8
+  },
+  {
+    "OriginalCharacter": "セ",
+    "ReplacedCharacter": "Д",
+    "Code": 33626,
+    "Offset": 9
+  },
+  {
+    "OriginalCharacter": "ゼ",
+    "ReplacedCharacter": "Е",
+    "Code": 33627,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ソ",
+    "ReplacedCharacter": "Ф",
+    "Code": 33628,
+    "Offset": 8
+  },
+  {
+    "OriginalCharacter": "ゾ",
+    "ReplacedCharacter": "Г",
+    "Code": 33629,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "タ",
+    "ReplacedCharacter": "Х",
+    "Code": 33630,
+    "Offset": 8
+  },
+  {
+    "OriginalCharacter": "ダ",
+    "ReplacedCharacter": "И",
+    "Code": 33631,
+    "Offset": 8
+  },
+  {
+    "OriginalCharacter": "チ",
+    "ReplacedCharacter": "Й",
+    "Code": 33632,
+    "Offset": 8
+  },
+  {
+    "OriginalCharacter": "ヂ",
+    "ReplacedCharacter": "К",
+    "Code": 33633,
+    "Offset": 7
+  },
+  {
+    "OriginalCharacter": "ッ",
+    "ReplacedCharacter": "Л",
+    "Code": 33634,
+    "Offset": 8
+  },
+  {
+    "OriginalCharacter": "ツ",
+    "ReplacedCharacter": "М",
+    "Code": 33635,
+    "Offset": 8
+  },
+  {
+    "OriginalCharacter": "ヅ",
+    "ReplacedCharacter": "Н",
+    "Code": 33636,
+    "Offset": 7
+  },
+  {
+    "OriginalCharacter": "テ",
+    "ReplacedCharacter": "О",
+    "Code": 33637,
+    "Offset": 7
+  },
+  {
+    "OriginalCharacter": "デ",
+    "ReplacedCharacter": "П",
+    "Code": 33638,
+    "Offset": 7
+  },
+  {
+    "OriginalCharacter": "ト",
+    "ReplacedCharacter": "Я",
+    "Code": 33639,
+    "Offset": 7
+  },
+  {
+    "OriginalCharacter": "ド",
+    "ReplacedCharacter": "Р",
+    "Code": 33640,
+    "Offset": 7
+  },
+  {
+    "OriginalCharacter": "ナ",
+    "ReplacedCharacter": "С",
+    "Code": 33641,
+    "Offset": 7
+  },
+  {
+    "OriginalCharacter": "ニ",
+    "ReplacedCharacter": "Т",
+    "Code": 33642,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ヌ",
+    "ReplacedCharacter": "У",
+    "Code": 33643,
+    "Offset": 8
+  },
+  {
+    "OriginalCharacter": "ネ",
+    "ReplacedCharacter": "Ж",
+    "Code": 33644,
+    "Offset": 11
+  },
+  {
+    "OriginalCharacter": "ノ",
+    "ReplacedCharacter": "В",
+    "Code": 33645,
+    "Offset": 7
+  },
+  {
+    "OriginalCharacter": "ハ",
+    "ReplacedCharacter": "Ь",
+    "Code": 33646,
+    "Offset": 7
+  },
+  {
+    "OriginalCharacter": "バ",
+    "ReplacedCharacter": "Ы",
+    "Code": 33647,
+    "Offset": 10
+  },
+  {
+    "OriginalCharacter": "パ",
+    "ReplacedCharacter": "З",
+    "Code": 33648,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ヒ",
+    "ReplacedCharacter": "Ш",
+    "Code": 33649,
+    "Offset": 11
+  },
+  {
+    "OriginalCharacter": "ビ",
+    "ReplacedCharacter": "Э",
+    "Code": 33650,
+    "Offset": 7
+  },
+  {
+    "OriginalCharacter": "ピ",
+    "ReplacedCharacter": "Щ",
+    "Code": 33651,
+    "Offset": 12
+  },
+  {
+    "OriginalCharacter": "フ",
+    "ReplacedCharacter": "Ч",
+    "Code": 33652,
+    "Offset": 7
+  },
+  {
+    "OriginalCharacter": "ブ",
+    "ReplacedCharacter": "Ъ",
+    "Code": 33653,
+    "Offset": 8
+  },
+  {
+    "OriginalCharacter": "プ",
+    "ReplacedCharacter": "ё",
+    "Code": 33654,
+    "Offset": 6
+  },
+  {
+    "OriginalCharacter": "ヘ",
+    "ReplacedCharacter": "Ё",
+    "Code": 33655,
+    "Offset": 6
+  }
+]

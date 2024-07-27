@@ -5,7 +5,7 @@ VisualStudioVersion = 17.10.35027.167
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SerialLoops", "src\SerialLoops\SerialLoops.csproj", "{4BAD2B9C-697B-4F99-ADB1-44A32D9C1EAD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialLoops.Lib", "..\src\SerialLoops.Lib\SerialLoops.Lib.csproj", "{D0A6E736-5240-4CD6-8F6F-CAA3F73330D3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialLoops.Lib", "src\SerialLoops.Lib\SerialLoops.Lib.csproj", "{D0A6E736-5240-4CD6-8F6F-CAA3F73330D3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D53AAD08-D78C-400E-A01D-85E1117D465A}"
 EndProject

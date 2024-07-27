@@ -1,0 +1,55 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <Version>$(SLAssemblyVersion)</Version>
+    <InformationalVersion>$(SLVersion)</InformationalVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BunLabs.NAudio.Flac" Version="2.0.1" />
+    <PackageReference Include="HarfBuzzSharp.NativeAssets.Linux" Version="7.3.0.2" />
+    <PackageReference Include="HarfBuzzSharp.NativeAssets.macOS" Version="7.3.0.2" />
+    <PackageReference Include="HaruhiChokuretsuLib" Version="0.40.6" />
+    <PackageReference Include="NAudio.Vorbis" Version="1.5.0" />
+    <PackageReference Include="NitroPacker.Core" Version="2.5.0" />
+    <PackageReference Include="NLayer" Version="1.15.0" />
+    <PackageReference Include="NLayer.NAudioSupport" Version="1.4.0" />
+    <PackageReference Include="QuikGraph" Version="2.5.0" />
+    <PackageReference Include="Topten.RichTextKit" Version="0.4.167" />
+    <PackageReference Include="VCDiff" Version="4.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Sources\**">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="MapIcons\*.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Defaults\DefaultCharacters.en.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Defaults\DefaultCharacters.ja.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="DefaultCharacters.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Defaults\DefaultFlags.en-US.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Defaults\DefaultNames.en-US.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

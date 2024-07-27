@@ -49,7 +49,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\src\SerialLoops.Lib\SerialLoops.Lib.csproj" />
+    <ProjectReference Include="..\SerialLoops.Lib\SerialLoops.Lib.csproj" />
   </ItemGroup>
 
   <ItemGroup>
