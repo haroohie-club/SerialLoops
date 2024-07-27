@@ -212,21 +212,20 @@ namespace SerialLoops.Controls
 
         protected override Control GetText()
         {
-            return ControlGenerator.GetControlWithItem(new TextBlock { Text = OptionName.Replace("_", " ") }, OptionName, _logger);
+            return ControlGenerator.GetControlWithIcon(new TextBlock { Text = OptionName.Replace("_", " ") }, OptionName, _logger);
         }
     }
 
     public class BooleanToggleOption : BooleanOption
     {
 
-        public TextBlock ToggleButton;
+        public LinkButton ToggleButton;
         private string _buttonText => Value ? Strings.All_On : Strings.All_Off;
 
         public BooleanToggleOption(List<Option> options)
         {
-            ToggleButton = new TextBlock { Text = _buttonText, IsEnabled = Enabled };
-            ToggleButton.Classes.Add("link");
-            ToggleButton.PointerPressed += (sender, args) =>
+            ToggleButton = new LinkButton { Text = _buttonText, IsEnabled = Enabled };
+            ToggleButton.OnClick = (sender, args) =>
             {
                 options.OfType<BooleanOption>().ToList().ForEach(option => option.Value = Value);
                 Value = !Value;

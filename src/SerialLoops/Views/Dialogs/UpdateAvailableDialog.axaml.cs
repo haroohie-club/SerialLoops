@@ -13,7 +13,7 @@ namespace SerialLoops.Views.Dialogs
             InitializeComponent();
         }
 
-        private void ReleaseLink_PointerPressed(object? sender, Avalonia.Input.PointerPressedEventArgs e)
+        private void ReleaseLink_Click(object? sender, EventArgs e)
         {
             ViewModel.OpenReleaseLink();
         }

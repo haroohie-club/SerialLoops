@@ -20,9 +20,14 @@
             <Setter Property="FontWeight" Value="Bold"/>
         </Style>
         <Style Selector="TextBlock.link">
-            <Setter Property="Foreground" Value="{DynamicResource ResourceKey=LinkColor}"/>
             <Setter Property="TextDecorations" Value="Underline"/>
+        </Style>
+        <Style Selector="TextBlock.link:not(:disabled)">
+            <Setter Property="Foreground" Value="{DynamicResource ResourceKey=LinkColor}"/>
             <Setter Property="Cursor" Value="Hand" />
+        </Style>
+        <Style Selector="TextBlock.link:disabled">
+            <Setter Property="Foreground" Value="{DynamicResource ResourceKey=DisabledLinkColor}"/>
         </Style>
     </Application.Styles>
 
@@ -31,13 +36,13 @@
             <ResourceDictionary.ThemeDictionaries>
                 <ResourceDictionary x:Key="Light">
                     <SolidColorBrush x:Key="LinkColor">Blue</SolidColorBrush>
+                    <SolidColorBrush x:Key="DisabledLinkColor">DarkGray</SolidColorBrush>
                     <SolidColorBrush x:Key="GroupLineColor">DarkGray</SolidColorBrush>
-                    <SolidColorBrush x:Key="BgColor">White</SolidColorBrush>
                 </ResourceDictionary>
                 <ResourceDictionary x:Key="Dark">
                     <SolidColorBrush x:Key="LinkColor">Cyan</SolidColorBrush>
+                    <SolidColorBrush x:Key="DisabledLinkColor">Gray</SolidColorBrush>
                     <SolidColorBrush x:Key="GroupLineColor">WhiteSmoke</SolidColorBrush>
-                    <SolidColorBrush x:Key="BgColor">Black</SolidColorBrush>
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
         </ResourceDictionary>

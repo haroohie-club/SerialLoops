@@ -65,7 +65,8 @@ namespace SerialLoops.ViewModels
             else
             {
                 HomePanelViewModel homePanelViewModel = new() { MainWindow = this };
-                HomePanel homePanel = new() { ViewModel = homePanelViewModel };
+                HomePanel homePanel = new() { ViewModel = homePanelViewModel, DataContext = homePanelViewModel };
+                homePanelViewModel.Initialize(this, homePanel);
                 Window.Content = homePanel;
             }
 

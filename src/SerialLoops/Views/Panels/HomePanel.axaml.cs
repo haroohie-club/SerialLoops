@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using SerialLoops.ViewModels.Panels;
+using System;
 using System.Reactive;
 
 namespace SerialLoops.Views.Panels
@@ -13,27 +14,27 @@ namespace SerialLoops.Views.Panels
             InitializeComponent();
         }
 
-        private void NewProject_PointerPressed(object? sender, Avalonia.Input.PointerPressedEventArgs e)
+        private void NewProject_PointerPressed(object? sender, EventArgs e)
         {
             ViewModel.MainWindow.NewProjectCommand.Execute(Unit.Default);
         }
 
-        private void OpenProject_PointerPressed(object? sender, Avalonia.Input.PointerPressedEventArgs e)
+        private void OpenProject_PointerPressed(object? sender, EventArgs e)
         {
             ViewModel.MainWindow.OpenProjectCommand.Execute(Unit.Default);
         }
 
-        private void EditSaveFile_PointerPressed(object? sender, Avalonia.Input.PointerPressedEventArgs e)
+        private void EditSaveFile_PointerPressed(object? sender, EventArgs e)
         {
             ViewModel.MainWindow.EditSaveCommand.Execute(Unit.Default);
         }
 
-        private void Preferences_PointerPressed(object? sender, Avalonia.Input.PointerPressedEventArgs e)
+        private void Preferences_PointerPressed(object? sender, EventArgs e)
         {
             ViewModel.MainWindow.PreferencesCommand.Execute(Unit.Default);
         }
 
-        private void About_PointerPressed(object? sender, Avalonia.Input.PointerPressedEventArgs e)
+        private void About_PointerPressed(object? sender, EventArgs e)
         {
             ViewModel.MainWindow.AboutCommand.Execute(Unit.Default);
         }

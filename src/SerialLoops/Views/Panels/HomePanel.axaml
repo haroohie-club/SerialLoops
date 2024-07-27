@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:vm="using:SerialLoops.ViewModels.Panels"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="using:SerialLoops.Controls"
              xmlns:assets="using:SerialLoops.Assets"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:HomePanelViewModel"
@@ -25,27 +26,28 @@
                     <TextBlock Classes="h2" Text="{x:Static assets:Strings.Start}"/>
                     <StackPanel Orientation="Horizontal" Spacing="5">
                         <Image Source="resm:SerialLoops.Assets.Icons.New.png?assembly=SerialLoops" Width="16"/>
-                        <TextBlock Classes="link" PointerPressed="NewProject_PointerPressed" Text="{x:Static assets:Strings.New_Project}"/>
+                        <controls:LinkButton OnClick="NewProject_PointerPressed" Text="{x:Static assets:Strings.New_Project}"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Spacing="5">
                         <Image Source="resm:SerialLoops.Assets.Icons.Open.png?assembly=SerialLoops" Width="16"/>
-                        <TextBlock Classes="link" PointerPressed="OpenProject_PointerPressed" Text="{x:Static assets:Strings.Open_Project}"/>
+                        <controls:LinkButton OnClick="OpenProject_PointerPressed" Text="{x:Static assets:Strings.Open_Project}"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Spacing="5">
                         <Image Source="resm:SerialLoops.Assets.Icons.Edit_Save.png?assembly=SerialLoops" Width="16"/>
-                        <TextBlock Classes="link" PointerPressed="EditSaveFile_PointerPressed" Text="{x:Static assets:Strings.Edit_Save_File}"/>
+                        <controls:LinkButton OnClick="EditSaveFile_PointerPressed" Text="{x:Static assets:Strings.Edit_Save_File}"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Spacing="5">
                         <Image Source="resm:SerialLoops.Assets.Icons.Options.png?assembly=SerialLoops" Width="16"/>
-                        <TextBlock Classes="link" PointerPressed="Preferences_PointerPressed" Text="{x:Static assets:Strings.Preferences}"/>
+                        <controls:LinkButton OnClick="Preferences_PointerPressed" Text="{x:Static assets:Strings.Preferences}"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Spacing="5">
                         <Image Source="resm:SerialLoops.Assets.Icons.Help.png?assembly=SerialLoops" Width="16"/>
-                        <TextBlock Classes="link" PointerPressed="About_PointerPressed" Text="{x:Static assets:Strings.About}"/>
+                        <controls:LinkButton OnClick="About_PointerPressed" Text="{x:Static assets:Strings.About}"/>
                     </StackPanel>
                 </StackPanel>
-                <StackPanel DockPanel.Dock="Right" MinWidth="450" MinHeight="400">
-                    
+                <StackPanel DockPanel.Dock="Right" Margin="13" Spacing="10" MinWidth="450" MinHeight="400">
+                    <TextBlock Classes="h2" Text="{x:Static assets:Strings.Recents}"/>
+                    <StackPanel Spacing="15" Name="RecentsPanel"/>
                 </StackPanel>
             </DockPanel>
         </StackPanel>

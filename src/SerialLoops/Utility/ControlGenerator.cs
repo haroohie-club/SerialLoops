@@ -22,7 +22,7 @@ namespace SerialLoops.Utility
             }
         }
 
-        public static StackPanel GetControlWithItem(Control control, string iconName, ILogger log)
+        public static StackPanel GetControlWithIcon(Control control, string iconName, ILogger log)
         {
             StackPanel panel = new()
             {
