@@ -1,135 +1,25 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-  <!--
-    Set the BuildPlatform property to the Eto platform you wish to build for.
-    The default is the platform you are building on.
-    Valid values: Wpf, Windows, Mac64, XamMac2, Gtk, Direct2D
-  -->
-
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <Version>$(SLAssemblyVersion)</Version>
-    <InformationalVersion>$(SLVersion)</InformationalVersion>
-    <AssemblyName>SerialLoops.Eto</AssemblyName>
+    <OutputType>WinExe</OutputType>
+    <TargetFrameworks>net8.0;net8.0-windows</TargetFrameworks>
+    <Nullable>enable</Nullable>
+    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Graphics\MS-Gothic-Haruhi.ttf" />
-    <None Remove="Graphics\BlankNameplate.png" />
-    <None Remove="Graphics\BlankNameplateBaseArrow.png" />
-    <None Remove="Graphics\msgothic-variablewidth.ttf" />
-    <None Remove="Graphics\ScriptPreviewError.png" />
-    <None Remove="Icons\Add.png" />
-    <None Remove="Icons\Add_Section.png" />
-    <None Remove="Icons\AppIcon.png" />
-    <None Remove="Icons\Background.png" />
-    <None Remove="Icons\BGM.png" />
-    <None Remove="Icons\Bottom_Screen.png" />
-    <None Remove="Icons\Camera.png" />
-    <None Remove="Icons\Character_Sprite.png" />
-    <None Remove="Icons\Chess_Puzzle.png" />
-    <None Remove="Icons\Chibi.png" />
-    <None Remove="Icons\Clear.png" />
-    <None Remove="Icons\Close.png" />
-    <None Remove="Icons\Dialogue_Config.png" />
-    <None Remove="Icons\Group_Selection.png" />
-    <None Remove="Icons\Item.png" />
-    <None Remove="Icons\Layout.png" />
-    <None Remove="Icons\Map.png" />
-    <None Remove="Icons\New.png" />
-    <None Remove="Icons\Open.png" />
-    <None Remove="Icons\Options.png" />
-    <None Remove="Icons\Pathing.png" />
-    <None Remove="Icons\Place.png" />
-    <None Remove="Icons\Project_Options.png" />
-    <None Remove="Icons\Puzzle.png" />
-    <None Remove="Icons\Remove.png" />
-    <None Remove="Icons\Save.png" />
-    <None Remove="Icons\Scenario.png" />
-    <None Remove="Icons\Script.png" />
-    <None Remove="Icons\System_Texture.png" />
-    <None Remove="Icons\Template.png" />
-    <None Remove="Icons\Topic.png" />
-    <None Remove="Icons\Top_Screen.png" />
-    <None Remove="Icons\Transition.png" />
-    <None Remove="Icons\Tutorial.png" />
-    <None Remove="Icons\Update.png" />
-    <None Remove="Icons\Voice.png" />
-    <None Remove="Icons\Build.png" />
-    <None Remove="Icons\Build_Scratch.png" />
-    <None Remove="Icons\Build_Run.png" />
-    <None Remove="Icons\Help.png" />
-    <None Remove="Icons\Warning.png" />
-    <None Remove="Icons\Chibi_DOWN_LEFT.png" />
-    <None Remove="Icons\Chibi_DOWN_RIGHT.png" />
-    <None Remove="Icons\Chibi_UP_LEFT.png" />
-    <None Remove="Icons\Chibi_UP_RIGHT.png" />
+    <Folder Include="Models\" />
+    <AvaloniaResource Include="Assets\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Icons\*.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <PackageReference Include="Avalonia" Version="11.1.0" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.1.0" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.1.0" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.1.0" />
+    <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.1.0" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
   </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Graphics\MS-Gothic-Haruhi.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Graphics\BlankNameplate.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Graphics\BlankNameplateBaseArrow.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Graphics\ScriptPreviewError.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Eto.Forms" Version="2.8.3" />
-    <PackageReference Include="Eto.Forms.Controls.SkiaSharp.Shared" Version="2.0.1" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.5" />
-    <PackageReference Include="System.Text.Json" Version="8.0.4" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\SerialLoops.Lib\SerialLoops.Lib.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="ProjectCreationDialog - Copy.eto.cs">
-      <DependentUpon>$([System.String]::Copy('%(Filename)').Replace('.eto', ''))%(Extension)</DependentUpon>
-    </Compile>
-    <Compile Update="Dialogs\SearchDialog.eto.cs">
-      <DependentUpon>$([System.String]::Copy('%(Filename)').Replace('.eto', ''))%(Extension)</DependentUpon>
-    </Compile>
-    <Compile Update="Dialogs\ProjectCreationDialog.eto.cs">
-      <DependentUpon>ProjectCreationDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Strings.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Strings.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="Strings.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="Icons\Layout.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-  </ItemGroup>
-
-  <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Linux'))">
-    <DefineConstants>OS_LINUX</DefineConstants>
-  </PropertyGroup>
-
 </Project>
