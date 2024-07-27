@@ -20,5 +20,13 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
     
+    <NativeMenu>
+        <NativeMenuItem Header="Settings">
+            <NativeMenu>
+                <NativeMenuItem Header="Option1" />
+                <NativeMenuItem Header="Option2" />
+            </NativeMenu>
+        </NativeMenuItem>
+    </NativeMenu>
         
 </Window>
