@@ -142,7 +142,7 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &amp;Build.
+        ///   Looks up a localized string similar to _Build.
         /// </summary>
         public static string _Build {
             get {
@@ -151,7 +151,7 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &amp;Check for Updates….
+        ///   Looks up a localized string similar to _Check for Updates….
         /// </summary>
         public static string _Check_for_Updates___ {
             get {
@@ -160,7 +160,7 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &amp;Edit.
+        ///   Looks up a localized string similar to _Edit.
         /// </summary>
         public static string _Edit {
             get {
@@ -169,7 +169,7 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &amp;File.
+        ///   Looks up a localized string similar to _File.
         /// </summary>
         public static string _File {
             get {
@@ -196,7 +196,7 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &amp;Preferences….
+        ///   Looks up a localized string similar to _Preferences….
         /// </summary>
         public static string _Preferences___ {
             get {
@@ -205,7 +205,7 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &amp;Tools.
+        ///   Looks up a localized string similar to _Tools.
         /// </summary>
         public static string _Tools {
             get {

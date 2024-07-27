@@ -125,22 +125,22 @@
     <comment>Just the percentage symbol</comment>
   </data>
   <data name="&amp;Build" xml:space="preserve">
-    <value>&amp;Build</value>
+    <value>_Build</value>
   </data>
   <data name="&amp;Check for Updates..." xml:space="preserve">
-    <value>&amp;Check for Updates…</value>
+    <value>_Check for Updates…</value>
   </data>
   <data name="&amp;Edit" xml:space="preserve">
-    <value>&amp;Edit</value>
+    <value>_Edit</value>
   </data>
   <data name="&amp;File" xml:space="preserve">
-    <value>&amp;File</value>
+    <value>_File</value>
   </data>
   <data name="&amp;Preferences..." xml:space="preserve">
-    <value>&amp;Preferences…</value>
+    <value>_Preferences…</value>
   </data>
   <data name="&amp;Tools" xml:space="preserve">
-    <value>&amp;Tools</value>
+    <value>_Tools</value>
   </data>
   <data name="(Missing)" xml:space="preserve">
     <value> (Missing)</value>

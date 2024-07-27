@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:views="using:SerialLoops.Views"
+        xmlns:assets="using:SerialLoops.Assets"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="SerialLoops.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
@@ -19,14 +20,25 @@
              to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
         <vm:MainWindowViewModel/>
     </Design.DataContext>
-    
-    <NativeMenu>
-        <NativeMenuItem Header="Settings">
-            <NativeMenu>
-                <NativeMenuItem Header="Option1" />
-                <NativeMenuItem Header="Option2" />
-            </NativeMenu>
-        </NativeMenuItem>
-    </NativeMenu>
-        
+
+    <NativeMenu.Menu>
+        <NativeMenu>
+            <NativeMenuItem Header="{x:Static assets:Strings.File}">
+                <NativeMenuItem.Menu>
+                    <NativeMenu>
+                        <NativeMenuItem Header="Hi" />
+                        <NativeMenuItem Header="Hello" />
+                    </NativeMenu>
+                </NativeMenuItem.Menu>
+            </NativeMenuItem>
+        </NativeMenu>
+    </NativeMenu.Menu>
+
+    <DockPanel>
+        <NativeMenuBar DockPanel.Dock="Top" />
+        <StackPanel DockPanel.Dock="Bottom">
+            
+        </StackPanel>
+    </DockPanel>
+
 </Window>

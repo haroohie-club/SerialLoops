@@ -8,5 +8,10 @@ namespace SerialLoops.Views
         {
             InitializeComponent();
         }
+
+        public void Initialize()
+        {
+
+        }
     }
 }
