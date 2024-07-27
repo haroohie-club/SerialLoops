@@ -564,9 +564,9 @@ namespace SerialLoops
 
         public void ImportProjectCommand_Executed(object sender, EventArgs e)
         {
-            OpenFileDialog openFileDialog = new();
-            openFileDialog.Filters.Add(new(Application.Instance.Localize(this, "Serial Loops Exported Project"), $".{Project.EXPORT_FORMAT}"));
-            if (openFileDialog.ShowAndReportIfFileSelected(this))
+            ProjectImportDialog projectImportDialog = new();
+            (string slzipPath, string baseRomPath) = projectImportDialog.ShowModal(this);
+            if (!string.IsNullOrEmpty(slzipPath) && !string.IsNullOrEmpty(baseRomPath))
             {
                 CancelEventArgs cancelEvent = new();
                 CloseProject_Executed(this, cancelEvent);
@@ -577,7 +577,7 @@ namespace SerialLoops
 
                 Project.LoadProjectResult result = new() { State = Project.LoadProjectState.FAILED };
                 LoopyProgressTracker tracker = new(s => Application.Instance.Localize(null, s));
-                _ = new ProgressDialog(() => (OpenProject, result) = Project.Import(openFileDialog.FileName, CurrentConfig, s => Application.Instance.Localize(null, s), Log, tracker),
+                _ = new ProgressDialog(() => (OpenProject, result) = Project.Import(slzipPath, baseRomPath, CurrentConfig, s => Application.Instance.Localize(null, s), Log, tracker),
                     () => { }, tracker, Application.Instance.Localize(this, "Importing Project"));
 
                 if (OpenProject is not null)
@@ -593,6 +593,23 @@ namespace SerialLoops
 
         private void ExportProjectCommand_Executed(object sender, EventArgs e)
         {
+            if (string.IsNullOrEmpty(OpenProject.BaseRomHash))
+            {
+                MessageBox.Show(this, Application.Instance.Localize(this, 
+                    "There is no recorded base ROM hash for this project. This is likely because this project was created with an older version of Serial Loops. Please select the base ROM used for this project so the hash can be recorded now."),
+                    Application.Instance.Localize(this, "No ROM Hash Recorded!"), MessageBoxButtons.OK, MessageBoxType.Warning);
+                OpenFileDialog openFileDialog = new();
+                openFileDialog.Filters.Add(new() { Name = Application.Instance.Localize(this, Strings.NDS_ROM), Extensions = [".nds"] });
+                if (openFileDialog.ShowAndReportIfFileSelected(this))
+                {
+                    OpenProject.SetBaseRomHash(openFileDialog.FileName);
+                    OpenProject.Save(Log);
+                }
+                else
+                {
+                    return;
+                }
+            }
             SaveFileDialog saveFileDialog = new();
             saveFileDialog.Filters.Add(new(Application.Instance.Localize(this, "Serial Loops Exported Project"), $".{Project.EXPORT_FORMAT}"));
             if (saveFileDialog.ShowAndReportIfFileSelected(this))

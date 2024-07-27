@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -32,6 +33,7 @@ namespace SerialLoops.Lib
 
         public string Name { get; set; }
         public string LangCode { get; set; }
+        public string BaseRomHash { get; set; }
         public Dictionary<string, string> ItemNames { get; set; }
         public Dictionary<int, NameplateProperties> Characters { get; set; }
 
@@ -1028,9 +1030,36 @@ namespace SerialLoops.Lib
                 using ZipArchive slzip = new(slzipFs, ZipArchiveMode.Create);
                 log.Log($"Adding '{ProjectFile}' to slzip...");
                 slzip.CreateEntryFromFile(ProjectFile, Path.GetFileName(ProjectFile));
+                slzip.Comment = BaseRomHash;
                 log.Log("Adding charset.json to slzip...");
                 slzip.CreateEntryFromFile(Path.Combine(MainDirectory, "font", "charset.json"), Path.Combine("font", "charset.json"));
-                foreach (string file in Directory.GetFiles(BaseDirectory, "*", SearchOption.AllDirectories))
+                foreach (string file in Directory.GetFiles(BaseDirectory, "*"))
+                {
+                    log.Log($"Adding '{file}' to slzip...");
+                    slzip.CreateEntryFromFile(file, Path.GetRelativePath(MainDirectory, file));
+                }
+                foreach (string file in Directory.GetFiles(Path.Combine(BaseDirectory, "assets"), "*", SearchOption.AllDirectories))
+                {
+                    log.Log($"Adding '{file}' to slzip...");
+                    slzip.CreateEntryFromFile(file, Path.GetRelativePath(MainDirectory, file));
+                }
+                foreach (string file in Directory.GetFiles(Path.Combine(BaseDirectory, "src"), "*", SearchOption.AllDirectories))
+                {
+                    log.Log($"Adding '{file}' to slzip...");
+                    slzip.CreateEntryFromFile(file, Path.GetRelativePath(MainDirectory, file));
+                }
+                slzip.CreateEntryFromFile(Path.Combine(BaseDirectory, "rom", $"{Name}.xml"), Path.Combine("base", "rom", $"{Name}.xml"));
+                foreach (string file in Directory.GetFiles(Path.Combine(BaseDirectory, "rom", "data", "bgm"), "*"))
+                {
+                    log.Log($"Adding '{file}' to slzip...");
+                    slzip.CreateEntryFromFile(file, Path.GetRelativePath(MainDirectory, file));
+                }
+                foreach (string file in Directory.GetFiles(Path.Combine(BaseDirectory, "rom", "data", "movie"), "*"))
+                {
+                    log.Log($"Adding '{file}' to slzip...");
+                    slzip.CreateEntryFromFile(file, Path.GetRelativePath(MainDirectory, file));
+                }
+                foreach (string file in Directory.GetFiles(Path.Combine(BaseDirectory, "rom", "data", "vce"), "*"))
                 {
                     log.Log($"Adding '{file}' to slzip...");
                     slzip.CreateEntryFromFile(file, Path.GetRelativePath(MainDirectory, file));
@@ -1042,7 +1071,7 @@ namespace SerialLoops.Lib
             }
         }
 
-        public static (Project Project, LoadProjectResult LoadResult) Import(string slzipFile, Config config, Func<string, string> localize, ILogger log, IProgressTracker tracker)
+        public static (Project Project, LoadProjectResult LoadResult) Import(string slzipFile, string romPath, Config config, Func<string, string> localize, ILogger log, IProgressTracker tracker)
         {
             try
             {
@@ -1066,13 +1095,14 @@ namespace SerialLoops.Lib
                         project.Name = $"{project.Name} (1)";
                     }
                 }
-                Directory.CreateDirectory(project.MainDirectory);
-                slzip.ExtractToDirectory(project.MainDirectory);
+
+                IO.OpenRom(project, romPath, log, tracker);
+                slzip.ExtractToDirectory(project.MainDirectory, overwriteFiles: true);
                 string newNdsProjFile = Path.Combine("rom", $"{project.Name}.xml");
                 if (!project.Name.Equals(oldProjectName))
                 {
                     string oldNdsProjFile = Path.Combine("rom", $"{oldProjectName}.xml");
-                    File.Move(Path.Combine(project.BaseDirectory, oldNdsProjFile), Path.Combine(project.BaseDirectory, newNdsProjFile));
+                    File.Move(Path.Combine(project.BaseDirectory, oldNdsProjFile), Path.Combine(project.BaseDirectory, newNdsProjFile), overwrite: true);
                 }
                 project.Settings = new(NdsProjectFile.FromByteArray<NdsProjectFile>(File.ReadAllBytes(Path.Combine(project.BaseDirectory, newNdsProjFile))), log);
                 Directory.CreateDirectory(project.IterativeDirectory);
@@ -1086,6 +1116,11 @@ namespace SerialLoops.Lib
                 log.LogException(localize("Failed to import project"), ex);
                 return (null, new() { State = LoadProjectState.FAILED });
             }
+        }
+
+        public void SetBaseRomHash(string romPath)
+        {
+            BaseRomHash = string.Join("", SHA1.HashData(File.ReadAllBytes(romPath)).Select(b => $"{b:X2}"));
         }
 
         public List<ItemDescription> GetSearchResults(string query, ILogger logger)
