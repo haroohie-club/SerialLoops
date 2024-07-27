@@ -2196,6 +2196,24 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Export Project.
+        /// </summary>
+        public static string Export_Project {
+            get {
+                return ResourceManager.GetString("Export Project", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export Project....
+        /// </summary>
+        public static string Export_Project___ {
+            get {
+                return ResourceManager.GetString("Export Project...", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export SFX.
         /// </summary>
         public static string Export_SFX {
@@ -2214,6 +2232,15 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Exported Project.
+        /// </summary>
+        public static string Exported_Project {
+            get {
+                return ResourceManager.GetString("Exported Project", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exporting BGM.
         /// </summary>
         public static string Exporting_BGM {
@@ -2228,6 +2255,15 @@ namespace SerialLoops {
         public static string Exporting_GIF___ {
             get {
                 return ResourceManager.GetString("Exporting GIF...", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exporting Project.
+        /// </summary>
+        public static string Exporting_Project {
+            get {
+                return ResourceManager.GetString("Exporting Project", resourceCulture);
             }
         }
         
@@ -2531,6 +2567,15 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to export project.
+        /// </summary>
+        public static string Failed_to_export_project {
+            get {
+                return ResourceManager.GetString("Failed to export project", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to export system texture {0} to file {1}.
         /// </summary>
         public static string Failed_to_export_system_texture__0__to_file__1_ {
@@ -2546,6 +2591,15 @@ namespace SerialLoops {
             get {
                 return ResourceManager.GetString("Failed to find character item -- have you saved all of your changes to character " +
                         "names?", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to import project.
+        /// </summary>
+        public static string Failed_to_import_project {
+            get {
+                return ResourceManager.GetString("Failed to import project", resourceCulture);
             }
         }
         
@@ -3203,6 +3257,33 @@ namespace SerialLoops {
         public static string Import_Hack {
             get {
                 return ResourceManager.GetString("Import Hack", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import Project.
+        /// </summary>
+        public static string Import_Project {
+            get {
+                return ResourceManager.GetString("Import Project", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import Project....
+        /// </summary>
+        public static string Import_Project___ {
+            get {
+                return ResourceManager.GetString("Import Project...", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Importing Project.
+        /// </summary>
+        public static string Importing_Project {
+            get {
+                return ResourceManager.GetString("Importing Project", resourceCulture);
             }
         }
         
@@ -4450,6 +4531,15 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Project exported successfully!.
+        /// </summary>
+        public static string Project_exported_successfully_ {
+            get {
+                return ResourceManager.GetString("Project exported successfully!", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Project not provided to project creation dialog.
         /// </summary>
         public static string Project_not_provided_to_project_creation_dialog {
@@ -5501,6 +5591,15 @@ namespace SerialLoops {
         public static string Select_Template_to_Apply {
             get {
                 return ResourceManager.GetString("Select Template to Apply", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Serial Loops Exported Project.
+        /// </summary>
+        public static string Serial_Loops_Exported_Project {
+            get {
+                return ResourceManager.GetString("Serial Loops Exported Project", resourceCulture);
             }
         }
         

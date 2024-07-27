@@ -822,17 +822,30 @@
   <data name="Export Patch" xml:space="preserve">
     <value>Export Patch</value>
   </data>
+  <data name="Export Project" xml:space="preserve">
+    <value>Export Project</value>
+  </data>
+  <data name="Export Project..." xml:space="preserve">
+    <value>Export Project...</value>
+  </data>
   <data name="Export SFX" xml:space="preserve">
     <value>Export SFX</value>
   </data>
   <data name="Export Sprites" xml:space="preserve">
     <value>Export Sprites</value>
   </data>
+  <data name="Exported Project" xml:space="preserve">
+    <value>Exported Project</value>
+    <comment>Past tense verb as in "project has been exported"</comment>
+  </data>
   <data name="Exporting BGM" xml:space="preserve">
     <value>Exporting BGM</value>
   </data>
   <data name="Exporting GIF..." xml:space="preserve">
     <value>Exporting GIF…</value>
+  </data>
+  <data name="Exporting Project" xml:space="preserve">
+    <value>Exporting Project</value>
   </data>
   <data name="Extract" xml:space="preserve">
     <value>Extract</value>
@@ -933,11 +946,19 @@
   <data name="Failed to export layout for sprite {0} to file" xml:space="preserve">
     <value>Failed to export layout for sprite {0} to file</value>
   </data>
+  <data name="Failed to export project" xml:space="preserve">
+    <value>Failed to export project</value>
+    <comment>Failed to export the Serial Loops project file to an slzip, basically</comment>
+  </data>
   <data name="Failed to export system texture {0} to file {1}" xml:space="preserve">
     <value>Failed to export system texture {0} to file {1}</value>
   </data>
   <data name="Failed to find character item -- have you saved all of your changes to character names?" xml:space="preserve">
     <value>Failed to find character item -- have you saved all of your changes to character names?</value>
+  </data>
+  <data name="Failed to import project" xml:space="preserve">
+    <value>Failed to import project</value>
+    <comment>Failed to import slzip into Serial Loops project</comment>
   </data>
   <data name="Failed to insert ARM9 assembly hacks" xml:space="preserve">
     <value>Failed to insert ARM9 assembly hacks</value>
@@ -1162,6 +1183,15 @@
   </data>
   <data name="Import Hack" xml:space="preserve">
     <value>Import Hack</value>
+  </data>
+  <data name="Import Project" xml:space="preserve">
+    <value>Import Project</value>
+  </data>
+  <data name="Import Project..." xml:space="preserve">
+    <value>Import Project...</value>
+  </data>
+  <data name="Importing Project" xml:space="preserve">
+    <value>Importing Project</value>
   </data>
   <data name="Include lip flap animation?" xml:space="preserve">
     <value>Include lip flap animation?</value>
@@ -1586,6 +1616,9 @@
   <data name="Project Creation Warning" xml:space="preserve">
     <value>Project Creation Warning</value>
   </data>
+  <data name="Project exported successfully!" xml:space="preserve">
+    <value>Project exported successfully!</value>
+  </data>
   <data name="Project not provided to project creation dialog" xml:space="preserve">
     <value>Project not provided to project creation dialog</value>
   </data>
@@ -1940,6 +1973,10 @@
   </data>
   <data name="Select..." xml:space="preserve">
     <value>Select…</value>
+  </data>
+  <data name="Serial Loops Exported Project" xml:space="preserve">
+    <value>Serial Loops Exported Project</value>
+    <comment>Refers to the "slzip" archive that is the exported project format</comment>
   </data>
   <data name="Serial Loops Project" xml:space="preserve">
     <value>Serial Loops Project</value>

@@ -41,6 +41,9 @@ namespace SerialLoops.Controls
 
             LinkButton openProjectLink = new() { Text = Application.Instance.Localize(this, "Open Project") };
             openProjectLink.Click += _mainForm.OpenProject_Executed;
+
+            LinkButton importProjectlink = new() { Text = Application.Instance.Localize(this, "Import Project") };
+            importProjectlink.Click += _mainForm.ImportProjectCommand_Executed;
             
             LinkButton editSaveLink = new() { Text = Application.Instance.Localize(this, "Edit Save File") };
             editSaveLink.Click += _mainForm.EditSaveFileCommand_Executed;
@@ -61,6 +64,7 @@ namespace SerialLoops.Controls
                     ControlGenerator.GetTextHeader(Application.Instance.Localize(this, "Start")),
                     ControlGenerator.GetControlWithIcon(newProjectLink, "New", _log),
                     ControlGenerator.GetControlWithIcon(openProjectLink, "Open", _log),
+                    importProjectlink,
                     ControlGenerator.GetControlWithIcon(editSaveLink, "Edit_Save", _log),
                     ControlGenerator.GetControlWithIcon(preferencesLink, "Options", _log),
                     ControlGenerator.GetControlWithIcon(aboutLink, "Help", _log),

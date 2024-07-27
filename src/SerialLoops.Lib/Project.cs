@@ -14,26 +14,30 @@ using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
 using static SerialLoops.Lib.Items.ItemDescription;
 
 namespace SerialLoops.Lib
 {
-    public class Project
+    public partial class Project
     {
         public const string PROJECT_FORMAT = "slproj";
+        public const string EXPORT_FORMAT = "slzip";
         public static readonly JsonSerializerOptions SERIALIZER_OPTIONS = new() { Converters = { new SKColorJsonConverter() } };
 
         public string Name { get; set; }
         public string LangCode { get; set; }
-        public string MainDirectory { get; set; }
         public Dictionary<string, string> ItemNames { get; set; }
         public Dictionary<int, NameplateProperties> Characters { get; set; }
 
         // SL settings
+        [JsonIgnore]
+        public string MainDirectory => Path.Combine(Config.ProjectsDirectory, Name);
         [JsonIgnore]
         public string BaseDirectory => Path.Combine(MainDirectory, "base");
         [JsonIgnore]
@@ -111,7 +115,6 @@ namespace SerialLoops.Lib
         {
             Name = name;
             LangCode = langCode;
-            MainDirectory = Path.Combine(config.ProjectsDirectory, name);
             Config = config;
             Localize = localize;
             log.Log("Creating project directories...");
@@ -1008,11 +1011,80 @@ namespace SerialLoops.Lib
         {
             try
             {
-                File.WriteAllText(Path.Combine(MainDirectory, $"{Name}.{PROJECT_FORMAT}"), JsonSerializer.Serialize(this, SERIALIZER_OPTIONS));
+                File.WriteAllText(ProjectFile, JsonSerializer.Serialize(this, SERIALIZER_OPTIONS));
             }
             catch (Exception ex)
             {
                 log.LogException("Failed to save project file! Check logs for more information.", ex);
+            }
+        }
+
+        public void Export(string slzipFile, ILogger log)
+        {
+            try
+            {
+                log.Log($"Creating slzip at '{slzipFile}'...");
+                using FileStream slzipFs = File.Create(slzipFile);
+                using ZipArchive slzip = new(slzipFs, ZipArchiveMode.Create);
+                log.Log($"Adding '{ProjectFile}' to slzip...");
+                slzip.CreateEntryFromFile(ProjectFile, Path.GetFileName(ProjectFile));
+                log.Log("Adding charset.json to slzip...");
+                slzip.CreateEntryFromFile(Path.Combine(MainDirectory, "font", "charset.json"), Path.Combine("font", "charset.json"));
+                foreach (string file in Directory.GetFiles(BaseDirectory, "*", SearchOption.AllDirectories))
+                {
+                    log.Log($"Adding '{file}' to slzip...");
+                    slzip.CreateEntryFromFile(file, Path.GetRelativePath(MainDirectory, file));
+                }
+            }
+            catch (Exception ex)
+            {
+                log.LogException(Localize("Failed to export project"), ex);
+            }
+        }
+
+        public static (Project Project, LoadProjectResult LoadResult) Import(string slzipFile, Config config, Func<string, string> localize, ILogger log, IProgressTracker tracker)
+        {
+            try
+            {
+                using FileStream slzipFs = File.OpenRead(slzipFile);
+                using ZipArchive slzip = new(slzipFs, ZipArchiveMode.Read);
+                string slprojTemp = Path.GetTempFileName();
+                slzip.Entries.FirstOrDefault(f => f.Name.EndsWith(".slproj")).ExtractToFile(slprojTemp, overwrite: true);
+                Project project = JsonSerializer.Deserialize<Project>(File.ReadAllText(slprojTemp), SERIALIZER_OPTIONS);
+                project.Config = config;
+                File.Delete(slprojTemp);
+                string oldProjectName = project.Name;
+                while (Directory.Exists(project.MainDirectory))
+                {
+                    Match numEnding = ProjectNameAppendedNumber().Match(project.Name);
+                    if (numEnding.Success)
+                    {
+                        project.Name = project.Name.Replace(numEnding.Value, $"({int.Parse(numEnding.Groups["num"].Value) + 1})");
+                    }
+                    else
+                    {
+                        project.Name = $"{project.Name} (1)";
+                    }
+                }
+                Directory.CreateDirectory(project.MainDirectory);
+                slzip.ExtractToDirectory(project.MainDirectory);
+                string newNdsProjFile = Path.Combine("rom", $"{project.Name}.xml");
+                if (!project.Name.Equals(oldProjectName))
+                {
+                    string oldNdsProjFile = Path.Combine("rom", $"{oldProjectName}.xml");
+                    File.Move(Path.Combine(project.BaseDirectory, oldNdsProjFile), Path.Combine(project.BaseDirectory, newNdsProjFile));
+                }
+                project.Settings = new(NdsProjectFile.FromByteArray<NdsProjectFile>(File.ReadAllBytes(Path.Combine(project.BaseDirectory, newNdsProjFile))), log);
+                Directory.CreateDirectory(project.IterativeDirectory);
+                IO.CopyFiles(project.BaseDirectory, project.IterativeDirectory, log, recursive: true);
+                Build.BuildBase(project, config, log, tracker);
+
+                return (project, project.Load(config, log, tracker));
+            }
+            catch (Exception ex)
+            {
+                log.LogException(localize("Failed to import project"), ex);
+                return (null, new() { State = LoadProjectState.FAILED });
             }
         }
 
@@ -1217,5 +1289,8 @@ namespace SerialLoops.Lib
 
             return scriptFileScenarioIndex > scenarioEpIndex && scriptFileScenarioIndex < scenarioNextEpIndex;
         }
+
+        [GeneratedRegex(@"\((?<num>\d+)\)")]
+        private static partial Regex ProjectNameAppendedNumber();
     }
 }
