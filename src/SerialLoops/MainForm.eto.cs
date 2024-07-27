@@ -18,7 +18,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json;
-using static SkiaSharp.HarfBuzz.SKShaper;
 
 namespace SerialLoops
 {
