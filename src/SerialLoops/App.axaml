@@ -31,11 +31,13 @@
             <ResourceDictionary.ThemeDictionaries>
                 <ResourceDictionary x:Key="Light">
                     <SolidColorBrush x:Key="LinkColor">Blue</SolidColorBrush>
-                    <SolidColorBrush x:Key="GroupLine">DarkGray</SolidColorBrush>
+                    <SolidColorBrush x:Key="GroupLineColor">DarkGray</SolidColorBrush>
+                    <SolidColorBrush x:Key="BgColor">White</SolidColorBrush>
                 </ResourceDictionary>
                 <ResourceDictionary x:Key="Dark">
                     <SolidColorBrush x:Key="LinkColor">Cyan</SolidColorBrush>
-                    <SolidColorBrush x:Key="GroupLine">WhiteSmoke</SolidColorBrush>
+                    <SolidColorBrush x:Key="GroupLineColor">WhiteSmoke</SolidColorBrush>
+                    <SolidColorBrush x:Key="BgColor">Black</SolidColorBrush>
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
         </ResourceDictionary>

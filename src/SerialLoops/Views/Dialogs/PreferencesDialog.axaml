@@ -14,7 +14,7 @@
         Height="{Binding Height}"
         Title="{x:Static assets:Strings.Preferences}">
     <DockPanel>
-        <ScrollViewer DockPanel.Dock="Top" MaxHeight="{Binding ScrollViewerHeight}">
+        <ScrollViewer DockPanel.Dock="Top" VerticalScrollBarVisibility="Visible" MaxHeight="{Binding ScrollViewerHeight}">
             <StackPanel>
                 <controls:OptionsGroup Name="BuildOptions" />
                 <controls:OptionsGroup Name="ProjectOptions" />

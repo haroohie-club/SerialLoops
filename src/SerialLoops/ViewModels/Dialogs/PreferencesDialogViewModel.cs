@@ -13,10 +13,10 @@ namespace SerialLoops.ViewModels.Dialogs
 {
     public class PreferencesDialogViewModel : ViewModelBase
     {
-        public int MinWidth => 600;
-        public int MinHeight => 800;
-        public int Width { get; set; } = 600;
-        public int Height { get; set; } = 800;
+        public int MinWidth => 550;
+        public int MinHeight => 600;
+        public int Width { get; set; } = 550;
+        public int Height { get; set; } = 600;
         public int ScrollViewerHeight => Height - 100;
 
         public ICommand SaveCommand { get; private set; }

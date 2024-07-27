@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Media;
+using Avalonia.Media.Immutable;
 using Avalonia.Platform.Storage;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
@@ -29,7 +30,7 @@ namespace SerialLoops.Controls
             Text = name;
             Margin = new(10);
 
-            int currentRow = 0;
+            int currentRow = 1;
             List<Grid> grids = [];
             for (int i = 0; i < options.Count; i++)
             {
@@ -48,6 +49,10 @@ namespace SerialLoops.Controls
                 RowDefinitions = new("Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"),
                 ColumnDefinitions = new("Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto")
             };
+            TextBlock header = new() { Text = Text, Margin = new(15, 5) };
+            header.Classes.Add("h2");
+            Grid.SetRow(header, 0);
+            bigGrid.Children.Add(header);
             bigGrid.Children.AddRange(grids);
             Content = bigGrid;
         }
@@ -55,7 +60,8 @@ namespace SerialLoops.Controls
         public override void Render(DrawingContext context)
         {
             base.Render(context);
-            context.DrawRectangle(new Pen((SolidColorBrush)Application.Current.Resources["GroupLine"]), new(new Size(Width, Height)));
+            this.TryFindResource("GroupLineColor", ActualThemeVariant, out object? brush);
+            context.DrawRectangle(new Pen((ImmutableSolidColorBrush)brush), new Rect(RenderTransformOrigin.Point, new Point(RenderTransformOrigin.Point.X + Bounds.Size.Width - 2, RenderTransformOrigin.Point.Y + Bounds.Size.Height - 2)), 5);
         }
     }
 
