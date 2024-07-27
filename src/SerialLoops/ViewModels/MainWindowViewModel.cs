@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Dialogs;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
+using ReactiveUI;
 using SerialLoops.Assets;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
@@ -67,6 +68,13 @@ namespace SerialLoops.ViewModels
                 HomePanel homePanel = new() { ViewModel = homePanelViewModel };
                 Window.Content = homePanel;
             }
+
+            NewProjectCommand = ReactiveCommand.Create(NewProjectCommand_Executed);
+            OpenProjectCommand = ReactiveCommand.Create(OpenProjectCommand_Executed);
+            OpenRecentProjectCommand = ReactiveCommand.Create<string>(OpenRecentProjectCommand_Executed);
+            EditSaveCommand = ReactiveCommand.Create(EditSaveFileCommand_Executed);
+            AboutCommand = ReactiveCommand.Create(AboutCommand_Executed);
+            PreferencesCommand = ReactiveCommand.Create(PreferencesCommand_Executed);
         }
 
         public async Task CloseProject_Executed(WindowClosingEventArgs e)
@@ -89,7 +97,7 @@ namespace SerialLoops.ViewModels
                         // message box with yes no cancel buttons
                         result = await MessageBoxManager.GetMessageBoxStandard(Strings.Confirm,
                             string.Format(Strings.You_have_unsaved_changes_in__0__item_s___Would_you_like_to_save_before_closing_the_project_, unsavedItems.Count()),
-                            ButtonEnum.YesNoCancel, Icon.Warning, WindowStartupLocation.CenterScreen).ShowAsPopupAsync(Window);
+                            ButtonEnum.YesNoCancel, Icon.Warning, WindowStartupLocation.CenterScreen).ShowWindowDialogAsync(Window);
                     }
                     switch (result)
                     {
@@ -116,6 +124,7 @@ namespace SerialLoops.ViewModels
                 //ProjectsCache.Save(Log);
             }
         }
+
         private void UpdateRecentProjects()
         {
             RecentProjectsMenu.Menu = [];
@@ -173,14 +182,30 @@ namespace SerialLoops.ViewModels
 
         }
 
-        public void OpenRecentProjectCommand_Executed()
+        public void OpenRecentProjectCommand_Executed(string project)
         {
 
         }
 
-        public void PreferencesCommand_Executed()
+        public async Task PreferencesCommand_Executed()
         {
-
+            PreferencesDialogViewModel preferencesDialogViewModel = new();
+            PreferencesDialog preferencesDialog = new();
+            preferencesDialogViewModel.Initialize(preferencesDialog, CurrentConfig, Log);
+            preferencesDialog.DataContext = preferencesDialogViewModel;
+            await preferencesDialog.ShowDialog(Window);
+            if (preferencesDialogViewModel.Saved)
+            {
+                CurrentConfig = preferencesDialogViewModel.Configuration;
+                if (preferencesDialogViewModel.RequireRestart)
+                {
+                    if ((await MessageBoxManager.GetMessageBoxStandard(string.Empty, Strings.The_changes_made_will_require_Serial_Loops_to_be_restarted__Is_that_okay_, ButtonEnum.YesNo).ShowAsPopupAsync(Window)) == ButtonResult.Yes)
+                    {
+                        Window.RestartOnClose = true;
+                        Window.Close();
+                    }
+                }
+            }
         }
 
         public void EditSaveFileCommand_Executed()

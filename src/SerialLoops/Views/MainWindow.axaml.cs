@@ -1,15 +1,16 @@
 using Avalonia.Controls;
-using Avalonia.Dialogs;
 using SerialLoops.Assets;
 using SerialLoops.Utility;
 using SerialLoops.ViewModels;
-using System.Windows.Input;
+using System;
+using System.Diagnostics;
 
 namespace SerialLoops.Views
 {
     public partial class MainWindow : Window
     {
         private MainWindowViewModel _viewModel;
+        public bool RestartOnClose { get; set; } = false;
 
         public MainWindow()
         {
@@ -30,7 +31,8 @@ namespace SerialLoops.Views
                 new NativeMenuItem()
                 {
                     Header = Strings._File,
-                    Menu = [
+                    Menu =
+                    [
                         new NativeMenuItem()
                         {
                             Header = Strings.New_Project___,
@@ -48,7 +50,20 @@ namespace SerialLoops.Views
                             Header = Strings.Edit_Save_File,
                             Icon = ControlGenerator.GetIcon("Edit_Save", _viewModel.Log),
                         }
-                        ]
+                    ]
+                },
+                new NativeMenuItem()
+                {
+                    Header = Strings._Help,
+                    Menu =
+                    [
+                        new NativeMenuItem()
+                        {
+                            Header = Strings.About___,
+                            Icon = ControlGenerator.GetIcon("Help", _viewModel.Log),
+                            Command = _viewModel.AboutCommand,
+                        },
+                    ]
                 }
                 ];
         }
@@ -56,6 +71,14 @@ namespace SerialLoops.Views
         private async void Window_Closing(object? sender, WindowClosingEventArgs e)
         {
             await _viewModel.CloseProject_Executed(e);
+        }
+
+        private void Window_Closed(object? sender, EventArgs e)
+        {
+            if (RestartOnClose)
+            {
+                Process.Start(new ProcessStartInfo(Environment.ProcessPath) { UseShellExecute = true });
+            }
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using Avalonia.Media.Imaging;
+﻿using Avalonia.Controls;
+using Avalonia.Layout;
+using Avalonia.Media.Imaging;
 using HaruhiChokuretsuLib.Util;
 using System;
 using System.Reflection;
@@ -18,6 +20,20 @@ namespace SerialLoops.Utility
                 log.LogWarning($"Failed to load icon '{iconName}': {ex.Message}\n\n{ex.StackTrace}");
                 return null;
             }
+        }
+
+        public static StackPanel GetControlWithItem(Control control, string iconName, ILogger log)
+        {
+            StackPanel panel = new()
+            {
+                Orientation = Orientation.Horizontal,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Center,
+                Spacing = 5,
+            };
+            panel.Children.Add(new Image { Source = GetIcon(iconName, log) });
+            panel.Children.Add(control);
+            return panel;
         }
     }
 }

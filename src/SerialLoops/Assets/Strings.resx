@@ -212,6 +212,14 @@
   <data name="All data will be erased prompt message box" xml:space="preserve">
     <value>All data will be erased prompt message box</value>
   </data>
+  <data name="All Off" xml:space="preserve">
+    <value>All Off</value>
+    <comment>Turn all boolean options off</comment>
+  </data>
+  <data name="All On" xml:space="preserve">
+    <value>All On</value>
+    <comment>Turn all boolean options on</comment>
+  </data>
   <data name="Animation" xml:space="preserve">
     <value>Animation</value>
   </data>
@@ -2384,6 +2392,9 @@
   </data>
   <data name="Yuki Nagato event unlocked message box" xml:space="preserve">
     <value>Yuki Nagato event unlocked message box</value>
+  </data>
+  <data name="_Help" xml:space="preserve">
+    <value>_Help</value>
   </data>
   <data name="{0} ({1}) Seen" xml:space="preserve">
     <value>{0} ({1}) Seen</value>

@@ -43,7 +43,7 @@ namespace SerialLoops.ViewModels.Dialogs
             Title = string.Format(Strings.New_Update_Available___0_, Version);
             Header = string.Format(Strings.Serial_Loops_v_0_, Version);
             OpenReleaseLinkCommand = ReactiveCommand.Create(OpenReleaseLink);
-            CloseCommand = ReactiveCommand.Create(() => _updateDialog.Close());
+            CloseCommand = ReactiveCommand.Create(_updateDialog.Close);
         }
 
         public void OpenReleaseLink()

@@ -178,6 +178,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to _Help.
+        /// </summary>
+        public static string _Help {
+            get {
+                return ResourceManager.GetString("_Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &quot;Kinetic&quot; Background.
         /// </summary>
         public static string _Kinetic__Background {
@@ -381,6 +390,24 @@ namespace SerialLoops.Assets {
         public static string All_data_will_be_erased_prompt_message_box {
             get {
                 return ResourceManager.GetString("All data will be erased prompt message box", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All Off.
+        /// </summary>
+        public static string All_Off {
+            get {
+                return ResourceManager.GetString("All Off", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All On.
+        /// </summary>
+        public static string All_On {
+            get {
+                return ResourceManager.GetString("All On", resourceCulture);
             }
         }
         

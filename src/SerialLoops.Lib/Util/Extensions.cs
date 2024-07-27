@@ -235,6 +235,19 @@ namespace SerialLoops.Lib.Util
             }
             return string.Empty;
         }
+
+        public static string ToTitleCase(this string str)
+        { 
+            if (string.IsNullOrEmpty(str))
+            {
+                return str;
+            }
+            else if (str.Length == 1)
+            {
+                return str.ToUpper();
+            }
+            return $"{str[0].ToString().ToUpper()}{str[1..]}";
+        }
     }
 
     public class SKColorJsonConverter : JsonConverter<SKColor>
