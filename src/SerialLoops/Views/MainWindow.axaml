@@ -12,6 +12,8 @@
         MinHeight="{Binding MinSize.Height}"
         Width="{Binding ClientSize.Width}"
         Height="{Binding ClientSize.Height}"
+        ClosingBehavior="OwnerAndChildWindows"
+        Closing="Window_Closing"
         Icon="/Assets/serial-loops.ico"
         Title="{Binding Title}">
 
@@ -23,14 +25,6 @@
 
     <NativeMenu.Menu>
         <NativeMenu>
-            <NativeMenuItem Header="{x:Static assets:Strings.File}">
-                <NativeMenuItem.Menu>
-                    <NativeMenu>
-                        <NativeMenuItem Header="Hi" />
-                        <NativeMenuItem Header="Hello" />
-                    </NativeMenu>
-                </NativeMenuItem.Menu>
-            </NativeMenuItem>
         </NativeMenu>
     </NativeMenu.Menu>
 
