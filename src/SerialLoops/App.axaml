@@ -5,6 +5,24 @@
              RequestedThemeVariant="Default">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
+    <TrayIcon.Icons>
+        <TrayIcons>
+            <TrayIcon Icon="/Assets/serial-loops.ico"
+                      ToolTipText="Serial Loops">
+                <TrayIcon.Menu>
+                    <NativeMenu>
+                        <NativeMenuItem Header="Settings">
+                            <NativeMenu>
+                                <NativeMenuItem Header="Option1" />
+                                <NativeMenuItem Header="Option2" />
+                            </NativeMenu>
+                        </NativeMenuItem>
+                    </NativeMenu>
+                </TrayIcon.Menu>
+            </TrayIcon>
+        </TrayIcons>
+    </TrayIcon.Icons>
+    
     <Application.DataTemplates>
         <local:ViewLocator/>
     </Application.DataTemplates>

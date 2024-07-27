@@ -2,7 +2,6 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFrameworks>net8.0;net8.0-windows</TargetFrameworks>
-    <Nullable>enable</Nullable>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
@@ -14,6 +13,22 @@
   </ItemGroup>
 
   <ItemGroup>
+    <AvaloniaResource Remove="Assets\Strings.de.resx" />
+    <AvaloniaResource Remove="Assets\Strings.en-GB.resx" />
+    <AvaloniaResource Remove="Assets\Strings.es.resx" />
+    <AvaloniaResource Remove="Assets\Strings.it.resx" />
+    <AvaloniaResource Remove="Assets\Strings.ja.resx" />
+    <AvaloniaResource Remove="Assets\Strings.pt-BR.resx" />
+    <AvaloniaResource Remove="Assets\Strings.resx" />
+    <AvaloniaResource Remove="Assets\Strings.ru.resx" />
+    <AvaloniaResource Remove="Assets\Strings.zh-Hans.resx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Assets\serial-loops.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Avalonia" Version="11.1.0" />
     <PackageReference Include="Avalonia.Desktop" Version="11.1.0" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.1.0" />
@@ -21,5 +36,34 @@
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.1.0" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
+    <PackageReference Include="DialogHost.Avalonia" Version="0.7.9" />
+    <PackageReference Include="MessageBox.Avalonia" Version="3.1.5.1" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net8.0-windows'">
+    <PackageReference Include="NAudio" Version="2.2.1" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' != 'net8.0-windows'">
+    <PackageReference Include="OpenTK" Version="4.8.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\SerialLoops.Lib\SerialLoops.Lib.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Assets\Strings.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Assets\Strings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>
