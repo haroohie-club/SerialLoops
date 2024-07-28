@@ -95,8 +95,16 @@ namespace SerialLoops.Views
             }
             else
             {
-                ((NativeMenuItem)menu.Items.FirstOrDefault(m => m is NativeMenuItem mItem && mItem.Header.Equals(Strings._Preferences___))).Icon = ControlGenerator.GetIcon("Options", ViewModel.Log);
-                ((NativeMenuItem)menu.Items.FirstOrDefault(m => m is NativeMenuItem mItem && mItem.Header.Equals(Strings._Check_for_Updates___))).Icon = ControlGenerator.GetIcon("Options", ViewModel.Log);
+                NativeMenuItem preferencesItem = (NativeMenuItem)menu.Items.FirstOrDefault(m => m is NativeMenuItem mItem && mItem.Header.Equals(Strings._Preferences___));
+                if (preferencesItem is not null)
+                {
+                    preferencesItem.Icon = ControlGenerator.GetIcon("Options", ViewModel.Log);
+                }
+                NativeMenuItem updatesItem = (NativeMenuItem)menu.Items.FirstOrDefault(m => m is NativeMenuItem mItem && mItem.Header.Equals(Strings._Check_for_Updates___));
+                if (updatesItem is not null)
+                {
+                    updatesItem.Icon = ControlGenerator.GetIcon("Options", ViewModel.Log);
+                }
             }
             return menu;
         }
