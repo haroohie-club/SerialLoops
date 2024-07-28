@@ -15,7 +15,8 @@
     <!-- Also defines .app file name -->
     <CFBundleDisplayName>Serial Loops</CFBundleDisplayName>
     <CFBundleIdentifier>club.haroohie.SerialLoops</CFBundleIdentifier>
-    <CFBundleVersion>$(SLVersion)</CFBundleVersion>
+    <CFBundleVersion>$(SLAssemblyVersion)</CFBundleVersion>
+    <CFBundleShortVersionString>$(SLVersion)</CFBundleShortVersionString>
     <CFBundlePackageType>APPL</CFBundlePackageType>
     <CFBundleExecutable>SerialLoops</CFBundleExecutable>
     <CFBundleIconFile>SerialLoops.icns</CFBundleIconFile>
