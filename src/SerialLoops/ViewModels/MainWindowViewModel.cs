@@ -1,6 +1,5 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Dialogs;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
 using ReactiveUI;
@@ -78,8 +77,8 @@ namespace SerialLoops.ViewModels
             OpenProjectCommand = ReactiveCommand.Create(OpenProjectCommand_Executed);
             OpenRecentProjectCommand = ReactiveCommand.Create<string>(OpenRecentProjectCommand_Executed);
             EditSaveCommand = ReactiveCommand.Create(EditSaveFileCommand_Executed);
-            AboutCommand = ReactiveCommand.Create(AboutCommand_Executed);
-            PreferencesCommand = ReactiveCommand.Create(PreferencesCommand_Executed);
+            AboutCommand = ReactiveCommand.CreateFromTask(AboutCommand_Executed);
+            PreferencesCommand = ReactiveCommand.CreateFromTask(PreferencesCommand_Executed);
             CheckForUpdatesCommand = ReactiveCommand.Create(() => new UpdateChecker(this).Check());
             ViewLogsCommand = ReactiveCommand.Create(() =>
             {

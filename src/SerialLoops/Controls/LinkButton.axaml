@@ -4,5 +4,5 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SerialLoops.Controls.LinkButton">
-    <TextBlock Classes="link" IsEnabled="True" Name="LinkText" PointerPressed="Action_Execute"/>
+    <Label Classes="link#enabled" IsEnabled="True" Name="LinkText" PointerPressed="Action_Execute"/>
 </UserControl>

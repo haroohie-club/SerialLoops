@@ -5,7 +5,7 @@ namespace SerialLoops.Controls
 {
     public partial class LinkButton : UserControl
     {
-        public string Text { get => LinkText.Text; set => LinkText.Text = value; }
+        public string Text { get => (string)LinkText.Content; set => LinkText.Content = value; }
         public delegate void OnClickDelegate(object sender, EventArgs e);
         public OnClickDelegate OnClick { get; set; }
 
