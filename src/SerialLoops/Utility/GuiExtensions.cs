@@ -20,5 +20,27 @@ namespace SerialLoops.Utility
                 controlsCollection.Add(control);
             }
         }
+
+        public static NativeMenuItem FindNativeMenuItem(this NativeMenu menu, string header)
+        {
+            foreach (NativeMenuItemBase itemBase in menu.Items)
+            {
+                if (itemBase is NativeMenuItem item)
+                {
+                    if (item.Header.Equals(header))
+                    {
+                        return item;
+                    }
+                    else
+                    {
+                        if (item.Menu?.FindNativeMenuItem(header) is not null)
+                        {
+                            return item;
+                        }
+                    }
+                }
+            }
+            return null;
+        }
     }
 }
