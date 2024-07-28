@@ -1,8 +1,10 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
+using Avalonia.Controls.Templates;
 using Avalonia.Input;
 using Avalonia.Layout;
+using Avalonia.Markup.Xaml.Templates;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib.Items;
 using SerialLoops.Utility;
@@ -26,27 +28,21 @@ namespace SerialLoops.Models
             set
             {
                 _items = value;
-                Source = new HierarchicalTreeDataGridSource<ITreeItem>(GetSections())
-                {
-                    Columns =
-                    {
-                        new HierarchicalExpanderColumn<ITreeItem>(
-                            new TextColumn<ITreeItem, string>("Text", i => i.Text),
-                            i => i.Children),
-                    }
-                };
+                Source = new ObservableCollection<ITreeItem>(GetSections());
+                Viewer.ItemsSource = Source;
             }
         }
+        public ObservableCollection<ITreeItem> Source { get; set; }
 
-        public HierarchicalTreeDataGridSource<ITreeItem> Source { get; set; }
-        public TreeDataGrid Viewer { get; set; }
+        public TreeView Viewer { get; set; }
 
         protected ILogger _log;
         protected bool ExpandItems { get; set; }
 
-        public void InitializeBase(List<ItemDescription> items, TreeDataGrid viewer, Size size, bool expandItems, ILogger log)
+        public void InitializeItems(List<ItemDescription> items, TreeView viewer, Size size, bool expandItems, ILogger log)
         {
             Viewer = viewer;
+            viewer.ItemTemplate = new FuncDataTemplate<ITreeItem>((value, namescope) => value.GetDisplay());
             Items = items;
             Width = size.Width;
             Height = size.Height;

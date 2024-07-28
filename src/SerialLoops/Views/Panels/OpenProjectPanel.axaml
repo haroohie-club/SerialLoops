@@ -20,7 +20,7 @@
             <NativeMenuBar Name="MenuBar"/>
             <toolbar:Toolbar Height="60" Name="ToolBar" HorizontalAlignment="Right"/>
         </StackPanel>
-        <DockPanel DockPanel.Dock="Bottom">
+        <DockPanel DockPanel.Dock="Bottom" Margin="40">
             <panels:ItemExplorerPanel DockPanel.Dock="Left" Name="ItemExplorer">
                 <panels:ItemExplorerPanel.DataContext>
                     <panelsvm:ItemExplorerPanelViewModel/>

@@ -13,7 +13,7 @@
     </Design.DataContext>
     
     <StackPanel Width="{Binding Width}" Height="{Binding Height}">
-        <TextBox Name="Search"/>
-        <TreeDataGrid Name="Viewer" Source="{Binding Source}"/>
+        <TextBox Name="Search" Width="{Binding Width}"/>
+        <TreeView Name="Viewer" SelectionMode="Single"/>
     </StackPanel>    
 </UserControl>

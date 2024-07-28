@@ -155,7 +155,7 @@ namespace SerialLoops.ViewModels
             //    .GetManifestResourceStream("SerialLoops.Graphics.MS-Gothic-Haruhi.ttf");
             //_msGothicHaruhi = SKTypeface.FromStream(typefaceStream);
 
-            Button advancedSearchButton = new() { Content = "...", Width = 25 };
+            Button advancedSearchButton = new() { Content = "...", Width = 25, Command = SearchProjectCommand };
             //advancedSearchButton.Click += Search_Executed;
             //TableLayout searchBarLayout = new(new TableRow(
             //    SearchBox,

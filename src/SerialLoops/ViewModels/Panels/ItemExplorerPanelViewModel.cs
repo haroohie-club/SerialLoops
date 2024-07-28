@@ -1,5 +1,4 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Controls.Selection;
 using Avalonia.Input;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib;
@@ -18,12 +17,11 @@ namespace SerialLoops.ViewModels.Panels
 
         public void Initialize(ItemExplorerPanel panel, Project project, EditorTabsPanelViewModel tabs, TextBox searchBox, ILogger log)
         {
-            InitializeBase(project.Items, panel.Viewer, new(200, 420), false, log);
+            InitializeItems(project.Items, panel.Viewer, new(200, 420), false, log);
             _project = project;
             _tabs = tabs;
             SearchBox = panel.Search;
-            //Viewer.RowSelection.SingleSelect = true;
-            //Viewer.RowSelection.SelectionChanged += Viewer_SelectionChanged;
+            Viewer.SelectionChanged += Viewer_SelectionChanged;
         }
 
         public override void ItemList_ItemDoubleClicked(object sender, TappedEventArgs args)
@@ -31,9 +29,9 @@ namespace SerialLoops.ViewModels.Panels
 
         }
 
-        private void Viewer_SelectionChanged(object sender, TreeSelectionModelSelectionChangedEventArgs e)
+        private void Viewer_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ItemDescription item = _project.FindItem(((ITreeItem)Viewer.RowSelection.SelectedItem).Text);
+            ItemDescription item = _project.FindItem(((ITreeItem)Viewer.SelectedItem).Text);
             if (item is not null)
             {
                 
