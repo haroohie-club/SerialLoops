@@ -5,6 +5,7 @@ using SerialLoops.Utility;
 using SerialLoops.ViewModels;
 using System;
 using System.Diagnostics;
+using System.Reactive;
 
 namespace SerialLoops.Views
 {
@@ -28,10 +29,9 @@ namespace SerialLoops.Views
 
         private NativeMenu GetInitialMenu(NativeMenu menu)
         {
-            if (NativeMenu.GetIsNativeMenuExported(this))
+            if (!NativeMenu.GetIsNativeMenuExported(this))
             {
-                
-                //menu.Add()
+                menu.Items.Clear();
             }
             NativeMenuItem fileMenu = new NativeMenuItem()
             {
@@ -85,6 +85,11 @@ namespace SerialLoops.Views
             {
                 Process.Start(new ProcessStartInfo(Environment.ProcessPath) { UseShellExecute = true });
             }
+        }
+
+        private void About_Click(object? sender, EventArgs e)
+        {
+            _viewModel.AboutCommand.Execute(Unit.Default);
         }
     }
 }

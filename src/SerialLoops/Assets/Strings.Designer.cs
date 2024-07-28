@@ -250,6 +250,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to About Serial Loops.
+        /// </summary>
+        public static string About_Serial_Loops {
+            get {
+                return ResourceManager.GetString("About Serial Loops", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Accessing save data prompt message box.
         /// </summary>
         public static string Accessing_save_data_prompt_message_box {

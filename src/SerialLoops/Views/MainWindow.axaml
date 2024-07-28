@@ -26,6 +26,7 @@
 
     <NativeMenu.Menu>
         <NativeMenu>
+            <NativeMenuItem Header="{x:Static assets:Strings.About_Serial_Loops}" Click="About_Click" />
         </NativeMenu>
     </NativeMenu.Menu>
 
