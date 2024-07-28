@@ -117,10 +117,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="SerialLoops.icns" />
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Include="Assets\Graphics\BlankNameplate.png" />
     <EmbeddedResource Include="Assets\Graphics\BlankNameplateBaseArrow.png" />
     <EmbeddedResource Include="Assets\Graphics\MS-Gothic-Haruhi.ttf" />
@@ -239,5 +235,11 @@
 
   <ItemGroup>
     <Folder Include="Models\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="SerialLoops.icns">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>
