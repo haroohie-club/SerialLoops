@@ -16,7 +16,10 @@ namespace SerialLoops.Controls
 
         private void Action_Execute(object? sender, Avalonia.Input.PointerPressedEventArgs e)
         {
-            OnClick?.Invoke(sender, e);
+            if (IsEnabled)
+            {
+                OnClick?.Invoke(sender, e);
+            }
         }
     }
 }

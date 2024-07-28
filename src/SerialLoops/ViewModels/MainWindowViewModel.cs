@@ -200,7 +200,7 @@ namespace SerialLoops.ViewModels
                 CurrentConfig = preferencesDialogViewModel.Configuration;
                 if (preferencesDialogViewModel.RequireRestart)
                 {
-                    if ((await MessageBoxManager.GetMessageBoxStandard(string.Empty, Strings.The_changes_made_will_require_Serial_Loops_to_be_restarted__Is_that_okay_, ButtonEnum.YesNo).ShowAsPopupAsync(Window)) == ButtonResult.Yes)
+                    if ((await MessageBoxManager.GetMessageBoxStandard(string.Empty, Strings.The_changes_made_will_require_Serial_Loops_to_be_restarted__Is_that_okay_, ButtonEnum.YesNo).ShowWindowDialogAsync(Window)) == ButtonResult.Yes)
                     {
                         Window.RestartOnClose = true;
                         Window.Close();

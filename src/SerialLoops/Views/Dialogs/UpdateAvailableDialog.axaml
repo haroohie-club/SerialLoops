@@ -35,7 +35,7 @@
         <StackPanel Grid.Row="5" Grid.Column="0" Orientation="Horizontal" Spacing="20">
             <Button Content="{x:Static assets:Strings.Download_from_GitHub}" Command="{Binding OpenReleaseLinkCommand}"/>
             <Button Content="{x:Static assets:Strings.Skip_Update}" Command="{Binding CloseCommand}"/>
-            <CheckBox Content="{x:Static assets:Strings._Check_for_Updates___}" IsChecked="{Binding Config.CheckForUpdates}" Name="CheckForUpdatesBox"/>
+            <CheckBox Content="{x:Static assets:Strings.Check_for_Updates}" IsChecked="{Binding Config.CheckForUpdates}" Name="CheckForUpdatesBox"/>
             <CheckBox Content="{x:Static assets:Strings.Pre_Release_Channel}" IsChecked="{Binding Config.PreReleaseChannel}" Name="PreReleaseChannelBox"/>
         </StackPanel>
     </Grid>

@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using MsBox.Avalonia;
 using SerialLoops.Assets;
 using SerialLoops.Utility;
 using SerialLoops.ViewModels;
@@ -27,8 +28,12 @@ namespace SerialLoops.Views
 
         private NativeMenu GetInitialMenu(NativeMenu menu)
         {
-            menu.Items.Clear();
-            menu.Items.Add(new NativeMenuItem()
+            if (NativeMenu.GetIsNativeMenuExported(this))
+            {
+                
+                //menu.Add()
+            }
+            NativeMenuItem fileMenu = new NativeMenuItem()
             {
                 Header = Strings._File,
                 Menu =
@@ -51,7 +56,8 @@ namespace SerialLoops.Views
                         Icon = ControlGenerator.GetIcon("Edit_Save", _viewModel.Log),
                     }
                 ]
-            });
+            };
+            menu.Items.Add(fileMenu);
             menu.Items.Add(new NativeMenuItem()
             {
                 Header = Strings._Help,
