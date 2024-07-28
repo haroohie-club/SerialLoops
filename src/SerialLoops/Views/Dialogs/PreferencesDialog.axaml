@@ -12,6 +12,7 @@
         MinHeight="{Binding MinHeight}"
         Width="{Binding Width}"
         Height="{Binding Height}"
+        Icon="/Assets/serial-loops.ico"
         Title="{x:Static assets:Strings.Preferences}">
     <DockPanel>
         <ScrollViewer DockPanel.Dock="Top" VerticalScrollBarVisibility="Visible" MaxHeight="{Binding ScrollViewerHeight}">

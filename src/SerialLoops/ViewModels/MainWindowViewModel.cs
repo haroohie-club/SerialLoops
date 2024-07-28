@@ -184,14 +184,14 @@ namespace SerialLoops.ViewModels
 
 
 
-        public void AboutCommand_Executed()
+        public async Task AboutCommand_Executed()
         {
             AboutDialogViewModel aboutDialogViewModel = new();
             AboutDialog aboutDialog = new()
             {
                 DataContext = aboutDialogViewModel,
             };
-            aboutDialog.ShowDialog(Window);
+            await aboutDialog.ShowDialog(Window);
         }
 
         public void NewProjectCommand_Executed()
