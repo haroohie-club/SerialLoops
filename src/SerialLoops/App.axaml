@@ -1,13 +1,19 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:assets="using:SerialLoops.Assets"
              x:Class="SerialLoops.App"
              xmlns:local="using:SerialLoops"
              RequestedThemeVariant="Default">
-             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
-    
+             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->    
     <Application.DataTemplates>
         <local:ViewLocator/>
     </Application.DataTemplates>
+
+    <NativeMenu.Menu>
+        <NativeMenu>
+            <NativeMenuItem Header="{x:Static assets:Strings.About_Serial_Loops}" Click="About_Click"/>
+        </NativeMenu>
+    </NativeMenu.Menu>
   
     <Application.Styles>
         <FluentTheme />

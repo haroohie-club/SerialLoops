@@ -11,7 +11,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <CFBundleName>SerialLoops</CFBundleName>
+    <CFBundleName>Serial Loops</CFBundleName>
     <!-- Also defines .app file name -->
     <CFBundleDisplayName>Serial Loops</CFBundleDisplayName>
     <CFBundleIdentifier>club.haroohie.SerialLoops</CFBundleIdentifier>

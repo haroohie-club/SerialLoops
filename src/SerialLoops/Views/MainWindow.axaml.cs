@@ -11,7 +11,7 @@ namespace SerialLoops.Views
 {
     public partial class MainWindow : Window
     {
-        private MainWindowViewModel _viewModel;
+        public MainWindowViewModel ViewModel;
         public bool RestartOnClose { get; set; } = false;
 
         public MainWindow()
@@ -22,8 +22,8 @@ namespace SerialLoops.Views
         public override void Show()
         {
             base.Show();
-            _viewModel = (MainWindowViewModel)DataContext;
-            _viewModel.Initialize(this);
+            ViewModel = (MainWindowViewModel)DataContext;
+            ViewModel.Initialize(this);
             NativeMenu.SetMenu(this, GetInitialMenu(NativeMenu.GetMenu(this)));
         }
 
@@ -41,19 +41,19 @@ namespace SerialLoops.Views
                     new NativeMenuItem()
                     {
                         Header = Strings.New_Project___,
-                        Icon = ControlGenerator.GetIcon("New", _viewModel.Log),
+                        Icon = ControlGenerator.GetIcon("New", ViewModel.Log),
                     },
                     new NativeMenuItem()
                     {
                         Header = Strings.Open_Project,
-                        Icon = ControlGenerator.GetIcon("Open", _viewModel.Log),
+                        Icon = ControlGenerator.GetIcon("Open", ViewModel.Log),
                     },
-                    _viewModel.RecentProjectsMenu,
+                    ViewModel.RecentProjectsMenu,
                     new NativeMenuItemSeparator(),
                     new NativeMenuItem()
                     {
                         Header = Strings.Edit_Save_File,
-                        Icon = ControlGenerator.GetIcon("Edit_Save", _viewModel.Log),
+                        Icon = ControlGenerator.GetIcon("Edit_Save", ViewModel.Log),
                     }
                 ]
             };
@@ -66,8 +66,8 @@ namespace SerialLoops.Views
                     new NativeMenuItem()
                     {
                         Header = Strings.About___,
-                        Icon = ControlGenerator.GetIcon("Help", _viewModel.Log),
-                        Command = _viewModel.AboutCommand,
+                        Icon = ControlGenerator.GetIcon("Help", ViewModel.Log),
+                        Command = ViewModel.AboutCommand,
                     },
                 ]
             });
@@ -76,7 +76,7 @@ namespace SerialLoops.Views
 
         private async void Window_Closing(object? sender, WindowClosingEventArgs e)
         {
-            await _viewModel.CloseProject_Executed(e);
+            await ViewModel.CloseProject_Executed(e);
         }
 
         private void Window_Closed(object? sender, EventArgs e)
@@ -85,11 +85,6 @@ namespace SerialLoops.Views
             {
                 Process.Start(new ProcessStartInfo(Environment.ProcessPath) { UseShellExecute = true });
             }
-        }
-
-        private void About_Click(object? sender, EventArgs e)
-        {
-            _viewModel.AboutCommand.Execute(Unit.Default);
         }
     }
 }

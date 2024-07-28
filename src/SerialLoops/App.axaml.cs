@@ -4,11 +4,15 @@ using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
 using SerialLoops.ViewModels;
 using SerialLoops.Views;
+using System.Reactive;
+using System;
 
 namespace SerialLoops
 {
     public partial class App : Application
     {
+        private IClassicDesktopStyleApplicationLifetime _desktop;
+
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
@@ -18,6 +22,7 @@ namespace SerialLoops
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
+                _desktop = desktop;
                 // Line below is needed to remove Avalonia data validation.
                 // Without this line you will get duplicate validations from both Avalonia and CT
                 BindingPlugins.DataValidators.RemoveAt(0);
@@ -28,6 +33,11 @@ namespace SerialLoops
             }
 
             base.OnFrameworkInitializationCompleted();
+        }
+
+        private void About_Click(object? sender, EventArgs e)
+        {
+            ((MainWindow)_desktop.MainWindow).ViewModel.AboutCommand.Execute(Unit.Default);
         }
     }
 }
