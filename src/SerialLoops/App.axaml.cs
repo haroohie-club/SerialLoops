@@ -4,10 +4,8 @@ using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
 using SerialLoops.ViewModels;
 using SerialLoops.Views;
-using System.Reactive;
 using System;
-using Avalonia.Media.Imaging;
-using SerialLoops.Utility;
+using System.Reactive;
 
 namespace SerialLoops
 {

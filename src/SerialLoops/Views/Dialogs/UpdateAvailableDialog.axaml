@@ -25,7 +25,7 @@
             Margin="20" Height="{Binding GridSize.Height}">
         <TextBlock Classes="h2" Text="{Binding Header}" Grid.Row="0" Grid.Column="0"/>
         <StackPanel Orientation="Horizontal" Spacing="5" Grid.Row="1" Grid.Column="0">
-            <Image Source="resm:SerialLoops.Assets.Icons.Update.png?assembly=SerialLoops" Width="16" Height="16"/>
+            <Image Source="avares://SerialLoops/Assets/Icons/Update.png" Width="16" Height="16"/>
             <TextBlock Text="{x:Static assets:Strings.A_new_update_for_Serial_Loops_is_available_}"/>
         </StackPanel>
         <TextBox Focusable="False" Width="750" Height="350" Grid.Row="2" Grid.Column="0"

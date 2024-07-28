@@ -14,8 +14,10 @@
             <NativeMenuItem Header="{x:Static assets:Strings.About_Serial_Loops}" Icon="/Assets/serial-loops.ico"
                             Click="About_Click"/>
             <NativeMenuItemSeparator />
-            <NativeMenuItem Header="{x:Static assets:Strings._Preferences___}" Click="Preferences_Click"/>
-            <NativeMenuItem Header="{x:Static assets:Strings._Check_for_Updates___}" Click="Updates_Click"/>
+            <NativeMenuItem Header="{x:Static assets:Strings._Preferences___}"
+                            Icon="avares://SerialLoops/Assets/Icons/Options.png" Click="Preferences_Click"/>
+            <NativeMenuItem Header="{x:Static assets:Strings._Check_for_Updates___}"
+                            Icon="avares://SerialLoops/Assets/Icons/Update.png" Click="Updates_Click"/>
             <NativeMenuItem Header="{x:Static assets:Strings.View__Logs}" Click="Logs_Click"/>
         </NativeMenu>
     </NativeMenu.Menu>

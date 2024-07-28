@@ -93,19 +93,6 @@ namespace SerialLoops.Views
                 ]
                 });
             }
-            else
-            {
-                NativeMenuItem preferencesItem = menu.FindNativeMenuItem(Strings._Preferences___);
-                if (preferencesItem is not null)
-                {
-                    preferencesItem.Icon = ControlGenerator.GetIcon("Options", ViewModel.Log);
-                }
-                NativeMenuItem updatesItem = menu.FindNativeMenuItem(Strings._Check_for_Updates___);
-                if (updatesItem is not null)
-                {
-                    updatesItem.Icon = ControlGenerator.GetIcon("Options", ViewModel.Log);
-                }
-            }
             return menu;
         }
 

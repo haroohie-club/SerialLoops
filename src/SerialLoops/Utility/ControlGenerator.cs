@@ -1,6 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Media.Imaging;
+using Avalonia.Platform;
 using HaruhiChokuretsuLib.Util;
 using System;
 using System.Reflection;
@@ -13,7 +14,7 @@ namespace SerialLoops.Utility
         {
             try
             {
-                return new Bitmap(Assembly.GetCallingAssembly().GetManifestResourceStream($"SerialLoops.Assets.Icons.{iconName}.png")).CreateScaledBitmap(new(size, size));
+                return new Bitmap(AssetLoader.Open(new($"avares://SerialLoops/Assets/Icons/{iconName}.png"))).CreateScaledBitmap(new(size, size));
             }
             catch (Exception ex)
             {
