@@ -5,6 +5,7 @@ using SerialLoops.Utility;
 using SerialLoops.ViewModels;
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Reactive;
 
 namespace SerialLoops.Views
@@ -49,7 +50,6 @@ namespace SerialLoops.Views
                         Icon = ControlGenerator.GetIcon("Open", ViewModel.Log),
                     },
                     ViewModel.RecentProjectsMenu,
-                    new NativeMenuItemSeparator(),
                     new NativeMenuItem()
                     {
                         Header = Strings.Edit_Save_File,
@@ -58,19 +58,46 @@ namespace SerialLoops.Views
                 ]
             };
             menu.Items.Add(fileMenu);
-            menu.Items.Add(new NativeMenuItem()
+            if (!NativeMenu.GetIsNativeMenuExported(this))
             {
-                Header = Strings._Help,
-                Menu =
-                [
-                    new NativeMenuItem()
+                fileMenu.Menu.Items.Add(new NativeMenuItemSeparator());
+                fileMenu.Menu.Items.Add(new NativeMenuItem()
+                {
+                    Header = Strings._Preferences___,
+                    Icon = ControlGenerator.GetIcon("Options", ViewModel.Log),
+                    Command = ViewModel.PreferencesCommand,
+                });
+                fileMenu.Menu.Items.Add(new NativeMenuItem()
+                {
+                    Header = Strings._Check_for_Updates___,
+                    Icon = ControlGenerator.GetIcon("Update", ViewModel.Log),
+                    Command = ViewModel.CheckForUpdatesCommand,
+                });
+                fileMenu.Menu.Items.Add(new NativeMenuItem()
+                {
+                    Header = Strings.View__Logs,
+                    Command = ViewModel.ViewLogsCommand,
+                });
+
+                menu.Items.Add(new NativeMenuItem()
+                {
+                    Header = Strings._Help,
+                    Menu =
+                    [
+                        new NativeMenuItem()
                     {
                         Header = Strings.About___,
                         Icon = ControlGenerator.GetIcon("Help", ViewModel.Log),
                         Command = ViewModel.AboutCommand,
                     },
                 ]
-            });
+                });
+            }
+            else
+            {
+                ((NativeMenuItem)menu.Items.FirstOrDefault(m => m is NativeMenuItem mItem && mItem.Header.Equals(Strings._Preferences___))).Icon = ControlGenerator.GetIcon("Options", ViewModel.Log);
+                ((NativeMenuItem)menu.Items.FirstOrDefault(m => m is NativeMenuItem mItem && mItem.Header.Equals(Strings._Check_for_Updates___))).Icon = ControlGenerator.GetIcon("Options", ViewModel.Log);
+            }
             return menu;
         }
 

@@ -6,6 +6,8 @@ using SerialLoops.ViewModels;
 using SerialLoops.Views;
 using System.Reactive;
 using System;
+using Avalonia.Media.Imaging;
+using SerialLoops.Utility;
 
 namespace SerialLoops
 {
@@ -38,6 +40,21 @@ namespace SerialLoops
         private void About_Click(object? sender, EventArgs e)
         {
             ((MainWindow)_desktop.MainWindow).ViewModel.AboutCommand.Execute(Unit.Default);
+        }
+
+        private void Preferences_Click(object? sender, EventArgs e)
+        {
+            ((MainWindow)_desktop.MainWindow).ViewModel.PreferencesCommand.Execute(Unit.Default);
+        }
+
+        private void Updates_Click(object? sender, EventArgs e)
+        {
+            ((MainWindow)_desktop.MainWindow).ViewModel.CheckForUpdatesCommand.Execute(Unit.Default);
+        }
+
+        private void Logs_Click(object? sender, EventArgs e)
+        {
+            ((MainWindow)_desktop.MainWindow).ViewModel.ViewLogsCommand.Execute(Unit.Default);
         }
     }
 }

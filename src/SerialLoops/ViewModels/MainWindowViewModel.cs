@@ -13,7 +13,9 @@ using SerialLoops.ViewModels.Panels;
 using SerialLoops.Views;
 using SerialLoops.Views.Dialogs;
 using SerialLoops.Views.Panels;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -41,6 +43,8 @@ namespace SerialLoops.ViewModels
         public ICommand EditSaveCommand { get; private set; }
         public ICommand AboutCommand { get; private set; }
         public ICommand PreferencesCommand { get; private set; }
+        public ICommand CheckForUpdatesCommand { get; private set; }
+        public ICommand ViewLogsCommand { get; private set; }
 
         public void Initialize(MainWindow window)
         {
@@ -76,6 +80,23 @@ namespace SerialLoops.ViewModels
             EditSaveCommand = ReactiveCommand.Create(EditSaveFileCommand_Executed);
             AboutCommand = ReactiveCommand.Create(AboutCommand_Executed);
             PreferencesCommand = ReactiveCommand.Create(PreferencesCommand_Executed);
+            CheckForUpdatesCommand = ReactiveCommand.Create(() => new UpdateChecker(this).Check());
+            ViewLogsCommand = ReactiveCommand.Create(() =>
+            {
+                try
+                {
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = Path.Combine(CurrentConfig.UserDirectory, "Logs", "SerialLoops.log"),
+                        UseShellExecute = true,
+                    });
+                }
+                catch (Exception)
+                {
+                    Log.LogError("Failed to open log file directly. " +
+                        $"Logs can be found at {Path.Combine(CurrentConfig.UserDirectory, "Logs", "SerialLoops.log")}");
+                }
+            });
         }
 
         public async Task CloseProject_Executed(WindowClosingEventArgs e)

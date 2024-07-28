@@ -11,7 +11,12 @@
 
     <NativeMenu.Menu>
         <NativeMenu>
-            <NativeMenuItem Header="{x:Static assets:Strings.About_Serial_Loops}" Click="About_Click"/>
+            <NativeMenuItem Header="{x:Static assets:Strings.About_Serial_Loops}" Icon="/Assets/serial-loops.ico"
+                            Click="About_Click"/>
+            <NativeMenuItemSeparator />
+            <NativeMenuItem Header="{x:Static assets:Strings._Preferences___}" Click="Preferences_Click"/>
+            <NativeMenuItem Header="{x:Static assets:Strings._Check_for_Updates___}" Click="Updates_Click"/>
+            <NativeMenuItem Header="{x:Static assets:Strings.View__Logs}" Click="Logs_Click"/>
         </NativeMenu>
     </NativeMenu.Menu>
   

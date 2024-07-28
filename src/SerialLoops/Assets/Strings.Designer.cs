@@ -6605,7 +6605,7 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to View &amp;Logs.
+        ///   Looks up a localized string similar to View _Logs.
         /// </summary>
         public static string View__Logs {
             get {
