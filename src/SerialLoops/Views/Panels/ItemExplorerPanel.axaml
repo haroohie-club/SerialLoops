@@ -1,0 +1,19 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:SerialLoops.ViewModels.Panels"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:panels="using:SerialLoops.Views.Panels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:ItemExplorerPanelViewModel"
+             x:Class="SerialLoops.Views.Panels.ItemExplorerPanel">
+
+    <Design.DataContext>
+        <vm:ItemExplorerPanelViewModel/>
+    </Design.DataContext>
+    
+    <StackPanel Width="{Binding Width}" Height="{Binding Height}">
+        <TextBox Name="Search"/>
+        <TreeDataGrid Name="Viewer" Source="{Binding Source}"/>
+    </StackPanel>    
+</UserControl>

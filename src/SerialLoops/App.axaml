@@ -3,6 +3,9 @@
              xmlns:assets="using:SerialLoops.Assets"
              x:Class="SerialLoops.App"
              xmlns:local="using:SerialLoops"
+             xmlns:tabaloniathemes="using:Tabalonia.Themes.Fluent"
+             xmlns:mintoolbarthemes="using:MiniToolbar.Avalonia.Themes"
+             xmlns:dialoghost="using:DialogHostAvalonia"
              RequestedThemeVariant="Default">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->    
     <Application.DataTemplates>
@@ -24,6 +27,10 @@
   
     <Application.Styles>
         <FluentTheme />
+        <dialoghost:DialogHostStyles />
+        <tabaloniathemes:FluentTheme/>
+        <mintoolbarthemes:MiniToolbarStyles/>
+        <StyleInclude Source="avares://Avalonia.Controls.TreeDataGrid/Themes/Fluent.axaml"/>
         <Style Selector="TextBlock.h1">
             <Setter Property="FontSize" Value="32"/>
             <Setter Property="FontWeight" Value="Bold"/>

@@ -1,0 +1,30 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="using:SerialLoops.ViewModels.Panels"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:controls="using:SerialLoops.Controls"
+             xmlns:assets="using:SerialLoops.Assets"
+             xmlns:editors="using:SerialLoops.ViewModels.Editors"
+             xmlns:tab="using:Tabalonia.Controls"
+             x:DataType="vm:EditorTabsPanelViewModel"
+             x:Class="SerialLoops.Views.Panels.EditorTabsPanel">
+    <Design.DataContext>
+        <vm:EditorTabsPanelViewModel/>
+    </Design.DataContext>
+    
+    <tab:TabsControl Name="Tabs" ShowDefaultAddButton="False" ContainerClearing="Tabs_PageClosed"
+                     SelectionChanged="Tabs_PageChanged">
+        <tab:TabsControl.ContentTemplate>
+            <DataTemplate DataType="editors:EditorViewModel">
+                <editors:EditorViewModel/>
+            </DataTemplate>
+        </tab:TabsControl.ContentTemplate>
+        <tab:TabsControl.ItemTemplate>
+            <DataTemplate DataType="editors:EditorViewModel">
+                <TextBlock Text="{Binding Description.DisplayNameWithStatus}"/>
+            </DataTemplate>
+        </tab:TabsControl.ItemTemplate>
+    </tab:TabsControl>
+</UserControl>

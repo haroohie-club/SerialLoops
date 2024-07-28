@@ -15,7 +15,7 @@
         Icon="/Assets/serial-loops.ico"
         Title="{x:Static assets:Strings.Preferences}">
     <DockPanel>
-        <ScrollViewer DockPanel.Dock="Top" VerticalScrollBarVisibility="Visible" MaxHeight="{Binding ScrollViewerHeight}">
+        <ScrollViewer DockPanel.Dock="Top" VerticalScrollBarVisibility="Visible" Height="{Binding ScrollViewerHeight}">
             <StackPanel>
                 <controls:OptionsGroup Name="BuildOptions" />
                 <controls:OptionsGroup Name="ProjectOptions" />

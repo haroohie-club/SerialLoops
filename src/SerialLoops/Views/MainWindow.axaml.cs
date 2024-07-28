@@ -1,12 +1,9 @@
 using Avalonia.Controls;
-using MsBox.Avalonia;
 using SerialLoops.Assets;
 using SerialLoops.Utility;
 using SerialLoops.ViewModels;
 using System;
 using System.Diagnostics;
-using System.Linq;
-using System.Reactive;
 
 namespace SerialLoops.Views
 {
@@ -93,6 +90,10 @@ namespace SerialLoops.Views
                 ]
                 });
             }
+            ViewModel.WindowMenu = new()
+            {
+                { MenuHeader.FILE, fileMenu },
+            };
             return menu;
         }
 

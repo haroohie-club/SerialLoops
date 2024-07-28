@@ -4,7 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:views="using:SerialLoops.Views"
+        xmlns:panels="using:SerialLoops.Views.Panels"
+        xmlns:panelsvm="using:SerialLoops.ViewModels.Panels"
         xmlns:assets="using:SerialLoops.Assets"
+        xmlns:toolbar="using:MiniToolbar.Avalonia"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="SerialLoops.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
@@ -30,10 +33,22 @@
     </NativeMenu.Menu>
 
     <DockPanel>
-        <NativeMenuBar DockPanel.Dock="Top" />
-        <StackPanel DockPanel.Dock="Bottom">
-            
+        <StackPanel DockPanel.Dock="Top">
+            <NativeMenuBar Name="MenuBar"/>
+            <toolbar:Toolbar Height="60" Name="ToolBar" HorizontalAlignment="Right"/>
         </StackPanel>
+        <DockPanel DockPanel.Dock="Bottom">
+            <panels:ItemExplorerPanel DockPanel.Dock="Left" Name="ItemExplorer">
+                <panels:ItemExplorerPanel.DataContext>
+                    <panelsvm:ItemExplorerPanelViewModel/>
+                </panels:ItemExplorerPanel.DataContext>
+            </panels:ItemExplorerPanel>
+            <panels:EditorTabsPanel DockPanel.Dock="Right" Name="EditorTabs">
+                <panels:EditorTabsPanel.DataContext>
+                    <panelsvm:EditorTabsPanelViewModel/>
+                </panels:EditorTabsPanel.DataContext>
+            </panels:EditorTabsPanel>
+        </DockPanel>
     </DockPanel>
 
 </Window>
