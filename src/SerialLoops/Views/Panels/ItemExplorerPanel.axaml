@@ -14,6 +14,6 @@
     
     <StackPanel Width="{Binding Width}" Height="{Binding Height}">
         <TextBox Name="Search" Width="{Binding Width}"/>
-        <TreeView Name="Viewer" SelectionMode="Single"/>
+        <TreeView Name="Viewer" Width="{Binding Width}" SelectionMode="Single"/>
     </StackPanel>    
 </UserControl>
