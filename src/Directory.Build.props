@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+
+  <PropertyGroup Condition="'$(SLVersion)' == ''">
+    <SLVersion>0.3.local</SLVersion>
+    <SLAssemblyVersion>0.3.9999.9999</SLAssemblyVersion>
+  </PropertyGroup>
+
+</Project>
