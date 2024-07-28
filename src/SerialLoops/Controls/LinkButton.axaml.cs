@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 using System;
 
 namespace SerialLoops.Controls
@@ -14,7 +15,7 @@ namespace SerialLoops.Controls
             InitializeComponent();
         }
 
-        private void Action_Execute(object? sender, Avalonia.Input.PointerPressedEventArgs e)
+        private void Action_Execute(object? sender, RoutedEventArgs e)
         {
             if (IsEnabled)
             {
