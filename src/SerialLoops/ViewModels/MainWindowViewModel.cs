@@ -1,6 +1,5 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Labs.Controls;
 using MiniToolbar.Avalonia;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
@@ -41,10 +40,11 @@ namespace SerialLoops.ViewModels
         public ProjectsCache ProjectsCache { get; set; }
         public Config CurrentConfig { get; set; }
         public Project OpenProject { get; set; }
+        public OpenProjectPanel ProjectPanel { get; set; }
         public Dictionary<MenuHeader, NativeMenuItem> WindowMenu { get; set; }
-        public Toolbar ToolBar => Window.ToolBar;
-        public EditorTabsPanelViewModel EditorTabs => (EditorTabsPanelViewModel)Window.EditorTabs.DataContext;
-        public ItemExplorerPanelViewModel ItemExplorer => (ItemExplorerPanelViewModel)Window.ItemExplorer.DataContext;
+        public Toolbar ToolBar => ProjectPanel.ToolBar;
+        public EditorTabsPanelViewModel EditorTabs => (EditorTabsPanelViewModel)ProjectPanel.EditorTabs.DataContext;
+        public ItemExplorerPanelViewModel ItemExplorer => (ItemExplorerPanelViewModel)ProjectPanel.ItemExplorer.DataContext;
         public TextBox SearchBox => ItemExplorer.SearchBox;
 
         public NativeMenuItem RecentProjectsMenu { get; set; } = new(Strings.Recent_Projects);
@@ -138,6 +138,11 @@ namespace SerialLoops.ViewModels
 
         private void OpenProjectView(Project project, IProgressTracker tracker)
         {
+            ProjectPanel = new()
+            {
+                DataContext = new OpenProjectPanelViewModel(),
+            };
+
             InitializeProjectMenu();
 
             //using Stream blankNameplateStream = Assembly.GetCallingAssembly()
@@ -158,12 +163,15 @@ namespace SerialLoops.ViewModels
             //))
             //{ Spacing = new(5, 0) };
 
-            ItemExplorer.Initialize(Window.ItemExplorer, OpenProject, EditorTabs, SearchBox, Log);
+
+            ItemExplorer.Initialize(ProjectPanel.ItemExplorer, OpenProject, EditorTabs, SearchBox, Log);
 
             Title = $"{BASE_TITLE} - {project.Name}";
             //EditorTabs.Tabs_PageChanged(this, EventArgs.Empty);
 
             //LoadCachedData(project, tracker);
+
+            Window.Content = ProjectPanel;
         }
 
         public async Task CloseProject_Executed(WindowClosingEventArgs e)

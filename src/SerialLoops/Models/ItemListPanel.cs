@@ -31,7 +31,7 @@ namespace SerialLoops.Models
                     Columns =
                     {
                         new HierarchicalExpanderColumn<ITreeItem>(
-                            new TextColumn<ITreeItem, StackPanel>("Text", i => GetPanelFromTreeItem(i)),
+                            new TextColumn<ITreeItem, string>("Text", i => i.Text),
                             i => i.Children),
                     }
                 };

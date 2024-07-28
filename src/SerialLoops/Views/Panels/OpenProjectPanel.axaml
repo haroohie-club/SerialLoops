@@ -1,0 +1,37 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="using:SerialLoops.ViewModels.Panels"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:views="using:SerialLoops.Views"
+             xmlns:panels="using:SerialLoops.Views.Panels"
+             xmlns:panelsvm="using:SerialLoops.ViewModels.Panels"
+             xmlns:assets="using:SerialLoops.Assets"
+             xmlns:toolbar="using:MiniToolbar.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:OpenProjectPanelViewModel"
+             x:Class="SerialLoops.Views.Panels.OpenProjectPanel">
+    <Design.DataContext>
+        <vm:OpenProjectPanelViewModel/>
+    </Design.DataContext>
+
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Top">
+            <NativeMenuBar Name="MenuBar"/>
+            <toolbar:Toolbar Height="60" Name="ToolBar" HorizontalAlignment="Right"/>
+        </StackPanel>
+        <DockPanel DockPanel.Dock="Bottom">
+            <panels:ItemExplorerPanel DockPanel.Dock="Left" Name="ItemExplorer">
+                <panels:ItemExplorerPanel.DataContext>
+                    <panelsvm:ItemExplorerPanelViewModel/>
+                </panels:ItemExplorerPanel.DataContext>
+            </panels:ItemExplorerPanel>
+            <panels:EditorTabsPanel DockPanel.Dock="Right" Name="EditorTabs">
+                <panels:EditorTabsPanel.DataContext>
+                    <panelsvm:EditorTabsPanelViewModel/>
+                </panels:EditorTabsPanel.DataContext>
+            </panels:EditorTabsPanel>
+        </DockPanel>
+    </DockPanel>
+    
+</UserControl>

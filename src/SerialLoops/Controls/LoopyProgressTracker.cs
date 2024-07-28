@@ -20,7 +20,7 @@ namespace SerialLoops.Controls
             }
 
             _loadingProgress = new() { Width = 390 };
-            _loadingItem = new() { Foreground = Brushes.White };
+            _loadingItem = new();
             Orientation = Avalonia.Layout.Orientation.Vertical;
             Margin = new(10);
             Spacing = 10;

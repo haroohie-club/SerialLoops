@@ -32,23 +32,4 @@
         </NativeMenu>
     </NativeMenu.Menu>
 
-    <DockPanel>
-        <StackPanel DockPanel.Dock="Top">
-            <NativeMenuBar Name="MenuBar"/>
-            <toolbar:Toolbar Height="60" Name="ToolBar" HorizontalAlignment="Right"/>
-        </StackPanel>
-        <DockPanel DockPanel.Dock="Bottom">
-            <panels:ItemExplorerPanel DockPanel.Dock="Left" Name="ItemExplorer">
-                <panels:ItemExplorerPanel.DataContext>
-                    <panelsvm:ItemExplorerPanelViewModel/>
-                </panels:ItemExplorerPanel.DataContext>
-            </panels:ItemExplorerPanel>
-            <panels:EditorTabsPanel DockPanel.Dock="Right" Name="EditorTabs">
-                <panels:EditorTabsPanel.DataContext>
-                    <panelsvm:EditorTabsPanelViewModel/>
-                </panels:EditorTabsPanel.DataContext>
-            </panels:EditorTabsPanel>
-        </DockPanel>
-    </DockPanel>
-
 </Window>

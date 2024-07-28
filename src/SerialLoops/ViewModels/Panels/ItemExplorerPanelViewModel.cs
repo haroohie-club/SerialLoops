@@ -23,7 +23,7 @@ namespace SerialLoops.ViewModels.Panels
             _tabs = tabs;
             SearchBox = panel.Search;
             //Viewer.RowSelection.SingleSelect = true;
-            //Viewer.RowSelection.SelectionChanged += Viewer_SelectionChanged; ;
+            //Viewer.RowSelection.SelectionChanged += Viewer_SelectionChanged;
         }
 
         public override void ItemList_ItemDoubleClicked(object sender, TappedEventArgs args)
