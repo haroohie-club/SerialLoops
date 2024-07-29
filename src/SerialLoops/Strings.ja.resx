@@ -148,7 +148,7 @@
     <value>区分を追加</value>
   </data>
   <data name="Adding frames to GIF..." xml:space="preserve">
-    <value>GIFにフレームを追加してしいます...</value>
+    <value>GIFにフレームを追加してしいます…</value>
   </data>
   <data name="About..." xml:space="preserve">
     <value>Serial Loopsについて</value>
@@ -201,5 +201,15 @@
   </data>
   <data name="Adjusting Loop Info" xml:space="preserve">
     <value>ループ情報を調整しています</value>
+  </data>
+  <data name="Add to Event Table" xml:space="preserve">
+    <value>イベントテーブルに追加</value>
+  </data>
+  <data name="Add Read Flag" xml:space="preserve">
+    <value>読んだフラグを追加</value>
+    <comment>As in "add a read flag to the script"</comment>
+  </data>
+  <data name="Animation" xml:space="preserve">
+    <value>アニメーション</value>
   </data>
 </root>
