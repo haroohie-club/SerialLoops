@@ -3,7 +3,6 @@ using HaruhiChokuretsuLib.Archive.Event;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
 namespace SerialLoops.Lib.Items
 {

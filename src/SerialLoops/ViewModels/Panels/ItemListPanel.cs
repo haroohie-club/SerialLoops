@@ -1,17 +1,16 @@
-﻿using Avalonia;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using Avalonia.Input;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib.Items;
+using SerialLoops.Models;
 using SerialLoops.Utility;
-using SerialLoops.ViewModels;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Linq;
 
-namespace SerialLoops.Models
+namespace SerialLoops.ViewModels.Panels
 {
     public abstract class ItemListPanel : ViewModelBase
     {

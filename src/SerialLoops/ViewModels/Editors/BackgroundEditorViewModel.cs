@@ -52,7 +52,7 @@ namespace SerialLoops.ViewModels.Editors
             {
                 ShowOverwritePrompt = true,
                 FileTypeChoices = [
-                    new FilePickerFileType(Strings.Supported_Images) { Patterns = [".bmp", ".gif", ".heif", ".jpg", ".jpeg", ".png", ".webp",] }
+                    new FilePickerFileType(Strings.PNG_Image) { Patterns = ["*.png"] }
                     ]
             };
             IStorageFile savedFile = await _window.Window.StorageProvider.SaveFilePickerAsync(saveOptions);
@@ -77,11 +77,11 @@ namespace SerialLoops.ViewModels.Editors
                 AllowMultiple = false,
                 SuggestedFileName = $"{Bg.Name}.png",
                 FileTypeFilter = [
-                    new FilePickerFileType(Strings.PNG_Image) { Patterns = [ "*.png" ] },
+                    new FilePickerFileType(Strings.Supported_Images) { Patterns = ["*.bmp", "*.gif", "*.heif", "*.jpg", "*.jpeg", "*.png", "*.webp",] },
                     ]
             };
             SKBitmap original = Bg.GetBackground();
-            IStorageFile openFile = (await _window.Window.StorageProvider.OpenFilePickerAsync(openOptions))?[0];
+            IStorageFile openFile = (await _window.Window.StorageProvider.OpenFilePickerAsync(openOptions))?.FirstOrDefault();
             if (openFile is not null)
             {
 

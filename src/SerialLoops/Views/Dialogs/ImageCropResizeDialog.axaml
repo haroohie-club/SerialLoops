@@ -1,0 +1,17 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:SerialLoops.ViewModels.Dialogs"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:assets="using:SerialLoops.Assets"
+        xmlns:labs="using:Avalonia.Labs.Controls"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:DataType="vm:ImageCropResizeDialogViewModel"
+        x:Class="SerialLoops.Views.Dialogs.ImageCropResizeDialog"
+        MinWidth="900"
+        MinHeight="750"
+        Padding="10"
+        Icon="/Assets/serial-loops.ico"
+        Title="{x:Static assets:Strings.Crop___Scale}">
+    
+</Window>

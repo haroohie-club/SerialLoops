@@ -303,11 +303,13 @@ namespace SerialLoops.ViewModels
                     Strings.Saved_but_unbuilt_files_were_detected_in_the_project_directory__Would_you_like_to_build_before_loading_the_project__Not_building_could_result_in_these_files_being_overwritten_,
                     ButtonEnum.YesNo, Icon.Question, WindowStartupLocation.CenterOwner).ShowWindowDialogAsync(Window)) == ButtonResult.Yes)
                 {
-                    await new ProgressDialog(() => Build.BuildIterative(OpenProject, CurrentConfig, Log, tracker),
-                        () => { }, tracker, "Loading Project").ShowDialog(Window);
+                    LoopyProgressTracker secondTracker = new();
+                    await new ProgressDialog(() => Build.BuildIterative(OpenProject, CurrentConfig, Log, secondTracker),
+                        () => { }, secondTracker, "Loading Project").ShowDialog(Window);
                 }
 
-                await new ProgressDialog(() => OpenProject.LoadArchives(Log, tracker), () => { }, tracker,
+                LoopyProgressTracker thirdTracker = new();
+                await new ProgressDialog(() => OpenProject.LoadArchives(Log, thirdTracker), () => { }, thirdTracker,
                     "Loading Project").ShowDialog(Window);
             }
             else if (result.State == Project.LoadProjectState.CORRUPTED_FILE)
