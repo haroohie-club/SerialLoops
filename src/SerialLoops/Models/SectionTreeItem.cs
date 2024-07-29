@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Layout;
 using Avalonia.Media.Imaging;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,7 @@ namespace SerialLoops.Models
         {
             StackPanel panel = new()
             {
+                Orientation = Orientation.Horizontal,
                 Spacing = 3,
                 Margin = new(2),
             };

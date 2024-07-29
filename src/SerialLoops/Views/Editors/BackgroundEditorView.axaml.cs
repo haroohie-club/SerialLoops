@@ -2,9 +2,9 @@ using Avalonia.Controls;
 
 namespace SerialLoops.Views.Editors
 {
-    public partial class Editor : TabItem
+    public partial class BackgroundEditorView : UserControl
     {
-        public Editor()
+        public BackgroundEditorView()
         {
             InitializeComponent();
         }

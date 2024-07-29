@@ -7,23 +7,32 @@
              xmlns:controls="using:SerialLoops.Controls"
              xmlns:assets="using:SerialLoops.Assets"
              xmlns:editors="using:SerialLoops.ViewModels.Editors"
+             xmlns:utility="using:SerialLoops.Utility"
              xmlns:tab="using:Tabalonia.Controls"
              x:DataType="vm:EditorTabsPanelViewModel"
              x:Class="SerialLoops.Views.Panels.EditorTabsPanel">
     <Design.DataContext>
         <vm:EditorTabsPanelViewModel/>
     </Design.DataContext>
+    <UserControl.Resources>
+        <utility:DisplayNameConverter x:Key="DisplayNameConverter"/>
+    </UserControl.Resources>
     
-    <tab:TabsControl Name="Tabs" ShowDefaultAddButton="False" ContainerClearing="Tabs_PageClosed"
-                     SelectionChanged="Tabs_PageChanged">
-        <tab:TabsControl.ContentTemplate>
-            <DataTemplate DataType="editors:EditorViewModel">
-                <editors:EditorViewModel/>
-            </DataTemplate>
-        </tab:TabsControl.ContentTemplate>
+    <tab:TabsControl Name="Tabs" ShowDefaultAddButton="False" ItemsSource="{Binding Tabs}"
+                     ContainerClearing="Tabs_PageClosed" SelectionChanged="Tabs_PageChanged">
         <tab:TabsControl.ItemTemplate>
             <DataTemplate DataType="editors:EditorViewModel">
-                <TextBlock Text="{Binding Description.DisplayNameWithStatus}"/>
+                <StackPanel Orientation="Horizontal" Spacing="3">
+                    <Image Source="avares://SerialLoops/Assets/Icons/Character_Sprite.png" Width="16"/>
+                    <TextBlock FontSize="12">
+                        <TextBlock.Text>
+                            <MultiBinding Converter="{StaticResource DisplayNameConverter}">
+                                <Binding Path="Description.DisplayName"/>
+                                <Binding Path="Description.UnsavedChanges"/>
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                </StackPanel>
             </DataTemplate>
         </tab:TabsControl.ItemTemplate>
     </tab:TabsControl>

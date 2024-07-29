@@ -15,23 +15,15 @@
         <vm:OpenProjectPanelViewModel/>
     </Design.DataContext>
 
-    <DockPanel>
-        <StackPanel DockPanel.Dock="Top">
+    <Grid RowDefinitions="Auto,*">
+        <StackPanel Grid.Row="0">
             <NativeMenuBar Name="MenuBar"/>
             <toolbar:Toolbar Height="60" Name="ToolBar" HorizontalAlignment="Right"/>
         </StackPanel>
-        <DockPanel DockPanel.Dock="Bottom" Margin="40">
-            <panels:ItemExplorerPanel DockPanel.Dock="Left" Name="ItemExplorer">
-                <panels:ItemExplorerPanel.DataContext>
-                    <panelsvm:ItemExplorerPanelViewModel/>
-                </panels:ItemExplorerPanel.DataContext>
-            </panels:ItemExplorerPanel>
-            <panels:EditorTabsPanel DockPanel.Dock="Right" Name="EditorTabs">
-                <panels:EditorTabsPanel.DataContext>
-                    <panelsvm:EditorTabsPanelViewModel/>
-                </panels:EditorTabsPanel.DataContext>
-            </panels:EditorTabsPanel>
-        </DockPanel>
-    </DockPanel>
+        <Grid Grid.Row="1" ColumnDefinitions="Auto,*">
+            <panels:ItemExplorerPanel Grid.Column="0" Name="ItemExplorer" DataContext="{Binding Explorer}" Width="300"/>
+            <panels:EditorTabsPanel Grid.Column="1" Name="EditorTabs" DataContext="{Binding EditorTabs}"/>
+        </Grid>
+    </Grid>
     
 </UserControl>

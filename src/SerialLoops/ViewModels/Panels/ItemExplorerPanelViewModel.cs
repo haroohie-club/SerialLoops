@@ -4,7 +4,6 @@ using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Models;
-using SerialLoops.Views.Panels;
 
 namespace SerialLoops.ViewModels.Panels
 {
@@ -15,27 +14,30 @@ namespace SerialLoops.ViewModels.Panels
 
         public TextBox SearchBox { get; private set; }
 
-        public void Initialize(ItemExplorerPanel panel, Project project, EditorTabsPanelViewModel tabs, TextBox searchBox, ILogger log)
+        public void Initialize(Project project, EditorTabsPanelViewModel tabs, TextBox searchBox, ILogger log)
         {
-            InitializeItems(project.Items, panel.Viewer, new(200, 420), false, log);
+            InitializeItems(project.Items, false, log);
             _project = project;
             _tabs = tabs;
-            SearchBox = panel.Search;
-            Viewer.SelectionChanged += Viewer_SelectionChanged;
+        }
+
+        public void SetupExplorer(TreeView viewer)
+        {
+            SetupViewer(viewer);
+            viewer.SelectionChanged += Viewer_SelectionChanged;
         }
 
         public override void ItemList_ItemDoubleClicked(object sender, TappedEventArgs args)
         {
-
+            ItemDescription item = _project.FindItem(((ITreeItem)((TreeView)sender).SelectedItem)?.Text);
+            if (item is not null)
+            {
+                _tabs.OpenTab(item);
+            }
         }
 
         private void Viewer_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ItemDescription item = _project.FindItem(((ITreeItem)Viewer.SelectedItem).Text);
-            if (item is not null)
-            {
-                
-            }
         }
     }
 }

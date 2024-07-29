@@ -12,8 +12,10 @@
         <vm:ItemExplorerPanelViewModel/>
     </Design.DataContext>
     
-    <StackPanel Width="{Binding Width}" Height="{Binding Height}">
-        <TextBox Name="Search" Width="{Binding Width}"/>
-        <TreeView Name="Viewer" Width="{Binding Width}" SelectionMode="Single"/>
-    </StackPanel>    
+    <Grid RowDefinitions="Auto,*">
+        <TextBox Grid.Row="0" Name="Search"/>
+        <ScrollViewer Grid.Row="1">
+            <TreeView Name="Viewer" SelectionMode="Single"/>
+        </ScrollViewer>
+    </Grid>
 </UserControl>

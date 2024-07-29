@@ -43,8 +43,8 @@ namespace SerialLoops.ViewModels
         public OpenProjectPanel ProjectPanel { get; set; }
         public Dictionary<MenuHeader, NativeMenuItem> WindowMenu { get; set; }
         public Toolbar ToolBar => ProjectPanel.ToolBar;
-        public EditorTabsPanelViewModel EditorTabs => (EditorTabsPanelViewModel)ProjectPanel.EditorTabs.DataContext;
-        public ItemExplorerPanelViewModel ItemExplorer => (ItemExplorerPanelViewModel)ProjectPanel.ItemExplorer.DataContext;
+        public EditorTabsPanelViewModel EditorTabs { get; set; }
+        public ItemExplorerPanelViewModel ItemExplorer { get; set; }
         public TextBox SearchBox => ItemExplorer.SearchBox;
 
         public NativeMenuItem RecentProjectsMenu { get; set; } = new(Strings.Recent_Projects);
@@ -138,10 +138,16 @@ namespace SerialLoops.ViewModels
 
         private void OpenProjectView(Project project, IProgressTracker tracker)
         {
+            ItemExplorer = new();
+            EditorTabs = new();
+            EditorTabs.Initialize(this, project, Log);
+            ItemExplorer.Initialize(OpenProject, EditorTabs, SearchBox, Log);
             ProjectPanel = new()
             {
-                DataContext = new OpenProjectPanelViewModel(),
+                DataContext = new OpenProjectPanelViewModel(ItemExplorer, EditorTabs),
             };
+            EditorTabs.InitializeTabs(ProjectPanel.EditorTabs);
+            ItemExplorer.SetupExplorer(ProjectPanel.ItemExplorer.Viewer);
 
             InitializeProjectMenu();
 
@@ -163,8 +169,6 @@ namespace SerialLoops.ViewModels
             //))
             //{ Spacing = new(5, 0) };
 
-
-            ItemExplorer.Initialize(ProjectPanel.ItemExplorer, OpenProject, EditorTabs, SearchBox, Log);
 
             Title = $"{BASE_TITLE} - {project.Name}";
             //EditorTabs.Tabs_PageChanged(this, EventArgs.Empty);

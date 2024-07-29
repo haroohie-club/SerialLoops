@@ -2,7 +2,6 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using Avalonia.Input;
-using Avalonia.Layout;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib.Items;
 using SerialLoops.Utility;
@@ -27,26 +26,18 @@ namespace SerialLoops.Models
             {
                 _items = value;
                 Source = new ObservableCollection<ITreeItem>(GetSections());
-                Viewer.ItemsSource = Source;
             }
         }
         public ObservableCollection<ITreeItem> Source { get; set; }
 
-        public TreeView Viewer { get; set; }
-
         protected ILogger _log;
         protected bool ExpandItems { get; set; }
 
-        public void InitializeItems(List<ItemDescription> items, TreeView viewer, Size size, bool expandItems, ILogger log)
+        public void InitializeItems(List<ItemDescription> items, bool expandItems, ILogger log)
         {
-            Viewer = viewer;
-            viewer.ItemTemplate = new FuncDataTemplate<ITreeItem>((value, namescope) => value.GetDisplay());
             Items = items;
-            Width = size.Width;
-            Height = size.Height;
             ExpandItems = expandItems;
             _log = log;
-            Viewer.DoubleTapped += ItemList_ItemDoubleClicked;
         }
 
         private ObservableCollection<ITreeItem> GetSections()
@@ -55,12 +46,11 @@ namespace SerialLoops.Models
                 .Select(g => new SectionTreeItem($"{g.Key}s", g.Select(i => new ItemDescriptionTreeItem(i)), ControlGenerator.GetIcon(g.Key.ToString(), _log))));
         }
 
-        private static StackPanel GetPanelFromTreeItem(ITreeItem i)
+        public void SetupViewer(TreeView viewer)
         {
-            StackPanel panel = new() { Orientation = Orientation.Horizontal, Spacing = 3 };
-            panel.Children.Add(new Image { Source = i.Icon });
-            panel.Children.Add(new TextBlock { Text = i.Text });
-            return panel;
+            viewer.ItemTemplate = new FuncTreeDataTemplate<ITreeItem>((item, namescope) => item.GetDisplay(), item => item.Children);
+            viewer.ItemsSource = Source;
+            viewer.DoubleTapped += ItemList_ItemDoubleClicked;
         }
 
         public abstract void ItemList_ItemDoubleClicked(object sender, TappedEventArgs args);
