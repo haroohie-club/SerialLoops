@@ -42,7 +42,7 @@ namespace SerialLoops.ViewModels.Panels
 
         private ObservableCollection<ITreeItem> GetSections()
         {
-            return new ObservableCollection<ITreeItem>(Items.GroupBy(i => i.Type).OrderBy(g => g.Key)
+            return new ObservableCollection<ITreeItem>(Items.GroupBy(i => i.Type).OrderBy(g => LocalizeItemTypes(g.Key))
                 .Select(g => new SectionTreeItem(LocalizeItemTypes(g.Key), g.Select(i => new ItemDescriptionTreeItem(i)), ControlGenerator.GetIcon(g.Key.ToString(), _log))));
         }
 
