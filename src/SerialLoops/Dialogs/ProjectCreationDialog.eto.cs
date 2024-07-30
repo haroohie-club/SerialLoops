@@ -22,7 +22,7 @@ namespace SerialLoops
         private DropDown _languageDropDown;
         private Label _romPath;
 
-        private const string NO_ROM_TEXT = "None Selected";
+        public const string NO_ROM_TEXT = "None Selected";
         private static readonly Regex ALLOWED_CHARACTERS_REGEX = new(@"[A-z\d-_\.]");
 
         void InitializeComponent()
@@ -172,6 +172,7 @@ namespace SerialLoops
             {
                 NewProject = new(_nameBox.Text, _languageDropDown.Items[_languageDropDown.SelectedIndex].Key, Config, s => Application.Instance.Localize(null, s), Log);
                 string romPath = _romPath.Text;
+                NewProject.SetBaseRomHash(romPath);
                 LoopyProgressTracker tracker = new(s => Application.Instance.Localize(null, s));
                 ProgressDialog _ = new(() => 
                 {

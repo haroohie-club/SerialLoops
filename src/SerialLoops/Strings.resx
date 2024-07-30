@@ -310,6 +310,9 @@
     <value>Both</value>
     <comment>Checkbox for "Both Screens"</comment>
   </data>
+  <data name="Both an exported project and a base ROM must be selected to import a project." xml:space="preserve">
+    <value>Both an exported project and a base ROM must be selected to import a project.</value>
+  </data>
   <data name="Both Screens" xml:space="preserve">
     <value>Both Screens</value>
   </data>
@@ -792,6 +795,9 @@
   <data name="Erase data options title" xml:space="preserve">
     <value>Erase data options title</value>
   </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
   <data name="Error getting script command tree for script {0} ({1})" xml:space="preserve">
     <value>Error getting script command tree for script {0} ({1})</value>
     <comment>{0} is the script display name, {1} is the script's underlying name</comment>
@@ -814,6 +820,10 @@
   <data name="Exception occurred while parsing projects_cache.json!" xml:space="preserve">
     <value>Exception occurred while parsing projects_cache.json!</value>
   </data>
+  <data name="Expected ROM SHA-1 Hash: {0}" xml:space="preserve">
+    <value>Expected ROM SHA-1 Hash: {0}</value>
+    <comment>{0} is the SHA-1 hash of the ROM that is expected when importing a project</comment>
+  </data>
   <data name="Export" xml:space="preserve">
     <value>Export</value>
   </data>
@@ -829,17 +839,30 @@
   <data name="Export Patch" xml:space="preserve">
     <value>Export Patch</value>
   </data>
+  <data name="Export Project" xml:space="preserve">
+    <value>Export Project</value>
+  </data>
+  <data name="Export Project..." xml:space="preserve">
+    <value>Export Project...</value>
+  </data>
   <data name="Export SFX" xml:space="preserve">
     <value>Export SFX</value>
   </data>
   <data name="Export Sprites" xml:space="preserve">
     <value>Export Sprites</value>
   </data>
+  <data name="Exported Project" xml:space="preserve">
+    <value>Exported Project</value>
+    <comment>Past tense verb as in "project has been exported"</comment>
+  </data>
   <data name="Exporting BGM" xml:space="preserve">
     <value>Exporting BGM</value>
   </data>
   <data name="Exporting GIF..." xml:space="preserve">
     <value>Exporting GIF…</value>
+  </data>
+  <data name="Exporting Project" xml:space="preserve">
+    <value>Exporting Project</value>
   </data>
   <data name="Extract" xml:space="preserve">
     <value>Extract</value>
@@ -944,6 +967,10 @@
   <data name="Failed to export layout for sprite {0} to file" xml:space="preserve">
     <value>Failed to export layout for sprite {0} to file</value>
   </data>
+  <data name="Failed to export project" xml:space="preserve">
+    <value>Failed to export project</value>
+    <comment>Failed to export the Serial Loops project file to an slzip, basically</comment>
+  </data>
   <data name="Failed to export system texture {0} to file {1}" xml:space="preserve">
     <value>Failed to export system texture {0} to file {1}</value>
   </data>
@@ -952,6 +979,10 @@
   </data>
   <data name="Failed to generate script template!" xml:space="preserve">
     <value>Failed to generate script template!</value>
+  </data>
+  <data name="Failed to import project" xml:space="preserve">
+    <value>Failed to import project</value>
+    <comment>Failed to import slzip into Serial Loops project</comment>
   </data>
   <data name="Failed to insert ARM9 assembly hacks" xml:space="preserve">
     <value>Failed to insert ARM9 assembly hacks</value>
@@ -1178,11 +1209,24 @@
   <data name="Image Files" xml:space="preserve">
     <value>Image Files</value>
   </data>
+  <data name="Import" xml:space="preserve">
+    <value>Import</value>
+    <comment>As in import an exported project</comment>
+  </data>
   <data name="Import a Hack" xml:space="preserve">
     <value>Import a Hack</value>
   </data>
   <data name="Import Hack" xml:space="preserve">
     <value>Import Hack</value>
+  </data>
+  <data name="Import Project" xml:space="preserve">
+    <value>Import Project</value>
+  </data>
+  <data name="Import Project..." xml:space="preserve">
+    <value>Import Project...</value>
+  </data>
+  <data name="Importing Project" xml:space="preserve">
+    <value>Importing Project</value>
   </data>
   <data name="Include lip flap animation?" xml:space="preserve">
     <value>Include lip flap animation?</value>
@@ -1414,6 +1458,9 @@
   <data name="No emulator path has been set.\nPlease set the path to a Nintendo DS emulator in Preferences to use Build &amp; Run." xml:space="preserve">
     <value>No emulator path has been set.\nPlease set the path to a Nintendo DS emulator in Preferences to use Build &amp; Run.</value>
   </data>
+  <data name="No exported project selected" xml:space="preserve">
+    <value>No exported project selected</value>
+  </data>
   <data name="No hacks applied!" xml:space="preserve">
     <value>No hacks applied!</value>
   </data>
@@ -1426,6 +1473,9 @@
   <data name="No recent projects. Create one and it will appear here." xml:space="preserve">
     <value>No recent projects. Create one and it will appear here.</value>
   </data>
+  <data name="No ROM Hash Recorded!" xml:space="preserve">
+    <value>No ROM Hash Recorded!</value>
+  </data>
   <data name="No save data ticker tape" xml:space="preserve">
     <value>No save data ticker tape</value>
   </data>
@@ -1437,6 +1487,7 @@
   </data>
   <data name="None Selected" xml:space="preserve">
     <value>None Selected</value>
+    <comment>In the context of "no ROM selected"</comment>
   </data>
   <data name="Number of Saves:" xml:space="preserve">
     <value>Number of Saves: </value>
@@ -1461,6 +1512,10 @@
   </data>
   <data name="Open Chokuretsu Save File" xml:space="preserve">
     <value>Open Chokuretsu Save File</value>
+  </data>
+  <data name="Open Exported Project" xml:space="preserve">
+    <value>Open Exported Project</value>
+    <comment>As in a slzip exported project</comment>
   </data>
   <data name="Open Project" xml:space="preserve">
     <value>Open Project</value>
@@ -1606,6 +1661,9 @@
   </data>
   <data name="Project Creation Warning" xml:space="preserve">
     <value>Project Creation Warning</value>
+  </data>
+  <data name="Project exported successfully!" xml:space="preserve">
+    <value>Project exported successfully!</value>
   </data>
   <data name="Project not provided to project creation dialog" xml:space="preserve">
     <value>Project not provided to project creation dialog</value>
@@ -1770,6 +1828,10 @@
   <data name="Results" xml:space="preserve">
     <value>Results</value>
   </data>
+  <data name="ROM Hash Mismatch" xml:space="preserve">
+    <value>ROM Hash Mismatch</value>
+    <comment>Message box title when there is a mismatch between the expected ROM hash and the selected ROM hash on project import</comment>
+  </data>
   <data name="Route &quot;{0}&quot; Completed" xml:space="preserve">
     <value>Route "{0}" Completed</value>
     <comment>{0} is the name of a route following a group selection that has been completed</comment>
@@ -1932,6 +1994,9 @@
   <data name="Select a Topic" xml:space="preserve">
     <value>Select a Topic</value>
   </data>
+  <data name="Select an exported project to see expected ROM hash" xml:space="preserve">
+    <value>Select an exported project to see expected ROM hash</value>
+  </data>
   <data name="Select base ROM" xml:space="preserve">
     <value>Select base ROM</value>
   </data>
@@ -1961,6 +2026,10 @@
   </data>
   <data name="Select..." xml:space="preserve">
     <value>Select…</value>
+  </data>
+  <data name="Serial Loops Exported Project" xml:space="preserve">
+    <value>Serial Loops Exported Project</value>
+    <comment>Refers to the "slzip" archive that is the exported project format</comment>
   </data>
   <data name="Serial Loops Project" xml:space="preserve">
     <value>Serial Loops Project</value>
@@ -2133,8 +2202,17 @@
   <data name="Text Voice Font" xml:space="preserve">
     <value>Text Voice Font</value>
   </data>
+  <data name="The base ROM hash does not match the expected hash! Please check the \&quot;Ignore Hash\&quot; checkbox if you wish to override this." xml:space="preserve">
+    <value>The base ROM hash does not match the expected hash! Please check the \"Ignore Hash\" checkbox if you wish to override this.</value>
+  </data>
   <data name="The changes made will require Serial Loops to be restarted. Is that okay?" xml:space="preserve">
     <value>The changes made will require Serial Loops to be restarted. Is that okay?</value>
+  </data>
+  <data name="The selected ROM's hash does not match the expected ROM hash. Please ensure you are using the correct base ROM.\n\nIf you wish to ignore this, please check the \&quot;Ignore Hash\&quot; checkbox." xml:space="preserve">
+    <value>The selected ROM's hash does not match the expected ROM hash. Please ensure you are using the correct base ROM.\n\nIf you wish to ignore this, please check the \"Ignore Hash\" checkbox.</value>
+  </data>
+  <data name="There is no recorded base ROM hash for this project. This is likely because this project was created with an older version of Serial Loops. Please select the base ROM used for this project so the hash can be recorded now." xml:space="preserve">
+    <value>There is no recorded base ROM hash for this project. This is likely because this project was created with an older version of Serial Loops. Please select the base ROM used for this project so the hash can be recorded now.</value>
   </data>
   <data name="This script is not included in the event table." xml:space="preserve">
     <value>This script is not included in the event table.</value>

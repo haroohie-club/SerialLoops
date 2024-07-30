@@ -145,6 +145,13 @@ namespace SerialLoops
             };
             openProjectCommand.Executed += OpenProject_Executed;
 
+            Command importProjectCommand = new()
+            {
+                MenuText = Application.Instance.Localize(this, "Import Project..."),
+                ToolBarText = Application.Instance.Localize(this, "Import Project"),
+            };
+            importProjectCommand.Executed += ImportProjectCommand_Executed;
+
             Command editSaveFileCommand = new()
             {
                 MenuText = Application.Instance.Localize(this, "Edit Save File..."),
@@ -202,6 +209,7 @@ namespace SerialLoops
                             newProjectCommand,
                             openProjectCommand,
                             _recentProjectsCommand,
+                            importProjectCommand,
                             new SeparatorMenuItem(),
                             editSaveFileCommand
                         }
@@ -248,6 +256,13 @@ namespace SerialLoops
                 Image = ControlGenerator.GetIcon("Project_Options", Log),
             };
             projectSettingsCommand.Executed += ProjectSettings_Executed;
+
+            Command exportProjectCommand = new()
+            {
+                MenuText = Application.Instance.Localize(this, "Export Project..."),
+                ToolBarText = Application.Instance.Localize(this, "Export Project"),
+            };
+            exportProjectCommand.Executed += ExportProjectCommand_Executed;
 
             Command migrateProjectCommand = new()
             {
@@ -346,10 +361,11 @@ namespace SerialLoops
                          projectSettingsCommand,
                          migrateProjectCommand,
                          exportPatchCommand,
-                         closeProjectCommand
+                         closeProjectCommand,
+                         exportProjectCommand,
                      })
                 {
-                    fileMenu.Items.Insert(3, command);
+                    fileMenu.Items.Insert(4, command);
                 }
             }
 
@@ -537,7 +553,6 @@ namespace SerialLoops
                 {
                     return;
                 }
-
                 OpenProjectFromPath(openFileDialog.FileName);
             }
         }
@@ -545,6 +560,65 @@ namespace SerialLoops
         private void OpenRecentProject_Executed(object sender, EventArgs e)
         {
             OpenProjectFromPath(((Command)sender).ToolTip);
+        }
+
+        public void ImportProjectCommand_Executed(object sender, EventArgs e)
+        {
+            ProjectImportDialog projectImportDialog = new();
+            (string slzipPath, string baseRomPath) = projectImportDialog.ShowModal(this);
+            if (!string.IsNullOrEmpty(slzipPath) && !string.IsNullOrEmpty(baseRomPath))
+            {
+                CancelEventArgs cancelEvent = new();
+                CloseProject_Executed(this, cancelEvent);
+                if (cancelEvent.Cancel)
+                {
+                    return;
+                }
+
+                Project.LoadProjectResult result = new() { State = Project.LoadProjectState.FAILED };
+                LoopyProgressTracker tracker = new(s => Application.Instance.Localize(null, s));
+                _ = new ProgressDialog(() => (OpenProject, result) = Project.Import(slzipPath, baseRomPath, CurrentConfig, s => Application.Instance.Localize(null, s), Log, tracker),
+                    () => { }, tracker, Application.Instance.Localize(this, "Importing Project"));
+
+                if (OpenProject is not null)
+                {
+                    OpenProjectView(OpenProject, tracker);
+                }
+                else
+                {
+                    CloseProjectView();
+                }
+            }
+        }
+
+        private void ExportProjectCommand_Executed(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(OpenProject.BaseRomHash))
+            {
+                MessageBox.Show(this, Application.Instance.Localize(this, 
+                    "There is no recorded base ROM hash for this project. This is likely because this project was created with an older version of Serial Loops. Please select the base ROM used for this project so the hash can be recorded now."),
+                    Application.Instance.Localize(this, "No ROM Hash Recorded!"), MessageBoxButtons.OK, MessageBoxType.Warning);
+                OpenFileDialog openFileDialog = new();
+                openFileDialog.Filters.Add(new() { Name = Application.Instance.Localize(this, Strings.NDS_ROM), Extensions = [".nds"] });
+                if (openFileDialog.ShowAndReportIfFileSelected(this))
+                {
+                    OpenProject.SetBaseRomHash(openFileDialog.FileName);
+                    OpenProject.Save(Log);
+                }
+                else
+                {
+                    return;
+                }
+            }
+            SaveFileDialog saveFileDialog = new();
+            saveFileDialog.Filters.Add(new(Application.Instance.Localize(this, "Serial Loops Exported Project"), $".{Project.EXPORT_FORMAT}"));
+            if (saveFileDialog.ShowAndReportIfFileSelected(this))
+            {
+                LoopyProgressTracker tracker = new(s => Application.Instance.Localize(null, s));
+                _ = new ProgressDialog(() => OpenProject.Export(saveFileDialog.FileName, Log),
+                    () => MessageBox.Show(this, Application.Instance.Localize(this, "Project exported successfully!"), Application.Instance.Localize(this, "Exported Project"), MessageBoxType.Information),
+                    tracker, Application.Instance.Localize(this, "Exporting Project"));
+            }
         }
 
         public void OpenProjectFromPath(string path)
