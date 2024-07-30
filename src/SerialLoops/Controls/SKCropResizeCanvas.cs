@@ -135,6 +135,7 @@ namespace SerialLoops.Controls
                 if (FinalBitmap is not null && SelectionAreaLocation is not null)
                 {
                     using SKCanvas finalCanvas = new(FinalBitmap);
+                    finalCanvas.Clear();
                     SKRect surfaceRect = new(
                         SelectionAreaLocation?.X ?? 0f,
                         SelectionAreaLocation?.Y ?? 0f,
