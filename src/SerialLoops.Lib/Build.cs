@@ -367,7 +367,7 @@ namespace SerialLoops.Lib
             try
             {
                 DataFile file = archive.GetFileByIndex(index);
-                file.Data = File.ReadAllBytes(filePath).ToList();
+                file.Data = [.. File.ReadAllBytes(filePath)];
                 file.Edited = true;
                 archive.Files[archive.Files.IndexOf(file)] = file;
             }
