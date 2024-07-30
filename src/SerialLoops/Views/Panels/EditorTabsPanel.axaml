@@ -19,7 +19,8 @@
     </UserControl.Resources>
     
     <tab:TabsControl Name="Tabs" ShowDefaultAddButton="False" ItemsSource="{Binding Tabs}"
-                     ContainerClearing="Tabs_PageClosed" SelectionChanged="Tabs_PageChanged">
+                     ContainerClearing="Tabs_PageClosed" SelectionChanged="Tabs_PageChanged"
+                     LastTabClosedAction="{x:Null}">
         <tab:TabsControl.ItemTemplate>
             <DataTemplate DataType="editors:EditorViewModel">
                 <StackPanel Orientation="Horizontal" Spacing="3">

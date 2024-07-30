@@ -5,6 +5,7 @@ using HaruhiChokuretsuLib.Archive.Graphics;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
 using SerialLoops.Assets;
+using SerialLoops.Controls;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Util;
@@ -21,6 +22,7 @@ namespace SerialLoops.ViewModels.Editors
 {
     public class BackgroundEditorViewModel : EditorViewModel
     {
+
         public BackgroundItem Bg { get; set; }
         public SKBitmap BgBitmap => Bg.GetBackground();
         public string BgDescription => $"{Bg.Id} (0x{Bg.Id:X3}); {Bg.BackgroundType}";
@@ -92,6 +94,21 @@ namespace SerialLoops.ViewModels.Editors
                 {
                     DataContext = cropResizeDialogViewModel,
                 }.ShowDialog<SKBitmap>(_window.Window);
+                if (finalImage is not null)
+                {
+                    try
+                    {
+                        LoopyProgressTracker tracker = new();
+                        await new ProgressDialog(() => Bg.SetBackground(finalImage, tracker, _log),
+                            () => { }, tracker, string.Format(Strings.Replacing__0____, Bg.DisplayName)).ShowDialog(_window.Window);
+                        OnPropertyChanged(nameof(BgBitmap));
+                        Description.UnsavedChanges = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        _log.LogException(string.Format(Strings.Failed_to_replace_background__0__with_file__1_, Bg.DisplayName, openFile.Path.AbsolutePath), ex);
+                    }
+                }
             }
         }
     }
