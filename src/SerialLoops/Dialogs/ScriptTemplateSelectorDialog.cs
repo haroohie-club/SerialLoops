@@ -1,6 +1,5 @@
 ﻿using Eto.Drawing;
 using Eto.Forms;
-using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Script;
@@ -15,17 +14,15 @@ namespace SerialLoops.Dialogs
     {
         private readonly ILogger _log;
         private readonly Project _project;
-        private readonly EventFile _script;
-        private ScriptTemplates.TemplateOption _currentSelection;
+        private ScriptTemplate _currentSelection;
         private TextBox _filter;
         private ListBox _selector;
         private Panel _description;
 
-        public ScriptTemplateSelectorDialog(Project project, EventFile script, ILogger log)
+        public ScriptTemplateSelectorDialog(Project project, ILogger log)
         {
             _log = log;
             _project = project;
-            _script = script;
             InitializeComponent();
         }
 
@@ -48,17 +45,17 @@ namespace SerialLoops.Dialogs
             };
             _filter.TextChanged += (sender, args) =>
             {
-                _selector.DataStore = new ObservableCollection<ScriptTemplates.TemplateOption>(ScriptTemplates.AvailableTemplates
+                _selector.DataStore = new ObservableCollection<ScriptTemplate>(_project.Config.ScriptTemplates
                     .Where(t => t.Name.Contains(_filter.Text, StringComparison.OrdinalIgnoreCase)));
             };
 
             _selector = new ListBox
             {
                 Size = new Size(200, 330),
-                DataStore = ScriptTemplates.AvailableTemplates,
-                SelectedIndex = ScriptTemplates.AvailableTemplates.IndexOf(_currentSelection),
-                ItemTextBinding = Binding.Delegate<ScriptTemplates.TemplateOption, string>(t => t.Name),
-                ItemKeyBinding = Binding.Delegate<ScriptTemplates.TemplateOption, string>(t => t.Name),
+                DataStore = _project.Config.ScriptTemplates,
+                SelectedIndex = _project.Config.ScriptTemplates.IndexOf(_currentSelection),
+                ItemTextBinding = Binding.Delegate<ScriptTemplate, string>(t => t.Name),
+                ItemKeyBinding = Binding.Delegate<ScriptTemplate, string>(t => t.Name),
             };
 
             _description = new StackLayout
@@ -74,7 +71,7 @@ namespace SerialLoops.Dialogs
             };
             _selector.SelectedValueChanged += (sender, args) =>
             {
-                _currentSelection = (ScriptTemplates.TemplateOption)_selector.SelectedValue;
+                _currentSelection = (ScriptTemplate)_selector.SelectedValue;
                 if (_currentSelection is not null)
                 {
                     _description.Content = new StackLayout
@@ -105,7 +102,7 @@ namespace SerialLoops.Dialogs
             };
 
             Button confirmButton = new() { Text = Application.Instance.Localize(this, "Confirm") };
-            confirmButton.Click += (sender, args) => Close(_currentSelection?.Template(_project, _script));
+            confirmButton.Click += (sender, args) => Close(_currentSelection);
             Button cancelButton = new() { Text = Application.Instance.Localize(this, "Cancel") };
             cancelButton.Click += (sender, args) => Close(null);
 

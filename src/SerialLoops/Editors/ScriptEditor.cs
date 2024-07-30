@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,7 +28,7 @@ namespace SerialLoops.Editors
     public class ScriptEditor(ScriptItem item, ILogger log, Project project, EditorTabsPanel tabs) : Editor(item, log, project, tabs)
     {
         private ScriptItem _script;
-        private Dictionary<ScriptSection, List<ScriptItemCommand>> _commands = new();
+        private Dictionary<ScriptSection, List<ScriptItemCommand>> _commands = [];
 
         private TableLayout _detailsLayout = new();
         private readonly StackLayout _preview = new() { Items = { new SKGuiImage(new(256, 384)) } };
@@ -65,7 +66,7 @@ namespace SerialLoops.Editors
             _commands = _script.GetScriptCommandTree(_project, _log);
         }
 
-        private Container GetCommandsContainer()
+        private TableLayout GetCommandsContainer()
         {
             TableLayout layout = new() { Spacing = new Size(5, 5) };
 
@@ -85,11 +86,11 @@ namespace SerialLoops.Editors
             Command applyTemplate = new() { MenuText = Application.Instance.Localize(this, "Apply Template"), ToolBarText = Application.Instance.Localize(this, "Template"), Image = ControlGenerator.GetIcon("Template", _log) };
             applyTemplate.Executed += (sender, args) =>
             {
-                ScriptTemplateSelectorDialog scriptTemplateSelector = new(_project, _script.Event, _log);
+                ScriptTemplateSelectorDialog scriptTemplateSelector = new(_project, _log);
                 ScriptTemplate template = scriptTemplateSelector.ShowModal(this);
                 if (template is not null)
                 {
-                    template.Apply(_script, _project);
+                    template.Apply(_script, _project, _log);
                     _script.Refresh(_project, _log);
                     Content = GetEditorPanel();
                     UpdateTabTitle(false);
@@ -97,6 +98,20 @@ namespace SerialLoops.Editors
             };
 
             EditorCommands.Add(applyTemplate);
+
+            Command generateTemplate = new() { MenuText = Application.Instance.Localize(this, "Generate Template"), Image = ControlGenerator.GetIcon("Template", _log) };
+            generateTemplate.Executed += (sender, args) =>
+            {
+                ScriptTemplateCreationDialog scriptTemplateGenerator = new(_project, _commands, _log);
+                ScriptTemplate template = scriptTemplateGenerator.ShowModal(this);
+                if (template is not null)
+                {
+                    Lib.IO.WriteStringFile(Path.Combine(_project.Config.ScriptTemplatesDirectory, $"{template.Name.Replace(" ", "")}.slscr"), JsonSerializer.Serialize(template), _log);
+                    _project.Config.ScriptTemplates.Add(template);
+                }
+            };
+
+            EditorCommands.Add(generateTemplate);
 
             TableRow mainRow = new();
             mainRow.Cells.Add(new TableLayout(GetEditorButtons(treeGridView), _commandsPanel));
@@ -451,7 +466,7 @@ namespace SerialLoops.Editors
                     }
 
                     dialog.Close();
-                    ScriptCommandSectionEntry section = new($"NONE{labelBox.Text}", new List<ScriptCommandSectionEntry>(), _script.Event);
+                    ScriptCommandSectionEntry section = new($"NONE{labelBox.Text}", [], _script.Event);
                     treeGridView.AddSection(new(section, null, null, _script.Event, true));
 
                     _updateOptionDropDowns();

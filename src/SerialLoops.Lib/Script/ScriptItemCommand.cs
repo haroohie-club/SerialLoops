@@ -64,7 +64,7 @@ namespace SerialLoops.Lib.Script
         public ScriptItemCommand(CommandVerb verb, params ScriptParameter[] parameters)
         {
             Verb = verb;
-            Parameters = parameters.ToList();
+            Parameters = [.. parameters];
         }
 
         public List<ScriptItemCommand> WalkCommandGraph(Dictionary<ScriptSection, List<ScriptItemCommand>> commandTree, AdjacencyGraph<ScriptSection, ScriptSectionEdge> graph)
