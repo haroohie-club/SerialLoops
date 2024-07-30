@@ -664,6 +664,15 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Both an exported project and a base ROM must be selected to import a project..
+        /// </summary>
+        public static string Both_an_exported_project_and_a_base_ROM_must_be_selected_to_import_a_project_ {
+            get {
+                return ResourceManager.GetString("Both an exported project and a base ROM must be selected to import a project.", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Both Screens.
         /// </summary>
         public static string Both_Screens {
@@ -2095,6 +2104,15 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        public static string Error {
+            get {
+                return ResourceManager.GetString("Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error: duplicate hack detected! A file with the same name as a file in this hack has already been imported..
         /// </summary>
         public static string Error__duplicate_hack_detected__A_file_with_the_same_name_as_a_file_in_this_hack_has_already_been_imported_ {
@@ -2151,6 +2169,15 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Expected ROM SHA-1 Hash: {0}.
+        /// </summary>
+        public static string Expected_ROM_SHA_1_Hash___0_ {
+            get {
+                return ResourceManager.GetString("Expected ROM SHA-1 Hash: {0}", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export.
         /// </summary>
         public static string Export {
@@ -2196,6 +2223,24 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Export Project.
+        /// </summary>
+        public static string Export_Project {
+            get {
+                return ResourceManager.GetString("Export Project", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export Project....
+        /// </summary>
+        public static string Export_Project___ {
+            get {
+                return ResourceManager.GetString("Export Project...", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export SFX.
         /// </summary>
         public static string Export_SFX {
@@ -2214,6 +2259,15 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Exported Project.
+        /// </summary>
+        public static string Exported_Project {
+            get {
+                return ResourceManager.GetString("Exported Project", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exporting BGM.
         /// </summary>
         public static string Exporting_BGM {
@@ -2228,6 +2282,15 @@ namespace SerialLoops {
         public static string Exporting_GIF___ {
             get {
                 return ResourceManager.GetString("Exporting GIF...", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exporting Project.
+        /// </summary>
+        public static string Exporting_Project {
+            get {
+                return ResourceManager.GetString("Exporting Project", resourceCulture);
             }
         }
         
@@ -2531,6 +2594,15 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to export project.
+        /// </summary>
+        public static string Failed_to_export_project {
+            get {
+                return ResourceManager.GetString("Failed to export project", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to export system texture {0} to file {1}.
         /// </summary>
         public static string Failed_to_export_system_texture__0__to_file__1_ {
@@ -2546,6 +2618,15 @@ namespace SerialLoops {
             get {
                 return ResourceManager.GetString("Failed to find character item -- have you saved all of your changes to character " +
                         "names?", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to import project.
+        /// </summary>
+        public static string Failed_to_import_project {
+            get {
+                return ResourceManager.GetString("Failed to import project", resourceCulture);
             }
         }
         
@@ -3189,6 +3270,15 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Import.
+        /// </summary>
+        public static string Import {
+            get {
+                return ResourceManager.GetString("Import", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Import a Hack.
         /// </summary>
         public static string Import_a_Hack {
@@ -3203,6 +3293,33 @@ namespace SerialLoops {
         public static string Import_Hack {
             get {
                 return ResourceManager.GetString("Import Hack", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import Project.
+        /// </summary>
+        public static string Import_Project {
+            get {
+                return ResourceManager.GetString("Import Project", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import Project....
+        /// </summary>
+        public static string Import_Project___ {
+            get {
+                return ResourceManager.GetString("Import Project...", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Importing Project.
+        /// </summary>
+        public static string Importing_Project {
+            get {
+                return ResourceManager.GetString("Importing Project", resourceCulture);
             }
         }
         
@@ -3883,6 +4000,15 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No exported project selected.
+        /// </summary>
+        public static string No_exported_project_selected {
+            get {
+                return ResourceManager.GetString("No exported project selected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No hacks applied!.
         /// </summary>
         public static string No_hacks_applied_ {
@@ -3915,6 +4041,15 @@ namespace SerialLoops {
         public static string No_recent_projects__Create_one_and_it_will_appear_here_ {
             get {
                 return ResourceManager.GetString("No recent projects. Create one and it will appear here.", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No ROM Hash Recorded!.
+        /// </summary>
+        public static string No_ROM_Hash_Recorded_ {
+            get {
+                return ResourceManager.GetString("No ROM Hash Recorded!", resourceCulture);
             }
         }
         
@@ -4023,6 +4158,15 @@ namespace SerialLoops {
         public static string Open_Chokuretsu_Save_File {
             get {
                 return ResourceManager.GetString("Open Chokuretsu Save File", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open Exported Project.
+        /// </summary>
+        public static string Open_Exported_Project {
+            get {
+                return ResourceManager.GetString("Open Exported Project", resourceCulture);
             }
         }
         
@@ -4446,6 +4590,15 @@ namespace SerialLoops {
         public static string Project_Creation_Warning {
             get {
                 return ResourceManager.GetString("Project Creation Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project exported successfully!.
+        /// </summary>
+        public static string Project_exported_successfully_ {
+            get {
+                return ResourceManager.GetString("Project exported successfully!", resourceCulture);
             }
         }
         
@@ -4932,6 +5085,15 @@ namespace SerialLoops {
         public static string Results {
             get {
                 return ResourceManager.GetString("Results", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ROM Hash Mismatch.
+        /// </summary>
+        public static string ROM_Hash_Mismatch {
+            get {
+                return ResourceManager.GetString("ROM Hash Mismatch", resourceCulture);
             }
         }
         
@@ -5424,6 +5586,15 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select an exported project to see expected ROM hash.
+        /// </summary>
+        public static string Select_an_exported_project_to_see_expected_ROM_hash {
+            get {
+                return ResourceManager.GetString("Select an exported project to see expected ROM hash", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select base ROM.
         /// </summary>
         public static string Select_base_ROM {
@@ -5501,6 +5672,15 @@ namespace SerialLoops {
         public static string Select_Template_to_Apply {
             get {
                 return ResourceManager.GetString("Select Template to Apply", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Serial Loops Exported Project.
+        /// </summary>
+        public static string Serial_Loops_Exported_Project {
+            get {
+                return ResourceManager.GetString("Serial Loops Exported Project", resourceCulture);
             }
         }
         
@@ -5982,11 +6162,43 @@ namespace SerialLoops {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The base ROM hash does not match the expected hash! Please check the \&quot;Ignore Hash\&quot; checkbox if you wish to override this..
+        /// </summary>
+        public static string The_base_ROM_hash_does_not_match_the_expected_hash__Please_check_the___Ignore_Hash___checkbox_if_you_wish_to_override_this_ {
+            get {
+                return ResourceManager.GetString("The base ROM hash does not match the expected hash! Please check the \\\"Ignore Has" +
+                        "h\\\" checkbox if you wish to override this.", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The changes made will require Serial Loops to be restarted. Is that okay?.
         /// </summary>
         public static string The_changes_made_will_require_Serial_Loops_to_be_restarted__Is_that_okay_ {
             get {
                 return ResourceManager.GetString("The changes made will require Serial Loops to be restarted. Is that okay?", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The selected ROM&apos;s hash does not match the expected ROM hash. Please ensure you are using the correct base ROM.\n\nIf you wish to ignore this, please check the \&quot;Ignore Hash\&quot; checkbox..
+        /// </summary>
+        public static string The_selected_ROM_s_hash_does_not_match_the_expected_ROM_hash__Please_ensure_you_are_using_the_correct_base_ROM__n_nIf_you_wish_to_ignore_this__please_check_the___Ignore_Hash___checkbox_ {
+            get {
+                return ResourceManager.GetString("The selected ROM\'s hash does not match the expected ROM hash. Please ensure you a" +
+                        "re using the correct base ROM.\\n\\nIf you wish to ignore this, please check the \\" +
+                        "\"Ignore Hash\\\" checkbox.", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There is no recorded base ROM hash for this project. This is likely because this project was created with an older version of Serial Loops. Please select the base ROM used for this project so the hash can be recorded now..
+        /// </summary>
+        public static string There_is_no_recorded_base_ROM_hash_for_this_project__This_is_likely_because_this_project_was_created_with_an_older_version_of_Serial_Loops__Please_select_the_base_ROM_used_for_this_project_so_the_hash_can_be_recorded_now_ {
+            get {
+                return ResourceManager.GetString("There is no recorded base ROM hash for this project. This is likely because this " +
+                        "project was created with an older version of Serial Loops. Please select the bas" +
+                        "e ROM used for this project so the hash can be recorded now.", resourceCulture);
             }
         }
         
