@@ -11,6 +11,14 @@ namespace SerialLoops.Controls
 {
     public class SKCropResizeCanvas : SKCanvasView
     {
+        // This should be looked into more. There is some unexpected behavior with drawing an SKSurface on Win/Mac -- requires multiplying the
+        // width/height of the draw destination by 1.5. This is not required on Linux, which is weird!
+#if LINUX
+        private const float SURFACE_SIZE_MULTIPLIER = 1.0f;
+#else
+        private const float SURFACE_SIZE_MULTIPLIER = 1.5f;
+#endif
+
         private const int KEY_CHANGE_AMOUNT = 10;
         private double _aspectRatio;
         private Point? _lastPointerPosition;
@@ -139,8 +147,8 @@ namespace SerialLoops.Controls
                     SKRect surfaceRect = new(
                         SelectionAreaLocation?.X ?? 0f,
                         SelectionAreaLocation?.Y ?? 0f,
-                        (SelectionAreaLocation?.X ?? 0f) + (FinalBitmap?.Width ?? 0f) * 1.5f,
-                        (SelectionAreaLocation?.Y ?? 0f) + (FinalBitmap?.Height ?? 0f) * 1.5f);
+                        (SelectionAreaLocation?.X ?? 0f) + (FinalBitmap?.Width ?? 0f) * SURFACE_SIZE_MULTIPLIER,
+                        (SelectionAreaLocation?.Y ?? 0f) + (FinalBitmap?.Height ?? 0f) * SURFACE_SIZE_MULTIPLIER);
                     finalCanvas.DrawImage(surface.Snapshot(), surfaceRect, new SKRect(0, 0, FinalBitmap.Width, FinalBitmap.Height));
                     finalCanvas.Flush();
                 }
