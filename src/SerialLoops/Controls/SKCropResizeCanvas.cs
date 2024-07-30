@@ -13,10 +13,10 @@ namespace SerialLoops.Controls
     {
         // This should be looked into more. There is some unexpected behavior with drawing an SKSurface on Win/Mac -- requires multiplying the
         // width/height of the draw destination by 1.5. This is not required on Linux, which is weird!
-#if LINUX
-        private const float SURFACE_SIZE_MULTIPLIER = 1.0f;
-#else
+#if WINDOWS || MACOS
         private const float SURFACE_SIZE_MULTIPLIER = 1.5f;
+#else
+        private const float SURFACE_SIZE_MULTIPLIER = 1.0f;
 #endif
 
         private const int KEY_CHANGE_AMOUNT = 10;
