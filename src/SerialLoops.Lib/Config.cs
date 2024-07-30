@@ -1,7 +1,9 @@
 ﻿using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib.Hacks;
+using SerialLoops.Lib.Script;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -25,7 +27,11 @@ namespace SerialLoops.Lib
         [JsonIgnore]
         public string HacksDirectory => Path.Combine(UserDirectory, "Hacks");
         [JsonIgnore]
+        public string ScriptTemplatesDirectory => Path.Combine(UserDirectory, "ScriptTemplates");
+        [JsonIgnore]
         public List<AsmHack> Hacks { get; set; }
+        [JsonIgnore]
+        public ObservableCollection<ScriptTemplate> ScriptTemplates { get; set; }
         public string CurrentCultureName { get; set; }
         public string DevkitArmPath { get; set; }
         public bool UseDocker { get; set; }
@@ -42,16 +48,17 @@ namespace SerialLoops.Lib
             IO.WriteStringFile(ConfigPath, JsonSerializer.Serialize(this), log);
         }
 
-        public static Config LoadConfig(ILogger log)
+        public static Config LoadConfig(Func<string, string> localize, ILogger log)
         {
             string configJson = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.json");
 
             if (!File.Exists(configJson))
             {
                 Config defaultConfig = GetDefault(log);
-                defaultConfig.ValidateConfig(log);
+                defaultConfig.ValidateConfig(localize, log);
                 defaultConfig.ConfigPath = configJson;
                 defaultConfig.InitializeHacks(log);
+                defaultConfig.InitializeScriptTemplates(localize, log);
                 IO.WriteStringFile(configJson, JsonSerializer.Serialize(defaultConfig), log);
                 return defaultConfig;
             }
@@ -59,26 +66,27 @@ namespace SerialLoops.Lib
             try
             {
                 Config config = JsonSerializer.Deserialize<Config>(File.ReadAllText(configJson));
-                config.ValidateConfig(log);
+                config.ValidateConfig(localize, log);
                 config.ConfigPath = configJson;
                 config.InitializeHacks(log);
+                config.InitializeScriptTemplates(localize, log);
                 return config;
             }
             catch (JsonException exc)
             {
-                log.LogError($"Exception occurred while parsing config.json!\n{exc.Message}\n\n{exc.StackTrace}");
+                log.LogException(localize("Exception occurred while parsing config.json!"), exc);
                 Config defaultConfig = GetDefault(log);
-                defaultConfig.ValidateConfig(log);
+                defaultConfig.ValidateConfig(localize, log);
                 IO.WriteStringFile(configJson, JsonSerializer.Serialize(defaultConfig), log);
                 return defaultConfig;
             }
         }
 
-        public void ValidateConfig(ILogger log)
+        public void ValidateConfig(Func<string, string> localize, ILogger log)
         {
             if (string.IsNullOrWhiteSpace(DevkitArmPath))
             {
-                log.LogError("devkitARM is not detected at the default or specified install location. Please set devkitARM path.");
+                log.LogError(localize("devkitARM is not detected at the default or specified install location. Please set devkitARM path."));
             }
             if (CurrentCultureName is null)
             {
@@ -123,6 +131,30 @@ namespace SerialLoops.Lib
             }
         }
 
+        private void InitializeScriptTemplates(Func<string, string> localize, ILogger log)
+        {
+            if (!Directory.Exists(ScriptTemplatesDirectory))
+            {
+                Directory.CreateDirectory(ScriptTemplatesDirectory);
+            }
+
+            IO.CopyFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "ScriptTemplates"), ScriptTemplatesDirectory, log); // Update script templates each time we launch in case of program update
+            string[] scriptTemplateFiles = Directory.GetFiles(ScriptTemplatesDirectory, "*.slscr");
+            List<ScriptTemplate> templates = [];
+            foreach (string scriptTemplateFile in scriptTemplateFiles)
+            {
+                try
+                {
+                    templates.Add(JsonSerializer.Deserialize<ScriptTemplate>(File.ReadAllText(scriptTemplateFile)));
+                }
+                catch (Exception ex)
+                {
+                    log.LogException(string.Format(localize("Failed to deserialize script template file '{0}'"), scriptTemplateFile), ex);
+                }
+            }
+            ScriptTemplates = new(templates);
+        }
+
         private static Config GetDefault(ILogger log)
         {
             string devkitArmDir = Environment.GetEnvironmentVariable("DEVKITARM") ?? string.Empty;
@@ -157,7 +189,7 @@ namespace SerialLoops.Lib
             {
                 emulatorPath = Path.Combine("/snap", "melonds", "current", "usr", "local", "bin", "melonDS");
             }
-            if (!Directory.Exists(emulatorPath) && !File.Exists(emulatorPath))
+            if (!Directory.Exists(emulatorPath) && !File.Exists(emulatorPath)) // on Mac, .app is a dir, so we check both of these
             {
                 emulatorPath = "";
                 log.LogWarning("Valid emulator path not found in config.json.");

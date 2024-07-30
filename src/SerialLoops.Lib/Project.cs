@@ -51,7 +51,7 @@ namespace SerialLoops.Lib
         [JsonIgnore]
         public ProjectSettings Settings { get; set; }
         [JsonIgnore]
-        public List<ItemDescription> Items { get; set; } = new();
+        public List<ItemDescription> Items { get; set; } = [];
 
         // Archives
         [JsonIgnore]
@@ -65,7 +65,7 @@ namespace SerialLoops.Lib
 
         // Common graphics
         [JsonIgnore]
-        public FontReplacementDictionary FontReplacement { get; set; } = new();
+        public FontReplacementDictionary FontReplacement { get; set; } = [];
         [JsonIgnore]
         public FontFile FontMap { get; set; } = new();
         [JsonIgnore]
@@ -107,7 +107,7 @@ namespace SerialLoops.Lib
         [JsonIgnore]
         public Func<string, string> Localize { get; set; }
 
-        private static readonly string[] NON_SCRIPT_EVT_FILES = new string[] { "CHESSS", "EVTTBLS", "TOPICS", "SCENARIOS", "TUTORIALS", "VOICEMAPS" };
+        private static readonly string[] NON_SCRIPT_EVT_FILES = ["CHESSS", "EVTTBLS", "TOPICS", "SCENARIOS", "TUTORIALS", "VOICEMAPS"];
 
         public Project()
         {
@@ -1150,7 +1150,7 @@ namespace SerialLoops.Lib
             catch (Exception ex)
             {
                 log.LogException("Failed to get search results!", ex);
-                return Array.Empty<ItemDescription>().ToList();
+                return [];
             }
         }
 

@@ -7,7 +7,7 @@ namespace SerialLoops.Lib.Script.Parameters
     {
         public BackgroundItem Background { get; set; }
         public bool Kinetic { get; set; }
-        public override short[] GetValues(object obj = null) => new short[] { (short)Background.Id };
+        public override short[] GetValues(object obj = null) => [(short)(Background?.Id ?? 0)];
 
         public BgScriptParameter(string name, BackgroundItem background, bool kinetic) : base(name, ParameterType.BG)
         {

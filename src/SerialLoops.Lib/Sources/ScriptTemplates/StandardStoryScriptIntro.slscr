@@ -1,0 +1,105 @@
+{
+    "Name": "Standard Story Script Intro",
+    "Description": "A standard intro for a story script (i.e. EVX_XXX)",
+    "Sections": [
+        {
+            "Name": "SCRIPT00",
+            "Commands": [
+                {
+                    "Verb": "KBG_DISP",
+                    "Parameters": [
+                        {
+                            "TypeName": "SerialLoops.Lib.Script.Parameters.BgScriptParameter",
+                            "ParameterName": "\"Kinetic\" Background",
+                            "Value": "BG_KBG01"
+                        }
+                    ]
+                },
+                {
+                    "Verb": "BG_DISP",
+                    "Parameters": [
+                        {
+                            "TypeName": "SerialLoops.Lib.Script.Parameters.BgScriptParameter",
+                            "ParameterName": "Background",
+                            "Value": "BG_TMP00_D"
+                        }
+                    ]
+                },
+                {
+                    "Verb": "BGM_PLAY",
+                    "Parameters": [
+                        {
+                            "TypeName": "SerialLoops.Lib.Script.Parameters.BgmScriptParameter",
+                            "ParameterName": "BGM",
+                            "Value": "BGM001"
+                        },
+                        {
+                            "TypeName": "SerialLoops.Lib.Script.Parameters.BgmModeScriptParameter",
+                            "ParameterName": "BGM Mode",
+                            "Value": "2"
+                        },
+                        {
+                            "TypeName": "SerialLoops.Lib.Script.Parameters.ShortScriptParameter",
+                            "ParameterName": "Volume",
+                            "Value": "100"
+                        },
+                        {
+                            "TypeName": "SerialLoops.Lib.Script.Parameters.ShortScriptParameter",
+                            "ParameterName": "Fade In Time",
+                            "Value": "30"
+                        },
+                        {
+                            "TypeName": "SerialLoops.Lib.Script.Parameters.ShortScriptParameter",
+                            "ParameterName": "Fade Out Time",
+                            "Value": "0"
+                        }
+                    ]
+                },
+                {
+                    "Verb": "SET_PLACE",
+                    "Parameters": [
+                        {
+                            "TypeName": "SerialLoops.Lib.Script.Parameters.BoolScriptParameter",
+                            "ParameterName": "Display",
+                            "Value": "true,1,0"
+                        },
+                        {
+                            "TypeName": "SerialLoops.Lib.Script.Parameters.PlaceScriptParameter",
+                            "ParameterName": "Place",
+                            "Value": "1"
+                        }
+                    ]
+                },
+                {
+                    "Verb": "SCREEN_FADEIN",
+                    "Parameters": [
+                        {
+                            "TypeName": "SerialLoops.Lib.Script.Parameters.ShortScriptParameter",
+                            "ParameterName": "Fade In Time",
+                            "Value": "30"
+                        },
+                        {
+                            "TypeName": "SerialLoops.Lib.Script.Parameters.ShortScriptParameter",
+                            "ParameterName": "Fade In Percentage",
+                            "Value": "0"
+                        },
+                        {
+                            "TypeName": "SerialLoops.Lib.Script.Parameters.ScreenScriptParameter",
+                            "ParameterName": "Screen",
+                            "Value": "2"
+                        },
+                        {
+                            "TypeName": "SerialLoops.Lib.Script.Parameters.ColorMonochromeScriptParameter",
+                            "ParameterName": "Color",
+                            "Value": "1"
+                        }
+                    ]
+                },
+                {
+                    "Verb": "BACK",
+                    "Parameters": []
+                }
+            ]
+        }
+    ]
+}

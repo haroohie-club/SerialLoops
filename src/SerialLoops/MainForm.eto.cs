@@ -442,7 +442,7 @@ namespace SerialLoops
         {
             base.OnLoad(e);
             Log = new();
-            CurrentConfig = Config.LoadConfig(Log);
+            CurrentConfig = Config.LoadConfig(s => Application.Instance.Localize(this, s), Log);
             Application.Instance.LocalizeString += Application_LocalizeString;
             Log.Initialize(CurrentConfig);
 

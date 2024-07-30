@@ -229,6 +229,7 @@
   </data>
   <data name="Apply Template" xml:space="preserve">
     <value>Apply Template</value>
+    <comment>The template in question is a script template</comment>
   </data>
   <data name="Arrow Keys - Move Image" xml:space="preserve">
     <value>Arrow Keys - Move Image</value>
@@ -589,6 +590,9 @@
   <data name="devkitARM Docker Tag" xml:space="preserve">
     <value>devkitARM Docker Tag</value>
   </data>
+  <data name="devkitARM is not detected at the default or specified install location. Please set devkitARM path." xml:space="preserve">
+    <value>devkitARM is not detected at the default or specified install location. Please set devkitARM path.</value>
+  </data>
   <data name="DevkitARM must be supplied in order to build!" xml:space="preserve">
     <value>DevkitARM must be supplied in order to build!</value>
   </data>
@@ -810,6 +814,9 @@
   <data name="Error: duplicate hack detected! A hack with the same name has already been imported." xml:space="preserve">
     <value>Error: duplicate hack detected! A hack with the same name has already been imported.</value>
   </data>
+  <data name="Exception occurred while parsing config.json!" xml:space="preserve">
+    <value>Exception occurred while parsing config.json!</value>
+  </data>
   <data name="Exception occurred while parsing projects_cache.json!" xml:space="preserve">
     <value>Exception occurred while parsing projects_cache.json!</value>
   </data>
@@ -941,6 +948,10 @@
   <data name="Failed to delete files for hack '{0}' -- this hack is likely applied in the ROM base and can't be disabled." xml:space="preserve">
     <value>Failed to delete files for hack '{0}' -- this hack is likely applied in the ROM base and can't be disabled.</value>
   </data>
+  <data name="Failed to deserialize script template file '{0}'" xml:space="preserve">
+    <value>Failed to deserialize script template file '{0}'</value>
+    <comment>{0} is a script template file path.</comment>
+  </data>
   <data name="Failed to export background {0} to file {1}" xml:space="preserve">
     <value>Failed to export background {0} to file {1}</value>
   </data>
@@ -965,6 +976,9 @@
   </data>
   <data name="Failed to find character item -- have you saved all of your changes to character names?" xml:space="preserve">
     <value>Failed to find character item -- have you saved all of your changes to character names?</value>
+  </data>
+  <data name="Failed to generate script template!" xml:space="preserve">
+    <value>Failed to generate script template!</value>
   </data>
   <data name="Failed to import project" xml:space="preserve">
     <value>Failed to import project</value>
@@ -993,6 +1007,9 @@
   </data>
   <data name="Failed to load voice file: file not found." xml:space="preserve">
     <value>Failed to load voice file: file not found.</value>
+  </data>
+  <data name="Failed to parse script parameter {0} of type {1} with parameter '{2}'!" xml:space="preserve">
+    <value>Failed to parse script parameter {0} of type {1} with parameter '{2}'!</value>
   </data>
   <data name="Failed to read ARM9 from '{0}'" xml:space="preserve">
     <value>Failed to read ARM9 from '{0}'</value>
@@ -1118,6 +1135,10 @@
   </data>
   <data name="gcc not found at '{0}'" xml:space="preserve">
     <value>gcc not found at '{0}'</value>
+  </data>
+  <data name="Generate Template" xml:space="preserve">
+    <value>Generate Template</value>
+    <comment>Template in question is a script template</comment>
   </data>
   <data name="German" xml:space="preserve">
     <value>German</value>
@@ -2156,6 +2177,15 @@
   </data>
   <data name="Template" xml:space="preserve">
     <value>Template</value>
+    <comment>Tool bar text for "apply [script] template" -- needs to be short to fit in the toolbar button</comment>
+  </data>
+  <data name="Template Name" xml:space="preserve">
+    <value>Template Name</value>
+    <comment>Template in question is a script template</comment>
+  </data>
+  <data name="Template Properties" xml:space="preserve">
+    <value>Template Properties</value>
+    <comment>Template in question is a script template</comment>
   </data>
   <data name="Text Color" xml:space="preserve">
     <value>Text Color</value>
