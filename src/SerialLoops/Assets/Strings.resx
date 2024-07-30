@@ -1260,6 +1260,14 @@
   <data name="Language Template" xml:space="preserve">
     <value>Language Template</value>
   </data>
+  <data name="Layout" xml:space="preserve">
+    <value>Layout</value>
+    <comment>As in a layout item</comment>
+  </data>
+  <data name="Layouts" xml:space="preserve">
+    <value>Layouts</value>
+    <comment>Plural layout items</comment>
+  </data>
   <data name="Listened to {0}" xml:space="preserve">
     <value>Listened to {0}</value>
     <comment>{0} is the name of a BGM that's been encountered while playing the game</comment>

@@ -2,6 +2,7 @@
 using Avalonia.Controls.Templates;
 using Avalonia.Input;
 using HaruhiChokuretsuLib.Util;
+using SerialLoops.Assets;
 using SerialLoops.Lib.Items;
 using SerialLoops.Models;
 using SerialLoops.Utility;
@@ -42,7 +43,34 @@ namespace SerialLoops.ViewModels.Panels
         private ObservableCollection<ITreeItem> GetSections()
         {
             return new ObservableCollection<ITreeItem>(Items.GroupBy(i => i.Type).OrderBy(g => g.Key)
-                .Select(g => new SectionTreeItem($"{g.Key}s", g.Select(i => new ItemDescriptionTreeItem(i)), ControlGenerator.GetIcon(g.Key.ToString(), _log))));
+                .Select(g => new SectionTreeItem(ItemListPanel.LocalizeItemTypes(g.Key), g.Select(i => new ItemDescriptionTreeItem(i)), ControlGenerator.GetIcon(g.Key.ToString(), _log))));
+        }
+
+        private static string LocalizeItemTypes(ItemDescription.ItemType type)
+        {
+            return type switch
+            {
+                ItemDescription.ItemType.Background => Strings.Backgrounds,
+                ItemDescription.ItemType.BGM => Strings.BGMs,
+                ItemDescription.ItemType.Character => Strings.Characters,
+                ItemDescription.ItemType.Character_Sprite => Strings.Character_Sprites,
+                ItemDescription.ItemType.Chess_Puzzle => Strings.Chess_Puzzles,
+                ItemDescription.ItemType.Chibi => Strings.Chibis,
+                ItemDescription.ItemType.Group_Selection => Strings.Group_Selections,
+                ItemDescription.ItemType.Item => Strings.Items,
+                ItemDescription.ItemType.Layout => Strings.Layouts,
+                ItemDescription.ItemType.Map => Strings.Maps,
+                ItemDescription.ItemType.Place => Strings.Places,
+                ItemDescription.ItemType.Puzzle => Strings.Puzzles,
+                ItemDescription.ItemType.Scenario => Strings.Scenario,
+                ItemDescription.ItemType.Script => Strings.Scripts,
+                ItemDescription.ItemType.SFX => Strings.SFXs,
+                ItemDescription.ItemType.System_Texture => Strings.System_Textures,
+                ItemDescription.ItemType.Topic => Strings.Topics,
+                ItemDescription.ItemType.Transition => Strings.Transitions,
+                ItemDescription.ItemType.Voice => Strings.Voices,
+                _ => "UNKNOWN TYPE",
+            };
         }
 
         public void SetupViewer(TreeView viewer)
