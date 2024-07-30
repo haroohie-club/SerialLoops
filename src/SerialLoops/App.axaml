@@ -58,11 +58,13 @@
                     <SolidColorBrush x:Key="LinkColor">Blue</SolidColorBrush>
                     <SolidColorBrush x:Key="DisabledLinkColor">DarkGray</SolidColorBrush>
                     <SolidColorBrush x:Key="GroupLineColor">DarkGray</SolidColorBrush>
+                    <Color x:Key="CropResizeOverlayColor">#55000000</Color>
                 </ResourceDictionary>
                 <ResourceDictionary x:Key="Dark">
                     <SolidColorBrush x:Key="LinkColor">Cyan</SolidColorBrush>
                     <SolidColorBrush x:Key="DisabledLinkColor">Gray</SolidColorBrush>
                     <SolidColorBrush x:Key="GroupLineColor">WhiteSmoke</SolidColorBrush>
+                    <Color x:Key="CropResizeOverlayColor">#AAFFFFFF</Color>
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
         </ResourceDictionary>

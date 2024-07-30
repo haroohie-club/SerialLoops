@@ -8,6 +8,8 @@ using SerialLoops.Assets;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Util;
+using SerialLoops.ViewModels.Dialogs;
+using SerialLoops.Views.Dialogs;
 using SkiaSharp;
 using System;
 using System.IO;
@@ -84,7 +86,12 @@ namespace SerialLoops.ViewModels.Editors
             IStorageFile openFile = (await _window.Window.StorageProvider.OpenFilePickerAsync(openOptions))?.FirstOrDefault();
             if (openFile is not null)
             {
-
+                SKBitmap newImage = SKBitmap.Decode(openFile.Path.AbsolutePath);
+                ImageCropResizeDialogViewModel cropResizeDialogViewModel = new(newImage, original.Width, original.Height, _log);
+                SKBitmap finalImage = await new ImageCropResizeDialog()
+                {
+                    DataContext = cropResizeDialogViewModel,
+                }.ShowDialog<SKBitmap>(_window.Window);
             }
         }
     }

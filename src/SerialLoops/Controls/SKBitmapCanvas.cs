@@ -39,7 +39,7 @@ namespace SerialLoops.Controls
             canvas.Clear();
             if (source is not null)
             {
-                canvas.DrawBitmap(source, SKRect.Create((float)CanvasSize.Width, (float)CanvasSize.Height));
+                canvas.DrawBitmap(source, SKRect.Create(source.Width, source.Height));
             }
         }
     }

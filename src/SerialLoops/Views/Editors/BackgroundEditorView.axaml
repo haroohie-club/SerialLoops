@@ -11,7 +11,7 @@
              x:DataType="vm:BackgroundEditorViewModel"
              x:Class="SerialLoops.Views.Editors.BackgroundEditorView">
     <ScrollViewer>
-        <StackPanel Orientation="Vertical" Spacing="5" HorizontalAlignment="Left">
+        <StackPanel Orientation="Vertical" Spacing="5" HorizontalAlignment="Left" VerticalAlignment="Top">
             <controls:SKBitmapCanvas Source="{Binding BgBitmap}"
                                      Width="{Binding BgBitmap.Width}" Height="{Binding BgBitmap.Height}"/>
             <TextBlock Text="{Binding BgDescription}"/>

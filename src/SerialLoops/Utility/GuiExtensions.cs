@@ -1,4 +1,6 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Media;
+using SkiaSharp;
 using System.Collections.Generic;
 
 namespace SerialLoops.Utility
