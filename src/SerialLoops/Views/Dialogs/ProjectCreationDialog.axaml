@@ -14,6 +14,7 @@
         Padding="10"
         x:DataType="vm:ProjectCreationDialogViewModel"
         x:Class="SerialLoops.Views.Dialogs.ProjectCreationDialog"
+        Icon="/Assets/serial-loops.ico"
         Title="{x:Static assets:Strings.Create_New_Project}"
         Name="PCDialog">
     
