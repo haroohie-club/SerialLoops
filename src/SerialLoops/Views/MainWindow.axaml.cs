@@ -40,17 +40,20 @@ namespace SerialLoops.Views
                     {
                         Header = Strings.New_Project___,
                         Icon = ControlGenerator.GetIcon("New", ViewModel.Log),
+                        Command = ViewModel.NewProjectCommand,
                     },
                     new NativeMenuItem()
                     {
                         Header = Strings.Open_Project,
                         Icon = ControlGenerator.GetIcon("Open", ViewModel.Log),
+                        Command = ViewModel.OpenProjectCommand,
                     },
                     ViewModel.RecentProjectsMenu,
                     new NativeMenuItem()
                     {
                         Header = Strings.Edit_Save_File,
                         Icon = ControlGenerator.GetIcon("Edit_Save", ViewModel.Log),
+                        Command = ViewModel.EditSaveCommand,
                     }
                 ]
             };

@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Platform.Storage;
 using MiniToolbar.Avalonia;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
@@ -83,8 +84,8 @@ namespace SerialLoops.ViewModels
 
         public async void Initialize(MainWindow window)
         {
-            NewProjectCommand = ReactiveCommand.Create(NewProjectCommand_Executed);
-            OpenProjectCommand = ReactiveCommand.Create(OpenProjectCommand_Executed);
+            NewProjectCommand = ReactiveCommand.CreateFromTask(NewProjectCommand_Executed);
+            OpenProjectCommand = ReactiveCommand.CreateFromTask(OpenProjectCommand_Executed);
             OpenRecentProjectCommand = ReactiveCommand.CreateFromTask<string>(OpenRecentProjectCommand_Executed);
             EditSaveCommand = ReactiveCommand.Create(EditSaveFileCommand_Executed);
             AboutCommand = ReactiveCommand.CreateFromTask(AboutCommand_Executed);
@@ -161,7 +162,7 @@ namespace SerialLoops.ViewModels
             //    .GetManifestResourceStream("SerialLoops.Graphics.MS-Gothic-Haruhi.ttf");
             //_msGothicHaruhi = SKTypeface.FromStream(typefaceStream);
 
-            Button advancedSearchButton = new() { Content = "...", Width = 25, Command = SearchProjectCommand };
+            //Button advancedSearchButton = new() { Content = "...", Width = 25, Command = SearchProjectCommand };
             //advancedSearchButton.Click += Search_Executed;
             //TableLayout searchBarLayout = new(new TableRow(
             //    SearchBox,
@@ -276,14 +277,32 @@ namespace SerialLoops.ViewModels
             await aboutDialog.ShowDialog(Window);
         }
 
-        public void NewProjectCommand_Executed()
+        public async Task NewProjectCommand_Executed()
         {
-
+            ProjectCreationDialogViewModel projectCreationDialogViewModel = new(CurrentConfig, this, Log);
+            Project newProject = await new ProjectCreationDialog()
+            {
+                DataContext = projectCreationDialogViewModel,
+            }.ShowDialog<Project>(Window);
+            if (newProject is not null)
+            {
+                OpenProject = newProject;
+                OpenProjectView(OpenProject, new LoopyProgressTracker());
+            }
         }
 
-        public void OpenProjectCommand_Executed()
+        public async Task OpenProjectCommand_Executed()
         {
-
+            FilePickerOpenOptions options = new()
+            {
+                SuggestedStartLocation = await Window.StorageProvider.TryGetFolderFromPathAsync(CurrentConfig.ProjectsDirectory),
+                FileTypeFilter = [new FilePickerFileType(Strings.Serial_Loops_Project) { Patterns = [$"*.{Project.PROJECT_FORMAT}"] }],
+            };
+            IStorageFile projectFile = (await Window.StorageProvider.OpenFilePickerAsync(options)).FirstOrDefault();
+            if (projectFile is not null)
+            {
+                await OpenProjectFromPath(projectFile.Path.AbsolutePath);
+            }
         }
 
         public async Task OpenRecentProjectCommand_Executed(string project)

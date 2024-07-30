@@ -6,7 +6,7 @@ using System.Globalization;
 
 namespace SerialLoops.Utility
 {
-    public static class SLConverters
+    public static partial class SLConverters
     {
     }
 
