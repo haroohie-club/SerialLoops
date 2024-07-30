@@ -1,0 +1,35 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:SerialLoops.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:views="using:SerialLoops.Views"
+        xmlns:panels="using:SerialLoops.Views.Panels"
+        xmlns:panelsvm="using:SerialLoops.ViewModels.Panels"
+        xmlns:assets="using:SerialLoops.Assets"
+        xmlns:toolbar="using:MiniToolbar.Avalonia"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="SerialLoops.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        MinWidth="{Binding MinSize.Width}"
+        MinHeight="{Binding MinSize.Height}"
+        Width="{Binding ClientSize.Width}"
+        Height="{Binding ClientSize.Height}"
+        ClosingBehavior="OwnerAndChildWindows"
+        Closing="Window_Closing"
+        Closed="Window_Closed"
+        Icon="/Assets/serial-loops.ico"
+        Title="{Binding Title}">
+
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <NativeMenu.Menu>
+        <NativeMenu>
+        </NativeMenu>
+    </NativeMenu.Menu>
+
+</Window>

@@ -1,0 +1,73 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:assets="using:SerialLoops.Assets"
+             x:Class="SerialLoops.App"
+             xmlns:local="using:SerialLoops"
+             xmlns:tabaloniathemes="using:Tabalonia.Themes.Fluent"
+             xmlns:mintoolbarthemes="using:MiniToolbar.Avalonia.Themes"
+             xmlns:dialoghost="using:DialogHostAvalonia"
+             RequestedThemeVariant="Default">
+             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->    
+    <Application.DataTemplates>
+        <local:ViewLocator/>
+    </Application.DataTemplates>
+
+    <NativeMenu.Menu>
+        <NativeMenu>
+            <NativeMenuItem Header="{x:Static assets:Strings.About_Serial_Loops}" Icon="/Assets/serial-loops.ico"
+                            Click="About_Click"/>
+            <NativeMenuItemSeparator />
+            <NativeMenuItem Header="{x:Static assets:Strings._Preferences___}"
+                            Icon="avares://SerialLoops/Assets/Icons/Options.png" Click="Preferences_Click"/>
+            <NativeMenuItem Header="{x:Static assets:Strings._Check_for_Updates___}"
+                            Icon="avares://SerialLoops/Assets/Icons/Update.png" Click="Updates_Click"/>
+            <NativeMenuItem Header="{x:Static assets:Strings.View__Logs}" Click="Logs_Click"/>
+        </NativeMenu>
+    </NativeMenu.Menu>
+  
+    <Application.Styles>
+        <FluentTheme />
+        <dialoghost:DialogHostStyles />
+        <tabaloniathemes:FluentTheme/>
+        <mintoolbarthemes:MiniToolbarStyles/>
+        <StyleInclude Source="avares://Avalonia.Controls.TreeDataGrid/Themes/Fluent.axaml"/>
+        <Style Selector="TextBlock.h1">
+            <Setter Property="FontSize" Value="32"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+        <Style Selector="TextBlock.h2">
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+        <Style Selector="TextBlock.link">
+            <Setter Property="TextDecorations" Value="Underline"/>
+        </Style>
+        <Style Selector="TextBlock.link:not(:disabled)">
+            <Setter Property="Foreground" Value="{DynamicResource ResourceKey=LinkColor}"/>
+            <Setter Property="Cursor" Value="Hand" />
+        </Style>
+        <Style Selector="TextBlock.link:disabled">
+            <Setter Property="Foreground" Value="{DynamicResource ResourceKey=DisabledLinkColor}"/>
+        </Style>
+    </Application.Styles>
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Light">
+                    <SolidColorBrush x:Key="LinkColor">Blue</SolidColorBrush>
+                    <SolidColorBrush x:Key="DisabledLinkColor">DarkGray</SolidColorBrush>
+                    <SolidColorBrush x:Key="GroupLineColor">DarkGray</SolidColorBrush>
+                    <Color x:Key="CropResizeOverlayColor">#55000000</Color>
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Dark">
+                    <SolidColorBrush x:Key="LinkColor">Cyan</SolidColorBrush>
+                    <SolidColorBrush x:Key="DisabledLinkColor">Gray</SolidColorBrush>
+                    <SolidColorBrush x:Key="GroupLineColor">WhiteSmoke</SolidColorBrush>
+                    <Color x:Key="CropResizeOverlayColor">#AAFFFFFF</Color>
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+    
+</Application>

@@ -1,0 +1,30 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:SerialLoops.ViewModels.Dialogs"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:assets="using:SerialLoops.Assets"
+        mc:Ignorable="d" d:DesignWidth="550" d:DesignHeight="600"
+        xmlns:controls="using:SerialLoops.Controls"
+        x:DataType="vm:PreferencesDialogViewModel"
+        x:Class="SerialLoops.Views.Dialogs.PreferencesDialog"
+        MinWidth="{Binding MinWidth}"
+        MinHeight="{Binding MinHeight}"
+        Width="{Binding Width}"
+        Height="{Binding Height}"
+        Icon="/Assets/serial-loops.ico"
+        Title="{x:Static assets:Strings.Preferences}">
+    <DockPanel>
+        <ScrollViewer DockPanel.Dock="Top" VerticalScrollBarVisibility="Visible" Height="{Binding ScrollViewerHeight}">
+            <StackPanel>
+                <controls:OptionsGroup Name="BuildOptions" />
+                <controls:OptionsGroup Name="ProjectOptions" />
+                <controls:OptionsGroup Name="SerialLoopsOptions" />                
+                </StackPanel>
+        </ScrollViewer>
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Spacing="5" Margin="20">
+            <Button Content="{x:Static assets:Strings.Save}" Command="{Binding SaveCommand}"/>
+            <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}" IsCancel="True"/>
+        </StackPanel>
+    </DockPanel>
+</Window>

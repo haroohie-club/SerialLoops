@@ -1,5 +1,8 @@
-﻿using Eto.Forms;
+﻿using Avalonia.Controls;
 using HaruhiChokuretsuLib.Util;
+using MsBox.Avalonia;
+using MsBox.Avalonia.Enums;
+using SerialLoops.Assets;
 using SerialLoops.Lib;
 using System;
 using System.IO;
@@ -36,7 +39,7 @@ namespace SerialLoops.Utility
 
         public void LogError(string message, bool lookForWarnings = false)
         {
-            Application.Instance.Invoke(() => MessageBox.Show(string.Format("ERROR: {0}", Application.Instance.Localize(this, message)), "Error", MessageBoxType.Error));
+            MessageBoxManager.GetMessageBoxStandard(Strings.Error, string.Format(Strings.ERROR___0_, message), ButtonEnum.Ok, Icon.Error, WindowStartupLocation.CenterScreen).ShowAsync().GetAwaiter().GetResult();
             if (_writer is not null && !string.IsNullOrEmpty(message))
             {
                 _writer.WriteLine($"{DateTimeOffset.Now} - ERROR: {message}");
@@ -46,7 +49,7 @@ namespace SerialLoops.Utility
 
         public void LogException(string message, Exception exception)
         {
-            LogError($"{Application.Instance.Localize(this, message)}\n{exception.Message}");
+            LogError($"{message}\n{exception.Message}");
             LogWarning($"\n{exception.StackTrace}");
         }
 

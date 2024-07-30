@@ -1,0 +1,36 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="using:SerialLoops.ViewModels.Editors"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:i="using:Avalonia.Xaml.Interactivity"
+             xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
+             xmlns:assets="using:SerialLoops.Assets"
+             xmlns:controls="using:SerialLoops.Controls"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:BackgroundEditorViewModel"
+             x:Class="SerialLoops.Views.Editors.BackgroundEditorView">
+    <ScrollViewer>
+        <StackPanel Orientation="Vertical" Spacing="5" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <controls:SKBitmapCanvas Source="{Binding BgBitmap}"
+                                     Width="{Binding BgBitmap.Width}" Height="{Binding BgBitmap.Height}"/>
+            <TextBlock Text="{Binding BgDescription}"/>
+            <StackPanel Orientation="Horizontal" Spacing="3">
+                <Button Content="{x:Static assets:Strings.Export}" Command="{Binding ExportCommand}"/>
+                <Button Content="{x:Static assets:Strings.Replace}" Command="{Binding ReplaceCommand}"/>
+            </StackPanel>
+            <StackPanel IsVisible="{Binding ShowExtras}" HorizontalAlignment="Left">
+                <TextBox Name="CgBox" Width="200" Text="{Binding Bg.CgName, Mode=OneTime}">
+                    <i:Interaction.Behaviors>
+                        <ia:EventTriggerBehavior EventName="TextChanged" SourceObject="{Binding #CgBox}">
+                            <ia:InvokeCommandAction Command="{Binding CgNameChangeCommand}" CommandParameter="{Binding #CgBox.Text}" />
+                        </ia:EventTriggerBehavior>
+                    </i:Interaction.Behaviors>
+                </TextBox>
+                <TextBlock Text="{Binding FlagDescription}"/>
+                <TextBlock Text="{Binding UnknownExtrasShortDescription}"/>
+                <TextBlock Text="{Binding UnknownExtrasByteDescription}"/>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

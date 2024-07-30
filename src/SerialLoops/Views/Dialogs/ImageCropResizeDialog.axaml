@@ -1,0 +1,75 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:SerialLoops.ViewModels.Dialogs"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:assets="using:SerialLoops.Assets"
+        xmlns:controls="using:SerialLoops.Controls"
+        xmlns:gbox="using:GroupBox.Avalonia.Controls"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:DataType="vm:ImageCropResizeDialogViewModel"
+        x:Class="SerialLoops.Views.Dialogs.ImageCropResizeDialog"
+        MinWidth="900"
+        MinHeight="750"
+        Padding="10"
+        Icon="/Assets/serial-loops.ico"
+        Title="{x:Static assets:Strings.Crop___Scale}"
+        Name="ICRDialog">
+    <StackPanel Orientation="Vertical" Spacing="5" HorizontalAlignment="Center">
+        <StackPanel Orientation="Horizontal" Margin="5">
+            <controls:SKCropResizeCanvas SourceBitmap="{Binding StartImage}" FinalBitmap="{Binding FinalImage}"
+                                         SourceWidth="{Binding SourceWidth}" SourceHeight="{Binding SourceHeight}"
+                                         PreviewWidth="{Binding PreviewWidth}" PreviewHeight="{Binding PreviewHeight}"
+                                         ImageLocation="{Binding ImageLocation}"
+                                         SelectionAreaLocation="{Binding SelectionLocation}"
+                                         PreserveAspectRatio="{Binding PreserveAspectRatio}"
+                                         Width="650" Height="600" Name="PreviewCanvas"/>
+            <StackPanel Orientation="Vertical" Spacing="5">
+                <gbox:GroupBox Header="{x:Static assets:Strings.Scale_Image}" Theme="{StaticResource GroupBoxClassic}"
+                               Width="200" Padding="5">
+                    <StackPanel Orientation="Vertical" Spacing="5" Margin="5">
+                        <StackPanel Orientation="Horizontal" Spacing="3" VerticalAlignment="Center" HorizontalAlignment="Right">
+                            <TextBlock Text="{x:Static assets:Strings.Size_}"/>
+                            <StackPanel Orientation="Vertical">
+                                <NumericUpDown Name="WidthStepper" Value="{Binding #PreviewCanvas.PreviewWidth}" />
+                                <NumericUpDown Name="HeightStepper" Value="{Binding #PreviewCanvas.PreviewHeight}" />
+                            </StackPanel>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Spacing="3" VerticalAlignment="Center">
+                            <TextBlock Text="{x:Static assets:Strings.Preserve_Aspect_Ratio_}"/>
+                            <CheckBox IsChecked="{Binding PreserveAspectRatio}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Spacing="3" VerticalAlignment="Center">
+                            <TextBlock Text="{x:Static assets:Strings.Scale_to_Fit_}"/>
+                            <Button Content="{x:Static assets:Strings.Apply}" Command="{Binding ScaleToFitCommand}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </gbox:GroupBox>
+                <gbox:GroupBox Header="{x:Static assets:Strings.Position_Image}" Theme="{StaticResource GroupBoxClassic}"
+                               Width="200" Padding="5">
+                    <StackPanel Orientation="Vertical" Spacing="5" Margin="5" VerticalAlignment="Center">
+                        <StackPanel Orientation="Horizontal" Spacing="3">
+                            <TextBlock Text="{x:Static assets:Strings.Position_}"/>
+                            <StackPanel Orientation="Vertical">
+                                <NumericUpDown Name="XStepper" Value="{Binding #PreviewCanvas.ImageLocation.Value.X}"/>
+                                <NumericUpDown Name="YStepper" Value="{Binding #PreviewCanvas.ImageLocation.Value.Y}"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Spacing="3" VerticalAlignment="Center">
+                            <TextBlock Text="{x:Static assets:Strings.Reset_}"/>
+                            <Button Content="{x:Static assets:Strings.Apply}" Command="{Binding ResetPositionCommand}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </gbox:GroupBox>
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Width="200" Margin="5">
+                    <TextBlock Text="{x:Static assets:Strings.Ctrl_Scroll___Scale_Image}"/>
+                    <TextBlock Text="{x:Static assets:Strings.Arrow_Keys___Move_Image}"/>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Spacing="3" Margin="5">
+            <Button Content="{x:Static assets:Strings.Save}" Command="{Binding SaveCommand}" CommandParameter="{Binding ElementName=ICRDialog}"/>
+            <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}" CommandParameter="{Binding ElementName=ICRDialog}"/>
+        </StackPanel>
+    </StackPanel>
+</Window>

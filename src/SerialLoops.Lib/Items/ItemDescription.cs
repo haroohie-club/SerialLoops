@@ -1,18 +1,39 @@
-﻿using HaruhiChokuretsuLib.Archive.Event;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using HaruhiChokuretsuLib.Archive.Event;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace SerialLoops.Lib.Items
 {
-    public class ItemDescription
+    public partial class ItemDescription : ObservableObject
     {
-        public string Name { get; protected set; }
-        public bool CanRename { get; set; }
-        public string DisplayName { get; protected set; }
-        public string DisplayNameWithStatus => UnsavedChanges ? $"{DisplayName} *" : DisplayName;
+        private string _name;
+        private bool _canRename;
+        private string _displayName;
+        private bool _unsavedChanges;
+
+        public string Name
+        {
+            get => _name;
+            set => SetProperty(ref _name, value);
+        }
+        public bool CanRename
+        {
+            get => _canRename;
+            set => SetProperty(ref _canRename, value);
+        }
+        public string DisplayName
+        {
+            get => _displayName;
+            set => SetProperty(ref _displayName, value);
+        }
         public ItemType Type { get; private set; }
-        public bool UnsavedChanges { get; set; } = false;
+        public bool UnsavedChanges
+        {
+            get => _unsavedChanges;
+            set => SetProperty(ref _unsavedChanges, value);
+        }
 
         public ItemDescription(string name, ItemType type, string displayName)
         {
@@ -192,6 +213,5 @@ namespace SerialLoops.Lib.Items
                     return references;
             }
         }
-
     }
 }

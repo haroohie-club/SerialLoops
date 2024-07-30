@@ -1,97 +1,79 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-  <!--
-    Set the BuildPlatform property to the Eto platform you wish to build for.
-    The default is the platform you are building on.
-    Valid values: Wpf, Windows, Mac64, XamMac2, Gtk, Direct2D
-  -->
-
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <OutputType>WinExe</OutputType>
+    <TargetFrameworks>net8.0;net8.0-windows</TargetFrameworks>
+    <Nullable>disable</Nullable>
+    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <Version>$(SLAssemblyVersion)</Version>
     <InformationalVersion>$(SLVersion)</InformationalVersion>
-    <AssemblyName>SerialLoops.Eto</AssemblyName>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <CFBundleName>Serial Loops</CFBundleName>
+    <!-- Also defines .app file name -->
+    <CFBundleDisplayName>Serial Loops</CFBundleDisplayName>
+    <CFBundleIdentifier>club.haroohie.SerialLoops</CFBundleIdentifier>
+    <CFBundleVersion>$(SLAssemblyVersion)</CFBundleVersion>
+    <CFBundleShortVersionString>$(SLVersion)</CFBundleShortVersionString>
+    <CFBundlePackageType>APPL</CFBundlePackageType>
+    <CFBundleExecutable>SerialLoops</CFBundleExecutable>
+    <CFBundleIconFile>SerialLoops.icns</CFBundleIconFile>
+    <!-- Will be copied from output directory -->
+    <NSPrincipalClass>NSApplication</NSPrincipalClass>
+    <NSHighResolutionCapable>true</NSHighResolutionCapable>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Graphics\MS-Gothic-Haruhi.ttf" />
-    <None Remove="Graphics\BlankNameplate.png" />
-    <None Remove="Graphics\BlankNameplateBaseArrow.png" />
-    <None Remove="Graphics\msgothic-variablewidth.ttf" />
-    <None Remove="Graphics\ScriptPreviewError.png" />
-    <None Remove="Icons\Add.png" />
-    <None Remove="Icons\Add_Section.png" />
-    <None Remove="Icons\AppIcon.png" />
-    <None Remove="Icons\Background.png" />
-    <None Remove="Icons\BGM.png" />
-    <None Remove="Icons\Bottom_Screen.png" />
-    <None Remove="Icons\Camera.png" />
-    <None Remove="Icons\Character_Sprite.png" />
-    <None Remove="Icons\Chess_Puzzle.png" />
-    <None Remove="Icons\Chibi.png" />
-    <None Remove="Icons\Clear.png" />
-    <None Remove="Icons\Close.png" />
-    <None Remove="Icons\Dialogue_Config.png" />
-    <None Remove="Icons\Group_Selection.png" />
-    <None Remove="Icons\Item.png" />
-    <None Remove="Icons\Layout.png" />
-    <None Remove="Icons\Map.png" />
-    <None Remove="Icons\New.png" />
-    <None Remove="Icons\Open.png" />
-    <None Remove="Icons\Options.png" />
-    <None Remove="Icons\Pathing.png" />
-    <None Remove="Icons\Place.png" />
-    <None Remove="Icons\Project_Options.png" />
-    <None Remove="Icons\Puzzle.png" />
-    <None Remove="Icons\Remove.png" />
-    <None Remove="Icons\Save.png" />
-    <None Remove="Icons\Scenario.png" />
-    <None Remove="Icons\Script.png" />
-    <None Remove="Icons\System_Texture.png" />
-    <None Remove="Icons\Template.png" />
-    <None Remove="Icons\Topic.png" />
-    <None Remove="Icons\Top_Screen.png" />
-    <None Remove="Icons\Transition.png" />
-    <None Remove="Icons\Tutorial.png" />
-    <None Remove="Icons\Update.png" />
-    <None Remove="Icons\Voice.png" />
-    <None Remove="Icons\Build.png" />
-    <None Remove="Icons\Build_Scratch.png" />
-    <None Remove="Icons\Build_Run.png" />
-    <None Remove="Icons\Help.png" />
-    <None Remove="Icons\Warning.png" />
-    <None Remove="Icons\Chibi_DOWN_LEFT.png" />
-    <None Remove="Icons\Chibi_DOWN_RIGHT.png" />
-    <None Remove="Icons\Chibi_UP_LEFT.png" />
-    <None Remove="Icons\Chibi_UP_RIGHT.png" />
+    <AvaloniaResource Include="Assets\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Icons\*.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <AvaloniaResource Remove="Assets\Strings.de.resx" />
+    <AvaloniaResource Remove="Assets\Strings.en-GB.resx" />
+    <AvaloniaResource Remove="Assets\Strings.es.resx" />
+    <AvaloniaResource Remove="Assets\Strings.it.resx" />
+    <AvaloniaResource Remove="Assets\Strings.ja.resx" />
+    <AvaloniaResource Remove="Assets\Strings.pt-BR.resx" />
+    <AvaloniaResource Remove="Assets\Strings.resx" />
+    <AvaloniaResource Remove="Assets\Strings.ru.resx" />
+    <AvaloniaResource Remove="Assets\Strings.zh-Hans.resx" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Graphics\MS-Gothic-Haruhi.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Graphics\BlankNameplate.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Graphics\BlankNameplateBaseArrow.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Graphics\ScriptPreviewError.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <None Remove="Assets\MacIcon.icns" />
+    <None Remove="Assets\serial-loops.ico" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Eto.Forms" Version="2.8.3" />
-    <PackageReference Include="Eto.Forms.Controls.SkiaSharp.Shared" Version="2.0.1" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.5" />
-    <PackageReference Include="System.Text.Json" Version="8.0.4" />
+    <PackageReference Include="Avalonia" Version="11.1.1" />
+    <PackageReference Include="Avalonia.Controls.TreeDataGrid" Version="11.0.10" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.1.1" />
+    <PackageReference Include="Avalonia.Labs.Controls" Version="11.0.10.1" />
+    <PackageReference Include="Avalonia.Labs.Panels" Version="11.0.10.1" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="11.1.1" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.1.1" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.1.1" />
+    <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.1.1" />
+    <PackageReference Include="Avalonia.Xaml.Behaviors" Version="11.1.0" />
+    <PackageReference Include="BinToss.GroupBox.Avalonia" Version="1.0.0" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+    <PackageReference Include="DialogHost.Avalonia" Version="0.7.9" />
+    <PackageReference Include="Dotnet.Bundle" Version="0.9.13" />
+    <PackageReference Include="Markdown.Avalonia" Version="11.0.2" />
+    <PackageReference Include="MessageBox.Avalonia" Version="3.1.5.1" />
+    <PackageReference Include="MiniToolbar.Avalonia" Version="1.0.26" />
+    <PackageReference Include="Tabalonia" Version="0.10.3" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net8.0-windows'">
+    <PackageReference Include="NAudio" Version="2.2.1" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' != 'net8.0-windows'">
+    <PackageReference Include="OpenTK" Version="4.8.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -99,37 +81,26 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="ProjectCreationDialog - Copy.eto.cs">
-      <DependentUpon>$([System.String]::Copy('%(Filename)').Replace('.eto', ''))%(Extension)</DependentUpon>
-    </Compile>
-    <Compile Update="Dialogs\SearchDialog.eto.cs">
-      <DependentUpon>$([System.String]::Copy('%(Filename)').Replace('.eto', ''))%(Extension)</DependentUpon>
-    </Compile>
-    <Compile Update="Dialogs\ProjectCreationDialog.eto.cs">
-      <DependentUpon>ProjectCreationDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Strings.Designer.cs">
+    <Compile Update="Assets\Strings.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
+    <Compile Update="Program.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Strings.resx">
+    <EmbeddedResource Update="Assets\Strings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Strings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Icons\Layout.png">
+    <None Update="SerialLoops.icns">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
+    </None>
   </ItemGroup>
-
-  <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Linux'))">
-    <DefineConstants>OS_LINUX</DefineConstants>
-  </PropertyGroup>
-
 </Project>

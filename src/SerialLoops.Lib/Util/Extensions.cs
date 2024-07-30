@@ -235,6 +235,19 @@ namespace SerialLoops.Lib.Util
             }
             return string.Empty;
         }
+
+        public static string ToTitleCase(this string str)
+        { 
+            if (string.IsNullOrEmpty(str))
+            {
+                return str;
+            }
+            else if (str.Length == 1)
+            {
+                return str.ToUpper();
+            }
+            return $"{str[0].ToString().ToUpper()}{str[1..]}";
+        }
     }
 
     public class SKColorJsonConverter : JsonConverter<SKColor>
@@ -243,10 +256,10 @@ namespace SerialLoops.Lib.Util
         {
             string html = reader.GetString();
             return new(
-                byte.Parse(html[2..4], System.Globalization.NumberStyles.HexNumber),
-                byte.Parse(html[4..6], System.Globalization.NumberStyles.HexNumber),
-                byte.Parse(html[6..8], System.Globalization.NumberStyles.HexNumber),
-                byte.Parse(html[0..2], System.Globalization.NumberStyles.HexNumber)
+                byte.Parse(html[2..4], NumberStyles.HexNumber),
+                byte.Parse(html[4..6], NumberStyles.HexNumber),
+                byte.Parse(html[6..8], NumberStyles.HexNumber),
+                byte.Parse(html[0..2], NumberStyles.HexNumber)
                 );
         }
 

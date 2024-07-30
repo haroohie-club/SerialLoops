@@ -1,18 +1,23 @@
-﻿using Eto.Forms;
-using HaruhiChokuretsuLib.Util;
-using SerialLoops.Dialogs;
+﻿using HaruhiChokuretsuLib.Util;
 using System;
-using System.Net.Http;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http.Headers;
+using System.Net.Http;
 using System.Reflection;
+using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
+using SerialLoops.Views;
+using SerialLoops.ViewModels;
+using SerialLoops.Assets;
+using SerialLoops.Views.Dialogs;
+using SerialLoops.ViewModels.Dialogs;
 
 namespace SerialLoops.Utility
 {
-    internal class UpdateChecker
+    internal class UpdateChecker(MainWindowViewModel mainWindowViewModel)
     {
-
         private const string USER_AGENT = "Serial-Loops-Updater";
         private const string ENDPOINT = "https://api.github.com";
         private const string ORG = "haroohie-club";
@@ -21,17 +26,11 @@ namespace SerialLoops.Utility
 
         public bool UpdateOnClose { get; set; } = false;
 
-        private readonly string _currentVersion;
+        private readonly string _currentVersion = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "0.1.0.0";
 
-        private MainForm _mainForm;
-        private ILogger _logger => _mainForm.Log;
-        private bool _preReleaseChannel => _mainForm.CurrentConfig.PreReleaseChannel;
-
-        public UpdateChecker(MainForm mainForm)
-        {
-            _mainForm = mainForm;
-            _currentVersion = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "0.1.0.0";
-        }
+        private MainWindowViewModel _mainWindowViewModel = mainWindowViewModel;
+        private ILogger _logger => _mainWindowViewModel.Log;
+        private bool _preReleaseChannel => _mainWindowViewModel.CurrentConfig.PreReleaseChannel;
 
         public async void Check()
         {
@@ -42,8 +41,12 @@ namespace SerialLoops.Utility
             }
 
             _logger.Log($"An update for Serial Loops is available! ({version})");
-            UpdateAvailableDialog updateDisplay = new(_mainForm, version, assets, url, changelog);
-            updateDisplay.ShowModal();
+            UpdateAvailableDialog updateDisplay = new();
+            UpdateAvailableDialogViewModel updateDisplayViewModel = new();
+            updateDisplayViewModel.Initialize(_mainWindowViewModel, updateDisplay, version, assets, url, changelog);
+            updateDisplay.DataContext = updateDisplayViewModel;
+            updateDisplay.ViewModel = updateDisplayViewModel;
+            await updateDisplay.ShowDialog(_mainWindowViewModel.Window);
         }
 
         private async Task<(string, string, JsonArray, string)> GetLatestVersion(string currentVersion)
@@ -69,7 +72,7 @@ namespace SerialLoops.Utility
             }
             catch (Exception e)
             {
-                _logger.LogException(string.Format(Application.Instance.Localize(null, "Failed to check for updates! (Endpoint: {0})"), GET_RELEASES), e);
+                _logger.LogException(string.Format(Strings.Failed_to_check_for_updates___Endpoint___0__, GET_RELEASES), e);
             }
 
             return (currentVersion, "https://github.com/haroohie-club/SerialLoops/releases/latest", [], "N/A");

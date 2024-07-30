@@ -1,15 +1,48 @@
-﻿using Eto.Forms;
-using HaruhiChokuretsuLib.Util;
-using SerialLoops.Controls;
-using SerialLoops.Lib;
+﻿using Avalonia.Controls;
+using Avalonia.Media;
+using SkiaSharp;
+using System.Collections.Generic;
 
 namespace SerialLoops.Utility
 {
     public static class GuiExtensions
     {
-        public static ContextMenu GetContextMenu(this string itemName, Project project, ItemExplorerPanel explorer, EditorTabsPanel tabs, ILogger log)
+        public static void AddRange(this ItemCollection itemCollection, IEnumerable<ContentControl> items)
         {
-            return project.FindItem(itemName) is not null ? new ItemContextMenu(project, explorer, tabs, log) : new TypeContextMenu(project, explorer, tabs, log);
+            foreach (ContentControl item in items)
+            {
+                itemCollection.Add(item);
+            }
+        }
+
+        public static void AddRange(this Avalonia.Controls.Controls controlsCollection, IEnumerable<Control> controlsToAdd)
+        {
+            foreach (Control control in controlsToAdd)
+            {
+                controlsCollection.Add(control);
+            }
+        }
+
+        public static NativeMenuItem FindNativeMenuItem(this NativeMenu menu, string header)
+        {
+            foreach (NativeMenuItemBase itemBase in menu.Items)
+            {
+                if (itemBase is NativeMenuItem item)
+                {
+                    if (item.Header.Equals(header))
+                    {
+                        return item;
+                    }
+                    else
+                    {
+                        if (item.Menu?.FindNativeMenuItem(header) is not null)
+                        {
+                            return item;
+                        }
+                    }
+                }
+            }
+            return null;
         }
     }
 }

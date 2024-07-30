@@ -1,0 +1,40 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="using:SerialLoops.ViewModels.Panels"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:controls="using:SerialLoops.Controls"
+             xmlns:assets="using:SerialLoops.Assets"
+             xmlns:editors="using:SerialLoops.ViewModels.Editors"
+             xmlns:utility="using:SerialLoops.Utility"
+             xmlns:tab="using:Tabalonia.Controls"
+             x:DataType="vm:EditorTabsPanelViewModel"
+             x:Class="SerialLoops.Views.Panels.EditorTabsPanel">
+    <Design.DataContext>
+        <vm:EditorTabsPanelViewModel/>
+    </Design.DataContext>
+    <UserControl.Resources>
+        <utility:DisplayNameConverter x:Key="DisplayNameConverter"/>
+    </UserControl.Resources>
+    
+    <tab:TabsControl Name="Tabs" ShowDefaultAddButton="False" ItemsSource="{Binding Tabs}"
+                     ContainerClearing="Tabs_PageClosed" SelectionChanged="Tabs_PageChanged"
+                     LastTabClosedAction="{x:Null}">
+        <tab:TabsControl.ItemTemplate>
+            <DataTemplate DataType="editors:EditorViewModel">
+                <StackPanel Orientation="Horizontal" Spacing="3">
+                    <Image Source="avares://SerialLoops/Assets/Icons/Character_Sprite.png" Width="16"/>
+                    <TextBlock FontSize="12">
+                        <TextBlock.Text>
+                            <MultiBinding Converter="{StaticResource DisplayNameConverter}">
+                                <Binding Path="Description.DisplayName"/>
+                                <Binding Path="Description.UnsavedChanges"/>
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                </StackPanel>
+            </DataTemplate>
+        </tab:TabsControl.ItemTemplate>
+    </tab:TabsControl>
+</UserControl>

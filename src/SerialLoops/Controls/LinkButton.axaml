@@ -1,0 +1,13 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SerialLoops.Controls.LinkButton">
+    <Grid>
+        <TextBlock Classes="link" IsEnabled="True" Name="LinkText"/>
+        <!-- TODO: (Maybe?) Remove this kludge (routes around https://github.com/AvaloniaUI/Avalonia/issues/15281) -->
+        <Button Cursor="Hand" Background="Transparent" Width="{Binding #LinkText.Bounds.Size.Width}"
+                Height="{Binding #LinkText.Bounds.Size.Height}" Click="Action_Execute"/>
+    </Grid>
+</UserControl>

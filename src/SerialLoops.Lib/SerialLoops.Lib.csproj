@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="BunLabs.NAudio.Flac" Version="2.0.1" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
     <PackageReference Include="HarfBuzzSharp.NativeAssets.Linux" Version="7.3.0.2" />
     <PackageReference Include="HarfBuzzSharp.NativeAssets.macOS" Version="7.3.0.2" />
     <PackageReference Include="HaruhiChokuretsuLib" Version="0.40.6" />
