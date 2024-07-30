@@ -405,6 +405,11 @@ namespace SerialLoops.ViewModels
 
         private void InitializeProjectMenu()
         {
+            if (WindowMenu.ContainsKey(MenuHeader.TOOLS))
+            {
+                // Skip adding the new menu items if they're already here
+                return;
+            }
             NativeMenu menu = NativeMenu.GetMenu(Window);
             int insertionPoint = menu.Items.Count;
             if (((NativeMenuItem)menu.Items.Last()).Header.Equals(Strings._Help))
