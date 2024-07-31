@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
-using Avalonia.Threading;
 using HaruhiChokuretsuLib.Util;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
@@ -80,15 +79,8 @@ namespace SerialLoops.ViewModels.Dialogs
                 await new ProgressDialog(() =>
                 {
                     ((IProgressTracker)tracker).Focus(Strings.Creating_Project, 1);
-#if (!WINDOWS && !MACOS)
-                    Dispatcher.UIThread.Invoke(() =>
-                    {
-#endif
-                        Lib.IO.OpenRom(newProject, RomPath, _log, tracker);
-#if (!WINDOWS && !MACOS)
-                    });
-#endif
-                        tracker.Finished++;
+                    Lib.IO.OpenRom(newProject, RomPath, _log, tracker);
+                    tracker.Finished++;
                     newProject.Load(_config, _log, tracker);
                 }, () => dialog.Close(newProject), tracker, Strings.Creating_Project).ShowDialog(_mainWindow.Window);
             }
