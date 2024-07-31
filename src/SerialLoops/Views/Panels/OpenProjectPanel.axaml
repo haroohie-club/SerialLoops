@@ -18,12 +18,12 @@
     <Grid RowDefinitions="Auto,*">
         <StackPanel Grid.Row="0">
             <NativeMenuBar Name="MenuBar"/>
-            <toolbar:Toolbar Height="60" Name="ToolBar" HorizontalAlignment="Right"/>
+            <toolbar:Toolbar Height="60" Name="ToolBar" HorizontalAlignment="Right" />
         </StackPanel>
         <Grid Grid.Row="1" ColumnDefinitions="Auto,*">
             <panels:ItemExplorerPanel Grid.Column="0" Name="ItemExplorer" DataContext="{Binding Explorer}" Width="300"/>
             <panels:EditorTabsPanel Grid.Column="1" Name="EditorTabs" DataContext="{Binding EditorTabs}"/>
         </Grid>
     </Grid>
-    
+
 </UserControl>

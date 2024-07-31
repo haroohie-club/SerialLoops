@@ -17,7 +17,7 @@
         <NativeMenuBar DockPanel.Dock="Top"/>
         <StackPanel DockPanel.Dock="Bottom" HorizontalAlignment="Center">
             <StackPanel Margin="15" Spacing="5" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center">
-                <Image Source="avares://SerialLoops/Assets/Icons/AppIcon.png" Width="96"/>
+                <Svg Path="avares://SerialLoops/Assets/Icons/AppIcon.svg" Width="96"/>
                 <TextBlock Classes="h1" Text="Serial Loops"/>
             </StackPanel>
             <DockPanel>
@@ -25,23 +25,23 @@
                             Orientation="Vertical">
                     <TextBlock Classes="h2" Text="{x:Static assets:Strings.Start}"/>
                     <StackPanel Orientation="Horizontal" Spacing="5">
-                        <Image Source="avares://SerialLoops/Assets/Icons/New.png" Width="16"/>
+                        <Svg Path="avares://SerialLoops/Assets/Icons/New.svg" Width="16"/>
                         <controls:LinkButton OnClick="NewProject_PointerPressed" Text="{x:Static assets:Strings.New_Project}"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Spacing="5">
-                        <Image Source="avares://SerialLoops/Assets/Icons/Open.png" Width="16"/>
+                        <Svg Path="avares://SerialLoops/Assets/Icons/Open.svg" Width="16"/>
                         <controls:LinkButton OnClick="OpenProject_PointerPressed" Text="{x:Static assets:Strings.Open_Project}"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Spacing="5">
-                        <Image Source="avares://SerialLoops/Assets/Icons/Edit_Save.png" Width="16"/>
+                        <Svg Path="avares://SerialLoops/Assets/Icons/Edit_Save.svg" Width="16"/>
                         <controls:LinkButton OnClick="EditSaveFile_PointerPressed" Text="{x:Static assets:Strings.Edit_Save_File}"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Spacing="5">
-                        <Image Source="avares://SerialLoops/Assets/Icons/Options.png" Width="16"/>
+                        <Svg Path="avares://SerialLoops/Assets/Icons/Options.svg" Width="16"/>
                         <controls:LinkButton OnClick="Preferences_PointerPressed" Text="{x:Static assets:Strings.Preferences}"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Spacing="5">
-                        <Image Source="avares://SerialLoops/Assets/Icons/Help.png" Width="16"/>
+                        <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16"/>
                         <controls:LinkButton OnClick="About_PointerPressed" Text="{x:Static assets:Strings.About}"/>
                     </StackPanel>
                 </StackPanel>
@@ -52,5 +52,5 @@
             </DockPanel>
         </StackPanel>
     </DockPanel>
-    
+
 </UserControl>

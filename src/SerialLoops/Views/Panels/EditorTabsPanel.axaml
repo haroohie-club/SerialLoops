@@ -17,15 +17,15 @@
     <UserControl.Resources>
         <utility:DisplayNameConverter x:Key="DisplayNameConverter"/>
     </UserControl.Resources>
-    
+
     <tab:TabsControl Name="Tabs" ShowDefaultAddButton="False" ItemsSource="{Binding Tabs}"
                      ContainerClearing="Tabs_PageClosed" SelectionChanged="Tabs_PageChanged"
-                     LastTabClosedAction="{x:Null}">
-        <tab:TabsControl.ItemTemplate>
+                     LastTabClosedAction="{x:Null}" TabItemWidth="220">
+        <tab:TabsControl.ItemTemplate >
             <DataTemplate DataType="editors:EditorViewModel">
                 <StackPanel Orientation="Horizontal" Spacing="3">
-                    <Image Source="avares://SerialLoops/Assets/Icons/Character_Sprite.png" Width="16"/>
-                    <TextBlock FontSize="12">
+                    <Svg Path="{Binding Description.Type, StringFormat='avares://SerialLoops/Assets/Icons/{0}.svg'}" Width="18"/>
+                    <TextBlock FontSize="14" Padding="0 1 8 1">
                         <TextBlock.Text>
                             <MultiBinding Converter="{StaticResource DisplayNameConverter}">
                                 <Binding Path="Description.DisplayName"/>

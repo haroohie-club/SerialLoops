@@ -48,7 +48,7 @@ namespace SerialLoops.ViewModels.Panels
                     MainWindow.Window.TryFindResource("DisabledLinkColor", MainWindow.Window.ActualThemeVariant, out object? brush);
                     panel.Children.Add(new TextBlock { Text = Strings.Missing_ + $" {project}", Foreground = (ImmutableSolidColorBrush)brush });
                 }
-                _homePanel.RecentsPanel.Children.Add(ControlGenerator.GetControlWithIcon(panel, !missing ? "AppIcon" : "Warning", Log));
+                _homePanel.RecentsPanel.Children.Add(ControlGenerator.GetControlWithIcon(panel, !missing ? "AppIconSimple" : "Warning", Log));
             }
 
             if (_homePanel.RecentsPanel.Children.Count == 0)

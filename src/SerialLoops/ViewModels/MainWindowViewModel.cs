@@ -24,6 +24,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Avalonia.Svg;
 
 namespace SerialLoops.ViewModels
 {
@@ -70,7 +71,7 @@ namespace SerialLoops.ViewModels
         public ICommand MigrateProjectCommand { get; private set; }
         public ICommand ExportPatchCommand { get; private set; }
         public ICommand CloseProjectCommand { get; private set; }
-        
+
         public ICommand ApplyHacksCommand { get; private set; }
         public ICommand RenameItemCommand { get; private set; }
         public ICommand EditUiTextCommand { get; private set; }
@@ -525,25 +526,25 @@ namespace SerialLoops.ViewModels
             {
                 Text = Strings.Save,
                 Command = SaveProjectCommand,
-                Icon = ControlGenerator.GetIcon("Save", Log),
+                Icon = ControlGenerator.GetVectorIcon("Save", Log),
             });
             ToolBar.Items.Add(new ToolbarButton()
             {
                 Text = Strings.Build,
                 Command = BuildIterativeCommand,
-                Icon = ControlGenerator.GetIcon("Build", Log),
+                Icon = ControlGenerator.GetVectorIcon("Build", Log),
             });
             ToolBar.Items.Add(new ToolbarButton()
             {
                 Text = Strings.Build_and_Run,
                 Command = BuildAndRunCommand,
-                Icon = ControlGenerator.GetIcon("Build_Run", Log),
+                Icon = ControlGenerator.GetVectorIcon("Build_Run", Log),
             });
             ToolBar.Items.Add(new ToolbarButton()
             {
                 Text = Strings.Search,
                 Command = SearchProjectCommand,
-                Icon = ControlGenerator.GetIcon("Search", Log),
+                Icon = ControlGenerator.GetVectorIcon("Search", Log),
             });
         }
     }
