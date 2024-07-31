@@ -32,4 +32,15 @@
         </NativeMenu>
     </NativeMenu.Menu>
 
+    <Grid RowDefinitions="Auto,*">
+        <StackPanel IsVisible="False">
+            <Button Command="{Binding SaveProjectCommand}" HotKey="{Binding SaveHotKey}"/>
+        </StackPanel>
+        <StackPanel Grid.Row="0">
+            <NativeMenuBar Name="MenuBar"/>
+            <toolbar:Toolbar Height="60" Name="ToolBar" HorizontalAlignment="Right"/>
+        </StackPanel>
+        <ContentControl Name="MainContent" Grid.Row="1"/>
+    </Grid>
+
 </Window>

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Platform;
 using Avalonia.Platform.Storage;
 using HaruhiChokuretsuLib.Archive;
@@ -56,7 +57,7 @@ namespace SerialLoops.ViewModels
         public Project OpenProject { get; set; }
         public OpenProjectPanel ProjectPanel { get; set; }
         public Dictionary<MenuHeader, NativeMenuItem> WindowMenu { get; set; }
-        public Toolbar ToolBar => ProjectPanel.ToolBar;
+        public Toolbar ToolBar => Window.ToolBar;
         public EditorTabsPanelViewModel EditorTabs { get; set; }
         public ItemExplorerPanelViewModel ItemExplorer { get; set; }
         public TextBox SearchBox => ItemExplorer.SearchBox;
@@ -95,8 +96,17 @@ namespace SerialLoops.ViewModels
         public ICommand BuildBaseCommand { get; private set; }
         public ICommand BuildAndRunCommand { get; private set; }
 
-        public async void Initialize(MainWindow window)
+        private KeyGesture _saveHotKey;
+        public KeyGesture SaveHotKey
         {
+            get => _saveHotKey;
+            set => SetProperty(ref _saveHotKey, value);
+        }
+
+        public MainWindowViewModel()
+        {
+            _saveHotKey = new(Key.S, KeyModifiers.Control);
+
             NewProjectCommand = ReactiveCommand.CreateFromTask(NewProjectCommand_Executed);
             OpenProjectCommand = ReactiveCommand.CreateFromTask(OpenProjectCommand_Executed);
             OpenRecentProjectCommand = ReactiveCommand.CreateFromTask<string>(OpenRecentProjectCommand_Executed);
@@ -113,6 +123,26 @@ namespace SerialLoops.ViewModels
             BuildBaseCommand = ReactiveCommand.CreateFromTask(BuildBase_Executed);
             BuildAndRunCommand = ReactiveCommand.CreateFromTask(BuildAndRun_Executed);
 
+            ViewLogsCommand = ReactiveCommand.Create(() =>
+            {
+                try
+                {
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = Path.Combine(CurrentConfig.UserDirectory, "Logs", "SerialLoops.log"),
+                        UseShellExecute = true,
+                    });
+                }
+                catch (Exception)
+                {
+                    Log.LogError("Failed to open log file directly. " +
+                        $"Logs can be found at {Path.Combine(CurrentConfig.UserDirectory, "Logs", "SerialLoops.log")}");
+                }
+            });
+        }
+
+        public async void Initialize(MainWindow window)
+        {
             Window = window;
             Log = new(Window);
             CurrentConfig = Config.LoadConfig((s) => s, Log);
@@ -135,23 +165,6 @@ namespace SerialLoops.ViewModels
             {
                 OpenHomePanel();
             }
-
-            ViewLogsCommand = ReactiveCommand.Create(() =>
-            {
-                try
-                {
-                    Process.Start(new ProcessStartInfo
-                    {
-                        FileName = Path.Combine(CurrentConfig.UserDirectory, "Logs", "SerialLoops.log"),
-                        UseShellExecute = true,
-                    });
-                }
-                catch (Exception)
-                {
-                    Log.LogError("Failed to open log file directly. " +
-                        $"Logs can be found at {Path.Combine(CurrentConfig.UserDirectory, "Logs", "SerialLoops.log")}");
-                }
-            });
         }
 
         private void OpenHomePanel()
@@ -159,7 +172,7 @@ namespace SerialLoops.ViewModels
             HomePanelViewModel homePanelViewModel = new() { MainWindow = this };
             HomePanel homePanel = new() { ViewModel = homePanelViewModel, DataContext = homePanelViewModel };
             homePanelViewModel.Initialize(this, homePanel);
-            Window.Content = homePanel;
+            Window.MainContent.Content = homePanel;
         }
 
         private void OpenProjectView(Project project, IProgressTracker tracker)
@@ -198,7 +211,7 @@ namespace SerialLoops.ViewModels
 
             //LoadCachedData(project, tracker);
 
-            Window.Content = ProjectPanel;
+            Window.MainContent.Content = ProjectPanel;
         }
 
         public async Task<bool> CloseProject_Executed(WindowClosingEventArgs e)
