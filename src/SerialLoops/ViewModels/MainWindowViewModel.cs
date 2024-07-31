@@ -94,7 +94,7 @@ namespace SerialLoops.ViewModels
 
             Window = window;
             Log = new();
-            CurrentConfig = Config.LoadConfig(Log);
+            CurrentConfig = Config.LoadConfig((s) => s, Log);
             Strings.Culture = new(CurrentConfig.CurrentCultureName);
             Log.Initialize(CurrentConfig);
 
