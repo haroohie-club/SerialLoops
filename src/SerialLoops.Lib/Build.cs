@@ -1,11 +1,4 @@
-﻿using HaroohieClub.NitroPacker.Core;
-using HaruhiChokuretsuLib.Archive;
-using HaruhiChokuretsuLib.Archive.Data;
-using HaruhiChokuretsuLib.Archive.Event;
-using HaruhiChokuretsuLib.Archive.Graphics;
-using HaruhiChokuretsuLib.Util;
-using SerialLoops.Lib.Util;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -14,6 +7,13 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using HaroohieClub.NitroPacker.Core;
+using HaruhiChokuretsuLib.Archive;
+using HaruhiChokuretsuLib.Archive.Data;
+using HaruhiChokuretsuLib.Archive.Event;
+using HaruhiChokuretsuLib.Archive.Graphics;
+using HaruhiChokuretsuLib.Util;
+using SerialLoops.Lib.Util;
 
 namespace SerialLoops.Lib
 {

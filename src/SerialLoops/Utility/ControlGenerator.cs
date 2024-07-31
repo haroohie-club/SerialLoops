@@ -1,10 +1,9 @@
-﻿using Avalonia.Controls;
+﻿using System;
+using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using HaruhiChokuretsuLib.Util;
-using System;
-using System.Reflection;
 
 namespace SerialLoops.Utility
 {

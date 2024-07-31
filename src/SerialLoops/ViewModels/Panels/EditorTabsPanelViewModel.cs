@@ -1,10 +1,10 @@
-﻿using HaruhiChokuretsuLib.Util;
+﻿using System.Collections.ObjectModel;
+using HaruhiChokuretsuLib.Util;
 using SerialLoops.Assets;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.ViewModels.Editors;
 using SerialLoops.Views.Panels;
-using System.Collections.ObjectModel;
 using Tabalonia.Controls;
 
 namespace SerialLoops.ViewModels.Panels

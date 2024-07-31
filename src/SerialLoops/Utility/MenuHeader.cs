@@ -3,6 +3,7 @@
     public enum MenuHeader
     {
         FILE,
+        PROJECT,
         TOOLS,
         BUILD,
     }

@@ -1,5 +1,4 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Media;
 using Avalonia.Threading;
 using SerialLoops.Assets;
 using SerialLoops.Lib.Util;

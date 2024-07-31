@@ -1,6 +1,5 @@
-﻿using NAudio.Wave;
-using System;
-using System.Linq;
+﻿using System.Linq;
+using NAudio.Wave;
 
 // Adapted from https://github.com/naudio/NAudio.WaveFormRenderer/blob/master/WaveFormRendererLib/MaxPeakProvider.cs
 // Copyright (c) 2021 NAudio

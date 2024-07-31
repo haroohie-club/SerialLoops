@@ -1,11 +1,11 @@
-﻿using Avalonia.Controls;
+﻿using System;
+using System.IO;
+using Avalonia.Controls;
 using HaruhiChokuretsuLib.Util;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
 using SerialLoops.Assets;
 using SerialLoops.Lib;
-using System;
-using System.IO;
 
 namespace SerialLoops.Utility
 {

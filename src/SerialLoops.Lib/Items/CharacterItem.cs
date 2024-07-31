@@ -1,10 +1,10 @@
-﻿using HaruhiChokuretsuLib.Archive.Data;
+﻿using System.Collections.Generic;
+using System.Linq;
+using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Font;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib.Util;
 using SkiaSharp;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace SerialLoops.Lib.Items
 {

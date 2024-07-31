@@ -1,4 +1,8 @@
-﻿using Avalonia.Controls;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Reactive.Linq;
+using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using Avalonia.Input;
 using HaruhiChokuretsuLib.Util;
@@ -6,10 +10,6 @@ using SerialLoops.Assets;
 using SerialLoops.Lib.Items;
 using SerialLoops.Models;
 using SerialLoops.Utility;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Reactive.Linq;
 
 namespace SerialLoops.ViewModels.Panels
 {

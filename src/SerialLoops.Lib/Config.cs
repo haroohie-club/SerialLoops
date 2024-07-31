@@ -1,7 +1,4 @@
-﻿using HaruhiChokuretsuLib.Util;
-using SerialLoops.Lib.Hacks;
-using SerialLoops.Lib.Script;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
@@ -10,6 +7,9 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using HaruhiChokuretsuLib.Util;
+using SerialLoops.Lib.Hacks;
+using SerialLoops.Lib.Script;
 
 namespace SerialLoops.Lib
 {

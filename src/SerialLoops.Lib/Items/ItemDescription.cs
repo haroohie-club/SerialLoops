@@ -1,8 +1,8 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using HaruhiChokuretsuLib.Archive.Event;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using CommunityToolkit.Mvvm.ComponentModel;
+using HaruhiChokuretsuLib.Archive.Event;
 
 namespace SerialLoops.Lib.Items
 {

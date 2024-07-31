@@ -1,7 +1,7 @@
+using System.Text.RegularExpressions;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using System.Text.RegularExpressions;
 
 namespace SerialLoops.Views.Dialogs
 {

@@ -1,6 +1,6 @@
-﻿using HaruhiChokuretsuLib.Util;
-using System;
+﻿using System;
 using System.IO;
+using HaruhiChokuretsuLib.Util;
 using VCDiff.Encoders;
 
 namespace SerialLoops.Lib

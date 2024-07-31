@@ -1,9 +1,9 @@
-﻿using Avalonia.Controls;
+﻿using System;
+using System.Threading.Tasks;
+using Avalonia.Controls;
 using Avalonia.Platform;
 using Avalonia.Threading;
 using SerialLoops.Controls;
-using System;
-using System.Threading.Tasks;
 
 namespace SerialLoops.Views.Dialogs
 {

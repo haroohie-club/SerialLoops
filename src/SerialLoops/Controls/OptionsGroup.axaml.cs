@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Layout;
@@ -9,10 +13,6 @@ using ReactiveUI;
 using SerialLoops.Assets;
 using SerialLoops.Lib.Items;
 using SerialLoops.Utility;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SerialLoops.Controls
 {

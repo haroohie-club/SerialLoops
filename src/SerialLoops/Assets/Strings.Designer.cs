@@ -214,6 +214,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to _Project.
+        /// </summary>
+        public static string _Project {
+            get {
+                return ResourceManager.GetString("_Project", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _Tools.
         /// </summary>
         public static string _Tools {
@@ -2720,6 +2729,7 @@ namespace SerialLoops.Assets {
                 return ResourceManager.GetString("Failed to generate script template!", resourceCulture);
             }
         }
+        
         /// <summary>
         ///   Looks up a localized string similar to Failed to import project.
         /// </summary>

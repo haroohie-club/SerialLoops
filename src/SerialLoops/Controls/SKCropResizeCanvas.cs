@@ -1,11 +1,11 @@
-﻿using Avalonia;
+﻿using System;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Labs.Controls;
 using Avalonia.Media;
 using Avalonia.Skia;
 using SkiaSharp;
-using System;
 
 namespace SerialLoops.Controls
 {

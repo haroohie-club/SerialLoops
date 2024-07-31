@@ -1,4 +1,8 @@
-﻿using HaruhiChokuretsuLib.Audio.ADX;
+﻿using System;
+using System.IO;
+using System.Linq;
+using System.Threading;
+using HaruhiChokuretsuLib.Audio.ADX;
 using HaruhiChokuretsuLib.Util;
 using NAudio.Flac;
 using NAudio.Vorbis;
@@ -6,10 +10,6 @@ using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
 using NLayer.NAudioSupport;
 using SerialLoops.Lib.Util;
-using System;
-using System.IO;
-using System.Linq;
-using System.Threading;
 
 namespace SerialLoops.Lib.Items
 {

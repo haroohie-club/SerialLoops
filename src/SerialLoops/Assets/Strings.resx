@@ -2512,6 +2512,10 @@
   <data name="_Help" xml:space="preserve">
     <value>_Help</value>
   </data>
+  <data name="_Project" xml:space="preserve">
+    <value>_Project</value>
+    <comment>Menu header</comment>
+  </data>
   <data name="{0} ({1}) Seen" xml:space="preserve">
     <value>{0} ({1}) Seen</value>
     <comment>{0} is the internal name and {1} is the display name of a CG that has been encountered during the game</comment>

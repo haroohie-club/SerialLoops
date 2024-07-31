@@ -1,10 +1,7 @@
-﻿using HaruhiChokuretsuLib.Archive;
-using HaruhiChokuretsuLib.Archive.Event;
+﻿using System.Collections.Generic;
 using HaruhiChokuretsuLib.Archive.Graphics;
 using HaruhiChokuretsuLib.Util;
 using SkiaSharp;
-using System.Collections.Generic;
-using System.Linq;
 using Topten.RichTextKit;
 
 namespace SerialLoops.Lib.Items

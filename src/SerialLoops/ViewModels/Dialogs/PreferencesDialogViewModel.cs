@@ -1,13 +1,13 @@
-﻿using HaruhiChokuretsuLib.Util;
+﻿using System;
+using System.Globalization;
+using System.Windows.Input;
+using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
 using SerialLoops.Assets;
 using SerialLoops.Controls;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Util;
 using SerialLoops.Views.Dialogs;
-using System;
-using System.Globalization;
-using System.Windows.Input;
 
 namespace SerialLoops.ViewModels.Dialogs
 {

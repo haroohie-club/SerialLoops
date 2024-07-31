@@ -1,6 +1,16 @@
-﻿using Avalonia;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Text.Json;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Platform;
 using Avalonia.Platform.Storage;
+using HaruhiChokuretsuLib.Archive;
 using MiniToolbar.Avalonia;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
@@ -12,18 +22,12 @@ using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Util;
 using SerialLoops.Utility;
 using SerialLoops.ViewModels.Dialogs;
+using SerialLoops.ViewModels.Editors;
 using SerialLoops.ViewModels.Panels;
 using SerialLoops.Views;
 using SerialLoops.Views.Dialogs;
 using SerialLoops.Views.Panels;
 using SkiaSharp;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace SerialLoops.ViewModels
 {
@@ -31,11 +35,20 @@ namespace SerialLoops.ViewModels
     {
         private const string BASE_TITLE = "Serial Loops";
 
-        public string Title { get; set; } = BASE_TITLE;
-        public Size MinSize => new(769, 420);
-        public Size ClientSize { get; set; } = new(1200, 800);
+        private string _title = BASE_TITLE;
+        private Size _clientSize = new(1200, 800);
 
-        private object _previousContent;
+        public string Title
+        {
+            get => _title;
+            set => SetProperty(ref _title, value);
+        }
+        public Size MinSize => new(769, 420);
+        public Size ClientSize
+        {
+            get => _clientSize;
+            set => SetProperty(ref _clientSize, value);
+        }
 
         public MainWindow Window { get; set; }
         public ProjectsCache ProjectsCache { get; set; }
@@ -92,6 +105,10 @@ namespace SerialLoops.ViewModels
             PreferencesCommand = ReactiveCommand.CreateFromTask(PreferencesCommand_Executed);
             CheckForUpdatesCommand = ReactiveCommand.Create(() => new UpdateChecker(this).Check());
 
+            SaveProjectCommand = ReactiveCommand.Create(SaveProject_Executed);
+
+            CloseProjectCommand = ReactiveCommand.Create(CloseProjectView);
+
             Window = window;
             Log = new();
             CurrentConfig = Config.LoadConfig((s) => s, Log);
@@ -112,10 +129,7 @@ namespace SerialLoops.ViewModels
             }
             else
             {
-                HomePanelViewModel homePanelViewModel = new() { MainWindow = this };
-                HomePanel homePanel = new() { ViewModel = homePanelViewModel, DataContext = homePanelViewModel };
-                homePanelViewModel.Initialize(this, homePanel);
-                Window.Content = homePanel;
+                OpenHomePanel();
             }
 
             ViewLogsCommand = ReactiveCommand.Create(() =>
@@ -134,7 +148,14 @@ namespace SerialLoops.ViewModels
                         $"Logs can be found at {Path.Combine(CurrentConfig.UserDirectory, "Logs", "SerialLoops.log")}");
                 }
             });
+        }
 
+        private void OpenHomePanel()
+        {
+            HomePanelViewModel homePanelViewModel = new() { MainWindow = this };
+            HomePanel homePanel = new() { ViewModel = homePanelViewModel, DataContext = homePanelViewModel };
+            homePanelViewModel.Initialize(this, homePanel);
+            Window.Content = homePanel;
         }
 
         private void OpenProjectView(Project project, IProgressTracker tracker)
@@ -152,15 +173,12 @@ namespace SerialLoops.ViewModels
 
             InitializeProjectMenu();
 
-            //using Stream blankNameplateStream = Assembly.GetCallingAssembly()
-            //    .GetManifestResourceStream("SerialLoops.Graphics.BlankNameplate.png");
-            //_blankNameplate = SKBitmap.Decode(blankNameplateStream);
-            //using Stream blankNameplateBaseArrowStream = Assembly.GetCallingAssembly()
-            //    .GetManifestResourceStream("SerialLoops.Graphics.BlankNameplateBaseArrow.png");
-            //_blankNameplateBaseArrow = SKBitmap.Decode(blankNameplateBaseArrowStream);
-            //using Stream typefaceStream = Assembly.GetCallingAssembly()
-            //    .GetManifestResourceStream("SerialLoops.Graphics.MS-Gothic-Haruhi.ttf");
-            //_msGothicHaruhi = SKTypeface.FromStream(typefaceStream);
+            using Stream blankNameplateStream = AssetLoader.Open(new("avares://SerialLoops/Assets/Graphics/BlankNameplate.png"));
+            _blankNameplate = SKBitmap.Decode(blankNameplateStream);
+            using Stream blankNameplateBaseArrowStream = AssetLoader.Open(new("avares://SerialLoops/Assets/Graphics/BlankNameplateBaseArrow.png"));
+            _blankNameplateBaseArrow = SKBitmap.Decode(blankNameplateBaseArrowStream);
+            using Stream typefaceStream = AssetLoader.Open(new("avares://SerialLoops/Assets/Graphics/MS-Gothic-Haruhi.ttf"));
+            _msGothicHaruhi = SKTypeface.FromStream(typefaceStream);
 
             //Button advancedSearchButton = new() { Content = "...", Width = 25, Command = SearchProjectCommand };
             //advancedSearchButton.Click += Search_Executed;
@@ -179,8 +197,9 @@ namespace SerialLoops.ViewModels
             Window.Content = ProjectPanel;
         }
 
-        public async Task CloseProject_Executed(WindowClosingEventArgs e)
+        public async Task<bool> CloseProject_Executed(WindowClosingEventArgs e)
         {
+            bool cancel = false;
             if (OpenProject is not null)
             {
                 // Warn against unsaved items
@@ -189,7 +208,7 @@ namespace SerialLoops.ViewModels
                 {
                     ButtonResult result;
                     bool skipBuild = false;
-                    if (e.CloseReason == WindowCloseReason.OSShutdown) // if the OS is shutting down, we're going to expedite things
+                    if (e?.CloseReason == WindowCloseReason.OSShutdown) // if the OS is shutting down, we're going to expedite things
                     {
                         result = ButtonResult.Yes;
                         skipBuild = true;
@@ -204,27 +223,58 @@ namespace SerialLoops.ViewModels
                     switch (result)
                     {
                         case ButtonResult.Yes:
-                            //SaveProject_Executed(sender, e);
+                            SaveProject_Executed();
                             if (!skipBuild)
                             {
                                 //BuildIterativeProject_Executed(sender, e); // make sure we lock in the changes
                             }
                             break;
                         default:
-                            e.Cancel = true;
+                            cancel = true;
+                            if (e is not null)
+                            {
+                                e.Cancel = true;
+                            }
                             break;
                     }
                 }
 
                 // Record open items
-                //List<string> openItems = EditorTabs.Tabs.Pages.Cast<Editor>()
-                //    .Select(e => e.Description)
-                //    .Select(i => i.Name)
-                //    .ToList();
-                //ProjectsCache.CacheRecentProject(OpenProject.ProjectFile, openItems);
-                //ProjectsCache.HadProjectOpenOnLastClose = true;
-                //ProjectsCache.Save(Log);
+                List<string> openItems = EditorTabs.Tabs.Cast<EditorViewModel>()
+                    .Select(e => e.Description)
+                    .Select(i => i.Name)
+                    .ToList();
+                ProjectsCache.CacheRecentProject(OpenProject.ProjectFile, openItems);
+                ProjectsCache.HadProjectOpenOnLastClose = true;
+                ProjectsCache.Save(Log);
             }
+            return cancel;
+        }
+
+        public async Task CloseProjectView()
+        {
+            if (await CloseProject_Executed(null))
+            {
+                return;
+            }
+
+            Title = BASE_TITLE;
+            OpenHomePanel();
+
+            OpenProject = null;
+            EditorTabs = null;
+            ItemExplorer = null;
+            ToolBar.Items.Clear();
+
+            NativeMenu menu = NativeMenu.GetMenu(Window);
+            menu.Items.Remove(WindowMenu[MenuHeader.PROJECT]);
+            WindowMenu.Remove(MenuHeader.PROJECT);
+            menu.Items.Remove(WindowMenu[MenuHeader.TOOLS]);
+            WindowMenu.Remove(MenuHeader.TOOLS);
+            menu.Items.Remove(WindowMenu[MenuHeader.BUILD]);
+            WindowMenu.Remove(MenuHeader.BUILD);
+            ProjectsCache.HadProjectOpenOnLastClose = false;
+            UpdateRecentProjects();
         }
 
         private void UpdateRecentProjects()
@@ -373,7 +423,7 @@ namespace SerialLoops.ViewModels
             }
             else
             {
-                //CloseProjectView();
+                await CloseProjectView();
             }
         }
 
@@ -403,6 +453,92 @@ namespace SerialLoops.ViewModels
 
         }
 
+        public void SaveProject_Executed()
+        {
+            if (OpenProject == null)
+            {
+                return;
+            }
+
+            IEnumerable<ItemDescription> unsavedItems = OpenProject.Items.Where(i => i.UnsavedChanges);
+            bool savedEventTable = false;
+            bool savedChrData = false;
+            bool savedExtra = false;
+            bool savedMessInfo = false;
+            bool changedNameplates = false;
+            bool changedTopics = false;
+            bool changedSubs = false;
+            List<int> changedLayouts = [];
+            SKCanvas nameplateCanvas = new(OpenProject.NameplateBitmap);
+            SKCanvas speakerCanvas = new(OpenProject.SpeakerBitmap);
+
+            Dictionary<string, IncludeEntry[]> includes = new()
+            {
+                {
+                    "GRPBIN",
+                    OpenProject.Grp.GetSourceInclude().Split('\n').Where(s => !string.IsNullOrEmpty(s))
+                        .Select(i => new IncludeEntry(i)).ToArray()
+                },
+                {
+                    "DATBIN",
+                    OpenProject.Dat.GetSourceInclude().Split('\n').Where(s => !string.IsNullOrEmpty(s))
+                        .Select(i => new IncludeEntry(i)).ToArray()
+                },
+                {
+                    "EVTBIN",
+                    OpenProject.Evt.GetSourceInclude().Split('\n').Where(s => !string.IsNullOrEmpty(s))
+                        .Select(i => new IncludeEntry(i)).ToArray()
+                }
+            };
+
+            foreach (ItemDescription item in unsavedItems)
+            {
+                switch (item.Type)
+                {
+                    case ItemDescription.ItemType.Background:
+                        if (!savedExtra)
+                        {
+                            IO.WriteStringFile(Path.Combine("assets", "data", $"{OpenProject.Extra.Index:X3}.s"),
+                                OpenProject.Extra.GetSource([]), OpenProject, Log);
+                            savedExtra = true;
+                        }
+
+                        ((BackgroundItem)item).Write(OpenProject, Log);
+                        break;
+
+                    default:
+                        Log.LogWarning($"Saving for {item.Type}s not yet implemented.");
+                        break;
+                }
+
+                item.UnsavedChanges = false;
+            }
+
+            if (changedNameplates)
+            {
+                nameplateCanvas.Flush();
+                speakerCanvas.Flush();
+                MemoryStream nameplateStream = new();
+                OpenProject.NameplateBitmap.Encode(nameplateStream, SKEncodedImageFormat.Png, 1);
+                IO.WriteBinaryFile(Path.Combine("assets", "graphics", "B87.png"), nameplateStream.ToArray(),
+                    OpenProject, Log);
+                IO.WriteStringFile(Path.Combine("assets", "graphics", "B87.gi"), JsonSerializer.Serialize(OpenProject.NameplateInfo),
+                    OpenProject, Log);
+            }
+
+            if (changedTopics)
+            {
+                IO.WriteStringFile(Path.Combine("assets", "events", $"{OpenProject.TopicFile.Index:X3}.s"),
+                    OpenProject.TopicFile.GetSource([]), OpenProject, Log);
+            }
+
+            if (changedSubs)
+            {
+                IO.WriteStringFile(Path.Combine("assets", "events", $"{OpenProject.VoiceMap.Index:X3}.s"),
+                    OpenProject.VoiceMap.GetSource(), OpenProject, Log);
+            }
+        }
+
         private void InitializeProjectMenu()
         {
             if (WindowMenu.ContainsKey(MenuHeader.TOOLS))
@@ -417,37 +553,42 @@ namespace SerialLoops.ViewModels
                 insertionPoint--;
             }
 
-            // FILE
-            WindowMenu[MenuHeader.FILE].Menu.Add(new NativeMenuItem()
-            {
-                Header = Strings.Save_Project,
-                Command = SaveProjectCommand,
-                Icon = ControlGenerator.GetIcon("Save", Log),
-            });
-            WindowMenu[MenuHeader.FILE].Menu.Add(new NativeMenuItem()
-            {
-                Header = Strings.Project_Settings___,
-                Command = ProjectSettingsCommand,
-                Icon = ControlGenerator.GetIcon("Project_Options", Log),
-            });
-            WindowMenu[MenuHeader.FILE].Menu.Add(new NativeMenuItem()
-            {
-                Header = Strings.Migrate_to_new_ROM,
-                Command = MigrateProjectCommand,
-                Icon = ControlGenerator.GetIcon("Migrate_ROM", Log),
-            });
-            WindowMenu[MenuHeader.FILE].Menu.Add(new NativeMenuItem()
-            {
-                Header = Strings.Export_Patch,
-                Command = ExportPatchCommand,
-                Icon = ControlGenerator.GetIcon("Export_Patch", Log),
-            });
-            WindowMenu[MenuHeader.FILE].Menu.Add(new NativeMenuItem()
-            {
-                Header = Strings.Close_Project,
-                Command = CloseProjectCommand,
-                Icon = ControlGenerator.GetIcon("Close", Log),
-            });
+            // PROJECT
+            WindowMenu.Add(MenuHeader.PROJECT, new(Strings._Project));
+            WindowMenu[MenuHeader.PROJECT].Menu = [
+                new NativeMenuItem()
+                {
+                    Header = Strings.Save_Project,
+                    Command = SaveProjectCommand,
+                    Icon = ControlGenerator.GetIcon("Save", Log),
+                },
+                new NativeMenuItem()
+                {
+                    Header = Strings.Project_Settings___,
+                    Command = ProjectSettingsCommand,
+                    Icon = ControlGenerator.GetIcon("Project_Options", Log),
+                },
+                new NativeMenuItem()
+                {
+                    Header = Strings.Migrate_to_new_ROM,
+                    Command = MigrateProjectCommand,
+                    Icon = ControlGenerator.GetIcon("Migrate_ROM", Log),
+                },
+                new NativeMenuItem()
+                {
+                    Header = Strings.Export_Patch,
+                    Command = ExportPatchCommand,
+                    Icon = ControlGenerator.GetIcon("Export_Patch", Log),
+                },
+                new NativeMenuItem()
+                {
+                    Header = Strings.Close_Project,
+                    Command = CloseProjectCommand,
+                    Icon = ControlGenerator.GetIcon("Close", Log),
+                }
+                ];
+            menu.Items.Insert(insertionPoint, WindowMenu[MenuHeader.PROJECT]);
+            insertionPoint++;
 
             // TOOLS
             WindowMenu.Add(MenuHeader.TOOLS, new(Strings._Tools));
