@@ -6,10 +6,10 @@ using System.Linq;
 
 namespace SerialLoops.Models
 {
-    public class SectionTreeItem(string sectionName, IEnumerable<ITreeItem> children, Bitmap icon) : ITreeItem
+    public class SectionTreeItem(string sectionName, IEnumerable<ITreeItem> children, Avalonia.Svg.Svg icon) : ITreeItem
     {
         public string Text { get; set; } = sectionName;
-        public Bitmap Icon { get; set; } = icon;
+        public Avalonia.Svg.Svg Icon { get; set; } = icon;
         public List<ITreeItem> Children { get; set; } = children.ToList();
 
         public Control GetDisplay()
@@ -20,7 +20,10 @@ namespace SerialLoops.Models
                 Spacing = 3,
                 Margin = new(2),
             };
-            panel.Children.Add(new Image { Source = Icon });
+            if (Icon is not null)
+            {
+                panel.Children.Add(Icon); // We don't add a control if there's no icon (unlike bitmaps)
+            }
             panel.Children.Add(new TextBlock { Text = Text });
             return panel;
         }

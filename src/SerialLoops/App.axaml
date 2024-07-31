@@ -7,7 +7,7 @@
              xmlns:mintoolbarthemes="using:MiniToolbar.Avalonia.Themes"
              xmlns:dialoghost="using:DialogHostAvalonia"
              RequestedThemeVariant="Default">
-             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->    
+             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
     <Application.DataTemplates>
         <local:ViewLocator/>
     </Application.DataTemplates>
@@ -24,7 +24,7 @@
             <NativeMenuItem Header="{x:Static assets:Strings.View__Logs}" Click="Logs_Click"/>
         </NativeMenu>
     </NativeMenu.Menu>
-  
+
     <Application.Styles>
         <FluentTheme />
         <dialoghost:DialogHostStyles />
@@ -69,5 +69,5 @@
             </ResourceDictionary.ThemeDictionaries>
         </ResourceDictionary>
     </Application.Resources>
-    
+
 </Application>

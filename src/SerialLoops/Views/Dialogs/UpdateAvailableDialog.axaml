@@ -16,9 +16,9 @@
         Icon="/Assets/serial-loops.ico"
         Closed="DialogClosed"
         Title="{Binding Title}">
-    
+
     <Design.DataContext>
-       <vm:UpdateAvailableDialogViewModel /> 
+       <vm:UpdateAvailableDialogViewModel />
     </Design.DataContext>
 
     <Grid HorizontalAlignment="Left" VerticalAlignment="Top"
@@ -26,7 +26,7 @@
             Margin="20" Height="{Binding GridSize.Height}">
         <TextBlock Classes="h2" Text="{Binding Header}" Grid.Row="0" Grid.Column="0"/>
         <StackPanel Orientation="Horizontal" Spacing="5" Grid.Row="1" Grid.Column="0">
-            <Image Source="avares://SerialLoops/Assets/Icons/Update.png" Width="16" Height="16"/>
+            <Svg Path="avares://SerialLoops/Assets/Icons/Update.svg" Width="16" Height="16"/>
             <TextBlock Text="{x:Static assets:Strings.A_new_update_for_Serial_Loops_is_available_}"/>
         </StackPanel>
         <md:MarkdownScrollViewer Width="750" Height="350" Grid.Row="2" Grid.Column="0"
@@ -40,5 +40,5 @@
             <CheckBox Content="{x:Static assets:Strings.Pre_Release_Channel}" IsChecked="{Binding Config.PreReleaseChannel}" Name="PreReleaseChannelBox"/>
         </StackPanel>
     </Grid>
-    
+
 </Window>
