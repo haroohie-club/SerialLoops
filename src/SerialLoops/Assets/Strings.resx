@@ -342,6 +342,10 @@
   <data name="Build from Scratch" xml:space="preserve">
     <value>Build from Scratch</value>
   </data>
+  <data name="Build Result" xml:space="preserve">
+    <value>Build Result</value>
+    <comment>The result of a build (message box title)</comment>
+  </data>
   <data name="Build succeeded!" xml:space="preserve">
     <value>Build succeeded!</value>
   </data>

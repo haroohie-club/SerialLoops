@@ -109,8 +109,12 @@ namespace SerialLoops.ViewModels
 
             CloseProjectCommand = ReactiveCommand.Create(CloseProjectView);
 
+            BuildIterativeCommand = ReactiveCommand.CreateFromTask(BuildIterative_Executed);
+            BuildBaseCommand = ReactiveCommand.CreateFromTask(BuildBase_Executed);
+            BuildAndRunCommand = ReactiveCommand.CreateFromTask(BuildAndRun_Executed);
+
             Window = window;
-            Log = new();
+            Log = new(Window);
             CurrentConfig = Config.LoadConfig((s) => s, Log);
             Strings.Culture = new(CurrentConfig.CurrentCultureName);
             Log.Initialize(CurrentConfig);
@@ -536,6 +540,93 @@ namespace SerialLoops.ViewModels
             {
                 IO.WriteStringFile(Path.Combine("assets", "events", $"{OpenProject.VoiceMap.Index:X3}.s"),
                     OpenProject.VoiceMap.GetSource(), OpenProject, Log);
+            }
+        }
+
+        public async Task BuildIterative_Executed()
+        {
+            if (OpenProject is not null)
+            {
+                bool buildSucceeded = true; // imo it's better to have a false negative than a false positive here
+                LoopyProgressTracker tracker = new(Strings.Building_);
+                await new ProgressDialog(
+                    () => buildSucceeded = Build.BuildIterative(OpenProject, CurrentConfig, Log, tracker), async () =>
+                    {
+                        if (buildSucceeded)
+                        {
+                            Log.Log("Build succeeded!");
+                            await MessageBoxManager.GetMessageBoxStandard(Strings.Build_Result, Strings.Build_succeeded_, ButtonEnum.Ok, Icon.Success).ShowWindowDialogAsync(Window);
+                        }
+                        else
+                        {
+                            Log.LogError(Strings.Build_failed_);
+                        }
+                    }, tracker, Strings.Building_Iteratively).ShowDialog(Window);
+            }
+        }
+
+        public async Task BuildBase_Executed()
+        {
+            if (OpenProject is not null)
+            {
+                bool buildSucceeded = true; LoopyProgressTracker tracker = new(Strings.Building_);
+                await new ProgressDialog(
+                    () => buildSucceeded = Build.BuildBase(OpenProject, CurrentConfig, Log, tracker), async () =>
+                    {
+                        if (buildSucceeded)
+                        {
+                            Log.Log("Build succeeded!");
+                            await MessageBoxManager.GetMessageBoxStandard(Strings.Build_Result, Strings.Build_succeeded_, ButtonEnum.Ok, Icon.Success).ShowWindowDialogAsync(Window);
+                        }
+                        else
+                        {
+                            Log.LogError(Strings.Build_failed_);
+                        }
+                    }, tracker, Strings.Building_Iteratively).ShowDialog(Window);
+            }
+        }
+
+        public async Task BuildAndRun_Executed()
+        {
+            if (OpenProject is not null)
+            {
+                if (string.IsNullOrWhiteSpace(CurrentConfig.EmulatorPath))
+                {
+                    await MessageBoxManager.GetMessageBoxStandard(Strings.No_Emulator_Path, Strings.No_emulator_path_has_been_set__nPlease_set_the_path_to_a_Nintendo_DS_emulator_in_Preferences_to_use_Build___Run_,
+                        ButtonEnum.Ok, Icon.Warning).ShowWindowDialogAsync(Window);
+                    Log.LogWarning("Attempted to build and run project while no emulator path was set.");
+                    await PreferencesCommand_Executed();
+                    return;
+                }
+                bool buildSucceeded = true; LoopyProgressTracker tracker = new(Strings.Building_);
+                await new ProgressDialog(
+                    () => buildSucceeded = Build.BuildIterative(OpenProject, CurrentConfig, Log, tracker), async () =>
+                    {
+                        if (buildSucceeded)
+                        {
+                            Log.Log("Build succeeded!");
+                            try
+                            {
+                                // If the EmulatorPath is an .app bundle, we need to run the executable inside it
+                                string emulatorExecutable = CurrentConfig.EmulatorPath;
+                                if (emulatorExecutable.EndsWith(".app"))
+                                {
+                                    emulatorExecutable = Path.Combine(CurrentConfig.EmulatorPath, "Contents", "MacOS",
+                                        Path.GetFileNameWithoutExtension(CurrentConfig.EmulatorPath));
+                                }
+
+                                Process.Start(emulatorExecutable, $"\"{Path.Combine(OpenProject.MainDirectory, $"{OpenProject.Name}.nds")}\"");
+                            }
+                            catch (Exception ex)
+                            {
+                                Log.LogException($"Failed to start emulator", ex);
+                            }
+                        }
+                        else
+                        {
+                            Log.LogError(Strings.Build_failed_);
+                        }
+                    }, tracker, Strings.Building_and_Running).ShowDialog(Window);
             }
         }
 

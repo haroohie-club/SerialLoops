@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using HaruhiChokuretsuLib.Util;
 using MsBox.Avalonia;
@@ -13,9 +14,11 @@ namespace SerialLoops.Utility
     {
         private Config _config;
         private StreamWriter _writer;
+        private Window _owner;
 
-        public LoopyLogger()
+        public LoopyLogger(Window window)
         {
+            _owner = window;
         }
 
         public void Initialize(Config config)
@@ -39,7 +42,12 @@ namespace SerialLoops.Utility
 
         public void LogError(string message, bool lookForWarnings = false)
         {
-            MessageBoxManager.GetMessageBoxStandard(Strings.Error, string.Format(Strings.ERROR___0_, message), ButtonEnum.Ok, Icon.Error, WindowStartupLocation.CenterScreen).ShowAsync().GetAwaiter().GetResult();
+            LogErrorAsync(message, lookForWarnings).GetAwaiter().GetResult();
+        }
+
+        private async Task LogErrorAsync(string message, bool lookForWarnings = false)
+        {
+            await MessageBoxManager.GetMessageBoxStandard(Strings.Error, string.Format(Strings.ERROR___0_, message), ButtonEnum.Ok, Icon.Error, WindowStartupLocation.CenterScreen).ShowWindowDialogAsync(_owner);
             if (_writer is not null && !string.IsNullOrEmpty(message))
             {
                 _writer.WriteLine($"{DateTimeOffset.Now} - ERROR: {message}");

@@ -772,6 +772,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Build Result.
+        /// </summary>
+        public static string Build_Result {
+            get {
+                return ResourceManager.GetString("Build Result", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Build succeeded!.
         /// </summary>
         public static string Build_succeeded_ {
