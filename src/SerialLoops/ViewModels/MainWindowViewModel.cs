@@ -1,6 +1,8 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Media;
 using Avalonia.Platform.Storage;
+using Avalonia.Styling;
 using MiniToolbar.Avalonia;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
@@ -97,6 +99,11 @@ namespace SerialLoops.ViewModels
             CurrentConfig = Config.LoadConfig((s) => s, Log);
             Strings.Culture = new(CurrentConfig.CurrentCultureName);
             Log.Initialize(CurrentConfig);
+
+            var fontStyle = new Style(x => x.OfType<Window>());
+            var font = FontFamily.Parse(string.IsNullOrEmpty(CurrentConfig.DisplayFont) ? Strings.Default_Font : CurrentConfig.DisplayFont);
+            fontStyle.Add(new Setter(Avalonia.Controls.Primitives.TemplatedControl.FontFamilyProperty, font));
+            Application.Current.Styles.Add(fontStyle);
 
             ProjectsCache = ProjectsCache.LoadCache(CurrentConfig, Log);
             UpdateRecentProjects();

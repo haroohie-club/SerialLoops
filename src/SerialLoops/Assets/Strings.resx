@@ -589,6 +589,13 @@
   <data name="Data reset message box" xml:space="preserve">
     <value>Data reset message box</value>
   </data>
+  <data name="Default Font" xml:space="preserve">
+    <value>Segoe UI</value>
+  </data>
+  <data name="Default Font Display" xml:space="preserve">
+    <value>Default ({0})</value>
+    <comment>{0} is default font name</comment>
+  </data>
   <data name="Defaults" xml:space="preserve">
     <value>Defaults</value>
   </data>
@@ -655,6 +662,9 @@
   </data>
   <data name="Display Flag 4" xml:space="preserve">
     <value>Display Flag 4</value>
+  </data>
+  <data name="Display Font" xml:space="preserve">
+    <value>Display Font</value>
   </data>
   <data name="Display from Bottom" xml:space="preserve">
     <value>Display from Bottom</value>

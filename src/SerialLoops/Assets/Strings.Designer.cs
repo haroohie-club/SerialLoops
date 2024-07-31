@@ -1501,6 +1501,24 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Segoe UI.
+        /// </summary>
+        public static string Default_Font {
+            get {
+                return ResourceManager.GetString("Default Font", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default ({0}).
+        /// </summary>
+        public static string Default_Font_Display {
+            get {
+                return ResourceManager.GetString("Default Font Display", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Defaults.
         /// </summary>
         public static string Defaults {
@@ -1705,6 +1723,15 @@ namespace SerialLoops.Assets {
         public static string Display_Flag_4 {
             get {
                 return ResourceManager.GetString("Display Flag 4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Display Font.
+        /// </summary>
+        public static string Display_Font {
+            get {
+                return ResourceManager.GetString("Display Font", resourceCulture);
             }
         }
         
