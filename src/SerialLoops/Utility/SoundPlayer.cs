@@ -8,7 +8,7 @@ namespace SerialLoops.Utility
         private WaveOut _player;
 #else
         private ALWavePlayer _player;
-        private static ALAudioContext _context = new();
+        private static readonly ALAudioContext _context = new();
 #endif
         public IWaveProvider WaveProvider { get; set; }
         public PlaybackState PlaybackState => _player.PlaybackState;
