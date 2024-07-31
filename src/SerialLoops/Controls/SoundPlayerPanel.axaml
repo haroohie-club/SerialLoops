@@ -12,10 +12,10 @@
     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="10">
         <StackPanel Spacing="5" Orientation="Horizontal" Name="SoundPlayer">
             <Button Name="PlayPauseButton" Command="{Binding PlayPauseCommand}">
-                <Image Source="{Binding PlayPauseImage}" Width="25"/>
+                <Svg Path="{Binding PlayPauseImagePath}" Width="25"/>
             </Button>
             <Button Name="StopButton" IsEnabled="{Binding StopButtonEnabled}" Command="{Binding StopCommand}">
-                <Image Source="avares://SerialLoops/Assets/Icons/Stop.png" Width="25"/>
+                <Svg Path="avares://SerialLoops/Assets/Icons/Stop.svg" Width="25"/>
             </Button>
             <controls:SKBitmapCanvas Name="WaveformCanvas"/>
         </StackPanel>

@@ -57,6 +57,11 @@ namespace SerialLoops.Utility
             }
         }
 
+        public static string GetVectorPath(string iconName)
+        {
+            return $"avares://SerialLoops/Assets/Icons/{iconName}.svg";
+        }
+
         public static StackPanel GetControlWithIcon(Control control, string iconName, ILogger log)
         {
             StackPanel panel = new()

@@ -521,7 +521,14 @@ namespace SerialLoops.ViewModels
 
                         ((BackgroundItem)item).Write(OpenProject, Log);
                         break;
-
+                    case ItemDescription.ItemType.BGM:
+                        if (!savedExtra)
+                        {
+                            IO.WriteStringFile(Path.Combine("assets", "data", $"{OpenProject.Extra.Index:X3}.s"),
+                                OpenProject.Extra.GetSource([]), OpenProject, Log);
+                            savedExtra = true;
+                        }
+                        break;
                     default:
                         Log.LogWarning($"Saving for {item.Type}s not yet implemented.");
                         break;

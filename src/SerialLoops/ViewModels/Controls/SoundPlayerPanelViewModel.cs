@@ -19,7 +19,7 @@ namespace SerialLoops.ViewModels.Controls
         private IWaveProvider _sound;
         private SKBitmap _waveform;
         private bool _stopButtonEnabled;
-        private Bitmap _playPauseImage = new(AssetLoader.Open(new("avares://SerialLoops/Assets/Icons/Play.png")));
+        private string _playPauseImagePath;
         private string _trackName;
 
         public IWaveProvider Sound
@@ -37,10 +37,10 @@ namespace SerialLoops.ViewModels.Controls
             get => _stopButtonEnabled;
             set => SetProperty(ref _stopButtonEnabled, value);
         }
-        public Bitmap PlayPauseImage
+        public string PlayPauseImagePath
         {
-            get => _playPauseImage;
-            set => SetProperty(ref _playPauseImage, value);
+            get => _playPauseImagePath;
+            set => SetProperty(ref _playPauseImagePath, value);
         }
         public string TrackName
         {
@@ -59,6 +59,7 @@ namespace SerialLoops.ViewModels.Controls
         {
             _log = log;
             _item = item;
+            PlayPauseImagePath = ControlGenerator.GetVectorPath("Play");
             TrackName = trackName;
             TrackDetails = trackDetails;
             TrackFlag = trackFlag;
@@ -82,7 +83,7 @@ namespace SerialLoops.ViewModels.Controls
         public void Stop()
         {
             StopButtonEnabled = false;
-            PlayPauseImage = ControlGenerator.GetIcon("Play", _log, 25);
+            PlayPauseImagePath = ControlGenerator.GetVectorPath("Play");
             _player.Stop();
             InitializePlayer();
         }
@@ -93,12 +94,12 @@ namespace SerialLoops.ViewModels.Controls
             if (_player.PlaybackState == PlaybackState.Playing)
             {
                 _player.Pause();
-                PlayPauseImage = ControlGenerator.GetIcon("Play", _log, 25);
+                PlayPauseImagePath = ControlGenerator.GetVectorPath("Play");
             }
             else
             {
                 _player.Play();
-                PlayPauseImage = ControlGenerator.GetIcon("Pause", _log, 25);
+                PlayPauseImagePath = ControlGenerator.GetVectorPath("Pause");
             }
         }
 

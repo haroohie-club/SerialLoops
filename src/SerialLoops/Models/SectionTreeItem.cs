@@ -2,7 +2,6 @@
 using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Layout;
-using Avalonia.Media.Imaging;
 
 namespace SerialLoops.Models
 {
