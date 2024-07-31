@@ -3,9 +3,8 @@ using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
-using HaruhiChokuretsuLib.Util;
-using System;
 using Avalonia.Svg;
+using HaruhiChokuretsuLib.Util;
 
 namespace SerialLoops.Utility
 {

@@ -29,14 +29,6 @@ using SerialLoops.Views;
 using SerialLoops.Views.Dialogs;
 using SerialLoops.Views.Panels;
 using SkiaSharp;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using Avalonia.Svg;
 
 namespace SerialLoops.ViewModels
 {
