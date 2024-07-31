@@ -80,15 +80,11 @@ namespace SerialLoops.ViewModels.Dialogs
                 await new ProgressDialog(() =>
                 {
                     ((IProgressTracker)tracker).Focus(Strings.Creating_Project, 1);
-#if (!WINDOWS && !MACOS)
-                    Dispatcher.UIThread.Invoke(() =>
+                    Dispatcher.UIThread.Post(() =>
                     {
-#endif
                         Lib.IO.OpenRom(newProject, RomPath, _log, tracker);
-#if (!WINDOWS && !MACOS)
                     });
-#endif
-                        tracker.Finished++;
+                    tracker.Finished++;
                     newProject.Load(_config, _log, tracker);
                 }, () => dialog.Close(newProject), tracker, Strings.Creating_Project).ShowDialog(_mainWindow.Window);
             }

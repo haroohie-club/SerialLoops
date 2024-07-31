@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using Avalonia.Controls;
+using Avalonia.Threading;
 using HaruhiChokuretsuLib.Util;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
@@ -53,8 +54,11 @@ namespace SerialLoops.Utility
             await MessageBoxManager.GetMessageBoxStandard(Strings.Error, string.Format(Strings.ERROR___0_, message), ButtonEnum.Ok, Icon.Error, WindowStartupLocation.CenterScreen).ShowWindowDialogAsync(_owner);
             if (_writer is not null && !string.IsNullOrEmpty(message))
             {
-                _writer.WriteLine($"{DateTimeOffset.Now} - ERROR: {message}");
-                _writer.Flush();
+                Dispatcher.UIThread.Post(() =>
+                {
+                    _writer.WriteLine($"{DateTimeOffset.Now} - ERROR: {message}");
+                    _writer.Flush();
+                });
             }
         }
 
