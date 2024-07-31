@@ -2177,7 +2177,6 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-<<<<<<< HEAD:src/SerialLoops/Assets/Strings.Designer.cs
         ///   Looks up a localized string similar to ERROR: {0}.
         /// </summary>
         public static string ERROR___0_ {
@@ -2187,8 +2186,6 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-=======
->>>>>>> main:src/SerialLoops/Strings.Designer.cs
         ///   Looks up a localized string similar to Error: duplicate hack detected! A file with the same name as a file in this hack has already been imported..
         /// </summary>
         public static string Error__duplicate_hack_detected__A_file_with_the_same_name_as_a_file_in_this_hack_has_already_been_imported_ {
