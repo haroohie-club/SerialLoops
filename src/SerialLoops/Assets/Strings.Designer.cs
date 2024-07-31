@@ -5297,6 +5297,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Save BGM as WAV.
+        /// </summary>
+        public static string Save_BGM_as_WAV {
+            get {
+                return ResourceManager.GetString("Save BGM as WAV", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save character sprite GIF.
         /// </summary>
         public static string Save_character_sprite_GIF {

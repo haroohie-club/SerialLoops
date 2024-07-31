@@ -80,7 +80,7 @@ namespace SerialLoops.ViewModels.Panels
         {
             if (closedEditor.Description.Type == ItemDescription.ItemType.BGM)
             {
-                ((BackgroundMusicEditorViewModel)closedEditor).SoundPlayerViewModel.Stop();
+                ((BackgroundMusicEditorViewModel)closedEditor).BgmPlayer.Stop();
             }
         }
     }

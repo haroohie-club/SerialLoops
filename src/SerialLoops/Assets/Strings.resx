@@ -1882,6 +1882,9 @@
   <data name="Save" xml:space="preserve">
     <value>Save</value>
   </data>
+  <data name="Save BGM as WAV" xml:space="preserve">
+    <value>Save BGM as WAV</value>
+  </data>
   <data name="Save character sprite GIF" xml:space="preserve">
     <value>Save character sprite GIF</value>
   </data>
