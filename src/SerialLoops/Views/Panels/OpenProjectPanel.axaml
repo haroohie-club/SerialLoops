@@ -11,9 +11,6 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:OpenProjectPanelViewModel"
              x:Class="SerialLoops.Views.Panels.OpenProjectPanel">
-    <Design.DataContext>
-        <vm:OpenProjectPanelViewModel/>
-    </Design.DataContext>
 
     <Grid RowDefinitions="Auto,*">
         <Grid Grid.Row="1" ColumnDefinitions="Auto,*">
