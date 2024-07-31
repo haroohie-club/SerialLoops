@@ -30,6 +30,7 @@ namespace SerialLoops.ViewModels.Dialogs
 
         public ICommand SaveCommand { get; }
         public ICommand CancelCommand { get; }
+        public ICommand DebugCommand { get; }
 
         public BgmLoopPropertiesDialogViewModel(WaveStream wav, string title, ILogger log, bool loopEnabled, uint startSample = 0, uint endSample = 0)
         {
@@ -45,6 +46,12 @@ namespace SerialLoops.ViewModels.Dialogs
 
             SaveCommand = ReactiveCommand.Create<BgmLoopPropertiesDialog>((dialog) => dialog.Close(LoopPreview));
             CancelCommand = ReactiveCommand.Create<BgmLoopPropertiesDialog>((dialog) => dialog.Close());
+            DebugCommand = ReactiveCommand.Create(Debug);
+        }
+
+        private void Debug()
+        {
+            _log.Log($"Loop Start: {LoopPreview.StartSample}; Loop End: {LoopPreview.EndSample}");
         }
     }
 }

@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using System.Globalization;
 using Avalonia;
 using Avalonia.Data.Converters;
+using Avalonia.Media.Imaging;
+using Avalonia.Platform;
+using SerialLoops.Lib.Items;
 using SerialLoops.Models;
 
 namespace SerialLoops.Utility
 {
     public static partial class SLConverters
     {
+        public static FuncValueConverter<ItemDescription.ItemType, Bitmap> ItemTypeToIconConverter => new((type) => new Bitmap(AssetLoader.Open(new Uri($"avares://SerialLoops/Assets/Icons/{type.ToString().Replace(' ', '_')}.png"))));
     }
 
     public class DisplayNameConverter : IMultiValueConverter
@@ -61,9 +65,9 @@ namespace SerialLoops.Utility
                 BgmLoopPreviewItem loopPreview = (BgmLoopPreviewItem)values[0];
                 uint sample = (uint)values[1];
 
-                return loopPreview.GetTimestampFromSample(sample);
+                return (decimal)loopPreview.GetTimestampFromSample(sample);
             }
-            return 0.0;
+            return (decimal)0.0;
         }
     }
 }

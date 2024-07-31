@@ -54,10 +54,11 @@
             </StackPanel>
         </StackPanel>
         <StackPanel Orientation="Vertical" Spacing="5">
-            <controls:SKBitmapCanvas Source="{Binding Waveform}"/>
+            <controls:SKBitmapCanvas Source="{Binding Waveform}" Width="{Binding Waveform.Width}"
+                                     Height="{Binding Waveform.Height}"/>
             <Slider Name="StartSampleSlider" Width="{Binding Waveform.Width}" Minimum="{Binding #StartSampleBox.Minimum}"
-                    Maximum="{Binding #StartSampleBox.Maximum}" Value="{Binding #StartSampleBox.Value}"/>
-            <Slider Name="EndSampleSlider" Width="{Binding Waveform.Width}" Minimum="{Binding #EndSampleBox.Minimum}"
+                    Maximum="{Binding #EndSampleBox.Maximum}" Value="{Binding #StartSampleBox.Value}"/>
+            <Slider Name="EndSampleSlider" Width="{Binding Waveform.Width}" Minimum="{Binding #StartSampleBox.Minimum}"
                     MaxHeight="{Binding #EndSampleBox.Maximum}" Value="{Binding #EndSampleBox.Value}"/>
             <StackPanel Orientation="Vertical" Spacing="3" HorizontalAlignment="Right" Width="{Binding Waveform.Width}">
                 <StackPanel Orientation="Horizontal" Spacing="3">
@@ -65,6 +66,7 @@
                             CommandParameter="{Binding #BgmLoopPropsDialog}"/>
                     <Button Content="{x:Static assets:Strings.Cancel}" IsCancel="True" Command="{Binding CancelCommand}"
                             CommandParameter="{Binding #BgmLoopPropsDialog}"/>
+                    <Button Command="{Binding DebugCommand}">Debug</Button>
                 </StackPanel>
             </StackPanel>
         </StackPanel>

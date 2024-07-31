@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Avalonia.Controls;
 using HaruhiChokuretsuLib.Audio.ADX;
 using HaruhiChokuretsuLib.Util;
 using NAudio.Wave;
@@ -33,7 +32,6 @@ namespace SerialLoops.ViewModels.Editors
         private bool _loopEnabled;
         private uint _loopStartSample;
         private uint _loopEndSample;
-        private TextBox _bgmTitleBox;
 
         private readonly string _bgmCachedFile;
 
@@ -43,27 +41,16 @@ namespace SerialLoops.ViewModels.Editors
         public ICommand ReplaceCommand { get; set; }
         public ICommand RestoreCommand { get; set; }
 
+        private ICommand _titleBoxTextChangedCommand;
+
         public BackgroundMusicEditorViewModel(BackgroundMusicItem bgm, MainWindowViewModel window, Project project, ILogger log) : base(bgm, window, log, project)
         {
             Bgm = bgm;
 
             _bgmCachedFile = Path.Combine(project.Config.CachesDirectory, "bgm", $"{Bgm.Name}.wav");
-            _bgmTitleBox = null;
-            if (!string.IsNullOrEmpty(Bgm.BgmName))
-            {
-                _bgmTitleBox = new() { Text = Bgm.BgmName, Width = 200 };
-                _bgmTitleBox.TextChanged += (obj, args) =>
-                {
-                    if (!string.IsNullOrEmpty(_bgmTitleBox?.Text) && !(_bgmTitleBox?.Text ?? string.Empty).Equals(Bgm.BgmName))
-                    {
-                        _project.Extra.Bgms[_project.Extra.Bgms.IndexOf(_project.Extra.Bgms.First(b => b.Name.GetSubstitutedString(_project) == Bgm.BgmName))].Name = _bgmTitleBox.Text.GetOriginalString(_project);
-                        Bgm.BgmName = _bgmTitleBox.Text;
-                        Bgm.UnsavedChanges = true;
-                    }
-                };
-            }
 
-            SoundPlayerViewModel = new(Bgm, _log, _bgmTitleBox, Bgm.Name, Bgm.Flag);
+            _titleBoxTextChangedCommand = ReactiveCommand.Create<string>(TitleBox_TextChanged);
+            SoundPlayerViewModel = new(Bgm, _log, Bgm.BgmName, Bgm.Name, Bgm.Flag, !string.IsNullOrEmpty(Bgm.BgmName) ? _titleBoxTextChangedCommand : null);
             ManageLoopCommand = ReactiveCommand.CreateFromTask(ManageLoop_Executed);
             AdjustVolumeCommand = ReactiveCommand.CreateFromTask(AdjustVolume_Executed);
         }
@@ -97,8 +84,18 @@ namespace SerialLoops.ViewModels.Editors
                 },
                 () =>
                 {
-                    SoundPlayerViewModel = new(Bgm, _log, _bgmTitleBox, Bgm.Name, Bgm.Flag);
+                    SoundPlayerViewModel = new(Bgm, _log, Bgm.BgmName, Bgm.Name, Bgm.Flag, !string.IsNullOrEmpty(Bgm.BgmName) ? _titleBoxTextChangedCommand : null);
                 }, tracker, Strings.Set_BGM_loop_info).ShowDialog(_window.Window);
+            }
+        }
+
+        private void TitleBox_TextChanged(string newText)
+        {
+            if (!string.IsNullOrEmpty(newText) && !newText.Equals(Bgm.BgmName))
+            {
+                _project.Extra.Bgms[_project.Extra.Bgms.IndexOf(_project.Extra.Bgms.First(b => b.Name.GetSubstitutedString(_project) == Bgm.BgmName))].Name = newText.GetOriginalString(_project);
+                Bgm.BgmName = newText;
+                Bgm.UnsavedChanges = true;
             }
         }
 

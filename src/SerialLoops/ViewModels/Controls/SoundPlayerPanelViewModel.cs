@@ -21,7 +21,7 @@ namespace SerialLoops.ViewModels.Controls
         private SKBitmap _waveform;
         private bool _stopButtonEnabled;
         private Bitmap _playPauseImage = new(AssetLoader.Open(new("avares://SerialLoops/Assets/Icons/Play.png")));
-        private Control _trackName;
+        private string _trackName;
 
         public IWaveProvider Sound
         {
@@ -43,24 +43,27 @@ namespace SerialLoops.ViewModels.Controls
             get => _playPauseImage;
             set => SetProperty(ref _playPauseImage, value);
         }
-        public Control TrackName
+        public string TrackName
         {
             get => _trackName;
             set => SetProperty(ref _trackName, value);
         }
+        public ICommand TrackNameCommand { get; set; }
+        public bool UseTextBoxForTrackName => TrackNameCommand is not null;
         public string TrackDetails { get; set; }
         public short? TrackFlag { get; set; }
 
         public ICommand PlayPauseCommand { get; private set; }
         public ICommand StopCommand { get; private set; }
 
-        public SoundPlayerPanelViewModel(ISoundItem item, ILogger log, Control trackName, string trackDetails = null, short? trackFlag = null)
+        public SoundPlayerPanelViewModel(ISoundItem item, ILogger log, string trackName, string trackDetails = null, short? trackFlag = null, ICommand trackNameCommand = null)
         {
             _log = log;
             _item = item;
             TrackName = trackName;
             TrackDetails = trackDetails;
             TrackFlag = trackFlag;
+            TrackNameCommand = trackNameCommand;
             InitializePlayer();
             PlayPauseCommand = ReactiveCommand.Create(PlayPause_Executed);
             StopCommand = ReactiveCommand.Create(Stop_Executed);
