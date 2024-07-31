@@ -20,6 +20,14 @@ namespace SerialLoops.Utility
             _player = new() { DeviceNumber = -1 };
 #else
             _player = new(new(), 8192);
+            _player.PlaybackStopped += (sender, args) =>
+            {
+                if (args.Exception is null)
+                {
+                    _player.Dispose();
+                    _player = new(new(), 8192);
+                }
+            };
 #endif
             _player.Init(WaveProvider);
         }
@@ -36,12 +44,7 @@ namespace SerialLoops.Utility
 
         public void Stop()
         {
-#if WINDOWS
             _player.Stop();
-#else
-            // AL has a static player, so if we stop it we'll throw errors
-            _player.Pause();
-#endif
         }
     }
 }
