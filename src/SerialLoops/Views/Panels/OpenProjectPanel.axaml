@@ -18,5 +18,5 @@
             <panels:EditorTabsPanel Grid.Column="1" Name="EditorTabs" DataContext="{Binding EditorTabs}"/>
         </Grid>
     </Grid>
-    
+
 </UserControl>
