@@ -1,5 +1,4 @@
 ﻿using System.Windows.Input;
-using Avalonia.Controls;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using HaruhiChokuretsuLib.Util;
@@ -67,6 +66,10 @@ namespace SerialLoops.ViewModels.Controls
             InitializePlayer();
             PlayPauseCommand = ReactiveCommand.Create(PlayPause_Executed);
             StopCommand = ReactiveCommand.Create(Stop_Executed);
+            _player.PlaybackStopped += (sender, args) =>
+            {
+                Stop();
+            };
         }
 
         private void InitializePlayer()

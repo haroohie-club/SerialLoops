@@ -1,4 +1,5 @@
-﻿using NAudio.Wave;
+﻿using System;
+using NAudio.Wave;
 
 namespace SerialLoops.Utility
 {
@@ -12,6 +13,12 @@ namespace SerialLoops.Utility
 #endif
         public IWaveProvider WaveProvider { get; set; }
         public PlaybackState PlaybackState => _player.PlaybackState;
+
+        public event EventHandler<StoppedEventArgs> PlaybackStopped
+        {
+            add => _player.PlaybackStopped += value;
+            remove => _player.PlaybackStopped -= value;
+        }
 
         public SoundPlayer(IWaveProvider waveProvider)
         {
