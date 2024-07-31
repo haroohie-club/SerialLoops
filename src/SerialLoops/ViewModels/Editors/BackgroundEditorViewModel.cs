@@ -63,12 +63,12 @@ namespace SerialLoops.ViewModels.Editors
             {
                 try
                 {
-                    using FileStream fs = File.Create(savedFile.Path.AbsolutePath);
+                    using FileStream fs = File.Create(savedFile.Path.LocalPath);
                     Bg.GetBackground().Encode(fs, SKEncodedImageFormat.Png, GraphicsFile.PNG_QUALITY);
                 }
                 catch (Exception ex)
                 {
-                    _log.LogException(string.Format(Strings.Failed_to_export_background__0__to_file__1_, Bg.DisplayName, savedFile.Path.AbsolutePath), ex);
+                    _log.LogException(string.Format(Strings.Failed_to_export_background__0__to_file__1_, Bg.DisplayName, savedFile.Path.LocalPath), ex);
                 }
             }
         }
@@ -87,7 +87,7 @@ namespace SerialLoops.ViewModels.Editors
             IStorageFile openFile = (await _window.Window.StorageProvider.OpenFilePickerAsync(openOptions))?.FirstOrDefault();
             if (openFile is not null)
             {
-                SKBitmap newImage = SKBitmap.Decode(openFile.Path.AbsolutePath);
+                SKBitmap newImage = SKBitmap.Decode(openFile.Path.LocalPath);
                 ImageCropResizeDialogViewModel cropResizeDialogViewModel = new(newImage, original.Width, original.Height, _log);
                 SKBitmap finalImage = await new ImageCropResizeDialog()
                 {
@@ -105,7 +105,7 @@ namespace SerialLoops.ViewModels.Editors
                     }
                     catch (Exception ex)
                     {
-                        _log.LogException(string.Format(Strings.Failed_to_replace_background__0__with_file__1_, Bg.DisplayName, openFile.Path.AbsolutePath), ex);
+                        _log.LogException(string.Format(Strings.Failed_to_replace_background__0__with_file__1_, Bg.DisplayName, openFile.Path.LocalPath), ex);
                     }
                 }
             }

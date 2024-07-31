@@ -57,7 +57,7 @@ namespace SerialLoops.ViewModels.Dialogs
             IStorageFile rom = (await _mainWindow.Window.StorageProvider.OpenFilePickerAsync(options)).FirstOrDefault();
             if (rom is not null)
             {
-                RomPath = rom.Path.AbsolutePath;
+                RomPath = rom.Path.LocalPath;
             }
         }
 

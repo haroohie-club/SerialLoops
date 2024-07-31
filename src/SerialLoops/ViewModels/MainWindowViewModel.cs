@@ -367,7 +367,7 @@ namespace SerialLoops.ViewModels
             IStorageFile projectFile = (await Window.StorageProvider.OpenFilePickerAsync(options)).FirstOrDefault();
             if (projectFile is not null)
             {
-                await OpenProjectFromPath(projectFile.Path.AbsolutePath);
+                await OpenProjectFromPath(projectFile.Path.LocalPath);
             }
         }
 
