@@ -50,8 +50,11 @@ namespace SerialLoops.ViewModels.Panels
             }
 
             EditorViewModel newTab = CreateTab(item);
-            Tabs.Add(newTab);
-            SelectedTab = newTab;
+            if (newTab is not null)
+            {
+                Tabs.Add(newTab);
+                SelectedTab = newTab;
+            }
         }
 
         private EditorViewModel CreateTab(ItemDescription item)
