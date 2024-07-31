@@ -58,10 +58,10 @@ namespace SerialLoops.ViewModels.Editors
         private async Task ManageLoop_Executed()
         {
             SoundPlayerViewModel.Stop();
-            LoopyProgressTracker tracker = new(Strings.Adjusting_Loop_Info);
+            LoopyProgressTracker firstTracker = new(Strings.Adjusting_Loop_Info);
             if (!File.Exists(_bgmCachedFile))
             {
-                await new ProgressDialog(() => WaveFileWriter.CreateWaveFile(_bgmCachedFile, Bgm.GetWaveProvider(_log, false)), () => { }, tracker, Strings.Caching_BGM).ShowDialog(_window.Window);
+                await new ProgressDialog(() => WaveFileWriter.CreateWaveFile(_bgmCachedFile, Bgm.GetWaveProvider(_log, false)), () => { }, firstTracker, Strings.Caching_BGM).ShowDialog(_window.Window);
             }
             string loopAdjustedWav = Path.Combine(Path.GetDirectoryName(_bgmCachedFile), $"{Path.GetFileNameWithoutExtension(_bgmCachedFile)}-loop.wav");
             File.Copy(_bgmCachedFile, loopAdjustedWav, true);
@@ -76,16 +76,18 @@ namespace SerialLoops.ViewModels.Editors
                 _loopEndSample = loopPreview.EndSample;
                 Shared.AudioReplacementCancellation.Cancel();
                 Shared.AudioReplacementCancellation = new();
+                LoopyProgressTracker secondTracker = new(Strings.Adjusting_Loop_Info);
+                LoopyProgressTracker thirdTracker = new(Strings.Adjusting_Loop_Info);
                 await new ProgressDialog(() =>
                 {
-                    Bgm.Replace(_bgmCachedFile, _project.BaseDirectory, _project.IterativeDirectory, _bgmCachedFile, _loopEnabled, _loopStartSample, _loopEndSample, _log, tracker, Shared.AudioReplacementCancellation.Token);
+                    Bgm.Replace(_bgmCachedFile, _project.BaseDirectory, _project.IterativeDirectory, _bgmCachedFile, _loopEnabled, _loopStartSample, _loopEndSample, _log, secondTracker, Shared.AudioReplacementCancellation.Token);
                     reader.Dispose();
                     File.Delete(loopAdjustedWav);
                 },
                 () =>
                 {
                     SoundPlayerViewModel = new(Bgm, _log, Bgm.BgmName, Bgm.Name, Bgm.Flag, !string.IsNullOrEmpty(Bgm.BgmName) ? _titleBoxTextChangedCommand : null);
-                }, tracker, Strings.Set_BGM_loop_info).ShowDialog(_window.Window);
+                }, thirdTracker, Strings.Set_BGM_loop_info).ShowDialog(_window.Window);
             }
         }
 
