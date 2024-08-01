@@ -1,14 +1,10 @@
-﻿using System.Globalization;
-using System.Linq;
+﻿using System.Linq;
 using System.Windows.Input;
 using Avalonia.Platform.Storage;
 using HaruhiChokuretsuLib.Util;
-using MsBox.Avalonia;
-using MsBox.Avalonia.Enums;
 using ReactiveUI;
 using SerialLoops.Assets;
 using SerialLoops.Lib;
-using SerialLoops.Lib.Util;
 using SerialLoops.Views.Dialogs;
 using SkiaSharp;
 

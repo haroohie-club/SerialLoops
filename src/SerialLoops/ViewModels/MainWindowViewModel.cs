@@ -119,8 +119,8 @@ namespace SerialLoops.ViewModels
 
             SaveProjectCommand = ReactiveCommand.Create(SaveProject_Executed);
 
-            ProjectSettingsCommand = ReactiveCommand.Create(ProjectSettingsCommand_Executed);
-            CloseProjectCommand = ReactiveCommand.Create(CloseProjectView);
+            ProjectSettingsCommand = ReactiveCommand.CreateFromTask(ProjectSettingsCommand_Executed);
+            CloseProjectCommand = ReactiveCommand.CreateFromTask(CloseProjectView);
 
             BuildIterativeCommand = ReactiveCommand.CreateFromTask(BuildIterative_Executed);
             BuildBaseCommand = ReactiveCommand.CreateFromTask(BuildBase_Executed);
@@ -275,7 +275,7 @@ namespace SerialLoops.ViewModels
             return cancel;
         }
 
-        public async void ProjectSettingsCommand_Executed()
+        public async Task ProjectSettingsCommand_Executed()
         {
             ProjectSettingsDialogViewModel projectSettingsDialogViewModel = new();
             ProjectSettingsDialog projectSettingsDialog = new();
