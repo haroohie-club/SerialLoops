@@ -83,7 +83,7 @@ namespace SerialLoops.ViewModels.Dialogs
                 Icon = newIcon;
                 return;
             }
-            await MessageBoxManager.GetMessageBoxStandard(Strings.Error, Strings.Invalid_image_file_selected, ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error).ShowWindowDialogAsync(_settingsDialog);
+            Log.LogError(Strings.Invalid_image_file_selected);
         }
 
         private async void ApplyCommand_Executed()
