@@ -14,6 +14,7 @@
     <ScrollViewer>
         <StackPanel Orientation="Vertical" Spacing="5" HorizontalAlignment="Left" VerticalAlignment="Top">
             <controls:SKBitmapCanvas Source="{Binding SystemTextureBitmap}"
+                                     HorizontalAlignment="Left"
                                      Width="{Binding SystemTextureBitmap.Width}"
                                      Height="{Binding SystemTextureBitmap.Height}"/>
             <StackPanel Orientation="Horizontal" Spacing="3">
@@ -24,6 +25,7 @@
             <TextBlock IsVisible="{Binding UsesCommonPalette}" Text="{Binding UsesCommonPaletteText}"/>
             <gbox:GroupBox Header="{Binding PaletteText}" Theme="{StaticResource GroupBoxClassic}">
                 <controls:SKBitmapCanvas Source="{Binding PaletteBitmap}"
+                                         HorizontalAlignment="Left"
                                          Width="{Binding PaletteBitmap.Width}"
                                          Height="{Binding PaletteBitmap.Height}"/>
             </gbox:GroupBox>
