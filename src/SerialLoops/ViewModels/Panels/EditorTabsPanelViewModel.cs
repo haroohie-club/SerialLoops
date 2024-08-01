@@ -65,6 +65,8 @@ namespace SerialLoops.ViewModels.Panels
                     return new BackgroundEditorViewModel((BackgroundItem)item, MainWindow, _project, _log);
                 case ItemDescription.ItemType.BGM:
                     return new BackgroundMusicEditorViewModel((BackgroundMusicItem)item, MainWindow, _project, _log);
+                case ItemDescription.ItemType.System_Texture:
+                    return new SystemTextureEditorViewModel((SystemTextureItem)item, MainWindow, _project, _log);
                 default:
                     _log.LogError(Strings.Invalid_item_type_);
                     return null;
@@ -73,7 +75,7 @@ namespace SerialLoops.ViewModels.Panels
 
         private void OnTabSwitched()
         {
-            
+
         }
 
         public void OnTabClosed(EditorViewModel closedEditor)
