@@ -27,7 +27,7 @@ jobs:
   pool:
     vmImage: $(imageName)
   ${{ if ne(variables['containerImage'], '') }}:
-    container: $(containerImage)
+    container: $[ variables['containerImage'] ]
   steps:
   - checkout: self
     clean: true
