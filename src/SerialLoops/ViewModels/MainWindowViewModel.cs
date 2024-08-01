@@ -466,7 +466,9 @@ namespace SerialLoops.ViewModels
                     {
                         Window.RestartOnClose = true;
                         Window.Close();
+                        return;
                     }
+                    await PreferencesCommand_Executed();
                 }
             }
         }

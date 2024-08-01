@@ -15,16 +15,28 @@
         Icon="/Assets/serial-loops.ico"
         Title="{x:Static assets:Strings.Preferences}">
     <DockPanel>
-        <ScrollViewer DockPanel.Dock="Top" VerticalScrollBarVisibility="Visible" Height="{Binding ScrollViewerHeight}">
-            <StackPanel>
-                <controls:OptionsGroup Name="BuildOptions" />
-                <controls:OptionsGroup Name="ProjectOptions" />
-                <controls:OptionsGroup Name="SerialLoopsOptions" />                
+        <StackPanel Spacing="5" Margin="5">
+            <TabControl>
+                <TabControl.Items>
+                    <TabItem Header="Serial Loops">
+                        <controls:OptionsGroup Name="SerialLoopsOptions" Width="500" />
+                    </TabItem>
+                    <TabItem Header="{x:Static assets:Strings.Projects}">
+                        <controls:OptionsGroup Name="ProjectOptions" Width="500" />
+                    </TabItem>
+                    <TabItem Header="{x:Static assets:Strings.Build}">
+                        <controls:OptionsGroup Name="BuildOptions" Width="500" />
+                    </TabItem>
+                </TabControl.Items>
+            </TabControl>
+            <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Spacing="5" Width="500">
+                <StackPanel Orientation="Horizontal" Spacing="5" Margin="5">
+                    <Button Content="{x:Static assets:Strings.Save}" Command="{Binding SaveCommand}"/>
+                    <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}" IsCancel="True"/>
                 </StackPanel>
-        </ScrollViewer>
-        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Spacing="5" Margin="20">
-            <Button Content="{x:Static assets:Strings.Save}" Command="{Binding SaveCommand}"/>
-            <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}" IsCancel="True"/>
+                <controls:LabelWithIcon IsVisible="{Binding RequireRestart}"
+                                        Text="{x:Static assets:Strings.Restart_required}" Icon="Warning" />
+            </StackPanel>
         </StackPanel>
     </DockPanel>
 </Window>
