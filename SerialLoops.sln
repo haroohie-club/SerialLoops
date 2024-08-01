@@ -5,9 +5,15 @@ VisualStudioVersion = 17.10.35027.167
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SerialLoops", "src\SerialLoops\SerialLoops.csproj", "{4BAD2B9C-697B-4F99-ADB1-44A32D9C1EAD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialLoops.Lib", "src\SerialLoops.Lib\SerialLoops.Lib.csproj", "{D0A6E736-5240-4CD6-8F6F-CAA3F73330D3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SerialLoops.Lib", "src\SerialLoops.Lib\SerialLoops.Lib.csproj", "{D0A6E736-5240-4CD6-8F6F-CAA3F73330D3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D53AAD08-D78C-400E-A01D-85E1117D465A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{0E408EA9-D3DE-4568-A8E4-8E3A6D791C46}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SerialLoops.Tests.Headless", "test\SerialLoops.Tests.Headless\SerialLoops.Tests.Headless.csproj", "{88779AB0-A349-4131-B7AF-FBC3B8FF4FCE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialLoops.Tests.Shared", "test\SerialLoops.Tests.Shared\SerialLoops.Tests.Shared.csproj", "{AAACA3F0-3DB5-4C45-83BE-5B0D87A32486}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,6 +29,14 @@ Global
 		{D0A6E736-5240-4CD6-8F6F-CAA3F73330D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D0A6E736-5240-4CD6-8F6F-CAA3F73330D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D0A6E736-5240-4CD6-8F6F-CAA3F73330D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88779AB0-A349-4131-B7AF-FBC3B8FF4FCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88779AB0-A349-4131-B7AF-FBC3B8FF4FCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88779AB0-A349-4131-B7AF-FBC3B8FF4FCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88779AB0-A349-4131-B7AF-FBC3B8FF4FCE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAACA3F0-3DB5-4C45-83BE-5B0D87A32486}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAACA3F0-3DB5-4C45-83BE-5B0D87A32486}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAACA3F0-3DB5-4C45-83BE-5B0D87A32486}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAACA3F0-3DB5-4C45-83BE-5B0D87A32486}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -30,6 +44,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{4BAD2B9C-697B-4F99-ADB1-44A32D9C1EAD} = {D53AAD08-D78C-400E-A01D-85E1117D465A}
 		{D0A6E736-5240-4CD6-8F6F-CAA3F73330D3} = {D53AAD08-D78C-400E-A01D-85E1117D465A}
+		{88779AB0-A349-4131-B7AF-FBC3B8FF4FCE} = {0E408EA9-D3DE-4568-A8E4-8E3A6D791C46}
+		{AAACA3F0-3DB5-4C45-83BE-5B0D87A32486} = {0E408EA9-D3DE-4568-A8E4-8E3A6D791C46}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BD2CAAA3-1F0F-451A-ABB8-DDD82A59815B}
