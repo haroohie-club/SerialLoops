@@ -1,10 +1,10 @@
-﻿using HaroohieClub.NitroPacker.Core;
+﻿using System;
+using System.Linq;
+using HaroohieClub.NitroPacker.Core;
 using HaroohieClub.NitroPacker.Nitro.Gx;
 using HaruhiChokuretsuLib.Archive.Graphics;
 using HaruhiChokuretsuLib.Util;
 using SkiaSharp;
-using System;
-using System.Linq;
 using static HaroohieClub.NitroPacker.Nitro.Card.Rom.RomBanner;
 
 namespace SerialLoops.Lib

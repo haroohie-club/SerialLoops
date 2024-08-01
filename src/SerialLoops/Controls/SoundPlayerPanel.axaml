@@ -1,0 +1,41 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="using:SerialLoops.ViewModels.Controls"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:i="using:Avalonia.Xaml.Interactivity"
+             xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
+             xmlns:controls="using:SerialLoops.Controls"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:SoundPlayerPanelViewModel"
+             x:Class="SerialLoops.Controls.SoundPlayerPanel">
+    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="10">
+        <StackPanel Spacing="5" Orientation="Horizontal" Name="SoundPlayer">
+            <Button Name="PlayPauseButton" Command="{Binding PlayPauseCommand}">
+                <Svg Path="{Binding PlayPauseImagePath}" Width="25"/>
+            </Button>
+            <Button Name="StopButton" IsEnabled="{Binding StopButtonEnabled}" Command="{Binding StopCommand}">
+                <Svg Path="avares://SerialLoops/Assets/Icons/Stop.svg" Width="25"/>
+            </Button>
+            <controls:SKBitmapCanvas Name="WaveformCanvas"/>
+        </StackPanel>
+        <StackPanel Orientation="Vertical" Spacing="5" Name="Details">
+            <StackPanel Name="TrackTitlePanel">
+                <TextBox Name="TrackNameBox" IsVisible="{Binding UseTextBoxForTrackName}" Width="200"
+                         Text="{Binding TrackName}">
+                    <i:Interaction.Behaviors>
+                        <ia:EventTriggerBehavior EventName="TextChanged" SourceObject="{Binding #TrackNameBox}">
+                            <ia:InvokeCommandAction Command="{Binding TrackNameCommand}" 
+                                                    CommandParameter="{Binding #TrackNameBox.Text}" />
+                        </ia:EventTriggerBehavior>
+                    </i:Interaction.Behaviors>
+                </TextBox>
+                <TextBlock IsVisible="{Binding !UseTextBoxForTrackName}" Text="{Binding TrackName}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Spacing="5" Name="ExtraDetails">
+                <TextBlock Text="{Binding TrackDetails}"/>
+                <TextBlock Text="{Binding TrackFlag}"/>
+            </StackPanel>
+        </StackPanel>
+    </StackPanel>
+</UserControl>

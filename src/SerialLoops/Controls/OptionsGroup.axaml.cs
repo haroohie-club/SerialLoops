@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Layout;
@@ -9,10 +13,6 @@ using ReactiveUI;
 using SerialLoops.Assets;
 using SerialLoops.Lib.Items;
 using SerialLoops.Utility;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SerialLoops.Controls
 {
@@ -286,7 +286,7 @@ namespace SerialLoops.Controls
             IStorageFile file = (await _window.StorageProvider.OpenFilePickerAsync(new())).FirstOrDefault();
             if (file is not null)
             {
-                _pathBox.Text = file.Path.AbsolutePath;
+                _pathBox.Text = file.Path.LocalPath;
             }
         }
     }
@@ -302,7 +302,7 @@ namespace SerialLoops.Controls
             IStorageFolder folder = (await _window.StorageProvider.OpenFolderPickerAsync(new())).FirstOrDefault();
             if (folder is not null)
             {
-                _pathBox.Text = folder.Path.AbsolutePath;
+                _pathBox.Text = folder.Path.LocalPath;
             }
         }
     }

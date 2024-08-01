@@ -1,0 +1,75 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:vm="using:SerialLoops.ViewModels.Dialogs"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:assets="using:SerialLoops.Assets"
+        xmlns:controls="using:SerialLoops.Controls"
+        xmlns:utility="using:SerialLoops.Utility"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:DataType="vm:BgmLoopPropertiesDialogViewModel"
+        x:Class="SerialLoops.Views.Dialogs.BgmLoopPropertiesDialog"
+        Title="{Binding Title}"
+        Icon="/Assets/serial-loops.ico"
+        Name="BgmLoopPropsDialog">
+    <Window.Resources>
+        <utility:IntSubtractionConverter x:Key="SubtractionConverter"/>
+        <utility:BgmLoopSampleToTimestampConverter x:Key="SampleToTimestampConverter"/>
+    </Window.Resources>
+    
+    <StackPanel Orientation="Horizontal" Spacing="5" Margin="10">
+        <StackPanel Orientation="Vertical" Spacing="10" HorizontalAlignment="Center">
+            <controls:SoundPlayerPanel DataContext="{Binding LoopPreviewPlayer}"/>
+            <CheckBox Content="{x:Static assets:Strings.Loop_}" IsChecked="{Binding LoopPreview.LoopEnabled}"/>
+            <StackPanel Height="{Binding Waveform.Height, Converter={StaticResource SubtractionConverter},
+                        ConverterParameter=65}"/>
+            <StackPanel Orientation="Horizontal" Spacing="3">
+                <TextBlock Text="{x:Static assets:Strings.Start}"/>
+                <NumericUpDown Name="StartSampleBox" Minimum="0" Maximum="{Binding #EndSampleBox.Value}"
+                               FormatString="0.0000">
+                    <NumericUpDown.Value>
+                        <MultiBinding Converter="{StaticResource SampleToTimestampConverter}">
+                            <Binding Path="LoopPreview"/>
+                            <Binding Path="LoopPreview.StartSample"/>
+                        </MultiBinding>
+                    </NumericUpDown.Value>
+                </NumericUpDown>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Spacing="3">
+                <TextBlock Text="{x:Static assets:Strings.End}"/>
+                <NumericUpDown Name="EndSampleBox" Minimum="{Binding #StartSampleBox.Value}" FormatString="0.0000">
+                    <NumericUpDown.Maximum>
+                        <MultiBinding Converter="{StaticResource SampleToTimestampConverter}">
+                            <Binding Path="LoopPreview"/>
+                            <Binding Path="MaxSample"/>
+                        </MultiBinding>
+                    </NumericUpDown.Maximum>
+                    <NumericUpDown.Value>
+                        <MultiBinding Converter="{StaticResource SampleToTimestampConverter}">
+                            <Binding Path="LoopPreview"/>
+                            <Binding Path="LoopPreview.EndSample"/>
+                        </MultiBinding>
+                    </NumericUpDown.Value>
+                </NumericUpDown>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel Orientation="Vertical" Spacing="5">
+            <controls:SKBitmapCanvas Source="{Binding Waveform}" Width="{Binding Waveform.Width}"
+                                     Height="{Binding Waveform.Height}"/>
+            <Slider Name="StartSampleSlider" Width="{Binding Waveform.Width}" Minimum="0"
+                    Maximum="{Binding #EndSampleBox.Maximum}"
+                    ValueChanged="StartSlider_ValueChanged" />
+            <Slider Name="EndSampleSlider" Width="{Binding Waveform.Width}" Minimum="0"
+                    Maximum="{Binding #EndSampleBox.Maximum}"
+                    ValueChanged="EndSlider_ValueChanged"/>
+            <StackPanel Orientation="Vertical" Spacing="3" HorizontalAlignment="Right" Width="{Binding Waveform.Width}">
+                <StackPanel Orientation="Horizontal" Spacing="3">
+                    <Button Content="{x:Static assets:Strings.Save}" Command="{Binding SaveCommand}"
+                            CommandParameter="{Binding #BgmLoopPropsDialog}"/>
+                    <Button Content="{x:Static assets:Strings.Cancel}" IsCancel="True" Command="{Binding CancelCommand}"
+                            CommandParameter="{Binding #BgmLoopPropsDialog}"/>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+    </StackPanel>
+</Window>

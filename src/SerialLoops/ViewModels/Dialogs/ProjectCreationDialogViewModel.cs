@@ -1,4 +1,7 @@
-﻿using Avalonia.Controls;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using Avalonia.Controls;
 using Avalonia.Platform.Storage;
 using HaruhiChokuretsuLib.Util;
 using MsBox.Avalonia;
@@ -9,9 +12,6 @@ using SerialLoops.Controls;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Util;
 using SerialLoops.Views.Dialogs;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace SerialLoops.ViewModels.Dialogs
 {
@@ -56,7 +56,7 @@ namespace SerialLoops.ViewModels.Dialogs
             IStorageFile rom = (await _mainWindow.Window.StorageProvider.OpenFilePickerAsync(options)).FirstOrDefault();
             if (rom is not null)
             {
-                RomPath = rom.Path.AbsolutePath;
+                RomPath = rom.Path.LocalPath;
             }
         }
 

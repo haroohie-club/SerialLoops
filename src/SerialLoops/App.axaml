@@ -3,7 +3,7 @@
              xmlns:assets="using:SerialLoops.Assets"
              x:Class="SerialLoops.App"
              xmlns:local="using:SerialLoops"
-             xmlns:tabaloniathemes="using:Tabalonia.Themes.Fluent"
+             xmlns:tabaloniathemes="using:Tabalonia.Themes.Custom"
              xmlns:mintoolbarthemes="using:MiniToolbar.Avalonia.Themes"
              xmlns:dialoghost="using:DialogHostAvalonia"
              RequestedThemeVariant="Default">
@@ -28,7 +28,7 @@
     <Application.Styles>
         <FluentTheme />
         <dialoghost:DialogHostStyles />
-        <tabaloniathemes:FluentTheme/>
+        <tabaloniathemes:CustomTheme/>
         <mintoolbarthemes:MiniToolbarStyles/>
         <StyleInclude Source="avares://Avalonia.Controls.TreeDataGrid/Themes/Fluent.axaml"/>
         <Style Selector="TextBlock.h1">

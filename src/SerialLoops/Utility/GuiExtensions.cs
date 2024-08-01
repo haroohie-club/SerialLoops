@@ -1,7 +1,9 @@
-﻿using Avalonia.Controls;
-using Avalonia.Media;
+﻿using System.Collections.Generic;
+using System.IO;
+using Avalonia.Controls;
+using Avalonia.Media.Imaging;
+using HaruhiChokuretsuLib.Archive.Graphics;
 using SkiaSharp;
-using System.Collections.Generic;
 
 namespace SerialLoops.Utility
 {
@@ -43,6 +45,14 @@ namespace SerialLoops.Utility
                 }
             }
             return null;
+        }
+
+        public static Bitmap ToAvaloniaBitmap(this SKBitmap skBitmap)
+        {
+            using MemoryStream memStream = new();
+            skBitmap.Encode(SKEncodedImageFormat.Png, GraphicsFile.PNG_QUALITY);
+            Bitmap bitmap = new(memStream);
+            return bitmap;
         }
     }
 }

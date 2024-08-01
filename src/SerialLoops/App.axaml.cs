@@ -1,11 +1,11 @@
+using System;
+using System.Reactive;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
 using SerialLoops.ViewModels;
 using SerialLoops.Views;
-using System;
-using System.Reactive;
 
 namespace SerialLoops
 {

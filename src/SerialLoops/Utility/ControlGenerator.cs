@@ -1,10 +1,10 @@
-﻿using Avalonia.Controls;
+﻿using System;
+using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
-using HaruhiChokuretsuLib.Util;
-using System;
 using Avalonia.Svg;
+using HaruhiChokuretsuLib.Util;
 
 namespace SerialLoops.Utility
 {
@@ -55,6 +55,11 @@ namespace SerialLoops.Utility
                 log.LogWarning($"Failed to load icon '{iconName}': {ex.Message}\n\n{ex.StackTrace}");
                 return null;
             }
+        }
+
+        public static string GetVectorPath(string iconName)
+        {
+            return $"avares://SerialLoops/Assets/Icons/{iconName}.svg";
         }
 
         public static StackPanel GetControlWithIcon(Control control, string iconName, ILogger log)

@@ -1,4 +1,7 @@
-﻿using HaruhiChokuretsuLib.Archive.Event;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
 using QuikGraph;
 using QuikGraph.Algorithms.Observers;
@@ -6,9 +9,6 @@ using QuikGraph.Algorithms.Search;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script.Parameters;
 using SerialLoops.Lib.Util;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using static HaruhiChokuretsuLib.Archive.Event.EventFile;
 
 namespace SerialLoops.Lib.Script

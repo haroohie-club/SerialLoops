@@ -1,6 +1,6 @@
+using System;
 using Avalonia.Controls;
 using SerialLoops.ViewModels.Dialogs;
-using System;
 
 namespace SerialLoops.Views.Dialogs
 {

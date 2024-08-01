@@ -1,9 +1,4 @@
-﻿using HaruhiChokuretsuLib.Archive.Event;
-using HaruhiChokuretsuLib.Archive.Graphics;
-using HaruhiChokuretsuLib.Font;
-using SerialLoops.Lib.Script.Parameters;
-using SkiaSharp;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -11,6 +6,11 @@ using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
+using HaruhiChokuretsuLib.Archive.Event;
+using HaruhiChokuretsuLib.Archive.Graphics;
+using HaruhiChokuretsuLib.Font;
+using SerialLoops.Lib.Script.Parameters;
+using SkiaSharp;
 using static HaruhiChokuretsuLib.Archive.Event.EventFile;
 using static SerialLoops.Lib.Script.SpritePositioning;
 

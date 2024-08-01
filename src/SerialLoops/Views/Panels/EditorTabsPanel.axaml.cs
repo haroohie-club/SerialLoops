@@ -1,4 +1,6 @@
 using Avalonia.Controls;
+using SerialLoops.ViewModels.Editors;
+using SerialLoops.ViewModels.Panels;
 
 namespace SerialLoops.Views.Panels
 {
@@ -10,14 +12,9 @@ namespace SerialLoops.Views.Panels
             InitializeComponent();
         }
 
-        private void Tabs_PageChanged(object? sender, SelectionChangedEventArgs e)
+        private void Tabs_ContainerClearing(object? sender, ContainerClearingEventArgs e)
         {
-            
-        }
-
-        private void Tabs_PageClosed(object? sender, ContainerClearingEventArgs e)
-        {
-            
+            ((EditorTabsPanelViewModel)DataContext).OnTabClosed((EditorViewModel)e.Container.DataContext);
         }
     }
 }

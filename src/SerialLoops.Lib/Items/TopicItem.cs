@@ -1,7 +1,6 @@
 ﻿using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib.Util;
-using System.Linq;
 
 namespace SerialLoops.Lib.Items
 {

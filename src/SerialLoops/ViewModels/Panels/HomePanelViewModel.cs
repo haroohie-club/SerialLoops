@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls;
+﻿using System.IO;
+using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Media.Immutable;
 using HaruhiChokuretsuLib.Util;
@@ -6,7 +7,6 @@ using SerialLoops.Assets;
 using SerialLoops.Controls;
 using SerialLoops.Utility;
 using SerialLoops.Views.Panels;
-using System.IO;
 
 namespace SerialLoops.ViewModels.Panels
 {

@@ -1,0 +1,23 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="using:SerialLoops.ViewModels.Editors"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:assets="using:SerialLoops.Assets"
+             xmlns:controls="using:SerialLoops.Controls"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:BackgroundMusicEditorViewModel"
+             x:Class="SerialLoops.Views.Editors.BackgroundMusicEditorView">
+    <Grid RowDefinitions="Auto,Auto,Auto,*">
+        <controls:SoundPlayerPanel Name="Player" Grid.Row="0" DataContext="{Binding BgmPlayer}"/>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="3" Margin="2">
+            <Button Content="{x:Static assets:Strings.Manage_Loop}" Command="{Binding ManageLoopCommand}"/>
+            <Button Content="{x:Static assets:Strings.Adjust_Volume}" Command="{Binding AdjustVolumeCommand}"/>
+        </StackPanel>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="3" Margin="2">
+            <Button Content="{x:Static assets:Strings.Replace}" Command="{Binding ReplaceCommand}"/>
+            <Button Content="{x:Static assets:Strings.Extract}" Command="{Binding ExtractCommand}"/>
+            <Button Content="{x:Static assets:Strings.Restore}" Command="{Binding RestoreCommand}"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

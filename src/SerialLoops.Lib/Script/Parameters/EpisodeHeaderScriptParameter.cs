@@ -1,7 +1,6 @@
-﻿using HaruhiChokuretsuLib.Archive.Data;
+﻿using System.Linq;
 using HaruhiChokuretsuLib.Archive.Event;
 using SerialLoops.Lib.Items;
-using System.Linq;
 
 namespace SerialLoops.Lib.Script.Parameters
 {

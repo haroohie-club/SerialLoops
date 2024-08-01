@@ -1,8 +1,8 @@
-﻿using HaruhiChokuretsuLib.Util;
+﻿using System.Windows.Input;
+using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
 using SerialLoops.Views.Dialogs;
 using SkiaSharp;
-using System.Windows.Input;
 
 namespace SerialLoops.ViewModels.Dialogs
 {

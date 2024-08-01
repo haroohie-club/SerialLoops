@@ -1,18 +1,14 @@
-﻿using HaruhiChokuretsuLib.Util;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Headers;
+﻿using System;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Reflection;
-using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
-using SerialLoops.Views;
-using SerialLoops.ViewModels;
+using HaruhiChokuretsuLib.Util;
 using SerialLoops.Assets;
-using SerialLoops.Views.Dialogs;
+using SerialLoops.ViewModels;
 using SerialLoops.ViewModels.Dialogs;
+using SerialLoops.Views.Dialogs;
 
 namespace SerialLoops.Utility
 {

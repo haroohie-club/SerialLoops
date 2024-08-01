@@ -1,11 +1,12 @@
-﻿using Avalonia.Controls;
+﻿using System;
+using System.IO;
+using System.Threading.Tasks;
+using Avalonia.Controls;
 using HaruhiChokuretsuLib.Util;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
 using SerialLoops.Assets;
 using SerialLoops.Lib;
-using System;
-using System.IO;
 
 namespace SerialLoops.Utility
 {
@@ -13,9 +14,11 @@ namespace SerialLoops.Utility
     {
         private Config _config;
         private StreamWriter _writer;
+        private Window _owner;
 
-        public LoopyLogger()
+        public LoopyLogger(Window window)
         {
+            _owner = window;
         }
 
         public void Initialize(Config config)
@@ -39,7 +42,15 @@ namespace SerialLoops.Utility
 
         public void LogError(string message, bool lookForWarnings = false)
         {
-            MessageBoxManager.GetMessageBoxStandard(Strings.Error, string.Format(Strings.ERROR___0_, message), ButtonEnum.Ok, Icon.Error, WindowStartupLocation.CenterScreen).ShowAsync().GetAwaiter().GetResult();
+            // Attempting to await this using the normal methods for awaiting in a synchronous context seems to deadlock the process, so we don't do it!!
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            LogErrorAsync(message, lookForWarnings);
+#pragma warning restore CS4014
+        }
+
+        private async Task LogErrorAsync(string message, bool lookForWarnings = false)
+        {
+            await MessageBoxManager.GetMessageBoxStandard(Strings.Error, string.Format(Strings.ERROR___0_, message), ButtonEnum.Ok, Icon.Error, WindowStartupLocation.CenterScreen).ShowWindowDialogAsync(_owner);
             if (_writer is not null && !string.IsNullOrEmpty(message))
             {
                 _writer.WriteLine($"{DateTimeOffset.Now} - ERROR: {message}");
