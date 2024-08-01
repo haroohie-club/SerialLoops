@@ -14,7 +14,7 @@ namespace SerialLoops.ViewModels.Controls
     {
         private ILogger _log;
         private ISoundItem _item;
-        private SoundPlayer _player;
+        internal SoundPlayer _player;
 
         private IWaveProvider _sound;
         private SKBitmap _waveform;

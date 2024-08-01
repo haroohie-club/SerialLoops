@@ -2,14 +2,22 @@
 using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Layout;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace SerialLoops.Models
 {
-    public class SectionTreeItem(string sectionName, IEnumerable<ITreeItem> children, Avalonia.Svg.Svg icon) : ITreeItem
+    public class SectionTreeItem(string sectionName, IEnumerable<ITreeItem> children, Avalonia.Svg.Svg icon) : ObservableObject, ITreeItem
     {
+        private bool _isExpanded;
+
         public string Text { get; set; } = sectionName;
         public Avalonia.Svg.Svg Icon { get; set; } = icon;
         public List<ITreeItem> Children { get; set; } = children.ToList();
+        public bool IsExpanded
+        {
+            get => _isExpanded;
+            set => SetProperty(ref _isExpanded, value);
+        }
 
         public Control GetDisplay()
         {

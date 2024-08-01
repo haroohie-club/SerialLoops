@@ -13,6 +13,7 @@ using Avalonia.Media;
 using Avalonia.Platform;
 using Avalonia.Platform.Storage;
 using Avalonia.Styling;
+using CommunityToolkit.Mvvm.ComponentModel;
 using HaruhiChokuretsuLib.Archive;
 using MiniToolbar.Avalonia;
 using MsBox.Avalonia;
@@ -98,16 +99,15 @@ namespace SerialLoops.ViewModels
         public ICommand BuildBaseCommand { get; private set; }
         public ICommand BuildAndRunCommand { get; private set; }
 
+        [ObservableProperty]
         private KeyGesture _saveHotKey;
-        public KeyGesture SaveHotKey
-        {
-            get => _saveHotKey;
-            set => SetProperty(ref _saveHotKey, value);
-        }
+        [ObservableProperty]
+        private KeyGesture _closeProjectKey;
 
         public MainWindowViewModel()
         {
-            _saveHotKey = new(Key.S, KeyModifiers.Control);
+            SaveHotKey = new(Key.S, KeyModifiers.Control);
+            CloseProjectKey = new(Key.W, KeyModifiers.Control);
 
             NewProjectCommand = ReactiveCommand.CreateFromTask(NewProjectCommand_Executed);
             OpenProjectCommand = ReactiveCommand.CreateFromTask(OpenProjectCommand_Executed);

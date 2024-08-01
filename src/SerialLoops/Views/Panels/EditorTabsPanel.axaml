@@ -30,7 +30,7 @@
         </i:Interaction.Behaviors>
         <tab:TabsControl.ItemTemplate>
             <DataTemplate DataType="editors:EditorViewModel">
-                <StackPanel Orientation="Horizontal" Spacing="3">
+                <StackPanel Orientation="Horizontal" Spacing="3" Name="TabHeader">
                     <Svg Path="{Binding Description.Type, StringFormat='avares://SerialLoops/Assets/Icons/{0}.svg'}" Width="18"/>
                     <TextBlock FontSize="14" Padding="0 1 8 1">
                         <TextBlock.Text>

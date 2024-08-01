@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net8.0;net8.0-windows</TargetFrameworks>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia.Headless.NUnit" Version="11.1.1" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.1.1" />
+    <PackageReference Include="coverlet.collector" Version="6.0.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
+    <PackageReference Include="NUnit" Version="4.1.0" />
+    <PackageReference Include="NUnit.Analyzers" Version="4.2.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\SerialLoops\SerialLoops.csproj" />
+    <ProjectReference Include="..\SerialLoops.Tests.Shared\SerialLoops.Tests.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="NUnit.Framework" />
+  </ItemGroup>
+
+</Project>
