@@ -1,6 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -92,8 +151,8 @@
   <data name="Background music volume options ticker tape" xml:space="preserve">
     <value>“背景音乐选项”滚动条</value>
   </data>
-  <data name="&amp;Tools" xml:space="preserve">
-    <value>工具 (&amp;T)</value>
+  <data name="_Tools" xml:space="preserve">
+    <value>工具 (_T)</value>
   </data>
   <data name="Add Command" xml:space="preserve">
     <value>增加命令</value>
@@ -187,8 +246,8 @@
     <value>添加</value>
     <comment>As in add/subtract</comment>
   </data>
-  <data name="&amp;File" xml:space="preserve">
-    <value>文件 (&amp;F)</value>
+  <data name="_File" xml:space="preserve">
+    <value>文件 (_F)</value>
   </data>
   <data name="Both" xml:space="preserve">
     <value>两个</value>
@@ -206,8 +265,8 @@
   <data name="Batch Dialogue Display On" xml:space="preserve">
     <value>批量对话显示开</value>
   </data>
-  <data name="&amp;Build" xml:space="preserve">
-    <value>构建 (&amp;B)</value>
+  <data name="_Build" xml:space="preserve">
+    <value>构建 (_B)</value>
   </data>
   <data name="Build succeeded!" xml:space="preserve">
     <value>构建成功！</value>
@@ -287,8 +346,8 @@
   <data name="Build" xml:space="preserve">
     <value>构建</value>
   </data>
-  <data name="&amp;Edit" xml:space="preserve">
-    <value>编辑 (&amp;E)</value>
+  <data name="_Edit" xml:space="preserve">
+    <value>编辑 (_E)</value>
   </data>
   <data name="Both Screens" xml:space="preserve">
     <value>两个屏幕</value>
@@ -312,8 +371,8 @@
   <data name="Background_Type" xml:space="preserve">
     <value>背景类型</value>
   </data>
-  <data name="&amp;Check for Updates..." xml:space="preserve">
-    <value>检查更新 (&amp;C)…</value>
+  <data name="_Check for Updates..." xml:space="preserve">
+    <value>检查更新 (_C)…</value>
   </data>
   <data name="Background" xml:space="preserve">
     <value>背景</value>
@@ -348,8 +407,8 @@
   <data name="Animation" xml:space="preserve">
     <value>动画</value>
   </data>
-  <data name="&amp;Preferences..." xml:space="preserve">
-    <value>设置 (&amp;P)…</value>
+  <data name="_Preferences..." xml:space="preserve">
+    <value>设置 (_P)…</value>
   </data>
   <data name="Add Frames" xml:space="preserve">
     <value>添加帧</value>

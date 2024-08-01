@@ -59,7 +59,7 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -122,24 +122,6 @@
   </data>
   <data name="%" xml:space="preserve">
     <value>%</value>
-  </data>
-  <data name="&amp;Build" xml:space="preserve">
-    <value>&amp;Build</value>
-  </data>
-  <data name="&amp;Check for Updates..." xml:space="preserve">
-    <value>&amp;Check for Updates…</value>
-  </data>
-  <data name="&amp;Edit" xml:space="preserve">
-    <value>&amp;Edit</value>
-  </data>
-  <data name="&amp;File" xml:space="preserve">
-    <value>&amp;File</value>
-  </data>
-  <data name="&amp;Preferences..." xml:space="preserve">
-    <value>&amp;Preferences…</value>
-  </data>
-  <data name="&amp;Tools" xml:space="preserve">
-    <value>&amp;Tools</value>
   </data>
   <data name="(Missing)" xml:space="preserve">
     <value> (Missing)</value>
@@ -2231,11 +2213,11 @@
   <data name="Vertical Intensity" xml:space="preserve">
     <value>Vertical Intensity</value>
   </data>
-  <data name="View &amp;Logs" xml:space="preserve">
-    <value>View &amp;Logs</value>
-  </data>
   <data name="View Logs" xml:space="preserve">
     <value>View Logs</value>
+  </data>
+  <data name="View _Logs" xml:space="preserve">
+    <value>View _Logs</value>
   </data>
   <data name="Visible?" xml:space="preserve">
     <value>Visible?</value>
@@ -2314,6 +2296,24 @@
   </data>
   <data name="Yuki Nagato event unlocked message box" xml:space="preserve">
     <value>Yuki Nagato event unlocked message box</value>
+  </data>
+  <data name="_Build" xml:space="preserve">
+    <value>_Build</value>
+  </data>
+  <data name="_Check for Updates..." xml:space="preserve">
+    <value>_Check for Updates…</value>
+  </data>
+  <data name="_Edit" xml:space="preserve">
+    <value>_Edit</value>
+  </data>
+  <data name="_File" xml:space="preserve">
+    <value>_File</value>
+  </data>
+  <data name="_Preferences..." xml:space="preserve">
+    <value>_Preferences…</value>
+  </data>
+  <data name="_Tools" xml:space="preserve">
+    <value>_Tools</value>
   </data>
   <data name="{0} - Adjust Volume" xml:space="preserve">
     <value>{0} - Adjust Volume</value>

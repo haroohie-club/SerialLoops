@@ -146,7 +146,7 @@ namespace SerialLoops.Assets {
         /// </summary>
         public static string _Build {
             get {
-                return ResourceManager.GetString("&Build", resourceCulture);
+                return ResourceManager.GetString("_Build", resourceCulture);
             }
         }
         
@@ -155,7 +155,7 @@ namespace SerialLoops.Assets {
         /// </summary>
         public static string _Check_for_Updates___ {
             get {
-                return ResourceManager.GetString("&Check for Updates...", resourceCulture);
+                return ResourceManager.GetString("_Check for Updates...", resourceCulture);
             }
         }
         
@@ -164,7 +164,7 @@ namespace SerialLoops.Assets {
         /// </summary>
         public static string _Edit {
             get {
-                return ResourceManager.GetString("&Edit", resourceCulture);
+                return ResourceManager.GetString("_Edit", resourceCulture);
             }
         }
         
@@ -173,7 +173,7 @@ namespace SerialLoops.Assets {
         /// </summary>
         public static string _File {
             get {
-                return ResourceManager.GetString("&File", resourceCulture);
+                return ResourceManager.GetString("_File", resourceCulture);
             }
         }
         
@@ -209,7 +209,7 @@ namespace SerialLoops.Assets {
         /// </summary>
         public static string _Preferences___ {
             get {
-                return ResourceManager.GetString("&Preferences...", resourceCulture);
+                return ResourceManager.GetString("_Preferences...", resourceCulture);
             }
         }
         
@@ -227,7 +227,7 @@ namespace SerialLoops.Assets {
         /// </summary>
         public static string _Tools {
             get {
-                return ResourceManager.GetString("&Tools", resourceCulture);
+                return ResourceManager.GetString("_Tools", resourceCulture);
             }
         }
         
@@ -6930,7 +6930,7 @@ namespace SerialLoops.Assets {
         /// </summary>
         public static string View__Logs {
             get {
-                return ResourceManager.GetString("View &Logs", resourceCulture);
+                return ResourceManager.GetString("View _Logs", resourceCulture);
             }
         }
         
