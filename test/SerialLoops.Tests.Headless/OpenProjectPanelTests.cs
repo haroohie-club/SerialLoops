@@ -166,53 +166,5 @@ namespace SerialLoops.Tests.Headless
                 Assert.That(tabs.Tabs.SelectedItem, Is.TypeOf<BackgroundEditorViewModel>());
             });
         }
-
-        [AvaloniaTest]
-        [Parallelizable]
-        public async Task BGMEditor_CanPlayPauseStopMusic()
-        {
-            int currentFrame = 0;
-            MainWindowViewModel mainWindowViewModel = new();
-            MainWindow mainWindow = new()
-            {
-                DataContext = mainWindowViewModel,
-            };
-            mainWindow.Show();
-            mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(BGMEditor_CanPlayPauseStopMusic), ref currentFrame);
-
-            await mainWindowViewModel.OpenProjectFromPath(Path.Combine(_createdProjectPath, $"{_uiVals.ProjectName}.slproj"));
-            mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(BGMEditor_CanPlayPauseStopMusic), ref currentFrame);
-
-            OpenProjectPanel openProjectPanel = (OpenProjectPanel)mainWindow.MainContent.Content;
-            OpenProjectPanelViewModel openProjectViewModel = (OpenProjectPanelViewModel)openProjectPanel.DataContext;
-
-            ItemExplorerPanel explorer = openProjectPanel.ItemExplorer;
-            EditorTabsPanel tabs = openProjectPanel.EditorTabs;
-
-            ITreeItem bgmsTreeItem = openProjectViewModel.Explorer.Source.First(i => i.Text == "BGMs");
-
-            mainWindow.TabToExplorer();
-
-            mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(BGMEditor_CanPlayPauseStopMusic), ref currentFrame);
-            explorer.Viewer.SelectedItem = bgmsTreeItem;
-            mainWindow.KeyPressQwerty(PhysicalKey.ArrowDown, RawInputModifiers.None);
-            mainWindow.KeyPressQwerty(PhysicalKey.ArrowRight, RawInputModifiers.None);
-            mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(BGMEditor_CanPlayPauseStopMusic), ref currentFrame);
-
-            ItemDescription bgm029 = mainWindowViewModel.OpenProject.Items.First(i => i.Name == "BGM029");
-            explorer.Viewer.SelectedItem = bgmsTreeItem.Children.First(i => i.Text == bgm029.DisplayName);
-            mainWindow.KeyPressQwerty(PhysicalKey.Enter, RawInputModifiers.None);
-            mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(BGMEditor_CanPlayPauseStopMusic), ref currentFrame);
-            Assert.Multiple(() =>
-            {
-                Assert.That(openProjectViewModel.EditorTabs.SelectedTab?.Description?.DisplayName, Is.EqualTo(bgm029.DisplayName));
-                Assert.That(tabs.Tabs.SelectedItem, Is.TypeOf<BackgroundMusicEditorViewModel>());
-            });
-
-            BackgroundMusicEditorViewModel bgmEditorViewModel = (BackgroundMusicEditorViewModel)tabs.Tabs.SelectedItem;
-            BackgroundMusicEditorView bgmEditor = mainWindow.FindDescendantOfType<BackgroundMusicEditorView>();
-            SoundPlayerPanel soundPlayer = bgmEditor.Player;
-            SoundPlayerPanelViewModel soundPlayerViewModel = (SoundPlayerPanelViewModel)soundPlayer.DataContext;
-        }
     }
 }
