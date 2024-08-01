@@ -76,15 +76,14 @@ namespace SerialLoops.ViewModels.Dialogs
                 return;
             }
             SKBitmap fileImage = SKBitmap.Decode(image.TryGetLocalPath());
-            if (fileImage is null)
+            if (fileImage is not null)
             {
-                await MessageBoxManager.GetMessageBoxStandard(Strings.Error, Strings.Invalid_image_file_selected, ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error).ShowWindowDialogAsync(_settingsDialog);
+                SKBitmap newIcon = new(32, 32);
+                fileImage.ScalePixels(newIcon, SKFilterQuality.High);
+                Icon = newIcon;
                 return;
             }
-
-            SKBitmap newIcon = new(32, 32);
-            fileImage.ScalePixels(newIcon, SKFilterQuality.High);
-            Icon = newIcon;
+            await MessageBoxManager.GetMessageBoxStandard(Strings.Error, Strings.Invalid_image_file_selected, ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error).ShowWindowDialogAsync(_settingsDialog);
         }
 
         private async void ApplyCommand_Executed()
