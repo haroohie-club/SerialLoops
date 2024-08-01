@@ -58,7 +58,7 @@ namespace SerialLoops.Tests.Headless
 
                 _uiVals = new()
                 {
-                    ProjectName = Environment.GetEnvironmentVariable(UiVals.PROJECT_NAME_ENV_VAR) ?? "MacUITest",
+                    ProjectName = Environment.GetEnvironmentVariable(UiVals.PROJECT_NAME_ENV_VAR) ?? "HeadlessUITests",
                     RomLoc = romPath,
                     ArtifactsDir = Environment.GetEnvironmentVariable(UiVals.ARTIFACTS_DIR_ENV_VAR) ?? "artifacts",
                 };
