@@ -1,6 +1,9 @@
-using Avalonia.Controls;
+using System;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Input;
 using Avalonia.Platform.Storage;
-using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Graphics;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
@@ -8,15 +11,9 @@ using SerialLoops.Assets;
 using SerialLoops.Controls;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
-using SerialLoops.Lib.Util;
 using SerialLoops.ViewModels.Dialogs;
 using SerialLoops.Views.Dialogs;
 using SkiaSharp;
-using System;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace SerialLoops.ViewModels.Editors
 {

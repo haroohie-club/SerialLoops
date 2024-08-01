@@ -15,7 +15,9 @@ namespace SerialLoops.Tests.Headless
             {
                 Directory.CreateDirectory(Path.Combine(artifactsDir, nameOfTest));
             }
-            window.CaptureRenderedFrame()?.Save(Path.Combine(artifactsDir, nameOfTest, $"{currentFrame++:D2}.png"));
+            string file = Path.Combine(artifactsDir, nameOfTest, $"{currentFrame++:D2}.png");
+            window.CaptureRenderedFrame()?.Save(file);
+            TestContext.AddTestAttachment(file, $"{currentFrame}");
         }
 
         public static void TabToExplorer(this MainWindow mainWindow)
