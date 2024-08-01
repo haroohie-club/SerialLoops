@@ -9,8 +9,10 @@ using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Media;
 using Avalonia.Platform;
 using Avalonia.Platform.Storage;
+using Avalonia.Styling;
 using CommunityToolkit.Mvvm.ComponentModel;
 using HaruhiChokuretsuLib.Archive;
 using MiniToolbar.Avalonia;
@@ -149,7 +151,13 @@ namespace SerialLoops.ViewModels
             Strings.Culture = new(CurrentConfig.CurrentCultureName);
             Log.Initialize(CurrentConfig);
 
-            CloseProjectCommand = ReactiveCommand.Create(CloseProjectView);
+            var fontStyle = new Style(x => x.OfType<Window>());
+            var font = FontFamily.Parse(string.IsNullOrEmpty(CurrentConfig.DisplayFont) ? Strings.Default_Font : CurrentConfig.DisplayFont);
+            fontStyle.Add(new Setter(Avalonia.Controls.Primitives.TemplatedControl.FontFamilyProperty, font));
+            Application.Current.Styles.Add(fontStyle);
+
+            ProjectsCache = ProjectsCache.LoadCache(CurrentConfig, Log);
+            UpdateRecentProjects();
 
             if (CurrentConfig.CheckForUpdates)
             {
