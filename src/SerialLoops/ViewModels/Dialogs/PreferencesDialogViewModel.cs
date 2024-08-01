@@ -110,7 +110,7 @@ namespace SerialLoops.ViewModels.Dialogs
                     },
                     new ComboBoxOption([
                             ("", string.Format(Strings.Default_Font_Display, Strings.Default_Font)),
-                            ..SystemFonts.Collection.Families.Select(_ => (_.Name, _.Name)).ToList(),
+                            ..SystemFonts.Collection.Families.Select(_ => (_.Name, _.Name)),
                         ])
                     {
                         OptionName = Strings.Display_Font,
