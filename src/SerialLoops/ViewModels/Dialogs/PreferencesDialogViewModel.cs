@@ -19,14 +19,18 @@ namespace SerialLoops.ViewModels.Dialogs
         public int MinHeight => 600;
         public int Width { get; set; } = 550;
         public int Height { get; set; } = 600;
-        public int ScrollViewerHeight => Height - 100;
 
         public ICommand SaveCommand { get; private set; }
         public ICommand CancelCommand { get; private set; }
 
         public Config Configuration { get; set; }
         public ILogger Log { get; set; }
-        public bool RequireRestart { get; set; }
+        private bool _requireRestart;
+        public bool RequireRestart
+        {
+            get => _requireRestart;
+            set => SetProperty(ref _requireRestart, value);
+        }
         public bool Saved { get; set; }
         private PreferencesDialog _preferencesDialog;
 
