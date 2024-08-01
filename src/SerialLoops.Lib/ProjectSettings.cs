@@ -58,6 +58,5 @@ namespace SerialLoops.Lib
                 Banner.Pltt = grp.PaletteData.ToArray();
             }
         }
-
     }
 }
