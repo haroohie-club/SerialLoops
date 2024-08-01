@@ -90,13 +90,13 @@ namespace SerialLoops.ViewModels.Dialogs
         {
             if (_gameTitle.Length is < 1 or > 127)
             {
-                await MessageBoxManager.GetMessageBoxStandard(Strings.Error, Strings.Please_enter_a_game_name_for_the_banner__between_1_and_128_characters_, ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error).ShowWindowDialogAsync(_settingsDialog);
+                Log.LogError(Strings.Please_enter_a_game_name_for_the_banner__between_1_and_128_characters_);
                 return;
             }
 
             if (_gameTitle.Split('\n').Length > 3)
             {
-                await MessageBoxManager.GetMessageBoxStandard(Strings.Error, Strings.Game_banner_can_only_contain_up_to_three_lines_, ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Error).ShowWindowDialogAsync(_settingsDialog);
+                Log.LogError(Strings.Game_banner_can_only_contain_up_to_three_lines_);
                 return;
             }
             _settings.Name = _gameTitle;
