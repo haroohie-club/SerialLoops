@@ -3502,6 +3502,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid image file selected.
+        /// </summary>
+        public static string Invalid_image_file_selected {
+            get {
+                return ResourceManager.GetString("Invalid image file selected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid item type!.
         /// </summary>
         public static string Invalid_item_type_ {

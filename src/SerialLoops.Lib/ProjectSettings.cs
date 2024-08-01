@@ -14,7 +14,7 @@ namespace SerialLoops.Lib
         public NdsProjectFile File { get; } = file;
         private BannerV1 Banner => File.RomInfo.Banner.Banner;
         private readonly ILogger _log = log;
-        
+
         public string Name {
             get => Banner.GameName[0];
             set
@@ -28,7 +28,7 @@ namespace SerialLoops.Lib
         }
 
         public SKBitmap Icon
-        { 
+        {
             get
             {
                 Rgba8Bitmap bitmap = Banner.GetIcon();
@@ -58,5 +58,6 @@ namespace SerialLoops.Lib
                 Banner.Pltt = grp.PaletteData.ToArray();
             }
         }
+
     }
 }

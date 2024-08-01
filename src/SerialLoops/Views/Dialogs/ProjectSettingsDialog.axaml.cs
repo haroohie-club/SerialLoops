@@ -2,9 +2,9 @@ using Avalonia.Controls;
 
 namespace SerialLoops.Views.Dialogs
 {
-    public partial class PreferencesDialog : Window
+    public partial class ProjectSettingsDialog : Window
     {
-        public PreferencesDialog()
+        public ProjectSettingsDialog()
         {
             InitializeComponent();
         }

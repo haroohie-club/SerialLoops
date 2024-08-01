@@ -1,0 +1,46 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:SerialLoops.ViewModels.Dialogs"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:assets="using:SerialLoops.Assets"
+        mc:Ignorable="d" d:DesignWidth="550" d:DesignHeight="370"
+        xmlns:controls="using:SerialLoops.Controls"
+        x:DataType="vm:ProjectSettingsDialogViewModel"
+        x:Class="SerialLoops.Views.Dialogs.ProjectSettingsDialog"
+        MinWidth="{Binding MinWidth}"
+        MinHeight="{Binding MinHeight}"
+        Width="{Binding Width}"
+        Height="{Binding Height}"
+        Icon="/Assets/serial-loops.ico"
+        Title="{x:Static assets:Strings.Project_Settings}">
+    <DockPanel>
+        <StackPanel Spacing="5" Margin="5">
+            <TabControl>
+                <TabControl.Items>
+                    <TabItem Header="{x:Static assets:Strings.Game_Banner}">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="20" Margin="5 20">
+                            <StackPanel Orientation="Vertical" Spacing="5" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <StackPanel Width="64">
+                                    <controls:SKBitmapCanvas Source="{Binding Icon}" Width="64" Height="64" />
+                                </StackPanel>
+                                <Button Content="{x:Static assets:Strings.Replace___}" Command="{Binding ReplaceCommand}" />
+                            </StackPanel>
+                            <StackPanel Orientation="Vertical" Spacing="5" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <TextBlock Text="{x:Static assets:Strings.Game_Title}" />
+                                <TextBox IsEnabled="True" Text="{Binding GameTitle}"
+                                         MaxLines="3" MinLines="3" Width="350" MaxWidth="350" />
+                            </StackPanel>
+                        </StackPanel>
+                    </TabItem>
+                </TabControl.Items>
+            </TabControl>
+            <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Spacing="5" Width="500">
+                <StackPanel Orientation="Horizontal" Spacing="5" Margin="5">
+                    <Button Content="{x:Static assets:Strings.Apply}" Command="{Binding ApplyCommand}"/>
+                    <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}" IsCancel="True"/>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+    </DockPanel>
+</Window>

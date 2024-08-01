@@ -1252,6 +1252,9 @@
   <data name="Invalid audio file selected." xml:space="preserve">
     <value>Invalid audio file selected.</value>
   </data>
+  <data name="Invalid image file selected" xml:space="preserve">
+        <value>Invalid image file selected</value>
+  </data>
   <data name="Invalid item type!" xml:space="preserve">
     <value>Invalid item type!</value>
   </data>
