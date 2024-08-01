@@ -23,13 +23,11 @@ namespace SerialLoops.ViewModels.Editors
     public class SystemTextureEditorViewModel : EditorViewModel
     {
         public SystemTextureItem SystemTexture { get; set; }
-        public SKBitmap SystemTextureBitmap => SystemTexture.GetTexture();
         public ICommand ExportCommand { get; set; }
         public ICommand ReplaceCommand { get; set; }
         public ICommand ReplaceWithPaletteCommand { get; set; }
+        public SKBitmap SystemTextureBitmap => SystemTexture.GetTexture();
         public bool UsesCommonPalette => SystemTexture.UsesCommonPalette();
-        public string UsesCommonPaletteText => string.Format(Strings.This_system_texture_uses_a_common_palette__so_palette_replacement_has_been_disabled);
-        public string PaletteText => string.Format(Strings.Palette);
         public SKBitmap PaletteBitmap => SystemTexture.Grp.GetPalette();
 
         public SystemTextureEditorViewModel(SystemTextureItem item, MainWindowViewModel window, Project project, ILogger log) : base(item, window, log, project)
@@ -45,8 +43,9 @@ namespace SerialLoops.ViewModels.Editors
             FilePickerSaveOptions saveOptions = new()
             {
                 ShowOverwritePrompt = true,
-                FileTypeChoices = [
-                    new FilePickerFileType(Strings.PNG_Image) {Patterns = ["*.png"]}
+                FileTypeChoices =
+                [
+                    new FilePickerFileType(Strings.PNG_Image) { Patterns = ["*.png"] }
                 ]
             };
             IStorageFile savedFile = await _window.Window.StorageProvider.SaveFilePickerAsync(saveOptions);
@@ -74,15 +73,15 @@ namespace SerialLoops.ViewModels.Editors
             await ReplaceImage(true);
         }
 
-
         private async Task ReplaceImage(bool ReplacePalette)
         {
             FilePickerOpenOptions openOptions = new()
             {
                 AllowMultiple = false,
                 SuggestedFileName = $"{SystemTexture.Name}.png",
-                FileTypeFilter = [
-                    new FilePickerFileType(Strings.Supported_Images) {Patterns = ["*.bmp", "*.gif", "*.heif", "*.jpg", "*.jpeg", "*.png", "*.webp"]},
+                FileTypeFilter =
+                [
+                    new FilePickerFileType(Strings.Supported_Images) { Patterns = ["*.bmp", "*.gif", "*.heif", "*.jpg", "*.jpeg", "*.png", "*.webp"] },
                 ]
             };
             SKBitmap original = SystemTexture.GetTexture();
@@ -101,7 +100,7 @@ namespace SerialLoops.ViewModels.Editors
                     {
                         LoopyProgressTracker tracker = new();
                         await new ProgressDialog(() => SystemTexture.SetTexture(finalImage, ReplacePalette, _log),
-                            () => { }, tracker, string.Format(Strings.Replacing__0____,SystemTexture.DisplayName)).ShowDialog(_window.Window);
+                            () => { }, tracker, string.Format(Strings.Replacing__0____, SystemTexture.DisplayName)).ShowDialog(_window.Window);
                         OnPropertyChanged(nameof(SystemTextureBitmap));
                         Description.UnsavedChanges = true;
                     }

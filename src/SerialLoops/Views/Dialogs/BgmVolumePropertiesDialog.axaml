@@ -1,0 +1,46 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:vm="using:SerialLoops.ViewModels.Dialogs"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        xmlns:i="using:Avalonia.Xaml.Interactivity"
+        xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
+        xmlns:assets="using:SerialLoops.Assets"
+        xmlns:controls="using:SerialLoops.Controls"
+        xmlns:utility="using:SerialLoops.Utility"
+        x:DataType="vm:BgmVolumePropertiesDialogViewModel"
+        x:Class="SerialLoops.Views.Dialogs.BgmVolumePropertiesDialog"
+        Title="{Binding Title}"
+        Icon="/Assets/serial-loops.ico"
+        Name="BgmVolumeDialog">
+    <Window.Resources>
+        <utility:IntAdditionConverter x:Key="AdditionConverter"/>
+    </Window.Resources>
+    
+    <StackPanel Orientation="Vertical" Spacing="5" Margin="10">
+        <StackPanel Orientation="Horizontal" Spacing="5">
+            <controls:SoundPlayerPanel DataContext="{Binding VolumePreviewPlayer}"/>
+            <Slider Name="VolumeSlider" Minimum="0" Maximum="200" Height="{Binding Waveform.Height}"
+                    Orientation="Vertical" Value="{Binding Volume}">
+                <i:Interaction.Behaviors>
+                    <ia:EventTriggerBehavior EventName="ValueChanged" SourceObject="{Binding #VolumeSlider}">
+                        <ia:InvokeCommandAction Command="{Binding VolumeSliderValueChangedCommand}"/>
+                    </ia:EventTriggerBehavior>
+                </i:Interaction.Behaviors>
+            </Slider>
+            <controls:SKBitmapCanvas Source="{Binding Waveform}" Width="{Binding Waveform.Width}"
+                                     Height="{Binding Waveform.Height}"/>
+        </StackPanel>
+        <StackPanel Orientation="Vertical" Spacing="3" HorizontalAlignment="Right"
+                    Width="{Binding Waveform.Width, Converter={StaticResource AdditionConverter},
+                    ConverterParameter=105}">
+            <StackPanel Orientation="Horizontal" Spacing="3">
+                <Button Content="{x:Static assets:Strings.Save}" Command="{Binding SaveCommand}"
+                        CommandParameter="{Binding #BgmVolumeDialog}"/>
+                <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}"
+                        CommandParameter="{Binding #BgmVolumeDialog}" IsCancel="true"/>
+            </StackPanel>
+        </StackPanel>
+    </StackPanel>
+</Window>

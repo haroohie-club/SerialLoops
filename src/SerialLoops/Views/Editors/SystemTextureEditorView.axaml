@@ -22,9 +22,9 @@
                 <Button Content="{x:Static assets:Strings.Replace}" Command="{Binding ReplaceCommand}"/>
                 <Button Content="{x:Static assets:Strings.Replace_with_Palette}" IsEnabled="{Binding !UsesCommonPalette}" Command="{Binding ReplaceWithPaletteCommand}"/>
             </StackPanel>
-            <TextBlock IsVisible="{Binding UsesCommonPalette}" Text="{Binding UsesCommonPaletteText}"/>
+            <TextBlock IsVisible="{Binding UsesCommonPalette}" Text="{x:Static assets:Strings.This_system_texture_uses_a_common_palette__so_palette_replacement_has_been_disabled}"/>
             <gbox:GroupBox Header="{Binding PaletteText}" Theme="{StaticResource GroupBoxClassic}" Width="264" HorizontalAlignment="Left">
-                <controls:SKBitmapCanvas Source="{Binding PaletteBitmap}"
+                <controls:SKBitmapCanvas Source="{x:Static assets:Strings.Palette}"
                                          HorizontalAlignment="Left"
                                          Width="{Binding PaletteBitmap.Width}"
                                          Height="{Binding PaletteBitmap.Height}"/>

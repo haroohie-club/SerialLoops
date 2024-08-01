@@ -11,15 +11,15 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:OpenProjectPanelViewModel"
              x:Class="SerialLoops.Views.Panels.OpenProjectPanel">
-    <Design.DataContext>
-        <vm:OpenProjectPanelViewModel/>
-    </Design.DataContext>
 
     <Grid RowDefinitions="Auto,*">
+<<<<<<< HEAD
         <StackPanel Grid.Row="0">
             <NativeMenuBar Name="MenuBar"/>
             <toolbar:Toolbar Height="60" Name="ToolBar" HorizontalAlignment="Right"/>
         </StackPanel>
+=======
+>>>>>>> Avalonia
         <Grid Grid.Row="1" ColumnDefinitions="Auto,*">
             <panels:ItemExplorerPanel Grid.Column="0" Name="ItemExplorer" DataContext="{Binding Explorer}" Width="300"/>
             <panels:EditorTabsPanel Grid.Column="1" Name="EditorTabs" DataContext="{Binding EditorTabs}"/>

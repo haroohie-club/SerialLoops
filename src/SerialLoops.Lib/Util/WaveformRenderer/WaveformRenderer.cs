@@ -1,6 +1,6 @@
-﻿using NAudio.Wave;
+﻿using System;
+using NAudio.Wave;
 using SkiaSharp;
-using System;
 
 // Adapted from https://github.com/naudio/NAudio.WaveFormRenderer/blob/master/WaveFormRendererLib/WaveFormRenderer.cs
 // Copyright (c) 2021 NAudio

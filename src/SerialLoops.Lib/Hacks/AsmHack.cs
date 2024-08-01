@@ -1,8 +1,8 @@
-﻿using HaruhiChokuretsuLib.Util;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json.Serialization;
+using HaruhiChokuretsuLib.Util;
 
 namespace SerialLoops.Lib.Hacks
 {

@@ -146,7 +146,7 @@ namespace SerialLoops.Assets {
         /// </summary>
         public static string _Build {
             get {
-                return ResourceManager.GetString("&Build", resourceCulture);
+                return ResourceManager.GetString("_Build", resourceCulture);
             }
         }
         
@@ -155,7 +155,7 @@ namespace SerialLoops.Assets {
         /// </summary>
         public static string _Check_for_Updates___ {
             get {
-                return ResourceManager.GetString("&Check for Updates...", resourceCulture);
+                return ResourceManager.GetString("_Check for Updates...", resourceCulture);
             }
         }
         
@@ -164,7 +164,7 @@ namespace SerialLoops.Assets {
         /// </summary>
         public static string _Edit {
             get {
-                return ResourceManager.GetString("&Edit", resourceCulture);
+                return ResourceManager.GetString("_Edit", resourceCulture);
             }
         }
         
@@ -173,7 +173,7 @@ namespace SerialLoops.Assets {
         /// </summary>
         public static string _File {
             get {
-                return ResourceManager.GetString("&File", resourceCulture);
+                return ResourceManager.GetString("_File", resourceCulture);
             }
         }
         
@@ -209,7 +209,16 @@ namespace SerialLoops.Assets {
         /// </summary>
         public static string _Preferences___ {
             get {
-                return ResourceManager.GetString("&Preferences...", resourceCulture);
+                return ResourceManager.GetString("_Preferences...", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Project.
+        /// </summary>
+        public static string _Project {
+            get {
+                return ResourceManager.GetString("_Project", resourceCulture);
             }
         }
         
@@ -218,7 +227,7 @@ namespace SerialLoops.Assets {
         /// </summary>
         public static string _Tools {
             get {
-                return ResourceManager.GetString("&Tools", resourceCulture);
+                return ResourceManager.GetString("_Tools", resourceCulture);
             }
         }
         
@@ -759,6 +768,15 @@ namespace SerialLoops.Assets {
         public static string Build_from_Scratch {
             get {
                 return ResourceManager.GetString("Build from Scratch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Build Result.
+        /// </summary>
+        public static string Build_Result {
+            get {
+                return ResourceManager.GetString("Build Result", resourceCulture);
             }
         }
         
@@ -1501,6 +1519,24 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Segoe UI.
+        /// </summary>
+        public static string Default_Font {
+            get {
+                return ResourceManager.GetString("Default Font", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default ({0}).
+        /// </summary>
+        public static string Default_Font_Display {
+            get {
+                return ResourceManager.GetString("Default Font Display", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Defaults.
         /// </summary>
         public static string Defaults {
@@ -1705,6 +1741,15 @@ namespace SerialLoops.Assets {
         public static string Display_Flag_4 {
             get {
                 return ResourceManager.GetString("Display Flag 4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Display Font.
+        /// </summary>
+        public static string Display_Font {
+            get {
+                return ResourceManager.GetString("Display Font", resourceCulture);
             }
         }
         
@@ -2720,6 +2765,7 @@ namespace SerialLoops.Assets {
                 return ResourceManager.GetString("Failed to generate script template!", resourceCulture);
             }
         }
+        
         /// <summary>
         ///   Looks up a localized string similar to Failed to import project.
         /// </summary>
@@ -5278,6 +5324,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Save BGM as WAV.
+        /// </summary>
+        public static string Save_BGM_as_WAV {
+            get {
+                return ResourceManager.GetString("Save BGM as WAV", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save character sprite GIF.
         /// </summary>
         public static string Save_character_sprite_GIF {
@@ -6902,7 +6957,7 @@ namespace SerialLoops.Assets {
         /// </summary>
         public static string View__Logs {
             get {
-                return ResourceManager.GetString("View &Logs", resourceCulture);
+                return ResourceManager.GetString("View _Logs", resourceCulture);
             }
         }
         

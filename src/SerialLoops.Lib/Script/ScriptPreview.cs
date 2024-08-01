@@ -1,6 +1,6 @@
-﻿using SerialLoops.Lib.Items;
+﻿using System.Collections.Generic;
+using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script.Parameters;
-using System.Collections.Generic;
 
 namespace SerialLoops.Lib.Script
 {

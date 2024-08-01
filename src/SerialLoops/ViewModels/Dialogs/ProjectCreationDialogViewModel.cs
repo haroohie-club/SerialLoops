@@ -1,4 +1,7 @@
-﻿using Avalonia.Controls;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using Avalonia.Controls;
 using Avalonia.Platform.Storage;
 using HaruhiChokuretsuLib.Util;
 using MsBox.Avalonia;
@@ -9,9 +12,6 @@ using SerialLoops.Controls;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Util;
 using SerialLoops.Views.Dialogs;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace SerialLoops.ViewModels.Dialogs
 {

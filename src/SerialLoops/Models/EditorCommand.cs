@@ -1,8 +1,8 @@
-﻿using Avalonia.Controls;
+﻿using System.Windows.Input;
+using Avalonia.Controls;
 using HaruhiChokuretsuLib.Util;
 using MiniToolbar.Avalonia;
 using SerialLoops.Utility;
-using System.Windows.Input;
 
 namespace SerialLoops.Models
 {

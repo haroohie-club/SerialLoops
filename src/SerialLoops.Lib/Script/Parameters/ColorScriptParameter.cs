@@ -1,5 +1,5 @@
-﻿using SkiaSharp;
-using HaruhiChokuretsuLib.Archive.Event;
+﻿using HaruhiChokuretsuLib.Archive.Event;
+using SkiaSharp;
 
 namespace SerialLoops.Lib.Script.Parameters
 {

@@ -1,9 +1,9 @@
+using System;
+using System.Diagnostics;
 using Avalonia.Controls;
 using SerialLoops.Assets;
 using SerialLoops.Utility;
 using SerialLoops.ViewModels;
-using System;
-using System.Diagnostics;
 
 namespace SerialLoops.Views
 {
@@ -85,11 +85,11 @@ namespace SerialLoops.Views
                     Menu =
                     [
                         new NativeMenuItem()
-                    {
-                        Header = Strings.About___,
-                        Icon = ControlGenerator.GetIcon("Help", ViewModel.Log),
-                        Command = ViewModel.AboutCommand,
-                    },
+                        {
+                            Header = Strings.About___,
+                            Icon = ControlGenerator.GetIcon("Help", ViewModel.Log),
+                            Command = ViewModel.AboutCommand,
+                        },
                 ]
                 });
             }

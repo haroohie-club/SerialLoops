@@ -1,5 +1,5 @@
 <h1 align="center">
-    <img alt="Serial Loops app icon; the letters 'SL' emblazoned above four translucent gray rings within a rounded square box colored with a blue-to-green gradient along the negative X-Z axis" src="src/SerialLoops/Icons/AppIcon.png" width="135px" />
+    <img alt="Serial Loops app icon; the letters 'SL' emblazoned above four translucent gray rings within a rounded square box colored with a blue-to-green gradient along the negative X-Z axis" src="src/SerialLoops/Assets/Icons/AppIcon.png" width="135px" />
     <br/>
     Serial Loops
 </h1>

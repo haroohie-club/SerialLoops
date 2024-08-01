@@ -1,4 +1,6 @@
-﻿namespace SerialLoops.ViewModels.Panels
+﻿using Avalonia.Input;
+
+namespace SerialLoops.ViewModels.Panels
 {
     public class OpenProjectPanelViewModel : ViewModelBase
     {

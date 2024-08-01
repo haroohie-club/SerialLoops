@@ -124,24 +124,6 @@
     <value>%</value>
     <comment>Just the percentage symbol</comment>
   </data>
-  <data name="&amp;Build" xml:space="preserve">
-    <value>_Build</value>
-  </data>
-  <data name="&amp;Check for Updates..." xml:space="preserve">
-    <value>_Check for Updates…</value>
-  </data>
-  <data name="&amp;Edit" xml:space="preserve">
-    <value>_Edit</value>
-  </data>
-  <data name="&amp;File" xml:space="preserve">
-    <value>_File</value>
-  </data>
-  <data name="&amp;Preferences..." xml:space="preserve">
-    <value>_Preferences…</value>
-  </data>
-  <data name="&amp;Tools" xml:space="preserve">
-    <value>_Tools</value>
-  </data>
   <data name="(Missing)" xml:space="preserve">
     <value> (Missing)</value>
     <comment>For when a project file has been deleted</comment>
@@ -341,6 +323,10 @@
   </data>
   <data name="Build from Scratch" xml:space="preserve">
     <value>Build from Scratch</value>
+  </data>
+  <data name="Build Result" xml:space="preserve">
+    <value>Build Result</value>
+    <comment>The result of a build (message box title)</comment>
   </data>
   <data name="Build succeeded!" xml:space="preserve">
     <value>Build succeeded!</value>
@@ -589,6 +575,13 @@
   <data name="Data reset message box" xml:space="preserve">
     <value>Data reset message box</value>
   </data>
+  <data name="Default Font" xml:space="preserve">
+    <value>Segoe UI</value>
+  </data>
+  <data name="Default Font Display" xml:space="preserve">
+    <value>Default ({0})</value>
+    <comment>{0} is default font name</comment>
+  </data>
   <data name="Defaults" xml:space="preserve">
     <value>Defaults</value>
   </data>
@@ -655,6 +648,9 @@
   </data>
   <data name="Display Flag 4" xml:space="preserve">
     <value>Display Flag 4</value>
+  </data>
+  <data name="Display Font" xml:space="preserve">
+    <value>Display Font</value>
   </data>
   <data name="Display from Bottom" xml:space="preserve">
     <value>Display from Bottom</value>
@@ -1878,6 +1874,9 @@
   <data name="Save" xml:space="preserve">
     <value>Save</value>
   </data>
+  <data name="Save BGM as WAV" xml:space="preserve">
+    <value>Save BGM as WAV</value>
+  </data>
   <data name="Save character sprite GIF" xml:space="preserve">
     <value>Save character sprite GIF</value>
   </data>
@@ -2425,11 +2424,11 @@
   <data name="Vertical Intensity" xml:space="preserve">
     <value>Vertical Intensity</value>
   </data>
-  <data name="View &amp;Logs" xml:space="preserve">
-    <value>View _Logs</value>
-  </data>
   <data name="View Logs" xml:space="preserve">
     <value>View Logs</value>
+  </data>
+  <data name="View _Logs" xml:space="preserve">
+    <value>View _Logs</value>
   </data>
   <data name="Visible?" xml:space="preserve">
     <value>Visible?</value>
@@ -2509,8 +2508,30 @@
   <data name="Yuki Nagato event unlocked message box" xml:space="preserve">
     <value>Yuki Nagato event unlocked message box</value>
   </data>
+  <data name="_Build" xml:space="preserve">
+    <value>_Build</value>
+  </data>
+  <data name="_Check for Updates..." xml:space="preserve">
+    <value>_Check for Updates…</value>
+  </data>
+  <data name="_Edit" xml:space="preserve">
+    <value>_Edit</value>
+  </data>
+  <data name="_File" xml:space="preserve">
+    <value>_File</value>
+  </data>
   <data name="_Help" xml:space="preserve">
     <value>_Help</value>
+  </data>
+  <data name="_Preferences..." xml:space="preserve">
+    <value>_Preferences…</value>
+  </data>
+  <data name="_Project" xml:space="preserve">
+    <value>_Project</value>
+    <comment>Menu header</comment>
+  </data>
+  <data name="_Tools" xml:space="preserve">
+    <value>_Tools</value>
   </data>
   <data name="{0} ({1}) Seen" xml:space="preserve">
     <value>{0} ({1}) Seen</value>

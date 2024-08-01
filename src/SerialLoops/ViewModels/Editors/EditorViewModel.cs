@@ -1,13 +1,9 @@
-﻿using Avalonia.Data.Converters;
+﻿using System.Collections.Generic;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Models;
 using SerialLoops.ViewModels.Panels;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Reactive;
 
 namespace SerialLoops.ViewModels.Editors
 {

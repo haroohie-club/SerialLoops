@@ -1,4 +1,8 @@
-﻿using Avalonia.Controls;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Reactive.Linq;
+using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using Avalonia.Input;
 using HaruhiChokuretsuLib.Util;
@@ -6,10 +10,6 @@ using SerialLoops.Assets;
 using SerialLoops.Lib.Items;
 using SerialLoops.Models;
 using SerialLoops.Utility;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Reactive.Linq;
 
 namespace SerialLoops.ViewModels.Panels
 {
@@ -43,7 +43,11 @@ namespace SerialLoops.ViewModels.Panels
         private ObservableCollection<ITreeItem> GetSections()
         {
             return new ObservableCollection<ITreeItem>(Items.GroupBy(i => i.Type).OrderBy(g => LocalizeItemTypes(g.Key))
-                .Select(g => new SectionTreeItem(LocalizeItemTypes(g.Key), g.Select(i => new ItemDescriptionTreeItem(i)), ControlGenerator.GetIcon(g.Key.ToString(), _log))));
+                .Select(g => new SectionTreeItem(
+                    LocalizeItemTypes(g.Key),
+                    g.Select(i => new ItemDescriptionTreeItem(i)),
+                    ControlGenerator.GetVectorIcon(g.Key.ToString(), _log, size: 16)
+                )));
         }
 
         private static string LocalizeItemTypes(ItemDescription.ItemType type)
