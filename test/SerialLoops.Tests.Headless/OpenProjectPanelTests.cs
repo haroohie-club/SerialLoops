@@ -31,6 +31,7 @@ namespace SerialLoops.Tests.Headless
         // We can't do Avalonia stuff outside of the [AvaloniaTest] fixture and there's no [AvaloniaSetUp] fixture so
         // we order the tests so that the first one to run sets up stuff for the later tests
 
+        // To run these tests locally, you can create a file called 'ui_vals.json' and place it next to the test assembly (in the output folder)
         private UiVals? _uiVals;
 
         private string _createdProjectPath;
@@ -49,6 +50,7 @@ namespace SerialLoops.Tests.Headless
             else
             {
                 string romUri = Environment.GetEnvironmentVariable(UiVals.ROM_URI_ENV_VAR) ?? string.Empty;
+                Console.WriteLine(romUri);
                 string romPath = Path.Combine(Directory.GetCurrentDirectory(), UiVals.ROM_NAME);
                 HttpClient httpClient = new();
                 using Stream downloadStream = httpClient.Send(new() { Method = HttpMethod.Get, RequestUri = new(romUri) }).Content.ReadAsStream();

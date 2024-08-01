@@ -26,9 +26,6 @@ jobs:
   steps:
   - checkout: self
     clean: true
-
-  - script: apt install -y libopenal1
-    condition: eq(variables.imageName, 'ubuntu-latest')
     
   - task: DotNetCoreCLI@2
     inputs:
