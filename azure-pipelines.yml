@@ -14,15 +14,19 @@ jobs:
       Linux:
         imageName: 'ubuntu-latest'
         targetFramework: 'net8.0'
+        containerImage: 'ghcr.io/haroohie-club/chokuretsu-devkitarm:main'
       macOS:
         imageName: 'macOS-latest'
         targetFramework: 'net8.0'
+        containerImage: ''
       Windows:
         imageName: 'windows-latest'
         targetFramework: 'net8.0-windows'
+        containerImage: ''
   displayName: Build & Test
   pool:
     vmImage: $(imageName)
+  container: $(containerImage)
   steps:
   - checkout: self
     clean: true

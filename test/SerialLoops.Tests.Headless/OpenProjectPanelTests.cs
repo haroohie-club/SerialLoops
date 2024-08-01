@@ -50,7 +50,6 @@ namespace SerialLoops.Tests.Headless
             else
             {
                 string romUri = Environment.GetEnvironmentVariable(UiVals.ROM_URI_ENV_VAR) ?? string.Empty;
-                Console.WriteLine(romUri);
                 string romPath = Path.Combine(Directory.GetCurrentDirectory(), UiVals.ROM_NAME);
                 HttpClient httpClient = new();
                 using Stream downloadStream = httpClient.Send(new() { Method = HttpMethod.Get, RequestUri = new(romUri) }).Content.ReadAsStream();
