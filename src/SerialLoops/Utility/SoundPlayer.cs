@@ -6,7 +6,7 @@ namespace SerialLoops.Utility
     public class SoundPlayer
     {
 #if WINDOWS
-        private WasapiOut _player;
+        private WaveOut _player;
 #else
         private ALWavePlayer _player;
         private static readonly ALAudioContext _context = new();
@@ -25,7 +25,7 @@ namespace SerialLoops.Utility
             WaveProvider = waveProvider;
 
 #if WINDOWS
-            _player = new();
+            _player = new() { DeviceNumber = -1 };
 #else
             _player = new(_context, 8192);
 #endif
