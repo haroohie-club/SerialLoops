@@ -24,7 +24,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Avalonia.Svg;
 
 namespace SerialLoops.ViewModels
 {
@@ -71,7 +70,7 @@ namespace SerialLoops.ViewModels
         public ICommand MigrateProjectCommand { get; private set; }
         public ICommand ExportPatchCommand { get; private set; }
         public ICommand CloseProjectCommand { get; private set; }
-
+        
         public ICommand ApplyHacksCommand { get; private set; }
         public ICommand RenameItemCommand { get; private set; }
         public ICommand EditUiTextCommand { get; private set; }
@@ -302,7 +301,7 @@ namespace SerialLoops.ViewModels
             IStorageFile projectFile = (await Window.StorageProvider.OpenFilePickerAsync(options)).FirstOrDefault();
             if (projectFile is not null)
             {
-                await OpenProjectFromPath(projectFile.Path.AbsolutePath);
+                await OpenProjectFromPath(projectFile.Path.LocalPath);
             }
         }
 
@@ -526,25 +525,25 @@ namespace SerialLoops.ViewModels
             {
                 Text = Strings.Save,
                 Command = SaveProjectCommand,
-                Icon = ControlGenerator.GetVectorIcon("Save", Log),
+                Icon = ControlGenerator.GetIcon("Save", Log),
             });
             ToolBar.Items.Add(new ToolbarButton()
             {
                 Text = Strings.Build,
                 Command = BuildIterativeCommand,
-                Icon = ControlGenerator.GetVectorIcon("Build", Log),
+                Icon = ControlGenerator.GetIcon("Build", Log),
             });
             ToolBar.Items.Add(new ToolbarButton()
             {
                 Text = Strings.Build_and_Run,
                 Command = BuildAndRunCommand,
-                Icon = ControlGenerator.GetVectorIcon("Build_Run", Log),
+                Icon = ControlGenerator.GetIcon("Build_Run", Log),
             });
             ToolBar.Items.Add(new ToolbarButton()
             {
                 Text = Strings.Search,
                 Command = SearchProjectCommand,
-                Icon = ControlGenerator.GetVectorIcon("Search", Log),
+                Icon = ControlGenerator.GetIcon("Search", Log),
             });
         }
     }

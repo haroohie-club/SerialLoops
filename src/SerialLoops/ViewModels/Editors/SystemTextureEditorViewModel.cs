@@ -1,4 +1,4 @@
-﻿using Avalonia.Controls;
+using Avalonia.Controls;
 using Avalonia.Platform.Storage;
 using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Graphics;
@@ -20,34 +20,24 @@ using System.Windows.Input;
 
 namespace SerialLoops.ViewModels.Editors
 {
-    public class BackgroundEditorViewModel : EditorViewModel
+    public class SystemTextureEditorViewModel : EditorViewModel
     {
-
-        public BackgroundItem Bg { get; set; }
-        public SKBitmap BgBitmap => Bg.GetBackground();
-        public string BgDescription => $"{Bg.Id} (0x{Bg.Id:X3}); {Bg.BackgroundType}";
+        public SystemTextureItem SystemTexture { get; set; }
+        public SKBitmap SystemTextureBitmap => SystemTexture.GetTexture();
         public ICommand ExportCommand { get; set; }
         public ICommand ReplaceCommand { get; set; }
-        public ICommand CgNameChangeCommand { get; set; }
-        public bool ShowExtras => Bg.BackgroundType != BgType.TEX_BG && Bg.BackgroundType != BgType.KINETIC_SCREEN;
-        public string FlagDescription => string.Format(Strings.Flag___0_, Bg.Flag);
-        public string UnknownExtrasShortDescription => string.Format(Strings.Unknown_Extras_Short___0_, Bg.ExtrasShort);
-        public string UnknownExtrasByteDescription => string.Format(Strings.Unknown_Extras_Byte___0_, Bg.ExtrasByte);
+        public ICommand ReplaceWithPaletteCommand { get; set; }
+        public bool UsesCommonPalette => SystemTexture.UsesCommonPalette();
+        public string UsesCommonPaletteText => string.Format(Strings.This_system_texture_uses_a_common_palette__so_palette_replacement_has_been_disabled);
+        public string PaletteText => string.Format(Strings.Palette);
+        public SKBitmap PaletteBitmap => SystemTexture.Grp.GetPalette();
 
-        public BackgroundEditorViewModel(BackgroundItem item, MainWindowViewModel window, Project project, ILogger log) : base(item, window, log, project)
+        public SystemTextureEditorViewModel(SystemTextureItem item, MainWindowViewModel window, Project project, ILogger log) : base(item, window, log, project)
         {
-            Bg = item;
+            SystemTexture = item;
             ExportCommand = ReactiveCommand.CreateFromTask(ExportButton_Click);
             ReplaceCommand = ReactiveCommand.CreateFromTask(ReplaceButton_Click);
-            CgNameChangeCommand = ReactiveCommand.Create<string>((cgName) =>
-            {
-                if (!string.IsNullOrEmpty(cgName) && !cgName.Equals(Bg.CgName))
-                {
-                    _project.Extra.Cgs[_project.Extra.Cgs.IndexOf(_project.Extra.Cgs.First(b => b.Name?.GetSubstitutedString(_project).Equals(Bg.CgName) ?? false))].Name = cgName.GetOriginalString(_project);
-                    Bg.CgName = cgName;
-                    Description.UnsavedChanges = true;
-                }
-            });
+            ReplaceWithPaletteCommand = ReactiveCommand.CreateFromTask(ReplaceWithPaletteButton_Click);
         }
 
         private async Task ExportButton_Click()
@@ -56,8 +46,8 @@ namespace SerialLoops.ViewModels.Editors
             {
                 ShowOverwritePrompt = true,
                 FileTypeChoices = [
-                    new FilePickerFileType(Strings.PNG_Image) { Patterns = ["*.png"] }
-                    ]
+                    new FilePickerFileType(Strings.PNG_Image) {Patterns = ["*.png"]}
+                ]
             };
             IStorageFile savedFile = await _window.Window.StorageProvider.SaveFilePickerAsync(saveOptions);
             if (savedFile is not null)
@@ -65,26 +55,37 @@ namespace SerialLoops.ViewModels.Editors
                 try
                 {
                     using FileStream fs = File.Create(savedFile.Path.LocalPath);
-                    Bg.GetBackground().Encode(fs, SKEncodedImageFormat.Png, GraphicsFile.PNG_QUALITY);
+                    SystemTexture.GetTexture().Encode(fs, SKEncodedImageFormat.Png, GraphicsFile.PNG_QUALITY);
                 }
                 catch (Exception ex)
                 {
-                    _log.LogException(string.Format(Strings.Failed_to_export_background__0__to_file__1_, Bg.DisplayName, savedFile.Path.LocalPath), ex);
+                    _log.LogException(string.Format(Strings.Failed_to_export_system_texture__0__to_file__1_, SystemTexture.DisplayName, savedFile.Path.LocalPath), ex);
                 }
             }
         }
 
         private async Task ReplaceButton_Click()
         {
+            await ReplaceImage(false);
+        }
+
+        private async Task ReplaceWithPaletteButton_Click()
+        {
+            await ReplaceImage(true);
+        }
+
+
+        private async Task ReplaceImage(bool ReplacePalette)
+        {
             FilePickerOpenOptions openOptions = new()
             {
                 AllowMultiple = false,
-                SuggestedFileName = $"{Bg.Name}.png",
+                SuggestedFileName = $"{SystemTexture.Name}.png",
                 FileTypeFilter = [
-                    new FilePickerFileType(Strings.Supported_Images) { Patterns = ["*.bmp", "*.gif", "*.heif", "*.jpg", "*.jpeg", "*.png", "*.webp",] },
-                    ]
+                    new FilePickerFileType(Strings.Supported_Images) {Patterns = ["*.bmp", "*.gif", "*.heif", "*.jpg", "*.jpeg", "*.png", "*.webp"]},
+                ]
             };
-            SKBitmap original = Bg.GetBackground();
+            SKBitmap original = SystemTexture.GetTexture();
             IStorageFile openFile = (await _window.Window.StorageProvider.OpenFilePickerAsync(openOptions))?.FirstOrDefault();
             if (openFile is not null)
             {
@@ -99,14 +100,14 @@ namespace SerialLoops.ViewModels.Editors
                     try
                     {
                         LoopyProgressTracker tracker = new();
-                        await new ProgressDialog(() => Bg.SetBackground(finalImage, tracker, _log),
-                            () => { }, tracker, string.Format(Strings.Replacing__0____, Bg.DisplayName)).ShowDialog(_window.Window);
-                        OnPropertyChanged(nameof(BgBitmap));
+                        await new ProgressDialog(() => SystemTexture.SetTexture(finalImage, ReplacePalette, _log),
+                            () => { }, tracker, string.Format(Strings.Replacing__0____,SystemTexture.DisplayName)).ShowDialog(_window.Window);
+                        OnPropertyChanged(nameof(SystemTextureBitmap));
                         Description.UnsavedChanges = true;
                     }
                     catch (Exception ex)
                     {
-                        _log.LogException(string.Format(Strings.Failed_to_replace_background__0__with_file__1_, Bg.DisplayName, openFile.Path.LocalPath), ex);
+                        _log.LogException(string.Format(Strings.Failed_to_replace_system_texture__0__with_file__1_, SystemTexture.DisplayName, openFile.Path.LocalPath), ex);
                     }
                 }
             }
