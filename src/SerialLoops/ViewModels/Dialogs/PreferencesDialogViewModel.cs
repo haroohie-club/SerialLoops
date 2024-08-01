@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Input;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using SerialLoops.Assets;
 using SerialLoops.Controls;
 using SerialLoops.Lib;
@@ -25,12 +26,8 @@ namespace SerialLoops.ViewModels.Dialogs
 
         public Config Configuration { get; set; }
         public ILogger Log { get; set; }
-        private bool _requireRestart;
-        public bool RequireRestart
-        {
-            get => _requireRestart;
-            set => SetProperty(ref _requireRestart, value);
-        }
+        [Reactive]
+        public bool RequireRestart { get; set; }
         public bool Saved { get; set; }
         private PreferencesDialog _preferencesDialog;
 

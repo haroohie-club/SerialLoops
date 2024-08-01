@@ -25,10 +25,8 @@
             RowDefinitions="Auto,Auto,Auto,Auto,*,Auto" ColumnDefinitions="Auto,Auto,Auto,Auto" Name="UpdateGrid"
             Margin="20" Height="{Binding GridSize.Height}">
         <TextBlock Classes="h2" Text="{Binding Header}" Grid.Row="0" Grid.Column="0"/>
-        <StackPanel Orientation="Horizontal" Spacing="5" Grid.Row="1" Grid.Column="0">
-            <Svg Path="avares://SerialLoops/Assets/Icons/Update.svg" Width="16" Height="16"/>
-            <TextBlock Text="{x:Static assets:Strings.A_new_update_for_Serial_Loops_is_available_}"/>
-        </StackPanel>
+        <controls:LabelWithIcon Text="{x:Static assets:Strings.A_new_update_for_Serial_Loops_is_available_}"
+                                Icon="Update" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left"/>
         <md:MarkdownScrollViewer Width="750" Height="350" Grid.Row="2" Grid.Column="0"
                                  Markdown="{Binding Changelog}" />
         <controls:LinkButton Text="{x:Static assets:Strings.Download_release_from_GitHub}"

@@ -1,39 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using CommunityToolkit.Mvvm.ComponentModel;
 using HaruhiChokuretsuLib.Archive.Event;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
 namespace SerialLoops.Lib.Items
 {
-    public partial class ItemDescription : ObservableObject
+    public partial class ItemDescription : ReactiveObject
     {
-        private string _name;
-        private bool _canRename;
-        private string _displayName;
-        private bool _unsavedChanges;
-
-        public string Name
-        {
-            get => _name;
-            set => SetProperty(ref _name, value);
-        }
-        public bool CanRename
-        {
-            get => _canRename;
-            set => SetProperty(ref _canRename, value);
-        }
-        public string DisplayName
-        {
-            get => _displayName;
-            set => SetProperty(ref _displayName, value);
-        }
+        [Reactive]
+        public string Name { get; set; }
+        [Reactive]
+        public bool CanRename { get; set; }
+        [Reactive]
+        public string DisplayName { get; set; }
         public ItemType Type { get; private set; }
-        public bool UnsavedChanges
-        {
-            get => _unsavedChanges;
-            set => SetProperty(ref _unsavedChanges, value);
-        }
+        [Reactive]
+        public bool UnsavedChanges { get; set; }
 
         public ItemDescription(string name, ItemType type, string displayName)
         {

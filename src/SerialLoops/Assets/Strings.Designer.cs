@@ -2312,6 +2312,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Export Background Image.
+        /// </summary>
+        public static string Export_Background_Image {
+            get {
+                return ResourceManager.GetString("Export Background Image", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export Frames.
         /// </summary>
         public static string Export_Frames {
@@ -2380,6 +2389,15 @@ namespace SerialLoops.Assets {
         public static string Export_Sprites {
             get {
                 return ResourceManager.GetString("Export Sprites", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export System Texture.
+        /// </summary>
+        public static string Export_System_Texture {
+            get {
+                return ResourceManager.GetString("Export System Texture", resourceCulture);
             }
         }
         
@@ -5115,6 +5133,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Replace Background Image.
+        /// </summary>
+        public static string Replace_Background_Image {
+            get {
+                return ResourceManager.GetString("Replace Background Image", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Replace BGM.
         /// </summary>
         public static string Replace_BGM {
@@ -5142,11 +5169,29 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Replace Game Icon.
+        /// </summary>
+        public static string Replace_Game_Icon {
+            get {
+                return ResourceManager.GetString("Replace Game Icon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Replace me.
         /// </summary>
         public static string Replace_me {
             get {
                 return ResourceManager.GetString("Replace me", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace System Texture.
+        /// </summary>
+        public static string Replace_System_Texture {
+            get {
+                return ResourceManager.GetString("Replace System Texture", resourceCulture);
             }
         }
         
