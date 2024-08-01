@@ -28,7 +28,21 @@ namespace SerialLoops.Utility
             {
                 Directory.CreateDirectory(_config.LogsDirectory);
             }
-            _writer = File.AppendText(Path.Combine(_config.LogsDirectory, $"SerialLoops.log"));
+            _writer = GetLogWriter(0);
+        }
+
+        // Safely gets a log writer, handling multiple processes using that file
+        private StreamWriter GetLogWriter(int attempt)
+        {
+            try
+            {
+                string suffix = attempt > 0 ? $"_{attempt}" : "";
+                return File.AppendText(Path.Combine(_config.LogsDirectory, $"SerialLoops{suffix}.log"));
+            }
+            catch (IOException)
+            {
+                return GetLogWriter(attempt + 1);
+            }
         }
 
         public void Log(string message)
