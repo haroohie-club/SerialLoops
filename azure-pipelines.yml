@@ -26,7 +26,8 @@ jobs:
   displayName: Build & Test
   pool:
     vmImage: $(imageName)
-  container: $[ variables['containerImage'] ]
+  ${{ if ne($[ variables['containerImage'] ], '') }}:
+    container: $[ variables['containerImage'] ]
   steps:
   - checkout: self
     clean: true
