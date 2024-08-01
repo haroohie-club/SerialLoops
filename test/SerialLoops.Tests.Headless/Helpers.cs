@@ -1,7 +1,9 @@
 ﻿using System.IO;
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Headless;
+using Avalonia.Input;
+using SerialLoops.ViewModels;
+using SerialLoops.Views;
 
 namespace SerialLoops.Tests.Headless
 {
@@ -14,6 +16,19 @@ namespace SerialLoops.Tests.Headless
                 Directory.CreateDirectory(Path.Combine(artifactsDir, nameOfTest));
             }
             window.CaptureRenderedFrame()?.Save(Path.Combine(artifactsDir, nameOfTest, $"{currentFrame++:D2}.png"));
+        }
+
+        public static void TabToExplorer(this MainWindow mainWindow)
+        {
+            int explorerTabStop = 2 + ((MainWindowViewModel)mainWindow.DataContext).ToolBar.Items.Count; // the menu, the search bar, and each of the tool bar items
+            if (NativeMenu.GetIsNativeMenuExported(mainWindow)) // if the menu is native, it's not a tab stop
+            {
+                explorerTabStop--;
+            }
+            for (int i = 0; i <= explorerTabStop; i++)
+            {
+                mainWindow.KeyPressQwerty(PhysicalKey.Tab, RawInputModifiers.None);
+            }
         }
     }
 }

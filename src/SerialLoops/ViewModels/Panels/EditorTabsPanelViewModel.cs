@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
+using Avalonia.Input;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
 using SerialLoops.Assets;
@@ -82,6 +83,11 @@ namespace SerialLoops.ViewModels.Panels
             {
                 ((BackgroundMusicEditorViewModel)closedEditor).BgmPlayer.Stop();
             }
+        }
+
+        public void OnTabMiddleClicked()
+        {
+            Tabs.Remove(SelectedTab);
         }
     }
 }

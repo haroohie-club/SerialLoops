@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using HaruhiChokuretsuLib.Util;
@@ -12,9 +14,9 @@ namespace SerialLoops.Utility
 {
     public class LoopyLogger : ILogger
     {
+        private readonly Window _owner;
         private Config _config;
-        private StreamWriter _writer;
-        private Window _owner;
+        private string _logFile;
 
         public LoopyLogger(Window window)
         {
@@ -28,15 +30,27 @@ namespace SerialLoops.Utility
             {
                 Directory.CreateDirectory(_config.LogsDirectory);
             }
-            _writer = File.AppendText(Path.Combine(_config.LogsDirectory, $"SerialLoops.log"));
+            _logFile = Path.Combine(_config.LogsDirectory, $"SerialLoops.log");
         }
+
+        private static string Stamp => $"\n({Environment.ProcessId}) {DateTimeOffset.Now} - ";
 
         public void Log(string message)
         {
-            if (_writer is not null && !string.IsNullOrEmpty(message))
+            if (!string.IsNullOrEmpty(_logFile) && !string.IsNullOrEmpty(message))
             {
-                _writer.WriteLine($"{DateTimeOffset.Now} - {message}");
-                _writer.Flush();
+                for (int i = 0; i < 10; i++)
+                {
+                    try
+                    {
+                        File.AppendAllText(_logFile, $"{Stamp}{message}");
+                        break;
+                    }
+                    catch (IOException)
+                    {
+                        Thread.Sleep(100);
+                    }
+                }
             }
         }
 
@@ -51,10 +65,20 @@ namespace SerialLoops.Utility
         private async Task LogErrorAsync(string message, bool lookForWarnings = false)
         {
             await MessageBoxManager.GetMessageBoxStandard(Strings.Error, string.Format(Strings.ERROR___0_, message), ButtonEnum.Ok, Icon.Error, WindowStartupLocation.CenterScreen).ShowWindowDialogAsync(_owner);
-            if (_writer is not null && !string.IsNullOrEmpty(message))
+            if (!string.IsNullOrEmpty(_logFile) && !string.IsNullOrEmpty(message))
             {
-                _writer.WriteLine($"{DateTimeOffset.Now} - ERROR: {message}");
-                _writer.Flush();
+                for (int i = 0; i < 10; i++)
+                {
+                    try
+                    {
+                        File.AppendAllText(_logFile, $"{Stamp}ERROR: {message}");
+                        break;
+                    }
+                    catch (IOException)
+                    {
+                        await Task.Delay(TimeSpan.FromMilliseconds(100));
+                    }
+                }
             }
         }
 
@@ -66,19 +90,39 @@ namespace SerialLoops.Utility
 
         public void LogWarning(string message, bool lookForErrors = false)
         {
-            if (_writer is not null && !string.IsNullOrEmpty(message))
+            if (!string.IsNullOrEmpty(_logFile) && !string.IsNullOrEmpty(message))
             {
-                _writer.WriteLine($"{DateTimeOffset.Now} - WARNING: {message}");
-                _writer.Flush();
+                for (int i = 0; i < 10; i++)
+                {
+                    try
+                    {
+                        File.AppendAllText(_logFile, $"{Stamp}WARNING: {message}");
+                        break;
+                    }
+                    catch (IOException)
+                    {
+                        Thread.Sleep(100);
+                    }
+                }
             }
         }
 
         public void LogCrash(Exception ex)
         {
-            if (_writer is not null)
+            if (!string.IsNullOrEmpty(_logFile))
             {
-                _writer.WriteLine($"{DateTimeOffset.Now} - SERIAL LOOPS CRASH: {ex.Message}\n\n{ex.StackTrace}");
-                _writer.Flush();
+                for (int i = 0; i < 10; i++)
+                {
+                    try
+                    {
+                        File.AppendAllText(_logFile, $"{Stamp}SERIAL LOOPS CRASH: {ex.Message}\n\n{ex.StackTrace}");
+                        break;
+                    }
+                    catch (IOException)
+                    {
+                        Thread.Sleep(100);
+                    }
+                }
             }
         }
     }

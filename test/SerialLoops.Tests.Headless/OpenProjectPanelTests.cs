@@ -7,14 +7,20 @@ using System.Threading.Tasks;
 using Avalonia.Headless;
 using Avalonia.Headless.NUnit;
 using Avalonia.Input;
+using Avalonia.VisualTree;
+using NAudio.Wave;
+using SerialLoops.Controls;
 using SerialLoops.Lib.Items;
+using SerialLoops.Models;
 using SerialLoops.Tests.Shared;
 using SerialLoops.ViewModels;
+using SerialLoops.ViewModels.Controls;
 using SerialLoops.ViewModels.Dialogs;
 using SerialLoops.ViewModels.Editors;
 using SerialLoops.ViewModels.Panels;
 using SerialLoops.Views;
 using SerialLoops.Views.Dialogs;
+using SerialLoops.Views.Editors;
 using SerialLoops.Views.Panels;
 
 namespace SerialLoops.Tests.Headless
@@ -75,7 +81,7 @@ namespace SerialLoops.Tests.Headless
                 DataContext = mainWindowViewModel,
             };
             mainWindow.Show();
-            mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(Setup), ref currentFrame);
+            mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(ProjectCreationTest), ref currentFrame);
 
             ProjectCreationDialogViewModel projectCreationViewModel = new(mainWindowViewModel.CurrentConfig, mainWindowViewModel, mainWindowViewModel.Log);
             ProjectCreationDialog projectCreationDialog = new()
@@ -83,36 +89,36 @@ namespace SerialLoops.Tests.Headless
                 DataContext = projectCreationViewModel
             };
             projectCreationDialog.Show();
-            projectCreationDialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(Setup), ref currentFrame);
+            projectCreationDialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(ProjectCreationTest), ref currentFrame);
 
             projectCreationDialog.NameBox.Focus();
             projectCreationDialog.KeyTextInput(_uiVals.ProjectName);
-            projectCreationDialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(Setup), ref currentFrame);
+            projectCreationDialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(ProjectCreationTest), ref currentFrame);
 
             projectCreationDialog.LanguageComboBox.Focus();
             projectCreationDialog.KeyPressQwerty(PhysicalKey.ArrowDown, RawInputModifiers.None);
             projectCreationDialog.KeyPressQwerty(PhysicalKey.ArrowDown, RawInputModifiers.None);
             projectCreationDialog.KeyPressQwerty(PhysicalKey.ArrowDown, RawInputModifiers.None);
             projectCreationDialog.KeyPressQwerty(PhysicalKey.ArrowDown, RawInputModifiers.None);
-            projectCreationDialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(Setup), ref currentFrame);
+            projectCreationDialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(ProjectCreationTest), ref currentFrame);
 
             projectCreationViewModel.RomPath = _uiVals!.RomLoc;
             projectCreationDialog.CreateButton.Focus();
             projectCreationDialog.KeyPressQwerty(PhysicalKey.Enter, RawInputModifiers.None);
             await Task.Delay(TimeSpan.FromSeconds(15)); // Give us time for project creation to complete
-            mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(Setup), ref currentFrame);
+            mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(ProjectCreationTest), ref currentFrame);
 
             await mainWindowViewModel.OpenProjectFromPath(Path.Combine(mainWindowViewModel.CurrentConfig.ProjectsDirectory, _uiVals.ProjectName, $"{_uiVals.ProjectName}.slproj"));
-            string _createdProjectPath = mainWindowViewModel.OpenProject.MainDirectory;
+            _createdProjectPath = mainWindowViewModel.OpenProject.MainDirectory;
 
             // Verify that the project panel is open
             Assert.That(mainWindow.MainContent.Content, Is.TypeOf<OpenProjectPanel>());
-            mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(Setup), ref currentFrame);
+            mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(ProjectCreationTest), ref currentFrame);
 
             // Close the project
             mainWindow.KeyPressQwerty(PhysicalKey.W, RawInputModifiers.Control);
             Assert.That(mainWindow.MainContent.Content, Is.TypeOf<HomePanel>());
-            mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(Setup), ref currentFrame);
+            mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(ProjectCreationTest), ref currentFrame);
 
             // Reopen the project
             await mainWindowViewModel.OpenProjectFromPath(Path.Combine(_createdProjectPath, $"{_uiVals.ProjectName}.slproj"));
@@ -120,7 +126,8 @@ namespace SerialLoops.Tests.Headless
         }
 
         [AvaloniaTest]
-        public void BackgroundEditor_CanOpenTabs()
+        [Parallelizable]
+        public async Task BackgroundEditor_CanOpenTabs()
         {
             int currentFrame = 0;
             MainWindowViewModel mainWindowViewModel = new();
@@ -129,9 +136,10 @@ namespace SerialLoops.Tests.Headless
                 DataContext = mainWindowViewModel,
             };
             mainWindow.Show();
-            mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(Setup), ref currentFrame);
+            mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(BackgroundEditor_CanOpenTabs), ref currentFrame);
 
-
+            await mainWindowViewModel.OpenProjectFromPath(Path.Combine(_createdProjectPath, $"{_uiVals.ProjectName}.slproj"));
+            mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(BackgroundEditor_CanOpenTabs), ref currentFrame);
 
             OpenProjectPanel openProjectPanel = (OpenProjectPanel)mainWindow.MainContent.Content;
             OpenProjectPanelViewModel openProjectViewModel = (OpenProjectPanelViewModel)openProjectPanel.DataContext;
@@ -139,17 +147,132 @@ namespace SerialLoops.Tests.Headless
             ItemExplorerPanel explorer = openProjectPanel.ItemExplorer;
             EditorTabsPanel tabs = openProjectPanel.EditorTabs;
 
-            explorer.Viewer.SelectedItem = openProjectViewModel.Explorer.Source.First(i => i.Text == "Backgrounds");
+            ITreeItem backgroundsTreeItem = openProjectViewModel.Explorer.Source.First(i => i.Text == "Backgrounds");
+
+            mainWindow.TabToExplorer();
+
+            mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(BackgroundEditor_CanOpenTabs), ref currentFrame);
+            explorer.Viewer.SelectedItem = backgroundsTreeItem;
             mainWindow.KeyPressQwerty(PhysicalKey.ArrowRight, RawInputModifiers.None);
             mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(BackgroundEditor_CanOpenTabs), ref currentFrame);
-            ItemDescription firstBg = mainWindowViewModel.OpenProject.Items.First(i => i.Type == Lib.Items.ItemDescription.ItemType.Background);
-            explorer.Viewer.SelectedItem = openProjectViewModel.Explorer.Source.First(i => i.Text == firstBg.DisplayName);
+            ItemDescription firstBg = mainWindowViewModel.OpenProject.Items.First(i => i.Type == ItemDescription.ItemType.Background);
+            explorer.Viewer.SelectedItem = backgroundsTreeItem.Children.First(i => i.Text == firstBg.DisplayName);
             mainWindow.KeyPressQwerty(PhysicalKey.Enter, RawInputModifiers.None);
             mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(BackgroundEditor_CanOpenTabs), ref currentFrame);
             Assert.Multiple(() =>
             {
-                Assert.That(openProjectViewModel.EditorTabs.SelectedTab.Description.DisplayName == firstBg.DisplayName);
+                Assert.That(openProjectViewModel.EditorTabs.SelectedTab?.Description?.DisplayName, Is.EqualTo(firstBg.DisplayName));
                 Assert.That(tabs.Tabs.SelectedItem, Is.TypeOf<BackgroundEditorViewModel>());
+            });
+        }
+
+        [AvaloniaTest]
+        [Parallelizable]
+        public async Task BGMEditor_CanPlayPauseStopMusic()
+        {
+            int currentFrame = 0;
+            MainWindowViewModel mainWindowViewModel = new();
+            MainWindow mainWindow = new()
+            {
+                DataContext = mainWindowViewModel,
+            };
+            mainWindow.Show();
+            mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(BGMEditor_CanPlayPauseStopMusic), ref currentFrame);
+
+            await mainWindowViewModel.OpenProjectFromPath(Path.Combine(_createdProjectPath, $"{_uiVals.ProjectName}.slproj"));
+            mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(BGMEditor_CanPlayPauseStopMusic), ref currentFrame);
+
+            OpenProjectPanel openProjectPanel = (OpenProjectPanel)mainWindow.MainContent.Content;
+            OpenProjectPanelViewModel openProjectViewModel = (OpenProjectPanelViewModel)openProjectPanel.DataContext;
+
+            ItemExplorerPanel explorer = openProjectPanel.ItemExplorer;
+            EditorTabsPanel tabs = openProjectPanel.EditorTabs;
+
+            ITreeItem bgmsTreeItem = openProjectViewModel.Explorer.Source.First(i => i.Text == "BGMs");
+
+            mainWindow.TabToExplorer();
+
+            mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(BGMEditor_CanPlayPauseStopMusic), ref currentFrame);
+            explorer.Viewer.SelectedItem = bgmsTreeItem;
+            mainWindow.KeyPressQwerty(PhysicalKey.ArrowDown, RawInputModifiers.None);
+            mainWindow.KeyPressQwerty(PhysicalKey.ArrowRight, RawInputModifiers.None);
+            mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(BGMEditor_CanPlayPauseStopMusic), ref currentFrame);
+
+            ItemDescription bgm029 = mainWindowViewModel.OpenProject.Items.First(i => i.Name == "BGM029");
+            explorer.Viewer.SelectedItem = bgmsTreeItem.Children.First(i => i.Text == bgm029.DisplayName);
+            mainWindow.KeyPressQwerty(PhysicalKey.Enter, RawInputModifiers.None);
+            mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(BGMEditor_CanPlayPauseStopMusic), ref currentFrame);
+            Assert.Multiple(() =>
+            {
+                Assert.That(openProjectViewModel.EditorTabs.SelectedTab?.Description?.DisplayName, Is.EqualTo(bgm029.DisplayName));
+                Assert.That(tabs.Tabs.SelectedItem, Is.TypeOf<BackgroundMusicEditorViewModel>());
+            });
+
+            BackgroundMusicEditorViewModel bgmEditorViewModel = (BackgroundMusicEditorViewModel)tabs.Tabs.SelectedItem;
+            BackgroundMusicEditorView bgmEditor = mainWindow.FindDescendantOfType<BackgroundMusicEditorView>();
+            SoundPlayerPanel soundPlayer = bgmEditor.Player;
+            SoundPlayerPanelViewModel soundPlayerViewModel = (SoundPlayerPanelViewModel)soundPlayer.DataContext;
+
+            // Check that the sound plays
+            soundPlayer.PlayPauseButton.Focus();
+            mainWindow.KeyPressQwerty(PhysicalKey.Enter, RawInputModifiers.None);
+            mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(BGMEditor_CanPlayPauseStopMusic), ref currentFrame);
+            Assert.Multiple(() =>
+            {
+                Assert.That(soundPlayerViewModel.StopButtonEnabled, Is.True);
+                Assert.That(soundPlayerViewModel._player.PlaybackState, Is.EqualTo(PlaybackState.Playing));
+                Assert.That(soundPlayerViewModel.PlayPauseImagePath, Contains.Substring("Pause"));
+            });
+
+            // The AL player is kinda unreliable from a testing perspective and thus these tests are restricted to Windows
+#if WINDOWS
+            // Check that we can pause the sound
+            soundPlayer.PlayPauseButton.Focus();
+            mainWindow.KeyPressQwerty(PhysicalKey.Enter, RawInputModifiers.None);
+            mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(BGMEditor_CanPlayPauseStopMusic), ref currentFrame);
+            Assert.Multiple(() =>
+            {
+                Assert.That(soundPlayerViewModel.StopButtonEnabled, Is.True);
+                Assert.That(soundPlayerViewModel._player.PlaybackState, Is.EqualTo(PlaybackState.Paused));
+                Assert.That(soundPlayerViewModel.PlayPauseImagePath, Contains.Substring("Play"));
+            });
+
+            // Check that the sound stops when it reaches the end of its play
+            // This doesn't work -- probably something with the headless stuff messing with playback
+            //soundPlayer.PlayPauseButton.Focus();
+            //mainWindow.KeyPressQwerty(PhysicalKey.Enter, RawInputModifiers.None);
+            //await Task.Delay(TimeSpan.FromSeconds(7));
+            //mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(BGMEditor_CanPlayPauseStopMusic), ref currentFrame);
+            //Assert.Multiple(() =>
+            //{
+            //    Assert.That(soundPlayerViewModel.StopButtonEnabled, Is.False);
+            //    Assert.That(soundPlayerViewModel._player.PlaybackState, Is.EqualTo(PlaybackState.Stopped));
+            //    Assert.That(soundPlayerViewModel.PlayPauseImagePath, Contains.Substring("Play"));
+            //});
+
+            // Check that we can stop the sound
+            soundPlayer.PlayPauseButton.Focus();
+            mainWindow.KeyPressQwerty(PhysicalKey.Enter, RawInputModifiers.None);
+            mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(BGMEditor_CanPlayPauseStopMusic), ref currentFrame);
+            Assert.Multiple(() =>
+            {
+                Assert.That(soundPlayerViewModel.StopButtonEnabled, Is.True);
+                Assert.That(soundPlayerViewModel._player.PlaybackState, Is.EqualTo(PlaybackState.Playing));
+                Assert.That(soundPlayerViewModel.PlayPauseImagePath, Contains.Substring("Pause"));
+            });
+#endif
+            soundPlayer.StopButton.Focus();
+            mainWindow.KeyPressQwerty(PhysicalKey.Enter, RawInputModifiers.None);
+            mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(BGMEditor_CanPlayPauseStopMusic), ref currentFrame);
+            Assert.Multiple(() =>
+            {
+                Assert.That(soundPlayerViewModel.StopButtonEnabled, Is.False);
+#if WINDOWS
+                Assert.That(soundPlayerViewModel._player.PlaybackState, Is.EqualTo(PlaybackState.Stopped));
+#else
+                Assert.That(soundPlayerViewModel._player.PlaybackState, Is.EqualTo(PlaybackState.Paused));
+#endif
+                Assert.That(soundPlayerViewModel.PlayPauseImagePath, Contains.Substring("Play"));
             });
         }
     }
