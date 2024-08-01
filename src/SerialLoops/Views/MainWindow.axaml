@@ -35,6 +35,7 @@
     <Grid RowDefinitions="Auto,*">
         <StackPanel IsVisible="False">
             <Button Command="{Binding SaveProjectCommand}" HotKey="{Binding SaveHotKey}"/>
+            <Button Command="{Binding CloseProjectCommand}" HotKey="{Binding CloseProjectKey}"/>
         </StackPanel>
         <StackPanel Grid.Row="0">
             <NativeMenuBar Name="MenuBar"/>

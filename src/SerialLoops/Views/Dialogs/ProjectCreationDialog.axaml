@@ -28,7 +28,8 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Spacing="10">
                     <TextBlock Text="{x:Static assets:Strings.Language_Template}"/>
-                    <ComboBox SelectedItem="{Binding LanguageTemplateItem, Mode=OneWayToSource}" SelectedIndex="0">
+                    <ComboBox SelectedItem="{Binding LanguageTemplateItem, Mode=OneWayToSource}" SelectedIndex="0"
+                              Name="LanguageComboBox">
                         <ComboBox.Items>
                             <ComboBoxItem Tag="en" Content="{x:Static assets:Strings.English}"/>
                             <ComboBoxItem Tag="ja" Content="{x:Static assets:Strings.Japanese}"/>
@@ -48,13 +49,16 @@
         <gbox:GroupBox Header="{x:Static assets:Strings.Select_ROM}" Theme="{StaticResource GroupBoxClassic}"
                        Padding="5" MinWidth="300" MinHeight="80">
             <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
-                <Button Content="{x:Static assets:Strings.Open_ROM}" Command="{Binding PickRomCommand}"/>
+                <Button Content="{x:Static assets:Strings.Open_ROM}" Command="{Binding PickRomCommand}"
+                        Name="OpenRomButton"/>
                 <TextBlock Text="{Binding RomPath}"/>
             </StackPanel>
         </gbox:GroupBox>
         <StackPanel Orientation="Horizontal" Margin="5" Spacing="10">
-            <Button Content="{x:Static assets:Strings.Create}" Command="{Binding CreateCommand}" CommandParameter="{Binding #PCDialog}"/>
-            <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}" CommandParameter="{Binding #PCDialog}"/>
+            <Button Content="{x:Static assets:Strings.Create}" Command="{Binding CreateCommand}" CommandParameter="{Binding #PCDialog}"
+                    Name="CreateButton"/>
+            <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}" CommandParameter="{Binding #PCDialog}"
+                    Name="CancelButton"/>
         </StackPanel>
     </StackPanel>
 </Window>

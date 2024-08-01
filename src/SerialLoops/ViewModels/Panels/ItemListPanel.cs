@@ -2,9 +2,13 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Linq;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
+using Avalonia.Data;
 using Avalonia.Input;
+using Avalonia.Interactivity;
+using Avalonia.Styling;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Assets;
 using SerialLoops.Lib.Items;
@@ -31,12 +35,18 @@ namespace SerialLoops.ViewModels.Panels
         public ObservableCollection<ITreeItem> Source { get; set; }
 
         protected ILogger _log;
-        protected bool ExpandItems { get; set; }
+        private bool _expandItems;
+        public bool ExpandItems
+        {
+            get => _expandItems;
+            set => SetProperty(ref _expandItems, value);
+        }
 
         public void InitializeItems(List<ItemDescription> items, bool expandItems, ILogger log)
         {
             Items = items;
             ExpandItems = expandItems;
+            
             _log = log;
         }
 
@@ -81,9 +91,30 @@ namespace SerialLoops.ViewModels.Panels
         {
             viewer.ItemTemplate = new FuncTreeDataTemplate<ITreeItem>((item, namescope) => item.GetDisplay(), item => item.Children);
             viewer.ItemsSource = Source;
+            viewer.ItemContainerTheme = new(typeof(TreeViewItem)) { BasedOn = (ControlTheme)Application.Current.FindResource(typeof(TreeViewItem)) };
+            viewer.ItemContainerTheme.Setters.Add(new Setter(TreeViewItem.IsExpandedProperty, new Binding("IsExpanded")));
+            if (ExpandItems)
+            {
+                foreach (ITreeItem item in viewer.ItemsSource)
+                {
+                    if (item is SectionTreeItem section)
+                    {
+                        section.IsExpanded = true;
+                    }
+                }
+            }
+            viewer.AddHandler(InputElement.KeyDownEvent, Viewer_KeyDown, RoutingStrategies.Tunnel);
             viewer.DoubleTapped += ItemList_ItemDoubleClicked;
         }
 
+        private void Viewer_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                ItemList_ItemDoubleClicked(sender, null);
+                e.Handled = true;
+            }
+        }
         public abstract void ItemList_ItemDoubleClicked(object sender, TappedEventArgs args);
     }
 }

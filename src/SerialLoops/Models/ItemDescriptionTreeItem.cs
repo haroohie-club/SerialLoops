@@ -11,6 +11,7 @@ namespace SerialLoops.Models
         public string Text { get; set; } = description.DisplayName;
         public Avalonia.Svg.Svg Icon { get; set; } = null;
         public List<ITreeItem> Children { get; set; } = null;
+        public bool IsExpanded { get; set; } = false;
 
         public Control GetDisplay()
         {
