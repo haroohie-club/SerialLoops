@@ -109,10 +109,5 @@ namespace SerialLoops.ViewModels.Dialogs
             Applied = true;
             _settingsDialog.Close();
         }
-
-        private static (string Culture, string Language) GetLanguageComboxBoxOption(string culture)
-        {
-            return (culture, new CultureInfo(culture).NativeName.ToTitleCase());
-        }
     }
 }
