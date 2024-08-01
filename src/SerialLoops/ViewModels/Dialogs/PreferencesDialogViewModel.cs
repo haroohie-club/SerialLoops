@@ -13,7 +13,7 @@ using SixLabors.Fonts;
 
 namespace SerialLoops.ViewModels.Dialogs
 {
-    public class PreferencesDialogViewModel : ReactiveObject
+    public class PreferencesDialogViewModel : ViewModelBase
     {
         public int MinWidth => 550;
         public int MinHeight => 600;
@@ -29,7 +29,7 @@ namespace SerialLoops.ViewModels.Dialogs
         public bool RequireRestart
         {
             get => _requireRestart;
-            set => this.RaiseAndSetIfChanged(ref _requireRestart, value);
+            set => SetProperty(ref _requireRestart, value);
         }
         public bool Saved { get; set; }
         private PreferencesDialog _preferencesDialog;

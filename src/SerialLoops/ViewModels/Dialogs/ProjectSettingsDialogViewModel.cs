@@ -10,7 +10,7 @@ using SkiaSharp;
 
 namespace SerialLoops.ViewModels.Dialogs
 {
-    public class ProjectSettingsDialogViewModel : ReactiveObject
+    public class ProjectSettingsDialogViewModel : ViewModelBase
     {
         public int MinWidth => 550;
         public int MinHeight => 600;
@@ -25,7 +25,7 @@ namespace SerialLoops.ViewModels.Dialogs
         public string GameTitle
         {
             get => _gameTitle;
-            set => this.RaiseAndSetIfChanged(ref _gameTitle, value);
+            set => SetProperty(ref _gameTitle, value);
         }
 
         private SKBitmap _icon;
@@ -37,7 +37,7 @@ namespace SerialLoops.ViewModels.Dialogs
                 _icon.ScalePixels(preview, SKFilterQuality.None);
                 return preview;
             }
-            set => this.RaiseAndSetIfChanged(ref _icon, value);
+            set => SetProperty(ref _icon, value);
         }
 
         private ProjectSettings _settings;
