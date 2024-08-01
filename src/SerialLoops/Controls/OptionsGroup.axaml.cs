@@ -47,12 +47,8 @@ namespace SerialLoops.Controls
             Grid bigGrid = new()
             {
                 RowDefinitions = new("Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"),
-                ColumnDefinitions = new("Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto")
+                ColumnDefinitions = new("Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"),
             };
-            TextBlock header = new() { Text = Text, Margin = new(15, 5) };
-            header.Classes.Add("h2");
-            Grid.SetRow(header, 0);
-            bigGrid.Children.Add(header);
             bigGrid.Children.AddRange(grids);
             Content = bigGrid;
         }
@@ -84,6 +80,7 @@ namespace SerialLoops.Controls
             {
                 ColumnDefinitions = new("Auto,*,Auto"),
                 Margin = new(10),
+                MinWidth = 465
             };
             Control textBlock = GetText();
             Control control = GetControl();
@@ -306,4 +303,5 @@ namespace SerialLoops.Controls
             }
         }
     }
+
 }

@@ -2327,4 +2327,7 @@
   <data name="{0} results found" xml:space="preserve">
     <value>{0} results found</value>
   </data>
+  <data name="Restart required" xml:space="preserve">
+    <value>Restart required</value>
+  </data>
 </root>

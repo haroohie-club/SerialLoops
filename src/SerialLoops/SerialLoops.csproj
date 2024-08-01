@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFrameworks>net8.0;net8.0-windows</TargetFrameworks>
@@ -99,13 +99,20 @@
     <Compile Update="Program.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
+    <Compile Update="Views\Dialogs\ProjectSettingsDialog.axaml.cs">
+      <DependentUpon>ProjectSettingsDialog.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Assets\Strings.id.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <PublicClass>true</PublicClass>
-    </EmbeddedResource>
+    <Compile Update="Assets\Strings.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
     <EmbeddedResource Update="Assets\Strings.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <PublicClass>true</PublicClass>
