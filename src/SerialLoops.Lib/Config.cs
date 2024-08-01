@@ -42,6 +42,7 @@ namespace SerialLoops.Lib
         public bool RemoveMissingProjects { get; set; }
         public bool CheckForUpdates { get; set; }
         public bool PreReleaseChannel { get; set; }
+        public string DisplayFont { get; set; }
 
         public void Save(ILogger log)
         {

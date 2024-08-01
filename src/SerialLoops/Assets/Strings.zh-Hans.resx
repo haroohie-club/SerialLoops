@@ -360,4 +360,13 @@
   <data name="Chokuretsu Save File" xml:space="preserve">
     <value>《串联》存档文件</value>
   </data>
+  <data name="Default Font" xml:space="preserve">
+    <value>Microsoft YaHei UI</value>
+  </data>
+  <data name="Default Font Display" xml:space="preserve">
+    <value>默认（{0}）</value>
+  </data>
+  <data name="Display Font" xml:space="preserve">
+    <value>显示字体</value>
+  </data>
 </root>

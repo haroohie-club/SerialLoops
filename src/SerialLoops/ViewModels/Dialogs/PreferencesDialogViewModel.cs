@@ -5,8 +5,10 @@ using SerialLoops.Controls;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Util;
 using SerialLoops.Views.Dialogs;
+using SixLabors.Fonts;
 using System;
 using System.Globalization;
+using System.Linq;
 using System.Windows.Input;
 
 namespace SerialLoops.ViewModels.Dialogs
@@ -103,6 +105,19 @@ namespace SerialLoops.ViewModels.Dialogs
                         {
                             Strings.Culture = CultureInfo.CurrentCulture;
                             Configuration.CurrentCultureName = value;
+                            RequireRestart = true;
+                        },
+                    },
+                    new ComboBoxOption([
+                            ("", string.Format(Strings.Default_Font_Display, Strings.Default_Font)),
+                            ..SystemFonts.Collection.Families.Select(_ => (_.Name, _.Name)),
+                        ])
+                    {
+                        OptionName = Strings.Display_Font,
+                        Value = Configuration.DisplayFont ?? "",
+                        OnChange = (value) =>
+                        {
+                            Configuration.DisplayFont = value;
                             RequireRestart = true;
                         },
                     },

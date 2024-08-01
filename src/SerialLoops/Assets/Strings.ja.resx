@@ -212,4 +212,7 @@
   <data name="Animation" xml:space="preserve">
     <value>アニメーション</value>
   </data>
+  <data name="Default Font" xml:space="preserve">
+    <value>Meiryo UI</value>
+  </data>
 </root>
