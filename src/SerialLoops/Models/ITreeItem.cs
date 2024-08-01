@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Avalonia.Controls;
+using Avalonia.Media.Imaging;
 
 namespace SerialLoops.Models
 {

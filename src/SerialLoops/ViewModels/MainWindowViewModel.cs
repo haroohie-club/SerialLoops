@@ -9,8 +9,10 @@ using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Media;
 using Avalonia.Platform;
 using Avalonia.Platform.Storage;
+using Avalonia.Styling;
 using CommunityToolkit.Mvvm.ComponentModel;
 using HaruhiChokuretsuLib.Archive;
 using MiniToolbar.Avalonia;
@@ -97,6 +99,7 @@ namespace SerialLoops.ViewModels
         public ICommand BuildBaseCommand { get; private set; }
         public ICommand BuildAndRunCommand { get; private set; }
 
+<<<<<<< HEAD
         [ObservableProperty]
         private KeyGesture _saveHotKey;
         [ObservableProperty]
@@ -106,6 +109,18 @@ namespace SerialLoops.ViewModels
         {
             SaveHotKey = new(Key.S, KeyModifiers.Control);
             CloseProjectKey = new(Key.W, KeyModifiers.Control);
+=======
+        private KeyGesture _saveHotKey;
+        public KeyGesture SaveHotKey
+        {
+            get => _saveHotKey;
+            set => SetProperty(ref _saveHotKey, value);
+        }
+
+        public MainWindowViewModel()
+        {
+            _saveHotKey = new(Key.S, KeyModifiers.Control);
+>>>>>>> Avalonia
 
             NewProjectCommand = ReactiveCommand.CreateFromTask(NewProjectCommand_Executed);
             OpenProjectCommand = ReactiveCommand.CreateFromTask(OpenProjectCommand_Executed);
@@ -116,6 +131,7 @@ namespace SerialLoops.ViewModels
             CheckForUpdatesCommand = ReactiveCommand.Create(() => new UpdateChecker(this).Check());
 
             SaveProjectCommand = ReactiveCommand.Create(SaveProject_Executed);
+<<<<<<< HEAD
 
             CloseProjectCommand = ReactiveCommand.Create(CloseProjectView);
 
@@ -148,6 +164,62 @@ namespace SerialLoops.ViewModels
             CurrentConfig = Config.LoadConfig((s) => s, Log);
             Strings.Culture = new(CurrentConfig.CurrentCultureName);
             Log.Initialize(CurrentConfig);
+=======
+>>>>>>> Avalonia
+
+            CloseProjectCommand = ReactiveCommand.Create(CloseProjectView);
+
+<<<<<<< HEAD
+            if (CurrentConfig.CheckForUpdates)
+            {
+                new UpdateChecker(this).Check();
+            }
+
+            if (CurrentConfig.AutoReopenLastProject && ProjectsCache.RecentProjects.Count > 0)
+            {
+                await OpenProjectFromPath(ProjectsCache.RecentProjects[0]);
+            }
+            else
+            {
+                OpenHomePanel();
+            }
+        }
+
+=======
+            BuildIterativeCommand = ReactiveCommand.CreateFromTask(BuildIterative_Executed);
+            BuildBaseCommand = ReactiveCommand.CreateFromTask(BuildBase_Executed);
+            BuildAndRunCommand = ReactiveCommand.CreateFromTask(BuildAndRun_Executed);
+
+            ViewLogsCommand = ReactiveCommand.Create(() =>
+            {
+                try
+                {
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = Path.Combine(CurrentConfig.UserDirectory, "Logs", "SerialLoops.log"),
+                        UseShellExecute = true,
+                    });
+                }
+                catch (Exception)
+                {
+                    Log.LogError("Failed to open log file directly. " +
+                        $"Logs can be found at {Path.Combine(CurrentConfig.UserDirectory, "Logs", "SerialLoops.log")}");
+                }
+            });
+        }
+
+        public async void Initialize(MainWindow window)
+        {
+            Window = window;
+            Log = new(Window);
+            CurrentConfig = Config.LoadConfig((s) => s, Log);
+            Strings.Culture = new(CurrentConfig.CurrentCultureName);
+            Log.Initialize(CurrentConfig);
+
+            var fontStyle = new Style(x => x.OfType<Window>());
+            var font = FontFamily.Parse(string.IsNullOrEmpty(CurrentConfig.DisplayFont) ? Strings.Default_Font : CurrentConfig.DisplayFont);
+            fontStyle.Add(new Setter(Avalonia.Controls.Primitives.TemplatedControl.FontFamilyProperty, font));
+            Application.Current.Styles.Add(fontStyle);
 
             ProjectsCache = ProjectsCache.LoadCache(CurrentConfig, Log);
             UpdateRecentProjects();
@@ -167,6 +239,7 @@ namespace SerialLoops.ViewModels
             }
         }
 
+>>>>>>> Avalonia
         private void OpenHomePanel()
         {
             HomePanelViewModel homePanelViewModel = new() { MainWindow = this };
