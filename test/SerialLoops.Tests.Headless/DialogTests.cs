@@ -287,7 +287,7 @@ namespace SerialLoops.Tests.Headless
                 Assert.Multiple(() =>
                 {
                     Assert.That(dockerTagTextBox.Text, Does.Not.Contain(dockerTagInput));
-                    Assert.That(dockerTagTextBox.Text, Is.EqualTo(config.EmulatorPath));
+                    Assert.That(dockerTagTextBox.Text, Is.EqualTo(string.Empty));
                     Assert.That(restartRequiredLabel.IsVisible, Is.False);
                 });
             }
