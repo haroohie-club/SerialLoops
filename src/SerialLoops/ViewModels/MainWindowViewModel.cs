@@ -145,11 +145,11 @@ namespace SerialLoops.ViewModels
             });
         }
 
-        public async void Initialize(MainWindow window)
+        public async void Initialize(MainWindow window, IConfigFactory configFactory = null)
         {
             Window = window;
             Log = new(Window);
-            ConfigFactory configFactory = new();
+            configFactory ??= new ConfigFactory();
             CurrentConfig = configFactory.LoadConfig((s) => s, Log);
             Strings.Culture = new(CurrentConfig.CurrentCultureName);
             Log.Initialize(CurrentConfig);
@@ -185,7 +185,7 @@ namespace SerialLoops.ViewModels
             Window.MainContent.Content = homePanel;
         }
 
-        private void OpenProjectView(Project project, IProgressTracker tracker)
+        internal void OpenProjectView(Project project, IProgressTracker tracker)
         {
             ItemExplorer = new();
             EditorTabs = new();

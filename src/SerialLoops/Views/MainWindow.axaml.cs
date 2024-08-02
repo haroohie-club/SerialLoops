@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using Avalonia.Controls;
 using SerialLoops.Assets;
+using SerialLoops.Lib.Factories;
 using SerialLoops.Utility;
 using SerialLoops.ViewModels;
 
@@ -11,6 +12,7 @@ namespace SerialLoops.Views
     {
         public MainWindowViewModel ViewModel;
         public bool RestartOnClose { get; set; } = false;
+        public IConfigFactory ConfigurationFactory { get; set; } // This is used for testing purposes; should always be null in production
 
         public MainWindow()
         {
@@ -21,7 +23,7 @@ namespace SerialLoops.Views
         {
             base.Show();
             ViewModel = (MainWindowViewModel)DataContext;
-            ViewModel.Initialize(this);
+            ViewModel.Initialize(this, ConfigurationFactory);
             NativeMenu.SetMenu(this, GetInitialMenu(NativeMenu.GetMenu(this)));
         }
 
