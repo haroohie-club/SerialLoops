@@ -7,25 +7,20 @@ using System.Threading.Tasks;
 using Avalonia.Headless;
 using Avalonia.Headless.NUnit;
 using Avalonia.Input;
-using Avalonia.VisualTree;
-using NAudio.Wave;
-using SerialLoops.Controls;
 using SerialLoops.Lib.Items;
 using SerialLoops.Models;
 using SerialLoops.Tests.Shared;
 using SerialLoops.ViewModels;
-using SerialLoops.ViewModels.Controls;
 using SerialLoops.ViewModels.Dialogs;
 using SerialLoops.ViewModels.Editors;
 using SerialLoops.ViewModels.Panels;
 using SerialLoops.Views;
 using SerialLoops.Views.Dialogs;
-using SerialLoops.Views.Editors;
 using SerialLoops.Views.Panels;
 
 namespace SerialLoops.Tests.Headless
 {
-    public class OpenProjectPanelTests
+    public class EditorTests
     {
         // Note that despite appearing to be unit tests, these tests need to all be run at once
         // We can't do Avalonia stuff outside of the [AvaloniaTest] fixture and there's no [AvaloniaSetUp] fixture so

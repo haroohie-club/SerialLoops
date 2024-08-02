@@ -13,6 +13,7 @@ using ReactiveUI;
 using SerialLoops.Assets;
 using SerialLoops.Lib.Items;
 using SerialLoops.Utility;
+using SerialLoops.Views.Dialogs;
 
 namespace SerialLoops.Controls
 {
@@ -84,6 +85,7 @@ namespace SerialLoops.Controls
             };
             Control textBlock = GetText();
             Control control = GetControl();
+            control.SetValue(Control.NameProperty, $"{OptionName.Replace(" ", "").Replace("-", "")}Control");
 
             Grid.SetColumn(textBlock, 0);
             Grid.SetColumn(control, 2);

@@ -23,6 +23,7 @@ using SerialLoops.Assets;
 using SerialLoops.Controls;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
+using SerialLoops.Lib.Factories;
 using SerialLoops.Lib.Util;
 using SerialLoops.Utility;
 using SerialLoops.ViewModels.Dialogs;
@@ -148,7 +149,8 @@ namespace SerialLoops.ViewModels
         {
             Window = window;
             Log = new(Window);
-            CurrentConfig = Config.LoadConfig((s) => s, Log);
+            ConfigFactory configFactory = new();
+            CurrentConfig = configFactory.LoadConfig((s) => s, Log);
             Strings.Culture = new(CurrentConfig.CurrentCultureName);
             Log.Initialize(CurrentConfig);
 
@@ -464,7 +466,7 @@ namespace SerialLoops.ViewModels
         {
             PreferencesDialogViewModel preferencesDialogViewModel = new();
             PreferencesDialog preferencesDialog = new();
-            preferencesDialogViewModel.Initialize(preferencesDialog, CurrentConfig, Log);
+            preferencesDialogViewModel.Initialize(preferencesDialog, Log);
             preferencesDialog.DataContext = preferencesDialogViewModel;
             await preferencesDialog.ShowDialog(Window);
             if (preferencesDialogViewModel.Saved)

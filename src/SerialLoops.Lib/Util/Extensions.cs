@@ -236,7 +236,7 @@ namespace SerialLoops.Lib.Util
             return string.Empty;
         }
 
-        public static string ToTitleCase(this string str)
+        public static string ToSentenceCase(this string str)
         { 
             if (string.IsNullOrEmpty(str))
             {
