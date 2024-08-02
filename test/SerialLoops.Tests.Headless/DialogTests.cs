@@ -144,10 +144,10 @@ namespace SerialLoops.Tests.Headless
             Assert.Multiple(() =>
             {
                 Assert.That(restartRequiredLabel.IsVisible, Is.False);
-                Assert.That(((ComboBoxItem)languageComboBox.SelectedItem).Tag, Is.EqualTo(config.CurrentCultureName));
-                Assert.That(((ComboBoxItem)languageComboBox.SelectedItem).Content, Is.EqualTo(new CultureInfo(config.CurrentCultureName).NativeName.ToSentenceCase()));
-                Assert.That(((string)((ComboBoxItem)displayFontComboBox.SelectedItem).Tag).Equals(config.DisplayFont)
-                    || (string.IsNullOrEmpty((string)((ComboBoxItem)displayFontComboBox.SelectedItem).Tag) == string.IsNullOrEmpty(config.DisplayFont)));
+                Assert.That(((ComboBoxItem)languageComboBox.SelectedItem)?.Tag, Is.EqualTo(config.CurrentCultureName));
+                Assert.That(((ComboBoxItem)languageComboBox.SelectedItem)?.Content, Is.EqualTo(new CultureInfo(config.CurrentCultureName).NativeName.ToSentenceCase()));
+                Assert.That(((string)((ComboBoxItem)displayFontComboBox.SelectedItem)?.Tag).Equals(config.DisplayFont)
+                    || (string.IsNullOrEmpty((string)((ComboBoxItem)displayFontComboBox.SelectedItem)?.Tag) == string.IsNullOrEmpty(config.DisplayFont)));
                 Assert.That(checkForUpdatesCheckBox.IsChecked, Is.EqualTo(config.CheckForUpdates));
                 Assert.That(usePreleaseCheckBox.IsChecked, Is.EqualTo(config.PreReleaseChannel));
                 Assert.That(autoReOpenProjectCheckBox.IsChecked, Is.EqualTo(config.AutoReopenLastProject));
