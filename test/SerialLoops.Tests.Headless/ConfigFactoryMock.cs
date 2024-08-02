@@ -24,6 +24,7 @@ namespace SerialLoops.Tests.Shared
             {
                 Config newConfig = ConfigFactory.GetDefault(log);
                 newConfig.ConfigPath = _configPath;
+                newConfig.CurrentCultureName = "en-US"; // there's a chance that the locale will be something we don't recognize (like Invariant culture) so we force this for tests
                 newConfig.Save(log);
                 return newConfig;
             }
