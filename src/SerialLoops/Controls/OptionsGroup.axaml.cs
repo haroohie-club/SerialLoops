@@ -13,7 +13,6 @@ using ReactiveUI;
 using SerialLoops.Assets;
 using SerialLoops.Lib.Items;
 using SerialLoops.Utility;
-using SerialLoops.Views.Dialogs;
 
 namespace SerialLoops.Controls
 {
