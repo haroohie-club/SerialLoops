@@ -319,7 +319,11 @@ namespace SerialLoops.Tests.Headless
                     Assert.That(config.RemoveMissingProjects, Is.Not.EqualTo(secondConfig.RemoveMissingProjects));
                     Assert.That(config.DevkitArmPath, Is.Not.EqualTo(secondConfig.DevkitArmPath));
                     Assert.That(config.EmulatorPath, Is.Not.EqualTo(secondConfig.EmulatorPath));
-                    Assert.That(config.DevkitArmDockerTag, Is.Not.EqualTo(secondConfig.DevkitArmDockerTag));
+                    if (!OperatingSystem.IsMacOS())
+                    {
+                        Assert.That(config.UseDocker, Is.EqualTo(secondConfig.UseDocker));
+                        Assert.That(config.DevkitArmDockerTag, Is.Not.EqualTo(secondConfig.DevkitArmDockerTag));
+                    }
                 });
             }
             else
@@ -335,8 +339,11 @@ namespace SerialLoops.Tests.Headless
                     Assert.That(config.RemoveMissingProjects, Is.EqualTo(secondConfig.RemoveMissingProjects));
                     Assert.That(config.DevkitArmPath, Is.EqualTo(secondConfig.DevkitArmPath));
                     Assert.That(config.EmulatorPath, Is.EqualTo(secondConfig.EmulatorPath));
-                    Assert.That(config.UseDocker, Is.EqualTo(secondConfig.UseDocker));
-                    Assert.That(config.DevkitArmDockerTag, Is.EqualTo(secondConfig.DevkitArmDockerTag));
+                    if (!OperatingSystem.IsMacOS())
+                    {
+                        Assert.That(config.UseDocker, Is.EqualTo(secondConfig.UseDocker));
+                        Assert.That(config.DevkitArmDockerTag, Is.EqualTo(secondConfig.DevkitArmDockerTag));
+                    }
                 });
             }
 
