@@ -321,7 +321,7 @@ namespace SerialLoops.Tests.Headless
                     Assert.That(config.EmulatorPath, Is.Not.EqualTo(secondConfig.EmulatorPath));
                     if (!OperatingSystem.IsMacOS())
                     {
-                        Assert.That(config.UseDocker, Is.EqualTo(secondConfig.UseDocker));
+                        Assert.That(config.UseDocker, Is.Not.EqualTo(secondConfig.UseDocker));
                         Assert.That(config.DevkitArmDockerTag, Is.Not.EqualTo(secondConfig.DevkitArmDockerTag));
                     }
                 });
