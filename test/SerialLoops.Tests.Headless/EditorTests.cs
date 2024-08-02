@@ -9,8 +9,10 @@ using Avalonia.Headless;
 using Avalonia.Headless.NUnit;
 using Avalonia.Input;
 using Avalonia.LogicalTree;
+using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
+using SerialLoops.Lib.Util;
 using SerialLoops.Models;
 using SerialLoops.Tests.Shared;
 using SerialLoops.ViewModels;
@@ -138,7 +140,7 @@ namespace SerialLoops.Tests.Headless
             {
                 try
                 {
-                    IO.OpenRom(newProject, _uiVals.RomLoc, mainWindowViewModel.Log, tracker);
+                    Lib.IO.OpenRom(newProject, _uiVals.RomLoc, mainWindowViewModel.Log, tracker);
                     break;
                 }
                 catch (IOException)
@@ -224,6 +226,7 @@ namespace SerialLoops.Tests.Headless
                 Assert.That(firstCg.UnsavedChanges, Is.False);
                 Assert.That(((BackgroundItem)firstCg).CgName, Contains.Substring(myExWifeStillMissesMe));
                 Assert.That(extraFile, Does.Exist);
+                Assert.That(File.ReadAllText(extraFile), Contains.Substring(myExWifeStillMissesMe.GetOriginalString(mainWindowViewModel.OpenProject).EscapeShiftJIS()));
             });
 
             Directory.Delete(createdProjectPath, recursive: true);
