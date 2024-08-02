@@ -93,7 +93,7 @@
     <value>“背景音乐选项”滚动条</value>
   </data>
   <data name="&amp;Tools" xml:space="preserve">
-    <value>工具 (&amp;T)</value>
+    <value>工具 (_T)</value>
   </data>
   <data name="Add Command" xml:space="preserve">
     <value>增加命令</value>
@@ -138,7 +138,7 @@
     <value>构建：</value>
   </data>
   <data name="Add Starting Chibis" xml:space="preserve">
-    <value>添加开始的 Q 版人物</value>
+    <value>添加开始的 Q 版角色</value>
   </data>
   <data name="Batch Dialogue Display option" xml:space="preserve">
     <value>批量对话显示选项</value>
@@ -181,14 +181,14 @@
     <value>取消</value>
   </data>
   <data name="Chibi" xml:space="preserve">
-    <value>Q 版人物</value>
+    <value>Q 版角色</value>
   </data>
   <data name="Add" xml:space="preserve">
     <value>添加</value>
     <comment>As in add/subtract</comment>
   </data>
   <data name="&amp;File" xml:space="preserve">
-    <value>文件 (&amp;F)</value>
+    <value>文件 (_F)</value>
   </data>
   <data name="Both" xml:space="preserve">
     <value>两个</value>
@@ -201,13 +201,13 @@
     <value>“访问保存数据提示”消息框</value>
   </data>
   <data name="(Missing)" xml:space="preserve">
-    <value> （缺失）</value>
+    <value>（缺失）</value>
   </data>
   <data name="Batch Dialogue Display On" xml:space="preserve">
     <value>批量对话显示开</value>
   </data>
   <data name="&amp;Build" xml:space="preserve">
-    <value>构建 (&amp;B)</value>
+    <value>构建 (_B)</value>
   </data>
   <data name="Build succeeded!" xml:space="preserve">
     <value>构建成功！</value>
@@ -279,7 +279,7 @@
     <value>背景（CG）</value>
   </data>
   <data name="Chibis" xml:space="preserve">
-    <value>Q 版人物</value>
+    <value>Q 版角色</value>
   </data>
   <data name="Chokuretsu ROM" xml:space="preserve">
     <value>《串联》ROM</value>
@@ -288,7 +288,7 @@
     <value>构建</value>
   </data>
   <data name="&amp;Edit" xml:space="preserve">
-    <value>编辑 (&amp;E)</value>
+    <value>编辑 (_E)</value>
   </data>
   <data name="Both Screens" xml:space="preserve">
     <value>两个屏幕</value>
@@ -313,7 +313,7 @@
     <value>背景类型</value>
   </data>
   <data name="&amp;Check for Updates..." xml:space="preserve">
-    <value>检查更新 (&amp;C)…</value>
+    <value>检查更新 (_C)…</value>
   </data>
   <data name="Background" xml:space="preserve">
     <value>背景</value>
@@ -349,7 +349,7 @@
     <value>动画</value>
   </data>
   <data name="&amp;Preferences..." xml:space="preserve">
-    <value>设置 (&amp;P)…</value>
+    <value>设置 (_P)…</value>
   </data>
   <data name="Add Frames" xml:space="preserve">
     <value>添加帧</value>
@@ -359,5 +359,2076 @@
   </data>
   <data name="Chokuretsu Save File" xml:space="preserve">
     <value>《串联》存档文件</value>
+  </data>
+  <data name="Extract" xml:space="preserve">
+    <value>提取</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>确认</value>
+  </data>
+  <data name="Companion selection description" xml:space="preserve">
+    <value>选择同伴描述</value>
+  </data>
+  <data name="Fade In Percentage" xml:space="preserve">
+    <value>淡入百分比</value>
+  </data>
+  <data name="Episode 5" xml:space="preserve">
+    <value>第 5 章</value>
+  </data>
+  <data name="devkitARM is not detected at the default or specified install location. Please set devkitARM path." xml:space="preserve">
+    <value>在默认或指定的安装位置未检测到 devkitARM 。请设置 devkitARM 路径。</value>
+  </data>
+  <data name="Language Template" xml:space="preserve">
+    <value>语言模板</value>
+  </data>
+  <data name="Display Flag 3" xml:space="preserve">
+    <value>展示旗标 3</value>
+  </data>
+  <data name="Failed to clean iterative directory" xml:space="preserve">
+    <value>清理迭代目录失败</value>
+  </data>
+  <data name="Episode 3 ticker tape" xml:space="preserve">
+    <value>第 3 章滚动条</value>
+  </data>
+  <data name="Failed replacing file {0} in evt.bin with file '{1}'" xml:space="preserve">
+    <value>将 evt.bin 中的文件 {0} 替换为文件“｛1｝”失败</value>
+  </data>
+  <data name="Recents" xml:space="preserve">
+    <value>最近使用</value>
+  </data>
+  <data name="Open Project" xml:space="preserve">
+    <value>打开项目</value>
+  </data>
+  <data name="Exporting GIF..." xml:space="preserve">
+    <value>正在导出 GIF…</value>
+  </data>
+  <data name="Command" xml:space="preserve">
+    <value>指令</value>
+  </data>
+  <data name="Episode 2 title" xml:space="preserve">
+    <value>第 2 章标题</value>
+  </data>
+  <data name="Fade Out Percentage" xml:space="preserve">
+    <value>淡出百分比</value>
+  </data>
+  <data name="Failed replacing graphics file {0} with file '{1}'" xml:space="preserve">
+    <value>将图形文件 {0} 替换为文件“{1}”失败</value>
+  </data>
+  <data name="Failed replacing source file {0} in evt.bin with file '{1}'" xml:space="preserve">
+    <value>将 evt.bin 中的源文件 {0} 替换为文件“｛1｝”失败</value>
+  </data>
+  <data name="Failed encoding audio file to ADX." xml:space="preserve">
+    <value>将音频文件编码到 ADX 失败。</value>
+  </data>
+  <data name="Failed to apply the following hacks to the ROM:\n{0}\n\nPlease check the log file for more information.\n\nIn order to preserve state, no hacks were applied." xml:space="preserve">
+    <value>未能对 ROM 应用以下修改：\n{0}\n\n有关详细信息，请检查日志文件。\n\n为了保持当前状态，没有应用任何修改。</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>错误</value>
+  </data>
+  <data name="Episode:" xml:space="preserve">
+    <value>章节：</value>
+  </data>
+  <data name="Erase data options ticker tape" xml:space="preserve">
+    <value>擦除数据选项滚动条</value>
+  </data>
+  <data name="Close Project" xml:space="preserve">
+    <value>关闭项目</value>
+  </data>
+  <data name="Failed replacing animation file {0} in grp.bin with file '{1}'" xml:space="preserve">
+    <value>将 grp.bin 中的动画文件 {0} 替换为文件“｛1｝”失败</value>
+  </data>
+  <data name="Create New Project" xml:space="preserve">
+    <value>创建新项目</value>
+  </data>
+  <data name="Converting from Vorbis..." xml:space="preserve">
+    <value>从 Vorbis 转换…</value>
+  </data>
+  <data name="Failed restoring BGM file." xml:space="preserve">
+    <value>还原 BGM 文件失败。</value>
+  </data>
+  <data name="Episode 1 ticker tape" xml:space="preserve">
+    <value>第 1 章滚动条</value>
+  </data>
+  <data name="Cleared all chess puzzles message box" xml:space="preserve">
+    <value>清除所有象棋谜题消息框</value>
+  </data>
+  <data name="Collected all Mikuru topics message box" xml:space="preserve">
+    <value>已收集所有实玖瑠话题消息框</value>
+  </data>
+  <data name="Recent Projects" xml:space="preserve">
+    <value>最近的项目</value>
+  </data>
+  <data name="Companion Selection" xml:space="preserve">
+    <value>选择同伴</value>
+  </data>
+  <data name="Clear all commands from the game scenario?\nThis action is irreversible." xml:space="preserve">
+    <value>清除游戏场景中的所有命令？\n此行为不可逆。</value>
+  </data>
+  <data name="Emulator Path" xml:space="preserve">
+    <value>模拟器路径</value>
+  </data>
+  <data name="Episode 3" xml:space="preserve">
+    <value>第 3 章</value>
+  </data>
+  <data name="New Project..." xml:space="preserve">
+    <value>新项目…</value>
+  </data>
+  <data name="Episode 5 title" xml:space="preserve">
+    <value>第 5 章标题</value>
+  </data>
+  <data name="Extras unlocked message box" xml:space="preserve">
+    <value>额外项目解锁消息框</value>
+  </data>
+  <data name="Dialogue_Text" xml:space="preserve">
+    <value>对话文本</value>
+  </data>
+  <data name="Export SFX" xml:space="preserve">
+    <value>导出 SFX</value>
+  </data>
+  <data name="Add to Event Table" xml:space="preserve">
+    <value>添加到事件表</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>复制</value>
+  </data>
+  <data name="Close All But This" xml:space="preserve">
+    <value>关闭除此之外的所有</value>
+  </data>
+  <data name="Creating Directories" xml:space="preserve">
+    <value>创建文件夹</value>
+  </data>
+  <data name="Dialogue Skipping setting" xml:space="preserve">
+    <value>跳过对话设置</value>
+  </data>
+  <data name="Collected all main topics message box" xml:space="preserve">
+    <value>已收集所有主要话题消息框</value>
+  </data>
+  <data name="Encoding" xml:space="preserve">
+    <value>编码</value>
+  </data>
+  <data name="English" xml:space="preserve">
+    <value>英语</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>创建</value>
+  </data>
+  <data name="New Project" xml:space="preserve">
+    <value>新项目</value>
+  </data>
+  <data name="Episode 5 ticker tape" xml:space="preserve">
+    <value>第 5 章滚动条</value>
+  </data>
+  <data name="Clear Script" xml:space="preserve">
+    <value>清除脚本</value>
+  </data>
+  <data name="Corrupted File Detected!" xml:space="preserve">
+    <value>检测到损坏的文件！</value>
+  </data>
+  <data name="Edit Tutorial Mappings" xml:space="preserve">
+    <value>编辑教程映射</value>
+  </data>
+  <data name="Delay (Frames)" xml:space="preserve">
+    <value>延迟（帧数）</value>
+  </data>
+  <data name="Export GIF" xml:space="preserve">
+    <value>导出 GIF</value>
+  </data>
+  <data name="Episode_Number" xml:space="preserve">
+    <value>章节编号</value>
+  </data>
+  <data name="Edit Save File" xml:space="preserve">
+    <value>编辑存档文件</value>
+  </data>
+  <data name="Both an exported project and a base ROM must be selected to import a project." xml:space="preserve">
+    <value>必须同时选择导出项目和基础 ROM 才能导入项目。</value>
+  </data>
+  <data name="Episode Group" xml:space="preserve">
+    <value>章节组</value>
+  </data>
+  <data name="Error getting script command tree for script {0} ({1})" xml:space="preserve">
+    <value>获取脚本 {0}（{1}）的脚本命令树时出错</value>
+    <comment>{0} is the script display name, {1} is the script's underlying name</comment>
+  </data>
+  <data name="Copying Archives to Iterative Originals" xml:space="preserve">
+    <value>将归档文件复制到迭代原件</value>
+  </data>
+  <data name="Export Item Names" xml:space="preserve">
+    <value>导出道具名</value>
+  </data>
+  <data name="Episode_Unique" xml:space="preserve">
+    <value>章节唯一</value>
+  </data>
+  <data name="Creating Patch" xml:space="preserve">
+    <value>创建补丁</value>
+  </data>
+  <data name="Export Project..." xml:space="preserve">
+    <value>导出项目...</value>
+  </data>
+  <data name="Edit Save File - {0}" xml:space="preserve">
+    <value>编辑存档文件 - {0}</value>
+  </data>
+  <data name="Exporting BGM" xml:space="preserve">
+    <value>导出 BGM</value>
+  </data>
+  <data name="Dialogue Skipping Fast Forward" xml:space="preserve">
+    <value>快进对话</value>
+  </data>
+  <data name="Add Read Flag" xml:space="preserve">
+    <value>添加读取旗标</value>
+    <comment>As in "add a read flag to the script"</comment>
+  </data>
+  <data name="Failed downsampling audio file." xml:space="preserve">
+    <value>音频文件下采样失败。</value>
+  </data>
+  <data name="Config Data" xml:space="preserve">
+    <value>配置数据</value>
+  </data>
+  <data name="Episode Header" xml:space="preserve">
+    <value>章节头</value>
+  </data>
+  <data name="Failed to copy newly built archives to the iterative originals directory" xml:space="preserve">
+    <value>将新建的归档文件复制到迭代原始目录失败</value>
+  </data>
+  <data name="Command Type:" xml:space="preserve">
+    <value>指令类型：</value>
+  </data>
+  <data name="Edit Tutorial Mappings..." xml:space="preserve">
+    <value>编辑教程映射…</value>
+  </data>
+  <data name="Drawing textures..." xml:space="preserve">
+    <value>正在绘制纹理…</value>
+  </data>
+  <data name="Fade Time (Frames)" xml:space="preserve">
+    <value>淡入淡出时间（帧数）</value>
+  </data>
+  <data name="Duration (Frames)" xml:space="preserve">
+    <value>持续时间（帧数）</value>
+  </data>
+  <data name="Error pruning labels!" xml:space="preserve">
+    <value>修剪标签时出错！</value>
+  </data>
+  <data name="Common Save Data..." xml:space="preserve">
+    <value>通用存档…</value>
+  </data>
+  <data name="Russian" xml:space="preserve">
+    <value>俄语</value>
+  </data>
+  <data name="End Script Section" xml:space="preserve">
+    <value>结束脚本部分</value>
+  </data>
+  <data name="Close All To Right" xml:space="preserve">
+    <value>关闭右侧的所有</value>
+  </data>
+  <data name="Japanese" xml:space="preserve">
+    <value>日语</value>
+  </data>
+  <data name="Failed attempting to cache audio file" xml:space="preserve">
+    <value>尝试缓存音频文件失败</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>开始</value>
+  </data>
+  <data name="Error: duplicate hack detected! A file with the same name as a file in this hack has already been imported." xml:space="preserve">
+    <value>错误：检测到重复的修改！已导入与此修改中的文件同名的文件。</value>
+  </data>
+  <data name="Failed copying file '{0}' to base and iterative directories at path '{1}'" xml:space="preserve">
+    <value>将文件“{0}”复制到路径“{1}”处的基目录和迭代目录失败</value>
+  </data>
+  <data name="Open Exported Project" xml:space="preserve">
+    <value>打开导出的项目</value>
+    <comment>As in a slzip exported project</comment>
+  </data>
+  <data name="Deleting all data message box" xml:space="preserve">
+    <value>删除所有数据消息框</value>
+  </data>
+  <data name="Edit UI Text..." xml:space="preserve">
+    <value>编辑 UI 文本…</value>
+  </data>
+  <data name="End" xml:space="preserve">
+    <value>结束</value>
+  </data>
+  <data name="Crop &amp; Scale" xml:space="preserve">
+    <value>剪裁&amp;缩放</value>
+  </data>
+  <data name="Enter/Exit" xml:space="preserve">
+    <value>进入/退出</value>
+  </data>
+  <data name="Common Save Data" xml:space="preserve">
+    <value>通用存档</value>
+  </data>
+  <data name="Creating Project" xml:space="preserve">
+    <value>创建项目</value>
+  </data>
+  <data name="Exception occurred while parsing config.json!" xml:space="preserve">
+    <value>解析 config.json 时发生异常！</value>
+  </data>
+  <data name="Collected all Nagato topics message box" xml:space="preserve">
+    <value>已收集所有长门话题消息框</value>
+  </data>
+  <data name="Converting frames..." xml:space="preserve">
+    <value>转换帧…</value>
+  </data>
+  <data name="Episode 1 title" xml:space="preserve">
+    <value>第 1 章标题</value>
+  </data>
+  <data name="Clear Block" xml:space="preserve">
+    <value>胜利部分</value>
+  </data>
+  <data name="Command Index:" xml:space="preserve">
+    <value>指令序号：</value>
+  </data>
+  <data name="Dialogue" xml:space="preserve">
+    <value>对话</value>
+  </data>
+  <data name="Download release from GitHub" xml:space="preserve">
+    <value>从 GitHub 下载版本</value>
+  </data>
+  <data name="Display Flag 2" xml:space="preserve">
+    <value>展示旗标 2</value>
+  </data>
+  <data name="Preferences" xml:space="preserve">
+    <value>设置</value>
+  </data>
+  <data name="Export Frames" xml:space="preserve">
+    <value>导出帧</value>
+  </data>
+  <data name="Dialogue:" xml:space="preserve">
+    <value>对话：</value>
+  </data>
+  <data name="Failed to start emulator" xml:space="preserve">
+    <value>启动模拟器失败</value>
+  </data>
+  <data name="Fade Out Time (Frames)" xml:space="preserve">
+    <value>淡出时间（帧数）</value>
+  </data>
+  <data name="Episode 1" xml:space="preserve">
+    <value>第 1 章</value>
+  </data>
+  <data name="Drawing top screen tiles..." xml:space="preserve">
+    <value>正在绘制上屏幕瓦片…</value>
+  </data>
+  <data name="Episode 4 ticker tape" xml:space="preserve">
+    <value>第 4 章滚动条</value>
+  </data>
+  <data name="Crossfade Time (Frames)" xml:space="preserve">
+    <value>淡入淡出时间（帧数）</value>
+  </data>
+  <data name="Run" xml:space="preserve">
+    <value>运行</value>
+  </data>
+  <data name="Display?" xml:space="preserve">
+    <value>展示？</value>
+  </data>
+  <data name="Episode 2" xml:space="preserve">
+    <value>第 2 章</value>
+  </data>
+  <data name="Downsampling..." xml:space="preserve">
+    <value>正在下采样…</value>
+  </data>
+  <data name="Export" xml:space="preserve">
+    <value>导出</value>
+  </data>
+  <data name="Failed replacing source file {0} in dat.bin with file '{1}'" xml:space="preserve">
+    <value>将 dat.bin 中的源文件 {0} 替换为文件“｛1｝”失败</value>
+  </data>
+  <data name="Collected all Koizumi topics message box" xml:space="preserve">
+    <value>已收集所有古泉话题消息框</value>
+  </data>
+  <data name="Emote" xml:space="preserve">
+    <value>表情</value>
+  </data>
+  <data name="Don't Clear Text" xml:space="preserve">
+    <value>不清除文本</value>
+  </data>
+  <data name="Download from GitHub" xml:space="preserve">
+    <value>从 GitHub 下载</value>
+  </data>
+  <data name="Edit Subtitle" xml:space="preserve">
+    <value>编辑字幕</value>
+  </data>
+  <data name="Dialogue Skipping ticker tape" xml:space="preserve">
+    <value>跳过对话滚动条</value>
+  </data>
+  <data name="Export Patch" xml:space="preserve">
+    <value>导出补丁</value>
+  </data>
+  <data name="Enter subtitle text..." xml:space="preserve">
+    <value>请输入字幕文本…</value>
+  </data>
+  <data name="Editor Tabs not provided to project creation dialog" xml:space="preserve">
+    <value>项目创建对话框未提供编辑器选项卡</value>
+  </data>
+  <data name="Custom Color" xml:space="preserve">
+    <value>自定义颜色</value>
+  </data>
+  <data name="Continue on Failure" xml:space="preserve">
+    <value>失败后继续</value>
+  </data>
+  <data name="Close All" xml:space="preserve">
+    <value>关闭所有</value>
+  </data>
+  <data name="Export Project" xml:space="preserve">
+    <value>导出项目</value>
+  </data>
+  <data name="devkitARM Docker Tag" xml:space="preserve">
+    <value>devkitARM Docker 标签</value>
+  </data>
+  <data name="Clear Scenario" xml:space="preserve">
+    <value>清除场景</value>
+  </data>
+  <data name="Display Flag 1" xml:space="preserve">
+    <value>展示旗标 1</value>
+  </data>
+  <data name="Failed to add parameters for hack file {0} in hack {1}" xml:space="preserve">
+    <value>在修改 {1} 中为修改文件 {0} 添加参数失败</value>
+  </data>
+  <data name="Display Flag 4" xml:space="preserve">
+    <value>展示旗标 4</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="Dialogue Skipping" xml:space="preserve">
+    <value>跳过对话</value>
+  </data>
+  <data name="Fade In Time (Frames)" xml:space="preserve">
+    <value>淡入时间（帧数）</value>
+  </data>
+  <data name="Export Sprites" xml:space="preserve">
+    <value>导出精灵图</value>
+  </data>
+  <data name="Defaults" xml:space="preserve">
+    <value>默认</value>
+  </data>
+  <data name="Failed converting audio file to WAV." xml:space="preserve">
+    <value>将音频文件转换为 WAV 失败。</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="Episode 4" xml:space="preserve">
+    <value>第 4 章</value>
+  </data>
+  <data name="Color" xml:space="preserve">
+    <value>颜色</value>
+  </data>
+  <data name="Exporting Project" xml:space="preserve">
+    <value>导出项目</value>
+  </data>
+  <data name="Exception occurred while parsing projects_cache.json!" xml:space="preserve">
+    <value>解析 projects_cache.json 时发生异常！</value>
+  </data>
+  <data name="Italian" xml:space="preserve">
+    <value>意大利语</value>
+  </data>
+  <data name="Failed to check for updates! (Endpoint: {0})" xml:space="preserve">
+    <value>检查更新失败！（端点：{0}）</value>
+  </data>
+  <data name="Episode 2 ticker tape" xml:space="preserve">
+    <value>第 2 章滚动条</value>
+  </data>
+  <data name="Error: duplicate hack detected! A hack with the same name has already been imported." xml:space="preserve">
+    <value>错误：检测到重复的修改！已导入同名修改。</value>
+  </data>
+  <data name="Failed to calculate graph edges!" xml:space="preserve">
+    <value>计算图形边界失败！</value>
+  </data>
+  <data name="Disable Lip Flap" xml:space="preserve">
+    <value>禁用口型同步</value>
+  </data>
+  <data name="Copying Files" xml:space="preserve">
+    <value>正在复制文件</value>
+  </data>
+  <data name="devkitARM Path" xml:space="preserve">
+    <value>devkitARM 路径</value>
+  </data>
+  <data name="Cut" xml:space="preserve">
+    <value>剪切</value>
+  </data>
+  <data name="Edit UI Text" xml:space="preserve">
+    <value>编辑 UI 文本</value>
+  </data>
+  <data name="Display from Bottom" xml:space="preserve">
+    <value>从下向上展示</value>
+  </data>
+  <data name="Dialogue Skipping Skip Already Read" xml:space="preserve">
+    <value>跳过已读对话</value>
+  </data>
+  <data name="Conditional" xml:space="preserve">
+    <value>条件式</value>
+  </data>
+  <data name="Draw Starting Point" xml:space="preserve">
+    <value>绘制起点</value>
+  </data>
+  <data name="Cross Space {0}&quot;" xml:space="preserve">
+    <value>交叉空间 {0}"</value>
+    <comment>As on a chessboard</comment>
+  </data>
+  <data name="DevkitARM must be supplied in order to build!" xml:space="preserve">
+    <value>为了构建，必须提供 devkitARM！</value>
+  </data>
+  <data name="Erase data options title" xml:space="preserve">
+    <value>擦除数据选项标题</value>
+  </data>
+  <data name="Episode 4 title" xml:space="preserve">
+    <value>第 4 章标题</value>
+  </data>
+  <data name="Episode 3 title" xml:space="preserve">
+    <value>第 3 章标题</value>
+  </data>
+  <data name="Drawing bottom screen texture..." xml:space="preserve">
+    <value>正在绘制下屏幕纹理…</value>
+  </data>
+  <data name="Compiled file {0} does not exist!" xml:space="preserve">
+    <value>已编译的文件 {0} 不存在！</value>
+  </data>
+  <data name="Ctrl+Scroll - Scale Image" xml:space="preserve">
+    <value>Ctrl+滚轮 - 缩放图片</value>
+  </data>
+  <data name="Exported Project" xml:space="preserve">
+    <value>已导出的项目</value>
+    <comment>Past tense verb as in "project has been exported"</comment>
+  </data>
+  <data name="Collected all Haruhi topics message box" xml:space="preserve">
+    <value>已收集所有春日话题消息框</value>
+  </data>
+  <data name="Expected ROM SHA-1 Hash: {0}" xml:space="preserve">
+    <value>预期的 ROM SHA-1 哈希值：{0}</value>
+    <comment>{0} is the SHA-1 hash of the ROM that is expected when importing a project</comment>
+  </data>
+  <data name="Converting from MP3..." xml:space="preserve">
+    <value>从 MP3 转换…</value>
+  </data>
+  <data name="EPISODE: {0}" xml:space="preserve">
+    <value>EPISODE: {0}</value>
+    <comment>Should match the game's translation for this (e.g. for Japanese this should still be EPISODE: {0})</comment>
+  </data>
+  <data name="Edit Save File..." xml:space="preserve">
+    <value>编辑存档文件…</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>语言</value>
+  </data>
+  <data name="Error reading save file." xml:space="preserve">
+    <value>读取存档文件时出错。</value>
+  </data>
+  <data name="Data reset message box" xml:space="preserve">
+    <value>重置数据消息框</value>
+  </data>
+  <data name="Draw Pathing Map" xml:space="preserve">
+    <value>绘制路径图</value>
+  </data>
+  <data name="Koizumi Time Percentage" xml:space="preserve">
+    <value>古泉时间百分比</value>
+  </data>
+  <data name="Nagato companion selected description" xml:space="preserve">
+    <value>长门同伴选择描述</value>
+  </data>
+  <data name="Replace" xml:space="preserve">
+    <value>替换</value>
+  </data>
+  <data name="Unable to create command" xml:space="preserve">
+    <value>创建命令失败</value>
+  </data>
+  <data name="References to {0}" xml:space="preserve">
+    <value>对 {0} 的引用</value>
+  </data>
+  <data name="Topic Stock Mode" xml:space="preserve">
+    <value>话题库存模式</value>
+  </data>
+  <data name="Highlight Space {0}" xml:space="preserve">
+    <value>突出显示格 {0}</value>
+    <comment>As on a chessboard</comment>
+  </data>
+  <data name="Start Read Flag" xml:space="preserve">
+    <value>开始读取旗标</value>
+    <comment>As in, the first read flag of the script file</comment>
+  </data>
+  <data name="Rename Item" xml:space="preserve">
+    <value>重命名项目</value>
+  </data>
+  <data name="Script Position" xml:space="preserve">
+    <value>脚本位置</value>
+  </data>
+  <data name="Failed to load voice file: file invalid." xml:space="preserve">
+    <value>加载语音文件失败：文件无效。</value>
+  </data>
+  <data name="Mystery girl voice added to config message box" xml:space="preserve">
+    <value>神秘女孩的声音添加到配置中消息框</value>
+  </data>
+  <data name="Failed to insert ARM9 assembly hacks" xml:space="preserve">
+    <value>插入 ARM9 程序集修改失败</value>
+  </data>
+  <data name="Update on Close" xml:space="preserve">
+    <value>关闭时更新</value>
+  </data>
+  <data name="Game Puzzle Phase (Options)" xml:space="preserve">
+    <value>游戏解谜阶段（选项）</value>
+  </data>
+  <data name="Text Speed" xml:space="preserve">
+    <value>文本速度</value>
+  </data>
+  <data name="Option 3" xml:space="preserve">
+    <value>选项 3</value>
+  </data>
+  <data name="Failed to generate script template!" xml:space="preserve">
+    <value>生成脚本模板失败！</value>
+  </data>
+  <data name="Items" xml:space="preserve">
+    <value>项目</value>
+  </data>
+  <data name="Failed to delete file '{0}'" xml:space="preserve">
+    <value>删除文件“{0}”失败</value>
+  </data>
+  <data name="No hacks applied!" xml:space="preserve">
+    <value>未应用修改！</value>
+  </data>
+  <data name="Puzzle Interrupt Scenes setting" xml:space="preserve">
+    <value>解谜中断场景设置</value>
+  </data>
+  <data name="Game Title" xml:space="preserve">
+    <value>游戏标题</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>设置</value>
+  </data>
+  <data name="NDS ROM" xml:space="preserve">
+    <value>NDS ROM</value>
+  </data>
+  <data name="ROM Hash Mismatch" xml:space="preserve">
+    <value>ROM 哈希值不匹配</value>
+    <comment>Message box title when there is a mismatch between the expected ROM hash and the selected ROM hash on project import</comment>
+  </data>
+  <data name="Name '{0}' is already in use!" xml:space="preserve">
+    <value>名称“{0}”已被使用！</value>
+    <comment>{0} is the name of an item (this appears when attempting to rename an item)</comment>
+  </data>
+  <data name="gcc not found at '{0}'" xml:space="preserve">
+    <value>在“{0}”处找不到gcc</value>
+  </data>
+  <data name="Include lip flap animation?" xml:space="preserve">
+    <value>包括口型动画吗？</value>
+  </data>
+  <data name="Select a Topic" xml:space="preserve">
+    <value>选择一个话题</value>
+  </data>
+  <data name="Hidden ID" xml:space="preserve">
+    <value>隐藏 ID</value>
+  </data>
+  <data name="Migrated to new ROM!" xml:space="preserve">
+    <value>已迁移到新 ROM！</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>地点</value>
+  </data>
+  <data name="Loading prompt message box" xml:space="preserve">
+    <value>加载提示消息框</value>
+  </data>
+  <data name="Failed to export project" xml:space="preserve">
+    <value>导出项目失败</value>
+    <comment>Failed to export the Serial Loops project file to an slzip, basically</comment>
+  </data>
+  <data name="Title screen Options ticker tape" xml:space="preserve">
+    <value>标题屏幕选项滚动条</value>
+  </data>
+  <data name="Investigation Phase Results" xml:space="preserve">
+    <value>调查阶段结果</value>
+  </data>
+  <data name="Patch Created!" xml:space="preserve">
+    <value>补丁已创建！</value>
+  </data>
+  <data name="Topic" xml:space="preserve">
+    <value>话题</value>
+  </data>
+  <data name="Scale Image" xml:space="preserve">
+    <value>缩放图像</value>
+  </data>
+  <data name="Select Icon" xml:space="preserve">
+    <value>选择图标</value>
+  </data>
+  <data name="Subtitle Text" xml:space="preserve">
+    <value>字幕文本</value>
+  </data>
+  <data name="SFX" xml:space="preserve">
+    <value>SFX</value>
+  </data>
+  <data name="Voice Font" xml:space="preserve">
+    <value>语音字体</value>
+  </data>
+  <data name="No save data ticker tape" xml:space="preserve">
+    <value>没有存档数据滚动条</value>
+  </data>
+  <data name="Title screen New Game ticker tape" xml:space="preserve">
+    <value>标题屏幕新游戏滚动条</value>
+  </data>
+  <data name="Set" xml:space="preserve">
+    <value>设置</value>
+    <comment>As in "set value to"</comment>
+  </data>
+  <data name="Image Files" xml:space="preserve">
+    <value>图像文件</value>
+  </data>
+  <data name="Has Outline?" xml:space="preserve">
+    <value>有大纲吗？</value>
+  </data>
+  <data name="Please select a ROM before creating the project." xml:space="preserve">
+    <value>请在创建项目之前选择 ROM。</value>
+  </data>
+  <data name="Haruhi Suzumiya event unlocked message box" xml:space="preserve">
+    <value>凉宫春日事件解锁消息框</value>
+  </data>
+  <data name="Scenario" xml:space="preserve">
+    <value>剧情</value>
+  </data>
+  <data name="Failed to load editor controls!" xml:space="preserve">
+    <value>加载编辑器控件失败！</value>
+  </data>
+  <data name="Mikuru Asahina event unlocked message box" xml:space="preserve">
+    <value>朝比奈实玖瑠事件解锁消息框</value>
+  </data>
+  <data name="Unvoiced dialogue volume options ticker tape" xml:space="preserve">
+    <value>无声对话音量选项滚动条</value>
+  </data>
+  <data name="Writing Includes" xml:space="preserve">
+    <value>正在写入包含文件</value>
+    <comment>"Includes" here is a noun, as in "an 'includes' file"</comment>
+  </data>
+  <data name="Voices" xml:space="preserve">
+    <value>语音</value>
+  </data>
+  <data name="Topic Set" xml:space="preserve">
+    <value>话题集</value>
+  </data>
+  <data name="Use Docker for ASM Hacks" xml:space="preserve">
+    <value>使用 Docker 进行 ASM 修改</value>
+  </data>
+  <data name="Failed to load cached data" xml:space="preserve">
+    <value>加载缓存数据失败</value>
+  </data>
+  <data name="Replace..." xml:space="preserve">
+    <value>替换…</value>
+  </data>
+  <data name="Show" xml:space="preserve">
+    <value>显示</value>
+    <comment>As in show/hide</comment>
+  </data>
+  <data name="{0} Obtained" xml:space="preserve">
+    <value>已获得 {0}</value>
+    <comment>{0} is the name of a topic that's been obtained</comment>
+  </data>
+  <data name="Toggle Tsuruya's voice ticker tape" xml:space="preserve">
+    <value>切换鹤屋语音滚动条</value>
+  </data>
+  <data name="Game banner can only contain up to three lines." xml:space="preserve">
+    <value>游戏横幅最多只能包含三行。</value>
+  </data>
+  <data name="Target Number" xml:space="preserve">
+    <value>目标编号</value>
+  </data>
+  <data name="This script is not included in the event table." xml:space="preserve">
+    <value>此脚本未包含在事件表中。</value>
+  </data>
+  <data name="Vorbis files" xml:space="preserve">
+    <value>Vorbis 文件</value>
+  </data>
+  <data name="Remove Starting Chibis" xml:space="preserve">
+    <value>删除起始 Q 版角色</value>
+  </data>
+  <data name="Hold Time (Frames)" xml:space="preserve">
+    <value>保持时间（帧数）</value>
+  </data>
+  <data name="White Space End" xml:space="preserve">
+    <value>空白结束</value>
+    <comment>As on a chessboard</comment>
+  </data>
+  <data name="Quicksave data damaged &amp; reset message box" xml:space="preserve">
+    <value>快速存档数据损坏&amp;重置消息框</value>
+  </data>
+  <data name="{0} results" xml:space="preserve">
+    <value>{0} 个结果</value>
+    <comment>{0} is the number of flags found</comment>
+  </data>
+  <data name="Future Description" xml:space="preserve">
+    <value>未来描述</value>
+  </data>
+  <data name="Skip Already Read" xml:space="preserve">
+    <value>跳过已读</value>
+  </data>
+  <data name="Failed to import project" xml:space="preserve">
+    <value>导入项目失败</value>
+    <comment>Failed to import slzip into Serial Loops project</comment>
+  </data>
+  <data name="Patching Overlay {0}" xml:space="preserve">
+    <value>给 Overlay {0} 打补丁</value>
+  </data>
+  <data name="{0} - Adjust Volume" xml:space="preserve">
+    <value>{0} - 调整音量</value>
+    <comment>{0} is the title of a BGM track</comment>
+  </data>
+  <data name="Loading Project" xml:space="preserve">
+    <value>加载项目</value>
+  </data>
+  <data name="Reset to default config ticker tape" xml:space="preserve">
+    <value>重置为默认配置滚动条</value>
+  </data>
+  <data name="Yuki Nagato event unlocked message box" xml:space="preserve">
+    <value>长门有希事件解锁消息框</value>
+  </data>
+  <data name="Save data 1 damaged &amp; reset message box" xml:space="preserve">
+    <value>存档数据 1 损坏&amp;重置消息框</value>
+  </data>
+  <data name="Select Command Type" xml:space="preserve">
+    <value>选择命令类型</value>
+  </data>
+  <data name="Packing ROM" xml:space="preserve">
+    <value>打包 ROM</value>
+  </data>
+  <data name="PNG Image" xml:space="preserve">
+    <value>PNG 图像</value>
+  </data>
+  <data name="{0} - Manage Loop" xml:space="preserve">
+    <value>{0} - 管理循环</value>
+    <comment>{0} is the title of a BGM track</comment>
+  </data>
+  <data name="Project exported successfully!" xml:space="preserve">
+    <value>项目导出成功！</value>
+  </data>
+  <data name="Text Color" xml:space="preserve">
+    <value>文本颜色</value>
+  </data>
+  <data name="Nagato Time Percentage" xml:space="preserve">
+    <value>长门时间百分比</value>
+  </data>
+  <data name="Failed to write NitroPacker NDS project file to disk" xml:space="preserve">
+    <value>将 NitroPacker NDS 项目文件写入磁盘失败</value>
+  </data>
+  <data name="Puzzle Interrupt Scenes On" xml:space="preserve">
+    <value>解谜中断场景开</value>
+  </data>
+  <data name="Game Investigation Phase (Options)" xml:space="preserve">
+    <value>游戏调查阶段（选项）</value>
+  </data>
+  <data name="Success!" xml:space="preserve">
+    <value>成功！</value>
+  </data>
+  <data name="Project Creation Warning" xml:space="preserve">
+    <value>项目创建警告</value>
+  </data>
+  <data name="Results" xml:space="preserve">
+    <value>结果</value>
+  </data>
+  <data name="Topic Stock Mode ticker tape" xml:space="preserve">
+    <value>话题库存模式滚动条</value>
+  </data>
+  <data name="Save voiced line as WAV" xml:space="preserve">
+    <value>将配音的行另存为 WAV</value>
+  </data>
+  <data name="French" xml:space="preserve">
+    <value>法语</value>
+  </data>
+  <data name="Vertical Intensity" xml:space="preserve">
+    <value>垂直强度</value>
+  </data>
+  <data name="Places" xml:space="preserve">
+    <value>地点</value>
+  </data>
+  <data name="This system texture uses a common palette, so palette replacement has been disabled" xml:space="preserve">
+    <value>此系统纹理使用通用调色板，因此已禁用调色板替换</value>
+  </data>
+  <data name="File {0}" xml:space="preserve">
+    <value>文件 {0}</value>
+  </data>
+  <data name="Project Options" xml:space="preserve">
+    <value>项目选项</value>
+  </data>
+  <data name="Failed to unpack ROM" xml:space="preserve">
+    <value>解压缩 ROM失败</value>
+  </data>
+  <data name="Past Description" xml:space="preserve">
+    <value>过去的描述</value>
+  </data>
+  <data name="Failed to write ARM9 to disk" xml:space="preserve">
+    <value>将 ARM9 写入磁盘失败</value>
+  </data>
+  <data name="Successfully applied the following hacks:\n{0}" xml:space="preserve">
+    <value>已成功应用以下修改：\n{0}</value>
+  </data>
+  <data name="Remove Chibi" xml:space="preserve">
+    <value>删除 Q 版角色</value>
+  </data>
+  <data name="Manage Loop" xml:space="preserve">
+    <value>管理循环</value>
+  </data>
+  <data name="Haruhi Present" xml:space="preserve">
+    <value>春日在场</value>
+  </data>
+  <data name="Resetting save data message box" xml:space="preserve">
+    <value>重置存档数据消息框</value>
+  </data>
+  <data name="SFXs" xml:space="preserve">
+    <value>SFX</value>
+  </data>
+  <data name="Time (Frames)" xml:space="preserve">
+    <value>时间（帧数）</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>类型</value>
+  </data>
+  <data name="Puzzle Interrupt Scenes Off" xml:space="preserve">
+    <value>解谜中断场景关</value>
+  </data>
+  <data name="Required Brigade Member" xml:space="preserve">
+    <value>所需团队成员</value>
+  </data>
+  <data name="ID" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="Route &quot;{0}&quot; Completed" xml:space="preserve">
+    <value>路线“{0}”已完成</value>
+    <comment>{0} is the name of a route following a group selection that has been completed</comment>
+  </data>
+  <data name="Reset options to default title" xml:space="preserve">
+    <value>将选项重置为默认标题</value>
+  </data>
+  <data name="Sprite Exit/Move Transition" xml:space="preserve">
+    <value>精灵图退出/移动过渡</value>
+  </data>
+  <data name="Failed to replace background {0} with file {1}" xml:space="preserve">
+    <value>用文件 {1} 替换背景 {0} 失败</value>
+  </data>
+  <data name="Routes" xml:space="preserve">
+    <value>路线</value>
+  </data>
+  <data name="Invalid audio file selected." xml:space="preserve">
+    <value>选择的音频文件无效。</value>
+  </data>
+  <data name="Singularity" xml:space="preserve">
+    <value>奇点</value>
+  </data>
+  <data name="Voice" xml:space="preserve">
+    <value>语音</value>
+  </data>
+  <data name="Select..." xml:space="preserve">
+    <value>选择…</value>
+  </data>
+  <data name="Preserve Aspect Ratio:" xml:space="preserve">
+    <value>保留纵横比：</value>
+  </data>
+  <data name="Place" xml:space="preserve">
+    <value>地点</value>
+  </data>
+  <data name="Palette" xml:space="preserve">
+    <value>调色板</value>
+  </data>
+  <data name="Puzzle Interrupt Scenes Unseen Only" xml:space="preserve">
+    <value>解谜中断场景仅未看过</value>
+  </data>
+  <data name="Title screen return unsaved progress lost prompt message box" xml:space="preserve">
+    <value>标题屏幕返回未保存进度丢失提示消息框</value>
+  </data>
+  <data name="Nagato puzzle phase selected description" xml:space="preserve">
+    <value>长门解谜阶段选择描述</value>
+  </data>
+  <data name="Replace voiced line" xml:space="preserve">
+    <value>替换有配音的行</value>
+  </data>
+  <data name="Writing NitroPacker Project File" xml:space="preserve">
+    <value>正在写入 NitroPacker 项目文件</value>
+  </data>
+  <data name="Output patch location" xml:space="preserve">
+    <value>输出补丁位置</value>
+  </data>
+  <data name="Failed to save Chokuretsu save file!" xml:space="preserve">
+    <value>保存《串联》存档文件失败！</value>
+  </data>
+  <data name="Pre-Release Channel" xml:space="preserve">
+    <value>预发布渠道</value>
+  </data>
+  <data name="Maps" xml:space="preserve">
+    <value>地图</value>
+  </data>
+  <data name="Unknown 17" xml:space="preserve">
+    <value>未知 17</value>
+  </data>
+  <data name="The base ROM hash does not match the expected hash! Please check the \&quot;Ignore Hash\&quot; checkbox if you wish to override this." xml:space="preserve">
+    <value>基础 ROM 哈希值与预期哈希值不匹配！如果要覆盖此项，请选中“忽略哈希值”复选框。</value>
+  </data>
+  <data name="Please select a template" xml:space="preserve">
+    <value>请选择一个模板</value>
+  </data>
+  <data name="Failed to replace item {0} with file {1}" xml:space="preserve">
+    <value>用文件 {1} 替换项 {0} 失败</value>
+  </data>
+  <data name="Replace me" xml:space="preserve">
+    <value>替换我</value>
+  </data>
+  <data name="Toggle Mysterious Girl's voice ticker tape" xml:space="preserve">
+    <value>切换神秘女孩语音滚动条</value>
+  </data>
+  <data name="Visible?" xml:space="preserve">
+    <value>可见？</value>
+  </data>
+  <data name="Select frames" xml:space="preserve">
+    <value>选择帧</value>
+  </data>
+  <data name="Transition" xml:space="preserve">
+    <value>过渡</value>
+  </data>
+  <data name="Saved but unbuilt files were detected in the project directory. Would you like to build before loading the project? Not building could result in these files being overwritten." xml:space="preserve">
+    <value>在项目目录中检测到已保存但未构建的文件。您想在加载项目之前进行构建吗？不构建可能会导致这些文件被覆盖。</value>
+  </data>
+  <data name="Please enter a value for the section name" xml:space="preserve">
+    <value>请为节名称输入一个值</value>
+  </data>
+  <data name="Kyon's Dialogue Box Companion Selection" xml:space="preserve">
+    <value>阿虚的对话框同伴选择</value>
+  </data>
+  <data name="Flag: {0}" xml:space="preserve">
+    <value>旗标：{0}</value>
+    <comment>{0} is the ID of the flag</comment>
+  </data>
+  <data name="Invalid search terms" xml:space="preserve">
+    <value>无效的搜索词</value>
+  </data>
+  <data name="Quick Save" xml:space="preserve">
+    <value>快速保存</value>
+  </data>
+  <data name="Sub-Topic" xml:space="preserve">
+    <value>补充话题</value>
+  </data>
+  <data name="Unsure what to do with file '{0}'" xml:space="preserve">
+    <value>不确定如何处理文件“{0}”</value>
+  </data>
+  <data name="Filter" xml:space="preserve">
+    <value>过滤器</value>
+  </data>
+  <data name="To edit Save Files, you need to have a project open.\nNo project is currently open. Would you like to create a new project?" xml:space="preserve">
+    <value>要编辑“保存文件”，您需要打开一个项目。\n当前没有打开的项目。您想创建一个新项目吗？</value>
+  </data>
+  <data name="System_Texture" xml:space="preserve">
+    <value>系统纹理</value>
+  </data>
+  <data name="Sound (Options)" xml:space="preserve">
+    <value>声音（选项）</value>
+  </data>
+  <data name="Unable to select asset URL for download" xml:space="preserve">
+    <value>选择要下载的资产 URL 失败</value>
+  </data>
+  <data name="GIF exported!" xml:space="preserve">
+    <value>GIF 已导出！</value>
+  </data>
+  <data name="While attempting to build,  file #{0:X3} in archive {1} was found to be corrupt. Serial Loops can delete this file from your base directory automatically which may allow you to load the rest of the project, but any changes made to that file will be lost. Alternatively, you can attempt to edit the file manually to fix it. How would you like to proceed? Press OK to proceed with deleting the file and Cancel to attempt to deal with it manually." xml:space="preserve">
+    <value>在尝试构建时，发现归档文件 {1} 中的文件#{0:X3} 已损坏。Serial Loops 可以自动从基本目录中删除此文件，这可能允许您加载项目的其余部分，但对该文件所做的任何更改都将丢失。或者，您可以尝试手动编辑文件以修复它。您想如何继续？按“确定”继续删除文件，按“取消”尝试手动处理。</value>
+  </data>
+  <data name="Supported Audio Files" xml:space="preserve">
+    <value>支持的音频文件</value>
+  </data>
+  <data name="WAV File" xml:space="preserve">
+    <value>WAV 文件</value>
+  </data>
+  <data name="Topics" xml:space="preserve">
+    <value>话题</value>
+  </data>
+  <data name="System data damaged &amp; reset message box" xml:space="preserve">
+    <value>系统数据损坏和重置消息框</value>
+  </data>
+  <data name="Setting item image..." xml:space="preserve">
+    <value>正在设置项目图像…</value>
+  </data>
+  <data name="WAV files" xml:space="preserve">
+    <value>WAV 文件</value>
+  </data>
+  <data name="Text Timer" xml:space="preserve">
+    <value>文本计时器</value>
+  </data>
+  <data name="Portuguese (Brazilian)" xml:space="preserve">
+    <value>葡萄牙语（巴西）</value>
+  </data>
+  <data name="Number of Saves:" xml:space="preserve">
+    <value>存档数：</value>
+  </data>
+  <data name="Flag" xml:space="preserve">
+    <value>旗标</value>
+  </data>
+  <data name="Screen Position" xml:space="preserve">
+    <value>屏幕位置</value>
+  </data>
+  <data name="Save prompt" xml:space="preserve">
+    <value>保存提示</value>
+  </data>
+  <data name="Loop?" xml:space="preserve">
+    <value>循环？</value>
+  </data>
+  <data name="Toggle Haruhi's voice ticker tape" xml:space="preserve">
+    <value>切换春日语音滚动条</value>
+  </data>
+  <data name="Loading Archives (evt.bin)" xml:space="preserve">
+    <value>正在加载归档文件（evt.bin）</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>否</value>
+  </data>
+  <data name="Group_Selections" xml:space="preserve">
+    <value>分组选择</value>
+  </data>
+  <data name="Import Project..." xml:space="preserve">
+    <value>导入项目...</value>
+  </data>
+  <data name="Voices:" xml:space="preserve">
+    <value>语音：</value>
+  </data>
+  <data name="Unknown 15" xml:space="preserve">
+    <value>未知 15</value>
+  </data>
+  <data name="Option 4" xml:space="preserve">
+    <value>选项 4</value>
+  </data>
+  <data name="Quick Toggle" xml:space="preserve">
+    <value>快速切换</value>
+  </data>
+  <data name="Power Character 1" xml:space="preserve">
+    <value>力量角色 1</value>
+  </data>
+  <data name="Serial Loops v{0}" xml:space="preserve">
+    <value>Serial Loops v{0}</value>
+  </data>
+  <data name="Kyon Time Percentage" xml:space="preserve">
+    <value>阿虚时间百分比</value>
+  </data>
+  <data name="Unknown 16" xml:space="preserve">
+    <value>未知 16</value>
+  </data>
+  <data name="Replacing BGM" xml:space="preserve">
+    <value>替换 BGM</value>
+  </data>
+  <data name="Group selection impossible selection made ticker tape" xml:space="preserve">
+    <value>分组选择不合理滚动条</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>是</value>
+  </data>
+  <data name="Text Voice Font" xml:space="preserve">
+    <value>文本语音字体</value>
+  </data>
+  <data name="Item" xml:space="preserve">
+    <value>项目</value>
+  </data>
+  <data name="MP3 files" xml:space="preserve">
+    <value>MP3 文件</value>
+  </data>
+  <data name="Toggle Kyon's voice ticker tape" xml:space="preserve">
+    <value>切换阿虚语音滚动条</value>
+  </data>
+  <data name="Save chibi GIF" xml:space="preserve">
+    <value>保存 Q 版角色 GIF</value>
+  </data>
+  <data name="Script Section" xml:space="preserve">
+    <value>脚本节</value>
+  </data>
+  <data name="Save game ticker tape" xml:space="preserve">
+    <value>存档滚动条</value>
+  </data>
+  <data name="objcopy not found at '{0}'" xml:space="preserve">
+    <value>在“{0}”处找不到 objcopy</value>
+  </data>
+  <data name="Select Graphic" xml:space="preserve">
+    <value>选择图形</value>
+  </data>
+  <data name="Setting screen image..." xml:space="preserve">
+    <value>正在设置屏幕图像…</value>
+  </data>
+  <data name="Place Name" xml:space="preserve">
+    <value>地点名称</value>
+  </data>
+  <data name="XDelta patch" xml:space="preserve">
+    <value>Xdelta 补丁</value>
+  </data>
+  <data name="Rename" xml:space="preserve">
+    <value>重命名</value>
+  </data>
+  <data name="Replace BGM track" xml:space="preserve">
+    <value>替换 BGM 音轨</value>
+  </data>
+  <data name="Open ROM" xml:space="preserve">
+    <value>打开 ROM</value>
+  </data>
+  <data name="Scale to Fit:" xml:space="preserve">
+    <value>按比例调整：</value>
+  </data>
+  <data name="Off" xml:space="preserve">
+    <value>关</value>
+  </data>
+  <data name="Kyonless Topics" xml:space="preserve">
+    <value>没有阿虚的话题</value>
+  </data>
+  <data name="Remove Missing Projects" xml:space="preserve">
+    <value>删除缺失的项目</value>
+  </data>
+  <data name="Item Names List" xml:space="preserve">
+    <value>项目名称列表</value>
+  </data>
+  <data name="Miss Block" xml:space="preserve">
+    <value>失败部分</value>
+  </data>
+  <data name="Replace with Palette" xml:space="preserve">
+    <value>用调色板替换</value>
+  </data>
+  <data name="Invalid item type!" xml:space="preserve">
+    <value>项目类型无效！</value>
+  </data>
+  <data name="Failed to set viewr contents for script command list panel." xml:space="preserve">
+    <value>为脚本命令列表面板设置查看器内容失败。</value>
+  </data>
+  <data name="Listened to {0}" xml:space="preserve">
+    <value>已收听 {0}</value>
+    <comment>{0} is the name of a BGM that's been encountered while playing the game</comment>
+  </data>
+  <data name="Game Banner" xml:space="preserve">
+    <value>游戏横幅</value>
+  </data>
+  <data name="Refresh Maps List" xml:space="preserve">
+    <value>刷新地图列表</value>
+  </data>
+  <data name="One or more archives is null." xml:space="preserve">
+    <value>一个或多个归档文件是空的。</value>
+  </data>
+  <data name="Scripts" xml:space="preserve">
+    <value>脚本</value>
+  </data>
+  <data name="Failed to load voice file: file not found." xml:space="preserve">
+    <value>加载语音文件失败：找不到文件。</value>
+  </data>
+  <data name="Main Topic" xml:space="preserve">
+    <value>主要话题</value>
+  </data>
+  <data name="Import Project" xml:space="preserve">
+    <value>导入项目</value>
+  </data>
+  <data name="Scenarios" xml:space="preserve">
+    <value>情节</value>
+  </data>
+  <data name="Replacing Files" xml:space="preserve">
+    <value>替换文件</value>
+  </data>
+  <data name="Invalid parameter detected in script {0} parameter {1}" xml:space="preserve">
+    <value>在脚本 {0} 参数 {1} 中检测到无效参数</value>
+  </data>
+  <data name="{0} results found" xml:space="preserve">
+    <value>找到 {0} 个结果</value>
+    <comment>{0} is the number of search results</comment>
+  </data>
+  <data name="Toggle Kunikida's voice ticker tape" xml:space="preserve">
+    <value>切换国木田语音滚动条</value>
+  </data>
+  <data name="Wait Time (Frames)" xml:space="preserve">
+    <value>等待时间（帧数）</value>
+  </data>
+  <data name="Kyon companion selected description" xml:space="preserve">
+    <value>阿虚同伴选择描述</value>
+  </data>
+  <data name="You have unsaved changes in {0} item(s). Would you like to save before closing the project?" xml:space="preserve">
+    <value>您在 {0} 个项目中有未保存的更改。您想在关闭项目之前保存吗？</value>
+  </data>
+  <data name="Scroll Direction" xml:space="preserve">
+    <value>滚动方向</value>
+  </data>
+  <data name="Save Files" xml:space="preserve">
+    <value>存档文件</value>
+  </data>
+  <data name="Serial Loops Project" xml:space="preserve">
+    <value>Serial Loops 项目</value>
+  </data>
+  <data name="Failed to load character progress voice for {0}." xml:space="preserve">
+    <value>加载 {0} 的角色进度语音失败。</value>
+  </data>
+  <data name="Volume Config" xml:space="preserve">
+    <value>音量设置</value>
+  </data>
+  <data name="Pause menu Title ticker tape" xml:space="preserve">
+    <value>暂停菜单标题滚动条</value>
+  </data>
+  <data name="Remove Map Characters" xml:space="preserve">
+    <value>删除地图角色</value>
+  </data>
+  <data name="Music:" xml:space="preserve">
+    <value>音乐：</value>
+  </data>
+  <data name="Save game read fail message box" xml:space="preserve">
+    <value>存档读取失败消息框</value>
+  </data>
+  <data name="New Update Available: {0}" xml:space="preserve">
+    <value>更新可用：{0}</value>
+    <comment>{0} is the version</comment>
+  </data>
+  <data name="Haroohie" xml:space="preserve">
+    <value>Haroohie</value>
+  </data>
+  <data name="Puzzle phase options ticker tape" xml:space="preserve">
+    <value>解谜阶段选项滚动条</value>
+  </data>
+  <data name="Invalid or unavailable script command selected: {0}" xml:space="preserve">
+    <value>所选脚本命令无效或不可用：{0}</value>
+  </data>
+  <data name="unknown04" xml:space="preserve">
+    <value>未知 04</value>
+  </data>
+  <data name="Puzzle Phase Group" xml:space="preserve">
+    <value>解谜阶段分组</value>
+  </data>
+  <data name="Loading:" xml:space="preserve">
+    <value>正在加载：</value>
+  </data>
+  <data name="Failed to decode original file too, giving up!" xml:space="preserve">
+    <value>原始文件解码也失败，放弃！</value>
+  </data>
+  <data name="SFX Group" xml:space="preserve">
+    <value>SFX 组</value>
+  </data>
+  <data name="Sound" xml:space="preserve">
+    <value>声音</value>
+  </data>
+  <data name="Migration Complete!" xml:space="preserve">
+    <value>迁移完成！</value>
+  </data>
+  <data name="Pause menu Load ticker tape" xml:space="preserve">
+    <value>暂停菜单加载滚动条</value>
+  </data>
+  <data name="Unknown 04" xml:space="preserve">
+    <value>未知 04</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>文件</value>
+    <comment>Please make this the same as &amp;File, just without the ampersand</comment>
+  </data>
+  <data name="Migrating to new ROM" xml:space="preserve">
+    <value>正在迁移到新 ROM</value>
+  </data>
+  <data name="Map Characters" xml:space="preserve">
+    <value>地图角色</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>标题</value>
+  </data>
+  <data name="unknown01" xml:space="preserve">
+    <value>未知 01</value>
+  </data>
+  <data name="Load this save prompt" xml:space="preserve">
+    <value>加载此存档提示</value>
+  </data>
+  <data name="Failed to read ARM9 from '{0}'" xml:space="preserve">
+    <value>从“{0}”读取 ARM9 失败</value>
+  </data>
+  <data name="Tutorial {0}" xml:space="preserve">
+    <value>教程 {0}</value>
+  </data>
+  <data name="Speaker_Name" xml:space="preserve">
+    <value>说话人名</value>
+  </data>
+  <data name="Save progress prompt end game message box" xml:space="preserve">
+    <value>保存进度提示结束游戏消息框</value>
+  </data>
+  <data name="Toggle Kyon's sister's voice ticker tape" xml:space="preserve">
+    <value>切换虚妹语音滚动条</value>
+  </data>
+  <data name="Save Time:" xml:space="preserve">
+    <value>保存时间：</value>
+  </data>
+  <data name="Title screen Load Game ticker tape" xml:space="preserve">
+    <value>标题屏幕加载游戏滚动条</value>
+  </data>
+  <data name="Toggle Nagato's voice ticker tape" xml:space="preserve">
+    <value>切换长门语音滚动条</value>
+  </data>
+  <data name="{0} Watched in Extras" xml:space="preserve">
+    <value>已在额外内容看过 {0}</value>
+    <comment>{0} is the name of a topic that has had its associated scene watched in the Extras mode</comment>
+  </data>
+  <data name="Filter by name" xml:space="preserve">
+    <value>按名称筛选</value>
+  </data>
+  <data name="Haruhi Routes" xml:space="preserve">
+    <value>春日路线</value>
+  </data>
+  <data name="Please select at least one search scope and item filter." xml:space="preserve">
+    <value>请至少选择一个搜索范围和项目筛选器。</value>
+  </data>
+  <data name="Remove Command/Section" xml:space="preserve">
+    <value>删除命令/节</value>
+  </data>
+  <data name="No emulator path has been set.\nPlease set the path to a Nintendo DS emulator in Preferences to use Build &amp; Run." xml:space="preserve">
+    <value>未设置模拟器路径。\n请在“设置”中添加 Nintendo DS 模拟器的路径以使用“构建和运行”。</value>
+  </data>
+  <data name="Section Label" xml:space="preserve">
+    <value>章节标签</value>
+  </data>
+  <data name="unknown02" xml:space="preserve">
+    <value>未知 02</value>
+  </data>
+  <data name="Flag Description" xml:space="preserve">
+    <value>旗标说明</value>
+  </data>
+  <data name="Plate Color" xml:space="preserve">
+    <value>图板颜色</value>
+  </data>
+  <data name="Failed to export system texture {0} to file {1}" xml:space="preserve">
+    <value>将系统纹理 {0} 导出到文件 {1} 失败</value>
+  </data>
+  <data name="Template Properties" xml:space="preserve">
+    <value>模板属性</value>
+    <comment>Template in question is a script template</comment>
+  </data>
+  <data name="Puzzle phase character description" xml:space="preserve">
+    <value>解谜阶段角色描述</value>
+  </data>
+  <data name="Save character sprite GIF" xml:space="preserve">
+    <value>保存角色精灵图 GIF</value>
+  </data>
+  <data name="Replace BGM" xml:space="preserve">
+    <value>替换 BGM</value>
+  </data>
+  <data name="Update Now" xml:space="preserve">
+    <value>立即更新</value>
+  </data>
+  <data name="Serial Loops Exported Project" xml:space="preserve">
+    <value>Serial Loops 导出的项目</value>
+    <comment>Refers to the "slzip" archive that is the exported project format</comment>
+  </data>
+  <data name="White Space Begin" xml:space="preserve">
+    <value>空白开始</value>
+    <comment>As on a chessboard</comment>
+  </data>
+  <data name="Searching" xml:space="preserve">
+    <value>搜索</value>
+  </data>
+  <data name="Sound options ticker tape" xml:space="preserve">
+    <value>声音选项滚动条</value>
+  </data>
+  <data name="Itsuki Koizumi event unlocked message box" xml:space="preserve">
+    <value>古泉事件解锁消息框</value>
+  </data>
+  <data name="Scenario Command Index:" xml:space="preserve">
+    <value>场景命令索引：</value>
+  </data>
+  <data name="Set/Clear" xml:space="preserve">
+    <value>设置/清除</value>
+  </data>
+  <data name="Target Screen" xml:space="preserve">
+    <value>目标屏幕</value>
+  </data>
+  <data name="No recent projects. Create one and it will appear here." xml:space="preserve">
+    <value>没有最近的项目。创建项目后，将在此处显示。</value>
+  </data>
+  <data name="No Project Open" xml:space="preserve">
+    <value>没有打开的项目</value>
+  </data>
+  <data name="Successfully applied hacks!" xml:space="preserve">
+    <value>成功应用修改！</value>
+  </data>
+  <data name="Voices Config" xml:space="preserve">
+    <value>语音设置</value>
+  </data>
+  <data name="None Selected" xml:space="preserve">
+    <value>未选择</value>
+    <comment>In the context of "no ROM selected"</comment>
+  </data>
+  <data name="No ROM Hash Recorded!" xml:space="preserve">
+    <value>未记录 ROM 哈希值！</value>
+  </data>
+  <data name="Unknown Extras Short: {0}" xml:space="preserve">
+    <value>未知附加短代码：{0}</value>
+  </data>
+  <data name="Toggle Taniguchi's voice ticker tape" xml:space="preserve">
+    <value>切换谷口语音滚动条</value>
+  </data>
+  <data name="Puzzles" xml:space="preserve">
+    <value>解谜</value>
+  </data>
+  <data name="Map" xml:space="preserve">
+    <value>地图</value>
+  </data>
+  <data name="Piece 3" xml:space="preserve">
+    <value>棋子 3</value>
+    <comment>Chesspiece</comment>
+  </data>
+  <data name="Unknown Extras Byte: {0}" xml:space="preserve">
+    <value>未知附加字节：{0}</value>
+  </data>
+  <data name="Remove Command" xml:space="preserve">
+    <value>删除命令</value>
+  </data>
+  <data name="No preview available" xml:space="preserve">
+    <value>没有可用的预览</value>
+  </data>
+  <data name="Patching ARM9" xml:space="preserve">
+    <value>给 ARM9 打补丁</value>
+  </data>
+  <data name="GIF file" xml:space="preserve">
+    <value>GIF 文件</value>
+  </data>
+  <data name="Serialized ASM hack" xml:space="preserve">
+    <value>序列化 ASM 修改</value>
+  </data>
+  <data name="Modify by" xml:space="preserve">
+    <value>修改于</value>
+    <comment>Expects an amount, i.e. "Modify by +5"</comment>
+  </data>
+  <data name="Number of Singularities" xml:space="preserve">
+    <value>奇点数量</value>
+  </data>
+  <data name="Failed to export item {0} to file {1}" xml:space="preserve">
+    <value>将项 {0} 导出到文件 {1} 失败</value>
+  </data>
+  <data name="Voiced dialogue volume options ticker tape" xml:space="preserve">
+    <value>语音对话音量选项滚动条</value>
+  </data>
+  <data name="New Section" xml:space="preserve">
+    <value>新部分</value>
+  </data>
+  <data name="Unseen Only" xml:space="preserve">
+    <value>仅未见过</value>
+  </data>
+  <data name="Import Hack" xml:space="preserve">
+    <value>导入修改</value>
+  </data>
+  <data name="Please enter a game name for the banner, between 1 and 128 characters." xml:space="preserve">
+    <value>请为横幅输入一个游戏名称，长度在 1 到 128 个字符之间。</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>搜索</value>
+  </data>
+  <data name="Failed to export chibi animation {0} for chibi {1} to file" xml:space="preserve">
+    <value>将 Q 版角色 {1} 的动画 {0} 导出到文件失败</value>
+  </data>
+  <data name="Save Project" xml:space="preserve">
+    <value>保存项目</value>
+  </data>
+  <data name="Set BGM loop info" xml:space="preserve">
+    <value>设置 BGM 循环信息</value>
+  </data>
+  <data name="Script Block:" xml:space="preserve">
+    <value>区块：</value>
+  </data>
+  <data name="Setting CG single image..." xml:space="preserve">
+    <value>正在设置 CG 单幅图像…</value>
+  </data>
+  <data name="Saving prompt message box" xml:space="preserve">
+    <value>保存提示消息框</value>
+  </data>
+  <data name="Load Game menu ticker tape" xml:space="preserve">
+    <value>加载游戏菜单滚动条</value>
+  </data>
+  <data name="Select chibi export folder" xml:space="preserve">
+    <value>选择 Q 版角色导出文件夹</value>
+  </data>
+  <data name="The changes made will require Serial Loops to be restarted. Is that okay?" xml:space="preserve">
+    <value>所做的更改将需要重新启动 Serial Loops。可以吗？</value>
+  </data>
+  <data name="Failed to load BGM file: file not found." xml:space="preserve">
+    <value>加载 BGM 文件失败：找不到文件。</value>
+  </data>
+  <data name="Paste" xml:space="preserve">
+    <value>粘贴</value>
+  </data>
+  <data name="Reset settings to default ticker tape" xml:space="preserve">
+    <value>将设置重置为默认滚动条</value>
+  </data>
+  <data name="Flags" xml:space="preserve">
+    <value>旗标</value>
+  </data>
+  <data name="Worst Group" xml:space="preserve">
+    <value>最差组</value>
+  </data>
+  <data name="Save data damaged &amp; reset message box" xml:space="preserve">
+    <value>存档数据损坏&amp;重置消息框</value>
+  </data>
+  <data name="Script:" xml:space="preserve">
+    <value>脚本：</value>
+  </data>
+  <data name="Quick Save Data" xml:space="preserve">
+    <value>快速存档数据</value>
+  </data>
+  <data name="Migrate to new ROM" xml:space="preserve">
+    <value>迁移到新 ROM</value>
+  </data>
+  <data name="The selected ROM's hash does not match the expected ROM hash. Please ensure you are using the correct base ROM.\n\nIf you wish to ignore this, please check the \&quot;Ignore Hash\&quot; checkbox." xml:space="preserve">
+    <value>所选 ROM 的哈希值与预期的 ROM 哈希值不匹配。请确保您使用的是正确的基础 ROM。\n\n如果您想忽略此问题，请选中“忽略哈希值”复选框。</value>
+  </data>
+  <data name="Volume" xml:space="preserve">
+    <value>音量</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>名称</value>
+  </data>
+  <data name="Voice Line" xml:space="preserve">
+    <value>语音行</value>
+  </data>
+  <data name="Investigation phase options ticker tape" xml:space="preserve">
+    <value>调查阶段选项滚动条</value>
+  </data>
+  <data name="Finding orphaned items" xml:space="preserve">
+    <value>查找孤立项目</value>
+  </data>
+  <data name="New Base ROM" xml:space="preserve">
+    <value>新基础 ROM</value>
+  </data>
+  <data name="Music" xml:space="preserve">
+    <value>音乐</value>
+  </data>
+  <data name="Generate Template" xml:space="preserve">
+    <value>生成模板</value>
+    <comment>Template in question is a script template</comment>
+  </data>
+  <data name="Import" xml:space="preserve">
+    <value>导入</value>
+    <comment>As in import an exported project</comment>
+  </data>
+  <data name="Sprite Shake" xml:space="preserve">
+    <value>精灵图摇动</value>
+  </data>
+  <data name="Move Command Up" xml:space="preserve">
+    <value>向上移动命令</value>
+  </data>
+  <data name="Groups: {0}" xml:space="preserve">
+    <value>分组：{0}</value>
+    <comment>As in "Sound Groups"</comment>
+  </data>
+  <data name="Remove Read Flag" xml:space="preserve">
+    <value>删除读取旗标</value>
+    <comment>As in "remove this read flag from the script"</comment>
+  </data>
+  <data name="Sound Effects:" xml:space="preserve">
+    <value>音效：</value>
+  </data>
+  <data name="Find References..." xml:space="preserve">
+    <value>查找引用…</value>
+  </data>
+  <data name="Loading Archives (dat.bin)" xml:space="preserve">
+    <value>正在加载归档文件（dat.bin）</value>
+  </data>
+  <data name="Sound effect volume options ticker tape" xml:space="preserve">
+    <value>音效音量选项滚动条</value>
+  </data>
+  <data name="Select an exported project to see expected ROM hash" xml:space="preserve">
+    <value>选择导出的项目以查看预期的 ROM 哈希值值</value>
+  </data>
+  <data name="Find in Project" xml:space="preserve">
+    <value>在项目中查找</value>
+  </data>
+  <data name="Import a Hack" xml:space="preserve">
+    <value>导入修改</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>值</value>
+  </data>
+  <data name="Filter by Item" xml:space="preserve">
+    <value>按项目筛选</value>
+  </data>
+  <data name="Failed to export eye animation {0} for sprite {1} to file" xml:space="preserve">
+    <value>将精灵图 {1} 的眼睛动画 {0} 导出到文件失败</value>
+  </data>
+  <data name="Pause menu Config ticker tape" xml:space="preserve">
+    <value>暂停菜单配置滚动条</value>
+  </data>
+  <data name="Koizumi companion selected description" xml:space="preserve">
+    <value>古泉同伴选择描述</value>
+  </data>
+  <data name="Failed to parse script parameter {0} of type {1} with parameter '{2}'!" xml:space="preserve">
+    <value>使用参数“{2}”解析类型为 {1} 的脚本参数 {0} 失败！</value>
+  </data>
+  <data name="unknown03" xml:space="preserve">
+    <value>未知 03</value>
+  </data>
+  <data name="{0} ({1}) Seen" xml:space="preserve">
+    <value>已见过 {0}（{1}）</value>
+    <comment>{0} is the internal name and {1} is the display name of a CG that has been encountered during the game</comment>
+  </data>
+  <data name="NitroPacker failed to pack ROM with exception" xml:space="preserve">
+    <value>NitroPacker 未能打包 ROM，出现异常</value>
+  </data>
+  <data name="Project Settings" xml:space="preserve">
+    <value>项目设置</value>
+  </data>
+  <data name="Find Orphaned Items..." xml:space="preserve">
+    <value>查找孤立项目…</value>
+  </data>
+  <data name="Save game write fail message box" xml:space="preserve">
+    <value>存档写入失败消息框</value>
+  </data>
+  <data name="Transitions" xml:space="preserve">
+    <value>过渡</value>
+  </data>
+  <data name="Failed to load BGM file: file invalid." xml:space="preserve">
+    <value>加载 BGM 文件失败：文件无效。</value>
+  </data>
+  <data name="Search Scope" xml:space="preserve">
+    <value>搜索范围</value>
+  </data>
+  <data name="View Logs" xml:space="preserve">
+    <value>查看日志</value>
+  </data>
+  <data name="Outline Color" xml:space="preserve">
+    <value>轮廓颜色</value>
+  </data>
+  <data name="Position Image" xml:space="preserve">
+    <value>位置图片</value>
+  </data>
+  <data name="Replace Frames" xml:space="preserve">
+    <value>替换帧</value>
+  </data>
+  <data name="Puzzle Interrupt Scenes ticker tape" xml:space="preserve">
+    <value>解谜中断场景滚动条</value>
+  </data>
+  <data name="Mode" xml:space="preserve">
+    <value>模式</value>
+    <comment>Sound play mode (start/stop)</comment>
+  </data>
+  <data name="Puzzle Interrupt Scenes" xml:space="preserve">
+    <value>解谜中断场景</value>
+  </data>
+  <data name="Piece 2" xml:space="preserve">
+    <value>棋子 2</value>
+    <comment>Chesspiece</comment>
+  </data>
+  <data name="Koizumi puzzle phase selected description" xml:space="preserve">
+    <value>古泉解谜阶段选择描述</value>
+  </data>
+  <data name="Sprite" xml:space="preserve">
+    <value>精灵图</value>
+  </data>
+  <data name="German" xml:space="preserve">
+    <value>德语</value>
+  </data>
+  <data name="Position:" xml:space="preserve">
+    <value>位置：</value>
+  </data>
+  <data name="Template Name" xml:space="preserve">
+    <value>模板名称</value>
+    <comment>Template in question is a script template</comment>
+  </data>
+  <data name="Failed to export layout for sprite {0} to file" xml:space="preserve">
+    <value>将精灵图 {0} 的布局导出到文件失败</value>
+  </data>
+  <data name="Section Name:" xml:space="preserve">
+    <value>章节名称：</value>
+  </data>
+  <data name="Loading Archives (grp.bin)" xml:space="preserve">
+    <value>正在加载归档文件（grp.bin）</value>
+  </data>
+  <data name="Select character sprite export folder" xml:space="preserve">
+    <value>选择角色精灵图导出文件夹</value>
+  </data>
+  <data name="Groups" xml:space="preserve">
+    <value>分组</value>
+    <comment>As in "Sound Groups"</comment>
+  </data>
+  <data name="sec" xml:space="preserve">
+    <value>秒</value>
+    <comment>As in "seconds"</comment>
+  </data>
+  <data name="Migrate Project" xml:space="preserve">
+    <value>迁移项目</value>
+  </data>
+  <data name="Move Command Down" xml:space="preserve">
+    <value>向下移动命令</value>
+  </data>
+  <data name="Scenes to Skip" xml:space="preserve">
+    <value>要跳过的场景</value>
+  </data>
+  <data name="Scroll Speed" xml:space="preserve">
+    <value>滚动速度</value>
+  </data>
+  <data name="Select ROM" xml:space="preserve">
+    <value>选择 ROM</value>
+  </data>
+  <data name="Failed to find character item -- have you saved all of your changes to character names?" xml:space="preserve">
+    <value>找不到角色项——是否已保存对角色名称的所有更改？</value>
+  </data>
+  <data name="Failed to deserialize script template file '{0}'" xml:space="preserve">
+    <value>反序列化脚本模板文件“{0}”失败</value>
+    <comment>{0} is a script template file path.</comment>
+  </data>
+  <data name="Failed to update preview!" xml:space="preserve">
+    <value>更新预览失败！</value>
+  </data>
+  <data name="Spanish" xml:space="preserve">
+    <value>西班牙语</value>
+  </data>
+  <data name="Project Settings..." xml:space="preserve">
+    <value>项目设置…</value>
+  </data>
+  <data name="Setting palettes and images..." xml:space="preserve">
+    <value>正在设置调色板和图像…</value>
+  </data>
+  <data name="Toggle Mikuru's voice ticker tape" xml:space="preserve">
+    <value>切换实玖瑠语音滚动条</value>
+  </data>
+  <data name="Text Entrance Effect" xml:space="preserve">
+    <value>文本入口效果</value>
+  </data>
+  <data name="Writing Replaced Archives" xml:space="preserve">
+    <value>正在写入修改后的归档文件</value>
+  </data>
+  <data name="Piece 1" xml:space="preserve">
+    <value>棋子 1</value>
+    <comment>Chesspiece</comment>
+  </data>
+  <data name="Frames" xml:space="preserve">
+    <value>帧</value>
+  </data>
+  <data name="Parameter Value" xml:space="preserve">
+    <value>参数值</value>
+  </data>
+  <data name="Searching {0}..." xml:space="preserve">
+    <value>正在搜索｛0｝…</value>
+  </data>
+  <data name="Failed to replace system texture {0} with file {1}" xml:space="preserve">
+    <value>用文件 {1} 替换系统纹理 {0} 失败</value>
+  </data>
+  <data name="Second prompt on data being erased" xml:space="preserve">
+    <value>数据被擦除的第二次提示</value>
+  </data>
+  <data name="Unknown" xml:space="preserve">
+    <value>未知</value>
+  </data>
+  <data name="Power Character 2" xml:space="preserve">
+    <value>力量角色 2</value>
+  </data>
+  <data name="Tsuruya event unlocked message box" xml:space="preserve">
+    <value>鹤屋事件解锁消息框</value>
+  </data>
+  <data name="gcc exited with code {0}" xml:space="preserve">
+    <value>gcc 退出，代码为 {0}</value>
+  </data>
+  <data name="New Name" xml:space="preserve">
+    <value>新名称</value>
+  </data>
+  <data name="Set BGM volume" xml:space="preserve">
+    <value>设置 BGM 音量</value>
+  </data>
+  <data name="Open Chokuretsu Save File" xml:space="preserve">
+    <value>打开《串联》存档文件</value>
+  </data>
+  <data name="Template" xml:space="preserve">
+    <value>模板</value>
+    <comment>Tool bar text for "apply [script] template" -- needs to be short to fit in the toolbar button</comment>
+  </data>
+  <data name="Piece 4" xml:space="preserve">
+    <value>棋子 4</value>
+    <comment>Chesspiece</comment>
+  </data>
+  <data name="Save loaded message box" xml:space="preserve">
+    <value>已载入存档消息框</value>
+  </data>
+  <data name="Select base ROM" xml:space="preserve">
+    <value>选择基础 ROM</value>
+  </data>
+  <data name="Top Screen" xml:space="preserve">
+    <value>上屏幕</value>
+  </data>
+  <data name="Sprite Layer" xml:space="preserve">
+    <value>精灵图图层</value>
+  </data>
+  <data name="Search..." xml:space="preserve">
+    <value>搜索…</value>
+  </data>
+  <data name="Failed to read BGM file; falling back to original..." xml:space="preserve">
+    <value>读取 BGM 文件失败；回退到原始文件…</value>
+  </data>
+  <data name="View &amp;Logs" xml:space="preserve">
+    <value>查看日志 (_L)</value>
+  </data>
+  <data name="Starting Chibis" xml:space="preserve">
+    <value>起始 Q 版角色</value>
+  </data>
+  <data name="No valid maps found." xml:space="preserve">
+    <value>未找到有效地图。</value>
+  </data>
+  <data name="Skip Update" xml:space="preserve">
+    <value>跳过更新</value>
+  </data>
+  <data name="Failed to delete files for hack '{0}' -- this hack is likely applied in the ROM base and can't be disabled." xml:space="preserve">
+    <value>删除修改“{0}”的文件失败——此修改可能应用于 ROM 库，无法禁用。</value>
+  </data>
+  <data name="Save data 2 damaged &amp; reset message box" xml:space="preserve">
+    <value>存档数据 2 损坏&amp;重置消息框</value>
+  </data>
+  <data name="Topic Stock Mode option" xml:space="preserve">
+    <value>话题库存模式选项</value>
+  </data>
+  <data name="Saving GIF..." xml:space="preserve">
+    <value>正在保存 GIF…</value>
+  </data>
+  <data name="Size:" xml:space="preserve">
+    <value>尺寸：</value>
+  </data>
+  <data name="Kyon's Dialogue Box Group Selection" xml:space="preserve">
+    <value>阿虚的对话框分组选择</value>
+  </data>
+  <data name="Game saved message box" xml:space="preserve">
+    <value>游戏保存消息框</value>
+  </data>
+  <data name="Puzzle" xml:space="preserve">
+    <value>解谜</value>
+  </data>
+  <data name="Finding orphaned items..." xml:space="preserve">
+    <value>正在查找孤立项目…</value>
+  </data>
+  <data name="Fast Forward" xml:space="preserve">
+    <value>快进</value>
+  </data>
+  <data name="Select Template to Apply" xml:space="preserve">
+    <value>选择要应用的模板</value>
+  </data>
+  <data name="Toggle Koizumi's voice ticker tape" xml:space="preserve">
+    <value>切换古泉语音滚动条</value>
+  </data>
+  <data name="Title screen Extra ticker tape" xml:space="preserve">
+    <value>标题屏幕额外内容滚动条</value>
+  </data>
+  <data name="Failed to create directory on specified path!" xml:space="preserve">
+    <value>在指定路径上创建目录失败！</value>
+  </data>
+  <data name="No Emulator Path" xml:space="preserve">
+    <value>未设置模拟器路径</value>
+  </data>
+  <data name="Please choose a project name before creating the project." xml:space="preserve">
+    <value>请在创建项目之前选择项目名称。</value>
+  </data>
+  <data name="Missing:" xml:space="preserve">
+    <value>缺失：</value>
+  </data>
+  <data name="Script {0} Section {1} Completed" xml:space="preserve">
+    <value>脚本 {0} 节 {1} 已完成</value>
+    <comment>{0} is the display name of a script and {1} is the name of the section of that script that has been completed</comment>
+  </data>
+  <data name="Script" xml:space="preserve">
+    <value>脚本</value>
+  </data>
+  <data name="Group_Selection" xml:space="preserve">
+    <value>分组选择</value>
+  </data>
+  <data name="Supported Images" xml:space="preserve">
+    <value>支持的图像</value>
+  </data>
+  <data name="Unknown 03" xml:space="preserve">
+    <value>未知 03</value>
+  </data>
+  <data name="Replacing {0}..." xml:space="preserve">
+    <value>正在替换 {0}…</value>
+  </data>
+  <data name="Miss 2 Block" xml:space="preserve">
+    <value>失败 2 部分</value>
+  </data>
+  <data name="Press ENTER to execute search" xml:space="preserve">
+    <value>按 ENTER 执行搜索</value>
+  </data>
+  <data name="No saves Load Game menu ticker tape" xml:space="preserve">
+    <value>没有存档加载游戏菜单滚动条</value>
+  </data>
+  <data name="No exported project selected" xml:space="preserve">
+    <value>未选择导出项目</value>
+  </data>
+  <data name="New Command" xml:space="preserve">
+    <value>新命令</value>
+  </data>
+  <data name="Optimal Group" xml:space="preserve">
+    <value>最优组</value>
+  </data>
+  <data name="Horizontal Intensity" xml:space="preserve">
+    <value>水平强度</value>
+  </data>
+  <data name="Restoring Workspace" xml:space="preserve">
+    <value>恢复工作区</value>
+  </data>
+  <data name="Save progress prompt message box" xml:space="preserve">
+    <value>保存进度提示消息框</value>
+  </data>
+  <data name="System_Textures" xml:space="preserve">
+    <value>系统纹理</value>
+  </data>
+  <data name="Sprite Entrance Transition" xml:space="preserve">
+    <value>精灵图进入过渡</value>
+  </data>
+  <data name="Option 2" xml:space="preserve">
+    <value>选项 2</value>
+  </data>
+  <data name="Project not provided to project creation dialog" xml:space="preserve">
+    <value>项目未提供给项目创建对话框</value>
+  </data>
+  <data name="Hide Unset Flags" xml:space="preserve">
+    <value>隐藏未设置的旗标</value>
+  </data>
+  <data name="Importing Project" xml:space="preserve">
+    <value>导入项目</value>
+  </data>
+  <data name="On" xml:space="preserve">
+    <value>开</value>
+  </data>
+  <data name="Overwrite save prompt message box" xml:space="preserve">
+    <value>覆盖保存提示消息框</value>
+  </data>
+  <data name="Restore" xml:space="preserve">
+    <value>还原</value>
+  </data>
+  <data name="Failed to export background {0} to file {1}" xml:space="preserve">
+    <value>将背景 {0} 导出到文件 {1} 失败</value>
+  </data>
+  <data name="Reset:" xml:space="preserve">
+    <value>重置：</value>
+  </data>
+  <data name="FLAC files" xml:space="preserve">
+    <value>FLAC 文件</value>
+  </data>
+  <data name="Orphaned Items" xml:space="preserve">
+    <value>未使用的项目</value>
+  </data>
+  <data name="Search for items by name, ID, or type." xml:space="preserve">
+    <value>按名称、ID 或类型搜索项目。</value>
+  </data>
+  <data name="Projects" xml:space="preserve">
+    <value>项目</value>
+  </data>
+  <data name="Haruhi Topic" xml:space="preserve">
+    <value>春日话题</value>
+  </data>
+  <data name="Mikuru Time Percentage" xml:space="preserve">
+    <value>实玖瑠时间百分比</value>
+  </data>
+  <data name="objcopy exited with code {0}" xml:space="preserve">
+    <value>objcopy 已退出，代码为 {0}</value>
+  </data>
+  <data name="Option 1" xml:space="preserve">
+    <value>选项 1</value>
+  </data>
+  <data name="Failed to set script command list panel section content." xml:space="preserve">
+    <value>设置脚本命令列表面板部分内容失败。</value>
+  </data>
+  <data name="Scene" xml:space="preserve">
+    <value>场景</value>
+  </data>
+  <data name="Use Pre-Release Update Channel" xml:space="preserve">
+    <value>使用预发布更新渠道</value>
+  </data>
+  <data name="Greek" xml:space="preserve">
+    <value>希腊语</value>
+  </data>
+  <data name="Times" xml:space="preserve">
+    <value>次数</value>
+  </data>
+  <data name="There is no recorded base ROM hash for this project. This is likely because this project was created with an older version of Serial Loops. Please select the base ROM used for this project so the hash can be recorded now." xml:space="preserve">
+    <value>此项目没有记录的基础 ROM 哈希值。这可能是因为此项目是使用旧版本的 Serial Loops 创建的。请选择用于此项目的基础 ROM，以便现在可以记录哈希值。</value>
+  </data>
+  <data name="Try again prompt message box" xml:space="preserve">
+    <value>重试提示消息框</value>
+  </data>
+  <data name="Remember Project Workspace" xml:space="preserve">
+    <value>记住项目工作区</value>
+  </data>
+  <data name="Failed to write include files to disk." xml:space="preserve">
+    <value>将包含文件写入磁盘失败。</value>
+  </data>
+  <data name="Save Data" xml:space="preserve">
+    <value>存档数据</value>
   </data>
 </root>

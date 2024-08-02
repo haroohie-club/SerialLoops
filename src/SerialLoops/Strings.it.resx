@@ -222,7 +222,7 @@
     <value>Messaggio sul aver raccolto tutte le discussioni su Nagato</value>
   </data>
   <data name="Check for Updates on Startup" xml:space="preserve">
-    <value>Verifica presenza di aggiornamenti all'avvio</value>
+    <value>Controlla Aggiornamenti all'Avvio</value>
   </data>
   <data name="Cleaning Iterative Directory" xml:space="preserve">
     <value>Pulizia dell'elenco iterativo</value>
@@ -237,7 +237,7 @@
     <value>Applica Template</value>
   </data>
   <data name="Check for Updates" xml:space="preserve">
-    <value>Verifica aggiornamenti</value>
+    <value>Controlla Aggiornamenti</value>
   </data>
   <data name="Chess File" xml:space="preserve">
     <value>File Scacchi</value>
@@ -280,7 +280,7 @@
     <value>Tipi di sfondo</value>
   </data>
   <data name="&amp;Check for Updates..." xml:space="preserve">
-    <value>Cercando &amp;aggiornamenti…</value>
+    <value>&amp;Controlla Aggiornamenti…</value>
   </data>
   <data name="Background" xml:space="preserve">
     <value>Sfondo</value>
@@ -1520,7 +1520,7 @@
     <value>Italiano</value>
   </data>
   <data name="Failed to check for updates! (Endpoint: {0})" xml:space="preserve">
-    <value>Impossibile trovare aggiornamenti! (Endpoint: {0})</value>
+    <value>Ricerca di aggiornamenti fallita! (Endpoint: {0})</value>
   </data>
   <data name="gcc exited with code {0}" xml:space="preserve">
     <value>gcc exited with code {0}</value>
