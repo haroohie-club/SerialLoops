@@ -6,4 +6,13 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="HaruhiChokuretsuLib" Version="0.40.6" />
+    <PackageReference Include="NUnit" Version="4.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\SerialLoops.Lib\SerialLoops.Lib.csproj" />
+  </ItemGroup>
+
 </Project>

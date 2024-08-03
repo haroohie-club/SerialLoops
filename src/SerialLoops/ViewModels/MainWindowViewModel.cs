@@ -23,6 +23,7 @@ using SerialLoops.Assets;
 using SerialLoops.Controls;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
+using SerialLoops.Lib.Factories;
 using SerialLoops.Lib.Util;
 using SerialLoops.Utility;
 using SerialLoops.ViewModels.Dialogs;
@@ -135,11 +136,12 @@ namespace SerialLoops.ViewModels
             });
         }
 
-        public async void Initialize(MainWindow window)
+        public async void Initialize(MainWindow window, IConfigFactory configFactory = null)
         {
             Window = window;
             Log = new(Window);
-            CurrentConfig = Config.LoadConfig((s) => s, Log);
+            configFactory ??= new ConfigFactory();
+            CurrentConfig = configFactory.LoadConfig((s) => s, Log);
             Strings.Culture = new(CurrentConfig.CurrentCultureName);
             Log.Initialize(CurrentConfig);
 
@@ -174,7 +176,7 @@ namespace SerialLoops.ViewModels
             Window.MainContent.Content = homePanel;
         }
 
-        private void OpenProjectView(Project project, IProgressTracker tracker)
+        internal void OpenProjectView(Project project, IProgressTracker tracker)
         {
             ItemExplorer = new();
             EditorTabs = new();
@@ -449,7 +451,7 @@ namespace SerialLoops.ViewModels
         {
             PreferencesDialogViewModel preferencesDialogViewModel = new();
             PreferencesDialog preferencesDialog = new();
-            preferencesDialogViewModel.Initialize(preferencesDialog, CurrentConfig, Log);
+            preferencesDialogViewModel.Initialize(preferencesDialog, Log);
             preferencesDialog.DataContext = preferencesDialogViewModel;
             await preferencesDialog.ShowDialog(Window);
             if (preferencesDialogViewModel.Saved)

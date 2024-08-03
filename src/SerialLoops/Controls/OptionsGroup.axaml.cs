@@ -84,6 +84,7 @@ namespace SerialLoops.Controls
             };
             Control textBlock = GetText();
             Control control = GetControl();
+            control.SetValue(Control.NameProperty, $"{OptionName.Replace(" ", "").Replace("-", "")}Control");
 
             Grid.SetColumn(textBlock, 0);
             Grid.SetColumn(control, 2);

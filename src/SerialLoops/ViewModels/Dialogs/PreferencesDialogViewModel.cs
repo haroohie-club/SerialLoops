@@ -8,6 +8,7 @@ using ReactiveUI.Fody.Helpers;
 using SerialLoops.Assets;
 using SerialLoops.Controls;
 using SerialLoops.Lib;
+using SerialLoops.Lib.Factories;
 using SerialLoops.Lib.Util;
 using SerialLoops.Views.Dialogs;
 using SixLabors.Fonts;
@@ -24,6 +25,7 @@ namespace SerialLoops.ViewModels.Dialogs
         public ICommand SaveCommand { get; private set; }
         public ICommand CancelCommand { get; private set; }
 
+        private IConfigFactory _configFactory;
         public Config Configuration { get; set; }
         public ILogger Log { get; set; }
         [Reactive]
@@ -31,10 +33,18 @@ namespace SerialLoops.ViewModels.Dialogs
         public bool Saved { get; set; }
         private PreferencesDialog _preferencesDialog;
 
-        public void Initialize(PreferencesDialog preferencesDialog, Config config, ILogger log)
+        public void Initialize(PreferencesDialog preferencesDialog, ILogger log, IConfigFactory configFactory = null)
         {
             _preferencesDialog = preferencesDialog;
-            Configuration = config;
+            if (configFactory is not null)
+            {
+                _configFactory = configFactory;
+            }
+            else
+            {
+                _configFactory = new ConfigFactory();
+            }
+            Configuration = _configFactory.LoadConfig(s => s, log);
             Log = log;
 
             _preferencesDialog.BuildOptions.InitializeOptions(Strings.Build,
@@ -149,7 +159,7 @@ namespace SerialLoops.ViewModels.Dialogs
 
         private static (string Culture, string Language) GetLanguageComboxBoxOption(string culture)
         {
-            return (culture, new CultureInfo(culture).NativeName.ToTitleCase());
+            return (culture, new CultureInfo(culture).NativeName.ToSentenceCase());
         }
     }
 }
