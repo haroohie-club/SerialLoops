@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFrameworks>net8.0;net8.0-windows</TargetFrameworks>
@@ -58,6 +58,7 @@
     <PackageReference Include="Avalonia.Labs.Controls" Version="11.0.10.1" />
     <PackageReference Include="Avalonia.Labs.Panels" Version="11.0.10.1" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="11.1.1" />
+    <PackageReference Include="Avalonia.Skia" Version="11.1.1" />
     <PackageReference Include="Avalonia.Svg" Version="11.1.0" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.1.1" />
     <PackageReference Include="Avalonia.Fonts.Inter" Version="11.1.1" />

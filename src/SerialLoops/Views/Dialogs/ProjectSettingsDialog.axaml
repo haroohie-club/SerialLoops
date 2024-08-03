@@ -6,6 +6,7 @@
         xmlns:assets="using:SerialLoops.Assets"
         mc:Ignorable="d" d:DesignWidth="550" d:DesignHeight="370"
         xmlns:controls="using:SerialLoops.Controls"
+        xmlns:utility="using:SerialLoops.Utility"
         x:DataType="vm:ProjectSettingsDialogViewModel"
         x:Class="SerialLoops.Views.Dialogs.ProjectSettingsDialog"
         MinWidth="{Binding MinWidth}"
@@ -22,7 +23,8 @@
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="20" Margin="5 20">
                             <StackPanel Orientation="Vertical" Spacing="5" HorizontalAlignment="Center" VerticalAlignment="Center">
                                 <StackPanel Width="64">
-                                    <controls:SKBitmapCanvas Source="{Binding Icon}" Width="64" Height="64" />
+                                    <Image Source="{Binding Icon, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
+                                           Width="64" Height="64" />
                                 </StackPanel>
                                 <Button Content="{x:Static assets:Strings.Replace___}" Command="{Binding ReplaceCommand}" />
                             </StackPanel>

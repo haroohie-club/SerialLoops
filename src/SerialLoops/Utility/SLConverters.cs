@@ -7,12 +7,14 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using SerialLoops.Lib.Items;
 using SerialLoops.Models;
+using SkiaSharp;
 
 namespace SerialLoops.Utility
 {
     public static partial class SLConverters
     {
         public static FuncValueConverter<ItemDescription.ItemType, Bitmap> ItemTypeToIconConverter => new((type) => new Bitmap(AssetLoader.Open(new Uri($"avares://SerialLoops/Assets/Icons/{type.ToString().Replace(' ', '_')}.png"))));
+        public static FuncValueConverter<SKBitmap, SKAvaloniaImage> SKBitmapToAvaloniaConverter => new((bitmap) => new SKAvaloniaImage(bitmap));
     }
 
     public class DisplayNameConverter : IMultiValueConverter

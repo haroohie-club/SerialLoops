@@ -7,16 +7,16 @@
              xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
              xmlns:assets="using:SerialLoops.Assets"
              xmlns:controls="using:SerialLoops.Controls"
+             xmlns:utility="using:SerialLoops.Utility"
              xmlns:gbox="using:GroupBox.Avalonia.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:SystemTextureEditorViewModel"
              x:Class="SerialLoops.Views.Editors.SystemTextureEditorView">
     <ScrollViewer>
         <StackPanel Orientation="Vertical" Spacing="5" HorizontalAlignment="Left" VerticalAlignment="Top">
-            <controls:SKBitmapCanvas Source="{Binding SystemTextureBitmap}"
-                                     HorizontalAlignment="Left"
-                                     Width="{Binding SystemTextureBitmap.Width}"
-                                     Height="{Binding SystemTextureBitmap.Height}"/>
+            <Image Source="{Binding SystemTextureBitmap, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
+                   Width="{Binding SystemTextureBitmap.Width}" Height="{Binding SystemTextureBitmap.Height}"
+                   HorizontalAlignment="Left"/>
             <StackPanel Orientation="Horizontal" Spacing="3">
                 <Button Content="{x:Static assets:Strings.Export}" Command="{Binding ExportCommand}"/>
                 <Button Content="{x:Static assets:Strings.Replace}" Command="{Binding ReplaceCommand}"/>
@@ -24,10 +24,10 @@
             </StackPanel>
             <TextBlock IsVisible="{Binding UsesCommonPalette}" Text="{x:Static assets:Strings.This_system_texture_uses_a_common_palette__so_palette_replacement_has_been_disabled}"/>
             <gbox:GroupBox Header="{x:Static assets:Strings.Palette}" Theme="{StaticResource GroupBoxClassic}" Width="264" HorizontalAlignment="Left">
-                <controls:SKBitmapCanvas Source="{Binding PaletteBitmap}"
-                                         HorizontalAlignment="Left"
-                                         Width="{Binding PaletteBitmap.Width}"
-                                         Height="{Binding PaletteBitmap.Height}"/>
+                <Image Source="{Binding PaletteBitmap, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
+                       HorizontalAlignment="Left"
+                       Width="{Binding PaletteBitmap.Width}"
+                       Height="{Binding PaletteBitmap.Height}"/>
             </gbox:GroupBox>
         </StackPanel>
     </ScrollViewer>

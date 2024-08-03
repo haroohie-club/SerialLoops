@@ -17,7 +17,7 @@
             <Button Name="StopButton" IsEnabled="{Binding StopButtonEnabled}" Command="{Binding StopCommand}">
                 <Svg Path="avares://SerialLoops/Assets/Icons/Stop.svg" Width="25"/>
             </Button>
-            <controls:SKBitmapCanvas Name="WaveformCanvas"/>
+            <Image Name="WaveformCanvas"/>
         </StackPanel>
         <StackPanel Orientation="Vertical" Spacing="5" Name="Details">
             <StackPanel Name="TrackTitlePanel">

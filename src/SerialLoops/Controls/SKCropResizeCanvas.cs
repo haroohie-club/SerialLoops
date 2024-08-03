@@ -109,7 +109,6 @@ namespace SerialLoops.Controls
 
         protected virtual void OnPaintSurface(SKSurface surface)
         {
-            Scale = 1;
             SKCanvas canvas = surface.Canvas;
             canvas.Clear();
             if (SourceBitmap is not null && ImageLocation is not null && SourceWidth is not null && SourceHeight is not null)
@@ -122,7 +121,8 @@ namespace SerialLoops.Controls
                         ImageLocation?.Y ?? 0f,
                         (ImageLocation?.X ?? 0f) + (int)SourceWidth,
                         (ImageLocation?.Y ?? 0f) + (int)SourceHeight
-                    )
+                    ),
+                    new() { FilterQuality = SKFilterQuality.High }
                 );
 
                 // Draw Final bitmap
@@ -142,7 +142,8 @@ namespace SerialLoops.Controls
                         SelectionAreaLocation?.Y ?? 0f,
                         (SelectionAreaLocation?.X ?? 0f) + (FinalBitmap?.Width ?? 0f),
                         (SelectionAreaLocation?.Y ?? 0f) + (FinalBitmap?.Height ?? 0f));
-                    finalCanvas.DrawImage(surface.Snapshot(), surfaceRect, new SKRect(0, 0, FinalBitmap.Width, FinalBitmap.Height));
+                    finalCanvas.DrawImage(surface.Snapshot(), surfaceRect, new SKRect(0, 0, FinalBitmap.Width, FinalBitmap.Height),
+                        new() { FilterQuality = SKFilterQuality.High });
                     finalCanvas.Flush();
                 }
 

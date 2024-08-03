@@ -54,8 +54,8 @@
             </StackPanel>
         </StackPanel>
         <StackPanel Orientation="Vertical" Spacing="5">
-            <controls:SKBitmapCanvas Source="{Binding Waveform}" Width="{Binding Waveform.Width}"
-                                     Height="{Binding Waveform.Height}"/>
+            <Image Source="{Binding Waveform, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
+                   Width="{Binding Waveform.Width}" Height="{Binding Waveform.Height}"/>
             <Slider Name="StartSampleSlider" Width="{Binding Waveform.Width}" Minimum="0"
                     Maximum="{Binding #EndSampleBox.Maximum}"
                     ValueChanged="StartSlider_ValueChanged" />
