@@ -26,7 +26,6 @@ namespace SerialLoops.Models
                     lease.SkCanvas.DrawBitmap(bitmap, SKRect.Create((float)Bounds.X, (float)Bounds.Y, (float)Bounds.Width, (float)Bounds.Height), new()
                     {
                         FilterQuality = SKFilterQuality.High,
-                        //IsAntialias = true,
                     });
                 }
             }
