@@ -1,9 +1,8 @@
 ﻿using System.Windows.Input;
-using Avalonia.Media.Imaging;
-using Avalonia.Platform;
 using HaruhiChokuretsuLib.Util;
 using NAudio.Wave;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using SerialLoops.Lib.Items;
 using SerialLoops.Utility;
 using SkiaSharp;
@@ -16,37 +15,16 @@ namespace SerialLoops.ViewModels.Controls
         private ISoundItem _item;
         internal SoundPlayer _player;
 
-        private IWaveProvider _sound;
-        private SKBitmap _waveform;
-        private bool _stopButtonEnabled;
-        private string _playPauseImagePath;
-        private string _trackName;
-
-        public IWaveProvider Sound
-        {
-            get => _sound;
-            set => SetProperty(ref _sound, value);
-        }
-        public SKBitmap Waveform
-        {
-            get => _waveform;
-            set => SetProperty(ref _waveform, value);
-        }
-        public bool StopButtonEnabled
-        {
-            get => _stopButtonEnabled;
-            set => SetProperty(ref _stopButtonEnabled, value);
-        }
-        public string PlayPauseImagePath
-        {
-            get => _playPauseImagePath;
-            set => SetProperty(ref _playPauseImagePath, value);
-        }
-        public string TrackName
-        {
-            get => _trackName;
-            set => SetProperty(ref _trackName, value);
-        }
+        [Reactive]
+        public IWaveProvider Sound { get; set; }
+        [Reactive]
+        public SKBitmap Waveform { get; set; }
+        [Reactive]
+        public bool StopButtonEnabled { get; set; }
+        [Reactive]
+        public string PlayPauseImagePath { get; set; }
+        [Reactive]
+        public string TrackName { get; set; }
         public ICommand TrackNameCommand { get; set; }
         public bool UseTextBoxForTrackName => TrackNameCommand is not null;
         public string TrackDetails { get; set; }

@@ -10,6 +10,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Styling;
 using HaruhiChokuretsuLib.Util;
+using ReactiveUI.Fody.Helpers;
 using SerialLoops.Assets;
 using SerialLoops.Lib.Items;
 using SerialLoops.Models;
@@ -35,12 +36,8 @@ namespace SerialLoops.ViewModels.Panels
         public ObservableCollection<ITreeItem> Source { get; set; }
 
         protected ILogger _log;
-        private bool _expandItems;
-        public bool ExpandItems
-        {
-            get => _expandItems;
-            set => SetProperty(ref _expandItems, value);
-        }
+        [Reactive]
+        public bool ExpandItems { get; set; }
 
         public void InitializeItems(List<ItemDescription> items, bool expandItems, ILogger log)
         {

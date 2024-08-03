@@ -280,7 +280,7 @@ namespace SerialLoops.Controls
 
         protected virtual async Task SelectButton_OnClick()
         {
-            IStorageFile file = (await _window.StorageProvider.OpenFilePickerAsync(new())).FirstOrDefault();
+            IStorageFile file = await _window.ShowOpenFilePickerAsync(string.Empty, []);
             if (file is not null)
             {
                 _pathBox.Text = file.Path.LocalPath;
@@ -296,7 +296,7 @@ namespace SerialLoops.Controls
 
         protected override async Task SelectButton_OnClick()
         {
-            IStorageFolder folder = (await _window.StorageProvider.OpenFolderPickerAsync(new())).FirstOrDefault();
+            IStorageFolder folder = await _window.ShowOpenFolderPickerAsync(string.Empty);
             if (folder is not null)
             {
                 _pathBox.Text = folder.Path.LocalPath;

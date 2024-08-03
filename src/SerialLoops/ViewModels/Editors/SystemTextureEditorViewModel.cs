@@ -11,6 +11,7 @@ using SerialLoops.Assets;
 using SerialLoops.Controls;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
+using SerialLoops.Utility;
 using SerialLoops.ViewModels.Dialogs;
 using SerialLoops.Views.Dialogs;
 using SkiaSharp;
@@ -37,15 +38,7 @@ namespace SerialLoops.ViewModels.Editors
 
         private async Task ExportButton_Click()
         {
-            FilePickerSaveOptions saveOptions = new()
-            {
-                ShowOverwritePrompt = true,
-                FileTypeChoices =
-                [
-                    new FilePickerFileType(Strings.PNG_Image) { Patterns = ["*.png"] }
-                ]
-            };
-            IStorageFile savedFile = await _window.Window.StorageProvider.SaveFilePickerAsync(saveOptions);
+            IStorageFile savedFile = await _window.Window.ShowSaveFilePickerAsync(Strings.Export_System_Texture, [new FilePickerFileType(Strings.PNG_Image) { Patterns = ["*.png"] }], $"{SystemTexture.Grp.Index:D4}.png");
             if (savedFile is not null)
             {
                 try
@@ -70,19 +63,10 @@ namespace SerialLoops.ViewModels.Editors
             await ReplaceImage(true);
         }
 
-        private async Task ReplaceImage(bool ReplacePalette)
+        private async Task ReplaceImage(bool replacePalette)
         {
-            FilePickerOpenOptions openOptions = new()
-            {
-                AllowMultiple = false,
-                SuggestedFileName = $"{SystemTexture.Name}.png",
-                FileTypeFilter =
-                [
-                    new FilePickerFileType(Strings.Supported_Images) { Patterns = ["*.bmp", "*.gif", "*.heif", "*.jpg", "*.jpeg", "*.png", "*.webp"] },
-                ]
-            };
             SKBitmap original = SystemTexture.GetTexture();
-            IStorageFile openFile = (await _window.Window.StorageProvider.OpenFilePickerAsync(openOptions))?.FirstOrDefault();
+            IStorageFile openFile = await _window.Window.ShowOpenFilePickerAsync(Strings.Replace_System_Texture, [new FilePickerFileType(Strings.Supported_Images) { Patterns = Shared.SupportedImageFiletypes }]);
             if (openFile is not null)
             {
                 SKBitmap newImage = SKBitmap.Decode(openFile.Path.LocalPath);
@@ -96,9 +80,9 @@ namespace SerialLoops.ViewModels.Editors
                     try
                     {
                         LoopyProgressTracker tracker = new();
-                        await new ProgressDialog(() => SystemTexture.SetTexture(finalImage, ReplacePalette, _log),
+                        await new ProgressDialog(() => SystemTexture.SetTexture(finalImage, replacePalette, _log),
                             () => { }, tracker, string.Format(Strings.Replacing__0____, SystemTexture.DisplayName)).ShowDialog(_window.Window);
-                        OnPropertyChanged(nameof(SystemTextureBitmap));
+                        this.RaisePropertyChanged(nameof(SystemTextureBitmap));
                         Description.UnsavedChanges = true;
                     }
                     catch (Exception ex)

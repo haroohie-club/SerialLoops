@@ -3,6 +3,7 @@ using System.Windows.Input;
 using HaruhiChokuretsuLib.Util;
 using NAudio.Wave;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using SerialLoops.Assets;
 using SerialLoops.Lib.Util.WaveformRenderer;
 using SerialLoops.Models;
@@ -14,30 +15,18 @@ namespace SerialLoops.ViewModels.Dialogs
 {
     public class BgmVolumePropertiesDialogViewModel : ViewModelBase
     {
-        private string _title;
-        private SKBitmap _waveform;
         private ILogger _log;
         private WaveStream _wav;
         private long _waveLength;
-        private double _volume = 100;
 
-        public string Title
-        {
-            get => _title;
-            set => SetProperty(ref _title, value);
-        }
+        [Reactive]
+        public string Title { get; set; }
         public BgmVolumePreviewItem VolumePreview { get; set; }
-        public SKBitmap Waveform
-        {
-            get => _waveform;
-            set => SetProperty(ref _waveform, value);
-        }
+        [Reactive]
+        public SKBitmap Waveform { get; set; }
         public SoundPlayerPanelViewModel VolumePreviewPlayer { get; set; }
-        public double Volume
-        {
-            get => _volume;
-            set => SetProperty(ref _volume, value);
-        }
+        [Reactive]
+        public double Volume { get; set; } = 100;
         public ICommand VolumeSliderValueChangedCommand { get; set; }
         public ICommand SaveCommand { get; set; }
         public ICommand CancelCommand { get; set; }

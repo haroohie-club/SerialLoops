@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -64,7 +63,7 @@ namespace SerialLoops.Utility
 
         private async Task LogErrorAsync(string message, bool lookForWarnings = false)
         {
-            await MessageBoxManager.GetMessageBoxStandard(Strings.Error, string.Format(Strings.ERROR___0_, message), ButtonEnum.Ok, Icon.Error, WindowStartupLocation.CenterScreen).ShowWindowDialogAsync(_owner);
+            await _owner.ShowMessageBoxAsync(Strings.Error, string.Format(Strings.ERROR___0_, message), ButtonEnum.Ok, Icon.Error, this);
             if (!string.IsNullOrEmpty(_logFile) && !string.IsNullOrEmpty(message))
             {
                 for (int i = 0; i < 10; i++)

@@ -1,39 +1,23 @@
 ﻿using System;
 using System.IO;
-using CommunityToolkit.Mvvm.ComponentModel;
 using HaruhiChokuretsuLib.Util;
 using NAudio.Wave;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using SerialLoops.Lib.Items;
 
 namespace SerialLoops.Models
 {
-    public class BgmLoopPreviewItem(WaveStream wav, bool loopEnabled, uint startSample, uint endSample) : ObservableObject, ISoundItem
+    public class BgmLoopPreviewItem(WaveStream wav, bool loopEnabled, uint startSample, uint endSample) : ReactiveObject, ISoundItem
     {
-        private WaveStream _wave = wav;
-        private bool _loopEnanbled = loopEnabled;
-        private uint _startSample = startSample;
-        private uint _endSample = endSample;
-
-        public WaveStream Wave
-        {
-            get => _wave;
-            set => SetProperty(ref _wave, value);
-        }
-        public bool LoopEnabled
-        {
-            get => _loopEnanbled;
-            set => SetProperty(ref _loopEnanbled, value);
-        }
-        public uint StartSample
-        {
-            get => _startSample;
-            set => SetProperty(ref _startSample, value);
-        }
-        public uint EndSample
-        {
-            get => _endSample;
-            set => SetProperty(ref _endSample, value);
-        }
+        [Reactive]
+        public WaveStream Wave { get; set; } = wav;
+        [Reactive]
+        public bool LoopEnabled { get; set; } = loopEnabled;
+        [Reactive]
+        public uint StartSample { get; set; } = startSample;
+        [Reactive]
+        public uint EndSample { get; set; } = endSample;
 
         public IWaveProvider GetWaveProvider(ILogger log, bool loop)
         {

@@ -7,6 +7,7 @@ using HaruhiChokuretsuLib.Audio.ADX;
 using HaruhiChokuretsuLib.Util;
 using NAudio.Wave;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using SerialLoops.Assets;
 using SerialLoops.Controls;
 using SerialLoops.Lib;
@@ -22,14 +23,9 @@ namespace SerialLoops.ViewModels.Editors
 {
     public class BackgroundMusicEditorViewModel : EditorViewModel
     {
-        private SoundPlayerPanelViewModel _soundPlayerViewModel;
-
         public BackgroundMusicItem Bgm { get; set; }
-        public SoundPlayerPanelViewModel BgmPlayer
-        {
-            get => _soundPlayerViewModel;
-            set => SetProperty(ref _soundPlayerViewModel, value);
-        }
+        [Reactive]
+        public SoundPlayerPanelViewModel BgmPlayer { get; set; }
         private bool _loopEnabled;
         private uint _loopStartSample;
         private uint _loopEndSample;
@@ -71,8 +67,7 @@ namespace SerialLoops.ViewModels.Editors
 
         private async Task Extract_Executed()
         {
-            FilePickerSaveOptions saveOptions = new() { Title = Strings.Save_BGM_as_WAV, FileTypeChoices = [ new(Strings.WAV_File) { Patterns = [ "*.wav" ] } ] };
-            IStorageFile file = await _window.Window.StorageProvider.SaveFilePickerAsync(saveOptions);
+            IStorageFile file = await _window.Window.ShowSaveFilePickerAsync(Strings.Save_BGM_as_WAV, [new(Strings.WAV_File) { Patterns = ["*.wav"] }]);
             if (file is not null)
             {
                 LoopyProgressTracker tracker = new();
@@ -83,19 +78,14 @@ namespace SerialLoops.ViewModels.Editors
 
         private async Task Replace_Executed()
         {
-            FilePickerOpenOptions openOptions = new()
-            {
-                Title = Strings.Replace_BGM,
-                FileTypeFilter =
+            IStorageFile file = await _window.Window.ShowOpenFilePickerAsync(Strings.Replace_BGM,
                 [
-                    new(Strings.Supported_Audio_Files) { Patterns = ["*.wav", "*.flac", "*.mp3", "*.ogg"] },
+                    new(Strings.Supported_Audio_Files) { Patterns = Shared.SupportedAudioFiletypes },
                     new(Strings.WAV_files) { Patterns = ["*.wav"] },
                     new(Strings.FLAC_files) { Patterns = ["*.flac"] },
                     new(Strings.MP3_files) { Patterns = ["*.mp3"] },
                     new(Strings.Vorbis_files) { Patterns = ["*.ogg"] },
-                ]
-            };
-            IStorageFile file = (await _window.Window.StorageProvider.OpenFilePickerAsync(openOptions)).FirstOrDefault();
+                ]);
             if (file is not null)
             {
                 LoopyProgressTracker firstTracker = new(Strings.Replacing_BGM);
