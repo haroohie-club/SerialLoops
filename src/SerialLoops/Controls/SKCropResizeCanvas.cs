@@ -109,6 +109,7 @@ namespace SerialLoops.Controls
 
         protected virtual void OnPaintSurface(SKSurface surface)
         {
+            Scale = 1;
             SKCanvas canvas = surface.Canvas;
             canvas.Clear();
             if (SourceBitmap is not null && ImageLocation is not null && SourceWidth is not null && SourceHeight is not null)
