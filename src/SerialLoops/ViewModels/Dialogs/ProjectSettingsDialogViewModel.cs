@@ -3,8 +3,10 @@ using System.Windows.Input;
 using Avalonia.Platform.Storage;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using SerialLoops.Assets;
 using SerialLoops.Lib;
+using SerialLoops.Utility;
 using SerialLoops.Views.Dialogs;
 using SkiaSharp;
 
@@ -21,12 +23,8 @@ namespace SerialLoops.ViewModels.Dialogs
         public ICommand ApplyCommand { get; private set; }
         public ICommand CancelCommand { get; private set; }
 
-        private string _gameTitle;
-        public string GameTitle
-        {
-            get => _gameTitle;
-            set => SetProperty(ref _gameTitle, value);
-        }
+        [Reactive]
+        public string GameTitle { get; set; }
 
         private SKBitmap _icon;
         public SKBitmap Icon
@@ -37,7 +35,7 @@ namespace SerialLoops.ViewModels.Dialogs
                 _icon.ScalePixels(preview, SKFilterQuality.None);
                 return preview;
             }
-            set => SetProperty(ref _icon, value);
+            set => this.RaiseAndSetIfChanged(ref _icon, value);
         }
 
         private ProjectSettings _settings;
@@ -61,12 +59,7 @@ namespace SerialLoops.ViewModels.Dialogs
 
         private async void ReplaceCommand_Executed()
         {
-            FilePickerOpenOptions options = new()
-            {
-                Title = Strings.Open_ROM,
-                FileTypeFilter = [new FilePickerFileType(Strings.Chokuretsu_ROM) { Patterns = [ "*.png", ".jpg", "*.jpeg", "*.bmp", "*.gif" ] }]
-            };
-            IStorageFile image = (await _settingsDialog.StorageProvider.OpenFilePickerAsync(options)).FirstOrDefault();
+            IStorageFile image = await _settingsDialog.ShowOpenFilePickerAsync(Strings.Replace_Game_Icon, [new FilePickerFileType(Strings.Supported_Images) { Patterns = Shared.SupportedImageFiletypes }]);
             if (image is null)
             {
                 return;
@@ -82,20 +75,20 @@ namespace SerialLoops.ViewModels.Dialogs
             Log.LogError(Strings.Invalid_image_file_selected);
         }
 
-        private async void ApplyCommand_Executed()
+        private void ApplyCommand_Executed()
         {
-            if (_gameTitle.Length is < 1 or > 127)
+            if (GameTitle.Length is < 1 or > 127)
             {
                 Log.LogError(Strings.Please_enter_a_game_name_for_the_banner__between_1_and_128_characters_);
                 return;
             }
 
-            if (_gameTitle.Split('\n').Length > 3)
+            if (GameTitle.Split('\n').Length > 3)
             {
                 Log.LogError(Strings.Game_banner_can_only_contain_up_to_three_lines_);
                 return;
             }
-            _settings.Name = _gameTitle;
+            _settings.Name = GameTitle;
 
             if (Icon is not null)
             {

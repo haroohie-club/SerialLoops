@@ -13,6 +13,7 @@ using SerialLoops.Controls;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Util;
+using SerialLoops.Utility;
 using SerialLoops.ViewModels.Dialogs;
 using SerialLoops.Views.Dialogs;
 using SkiaSharp;
@@ -21,7 +22,6 @@ namespace SerialLoops.ViewModels.Editors
 {
     public class BackgroundEditorViewModel : EditorViewModel
     {
-
         public BackgroundItem Bg { get; set; }
         public SKBitmap BgBitmap => Bg.GetBackground();
         public string BgDescription => $"{Bg.Id} (0x{Bg.Id:X3}); {Bg.BackgroundType}";
@@ -58,7 +58,7 @@ namespace SerialLoops.ViewModels.Editors
                     new FilePickerFileType(Strings.PNG_Image) { Patterns = ["*.png"] }
                     ]
             };
-            IStorageFile savedFile = await _window.Window.StorageProvider.SaveFilePickerAsync(saveOptions);
+            IStorageFile savedFile = await _window.Window.ShowSaveFilePickerAsync(Strings.Export_Background_Image, [new FilePickerFileType(Strings.PNG_Image) { Patterns = ["*.png"] }], $"{Bg.Name}.png");
             if (savedFile is not null)
             {
                 try
@@ -75,18 +75,10 @@ namespace SerialLoops.ViewModels.Editors
 
         private async Task ReplaceButton_Click()
         {
-            FilePickerOpenOptions openOptions = new()
-            {
-                AllowMultiple = false,
-                SuggestedFileName = $"{Bg.Name}.png",
-                FileTypeFilter = [
-                    new FilePickerFileType(Strings.Supported_Images) { Patterns = ["*.bmp", "*.gif", "*.heif", "*.jpg", "*.jpeg", "*.png", "*.webp",] },
-                    ]
-            };
-            SKBitmap original = Bg.GetBackground();
-            IStorageFile openFile = (await _window.Window.StorageProvider.OpenFilePickerAsync(openOptions))?.FirstOrDefault();
+            IStorageFile openFile = await _window.Window.ShowOpenFilePickerAsync(Strings.Replace_Background_Image, [new FilePickerFileType(Strings.Supported_Images) { Patterns = Shared.SupportedImageFiletypes }]);
             if (openFile is not null)
             {
+                SKBitmap original = Bg.GetBackground();
                 SKBitmap newImage = SKBitmap.Decode(openFile.Path.LocalPath);
                 ImageCropResizeDialogViewModel cropResizeDialogViewModel = new(newImage, original.Width, original.Height, _log);
                 SKBitmap finalImage = await new ImageCropResizeDialog()
@@ -100,7 +92,7 @@ namespace SerialLoops.ViewModels.Editors
                         LoopyProgressTracker tracker = new();
                         await new ProgressDialog(() => Bg.SetBackground(finalImage, tracker, _log),
                             () => { }, tracker, string.Format(Strings.Replacing__0____, Bg.DisplayName)).ShowDialog(_window.Window);
-                        OnPropertyChanged(nameof(BgBitmap));
+                        this.RaisePropertyChanged(nameof(BgBitmap));
                         Description.UnsavedChanges = true;
                     }
                     catch (Exception ex)

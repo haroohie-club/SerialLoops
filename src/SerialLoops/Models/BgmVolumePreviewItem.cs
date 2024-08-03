@@ -1,21 +1,18 @@
 ﻿using System.IO;
-using CommunityToolkit.Mvvm.ComponentModel;
 using HaruhiChokuretsuLib.Util;
 using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using SerialLoops.Lib.Items;
 
 namespace SerialLoops.Models
 {
-    public class BgmVolumePreviewItem : ObservableObject, ISoundItem
+    public class BgmVolumePreviewItem : ReactiveObject, ISoundItem
     {
         private WaveStream _wav;
-        private VolumeSampleProvider _provider;
-        public VolumeSampleProvider Provider
-        {
-            get => _provider;
-            set => SetProperty(ref _provider, value);
-        }
+        [Reactive]
+        public VolumeSampleProvider Provider { get; set; }
 
         public BgmVolumePreviewItem(WaveStream wav)
         {

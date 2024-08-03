@@ -2,6 +2,7 @@
 using HaruhiChokuretsuLib.Util;
 using NAudio.Wave;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using SerialLoops.Assets;
 using SerialLoops.Lib.Util.WaveformRenderer;
 using SerialLoops.Models;
@@ -15,13 +16,8 @@ namespace SerialLoops.ViewModels.Dialogs
     {
         public ILogger Log { get; set; }
 
-        private string _title;
-
-        public string Title
-        {
-            get => _title;
-            set => SetProperty(ref _title, value);
-        }
+        [Reactive]
+        public string Title { get; set; }
         public uint MaxSample => (uint)(LoopPreview.Wave.Length / LoopPreview.Wave.WaveFormat.BitsPerSample * 8 / LoopPreview.Wave.WaveFormat.Channels);
 
         public BgmLoopPreviewItem LoopPreview { get; set; }

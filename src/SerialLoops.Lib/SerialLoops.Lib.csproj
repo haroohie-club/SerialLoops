@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <PackageReference Include="BunLabs.NAudio.Flac" Version="2.0.1" />
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
     <PackageReference Include="HarfBuzzSharp.NativeAssets.Linux" Version="7.3.0.2" />
     <PackageReference Include="HarfBuzzSharp.NativeAssets.macOS" Version="7.3.0.2" />
     <PackageReference Include="HaruhiChokuretsuLib" Version="0.40.6" />
@@ -19,6 +18,7 @@
     <PackageReference Include="NLayer" Version="1.15.0" />
     <PackageReference Include="NLayer.NAudioSupport" Version="1.4.0" />
     <PackageReference Include="QuikGraph" Version="2.5.0" />
+    <PackageReference Include="ReactiveUI.Fody" Version="19.5.41" />
     <PackageReference Include="Topten.RichTextKit" Version="0.4.167" />
     <PackageReference Include="VCDiff" Version="4.0.1" />
   </ItemGroup>

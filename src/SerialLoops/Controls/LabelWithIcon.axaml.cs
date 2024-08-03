@@ -1,6 +1,4 @@
-﻿using System;
-using Avalonia.Controls;
-using Avalonia.Interactivity;
+﻿using Avalonia.Controls;
 
 namespace SerialLoops.Controls
 {

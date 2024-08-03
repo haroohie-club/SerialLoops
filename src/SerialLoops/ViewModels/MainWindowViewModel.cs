@@ -13,12 +13,12 @@ using Avalonia.Media;
 using Avalonia.Platform;
 using Avalonia.Platform.Storage;
 using Avalonia.Styling;
-using CommunityToolkit.Mvvm.ComponentModel;
 using HaruhiChokuretsuLib.Archive;
 using MiniToolbar.Avalonia;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using SerialLoops.Assets;
 using SerialLoops.Controls;
 using SerialLoops.Lib;
@@ -40,20 +40,11 @@ namespace SerialLoops.ViewModels
     {
         private const string BASE_TITLE = "Serial Loops";
 
-        private string _title = BASE_TITLE;
-        private Size _clientSize = new(1200, 800);
-
-        public string Title
-        {
-            get => _title;
-            set => SetProperty(ref _title, value);
-        }
+        [Reactive]
+        public string Title { get; set; } = BASE_TITLE;
         public Size MinSize => new(769, 420);
-        public Size ClientSize
-        {
-            get => _clientSize;
-            set => SetProperty(ref _clientSize, value);
-        }
+        [Reactive]
+        public Size ClientSize { get; set; } = new(1200, 800);
 
         public MainWindow Window { get; set; }
         public ProjectsCache ProjectsCache { get; set; }
@@ -100,10 +91,10 @@ namespace SerialLoops.ViewModels
         public ICommand BuildBaseCommand { get; private set; }
         public ICommand BuildAndRunCommand { get; private set; }
 
-        [ObservableProperty]
-        private KeyGesture _saveHotKey;
-        [ObservableProperty]
-        private KeyGesture _closeProjectKey;
+        [Reactive]
+        public KeyGesture SaveHotKey { get; set; }
+        [Reactive]
+        public KeyGesture CloseProjectKey { get; set; }
 
         public MainWindowViewModel()
         {
@@ -242,9 +233,8 @@ namespace SerialLoops.ViewModels
                     else
                     {
                         // message box with yes no cancel buttons
-                        result = await MessageBoxManager.GetMessageBoxStandard(Strings.Confirm,
-                            string.Format(Strings.You_have_unsaved_changes_in__0__item_s___Would_you_like_to_save_before_closing_the_project_, unsavedItems.Count()),
-                            ButtonEnum.YesNoCancel, Icon.Warning, WindowStartupLocation.CenterScreen).ShowWindowDialogAsync(Window);
+                        result = await Window.ShowMessageBoxAsync(Strings.Confirm, string.Format(Strings.You_have_unsaved_changes_in__0__item_s___Would_you_like_to_save_before_closing_the_project_, unsavedItems.Count()),
+                            ButtonEnum.YesNoCancel, Icon.Warning, Log);
                     }
                     switch (result)
                     {
@@ -378,12 +368,7 @@ namespace SerialLoops.ViewModels
 
         public async Task OpenProjectCommand_Executed()
         {
-            FilePickerOpenOptions options = new()
-            {
-                SuggestedStartLocation = await Window.StorageProvider.TryGetFolderFromPathAsync(CurrentConfig.ProjectsDirectory),
-                FileTypeFilter = [new FilePickerFileType(Strings.Serial_Loops_Project) { Patterns = [$"*.{Project.PROJECT_FORMAT}"] }],
-            };
-            IStorageFile projectFile = (await Window.StorageProvider.OpenFilePickerAsync(options)).FirstOrDefault();
+            IStorageFile projectFile = await Window.ShowOpenFilePickerAsync(Strings.Open_Project, [new FilePickerFileType(Strings.Serial_Loops_Project) { Patterns = [$"*.{Project.PROJECT_FORMAT}"] }], CurrentConfig.ProjectsDirectory);
             if (projectFile is not null)
             {
                 await OpenProjectFromPath(projectFile.Path.LocalPath);
@@ -403,9 +388,9 @@ namespace SerialLoops.ViewModels
                 () => { }, tracker, Strings.Loading_Project).ShowDialog(Window);
             if (OpenProject is not null && result.State == Project.LoadProjectState.LOOSELEAF_FILES)
             {
-                if ((await MessageBoxManager.GetMessageBoxStandard(Strings.Build_Unbuilt_Files_,
+                if ((await Window.ShowMessageBoxAsync(Strings.Build_Unbuilt_Files_,
                     Strings.Saved_but_unbuilt_files_were_detected_in_the_project_directory__Would_you_like_to_build_before_loading_the_project__Not_building_could_result_in_these_files_being_overwritten_,
-                    ButtonEnum.YesNo, Icon.Question, WindowStartupLocation.CenterOwner).ShowWindowDialogAsync(Window)) == ButtonResult.Yes)
+                    ButtonEnum.YesNo, Icon.Question, Log)) == ButtonResult.Yes)
                 {
                     LoopyProgressTracker secondTracker = new();
                     await new ProgressDialog(() => Build.BuildIterative(OpenProject, CurrentConfig, Log, secondTracker),
@@ -418,10 +403,10 @@ namespace SerialLoops.ViewModels
             }
             else if (result.State == Project.LoadProjectState.CORRUPTED_FILE)
             {
-                if ((await MessageBoxManager.GetMessageBoxStandard(Strings.Corrupted_File_Detected_,
+                if ((await Window.ShowMessageBoxAsync(Strings.Corrupted_File_Detected_,
                         string.Format(Strings.While_attempting_to_build___file___0_X3__in_archive__1__was_found_to_be_corrupt__Serial_Loops_can_delete_this_file_from_your_base_directory_automatically_which_may_allow_you_to_load_the_rest_of_the_project__but_any_changes_made_to_that_file_will_be_lost__Alternatively__you_can_attempt_to_edit_the_file_manually_to_fix_it__How_would_you_like_to_proceed__Press_OK_to_proceed_with_deleting_the_file_and_Cancel_to_attempt_to_deal_with_it_manually_,
                         result.BadFileIndex, result.BadArchive),
-                        ButtonEnum.OkCancel, Icon.Warning, WindowStartupLocation.CenterOwner).ShowWindowDialogAsync(Window)) == ButtonResult.Ok)
+                        ButtonEnum.OkCancel, Icon.Warning, Log)) == ButtonResult.Ok)
                 {
                     switch (result.BadArchive)
                     {
@@ -474,7 +459,7 @@ namespace SerialLoops.ViewModels
                 CurrentConfig = preferencesDialogViewModel.Configuration;
                 if (preferencesDialogViewModel.RequireRestart)
                 {
-                    if ((await MessageBoxManager.GetMessageBoxStandard(string.Empty, Strings.The_changes_made_will_require_Serial_Loops_to_be_restarted__Is_that_okay_, ButtonEnum.YesNo).ShowWindowDialogAsync(Window)) == ButtonResult.Yes)
+                    if ((await Window.ShowMessageBoxAsync(Strings.Restart_required, Strings.The_changes_made_will_require_Serial_Loops_to_be_restarted__Is_that_okay_, ButtonEnum.YesNo, Icon.Setting, Log)) == ButtonResult.Yes)
                     {
                         Window.RestartOnClose = true;
                         Window.Close();
@@ -595,7 +580,7 @@ namespace SerialLoops.ViewModels
                         if (buildSucceeded)
                         {
                             Log.Log("Build succeeded!");
-                            await MessageBoxManager.GetMessageBoxStandard(Strings.Build_Result, Strings.Build_succeeded_, ButtonEnum.Ok, Icon.Success).ShowWindowDialogAsync(Window);
+                            await Window.ShowMessageBoxAsync(Strings.Build_Result, Strings.Build_succeeded_, ButtonEnum.Ok, Icon.Success, Log);
                         }
                         else
                         {
@@ -616,7 +601,7 @@ namespace SerialLoops.ViewModels
                         if (buildSucceeded)
                         {
                             Log.Log("Build succeeded!");
-                            await MessageBoxManager.GetMessageBoxStandard(Strings.Build_Result, Strings.Build_succeeded_, ButtonEnum.Ok, Icon.Success).ShowWindowDialogAsync(Window);
+                            await Window.ShowMessageBoxAsync(Strings.Build_Result, Strings.Build_succeeded_, ButtonEnum.Ok, Icon.Success, Log);
                         }
                         else
                         {
@@ -632,9 +617,9 @@ namespace SerialLoops.ViewModels
             {
                 if (string.IsNullOrWhiteSpace(CurrentConfig.EmulatorPath))
                 {
-                    await MessageBoxManager.GetMessageBoxStandard(Strings.No_Emulator_Path, Strings.No_emulator_path_has_been_set__nPlease_set_the_path_to_a_Nintendo_DS_emulator_in_Preferences_to_use_Build___Run_,
-                        ButtonEnum.Ok, Icon.Warning).ShowWindowDialogAsync(Window);
                     Log.LogWarning("Attempted to build and run project while no emulator path was set.");
+                    await Window.ShowMessageBoxAsync(Strings.No_Emulator_Path, Strings.No_emulator_path_has_been_set__nPlease_set_the_path_to_a_Nintendo_DS_emulator_in_Preferences_to_use_Build___Run_,
+                        ButtonEnum.Ok, Icon.Warning, Log);
                     await PreferencesCommand_Executed();
                     return;
                 }

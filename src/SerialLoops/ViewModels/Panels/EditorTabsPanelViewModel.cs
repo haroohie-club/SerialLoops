@@ -1,8 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
-using Avalonia.Input;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using SerialLoops.Assets;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
@@ -17,11 +17,8 @@ namespace SerialLoops.ViewModels.Panels
         private EditorViewModel _selectedTab;
 
         public MainWindowViewModel MainWindow { get; private set; }
-        public EditorViewModel SelectedTab
-        {
-            get => _selectedTab;
-            set => SetProperty(ref _selectedTab, value);
-        }
+        [Reactive]
+        public EditorViewModel SelectedTab { get; set; }
 
         public ICommand TabSwitchedCommand { get; set; }
 

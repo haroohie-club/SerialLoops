@@ -7,10 +7,12 @@ using HaruhiChokuretsuLib.Util;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using SerialLoops.Assets;
 using SerialLoops.Controls;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Util;
+using SerialLoops.Utility;
 using SerialLoops.Views.Dialogs;
 
 namespace SerialLoops.ViewModels.Dialogs
@@ -21,16 +23,11 @@ namespace SerialLoops.ViewModels.Dialogs
         private MainWindowViewModel _mainWindow;
         private Config _config;
 
-        private string _romPath = Strings.None_Selected;
-
         public string ProjectName { get; set; }
         public ComboBoxItem LanguageTemplateItem { get; set; }
         public string LanguageTemplateCode => (string)LanguageTemplateItem?.Tag ?? "";
-        public string RomPath
-        {
-            get => _romPath;
-            set => SetProperty(ref _romPath, value);
-        }
+        [Reactive]
+        public string RomPath { get; set; } = Strings.None_Selected;
 
         public ICommand PickRomCommand { get; set; }
         public ICommand CreateCommand { get; set; }
@@ -48,12 +45,7 @@ namespace SerialLoops.ViewModels.Dialogs
 
         private async Task PickRom()
         {
-            FilePickerOpenOptions options = new()
-            {
-                Title = Strings.Open_ROM,
-                FileTypeFilter = [new FilePickerFileType(Strings.Chokuretsu_ROM) { Patterns = [ "*.nds" ] }]
-            };
-            IStorageFile rom = (await _mainWindow.Window.StorageProvider.OpenFilePickerAsync(options)).FirstOrDefault();
+            IStorageFile rom = await _mainWindow.Window.ShowOpenFilePickerAsync(Strings.Open_ROM, [new FilePickerFileType(Strings.Chokuretsu_ROM) { Patterns = ["*.nds"] }]);
             if (rom is not null)
             {
                 RomPath = rom.Path.LocalPath;
@@ -64,13 +56,11 @@ namespace SerialLoops.ViewModels.Dialogs
         {
             if (string.IsNullOrEmpty(RomPath) || RomPath.Equals(Strings.None_Selected))
             {
-                await MessageBoxManager.GetMessageBoxStandard(Strings.Project_Creation_Warning, Strings.Please_select_a_ROM_before_creating_the_project_,
-                    ButtonEnum.Ok, Icon.Warning).ShowWindowDialogAsync(_mainWindow.Window);
+                await _mainWindow.Window.ShowMessageBoxAsync(Strings.Project_Creation_Warning, Strings.Please_select_a_ROM_before_creating_the_project_, ButtonEnum.Ok, Icon.Warning, _log);
             }
             else if (string.IsNullOrWhiteSpace(ProjectName))
             {
-                await MessageBoxManager.GetMessageBoxStandard(Strings.Project_Creation_Warning, Strings.Please_choose_a_project_name_before_creating_the_project_,
-                    ButtonEnum.Ok, Icon.Warning).ShowWindowDialogAsync(_mainWindow.Window);
+                await _mainWindow.Window.ShowMessageBoxAsync(Strings.Project_Creation_Warning, Strings.Please_choose_a_project_name_before_creating_the_project_, ButtonEnum.Ok, Icon.Warning, _log);
             }
             else
             {
