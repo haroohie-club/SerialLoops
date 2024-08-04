@@ -65,7 +65,7 @@ namespace SerialLoops.Lib
             }
         }
 
-        internal void InitializeHacks(ILogger log)
+        public void InitializeHacks(ILogger log)
         {
             if (!Directory.Exists(HacksDirectory))
             {

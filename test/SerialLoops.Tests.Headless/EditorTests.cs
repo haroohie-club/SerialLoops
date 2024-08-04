@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -30,6 +31,7 @@ namespace SerialLoops.Tests.Headless
     {
         // To run these tests locally, you can create a file called 'ui_vals.json' and place it next to the test assembly (in the output folder)
         private UiVals? _uiVals;
+        private List<string> _dirsToDelete = [];
 
         [OneTimeSetUp]
         public void Setup()
@@ -59,6 +61,12 @@ namespace SerialLoops.Tests.Headless
                     ArtifactsDir = Environment.GetEnvironmentVariable(UiVals.ARTIFACTS_DIR_ENV_VAR) ?? "artifacts",
                 };
             }
+        }
+
+        [OneTimeTearDown]
+        public void TearDown()
+        {
+
         }
 
         [AvaloniaTest]
@@ -102,6 +110,7 @@ namespace SerialLoops.Tests.Headless
 
             await mainWindowViewModel.OpenProjectFromPath(Path.Combine(mainWindowViewModel.CurrentConfig.ProjectsDirectory, _uiVals.ProjectName, $"{_uiVals.ProjectName}.slproj"));
             string createdProjectPath = mainWindowViewModel.OpenProject.MainDirectory;
+            _dirsToDelete.Add(createdProjectPath);
 
             // Verify that the project panel is open
             Assert.That(mainWindow.MainContent.Content, Is.TypeOf<OpenProjectPanel>());
@@ -115,7 +124,6 @@ namespace SerialLoops.Tests.Headless
             // Reopen the project
             await mainWindowViewModel.OpenProjectFromPath(Path.Combine(createdProjectPath, $"{_uiVals.ProjectName}.slproj"));
             Assert.That(mainWindow.MainContent.Content, Is.TypeOf<OpenProjectPanel>());
-            Directory.Delete(createdProjectPath, recursive: true);
         }
 
         [AvaloniaTest]
@@ -151,7 +159,7 @@ namespace SerialLoops.Tests.Headless
             Assert.That(newProject.Load(mainWindowViewModel.CurrentConfig, mainWindowViewModel.Log, tracker).State, Is.EqualTo(Project.LoadProjectState.SUCCESS));
             mainWindowViewModel.OpenProject = newProject;
             mainWindowViewModel.OpenProjectView(newProject, tracker);
-            string createdProjectPath = mainWindowViewModel.OpenProject.MainDirectory;
+            _dirsToDelete.Add(mainWindowViewModel.OpenProject.MainDirectory);
             mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(BackgroundEditor_CanEditCgNames), ref currentFrame);
 
             OpenProjectPanel openProjectPanel = (OpenProjectPanel)mainWindow.MainContent.Content;
@@ -228,8 +236,6 @@ namespace SerialLoops.Tests.Headless
                 Assert.That(extraFile, Does.Exist);
                 Assert.That(File.ReadAllText(extraFile), Contains.Substring(myExWifeStillMissesMe.GetOriginalString(mainWindowViewModel.OpenProject).EscapeShiftJIS()));
             });
-
-            Directory.Delete(createdProjectPath, recursive: true);
         }
     }
 }
