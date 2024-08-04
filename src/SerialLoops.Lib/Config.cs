@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using DynamicData;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib.Hacks;
 using SerialLoops.Lib.Script;
@@ -28,7 +29,7 @@ namespace SerialLoops.Lib
         [JsonIgnore]
         public string ScriptTemplatesDirectory => Path.Combine(UserDirectory, "ScriptTemplates");
         [JsonIgnore]
-        public List<AsmHack> Hacks { get; set; }
+        public ObservableCollection<AsmHack> Hacks { get; set; }
         [JsonIgnore]
         public ObservableCollection<ScriptTemplate> ScriptTemplates { get; set; }
         public string CurrentCultureName { get; set; }
@@ -73,7 +74,7 @@ namespace SerialLoops.Lib
                 File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "hacks.json"), Path.Combine(HacksDirectory, "hacks.json"));
             }
 
-            Hacks = JsonSerializer.Deserialize<List<AsmHack>>(File.ReadAllText(Path.Combine(HacksDirectory, "hacks.json")));
+            Hacks = JsonSerializer.Deserialize<ObservableCollection<AsmHack>>(File.ReadAllText(Path.Combine(HacksDirectory, "hacks.json")));
             
             // Pull in new hacks in case we've updated the program with more
             List<AsmHack> builtinHacks = JsonSerializer.Deserialize<List<AsmHack>>(File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "hacks.json")));
@@ -91,10 +92,20 @@ namespace SerialLoops.Lib
                 IO.CopyFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Hacks"), HacksDirectory, log);
                 foreach (AsmHack updatedHack in updatedHacks)
                 {
-                    Hacks[Hacks.FindIndex(h => h.Name == updatedHack.Name)] = updatedHack;
+                    Hacks[Hacks.IndexOf(updatedHack)] = updatedHack;
                 }
                 File.WriteAllText(Path.Combine(HacksDirectory, "hacks.json"), JsonSerializer.Serialize(Hacks));
             }
+        }
+
+        public void UpdateHackAppliedStatus(Project project, ILogger log)
+        {
+            foreach (AsmHack hack in Hacks)
+            {
+                hack.IsApplied = hack.Applied(project);
+            }
+
+            log.Log("Hydrated all hacks with the applied information for the current project.");
         }
 
         internal void InitializeScriptTemplates(Func<string, string> localize, ILogger log)
