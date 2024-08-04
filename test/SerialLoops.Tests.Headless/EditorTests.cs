@@ -66,7 +66,10 @@ namespace SerialLoops.Tests.Headless
         [OneTimeTearDown]
         public void TearDown()
         {
-
+            foreach (string dir in _dirsToDelete)
+            {
+                Directory.Delete(dir, true);
+            }
         }
 
         [AvaloniaTest]
