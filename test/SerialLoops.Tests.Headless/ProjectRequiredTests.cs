@@ -261,7 +261,7 @@ namespace SerialLoops.Tests.Headless
             {
                 try
                 {
-                    IO.OpenRom(project, _uiVals.RomLoc, log, tracker);
+                    Lib.IO.OpenRom(project, _uiVals.RomLoc, log, tracker);
                     break;
                 }
                 catch (IOException)
@@ -270,7 +270,7 @@ namespace SerialLoops.Tests.Headless
                 }
             }
             Assert.That(project.Load(config, log, tracker).State, Is.EqualTo(Project.LoadProjectState.SUCCESS));
-            _deleteDirs.Add(project.MainDirectory);
+            _dirsToDelete.Add(project.MainDirectory);
 
             AsmHacksDialogViewModel viewModel = new(project, config, log);
             AsmHacksDialog dialog = new(viewModel);
