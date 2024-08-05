@@ -21,7 +21,7 @@ using SerialLoops.Views.Dialogs;
 
 namespace SerialLoops.Tests.Headless
 {
-    public class DialogTests
+    public class NoProjectRequiredTests
     {
         // To run these tests locally, you can create a file called 'ui_vals.json' and place it next to the test assembly (in the output folder)
         private UiVals? _uiVals;
@@ -362,78 +362,6 @@ namespace SerialLoops.Tests.Headless
             }
 
             File.Delete(configPath);
-        }
-
-        [AvaloniaTest]
-        //[TestCase("SaveButton")]
-        [TestCase("CancelButton")]
-        [Parallelizable(ParallelScope.All)]
-        public async Task AsmHacksDialog_ApplyTest(string buttonName)
-        {
-            ConfigFactoryMock configFactory = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"config-{nameof(AsmHacksDialog_ApplyTest)}_{buttonName}.json"));
-            TestConsoleLogger log = new();
-            string projectName = $"Headless_{nameof(AsmHacksDialog_ApplyTest)}_{buttonName}";
-            Config config = configFactory.LoadConfig(s => s, log);
-            config.UseDocker = true;
-            int currentFrame = 0;
-            Project project = new(projectName, "en", config, (s) => s, log);
-            TestProgressTracker tracker = new();
-            // We're all gonna be trying to access the same ROM at the same time. We should retry if we hit IOExceptions to fix flakiness
-            for (int i = 0; i < 100; i++)
-            {
-                try
-                {
-                    IO.OpenRom(project, _uiVals.RomLoc, log, tracker);
-                    break;
-                }
-                catch (IOException)
-                {
-                    await Task.Delay(TimeSpan.FromMilliseconds(100));
-                }
-            }
-            Assert.That(project.Load(config, log, tracker).State, Is.EqualTo(Project.LoadProjectState.SUCCESS));
-            _deleteDirs.Add(project.MainDirectory);
-
-            AsmHacksDialogViewModel viewModel = new(project, config, log);
-            AsmHacksDialog dialog = new(viewModel);
-            dialog.Show();
-            dialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, $"{nameof(AsmHacksDialog_ApplyTest)}_{buttonName}", ref currentFrame);
-
-            AsmHack skipOpHack = config.Hacks.First(h => h.Name == "Skip OP");
-            viewModel.SelectedHack = skipOpHack;
-            viewModel.SelectedHack.IsApplied = true;
-            dialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, $"{nameof(AsmHacksDialog_ApplyTest)}_{buttonName}", ref currentFrame);
-
-            AsmHack changeOpModeHack = config.Hacks.First(h => h.Name == "Change OP_MODE Chibi");
-            viewModel.SelectedHack = changeOpModeHack;
-            dialog.DescriptionPanel.FindLogicalDescendantOfType<ComboBox>().SelectedIndex = 2;
-            viewModel.SelectedHack.IsApplied = true;
-            dialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, $"{nameof(AsmHacksDialog_ApplyTest)}_{buttonName}", ref currentFrame);
-
-            if (buttonName == "SaveButton")
-            {
-                dialog.SaveButton.Focus();
-                dialog.KeyPressQwerty(PhysicalKey.Enter, RawInputModifiers.None);
-                await Task.Delay(TimeSpan.FromSeconds(5));
-
-                Assert.Multiple(() =>
-                {
-                    Assert.That(skipOpHack.Applied(project), Is.True);
-                    Assert.That(changeOpModeHack.Applied(project), Is.True);
-                });
-            }
-            else
-            {
-                dialog.CancelButton.Focus();
-                dialog.KeyPressQwerty(PhysicalKey.Enter, RawInputModifiers.None);
-                await Task.Delay(TimeSpan.FromSeconds(5));
-
-                Assert.Multiple(() =>
-                {
-                    Assert.That(skipOpHack.Applied(project), Is.False);
-                    Assert.That(changeOpModeHack.Applied(project), Is.False);
-                });
-            }
         }
     }
 }
