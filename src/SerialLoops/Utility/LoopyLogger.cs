@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using HaruhiChokuretsuLib.Util;
-using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
 using SerialLoops.Assets;
 using SerialLoops.Lib;

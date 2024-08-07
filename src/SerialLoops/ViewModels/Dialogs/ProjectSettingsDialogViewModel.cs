@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using Avalonia.Platform.Storage;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;

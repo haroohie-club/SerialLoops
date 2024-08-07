@@ -15,7 +15,6 @@ using Avalonia.Platform.Storage;
 using Avalonia.Styling;
 using HaruhiChokuretsuLib.Archive;
 using MiniToolbar.Avalonia;
-using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -111,6 +110,7 @@ namespace SerialLoops.ViewModels
 
             SaveProjectCommand = ReactiveCommand.Create(SaveProject_Executed);
 
+            ApplyHacksCommand = ReactiveCommand.CreateFromTask(ApplyHacksCommand_Executed);
             ProjectSettingsCommand = ReactiveCommand.CreateFromTask(ProjectSettingsCommand_Executed);
             CloseProjectCommand = ReactiveCommand.CreateFromTask(CloseProjectView);
 
@@ -265,6 +265,13 @@ namespace SerialLoops.ViewModels
                 ProjectsCache.Save(Log);
             }
             return cancel;
+        }
+
+        public async Task ApplyHacksCommand_Executed()
+        {
+            AsmHacksDialogViewModel hacksModel = new(OpenProject, CurrentConfig, Log);
+            AsmHacksDialog hacksDialog = new(hacksModel);
+            await hacksDialog.ShowDialog(Window);
         }
 
         public async Task ProjectSettingsCommand_Executed()
