@@ -72,7 +72,7 @@
     <PackageReference Include="MiniToolbar.Avalonia" Version="1.0.26" />
     <PackageReference Include="ReactiveUI.Fody" Version="19.5.41" />
     <PackageReference Include="SixLabors.Fonts" Version="2.0.4" />
-    <PackageReference Include="Tabalonia" Version="0.10.3.5" />
+    <PackageReference Include="Tabalonia" Version="0.10.4.1" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net8.0-windows'">
