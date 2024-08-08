@@ -29,8 +29,8 @@
                     </ia:EventTriggerBehavior>
                 </i:Interaction.Behaviors>
             </Slider>
-            <controls:SKBitmapCanvas Source="{Binding Waveform}" Width="{Binding Waveform.Width}"
-                                     Height="{Binding Waveform.Height}"/>
+            <Image Source="{Binding Waveform, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
+                   Width="{Binding Waveform.Width}" Height="{Binding Waveform.Height}"/>
         </StackPanel>
         <StackPanel Orientation="Vertical" Spacing="3" HorizontalAlignment="Right"
                     Width="{Binding Waveform.Width, Converter={StaticResource AdditionConverter},
