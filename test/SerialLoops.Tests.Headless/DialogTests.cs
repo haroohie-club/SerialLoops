@@ -63,7 +63,7 @@ namespace SerialLoops.Tests.Headless
 
             dialog.Show();
 
-            dialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(PreferencesDialogTest), ref currentFrame);
+            dialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, TestContext.CurrentContext.Test.Name, ref currentFrame);
             TabItem serialLoopsTab = dialog.FindControl<TabItem>("SerialLoopsTab");
             TabItem projectsTab = dialog.FindControl<TabItem>("ProjectsTab");
             TabItem buildTab = dialog.FindControl<TabItem>("BuildTab");
@@ -161,7 +161,7 @@ namespace SerialLoops.Tests.Headless
 
             languageComboBox.Focus();
             dialog.KeyPressQwerty(PhysicalKey.ArrowDown, RawInputModifiers.None);
-            dialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(PreferencesDialogTest), ref currentFrame);
+            dialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, TestContext.CurrentContext.Test.Name, ref currentFrame);
             Assert.Multiple(() =>
             {
                 Assert.That(((ComboBoxItem)languageComboBox.SelectedItem).Tag, Is.Not.EqualTo(config.CurrentCultureName));
@@ -173,7 +173,7 @@ namespace SerialLoops.Tests.Headless
             Assert.That(restartRequiredLabel.IsVisible, Is.False); // Double check the binding happened
             displayFontComboBox.Focus();
             dialog.KeyPressQwerty(PhysicalKey.ArrowDown, RawInputModifiers.None);
-            dialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(PreferencesDialogTest), ref currentFrame);
+            dialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, TestContext.CurrentContext.Test.Name, ref currentFrame);
             Assert.Multiple(() =>
             {
                 Assert.That(((ComboBoxItem)displayFontComboBox.SelectedItem).Tag, Is.Not.EqualTo(config.DisplayFont));
@@ -183,7 +183,7 @@ namespace SerialLoops.Tests.Headless
             viewModel.RequireRestart = false; // reset it for the next test
             checkForUpdatesCheckBox.Focus();
             dialog.KeyPressQwerty(PhysicalKey.Enter, RawInputModifiers.None);
-            dialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(PreferencesDialogTest), ref currentFrame);
+            dialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, TestContext.CurrentContext.Test.Name, ref currentFrame);
             Assert.Multiple(() =>
             {
                 Assert.That(checkForUpdatesCheckBox.IsChecked, Is.Not.EqualTo(config.CheckForUpdates));
@@ -192,7 +192,7 @@ namespace SerialLoops.Tests.Headless
 
             usePreleaseCheckBox.Focus();
             dialog.KeyPressQwerty(PhysicalKey.Enter, RawInputModifiers.None);
-            dialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(PreferencesDialogTest), ref currentFrame);
+            dialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, TestContext.CurrentContext.Test.Name, ref currentFrame);
             Assert.Multiple(() =>
             {
                 Assert.That(usePreleaseCheckBox.IsChecked, Is.Not.EqualTo(config.PreReleaseChannel));
@@ -202,11 +202,11 @@ namespace SerialLoops.Tests.Headless
             // Time for the projects tab
             serialLoopsTab.Focus();
             dialog.KeyPressQwerty(PhysicalKey.ArrowRight, RawInputModifiers.None);
-            dialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(PreferencesDialogTest), ref currentFrame);
+            dialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, TestContext.CurrentContext.Test.Name, ref currentFrame);
 
             autoReOpenProjectCheckBox.Focus();
             dialog.KeyPressQwerty(PhysicalKey.Enter, RawInputModifiers.None);
-            dialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(PreferencesDialogTest), ref currentFrame);
+            dialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, TestContext.CurrentContext.Test.Name, ref currentFrame);
             Assert.Multiple(() =>
             {
                 Assert.That(autoReOpenProjectCheckBox.IsChecked, Is.Not.EqualTo(config.AutoReopenLastProject));
@@ -215,7 +215,7 @@ namespace SerialLoops.Tests.Headless
 
             rememberWorkspaceCheckBox.Focus();
             dialog.KeyPressQwerty(PhysicalKey.Enter, RawInputModifiers.None);
-            dialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(PreferencesDialogTest), ref currentFrame);
+            dialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, TestContext.CurrentContext.Test.Name, ref currentFrame);
             Assert.Multiple(() =>
             {
                 Assert.That(rememberWorkspaceCheckBox.IsChecked, Is.Not.EqualTo(config.RememberProjectWorkspace));
@@ -224,7 +224,7 @@ namespace SerialLoops.Tests.Headless
 
             removeMissingCheckBox.Focus();
             dialog.KeyPressQwerty(PhysicalKey.Enter, RawInputModifiers.None);
-            dialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(PreferencesDialogTest), ref currentFrame);
+            dialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, TestContext.CurrentContext.Test.Name, ref currentFrame);
             Assert.Multiple(() =>
             {
                 Assert.That(removeMissingCheckBox.IsChecked, Is.Not.EqualTo(config.RemoveMissingProjects));
@@ -234,12 +234,12 @@ namespace SerialLoops.Tests.Headless
             // Time for the build tab
             projectsTab.Focus();
             dialog.KeyPressQwerty(PhysicalKey.ArrowRight, RawInputModifiers.None);
-            dialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(PreferencesDialogTest), ref currentFrame);
+            dialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, TestContext.CurrentContext.Test.Name, ref currentFrame);
 
             string devkitARMInput = "thank you based devkitPro organization";
             devkitArmTextBox.Focus();
             dialog.KeyTextInput(devkitARMInput);
-            dialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(PreferencesDialogTest), ref currentFrame);
+            dialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, TestContext.CurrentContext.Test.Name, ref currentFrame);
             Assert.Multiple(() =>
             {
                 Assert.That(devkitArmTextBox.Text, Contains.Substring(devkitARMInput));
@@ -250,7 +250,7 @@ namespace SerialLoops.Tests.Headless
             string emulatorPathInput = "thank you based melonDS devs";
             emulatorPathTextBox.Focus();
             dialog.KeyTextInput(emulatorPathInput);
-            dialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(PreferencesDialogTest), ref currentFrame);
+            dialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, TestContext.CurrentContext.Test.Name, ref currentFrame);
             Assert.Multiple(() =>
             {
                 Assert.That(emulatorPathTextBox.Text, Contains.Substring(emulatorPathInput));
@@ -260,7 +260,7 @@ namespace SerialLoops.Tests.Headless
 
             useDockerCheckBox.Focus();
             dialog.KeyPressQwerty(PhysicalKey.Enter, RawInputModifiers.None);
-            dialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(PreferencesDialogTest), ref currentFrame);
+            dialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, TestContext.CurrentContext.Test.Name, ref currentFrame);
             if (OperatingSystem.IsMacOS())
             {
                 Assert.Multiple(() =>
@@ -281,7 +281,7 @@ namespace SerialLoops.Tests.Headless
             string dockerTagInput = "thank you based docker creators and such";
             dockerTagTextBox.Focus();
             dialog.KeyTextInput(dockerTagInput);
-            dialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(PreferencesDialogTest), ref currentFrame);
+            dialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, TestContext.CurrentContext.Test.Name, ref currentFrame);
             if (OperatingSystem.IsMacOS())
             {
                 Assert.Multiple(() =>
