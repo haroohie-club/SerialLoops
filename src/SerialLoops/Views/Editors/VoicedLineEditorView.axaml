@@ -1,0 +1,29 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="using:SerialLoops.ViewModels.Editors"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:i="using:Avalonia.Xaml.Interactivity"
+             xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
+             xmlns:assets="using:SerialLoops.Assets"
+             xmlns:controls="using:SerialLoops.Controls"
+             xmlns:gbox="using:GroupBox.Avalonia.Controls"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:VoicedLineEditorViewModel"
+             x:Class="SerialLoops.Views.Editors.VoicedLineEditorView">
+    <Grid RowDefinitions="Auto,Auto,Auto,*" ColumnDefinitions="*,Auto,*">
+        <controls:SoundPlayerPanel Name="Player" Grid.Row="0" Grid.Column="0" DataContext="{Binding VcePlayer}"/>
+        <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Spacing="3" Margin="5">
+            <Button Content="{x:Static assets:Strings.Replace}"/>
+            <Button Content="{x:Static assets:Strings.Export}"/>
+            <Button Content="{x:Static assets:Strings.Restore}"/>
+        </StackPanel>
+        <gbox:GroupBox Header="{x:Static assets:Strings.Edit_Subtitle}" Theme="{StaticResource GroupBoxClassic}" Margin="5"
+                       IsVisible="{Binding SubsEnabled}">
+            <StackPanel Spacing="3" Orientation="Horizontal">
+                <TextBlock Text="{x:Static assets:Strings.Subtitle_Text}"/>
+                <TextBox Text="{Binding Subtitle, Mode=TwoWay}" Watermark="{x:Static assets:Strings.Enter_subtitle_text___}" Width="400"/>
+            </StackPanel>
+        </gbox:GroupBox>
+    </Grid>
+</UserControl>
