@@ -1283,6 +1283,10 @@
   <data name="Investigation Phase Results" xml:space="preserve">
     <value>Investigation Phase Results</value>
   </data>
+  <data name="Is Large" xml:space="preserve">
+    <value>Is Large</value>
+    <comment>Describes whether the character sprite is a large sprite or not</comment>
+  </data>
   <data name="Italian" xml:space="preserve">
     <value>Italian</value>
   </data>
@@ -1827,6 +1831,9 @@
   </data>
   <data name="Replace me" xml:space="preserve">
     <value>Replace me</value>
+  </data>
+  <data name="Replace Sprite" xml:space="preserve">
+    <value>Replace Sprite</value>
   </data>
   <data name="Replace System Texture" xml:space="preserve">
     <value>Replace System Texture</value>
