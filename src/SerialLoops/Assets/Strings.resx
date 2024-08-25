@@ -991,6 +991,10 @@
   <data name="Failed to export layout for sprite {0} to file" xml:space="preserve">
     <value>Failed to export layout for sprite {0} to file</value>
   </data>
+  <data name="Failed to export mouth animation {0} for sprite {1} to file" xml:space="preserve">
+    <value>Failed to export mouth animation {0} for sprite {1} to file</value>
+    <comment>{0} is a number indicating the frame of the animation; {1} is the name of the sprite</comment>
+  </data>
   <data name="Failed to export project" xml:space="preserve">
     <value>Failed to export project</value>
     <comment>Failed to export the Serial Loops project file to an slzip, basically</comment>

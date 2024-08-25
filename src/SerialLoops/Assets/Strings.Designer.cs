@@ -2746,6 +2746,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to export mouth animation {0} for sprite {1} to file.
+        /// </summary>
+        public static string Failed_to_export_mouth_animation__0__for_sprite__1__to_file {
+            get {
+                return ResourceManager.GetString("Failed to export mouth animation {0} for sprite {1} to file", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to export project.
         /// </summary>
         public static string Failed_to_export_project {
