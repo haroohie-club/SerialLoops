@@ -29,7 +29,7 @@
         </StackPanel>
         <Button Command="{Binding ReplaceCommand}" Content="{x:Static assets:Strings.Replace_Sprite}"/>
         <StackPanel Orientation="Horizontal" Spacing="3">
-            <Button Name="ExportFramesButton" Command="{Binding ExportFramesCommand}" Content="{x:Static assets:Strings.Export_Frames"/>
+            <Button Name="ExportFramesButton" Command="{Binding ExportFramesCommand}" Content="{x:Static assets:Strings.Export_Frames}"/>
             <Button Name="ExportGIFButton" Command="{Binding ExportGIFCommand}" Content="{x:Static assets:Strings.Export_GIF}"/>
         </StackPanel>
     </StackPanel>
