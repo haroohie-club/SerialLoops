@@ -29,8 +29,8 @@
         </StackPanel>
         <Button Command="{Binding ReplaceCommand}">Replace Sprite</Button>
         <StackPanel Orientation="Horizontal" Spacing="3">
-            <Button Command="{Binding ExportFramesCommand}">Export Frames</Button>
-            <Button Command="{Binding ExportGIFCommand}">Export GIF</Button>
+            <Button Name="ExportFramesButton" Command="{Binding ExportFramesCommand}">Export Frames</Button>
+            <Button Name="ExportGIFButton" Command="{Binding ExportGIFCommand}">Export GIF</Button>
         </StackPanel>
     </StackPanel>
 </UserControl>

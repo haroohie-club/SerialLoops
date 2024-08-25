@@ -21,6 +21,7 @@ using SerialLoops.ViewModels.Editors;
 using SerialLoops.ViewModels.Panels;
 using SerialLoops.Views;
 using SerialLoops.Views.Dialogs;
+using SerialLoops.Views.Editors;
 using SerialLoops.Views.Panels;
 using Tabalonia.Controls;
 
@@ -230,6 +231,87 @@ namespace SerialLoops.Tests.Headless
             });
 
             Directory.Delete(createdProjectPath, recursive: true);
+        }
+
+        [AvaloniaTest]
+        [Parallelizable]
+        public async Task CharacterSpriteEditor_CanEdit()
+        {
+            ConfigFactoryMock configFactory = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"config-{nameof(CharacterSpriteEditor_CanEdit)}.json"));
+            string projectName = $"Headless_{nameof(CharacterSpriteEditor_CanEdit)}";
+            int currentFrame = 0;
+            MainWindowViewModel mainWindowViewModel = new();
+            MainWindow mainWindow = new()
+            {
+                DataContext = mainWindowViewModel,
+                ConfigurationFactory = configFactory,
+            };
+            mainWindow.Show();
+            mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(CharacterSpriteEditor_CanEdit), ref currentFrame);
+            Project newProject = new(projectName, "en", mainWindowViewModel.CurrentConfig, (s) => s, mainWindowViewModel.Log);
+            TestProgressTracker tracker = new();
+            // We're all gonna be trying to access the same ROM at the same time. We should retry if we hit IOExceptions to fix flakiness
+            for (int i = 0; i < 100; i++)
+            {
+                try
+                {
+                    Lib.IO.OpenRom(newProject, _uiVals.RomLoc, mainWindowViewModel.Log, tracker);
+                    break;
+                }
+                catch (IOException)
+                {
+                    await Task.Delay(TimeSpan.FromMilliseconds(100));
+                }
+            }
+            Assert.That(newProject.Load(mainWindowViewModel.CurrentConfig, mainWindowViewModel.Log, tracker).State, Is.EqualTo(Project.LoadProjectState.SUCCESS));
+            mainWindowViewModel.OpenProject = newProject;
+            mainWindowViewModel.OpenProjectView(newProject, tracker);
+            string createdProjectPath = mainWindowViewModel.OpenProject.MainDirectory;
+            mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(CharacterSpriteEditor_CanEdit), ref currentFrame);
+
+            OpenProjectPanel openProjectPanel = (OpenProjectPanel)mainWindow.MainContent.Content;
+            OpenProjectPanelViewModel openProjectViewModel = (OpenProjectPanelViewModel)openProjectPanel.DataContext;
+
+            ItemExplorerPanel explorer = openProjectPanel.ItemExplorer;
+            EditorTabsPanel tabs = openProjectPanel.EditorTabs;
+
+            ITreeItem characterSpritesTreeItem = openProjectViewModel.Explorer.Source.First(i => i.Text == "Character Sprites");
+
+            mainWindow.TabToExplorer();
+
+            mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(CharacterSpriteEditor_CanEdit), ref currentFrame);
+            explorer.Viewer.SelectedItem = characterSpritesTreeItem;
+            mainWindow.KeyPressQwerty(PhysicalKey.ArrowRight, RawInputModifiers.None);
+            mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(CharacterSpriteEditor_CanEdit), ref currentFrame);
+            ItemDescription firstCharacterSprite = mainWindowViewModel.OpenProject.Items.First(i => i.Type == ItemDescription.ItemType.Character_Sprite);
+            explorer.Viewer.SelectedItem = characterSpritesTreeItem.Children.First(i => i.Text == firstCharacterSprite.DisplayName);
+            mainWindow.KeyPressQwerty(PhysicalKey.Enter, RawInputModifiers.None);
+            mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(CharacterSpriteEditor_CanEdit), ref currentFrame);
+            Assert.Multiple(() =>
+            {
+                Assert.That(openProjectViewModel.EditorTabs.SelectedTab?.Description?.DisplayName, Is.EqualTo(firstCharacterSprite.DisplayName));
+                Assert.That(tabs.Tabs.SelectedItem, Is.TypeOf<CharacterSpriteEditorViewModel>());
+            });
+
+            // Test edit
+            CharacterSpriteEditorViewModel viewModel = (CharacterSpriteEditorViewModel)tabs.Tabs.SelectedItem;
+            ComboBox characterBox = tabs.FindLogicalDescendantOfType<ComboBox>();
+            characterBox.SelectedIndex++;
+            Assert.Multiple(() =>
+            {
+                Assert.That(viewModel.Character.DisplayName, Is.EqualTo(((CharacterItem)characterBox.SelectedItem).DisplayName));
+                Assert.That(viewModel.Description.UnsavedChanges, Is.True);
+            });
+            viewModel.Description.UnsavedChanges = false;
+
+            CheckBox isLargeCheckBox = tabs.FindLogicalDescendantOfType<CheckBox>();
+            isLargeCheckBox.Focus();
+            mainWindow.KeyPressQwerty(PhysicalKey.Enter, RawInputModifiers.None);
+            Assert.Multiple(() =>
+            {
+                Assert.That(viewModel.IsLarge, Is.EqualTo(isLargeCheckBox.IsChecked));
+                Assert.That(viewModel.Description.UnsavedChanges, Is.True);
+            });
         }
     }
 }
