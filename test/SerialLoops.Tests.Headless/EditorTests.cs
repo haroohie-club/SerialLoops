@@ -302,6 +302,7 @@ namespace SerialLoops.Tests.Headless
                 Assert.That(viewModel.Character.DisplayName, Is.EqualTo(((CharacterItem)characterBox.SelectedItem).DisplayName));
                 Assert.That(viewModel.Description.UnsavedChanges, Is.True);
             });
+            mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(CharacterSpriteEditor_CanEdit), ref currentFrame);
             viewModel.Description.UnsavedChanges = false;
 
             CheckBox isLargeCheckBox = tabs.FindLogicalDescendantOfType<CheckBox>();
@@ -312,6 +313,7 @@ namespace SerialLoops.Tests.Headless
                 Assert.That(viewModel.IsLarge, Is.EqualTo(isLargeCheckBox.IsChecked));
                 Assert.That(viewModel.Description.UnsavedChanges, Is.True);
             });
+            mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(CharacterSpriteEditor_CanEdit), ref currentFrame);
         }
     }
 }
