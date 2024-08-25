@@ -31,11 +31,20 @@ namespace SerialLoops.ViewModels.Panels
             {
                 _items = value;
                 Source = new ObservableCollection<ITreeItem>(GetSections());
+                if (ExpandItems)
+                {
+                    foreach (ITreeItem item in Source)
+                    {
+                        item.IsExpanded = true;
+                    }
+                }
             }
         }
-        public ObservableCollection<ITreeItem> Source { get; set; }
 
         protected ILogger _log;
+
+        [Reactive]
+        public ObservableCollection<ITreeItem> Source { get; set; }
         [Reactive]
         public bool ExpandItems { get; set; }
 
@@ -87,7 +96,7 @@ namespace SerialLoops.ViewModels.Panels
         public void SetupViewer(TreeView viewer)
         {
             viewer.ItemTemplate = new FuncTreeDataTemplate<ITreeItem>((item, namescope) => item.GetDisplay(), item => item.Children);
-            viewer.ItemsSource = Source;
+            viewer.Bind(ItemsControl.ItemsSourceProperty, new Binding(nameof(Source), BindingMode.TwoWay));
             viewer.ItemContainerTheme = new(typeof(TreeViewItem)) { BasedOn = (ControlTheme)Application.Current.FindResource(typeof(TreeViewItem)) };
             viewer.ItemContainerTheme.Setters.Add(new Setter(TreeViewItem.IsExpandedProperty, new Binding("IsExpanded")));
             if (ExpandItems)
