@@ -11,13 +11,13 @@
              x:DataType="vm:ScreenSelectorViewModel"
              x:Class="SerialLoops.Controls.ScreenSelector">
     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="5">
-        <StackPanel Orientation="Vertical" Spacing="2" ToolTip.Tip="{x:Static assets:Strings.Both_Screens}">
+        <StackPanel Orientation="Vertical" Spacing="2">
             <Button Width="35" Height="20" Command="{Binding SelectTopCommand}" ToolTip.Tip="{x:Static assets:Strings.Top_Screen}"
-                    IsEnabled="{Binding SelectedScreen, Converter={x:Static utility:SLConverters.TopScreenSelectedConverter}}">
+                    IsEnabled="{Binding SelectedScreen, Converter={x:Static utility:SLConverters.TopScreenSelectableConverter}}">
                 <Svg Path="avares://SerialLoops/Assets/Icons/Top_Screen.svg"/>
             </Button>
             <Button Width="35" Height="20" Command="{Binding SelectBottomCommand}" ToolTip.Tip="{x:Static assets:Strings.Bottom_Screen}"
-                    IsEnabled="{Binding SelectedScreen, Converter={x:Static utility:SLConverters.BottomScreenSelectedConverter}}">
+                    IsEnabled="{Binding SelectedScreen, Converter={x:Static utility:SLConverters.BottomScreenSelectableConverter}}">
                 <Svg Path="avares://SerialLoops/Assets/Icons/Bottom_Screen.svg"/>
             </Button>
         </StackPanel>

@@ -10,7 +10,6 @@ namespace SerialLoops.ViewModels.Controls
     {
         public event EventHandler ScreenChanged;
 
-        [Reactive]
         public bool AllowSelectingBoth { get; set; }
 
         private DsScreen _selectedScreen;
@@ -19,7 +18,6 @@ namespace SerialLoops.ViewModels.Controls
             get => _selectedScreen;
             set
             {
-                _selectedScreen = value;
                 this.RaiseAndSetIfChanged(ref _selectedScreen, value);
                 ScreenChanged?.Invoke(this, EventArgs.Empty);
             }

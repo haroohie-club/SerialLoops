@@ -22,12 +22,21 @@ namespace SerialLoops.ViewModels.Editors
         public ScreenSelectorViewModel ScreenSelector { get; set; }
         [Reactive]
         public SKBitmap SubtitlesPreview { get; set; } = new(256, 384);
-        [Reactive]
+
         public DsScreen SubtitleScreen { get; set; }
+
+        [Reactive]
+        public bool TopY { get; set; }
+        [Reactive]
+        public bool BelowTopY { get; set; }
+        [Reactive]
+        public bool AboveBottomY { get; set; }
+        [Reactive]
+        public bool BottomY { get; set; }
 
         public string Subtitle
         {
-            get => _project.LangCode.Equals("ja") ? _subtitle : _subtitle.GetSubstitutedString(_project);
+            get => _project.LangCode.Equals("ja") ? _subtitle : (_subtitle?.GetSubstitutedString(_project) ?? string.Empty);
             set
             {
                 _subtitle = _project.LangCode.Equals("ja") ? value : value.GetOriginalString(_project);
@@ -39,11 +48,13 @@ namespace SerialLoops.ViewModels.Editors
                     {
                         VoiceFileName = Path.GetFileNameWithoutExtension(_vce.VoiceFile),
                         FontSize = 100,
-                        TargetScreen = VoiceMapFile.VoiceMapEntry.Screen.BOTTOM,
+                        TargetScreen = SubtitleScreen == DsScreen.BOTTOM ? VoiceMapFile.VoiceMapEntry.Screen.BOTTOM : VoiceMapFile.VoiceMapEntry.Screen.TOP,
                         Timer = 350,
                     });
                     _project.VoiceMap.VoiceMapEntries[^1].SetSubtitle(_subtitle, _project.FontReplacement);
-                    _project.VoiceMap.VoiceMapEntries[^1].YPos = VoiceMapFile.VoiceMapEntry.YPosition.BELOW_TOP;
+                    _project.VoiceMap.VoiceMapEntries[^1].YPos = TopY ? VoiceMapFile.VoiceMapEntry.YPosition.TOP :
+                        BelowTopY ? VoiceMapFile.VoiceMapEntry.YPosition.BELOW_TOP :
+                        AboveBottomY ? VoiceMapFile.VoiceMapEntry.YPosition.ABOVE_BOTTOM : VoiceMapFile.VoiceMapEntry.YPosition.BOTTOM;
                 }
                 else
                 {
@@ -60,6 +71,11 @@ namespace SerialLoops.ViewModels.Editors
             _vce = item;
             VcePlayer = new(_vce, log, null);
             ScreenSelector = new(DsScreen.BOTTOM, false);
+
+            ScreenSelector.ScreenChanged += (sender, args) =>
+            {
+                SubtitleScreen = ScreenSelector.SelectedScreen;
+            };
         }
     }
 }

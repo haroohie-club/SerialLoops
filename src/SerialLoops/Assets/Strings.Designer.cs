@@ -266,6 +266,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Above Bottom.
+        /// </summary>
+        public static string Above_Bottom {
+            get {
+                return ResourceManager.GetString("Above Bottom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Accessing save data prompt message box.
         /// </summary>
         public static string Accessing_save_data_prompt_message_box {
@@ -662,6 +671,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Below Top.
+        /// </summary>
+        public static string Below_Top {
+            get {
+                return ResourceManager.GetString("Below Top", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to BGM.
         /// </summary>
         public static string BGM {
@@ -721,6 +739,15 @@ namespace SerialLoops.Assets {
         public static string Both_Screens {
             get {
                 return ResourceManager.GetString("Both Screens", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bottom.
+        /// </summary>
+        public static string Bottom {
+            get {
+                return ResourceManager.GetString("Bottom", resourceCulture);
             }
         }
         
@@ -6668,6 +6695,15 @@ namespace SerialLoops.Assets {
         public static string Toggle_Tsuruya_s_voice_ticker_tape {
             get {
                 return ResourceManager.GetString("Toggle Tsuruya\'s voice ticker tape", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Top.
+        /// </summary>
+        public static string Top {
+            get {
+                return ResourceManager.GetString("Top", resourceCulture);
             }
         }
         
