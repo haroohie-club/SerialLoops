@@ -8,6 +8,7 @@ using Avalonia.Platform;
 using SerialLoops.Lib.Items;
 using SerialLoops.Models;
 using SkiaSharp;
+using static SerialLoops.Lib.Script.Parameters.ScreenScriptParameter;
 
 namespace SerialLoops.Utility
 {
@@ -15,6 +16,9 @@ namespace SerialLoops.Utility
     {
         public static FuncValueConverter<ItemDescription.ItemType, Bitmap> ItemTypeToIconConverter => new((type) => new Bitmap(AssetLoader.Open(new Uri($"avares://SerialLoops/Assets/Icons/{type.ToString().Replace(' ', '_')}.png"))));
         public static FuncValueConverter<SKBitmap, SKAvaloniaImage> SKBitmapToAvaloniaConverter => new((bitmap) => new SKAvaloniaImage(bitmap));
+        public static FuncValueConverter<DsScreen, bool> TopScreenSelectedConverter => new((screen) => screen == DsScreen.TOP || screen == DsScreen.BOTH);
+        public static FuncValueConverter<DsScreen, bool> BottomScreenSelectedConverter => new((screen) => screen == DsScreen.BOTTOM || screen == DsScreen.BOTH);
+        public static FuncValueConverter<DsScreen, bool> BothScreensSelectedConverter => new((screen) => screen == DsScreen.BOTH);
     }
 
     public class DisplayNameConverter : IMultiValueConverter

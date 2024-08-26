@@ -19,6 +19,7 @@ namespace SerialLoops.ViewModels.Editors
 
         [Reactive]
         public SoundPlayerPanelViewModel VcePlayer { get; set; }
+        public ScreenSelectorViewModel ScreenSelector { get; set; }
         [Reactive]
         public SKBitmap SubtitlesPreview { get; set; } = new(256, 384);
         [Reactive]
@@ -58,6 +59,7 @@ namespace SerialLoops.ViewModels.Editors
         {
             _vce = item;
             VcePlayer = new(_vce, log, null);
+            ScreenSelector = new(DsScreen.BOTTOM, false);
         }
     }
 }
