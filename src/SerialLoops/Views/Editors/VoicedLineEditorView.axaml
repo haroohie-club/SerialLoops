@@ -7,6 +7,7 @@
              xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
              xmlns:assets="using:SerialLoops.Assets"
              xmlns:controls="using:SerialLoops.Controls"
+             xmlns:utility="using:SerialLoops.Utility"
              xmlns:gbox="using:GroupBox.Avalonia.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:VoicedLineEditorViewModel"
@@ -42,6 +43,7 @@
                 </StackPanel>
             </StackPanel>
         </gbox:GroupBox>
-        
+        <Image Source="{Binding SubtitlesPreview, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
+               Grid.Row="0" Grid.RowSpan="3" Grid.Column="1"/>
     </Grid>
 </UserControl>
