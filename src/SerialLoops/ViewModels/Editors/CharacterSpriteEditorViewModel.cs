@@ -32,7 +32,6 @@ namespace SerialLoops.ViewModels.Editors
             get => _character;
             set
             {
-                _character = value;
                 this.RaiseAndSetIfChanged(ref _character, value);
                 _sprite.Sprite.Character = _character.MessageInfo.Character;
                 _sprite.UnsavedChanges = true;
@@ -43,7 +42,6 @@ namespace SerialLoops.ViewModels.Editors
             get => _isLarge;
             set
             {
-                _isLarge = value;
                 this.RaiseAndSetIfChanged(ref _isLarge, value);
                 _sprite.Sprite.IsLarge = _isLarge;
                 if (_sprite.Sprite.IsLarge)
