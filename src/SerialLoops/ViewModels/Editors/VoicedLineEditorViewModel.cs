@@ -1,13 +1,22 @@
 ﻿using System.IO;
 using System.Linq;
-using HaruhiChokuretsuLib.Archive.Event;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Windows.Input;
+using Avalonia.Platform.Storage;
 using HaruhiChokuretsuLib.Util;
+using NAudio.Wave;
+using QuikGraph;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using SerialLoops.Assets;
+using SerialLoops.Controls;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script.Parameters;
 using SerialLoops.Lib.Util;
+using SerialLoops.Utility;
 using SerialLoops.ViewModels.Controls;
+using SerialLoops.Views.Dialogs;
 using SkiaSharp;
 using static HaruhiChokuretsuLib.Archive.Event.VoiceMapFile;
 using static SerialLoops.Lib.Script.Parameters.ScreenScriptParameter;
@@ -19,6 +28,10 @@ namespace SerialLoops.ViewModels.Editors
         private VoicedLineItem _vce;
         private VoiceMapEntry _voiceMapEntry;
         private string _subtitle;
+
+        public ICommand ReplaceCommand { get; set; }
+        public ICommand ExportCommand { get; set; }
+        public ICommand RestoreCommand { get; set; }
 
         [Reactive]
         public SoundPlayerPanelViewModel VcePlayer { get; set; }
@@ -135,8 +148,11 @@ namespace SerialLoops.ViewModels.Editors
         {
             _vce = item;
             VcePlayer = new(_vce, log, null);
-            ScreenSelector = new(DsScreen.BOTTOM, false);
+            ReplaceCommand = ReactiveCommand.CreateFromTask(Replace);
+            ExportCommand = ReactiveCommand.CreateFromTask(Export);
+            RestoreCommand = ReactiveCommand.Create(Restore);
 
+            ScreenSelector = new(DsScreen.BOTTOM, false);
             ScreenSelector.ScreenChanged += (sender, args) =>
             {
                 SubtitleScreen = ScreenSelector.SelectedScreen;
@@ -152,7 +168,35 @@ namespace SerialLoops.ViewModels.Editors
             }
         }
 
-        public void UpdatePreview()
+        private async Task Replace()
+        {
+            IStorageFile openFile = await _window.Window.ShowOpenFilePickerAsync(Strings.Replace_voiced_line, [new FilePickerFileType(Strings.Supported_Audio_Files) { Patterns = Shared.SupportedAudioFiletypes },
+                new FilePickerFileType(Strings.WAV_files) { Patterns = ["*.wav"] }, new FilePickerFileType(Strings.FLAC_files) { Patterns = ["*.flac"] },
+                new FilePickerFileType(Strings.MP3_files) { Patterns = ["*.mp3"] }, new FilePickerFileType(Strings.Vorbis_files) { Patterns = ["*.ogg"] }]);
+            if (openFile is not null)
+            {
+                LoopyProgressTracker tracker = new();
+                VcePlayer.Stop();
+                await new ProgressDialog(() => _vce.Replace(openFile.Path.LocalPath, _project.BaseDirectory, _project.IterativeDirectory, Path.Combine(_project.Config.CachesDirectory, "vce", $"{_vce.Name}.wav"), _log),
+                    () => { }, tracker, Strings.Replace_voiced_line).ShowDialog(_window.Window);
+            }
+        }
+
+        private async Task Export()
+        {
+            IStorageFile saveFile = await _window.Window.ShowSaveFilePickerAsync(Strings.Save_voiced_line_as_WAV, [new FilePickerFileType(Strings.WAV_File) { Patterns = ["*.wav"] }]);
+            if (saveFile is not null)
+            {
+                WaveFileWriter.CreateWaveFile(saveFile.Path.LocalPath, _vce.GetWaveProvider(_log));
+            }
+        }
+
+        private void Restore()
+        {
+
+        }
+
+        private void UpdatePreview()
         {
             SubtitlesPreview = new(256, 384);
             SKCanvas canvas = new(SubtitlesPreview);
