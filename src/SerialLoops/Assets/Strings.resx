@@ -143,6 +143,10 @@
   <data name="About..." xml:space="preserve">
     <value>About…</value>
   </data>
+  <data name="Above Bottom" xml:space="preserve">
+    <value>Above Bottom</value>
+    <comment>As in "above the bottom of the screen"; subtitle location</comment>
+  </data>
   <data name="Accessing save data prompt message box" xml:space="preserve">
     <value>Accessing save data prompt message box</value>
   </data>
@@ -285,6 +289,10 @@
   <data name="Batch Dialogue Display ticker tape" xml:space="preserve">
     <value>Batch Dialogue Display ticker tape</value>
   </data>
+  <data name="Below Top" xml:space="preserve">
+    <value>Below Top</value>
+    <comment>As in "below the top of the screen"; subtitle location</comment>
+  </data>
   <data name="BGM" xml:space="preserve">
     <value>BGM</value>
   </data>
@@ -308,6 +316,10 @@
   </data>
   <data name="Both Screens" xml:space="preserve">
     <value>Both Screens</value>
+  </data>
+  <data name="Bottom" xml:space="preserve">
+    <value>Bottom</value>
+    <comment>As in "bottom of the screen"; subtitle location</comment>
   </data>
   <data name="Bottom Screen" xml:space="preserve">
     <value>Bottom Screen</value>
@@ -2363,6 +2375,10 @@ No project is currently open. Would you like to create a new project?</value>
   </data>
   <data name="Toggle Tsuruya's voice ticker tape" xml:space="preserve">
     <value>Toggle Tsuruya's voice ticker tape</value>
+  </data>
+  <data name="Top" xml:space="preserve">
+    <value>Top</value>
+    <comment>As in "top of the screen"; subtitle location</comment>
   </data>
   <data name="Top Screen" xml:space="preserve">
     <value>Top Screen</value>

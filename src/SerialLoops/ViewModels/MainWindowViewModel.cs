@@ -538,6 +538,13 @@ namespace SerialLoops.ViewModels
                             savedExtra = true;
                         }
                         break;
+                    case ItemDescription.ItemType.Voice:
+                        VoicedLineItem vce = (VoicedLineItem)item;
+                        if (OpenProject.VoiceMap is not null)
+                        {
+                            changedSubs = true;
+                        }
+                        break;
                     default:
                         Log.LogWarning($"Saving for {item.Type}s not yet implemented.");
                         break;
