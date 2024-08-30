@@ -15,6 +15,7 @@ namespace SerialLoops.Utility
     {
         public static FuncValueConverter<ItemDescription.ItemType, Bitmap> ItemTypeToIconConverter => new((type) => new Bitmap(AssetLoader.Open(new Uri($"avares://SerialLoops/Assets/Icons/{type.ToString().Replace(' ', '_')}.png"))));
         public static FuncValueConverter<SKBitmap, SKAvaloniaImage> SKBitmapToAvaloniaConverter => new((bitmap) => new SKAvaloniaImage(bitmap));
+        public static FuncValueConverter<string, string> CharacterNameCropConverter => new((name) => name[4..]);
     }
 
     public class DisplayNameConverter : IMultiValueConverter

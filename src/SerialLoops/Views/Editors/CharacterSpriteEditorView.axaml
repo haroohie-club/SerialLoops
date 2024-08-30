@@ -1,0 +1,36 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:SerialLoops.ViewModels.Editors"
+             xmlns:i="using:Avalonia.Xaml.Interactivity"
+             xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
+             xmlns:libitems="using:SerialLoops.Lib.Items"
+             xmlns:assets="using:SerialLoops.Assets"
+             xmlns:controls="using:SerialLoops.Controls"
+             xmlns:utility="using:SerialLoops.Utility"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:CharacterSpriteEditorViewModel"
+             x:Class="SerialLoops.Views.Editors.CharacterSpriteEditorView">
+    <StackPanel Spacing="10" Orientation="Vertical">
+        <controls:AnimatedImage DataContext="{Binding AnimatedImage}" />
+        <StackPanel Orientation="Horizontal" Spacing="5">
+            <StackPanel Orientation="Horizontal" Spacing="3" VerticalAlignment="Center">
+                <TextBlock Text="{x:Static assets:Strings.Character}"/>
+                <ComboBox ItemsSource="{Binding Characters}" SelectedItem="{Binding Character}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate DataType="libitems:CharacterItem">
+                            <TextBlock Text="{Binding DisplayName, Converter={x:Static utility:SLConverters.CharacterNameCropConverter}}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </StackPanel>
+            <CheckBox IsChecked="{Binding IsLarge}" Content="{x:Static assets:Strings.Is_Large}"/>
+        </StackPanel>
+        <Button Command="{Binding ReplaceCommand}" Content="{x:Static assets:Strings.Replace_Sprite}"/>
+        <StackPanel Orientation="Horizontal" Spacing="3">
+            <Button Name="ExportFramesButton" Command="{Binding ExportFramesCommand}" Content="{x:Static assets:Strings.Export_Frames}"/>
+            <Button Name="ExportGIFButton" Command="{Binding ExportGIFCommand}" Content="{x:Static assets:Strings.Export_GIF}"/>
+        </StackPanel>
+    </StackPanel>
+</UserControl>

@@ -2761,6 +2761,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to export mouth animation {0} for sprite {1} to file.
+        /// </summary>
+        public static string Failed_to_export_mouth_animation__0__for_sprite__1__to_file {
+            get {
+                return ResourceManager.GetString("Failed to export mouth animation {0} for sprite {1} to file", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to export project.
         /// </summary>
         public static string Failed_to_export_project {
@@ -3604,6 +3613,15 @@ namespace SerialLoops.Assets {
         public static string Investigation_Phase_Results {
             get {
                 return ResourceManager.GetString("Investigation Phase Results", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is Large.
+        /// </summary>
+        public static string Is_Large {
+            get {
+                return ResourceManager.GetString("Is Large", resourceCulture);
             }
         }
         
@@ -5217,6 +5235,15 @@ namespace SerialLoops.Assets {
         public static string Replace_me {
             get {
                 return ResourceManager.GetString("Replace me", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace Sprite.
+        /// </summary>
+        public static string Replace_Sprite {
+            get {
+                return ResourceManager.GetString("Replace Sprite", resourceCulture);
             }
         }
         

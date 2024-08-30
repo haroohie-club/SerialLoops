@@ -1001,6 +1001,10 @@ In order to preserve state, no hacks were applied.</value>
   <data name="Failed to export layout for sprite {0} to file" xml:space="preserve">
     <value>Failed to export layout for sprite {0} to file</value>
   </data>
+  <data name="Failed to export mouth animation {0} for sprite {1} to file" xml:space="preserve">
+    <value>Failed to export mouth animation {0} for sprite {1} to file</value>
+    <comment>{0} is a number indicating the frame of the animation; {1} is the name of the sprite</comment>
+  </data>
   <data name="Failed to export project" xml:space="preserve">
     <value>Failed to export project</value>
     <comment>Failed to export the Serial Loops project file to an slzip, basically</comment>
@@ -1292,6 +1296,10 @@ In order to preserve state, no hacks were applied.</value>
   </data>
   <data name="Investigation Phase Results" xml:space="preserve">
     <value>Investigation Phase Results</value>
+  </data>
+  <data name="Is Large" xml:space="preserve">
+    <value>Is Large</value>
+    <comment>Describes whether the character sprite is a large sprite or not</comment>
   </data>
   <data name="Italian" xml:space="preserve">
     <value>Italian</value>
@@ -1842,6 +1850,9 @@ Please set the path to a Nintendo DS emulator in Preferences to use Build &amp; 
   </data>
   <data name="Replace me" xml:space="preserve">
     <value>Replace me</value>
+  </data>
+  <data name="Replace Sprite" xml:space="preserve">
+    <value>Replace Sprite</value>
   </data>
   <data name="Replace System Texture" xml:space="preserve">
     <value>Replace System Texture</value>
