@@ -15,15 +15,14 @@ using Avalonia.Platform.Storage;
 using Avalonia.Styling;
 using HaruhiChokuretsuLib.Archive;
 using MiniToolbar.Avalonia;
-using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SerialLoops.Assets;
 using SerialLoops.Controls;
 using SerialLoops.Lib;
-using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Factories;
+using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Util;
 using SerialLoops.Utility;
 using SerialLoops.ViewModels.Dialogs;
@@ -55,7 +54,6 @@ namespace SerialLoops.ViewModels
         public Toolbar ToolBar => Window.ToolBar;
         public EditorTabsPanelViewModel EditorTabs { get; set; }
         public ItemExplorerPanelViewModel ItemExplorer { get; set; }
-        public TextBox SearchBox => ItemExplorer.SearchBox;
 
         public NativeMenuItem RecentProjectsMenu { get; set; } = new(Strings.Recent_Projects);
         public LoopyLogger Log { get; set; }
@@ -111,6 +109,7 @@ namespace SerialLoops.ViewModels
 
             SaveProjectCommand = ReactiveCommand.Create(SaveProject_Executed);
 
+            ApplyHacksCommand = ReactiveCommand.CreateFromTask(ApplyHacksCommand_Executed);
             ProjectSettingsCommand = ReactiveCommand.CreateFromTask(ProjectSettingsCommand_Executed);
             CloseProjectCommand = ReactiveCommand.CreateFromTask(CloseProjectView);
 
@@ -178,10 +177,8 @@ namespace SerialLoops.ViewModels
 
         internal void OpenProjectView(Project project, IProgressTracker tracker)
         {
-            ItemExplorer = new();
-            EditorTabs = new();
-            EditorTabs.Initialize(this, project, Log);
-            ItemExplorer.Initialize(OpenProject, EditorTabs, SearchBox, Log);
+            EditorTabs = new(this, project, Log);
+            ItemExplorer = new(OpenProject, EditorTabs, Log);
             ProjectPanel = new()
             {
                 DataContext = new OpenProjectPanelViewModel(ItemExplorer, EditorTabs),
@@ -207,7 +204,6 @@ namespace SerialLoops.ViewModels
 
 
             Title = $"{BASE_TITLE} - {project.Name}";
-            //EditorTabs.Tabs_PageChanged(this, EventArgs.Empty);
 
             //LoadCachedData(project, tracker);
 
@@ -265,6 +261,13 @@ namespace SerialLoops.ViewModels
                 ProjectsCache.Save(Log);
             }
             return cancel;
+        }
+
+        public async Task ApplyHacksCommand_Executed()
+        {
+            AsmHacksDialogViewModel hacksModel = new(OpenProject, CurrentConfig, Log);
+            AsmHacksDialog hacksDialog = new(hacksModel);
+            await hacksDialog.ShowDialog(Window);
         }
 
         public async Task ProjectSettingsCommand_Executed()
@@ -535,8 +538,28 @@ namespace SerialLoops.ViewModels
                             savedExtra = true;
                         }
                         break;
+                    case ItemDescription.ItemType.Voice:
+                        VoicedLineItem vce = (VoicedLineItem)item;
+                        if (OpenProject.VoiceMap is not null)
+                        {
+                            changedSubs = true;
+                        }
+                        break;
                     default:
                         Log.LogWarning($"Saving for {item.Type}s not yet implemented.");
+                        break;
+                    case ItemDescription.ItemType.Character_Sprite:
+                        if (!savedChrData)
+                        {
+                            IO.WriteStringFile(Path.Combine("assets", "data", $"{OpenProject.ChrData.Index:X3}.s"),
+                                OpenProject.ChrData.GetSource(new Dictionary<string, IncludeEntry[]>()
+                                {
+                                    { "GRPBIN", OpenProject.Grp.GetSourceInclude().Split('\n').Where(l => !string.IsNullOrWhiteSpace(l)).Select(l => new IncludeEntry(l)).ToArray() }
+                                }), OpenProject, Log);
+                            savedChrData = true;
+                        }
+                        CharacterSpriteItem characterSpriteItem = (CharacterSpriteItem)item;
+                        characterSpriteItem.Graphics.Write(OpenProject, Log);
                         break;
                 }
 

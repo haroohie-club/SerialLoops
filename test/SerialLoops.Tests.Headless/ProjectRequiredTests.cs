@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -11,6 +12,7 @@ using Avalonia.Input;
 using Avalonia.LogicalTree;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib;
+using SerialLoops.Lib.Hacks;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Util;
 using SerialLoops.Models;
@@ -21,15 +23,17 @@ using SerialLoops.ViewModels.Editors;
 using SerialLoops.ViewModels.Panels;
 using SerialLoops.Views;
 using SerialLoops.Views.Dialogs;
+using SerialLoops.Views.Editors;
 using SerialLoops.Views.Panels;
 using Tabalonia.Controls;
 
 namespace SerialLoops.Tests.Headless
 {
-    public class EditorTests
+    public class ProjectRequiredTests
     {
         // To run these tests locally, you can create a file called 'ui_vals.json' and place it next to the test assembly (in the output folder)
         private UiVals? _uiVals;
+        private List<string> _dirsToDelete = [];
 
         [OneTimeSetUp]
         public void Setup()
@@ -58,6 +62,15 @@ namespace SerialLoops.Tests.Headless
                     RomLoc = romPath,
                     ArtifactsDir = Environment.GetEnvironmentVariable(UiVals.ARTIFACTS_DIR_ENV_VAR) ?? "artifacts",
                 };
+            }
+        }
+
+        [OneTimeTearDown]
+        public void TearDown()
+        {
+            foreach (string dir in _dirsToDelete)
+            {
+                Directory.Delete(dir, true);
             }
         }
 
@@ -102,6 +115,7 @@ namespace SerialLoops.Tests.Headless
 
             await mainWindowViewModel.OpenProjectFromPath(Path.Combine(mainWindowViewModel.CurrentConfig.ProjectsDirectory, _uiVals.ProjectName, $"{_uiVals.ProjectName}.slproj"));
             string createdProjectPath = mainWindowViewModel.OpenProject.MainDirectory;
+            _dirsToDelete.Add(createdProjectPath);
 
             // Verify that the project panel is open
             Assert.That(mainWindow.MainContent.Content, Is.TypeOf<OpenProjectPanel>());
@@ -115,7 +129,6 @@ namespace SerialLoops.Tests.Headless
             // Reopen the project
             await mainWindowViewModel.OpenProjectFromPath(Path.Combine(createdProjectPath, $"{_uiVals.ProjectName}.slproj"));
             Assert.That(mainWindow.MainContent.Content, Is.TypeOf<OpenProjectPanel>());
-            Directory.Delete(createdProjectPath, recursive: true);
         }
 
         [AvaloniaTest]
@@ -151,7 +164,7 @@ namespace SerialLoops.Tests.Headless
             Assert.That(newProject.Load(mainWindowViewModel.CurrentConfig, mainWindowViewModel.Log, tracker).State, Is.EqualTo(Project.LoadProjectState.SUCCESS));
             mainWindowViewModel.OpenProject = newProject;
             mainWindowViewModel.OpenProjectView(newProject, tracker);
-            string createdProjectPath = mainWindowViewModel.OpenProject.MainDirectory;
+            _dirsToDelete.Add(mainWindowViewModel.OpenProject.MainDirectory);
             mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(BackgroundEditor_CanEditCgNames), ref currentFrame);
 
             OpenProjectPanel openProjectPanel = (OpenProjectPanel)mainWindow.MainContent.Content;
@@ -228,8 +241,161 @@ namespace SerialLoops.Tests.Headless
                 Assert.That(extraFile, Does.Exist);
                 Assert.That(File.ReadAllText(extraFile), Contains.Substring(myExWifeStillMissesMe.GetOriginalString(mainWindowViewModel.OpenProject).EscapeShiftJIS()));
             });
+        }
 
-            Directory.Delete(createdProjectPath, recursive: true);
+        [AvaloniaTest]
+        //[TestCase("SaveButton")]
+        [TestCase("CancelButton")]
+        [Parallelizable(ParallelScope.All)]
+        public async Task AsmHacksDialog_ApplyTest(string buttonName)
+        {
+            ConfigFactoryMock configFactory = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"config-{nameof(AsmHacksDialog_ApplyTest)}_{buttonName}.json"));
+            TestConsoleLogger log = new();
+            string projectName = $"Headless_{nameof(AsmHacksDialog_ApplyTest)}_{buttonName}";
+            Config config = configFactory.LoadConfig(s => s, log);
+            config.UseDocker = true;
+            int currentFrame = 0;
+            Project project = new(projectName, "en", config, (s) => s, log);
+            TestProgressTracker tracker = new();
+            // We're all gonna be trying to access the same ROM at the same time. We should retry if we hit IOExceptions to fix flakiness
+            for (int i = 0; i < 100; i++)
+            {
+                try
+                {
+                    Lib.IO.OpenRom(project, _uiVals.RomLoc, log, tracker);
+                    break;
+                }
+                catch (IOException)
+                {
+                    await Task.Delay(TimeSpan.FromMilliseconds(100));
+                }
+            }
+            Assert.That(project.Load(config, log, tracker).State, Is.EqualTo(Project.LoadProjectState.SUCCESS));
+            _dirsToDelete.Add(project.MainDirectory);
+
+            AsmHacksDialogViewModel viewModel = new(project, config, log);
+            AsmHacksDialog dialog = new(viewModel);
+            dialog.Show();
+            dialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, $"{nameof(AsmHacksDialog_ApplyTest)}_{buttonName}", ref currentFrame);
+
+            AsmHack skipOpHack = config.Hacks.First(h => h.Name == "Skip OP");
+            viewModel.SelectedHack = skipOpHack;
+            viewModel.SelectedHack.IsApplied = true;
+            dialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, $"{nameof(AsmHacksDialog_ApplyTest)}_{buttonName}", ref currentFrame);
+
+            AsmHack changeOpModeHack = config.Hacks.First(h => h.Name == "Change OP_MODE Chibi");
+            viewModel.SelectedHack = changeOpModeHack;
+            dialog.DescriptionPanel.FindLogicalDescendantOfType<ComboBox>().SelectedIndex = 2;
+            viewModel.SelectedHack.IsApplied = true;
+            dialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, $"{nameof(AsmHacksDialog_ApplyTest)}_{buttonName}", ref currentFrame);
+
+            if (buttonName == "SaveButton")
+            {
+                dialog.SaveButton.Focus();
+                dialog.KeyPressQwerty(PhysicalKey.Enter, RawInputModifiers.None);
+                await Task.Delay(TimeSpan.FromSeconds(5));
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(skipOpHack.Applied(project), Is.True);
+                    Assert.That(changeOpModeHack.Applied(project), Is.True);
+                });
+            }
+            else
+            {
+                dialog.CancelButton.Focus();
+                dialog.KeyPressQwerty(PhysicalKey.Enter, RawInputModifiers.None);
+                await Task.Delay(TimeSpan.FromSeconds(5));
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(skipOpHack.Applied(project), Is.False);
+                    Assert.That(changeOpModeHack.Applied(project), Is.False);
+                });
+            }
+        }
+
+        [AvaloniaTest]
+        [Parallelizable]
+        public async Task CharacterSpriteEditor_CanEdit()
+        {
+            ConfigFactoryMock configFactory = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"config-{nameof(CharacterSpriteEditor_CanEdit)}.json"));
+            string projectName = $"Headless_{nameof(CharacterSpriteEditor_CanEdit)}";
+            int currentFrame = 0;
+            MainWindowViewModel mainWindowViewModel = new();
+            MainWindow mainWindow = new()
+            {
+                DataContext = mainWindowViewModel,
+                ConfigurationFactory = configFactory,
+            };
+            mainWindow.Show();
+            mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(CharacterSpriteEditor_CanEdit), ref currentFrame);
+            Project newProject = new(projectName, "en", mainWindowViewModel.CurrentConfig, (s) => s, mainWindowViewModel.Log);
+            TestProgressTracker tracker = new();
+            // We're all gonna be trying to access the same ROM at the same time. We should retry if we hit IOExceptions to fix flakiness
+            for (int i = 0; i < 100; i++)
+            {
+                try
+                {
+                    Lib.IO.OpenRom(newProject, _uiVals.RomLoc, mainWindowViewModel.Log, tracker);
+                    break;
+                }
+                catch (IOException)
+                {
+                    await Task.Delay(TimeSpan.FromMilliseconds(100));
+                }
+            }
+            Assert.That(newProject.Load(mainWindowViewModel.CurrentConfig, mainWindowViewModel.Log, tracker).State, Is.EqualTo(Project.LoadProjectState.SUCCESS));
+            mainWindowViewModel.OpenProject = newProject;
+            mainWindowViewModel.OpenProjectView(newProject, tracker);
+            string createdProjectPath = mainWindowViewModel.OpenProject.MainDirectory;
+            mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(CharacterSpriteEditor_CanEdit), ref currentFrame);
+
+            OpenProjectPanel openProjectPanel = (OpenProjectPanel)mainWindow.MainContent.Content;
+            OpenProjectPanelViewModel openProjectViewModel = (OpenProjectPanelViewModel)openProjectPanel.DataContext;
+
+            ItemExplorerPanel explorer = openProjectPanel.ItemExplorer;
+            EditorTabsPanel tabs = openProjectPanel.EditorTabs;
+
+            ITreeItem characterSpritesTreeItem = openProjectViewModel.Explorer.Source.First(i => i.Text == "Character Sprites");
+
+            mainWindow.TabToExplorer();
+
+            mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(CharacterSpriteEditor_CanEdit), ref currentFrame);
+            explorer.Viewer.SelectedItem = characterSpritesTreeItem;
+            mainWindow.KeyPressQwerty(PhysicalKey.ArrowRight, RawInputModifiers.None);
+            mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(CharacterSpriteEditor_CanEdit), ref currentFrame);
+            ItemDescription firstCharacterSprite = mainWindowViewModel.OpenProject.Items.First(i => i.Type == ItemDescription.ItemType.Character_Sprite);
+            explorer.Viewer.SelectedItem = characterSpritesTreeItem.Children.First(i => i.Text == firstCharacterSprite.DisplayName);
+            mainWindow.KeyPressQwerty(PhysicalKey.Enter, RawInputModifiers.None);
+            mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(CharacterSpriteEditor_CanEdit), ref currentFrame);
+            Assert.Multiple(() =>
+            {
+                Assert.That(openProjectViewModel.EditorTabs.SelectedTab?.Description?.DisplayName, Is.EqualTo(firstCharacterSprite.DisplayName));
+                Assert.That(tabs.Tabs.SelectedItem, Is.TypeOf<CharacterSpriteEditorViewModel>());
+            });
+
+            // Test edit
+            CharacterSpriteEditorViewModel viewModel = (CharacterSpriteEditorViewModel)tabs.Tabs.SelectedItem;
+            ComboBox characterBox = tabs.FindLogicalDescendantOfType<ComboBox>();
+            characterBox.SelectedIndex++;
+            Assert.Multiple(() =>
+            {
+                Assert.That(viewModel.Character.DisplayName, Is.EqualTo(((CharacterItem)characterBox.SelectedItem).DisplayName));
+                Assert.That(viewModel.Description.UnsavedChanges, Is.True);
+            });
+            mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(CharacterSpriteEditor_CanEdit), ref currentFrame);
+            viewModel.Description.UnsavedChanges = false;
+
+            CheckBox isLargeCheckBox = tabs.FindLogicalDescendantOfType<CheckBox>();
+            isLargeCheckBox.Focus();
+            mainWindow.KeyPressQwerty(PhysicalKey.Enter, RawInputModifiers.None);
+            Assert.Multiple(() =>
+            {
+                Assert.That(viewModel.IsLarge, Is.EqualTo(isLargeCheckBox.IsChecked));
+                Assert.That(viewModel.Description.UnsavedChanges, Is.True);
+            });
+            mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(CharacterSpriteEditor_CanEdit), ref currentFrame);
         }
     }
 }

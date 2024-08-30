@@ -24,13 +24,9 @@ namespace SerialLoops.ViewModels.Panels
 
         public ObservableCollection<EditorViewModel> Tabs { get; set; } = [];
 
-        public EditorTabsPanelViewModel()
+        public EditorTabsPanelViewModel(MainWindowViewModel mainWindow, Project project, ILogger log)
         {
             TabSwitchedCommand = ReactiveCommand.Create(OnTabSwitched);
-        }
-
-        public void Initialize(MainWindowViewModel mainWindow, Project project, ILogger log)
-        {
             MainWindow = mainWindow;
             _project = project;
             _log = log;
@@ -61,12 +57,16 @@ namespace SerialLoops.ViewModels.Panels
             {
                 case ItemDescription.ItemType.Background:
                     return new BackgroundEditorViewModel((BackgroundItem)item, MainWindow, _project, _log);
+                case ItemDescription.ItemType.Character_Sprite:
+                    return new CharacterSpriteEditorViewModel((CharacterSpriteItem)item, MainWindow, _log);
                 case ItemDescription.ItemType.BGM:
                     return new BackgroundMusicEditorViewModel((BackgroundMusicItem)item, MainWindow, _project, _log);
                 case ItemDescription.ItemType.Scenario:
                     return new ScenarioEditorViewModel((ScenarioItem)item, MainWindow, _log);
                 case ItemDescription.ItemType.System_Texture:
                     return new SystemTextureEditorViewModel((SystemTextureItem)item, MainWindow, _project, _log);
+                case ItemDescription.ItemType.Voice:
+                    return new VoicedLineEditorViewModel((VoicedLineItem)item, MainWindow, _log);
                 default:
                     _log.LogError(Strings.Invalid_item_type_);
                     return null;
@@ -83,6 +83,10 @@ namespace SerialLoops.ViewModels.Panels
             if (closedEditor.Description.Type == ItemDescription.ItemType.BGM)
             {
                 ((BackgroundMusicEditorViewModel)closedEditor).BgmPlayer.Stop();
+            }
+            else if (closedEditor.Description.Type == ItemDescription.ItemType.Character_Sprite)
+            {
+                ((CharacterSpriteEditorViewModel)closedEditor).AnimatedImage.Stop();
             }
         }
 
