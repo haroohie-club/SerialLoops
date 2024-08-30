@@ -1,6 +1,7 @@
 ﻿using System;
 using Avalonia.Controls;
 using Avalonia.Layout;
+using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Avalonia.Svg;
@@ -73,6 +74,11 @@ namespace SerialLoops.Utility
             panel.Children.Add(GetVectorIcon(iconName, log, size: 16));
             panel.Children.Add(control);
             return panel;
+        }
+
+        internal static TextBlock GetTextHeader(string text, int size = 14)
+        {
+            return new TextBlock { Text = text, FontWeight = FontWeight.Bold, FontSize = size };
         }
     }
 }
