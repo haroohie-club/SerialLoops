@@ -63,6 +63,8 @@ namespace SerialLoops.ViewModels.Panels
                     return new BackgroundEditorViewModel((BackgroundItem)item, MainWindow, _project, _log);
                 case ItemDescription.ItemType.BGM:
                     return new BackgroundMusicEditorViewModel((BackgroundMusicItem)item, MainWindow, _project, _log);
+                case ItemDescription.ItemType.Scenario:
+                    return new ScenarioEditorViewModel((ScenarioItem)item, MainWindow, _log);
                 case ItemDescription.ItemType.System_Texture:
                     return new SystemTextureEditorViewModel((SystemTextureItem)item, MainWindow, _project, _log);
                 default:

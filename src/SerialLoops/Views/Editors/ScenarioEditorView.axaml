@@ -1,0 +1,31 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="using:SerialLoops.ViewModels.Editors"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:i="using:Avalonia.Xaml.Interactivity"
+             xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
+             xmlns:assets="using:SerialLoops.Assets"
+             xmlns:models="using:SerialLoops.Models"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:ScenarioEditorViewModel"
+             x:Class="SerialLoops.Views.Editors.ScenarioEditorView">
+    <Grid RowDefinitions="*" ColumnDefinitions="Auto,*">
+        <ListBox Name="CommandsBox" MinWidth="280" MinHeight="185" ItemsSource="{Binding Commands}">
+            <ListBox.ItemTemplate>
+                <DataTemplate x:DataType="models:PrettyScenarioCommand">
+                    <StackPanel Orientation="Horizontal" Spacing="3">
+                        <TextBlock Text="{Binding Verb}"/>
+                        <TextBlock Text="{Binding Parameter}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            <!--<i:Interaction.Behaviors>
+                <ia:EventTriggerBehavior EventName="SelectionChanged" SourceObject="{Binding #CommandsBox}">
+                    <ia:InvokeCommandAction Command="{Binding CommandsBoxSelectionChanged}" CommandParameter="{Binding #CommandsBox.SelectedIndex}"/>
+                </ia:EventTriggerBehavior>
+            </i:Interaction.Behaviors>-->
+        </ListBox>
+        
+    </Grid>
+</UserControl>
