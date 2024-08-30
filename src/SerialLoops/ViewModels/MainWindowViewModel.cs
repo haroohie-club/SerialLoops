@@ -21,8 +21,8 @@ using ReactiveUI.Fody.Helpers;
 using SerialLoops.Assets;
 using SerialLoops.Controls;
 using SerialLoops.Lib;
-using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Factories;
+using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Util;
 using SerialLoops.Utility;
 using SerialLoops.ViewModels.Dialogs;
@@ -54,7 +54,6 @@ namespace SerialLoops.ViewModels
         public Toolbar ToolBar => Window.ToolBar;
         public EditorTabsPanelViewModel EditorTabs { get; set; }
         public ItemExplorerPanelViewModel ItemExplorer { get; set; }
-        public TextBox SearchBox => ItemExplorer.SearchBox;
 
         public NativeMenuItem RecentProjectsMenu { get; set; } = new(Strings.Recent_Projects);
         public LoopyLogger Log { get; set; }
@@ -178,10 +177,8 @@ namespace SerialLoops.ViewModels
 
         internal void OpenProjectView(Project project, IProgressTracker tracker)
         {
-            ItemExplorer = new();
-            EditorTabs = new();
-            EditorTabs.Initialize(this, project, Log);
-            ItemExplorer.Initialize(OpenProject, EditorTabs, SearchBox, Log);
+            EditorTabs = new(this, project, Log);
+            ItemExplorer = new(OpenProject, EditorTabs, Log);
             ProjectPanel = new()
             {
                 DataContext = new OpenProjectPanelViewModel(ItemExplorer, EditorTabs),
@@ -207,7 +204,6 @@ namespace SerialLoops.ViewModels
 
 
             Title = $"{BASE_TITLE} - {project.Name}";
-            //EditorTabs.Tabs_PageChanged(this, EventArgs.Empty);
 
             //LoadCachedData(project, tracker);
 

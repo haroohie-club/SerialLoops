@@ -11,7 +11,6 @@ namespace SerialLoops.Utility
 {
     public static class ControlGenerator
     {
-
         public static Bitmap GetIcon(string iconName, ILogger log, int size = 100)
         {
             try
