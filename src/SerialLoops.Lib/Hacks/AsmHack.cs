@@ -3,10 +3,12 @@ using System.IO;
 using System.Linq;
 using System.Text.Json.Serialization;
 using HaruhiChokuretsuLib.Util;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
 namespace SerialLoops.Lib.Hacks
 {
-    public class AsmHack
+    public class AsmHack : ReactiveObject
     {
         public string Name { get; set; }
         public string Description { get; set; }
@@ -14,6 +16,9 @@ namespace SerialLoops.Lib.Hacks
         public List<HackFile> Files { get; set; }
         [JsonIgnore]
         public bool ValueChanged { get; set; }
+        [JsonIgnore]
+        [Reactive]
+        public bool IsApplied { get; set; }
 
         public bool Applied(Project project)
         {
@@ -42,9 +47,9 @@ namespace SerialLoops.Lib.Hacks
             return false;
         }
 
-        public void Apply(Project project, Config config, Dictionary<HackFile, SelectedHackParameter[]> selectedParameters, ILogger log)
+        public void Apply(Project project, Config config, Dictionary<HackFile, SelectedHackParameter[]> selectedParameters, ILogger log, bool forceApplication = false)
         {
-            if (Applied(project))
+            if (Applied(project) && !forceApplication)
             {
                 log.LogWarning($"Hack '{Name}' already applied, skipping.");
                 return;
@@ -69,26 +74,29 @@ namespace SerialLoops.Lib.Hacks
         public void Revert(Project project, ILogger log)
         {
             bool oneSuccess = false;
-            try
+            foreach (HackFile file in Files)
             {
-                foreach (HackFile file in Files)
+                string fileToDelete = Path.Combine(project.BaseDirectory, "src", file.Destination);
+                if (File.Exists(fileToDelete))
                 {
-                    File.Delete(Path.Combine(project.BaseDirectory, "src", file.Destination));
+                    File.Delete(fileToDelete);
                     oneSuccess = true;
                 }
             }
-            catch (IOException)
+            // If there's at least one success, we assume that an older version of the hack was applied and we've now rolled it back
+            if (!oneSuccess)
             {
-                // If there's at least one success, we assume that an older version of the hack was applied and we've now rolled it back
-                if (!oneSuccess)
-                {
-                    log.LogError(string.Format(project.Localize("Failed to delete files for hack '{0}' -- this hack is likely applied in the ROM base and can't be disabled."), Name));
-                }
+                log.LogError(string.Format(project.Localize("Failed to delete files for hack '{0}' -- this hack is likely applied in the ROM base and can't be disabled."), Name));
+                IsApplied = true;
             }
         }
 
         public override bool Equals(object obj)
         {
+            if (obj is string name)
+            {
+                return name.Equals(Name);
+            }
             return ((AsmHack)obj).Name.Equals(Name);
         }
 

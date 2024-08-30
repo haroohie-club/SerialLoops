@@ -22,7 +22,8 @@
 
     <tab:TabsControl Name="Tabs" ShowDefaultAddButton="False" ItemsSource="{Binding Tabs}"
                      ContainerClearing="Tabs_ContainerClearing"
-                     SelectedItem="{Binding SelectedTab}" LastTabClosedAction="{x:Null}">
+                     SelectedItem="{Binding SelectedTab}" LastTabClosedAction="{x:Null}"
+                     LeftThumbWidth="4" RightThumbWidth="4">
         <i:Interaction.Behaviors>
             <ia:EventTriggerBehavior EventName="SelectionChanged" SourceObject="{Binding #Tabs}">
                 <ia:InvokeCommandAction Command="{Binding TabSwitchedCommand}"/>

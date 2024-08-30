@@ -24,13 +24,9 @@ namespace SerialLoops.ViewModels.Panels
 
         public ObservableCollection<EditorViewModel> Tabs { get; set; } = [];
 
-        public EditorTabsPanelViewModel()
+        public EditorTabsPanelViewModel(MainWindowViewModel mainWindow, Project project, ILogger log)
         {
             TabSwitchedCommand = ReactiveCommand.Create(OnTabSwitched);
-        }
-
-        public void Initialize(MainWindowViewModel mainWindow, Project project, ILogger log)
-        {
             MainWindow = mainWindow;
             _project = project;
             _log = log;
