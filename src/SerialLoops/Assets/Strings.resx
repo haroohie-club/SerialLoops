@@ -434,7 +434,8 @@
     <value>Cleaning Iterative Directory</value>
   </data>
   <data name="Clear all commands from the game scenario?\nThis action is irreversible." xml:space="preserve">
-    <value>Clear all commands from the game scenario?\nThis action is irreversible.</value>
+    <value>Clear all commands from the game scenario?
+This action is irreversible.</value>
   </data>
   <data name="Clear Block" xml:space="preserve">
     <value>Win Section</value>
@@ -942,11 +943,20 @@
   <data name="Failed restoring BGM file." xml:space="preserve">
     <value>Failed restoring BGM file.</value>
   </data>
+  <data name="Failed saving overlay {0} to disk" xml:space="preserve">
+    <value>Failed saving overlay {0} to disk</value>
+    <comment>{0} is the name of an overlay we were attempting to save changes to.</comment>
+  </data>
   <data name="Failed to add parameters for hack file {0} in hack {1}" xml:space="preserve">
     <value>Failed to add parameters for hack file {0} in hack {1}</value>
   </data>
   <data name="Failed to apply the following hacks to the ROM:\n{0}\n\nPlease check the log file for more information.\n\nIn order to preserve state, no hacks were applied." xml:space="preserve">
-    <value>Failed to apply the following hacks to the ROM:\n{0}\n\nPlease check the log file for more information.\n\nIn order to preserve state, no hacks were applied.</value>
+    <value>Failed to apply the following hacks to the ROM:
+{0}
+
+Please check the log file for more information.
+
+In order to preserve state, no hacks were applied.</value>
   </data>
   <data name="Failed to calculate graph edges!" xml:space="preserve">
     <value>Failed to calculate graph edges!</value>
@@ -1014,6 +1024,10 @@
   </data>
   <data name="Failed to insert ARM9 assembly hacks" xml:space="preserve">
     <value>Failed to insert ARM9 assembly hacks</value>
+  </data>
+  <data name="Failed to insert hacks into overlay {0}." xml:space="preserve">
+    <value>Failed to insert hacks into overlay {0}.</value>
+    <comment>{0} is the name of a particular overlay we were trying to insert an ASM hack into.</comment>
   </data>
   <data name="Failed to load BGM file: file invalid." xml:space="preserve">
     <value>Failed to load BGM file: file invalid.</value>
@@ -1499,7 +1513,8 @@
     <value>No Emulator Path</value>
   </data>
   <data name="No emulator path has been set.\nPlease set the path to a Nintendo DS emulator in Preferences to use Build &amp; Run." xml:space="preserve">
-    <value>No emulator path has been set.\nPlease set the path to a Nintendo DS emulator in Preferences to use Build &amp; Run.</value>
+    <value>No emulator path has been set.
+Please set the path to a Nintendo DS emulator in Preferences to use Build &amp; Run.</value>
   </data>
   <data name="No exported project selected" xml:space="preserve">
     <value>No exported project selected</value>
@@ -1601,6 +1616,10 @@
   </data>
   <data name="Parameter Value" xml:space="preserve">
     <value>Parameter Value</value>
+  </data>
+  <data name="Parameters" xml:space="preserve">
+    <value>Parameters</value>
+    <comment>Describes the parameters that will be applied to an ASM hack</comment>
   </data>
   <data name="Past Description" xml:space="preserve">
     <value>Past Description</value>
@@ -2213,7 +2232,8 @@
     <value>Successfully applied hacks!</value>
   </data>
   <data name="Successfully applied the following hacks:\n{0}" xml:space="preserve">
-    <value>Successfully applied the following hacks:\n{0}</value>
+    <value>Successfully applied the following hacks:
+{0}</value>
   </data>
   <data name="Supported Audio Files" xml:space="preserve">
     <value>Supported Audio Files</value>
@@ -2267,13 +2287,15 @@
     <value>Text Voice Font</value>
   </data>
   <data name="The base ROM hash does not match the expected hash! Please check the \&quot;Ignore Hash\&quot; checkbox if you wish to override this." xml:space="preserve">
-    <value>The base ROM hash does not match the expected hash! Please check the \"Ignore Hash\" checkbox if you wish to override this.</value>
+    <value>The base ROM hash does not match the expected hash! Please check the "Ignore Hash" checkbox if you wish to override this.</value>
   </data>
   <data name="The changes made will require Serial Loops to be restarted. Is that okay?" xml:space="preserve">
     <value>The changes made will require Serial Loops to be restarted. Is that okay?</value>
   </data>
   <data name="The selected ROM's hash does not match the expected ROM hash. Please ensure you are using the correct base ROM.\n\nIf you wish to ignore this, please check the \&quot;Ignore Hash\&quot; checkbox." xml:space="preserve">
-    <value>The selected ROM's hash does not match the expected ROM hash. Please ensure you are using the correct base ROM.\n\nIf you wish to ignore this, please check the \"Ignore Hash\" checkbox.</value>
+    <value>The selected ROM's hash does not match the expected ROM hash. Please ensure you are using the correct base ROM.
+
+If you wish to ignore this, please check the "Ignore Hash" checkbox.</value>
   </data>
   <data name="There is no recorded base ROM hash for this project. This is likely because this project was created with an older version of Serial Loops. Please select the base ROM used for this project so the hash can be recorded now." xml:space="preserve">
     <value>There is no recorded base ROM hash for this project. This is likely because this project was created with an older version of Serial Loops. Please select the base ROM used for this project so the hash can be recorded now.</value>
@@ -2309,7 +2331,8 @@
     <value>Title screen return unsaved progress lost prompt message box</value>
   </data>
   <data name="To edit Save Files, you need to have a project open.\nNo project is currently open. Would you like to create a new project?" xml:space="preserve">
-    <value>To edit Save Files, you need to have a project open.\nNo project is currently open. Would you like to create a new project?</value>
+    <value>To edit Save Files, you need to have a project open.
+No project is currently open. Would you like to create a new project?</value>
   </data>
   <data name="Toggle Haruhi's voice ticker tape" xml:space="preserve">
     <value>Toggle Haruhi's voice ticker tape</value>
@@ -2505,7 +2528,7 @@
     <value>WAV files</value>
   </data>
   <data name="While attempting to build,  file #{0:X3} in archive {1} was found to be corrupt. Serial Loops can delete this file from your base directory automatically which may allow you to load the rest of the project, but any changes made to that file will be lost. Alternatively, you can attempt to edit the file manually to fix it. How would you like to proceed? Press OK to proceed with deleting the file and Cancel to attempt to deal with it manually." xml:space="preserve">
-    <value>While attempting to build,  file #{0:X3} in archive {1} was found to be corrupt. Serial Loops can delete this file from your base directory automatically which may allow you to load the rest of the project, but any changes made to that file will be lost. Alternatively, you can attempt to edit the file manually to fix it. How would you like to proceed? Press OK to proceed with deleting the file and Cancel to attempt to deal with it manually.</value>
+    <value>While attempting to build, file #{0:X3} in archive {1} was found to be corrupt. Serial Loops can delete this file from your base directory automatically which may allow you to load the rest of the project, but any changes made to that file will be lost. Alternatively, you can attempt to edit the file manually to fix it. How would you like to proceed? Press OK to proceed with deleting the file and Cancel to attempt to deal with it manually.</value>
   </data>
   <data name="White Space Begin" xml:space="preserve">
     <value>White Space Begin</value>

@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Headless;
 using Avalonia.Headless.NUnit;
@@ -10,6 +13,7 @@ using Avalonia.LogicalTree;
 using SerialLoops.Assets;
 using SerialLoops.Controls;
 using SerialLoops.Lib;
+using SerialLoops.Lib.Hacks;
 using SerialLoops.Lib.Util;
 using SerialLoops.Tests.Shared;
 using SerialLoops.ViewModels.Dialogs;
@@ -17,10 +21,11 @@ using SerialLoops.Views.Dialogs;
 
 namespace SerialLoops.Tests.Headless
 {
-    public class DialogTests
+    public class NoProjectRequiredTests
     {
         // To run these tests locally, you can create a file called 'ui_vals.json' and place it next to the test assembly (in the output folder)
         private UiVals? _uiVals;
+        List<string> _deleteDirs = [];
 
         [OneTimeSetUp]
         public void SetUp()
@@ -39,6 +44,15 @@ namespace SerialLoops.Tests.Headless
                 {
                     ArtifactsDir = Environment.GetEnvironmentVariable(UiVals.ARTIFACTS_DIR_ENV_VAR) ?? "artifacts",
                 };
+            }
+        }
+
+        [OneTimeTearDown]
+        public void TearDown()
+        {
+            foreach (string dir in _deleteDirs)
+            {
+                Directory.Delete(dir, true);
             }
         }
 

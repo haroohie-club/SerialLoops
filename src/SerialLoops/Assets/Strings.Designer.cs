@@ -1094,7 +1094,8 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Clear all commands from the game scenario?\nThis action is irreversible..
+        ///   Looks up a localized string similar to Clear all commands from the game scenario?
+        ///This action is irreversible..
         /// </summary>
         public static string Clear_all_commands_from_the_game_scenario__nThis_action_is_irreversible_ {
             get {
@@ -2600,6 +2601,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed saving overlay {0} to disk.
+        /// </summary>
+        public static string Failed_saving_overlay__0__to_disk {
+            get {
+                return ResourceManager.GetString("Failed saving overlay {0} to disk", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to add parameters for hack file {0} in hack {1}.
         /// </summary>
         public static string Failed_to_add_parameters_for_hack_file__0__in_hack__1_ {
@@ -2609,7 +2619,12 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to apply the following hacks to the ROM:\n{0}\n\nPlease check the log file for more information.\n\nIn order to preserve state, no hacks were applied..
+        ///   Looks up a localized string similar to Failed to apply the following hacks to the ROM:
+        ///{0}
+        ///
+        ///Please check the log file for more information.
+        ///
+        ///In order to preserve state, no hacks were applied..
         /// </summary>
         public static string Failed_to_apply_the_following_hacks_to_the_ROM__n_0__n_nPlease_check_the_log_file_for_more_information__n_nIn_order_to_preserve_state__no_hacks_were_applied_ {
             get {
@@ -2806,6 +2821,15 @@ namespace SerialLoops.Assets {
         public static string Failed_to_insert_ARM9_assembly_hacks {
             get {
                 return ResourceManager.GetString("Failed to insert ARM9 assembly hacks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to insert hacks into overlay {0}..
+        /// </summary>
+        public static string Failed_to_insert_hacks_into_overlay__0__ {
+            get {
+                return ResourceManager.GetString("Failed to insert hacks into overlay {0}.", resourceCulture);
             }
         }
         
@@ -4214,7 +4238,8 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No emulator path has been set.\nPlease set the path to a Nintendo DS emulator in Preferences to use Build &amp; Run..
+        ///   Looks up a localized string similar to No emulator path has been set.
+        ///Please set the path to a Nintendo DS emulator in Preferences to use Build &amp; Run..
         /// </summary>
         public static string No_emulator_path_has_been_set__nPlease_set_the_path_to_a_Nintendo_DS_emulator_in_Preferences_to_use_Build___Run_ {
             get {
@@ -4517,6 +4542,15 @@ namespace SerialLoops.Assets {
         public static string Parameter_Value {
             get {
                 return ResourceManager.GetString("Parameter Value", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameters.
+        /// </summary>
+        public static string Parameters {
+            get {
+                return ResourceManager.GetString("Parameters", resourceCulture);
             }
         }
         
@@ -6314,7 +6348,8 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Successfully applied the following hacks:\n{0}.
+        ///   Looks up a localized string similar to Successfully applied the following hacks:
+        ///{0}.
         /// </summary>
         public static string Successfully_applied_the_following_hacks__n_0_ {
             get {
@@ -6467,7 +6502,7 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The base ROM hash does not match the expected hash! Please check the \&quot;Ignore Hash\&quot; checkbox if you wish to override this..
+        ///   Looks up a localized string similar to The base ROM hash does not match the expected hash! Please check the &quot;Ignore Hash&quot; checkbox if you wish to override this..
         /// </summary>
         public static string The_base_ROM_hash_does_not_match_the_expected_hash__Please_check_the___Ignore_Hash___checkbox_if_you_wish_to_override_this_ {
             get {
@@ -6486,7 +6521,9 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The selected ROM&apos;s hash does not match the expected ROM hash. Please ensure you are using the correct base ROM.\n\nIf you wish to ignore this, please check the \&quot;Ignore Hash\&quot; checkbox..
+        ///   Looks up a localized string similar to The selected ROM&apos;s hash does not match the expected ROM hash. Please ensure you are using the correct base ROM.
+        ///
+        ///If you wish to ignore this, please check the &quot;Ignore Hash&quot; checkbox..
         /// </summary>
         public static string The_selected_ROM_s_hash_does_not_match_the_expected_ROM_hash__Please_ensure_you_are_using_the_correct_base_ROM__n_nIf_you_wish_to_ignore_this__please_check_the___Ignore_Hash___checkbox_ {
             get {
@@ -6599,7 +6636,8 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To edit Save Files, you need to have a project open.\nNo project is currently open. Would you like to create a new project?.
+        ///   Looks up a localized string similar to To edit Save Files, you need to have a project open.
+        ///No project is currently open. Would you like to create a new project?.
         /// </summary>
         public static string To_edit_Save_Files__you_need_to_have_a_project_open__nNo_project_is_currently_open__Would_you_like_to_create_a_new_project_ {
             get {
@@ -7185,7 +7223,7 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to While attempting to build,  file #{0:X3} in archive {1} was found to be corrupt. Serial Loops can delete this file from your base directory automatically which may allow you to load the rest of the project, but any changes made to that file will be lost. Alternatively, you can attempt to edit the file manually to fix it. How would you like to proceed? Press OK to proceed with deleting the file and Cancel to attempt to deal with it manually..
+        ///   Looks up a localized string similar to While attempting to build, file #{0:X3} in archive {1} was found to be corrupt. Serial Loops can delete this file from your base directory automatically which may allow you to load the rest of the project, but any changes made to that file will be lost. Alternatively, you can attempt to edit the file manually to fix it. How would you like to proceed? Press OK to proceed with deleting the file and Cancel to attempt to deal with it manually..
         /// </summary>
         public static string While_attempting_to_build___file___0_X3__in_archive__1__was_found_to_be_corrupt__Serial_Loops_can_delete_this_file_from_your_base_directory_automatically_which_may_allow_you_to_load_the_rest_of_the_project__but_any_changes_made_to_that_file_will_be_lost__Alternatively__you_can_attempt_to_edit_the_file_manually_to_fix_it__How_would_you_like_to_proceed__Press_OK_to_proceed_with_deleting_the_file_and_Cancel_to_attempt_to_deal_with_it_manually_ {
             get {

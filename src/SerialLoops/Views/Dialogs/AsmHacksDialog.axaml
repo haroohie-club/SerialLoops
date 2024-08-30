@@ -1,0 +1,50 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:vm="using:SerialLoops.ViewModels.Dialogs"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:assets="using:SerialLoops.Assets"
+        xmlns:m="clr-namespace:SerialLoops.Lib.Hacks;assembly=SerialLoops.Lib"
+        xmlns:i="using:Avalonia.Xaml.Interactivity"
+        xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
+        xmlns:local="using:SerialLoops.Views.Dialogs"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        Padding="5"
+        SizeToContent="WidthAndHeight"
+        x:DataType="vm:AsmHacksDialogViewModel"
+        x:Class="SerialLoops.Views.Dialogs.AsmHacksDialog"
+        Title="{x:Static assets:Strings.Apply_Assembly_Hack}">
+    
+    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto">
+        <ScrollViewer Name="HacksPanel" Grid.Row="0" Grid.Column="0" Margin="3">
+            <ListBox Name="HacksBox" Background="Transparent" ItemsSource="{Binding Configuration.Hacks}"
+                     SelectedItem="{Binding SelectedHack}" Width="200" Height="400">
+                <i:Interaction.Behaviors>
+                    <ia:EventTriggerBehavior EventName="SelectionChanged" SourceObject="#HacksBox">
+                        <ia:InvokeCommandAction Command="{Binding HackChangedCommand}"
+                                                CommandParameter="{Binding #DescriptionPanel}"/>
+                    </ia:EventTriggerBehavior>
+                </i:Interaction.Behaviors>
+                <ListBox.ItemTemplate>
+                    <DataTemplate DataType="m:AsmHack">
+                        <StackPanel Orientation="Horizontal" Spacing="5" VerticalAlignment="Center">
+                            <CheckBox IsChecked="{Binding IsApplied}"/>
+                            <TextBlock Text="{Binding Name}" Margin="0 5 0 0"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </ScrollViewer>
+        <StackPanel Name="DescriptionPanel" Orientation="Vertical" Grid.Row="0" Grid.Column="1"
+                    Spacing="5" Margin="3" Width="300" Height="400"/>
+        <StackPanel Name="ButtonsPanel" Orientation="Horizontal" Spacing="3" Margin="5"
+                    Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Right">
+            <Button Name="ImportHackButton" Content="{x:Static assets:Strings.Import_Hack}"
+                    Command="{Binding ImportHackCommand}" CommandParameter="{Binding $parent[local:AsmHacksDialog]}"/>
+            <Button Name="SaveButton" Content="{x:Static assets:Strings.Save}"
+                    Command="{Binding SaveCommand}" CommandParameter="{Binding $parent[local:AsmHacksDialog]}"/>
+            <Button Name="CancelButton" Content="{x:Static assets:Strings.Cancel}" IsCancel="True"
+                    Command="{Binding CancelCommand}" CommandParameter="{Binding $parent[local:AsmHacksDialog]}"/>
+        </StackPanel>
+    </Grid>
+</Window>
