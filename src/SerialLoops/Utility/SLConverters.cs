@@ -21,6 +21,7 @@ namespace SerialLoops.Utility
         public static FuncValueConverter<DsScreen, bool> BottomScreenSelectableConverter => new((screen) => screen != DsScreen.BOTTOM);
         public static FuncValueConverter<DsScreen, bool> BothScreensSelectedConverter => new((screen) => screen == DsScreen.BOTH);
         public static FuncValueConverter<bool, IImmutableSolidColorBrush> BooleanBrushConverter => new((val) => val ? Brushes.Transparent : Brushes.LightGreen);
+        public static FuncValueConverter<string, string> CharacterNameCropConverter => new((name) => name[4..]);
     }
 
     public class DisplayNameConverter : IMultiValueConverter

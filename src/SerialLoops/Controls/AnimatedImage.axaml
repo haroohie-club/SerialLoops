@@ -1,0 +1,12 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:SerialLoops.ViewModels.Controls"
+             xmlns:utility="using:SerialLoops.Utility"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:AnimatedImageViewModel"
+             x:Class="SerialLoops.Controls.AnimatedImage">
+    <Image Source="{Binding CurrentFrame, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
+            Width="{Binding CurrentFrame.Width}" Height="{Binding CurrentFrame.Height}"/>
+</UserControl>
