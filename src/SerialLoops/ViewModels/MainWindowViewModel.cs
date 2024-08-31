@@ -14,6 +14,7 @@ using Avalonia.Platform;
 using Avalonia.Platform.Storage;
 using Avalonia.Styling;
 using HaruhiChokuretsuLib.Archive;
+using HaruhiChokuretsuLib.Archive.Event;
 using MiniToolbar.Avalonia;
 using MsBox.Avalonia.Enums;
 using ReactiveUI;
@@ -538,16 +539,6 @@ namespace SerialLoops.ViewModels
                             savedExtra = true;
                         }
                         break;
-                    case ItemDescription.ItemType.Voice:
-                        VoicedLineItem vce = (VoicedLineItem)item;
-                        if (OpenProject.VoiceMap is not null)
-                        {
-                            changedSubs = true;
-                        }
-                        break;
-                    default:
-                        Log.LogWarning($"Saving for {item.Type}s not yet implemented.");
-                        break;
                     case ItemDescription.ItemType.Character_Sprite:
                         if (!savedChrData)
                         {
@@ -560,6 +551,22 @@ namespace SerialLoops.ViewModels
                         }
                         CharacterSpriteItem characterSpriteItem = (CharacterSpriteItem)item;
                         characterSpriteItem.Graphics.Write(OpenProject, Log);
+                        break;
+                    case ItemDescription.ItemType.Scenario:
+                        ScenarioStruct scenario = ((ScenarioItem)item).Scenario;
+                        IO.WriteStringFile(
+                            Path.Combine("assets", "events", $"{OpenProject.Evt.GetFileByName("SCENARIOS").Index:X3}.s"),
+                            scenario.GetSource(includes, Log), OpenProject, Log);
+                        break;
+                    case ItemDescription.ItemType.Voice:
+                        VoicedLineItem vce = (VoicedLineItem)item;
+                        if (OpenProject.VoiceMap is not null)
+                        {
+                            changedSubs = true;
+                        }
+                        break;
+                    default:
+                        Log.LogWarning($"Saving for {item.Type}s not yet implemented.");
                         break;
                 }
 

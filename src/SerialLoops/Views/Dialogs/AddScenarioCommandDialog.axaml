@@ -1,0 +1,21 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:vm="using:SerialLoops.ViewModels.Dialogs"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:assets="using:SerialLoops.Assets"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:DataType="vm:AddScenarioCommandDialogViewModel"
+        x:Class="SerialLoops.Views.Dialogs.AddScenarioCommandDialog"
+        SizeToContent="WidthAndHeight"
+        Title="{x:Static assets:Strings.Add_Command}"
+        Name="AddCommandDialog">
+    <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto" VerticalAlignment="Center">
+        <TextBlock Text="{x:Static assets:Strings.Command_Type_}" Margin="10"/>
+        <ComboBox Grid.Column="1" Grid.Row="0" ItemsSource="{Binding Verbs}" SelectedItem="{Binding SelectedVerb}" Margin="5"/>
+        <StackPanel Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Margin="10" Spacing="5" HorizontalAlignment="Right" Orientation="Horizontal">
+            <Button Content="{x:Static assets:Strings.Create}" Command="{Binding CreateCommand}" CommandParameter="{Binding #AddCommandDialog}" IsDefault="True"/>
+            <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}" CommandParameter="{Binding #AddCommandDialog}" IsCancel="True"/>
+        </StackPanel>
+    </Grid>
+</Window>

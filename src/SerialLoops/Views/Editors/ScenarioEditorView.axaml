@@ -7,10 +7,12 @@
              xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
              xmlns:assets="using:SerialLoops.Assets"
              xmlns:editor="using:SerialLoops.ViewModels.Editors.ScenarioCommandEditors"
+             xmlns:local="using:SerialLoops.Views.Editors"
              xmlns:models="using:SerialLoops.Models"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:ScenarioEditorViewModel"
-             x:Class="SerialLoops.Views.Editors.ScenarioEditorView">
+             x:Class="SerialLoops.Views.Editors.ScenarioEditorView"
+             Name="ScenarioEditor">
     <Grid RowDefinitions="Auto,*" ColumnDefinitions="Auto,*">
         <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right"
                     Width="{Binding #CommandsBox.Width}" Spacing="5" Margin="5">
@@ -44,12 +46,6 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <ContentPresenter Grid.Row="1" Grid.Column="1" Content="{Binding CurrentCommandViewModel}">
-            <ContentPresenter.ContentTemplate>
-                <DataTemplate DataType="editor:ScenarioCommandEditorViewModel">
-                    <TextBlock Text="{Binding Test}"/>
-                </DataTemplate>
-            </ContentPresenter.ContentTemplate>
-        </ContentPresenter>
+        <ContentPresenter Grid.Row="1" Grid.Column="1" DataContext="{Binding CurrentCommandViewModel}" Content="{Binding}"/>
     </Grid>
 </UserControl>
