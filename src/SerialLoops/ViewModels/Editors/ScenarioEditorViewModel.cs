@@ -79,7 +79,10 @@ namespace SerialLoops.ViewModels.Editors
                 ScenarioCommand newCommand = new(newVerb ?? ScenarioVerb.LOAD_SCENE, param);
                 _scenario.Scenario.Commands.Insert(selectedIndex + 1, newCommand);
                 Commands.Insert(selectedIndex + 1, new(_scenario.GetCommandMacro(newCommand), selectedIndex + 1, _scenario));
-                SelectedCommand.CommandIndex = Commands.IndexOf(SelectedCommand);
+                if (SelectedCommand is not null)
+                {
+                    SelectedCommand.CommandIndex = Commands.IndexOf(SelectedCommand);
+                }
                 Description.UnsavedChanges = true;
             }
         }
