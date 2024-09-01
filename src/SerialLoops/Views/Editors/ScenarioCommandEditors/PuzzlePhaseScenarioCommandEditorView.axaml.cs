@@ -9,5 +9,4 @@ namespace SerialLoops.Views.Editors.ScenarioCommandEditors
             InitializeComponent();
         }
     }
-
 }
