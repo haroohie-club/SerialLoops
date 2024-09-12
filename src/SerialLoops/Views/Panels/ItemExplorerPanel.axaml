@@ -22,8 +22,8 @@
                 </ia:EventTriggerBehavior>
             </i:Interaction.Behaviors>
         </TextBox>
-        <ScrollViewer Grid.Row="1">
-            <TreeView Name="Viewer" SelectionMode="Single"/>
-        </ScrollViewer>
+        <!--<ScrollViewer Grid.Row="1">-->
+            <TreeDataGrid Grid.Row="1" Name="Viewer" Source="{Binding Source}"/>
+        <!--</ScrollViewer>-->
     </Grid>
 </UserControl>

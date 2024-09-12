@@ -2,13 +2,12 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Linq;
-using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Controls.Templates;
 using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.Styling;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI.Fody.Helpers;
 using SerialLoops.Assets;
@@ -23,17 +22,37 @@ namespace SerialLoops.ViewModels.Panels
         public double Width { get; set; }
         public double Height { get; set; }
 
-        private List<ItemDescription> _items;
-        public List<ItemDescription> Items
+        private ObservableCollection<ItemDescription> _items;
+        public ObservableCollection<ItemDescription> Items
         {
             protected get { return _items; }
             set
             {
                 _items = value;
-                Source = new ObservableCollection<ITreeItem>(GetSections());
+                Source = new HierarchicalTreeDataGridSource<ITreeItem>(GetSections())
+                {
+                    Columns =
+                    {
+                        new HierarchicalExpanderColumn<ITreeItem>(
+                            new TemplateColumn<ITreeItem>("Section", new FuncDataTemplate<ITreeItem>((val, namescope) =>
+                            {
+                                StackPanel panel = new()
+                                {
+                                    Orientation = Avalonia.Layout.Orientation.Horizontal,
+                                    Spacing = 3,
+                                };
+                                panel.Children.Add(val.Icon);
+                                panel.Children.Add(new TextBlock { Text = val.Text });
+                                return panel;
+                            }
+                            )),
+                            val => val.Children
+                        )
+                    }
+                };
                 if (ExpandItems)
                 {
-                    foreach (ITreeItem item in Source)
+                    foreach (ITreeItem item in Source.Items)
                     {
                         item.IsExpanded = true;
                     }
@@ -44,13 +63,13 @@ namespace SerialLoops.ViewModels.Panels
         protected ILogger _log;
 
         [Reactive]
-        public ObservableCollection<ITreeItem> Source { get; set; }
+        public HierarchicalTreeDataGridSource<ITreeItem> Source { get; set; }
         [Reactive]
         public bool ExpandItems { get; set; }
 
         public void InitializeItems(List<ItemDescription> items, bool expandItems, ILogger log)
         {
-            Items = items;
+            Items = new(items);
             ExpandItems = expandItems;
             
             _log = log;
@@ -93,15 +112,12 @@ namespace SerialLoops.ViewModels.Panels
             };
         }
 
-        public void SetupViewer(TreeView viewer)
+        public void SetupViewer(TreeDataGrid viewer)
         {
-            viewer.ItemTemplate = new FuncTreeDataTemplate<ITreeItem>((item, namescope) => item.GetDisplay(), item => item.Children);
             viewer.Bind(ItemsControl.ItemsSourceProperty, new Binding(nameof(Source), BindingMode.TwoWay));
-            viewer.ItemContainerTheme = new(typeof(TreeViewItem)) { BasedOn = (ControlTheme)Application.Current.FindResource(typeof(TreeViewItem)) };
-            viewer.ItemContainerTheme.Setters.Add(new Setter(TreeViewItem.IsExpandedProperty, new Binding("IsExpanded")));
             if (ExpandItems)
             {
-                foreach (ITreeItem item in viewer.ItemsSource)
+                foreach (ITreeItem item in viewer.Source.Items)
                 {
                     if (item is SectionTreeItem section)
                     {
