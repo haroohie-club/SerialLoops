@@ -57,10 +57,12 @@ namespace SerialLoops.ViewModels.Panels
             {
                 case ItemDescription.ItemType.Background:
                     return new BackgroundEditorViewModel((BackgroundItem)item, MainWindow, _project, _log);
-                case ItemDescription.ItemType.Character_Sprite:
-                    return new CharacterSpriteEditorViewModel((CharacterSpriteItem)item, MainWindow, _log);
                 case ItemDescription.ItemType.BGM:
                     return new BackgroundMusicEditorViewModel((BackgroundMusicItem)item, MainWindow, _project, _log);
+                case ItemDescription.ItemType.Character_Sprite:
+                    return new CharacterSpriteEditorViewModel((CharacterSpriteItem)item, MainWindow, _log);
+                case ItemDescription.ItemType.Group_Selection:
+                    return new GroupSelectionEditorViewModel((GroupSelectionItem)item, MainWindow, _log);
                 case ItemDescription.ItemType.System_Texture:
                     return new SystemTextureEditorViewModel((SystemTextureItem)item, MainWindow, _project, _log);
                 case ItemDescription.ItemType.Voice:
