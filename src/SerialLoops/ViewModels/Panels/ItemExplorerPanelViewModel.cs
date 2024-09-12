@@ -39,17 +39,14 @@ namespace SerialLoops.ViewModels.Panels
                                 return GetItemPanel(val);
                             }), cellEditingTemplate: new FuncDataTemplate<ITreeItem>((val, namescope) =>
                             {
-                                ItemDescription item = _project.FindItem(val.Text);
-                                if (item is not null)
-                                {
-                                    _tabs.OpenTab(item);
-                                }
+                                // Eventually we can maybe do rename logic here
                                 return GetItemPanel(val);
-                            }), options: new() { BeginEditGestures = BeginEditGestures.DoubleTap }),
+                            }), options: new() { BeginEditGestures = BeginEditGestures.F2 }),
                             i => i.Children
                         )
                     }
                 };
+
                 if (ExpandItems)
                 {
                     Source.ExpandAll();
@@ -91,6 +88,7 @@ namespace SerialLoops.ViewModels.Panels
         public bool ExpandItems { get; set; }
 
         public ICommand SearchCommand { get; set; }
+        public ICommand OpenItemCommand { get; set; }
 
         public ItemExplorerPanelViewModel(Project project, EditorTabsPanelViewModel tabs, ILogger log)
         {
@@ -99,11 +97,12 @@ namespace SerialLoops.ViewModels.Panels
             _log = log;
             Items = new(project.Items);
             SearchCommand = ReactiveCommand.Create<string>(Search);
+            OpenItemCommand = ReactiveCommand.Create<TreeDataGrid>(OpenItem);
         }
 
-        public void ItemList_ItemDoubleClicked(object sender, TappedEventArgs args)
+        public void OpenItem(TreeDataGrid viewer)
         {
-            ItemDescription item = _project.FindItem(((ITreeItem)((TreeDataGrid)sender).RowSelection)?.Text);
+            ItemDescription item = _project.FindItem(((ITreeItem)viewer.RowSelection.SelectedItem)?.Text);
             if (item is not null)
             {
                 _tabs.OpenTab(item);

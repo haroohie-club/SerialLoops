@@ -22,8 +22,15 @@
                 </ia:EventTriggerBehavior>
             </i:Interaction.Behaviors>
         </TextBox>
-        <!--<ScrollViewer Grid.Row="1">-->
-            <TreeDataGrid Grid.Row="1" Name="Viewer" Source="{Binding Source}"/>
-        <!--</ScrollViewer>-->
+        <TreeDataGrid Grid.Row="1" Name="Viewer" Source="{Binding Source}">
+            <i:Interaction.Behaviors>
+                <ia:EventTriggerBehavior EventName="KeyUp" SourceObject="{Binding #Viewer}">
+                    <ia:InvokeCommandAction Command="{Binding OpenItemCommand}" CommandParameter="{Binding #Viewer}"/>
+                </ia:EventTriggerBehavior>
+                <ia:EventTriggerBehavior EventName="DoubleTapped" SourceObject="{Binding #Viewer}">
+                    <ia:InvokeCommandAction Command="{Binding OpenItemCommand}" CommandParameter="{Binding #Viewer}"/>
+                </ia:EventTriggerBehavior>
+            </i:Interaction.Behaviors>
+        </TreeDataGrid>
     </Grid>
 </UserControl>
