@@ -6,7 +6,9 @@ using Avalonia.Data.Converters;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
+using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
+using SerialLoops.Lib.Util;
 using SerialLoops.Models;
 using SkiaSharp;
 using static SerialLoops.Lib.Script.Parameters.ScreenScriptParameter;
@@ -36,6 +38,19 @@ namespace SerialLoops.Utility
                 return unsavedChanges ? $"* {displayName}" : displayName;
             }
             return string.Empty;
+        }
+    }
+
+    public class SubstitutedStringConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return ((string)value).GetSubstitutedString((Project)parameter);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return ((string)value).GetOriginalString((Project)parameter);
         }
     }
 

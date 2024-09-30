@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="HaruhiChokuretsuLib" Version="0.40.6" />
     <PackageReference Include="NUnit" Version="4.1.0" />
   </ItemGroup>
 

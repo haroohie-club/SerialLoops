@@ -7,14 +7,20 @@
              xmlns:controls="using:SerialLoops.Controls"
              xmlns:gbox="using:GroupBox.Avalonia.Controls"
              xmlns:hlib="using:HaruhiChokuretsuLib.Archive.Event"
+             xmlns:utility="using:SerialLoops.Utility"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:GroupSelectionEditorViewModel"
-             x:Class="SerialLoops.Views.Editors.GroupSelectionEditorView">
+             x:Class="SerialLoops.Views.Editors.GroupSelectionEditorView"
+             x:Name="GroupSelectionEditor">
+    <UserControl.Resources>
+        <utility:SubstitutedStringConverter x:Key="SubstitutedStringConverter"/>
+    </UserControl.Resources>
     <ScrollViewer>
         <ItemsControl ItemsSource="{Binding GroupSelection.Selection.Activities}">
             <ItemsControl.DataTemplates>
                 <DataTemplate DataType="hlib:ScenarioActivity">
-                    <gbox:GroupBox Header="{Binding Title}" Theme="{StaticResource GroupBoxClassic}">
+                    <gbox:GroupBox Header="{Binding Title, Converter={StaticResource SubstitutedStringConverter}, ConverterParameter={Binding $parent[vm:GroupSelectionEditorViewModel].OpenProject}}"
+                                   Theme="{StaticResource GroupBoxClassic}">
                         <StackPanel Orientation="Vertical" Spacing="5" Margin="3">
                             <StackPanel Orientation="Horizontal" Spacing="5">
                                 <TextBlock Text="{x:Static assets:Strings.Haruhi_Present}"/>
@@ -32,20 +38,20 @@
                                 <TextBlock Text="{x:Static assets:Strings.Past_Description}"/>
                                 <TextBox Height="50" Width="400" Text="{Binding PastDesc}"/>
                             </StackPanel>
-                            <!--<gbox:GroupBox Header="{x:Static assets:Strings.Optimal_Group}">
+                            <gbox:GroupBox Header="{x:Static assets:Strings.Optimal_Group}" Theme="{StaticResource GroupBoxClassic}">
                                 <StackPanel Orientation="Horizontal" Spacing="5">
-                                    <TextBlock Text="{Binding OptimalGroup.FirstMember}"/>
-                                    <TextBlock Text="{Binding OptimalGroup.SecondMember}"/>
-                                    <TextBlock Text="{Binding OptimalGroup.ThirdMember}"/>
+                                    <TextBlock Text="{Binding OptimalGroup[0]}"/>
+                                    <TextBlock Text="{Binding OptimalGroup[1]}"/>
+                                    <TextBlock Text="{Binding OptimalGroup[2]}"/>
                                 </StackPanel>
                             </gbox:GroupBox>
-                            <gbox:GroupBox Header="{x:Static assets:Strings.Worst_Group}">
+                            <gbox:GroupBox Header="{x:Static assets:Strings.Worst_Group}" Theme="{StaticResource GroupBoxClassic}">
                                 <StackPanel Orientation="Horizontal" Spacing="5">
-                                    <TextBlock Text="{Binding WorstGroup.FirstMember}"/>
-                                    <TextBlock Text="{Binding WorstGroup.SecondMember}"/>
-                                    <TextBlock Text="{Binding WorstGroup.ThirdMember}"/>
+                                    <TextBlock Text="{Binding WorstGroup[0]}"/>
+                                    <TextBlock Text="{Binding WorstGroup[1]}"/>
+                                    <TextBlock Text="{Binding WorstGroup[2]}"/>
                                 </StackPanel>
-                            </gbox:GroupBox>-->
+                            </gbox:GroupBox>
                             <gbox:GroupBox Header="{x:Static assets:Strings.Routes}" Theme="{StaticResource GroupBoxClassic}">
                                 <ItemsControl ItemsSource="{Binding Routes}">
                                     <ItemsControl.DataTemplates>
