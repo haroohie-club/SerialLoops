@@ -113,6 +113,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
+    <Compile Update="Views\Editors\ScenarioCommandEditors\ScenarioCommandEditorView.axaml.cs">
+      <DependentUpon>ScenarioCommandEditorView.axaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="Assets\Strings.resx">

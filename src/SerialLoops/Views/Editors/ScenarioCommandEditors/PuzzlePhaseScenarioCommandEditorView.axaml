@@ -1,0 +1,28 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="using:SerialLoops.ViewModels.Editors.ScenarioCommandEditors"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:assets="using:SerialLoops.Assets"
+             xmlns:controls="using:SerialLoops.Controls"
+             xmlns:litems="using:SerialLoops.Lib.Items"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:PuzzlePhaseScenarioCommandEditorViewModel"
+             x:Class="SerialLoops.Views.Editors.ScenarioCommandEditors.PuzzlePhaseScenarioCommandEditorView">
+    <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,Auto"
+          VerticalAlignment="Center" Margin="10">
+        <TextBlock Grid.Row="0" Grid.Column="0" Margin="5" Text="{x:Static assets:Strings.Command}"/>
+        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding SelectedScenarioCommand.Verb}"/>
+        <TextBlock Grid.Row="1" Grid.Column="0" Margin="5" Text="{x:Static assets:Strings.Puzzle}"/>
+        <StackPanel Orientation="Horizontal" Spacing="3" Grid.Row="1" Grid.Column="1" Margin="5">
+            <ComboBox Grid.Row="1" Grid.Column="1" Margin="5" ItemsSource="{Binding Puzzles}" SelectedItem="{Binding Puzzle}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate x:DataType="litems:PuzzleItem">
+                        <TextBlock Text="{Binding DisplayName}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <controls:ItemLink Item="{Binding Puzzle}" Tabs="{Binding Tabs}"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

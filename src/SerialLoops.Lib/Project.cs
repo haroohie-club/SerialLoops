@@ -861,6 +861,7 @@ namespace SerialLoops.Lib
                     tracker.Finished++;
                     return new GroupSelectionItem(s, i, this);
                 }));
+                ((ScenarioItem)Items.First(i => i.Type == ItemType.Scenario)).Refresh(this, log);
             }
             catch (Exception ex)
             {

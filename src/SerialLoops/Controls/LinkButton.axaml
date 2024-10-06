@@ -4,10 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SerialLoops.Controls.LinkButton">
-    <Grid>
-        <TextBlock Classes="link" IsEnabled="True" Name="LinkText"/>
+    <Grid ColumnDefinitions="Auto,Auto" VerticalAlignment="Center">
+        <Svg Grid.Column="0" Name="IconPath" Width="18"/>
+        <TextBlock Grid.Column="1" Classes="link" IsEnabled="True" Name="LinkText"/>
         <!-- TODO: (Maybe?) Remove this kludge (routes around https://github.com/AvaloniaUI/Avalonia/issues/15281) -->
-        <Button Cursor="Hand" Background="Transparent" Width="{Binding #LinkText.Bounds.Size.Width}"
+        <Button Grid.Column="1" Cursor="Hand" Background="Transparent" Width="{Binding #LinkText.Bounds.Size.Width}"
                 Height="{Binding #LinkText.Bounds.Size.Height}" Click="Action_Execute"/>
     </Grid>
 </UserControl>

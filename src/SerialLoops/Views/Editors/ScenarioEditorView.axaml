@@ -1,0 +1,51 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="using:SerialLoops.ViewModels.Editors"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:i="using:Avalonia.Xaml.Interactivity"
+             xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
+             xmlns:assets="using:SerialLoops.Assets"
+             xmlns:editor="using:SerialLoops.ViewModels.Editors.ScenarioCommandEditors"
+             xmlns:local="using:SerialLoops.Views.Editors"
+             xmlns:models="using:SerialLoops.Models"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:ScenarioEditorViewModel"
+             x:Class="SerialLoops.Views.Editors.ScenarioEditorView"
+             Name="ScenarioEditor">
+    <Grid RowDefinitions="Auto,*" ColumnDefinitions="Auto,*">
+        <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right"
+                    Width="{Binding #CommandsBox.Width}" Spacing="5" Margin="5">
+            <Button ToolTip.Tip="Add Command" Width="22" Command="{Binding AddCommand}">
+                <Svg Path="avares://SerialLoops/Assets/Icons/Add.svg" Width="22"/>
+            </Button>
+            <Button ToolTip.Tip="Remove Command" Width="22" Command="{Binding DeleteCommand}"
+                    IsEnabled="{Binding SelectedCommand, Converter={x:Static ObjectConverters.IsNotNull}}">
+                <Svg Path="avares://SerialLoops/Assets/Icons/Remove.svg" Width="22"/>
+            </Button>
+            <Button ToolTip.Tip="Clear Scenario" Width="22" Command="{Binding ClearCommand}">
+                <Svg Path="avares://SerialLoops/Assets/Icons/Clear.svg" Width="22"/>
+            </Button>
+            <Button ToolTip.Tip="Move Command Up" Width="22" Command="{Binding UpCommand}"
+                    IsEnabled="{Binding SelectedCommand, Converter={x:Static ObjectConverters.IsNotNull}}">
+                <Svg Path="avares://SerialLoops/Assets/Icons/Move_Up.svg" Width="22"/>
+            </Button>
+            <Button ToolTip.Tip="Move Command Down" Width="22" Command="{Binding DownCommand}"
+                    IsEnabled="{Binding SelectedCommand, Converter={x:Static ObjectConverters.IsNotNull}}">
+                <Svg Path="avares://SerialLoops/Assets/Icons/Move_Down.svg" Width="22"/>
+            </Button>
+        </StackPanel>
+        <ListBox Name="CommandsBox" MinWidth="280" MinHeight="185" ItemsSource="{Binding Commands}"
+                 SelectedItem="{Binding SelectedCommand}" Grid.Column="0" Grid.Row="1">
+            <ListBox.ItemTemplate>
+                <DataTemplate x:DataType="models:PrettyScenarioCommand">
+                    <StackPanel Orientation="Horizontal" Spacing="3">
+                        <TextBlock Text="{Binding Verb}"/>
+                        <TextBlock Text="{Binding Parameter}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <ContentPresenter Grid.Row="1" Grid.Column="1" DataContext="{Binding CurrentCommandViewModel}" Content="{Binding}"/>
+    </Grid>
+</UserControl>

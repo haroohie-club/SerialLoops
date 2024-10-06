@@ -1,0 +1,18 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="using:SerialLoops.ViewModels.Editors.ScenarioCommandEditors"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:assets="using:SerialLoops.Assets"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:ScenarioCommandEditorViewModel"
+             x:Class="SerialLoops.Views.Editors.ScenarioCommandEditors.ScenarioCommandEditorView">
+    <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,Auto"
+          VerticalAlignment="Center" Margin="10">
+        <TextBlock Grid.Row="0" Grid.Column="0" Margin="5" Text="{x:Static assets:Strings.Command}"/>
+        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding SelectedScenarioCommand.Verb}"/>
+        <TextBlock Grid.Row="1" Grid.Column="0" Margin="5" Text="{x:Static assets:Strings.Parameter_Value}"/>
+        <NumericUpDown Minimum="0" Maximum="{Binding MaxValue}" ClipValueToMinMax="True" FormatString="0"
+                       Value="{Binding Parameter}" Grid.Row="1" Grid.Column="1" Margin="5"/>
+    </Grid>
+</UserControl>

@@ -59,6 +59,8 @@ namespace SerialLoops.ViewModels.Panels
                     return new BackgroundEditorViewModel((BackgroundItem)item, MainWindow, _project, _log);
                 case ItemDescription.ItemType.BGM:
                     return new BackgroundMusicEditorViewModel((BackgroundMusicItem)item, MainWindow, _project, _log);
+                case ItemDescription.ItemType.Scenario:
+                    return new ScenarioEditorViewModel((ScenarioItem)item, MainWindow, _log);
                 case ItemDescription.ItemType.Character_Sprite:
                     return new CharacterSpriteEditorViewModel((CharacterSpriteItem)item, MainWindow, _log);
                 case ItemDescription.ItemType.Group_Selection:
