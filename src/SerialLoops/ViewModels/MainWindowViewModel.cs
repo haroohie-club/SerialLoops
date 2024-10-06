@@ -178,6 +178,7 @@ namespace SerialLoops.ViewModels
 
         internal void OpenProjectView(Project project, IProgressTracker tracker)
         {
+            TextSubstitutionConverter.SetProject(project);
             EditorTabs = new(this, project, Log);
             ItemExplorer = new(OpenProject, EditorTabs, Log);
             ProjectPanel = new()
