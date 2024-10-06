@@ -8,6 +8,7 @@
              xmlns:utility="using:SerialLoops.Utility"
              xmlns:gbox="using:GroupBox.Avalonia.Controls"
              xmlns:hlib="using:HaruhiChokuretsuLib.Archive.Event"
+             xmlns:utility="using:SerialLoops.Utility"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:GroupSelectionEditorViewModel"
              x:Class="SerialLoops.Views.Editors.GroupSelectionEditorView">
@@ -44,7 +45,7 @@
                                     <TextBlock Text="{Binding OptimalGroup[2]}"/>
                                 </StackPanel>
                             </gbox:GroupBox>
-                            <gbox:GroupBox Header="{x:Static assets:Strings.Worst_Group}">
+                            <gbox:GroupBox Header="{x:Static assets:Strings.Worst_Group}" Theme="{StaticResource GroupBoxClassic}">
                                 <StackPanel Orientation="Horizontal" Spacing="5">
                                     <TextBlock Text="{Binding WorstGroup[0]}"/>
                                     <TextBlock Text="{Binding WorstGroup[1]}"/>
