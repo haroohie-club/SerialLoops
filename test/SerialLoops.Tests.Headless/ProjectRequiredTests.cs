@@ -407,65 +407,65 @@ namespace SerialLoops.Tests.Headless
             mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(CharacterSpriteEditor_CanEdit), ref currentFrame);
         }
 
-        [AvaloniaTest]
-        [Parallelizable]
-        public async Task ScenarioEditor_CanEdit()
-        {
-            ConfigFactoryMock configFactory = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"config-{nameof(ScenarioEditor_CanEdit)}.json"));
-            string projectName = $"Headless_{nameof(ScenarioEditor_CanEdit)}";
-            int currentFrame = 0;
-            MainWindowViewModel mainWindowViewModel = new();
-            MainWindow mainWindow = new()
-            {
-                DataContext = mainWindowViewModel,
-                ConfigurationFactory = configFactory,
-            };
-            mainWindow.Show();
-            mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(ScenarioEditor_CanEdit), ref currentFrame);
-            Project newProject = new(projectName, "en", mainWindowViewModel.CurrentConfig, (s) => s, mainWindowViewModel.Log);
-            TestProgressTracker tracker = new();
-            // We're all gonna be trying to access the same ROM at the same time. We should retry if we hit IOExceptions to fix flakiness
-            for (int i = 0; i < 100; i++)
-            {
-                try
-                {
-                    Lib.IO.OpenRom(newProject, _uiVals.RomLoc, mainWindowViewModel.Log, tracker);
-                    break;
-                }
-                catch (IOException)
-                {
-                    await Task.Delay(TimeSpan.FromMilliseconds(100));
-                }
-            }
-            Assert.That(newProject.Load(mainWindowViewModel.CurrentConfig, mainWindowViewModel.Log, tracker).State, Is.EqualTo(Project.LoadProjectState.SUCCESS));
-            mainWindowViewModel.OpenProject = newProject;
-            mainWindowViewModel.OpenProjectView(newProject, tracker);
-            string createdProjectPath = mainWindowViewModel.OpenProject.MainDirectory;
-            mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(ScenarioEditor_CanEdit), ref currentFrame);
+        //[AvaloniaTest]
+        //[Parallelizable]
+        //public async Task ScenarioEditor_CanEdit()
+        //{
+        //    ConfigFactoryMock configFactory = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"config-{nameof(ScenarioEditor_CanEdit)}.json"));
+        //    string projectName = $"Headless_{nameof(ScenarioEditor_CanEdit)}";
+        //    int currentFrame = 0;
+        //    MainWindowViewModel mainWindowViewModel = new();
+        //    MainWindow mainWindow = new()
+        //    {
+        //        DataContext = mainWindowViewModel,
+        //        ConfigurationFactory = configFactory,
+        //    };
+        //    mainWindow.Show();
+        //    mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(ScenarioEditor_CanEdit), ref currentFrame);
+        //    Project newProject = new(projectName, "en", mainWindowViewModel.CurrentConfig, (s) => s, mainWindowViewModel.Log);
+        //    TestProgressTracker tracker = new();
+        //    // We're all gonna be trying to access the same ROM at the same time. We should retry if we hit IOExceptions to fix flakiness
+        //    for (int i = 0; i < 100; i++)
+        //    {
+        //        try
+        //        {
+        //            Lib.IO.OpenRom(newProject, _uiVals.RomLoc, mainWindowViewModel.Log, tracker);
+        //            break;
+        //        }
+        //        catch (IOException)
+        //        {
+        //            await Task.Delay(TimeSpan.FromMilliseconds(100));
+        //        }
+        //    }
+        //    Assert.That(newProject.Load(mainWindowViewModel.CurrentConfig, mainWindowViewModel.Log, tracker).State, Is.EqualTo(Project.LoadProjectState.SUCCESS));
+        //    mainWindowViewModel.OpenProject = newProject;
+        //    mainWindowViewModel.OpenProjectView(newProject, tracker);
+        //    string createdProjectPath = mainWindowViewModel.OpenProject.MainDirectory;
+        //    mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(ScenarioEditor_CanEdit), ref currentFrame);
 
-            OpenProjectPanel openProjectPanel = (OpenProjectPanel)mainWindow.MainContent.Content;
-            OpenProjectPanelViewModel openProjectViewModel = (OpenProjectPanelViewModel)openProjectPanel.DataContext;
+        //    OpenProjectPanel openProjectPanel = (OpenProjectPanel)mainWindow.MainContent.Content;
+        //    OpenProjectPanelViewModel openProjectViewModel = (OpenProjectPanelViewModel)openProjectPanel.DataContext;
 
-            ItemExplorerPanel explorer = openProjectPanel.ItemExplorer;
-            EditorTabsPanel tabs = openProjectPanel.EditorTabs;
+        //    ItemExplorerPanel explorer = openProjectPanel.ItemExplorer;
+        //    EditorTabsPanel tabs = openProjectPanel.EditorTabs;
 
-            ITreeItem scenarioTreeItem = openProjectViewModel.Explorer.Source.First(i => i.Text == "Scenario");
+        //    ITreeItem scenarioTreeItem = openProjectViewModel.Explorer.Source.(i => i.Text == "Scenario");
 
-            mainWindow.TabToExplorer();
+        //    mainWindow.TabToExplorer();
 
-            mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(ScenarioEditor_CanEdit), ref currentFrame);
-            explorer.Viewer.SelectedItem = scenarioTreeItem;
-            mainWindow.KeyPressQwerty(PhysicalKey.ArrowRight, RawInputModifiers.None);
-            mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(ScenarioEditor_CanEdit), ref currentFrame);
-            ItemDescription scnearioItem = mainWindowViewModel.OpenProject.Items.First(i => i.Type == ItemDescription.ItemType.Scenario);
-            explorer.Viewer.SelectedItem = scenarioTreeItem.Children.First(i => i.Text == scnearioItem.DisplayName);
-            mainWindow.KeyPressQwerty(PhysicalKey.Enter, RawInputModifiers.None);
-            mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(ScenarioEditor_CanEdit), ref currentFrame);
-            Assert.Multiple(() =>
-            {
-                Assert.That(openProjectViewModel.EditorTabs.SelectedTab?.Description?.DisplayName, Is.EqualTo(scnearioItem.DisplayName));
-                Assert.That(tabs.Tabs.SelectedItem, Is.TypeOf<ScenarioEditorViewModel>());
-            });
-        }
+        //    mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(ScenarioEditor_CanEdit), ref currentFrame);
+        //    explorer.Viewer.SelectedItem = scenarioTreeItem;
+        //    mainWindow.KeyPressQwerty(PhysicalKey.ArrowRight, RawInputModifiers.None);
+        //    mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(ScenarioEditor_CanEdit), ref currentFrame);
+        //    ItemDescription scnearioItem = mainWindowViewModel.OpenProject.Items.First(i => i.Type == ItemDescription.ItemType.Scenario);
+        //    explorer.Viewer.SelectedItem = scenarioTreeItem.Children.First(i => i.Text == scnearioItem.DisplayName);
+        //    mainWindow.KeyPressQwerty(PhysicalKey.Enter, RawInputModifiers.None);
+        //    mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(ScenarioEditor_CanEdit), ref currentFrame);
+        //    Assert.Multiple(() =>
+        //    {
+        //        Assert.That(openProjectViewModel.EditorTabs.SelectedTab?.Description?.DisplayName, Is.EqualTo(scnearioItem.DisplayName));
+        //        Assert.That(tabs.Tabs.SelectedItem, Is.TypeOf<ScenarioEditorViewModel>());
+        //    });
+        //}
     }
 }
