@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using Avalonia;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
+using HaruhiChokuretsuLib.Archive.Event;
+using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
+using SerialLoops.Lib.Util;
 using SerialLoops.Models;
 using SkiaSharp;
 using static SerialLoops.Lib.Script.Parameters.ScreenScriptParameter;
@@ -22,6 +26,7 @@ namespace SerialLoops.Utility
         public static FuncValueConverter<DsScreen, bool> BothScreensSelectedConverter => new((screen) => screen == DsScreen.BOTH);
         public static FuncValueConverter<bool, IImmutableSolidColorBrush> BooleanBrushConverter => new((val) => val ? Brushes.Transparent : Brushes.LightGreen);
         public static FuncValueConverter<string, string> CharacterNameCropConverter => new((name) => name[4..]);
+        public static FuncValueConverter<List<Speaker>, string> ListDisplayConverter => new((strs) => string.Join(", ", strs.Select(s => s.ToString())));
     }
 
     public class DisplayNameConverter : IMultiValueConverter
@@ -36,6 +41,24 @@ namespace SerialLoops.Utility
                 return unsavedChanges ? $"* {displayName}" : displayName;
             }
             return string.Empty;
+        }
+    }
+
+    public class TextSubstitutionConverter : IValueConverter
+    {
+        private static Project _project;
+
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return ((string)value).GetSubstitutedString(_project);
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return ((string)value).GetOriginalString(_project);
+        }
+        public static void SetProject(Project project)
+        {
+            _project = project;
         }
     }
 
