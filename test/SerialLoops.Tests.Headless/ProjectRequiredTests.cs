@@ -11,6 +11,7 @@ using Avalonia.Headless.NUnit;
 using Avalonia.Input;
 using Avalonia.LogicalTree;
 using HaruhiChokuretsuLib.Util;
+using SerialLoops.Assets;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Hacks;
 using SerialLoops.Lib.Items;
@@ -23,7 +24,6 @@ using SerialLoops.ViewModels.Editors;
 using SerialLoops.ViewModels.Panels;
 using SerialLoops.Views;
 using SerialLoops.Views.Dialogs;
-using SerialLoops.Views.Editors;
 using SerialLoops.Views.Panels;
 using Tabalonia.Controls;
 
@@ -72,6 +72,12 @@ namespace SerialLoops.Tests.Headless
             {
                 Directory.Delete(dir, true);
             }
+        }
+
+        private static (int Index, ITreeItem Item) GetTreeItemRowIndex(OpenProjectPanelViewModel openProjectViewModel, string itemName)
+        {
+            ITreeItem item = (ITreeItem)openProjectViewModel.Explorer.Source.Rows.FirstOrDefault(i => ((ITreeItem)i.Model).Text == itemName).Model;
+            return (openProjectViewModel.Explorer.Source.Rows.ToList().FindIndex(i => ((ITreeItem)i.Model).Text == itemName), item);
         }
 
         [AvaloniaTest]
@@ -173,17 +179,18 @@ namespace SerialLoops.Tests.Headless
             ItemExplorerPanel explorer = openProjectPanel.ItemExplorer;
             EditorTabsPanel tabs = openProjectPanel.EditorTabs;
 
-            ITreeItem backgroundsTreeItem = openProjectViewModel.Explorer.Source.First(i => i.Text == "Backgrounds");
+            (int backgroundsTreeItemIndex, ITreeItem backgroundTreeItem) = GetTreeItemRowIndex(openProjectViewModel, Strings.Backgrounds);
 
             mainWindow.TabToExplorer();
 
             mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(BackgroundEditor_CanEditCgNames), ref currentFrame);
-            explorer.Viewer.SelectedItem = backgroundsTreeItem;
+            explorer.Viewer.RowSelection.Select(backgroundsTreeItemIndex);
             mainWindow.KeyPressQwerty(PhysicalKey.ArrowRight, RawInputModifiers.None);
             mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(BackgroundEditor_CanEditCgNames), ref currentFrame);
             ItemDescription firstBg = mainWindowViewModel.OpenProject.Items.First(i => i.Type == ItemDescription.ItemType.Background);
-            explorer.Viewer.SelectedItem = backgroundsTreeItem.Children.First(i => i.Text == firstBg.DisplayName);
+            explorer.Viewer.RowSelection.Select(new(backgroundsTreeItemIndex, backgroundTreeItem.Children.ToList().FindIndex(i => i.Text.Equals(firstBg.DisplayName))));
             mainWindow.KeyPressQwerty(PhysicalKey.Enter, RawInputModifiers.None);
+            mainWindow.KeyReleaseQwerty(PhysicalKey.Enter, RawInputModifiers.None);
             mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(BackgroundEditor_CanEditCgNames), ref currentFrame);
             Assert.Multiple(() =>
             {
@@ -193,8 +200,9 @@ namespace SerialLoops.Tests.Headless
 
             // Time to select a CG
             ItemDescription firstCg = mainWindowViewModel.OpenProject.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).BackgroundType == HaruhiChokuretsuLib.Archive.Data.BgType.TEX_CG);
-            explorer.Viewer.SelectedItem = backgroundsTreeItem.Children.First(i => i.Text == firstCg.DisplayName);
+            explorer.Viewer.RowSelection.Select(new(backgroundsTreeItemIndex, backgroundTreeItem.Children.ToList().FindIndex(i => i.Text.Equals(firstCg.DisplayName))));
             mainWindow.KeyPressQwerty(PhysicalKey.Enter, RawInputModifiers.None);
+            mainWindow.KeyReleaseQwerty(PhysicalKey.Enter, RawInputModifiers.None);
             mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(BackgroundEditor_CanEditCgNames), ref currentFrame);
             Assert.Multiple(() =>
             {
@@ -357,17 +365,18 @@ namespace SerialLoops.Tests.Headless
             ItemExplorerPanel explorer = openProjectPanel.ItemExplorer;
             EditorTabsPanel tabs = openProjectPanel.EditorTabs;
 
-            ITreeItem characterSpritesTreeItem = openProjectViewModel.Explorer.Source.First(i => i.Text == "Character Sprites");
+            (int characterSpritesTreeItemIndex, ITreeItem characterSpriteTreeItem) = GetTreeItemRowIndex(openProjectViewModel, "Character Sprites");
 
             mainWindow.TabToExplorer();
 
             mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(CharacterSpriteEditor_CanEdit), ref currentFrame);
-            explorer.Viewer.SelectedItem = characterSpritesTreeItem;
+            explorer.Viewer.RowSelection.Select(characterSpritesTreeItemIndex);
             mainWindow.KeyPressQwerty(PhysicalKey.ArrowRight, RawInputModifiers.None);
             mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(CharacterSpriteEditor_CanEdit), ref currentFrame);
             ItemDescription firstCharacterSprite = mainWindowViewModel.OpenProject.Items.First(i => i.Type == ItemDescription.ItemType.Character_Sprite);
-            explorer.Viewer.SelectedItem = characterSpritesTreeItem.Children.First(i => i.Text == firstCharacterSprite.DisplayName);
+            explorer.Viewer.RowSelection.Select(new(characterSpritesTreeItemIndex, characterSpriteTreeItem.Children.ToList().FindIndex(i => i.Text.Equals(firstCharacterSprite.DisplayName))));
             mainWindow.KeyPressQwerty(PhysicalKey.Enter, RawInputModifiers.None);
+            mainWindow.KeyReleaseQwerty(PhysicalKey.Enter, RawInputModifiers.None);
             mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(CharacterSpriteEditor_CanEdit), ref currentFrame);
             Assert.Multiple(() =>
             {

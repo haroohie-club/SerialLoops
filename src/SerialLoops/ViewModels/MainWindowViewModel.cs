@@ -184,7 +184,6 @@ namespace SerialLoops.ViewModels
             {
                 DataContext = new OpenProjectPanelViewModel(ItemExplorer, EditorTabs),
             };
-            ItemExplorer.SetupExplorer(ProjectPanel.ItemExplorer.Viewer);
 
             InitializeProjectMenu();
 

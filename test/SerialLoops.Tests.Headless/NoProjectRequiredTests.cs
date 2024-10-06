@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Text.Json;
-using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Headless;
 using Avalonia.Headless.NUnit;
@@ -13,7 +11,6 @@ using Avalonia.LogicalTree;
 using SerialLoops.Assets;
 using SerialLoops.Controls;
 using SerialLoops.Lib;
-using SerialLoops.Lib.Hacks;
 using SerialLoops.Lib.Util;
 using SerialLoops.Tests.Shared;
 using SerialLoops.ViewModels.Dialogs;
