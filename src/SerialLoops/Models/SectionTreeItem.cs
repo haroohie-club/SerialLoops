@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using System.Collections.ObjectModel;
 using Avalonia.Controls;
 using Avalonia.Layout;
 using ReactiveUI;
@@ -11,7 +11,7 @@ namespace SerialLoops.Models
     {
         public string Text { get; set; } = sectionName;
         public Avalonia.Svg.Svg Icon { get; set; } = icon;
-        public List<ITreeItem> Children { get; set; } = children.ToList();
+        public ObservableCollection<ITreeItem> Children { get; set; } = new(children);
         [Reactive]
         public bool IsExpanded { get; set; }
 
