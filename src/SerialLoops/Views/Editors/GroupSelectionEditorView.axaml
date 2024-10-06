@@ -1,0 +1,91 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="using:SerialLoops.ViewModels.Editors"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:assets="using:SerialLoops.Assets"
+             xmlns:controls="using:SerialLoops.Controls"
+             xmlns:utility="using:SerialLoops.Utility"
+             xmlns:gbox="using:GroupBox.Avalonia.Controls"
+             xmlns:hlib="using:HaruhiChokuretsuLib.Archive.Event"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:GroupSelectionEditorViewModel"
+             x:Class="SerialLoops.Views.Editors.GroupSelectionEditorView">
+    <UserControl.Resources>
+        <utility:TextSubstitutionConverter x:Key="TextSubstitutionConverter"/>
+    </UserControl.Resources>
+    
+    <ScrollViewer>
+        <ItemsControl ItemsSource="{Binding GroupSelection.Selection.Activities}">
+            <ItemsControl.DataTemplates>
+                <DataTemplate DataType="hlib:ScenarioActivity">
+                    <gbox:GroupBox Header="{Binding Title, Converter={StaticResource TextSubstitutionConverter}}" Theme="{StaticResource GroupBoxClassic}">
+                        <StackPanel Orientation="Vertical" Spacing="5" Margin="3">
+                            <StackPanel Orientation="Horizontal" Spacing="5">
+                                <TextBlock Text="{x:Static assets:Strings.Haruhi_Present}"/>
+                                <CheckBox IsChecked="{Binding HaruhiPresent}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Spacing="5">
+                                <TextBlock Text="{x:Static assets:Strings.Required_Brigade_Member}"/>
+                                <TextBlock Text="{Binding RequiredBrigadeMember}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Spacing="5">
+                                <TextBlock Text="{x:Static assets:Strings.Future_Description}"/>
+                                <TextBox Height="50" Width="400" Text="{Binding FutureDesc, Converter={StaticResource TextSubstitutionConverter}}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Spacing="5">
+                                <TextBlock Text="{x:Static assets:Strings.Past_Description}"/>
+                                <TextBox Height="50" Width="400" Text="{Binding PastDesc, Converter={StaticResource TextSubstitutionConverter}}"/>
+                            </StackPanel>
+                            <gbox:GroupBox Header="{x:Static assets:Strings.Optimal_Group}">
+                                <StackPanel Orientation="Horizontal" Spacing="5">
+                                    <TextBlock Text="{Binding OptimalGroup[0]}"/>
+                                    <TextBlock Text="{Binding OptimalGroup[1]}"/>
+                                    <TextBlock Text="{Binding OptimalGroup[2]}"/>
+                                </StackPanel>
+                            </gbox:GroupBox>
+                            <gbox:GroupBox Header="{x:Static assets:Strings.Worst_Group}" Theme="{StaticResource GroupBoxClassic}">
+                                <StackPanel Orientation="Horizontal" Spacing="5">
+                                    <TextBlock Text="{Binding WorstGroup[0]}"/>
+                                    <TextBlock Text="{Binding WorstGroup[1]}"/>
+                                    <TextBlock Text="{Binding WorstGroup[2]}"/>
+                                </StackPanel>
+                            </gbox:GroupBox>
+                            <gbox:GroupBox Header="{x:Static assets:Strings.Routes}" Theme="{StaticResource GroupBoxClassic}" Margin="10">
+                                <ItemsControl ItemsSource="{Binding Routes}">
+                                    <ItemsControl.DataTemplates>
+                                        <DataTemplate x:DataType="hlib:ScenarioRoute">
+                                            <gbox:GroupBox Header="{Binding Title, Converter={StaticResource TextSubstitutionConverter}}" Theme="{StaticResource GroupBoxClassic}" Margin="5">
+                                                <StackPanel Orientation="Vertical" Spacing="3">
+                                                    <StackPanel Orientation="Horizontal" Spacing="5">
+                                                        <TextBlock Text="{x:Static assets:Strings.Script}"/>
+                                                        <!-- Put link here after we merge scenario editor -->
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Horizontal" Spacing="5">
+                                                        <TextBlock Text="{x:Static assets:Strings.Characters_Involved}"/>
+                                                        <TextBlock Text="{Binding CharactersInvolved, Converter={x:Static utility:SLConverters.ListDisplayConverter}}"/>
+                                                    </StackPanel>
+                                                    <gbox:GroupBox Header="{x:Static assets:Strings.Kyonless_Topics}" Theme="{StaticResource GroupBoxClassic}" Margin="3">
+                                                        <StackPanel Orientation="Vertical" Spacing="3">
+                                                            <ItemsControl ItemsSource="{Binding KyonlessTopics}">
+                                                                <ItemsControl.DataTemplates>
+                                                                    <DataTemplate x:DataType="hlib:Topic">
+                                                                        <TextBlock Text="{Binding Title, Converter={StaticResource TextSubstitutionConverter}}"/>
+                                                                    </DataTemplate>
+                                                                </ItemsControl.DataTemplates>
+                                                            </ItemsControl>
+                                                        </StackPanel>
+                                                    </gbox:GroupBox>
+                                                </StackPanel>
+                                            </gbox:GroupBox>
+                                        </DataTemplate>
+                                    </ItemsControl.DataTemplates>
+                                </ItemsControl>
+                            </gbox:GroupBox>
+                        </StackPanel>
+                    </gbox:GroupBox>
+                </DataTemplate>
+            </ItemsControl.DataTemplates>
+        </ItemsControl>
+    </ScrollViewer>
+</UserControl>
