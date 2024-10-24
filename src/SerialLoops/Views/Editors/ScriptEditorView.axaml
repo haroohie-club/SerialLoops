@@ -4,9 +4,10 @@
              xmlns:vm="using:SerialLoops.ViewModels.Editors"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:ScriptEditorViewModel"
              x:Class="SerialLoops.Views.Editors.ScriptEditorView">
     <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,*">
-        <TreeDataGrid Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1">
+        <TreeDataGrid Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1" Source="{Binding Source}">
             
         </TreeDataGrid>
     </Grid>

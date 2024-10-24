@@ -65,6 +65,8 @@ namespace SerialLoops.ViewModels.Panels
                     return new CharacterSpriteEditorViewModel((CharacterSpriteItem)item, MainWindow, _log);
                 case ItemDescription.ItemType.Group_Selection:
                     return new GroupSelectionEditorViewModel((GroupSelectionItem)item, MainWindow, _log);
+                case ItemDescription.ItemType.Script:
+                    return new ScriptEditorViewModel((ScriptItem)item, MainWindow, _log);
                 case ItemDescription.ItemType.System_Texture:
                     return new SystemTextureEditorViewModel((SystemTextureItem)item, MainWindow, _project, _log);
                 case ItemDescription.ItemType.Voice:
