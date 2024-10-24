@@ -134,4 +134,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ViewModels\Editors\ScriptCommandEditors\" />
+    <Folder Include="Views\Editors\ScriptCommandEditors\" />
+  </ItemGroup>
 </Project>
