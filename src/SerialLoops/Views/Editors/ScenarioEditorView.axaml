@@ -46,6 +46,6 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <ContentPresenter Grid.Row="1" Grid.Column="1" DataContext="{Binding CurrentCommandViewModel}" Content="{Binding}"/>
+        <ContentPresenter Grid.Row="1" Grid.Column="1" Margin="5" DataContext="{Binding CurrentCommandViewModel}" Content="{Binding}"/>
     </Grid>
 </UserControl>

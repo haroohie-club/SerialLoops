@@ -1,7 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Windows.Input;
 using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
+using Avalonia.Controls.Selection;
 using Avalonia.Controls.Templates;
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
@@ -10,13 +15,41 @@ using ReactiveUI.Fody.Helpers;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
 using SerialLoops.Models;
+using SerialLoops.ViewModels.Editors.ScriptCommandEditors;
+using SkiaSharp;
+using static HaruhiChokuretsuLib.Archive.Event.EventFile;
 
 namespace SerialLoops.ViewModels.Editors
 {
     public class ScriptEditorViewModel : EditorViewModel
     {
         private ScriptItem _script;
+        private ScriptItemCommand _selectedCommand;
         private Dictionary<ScriptSection, List<ScriptItemCommand>> _commands = [];
+
+        public ICommand SelectedCommandChangedCommand { get; }
+        public ICommand AddScriptCommandCommand { get; }
+        public ICommand AddScriptSectionCommand { get; }
+        public ICommand DeleteScriptCommandOrSectionCommand { get; }
+        public ICommand ClearScriptCommand { get; }
+
+        public ScriptItemCommand SelectedCommand
+        {
+            get => _selectedCommand;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _selectedCommand, value);
+                UpdateCommandViewModel();
+                UpdatePreview();
+            }
+        }
+        [Reactive]
+        public ScriptSection SelectedSection { get; set; }
+
+        [Reactive]
+        public SKBitmap PreviewBitmap { get; set; }
+        [Reactive]
+        public ScriptCommandEditorViewModel CurrentCommandViewModel { get; set; }
 
         public Dictionary<ScriptSection, List<ScriptItemCommand>> Commands
         {
@@ -37,6 +70,8 @@ namespace SerialLoops.ViewModels.Editors
                         )
                     }
                 };
+                Source.RowSelection.SingleSelect = true;
+                Source.RowSelection.SelectionChanged += RowSelection_SelectionChanged;
                 Source.ExpandAll();
             }
         }
@@ -82,6 +117,70 @@ namespace SerialLoops.ViewModels.Editors
             }
             panel.Children.Add(new TextBlock { Text = val.Text });
             return panel;
+        }
+
+        private void UpdateCommandViewModel()
+        {
+            if (_selectedCommand is null)
+            {
+                CurrentCommandViewModel = null;
+            }
+            else
+            {
+                CurrentCommandViewModel = _selectedCommand.Verb switch
+                {
+                    CommandVerb.WAIT => new WaitScriptCommandEditorViewModel(_selectedCommand),
+                    _ => new ScriptCommandEditorViewModel(_selectedCommand)
+                };
+            }
+        }
+
+        private void UpdatePreview()
+        {
+            try
+            {
+                if (_selectedCommand is null)
+                {
+                    PreviewBitmap = null;
+                }
+                else
+                {
+                    (SKBitmap previewBitmap, string errorImage) = _script.GeneratePreviewImage(_commands, SelectedCommand, _project, _log);
+                    if (previewBitmap is null)
+                    {
+                        previewBitmap = new(256, 384);
+                        SKCanvas canvas = new(previewBitmap);
+                        canvas.DrawColor(SKColors.Black);
+                        using Stream noPreviewStream = Assembly.GetCallingAssembly().GetManifestResourceStream(errorImage);
+                        canvas.DrawImage(SKImage.FromEncodedData(noPreviewStream), new SKPoint(0, 0));
+                        canvas.Flush();
+                    }
+                    PreviewBitmap = previewBitmap;
+                }
+            }
+            catch (Exception ex)
+            {
+                _log.LogException("Failed to update preview!", ex);
+            }
+        }
+
+        private void RowSelection_SelectionChanged(object sender, TreeSelectionModelSelectionChangedEventArgs<ITreeItem> e)
+        {
+            if (e.SelectedIndexes.Count == 0 || e.SelectedIndexes[0].Count == 0)
+            {
+                SelectedCommand = null;
+                SelectedSection = null;
+            }
+            if (e.SelectedIndexes[0].Count > 1)
+            {
+                SelectedCommand = Commands[Commands.Keys.ElementAt(e.SelectedIndexes[0][0])][e.SelectedIndexes[0][1]];
+                SelectedSection = null;
+            }
+            else
+            {
+                SelectedCommand = null;
+                SelectedSection = Commands.Keys.ElementAt(e.SelectedIndexes[0][0]);
+            }
         }
     }
 }
