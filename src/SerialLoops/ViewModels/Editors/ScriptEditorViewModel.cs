@@ -133,6 +133,7 @@ namespace SerialLoops.ViewModels.Editors
                     CommandVerb.DIALOGUE => new DialogueScriptCommandEditorViewModel(_selectedCommand, this, _window),
                     CommandVerb.KBG_DISP => new KbgDispScriptCommandEditorViewModel(_selectedCommand, this, _window),
                     CommandVerb.PIN_MNL => new PinMnlScriptCommandEditorViewModel(_selectedCommand, this, _window.OpenProject),
+                    CommandVerb.BG_DISP => new BgDispScriptCommandEditorViewModel(_selectedCommand, this, _window),
                     CommandVerb.REMOVED => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
                     CommandVerb.SND_STOP => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
                     CommandVerb.SCREEN_SHAKE_STOP => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
@@ -145,6 +146,7 @@ namespace SerialLoops.ViewModels.Editors
                     CommandVerb.INVEST_END => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
                     CommandVerb.NEXT_SCENE => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
                     CommandVerb.AVOID_DISP => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
+                    CommandVerb.BG_DISP2 => new BgDispScriptCommandEditorViewModel(_selectedCommand, this, _window),
                     _ => new ScriptCommandEditorViewModel(_selectedCommand, this)
                 };
             }
