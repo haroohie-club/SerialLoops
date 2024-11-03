@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using HaruhiChokuretsuLib.Archive.Event;
 using ReactiveUI;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
@@ -158,6 +157,7 @@ namespace SerialLoops.ViewModels.Editors.ScriptCommandEditors
                 ((SpriteEntranceScriptParameter)Command.Parameters[2]).EntranceTransition = _spriteEntranceTransition;
                 Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
                     .Objects[Command.Index].Parameters[2] = (short)_spriteEntranceTransition;
+                ScriptEditor.UpdatePreview();
                 Script.UnsavedChanges = true;
             }
         }
@@ -260,6 +260,7 @@ namespace SerialLoops.ViewModels.Editors.ScriptCommandEditors
                 ((ShortScriptParameter)Command.Parameters[9]).Value = _spriteLayer;
                 Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
                     .Objects[Command.Index].Parameters[9] = _spriteLayer;
+                ScriptEditor.UpdatePreview();
                 Script.UnsavedChanges = true;
             }
         }
