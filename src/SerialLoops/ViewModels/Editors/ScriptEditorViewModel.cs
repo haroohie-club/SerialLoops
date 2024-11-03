@@ -129,8 +129,20 @@ namespace SerialLoops.ViewModels.Editors
             {
                 CurrentCommandViewModel = _selectedCommand.Verb switch
                 {
-                    CommandVerb.WAIT => new WaitScriptCommandEditorViewModel(_selectedCommand),
-                    _ => new ScriptCommandEditorViewModel(_selectedCommand)
+                    CommandVerb.INIT_READ_FLAG => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
+                    CommandVerb.REMOVED => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
+                    CommandVerb.SND_STOP => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
+                    CommandVerb.SCREEN_SHAKE_STOP => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
+                    CommandVerb.WAIT => new WaitScriptCommandEditorViewModel(_selectedCommand, this),
+                    CommandVerb.HOLD => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
+                    CommandVerb.NOOP1 => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
+                    CommandVerb.BACK => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
+                    CommandVerb.STOP => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
+                    CommandVerb.NOOP2 => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
+                    CommandVerb.INVEST_END => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
+                    CommandVerb.NEXT_SCENE => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
+                    CommandVerb.AVOID_DISP => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
+                    _ => new ScriptCommandEditorViewModel(_selectedCommand, this)
                 };
             }
         }

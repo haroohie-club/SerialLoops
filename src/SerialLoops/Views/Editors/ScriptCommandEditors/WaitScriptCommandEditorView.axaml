@@ -6,8 +6,9 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:WaitScriptCommandEditorViewModel"
              x:Class="SerialLoops.Views.Editors.ScriptCommandEditors.WaitScriptCommandEditorView">
-    <StackPanel Orientation="Horizontal" Spacing="5">
-        <TextBlock Text="Wait Time (Frames)"/>
-        <NumericUpDown Minimum="0" Maximum="{Binding MaxShort}" Value="{Binding WaitTime}"/>
-    </StackPanel>
+    <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto">
+        <TextBlock Grid.Row="0" Margin="0,7,0,0" Grid.Column="0" Text="Wait Time (Frames)"/>
+        <NumericUpDown Grid.Row="0" Margin="10,0,0,0" Grid.Column="1" Minimum="0" Maximum="{Binding MaxShort}" Value="{Binding WaitTime}"
+                       FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
+    </Grid>
 </UserControl>
