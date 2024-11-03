@@ -34,7 +34,7 @@ namespace SerialLoops.ViewModels.Controls
 
             SelectTopCommand = ReactiveCommand.Create(() => SelectedScreen = DsScreen.TOP);
             SelectBottomCommand = ReactiveCommand.Create(() => SelectedScreen = DsScreen.BOTTOM);
-            SelectBothCommand = ReactiveCommand.Create<bool>((bothChecked) => SelectedScreen = bothChecked ? DsScreen.BOTH : DsScreen.TOP);
+            SelectBothCommand = ReactiveCommand.Create<bool>((bothChecked) => SelectedScreen = bothChecked ? (SelectedScreen == DsScreen.BOTH ? DsScreen.TOP : SelectedScreen) : DsScreen.BOTH); // reverse as IsChecked hasn't changed yet
         }
     }
 }
