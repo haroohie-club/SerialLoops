@@ -82,7 +82,7 @@ namespace SerialLoops.ViewModels.Editors.ScriptCommandEditors
                 text = MidStringOpenQuotes().Replace(text, "$1“");
                 text = text.Replace('"', '”');
 
-                this.RaiseAndSetIfChanged(ref _dialogueLine, text);
+                this.RaiseAndSetIfChanged(ref _dialogueLine, text.GetOriginalString(_window.OpenProject));
 
                 if (string.IsNullOrEmpty(_dialogueLine))
                 {
@@ -100,9 +100,8 @@ namespace SerialLoops.ViewModels.Editors.ScriptCommandEditors
                         ((DialogueScriptParameter)Command.Parameters[0]).Line.Pointer = 1;
                         Script.Event.DialogueSection.Objects[Command.Section.Objects[Command.Index].Parameters[0]].Pointer = 1;
                     }
-                    string originalText = text.GetOriginalString(_window.OpenProject);
-                    ((DialogueScriptParameter)Command.Parameters[0]).Line.Text = originalText;
-                    Script.Event.DialogueSection.Objects[Command.Section.Objects[Command.Index].Parameters[0]].Text = originalText;
+                    ((DialogueScriptParameter)Command.Parameters[0]).Line.Text = _dialogueLine;
+                    Script.Event.DialogueSection.Objects[Command.Section.Objects[Command.Index].Parameters[0]].Text = _dialogueLine;
                 }
 
                 ScriptEditor.UpdatePreview();
