@@ -15,7 +15,7 @@
     <PackageReference Include="HaruhiChokuretsuLib" Version="0.41.0" />
     <PackageReference Include="NAudio.Vorbis" Version="1.5.0" />
     <PackageReference Include="NitroPacker.Core" Version="2.5.1" />
-    <PackageReference Include="NLayer" Version="1.15.0" />
+    <PackageReference Include="NLayer" Version="1.16.0" />
     <PackageReference Include="NLayer.NAudioSupport" Version="1.4.0" />
     <PackageReference Include="QuikGraph" Version="2.5.0" />
     <PackageReference Include="ReactiveUI.Fody" Version="19.5.41" />

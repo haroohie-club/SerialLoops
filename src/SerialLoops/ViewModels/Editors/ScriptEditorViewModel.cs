@@ -135,6 +135,7 @@ namespace SerialLoops.ViewModels.Editors
                     CommandVerb.PIN_MNL => new PinMnlScriptCommandEditorViewModel(_selectedCommand, this, _window.OpenProject),
                     CommandVerb.BG_DISP => new BgDispScriptCommandEditorViewModel(_selectedCommand, this, _window),
                     CommandVerb.SCREEN_FADEIN => new ScreenFadeInScriptCommandEditorViewModel(_selectedCommand, this),
+                    CommandVerb.SCREEN_FADEOUT => new ScreenFadeOutScriptCommandEditorViewModel(_selectedCommand, this),
                     CommandVerb.REMOVED => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
                     CommandVerb.SND_STOP => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
                     CommandVerb.SCREEN_SHAKE_STOP => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
