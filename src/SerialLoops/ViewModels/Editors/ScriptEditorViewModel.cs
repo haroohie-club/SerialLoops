@@ -131,6 +131,7 @@ namespace SerialLoops.ViewModels.Editors
                 {
                     CommandVerb.INIT_READ_FLAG => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
                     CommandVerb.DIALOGUE => new DialogueScriptCommandEditorViewModel(_selectedCommand, this, _window),
+                    CommandVerb.KBG_DISP => new KbgDispScriptCommandEditorViewModel(_selectedCommand, this, _window),
                     CommandVerb.REMOVED => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
                     CommandVerb.SND_STOP => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
                     CommandVerb.SCREEN_SHAKE_STOP => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
