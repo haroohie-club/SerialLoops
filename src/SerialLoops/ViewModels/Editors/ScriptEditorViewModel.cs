@@ -12,6 +12,7 @@ using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
 using SerialLoops.Models;
@@ -130,6 +131,7 @@ namespace SerialLoops.ViewModels.Editors
                 CurrentCommandViewModel = _selectedCommand.Verb switch
                 {
                     CommandVerb.INIT_READ_FLAG => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
+                    CommandVerb.DIALOGUE => new DialogueScriptCommandEditorViewModel(_selectedCommand, this, _window),
                     CommandVerb.REMOVED => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
                     CommandVerb.SND_STOP => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
                     CommandVerb.SCREEN_SHAKE_STOP => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
@@ -147,7 +149,7 @@ namespace SerialLoops.ViewModels.Editors
             }
         }
 
-        private void UpdatePreview()
+        public void UpdatePreview()
         {
             try
             {

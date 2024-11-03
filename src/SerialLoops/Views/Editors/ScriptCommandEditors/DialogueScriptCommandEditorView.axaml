@@ -1,0 +1,28 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="using:SerialLoops.ViewModels.Editors.ScriptCommandEditors"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:assets="using:SerialLoops.Assets"
+             xmlns:controls="using:SerialLoops.Controls"
+             xmlns:i="using:Avalonia.Xaml.Interactivity"
+             xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
+             x:DataType="vm:DialogueScriptCommandEditorViewModel"
+             x:Class="SerialLoops.Views.Editors.ScriptCommandEditors.DialogueScriptCommandEditorView">
+    <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+        <TextBlock Grid.Column="0" Grid.Row="0" Text="{x:Static assets:Strings.Dialogue}" Margin="0,40,0,0"/>
+        <StackPanel Grid.Column="1" Grid.Row="0" Margin="10,0,0,0" Orientation="Horizontal" VerticalAlignment="Center"
+                    Spacing="10">
+            <ComboBox Name="SpeakerComboBox" Margin="0,30,0,0" ItemsSource="{Binding Speakers}" SelectedValue="{Binding Speaker}"/>
+            <TextBox Name="DialogueTextBox" AcceptsReturn="True" Width="400" Height="100" Text="{Binding DialogueLine}"/>
+        </StackPanel>
+
+        <TextBlock Grid.Column="0" Grid.Row="1" Text="{x:Static assets:Strings.Sprite}" Margin="0,10,0,0"/>
+        <StackPanel Grid.Column="1" Grid.Row="1" Margin="10,5,0,0" Orientation="Horizontal" VerticalAlignment="Center"
+                    Spacing="10">
+            <Button Content="{x:Static assets:Strings.Select___}" Command="{Binding SelectCharacterSpriteCommand}"/>
+            <controls:ItemLink Tabs="{Binding Tabs}" Item="{Binding CharacterSprite}"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

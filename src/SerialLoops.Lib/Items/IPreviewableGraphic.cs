@@ -6,12 +6,14 @@ namespace SerialLoops.Lib.Items
 
     public interface IPreviewableGraphic
     {
+        public string Text => ((ItemDescription)this).DisplayName;
+
         protected SKBitmap GetPreview(Project project);
-        
+
         public SKBitmap GetPreview(Project project, int maxWidth, int maxHeight)
         {
-            var preview = GetPreview(project);
-            var scale = Math.Min(maxWidth / (float)preview.Width, maxHeight / (float)preview.Height);
+            SKBitmap preview = GetPreview(project);
+            float scale = Math.Min(maxWidth / (float)preview.Width, maxHeight / (float)preview.Height);
             return preview.Resize(new SKImageInfo((int)(preview.Width * scale), (int)(preview.Height * scale)), SKFilterQuality.None);
         }
     }

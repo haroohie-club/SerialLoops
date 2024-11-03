@@ -16,7 +16,7 @@ namespace SerialLoops.ViewModels.Editors.ScriptCommandEditors
                 ((ShortScriptParameter)Command.Parameters[0]).Value = _waitTime;
                 Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
                     .Objects[Command.Index].Parameters[0] = _waitTime;
-                ScriptEditor.Description.UnsavedChanges = true;
+                Script.UnsavedChanges = true;
             }
         }
     }
