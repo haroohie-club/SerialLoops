@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Graphics;
 using HaruhiChokuretsuLib.Util;
@@ -215,7 +217,7 @@ namespace SerialLoops.Lib.Items
             }
             else if (BackgroundType == BgType.KINETIC_SCREEN)
             {
-                // TODO: Export screen information for KBGs
+                IO.WriteStringFile(Path.Combine("assets", "graphics", $"{Graphic2.Index:X3}.scr"), JsonSerializer.Serialize(Graphic2.ScreenData), project, log);
             }
         }
 

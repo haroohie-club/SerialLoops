@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -117,9 +118,13 @@ namespace SerialLoops.Lib
                         {
                             ReplaceSingleGraphicsFile(grp, file, index, project.Localize, log);
                         }
-                        else if (file.EndsWith(".gi", StringComparison.OrdinalIgnoreCase))
+                        else if (Path.GetExtension(file).Equals(".gi", StringComparison.OrdinalIgnoreCase))
                         {
                             // ignore graphics info files as they will be handled by the PNGs above
+                        }
+                        else if (Path.GetExtension(file).Equals(".scr", StringComparison.OrdinalIgnoreCase))
+                        {
+                            ReplaceSingleScreenGraphicsFile(grp, file, index, project.Localize, log);
                         }
                         else if (Path.GetExtension(file).Equals(".s", StringComparison.OrdinalIgnoreCase))
                         {
@@ -239,6 +244,23 @@ namespace SerialLoops.Lib
                 grpFile.SetImage(filePath, newSize: true);
 
                 grp.Files[grp.Files.IndexOf(grpFile)] = grpFile;
+            }
+            catch (Exception ex)
+            {
+                log.LogException(string.Format(localize("Failed replacing graphics file {0} with file '{1}'"), index, filePath), ex);
+            }
+        }
+
+        private static void ReplaceSingleScreenGraphicsFile(ArchiveFile<GraphicsFile> grp, string filePath, int index, Func<string, string> localize, ILogger log)
+        {
+            try
+            {
+                GraphicsFile screenFile = grp.GetFileByIndex(index);
+
+                screenFile.ScreenData = JsonSerializer.Deserialize<List<GraphicsFile.ScreenDataEntry>>(File.ReadAllText(filePath));
+                screenFile.Edited = true;
+
+                grp.Files[grp.Files.IndexOf(screenFile)] = screenFile;
             }
             catch (Exception ex)
             {

@@ -13,7 +13,6 @@ namespace SerialLoops.Lib.Util
         public short Unknown08 { get; set; }
         public short RenderWidth { get; set; }
         public short RenderHeight { get; set; }
-        public short Unknown12 { get; set; }
         public string PaletteString { get; set; }
 
         [JsonIgnore]
@@ -30,7 +29,6 @@ namespace SerialLoops.Lib.Util
             TileForm = file.ImageTileForm;
             RenderWidth = file.RenderWidth;
             RenderHeight = file.RenderHeight;
-            Unknown12 = file.Unknown12;
             PaletteString = string.Join(',', file.Palette.Select(c => c.ToString()));
         }
 
@@ -47,7 +45,6 @@ namespace SerialLoops.Lib.Util
             file.Unknown08 = Unknown08;
             file.RenderWidth = RenderWidth;
             file.RenderHeight = RenderHeight;
-            file.Unknown12 = Unknown12;
         }
     }
 }
