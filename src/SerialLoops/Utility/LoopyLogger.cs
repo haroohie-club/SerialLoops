@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Controls;
+using Avalonia.Threading;
 using HaruhiChokuretsuLib.Util;
 using MsBox.Avalonia.Enums;
 using SerialLoops.Assets;
@@ -54,10 +55,7 @@ namespace SerialLoops.Utility
 
         public void LogError(string message, bool lookForWarnings = false)
         {
-            // Attempting to await this using the normal methods for awaiting in a synchronous context seems to deadlock the process, so we don't do it!!
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            LogErrorAsync(message, lookForWarnings);
-#pragma warning restore CS4014
+            Dispatcher.UIThread.Invoke(() => LogErrorAsync(message, lookForWarnings));
         }
 
         private async Task LogErrorAsync(string message, bool lookForWarnings = false)

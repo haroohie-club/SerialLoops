@@ -2969,6 +2969,16 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to replace screen image: image too complex (generated more than 255 tiles); please use a simpler image.
+        /// </summary>
+        public static string Failed_to_replace_screen_image__image_too_complex__generated_more_than_255_tiles___please_use_a_simpler_image {
+            get {
+                return ResourceManager.GetString("Failed to replace screen image: image too complex (generated more than 255 tiles)" +
+                        "; please use a simpler image", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to replace system texture {0} with file {1}.
         /// </summary>
         public static string Failed_to_replace_system_texture__0__with_file__1_ {
