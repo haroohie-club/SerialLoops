@@ -29,17 +29,19 @@
             <TabControl Grid.Column="1" Grid.Row="0">
                 <TabControl.Items>
                     <TabItem Header="Starting Chibis">
-                        
+
                     </TabItem>
                     <TabItem Header="Map Characters">
-                        
+
                     </TabItem>
                 </TabControl.Items>
             </TabControl>
             <StackPanel Grid.Column="1" Grid.Row="1">
-                
+
             </StackPanel>
         </Grid>
-        <ContentPresenter Grid.Column="1" Grid.Row="2" Margin="10" DataContext="{Binding CurrentCommandViewModel}" Content="{Binding}"/>
+        <ScrollViewer Grid.Column="1" Grid.Row="2">
+            <ContentPresenter Margin="10" DataContext="{Binding CurrentCommandViewModel}" Content="{Binding}"/>
+        </ScrollViewer>
     </Grid>
 </UserControl>
