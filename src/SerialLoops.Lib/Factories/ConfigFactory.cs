@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -74,18 +75,25 @@ namespace SerialLoops.Lib.Factories
 
             // TODO: Probably make a way of defining "presets" of common emulator install paths on different platforms.
             // Ideally this should be as painless as possible.
-            string emulatorPath = "";
+            bool emulatorExists = false;
+            string emulatorPath = string.Empty;
+            string emulatorFlatpak = string.Empty;
             if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
                 emulatorPath = Path.Combine("/Applications", "melonDS.app");
+                emulatorExists = Directory.Exists(emulatorPath);
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                emulatorPath = Path.Combine("/snap", "melonds", "current", "usr", "local", "bin", "melonDS");
+                emulatorFlatpak = "net.kuribo64.melonDS";
+                Process flatpakProc = Process.Start((new ProcessStartInfo("flatpak", ["info", emulatorFlatpak])));
+                flatpakProc?.WaitForExit();
+                emulatorExists = flatpakProc?.ExitCode == 0;
             }
-            if (!Directory.Exists(emulatorPath) && !File.Exists(emulatorPath)) // on Mac, .app is a dir, so we check both of these
+            if (!emulatorExists) // on Mac, .app is a dir, so we check both of these
             {
-                emulatorPath = "";
+                emulatorPath = string.Empty;
+                emulatorFlatpak = string.Empty;
                 log.LogWarning("Valid emulator path not found in config.json.");
             }
 
@@ -95,6 +103,7 @@ namespace SerialLoops.Lib.Factories
                 CurrentCultureName = CultureInfo.CurrentCulture.Name,
                 DevkitArmPath = devkitArmDir,
                 EmulatorPath = emulatorPath,
+                EmulatorFlatpak = emulatorFlatpak,
                 UseDocker = false,
                 DevkitArmDockerTag = "latest",
                 AutoReopenLastProject = false,

@@ -61,6 +61,12 @@ namespace SerialLoops.ViewModels.Dialogs
                         Path = Configuration.EmulatorPath,
                         OnChange = (path) => Configuration.EmulatorPath = path,
                     },
+                    new TextOption
+                    {
+                        OptionName = Strings.Emulator_Flatpak,
+                        Value = Configuration.EmulatorFlatpak,
+                        OnChange = (flatpak) => Configuration.EmulatorFlatpak = flatpak,
+                    },
                     new BooleanOption
                     {
                         OptionName = Strings.Use_Docker_for_ASM_Hacks,

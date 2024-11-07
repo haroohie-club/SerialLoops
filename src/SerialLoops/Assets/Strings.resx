@@ -1525,8 +1525,8 @@ In order to preserve state, no hacks were applied.</value>
     <value>No Emulator Path</value>
   </data>
   <data name="No emulator path has been set.\nPlease set the path to a Nintendo DS emulator in Preferences to use Build &amp; Run." xml:space="preserve">
-    <value>No emulator path has been set.
-Please set the path to a Nintendo DS emulator in Preferences to use Build &amp; Run.</value>
+    <value>No emulator path/flatpak has been set.
+Please set the path to a Nintendo DS emulator or specify a Nintendo DS emulator flatpak in Preferences to use Build &amp; Run.</value>
   </data>
   <data name="No exported project selected" xml:space="preserve">
     <value>No exported project selected</value>
@@ -2635,4 +2635,13 @@ No project is currently open. Would you like to create a new project?</value>
   <data name="Failed to replace screen image: image too complex (generated more than 255 tiles); please use a simpler image" xml:space="preserve">
     <value>Failed to replace screen image: image too complex (generated more than 255 tiles); please use a simpler image</value>
   </data>
+<<<<<<< Updated upstream
+=======
+  <data name="Load Sound" xml:space="preserve">
+    <value>Load Sound</value><comment>The name of a parameter for the SND_PLAY command which indicates whether a sound should be loaded or not</comment>
+  </data>
+  <data name="Emulator Flatpak" xml:space="preserve">
+    <value>Emulator Flatpak</value>
+  </data>
+>>>>>>> Stashed changes
 </root>
