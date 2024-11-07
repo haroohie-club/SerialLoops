@@ -86,9 +86,16 @@ namespace SerialLoops.Lib.Factories
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
                 emulatorFlatpak = "net.kuribo64.melonDS";
-                Process flatpakProc = Process.Start((new ProcessStartInfo("flatpak", ["info", emulatorFlatpak])));
-                flatpakProc?.WaitForExit();
-                emulatorExists = flatpakProc?.ExitCode == 0;
+                try
+                {
+                    Process flatpakProc = Process.Start((new ProcessStartInfo("flatpak", ["info", emulatorFlatpak])));
+                    flatpakProc?.WaitForExit();
+                    emulatorExists = flatpakProc?.ExitCode == 0;
+                }
+                catch
+                {
+                    emulatorExists = false;
+                }
             }
             if (!emulatorExists) // on Mac, .app is a dir, so we check both of these
             {
