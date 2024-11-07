@@ -65,6 +65,8 @@ namespace SerialLoops.ViewModels.Panels
                     return new CharacterSpriteEditorViewModel((CharacterSpriteItem)item, MainWindow, _log);
                 case ItemDescription.ItemType.Group_Selection:
                     return new GroupSelectionEditorViewModel((GroupSelectionItem)item, MainWindow, _log);
+                case ItemDescription.ItemType.SFX:
+                    return new SfxEditorViewModel((SfxItem)item, MainWindow, _log);
                 case ItemDescription.ItemType.System_Texture:
                     return new SystemTextureEditorViewModel((SystemTextureItem)item, MainWindow, _project, _log);
                 case ItemDescription.ItemType.Voice:
@@ -89,6 +91,10 @@ namespace SerialLoops.ViewModels.Panels
             else if (closedEditor.Description.Type == ItemDescription.ItemType.Character_Sprite)
             {
                 ((CharacterSpriteEditorViewModel)closedEditor).AnimatedImage.Stop();
+            }
+            else if (closedEditor.Description.Type == ItemDescription.ItemType.SFX)
+            {
+                ((SfxEditorViewModel)closedEditor).SfxPlayerPanel.Stop();
             }
         }
 
