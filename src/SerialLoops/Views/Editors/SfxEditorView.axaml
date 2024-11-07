@@ -1,0 +1,24 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="using:SerialLoops.ViewModels.Editors"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:assets="using:SerialLoops.Assets"
+             xmlns:controls="using:SerialLoops.Controls"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:SfxEditorViewModel"
+             x:Class="SerialLoops.Views.Editors.SfxEditorView">
+    <Grid ColumnDefinitions="Auto" RowDefinitions="Auto,Auto,Auto">
+        <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" Spacing="5" Margin="5">
+            <controls:SfxPlayerPanel DataContext="{Binding SfxPlayerPanel}"/>
+            <TextBlock Text="{Binding Sfx.DisplayName}"/>
+        </StackPanel>
+        <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Vertical" Spacing="3" Margin="5">
+            <TextBlock Classes="h1" Text="{x:Static assets:Strings.Bank}"/>
+            <TextBlock Text="{Binding Sfx.AssociatedBank}"/>
+            <TextBlock Classes="h1" Text="{x:Static assets:Strings.Groups}"/>
+            <TextBlock Text="{Binding Groups}" TextWrapping="Wrap" Width="600"/>
+        </StackPanel>
+        <Button Grid.Column="0" Grid.Row="2" Margin="5" Content="{x:Static assets:Strings.Extract}" Command="{Binding ExtractCommand}"/>
+    </Grid>
+</UserControl>

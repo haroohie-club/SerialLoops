@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Graphics;
 using HaruhiChokuretsuLib.Util;
@@ -93,20 +95,24 @@ namespace SerialLoops.Lib.Items
             }
         }
 
-        public void SetBackground(SKBitmap image, IProgressTracker tracker, ILogger log)
+        public bool SetBackground(SKBitmap image, IProgressTracker tracker, ILogger log, Func<string, string> localize)
         {
             PnnQuantizer quantizer = new();
             int transparentIndex = BackgroundType != BgType.TEX_BG ? 0 : -1;
             switch (BackgroundType)
             {
                 case BgType.KINETIC_SCREEN:
-                    tracker.Focus("Setting screen image...", 1);
-                    Graphic2.SetScreenImage(image, quantizer, Graphic1);
+                    tracker.Focus(localize("Setting screen image..."), 1);
+                    if (Graphic2.SetScreenImage(image, quantizer, Graphic1, suppressErrors: true) < 0)
+                    {
+                        log.LogError(localize("Failed to replace screen image: image too complex (generated more than 255 tiles); please use a simpler image"));
+                        return false;
+                    }
                     tracker.Finished++;
                     break;
 
                 case BgType.TEX_CG_SINGLE:
-                    tracker.Focus("Setting CG single image...", 1);
+                    tracker.Focus(localize("Setting CG single image..."), 1);
                     List<SKColor> singlePalette = Helpers.GetPaletteFromImage(image, transparentIndex == 0 ? 255 : 256, log);
                     if (singlePalette.Count == 255)
                     {
@@ -122,7 +128,7 @@ namespace SerialLoops.Lib.Items
                     SKBitmap newTileBitmap = new(64, Graphic2.Height * Graphic2.Width / 64);
                     SKBitmap tileSource = new(image.Width, image.Height - Graphic1.Height);
 
-                    tracker.Focus("Drawing bottom screen texture...", 1);
+                    tracker.Focus(localize("Drawing bottom screen texture..."), 1);
                     SKCanvas textureCanvas = new(newTextureBitmap);
                     textureCanvas.DrawBitmap(image, new SKRect(0, image.Height - newTextureBitmap.Height, newTextureBitmap.Width, image.Height), new SKRect(0, 0, newTextureBitmap.Width, newTextureBitmap.Height));
                     textureCanvas.Flush();
@@ -132,7 +138,7 @@ namespace SerialLoops.Lib.Items
                     tileSourceCanvas.DrawBitmap(image, 0, 0);
                     tileSourceCanvas.Flush();
 
-                    tracker.Focus("Drawing top screen tiles...", newTileBitmap.Height / 64 * newTileBitmap.Width / 64);
+                    tracker.Focus(localize("Drawing top screen tiles..."), newTileBitmap.Height / 64 * newTileBitmap.Width / 64);
                     SKCanvas tileCanvas = new(newTileBitmap);
                     int currentTile = 0;
                     for (int y = 0; y < tileSource.Height; y += 64)
@@ -148,7 +154,7 @@ namespace SerialLoops.Lib.Items
                     }
                     tileCanvas.Flush();
 
-                    tracker.Focus("Setting palettes and images...", 5);
+                    tracker.Focus(localize("Setting palettes and images..."), 5);
                     List<SKColor> tilePalette = Helpers.GetPaletteFromImage(image, transparentIndex == 0 ? 255 : 256, log);
                     if (tilePalette.Count == 255)
                     {
@@ -169,7 +175,7 @@ namespace SerialLoops.Lib.Items
                     SKBitmap newGraphic1 = new(Graphic1.Width, Graphic1.Height);
                     SKBitmap newGraphic2 = new(Graphic2.Width, Graphic2.Height);
 
-                    tracker.Focus("Drawing textures...", 2);
+                    tracker.Focus(localize("Drawing textures..."), 2);
                     SKCanvas canvas1 = new(newGraphic1);
                     canvas1.DrawBitmap(image, new SKRect(0, 0, newGraphic1.Width, newGraphic1.Height), new SKRect(0, 0, newGraphic1.Width, newGraphic1.Height));
                     canvas1.Flush();
@@ -180,7 +186,7 @@ namespace SerialLoops.Lib.Items
                     canvas2.Flush();
                     tracker.Finished++;
 
-                    tracker.Focus("Setting palettes and images...", 5);
+                    tracker.Focus(localize("Setting palettes and images..."), 5);
                     List<SKColor> texPalette = Helpers.GetPaletteFromImage(image, transparentIndex == 0 ? 255 : 256, log);
                     if (texPalette.Count == 255)
                     {
@@ -197,6 +203,7 @@ namespace SerialLoops.Lib.Items
                     tracker.Finished++;
                     break;
             }
+            return true;
         }
 
         public void Write(Project project, ILogger log)
@@ -215,7 +222,7 @@ namespace SerialLoops.Lib.Items
             }
             else if (BackgroundType == BgType.KINETIC_SCREEN)
             {
-                // TODO: Export screen information for KBGs
+                IO.WriteStringFile(Path.Combine("assets", "graphics", $"{Graphic2.Index:X3}.scr"), JsonSerializer.Serialize(Graphic2.ScreenData), project, log);
             }
         }
 
