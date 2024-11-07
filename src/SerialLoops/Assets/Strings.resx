@@ -2632,4 +2632,7 @@ No project is currently open. Would you like to create a new project?</value>
     <value>{0} Watched in Extras</value>
     <comment>{0} is the name of a topic that has had its associated scene watched in the Extras mode</comment>
   </data>
+  <data name="Failed to replace screen image: image too complex (generated more than 255 tiles); please use a simpler image" xml:space="preserve">
+    <value>Failed to replace screen image: image too complex (generated more than 255 tiles); please use a simpler image</value>
+  </data>
 </root>

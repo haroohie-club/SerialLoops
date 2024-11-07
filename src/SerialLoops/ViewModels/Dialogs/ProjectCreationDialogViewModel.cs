@@ -62,7 +62,7 @@ namespace SerialLoops.ViewModels.Dialogs
             }
             else
             {
-                Project newProject = new(ProjectName, LanguageTemplateCode, _config, (s) => s, _log);
+                Project newProject = new(ProjectName, LanguageTemplateCode, _config, Strings.ResourceManager.GetString, _log);
                 LoopyProgressTracker tracker = new();
                 await new ProgressDialog(() =>
                 {
