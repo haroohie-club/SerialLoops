@@ -90,10 +90,14 @@ namespace SerialLoops.ViewModels.Editors
                     try
                     {
                         LoopyProgressTracker tracker = new();
-                        await new ProgressDialog(() => Bg.SetBackground(finalImage, tracker, _log),
+                        bool success = false;
+                        await new ProgressDialog(() => success = Bg.SetBackground(finalImage, tracker, _log, _project.Localize),
                             () => { }, tracker, string.Format(Strings.Replacing__0____, Bg.DisplayName)).ShowDialog(_window.Window);
-                        this.RaisePropertyChanged(nameof(BgBitmap));
-                        Description.UnsavedChanges = true;
+                        if (success)
+                        {
+                            this.RaisePropertyChanged(nameof(BgBitmap));
+                            Description.UnsavedChanges = true;
+                        }
                     }
                     catch (Exception ex)
                     {
