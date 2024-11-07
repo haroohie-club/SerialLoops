@@ -15,7 +15,7 @@
     </a>
 </p>
 
-**Serial Loops** is a fully-fledged editor for the Nintendo DS game _Suzumiya Haruhi no Chokuretsu_ (The Series of Haruhi Suzumiya).
+**Serial Loops** is a full-fledged editor for the Nintendo DS game _Suzumiya Haruhi no Chokuretsu_ (The Series of Haruhi Suzumiya).
 
 ## Screenshots
 <p align="center">
@@ -30,6 +30,10 @@
 Serial Loops is developed by:
 * [Jonko](https://github.com/jonko0493) &ndash; Systems architect & reverse engineering work
 * [William278](https://william278.net) &ndash; UX architect & design work
+
+Additional contributions have been made by:
+* Fuyuko Ayumu
+* Xzonn
 
 ### Translators
 Serial Loops is translated into a variety of langauges thanks to the following contributors:
@@ -69,7 +73,7 @@ way of getting the Docker path to work, so you will have to use Make.
     - Make comes preinstalled on many Linux distributions, and if you're using the Debian or RPM package, it was definitely installed when you installed
       Serial Loops. If you're using the tar.gz it is not installed on yours, you will likely be able to install it as simply as
       `[packagemanger] install make` from a terminal.
-  
+
   To test if make is installed properly, type `make --verison` into a terminal and see if it produces the version of make.
 * If you would rather not install Make, or if it is not working properly, you can instead run it through a Docker container. To do this, you should
   install [Docker Desktop](https://www.docker.com/products/docker-desktop/) or the Docker Engine. Ensure the Docker engine is running and make sure
@@ -101,61 +105,14 @@ Serial Loops is licensed under the GPLv3. See [LICENSE](LICENSE) for more inform
 Serial Loops requires the .NET 8.0 SDK to build. You can download it [here](https://dotnet.microsoft.com/download/dotnet/8.0). To build Serial Loops for your platform, run:
 
 ```bash
-dotnet build src/PLATFORM
+dotnet build
 ```
-
-Remember to replace `PLATFORM` with the platform you're on:
-* `SerialLoops.Gtk` for Linux
-* `SerialLoops.Mac` for macOS
-* `SerialLoops.Wpf` for Windows
-
-We recommend [Visual Studio 2022](https://visualstudio.microsoft.com/) on Windows or [Rider](https://www.jetbrains.com/rider/) on Linux/Mac for development. If you'd like to contribute new features or fixes, we recommend [getting in touch on Discord first](https://discord.gg/nesRSbpeFM) before submitting a pull request!
-
-### Testing
-The `SerialLoops.Tests` project can be run from inside Visual Studio, Rider, or with `dotnet test` as normal. However, our UI tests (currently only runnable on Windows) are a bit more involved.
-
-Our UI tests rely on [Appium](https://appium.io/).
-#### macOS
-1. You will need to install nodejs and then use it to [install Appium](https://appium.io/docs/en/2.4/quickstart/install/).
-  - The easiest way to install nodejs is to first install [nvm](https://github.com/nvm-sh/nvm) and then run `nvm install <version>` followed by `nvm use <version>` (you can use `16` as the version)
-2. You will then need to install the Mac2 driver with `appium driver install mac2`
-3. Follow [these instructions](https://github.com/appium/appium-mac2-driver?tab=readme-ov-file#requirements) for installing and setting up the necessary prerequisites for the Mac2 driver to work
-
-Once you've installed the prerequisites, build the `SerialLoops.Mac` and `SerialLoops.Mac.Tests` projects with `dotnet build src/SerialLoops.Mac/SerialLoops.Mac.csproj` and `dotnet build test/ui/SerialLoops.Mac.Tests/SerialLoops.Mac.Tests.csproj`,
-respectively. Then, inside `test\ui\SerialLoops.Mac.Tests\bin\Debug\net8.0`, create a new text file called `ui_vals.json`. Inside this file, place the following text, replacing necessary values:
-```json
-{
-    "AppLoc": "PATH/TO/Serial Loops.app",
-    "ProjectName": "MacUITest",
-    "RomLoc": "PATH/TO/HaruhiChokuretsu.nds",
-    "ArtifactsDir": "PATH/TO/artifacts"
-}
+On Linux/Mac, you need to specify the target framework:
+```bash
+dotnet build -f net8.0
 ```
-The artifacts directory can be any arbitrary directory, but ensure it exists before running the tests. The project name by default is WinUITest, but it can be anything you'd like. Have fun.
+Specifying this prevents dotnet from trying to build the Windows project, which can cause errors.
 
-Finally, you can then run the tests with `dotnet test test\ui\SerialLoops.Mac.Tests\SerialLoops.Mac.Tests.csproj`. However, it may be better to run `appium` from a different terminal first so you
-can see the server output as well.
+We recommend [Visual Studio 2022](https://visualstudio.microsoft.com/) on Windows or [Rider](https://www.jetbrains.com/rider/) on Linux/Mac (or Windows!) for development. You can also build from both of these IDEs; however, when building from Rider on Linux/Mac, you must go into **Settings &rarr; Build, Execution, Deployment &rarr; Toolset and Build** and add `TargetFramework=net8.0` to the MSBuild global properties field. This has the same effect as specifying `-f net8.0` on the command line.
 
-#### Windows
-1. You will need to install nodejs and then use it to [install Appium](https://appium.io/docs/en/2.4/quickstart/install/).
-  - The easiest way to install nodejs is to first install [NVM for Windows](https://github.com/coreybutler/nvm-windows) and then run `nvm install latest` followed by `nvm use latest` (you can sub latest for any version)
-2. You will then need to install the [Appium Windows Driver](https://github.com/appium/appium-windows-driver) with `appium driver install --source=npm appium-windows-driver`.
-3. Next, download and install [WinAppDriver](https://github.com/microsoft/WinAppDriver).
-
-Once you've installed all the prerequisites, build the `SerialLoops.Wpf` and `SerialLoops.Wpf.Tests` projects from Visual Studio or with `dotnet build src\ui\SerialLoops.Wpf\SerialLoops.Wpf.csproj` and
-`dotnet build test\ui\SerialLoops.Wpf.Tests\SerialLoops.Wpf.Tests.csproj`, respectively. Then, inside `test\ui\SerialLoops.Wpf.Tests\bin\Debug\net8.0`, create a new text file called `ui_vals.json`.
-Inside this file place the following text, replacing necessary values:
-```json
-{
-    "AppLoc": "PATH\\TO\\SerialLoops.exe",
-    "ProjectName": "WinUITest",
-    "WinAppDriverLoc": "PATH\\TO\\WinAppDriver.exe",
-    "RomLoc": "PATH\\TO\\HaruhiChokuretsu.nds",
-    "ArtifactsDir": "PATH\\TO\\artifacts"
-}
-```
-Ensure you escape your backslashes (`\\` rather than `\`). WinAppDriver is usually installed to `C:\Program Files (x86)\Windows Application Driver\WinAppDriver.exe`. The artifacts directory can
-be any arbitrary directory, but ensure it exists before running the tests. The project name by default is WinUITest, but it can be anything you'd like. Have fun.
-
-Finally, you can then open the solution inside Visual Studio and run the tests from the Test Explorer. Alternatively, running `dotnet test test\ui\SerialLoops.Wpf.Tests\SerialLoops.Wpf.Tests.csproj`
-may also work.
+If you'd like to contribute new features or fixes, we recommend [getting in touch on Discord first](https://discord.gg/nesRSbpeFM) before submitting a pull request!
