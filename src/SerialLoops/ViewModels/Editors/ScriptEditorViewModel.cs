@@ -137,6 +137,7 @@ namespace SerialLoops.ViewModels.Editors
                     CommandVerb.SCREEN_FADEIN => new ScreenFadeInScriptCommandEditorViewModel(_selectedCommand, this),
                     CommandVerb.SCREEN_FADEOUT => new ScreenFadeOutScriptCommandEditorViewModel(_selectedCommand, this),
                     CommandVerb.SCREEN_FLASH => new ScreenFlashScriptCommandEditorViewModel(_selectedCommand, this),
+                    CommandVerb.SND_PLAY => new SndPlayScriptCommandEditorViewModel(_selectedCommand, this, _window),
                     CommandVerb.REMOVED => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
                     CommandVerb.SND_STOP => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
                     CommandVerb.SCREEN_SHAKE_STOP => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),

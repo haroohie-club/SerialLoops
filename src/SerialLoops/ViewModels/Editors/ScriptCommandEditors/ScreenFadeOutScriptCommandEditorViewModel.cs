@@ -1,5 +1,5 @@
-﻿using System.Collections.ObjectModel;
-using System;
+﻿using System;
+using System.Collections.ObjectModel;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SerialLoops.Lib.Script;
