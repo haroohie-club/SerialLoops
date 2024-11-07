@@ -558,6 +558,16 @@ namespace SerialLoops.ViewModels
                             Path.Combine("assets", "events", $"{OpenProject.Evt.GetFileByName("SCENARIOS").Index:X3}.s"),
                             scenario.GetSource(includes, Log), OpenProject, Log);
                         break;
+                    case ItemDescription.ItemType.Script:
+                        if (!savedEventTable)
+                        {
+                            OpenProject.RecalculateEventTable();
+                            IO.WriteStringFile(Path.Combine("assets", "events", $"{OpenProject.EventTableFile.Index:X3}.s"), OpenProject.EventTableFile.GetSource(includes), OpenProject, Log);
+                        }
+                        EventFile evt = ((ScriptItem)item).Event;
+                        evt.CollectGarbage();
+                        IO.WriteStringFile(Path.Combine("assets", "events", $"{evt.Index:X3}.s"), evt.GetSource(includes), OpenProject, Log);
+                        break;
                     case ItemDescription.ItemType.Voice:
                         VoicedLineItem vce = (VoicedLineItem)item;
                         if (OpenProject.VoiceMap is not null)

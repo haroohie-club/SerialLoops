@@ -55,7 +55,6 @@ namespace SerialLoops.ViewModels.Panels
                 {
                     Source.CollapseAll();
                 }
-
             }
         }
 

@@ -31,8 +31,16 @@ namespace SerialLoops.Controls
             base.OnPropertyChanged(change);
             if (change.Property == ItemProperty)
             {
-                Link.Text = Item.DisplayName;
-                Link.Icon = Item.Type.ToString();
+                if (Item is null)
+                {
+                    Link.Text = "NONE";
+                    Link.Icon = null;
+                }
+                else
+                {
+                    Link.Text = Item.DisplayName;
+                    Link.Icon = Item.Type.ToString();
+                }
             }
         }
 
@@ -43,7 +51,10 @@ namespace SerialLoops.Controls
 
         public void Link_PointerPressed(object? sender, EventArgs e)
         {
-            Tabs.OpenTab(Item);
+            if (Item is not null)
+            {
+                Tabs.OpenTab(Item);
+            }
         }
     }
 }

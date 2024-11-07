@@ -1,0 +1,47 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="using:SerialLoops.ViewModels.Editors"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:utility="using:SerialLoops.Utility"
+             x:DataType="vm:ScriptEditorViewModel"
+             x:Class="SerialLoops.Views.Editors.ScriptEditorView">
+    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,*">
+        <StackPanel Grid.Column="0" Grid.Row="0" Margin="5" Spacing="5" HorizontalAlignment="Right" Orientation="Horizontal">
+            <Button Command="{Binding AddScriptCommandCommand}">
+                <Svg Path="avares://SerialLoops/Assets/Icons/Add.svg" Width="22"/>
+            </Button>
+            <Button Command="{Binding AddScriptSectionCommand}">
+                <Svg Path="avares://SerialLoops/Assets/Icons/Add_Section.svg" Width="22"/>
+            </Button>
+            <Button Command="{Binding DeleteScriptCommandOrSectionCommand}">
+                <Svg Path="avares://SerialLoops/Assets/Icons/Remove.svg" Width="22"/>
+            </Button>
+            <Button Command="{Binding ClearScriptCommand}">
+                <Svg Path="avares://SerialLoops/Assets/Icons/Clear.svg" Width="22"/>
+            </Button>
+        </StackPanel>
+        <TreeDataGrid Grid.Column="0" Grid.Row="1" Grid.RowSpan="2" Source="{Binding Source}"/>
+        <Grid Grid.Column="1" Grid.Row="1" ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto">
+            <Image Source="{Binding PreviewBitmap, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
+                   Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Width="256"/>
+            <TabControl Grid.Column="1" Grid.Row="0">
+                <TabControl.Items>
+                    <TabItem Header="Starting Chibis">
+
+                    </TabItem>
+                    <TabItem Header="Map Characters">
+
+                    </TabItem>
+                </TabControl.Items>
+            </TabControl>
+            <StackPanel Grid.Column="1" Grid.Row="1">
+
+            </StackPanel>
+        </Grid>
+        <ScrollViewer Grid.Column="1" Grid.Row="2">
+            <ContentPresenter Margin="10" DataContext="{Binding CurrentCommandViewModel}" Content="{Binding}"/>
+        </ScrollViewer>
+    </Grid>
+</UserControl>
