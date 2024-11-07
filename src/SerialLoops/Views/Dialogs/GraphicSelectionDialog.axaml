@@ -13,7 +13,7 @@
         MinWidth="450"
         MinHeight="400"
         Width="450"
-        Height="600"
+        Height="550"
         Loaded="Window_Loaded"
         Title="{x:Static assets:Strings.Select_Graphic}"
         Name="GraphicSelector">
