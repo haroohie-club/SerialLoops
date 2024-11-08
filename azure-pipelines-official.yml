@@ -94,7 +94,7 @@ stages:
       inputs:
         command: 'restore'
         projects: $(Build.SourcesDirectory)/src/SerialLoops/SerialLoops.csproj
-        arguments: '-c Release -f net8.0 -r $(rid)'
+        restoreArguments: '-c Release -f net8.0 -r $(rid)'
         publishWebProjects: false
       displayName: Restore
     - task: DotNetCoreCLI@2
