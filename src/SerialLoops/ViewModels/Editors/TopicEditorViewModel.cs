@@ -85,6 +85,10 @@ public class TopicEditorViewModel : EditorViewModel
         {
             this.RaiseAndSetIfChanged(ref _baseTimeGain, value);
             Topic.TopicEntry.BaseTimeGain = _baseTimeGain;
+            KyonTime = BaseTimeGain * _kyonTimePercentage / 100.0;
+            MikuruTime = BaseTimeGain * _mikuruTimePercentage / 100.0;
+            NagatoTime = BaseTimeGain * _nagatoTimePercentage / 100.0;
+            KoizumiTime = BaseTimeGain * _koizumiTimePercentage / 100.0;
             Topic.UnsavedChanges = true;
         }
     }
@@ -157,7 +161,7 @@ public class TopicEditorViewModel : EditorViewModel
         Topic = topic;
         _title = Topic.TopicEntry.Title;
         Scripts = new(window.OpenProject.Items.Where(i => i.Type == ItemDescription.ItemType.Script).Cast<ScriptItem>());
-        short associatedScriptIndex = (short)(Topic.TopicEntry.Type == TopicType.Main ? Topic.HiddenMainTopic.EventIndex : Topic.TopicEntry.EventIndex);
+        short associatedScriptIndex = (short)(Topic.TopicEntry.Type == TopicType.Main ? Topic.HiddenMainTopic?.EventIndex ?? Topic.TopicEntry.EventIndex : Topic.TopicEntry.EventIndex);
         _associatedScript = (ScriptItem)window.OpenProject.Items.FirstOrDefault(i =>
             i.Type == ItemDescription.ItemType.Script && ((ScriptItem)i).Event.Index == associatedScriptIndex);
         EpisodeGroups = [Strings.Episode_1, Strings.Episode_2, Strings.Episode_3, Strings.Episode_4, Strings.Episode_5];
@@ -168,5 +172,9 @@ public class TopicEditorViewModel : EditorViewModel
         _mikuruTimePercentage = Topic.TopicEntry.MikuruTimePercentage;
         _nagatoTimePercentage = Topic.TopicEntry.NagatoTimePercentage;
         _koizumiTimePercentage = Topic.TopicEntry.KoizumiTimePercentage;
+        KyonTime = BaseTimeGain * _kyonTimePercentage / 100.0;
+        MikuruTime = BaseTimeGain * _mikuruTimePercentage / 100.0;
+        NagatoTime = BaseTimeGain * _nagatoTimePercentage / 100.0;
+        KoizumiTime = BaseTimeGain * _koizumiTimePercentage / 100.0;
     }
 }
