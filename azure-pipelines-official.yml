@@ -151,11 +151,11 @@ stages:
         downloadPath: '$(Build.ArtifactStagingDirectory)'
       displayName: Download Linux zip artifact
     - pwsh: |
-        Move-Item -Path ./install/linux/dpkg-build -Destination ./dpkg-build
+        Move-Item -Force -Path ./install/linux/dpkg-build/* -Destination ./dpkg-build
         Push-Location dpkg-build/SerialLoops
         ((Get-Content -Path DEBIAN/control) -replace '#VERSION#', '$(Version)') | Set-Content -Path DEBIAN/control
         Expand-Archive $(Build.ArtifactStagingDirectory)/Linux-v$(Version)/publish.zip -DestinationPath $(Build.ArtifactStagingDirectory)/publish/
-        Move-Item -Path $(Build.ArtifactStagingDirectory)/publish/* usr/lib/SerialLoops
+        Move-Item -Force -Path $(Build.ArtifactStagingDirectory)/publish/* usr/lib/SerialLoops
         ln -s /usr/lib/SerialLoops/SerialLoops usr/bin/SerialLoops
         Set-Location ..
         dpkg-deb --build SerialLoops
@@ -175,8 +175,14 @@ stages:
     steps:
     - checkout: self
       clean: true
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: 'Linux-v$(Version)'
+        downloadPath: '$(Build.ArtifactStagingDirectory)'
+      displayName: Download Linux zip artifact
     - pwsh: |
-        Get-ChildItem -Path $(Build.ArtifactStagingDirectory)
         Expand-Archive $(Build.ArtifactStagingDirectory)/Linux-v$(Version)/publish.zip -DestinationPath $(Build.ArtifactStagingDirectory)/publish/
         chmod +x $(Build.ArtifactStagingDirectory)/publish/SerialLoops
         Push-Location $(Build.ArtifactStagingDirectory)/publish
