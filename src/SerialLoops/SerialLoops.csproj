@@ -8,6 +8,7 @@
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <Version>$(SLAssemblyVersion)</Version>
     <InformationalVersion>$(SLVersion)</InformationalVersion>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -23,7 +24,6 @@
     <!-- Will be copied from output directory -->
     <NSPrincipalClass>NSApplication</NSPrincipalClass>
     <NSHighResolutionCapable>true</NSHighResolutionCapable>
-    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>

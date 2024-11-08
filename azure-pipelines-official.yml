@@ -44,18 +44,6 @@ stages:
           framework: 'net8.0'
           rid: 'linux-x64'
           artifactFile: 'publish.zip'
-        macOS-x64:
-          imageName: 'macOS-latest'
-          artifactName: 'macOS-x64-v$(Version)'
-          framework: 'net8.0'
-          rid: 'osx-x64'
-          artifactFile: 'Serial Loops.app'
-        macOS-arm64:
-          imageName: 'macOS-latest'
-          artifactName: 'macOS-arm-v$(Version)'
-          framework: 'net8.0'
-          rid: 'osx-arm64'
-          artifactFile: 'Serial Loops.app'
         Windows:
           imageName: 'windows-latest'
           artifactName: 'Windows-v$(Version)'
@@ -82,6 +70,45 @@ stages:
     - task: PublishBuildArtifacts@1
       inputs:
         PathtoPublish: '$(Build.SourcesDirectory)/src/SerialLoops/bin/Release/$(framework)/$(rid)/$(artifactFile)'
+        ArtifactName: '$(artifactName)'
+        publishLocation: 'Container'
+      displayName: Publish build artifact
+
+  - job:
+    strategy:
+      matrix:
+        x64:
+          artifactName: 'macOS-x64-v$(Version)'
+          rid: 'osx-x64'
+        arm64:
+          artifactName: 'macOS-arm-v$(Version)'
+          rid: 'osx-arm64'
+    displayName: Build & Publish macOS
+    pool:
+      vmImage: macos-latest
+    steps:
+    - checkout: self
+      clean: true
+
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'restore'
+        projects: $(Build.SourcesDirectory)/src/SerialLoops/SerialLoops.csproj
+        arguments: '-c Release -f net8.0 -r $(rid)'
+        publishWebProjects: false
+      displayName: Restore
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'msbuild'
+        projects: $(Build.SourcesDirectory)/src/SerialLoops/SerialLoops.csproj
+        arguments: '-t:BundleApp -p:Configuration=Release -p:TargetFramework=net8.0 -p:RuntimeIdentifier=$(rid) -p:UseAppHost=true --self-contained -p:DebugType=None -p:DebugSymbols=false -p:PublishSingleFile=true'
+      env:
+        SLVersion: $(Version)
+        SLAssemblyVersion: $(AssemblyVersion)
+      displayName: Build & Publish Serial Loops
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.SourcesDirectory)/src/SerialLoops/bin/Release/net8.0/$(rid)/Serial Loops.app'
         ArtifactName: '$(artifactName)'
         publishLocation: 'Container'
       displayName: Publish build artifact
