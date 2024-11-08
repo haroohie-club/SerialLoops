@@ -38,6 +38,9 @@ bld/
 [Ll]og/
 [Ll]ogs/
 
+# Python venv
+.venv/
+
 # Rider solution directory
 .idea/
 
