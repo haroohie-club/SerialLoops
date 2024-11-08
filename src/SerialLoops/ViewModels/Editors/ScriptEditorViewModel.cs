@@ -141,6 +141,7 @@ namespace SerialLoops.ViewModels.Editors
                     CommandVerb.REMOVED => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
                     CommandVerb.SND_STOP => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
                     CommandVerb.BGM_PLAY => new BgmPlayScriptCommandEditorViewModel(_selectedCommand, this, _window),
+                    CommandVerb.VCE_PLAY => new VcePlayScriptCommandEditorViewModel(_selectedCommand, this, _window),
                     CommandVerb.SCREEN_SHAKE_STOP => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
                     CommandVerb.WAIT => new WaitScriptCommandEditorViewModel(_selectedCommand, this),
                     CommandVerb.HOLD => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
