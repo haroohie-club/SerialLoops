@@ -163,6 +163,10 @@ public class TopicEditorViewModel : EditorViewModel
         EpisodeGroups = [Strings.Episode_1, Strings.Episode_2, Strings.Episode_3, Strings.Episode_4, Strings.Episode_5];
         _episodeGroup = Topic.TopicEntry.EpisodeGroup;
         _puzzlePhaseGroup = Topic.TopicEntry.PuzzlePhaseGroup;
-
+        _baseTimeGain = Topic.TopicEntry.BaseTimeGain;
+        _kyonTimePercentage = Topic.TopicEntry.KyonTimePercentage;
+        _mikuruTimePercentage = Topic.TopicEntry.MikuruTimePercentage;
+        _nagatoTimePercentage = Topic.TopicEntry.NagatoTimePercentage;
+        _koizumiTimePercentage = Topic.TopicEntry.KoizumiTimePercentage;
     }
 }
