@@ -43,22 +43,25 @@ stages:
           artifactName: 'Linux-v$(Version)'
           framework: 'net8.0'
           rid: 'linux-x64'
-          extraPublishParams: ''
+          artifactFile: 'publish.zip'
         macOS-x64:
           imageName: 'macOS-latest'
           artifactName: 'macOS-x64-v$(Version)'
           framework: 'net8.0'
           rid: 'osx-x64'
+          artifactFile: 'Serial Loops.app'
         macOS-arm64:
           imageName: 'macOS-latest'
           artifactName: 'macOS-arm-v$(Version)'
           framework: 'net8.0'
           rid: 'osx-arm64'
+          artifactFile: 'Serial Loops.app'
         Windows:
           imageName: 'windows-latest'
           artifactName: 'Windows-v$(Version)'
           framework: 'net8.0-windows'
           rid: 'win-x64'
+          artifactFile: 'publish.zip'
     displayName: Build & Publish
     pool:
       vmImage: $(imageName)
@@ -78,7 +81,7 @@ stages:
       displayName: Build & Publish Serial Loops
     - task: PublishBuildArtifacts@1
       inputs:
-        PathtoPublish: '$(Build.SourcesDirectory)/src/SerialLoops/bin/Release/$(framework)/$(rid)/publish.zip'
+        PathtoPublish: '$(Build.SourcesDirectory)/src/SerialLoops/bin/Release/$(framework)/$(rid)/$(artifactFile)'
         ArtifactName: '$(artifactName)'
         publishLocation: 'Container'
       displayName: Publish build artifact
@@ -112,7 +115,7 @@ stages:
         python serial_loops_pkg_builder.py $SLVersion "$SLZip"
       env:
         SLVersion: $(Version)
-        SLZip: $(Build.ArtifactStagingDirectory)/$(artifactName)/publish.zip
+        SLZip: "$(Build.ArtifactStagingDirectory)/$(artifactName)/Serial Loops.app.zip"
       displayName: Build macOS pkg installer
     - task: PublishBuildArtifacts@1
       inputs:
