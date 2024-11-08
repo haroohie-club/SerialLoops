@@ -567,6 +567,12 @@ namespace SerialLoops.ViewModels
                         evt.CollectGarbage();
                         IO.WriteStringFile(Path.Combine("assets", "events", $"{evt.Index:X3}.s"), evt.GetSource(includes), OpenProject, Log);
                         break;
+                    case ItemDescription.ItemType.System_Texture:
+                        ((SystemTextureItem)item).Write(OpenProject, Log);
+                        break;
+                    case ItemDescription.ItemType.Topic:
+                        changedTopics = true;
+                        break;
                     case ItemDescription.ItemType.Voice:
                         VoicedLineItem vce = (VoicedLineItem)item;
                         if (OpenProject.VoiceMap is not null)
