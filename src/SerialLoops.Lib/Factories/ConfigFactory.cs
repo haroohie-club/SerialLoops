@@ -17,7 +17,7 @@ namespace SerialLoops.Lib.Factories
     {
         public Config LoadConfig(Func<string, string> localize, ILogger log)
         {
-            string configJson = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.json");
+            string configJson = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SerialLoops", "config.json");
 
             if (!File.Exists(configJson))
             {
