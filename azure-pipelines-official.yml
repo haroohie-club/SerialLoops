@@ -151,11 +151,11 @@ stages:
         downloadPath: '$(Build.ArtifactStagingDirectory)'
       displayName: Download Linux zip artifact
     - pwsh: |
-        Move-Item -Force -Path ./install/linux/dpkg-build/* -Destination ./dpkg-build
-        Push-Location dpkg-build/SerialLoops
+        Get-Childitem -Path ./install/linux/dpkg-build/ -Recurse | Move-Item -Force -Destination ./dpkg-build
+        Push-Location ./dpkg-build/SerialLoops
         ((Get-Content -Path DEBIAN/control) -replace '#VERSION#', '$(Version)') | Set-Content -Path DEBIAN/control
         Expand-Archive $(Build.ArtifactStagingDirectory)/Linux-v$(Version)/publish.zip -DestinationPath $(Build.ArtifactStagingDirectory)/publish/
-        Move-Item -Force -Path $(Build.ArtifactStagingDirectory)/publish/* usr/lib/SerialLoops
+        Get-Childitem -Path $(Build.ArtifactStagingDirectory)/publish/ -Recurse | Move-Item -Force -Destination usr/lib/SerialLoops
         ln -s /usr/lib/SerialLoops/SerialLoops usr/bin/SerialLoops
         Set-Location ..
         dpkg-deb --build SerialLoops
@@ -190,9 +190,11 @@ stages:
         Pop-Location
       displayName: Create tar
     - pwsh: |
+        Get-ChildItem $(Build.ArtifactStagingDirectory)
         ((Get-Content -Path ./install/linux/rpm/rpmbuild/SPECS/SerialLoops.spec) -replace '#VERSION#', '$(Version)') | Set-Content -Path ./install/linux/rpm/rpmbuild/SPECS/SerialLoops.spec
         Copy-Item -Path $(Build.ArtifactStagingDirectory)/publish.tar.gz $(Build.SourcesDirectory)/install/rpm/rpmbuild/SOURCES/SerialLoops-$(Version).tar.gz
         docker run -v $(Build.SourcesDirectory)/install/rpm/rpm-scripts:/rpm-scripts -v $(Build.SourcesDirectory)/install/linux/rpm/rpmbuild:/root/rpmbuild fedora:39 /rpm-scripts/rpm-make.sh
+      displayName: Build rpm
     - task: PublishBuildArtifacts@1
       inputs:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)/publish.tar.gz'
