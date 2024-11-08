@@ -1,5 +1,5 @@
 Package: SerialLoops
-Version: $(Version)
+Version: #VERSION#
 Section: custom
 Priority: optional
 Architecture: all

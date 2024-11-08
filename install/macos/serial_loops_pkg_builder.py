@@ -2,6 +2,7 @@ from macos_pkg_builder import Packages
 from sys import argv
 
 ver = argv[1]
+zip = argv[2]
 
 with open("welcome.md") as welcome_file:
     welcome_md = welcome_file.read()

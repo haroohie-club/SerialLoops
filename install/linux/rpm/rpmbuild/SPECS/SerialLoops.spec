@@ -1,5 +1,5 @@
 Name:           SerialLoops
-Version:        $(Version)
+Version:        #VERSION#
 Release:        1%{?dist}
 Summary:        Editor for Suzumiya Haruhi no Chokuretsu
 ExclusiveArch:  x86_64
