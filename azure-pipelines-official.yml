@@ -40,26 +40,22 @@ stages:
       matrix:
         Linux:
           imageName: 'ubuntu-latest'
-          platformName: 'Gtk'
           artifactName: 'Linux-v$(Version)'
           framework: 'net8.0'
           rid: 'linux-x64'
           extraPublishParams: ''
         macOS-x64:
           imageName: 'macOS-latest'
-          platformName: 'Mac'
           artifactName: 'macOS-x64-v$(Version)'
           framework: 'net8.0'
           rid: 'osx-x64'
         macOS-arm64:
           imageName: 'macOS-latest'
-          platformName: 'Mac'
           artifactName: 'macOS-arm-v$(Version)'
           framework: 'net8.0'
           rid: 'osx-arm64'
         Windows:
           imageName: 'windows-latest'
-          platformName: 'Wpf'
           artifactName: 'Windows-v$(Version)'
           framework: 'net8.0-windows'
           rid: 'win-x64'
