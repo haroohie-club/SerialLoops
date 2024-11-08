@@ -152,10 +152,11 @@ stages:
       displayName: Download Linux zip artifact
     - pwsh: |
         Copy-Item -Path ./install/linux/dpkg-build -Destination ./dpkg-build -Recurse -Exclude ".gitkeep"
+        New-Item -ItemType "directory" -Path ./dpkg-build/SerialLoops/usr -Name bin
         Push-Location ./dpkg-build/SerialLoops
         ((Get-Content -Path DEBIAN/control) -replace '#VERSION#', '$(Version)') | Set-Content -Path DEBIAN/control
         Expand-Archive $(Build.ArtifactStagingDirectory)/Linux-v$(Version)/publish.zip -DestinationPath $(Build.ArtifactStagingDirectory)/publish/
-        Get-Childitem -Path $(Build.ArtifactStagingDirectory)/publish/ -Recurse | Move-Item -Force -Destination usr/lib/SerialLoops
+        Copy-Item -Path $(Build.ArtifactStagingDirectory)/publish/* -Destination ./usr/lib/SerialLoops -Recurse
         ln -s /usr/lib/SerialLoops/SerialLoops usr/bin/SerialLoops
         Set-Location ..
         dpkg-deb --build SerialLoops
