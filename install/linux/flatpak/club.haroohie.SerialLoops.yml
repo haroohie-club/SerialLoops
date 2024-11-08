@@ -1,0 +1,36 @@
+id: club.haroohie.SerialLoops
+runtime: org.freedesktop.Platform
+runtime-version: '23.08'
+sdk: org.freedesktop.Sdk
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.dotnet8
+build-options:
+  prepend-path: "/usr/lib/sdk/dotnet8/bin"
+  append-ld-library-path: "/usr/lib/sdk/dotnet8/lib"
+  prepend-pkg-config-path: "/usr/lib/sdk/dotnet8/lib/pkgconfig"
+
+command: SerialLoops
+
+finish-args:
+  - --device=dri
+  - --socket=x11
+  - --share=ipc
+  - --env=DOTNET_ROOT=/app/lib/dotnet
+
+modules:
+  - name: dotnet
+    buildsystem: simple
+    build-commands:
+    - /usr/lib/sdk/dotnet8/bin/install.sh
+
+  - name: SerialLoops
+    buildsystem: simple
+    sources:
+      - type: git
+        url: https://github.com/haroohie-club/SerialLoops.git
+      - ./nuget-sources.json
+    build-commands:
+      - dotnet publish src/SerialLoops/SerialLoops.csproj -c Release --no-self-contained --source ./nuget-sources
+      - mkdir -p ${FLATPACK_DEST}/bin
+      - cp -r bin/Release/net8.0/publish/* ${FLATPAK_DEST}/bin
+      - install -Dm644 club.haroohie.SerialLoops.appdata.xml ${FLATPACK_DEST}/app/share/appdata/club.haroohie.SerialLoops.appdata.xml
