@@ -1,8 +1,11 @@
 from macos_pkg_builder import Packages
 from sys import argv
+import zipfile
 
 ver = argv[1]
 zip = argv[2]
+with zipfile.ZipFile(zip, 'r') as zip_ref:
+    zip_ref.extractall("./publish/")
 
 with open("welcome.md") as welcome_file:
     welcome_md = welcome_file.read()
@@ -11,9 +14,14 @@ with open("../../README.md") as readme_file:
 with open("../../LICENSE") as license_file:
     license_md = license_file.read()
 
+
+
 pkg_obj = Packages(
     pkg_output="SerialLoops.pkg",
     pkg_bundle_id="club.haroohie.serialloopsinstaller",
+    pkg_file_structure={
+        "publish/SerialLoops.app": "/Applications/SerialLoops.app",
+    },
     pkg_version=ver,
     pkg_welcome=welcome_md,
     pkg_readme=readme_md,
