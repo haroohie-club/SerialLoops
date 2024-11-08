@@ -176,6 +176,7 @@ stages:
     - checkout: self
       clean: true
     - pwsh: |
+        Get-ChildItem -Path $(Build.ArtifactStagingDirectory)
         Expand-Archive $(Build.ArtifactStagingDirectory)/Linux-v$(Version)/publish.zip -DestinationPath $(Build.ArtifactStagingDirectory)/publish/
         chmod +x $(Build.ArtifactStagingDirectory)/publish/SerialLoops
         Push-Location $(Build.ArtifactStagingDirectory)/publish
