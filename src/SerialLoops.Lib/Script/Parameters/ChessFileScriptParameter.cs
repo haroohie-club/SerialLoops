@@ -1,20 +1,19 @@
 ﻿using HaruhiChokuretsuLib.Archive.Event;
 
-namespace SerialLoops.Lib.Script.Parameters
+namespace SerialLoops.Lib.Script.Parameters;
+
+public class ChessFileScriptParameter : ScriptParameter
 {
-    public class ChessFileScriptParameter : ScriptParameter
+    public short ChessFileIndex { get; set; }
+    public override short[] GetValues(object obj = null) => new short[] { ChessFileIndex };
+
+    public ChessFileScriptParameter(string name, short chessFileIndex) : base(name, ParameterType.CHESS_FILE)
     {
-        public short ChessFileIndex { get; set; }
-        public override short[] GetValues(object obj = null) => new short[] { ChessFileIndex };
+        ChessFileIndex = chessFileIndex;
+    }
 
-        public ChessFileScriptParameter(string name, short chessFileIndex) : base(name, ParameterType.CHESS_FILE)
-        {
-            ChessFileIndex = chessFileIndex;
-        }
-
-        public override ChessFileScriptParameter Clone(Project project, EventFile eventFile)
-        {
-            return new(Name, ChessFileIndex);
-        }
+    public override ChessFileScriptParameter Clone(Project project, EventFile eventFile)
+    {
+        return new(Name, ChessFileIndex);
     }
 }

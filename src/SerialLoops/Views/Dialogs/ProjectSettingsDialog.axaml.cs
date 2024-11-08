@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 
-namespace SerialLoops.Views.Dialogs
+namespace SerialLoops.Views.Dialogs;
+
+public partial class ProjectSettingsDialog : Window
 {
-    public partial class ProjectSettingsDialog : Window
+    public ProjectSettingsDialog()
     {
-        public ProjectSettingsDialog()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

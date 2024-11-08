@@ -1,13 +1,12 @@
 using Avalonia.Controls;
 
-namespace SerialLoops.Controls
-{
-    public partial class SoundPlayerPanel : UserControl
-    {
+namespace SerialLoops.Controls;
 
-        public SoundPlayerPanel()
-        {
-            InitializeComponent();
-        }
+public partial class SoundPlayerPanel : UserControl
+{
+
+    public SoundPlayerPanel()
+    {
+        InitializeComponent();
     }
 }

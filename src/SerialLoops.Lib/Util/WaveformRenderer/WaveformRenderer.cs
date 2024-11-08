@@ -11,74 +11,73 @@ using SkiaSharp;
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
-namespace SerialLoops.Lib.Util.WaveformRenderer
+namespace SerialLoops.Lib.Util.WaveformRenderer;
+
+public static class WaveformRenderer
 {
-    public static class WaveformRenderer
+    public static SKBitmap Render(WaveStream waveStream, WaveFormRendererSettings settings)
     {
-        public static SKBitmap Render(WaveStream waveStream, WaveFormRendererSettings settings)
+        int bytesPerSample = waveStream.WaveFormat.BitsPerSample / 8;
+        long numSamples = waveStream.Length / bytesPerSample;
+        int samplesPerPixel = (int)(numSamples / settings.Width);
+        int stepSize = settings.PixelsPerPeak + settings.SpacerPixels;
+        MaxPeakProvider peakProvider = new();
+        peakProvider.Init(waveStream.ToSampleProvider(), samplesPerPixel * stepSize);
+        return Render(peakProvider, settings);
+    }
+
+    public static SKBitmap Render(ISampleProvider sampleProvider, long length, WaveFormRendererSettings settings)
+    {
+        int bytesPerSample = sampleProvider.WaveFormat.BitsPerSample / 8;
+        long numSamples = length / bytesPerSample;
+        int samplesPerPixel = (int)(numSamples / settings.Width);
+        int stepSize = settings.PixelsPerPeak + settings.SpacerPixels;
+        MaxPeakProvider peakProvider = new();
+        peakProvider.Init(sampleProvider, samplesPerPixel * stepSize);
+        return Render(peakProvider, settings);
+    }
+
+    private static SKBitmap Render(PeakProvider peakProvider, WaveFormRendererSettings settings)
+    {
+        SKBitmap waveformBitmap = new(settings.Width, settings.TopHeight + settings.BottomHeight);
+
+        using SKCanvas canvas = new(waveformBitmap);
+
+        if (settings.BackgroundColor != SKColors.Transparent)
         {
-            int bytesPerSample = waveStream.WaveFormat.BitsPerSample / 8;
-            long numSamples = waveStream.Length / bytesPerSample;
-            int samplesPerPixel = (int)(numSamples / settings.Width);
-            int stepSize = settings.PixelsPerPeak + settings.SpacerPixels;
-            MaxPeakProvider peakProvider = new();
-            peakProvider.Init(waveStream.ToSampleProvider(), samplesPerPixel * stepSize);
-            return Render(peakProvider, settings);
+            canvas.DrawRect(0, 0, waveformBitmap.Width, waveformBitmap.Height, new SKPaint { Color = settings.BackgroundColor });
         }
+        int midpoint = settings.TopHeight;
 
-        public static SKBitmap Render(ISampleProvider sampleProvider, long length, WaveFormRendererSettings settings)
+        int x = 0;
+        PeakInfo currentPeak = peakProvider.GetNextPeak();
+        while (x < settings.Width)
         {
-            int bytesPerSample = sampleProvider.WaveFormat.BitsPerSample / 8;
-            long numSamples = length / bytesPerSample;
-            int samplesPerPixel = (int)(numSamples / settings.Width);
-            int stepSize = settings.PixelsPerPeak + settings.SpacerPixels;
-            MaxPeakProvider peakProvider = new();
-            peakProvider.Init(sampleProvider, samplesPerPixel * stepSize);
-            return Render(peakProvider, settings);
-        }
+            PeakInfo nextPeak = peakProvider.GetNextPeak();
 
-        private static SKBitmap Render(PeakProvider peakProvider, WaveFormRendererSettings settings)
-        {
-            SKBitmap waveformBitmap = new(settings.Width, settings.TopHeight + settings.BottomHeight);
-
-            using SKCanvas canvas = new(waveformBitmap);
-
-            if (settings.BackgroundColor != SKColors.Transparent)
+            for (int n = 0; n < settings.PixelsPerPeak; n++)
             {
-                canvas.DrawRect(0, 0, waveformBitmap.Width, waveformBitmap.Height, new SKPaint { Color = settings.BackgroundColor });
-            }
-            int midpoint = settings.TopHeight;
-
-            int x = 0;
-            PeakInfo currentPeak = peakProvider.GetNextPeak();
-            while (x < settings.Width)
-            {
-                PeakInfo nextPeak = peakProvider.GetNextPeak();
-
-                for (int n = 0; n < settings.PixelsPerPeak; n++)
-                {
-                    float lineHeight = settings.TopHeight * currentPeak.Max;
-                    canvas.DrawLine(x, midpoint, x, midpoint - lineHeight, settings.TopPeakPaint);
-                    lineHeight = settings.BottomHeight * currentPeak.Min;
-                    canvas.DrawLine(x, midpoint, x, midpoint - lineHeight, settings.BottomPeakPaint);
-                    x++;
-                }
-
-                for (int n = 0; n < settings.SpacerPixels; n++)
-                {
-                    float max = Math.Max(currentPeak.Max, nextPeak.Max);
-                    float min = Math.Min(currentPeak.Min, nextPeak.Min);
-
-                    float lineHeight = settings.TopHeight * max;
-                    canvas.DrawLine(x, midpoint, x, midpoint - lineHeight, settings.TopSpacerPaint);
-                    lineHeight = settings.BottomHeight * min;
-                    canvas.DrawLine(x, midpoint, x, midpoint - lineHeight, settings.BottomSpacerPaint);
-                    x++;
-                }
-                currentPeak = nextPeak;
+                float lineHeight = settings.TopHeight * currentPeak.Max;
+                canvas.DrawLine(x, midpoint, x, midpoint - lineHeight, settings.TopPeakPaint);
+                lineHeight = settings.BottomHeight * currentPeak.Min;
+                canvas.DrawLine(x, midpoint, x, midpoint - lineHeight, settings.BottomPeakPaint);
+                x++;
             }
 
-            return waveformBitmap;
+            for (int n = 0; n < settings.SpacerPixels; n++)
+            {
+                float max = Math.Max(currentPeak.Max, nextPeak.Max);
+                float min = Math.Min(currentPeak.Min, nextPeak.Min);
+
+                float lineHeight = settings.TopHeight * max;
+                canvas.DrawLine(x, midpoint, x, midpoint - lineHeight, settings.TopSpacerPaint);
+                lineHeight = settings.BottomHeight * min;
+                canvas.DrawLine(x, midpoint, x, midpoint - lineHeight, settings.BottomSpacerPaint);
+                x++;
+            }
+            currentPeak = nextPeak;
         }
+
+        return waveformBitmap;
     }
 }

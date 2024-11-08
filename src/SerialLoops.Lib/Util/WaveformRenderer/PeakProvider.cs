@@ -10,27 +10,26 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
-namespace SerialLoops.Lib.Util.WaveformRenderer
+namespace SerialLoops.Lib.Util.WaveformRenderer;
+
+public abstract class PeakProvider
 {
-    public abstract class PeakProvider
+    protected ISampleProvider Provider { get; private set; }
+    protected int SamplesPerPeak { get; private set; }
+    protected float[] ReadBuffer { get; private set; }
+
+    public void Init(ISampleProvider provider, int samplesPerPeak)
     {
-        protected ISampleProvider Provider { get; private set; }
-        protected int SamplesPerPeak { get; private set; }
-        protected float[] ReadBuffer { get; private set; }
-
-        public void Init(ISampleProvider provider, int samplesPerPeak)
-        {
-            Provider = provider;
-            SamplesPerPeak = samplesPerPeak;
-            ReadBuffer = new float[samplesPerPeak];
-        }
-
-        public abstract PeakInfo GetNextPeak();
+        Provider = provider;
+        SamplesPerPeak = samplesPerPeak;
+        ReadBuffer = new float[samplesPerPeak];
     }
 
-    public class PeakInfo(float min, float max)
-    {
-        public float Min { get; private set; } = min;
-        public float Max { get; private set; } = max;
-    }
+    public abstract PeakInfo GetNextPeak();
+}
+
+public class PeakInfo(float min, float max)
+{
+    public float Min { get; private set; } = min;
+    public float Max { get; private set; } = max;
 }

@@ -1,8 +1,7 @@
 ﻿using ReactiveUI;
 
-namespace SerialLoops.ViewModels
+namespace SerialLoops.ViewModels;
+
+public class ViewModelBase : ReactiveObject
 {
-    public class ViewModelBase : ReactiveObject
-    {
-    }
 }

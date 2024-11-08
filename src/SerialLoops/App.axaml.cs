@@ -7,52 +7,51 @@ using Avalonia.Markup.Xaml;
 using SerialLoops.ViewModels;
 using SerialLoops.Views;
 
-namespace SerialLoops
+namespace SerialLoops;
+
+public partial class App : Application
 {
-    public partial class App : Application
+    private IClassicDesktopStyleApplicationLifetime _desktop;
+
+    public override void Initialize()
     {
-        private IClassicDesktopStyleApplicationLifetime _desktop;
+        AvaloniaXamlLoader.Load(this);
+    }
 
-        public override void Initialize()
+    public override void OnFrameworkInitializationCompleted()
+    {
+        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            AvaloniaXamlLoader.Load(this);
-        }
-
-        public override void OnFrameworkInitializationCompleted()
-        {
-            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+            _desktop = desktop;
+            // Line below is needed to remove Avalonia data validation.
+            // Without this line you will get duplicate validations from both Avalonia and CT
+            BindingPlugins.DataValidators.RemoveAt(0);
+            desktop.MainWindow = new MainWindow
             {
-                _desktop = desktop;
-                // Line below is needed to remove Avalonia data validation.
-                // Without this line you will get duplicate validations from both Avalonia and CT
-                BindingPlugins.DataValidators.RemoveAt(0);
-                desktop.MainWindow = new MainWindow
-                {
-                    DataContext = new MainWindowViewModel(),
-                };
-            }
-
-            base.OnFrameworkInitializationCompleted();
+                DataContext = new MainWindowViewModel(),
+            };
         }
 
-        private void About_Click(object? sender, EventArgs e)
-        {
-            ((MainWindow)_desktop.MainWindow).ViewModel.AboutCommand.Execute(Unit.Default);
-        }
+        base.OnFrameworkInitializationCompleted();
+    }
 
-        private void Preferences_Click(object? sender, EventArgs e)
-        {
-            ((MainWindow)_desktop.MainWindow).ViewModel.PreferencesCommand.Execute(Unit.Default);
-        }
+    private void About_Click(object? sender, EventArgs e)
+    {
+        ((MainWindow)_desktop.MainWindow).ViewModel.AboutCommand.Execute(Unit.Default);
+    }
 
-        private void Updates_Click(object? sender, EventArgs e)
-        {
-            ((MainWindow)_desktop.MainWindow).ViewModel.CheckForUpdatesCommand.Execute(Unit.Default);
-        }
+    private void Preferences_Click(object? sender, EventArgs e)
+    {
+        ((MainWindow)_desktop.MainWindow).ViewModel.PreferencesCommand.Execute(Unit.Default);
+    }
 
-        private void Logs_Click(object? sender, EventArgs e)
-        {
-            ((MainWindow)_desktop.MainWindow).ViewModel.ViewLogsCommand.Execute(Unit.Default);
-        }
+    private void Updates_Click(object? sender, EventArgs e)
+    {
+        ((MainWindow)_desktop.MainWindow).ViewModel.CheckForUpdatesCommand.Execute(Unit.Default);
+    }
+
+    private void Logs_Click(object? sender, EventArgs e)
+    {
+        ((MainWindow)_desktop.MainWindow).ViewModel.ViewLogsCommand.Execute(Unit.Default);
     }
 }
