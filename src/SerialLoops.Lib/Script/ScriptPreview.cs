@@ -18,6 +18,7 @@ namespace SerialLoops.Lib.Script
         public (ItemItem Item, ItemItem.ItemLocation Location) Item { get; set; }
         public List<PositionedSprite> Sprites { get; set; } = [];
         public ScriptItemCommand LastDialogueCommand { get; set; }
+        public TopicItem Topic { get; set; }
         public string ErrorImage { get; set; }
     }
 }
