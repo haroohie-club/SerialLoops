@@ -64,7 +64,7 @@ namespace SerialLoops.ViewModels.Editors
                         new HierarchicalExpanderColumn<ITreeItem>(
                             new TemplateColumn<ITreeItem>(null, new FuncDataTemplate<ITreeItem>((val, namescope) =>
                             {
-                                return GetItemPanel(val);
+                                return val?.GetDisplay();
                             }), options: new TemplateColumnOptions<ITreeItem>() { IsTextSearchEnabled = true }),
                             i => i.Children
                         )
@@ -94,29 +94,6 @@ namespace SerialLoops.ViewModels.Editors
                 _script.Refresh(_project, _log);
             }
             Commands = _script.GetScriptCommandTree(_project, _log);
-        }
-
-        private StackPanel GetItemPanel(ITreeItem val)
-        {
-            if (val is null)
-            {
-                return null;
-            }
-            StackPanel panel = new()
-            {
-                Orientation = Avalonia.Layout.Orientation.Horizontal,
-                Spacing = 3,
-            };
-            if (val.Icon is not null)
-            {
-                if (val.Icon.Parent is not null)
-                {
-                    ((StackPanel)val.Icon.Parent).Children.Clear();
-                }
-                panel.Children.Add(val.Icon);
-            }
-            panel.Children.Add(new TextBlock { Text = val.Text });
-            return panel;
         }
 
         private void UpdateCommandViewModel()
