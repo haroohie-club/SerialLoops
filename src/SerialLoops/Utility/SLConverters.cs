@@ -44,24 +44,6 @@ namespace SerialLoops.Utility
         }
     }
 
-    public class TextSubstitutionConverter : IValueConverter
-    {
-        private static Project _project;
-
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return ((string)value).GetSubstitutedString(_project);
-        }
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return ((string)value).GetOriginalString(_project);
-        }
-        public static void SetProject(Project project)
-        {
-            _project = project;
-        }
-    }
-
     public class DoubleSubtractionConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
