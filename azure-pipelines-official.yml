@@ -112,7 +112,7 @@ stages:
         python serial_loops_pkg_builder.py $SLVersion "$SLZip"
       env:
         SLVersion: $(Version)
-        SLZip: $(Build.ArtifactStagingDirectory)/publish.zip
+        SLZip: $(Build.ArtifactStagingDirectory)/$(artifactName)/publish.zip
       displayName: Build macOS pkg installer
     - task: PublishBuildArtifacts@1
       inputs:
@@ -154,6 +154,7 @@ stages:
         Move-Item -Path ./install/linux/dpkg-build -Destination ./dpkg-build
         Push-Location dpkg-build/SerialLoops
         ((Get-Content -Path DEBIAN/control) -replace '#VERSION#', '$(Version)') | Set-Content -Path DEBIAN/control
+        Expand-Archive $(Build.ArtifactStagingDirectory)/Linux-v$(Version)/publish.zip -DestinationPath $(Build.ArtifactStagingDirectory)/publish/
         Move-Item -Path $(Build.ArtifactStagingDirectory)/publish/* usr/lib/SerialLoops
         ln -s /usr/lib/SerialLoops/SerialLoops usr/bin/SerialLoops
         Set-Location ..
@@ -175,7 +176,7 @@ stages:
     - checkout: self
       clean: true
     - pwsh: |
-        Expand-Archive $(Build.ArtifactStagingDirectory)/publish.zip -DestinationPath $(Build.ArtifactStagingDirectory)/publish/
+        Expand-Archive $(Build.ArtifactStagingDirectory)/Linux-v$(Version)/publish.zip -DestinationPath $(Build.ArtifactStagingDirectory)/publish/
         chmod +x $(Build.ArtifactStagingDirectory)/publish/SerialLoops
         Push-Location $(Build.ArtifactStagingDirectory)/publish
         tar -czvf ../publish.tar.gz --transform 's,^\.\/,,' .
