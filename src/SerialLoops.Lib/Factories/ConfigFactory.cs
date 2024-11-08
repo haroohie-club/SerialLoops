@@ -26,6 +26,10 @@ namespace SerialLoops.Lib.Factories
                 defaultConfig.ConfigPath = configJson;
                 defaultConfig.InitializeHacks(log);
                 defaultConfig.InitializeScriptTemplates(localize, log);
+                if (!Directory.Exists(Path.GetDirectoryName(configJson)))
+                {
+                    Directory.CreateDirectory(Path.GetDirectoryName(configJson)!);
+                }
                 IO.WriteStringFile(configJson, JsonSerializer.Serialize(defaultConfig), log);
                 return defaultConfig;
             }
