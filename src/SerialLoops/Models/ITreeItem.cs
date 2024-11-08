@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Reactive.Subjects;
 using Avalonia.Controls;
 
 namespace SerialLoops.Models
