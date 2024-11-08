@@ -76,15 +76,9 @@ stages:
         SLVersion: $(Version)
         SLAssemblyVersion: $(AssemblyVersion)
       displayName: Build & Publish Serial Loops
-
-    - pwsh: |
-        Get-ChildItem -Path "$(Build.SourcesDirectory)/src/SerialLoops/bin/Release/$(framework)/$(rid)/"
-        Compress-Archive -Path "$(Build.SourcesDirectory)/src/SerialLoops/bin/Release/$(framework)/$(rid)/publish" -DestinationPath "$(Build.ArtifactStagingDirectory)/publish.zip"
-      displayName: Compress artifacts to zip
-
     - task: PublishBuildArtifacts@1
       inputs:
-        PathtoPublish: '$(Build.ArtifactStagingDirectory)/publish.zip'
+        PathtoPublish: '$(Build.SourcesDirectory)/src/SerialLoops/bin/Release/$(framework)/$(rid)/publish.zip'
         ArtifactName: '$(artifactName)'
         publishLocation: 'Container'
       displayName: Publish build artifact
