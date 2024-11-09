@@ -155,7 +155,7 @@ stages:
   - job:
     pool:
       vmImage: ubuntu-latest
-    container: freedesktopsdk/flatpak:24.08-x86_64
+    container: ghcr.io/haroohie-club/sl-flatpak:main
     steps:
     - checkout: self
       clean: true

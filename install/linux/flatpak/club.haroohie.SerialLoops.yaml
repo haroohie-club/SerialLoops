@@ -33,12 +33,11 @@ modules:
   - name: devkitARM
     buildsystem: simple
     sources:
-      - type: archive
-        url: https://haroohie.nyc3.cdn.digitaloceanspaces.com/bootstrap/serial-loops/dkp.zip
-        sha256: 91d9d524d5150ae892de4457c4cbb7eaa5edcb2449a85366def678242b1f60e2
+      - type: dir
+        path: /opt/devkitpro
     build-commands:
-      - mkdir -p ${FLATPAK_DEST}/opt
-      - cp -r ./* ${FLATPAK_DEST}/opt/
+      - mkdir -p ${FLATPAK_DEST}/opt/devkitpro
+      - cp -r ./* ${FLATPAK_DEST}/opt/devkitpro
 
   - name: SerialLoops
     buildsystem: simple
@@ -49,9 +48,12 @@ modules:
       - ./nuget-sources.json
       - type: file
         path: club.haroohie.SerialLoops.appdata.xml
+      - type: file
+        path: SerialLoops/install/linux/dpkg-build/SerialLoops/usr/share/applications/SerialLoops.desktop
     build-commands:
       - dotnet publish src/SerialLoops/SerialLoops.csproj -c Release -f net8.0 --no-self-contained --source ./nuget-sources
       - mkdir -p ${FLATPAK_DEST}/bin
       - cp -r src/SerialLoops/bin/Release/net8.0/publish/* ${FLATPAK_DEST}/bin
       - mkdir -p ${FLATPAK_DEST}/app/share/appdata/
       - install -Dm644 club.haroohie.SerialLoops.appdata.xml ${FLATPAK_DEST}/app/share/appdata/club.haroohie.SerialLoops.appdata.xml
+      - install -Dm644 SerialLoops.desktop ${FLATPAK_DEST}/app/share/applications/club.haroohie.SerialLoops.desktop
