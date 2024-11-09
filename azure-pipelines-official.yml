@@ -150,7 +150,7 @@ stages:
         ArtifactName: $(artifactName)-installer
         publishLocation: 'Container'
       displayName: Publish macOS pkg installer
-    displayName: Build macOS pkg
+    displayName: Build macOS pkg installer
 
   # - job:
   #   pool:
