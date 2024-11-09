@@ -35,43 +35,43 @@ variables:
 stages:
 - stage: Build
   jobs:
-  # - job:
-  #   strategy:
-  #     matrix:
-  #       Linux:
-  #         imageName: 'ubuntu-latest'
-  #         artifactName: 'Linux-v$(Version)'
-  #         framework: 'net8.0'
-  #         rid: 'linux-x64'
-  #         artifactFile: 'publish.zip'
-  #       Windows:
-  #         imageName: 'windows-latest'
-  #         artifactName: 'Windows-v$(Version)'
-  #         framework: 'net8.0-windows'
-  #         rid: 'win-x64'
-  #         artifactFile: 'publish.zip'
-  #   displayName: Build & Publish
-  #   pool:
-  #     vmImage: $(imageName)
-  #   steps:
-  #   - checkout: self
-  #     clean: true
-  #   - task: DotNetCoreCLI@2
-  #     inputs:
-  #       command: 'publish'
-  #       projects: $(Build.SourcesDirectory)/src/SerialLoops/SerialLoops.csproj
-  #       arguments: '-c Release -f $(framework) -r $(rid) --self-contained /p:DebugType=None /p:DebugSymbols=false /p:PublishSingleFile=true'
-  #       publishWebProjects: false
-  #     env:
-  #       SLVersion: $(Version)
-  #       SLAssemblyVersion: $(AssemblyVersion)
-  #     displayName: Build & Publish Serial Loops
-  #   - task: PublishBuildArtifacts@1
-  #     inputs:
-  #       PathtoPublish: '$(Build.SourcesDirectory)/src/SerialLoops/bin/Release/$(framework)/$(rid)/$(artifactFile)'
-  #       ArtifactName: '$(artifactName)'
-  #       publishLocation: 'Container'
-  #     displayName: Publish build artifact
+  - job:
+    strategy:
+      matrix:
+        Linux:
+          imageName: 'ubuntu-latest'
+          artifactName: 'Linux-v$(Version)'
+          framework: 'net8.0'
+          rid: 'linux-x64'
+          artifactFile: 'publish.zip'
+        Windows:
+          imageName: 'windows-latest'
+          artifactName: 'Windows-v$(Version)'
+          framework: 'net8.0-windows'
+          rid: 'win-x64'
+          artifactFile: 'publish.zip'
+    displayName: Build & Publish
+    pool:
+      vmImage: $(imageName)
+    steps:
+    - checkout: self
+      clean: true
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'publish'
+        projects: $(Build.SourcesDirectory)/src/SerialLoops/SerialLoops.csproj
+        arguments: '-c Release -f $(framework) -r $(rid) --self-contained /p:DebugType=None /p:DebugSymbols=false /p:PublishSingleFile=true'
+        publishWebProjects: false
+      env:
+        SLVersion: $(Version)
+        SLAssemblyVersion: $(AssemblyVersion)
+      displayName: Build & Publish Serial Loops
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.SourcesDirectory)/src/SerialLoops/bin/Release/$(framework)/$(rid)/$(artifactFile)'
+        ArtifactName: '$(artifactName)'
+        publishLocation: 'Container'
+      displayName: Publish build artifact
 
   - job:
     strategy:
@@ -167,78 +167,78 @@ stages:
   #     displayName: Download Linux zip artifact
   #   displayName: Build Linux flatpak
 
-  # - job:
-  #   pool:
-  #     vmImage: ubuntu-latest
-  #   steps:
-  #   - checkout: self
-  #     clean: true
-  #   - task: DownloadBuildArtifacts@0
-  #     inputs:
-  #       buildType: 'current'
-  #       downloadType: 'single'
-  #       artifactName: 'Linux-v$(Version)'
-  #       downloadPath: '$(Build.ArtifactStagingDirectory)'
-  #     displayName: Download Linux zip artifact
-  #   - pwsh: |
-  #       Copy-Item -Path ./install/linux/dpkg-build -Destination ./dpkg-build -Recurse -Exclude ".gitkeep"
-  #       New-Item -ItemType "directory" -Path ./dpkg-build/SerialLoops/usr -Name bin
-  #       Push-Location ./dpkg-build/SerialLoops
-  #       ((Get-Content -Path DEBIAN/control) -replace '#VERSION#', '$(Version)') | Set-Content -Path DEBIAN/control
-  #       Expand-Archive $(Build.ArtifactStagingDirectory)/Linux-v$(Version)/publish.zip -DestinationPath $(Build.ArtifactStagingDirectory)/publish/
-  #       Copy-Item -Path $(Build.ArtifactStagingDirectory)/publish/* -Destination ./usr/lib/SerialLoops -Recurse
-  #       ln -s /usr/lib/SerialLoops/SerialLoops usr/bin/SerialLoops
-  #       Set-Location ..
-  #       dpkg-deb --build SerialLoops
-  #       Pop-Location
-  #     displayName: Create deb package
-  #   - task: PublishBuildArtifacts@1
-  #     inputs:
-  #       PathtoPublish: '$(Build.SourcesDirectory)/dpkg-build/SerialLoops.deb'
-  #       ArtifactName: 'Linux-v$(Version)-deb'
-  #       publishLocation: 'Container'
-  #     displayName: Publish Linux deb
-  #   displayName: Build Linux deb package
+  - job:
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - checkout: self
+      clean: true
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: 'Linux-v$(Version)'
+        downloadPath: '$(Build.ArtifactStagingDirectory)'
+      displayName: Download Linux zip artifact
+    - pwsh: |
+        Copy-Item -Path ./install/linux/dpkg-build -Destination ./dpkg-build -Recurse -Exclude ".gitkeep"
+        New-Item -ItemType "directory" -Path ./dpkg-build/SerialLoops/usr -Name bin
+        Push-Location ./dpkg-build/SerialLoops
+        ((Get-Content -Path DEBIAN/control) -replace '#VERSION#', '$(Version)') | Set-Content -Path DEBIAN/control
+        Expand-Archive $(Build.ArtifactStagingDirectory)/Linux-v$(Version)/publish.zip -DestinationPath $(Build.ArtifactStagingDirectory)/publish/
+        Copy-Item -Path $(Build.ArtifactStagingDirectory)/publish/* -Destination ./usr/lib/SerialLoops -Recurse
+        ln -s /usr/lib/SerialLoops/SerialLoops usr/bin/SerialLoops
+        Set-Location ..
+        dpkg-deb --build SerialLoops
+        Pop-Location
+      displayName: Create deb package
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.SourcesDirectory)/dpkg-build/SerialLoops.deb'
+        ArtifactName: 'Linux-v$(Version)-deb'
+        publishLocation: 'Container'
+      displayName: Publish Linux deb
+    displayName: Build Linux deb package
 
-  # - job:
-  #   pool:
-  #     vmImage: ubuntu-latest
-  #   steps:
-  #   - checkout: self
-  #     clean: true
-  #   - task: DownloadBuildArtifacts@0
-  #     inputs:
-  #       buildType: 'current'
-  #       downloadType: 'single'
-  #       artifactName: 'Linux-v$(Version)'
-  #       downloadPath: '$(Build.ArtifactStagingDirectory)'
-  #     displayName: Download Linux zip artifact
-  #   - pwsh: |
-  #       Expand-Archive $(Build.ArtifactStagingDirectory)/Linux-v$(Version)/publish.zip -DestinationPath $(Build.ArtifactStagingDirectory)/publish/
-  #       chmod +x $(Build.ArtifactStagingDirectory)/publish/SerialLoops
-  #       Push-Location $(Build.ArtifactStagingDirectory)/publish
-  #       tar -czvf ../publish.tar.gz --transform 's,^\.\/,,' .
-  #       Pop-Location
-  #     displayName: Create tar
-  #   - pwsh: |
-  #       Get-ChildItem $(Build.ArtifactStagingDirectory)
-  #       ((Get-Content -Path ./install/linux/rpm/rpmbuild/SPECS/SerialLoops.spec) -Replace '#VERSION#', '$(Version)') | Set-Content -Path ./install/linux/rpm/rpmbuild/SPECS/SerialLoops.spec
-  #       Copy-Item -Path $(Build.ArtifactStagingDirectory)/publish.tar.gz -Destination $(Build.SourcesDirectory)/install/linux/rpm/rpmbuild/SOURCES/SerialLoops-$(Version).tar.gz
-  #       docker run -v $(Build.SourcesDirectory)/install/linux/rpm/rpm-scripts:/rpm-scripts -v $(Build.SourcesDirectory)/install/linux/rpm/rpmbuild:/root/rpmbuild fedora:39 /rpm-scripts/rpm-make.sh
-  #     displayName: Build rpm
-  #   - task: PublishBuildArtifacts@1
-  #     inputs:
-  #       PathtoPublish: '$(Build.ArtifactStagingDirectory)/publish.tar.gz'
-  #       ArtifactName: 'Linux-v$(Version)-tar'
-  #       publishLocation: 'Container'
-  #     displayName: Publish Linux tar
-  #   - task: PublishBuildArtifacts@1
-  #     inputs:
-  #       PathtoPublish: '$(Build.SourceDirectory)/install/linux/rpm/rpmbuild/RPMS/x86_64/SerialLoops-$(Version)-1.fc39.x86_64.rpm'
-  #       ArtifactName: 'Linux-v$(Version)-rpm'
-  #       publishLocation: 'Container'
-  #     displayName: Publish Linux rpm
-  #   displayName: Package Linux tar & build Linux rpm package
+  - job:
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - checkout: self
+      clean: true
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: 'Linux-v$(Version)'
+        downloadPath: '$(Build.ArtifactStagingDirectory)'
+      displayName: Download Linux zip artifact
+    - pwsh: |
+        Expand-Archive $(Build.ArtifactStagingDirectory)/Linux-v$(Version)/publish.zip -DestinationPath $(Build.ArtifactStagingDirectory)/publish/
+        chmod +x $(Build.ArtifactStagingDirectory)/publish/SerialLoops
+        Push-Location $(Build.ArtifactStagingDirectory)/publish
+        tar -czvf ../publish.tar.gz --transform 's,^\.\/,,' .
+        Pop-Location
+      displayName: Create tar
+    - pwsh: |
+        Get-ChildItem $(Build.ArtifactStagingDirectory)
+        ((Get-Content -Path ./install/linux/rpm/rpmbuild/SPECS/SerialLoops.spec) -Replace '#VERSION#', '$(Version)') | Set-Content -Path ./install/linux/rpm/rpmbuild/SPECS/SerialLoops.spec
+        Copy-Item -Path $(Build.ArtifactStagingDirectory)/publish.tar.gz -Destination $(Build.SourcesDirectory)/install/linux/rpm/rpmbuild/SOURCES/SerialLoops-$(Version).tar.gz
+        docker run -v $(Build.SourcesDirectory)/install/linux/rpm/rpm-scripts:/rpm-scripts -v $(Build.SourcesDirectory)/install/linux/rpm/rpmbuild:/root/rpmbuild fedora:39 /rpm-scripts/rpm-make.sh
+      displayName: Build rpm
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)/publish.tar.gz'
+        ArtifactName: 'Linux-v$(Version)-tar'
+        publishLocation: 'Container'
+      displayName: Publish Linux tar
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.SourceDirectory)/install/linux/rpm/rpmbuild/RPMS/x86_64/SerialLoops-$(Version)-1.fc39.x86_64.rpm'
+        ArtifactName: 'Linux-v$(Version)-rpm'
+        publishLocation: 'Container'
+      displayName: Publish Linux rpm
+    displayName: Package Linux tar & build Linux rpm package
 
 
 - stage: Publish
@@ -256,6 +256,13 @@ stages:
         downloadType: 'single'
         artifactName: 'Linux-v$(Version)-tar'
         downloadPath: '$(Build.ArtifactStagingDirectory)'
+    # - task: DownloadBuildArtifacts@0
+    #   displayName: Download Linux flatpak
+    #   inputs:
+    #     buildType: 'current'
+    #     downloadType: 'single'
+    #     artifactName: 'Linux-v$(Version)-flatpak'
+    #     downloadPath: '$(Build.ArtifactStagingDirectory)'
     - task: DownloadBuildArtifacts@0
       displayName: Download Linux deb
       inputs:
