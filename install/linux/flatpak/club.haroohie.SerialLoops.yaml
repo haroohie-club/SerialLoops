@@ -9,13 +9,20 @@ build-options:
   append-ld-library-path: "/usr/lib/sdk/dotnet8/lib"
   prepend-pkg-config-path: "/usr/lib/sdk/dotnet8/lib/pkgconfig"
 
-command: SerialLoops.csproj
+command: SerialLoops
 
 finish-args:
   - --device=dri
   - --socket=x11
   - --share=ipc
+  - --share=network
+  - --socket=pulseaudio
+  - --filesystem=~/SerialLoops:create
+  - --filesystem=xdg-config:create
   - --env=DOTNET_ROOT=/app/lib/dotnet
+  - --env=DEVKITPRO=/opt/devkitpro
+  - --env=DEVKITARM=${DEVKITPRO}/devkitARM
+  - --env="PATH=${DEVKITPRO}/tools/bin:$PATH"
 
 modules:
   - name: dotnet
@@ -30,9 +37,6 @@ modules:
         url: https://haroohie.nyc3.cdn.digitaloceanspaces.com/bootstrap/serial-loops/dkp.zip
         sha256: 91d9d524d5150ae892de4457c4cbb7eaa5edcb2449a85366def678242b1f60e2
     build-commands:
-      - export DEVKITPRO=/opt/devkitpro
-      - export DEVKITARM=${DEVKITPRO}/devkitARM
-      - export PATH=${DEVKITPRO}/tools/bin:$PATH
       - mkdir -p ${FLATPAK_DEST}/opt
       - cp -r ./* ${FLATPAK_DEST}/opt/
 
@@ -43,6 +47,8 @@ modules:
         url: https://github.com/haroohie-club/SerialLoops.git
         branch: Avalonia
       - ./nuget-sources.json
+      - type: file
+        path: club.haroohie.SerialLoops.appdata.xml
     build-commands:
       - dotnet publish src/SerialLoops/SerialLoops.csproj -c Release -f net8.0 --no-self-contained --source ./nuget-sources
       - mkdir -p ${FLATPAK_DEST}/bin
