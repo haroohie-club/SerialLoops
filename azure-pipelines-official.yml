@@ -105,7 +105,7 @@ stages:
       displayName: Build & Publish Serial Loops
     - task: PublishBuildArtifacts@1
       inputs:
-        PathtoPublish: '$(Build.SourcesDirectory)/src/SerialLoops/bin/Release/net8.0/$(rid)/publish'
+        PathtoPublish: '$(Build.SourcesDirectory)/src/SerialLoops/bin/Release/net8.0/$(rid)/publish/Serial Loops.app'
         ArtifactName: '$(artifactName)'
         publishLocation: 'Container'
       displayName: Publish build artifact
@@ -136,10 +136,10 @@ stages:
       displayName: Install macos-pkg-builder pip package
     - script: |
         cd install/macos/
-        python serial_loops_pkg_builder.py $SLVersion "$SLZip"
+        python serial_loops_pkg_builder.py $SLVersion "$SLApp"
       env:
         SLVersion: $(Version)
-        SLZip: "$(Build.ArtifactStagingDirectory)/$(artifactName)/Serial Loops.app.zip"
+        SLApp: "$(Build.ArtifactStagingDirectory)/$(artifactName)/Serial Loops.app"
       displayName: Build macOS pkg installer
     - task: PublishBuildArtifacts@1
       inputs:
