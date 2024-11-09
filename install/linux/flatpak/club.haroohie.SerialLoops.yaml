@@ -35,7 +35,7 @@ modules:
           - export DEVKITARM=${DEVKITPRO}/devkitARM
           - export PATH=${DEVKITPRO}/tools/bin:$PATH
     build-commands:
-      - cp -r opt/ ${FLATPACK_DEST}/
+      - cp -r SerialLoops/opt/ ${FLATPACK_DEST}/
 
   - name: SerialLoops
     buildsystem: simple
@@ -45,7 +45,7 @@ modules:
         branch: Avalonia
       - ./nuget-sources.json
     build-commands:
-      - dotnet publish SerialLoops/src/SerialLoops/SerialLoops.csproj -c Release -f net8.0 -r linux-x64 --no-self-contained --source ./nuget-sources
+      - dotnet publish SerialLoops/src/SerialLoops/SerialLoops.csproj -c Release -f net8.0 --no-self-contained --source ./nuget-sources
       - mkdir -p ${FLATPACK_DEST}/bin
       - cp -r bin/Release/net8.0/publish/* ${FLATPAK_DEST}/bin
       - install -Dm644 club.haroohie.SerialLoops.appdata.xml ${FLATPACK_DEST}/app/share/appdata/club.haroohie.SerialLoops.appdata.xml

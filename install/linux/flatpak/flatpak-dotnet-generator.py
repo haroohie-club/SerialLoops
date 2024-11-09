@@ -8,9 +8,9 @@ import argparse
 import base64
 import binascii
 import json
+import requests
 import subprocess
 import tempfile
-import urllib.request
 
 
 def main():
@@ -54,9 +54,7 @@ def main():
             filename = '{}.{}.nupkg'.format(name, version)
             url = 'https://api.nuget.org/v3-flatcontainer/{}/{}/{}'.format(name, version,
                                                                            filename)
-            try:
-                urllib.request.urlretrieve(url, "pkg.nupkg")
-            except:
+            if requests.head(url).status_code is not 200:
                 url = 'https://pkgs.dev.azure.com/jonko0493/haroohie-public/_apis/packaging/feeds/haroohie/nuget/packages/{}/versions/{}/content?api-version=7.1-preview.1'.format(name, version)
 
             with path.open() as fp:
