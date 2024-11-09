@@ -34,7 +34,6 @@ printf "[Desktop Entry]\nVersion=%{version}\nName=Serial Loops\nComment=Editor f
 chmod +x %{buildroot}/%{_datadir}/applications/SerialLoops.desktop
 
 %files
-dir %{_libdir}/SerialLoops
 %{_bindir}/SerialLoops
 %{_libdir}/SerialLoops
 %{_datadir}/applications/SerialLoops.desktop
