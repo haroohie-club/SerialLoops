@@ -21,6 +21,7 @@ pkg_obj = Packages(
     },
     pkg_preinstall_script="install-dependencies.sh",
     pkg_script_resources=['devkitpro-pacman-installer.pkg'],
+    pkg_postinstall_script="cleanup-logs.sh",
     pkg_as_distribution=True,
     pkg_version=ver,
     pkg_welcome=welcome_md,

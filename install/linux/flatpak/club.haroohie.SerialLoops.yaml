@@ -9,7 +9,7 @@ build-options:
   append-ld-library-path: "/usr/lib/sdk/dotnet8/lib"
   prepend-pkg-config-path: "/usr/lib/sdk/dotnet8/lib/pkgconfig"
 
-command: SerialLoops
+command: SerialLoops.csproj
 
 finish-args:
   - --device=dri
@@ -23,7 +23,19 @@ modules:
     build-commands:
     - /usr/lib/sdk/dotnet8/bin/install.sh
 
-  - name: devkit
+  - name: devkitARM
+    buildsystem: simple
+    sources:
+      - type: archive
+        url: https://haroohie.nyc3.cdn.digitaloceanspaces.com/bootstrap/serial-loops/dkp.zip
+        sha256: 91D9D524D5150AE892DE4457C4CBB7EAA5EDCB2449A85366DEF678242B1F60E2
+      - type: shell
+        commands:
+          - export DEVKITPRO=/opt/devkitpro
+          - export DEVKITARM=${DEVKITPRO}/devkitARM
+          - export PATH=${DEVKITPRO}/tools/bin:$PATH
+    - build-commands:
+        - cp -r opt/ ${FLATPACK_DEST}/
 
   - name: SerialLoops
     buildsystem: simple
