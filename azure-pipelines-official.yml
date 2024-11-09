@@ -88,15 +88,12 @@ stages:
     steps:
     - checkout: self
       clean: true
-    - script: |
-        mkdir -p $(Agent.BuildDirectory)/Nuget
-        cp $(Build.SourcesDirectory)/NuGet.Config $(Agent.BuildDirectory)/Nuget/NuGet.Config
       displayName: Copy NuGet.Config to Nuget directory
     - task: DotNetCoreCLI@2
       inputs:
-        command: 'restore'
+        command: 'build'
         projects: $(Build.SourcesDirectory)/src/SerialLoops/SerialLoops.csproj
-        restoreArguments: '-r $(rid)'
+        restoreArguments: '-c Release -f net8.0 -r $(rid)'
       displayName: Restore
     - task: DotNetCoreCLI@2
       inputs:
