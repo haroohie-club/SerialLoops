@@ -33,11 +33,11 @@ modules:
   - name: devkitARM
     buildsystem: simple
     sources:
-      - type: dir
-        path: /opt/devkitpro
+      - type: file
+        path: /devkitpro.tar.gz
     build-commands:
       - mkdir -p ${FLATPAK_DEST}/opt/devkitpro
-      - cp -r ./* ${FLATPAK_DEST}/opt/devkitpro
+      - tar xvf devkitpro.tar.gz -C ${FLATPAK_DEST}/opt/devkitpro
 
   - name: SerialLoops
     buildsystem: simple
