@@ -17,10 +17,12 @@ pkg_obj = Packages(
     pkg_file_structure={
         "./Serial Loops.app": "/Applications/Serial Loops.app",
     },
+    pkg_as_distribution=True,
     pkg_version=ver,
     pkg_welcome=welcome_md,
     pkg_readme=readme_md,
     pkg_license=license_md,
+    pkg_title="Serial Loops"
 )
 
 assert pkg_obj.build() is True
