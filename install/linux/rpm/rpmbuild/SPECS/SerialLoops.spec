@@ -26,6 +26,7 @@ dotnet publish src/SerialLoops/SerialLoops.csproj -c Release -f net8.0 -r linux-
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/%{_bindir}
 mkdir -p %{buildroot}/%{_datadir}/applications
+mkdir -p %{buildroot}/%{_libdir}/SerialLoops
 cp -r src/SerialLoops/bin/Release/net8.0/linux-x64/publish/* %{buildroot}/%{_libdir}/SerialLoops/
 chmod 777 %{buildroot}/%{_libdir}/SerialLoops/
 ln -s %{_libdir}/SerialLoops/SerialLoops %{buildroot}/%{_bindir}/SerialLoops

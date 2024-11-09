@@ -240,7 +240,6 @@ stages:
       displayName: Publish Linux rpm
     displayName: Package Linux tar & build Linux rpm package
 
-
 - stage: Publish
   dependsOn: Package
   jobs:
