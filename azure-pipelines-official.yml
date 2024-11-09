@@ -105,7 +105,7 @@ stages:
       displayName: Build & Publish Serial Loops
     - task: PublishBuildArtifacts@1
       inputs:
-        PathtoPublish: '$(Build.SourcesDirectory)/src/SerialLoops/bin/Release/net8.0/$(rid)/publish.zip'
+        PathtoPublish: '$(Build.SourcesDirectory)/src/SerialLoops/bin/Release/net8.0/$(rid)/publish'
         ArtifactName: '$(artifactName)'
         publishLocation: 'Container'
       displayName: Publish build artifact
