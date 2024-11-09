@@ -220,18 +220,18 @@ stages:
         tar -czvf ../publish.tar.gz --transform 's,^\.\/,,' .
         Pop-Location
       displayName: Create tar
-    - pwsh: |
-        Get-ChildItem $(Build.ArtifactStagingDirectory)
-        ((Get-Content -Path ./install/linux/rpm/rpmbuild/SPECS/SerialLoops.spec) -Replace '#VERSION#', '$(Version)') | Set-Content -Path ./install/linux/rpm/rpmbuild/SPECS/SerialLoops.spec
-        Copy-Item -Path $(Build.ArtifactStagingDirectory)/publish.tar.gz -Destination $(Build.SourcesDirectory)/install/linux/rpm/rpmbuild/SOURCES/SerialLoops-$(Version).tar.gz
-        docker run -v $(Build.SourcesDirectory)/install/linux/rpm/rpm-scripts:/rpm-scripts -v $(Build.SourcesDirectory)/install/linux/rpm/rpmbuild:/root/rpmbuild fedora:39 /rpm-scripts/rpm-make.sh
-      displayName: Build rpm
     - task: PublishBuildArtifacts@1
       inputs:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)/publish.tar.gz'
         ArtifactName: 'Linux-v$(Version)-tar'
         publishLocation: 'Container'
       displayName: Publish Linux tar
+    - pwsh: |
+        Get-ChildItem $(Build.ArtifactStagingDirectory)
+        ((Get-Content -Path ./install/linux/rpm/rpmbuild/SPECS/SerialLoops.spec) -Replace '#VERSION#', '$(Version)') | Set-Content -Path ./install/linux/rpm/rpmbuild/SPECS/SerialLoops.spec
+        Copy-Item -Path $(Build.ArtifactStagingDirectory)/publish.tar.gz -Destination $(Build.SourcesDirectory)/install/linux/rpm/rpmbuild/SOURCES/SerialLoops-$(Version).tar.gz
+        docker run -v $(Build.SourcesDirectory)/install/linux/rpm/rpm-scripts:/rpm-scripts -v $(Build.SourcesDirectory)/install/linux/rpm/rpmbuild:/root/rpmbuild fedora:39 /rpm-scripts/rpm-make.sh
+      displayName: Build rpm
     - task: PublishBuildArtifacts@1
       inputs:
         PathtoPublish: '$(Build.SourceDirectory)/install/linux/rpm/rpmbuild/RPMS/x86_64/SerialLoops-$(Version)-1.fc39.x86_64.rpm'
