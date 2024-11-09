@@ -98,7 +98,7 @@ stages:
       inputs:
         command: 'custom'
         custom: 'msbuild'
-        arguments: '$(Build.SourcesDirectory)/src/SerialLoops/SerialLoops.csproj -t:BundleApp -p:Configuration=Release -p:TargetFramework=net8.0 -p:RuntimeIdentifier=$(rid) -p:UseAppHost=true --self-contained -p:DebugType=None -p:DebugSymbols=false -p:PublishSingleFile=true'
+        arguments: '$(Build.SourcesDirectory)/src/SerialLoops/SerialLoops.csproj -t:BundleApp -p:Configuration=Release -p:TargetFramework=net8.0 -p:RuntimeIdentifier=$(rid) -p:UseAppHost=true --p:SelfContained=true -p:DebugType=None -p:DebugSymbols=false -p:PublishSingleFile=true'
       env:
         SLVersion: $(Version)
         SLAssemblyVersion: $(AssemblyVersion)
