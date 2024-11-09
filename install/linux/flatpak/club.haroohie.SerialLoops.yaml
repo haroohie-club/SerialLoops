@@ -39,6 +39,27 @@ modules:
       - mkdir -p ${FLATPAK_DEST}/opt/devkitpro
       - tar xvf devkitpro.tar.gz -C ${FLATPAK_DEST}/opt/devkitpro
 
+  - name: make
+    buildsystem: autotools
+    sources:
+      - type: archive
+        url: https://mirror.team-cymru.com/gnu/make/make-4.4.tar.gz
+        sha256: 581f4d4e872da74b3941c874215898a7d35802f03732bdccee1d4a7979105d18
+    build-commands:
+      - ./configure
+      - make
+      - make install
+
+  - name: OpenAL
+    buildsystem: cmake
+    sources:
+      - type: git
+        url: https://github.com/kcat/openal-soft.git
+    build-commands:
+      - cd build
+      - cmake ..
+      - cmake --build .
+
   - name: SerialLoops
     buildsystem: simple
     sources:
