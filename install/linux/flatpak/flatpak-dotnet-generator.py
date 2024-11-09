@@ -10,6 +10,7 @@ import binascii
 import json
 import subprocess
 import tempfile
+import urllib.request
 
 
 def main():
@@ -22,9 +23,9 @@ def main():
     parser.add_argument('output', help='The output JSON sources file')
     parser.add_argument('project', help='The project file')
     parser.add_argument('--runtime', '-r', help='The target runtime to restore packages for')
-    parser.add_argument('--freedesktop', '-f', help='The target version of the freedesktop sdk to use', 
+    parser.add_argument('--freedesktop', '-f', help='The target version of the freedesktop sdk to use',
                         default=freedesktop_default)
-    parser.add_argument('--dotnet', '-d', help='The target version of dotnet to use', 
+    parser.add_argument('--dotnet', '-d', help='The target version of dotnet to use',
                         default=dotnet_default)
     parser.add_argument('--destdir',
                         help='The directory the generated sources file will save sources to',
@@ -53,6 +54,10 @@ def main():
             filename = '{}.{}.nupkg'.format(name, version)
             url = 'https://api.nuget.org/v3-flatcontainer/{}/{}/{}'.format(name, version,
                                                                            filename)
+            try:
+                urllib.request.urlretrieve(url, "pkg.nupkg")
+            except:
+                url = 'https://pkgs.dev.azure.com/jonko0493/haroohie-public/_apis/packaging/feeds/haroohie/nuget/packages/{}/versions/{}/content?api-version=7.1-preview.1'.format(name, version)
 
             with path.open() as fp:
                 sha512 = binascii.hexlify(base64.b64decode(fp.read())).decode('ascii')
