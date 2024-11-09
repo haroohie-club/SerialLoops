@@ -47,16 +47,15 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
-Name: "dockerdesktop"; Description: "Docker Desktop can be used to compile ASM hacks. It is highly recommended that you install it. Would you like to do so?"; GroupDescription: "Install Docker Desktop?"; Flags: checkedonce
+Name: "devkitarm"; Description: "Serial Loops uses devkitARM to compile various source files. It is mandatory to install this toolkit."; GroupDescription: "Install Other Tools"; Flags: checkedonce
+Name: "dockerdesktop"; Description: "Docker Desktop can be used to compile ASM hacks. It is highly recommended that you install it. Would you like to do so?"; GroupDescription: "Install Other Tools"; Flags: checkedonce
 
 [Files]
 Source: "..\..\publish\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\..\publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "Docker Desktop Installer.exe"; DestDir: {tmp}; Flags: deleteafterinstall
+Source: "devkitProUpdater-3.0.3.exe"; DestDir: {tmp}; Flags: deleteafterinstall; Tasks: devkitarm
+Source: "Docker Desktop Installer.exe"; DestDir: {tmp}; Flags: deleteafterinstall; Tasks: dockerdesktop
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
-
-[Run]
-Filename: "{tmp}\Docker Desktop Installer.exe"; WorkingDir: {tmp}; Tasks: dockerdesktop
 
 [Registry]
 Root: HKA; Subkey: "Software\Classes\{#MyAppAssocExt}\OpenWithProgids"; ValueType: string; ValueName: "{#MyAppAssocKey}"; ValueData: ""; Flags: uninsdeletevalue
@@ -70,5 +69,7 @@ Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
 [Run]
+Filename: "{tmp}\devkitProUpdater-3.0.3.exe"; WorkingDir: {tmp}; Tasks: devkitarm
+Filename: "{tmp}\Docker Desktop Installer.exe"; WorkingDir: {tmp}; Tasks: dockerdesktop
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
