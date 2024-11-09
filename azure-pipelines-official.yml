@@ -90,10 +90,10 @@ stages:
       clean: true
     - task: DotNetCoreCLI@2
       inputs:
-        command: 'build'
-        projects: $(Build.SourcesDirectory)/src/SerialLoops/SerialLoops.csproj
-        arguments: '-c Release -f net8.0 -r $(rid)'
-      displayName: Build (to restore bc restore doesn't work)
+        command: 'custom'
+        custom: 'restore'
+        arguments: '$(Build.SourcesDirectory)/src/SerialLoops/SerialLoops.csproj -r $(rid)'
+      displayName: Restore
     - task: DotNetCoreCLI@2
       inputs:
         command: 'custom'
