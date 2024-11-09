@@ -152,93 +152,93 @@ stages:
       displayName: Publish macOS pkg installer
     displayName: Build macOS pkg
 
-  - job:
-    pool:
-      vmImage: ubuntu-latest
-    steps:
-    - checkout: self
-      clean: true
-    - task: DownloadBuildArtifacts@0
-      inputs:
-        buildType: 'current'
-        downloadType: 'single'
-        artifactName: 'Linux-v$(Version)'
-        downloadPath: '$(Build.ArtifactStagingDirectory)'
-      displayName: Download Linux zip artifact
-    displayName: Build Linux flatpak
+  # - job:
+  #   pool:
+  #     vmImage: ubuntu-latest
+  #   steps:
+  #   - checkout: self
+  #     clean: true
+  #   - task: DownloadBuildArtifacts@0
+  #     inputs:
+  #       buildType: 'current'
+  #       downloadType: 'single'
+  #       artifactName: 'Linux-v$(Version)'
+  #       downloadPath: '$(Build.ArtifactStagingDirectory)'
+  #     displayName: Download Linux zip artifact
+  #   displayName: Build Linux flatpak
 
-  - job:
-    pool:
-      vmImage: ubuntu-latest
-    steps:
-    - checkout: self
-      clean: true
-    - task: DownloadBuildArtifacts@0
-      inputs:
-        buildType: 'current'
-        downloadType: 'single'
-        artifactName: 'Linux-v$(Version)'
-        downloadPath: '$(Build.ArtifactStagingDirectory)'
-      displayName: Download Linux zip artifact
-    - pwsh: |
-        Copy-Item -Path ./install/linux/dpkg-build -Destination ./dpkg-build -Recurse -Exclude ".gitkeep"
-        New-Item -ItemType "directory" -Path ./dpkg-build/SerialLoops/usr -Name bin
-        Push-Location ./dpkg-build/SerialLoops
-        ((Get-Content -Path DEBIAN/control) -replace '#VERSION#', '$(Version)') | Set-Content -Path DEBIAN/control
-        Expand-Archive $(Build.ArtifactStagingDirectory)/Linux-v$(Version)/publish.zip -DestinationPath $(Build.ArtifactStagingDirectory)/publish/
-        Copy-Item -Path $(Build.ArtifactStagingDirectory)/publish/* -Destination ./usr/lib/SerialLoops -Recurse
-        ln -s /usr/lib/SerialLoops/SerialLoops usr/bin/SerialLoops
-        Set-Location ..
-        dpkg-deb --build SerialLoops
-        Pop-Location
-      displayName: Create deb package
-    - task: PublishBuildArtifacts@1
-      inputs:
-        PathtoPublish: '$(Build.SourcesDirectory)/dpkg-build/SerialLoops.deb'
-        ArtifactName: 'Linux-v$(Version)-deb'
-        publishLocation: 'Container'
-      displayName: Publish Linux deb
-    displayName: Build Linux deb package
+  # - job:
+  #   pool:
+  #     vmImage: ubuntu-latest
+  #   steps:
+  #   - checkout: self
+  #     clean: true
+  #   - task: DownloadBuildArtifacts@0
+  #     inputs:
+  #       buildType: 'current'
+  #       downloadType: 'single'
+  #       artifactName: 'Linux-v$(Version)'
+  #       downloadPath: '$(Build.ArtifactStagingDirectory)'
+  #     displayName: Download Linux zip artifact
+  #   - pwsh: |
+  #       Copy-Item -Path ./install/linux/dpkg-build -Destination ./dpkg-build -Recurse -Exclude ".gitkeep"
+  #       New-Item -ItemType "directory" -Path ./dpkg-build/SerialLoops/usr -Name bin
+  #       Push-Location ./dpkg-build/SerialLoops
+  #       ((Get-Content -Path DEBIAN/control) -replace '#VERSION#', '$(Version)') | Set-Content -Path DEBIAN/control
+  #       Expand-Archive $(Build.ArtifactStagingDirectory)/Linux-v$(Version)/publish.zip -DestinationPath $(Build.ArtifactStagingDirectory)/publish/
+  #       Copy-Item -Path $(Build.ArtifactStagingDirectory)/publish/* -Destination ./usr/lib/SerialLoops -Recurse
+  #       ln -s /usr/lib/SerialLoops/SerialLoops usr/bin/SerialLoops
+  #       Set-Location ..
+  #       dpkg-deb --build SerialLoops
+  #       Pop-Location
+  #     displayName: Create deb package
+  #   - task: PublishBuildArtifacts@1
+  #     inputs:
+  #       PathtoPublish: '$(Build.SourcesDirectory)/dpkg-build/SerialLoops.deb'
+  #       ArtifactName: 'Linux-v$(Version)-deb'
+  #       publishLocation: 'Container'
+  #     displayName: Publish Linux deb
+  #   displayName: Build Linux deb package
 
-  - job:
-    pool:
-      vmImage: ubuntu-latest
-    steps:
-    - checkout: self
-      clean: true
-    - task: DownloadBuildArtifacts@0
-      inputs:
-        buildType: 'current'
-        downloadType: 'single'
-        artifactName: 'Linux-v$(Version)'
-        downloadPath: '$(Build.ArtifactStagingDirectory)'
-      displayName: Download Linux zip artifact
-    - pwsh: |
-        Expand-Archive $(Build.ArtifactStagingDirectory)/Linux-v$(Version)/publish.zip -DestinationPath $(Build.ArtifactStagingDirectory)/publish/
-        chmod +x $(Build.ArtifactStagingDirectory)/publish/SerialLoops
-        Push-Location $(Build.ArtifactStagingDirectory)/publish
-        tar -czvf ../publish.tar.gz --transform 's,^\.\/,,' .
-        Pop-Location
-      displayName: Create tar
-    - pwsh: |
-        Get-ChildItem $(Build.ArtifactStagingDirectory)
-        ((Get-Content -Path ./install/linux/rpm/rpmbuild/SPECS/SerialLoops.spec) -Replace '#VERSION#', '$(Version)') | Set-Content -Path ./install/linux/rpm/rpmbuild/SPECS/SerialLoops.spec
-        Copy-Item -Path $(Build.ArtifactStagingDirectory)/publish.tar.gz -Destination $(Build.SourcesDirectory)/install/linux/rpm/rpmbuild/SOURCES/SerialLoops-$(Version).tar.gz
-        docker run -v $(Build.SourcesDirectory)/install/linux/rpm/rpm-scripts:/rpm-scripts -v $(Build.SourcesDirectory)/install/linux/rpm/rpmbuild:/root/rpmbuild fedora:39 /rpm-scripts/rpm-make.sh
-      displayName: Build rpm
-    - task: PublishBuildArtifacts@1
-      inputs:
-        PathtoPublish: '$(Build.ArtifactStagingDirectory)/publish.tar.gz'
-        ArtifactName: 'Linux-v$(Version)-tar'
-        publishLocation: 'Container'
-      displayName: Publish Linux tar
-    - task: PublishBuildArtifacts@1
-      inputs:
-        PathtoPublish: '$(Build.SourceDirectory)/install/linux/rpm/rpmbuild/RPMS/x86_64/SerialLoops-$(Version)-1.fc39.x86_64.rpm'
-        ArtifactName: 'Linux-v$(Version)-rpm'
-        publishLocation: 'Container'
-      displayName: Publish Linux rpm
-    displayName: Package Linux tar & build Linux rpm package
+  # - job:
+  #   pool:
+  #     vmImage: ubuntu-latest
+  #   steps:
+  #   - checkout: self
+  #     clean: true
+  #   - task: DownloadBuildArtifacts@0
+  #     inputs:
+  #       buildType: 'current'
+  #       downloadType: 'single'
+  #       artifactName: 'Linux-v$(Version)'
+  #       downloadPath: '$(Build.ArtifactStagingDirectory)'
+  #     displayName: Download Linux zip artifact
+  #   - pwsh: |
+  #       Expand-Archive $(Build.ArtifactStagingDirectory)/Linux-v$(Version)/publish.zip -DestinationPath $(Build.ArtifactStagingDirectory)/publish/
+  #       chmod +x $(Build.ArtifactStagingDirectory)/publish/SerialLoops
+  #       Push-Location $(Build.ArtifactStagingDirectory)/publish
+  #       tar -czvf ../publish.tar.gz --transform 's,^\.\/,,' .
+  #       Pop-Location
+  #     displayName: Create tar
+  #   - pwsh: |
+  #       Get-ChildItem $(Build.ArtifactStagingDirectory)
+  #       ((Get-Content -Path ./install/linux/rpm/rpmbuild/SPECS/SerialLoops.spec) -Replace '#VERSION#', '$(Version)') | Set-Content -Path ./install/linux/rpm/rpmbuild/SPECS/SerialLoops.spec
+  #       Copy-Item -Path $(Build.ArtifactStagingDirectory)/publish.tar.gz -Destination $(Build.SourcesDirectory)/install/linux/rpm/rpmbuild/SOURCES/SerialLoops-$(Version).tar.gz
+  #       docker run -v $(Build.SourcesDirectory)/install/linux/rpm/rpm-scripts:/rpm-scripts -v $(Build.SourcesDirectory)/install/linux/rpm/rpmbuild:/root/rpmbuild fedora:39 /rpm-scripts/rpm-make.sh
+  #     displayName: Build rpm
+  #   - task: PublishBuildArtifacts@1
+  #     inputs:
+  #       PathtoPublish: '$(Build.ArtifactStagingDirectory)/publish.tar.gz'
+  #       ArtifactName: 'Linux-v$(Version)-tar'
+  #       publishLocation: 'Container'
+  #     displayName: Publish Linux tar
+  #   - task: PublishBuildArtifacts@1
+  #     inputs:
+  #       PathtoPublish: '$(Build.SourceDirectory)/install/linux/rpm/rpmbuild/RPMS/x86_64/SerialLoops-$(Version)-1.fc39.x86_64.rpm'
+  #       ArtifactName: 'Linux-v$(Version)-rpm'
+  #       publishLocation: 'Container'
+  #     displayName: Publish Linux rpm
+  #   displayName: Package Linux tar & build Linux rpm package
 
 
 - stage: Publish
