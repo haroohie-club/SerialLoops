@@ -29,13 +29,12 @@ modules:
       - type: archive
         url: https://haroohie.nyc3.cdn.digitaloceanspaces.com/bootstrap/serial-loops/dkp.zip
         sha256: 91d9d524d5150ae892de4457c4cbb7eaa5edcb2449a85366def678242b1f60e2
-      - type: shell
-        commands:
-          - export DEVKITPRO=/opt/devkitpro
-          - export DEVKITARM=${DEVKITPRO}/devkitARM
-          - export PATH=${DEVKITPRO}/tools/bin:$PATH
     build-commands:
-      - cp -r SerialLoops/opt/ ${FLATPACK_DEST}/
+      - export DEVKITPRO=/opt/devkitpro
+      - export DEVKITARM=${DEVKITPRO}/devkitARM
+      - export PATH=${DEVKITPRO}/tools/bin:$PATH
+      - mkdir -p ${FLATPAK_DEST}/opt
+      - cp -r ./* ${FLATPAK_DEST}/opt/
 
   - name: SerialLoops
     buildsystem: simple
@@ -45,7 +44,8 @@ modules:
         branch: Avalonia
       - ./nuget-sources.json
     build-commands:
-      - dotnet publish SerialLoops/src/SerialLoops/SerialLoops.csproj -c Release -f net8.0 --no-self-contained --source ./nuget-sources
-      - mkdir -p ${FLATPACK_DEST}/bin
-      - cp -r bin/Release/net8.0/publish/* ${FLATPAK_DEST}/bin
-      - install -Dm644 club.haroohie.SerialLoops.appdata.xml ${FLATPACK_DEST}/app/share/appdata/club.haroohie.SerialLoops.appdata.xml
+      - dotnet publish src/SerialLoops/SerialLoops.csproj -c Release -f net8.0 --no-self-contained --source ./nuget-sources
+      - mkdir -p ${FLATPAK_DEST}/bin
+      - cp -r src/SerialLoops/bin/Release/net8.0/publish/* ${FLATPAK_DEST}/bin
+      - mkdir -p ${FLATPAK_DEST}/app/share/appdata/
+      - install -Dm644 club.haroohie.SerialLoops.appdata.xml ${FLATPAK_DEST}/app/share/appdata/club.haroohie.SerialLoops.appdata.xml
