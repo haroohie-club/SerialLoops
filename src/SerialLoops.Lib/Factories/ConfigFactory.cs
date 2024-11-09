@@ -61,15 +61,24 @@ namespace SerialLoops.Lib.Factories
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
                     devkitArmDir = Path.Combine("C:", "devkitPro", "devkitARM");
+                    if (!Directory.Exists(devkitArmDir))
+                    {
+                        devkitArmDir = string.Empty;
+                    }
                 }
                 else
                 {
                     devkitArmDir = Path.Combine("/opt", "devkitpro", "devkitARM");
+                    if (!Directory.Exists(devkitArmDir))
+                    {
+                        // flatpak version
+                        devkitArmDir = Path.Combine("/app", "opt", "devkitpro", "devkitARM");
+                        if (!Directory.Exists(devkitArmDir))
+                        {
+                            devkitArmDir = string.Empty;
+                        }
+                    }
                 }
-            }
-            if (!Directory.Exists(devkitArmDir))
-            {
-                devkitArmDir = "";
             }
 
             // TODO: Probably make a way of defining "presets" of common emulator install paths on different platforms.
