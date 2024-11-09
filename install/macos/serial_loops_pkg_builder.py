@@ -16,7 +16,7 @@ pkg_obj = Packages(
     pkg_output="SerialLoops.pkg",
     pkg_bundle_id="club.haroohie.serialloopsinstaller",
     pkg_file_structure={
-        app: "/Applications/SerialLoops.app",
+        app: "/Applications/Serial Loops.app",
     },
     pkg_version=ver,
     pkg_welcome=welcome_md,

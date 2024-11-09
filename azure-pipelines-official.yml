@@ -136,10 +136,11 @@ stages:
       displayName: Install macos-pkg-builder pip package
     - script: |
         cd install/macos/
-        python serial_loops_pkg_builder.py $SLVersion "$SLApp"
+        cp -r $SLApp/* "./Serial Loops.app/"
+        python serial_loops_pkg_builder.py $SLVersion "./Serial Loops.app"
       env:
         SLVersion: $(Version)
-        SLApp: "$(Build.ArtifactStagingDirectory)/$(artifactName)/Serial Loops.app"
+        SLApp: "$(Build.ArtifactStagingDirectory)/$(artifactName)"
       displayName: Build macOS pkg installer
     - task: PublishBuildArtifacts@1
       inputs:
