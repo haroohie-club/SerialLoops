@@ -28,7 +28,7 @@ modules:
     sources:
       - type: archive
         url: https://haroohie.nyc3.cdn.digitaloceanspaces.com/bootstrap/serial-loops/dkp.zip
-        sha256: 91D9D524D5150AE892DE4457C4CBB7EAA5EDCB2449A85366DEF678242B1F60E2
+        sha256: 91d9d524d5150ae892de4457c4cbb7eaa5edcb2449a85366def678242b1f60e2
       - type: shell
         commands:
           - export DEVKITPRO=/opt/devkitpro

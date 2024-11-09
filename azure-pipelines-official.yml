@@ -155,11 +155,12 @@ stages:
   - job:
     pool:
       vmImage: ubuntu-latest
+    container: freedesktopsdk/flatpak
     steps:
     - checkout: self
       clean: true
-    - script: apt install -y flatpak-builder
-      displayName: Install flatpak-builder
+    - script: flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+      displayName: Add flathub remote
     - script: |
         cp -r install/linux/flatpak/* $(Agent.BuildDirectory)/
         cd $(Agent.BuildDirectory)
