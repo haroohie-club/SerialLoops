@@ -217,7 +217,7 @@ stages:
         Expand-Archive $(Build.ArtifactStagingDirectory)/Linux-v$(Version)/publish.zip -DestinationPath $(Build.ArtifactStagingDirectory)/publish/
         chmod +x $(Build.ArtifactStagingDirectory)/publish/SerialLoops
         Push-Location $(Build.ArtifactStagingDirectory)/publish
-        tar -czvf ../publish.tar.gz --transform 's,^\.\/,,' .
+        tar -czvf ../publish.tar.gz --transform 's,^\.\/,SerialLoops-$(Version)/,' .
         Pop-Location
       displayName: Create tar
     - task: PublishBuildArtifacts@1
