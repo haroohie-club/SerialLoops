@@ -42,9 +42,10 @@ modules:
     sources:
       - type: git
         url: https://github.com/haroohie-club/SerialLoops.git
+        branch: Avalonia
       - ./nuget-sources.json
     build-commands:
-      - dotnet publish src/SerialLoops/SerialLoops.csproj -c Release --no-self-contained --source ./nuget-sources
+      - dotnet publish src/SerialLoops/SerialLoops.csproj -c Release -f net8.0 -r linux-x64 --no-self-contained --source ./nuget-sources
       - mkdir -p ${FLATPACK_DEST}/bin
       - cp -r bin/Release/net8.0/publish/* ${FLATPAK_DEST}/bin
       - install -Dm644 club.haroohie.SerialLoops.appdata.xml ${FLATPACK_DEST}/app/share/appdata/club.haroohie.SerialLoops.appdata.xml
