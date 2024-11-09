@@ -56,7 +56,6 @@ stages:
     steps:
     - checkout: self
       clean: true
-
     - task: DotNetCoreCLI@2
       inputs:
         command: 'publish'
@@ -89,12 +88,12 @@ stages:
     steps:
     - checkout: self
       clean: true
-
+    - script: cp $(Build.SourcesDirectory)/NuGet.Config $(Agent.BuildDirectory)/Nuget/NuGet.Config
+      displayName: Copy NuGet.Config to Nuget directory
     - task: DotNetCoreCLI@2
       inputs:
         command: 'restore'
         projects: $(Build.SourcesDirectory)/src/SerialLoops/SerialLoops.csproj
-        nugetConfigPath: '$(Build.SourcesDirectory)/NuGet.Config'
         restoreArguments: '-r $(rid)'
       displayName: Restore
     - task: DotNetCoreCLI@2
