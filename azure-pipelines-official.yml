@@ -161,7 +161,6 @@ stages:
       clean: true
     - script: |
         flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-        pip install requests
       displayName: Add flathub remote
     - script: |
         cp -r install/linux/flatpak/* $(Agent.BuildDirectory)/
@@ -299,13 +298,13 @@ stages:
         downloadType: 'single'
         artifactName: 'Linux-v$(Version)-tar'
         downloadPath: '$(Build.ArtifactStagingDirectory)'
-    # - task: DownloadBuildArtifacts@0
-    #   displayName: Download Linux flatpak
-    #   inputs:
-    #     buildType: 'current'
-    #     downloadType: 'single'
-    #     artifactName: 'Linux-v$(Version)-flatpak'
-    #     downloadPath: '$(Build.ArtifactStagingDirectory)'
+    - task: DownloadBuildArtifacts@0
+      displayName: Download Linux flatpak
+      inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: 'Linux-v$(Version)-flatpak'
+        downloadPath: '$(Build.ArtifactStagingDirectory)'
     - task: DownloadBuildArtifacts@0
       displayName: Download Linux deb
       inputs:
@@ -350,6 +349,7 @@ stages:
         downloadPath: '$(Build.ArtifactStagingDirectory)'
     - pwsh: |
         Move-Item -Path $(Build.ArtifactStagingDirectory)/Linux-v$(Version)-tar/publish.tar.gz -Destination $(Build.ArtifactStagingDirectory)/SerialLoops-linux-x64-v$(Version).tar.gz
+        Move-Item -Path $(Build.ArtifactStagingDirectory)/Linux-v$(Version)-flatpak/SerialLoops.flatpak -Destination $(Build.ArtifactStagingDirectory)/SerialLoops-linux-x64-v$(Version).flatpak
         Move-Item -Path $(Build.ArtifactStagingDirectory)/Linux-v$(Version)-deb/SerialLoops.deb -Destination $(Build.ArtifactStagingDirectory)/SerialLoops-$(Version)_amd64.deb
         Move-Item -Path $(Build.ArtifactStagingDirectory)/Linux-v$(Version)-rpm/SerialLoops-$(Version)-1.fc39.x86_64.rpm -Destination $(Build.ArtifactStagingDirectory)/SerialLoops-$(Version)-1.fc39.x86_64.rpm
         Move-Item -Path "$(Build.ArtifactStagingDirectory)/macOS-x64-v$(Version)-installer/SerialLoops.pkg" -Destination $(Build.ArtifactStagingDirectory)/SerialLoops-macOS-x64-v$(Version).pkg
