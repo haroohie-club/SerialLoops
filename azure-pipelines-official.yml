@@ -94,7 +94,7 @@ stages:
       inputs:
         command: 'restore'
         projects: $(Build.SourcesDirectory)/src/SerialLoops/SerialLoops.csproj
-        nugetConfigPath: '$(Build.SourcesDirectory)/NuGet.config'
+        nugetConfigPath: '$(Build.SourcesDirectory)/NuGet.Config'
         restoreArguments: '-r $(rid)'
       displayName: Restore
     - task: DotNetCoreCLI@2
