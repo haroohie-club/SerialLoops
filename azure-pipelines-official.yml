@@ -234,11 +234,41 @@ stages:
       displayName: Build rpm
     - task: PublishBuildArtifacts@1
       inputs:
-        PathtoPublish: '$(Build.SourceDirectory)/install/linux/rpm/rpmbuild/RPMS/x86_64/SerialLoops-$(Version)-1.fc39.x86_64.rpm'
+        PathtoPublish: '$(Build.SourcesDirectory)/install/linux/rpm/rpmbuild/RPMS/x86_64/SerialLoops-$(Version)-1.fc39.x86_64.rpm'
         ArtifactName: 'Linux-v$(Version)-rpm'
         publishLocation: 'Container'
       displayName: Publish Linux rpm
     displayName: Package Linux tar & build Linux rpm package
+
+  - job:
+    pool:
+      vmImage: windows-latest
+    steps:
+    - checkout: self
+      clean: true
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: 'Windows-v$(Version)'
+        downloadPath: '$(Build.ArtifactStagingDirectory)'
+      displayName: Download Windows zip artifact
+    - pwsh: Expand-Archive -Path $(Build.ArtifactStagingDirectory)\Windows-v$(Version)\publish.zip -Destination $(Build.SourcesDirectory)\publish
+      displayName: Unpack published artifacts
+    - pwsh: |
+        Starts-BitsTransfer -Source https://haroohie.nyc3.cdn.digitaloceanspaces.com/bootstrap/serial-loops/iscc.zip -Destination $(Build.SourcesDirectory)\install\windows\iscc.zip
+        Expand-Archive -Path $(Build.SourcesDirectory)\install\windows\iscc.zip -DestinationPath $(Build.SourcesDirectory)\install\windows\
+        Starts-BitsTransfer -Source https://desktop.docker.com/win/main/amd64/Docker%20Desktop%20Installer.exe -Destination "$(Build.SourcesDirectory)\install\windows\Docker Desktop Installer.exe"
+      displayName: Download ISCC and Docker Desktop Installer
+    - pwsh: $(Build.SourcesDirectory)\install\windows\iscc\ISCC.exe .\install\windows\serial-loops.iss
+      displayName: Compile Windows installer
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.SourcesDirectory)/install/windows/Output/SerialLoopsInstaller.exe'
+        ArtifactName: 'Windows-v$(Version)-installer'
+        publishLocation: 'Container'
+      displayName: Publish Windows installer
+    displayName: Build Windows installer
 
 - stage: Publish
   dependsOn: Package
@@ -297,6 +327,13 @@ stages:
         downloadType: 'single'
         artifactName: 'Windows-v$(Version)'
         downloadPath: '$(Build.ArtifactStagingDirectory)'
+    - task: DownloadBuildArtifacts@0
+      displayName: Download Windows installer
+      inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: 'Windows-v$(Version)-installer'
+        downloadPath: '$(Build.ArtifactStagingDirectory)'
     - pwsh: |
         Move-Item -Path $(Build.ArtifactStagingDirectory)/Linux-v$(Version)-tar/publish.tar.gz -Destination $(Build.ArtifactStagingDirectory)/SerialLoops-linux-x64-v$(Version).tar.gz
         Move-Item -Path $(Build.ArtifactStagingDirectory)/Linux-v$(Version)-deb/SerialLoops.deb -Destination $(Build.ArtifactStagingDirectory)/SerialLoops-$(Version)_amd64.deb
@@ -304,6 +341,7 @@ stages:
         Move-Item -Path "$(Build.ArtifactStagingDirectory)/macOS-x64-v$(Version)/SerialLoops.pkg" -Destination $(Build.ArtifactStagingDirectory)/SerialLoops-macOS-x64-v$(Version).pkg
         Move-Item -Path "$(Build.ArtifactStagingDirectory)/macOS-arm-v$(Version)/SerialLoops.pkg" -Destination $(Build.ArtifactStagingDirectory)/SerialLoops-macOS-arm-v$(Version).pkg
         Move-Item -Path $(Build.ArtifactStagingDirectory)/Windows-v$(Version)/publish.zip -Destination $(Build.ArtifactStagingDirectory)/SerialLoops-windows-x64-v$(Version).zip
+        Move-Item -Path $(Build.ArtifactStagingDirectory)/Windows-v$(Version)-installer/SerialLoopsInstaller.exe -Destination $(Build.ArtifactStagingDirectory)/SerialLoops-windows-x64-v$(Version).exe
       displayName: Move and rename artifacts
     # - task: GitHubRelease@1
     #   displayName: 'Create GitHub Pre-Release'
