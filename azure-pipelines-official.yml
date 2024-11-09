@@ -155,7 +155,7 @@ stages:
   - job:
     pool:
       vmImage: ubuntu-latest
-    container: freedesktopsdk/flatpak:latest
+    container: freedesktopsdk/flatpak:24.08-x86_64
     steps:
     - checkout: self
       clean: true
@@ -167,6 +167,14 @@ stages:
         flatpak-builder build-dir --user --install-deps-from=flathub --download-only club.haroohie.SerialLoops.yaml
         python flatpak-dotnet-generator.py --dotnet 8 --freedesktop 23.08 nuget-sources.json SerialLoops/src/SerialLoops/SerialLoops.csproj
         flatpak-builder build-dir --user --force-clean --install --repo=repo club.haroohie.SerialLoops.yaml
+        flatpak build-bundle ./repo SerialLoops.flatpak club.haroohie.SerialLoops
+      displayName: Build flatpak
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Agent.BuildDirectory)/SerialLoops.flatpak'
+        ArtifactName: 'Linux-v$(Version)-flatpak'
+        publishLocation: 'Container'
+      displayName: Publish Linux flatpak
     displayName: Build Linux flatpak
 
   - job:
