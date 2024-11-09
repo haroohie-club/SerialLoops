@@ -47,8 +47,8 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
-Name: "devkitarm"; Description: "Serial Loops uses devkitARM to compile various source files. It is mandatory to install this toolkit."; GroupDescription: "Install Other Tools"; Flags: checkedonce
-Name: "dockerdesktop"; Description: "Docker Desktop can be used to compile ASM hacks. It is highly recommended that you install it. Would you like to do so?"; GroupDescription: "Install Other Tools"; Flags: checkedonce
+Name: "devkitarm"; Description: "Install devkitARM"; GroupDescription: "Install Other Tools"; Flags: checkedonce
+Name: "dockerdesktop"; Description: "Install Docker Desktop"; GroupDescription: "Install Other Tools"; Flags: checkedonce
 
 [Files]
 Source: "..\..\publish\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
