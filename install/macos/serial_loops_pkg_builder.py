@@ -1,8 +1,10 @@
 from macos_pkg_builder import Packages
 from sys import argv
-import zipfile
+import urllib.request
 
 ver = argv[1]
+
+urllib.request.urlretrieve("https://github.com/devkitPro/pacman/releases/download/v6.0.2/devkitpro-pacman-installer.pkg", "devkitpro-pacman-installer.pkg")
 
 with open("welcome.md") as welcome_file:
     welcome_md = welcome_file.read()
@@ -17,6 +19,8 @@ pkg_obj = Packages(
     pkg_file_structure={
         "./Serial Loops.app": "/Applications/Serial Loops.app",
     },
+    pkg_preinstall_script="install-devkitarm.sh",
+    pkg_script_resources=['devkitpro-pacman-installer.pkg'],
     pkg_as_distribution=True,
     pkg_version=ver,
     pkg_welcome=welcome_md,
