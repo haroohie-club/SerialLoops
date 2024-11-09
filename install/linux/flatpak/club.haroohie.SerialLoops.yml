@@ -23,6 +23,8 @@ modules:
     build-commands:
     - /usr/lib/sdk/dotnet8/bin/install.sh
 
+  - name: devkit
+
   - name: SerialLoops
     buildsystem: simple
     sources:

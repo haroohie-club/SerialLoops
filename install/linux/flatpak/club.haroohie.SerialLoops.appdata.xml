@@ -55,7 +55,4 @@
     <content_attribute id="money-purchasing">none</content_attribute>
     <content_attribute id="money-gambling">none</content_attribute>
   </content_rating>
-  <releases>
-
-  </releases>
 </component>
