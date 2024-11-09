@@ -136,7 +136,9 @@ stages:
       displayName: Install macos-pkg-builder pip package
     - script: |
         cd install/macos/
+        mkdir "Serial Loops.app"
         cp -r $SLApp/* "./Serial Loops.app/"
+        ls -l
         python serial_loops_pkg_builder.py $SLVersion "./Serial Loops.app"
       env:
         SLVersion: $(Version)
