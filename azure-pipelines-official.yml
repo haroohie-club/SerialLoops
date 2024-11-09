@@ -88,7 +88,6 @@ stages:
     steps:
     - checkout: self
       clean: true
-      displayName: Copy NuGet.Config to Nuget directory
     - task: DotNetCoreCLI@2
       inputs:
         command: 'build'
@@ -97,9 +96,9 @@ stages:
       displayName: Build (to restore bc restore doesn't work)
     - task: DotNetCoreCLI@2
       inputs:
-        command: 'msbuild'
-        projects: $(Build.SourcesDirectory)/src/SerialLoops/SerialLoops.csproj
-        arguments: '-t:BundleApp -p:Configuration=Release -p:TargetFramework=net8.0 -p:RuntimeIdentifier=$(rid) -p:UseAppHost=true --self-contained -p:DebugType=None -p:DebugSymbols=false -p:PublishSingleFile=true'
+        command: 'custom'
+        custom: 'msbuild'
+        arguments: '$(Build.SourcesDirectory)/src/SerialLoops/SerialLoops.csproj -t:BundleApp -p:Configuration=Release -p:TargetFramework=net8.0 -p:RuntimeIdentifier=$(rid) -p:UseAppHost=true --self-contained -p:DebugType=None -p:DebugSymbols=false -p:PublishSingleFile=true'
       env:
         SLVersion: $(Version)
         SLAssemblyVersion: $(AssemblyVersion)
