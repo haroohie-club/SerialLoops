@@ -94,9 +94,8 @@ stages:
       inputs:
         command: 'restore'
         projects: $(Build.SourcesDirectory)/src/SerialLoops/SerialLoops.csproj
-        restoreArguments: '-r $(rid)'
         nugetConfigPath: '$(Build.SourcesDirectory)/NuGet.config'
-        publishWebProjects: false
+        restoreArguments: '-r $(rid)'
       displayName: Restore
     - task: DotNetCoreCLI@2
       inputs:
