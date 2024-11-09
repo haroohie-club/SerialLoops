@@ -19,7 +19,7 @@ pkg_obj = Packages(
     pkg_file_structure={
         "./Serial Loops.app": "/Applications/Serial Loops.app",
     },
-    pkg_preinstall_script="install-devkitarm.sh",
+    pkg_preinstall_script="install-dependencies.sh",
     pkg_script_resources=['devkitpro-pacman-installer.pkg'],
     pkg_as_distribution=True,
     pkg_version=ver,
