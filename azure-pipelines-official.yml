@@ -255,7 +255,7 @@ stages:
       displayName: Download Windows zip artifact
     - pwsh: Expand-Archive -Path $(Build.ArtifactStagingDirectory)\Windows-v$(Version)\publish.zip -Destination $(Build.SourcesDirectory)\publish
       displayName: Unpack published artifacts
-    - pwsh: |
+    - powershell: |
         ((Get-Content -Path $(Build.SourcesDirectory)\install\windows\serial-loops.iss) -replace '#VERSION#', '$(Version)') | Set-Content -Path $(Build.SourcesDirectory)\install\windows\serial-loops.iss
         Starts-BitsTransfer -Source https://haroohie.nyc3.cdn.digitaloceanspaces.com/bootstrap/serial-loops/iscc.zip -Destination $(Build.SourcesDirectory)\install\windows\iscc.zip
         Expand-Archive -Path $(Build.SourcesDirectory)\install\windows\iscc.zip -DestinationPath $(Build.SourcesDirectory)\install\windows\
