@@ -161,11 +161,11 @@ stages:
     - script: apt install -y flatpak-builder
       displayName: Install flatpak-builder
     - script: |
-        cp -r install/linux/flatpak $(Agent.Work)
-        cd install/linux/flatpak
-        flatpak-builder build-dir --user --instal-deps-from=flathub --download-only club.haroohie.SerialLoops.yaml
+        cp -r install/linux/flatpak/* $(Agent.BuildDirectory)/
+        cd $(Agent.BuildDirectory)
+        flatpak-builder build-dir --user --install-deps-from=flathub --download-only club.haroohie.SerialLoops.yaml
         python flatpak-dotnet-generator.py --dotnet 8 --freedesktop 23.08 nuget-sources.json SerialLoops/src/SerialLoops/SerialLoops.csproj
-        flatpak-builder build-dir --user --force-clean --install --repo=repo
+        flatpak-builder build-dir --user --force-clean --install --repo=repo club.haroohie.SerialLoops.yaml
     displayName: Build Linux flatpak
 
   - job:

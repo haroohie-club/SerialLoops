@@ -34,8 +34,8 @@ modules:
           - export DEVKITPRO=/opt/devkitpro
           - export DEVKITARM=${DEVKITPRO}/devkitARM
           - export PATH=${DEVKITPRO}/tools/bin:$PATH
-    - build-commands:
-        - cp -r opt/ ${FLATPACK_DEST}/
+    build-commands:
+      - cp -r opt/ ${FLATPACK_DEST}/
 
   - name: SerialLoops
     buildsystem: simple
