@@ -35,43 +35,43 @@ variables:
 stages:
 - stage: Build
   jobs:
-  - job:
-    strategy:
-      matrix:
-        Linux:
-          imageName: 'ubuntu-latest'
-          artifactName: 'Linux-v$(Version)'
-          framework: 'net8.0'
-          rid: 'linux-x64'
-          artifactFile: 'publish.zip'
-        Windows:
-          imageName: 'windows-latest'
-          artifactName: 'Windows-v$(Version)'
-          framework: 'net8.0-windows'
-          rid: 'win-x64'
-          artifactFile: 'publish.zip'
-    displayName: Build & Publish
-    pool:
-      vmImage: $(imageName)
-    steps:
-    - checkout: self
-      clean: true
-    - task: DotNetCoreCLI@2
-      inputs:
-        command: 'publish'
-        projects: $(Build.SourcesDirectory)/src/SerialLoops/SerialLoops.csproj
-        arguments: '-c Release -f $(framework) -r $(rid) --self-contained /p:DebugType=None /p:DebugSymbols=false /p:PublishSingleFile=true'
-        publishWebProjects: false
-      env:
-        SLVersion: $(Version)
-        SLAssemblyVersion: $(AssemblyVersion)
-      displayName: Build & Publish Serial Loops
-    - task: PublishBuildArtifacts@1
-      inputs:
-        PathtoPublish: '$(Build.SourcesDirectory)/src/SerialLoops/bin/Release/$(framework)/$(rid)/$(artifactFile)'
-        ArtifactName: '$(artifactName)'
-        publishLocation: 'Container'
-      displayName: Publish build artifact
+  # - job:
+  #   strategy:
+  #     matrix:
+  #       Linux:
+  #         imageName: 'ubuntu-latest'
+  #         artifactName: 'Linux-v$(Version)'
+  #         framework: 'net8.0'
+  #         rid: 'linux-x64'
+  #         artifactFile: 'publish.zip'
+  #       Windows:
+  #         imageName: 'windows-latest'
+  #         artifactName: 'Windows-v$(Version)'
+  #         framework: 'net8.0-windows'
+  #         rid: 'win-x64'
+  #         artifactFile: 'publish.zip'
+  #   displayName: Build & Publish
+  #   pool:
+  #     vmImage: $(imageName)
+  #   steps:
+  #   - checkout: self
+  #     clean: true
+  #   - task: DotNetCoreCLI@2
+  #     inputs:
+  #       command: 'publish'
+  #       projects: $(Build.SourcesDirectory)/src/SerialLoops/SerialLoops.csproj
+  #       arguments: '-c Release -f $(framework) -r $(rid) --self-contained /p:DebugType=None /p:DebugSymbols=false /p:PublishSingleFile=true'
+  #       publishWebProjects: false
+  #     env:
+  #       SLVersion: $(Version)
+  #       SLAssemblyVersion: $(AssemblyVersion)
+  #     displayName: Build & Publish Serial Loops
+  #   - task: PublishBuildArtifacts@1
+  #     inputs:
+  #       PathtoPublish: '$(Build.SourcesDirectory)/src/SerialLoops/bin/Release/$(framework)/$(rid)/$(artifactFile)'
+  #       ArtifactName: '$(artifactName)'
+  #       publishLocation: 'Container'
+  #     displayName: Publish build artifact
 
   - job:
     strategy:
@@ -105,7 +105,7 @@ stages:
       displayName: Build & Publish Serial Loops
     - task: PublishBuildArtifacts@1
       inputs:
-        PathtoPublish: '$(Build.SourcesDirectory)/src/SerialLoops/bin/Release/net8.0/$(rid)/Serial Loops.app'
+        PathtoPublish: '$(Build.SourcesDirectory)/src/SerialLoops/bin/Release/net8.0/$(rid)/publish.zip'
         ArtifactName: '$(artifactName)'
         publishLocation: 'Container'
       displayName: Publish build artifact
