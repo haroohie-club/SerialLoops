@@ -105,7 +105,7 @@ jobs:
           ((Get-Content -Path usr/share/applications/SerialLoops.desktop) -replace '#VERSION#', "$env:SLVersion") | Set-Content -Path usr/share/applications/SerialLoops.desktop
           Copy-Item -Path ../../src/SerialLoops/bin/Release/net8.0/linux-x64/publish/* -Destination ./usr/lib/SerialLoops -Recurse
           ln -s /usr/lib/SerialLoops/SerialLoops usr/bin/SerialLoops
-          Copy-Item -Path ../../src/SerialLoops/Assets/Icons/AppIcon.png usr/share/applications/SerialLoops.png
+          Copy-Item -Path ../../src/SerialLoops/Assets/Icons/AppIcon.png usr/lib/SerialLoops/SerialLoops.png
           Set-Location ..
           dpkg-deb --build SerialLoops
           Pop-Location
