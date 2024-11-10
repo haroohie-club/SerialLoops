@@ -90,7 +90,7 @@ jobs:
           Copy-Item -Path ./install/linux/dpkg-build -Destination ./dpkg-build -Recurse -Exclude ".gitkeep"
           New-Item -ItemType "directory" -Path ./dpkg-build/SerialLoops/usr -Name bin
           Push-Location ./dpkg-build/SerialLoops
-          ((Get-Content -Path DEBIAN/control) -replace '#VERSION#', '$env:SLVersion') | Set-Content -Path DEBIAN/control
+          ((Get-Content -Path DEBIAN/control) -replace '#VERSION#', "$env:SLVersion") | Set-Content -Path DEBIAN/control
           Copy-Item -Path ../../src/SerialLoops/bin/Release/net8.0/linux-x64/publish/* -Destination ./usr/lib/SerialLoops -Recurse
           ln -s /usr/lib/SerialLoops/SerialLoops usr/bin/SerialLoops
           Set-Location ..
