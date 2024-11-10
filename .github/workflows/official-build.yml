@@ -112,12 +112,13 @@ jobs:
         uses: actions/checkout@v4
       - name: Create RPM
         run: |
-          tar -czvf ../source.tar.gz --transform 's,^\.\/,SerialLoops-$SLVersion/,' .
-          cp ../source.tar.gz install/linux/rpm/rpmbuild/SOURCES/SerialLoops-$SLVersion.tar.gz
-          sed -i "s/#VERSION#/$SLVersion/g" ./install/linux/rpm/rpmbuild/SPECS/SerialLoops.spec
+          cp -r install/linux/rpm/rpmbuild ~/rpmbuild
+          tar -czvf ~/rpmbuild/SOURCES/SerialLoops-$SLVersion.tar.gz --transform 's,^\.\/,SerialLoops-$SLVersion/,' .
+          sed -i "s/#VERSION#/$SLVersion/g" ~/rpmbuild/SPECS/SerialLoops.spec
           dnf install -y rpmdevtools rpmlint dotnet-sdk-8.0
-          pushd install/linux/rpm
+          pushd ~
           rpmbuild -bb rpmbuild/SPECS/SerialLoops.spec
+          popd
       - name: Upload rpm
         uses: actions/upload-artifact@v4
         with:
@@ -169,3 +170,27 @@ jobs:
         uses: actions/setup-dotnet@v4.1.0
         with:
           dotnet-version: '8.0.x'
+      - name: Build & Publish Serial Loops
+        run: dotnet publish src/SerialLoops/SerialLoops.csproj -c Release -f net8.0-windows -r win-x64 --self-contained /p:DebugType=None /p:DebugSymbols=false /p:PublishSingleFile=true
+      - name: Upload Windows zip
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-x64-zip
+          path: src/SerialLoops/bin/Release/net8.0-windows/win-x64/publish/
+          retention-days: 1
+      - name: Download ISCC, Docker Desktop Installer, and devkitPro Updater
+        shell: pwsh
+        run: |
+          ((Get-Content -Path install\windows\serial-loops.iss) -replace '#VERSION#', '$(Version)') | Set-Content -Path install\windows\serial-loops.iss
+          Start-BitsTransfer -Source https://haroohie.nyc3.cdn.digitaloceanspaces.com/bootstrap/serial-loops/iscc.zip -Destination install\windows\iscc.zip
+          Expand-Archive -Path install\windows\iscc.zip -DestinationPath install\windows\
+          Start-BitsTransfer -Source https://github.com/devkitPro/installer/releases/download/v3.0.3/devkitProUpdater-3.0.3.exe -Destination install\windows\devkitProUpdater-3.0.3.exe
+          Start-BitsTransfer -Source https://desktop.docker.com/win/main/amd64/Docker%20Desktop%20Installer.exe -Destination "install\windows\Docker Desktop Installer.exe"
+      - name: Compile Windows installer
+        run: install\windows\iscc\ISCC.exe .\install\windows\serial-loops.iss
+      - name: Upload Windows installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-x64-installer
+          path: install/windows/Output/SerialLoopsInstaller.exe
+          retention-days: 1

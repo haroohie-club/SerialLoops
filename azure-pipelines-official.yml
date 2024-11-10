@@ -271,7 +271,7 @@ stages:
         Expand-Archive -Path $(Build.SourcesDirectory)\install\windows\iscc.zip -DestinationPath $(Build.SourcesDirectory)\install\windows\
         Start-BitsTransfer -Source https://github.com/devkitPro/installer/releases/download/v3.0.3/devkitProUpdater-3.0.3.exe -Destination $(Build.SourcesDirectory)\install\windows\devkitProUpdater-3.0.3.exe
         Start-BitsTransfer -Source https://desktop.docker.com/win/main/amd64/Docker%20Desktop%20Installer.exe -Destination "$(Build.SourcesDirectory)\install\windows\Docker Desktop Installer.exe"
-      displayName: Download ISCC and Docker Desktop Installer
+      displayName: Download ISCC, Docker Desktop Installer, and devkitPro Updater
     - pwsh: $(Build.SourcesDirectory)\install\windows\iscc\ISCC.exe .\install\windows\serial-loops.iss
       displayName: Compile Windows installer
     - task: PublishBuildArtifacts@1
