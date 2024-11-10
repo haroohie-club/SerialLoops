@@ -90,6 +90,8 @@ namespace SerialLoops.ViewModels
         public ICommand BuildBaseCommand { get; private set; }
         public ICommand BuildAndRunCommand { get; private set; }
 
+        public SfxMixer SfxMixer { get; } = new();
+
         [Reactive]
         public KeyGesture SaveHotKey { get; set; }
         [Reactive]
@@ -178,7 +180,6 @@ namespace SerialLoops.ViewModels
 
         internal void OpenProjectView(Project project, IProgressTracker tracker)
         {
-            TextSubstitutionConverter.SetProject(project);
             EditorTabs = new(this, project, Log);
             ItemExplorer = new(OpenProject, EditorTabs, Log);
             ProjectPanel = new()
@@ -567,6 +568,12 @@ namespace SerialLoops.ViewModels
                         EventFile evt = ((ScriptItem)item).Event;
                         evt.CollectGarbage();
                         IO.WriteStringFile(Path.Combine("assets", "events", $"{evt.Index:X3}.s"), evt.GetSource(includes), OpenProject, Log);
+                        break;
+                    case ItemDescription.ItemType.System_Texture:
+                        ((SystemTextureItem)item).Write(OpenProject, Log);
+                        break;
+                    case ItemDescription.ItemType.Topic:
+                        changedTopics = true;
                         break;
                     case ItemDescription.ItemType.Voice:
                         VoicedLineItem vce = (VoicedLineItem)item;

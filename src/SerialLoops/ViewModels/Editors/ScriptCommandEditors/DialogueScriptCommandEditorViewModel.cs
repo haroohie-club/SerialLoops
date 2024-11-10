@@ -77,6 +77,8 @@ namespace SerialLoops.ViewModels.Editors.ScriptCommandEditors
             get => _dialogueLine.GetSubstitutedString(_window.OpenProject);
             set
             {
+                if (value is null)
+                    return;
                 string text = value;
                 text = StartStringQuotes().Replace(text, "“");
                 text = MidStringOpenQuotes().Replace(text, "$1“");
@@ -106,6 +108,7 @@ namespace SerialLoops.ViewModels.Editors.ScriptCommandEditors
 
                 ScriptEditor.UpdatePreview();
                 Script.UnsavedChanges = true;
+                Command.UpdateDisplay();
             }
         }
 

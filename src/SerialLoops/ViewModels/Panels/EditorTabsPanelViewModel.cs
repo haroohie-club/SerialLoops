@@ -71,6 +71,8 @@ namespace SerialLoops.ViewModels.Panels
                     return new SfxEditorViewModel((SfxItem)item, MainWindow, _log);
                 case ItemDescription.ItemType.System_Texture:
                     return new SystemTextureEditorViewModel((SystemTextureItem)item, MainWindow, _project, _log);
+                case ItemDescription.ItemType.Topic:
+                    return new TopicEditorViewModel((TopicItem)item, MainWindow, _log);
                 case ItemDescription.ItemType.Voice:
                     return new VoicedLineEditorViewModel((VoicedLineItem)item, MainWindow, _log);
                 default:

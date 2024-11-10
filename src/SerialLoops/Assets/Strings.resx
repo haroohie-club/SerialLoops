@@ -2638,4 +2638,7 @@ No project is currently open. Would you like to create a new project?</value>
   <data name="Emulator Flatpak" xml:space="preserve">
     <value>Emulator Flatpak</value>
   </data>
+  <data name="Load Sound" xml:space="preserve">
+    <value>Load Sound</value><comment>The name of a parameter for the SND_PLAY command which indicates whether a sound should be loaded or not</comment>
+  </data>
 </root>
