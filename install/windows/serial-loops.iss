@@ -51,8 +51,8 @@ Name: "devkitarm"; Description: "Install devkitARM"; GroupDescription: "Install 
 Name: "dockerdesktop"; Description: "Install Docker Desktop"; GroupDescription: "Install Other Tools"; Flags: checkedonce
 
 [Files]
-Source: "..\..\publish\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\..\publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\..\src\SerialLoops\bin\Release\net8.0-windows\win-x64\publish\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\..\src\SerialLoops\bin\Release\net8.0-windows\win-x64\publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "devkitProUpdater-3.0.3.exe"; DestDir: {tmp}; Flags: deleteafterinstall; Tasks: devkitarm
 Source: "Docker Desktop Installer.exe"; DestDir: {tmp}; Flags: deleteafterinstall; Tasks: dockerdesktop
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
