@@ -1,0 +1,44 @@
+diff --git a/src/SerialLoops.Lib/Factories/ConfigFactory.cs b/src/SerialLoops.Lib/Factories/ConfigFactory.cs
+index 13c8f55..5a79f3b 100644
+--- a/src/SerialLoops.Lib/Factories/ConfigFactory.cs
++++ b/src/SerialLoops.Lib/Factories/ConfigFactory.cs
+@@ -69,7 +69,7 @@ namespace SerialLoops.Lib.Factories
+                 }
+                 else
+                 {
+-                    devkitArmDir = Path.Combine("/opt", "devkitpro", "devkitARM");
++                    devkitArmDir = Path.Combine("/app", "opt", "devkitpro", "devkitARM");
+                 }
+             }
+             if (!Directory.Exists(devkitArmDir))
+@@ -92,7 +92,7 @@ namespace SerialLoops.Lib.Factories
+                 emulatorFlatpak = "net.kuribo64.melonDS";
+                 try
+                 {
+-                    Process flatpakProc = Process.Start((new ProcessStartInfo("flatpak", ["info", emulatorFlatpak])));
++                    Process flatpakProc = Process.Start((new ProcessStartInfo("flatpak-spawn", ["--host", "flatpak", "info", emulatorFlatpak])));
+                     flatpakProc?.WaitForExit();
+                     emulatorExists = flatpakProc?.ExitCode == 0;
+                 }
+diff --git a/src/SerialLoops/ViewModels/MainWindowViewModel.cs b/src/SerialLoops/ViewModels/MainWindowViewModel.cs
+index 3ff94cd..a68055c 100644
+--- a/src/SerialLoops/ViewModels/MainWindowViewModel.cs
++++ b/src/SerialLoops/ViewModels/MainWindowViewModel.cs
+@@ -676,7 +676,7 @@ namespace SerialLoops.ViewModels
+                                 string emulatorExecutable = CurrentConfig.EmulatorPath;
+                                 if (!string.IsNullOrWhiteSpace(CurrentConfig.EmulatorFlatpak))
+                                 {
+-                                    emulatorExecutable = "flatpak";
++                                    emulatorExecutable = "flatpak-spawn";
+                                 }
+                                 if (emulatorExecutable.EndsWith(".app"))
+                                 {
+@@ -689,7 +689,7 @@ namespace SerialLoops.ViewModels
+                                 {
+                                     emulatorArgs =
+                                     [
+-                                        "run", CurrentConfig.EmulatorFlatpak,
++                                        "--host", "flatpak", "run", CurrentConfig.EmulatorFlatpak,
+                                         Path.Combine(OpenProject.MainDirectory, $"{OpenProject.Name}.nds")
+                                     ];
+                                 }
