@@ -108,6 +108,12 @@ namespace SerialLoops.ViewModels.Editors
                 {
                     CommandVerb.INIT_READ_FLAG => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
                     CommandVerb.DIALOGUE => new DialogueScriptCommandEditorViewModel(_selectedCommand, this, _window),
+                    CommandVerb.KBG_DISP => new KbgDispScriptCommandEditorViewModel(_selectedCommand, this, _window),
+                    CommandVerb.PIN_MNL => new PinMnlScriptCommandEditorViewModel(_selectedCommand, this, _window.OpenProject),
+                    CommandVerb.BG_DISP => new BgDispScriptCommandEditorViewModel(_selectedCommand, this, _window),
+                    CommandVerb.SCREEN_FADEIN => new ScreenFadeInScriptCommandEditorViewModel(_selectedCommand, this),
+                    CommandVerb.SCREEN_FADEOUT => new ScreenFadeOutScriptCommandEditorViewModel(_selectedCommand, this),
+                    CommandVerb.SCREEN_FLASH => new ScreenFlashScriptCommandEditorViewModel(_selectedCommand, this),
                     CommandVerb.REMOVED => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
                     CommandVerb.SND_STOP => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
                     CommandVerb.SCREEN_SHAKE_STOP => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
@@ -120,6 +126,7 @@ namespace SerialLoops.ViewModels.Editors
                     CommandVerb.INVEST_END => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
                     CommandVerb.NEXT_SCENE => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
                     CommandVerb.AVOID_DISP => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
+                    CommandVerb.BG_DISP2 => new BgDispScriptCommandEditorViewModel(_selectedCommand, this, _window),
                     _ => new ScriptCommandEditorViewModel(_selectedCommand, this)
                 };
             }

@@ -7,6 +7,7 @@ using Avalonia.Data.Converters;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
+using Avalonia.Skia;
 using HaruhiChokuretsuLib.Archive.Event;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
@@ -41,6 +42,36 @@ namespace SerialLoops.Utility
                 return unsavedChanges ? $"* {displayName}" : displayName;
             }
             return string.Empty;
+        }
+    }
+
+    public class TextSubstitutionConverter : IValueConverter
+    {
+        private static Project _project;
+
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return ((string)value).GetSubstitutedString(_project);
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return ((string)value).GetOriginalString(_project);
+        }
+        public static void SetProject(Project project)
+        {
+            _project = project;
+        }
+    }
+
+    public class SKAvaloniaColorConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return ((SKColor)value).ToAvalonia();
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return ((Color)value).ToSKColor();
         }
     }
 

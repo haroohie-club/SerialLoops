@@ -540,20 +540,26 @@ namespace SerialLoops.Lib.Items
                 preview.Sprites = [.. sprites.Values.OrderBy(p => p.Positioning.Layer)];
 
                 // Draw dialogue
-                ScriptItemCommand lastDialogueCommand = commands.LastOrDefault(c => c.Verb == CommandVerb.DIALOGUE);
-                if (commands.FindLastIndex(c => c.Verb == CommandVerb.TOGGLE_DIALOGUE &&
-                    !((BoolScriptParameter)c.Parameters[0]).Value) < commands.IndexOf(lastDialogueCommand))
+                ScriptItemCommand lastPinMnlCommand = commands.LastOrDefault(c => c.Verb == CommandVerb.PIN_MNL && c.Section.Equals(commands.Last().Section));
+                if (lastPinMnlCommand is not null)
                 {
-                    DialogueLine line = ((DialogueScriptParameter)lastDialogueCommand.Parameters[0]).Line;
-                    SKPaint dialoguePaint = line.Speaker switch
-                    {
-                        Speaker.MONOLOGUE => DialogueScriptParameter.Paint01,
-                        Speaker.INFO => DialogueScriptParameter.Paint04,
-                        _ => DialogueScriptParameter.Paint00,
-                    };
+                    DialogueLine line = ((DialogueScriptParameter)lastPinMnlCommand.Parameters[0]).Line;
                     if (!string.IsNullOrEmpty(line.Text))
                     {
-                        preview.LastDialogueCommand = lastDialogueCommand;
+                        preview.LastDialogueCommand = lastPinMnlCommand;
+                    }
+                }
+                else
+                {
+                    ScriptItemCommand lastDialogueCommand = commands.LastOrDefault(c => c.Verb == CommandVerb.DIALOGUE);
+                    if (commands.FindLastIndex(c => c.Verb == CommandVerb.TOGGLE_DIALOGUE &&
+                    !((BoolScriptParameter)c.Parameters[0]).Value) < commands.IndexOf(lastDialogueCommand))
+                    {
+                        DialogueLine line = ((DialogueScriptParameter)lastDialogueCommand.Parameters[0]).Line;
+                        if (!string.IsNullOrEmpty(line.Text))
+                        {
+                            preview.LastDialogueCommand = lastDialogueCommand;
+                        }
                     }
                 }
             }
