@@ -64,7 +64,7 @@ namespace SerialLoops.ViewModels.Editors
                         new HierarchicalExpanderColumn<ITreeItem>(
                             new TemplateColumn<ITreeItem>(null, new FuncDataTemplate<ITreeItem>((val, namescope) =>
                             {
-                                return GetItemPanel(val);
+                                return val?.GetDisplay();
                             }), options: new TemplateColumnOptions<ITreeItem>() { IsTextSearchEnabled = true }),
                             i => i.Children
                         )
@@ -96,29 +96,6 @@ namespace SerialLoops.ViewModels.Editors
             Commands = _script.GetScriptCommandTree(_project, _log);
         }
 
-        private StackPanel GetItemPanel(ITreeItem val)
-        {
-            if (val is null)
-            {
-                return null;
-            }
-            StackPanel panel = new()
-            {
-                Orientation = Avalonia.Layout.Orientation.Horizontal,
-                Spacing = 3,
-            };
-            if (val.Icon is not null)
-            {
-                if (val.Icon.Parent is not null)
-                {
-                    ((StackPanel)val.Icon.Parent).Children.Clear();
-                }
-                panel.Children.Add(val.Icon);
-            }
-            panel.Children.Add(new TextBlock { Text = val.Text });
-            return panel;
-        }
-
         private void UpdateCommandViewModel()
         {
             if (_selectedCommand is null)
@@ -137,7 +114,6 @@ namespace SerialLoops.ViewModels.Editors
                     CommandVerb.SCREEN_FADEIN => new ScreenFadeInScriptCommandEditorViewModel(_selectedCommand, this),
                     CommandVerb.SCREEN_FADEOUT => new ScreenFadeOutScriptCommandEditorViewModel(_selectedCommand, this),
                     CommandVerb.SCREEN_FLASH => new ScreenFlashScriptCommandEditorViewModel(_selectedCommand, this),
-                    CommandVerb.SND_PLAY => new SndPlayScriptCommandEditorViewModel(_selectedCommand, this, _window),
                     CommandVerb.REMOVED => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
                     CommandVerb.SND_STOP => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
                     CommandVerb.BGM_PLAY => new BgmPlayScriptCommandEditorViewModel(_selectedCommand, this, _window),

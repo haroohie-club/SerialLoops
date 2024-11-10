@@ -33,7 +33,7 @@ namespace SerialLoops.Tests.Headless
     {
         // To run these tests locally, you can create a file called 'ui_vals.json' and place it next to the test assembly (in the output folder)
         private UiVals? _uiVals;
-        private List<string> _dirsToDelete = [];
+        private readonly List<string> _dirsToDelete = [];
 
         [OneTimeSetUp]
         public void Setup()

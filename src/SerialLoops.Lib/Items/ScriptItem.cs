@@ -561,7 +561,7 @@ namespace SerialLoops.Lib.Items
                     DialogueLine line = ((DialogueScriptParameter)lastDialogueCommand.Parameters[0]).Line;
                     if (!string.IsNullOrEmpty(line.Text))
                     {
-                        preview.LastDialogueCommand = lastDialogueCommand;
+                        preview.LastDialogueCommand = lastDialogueCommand;}
                     }
                 }
             }
@@ -783,7 +783,7 @@ namespace SerialLoops.Lib.Items
             }
         }
 
-        public void PruneLabelsSection(ILogger log)
+        private void PruneLabelsSection(ILogger log)
         {
             if ((Event.LabelsSection?.Objects?.Count ?? 0) - 1 > Event.ScriptSections.Count)
             {
