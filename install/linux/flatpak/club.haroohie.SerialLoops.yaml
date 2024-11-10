@@ -16,7 +16,6 @@ finish-args:
   - --socket=x11
   - --share=ipc
   - --share=network
-  - --socket=pulseaudio
   - --filesystem=~/SerialLoops:create
   - --filesystem=xdg-config:create
   - --env=DOTNET_ROOT=/app/lib/dotnet
