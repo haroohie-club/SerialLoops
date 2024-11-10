@@ -1,0 +1,37 @@
+name: Serial Loops Official Build
+run-name: "Official release build for Serial Loops"
+on:
+  # schedule:
+  #   - cron: '0 23 * * *'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Release version
+        required: true
+        type: string
+      releaseNotes:
+        description: Release notes
+        required: true
+        type: string
+jobs:
+  flatpak:
+    runs-on: ubuntu-latest
+    container:
+      image: bilelmoussaoui/flatpak-github-actions:freedesktop-23.08
+      options: --privileged
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: python install/linux/flatpak/flatpak-dotnet-generator.py --dotnet 8 --freedesktop 23.08 nuget-sources.json src/SerialLoops/SerialLoops.csproj
+      - name: Build flatpak
+        uses: flatpak/flatpak-github-actions@v6
+        with:
+          manifest-path: install/linux/flatpak/club.haroohie.SerialLoops.yaml
+          bundle: SerialLoops.flatpak
+          cache-key: flatpak-builder-${{ github.sha }}
+
+
