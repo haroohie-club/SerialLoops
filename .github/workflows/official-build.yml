@@ -60,6 +60,13 @@ jobs:
           manifest-path: install/linux/flatpak/club.haroohie.SerialLoops.yaml
           bundle: SerialLoops.flatpak
           cache-key: flatpak-builder-${{ github.sha }}
+          upload-artifact: false
+      - name: Upload rpm
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-x64-flatpak
+          path: SerialLoops.flatpak
+          retention-days: 1
 
   linux-dpkg-tarball:
     runs-on: ubuntu-latest
@@ -119,11 +126,12 @@ jobs:
           pushd ~
           rpmbuild -bb rpmbuild/SPECS/SerialLoops.spec
           popd
+          mv ~/rpmbuild/RPMS/x86_64/SerialLoops-${{ env.SLVersion }}-1.fc39.x86_64.rpm SerialLoops.rpm
       - name: Upload rpm
         uses: actions/upload-artifact@v4
         with:
           name: linux-x64-rpm
-          path: install/linux/rpm/rpmbuild/RPMS/x86_64/SerialLoops-${{ env.SLVersion }}-1.fc39.x86_64.rpm
+          path: SerialLoops.rpm
           retention-days: 1
 
   macos-pkg:
@@ -205,7 +213,7 @@ jobs:
       - name: Download Linux flatpak
         uses: actions/download-artifact@v4.1.8
         with:
-          name: SerialLoops-x86_64
+          name: linux-x64-flatpak
       - name: Download Linux tarball
         uses: actions/download-artifact@v4.1.8
         with:
@@ -242,7 +250,7 @@ jobs:
           Move-Item -Path SerialLoops.flatpak -Destination release/SerialLoops-linux-x64-v$($env:SLVersion).flatpak
           Move-Item -Path SerialLoops.tar.gz -Destination release/SerialLoops-linux-x64-v$($env:SLVersion).tar.gz
           Move-Item -Path SerialLoops.deb -Destination release/SerialLoops-$($env:SLVersion)_amd64.deb
-          Move-Item -Path SerialLoops-$($env:SLVersion)-1.fc39.x86_64.rpm -Destination release/SerialLoops-$($env:SLVersion)-1.fc39.x86_64.rpm
+          Move-Item -Path SerialLoops.rpm -Destination release/SerialLoops-$($env:SLVersion)-1.fc39.x86_64.rpm
           Move-Item -Path SerialLoops-osx-arm64.pkg -Destination release/SerialLoops-macOS-arm-v$($env:SLVersion).pkg
           Move-Item -Path SerialLoops-osx-x64.pkg -Destination release/SerialLoops-macOS-x64-v$($env:SLVersion).pkg
           Move-Item -Path SerialLoopsInstaller.exe -Destination release/SerialLoops-windows-x64-v$($env:SLVersion).exe
