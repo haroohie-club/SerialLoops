@@ -70,8 +70,11 @@ modules:
         path: club.haroohie.SerialLoops.desktop
       - type: file
         path: ../../src/SerialLoops/Assets/Icons/AppIcon.svg
+      - type: file
+        path: VERSION
     build-commands:
       - dotnet publish src/SerialLoops/SerialLoops.csproj -c Release -f net8.0 --no-self-contained --source ./nuget-sources
+      - sed -i "s/#VERSION#/$(cat VERSION)/g" club.haroohie.SerialLoops.desktop
       - mkdir -p ${FLATPAK_DEST}/bin
       - cp -r src/SerialLoops/bin/Release/net8.0/publish/* ${FLATPAK_DEST}/bin
       - mkdir -p ${FLATPAK_DEST}/app/share/appdata/
