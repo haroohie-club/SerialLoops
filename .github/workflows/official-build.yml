@@ -194,7 +194,7 @@ jobs:
       - name: Download ISCC, Docker Desktop Installer, and devkitPro Updater
         shell: pwsh
         run: |
-          ((Get-Content -Path install\windows\serial-loops.iss) -replace '#VERSION#', '$(Version)') | Set-Content -Path install\windows\serial-loops.iss
+          ((Get-Content -Path install\windows\serial-loops.iss) -replace '#VERSION#', "$env:SLVersion") | Set-Content -Path install\windows\serial-loops.iss
           Start-BitsTransfer -Source https://haroohie.nyc3.cdn.digitaloceanspaces.com/bootstrap/serial-loops/iscc.zip -Destination install\windows\iscc.zip
           Expand-Archive -Path install\windows\iscc.zip -DestinationPath install\windows\
           Start-BitsTransfer -Source https://github.com/devkitPro/installer/releases/download/v3.0.3/devkitProUpdater-3.0.3.exe -Destination install\windows\devkitProUpdater-3.0.3.exe
@@ -291,7 +291,7 @@ jobs:
             bringing all the necessary dependencies with it.
 
             If you would rather manually install, follow the below instructions:
-            * The `.deb` package is intended for Debian-based distros (e.g. Ubuntu). Install it with `sudo apt install -f ./SerialLoops-$(Version)_amd64.deb`.
-            * The `.rpm` package is intended for Red Hat distros (e.g. Fedora). Install it with `sudo dnf install ./SerialLoops-$(Version)-1.fc39.x86_64.rpm`.
+            * The `.deb` package is intended for Debian-based distros (e.g. Ubuntu). Install it with `sudo apt install -f ./SerialLoops-${{ env.SLVersion }}_amd64.deb`.
+            * The `.rpm` package is intended for Red Hat distros (e.g. Fedora). Install it with `sudo dnf install ./SerialLoops-${{ env.SLVersion }}-1.fc39.x86_64.rpm`.
             * For other Linux distros, please use the binaries packaged in the `.tar.gz` archive; when doing so, ensure you install the OpenAL binaries so audio playback works.
 
