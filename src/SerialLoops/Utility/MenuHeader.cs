@@ -1,10 +1,9 @@
-﻿namespace SerialLoops.Utility
+﻿namespace SerialLoops.Utility;
+
+public enum MenuHeader
 {
-    public enum MenuHeader
-    {
-        FILE,
-        PROJECT,
-        TOOLS,
-        BUILD,
-    }
+    FILE,
+    PROJECT,
+    TOOLS,
+    BUILD,
 }

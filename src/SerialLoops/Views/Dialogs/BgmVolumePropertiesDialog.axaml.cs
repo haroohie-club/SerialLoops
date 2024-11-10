@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 
-namespace SerialLoops.Views.Dialogs
+namespace SerialLoops.Views.Dialogs;
+
+public partial class BgmVolumePropertiesDialog : Window
 {
-    public partial class BgmVolumePropertiesDialog : Window
+    public BgmVolumePropertiesDialog()
     {
-        public BgmVolumePropertiesDialog()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

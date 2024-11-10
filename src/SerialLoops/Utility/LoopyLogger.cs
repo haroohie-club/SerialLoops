@@ -9,115 +9,114 @@ using MsBox.Avalonia.Enums;
 using SerialLoops.Assets;
 using SerialLoops.Lib;
 
-namespace SerialLoops.Utility
+namespace SerialLoops.Utility;
+
+public class LoopyLogger : ILogger
 {
-    public class LoopyLogger : ILogger
+    private readonly Window _owner;
+    private Config _config;
+    private string _logFile;
+
+    public LoopyLogger(Window window)
     {
-        private readonly Window _owner;
-        private Config _config;
-        private string _logFile;
+        _owner = window;
+    }
 
-        public LoopyLogger(Window window)
+    public void Initialize(Config config)
+    {
+        _config = config;
+        if (!Directory.Exists(_config.LogsDirectory))
         {
-            _owner = window;
+            Directory.CreateDirectory(_config.LogsDirectory);
         }
+        _logFile = Path.Combine(_config.LogsDirectory, $"SerialLoops.log");
+    }
 
-        public void Initialize(Config config)
+    private static string Stamp => $"\n({Environment.ProcessId}) {DateTimeOffset.Now} - ";
+
+    public void Log(string message)
+    {
+        if (!string.IsNullOrEmpty(_logFile) && !string.IsNullOrEmpty(message))
         {
-            _config = config;
-            if (!Directory.Exists(_config.LogsDirectory))
+            for (int i = 0; i < 10; i++)
             {
-                Directory.CreateDirectory(_config.LogsDirectory);
-            }
-            _logFile = Path.Combine(_config.LogsDirectory, $"SerialLoops.log");
-        }
-
-        private static string Stamp => $"\n({Environment.ProcessId}) {DateTimeOffset.Now} - ";
-
-        public void Log(string message)
-        {
-            if (!string.IsNullOrEmpty(_logFile) && !string.IsNullOrEmpty(message))
-            {
-                for (int i = 0; i < 10; i++)
+                try
                 {
-                    try
-                    {
-                        File.AppendAllText(_logFile, $"{Stamp}{message}");
-                        break;
-                    }
-                    catch (IOException)
-                    {
-                        Thread.Sleep(100);
-                    }
+                    File.AppendAllText(_logFile, $"{Stamp}{message}");
+                    break;
+                }
+                catch (IOException)
+                {
+                    Thread.Sleep(100);
                 }
             }
         }
+    }
 
-        public void LogError(string message, bool lookForWarnings = false)
-        {
-            Dispatcher.UIThread.Invoke(() => LogErrorAsync(message, lookForWarnings));
-        }
+    public void LogError(string message, bool lookForWarnings = false)
+    {
+        Dispatcher.UIThread.Invoke(() => LogErrorAsync(message, lookForWarnings));
+    }
 
-        private async Task LogErrorAsync(string message, bool lookForWarnings = false)
+    private async Task LogErrorAsync(string message, bool lookForWarnings = false)
+    {
+        await _owner.ShowMessageBoxAsync(Strings.Error, string.Format(Strings.ERROR___0_, message), ButtonEnum.Ok, Icon.Error, this);
+        if (!string.IsNullOrEmpty(_logFile) && !string.IsNullOrEmpty(message))
         {
-            await _owner.ShowMessageBoxAsync(Strings.Error, string.Format(Strings.ERROR___0_, message), ButtonEnum.Ok, Icon.Error, this);
-            if (!string.IsNullOrEmpty(_logFile) && !string.IsNullOrEmpty(message))
+            for (int i = 0; i < 10; i++)
             {
-                for (int i = 0; i < 10; i++)
+                try
                 {
-                    try
-                    {
-                        File.AppendAllText(_logFile, $"{Stamp}ERROR: {message}");
-                        break;
-                    }
-                    catch (IOException)
-                    {
-                        await Task.Delay(TimeSpan.FromMilliseconds(100));
-                    }
+                    File.AppendAllText(_logFile, $"{Stamp}ERROR: {message}");
+                    break;
+                }
+                catch (IOException)
+                {
+                    await Task.Delay(TimeSpan.FromMilliseconds(100));
                 }
             }
         }
+    }
 
-        public void LogException(string message, Exception exception)
-        {
-            LogError($"{message}\n{exception.Message}");
-            LogWarning($"\n{exception.StackTrace}");
-        }
+    public void LogException(string message, Exception exception)
+    {
+        LogError($"{message}\n{exception.Message}");
+        LogWarning($"\n{exception.StackTrace}");
+    }
 
-        public void LogWarning(string message, bool lookForErrors = false)
+    public void LogWarning(string message, bool lookForErrors = false)
+    {
+        if (!string.IsNullOrEmpty(_logFile) && !string.IsNullOrEmpty(message))
         {
-            if (!string.IsNullOrEmpty(_logFile) && !string.IsNullOrEmpty(message))
+            for (int i = 0; i < 10; i++)
             {
-                for (int i = 0; i < 10; i++)
+                try
                 {
-                    try
-                    {
-                        File.AppendAllText(_logFile, $"{Stamp}WARNING: {message}");
-                        break;
-                    }
-                    catch (IOException)
-                    {
-                        Thread.Sleep(100);
-                    }
+                    File.AppendAllText(_logFile, $"{Stamp}WARNING: {message}");
+                    break;
+                }
+                catch (IOException)
+                {
+                    Thread.Sleep(100);
                 }
             }
         }
+    }
 
-        public void LogCrash(Exception ex)
+    public void LogCrash(Exception ex)
+    {
+        if (!string.IsNullOrEmpty(_logFile))
         {
-            if (!string.IsNullOrEmpty(_logFile))
+            for (int i = 0; i < 10; i++)
             {
-                for (int i = 0; i < 10; i++)
+                try
                 {
-                    try
-                    {
-                        File.AppendAllText(_logFile, $"{Stamp}SERIAL LOOPS CRASH: {ex.Message}\n\n{ex.StackTrace}");
-                        break;
-                    }
-                    catch (IOException)
-                    {
-                        Thread.Sleep(100);
-                    }
+                    File.AppendAllText(_logFile, $"{Stamp}SERIAL LOOPS CRASH: {ex.Message}\n\n{ex.StackTrace}");
+                    break;
+                }
+                catch (IOException)
+                {
+                    Thread.Sleep(100);
                 }
             }
         }

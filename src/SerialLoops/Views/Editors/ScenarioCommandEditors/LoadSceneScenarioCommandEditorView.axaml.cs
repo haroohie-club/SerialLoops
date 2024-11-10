@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 
-namespace SerialLoops.Views.Editors.ScenarioCommandEditors
+namespace SerialLoops.Views.Editors.ScenarioCommandEditors;
+
+public partial class LoadSceneScenarioCommandEditorView : UserControl
 {
-    public partial class LoadSceneScenarioCommandEditorView : UserControl
+    public LoadSceneScenarioCommandEditorView()
     {
-        public LoadSceneScenarioCommandEditorView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }
