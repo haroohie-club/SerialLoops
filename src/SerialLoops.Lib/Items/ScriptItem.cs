@@ -25,7 +25,9 @@ namespace SerialLoops.Lib.Items
         public ScriptItem(string name) : base(name, ItemType.Script)
         {
         }
-        public ScriptItem(EventFile evt, EventTable evtTbl, Func<string, string> localize, ILogger log) : base(evt.Name[0..^1], ItemType.Script)
+
+        public ScriptItem(EventFile evt, EventTable evtTbl, Func<string, string> localize, ILogger log) : base(
+            evt.Name[0..^1], ItemType.Script)
         {
             Event = evt;
             UpdateEventTableInfo(evtTbl);
@@ -45,14 +47,18 @@ namespace SerialLoops.Lib.Items
                     commands.Add(section, []);
                     foreach (ScriptCommandInvocation command in section.Objects)
                     {
-                        commands[section].Add(ScriptItemCommand.FromInvocation(command, section, commands[section].Count, Event, project, _localize, log));
+                        commands[section].Add(ScriptItemCommand.FromInvocation(command, section,
+                            commands[section].Count, Event, project, _localize, log));
                     }
                 }
+
                 return commands;
             }
             catch (Exception ex)
             {
-                log.LogException(string.Format(project.Localize("Error getting script command tree for script {0} ({1})"), DisplayName, Name), ex);
+                log.LogException(
+                    string.Format(project.Localize("Error getting script command tree for script {0} ({1})"),
+                        DisplayName, Name), ex);
                 return null;
             }
         }
@@ -68,56 +74,84 @@ namespace SerialLoops.Lib.Items
                     {
                         if (command.Verb == CommandVerb.INVEST_START)
                         {
-                            Graph.AddEdge(new() { Source = section, Target = ((ScriptSectionScriptParameter)command.Parameters[4]).Section });
+                            Graph.AddEdge(new()
+                            {
+                                Source = section,
+                                Target = ((ScriptSectionScriptParameter)command.Parameters[4]).Section
+                            });
                             Graph.AddEdgeRange(Event.ScriptSections.Where(s =>
                                 Event.LabelsSection.Objects.Where(l =>
-                                Event.MapCharactersSection?.Objects.Select(c => c.TalkScriptBlock).Contains(l.Id) ?? false)
-                                .Select(l => l.Name.Replace("/", "")).Contains(s.Name)).Select(s => new ScriptSectionEdge() { Source = section, Target = s }));
+                                        Event.MapCharactersSection?.Objects.Select(c => c.TalkScriptBlock)
+                                            .Contains(l.Id) ?? false)
+                                    .Select(l => l.Name.Replace("/", "")).Contains(s.Name)).Select(s =>
+                                new ScriptSectionEdge() { Source = section, Target = s }));
                             Graph.AddEdgeRange(Event.ScriptSections.Where(s =>
                                 Event.LabelsSection.Objects.Where(l =>
-                                Event.InteractableObjectsSection.Objects.Select(o => o.ScriptBlock).Contains(l.Id))
-                                .Select(l => l.Name.Replace("/", "")).Contains(s.Name)).Select(s => new ScriptSectionEdge() { Source = section, Target = s }));
+                                        Event.InteractableObjectsSection.Objects.Select(o => o.ScriptBlock)
+                                            .Contains(l.Id))
+                                    .Select(l => l.Name.Replace("/", "")).Contains(s.Name)).Select(s =>
+                                new ScriptSectionEdge() { Source = section, Target = s }));
                             @continue = true;
                         }
                         else if (command.Verb == CommandVerb.GOTO)
                         {
                             try
                             {
-                                Graph.AddEdge(new() { Source = section, Target = ((ScriptSectionScriptParameter)command.Parameters[0]).Section });
+                                Graph.AddEdge(new()
+                                {
+                                    Source = section,
+                                    Target = ((ScriptSectionScriptParameter)command.Parameters[0]).Section
+                                });
                             }
                             catch (ArgumentOutOfRangeException)
                             {
-                                log.LogWarning("Failed to add graph edge for GOTO command as script section parameter was out of range.");
+                                log.LogWarning(
+                                    "Failed to add graph edge for GOTO command as script section parameter was out of range.");
                             }
+
                             @continue = true;
                         }
                         else if (command.Verb == CommandVerb.VGOTO)
                         {
                             try
                             {
-                                Graph.AddEdge(new() { Source = section, Target = ((ScriptSectionScriptParameter)command.Parameters[1]).Section });
+                                Graph.AddEdge(new()
+                                {
+                                    Source = section,
+                                    Target = ((ScriptSectionScriptParameter)command.Parameters[1]).Section
+                                });
                             }
                             catch (ArgumentOutOfRangeException)
                             {
-                                log.LogWarning("Failed to add graph edge for VGOTO command as script section parameter was out of range.");
+                                log.LogWarning(
+                                    "Failed to add graph edge for VGOTO command as script section parameter was out of range.");
                             }
                         }
                         else if (command.Verb == CommandVerb.CHESS_VGOTO)
                         {
                             Graph.AddEdgeRange(command.Parameters.Cast<ScriptSectionScriptParameter>()
-                                .Where(p => p.Section is not null).Select(p => new ScriptSectionEdge() { Source = section, Target = p.Section }));
-                            ScriptSection miss2Section = Event.ScriptSections.FirstOrDefault(s => s.Name == "NONEMiss2");
+                                .Where(p => p.Section is not null).Select(p =>
+                                    new ScriptSectionEdge() { Source = section, Target = p.Section }));
+                            ScriptSection miss2Section =
+                                Event.ScriptSections.FirstOrDefault(s => s.Name == "NONEMiss2");
                             if (miss2Section is not null)
                             {
-                                Graph.AddEdge(new() { Source = section, Target = Event.ScriptSections.First(s => s.Name == "NONEMiss2") }); // hardcode this section, even tho you can't get to it
+                                Graph.AddEdge(new()
+                                {
+                                    Source = section,
+                                    Target = Event.ScriptSections.First(s => s.Name == "NONEMiss2")
+                                }); // hardcode this section, even tho you can't get to it
                             }
                         }
                         else if (command.Verb == CommandVerb.SELECT)
                         {
                             Graph.AddEdgeRange(Event.ScriptSections.Where(s =>
-                                Event.LabelsSection.Objects.Where(l =>
-                                command.Parameters.Where(p => p.Type == ScriptParameter.ParameterType.OPTION).Cast<OptionScriptParameter>()
-                                .Where(p => p.Option.Id > 0).Select(p => p.Option.Id).Contains(l.Id)).Select(l => l.Name.Replace("/", "")).Contains(s.Name))
+                                    Event.LabelsSection.Objects.Where(l =>
+                                            command.Parameters
+                                                .Where(p => p.Type == ScriptParameter.ParameterType.OPTION)
+                                                .Cast<OptionScriptParameter>()
+                                                .Where(p => p.Option.Id > 0).Select(p => p.Option.Id).Contains(l.Id))
+                                        .Select(l => l.Name.Replace("/", "")).Contains(s.Name))
                                 .Select(s => new ScriptSectionEdge() { Source = section, Target = s }));
                             @continue = true;
                         }
@@ -129,18 +163,28 @@ namespace SerialLoops.Lib.Items
                         {
                             @continue = true;
                         }
-                        else if (Name.StartsWith("CHS") && Name.EndsWith("90") && commandTree.Keys.ToList().IndexOf(section) > 1 && command.Index == 0)
+                        else if (Name.StartsWith("CHS") && Name.EndsWith("90") &&
+                                 commandTree.Keys.ToList().IndexOf(section) > 1 && command.Index == 0)
                         {
-                            Graph.AddEdge(new() { Source = Event.ScriptSections[1], Target = section }); // these particular chess files have no VGOTOs, so uh... we manually hardcode them
+                            Graph.AddEdge(new()
+                            {
+                                Source = Event.ScriptSections[1], Target = section
+                            }); // these particular chess files have no VGOTOs, so uh... we manually hardcode them
                         }
                     }
+
                     if (@continue)
                     {
                         continue;
                     }
+
                     if (section != commandTree.Keys.Last())
                     {
-                        Graph.AddEdge(new() { Source = section, Target = commandTree.Keys.ElementAt(commandTree.Keys.ToList().IndexOf(section) + 1) });
+                        Graph.AddEdge(new()
+                        {
+                            Source = section,
+                            Target = commandTree.Keys.ElementAt(commandTree.Keys.ToList().IndexOf(section) + 1)
+                        });
                     }
                 }
             }
@@ -151,7 +195,8 @@ namespace SerialLoops.Lib.Items
             }
         }
 
-        public ScriptPreview GetScriptPreview(Dictionary<ScriptSection, List<ScriptItemCommand>> commandTree, ScriptItemCommand currentCommand, Project project, ILogger log)
+        public ScriptPreview GetScriptPreview(Dictionary<ScriptSection, List<ScriptItemCommand>> commandTree,
+            ScriptItemCommand currentCommand, Project project, ILogger log)
         {
             ScriptPreview preview = new();
 
@@ -173,13 +218,16 @@ namespace SerialLoops.Lib.Items
                 && ((EpisodeHeaderScriptParameter)commands.Last(c => c.Verb == CommandVerb.EPHEADER).Parameters[0])
                 .EpisodeHeaderIndex != EpisodeHeaderScriptParameter.Episode.None)
             {
-                preview.EpisodeHeader = (short)((EpisodeHeaderScriptParameter)commands.Last(c => c.Verb == CommandVerb.EPHEADER).Parameters[0]).EpisodeHeaderIndex;
+                preview.EpisodeHeader =
+                    (short)((EpisodeHeaderScriptParameter)commands.Last(c => c.Verb == CommandVerb.EPHEADER)
+                        .Parameters[0]).EpisodeHeaderIndex;
             }
 
             // Draw top screen "kinetic" background
             for (int i = commands.Count - 1; i >= 0; i--)
             {
-                if (commands[i].Verb == CommandVerb.KBG_DISP && ((BgScriptParameter)commands[i].Parameters[0]).Background is not null)
+                if (commands[i].Verb == CommandVerb.KBG_DISP &&
+                    ((BgScriptParameter)commands[i].Parameters[0]).Background is not null)
                 {
                     preview.Kbg = ((BgScriptParameter)commands[i].Parameters[0]).Background;
                     break;
@@ -191,10 +239,12 @@ namespace SerialLoops.Lib.Items
             {
                 if (commands[i].Verb == CommandVerb.SET_PLACE)
                 {
-                    if (((BoolScriptParameter)commands[i].Parameters[0]).Value && (((PlaceScriptParameter)commands[i].Parameters[1]).Place is not null))
+                    if (((BoolScriptParameter)commands[i].Parameters[0]).Value &&
+                        (((PlaceScriptParameter)commands[i].Parameters[1]).Place is not null))
                     {
                         preview.Place = ((PlaceScriptParameter)commands[i].Parameters[1]).Place;
                     }
+
                     break;
                 }
             }
@@ -206,23 +256,28 @@ namespace SerialLoops.Lib.Items
             {
                 if (chibi.ChibiIndex > 0)
                 {
-                    chibis.Add((ChibiItem)project.Items.First(i => i.Type == ItemType.Chibi && ((ChibiItem)i).TopScreenIndex == chibi.ChibiIndex));
+                    chibis.Add((ChibiItem)project.Items.First(i =>
+                        i.Type == ItemType.Chibi && ((ChibiItem)i).TopScreenIndex == chibi.ChibiIndex));
                 }
             }
+
             for (int i = 0; i < commands.Count; i++)
             {
                 if (commands[i].Verb == CommandVerb.OP_MODE)
                 {
                     // Kyon auto-added by OP_MODE command
-                    ChibiItem chibi = (ChibiItem)project.Items.First(i => i.Type == ItemType.Chibi && ((ChibiItem)i).TopScreenIndex == 1);
+                    ChibiItem chibi = (ChibiItem)project.Items.First(i =>
+                        i.Type == ItemType.Chibi && ((ChibiItem)i).TopScreenIndex == 1);
                     if (!chibis.Contains(chibi))
                     {
                         chibis.Add(chibi);
                     }
                 }
+
                 if (commands[i].Verb == CommandVerb.CHIBI_ENTEREXIT)
                 {
-                    if (((ChibiEnterExitScriptParameter)commands[i].Parameters[1]).Mode == ChibiEnterExitScriptParameter.ChibiEnterExitType.ENTER)
+                    if (((ChibiEnterExitScriptParameter)commands[i].Parameters[1]).Mode ==
+                        ChibiEnterExitScriptParameter.ChibiEnterExitType.ENTER)
                     {
                         ChibiItem chibi = ((ChibiScriptParameter)commands[i].Parameters[0]).Chibi;
                         if (!chibis.Contains(chibi))
@@ -243,6 +298,7 @@ namespace SerialLoops.Lib.Items
                                         break;
                                     }
                                 }
+
                                 if (!inserted)
                                 {
                                     chibis.Add(chibi);
@@ -279,6 +335,7 @@ namespace SerialLoops.Lib.Items
                 chibiStartX = 80;
                 chibiY = 100;
             }
+
             int chibiCurrentX = chibiStartX;
             int chibiWidth = 0;
             foreach (ChibiItem chibi in chibis)
@@ -304,7 +361,8 @@ namespace SerialLoops.Lib.Items
                 if (chibis.Contains(chibi))
                 {
                     int chibiIndex = chibis.IndexOf(chibi);
-                    int internalYOffset = ((int)((ChibiEmoteScriptParameter)currentCommand.Parameters[1]).Emote - 1) * 32;
+                    int internalYOffset =
+                        ((int)((ChibiEmoteScriptParameter)currentCommand.Parameters[1]).Emote - 1) * 32;
                     int externalXOffset = chibiStartX + chibiWidth * chibiIndex;
                     preview.ChibiEmote = (internalYOffset, externalXOffset, chibi);
                 }
@@ -318,10 +376,13 @@ namespace SerialLoops.Lib.Items
             bool bgReverted = false;
             ScriptItemCommand palCommand = commands.LastOrDefault(c => c.Verb == CommandVerb.PALEFFECT);
             ScriptItemCommand lastBgCommand = commands.LastOrDefault(c => c.Verb == CommandVerb.BG_DISP ||
-                                                                          c.Verb == CommandVerb.BG_DISP2 || c.Verb == CommandVerb.BG_DISPCG || c.Verb == CommandVerb.BG_FADE ||
+                                                                          c.Verb == CommandVerb.BG_DISP2 ||
+                                                                          c.Verb == CommandVerb.BG_DISPCG ||
+                                                                          c.Verb == CommandVerb.BG_FADE ||
                                                                           c.Verb == CommandVerb.BG_REVERT);
             SKPaint palEffectPaint = PaletteEffectScriptParameter.IdentityPaint;
-            if (palCommand is not null && lastBgCommand is not null && commands.IndexOf(palCommand) > commands.IndexOf(lastBgCommand))
+            if (palCommand is not null && lastBgCommand is not null &&
+                commands.IndexOf(palCommand) > commands.IndexOf(lastBgCommand))
             {
                 preview.BgPalEffect = ((PaletteEffectScriptParameter)palCommand.Parameters[0]).Effect;
             }
@@ -334,27 +395,36 @@ namespace SerialLoops.Lib.Items
                     bgReverted = true;
                     continue;
                 }
+
                 if (commands[i].Verb == CommandVerb.BG_SCROLL)
                 {
                     bgScrollCommand = commands[i];
                     continue;
                 }
+
                 // Checks to see if this is one of the commands that sets a BG_REVERT immune background or if BG_REVERT hasn't been called
                 if (commands[i].Verb == CommandVerb.BG_DISP || commands[i].Verb == CommandVerb.BG_DISP2 ||
-                    (commands[i].Verb == CommandVerb.BG_FADE && (((BgScriptParameter)commands[i].Parameters[0]).Background is not null)) ||
-                    (!bgReverted && (commands[i].Verb == CommandVerb.BG_DISPCG || commands[i].Verb == CommandVerb.BG_FADE)))
+                    (commands[i].Verb == CommandVerb.BG_FADE &&
+                     (((BgScriptParameter)commands[i].Parameters[0]).Background is not null)) ||
+                    (!bgReverted && (commands[i].Verb == CommandVerb.BG_DISPCG ||
+                                     commands[i].Verb == CommandVerb.BG_FADE)))
                 {
-                    BackgroundItem background = (commands[i].Verb == CommandVerb.BG_FADE && ((BgScriptParameter)commands[i].Parameters[0]).Background is null) ?
-                        ((BgScriptParameter)commands[i].Parameters[1]).Background : ((BgScriptParameter)commands[i].Parameters[0]).Background;
+                    BackgroundItem background =
+                        (commands[i].Verb == CommandVerb.BG_FADE &&
+                         ((BgScriptParameter)commands[i].Parameters[0]).Background is null)
+                            ? ((BgScriptParameter)commands[i].Parameters[1]).Background
+                            : ((BgScriptParameter)commands[i].Parameters[0]).Background;
 
                     if (background is not null)
                     {
                         preview.Background = background;
                         preview.BgScrollCommand = bgScrollCommand;
-                        if (commands[i].Parameters.Count >= 2 && commands[i].Parameters[1].Type == ScriptParameter.ParameterType.BOOL)
+                        if (commands[i].Parameters.Count >= 2 &&
+                            commands[i].Parameters[1].Type == ScriptParameter.ParameterType.BOOL)
                         {
                             preview.BgPositionBool = ((BoolScriptParameter)commands[i].Parameters[1]).Value;
                         }
+
                         break;
                     }
                 }
@@ -364,8 +434,11 @@ namespace SerialLoops.Lib.Items
             ScriptItemCommand lastItemCommand = commands.LastOrDefault(c => c.Verb == CommandVerb.ITEM_DISPIMG);
             if (lastItemCommand is not null)
             {
-                ItemItem item = (ItemItem)project.Items.FirstOrDefault(i => i.Type == ItemType.Item && ((ItemScriptParameter)lastItemCommand.Parameters[0]).ItemIndex == ((ItemItem)i).ItemIndex);
-                if (item is not null && ((ItemLocationScriptParameter)lastItemCommand.Parameters[1]).Location != ItemItem.ItemLocation.Exit)
+                ItemItem item = (ItemItem)project.Items.FirstOrDefault(i =>
+                    i.Type == ItemType.Item && ((ItemScriptParameter)lastItemCommand.Parameters[0]).ItemIndex ==
+                    ((ItemItem)i).ItemIndex);
+                if (item is not null && ((ItemLocationScriptParameter)lastItemCommand.Parameters[1]).Location !=
+                    ItemItem.ItemLocation.Exit)
                 {
                     preview.Item = (item, ((ItemLocationScriptParameter)lastItemCommand.Parameters[1]).Location);
                 }
@@ -381,12 +454,18 @@ namespace SerialLoops.Lib.Items
             {
                 if (previousCommand?.Verb == CommandVerb.DIALOGUE)
                 {
-                    SpriteExitScriptParameter spriteExitMoveParam = (SpriteExitScriptParameter)previousCommand?.Parameters[3]; // exits/moves happen _after_ dialogue is advanced, so we check these at this point
+                    SpriteExitScriptParameter spriteExitMoveParam =
+                        (SpriteExitScriptParameter)previousCommand
+                            ?.Parameters
+                                [3]; // exits/moves happen _after_ dialogue is advanced, so we check these at this point
                     if (spriteExitMoveParam.ExitTransition != SpriteExitScriptParameter.SpriteExitTransition.NO_EXIT)
                     {
-                        CharacterItem prevCharacter = (CharacterItem)project.Items.First(i => i.Type == ItemType.Character &&
-                            i.Name == $"CHR_{project.Characters[(int)((DialogueScriptParameter)previousCommand.Parameters[0]).Line.Speaker].Name}");
-                        SpriteScriptParameter previousSpriteParam = (SpriteScriptParameter)previousCommand.Parameters[1];
+                        CharacterItem prevCharacter = (CharacterItem)project.Items.First(i =>
+                            i.Type == ItemType.Character &&
+                            i.Name ==
+                            $"CHR_{project.Characters[(int)((DialogueScriptParameter)previousCommand.Parameters[0]).Line.Speaker].Name}");
+                        SpriteScriptParameter previousSpriteParam =
+                            (SpriteScriptParameter)previousCommand.Parameters[1];
                         short layer = ((ShortScriptParameter)previousCommand.Parameters[9]).Value;
                         switch (spriteExitMoveParam.ExitTransition)
                         {
@@ -396,25 +475,43 @@ namespace SerialLoops.Lib.Items
                             case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_FROM_CENTER_TO_RIGHT_FADE_OUT:
                             case SpriteExitScriptParameter.SpriteExitTransition.FADE_OUT_CENTER:
                             case SpriteExitScriptParameter.SpriteExitTransition.FADE_OUT_LEFT:
-                                if (sprites.ContainsKey(prevCharacter) && previousSprites.ContainsKey(prevCharacter) && ((SpriteScriptParameter)previousCommand.Parameters[1]).Sprite?.Sprite?.Character == prevCharacter.MessageInfo.Character)
+                                if (sprites.ContainsKey(prevCharacter) && previousSprites.ContainsKey(prevCharacter) &&
+                                    ((SpriteScriptParameter)previousCommand.Parameters[1]).Sprite?.Sprite?.Character ==
+                                    prevCharacter.MessageInfo.Character)
                                 {
                                     sprites.Remove(prevCharacter);
                                     previousSprites.Remove(prevCharacter);
                                 }
+
                                 break;
 
                             case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_CENTER_TO_LEFT_AND_STAY:
                             case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_RIGHT_TO_LEFT_AND_STAY:
-                                sprites[prevCharacter] = new() { Sprite = previousSpriteParam.Sprite, Positioning = new() { X = SpritePositioning.SpritePosition.LEFT.GetSpriteX(), Layer = layer } };
+                                sprites[prevCharacter] = new()
+                                {
+                                    Sprite = previousSpriteParam.Sprite,
+                                    Positioning = new()
+                                    {
+                                        X = SpritePositioning.SpritePosition.LEFT.GetSpriteX(), Layer = layer
+                                    }
+                                };
                                 break;
 
                             case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_CENTER_TO_RIGHT_AND_STAY:
                             case SpriteExitScriptParameter.SpriteExitTransition.SLIDE_LEFT_TO_RIGHT_AND_STAY:
-                                sprites[prevCharacter] = new() { Sprite = previousSpriteParam.Sprite, Positioning = new() { X = SpritePositioning.SpritePosition.RIGHT.GetSpriteX(), Layer = layer } };
+                                sprites[prevCharacter] = new()
+                                {
+                                    Sprite = previousSpriteParam.Sprite,
+                                    Positioning = new()
+                                    {
+                                        X = SpritePositioning.SpritePosition.RIGHT.GetSpriteX(), Layer = layer
+                                    }
+                                };
                                 break;
                         }
                     }
                 }
+
                 if (command.Verb == CommandVerb.DIALOGUE)
                 {
                     SpriteScriptParameter spriteParam = (SpriteScriptParameter)command.Parameters[1];
@@ -423,56 +520,90 @@ namespace SerialLoops.Lib.Items
                     {
                         spritePaint = ((PaletteEffectScriptParameter)palCommand.Parameters[0]).Effect switch
                         {
-                            PaletteEffectScriptParameter.PaletteEffect.INVERTED => PaletteEffectScriptParameter.InvertedPaint,
-                            PaletteEffectScriptParameter.PaletteEffect.GRAYSCALE => PaletteEffectScriptParameter.GrayscalePaint,
+                            PaletteEffectScriptParameter.PaletteEffect.INVERTED => PaletteEffectScriptParameter
+                                .InvertedPaint,
+                            PaletteEffectScriptParameter.PaletteEffect.GRAYSCALE => PaletteEffectScriptParameter
+                                .GrayscalePaint,
                             PaletteEffectScriptParameter.PaletteEffect.SEPIA => PaletteEffectScriptParameter.SepiaPaint,
-                            PaletteEffectScriptParameter.PaletteEffect.DIMMED => PaletteEffectScriptParameter.DimmedPaint,
+                            PaletteEffectScriptParameter.PaletteEffect.DIMMED => PaletteEffectScriptParameter
+                                .DimmedPaint,
                             _ => PaletteEffectScriptParameter.IdentityPaint,
                         };
                     }
+
                     if (spriteParam.Sprite is not null)
                     {
                         CharacterItem character;
                         try
                         {
-                            character = (CharacterItem)project.Items.First(i => i.Type == ItemDescription.ItemType.Character &&
-                                i.DisplayName == $"CHR_{project.Characters[(int)((DialogueScriptParameter)command.Parameters[0]).Line.Speaker].Name}");
+                            character = (CharacterItem)project.Items.First(i =>
+                                i.Type == ItemDescription.ItemType.Character &&
+                                i.DisplayName ==
+                                $"CHR_{project.Characters[(int)((DialogueScriptParameter)command.Parameters[0]).Line.Speaker].Name}");
                         }
                         catch (InvalidOperationException)
                         {
-                            log.LogWarning($"Unable to determine speaking character in DIALOGUE command in {DisplayName}.");
+                            log.LogWarning(
+                                $"Unable to determine speaking character in DIALOGUE command in {DisplayName}.");
                             preview.ErrorImage = "SerialLoops.Graphics.ScriptPreviewError.png";
                             return preview;
                         }
-                        SpriteEntranceScriptParameter spriteEntranceParam = (SpriteEntranceScriptParameter)command.Parameters[2];
+
+                        SpriteEntranceScriptParameter spriteEntranceParam =
+                            (SpriteEntranceScriptParameter)command.Parameters[2];
                         SpriteShakeScriptParameter spriteShakeParam = (SpriteShakeScriptParameter)command.Parameters[4];
                         short layer = ((ShortScriptParameter)command.Parameters[9]).Value;
 
                         bool spriteIsNew = !sprites.ContainsKey(character);
-                        if (spriteIsNew && spriteEntranceParam.EntranceTransition != SpriteEntranceScriptParameter.SpriteEntranceTransition.NO_TRANSITION)
+                        if (spriteIsNew && spriteEntranceParam.EntranceTransition !=
+                            SpriteEntranceScriptParameter.SpriteEntranceTransition.NO_TRANSITION)
                         {
                             sprites.Add(character, new());
                             previousSprites.Add(character, new());
                         }
+
                         if (sprites.ContainsKey(character))
                         {
                             previousSprites[character] = sprites[character];
                         }
-                        if (spriteEntranceParam.EntranceTransition != SpriteEntranceScriptParameter.SpriteEntranceTransition.NO_TRANSITION)
+
+                        if (spriteEntranceParam.EntranceTransition !=
+                            SpriteEntranceScriptParameter.SpriteEntranceTransition.NO_TRANSITION)
                         {
                             switch (spriteEntranceParam.EntranceTransition)
                             {
                                 // These ones will do their thing no matter what
                                 case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_CENTER:
                                 case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_CENTER:
-                                    sprites[character] = new() { Sprite = spriteParam.Sprite, Positioning = new() { X = SpritePositioning.SpritePosition.CENTER.GetSpriteX(), Layer = layer }, PalEffect = spritePaint };
+                                    sprites[character] = new()
+                                    {
+                                        Sprite = spriteParam.Sprite,
+                                        Positioning =
+                                            new()
+                                            {
+                                                X = SpritePositioning.SpritePosition.CENTER.GetSpriteX(),
+                                                Layer = layer
+                                            },
+                                        PalEffect = spritePaint
+                                    };
                                     break;
 
                                 case SpriteEntranceScriptParameter.SpriteEntranceTransition.FADE_TO_CENTER:
                                     if (spriteIsNew)
                                     {
-                                        sprites[character] = new() { Sprite = spriteParam.Sprite, Positioning = new() { X = SpritePositioning.SpritePosition.CENTER.GetSpriteX(), Layer = layer }, PalEffect = spritePaint };
+                                        sprites[character] = new()
+                                        {
+                                            Sprite = spriteParam.Sprite,
+                                            Positioning =
+                                                new()
+                                                {
+                                                    X = SpritePositioning.SpritePosition.CENTER.GetSpriteX(),
+                                                    Layer = layer
+                                                },
+                                            PalEffect = spritePaint
+                                        };
                                     }
+
                                     break;
 
                                 case SpriteEntranceScriptParameter.SpriteEntranceTransition.FADE_IN_LEFT:
@@ -482,12 +613,35 @@ namespace SerialLoops.Lib.Items
                                 case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_LEFT_SLOW:
                                     if (spriteIsNew)
                                     {
-                                        sprites[character] = new() { Sprite = spriteParam.Sprite, Positioning = new() { X = SpritePositioning.SpritePosition.LEFT.GetSpriteX(), Layer = layer }, PalEffect = spritePaint };
+                                        sprites[character] = new()
+                                        {
+                                            Sprite = spriteParam.Sprite,
+                                            Positioning =
+                                                new()
+                                                {
+                                                    X = SpritePositioning.SpritePosition.LEFT.GetSpriteX(),
+                                                    Layer = layer
+                                                },
+                                            PalEffect = spritePaint
+                                        };
                                     }
-                                    else if (previousCharacter != character && (spriteEntranceParam.EntranceTransition == SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_LEFT_FAST))
+                                    else if (previousCharacter != character &&
+                                             (spriteEntranceParam.EntranceTransition == SpriteEntranceScriptParameter
+                                                 .SpriteEntranceTransition.SLIDE_RIGHT_TO_LEFT_FAST))
                                     {
-                                        sprites[character] = new() { Sprite = spriteParam.Sprite, Positioning = new() { X = SpritePositioning.SpritePosition.CENTER.GetSpriteX(), Layer = layer }, PalEffect = spritePaint };
+                                        sprites[character] = new()
+                                        {
+                                            Sprite = spriteParam.Sprite,
+                                            Positioning =
+                                                new()
+                                                {
+                                                    X = SpritePositioning.SpritePosition.CENTER.GetSpriteX(),
+                                                    Layer = layer
+                                                },
+                                            PalEffect = spritePaint
+                                        };
                                     }
+
                                     break;
 
                                 case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_RIGHT:
@@ -495,36 +649,96 @@ namespace SerialLoops.Lib.Items
                                 case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_RIGHT_SLOW:
                                     if (spriteIsNew)
                                     {
-                                        sprites[character] = new() { Sprite = spriteParam.Sprite, Positioning = new() { X = SpritePositioning.SpritePosition.RIGHT.GetSpriteX(), Layer = layer }, PalEffect = spritePaint };
+                                        sprites[character] = new()
+                                        {
+                                            Sprite = spriteParam.Sprite,
+                                            Positioning =
+                                                new()
+                                                {
+                                                    X = SpritePositioning.SpritePosition.RIGHT.GetSpriteX(),
+                                                    Layer = layer
+                                                },
+                                            PalEffect = spritePaint
+                                        };
                                     }
-                                    else if (previousCharacter != character && (spriteEntranceParam.EntranceTransition == SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_RIGHT_FAST))
+                                    else if (previousCharacter != character &&
+                                             (spriteEntranceParam.EntranceTransition == SpriteEntranceScriptParameter
+                                                 .SpriteEntranceTransition.SLIDE_LEFT_TO_RIGHT_FAST))
                                     {
-                                        sprites[character] = new() { Sprite = spriteParam.Sprite, Positioning = new() { X = SpritePositioning.SpritePosition.CENTER.GetSpriteX(), Layer = layer }, PalEffect = spritePaint };
+                                        sprites[character] = new()
+                                        {
+                                            Sprite = spriteParam.Sprite,
+                                            Positioning =
+                                                new()
+                                                {
+                                                    X = SpritePositioning.SpritePosition.CENTER.GetSpriteX(),
+                                                    Layer = layer
+                                                },
+                                            PalEffect = spritePaint
+                                        };
                                     }
+
                                     break;
                             }
                         }
                         else if (sprites.TryGetValue(character, out PositionedSprite sprite))
                         {
-                            sprites[character] = new() { Sprite = spriteParam.Sprite, Positioning = sprite.Positioning, PalEffect = spritePaint };
+                            sprites[character] = new()
+                            {
+                                Sprite = spriteParam.Sprite,
+                                Positioning = sprite.Positioning,
+                                PalEffect = spritePaint
+                            };
                         }
 
-                        if (spriteShakeParam.ShakeEffect != SpriteShakeScriptParameter.SpriteShakeEffect.NONE && sprites.ContainsKey(character))
+                        if (spriteShakeParam.ShakeEffect != SpriteShakeScriptParameter.SpriteShakeEffect.NONE &&
+                            sprites.ContainsKey(character))
                         {
                             switch (spriteShakeParam.ShakeEffect)
                             {
                                 case SpriteShakeScriptParameter.SpriteShakeEffect.SHAKE_LEFT:
-                                    sprites[character] = new() { Sprite = spriteParam.Sprite, Positioning = new() { X = SpritePositioning.SpritePosition.LEFT.GetSpriteX(), Layer = layer }, PalEffect = spritePaint };
+                                    sprites[character] = new()
+                                    {
+                                        Sprite = spriteParam.Sprite,
+                                        Positioning =
+                                            new()
+                                            {
+                                                X = SpritePositioning.SpritePosition.LEFT.GetSpriteX(),
+                                                Layer = layer
+                                            },
+                                        PalEffect = spritePaint
+                                    };
                                     break;
 
                                 case SpriteShakeScriptParameter.SpriteShakeEffect.SHAKE_RIGHT:
-                                    sprites[character] = new() { Sprite = spriteParam.Sprite, Positioning = new() { X = SpritePositioning.SpritePosition.RIGHT.GetSpriteX(), Layer = layer }, PalEffect = spritePaint };
+                                    sprites[character] = new()
+                                    {
+                                        Sprite = spriteParam.Sprite,
+                                        Positioning =
+                                            new()
+                                            {
+                                                X = SpritePositioning.SpritePosition.RIGHT.GetSpriteX(),
+                                                Layer = layer
+                                            },
+                                        PalEffect = spritePaint
+                                    };
                                     break;
 
                                 case SpriteShakeScriptParameter.SpriteShakeEffect.SHAKE_CENTER:
                                 case SpriteShakeScriptParameter.SpriteShakeEffect.BOUNCE_HORIZONTAL_CENTER:
-                                case SpriteShakeScriptParameter.SpriteShakeEffect.BOUNCE_HORIZONTAL_CENTER_WITH_SMALL_SHAKES:
-                                    sprites[character] = new() { Sprite = spriteParam.Sprite, Positioning = new() { X = SpritePositioning.SpritePosition.CENTER.GetSpriteX(), Layer = layer }, PalEffect = spritePaint };
+                                case SpriteShakeScriptParameter.SpriteShakeEffect
+                                    .BOUNCE_HORIZONTAL_CENTER_WITH_SMALL_SHAKES:
+                                    sprites[character] = new()
+                                    {
+                                        Sprite = spriteParam.Sprite,
+                                        Positioning =
+                                            new()
+                                            {
+                                                X = SpritePositioning.SpritePosition.CENTER.GetSpriteX(),
+                                                Layer = layer
+                                            },
+                                        PalEffect = spritePaint
+                                    };
                                     break;
                             }
                         }
@@ -537,13 +751,15 @@ namespace SerialLoops.Lib.Items
                     sprites.Clear();
                     previousSprites.Clear();
                 }
+
                 previousCommand = command;
             }
 
             preview.Sprites = [.. sprites.Values.OrderBy(p => p.Positioning.Layer)];
 
             // Draw dialogue
-            ScriptItemCommand lastPinMnlCommand = commands.LastOrDefault(c => c.Verb == CommandVerb.PIN_MNL && c.Section.Equals(commands.Last().Section));
+            ScriptItemCommand lastPinMnlCommand = commands.LastOrDefault(c =>
+                c.Verb == CommandVerb.PIN_MNL && c.Section.Equals(commands.Last().Section));
             if (lastPinMnlCommand is not null)
             {
                 DialogueLine line = ((DialogueScriptParameter)lastPinMnlCommand.Parameters[0]).Line;
@@ -556,12 +772,13 @@ namespace SerialLoops.Lib.Items
             {
                 ScriptItemCommand lastDialogueCommand = commands.LastOrDefault(c => c.Verb == CommandVerb.DIALOGUE);
                 if (commands.FindLastIndex(c => c.Verb == CommandVerb.TOGGLE_DIALOGUE &&
-                                                !((BoolScriptParameter)c.Parameters[0]).Value) < commands.IndexOf(lastDialogueCommand))
+                                                !((BoolScriptParameter)c.Parameters[0]).Value) <
+                    commands.IndexOf(lastDialogueCommand))
                 {
                     DialogueLine line = ((DialogueScriptParameter)lastDialogueCommand.Parameters[0]).Line;
                     if (!string.IsNullOrEmpty(line.Text))
                     {
-                        preview.LastDialogueCommand = lastDialogueCommand;}
+                        preview.LastDialogueCommand = lastDialogueCommand;
                     }
                 }
             }
@@ -577,7 +794,8 @@ namespace SerialLoops.Lib.Items
             return preview;
         }
 
-        public static (SKBitmap PreviewImage, string ErrorImage) GeneratePreviewImage(ScriptPreview preview, Project project)
+        public static (SKBitmap PreviewImage, string ErrorImage) GeneratePreviewImage(ScriptPreview preview,
+            Project project)
         {
             SKBitmap previewBitmap = new(256, 384);
             SKCanvas canvas = new(previewBitmap);
@@ -590,7 +808,10 @@ namespace SerialLoops.Lib.Items
 
             if (preview.EpisodeHeader != 0)
             {
-                canvas.DrawBitmap(EpisodeHeaderScriptParameter.GetTexture((EpisodeHeaderScriptParameter.Episode)preview.EpisodeHeader, project).GetTexture(), new SKPoint(0, 0));
+                canvas.DrawBitmap(
+                    EpisodeHeaderScriptParameter
+                        .GetTexture((EpisodeHeaderScriptParameter.Episode)preview.EpisodeHeader, project).GetTexture(),
+                    new SKPoint(0, 0));
             }
             else
             {
@@ -612,9 +833,13 @@ namespace SerialLoops.Lib.Items
 
                 if (preview.ChibiEmote.EmotingChibi is not null)
                 {
-                    SKBitmap emotes = project.Grp.GetFileByName("SYS_ADV_T08DNX").GetImage(width: 32, transparentIndex: 0);
+                    SKBitmap emotes = project.Grp.GetFileByName("SYS_ADV_T08DNX")
+                        .GetImage(width: 32, transparentIndex: 0);
                     int chibiY = preview.TopScreenChibis.First(c => c.Chibi == preview.ChibiEmote.EmotingChibi).Y;
-                    canvas.DrawBitmap(emotes, new SKRect(0, preview.ChibiEmote.InternalYOffset, 32, preview.ChibiEmote.InternalYOffset + 32), new SKRect(preview.ChibiEmote.ExternalXOffset + 16, chibiY - 32, preview.ChibiEmote.ExternalXOffset + 48, chibiY));
+                    canvas.DrawBitmap(emotes,
+                        new SKRect(0, preview.ChibiEmote.InternalYOffset, 32, preview.ChibiEmote.InternalYOffset + 32),
+                        new SKRect(preview.ChibiEmote.ExternalXOffset + 16, chibiY - 32,
+                            preview.ChibiEmote.ExternalXOffset + 48, chibiY));
                 }
             }
 
@@ -625,42 +850,59 @@ namespace SerialLoops.Lib.Items
                 {
                     case BgType.TEX_CG_DUAL_SCREEN:
                         SKBitmap dualScreenBg = preview.Background.GetBackground();
-                        if (preview.BgScrollCommand is not null && ((BgScrollDirectionScriptParameter)preview.BgScrollCommand.Parameters[0]).ScrollDirection == BgScrollDirectionScriptParameter.BgScrollDirection.DOWN)
+                        if (preview.BgScrollCommand is not null &&
+                            ((BgScrollDirectionScriptParameter)preview.BgScrollCommand.Parameters[0]).ScrollDirection ==
+                            BgScrollDirectionScriptParameter.BgScrollDirection.DOWN)
                         {
-                            canvas.DrawBitmap(dualScreenBg, new SKRect(0, preview.Background.Graphic2.Height - 192, 256, preview.Background.Graphic2.Height), new SKRect(0, 0, 256, 192));
+                            canvas.DrawBitmap(dualScreenBg,
+                                new SKRect(0, preview.Background.Graphic2.Height - 192, 256,
+                                    preview.Background.Graphic2.Height), new SKRect(0, 0, 256, 192));
                             int bottomScreenX = dualScreenBg.Height - 192;
-                            canvas.DrawBitmap(dualScreenBg, new SKRect(0, bottomScreenX, 256, bottomScreenX + 192), new SKRect(0, 192, 256, 384));
+                            canvas.DrawBitmap(dualScreenBg, new SKRect(0, bottomScreenX, 256, bottomScreenX + 192),
+                                new SKRect(0, 192, 256, 384));
                         }
                         else
                         {
                             canvas.DrawBitmap(dualScreenBg, new SKRect(0, 0, 256, 192), new SKRect(0, 0, 256, 192));
-                            canvas.DrawBitmap(dualScreenBg, new SKRect(0, preview.Background.Graphic2.Height, 256, preview.Background.Graphic2.Height + 192), new SKRect(0, 192, 256, 384));
+                            canvas.DrawBitmap(dualScreenBg,
+                                new SKRect(0, preview.Background.Graphic2.Height, 256,
+                                    preview.Background.Graphic2.Height + 192), new SKRect(0, 192, 256, 384));
                         }
+
                         break;
 
                     case BgType.TEX_CG_SINGLE:
-                        if (preview.BgPositionBool || (preview.BgScrollCommand is not null && ((BgScrollDirectionScriptParameter)preview.BgScrollCommand.Parameters[0]).ScrollDirection == BgScrollDirectionScriptParameter.BgScrollDirection.DOWN))
+                        if (preview.BgPositionBool || (preview.BgScrollCommand is not null &&
+                                                       ((BgScrollDirectionScriptParameter)preview.BgScrollCommand
+                                                           .Parameters[0]).ScrollDirection ==
+                                                       BgScrollDirectionScriptParameter.BgScrollDirection.DOWN))
                         {
                             SKBitmap bgBitmap = preview.Background.GetBackground();
-                            canvas.DrawBitmap(bgBitmap, new SKRect(0, bgBitmap.Height - 192, bgBitmap.Width, bgBitmap.Height),
+                            canvas.DrawBitmap(bgBitmap,
+                                new SKRect(0, bgBitmap.Height - 192, bgBitmap.Width, bgBitmap.Height),
                                 new SKRect(0, 192, 256, 384));
                         }
                         else
                         {
                             canvas.DrawBitmap(preview.Background.GetBackground(), new SKPoint(0, 192));
                         }
+
                         break;
 
                     case BgType.TEX_CG_WIDE:
-                        if (preview.BgScrollCommand is not null && ((BgScrollDirectionScriptParameter)preview.BgScrollCommand.Parameters[0]).ScrollDirection == BgScrollDirectionScriptParameter.BgScrollDirection.RIGHT)
+                        if (preview.BgScrollCommand is not null &&
+                            ((BgScrollDirectionScriptParameter)preview.BgScrollCommand.Parameters[0]).ScrollDirection ==
+                            BgScrollDirectionScriptParameter.BgScrollDirection.RIGHT)
                         {
                             SKBitmap bgBitmap = preview.Background.GetBackground();
-                            canvas.DrawBitmap(bgBitmap, new SKRect(bgBitmap.Width - 256, 0, bgBitmap.Width, 192), new SKRect(0, 192, 256, 384));
+                            canvas.DrawBitmap(bgBitmap, new SKRect(bgBitmap.Width - 256, 0, bgBitmap.Width, 192),
+                                new SKRect(0, 192, 256, 384));
                         }
                         else
                         {
                             canvas.DrawBitmap(preview.Background.GetBackground(), new SKPoint(0, 192));
                         }
+
                         break;
 
                     case BgType.TEX_CG:
@@ -668,7 +910,8 @@ namespace SerialLoops.Lib.Items
                         break;
 
                     default:
-                        canvas.DrawBitmap(preview.Background.GetBackground(), new SKPoint(0, 192), PaletteEffectScriptParameter.GetPaletteEffectPaint(preview.BgPalEffect));
+                        canvas.DrawBitmap(preview.Background.GetBackground(), new SKPoint(0, 192),
+                            PaletteEffectScriptParameter.GetPaletteEffectPaint(preview.BgPalEffect));
                         break;
                 }
             }
@@ -679,11 +922,13 @@ namespace SerialLoops.Lib.Items
                 switch (preview.Item.Location)
                 {
                     case ItemItem.ItemLocation.Left:
-                        canvas.DrawBitmap(preview.Item.Item.ItemGraphic.GetImage(transparentIndex: 0), 128 - width, 204);
+                        canvas.DrawBitmap(preview.Item.Item.ItemGraphic.GetImage(transparentIndex: 0), 128 - width,
+                            204);
                         break;
 
                     case ItemItem.ItemLocation.Center:
-                        canvas.DrawBitmap(preview.Item.Item.ItemGraphic.GetImage(transparentIndex: 0), 128 - width / 2, 204);
+                        canvas.DrawBitmap(preview.Item.Item.ItemGraphic.GetImage(transparentIndex: 0), 128 - width / 2,
+                            204);
                         break;
 
                     case ItemItem.ItemLocation.Right:
@@ -702,7 +947,8 @@ namespace SerialLoops.Lib.Items
                 if (sprite.Sprite is not null)
                 {
                     SKBitmap spriteBitmap = sprite.Sprite.GetClosedMouthAnimation(project)[0].Frame;
-                    canvas.DrawBitmap(spriteBitmap, sprite.Positioning.GetSpritePosition(spriteBitmap), sprite.PalEffect);
+                    canvas.DrawBitmap(spriteBitmap, sprite.Positioning.GetSpritePosition(spriteBitmap),
+                        sprite.PalEffect);
                 }
             }
 
@@ -721,8 +967,10 @@ namespace SerialLoops.Lib.Items
                     canvas.DrawBitmap(project.DialogueBitmap, new SKRect(0, 24, 32, 36), new SKRect(0, 344, 256, 356));
                     SKColor dialogueBoxColor = project.DialogueBitmap.GetPixel(0, 28);
                     canvas.DrawRect(0, 356, 224, 384, new() { Color = dialogueBoxColor });
-                    canvas.DrawBitmap(project.DialogueBitmap, new SKRect(0, 37, 32, 64), new SKRect(224, 356, 256, 384));
-                    canvas.DrawBitmap(project.SpeakerBitmap, new SKRect(0, 16 * ((int)line.Speaker - 1), 64, 16 * ((int)line.Speaker)),
+                    canvas.DrawBitmap(project.DialogueBitmap, new SKRect(0, 37, 32, 64),
+                        new SKRect(224, 356, 256, 384));
+                    canvas.DrawBitmap(project.SpeakerBitmap,
+                        new SKRect(0, 16 * ((int)line.Speaker - 1), 64, 16 * ((int)line.Speaker)),
                         new SKRect(0, 332, 64, 348));
 
                     canvas.DrawHaroohieText(line.Text, dialoguePaint, project);
@@ -763,7 +1011,9 @@ namespace SerialLoops.Lib.Items
             return (previewBitmap, null);
         }
 
-        public (SKBitmap PreviewImage, string ErrorImage) GeneratePreviewImage(Dictionary<ScriptSection, List<ScriptItemCommand>> commandTree, ScriptItemCommand currentCommand, Project project, ILogger log)
+        public (SKBitmap PreviewImage, string ErrorImage) GeneratePreviewImage(
+            Dictionary<ScriptSection, List<ScriptItemCommand>> commandTree, ScriptItemCommand currentCommand,
+            Project project, ILogger log)
         {
             return GeneratePreviewImage(GetScriptPreview(commandTree, currentCommand, project, log), project);
         }
@@ -795,7 +1045,9 @@ namespace SerialLoops.Lib.Items
                         {
                             continue;
                         }
-                        if (!Event.ScriptSections.Select(s => s.Name).Contains(Event.LabelsSection.Objects[i].Name.Replace("/", "")))
+
+                        if (!Event.ScriptSections.Select(s => s.Name)
+                                .Contains(Event.LabelsSection.Objects[i].Name.Replace("/", "")))
                         {
                             Event.LabelsSection.Objects.RemoveAt(i);
                             i--;
