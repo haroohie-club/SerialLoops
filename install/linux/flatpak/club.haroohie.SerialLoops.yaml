@@ -67,7 +67,7 @@ modules:
       - type: file
         path: club.haroohie.SerialLoops.appdata.xml
       - type: file
-        path: SerialLoops/install/linux/dpkg-build/SerialLoops/usr/share/applications/SerialLoops.desktop
+        path: ../dpkg-build/SerialLoops/usr/share/applications/SerialLoops.desktop
     build-commands:
       - dotnet publish src/SerialLoops/SerialLoops.csproj -c Release -f net8.0 --no-self-contained --source ./nuget-sources
       - mkdir -p ${FLATPAK_DEST}/bin
