@@ -123,7 +123,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: linux-x64-rpm
-          path: install/linux/rpm/rpmbuild/RPMS/x86_64/SerialLoops-$SLVersion-1.fc39.x86_64.rpm
+          path: install/linux/rpm/rpmbuild/RPMS/x86_64/SerialLoops-${{ env.SLVersion }}-1.fc39.x86_64.rpm
           retention-days: 1
 
   macos-pkg:
@@ -250,8 +250,8 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          name: Serial Loops v$SLVersion
-          tag_name: $SLVersion
+          name: Serial Loops v${{ env.SLVersion }}
+          tag_name: ${{ env.SLVersion }}
           prerelease: ${{ inputs.version == '' }}
           files: release/*
           body: |
