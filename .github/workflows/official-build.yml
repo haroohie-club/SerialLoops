@@ -108,9 +108,10 @@ jobs:
     container:
       image: fedora:39
     steps:
+      - name: Check out
+        uses: actions/checkout@v4
       - name: Create RPM
         run: |
-          cd SerialLoops
           tar -czvf ../source.tar.gz --transform 's,^\.\/,SerialLoops-$SLVersion/,' .
           cp ../source.tar.gz install/linux/rpm/rpmbuild/SOURCES/SerialLoops-$SLVersion.tar.gz
           sed -i "s/#VERSION#/$SLVersion/g" ./install/linux/rpm/rpmbuild/SPECS/SerialLoops.spec
