@@ -84,8 +84,7 @@ jobs:
       - name: Build pkg installer
         run: |
           mkdir "install/macos/Serial Loops.app"
-          ls -l src/SerialLoops/bin/Release/net8.0/${{ matrix.rid }}/publish
-          cp -r "src/SerialLoops/bin/Release/net8.0/${{ matrix.rid }}/publish/Serial Loops.app/*" "install/macos/Serial Loops.app/"
+          cp -r "src/SerialLoops/bin/Release/net8.0/${{ matrix.rid }}/publish/Serial Loops.app" "install/macos/"
           cd install/macos/
           chmod +x "./Serial Loops.app/Contents/MacOS/SerialLoops"
           python serial_loops_pkg_builder.py $SLVersion
