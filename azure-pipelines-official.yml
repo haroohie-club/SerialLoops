@@ -159,8 +159,7 @@ stages:
     steps:
     - checkout: self
       clean: true
-    - script: |
-        flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+    - script: flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
       displayName: Add flathub remote
     - script: |
         cp -r install/linux/flatpak/* $(Agent.BuildDirectory)/
