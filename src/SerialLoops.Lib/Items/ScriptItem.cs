@@ -737,7 +737,7 @@ namespace SerialLoops.Lib.Items
             }
         }
 
-        public void PruneLabelsSection(ILogger log)
+        private void PruneLabelsSection(ILogger log)
         {
             if ((Event.LabelsSection?.Objects?.Count ?? 0) - 1 > Event.ScriptSections.Count)
             {
