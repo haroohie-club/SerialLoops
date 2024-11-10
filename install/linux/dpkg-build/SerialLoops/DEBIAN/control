@@ -2,7 +2,7 @@ Package: SerialLoops
 Version: #VERSION#
 Section: custom
 Priority: optional
-Architecture: all
+Architecture: amd64
 Essential: no
 Depends: libopenal-dev, make, dotnet-sdk-8.0
 Maintainer: The Haroohie Translation Club <haroohietranslation@gmail.com>

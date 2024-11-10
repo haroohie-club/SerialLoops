@@ -66,7 +66,7 @@ namespace SerialLoops.ViewModels.Dialogs
                         OptionName = Strings.Emulator_Flatpak,
                         Value = Configuration.EmulatorFlatpak,
                         OnChange = (flatpak) => Configuration.EmulatorFlatpak = flatpak,
-                        Enabled = !OperatingSystem.IsLinux(),
+                        Enabled = OperatingSystem.IsLinux(),
                     },
                     new BooleanOption
                     {

@@ -2,7 +2,7 @@
 <component type="desktop">
   <id>club.haroohie.SerialLoops</id>
   <metadata_license>CC0-1.0</metadata_license>
-  <project_license>GPL-3.0</project_license>
+  <project_license>GPL-3.0-or-later</project_license>
   <name>Serial Loops</name>
   <launchable type="desktop-id">club.haroohie.SerialLoops.desktop</launchable>
   <summary>Editor for Suzumiya Haruhi no Chokuretsu</summary>
@@ -10,8 +10,8 @@
     <p>Serial Loops is a full-fledged editor for the Nintendo DS game Suzumiya Haruhi no Chokuretsu (The Series of Haruhi Suzumiya).</p>
   </description>
   <branding>
-    <color type="primary" scheme_preference="light">#eff0f1</color>
-    <color type="primary" scheme_preference="dark">#302f2f</color>
+    <color type="primary" scheme_preference="light">#9accfe</color>
+    <color type="primary" scheme_preference="dark">#042058</color>
   </branding>
   <screenshots>
     <screenshot type="default">
