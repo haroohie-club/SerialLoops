@@ -106,6 +106,7 @@ namespace SerialLoops.ViewModels.Editors.ScriptCommandEditors
 
                 ScriptEditor.UpdatePreview();
                 Script.UnsavedChanges = true;
+                Command.UpdateDisplay();
             }
         }
 
