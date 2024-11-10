@@ -120,6 +120,7 @@ namespace SerialLoops.ViewModels.Editors
                     CommandVerb.VCE_PLAY => new VcePlayScriptCommandEditorViewModel(_selectedCommand, this, _window),
                     CommandVerb.FLAG => new FlagScriptCommandEditorViewModel(_selectedCommand, this),
                     CommandVerb.TOPIC_GET => new TopicGetScriptCommandEditorViewModel(_selectedCommand, this, _window),
+                    CommandVerb.SELECT => new SelectScriptCommandEditorViewModel(_selectedCommand, this, _window.OpenProject),
                     CommandVerb.TOGGLE_DIALOGUE => new ToggleDialogueScriptCommandEditorViewModel(_selectedCommand, this),
                     CommandVerb.SCREEN_SHAKE_STOP => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
                     CommandVerb.WAIT => new WaitScriptCommandEditorViewModel(_selectedCommand, this),

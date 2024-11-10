@@ -9,6 +9,7 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Avalonia.Skia;
 using HaruhiChokuretsuLib.Archive.Event;
+using ReactiveUI;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Util;
@@ -45,21 +46,18 @@ namespace SerialLoops.Utility
         }
     }
 
-    public class TextSubstitutionConverter : IValueConverter
+    public class TextSubstitionConverter : IMultiValueConverter
     {
-        private static Project _project;
+        public object Convert(IList<object> values, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (values[0] is not UnsetValueType && values[1] is not UnsetValueType)
+            {
+                string originalText = (string)values[0];
+                Project project = (Project)values[1];
 
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return ((string)value).GetSubstitutedString(_project);
-        }
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return ((string)value).GetOriginalString(_project);
-        }
-        public static void SetProject(Project project)
-        {
-            _project = project;
+                return originalText.GetSubstitutedString(project);
+            }
+            return string.Empty;
         }
     }
 
