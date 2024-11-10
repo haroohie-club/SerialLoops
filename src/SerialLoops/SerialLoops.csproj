@@ -9,6 +9,7 @@
     <Version>$(SLAssemblyVersion)</Version>
     <InformationalVersion>$(SLVersion)</InformationalVersion>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <ApplicationIcon>Assets\serial-loops.ico</ApplicationIcon>
   </PropertyGroup>
 
   <PropertyGroup>
