@@ -78,7 +78,7 @@ jobs:
         with:
           python-version: '3.13'
       - name: Restore
-        run: dotnet restore src/SerialLoops/SerialLoops.csproj -r $(rid)
+        run: dotnet restore src/SerialLoops/SerialLoops.csproj -r ${{ matrix.rid }}
       - name: Build .app
         run: dotnet msbuild src/SerialLoops/SerialLoops.csproj -t:BundleApp -p:Configuration=Release -p:TargetFramework=net8.0 -p:RuntimeIdentifier=${{ matrix.rid }} -p:UseAppHost=true --p:SelfContained=true -p:DebugType=None -p:DebugSymbols=false -p:PublishSingleFile=true
       - name: Build pkg installer
