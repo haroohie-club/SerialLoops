@@ -113,7 +113,7 @@ jobs:
       - name: Create RPM
         run: |
           cp -r install/linux/rpm/rpmbuild ~/
-          tar -czvf ~/rpmbuild/SOURCES/SerialLoops-$SLVersion.tar.gz --transform 's,^\.\/,SerialLoops-$SLVersion/,' .
+          tar -czvf ~/rpmbuild/SOURCES/SerialLoops-$SLVersion.tar.gz --transform "s,^\.\/,SerialLoops-$SLVersion/," .
           sed -i "s/#VERSION#/$SLVersion/g" ~/rpmbuild/SPECS/SerialLoops.spec
           dnf install -y rpmdevtools rpmlint dotnet-sdk-8.0
           pushd ~
