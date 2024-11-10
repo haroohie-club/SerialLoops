@@ -91,7 +91,7 @@ jobs:
           New-Item -ItemType "directory" -Path ./dpkg-build/SerialLoops/usr -Name bin
           Push-Location ./dpkg-build/SerialLoops
           ((Get-Content -Path DEBIAN/control) -replace '#VERSION#', '$env:SLVersion') | Set-Content -Path DEBIAN/control
-          Copy-Item -Path ./src/SerialLoops/bin/Release/net8.0/linux-x64/publish/* -Destination ./usr/lib/SerialLoops -Recurse
+          Copy-Item -Path ../../src/SerialLoops/bin/Release/net8.0/linux-x64/publish/* -Destination ./usr/lib/SerialLoops -Recurse
           ln -s /usr/lib/SerialLoops/SerialLoops usr/bin/SerialLoops
           Set-Location ..
           dpkg-deb --build SerialLoops
@@ -110,6 +110,9 @@ jobs:
     steps:
       - name: Create RPM
         run: |
+          ls -l
+          echo ok
+          ls -l ..
           tar -czvf ../source.tar.gz --transform 's,^\.\/,SerialLoops-$SLVersion/,' .
           cp ../source.tar.gz install/linux/rpm/rpmbuild/SOURCES/SerialLoops-$SLVersion.tar.gz
           sed -i "s/#VERSION#/$SLVersion/g" ./install/linux/rpm/rpmbuild/SPECS/SerialLoops.spec
@@ -157,3 +160,13 @@ jobs:
           name: macOS-${{ matrix.rid }}-installer
           path: install/macos/SerialLoops.pkg
           retention-days: 1
+
+  windows:
+    runs-on: windows-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4.1.0
+        with:
+          dotnet-version: '8.0.x'
