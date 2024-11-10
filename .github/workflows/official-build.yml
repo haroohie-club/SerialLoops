@@ -263,6 +263,7 @@ jobs:
           name: Serial Loops v${{ env.SLVersion }}
           tag_name: ${{ env.SLVersion }}
           prerelease: ${{ inputs.version == '' }}
+          generate_release_notes: true
           files: release/*
           body: |
             ${{ inputs.releaseNotes }}
