@@ -54,9 +54,7 @@ def main():
             filename = '{}.{}.nupkg'.format(name, version)
             url = 'https://api.nuget.org/v3-flatcontainer/{}/{}/{}'.format(name, version,
                                                                            filename)
-            try:
-                requests.head(url)
-            except:
+            if requests.head(url).status_code != 200:
                 url = 'https://pkgs.dev.azure.com/jonko0493/haroohie-public/_apis/packaging/feeds/haroohie/nuget/packages/{}/versions/{}/content?api-version=7.1-preview.1'.format(name, version)
 
             with path.open() as fp:

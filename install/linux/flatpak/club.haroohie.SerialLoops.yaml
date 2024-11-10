@@ -33,11 +33,12 @@ modules:
   - name: devkitARM
     buildsystem: simple
     sources:
-      - type: file
-        path: /devkitpro.tar.gz
+      - type: archive
+        url: https://haroohie.nyc3.cdn.digitaloceanspaces.com/bootstrap/serial-loops/dkp.zip
+        sha256: 91d9d524d5150ae892de4457c4cbb7eaa5edcb2449a85366def678242b1f60e2
     build-commands:
-      - mkdir -p ${FLATPAK_DEST}/opt/devkitpro
-      - bsdtar xvf devkitpro.tar.gz -C ${FLATPAK_DEST}/opt/devkitpro
+      - mkdir -p ${FLATPAK_DEST}/opt/
+      - copy ./* ${FLATPAK_DEST}/opt/
 
   - name: make
     buildsystem: autotools
