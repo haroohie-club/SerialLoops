@@ -256,10 +256,10 @@ jobs:
           Move-Item -Path SerialLoops.tar.gz -Destination release/SerialLoops-linux-x64-v$($env:SLVersion).tar.gz
           Move-Item -Path SerialLoops.deb -Destination release/SerialLoops-linux-x64-$($env:SLVersion).deb
           Move-Item -Path SerialLoops.rpm -Destination release/SerialLoops-linux-x64-$($env:SLVersion)-1.fc39.x86_64.rpm
-          Move-Item -Path SerialLoops-osx-arm64.pkg -Destination release/SerialLoops-macOS-arm-v$($env:SLVersion).pkg
-          Move-Item -Path SerialLoops-osx-x64.pkg -Destination release/SerialLoops-macOS-x64-v$($env:SLVersion).pkg
-          Move-Item -Path SerialLoopsInstaller.exe -Destination release/SerialLoops-windows-x64-v$($env:SLVersion).exe
-          Move-Item -Path SerialLoops-winx64.zip -Destination release/SerialLoops-windows-x64-v$($env:SLVersion).zip
+          Move-Item -Path SerialLoops-osx-arm64.pkg -Destination release/SerialLoops-macOS-arm-v$($env:SLVersion)-installer.pkg
+          Move-Item -Path SerialLoops-osx-x64.pkg -Destination release/SerialLoops-macOS-x64-v$($env:SLVersion)-installer.pkg
+          Move-Item -Path SerialLoopsInstaller.exe -Destination release/SerialLoops-windows-x64-v$($env:SLVersion)-installer.exe
+          Move-Item -Path SerialLoops-winx64.zip -Destination release/SerialLoops-windows-x64-v$($env:SLVersion)-portable.zip
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
@@ -294,7 +294,6 @@ jobs:
             bringing all the necessary dependencies with it.
 
             If you would rather manually install, follow the below instructions:
-            * The `.deb` package is intended for Debian-based distros (e.g. Ubuntu). Install it with `sudo apt install -f ./SerialLoops-${{ env.SLVersion }}_amd64.deb`.
-            * The `.rpm` package is intended for Red Hat distros (e.g. Fedora). Install it with `sudo dnf install ./SerialLoops-${{ env.SLVersion }}-1.fc39.x86_64.rpm`.
+            * The `.deb` package is intended for Debian-based distros (e.g. Ubuntu). Install it with `sudo apt install -f ./SerialLoops-linux-x64-${{ env.SLVersion }}.deb`.
+            * The `.rpm` package is intended for Red Hat distros (e.g. Fedora). Install it with `sudo dnf install ./SerialLoops-linux-x64-${{ env.SLVersion }}-1.fc39.x86_64.rpm`.
             * For other Linux distros, please use the binaries packaged in the `.tar.gz` archive; when doing so, ensure you install the OpenAL binaries so audio playback works.
-
