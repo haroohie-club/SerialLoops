@@ -71,7 +71,7 @@ jobs:
         with:
           dotnet-version: '8.0.x'
       - name: Build & Publish Serial Loops
-        run: dotnet publish --project src/SerialLoops/SerialLoops.csproj -c Release -f net8.0 -r linux-x64 --self-contained /p:DebugType=None /p:DebugSymbols=false /p:PublishSingleFile=true
+        run: dotnet publish src/SerialLoops/SerialLoops.csproj -c Release -f net8.0 -r linux-x64 --self-contained /p:DebugType=None /p:DebugSymbols=false /p:PublishSingleFile=true
       - name: Create tarball
         run: |
           chmod +x ./src/SerialLoops/bin/Release/net8.0/linux-x64/publish/SerialLoops
@@ -156,3 +156,13 @@ jobs:
           name: macOS-${{ matrix.rid }}-installer
           path: install/macos/SerialLoops.pkg
           retention-days: 1
+
+  windows:
+    runs-on: windows-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4.1.0
+        with:
+          dotnet-version: '8.0.x'
