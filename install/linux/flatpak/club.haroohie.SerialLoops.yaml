@@ -67,11 +67,14 @@ modules:
       - type: file
         path: club.haroohie.SerialLoops.appdata.xml
       - type: file
-        path: ../dpkg-build/SerialLoops/usr/share/applications/SerialLoops.desktop
+        path: club.haroohie.SerialLoops.desktop
+      - type: file
+        path: ../../src/SerialLoops/Assets/Icons/AppIcon.svg
     build-commands:
       - dotnet publish src/SerialLoops/SerialLoops.csproj -c Release -f net8.0 --no-self-contained --source ./nuget-sources
       - mkdir -p ${FLATPAK_DEST}/bin
       - cp -r src/SerialLoops/bin/Release/net8.0/publish/* ${FLATPAK_DEST}/bin
       - mkdir -p ${FLATPAK_DEST}/app/share/appdata/
-      - install -Dm644 club.haroohie.SerialLoops.appdata.xml ${FLATPAK_DEST}/app/share/appdata/club.haroohie.SerialLoops.appdata.xml
-      - install -Dm644 SerialLoops.desktop ${FLATPAK_DEST}/app/share/applications/club.haroohie.SerialLoops.desktop
+      - install -Dm644 club.haroohie.SerialLoops.metainfo.xml ${FLATPAK_DEST}/app/share/metainfo/club.haroohie.SerialLoops.metainfo.xml
+      - install -Dm644 club.haroohie.SerialLoops.desktop ${FLATPAK_DEST}/app/share/applications/club.haroohie.SerialLoops.desktop
+      - install -Dm644 AppIcon.svg ${FLATPAK_DEST}/app/share/icons/hicolor/scalable/apps/club.haroohie.SerialLoops.svg

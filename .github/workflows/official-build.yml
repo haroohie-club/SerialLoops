@@ -85,7 +85,7 @@ jobs:
         run: |
           chmod +x ./src/SerialLoops/bin/Release/net8.0/linux-x64/publish/SerialLoops
           pushd ./src/SerialLoops/bin/Release/net8.0/linux-x64/publish
-          tar -czvf ../SerialLoops.tar.gz --transform 's,^\.\/,SerialLoops-$SLVersion/,' .
+          tar -czvf ../SerialLoops.tar.gz --transform "s,^\.\/,SerialLoops-$SLVersion/," .
           popd
       - name: Upload tarball
         uses: actions/upload-artifact@v4
@@ -100,6 +100,7 @@ jobs:
           New-Item -ItemType "directory" -Path ./dpkg-build/SerialLoops/usr -Name bin
           Push-Location ./dpkg-build/SerialLoops
           ((Get-Content -Path DEBIAN/control) -replace '#VERSION#', "$env:SLVersion") | Set-Content -Path DEBIAN/control
+          ((Get-Content -Path usr/share/applications/SerialLoops.desktop) -replace '#VERSION#', "$env:SLVersion") | Set-Content -Path usr/share/applications/SerialLoops.desktop
           Copy-Item -Path ../../src/SerialLoops/bin/Release/net8.0/linux-x64/publish/* -Destination ./usr/lib/SerialLoops -Recurse
           ln -s /usr/lib/SerialLoops/SerialLoops usr/bin/SerialLoops
           Set-Location ..

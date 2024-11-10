@@ -2,8 +2,8 @@
 Version=#VERSION#
 Name=Serial Loops
 Comment=Editor for Suzumiya Haruhi no Chokuretsu
-Exec=/usr/bin/SerialLoops
-Icon=/usr/lib/SerialLoops/Icons/AppIcon.png
+Exec=SerialLoops
+Icon=club.haroohie.SerialLoops
 Terminal=false
 Type=Application
 Categories=Utility;Application
