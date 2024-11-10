@@ -110,7 +110,8 @@ jobs:
     steps:
       - name: Create RPM
         run: |
-          tar -czvf install/linux/rpm/rpmbuild/SOURCES/SerialLoops-$SLVersion.tar.gz --transform 's,^\.\/,SerialLoops-$SLVersion/,' .
+          tar -czvf ../source.tar.gz --transform 's,^\.\/,SerialLoops-$SLVersion/,' .
+          cp ../source.tar.gz install/linux/rpm/rpmbuild/SOURCES/SerialLoops-$SLVersion.tar.gz
           sed -i "s/#VERSION#/$SLVersion/g" ./install/linux/rpm/rpmbuild/SPECS/SerialLoops.spec
           dnf install -y rpmdevtools rpmlint dotnet-sdk-8.0
           pushd install/linux/rpm
@@ -156,13 +157,3 @@ jobs:
           name: macOS-${{ matrix.rid }}-installer
           path: install/macos/SerialLoops.pkg
           retention-days: 1
-
-  windows:
-    runs-on: windows-latest
-    steps:
-      - name: Check out
-        uses: actions/checkout@v4
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4.1.0
-        with:
-          dotnet-version: '8.0.x'
