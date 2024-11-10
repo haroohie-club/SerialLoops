@@ -3,7 +3,9 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 using System.Text.Json;
+using DynamicData.Binding;
 using HaruhiChokuretsuLib.Util;
 
 namespace SerialLoops.Lib.Factories;
@@ -92,7 +94,22 @@ public class ConfigFactory : IConfigFactory
             emulatorFlatpak = "net.kuribo64.melonDS";
             try
             {
-                Process flatpakProc = Process.Start((new ProcessStartInfo("flatpak", ["info", emulatorFlatpak])));
+                Process flatpakProc = new()
+                {
+                    StartInfo = new ProcessStartInfo("flatpak", ["info", emulatorFlatpak])
+                    {
+                        RedirectStandardError = true, RedirectStandardOutput = true
+                    }
+                };
+                flatpakProc.OutputDataReceived += (_, args) => log.Log(args.Data ?? string.Empty);
+                flatpakProc.ErrorDataReceived += (_, args) =>
+                {
+                    if (!string.IsNullOrEmpty(args.Data))
+                    {
+                        log.LogWarning(args.Data);
+                    }
+                };
+                flatpakProc.Start();
                 flatpakProc?.WaitForExit();
                 emulatorExists = flatpakProc?.ExitCode == 0;
             }
