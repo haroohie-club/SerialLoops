@@ -111,7 +111,16 @@ jobs:
       - name: Create RPM
         run: |
           tar -czvf install/linux/rpm/rpmbuild/SOURCES/SerialLoops-$SLVersion.tar.gz --transform 's,^\.\/,SerialLoops-$SLVersion/,' .
-          sed -n 's/#VERSION/$SLVersion' ./install/linux/rpm/rpmbuild/SPECS/SerialLoops.spec
+          sed -i "s/#VERSION#/$SLVersion/g" ./install/linux/rpm/rpmbuild/SPECS/SerialLoops.spec
+          dnf install -y rpmdevtools rpmlint dotnet-sdk-8.0
+          pushd install/linux/rpm
+          rpmbuild -bb rpmbuild/SPECS/SerialLoops.spec
+      - name: Upload rpm
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-x64-rpm
+          path: install/linux/rpm/rpmbuild/RPMS/x86_64/SerialLoops-$(Version)-1.fc39.x86_64.rpm
+          retention-days: 1
 
   macos-pkg:
     runs-on: macos-latest
@@ -147,4 +156,3 @@ jobs:
           name: macOS-${{ matrix.rid }}-installer
           path: install/macos/SerialLoops.pkg
           retention-days: 1
-
