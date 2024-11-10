@@ -1,0 +1,18 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:SerialLoops.ViewModels.Editors.ScriptCommandEditors"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:assets="using:SerialLoops.Assets"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:FlagScriptCommandEditorViewModel"
+             x:Class="SerialLoops.Views.Editors.ScriptCommandEditors.FlagScriptCommandEditorView">
+    <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto">
+        <TextBlock Grid.Column="0" Grid.Row="0" Margin="0,7,0,0" Text="{x:Static assets:Strings.Flag}"/>
+        <TextBox Grid.Column="1" Grid.Row="0" Margin="10,0,0,0" Text="{Binding Flag}"/>
+
+        <TextBlock Grid.Column="0" Grid.Row="1" Margin="0,7,0,0" Text="{x:Static assets:Strings.Set_Clear}"/>
+        <CheckBox Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" IsChecked="{Binding SetClear}"/>
+    </Grid>
+</UserControl>
+

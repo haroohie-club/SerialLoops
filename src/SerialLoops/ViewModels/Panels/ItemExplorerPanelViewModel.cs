@@ -4,7 +4,6 @@ using System.Windows.Input;
 using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Controls.Templates;
-using Avalonia.Input;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -36,11 +35,11 @@ namespace SerialLoops.ViewModels.Panels
                         new HierarchicalExpanderColumn<ITreeItem>(
                             new TemplateColumn<ITreeItem>(null, new FuncDataTemplate<ITreeItem>((val, namescope) =>
                             {
-                                return GetItemPanel(val);
+                                return val?.GetDisplay();
                             }), cellEditingTemplate: new FuncDataTemplate<ITreeItem>((val, namescope) =>
                             {
                                 // Eventually we can maybe do rename logic here
-                                return GetItemPanel(val);
+                                return val?.GetDisplay();
                             }), options: new() { BeginEditGestures = BeginEditGestures.F2 }),
                             i => i.Children
                         )
@@ -56,29 +55,6 @@ namespace SerialLoops.ViewModels.Panels
                     Source.CollapseAll();
                 }
             }
-        }
-
-        private StackPanel GetItemPanel(ITreeItem val)
-        {
-            if (val is null)
-            {
-                return null;
-            }
-            StackPanel panel = new()
-            {
-                Orientation = Avalonia.Layout.Orientation.Horizontal,
-                Spacing = 3,
-            };
-            if (val.Icon is not null)
-            {
-                if (val.Icon.Parent is not null)
-                {
-                    ((StackPanel)val.Icon.Parent).Children.Clear();
-                }
-                panel.Children.Add(val.Icon);
-            }
-            panel.Children.Add(new TextBlock { Text = val.Text });
-            return panel;
         }
 
         [Reactive]

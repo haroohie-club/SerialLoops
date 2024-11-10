@@ -17,6 +17,7 @@ namespace SerialLoops.ViewModels.Editors.ScriptCommandEditors
                 Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
                     .Objects[Command.Index].Parameters[0] = _waitTime;
                 Script.UnsavedChanges = true;
+                Command.UpdateDisplay();
             }
         }
     }
