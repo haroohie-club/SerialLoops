@@ -110,9 +110,7 @@ jobs:
     steps:
       - name: Create RPM
         run: |
-          ls -l
-          echo ok
-          ls -l ..
+          cd SerialLoops
           tar -czvf ../source.tar.gz --transform 's,^\.\/,SerialLoops-$SLVersion/,' .
           cp ../source.tar.gz install/linux/rpm/rpmbuild/SOURCES/SerialLoops-$SLVersion.tar.gz
           sed -i "s/#VERSION#/$SLVersion/g" ./install/linux/rpm/rpmbuild/SPECS/SerialLoops.spec
