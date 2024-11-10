@@ -65,7 +65,7 @@ modules:
         branch: AvaloniaInstallations
       - ./nuget-sources.json
       - type: file
-        path: club.haroohie.SerialLoops.appdata.xml
+        path: club.haroohie.SerialLoops.metainfo.xml
       - type: file
         path: club.haroohie.SerialLoops.desktop
       - type: file
