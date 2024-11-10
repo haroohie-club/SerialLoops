@@ -3,6 +3,7 @@ from sys import argv
 import urllib.request
 
 ver = argv[1]
+rid = argv[2]
 
 urllib.request.urlretrieve("https://github.com/devkitPro/pacman/releases/download/v6.0.2/devkitpro-pacman-installer.pkg", "devkitpro-pacman-installer.pkg")
 
@@ -14,7 +15,7 @@ with open("../../LICENSE") as license_file:
     license_md = license_file.read()
 
 pkg_obj = Packages(
-    pkg_output="SerialLoops.pkg",
+    pkg_output=f"SerialLoops-{rid}.pkg",
     pkg_bundle_id="club.haroohie.serialloopsinstaller",
     pkg_file_structure={
         "./Serial Loops.app": "/Applications/Serial Loops.app",

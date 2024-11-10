@@ -81,7 +81,7 @@ jobs:
       - name: Upload tarball
         uses: actions/upload-artifact@v4
         with:
-          name: linux-x64-tar
+          name: linux-x64-tarball
           path: src/SerialLoops/bin/Release/net8.0/linux-x64/SerialLoops.tar.gz
           retention-days: 1
       - name: Create deb package
@@ -153,12 +153,12 @@ jobs:
           cp -r "src/SerialLoops/bin/Release/net8.0/${{ matrix.rid }}/publish/Serial Loops.app" "install/macos/"
           cd install/macos/
           chmod +x "./Serial Loops.app/Contents/MacOS/SerialLoops"
-          python serial_loops_pkg_builder.py $SLVersion
+          python serial_loops_pkg_builder.py $SLVersion ${{ matrix.rid }}
       - name: Upload pkg installer
         uses: actions/upload-artifact@v4
         with:
-          name: macOS-${{ matrix.rid }}-installer
-          path: install/macos/SerialLoops.pkg
+          name: ${{ matrix.rid }}-installer
+          path: install/macos/SerialLoops-${{ matrix.rid }}.pkg
           retention-days: 1
 
   windows:
@@ -171,12 +171,15 @@ jobs:
         with:
           dotnet-version: '8.0.x'
       - name: Build & Publish Serial Loops
-        run: dotnet publish src/SerialLoops/SerialLoops.csproj -c Release -f net8.0-windows -r win-x64 --self-contained /p:DebugType=None /p:DebugSymbols=false /p:PublishSingleFile=true
+        shell: pwsh
+        run: |
+          dotnet publish src/SerialLoops/SerialLoops.csproj -c Release -f net8.0-windows -r win-x64 --self-contained /p:DebugType=None /p:DebugSymbols=false /p:PublishSingleFile=true
+          Compress-Archive -Path src/SerialLoops/bin/Release/net8.0-windows/win-x64/publish/ -DestinationPath src/SerialLoops/bin/Release/net8.0-windows/win-x64/SerialLoops-winx64.zip
       - name: Upload Windows zip
         uses: actions/upload-artifact@v4
         with:
           name: windows-x64-zip
-          path: src/SerialLoops/bin/Release/net8.0-windows/win-x64/publish/
+          path: src/SerialLoops/bin/Release/net8.0-windows/win-x64/SerialLoops-winx64.zip
           retention-days: 1
       - name: Download ISCC, Docker Desktop Installer, and devkitPro Updater
         shell: pwsh
@@ -194,3 +197,90 @@ jobs:
           name: windows-x64-installer
           path: install/windows/Output/SerialLoopsInstaller.exe
           retention-days: 1
+
+  release:
+    runs-on: ubuntu-latest
+    needs: [ linux-flatpak, linux-dpkg-tarball, linux-rpm, macos-pkg, windows ]
+    steps:
+      - name: Download Linux flatpak
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: SerialLoops-x86_64
+      - name: Download Linux tarball
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: linux-x64-tarball
+      - name: Download Linux dpkg
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: linux-x64-dpkg
+      - name: Download Linux rpm
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: linux-x64-rpm
+      - name: Download Apple Silicon macOS installer
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: osx-arm64-installer
+      - name: Download Intel macOS installer
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: osx-x64-installer
+      - name: Download Windows installer
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: windows-x64-installer
+      - name: Download Windows portable zip
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: windows-x64-zip
+      - name: Move and rename artifacts
+        shell: pwsh
+        run: |
+          New-Item -Type Directory -Path release
+          Get-ChildItem .
+          Move-Item -Path SerialLoops.flatpak -Destination release/SerialLoops-linux-x64-v$($env:SLVersion).flatpak
+          Move-Item -Path SerialLoops.tar.gz -Destination release/SerialLoops-linux-x64-v$($env:SLVersion).tar.gz
+          Move-Item -Path SerialLoops.deb -Destination release/SerialLoops-$($env:SLVersion)_amd64.deb
+          Move-Item -Path SerialLoops-$($env:SLVersion)-1.fc39.x86_64.rpm -Destination release/SerialLoops-$($env:SLVersion)-1.fc39.x86_64.rpm
+          Move-Item -Path SerialLoops-osx-arm64.pkg -Destination release/SerialLoops-macOS-arm-v$($env:SLVersion).pkg
+          Move-Item -Path SerialLoops-osx-x64.pkg -Destination release/SerialLoops-macOS-x64-v$($env:SLVersion).pkg
+          Move-Item -Path SerialLoopsInstaller.exe -Destination release/SerialLoops-windows-x64-v$($env:SLVersion).exe
+          Move-Item -Path SerialLoops-winx64.zip -Destination release/SerialLoops-windows-x64-v$($env:SLVersion).zip
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Serial Loops v$SLVersion
+          tag_name: $SLVersion
+          prerelease: ${{ inputs.version == '' }}
+          files: release/*
+          body: |
+            ${{ inputs.releaseNotes }}
+
+            ## Installation Notes
+            To test the game you will need to have a Nintendo DS emulator installed. We recommend [melonDS](https://melonds.kuribo64.net/) for its accuracy.
+
+            Because our application contacts GitHub's servers to check for new releases on launch, it is possible it will get flagged by firewall software &ndash; please allow it through so it can function correctly.
+
+            ### Windows
+            Simply download the Windows installer application and run it. It will walk you through installation, including installing the necessary dependencies.
+            Alternatively, you can download the zip file for a portable application; however, dependencies are not included with this option.
+
+            ### macOS
+            Pick the macOS pkg installer that fits your computer's architecture. Before executing it, you will need to open the Terminal application and run `xattr -cr /User/yourusernamehere/Downloads/pkginstallernamehere.pkg`,
+            replacing "yourusernamehere" with your username and "pkginstallernamehere.pkg" with the appropriate pkg installer filename. Running this command makes it so that the pkg installer is runnable even though we don't codesign it.
+
+            The pkg installer will guide you through installing Serial Loops and will automatically install the dependencies devkitARM and make if necessary.
+
+            #### Which macOS pkg installer should I choose?
+            If your Mac is newer, you will probably want the ARM installer. If it is older, you may want the x64 one. If unsure, download the ARM one first and attempt to run it &ndash; it will throw an error saying it can't be run on this computer if your computer is not able to run it. If that's the case, download the x64 one instead.
+
+            ### Linux
+            We recommend using the provided flatpak as it is the easiest to use. First, install flatpak if you haven't already. Then, download the flatpak and double click it or run `flatpak install` on it from the terminal. It will then install itself,
+            bringing all the necessary dependencies with it.
+
+            If you would rather manually install, follow the below instructions:
+            * The `.deb` package is intended for Debian-based distros (e.g. Ubuntu). Install it with `sudo apt install -f ./SerialLoops-$(Version)_amd64.deb`.
+            * The `.rpm` package is intended for Red Hat distros (e.g. Fedora). Install it with `sudo dnf install ./SerialLoops-$(Version)-1.fc39.x86_64.rpm`.
+            * For other Linux distros, please use the binaries packaged in the `.tar.gz` archive; when doing so, ensure you install the OpenAL binaries so audio playback works.
+
