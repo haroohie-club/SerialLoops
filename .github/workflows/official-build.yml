@@ -14,6 +14,9 @@ on:
         required: true
         type: string
 
+permissions:
+  contents: write
+
 env:
   SLVersion: ${{ inputs.version == '' && format('0.3.pre.a{0}', github.run_number) || inputs.version }}
   SLAssemblyVersion: ${{ inputs.version == '' && format('0.3.9999.a{0}', github.run_number) || inputs.version }}
@@ -60,8 +63,7 @@ jobs:
           manifest-path: install/linux/flatpak/club.haroohie.SerialLoops.yaml
           bundle: SerialLoops.flatpak
           cache-key: flatpak-builder-${{ github.sha }}
-          upload-artifact: false
-      - name: Upload rpm
+      - name: Upload flatpak
         uses: actions/upload-artifact@v4
         with:
           name: linux-x64-flatpak
