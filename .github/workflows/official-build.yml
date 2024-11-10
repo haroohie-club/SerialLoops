@@ -83,10 +83,9 @@ jobs:
         run: dotnet msbuild src/SerialLoops/SerialLoops.csproj -t:BundleApp -p:Configuration=Release -p:TargetFramework=net8.0 -p:RuntimeIdentifier=${{ matrix.rid }} -p:UseAppHost=true --p:SelfContained=true -p:DebugType=None -p:DebugSymbols=false -p:PublishSingleFile=true
       - name: Build pkg installer
         run: |
-          cd install/macos/
-          mkdir "Serial Loops.app"
-          ls -l src/SerialLoops/bin/Release/net8.0/${{ matrix.rid }}/publish/
+          mkdir "install/macos/Serial Loops.app"
           cp -r "src/SerialLoops/bin/Release/net8.0/${{ matrix.rid }}/publish/Serial Loops.app/*" "./Serial Loops.app/"
+          cd install/macos/
           chmod +x "./Serial Loops.app/Contents/MacOS/SerialLoops"
           python serial_loops_pkg_builder.py $SLVersion
       - name: Upload pkg installer
