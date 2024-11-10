@@ -76,7 +76,6 @@ modules:
       - sed -i "s/#VERSION#/$(cat VERSION)/g" club.haroohie.SerialLoops.desktop
       - mkdir -p ${FLATPAK_DEST}/bin
       - cp -r src/SerialLoops/bin/Release/net8.0/publish/* ${FLATPAK_DEST}/bin
-      - mkdir -p ${FLATPAK_DEST}/app/share/appdata/
-      - install -Dm644 club.haroohie.SerialLoops.metainfo.xml ${FLATPAK_DEST}/app/share/metainfo/club.haroohie.SerialLoops.metainfo.xml
-      - install -Dm644 club.haroohie.SerialLoops.desktop ${FLATPAK_DEST}/app/share/applications/club.haroohie.SerialLoops.desktop
-      - install -Dm644 AppIcon.svg ${FLATPAK_DEST}/app/share/icons/hicolor/scalable/apps/club.haroohie.SerialLoops.svg
+      - install -Dm644 club.haroohie.SerialLoops.metainfo.xml ${FLATPAK_DEST}/share/metainfo/club.haroohie.SerialLoops.metainfo.xml
+      - install -Dm644 club.haroohie.SerialLoops.desktop ${FLATPAK_DEST}/share/applications/club.haroohie.SerialLoops.desktop
+      - install -Dm644 AppIcon.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/club.haroohie.SerialLoops.svg
