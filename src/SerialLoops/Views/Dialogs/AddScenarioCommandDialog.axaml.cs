@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 
-namespace SerialLoops.Views.Dialogs
+namespace SerialLoops.Views.Dialogs;
+
+public partial class AddScenarioCommandDialog : Window
 {
-    public partial class AddScenarioCommandDialog : Window
+    public AddScenarioCommandDialog()
     {
-        public AddScenarioCommandDialog()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

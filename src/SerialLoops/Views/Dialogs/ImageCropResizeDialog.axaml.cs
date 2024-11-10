@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 
-namespace SerialLoops.Views.Dialogs
+namespace SerialLoops.Views.Dialogs;
+
+public partial class ImageCropResizeDialog : Window
 {
-    public partial class ImageCropResizeDialog : Window
+    public ImageCropResizeDialog()
     {
-        public ImageCropResizeDialog()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

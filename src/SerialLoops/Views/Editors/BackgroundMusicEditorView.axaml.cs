@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 
-namespace SerialLoops.Views.Editors
+namespace SerialLoops.Views.Editors;
+
+public partial class BackgroundMusicEditorView : UserControl
 {
-    public partial class BackgroundMusicEditorView : UserControl
+    public BackgroundMusicEditorView()
     {
-        public BackgroundMusicEditorView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

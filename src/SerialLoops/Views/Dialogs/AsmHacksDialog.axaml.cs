@@ -1,16 +1,15 @@
 using Avalonia.Controls;
 using SerialLoops.ViewModels.Dialogs;
 
-namespace SerialLoops.Views.Dialogs
+namespace SerialLoops.Views.Dialogs;
+
+public partial class AsmHacksDialog : Window
 {
-    public partial class AsmHacksDialog : Window
+    public AsmHacksDialogViewModel ViewModel { get; }
+    public AsmHacksDialog(AsmHacksDialogViewModel viewModel)
     {
-        public AsmHacksDialogViewModel ViewModel { get; }
-        public AsmHacksDialog(AsmHacksDialogViewModel viewModel)
-        {
-            InitializeComponent();
-            DataContext = viewModel;
-            ViewModel = viewModel;
-        }
+        InitializeComponent();
+        DataContext = viewModel;
+        ViewModel = viewModel;
     }
 }

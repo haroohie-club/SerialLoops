@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 
-namespace SerialLoops.Views.Editors
+namespace SerialLoops.Views.Editors;
+
+public partial class ScriptEditorView : UserControl
 {
-    public partial class ScriptEditorView : UserControl
+    public ScriptEditorView()
     {
-        public ScriptEditorView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

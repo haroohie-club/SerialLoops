@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 
-namespace SerialLoops.Views.Editors
+namespace SerialLoops.Views.Editors;
+
+public partial class SystemTextureEditorView : UserControl
 {
-    public partial class SystemTextureEditorView : UserControl
+    public SystemTextureEditorView()
     {
-        public SystemTextureEditorView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

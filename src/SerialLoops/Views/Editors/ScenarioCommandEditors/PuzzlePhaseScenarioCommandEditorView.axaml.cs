@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 
-namespace SerialLoops.Views.Editors.ScenarioCommandEditors
+namespace SerialLoops.Views.Editors.ScenarioCommandEditors;
+
+public partial class PuzzlePhaseScenarioCommandEditorView : UserControl
 {
-    public partial class PuzzlePhaseScenarioCommandEditorView : UserControl
+    public PuzzlePhaseScenarioCommandEditorView()
     {
-        public PuzzlePhaseScenarioCommandEditorView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

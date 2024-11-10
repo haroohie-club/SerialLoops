@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 
-namespace SerialLoops.Views.Editors.ScriptCommandEditors
+namespace SerialLoops.Views.Editors.ScriptCommandEditors;
+
+public partial class ScreenFadeOutScriptCommandEditorView : UserControl
 {
-    public partial class ScreenFadeOutScriptCommandEditorView : UserControl
+    public ScreenFadeOutScriptCommandEditorView()
     {
-        public ScreenFadeOutScriptCommandEditorView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }
