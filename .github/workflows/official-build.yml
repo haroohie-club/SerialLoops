@@ -13,6 +13,11 @@ on:
         description: Release notes
         required: true
         type: string
+
+env:
+  SLVersion: ${{ inputs.version == '' && format('0.3.pre.a{0}', github.run_number) || inputs.version }}
+  SLAssemblyVersion: ${{ inputs.version == '' && format('0.3.9999.a{0}', github.run_number) || inputs.version }}
+
 jobs:
   flatpak-setup:
     runs-on: ubuntu-latest
@@ -55,5 +60,39 @@ jobs:
           manifest-path: install/linux/flatpak/club.haroohie.SerialLoops.yaml
           bundle: SerialLoops.flatpak
           cache-key: flatpak-builder-${{ github.sha }}
+
+  macOS-pkg:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        rid: ['osx-x64', 'osx-arm']
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4.1.0
+        with:
+          dotnet-version: '8.0.x'
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Restore
+        run: dotnet restore src/SerialLoops/SerialLoops.csproj -r $(rid)
+      - name: Build .app
+        run: dotnet msbuild src/SerialLoops/SerialLoops.csproj -t:BundleApp -p:Configuration=Release -p:TargetFramework=net8.0 -p:RuntimeIdentifier=${{ matrix.rid }} -p:UseAppHost=true --p:SelfContained=true -p:DebugType=None -p:DebugSymbols=false -p:PublishSingleFile=true
+      - name: Build pkg installer
+        run: |
+          cd install/macos/
+          mkdir "Serial Loops.app"
+          cp -r src/SerialLoops/bin/Release/net8.0/${{ matrix.rid }}/publish/Serial Loops.app/* "./Serial Loops.app/"
+          chmod +x "./Serial Loops.app/Contents/MacOS/SerialLoops"
+          python serial_loops_pkg_builder.py $SLVersion
+      - name: Upload pkg installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: macOS-${{ matrix.rid }}-installer
+          path: install/macos/SerialLoops.pkg
+          retention-days: 1
 
 
