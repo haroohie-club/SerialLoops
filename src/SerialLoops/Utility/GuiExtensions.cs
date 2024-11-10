@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
+using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using HaruhiChokuretsuLib.Util;
 using MsBox.Avalonia;
@@ -113,5 +114,10 @@ public static class GuiExtensions
             }
         }
         return null;
+    }
+
+    public static Color ToAvalonia(this SKColor color)
+    {
+        return new(color.Alpha, color.Red, color.Green, color.Blue);
     }
 }

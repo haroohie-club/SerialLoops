@@ -1968,6 +1968,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Emulator Flatpak.
+        /// </summary>
+        public static string Emulator_Flatpak {
+            get {
+                return ResourceManager.GetString("Emulator Flatpak", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Emulator Path.
         /// </summary>
         public static string Emulator_Path {
@@ -3842,6 +3851,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Load Sound.
+        /// </summary>
+        public static string Load_Sound {
+            get {
+                return ResourceManager.GetString("Load Sound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Load this save prompt.
         /// </summary>
         public static string Load_this_save_prompt {
@@ -4274,8 +4292,8 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No emulator path has been set.
-        ///Please set the path to a Nintendo DS emulator in Preferences to use Build &amp; Run..
+        ///   Looks up a localized string similar to No emulator path/flatpak has been set.
+        ///Please set the path to a Nintendo DS emulator or specify a Nintendo DS emulator flatpak in Preferences to use Build &amp; Run..
         /// </summary>
         public static string No_emulator_path_has_been_set__nPlease_set_the_path_to_a_Nintendo_DS_emulator_in_Preferences_to_use_Build___Run_ {
             get {

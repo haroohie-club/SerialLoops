@@ -6,6 +6,8 @@ using HaruhiChokuretsuLib.Util;
 using QuikGraph;
 using QuikGraph.Algorithms.Observers;
 using QuikGraph.Algorithms.Search;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script.Parameters;
 using SerialLoops.Lib.Util;
@@ -13,7 +15,7 @@ using static HaruhiChokuretsuLib.Archive.Event.EventFile;
 
 namespace SerialLoops.Lib.Script;
 
-public class ScriptItemCommand
+public class ScriptItemCommand : ReactiveObject
 {
     public ScriptCommandInvocation Invocation { get; set; }
     public CommandVerb Verb { get; set; }
@@ -25,7 +27,7 @@ public class ScriptItemCommand
 
     public static ScriptItemCommand FromInvocation(ScriptCommandInvocation invocation, ScriptSection section, int index, EventFile eventFile, Project project, Func<string, string> localize, ILogger log)
     {
-        return new()
+        ScriptItemCommand command = new()
         {
             Invocation = invocation,
             Verb = (CommandVerb)Enum.Parse(typeof(CommandVerb), invocation.Command.Mnemonic),
@@ -35,6 +37,8 @@ public class ScriptItemCommand
             Script = eventFile,
             Project = project,
         };
+        command.UpdateDisplay();
+        return command;
     }
 
     public ScriptItemCommand()
@@ -60,11 +64,13 @@ public class ScriptItemCommand
         }).ToList();
         shortParams.AddRange(new short[16 - shortParams.Count]);
         Invocation = new(CommandsAvailable.First(c => c.Mnemonic == verb.ToString())) { Parameters = shortParams };
+        UpdateDisplay();
     }
     public ScriptItemCommand(CommandVerb verb, params ScriptParameter[] parameters)
     {
         Verb = verb;
         Parameters = [.. parameters];
+        UpdateDisplay();
     }
 
     public List<ScriptItemCommand> WalkCommandGraph(Dictionary<ScriptSection, List<ScriptItemCommand>> commandTree, AdjacencyGraph<ScriptSection, ScriptSectionEdge> graph)
@@ -696,20 +702,31 @@ public class ScriptItemCommand
         return parameters;
     }
 
+    [Reactive]
+    public string Display { get; set; }
+
+    public void UpdateDisplay()
+    {
+        Display = ToString();
+    }
+
     public override string ToString()
     {
         string str = $"{Verb}";
-        if (Verb == CommandVerb.DIALOGUE)
+        switch (Verb)
         {
-            str += $" {((DialogueScriptParameter)Parameters[0]).Line.Text.GetSubstitutedString(Project)[0..Math.Min(((DialogueScriptParameter)Parameters[0]).Line.Text.Length, 10)]}...";
-        }
-        else if (Verb == CommandVerb.GOTO)
-        {
-            str += $" {((ScriptSectionScriptParameter)Parameters[0]).Section.Name}";
-        }
-        else if (Verb == CommandVerb.VGOTO)
-        {
-            str += $" {((ConditionalScriptParameter)Parameters[0]).Conditional}, {((ScriptSectionScriptParameter)Parameters[1]).Section.Name}";
+            case CommandVerb.DIALOGUE:
+                str += $" {((DialogueScriptParameter)Parameters[0]).Line.Text.GetSubstitutedString(Project)[0..Math.Min(((DialogueScriptParameter)Parameters[0]).Line.Text.Length, 10)]}...";
+                break;
+            case CommandVerb.GOTO:
+                str += $" {((ScriptSectionScriptParameter)Parameters[0]).Section.Name}";
+                break;
+            case CommandVerb.VGOTO:
+                str += $" {((ConditionalScriptParameter)Parameters[0]).Conditional}, {((ScriptSectionScriptParameter)Parameters[1]).Section.Name}";
+                break;
+            case CommandVerb.WAIT:
+                str += $" {((ShortScriptParameter)Parameters[0]).Value}";
+                break;
         }
         return str;
     }

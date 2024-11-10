@@ -6,8 +6,6 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              xmlns:assets="using:SerialLoops.Assets"
              xmlns:controls="using:SerialLoops.Controls"
-             xmlns:i="using:Avalonia.Xaml.Interactivity"
-             xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
              xmlns:items="clr-namespace:SerialLoops.Lib.Items;assembly=SerialLoops.Lib"
              xmlns:utility="using:SerialLoops.Utility"
              x:DataType="vm:DialogueScriptCommandEditorViewModel"
@@ -44,7 +42,7 @@
         <TextBlock Grid.Column="0" Grid.Row="4" Text="{x:Static assets:Strings.Sprite_Shake}" Margin="0,12,0,0"/>
         <ComboBox Grid.Column="1" Grid.Row="4" ItemsSource="{Binding SpriteShakeEffects}" Margin="10,5,0,0"
                   SelectedItem="{Binding SpriteShakeEffect}"/>
-        
+
         <TextBlock Grid.Column="0" Grid.Row="5" Text="{x:Static assets:Strings.Voice_Line}" Margin="0,12,0,0"/>
         <StackPanel Grid.Column="1" Grid.Row="5" Margin="10,5,0,0" Orientation="Horizontal" VerticalAlignment="Center"
                     Spacing="10">

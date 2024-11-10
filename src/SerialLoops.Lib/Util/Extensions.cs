@@ -80,28 +80,58 @@ public static class Extensions
 
     public static void CollectGarbage(this EventFile evt)
     {
-        IEnumerable<string> conditionalContainingCommands = new CommandVerb[] { CommandVerb.VGOTO, CommandVerb.SCENE_GOTO, CommandVerb.SCENE_GOTO2 }.Select(c => c.ToString());
-        List<UsedIndex> usedIndices = new();
+        // Collect conditional garbage
+        IEnumerable<string> conditionalContainingCommands = new[] { CommandVerb.VGOTO, CommandVerb.SCENE_GOTO, CommandVerb.SCENE_GOTO2 }.Select(c => c.ToString());
+        List<UsedIndex> conditionalUsedIndices = [];
         foreach (ScriptCommandInvocation conditionalCommand in evt.ScriptSections.SelectMany(s => s.Objects).Where(c => conditionalContainingCommands.Contains(c.Command.Mnemonic)))
         {
-            usedIndices.Add(new() { Command = conditionalCommand, Index = conditionalCommand.Parameters[0] });
+            conditionalUsedIndices.Add(new() { Command = conditionalCommand, Index = conditionalCommand.Parameters[0] });
         }
-        if (usedIndices.DistinctBy(c => c.Index).Count() < evt.ConditionalsSection.Objects.Count)
+        if (conditionalUsedIndices.DistinctBy(c => c.Index).Count() < evt.ConditionalsSection.Objects.Count)
         {
             for (short i = 0; i < evt.ConditionalsSection.Objects.Count; i++)
             {
-                if (!usedIndices.Select(idx => idx.Index).Contains(i))
+                if (!conditionalUsedIndices.Select(idx => idx.Index).Contains(i))
                 {
                     evt.ConditionalsSection.Objects.RemoveAt(i);
-                    for (int j = 0; j < usedIndices.Count; j++)
+                    for (int j = 0; j < conditionalUsedIndices.Count; j++)
                     {
-                        if (usedIndices[j].Index >= i)
+                        if (conditionalUsedIndices[j].Index >= i)
                         {
-                            usedIndices[j].Command.Parameters[0]--;
-                            usedIndices[j].Index--;
+                            conditionalUsedIndices[j].Command.Parameters[0]--;
+                            conditionalUsedIndices[j].Index--;
                         }
                     }
                     i--;
+                }
+            }
+        }
+
+        // Collect dialogue garbage
+        IEnumerable<string> dialogueContainingCommands = new[] { CommandVerb.DIALOGUE, CommandVerb.PIN_MNL }.Select(c => c.ToString());
+        List<UsedIndex> dialogueUsedIndices = [];
+        foreach (ScriptCommandInvocation dialogueCommand in evt.ScriptSections.SelectMany(s => s.Objects)
+                     .Where((c => dialogueContainingCommands.Contains(c.Command.Mnemonic))))
+        {
+            dialogueUsedIndices.Add(new() { Command = dialogueCommand, Index = dialogueCommand.Parameters[0] });
+        }
+
+        if (dialogueUsedIndices.DistinctBy(i => i.Index).Count() < evt.DialogueSection.Objects.Count)
+        {
+            for (short i = 0; i < evt.DialogueSection.Objects.Count; i++)
+            {
+                if (dialogueUsedIndices.All(idx => idx.Index != i))
+                {
+                    evt.DialogueSection.Objects.RemoveAt(i);
+                    evt.DialogueLines.RemoveAt(i);
+                    for (int j = 0; j < dialogueUsedIndices.Count; j++)
+                    {
+                        if (dialogueUsedIndices[j].Index >= i)
+                        {
+                            dialogueUsedIndices[j].Command.Parameters[0]--;
+                            dialogueUsedIndices[j].Index--;
+                        }
+                    }
                 }
             }
         }
@@ -237,7 +267,7 @@ public static class Extensions
     }
 
     public static string ToSentenceCase(this string str)
-    { 
+    {
         if (string.IsNullOrEmpty(str))
         {
             return str;

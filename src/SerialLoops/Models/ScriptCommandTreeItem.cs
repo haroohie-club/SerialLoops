@@ -1,40 +1,44 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using Avalonia.Controls;
 using Avalonia.Layout;
+using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SerialLoops.Lib.Script;
 
 namespace SerialLoops.Models;
 
-public class ScriptCommandTreeItem(ScriptItemCommand command) : ITreeItem
+public class ScriptCommandTreeItem : ITreeItem, IViewFor<ScriptItemCommand>
 {
-    private ScriptItemCommand _command = command;
-    public ScriptItemCommand Command
+    private TextBlock _textBlock = new();
+    StackPanel _panel = new()
     {
-        get => _command;
-        set
-        {
-            _command = value;
-            Text = _command.ToString();
-        }
-    }
+        Orientation = Orientation.Horizontal,
+        Spacing = 3,
+        Margin = new(2),
+    };
 
-    [Reactive]
-    public string Text { get; set; } = command.ToString();
+    public string Text { get; set; }
     public Avalonia.Svg.Svg Icon { get; set; } = null;
     public ObservableCollection<ITreeItem> Children { get; set; } = null;
     public bool IsExpanded { get; set; } = false;
 
+    public ScriptCommandTreeItem(ScriptItemCommand command)
+    {
+        ViewModel = command;
+        this.OneWayBind(ViewModel, vm => vm.Display, v => v._textBlock.Text);
+        _panel.Children.Add(_textBlock);
+    }
+
     public Control GetDisplay()
     {
-        StackPanel panel = new()
-        {
-            Orientation = Orientation.Horizontal,
-            Spacing = 3,
-            Margin = new(2),
-        };
-        panel.Children.Add(new TextBlock { Text = Text });
-        return panel;
+        return _panel;
     }
+
+    object IViewFor.ViewModel
+    {
+        get => ViewModel;
+        set => ViewModel = (ScriptItemCommand)value;
+    }
+
+    public ScriptItemCommand ViewModel { get; set; }
 }

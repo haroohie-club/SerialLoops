@@ -36,6 +36,7 @@ public class Config
     public string DevkitArmPath { get; set; }
     public bool UseDocker { get; set; }
     public string DevkitArmDockerTag { get; set; }
+    public string EmulatorFlatpak { get; set; }
     public string EmulatorPath { get; set; }
     public bool AutoReopenLastProject { get; set; }
     public bool RememberProjectWorkspace { get; set; }
@@ -75,7 +76,7 @@ public class Config
         }
 
         Hacks = JsonSerializer.Deserialize<ObservableCollection<AsmHack>>(File.ReadAllText(Path.Combine(HacksDirectory, "hacks.json")));
-            
+
         // Pull in new hacks in case we've updated the program with more
         List<AsmHack> builtinHacks = JsonSerializer.Deserialize<List<AsmHack>>(File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "hacks.json")));
         IEnumerable<AsmHack> missingHacks = builtinHacks.Where(h => !Hacks.Contains(h));

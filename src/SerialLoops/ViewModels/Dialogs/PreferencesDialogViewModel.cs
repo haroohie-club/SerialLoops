@@ -61,6 +61,13 @@ public class PreferencesDialogViewModel : ViewModelBase
                 Path = Configuration.EmulatorPath,
                 OnChange = (path) => Configuration.EmulatorPath = path,
             },
+            new TextOption
+            {
+                OptionName = Strings.Emulator_Flatpak,
+                Value = Configuration.EmulatorFlatpak,
+                OnChange = (flatpak) => Configuration.EmulatorFlatpak = flatpak,
+                Enabled = !OperatingSystem.IsLinux(),
+            },
             new BooleanOption
             {
                 OptionName = Strings.Use_Docker_for_ASM_Hacks,

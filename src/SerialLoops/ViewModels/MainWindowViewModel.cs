@@ -90,6 +90,8 @@ public partial class MainWindowViewModel : ViewModelBase
     public ICommand BuildBaseCommand { get; private set; }
     public ICommand BuildAndRunCommand { get; private set; }
 
+    public SfxMixer SfxMixer { get; } = new();
+
     [Reactive]
     public KeyGesture SaveHotKey { get; set; }
     [Reactive]
@@ -178,7 +180,6 @@ public partial class MainWindowViewModel : ViewModelBase
 
     internal void OpenProjectView(Project project, IProgressTracker tracker)
     {
-        TextSubstitutionConverter.SetProject(project);
         EditorTabs = new(this, project, Log);
         ItemExplorer = new(OpenProject, EditorTabs, Log);
         ProjectPanel = new()
@@ -568,6 +569,12 @@ public partial class MainWindowViewModel : ViewModelBase
                     evt.CollectGarbage();
                     IO.WriteStringFile(Path.Combine("assets", "events", $"{evt.Index:X3}.s"), evt.GetSource(includes), OpenProject, Log);
                     break;
+                case ItemDescription.ItemType.System_Texture:
+                    ((SystemTextureItem)item).Write(OpenProject, Log);
+                    break;
+                case ItemDescription.ItemType.Topic:
+                    changedTopics = true;
+                    break;
                 case ItemDescription.ItemType.Voice:
                     VoicedLineItem vce = (VoicedLineItem)item;
                     if (OpenProject.VoiceMap is not null)
@@ -655,9 +662,9 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         if (OpenProject is not null)
         {
-            if (string.IsNullOrWhiteSpace(CurrentConfig.EmulatorPath))
+            if (string.IsNullOrWhiteSpace(CurrentConfig.EmulatorPath) && string.IsNullOrWhiteSpace(CurrentConfig.EmulatorFlatpak))
             {
-                Log.LogWarning("Attempted to build and run project while no emulator path was set.");
+                Log.LogWarning("Attempted to build and run project while no emulator path/flatpak was set.");
                 await Window.ShowMessageBoxAsync(Strings.No_Emulator_Path, Strings.No_emulator_path_has_been_set__nPlease_set_the_path_to_a_Nintendo_DS_emulator_in_Preferences_to_use_Build___Run_,
                     ButtonEnum.Ok, Icon.Warning, Log);
                 await PreferencesCommand_Executed();
@@ -674,13 +681,26 @@ public partial class MainWindowViewModel : ViewModelBase
                         {
                             // If the EmulatorPath is an .app bundle, we need to run the executable inside it
                             string emulatorExecutable = CurrentConfig.EmulatorPath;
+                            if (!string.IsNullOrWhiteSpace(CurrentConfig.EmulatorFlatpak))
+                            {
+                                emulatorExecutable = "flatpak";
+                            }
                             if (emulatorExecutable.EndsWith(".app"))
                             {
                                 emulatorExecutable = Path.Combine(CurrentConfig.EmulatorPath, "Contents", "MacOS",
                                     Path.GetFileNameWithoutExtension(CurrentConfig.EmulatorPath));
                             }
 
-                            Process.Start(emulatorExecutable, $"\"{Path.Combine(OpenProject.MainDirectory, $"{OpenProject.Name}.nds")}\"");
+                            string[] emulatorArgs = [Path.Combine(OpenProject.MainDirectory, $"{OpenProject.Name}.nds")];
+                            if (emulatorExecutable.Equals("flatpak"))
+                            {
+                                emulatorArgs =
+                                [
+                                    "run", CurrentConfig.EmulatorFlatpak,
+                                    Path.Combine(OpenProject.MainDirectory, $"{OpenProject.Name}.nds")
+                                ];
+                            }
+                            Process.Start(emulatorExecutable, emulatorArgs);
                         }
                         catch (Exception ex)
                         {

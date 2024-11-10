@@ -21,11 +21,14 @@ public class SectionTreeItem(string sectionName, IEnumerable<ITreeItem> children
         {
             Orientation = Orientation.Horizontal,
             Spacing = 3,
-            Margin = new(2),
         };
         if (Icon is not null)
         {
-            panel.Children.Add(Icon); // We don't add a control if there's no icon (unlike bitmaps)
+            if (Icon.Parent is not null)
+            {
+                ((StackPanel)Icon.Parent).Children.Clear();
+            }
+            panel.Children.Add(Icon);
         }
         panel.Children.Add(new TextBlock { Text = Text });
         return panel;

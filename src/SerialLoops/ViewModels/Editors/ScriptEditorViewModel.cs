@@ -64,7 +64,7 @@ public class ScriptEditorViewModel : EditorViewModel
                     new HierarchicalExpanderColumn<ITreeItem>(
                         new TemplateColumn<ITreeItem>(null, new FuncDataTemplate<ITreeItem>((val, namescope) =>
                         {
-                            return GetItemPanel(val);
+                            return val?.GetDisplay();
                         }), options: new TemplateColumnOptions<ITreeItem>() { IsTextSearchEnabled = true }),
                         i => i.Children
                     )
@@ -96,29 +96,6 @@ public class ScriptEditorViewModel : EditorViewModel
         Commands = _script.GetScriptCommandTree(_project, _log);
     }
 
-    private StackPanel GetItemPanel(ITreeItem val)
-    {
-        if (val is null)
-        {
-            return null;
-        }
-        StackPanel panel = new()
-        {
-            Orientation = Avalonia.Layout.Orientation.Horizontal,
-            Spacing = 3,
-        };
-        if (val.Icon is not null)
-        {
-            if (val.Icon.Parent is not null)
-            {
-                ((StackPanel)val.Icon.Parent).Children.Clear();
-            }
-            panel.Children.Add(val.Icon);
-        }
-        panel.Children.Add(new TextBlock { Text = val.Text });
-        return panel;
-    }
-
     private void UpdateCommandViewModel()
     {
         if (_selectedCommand is null)
@@ -131,8 +108,19 @@ public class ScriptEditorViewModel : EditorViewModel
             {
                 CommandVerb.INIT_READ_FLAG => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
                 CommandVerb.DIALOGUE => new DialogueScriptCommandEditorViewModel(_selectedCommand, this, _window),
+                CommandVerb.KBG_DISP => new KbgDispScriptCommandEditorViewModel(_selectedCommand, this, _window),
+                CommandVerb.PIN_MNL => new PinMnlScriptCommandEditorViewModel(_selectedCommand, this, _window.OpenProject),
+                CommandVerb.BG_DISP => new BgDispScriptCommandEditorViewModel(_selectedCommand, this, _window),
+                CommandVerb.SCREEN_FADEIN => new ScreenFadeInScriptCommandEditorViewModel(_selectedCommand, this),
+                CommandVerb.SCREEN_FADEOUT => new ScreenFadeOutScriptCommandEditorViewModel(_selectedCommand, this),
+                CommandVerb.SCREEN_FLASH => new ScreenFlashScriptCommandEditorViewModel(_selectedCommand, this),
                 CommandVerb.REMOVED => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
                 CommandVerb.SND_STOP => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
+                CommandVerb.BGM_PLAY => new BgmPlayScriptCommandEditorViewModel(_selectedCommand, this, _window),
+                CommandVerb.VCE_PLAY => new VcePlayScriptCommandEditorViewModel(_selectedCommand, this, _window),
+                CommandVerb.FLAG => new FlagScriptCommandEditorViewModel(_selectedCommand, this),
+                CommandVerb.TOPIC_GET => new TopicGetScriptCommandEditorViewModel(_selectedCommand, this, _window),
+                CommandVerb.TOGGLE_DIALOGUE => new ToggleDialogueScriptCommandEditorViewModel(_selectedCommand, this),
                 CommandVerb.SCREEN_SHAKE_STOP => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
                 CommandVerb.WAIT => new WaitScriptCommandEditorViewModel(_selectedCommand, this),
                 CommandVerb.HOLD => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
@@ -143,6 +131,7 @@ public class ScriptEditorViewModel : EditorViewModel
                 CommandVerb.INVEST_END => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
                 CommandVerb.NEXT_SCENE => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
                 CommandVerb.AVOID_DISP => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
+                CommandVerb.BG_DISP2 => new BgDispScriptCommandEditorViewModel(_selectedCommand, this, _window),
                 _ => new ScriptCommandEditorViewModel(_selectedCommand, this)
             };
         }

@@ -77,6 +77,8 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
         get => _dialogueLine.GetSubstitutedString(_window.OpenProject);
         set
         {
+            if (value is null)
+                return;
             string text = value;
             text = StartStringQuotes().Replace(text, "“");
             text = MidStringOpenQuotes().Replace(text, "$1“");
@@ -106,6 +108,7 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
 
             ScriptEditor.UpdatePreview();
             Script.UnsavedChanges = true;
+            Command.UpdateDisplay();
         }
     }
 
