@@ -14,13 +14,13 @@
         x:DataType="vm:AsmHacksDialogViewModel"
         x:Class="SerialLoops.Views.Dialogs.AsmHacksDialog"
         Title="{x:Static assets:Strings.Apply_Assembly_Hack}">
-    
+
     <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto">
         <ScrollViewer Name="HacksPanel" Grid.Row="0" Grid.Column="0" Margin="3">
             <ListBox Name="HacksBox" Background="Transparent" ItemsSource="{Binding Configuration.Hacks}"
                      SelectedItem="{Binding SelectedHack}" Width="200" Height="400">
                 <i:Interaction.Behaviors>
-                    <ia:EventTriggerBehavior EventName="SelectionChanged" SourceObject="#HacksBox">
+                    <ia:EventTriggerBehavior EventName="SelectionChanged" SourceObject="{Binding #HacksBox}">
                         <ia:InvokeCommandAction Command="{Binding HackChangedCommand}"
                                                 CommandParameter="{Binding #DescriptionPanel}"/>
                     </ia:EventTriggerBehavior>

@@ -3851,6 +3851,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Load Sound.
+        /// </summary>
+        public static string Load_Sound {
+            get {
+                return ResourceManager.GetString("Load Sound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Load this save prompt.
         /// </summary>
         public static string Load_this_save_prompt {

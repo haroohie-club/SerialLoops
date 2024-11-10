@@ -90,6 +90,8 @@ namespace SerialLoops.ViewModels
         public ICommand BuildBaseCommand { get; private set; }
         public ICommand BuildAndRunCommand { get; private set; }
 
+        public SfxMixer SfxMixer { get; } = new();
+
         [Reactive]
         public KeyGesture SaveHotKey { get; set; }
         [Reactive]
