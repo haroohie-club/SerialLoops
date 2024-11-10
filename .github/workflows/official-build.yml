@@ -19,7 +19,7 @@ env:
   SLAssemblyVersion: ${{ inputs.version == '' && format('0.3.9999.a{0}', github.run_number) || inputs.version }}
 
 jobs:
-  flatpak-setup:
+  linux-flatpak-setup:
     runs-on: ubuntu-latest
     steps:
       - name: Check out
@@ -40,8 +40,8 @@ jobs:
           name: nuget-sources
           path: nuget-sources.json
           retention-days: 1
-  flatpak:
-    needs: flatpak-setup
+  linux-flatpak:
+    needs: linux-flatpak-setup
     runs-on: ubuntu-latest
     container:
       image: bilelmoussaoui/flatpak-github-actions:freedesktop-23.08
@@ -61,7 +61,59 @@ jobs:
           bundle: SerialLoops.flatpak
           cache-key: flatpak-builder-${{ github.sha }}
 
-  macOS-pkg:
+  linux-dpkg-tarball:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4.1.0
+        with:
+          dotnet-version: '8.0.x'
+      - name: Build & Publish Serial Loops
+        run: dotnet publish --project src/SerialLoops/SerialLoops.csproj -c Release -f net8.0 -r linux-x64 --self-contained /p:DebugType=None /p:DebugSymbols=false /p:PublishSingleFile=true
+      - name: Create tarball
+        run: |
+          chmod +x ./src/SerialLoops/bin/Release/net8.0/linux-x64/publish/SerialLoops
+          pushd ./src/SerialLoops/bin/Release/net8.0/linux-x64/publish
+          tar -czvf ../SerialLoops.tar.gz --transform 's,^\.\/,SerialLoops-$SLVersion/,' .
+          popd
+      - name: Upload tarball
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-x64-tar
+          path: src/SerialLoops/bin/Release/net8.0/linux-x64/SerialLoops.tar.gz
+          retention-days: 1
+      - name: Create deb package
+        shell: pwsh
+        run: |
+          Copy-Item -Path ./install/linux/dpkg-build -Destination ./dpkg-build -Recurse -Exclude ".gitkeep"
+          New-Item -ItemType "directory" -Path ./dpkg-build/SerialLoops/usr -Name bin
+          Push-Location ./dpkg-build/SerialLoops
+          ((Get-Content -Path DEBIAN/control) -replace '#VERSION#', '$env:SLVersion') | Set-Content -Path DEBIAN/control
+          Copy-Item -Path ./src/SerialLoops/bin/Release/net8.0/linux-x64/publish/* -Destination ./usr/lib/SerialLoops -Recurse
+          ln -s /usr/lib/SerialLoops/SerialLoops usr/bin/SerialLoops
+          Set-Location ..
+          dpkg-deb --build SerialLoops
+          Pop-Location
+      - name: Upload dpkg
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-x64-dpkg
+          path: dpkg-build/SerialLoops.deb
+          retention-days: 1
+
+  linux-rpm:
+    runs-on: ubuntu-latest
+    container:
+      image: fedora:39
+    steps:
+      - name: Create RPM
+        run: |
+          tar -czvf install/linux/rpm/rpmbuild/SOURCES/SerialLoops-$SLVersion.tar.gz --transform 's,^\.\/,SerialLoops-$SLVersion/,' .
+          sed -n 's/#VERSION/$SLVersion' ./install/linux/rpm/rpmbuild/SPECS/SerialLoops.spec
+
+  macos-pkg:
     runs-on: macos-latest
     strategy:
       matrix:
@@ -95,5 +147,4 @@ jobs:
           name: macOS-${{ matrix.rid }}-installer
           path: install/macos/SerialLoops.pkg
           retention-days: 1
-
 
