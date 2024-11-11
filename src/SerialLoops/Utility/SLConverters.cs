@@ -9,7 +9,6 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Avalonia.Skia;
 using HaruhiChokuretsuLib.Archive.Event;
-using ReactiveUI;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Util;

@@ -1,11 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 using Avalonia.Controls;
-using Avalonia.Data.Converters;
 using Avalonia.Layout;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 using SerialLoops.Lib.Script;
-using SerialLoops.Utility;
 
 namespace SerialLoops.Models;
 
