@@ -127,7 +127,7 @@ dotnet build -f net8.0
 ```
 Specifying this prevents dotnet from trying to build the Windows project, which can cause errors.
 
-We recommend [Rider](https://www.jetbrains.com/rider/) for development as it has the best Avalonia support; however, on Windows, you can also use [Visual Studio 2022](https://visualstudio.microsoft.com/).
+We recommend [Rider](https://www.jetbrains.com/rider/) for development as it has the best Avalonia support and is now free to use for non-commercial purposes; however, on Windows, you can also use [Visual Studio 2022](https://visualstudio.microsoft.com/).
 You can also build from both of these IDEs; however, when building from Rider on Linux/Mac, you must go into **Settings &rarr; Build, Execution, Deployment &rarr; Toolset and Build** and add `TargetFramework=net8.0`
 to the MSBuild global properties field. This has the same effect as specifying `-f net8.0` on the command line.
 
