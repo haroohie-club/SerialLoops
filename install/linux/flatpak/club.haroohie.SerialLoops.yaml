@@ -23,6 +23,7 @@ finish-args:
   - --env=DEVKITPRO=/opt/devkitpro
   - --env=DEVKITARM=${DEVKITPRO}/devkitARM
   - --env="PATH=${DEVKITPRO}/tools/bin:$PATH"
+  - --talk-name=org.freedesktop.Flatpak
 
 modules:
   - name: dotnet
