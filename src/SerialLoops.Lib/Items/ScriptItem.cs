@@ -790,6 +790,28 @@ public class ScriptItem : Item
                 ((TopicScriptParameter)currentCommand.Parameters[0]).TopicId);
         }
 
+        // Draw SELECT choices
+        if (currentCommand.Verb == CommandVerb.SELECT)
+        {
+            preview.CurrentChocies = [];
+            if (((OptionScriptParameter)currentCommand.Parameters[0]).Option.Id > 0)
+            {
+                preview.CurrentChocies.Add(((OptionScriptParameter)currentCommand.Parameters[0]).Option.Text);
+            }
+            if (((OptionScriptParameter)currentCommand.Parameters[1]).Option.Id > 0)
+            {
+                preview.CurrentChocies.Add(((OptionScriptParameter)currentCommand.Parameters[1]).Option.Text);
+            }
+            if (((OptionScriptParameter)currentCommand.Parameters[2]).Option.Id > 0)
+            {
+                preview.CurrentChocies.Add(((OptionScriptParameter)currentCommand.Parameters[2]).Option.Text);
+            }
+            if (((OptionScriptParameter)currentCommand.Parameters[3]).Option.Id > 0)
+            {
+                preview.CurrentChocies.Add(((OptionScriptParameter)currentCommand.Parameters[3]).Option.Text);
+            }
+        }
+
         return preview;
     }
 
@@ -1004,6 +1026,30 @@ public class ScriptItem : Item
             flyoutCanvas.Flush();
 
             canvas.DrawBitmap(topicFlyout, 256 - topicFlyout.Width, 320);
+        }
+
+        // Draw select choices
+        if (preview.CurrentChocies?.Count > 0)
+        {
+            List<SKBitmap> choiceGraphics = [];
+            foreach (string choice in preview.CurrentChocies)
+            {
+                SKBitmap choiceGraphic = new(218, 18);
+                SKCanvas choiceCanvas = new(choiceGraphic);
+                choiceCanvas.DrawRect(1, 1, 216, 16, new() { Color = new(146, 146, 146) });
+                choiceCanvas.DrawRect(2, 2, 214, 14, new() { Color = new(69, 69, 69) });
+                int choiceWidth = project.LangCode.Equals("ja") ? choice.Length * 14 : choice.Sum(c => project.FontReplacement.ReverseLookup(c).Offset);
+                choiceCanvas.DrawHaroohieText(choice, DialogueScriptParameter.Paint00, project, (218 - choiceWidth) / 2, 2);
+                choiceCanvas.Flush();
+                choiceGraphics.Add(choiceGraphic);
+            }
+
+            int graphicY = (192 - (choiceGraphics.Count * 18 + (choiceGraphics.Count - 1) * 8)) / 2 + 184;
+            foreach (SKBitmap choiceGraphic in choiceGraphics)
+            {
+                canvas.DrawBitmap(choiceGraphic, 19, graphicY);
+                graphicY += 26;
+            }
         }
 
         canvas.Flush();

@@ -41,7 +41,7 @@ public class SelectScriptCommandEditorViewModel : ScriptCommandEditorViewModel
         set
         {
             this.RaiseAndSetIfChanged(ref _option3, value);
-            EditOptionParameter(0, _option3);
+            EditOptionParameter(2, _option3);
         }
     }
     private ChoicesSectionEntry _option4;
@@ -51,7 +51,7 @@ public class SelectScriptCommandEditorViewModel : ScriptCommandEditorViewModel
         set
         {
             this.RaiseAndSetIfChanged(ref _option4, value);
-            EditOptionParameter(2, _option4);
+            EditOptionParameter(3, _option4);
         }
     }
 
@@ -119,6 +119,7 @@ public class SelectScriptCommandEditorViewModel : ScriptCommandEditorViewModel
         Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
             .Objects[Command.Index].Parameters[index] = (short)option.Id;
         Script.UnsavedChanges = true;
+        ScriptEditor.UpdatePreview();
     }
 
     private void EditDisplayFlag(int index, short displayFlag)

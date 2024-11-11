@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using HaruhiChokuretsuLib.Archive.Event;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script.Parameters;
 
@@ -19,5 +20,6 @@ public class ScriptPreview
     public List<PositionedSprite> Sprites { get; set; } = [];
     public ScriptItemCommand LastDialogueCommand { get; set; }
     public TopicItem Topic { get; set; }
+    public List<string> CurrentChocies { get; set; }
     public string ErrorImage { get; set; }
 }
