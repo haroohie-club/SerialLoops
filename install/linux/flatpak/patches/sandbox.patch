@@ -1,5 +1,5 @@
 diff --git a/src/SerialLoops.Lib/Factories/ConfigFactory.cs b/src/SerialLoops.Lib/Factories/ConfigFactory.cs
-index 275c2c2..19901e3 100644
+index 275c2c2..434b611 100644
 --- a/src/SerialLoops.Lib/Factories/ConfigFactory.cs
 +++ b/src/SerialLoops.Lib/Factories/ConfigFactory.cs
 @@ -71,7 +71,7 @@ public class ConfigFactory : IConfigFactory
@@ -21,7 +21,7 @@ index 275c2c2..19901e3 100644
                          RedirectStandardError = true, RedirectStandardOutput = true
                      }
 diff --git a/src/SerialLoops/ViewModels/MainWindowViewModel.cs b/src/SerialLoops/ViewModels/MainWindowViewModel.cs
-index d866647..06e86ee 100644
+index d866647..97c09f3 100644
 --- a/src/SerialLoops/ViewModels/MainWindowViewModel.cs
 +++ b/src/SerialLoops/ViewModels/MainWindowViewModel.cs
 @@ -683,7 +683,7 @@ public partial class MainWindowViewModel : ViewModelBase
@@ -33,7 +33,12 @@ index d866647..06e86ee 100644
                              }
                              if (emulatorExecutable.EndsWith(".app"))
                              {
-@@ -696,7 +696,7 @@ public partial class MainWindowViewModel : ViewModelBase
+@@ -692,11 +692,11 @@ public partial class MainWindowViewModel : ViewModelBase
+                             }
+
+                             string[] emulatorArgs = [Path.Combine(OpenProject.MainDirectory, $"{OpenProject.Name}.nds")];
+-                            if (emulatorExecutable.Equals("flatpak"))
++                            if (emulatorExecutable.Equals("flatpak-spawn"))
                              {
                                  emulatorArgs =
                                  [
