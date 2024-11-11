@@ -11,6 +11,7 @@ on:
 
 jobs:
   build_test:
+    if: github.repository == 'haroohie-club'
     strategy:
       matrix:
         platform:
