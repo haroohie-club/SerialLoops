@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
+using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SerialLoops.Lib.Items;
@@ -35,8 +36,8 @@ public class TopicGetScriptCommandEditorViewModel : ScriptCommandEditorViewModel
 
     public ICommand SelectTopicCommand { get; }
 
-    public TopicGetScriptCommandEditorViewModel(ScriptItemCommand command, ScriptEditorViewModel scriptEditor, MainWindowViewModel window)
-        : base(command, scriptEditor)
+    public TopicGetScriptCommandEditorViewModel(ScriptItemCommand command, ScriptEditorViewModel scriptEditor, ILogger log, MainWindowViewModel window)
+        : base(command, scriptEditor, log)
     {
         Tabs = window.EditorTabs;
         Topics = new(window.OpenProject.Items.Where(i => i.Type == ItemDescription.ItemType.Topic).Cast<TopicItem>());

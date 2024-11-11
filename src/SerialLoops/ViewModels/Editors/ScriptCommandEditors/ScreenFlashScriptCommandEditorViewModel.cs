@@ -1,11 +1,12 @@
-﻿using ReactiveUI;
+﻿using HaruhiChokuretsuLib.Util;
+using ReactiveUI;
 using SerialLoops.Lib.Script;
 using SerialLoops.Lib.Script.Parameters;
 using SkiaSharp;
 
 namespace SerialLoops.ViewModels.Editors.ScriptCommandEditors;
 
-public class ScreenFlashScriptCommandEditorViewModel(ScriptItemCommand command, ScriptEditorViewModel scriptEditor) : ScriptCommandEditorViewModel(command, scriptEditor)
+public class ScreenFlashScriptCommandEditorViewModel(ScriptItemCommand command, ScriptEditorViewModel scriptEditor, ILogger log) : ScriptCommandEditorViewModel(command, scriptEditor, log)
 {
     private short _fadeInTime = ((ShortScriptParameter)command.Parameters[0]).Value;
     public short FadeInTime

@@ -60,7 +60,6 @@ public class LoopyLogger : ILogger
 
     private async Task LogErrorAsync(string message, bool lookForWarnings = false)
     {
-        await _owner.ShowMessageBoxAsync(Strings.Error, string.Format(Strings.ERROR___0_, message), ButtonEnum.Ok, Icon.Error, this);
         if (!string.IsNullOrEmpty(_logFile) && !string.IsNullOrEmpty(message))
         {
             for (int i = 0; i < 10; i++)
@@ -76,6 +75,7 @@ public class LoopyLogger : ILogger
                 }
             }
         }
+        await _owner.ShowMessageBoxAsync(Strings.Error, string.Format(Strings.ERROR___0_, message), ButtonEnum.Ok, Icon.Error, this);
     }
 
     public void LogException(string message, Exception exception)

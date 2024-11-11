@@ -1,4 +1,5 @@
-﻿using ReactiveUI;
+﻿using HaruhiChokuretsuLib.Util;
+using ReactiveUI;
 using SerialLoops.Lib.Script;
 using SerialLoops.Lib.Script.Parameters;
 
@@ -48,8 +49,8 @@ public class ScreenShakeScriptCommandEditorViewModel : ScriptCommandEditorViewMo
         }
     }
 
-    public ScreenShakeScriptCommandEditorViewModel(ScriptItemCommand command, ScriptEditorViewModel scriptEditor) :
-        base(command, scriptEditor)
+    public ScreenShakeScriptCommandEditorViewModel(ScriptItemCommand command, ScriptEditorViewModel scriptEditor, ILogger log) :
+        base(command, scriptEditor, log)
     {
         _duration = ((ShortScriptParameter)Command.Parameters[0]).Value;
         _horizontalIntensity = ((ShortScriptParameter)Command.Parameters[1]).Value;

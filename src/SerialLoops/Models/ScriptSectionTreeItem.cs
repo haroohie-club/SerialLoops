@@ -3,13 +3,13 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Layout;
-using HaruhiChokuretsuLib.Archive.Event;
 using ReactiveUI;
 using SerialLoops.Lib.Script;
+using SerialLoops.ViewModels.Editors;
 
 namespace SerialLoops.Models;
 
-public class ScriptSectionTreeItem : ITreeItem, IViewFor<ScriptSection>
+public class ScriptSectionTreeItem : ITreeItem, IViewFor<ReactiveScriptSection>
 {
     private TextBlock _textBlock = new();
     StackPanel _panel = new()
@@ -24,7 +24,7 @@ public class ScriptSectionTreeItem : ITreeItem, IViewFor<ScriptSection>
     public ObservableCollection<ITreeItem> Children { get; set; }
     public bool IsExpanded { get; set; } = true;
 
-    public ScriptSectionTreeItem(ScriptSection section, List<ScriptItemCommand> commands)
+    public ScriptSectionTreeItem(ReactiveScriptSection section, List<ScriptItemCommand> commands)
     {
         ViewModel = section;
         Children = new([.. commands.Select(c => new ScriptCommandTreeItem(c))]);
@@ -41,8 +41,8 @@ public class ScriptSectionTreeItem : ITreeItem, IViewFor<ScriptSection>
     object IViewFor.ViewModel
     {
         get => ViewModel;
-        set => ViewModel = (ScriptSection)value;
+        set => ViewModel = (ReactiveScriptSection)value;
     }
 
-    public ScriptSection ViewModel { get; set; }
+    public ReactiveScriptSection ViewModel { get; set; }
 }

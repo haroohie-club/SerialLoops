@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Linq;
+using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
@@ -27,8 +28,8 @@ public class VcePlayScriptCommandEditorViewModel : ScriptCommandEditorViewModel
         }
     }
 
-    public VcePlayScriptCommandEditorViewModel(ScriptItemCommand command, ScriptEditorViewModel scriptEditor, MainWindowViewModel window) :
-        base(command, scriptEditor)
+    public VcePlayScriptCommandEditorViewModel(ScriptItemCommand command, ScriptEditorViewModel scriptEditor, ILogger log, MainWindowViewModel window) :
+        base(command, scriptEditor, log)
     {
         Tabs = window.EditorTabs;
         Vces = new(window.OpenProject.Items.Where(i => i.Type == ItemDescription.ItemType.Voice).Cast<VoicedLineItem>());

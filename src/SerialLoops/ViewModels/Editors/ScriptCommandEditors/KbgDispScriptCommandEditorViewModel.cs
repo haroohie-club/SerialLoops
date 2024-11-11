@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using HaruhiChokuretsuLib.Archive.Data;
+using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
@@ -41,7 +42,7 @@ public class KbgDispScriptCommandEditorViewModel : ScriptCommandEditorViewModel
         }
     }
 
-    public KbgDispScriptCommandEditorViewModel(ScriptItemCommand command, ScriptEditorViewModel scriptEditor, MainWindowViewModel window) : base(command, scriptEditor)
+    public KbgDispScriptCommandEditorViewModel(ScriptItemCommand command, ScriptEditorViewModel scriptEditor, ILogger log, MainWindowViewModel window) : base(command, scriptEditor, log)
     {
         _kbg = ((BgScriptParameter)command.Parameters[0]).Background;
         ReplaceKbgCommand = ReactiveCommand.CreateFromTask(ReplaceKbg);

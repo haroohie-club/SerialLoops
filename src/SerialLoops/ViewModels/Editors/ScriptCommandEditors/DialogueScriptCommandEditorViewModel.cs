@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Input;
+using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
@@ -23,7 +24,7 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
     private Func<ItemDescription, bool> _specialPredicate;
     private Timer _dialogueUpdateTimer;
 
-    public DialogueScriptCommandEditorViewModel(ScriptItemCommand command, ScriptEditorViewModel scriptEditor, MainWindowViewModel window) : base(command, scriptEditor)
+    public DialogueScriptCommandEditorViewModel(ScriptItemCommand command, ScriptEditorViewModel scriptEditor, ILogger log, MainWindowViewModel window) : base(command, scriptEditor, log)
     {
         _window = window;
         Tabs = _window.EditorTabs;

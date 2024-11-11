@@ -38,6 +38,7 @@ public class ScriptItem : Item
 
     public Dictionary<ScriptSection, List<ScriptItemCommand>> GetScriptCommandTree(Project project, ILogger log)
     {
+        ScriptCommandInvocation currentCommand = null;
         try
         {
             Dictionary<ScriptSection, List<ScriptItemCommand>> commands = [];
@@ -46,6 +47,7 @@ public class ScriptItem : Item
                 commands.Add(section, []);
                 foreach (ScriptCommandInvocation command in section.Objects)
                 {
+                    currentCommand = command;
                     commands[section].Add(ScriptItemCommand.FromInvocation(command, section,
                         commands[section].Count, Event, project, _localize, log));
                 }
@@ -56,8 +58,8 @@ public class ScriptItem : Item
         catch (Exception ex)
         {
             log.LogException(
-                string.Format(project.Localize("Error getting script command tree for script {0} ({1})"),
-                    DisplayName, Name), ex);
+                string.Format(project.Localize("Error getting script command tree for script {0} ({1}): {2} {3}"),
+                    DisplayName, Name, currentCommand?.Command.Mnemonic ?? "NULL_COMMAND", string.Join(", ", currentCommand?.Parameters ?? [])), ex);
             return null;
         }
     }
@@ -209,7 +211,7 @@ public class ScriptItem : Item
         if (commands is null)
         {
             log.LogWarning($"No path found to current command.");
-            preview.ErrorImage = "SerialLoops.Graphics.ScriptPreviewError.png";
+            preview.ErrorImage = "avares://SerialLoops/Assets/Graphics/ScriptPreviewError.png";
             return preview;
         }
 

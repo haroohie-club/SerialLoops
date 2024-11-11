@@ -1,11 +1,12 @@
+using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
 using SerialLoops.Lib.Script;
 using SerialLoops.Lib.Script.Parameters;
 
 namespace SerialLoops.ViewModels.Editors.ScriptCommandEditors;
 
-public class FlagScriptCommandEditorViewModel(ScriptItemCommand command, ScriptEditorViewModel scriptEditor)
-    : ScriptCommandEditorViewModel(command, scriptEditor)
+public class FlagScriptCommandEditorViewModel(ScriptItemCommand command, ScriptEditorViewModel scriptEditor, ILogger log)
+    : ScriptCommandEditorViewModel(command, scriptEditor, log)
 {
     private short _flagId = ((FlagScriptParameter)command.Parameters[0]).Id;
     public string Flag

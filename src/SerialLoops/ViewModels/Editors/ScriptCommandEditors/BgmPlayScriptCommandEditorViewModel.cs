@@ -1,6 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
@@ -84,8 +85,8 @@ public class BgmPlayScriptCommandEditorViewModel : ScriptCommandEditorViewModel
         }
     }
 
-    public BgmPlayScriptCommandEditorViewModel(ScriptItemCommand command, ScriptEditorViewModel scriptEditor, MainWindowViewModel window)
-        : base(command, scriptEditor)
+    public BgmPlayScriptCommandEditorViewModel(ScriptItemCommand command, ScriptEditorViewModel scriptEditor, ILogger log, MainWindowViewModel window)
+        : base(command, scriptEditor, log)
     {
         Tabs = window.EditorTabs;
         Bgms = new(window.OpenProject.Items.Where(i => i.Type == ItemDescription.ItemType.BGM)

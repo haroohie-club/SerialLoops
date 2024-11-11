@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using HaruhiChokuretsuLib.Archive.Event;
+using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Script;
@@ -96,8 +97,8 @@ public class SelectScriptCommandEditorViewModel : ScriptCommandEditorViewModel
         }
     }
 
-    public SelectScriptCommandEditorViewModel(ScriptItemCommand command, ScriptEditorViewModel scriptEditor, Project project) :
-        base(command, scriptEditor)
+    public SelectScriptCommandEditorViewModel(ScriptItemCommand command, ScriptEditorViewModel scriptEditor, ILogger log, Project project) :
+        base(command, scriptEditor, log)
     {
         OpenProject = project;
         AvailableChoices =
@@ -117,9 +118,10 @@ public class SelectScriptCommandEditorViewModel : ScriptCommandEditorViewModel
     {
         ((OptionScriptParameter)Command.Parameters[index]).Option = option;
         Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
-            .Objects[Command.Index].Parameters[index] = (short)option.Id;
+            .Objects[Command.Index].Parameters[index] = Script.Event.ChoicesSection.Objects.IndexOf(option) == -1 ? (short)0 : (short)Script.Event.ChoicesSection.Objects.IndexOf(option) ;
         Script.UnsavedChanges = true;
         ScriptEditor.UpdatePreview();
+        Script.Refresh(OpenProject, Log);
     }
 
     private void EditDisplayFlag(int index, short displayFlag)

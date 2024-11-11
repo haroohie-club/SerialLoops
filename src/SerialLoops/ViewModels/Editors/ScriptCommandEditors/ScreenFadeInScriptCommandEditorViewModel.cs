@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SerialLoops.Lib.Script;
@@ -56,7 +57,7 @@ public class ScreenFadeInScriptCommandEditorViewModel : ScriptCommandEditorViewM
         }
     }
 
-    public ScreenFadeInScriptCommandEditorViewModel(ScriptItemCommand command, ScriptEditorViewModel scriptEditor) : base(command, scriptEditor)
+    public ScreenFadeInScriptCommandEditorViewModel(ScriptItemCommand command, ScriptEditorViewModel scriptEditor, ILogger log) : base(command, scriptEditor, log)
     {
         _fadeTime = ((ShortScriptParameter)command.Parameters[0]).Value;
         _fadePercentage = ((ShortScriptParameter)command.Parameters[1]).Value;

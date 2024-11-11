@@ -2285,7 +2285,7 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error getting script command tree for script {0} ({1}).
+        ///   Looks up a localized string similar to Error getting script command tree for script {0} ({1}): {2} {3}.
         /// </summary>
         public static string Error_getting_script_command_tree_for_script__0____1__ {
             get {
