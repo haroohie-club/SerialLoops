@@ -13,7 +13,7 @@
     <color type="primary" scheme_preference="light">#9accfe</color>
     <color type="primary" scheme_preference="dark">#042058</color>
   </branding>
-  <screenshots>
+  <!-- <screenshots>
     <screenshot type="default">
       <caption>Serial Loops startup screen</caption>
       <image></image>
@@ -30,7 +30,7 @@
         <image></image>
       </screenshot>
     </screenshot>
-  </screenshots>
+  </screenshots> -->
   <developer_name>The Haroohie Translation Club</developer_name>
   <url type="homepage">https://haroohie.club/chokuretsu/serial-loops</url>
   <content_rating type="oars-1.0">

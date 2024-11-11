@@ -47,7 +47,7 @@ modules:
         url: https://mirror.team-cymru.com/gnu/make/make-4.4.tar.gz
         sha256: 581f4d4e872da74b3941c874215898a7d35802f03732bdccee1d4a7979105d18
     build-commands:
-      - ./configure --prefix=${FLATPAK_DEST}/usr/local
+      - ./configure --prefix=${FLATPAK_DEST}/app/usr/local
       - make
       - make install
 
@@ -75,10 +75,11 @@ modules:
       - type: file
         path: VERSION
     build-commands:
+      - export SLVersion=$(cat VERSION)
+      - export SLAssemblyVersion=$(sed -n 's/pre/9999/p' VERSION)
       - dotnet publish src/SerialLoops/SerialLoops.csproj -c Release -f net8.0 --no-self-contained --source ./nuget-sources
-      - sed -i "s/#VERSION#/$(cat VERSION)/g" club.haroohie.SerialLoops.desktop
       - mkdir -p ${FLATPAK_DEST}/bin
       - cp -r src/SerialLoops/bin/Release/net8.0/publish/* ${FLATPAK_DEST}/bin
+      - install -Dm644 AppIcon.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/club.haroohie.SerialLoops.svg
       - install -Dm644 club.haroohie.SerialLoops.metainfo.xml ${FLATPAK_DEST}/share/metainfo/club.haroohie.SerialLoops.metainfo.xml
       - install -Dm644 club.haroohie.SerialLoops.desktop ${FLATPAK_DEST}/share/applications/club.haroohie.SerialLoops.desktop
-      - install -Dm644 AppIcon.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/club.haroohie.SerialLoops.svg
