@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows.Input;
 using ReactiveUI;
 using SerialLoops.Lib.Items;
@@ -19,7 +20,8 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
 {
     private MainWindowViewModel _window;
     public EditorTabsPanelViewModel Tabs { get; set; }
-    private Func<ItemDescription, bool> _specialPredicate = (i => true);
+    private Func<ItemDescription, bool> _specialPredicate;
+    private Timer _dialogueUpdateTimer;
 
     public DialogueScriptCommandEditorViewModel(ScriptItemCommand command, ScriptEditorViewModel scriptEditor, MainWindowViewModel window) : base(command, scriptEditor)
     {
@@ -42,6 +44,13 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
         _spriteLayer = ((ShortScriptParameter)command.Parameters[9]).Value;
         _dontClearText = ((BoolScriptParameter)command.Parameters[10]).Value;
         _disableLipFlap = ((BoolScriptParameter)command.Parameters[11]).Value;
+
+        _dialogueUpdateTimer = new(TimeSpan.FromMilliseconds(250));
+        _dialogueUpdateTimer.Elapsed += (sender, args) =>
+        {
+            ScriptEditor.UpdatePreview();
+            _dialogueUpdateTimer.Stop();
+        };
     }
 
     public ObservableCollection<CharacterItem> Characters { get; }
@@ -106,7 +115,8 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
                 Script.Event.DialogueSection.Objects[Command.Section.Objects[Command.Index].Parameters[0]].Text = _dialogueLine;
             }
 
-            ScriptEditor.UpdatePreview();
+            _dialogueUpdateTimer.Stop();
+            _dialogueUpdateTimer.Start();
             Script.UnsavedChanges = true;
             Command.UpdateDisplay();
         }

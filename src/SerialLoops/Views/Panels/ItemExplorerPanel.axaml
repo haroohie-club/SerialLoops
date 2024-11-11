@@ -9,10 +9,6 @@
              x:DataType="vm:ItemExplorerPanelViewModel"
              x:Class="SerialLoops.Views.Panels.ItemExplorerPanel">
 
-    <Design.DataContext>
-        <vm:ItemExplorerPanelViewModel/>
-    </Design.DataContext>
-
     <Grid RowDefinitions="Auto,*">
         <TextBox Grid.Row="0" Name="Search">
             <i:Interaction.Behaviors>
