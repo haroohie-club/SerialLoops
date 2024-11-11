@@ -10,55 +10,54 @@ using SerialLoops.ViewModels.Dialogs;
 using SerialLoops.ViewModels.Panels;
 using SerialLoops.Views.Dialogs;
 
-namespace SerialLoops.ViewModels.Editors.ScriptCommandEditors
+namespace SerialLoops.ViewModels.Editors.ScriptCommandEditors;
+
+public class BgDispScriptCommandEditorViewModel : ScriptCommandEditorViewModel
 {
-    public class BgDispScriptCommandEditorViewModel : ScriptCommandEditorViewModel
+    private MainWindowViewModel _window;
+    public EditorTabsPanelViewModel Tabs { get; }
+
+    private BackgroundItem _bg;
+    public BackgroundItem Bg
     {
-        private MainWindowViewModel _window;
-        public EditorTabsPanelViewModel Tabs { get; }
-
-        private BackgroundItem _bg;
-        public BackgroundItem Bg
+        get => _bg;
+        set
         {
-            get => _bg;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _bg, value);
-                ((BgScriptParameter)Command.Parameters[0]).Background = _bg;
-                Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
-                    .Objects[Command.Index].Parameters[0] = (short)_bg.Id;
-                ScriptEditor.UpdatePreview();
-                Script.UnsavedChanges = true;
-            }
+            this.RaiseAndSetIfChanged(ref _bg, value);
+            ((BgScriptParameter)Command.Parameters[0]).Background = _bg;
+            Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
+                .Objects[Command.Index].Parameters[0] = (short)_bg.Id;
+            ScriptEditor.UpdatePreview();
+            Script.UnsavedChanges = true;
         }
+    }
 
-        public ICommand ReplaceBgCommand { get; }
+    public ICommand ReplaceBgCommand { get; }
 
-        public BgDispScriptCommandEditorViewModel(ScriptItemCommand command, ScriptEditorViewModel scriptEditor, MainWindowViewModel window) : base(command, scriptEditor)
+    public BgDispScriptCommandEditorViewModel(ScriptItemCommand command, ScriptEditorViewModel scriptEditor, MainWindowViewModel window) : base(command, scriptEditor)
+    {
+        _window = window;
+        Tabs = _window.EditorTabs;
+        _bg = ((BgScriptParameter)Command.Parameters[0]).Background;
+        ReplaceBgCommand = ReactiveCommand.CreateFromTask(ReplaceBg);
+    }
+
+    private async Task ReplaceBg()
+    {
+        GraphicSelectionDialogViewModel graphicSelectionDialog = new(new List<IPreviewableGraphic>() { NonePreviewableGraphic.BACKGROUND }.Concat(_window.OpenProject.Items.Where(i => i.Type == ItemDescription.ItemType.Background).Cast<IPreviewableGraphic>()),
+            Bg, _window.OpenProject, _window.Log, i => i.Name == "NONE" || ((BackgroundItem)i).BackgroundType == HaruhiChokuretsuLib.Archive.Data.BgType.TEX_BG);
+        IPreviewableGraphic bg = await new GraphicSelectionDialog() { DataContext = graphicSelectionDialog }.ShowDialog<IPreviewableGraphic>(_window.Window);
+        if (bg is null)
         {
-            _window = window;
-            Tabs = _window.EditorTabs;
-            _bg = ((BgScriptParameter)Command.Parameters[0]).Background;
-            ReplaceBgCommand = ReactiveCommand.CreateFromTask(ReplaceBg);
+            return;
         }
-
-        private async Task ReplaceBg()
+        else if (bg.Text == "NONE")
         {
-            GraphicSelectionDialogViewModel graphicSelectionDialog = new(new List<IPreviewableGraphic>() { NonePreviewableGraphic.BACKGROUND }.Concat(_window.OpenProject.Items.Where(i => i.Type == ItemDescription.ItemType.Background).Cast<IPreviewableGraphic>()),
-                Bg, _window.OpenProject, _window.Log, i => i.Name == "NONE" || ((BackgroundItem)i).BackgroundType == HaruhiChokuretsuLib.Archive.Data.BgType.TEX_BG);
-            IPreviewableGraphic bg = await new GraphicSelectionDialog() { DataContext = graphicSelectionDialog }.ShowDialog<IPreviewableGraphic>(_window.Window);
-            if (bg is null)
-            {
-                return;
-            }
-            else if (bg.Text == "NONE")
-            {
-                Bg = null;
-            }
-            else
-            {
-                Bg = (BackgroundItem)bg;
-            }
+            Bg = null;
+        }
+        else
+        {
+            Bg = (BackgroundItem)bg;
         }
     }
 }

@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 
-namespace SerialLoops.Views.Editors.ScriptCommandEditors
+namespace SerialLoops.Views.Editors.ScriptCommandEditors;
+
+public partial class KbgDispScriptCommandEditorView : UserControl
 {
-    public partial class KbgDispScriptCommandEditorView : UserControl
+    public KbgDispScriptCommandEditorView()
     {
-        public KbgDispScriptCommandEditorView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

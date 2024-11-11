@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 
-namespace SerialLoops.Views.Panels
+namespace SerialLoops.Views.Panels;
+
+public partial class OpenProjectPanel : UserControl
 {
-    public partial class OpenProjectPanel : UserControl
+    public OpenProjectPanel()
     {
-        public OpenProjectPanel()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

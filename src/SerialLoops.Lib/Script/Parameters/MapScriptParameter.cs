@@ -1,21 +1,20 @@
 ﻿using HaruhiChokuretsuLib.Archive.Event;
 using SerialLoops.Lib.Items;
 
-namespace SerialLoops.Lib.Script.Parameters
+namespace SerialLoops.Lib.Script.Parameters;
+
+public class MapScriptParameter : ScriptParameter
 {
-    public class MapScriptParameter : ScriptParameter
+    public MapItem Map { get; set; }
+    public override short[] GetValues(object obj = null) => new short[] { (short)Map.Map.Index };
+
+    public MapScriptParameter(string name, MapItem map) : base(name, ParameterType.MAP)
     {
-        public MapItem Map { get; set; }
-        public override short[] GetValues(object obj = null) => new short[] { (short)Map.Map.Index };
+        Map = map;
+    }
 
-        public MapScriptParameter(string name, MapItem map) : base(name, ParameterType.MAP)
-        {
-            Map = map;
-        }
-
-        public override MapScriptParameter Clone(Project project, EventFile eventFile)
-        {
-            return new(Name, Map);
-        }
+    public override MapScriptParameter Clone(Project project, EventFile eventFile)
+    {
+        return new(Name, Map);
     }
 }

@@ -11,114 +11,113 @@ using MsBox.Avalonia.Enums;
 using SerialLoops.Models;
 using SkiaSharp;
 
-namespace SerialLoops.Utility
+namespace SerialLoops.Utility;
+
+public static class GuiExtensions
 {
-    public static class GuiExtensions
+    public static async Task<IStorageFile> ShowOpenFilePickerAsync(this Window window, string title, IReadOnlyList<FilePickerFileType> fileFilter, string suggestedStartLocation = "")
     {
-        public static async Task<IStorageFile> ShowOpenFilePickerAsync(this Window window, string title, IReadOnlyList<FilePickerFileType> fileFilter, string suggestedStartLocation = "")
+        FilePickerOpenOptions options = new()
         {
-            FilePickerOpenOptions options = new()
-            {
-                Title = title,
-                FileTypeFilter = fileFilter,
-            };
-            if (!string.IsNullOrEmpty(suggestedStartLocation))
-            {
-                options.SuggestedStartLocation = await window.StorageProvider.TryGetFolderFromPathAsync(suggestedStartLocation);
-            }
-            return (await window.StorageProvider.OpenFilePickerAsync(options)).FirstOrDefault();
-        }
-        public static async Task<IStorageFile> ShowSaveFilePickerAsync(this Window window, string title, IReadOnlyList<FilePickerFileType> fileFilter, string suggestedFileName = "")
+            Title = title,
+            FileTypeFilter = fileFilter,
+        };
+        if (!string.IsNullOrEmpty(suggestedStartLocation))
         {
-            FilePickerSaveOptions options = new()
-            {
-                Title = title,
-                FileTypeChoices = fileFilter,
-                ShowOverwritePrompt = true,
-                SuggestedFileName = suggestedFileName,
-            };
-            return await window.StorageProvider.SaveFilePickerAsync(options);
+            options.SuggestedStartLocation = await window.StorageProvider.TryGetFolderFromPathAsync(suggestedStartLocation);
         }
-        public static async Task<IReadOnlyList<IStorageFile>> ShowOpenMultiFilePickerAsync(this Window window, string title, IReadOnlyList<FilePickerFileType> fileFilter)
+        return (await window.StorageProvider.OpenFilePickerAsync(options)).FirstOrDefault();
+    }
+    public static async Task<IStorageFile> ShowSaveFilePickerAsync(this Window window, string title, IReadOnlyList<FilePickerFileType> fileFilter, string suggestedFileName = "")
+    {
+        FilePickerSaveOptions options = new()
         {
-            FilePickerOpenOptions options = new()
-            {
-                Title = title,
-                FileTypeFilter = fileFilter,
-                AllowMultiple = true,
-            };
-            return await window.StorageProvider.OpenFilePickerAsync(options);
-        }
-        public static async Task<IStorageFolder> ShowOpenFolderPickerAsync(this Window window, string title)
+            Title = title,
+            FileTypeChoices = fileFilter,
+            ShowOverwritePrompt = true,
+            SuggestedFileName = suggestedFileName,
+        };
+        return await window.StorageProvider.SaveFilePickerAsync(options);
+    }
+    public static async Task<IReadOnlyList<IStorageFile>> ShowOpenMultiFilePickerAsync(this Window window, string title, IReadOnlyList<FilePickerFileType> fileFilter)
+    {
+        FilePickerOpenOptions options = new()
         {
-            FolderPickerOpenOptions options = new()
-            {
-                Title = title,
-                AllowMultiple = false,
-            };
-            return (await window.StorageProvider.OpenFolderPickerAsync(options)).FirstOrDefault();
-        }
+            Title = title,
+            FileTypeFilter = fileFilter,
+            AllowMultiple = true,
+        };
+        return await window.StorageProvider.OpenFilePickerAsync(options);
+    }
+    public static async Task<IStorageFolder> ShowOpenFolderPickerAsync(this Window window, string title)
+    {
+        FolderPickerOpenOptions options = new()
+        {
+            Title = title,
+            AllowMultiple = false,
+        };
+        return (await window.StorageProvider.OpenFolderPickerAsync(options)).FirstOrDefault();
+    }
 
-        public static async Task<ButtonResult> ShowMessageBoxAsync(this Window window, string title, string message, ButtonEnum buttons, Icon icon, ILogger log)
+    public static async Task<ButtonResult> ShowMessageBoxAsync(this Window window, string title, string message, ButtonEnum buttons, Icon icon, ILogger log)
+    {
+        MessageBoxStandardParams msgParams = new()
         {
-            MessageBoxStandardParams msgParams = new()
-            {
-                ButtonDefinitions = buttons,
-                Icon = icon,
-                WindowIcon = new(ControlGenerator.GetIcon("AppIcon", log)),
-                ContentTitle = title,
-                ContentHeader = title,
-                ContentMessage = message,
-                CanResize = false,
-                CloseOnClickAway = false,
-                SizeToContent = SizeToContent.WidthAndHeight,
-                SystemDecorations = SystemDecorations.Full,
-            };
+            ButtonDefinitions = buttons,
+            Icon = icon,
+            WindowIcon = new(ControlGenerator.GetIcon("AppIcon", log)),
+            ContentTitle = title,
+            ContentHeader = title,
+            ContentMessage = message,
+            CanResize = false,
+            CloseOnClickAway = false,
+            SizeToContent = SizeToContent.WidthAndHeight,
+            SystemDecorations = SystemDecorations.Full,
+        };
 
-            return await MessageBoxManager.GetMessageBoxStandard(msgParams).ShowWindowDialogAsync(window);
+        return await MessageBoxManager.GetMessageBoxStandard(msgParams).ShowWindowDialogAsync(window);
+    }
+
+    public static void AddRange(this ItemCollection itemCollection, IEnumerable<ContentControl> items)
+    {
+        foreach (ContentControl item in items)
+        {
+            itemCollection.Add(item);
         }
+    }
 
-        public static void AddRange(this ItemCollection itemCollection, IEnumerable<ContentControl> items)
+    public static void AddRange(this Avalonia.Controls.Controls controlsCollection, IEnumerable<Control> controlsToAdd)
+    {
+        foreach (Control control in controlsToAdd)
         {
-            foreach (ContentControl item in items)
-            {
-                itemCollection.Add(item);
-            }
+            controlsCollection.Add(control);
         }
+    }
 
-        public static void AddRange(this Avalonia.Controls.Controls controlsCollection, IEnumerable<Control> controlsToAdd)
+    public static NativeMenuItem FindNativeMenuItem(this NativeMenu menu, string header)
+    {
+        foreach (NativeMenuItemBase itemBase in menu.Items)
         {
-            foreach (Control control in controlsToAdd)
+            if (itemBase is NativeMenuItem item)
             {
-                controlsCollection.Add(control);
-            }
-        }
-
-        public static NativeMenuItem FindNativeMenuItem(this NativeMenu menu, string header)
-        {
-            foreach (NativeMenuItemBase itemBase in menu.Items)
-            {
-                if (itemBase is NativeMenuItem item)
+                if (item.Header.Equals(header))
                 {
-                    if (item.Header.Equals(header))
+                    return item;
+                }
+                else
+                {
+                    if (item.Menu?.FindNativeMenuItem(header) is not null)
                     {
                         return item;
                     }
-                    else
-                    {
-                        if (item.Menu?.FindNativeMenuItem(header) is not null)
-                        {
-                            return item;
-                        }
-                    }
                 }
             }
-            return null;
         }
+        return null;
+    }
 
-        public static Color ToAvalonia(this SKColor color)
-        {
-            return new(color.Alpha, color.Red, color.Green, color.Blue);
-        }
+    public static Color ToAvalonia(this SKColor color)
+    {
+        return new(color.Alpha, color.Red, color.Green, color.Blue);
     }
 }

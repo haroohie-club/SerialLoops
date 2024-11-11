@@ -6,30 +6,29 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SerialLoops.Lib.Items;
 
-namespace SerialLoops.Models
+namespace SerialLoops.Models;
+
+public class BgmVolumePreviewItem : ReactiveObject, ISoundItem
 {
-    public class BgmVolumePreviewItem : ReactiveObject, ISoundItem
+    private WaveStream _wav;
+    [Reactive]
+    public VolumeSampleProvider Provider { get; set; }
+
+    public BgmVolumePreviewItem(WaveStream wav)
     {
-        private WaveStream _wav;
-        [Reactive]
-        public VolumeSampleProvider Provider { get; set; }
+        _wav = wav;
+        _wav.Seek(0, SeekOrigin.Begin);
+        Provider = new(wav.ToSampleProvider());
+    }
 
-        public BgmVolumePreviewItem(WaveStream wav)
-        {
-            _wav = wav;
-            _wav.Seek(0, SeekOrigin.Begin);
-            Provider = new(wav.ToSampleProvider());
-        }
+    public void SetVolume(double volume)
+    {
+        Provider.Volume = (float)volume / 100f;
+    }
 
-        public void SetVolume(double volume)
-        {
-            Provider.Volume = (float)volume / 100f;
-        }
-
-        public IWaveProvider GetWaveProvider(ILogger log, bool loop)
-        {
-            _wav.Seek(0, SeekOrigin.Begin);
-            return Provider.ToWaveProvider16();
-        }
+    public IWaveProvider GetWaveProvider(ILogger log, bool loop)
+    {
+        _wav.Seek(0, SeekOrigin.Begin);
+        return Provider.ToWaveProvider16();
     }
 }

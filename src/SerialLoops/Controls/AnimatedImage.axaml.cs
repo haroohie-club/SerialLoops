@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 
-namespace SerialLoops.Controls
+namespace SerialLoops.Controls;
+
+public partial class AnimatedImage : UserControl
 {
-    public partial class AnimatedImage : UserControl
+    public AnimatedImage()
     {
-        public AnimatedImage()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

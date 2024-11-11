@@ -1,0 +1,56 @@
+diff --git a/src/SerialLoops.Lib/Factories/ConfigFactory.cs b/src/SerialLoops.Lib/Factories/ConfigFactory.cs
+index 275c2c2..434b611 100644
+--- a/src/SerialLoops.Lib/Factories/ConfigFactory.cs
++++ b/src/SerialLoops.Lib/Factories/ConfigFactory.cs
+@@ -71,7 +71,7 @@ public class ConfigFactory : IConfigFactory
+             }
+             else
+             {
+-                devkitArmDir = Path.Combine("/opt", "devkitpro", "devkitARM");
++                devkitArmDir = Path.Combine("/app", "opt", "devkitpro", "devkitARM");
+             }
+         }
+         if (!Directory.Exists(devkitArmDir))
+@@ -96,7 +96,7 @@ public class ConfigFactory : IConfigFactory
+             {
+                 Process flatpakProc = new()
+                 {
+-                    StartInfo = new ProcessStartInfo("flatpak", ["info", emulatorFlatpak])
++                    StartInfo = new ProcessStartInfo("flatpak-spawn", ["--host", "flatpak", "info", emulatorFlatpak])
+                     {
+                         RedirectStandardError = true, RedirectStandardOutput = true
+                     }
+diff --git a/src/SerialLoops/ViewModels/MainWindowViewModel.cs b/src/SerialLoops/ViewModels/MainWindowViewModel.cs
+index d866647..97c09f3 100644
+--- a/src/SerialLoops/ViewModels/MainWindowViewModel.cs
++++ b/src/SerialLoops/ViewModels/MainWindowViewModel.cs
+@@ -683,7 +683,7 @@ public partial class MainWindowViewModel : ViewModelBase
+                             string emulatorExecutable = CurrentConfig.EmulatorPath;
+                             if (!string.IsNullOrWhiteSpace(CurrentConfig.EmulatorFlatpak))
+                             {
+-                                emulatorExecutable = "flatpak";
++                                emulatorExecutable = "flatpak-spawn";
+                             }
+                             if (emulatorExecutable.EndsWith(".app"))
+                             {
+@@ -692,11 +692,11 @@ public partial class MainWindowViewModel : ViewModelBase
+                             }
+
+                             string[] emulatorArgs = [Path.Combine(OpenProject.MainDirectory, $"{OpenProject.Name}.nds")];
+-                            if (emulatorExecutable.Equals("flatpak"))
++                            if (emulatorExecutable.Equals("flatpak-spawn"))
+                             {
+                                 emulatorArgs =
+                                 [
+-                                    "run", CurrentConfig.EmulatorFlatpak,
++                                    "--host", "flatpak", "run", CurrentConfig.EmulatorFlatpak,
+                                     Path.Combine(OpenProject.MainDirectory, $"{OpenProject.Name}.nds")
+                                 ];
+                             }
+@@ -863,4 +863,4 @@ public partial class MainWindowViewModel : ViewModelBase
+             Icon = ControlGenerator.GetVectorIcon("Search", Log),
+         });
+     }
+-}
+\ No newline at end of file
++}

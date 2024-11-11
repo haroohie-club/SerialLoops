@@ -1,13 +1,12 @@
 using Avalonia;
 using Avalonia.Controls;
 
-namespace SerialLoops.Controls
+namespace SerialLoops.Controls;
+
+public partial class ScreenSelector : UserControl
 {
-    public partial class ScreenSelector : UserControl
+    public ScreenSelector()
     {
-        public ScreenSelector()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

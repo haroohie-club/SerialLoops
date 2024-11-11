@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 
-namespace SerialLoops.Views.Dialogs
+namespace SerialLoops.Views.Dialogs;
+
+public partial class PreferencesDialog : Window
 {
-    public partial class PreferencesDialog : Window
+    public PreferencesDialog()
     {
-        public PreferencesDialog()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

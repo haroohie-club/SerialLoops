@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 
-namespace SerialLoops.Views.Editors.ScriptCommandEditors
+namespace SerialLoops.Views.Editors.ScriptCommandEditors;
+
+public partial class ScreenFlashScriptCommandEditorView : UserControl
 {
-    public partial class ScreenFlashScriptCommandEditorView : UserControl
+    public ScreenFlashScriptCommandEditorView()
     {
-        public ScreenFlashScriptCommandEditorView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }
