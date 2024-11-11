@@ -55,6 +55,7 @@
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="11.2.0" />
     <PackageReference Include="Avalonia.Controls.TreeDataGrid" Version="11.0.10" />
+    <PackageReference Include="Avalonia.Controls.ColorPicker"/>
     <PackageReference Include="Avalonia.Desktop" Version="11.2.0" />
     <PackageReference Include="Avalonia.Labs.Controls" Version="11.2.0" />
     <PackageReference Include="Avalonia.Labs.Panels" Version="11.2.0" />
@@ -134,11 +135,5 @@
     <None Update="SerialLoops.icns">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Avalonia.Controls.ColorPicker">
-      <HintPath>..\..\..\..\..\.nuget\packages\avalonia.controls.colorpicker\11.2.0\lib\net8.0\Avalonia.Controls.ColorPicker.dll</HintPath>
-    </Reference>
   </ItemGroup>
 </Project>
