@@ -1,0 +1,24 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="using:SerialLoops.ViewModels.Editors.ScriptCommandEditors"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:assets="using:SerialLoops.Assets"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:ScreenShakeScriptCommandEditorViewModel"
+             x:Class="SerialLoops.Views.Editors.ScriptCommandEditors.ScreenShakeScriptCommandEditorView">
+    <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto">
+        <TextBlock Grid.Column="0" Grid.Row="0" Margin="0,7,0,0" Text="{x:Static assets:Strings.Duration__Frames_}"/>
+        <NumericUpDown Grid.Column="1" Grid.Row="0" Value="{Binding Duration}" Minimum="0"
+                       Maximum="{Binding MaxShort}" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
+
+        <TextBlock Grid.Column="0" Grid.Row="1" Margin="0,7,0,0" Text="{x:Static assets:Strings.Horizontal_Intensity}"/>
+        <NumericUpDown Grid.Column="1" Grid.Row="1" Value="{Binding HorizontalIntensity}" Minimum="0"
+                       Maximum="{Binding MaxShort}" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
+
+        <TextBlock Grid.Column="0" Grid.Row="2" Margin="0,7,0,0" Text="{x:Static assets:Strings.Vertical_Intensity}"/>
+        <NumericUpDown Grid.Column="1" Grid.Row="2" Value="{Binding VerticalIntensity}" Minimum="0"
+                       Maximum="{Binding MaxShort}" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
+    </Grid>
+</UserControl>
+
