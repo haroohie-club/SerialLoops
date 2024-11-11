@@ -3,10 +3,6 @@
         xmlns:vm="using:SerialLoops.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:views="using:SerialLoops.Views"
-        xmlns:panels="using:SerialLoops.Views.Panels"
-        xmlns:panelsvm="using:SerialLoops.ViewModels.Panels"
-        xmlns:assets="using:SerialLoops.Assets"
         xmlns:toolbar="using:MiniToolbar.Avalonia"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="SerialLoops.Views.MainWindow"
@@ -28,8 +24,7 @@
     </Design.DataContext>
 
     <NativeMenu.Menu>
-        <NativeMenu>
-        </NativeMenu>
+        <NativeMenu />
     </NativeMenu.Menu>
 
     <Grid RowDefinitions="Auto,*">

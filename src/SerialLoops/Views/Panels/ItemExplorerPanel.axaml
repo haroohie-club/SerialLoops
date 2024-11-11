@@ -3,7 +3,6 @@
              xmlns:vm="using:SerialLoops.ViewModels.Panels"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:panels="using:SerialLoops.Views.Panels"
              xmlns:i="using:Avalonia.Xaml.Interactivity"
              xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -13,7 +12,7 @@
     <Design.DataContext>
         <vm:ItemExplorerPanelViewModel/>
     </Design.DataContext>
-    
+
     <Grid RowDefinitions="Auto,*">
         <TextBox Grid.Row="0" Name="Search">
             <i:Interaction.Behaviors>
