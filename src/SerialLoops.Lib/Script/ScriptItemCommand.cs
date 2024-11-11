@@ -386,7 +386,7 @@ public class ScriptItemCommand : ReactiveObject
                     }
                     break;
                 case CommandVerb.SCENE_GOTO:
-                case CommandVerb.SCENE_GOTO2:
+                case CommandVerb.SCENE_GOTO_CHESS:
                     if (i == 0)
                     {
                         parameters.Add(new ConditionalScriptParameter(localize("Scene"), eventFile.ConditionalsSection.Objects[parameter]));

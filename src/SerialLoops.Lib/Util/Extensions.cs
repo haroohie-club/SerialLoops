@@ -81,7 +81,7 @@ public static class Extensions
     public static void CollectGarbage(this EventFile evt)
     {
         // Collect conditional garbage
-        IEnumerable<string> conditionalContainingCommands = new[] { CommandVerb.VGOTO, CommandVerb.SCENE_GOTO, CommandVerb.SCENE_GOTO2 }.Select(c => c.ToString());
+        IEnumerable<string> conditionalContainingCommands = new[] { CommandVerb.VGOTO, CommandVerb.SCENE_GOTO, CommandVerb.SCENE_GOTO_CHESS }.Select(c => c.ToString());
         List<UsedIndex> conditionalUsedIndices = [];
         foreach (ScriptCommandInvocation conditionalCommand in evt.ScriptSections.SelectMany(s => s.Objects).Where(c => conditionalContainingCommands.Contains(c.Command.Mnemonic)))
         {
@@ -123,7 +123,7 @@ public static class Extensions
                 if (dialogueUsedIndices.All(idx => idx.Index != i))
                 {
                     evt.DialogueSection.Objects.RemoveAt(i);
-                    evt.DialogueLines.RemoveAt(i);
+                    evt.DialogueLines.RemoveAt(i--);
                     for (int j = 0; j < dialogueUsedIndices.Count; j++)
                     {
                         if (dialogueUsedIndices[j].Index >= i)

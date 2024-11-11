@@ -2,9 +2,9 @@
 
 namespace SerialLoops.Views.Editors.ScriptCommandEditors;
 
-public partial class GotoScriptCommandEditorView : UserControl
+public partial class SceneGotoScriptCommandEditorView : UserControl
 {
-    public GotoScriptCommandEditorView()
+    public SceneGotoScriptCommandEditorView()
     {
         InitializeComponent();
     }
