@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=#VERSION#
+Name=Serial Loops
+Comment=Editor for Suzumiya Haruhi no Chokuretsu
+Exec=/usr/bin/SerialLoops
+Icon=/usr/lib/SerialLoops/SerialLoops.png
+Terminal=false
+Type=Application
+Categories=Utility;Application
