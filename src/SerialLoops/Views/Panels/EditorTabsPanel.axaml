@@ -11,9 +11,6 @@
              xmlns:tab="using:Tabalonia.Controls"
              x:DataType="vm:EditorTabsPanelViewModel"
              x:Class="SerialLoops.Views.Panels.EditorTabsPanel">
-    <Design.DataContext>
-        <vm:EditorTabsPanelViewModel/>
-    </Design.DataContext>
     <UserControl.Resources>
         <utility:DisplayNameConverter x:Key="DisplayNameConverter"/>
     </UserControl.Resources>
