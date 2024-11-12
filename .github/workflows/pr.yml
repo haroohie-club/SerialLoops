@@ -9,8 +9,8 @@ on:
       - 'main'
       - 'Avalonia'
   push:
-    branches: 'Avalonia'
-
+    branches:
+      - 'Avalonia'
 
 jobs:
   build_test:
@@ -41,4 +41,4 @@ jobs:
       - name: Run tests
         run: dotnet test test/SerialLoops.Tests.Headless/SerialLoops.Tests.Headless.csproj -f ${{ matrix.platform.targetFramework }}
         env:
-          ROM_URI: ${{ secrets.CHOKU_ROM_URI }}
+          ROM_URI: ${{ secrets.GITHUB_TOKEN }}
