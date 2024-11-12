@@ -26,7 +26,6 @@ jobs:
           - os: windows-latest
             targetFramework: net8.0-windows
             container: ''
-    environment: SerialLoops
     runs-on: ${{ matrix.platform.os }}
     container: ${{ matrix.platform.container }}
     steps:
