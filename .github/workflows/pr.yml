@@ -8,6 +8,8 @@ on:
     branches:
       - 'main'
       - 'Avalonia'
+  push:
+    branches: 'Avalonia'
 
 
 jobs:
