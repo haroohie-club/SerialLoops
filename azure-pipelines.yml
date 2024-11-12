@@ -20,7 +20,7 @@ jobs:
       Windows:
         imageName: 'windows-latest'
         targetFramework: 'net8.0-windows'
-  displayName: Build & Test
+  displayName: Build Validation
   pool:
     vmImage: $(imageName)
   steps:
