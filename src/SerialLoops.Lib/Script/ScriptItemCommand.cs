@@ -17,13 +17,16 @@ namespace SerialLoops.Lib.Script;
 
 public class ScriptItemCommand : ReactiveObject
 {
-    public ScriptCommandInvocation Invocation { get; set; }
+    public ScriptCommandInvocation? Invocation { get; set; }
     public CommandVerb Verb { get; set; }
-    public List<ScriptParameter> Parameters { get; set; }
-    public ScriptSection Section { get; set; }
-    public EventFile Script { get; set; }
+    public List<ScriptParameter> Parameters { get; set; } = [];
+    public ScriptSection? Section { get; set; }
+    public EventFile? Script { get; set; }
     public int Index { get; set; }
-    public Project Project { get; set; }
+    public Project? Project { get; set; }
+
+    [Reactive]
+    public string? Display { get; set; }
 
     public static ScriptItemCommand FromInvocation(ScriptCommandInvocation invocation, ScriptSection section, int index, EventFile eventFile, Project project, Func<string, string> localize, ILogger log)
     {
@@ -44,7 +47,7 @@ public class ScriptItemCommand : ReactiveObject
     public ScriptItemCommand()
     {
     }
-    public ScriptItemCommand(ScriptSection section, EventFile script, int index, Project project, CommandVerb verb, params ScriptParameter[] parameters)
+    public ScriptItemCommand(ScriptSection? section, EventFile? script, int index, Project project, CommandVerb verb, params ScriptParameter[] parameters)
     {
         Section = section;
         Script = script;
@@ -73,14 +76,16 @@ public class ScriptItemCommand : ReactiveObject
         UpdateDisplay();
     }
 
-    public List<ScriptItemCommand> WalkCommandGraph(Dictionary<ScriptSection, List<ScriptItemCommand>> commandTree, AdjacencyGraph<ScriptSection, ScriptSectionEdge> graph)
+    public List<ScriptItemCommand>? WalkCommandGraph(Dictionary<ScriptSection, List<ScriptItemCommand>> commandTree, AdjacencyGraph<ScriptSection, ScriptSectionEdge> graph)
     {
         List<ScriptItemCommand> commands = [];
 
-        Func<ScriptSectionEdge, double> weightFunction = new((ScriptSectionEdge edge) =>
+        Func<ScriptSectionEdge, double> weightFunction = new((ScriptSectionEdge edge) => 1);
+
+        if (Section is null)
         {
-            return 1;
-        });
+            return null;
+        }
 
         if (Section != commandTree.Keys.First())
         {
@@ -97,7 +102,7 @@ public class ScriptItemCommand : ReactiveObject
                 return null;
             }
 
-            foreach (ScriptSectionEdge edge in path)
+            foreach (ScriptSectionEdge edge in path!)
             {
                 commands.AddRange(commandTree[edge.Source]);
             }
@@ -124,7 +129,7 @@ public class ScriptItemCommand : ReactiveObject
                             parameters.Add(new DialogueScriptParameter(localize("Dialogue"), GetDialogueLine(parameter, eventFile)));
                             break;
                         case 1:
-                            parameters.Add(new SpriteScriptParameter(localize("Sprite"), (CharacterSpriteItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Character_Sprite && parameter == ((CharacterSpriteItem)i).Index)));
+                            parameters.Add(new SpriteScriptParameter(localize("Sprite"), (CharacterSpriteItem)project.Items.First(item => item.Type == ItemDescription.ItemType.Character_Sprite && parameter == ((CharacterSpriteItem)item).Index)));
                             break;
                         case 2:
                             parameters.Add(new SpriteEntranceScriptParameter(localize("Sprite Entrance Transition"), parameter));
@@ -136,13 +141,13 @@ public class ScriptItemCommand : ReactiveObject
                             parameters.Add(new SpriteShakeScriptParameter(localize("Sprite Shake"), parameter));
                             break;
                         case 5:
-                            parameters.Add(new VoicedLineScriptParameter(localize("Voice Line"), (VoicedLineItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Voice && parameter == ((VoicedLineItem)i).Index)));
+                            parameters.Add(new VoicedLineScriptParameter(localize("Voice Line"), (VoicedLineItem)project.Items.First(item => item.Type == ItemDescription.ItemType.Voice && parameter == ((VoicedLineItem)item).Index)));
                             break;
                         case 6:
-                            parameters.Add(new DialoguePropertyScriptParameter(localize("Text Voice Font"), (CharacterItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Character && ((CharacterItem)i).MessageInfo.Character == project.MessInfo.MessageInfos[parameter].Character)));
+                            parameters.Add(new DialoguePropertyScriptParameter(localize("Text Voice Font"), (CharacterItem)project.Items.First(item => item.Type == ItemDescription.ItemType.Character && ((CharacterItem)item).MessageInfo.Character == project.MessInfo!.MessageInfos[parameter].Character)));
                             break;
                         case 7:
-                            parameters.Add(new DialoguePropertyScriptParameter(localize("Text Speed"), (CharacterItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Character && ((CharacterItem)i).MessageInfo.Character == project.MessInfo.MessageInfos[parameter].Character)));
+                            parameters.Add(new DialoguePropertyScriptParameter(localize("Text Speed"), (CharacterItem)project.Items.First(item => item.Type == ItemDescription.ItemType.Character && ((CharacterItem)item).MessageInfo.Character == project.MessInfo!.MessageInfos[parameter].Character)));
                             break;
                         case 8:
                             parameters.Add(new TextEntranceEffectScriptParameter(localize("Text Entrance Effect"), parameter));
@@ -162,7 +167,7 @@ public class ScriptItemCommand : ReactiveObject
                 case CommandVerb.KBG_DISP:
                     if (i == 0)
                     {
-                        parameters.Add(new BgScriptParameter(localize("\"Kinetic\" Background"), (BackgroundItem)project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == parameter), kinetic: true));
+                        parameters.Add(new BgScriptParameter(localize("\"Kinetic\" Background"), (BackgroundItem)project.Items.First(item => item.Type == ItemDescription.ItemType.Background && ((BackgroundItem)item).Id == parameter), kinetic: true));
                     }
                     break;
                 case CommandVerb.PIN_MNL:
@@ -175,8 +180,8 @@ public class ScriptItemCommand : ReactiveObject
                 case CommandVerb.BG_DISP2:
                     if (i == 0)
                     {
-                        ItemDescription bgItem = project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == parameter)
-                                                 ?? project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).BackgroundType == HaruhiChokuretsuLib.Archive.Data.BgType.TEX_BG);
+                        ItemDescription bgItem = project.Items.FirstOrDefault(item => item.Type == ItemDescription.ItemType.Background && ((BackgroundItem)item).Id == parameter)
+                                                 ?? project.Items.First(item => item.Type == ItemDescription.ItemType.Background && ((BackgroundItem)item).BackgroundType == HaruhiChokuretsuLib.Archive.Data.BgType.TEX_BG);
                         parameters.Add(new BgScriptParameter(localize("Background"), (BackgroundItem)bgItem, kinetic: false));
                     }
                     break;
@@ -473,10 +478,10 @@ public class ScriptItemCommand : ReactiveObject
                     switch (i)
                     {
                         case 0:
-                            parameters.Add(new BgScriptParameter(localize("Background"), (BackgroundItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == parameter), kinetic: false));
+                            parameters.Add(new BgScriptParameter(localize("Background"), (BackgroundItem)project.Items.First(item => item.Type == ItemDescription.ItemType.Background && ((BackgroundItem)item).Id == parameter), kinetic: false));
                             break;
                         case 1:
-                            parameters.Add(new BgScriptParameter(localize("Background (CG)"), (BackgroundItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == parameter), kinetic: false));
+                            parameters.Add(new BgScriptParameter(localize("Background (CG)"), (BackgroundItem)project.Items.First(item => item.Type == ItemDescription.ItemType.Background && ((BackgroundItem)item).Id == parameter), kinetic: false));
                             break;
                         case 2:
                             parameters.Add(new ShortScriptParameter(localize("Fade Time (Frames)"), parameter));
@@ -497,7 +502,7 @@ public class ScriptItemCommand : ReactiveObject
                             parameters.Add(new BoolScriptParameter(localize("Display?"), parameter == 1));
                             break;
                         case 1:
-                            parameters.Add(new PlaceScriptParameter(localize("Place"), (PlaceItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Place && ((PlaceItem)i).Index == parameter)));
+                            parameters.Add(new PlaceScriptParameter(localize("Place"), (PlaceItem)project.Items.First(item => item.Type == ItemDescription.ItemType.Place && ((PlaceItem)item).Index == parameter)));
                             break;
                     }
                     break;
@@ -518,7 +523,7 @@ public class ScriptItemCommand : ReactiveObject
                 case CommandVerb.LOAD_ISOMAP:
                     if (i == 0)
                     {
-                        parameters.Add(new MapScriptParameter(localize("Map"), (MapItem)project.Items.First(i => i.Type == ItemDescription.ItemType.Map && (parameter) == ((MapItem)i).Map.Index)));
+                        parameters.Add(new MapScriptParameter(localize("Map"), (MapItem)project.Items.First(item => item.Type == ItemDescription.ItemType.Map && (parameter) == ((MapItem)item).Map?.Index)));
                     }
                     break;
                 case CommandVerb.INVEST_START:
@@ -702,9 +707,6 @@ public class ScriptItemCommand : ReactiveObject
         return parameters;
     }
 
-    [Reactive]
-    public string Display { get; set; }
-
     public void UpdateDisplay()
     {
         Display = ToString();
@@ -716,13 +718,13 @@ public class ScriptItemCommand : ReactiveObject
         switch (Verb)
         {
             case CommandVerb.DIALOGUE:
-                str += $" {((DialogueScriptParameter)Parameters[0]).Line.Text.GetSubstitutedString(Project)[0..Math.Min(((DialogueScriptParameter)Parameters[0]).Line.Text.Length, 10)]}...";
+                str += $" {((DialogueScriptParameter)Parameters[0]).Line.Text.GetSubstitutedString(Project!)[0..Math.Min(((DialogueScriptParameter)Parameters[0]).Line.Text.Length, 10)]}...";
                 break;
             case CommandVerb.GOTO:
-                str += $" {((ScriptSectionScriptParameter)Parameters[0]).Section.Name}";
+                str += $" {((ScriptSectionScriptParameter)Parameters[0]).Section?.Name}";
                 break;
             case CommandVerb.VGOTO:
-                str += $" {((ConditionalScriptParameter)Parameters[0]).Conditional}, {((ScriptSectionScriptParameter)Parameters[1]).Section.Name}";
+                str += $" {((ConditionalScriptParameter)Parameters[0]).Conditional}, {((ScriptSectionScriptParameter)Parameters[1]).Section?.Name}";
                 break;
             case CommandVerb.WAIT:
                 str += $" {((ShortScriptParameter)Parameters[0]).Value}";
@@ -742,7 +744,7 @@ public class ScriptItemCommand : ReactiveObject
         {
             Invocation = Invocation,
             Verb = Verb,
-            Parameters = Parameters.Select(p => p.Clone(Project, Script)).ToList(),
+            Parameters = Parameters.Select(p => p.Clone(Project!, Script!)).ToList(),
             Section = Section,
             Index = Index,
             Script = Script,

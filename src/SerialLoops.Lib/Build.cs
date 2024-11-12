@@ -20,7 +20,7 @@ namespace SerialLoops.Lib;
 
 public static class Build
 {
-    public static bool BuildIterative(Project project, Config config, ILogger log, IProgressTracker tracker)
+    public static bool BuildIterative(Project project, Config? config, ILogger log, IProgressTracker tracker)
     {
         bool result = DoBuild(project.IterativeDirectory, project, config, log, tracker);
         CopyToArchivesToIterativeOriginal(Path.Combine(project.IterativeDirectory, "rom", "data"),
@@ -32,7 +32,7 @@ public static class Build
         return result;
     }
 
-    public static bool BuildBase(Project project, Config config, ILogger log, IProgressTracker tracker)
+    public static bool BuildBase(Project project, Config? config, ILogger log, IProgressTracker tracker)
     {
         bool result = DoBuild(project.BaseDirectory, project, config, log, tracker);
         CopyToArchivesToIterativeOriginal(Path.Combine(project.BaseDirectory, "rom", "data"),
@@ -66,7 +66,7 @@ public static class Build
         }
     }
 
-    private static bool DoBuild(string directory, Project project, Config config, ILogger log, IProgressTracker tracker)
+    private static bool DoBuild(string directory, Project project, Config? config, ILogger log, IProgressTracker tracker)
     {
         // Export includes
         StringBuilder commandsIncSb = new();
@@ -128,7 +128,7 @@ public static class Build
                     }
                     else if (Path.GetExtension(file).Equals(".s", StringComparison.OrdinalIgnoreCase))
                     {
-                        if (string.IsNullOrEmpty(config.DevkitArmPath))
+                        if (string.IsNullOrEmpty(config?.DevkitArmPath))
                         {
                             log.LogError("DevkitARM must be supplied in order to build!");
                             return false;
@@ -186,8 +186,8 @@ public static class Build
         tracker.Focus("Writing NitroPacker Project File", 1);
         try
         {
-            File.WriteAllBytes(ndsProjectFile, project.Settings.File.Write());
-        } 
+            File.WriteAllBytes(ndsProjectFile, project.Settings!.File.Write());
+        }
         catch (IOException exc)
         {
             log.LogException("Failed to write NitroPacker NDS project file to disk", exc);
@@ -238,7 +238,7 @@ public static class Build
                 grpFile.InitializeFontFile();
             }
 
-            GraphicInfo graphicInfo = JsonSerializer.Deserialize<GraphicInfo>(File.ReadAllText(Path.Combine(Path.GetDirectoryName(filePath), $"{Path.GetFileNameWithoutExtension(filePath)}.gi")));
+            GraphicInfo graphicInfo = JsonSerializer.Deserialize<GraphicInfo>(File.ReadAllText(Path.Combine(Path.GetDirectoryName(filePath)!, $"{Path.GetFileNameWithoutExtension(filePath)}.gi")))!;
 
             graphicInfo.Set(grpFile);
             grpFile.SetImage(filePath, newSize: true);
@@ -315,8 +315,8 @@ public static class Build
     {
         string exeExtension = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? ".exe" : string.Empty;
 
-        string objFile = $"{Path.Combine(Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath))}.o";
-        string binFile = $"{Path.Combine(Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath))}.bin";
+        string objFile = $"{Path.Combine(Path.GetDirectoryName(filePath)!, Path.GetFileNameWithoutExtension(filePath))}.o";
+        string binFile = $"{Path.Combine(Path.GetDirectoryName(filePath)!, Path.GetFileNameWithoutExtension(filePath))}.bin";
         ProcessStartInfo gccStartInfo = new(Path.Combine(devkitArm, "bin", $"arm-none-eabi-gcc{exeExtension}"), $"-c -nostdlib -static \"{filePath}\" -o \"{objFile}")
         {
             CreateNoWindow = true,
@@ -331,8 +331,8 @@ public static class Build
         }
         log.Log($"Compiling '{filePath}' to '{objFile}' with '{gccStartInfo.FileName}'...");
         Process gcc = new() { StartInfo = gccStartInfo };
-        gcc.OutputDataReceived += (object sender, DataReceivedEventArgs e) => log.Log(e.Data);
-        gcc.ErrorDataReceived += (object sender, DataReceivedEventArgs e) => log.LogWarning(e.Data);
+        gcc.OutputDataReceived += (_, e) => log.Log(e.Data);
+        gcc.ErrorDataReceived += (_, e) => log.LogWarning(e.Data);
         gcc.Start();
         gcc.WaitForExit();
         Task.Delay(50); // ensures process is actually complete

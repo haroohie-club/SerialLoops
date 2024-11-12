@@ -2,15 +2,11 @@
 
 namespace SerialLoops.Lib.Script.Parameters;
 
-public class TextEntranceEffectScriptParameter : ScriptParameter
+public class TextEntranceEffectScriptParameter(string name, short entranceEffect)
+    : ScriptParameter(name, ParameterType.TEXT_ENTRANCE_EFFECT)
 {
-    public TextEntranceEffect EntranceEffect { get; set; }
-    public override short[] GetValues(object obj = null) => new short[] { (short)EntranceEffect };
-
-    public TextEntranceEffectScriptParameter(string name, short entranceEffect) : base(name, ParameterType.TEXT_ENTRANCE_EFFECT)
-    {
-        EntranceEffect = (TextEntranceEffect)entranceEffect;
-    }
+    public TextEntranceEffect EntranceEffect { get; set; } = (TextEntranceEffect)entranceEffect;
+    public override short[] GetValues(object? obj = null) => [(short)EntranceEffect];
 
     public override TextEntranceEffectScriptParameter Clone(Project project, EventFile eventFile)
     {

@@ -24,7 +24,7 @@ public class SaveFilePreview(SaveSlotData slotData, Project project)
         DrawBox(canvas);
         if (_slotData.EpisodeNumber == 0)
         {
-            DrawText(canvas, _project.UiText.Messages[27]);
+            DrawText(canvas, _project.UiText!.Messages[27]);
         }
         else
         {
@@ -43,7 +43,7 @@ public class SaveFilePreview(SaveSlotData slotData, Project project)
         );
     }
 
-    private void DrawText(SKCanvas canvas, string text, int x = 10, int y = 5, SKPaint paint = null)
+    private void DrawText(SKCanvas canvas, string text, int x = 10, int y = 5, SKPaint? paint = null)
     {
         canvas.DrawHaroohieText(
             _project.LangCode != "ja" ? text.GetOriginalString(_project) : text,
@@ -88,7 +88,7 @@ public class SaveFilePreview(SaveSlotData slotData, Project project)
         SKCanvas episodeCanvas = new(episodeNumber);
 
         // Draw "EPISODE: (number)"
-        var numberXOffSet = 8 * (number - 1);
+        int numberXOffSet = 8 * (number - 1);
         episodeCanvas.DrawBitmap(bitmap, 0, 0);
         episodeCanvas.DrawBitmap(
             bitmap,
@@ -155,6 +155,6 @@ public class SaveFilePreview(SaveSlotData slotData, Project project)
 
     private string GetEpisodeTitle(int number)
     {
-        return _project.UiText.Messages[16 + number];
+        return _project.UiText!.Messages[16 + number];
     }
 }

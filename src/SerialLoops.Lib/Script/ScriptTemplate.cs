@@ -12,9 +12,9 @@ namespace SerialLoops.Lib.Script;
 
 public class ScriptTemplate
 {
-    public string Name { get; set; }
-    public string Description { get; set; }
-    public TemplateSection[] Sections { get; set; }
+    public string? Name { get; set; }
+    public string? Description { get; set; }
+    public TemplateSection[]? Sections { get; set; }
 
     public ScriptTemplate()
     {
@@ -34,9 +34,9 @@ public class ScriptTemplate
 
     public void Apply(ScriptItem script, Project project, ILogger log)
     {
-        foreach (TemplateSection section in Sections)
+        foreach (TemplateSection section in Sections!)
         {
-            int sectionIndex = script.Event.ScriptSections.FindIndex(s => s.Name == section.Name);
+            int sectionIndex = script.Event!.ScriptSections.FindIndex(s => s.Name == section.Name);
             if (sectionIndex < 0)
             {
                 sectionIndex = script.Event.ScriptSections.Count;
@@ -47,11 +47,11 @@ public class ScriptTemplate
         // We add the sections first and then do it a second time in order to allow ScriptSectionParameters to be able to find their sections
         foreach (TemplateSection section in Sections)
         {
-            int sectionIndex = script.Event.ScriptSections.FindIndex(s => s.Name == section.Name);
-            for (int i = 0; i < section.Commands.Length; i++)
+            int sectionIndex = script.Event!.ScriptSections.FindIndex(s => s.Name == section.Name);
+            for (int i = 0; i < section.Commands?.Length; i++)
             {
                 script.Event.ScriptSections[sectionIndex].Objects.Insert(i,
-                    new ScriptItemCommand(script.Event.ScriptSections[sectionIndex], script.Event, i, project, section.Commands[i].Verb, [.. section.Commands[i].Parameters.Select(p => p.ParseAndApply(project, script.Event, log))]).Invocation);
+                    new ScriptItemCommand(script.Event.ScriptSections[sectionIndex], script.Event, i, project, section.Commands[i].Verb, [.. section.Commands[i].Parameters.Select(p => p.ParseAndApply(project, script.Event, log))!]).Invocation);
             }
         }
     }
@@ -59,8 +59,8 @@ public class ScriptTemplate
 
 public class TemplateSection
 {
-    public string Name { get; set; }
-    public TemplateScriptCommand[] Commands { get; set; }
+    public string? Name { get; set; }
+    public TemplateScriptCommand[]? Commands { get; set; }
 
     public TemplateSection()
     {
@@ -83,7 +83,8 @@ public class TemplateScriptCommand
 {
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public EventFile.CommandVerb Verb { get; set; }
-    public TemplateScriptParameter[] Parameters { get; set; }
+
+    public TemplateScriptParameter[] Parameters { get; set; } = [];
 
     public TemplateScriptCommand()
     {
@@ -98,7 +99,7 @@ public class TemplateScriptCommand
     public TemplateScriptCommand(ScriptItemCommand command, Project project)
     {
         Verb = command.Verb;
-        Parameters = [.. command.Parameters.Select(p => new TemplateScriptParameter(p, project))];
+        Parameters = [.. command.Parameters!.Select(p => new TemplateScriptParameter(p, project))];
     }
 }
 
@@ -107,18 +108,7 @@ public class TemplateScriptParameter
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public ScriptParameter.ParameterType ParameterType { get; set; }
     public string ParameterName { get; set; }
-    public string Value { get; set; }
-
-    public TemplateScriptParameter()
-    {
-    }
-
-    public TemplateScriptParameter(ScriptParameter.ParameterType type, string name, string value)
-    {
-        ParameterType = type;
-        ParameterName = name;
-        Value = value;
-    }
+    public string? Value { get; set; }
 
     public TemplateScriptParameter(ScriptParameter parameter, Project project)
     {
@@ -190,7 +180,7 @@ public class TemplateScriptParameter
                 break;
 
             case ScriptParameter.ParameterType.CHARACTER:
-                Value = $"{(short)((DialoguePropertyScriptParameter)parameter).Character.MessageInfo.Character}";
+                Value = $"{(short)(((DialoguePropertyScriptParameter)parameter).Character?.MessageInfo.Character ?? 0)}";
                 break;
 
             case ScriptParameter.ParameterType.DIALOGUE:
@@ -296,11 +286,15 @@ public class TemplateScriptParameter
         }
     }
 
-    public ScriptParameter ParseAndApply(Project project, EventFile evt, ILogger log)
+    public ScriptParameter? ParseAndApply(Project project, EventFile evt, ILogger log)
     {
         try
         {
-            string value = Value;
+            string? value = Value;
+            if (string.IsNullOrEmpty(value))
+            {
+                return null;
+            }
             string localizedName = project.Localize(ParameterName);
             switch (ParameterType)
             {
@@ -308,10 +302,10 @@ public class TemplateScriptParameter
                     return new BgmModeScriptParameter(localizedName, short.Parse(value));
 
                 case ScriptParameter.ParameterType.BGM:
-                    return new BgmScriptParameter(localizedName, (BackgroundMusicItem)project.Items.FirstOrDefault(i => i.Name == value));
+                    return new BgmScriptParameter(localizedName, (BackgroundMusicItem)project.Items.First(i => i.Name == value));
 
                 case ScriptParameter.ParameterType.BG:
-                    return new BgScriptParameter(localizedName, (BackgroundItem)project.Items.FirstOrDefault(i => i.Name == value), value.Contains("KBG"));
+                    return new BgScriptParameter(localizedName, (BackgroundItem)project.Items.First(i => i.Name == value), value.Contains("KBG"));
 
                 case ScriptParameter.ParameterType.BG_SCROLL_DIRECTION:
                     return new BgScrollDirectionScriptParameter(localizedName, short.Parse(value));
@@ -336,7 +330,7 @@ public class TemplateScriptParameter
                     return new ChibiEnterExitScriptParameter(localizedName, short.Parse(value));
 
                 case ScriptParameter.ParameterType.CHIBI:
-                    return new ChibiScriptParameter(localizedName, (ChibiItem)project.Items.FirstOrDefault(i => i.Name == value));
+                    return new ChibiScriptParameter(localizedName, (ChibiItem)project.Items.First(i => i.Name == value));
 
                 case ScriptParameter.ParameterType.COLOR_MONOCHROME:
                     return new ColorMonochromeScriptParameter(localizedName, short.Parse(value));
@@ -383,7 +377,7 @@ public class TemplateScriptParameter
                     return new ItemTransitionScriptParameter(localizedName, short.Parse(value));
 
                 case ScriptParameter.ParameterType.MAP:
-                    return new MapScriptParameter(localizedName, (MapItem)project.Items.FirstOrDefault(i => i.Name == value));
+                    return new MapScriptParameter(localizedName, (MapItem)project.Items.First(i => i.Name == value));
 
                 case ScriptParameter.ParameterType.OPTION:
                     if (evt.ChoicesSection.Objects.Any(c => c.Text == value))
@@ -401,19 +395,19 @@ public class TemplateScriptParameter
                     return new PaletteEffectScriptParameter(localizedName, short.Parse(value));
 
                 case ScriptParameter.ParameterType.PLACE:
-                    return new PlaceScriptParameter(localizedName, (PlaceItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Place && ((PlaceItem)i).Index == short.Parse(value)));
+                    return new PlaceScriptParameter(localizedName, (PlaceItem)project.Items.First(i => i.Type == ItemDescription.ItemType.Place && ((PlaceItem)i).Index == short.Parse(value)));
 
                 case ScriptParameter.ParameterType.SCREEN:
                     return new ScreenScriptParameter(localizedName, short.Parse(value));
 
                 case ScriptParameter.ParameterType.SCRIPT_SECTION:
-                    return new ScriptSectionScriptParameter(localizedName, evt.ScriptSections.FirstOrDefault(s => s.Name == value));
+                    return new ScriptSectionScriptParameter(localizedName, evt.ScriptSections.First(s => s.Name == value));
 
                 case ScriptParameter.ParameterType.SFX_MODE:
                     return new SfxModeScriptParameter(localizedName, short.Parse(value));
 
                 case ScriptParameter.ParameterType.SFX:
-                    return new SfxScriptParameter(localizedName, (SfxItem)project.Items.FirstOrDefault(s => s.Name == value));
+                    return new SfxScriptParameter(localizedName, (SfxItem)project.Items.First(s => s.Name == value));
 
                 case ScriptParameter.ParameterType.SHORT:
                     return new ShortScriptParameter(localizedName, short.Parse(value));
@@ -425,7 +419,7 @@ public class TemplateScriptParameter
                     return new SpriteExitScriptParameter(localizedName, short.Parse(value));
 
                 case ScriptParameter.ParameterType.SPRITE:
-                    return new SpriteScriptParameter(localizedName, (CharacterSpriteItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Character_Sprite && ((CharacterSpriteItem)i).Index == short.Parse(value)));
+                    return new SpriteScriptParameter(localizedName, (CharacterSpriteItem)project.Items.First(i => i.Type == ItemDescription.ItemType.Character_Sprite && ((CharacterSpriteItem)i).Index == short.Parse(value)));
 
                 case ScriptParameter.ParameterType.SPRITE_SHAKE:
                     return new SpriteShakeScriptParameter(localizedName, short.Parse(value));
@@ -440,7 +434,7 @@ public class TemplateScriptParameter
                     return new TransitionScriptParameter(localizedName, short.Parse(value));
 
                 case ScriptParameter.ParameterType.VOICE_LINE:
-                    return new VoicedLineScriptParameter(localizedName, (VoicedLineItem)project.Items.FirstOrDefault(i => i.Name == value));
+                    return new VoicedLineScriptParameter(localizedName, (VoicedLineItem)project.Items.First(i => i.Name == value));
 
                 default:
                     return null;

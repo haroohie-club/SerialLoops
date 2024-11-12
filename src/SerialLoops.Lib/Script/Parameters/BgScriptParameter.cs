@@ -3,17 +3,12 @@ using SerialLoops.Lib.Items;
 
 namespace SerialLoops.Lib.Script.Parameters;
 
-public class BgScriptParameter : ScriptParameter
+public class BgScriptParameter(string name, BackgroundItem background, bool kinetic)
+    : ScriptParameter(name, ParameterType.BG)
 {
-    public BackgroundItem Background { get; set; }
-    public bool Kinetic { get; set; }
-    public override short[] GetValues(object obj = null) => [(short)(Background?.Id ?? 0)];
-
-    public BgScriptParameter(string name, BackgroundItem background, bool kinetic) : base(name, ParameterType.BG)
-    {
-        Background = background;
-        Kinetic = kinetic;
-    }
+    public BackgroundItem Background { get; set; } = background;
+    public bool Kinetic { get; set; } = kinetic;
+    public override short[] GetValues(object? obj = null) => [(short)(Background?.Id ?? 0)];
 
     public override BgScriptParameter Clone(Project project, EventFile eventFile)
     {

@@ -142,7 +142,7 @@ public class ProjectRequiredTests
     public async Task BackgroundEditor_CanEditCgNames()
     {
         ConfigFactoryMock configFactory = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"config-{nameof(BackgroundEditor_CanEditCgNames)}.json"));
-        string projectName = $"Headless_{nameof(BackgroundEditor_CanEditCgNames)}";
+        string? projectName = $"Headless_{nameof(BackgroundEditor_CanEditCgNames)}";
         int currentFrame = 0;
         MainWindowViewModel mainWindowViewModel = new();
         MainWindow mainWindow = new()
@@ -259,8 +259,8 @@ public class ProjectRequiredTests
     {
         ConfigFactoryMock configFactory = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"config-{nameof(AsmHacksDialog_ApplyTest)}_{buttonName}.json"));
         TestConsoleLogger log = new();
-        string projectName = $"Headless_{nameof(AsmHacksDialog_ApplyTest)}_{buttonName}";
-        Config config = configFactory.LoadConfig(s => s, log);
+        string? projectName = $"Headless_{nameof(AsmHacksDialog_ApplyTest)}_{buttonName}";
+        Config? config = configFactory.LoadConfig(s => s, log);
         config.UseDocker = true;
         int currentFrame = 0;
         Project project = new(projectName, "en", config, (s) => s, log);
@@ -328,7 +328,7 @@ public class ProjectRequiredTests
     public async Task CharacterSpriteEditor_CanEdit()
     {
         ConfigFactoryMock configFactory = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"config-{nameof(CharacterSpriteEditor_CanEdit)}.json"));
-        string projectName = $"Headless_{nameof(CharacterSpriteEditor_CanEdit)}";
+        string? projectName = $"Headless_{nameof(CharacterSpriteEditor_CanEdit)}";
         int currentFrame = 0;
         MainWindowViewModel mainWindowViewModel = new();
         MainWindow mainWindow = new()

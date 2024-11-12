@@ -42,16 +42,16 @@ public class ProjectSettings(NdsProjectFile file, ILogger log)
             GraphicsFile grp = new()
             {
                 Name = "ICON",
-                PixelData = new(),
-                PaletteData = new(),
+                PixelData = [],
+                PaletteData = [],
             };
-            grp.Initialize(Array.Empty<byte>(), 0, _log);
+            grp.Initialize([], 0, _log);
             grp.FileFunction = GraphicsFile.Function.SHTX;
             grp.ImageForm = GraphicsFile.Form.TILE;
             grp.ImageTileForm = GraphicsFile.TileForm.GBA_4BPP;
             grp.Width = 32;
             grp.Height = 32;
-            grp.Palette = new(new SKColor[16]);
+            grp.Palette = [..new SKColor[16]];
             grp.SetImage(value, setPalette: true, transparentIndex: 0, newSize: true);
 
             Banner.Image = grp.PixelData.ToArray();

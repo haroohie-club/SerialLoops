@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
@@ -10,19 +11,28 @@ public class ProjectsCache
 {
     private const int MAX_RECENT_PROJECTS = 10;
     [JsonIgnore]
-    public string CacheFilePath { get; set; }
-    public List<string> RecentProjects { get; set; }
-    public Dictionary<string, List<string>> RecentWorkspaces { get; set; }
+    public string? CacheFilePath { get; set; }
+    public List<string>? RecentProjects { get; set; }
+    public Dictionary<string, List<string>>? RecentWorkspaces { get; set; }
     public bool HadProjectOpenOnLastClose { get; set; }
 
     public void Save(ILogger log)
     {
+        if (CacheFilePath is null)
+        {
+            log.LogError("Cache file path is null!");
+            return;
+        }
         log.Log($"Caching recent projects and workspaces to '{CacheFilePath}'...");
         IO.WriteStringFile(CacheFilePath, JsonSerializer.Serialize(this), log);
     }
-        
-    public static ProjectsCache LoadCache(Config config, ILogger log)
+
+    public static ProjectsCache? LoadCache(Config? config, ILogger log)
     {
+        if (config is null)
+        {
+            return null;
+        }
         string recentProjectsJson = Path.Combine(config.UserDirectory, "projects_cache.json");
         if (!File.Exists(recentProjectsJson))
         {
@@ -35,7 +45,11 @@ public class ProjectsCache
 
         try
         {
-            ProjectsCache recentProjects = JsonSerializer.Deserialize<ProjectsCache>(File.ReadAllText(recentProjectsJson));
+            ProjectsCache? recentProjects = JsonSerializer.Deserialize<ProjectsCache>(File.ReadAllText(recentProjectsJson));
+            if (recentProjects is null)
+            {
+                throw new NullReferenceException("Failed to parse project cache -- value was null!");
+            }
             recentProjects.CacheFilePath = recentProjectsJson;
             return recentProjects;
         }
@@ -47,7 +61,7 @@ public class ProjectsCache
             return defaultRecentProjects;
         }
     }
-        
+
     private static ProjectsCache GetDefault()
     {
         return new()
@@ -59,19 +73,19 @@ public class ProjectsCache
 
     public void CacheRecentProject(string projectPath, List<string> workspaceItems)
     {
-        if (RecentProjects.Contains(projectPath))
+        if (RecentProjects!.Contains(projectPath))
         {
             RecentProjects.Remove(projectPath);
-            RecentWorkspaces.Remove(projectPath);
+            RecentWorkspaces!.Remove(projectPath);
         }
         if (RecentProjects.Count >= MAX_RECENT_PROJECTS)
         {
-            string lastProject = RecentProjects[RecentProjects.Count - 1];
+            string lastProject = RecentProjects[^1];
             RecentProjects.Remove(lastProject);
-            RecentWorkspaces.Remove(lastProject);
+            RecentWorkspaces!.Remove(lastProject);
         }
         RecentProjects.Insert(0, projectPath);
-        RecentWorkspaces.Add(projectPath, workspaceItems);
+        RecentWorkspaces!.Add(projectPath, workspaceItems);
     }
-        
+
 }

@@ -10,13 +10,13 @@ using SkiaSharp;
 
 namespace SerialLoops.Lib.Items;
 
-public class CharacterSpriteItem(CharacterSprite sprite, CharacterDataFile chrdata, Project project, ILogger log) : Item($"SPR_{project.Characters[(int)sprite.Character].Name}_{chrdata.Sprites.IndexOf(sprite):D3}{(sprite.IsLarge ? "_L" : "")}", ItemType.Character_Sprite), IPreviewableGraphic
+public class CharacterSpriteItem(CharacterSprite sprite, CharacterDataFile? chrdata, Project project, ILogger log) : Item($"SPR_{project.Characters![(int)sprite.Character].Name}_{chrdata.Sprites.IndexOf(sprite):D3}{(sprite.IsLarge ? "_L" : "")}", ItemType.Character_Sprite), IPreviewableGraphic
 {
     private readonly ILogger _log = log;
 
     public CharacterSprite Sprite { get; set; } = sprite;
-    public CharacterSpriteGraphics Graphics { get; set; } = new(sprite, project.Grp);
-    public int Index { get; set; } = chrdata.Sprites.IndexOf(sprite);
+    public CharacterSpriteGraphics Graphics { get; set; } = new(sprite, project.Grp!);
+    public int Index { get; set; } = chrdata!.Sprites.IndexOf(sprite);
 
     public override void Refresh(Project project, ILogger log)
     {
@@ -57,7 +57,7 @@ public class CharacterSpriteItem(CharacterSprite sprite, CharacterDataFile chrda
         Graphics.MouthAnimation.AnimationX = mouthX;
         Graphics.MouthAnimation.AnimationY = mouthY;
     }
-        
+
     public SKBitmap GetPreview(Project project)
     {
         return GetClosedMouthAnimation(project).First().Frame;

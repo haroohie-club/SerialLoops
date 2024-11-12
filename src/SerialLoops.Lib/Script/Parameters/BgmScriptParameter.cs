@@ -3,15 +3,10 @@ using SerialLoops.Lib.Items;
 
 namespace SerialLoops.Lib.Script.Parameters;
 
-public class BgmScriptParameter : ScriptParameter
+public class BgmScriptParameter(string name, BackgroundMusicItem bgm) : ScriptParameter(name, ParameterType.BGM)
 {
-    public BackgroundMusicItem Bgm { get; set; }
-    public override short[] GetValues(object obj = null) => new short[] { (short)Bgm.Index };
-
-    public BgmScriptParameter(string name, BackgroundMusicItem bgm) : base(name, ParameterType.BGM)
-    {
-        Bgm = bgm;
-    }
+    public BackgroundMusicItem Bgm { get; set; } = bgm;
+    public override short[] GetValues(object? obj = null) => [(short)Bgm.Index];
 
     public override BgmScriptParameter Clone(Project project, EventFile eventFile)
     {

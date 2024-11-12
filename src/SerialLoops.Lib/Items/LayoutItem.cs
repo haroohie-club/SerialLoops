@@ -24,7 +24,7 @@ public class LayoutItem(int layoutIndex, List<GraphicsFile> grps, int startEntry
         return Layout.GetLayout(GraphicsFiles, Layout.LayoutEntries.Skip(StartEntry).Take(NumEntries).ToList(), darkMode: false, preprocessedList: true).bitmap;
     }
 
-    public (SKBitmap tile, SKRect dest) GetLayoutEntryRender(int index)
+    public (SKBitmap? tile, SKRect? dest) GetLayoutEntryRender(int index)
     {
         if (index < 0 || Layout.LayoutEntries[index].RelativeShtxIndex < 0)
         {

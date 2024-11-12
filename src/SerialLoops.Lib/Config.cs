@@ -16,8 +16,8 @@ namespace SerialLoops.Lib;
 public class Config
 {
     [JsonIgnore]
-    public string ConfigPath { get; set; }
-    public string UserDirectory { get; set; }
+    public string ConfigPath { get; set; } = string.Empty;
+    public string UserDirectory { get; set; } = string.Empty;
     [JsonIgnore]
     public string ProjectsDirectory => Path.Combine(UserDirectory, "Projects");
     [JsonIgnore]
@@ -28,22 +28,24 @@ public class Config
     public string HacksDirectory => Path.Combine(UserDirectory, "Hacks");
     [JsonIgnore]
     public string ScriptTemplatesDirectory => Path.Combine(UserDirectory, "ScriptTemplates");
+
     [JsonIgnore]
-    public ObservableCollection<AsmHack> Hacks { get; set; }
+    public ObservableCollection<AsmHack> Hacks { get; set; } = [];
+
     [JsonIgnore]
-    public ObservableCollection<ScriptTemplate> ScriptTemplates { get; set; }
-    public string CurrentCultureName { get; set; }
-    public string DevkitArmPath { get; set; }
+    public ObservableCollection<ScriptTemplate> ScriptTemplates { get; set; } = [];
+    public string CurrentCultureName { get; set; } = string.Empty;
+    public string DevkitArmPath { get; set; } = string.Empty;
     public bool UseDocker { get; set; }
-    public string DevkitArmDockerTag { get; set; }
-    public string EmulatorFlatpak { get; set; }
-    public string EmulatorPath { get; set; }
+    public string DevkitArmDockerTag { get; set; } = string.Empty;
+    public string EmulatorFlatpak { get; set; } = string.Empty;
+    public string EmulatorPath { get; set; } = string.Empty;
     public bool AutoReopenLastProject { get; set; }
     public bool RememberProjectWorkspace { get; set; }
     public bool RemoveMissingProjects { get; set; }
     public bool CheckForUpdates { get; set; }
     public bool PreReleaseChannel { get; set; }
-    public string DisplayFont { get; set; }
+    public string DisplayFont { get; set; } = string.Empty;
 
     public void Save(ILogger log)
     {
@@ -56,14 +58,8 @@ public class Config
         {
             log.LogError(localize("devkitARM is not detected at the default or specified install location. Please set devkitARM path."));
         }
-        if (CurrentCultureName is null)
-        {
-            CurrentCultureName = CultureInfo.CurrentCulture.Name;
-        }
-        else
-        {
-            CultureInfo.CurrentCulture = new(CurrentCultureName);
-        }
+
+        CultureInfo.CurrentCulture = new(CurrentCultureName);
     }
 
     public void InitializeHacks(ILogger log)
@@ -75,20 +71,20 @@ public class Config
             File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "hacks.json"), Path.Combine(HacksDirectory, "hacks.json"));
         }
 
-        Hacks = JsonSerializer.Deserialize<ObservableCollection<AsmHack>>(File.ReadAllText(Path.Combine(HacksDirectory, "hacks.json")));
+        Hacks = JsonSerializer.Deserialize<ObservableCollection<AsmHack>>(File.ReadAllText(Path.Combine(HacksDirectory, "hacks.json"))) ?? [];
 
         // Pull in new hacks in case we've updated the program with more
-        List<AsmHack> builtinHacks = JsonSerializer.Deserialize<List<AsmHack>>(File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "hacks.json")));
-        IEnumerable<AsmHack> missingHacks = builtinHacks.Where(h => !Hacks.Contains(h));
-        if (missingHacks.Any())
+        List<AsmHack> builtinHacks = JsonSerializer.Deserialize<List<AsmHack>>(File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "hacks.json"))) ?? [];
+        AsmHack[] missingHacks = [.. builtinHacks.Where(h => !Hacks.Contains(h))];
+        if (missingHacks.Length != 0)
         {
             IO.CopyFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Hacks"), HacksDirectory, log);
             Hacks.AddRange(missingHacks);
             File.WriteAllText(Path.Combine(HacksDirectory, "hacks.json"), JsonSerializer.Serialize(Hacks));
         }
 
-        IEnumerable<AsmHack> updatedHacks = builtinHacks.Where(h => !Hacks.FirstOrDefault(o => h.Name == o.Name)?.DeepEquals(h) ?? false);
-        if (updatedHacks.Any())
+        AsmHack[] updatedHacks = [.. builtinHacks.Where(h => !Hacks.FirstOrDefault(o => h.Name == o.Name)?.DeepEquals(h) ?? false)];
+        if (updatedHacks.Length != 0)
         {
             IO.CopyFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Hacks"), HacksDirectory, log);
             foreach (AsmHack updatedHack in updatedHacks)
@@ -123,7 +119,7 @@ public class Config
         {
             try
             {
-                templates.Add(JsonSerializer.Deserialize<ScriptTemplate>(File.ReadAllText(scriptTemplateFile)));
+                templates.Add(JsonSerializer.Deserialize<ScriptTemplate>(File.ReadAllText(scriptTemplateFile))!);
             }
             catch (Exception ex)
             {

@@ -98,7 +98,7 @@ public static class Extensions
                     {
                         if (conditionalUsedIndices[j].Index >= i)
                         {
-                            conditionalUsedIndices[j].Command.Parameters[0]--;
+                            conditionalUsedIndices[j].Command!.Parameters[0]--;
                             conditionalUsedIndices[j].Index--;
                         }
                     }
@@ -128,7 +128,7 @@ public static class Extensions
                     {
                         if (dialogueUsedIndices[j].Index >= i)
                         {
-                            dialogueUsedIndices[j].Command.Parameters[0]--;
+                            dialogueUsedIndices[j].Command!.Parameters[0]--;
                             dialogueUsedIndices[j].Index--;
                         }
                     }
@@ -139,7 +139,7 @@ public static class Extensions
 
     private class UsedIndex
     {
-        public ScriptCommandInvocation Command { get; set; }
+        public ScriptCommandInvocation? Command { get; set; }
         public short Index { get; set; }
     }
 
@@ -216,7 +216,7 @@ public static class Extensions
             if (text[i] != '　') // if it's a space, we just skip drawing
             {
                 int charIndex = project.FontMap.CharMap.IndexOf(text[i]);
-                if ((charIndex + 1) * 16 <= project.FontBitmap.Height)
+                if ((charIndex + 1) * 16 <= project.FontBitmap!.Height)
                 {
                     canvas.DrawBitmap(project.FontBitmap, new SKRect(0, charIndex * 16, 16, (charIndex + 1) * 16),
                         new SKRect(currentX, currentY, currentX + 16, currentY + 16), color);
@@ -284,9 +284,9 @@ public class SKColorJsonConverter : JsonConverter<SKColor>
 {
     public override SKColor Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        string html = reader.GetString();
+        string? html = reader.GetString();
         return new(
-            byte.Parse(html[2..4], NumberStyles.HexNumber),
+            byte.Parse(html![2..4], NumberStyles.HexNumber),
             byte.Parse(html[4..6], NumberStyles.HexNumber),
             byte.Parse(html[6..8], NumberStyles.HexNumber),
             byte.Parse(html[0..2], NumberStyles.HexNumber)

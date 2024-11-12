@@ -15,7 +15,7 @@ public class ChibiItem : Item, IPreviewableGraphic
     public Chibi Chibi { get; set; }
     public int TopScreenIndex { get; set; }
     public int ChibiIndex { get; set; }
-    public List<(string Name, ChibiGraphics Chibi)> ChibiEntries { get; set; } = new();
+    public List<(string Name, ChibiGraphics Chibi)> ChibiEntries { get; set; } = [];
     public Dictionary<string, bool> ChibiEntryModifications { get; set; } = new();
     public Dictionary<string, List<(SKBitmap Frame, short Timing)>> ChibiAnimations { get; set; } = new();
 
@@ -25,7 +25,7 @@ public class ChibiItem : Item, IPreviewableGraphic
 
         Chibi = chibi;
         ChibiIndex = chibiIndex + 1;
-        string firstAnimationName = project.Grp.GetFileByIndex(Chibi.ChibiEntries[0].Animation).Name;
+        string firstAnimationName = project.Grp!.GetFileByIndex(Chibi.ChibiEntries[0].Animation).Name;
         Name = $"CHIBI_{firstAnimationName[0..firstAnimationName.IndexOf('_')]}";
         DisplayName = $"CHIBI_{firstAnimationName[0..firstAnimationName.IndexOf('_')]}";
         TopScreenIndex = chibiIndices.IndexOf(firstAnimationName[0..3]);
@@ -44,7 +44,7 @@ public class ChibiItem : Item, IPreviewableGraphic
         chibiGraphics.Texture = texture;
     }
 
-    public List<(SKBitmap Frame, short Timing)> GetChibiAnimation(string entryName, ArchiveFile<GraphicsFile> grp)
+    public List<(SKBitmap Frame, short Timing)> GetChibiAnimation(string entryName, ArchiveFile<GraphicsFile>? grp)
     {
         ChibiGraphics chibiGraphics = ChibiEntries.First(c => c.Name == entryName).Chibi;
         GraphicsFile animation = chibiGraphics.Animation;
@@ -87,7 +87,7 @@ public class ChibiItem : Item, IPreviewableGraphic
 
     public class ChibiGraphics(ChibiEntry entry, Project project)
     {
-        public GraphicsFile Texture { get; set; } = project.Grp.GetFileByIndex(entry.Texture);
+        public GraphicsFile Texture { get; set; } = project.Grp!.GetFileByIndex(entry.Texture);
         public GraphicsFile Animation { get; set; } = project.Grp.GetFileByIndex(entry.Animation);
 
         public void Write(Project project, ILogger log)

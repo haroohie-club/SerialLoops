@@ -8,7 +8,7 @@ namespace SerialLoops.Lib.Items;
 
 public class MapItem : Item
 {
-    public MapFile Map { get; set; }
+    public MapFile? Map { get; set; }
     public int QmapIndex { get; set; }
 
     public MapItem(string name) : base(name, ItemType.Map)
@@ -20,14 +20,22 @@ public class MapItem : Item
         QmapIndex = qmapIndex;
     }
 
-    public SKPoint GetOrigin(ArchiveFile<GraphicsFile> grp)
+    public SKPoint? GetOrigin(ArchiveFile<GraphicsFile> grp)
     {
+        if (Map is null)
+        {
+            return null;
+        }
         GraphicsFile layout = grp.GetFileByIndex(Map.Settings.LayoutFileIndex);
         return new SKPoint(layout.LayoutEntries[Map.Settings.LayoutSizeDefinitionIndex].ScreenX, layout.LayoutEntries[Map.Settings.LayoutSizeDefinitionIndex].ScreenY);
     }
 
-    public SKBitmap GetMapImage(ArchiveFile<GraphicsFile> grp, bool displayPathingMap, bool displayMapStart)
+    public SKBitmap? GetMapImage(ArchiveFile<GraphicsFile> grp, bool displayPathingMap, bool displayMapStart)
     {
+        if (Map is null)
+        {
+            return null;
+        }
         SKBitmap map;
         if (Map.Settings.BackgroundLayoutStartIndex > 0)
         {
@@ -41,7 +49,7 @@ public class MapItem : Item
         SKCanvas canvas = new(mapWithGrid);
         canvas.DrawBitmap(map, new SKPoint(0, 0));
 
-        SKPoint gridZero = GetOrigin(grp);
+        SKPoint gridZero = GetOrigin(grp) ?? SKPoint.Empty;
         if (displayPathingMap)
         {
             if (Map.Settings.SlgMode)
@@ -59,7 +67,7 @@ public class MapItem : Item
                             new(origin.X, origin.Y + 32),
                             new(origin.X + 32, origin.Y + 16)
                         ]);
-                        canvas.DrawRegion(new SKRegion(diamond), GetPathingCellPaint(x, y));
+                        canvas.DrawRegion(new(diamond), GetPathingCellPaint(x, y));
                     }
                 }
             }
@@ -78,7 +86,7 @@ public class MapItem : Item
                             new(origin.X, origin.Y + 16),
                             new(origin.X + 16, origin.Y + 8),
                         ]);
-                        canvas.DrawRegion(new SKRegion(diamond), GetPathingCellPaint(x, y));
+                        canvas.DrawRegion(new(diamond), GetPathingCellPaint(x, y));
                     }
                 }
             }
@@ -107,11 +115,11 @@ public class MapItem : Item
 
     private SKPaint GetPathingCellPaint(int x, int y)
     {
-        return Map.PathingMap[x][y] switch
+        return Map?.PathingMap[x][y] switch
         {
-            1 => new() { Color = new SKColor(0, 128, 0, 186) }, // walkable
-            2 => new() { Color = new SKColor(0, 200, 200, 186) }, // spawnable
-            _ => new() { Color = new SKColor(255, 0, 0, 186) }, // unwalkable
+            1 => new() { Color = new(0, 128, 0, 186) }, // walkable
+            2 => new() { Color = new(0, 200, 200, 186) }, // spawnable
+            _ => new() { Color = new(255, 0, 0, 186) }, // unwalkable
         };
     }
 

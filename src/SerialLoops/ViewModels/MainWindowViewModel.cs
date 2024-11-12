@@ -48,7 +48,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public MainWindow Window { get; set; }
     public ProjectsCache ProjectsCache { get; set; }
-    public Config CurrentConfig { get; set; }
+    public Config? CurrentConfig { get; set; }
     public Project OpenProject { get; set; }
     public OpenProjectPanel ProjectPanel { get; set; }
     public Dictionary<MenuHeader, NativeMenuItem> WindowMenu { get; set; }

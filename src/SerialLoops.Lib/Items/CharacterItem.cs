@@ -13,7 +13,7 @@ public class CharacterItem : Item
     public MessageInfo MessageInfo { get; set; }
     public NameplateProperties NameplateProperties { get; set; }
 
-    public CharacterItem(MessageInfo character, NameplateProperties nameplateProperties, Project project) : base($"CHR_{project.Characters[(int)character.Character].Name}", ItemType.Character)
+    public CharacterItem(MessageInfo character, NameplateProperties nameplateProperties, Project project) : base($"CHR_{project.Characters![(int)character.Character].Name}", ItemType.Character)
     {
         CanRename = false;
         MessageInfo = character;
@@ -53,8 +53,8 @@ public class CharacterItem : Item
         double widthFactor = 1.0;
         int totalWidth = NameplateProperties.Name.Sum(c =>
         {
-            project.FontReplacement.TryGetValue(c, out FontReplacement fr);
-            return fr is not null ? fr.Offset : 15;
+            project.FontReplacement.TryGetValue(c, out FontReplacement? fr);
+            return fr?.Offset ?? 15;
         });
         if (totalWidth > 53)
         {
@@ -67,23 +67,22 @@ public class CharacterItem : Item
             if (NameplateProperties.Name[i] != '　') // if it's a space, we just skip drawing
             {
                 int charIndex = project.FontMap.CharMap.IndexOf(NameplateProperties.Name.GetOriginalString(project)[i]);
-                if ((charIndex + 1) * 16 <= project.FontBitmap.Height)
+                if ((charIndex + 1) * 16 <= project.FontBitmap!.Height)
                 {
                     newCanvas.DrawBitmap(project.FontBitmap, new SKRect(0, charIndex * 16, 16, (charIndex + 1) * 16),
                         new SKRect(currentX, currentY, currentX + (int)(16 * widthFactor), currentY + 16), new SKPaint()
                         {
-                            ColorFilter = SKColorFilter.CreateColorMatrix(new float[]
-                            {
+                            ColorFilter = SKColorFilter.CreateColorMatrix([
                                 NameplateProperties.NameColor.Red / 255.0f, 0.0f, 0.0f, 0.0f, 0.0f,
                                 0.0f, NameplateProperties.NameColor.Green / 255.0f, 0.0f, 0.0f, 0.0f,
                                 0.0f, 0.0f, NameplateProperties.NameColor.Blue / 255.0f, 0.0f, 0.0f,
-                                0.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-                            })
+                                0.0f, 0.0f, 0.0f, 1.0f, 0.0f
+                            ])
                         }
                     );
                 }
             }
-            project.FontReplacement.TryGetValue(NameplateProperties.Name[i], out FontReplacement replacement);
+            project.FontReplacement.TryGetValue(NameplateProperties.Name[i], out FontReplacement? replacement);
             if (replacement is not null && project.LangCode != "ja")
             {
                 currentX += (int)(replacement.Offset * widthFactor);
@@ -103,8 +102,8 @@ public class CharacterItem : Item
                 for (int x = 0; x < newNameplate.Width; x++)
                 {
                     SKColor pixel = newNameplate.GetPixel(x, y);
-                    SKColor[] neighborPixels = new SKColor[]
-                    {
+                    SKColor[] neighborPixels =
+                    [
                         newNameplate.GetPixel(x + 1, y),
                         newNameplate.GetPixel(x - 1, y),
                         newNameplate.GetPixel(x, y + 1),
@@ -112,8 +111,8 @@ public class CharacterItem : Item
                         newNameplate.GetPixel(x + 1, y + 1),
                         newNameplate.GetPixel(x - 1, y + 1),
                         newNameplate.GetPixel(x + 1, y - 1),
-                        newNameplate.GetPixel(x - 1, y - 1),
-                    };
+                        newNameplate.GetPixel(x - 1, y - 1)
+                    ];
                     if (Helpers.ColorDistance(pixel, NameplateProperties.NameColor) > 50 && neighborPixels.Any(p => Helpers.ColorDistance(p, NameplateProperties.NameColor) < 50))
                     {
                         newNameplate.SetPixel(x, y, NameplateProperties.OutlineColor);
@@ -130,13 +129,12 @@ public class CharacterItem : Item
         newCanvas.DrawBitmap(blankNameplateBaseArrow, new SKPoint(0, 3),
             new SKPaint()
             {
-                ColorFilter = SKColorFilter.CreateColorMatrix(new float[]
-                {
+                ColorFilter = SKColorFilter.CreateColorMatrix([
                     NameplateProperties.PlateColor.Red / 255.0f, 0.0f, 0.0f, 0.0f, 0.0f,
                     0.0f, NameplateProperties.PlateColor.Green / 255.0f, 0.0f, 0.0f, 0.0f,
                     0.0f, 0.0f, NameplateProperties.PlateColor.Blue / 255.0f, 0.0f, 0.0f,
-                    0.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-                })
+                    0.0f, 0.0f, 0.0f, 1.0f, 0.0f
+                ])
             });
         newCanvas.DrawLine(new(0, 15), new(59, 15), new() { Color = NameplateProperties.PlateColor });
         newCanvas.Flush();

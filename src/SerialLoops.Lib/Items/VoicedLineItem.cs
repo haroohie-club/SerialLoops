@@ -10,39 +10,31 @@ using NLayer.NAudioSupport;
 
 namespace SerialLoops.Lib.Items;
 
-public class VoicedLineItem : Item, ISoundItem
+public class VoicedLineItem(string voiceFile, int index, Project project)
+    : Item(Path.GetFileNameWithoutExtension(voiceFile), ItemType.Voice), ISoundItem
 {
-    private readonly string _vceFile;
-
-    public string VoiceFile { get; set; }
-    public int Index { get; set; }
+    public string VoiceFile { get; set; } = Path.GetRelativePath(project.IterativeDirectory, voiceFile);
+    public int Index { get; set; } = index;
     public AdxEncoding AdxType { get; set; }
 
-    public VoicedLineItem(string voiceFile, int index, Project project) : base(Path.GetFileNameWithoutExtension(voiceFile), ItemType.Voice)
-    {
-        VoiceFile = Path.GetRelativePath(project.IterativeDirectory, voiceFile);
-        _vceFile = voiceFile;
-        Index = index;
-    }
-        
     public IWaveProvider GetWaveProvider(ILogger log, bool loop = false)
     {
         byte[] adxBytes = [];
         try
         {
-            adxBytes = File.ReadAllBytes(_vceFile);
+            adxBytes = File.ReadAllBytes(voiceFile);
         }
         catch
         {
-            if (!File.Exists(_vceFile))
+            if (!File.Exists(voiceFile))
             {
                 log.LogError("Failed to load voice file: file not found.");
-                log.LogWarning(_vceFile);
+                log.LogWarning(voiceFile);
             }
             else
             {
                 log.LogError("Failed to load voice file: file invalid.");
-                log.LogWarning(_vceFile);
+                log.LogWarning(voiceFile);
             }
         }
 
@@ -78,7 +70,7 @@ public class VoicedLineItem : Item, ISoundItem
             WaveFileWriter.CreateWaveFile(vceCachedFile, vorbisReader.ToSampleProvider().ToWaveProvider16());
             audioFile = vceCachedFile;
         }
-        using WaveStream audio = Path.GetExtension(audioFile).ToLower() switch
+        using WaveStream? audio = Path.GetExtension(audioFile).ToLower() switch
         {
             ".wav" => new WaveFileReader(audioFile),
             ".flac" => new FlacReader(audioFile),
@@ -96,14 +88,14 @@ public class VoicedLineItem : Item, ISoundItem
             if (audio.WaveFormat.Channels > 1)
             {
                 log.Log("Downmixing audio from stereo to mono for AHX conversion...");
-                newAudioFile = Path.Combine(Path.GetDirectoryName(vceCachedFile), $"{Path.GetFileNameWithoutExtension(vceCachedFile)}-downmixed.wav");
+                newAudioFile = Path.Combine(Path.GetDirectoryName(vceCachedFile)!, $"{Path.GetFileNameWithoutExtension(vceCachedFile)}-downmixed.wav");
                 WaveFileWriter.CreateWaveFile(newAudioFile, audio.ToSampleProvider().ToMono().ToWaveProvider16());
             }
             if (audio.WaveFormat.SampleRate > SoundItem.MAX_SAMPLERATE)
             {
                 log.Log($"Downsampling audio from {audio.WaveFormat.SampleRate} to NDS max sample rate {SoundItem.MAX_SAMPLERATE}...");
                 string prevAudioFile = $"{newAudioFile}";
-                newAudioFile = Path.Combine(Path.GetDirectoryName(vceCachedFile), $"{Path.GetFileNameWithoutExtension(vceCachedFile)}-downsampled.wav");
+                newAudioFile = Path.Combine(Path.GetDirectoryName(vceCachedFile)!, $"{Path.GetFileNameWithoutExtension(vceCachedFile)}-downsampled.wav");
                 if (!string.IsNullOrEmpty(prevAudioFile))
                 {
                     using WaveFileReader newAudio = new(prevAudioFile);
@@ -129,5 +121,5 @@ public class VoicedLineItem : Item, ISoundItem
 
     public override void Refresh(Project project, ILogger log)
     {
-    }        
+    }
 }

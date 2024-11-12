@@ -3,15 +3,10 @@ using SerialLoops.Lib.Items;
 
 namespace SerialLoops.Lib.Script.Parameters;
 
-public class ChibiScriptParameter : ScriptParameter
+public class ChibiScriptParameter(string name, ChibiItem chibi) : ScriptParameter(name, ParameterType.CHIBI)
 {
-    public ChibiItem Chibi { get; set; }
-    public override short[] GetValues(object obj = null) => new short[] { (short)Chibi.TopScreenIndex };
-
-    public ChibiScriptParameter(string name, ChibiItem chibi) : base(name, ParameterType.CHIBI)
-    {
-        Chibi = chibi;
-    }
+    public ChibiItem Chibi { get; set; } = chibi;
+    public override short[] GetValues(object? obj = null) => [(short)Chibi.TopScreenIndex];
 
     public override ChibiScriptParameter Clone(Project project, EventFile eventFile)
     {

@@ -7,19 +7,19 @@ namespace SerialLoops.Lib.Script.Parameters;
 public class EpisodeHeaderScriptParameter(string name, short epHeaderIndex) : ScriptParameter(name, ParameterType.EPISODE_HEADER)
 {
     public Episode EpisodeHeaderIndex { get; set; } = (Episode)epHeaderIndex;
-    public override short[] GetValues(object obj = null) => new short[] { (short)EpisodeHeaderIndex };
+    public override short[] GetValues(object? obj = null) => [(short)EpisodeHeaderIndex];
 
     public override EpisodeHeaderScriptParameter Clone(Project project, EventFile eventFile)
     {
         return new(Name, (short)EpisodeHeaderIndex);
     }
 
-    public SystemTextureItem GetTexture(Project project)
+    public SystemTextureItem? GetTexture(Project project)
     {
         return GetTexture(EpisodeHeaderIndex, project);
     }
 
-    public static SystemTextureItem GetTexture(Episode episode, Project project)
+    public static SystemTextureItem? GetTexture(Episode episode, Project project)
     {
         // We use names here because display names can change but names cannot
         return episode switch

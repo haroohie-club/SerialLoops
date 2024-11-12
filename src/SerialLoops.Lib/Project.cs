@@ -31,15 +31,15 @@ public partial class Project
     public const string EXPORT_FORMAT = "slzip";
     public static readonly JsonSerializerOptions SERIALIZER_OPTIONS = new() { Converters = { new SKColorJsonConverter() } };
 
-    public string Name { get; set; }
-    public string LangCode { get; set; }
-    public string BaseRomHash { get; set; }
-    public Dictionary<string, string> ItemNames { get; set; }
-    public Dictionary<int, NameplateProperties> Characters { get; set; }
+    public string? Name { get; set; }
+    public string? LangCode { get; set; }
+    public string? BaseRomHash { get; set; }
+    public Dictionary<string, string>? ItemNames { get; set; }
+    public Dictionary<int, NameplateProperties>? Characters { get; set; }
 
     // SL settings
     [JsonIgnore]
-    public string MainDirectory => Path.Combine(Config.ProjectsDirectory, Name);
+    public string MainDirectory => Path.Combine(Config!.ProjectsDirectory, Name!);
     [JsonIgnore]
     public string BaseDirectory => Path.Combine(MainDirectory, "base");
     [JsonIgnore]
@@ -47,21 +47,21 @@ public partial class Project
     [JsonIgnore]
     public string ProjectFile => Path.Combine(MainDirectory, $"{Name}.{PROJECT_FORMAT}");
     [JsonIgnore]
-    public Config Config { get; private set; }
+    public Config? Config { get; private set; }
     [JsonIgnore]
-    public ProjectSettings Settings { get; set; }
+    public ProjectSettings? Settings { get; set; }
     [JsonIgnore]
     public List<ItemDescription> Items { get; set; } = [];
 
     // Archives
     [JsonIgnore]
-    public ArchiveFile<DataFile> Dat { get; set; }
+    public ArchiveFile<DataFile>? Dat { get; set; }
     [JsonIgnore]
-    public ArchiveFile<GraphicsFile> Grp { get; set; }
+    public ArchiveFile<GraphicsFile>? Grp { get; set; }
     [JsonIgnore]
-    public ArchiveFile<EventFile> Evt { get; set; }
+    public ArchiveFile<EventFile>? Evt { get; set; }
     [JsonIgnore]
-    public SoundArchive Snd { get; set; }
+    public SoundArchive? Snd { get; set; }
 
     // Common graphics
     [JsonIgnore]
@@ -69,37 +69,37 @@ public partial class Project
     [JsonIgnore]
     public FontFile FontMap { get; set; } = new();
     [JsonIgnore]
-    public SKBitmap SpeakerBitmap { get; set; }
+    public SKBitmap? SpeakerBitmap { get; set; }
     [JsonIgnore]
-    public SKBitmap NameplateBitmap { get; set; }
+    public SKBitmap? NameplateBitmap { get; set; }
     [JsonIgnore]
-    public GraphicInfo NameplateInfo { get; set; }
+    public GraphicInfo? NameplateInfo { get; set; }
     [JsonIgnore]
-    public SKBitmap DialogueBitmap { get; set; }
+    public SKBitmap? DialogueBitmap { get; set; }
     [JsonIgnore]
-    public SKBitmap FontBitmap { get; set; }
+    public SKBitmap? FontBitmap { get; set; }
 
     // Files shared between items
     [JsonIgnore]
-    public CharacterDataFile ChrData { get; set; }
+    public CharacterDataFile? ChrData { get; set; }
     [JsonIgnore]
-    public EventFile EventTableFile { get; set; }
+    public EventFile? EventTableFile { get; set; }
     [JsonIgnore]
-    public ExtraFile Extra { get; set; }
+    public ExtraFile? Extra { get; set; }
     [JsonIgnore]
-    public ScenarioStruct Scenario { get; set; }
+    public ScenarioStruct? Scenario { get; set; }
     [JsonIgnore]
-    public SoundDSFile SoundDS { get; set; }
+    public SoundDSFile? SoundDS { get; set; }
     [JsonIgnore]
-    public EventFile TopicFile { get; set; }
+    public EventFile? TopicFile { get; set; }
     [JsonIgnore]
-    public EventFile TutorialFile { get; set; }
+    public EventFile? TutorialFile { get; set; }
     [JsonIgnore]
-    public MessageFile UiText { get; set; }
+    public MessageFile? UiText { get; set; }
     [JsonIgnore]
-    public MessageInfoFile MessInfo { get; set; }
+    public MessageInfoFile? MessInfo { get; set; }
     [JsonIgnore]
-    public VoiceMapFile VoiceMap { get; set; }
+    public VoiceMapFile? VoiceMap { get; set; }
     [JsonIgnore]
     public Dictionary<int, GraphicsFile> LayoutFiles { get; set; } = [];
 
@@ -111,9 +111,10 @@ public partial class Project
 
     public Project()
     {
+        Localize = s => s;
     }
 
-    public Project(string name, string langCode, Config config, Func<string, string> localize, ILogger log)
+    public Project(string? name, string? langCode, Config? config, Func<string, string> localize, ILogger log)
     {
         Name = name;
         LangCode = langCode;
@@ -144,28 +145,25 @@ public partial class Project
         FAILED,
     }
 
-    public struct LoadProjectResult
+    public struct LoadProjectResult(LoadProjectState state, string badArchive, int badFileIndex)
     {
-        public LoadProjectState State { get; set; }
-        public string BadArchive { get; set; }
-        public int BadFileIndex { get; set; }
+        public LoadProjectState State { get; set; } = state;
+        public string BadArchive { get; set; } = badArchive;
+        public int BadFileIndex { get; set; } = badFileIndex;
 
-        public LoadProjectResult(LoadProjectState state, string badArchive, int badFileIndex)
+        public LoadProjectResult(LoadProjectState state) : this(state, string.Empty, -1)
         {
-            State = state;
-            BadArchive = badArchive;
-            BadFileIndex = badFileIndex;
-        }
-        public LoadProjectResult(LoadProjectState state)
-        {
-            State = state;
-            BadArchive = string.Empty;
-            BadFileIndex = -1;
         }
     }
 
-    public LoadProjectResult Load(Config config, ILogger log, IProgressTracker tracker)
+    public LoadProjectResult Load(Config? config, ILogger log, IProgressTracker tracker)
     {
+        if (config is null)
+        {
+            log.LogError("Failed to load project: config was null!");
+            return new(LoadProjectState.FAILED);
+        }
+
         Config = config;
         LoadProjectSettings(log, tracker);
         ClearOrCreateCaches(config.CachesDirectory, log);
@@ -212,13 +210,11 @@ public partial class Project
                 log.LogError($"File {ex.Index:4} (0x{ex.Index:X3}) '{ex.Filename}' in dat.bin was detected as corrupt.");
                 return new(LoadProjectState.CORRUPTED_FILE, "dat.bin", ex.Index);
             }
-            else
-            {
-                // If it's not a file they've modified, then they're using a bad base ROM
-                log.LogError($"File {ex.Index:4} (0x{ex.Index:X3}) '{ex.Filename}' in dat.bin was detected as corrupt. " +
-                             $"Please use a different base ROM as this one is corrupted.");
-                return new(LoadProjectState.CORRUPTED_FILE, "dat.bin", -1);
-            }
+
+            // If it's not a file they've modified, then they're using a bad base ROM
+            log.LogError($"File {ex.Index:4} (0x{ex.Index:X3}) '{ex.Filename}' in dat.bin was detected as corrupt. " +
+                         $"Please use a different base ROM as this one is corrupted.");
+            return new(LoadProjectState.CORRUPTED_FILE, "dat.bin", -1);
         }
         catch (Exception ex)
         {
@@ -239,13 +235,11 @@ public partial class Project
                 log.LogError($"File {ex.Index:4} (0x{ex.Index:X3}) '{ex.Filename}' in grp.bin was detected as corrupt.");
                 return new(LoadProjectState.CORRUPTED_FILE, "grp.bin", ex.Index);
             }
-            else
-            {
-                // If it's not a file they've modified, then they're using a bad base ROM
-                log.LogError($"File {ex.Index:4} (0x{ex.Index:X3}) '{ex.Filename}' in grp.bin was detected as corrupt. " +
-                             $"Please use a different base ROM as this one is corrupted.");
-                return new(LoadProjectState.CORRUPTED_FILE, "grp.bin", -1);
-            }
+
+            // If it's not a file they've modified, then they're using a bad base ROM
+            log.LogError($"File {ex.Index:4} (0x{ex.Index:X3}) '{ex.Filename}' in grp.bin was detected as corrupt. " +
+                         $"Please use a different base ROM as this one is corrupted.");
+            return new(LoadProjectState.CORRUPTED_FILE, "grp.bin", -1);
         }
         catch (Exception ex)
         {
@@ -266,13 +260,11 @@ public partial class Project
                 log.LogError($"File {ex.Index:4} (0x{ex.Index:X3}) '{ex.Filename}' in evt.bin was detected as corrupt.");
                 return new(LoadProjectState.CORRUPTED_FILE, "evt.bin", ex.Index);
             }
-            else
-            {
-                // If it's not a file they've modified, then they're using a bad base ROM
-                log.LogError($"File {ex.Index:4} (0x{ex.Index:X3}) '{ex.Filename}' in evt.bin was detected as corrupt. " +
-                             $"Please use a different base ROM as this one is corrupted.");
-                return new(LoadProjectState.CORRUPTED_FILE, "evt.bin", -1);
-            }
+
+            // If it's not a file they've modified, then they're using a bad base ROM
+            log.LogError($"File {ex.Index:4} (0x{ex.Index:X3}) '{ex.Filename}' in evt.bin was detected as corrupt. " +
+                         $"Please use a different base ROM as this one is corrupted.");
+            return new(LoadProjectState.CORRUPTED_FILE, "evt.bin", -1);
         }
         catch (Exception ex)
         {
@@ -305,7 +297,7 @@ public partial class Project
         }
         catch (Exception ex)
         {
-            log.LogException($"Failed to load DefaultCharacters file", ex);
+            log.LogException("Failed to load DefaultCharacters file", ex);
             return new(LoadProjectState.FAILED);
         }
 
@@ -325,7 +317,7 @@ public partial class Project
         }
         catch (Exception ex)
         {
-            log.LogException($"Failed to load font map", ex);
+            log.LogException("Failed to load font map", ex);
             return new(LoadProjectState.FAILED);
         }
         tracker.Finished++;
@@ -335,7 +327,7 @@ public partial class Project
         }
         catch (Exception ex)
         {
-            log.LogException($"Failed to load speaker bitmap", ex);
+            log.LogException("Failed to load speaker bitmap", ex);
             return new(LoadProjectState.FAILED);
         }
         try
@@ -346,7 +338,7 @@ public partial class Project
         }
         catch (Exception ex)
         {
-            log.LogException($"Failed to load nameplate bitmap", ex);
+            log.LogException("Failed to load nameplate bitmap", ex);
             return new(LoadProjectState.FAILED);
         }
         tracker.Finished++;
@@ -356,7 +348,7 @@ public partial class Project
         }
         catch (Exception ex)
         {
-            log.LogException($"Failed to load dialogue bitmap", ex);
+            log.LogException("Failed to load dialogue bitmap", ex);
             return new(LoadProjectState.FAILED);
         }
         tracker.Finished++;
@@ -368,7 +360,7 @@ public partial class Project
         }
         catch (Exception ex)
         {
-            log.LogException($"Failed to load font bitmap", ex);
+            log.LogException("Failed to load font bitmap", ex);
             return new(LoadProjectState.FAILED);
         }
         tracker.Finished++;
@@ -381,7 +373,7 @@ public partial class Project
         }
         catch (Exception ex)
         {
-            log.LogException($"Failed to load event table file", ex);
+            log.LogException("Failed to load event table file", ex);
         }
         tracker.Finished++;
         try
@@ -400,7 +392,7 @@ public partial class Project
         }
         catch (Exception ex)
         {
-            log.LogException($"Failed to load extra file", ex);
+            log.LogException("Failed to load extra file", ex);
             return new(LoadProjectState.FAILED);
         }
         tracker.Finished++;
@@ -412,7 +404,7 @@ public partial class Project
         }
         catch (Exception ex)
         {
-            log.LogException($"Failed to load scenario file", ex);
+            log.LogException("Failed to load scenario file", ex);
             return new(LoadProjectState.FAILED);
         }
         tracker.Finished++;
@@ -422,7 +414,7 @@ public partial class Project
         }
         catch (Exception ex)
         {
-            log.LogException($"Failed to load message info file", ex);
+            log.LogException("Failed to load message info file", ex);
             return new(LoadProjectState.FAILED);
         }
         tracker.Finished++;
@@ -432,7 +424,7 @@ public partial class Project
         }
         catch (Exception ex)
         {
-            log.LogException($"Failed to load UI text file", ex);
+            log.LogException("Failed to load UI text file", ex);
             return new(LoadProjectState.FAILED);
         }
         tracker.Finished++;
@@ -447,7 +439,7 @@ public partial class Project
                 if (entry.BgIndex1 > 0)
                 {
                     GraphicsFile nameGraphic = Grp.GetFileByIndex(entry.BgIndex1);
-                    string name = $"BG_{nameGraphic.Name[0..nameGraphic.Name.LastIndexOf('_')]}";
+                    string name = $"BG_{nameGraphic.Name[..nameGraphic.Name.LastIndexOf('_')]}";
                     string bgNameBackup = name;
                     for (int j = 1; names.Contains(name); j++)
                     {
@@ -457,11 +449,9 @@ public partial class Project
                     names.Add(name);
                     return new BackgroundItem(name, i, entry, this);
                 }
-                else
-                {
-                    return null;
-                }
-            }).Where(b => b is not null));
+
+                return null;
+            }).Where(b => b is not null)!);
         }
         catch (Exception ex)
         {
@@ -492,7 +482,7 @@ public partial class Project
 
         try
         {
-            string[] bgmFiles = SoundDS.BgmSection.AsParallel().Where(bgm => bgm is not null).Select(bgm => Path.Combine(IterativeDirectory, "rom", "data", bgm)).ToArray();
+            string[] bgmFiles = SoundDS!.BgmSection.AsParallel().Where(bgm => bgm is not null).Select(bgm => Path.Combine(IterativeDirectory, "rom", "data", bgm)).ToArray();
             tracker.Focus("BGM Tracks", bgmFiles.Length);
             Items.AddRange(bgmFiles.AsParallel().Select((bgm, i) =>
             {
@@ -502,7 +492,7 @@ public partial class Project
         }
         catch (Exception ex)
         {
-            log.LogException($"Failed to load BGM tracks", ex);
+            log.LogException("Failed to load BGM tracks", ex);
             return new(LoadProjectState.FAILED);
         }
         try
@@ -517,7 +507,7 @@ public partial class Project
         }
         catch (Exception ex)
         {
-            log.LogException($"Failed to load voiced lines", ex);
+            log.LogException("Failed to load voiced lines", ex);
             return new(LoadProjectState.FAILED);
         }
 
@@ -555,13 +545,18 @@ public partial class Project
         }
         catch (Exception ex)
         {
-            log.LogException($"Failed to load item file", ex);
+            log.LogException("Failed to load item file", ex);
             return new(LoadProjectState.FAILED);
         }
 
         try
         {
             tracker.Focus("Characters", MessInfo.MessageInfos.Count);
+            if (Characters is null)
+            {
+                log.LogError("Project creation failed: characters list was null!");
+                return new LoadProjectResult(LoadProjectState.FAILED);
+            }
             Items.AddRange(MessInfo.MessageInfos.AsParallel().Where(m => (int)m.Character > 0).Select(m =>
             {
                 tracker.Finished++;
@@ -570,7 +565,7 @@ public partial class Project
         }
         catch (Exception ex)
         {
-            log.LogException($"Failed to load characters", ex);
+            log.LogException("Failed to load characters", ex);
             return new(LoadProjectState.FAILED);
         }
 
@@ -585,7 +580,7 @@ public partial class Project
         }
         catch (Exception ex)
         {
-            log.LogException($"Failed to load character sprites", ex);
+            log.LogException("Failed to load character sprites", ex);
             return new(LoadProjectState.FAILED);
         }
 
@@ -601,7 +596,7 @@ public partial class Project
         }
         catch (Exception ex)
         {
-            log.LogException($"Failed to load chibis", ex);
+            log.LogException("Failed to load chibis", ex);
             return new(LoadProjectState.FAILED);
         }
 
@@ -613,12 +608,12 @@ public partial class Project
                 .Select(e =>
                 {
                     tracker.Finished++;
-                    return new ScriptItem(e, EventTableFile.EvtTbl, Localize, log);
+                    return new ScriptItem(e, EventTableFile!.EvtTbl, Localize, log);
                 }));
         }
         catch (Exception ex)
         {
-            log.LogException($"Failed to load scripts", ex);
+            log.LogException("Failed to load scripts", ex);
             return new(LoadProjectState.FAILED);
         }
 
@@ -647,7 +642,7 @@ public partial class Project
         }
         catch (Exception ex)
         {
-            log.LogException($"Failed to load maps", ex);
+            log.LogException("Failed to load maps", ex);
             return new(LoadProjectState.FAILED);
         }
 
@@ -664,7 +659,7 @@ public partial class Project
         }
         catch (Exception ex)
         {
-            log.LogException($"Failed to load place items", ex);
+            log.LogException("Failed to load place items", ex);
             return new(LoadProjectState.FAILED);
         }
 
@@ -680,7 +675,7 @@ public partial class Project
         }
         catch (Exception ex)
         {
-            log.LogException($"Failed to load puzzle items", ex);
+            log.LogException("Failed to load puzzle items", ex);
             return new(LoadProjectState.FAILED);
         }
 
@@ -694,9 +689,9 @@ public partial class Project
                 // Main topics have shadow topics that are located at ID + 40 (this is actually how the game finds them)
                 // So if we're a main topic and we see another topic 40 back, we know we're one of these shadow topics and should really be
                 // rolled into the original main topic
-                if (topic.Type == TopicType.Main && Items.AsParallel().Any(i => i.Type == ItemDescription.ItemType.Topic && ((TopicItem)i).TopicEntry.Id == topic.Id - 40))
+                if (topic.Type == TopicType.Main && Items.AsParallel().Any(i => i.Type == ItemType.Topic && ((TopicItem)i).TopicEntry?.Id == topic.Id - 40))
                 {
-                    ((TopicItem)Items.AsParallel().First(i => i.Type == ItemDescription.ItemType.Topic && ((TopicItem)i).TopicEntry.Id == topic.Id - 40)).HiddenMainTopic = topic;
+                    ((TopicItem)Items.AsParallel().First(i => i.Type == ItemType.Topic && ((TopicItem)i).TopicEntry?.Id == topic.Id - 40)).HiddenMainTopic = topic;
                 }
                 else
                 {
@@ -707,7 +702,7 @@ public partial class Project
         }
         catch (Exception ex)
         {
-            log.LogException($"Failed to load topics", ex);
+            log.LogException("Failed to load topics", ex);
             return new(LoadProjectState.FAILED);
         }
 
@@ -732,28 +727,28 @@ public partial class Project
             tracker.Finished++;
             foreach (SystemTexture extraSysTex in systemTextureFile.SystemTextures.Where(s => Grp.Files.AsParallel().Where(g => g.Name.StartsWith("XTR")).Distinct().Select(g => g.Index).Contains(s.GrpIndex)))
             {
-                Items.Add(new SystemTextureItem(extraSysTex, this, $"SYSTEX_{Grp.GetFileByIndex(extraSysTex.GrpIndex).Name[0..^3]}"));
+                Items.Add(new SystemTextureItem(extraSysTex, this, $"SYSTEX_{Grp.GetFileByIndex(extraSysTex.GrpIndex).Name[..^3]}"));
                 tracker.Finished++;
             }
             // Exclude B12 as that's the nameplates we replace in the character items and PPT_001 as that's the puzzle phase singularity we'll be replacing in the puzzle items
             // We also exclude the "special" graphics as they do not include all of them in the SYSTEX file (should be made to be edited manually)
             foreach (SystemTexture sysSysTex in systemTextureFile.SystemTextures.Where(s => Grp.Files.AsParallel().Where(g => g.Name.StartsWith("SYS") && !g.Name.Contains("_SPC_") && g.Name != "SYS_CMN_B12DNX" && g.Name != "SYS_PPT_001DNX").Select(g => g.Index).Contains(s.GrpIndex)).DistinctBy(s => s.GrpIndex))
             {
-                if (Grp.GetFileByIndex(sysSysTex.GrpIndex).Name[0..^4].EndsWith("T6"))
+                if (Grp.GetFileByIndex(sysSysTex.GrpIndex).Name[..^4].EndsWith("T6"))
                 {
                     // special case the ep headers
-                    Items.Add(new SystemTextureItem(sysSysTex, this, $"SYSTEX_{Grp.GetFileByIndex(sysSysTex.GrpIndex).Name[0..^3]}", height: 192));
+                    Items.Add(new SystemTextureItem(sysSysTex, this, $"SYSTEX_{Grp.GetFileByIndex(sysSysTex.GrpIndex).Name[..^3]}", height: 192));
                 }
                 else
                 {
-                    Items.Add(new SystemTextureItem(sysSysTex, this, $"SYSTEX_{Grp.GetFileByIndex(sysSysTex.GrpIndex).Name[0..^3]}"));
+                    Items.Add(new SystemTextureItem(sysSysTex, this, $"SYSTEX_{Grp.GetFileByIndex(sysSysTex.GrpIndex).Name[..^3]}"));
                 }
                 tracker.Finished++;
             }
         }
         catch (Exception ex)
         {
-            log.LogException($"Failed to load system textures", ex);
+            log.LogException("Failed to load system textures", ex);
             return new(LoadProjectState.FAILED);
         }
 
@@ -833,7 +828,7 @@ public partial class Project
         }
         catch (Exception ex)
         {
-            log.LogException($"Failed to load layouts", ex);
+            log.LogException("Failed to load layouts", ex);
             return new(LoadProjectState.FAILED);
         }
 
@@ -849,7 +844,7 @@ public partial class Project
         }
         catch (Exception ex)
         {
-            log.LogException($"Failed to load scenario", ex);
+            log.LogException("Failed to load scenario", ex);
             return new(LoadProjectState.FAILED);
         }
 
@@ -865,7 +860,7 @@ public partial class Project
         }
         catch (Exception ex)
         {
-            log.LogException($"Failed to load group selections", ex);
+            log.LogException("Failed to load group selections", ex);
             return new(LoadProjectState.FAILED);
         }
 
@@ -874,6 +869,11 @@ public partial class Project
             try
             {
                 ItemNames = JsonSerializer.Deserialize<Dictionary<string, string>>(File.ReadAllText(Extensions.GetLocalizedFilePath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Defaults", "DefaultNames"), "json")));
+                if (ItemNames is null)
+                {
+                    log.LogError("Failed to deserialize default item names JSON!");
+                    return new(LoadProjectState.FAILED);
+                }
                 foreach (ItemDescription item in Items)
                 {
                     if (!ItemNames.ContainsKey(item.Name) && item.CanRename)
@@ -884,7 +884,7 @@ public partial class Project
             }
             catch (Exception ex)
             {
-                log.LogException($"Failed to load item names", ex);
+                log.LogException("Failed to load item names", ex);
                 return new(LoadProjectState.FAILED);
             }
         }
@@ -893,7 +893,7 @@ public partial class Project
         {
             if (Items[i].CanRename || Items[i].Type == ItemType.Place) // We don't want to manually rename places, but they do use the display name pattern
             {
-                if (ItemNames.TryGetValue(Items[i].Name, out string value))
+                if (ItemNames!.TryGetValue(Items[i].Name, out string? value))
                 {
                     Items[i].Rename(value);
                 }
@@ -911,14 +911,14 @@ public partial class Project
 
     public bool VoiceMapIsV06OrHigher()
     {
-        return Evt.Files.AsParallel().Any(f => f.Name == "VOICEMAPS") && Encoding.ASCII.GetString(Evt.GetFileByName("VOICEMAPS").Data.Skip(0x08).Take(4).ToArray()) == "SUBS";
+        return Evt!.Files.AsParallel().Any(f => f.Name == "VOICEMAPS") && Encoding.ASCII.GetString(Evt.GetFileByName("VOICEMAPS").Data.Skip(0x08).Take(4).ToArray()) == "SUBS";
     }
 
     public void RecalculateEventTable()
     {
         short currentFlag = 0;
         int prevScriptIndex = 0;
-        foreach (EventTableEntry entry in EventTableFile.EvtTbl.Entries)
+        foreach (EventTableEntry entry in EventTableFile!.EvtTbl.Entries)
         {
             if (currentFlag == 0 && entry.FirstReadFlag > 0)
             {
@@ -927,12 +927,12 @@ public partial class Project
             }
             else if (entry.FirstReadFlag > 0)
             {
-                currentFlag += (short)(Evt.GetFileByIndex(prevScriptIndex).ScriptSections.Count + 1);
+                currentFlag += (short)(Evt!.GetFileByIndex(prevScriptIndex).ScriptSections.Count + 1);
                 entry.FirstReadFlag = currentFlag;
                 prevScriptIndex = entry.EventFileIndex;
             }
         }
-        Items.Where(i => i.Type == ItemDescription.ItemType.Script).Cast<ScriptItem>().ToList().ForEach(s => s.UpdateEventTableInfo(EventTableFile.EvtTbl));
+        Items.Where(i => i.Type == ItemType.Script).Cast<ScriptItem>().ToList().ForEach(s => s.UpdateEventTableInfo(EventTableFile.EvtTbl));
     }
 
     public void MigrateProject(string newRom, ILogger log, IProgressTracker tracker)
@@ -969,7 +969,7 @@ public partial class Project
         Directory.CreateDirectory(vceCache);
     }
 
-    public ItemDescription FindItem(string name)
+    public ItemDescription? FindItem(string name)
     {
         if (string.IsNullOrEmpty(name))
         {
@@ -978,7 +978,7 @@ public partial class Project
         return Items.FirstOrDefault(i => i.DisplayName == name);
     }
 
-    public static (Project Project, LoadProjectResult Result) OpenProject(string projFile, Config config, Func<string, string> localize, ILogger log, IProgressTracker tracker)
+    public static (Project? Project, LoadProjectResult Result) OpenProject(string projFile, Config? config, Func<string, string> localize, ILogger log, IProgressTracker tracker)
     {
         log.Log($"Loading project from '{projFile}'...");
         if (!File.Exists(projFile))
@@ -989,7 +989,12 @@ public partial class Project
         try
         {
             tracker.Focus($"{Path.GetFileNameWithoutExtension(projFile)} Project Data", 1);
-            Project project = JsonSerializer.Deserialize<Project>(File.ReadAllText(projFile), SERIALIZER_OPTIONS);
+            Project? project = JsonSerializer.Deserialize<Project>(File.ReadAllText(projFile), SERIALIZER_OPTIONS);
+            if (project is null)
+            {
+                log.LogError($"Project file {projFile} is not a valid JSON file -- returned null!");
+                return (null, new(LoadProjectState.CORRUPTED_FILE));
+            }
             project.Localize = localize;
             tracker.Finished++;
             LoadProjectResult result = project.Load(config, log, tracker);
@@ -1072,24 +1077,29 @@ public partial class Project
         }
     }
 
-    public static (Project Project, LoadProjectResult LoadResult) Import(string slzipFile, string romPath, Config config, Func<string, string> localize, ILogger log, IProgressTracker tracker)
+    public static (Project? Project, LoadProjectResult LoadResult) Import(string slzipFile, string romPath, Config? config, Func<string, string> localize, ILogger log, IProgressTracker tracker)
     {
         try
         {
             using FileStream slzipFs = File.OpenRead(slzipFile);
             using ZipArchive slzip = new(slzipFs, ZipArchiveMode.Read);
             string slprojTemp = Path.GetTempFileName();
-            slzip.Entries.FirstOrDefault(f => f.Name.EndsWith(".slproj")).ExtractToFile(slprojTemp, overwrite: true);
-            Project project = JsonSerializer.Deserialize<Project>(File.ReadAllText(slprojTemp), SERIALIZER_OPTIONS);
+            slzip.Entries.FirstOrDefault(f => f.Name.EndsWith(".slproj"))?.ExtractToFile(slprojTemp, overwrite: true);
+            Project? project = JsonSerializer.Deserialize<Project>(File.ReadAllText(slprojTemp), SERIALIZER_OPTIONS);
+            if (project is null)
+            {
+                log.LogError("Failed to import project: deserialized slproj was null!");
+                return (null, new(LoadProjectState.FAILED));
+            }
             project.Config = config;
             File.Delete(slprojTemp);
-            string oldProjectName = project.Name;
+            string? oldProjectName = project.Name;
             while (Directory.Exists(project.MainDirectory))
             {
-                Match numEnding = ProjectNameAppendedNumber().Match(project.Name);
+                Match numEnding = ProjectNameAppendedNumber().Match(project.Name!);
                 if (numEnding.Success)
                 {
-                    project.Name = project.Name.Replace(numEnding.Value, $"({int.Parse(numEnding.Groups["num"].Value) + 1})");
+                    project.Name = project.Name!.Replace(numEnding.Value, $"({int.Parse(numEnding.Groups["num"].Value) + 1})");
                 }
                 else
                 {
@@ -1100,7 +1110,7 @@ public partial class Project
             IO.OpenRom(project, romPath, log, tracker);
             slzip.ExtractToDirectory(project.MainDirectory, overwriteFiles: true);
             string newNdsProjFile = Path.Combine("rom", $"{project.Name}.xml");
-            if (!project.Name.Equals(oldProjectName))
+            if (!project.Name!.Equals(oldProjectName))
             {
                 string oldNdsProjFile = Path.Combine("rom", $"{oldProjectName}.xml");
                 File.Move(Path.Combine(project.BaseDirectory, oldNdsProjFile), Path.Combine(project.BaseDirectory, newNdsProjFile), overwrite: true);
@@ -1131,7 +1141,7 @@ public partial class Project
 
     public List<ItemDescription> GetSearchResults(SearchQuery query, ILogger log, IProgressTracker? tracker = null)
     {
-        var term = query.Term.Trim();
+        string term = query.Term?.Trim() ?? string.Empty;
         var searchable = Items.Where(i => query.Types.Contains(i.Type)).ToList();
         tracker?.Focus($"{searchable.Count} Items", searchable.Count);
 
@@ -1157,7 +1167,7 @@ public partial class Project
 
     public CharacterItem GetCharacterBySpeaker(Speaker speaker)
     {
-        return (CharacterItem)Items.First(i => i.Type == ItemType.Character && i.DisplayName == $"CHR_{Characters[(int)speaker].Name}");
+        return (CharacterItem)Items.First(i => i.Type == ItemType.Character && i.DisplayName == $"CHR_{Characters![(int)speaker].Name}");
     }
 
     private bool ItemMatches(ItemDescription item, string term, SearchQuery.DataHolder scope, ILogger logger)
@@ -1171,60 +1181,63 @@ public partial class Project
             case SearchQuery.DataHolder.Background_ID:
                 if (int.TryParse(term, out int backgroundId))
                 {
-                    return item.Type == ItemDescription.ItemType.Background && ((BackgroundItem)item).Id == backgroundId;
+                    return item.Type == ItemType.Background && ((BackgroundItem)item).Id == backgroundId;
                 }
                 return false;
 
             case SearchQuery.DataHolder.Dialogue_Text:
                 if (item is ScriptItem dialogueScript)
                 {
-                    if (LangCode.Equals("ja", StringComparison.OrdinalIgnoreCase))
+                    if (LangCode!.Equals("ja", StringComparison.OrdinalIgnoreCase))
                     {
-                        return dialogueScript.GetScriptCommandTree(this, logger)
-                            .Any(s => s.Value.Any(c => c.Parameters
+                        return dialogueScript.GetScriptCommandTree(this, logger)?
+                            .Any(s => s.Value.Any(c => c.Parameters!
                                 .Where(p => p.Type == ScriptParameter.ParameterType.DIALOGUE)
                                 .Any(p => ((DialogueScriptParameter)p).Line.Text
-                                    .Contains(term, StringComparison.OrdinalIgnoreCase))));
+                                    .Contains(term, StringComparison.OrdinalIgnoreCase)))) ?? false;
                     }
-                    else
-                    {
-                        return dialogueScript.GetScriptCommandTree(this, logger)
-                            .Any(s => s.Value.Any(c => c.Parameters
-                                .Where(p => p.Type == ScriptParameter.ParameterType.DIALOGUE)
-                                .Any(p => ((DialogueScriptParameter)p).Line.Text
-                                    .GetSubstitutedString(this).Contains(term, StringComparison.OrdinalIgnoreCase))));
-                    }
+
+                    return dialogueScript.GetScriptCommandTree(this, logger)?
+                        .Any(s => s.Value.Any(c => c.Parameters!
+                            .Where(p => p.Type == ScriptParameter.ParameterType.DIALOGUE)
+                            .Any(p => ((DialogueScriptParameter)p).Line.Text
+                                .GetSubstitutedString(this).Contains(term, StringComparison.OrdinalIgnoreCase)))) ?? false;
                 }
                 return false;
 
             case SearchQuery.DataHolder.Flag:
                 if (item is ScriptItem flagScript)
                 {
-                    return flagScript.GetScriptCommandTree(this, logger)
-                        .Any(s => s.Value.Any(c => c.Parameters
+                    return flagScript.GetScriptCommandTree(this, logger)?
+                        .Any(s => s.Value.Any(c => c.Parameters!
                             .Where(p => p.Type == ScriptParameter.ParameterType.FLAG)
                             .Any(p => ((FlagScriptParameter)p).FlagName
-                                .Contains(term, StringComparison.OrdinalIgnoreCase))));
+                                .Contains(term, StringComparison.OrdinalIgnoreCase)))) ?? false;
                 }
-                else if (short.TryParse(term, out short flagTerm))
+
+                if (short.TryParse(term, out short flagTerm))
                 {
                     if (item is BackgroundMusicItem flagBgm)
                     {
                         return flagBgm.Flag == flagTerm;
                     }
-                    else if (item is BackgroundItem flagBg)
+
+                    if (item is BackgroundItem flagBg)
                     {
                         return flagBg.Flag == flagTerm;
                     }
-                    else if (item is TopicItem flagTopic)
+
+                    if (item is TopicItem flagTopic)
                     {
-                        return flagTopic.TopicEntry.Id == flagTerm;
+                        return flagTopic.TopicEntry?.Id == flagTerm;
                     }
-                    else if (item is PuzzleItem flagPuzzle)
+
+                    if (item is PuzzleItem flagPuzzle)
                     {
                         return flagPuzzle.Puzzle.Settings.Unknown15 == flagTerm || flagPuzzle.Puzzle.Settings.Unknown16 == flagTerm;
                     }
-                    else if (item is GroupSelectionItem flagGroupSelection)
+
+                    if (item is GroupSelectionItem flagGroupSelection)
                     {
                         return flagGroupSelection.Selection.Activities.Any(a => a?.Routes.Any(r => r?.Flag == flagTerm) ?? false);
                     }
@@ -1234,7 +1247,7 @@ public partial class Project
             case SearchQuery.DataHolder.Conditional:
                 if (item is ScriptItem conditionalScript)
                 {
-                    return conditionalScript.Event.ConditionalsSection?.Objects?
+                    return conditionalScript.Event?.ConditionalsSection?.Objects?
                         .Any(c => !string.IsNullOrEmpty(c) && c.Contains(term, StringComparison.OrdinalIgnoreCase)) ?? false;
                 }
                 return false;
@@ -1242,11 +1255,11 @@ public partial class Project
             case SearchQuery.DataHolder.Speaker_Name:
                 if (item is ScriptItem speakerScript)
                 {
-                    return speakerScript.GetScriptCommandTree(this, logger)
-                        .Any(s => s.Value.Any(c => c.Parameters
+                    return speakerScript.GetScriptCommandTree(this, logger)?
+                        .Any(s => s.Value.Any(c => c.Parameters!
                             .Where(p => p.Type == ScriptParameter.ParameterType.DIALOGUE)
-                            .Any(p => Characters[(int)((DialogueScriptParameter)p).Line.Speaker].Name
-                                .Contains(term, StringComparison.OrdinalIgnoreCase))));
+                            .Any(p => Characters![(int)((DialogueScriptParameter)p).Line.Speaker].Name
+                                .Contains(term, StringComparison.OrdinalIgnoreCase)))) ?? false;
                 }
                 return false;
 
@@ -1279,7 +1292,7 @@ public partial class Project
 
     private bool ItemIsInEpisode(ItemDescription item, int episodeNum, bool unique)
     {
-        int scenarioEpIndex = Scenario.Commands.FindIndex(c => c.Verb == ScenarioCommand.ScenarioVerb.NEW_GAME && c.Parameter == episodeNum);
+        int scenarioEpIndex = Scenario!.Commands.FindIndex(c => c.Verb == ScenarioCommand.ScenarioVerb.NEW_GAME && c.Parameter == episodeNum);
         if (scenarioEpIndex >= 0)
         {
             int scenarioNextEpIndex = Scenario.Commands.FindIndex(c => c.Verb == ScenarioCommand.ScenarioVerb.NEW_GAME && c.Parameter == episodeNum + 1);
@@ -1287,32 +1300,28 @@ public partial class Project
             {
                 return ScriptIsInEpisode(script, scenarioEpIndex, scenarioNextEpIndex);
             }
-            else
-            {
-                List<ItemDescription> references = item.GetReferencesTo(this);
-                if (unique)
-                {
 
-                    return references.Where(r => r.Type == ItemDescription.ItemType.Script).Any() &&
-                           references.Where(r => r.Type == ItemDescription.ItemType.Script)
-                               .All(r => ScriptIsInEpisode((ScriptItem)r, scenarioEpIndex, scenarioNextEpIndex));
-                }
-                else
-                {
-                    return references.Any(r => r.Type == ItemDescription.ItemType.Script && ScriptIsInEpisode((ScriptItem)r, scenarioEpIndex, scenarioNextEpIndex));
-                }
+            List<ItemDescription> references = item.GetReferencesTo(this);
+            if (unique)
+            {
+
+                return references.Where(r => r.Type == ItemType.Script).Any() &&
+                       references.Where(r => r.Type == ItemType.Script)
+                           .All(r => ScriptIsInEpisode((ScriptItem)r, scenarioEpIndex, scenarioNextEpIndex));
             }
+
+            return references.Any(r => r.Type == ItemType.Script && ScriptIsInEpisode((ScriptItem)r, scenarioEpIndex, scenarioNextEpIndex));
         }
         return false;
     }
 
     private bool ScriptIsInEpisode(ScriptItem script, int scenarioEpIndex, int scenarioNextEpIndex)
     {
-        int scriptFileScenarioIndex = Scenario.Commands.FindIndex(c => c.Verb == ScenarioCommand.ScenarioVerb.LOAD_SCENE && c.Parameter == script.Event.Index);
+        int scriptFileScenarioIndex = Scenario!.Commands.FindIndex(c => c.Verb == ScenarioCommand.ScenarioVerb.LOAD_SCENE && c.Parameter == script.Event?.Index);
         if (scriptFileScenarioIndex < 0)
         {
             List<ItemDescription> references = script.GetReferencesTo(this);
-            ItemDescription groupSelection = references.Find(r => r.Type == ItemDescription.ItemType.Group_Selection);
+            ItemDescription? groupSelection = references.Find(r => r.Type == ItemType.Group_Selection);
             if (groupSelection is not null)
             {
                 scriptFileScenarioIndex = Scenario.Commands.FindIndex(c => c.Verb == ScenarioCommand.ScenarioVerb.ROUTE_SELECT && c.Parameter == ((GroupSelectionItem)groupSelection).Index);

@@ -2,15 +2,13 @@
 
 namespace SerialLoops.Lib.Script.Parameters;
 
-public class OptionScriptParameter : ScriptParameter
+public class OptionScriptParameter(string name, ChoicesSectionEntry option)
+    : ScriptParameter(name, ParameterType.OPTION)
 {
-    public ChoicesSectionEntry Option { get; set; }
-    public override short[] GetValues(object obj = null) => new short[] { (short)((EventFile)obj).ChoicesSection.Objects.IndexOf(Option) };
+    public ChoicesSectionEntry Option { get; set; } = option;
 
-    public OptionScriptParameter(string name, ChoicesSectionEntry option) : base(name, ParameterType.OPTION)
-    {
-        Option = option;
-    }
+    public override short[] GetValues(object? obj = null) => [(short)((EventFile)obj!).ChoicesSection.Objects.IndexOf(Option)
+    ];
 
     public override OptionScriptParameter Clone(Project project, EventFile eventFile)
     {

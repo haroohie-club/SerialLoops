@@ -2,7 +2,8 @@
 
 namespace SerialLoops.Lib.Script.Parameters;
 
-public class FriendshipLevelScriptParameter : ScriptParameter
+public class FriendshipLevelScriptParameter(string name, short character)
+    : ScriptParameter(name, ParameterType.FRIENDSHIP_LEVEL)
 {
     public enum FriendshipCharacter : short
     {
@@ -14,14 +15,9 @@ public class FriendshipLevelScriptParameter : ScriptParameter
         Tsuruya = 7,
     }
 
-    public FriendshipCharacter Character { get; set; }
+    public FriendshipCharacter Character { get; set; } = (FriendshipCharacter)character;
 
-    public override short[] GetValues(object obj = null) => new short[] { (short)Character };
-
-    public FriendshipLevelScriptParameter(string name, short character) : base(name, ParameterType.FRIENDSHIP_LEVEL)
-    {
-        Character = (FriendshipCharacter)character;
-    }
+    public override short[] GetValues(object? obj = null) => [(short)Character];
 
     public override FriendshipLevelScriptParameter Clone(Project project, EventFile eventFile)
     {

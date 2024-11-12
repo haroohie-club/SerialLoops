@@ -3,15 +3,11 @@ using SerialLoops.Lib.Items;
 
 namespace SerialLoops.Lib.Script.Parameters;
 
-public class VoicedLineScriptParameter : ScriptParameter
+public class VoicedLineScriptParameter(string name, VoicedLineItem vce)
+    : ScriptParameter(name, ParameterType.VOICE_LINE)
 {
-    public VoicedLineItem VoiceLine { get; set; }
-    public override short[] GetValues(object obj = null) => new short[] { (short)(VoiceLine?.Index ?? 0) };
-
-    public VoicedLineScriptParameter(string name, VoicedLineItem vce) : base(name, ParameterType.VOICE_LINE)
-    {
-        VoiceLine = vce;
-    }
+    public VoicedLineItem VoiceLine { get; set; } = vce;
+    public override short[] GetValues(object? obj = null) => [(short)(VoiceLine?.Index ?? 0)];
 
     public override VoicedLineScriptParameter Clone(Project project, EventFile eventFile)
     {

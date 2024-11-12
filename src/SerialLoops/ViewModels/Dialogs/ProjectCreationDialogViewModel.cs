@@ -19,11 +19,11 @@ public partial class ProjectCreationDialogViewModel : ViewModelBase
 {
     private ILogger _log;
     private MainWindowViewModel _mainWindow;
-    private Config _config;
+    private Config? _config;
 
-    public string ProjectName { get; set; }
+    public string? ProjectName { get; set; }
     public ComboBoxItem LanguageTemplateItem { get; set; }
-    public string LanguageTemplateCode => (string)LanguageTemplateItem?.Tag ?? "";
+    public string? LanguageTemplateCode => (string)LanguageTemplateItem?.Tag ?? "";
     [Reactive]
     public string RomPath { get; set; } = Strings.None_Selected;
 
@@ -31,7 +31,7 @@ public partial class ProjectCreationDialogViewModel : ViewModelBase
     public ICommand CreateCommand { get; set; }
     public ICommand CancelCommand { get; set; }
 
-    public ProjectCreationDialogViewModel(Config config, MainWindowViewModel mainWindow, ILogger log)
+    public ProjectCreationDialogViewModel(Config? config, MainWindowViewModel mainWindow, ILogger log)
     {
         _log = log;
         _mainWindow = mainWindow;
@@ -62,7 +62,7 @@ public partial class ProjectCreationDialogViewModel : ViewModelBase
         }
         else
         {
-            Project newProject = new(ProjectName, LanguageTemplateCode, _config, Strings.ResourceManager.GetString, _log);
+            Project newProject = new(ProjectName, LanguageTemplateCode, _config, Strings.ResourceManager.GetString!, _log);
             LoopyProgressTracker tracker = new();
             await new ProgressDialog(() =>
             {

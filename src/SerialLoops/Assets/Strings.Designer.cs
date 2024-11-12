@@ -2932,6 +2932,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to parse config.json; null value returned!.
+        /// </summary>
+        public static string Failed_to_parse_config_json__null_value_returned_ {
+            get {
+                return ResourceManager.GetString("Failed to parse config.json; null value returned!", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to parse script parameter {0} of type {1} with parameter &apos;{2}&apos;!.
         /// </summary>
         public static string Failed_to_parse_script_parameter__0__of_type__1__with_parameter___2___ {

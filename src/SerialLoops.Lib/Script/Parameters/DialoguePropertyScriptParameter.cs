@@ -4,15 +4,13 @@ using SerialLoops.Lib.Items;
 
 namespace SerialLoops.Lib.Script.Parameters;
 
-public class DialoguePropertyScriptParameter : ScriptParameter
+public class DialoguePropertyScriptParameter(string name, CharacterItem character)
+    : ScriptParameter(name, ParameterType.CHARACTER)
 {
-    public CharacterItem Character { get; set; }
-    public override short[] GetValues(object obj = null) => new short[] { (short)((MessageInfoFile)obj).MessageInfos.FindIndex(m => m.Character == Character.MessageInfo.Character) };
+    public CharacterItem Character { get; set; } = character;
 
-    public DialoguePropertyScriptParameter(string name, CharacterItem character) : base(name, ParameterType.CHARACTER)
-    {
-        Character = character;
-    }
+    public override short[] GetValues(object? obj = null) => [(short)((MessageInfoFile)obj!).MessageInfos.FindIndex(m => m.Character == Character.MessageInfo.Character)
+    ];
 
     public override DialoguePropertyScriptParameter Clone(Project project, EventFile eventFile)
     {

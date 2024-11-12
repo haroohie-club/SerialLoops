@@ -28,7 +28,7 @@ public class UpdateAvailableDialogViewModel : ViewModelBase
     private JsonArray _assets;
     private MainWindowViewModel _mainWindowViewModel;
     private UpdateAvailableDialog _updateDialog;
-    public Config Config => _mainWindowViewModel.CurrentConfig;
+    public Config? Config => _mainWindowViewModel.CurrentConfig;
     public ILogger Log => _mainWindowViewModel.Log;
 
     public void Initialize(MainWindowViewModel mainWindowViewModel, UpdateAvailableDialog updateDialog, string version, JsonArray assets, string url, string changelog)

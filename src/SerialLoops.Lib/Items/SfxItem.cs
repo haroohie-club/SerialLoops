@@ -17,7 +17,7 @@ public class SfxItem : Item
     {
         Entry = entry;
         Index = index;
-        AssociatedBank = project.Snd.SequenceArchives[entry.SequenceArchive].File.Sequences[entry.Index].Bank.Name;
+        AssociatedBank = project.Snd!.SequenceArchives[entry.SequenceArchive].File.Sequences[entry.Index].Bank.Name;
         AssociatedGroups = project.Snd.Groups.Where(g => g.Entries.Any(e => e.LoadBank && ((BankInfo)e.Entry).Name.Equals(AssociatedBank))).Select(g => g.Name).ToList();
     }
 

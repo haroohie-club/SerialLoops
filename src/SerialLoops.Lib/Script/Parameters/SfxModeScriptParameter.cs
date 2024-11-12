@@ -2,15 +2,10 @@
 
 namespace SerialLoops.Lib.Script.Parameters;
 
-public class SfxModeScriptParameter : ScriptParameter
+public class SfxModeScriptParameter(string name, short mode) : ScriptParameter(name, ParameterType.SFX_MODE)
 {
-    public SfxMode Mode { get; set; }
-    public override short[] GetValues(object obj = null) => new short[] { (short)Mode };
-
-    public SfxModeScriptParameter(string name, short mode) : base(name, ParameterType.SFX_MODE)
-    {
-        Mode = (SfxMode)mode;
-    }
+    public SfxMode Mode { get; set; } = (SfxMode)mode;
+    public override short[] GetValues(object? obj = null) => [(short)Mode];
 
     public override SfxModeScriptParameter Clone(Project project, EventFile eventFile)
     {

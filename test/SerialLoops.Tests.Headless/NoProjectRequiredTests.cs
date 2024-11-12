@@ -64,7 +64,7 @@ public class NoProjectRequiredTests
         TestConsoleLogger log = new();
         string configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"config-{buttonName}.json");
         ConfigFactoryMock configFactory = new(configPath);
-        Config config = configFactory.LoadConfig(s => s, log);
+        Config? config = configFactory.LoadConfig(s => s, log);
 
         Strings.Culture = new(config.CurrentCultureName);
         PreferencesDialogViewModel viewModel = new();
@@ -315,7 +315,7 @@ public class NoProjectRequiredTests
         button.Focus();
         dialog.KeyPressQwerty(PhysicalKey.Enter, RawInputModifiers.None);
 
-        Config secondConfig = configFactory.LoadConfig(s => s, log);
+        Config? secondConfig = configFactory.LoadConfig(s => s, log);
 
         if (buttonName.Equals("SaveButton"))
         {

@@ -21,14 +21,14 @@ public class BackgroundMusicItem : Item, ISoundItem
     public int Index { get; set; }
     public string BgmName { get; set; }
     public short? Flag { get; set; }
-    public string CachedWaveFile { get; set; }
+    public string? CachedWaveFile { get; set; }
 
     public BackgroundMusicItem(string bgmFile, int index, Project project) : base(Path.GetFileNameWithoutExtension(bgmFile), ItemType.BGM)
     {
         BgmFile = Path.GetRelativePath(project.IterativeDirectory, bgmFile);
         _bgmFile = bgmFile;
         Index = index;
-        BgmName = project.Extra.Bgms.FirstOrDefault(b => b.Index == Index)?.Name?.GetSubstitutedString(project) ?? "";
+        BgmName = project.Extra!.Bgms.FirstOrDefault(b => b.Index == Index)?.Name?.GetSubstitutedString(project) ?? "";
         Flag = project.Extra.Bgms.FirstOrDefault(b => b.Index == Index)?.Flag;
         DisplayName = string.IsNullOrEmpty(BgmName) ? Name : $"{Name} - {BgmName}";
         CanRename = string.IsNullOrEmpty(BgmName);
@@ -46,7 +46,7 @@ public class BackgroundMusicItem : Item, ISoundItem
             // So we just convert to WAV AOT
             if (Path.GetExtension(audioFile).Equals(".mp3", StringComparison.OrdinalIgnoreCase))
             {
-                string mp3ConvertedFile = Path.Combine(Path.GetDirectoryName(bgmCachedFile), $"{Path.GetFileNameWithoutExtension(bgmCachedFile)}-converted.wav");
+                string mp3ConvertedFile = Path.Combine(Path.GetDirectoryName(bgmCachedFile)!, $"{Path.GetFileNameWithoutExtension(bgmCachedFile)}-converted.wav");
                 log.Log($"Converting {audioFile} to WAV...");
                 tracker.Focus("Converting from MP3...", 1);
                 using Mp3FileReaderBase mp3Reader = new(audioFile, new Mp3FileReaderBase.FrameDecompressorBuilder(wf => new Mp3FrameDecompressor(wf)));
@@ -57,7 +57,7 @@ public class BackgroundMusicItem : Item, ISoundItem
             // Ditto the Vorbis decoder
             else if (Path.GetExtension(audioFile).Equals(".ogg", StringComparison.OrdinalIgnoreCase))
             {
-                string oggConvertedFile = Path.Combine(Path.GetDirectoryName(bgmCachedFile), $"{Path.GetFileNameWithoutExtension(bgmCachedFile)}-converted.wav");
+                string oggConvertedFile = Path.Combine(Path.GetDirectoryName(bgmCachedFile)!, $"{Path.GetFileNameWithoutExtension(bgmCachedFile)}-converted.wav");
                 log.Log($"Converting {audioFile} to WAV...");
                 tracker.Focus("Converting from Vorbis...", 1);
                 using VorbisWaveReader vorbisReader = new(audioFile);
@@ -79,7 +79,7 @@ public class BackgroundMusicItem : Item, ISoundItem
             return;
         }
 
-        using WaveStream audio = Path.GetExtension(audioFile).ToLower() switch
+        using WaveStream? audio = Path.GetExtension(audioFile).ToLower() switch
         {
             ".wav" => new WaveFileReader(audioFile),
             ".flac" => new FlacReader(audioFile),
@@ -94,11 +94,11 @@ public class BackgroundMusicItem : Item, ISoundItem
         if (audio.WaveFormat.SampleRate > SoundItem.MAX_SAMPLERATE)
         {
             tracker.Focus("Downsampling...", 1);
-            string newAudioFile = string.Empty;
+            string newAudioFile;
             try
             {
                 log.Log($"Downsampling audio from {audio.WaveFormat.SampleRate} to NDS max sample rate {SoundItem.MAX_SAMPLERATE}...");
-                newAudioFile = Path.Combine(Path.GetDirectoryName(bgmCachedFile), $"{Path.GetFileNameWithoutExtension(bgmCachedFile)}-downsampled.wav");
+                newAudioFile = Path.Combine(Path.GetDirectoryName(bgmCachedFile)!, $"{Path.GetFileNameWithoutExtension(bgmCachedFile)}-downsampled.wav");
                 WaveFileWriter.CreateWaveFile(newAudioFile, new WdlResamplingSampleProvider(audio.ToSampleProvider(), SoundItem.MAX_SAMPLERATE).ToWaveProvider16());
             }
             catch (Exception ex)
@@ -201,7 +201,7 @@ public class BackgroundMusicItem : Item, ISoundItem
             catch (Exception nestedException)
             {
                 log.LogException("Failed restoring BGM file.", nestedException);
-                return null;
+                return new BufferedWaveProvider(new(0, 0, 0)); // Avoid returning null to avoid crashes
             }
             try
             {
@@ -212,7 +212,7 @@ public class BackgroundMusicItem : Item, ISoundItem
             catch (Exception nestedException)
             {
                 log.LogException("Failed to decode original file too, giving up!", nestedException);
-                return null;
+                return new BufferedWaveProvider(new(0, 0, 0)); // Avoid returning null to avoid crashes
             }
         }
     }

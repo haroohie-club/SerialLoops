@@ -2,17 +2,11 @@
 
 namespace SerialLoops.Lib.Script.Parameters;
 
-public abstract class ScriptParameter
+public abstract class ScriptParameter(string name, ScriptParameter.ParameterType type)
 {
-    public ParameterType Type { get; protected set; }
-    public string Name { get; protected set; }
-    public abstract short[] GetValues(object obj = null);
-
-    protected ScriptParameter(string name, ParameterType type)
-    {
-        Name = name;
-        Type = type;
-    }
+    public ParameterType Type { get; protected set; } = type;
+    public string Name { get; protected set; } = name;
+    public abstract short[] GetValues(object? obj = null);
 
     public abstract ScriptParameter Clone(Project project, EventFile eventFile);
 

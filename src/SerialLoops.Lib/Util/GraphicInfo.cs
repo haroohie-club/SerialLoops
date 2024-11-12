@@ -8,15 +8,15 @@ namespace SerialLoops.Lib.Util;
 
 public class GraphicInfo
 {
-    public string Determinant { get; set; }
+    public string? Determinant { get; set; }
     public GraphicsFile.TileForm TileForm { get; set; }
     public short Unknown08 { get; set; }
     public short RenderWidth { get; set; }
     public short RenderHeight { get; set; }
-    public string PaletteString { get; set; }
+    public string? PaletteString { get; set; }
 
     [JsonIgnore]
-    public List<SKColor> Palette => PaletteString.Split(',').Select(SKColor.Parse).ToList();
+    public List<SKColor>? Palette => PaletteString?.Split(',').Select(SKColor.Parse).ToList();
 
     public GraphicInfo()
     {

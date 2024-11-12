@@ -3,15 +3,11 @@ using SkiaSharp;
 
 namespace SerialLoops.Lib.Script.Parameters;
 
-public class PaletteEffectScriptParameter : ScriptParameter
+public class PaletteEffectScriptParameter(string name, short effect)
+    : ScriptParameter(name, ParameterType.PALETTE_EFFECT)
 {
-    public PaletteEffect Effect { get; set; }
-    public override short[] GetValues(object obj = null) => new short[] { (short)Effect };
-
-    public PaletteEffectScriptParameter(string name, short effect) : base(name, ParameterType.PALETTE_EFFECT)
-    {
-        Effect = (PaletteEffect)effect;
-    }
+    public PaletteEffect Effect { get; set; } = (PaletteEffect)effect;
+    public override short[] GetValues(object? obj = null) => [(short)Effect];
 
     public override PaletteEffectScriptParameter Clone(Project project, EventFile eventFile)
     {

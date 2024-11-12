@@ -16,11 +16,11 @@ namespace SerialLoops.Lib.Items;
 
 public class ScriptItem : Item
 {
-    public EventFile Event { get; set; }
+    public EventFile? Event { get; set; }
     public short StartReadFlag { get; set; }
     public short SfxGroupIndex { get; set; }
     public AdjacencyGraph<ScriptSection, ScriptSectionEdge> Graph { get; set; } = new();
-    private readonly Func<string, string> _localize;
+    private readonly Func<string, string> _localize = (s) => s;
 
     public ScriptItem(string name) : base(name, ItemType.Script)
     {
@@ -37,10 +37,14 @@ public class ScriptItem : Item
         Graph.AddVertexRange(Event.ScriptSections);
     }
 
-    public Dictionary<ScriptSection, List<ScriptItemCommand>> GetScriptCommandTree(Project project, ILogger log)
+    public Dictionary<ScriptSection, List<ScriptItemCommand>>? GetScriptCommandTree(Project project, ILogger log)
     {
         try
         {
+            if (Event is null)
+            {
+                throw new NullReferenceException("Event is null");
+            }
             Dictionary<ScriptSection, List<ScriptItemCommand>> commands = [];
             foreach (ScriptSection section in Event.ScriptSections)
             {
@@ -67,6 +71,10 @@ public class ScriptItem : Item
     {
         try
         {
+            if (Event is null)
+            {
+                throw new NullReferenceException("Event is null");
+            }
             foreach (ScriptSection section in commandTree.Keys)
             {
                 bool @continue = false;
@@ -77,7 +85,7 @@ public class ScriptItem : Item
                         Graph.AddEdge(new()
                         {
                             Source = section,
-                            Target = ((ScriptSectionScriptParameter)command.Parameters[4]).Section
+                            Target = ((ScriptSectionScriptParameter)command.Parameters[4]).Section!
                         });
                         Graph.AddEdgeRange(Event.ScriptSections.Where(s =>
                             Event.LabelsSection.Objects.Where(l =>
@@ -100,7 +108,7 @@ public class ScriptItem : Item
                             Graph.AddEdge(new()
                             {
                                 Source = section,
-                                Target = ((ScriptSectionScriptParameter)command.Parameters[0]).Section
+                                Target = ((ScriptSectionScriptParameter)command.Parameters[0]).Section!
                             });
                         }
                         catch (ArgumentOutOfRangeException)
@@ -118,7 +126,7 @@ public class ScriptItem : Item
                             Graph.AddEdge(new()
                             {
                                 Source = section,
-                                Target = ((ScriptSectionScriptParameter)command.Parameters[1]).Section
+                                Target = ((ScriptSectionScriptParameter)command.Parameters[1]).Section!
                             });
                         }
                         catch (ArgumentOutOfRangeException)
@@ -131,9 +139,9 @@ public class ScriptItem : Item
                     {
                         Graph.AddEdgeRange(command.Parameters.Cast<ScriptSectionScriptParameter>()
                             .Where(p => p.Section is not null).Select(p =>
-                                new ScriptSectionEdge() { Source = section, Target = p.Section }));
+                                new ScriptSectionEdge() { Source = section, Target = p.Section! }));
                         ScriptSection miss2Section =
-                            Event.ScriptSections.FirstOrDefault(s => s.Name == "NONEMiss2");
+                            Event.ScriptSections.First(s => s.Name == "NONEMiss2");
                         if (miss2Section is not null)
                         {
                             Graph.AddEdge(new()
@@ -196,7 +204,7 @@ public class ScriptItem : Item
     }
 
     public ScriptPreview GetScriptPreview(Dictionary<ScriptSection, List<ScriptItemCommand>> commandTree,
-        ScriptItemCommand currentCommand, Project project, ILogger log)
+        ScriptItemCommand? currentCommand, Project project, ILogger log)
     {
         ScriptPreview preview = new();
 
@@ -205,7 +213,7 @@ public class ScriptItem : Item
             return preview;
         }
 
-        List<ScriptItemCommand> commands = currentCommand.WalkCommandGraph(commandTree, Graph);
+        List<ScriptItemCommand>? commands = currentCommand.WalkCommandGraph(commandTree, Graph);
 
         if (commands is null)
         {
@@ -226,8 +234,7 @@ public class ScriptItem : Item
         // Draw top screen "kinetic" background
         for (int i = commands.Count - 1; i >= 0; i--)
         {
-            if (commands[i].Verb == CommandVerb.KBG_DISP &&
-                ((BgScriptParameter)commands[i].Parameters[0]).Background is not null)
+            if (commands[i].Verb == CommandVerb.KBG_DISP)
             {
                 preview.Kbg = ((BgScriptParameter)commands[i].Parameters[0]).Background;
                 break;
@@ -239,8 +246,7 @@ public class ScriptItem : Item
         {
             if (commands[i].Verb == CommandVerb.SET_PLACE)
             {
-                if (((BoolScriptParameter)commands[i].Parameters[0]).Value &&
-                    (((PlaceScriptParameter)commands[i].Parameters[1]).Place is not null))
+                if (((BoolScriptParameter)commands[i].Parameters[0]).Value)
                 {
                     preview.Place = ((PlaceScriptParameter)commands[i].Parameters[1]).Place;
                 }
@@ -252,7 +258,7 @@ public class ScriptItem : Item
         // Draw top screen chibis
         List<ChibiItem> chibis = [];
 
-        foreach (StartingChibiEntry chibi in Event.StartingChibisSection?.Objects ?? [])
+        foreach (StartingChibiEntry chibi in Event?.StartingChibisSection?.Objects ?? [])
         {
             if (chibi.ChibiIndex > 0)
             {
@@ -266,8 +272,8 @@ public class ScriptItem : Item
             if (commands[i].Verb == CommandVerb.OP_MODE)
             {
                 // Kyon auto-added by OP_MODE command
-                ChibiItem chibi = (ChibiItem)project.Items.First(i =>
-                    i.Type == ItemType.Chibi && ((ChibiItem)i).TopScreenIndex == 1);
+                ChibiItem chibi = (ChibiItem)project.Items.First(item =>
+                    item.Type == ItemType.Chibi && ((ChibiItem)item).TopScreenIndex == 1);
                 if (!chibis.Contains(chibi))
                 {
                     chibis.Add(chibi);
@@ -374,20 +380,19 @@ public class ScriptItem : Item
 
         // Draw background
         bool bgReverted = false;
-        ScriptItemCommand palCommand = commands.LastOrDefault(c => c.Verb == CommandVerb.PALEFFECT);
-        ScriptItemCommand lastBgCommand = commands.LastOrDefault(c => c.Verb == CommandVerb.BG_DISP ||
+        ScriptItemCommand? palCommand = commands.LastOrDefault(c => c.Verb == CommandVerb.PALEFFECT);
+        ScriptItemCommand? lastBgCommand = commands.LastOrDefault(c => c.Verb == CommandVerb.BG_DISP ||
                                                                       c.Verb == CommandVerb.BG_DISP2 ||
                                                                       c.Verb == CommandVerb.BG_DISPCG ||
                                                                       c.Verb == CommandVerb.BG_FADE ||
                                                                       c.Verb == CommandVerb.BG_REVERT);
-        SKPaint palEffectPaint = PaletteEffectScriptParameter.IdentityPaint;
         if (palCommand is not null && lastBgCommand is not null &&
             commands.IndexOf(palCommand) > commands.IndexOf(lastBgCommand))
         {
             preview.BgPalEffect = ((PaletteEffectScriptParameter)palCommand.Parameters[0]).Effect;
         }
 
-        ScriptItemCommand bgScrollCommand = null;
+        ScriptItemCommand? bgScrollCommand = null;
         for (int i = commands.Count - 1; i >= 0; i--)
         {
             if (commands[i].Verb == CommandVerb.BG_REVERT)
@@ -404,37 +409,29 @@ public class ScriptItem : Item
 
             // Checks to see if this is one of the commands that sets a BG_REVERT immune background or if BG_REVERT hasn't been called
             if (commands[i].Verb == CommandVerb.BG_DISP || commands[i].Verb == CommandVerb.BG_DISP2 ||
-                (commands[i].Verb == CommandVerb.BG_FADE &&
-                 (((BgScriptParameter)commands[i].Parameters[0]).Background is not null)) ||
+                commands[i].Verb == CommandVerb.BG_FADE ||
                 (!bgReverted && (commands[i].Verb == CommandVerb.BG_DISPCG ||
                                  commands[i].Verb == CommandVerb.BG_FADE)))
             {
-                BackgroundItem background =
-                    (commands[i].Verb == CommandVerb.BG_FADE &&
-                     ((BgScriptParameter)commands[i].Parameters[0]).Background is null)
-                        ? ((BgScriptParameter)commands[i].Parameters[1]).Background
-                        : ((BgScriptParameter)commands[i].Parameters[0]).Background;
+                BackgroundItem background = ((BgScriptParameter)commands[i].Parameters[0]).Background;
 
-                if (background is not null)
+                preview.Background = background;
+                preview.BgScrollCommand = bgScrollCommand;
+                if (commands[i].Parameters.Count >= 2 &&
+                    commands[i].Parameters[1].Type == ScriptParameter.ParameterType.BOOL)
                 {
-                    preview.Background = background;
-                    preview.BgScrollCommand = bgScrollCommand;
-                    if (commands[i].Parameters.Count >= 2 &&
-                        commands[i].Parameters[1].Type == ScriptParameter.ParameterType.BOOL)
-                    {
-                        preview.BgPositionBool = ((BoolScriptParameter)commands[i].Parameters[1]).Value;
-                    }
-
-                    break;
+                    preview.BgPositionBool = ((BoolScriptParameter)commands[i].Parameters[1]).Value;
                 }
+
+                break;
             }
         }
 
         // Draw items
-        ScriptItemCommand lastItemCommand = commands.LastOrDefault(c => c.Verb == CommandVerb.ITEM_DISPIMG);
+        ScriptItemCommand? lastItemCommand = commands.LastOrDefault(c => c.Verb == CommandVerb.ITEM_DISPIMG);
         if (lastItemCommand is not null)
         {
-            ItemItem item = (ItemItem)project.Items.FirstOrDefault(i =>
+            ItemItem? item = (ItemItem?)project.Items.FirstOrDefault(i =>
                 i.Type == ItemType.Item && ((ItemScriptParameter)lastItemCommand.Parameters[0]).ItemIndex ==
                 ((ItemItem)i).ItemIndex);
             if (item is not null && ((ItemLocationScriptParameter)lastItemCommand.Parameters[1]).Location !=
@@ -448,22 +445,21 @@ public class ScriptItem : Item
         Dictionary<CharacterItem, PositionedSprite> sprites = [];
         Dictionary<CharacterItem, PositionedSprite> previousSprites = [];
 
-        CharacterItem previousCharacter = null;
-        ScriptItemCommand previousCommand = null;
+        CharacterItem? previousCharacter = null;
+        ScriptItemCommand? previousCommand = null;
         foreach (ScriptItemCommand command in commands)
         {
             if (previousCommand?.Verb == CommandVerb.DIALOGUE)
             {
                 SpriteExitScriptParameter spriteExitMoveParam =
-                    (SpriteExitScriptParameter)previousCommand
-                        ?.Parameters
+                    (SpriteExitScriptParameter)previousCommand.Parameters
                             [3]; // exits/moves happen _after_ dialogue is advanced, so we check these at this point
                 if (spriteExitMoveParam.ExitTransition != SpriteExitScriptParameter.SpriteExitTransition.NO_EXIT)
                 {
                     CharacterItem prevCharacter = (CharacterItem)project.Items.First(i =>
                         i.Type == ItemType.Character &&
                         i.Name ==
-                        $"CHR_{project.Characters[(int)((DialogueScriptParameter)previousCommand.Parameters[0]).Line.Speaker].Name}");
+                        $"CHR_{project.Characters![(int)((DialogueScriptParameter)previousCommand.Parameters[0]).Line.Speaker].Name}");
                     SpriteScriptParameter previousSpriteParam =
                         (SpriteScriptParameter)previousCommand.Parameters[1];
                     short layer = ((ShortScriptParameter)previousCommand.Parameters[9]).Value;
@@ -476,7 +472,7 @@ public class ScriptItem : Item
                         case SpriteExitScriptParameter.SpriteExitTransition.FADE_OUT_CENTER:
                         case SpriteExitScriptParameter.SpriteExitTransition.FADE_OUT_LEFT:
                             if (sprites.ContainsKey(prevCharacter) && previousSprites.ContainsKey(prevCharacter) &&
-                                ((SpriteScriptParameter)previousCommand.Parameters[1]).Sprite?.Sprite?.Character ==
+                                ((SpriteScriptParameter)previousCommand.Parameters[1]).Sprite.Sprite.Character ==
                                 prevCharacter.MessageInfo.Character)
                             {
                                 sprites.Remove(prevCharacter);
@@ -516,7 +512,7 @@ public class ScriptItem : Item
             {
                 SpriteScriptParameter spriteParam = (SpriteScriptParameter)command.Parameters[1];
                 SKPaint spritePaint = PaletteEffectScriptParameter.IdentityPaint;
-                if (commands.IndexOf(palCommand) > commands.IndexOf(command))
+                if (palCommand is not null && commands.IndexOf(palCommand) > commands.IndexOf(command))
                 {
                     spritePaint = ((PaletteEffectScriptParameter)palCommand.Parameters[0]).Effect switch
                     {
@@ -531,50 +527,64 @@ public class ScriptItem : Item
                     };
                 }
 
-                if (spriteParam.Sprite is not null)
+                CharacterItem character;
+                try
                 {
-                    CharacterItem character;
-                    try
-                    {
-                        character = (CharacterItem)project.Items.First(i =>
-                            i.Type == ItemDescription.ItemType.Character &&
-                            i.DisplayName ==
-                            $"CHR_{project.Characters[(int)((DialogueScriptParameter)command.Parameters[0]).Line.Speaker].Name}");
-                    }
-                    catch (InvalidOperationException)
-                    {
-                        log.LogWarning(
-                            $"Unable to determine speaking character in DIALOGUE command in {DisplayName}.");
-                        preview.ErrorImage = "SerialLoops.Graphics.ScriptPreviewError.png";
-                        return preview;
-                    }
+                    character = (CharacterItem)project.Items.First(i =>
+                        i.Type == ItemType.Character &&
+                        i.DisplayName ==
+                        $"CHR_{project.Characters![(int)((DialogueScriptParameter)command.Parameters[0]).Line.Speaker].Name}");
+                }
+                catch (InvalidOperationException)
+                {
+                    log.LogWarning(
+                        $"Unable to determine speaking character in DIALOGUE command in {DisplayName}.");
+                    preview.ErrorImage = "SerialLoops.Graphics.ScriptPreviewError.png";
+                    return preview;
+                }
 
-                    SpriteEntranceScriptParameter spriteEntranceParam =
-                        (SpriteEntranceScriptParameter)command.Parameters[2];
-                    SpriteShakeScriptParameter spriteShakeParam = (SpriteShakeScriptParameter)command.Parameters[4];
-                    short layer = ((ShortScriptParameter)command.Parameters[9]).Value;
+                SpriteEntranceScriptParameter spriteEntranceParam =
+                    (SpriteEntranceScriptParameter)command.Parameters[2];
+                SpriteShakeScriptParameter spriteShakeParam = (SpriteShakeScriptParameter)command.Parameters[4];
+                short layer = ((ShortScriptParameter)command.Parameters[9]).Value;
 
-                    bool spriteIsNew = !sprites.ContainsKey(character);
-                    if (spriteIsNew && spriteEntranceParam.EntranceTransition !=
-                        SpriteEntranceScriptParameter.SpriteEntranceTransition.NO_TRANSITION)
-                    {
-                        sprites.Add(character, new());
-                        previousSprites.Add(character, new());
-                    }
+                bool spriteIsNew = !sprites.ContainsKey(character);
+                if (spriteIsNew && spriteEntranceParam.EntranceTransition !=
+                    SpriteEntranceScriptParameter.SpriteEntranceTransition.NO_TRANSITION)
+                {
+                    sprites.Add(character, new());
+                    previousSprites.Add(character, new());
+                }
 
-                    if (sprites.ContainsKey(character))
-                    {
-                        previousSprites[character] = sprites[character];
-                    }
+                if (sprites.ContainsKey(character))
+                {
+                    previousSprites[character] = sprites[character];
+                }
 
-                    if (spriteEntranceParam.EntranceTransition !=
-                        SpriteEntranceScriptParameter.SpriteEntranceTransition.NO_TRANSITION)
+                if (spriteEntranceParam.EntranceTransition !=
+                    SpriteEntranceScriptParameter.SpriteEntranceTransition.NO_TRANSITION)
+                {
+                    switch (spriteEntranceParam.EntranceTransition)
                     {
-                        switch (spriteEntranceParam.EntranceTransition)
-                        {
-                            // These ones will do their thing no matter what
-                            case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_CENTER:
-                            case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_CENTER:
+                        // These ones will do their thing no matter what
+                        case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_CENTER:
+                        case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_CENTER:
+                            sprites[character] = new()
+                            {
+                                Sprite = spriteParam.Sprite,
+                                Positioning =
+                                    new()
+                                    {
+                                        X = SpritePositioning.SpritePosition.CENTER.GetSpriteX(),
+                                        Layer = layer
+                                    },
+                                PalEffect = spritePaint
+                            };
+                            break;
+
+                        case SpriteEntranceScriptParameter.SpriteEntranceTransition.FADE_TO_CENTER:
+                            if (spriteIsNew)
+                            {
                                 sprites[character] = new()
                                 {
                                     Sprite = spriteParam.Sprite,
@@ -586,117 +596,17 @@ public class ScriptItem : Item
                                         },
                                     PalEffect = spritePaint
                                 };
-                                break;
+                            }
 
-                            case SpriteEntranceScriptParameter.SpriteEntranceTransition.FADE_TO_CENTER:
-                                if (spriteIsNew)
-                                {
-                                    sprites[character] = new()
-                                    {
-                                        Sprite = spriteParam.Sprite,
-                                        Positioning =
-                                            new()
-                                            {
-                                                X = SpritePositioning.SpritePosition.CENTER.GetSpriteX(),
-                                                Layer = layer
-                                            },
-                                        PalEffect = spritePaint
-                                    };
-                                }
+                            break;
 
-                                break;
-
-                            case SpriteEntranceScriptParameter.SpriteEntranceTransition.FADE_IN_LEFT:
-                            case SpriteEntranceScriptParameter.SpriteEntranceTransition.PEEK_RIGHT_TO_LEFT:
-                            case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_LEFT:
-                            case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_LEFT_FAST:
-                            case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_LEFT_SLOW:
-                                if (spriteIsNew)
-                                {
-                                    sprites[character] = new()
-                                    {
-                                        Sprite = spriteParam.Sprite,
-                                        Positioning =
-                                            new()
-                                            {
-                                                X = SpritePositioning.SpritePosition.LEFT.GetSpriteX(),
-                                                Layer = layer
-                                            },
-                                        PalEffect = spritePaint
-                                    };
-                                }
-                                else if (previousCharacter != character &&
-                                         (spriteEntranceParam.EntranceTransition == SpriteEntranceScriptParameter
-                                             .SpriteEntranceTransition.SLIDE_RIGHT_TO_LEFT_FAST))
-                                {
-                                    sprites[character] = new()
-                                    {
-                                        Sprite = spriteParam.Sprite,
-                                        Positioning =
-                                            new()
-                                            {
-                                                X = SpritePositioning.SpritePosition.CENTER.GetSpriteX(),
-                                                Layer = layer
-                                            },
-                                        PalEffect = spritePaint
-                                    };
-                                }
-
-                                break;
-
-                            case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_RIGHT:
-                            case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_RIGHT_FAST:
-                            case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_RIGHT_SLOW:
-                                if (spriteIsNew)
-                                {
-                                    sprites[character] = new()
-                                    {
-                                        Sprite = spriteParam.Sprite,
-                                        Positioning =
-                                            new()
-                                            {
-                                                X = SpritePositioning.SpritePosition.RIGHT.GetSpriteX(),
-                                                Layer = layer
-                                            },
-                                        PalEffect = spritePaint
-                                    };
-                                }
-                                else if (previousCharacter != character &&
-                                         (spriteEntranceParam.EntranceTransition == SpriteEntranceScriptParameter
-                                             .SpriteEntranceTransition.SLIDE_LEFT_TO_RIGHT_FAST))
-                                {
-                                    sprites[character] = new()
-                                    {
-                                        Sprite = spriteParam.Sprite,
-                                        Positioning =
-                                            new()
-                                            {
-                                                X = SpritePositioning.SpritePosition.CENTER.GetSpriteX(),
-                                                Layer = layer
-                                            },
-                                        PalEffect = spritePaint
-                                    };
-                                }
-
-                                break;
-                        }
-                    }
-                    else if (sprites.TryGetValue(character, out PositionedSprite sprite))
-                    {
-                        sprites[character] = new()
-                        {
-                            Sprite = spriteParam.Sprite,
-                            Positioning = sprite.Positioning,
-                            PalEffect = spritePaint
-                        };
-                    }
-
-                    if (spriteShakeParam.ShakeEffect != SpriteShakeScriptParameter.SpriteShakeEffect.NONE &&
-                        sprites.ContainsKey(character))
-                    {
-                        switch (spriteShakeParam.ShakeEffect)
-                        {
-                            case SpriteShakeScriptParameter.SpriteShakeEffect.SHAKE_LEFT:
+                        case SpriteEntranceScriptParameter.SpriteEntranceTransition.FADE_IN_LEFT:
+                        case SpriteEntranceScriptParameter.SpriteEntranceTransition.PEEK_RIGHT_TO_LEFT:
+                        case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_LEFT:
+                        case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_LEFT_FAST:
+                        case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_LEFT_SLOW:
+                            if (spriteIsNew)
+                            {
                                 sprites[character] = new()
                                 {
                                     Sprite = spriteParam.Sprite,
@@ -708,26 +618,11 @@ public class ScriptItem : Item
                                         },
                                     PalEffect = spritePaint
                                 };
-                                break;
-
-                            case SpriteShakeScriptParameter.SpriteShakeEffect.SHAKE_RIGHT:
-                                sprites[character] = new()
-                                {
-                                    Sprite = spriteParam.Sprite,
-                                    Positioning =
-                                        new()
-                                        {
-                                            X = SpritePositioning.SpritePosition.RIGHT.GetSpriteX(),
-                                            Layer = layer
-                                        },
-                                    PalEffect = spritePaint
-                                };
-                                break;
-
-                            case SpriteShakeScriptParameter.SpriteShakeEffect.SHAKE_CENTER:
-                            case SpriteShakeScriptParameter.SpriteShakeEffect.BOUNCE_HORIZONTAL_CENTER:
-                            case SpriteShakeScriptParameter.SpriteShakeEffect
-                                .BOUNCE_HORIZONTAL_CENTER_WITH_SMALL_SHAKES:
+                            }
+                            else if (previousCharacter != character &&
+                                     (spriteEntranceParam.EntranceTransition == SpriteEntranceScriptParameter
+                                         .SpriteEntranceTransition.SLIDE_RIGHT_TO_LEFT_FAST))
+                            {
                                 sprites[character] = new()
                                 {
                                     Sprite = spriteParam.Sprite,
@@ -739,12 +634,110 @@ public class ScriptItem : Item
                                         },
                                     PalEffect = spritePaint
                                 };
-                                break;
-                        }
-                    }
+                            }
 
-                    previousCharacter = character;
+                            break;
+
+                        case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_RIGHT:
+                        case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_RIGHT_FAST:
+                        case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_RIGHT_SLOW:
+                            if (spriteIsNew)
+                            {
+                                sprites[character] = new()
+                                {
+                                    Sprite = spriteParam.Sprite,
+                                    Positioning =
+                                        new()
+                                        {
+                                            X = SpritePositioning.SpritePosition.RIGHT.GetSpriteX(),
+                                            Layer = layer
+                                        },
+                                    PalEffect = spritePaint
+                                };
+                            }
+                            else if (previousCharacter != character &&
+                                     (spriteEntranceParam.EntranceTransition == SpriteEntranceScriptParameter
+                                         .SpriteEntranceTransition.SLIDE_LEFT_TO_RIGHT_FAST))
+                            {
+                                sprites[character] = new()
+                                {
+                                    Sprite = spriteParam.Sprite,
+                                    Positioning =
+                                        new()
+                                        {
+                                            X = SpritePositioning.SpritePosition.CENTER.GetSpriteX(),
+                                            Layer = layer
+                                        },
+                                    PalEffect = spritePaint
+                                };
+                            }
+
+                            break;
+                    }
                 }
+                else if (sprites.TryGetValue(character, out PositionedSprite sprite))
+                {
+                    sprites[character] = new()
+                    {
+                        Sprite = spriteParam.Sprite,
+                        Positioning = sprite.Positioning,
+                        PalEffect = spritePaint
+                    };
+                }
+
+                if (spriteShakeParam.ShakeEffect != SpriteShakeScriptParameter.SpriteShakeEffect.NONE &&
+                    sprites.ContainsKey(character))
+                {
+                    switch (spriteShakeParam.ShakeEffect)
+                    {
+                        case SpriteShakeScriptParameter.SpriteShakeEffect.SHAKE_LEFT:
+                            sprites[character] = new()
+                            {
+                                Sprite = spriteParam.Sprite,
+                                Positioning =
+                                    new()
+                                    {
+                                        X = SpritePositioning.SpritePosition.LEFT.GetSpriteX(),
+                                        Layer = layer
+                                    },
+                                PalEffect = spritePaint
+                            };
+                            break;
+
+                        case SpriteShakeScriptParameter.SpriteShakeEffect.SHAKE_RIGHT:
+                            sprites[character] = new()
+                            {
+                                Sprite = spriteParam.Sprite,
+                                Positioning =
+                                    new()
+                                    {
+                                        X = SpritePositioning.SpritePosition.RIGHT.GetSpriteX(),
+                                        Layer = layer
+                                    },
+                                PalEffect = spritePaint
+                            };
+                            break;
+
+                        case SpriteShakeScriptParameter.SpriteShakeEffect.SHAKE_CENTER:
+                        case SpriteShakeScriptParameter.SpriteShakeEffect.BOUNCE_HORIZONTAL_CENTER:
+                        case SpriteShakeScriptParameter.SpriteShakeEffect
+                            .BOUNCE_HORIZONTAL_CENTER_WITH_SMALL_SHAKES:
+                            sprites[character] = new()
+                            {
+                                Sprite = spriteParam.Sprite,
+                                Positioning =
+                                    new()
+                                    {
+                                        X = SpritePositioning.SpritePosition.CENTER.GetSpriteX(),
+                                        Layer = layer
+                                    },
+                                PalEffect = spritePaint
+                            };
+                            break;
+                    }
+                }
+
+                previousCharacter = character;
             }
             else if (command.Verb == CommandVerb.INVEST_START)
             {
@@ -758,8 +751,8 @@ public class ScriptItem : Item
         preview.Sprites = [.. sprites.Values.OrderBy(p => p.Positioning.Layer)];
 
         // Draw dialogue
-        ScriptItemCommand lastPinMnlCommand = commands.LastOrDefault(c =>
-            c.Verb == CommandVerb.PIN_MNL && c.Section.Equals(commands.Last().Section));
+        ScriptItemCommand? lastPinMnlCommand = commands.LastOrDefault(c =>
+            c.Verb == CommandVerb.PIN_MNL && c.Section is not null && c.Section.Equals(commands.Last().Section));
         if (lastPinMnlCommand is not null)
         {
             DialogueLine line = ((DialogueScriptParameter)lastPinMnlCommand.Parameters[0]).Line;
@@ -770,8 +763,8 @@ public class ScriptItem : Item
         }
         else
         {
-            ScriptItemCommand lastDialogueCommand = commands.LastOrDefault(c => c.Verb == CommandVerb.DIALOGUE);
-            if (commands.FindLastIndex(c => c.Verb == CommandVerb.TOGGLE_DIALOGUE &&
+            ScriptItemCommand? lastDialogueCommand = commands.LastOrDefault(c => c.Verb == CommandVerb.DIALOGUE);
+            if (lastDialogueCommand is not null && commands.FindLastIndex(c => c.Verb == CommandVerb.TOGGLE_DIALOGUE &&
                                             !((BoolScriptParameter)c.Parameters[0]).Value) <
                 commands.IndexOf(lastDialogueCommand))
             {
@@ -786,15 +779,15 @@ public class ScriptItem : Item
         // Draw the get topic flyout
         if (currentCommand.Verb == CommandVerb.TOPIC_GET)
         {
-            preview.Topic = (TopicItem)project.Items.FirstOrDefault(i =>
-                i.Type == ItemType.Topic && ((TopicItem)i).TopicEntry.Id ==
+            preview.Topic = (TopicItem?)project.Items.FirstOrDefault(i =>
+                i.Type == ItemType.Topic && ((TopicItem)i).TopicEntry?.Id ==
                 ((TopicScriptParameter)currentCommand.Parameters[0]).TopicId);
         }
 
         return preview;
     }
 
-    public static (SKBitmap PreviewImage, string ErrorImage) GeneratePreviewImage(ScriptPreview preview,
+    public static (SKBitmap? PreviewImage, string? ErrorImage) GeneratePreviewImage(ScriptPreview preview,
         Project project)
     {
         SKBitmap previewBitmap = new(256, 384);
@@ -810,7 +803,7 @@ public class ScriptItem : Item
         {
             canvas.DrawBitmap(
                 EpisodeHeaderScriptParameter
-                    .GetTexture((EpisodeHeaderScriptParameter.Episode)preview.EpisodeHeader, project).GetTexture(),
+                    .GetTexture((EpisodeHeaderScriptParameter.Episode)preview.EpisodeHeader, project)?.GetTexture(),
                 new SKPoint(0, 0));
         }
         else
@@ -827,13 +820,13 @@ public class ScriptItem : Item
 
             foreach (var chibi in preview.TopScreenChibis)
             {
-                SKBitmap chibiFrame = chibi.Chibi.ChibiAnimations.First().Value.ElementAt(0).Frame;
+                SKBitmap? chibiFrame = chibi.Chibi?.ChibiAnimations.First().Value.ElementAt(0).Frame;
                 canvas.DrawBitmap(chibiFrame, new SKPoint(chibi.X, chibi.Y));
             }
 
             if (preview.ChibiEmote.EmotingChibi is not null)
             {
-                SKBitmap emotes = project.Grp.GetFileByName("SYS_ADV_T08DNX")
+                SKBitmap emotes = project.Grp!.GetFileByName("SYS_ADV_T08DNX")
                     .GetImage(width: 32, transparentIndex: 0);
                 int chibiY = preview.TopScreenChibis.First(c => c.Chibi == preview.ChibiEmote.EmotingChibi).Y;
                 canvas.DrawBitmap(emotes,
@@ -849,8 +842,9 @@ public class ScriptItem : Item
             switch (preview.Background.BackgroundType)
             {
                 case BgType.TEX_CG_DUAL_SCREEN:
-                    SKBitmap dualScreenBg = preview.Background.GetBackground();
-                    if (preview.BgScrollCommand is not null &&
+                    SKBitmap? dualScreenBg = preview.Background.GetBackground();
+                    if (preview.Background.Graphic2 is not null && dualScreenBg is not null &&
+                        preview.BgScrollCommand is not null &&
                         ((BgScrollDirectionScriptParameter)preview.BgScrollCommand.Parameters[0]).ScrollDirection ==
                         BgScrollDirectionScriptParameter.BgScrollDirection.DOWN)
                     {
@@ -861,7 +855,7 @@ public class ScriptItem : Item
                         canvas.DrawBitmap(dualScreenBg, new SKRect(0, bottomScreenX, 256, bottomScreenX + 192),
                             new SKRect(0, 192, 256, 384));
                     }
-                    else
+                    else if (preview.Background.Graphic2 is not null)
                     {
                         canvas.DrawBitmap(dualScreenBg, new SKRect(0, 0, 256, 192), new SKRect(0, 0, 256, 192));
                         canvas.DrawBitmap(dualScreenBg,
@@ -877,10 +871,13 @@ public class ScriptItem : Item
                                                        .Parameters[0]).ScrollDirection ==
                                                    BgScrollDirectionScriptParameter.BgScrollDirection.DOWN))
                     {
-                        SKBitmap bgBitmap = preview.Background.GetBackground();
-                        canvas.DrawBitmap(bgBitmap,
-                            new SKRect(0, bgBitmap.Height - 192, bgBitmap.Width, bgBitmap.Height),
-                            new SKRect(0, 192, 256, 384));
+                        SKBitmap? bgBitmap = preview.Background.GetBackground();
+                        if (bgBitmap is not null)
+                        {
+                            canvas.DrawBitmap(bgBitmap,
+                                new SKRect(0, bgBitmap.Height - 192, bgBitmap.Width, bgBitmap.Height),
+                                new SKRect(0, 192, 256, 384));
+                        }
                     }
                     else
                     {
@@ -894,9 +891,12 @@ public class ScriptItem : Item
                         ((BgScrollDirectionScriptParameter)preview.BgScrollCommand.Parameters[0]).ScrollDirection ==
                         BgScrollDirectionScriptParameter.BgScrollDirection.RIGHT)
                     {
-                        SKBitmap bgBitmap = preview.Background.GetBackground();
-                        canvas.DrawBitmap(bgBitmap, new SKRect(bgBitmap.Width - 256, 0, bgBitmap.Width, 192),
-                            new SKRect(0, 192, 256, 384));
+                        SKBitmap? bgBitmap = preview.Background.GetBackground();
+                        if (bgBitmap is not null)
+                        {
+                            canvas.DrawBitmap(bgBitmap, new SKRect(bgBitmap.Width - 256, 0, bgBitmap.Width, 192),
+                                new SKRect(0, 192, 256, 384));
+                        }
                     }
                     else
                     {
@@ -916,7 +916,7 @@ public class ScriptItem : Item
             }
         }
 
-        if (preview.Item.Item is not null)
+        if (preview.Item.Item?.ItemGraphic is not null)
         {
             int width = preview.Item.Item.ItemGraphic.Width;
             switch (preview.Item.Location)
@@ -944,12 +944,9 @@ public class ScriptItem : Item
         // Draw character sprites
         foreach (PositionedSprite sprite in preview.Sprites)
         {
-            if (sprite.Sprite is not null)
-            {
-                SKBitmap spriteBitmap = sprite.Sprite.GetClosedMouthAnimation(project)[0].Frame;
-                canvas.DrawBitmap(spriteBitmap, sprite.Positioning.GetSpritePosition(spriteBitmap),
-                    sprite.PalEffect);
-            }
+            SKBitmap spriteBitmap = sprite.Sprite.GetClosedMouthAnimation(project)[0].Frame;
+            canvas.DrawBitmap(spriteBitmap, sprite.Positioning.GetSpritePosition(spriteBitmap),
+                sprite.PalEffect);
         }
 
         // Draw dialogue
@@ -965,7 +962,7 @@ public class ScriptItem : Item
             if (!string.IsNullOrEmpty(line.Text))
             {
                 canvas.DrawBitmap(project.DialogueBitmap, new SKRect(0, 24, 32, 36), new SKRect(0, 344, 256, 356));
-                SKColor dialogueBoxColor = project.DialogueBitmap.GetPixel(0, 28);
+                SKColor dialogueBoxColor = project.DialogueBitmap!.GetPixel(0, 28);
                 canvas.DrawRect(0, 356, 224, 384, new() { Color = dialogueBoxColor });
                 canvas.DrawBitmap(project.DialogueBitmap, new SKRect(0, 37, 32, 64),
                     new SKRect(224, 356, 256, 384));
@@ -980,7 +977,7 @@ public class ScriptItem : Item
         // Draw topic obtained flyout
         if (preview.Topic is not null)
         {
-            SKBitmap flyoutSysTex = project.Grp.GetFileByName("SYS_ADV_B01DNX").GetImage(transparentIndex: 0);
+            SKBitmap flyoutSysTex = project.Grp!.GetFileByName("SYS_ADV_B01DNX").GetImage(transparentIndex: 0);
             SKBitmap topicFlyout = new(76, 32);
             SKCanvas flyoutCanvas = new SKCanvas(topicFlyout);
 
@@ -990,7 +987,7 @@ public class ScriptItem : Item
                 new SKRect(32, 6, 76, 26));
 
             SKBitmap topicCards = project.Grp.GetFileByName("SYS_CMN_B09DNX").GetImage(transparentIndex: 0);
-            int srcX = preview.Topic.TopicEntry.CardType switch
+            int srcX = preview.Topic.TopicEntry?.CardType switch
             {
                 TopicCardType.Haruhi => 0,
                 TopicCardType.Mikuru => 20,
@@ -1011,7 +1008,7 @@ public class ScriptItem : Item
         return (previewBitmap, null);
     }
 
-    public (SKBitmap PreviewImage, string ErrorImage) GeneratePreviewImage(
+    public (SKBitmap? PreviewImage, string? ErrorImage) GeneratePreviewImage(
         Dictionary<ScriptSection, List<ScriptItemCommand>> commandTree, ScriptItemCommand currentCommand,
         Project project, ILogger log)
     {
@@ -1020,7 +1017,7 @@ public class ScriptItem : Item
 
     public void UpdateEventTableInfo(EventTable evtTbl)
     {
-        EventTableEntry entry = evtTbl.Entries.FirstOrDefault(e => e.EventFileIndex == Event.Index);
+        EventTableEntry? entry = evtTbl.Entries.FirstOrDefault(e => e.EventFileIndex == Event?.Index);
         if (entry is not null)
         {
             StartReadFlag = entry.FirstReadFlag;
@@ -1035,11 +1032,11 @@ public class ScriptItem : Item
 
     private void PruneLabelsSection(ILogger log)
     {
-        if ((Event.LabelsSection?.Objects?.Count ?? 0) - 1 > Event.ScriptSections.Count)
+        if ((Event?.LabelsSection?.Objects?.Count ?? 0) - 1 > Event?.ScriptSections.Count)
         {
             try
             {
-                for (int i = 0; i < Event.LabelsSection.Objects.Count; i++)
+                for (int i = 0; i < Event?.LabelsSection?.Objects?.Count; i++)
                 {
                     if (Event.LabelsSection.Objects[i].Id == 0)
                     {
@@ -1065,7 +1062,7 @@ public class ScriptItem : Item
     public override void Refresh(Project project, ILogger log)
     {
         Graph = new();
-        Graph.AddVertexRange(Event.ScriptSections);
-        CalculateGraphEdges(GetScriptCommandTree(project, log), log);
+        Graph.AddVertexRange(Event?.ScriptSections ?? []);
+        CalculateGraphEdges(GetScriptCommandTree(project, log) ?? [], log);
     }
 }

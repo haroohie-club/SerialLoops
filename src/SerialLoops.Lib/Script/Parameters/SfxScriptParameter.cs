@@ -3,15 +3,10 @@ using SerialLoops.Lib.Items;
 
 namespace SerialLoops.Lib.Script.Parameters;
 
-public class SfxScriptParameter : ScriptParameter
+public class SfxScriptParameter(string name, SfxItem sfx) : ScriptParameter(name, ParameterType.SFX)
 {
-    public SfxItem Sfx { get; set; }
-    public override short[] GetValues(object obj = null) => new short[] { Sfx.Index };
-
-    public SfxScriptParameter(string name, SfxItem sfx) : base(name, ParameterType.SFX)
-    {
-        Sfx = sfx;
-    }
+    public SfxItem Sfx { get; set; } = sfx;
+    public override short[] GetValues(object? obj = null) => [Sfx.Index];
 
     public override SfxScriptParameter Clone(Project project, EventFile eventFile)
     {

@@ -14,7 +14,7 @@ namespace SerialLoops.Utility;
 public class LoopyLogger : ILogger
 {
     private readonly Window _owner;
-    private Config _config;
+    private Config? _config;
     private string _logFile;
 
     public LoopyLogger(Window window)
@@ -22,7 +22,7 @@ public class LoopyLogger : ILogger
         _owner = window;
     }
 
-    public void Initialize(Config config)
+    public void Initialize(Config? config)
     {
         _config = config;
         if (!Directory.Exists(_config.LogsDirectory))

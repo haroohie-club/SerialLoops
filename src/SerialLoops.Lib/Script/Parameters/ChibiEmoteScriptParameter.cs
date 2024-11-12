@@ -2,15 +2,10 @@
 
 namespace SerialLoops.Lib.Script.Parameters;
 
-public class ChibiEmoteScriptParameter : ScriptParameter
+public class ChibiEmoteScriptParameter(string name, short emote) : ScriptParameter(name, ParameterType.CHIBI_EMOTE)
 {
-    public ChibiEmote Emote { get; set; }
-    public override short[] GetValues(object obj = null) => new short[] { (short)Emote };
-
-    public ChibiEmoteScriptParameter(string name, short emote) : base(name, ParameterType.CHIBI_EMOTE)
-    {
-        Emote = (ChibiEmote)emote;
-    }
+    public ChibiEmote Emote { get; set; } = (ChibiEmote)emote;
+    public override short[] GetValues(object? obj = null) => [(short)Emote];
 
     public override ChibiEmoteScriptParameter Clone(Project project, EventFile eventFile)
     {

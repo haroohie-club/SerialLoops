@@ -10,10 +10,10 @@ namespace SerialLoops.Lib.Hacks;
 
 public class AsmHack : ReactiveObject
 {
-    public string Name { get; set; }
-    public string Description { get; set; }
-    public List<InjectionSite> InjectionSites { get; set; }
-    public List<HackFile> Files { get; set; }
+    public string? Name { get; set; }
+    public string? Description { get; set; }
+    public List<InjectionSite>? InjectionSites { get; set; }
+    public List<HackFile>? Files { get; set; }
     [JsonIgnore]
     public bool ValueChanged { get; set; }
     [JsonIgnore]
@@ -22,9 +22,9 @@ public class AsmHack : ReactiveObject
 
     public bool Applied(Project project)
     {
-        foreach (InjectionSite site in InjectionSites)
+        foreach (InjectionSite site in InjectionSites!)
         {
-            if (site.Code.Equals("ARM9"))
+            if (site.Code!.Equals("ARM9"))
             {
                 using FileStream arm9 = File.OpenRead(Path.Combine(project.IterativeDirectory, "rom", "arm9.bin"));
                 arm9.Seek(site.Offset + 3, SeekOrigin.Begin);
@@ -47,7 +47,7 @@ public class AsmHack : ReactiveObject
         return false;
     }
 
-    public void Apply(Project project, Config config, Dictionary<HackFile, SelectedHackParameter[]> selectedParameters, ILogger log, bool forceApplication = false)
+    public void Apply(Project project, Config? config, Dictionary<HackFile, SelectedHackParameter[]> selectedParameters, ILogger log, bool forceApplication = false)
     {
         if (Applied(project) && !forceApplication)
         {
@@ -55,17 +55,17 @@ public class AsmHack : ReactiveObject
             return;
         }
 
-        foreach (HackFile file in Files)
+        foreach (HackFile file in Files!)
         {
-            string destination = Path.Combine(project.BaseDirectory, "src", file.Destination);
+            string destination = Path.Combine(project.BaseDirectory, "src", file.Destination!);
             if (!Directory.Exists(Path.GetDirectoryName(destination)))
             {
-                Directory.CreateDirectory(Path.GetDirectoryName(destination));
+                Directory.CreateDirectory(Path.GetDirectoryName(destination)!);
             }
-            string fileText = File.ReadAllText(Path.Combine(config.HacksDirectory, file.File));
+            string fileText = File.ReadAllText(Path.Combine(config?.HacksDirectory ?? string.Empty, file.File!));
             foreach (SelectedHackParameter parameter in selectedParameters[file])
             {
-                fileText = fileText.Replace($"{{{{{parameter.Parameter.Name}}}}}", parameter.Value);
+                fileText = fileText.Replace($"{{{{{parameter.Parameter!.Name}}}}}", parameter.Value);
             }
             File.WriteAllText(destination, fileText);
         }
@@ -74,9 +74,9 @@ public class AsmHack : ReactiveObject
     public void Revert(Project project, ILogger log)
     {
         bool oneSuccess = false;
-        foreach (HackFile file in Files)
+        foreach (HackFile file in Files!)
         {
-            string fileToDelete = Path.Combine(project.BaseDirectory, "src", file.Destination);
+            string fileToDelete = Path.Combine(project.BaseDirectory, "src", file.Destination!);
             if (File.Exists(fileToDelete))
             {
                 File.Delete(fileToDelete);
@@ -91,23 +91,27 @@ public class AsmHack : ReactiveObject
         }
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
+        if (obj is null)
+        {
+            return false;
+        }
         if (obj is string name)
         {
             return name.Equals(Name);
         }
-        return ((AsmHack)obj).Name.Equals(Name);
+        return ((AsmHack)obj).Name!.Equals(Name);
     }
 
     public override int GetHashCode()
     {
-        return Name.GetHashCode();
+        return Name!.GetHashCode();
     }
 
     public bool DeepEquals(AsmHack other)
     {
-        return other.Name.Equals(Name) && other.Description.Equals(Description) && other.InjectionSites.SequenceEqual(InjectionSites) && other.Files.SequenceEqual(Files);
+        return other.Name!.Equals(Name) && other.Description!.Equals(Description) && other.InjectionSites!.SequenceEqual(InjectionSites!) && other.Files!.SequenceEqual(Files!);
     }
 }
 
@@ -115,13 +119,13 @@ public class InjectionSite
 {
     [JsonIgnore]
     public uint Offset { get; set; }
-    public string Code { get; set; }
+    public string? Code { get; set; }
     public string Location
     {
         get
         {
             int startAddress;
-            if (!Code.Equals("ARM9"))
+            if (!Code!.Equals("ARM9"))
             {
                 startAddress = 0x020C7660;
             }
@@ -134,7 +138,7 @@ public class InjectionSite
         set
         {
             int startAddress;
-            if (!Code.Equals("ARM9"))
+            if (!Code!.Equals("ARM9"))
             {
                 startAddress = 0x020C7660;
             }
@@ -146,70 +150,86 @@ public class InjectionSite
         }
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
-        return ((InjectionSite)obj).Offset == Offset && ((InjectionSite)obj).Code.Equals(Code);
+        if (obj is null)
+        {
+            return false;
+        }
+        return ((InjectionSite)obj).Offset == Offset && ((InjectionSite)obj).Code!.Equals(Code);
     }
 
     public override int GetHashCode()
     {
-        return Offset.GetHashCode() * Code.GetHashCode() - (Offset.GetHashCode() + Code.GetHashCode());
+        return Offset.GetHashCode() * Code!.GetHashCode() - (Offset.GetHashCode() + Code!.GetHashCode());
     }
 }
 
 public class HackFile
 {
-    public string File { get; set; }
-    public string Destination { get; set; }
-    public string[] Symbols { get; set; }
-    public HackParameter[] Parameters { get; set; }
+    public string? File { get; set; }
+    public string? Destination { get; set; }
+    public string[]? Symbols { get; set; }
+    public HackParameter[]? Parameters { get; set; }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
-        return (((HackFile)obj).File?.Equals(File) ?? false) && (((HackFile)obj).Destination?.Equals(Destination) ?? false) && (((HackFile)obj)?.Symbols.SequenceEqual(Symbols) ?? false) && (((HackFile)obj).Parameters?.SequenceEqual(Parameters) ?? false);
+        if (obj is null)
+        {
+            return false;
+        }
+        return (((HackFile)obj).File?.Equals(File) ?? false) && (((HackFile)obj).Destination?.Equals(Destination) ?? false) && (((HackFile)obj)?.Symbols!.SequenceEqual(Symbols!) ?? false) && (((HackFile)obj).Parameters?.SequenceEqual(Parameters!) ?? false);
     }
 
     public override int GetHashCode()
     {
-        return File.GetHashCode();
+        return File!.GetHashCode();
     }
 }
 
 public class SelectedHackParameter
 {
-    public HackParameter Parameter { get; set; }
+    public HackParameter? Parameter { get; set; }
     public int Selection { get; set; } = -1;
-    public string Value => Parameter.Values[Selection].Value;
+    public string Value => Parameter?.Values?[Selection].Value ?? string.Empty;
 }
 
 public class HackParameter
 {
-    public string Name { get; set; }
-    public string DescriptiveName { get; set; }
-    public HackParameterValue[] Values { get; set; }
+    public string? Name { get; set; }
+    public string? DescriptiveName { get; set; }
+    public HackParameterValue[]? Values { get; set; }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
+        if (obj is null)
+        {
+            return false;
+        }
         return (((HackParameter)obj).Name?.Equals(Name) ?? false) && (((HackParameter)obj).DescriptiveName?.Equals(DescriptiveName) ?? false) && (((HackParameter)obj).Values?.Equals(Values) ?? false);
     }
 
     public override int GetHashCode()
     {
-        return Name.GetHashCode();
+        return Name!.GetHashCode();
     }
 }
 
 public class HackParameterValue
 {
-    public string Name { get; set; }
-    public string Value { get; set; }
+    public string? Name { get; set; }
+    public string? Value { get; set; }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
+        if (obj is null)
+        {
+            return false;
+        }
         return (((HackParameterValue)obj).Name?.Equals(Name) ?? false) && (((HackParameterValue)obj).Value?.Equals(Value) ?? false);
     }
     public override int GetHashCode()
     {
-        return Name.GetHashCode();
+        return Name!.GetHashCode();
     }
 }

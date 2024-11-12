@@ -26,7 +26,7 @@ public class PreferencesDialogViewModel : ViewModelBase
     public ICommand CancelCommand { get; private set; }
 
     private IConfigFactory _configFactory;
-    public Config Configuration { get; set; }
+    public Config? Configuration { get; set; }
     public ILogger Log { get; set; }
     [Reactive]
     public bool RequireRestart { get; set; }

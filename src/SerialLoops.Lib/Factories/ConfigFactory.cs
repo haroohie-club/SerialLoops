@@ -18,7 +18,7 @@ namespace SerialLoops.Lib.Factories;
 // "You've forgotten the mocks."
 public class ConfigFactory : IConfigFactory
 {
-    public Config LoadConfig(Func<string, string> localize, ILogger log)
+    public Config? LoadConfig(Func<string, string> localize, ILogger log)
     {
         string configJson = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SerialLoops", "config.json");
 
@@ -39,7 +39,12 @@ public class ConfigFactory : IConfigFactory
 
         try
         {
-            Config config = JsonSerializer.Deserialize<Config>(File.ReadAllText(configJson));
+            Config? config = JsonSerializer.Deserialize<Config>(File.ReadAllText(configJson));
+            if (config is null)
+            {
+                log.LogError(localize("Failed to parse config.json; null value returned!"));
+                return HandleDefaultConfig(configJson, localize, log);
+            }
             config.ValidateConfig(localize, log);
             config.ConfigPath = configJson;
             config.InitializeHacks(log);
@@ -49,10 +54,7 @@ public class ConfigFactory : IConfigFactory
         catch (JsonException exc)
         {
             log.LogException(localize("Exception occurred while parsing config.json!"), exc);
-            Config defaultConfig = GetDefault(log);
-            defaultConfig.ValidateConfig(localize, log);
-            IO.WriteStringFile(configJson, JsonSerializer.Serialize(defaultConfig), log);
-            return defaultConfig;
+            return HandleDefaultConfig(configJson, localize, log);
         }
     }
 
@@ -140,5 +142,13 @@ public class ConfigFactory : IConfigFactory
             CheckForUpdates = true,
             PreReleaseChannel = false,
         };
+    }
+
+    private Config? HandleDefaultConfig(string configJson, Func<string, string> localize, ILogger log)
+    {
+        Config? defaultConfig = GetDefault(log);
+        defaultConfig.ValidateConfig(localize, log);
+        IO.WriteStringFile(configJson, JsonSerializer.Serialize(defaultConfig), log);
+        return defaultConfig;
     }
 }

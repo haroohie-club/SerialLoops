@@ -2,15 +2,11 @@
 
 namespace SerialLoops.Lib.Script.Parameters;
 
-public class SpriteExitScriptParameter : ScriptParameter
+public class SpriteExitScriptParameter(string name, short exitTransition)
+    : ScriptParameter(name, ParameterType.SPRITE_EXIT)
 {
-    public SpriteExitTransition ExitTransition { get; set; }
-    public override short[] GetValues(object obj = null) => new short[] { (short)ExitTransition };
-
-    public SpriteExitScriptParameter(string name, short exitTransition) : base(name, ParameterType.SPRITE_EXIT)
-    {
-        ExitTransition = (SpriteExitTransition)exitTransition;
-    }
+    public SpriteExitTransition ExitTransition { get; set; } = (SpriteExitTransition)exitTransition;
+    public override short[] GetValues(object? obj = null) => [(short)ExitTransition];
 
     public override SpriteExitScriptParameter Clone(Project project, EventFile eventFile)
     {

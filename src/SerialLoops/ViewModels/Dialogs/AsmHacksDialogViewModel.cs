@@ -32,7 +32,7 @@ public class AsmHacksDialogViewModel : ViewModelBase
 
     private ILogger _log;
     private Project _project;
-    public Config Configuration { get; set; }
+    public Config? Configuration { get; set; }
     private Dictionary<HackFile, SelectedHackParameter[]> _hackParameters { get; set; } = [];
     [Reactive]
     public AsmHack SelectedHack { get; set; }
@@ -41,7 +41,7 @@ public class AsmHacksDialogViewModel : ViewModelBase
     public ICommand SaveCommand { get; set; }
     public ICommand CancelCommand { get; set; }
 
-    public AsmHacksDialogViewModel(Project project, Config config, ILogger log)
+    public AsmHacksDialogViewModel(Project project, Config? config, ILogger log)
     {
         _log = log;
         _project = project;

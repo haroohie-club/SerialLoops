@@ -14,24 +14,21 @@ namespace SerialLoops.Lib.Items;
 public class BackgroundItem : Item, IPreviewableGraphic
 {
     public int Id { get; set; }
-    public GraphicsFile Graphic1 { get; set; }
-    public GraphicsFile Graphic2 { get; set; }
+    public GraphicsFile? Graphic1 { get; set; }
+    public GraphicsFile? Graphic2 { get; set; }
     public BgType BackgroundType { get; set; }
-    public string CgName { get; set; }
+    public string? CgName { get; set; }
     public int Flag { get; set; }
     public short ExtrasShort { get; set; }
     public byte ExtrasByte { get; set; }
 
-    public BackgroundItem(string name) : base(name, ItemType.Background)
-    {
-    }
     public BackgroundItem(string name, int id, BgTableEntry entry, Project project) : base(name, ItemType.Background)
     {
         Id = id;
         BackgroundType = entry.Type;
-        Graphic1 = project.Grp.GetFileByIndex(entry.BgIndex1);
+        Graphic1 = project.Grp!.GetFileByIndex(entry.BgIndex1);
         Graphic2 = project.Grp.GetFileByIndex(entry.BgIndex2); // can be null if type is SINGLE_TEX
-        CgExtraData cgEntry = project.Extra.Cgs.AsParallel().FirstOrDefault(c => c.BgId == Id);
+        CgExtraData? cgEntry = project.Extra!.Cgs.AsParallel().FirstOrDefault(c => c.BgId == Id);
         if (cgEntry is not null)
         {
             CgName = cgEntry?.Name?.GetSubstitutedString(project);
@@ -45,14 +42,19 @@ public class BackgroundItem : Item, IPreviewableGraphic
     {
     }
 
-    public SKBitmap GetBackground()
+    public SKBitmap? GetBackground()
     {
         if (BackgroundType == BgType.TEX_CG_SINGLE)
         {
-            return Graphic1.GetImage();
+            return Graphic1?.GetImage();
         }
-        else if (BackgroundType == BgType.TEX_CG_DUAL_SCREEN)
+
+        if (BackgroundType == BgType.TEX_CG_DUAL_SCREEN)
         {
+            if (Graphic1 is null || Graphic2 is null)
+            {
+                return null;
+            }
             SKBitmap bitmap = new(Graphic1.Width, Graphic1.Height + Graphic2.Height);
             SKCanvas canvas = new(bitmap);
 
@@ -78,12 +80,18 @@ public class BackgroundItem : Item, IPreviewableGraphic
 
             return bitmap;
         }
-        else if (BackgroundType == BgType.KINETIC_SCREEN)
+
+        if (BackgroundType == BgType.KINETIC_SCREEN)
         {
-            return Graphic2.GetScreenImage(Graphic1);
+            return Graphic2?.GetScreenImage(Graphic1);
         }
         else
         {
+            if (Graphic1 is null || Graphic2 is null)
+            {
+                return null;
+            }
+
             SKBitmap bitmap = new(Graphic1.Width, Graphic1.Height + Graphic2.Height);
             SKCanvas canvas = new(bitmap);
 
@@ -102,6 +110,11 @@ public class BackgroundItem : Item, IPreviewableGraphic
         switch (BackgroundType)
         {
             case BgType.KINETIC_SCREEN:
+                if (Graphic2 is null)
+                {
+                    log.LogError(localize("Failed to replace screen image: graphic 2 was null!"));
+                    return false;
+                }
                 tracker.Focus(localize("Setting screen image..."), 1);
                 if (Graphic2.SetScreenImage(image, quantizer, Graphic1, suppressErrors: true) < 0)
                 {
@@ -112,6 +125,11 @@ public class BackgroundItem : Item, IPreviewableGraphic
                 break;
 
             case BgType.TEX_CG_SINGLE:
+                if (Graphic1 is null)
+                {
+                    log.LogError(localize("Failed to replace CG single image: graphic 1 was null!"));
+                    return false;
+                }
                 tracker.Focus(localize("Setting CG single image..."), 1);
                 List<SKColor> singlePalette = Helpers.GetPaletteFromImage(image, transparentIndex == 0 ? 255 : 256, log);
                 if (singlePalette.Count == 255)
@@ -124,6 +142,11 @@ public class BackgroundItem : Item, IPreviewableGraphic
                 break;
 
             case BgType.TEX_CG_DUAL_SCREEN:
+                if (Graphic1 is null || Graphic2 is null)
+                {
+                    log.LogError(localize("Failed to replace dual screen CG image: graphics were null!"));
+                    return false;
+                }
                 SKBitmap newTextureBitmap = new(Graphic1.Width, Graphic1.Height);
                 SKBitmap newTileBitmap = new(64, Graphic2.Height * Graphic2.Width / 64);
                 SKBitmap tileSource = new(image.Width, image.Height - Graphic1.Height);
@@ -172,6 +195,11 @@ public class BackgroundItem : Item, IPreviewableGraphic
                 break;
 
             default:
+                if (Graphic1 is null || Graphic2 is null)
+                {
+                    log.LogError(localize("Failed to replace background image: graphics were null!"));
+                    return false;
+                }
                 SKBitmap newGraphic1 = new(Graphic1.Width, Graphic1.Height);
                 SKBitmap newGraphic2 = new(Graphic2.Width, Graphic2.Height);
 
@@ -208,6 +236,11 @@ public class BackgroundItem : Item, IPreviewableGraphic
 
     public void Write(Project project, ILogger log)
     {
+        if (Graphic1 is null)
+        {
+            log.LogError("Failed to write BG image to disk: graphic 1 was null!");
+            return;
+        }
         using MemoryStream grp1Stream = new();
         Graphic1.GetImage().Encode(grp1Stream, SKEncodedImageFormat.Png, 1);
         IO.WriteBinaryFile(Path.Combine("assets", "graphics", $"{Graphic1.Index:X3}.png"), grp1Stream.ToArray(), project, log);
@@ -215,6 +248,11 @@ public class BackgroundItem : Item, IPreviewableGraphic
 
         if (BackgroundType != BgType.KINETIC_SCREEN && BackgroundType != BgType.TEX_CG_SINGLE)
         {
+            if (Graphic2 is null)
+            {
+                log.LogError("Failed to write BG image to disk: graphic 2 was null!");
+                return;
+            }
             using MemoryStream grp2Stream = new();
             Graphic2.GetImage().Encode(grp2Stream, SKEncodedImageFormat.Png, 1);
             IO.WriteBinaryFile(Path.Combine("assets", "graphics", $"{Graphic2.Index:X3}.png"), grp2Stream.ToArray(), project, log);
@@ -222,12 +260,17 @@ public class BackgroundItem : Item, IPreviewableGraphic
         }
         else if (BackgroundType == BgType.KINETIC_SCREEN)
         {
+            if (Graphic2 is null)
+            {
+                log.LogError("Failed to write KBG image to disk: graphic 2 was null!");
+                return;
+            }
             IO.WriteStringFile(Path.Combine("assets", "graphics", $"{Graphic2.Index:X3}.scr"), JsonSerializer.Serialize(Graphic2.ScreenData), project, log);
         }
     }
 
     public SKBitmap GetPreview(Project project)
     {
-        return GetBackground();
+        return GetBackground() ?? new();
     }
 }

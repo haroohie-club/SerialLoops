@@ -24,13 +24,8 @@ public class WaveFormRendererSettings
         BottomPeakPaint = new() { Color = new SKColor(179, 0, 64) },
     };
 
-    public WaveFormRendererSettings()
-    {
-        BackgroundColor = SKColors.Transparent;
-    }
-
     // for display purposes only
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
     public int Width { get; set; }
 
@@ -38,10 +33,10 @@ public class WaveFormRendererSettings
     public int BottomHeight { get; set; }
     public int PixelsPerPeak { get; set; }
     public int SpacerPixels { get; set; }
-    public virtual SKPaint TopPeakPaint { get; set; }
-    public virtual SKPaint TopSpacerPaint { get; set; }
-    public virtual SKPaint BottomPeakPaint { get; set; }
-    public virtual SKPaint BottomSpacerPaint { get; set; }
+    public virtual SKPaint? TopPeakPaint { get; set; }
+    public virtual SKPaint? TopSpacerPaint { get; set; }
+    public virtual SKPaint? BottomPeakPaint { get; set; }
+    public virtual SKPaint? BottomSpacerPaint { get; set; }
     public bool DecibelScale { get; set; }
-    public SKColor BackgroundColor { get; set; }
+    public SKColor BackgroundColor { get; set; } = SKColors.Transparent;
 }

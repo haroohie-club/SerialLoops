@@ -146,13 +146,13 @@ public static class IO
         string iterativeFile = Path.Combine(project.IterativeDirectory, relativePath);
         try
         {
-            if (!Directory.Exists(Path.GetDirectoryName(baseFile)))
+            if (!string.IsNullOrEmpty(baseFile) && !Directory.Exists(Path.GetDirectoryName(baseFile)))
             {
-                Directory.CreateDirectory(Path.GetDirectoryName(baseFile));
+                Directory.CreateDirectory(Path.GetDirectoryName(baseFile)!);
             }
             if (!Directory.Exists(Path.GetDirectoryName(iterativeFile)))
             {
-                Directory.CreateDirectory(Path.GetDirectoryName(iterativeFile));
+                Directory.CreateDirectory(Path.GetDirectoryName(iterativeFile)!);
             }
 
             File.Copy(sourceFile, baseFile, true);

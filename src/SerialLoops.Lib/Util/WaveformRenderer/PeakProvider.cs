@@ -14,9 +14,9 @@ namespace SerialLoops.Lib.Util.WaveformRenderer;
 
 public abstract class PeakProvider
 {
-    protected ISampleProvider Provider { get; private set; }
+    protected ISampleProvider? Provider { get; private set; }
     protected int SamplesPerPeak { get; private set; }
-    protected float[] ReadBuffer { get; private set; }
+    protected float[]? ReadBuffer { get; private set; }
 
     public void Init(ISampleProvider provider, int samplesPerPeak)
     {

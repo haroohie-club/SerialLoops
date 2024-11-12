@@ -2,15 +2,11 @@
 
 namespace SerialLoops.Lib.Script.Parameters;
 
-public class SpriteShakeScriptParameter : ScriptParameter
+public class SpriteShakeScriptParameter(string name, short shakeEffect)
+    : ScriptParameter(name, ParameterType.SPRITE_SHAKE)
 {
-    public SpriteShakeEffect ShakeEffect { get; set; }
-    public override short[] GetValues(object obj = null) => new short[] { (short)ShakeEffect };
-
-    public SpriteShakeScriptParameter(string name, short shakeEffect) : base(name, ParameterType.SPRITE_SHAKE)
-    {
-        ShakeEffect = (SpriteShakeEffect)shakeEffect;
-    }
+    public SpriteShakeEffect ShakeEffect { get; set; } = (SpriteShakeEffect)shakeEffect;
+    public override short[] GetValues(object? obj = null) => [(short)ShakeEffect];
 
     public override SpriteShakeScriptParameter Clone(Project project, EventFile eventFile)
     {

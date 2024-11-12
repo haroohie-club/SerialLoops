@@ -2,9 +2,4 @@
 
 namespace SerialLoops.Lib.Logging;
 
-public class LoggerNullException : Exception
-{
-    public LoggerNullException() : base("No logger provided")
-    {
-    }
-}
+public class LoggerNullException() : Exception("No logger provided");

@@ -9,7 +9,7 @@ namespace SerialLoops.Lib.Items;
 public class PuzzleItem : Item
 {
     public PuzzleFile Puzzle { get; set; }
-    public SKBitmap SingularityImage { get; set; }
+    public SKBitmap? SingularityImage { get; set; }
 
     public PuzzleItem(PuzzleFile puzzleFile, Project project, ILogger log) : base(puzzleFile.Name[0..^1], ItemType.Puzzle)
     {
@@ -19,7 +19,7 @@ public class PuzzleItem : Item
 
     public override void Refresh(Project project, ILogger log)
     {
-        GraphicsFile singularityLayout = project.Grp.GetFileByIndex(Puzzle.Settings.SingularityLayout);
+        GraphicsFile singularityLayout = project.Grp!.GetFileByIndex(Puzzle.Settings.SingularityLayout);
         GraphicsFile singularityTexture = project.Grp.GetFileByIndex(Puzzle.Settings.SingularityTexture);
         SingularityImage = singularityLayout.GetLayout(
             [singularityTexture],

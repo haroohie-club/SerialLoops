@@ -10,7 +10,7 @@ public class PlaceItem : Item, IPreviewableGraphic
 {
     public int Index { get; set; }
     public GraphicsFile PlaceGraphic { get; set; }
-    public string PlaceName { get; set; }
+    public string PlaceName { get; set; } = string.Empty;
 
     public PlaceItem(int index, GraphicsFile placeGrp) : base(placeGrp.Name[0..^3], ItemType.Place)
     {
@@ -34,8 +34,10 @@ public class PlaceItem : Item, IPreviewableGraphic
             for (int x = 0; x < 2; x++)
             {
                 canvas.DrawBitmap(placeGraphic,
+                    // ReSharper disable PossibleLossOfFraction
                     new SKRect(x * placeGraphic.Width / 2, y * placeGraphic.Height / 4, (x + 1) * placeGraphic.Width / 2, (y + 1) * placeGraphic.Height / 4),
                     new SKRect(col * placeGraphic.Width / 2, row * placeGraphic.Height / 4, (col + 1) * placeGraphic.Width / 2, (row + 1) * placeGraphic.Height / 4));
+                    // ReSharper restore PossibleLossOfFraction
                 row++;
                 if (row >= 4)
                 {

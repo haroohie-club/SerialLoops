@@ -37,12 +37,12 @@ public class ProjectSettingsDialogViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _icon, value);
     }
 
-    private ProjectSettings _settings;
+    private ProjectSettings? _settings;
     public ILogger Log { get; set; }
     public bool Applied { get; set; }
     private ProjectSettingsDialog _settingsDialog;
 
-    public void Initialize(ProjectSettingsDialog settingsDialog, ProjectSettings settings, ILogger log)
+    public void Initialize(ProjectSettingsDialog settingsDialog, ProjectSettings? settings, ILogger log)
     {
         _settingsDialog = settingsDialog;
         _settings = settings;

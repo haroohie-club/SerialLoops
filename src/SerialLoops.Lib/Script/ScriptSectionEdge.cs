@@ -8,4 +8,10 @@ public class ScriptSectionEdge : IEdge<ScriptSection>
     public ScriptSection Source { get; set; }
 
     public ScriptSection Target { get; set; }
+
+    public ScriptSectionEdge()
+    {
+        Source = new();
+        Target = new();
+    }
 }

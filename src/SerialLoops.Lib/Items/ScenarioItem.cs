@@ -10,9 +10,9 @@ public class ScenarioItem : Item
     public ScenarioStruct Scenario { get; set; }
     public List<(ScenarioCommand.ScenarioVerb Command, string Parameter)> ScenarioCommands { get; set; } = [];
 
-    private IEnumerable<PuzzleItem> _puzzleItems;
-    private IEnumerable<ScriptItem> _scriptItems;
-    private IEnumerable<GroupSelectionItem> _groupSelectionItems;
+    private IEnumerable<PuzzleItem> _puzzleItems = [];
+    private IEnumerable<ScriptItem> _scriptItems = [];
+    private IEnumerable<GroupSelectionItem> _groupSelectionItems = [];
 
     public ScenarioItem(ScenarioStruct scenario, Project project, ILogger log) : base("Scenario", ItemType.Scenario)
     {
@@ -41,7 +41,7 @@ public class ScenarioItem : Item
         switch (command.Verb)
         {
             case ScenarioCommand.ScenarioVerb.LOAD_SCENE:
-                ScriptItem script = _scriptItems.First(s => s.Event.Index == command.Parameter);
+                ScriptItem script = _scriptItems.First(s => s.Event?.Index == command.Parameter);
                 return (command.Verb, script.DisplayName);
 
             case ScenarioCommand.ScenarioVerb.PUZZLE_PHASE:
