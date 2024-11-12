@@ -3,23 +3,29 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Windows.Input;
 using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Controls.Selection;
 using Avalonia.Controls.Templates;
 using Avalonia.Platform;
+using DynamicData;
+using HarfBuzzSharp;
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using SerialLoops.Assets;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
+using SerialLoops.Lib.Script.Parameters;
 using SerialLoops.Models;
+using SerialLoops.ViewModels.Dialogs;
 using SerialLoops.ViewModels.Editors.ScriptCommandEditors;
+using SerialLoops.Views.Dialogs;
 using SkiaSharp;
 using static HaruhiChokuretsuLib.Archive.Event.EventFile;
+using Task = System.Threading.Tasks.Task;
 
 namespace SerialLoops.ViewModels.Editors;
 
@@ -46,7 +52,7 @@ public class ScriptEditorViewModel : EditorViewModel
         }
     }
 
-    [Reactive] public ScriptSection SelectedSection { get; set; }
+    [Reactive] public ReactiveScriptSection SelectedSection { get; set; }
 
     [Reactive] public SKBitmap PreviewBitmap { get; set; }
     [Reactive] public ScriptCommandEditorViewModel CurrentCommandViewModel { get; set; }
@@ -71,7 +77,7 @@ public class ScriptEditorViewModel : EditorViewModel
                     )
                 }
             };
-            Source.RowSelection.SingleSelect = true;
+            Source.RowSelection!.SingleSelect = true;
             Source.RowSelection.SelectionChanged += RowSelection_SelectionChanged;
             Source.ExpandAll();
         }
@@ -87,6 +93,7 @@ public class ScriptEditorViewModel : EditorViewModel
         _project = window.OpenProject;
         PopulateScriptCommands();
         _script.CalculateGraphEdges(_commands, _log);
+        AddScriptCommandCommand = ReactiveCommand.CreateFromTask(AddCommand);
     }
 
     public void PopulateScriptCommands(bool refresh = false)
@@ -144,7 +151,7 @@ public class ScriptEditorViewModel : EditorViewModel
                 CommandVerb.AVOID_DISP => new EmptyScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.SCENE_GOTO_CHESS => new SceneGotoScriptCommandEditorViewModel(_selectedCommand, this, _log, _window),
                 CommandVerb.BG_DISP2 => new BgDispScriptCommandEditorViewModel(_selectedCommand, this, _log, _window),
-                _ => new ScriptCommandEditorViewModel(_selectedCommand, this, _log)
+                _ => new(_selectedCommand, this, _log)
             };
         }
     }
@@ -196,8 +203,59 @@ public class ScriptEditorViewModel : EditorViewModel
         else
         {
             SelectedCommand = null;
-            SelectedSection = Commands.Keys.ElementAt(e.SelectedIndexes[0][0]);
+            SelectedSection = ScriptSections[e.SelectedIndexes[0][0]];
         }
+    }
+
+    private async Task AddCommand()
+    {
+        if (SelectedCommand is null && SelectedSection is null)
+        {
+            return;
+        }
+
+        CommandVerb? newVerb =
+            await new AddScriptCommandDialog() { DataContext = new AddScriptCommandDialogViewModel() }
+                .ShowDialog<CommandVerb?>(_window.Window);
+        if (newVerb is null)
+        {
+            return;
+        }
+
+        if (SelectedCommand is null)
+        {
+            ScriptCommandInvocation invocation =
+                new(CommandsAvailable.Find(command => command.Mnemonic.Equals(newVerb.ToString())));
+            ScriptItemCommand newCommand =
+                ScriptItemCommand.FromInvocation(
+                    invocation,
+                    SelectedSection.Section,
+                    0,
+                    _script.Event,
+                    _project,
+                    Strings.ResourceManager.GetString,
+                    _log
+                );
+            SelectedSection.InsertCommand(newCommand.Index, newCommand.Invocation);
+        }
+        else
+        {
+            ScriptCommandInvocation invocation =
+                new(CommandsAvailable.Find(command => command.Mnemonic.Equals(newVerb.ToString())));
+            ScriptItemCommand newCommand =
+                ScriptItemCommand.FromInvocation(
+                    invocation,
+                    SelectedCommand.Section,
+                    0,
+                    _script.Event,
+                    _project,
+                    Strings.ResourceManager.GetString,
+                    _log
+                );
+            ScriptSections[_script.Event.ScriptSections.IndexOf(SelectedCommand.Section)].InsertCommand(newCommand.Index, newCommand.Invocation);
+        }
+        _script.Refresh(_project, _log);
+        _script.UnsavedChanges = true;
     }
 }
 

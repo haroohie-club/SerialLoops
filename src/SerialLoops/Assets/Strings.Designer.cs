@@ -6969,7 +6969,7 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Time (Frames).
+        ///   Looks up a localized string similar to Transition Time (Frames).
         /// </summary>
         public static string Time__Frames_ {
             get {
