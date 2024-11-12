@@ -1457,7 +1457,7 @@
   <data name="Editor Tabs not provided to project creation dialog" xml:space="preserve">
     <value>Le schede dell'editor non vengono fornite nella finestra di dialogo di creazione del progetto</value>
   </data>
-  <data name="Custom Color" xml:space="preserve">
+  <data name="CUSTOM_COLOR" xml:space="preserve">
     <value>Colore personalizzato</value>
   </data>
   <data name="Outline Color" xml:space="preserve">

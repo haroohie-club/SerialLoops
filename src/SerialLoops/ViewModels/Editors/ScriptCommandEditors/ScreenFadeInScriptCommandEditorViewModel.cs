@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using SerialLoops.Assets;
 using SerialLoops.Lib.Script;
 using SerialLoops.Lib.Script.Parameters;
 using SerialLoops.ViewModels.Controls;
@@ -42,17 +44,18 @@ public class ScreenFadeInScriptCommandEditorViewModel : ScriptCommandEditorViewM
     [Reactive]
     public ScreenSelectorViewModel ScreenSelector { get; set; }
 
-    public ObservableCollection<string> Colors { get; } = new(Enum.GetNames<ColorMonochromeScriptParameter.ColorMonochrome>());
-    private ColorMonochromeScriptParameter.ColorMonochrome _color;
-    public string Color
+    public ObservableCollection<ColorMonochromeLocalized> Colors { get; } =
+        new(Enum.GetValues<ColorMonochromeScriptParameter.ColorMonochrome>().Select(c => new ColorMonochromeLocalized(c)));
+    private ColorMonochromeLocalized _color;
+    public ColorMonochromeLocalized Color
     {
-        get => _color.ToString();
+        get => _color;
         set
         {
-            this.RaiseAndSetIfChanged(ref _color, Enum.Parse<ColorMonochromeScriptParameter.ColorMonochrome>(value));
-            ((ColorMonochromeScriptParameter)Command.Parameters[3]).ColorType = _color;
+            this.RaiseAndSetIfChanged(ref _color, value);
+            ((ColorMonochromeScriptParameter)Command.Parameters[3]).ColorType = _color.Color;
             Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
-                .Objects[Command.Index].Parameters[3] = (short)_color;
+                .Objects[Command.Index].Parameters[3] = (short)_color.Color;
             Script.UnsavedChanges = true;
         }
     }
@@ -69,6 +72,12 @@ public class ScreenFadeInScriptCommandEditorViewModel : ScriptCommandEditorViewM
                 .Objects[Command.Index].Parameters[2] = (short)ScreenSelector.SelectedScreen;
             Script.UnsavedChanges = true;
         };
-        _color = ((ColorMonochromeScriptParameter)command.Parameters[3]).ColorType;
+        _color = new(((ColorMonochromeScriptParameter)command.Parameters[3]).ColorType);
     }
+}
+
+public readonly struct ColorMonochromeLocalized(ColorMonochromeScriptParameter.ColorMonochrome color)
+{
+    public ColorMonochromeScriptParameter.ColorMonochrome Color { get; } = color;
+    public string DisplayText { get; } = Strings.ResourceManager.GetString(color.ToString());
 }

@@ -531,7 +531,7 @@
   <data name="Ctrl+Scroll - Scale Image" xml:space="preserve">
     <value>Ctrl+Scroll - Scale Image</value>
   </data>
-  <data name="Custom Color" xml:space="preserve">
+  <data name="CUSTOM_COLOR" xml:space="preserve">
     <value>Custom Colour</value>
   </data>
   <data name="Cut" xml:space="preserve">

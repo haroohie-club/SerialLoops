@@ -19,7 +19,7 @@ public class ColorMonochromeScriptParameter : ScriptParameter
 
     public enum ColorMonochrome : short
     {
-        CUSTOM = 0,
+        CUSTOM_COLOR = 0,
         BLACK = 1,
         WHITE = 2,
     }

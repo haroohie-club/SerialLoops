@@ -14,8 +14,8 @@ public class BgmModeScriptParameter : ScriptParameter
 
     public enum BgmMode : short
     {
-        START = 2,
-        STOP = 4,
+        Start = 2,
+        Stop = 4,
     }
 
     public override BgmModeScriptParameter Clone(Project project, EventFile eventFile)

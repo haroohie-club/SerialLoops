@@ -14,7 +14,7 @@
         <NumericUpDown Grid.Column="1" Grid.Row="0" Margin="10,0,0,0" Value="{Binding AddNoShowAmount}"
                        Minimum="-9" Maximum="9" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" IsVisible="{Binding NoShow}"/>
 
-        <TextBlock Grid.Column="0" Grid.Row="1" Margin="0,7,0,0" Text="{x:Static assets:Strings.Set}" IsVisible="{Binding!NoShow}"/>
+        <TextBlock Grid.Column="0" Grid.Row="1" Margin="0,7,0,0" Text="{x:Static assets:Strings.Set}" IsVisible="{Binding !NoShow}"/>
         <NumericUpDown Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" Value="{Binding SetAmount}"
                        Minimum="0" Maximum="9" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" IsVisible="{Binding !NoShow}"/>
     </Grid>

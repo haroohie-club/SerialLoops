@@ -7,6 +7,7 @@ using System.Timers;
 using System.Windows.Input;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
+using SerialLoops.Assets;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
 using SerialLoops.Lib.Script.Parameters;
@@ -34,14 +35,14 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
         _dialogueLine = ((DialogueScriptParameter)command.Parameters[0]).Line.Text;
         _characterSprite = ((SpriteScriptParameter)command.Parameters[1]).Sprite;
         SelectCharacterSpriteCommand = ReactiveCommand.CreateFromTask(SelectCharacterSpriteCommand_Executed);
-        _spriteEntranceTransition = ((SpriteEntranceScriptParameter)command.Parameters[2]).EntranceTransition;
-        _spriteExitTransition = ((SpriteExitScriptParameter)command.Parameters[3]).ExitTransition;
-        _spriteShakeEffect = ((SpriteShakeScriptParameter)command.Parameters[4]).ShakeEffect;
+        _spriteEntranceTransition = new(((SpriteEntranceScriptParameter)command.Parameters[2]).EntranceTransition);
+        _spriteExitTransition = new(((SpriteExitScriptParameter)command.Parameters[3]).ExitTransition);
+        _spriteShakeEffect = new(((SpriteShakeScriptParameter)command.Parameters[4]).ShakeEffect);
         VoicedLines = new(_window.OpenProject.Items.Where(i => i.Type == ItemDescription.ItemType.Voice).Cast<VoicedLineItem>());
         _voicedLine = ((VoicedLineScriptParameter)command.Parameters[5]).VoiceLine;
         _textVoiceFont = ((DialoguePropertyScriptParameter)command.Parameters[6]).Character;
         _textSpeed = ((DialoguePropertyScriptParameter)command.Parameters[7]).Character;
-        _textEntranceEffect = ((TextEntranceEffectScriptParameter)command.Parameters[8]).EntranceEffect;
+        _textEntranceEffect = new(((TextEntranceEffectScriptParameter)command.Parameters[8]).EntranceEffect);
         _spriteLayer = ((ShortScriptParameter)command.Parameters[9]).Value;
         _dontClearText = ((BoolScriptParameter)command.Parameters[10]).Value;
         _disableLipFlap = ((BoolScriptParameter)command.Parameters[11]).Value;
@@ -159,48 +160,51 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
         }
     }
 
-    public ObservableCollection<string> SpriteEntranceTransitions { get; } = new(Enum.GetNames<SpriteEntranceScriptParameter.SpriteEntranceTransition>());
-    private SpriteEntranceScriptParameter.SpriteEntranceTransition _spriteEntranceTransition;
-    public string SpriteEntranceTransition
+    public ObservableCollection<SpriteEntranceTransitionLocalized> SpriteEntranceTransitions { get; } =
+        new(Enum.GetValues<SpriteEntranceScriptParameter.SpriteEntranceTransition>().Select(e => new SpriteEntranceTransitionLocalized(e)));
+    private SpriteEntranceTransitionLocalized _spriteEntranceTransition;
+    public SpriteEntranceTransitionLocalized SpriteEntranceTransition
     {
-        get => _spriteEntranceTransition.ToString();
+        get => _spriteEntranceTransition;
         set
         {
-            this.RaiseAndSetIfChanged(ref _spriteEntranceTransition, Enum.Parse<SpriteEntranceScriptParameter.SpriteEntranceTransition>(value));
-            ((SpriteEntranceScriptParameter)Command.Parameters[2]).EntranceTransition = _spriteEntranceTransition;
+            this.RaiseAndSetIfChanged(ref _spriteEntranceTransition, value);
+            ((SpriteEntranceScriptParameter)Command.Parameters[2]).EntranceTransition = _spriteEntranceTransition.Entrance;
             Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
-                .Objects[Command.Index].Parameters[2] = (short)_spriteEntranceTransition;
+                .Objects[Command.Index].Parameters[2] = (short)_spriteEntranceTransition.Entrance;
             ScriptEditor.UpdatePreview();
             Script.UnsavedChanges = true;
         }
     }
 
-    public ObservableCollection<string> SpriteExitTransitions { get; } = new(Enum.GetNames<SpriteExitScriptParameter.SpriteExitTransition>());
-    private SpriteExitScriptParameter.SpriteExitTransition _spriteExitTransition;
-    public string SpriteExitTransition
+    public ObservableCollection<SpriteExitTransitionLocalized> SpriteExitTransitions { get; } =
+        new(Enum.GetValues<SpriteExitScriptParameter.SpriteExitTransition>().Select(e => new SpriteExitTransitionLocalized(e)));
+    private SpriteExitTransitionLocalized _spriteExitTransition;
+    public SpriteExitTransitionLocalized SpriteExitTransition
     {
-        get => _spriteExitTransition.ToString();
+        get => _spriteExitTransition;
         set
         {
-            this.RaiseAndSetIfChanged(ref _spriteExitTransition, Enum.Parse<SpriteExitScriptParameter.SpriteExitTransition>(value));
-            ((SpriteExitScriptParameter)Command.Parameters[3]).ExitTransition = _spriteExitTransition;
+            this.RaiseAndSetIfChanged(ref _spriteExitTransition, value);
+            ((SpriteExitScriptParameter)Command.Parameters[3]).ExitTransition = _spriteExitTransition.Exit;
             Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
-                .Objects[Command.Index].Parameters[3] = (short)_spriteExitTransition;
+                .Objects[Command.Index].Parameters[3] = (short)_spriteExitTransition.Exit;
             Script.UnsavedChanges = true;
         }
     }
 
-    public ObservableCollection<string> SpriteShakeEffects { get; } = new(Enum.GetNames<SpriteShakeScriptParameter.SpriteShakeEffect>());
-    private SpriteShakeScriptParameter.SpriteShakeEffect _spriteShakeEffect;
-    public string SpriteShakeEffect
+    public ObservableCollection<SpriteShakeLocalized> SpriteShakeEffects { get; } =
+        new(Enum.GetValues<SpriteShakeScriptParameter.SpriteShakeEffect>().Select(s => new SpriteShakeLocalized(s)));
+    private SpriteShakeLocalized _spriteShakeEffect;
+    public SpriteShakeLocalized SpriteShakeEffect
     {
-        get => _spriteShakeEffect.ToString();
+        get => _spriteShakeEffect;
         set
         {
-            this.RaiseAndSetIfChanged(ref _spriteShakeEffect, Enum.Parse<SpriteShakeScriptParameter.SpriteShakeEffect>(value));
-            ((SpriteShakeScriptParameter)Command.Parameters[4]).ShakeEffect = _spriteShakeEffect;
+            this.RaiseAndSetIfChanged(ref _spriteShakeEffect, value);
+            ((SpriteShakeScriptParameter)Command.Parameters[4]).ShakeEffect = _spriteShakeEffect.Shake;
             Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
-                .Objects[Command.Index].Parameters[4] = (short)_spriteShakeEffect;
+                .Objects[Command.Index].Parameters[4] = (short)_spriteShakeEffect.Shake;
             Script.UnsavedChanges = true;
         }
     }
@@ -248,17 +252,18 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
         }
     }
 
-    public ObservableCollection<string> TextEntranceEffects { get; } = new(Enum.GetNames<TextEntranceEffectScriptParameter.TextEntranceEffect>());
-    private TextEntranceEffectScriptParameter.TextEntranceEffect _textEntranceEffect;
-    public string TextEntranceEffect
+    public ObservableCollection<TextEntranceEffectLocalized> TextEntranceEffects { get; } =
+        new(Enum.GetValues<TextEntranceEffectScriptParameter.TextEntranceEffect>().Select(e => new TextEntranceEffectLocalized(e)));
+    private TextEntranceEffectLocalized _textEntranceEffect;
+    public TextEntranceEffectLocalized TextEntranceEffect
     {
-        get => _textEntranceEffect.ToString();
+        get => _textEntranceEffect;
         set
         {
-            this.RaiseAndSetIfChanged(ref _textEntranceEffect, Enum.Parse<TextEntranceEffectScriptParameter.TextEntranceEffect>(value));
-            ((TextEntranceEffectScriptParameter)Command.Parameters[8]).EntranceEffect = _textEntranceEffect;
+            this.RaiseAndSetIfChanged(ref _textEntranceEffect, value);
+            ((TextEntranceEffectScriptParameter)Command.Parameters[8]).EntranceEffect = _textEntranceEffect.Effect;
             Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
-                .Objects[Command.Index].Parameters[8] = (short)_textEntranceEffect;
+                .Objects[Command.Index].Parameters[8] = (short)_textEntranceEffect.Effect;
             Script.UnsavedChanges = true;
         }
     }
@@ -311,3 +316,25 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
     [GeneratedRegex(@"(\s)""")]
     private static partial Regex MidStringOpenQuotes();
 }
+
+public readonly struct SpriteEntranceTransitionLocalized(SpriteEntranceScriptParameter.SpriteEntranceTransition entrance)
+{
+    public SpriteEntranceScriptParameter.SpriteEntranceTransition Entrance { get; } = entrance;
+    public string DisplayText { get; } = Strings.ResourceManager.GetString(entrance.ToString());
+}
+public readonly struct SpriteExitTransitionLocalized(SpriteExitScriptParameter.SpriteExitTransition exit)
+{
+    public SpriteExitScriptParameter.SpriteExitTransition Exit { get; } = exit;
+    public string DisplayText { get; } = Strings.ResourceManager.GetString(exit.ToString());
+}
+public readonly struct SpriteShakeLocalized(SpriteShakeScriptParameter.SpriteShakeEffect shake)
+{
+    public SpriteShakeScriptParameter.SpriteShakeEffect Shake { get; } = shake;
+    public string DisplayText { get; } = Strings.ResourceManager.GetString(shake.ToString());
+}
+public readonly struct TextEntranceEffectLocalized(TextEntranceEffectScriptParameter.TextEntranceEffect effect)
+{
+    public TextEntranceEffectScriptParameter.TextEntranceEffect Effect { get; } = effect;
+    public string DisplayText { get; } = Strings.ResourceManager.GetString(effect.ToString());
+}
+

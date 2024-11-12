@@ -692,7 +692,7 @@ public class ScriptItem : Item
                         };
                     }
 
-                    if (spriteShakeParam.ShakeEffect != SpriteShakeScriptParameter.SpriteShakeEffect.NONE &&
+                    if (spriteShakeParam.ShakeEffect != SpriteShakeScriptParameter.SpriteShakeEffect.NO_SHAKE &&
                         sprites.ContainsKey(character))
                     {
                         switch (spriteShakeParam.ShakeEffect)

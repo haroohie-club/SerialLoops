@@ -541,7 +541,7 @@
   <data name="Ctrl+Scroll - Scale Image" xml:space="preserve">
     <value>Ctrl+滚轮 - 缩放图片</value>
   </data>
-  <data name="Custom Color" xml:space="preserve">
+  <data name="CUSTOM_COLOR" xml:space="preserve">
     <value>自定义颜色</value>
   </data>
   <data name="Cut" xml:space="preserve">

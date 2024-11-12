@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
+using SerialLoops.Assets;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
 using SerialLoops.Lib.Script.Parameters;
@@ -29,17 +30,18 @@ public class BgmPlayScriptCommandEditorViewModel : ScriptCommandEditorViewModel
         }
     }
 
-    public ObservableCollection<string> Modes { get; } = new(Enum.GetNames<BgmModeScriptParameter.BgmMode>());
-    private BgmModeScriptParameter.BgmMode _mode;
-    public string Mode
+    public ObservableCollection<BgmModeLocalized> Modes { get; } = new(Enum.GetValues<BgmModeScriptParameter.BgmMode>()
+        .Select(m => new BgmModeLocalized(m)));
+    private BgmModeLocalized _mode;
+    public BgmModeLocalized Mode
     {
-        get => _mode.ToString();
+        get => _mode;
         set
         {
-            this.RaiseAndSetIfChanged(ref _mode, Enum.Parse<BgmModeScriptParameter.BgmMode>(value));
-            ((BgmModeScriptParameter)Command.Parameters[1]).Mode = _mode;
+            this.RaiseAndSetIfChanged(ref _mode, value);
+            ((BgmModeScriptParameter)Command.Parameters[1]).Mode = _mode.Mode;
             Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
-                .Objects[Command.Index].Parameters[1] = (short)_mode;
+                .Objects[Command.Index].Parameters[1] = (short)_mode.Mode;
             Script.UnsavedChanges = true;
         }
     }
@@ -92,9 +94,15 @@ public class BgmPlayScriptCommandEditorViewModel : ScriptCommandEditorViewModel
         Bgms = new(window.OpenProject.Items.Where(i => i.Type == ItemDescription.ItemType.BGM)
             .Cast<BackgroundMusicItem>());
         _music = ((BgmScriptParameter)Command.Parameters[0]).Bgm;
-        _mode = ((BgmModeScriptParameter)Command.Parameters[1]).Mode;
+        _mode = new(((BgmModeScriptParameter)Command.Parameters[1]).Mode);
         _volume = ((ShortScriptParameter)Command.Parameters[2]).Value;
         _fadeInTime = ((ShortScriptParameter)Command.Parameters[3]).Value;
         _fadeOutTime = ((ShortScriptParameter)Command.Parameters[4]).Value;
     }
+}
+
+public readonly struct BgmModeLocalized(BgmModeScriptParameter.BgmMode mode)
+{
+    public string DisplayString { get; } = Strings.ResourceManager.GetString(mode.ToString());
+    public BgmModeScriptParameter.BgmMode Mode { get; } = mode;
 }
