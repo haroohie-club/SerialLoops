@@ -1,15 +1,9 @@
 name: Serial Loops PR
 run-name: PR for ${{ github.actor }} - ${{ github.ref_name }}
 on:
-  pull_request:
-    types:
-      - opened
-      - reopened
-    branches:
-      - 'main'
-      - 'Avalonia'
   push:
     branches:
+      - 'main'
       - 'Avalonia'
 
 jobs:
