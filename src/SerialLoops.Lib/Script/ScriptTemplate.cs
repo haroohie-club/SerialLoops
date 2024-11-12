@@ -7,14 +7,15 @@ using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script.Parameters;
 using SerialLoops.Lib.Util;
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
 namespace SerialLoops.Lib.Script;
 
 public class ScriptTemplate
 {
-    public string? Name { get; set; }
-    public string? Description { get; set; }
-    public TemplateSection[]? Sections { get; set; }
+    public string Name { get; set; }
+    public string Description { get; set; }
+    public TemplateSection[] Sections { get; set; }
 
     public ScriptTemplate()
     {
@@ -59,8 +60,8 @@ public class ScriptTemplate
 
 public class TemplateSection
 {
-    public string? Name { get; set; }
-    public TemplateScriptCommand[]? Commands { get; set; }
+    public string Name { get; set; }
+    public TemplateScriptCommand[] Commands { get; set; }
 
     public TemplateSection()
     {
@@ -84,7 +85,7 @@ public class TemplateScriptCommand
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public EventFile.CommandVerb Verb { get; set; }
 
-    public TemplateScriptParameter[] Parameters { get; set; } = [];
+    public TemplateScriptParameter[] Parameters { get; set; }
 
     public TemplateScriptCommand()
     {
@@ -109,6 +110,17 @@ public class TemplateScriptParameter
     public ScriptParameter.ParameterType ParameterType { get; set; }
     public string ParameterName { get; set; }
     public string? Value { get; set; }
+
+    public TemplateScriptParameter()
+    {
+    }
+
+    public TemplateScriptParameter(ScriptParameter.ParameterType type, string name, string value)
+    {
+        ParameterType = type;
+        ParameterName = name;
+        Value = value;
+    }
 
     public TemplateScriptParameter(ScriptParameter parameter, Project project)
     {
