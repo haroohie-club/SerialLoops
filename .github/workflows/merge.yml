@@ -1,10 +1,7 @@
-name: Serial Loops PR
-run-name: PR for ${{ github.actor }} - ${{ github.ref_name }}
+name: Serial Loops Merge
+run-name: Validation for ${{ github.actor }} - ${{ github.ref_name }}
 on:
-  pull_request:
-    types:
-      - opened
-      - reopened
+  push:
     branches:
       - 'main'
       - 'Avalonia'
@@ -37,4 +34,4 @@ jobs:
       - name: Run tests
         run: dotnet test test/SerialLoops.Tests.Headless/SerialLoops.Tests.Headless.csproj -f ${{ matrix.platform.targetFramework }}
         env:
-          ROM_URI: ${{ vars.CHOKU_ROM_URI }}
+          ROM_URI: ${{ secrets.CHOKU_ROM_URI }}

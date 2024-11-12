@@ -26,20 +26,10 @@ jobs:
   steps:
   - checkout: self
     clean: true
-    
+
   - task: DotNetCoreCLI@2
     inputs:
       command: 'build'
       projects: $(Build.SourcesDirectory)/src/SerialLoops/SerialLoops.csproj
       arguments: -f $(targetFramework)
     displayName: Build project
-
-  - task: DotNetCoreCLI@2
-    inputs:
-      command: 'test'
-      projects: $(Build.SourcesDirectory)/test/SerialLoops.Tests.Headless/SerialLoops.Tests.Headless.csproj
-      arguments: -f $(targetFramework)
-      publishTestResults: true
-    env:
-      ROM_URI: $(ChokuRomUri)
-    displayName: Run tests
