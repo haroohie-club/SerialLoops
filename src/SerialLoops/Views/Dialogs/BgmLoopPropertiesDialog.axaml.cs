@@ -16,20 +16,20 @@ public partial class BgmLoopPropertiesDialog : Window
         base.OnLoaded(e);
 
         // Order here matters. Do not change the order. I do not know why. Please don't change the order.
-        EndSampleSlider.Value = (double)EndSampleBox.Value;
-        StartSampleSlider.Value = (double)StartSampleBox.Value;
+        EndSampleSlider.Value = (double)(EndSampleBox.Value ?? 0);
+        StartSampleSlider.Value = (double)(StartSampleBox.Value ?? 0);
     }
 
     protected override void OnClosing(WindowClosingEventArgs e)
     {
         base.OnClosing(e);
 
-        ((BgmLoopPropertiesDialogViewModel)DataContext).LoopPreviewPlayer.Stop();
+        ((BgmLoopPropertiesDialogViewModel)DataContext!).LoopPreviewPlayer.Stop();
     }
 
     private void StartSlider_ValueChanged(object? sender, Avalonia.Controls.Primitives.RangeBaseValueChangedEventArgs e)
     {
-        BgmLoopPropertiesDialogViewModel viewModel = (BgmLoopPropertiesDialogViewModel)DataContext;
+        BgmLoopPropertiesDialogViewModel viewModel = (BgmLoopPropertiesDialogViewModel)DataContext!;
         if (StartSampleSlider.Value > EndSampleSlider.Value)
         {
             StartSampleSlider.ValueChanged -= StartSlider_ValueChanged;
@@ -45,7 +45,7 @@ public partial class BgmLoopPropertiesDialog : Window
 
     private void EndSlider_ValueChanged(object? sender, Avalonia.Controls.Primitives.RangeBaseValueChangedEventArgs e)
     {
-        BgmLoopPropertiesDialogViewModel viewModel = (BgmLoopPropertiesDialogViewModel)DataContext;
+        BgmLoopPropertiesDialogViewModel viewModel = (BgmLoopPropertiesDialogViewModel)DataContext!;
         if (EndSampleSlider.Value < StartSampleSlider.Value)
         {
             EndSampleSlider.ValueChanged -= EndSlider_ValueChanged;

@@ -33,6 +33,7 @@ using SerialLoops.Views;
 using SerialLoops.Views.Dialogs;
 using SerialLoops.Views.Panels;
 using SkiaSharp;
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
 namespace SerialLoops.ViewModels;
 
@@ -49,12 +50,12 @@ public partial class MainWindowViewModel : ViewModelBase
     public MainWindow Window { get; set; }
     public ProjectsCache ProjectsCache { get; set; }
     public Config? CurrentConfig { get; set; }
-    public Project OpenProject { get; set; }
+    public Project? OpenProject { get; set; }
     public OpenProjectPanel ProjectPanel { get; set; }
     public Dictionary<MenuHeader, NativeMenuItem> WindowMenu { get; set; }
     public Toolbar ToolBar => Window.ToolBar;
-    public EditorTabsPanelViewModel EditorTabs { get; set; }
-    public ItemExplorerPanelViewModel ItemExplorer { get; set; }
+    public EditorTabsPanelViewModel? EditorTabs { get; set; }
+    public ItemExplorerPanelViewModel? ItemExplorer { get; set; }
 
     public NativeMenuItem RecentProjectsMenu { get; set; } = new(Strings.Recent_Projects);
     public LoopyLogger Log { get; set; }
@@ -62,7 +63,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private SKBitmap _blankNameplate, _blankNameplateBaseArrow;
     private SKTypeface _msGothicHaruhi;
 
-    public string ShutdownUpdateUrl { get; set; } = null;
+    public string? ShutdownUpdateUrl { get; set; } = null;
 
     public ICommand NewProjectCommand { get; private set; }
     public ICommand OpenProjectCommand { get; private set; }
@@ -126,33 +127,33 @@ public partial class MainWindowViewModel : ViewModelBase
             {
                 Process.Start(new ProcessStartInfo
                 {
-                    FileName = Path.Combine(CurrentConfig.UserDirectory, "Logs", "SerialLoops.log"),
+                    FileName = Path.Combine(CurrentConfig!.UserDirectory, "Logs", "SerialLoops.log"),
                     UseShellExecute = true,
                 });
             }
             catch (Exception)
             {
-                Log.LogError("Failed to open log file directly. " +
-                             $"Logs can be found at {Path.Combine(CurrentConfig.UserDirectory, "Logs", "SerialLoops.log")}");
+                Log!.LogError("Failed to open log file directly. " +
+                             $"Logs can be found at {Path.Combine(CurrentConfig!.UserDirectory, "Logs", "SerialLoops.log")}");
             }
         });
     }
 
-    public async void Initialize(MainWindow window, IConfigFactory configFactory = null)
+    public async void Initialize(MainWindow window, IConfigFactory? configFactory = null)
     {
         Window = window;
         Log = new(Window);
         configFactory ??= new ConfigFactory();
         CurrentConfig = configFactory.LoadConfig((s) => s, Log);
-        Strings.Culture = new(CurrentConfig.CurrentCultureName);
+        Strings.Culture = new(CurrentConfig!.CurrentCultureName);
         Log.Initialize(CurrentConfig);
 
         var fontStyle = new Style(x => x.OfType<Window>());
         var font = FontFamily.Parse(string.IsNullOrEmpty(CurrentConfig.DisplayFont) ? Strings.Default_Font : CurrentConfig.DisplayFont);
         fontStyle.Add(new Setter(Avalonia.Controls.Primitives.TemplatedControl.FontFamilyProperty, font));
-        Application.Current.Styles.Add(fontStyle);
+        Application.Current!.Styles.Add(fontStyle);
 
-        ProjectsCache = ProjectsCache.LoadCache(CurrentConfig, Log);
+        ProjectsCache = ProjectsCache.LoadCache(CurrentConfig, Log)!;
         UpdateRecentProjects();
 
         if (CurrentConfig.CheckForUpdates)
@@ -160,7 +161,7 @@ public partial class MainWindowViewModel : ViewModelBase
             new UpdateChecker(this).Check();
         }
 
-        if (CurrentConfig.AutoReopenLastProject && ProjectsCache.RecentProjects.Count > 0)
+        if (CurrentConfig.AutoReopenLastProject && ProjectsCache.RecentProjects!.Count > 0)
         {
             await OpenProjectFromPath(ProjectsCache.RecentProjects[0]);
         }
@@ -181,7 +182,7 @@ public partial class MainWindowViewModel : ViewModelBase
     internal void OpenProjectView(Project project, IProgressTracker tracker)
     {
         EditorTabs = new(this, project, Log);
-        ItemExplorer = new(OpenProject, EditorTabs, Log);
+        ItemExplorer = new(OpenProject!, EditorTabs, Log);
         ProjectPanel = new()
         {
             DataContext = new OpenProjectPanelViewModel(ItemExplorer, EditorTabs),
@@ -212,7 +213,7 @@ public partial class MainWindowViewModel : ViewModelBase
         Window.MainContent.Content = ProjectPanel;
     }
 
-    public async Task<bool> CloseProject_Executed(WindowClosingEventArgs e)
+    public async Task<bool> CloseProject_Executed(WindowClosingEventArgs? e)
     {
         bool cancel = false;
         if (OpenProject is not null)
@@ -254,7 +255,7 @@ public partial class MainWindowViewModel : ViewModelBase
             }
 
             // Record open items
-            List<string> openItems = EditorTabs.Tabs.Cast<EditorViewModel>()
+            List<string> openItems = EditorTabs!.Tabs.Cast<EditorViewModel>()
                 .Select(e => e.Description)
                 .Select(i => i.Name)
                 .ToList();
@@ -267,7 +268,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public async Task ApplyHacksCommand_Executed()
     {
-        AsmHacksDialogViewModel hacksModel = new(OpenProject, CurrentConfig, Log);
+        AsmHacksDialogViewModel hacksModel = new(OpenProject!, CurrentConfig, Log);
         AsmHacksDialog hacksDialog = new(hacksModel);
         await hacksDialog.ShowDialog(Window);
     }
@@ -276,7 +277,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         ProjectSettingsDialogViewModel projectSettingsDialogViewModel = new();
         ProjectSettingsDialog projectSettingsDialog = new();
-        projectSettingsDialogViewModel.Initialize(projectSettingsDialog, OpenProject.Settings, Log);
+        projectSettingsDialogViewModel.Initialize(projectSettingsDialog, OpenProject!.Settings, Log);
         projectSettingsDialog.DataContext = projectSettingsDialogViewModel;
         await projectSettingsDialog.ShowDialog(Window);
     }
@@ -296,7 +297,7 @@ public partial class MainWindowViewModel : ViewModelBase
         ItemExplorer = null;
         ToolBar.Items.Clear();
 
-        NativeMenu menu = NativeMenu.GetMenu(Window);
+        NativeMenu menu = NativeMenu.GetMenu(Window)!;
         menu.Items.Remove(WindowMenu[MenuHeader.PROJECT]);
         WindowMenu.Remove(MenuHeader.PROJECT);
         menu.Items.Remove(WindowMenu[MenuHeader.TOOLS]);
@@ -312,7 +313,7 @@ public partial class MainWindowViewModel : ViewModelBase
         RecentProjectsMenu.Menu = [];
 
         List<string> projectsToRemove = [];
-        foreach (string project in ProjectsCache.RecentProjects)
+        foreach (string project in ProjectsCache.RecentProjects!)
         {
             NativeMenuItem recentProject = new()
             {
@@ -323,7 +324,7 @@ public partial class MainWindowViewModel : ViewModelBase
             };
             if (!File.Exists(project))
             {
-                if (CurrentConfig.RemoveMissingProjects)
+                if (CurrentConfig!.RemoveMissingProjects)
                 {
                     projectsToRemove.Add(project);
                     continue;
@@ -342,7 +343,7 @@ public partial class MainWindowViewModel : ViewModelBase
         projectsToRemove.ForEach(project =>
         {
             ProjectsCache.RecentProjects.Remove(project);
-            ProjectsCache.RecentWorkspaces.Remove(project);
+            ProjectsCache.RecentWorkspaces!.Remove(project);
         });
         ProjectsCache.Save(Log);
     }
@@ -373,7 +374,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public async Task OpenProjectCommand_Executed()
     {
-        IStorageFile projectFile = await Window.ShowOpenFilePickerAsync(Strings.Open_Project, [new FilePickerFileType(Strings.Serial_Loops_Project) { Patterns = [$"*.{Project.PROJECT_FORMAT}"] }], CurrentConfig.ProjectsDirectory);
+        IStorageFile? projectFile = await Window.ShowOpenFilePickerAsync(Strings.Open_Project, [new FilePickerFileType(Strings.Serial_Loops_Project) { Patterns = [$"*.{Project.PROJECT_FORMAT}"] }], CurrentConfig!.ProjectsDirectory);
         if (projectFile is not null)
         {
             await OpenProjectFromPath(projectFile.Path.LocalPath);
@@ -416,19 +417,19 @@ public partial class MainWindowViewModel : ViewModelBase
                 switch (result.BadArchive)
                 {
                     case "dat.bin":
-                        File.Delete(Path.Combine(OpenProject.BaseDirectory, "assets", "data",
+                        File.Delete(Path.Combine(OpenProject!.BaseDirectory, "assets", "data",
                             $"{result.BadFileIndex:X3}.s"));
                         break;
 
                     case "grp.bin":
-                        File.Delete(Path.Combine(OpenProject.BaseDirectory, "assets", "graphics",
+                        File.Delete(Path.Combine(OpenProject!.BaseDirectory, "assets", "graphics",
                             $"{result.BadFileIndex:X3}.png"));
                         File.Delete(Path.Combine(OpenProject.BaseDirectory, "assets", "graphics",
                             $"{result.BadFileIndex:X3}.gi"));
                         break;
 
                     case "evt.bin":
-                        File.Delete(Path.Combine(OpenProject.BaseDirectory, "assets", "events",
+                        File.Delete(Path.Combine(OpenProject!.BaseDirectory, "assets", "events",
                             $"{result.BadFileIndex:X3}.s"));
                         break;
                 }
@@ -503,17 +504,17 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             {
                 "GRPBIN",
-                OpenProject.Grp.GetSourceInclude().Split('\n').Where(s => !string.IsNullOrEmpty(s))
+                OpenProject.Grp!.GetSourceInclude().Split('\n').Where(s => !string.IsNullOrEmpty(s))
                     .Select(i => new IncludeEntry(i)).ToArray()
             },
             {
                 "DATBIN",
-                OpenProject.Dat.GetSourceInclude().Split('\n').Where(s => !string.IsNullOrEmpty(s))
+                OpenProject.Dat!.GetSourceInclude().Split('\n').Where(s => !string.IsNullOrEmpty(s))
                     .Select(i => new IncludeEntry(i)).ToArray()
             },
             {
                 "EVTBIN",
-                OpenProject.Evt.GetSourceInclude().Split('\n').Where(s => !string.IsNullOrEmpty(s))
+                OpenProject.Evt!.GetSourceInclude().Split('\n').Where(s => !string.IsNullOrEmpty(s))
                     .Select(i => new IncludeEntry(i)).ToArray()
             }
         };
@@ -525,7 +526,7 @@ public partial class MainWindowViewModel : ViewModelBase
                 case ItemDescription.ItemType.Background:
                     if (!savedExtra)
                     {
-                        IO.WriteStringFile(Path.Combine("assets", "data", $"{OpenProject.Extra.Index:X3}.s"),
+                        IO.WriteStringFile(Path.Combine("assets", "data", $"{OpenProject.Extra!.Index:X3}.s"),
                             OpenProject.Extra.GetSource([]), OpenProject, Log);
                         savedExtra = true;
                     }
@@ -535,7 +536,7 @@ public partial class MainWindowViewModel : ViewModelBase
                 case ItemDescription.ItemType.BGM:
                     if (!savedExtra)
                     {
-                        IO.WriteStringFile(Path.Combine("assets", "data", $"{OpenProject.Extra.Index:X3}.s"),
+                        IO.WriteStringFile(Path.Combine("assets", "data", $"{OpenProject.Extra!.Index:X3}.s"),
                             OpenProject.Extra.GetSource([]), OpenProject, Log);
                         savedExtra = true;
                     }
@@ -543,7 +544,7 @@ public partial class MainWindowViewModel : ViewModelBase
                 case ItemDescription.ItemType.Character_Sprite:
                     if (!savedChrData)
                     {
-                        IO.WriteStringFile(Path.Combine("assets", "data", $"{OpenProject.ChrData.Index:X3}.s"),
+                        IO.WriteStringFile(Path.Combine("assets", "data", $"{OpenProject.ChrData!.Index:X3}.s"),
                             OpenProject.ChrData.GetSource(new Dictionary<string, IncludeEntry[]>()
                             {
                                 { "GRPBIN", OpenProject.Grp.GetSourceInclude().Split('\n').Where(l => !string.IsNullOrWhiteSpace(l)).Select(l => new IncludeEntry(l)).ToArray() }
@@ -563,9 +564,9 @@ public partial class MainWindowViewModel : ViewModelBase
                     if (!savedEventTable)
                     {
                         OpenProject.RecalculateEventTable();
-                        IO.WriteStringFile(Path.Combine("assets", "events", $"{OpenProject.EventTableFile.Index:X3}.s"), OpenProject.EventTableFile.GetSource(includes), OpenProject, Log);
+                        IO.WriteStringFile(Path.Combine("assets", "events", $"{OpenProject.EventTableFile!.Index:X3}.s"), OpenProject.EventTableFile.GetSource(includes), OpenProject, Log);
                     }
-                    EventFile evt = ((ScriptItem)item).Event;
+                    EventFile evt = ((ScriptItem)item).Event!;
                     evt.CollectGarbage();
                     IO.WriteStringFile(Path.Combine("assets", "events", $"{evt.Index:X3}.s"), evt.GetSource(includes), OpenProject, Log);
                     break;
@@ -595,7 +596,7 @@ public partial class MainWindowViewModel : ViewModelBase
             nameplateCanvas.Flush();
             speakerCanvas.Flush();
             MemoryStream nameplateStream = new();
-            OpenProject.NameplateBitmap.Encode(nameplateStream, SKEncodedImageFormat.Png, 1);
+            OpenProject.NameplateBitmap!.Encode(nameplateStream, SKEncodedImageFormat.Png, 1);
             IO.WriteBinaryFile(Path.Combine("assets", "graphics", "B87.png"), nameplateStream.ToArray(),
                 OpenProject, Log);
             IO.WriteStringFile(Path.Combine("assets", "graphics", "B87.gi"), JsonSerializer.Serialize(OpenProject.NameplateInfo),
@@ -604,13 +605,13 @@ public partial class MainWindowViewModel : ViewModelBase
 
         if (changedTopics)
         {
-            IO.WriteStringFile(Path.Combine("assets", "events", $"{OpenProject.TopicFile.Index:X3}.s"),
+            IO.WriteStringFile(Path.Combine("assets", "events", $"{OpenProject.TopicFile!.Index:X3}.s"),
                 OpenProject.TopicFile.GetSource([]), OpenProject, Log);
         }
 
         if (changedSubs)
         {
-            IO.WriteStringFile(Path.Combine("assets", "events", $"{OpenProject.VoiceMap.Index:X3}.s"),
+            IO.WriteStringFile(Path.Combine("assets", "events", $"{OpenProject.VoiceMap!.Index:X3}.s"),
                 OpenProject.VoiceMap.GetSource(), OpenProject, Log);
         }
     }
@@ -662,7 +663,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         if (OpenProject is not null)
         {
-            if (string.IsNullOrWhiteSpace(CurrentConfig.EmulatorPath) && string.IsNullOrWhiteSpace(CurrentConfig.EmulatorFlatpak))
+            if (string.IsNullOrWhiteSpace(CurrentConfig!.EmulatorPath) && string.IsNullOrWhiteSpace(CurrentConfig.EmulatorFlatpak))
             {
                 Log.LogWarning("Attempted to build and run project while no emulator path/flatpak was set.");
                 await Window.ShowMessageBoxAsync(Strings.No_Emulator_Path, Strings.No_emulator_path_has_been_set__nPlease_set_the_path_to_a_Nintendo_DS_emulator_in_Preferences_to_use_Build___Run_,
@@ -722,9 +723,9 @@ public partial class MainWindowViewModel : ViewModelBase
             // Skip adding the new menu items if they're already here
             return;
         }
-        NativeMenu menu = NativeMenu.GetMenu(Window);
+        NativeMenu menu = NativeMenu.GetMenu(Window)!;
         int insertionPoint = menu.Items.Count;
-        if (((NativeMenuItem)menu.Items.Last()).Header.Equals(Strings._Help))
+        if (((NativeMenuItem)menu.Items.Last()).Header!.Equals(Strings._Help))
         {
             insertionPoint--;
         }

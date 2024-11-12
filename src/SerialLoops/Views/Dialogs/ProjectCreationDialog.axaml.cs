@@ -13,7 +13,7 @@ public partial class ProjectCreationDialog : Window
         NameBox.AddHandler(KeyDownEvent, NameBox_KeyDown, RoutingStrategies.Tunnel);
     }
 
-    private void NameBox_KeyDown(object sender, KeyEventArgs e)
+    private void NameBox_KeyDown(object? sender, KeyEventArgs e)
     {
         if (!string.IsNullOrEmpty(e.KeySymbol) && !AllowedCharactersRegex().IsMatch(e.KeySymbol) && e.Key != Key.Back)
         {

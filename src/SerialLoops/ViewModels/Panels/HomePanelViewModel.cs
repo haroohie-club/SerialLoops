@@ -7,6 +7,7 @@ using SerialLoops.Assets;
 using SerialLoops.Controls;
 using SerialLoops.Utility;
 using SerialLoops.Views.Panels;
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
 namespace SerialLoops.ViewModels.Panels;
 
@@ -20,17 +21,17 @@ public partial class HomePanelViewModel : ViewModelBase
     {
         MainWindow = mainWindow;
         _homePanel = homePanel;
-        foreach (string project in MainWindow.ProjectsCache.RecentProjects)
+        foreach (string project in MainWindow.ProjectsCache.RecentProjects!)
         {
             bool missing = !File.Exists(project);
-            if (missing && MainWindow.CurrentConfig.RemoveMissingProjects)
+            if (missing && MainWindow.CurrentConfig!.RemoveMissingProjects)
             {
                 continue;
             }
             LinkButton linkButton = new()
             {
                 Text = Path.GetFileName(project),
-                OnClick = (sender, args) =>
+                OnClick = (_, _) =>
                 {
                     MainWindow.OpenRecentProjectCommand.Execute(project);
                 },
@@ -46,7 +47,7 @@ public partial class HomePanelViewModel : ViewModelBase
             if (missing)
             {
                 MainWindow.Window.TryFindResource("DisabledLinkColor", MainWindow.Window.ActualThemeVariant, out object? brush);
-                panel.Children.Add(new TextBlock { Text = Strings.Missing_ + $" {project}", Foreground = (ImmutableSolidColorBrush)brush });
+                panel.Children.Add(new TextBlock { Text = Strings.Missing_ + $" {project}", Foreground = (ImmutableSolidColorBrush)brush! });
             }
             _homePanel.RecentsPanel.Children.Add(ControlGenerator.GetControlWithIcon(panel, !missing ? "AppIconSimple" : "Warning", Log));
         }

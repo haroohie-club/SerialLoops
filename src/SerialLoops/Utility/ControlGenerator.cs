@@ -11,7 +11,7 @@ namespace SerialLoops.Utility;
 
 public static class ControlGenerator
 {
-    public static Bitmap GetIcon(string iconName, ILogger log, int size = 100)
+    public static Bitmap? GetIcon(string iconName, ILogger log, int size = 100)
     {
         try
         {
@@ -25,12 +25,12 @@ public static class ControlGenerator
         }
     }
 
-    public static SvgImage GetVectorIcon(string iconName, ILogger log)
+    public static SvgImage? GetVectorIcon(string iconName, ILogger log)
     {
         try
         {
             var path = $"avares://SerialLoops/Assets/Icons/{iconName}.svg";
-            return new SvgImage { Source = SvgSource.Load(path, new Uri(path)) };
+            return new() { Source = SvgSource.Load(path, new Uri(path)) };
         }
         catch (Exception ex)
         {
@@ -39,11 +39,11 @@ public static class ControlGenerator
         }
     }
 
-    public static Avalonia.Svg.Svg GetVectorIcon(string iconName, ILogger log, int size = 100)
+    public static Avalonia.Svg.Svg? GetVectorIcon(string iconName, ILogger log, int size = 100)
     {
         try
         {
-            return new Avalonia.Svg.Svg(new Uri($"avares://SerialLoops/Assets/Icons/{iconName}.svg"))
+            return new(new Uri($"avares://SerialLoops/Assets/Icons/{iconName}.svg"))
             {
                 Path = $"avares://SerialLoops/Assets/Icons/{iconName}.svg",
                 Width = size,
@@ -71,13 +71,17 @@ public static class ControlGenerator
             VerticalAlignment = VerticalAlignment.Center,
             Spacing = 5,
         };
-        panel.Children.Add(GetVectorIcon(iconName, log, size: 16));
+        Avalonia.Svg.Svg? vectorIcon = GetVectorIcon(iconName, log, size: 16);
+        if (vectorIcon is not null)
+        {
+            panel.Children.Add(vectorIcon);
+        }
         panel.Children.Add(control);
         return panel;
     }
 
     internal static TextBlock GetTextHeader(string text, int size = 14)
     {
-        return new TextBlock { Text = text, FontWeight = FontWeight.Bold, FontSize = size };
+        return new() { Text = text, FontWeight = FontWeight.Bold, FontSize = size };
     }
 }

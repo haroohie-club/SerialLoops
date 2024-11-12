@@ -14,7 +14,7 @@ public class ToggleDialogueScriptCommandEditorViewModel(ScriptItemCommand comman
         {
             this.RaiseAndSetIfChanged(ref _dialogueVisible, value);
             ((BoolScriptParameter)Command.Parameters[0]).Value = _dialogueVisible;
-            Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
+            Script.Event!.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
                 .Objects[Command.Index].Parameters[0] = _dialogueVisible
                 ? ((BoolScriptParameter)Command.Parameters[0]).TrueValue
                 : ((BoolScriptParameter)Command.Parameters[0]).FalseValue;

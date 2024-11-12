@@ -76,8 +76,8 @@ public class ProjectRequiredTests
 
     private static (int Index, ITreeItem Item) GetTreeItemRowIndex(OpenProjectPanelViewModel openProjectViewModel, string itemName)
     {
-        ITreeItem item = (ITreeItem)openProjectViewModel.Explorer.Source.Rows.FirstOrDefault(i => ((ITreeItem)i.Model).Text == itemName).Model;
-        return (openProjectViewModel.Explorer.Source.Rows.ToList().FindIndex(i => ((ITreeItem)i.Model).Text == itemName), item);
+        ITreeItem item = (ITreeItem)openProjectViewModel.Explorer.Source.Rows.FirstOrDefault(i => ((ITreeItem)i.Model!).Text == itemName)!.Model!;
+        return (openProjectViewModel.Explorer.Source.Rows.ToList().FindIndex(i => ((ITreeItem)i.Model!).Text == itemName), item)!;
     }
 
     [AvaloniaTest]
@@ -119,8 +119,8 @@ public class ProjectRequiredTests
         await Task.Delay(TimeSpan.FromSeconds(15)); // Give us time for project creation to complete
         mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(ProjectCreationTest), ref currentFrame);
 
-        await mainWindowViewModel.OpenProjectFromPath(Path.Combine(mainWindowViewModel.CurrentConfig.ProjectsDirectory, _uiVals.ProjectName, $"{_uiVals.ProjectName}.slproj"));
-        string createdProjectPath = mainWindowViewModel.OpenProject.MainDirectory;
+        await mainWindowViewModel.OpenProjectFromPath(Path.Combine(mainWindowViewModel.CurrentConfig!.ProjectsDirectory, _uiVals.ProjectName, $"{_uiVals.ProjectName}.slproj"));
+        string createdProjectPath = mainWindowViewModel.OpenProject!.MainDirectory;
         _dirsToDelete.Add(createdProjectPath);
 
         // Verify that the project panel is open
@@ -173,8 +173,8 @@ public class ProjectRequiredTests
         _dirsToDelete.Add(mainWindowViewModel.OpenProject.MainDirectory);
         mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(BackgroundEditor_CanEditCgNames), ref currentFrame);
 
-        OpenProjectPanel openProjectPanel = (OpenProjectPanel)mainWindow.MainContent.Content;
-        OpenProjectPanelViewModel openProjectViewModel = (OpenProjectPanelViewModel)openProjectPanel.DataContext;
+        OpenProjectPanel openProjectPanel = (OpenProjectPanel)mainWindow.MainContent.Content!;
+        OpenProjectPanelViewModel openProjectViewModel = (OpenProjectPanelViewModel)openProjectPanel.DataContext!;
 
         ItemExplorerPanel explorer = openProjectPanel.ItemExplorer;
         EditorTabsPanel tabs = openProjectPanel.EditorTabs;
@@ -184,11 +184,11 @@ public class ProjectRequiredTests
         mainWindow.TabToExplorer();
 
         mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(BackgroundEditor_CanEditCgNames), ref currentFrame);
-        explorer.Viewer.RowSelection.Select(backgroundsTreeItemIndex);
+        explorer.Viewer.RowSelection!.Select(backgroundsTreeItemIndex);
         mainWindow.KeyPressQwerty(PhysicalKey.ArrowRight, RawInputModifiers.None);
         mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(BackgroundEditor_CanEditCgNames), ref currentFrame);
         ItemDescription firstBg = mainWindowViewModel.OpenProject.Items.First(i => i.Type == ItemDescription.ItemType.Background);
-        explorer.Viewer.RowSelection.Select(new(backgroundsTreeItemIndex, backgroundTreeItem.Children.ToList().FindIndex(i => i.Text.Equals(firstBg.DisplayName))));
+        explorer.Viewer.RowSelection.Select(new(backgroundsTreeItemIndex, backgroundTreeItem.Children!.ToList().FindIndex(i => i.Text.Equals(firstBg.DisplayName))));
         mainWindow.KeyPressQwerty(PhysicalKey.Enter, RawInputModifiers.None);
         mainWindow.KeyReleaseQwerty(PhysicalKey.Enter, RawInputModifiers.None);
         mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(BackgroundEditor_CanEditCgNames), ref currentFrame);
@@ -200,7 +200,7 @@ public class ProjectRequiredTests
 
         // Time to select a CG
         ItemDescription firstCg = mainWindowViewModel.OpenProject.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).BackgroundType == HaruhiChokuretsuLib.Archive.Data.BgType.TEX_CG);
-        explorer.Viewer.RowSelection.Select(new(backgroundsTreeItemIndex, backgroundTreeItem.Children.ToList().FindIndex(i => i.Text.Equals(firstCg.DisplayName))));
+        explorer.Viewer.RowSelection.Select(new(backgroundsTreeItemIndex, backgroundTreeItem.Children!.ToList().FindIndex(i => i.Text.Equals(firstCg.DisplayName))));
         mainWindow.KeyPressQwerty(PhysicalKey.Enter, RawInputModifiers.None);
         mainWindow.KeyReleaseQwerty(PhysicalKey.Enter, RawInputModifiers.None);
         mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(BackgroundEditor_CanEditCgNames), ref currentFrame);
@@ -210,19 +210,18 @@ public class ProjectRequiredTests
             Assert.That(tabs.Tabs.SelectedItem, Is.TypeOf<BackgroundEditorViewModel>());
         });
 
-        TextBox cgNameBox = tabs.FindLogicalDescendantOfType<TextBox>();
+        TextBox cgNameBox = tabs.FindLogicalDescendantOfType<TextBox>()!;
         cgNameBox.Focus();
         string myExWifeStillMissesMe = "...but her aim is getting better!";
         mainWindow.KeyTextInput(myExWifeStillMissesMe);
         mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(BackgroundEditor_CanEditCgNames), ref currentFrame);
         bool foundTab = false;
-        TextBlock tabTitleBlock = null;
+        TextBlock? tabTitleBlock = null;
         foreach (ILogical logical in tabs.GetLogicalDescendants())
         {
             if (logical is DragTabItem t && !foundTab)
             {
                 foundTab = true;
-                continue;
             }
             else if (logical is DragTabItem)
             {
@@ -230,7 +229,7 @@ public class ProjectRequiredTests
                 break;
             }
         }
-        string extraFile = Path.Combine(mainWindowViewModel.OpenProject.IterativeDirectory, "assets", "data", $"{mainWindowViewModel.OpenProject.Extra.Index:X3}.s");
+        string extraFile = Path.Combine(mainWindowViewModel.OpenProject.IterativeDirectory, "assets", "data", $"{mainWindowViewModel.OpenProject.Extra!.Index:X3}.s");
         Assert.Multiple(() =>
         {
             Assert.That(tabTitleBlock?.Text, Is.EqualTo($"* {firstCg.DisplayName}"));
@@ -260,7 +259,7 @@ public class ProjectRequiredTests
         ConfigFactoryMock configFactory = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"config-{nameof(AsmHacksDialog_ApplyTest)}_{buttonName}.json"));
         TestConsoleLogger log = new();
         string? projectName = $"Headless_{nameof(AsmHacksDialog_ApplyTest)}_{buttonName}";
-        Config? config = configFactory.LoadConfig(s => s, log);
+        Config config = configFactory.LoadConfig(s => s, log)!;
         config.UseDocker = true;
         int currentFrame = 0;
         Project project = new(projectName, "en", config, (s) => s, log);
@@ -270,7 +269,7 @@ public class ProjectRequiredTests
         {
             try
             {
-                Lib.IO.OpenRom(project, _uiVals.RomLoc, log, tracker);
+                Lib.IO.OpenRom(project, _uiVals!.RomLoc, log, tracker);
                 break;
             }
             catch (IOException)
@@ -293,7 +292,7 @@ public class ProjectRequiredTests
 
         AsmHack changeOpModeHack = config.Hacks.First(h => h.Name == "Change OP_MODE Chibi");
         viewModel.SelectedHack = changeOpModeHack;
-        dialog.DescriptionPanel.FindLogicalDescendantOfType<ComboBox>().SelectedIndex = 2;
+        dialog.DescriptionPanel.FindLogicalDescendantOfType<ComboBox>()!.SelectedIndex = 2;
         viewModel.SelectedHack.IsApplied = true;
         dialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, $"{nameof(AsmHacksDialog_ApplyTest)}_{buttonName}", ref currentFrame);
 
@@ -359,8 +358,8 @@ public class ProjectRequiredTests
         string createdProjectPath = mainWindowViewModel.OpenProject.MainDirectory;
         mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(CharacterSpriteEditor_CanEdit), ref currentFrame);
 
-        OpenProjectPanel openProjectPanel = (OpenProjectPanel)mainWindow.MainContent.Content;
-        OpenProjectPanelViewModel openProjectViewModel = (OpenProjectPanelViewModel)openProjectPanel.DataContext;
+        OpenProjectPanel openProjectPanel = (OpenProjectPanel)mainWindow.MainContent.Content!;
+        OpenProjectPanelViewModel openProjectViewModel = (OpenProjectPanelViewModel)openProjectPanel.DataContext!;
 
         ItemExplorerPanel explorer = openProjectPanel.ItemExplorer;
         EditorTabsPanel tabs = openProjectPanel.EditorTabs;
@@ -370,11 +369,11 @@ public class ProjectRequiredTests
         mainWindow.TabToExplorer();
 
         mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(CharacterSpriteEditor_CanEdit), ref currentFrame);
-        explorer.Viewer.RowSelection.Select(characterSpritesTreeItemIndex);
+        explorer.Viewer.RowSelection!.Select(characterSpritesTreeItemIndex);
         mainWindow.KeyPressQwerty(PhysicalKey.ArrowRight, RawInputModifiers.None);
         mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(CharacterSpriteEditor_CanEdit), ref currentFrame);
         ItemDescription firstCharacterSprite = mainWindowViewModel.OpenProject.Items.First(i => i.Type == ItemDescription.ItemType.Character_Sprite);
-        explorer.Viewer.RowSelection.Select(new(characterSpritesTreeItemIndex, characterSpriteTreeItem.Children.ToList().FindIndex(i => i.Text.Equals(firstCharacterSprite.DisplayName))));
+        explorer.Viewer.RowSelection.Select(new(characterSpritesTreeItemIndex, characterSpriteTreeItem.Children!.ToList().FindIndex(i => i.Text.Equals(firstCharacterSprite.DisplayName))));
         mainWindow.KeyPressQwerty(PhysicalKey.Enter, RawInputModifiers.None);
         mainWindow.KeyReleaseQwerty(PhysicalKey.Enter, RawInputModifiers.None);
         mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(CharacterSpriteEditor_CanEdit), ref currentFrame);
@@ -386,17 +385,17 @@ public class ProjectRequiredTests
 
         // Test edit
         CharacterSpriteEditorViewModel viewModel = (CharacterSpriteEditorViewModel)tabs.Tabs.SelectedItem;
-        ComboBox characterBox = tabs.FindLogicalDescendantOfType<ComboBox>();
+        ComboBox characterBox = tabs.FindLogicalDescendantOfType<ComboBox>()!;
         characterBox.SelectedIndex++;
         Assert.Multiple(() =>
         {
-            Assert.That(viewModel.Character.DisplayName, Is.EqualTo(((CharacterItem)characterBox.SelectedItem).DisplayName));
+            Assert.That(viewModel.Character.DisplayName, Is.EqualTo(((CharacterItem)characterBox.SelectedItem!).DisplayName));
             Assert.That(viewModel.Description.UnsavedChanges, Is.True);
         });
         mainWindow.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, nameof(CharacterSpriteEditor_CanEdit), ref currentFrame);
         viewModel.Description.UnsavedChanges = false;
 
-        CheckBox isLargeCheckBox = tabs.FindLogicalDescendantOfType<CheckBox>();
+        CheckBox isLargeCheckBox = tabs.FindLogicalDescendantOfType<CheckBox>()!;
         isLargeCheckBox.Focus();
         mainWindow.KeyPressQwerty(PhysicalKey.Enter, RawInputModifiers.None);
         Assert.Multiple(() =>

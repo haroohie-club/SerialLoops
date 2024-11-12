@@ -22,9 +22,9 @@ public class GroupSelectionEditorViewModel : EditorViewModel
 
     public GroupSelectionEditorViewModel(GroupSelectionItem groupSelection, MainWindowViewModel window, ILogger log) : base(groupSelection, window, log)
     {
-        Tabs = window.EditorTabs;
+        Tabs = window.EditorTabs!;
         GroupSelection = groupSelection;
-        OpenProject = window.OpenProject;
+        OpenProject = window.OpenProject!;
         Activities = new(groupSelection.Selection.Activities.Select(a =>
             new ScenarioActivityViewModel(this, a)));
     }
@@ -40,10 +40,10 @@ public class ScenarioActivityViewModel(GroupSelectionEditorViewModel selection, 
     private string _title = activity.Title;
     public string Title
     {
-        get => _title.GetSubstitutedString(selection.OpenProject);
+        get => _title.GetSubstitutedString(_selection.OpenProject);
         set
         {
-            this.RaiseAndSetIfChanged(ref _title, value.GetOriginalString(selection.OpenProject));
+            this.RaiseAndSetIfChanged(ref _title, value.GetOriginalString(_selection.OpenProject));
             Activity.Title = _title;
             // _selection.GroupSelection.UnsavedChanges = true;
         }
@@ -52,7 +52,7 @@ public class ScenarioActivityViewModel(GroupSelectionEditorViewModel selection, 
     private string _futureDesc = activity.FutureDesc;
     public string FutureDesc
     {
-        get => _futureDesc.GetSubstitutedString(selection.OpenProject);
+        get => _futureDesc.GetSubstitutedString(_selection.OpenProject);
         set
         {
             this.RaiseAndSetIfChanged(ref _futureDesc, value.GetOriginalString(_selection.OpenProject));
@@ -79,37 +79,35 @@ public class ScenarioActivityViewModel(GroupSelectionEditorViewModel selection, 
 
 public class ScenarioRouteViewModel(GroupSelectionEditorViewModel selection, ScenarioRoute route) : ViewModelBase
 {
-    private GroupSelectionEditorViewModel _selection = selection;
-
     [Reactive]
     public ScenarioRoute Route { get; set; } = route;
 
     private string _title = route.Title;
     public string Title
     {
-        get => _title.GetSubstitutedString(_selection.OpenProject);
+        get => _title.GetSubstitutedString(selection.OpenProject);
         set
         {
-            this.RaiseAndSetIfChanged(ref _title, value.GetOriginalString(_selection.OpenProject));
+            this.RaiseAndSetIfChanged(ref _title, value.GetOriginalString(selection.OpenProject));
             Route.Title = _title;
             // _selection.GroupSelection.UnsavedChanges = true;
         }
     }
 
     public ObservableCollection<TopicItem> KyonlessTopics { get; set; } = new(route.KyonlessTopics.Select(t =>
-            (TopicItem)selection.OpenProject.Items.FirstOrDefault(i =>
-                i.Type == ItemDescription.ItemType.Topic && ((TopicItem)i).TopicEntry.Id == t))
-        .Where(t => t is not null));
+            (TopicItem?)selection.OpenProject.Items.FirstOrDefault(i =>
+                i.Type == ItemDescription.ItemType.Topic && ((TopicItem)i).TopicEntry?.Id == t))
+        .Where(t => t is not null)!);
 
-    private ScriptItem _script = (ScriptItem)selection.OpenProject.Items.FirstOrDefault(i =>
-        i.Type == ItemDescription.ItemType.Script && ((ScriptItem)i).Event.Index == route.ScriptIndex);
-    public ScriptItem Script
+    private ScriptItem? _script = (ScriptItem?)selection.OpenProject.Items.FirstOrDefault(i =>
+        i.Type == ItemDescription.ItemType.Script && ((ScriptItem)i).Event!.Index == route.ScriptIndex);
+    public ScriptItem? Script
     {
         get => _script;
         set
         {
             this.RaiseAndSetIfChanged(ref _script, value);
-            Route.ScriptIndex = (short)_script.Event.Index;
+            Route.ScriptIndex = (short)(_script?.Event?.Index ?? 0);
             // selection.GroupSelection.UnsavedChanges = true;
         }
     }

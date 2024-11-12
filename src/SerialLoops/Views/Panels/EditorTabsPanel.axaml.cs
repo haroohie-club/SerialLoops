@@ -14,6 +14,6 @@ public partial class EditorTabsPanel : Panel
 
     private void Tabs_ContainerClearing(object? sender, ContainerClearingEventArgs e)
     {
-        ((EditorTabsPanelViewModel)DataContext).OnTabClosed((EditorViewModel)e.Container.DataContext);
+        ((EditorTabsPanelViewModel)DataContext!).OnTabClosed((EditorViewModel)e.Container.DataContext!);
     }
 }

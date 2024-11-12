@@ -19,7 +19,7 @@ public class ScreenFadeOutScriptCommandEditorViewModel : ScriptCommandEditorView
         {
             this.RaiseAndSetIfChanged(ref _fadeTime, value);
             ((ShortScriptParameter)Command.Parameters[0]).Value = _fadeTime;
-            Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
+            Script.Event!.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
                 .Objects[Command.Index].Parameters[0] = _fadeTime;
             Script.UnsavedChanges = true;
         }
@@ -33,7 +33,7 @@ public class ScreenFadeOutScriptCommandEditorViewModel : ScriptCommandEditorView
         {
             this.RaiseAndSetIfChanged(ref _fadePercentage, value);
             ((ShortScriptParameter)Command.Parameters[1]).Value = _fadePercentage;
-            Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
+            Script.Event!.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
                 .Objects[Command.Index].Parameters[1] = _fadePercentage;
             Script.UnsavedChanges = true;
         }
@@ -47,7 +47,7 @@ public class ScreenFadeOutScriptCommandEditorViewModel : ScriptCommandEditorView
         {
             this.RaiseAndSetIfChanged(ref _customColor, value);
             ((ColorScriptParameter)Command.Parameters[2]).Color = _customColor;
-            Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
+            Script.Event!.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
                 .Objects[Command.Index].Parameters[2] = _customColor.Red;
             Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
                 .Objects[Command.Index].Parameters[3] = _customColor.Green;
@@ -69,7 +69,7 @@ public class ScreenFadeOutScriptCommandEditorViewModel : ScriptCommandEditorView
         {
             this.RaiseAndSetIfChanged(ref _color, Enum.Parse<ColorMonochromeScriptParameter.ColorMonochrome>(value));
             ((ColorMonochromeScriptParameter)Command.Parameters[4]).ColorType = _color;
-            Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
+            Script.Event!.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
                 .Objects[Command.Index].Parameters[6] = (short)_color;
             Script.UnsavedChanges = true;
         }
@@ -84,7 +84,7 @@ public class ScreenFadeOutScriptCommandEditorViewModel : ScriptCommandEditorView
         ScreenSelector.ScreenChanged += (sender, args) =>
         {
             ((ScreenScriptParameter)Command.Parameters[3]).Screen = ScreenSelector.SelectedScreen;
-            Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
+            Script.Event!.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
                 .Objects[Command.Index].Parameters[5] = (short)ScreenSelector.SelectedScreen;
             Script.UnsavedChanges = true;
         };

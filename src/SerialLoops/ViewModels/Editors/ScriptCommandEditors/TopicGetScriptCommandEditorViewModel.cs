@@ -25,23 +25,23 @@ public class TopicGetScriptCommandEditorViewModel : ScriptCommandEditorViewModel
         set
         {
             this.RaiseAndSetIfChanged(ref _selectedTopic, value);
-            ((TopicScriptParameter)Command.Parameters[0]).TopicId = _selectedTopic.TopicEntry.Id;
+            ((TopicScriptParameter)Command.Parameters[0]).TopicId = _selectedTopic.TopicEntry!.Id;
             TopicId = _selectedTopic.TopicEntry.Id;
-            Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
+            Script.Event!.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
                 .Objects[Command.Index].Parameters[0] = _selectedTopic.TopicEntry.Id;
             Script.UnsavedChanges = true;
         }
     }
 
-    public ICommand SelectTopicCommand { get; }
+    public ICommand ReassignTopicCommand { get; }
 
     public TopicGetScriptCommandEditorViewModel(ScriptItemCommand command, ScriptEditorViewModel scriptEditor, MainWindowViewModel window)
         : base(command, scriptEditor)
     {
-        Tabs = window.EditorTabs;
-        Topics = new(window.OpenProject.Items.Where(i => i.Type == ItemDescription.ItemType.Topic).Cast<TopicItem>());
+        Tabs = window.EditorTabs!;
+        Topics = new(window.OpenProject!.Items.Where(i => i.Type == ItemDescription.ItemType.Topic).Cast<TopicItem>());
         TopicId = ((TopicScriptParameter)Command.Parameters[0]).TopicId;
-        _selectedTopic = (TopicItem)window.OpenProject.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Topic && ((TopicItem)i).TopicEntry.Id == TopicId);
-        SelectTopicCommand = ReactiveCommand.Create(() => SelectedTopic = Topics.FirstOrDefault());
+        _selectedTopic = (TopicItem)window.OpenProject.Items.First(i => i.Type == ItemDescription.ItemType.Topic && ((TopicItem)i).TopicEntry!.Id == TopicId);
+        ReassignTopicCommand = ReactiveCommand.Create(() => SelectedTopic = Topics.First());
     }
 }

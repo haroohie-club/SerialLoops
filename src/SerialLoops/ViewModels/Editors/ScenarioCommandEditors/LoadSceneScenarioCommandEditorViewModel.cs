@@ -19,7 +19,7 @@ public class LoadSceneScenarioCommandEditorViewModel : ScenarioCommandEditorView
         set
         {
             this.RaiseAndSetIfChanged(ref _scene, value);
-            _parameter = _scene.Event.Index;
+            _parameter = _scene.Event!.Index;
             SelectedScenarioCommand.Parameter = _scene.DisplayName;
             SelectedScenarioCommand.Scenario.Scenario.Commands[SelectedScenarioCommand.CommandIndex].Parameter = _parameter;
             SelectedScenarioCommand.Scenario.UnsavedChanges = true;
@@ -29,7 +29,7 @@ public class LoadSceneScenarioCommandEditorViewModel : ScenarioCommandEditorView
     public LoadSceneScenarioCommandEditorViewModel(PrettyScenarioCommand command, Project project, EditorTabsPanelViewModel tabs) : base(command, tabs)
     {
         Scripts = new(project.Items.Where(i => i.Type == ItemDescription.ItemType.Script).Cast<ScriptItem>());
-        _scene = Scripts.FirstOrDefault(s => s.DisplayName == command.Parameter);
-        _parameter = _scene.Event.Index;
+        _scene = Scripts.First(s => s.DisplayName == command.Parameter);
+        _parameter = _scene.Event!.Index;
     }
 }

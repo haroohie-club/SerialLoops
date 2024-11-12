@@ -22,12 +22,12 @@ public class TopicEditorViewModel : EditorViewModel
 
     public string Title
     {
-        get => _title.GetSubstitutedString(_window.OpenProject);
+        get => _title.GetSubstitutedString(_window.OpenProject!);
         set
         {
-            this.RaiseAndSetIfChanged(ref _title, value.GetOriginalString(_window.OpenProject));
-            Topic.TopicEntry.Title = _title;
-            Topic.DisplayName = $"{Topic.TopicEntry.Id} - {_title.GetSubstitutedString(_window.OpenProject)}";
+            this.RaiseAndSetIfChanged(ref _title, value.GetOriginalString(_window.OpenProject!));
+            Topic.TopicEntry!.Title = _title;
+            Topic.DisplayName = $"{Topic.TopicEntry.Id} - {_title.GetSubstitutedString(_window.OpenProject!)}";
             Topic.UnsavedChanges = true;
         }
     }
@@ -39,14 +39,18 @@ public class TopicEditorViewModel : EditorViewModel
         get => _associatedScript;
         set
         {
-            this.RaiseAndSetIfChanged(ref _associatedScript, value);
-            if (Topic.TopicEntry.Type == TopicType.Main)
+            if (Topic.TopicEntry is null)
             {
-                Topic.HiddenMainTopic.EventIndex = (short)_associatedScript.Event.Index;
+                return;
+            }
+            this.RaiseAndSetIfChanged(ref _associatedScript, value);
+            if (Topic.TopicEntry!.Type == TopicType.Main)
+            {
+                Topic.HiddenMainTopic!.EventIndex = (short)_associatedScript.Event!.Index;
             }
             else
             {
-                Topic.TopicEntry.EventIndex = (short)_associatedScript.Event.Index;
+                Topic.TopicEntry!.EventIndex = (short)_associatedScript.Event!.Index;
             }
             Topic.UnsavedChanges = true;
         }
@@ -60,7 +64,7 @@ public class TopicEditorViewModel : EditorViewModel
         set
         {
             this.RaiseAndSetIfChanged(ref _episodeGroup, (byte)(value + 1));
-            Topic.TopicEntry.EpisodeGroup = _episodeGroup;
+            Topic.TopicEntry!.EpisodeGroup = _episodeGroup;
             Topic.UnsavedChanges = true;
         }
     }
@@ -72,7 +76,7 @@ public class TopicEditorViewModel : EditorViewModel
         set
         {
             this.RaiseAndSetIfChanged(ref _puzzlePhaseGroup, value);
-            Topic.TopicEntry.PuzzlePhaseGroup = _puzzlePhaseGroup;
+            Topic.TopicEntry!.PuzzlePhaseGroup = _puzzlePhaseGroup;
             Topic.UnsavedChanges = true;
         }
     }
@@ -84,7 +88,7 @@ public class TopicEditorViewModel : EditorViewModel
         set
         {
             this.RaiseAndSetIfChanged(ref _baseTimeGain, value);
-            Topic.TopicEntry.BaseTimeGain = _baseTimeGain;
+            Topic.TopicEntry!.BaseTimeGain = _baseTimeGain;
             KyonTime = BaseTimeGain * _kyonTimePercentage / 100.0;
             MikuruTime = BaseTimeGain * _mikuruTimePercentage / 100.0;
             NagatoTime = BaseTimeGain * _nagatoTimePercentage / 100.0;
@@ -102,7 +106,7 @@ public class TopicEditorViewModel : EditorViewModel
         set
         {
             this.RaiseAndSetIfChanged(ref _kyonTimePercentage, value);
-            Topic.TopicEntry.KyonTimePercentage = _kyonTimePercentage;
+            Topic.TopicEntry!.KyonTimePercentage = _kyonTimePercentage;
             KyonTime = BaseTimeGain * _kyonTimePercentage / 100.0;
             Topic.UnsavedChanges = true;
         }
@@ -117,7 +121,7 @@ public class TopicEditorViewModel : EditorViewModel
         set
         {
             this.RaiseAndSetIfChanged(ref _mikuruTimePercentage, value);
-            Topic.TopicEntry.MikuruTimePercentage = _mikuruTimePercentage;
+            Topic.TopicEntry!.MikuruTimePercentage = _mikuruTimePercentage;
             MikuruTime = BaseTimeGain * _mikuruTimePercentage / 100.0;
             Topic.UnsavedChanges = true;
         }
@@ -132,7 +136,7 @@ public class TopicEditorViewModel : EditorViewModel
         set
         {
             this.RaiseAndSetIfChanged(ref _nagatoTimePercentage, value);
-            Topic.TopicEntry.NagatoTimePercentage = _nagatoTimePercentage;
+            Topic.TopicEntry!.NagatoTimePercentage = _nagatoTimePercentage;
             NagatoTime = BaseTimeGain * _nagatoTimePercentage / 100.0;
             Topic.UnsavedChanges = true;
         }
@@ -147,7 +151,7 @@ public class TopicEditorViewModel : EditorViewModel
         set
         {
             this.RaiseAndSetIfChanged(ref _koizumiTimePercentage, value);
-            Topic.TopicEntry.KoizumiTimePercentage = _koizumiTimePercentage;
+            Topic.TopicEntry!.KoizumiTimePercentage = _koizumiTimePercentage;
             KoizumiTime = BaseTimeGain * _koizumiTimePercentage / 100.0;
             Topic.UnsavedChanges = true;
         }
@@ -157,13 +161,13 @@ public class TopicEditorViewModel : EditorViewModel
 
     public TopicEditorViewModel(TopicItem topic, MainWindowViewModel window, ILogger log) : base(topic, window, log)
     {
-        Tabs = window.EditorTabs;
+        Tabs = window.EditorTabs!;
         Topic = topic;
-        _title = Topic.TopicEntry.Title;
-        Scripts = new(window.OpenProject.Items.Where(i => i.Type == ItemDescription.ItemType.Script).Cast<ScriptItem>());
+        _title = Topic.TopicEntry!.Title;
+        Scripts = new(window.OpenProject!.Items.Where(i => i.Type == ItemDescription.ItemType.Script).Cast<ScriptItem>());
         short associatedScriptIndex = (short)(Topic.TopicEntry.Type == TopicType.Main ? Topic.HiddenMainTopic?.EventIndex ?? Topic.TopicEntry.EventIndex : Topic.TopicEntry.EventIndex);
-        _associatedScript = (ScriptItem)window.OpenProject.Items.FirstOrDefault(i =>
-            i.Type == ItemDescription.ItemType.Script && ((ScriptItem)i).Event.Index == associatedScriptIndex);
+        _associatedScript = (ScriptItem)window.OpenProject.Items.First(i =>
+            i.Type == ItemDescription.ItemType.Script && ((ScriptItem)i).Event!.Index == associatedScriptIndex);
         EpisodeGroups = [Strings.Episode_1, Strings.Episode_2, Strings.Episode_3, Strings.Episode_4, Strings.Episode_5];
         _episodeGroup = Topic.TopicEntry.EpisodeGroup;
         _puzzlePhaseGroup = Topic.TopicEntry.PuzzlePhaseGroup;

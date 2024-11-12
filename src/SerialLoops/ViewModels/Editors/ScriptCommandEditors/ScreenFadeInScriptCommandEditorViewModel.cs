@@ -18,7 +18,7 @@ public class ScreenFadeInScriptCommandEditorViewModel : ScriptCommandEditorViewM
         {
             this.RaiseAndSetIfChanged(ref _fadeTime, value);
             ((ShortScriptParameter)Command.Parameters[0]).Value = _fadeTime;
-            Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
+            Script.Event!.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
                 .Objects[Command.Index].Parameters[0] = _fadeTime;
             Script.UnsavedChanges = true;
         }
@@ -32,7 +32,7 @@ public class ScreenFadeInScriptCommandEditorViewModel : ScriptCommandEditorViewM
         {
             this.RaiseAndSetIfChanged(ref _fadePercentage, value);
             ((ShortScriptParameter)Command.Parameters[1]).Value = _fadePercentage;
-            Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
+            Script.Event!.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
                 .Objects[Command.Index].Parameters[1] = _fadePercentage;
             Script.UnsavedChanges = true;
         }
@@ -50,7 +50,7 @@ public class ScreenFadeInScriptCommandEditorViewModel : ScriptCommandEditorViewM
         {
             this.RaiseAndSetIfChanged(ref _color, Enum.Parse<ColorMonochromeScriptParameter.ColorMonochrome>(value));
             ((ColorMonochromeScriptParameter)Command.Parameters[3]).ColorType = _color;
-            Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
+            Script.Event!.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
                 .Objects[Command.Index].Parameters[3] = (short)_color;
             Script.UnsavedChanges = true;
         }
@@ -64,7 +64,7 @@ public class ScreenFadeInScriptCommandEditorViewModel : ScriptCommandEditorViewM
         ScreenSelector.ScreenChanged += (sender, args) =>
         {
             ((ScreenScriptParameter)Command.Parameters[2]).Screen = ScreenSelector.SelectedScreen;
-            Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
+            Script.Event!.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
                 .Objects[Command.Index].Parameters[2] = (short)ScreenSelector.SelectedScreen;
             Script.UnsavedChanges = true;
         };

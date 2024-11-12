@@ -21,108 +21,84 @@ namespace SerialLoops.Utility;
 public static partial class SLConverters
 {
     public static FuncValueConverter<ItemDescription.ItemType, Bitmap> ItemTypeToIconConverter => new((type) => new Bitmap(AssetLoader.Open(new Uri($"avares://SerialLoops/Assets/Icons/{type.ToString().Replace(' ', '_')}.png"))));
-    public static FuncValueConverter<SKBitmap, SKAvaloniaImage> SKBitmapToAvaloniaConverter => new((bitmap) => new SKAvaloniaImage(bitmap));
+    public static FuncValueConverter<SKBitmap?, SKAvaloniaImage?> SKBitmapToAvaloniaConverter => new((bitmap) => bitmap is null ? null : new(bitmap));
     public static FuncValueConverter<DsScreen, bool> TopScreenSelectableConverter => new((screen) => screen != DsScreen.TOP);
     public static FuncValueConverter<DsScreen, bool> BottomScreenSelectableConverter => new((screen) => screen != DsScreen.BOTTOM);
     public static FuncValueConverter<DsScreen, bool> BothScreensSelectedConverter => new((screen) => screen == DsScreen.BOTH);
     public static FuncValueConverter<bool, IImmutableSolidColorBrush> BooleanBrushConverter => new((val) => val ? Brushes.Transparent : Brushes.LightGreen);
-    public static FuncValueConverter<string, string> CharacterNameCropConverter => new((name) => name[4..]);
-    public static FuncValueConverter<List<Speaker>, string> ListDisplayConverter => new((strs) => string.Join(", ", strs.Select(s => s.ToString())));
+    public static FuncValueConverter<string, string> CharacterNameCropConverter => new((name) => name![4..]);
+    public static FuncValueConverter<List<Speaker>, string> ListDisplayConverter => new((strs) => string.Join(", ", strs?.Select(s => s.ToString()) ?? []));
 }
 
 public class DisplayNameConverter : IMultiValueConverter
 {
-    public object Convert(IList<object> values, Type targetType, object parameter, CultureInfo culture)
+    public object Convert(IList<object?> values, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (values[0] is not UnsetValueType && values[1] is not UnsetValueType)
+        if (values[0] is string displayName && values[1] is bool unsavedChanges)
         {
-            string displayName = (string)values[0];
-            bool unsavedChanges = (bool)values[1];
-
             return unsavedChanges ? $"* {displayName}" : displayName;
         }
         return string.Empty;
     }
 }
 
-public class TextSubstitutionConverter : IValueConverter
-{
-    private static Project _project;
-
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-        return ((string)value).GetSubstitutedString(_project);
-    }
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-        return ((string)value).GetOriginalString(_project);
-    }
-    public static void SetProject(Project project)
-    {
-        _project = project;
-    }
-}
-
 public class SKAvaloniaColorConverter : IValueConverter
 {
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        return ((SKColor)value).ToAvalonia();
+        return ((SKColor?)value ?? SKColor.Empty).ToAvalonia();
     }
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        return ((Color)value).ToSKColor();
+        return ((Color?)value ?? new Color()).ToSKColor();
     }
 }
 
 public class DoubleSubtractionConverter : IValueConverter
 {
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        return (double)value - double.Parse((string)parameter);
+        return (double?)value ?? 0 - double.Parse((string?)parameter ?? "0");
     }
 
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        return (double)value + double.Parse((string)parameter);
+        return (double?)value ?? 0 + double.Parse((string?)parameter ?? "0");
     }
 }
 
 public class IntSubtractionConverter : IValueConverter
 {
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        return (int)value - int.Parse((string)parameter);
+        return (int?)value ?? 0 - int.Parse((string?)parameter ?? "0");
     }
 
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        return (int)value + int.Parse((string)parameter);
+        return (int?)value ?? 0 + int.Parse((string?)parameter ?? "0");
     }
 }
 
 public class IntAdditionConverter : IValueConverter
 {
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        return (int)value + int.Parse((string)parameter);
+        return (int?)value ?? 0 + int.Parse((string?)parameter ?? "0");
     }
 
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        return (int)value - int.Parse((string)parameter);
+        return (int?)value ?? 0 - int.Parse((string?)parameter ?? "0");
     }
 }
 
 public class BgmLoopSampleToTimestampConverter : IMultiValueConverter
 {
-    public object Convert(IList<object> values, Type targetType, object parameter, CultureInfo culture)
+    public object Convert(IList<object?> values, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (values[0] is not UnsetValueType && values[1] is not UnsetValueType)
+        if (values[0] is BgmLoopPreviewItem loopPreview && values[1] is uint sample)
         {
-            BgmLoopPreviewItem loopPreview = (BgmLoopPreviewItem)values[0];
-            uint sample = (uint)values[1];
-
             return (decimal)loopPreview.GetTimestampFromSample(sample);
         }
         return (decimal)0.0;

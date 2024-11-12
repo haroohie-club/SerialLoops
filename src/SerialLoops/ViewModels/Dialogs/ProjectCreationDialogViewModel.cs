@@ -22,8 +22,8 @@ public partial class ProjectCreationDialogViewModel : ViewModelBase
     private Config? _config;
 
     public string? ProjectName { get; set; }
-    public ComboBoxItem LanguageTemplateItem { get; set; }
-    public string? LanguageTemplateCode => (string)LanguageTemplateItem?.Tag ?? "";
+    public ComboBoxItem? LanguageTemplateItem { get; set; }
+    public string LanguageTemplateCode => (string?)LanguageTemplateItem?.Tag ?? "";
     [Reactive]
     public string RomPath { get; set; } = Strings.None_Selected;
 
@@ -43,7 +43,7 @@ public partial class ProjectCreationDialogViewModel : ViewModelBase
 
     private async Task PickRom()
     {
-        IStorageFile rom = await _mainWindow.Window.ShowOpenFilePickerAsync(Strings.Open_ROM, [new FilePickerFileType(Strings.Chokuretsu_ROM) { Patterns = ["*.nds"] }]);
+        IStorageFile? rom = await _mainWindow.Window.ShowOpenFilePickerAsync(Strings.Open_ROM, [new FilePickerFileType(Strings.Chokuretsu_ROM) { Patterns = ["*.nds"] }]);
         if (rom is not null)
         {
             RomPath = rom.Path.LocalPath;

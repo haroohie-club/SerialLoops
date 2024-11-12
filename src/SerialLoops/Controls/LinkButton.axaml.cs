@@ -6,7 +6,7 @@ namespace SerialLoops.Controls;
 
 public partial class LinkButton : UserControl
 {
-    public string Icon
+    public string? Icon
     {
         get => IconPath.Path;
         set
@@ -15,13 +15,13 @@ public partial class LinkButton : UserControl
             IconPath.IsVisible = !string.IsNullOrEmpty(value);
         }
     }
-    public string Text
+    public string? Text
     {
         get => LinkText.Text;
         set => LinkText.Text = value;
     }
-    public delegate void OnClickDelegate(object sender, EventArgs e);
-    public OnClickDelegate OnClick { get; set; }
+    public delegate void OnClickDelegate(object? sender, EventArgs e);
+    public OnClickDelegate? OnClick { get; set; }
 
     public LinkButton()
     {

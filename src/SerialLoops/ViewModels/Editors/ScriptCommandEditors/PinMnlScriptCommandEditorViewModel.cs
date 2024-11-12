@@ -26,7 +26,7 @@ public partial class PinMnlScriptCommandEditorViewModel(ScriptItemCommand comman
 
             this.RaiseAndSetIfChanged(ref _speaker, value);
             ((DialogueScriptParameter)Command.Parameters[0]).Line.Speaker = _speaker.MessageInfo.Character;
-            Script.Event.DialogueSection.Objects[Command.Section.Objects[Command.Index].Parameters[0]].Speaker = _speaker.MessageInfo.Character;
+            Script.Event!.DialogueSection.Objects[Command.Section!.Objects[Command.Index].Parameters[0]].Speaker = _speaker.MessageInfo.Character;
             ScriptEditor.UpdatePreview();
             Script.UnsavedChanges = true;
         }
@@ -48,7 +48,7 @@ public partial class PinMnlScriptCommandEditorViewModel(ScriptItemCommand comman
             if (string.IsNullOrEmpty(_dialogueLine))
             {
                 ((DialogueScriptParameter)Command.Parameters[0]).Line.Text = "";
-                Script.Event.DialogueSection.Objects[Command.Section.Objects[Command.Index].Parameters[0]].Text = "";
+                Script.Event!.DialogueSection.Objects[Command.Section!.Objects[Command.Index].Parameters[0]].Text = "";
                 ((DialogueScriptParameter)Command.Parameters[0]).Line.Pointer = 0;
                 Script.Event.DialogueSection.Objects[Command.Section.Objects[Command.Index].Parameters[0]].Pointer = 0;
             }
@@ -59,10 +59,10 @@ public partial class PinMnlScriptCommandEditorViewModel(ScriptItemCommand comman
                     // It doesn't matter what we set this to as long as it's greater than zero
                     // The ASM creation routine only checks that the pointer is not zero
                     ((DialogueScriptParameter)Command.Parameters[0]).Line.Pointer = 1;
-                    Script.Event.DialogueSection.Objects[Command.Section.Objects[Command.Index].Parameters[0]].Pointer = 1;
+                    Script.Event!.DialogueSection.Objects[Command.Section!.Objects[Command.Index].Parameters[0]].Pointer = 1;
                 }
                 ((DialogueScriptParameter)Command.Parameters[0]).Line.Text = _dialogueLine;
-                Script.Event.DialogueSection.Objects[Command.Section.Objects[Command.Index].Parameters[0]].Text = _dialogueLine;
+                Script.Event!.DialogueSection.Objects[Command.Section!.Objects[Command.Index].Parameters[0]].Text = _dialogueLine;
             }
 
             ScriptEditor.UpdatePreview();

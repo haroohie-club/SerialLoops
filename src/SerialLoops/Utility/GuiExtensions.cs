@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Media;
+using Avalonia.Platform;
 using Avalonia.Platform.Storage;
 using HaruhiChokuretsuLib.Util;
 using MsBox.Avalonia;
@@ -15,7 +17,7 @@ namespace SerialLoops.Utility;
 
 public static class GuiExtensions
 {
-    public static async Task<IStorageFile> ShowOpenFilePickerAsync(this Window window, string title, IReadOnlyList<FilePickerFileType> fileFilter, string suggestedStartLocation = "")
+    public static async Task<IStorageFile?> ShowOpenFilePickerAsync(this Window window, string title, IReadOnlyList<FilePickerFileType> fileFilter, string suggestedStartLocation = "")
     {
         FilePickerOpenOptions options = new()
         {
@@ -28,7 +30,7 @@ public static class GuiExtensions
         }
         return (await window.StorageProvider.OpenFilePickerAsync(options)).FirstOrDefault();
     }
-    public static async Task<IStorageFile> ShowSaveFilePickerAsync(this Window window, string title, IReadOnlyList<FilePickerFileType> fileFilter, string suggestedFileName = "")
+    public static async Task<IStorageFile?> ShowSaveFilePickerAsync(this Window window, string title, IReadOnlyList<FilePickerFileType> fileFilter, string suggestedFileName = "")
     {
         FilePickerSaveOptions options = new()
         {
@@ -49,7 +51,7 @@ public static class GuiExtensions
         };
         return await window.StorageProvider.OpenFilePickerAsync(options);
     }
-    public static async Task<IStorageFolder> ShowOpenFolderPickerAsync(this Window window, string title)
+    public static async Task<IStorageFolder?> ShowOpenFolderPickerAsync(this Window window, string title)
     {
         FolderPickerOpenOptions options = new()
         {
@@ -65,7 +67,7 @@ public static class GuiExtensions
         {
             ButtonDefinitions = buttons,
             Icon = icon,
-            WindowIcon = new(ControlGenerator.GetIcon("AppIcon", log)),
+            WindowIcon = new(ControlGenerator.GetIcon("AppIcon", log)!),
             ContentTitle = title,
             ContentHeader = title,
             ContentMessage = message,
@@ -94,13 +96,13 @@ public static class GuiExtensions
         }
     }
 
-    public static NativeMenuItem FindNativeMenuItem(this NativeMenu menu, string header)
+    public static NativeMenuItem? FindNativeMenuItem(this NativeMenu menu, string header)
     {
         foreach (NativeMenuItemBase itemBase in menu.Items)
         {
             if (itemBase is NativeMenuItem item)
             {
-                if (item.Header.Equals(header))
+                if (item.Header!.Equals(header))
                 {
                     return item;
                 }

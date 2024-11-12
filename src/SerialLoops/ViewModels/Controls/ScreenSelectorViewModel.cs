@@ -8,7 +8,7 @@ namespace SerialLoops.ViewModels.Controls;
 
 public class ScreenSelectorViewModel : ViewModelBase
 {
-    public event EventHandler ScreenChanged;
+    public event EventHandler? ScreenChanged;
 
     public bool AllowSelectingBoth { get; set; }
 

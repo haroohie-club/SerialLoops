@@ -11,10 +11,10 @@ namespace SerialLoops.Models;
 public class SKBitmapDrawOperation : ICustomDrawOperation
 {
     public Rect Bounds { get; set; }
-    public SKBitmap Bitmap { get; set; }
+    public SKBitmap? Bitmap { get; set; }
 
     public void Dispose() { }
-    public bool Equals(ICustomDrawOperation other) => false;
+    public bool Equals(ICustomDrawOperation? other) => false;
     public bool HitTest(Point p) => Bounds.Contains(p);
     public void Render(ImmediateDrawingContext context)
     {
@@ -34,8 +34,8 @@ public class SKBitmapDrawOperation : ICustomDrawOperation
 
 public class SKAvaloniaImage : IImage, IDisposable
 {
-    private readonly SKBitmap _bitmap;
-    private SKBitmapDrawOperation _drawOperation;
+    private readonly SKBitmap? _bitmap;
+    private SKBitmapDrawOperation? _drawOperation;
 
     public SKAvaloniaImage(SKBitmap bitmap)
     {

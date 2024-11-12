@@ -15,7 +15,7 @@ public class ScreenFlashScriptCommandEditorViewModel(ScriptItemCommand command, 
         {
             this.RaiseAndSetIfChanged(ref _fadeInTime, value);
             ((ShortScriptParameter)Command.Parameters[0]).Value = _fadeInTime;
-            Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
+            Script.Event!.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
                 .Objects[Command.Index].Parameters[0] = _fadeInTime;
             Script.UnsavedChanges = true;
         }
@@ -29,7 +29,7 @@ public class ScreenFlashScriptCommandEditorViewModel(ScriptItemCommand command, 
         {
             this.RaiseAndSetIfChanged(ref _holdTime, value);
             ((ShortScriptParameter)Command.Parameters[1]).Value = _holdTime;
-            Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
+            Script.Event!.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
                 .Objects[Command.Index].Parameters[1] = _holdTime;
             Script.UnsavedChanges = true;
         }
@@ -43,7 +43,7 @@ public class ScreenFlashScriptCommandEditorViewModel(ScriptItemCommand command, 
         {
             this.RaiseAndSetIfChanged(ref _fadeOutTime, value);
             ((ShortScriptParameter)Command.Parameters[2]).Value = _fadeOutTime;
-            Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
+            Script.Event!.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
                 .Objects[Command.Index].Parameters[2] = _fadeOutTime;
             Script.UnsavedChanges = true;
         }
@@ -57,7 +57,7 @@ public class ScreenFlashScriptCommandEditorViewModel(ScriptItemCommand command, 
         {
             this.RaiseAndSetIfChanged(ref _color, value);
             ((ColorScriptParameter)Command.Parameters[3]).Color = _color;
-            Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
+            Script.Event!.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
                 .Objects[Command.Index].Parameters[3] = _color.Red;
             Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
                 .Objects[Command.Index].Parameters[4] = _color.Green;

@@ -8,9 +8,9 @@ public class SpritePositioning
     public int X { get; set; }
     public int Layer { get; set; }
 
-    public SKPoint GetSpritePosition(SKBitmap sprite)
+    public SKPoint GetSpritePosition(SKBitmap? sprite)
     {
-        return new SKPoint(X, 384 - sprite.Height);
+        return sprite is null ? new() : new(X, 384 - sprite.Height);
     }
 
     public enum SpritePosition
@@ -23,7 +23,7 @@ public class SpritePositioning
 
 public struct PositionedSprite
 {
-    public CharacterSpriteItem Sprite { get; set; }
+    public CharacterSpriteItem? Sprite { get; set; }
     public SpritePositioning Positioning { get; set; }
     public SKPaint PalEffect { get; set; }
 }

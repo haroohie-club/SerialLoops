@@ -7,11 +7,11 @@ using ReactiveUI.Fody.Helpers;
 
 namespace SerialLoops.Models;
 
-public class SectionTreeItem(string sectionName, IEnumerable<ITreeItem> children, Avalonia.Svg.Svg icon) : ReactiveObject, ITreeItem
+public class SectionTreeItem(string sectionName, IEnumerable<ITreeItem> children, Avalonia.Svg.Svg? icon) : ReactiveObject, ITreeItem
 {
     public string Text { get; set; } = sectionName;
-    public Avalonia.Svg.Svg Icon { get; set; } = icon;
-    public ObservableCollection<ITreeItem> Children { get; set; } = new(children);
+    public Avalonia.Svg.Svg? Icon { get; set; } = icon;
+    public ObservableCollection<ITreeItem>? Children { get; set; } = new(children);
     [Reactive]
     public bool IsExpanded { get; set; }
 

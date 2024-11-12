@@ -14,7 +14,7 @@ public class WaitScriptCommandEditorViewModel(ScriptItemCommand command, ScriptE
         {
             this.RaiseAndSetIfChanged(ref _waitTime, value);
             ((ShortScriptParameter)Command.Parameters[0]).Value = _waitTime;
-            Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
+            Script.Event!.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
                 .Objects[Command.Index].Parameters[0] = _waitTime;
             Script.UnsavedChanges = true;
             Command.UpdateDisplay();

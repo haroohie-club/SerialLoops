@@ -11,21 +11,15 @@ using SerialLoops.Lib;
 
 namespace SerialLoops.Utility;
 
-public class LoopyLogger : ILogger
+public class LoopyLogger(Window window) : ILogger
 {
-    private readonly Window _owner;
     private Config? _config;
-    private string _logFile;
-
-    public LoopyLogger(Window window)
-    {
-        _owner = window;
-    }
+    private string _logFile = "";
 
     public void Initialize(Config? config)
     {
         _config = config;
-        if (!Directory.Exists(_config.LogsDirectory))
+        if (!Directory.Exists(_config!.LogsDirectory))
         {
             Directory.CreateDirectory(_config.LogsDirectory);
         }
@@ -60,7 +54,7 @@ public class LoopyLogger : ILogger
 
     private async Task LogErrorAsync(string message, bool lookForWarnings = false)
     {
-        await _owner.ShowMessageBoxAsync(Strings.Error, string.Format(Strings.ERROR___0_, message), ButtonEnum.Ok, Icon.Error, this);
+        await window.ShowMessageBoxAsync(Strings.Error, string.Format(Strings.ERROR___0_, message), ButtonEnum.Ok, Icon.Error, this);
         if (!string.IsNullOrEmpty(_logFile) && !string.IsNullOrEmpty(message))
         {
             for (int i = 0; i < 10; i++)

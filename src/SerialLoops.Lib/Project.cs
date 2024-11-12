@@ -969,7 +969,7 @@ public partial class Project
         Directory.CreateDirectory(vceCache);
     }
 
-    public ItemDescription? FindItem(string name)
+    public ItemDescription? FindItem(string? name)
     {
         if (string.IsNullOrEmpty(name))
         {

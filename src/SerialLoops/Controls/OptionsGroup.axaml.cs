@@ -18,7 +18,7 @@ namespace SerialLoops.Controls;
 
 public partial class OptionsGroup : UserControl
 {
-    public string Text { get; set; }
+    public string Text { get; set; } = string.Empty;
 
     public OptionsGroup()
     {
@@ -57,13 +57,13 @@ public partial class OptionsGroup : UserControl
     {
         base.Render(context);
         this.TryFindResource("GroupLineColor", ActualThemeVariant, out object? brush);
-        context.DrawRectangle(new Pen((ImmutableSolidColorBrush)brush), new Rect(RenderTransformOrigin.Point, new Point(RenderTransformOrigin.Point.X + Bounds.Size.Width - 2, RenderTransformOrigin.Point.Y + Bounds.Size.Height - 2)), 5);
+        context.DrawRectangle(new Pen((ImmutableSolidColorBrush)brush!), new Rect(RenderTransformOrigin.Point, new Point(RenderTransformOrigin.Point.X + Bounds.Size.Width - 2, RenderTransformOrigin.Point.Y + Bounds.Size.Height - 2)), 5);
     }
 }
 
 public abstract class Option
 {
-    public string OptionName { get; set; }
+    public string OptionName { get; set; } = string.Empty;
 
     public bool Enabled { get; set; } = true;
 
@@ -97,13 +97,19 @@ public abstract class Option
 }
 public class TextOption : Option
 {
-    public Action<string> OnChange { get; set; }
-    protected TextBox _textBox;
+    public Action<string?>? OnChange { get; set; }
+    protected TextBox? _textBox;
 
-    public string Value
+    public string? Value
     {
-        get => _textBox.Text;
-        set => _textBox.Text = value;
+        get => _textBox?.Text;
+        set
+        {
+            if (_textBox is not null)
+            {
+                _textBox.Text = value;
+            }
+        }
     }
 
     public TextOption()
@@ -122,25 +128,28 @@ public class TextOption : Option
             VerticalAlignment = VerticalAlignment.Center,
             IsEnabled = Enabled,
         };
-        panel.Children.Add(_textBox);
+        if (_textBox is not null)
+        {
+            panel.Children.Add(_textBox);
+        }
         return panel;
     }
 }
 
 public class ComboBoxOption : Option
 {
-    public Action<string> OnChange { get; set; }
+    public Action<string?>? OnChange { get; set; }
     protected ComboBox _comboBox { get; set; }
 
     public string Value
     {
-        get => (string)((ComboBoxItem)_comboBox.Items[_comboBox.SelectedIndex]).Tag;
-        set => _comboBox.SelectedIndex = _comboBox.Items.ToList().FindIndex(i => value.Equals((string)((ComboBoxItem)i).Tag));
+        get => (string)((ComboBoxItem)_comboBox.Items[_comboBox.SelectedIndex]!).Tag!;
+        set => _comboBox.SelectedIndex = _comboBox.Items.ToList().FindIndex(i => value.Equals((string)((ComboBoxItem)i!).Tag!));
     }
 
     public ComboBoxOption(List<(string Key, string Value)> options)
     {
-        _comboBox = new ComboBox();
+        _comboBox = new();
         _comboBox.Items.AddRange(options.Select(o => new ComboBoxItem { Tag = o.Key, Content = o.Value }));
         _comboBox.SelectionChanged += (sender, args) => { OnChange?.Invoke(Value); };
     }
@@ -162,7 +171,7 @@ public class ComboBoxOption : Option
 
 public class BooleanOption : Option
 {
-    public Action<bool> OnChange { get; set; }
+    public Action<bool?>? OnChange { get; set; }
 
     public bool Value
     {
@@ -239,10 +248,10 @@ public class BooleanToggleOption : BooleanOption
 
 public class FileOption : Option
 {
-    public Action<string> OnChange { get; set; }
+    public Action<string?>? OnChange { get; set; }
     protected Window _window;
 
-    public string Path
+    public string? Path
     {
         get => _pathBox.Text;
         set
@@ -281,7 +290,7 @@ public class FileOption : Option
 
     protected virtual async Task SelectButton_OnClick()
     {
-        IStorageFile file = await _window.ShowOpenFilePickerAsync(string.Empty, []);
+        IStorageFile? file = await _window.ShowOpenFilePickerAsync(string.Empty, []);
         if (file is not null)
         {
             _pathBox.Text = file.Path.LocalPath;
@@ -297,7 +306,7 @@ public class FolderOption : FileOption
 
     protected override async Task SelectButton_OnClick()
     {
-        IStorageFolder folder = await _window.ShowOpenFolderPickerAsync(string.Empty);
+        IStorageFolder? folder = await _window.ShowOpenFolderPickerAsync(string.Empty);
         if (folder is not null)
         {
             _pathBox.Text = folder.Path.LocalPath;

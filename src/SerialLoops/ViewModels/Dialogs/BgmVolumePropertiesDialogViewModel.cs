@@ -39,7 +39,7 @@ public class BgmVolumePropertiesDialogViewModel : ViewModelBase
         Waveform = WaveformRenderer.Render(wav, WaveFormRendererSettings.StandardSettings);
         _waveLength = wav.Length;
         VolumePreview = new(wav);
-        VolumePreviewPlayer = new(VolumePreview, _log, null);
+        VolumePreviewPlayer = new(VolumePreview, _log, string.Empty);
 
         VolumeSliderValueChangedCommand = ReactiveCommand.Create(VolumeSlider_ValueChanged);
         SaveCommand = ReactiveCommand.Create<BgmVolumePropertiesDialog>((dialog) => dialog.Close(VolumePreview));

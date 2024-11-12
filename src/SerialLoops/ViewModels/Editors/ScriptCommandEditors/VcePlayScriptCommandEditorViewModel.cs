@@ -21,7 +21,7 @@ public class VcePlayScriptCommandEditorViewModel : ScriptCommandEditorViewModel
         {
             this.RaiseAndSetIfChanged(ref _vce, value);
             ((VoicedLineScriptParameter)Command.Parameters[0]).VoiceLine = _vce;
-            Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
+            Script.Event!.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
                 .Objects[Command.Index].Parameters[0] = (short)_vce.Index;
             Script.UnsavedChanges = true;
         }
@@ -30,8 +30,8 @@ public class VcePlayScriptCommandEditorViewModel : ScriptCommandEditorViewModel
     public VcePlayScriptCommandEditorViewModel(ScriptItemCommand command, ScriptEditorViewModel scriptEditor, MainWindowViewModel window) :
         base(command, scriptEditor)
     {
-        Tabs = window.EditorTabs;
-        Vces = new(window.OpenProject.Items.Where(i => i.Type == ItemDescription.ItemType.Voice).Cast<VoicedLineItem>());
+        Tabs = window.EditorTabs!;
+        Vces = new(window.OpenProject!.Items.Where(i => i.Type == ItemDescription.ItemType.Voice).Cast<VoicedLineItem>());
         _vce = ((VoicedLineScriptParameter)Command.Parameters[0]).VoiceLine;
     }
 }

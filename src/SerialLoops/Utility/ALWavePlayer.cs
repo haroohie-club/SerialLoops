@@ -3,6 +3,7 @@ using System;
 using System.Threading.Tasks;
 using NAudio.Wave;
 using OpenTK.Audio.OpenAL;
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
 namespace SerialLoops.Utility;
 
@@ -82,7 +83,7 @@ public class ALWavePlayer : IWavePlayer, IDisposable
 
     private System.Threading.ManualResetEventSlim _signaller;
 
-    private System.Threading.CancellationTokenSource _playerCanceller;
+    private System.Threading.CancellationTokenSource? _playerCanceller;
     private Task Player;
 
     public WaveFormat OutputWaveFormat => WaveProvider.WaveFormat;

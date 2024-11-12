@@ -64,7 +64,7 @@ public class NoProjectRequiredTests
         TestConsoleLogger log = new();
         string configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"config-{buttonName}.json");
         ConfigFactoryMock configFactory = new(configPath);
-        Config? config = configFactory.LoadConfig(s => s, log);
+        Config config = configFactory.LoadConfig(s => s, log)!;
 
         Strings.Culture = new(config.CurrentCultureName);
         PreferencesDialogViewModel viewModel = new();
@@ -75,41 +75,41 @@ public class NoProjectRequiredTests
         dialog.Show();
 
         dialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, TestContext.CurrentContext.Test.Name.Replace("(", "_").Replace("\"", ""), ref currentFrame);
-        TabItem serialLoopsTab = dialog.FindControl<TabItem>("SerialLoopsTab");
-        TabItem projectsTab = dialog.FindControl<TabItem>("ProjectsTab");
-        TabItem buildTab = dialog.FindControl<TabItem>("BuildTab");
+        TabItem serialLoopsTab = dialog.FindControl<TabItem>("SerialLoopsTab")!;
+        TabItem projectsTab = dialog.FindControl<TabItem>("ProjectsTab")!;
+        TabItem buildTab = dialog.FindControl<TabItem>("BuildTab")!;
 
-        LabelWithIcon restartRequiredLabel = dialog.FindControl<LabelWithIcon>("RestartRequiredLabel");
+        LabelWithIcon restartRequiredLabel = dialog.FindControl<LabelWithIcon>("RestartRequiredLabel")!;
 
-        OptionsGroup serialLoopsGroup = dialog.FindControl<OptionsGroup>("SerialLoopsOptions");
-        ComboBox languageComboBox = null;
-        ComboBox displayFontComboBox = null;
-        CheckBox checkForUpdatesCheckBox = null;
-        CheckBox usePreleaseCheckBox = null;
+        OptionsGroup serialLoopsGroup = dialog.FindControl<OptionsGroup>("SerialLoopsOptions")!;
+        ComboBox? languageComboBox = null;
+        ComboBox? displayFontComboBox = null;
+        CheckBox? checkForUpdatesCheckBox = null;
+        CheckBox? usePreleaseCheckBox = null;
         foreach (ILogical logical in serialLoopsGroup.GetLogicalDescendants())
         {
             if (((Control)logical).Name?.Equals("LanguageControl") ?? false)
             {
-                languageComboBox = logical.FindLogicalDescendantOfType<ComboBox>();
+                languageComboBox = logical.FindLogicalDescendantOfType<ComboBox>()!;
             }
             else if (((Control)logical).Name?.Equals("DisplayFontControl") ?? false)
             {
-                displayFontComboBox = logical.FindLogicalDescendantOfType<ComboBox>();
+                displayFontComboBox = logical.FindLogicalDescendantOfType<ComboBox>()!;
             }
             else if (((Control)logical).Name?.Equals("CheckforUpdatesonStartupControl") ?? false)
             {
-                checkForUpdatesCheckBox = logical.FindLogicalDescendantOfType<CheckBox>();
+                checkForUpdatesCheckBox = logical.FindLogicalDescendantOfType<CheckBox>()!;
             }
             else if (((Control)logical).Name?.Equals("UsePreReleaseUpdateChannelControl") ?? false)
             {
-                usePreleaseCheckBox = logical.FindLogicalDescendantOfType<CheckBox>();
+                usePreleaseCheckBox = logical.FindLogicalDescendantOfType<CheckBox>()!;
             }
         }
 
-        OptionsGroup projectGroup = dialog.FindControl<OptionsGroup>("ProjectOptions");
-        CheckBox autoReOpenProjectCheckBox = null;
-        CheckBox rememberWorkspaceCheckBox = null;
-        CheckBox removeMissingCheckBox = null;
+        OptionsGroup projectGroup = dialog.FindControl<OptionsGroup>("ProjectOptions")!;
+        CheckBox? autoReOpenProjectCheckBox = null;
+        CheckBox? rememberWorkspaceCheckBox = null;
+        CheckBox? removeMissingCheckBox = null;
         foreach (ILogical logical in projectGroup.GetLogicalDescendants())
         {
             if (((Control)logical).Name?.Equals("AutoReOpenLastProjectControl") ?? false)
@@ -126,11 +126,11 @@ public class NoProjectRequiredTests
             }
         }
 
-        OptionsGroup buildGroup = dialog.FindControl<OptionsGroup>("BuildOptions");
-        TextBox devkitArmTextBox = null;
-        TextBox emulatorPathTextBox = null;
-        CheckBox useDockerCheckBox = null;
-        TextBox dockerTagTextBox = null;
+        OptionsGroup buildGroup = dialog.FindControl<OptionsGroup>("BuildOptions")!;
+        TextBox? devkitArmTextBox = null;
+        TextBox? emulatorPathTextBox = null;
+        CheckBox? useDockerCheckBox = null;
+        TextBox? dockerTagTextBox = null;
         foreach (ILogical logical in buildGroup.GetLogicalDescendants())
         {
             if (((Control)logical).Name?.Equals("devkitARMPathControl") ?? false)
@@ -155,44 +155,44 @@ public class NoProjectRequiredTests
         Assert.Multiple(() =>
         {
             Assert.That(restartRequiredLabel.IsVisible, Is.False);
-            Assert.That(((ComboBoxItem)languageComboBox.SelectedItem)?.Tag, Is.EqualTo(config.CurrentCultureName));
-            Assert.That(((ComboBoxItem)languageComboBox.SelectedItem)?.Content, Is.EqualTo(new CultureInfo(config.CurrentCultureName).NativeName.ToSentenceCase()));
-            Assert.That(((string)((ComboBoxItem)displayFontComboBox.SelectedItem)?.Tag).Equals(config.DisplayFont)
-                        || (string.IsNullOrEmpty((string)((ComboBoxItem)displayFontComboBox.SelectedItem)?.Tag) == string.IsNullOrEmpty(config.DisplayFont)));
-            Assert.That(checkForUpdatesCheckBox.IsChecked, Is.EqualTo(config.CheckForUpdates));
-            Assert.That(usePreleaseCheckBox.IsChecked, Is.EqualTo(config.PreReleaseChannel));
-            Assert.That(autoReOpenProjectCheckBox.IsChecked, Is.EqualTo(config.AutoReopenLastProject));
-            Assert.That(rememberWorkspaceCheckBox.IsChecked, Is.EqualTo(config.RememberProjectWorkspace));
-            Assert.That(removeMissingCheckBox.IsChecked, Is.EqualTo(config.RemoveMissingProjects));
-            Assert.That(devkitArmTextBox.Text, Is.EqualTo(config.DevkitArmPath));
-            Assert.That(emulatorPathTextBox.Text, Is.EqualTo(config.EmulatorPath));
-            Assert.That(useDockerCheckBox.IsChecked, Is.EqualTo(config.UseDocker));
-            Assert.That(dockerTagTextBox.Text, Is.EqualTo(config.DevkitArmDockerTag));
+            Assert.That(((ComboBoxItem)languageComboBox!.SelectedItem!)?.Tag, Is.EqualTo(config.CurrentCultureName));
+            Assert.That(((ComboBoxItem)languageComboBox.SelectedItem!)?.Content, Is.EqualTo(new CultureInfo(config.CurrentCultureName).NativeName.ToSentenceCase()));
+            Assert.That(((string)((ComboBoxItem)displayFontComboBox!.SelectedItem!).Tag!).Equals(config.DisplayFont)
+                        || (string.IsNullOrEmpty((string)((ComboBoxItem)displayFontComboBox.SelectedItem)?.Tag!) == string.IsNullOrEmpty(config.DisplayFont)));
+            Assert.That(checkForUpdatesCheckBox!.IsChecked, Is.EqualTo(config.CheckForUpdates));
+            Assert.That(usePreleaseCheckBox!.IsChecked, Is.EqualTo(config.PreReleaseChannel));
+            Assert.That(autoReOpenProjectCheckBox!.IsChecked, Is.EqualTo(config.AutoReopenLastProject));
+            Assert.That(rememberWorkspaceCheckBox!.IsChecked, Is.EqualTo(config.RememberProjectWorkspace));
+            Assert.That(removeMissingCheckBox!.IsChecked, Is.EqualTo(config.RemoveMissingProjects));
+            Assert.That(devkitArmTextBox!.Text, Is.EqualTo(config.DevkitArmPath));
+            Assert.That(emulatorPathTextBox!.Text, Is.EqualTo(config.EmulatorPath));
+            Assert.That(useDockerCheckBox!.IsChecked, Is.EqualTo(config.UseDocker));
+            Assert.That(dockerTagTextBox!.Text, Is.EqualTo(config.DevkitArmDockerTag));
         });
 
-        languageComboBox.Focus();
+        languageComboBox!.Focus();
         dialog.KeyPressQwerty(PhysicalKey.ArrowDown, RawInputModifiers.None);
         dialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, TestContext.CurrentContext.Test.Name.Replace("(", "_").Replace("\"", ""), ref currentFrame);
         Assert.Multiple(() =>
         {
-            Assert.That(((ComboBoxItem)languageComboBox.SelectedItem).Tag, Is.Not.EqualTo(config.CurrentCultureName));
+            Assert.That(((ComboBoxItem)languageComboBox.SelectedItem!).Tag, Is.Not.EqualTo(config.CurrentCultureName));
             Assert.That(((ComboBoxItem)languageComboBox.SelectedItem).Content, Is.Not.EqualTo(new CultureInfo(config.CurrentCultureName).NativeName.ToSentenceCase()));
             Assert.That(restartRequiredLabel.IsVisible, Is.True); // Let's make sure we've alerted users they have to restart
         });
 
         viewModel.RequireRestart = false; // reset it for the next test
         Assert.That(restartRequiredLabel.IsVisible, Is.False); // Double check the binding happened
-        displayFontComboBox.Focus();
+        displayFontComboBox!.Focus();
         dialog.KeyPressQwerty(PhysicalKey.ArrowDown, RawInputModifiers.None);
         dialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, TestContext.CurrentContext.Test.Name.Replace("(", "_").Replace("\"", ""), ref currentFrame);
         Assert.Multiple(() =>
         {
-            Assert.That(((ComboBoxItem)displayFontComboBox.SelectedItem).Tag, Is.Not.EqualTo(config.DisplayFont));
+            Assert.That(((ComboBoxItem)displayFontComboBox.SelectedItem!).Tag, Is.Not.EqualTo(config.DisplayFont));
             Assert.That(restartRequiredLabel.IsVisible, Is.True); // Let's make sure we've alerted users they have to restart
         });
 
         viewModel.RequireRestart = false; // reset it for the next test
-        checkForUpdatesCheckBox.Focus();
+        checkForUpdatesCheckBox!.Focus();
         dialog.KeyPressQwerty(PhysicalKey.Enter, RawInputModifiers.None);
         dialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, TestContext.CurrentContext.Test.Name.Replace("(", "_").Replace("\"", ""), ref currentFrame);
         Assert.Multiple(() =>
@@ -201,7 +201,7 @@ public class NoProjectRequiredTests
             Assert.That(restartRequiredLabel.IsVisible, Is.False);
         });
 
-        usePreleaseCheckBox.Focus();
+        usePreleaseCheckBox!.Focus();
         dialog.KeyPressQwerty(PhysicalKey.Enter, RawInputModifiers.None);
         dialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, TestContext.CurrentContext.Test.Name.Replace("(", "_").Replace("\"", ""), ref currentFrame);
         Assert.Multiple(() =>
@@ -215,7 +215,7 @@ public class NoProjectRequiredTests
         dialog.KeyPressQwerty(PhysicalKey.ArrowRight, RawInputModifiers.None);
         dialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, TestContext.CurrentContext.Test.Name.Replace("(", "_").Replace("\"", ""), ref currentFrame);
 
-        autoReOpenProjectCheckBox.Focus();
+        autoReOpenProjectCheckBox!.Focus();
         dialog.KeyPressQwerty(PhysicalKey.Enter, RawInputModifiers.None);
         dialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, TestContext.CurrentContext.Test.Name.Replace("(", "_").Replace("\"", ""), ref currentFrame);
         Assert.Multiple(() =>
@@ -224,7 +224,7 @@ public class NoProjectRequiredTests
             Assert.That(restartRequiredLabel.IsVisible, Is.False);
         });
 
-        rememberWorkspaceCheckBox.Focus();
+        rememberWorkspaceCheckBox!.Focus();
         dialog.KeyPressQwerty(PhysicalKey.Enter, RawInputModifiers.None);
         dialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, TestContext.CurrentContext.Test.Name.Replace("(", "_").Replace("\"", ""), ref currentFrame);
         Assert.Multiple(() =>
@@ -233,7 +233,7 @@ public class NoProjectRequiredTests
             Assert.That(restartRequiredLabel.IsVisible, Is.False);
         });
 
-        removeMissingCheckBox.Focus();
+        removeMissingCheckBox!.Focus();
         dialog.KeyPressQwerty(PhysicalKey.Enter, RawInputModifiers.None);
         dialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, TestContext.CurrentContext.Test.Name.Replace("(", "_").Replace("\"", ""), ref currentFrame);
         Assert.Multiple(() =>
@@ -248,7 +248,7 @@ public class NoProjectRequiredTests
         dialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, TestContext.CurrentContext.Test.Name.Replace("(", "_").Replace("\"", ""), ref currentFrame);
 
         string devkitARMInput = "thank you based devkitPro organization";
-        devkitArmTextBox.Focus();
+        devkitArmTextBox!.Focus();
         dialog.KeyTextInput(devkitARMInput);
         dialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, TestContext.CurrentContext.Test.Name.Replace("(", "_").Replace("\"", ""), ref currentFrame);
         Assert.Multiple(() =>
@@ -259,7 +259,7 @@ public class NoProjectRequiredTests
         });
 
         string emulatorPathInput = "thank you based melonDS devs";
-        emulatorPathTextBox.Focus();
+        emulatorPathTextBox!.Focus();
         dialog.KeyTextInput(emulatorPathInput);
         dialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, TestContext.CurrentContext.Test.Name.Replace("(", "_").Replace("\"", ""), ref currentFrame);
         Assert.Multiple(() =>
@@ -269,7 +269,7 @@ public class NoProjectRequiredTests
             Assert.That(restartRequiredLabel.IsVisible, Is.False);
         });
 
-        useDockerCheckBox.Focus();
+        useDockerCheckBox!.Focus();
         dialog.KeyPressQwerty(PhysicalKey.Enter, RawInputModifiers.None);
         dialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, TestContext.CurrentContext.Test.Name.Replace("(", "_").Replace("\"", ""), ref currentFrame);
         if (OperatingSystem.IsMacOS())
@@ -290,7 +290,7 @@ public class NoProjectRequiredTests
         }
 
         string dockerTagInput = "thank you based docker creators and such";
-        dockerTagTextBox.Focus();
+        dockerTagTextBox!.Focus();
         dialog.KeyTextInput(dockerTagInput);
         dialog.CaptureAndSaveFrame(_uiVals!.ArtifactsDir, TestContext.CurrentContext.Test.Name.Replace("(", "_").Replace("\"", ""), ref currentFrame);
         if (OperatingSystem.IsMacOS())
@@ -311,7 +311,7 @@ public class NoProjectRequiredTests
             });
         }
 
-        Button button = dialog.Find<Button>(buttonName);
+        Button button = dialog.Find<Button>(buttonName)!;
         button.Focus();
         dialog.KeyPressQwerty(PhysicalKey.Enter, RawInputModifiers.None);
 
@@ -321,7 +321,7 @@ public class NoProjectRequiredTests
         {
             Assert.Multiple(() =>
             {
-                Assert.That(config.CurrentCultureName, Is.Not.EqualTo(secondConfig.CurrentCultureName));
+                Assert.That(config.CurrentCultureName, Is.Not.EqualTo(secondConfig!.CurrentCultureName));
                 Assert.That(config.DisplayFont, Is.Not.EqualTo(secondConfig.DisplayFont));
                 Assert.That(config.CheckForUpdates, Is.Not.EqualTo(secondConfig.CheckForUpdates));
                 Assert.That(config.PreReleaseChannel, Is.Not.EqualTo(secondConfig.PreReleaseChannel));
@@ -341,7 +341,7 @@ public class NoProjectRequiredTests
         {
             Assert.Multiple(() =>
             {
-                Assert.That(config.CurrentCultureName, Is.EqualTo(secondConfig.CurrentCultureName));
+                Assert.That(config.CurrentCultureName, Is.EqualTo(secondConfig!.CurrentCultureName));
                 Assert.That(config.DisplayFont, Is.EqualTo(secondConfig.DisplayFont));
                 Assert.That(config.CheckForUpdates, Is.EqualTo(secondConfig.CheckForUpdates));
                 Assert.That(config.PreReleaseChannel, Is.EqualTo(secondConfig.PreReleaseChannel));

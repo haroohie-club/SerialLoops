@@ -24,8 +24,8 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
     public DialogueScriptCommandEditorViewModel(ScriptItemCommand command, ScriptEditorViewModel scriptEditor, MainWindowViewModel window) : base(command, scriptEditor)
     {
         _window = window;
-        Tabs = _window.EditorTabs;
-        Characters = new(_window.OpenProject.Items.Where(i => i.Type == ItemDescription.ItemType.Character).Cast<CharacterItem>());
+        Tabs = _window.EditorTabs!;
+        Characters = new(_window.OpenProject!.Items.Where(i => i.Type == ItemDescription.ItemType.Character).Cast<CharacterItem>());
         _speaker = _window.OpenProject.GetCharacterBySpeaker(((DialogueScriptParameter)Command.Parameters[0]).Line.Speaker);
         _specialPredicate = i => i.Name != "NONE" && ((CharacterSpriteItem)i).Sprite.Character == _speaker.MessageInfo.Character;
         _dialogueLine = ((DialogueScriptParameter)command.Parameters[0]).Line.Text;
@@ -64,17 +64,17 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
             }
             this.RaiseAndSetIfChanged(ref _speaker, value);
             ((DialogueScriptParameter)Command.Parameters[0]).Line.Speaker = _speaker.MessageInfo.Character;
-            Script.Event.DialogueSection.Objects[Command.Section.Objects[Command.Index].Parameters[0]].Speaker = _speaker.MessageInfo.Character;
+            Script.Event!.DialogueSection.Objects[Command.Section!.Objects[Command.Index].Parameters[0]].Speaker = _speaker.MessageInfo.Character;
             _specialPredicate = i => i.Name != "NONE" && ((CharacterSpriteItem)i).Sprite.Character == _speaker.MessageInfo.Character;
             Script.UnsavedChanges = true;
             ScriptEditor.UpdatePreview();
         }
     }
 
-    private string _dialogueLine;
-    public string DialogueLine
+    private string? _dialogueLine;
+    public string? DialogueLine
     {
-        get => _dialogueLine.GetSubstitutedString(_window.OpenProject);
+        get => _dialogueLine?.GetSubstitutedString(_window.OpenProject!);
         set
         {
             if (value is null)
@@ -84,12 +84,12 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
             text = MidStringOpenQuotes().Replace(text, "$1“");
             text = text.Replace('"', '”');
 
-            this.RaiseAndSetIfChanged(ref _dialogueLine, text.GetOriginalString(_window.OpenProject));
+            this.RaiseAndSetIfChanged(ref _dialogueLine, text.GetOriginalString(_window.OpenProject!));
 
             if (string.IsNullOrEmpty(_dialogueLine))
             {
                 ((DialogueScriptParameter)Command.Parameters[0]).Line.Text = "";
-                Script.Event.DialogueSection.Objects[Command.Section.Objects[Command.Index].Parameters[0]].Text = "";
+                Script.Event!.DialogueSection.Objects[Command.Section!.Objects[Command.Index].Parameters[0]].Text = "";
                 ((DialogueScriptParameter)Command.Parameters[0]).Line.Pointer = 0;
                 Script.Event.DialogueSection.Objects[Command.Section.Objects[Command.Index].Parameters[0]].Pointer = 0;
             }
@@ -100,10 +100,10 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
                     // It doesn't matter what we set this to as long as it's greater than zero
                     // The ASM creation routine only checks that the pointer is not zero
                     ((DialogueScriptParameter)Command.Parameters[0]).Line.Pointer = 1;
-                    Script.Event.DialogueSection.Objects[Command.Section.Objects[Command.Index].Parameters[0]].Pointer = 1;
+                    Script.Event!.DialogueSection.Objects[Command.Section!.Objects[Command.Index].Parameters[0]].Pointer = 1;
                 }
                 ((DialogueScriptParameter)Command.Parameters[0]).Line.Text = _dialogueLine;
-                Script.Event.DialogueSection.Objects[Command.Section.Objects[Command.Index].Parameters[0]].Text = _dialogueLine;
+                Script.Event!.DialogueSection.Objects[Command.Section!.Objects[Command.Index].Parameters[0]].Text = _dialogueLine;
             }
 
             ScriptEditor.UpdatePreview();
@@ -112,8 +112,8 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
         }
     }
 
-    private CharacterSpriteItem _characterSprite;
-    public CharacterSpriteItem CharacterSprite
+    private CharacterSpriteItem? _characterSprite;
+    public CharacterSpriteItem? CharacterSprite
     {
         get => _characterSprite;
         set
@@ -122,13 +122,13 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
             if (_characterSprite is null)
             {
                 ((SpriteScriptParameter)Command.Parameters[1]).Sprite = null;
-                Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
+                Script.Event!.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
                     .Objects[Command.Index].Parameters[1] = 0;
             }
             else
             {
                 ((SpriteScriptParameter)Command.Parameters[1]).Sprite = _characterSprite;
-                Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
+                Script.Event!.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
                     .Objects[Command.Index].Parameters[1] = (short)(_characterSprite.Index);
             }
             ScriptEditor.UpdatePreview();
@@ -139,9 +139,9 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
 
     private async Task SelectCharacterSpriteCommand_Executed()
     {
-        GraphicSelectionDialogViewModel graphicSelectionDialog = new(_window.OpenProject.Items.Where(i => i.Type == ItemDescription.ItemType.Character_Sprite).Cast<CharacterSpriteItem>(),
+        GraphicSelectionDialogViewModel graphicSelectionDialog = new(_window.OpenProject!.Items.Where(i => i.Type == ItemDescription.ItemType.Character_Sprite).Cast<CharacterSpriteItem>(),
             CharacterSprite, _window.OpenProject, _window.Log, _specialPredicate);
-        CharacterSpriteItem sprite = await new GraphicSelectionDialog() { DataContext = graphicSelectionDialog }.ShowDialog<CharacterSpriteItem>(_window.Window);
+        CharacterSpriteItem? sprite = await new GraphicSelectionDialog() { DataContext = graphicSelectionDialog }.ShowDialog<CharacterSpriteItem?>(_window.Window);
         if (sprite is not null)
         {
             CharacterSprite = sprite;
@@ -157,7 +157,7 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
         {
             this.RaiseAndSetIfChanged(ref _spriteEntranceTransition, Enum.Parse<SpriteEntranceScriptParameter.SpriteEntranceTransition>(value));
             ((SpriteEntranceScriptParameter)Command.Parameters[2]).EntranceTransition = _spriteEntranceTransition;
-            Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
+            Script.Event!.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
                 .Objects[Command.Index].Parameters[2] = (short)_spriteEntranceTransition;
             ScriptEditor.UpdatePreview();
             Script.UnsavedChanges = true;
@@ -173,7 +173,7 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
         {
             this.RaiseAndSetIfChanged(ref _spriteExitTransition, Enum.Parse<SpriteExitScriptParameter.SpriteExitTransition>(value));
             ((SpriteExitScriptParameter)Command.Parameters[3]).ExitTransition = _spriteExitTransition;
-            Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
+            Script.Event!.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
                 .Objects[Command.Index].Parameters[3] = (short)_spriteExitTransition;
             Script.UnsavedChanges = true;
         }
@@ -188,7 +188,7 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
         {
             this.RaiseAndSetIfChanged(ref _spriteShakeEffect, Enum.Parse<SpriteShakeScriptParameter.SpriteShakeEffect>(value));
             ((SpriteShakeScriptParameter)Command.Parameters[4]).ShakeEffect = _spriteShakeEffect;
-            Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
+            Script.Event!.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
                 .Objects[Command.Index].Parameters[4] = (short)_spriteShakeEffect;
             Script.UnsavedChanges = true;
         }
@@ -203,7 +203,7 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
         {
             this.RaiseAndSetIfChanged(ref _voicedLine, value);
             ((VoicedLineScriptParameter)Command.Parameters[5]).VoiceLine = _voicedLine;
-            Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
+            Script.Event!.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
                 .Objects[Command.Index].Parameters[5] = (short)_voicedLine.Index;
             Script.UnsavedChanges = true;
         }
@@ -217,7 +217,7 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
         {
             this.RaiseAndSetIfChanged(ref _textVoiceFont, value);
             ((DialoguePropertyScriptParameter)Command.Parameters[6]).Character = _textVoiceFont;
-            Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
+            Script.Event!.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
                 .Objects[Command.Index].Parameters[6] = (short)_textVoiceFont.MessageInfo.Character;
             Script.UnsavedChanges = true;
         }
@@ -231,7 +231,7 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
         {
             this.RaiseAndSetIfChanged(ref _textSpeed, value);
             ((DialoguePropertyScriptParameter)Command.Parameters[7]).Character = _textSpeed;
-            Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
+            Script.Event!.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
                 .Objects[Command.Index].Parameters[7] = (short)_textSpeed.MessageInfo.Character;
             Script.UnsavedChanges = true;
         }
@@ -246,7 +246,7 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
         {
             this.RaiseAndSetIfChanged(ref _textEntranceEffect, Enum.Parse<TextEntranceEffectScriptParameter.TextEntranceEffect>(value));
             ((TextEntranceEffectScriptParameter)Command.Parameters[8]).EntranceEffect = _textEntranceEffect;
-            Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
+            Script.Event!.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
                 .Objects[Command.Index].Parameters[8] = (short)_textEntranceEffect;
             Script.UnsavedChanges = true;
         }
@@ -260,7 +260,7 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
         {
             this.RaiseAndSetIfChanged(ref _spriteLayer, value);
             ((ShortScriptParameter)Command.Parameters[9]).Value = _spriteLayer;
-            Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
+            Script.Event!.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
                 .Objects[Command.Index].Parameters[9] = _spriteLayer;
             ScriptEditor.UpdatePreview();
             Script.UnsavedChanges = true;
@@ -275,7 +275,7 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
         {
             this.RaiseAndSetIfChanged(ref _dontClearText, value);
             ((BoolScriptParameter)Command.Parameters[10]).Value = _dontClearText;
-            Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
+            Script.Event!.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
                 .Objects[Command.Index].Parameters[10] = _dontClearText ? ((BoolScriptParameter)Command.Parameters[10]).TrueValue : ((BoolScriptParameter)Command.Parameters[10]).FalseValue;
             Script.UnsavedChanges = true;
         }
@@ -289,7 +289,7 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
         {
             this.RaiseAndSetIfChanged(ref _disableLipFlap, value);
             ((BoolScriptParameter)Command.Parameters[11]).Value = _disableLipFlap;
-            Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
+            Script.Event!.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
                 .Objects[Command.Index].Parameters[11] = _disableLipFlap ? ((BoolScriptParameter)Command.Parameters[11]).TrueValue : ((BoolScriptParameter)Command.Parameters[11]).FalseValue;
             Script.UnsavedChanges = true;
         }

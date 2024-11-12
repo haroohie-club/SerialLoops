@@ -73,8 +73,8 @@ public class CharacterSpriteEditorViewModel : EditorViewModel
     public CharacterSpriteEditorViewModel(CharacterSpriteItem item, MainWindowViewModel mainWindow, ILogger log) : base(item, mainWindow, log)
     {
         _sprite = item;
-        AnimatedImage = new(_sprite.GetLipFlapAnimation(mainWindow.OpenProject));
-        Characters = new(mainWindow.OpenProject.Items.Where(i => i.Type == ItemDescription.ItemType.Character).Cast<CharacterItem>());
+        AnimatedImage = new(_sprite.GetLipFlapAnimation(mainWindow.OpenProject!));
+        Characters = new(mainWindow.OpenProject!.Items.Where(i => i.Type == ItemDescription.ItemType.Character).Cast<CharacterItem>());
         _character = (CharacterItem)mainWindow.OpenProject.Items.First(i => i.Type == ItemDescription.ItemType.Character && ((CharacterItem)i).MessageInfo.Character == item.Sprite.Character);
         _isLarge = _sprite.Sprite.IsLarge;
 
@@ -85,12 +85,12 @@ public class CharacterSpriteEditorViewModel : EditorViewModel
 
     private async Task ReplaceSprite()
     {
-
+        await Task.Delay(1);
     }
 
     private async Task ExportFrames()
     {
-        IStorageFolder dir = await _window.Window.ShowOpenFolderPickerAsync(Strings.Select_character_sprite_export_folder);
+        IStorageFolder? dir = await _window.Window.ShowOpenFolderPickerAsync(Strings.Select_character_sprite_export_folder);
         if (dir is not null)
         {
             SKBitmap layout = _sprite.GetBaseLayout();
@@ -144,14 +144,14 @@ public class CharacterSpriteEditorViewModel : EditorViewModel
         List<(SKBitmap bitmap, int timing)> animationFrames;
         if (await _window.Window.ShowMessageBoxAsync(Strings.Animation_Export_Option, Strings.Include_lip_flap_animation_, MsBox.Avalonia.Enums.ButtonEnum.YesNo, MsBox.Avalonia.Enums.Icon.Question, _log) == MsBox.Avalonia.Enums.ButtonResult.Yes)
         {
-            animationFrames = _sprite.GetLipFlapAnimation(_window.OpenProject);
+            animationFrames = _sprite.GetLipFlapAnimation(_window.OpenProject!);
         }
         else
         {
-            animationFrames = _sprite.GetClosedMouthAnimation(_window.OpenProject);
+            animationFrames = _sprite.GetClosedMouthAnimation(_window.OpenProject!);
         }
 
-        IStorageFile saveFile = await _window.Window.ShowSaveFilePickerAsync(Strings.Save_character_sprite_GIF, [new FilePickerFileType(Strings.GIF_file) { Patterns = ["*.gif"] }]);
+        IStorageFile? saveFile = await _window.Window.ShowSaveFilePickerAsync(Strings.Save_character_sprite_GIF, [new FilePickerFileType(Strings.GIF_file) { Patterns = ["*.gif"] }]);
         if (saveFile is not null)
         {
             List<SKBitmap> frames = [];

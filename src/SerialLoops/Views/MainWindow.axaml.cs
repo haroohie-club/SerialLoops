@@ -10,9 +10,9 @@ namespace SerialLoops.Views;
 
 public partial class MainWindow : Window
 {
-    public MainWindowViewModel ViewModel;
+    public MainWindowViewModel? ViewModel;
     public bool RestartOnClose { get; set; } = false;
-    public IConfigFactory ConfigurationFactory { get; set; } // This is used for testing purposes; should always be null in production
+    public IConfigFactory? ConfigurationFactory { get; set; } // This is used for testing purposes; should always be null in production
 
     public MainWindow()
     {
@@ -22,9 +22,9 @@ public partial class MainWindow : Window
     public override void Show()
     {
         base.Show();
-        ViewModel = (MainWindowViewModel)DataContext;
+        ViewModel = (MainWindowViewModel)DataContext!;
         ViewModel.Initialize(this, ConfigurationFactory);
-        NativeMenu.SetMenu(this, GetInitialMenu(NativeMenu.GetMenu(this)));
+        NativeMenu.SetMenu(this, GetInitialMenu(NativeMenu.GetMenu(this)!));
     }
 
     private NativeMenu GetInitialMenu(NativeMenu menu)
@@ -41,7 +41,7 @@ public partial class MainWindow : Window
                 new NativeMenuItem()
                 {
                     Header = Strings.New_Project___,
-                    Icon = ControlGenerator.GetIcon("New", ViewModel.Log),
+                    Icon = ControlGenerator.GetIcon("New", ViewModel!.Log),
                     Command = ViewModel.NewProjectCommand,
                 },
                 new NativeMenuItem()
@@ -104,14 +104,14 @@ public partial class MainWindow : Window
 
     private async void Window_Closing(object? sender, WindowClosingEventArgs e)
     {
-        await ViewModel.CloseProject_Executed(e);
+        await ViewModel!.CloseProject_Executed(e);
     }
 
     private void Window_Closed(object? sender, EventArgs e)
     {
         if (RestartOnClose)
         {
-            Process.Start(new ProcessStartInfo(Environment.ProcessPath) { UseShellExecute = true });
+            Process.Start(new ProcessStartInfo(Environment.ProcessPath!) { UseShellExecute = true });
         }
     }
 }

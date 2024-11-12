@@ -18,6 +18,7 @@ public class LoopyProgressTracker : StackPanel, IProgressTracker
             processVerb = Strings.Loading_;
         }
 
+        _processVerb = processVerb;
         _loadingProgress = new() { Width = 390 };
         _loadingItem = new();
         Orientation = Avalonia.Layout.Orientation.Vertical;
@@ -50,7 +51,7 @@ public class LoopyProgressTracker : StackPanel, IProgressTracker
         }
     }
 
-    private string _currentlyLoading;
+    private string _currentlyLoading = string.Empty;
     public string CurrentlyLoading
     {
         get => _currentlyLoading;

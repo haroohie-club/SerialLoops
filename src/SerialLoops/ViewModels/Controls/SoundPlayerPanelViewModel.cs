@@ -1,4 +1,5 @@
 ﻿using System.Windows.Input;
+using HaruhiChokuretsuLib.Audio.SDAT;
 using HaruhiChokuretsuLib.Util;
 using NAudio.Wave;
 using ReactiveUI;
@@ -16,7 +17,7 @@ public class SoundPlayerPanelViewModel : ViewModelBase
     internal SoundPlayer _player;
 
     [Reactive]
-    public IWaveProvider Sound { get; set; }
+    public IWaveProvider? Sound { get; set; }
     [Reactive]
     public SKBitmap Waveform { get; set; }
     [Reactive]
@@ -26,14 +27,14 @@ public class SoundPlayerPanelViewModel : ViewModelBase
     [Reactive]
     public string TrackName { get; set; }
     public ICommand TrackNameCommand { get; set; }
-    public bool UseTextBoxForTrackName => TrackNameCommand is not null;
+    public bool UseTextBoxForTrackName => !string.IsNullOrEmpty(TrackName);
     public string TrackDetails { get; set; }
     public short? TrackFlag { get; set; }
 
     public ICommand PlayPauseCommand { get; private set; }
     public ICommand StopCommand { get; private set; }
 
-    public SoundPlayerPanelViewModel(ISoundItem item, ILogger log, string trackName, string trackDetails = null, short? trackFlag = null, ICommand trackNameCommand = null)
+    public SoundPlayerPanelViewModel(ISoundItem item, ILogger log, string trackName, string trackDetails = "", short? trackFlag = null, ICommand? trackNameCommand = null)
     {
         _log = log;
         _item = item;
@@ -41,14 +42,15 @@ public class SoundPlayerPanelViewModel : ViewModelBase
         TrackName = trackName;
         TrackDetails = trackDetails;
         TrackFlag = trackFlag;
-        TrackNameCommand = trackNameCommand;
+        TrackNameCommand = trackNameCommand ?? ReactiveCommand.Create(() => { });
         InitializePlayer();
         PlayPauseCommand = ReactiveCommand.Create(PlayPause_Executed);
         StopCommand = ReactiveCommand.Create(Stop_Executed);
-        _player.PlaybackStopped += (sender, args) =>
+        _player!.PlaybackStopped += (sender, args) =>
         {
             Stop();
         };
+        Waveform = new();
     }
 
     private void InitializePlayer()

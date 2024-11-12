@@ -20,12 +20,12 @@ public class GraphicSelectionDialogViewModel : ViewModelBase
     private readonly ILogger _log;
     private readonly IEnumerable<IPreviewableGraphic> _items;
     private Func<ItemDescription, bool> _specialPredicate;
-    private IPreviewableGraphic _currentSelection;
+    private IPreviewableGraphic? _currentSelection;
     private string _filter;
 
     [Reactive]
     public ObservableCollection<IPreviewableGraphic> Items { get; set; }
-    public IPreviewableGraphic CurrentSelection
+    public IPreviewableGraphic? CurrentSelection
     {
         get => _currentSelection;
         set
@@ -51,22 +51,24 @@ public class GraphicSelectionDialogViewModel : ViewModelBase
             Items = new(_items.Where(i => i.Text.Contains(_filter, StringComparison.OrdinalIgnoreCase)));
         }
     }
+
     [Reactive]
-    public string PreviewLabel { get; set; }
+    public string PreviewLabel { get; set; } = string.Empty;
     [Reactive]
-    public SKBitmap Preview { get; set; }
+    public SKBitmap? Preview { get; set; }
 
     public ICommand ConfirmCommand { get; }
     public ICommand CancelCommand { get; }
 
-    public GraphicSelectionDialogViewModel(IEnumerable<IPreviewableGraphic> items, IPreviewableGraphic currentSelection, Project project, ILogger log, Func<ItemDescription, bool> specialPredicate = null) : base()
+    public GraphicSelectionDialogViewModel(IEnumerable<IPreviewableGraphic> items, IPreviewableGraphic? currentSelection, Project project, ILogger log, Func<ItemDescription, bool>? specialPredicate = null)
     {
         _project = project;
         _log = log;
         _specialPredicate = specialPredicate ?? (i => true);
-        _items = items.Where(i => specialPredicate((ItemDescription)i));
+        _items = specialPredicate is not null ? items.Where(i => specialPredicate((ItemDescription)i)) : items;
         Items = new(_items);
         CurrentSelection = currentSelection;
+        _filter = string.Empty;
         ConfirmCommand = ReactiveCommand.Create<GraphicSelectionDialog>((dialog) => dialog.Close(CurrentSelection));
         CancelCommand = ReactiveCommand.Create<GraphicSelectionDialog>((dialog) => dialog.Close());
     }

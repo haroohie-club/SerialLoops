@@ -24,8 +24,8 @@ namespace SerialLoops.ViewModels.Editors;
 public class VoicedLineEditorViewModel : EditorViewModel
 {
     private VoicedLineItem _vce;
-    private VoiceMapEntry _voiceMapEntry;
-    private string _subtitle;
+    private VoiceMapEntry? _voiceMapEntry;
+    private string? _subtitle;
 
     public ICommand ReplaceCommand { get; set; }
     public ICommand ExportCommand { get; set; }
@@ -112,15 +112,15 @@ public class VoicedLineEditorViewModel : EditorViewModel
         }
     }
 
-    public string Subtitle
+    public string? Subtitle
     {
-        get => _project.LangCode.Equals("ja") ? _subtitle : (_subtitle?.GetSubstitutedString(_project) ?? string.Empty);
+        get => _project!.LangCode!.Equals("ja") ? _subtitle : (_subtitle?.GetSubstitutedString(_project) ?? string.Empty);
         set
         {
-            this.RaiseAndSetIfChanged(ref _subtitle, _project.LangCode.Equals("ja") ? value : value.GetOriginalString(_project));
+            this.RaiseAndSetIfChanged(ref _subtitle, _project!.LangCode!.Equals("ja") ? value : value?.GetOriginalString(_project));
             if (_voiceMapEntry is null)
             {
-                _project.VoiceMap.VoiceMapEntries.Add(new()
+                _project.VoiceMap!.VoiceMapEntries.Add(new()
                 {
                     VoiceFileName = Path.GetFileNameWithoutExtension(_vce.VoiceFile),
                     FontSize = 100,
@@ -140,12 +140,12 @@ public class VoicedLineEditorViewModel : EditorViewModel
         }
     }
 
-    public bool SubsEnabled => _window.OpenProject.VoiceMap is not null;
+    public bool SubsEnabled => _window.OpenProject!.VoiceMap is not null;
 
     public VoicedLineEditorViewModel(VoicedLineItem item, MainWindowViewModel window, ILogger log) : base(item, window, log, window.OpenProject)
     {
         _vce = item;
-        VcePlayer = new(_vce, log, null);
+        VcePlayer = new(_vce, log, string.Empty);
         ReplaceCommand = ReactiveCommand.CreateFromTask(Replace);
         ExportCommand = ReactiveCommand.CreateFromTask(Export);
         RestoreCommand = ReactiveCommand.Create(Restore);
@@ -156,7 +156,7 @@ public class VoicedLineEditorViewModel : EditorViewModel
             SubtitleScreen = ScreenSelector.SelectedScreen;
         };
 
-        _voiceMapEntry = _project.VoiceMap.VoiceMapEntries.FirstOrDefault(v => v.VoiceFileName.Equals(Path.GetFileNameWithoutExtension(_vce.VoiceFile)));
+        _voiceMapEntry = _project!.VoiceMap!.VoiceMapEntries.FirstOrDefault(v => v.VoiceFileName.Equals(Path.GetFileNameWithoutExtension(_vce.VoiceFile)));
         if (_voiceMapEntry is not null)
         {
             _subtitle = _voiceMapEntry.Subtitle;
@@ -168,21 +168,21 @@ public class VoicedLineEditorViewModel : EditorViewModel
 
     private async Task Replace()
     {
-        IStorageFile openFile = await _window.Window.ShowOpenFilePickerAsync(Strings.Replace_voiced_line, [new FilePickerFileType(Strings.Supported_Audio_Files) { Patterns = Shared.SupportedAudioFiletypes },
-            new FilePickerFileType(Strings.WAV_files) { Patterns = ["*.wav"] }, new FilePickerFileType(Strings.FLAC_files) { Patterns = ["*.flac"] },
-            new FilePickerFileType(Strings.MP3_files) { Patterns = ["*.mp3"] }, new FilePickerFileType(Strings.Vorbis_files) { Patterns = ["*.ogg"] }]);
+        IStorageFile? openFile = await _window.Window.ShowOpenFilePickerAsync(Strings.Replace_voiced_line, [new(Strings.Supported_Audio_Files) { Patterns = Shared.SupportedAudioFiletypes },
+            new(Strings.WAV_files) { Patterns = ["*.wav"] }, new(Strings.FLAC_files) { Patterns = ["*.flac"] },
+            new(Strings.MP3_files) { Patterns = ["*.mp3"] }, new(Strings.Vorbis_files) { Patterns = ["*.ogg"] }]);
         if (openFile is not null)
         {
             LoopyProgressTracker tracker = new();
             VcePlayer.Stop();
-            await new ProgressDialog(() => _vce.Replace(openFile.Path.LocalPath, _project.BaseDirectory, _project.IterativeDirectory, Path.Combine(_project.Config.CachesDirectory, "vce", $"{_vce.Name}.wav"), _log),
+            await new ProgressDialog(() => _vce.Replace(openFile.Path.LocalPath, _project!.BaseDirectory, _project.IterativeDirectory, Path.Combine(_project.Config!.CachesDirectory, "vce", $"{_vce.Name}.wav"), _log),
                 () => { }, tracker, Strings.Replace_voiced_line).ShowDialog(_window.Window);
         }
     }
 
     private async Task Export()
     {
-        IStorageFile saveFile = await _window.Window.ShowSaveFilePickerAsync(Strings.Save_voiced_line_as_WAV, [new FilePickerFileType(Strings.WAV_File) { Patterns = ["*.wav"] }]);
+        IStorageFile? saveFile = await _window.Window.ShowSaveFilePickerAsync(Strings.Save_voiced_line_as_WAV, [new(Strings.WAV_File) { Patterns = ["*.wav"] }]);
         if (saveFile is not null)
         {
             WaveFileWriter.CreateWaveFile(saveFile.Path.LocalPath, _vce.GetWaveProvider(_log));
@@ -196,12 +196,17 @@ public class VoicedLineEditorViewModel : EditorViewModel
 
     private void UpdatePreview()
     {
+        if (_subtitle is null)
+        {
+            return;
+        }
+
         SubtitlesPreview = new(256, 384);
         SKCanvas canvas = new(SubtitlesPreview);
         canvas.DrawColor(SKColors.DarkGray);
-        canvas.DrawLine(new SKPoint { X = 0, Y = 192 }, new SKPoint { X = 256, Y = 192 }, DialogueScriptParameter.Paint00);
+        canvas.DrawLine(new() { X = 0, Y = 192 }, new() { X = 256, Y = 192 }, DialogueScriptParameter.Paint00);
 
-        bool bottomScreen = _voiceMapEntry.TargetScreen == VoiceMapEntry.Screen.BOTTOM;
+        bool bottomScreen = _voiceMapEntry!.TargetScreen == VoiceMapEntry.Screen.BOTTOM;
         if (bottomScreen)
         {
             for (int i = 0; i <= 1; i++)
@@ -209,7 +214,7 @@ public class VoicedLineEditorViewModel : EditorViewModel
                 canvas.DrawHaroohieText(
                     _subtitle,
                     DialogueScriptParameter.Paint07,
-                    _project,
+                    _project!,
                     i + _voiceMapEntry.X,
                     1 + _voiceMapEntry.Y + (bottomScreen ? 192 : 0),
                     false
@@ -220,7 +225,7 @@ public class VoicedLineEditorViewModel : EditorViewModel
         canvas.DrawHaroohieText(
             _subtitle,
             DialogueScriptParameter.Paint00,
-            _project,
+            _project!,
             _voiceMapEntry.X,
             _voiceMapEntry.Y + (bottomScreen ? 192 : 0),
             false

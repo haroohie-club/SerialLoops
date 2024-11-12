@@ -16,9 +16,9 @@ public class ItemDescriptionTreeItem : ITreeItem, IViewFor<ItemDescription>
         Margin = new(2),
     };
 
-    public string Text { get; set; }
-    public Avalonia.Svg.Svg Icon { get; set; } = null;
-    public ObservableCollection<ITreeItem> Children { get; set; } = null;
+    public string Text { get; set; } = string.Empty;
+    public Avalonia.Svg.Svg? Icon { get; set; } = null;
+    public ObservableCollection<ITreeItem>? Children { get; set; } = null;
     public bool IsExpanded { get; set; } = false;
 
     public ItemDescriptionTreeItem(ItemDescription item)
@@ -34,11 +34,11 @@ public class ItemDescriptionTreeItem : ITreeItem, IViewFor<ItemDescription>
         return _panel;
     }
 
-    object IViewFor.ViewModel
+    object? IViewFor.ViewModel
     {
         get => ViewModel;
-        set => ViewModel = (ItemDescription)value;
+        set => ViewModel = (ItemDescription?)value;
     }
 
-    public ItemDescription ViewModel { get; set; }
+    public ItemDescription? ViewModel { get; set; }
 }

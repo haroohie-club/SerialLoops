@@ -13,7 +13,7 @@
         <TextBlock Grid.Column="0" Grid.Row="0" Margin="0,7,0,0" Text="{x:Static assets:Strings.Topic}"/>
         <StackPanel Name="InvalidTopicPanel" Grid.Column="1" Grid.Row="0" Margin="10,0,0,0" Orientation="Horizontal" Spacing="5" IsVisible="{Binding SelectedTopic, Converter={x:Static ObjectConverters.IsNull}}">
             <TextBlock Margin="0,7,0,0" Text="{Binding TopicId}"/>
-            <Button Content="{x:Static assets:Strings.Select_a_Topic}" Command="{Binding SelectTopicCommand}"/>
+            <Button Content="{x:Static assets:Strings.Select_a_Topic}" Command="{Binding ReassignTopicCommand}"/>
         </StackPanel>
         <StackPanel Grid.Column="1" Grid.Row="0" Margin="10,0,0,0" Orientation="Horizontal" Spacing="5" IsVisible="{Binding SelectedTopic, Converter={x:Static ObjectConverters.IsNotNull}}">
             <ComboBox ItemsSource="{Binding Topics}" SelectedItem="{Binding SelectedTopic}">

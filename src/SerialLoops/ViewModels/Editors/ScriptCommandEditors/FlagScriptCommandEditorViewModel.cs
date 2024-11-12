@@ -21,7 +21,7 @@ public class FlagScriptCommandEditorViewModel(ScriptItemCommand command, ScriptE
                 }
                 this.RaiseAndSetIfChanged(ref _flagId, flag);
                 ((FlagScriptParameter)Command.Parameters[0]).Id = _flagId;
-                Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
+                Script.Event!.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
                     .Objects[Command.Index].Parameters[0] = _flagId;
                 Script.UnsavedChanges = true;
             }
@@ -36,7 +36,7 @@ public class FlagScriptCommandEditorViewModel(ScriptItemCommand command, ScriptE
         {
             this.RaiseAndSetIfChanged(ref _setClear, value);
             ((BoolScriptParameter)Command.Parameters[1]).Value = _setClear;
-            Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
+            Script.Event!.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
                 .Objects[Command.Index].Parameters[1] = _setClear
                 ? ((BoolScriptParameter)Command.Parameters[1]).TrueValue
                 : ((BoolScriptParameter)Command.Parameters[1]).FalseValue;

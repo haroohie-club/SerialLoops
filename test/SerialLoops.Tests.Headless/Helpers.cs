@@ -22,7 +22,7 @@ public static class Helpers
 
     public static void TabToExplorer(this MainWindow mainWindow)
     {
-        int explorerTabStop = 2 + ((MainWindowViewModel)mainWindow.DataContext).ToolBar.Items.Count; // the menu, the search bar, and each of the tool bar items
+        int explorerTabStop = 2 + ((MainWindowViewModel)mainWindow.DataContext!).ToolBar.Items.Count; // the menu, the search bar, and each of the tool bar items
         if (NativeMenu.GetIsNativeMenuExported(mainWindow)) // if the menu is native, it's not a tab stop
         {
             explorerTabStop--;

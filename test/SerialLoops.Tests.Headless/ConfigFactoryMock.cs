@@ -5,7 +5,7 @@ using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Factories;
 
-namespace SerialLoops.Tests.Shared;
+namespace SerialLoops.Tests.Headless;
 
 public class ConfigFactoryMock(string configPath) : IConfigFactory
 {
@@ -15,7 +15,7 @@ public class ConfigFactoryMock(string configPath) : IConfigFactory
     {
         if (File.Exists(_configPath))
         {
-            Config? newConfig = JsonSerializer.Deserialize<Config>(File.ReadAllText(_configPath));
+            Config newConfig = JsonSerializer.Deserialize<Config>(File.ReadAllText(_configPath))!;
             newConfig.ConfigPath = _configPath;
             newConfig.InitializeHacks(log);
             return newConfig;

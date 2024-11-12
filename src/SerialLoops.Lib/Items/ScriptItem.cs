@@ -413,7 +413,7 @@ public class ScriptItem : Item
                 (!bgReverted && (commands[i].Verb == CommandVerb.BG_DISPCG ||
                                  commands[i].Verb == CommandVerb.BG_FADE)))
             {
-                BackgroundItem background = ((BgScriptParameter)commands[i].Parameters[0]).Background;
+                BackgroundItem? background = ((BgScriptParameter)commands[i].Parameters[0]).Background;
 
                 preview.Background = background;
                 preview.BgScrollCommand = bgScrollCommand;
@@ -472,7 +472,7 @@ public class ScriptItem : Item
                         case SpriteExitScriptParameter.SpriteExitTransition.FADE_OUT_CENTER:
                         case SpriteExitScriptParameter.SpriteExitTransition.FADE_OUT_LEFT:
                             if (sprites.ContainsKey(prevCharacter) && previousSprites.ContainsKey(prevCharacter) &&
-                                ((SpriteScriptParameter)previousCommand.Parameters[1]).Sprite.Sprite.Character ==
+                                ((SpriteScriptParameter)previousCommand.Parameters[1]).Sprite?.Sprite.Character ==
                                 prevCharacter.MessageInfo.Character)
                             {
                                 sprites.Remove(prevCharacter);
@@ -944,7 +944,7 @@ public class ScriptItem : Item
         // Draw character sprites
         foreach (PositionedSprite sprite in preview.Sprites)
         {
-            SKBitmap spriteBitmap = sprite.Sprite.GetClosedMouthAnimation(project)[0].Frame;
+            SKBitmap? spriteBitmap = sprite.Sprite?.GetClosedMouthAnimation(project)[0].Frame;
             canvas.DrawBitmap(spriteBitmap, sprite.Positioning.GetSpritePosition(spriteBitmap),
                 sprite.PalEffect);
         }
@@ -1009,7 +1009,7 @@ public class ScriptItem : Item
     }
 
     public (SKBitmap? PreviewImage, string? ErrorImage) GeneratePreviewImage(
-        Dictionary<ScriptSection, List<ScriptItemCommand>> commandTree, ScriptItemCommand currentCommand,
+        Dictionary<ScriptSection, List<ScriptItemCommand>> commandTree, ScriptItemCommand? currentCommand,
         Project project, ILogger log)
     {
         return GeneratePreviewImage(GetScriptPreview(commandTree, currentCommand, project, log), project);

@@ -21,7 +21,7 @@ public class ItemExplorerPanelViewModel : ViewModelBase
     private EditorTabsPanelViewModel _tabs;
     private ILogger _log;
 
-    private ObservableCollection<ItemDescription> _items;
+    private ObservableCollection<ItemDescription> _items = [];
     public ObservableCollection<ItemDescription> Items
     {
         get => _items;
@@ -58,7 +58,7 @@ public class ItemExplorerPanelViewModel : ViewModelBase
     }
 
     [Reactive]
-    public HierarchicalTreeDataGridSource<ITreeItem> Source { get; private set; }
+    public HierarchicalTreeDataGridSource<ITreeItem> Source { get; private set; } = new([]);
     [Reactive]
     public bool ExpandItems { get; set; }
 
@@ -77,7 +77,7 @@ public class ItemExplorerPanelViewModel : ViewModelBase
 
     public void OpenItem(TreeDataGrid viewer)
     {
-        ItemDescription item = _project.FindItem(((ITreeItem)viewer.RowSelection.SelectedItem)?.Text);
+        ItemDescription? item = _project.FindItem(((ITreeItem?)viewer.RowSelection?.SelectedItem)?.Text);
         if (item is not null)
         {
             _tabs.OpenTab(item);
@@ -86,7 +86,7 @@ public class ItemExplorerPanelViewModel : ViewModelBase
 
     private ObservableCollection<ITreeItem> GetSections()
     {
-        return new ObservableCollection<ITreeItem>(Items.GroupBy(i => i.Type).OrderBy(g => LocalizeItemTypes(g.Key))
+        return new(Items.GroupBy(i => i.Type).OrderBy(g => LocalizeItemTypes(g.Key))
             .Select(g => new SectionTreeItem(
                 LocalizeItemTypes(g.Key),
                 g.Select(i => new ItemDescriptionTreeItem(i)),

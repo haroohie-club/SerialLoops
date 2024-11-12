@@ -29,7 +29,7 @@ public class RouteSelectScenarioCommandEditorViewModel : ScenarioCommandEditorVi
     public RouteSelectScenarioCommandEditorViewModel(PrettyScenarioCommand command, Project project, EditorTabsPanelViewModel tabs) : base(command, tabs)
     {
         GroupSelections = new(project.Items.Where(i => i.Type == ItemDescription.ItemType.Group_Selection).Cast<GroupSelectionItem>());
-        _groupSelection = GroupSelections.FirstOrDefault(g => g.DisplayName == command.Parameter);
+        _groupSelection = GroupSelections.First(g => g.DisplayName == command.Parameter);
         _parameter = GroupSelections.IndexOf(_groupSelection);
     }
 }

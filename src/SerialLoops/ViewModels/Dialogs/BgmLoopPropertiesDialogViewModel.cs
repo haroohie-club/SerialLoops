@@ -37,7 +37,7 @@ public class BgmLoopPropertiesDialogViewModel : ViewModelBase
             endSample = (uint)(wav.Length / (wav.WaveFormat.BitsPerSample / 8));
         }
         LoopPreview = new(wav, loopEnabled, startSample, endSample);
-        LoopPreviewPlayer = new(LoopPreview, Log, null);
+        LoopPreviewPlayer = new(LoopPreview, Log, string.Empty);
 
         SaveCommand = ReactiveCommand.Create<BgmLoopPropertiesDialog>((dialog) => dialog.Close(LoopPreview));
         CancelCommand = ReactiveCommand.Create<BgmLoopPropertiesDialog>((dialog) => dialog.Close());

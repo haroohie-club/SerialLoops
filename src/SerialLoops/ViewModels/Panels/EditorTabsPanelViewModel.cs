@@ -14,11 +14,10 @@ public class EditorTabsPanelViewModel : ViewModelBase
 {
     private Project _project;
     private ILogger _log;
-    private EditorViewModel _selectedTab;
 
     public MainWindowViewModel MainWindow { get; private set; }
     [Reactive]
-    public EditorViewModel SelectedTab { get; set; }
+    public EditorViewModel? SelectedTab { get; set; }
 
     public ICommand TabSwitchedCommand { get; set; }
 
@@ -43,7 +42,7 @@ public class EditorTabsPanelViewModel : ViewModelBase
             }
         }
 
-        EditorViewModel newTab = CreateTab(item);
+        EditorViewModel? newTab = CreateTab(item);
         if (newTab is not null)
         {
             Tabs.Add(newTab);
@@ -51,7 +50,7 @@ public class EditorTabsPanelViewModel : ViewModelBase
         }
     }
 
-    private EditorViewModel CreateTab(ItemDescription item)
+    private EditorViewModel? CreateTab(ItemDescription item)
     {
         switch (item.Type)
         {
@@ -100,10 +99,5 @@ public class EditorTabsPanelViewModel : ViewModelBase
         {
             ((SfxEditorViewModel)closedEditor).SfxPlayerPanel.Stop();
         }
-    }
-
-    public void OnTabMiddleClicked()
-    {
-        Tabs.Remove(SelectedTab);
     }
 }

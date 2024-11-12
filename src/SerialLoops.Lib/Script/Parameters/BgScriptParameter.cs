@@ -3,10 +3,10 @@ using SerialLoops.Lib.Items;
 
 namespace SerialLoops.Lib.Script.Parameters;
 
-public class BgScriptParameter(string name, BackgroundItem background, bool kinetic)
+public class BgScriptParameter(string name, BackgroundItem? background, bool kinetic)
     : ScriptParameter(name, ParameterType.BG)
 {
-    public BackgroundItem Background { get; set; } = background;
+    public BackgroundItem? Background { get; set; } = background;
     public bool Kinetic { get; set; } = kinetic;
     public override short[] GetValues(object? obj = null) => [(short)(Background?.Id ?? 0)];
 

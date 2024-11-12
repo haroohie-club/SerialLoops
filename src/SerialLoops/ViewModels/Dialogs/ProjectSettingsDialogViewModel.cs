@@ -8,6 +8,7 @@ using SerialLoops.Lib;
 using SerialLoops.Utility;
 using SerialLoops.Views.Dialogs;
 using SkiaSharp;
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
 namespace SerialLoops.ViewModels.Dialogs;
 
@@ -25,13 +26,13 @@ public class ProjectSettingsDialogViewModel : ViewModelBase
     [Reactive]
     public string GameTitle { get; set; }
 
-    private SKBitmap _icon;
-    public SKBitmap Icon
+    private SKBitmap? _icon;
+    public SKBitmap? Icon
     {
         get
         {
             SKBitmap preview = new(64, 64);
-            _icon.ScalePixels(preview, SKFilterQuality.None);
+            _icon?.ScalePixels(preview, SKFilterQuality.None);
             return preview;
         }
         set => this.RaiseAndSetIfChanged(ref _icon, value);
@@ -47,8 +48,8 @@ public class ProjectSettingsDialogViewModel : ViewModelBase
         _settingsDialog = settingsDialog;
         _settings = settings;
 
-        Icon = settings.Icon;
-        GameTitle = settings.Name;
+        Icon = settings?.Icon;
+        GameTitle = settings?.Name ?? string.Empty;
         Log = log;
 
         ReplaceCommand = ReactiveCommand.Create(ReplaceCommand_Executed);
@@ -58,7 +59,7 @@ public class ProjectSettingsDialogViewModel : ViewModelBase
 
     private async void ReplaceCommand_Executed()
     {
-        IStorageFile image = await _settingsDialog.ShowOpenFilePickerAsync(Strings.Replace_Game_Icon, [new FilePickerFileType(Strings.Supported_Images) { Patterns = Shared.SupportedImageFiletypes }]);
+        IStorageFile? image = await _settingsDialog.ShowOpenFilePickerAsync(Strings.Replace_Game_Icon, [new FilePickerFileType(Strings.Supported_Images) { Patterns = Shared.SupportedImageFiletypes }]);
         if (image is null)
         {
             return;
@@ -87,11 +88,11 @@ public class ProjectSettingsDialogViewModel : ViewModelBase
             Log.LogError(Strings.Game_banner_can_only_contain_up_to_three_lines_);
             return;
         }
-        _settings.Name = GameTitle;
+        _settings!.Name = GameTitle;
 
         if (Icon is not null)
         {
-            _settings.Icon = _icon;
+            _settings.Icon = Icon;
         }
 
         Applied = true;

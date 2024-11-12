@@ -24,7 +24,7 @@ namespace SerialLoops.ViewModels.Editors;
 public class ScriptEditorViewModel : EditorViewModel
 {
     private ScriptItem _script;
-    private ScriptItemCommand _selectedCommand;
+    private ScriptItemCommand? _selectedCommand;
     private Dictionary<ScriptSection, List<ScriptItemCommand>> _commands = [];
 
     public ICommand SelectedCommandChangedCommand { get; }
@@ -33,7 +33,7 @@ public class ScriptEditorViewModel : EditorViewModel
     public ICommand DeleteScriptCommandOrSectionCommand { get; }
     public ICommand ClearScriptCommand { get; }
 
-    public ScriptItemCommand SelectedCommand
+    public ScriptItemCommand? SelectedCommand
     {
         get => _selectedCommand;
         set
@@ -44,12 +44,12 @@ public class ScriptEditorViewModel : EditorViewModel
         }
     }
     [Reactive]
-    public ScriptSection SelectedSection { get; set; }
+    public ScriptSection? SelectedSection { get; set; }
 
     [Reactive]
-    public SKBitmap PreviewBitmap { get; set; }
+    public SKBitmap? PreviewBitmap { get; set; }
     [Reactive]
-    public ScriptCommandEditorViewModel CurrentCommandViewModel { get; set; }
+    public ScriptCommandEditorViewModel? CurrentCommandViewModel { get; set; }
 
     public Dictionary<ScriptSection, List<ScriptItemCommand>> Commands
     {
@@ -70,14 +70,14 @@ public class ScriptEditorViewModel : EditorViewModel
                     )
                 }
             };
-            Source.RowSelection.SingleSelect = true;
+            Source.RowSelection!.SingleSelect = true;
             Source.RowSelection.SelectionChanged += RowSelection_SelectionChanged;
             Source.ExpandAll();
         }
     }
 
     [Reactive]
-    public HierarchicalTreeDataGridSource<ITreeItem> Source { get; private set; }
+    public HierarchicalTreeDataGridSource<ITreeItem>? Source { get; private set; }
 
     public ScriptEditorViewModel(ScriptItem script, MainWindowViewModel window, ILogger log) : base(script, window, log)
     {
@@ -85,15 +85,20 @@ public class ScriptEditorViewModel : EditorViewModel
         _project = window.OpenProject;
         PopulateScriptCommands();
         _script.CalculateGraphEdges(_commands, _log);
+        SelectedCommandChangedCommand = ReactiveCommand.Create(SelectedCommandChanged);
+        AddScriptCommandCommand = ReactiveCommand.Create(AddScriptCommand);
+        AddScriptSectionCommand = ReactiveCommand.Create(AddScriptSection);
+        DeleteScriptCommandOrSectionCommand = ReactiveCommand.Create(Delete);
+        ClearScriptCommand = ReactiveCommand.Create(Clear);
     }
 
     public void PopulateScriptCommands(bool refresh = false)
     {
         if (refresh)
         {
-            _script.Refresh(_project, _log);
+            _script.Refresh(_project!, _log);
         }
-        Commands = _script.GetScriptCommandTree(_project, _log);
+        Commands = _script.GetScriptCommandTree(_project!, _log) ?? [];
     }
 
     private void UpdateCommandViewModel()
@@ -109,7 +114,7 @@ public class ScriptEditorViewModel : EditorViewModel
                 CommandVerb.INIT_READ_FLAG => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
                 CommandVerb.DIALOGUE => new DialogueScriptCommandEditorViewModel(_selectedCommand, this, _window),
                 CommandVerb.KBG_DISP => new KbgDispScriptCommandEditorViewModel(_selectedCommand, this, _window),
-                CommandVerb.PIN_MNL => new PinMnlScriptCommandEditorViewModel(_selectedCommand, this, _window.OpenProject),
+                CommandVerb.PIN_MNL => new PinMnlScriptCommandEditorViewModel(_selectedCommand, this, _window.OpenProject!),
                 CommandVerb.BG_DISP => new BgDispScriptCommandEditorViewModel(_selectedCommand, this, _window),
                 CommandVerb.SCREEN_FADEIN => new ScreenFadeInScriptCommandEditorViewModel(_selectedCommand, this),
                 CommandVerb.SCREEN_FADEOUT => new ScreenFadeOutScriptCommandEditorViewModel(_selectedCommand, this),
@@ -132,7 +137,7 @@ public class ScriptEditorViewModel : EditorViewModel
                 CommandVerb.NEXT_SCENE => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
                 CommandVerb.AVOID_DISP => new EmptyScriptCommandEditorViewModel(_selectedCommand, this),
                 CommandVerb.BG_DISP2 => new BgDispScriptCommandEditorViewModel(_selectedCommand, this, _window),
-                _ => new ScriptCommandEditorViewModel(_selectedCommand, this)
+                _ => new(_selectedCommand, this)
             };
         }
     }
@@ -147,13 +152,13 @@ public class ScriptEditorViewModel : EditorViewModel
             }
             else
             {
-                (SKBitmap previewBitmap, string errorImage) = _script.GeneratePreviewImage(_commands, SelectedCommand, _project, _log);
+                (SKBitmap? previewBitmap, string? errorImage) = _script.GeneratePreviewImage(_commands, SelectedCommand, _project!, _log);
                 if (previewBitmap is null)
                 {
                     previewBitmap = new(256, 384);
                     SKCanvas canvas = new(previewBitmap);
                     canvas.DrawColor(SKColors.Black);
-                    using Stream noPreviewStream = Assembly.GetCallingAssembly().GetManifestResourceStream(errorImage);
+                    using Stream noPreviewStream = Assembly.GetCallingAssembly().GetManifestResourceStream(errorImage ?? "")!;
                     canvas.DrawImage(SKImage.FromEncodedData(noPreviewStream), new SKPoint(0, 0));
                     canvas.Flush();
                 }
@@ -166,7 +171,7 @@ public class ScriptEditorViewModel : EditorViewModel
         }
     }
 
-    private void RowSelection_SelectionChanged(object sender, TreeSelectionModelSelectionChangedEventArgs<ITreeItem> e)
+    private void RowSelection_SelectionChanged(object? sender, TreeSelectionModelSelectionChangedEventArgs<ITreeItem> e)
     {
         if (e.SelectedIndexes.Count == 0 || e.SelectedIndexes[0].Count == 0)
         {
@@ -183,5 +188,30 @@ public class ScriptEditorViewModel : EditorViewModel
             SelectedCommand = null;
             SelectedSection = Commands.Keys.ElementAt(e.SelectedIndexes[0][0]);
         }
+    }
+
+    private void SelectedCommandChanged()
+    {
+
+    }
+
+    private void AddScriptCommand()
+    {
+
+    }
+
+    private void AddScriptSection()
+    {
+
+    }
+
+    private void Delete()
+    {
+
+    }
+
+    private void Clear()
+    {
+
     }
 }

@@ -23,11 +23,11 @@ namespace SerialLoops.ViewModels.Editors;
 public class ScenarioEditorViewModel : EditorViewModel
 {
     private ScenarioItem _scenario;
-    private PrettyScenarioCommand _selectedCommand;
+    private PrettyScenarioCommand? _selectedCommand;
 
     public ObservableCollection<PrettyScenarioCommand> Commands { get; set; }
 
-    public PrettyScenarioCommand SelectedCommand
+    public PrettyScenarioCommand? SelectedCommand
     {
         get => _selectedCommand;
         set
@@ -44,7 +44,7 @@ public class ScenarioEditorViewModel : EditorViewModel
         }
     }
     [Reactive]
-    public ScenarioCommandEditorViewModel CurrentCommandViewModel { get; set; }
+    public ScenarioCommandEditorViewModel? CurrentCommandViewModel { get; set; }
 
     public ICommand AddCommand { get; set; }
     public ICommand DeleteCommand { get; set; }
@@ -65,15 +65,15 @@ public class ScenarioEditorViewModel : EditorViewModel
 
     private async void Add()
     {
-        int selectedIndex = Math.Min(_scenario.Scenario.Commands.Count - 1, Commands.IndexOf(SelectedCommand));
-        ScenarioVerb? newVerb = await new AddScenarioCommandDialog() { DataContext = new AddScenarioCommandDialogViewModel() }.ShowDialog<ScenarioVerb>(_window.Window);
+        int selectedIndex = Math.Min(_scenario.Scenario.Commands.Count - 1, SelectedCommand is null ? -1 : Commands.IndexOf(SelectedCommand));
+        ScenarioVerb? newVerb = await new AddScenarioCommandDialog { DataContext = new AddScenarioCommandDialogViewModel() }.ShowDialog<ScenarioVerb?>(_window.Window);
         if (newVerb is not null)
         {
             int param = newVerb switch
             {
                 ScenarioVerb.NEW_GAME => 1,
-                ScenarioVerb.PUZZLE_PHASE => ((PuzzleItem)_window.OpenProject.Items.First(i => i.Type == ItemDescription.ItemType.Puzzle)).Puzzle.Index,
-                ScenarioVerb.LOAD_SCENE => ((ScriptItem)_window.OpenProject.Items.First(i => i.Type == ItemDescription.ItemType.Script)).Event.Index,
+                ScenarioVerb.PUZZLE_PHASE => ((PuzzleItem)_window.OpenProject!.Items.First(i => i.Type == ItemDescription.ItemType.Puzzle)).Puzzle.Index,
+                ScenarioVerb.LOAD_SCENE => ((ScriptItem)_window.OpenProject!.Items.First(i => i.Type == ItemDescription.ItemType.Script)).Event!.Index,
                 _ => 0,
             };
             ScenarioCommand newCommand = new(newVerb ?? ScenarioVerb.LOAD_SCENE, param);
@@ -88,7 +88,7 @@ public class ScenarioEditorViewModel : EditorViewModel
     }
     private void Delete()
     {
-        int selectedIndex = Commands.IndexOf(SelectedCommand);
+        int selectedIndex = SelectedCommand is null ? -1 : Commands.IndexOf(SelectedCommand);
         if (selectedIndex < 0 || selectedIndex >= _scenario.Scenario.Commands.Count)
         {
             return;
@@ -112,7 +112,7 @@ public class ScenarioEditorViewModel : EditorViewModel
     }
     private void Up()
     {
-        int selectedIndex = Commands.IndexOf(SelectedCommand);
+        int selectedIndex = SelectedCommand is null ? -1 : Commands.IndexOf(SelectedCommand);
         if (selectedIndex <= 0 || selectedIndex >= _scenario.Scenario.Commands.Count)
         {
             return;
@@ -126,7 +126,7 @@ public class ScenarioEditorViewModel : EditorViewModel
     }
     private void Down()
     {
-        int selectedIndex = Commands.IndexOf(SelectedCommand);
+        int selectedIndex = SelectedCommand is null ? -1 : Commands.IndexOf(SelectedCommand);
         if (selectedIndex < 0 || selectedIndex >= _scenario.Scenario.Commands.Count - 1)
         {
             return;
@@ -138,14 +138,18 @@ public class ScenarioEditorViewModel : EditorViewModel
 
         Description.UnsavedChanges = true;
     }
-    public ScenarioCommandEditorViewModel GetScenarioCommandEditor(PrettyScenarioCommand command)
+    public ScenarioCommandEditorViewModel? GetScenarioCommandEditor(PrettyScenarioCommand? command)
     {
+        if (command is null)
+        {
+            return null;
+        }
         return command.Verb switch
         {
-            ScenarioVerb.LOAD_SCENE => new LoadSceneScenarioCommandEditorViewModel(command, _window.OpenProject, _window.EditorTabs),
-            ScenarioVerb.PUZZLE_PHASE => new PuzzlePhaseScenarioCommandEditorViewModel(command, _window.OpenProject, _window.EditorTabs),
-            ScenarioVerb.ROUTE_SELECT => new RouteSelectScenarioCommandEditorViewModel(command, _window.OpenProject, _window.EditorTabs),
-            _ => new ScenarioCommandEditorViewModel(command, _window.EditorTabs),
+            ScenarioVerb.LOAD_SCENE => new LoadSceneScenarioCommandEditorViewModel(command, _window.OpenProject!, _window.EditorTabs!),
+            ScenarioVerb.PUZZLE_PHASE => new PuzzlePhaseScenarioCommandEditorViewModel(command, _window.OpenProject!, _window.EditorTabs!),
+            ScenarioVerb.ROUTE_SELECT => new RouteSelectScenarioCommandEditorViewModel(command, _window.OpenProject!, _window.EditorTabs!),
+            _ => new(command, _window.EditorTabs!),
         };
     }
 }

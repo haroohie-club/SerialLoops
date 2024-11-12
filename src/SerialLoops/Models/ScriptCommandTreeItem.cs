@@ -17,9 +17,9 @@ public class ScriptCommandTreeItem : ITreeItem, IViewFor<ScriptItemCommand>
         Margin = new(2),
     };
 
-    public string Text { get; set; }
-    public Avalonia.Svg.Svg Icon { get; set; } = null;
-    public ObservableCollection<ITreeItem> Children { get; set; } = null;
+    public string Text { get; set; } = string.Empty;
+    public Avalonia.Svg.Svg? Icon { get; set; } = null;
+    public ObservableCollection<ITreeItem>? Children { get; set; } = null;
     public bool IsExpanded { get; set; } = false;
 
     public ScriptCommandTreeItem(ScriptItemCommand command)
@@ -34,11 +34,11 @@ public class ScriptCommandTreeItem : ITreeItem, IViewFor<ScriptItemCommand>
         return _panel;
     }
 
-    object IViewFor.ViewModel
+    object? IViewFor.ViewModel
     {
         get => ViewModel;
-        set => ViewModel = (ScriptItemCommand)value;
+        set => ViewModel = (ScriptItemCommand?)value;
     }
 
-    public ScriptItemCommand ViewModel { get; set; }
+    public ScriptItemCommand? ViewModel { get; set; }
 }
