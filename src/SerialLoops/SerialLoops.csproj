@@ -50,6 +50,7 @@
   <ItemGroup>
     <None Remove="Assets\MacIcon.icns" />
     <None Remove="Assets\serial-loops.ico" />
+    <None Remove="Views\Editors\ScriptCommandEditors\HaruhiMeterScriptCommandEditorView.axaml~" />
   </ItemGroup>
 
   <ItemGroup>

@@ -5,11 +5,14 @@ using ReactiveUI;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
 using SerialLoops.Lib.Script.Parameters;
+using SerialLoops.ViewModels.Panels;
 
 namespace SerialLoops.ViewModels.Editors.ScriptCommandEditors;
 
 public class SceneGotoScriptCommandEditorViewModel : ScriptCommandEditorViewModel
 {
+    public EditorTabsPanelViewModel Tabs { get; }
+
     public ObservableCollection<ScriptItem> Scripts { get; }
     private ScriptItem _selectedScript;
 
@@ -40,6 +43,7 @@ public class SceneGotoScriptCommandEditorViewModel : ScriptCommandEditorViewMode
     public SceneGotoScriptCommandEditorViewModel(ScriptItemCommand command, ScriptEditorViewModel scriptEditor, ILogger log, MainWindowViewModel window) :
         base(command, scriptEditor, log)
     {
+        Tabs = window.EditorTabs;
         Scripts = new(window.OpenProject.Items.Where(i => i.Type == ItemDescription.ItemType.Script)
             .Cast<ScriptItem>());
         _selectedScript = (ScriptItem)(window.OpenProject.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Script && ((ScriptItem)i).Name.Equals(((ConditionalScriptParameter)Command.Parameters[0]).Conditional))
