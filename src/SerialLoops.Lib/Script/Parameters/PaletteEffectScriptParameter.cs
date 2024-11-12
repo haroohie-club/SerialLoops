@@ -20,7 +20,7 @@ public class PaletteEffectScriptParameter : ScriptParameter
 
     public enum PaletteEffect : short
     {
-        DEFAULT = 216,
+        DEFAULT_PALETTE = 216,
         INVERTED = 217,
         GRAYSCALE = 218,
         SEPIA = 219,

@@ -2319,7 +2319,7 @@ If you wish to ignore this, please check the "Ignore Hash" checkbox.</value>
     <value>This system texture uses a common palette, so palette replacement has been disabled</value>
   </data>
   <data name="Time (Frames)" xml:space="preserve">
-    <value>Time (Frames)</value>
+    <value>Transition Time (Frames)</value>
   </data>
   <data name="Times" xml:space="preserve">
     <value>Times</value>
@@ -2745,5 +2745,20 @@ No project is currently open. Would you like to create a new project?</value>
   </data>
   <data name="WHITE" xml:space="preserve">
     <value>White</value>
+  </data>
+  <data name="DEFAULT_PALETTE" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="INVERTED" xml:space="preserve">
+    <value>Inverted</value>
+  </data>
+  <data name="GRAYSCALE" xml:space="preserve">
+    <value>Grayscale</value>
+  </data>
+  <data name="SEPIA" xml:space="preserve">
+    <value>Sepia</value>
+  </data>
+  <data name="DIMMED" xml:space="preserve">
+    <value>Dimmed</value>
   </data>
 </root>

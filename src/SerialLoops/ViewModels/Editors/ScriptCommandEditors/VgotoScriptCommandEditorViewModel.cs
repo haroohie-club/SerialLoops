@@ -31,6 +31,8 @@ public class VgotoScriptCommandEditorViewModel(ScriptItemCommand command, Script
                     (short)(Script.Event.ConditionalsSection.Objects.Count - 1);
                 Script.Event.ConditionalsSection.Objects.Insert(Script.Event.ConditionalsSection.Objects.Count - 1, _conditional);
             }
+            Script.UnsavedChanges = true;
+            Command.UpdateDisplay();
         }
     }
 

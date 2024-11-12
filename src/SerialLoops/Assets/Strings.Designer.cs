@@ -1589,6 +1589,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Default.
+        /// </summary>
+        public static string DEFAULT_PALETTE {
+            get {
+                return ResourceManager.GetString("DEFAULT_PALETTE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Defaults.
         /// </summary>
         public static string Defaults {
@@ -1739,6 +1748,15 @@ namespace SerialLoops.Assets {
         public static string Dialogue_Text {
             get {
                 return ResourceManager.GetString("Dialogue_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dimmed.
+        /// </summary>
+        public static string DIMMED {
+            get {
+                return ResourceManager.GetString("DIMMED", resourceCulture);
             }
         }
         
@@ -3419,6 +3437,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Grayscale.
+        /// </summary>
+        public static string GRAYSCALE {
+            get {
+                return ResourceManager.GetString("GRAYSCALE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Greek.
         /// </summary>
         public static string Greek {
@@ -3703,6 +3730,15 @@ namespace SerialLoops.Assets {
         public static string Invalid_search_terms {
             get {
                 return ResourceManager.GetString("Invalid search terms", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Inverted.
+        /// </summary>
+        public static string INVERTED {
+            get {
+                return ResourceManager.GetString("INVERTED", resourceCulture);
             }
         }
         
@@ -6146,6 +6182,15 @@ namespace SerialLoops.Assets {
         public static string Select_Template_to_Apply {
             get {
                 return ResourceManager.GetString("Select Template to Apply", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sepia.
+        /// </summary>
+        public static string SEPIA {
+            get {
+                return ResourceManager.GetString("SEPIA", resourceCulture);
             }
         }
         
