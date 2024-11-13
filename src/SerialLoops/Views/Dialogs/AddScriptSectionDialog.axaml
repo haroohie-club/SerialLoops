@@ -1,25 +1,28 @@
-﻿<Window xmlns="https://github.com/avaloniaui"
+<Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:vm="using:SerialLoops.ViewModels.Dialogs"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:assets="using:SerialLoops.Assets"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         Width="200" Height="150"
-        x:DataType="vm:AddScriptCommandDialogViewModel"
-        x:Class="SerialLoops.Views.Dialogs.AddScriptCommandDialog"
-        Title="{x:Static assets:Strings.Add_Command}"
-        Name="AddCommandDialog">
+        x:DataType="vm:AddScriptSectionDialogViewModel"
+        x:Class="SerialLoops.Views.Dialogs.AddScriptSectionDialog"
+        Title="{x:Static assets:Strings.Add_Section}"
+        Name="AddSectionDialog">
     <StackPanel Orientation="Vertical" Spacing="20" Margin="15">
         <StackPanel Orientation="Vertical" Spacing="3">
-            <TextBlock Text="{x:Static assets:Strings.Select_Command_Type}"/>
-            <ComboBox ItemsSource="{Binding CommandVerbs}" SelectedItem="{Binding SelectedCommandVerb}"/>
+            <TextBlock Text="{x:Static assets:Strings.Section_Name_}"/>
+            <StackPanel Orientation="Horizontal" Spacing="2">
+                <TextBlock Text="NONE"/>
+                <TextBox Text="{Binding SectionName}"/>
+            </StackPanel>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Spacing="5">
             <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}"
-                    CommandParameter="{Binding #AddCommandDialog}" IsCancel="True"/>
+                    CommandParameter="{Binding #AddSectionDialog}" IsCancel="True"/>
             <Button Content="{x:Static assets:Strings.Create}" Command="{Binding CreateCommand}"
-                    CommandParameter="{Binding #AddCommandDialog}" IsDefault="True"/>
+                    CommandParameter="{Binding #AddSectionDialog}" IsDefault="True"/>
         </StackPanel>
     </StackPanel>
 </Window>

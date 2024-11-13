@@ -11,18 +11,23 @@ using Avalonia.Controls.Selection;
 using Avalonia.Controls.Templates;
 using Avalonia.Platform;
 using AvaloniaEdit.Utils;
+using DynamicData;
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
+using MsBox.Avalonia.Enums;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SerialLoops.Assets;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
+using SerialLoops.Lib.Util;
 using SerialLoops.Models;
+using SerialLoops.Utility;
 using SerialLoops.ViewModels.Dialogs;
 using SerialLoops.ViewModels.Editors.ScriptCommandEditors;
 using SerialLoops.Views.Dialogs;
 using SkiaSharp;
+using SoftCircuits.Collections;
 using static HaruhiChokuretsuLib.Archive.Event.EventFile;
 
 namespace SerialLoops.ViewModels.Editors;
@@ -31,9 +36,8 @@ public class ScriptEditorViewModel : EditorViewModel
 {
     private ScriptItem _script;
     private ScriptItemCommand _selectedCommand;
-    private Dictionary<ScriptSection, List<ScriptItemCommand>> _commands = [];
+    private OrderedDictionary<ScriptSection, List<ScriptItemCommand>> _commands = [];
 
-    public ICommand SelectedCommandChangedCommand { get; }
     public ICommand AddScriptCommandCommand { get; }
     public ICommand AddScriptSectionCommand { get; }
     public ICommand DeleteScriptCommandOrSectionCommand { get; }
@@ -45,19 +49,25 @@ public class ScriptEditorViewModel : EditorViewModel
         set
         {
             this.RaiseAndSetIfChanged(ref _selectedCommand, value);
+
             UpdateCommandViewModel();
             UpdatePreview();
         }
     }
 
-    [Reactive] public ReactiveScriptSection SelectedSection { get; set; }
+    [Reactive]
+    public ReactiveScriptSection SelectedSection { get; set; }
+    [Reactive]
+    public ITreeItem SelectedTreeItem { get; set; }
 
-    [Reactive] public SKBitmap PreviewBitmap { get; set; }
-    [Reactive] public ScriptCommandEditorViewModel CurrentCommandViewModel { get; set; }
+    [Reactive]
+    public SKBitmap PreviewBitmap { get; set; }
+    [Reactive]
+    public ScriptCommandEditorViewModel CurrentCommandViewModel { get; set; }
 
     public ObservableCollection<ReactiveScriptSection> ScriptSections { get; }
 
-    public Dictionary<ScriptSection, List<ScriptItemCommand>> Commands
+    public OrderedDictionary<ScriptSection, List<ScriptItemCommand>> Commands
     {
         get => _commands;
         set
@@ -70,11 +80,12 @@ public class ScriptEditorViewModel : EditorViewModel
                     new HierarchicalExpanderColumn<ITreeItem>(
                         new TemplateColumn<ITreeItem>(null,
                             new FuncDataTemplate<ITreeItem>((val, namescope) => val?.GetDisplay()),
-                            options: new TemplateColumnOptions<ITreeItem>() { IsTextSearchEnabled = true }),
+                            options: new() { IsTextSearchEnabled = true }),
                         i => i.Children
-                    )
-                }
+                    ),
+                },
             };
+
             Source.RowSelection!.SingleSelect = true;
             Source.RowSelection.SelectionChanged += RowSelection_SelectionChanged;
             Source.ExpandAll();
@@ -96,8 +107,10 @@ public class ScriptEditorViewModel : EditorViewModel
             section.SetCommands(_commands[section.Section]);
         }
         Source.ExpandAll();
-
         AddScriptCommandCommand = ReactiveCommand.CreateFromTask(AddCommand);
+        AddScriptSectionCommand = ReactiveCommand.CreateFromTask(AddSection);
+        DeleteScriptCommandOrSectionCommand = ReactiveCommand.CreateFromTask(Delete);
+        ClearScriptCommand = ReactiveCommand.CreateFromTask(Clear);
     }
 
     public void PopulateScriptCommands(bool refresh = false)
@@ -128,6 +141,7 @@ public class ScriptEditorViewModel : EditorViewModel
                 CommandVerb.SCREEN_FADEIN => new ScreenFadeInScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.SCREEN_FADEOUT => new ScreenFadeOutScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.SCREEN_FLASH => new ScreenFlashScriptCommandEditorViewModel(_selectedCommand, this, _log),
+                CommandVerb.SND_PLAY => new SndPlayScriptCommandEditorViewModel(_selectedCommand, this, _log, _window),
                 CommandVerb.REMOVED => new EmptyScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.SND_STOP => new EmptyScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.BGM_PLAY => new BgmPlayScriptCommandEditorViewModel(_selectedCommand, this, _log, _window),
@@ -138,7 +152,7 @@ public class ScriptEditorViewModel : EditorViewModel
                 CommandVerb.SELECT => new SelectScriptCommandEditorViewModel(_selectedCommand, this, _log, _window.OpenProject),
                 CommandVerb.SCREEN_SHAKE => new ScreenShakeScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.SCREEN_SHAKE_STOP => new EmptyScriptCommandEditorViewModel(_selectedCommand, this, _log),
-                CommandVerb.GOTO => new GotoScriptCommandEditorViewModel(_selectedCommand, this, _log),
+                CommandVerb.GOTO => new GotoScriptCommandEditorViewModel(_selectedCommand, this, _log, _window.OpenProject),
                 CommandVerb.SCENE_GOTO => new SceneGotoScriptCommandEditorViewModel(_selectedCommand, this, _log, _window),
                 CommandVerb.WAIT => new WaitScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.HOLD => new EmptyScriptCommandEditorViewModel(_selectedCommand, this, _log),
@@ -228,11 +242,10 @@ public class ScriptEditorViewModel : EditorViewModel
 
         ScriptCommandInvocation invocation =
             new(CommandsAvailable.Find(command => command.Mnemonic.Equals(newVerb.ToString())));
+        invocation.InitializeWithDefaultValues(_script.Event, _project);
         ScriptItemCommand newCommand;
-        ScriptSection scriptSection;
         if (SelectedCommand is null)
         {
-            scriptSection = SelectedSection.Section;
             newCommand =
                 ScriptItemCommand.FromInvocation(
                     invocation,
@@ -243,12 +256,10 @@ public class ScriptEditorViewModel : EditorViewModel
                     Strings.ResourceManager.GetString,
                     _log
                 );
-
             SelectedSection.InsertCommand(newCommand.Index, newCommand, Commands);
         }
         else
         {
-            scriptSection = SelectedCommand.Section;
             newCommand =
                 ScriptItemCommand.FromInvocation(
                     invocation,
@@ -262,10 +273,153 @@ public class ScriptEditorViewModel : EditorViewModel
             ScriptSections[_script.Event.ScriptSections.IndexOf(SelectedCommand.Section)].InsertCommand(newCommand.Index, newCommand, Commands);
         }
 
-        for (int i = newCommand.Index + 1; i < ScriptSections.Count; i++)
+        SelectedCommand = newCommand;
+        Source.RowSelection?.Select(new(_script.Event.ScriptSections.IndexOf(SelectedCommand.Section), SelectedCommand.Index));
+
+        _script.Refresh(_project, _log);
+        _script.UnsavedChanges = true;
+    }
+
+    private async Task AddSection()
+    {
+        string sectionName = await new AddScriptSectionDialog() { DataContext = new AddScriptSectionDialogViewModel() }
+            .ShowDialog<string>(_window.Window);
+        if (string.IsNullOrEmpty(sectionName))
         {
-            Commands[scriptSection][i].Index++;
+            return;
         }
+
+        sectionName = $"NONE{sectionName}";
+        if (ScriptSections.Any(s => s.Name.Equals(sectionName)))
+        {
+            await _window.Window.ShowMessageBoxAsync(Strings.Duplicate_Section_Name,
+                Strings.Section_name_already_exists__Please_pick_a_different_name_for_this_section_,
+                ButtonEnum.Ok, Icon.Warning, _log);
+            return;
+        }
+
+        int sectionIndex = 1;
+        if (SelectedCommand is not null)
+        {
+            sectionIndex = _script.Event.ScriptSections.IndexOf(SelectedCommand.Section) + 1;
+        }
+        else if (SelectedSection is not null)
+        {
+            sectionIndex = ScriptSections.IndexOf(SelectedSection) + 1;
+        }
+
+        ScriptSection section = new()
+        {
+            Name = sectionName,
+            CommandsAvailable = CommandsAvailable,
+            SectionType = typeof(ScriptSection),
+            ObjectType = typeof(ScriptCommandInvocation),
+        };
+        ReactiveScriptSection reactiveSection = new(section);
+
+        _script.Event.ScriptSections.Insert(sectionIndex, section);
+        _script.Event.NumSections++;
+        _script.Event.LabelsSection.Objects.Insert(sectionIndex,
+            new()
+            {
+                Name = $"NONE/{sectionName[4..]}",
+                Id = (short)(sectionIndex == _script.Event.LabelsSection.Objects.Count ?
+                    _script.Event.LabelsSection.Objects[^1].Id + 1 :
+                    _script.Event.LabelsSection.Objects[sectionIndex + 1].Id),
+            }
+        );
+        for (int i = sectionIndex + 1; i < _script.Event.LabelsSection.Objects.Count; i++)
+        {
+            _script.Event.LabelsSection.Objects[i].Id++;
+        }
+
+        ScriptSections.Insert(sectionIndex, reactiveSection);
+        _script.Refresh(_project, _log);
+        _commands.Insert(sectionIndex, section, []);
+        // This forces a complete refresh of the hierarchical tree. This is not as performant as
+        // inserting directly into the collection, but is fine since users will not be adding sections
+        // as frequently as commands (and is necessary with our current architecture)
+        Commands = _commands;
+        _script.UnsavedChanges = true;
+    }
+
+    private async Task Delete()
+    {
+        if (SelectedCommand is null && SelectedSection is null)
+        {
+            return;
+        }
+
+        if (SelectedCommand is not null)
+        {
+            int index = SelectedCommand.Index;
+            SelectedCommand = index == 0 ? Commands[SelectedCommand.Section][1] : Commands[SelectedCommand.Section][index - 1];
+            Source.RowSelection?.Select(new(_script.Event.ScriptSections.IndexOf(SelectedCommand.Section), SelectedCommand.Index));
+            ScriptSections[_script.Event.ScriptSections.IndexOf(SelectedCommand.Section)].DeleteCommand(index, Commands);
+        }
+        else
+        {
+            int sectionIndex = ScriptSections.IndexOf(SelectedSection);
+            if (sectionIndex == 0)
+            {
+                await _window.Window.ShowMessageBoxAsync(Strings.Cannot_Delete_Root_Section_,
+                    Strings.The_root_section_cannot_be_deleted_, ButtonEnum.Ok,
+                    Icon.Warning, _log);
+                return;
+            }
+
+            SelectedSection = null;
+            SelectedCommand = Commands[_script.Event.ScriptSections[sectionIndex - 1]][^1];
+            Source.RowSelection?.Select(new(_script.Event.ScriptSections.IndexOf(SelectedCommand.Section), SelectedCommand.Index));
+
+            _script.Event.ScriptSections.RemoveAt(sectionIndex);
+            _script.Event.NumSections--;
+            _script.Event.LabelsSection.Objects.RemoveAt(sectionIndex);
+            for (int i = sectionIndex; i < _script.Event.LabelsSection.Objects.Count; i++)
+            {
+                _script.Event.LabelsSection.Objects[i].Id--;
+            }
+
+            ScriptSections.RemoveAt(sectionIndex);
+
+            _commands.RemoveAt(sectionIndex);
+            // This forces a complete refresh of the hierarchical tree. This is not as performant as
+            // inserting directly into the collection, but is fine since users will not be adding sections
+            // as frequently as commands (and is necessary with our current architecture)
+            Commands = _commands;
+        }
+
+        _script.Refresh(_project, _log);
+        _script.UnsavedChanges = true;
+    }
+
+    private async Task Clear()
+    {
+        if (await _window.Window.ShowMessageBoxAsync(Strings.Clear_Script_,
+                Strings.Are_you_sure_you_want_to_clear_the_script__nThis_action_is_irreversible_,
+                ButtonEnum.YesNo, Icon.Question, _log) != ButtonResult.Yes)
+        {
+            return;
+        };
+
+        Source.RowSelection?.Select(new());
+        SelectedSection = null;
+        SelectedCommand = null;
+        _script.Event.ScriptSections.Clear();
+        _script.Event.ScriptSections.Add(new()
+        {
+            Name = "SCRIPT00",
+            CommandsAvailable = CommandsAvailable,
+            SectionType = typeof(ScriptSection),
+            ObjectType = typeof(ScriptCommandInvocation),
+        });
+        _script.Event.LabelsSection.Objects.Clear();
+        ScriptSections.Clear();
+        ScriptSections.Add(new(_script.Event.ScriptSections[0]));
+        _commands.Clear();
+        _commands.Add(_script.Event.ScriptSections[0], []);
+        Commands = _commands;
+
         _script.Refresh(_project, _log);
         _script.UnsavedChanges = true;
     }
@@ -289,16 +443,31 @@ public class ReactiveScriptSection(ScriptSection section) : ReactiveObject
 
     public ObservableCollection<ITreeItem> Commands { get; private set; } = [];
 
-    public void InsertCommand(int index, ScriptItemCommand command, Dictionary<ScriptSection, List<ScriptItemCommand>> commands)
+    public void InsertCommand(int index, ScriptItemCommand command, OrderedDictionary<ScriptSection, List<ScriptItemCommand>> commands)
     {
         Commands.Insert(index, new ScriptCommandTreeItem(command));
         Section.Objects.Insert(index, command.Invocation);
         commands[Section].Insert(index, command);
+        for (int i = index + 1; i < commands[Section].Count; i++)
+        {
+            commands[Section][i].Index++;
+        }
     }
 
-    public void SetCommands(IEnumerable<ScriptItemCommand> commands)
+    public void DeleteCommand(int index, OrderedDictionary<ScriptSection, List<ScriptItemCommand>> commands)
+    {
+        Commands.RemoveAt(index);
+        Section.Objects.RemoveAt(index);
+        commands[Section].RemoveAt(index);
+        for (int i = index; i < commands[Section].Count; i++)
+        {
+            commands[Section][i].Index--;
+        }
+    }
+
+    internal void SetCommands(IEnumerable<ScriptItemCommand> commands)
     {
         Commands.Clear();
-        Commands.AddRange(commands.Select(c => new ScriptCommandTreeItem(c)));
+        ExtensionMethods.AddRange(Commands, commands.Select(c => new ScriptCommandTreeItem(c)));
     }
 }

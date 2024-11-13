@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
 using QuikGraph;
@@ -11,6 +12,7 @@ using ReactiveUI.Fody.Helpers;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script.Parameters;
 using SerialLoops.Lib.Util;
+using SoftCircuits.Collections;
 using static HaruhiChokuretsuLib.Archive.Event.EventFile;
 
 namespace SerialLoops.Lib.Script;
@@ -73,7 +75,7 @@ public class ScriptItemCommand : ReactiveObject
         UpdateDisplay();
     }
 
-    public List<ScriptItemCommand> WalkCommandGraph(Dictionary<ScriptSection, List<ScriptItemCommand>> commandTree, AdjacencyGraph<ScriptSection, ScriptSectionEdge> graph)
+    public List<ScriptItemCommand> WalkCommandGraph(OrderedDictionary<ScriptSection, List<ScriptItemCommand>> commandTree, AdjacencyGraph<ScriptSection, ScriptSectionEdge> graph)
     {
         List<ScriptItemCommand> commands = [];
 
@@ -247,7 +249,7 @@ public class ScriptItemCommand : ReactiveObject
                     switch (i)
                     {
                         case 0:
-                            parameters.Add(new SfxScriptParameter(localize("Sound"), (SfxItem)project.Items.First(s => s.Type == ItemDescription.ItemType.SFX && ((SfxItem)s).Index == parameter)));
+                            parameters.Add(new SfxScriptParameter(localize("Sound"), (SfxItem)project.Items.FirstOrDefault(s => s.Type == ItemDescription.ItemType.SFX && ((SfxItem)s).Index == parameter)));
                             break;
                         case 1:
                             parameters.Add(new SfxModeScriptParameter(localize("Mode"), parameter));

@@ -9,6 +9,7 @@ using SerialLoops.Lib.Script;
 using SerialLoops.Lib.Script.Parameters;
 using SerialLoops.Lib.Util;
 using SkiaSharp;
+using SoftCircuits.Collections;
 using static HaruhiChokuretsuLib.Archive.Event.EventFile;
 
 namespace SerialLoops.Lib.Items;
@@ -29,19 +30,26 @@ public class ScriptItem : Item
         evt.Name[0..^1], ItemType.Script)
     {
         Event = evt;
-        UpdateEventTableInfo(evtTbl);
         _localize = localize;
+        try
+        {
+            UpdateEventTableInfo(evtTbl);
 
-        PruneLabelsSection(log);
-        Graph.AddVertexRange(Event.ScriptSections);
+            PruneLabelsSection(log);
+            Graph.AddVertexRange(Event.ScriptSections);
+        }
+        catch (Exception ex)
+        {
+            log.LogException(string.Format(localize("Failed to load script file {0}"), evt.Name), ex);
+        }
     }
 
-    public Dictionary<ScriptSection, List<ScriptItemCommand>> GetScriptCommandTree(Project project, ILogger log)
+    public OrderedDictionary<ScriptSection, List<ScriptItemCommand>> GetScriptCommandTree(Project project, ILogger log)
     {
         ScriptCommandInvocation currentCommand = null;
         try
         {
-            Dictionary<ScriptSection, List<ScriptItemCommand>> commands = [];
+            OrderedDictionary<ScriptSection, List<ScriptItemCommand>> commands = [];
             foreach (ScriptSection section in Event.ScriptSections)
             {
                 commands.Add(section, []);
@@ -64,7 +72,7 @@ public class ScriptItem : Item
         }
     }
 
-    public void CalculateGraphEdges(Dictionary<ScriptSection, List<ScriptItemCommand>> commandTree, ILogger log)
+    public void CalculateGraphEdges(OrderedDictionary<ScriptSection, List<ScriptItemCommand>> commandTree, ILogger log)
     {
         try
         {
@@ -196,7 +204,7 @@ public class ScriptItem : Item
         }
     }
 
-    public ScriptPreview GetScriptPreview(Dictionary<ScriptSection, List<ScriptItemCommand>> commandTree,
+    public ScriptPreview GetScriptPreview(OrderedDictionary<ScriptSection, List<ScriptItemCommand>> commandTree,
         ScriptItemCommand currentCommand, Project project, ILogger log)
     {
         ScriptPreview preview = new();
@@ -1059,7 +1067,7 @@ public class ScriptItem : Item
     }
 
     public (SKBitmap PreviewImage, string ErrorImage) GeneratePreviewImage(
-        Dictionary<ScriptSection, List<ScriptItemCommand>> commandTree, ScriptItemCommand currentCommand,
+        OrderedDictionary<ScriptSection, List<ScriptItemCommand>> commandTree, ScriptItemCommand currentCommand,
         Project project, ILogger log)
     {
         return GeneratePreviewImage(GetScriptPreview(commandTree, currentCommand, project, log), project);
