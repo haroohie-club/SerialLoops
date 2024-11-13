@@ -9,7 +9,7 @@ namespace SerialLoops.ViewModels.Editors;
 
 public class EditorViewModel(ItemDescription item, MainWindowViewModel window, ILogger log, Project project = null, EditorTabsPanelViewModel tabs = null, ItemExplorerPanelViewModel explorer = null) : ViewModelBase
 {
-    protected MainWindowViewModel _window = window;
+    public MainWindowViewModel Window { get; protected set; } = window;
     protected ILogger _log = log;
     protected Project _project = project;
     protected EditorTabsPanelViewModel _tabs = tabs;

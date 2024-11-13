@@ -22,12 +22,12 @@ public class TopicEditorViewModel : EditorViewModel
 
     public string Title
     {
-        get => _title.GetSubstitutedString(_window.OpenProject);
+        get => _title.GetSubstitutedString(Window.OpenProject);
         set
         {
-            this.RaiseAndSetIfChanged(ref _title, value.GetOriginalString(_window.OpenProject));
+            this.RaiseAndSetIfChanged(ref _title, value.GetOriginalString(Window.OpenProject));
             Topic.TopicEntry.Title = _title;
-            Topic.DisplayName = $"{Topic.TopicEntry.Id} - {_title.GetSubstitutedString(_window.OpenProject)}";
+            Topic.DisplayName = $"{Topic.TopicEntry.Id} - {_title.GetSubstitutedString(Window.OpenProject)}";
             Topic.UnsavedChanges = true;
         }
     }

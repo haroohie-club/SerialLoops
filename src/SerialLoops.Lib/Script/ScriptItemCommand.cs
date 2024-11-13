@@ -737,9 +737,9 @@ public class ScriptItemCommand : ReactiveObject
 
     public ScriptItemCommand Clone()
     {
-        return new()
+        ScriptItemCommand clonedCommand = new()
         {
-            Invocation = Invocation,
+            Invocation = Invocation.Clone(Script, Project),
             Verb = Verb,
             Parameters = Parameters.Select(p => p.Clone(Project, Script)).ToList(),
             Section = Section,
@@ -747,6 +747,9 @@ public class ScriptItemCommand : ReactiveObject
             Script = Script,
             Project = Project,
         };
+        clonedCommand.UpdateDisplay();
+
+        return clonedCommand;
     }
 
 }

@@ -46,7 +46,7 @@ public class SfxEditorViewModel : EditorViewModel
     private async Task Extract()
     {
         _player.Stop();
-        IStorageFile wavFile = await GuiExtensions.ShowSaveFilePickerAsync(_window.Window, Strings.Export_SFX, [new(Strings.WAV_File) { Patterns = ["*.wav"] }], $"{Sfx.DisplayName}.wav");
+        IStorageFile wavFile = await GuiExtensions.ShowSaveFilePickerAsync(Window.Window, Strings.Export_SFX, [new(Strings.WAV_File) { Patterns = ["*.wav"] }], $"{Sfx.DisplayName}.wav");
         if (wavFile is not null)
         {
             _player.Record(wavFile.TryGetLocalPath());

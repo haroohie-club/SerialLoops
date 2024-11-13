@@ -65,14 +65,14 @@ public class ScenarioEditorViewModel : EditorViewModel
     private async void Add()
     {
         int selectedIndex = Math.Min(_scenario.Scenario.Commands.Count - 1, Commands.IndexOf(SelectedCommand));
-        ScenarioVerb? newVerb = await new AddScenarioCommandDialog() { DataContext = new AddScenarioCommandDialogViewModel() }.ShowDialog<ScenarioVerb>(_window.Window);
+        ScenarioVerb? newVerb = await new AddScenarioCommandDialog() { DataContext = new AddScenarioCommandDialogViewModel() }.ShowDialog<ScenarioVerb>(Window.Window);
         if (newVerb is not null)
         {
             int param = newVerb switch
             {
                 ScenarioVerb.NEW_GAME => 1,
-                ScenarioVerb.PUZZLE_PHASE => ((PuzzleItem)_window.OpenProject.Items.First(i => i.Type == ItemDescription.ItemType.Puzzle)).Puzzle.Index,
-                ScenarioVerb.LOAD_SCENE => ((ScriptItem)_window.OpenProject.Items.First(i => i.Type == ItemDescription.ItemType.Script)).Event.Index,
+                ScenarioVerb.PUZZLE_PHASE => ((PuzzleItem)Window.OpenProject.Items.First(i => i.Type == ItemDescription.ItemType.Puzzle)).Puzzle.Index,
+                ScenarioVerb.LOAD_SCENE => ((ScriptItem)Window.OpenProject.Items.First(i => i.Type == ItemDescription.ItemType.Script)).Event.Index,
                 _ => 0,
             };
             ScenarioCommand newCommand = new(newVerb ?? ScenarioVerb.LOAD_SCENE, param);
@@ -100,7 +100,7 @@ public class ScenarioEditorViewModel : EditorViewModel
     }
     private async Task Clear()
     {
-        if (await _window.Window.ShowMessageBoxAsync(Strings.Clear_Scenario, Strings.Clear_all_commands_from_the_game_scenario__nThis_action_is_irreversible_,
+        if (await Window.Window.ShowMessageBoxAsync(Strings.Clear_Scenario, Strings.Clear_all_commands_from_the_game_scenario__nThis_action_is_irreversible_,
                 ButtonEnum.YesNo, Icon.Warning, _log) == ButtonResult.Yes)
         {
             Commands.Clear();
@@ -141,10 +141,10 @@ public class ScenarioEditorViewModel : EditorViewModel
     {
         return command.Verb switch
         {
-            ScenarioVerb.LOAD_SCENE => new LoadSceneScenarioCommandEditorViewModel(command, _window.OpenProject, _window.EditorTabs),
-            ScenarioVerb.PUZZLE_PHASE => new PuzzlePhaseScenarioCommandEditorViewModel(command, _window.OpenProject, _window.EditorTabs),
-            ScenarioVerb.ROUTE_SELECT => new RouteSelectScenarioCommandEditorViewModel(command, _window.OpenProject, _window.EditorTabs),
-            _ => new ScenarioCommandEditorViewModel(command, _window.EditorTabs),
+            ScenarioVerb.LOAD_SCENE => new LoadSceneScenarioCommandEditorViewModel(command, Window.OpenProject, Window.EditorTabs),
+            ScenarioVerb.PUZZLE_PHASE => new PuzzlePhaseScenarioCommandEditorViewModel(command, Window.OpenProject, Window.EditorTabs),
+            ScenarioVerb.ROUTE_SELECT => new RouteSelectScenarioCommandEditorViewModel(command, Window.OpenProject, Window.EditorTabs),
+            _ => new ScenarioCommandEditorViewModel(command, Window.EditorTabs),
         };
     }
 }

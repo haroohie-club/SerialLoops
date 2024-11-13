@@ -67,18 +67,18 @@ public class BackgroundMusicEditorViewModel : EditorViewModel
 
     private async Task Extract_Executed()
     {
-        IStorageFile file = await _window.Window.ShowSaveFilePickerAsync(Strings.Save_BGM_as_WAV, [new(Strings.WAV_File) { Patterns = ["*.wav"] }]);
+        IStorageFile file = await Window.Window.ShowSaveFilePickerAsync(Strings.Save_BGM_as_WAV, [new(Strings.WAV_File) { Patterns = ["*.wav"] }]);
         if (file is not null)
         {
             LoopyProgressTracker tracker = new();
             await new ProgressDialog(() => WaveFileWriter.CreateWaveFile(file.Path.LocalPath, Bgm.GetWaveProvider(_log, false)),
-                () => { }, tracker, Strings.Exporting_BGM).ShowDialog(_window.Window);
+                () => { }, tracker, Strings.Exporting_BGM).ShowDialog(Window.Window);
         }
     }
 
     private async Task Replace_Executed()
     {
-        IStorageFile file = await _window.Window.ShowOpenFilePickerAsync(Strings.Replace_BGM,
+        IStorageFile file = await Window.Window.ShowOpenFilePickerAsync(Strings.Replace_BGM,
         [
             new(Strings.Supported_Audio_Files) { Patterns = Shared.SupportedAudioFiletypes },
             new(Strings.WAV_files) { Patterns = ["*.wav"] },
@@ -94,7 +94,7 @@ public class BackgroundMusicEditorViewModel : EditorViewModel
             Shared.AudioReplacementCancellation.Cancel();
             Shared.AudioReplacementCancellation = new();
             await new ProgressDialog(() => Bgm.Replace(file.Path.LocalPath, _project.BaseDirectory, _project.IterativeDirectory, _bgmCachedFile, _loopEnabled, _loopStartSample, _loopEndSample, _log, secondTracker, Shared.AudioReplacementCancellation.Token),
-                () => BgmPlayer = new(Bgm, _log, Bgm.BgmName, Bgm.Name, Bgm.Flag, !string.IsNullOrEmpty(Bgm.BgmName) ? _titleBoxTextChangedCommand : null), firstTracker, Strings.Replace_BGM_track).ShowDialog(_window.Window);
+                () => BgmPlayer = new(Bgm, _log, Bgm.BgmName, Bgm.Name, Bgm.Flag, !string.IsNullOrEmpty(Bgm.BgmName) ? _titleBoxTextChangedCommand : null), firstTracker, Strings.Replace_BGM_track).ShowDialog(Window.Window);
         }
     }
 
@@ -113,14 +113,14 @@ public class BackgroundMusicEditorViewModel : EditorViewModel
         LoopyProgressTracker firstTracker = new(Strings.Adjusting_Loop_Info);
         if (!File.Exists(_bgmCachedFile))
         {
-            await new ProgressDialog(() => WaveFileWriter.CreateWaveFile(_bgmCachedFile, Bgm.GetWaveProvider(_log, false)), () => { }, firstTracker, Strings.Caching_BGM).ShowDialog(_window.Window);
+            await new ProgressDialog(() => WaveFileWriter.CreateWaveFile(_bgmCachedFile, Bgm.GetWaveProvider(_log, false)), () => { }, firstTracker, Strings.Caching_BGM).ShowDialog(Window.Window);
         }
         string loopAdjustedWav = Path.Combine(Path.GetDirectoryName(_bgmCachedFile), $"{Path.GetFileNameWithoutExtension(_bgmCachedFile)}-loop.wav");
         File.Copy(_bgmCachedFile, loopAdjustedWav, true);
         using WaveFileReader reader = new(loopAdjustedWav);
         BgmLoopPropertiesDialogViewModel loopPropertiesDialog = new(reader, Bgm.Name, _log,
             ((AdxWaveProvider)BgmPlayer.Sound).LoopEnabled, ((AdxWaveProvider)BgmPlayer.Sound).LoopStartSample, ((AdxWaveProvider)BgmPlayer.Sound).LoopEndSample);
-        BgmLoopPreviewItem loopPreview = await new BgmLoopPropertiesDialog() { DataContext = loopPropertiesDialog }.ShowDialog<BgmLoopPreviewItem>(_window.Window);
+        BgmLoopPreviewItem loopPreview = await new BgmLoopPropertiesDialog() { DataContext = loopPropertiesDialog }.ShowDialog<BgmLoopPreviewItem>(Window.Window);
         if (loopPreview is not null)
         {
             _loopEnabled = loopPreview.LoopEnabled;
@@ -139,7 +139,7 @@ public class BackgroundMusicEditorViewModel : EditorViewModel
                 () =>
                 {
                     BgmPlayer = new(Bgm, _log, Bgm.BgmName, Bgm.Name, Bgm.Flag, !string.IsNullOrEmpty(Bgm.BgmName) ? _titleBoxTextChangedCommand : null);
-                }, thirdTracker, Strings.Set_BGM_loop_info).ShowDialog(_window.Window);
+                }, thirdTracker, Strings.Set_BGM_loop_info).ShowDialog(Window.Window);
         }
     }
 
@@ -149,13 +149,13 @@ public class BackgroundMusicEditorViewModel : EditorViewModel
         LoopyProgressTracker firstTracker = new(Strings.Adjusting_Volume);
         if (!File.Exists(_bgmCachedFile))
         {
-            await new ProgressDialog(() => WaveFileWriter.CreateWaveFile(_bgmCachedFile, Bgm.GetWaveProvider(_log, false)), () => { }, firstTracker, Strings.Caching_BGM).ShowDialog(_window.Window);
+            await new ProgressDialog(() => WaveFileWriter.CreateWaveFile(_bgmCachedFile, Bgm.GetWaveProvider(_log, false)), () => { }, firstTracker, Strings.Caching_BGM).ShowDialog(Window.Window);
         }
         string volumeAdjustedWav = Path.Combine(Path.GetDirectoryName(_bgmCachedFile), $"{Path.GetFileNameWithoutExtension(_bgmCachedFile)}-volume.wav");
         File.Copy(_bgmCachedFile, volumeAdjustedWav, true);
         using WaveFileReader reader = new(volumeAdjustedWav);
         BgmVolumePropertiesDialogViewModel volumeDialog = new(reader, Bgm.Name, _log);
-        BgmVolumePreviewItem volumePreview = await new BgmVolumePropertiesDialog() { DataContext = volumeDialog }.ShowDialog<BgmVolumePreviewItem>(_window.Window);
+        BgmVolumePreviewItem volumePreview = await new BgmVolumePropertiesDialog() { DataContext = volumeDialog }.ShowDialog<BgmVolumePreviewItem>(Window.Window);
         if (volumePreview is not null)
         {
             LoopyProgressTracker secondTracker = new(Strings.Adjusting_Volume) { Total = 2 };
@@ -174,7 +174,7 @@ public class BackgroundMusicEditorViewModel : EditorViewModel
             }, () =>
             {
                 BgmPlayer = new(Bgm, _log, Bgm.BgmName, Bgm.Name, Bgm.Flag, !string.IsNullOrEmpty(Bgm.BgmName) ? _titleBoxTextChangedCommand : null);
-            }, thirdTracker, Strings.Replace_BGM_track).ShowDialog(_window.Window);
+            }, thirdTracker, Strings.Replace_BGM_track).ShowDialog(Window.Window);
         }
     }
 }

@@ -90,7 +90,7 @@ public class CharacterSpriteEditorViewModel : EditorViewModel
 
     private async Task ExportFrames()
     {
-        IStorageFolder dir = await _window.Window.ShowOpenFolderPickerAsync(Strings.Select_character_sprite_export_folder);
+        IStorageFolder dir = await Window.Window.ShowOpenFolderPickerAsync(Strings.Select_character_sprite_export_folder);
         if (dir is not null)
         {
             SKBitmap layout = _sprite.GetBaseLayout();
@@ -135,23 +135,23 @@ public class CharacterSpriteEditorViewModel : EditorViewModel
                     _log.LogException(string.Format(Strings.Failed_to_export_mouth_animation__0__for_sprite__1__to_file, i, _sprite.DisplayName), ex);
                 }
             }
-            await _window.Window.ShowMessageBoxAsync(Strings.Success_, Strings.Character_sprite_frames_exported_, MsBox.Avalonia.Enums.ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Success, _log);
+            await Window.Window.ShowMessageBoxAsync(Strings.Success_, Strings.Character_sprite_frames_exported_, MsBox.Avalonia.Enums.ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Success, _log);
         }
     }
 
     private async Task ExportGIF()
     {
         List<(SKBitmap bitmap, int timing)> animationFrames;
-        if (await _window.Window.ShowMessageBoxAsync(Strings.Animation_Export_Option, Strings.Include_lip_flap_animation_, MsBox.Avalonia.Enums.ButtonEnum.YesNo, MsBox.Avalonia.Enums.Icon.Question, _log) == MsBox.Avalonia.Enums.ButtonResult.Yes)
+        if (await Window.Window.ShowMessageBoxAsync(Strings.Animation_Export_Option, Strings.Include_lip_flap_animation_, MsBox.Avalonia.Enums.ButtonEnum.YesNo, MsBox.Avalonia.Enums.Icon.Question, _log) == MsBox.Avalonia.Enums.ButtonResult.Yes)
         {
-            animationFrames = _sprite.GetLipFlapAnimation(_window.OpenProject);
+            animationFrames = _sprite.GetLipFlapAnimation(Window.OpenProject);
         }
         else
         {
-            animationFrames = _sprite.GetClosedMouthAnimation(_window.OpenProject);
+            animationFrames = _sprite.GetClosedMouthAnimation(Window.OpenProject);
         }
 
-        IStorageFile saveFile = await _window.Window.ShowSaveFilePickerAsync(Strings.Save_character_sprite_GIF, [new FilePickerFileType(Strings.GIF_file) { Patterns = ["*.gif"] }]);
+        IStorageFile saveFile = await Window.Window.ShowSaveFilePickerAsync(Strings.Save_character_sprite_GIF, [new FilePickerFileType(Strings.GIF_file) { Patterns = ["*.gif"] }]);
         if (saveFile is not null)
         {
             List<SKBitmap> frames = [];
@@ -165,8 +165,8 @@ public class CharacterSpriteEditorViewModel : EditorViewModel
 
             LoopyProgressTracker tracker = new();
             await new ProgressDialog(() => frames.SaveGif(saveFile.Path.LocalPath, tracker),
-                async () => await _window.Window.ShowMessageBoxAsync(Strings.Success_, Strings.GIF_exported_, MsBox.Avalonia.Enums.ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Success, _log),
-                tracker, Strings.Exporting_GIF___).ShowDialog(_window.Window);
+                async () => await Window.Window.ShowMessageBoxAsync(Strings.Success_, Strings.GIF_exported_, MsBox.Avalonia.Enums.ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Success, _log),
+                tracker, Strings.Exporting_GIF___).ShowDialog(Window.Window);
         }
     }
 }

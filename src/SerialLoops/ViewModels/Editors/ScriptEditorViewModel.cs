@@ -9,9 +9,9 @@ using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Controls.Selection;
 using Avalonia.Controls.Templates;
+using Avalonia.Input;
 using Avalonia.Platform;
 using AvaloniaEdit.Utils;
-using DynamicData;
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
 using MsBox.Avalonia.Enums;
@@ -42,6 +42,14 @@ public class ScriptEditorViewModel : EditorViewModel
     public ICommand AddScriptSectionCommand { get; }
     public ICommand DeleteScriptCommandOrSectionCommand { get; }
     public ICommand ClearScriptCommand { get; }
+    public ICommand CutCommand { get; }
+    public ICommand CopyCommand { get; }
+    public ICommand PasteCommand { get; }
+
+    public KeyGesture CutHotKey { get; }
+    public KeyGesture CopyHotKey { get; }
+    public KeyGesture PasteHotKey { get; }
+    public KeyGesture DeleteHotKey { get; }
 
     public ScriptItemCommand SelectedCommand
     {
@@ -57,8 +65,6 @@ public class ScriptEditorViewModel : EditorViewModel
 
     [Reactive]
     public ReactiveScriptSection SelectedSection { get; set; }
-    [Reactive]
-    public ITreeItem SelectedTreeItem { get; set; }
 
     [Reactive]
     public SKBitmap PreviewBitmap { get; set; }
@@ -95,6 +101,17 @@ public class ScriptEditorViewModel : EditorViewModel
     [Reactive]
     public HierarchicalTreeDataGridSource<ITreeItem> Source { get; private set; }
 
+    public enum ClipboardMode
+    {
+        None,
+        Cut,
+        Copy,
+    }
+
+    [Reactive]
+    public ScriptItemCommand ClipboardCommand { get; set; }
+    private ClipboardMode _clipboardMode = ClipboardMode.None;
+
     public ScriptEditorViewModel(ScriptItem script, MainWindowViewModel window, ILogger log) : base(script, window, log)
     {
         _script = script;
@@ -111,6 +128,13 @@ public class ScriptEditorViewModel : EditorViewModel
         AddScriptSectionCommand = ReactiveCommand.CreateFromTask(AddSection);
         DeleteScriptCommandOrSectionCommand = ReactiveCommand.CreateFromTask(Delete);
         ClearScriptCommand = ReactiveCommand.CreateFromTask(Clear);
+        CutCommand = ReactiveCommand.Create(Cut);
+        CopyCommand = ReactiveCommand.Create(Copy);
+        PasteCommand = ReactiveCommand.Create(Paste);
+        CutHotKey = new(Key.X, KeyModifiers.Control);
+        CopyHotKey = new(Key.C, KeyModifiers.Control);
+        PasteHotKey = new(Key.V, KeyModifiers.Control);
+        DeleteHotKey = new(Key.Delete);
     }
 
     public void PopulateScriptCommands(bool refresh = false)
@@ -134,26 +158,26 @@ public class ScriptEditorViewModel : EditorViewModel
             CurrentCommandViewModel = _selectedCommand.Verb switch
             {
                 CommandVerb.INIT_READ_FLAG => new EmptyScriptCommandEditorViewModel(_selectedCommand, this, _log),
-                CommandVerb.DIALOGUE => new DialogueScriptCommandEditorViewModel(_selectedCommand, this, _log, _window),
-                CommandVerb.KBG_DISP => new KbgDispScriptCommandEditorViewModel(_selectedCommand, this, _log, _window),
-                CommandVerb.PIN_MNL => new PinMnlScriptCommandEditorViewModel(_selectedCommand, this, _log, _window.OpenProject),
-                CommandVerb.BG_DISP => new BgDispScriptCommandEditorViewModel(_selectedCommand, this, _log, _window),
+                CommandVerb.DIALOGUE => new DialogueScriptCommandEditorViewModel(_selectedCommand, this, _log, Window),
+                CommandVerb.KBG_DISP => new KbgDispScriptCommandEditorViewModel(_selectedCommand, this, _log, Window),
+                CommandVerb.PIN_MNL => new PinMnlScriptCommandEditorViewModel(_selectedCommand, this, _log, Window.OpenProject),
+                CommandVerb.BG_DISP => new BgDispScriptCommandEditorViewModel(_selectedCommand, this, _log, Window),
                 CommandVerb.SCREEN_FADEIN => new ScreenFadeInScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.SCREEN_FADEOUT => new ScreenFadeOutScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.SCREEN_FLASH => new ScreenFlashScriptCommandEditorViewModel(_selectedCommand, this, _log),
-                CommandVerb.SND_PLAY => new SndPlayScriptCommandEditorViewModel(_selectedCommand, this, _log, _window),
+                CommandVerb.SND_PLAY => new SndPlayScriptCommandEditorViewModel(_selectedCommand, this, _log, Window),
                 CommandVerb.REMOVED => new EmptyScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.SND_STOP => new EmptyScriptCommandEditorViewModel(_selectedCommand, this, _log),
-                CommandVerb.BGM_PLAY => new BgmPlayScriptCommandEditorViewModel(_selectedCommand, this, _log, _window),
-                CommandVerb.VCE_PLAY => new VcePlayScriptCommandEditorViewModel(_selectedCommand, this, _log, _window),
+                CommandVerb.BGM_PLAY => new BgmPlayScriptCommandEditorViewModel(_selectedCommand, this, _log, Window),
+                CommandVerb.VCE_PLAY => new VcePlayScriptCommandEditorViewModel(_selectedCommand, this, _log, Window),
                 CommandVerb.FLAG => new FlagScriptCommandEditorViewModel(_selectedCommand, this, _log),
-                CommandVerb.TOPIC_GET => new TopicGetScriptCommandEditorViewModel(_selectedCommand, this, _log, _window),
+                CommandVerb.TOPIC_GET => new TopicGetScriptCommandEditorViewModel(_selectedCommand, this, _log, Window),
                 CommandVerb.TOGGLE_DIALOGUE => new ToggleDialogueScriptCommandEditorViewModel(_selectedCommand, this, _log),
-                CommandVerb.SELECT => new SelectScriptCommandEditorViewModel(_selectedCommand, this, _log, _window.OpenProject),
+                CommandVerb.SELECT => new SelectScriptCommandEditorViewModel(_selectedCommand, this, _log, Window.OpenProject),
                 CommandVerb.SCREEN_SHAKE => new ScreenShakeScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.SCREEN_SHAKE_STOP => new EmptyScriptCommandEditorViewModel(_selectedCommand, this, _log),
-                CommandVerb.GOTO => new GotoScriptCommandEditorViewModel(_selectedCommand, this, _log, _window.OpenProject),
-                CommandVerb.SCENE_GOTO => new SceneGotoScriptCommandEditorViewModel(_selectedCommand, this, _log, _window),
+                CommandVerb.GOTO => new GotoScriptCommandEditorViewModel(_selectedCommand, this, _log, Window.OpenProject),
+                CommandVerb.SCENE_GOTO => new SceneGotoScriptCommandEditorViewModel(_selectedCommand, this, _log, Window),
                 CommandVerb.WAIT => new WaitScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.HOLD => new EmptyScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.NOOP1 => new EmptyScriptCommandEditorViewModel(_selectedCommand, this, _log),
@@ -167,8 +191,8 @@ public class ScriptEditorViewModel : EditorViewModel
                 CommandVerb.INVEST_END => new EmptyScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.NEXT_SCENE => new EmptyScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.AVOID_DISP => new EmptyScriptCommandEditorViewModel(_selectedCommand, this, _log),
-                CommandVerb.SCENE_GOTO_CHESS => new SceneGotoScriptCommandEditorViewModel(_selectedCommand, this, _log, _window),
-                CommandVerb.BG_DISP2 => new BgDispScriptCommandEditorViewModel(_selectedCommand, this, _log, _window),
+                CommandVerb.SCENE_GOTO_CHESS => new SceneGotoScriptCommandEditorViewModel(_selectedCommand, this, _log, Window),
+                CommandVerb.BG_DISP2 => new BgDispScriptCommandEditorViewModel(_selectedCommand, this, _log, Window),
                 _ => new(_selectedCommand, this, _log)
             };
         }
@@ -215,8 +239,10 @@ public class ScriptEditorViewModel : EditorViewModel
             {
                 targetSectionIndex = _script.Event.ScriptSections.IndexOf(targetCommand.ViewModel!.Section);
                 targetCommandIndex = position == TreeDataGridRowDropPosition.Before
-                    ? targetCommand.ViewModel!.Index
-                    : targetCommand.ViewModel!.Index + 1;
+                    ? sourceCommand.Section == targetCommand.ViewModel!.Section && targetCommand.ViewModel!.Index >= sourceCommand.Index ?
+                        targetCommand.ViewModel!.Index - 1 : targetCommand.ViewModel.Index
+                    : sourceCommand.Section == targetCommand.ViewModel!.Section && targetCommand.ViewModel!.Index >= sourceCommand.Index ?
+                        targetCommand.ViewModel!.Index : targetCommand.ViewModel!.Index + 1;
             }
             else if (target is ScriptSectionTreeItem targetSection)
             {
@@ -280,7 +306,7 @@ public class ScriptEditorViewModel : EditorViewModel
 
         CommandVerb? newVerb =
             await new AddScriptCommandDialog() { DataContext = new AddScriptCommandDialogViewModel() }
-                .ShowDialog<CommandVerb?>(_window.Window);
+                .ShowDialog<CommandVerb?>(Window.Window);
         if (newVerb is null)
         {
             return;
@@ -329,7 +355,7 @@ public class ScriptEditorViewModel : EditorViewModel
     private async Task AddSection()
     {
         string sectionName = await new AddScriptSectionDialog() { DataContext = new AddScriptSectionDialogViewModel() }
-            .ShowDialog<string>(_window.Window);
+            .ShowDialog<string>(Window.Window);
         if (string.IsNullOrEmpty(sectionName))
         {
             return;
@@ -338,7 +364,7 @@ public class ScriptEditorViewModel : EditorViewModel
         sectionName = $"NONE{sectionName}";
         if (ScriptSections.Any(s => s.Name.Equals(sectionName)))
         {
-            await _window.Window.ShowMessageBoxAsync(Strings.Duplicate_Section_Name,
+            await Window.Window.ShowMessageBoxAsync(Strings.Duplicate_Section_Name,
                 Strings.Section_name_already_exists__Please_pick_a_different_name_for_this_section_,
                 ButtonEnum.Ok, Icon.Warning, _log);
             return;
@@ -408,7 +434,7 @@ public class ScriptEditorViewModel : EditorViewModel
             int sectionIndex = ScriptSections.IndexOf(SelectedSection);
             if (sectionIndex == 0)
             {
-                await _window.Window.ShowMessageBoxAsync(Strings.Cannot_Delete_Root_Section_,
+                await Window.Window.ShowMessageBoxAsync(Strings.Cannot_Delete_Root_Section_,
                     Strings.The_root_section_cannot_be_deleted_, ButtonEnum.Ok,
                     Icon.Warning, _log);
                 return;
@@ -439,14 +465,9 @@ public class ScriptEditorViewModel : EditorViewModel
         _script.UnsavedChanges = true;
     }
 
-    private void RemoveCommand(ScriptItemCommand command)
-    {
-
-    }
-
     private async Task Clear()
     {
-        if (await _window.Window.ShowMessageBoxAsync(Strings.Clear_Script_,
+        if (await Window.Window.ShowMessageBoxAsync(Strings.Clear_Script_,
                 Strings.Are_you_sure_you_want_to_clear_the_script__nThis_action_is_irreversible_,
                 ButtonEnum.YesNo, Icon.Question, _log) != ButtonResult.Yes)
         {
@@ -470,6 +491,79 @@ public class ScriptEditorViewModel : EditorViewModel
         _commands.Clear();
         _commands.Add(_script.Event.ScriptSections[0], []);
         Commands = _commands;
+
+        _script.Refresh(_project, _log);
+        _script.UnsavedChanges = true;
+    }
+
+    private void Cut()
+    {
+        if (SelectedCommand is null)
+        {
+            return;
+        }
+        ClipboardCommand = SelectedCommand;
+        _clipboardMode = ClipboardMode.Cut;
+    }
+
+    private void Copy()
+    {
+        if (SelectedCommand is null)
+        {
+            return;
+        }
+        ClipboardCommand = SelectedCommand;
+        _clipboardMode = ClipboardMode.Copy;
+    }
+
+    private void Paste()
+    {
+        if (ClipboardCommand is null)
+        {
+            return;
+        }
+        int pasteSectionIndex, pasteCommandIndex;
+        if (SelectedCommand is not null)
+        {
+            pasteSectionIndex = _script.Event.ScriptSections.IndexOf(SelectedCommand.Section);
+            pasteCommandIndex = SelectedCommand.Section == ClipboardCommand.Section && SelectedCommand.Index >= ClipboardCommand.Index && _clipboardMode != ClipboardMode.Copy ?
+                SelectedCommand.Index :
+                SelectedCommand.Index + 1;
+        }
+        else if (SelectedSection is not null)
+        {
+            pasteSectionIndex = ScriptSections.IndexOf(SelectedSection);
+            pasteCommandIndex = 0;
+        }
+        else
+        {
+            return;
+        }
+        switch (_clipboardMode)
+        {
+            case ClipboardMode.Cut:
+                ScriptSections[_script.Event.ScriptSections.IndexOf(ClipboardCommand.Section)].DeleteCommand(ClipboardCommand.Index, Commands);
+                ScriptSections[pasteSectionIndex].InsertCommand(pasteCommandIndex, ClipboardCommand, Commands);
+                ClipboardCommand.Section = ScriptSections[pasteSectionIndex].Section;
+                ClipboardCommand.Index = pasteCommandIndex;
+
+                _clipboardMode = ClipboardMode.None;
+                ClipboardCommand = null;
+                break;
+            case ClipboardMode.Copy:
+                ScriptItemCommand clonedCommand = ClipboardCommand.Clone();
+                ScriptSections[pasteSectionIndex].InsertCommand(pasteCommandIndex, clonedCommand, Commands);
+                clonedCommand.Section = ScriptSections[pasteSectionIndex].Section;
+                clonedCommand.Index = pasteCommandIndex;
+
+                // We propagate the cloned command to the clipboard to allow further pasting
+                // while still making sure each instance of the command is unique
+                ClipboardCommand = clonedCommand;
+                break;
+            case ClipboardMode.None:
+            default:
+                return;
+        }
 
         _script.Refresh(_project, _log);
         _script.UnsavedChanges = true;

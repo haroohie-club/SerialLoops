@@ -140,7 +140,7 @@ public class VoicedLineEditorViewModel : EditorViewModel
         }
     }
 
-    public bool SubsEnabled => _window.OpenProject.VoiceMap is not null;
+    public bool SubsEnabled => Window.OpenProject.VoiceMap is not null;
 
     public VoicedLineEditorViewModel(VoicedLineItem item, MainWindowViewModel window, ILogger log) : base(item, window, log, window.OpenProject)
     {
@@ -168,7 +168,7 @@ public class VoicedLineEditorViewModel : EditorViewModel
 
     private async Task Replace()
     {
-        IStorageFile openFile = await _window.Window.ShowOpenFilePickerAsync(Strings.Replace_voiced_line, [new FilePickerFileType(Strings.Supported_Audio_Files) { Patterns = Shared.SupportedAudioFiletypes },
+        IStorageFile openFile = await Window.Window.ShowOpenFilePickerAsync(Strings.Replace_voiced_line, [new FilePickerFileType(Strings.Supported_Audio_Files) { Patterns = Shared.SupportedAudioFiletypes },
             new FilePickerFileType(Strings.WAV_files) { Patterns = ["*.wav"] }, new FilePickerFileType(Strings.FLAC_files) { Patterns = ["*.flac"] },
             new FilePickerFileType(Strings.MP3_files) { Patterns = ["*.mp3"] }, new FilePickerFileType(Strings.Vorbis_files) { Patterns = ["*.ogg"] }]);
         if (openFile is not null)
@@ -176,13 +176,13 @@ public class VoicedLineEditorViewModel : EditorViewModel
             LoopyProgressTracker tracker = new();
             VcePlayer.Stop();
             await new ProgressDialog(() => _vce.Replace(openFile.Path.LocalPath, _project.BaseDirectory, _project.IterativeDirectory, Path.Combine(_project.Config.CachesDirectory, "vce", $"{_vce.Name}.wav"), _log),
-                () => { }, tracker, Strings.Replace_voiced_line).ShowDialog(_window.Window);
+                () => { }, tracker, Strings.Replace_voiced_line).ShowDialog(Window.Window);
         }
     }
 
     private async Task Export()
     {
-        IStorageFile saveFile = await _window.Window.ShowSaveFilePickerAsync(Strings.Save_voiced_line_as_WAV, [new FilePickerFileType(Strings.WAV_File) { Patterns = ["*.wav"] }]);
+        IStorageFile saveFile = await Window.Window.ShowSaveFilePickerAsync(Strings.Save_voiced_line_as_WAV, [new FilePickerFileType(Strings.WAV_File) { Patterns = ["*.wav"] }]);
         if (saveFile is not null)
         {
             WaveFileWriter.CreateWaveFile(saveFile.Path.LocalPath, _vce.GetWaveProvider(_log));

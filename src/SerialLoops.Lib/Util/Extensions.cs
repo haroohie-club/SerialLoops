@@ -12,6 +12,7 @@ using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Archive.Graphics;
 using HaruhiChokuretsuLib.Font;
 using SerialLoops.Lib.Items;
+using SerialLoops.Lib.Script;
 using SerialLoops.Lib.Script.Parameters;
 using SkiaSharp;
 using static HaruhiChokuretsuLib.Archive.Event.EventFile;
@@ -195,6 +196,13 @@ public static class Extensions
         }
     }
 
+    public static ScriptCommandInvocation Clone(this ScriptCommandInvocation invocation, EventFile eventFile, Project project)
+    {
+        ScriptCommandInvocation clonedInvocation = new(invocation.Command);
+        clonedInvocation.InitializeWithDefaultValues(eventFile, project);
+        return clonedInvocation;
+    }
+
     public static void CollectGarbage(this EventFile evt)
     {
         // Collect conditional garbage
@@ -227,36 +235,6 @@ public static class Extensions
                     }
 
                     i--;
-                }
-            }
-        }
-
-        // Collect dialogue garbage
-        IEnumerable<string> dialogueContainingCommands =
-            new[] { CommandVerb.DIALOGUE, CommandVerb.PIN_MNL }.Select(c => c.ToString());
-        List<UsedIndex> dialogueUsedIndices = [];
-        foreach (ScriptCommandInvocation dialogueCommand in evt.ScriptSections.SelectMany(s => s.Objects)
-                     .Where((c => dialogueContainingCommands.Contains(c.Command.Mnemonic))))
-        {
-            dialogueUsedIndices.Add(new() { Command = dialogueCommand, Index = dialogueCommand.Parameters[0] });
-        }
-
-        if (dialogueUsedIndices.DistinctBy(i => i.Index).Count() < evt.DialogueSection.Objects.Count)
-        {
-            for (short i = 0; i < evt.DialogueSection.Objects.Count; i++)
-            {
-                if (dialogueUsedIndices.All(idx => idx.Index != i))
-                {
-                    evt.DialogueSection.Objects.RemoveAt(i);
-                    evt.DialogueLines.RemoveAt(i--);
-                    for (int j = 0; j < dialogueUsedIndices.Count; j++)
-                    {
-                        if (dialogueUsedIndices[j].Index >= i)
-                        {
-                            dialogueUsedIndices[j].Command.Parameters[0]--;
-                            dialogueUsedIndices[j].Index--;
-                        }
-                    }
                 }
             }
         }
