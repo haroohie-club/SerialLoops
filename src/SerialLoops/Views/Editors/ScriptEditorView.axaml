@@ -22,7 +22,8 @@
                 <Svg Path="avares://SerialLoops/Assets/Icons/Clear.svg" Width="22"/>
             </Button>
         </StackPanel>
-        <TreeDataGrid Grid.Column="0" Grid.Row="1" Grid.RowSpan="2" Source="{Binding Source}"/>
+        <TreeDataGrid Grid.Column="0" Grid.Row="1" Grid.RowSpan="2" Source="{Binding Source}"
+                      AutoDragDropRows="True" RowDragStarted="TreeDataGrid_OnRowDragStarted" RowDrop="TreeDataGrid_OnRowDrop"/>
         <Grid Grid.Column="1" Grid.Row="1" ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto">
             <Image Source="{Binding PreviewBitmap, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
                    Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Width="256"/>

@@ -205,12 +205,58 @@ public class ScriptEditorViewModel : EditorViewModel
         }
     }
 
+    public void HandleDragDrop(ITreeItem source, ITreeItem target, TreeDataGridRowDropPosition position)
+    {
+        if (source is ScriptCommandTreeItem sourceCommandItem)
+        {
+            ScriptItemCommand sourceCommand = sourceCommandItem.ViewModel!;
+            int targetSectionIndex, targetCommandIndex;
+            if (target is ScriptCommandTreeItem targetCommand)
+            {
+                targetSectionIndex = _script.Event.ScriptSections.IndexOf(targetCommand.ViewModel!.Section);
+                targetCommandIndex = position == TreeDataGridRowDropPosition.Before
+                    ? targetCommand.ViewModel!.Index
+                    : targetCommand.ViewModel!.Index + 1;
+            }
+            else if (target is ScriptSectionTreeItem targetSection)
+            {
+                if (position == TreeDataGridRowDropPosition.Before && ScriptSections.IndexOf(targetSection.ViewModel!) > 0)
+                {
+                    targetSectionIndex = ScriptSections.IndexOf(targetSection.ViewModel!) - 1;
+                    targetCommandIndex = ScriptSections[targetSectionIndex].Commands.Count;
+                }
+                else
+                {
+                    targetSectionIndex = ScriptSections.IndexOf(targetSection.ViewModel!);
+                    targetCommandIndex = 0;
+                }
+            }
+            else
+            {
+                return;
+            }
+            ScriptSections[_script.Event.ScriptSections.IndexOf(sourceCommand.Section)].DeleteCommand(sourceCommand.Index, Commands);
+            ScriptSections[targetSectionIndex].InsertCommand(targetCommandIndex, sourceCommand, Commands);
+            sourceCommand.Section = ScriptSections[targetSectionIndex].Section;
+            sourceCommand.Index = targetCommandIndex;
+
+            _script.Refresh(_project, _log);
+            _script.UnsavedChanges = true;
+        }
+    }
+
+    public bool CanDrag(ITreeItem source)
+    {
+        return !(source is ScriptSectionTreeItem);
+    }
+
     private void RowSelection_SelectionChanged(object sender, TreeSelectionModelSelectionChangedEventArgs<ITreeItem> e)
     {
         if (e.SelectedIndexes.Count == 0 || e.SelectedIndexes[0].Count == 0)
         {
             SelectedCommand = null;
             SelectedSection = null;
+            return;
         }
 
         if (e.SelectedIndexes[0].Count > 1)
@@ -391,6 +437,11 @@ public class ScriptEditorViewModel : EditorViewModel
 
         _script.Refresh(_project, _log);
         _script.UnsavedChanges = true;
+    }
+
+    private void RemoveCommand(ScriptItemCommand command)
+    {
+
     }
 
     private async Task Clear()
