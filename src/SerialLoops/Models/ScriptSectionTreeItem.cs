@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Layout;
 using ReactiveUI;
@@ -27,7 +26,7 @@ public class ScriptSectionTreeItem : ITreeItem, IViewFor<ReactiveScriptSection>
     public ScriptSectionTreeItem(ReactiveScriptSection section, List<ScriptItemCommand> commands)
     {
         ViewModel = section;
-        Children = new([.. commands.Select(c => new ScriptCommandTreeItem(c))]);
+        this.OneWayBind(ViewModel, vm => vm.Commands, v => v.Children);
         this.OneWayBind(ViewModel, vm => vm.Name, v => v._textBlock.Text);
         this.Bind(ViewModel, vm => vm.Name, v => v.Text);
         _panel.Children.Add(_textBlock);

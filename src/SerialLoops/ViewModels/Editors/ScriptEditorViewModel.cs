@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Controls.Selection;
 using Avalonia.Controls.Templates;
 using Avalonia.Platform;
-using DynamicData;
-using HarfBuzzSharp;
+using AvaloniaEdit.Utils;
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
@@ -18,14 +18,12 @@ using ReactiveUI.Fody.Helpers;
 using SerialLoops.Assets;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
-using SerialLoops.Lib.Script.Parameters;
 using SerialLoops.Models;
 using SerialLoops.ViewModels.Dialogs;
 using SerialLoops.ViewModels.Editors.ScriptCommandEditors;
 using SerialLoops.Views.Dialogs;
 using SkiaSharp;
 using static HaruhiChokuretsuLib.Archive.Event.EventFile;
-using Task = System.Threading.Tasks.Task;
 
 namespace SerialLoops.ViewModels.Editors;
 
@@ -93,6 +91,12 @@ public class ScriptEditorViewModel : EditorViewModel
         _project = window.OpenProject;
         PopulateScriptCommands();
         _script.CalculateGraphEdges(_commands, _log);
+        foreach (ReactiveScriptSection section in ScriptSections)
+        {
+            section.SetCommands(_commands[section.Section]);
+        }
+        Source.ExpandAll();
+
         AddScriptCommandCommand = ReactiveCommand.CreateFromTask(AddCommand);
     }
 
@@ -222,11 +226,14 @@ public class ScriptEditorViewModel : EditorViewModel
             return;
         }
 
+        ScriptCommandInvocation invocation =
+            new(CommandsAvailable.Find(command => command.Mnemonic.Equals(newVerb.ToString())));
+        ScriptItemCommand newCommand;
+        ScriptSection scriptSection;
         if (SelectedCommand is null)
         {
-            ScriptCommandInvocation invocation =
-                new(CommandsAvailable.Find(command => command.Mnemonic.Equals(newVerb.ToString())));
-            ScriptItemCommand newCommand =
+            scriptSection = SelectedSection.Section;
+            newCommand =
                 ScriptItemCommand.FromInvocation(
                     invocation,
                     SelectedSection.Section,
@@ -236,23 +243,28 @@ public class ScriptEditorViewModel : EditorViewModel
                     Strings.ResourceManager.GetString,
                     _log
                 );
-            SelectedSection.InsertCommand(newCommand.Index, newCommand.Invocation);
+
+            SelectedSection.InsertCommand(newCommand.Index, newCommand, Commands);
         }
         else
         {
-            ScriptCommandInvocation invocation =
-                new(CommandsAvailable.Find(command => command.Mnemonic.Equals(newVerb.ToString())));
-            ScriptItemCommand newCommand =
+            scriptSection = SelectedCommand.Section;
+            newCommand =
                 ScriptItemCommand.FromInvocation(
                     invocation,
                     SelectedCommand.Section,
-                    0,
+                    SelectedCommand.Index + 1,
                     _script.Event,
                     _project,
                     Strings.ResourceManager.GetString,
                     _log
                 );
-            ScriptSections[_script.Event.ScriptSections.IndexOf(SelectedCommand.Section)].InsertCommand(newCommand.Index, newCommand.Invocation);
+            ScriptSections[_script.Event.ScriptSections.IndexOf(SelectedCommand.Section)].InsertCommand(newCommand.Index, newCommand, Commands);
+        }
+
+        for (int i = newCommand.Index + 1; i < ScriptSections.Count; i++)
+        {
+            Commands[scriptSection][i].Index++;
         }
         _script.Refresh(_project, _log);
         _script.UnsavedChanges = true;
@@ -275,11 +287,18 @@ public class ReactiveScriptSection(ScriptSection section) : ReactiveObject
         }
     }
 
-    public ObservableCollection<ScriptCommandInvocation> Commands { get; } = new(section.Objects);
+    public ObservableCollection<ITreeItem> Commands { get; private set; } = [];
 
-    public void InsertCommand(int index, ScriptCommandInvocation command)
+    public void InsertCommand(int index, ScriptItemCommand command, Dictionary<ScriptSection, List<ScriptItemCommand>> commands)
     {
-        Commands.Insert(index, command);
-        Section.Objects.Insert(index, command);
+        Commands.Insert(index, new ScriptCommandTreeItem(command));
+        Section.Objects.Insert(index, command.Invocation);
+        commands[Section].Insert(index, command);
+    }
+
+    public void SetCommands(IEnumerable<ScriptItemCommand> commands)
+    {
+        Commands.Clear();
+        Commands.AddRange(commands.Select(c => new ScriptCommandTreeItem(c)));
     }
 }
