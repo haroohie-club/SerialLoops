@@ -45,6 +45,8 @@ public class ScriptEditorViewModel : EditorViewModel
     public ICommand CutCommand { get; }
     public ICommand CopyCommand { get; }
     public ICommand PasteCommand { get; }
+    public ICommand ApplyTemplateCommand { get; }
+    public ICommand GenerateTemplateCommand { get; }
 
     public KeyGesture CutHotKey { get; }
     public KeyGesture CopyHotKey { get; }
@@ -131,6 +133,9 @@ public class ScriptEditorViewModel : EditorViewModel
         CutCommand = ReactiveCommand.Create(Cut);
         CopyCommand = ReactiveCommand.Create(Copy);
         PasteCommand = ReactiveCommand.Create(Paste);
+        ApplyTemplateCommand = ReactiveCommand.CreateFromTask(ApplyTemplate);
+        GenerateTemplateCommand = ReactiveCommand.CreateFromTask(GenerateTemplate);
+
         CutHotKey = new(Key.X, KeyModifiers.Control);
         CopyHotKey = new(Key.C, KeyModifiers.Control);
         PasteHotKey = new(Key.V, KeyModifiers.Control);
@@ -567,6 +572,23 @@ public class ScriptEditorViewModel : EditorViewModel
 
         _script.Refresh(_project, _log);
         _script.UnsavedChanges = true;
+    }
+
+    private async Task ApplyTemplate()
+    {
+        ScriptTemplate template = await new ScriptTemplateSelectorDialog { DataContext = new ScriptTemplateSelectorDialogViewModel(_project) }
+                .ShowDialog<ScriptTemplate>(Window.Window);
+        if (template is null)
+        {
+            return;
+        }
+
+        template.Apply(_script, _project, _log);
+    }
+
+    private async Task GenerateTemplate()
+    {
+
     }
 }
 

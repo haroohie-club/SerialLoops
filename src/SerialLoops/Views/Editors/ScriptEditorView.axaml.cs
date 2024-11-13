@@ -2,6 +2,7 @@ using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using MiniToolbar.Avalonia;
 using ReactiveUI;
 using SerialLoops.Assets;
 using SerialLoops.Models;
@@ -39,10 +40,12 @@ public partial class ScriptEditorView : UserControl
             new NativeMenuItem()
             {
                 Header = Strings.Generate_Template,
+                Command = vm.GenerateTemplateCommand,
             },
             new NativeMenuItem()
             {
                 Header = Strings.Apply_Template,
+                Command = vm.ApplyTemplateCommand,
                 Icon = ControlGenerator.GetIcon("Template", window.Log),
             },
             new NativeMenuItem()
@@ -70,6 +73,14 @@ public partial class ScriptEditorView : UserControl
         // window.WindowMenu[MenuHeader.EDIT].Menu!.Items.Last().Bind(NativeMenuItem.IsEnabledProperty,
         //     vm.ObservableForProperty(s => s.ClipboardCommand));
         menu.Items.Insert(insertionPoint, window.WindowMenu[MenuHeader.EDIT]);
+
+        ToolbarButton applyTemplateButton = new()
+        {
+            Text = Strings.Apply_Template,
+            Command = vm.ApplyTemplateCommand,
+            Icon = ControlGenerator.GetVectorIcon("Template", window.Log),
+        };
+        window.ToolBar.Items.Insert(0, applyTemplateButton);
     }
 
     protected override void OnUnloaded(RoutedEventArgs e)
@@ -80,6 +91,8 @@ public partial class ScriptEditorView : UserControl
 
         window.WindowMenu.Remove(MenuHeader.EDIT);
         menu.Items.Remove(menu.Items.First(i => ((NativeMenuItem)i).Header!.Equals(Strings._Edit)));
+
+        window.ToolBar.Items.RemoveAt(0);
     }
 
     private void TreeDataGrid_OnRowDragStarted(object sender, TreeDataGridRowDragStartedEventArgs e)
