@@ -595,13 +595,13 @@ public class ScriptItemCommand : ReactiveObject
                     switch (i)
                     {
                         case 0:
-                            parameters.Add(new ScriptSectionScriptParameter(localize("Clear Block"), eventFile.ScriptSections.FirstOrDefault(s => s.Name == eventFile.LabelsSection.Objects.First(l => l.Id == parameter).Name.Replace("/", ""))));
+                            parameters.Add(new ScriptSectionScriptParameter(localize("Clear Block"), eventFile.ScriptSections.FirstOrDefault(s => s.Name == eventFile.LabelsSection.Objects.FirstOrDefault(l => l.Id == parameter)?.Name.Replace("/", ""))));
                             break;
                         case 1:
-                            parameters.Add(new ScriptSectionScriptParameter(localize("Miss Block"), eventFile.ScriptSections.FirstOrDefault(s => s.Name == eventFile.LabelsSection.Objects.First(l => l.Id == parameter).Name.Replace("/", ""))));
+                            parameters.Add(new ScriptSectionScriptParameter(localize("Miss Block"), eventFile.ScriptSections.FirstOrDefault(s => s.Name == eventFile.LabelsSection.Objects.FirstOrDefault(l => l.Id == parameter)?.Name.Replace("/", ""))));
                             break;
                         case 2:
-                            parameters.Add(new ScriptSectionScriptParameter(localize("Miss 2 Block"), eventFile.ScriptSections.FirstOrDefault(s => s.Name == eventFile.LabelsSection.Objects.First(l => l.Id == parameter).Name.Replace("/", ""))));
+                            parameters.Add(new ScriptSectionScriptParameter(localize("Miss 2 Block"), eventFile.ScriptSections.FirstOrDefault(s => s.Name == eventFile.LabelsSection.Objects.FirstOrDefault(l => l.Id == parameter)?.Name.Replace("/", ""))));
                             break;
                     }
                     break;

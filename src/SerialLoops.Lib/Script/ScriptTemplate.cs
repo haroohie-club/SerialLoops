@@ -41,6 +41,7 @@ public class ScriptTemplate
             {
                 script.Event.LabelsSection.Objects.Add(new() { Id = (short)(script.Event.LabelsSection.Objects.Count > 0 ? script.Event.LabelsSection.Objects.Max(l => l.Id) + 1 : 1001), Name = section.Name });
                 script.Event.ScriptSections.Add(new() { Name = section.Name, CommandsAvailable = EventFile.CommandsAvailable });
+                script.Event.NumSections++;
             }
         }
         // We add the sections first and then do it a second time in order to allow ScriptSectionParameters to be able to find their sections

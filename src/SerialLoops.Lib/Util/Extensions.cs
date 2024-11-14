@@ -197,7 +197,7 @@ public static class Extensions
             case CommandVerb.VGOTO:
                 invocation.Parameters[0] = (short)eventFile.ConditionalsSection.Objects.Count;
                 eventFile.ConditionalsSection.Objects.Add(string.Empty);
-                invocation.Parameters[2] = eventFile.LabelsSection.Objects.First(l => l.Id > 0).Id;
+                invocation.Parameters[2] = eventFile.LabelsSection.Objects.FirstOrDefault(l => l.Id > 0)?.Id ?? 0;
                 break;
         }
     }

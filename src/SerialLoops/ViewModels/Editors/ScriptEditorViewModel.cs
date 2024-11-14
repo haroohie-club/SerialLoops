@@ -14,6 +14,7 @@ using Avalonia.Controls.Templates;
 using Avalonia.Input;
 using Avalonia.Platform;
 using AvaloniaEdit.Utils;
+using DynamicData;
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
 using MsBox.Avalonia.Enums;
@@ -125,7 +126,7 @@ public class ScriptEditorViewModel : EditorViewModel
         _script = script;
         ScriptSections = new(script.Event.ScriptSections.Select(s => new ReactiveScriptSection(s)));
         _project = window.OpenProject;
-        PopulateScriptCommands();
+        Commands = _script.GetScriptCommandTree(_project, _log);
         _script.CalculateGraphEdges(_commands, _log);
         foreach (ReactiveScriptSection section in ScriptSections)
         {
@@ -147,16 +148,6 @@ public class ScriptEditorViewModel : EditorViewModel
         CopyHotKey = new(Key.C, KeyModifiers.Control);
         PasteHotKey = new(Key.V, KeyModifiers.Control);
         DeleteHotKey = new(Key.Delete);
-    }
-
-    public void PopulateScriptCommands(bool refresh = false)
-    {
-        if (refresh)
-        {
-            _script.Refresh(_project, _log);
-        }
-
-        Commands = _script.GetScriptCommandTree(_project, _log);
     }
 
     private void UpdateCommandViewModel()
@@ -438,9 +429,18 @@ public class ScriptEditorViewModel : EditorViewModel
         if (SelectedCommand is not null)
         {
             int index = SelectedCommand.Index;
-            SelectedCommand = index == 0 ? Commands[SelectedCommand.Section][1] : Commands[SelectedCommand.Section][index - 1];
-            Source.RowSelection?.Select(new(_script.Event.ScriptSections.IndexOf(SelectedCommand.Section), SelectedCommand.Index));
-            ScriptSections[_script.Event.ScriptSections.IndexOf(SelectedCommand.Section)].DeleteCommand(index, Commands);
+            ReactiveScriptSection selectedSection = ScriptSections[_script.Event.ScriptSections.IndexOf(SelectedCommand.Section)];
+            SelectedCommand = index switch
+            {
+                0 => Commands[SelectedCommand.Section].Count == 1 ? null : Commands[SelectedCommand.Section][1],
+                _ => Commands[SelectedCommand.Section][index - 1],
+            };
+            if (SelectedCommand is null)
+            {
+                SelectedSection = selectedSection;
+            }
+            Source.RowSelection?.Select(new(ScriptSections.IndexOf(selectedSection), index));
+            selectedSection.DeleteCommand(index, Commands);
         }
         else
         {
@@ -490,6 +490,7 @@ public class ScriptEditorViewModel : EditorViewModel
         Source.RowSelection?.Select(new());
         SelectedSection = null;
         SelectedCommand = null;
+        _script.Event.NumSections -= _script.Event.ScriptSections.Count - 1;
         _script.Event.ScriptSections.Clear();
         _script.Event.ScriptSections.Add(new()
         {
@@ -501,9 +502,17 @@ public class ScriptEditorViewModel : EditorViewModel
         _script.Event.LabelsSection.Objects.Clear();
         ScriptSections.Clear();
         ScriptSections.Add(new(_script.Event.ScriptSections[0]));
+        _script.Event.LabelsSection.Objects.Add(new() { Id = 1, Name = "" });
         _commands.Clear();
         _commands.Add(_script.Event.ScriptSections[0], []);
         Commands = _commands;
+
+        _script.Event.DialogueLines.Clear();
+        _script.Event.DialogueSection.Objects.Clear();
+        _script.Event.ConditionalsSection.Objects.RemoveRange(1, _script.Event.ConditionalsSection.Objects.Count - 1);
+        _script.Event.ChoicesSection.Objects.RemoveRange(1, _script.Event.ChoicesSection.Objects.Count - 1);
+        _script.Event.StartingChibisSection.Objects.RemoveRange(1, _script.Event.StartingChibisSection.Objects.Count - 1);
+        _script.Event.MapCharactersSection.Objects.RemoveRange(1, _script.Event.MapCharactersSection.Objects.Count - 1);
 
         _script.Refresh(_project, _log);
         _script.UnsavedChanges = true;
@@ -591,8 +600,18 @@ public class ScriptEditorViewModel : EditorViewModel
             return;
         }
 
+        SelectedSection = null;
+        SelectedCommand = null;
+        Source.RowSelection?.Select(new());
         template.Apply(_script, _project, _log);
+        ScriptSections.Clear();
+        ScriptSections.AddRange(_script.Event.ScriptSections.Select(s => new ReactiveScriptSection(s)));
         Commands = _script.GetScriptCommandTree(_project, _log);
+        foreach (ReactiveScriptSection section in ScriptSections)
+        {
+            section.SetCommands(_commands[section.Section]);
+        }
+        Source.ExpandAll();
     }
 
     private async Task GenerateTemplate()
