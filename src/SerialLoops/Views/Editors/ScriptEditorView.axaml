@@ -16,7 +16,7 @@
         </StackPanel>
 
         <StackPanel Grid.Column="0" Grid.Row="0" Margin="5" Spacing="5" HorizontalAlignment="Right" Orientation="Horizontal">
-            <Button Command="{Binding AddScriptCommandCommand}">
+            <Button Command="{Binding AddScriptCommandCommand}" HotKey="{Binding AddCommandHotKey}">
                 <Svg Path="avares://SerialLoops/Assets/Icons/Add.svg" Width="22"/>
             </Button>
             <Button Command="{Binding AddScriptSectionCommand}">
@@ -31,7 +31,8 @@
         </StackPanel>
         <TreeDataGrid Grid.Column="0" Grid.Row="1" Grid.RowSpan="2" Source="{Binding Source}"
                       AutoDragDropRows="True" RowDragStarted="TreeDataGrid_OnRowDragStarted" RowDrop="TreeDataGrid_OnRowDrop"
-                      MaxWidth="300"/>
+                      MaxWidth="300" Name="CommandTree">
+        </TreeDataGrid>
         <Grid Grid.Column="1" Grid.Row="1" ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto">
             <Image Source="{Binding PreviewBitmap, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
                    Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Width="256"/>

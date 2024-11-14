@@ -6890,6 +6890,24 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Template Already Exists.
+        /// </summary>
+        public static string Template_Already_Exists {
+            get {
+                return ResourceManager.GetString("Template Already Exists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Template Description.
+        /// </summary>
+        public static string Template_Description {
+            get {
+                return ResourceManager.GetString("Template Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Template Name.
         /// </summary>
         public static string Template_Name {
@@ -6999,6 +7017,16 @@ namespace SerialLoops.Assets {
                 return ResourceManager.GetString("The selected ROM\'s hash does not match the expected ROM hash. Please ensure you a" +
                         "re using the correct base ROM.\\n\\nIf you wish to ignore this, please check the \\" +
                         "\"Ignore Hash\\\" checkbox.", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There is already a template with that name. Please choose a different name for your template..
+        /// </summary>
+        public static string There_is_already_a_template_with_that_name__Please_choose_a_different_name_for_your_template_ {
+            get {
+                return ResourceManager.GetString("There is already a template with that name. Please choose a different name for yo" +
+                        "ur template.", resourceCulture);
             }
         }
         

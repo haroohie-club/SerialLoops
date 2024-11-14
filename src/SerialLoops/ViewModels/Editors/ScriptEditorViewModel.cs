@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Controls.Selection;
@@ -18,6 +20,7 @@ using MsBox.Avalonia.Enums;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SerialLoops.Assets;
+using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
 using SerialLoops.Lib.Util;
@@ -48,6 +51,7 @@ public class ScriptEditorViewModel : EditorViewModel
     public ICommand ApplyTemplateCommand { get; }
     public ICommand GenerateTemplateCommand { get; }
 
+    public KeyGesture AddCommandHotKey { get; }
     public KeyGesture CutHotKey { get; }
     public KeyGesture CopyHotKey { get; }
     public KeyGesture PasteHotKey { get; }
@@ -114,6 +118,8 @@ public class ScriptEditorViewModel : EditorViewModel
     public ScriptItemCommand ClipboardCommand { get; set; }
     private ClipboardMode _clipboardMode = ClipboardMode.None;
 
+    public Vector? ScrollPosition { get; set; }
+
     public ScriptEditorViewModel(ScriptItem script, MainWindowViewModel window, ILogger log) : base(script, window, log)
     {
         _script = script;
@@ -136,6 +142,7 @@ public class ScriptEditorViewModel : EditorViewModel
         ApplyTemplateCommand = ReactiveCommand.CreateFromTask(ApplyTemplate);
         GenerateTemplateCommand = ReactiveCommand.CreateFromTask(GenerateTemplate);
 
+        AddCommandHotKey = new(Key.N, KeyModifiers.Control | KeyModifiers.Shift);
         CutHotKey = new(Key.X, KeyModifiers.Control);
         CopyHotKey = new(Key.C, KeyModifiers.Control);
         PasteHotKey = new(Key.V, KeyModifiers.Control);
@@ -396,11 +403,12 @@ public class ScriptEditorViewModel : EditorViewModel
 
         _script.Event.ScriptSections.Insert(sectionIndex, section);
         _script.Event.NumSections++;
-        _script.Event.LabelsSection.Objects.Insert(sectionIndex,
+        _script.Event.LabelsSection.Objects.Insert(sectionIndex - 1,
             new()
             {
                 Name = $"NONE/{sectionName[4..]}",
-                Id = (short)(sectionIndex == _script.Event.LabelsSection.Objects.Count ?
+                Id = (short)(_script.Event.LabelsSection.Objects.Count == 0 ? 1001 :
+                    sectionIndex == _script.Event.LabelsSection.Objects.Count ?
                     _script.Event.LabelsSection.Objects[^1].Id + 1 :
                     _script.Event.LabelsSection.Objects[sectionIndex + 1].Id),
             }
@@ -584,11 +592,21 @@ public class ScriptEditorViewModel : EditorViewModel
         }
 
         template.Apply(_script, _project, _log);
+        Commands = _script.GetScriptCommandTree(_project, _log);
     }
 
     private async Task GenerateTemplate()
     {
+        ScriptTemplate template = await new GenerateTemplateDialog() { DataContext = new GenerateTemplateDialogViewModel(Commands, _project, _log) }
+                .ShowDialog<ScriptTemplate>(Window.Window);
+        if (template is null)
+        {
+            return;
+        }
 
+        Lib.IO.WriteStringFile(Path.Combine(_project.Config.ScriptTemplatesDirectory, $"{template.Name}.slscr"),
+            JsonSerializer.Serialize(template), _log);
+        _project.Config.ScriptTemplates.Add(template);
     }
 }
 

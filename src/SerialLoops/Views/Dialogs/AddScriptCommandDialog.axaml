@@ -13,7 +13,8 @@
     <StackPanel Orientation="Vertical" Spacing="20" Margin="15">
         <StackPanel Orientation="Vertical" Spacing="3">
             <TextBlock Text="{x:Static assets:Strings.Select_Command_Type}"/>
-            <ComboBox ItemsSource="{Binding CommandVerbs}" SelectedItem="{Binding SelectedCommandVerb}"/>
+            <ComboBox ItemsSource="{Binding CommandVerbs}" SelectedItem="{Binding SelectedCommandVerb}"
+                      Name="CommandBox"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Spacing="5">
             <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}"

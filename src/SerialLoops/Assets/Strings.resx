@@ -2783,4 +2783,13 @@ No project is currently open. Would you like to create a new project?</value>
     <value>Are you sure you want to clear the script?
 This action is irreversible.</value>
   </data>
+  <data name="Template Description" xml:space="preserve">
+    <value>Template Description</value><comment>Template is a script template</comment>
+  </data>
+  <data name="Template Already Exists" xml:space="preserve">
+    <value>Template Already Exists</value><comment>Template is a script template</comment>
+  </data>
+  <data name="There is already a template with that name. Please choose a different name for your template." xml:space="preserve">
+    <value>There is already a template with that name. Please choose a different name for your template.</value>
+  </data>
 </root>

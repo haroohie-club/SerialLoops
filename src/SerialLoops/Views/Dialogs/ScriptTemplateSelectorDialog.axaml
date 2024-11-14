@@ -45,8 +45,8 @@
             </StackPanel>
         </Grid>
         <StackPanel Orientation="Horizontal" Spacing="5" Margin="20" HorizontalAlignment="Center">
-            <Button Content="{x:Static assets:Strings.Confirm}" Command="{Binding ConfirmCommand}" IsDefault="True"/>
-            <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}" IsCancel="True"/>
+            <Button Content="{x:Static assets:Strings.Confirm}" Command="{Binding ConfirmCommand}" CommandParameter="{Binding #ApplyTemplateDialog}" IsDefault="True"/>
+            <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}" CommandParameter="{Binding #ApplyTemplateDialog}" IsCancel="True"/>
         </StackPanel>
     </StackPanel>
 </Window>

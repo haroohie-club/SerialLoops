@@ -1,4 +1,5 @@
 using System.Linq;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
@@ -83,6 +84,15 @@ public partial class ScriptEditorView : UserControl
         window.ToolBar.Items.Insert(0, applyTemplateButton);
     }
 
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        if (CommandTree.Scroll is not null)
+        {
+            CommandTree.Scroll.Offset = ((ScriptEditorViewModel)DataContext!).ScrollPosition ?? new();
+        }
+    }
+
     protected override void OnUnloaded(RoutedEventArgs e)
     {
         base.OnUnloaded(e);
@@ -93,6 +103,7 @@ public partial class ScriptEditorView : UserControl
         menu.Items.Remove(menu.Items.First(i => ((NativeMenuItem)i).Header!.Equals(Strings._Edit)));
 
         window.ToolBar.Items.RemoveAt(0);
+        ((ScriptEditorViewModel)DataContext!).ScrollPosition = CommandTree.Scroll?.Offset;
     }
 
     private void TreeDataGrid_OnRowDragStarted(object sender, TreeDataGridRowDragStartedEventArgs e)

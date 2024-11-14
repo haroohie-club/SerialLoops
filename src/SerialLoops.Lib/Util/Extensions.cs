@@ -159,6 +159,12 @@ public static class Extensions
                 invocation.Parameters[0] = 2;
                 break;
 
+            case CommandVerb.PIN_MNL:
+                invocation.Parameters[0] = (short)(eventFile.DialogueSection.Objects.Count);
+                DialogueLine mnl = new(project.Localize("Replace me").GetOriginalString(project), eventFile);
+                eventFile.DialogueSection.Objects.Add(mnl);
+                break;
+
             case CommandVerb.SCENE_GOTO:
             case CommandVerb.SCENE_GOTO_CHESS:
                 invocation.Parameters[0] = (short)eventFile.ConditionalsSection.Objects.Count;

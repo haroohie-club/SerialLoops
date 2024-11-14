@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 using Avalonia.Dialogs;
 using HaruhiChokuretsuLib.Archive.Event;
@@ -10,7 +11,7 @@ namespace SerialLoops.ViewModels.Dialogs;
 
 public class AddScriptCommandDialogViewModel : ViewModelBase
 {
-    public ObservableCollection<string> CommandVerbs { get; } = new(Enum.GetNames<EventFile.CommandVerb>());
+    public ObservableCollection<string> CommandVerbs { get; } = new(Enum.GetNames<EventFile.CommandVerb>().OrderBy(c => c));
     private EventFile.CommandVerb _selectedCommandVerb = EventFile.CommandVerb.DIALOGUE;
     public string SelectedCommandVerb
     {
