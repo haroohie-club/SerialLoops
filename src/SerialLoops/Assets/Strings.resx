@@ -2641,4 +2641,7 @@ No project is currently open. Would you like to create a new project?</value>
   <data name="Load Sound" xml:space="preserve">
     <value>Load Sound</value><comment>The name of a parameter for the SND_PLAY command which indicates whether a sound should be loaded or not</comment>
   </data>
+  <data name="&quot;Failed to open log file directly. Logs can be found at {0}&quot;" xml:space="preserve">
+    <value>"Failed to open log file directly. Logs can be found at {0}"</value>
+  </data>
 </root>

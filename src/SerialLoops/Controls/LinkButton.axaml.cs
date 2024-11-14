@@ -1,11 +1,17 @@
 using System;
+using System.Windows.Input;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using GotaSequenceLib;
 
 namespace SerialLoops.Controls;
 
 public partial class LinkButton : UserControl
 {
+    public static readonly AvaloniaProperty<ICommand> CommandProperty = AvaloniaProperty.Register<ItemLink, ICommand>(nameof(Command));
+    public static readonly AvaloniaProperty<string> TextProperty = AvaloniaProperty.Register<ItemLink, string>(nameof(Text));
+
     public string Icon
     {
         get => IconPath.Path;
@@ -17,22 +23,37 @@ public partial class LinkButton : UserControl
     }
     public string Text
     {
-        get => LinkText.Text;
-        set => LinkText.Text = value;
+        get => this.GetValue<string>(TextProperty);
+        set
+        {
+            SetValue(TextProperty, value);
+        }
     }
-    public delegate void OnClickDelegate(object sender, EventArgs e);
-    public OnClickDelegate OnClick { get; set; }
+
+    public ICommand Command
+    {
+        get => this.GetValue<ICommand>(CommandProperty);
+        set
+        {
+            SetValue(CommandProperty, value);
+        }
+    }
+
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        base.OnPropertyChanged(change);
+        if (change.Property == TextProperty)
+        {
+            LinkText.Text = Text;
+        }
+        else if (change.Property == CommandProperty)
+        {
+            BackingButton.Command = Command;
+        }
+    }
 
     public LinkButton()
     {
         InitializeComponent();
-    }
-
-    private void Action_Execute(object? sender, RoutedEventArgs e)
-    {
-        if (IsEnabled)
-        {
-            OnClick?.Invoke(sender, e);
-        }
     }
 }
