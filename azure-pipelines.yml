@@ -48,4 +48,4 @@ jobs:
     env:
       ASSETS_DIRECTORY: $(Build.ArtifactStagingDirectory)/test-assets/
     displayName: Run tests
-    condition: ne(variables.imageName, 'ubuntu-latest')
+    condition: eq(variables.imageName, 'windows-latest')
