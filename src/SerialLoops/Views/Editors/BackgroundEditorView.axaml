@@ -6,7 +6,6 @@
              xmlns:i="using:Avalonia.Xaml.Interactivity"
              xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
              xmlns:assets="using:SerialLoops.Assets"
-             xmlns:controls="using:SerialLoops.Controls"
              xmlns:utility="using:SerialLoops.Utility"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:BackgroundEditorViewModel"
@@ -20,7 +19,7 @@
                 <Button Content="{x:Static assets:Strings.Export}" Command="{Binding ExportCommand}"/>
                 <Button Content="{x:Static assets:Strings.Replace}" Command="{Binding ReplaceCommand}"/>
             </StackPanel>
-            <StackPanel IsVisible="{Binding ShowExtras}" HorizontalAlignment="Left">
+            <StackPanel Name="CgPanel" IsVisible="{Binding ShowExtras}" HorizontalAlignment="Left">
                 <TextBox Name="CgBox" Width="200" Text="{Binding Bg.CgName, Mode=OneTime}">
                     <i:Interaction.Behaviors>
                         <ia:EventTriggerBehavior EventName="TextChanged" SourceObject="{Binding #CgBox}">

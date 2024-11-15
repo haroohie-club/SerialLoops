@@ -19,17 +19,4 @@ public static class Helpers
         window.CaptureRenderedFrame()?.Save(file);
         TestContext.AddTestAttachment(file, $"{currentFrame}");
     }
-
-    public static void TabToExplorer(this MainWindow mainWindow)
-    {
-        int explorerTabStop = 2 + ((MainWindowViewModel)mainWindow.DataContext).ToolBar.Items.Count; // the menu, the search bar, and each of the tool bar items
-        if (NativeMenu.GetIsNativeMenuExported(mainWindow)) // if the menu is native, it's not a tab stop
-        {
-            explorerTabStop--;
-        }
-        for (int i = 0; i <= explorerTabStop; i++)
-        {
-            mainWindow.KeyPressQwerty(PhysicalKey.Tab, RawInputModifiers.None);
-        }
-    }
 }
