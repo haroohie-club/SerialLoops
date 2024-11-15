@@ -213,7 +213,11 @@ public class BackgroundMusicEditorTests
         titleBox.SelectAll();
         window.KeyTextInput(newTitle);
         window.CaptureAndSaveFrame(Path.Combine(_uiVals.AssetsDirectory, "artifacts"), TestContext.CurrentContext.Test.Name, ref currentFrame);
-        Assert.That(_extra.Bgms.First(b => b.Index == bgm.Index).Name.GetSubstitutedString(_project), Is.EqualTo(newTitle));
+        Assert.Multiple(() =>
+        {
+            Assert.That(_extra.Bgms.First(b => b.Index == bgm.Index).Name.GetSubstitutedString(_project), Is.EqualTo(newTitle));
+            Assert.That(bgm.DisplayName, Does.EndWith(newTitle));
+        });
     }
 
     [AvaloniaTest]

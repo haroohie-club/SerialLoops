@@ -61,6 +61,7 @@ public class BackgroundMusicEditorViewModel : EditorViewModel
         {
             _project.Extra.Bgms[_project.Extra.Bgms.IndexOf(_project.Extra.Bgms.First(b => b.Name.GetSubstitutedString(_project) == Bgm.BgmName))].Name = newText.GetOriginalString(_project);
             Bgm.BgmName = newText;
+            Bgm.DisplayName = $"{Bgm.Name} - {Bgm.BgmName}";
             Bgm.UnsavedChanges = true;
         }
     }
