@@ -26,13 +26,18 @@ jobs:
   steps:
   - checkout: self
     clean: true
-    
+
   - task: DotNetCoreCLI@2
     inputs:
       command: 'build'
       projects: $(Build.SourcesDirectory)/src/SerialLoops/SerialLoops.csproj
       arguments: -f $(targetFramework)
     displayName: Build project
+
+  - pwsh: |
+      Invoke-WebRequest -Uri https://haroohie.nyc3.cdn.digitaloceanspaces.com/bootstrap/serial-loops/test-assets.zip -OutFile $(Build.ArtifactStagingDirectory)/test-assets.zip
+      Expand-Archive -Path $(Build.ArtifactStagingDirectory)/test-assets.zip -DestinationPath $(Build.ArtifactStagingDirectory)/test-assets
+    displayName: Download test assets
 
   - task: DotNetCoreCLI@2
     inputs:
@@ -41,5 +46,5 @@ jobs:
       arguments: -f $(targetFramework)
       publishTestResults: true
     env:
-      ROM_URI: $(ChokuRomUri)
+      ASSETS_DIRECTORY: $(Build.ArtifactStagingDirectory)/test-assets/
     displayName: Run tests
