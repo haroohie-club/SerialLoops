@@ -51,4 +51,4 @@ jobs:
     env:
       ASSETS_DIRECTORY: $(Build.ArtifactStagingDirectory)/test-assets/
     displayName: Run tests
-    condition: $(imageName) -ne 'ubuntu-latest'
+    condition: ne(variables.imageName, 'ubuntu-latest')
