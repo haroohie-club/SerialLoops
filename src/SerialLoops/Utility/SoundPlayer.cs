@@ -25,7 +25,7 @@ public class SoundPlayer
         WaveProvider = waveProvider;
 
 #if WINDOWS
-            _player = new() { DeviceNumber = -1 };
+        _player = new() { DeviceNumber = -1 };
 #else
         _player = new(_context, 8192);
 #endif
