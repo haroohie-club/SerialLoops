@@ -65,7 +65,7 @@ public class SoundPlayerPanelViewModel : ViewModelBase
     {
         StopButtonEnabled = false;
         PlayPauseImagePath = ControlGenerator.GetVectorPath("Play");
-        _player.Stop();
+        _player?.Stop();
         InitializePlayer();
     }
 
@@ -74,12 +74,12 @@ public class SoundPlayerPanelViewModel : ViewModelBase
         StopButtonEnabled = true;
         if (_player.PlaybackState == PlaybackState.Playing)
         {
-            _player.Pause();
+            _player?.Pause();
             PlayPauseImagePath = ControlGenerator.GetVectorPath("Play");
         }
         else
         {
-            _player.Play();
+            _player?.Play();
             PlayPauseImagePath = ControlGenerator.GetVectorPath("Pause");
         }
     }
