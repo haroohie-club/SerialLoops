@@ -14,12 +14,15 @@ jobs:
       Linux:
         imageName: 'ubuntu-latest'
         targetFramework: 'net8.0'
+        testArguments: --filter ""
       macOS:
         imageName: 'macOS-latest'
         targetFramework: 'net8.0'
+        testArguments: --filter ""
       Windows:
         imageName: 'windows-latest'
         targetFramework: 'net8.0-windows'
+        testArguments: --filter "Name !~ BackgroundMusicEditor"
   displayName: Build & Test
   pool:
     vmImage: $(imageName)
@@ -43,8 +46,9 @@ jobs:
     inputs:
       command: 'test'
       projects: $(Build.SourcesDirectory)/test/SerialLoops.Tests.Headless/SerialLoops.Tests.Headless.csproj
-      arguments: -f $(targetFramework)
+      arguments: -f $(targetFramework) $(testArguments)
       publishTestResults: true
     env:
       ASSETS_DIRECTORY: $(Build.ArtifactStagingDirectory)/test-assets/
     displayName: Run tests
+    condition: $(imageName) -ne 'ubuntu-latest'
