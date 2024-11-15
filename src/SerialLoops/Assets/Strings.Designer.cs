@@ -2321,6 +2321,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error while loading project.
+        /// </summary>
+        public static string Error_while_loading_project {
+            get {
+                return ResourceManager.GetString("Error while loading project", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exception occurred while parsing config.json!.
         /// </summary>
         public static string Exception_occurred_while_parsing_config_json_ {

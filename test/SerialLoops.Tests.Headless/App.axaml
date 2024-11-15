@@ -1,8 +1,39 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="SerialLoops.Tests.Headless.App"
+             xmlns:local="using:SerialLoops"
+             xmlns:tabaloniathemes="using:Tabalonia.Themes.Custom"
+             xmlns:mintoolbarthemes="using:MiniToolbar.Avalonia.Themes"
+             xmlns:dialoghost="using:DialogHostAvalonia"
              RequestedThemeVariant="Default">
+    <Application.DataTemplates>
+        <local:ViewLocator/>
+    </Application.DataTemplates>
+
     <Application.Styles>
         <FluentTheme />
+        <dialoghost:DialogHostStyles />
+        <tabaloniathemes:CustomTheme/>
+        <mintoolbarthemes:MiniToolbarStyles/>
+        <StyleInclude Source="avares://Avalonia.Controls.TreeDataGrid/Themes/Fluent.axaml"/>
+        <StyleInclude Source="avares://Avalonia.Controls.ColorPicker/Themes/Fluent/Fluent.xaml" />
+        <Style Selector="TextBlock.h1">
+            <Setter Property="FontSize" Value="32"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+        <Style Selector="TextBlock.h2">
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+        <Style Selector="TextBlock.link">
+            <Setter Property="TextDecorations" Value="Underline"/>
+        </Style>
+        <Style Selector="TextBlock.link:not(:disabled)">
+            <Setter Property="Foreground" Value="{DynamicResource ResourceKey=LinkColor}"/>
+            <Setter Property="Cursor" Value="Hand" />
+        </Style>
+        <Style Selector="TextBlock.link:disabled">
+            <Setter Property="Foreground" Value="{DynamicResource ResourceKey=DisabledLinkColor}"/>
+        </Style>
     </Application.Styles>
 </Application>

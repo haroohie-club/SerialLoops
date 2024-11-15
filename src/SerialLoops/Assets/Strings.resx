@@ -2644,4 +2644,7 @@ No project is currently open. Would you like to create a new project?</value>
   <data name="&quot;Failed to open log file directly. Logs can be found at {0}&quot;" xml:space="preserve">
     <value>"Failed to open log file directly. Logs can be found at {0}"</value>
   </data>
+  <data name="Error while loading project" xml:space="preserve">
+    <value>Error while loading project</value>
+  </data>
 </root>

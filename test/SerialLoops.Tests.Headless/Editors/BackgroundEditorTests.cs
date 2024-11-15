@@ -10,6 +10,8 @@ using HaruhiChokuretsuLib.Archive;
 using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Graphics;
 using Moq;
+using NUnit.Framework;
+using NUnit.Framework.Internal;
 using SerialLoops.Controls;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
@@ -25,6 +27,7 @@ using SkiaSharp;
 
 namespace SerialLoops.Tests.Headless.Editors;
 
+[TestFixture]
 public class BackgroundEditorTests
 {
     private UiVals _uiVals;
@@ -84,13 +87,11 @@ public class BackgroundEditorTests
     [TestCase("EV150_D", 0xE2, "TEX_CG_DUAL_SCREEN")]
     [TestCase("EV285", 0x106, "TEX_CG_WIDE")]
     [TestCase("EV381", 0x125, "TEX_CG_SINGLE")]
-    public void BgReplacementIsApproximatelyIdempotent(string name, int bgTableIndex, string type)
+    public void BackgroundEditor_ReplacementIsApproximatelyIdempotent(string name, int bgTableIndex, string type)
     {
         BackgroundItem bgItem = new(name, bgTableIndex, _bgTableFile.BgTableEntries[bgTableIndex], _project);
-        _mainWindowViewModel.EditorTabs.OpenTab(bgItem);
+        BackgroundEditorViewModel editorVm = new(bgItem, _mainWindowViewModel, _project, _log);
 
-        Assert.That(_mainWindowViewModel.EditorTabs.Tabs[0], Is.TypeOf(typeof(BackgroundEditorViewModel)));
-        BackgroundEditorViewModel editorVm = (BackgroundEditorViewModel)_mainWindowViewModel.EditorTabs.Tabs[0];
         using MemoryStream initialBg = new();
         editorVm.BgBitmap.Encode(initialBg, SKEncodedImageFormat.Png, GraphicsFile.PNG_QUALITY);
         string filePath = $"{name}.png";
@@ -119,13 +120,10 @@ public class BackgroundEditorTests
     [TestCase("colorful.jpg", "EV352", 0x4C, 10, "TEX_CG")]
     [TestCase("too-colorful.jpg", "EV352", 0x4C, 25, "TEX_CG")]
     [TestCase("pattern.png", "KBG00", 0xB6, 10, "KINETIC_SCREEN")]
-    public void BgReplacementIsAccurate(string replacementImage, string name, int bgTableIndex, int threshold, string type)
+    public void BackgroundEditor_ReplacementIsAccurate(string replacementImage, string name, int bgTableIndex, int threshold, string type)
     {
         BackgroundItem bgItem = new(name, bgTableIndex, _bgTableFile.BgTableEntries[bgTableIndex], _project);
-        _mainWindowViewModel.EditorTabs.OpenTab(bgItem);
-
-        Assert.That(_mainWindowViewModel.EditorTabs.Tabs[0], Is.TypeOf(typeof(BackgroundEditorViewModel)));
-        BackgroundEditorViewModel editorVm = (BackgroundEditorViewModel)_mainWindowViewModel.EditorTabs.Tabs[0];
+        BackgroundEditorViewModel editorVm = new(bgItem, _mainWindowViewModel, _project, _log);
 
         using FileStream fs = File.OpenRead(Path.Combine(_uiVals.AssetsDirectory, replacementImage));
         using MemoryStream initialBg = new(File.ReadAllBytes(Path.Combine(_uiVals.AssetsDirectory, replacementImage)));
@@ -144,13 +142,10 @@ public class BackgroundEditorTests
     }
 
     [AvaloniaTest]
-    public void KbgReplacementFailsOnComplexImageButDoesntThrow()
+    public void BackgroundEditor_KbgReplacementFailsOnComplexImageButDoesntThrow()
     {
         BackgroundItem bgItem = new("KBG00", 0xB6, _bgTableFile.BgTableEntries[0xB6], _project);
-        _mainWindowViewModel.EditorTabs.OpenTab(bgItem);
-
-        Assert.That(_mainWindowViewModel.EditorTabs.Tabs[0], Is.TypeOf(typeof(BackgroundEditorViewModel)));
-        BackgroundEditorViewModel editorVm = (BackgroundEditorViewModel)_mainWindowViewModel.EditorTabs.Tabs[0];
+        BackgroundEditorViewModel editorVm = new(bgItem, _mainWindowViewModel, _project, _log);
 
         using FileStream fs = File.OpenRead(Path.Combine(_uiVals.AssetsDirectory, "too-colorful.jpg"));
         using MemoryStream initialBg = new();
@@ -174,13 +169,10 @@ public class BackgroundEditorTests
     [TestCase("EV150_D", 0xE2, "TEX_CG_DUAL_SCREEN")]
     [TestCase("EV285", 0x106, "TEX_CG_WIDE")]
     [TestCase("EV381", 0x125, "TEX_CG_SINGLE")]
-    public void CgNameCanBeChanged(string name, int bgTableIndex, string type)
+    public void BackgroundEditor_CgNameCanBeChanged(string name, int bgTableIndex, string type)
     {
         BackgroundItem bgItem = new(name, bgTableIndex, _bgTableFile.BgTableEntries[bgTableIndex], _project);
-        _mainWindowViewModel.EditorTabs.OpenTab(bgItem);
-
-        Assert.That(_mainWindowViewModel.EditorTabs.Tabs[0], Is.TypeOf(typeof(BackgroundEditorViewModel)));
-        BackgroundEditorViewModel editorVm = (BackgroundEditorViewModel)_mainWindowViewModel.EditorTabs.Tabs[0];
+        BackgroundEditorViewModel editorVm = new(bgItem, _mainWindowViewModel, _project, _log);
 
         BackgroundEditorView editor = new() { DataContext = editorVm };
         string newCgName = "Test CG";
@@ -191,6 +183,8 @@ public class BackgroundEditorTests
         Assert.That(editor.CgBox.Focus(), Is.True);
         editor.CgBox.SelectAll();
         window.KeyTextInput(newCgName);
+        int currentFrame = 0;
+        window.CaptureAndSaveFrame(Path.Combine(_uiVals.AssetsDirectory, "artifacts"), TestContext.CurrentContext.Test.Name, ref currentFrame);
         Assert.Multiple(() =>
         {
             Assert.That(editor.CgBox.Text, Is.EqualTo(newCgName));
@@ -202,17 +196,16 @@ public class BackgroundEditorTests
     [TestCase("KBG00", 0xB6, "KINETIC_SCREEN")]
     [TestCase("BG_ROUD2", 0x4C, "TEX_BG")]
     [TestCase("BG_OKUD0", 0x2F, "TEX_BG")]
-    public void CgBoxNotVisibleOnNonCg(string name, int bgTableIndex, string type)
+    public void BackgroundEditor_CgBoxNotVisibleOnNonCg(string name, int bgTableIndex, string type)
     {
         BackgroundItem bgItem = new(name, bgTableIndex, _bgTableFile.BgTableEntries[bgTableIndex], _project);
-        _mainWindowViewModel.EditorTabs.OpenTab(bgItem);
-
-        Assert.That(_mainWindowViewModel.EditorTabs.Tabs[0], Is.TypeOf(typeof(BackgroundEditorViewModel)));
-        BackgroundEditorViewModel editorVm = (BackgroundEditorViewModel)_mainWindowViewModel.EditorTabs.Tabs[0];
+        BackgroundEditorViewModel editorVm = new(bgItem, _mainWindowViewModel, _project, _log);
 
         BackgroundEditorView editor = new() { DataContext = editorVm };
         Window window = new() { Content = editor };
         window.Show();
+        int currentFrame = 0;
+        window.CaptureAndSaveFrame(Path.Combine(_uiVals.AssetsDirectory, "artifacts"), TestContext.CurrentContext.Test.Name, ref currentFrame);
         Assert.That(editor.CgPanel.IsVisible, Is.False);
     }
 }

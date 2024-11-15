@@ -1003,9 +1003,9 @@ public partial class Project
             }
             return (project, result);
         }
-        catch (Exception exc)
+        catch (Exception ex)
         {
-            log.LogError($"Error while loading project: {exc.Message}\n\n{exc.StackTrace}");
+            log.LogException(localize("Error while loading project"), ex);
             return (null, new(LoadProjectState.FAILED));
         }
     }

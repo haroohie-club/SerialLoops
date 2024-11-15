@@ -3,18 +3,22 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using Avalonia.Controls;
+using Avalonia.Headless;
 using Avalonia.Headless.NUnit;
 using Codeuctivity.ImageSharpCompare;
 using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Graphics;
 using Moq;
 using NAudio.Wave;
+using NUnit.Framework;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
+using SerialLoops.Lib.Util;
 using SerialLoops.Lib.Util.WaveformRenderer;
 using SerialLoops.Tests.Shared;
 using SerialLoops.ViewModels;
 using SerialLoops.ViewModels.Editors;
+using SerialLoops.Views.Editors;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.PixelFormats;
@@ -23,6 +27,7 @@ using Image = SixLabors.ImageSharp.Image;
 
 namespace SerialLoops.Tests.Headless.Editors;
 
+[TestFixture]
 public class BackgroundMusicEditorTests
 {
     private UiVals _uiVals;
@@ -70,13 +75,16 @@ public class BackgroundMusicEditorTests
 
         IO.CopyFileToDirectories(_project, Path.Combine(_uiVals.AssetsDirectory, "BGM027.bin"), Path.Combine("original", "bgm", "BGM027.bin"), _log);
         IO.CopyFileToDirectories(_project, Path.Combine(_uiVals.AssetsDirectory, "BGM030.bin"), Path.Combine("original", "bgm", "BGM030.bin"), _log);
+        IO.CopyFileToDirectories(_project, Path.Combine(_uiVals.AssetsDirectory, "BGM031.bin"), Path.Combine("original", "bgm", "BGM031.bin"), _log);
         IO.CopyFileToDirectories(_project, Path.Combine(_uiVals.AssetsDirectory, "BGM027.bin"), Path.Combine("rom", "data", "bgm", "BGM027.bin"), _log);
         IO.CopyFileToDirectories(_project, Path.Combine(_uiVals.AssetsDirectory, "BGM030.bin"), Path.Combine("rom", "data", "bgm", "BGM030.bin"), _log);
+        IO.CopyFileToDirectories(_project, Path.Combine(_uiVals.AssetsDirectory, "BGM031.bin"), Path.Combine("rom", "data", "bgm", "BGM031.bin"), _log);
 
         _project.Items =
         [
             new BackgroundMusicItem(Path.Combine(_project.IterativeDirectory, "rom", "data", "bgm", "BGM027.bin"), 19, _project),
             new BackgroundMusicItem(Path.Combine(_project.IterativeDirectory, "rom", "data", "bgm", "BGM030.bin"), 22, _project),
+            new BackgroundMusicItem(Path.Combine(_project.IterativeDirectory, "rom", "data", "bgm", "BGM031.bin"), 23, _project),
         ];
     }
 
@@ -89,7 +97,8 @@ public class BackgroundMusicEditorTests
     [AvaloniaTest]
     [TestCase("BGM027", "Looping")]
     [TestCase("BGM030", "Non-Looping")]
-    public void BgmReplacementIsIdempotent(string bgmName, string loopingType)
+    [TestCase("BGM031", "No Title")]
+    public void BackgroundMusicEditor_ReplacementIsIdempotent(string bgmName, string loopingType)
     {
         BackgroundMusicItem bgm = (BackgroundMusicItem)_project.Items.First(i => i.Name == bgmName);
         Assert.That(bgm, Is.Not.Null);
@@ -124,14 +133,13 @@ public class BackgroundMusicEditorTests
     [AvaloniaTest]
     [TestCase("BGM027", "Looping")]
     [TestCase("BGM030", "Non-Looping")]
-    public void BgmReplacementAndRestoreWork(string bgmName, string loopingType)
+    [TestCase("BGM031", "No Title")]
+    public void BackgroundMusicEditor_ReplacementAndRestoreWork(string bgmName, string loopingType)
     {
         BackgroundMusicItem bgm = (BackgroundMusicItem)_project.Items.First(i => i.Name == bgmName);
         Assert.That(bgm, Is.Not.Null);
 
         BackgroundMusicEditorViewModel editorVm = new(bgm, _mainWindowViewModel, _project, _log);
-        Window window = new() { Content = editorVm };
-        window.Show();
 
         using MemoryStream originalStream = new();
         string wavFile = $"{bgmName}.wav";
@@ -176,5 +184,53 @@ public class BackgroundMusicEditorTests
         TestContext.AddTestAttachment($"{bgmName}_restore_diff.png", "Diff mask of original and restored waveforms");
         _log.Log($"Mean error: {restoredDiff.MeanError}");
         Assert.That(restoredDiff.MeanError, Is.Zero);
+    }
+
+    [AvaloniaTest]
+    [TestCase("BGM027")]
+    [TestCase("BGM030")]
+    public void BackgroundMusicEditor_CanChangeTitle(string bgmName)
+    {
+        BackgroundMusicItem bgm = (BackgroundMusicItem)_project.Items.First(i => i.Name == bgmName);
+        Assert.That(bgm, Is.Not.Null);
+
+        BackgroundMusicEditorViewModel editorVm = new(bgm, _mainWindowViewModel, _project, _log);
+        BackgroundMusicEditorView editor = new() { DataContext = editorVm };
+        Window window = new() { Content = editor };
+        window.Show();
+
+        int currentFrame = 0;
+        TextBox titleBox = editor.Player.Get<TextBox>("TrackNameBox");
+        Assert.That(titleBox, Is.Not.Null);
+        Assert.Multiple(() =>
+        {
+            Assert.That(titleBox.IsVisible, Is.True);
+            Assert.That(titleBox.Text, Is.EqualTo(_extra.Bgms.First(b => b.Index == bgm.Index).Name.GetSubstitutedString(_project)));
+        });
+
+        const string newTitle = "BGM Title";
+        titleBox.Focus();
+        titleBox.SelectAll();
+        window.KeyTextInput(newTitle);
+        window.CaptureAndSaveFrame(Path.Combine(_uiVals.AssetsDirectory, "artifacts"), TestContext.CurrentContext.Test.Name, ref currentFrame);
+        Assert.That(_extra.Bgms.First(b => b.Index == bgm.Index).Name.GetSubstitutedString(_project), Is.EqualTo(newTitle));
+    }
+
+    [AvaloniaTest]
+    public void BackgroundMusicEditor_TitleBoxNotVisibleWhenTrackHasNoTitle()
+    {
+        BackgroundMusicItem bgm = (BackgroundMusicItem)_project.Items.First(i => i.Name == "BGM031");
+        Assert.That(bgm, Is.Not.Null);
+
+        BackgroundMusicEditorViewModel editorVm = new(bgm, _mainWindowViewModel, _project, _log);
+        BackgroundMusicEditorView editor = new() { DataContext = editorVm };
+        Window window = new() { Content = editor };
+        window.Show();
+
+        int currentFrame = 0;
+        window.CaptureAndSaveFrame(Path.Combine(_uiVals.AssetsDirectory, "artifacts"), TestContext.CurrentContext.Test.Name, ref currentFrame);
+        TextBox titleBox = editor.Player.Get<TextBox>("TrackNameBox");
+        Assert.That(titleBox, Is.Not.Null);
+        Assert.That(titleBox.IsVisible, Is.False);
     }
 }
