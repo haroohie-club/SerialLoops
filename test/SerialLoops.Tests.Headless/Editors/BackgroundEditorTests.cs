@@ -11,7 +11,6 @@ using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Graphics;
 using Moq;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 using SerialLoops.Controls;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;

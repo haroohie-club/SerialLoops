@@ -2,14 +2,8 @@
 using System.IO;
 using System.Linq;
 using System.Windows.Input;
-using Avalonia.Controls;
-using Avalonia.Layout;
-using Avalonia.Media.Immutable;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
-using SerialLoops.Assets;
-using SerialLoops.Controls;
-using SerialLoops.Utility;
 
 namespace SerialLoops.ViewModels.Panels;
 

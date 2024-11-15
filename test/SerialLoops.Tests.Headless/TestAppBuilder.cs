@@ -1,6 +1,5 @@
 using Avalonia;
 using Avalonia.Headless;
-using Avalonia.Platform;
 using Avalonia.ReactiveUI;
 
 [assembly: AvaloniaTestApplication(typeof(SerialLoops.Tests.Headless.TestAppBuilder))]

@@ -4,11 +4,8 @@ using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
 using Avalonia.Headless;
-using Avalonia.Input;
 using Avalonia.Layout;
 using NUnit.Framework;
-using SerialLoops.ViewModels;
-using SerialLoops.Views;
 
 namespace SerialLoops.Tests.Headless;
 

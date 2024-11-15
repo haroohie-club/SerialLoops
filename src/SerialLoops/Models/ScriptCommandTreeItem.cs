@@ -2,7 +2,6 @@
 using Avalonia.Controls;
 using Avalonia.Layout;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 using SerialLoops.Lib.Script;
 
 namespace SerialLoops.Models;
