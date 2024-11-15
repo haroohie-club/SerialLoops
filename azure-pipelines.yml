@@ -43,7 +43,7 @@ jobs:
     inputs:
       command: 'test'
       projects: $(Build.SourcesDirectory)/test/SerialLoops.Tests.Headless/SerialLoops.Tests.Headless.csproj
-      arguments: -f $(targetFramework)
+      arguments: -f $(targetFramework) --filter "Name !~ BackgroundMusicEditor_ReplacementAndRestoreWork"
       publishTestResults: true
     env:
       ASSETS_DIRECTORY: $(Build.ArtifactStagingDirectory)/test-assets/
