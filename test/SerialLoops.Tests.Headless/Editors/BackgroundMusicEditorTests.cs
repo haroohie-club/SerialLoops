@@ -139,7 +139,7 @@ public class BackgroundMusicEditorTests
         BackgroundMusicItem bgm = (BackgroundMusicItem)_project.Items.First(i => i.Name == bgmName);
         Assert.That(bgm, Is.Not.Null);
 
-        BackgroundMusicEditorViewModel editorVm = new(bgm, _mainWindowViewModel, _project, _log);
+        BackgroundMusicEditorViewModel editorVm = new(bgm, _mainWindowViewModel, _project, _log, initializePlayer: false);
 
         using MemoryStream originalStream = new();
         string wavFile = $"{bgmName}.wav";
@@ -194,7 +194,7 @@ public class BackgroundMusicEditorTests
         BackgroundMusicItem bgm = (BackgroundMusicItem)_project.Items.First(i => i.Name == bgmName);
         Assert.That(bgm, Is.Not.Null);
 
-        BackgroundMusicEditorViewModel editorVm = new(bgm, _mainWindowViewModel, _project, _log);
+        BackgroundMusicEditorViewModel editorVm = new(bgm, _mainWindowViewModel, _project, _log, initializePlayer: false);
         BackgroundMusicEditorView editor = new() { DataContext = editorVm };
         Window window = new() { Content = editor };
         window.Show();
@@ -226,7 +226,7 @@ public class BackgroundMusicEditorTests
         BackgroundMusicItem bgm = (BackgroundMusicItem)_project.Items.First(i => i.Name == "BGM031");
         Assert.That(bgm, Is.Not.Null);
 
-        BackgroundMusicEditorViewModel editorVm = new(bgm, _mainWindowViewModel, _project, _log);
+        BackgroundMusicEditorViewModel editorVm = new(bgm, _mainWindowViewModel, _project, _log, initializePlayer: false);
         BackgroundMusicEditorView editor = new() { DataContext = editorVm };
         Window window = new() { Content = editor };
         window.Show();

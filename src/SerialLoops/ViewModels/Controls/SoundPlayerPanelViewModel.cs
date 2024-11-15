@@ -33,7 +33,7 @@ public class SoundPlayerPanelViewModel : ViewModelBase
     public ICommand PlayPauseCommand { get; private set; }
     public ICommand StopCommand { get; private set; }
 
-    public SoundPlayerPanelViewModel(ISoundItem item, ILogger log, string trackName, string trackDetails = null, short? trackFlag = null, ICommand trackNameCommand = null)
+    public SoundPlayerPanelViewModel(ISoundItem item, ILogger log, string trackName, string trackDetails = null, short? trackFlag = null, ICommand trackNameCommand = null, bool initializePlayer = true)
     {
         _log = log;
         _item = item;
@@ -42,13 +42,16 @@ public class SoundPlayerPanelViewModel : ViewModelBase
         TrackDetails = trackDetails;
         TrackFlag = trackFlag;
         TrackNameCommand = trackNameCommand;
-        InitializePlayer();
+        if (initializePlayer)
+        {
+            InitializePlayer();
+            _player.PlaybackStopped += (_, _) =>
+            {
+                Stop();
+            };
+        }
         PlayPauseCommand = ReactiveCommand.Create(PlayPause_Executed);
         StopCommand = ReactiveCommand.Create(Stop_Executed);
-        _player.PlaybackStopped += (sender, args) =>
-        {
-            Stop();
-        };
     }
 
     private void InitializePlayer()

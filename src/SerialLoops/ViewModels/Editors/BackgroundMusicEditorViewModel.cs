@@ -40,14 +40,14 @@ public class BackgroundMusicEditorViewModel : EditorViewModel
 
     private ICommand _titleBoxTextChangedCommand;
 
-    public BackgroundMusicEditorViewModel(BackgroundMusicItem bgm, MainWindowViewModel window, Project project, ILogger log) : base(bgm, window, log, project)
+    public BackgroundMusicEditorViewModel(BackgroundMusicItem bgm, MainWindowViewModel window, Project project, ILogger log, bool initializePlayer = true) : base(bgm, window, log, project)
     {
         Bgm = bgm;
 
         _bgmCachedFile = Path.Combine(project.Config.CachesDirectory, "bgm", $"{Bgm.Name}.wav");
 
         _titleBoxTextChangedCommand = ReactiveCommand.Create<string>(TitleBox_TextChanged);
-        BgmPlayer = new(Bgm, _log, Bgm.BgmName, Bgm.Name, Bgm.Flag, !string.IsNullOrEmpty(Bgm.BgmName) ? _titleBoxTextChangedCommand : null);
+        BgmPlayer = new(Bgm, _log, Bgm.BgmName, Bgm.Name, Bgm.Flag, !string.IsNullOrEmpty(Bgm.BgmName) ? _titleBoxTextChangedCommand : null, initializePlayer);
         ManageLoopCommand = ReactiveCommand.CreateFromTask(ManageLoop_Executed);
         AdjustVolumeCommand = ReactiveCommand.CreateFromTask(AdjustVolume_Executed);
         ExtractCommand = ReactiveCommand.CreateFromTask(Extract_Executed);
