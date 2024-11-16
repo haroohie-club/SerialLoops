@@ -19,5 +19,6 @@ public class ScriptPreview
     public List<PositionedSprite> Sprites { get; set; } = [];
     public ScriptItemCommand LastDialogueCommand { get; set; }
     public TopicItem Topic { get; set; }
+    public bool ChessMode { get; set; }
     public string ErrorImage { get; set; }
 }
