@@ -14,16 +14,13 @@ jobs:
       Linux:
         imageName: 'ubuntu-latest'
         targetFramework: 'net8.0'
-        displayName: 'Build'
       macOS:
         imageName: 'macOS-latest'
         targetFramework: 'net8.0'
-        displayName: 'Build'
       Windows:
         imageName: 'windows-latest'
         targetFramework: 'net8.0-windows'
-        displayName: 'Build & Test'
-  displayName: $(displayName)
+  displayName: Build & Maybe Test
   pool:
     vmImage: $(imageName)
   steps:
