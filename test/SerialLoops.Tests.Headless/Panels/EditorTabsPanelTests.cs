@@ -31,13 +31,11 @@ public class EditorTabsPanelTests
 
     private BgTableFile _bgTableFile;
     private ExtraFile _extra;
-    private MouseTestHelper _mouseTestHelper;
 
     [OneTimeSetUp]
     public void OneTimeSetup()
     {
         _log = new();
-        _mouseTestHelper = new();
         if (Path.Exists("ui_vals.json"))
         {
             _uiVals = JsonSerializer.Deserialize<UiVals>(File.ReadAllText("ui_vals.json"));
