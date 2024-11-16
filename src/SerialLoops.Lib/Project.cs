@@ -545,6 +545,23 @@ public partial class Project
 
         try
         {
+            tracker.Focus("Chess Puzzles", Dat.Files.Count(f => f.Name.StartsWith("CHS")));
+            Items.AddRange(Dat.Files.AsParallel()
+                .Where(f => f.Name.StartsWith("CHS"))
+                .Select(f =>
+                {
+                    tracker.Finished++;
+                    return new ChessPuzzleItem(f.CastTo<ChessFile>());
+                }));
+        }
+        catch (Exception ex)
+        {
+            log.LogException("Failed to load chess puzzles", ex);
+            return new(LoadProjectState.FAILED);
+        }
+
+        try
+        {
             ItemFile itemFile = Dat.GetFileByName("ITEMS").CastTo<ItemFile>();
             tracker.Focus("Items", itemFile.Items.Count);
             Items.AddRange(itemFile.Items.AsParallel().Where(i => i > 0).Select((i, idx) =>

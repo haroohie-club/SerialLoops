@@ -20,5 +20,6 @@ public class ScriptPreview
     public ScriptItemCommand LastDialogueCommand { get; set; }
     public TopicItem Topic { get; set; }
     public bool ChessMode { get; set; }
+    public ChessPuzzleItem ChessPuzzle { get; set; }
     public string ErrorImage { get; set; }
 }

@@ -378,6 +378,14 @@ public class ScriptItem : Item
                 }
             }
         }
+        else
+        {
+            ScriptItemCommand lastChessLoad = commands.LastOrDefault(c => c.Verb == CommandVerb.CHESS_LOAD);
+            if (lastChessLoad is not null)
+            {
+                preview.ChessPuzzle = ((ChessPuzzleScriptParameter)lastChessLoad.Parameters[0]).ChessPuzzle;
+            }
+        }
 
         // Draw background
         bool bgReverted = false;
@@ -844,6 +852,10 @@ public class ScriptItem : Item
                             preview.ChibiEmote.ExternalXOffset + 48, chibiY));
                 }
             }
+        }
+        else if (preview.ChessPuzzle is not null)
+        {
+            canvas.DrawBitmap(preview.ChessPuzzle.GetChessboard(project.Grp), 8, 188);
         }
 
         // Draw background

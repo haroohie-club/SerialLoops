@@ -153,7 +153,7 @@ public class TemplateScriptParameter
                 break;
 
             case ScriptParameter.ParameterType.CHESS_FILE:
-                Value = ((ChessFileScriptParameter)parameter).ChessFileIndex.ToString();
+                Value = ((ChessPuzzleScriptParameter)parameter).ChessPuzzle.ToString();
                 break;
 
             case ScriptParameter.ParameterType.CHESS_PIECE:
@@ -321,7 +321,7 @@ public class TemplateScriptParameter
                     return new BoolScriptParameter(localizedName, bool.Parse(boolValues[0]), short.Parse(boolValues[1]), short.Parse(boolValues[2]));
 
                 case ScriptParameter.ParameterType.CHESS_FILE:
-                    return new ChessFileScriptParameter(localizedName, short.Parse(value));
+                    return new ChessPuzzleScriptParameter(localizedName, (ChessPuzzleItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Chess_Puzzle && ((ChessPuzzleItem)i).ChessPuzzle.Index == short.Parse(value)));
 
                 case ScriptParameter.ParameterType.CHESS_PIECE:
                     return new ChessPieceScriptParameter(localizedName, short.Parse(value));
