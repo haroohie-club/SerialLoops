@@ -60,11 +60,11 @@
         <Grid Grid.Column="1" Grid.Row="0" ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto">
             <TextBlock Grid.Column="0" Grid.Row="0" Margin="0,7,0,0" Text="{x:Static assets:Strings.Number_of_Moves}"/>
             <NumericUpDown Grid.Column="1" Grid.Row="0" Margin="10,0,0,0" Value="{Binding NumMoves}"
-                           Minimum="0" Maximum="10000" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
+                           Minimum="0" Maximum="5" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
 
             <TextBlock Grid.Column="0" Grid.Row="1" Margin="0,7,0,0" Text="{x:Static assets:Strings.Time_Limit}"/>
             <NumericUpDown Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" Value="{Binding TimeLimit}"
-                           Minimum="0" Maximum="10000" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
+                           Minimum="0" Maximum="999" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
 
             <TextBlock Grid.Column="0" Grid.Row="2" Margin="0,7,0,0" Text="{x:Static assets:Strings.Unknown}"/>
             <NumericUpDown Grid.Column="1" Grid.Row="2" Margin="10,0,0,0" Value="{Binding Unknown08}"

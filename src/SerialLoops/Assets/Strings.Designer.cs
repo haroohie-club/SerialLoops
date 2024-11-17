@@ -6636,7 +6636,7 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The time limit for a given chess puzzle.
+        ///   Looks up a localized string similar to Time Limit.
         /// </summary>
         public static string Time_Limit {
             get {
