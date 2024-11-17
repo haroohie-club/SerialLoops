@@ -24,6 +24,8 @@ public class ChessLoadScriptCommandEditorViewModel : ScriptCommandEditorViewMode
             ((ChessPuzzleScriptParameter)Command.Parameters[0]).ChessPuzzle = _chessPuzzle;
             Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
                 .Objects[Command.Index].Parameters[0] = (short)_chessPuzzle.ChessPuzzle.Index;
+            ScriptEditor.UpdatePreview();
+            Script.UnsavedChanges = true;
         }
     }
 
@@ -31,7 +33,7 @@ public class ChessLoadScriptCommandEditorViewModel : ScriptCommandEditorViewMode
         : base(command, scriptEditor)
     {
         ChessPuzzles = new(window.OpenProject.Items.Where(c => c.Type == ItemDescription.ItemType.Chess_Puzzle).Cast<ChessPuzzleItem>());
-        ChessPuzzle = ((ChessPuzzleScriptParameter)command.Parameters[0]).ChessPuzzle;
+        _chessPuzzle = ((ChessPuzzleScriptParameter)command.Parameters[0]).ChessPuzzle;
         Tabs = window.EditorTabs;
     }
 }

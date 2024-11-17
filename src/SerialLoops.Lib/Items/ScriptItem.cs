@@ -855,7 +855,7 @@ public class ScriptItem : Item
         }
         else if (preview.ChessPuzzle is not null)
         {
-            canvas.DrawBitmap(preview.ChessPuzzle.GetChessboard(project.Grp), 8, 188);
+            canvas.DrawBitmap(preview.ChessPuzzle.GetChessboard(project), 8, 188);
         }
 
         // Draw background

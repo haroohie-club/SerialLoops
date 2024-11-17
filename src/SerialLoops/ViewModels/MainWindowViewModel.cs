@@ -553,6 +553,11 @@ public partial class MainWindowViewModel : ViewModelBase
                     CharacterSpriteItem characterSpriteItem = (CharacterSpriteItem)item;
                     characterSpriteItem.Graphics.Write(OpenProject, Log);
                     break;
+                case ItemDescription.ItemType.Chess_Puzzle:
+                    ChessPuzzleItem chessPuzzleItem = (ChessPuzzleItem)item;
+                    IO.WriteStringFile(Path.Combine("assets", "data", $"{chessPuzzleItem.ChessPuzzle.Index:X3}.s"),
+                        chessPuzzleItem.ChessPuzzle.GetSource([]), OpenProject, Log);
+                    break;
                 case ItemDescription.ItemType.Scenario:
                     ScenarioStruct scenario = ((ScenarioItem)item).Scenario;
                     IO.WriteStringFile(
