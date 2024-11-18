@@ -16,7 +16,7 @@ public partial class ChessPuzzleEditorView : UserControl
     private void ChessPiece_OnPointerEntered(object sender, PointerEventArgs e)
     {
         Panel pieceBg = sender as Panel;
-        if (((ChessPieceOnBoard)pieceBg.DataContext).Piece == ChessFile.ChessPiece.Empty)
+        if (((ChessPieceOnBoard)pieceBg?.DataContext)?.Piece == ChessFile.ChessPiece.Empty)
         {
             return;
         }
@@ -26,7 +26,7 @@ public partial class ChessPuzzleEditorView : UserControl
     private void InputElement_OnPointerExited(object sender, PointerEventArgs e)
     {
         Panel pieceBg = sender as Panel;
-        if (((ChessPieceOnBoard)pieceBg.DataContext).Piece == ChessFile.ChessPiece.Empty)
+        if (((ChessPieceOnBoard)pieceBg?.DataContext)?.Piece == ChessFile.ChessPiece.Empty)
         {
             return;
         }
