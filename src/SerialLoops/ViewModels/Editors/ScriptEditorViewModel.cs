@@ -3,25 +3,18 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-<<<<<<< HEAD
 using System.Text.Json;
 using System.Threading.Tasks;
-=======
->>>>>>> Avalonia
 using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Controls.Selection;
 using Avalonia.Controls.Templates;
-<<<<<<< HEAD
 using Avalonia.Input;
 using Avalonia.Platform;
 using AvaloniaEdit.Utils;
 using DynamicData;
-=======
-using Avalonia.Platform;
->>>>>>> Avalonia
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
 using MsBox.Avalonia.Enums;
@@ -49,21 +42,21 @@ public class ScriptEditorViewModel : EditorViewModel
     private ScriptItemCommand _selectedCommand;
     private OrderedDictionary<ScriptSection, List<ScriptItemCommand>> _commands = [];
 
-    public ICommand AddScriptCommandCommand { get; }
-    public ICommand AddScriptSectionCommand { get; }
-    public ICommand DeleteScriptCommandOrSectionCommand { get; }
-    public ICommand ClearScriptCommand { get; }
-    public ICommand CutCommand { get; }
-    public ICommand CopyCommand { get; }
-    public ICommand PasteCommand { get; }
-    public ICommand ApplyTemplateCommand { get; }
-    public ICommand GenerateTemplateCommand { get; }
+    public ICommand AddScriptCommandCommand { get; set; }
+    public ICommand AddScriptSectionCommand { get; set;  }
+    public ICommand DeleteScriptCommandOrSectionCommand { get; set; }
+    public ICommand ClearScriptCommand { get; set; }
+    public ICommand CutCommand { get; set; }
+    public ICommand CopyCommand { get; set; }
+    public ICommand PasteCommand { get; set; }
+    public ICommand ApplyTemplateCommand { get; set; }
+    public ICommand GenerateTemplateCommand { get; set; }
 
-    public KeyGesture AddCommandHotKey { get; }
-    public KeyGesture CutHotKey { get; }
-    public KeyGesture CopyHotKey { get; }
-    public KeyGesture PasteHotKey { get; }
-    public KeyGesture DeleteHotKey { get; }
+    public KeyGesture AddCommandHotKey { get; set; }
+    public KeyGesture CutHotKey { get; set; }
+    public KeyGesture CopyHotKey { get; set; }
+    public KeyGesture PasteHotKey { get; set; }
+    public KeyGesture DeleteHotKey { get; set; }
 
     public ScriptItemCommand SelectedCommand
     {
@@ -76,19 +69,12 @@ public class ScriptEditorViewModel : EditorViewModel
             UpdatePreview();
         }
     }
-<<<<<<< HEAD
 
     [Reactive]
     public ReactiveScriptSection SelectedSection { get; set; }
-=======
->>>>>>> Avalonia
-
-    [Reactive] public ScriptSection SelectedSection { get; set; }
 
     [Reactive] public SKBitmap PreviewBitmap { get; set; }
     [Reactive] public ScriptCommandEditorViewModel CurrentCommandViewModel { get; set; }
-
-    public ObservableCollection<ReactiveScriptSection> ScriptSections { get; }
 
     public ObservableCollection<ReactiveScriptSection> ScriptSections { get; }
 
@@ -105,11 +91,7 @@ public class ScriptEditorViewModel : EditorViewModel
                     new HierarchicalExpanderColumn<ITreeItem>(
                         new TemplateColumn<ITreeItem>(null,
                             new FuncDataTemplate<ITreeItem>((val, namescope) => val?.GetDisplay()),
-<<<<<<< HEAD
-                            options: new() { IsTextSearchEnabled = true }),
-=======
                             options: new TemplateColumnOptions<ITreeItem>() { IsTextSearchEnabled = true }),
->>>>>>> Avalonia
                         i => i.Children
                     ),
                 },
@@ -142,8 +124,6 @@ public class ScriptEditorViewModel : EditorViewModel
         _script = script;
         ScriptSections = new(script.Event.ScriptSections.Select(s => new ReactiveScriptSection(s)));
         _project = window.OpenProject;
-<<<<<<< HEAD
-=======
         PopulateScriptCommands();
         _script.CalculateGraphEdges(_commands, _log);
     }
@@ -155,7 +135,6 @@ public class ScriptEditorViewModel : EditorViewModel
             _script.Refresh(_project, _log);
         }
 
->>>>>>> Avalonia
         Commands = _script.GetScriptCommandTree(_project, _log);
         _script.CalculateGraphEdges(_commands, _log);
         foreach (ReactiveScriptSection section in ScriptSections)
@@ -704,30 +683,5 @@ public class ReactiveScriptSection(ScriptSection section) : ReactiveObject
     {
         Commands.Clear();
         ExtensionMethods.AddRange(Commands, commands.Select(c => new ScriptCommandTreeItem(c)));
-    }
-}
-
-public class ReactiveScriptSection(ScriptSection section) : ReactiveObject
-{
-    public ScriptSection Section { get; } = section;
-
-    private string _name = section.Name;
-
-    public string Name
-    {
-        get => _name;
-        set
-        {
-            this.RaiseAndSetIfChanged(ref _name, value);
-            Section.Name = _name;
-        }
-    }
-
-    public ObservableCollection<ScriptCommandInvocation> Commands { get; } = new(section.Objects);
-
-    public void InsertCommand(int index, ScriptCommandInvocation command)
-    {
-        Commands.Insert(index, command);
-        Section.Objects.Insert(index, command);
     }
 }

@@ -36,22 +36,6 @@ public class ScriptItem : Item
         Graph.AddVertexRange(Event.ScriptSections);
     }
 
-    public Dictionary<ScriptSection, List<ScriptItemCommand>> GetScriptCommandTree(Project project, ILogger log)
-    {
-        ScriptCommandInvocation currentCommand = null;
-        try
-        {
-            UpdateEventTableInfo(evtTbl);
-
-            PruneLabelsSection(log);
-            Graph.AddVertexRange(Event.ScriptSections);
-        }
-        catch (Exception ex)
-        {
-            log.LogException(string.Format(localize("Failed to load script file {0}"), evt.Name), ex);
-        }
-    }
-
     public OrderedDictionary<ScriptSection, List<ScriptItemCommand>> GetScriptCommandTree(Project project, ILogger log)
     {
         ScriptCommandInvocation currentCommand = null;

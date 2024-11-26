@@ -58,7 +58,7 @@ public class ChessPuzzleEditorViewModel : EditorViewModel
     public ChessPuzzleEditorViewModel(ChessPuzzleItem chessPuzzle, MainWindowViewModel window, ILogger log) : base(chessPuzzle, window, log)
     {
         _chessPuzzle = chessPuzzle;
-        EmptyChessboard = ChessPuzzleItem.GetEmptyChessboard(_window.OpenProject.Grp);
+        EmptyChessboard = ChessPuzzleItem.GetEmptyChessboard(Window.OpenProject.Grp);
 
         Pieces = new(_chessPuzzle.ChessPuzzle.Chessboard.Select((p, i) => new ChessPieceOnBoard(p, i, window.OpenProject, this)));
         _numMoves = _chessPuzzle.ChessPuzzle.NumMoves;
