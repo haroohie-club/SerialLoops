@@ -579,7 +579,7 @@ This action is irreversible.</value>
   <data name="Ctrl+Scroll - Scale Image" xml:space="preserve">
     <value>Ctrl+Scroll - Scale Image</value>
   </data>
-  <data name="Custom Color" xml:space="preserve">
+  <data name="CUSTOM_COLOR" xml:space="preserve">
     <value>Custom Color</value>
   </data>
   <data name="Cut" xml:space="preserve">
@@ -826,7 +826,7 @@ This action is irreversible.</value>
     <value>Error</value>
   </data>
   <data name="Error getting script command tree for script {0} ({1})" xml:space="preserve">
-    <value>Error getting script command tree for script {0} ({1})</value>
+    <value>Error getting script command tree for script {0} ({1}): {2} {3}</value>
     <comment>{0} is the script display name, {1} is the script's underlying name</comment>
   </data>
   <data name="Error pruning labels!" xml:space="preserve">
@@ -2319,7 +2319,7 @@ If you wish to ignore this, please check the "Ignore Hash" checkbox.</value>
     <value>This system texture uses a common palette, so palette replacement has been disabled</value>
   </data>
   <data name="Time (Frames)" xml:space="preserve">
-    <value>Time (Frames)</value>
+    <value>Transition Time (Frames)</value>
   </data>
   <data name="Times" xml:space="preserve">
     <value>Times</value>
@@ -2640,6 +2640,126 @@ No project is currently open. Would you like to create a new project?</value>
   </data>
   <data name="Load Sound" xml:space="preserve">
     <value>Load Sound</value><comment>The name of a parameter for the SND_PLAY command which indicates whether a sound should be loaded or not</comment>
+  </data>
+  <data name="Stop" xml:space="preserve">
+    <value>Stop</value>
+  </data>
+  <data name="NO_TRANSITION" xml:space="preserve">
+    <value>No Transition</value>
+  </data>
+  <data name="SLIDE_LEFT_TO_CENTER" xml:space="preserve">
+    <value>Slide Left to Center</value>
+  </data>
+  <data name="SLIDE_RIGHT_TO_CENTER" xml:space="preserve">
+    <value>Slide Right to Center</value>
+  </data>
+  <data name="SLIDE_LEFT_TO_RIGHT" xml:space="preserve">
+    <value>Slide Left to Right</value>
+  </data>
+  <data name="SLIDE_RIGHT_TO_LEFT" xml:space="preserve">
+    <value>Slide Right to Left</value>
+  </data>
+  <data name="SLIDE_LEFT_TO_RIGHT_SLOW" xml:space="preserve">
+    <value>Slide Left to Right (Slow)</value>
+  </data>
+  <data name="SLIDE_RIGHT_TO_LEFT_SLOW" xml:space="preserve">
+    <value>Slide Right to Left (Slow)</value>
+  </data>
+  <data name="FADE_TO_CENTER" xml:space="preserve">
+    <value>Fade to Center</value>
+  </data>
+  <data name="SLIDE_LEFT_TO_RIGHT_FAST" xml:space="preserve">
+    <value>Slight Left to Right (Fast)</value>
+  </data>
+  <data name="SLIDE_RIGHT_TO_LEFT_FAST" xml:space="preserve">
+    <value>Slide Right to Left (Fast)</value>
+  </data>
+  <data name="PEEK_RIGHT_TO_LEFT" xml:space="preserve">
+    <value>Peek Right to Left</value>
+  </data>
+  <data name="FADE_IN_LEFT" xml:space="preserve">
+    <value>Fade In Left</value>
+  </data>
+  <data name="NO_EXIT" xml:space="preserve">
+    <value>Don't Exit</value>
+  </data>
+  <data name="SLIDE_FROM_CENTER_TO_RIGHT_FADE_OUT" xml:space="preserve">
+    <value>Slide from Center to Right and Fade Out</value>
+  </data>
+  <data name="SLIDE_FROM_CENTER_TO_LEFT_FADE_OUT" xml:space="preserve">
+    <value>Slide from Center to Left and Fade Out</value>
+  </data>
+  <data name="SLIDE_CENTER_TO_RIGHT_AND_STAY" xml:space="preserve">
+    <value>Slide from Center to Right and Stay (Transition)</value>
+  </data>
+  <data name="SLIDE_CENTER_TO_LEFT_AND_STAY" xml:space="preserve">
+    <value>Slide from Center to Left and Stay (Transition)</value>
+  </data>
+  <data name="SLIDE_LEFT_TO_RIGHT_FADE_OUT" xml:space="preserve">
+    <value>Slide Left to Right and Fade Out</value>
+  </data>
+  <data name="SLIDE_LEFT_TO_LEFT_FADE_OUT" xml:space="preserve">
+    <value>Slide Left to Left and Fade Out</value>
+  </data>
+  <data name="FADE_OUT_CENTER" xml:space="preserve">
+    <value>Fade Out Center</value>
+  </data>
+  <data name="FADE_OUT_LEFT" xml:space="preserve">
+    <value>Fade Out Left</value>
+  </data>
+  <data name="SLIDE_LEFT_TO_RIGHT_AND_STAY" xml:space="preserve">
+    <value>Slide Left to Right and Stay (Transition)</value>
+  </data>
+  <data name="SLIDE_RIGHT_TO_LEFT_AND_STAY" xml:space="preserve">
+    <value>Slide Right to Left and Stay (Transition)</value>
+  </data>
+  <data name="NO_SHAKE" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="SHAKE_CENTER" xml:space="preserve">
+    <value>Shake (Center)</value>
+  </data>
+  <data name="BOUNCE_HORIZONTAL_CENTER" xml:space="preserve">
+    <value>Bounce Horizontal (Center)</value>
+  </data>
+  <data name="BOUNCE_HORIZONTAL_CENTER_WITH_SMALL_SHAKES" xml:space="preserve">
+    <value>Bounce Horizontal (Center) with Small Shakes</value>
+  </data>
+  <data name="SHAKE_RIGHT" xml:space="preserve">
+    <value>Shake (Right)</value>
+  </data>
+  <data name="SHAKE_LEFT" xml:space="preserve">
+    <value>Shake (Left)</value>
+  </data>
+  <data name="NORMAL_TEXT_ENTRANCE" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="SHRINK_IN" xml:space="preserve">
+    <value>Shrink In</value>
+  </data>
+  <data name="TERMINAL_TYPING" xml:space="preserve">
+    <value>Terminal Typing</value>
+  </data>
+  <data name="BLACK" xml:space="preserve">
+    <value>Black</value>
+  </data>
+  <data name="WHITE" xml:space="preserve">
+    <value>White</value>
+  </data>
+  <data name="DEFAULT_PALETTE" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="INVERTED" xml:space="preserve">
+    <value>Inverted</value>
+  </data>
+  <data name="GRAYSCALE" xml:space="preserve">
+    <value>Grayscale</value>
+  </data>
+  <data name="SEPIA" xml:space="preserve">
+    <value>Sepia</value>
+  </data>
+  <data name="DIMMED" xml:space="preserve">
+    <value>Dimmed</value>
   </data>
   <data name="Number of Moves" xml:space="preserve">
     <value>Number of Moves</value><comment>The number of moves available in a given chess puzzle</comment>

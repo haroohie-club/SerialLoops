@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
@@ -34,7 +35,7 @@ public class BgDispScriptCommandEditorViewModel : ScriptCommandEditorViewModel
 
     public ICommand ReplaceBgCommand { get; }
 
-    public BgDispScriptCommandEditorViewModel(ScriptItemCommand command, ScriptEditorViewModel scriptEditor, MainWindowViewModel window) : base(command, scriptEditor)
+    public BgDispScriptCommandEditorViewModel(ScriptItemCommand command, ScriptEditorViewModel scriptEditor, ILogger log, MainWindowViewModel window) : base(command, scriptEditor, log)
     {
         _window = window;
         Tabs = _window.EditorTabs;

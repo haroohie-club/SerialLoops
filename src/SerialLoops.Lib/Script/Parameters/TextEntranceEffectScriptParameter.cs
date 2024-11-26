@@ -19,7 +19,7 @@ public class TextEntranceEffectScriptParameter : ScriptParameter
 
     public enum TextEntranceEffect : short
     {
-        NORMAL = 0,
+        NORMAL_TEXT_ENTRANCE = 0,
         SHRINK_IN = 1,
         TERMINAL_TYPING = 2,
     }

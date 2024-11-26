@@ -28,7 +28,18 @@
         </StackPanel>
 
         <TextBlock Grid.Column="0" Grid.Row="1" Margin="0,7,0,0" Text="{x:Static assets:Strings.Mode}"/>
-        <ComboBox Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" ItemsSource="{Binding Modes}" SelectedItem="{Binding Mode}"/>
+        <ComboBox Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" ItemsSource="{Binding Modes}" SelectedItem="{Binding Mode}">
+            <ComboBox.ItemTemplate>
+                <DataTemplate DataType="vm:BgmModeLocalized">
+                    <TextBlock Text="{Binding DisplayString}"/>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+            <ComboBox.ItemContainerTheme>
+                <ControlTheme TargetType="ComboBoxItem" x:DataType="vm:BgmModeLocalized" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
+                    <Setter Property="TextSearch.Text" Value="{Binding DisplayString}" />
+                </ControlTheme>
+            </ComboBox.ItemContainerTheme>
+        </ComboBox>
 
         <TextBlock Grid.Column="0" Grid.Row="2" Margin="0,7,0,0" Text="{x:Static assets:Strings.Volume}"/>
         <NumericUpDown Grid.Column="1" Grid.Row="2" Margin="10,0,0,0" Value="{Binding Volume}"

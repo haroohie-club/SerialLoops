@@ -77,10 +77,7 @@ public class ScriptItemCommand : ReactiveObject
     {
         List<ScriptItemCommand> commands = [];
 
-        Func<ScriptSectionEdge, double> weightFunction = new((ScriptSectionEdge edge) =>
-        {
-            return 1;
-        });
+        Func<ScriptSectionEdge, double> weightFunction = new((ScriptSectionEdge edge) => 1);
 
         if (Section != commandTree.Keys.First())
         {

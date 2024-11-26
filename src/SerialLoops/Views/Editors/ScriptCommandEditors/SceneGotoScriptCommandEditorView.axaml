@@ -1,0 +1,32 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:SerialLoops.ViewModels.Editors.ScriptCommandEditors"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:assets="using:SerialLoops.Assets"
+             xmlns:controls="using:SerialLoops.Controls"
+             xmlns:items="using:SerialLoops.Lib.Items"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:SceneGotoScriptCommandEditorViewModel"
+             x:Class="SerialLoops.Views.Editors.ScriptCommandEditors.SceneGotoScriptCommandEditorView">
+    <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto">
+        <TextBlock Grid.Column="0" Grid.Row="0" Margin="0,7,0,0" Text="{x:Static assets:Strings.Scene}"/>
+        <StackPanel Grid.Column="1" Grid.Row="0" Spacing="3" Orientation="Horizontal">
+            <ComboBox Margin="10,0,0,0" ItemsSource="{Binding Scripts}"
+                      SelectedItem="{Binding SelectedScript}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate DataType="items:ScriptItem">
+                        <TextBlock Text="{Binding DisplayName}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+                <ComboBox.ItemContainerTheme>
+                    <ControlTheme TargetType="ComboBoxItem" x:DataType="items:ScriptItem" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
+                        <Setter Property="TextSearch.Text" Value="{Binding DisplayName}" />
+                    </ControlTheme>
+                </ComboBox.ItemContainerTheme>
+            </ComboBox>
+            <controls:ItemLink Item="{Binding SelectedScript}" Tabs="{Binding Tabs}"/>
+        </StackPanel>
+    </Grid>
+</UserControl>
+

@@ -1,10 +1,11 @@
-﻿using ReactiveUI;
+﻿using HaruhiChokuretsuLib.Util;
+using ReactiveUI;
 using SerialLoops.Lib.Script;
 using SerialLoops.Lib.Script.Parameters;
 
 namespace SerialLoops.ViewModels.Editors.ScriptCommandEditors;
 
-public class WaitScriptCommandEditorViewModel(ScriptItemCommand command, ScriptEditorViewModel scriptEditor) : ScriptCommandEditorViewModel(command, scriptEditor)
+public class WaitScriptCommandEditorViewModel(ScriptItemCommand command, ScriptEditorViewModel scriptEditor, ILogger log) : ScriptCommandEditorViewModel(command, scriptEditor, log)
 {
     private short _waitTime = ((ShortScriptParameter)command.Parameters[0]).Value;
     public short WaitTime

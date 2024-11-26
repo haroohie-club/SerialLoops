@@ -38,6 +38,7 @@ public class ScriptItem : Item
 
     public Dictionary<ScriptSection, List<ScriptItemCommand>> GetScriptCommandTree(Project project, ILogger log)
     {
+        ScriptCommandInvocation currentCommand = null;
         try
         {
             Dictionary<ScriptSection, List<ScriptItemCommand>> commands = [];
@@ -46,6 +47,7 @@ public class ScriptItem : Item
                 commands.Add(section, []);
                 foreach (ScriptCommandInvocation command in section.Objects)
                 {
+                    currentCommand = command;
                     commands[section].Add(ScriptItemCommand.FromInvocation(command, section,
                         commands[section].Count, Event, project, _localize, log));
                 }
@@ -56,8 +58,8 @@ public class ScriptItem : Item
         catch (Exception ex)
         {
             log.LogException(
-                string.Format(project.Localize("Error getting script command tree for script {0} ({1})"),
-                    DisplayName, Name), ex);
+                string.Format(project.Localize("Error getting script command tree for script {0} ({1}): {2} {3}"),
+                    DisplayName, Name, currentCommand?.Command.Mnemonic ?? "NULL_COMMAND", string.Join(", ", currentCommand?.Parameters ?? [])), ex);
             return null;
         }
     }
@@ -207,7 +209,7 @@ public class ScriptItem : Item
         if (commands is null)
         {
             log.LogWarning($"No path found to current command.");
-            preview.ErrorImage = "SerialLoops.Graphics.ScriptPreviewError.png";
+            preview.ErrorImage = "avares://SerialLoops/Assets/Graphics/ScriptPreviewError.png";
             return preview;
         }
 
@@ -702,7 +704,7 @@ public class ScriptItem : Item
                         };
                     }
 
-                    if (spriteShakeParam.ShakeEffect != SpriteShakeScriptParameter.SpriteShakeEffect.NONE &&
+                    if (spriteShakeParam.ShakeEffect != SpriteShakeScriptParameter.SpriteShakeEffect.NO_SHAKE &&
                         sprites.ContainsKey(character))
                     {
                         switch (spriteShakeParam.ShakeEffect)
@@ -794,6 +796,28 @@ public class ScriptItem : Item
             preview.Topic = (TopicItem)project.Items.FirstOrDefault(i =>
                 i.Type == ItemType.Topic && ((TopicItem)i).TopicEntry.Id ==
                 ((TopicScriptParameter)currentCommand.Parameters[0]).TopicId);
+        }
+
+        // Draw SELECT choices
+        if (currentCommand.Verb == CommandVerb.SELECT)
+        {
+            preview.CurrentChocies = [];
+            if (((OptionScriptParameter)currentCommand.Parameters[0]).Option.Id > 0)
+            {
+                preview.CurrentChocies.Add(((OptionScriptParameter)currentCommand.Parameters[0]).Option.Text);
+            }
+            if (((OptionScriptParameter)currentCommand.Parameters[1]).Option.Id > 0)
+            {
+                preview.CurrentChocies.Add(((OptionScriptParameter)currentCommand.Parameters[1]).Option.Text);
+            }
+            if (((OptionScriptParameter)currentCommand.Parameters[2]).Option.Id > 0)
+            {
+                preview.CurrentChocies.Add(((OptionScriptParameter)currentCommand.Parameters[2]).Option.Text);
+            }
+            if (((OptionScriptParameter)currentCommand.Parameters[3]).Option.Id > 0)
+            {
+                preview.CurrentChocies.Add(((OptionScriptParameter)currentCommand.Parameters[3]).Option.Text);
+            }
         }
 
         return preview;
@@ -1019,6 +1043,30 @@ public class ScriptItem : Item
             flyoutCanvas.Flush();
 
             canvas.DrawBitmap(topicFlyout, 256 - topicFlyout.Width, verticalOffset + 128);
+        }
+
+        // Draw select choices
+        if (preview.CurrentChocies?.Count > 0)
+        {
+            List<SKBitmap> choiceGraphics = [];
+            foreach (string choice in preview.CurrentChocies)
+            {
+                SKBitmap choiceGraphic = new(218, 18);
+                SKCanvas choiceCanvas = new(choiceGraphic);
+                choiceCanvas.DrawRect(1, 1, 216, 16, new() { Color = new(146, 146, 146) });
+                choiceCanvas.DrawRect(2, 2, 214, 14, new() { Color = new(69, 69, 69) });
+                int choiceWidth = project.LangCode.Equals("ja") ? choice.Length * 14 : choice.Sum(c => project.FontReplacement.ReverseLookup(c).Offset);
+                choiceCanvas.DrawHaroohieText(choice, DialogueScriptParameter.Paint00, project, (218 - choiceWidth) / 2, 2);
+                choiceCanvas.Flush();
+                choiceGraphics.Add(choiceGraphic);
+            }
+
+            int graphicY = (192 - (choiceGraphics.Count * 18 + (choiceGraphics.Count - 1) * 8)) / 2 + 184;
+            foreach (SKBitmap choiceGraphic in choiceGraphics)
+            {
+                canvas.DrawBitmap(choiceGraphic, 19, graphicY);
+                graphicY += 26;
+            }
         }
 
         canvas.Flush();

@@ -1,11 +1,9 @@
 ﻿using System.Collections.ObjectModel;
-using System.Diagnostics.Tracing;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.VisualTree;
 using Avalonia.Xaml.Interactions.DragAndDrop;
 using HaruhiChokuretsuLib.Archive.Data;
-using ReactiveUI;
 using SerialLoops.ViewModels.Editors;
 
 namespace SerialLoops.Behaviors;

@@ -12,9 +12,8 @@ namespace SerialLoops.ViewModels.Panels;
 
 public class EditorTabsPanelViewModel : ViewModelBase
 {
-    private Project _project;
-    private ILogger _log;
-    private EditorViewModel _selectedTab;
+    private readonly Project _project;
+    private readonly ILogger _log;
 
     public MainWindowViewModel MainWindow { get; private set; }
     [Reactive]

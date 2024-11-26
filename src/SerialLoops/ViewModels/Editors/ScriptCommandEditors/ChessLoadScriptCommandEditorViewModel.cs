@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
+using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
-using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
 using SerialLoops.Lib.Script.Parameters;
@@ -29,8 +29,8 @@ public class ChessLoadScriptCommandEditorViewModel : ScriptCommandEditorViewMode
         }
     }
 
-    public ChessLoadScriptCommandEditorViewModel(ScriptItemCommand command, ScriptEditorViewModel scriptEditor, MainWindowViewModel window)
-        : base(command, scriptEditor)
+    public ChessLoadScriptCommandEditorViewModel(ScriptItemCommand command, ScriptEditorViewModel scriptEditor, MainWindowViewModel window, ILogger log)
+        : base(command, scriptEditor, log)
     {
         ChessPuzzles = new(window.OpenProject.Items.Where(c => c.Type == ItemDescription.ItemType.Chess_Puzzle).Cast<ChessPuzzleItem>());
         _chessPuzzle = ((ChessPuzzleScriptParameter)command.Parameters[0]).ChessPuzzle;

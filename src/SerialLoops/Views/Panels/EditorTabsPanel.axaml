@@ -6,16 +6,11 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              xmlns:i="using:Avalonia.Xaml.Interactivity"
              xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
-             xmlns:controls="using:SerialLoops.Controls"
-             xmlns:assets="using:SerialLoops.Assets"
              xmlns:editors="using:SerialLoops.ViewModels.Editors"
              xmlns:utility="using:SerialLoops.Utility"
              xmlns:tab="using:Tabalonia.Controls"
              x:DataType="vm:EditorTabsPanelViewModel"
              x:Class="SerialLoops.Views.Panels.EditorTabsPanel">
-    <Design.DataContext>
-        <vm:EditorTabsPanelViewModel/>
-    </Design.DataContext>
     <UserControl.Resources>
         <utility:DisplayNameConverter x:Key="DisplayNameConverter"/>
     </UserControl.Resources>

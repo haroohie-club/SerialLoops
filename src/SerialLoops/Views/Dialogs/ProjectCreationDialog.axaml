@@ -4,7 +4,6 @@
         xmlns:vm="using:SerialLoops.ViewModels.Dialogs"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:assets="using:SerialLoops.Assets"
-        xmlns:utility="using:SerialLoops.Utility"
         xmlns:gbox="using:GroupBox.Avalonia.Controls"
         xmlns:i="using:Avalonia.Xaml.Interactivity"
         mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="275"

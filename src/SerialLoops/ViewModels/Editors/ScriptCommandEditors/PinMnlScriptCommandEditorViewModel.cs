@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.RegularExpressions;
+using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
@@ -10,7 +11,7 @@ using SerialLoops.Lib.Util;
 
 namespace SerialLoops.ViewModels.Editors.ScriptCommandEditors;
 
-public partial class PinMnlScriptCommandEditorViewModel(ScriptItemCommand command, ScriptEditorViewModel scriptEditor, Project project) : ScriptCommandEditorViewModel(command, scriptEditor)
+public partial class PinMnlScriptCommandEditorViewModel(ScriptItemCommand command, ScriptEditorViewModel scriptEditor, ILogger log, Project project) : ScriptCommandEditorViewModel(command, scriptEditor, log)
 {
     private Project _project = project;
 

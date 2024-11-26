@@ -19,7 +19,7 @@ public class SpriteShakeScriptParameter : ScriptParameter
 
     public enum SpriteShakeEffect : short
     {
-        NONE = 0,
+        NO_SHAKE = 0,
         SHAKE_CENTER = 1,
         BOUNCE_HORIZONTAL_CENTER = 2,
         BOUNCE_HORIZONTAL_CENTER_WITH_SMALL_SHAKES = 3,

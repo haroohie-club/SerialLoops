@@ -28,17 +28,11 @@
                    Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Width="256"/>
             <TabControl Grid.Column="1" Grid.Row="0">
                 <TabControl.Items>
-                    <TabItem Header="Starting Chibis">
-
-                    </TabItem>
-                    <TabItem Header="Map Characters">
-
-                    </TabItem>
+                    <TabItem Header="Starting Chibis" />
+                    <TabItem Header="Map Characters" />
                 </TabControl.Items>
             </TabControl>
-            <StackPanel Grid.Column="1" Grid.Row="1">
-
-            </StackPanel>
+            <StackPanel Grid.Column="1" Grid.Row="1" />
         </Grid>
         <ScrollViewer Grid.Column="1" Grid.Row="2">
             <ContentPresenter Margin="10" DataContext="{Binding CurrentCommandViewModel}" Content="{Binding}"/>

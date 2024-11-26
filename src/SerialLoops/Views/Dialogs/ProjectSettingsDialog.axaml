@@ -5,7 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:assets="using:SerialLoops.Assets"
         mc:Ignorable="d" d:DesignWidth="550" d:DesignHeight="370"
-        xmlns:controls="using:SerialLoops.Controls"
         xmlns:utility="using:SerialLoops.Utility"
         x:DataType="vm:ProjectSettingsDialogViewModel"
         x:Class="SerialLoops.Views.Dialogs.ProjectSettingsDialog"

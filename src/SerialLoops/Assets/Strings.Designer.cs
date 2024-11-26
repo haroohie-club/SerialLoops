@@ -706,6 +706,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Black.
+        /// </summary>
+        public static string BLACK {
+            get {
+                return ResourceManager.GetString("BLACK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Black Space Begin.
         /// </summary>
         public static string Black_Space_Begin {
@@ -765,6 +774,24 @@ namespace SerialLoops.Assets {
         public static string Bottom_Screen {
             get {
                 return ResourceManager.GetString("Bottom Screen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bounce Horizontal (Center).
+        /// </summary>
+        public static string BOUNCE_HORIZONTAL_CENTER {
+            get {
+                return ResourceManager.GetString("BOUNCE_HORIZONTAL_CENTER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bounce Horizontal (Center) with Small Shakes.
+        /// </summary>
+        public static string BOUNCE_HORIZONTAL_CENTER_WITH_SMALL_SHAKES {
+            get {
+                return ResourceManager.GetString("BOUNCE_HORIZONTAL_CENTER_WITH_SMALL_SHAKES", resourceCulture);
             }
         }
         
@@ -1528,9 +1555,9 @@ namespace SerialLoops.Assets {
         /// <summary>
         ///   Looks up a localized string similar to Custom Color.
         /// </summary>
-        public static string Custom_Color {
+        public static string CUSTOM_COLOR {
             get {
-                return ResourceManager.GetString("Custom Color", resourceCulture);
+                return ResourceManager.GetString("CUSTOM_COLOR", resourceCulture);
             }
         }
         
@@ -1567,6 +1594,15 @@ namespace SerialLoops.Assets {
         public static string Default_Font_Display {
             get {
                 return ResourceManager.GetString("Default Font Display", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default.
+        /// </summary>
+        public static string DEFAULT_PALETTE {
+            get {
+                return ResourceManager.GetString("DEFAULT_PALETTE", resourceCulture);
             }
         }
         
@@ -1721,6 +1757,15 @@ namespace SerialLoops.Assets {
         public static string Dialogue_Text {
             get {
                 return ResourceManager.GetString("Dialogue_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dimmed.
+        /// </summary>
+        public static string DIMMED {
+            get {
+                return ResourceManager.GetString("DIMMED", resourceCulture);
             }
         }
         
@@ -2294,7 +2339,7 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error getting script command tree for script {0} ({1}).
+        ///   Looks up a localized string similar to Error getting script command tree for script {0} ({1}): {2} {3}.
         /// </summary>
         public static string Error_getting_script_command_tree_for_script__0____1__ {
             get {
@@ -2510,6 +2555,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fade In Left.
+        /// </summary>
+        public static string FADE_IN_LEFT {
+            get {
+                return ResourceManager.GetString("FADE_IN_LEFT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fade In Percentage.
         /// </summary>
         public static string Fade_In_Percentage {
@@ -2524,6 +2578,24 @@ namespace SerialLoops.Assets {
         public static string Fade_In_Time__Frames_ {
             get {
                 return ResourceManager.GetString("Fade In Time (Frames)", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fade Out Center.
+        /// </summary>
+        public static string FADE_OUT_CENTER {
+            get {
+                return ResourceManager.GetString("FADE_OUT_CENTER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fade Out Left.
+        /// </summary>
+        public static string FADE_OUT_LEFT {
+            get {
+                return ResourceManager.GetString("FADE_OUT_LEFT", resourceCulture);
             }
         }
         
@@ -2551,6 +2623,15 @@ namespace SerialLoops.Assets {
         public static string Fade_Time__Frames_ {
             get {
                 return ResourceManager.GetString("Fade Time (Frames)", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fade to Center.
+        /// </summary>
+        public static string FADE_TO_CENTER {
+            get {
+                return ResourceManager.GetString("FADE_TO_CENTER", resourceCulture);
             }
         }
         
@@ -3374,6 +3455,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Grayscale.
+        /// </summary>
+        public static string GRAYSCALE {
+            get {
+                return ResourceManager.GetString("GRAYSCALE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Greek.
         /// </summary>
         public static string Greek {
@@ -3658,6 +3748,15 @@ namespace SerialLoops.Assets {
         public static string Invalid_search_terms {
             get {
                 return ResourceManager.GetString("Invalid search terms", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Inverted.
+        /// </summary>
+        public static string INVERTED {
+            get {
+                return ResourceManager.GetString("INVERTED", resourceCulture);
             }
         }
         
@@ -4321,6 +4420,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Don&apos;t Exit.
+        /// </summary>
+        public static string NO_EXIT {
+            get {
+                return ResourceManager.GetString("NO_EXIT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No exported project selected.
         /// </summary>
         public static string No_exported_project_selected {
@@ -4393,6 +4501,24 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to None.
+        /// </summary>
+        public static string NO_SHAKE {
+            get {
+                return ResourceManager.GetString("NO_SHAKE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No Transition.
+        /// </summary>
+        public static string NO_TRANSITION {
+            get {
+                return ResourceManager.GetString("NO_TRANSITION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No valid maps found..
         /// </summary>
         public static string No_valid_maps_found_ {
@@ -4407,6 +4533,15 @@ namespace SerialLoops.Assets {
         public static string None_Selected {
             get {
                 return ResourceManager.GetString("None Selected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Normal.
+        /// </summary>
+        public static string NORMAL_TEXT_ENTRANCE {
+            get {
+                return ResourceManager.GetString("NORMAL_TEXT_ENTRANCE", resourceCulture);
             }
         }
         
@@ -4704,6 +4839,15 @@ namespace SerialLoops.Assets {
         public static string Pause_menu_Title_ticker_tape {
             get {
                 return ResourceManager.GetString("Pause menu Title ticker tape", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Peek Right to Left.
+        /// </summary>
+        public static string PEEK_RIGHT_TO_LEFT {
+            get {
+                return ResourceManager.GetString("PEEK_RIGHT_TO_LEFT", resourceCulture);
             }
         }
         
@@ -6069,6 +6213,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sepia.
+        /// </summary>
+        public static string SEPIA {
+            get {
+                return ResourceManager.GetString("SEPIA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Serial Loops Exported Project.
         /// </summary>
         public static string Serial_Loops_Exported_Project {
@@ -6213,11 +6366,47 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Shake (Center).
+        /// </summary>
+        public static string SHAKE_CENTER {
+            get {
+                return ResourceManager.GetString("SHAKE_CENTER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shake (Left).
+        /// </summary>
+        public static string SHAKE_LEFT {
+            get {
+                return ResourceManager.GetString("SHAKE_LEFT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shake (Right).
+        /// </summary>
+        public static string SHAKE_RIGHT {
+            get {
+                return ResourceManager.GetString("SHAKE_RIGHT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show.
         /// </summary>
         public static string Show {
             get {
                 return ResourceManager.GetString("Show", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shrink In.
+        /// </summary>
+        public static string SHRINK_IN {
+            get {
+                return ResourceManager.GetString("SHRINK_IN", resourceCulture);
             }
         }
         
@@ -6254,6 +6443,150 @@ namespace SerialLoops.Assets {
         public static string Skip_Update {
             get {
                 return ResourceManager.GetString("Skip Update", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Slide from Center to Left and Stay (Transition).
+        /// </summary>
+        public static string SLIDE_CENTER_TO_LEFT_AND_STAY {
+            get {
+                return ResourceManager.GetString("SLIDE_CENTER_TO_LEFT_AND_STAY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Slide from Center to Right and Stay (Transition).
+        /// </summary>
+        public static string SLIDE_CENTER_TO_RIGHT_AND_STAY {
+            get {
+                return ResourceManager.GetString("SLIDE_CENTER_TO_RIGHT_AND_STAY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Slide from Center to Left and Fade Out.
+        /// </summary>
+        public static string SLIDE_FROM_CENTER_TO_LEFT_FADE_OUT {
+            get {
+                return ResourceManager.GetString("SLIDE_FROM_CENTER_TO_LEFT_FADE_OUT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Slide from Center to Right and Fade Out.
+        /// </summary>
+        public static string SLIDE_FROM_CENTER_TO_RIGHT_FADE_OUT {
+            get {
+                return ResourceManager.GetString("SLIDE_FROM_CENTER_TO_RIGHT_FADE_OUT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Slide Left to Center.
+        /// </summary>
+        public static string SLIDE_LEFT_TO_CENTER {
+            get {
+                return ResourceManager.GetString("SLIDE_LEFT_TO_CENTER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Slide Left to Left and Fade Out.
+        /// </summary>
+        public static string SLIDE_LEFT_TO_LEFT_FADE_OUT {
+            get {
+                return ResourceManager.GetString("SLIDE_LEFT_TO_LEFT_FADE_OUT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Slide Left to Right.
+        /// </summary>
+        public static string SLIDE_LEFT_TO_RIGHT {
+            get {
+                return ResourceManager.GetString("SLIDE_LEFT_TO_RIGHT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Slide Left to Right and Stay (Transition).
+        /// </summary>
+        public static string SLIDE_LEFT_TO_RIGHT_AND_STAY {
+            get {
+                return ResourceManager.GetString("SLIDE_LEFT_TO_RIGHT_AND_STAY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Slide Left to Right and Fade Out.
+        /// </summary>
+        public static string SLIDE_LEFT_TO_RIGHT_FADE_OUT {
+            get {
+                return ResourceManager.GetString("SLIDE_LEFT_TO_RIGHT_FADE_OUT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Slight Left to Right (Fast).
+        /// </summary>
+        public static string SLIDE_LEFT_TO_RIGHT_FAST {
+            get {
+                return ResourceManager.GetString("SLIDE_LEFT_TO_RIGHT_FAST", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Slide Left to Right (Slow).
+        /// </summary>
+        public static string SLIDE_LEFT_TO_RIGHT_SLOW {
+            get {
+                return ResourceManager.GetString("SLIDE_LEFT_TO_RIGHT_SLOW", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Slide Right to Center.
+        /// </summary>
+        public static string SLIDE_RIGHT_TO_CENTER {
+            get {
+                return ResourceManager.GetString("SLIDE_RIGHT_TO_CENTER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Slide Right to Left.
+        /// </summary>
+        public static string SLIDE_RIGHT_TO_LEFT {
+            get {
+                return ResourceManager.GetString("SLIDE_RIGHT_TO_LEFT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Slide Right to Left and Stay (Transition).
+        /// </summary>
+        public static string SLIDE_RIGHT_TO_LEFT_AND_STAY {
+            get {
+                return ResourceManager.GetString("SLIDE_RIGHT_TO_LEFT_AND_STAY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Slide Right to Left (Fast).
+        /// </summary>
+        public static string SLIDE_RIGHT_TO_LEFT_FAST {
+            get {
+                return ResourceManager.GetString("SLIDE_RIGHT_TO_LEFT_FAST", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Slide Right to Left (Slow).
+        /// </summary>
+        public static string SLIDE_RIGHT_TO_LEFT_SLOW {
+            get {
+                return ResourceManager.GetString("SLIDE_RIGHT_TO_LEFT_SLOW", resourceCulture);
             }
         }
         
@@ -6389,6 +6722,15 @@ namespace SerialLoops.Assets {
         public static string Starting_Chibis {
             get {
                 return ResourceManager.GetString("Starting Chibis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stop.
+        /// </summary>
+        public static string Stop {
+            get {
+                return ResourceManager.GetString("Stop", resourceCulture);
             }
         }
         
@@ -6538,6 +6880,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Terminal Typing.
+        /// </summary>
+        public static string TERMINAL_TYPING {
+            get {
+                return ResourceManager.GetString("TERMINAL_TYPING", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Text Color.
         /// </summary>
         public static string Text_Color {
@@ -6645,7 +6996,7 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Time (Frames).
+        ///   Looks up a localized string similar to Transition Time (Frames).
         /// </summary>
         public static string Time__Frames_ {
             get {
@@ -7327,6 +7678,15 @@ namespace SerialLoops.Assets {
         public static string While_attempting_to_build___file___0_X3__in_archive__1__was_found_to_be_corrupt__Serial_Loops_can_delete_this_file_from_your_base_directory_automatically_which_may_allow_you_to_load_the_rest_of_the_project__but_any_changes_made_to_that_file_will_be_lost__Alternatively__you_can_attempt_to_edit_the_file_manually_to_fix_it__How_would_you_like_to_proceed__Press_OK_to_proceed_with_deleting_the_file_and_Cancel_to_attempt_to_deal_with_it_manually_ {
             get {
                 return ResourceManager.GetString(@"While attempting to build,  file #{0:X3} in archive {1} was found to be corrupt. Serial Loops can delete this file from your base directory automatically which may allow you to load the rest of the project, but any changes made to that file will be lost. Alternatively, you can attempt to edit the file manually to fix it. How would you like to proceed? Press OK to proceed with deleting the file and Cancel to attempt to deal with it manually.", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to White.
+        /// </summary>
+        public static string WHITE {
+            get {
+                return ResourceManager.GetString("WHITE", resourceCulture);
             }
         }
         
