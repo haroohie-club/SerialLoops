@@ -20,6 +20,11 @@
                         <TextBlock Text="{Binding DisplayName, Converter={x:Static utility:SLConverters.CharacterNameCropConverter}}"/>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
+                <ComboBox.ItemContainerTheme>
+                    <ControlTheme TargetType="ComboBoxItem" x:DataType="items:CharacterItem" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
+                        <Setter Property="TextSearch.Text" Value="{Binding DisplayName, Converter={x:Static utility:SLConverters.CharacterNameCropConverter}}" />
+                    </ControlTheme>
+                </ComboBox.ItemContainerTheme>
             </ComboBox>
             <TextBox Name="DialogueTextBox" AcceptsReturn="True" Width="400" Height="100" Text="{Binding DialogueLine}"/>
         </StackPanel>
@@ -52,6 +57,11 @@
                         <TextBlock Text="{Binding DisplayName}"/>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
+                <ComboBox.ItemContainerTheme>
+                    <ControlTheme TargetType="ComboBoxItem" x:DataType="items:VoicedLineItem" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
+                        <Setter Property="TextSearch.Text" Value="{Binding DisplayName}" />
+                    </ControlTheme>
+                </ComboBox.ItemContainerTheme>
             </ComboBox>
             <controls:ItemLink Tabs="{Binding Tabs}" Item="{Binding VoicedLine}"/>
         </StackPanel>
@@ -63,6 +73,11 @@
                     <TextBlock Text="{Binding DisplayName, Converter={x:Static utility:SLConverters.CharacterNameCropConverter}}"/>
                 </DataTemplate>
             </ComboBox.ItemTemplate>
+            <ComboBox.ItemContainerTheme>
+                <ControlTheme TargetType="ComboBoxItem" x:DataType="items:CharacterItem" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
+                    <Setter Property="TextSearch.Text" Value="{Binding DisplayName, Converter={x:Static utility:SLConverters.CharacterNameCropConverter}}" />
+                </ControlTheme>
+            </ComboBox.ItemContainerTheme>
         </ComboBox>
 
         <TextBlock Grid.Column="0" Grid.Row="7" Text="{x:Static assets:Strings.Text_Speed}" Margin="0,12,0,0"/>
@@ -72,6 +87,11 @@
                     <TextBlock Text="{Binding DisplayName, Converter={x:Static utility:SLConverters.CharacterNameCropConverter}}"/>
                 </DataTemplate>
             </ComboBox.ItemTemplate>
+            <ComboBox.ItemContainerTheme>
+                <ControlTheme TargetType="ComboBoxItem" x:DataType="items:CharacterItem" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
+                    <Setter Property="TextSearch.Text" Value="{Binding DisplayName, Converter={x:Static utility:SLConverters.CharacterNameCropConverter}}" />
+                </ControlTheme>
+            </ComboBox.ItemContainerTheme>
         </ComboBox>
 
         <TextBlock Grid.Column="0" Grid.Row="8" Text="{x:Static assets:Strings.Text_Entrance_Effect}" Margin="0,12,0,0"/>

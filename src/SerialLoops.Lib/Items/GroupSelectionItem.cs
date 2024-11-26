@@ -7,6 +7,7 @@ public class GroupSelectionItem : Item
 {
     public ScenarioSelection Selection { get; set; }
     public int Index { get; set; }
+    public string TextSearch => $"{Index + 1}";
 
     public GroupSelectionItem(ScenarioSelection selection, int index, Project project) : base($"Selection {index + 1}", ItemType.Group_Selection)
     {

@@ -1,0 +1,38 @@
+name: Serial Loops PR
+run-name: PR for ${{ github.actor }} - ${{ github.ref_name }}
+on:
+  push:
+    branches:
+      - 'main'
+      - 'Avalonia'
+
+jobs:
+  build_test:
+    if: github.repository == 'haroohie-club'
+    strategy:
+      matrix:
+        platform:
+          - os: ubuntu-latest
+            targetFramework: net8.0
+            container: 'ghcr.io/haroohie-club/chokuretsu-devkitarm:main'
+          - os: macos-latest
+            targetFramework: net8.0
+            container: ''
+          - os: windows-latest
+            targetFramework: net8.0-windows
+            container: ''
+    runs-on: ${{ matrix.platform.os }}
+    container: ${{ matrix.platform.container }}
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4.1.0
+        with:
+          dotnet-version: '8.0.x'
+      - name: Build project
+        run: dotnet build src/SerialLoops/SerialLoops.csproj -f ${{ matrix.platform.targetFramework }}
+      - name: Run tests
+        run: dotnet test test/SerialLoops.Tests.Headless/SerialLoops.Tests.Headless.csproj -f ${{ matrix.platform.targetFramework }}
+        env:
+          ROM_URI: ${{ secrets.CHOKU_ROM_URI }}
