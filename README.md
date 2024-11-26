@@ -132,3 +132,10 @@ You can also build from both of these IDEs; however, when building from Rider on
 to the MSBuild global properties field. This has the same effect as specifying `-f net8.0` on the command line.
 
 If you'd like to contribute new features or fixes, we recommend [getting in touch on Discord first](https://discord.gg/nesRSbpeFM) before submitting a pull request!
+
+### Testing
+Serial Loops has headless tests that run to test the UI and other functionality of the program. To run tests locally, you will need to define either a `ui_vals.json` file or set an environment variable.
+
+First, download [these test assets](https://haroohie.nyc3.cdn.digitaloceanspaces.com/bootstrap/serial-loops/test-assets.zip -OutFile $(Build.ArtifactStagingDirectory)/test-assets.zip) and unzip them to a directory somewhere. Then, specify that directory in the `ui_vals.json` as `AssetsDirectory` or set the environment variable `ASSETS_DIRECTORY` to that path.
+
+Tests can be run via `dotnet test` (make sure to add `-f net8.0` on Linux or Mac) or through the test runners in Rider or Visual Studio.
