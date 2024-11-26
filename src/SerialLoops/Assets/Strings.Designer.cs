@@ -4411,6 +4411,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Number of Moves.
+        /// </summary>
+        public static string Number_of_Moves {
+            get {
+                return ResourceManager.GetString("Number of Moves", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Number of Saves: .
         /// </summary>
         public static string Number_of_Saves_ {
@@ -6641,6 +6650,15 @@ namespace SerialLoops.Assets {
         public static string Time__Frames_ {
             get {
                 return ResourceManager.GetString("Time (Frames)", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Time Limit.
+        /// </summary>
+        public static string Time_Limit {
+            get {
+                return ResourceManager.GetString("Time Limit", resourceCulture);
             }
         }
         

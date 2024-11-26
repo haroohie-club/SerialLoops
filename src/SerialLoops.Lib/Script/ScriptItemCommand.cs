@@ -124,7 +124,7 @@ public class ScriptItemCommand : ReactiveObject
                             parameters.Add(new DialogueScriptParameter(localize("Dialogue"), GetDialogueLine(parameter, eventFile)));
                             break;
                         case 1:
-                            parameters.Add(new SpriteScriptParameter(localize("Sprite"), (CharacterSpriteItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Character_Sprite && parameter == ((CharacterSpriteItem)i).Index)));
+                            parameters.Add(new SpriteScriptParameter(localize("Sprite"), (CharacterSpriteItem)project.Items.FirstOrDefault(item => item.Type == ItemDescription.ItemType.Character_Sprite && parameter == ((CharacterSpriteItem)item).Index)));
                             break;
                         case 2:
                             parameters.Add(new SpriteEntranceScriptParameter(localize("Sprite Entrance Transition"), parameter));
@@ -136,13 +136,13 @@ public class ScriptItemCommand : ReactiveObject
                             parameters.Add(new SpriteShakeScriptParameter(localize("Sprite Shake"), parameter));
                             break;
                         case 5:
-                            parameters.Add(new VoicedLineScriptParameter(localize("Voice Line"), (VoicedLineItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Voice && parameter == ((VoicedLineItem)i).Index)));
+                            parameters.Add(new VoicedLineScriptParameter(localize("Voice Line"), (VoicedLineItem)project.Items.FirstOrDefault(item => item.Type == ItemDescription.ItemType.Voice && parameter == ((VoicedLineItem)item).Index)));
                             break;
                         case 6:
-                            parameters.Add(new DialoguePropertyScriptParameter(localize("Text Voice Font"), (CharacterItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Character && ((CharacterItem)i).MessageInfo.Character == project.MessInfo.MessageInfos[parameter].Character)));
+                            parameters.Add(new DialoguePropertyScriptParameter(localize("Text Voice Font"), (CharacterItem)project.Items.FirstOrDefault(item => item.Type == ItemDescription.ItemType.Character && ((CharacterItem)item).MessageInfo.Character == project.MessInfo.MessageInfos[parameter].Character)));
                             break;
                         case 7:
-                            parameters.Add(new DialoguePropertyScriptParameter(localize("Text Speed"), (CharacterItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Character && ((CharacterItem)i).MessageInfo.Character == project.MessInfo.MessageInfos[parameter].Character)));
+                            parameters.Add(new DialoguePropertyScriptParameter(localize("Text Speed"), (CharacterItem)project.Items.FirstOrDefault(item => item.Type == ItemDescription.ItemType.Character && ((CharacterItem)item).MessageInfo.Character == project.MessInfo.MessageInfos[parameter].Character)));
                             break;
                         case 8:
                             parameters.Add(new TextEntranceEffectScriptParameter(localize("Text Entrance Effect"), parameter));
@@ -162,7 +162,7 @@ public class ScriptItemCommand : ReactiveObject
                 case CommandVerb.KBG_DISP:
                     if (i == 0)
                     {
-                        parameters.Add(new BgScriptParameter(localize("\"Kinetic\" Background"), (BackgroundItem)project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == parameter), kinetic: true));
+                        parameters.Add(new BgScriptParameter(localize("\"Kinetic\" Background"), (BackgroundItem)project.Items.First(item => item.Type == ItemDescription.ItemType.Background && ((BackgroundItem)item).Id == parameter), kinetic: true));
                     }
                     break;
                 case CommandVerb.PIN_MNL:
@@ -175,8 +175,8 @@ public class ScriptItemCommand : ReactiveObject
                 case CommandVerb.BG_DISP2:
                     if (i == 0)
                     {
-                        ItemDescription bgItem = project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == parameter)
-                                                 ?? project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).BackgroundType == HaruhiChokuretsuLib.Archive.Data.BgType.TEX_BG);
+                        ItemDescription bgItem = project.Items.FirstOrDefault(item => item.Type == ItemDescription.ItemType.Background && ((BackgroundItem)item).Id == parameter)
+                                                 ?? project.Items.First(item => item.Type == ItemDescription.ItemType.Background && ((BackgroundItem)item).BackgroundType == HaruhiChokuretsuLib.Archive.Data.BgType.TEX_BG);
                         parameters.Add(new BgScriptParameter(localize("Background"), (BackgroundItem)bgItem, kinetic: false));
                     }
                     break;
@@ -270,7 +270,7 @@ public class ScriptItemCommand : ReactiveObject
                     switch (i)
                     {
                         case 0:
-                            parameters.Add(new BgmScriptParameter(localize("Music"), (BackgroundMusicItem)project.Items.First(i => i.Type == ItemDescription.ItemType.BGM && ((BackgroundMusicItem)i).Index == parameter)));
+                            parameters.Add(new BgmScriptParameter(localize("Music"), (BackgroundMusicItem)project.Items.First(item => item.Type == ItemDescription.ItemType.BGM && ((BackgroundMusicItem)item).Index == parameter)));
                             break;
                         case 1:
                             parameters.Add(new BgmModeScriptParameter(localize("Mode"), parameter));
@@ -289,7 +289,7 @@ public class ScriptItemCommand : ReactiveObject
                 case CommandVerb.VCE_PLAY:
                     if (i == 0)
                     {
-                        parameters.Add(new VoicedLineScriptParameter(localize("Voice Line"), (VoicedLineItem)project.Items.First(i => i.Type == ItemDescription.ItemType.Voice && parameter == ((VoicedLineItem)i).Index)));
+                        parameters.Add(new VoicedLineScriptParameter(localize("Voice Line"), (VoicedLineItem)project.Items.First(item => item.Type == ItemDescription.ItemType.Voice && parameter == ((VoicedLineItem)item).Index)));
                     }
                     break;
                 case CommandVerb.FLAG:
@@ -473,10 +473,10 @@ public class ScriptItemCommand : ReactiveObject
                     switch (i)
                     {
                         case 0:
-                            parameters.Add(new BgScriptParameter(localize("Background"), (BackgroundItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == parameter), kinetic: false));
+                            parameters.Add(new BgScriptParameter(localize("Background"), (BackgroundItem)project.Items.FirstOrDefault(item => item.Type == ItemDescription.ItemType.Background && ((BackgroundItem)item).Id == parameter), kinetic: false));
                             break;
                         case 1:
-                            parameters.Add(new BgScriptParameter(localize("Background (CG)"), (BackgroundItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == parameter), kinetic: false));
+                            parameters.Add(new BgScriptParameter(localize("Background (CG)"), (BackgroundItem)project.Items.FirstOrDefault(item => item.Type == ItemDescription.ItemType.Background && ((BackgroundItem)item).Id == parameter), kinetic: false));
                             break;
                         case 2:
                             parameters.Add(new ShortScriptParameter(localize("Fade Time (Frames)"), parameter));
@@ -497,7 +497,7 @@ public class ScriptItemCommand : ReactiveObject
                             parameters.Add(new BoolScriptParameter(localize("Display?"), parameter == 1));
                             break;
                         case 1:
-                            parameters.Add(new PlaceScriptParameter(localize("Place"), (PlaceItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Place && ((PlaceItem)i).Index == parameter)));
+                            parameters.Add(new PlaceScriptParameter(localize("Place"), (PlaceItem)project.Items.FirstOrDefault(item => item.Type == ItemDescription.ItemType.Place && ((PlaceItem)item).Index == parameter)));
                             break;
                     }
                     break;
@@ -518,7 +518,7 @@ public class ScriptItemCommand : ReactiveObject
                 case CommandVerb.LOAD_ISOMAP:
                     if (i == 0)
                     {
-                        parameters.Add(new MapScriptParameter(localize("Map"), (MapItem)project.Items.First(i => i.Type == ItemDescription.ItemType.Map && (parameter) == ((MapItem)i).Map.Index)));
+                        parameters.Add(new MapScriptParameter(localize("Map"), (MapItem)project.Items.First(item => item.Type == ItemDescription.ItemType.Map && (parameter) == ((MapItem)item).Map.Index)));
                     }
                     break;
                 case CommandVerb.INVEST_START:
@@ -541,7 +541,7 @@ public class ScriptItemCommand : ReactiveObject
                     switch (i)
                     {
                         case 0:
-                            parameters.Add(new ChibiScriptParameter(localize("Chibi"), (ChibiItem)project.Items.First(i => i.Type == ItemDescription.ItemType.Chibi && (parameter) == ((ChibiItem)i).TopScreenIndex)));
+                            parameters.Add(new ChibiScriptParameter(localize("Chibi"), (ChibiItem)project.Items.First(item => item.Type == ItemDescription.ItemType.Chibi && (parameter) == ((ChibiItem)item).TopScreenIndex)));
                             break;
                         case 1:
                             parameters.Add(new ChibiEmoteScriptParameter(localize("Emote"), parameter));
@@ -569,7 +569,7 @@ public class ScriptItemCommand : ReactiveObject
                     switch (i)
                     {
                         case 0:
-                            parameters.Add(new ChibiScriptParameter(localize("Chibi"), (ChibiItem)project.Items.First(i => i.Type == ItemDescription.ItemType.Chibi && (parameter) == ((ChibiItem)i).TopScreenIndex)));
+                            parameters.Add(new ChibiScriptParameter(localize("Chibi"), (ChibiItem)project.Items.First(item => item.Type == ItemDescription.ItemType.Chibi && (parameter) == ((ChibiItem)item).TopScreenIndex)));
                             break;
                         case 1:
                             parameters.Add(new ChibiEnterExitScriptParameter(localize("Enter/Exit"), parameter));
@@ -587,9 +587,8 @@ public class ScriptItemCommand : ReactiveObject
                     break;
                 case CommandVerb.CHESS_LOAD:
                     if (i == 0)
-
                     {
-                        parameters.Add(new ChessFileScriptParameter(localize("Chess File"), parameter));
+                        parameters.Add(new ChessPuzzleScriptParameter(localize("Chess File"), (ChessPuzzleItem)project.Items.FirstOrDefault(item => item.Type == ItemDescription.ItemType.Chess_Puzzle && ((ChessPuzzleItem)item).ChessPuzzle.Index ==  parameter)));
                     }
                     break;
                 case CommandVerb.CHESS_VGOTO:
@@ -669,8 +668,8 @@ public class ScriptItemCommand : ReactiveObject
                     switch (i)
                     {
                         case 0:
-                            ItemDescription cgItem = project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == parameter)
-                                                     ?? project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).BackgroundType == HaruhiChokuretsuLib.Archive.Data.BgType.TEX_CG);
+                            ItemDescription cgItem = project.Items.FirstOrDefault(item => item.Type == ItemDescription.ItemType.Background && ((BackgroundItem)item).Id == parameter)
+                                                     ?? project.Items.First(item => item.Type == ItemDescription.ItemType.Background && ((BackgroundItem)item).BackgroundType == HaruhiChokuretsuLib.Archive.Data.BgType.TEX_CG);
 
                             parameters.Add(new BgScriptParameter(localize("Background"), (BackgroundItem)cgItem, kinetic: false));
                             break;

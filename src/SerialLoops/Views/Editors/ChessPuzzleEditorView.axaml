@@ -1,0 +1,75 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:SerialLoops.ViewModels.Editors"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:assets="using:SerialLoops.Assets"
+             xmlns:b="using:SerialLoops.Behaviors"
+             xmlns:utility="using:SerialLoops.Utility"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:ChessPuzzleEditorViewModel"
+             x:Class="SerialLoops.Views.Editors.ChessPuzzleEditorView">
+    <UserControl.Styles>
+        <Style Selector="ItemsControl.ItemsDragAndDrop">
+            <Style.Resources>
+                <b:ItemsControlDropHandler x:Key="ItemsControlDropHandler"/>
+            </Style.Resources>
+            <Setter Property="(Interaction.Behaviors)">
+                <BehaviorCollectionTemplate>
+                    <BehaviorCollection>
+                        <ContextDropBehavior Handler="{StaticResource ItemsControlDropHandler}"/>
+                    </BehaviorCollection>
+                </BehaviorCollectionTemplate>
+            </Setter>
+        </Style>
+
+        <Style Selector="ItemsControl.ItemsDragAndDrop Panel">
+            <Setter Property="(Interaction.Behaviors)">
+                <BehaviorCollectionTemplate>
+                    <BehaviorCollection>
+                        <ContextDragBehavior HorizontalDragThreshold="3" VerticalDragThreshold="3" />
+                    </BehaviorCollection>
+                </BehaviorCollectionTemplate>
+            </Setter>
+        </Style>
+
+    </UserControl.Styles>
+
+    <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto" Margin="10">
+        <Image Grid.Column="0" Grid.Row="0" Source="{Binding EmptyChessboard, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
+        <ItemsControl Grid.Column="0" Grid.Row="0" ItemsSource="{Binding Pieces}" Classes="ItemsDragAndDrop">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas Width="{Binding EmptyChessboard.Width}" Height="{Binding EmptyChessboard.Height}"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.DataTemplates>
+                <DataTemplate DataType="vm:ChessPieceOnBoard">
+                    <Panel PointerEntered="ChessPiece_OnPointerEntered" PointerExited="InputElement_OnPointerExited" Opacity="0.5">
+                        <Image Source="{Binding Image, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
+                    </Panel>
+                </DataTemplate>
+            </ItemsControl.DataTemplates>
+            <ItemsControl.Styles>
+                <Style Selector="ItemsControl > ContentPresenter" x:DataType="vm:ChessPieceOnBoard">
+                    <Setter Property="(Canvas.Left)" Value="{Binding X}"/>
+                    <Setter Property="(Canvas.Top)" Value="{Binding Y}"/>
+                </Style>
+            </ItemsControl.Styles>
+        </ItemsControl>
+        <Grid Grid.Column="1" Grid.Row="0" ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto">
+            <TextBlock Grid.Column="0" Grid.Row="0" Margin="0,7,0,0" Text="{x:Static assets:Strings.Number_of_Moves}"/>
+            <NumericUpDown Grid.Column="1" Grid.Row="0" Margin="10,0,0,0" Value="{Binding NumMoves}"
+                           Minimum="0" Maximum="5" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
+
+            <TextBlock Grid.Column="0" Grid.Row="1" Margin="0,7,0,0" Text="{x:Static assets:Strings.Time_Limit}"/>
+            <NumericUpDown Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" Value="{Binding TimeLimit}"
+                           Minimum="0" Maximum="999" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
+
+            <TextBlock Grid.Column="0" Grid.Row="2" Margin="0,7,0,0" Text="{x:Static assets:Strings.Unknown}"/>
+            <NumericUpDown Grid.Column="1" Grid.Row="2" Margin="10,0,0,0" Value="{Binding Unknown08}"
+                           Minimum="0" Maximum="10000" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
+        </Grid>
+    </Grid>
+</UserControl>
+
