@@ -102,7 +102,10 @@ public class BackgroundMusicEditorViewModel : EditorViewModel
     private void Restore_Executed()
     {
         BgmPlayer.Stop();
-        File.Delete(_bgmCachedFile); // Clear the cached WAV as we're restoring the original ADX
+        if (Directory.Exists(_project.Config.CachesDirectory))
+        {
+            File.Delete(_bgmCachedFile); // Clear the cached WAV as we're restoring the original ADX
+        }
         File.Copy(Path.Combine(_project.BaseDirectory, "original", "bgm", Path.GetFileName(Bgm.BgmFile)), Path.Combine(_project.BaseDirectory, Bgm.BgmFile), true);
         File.Copy(Path.Combine(_project.IterativeDirectory, "original", "bgm", Path.GetFileName(Bgm.BgmFile)), Path.Combine(_project.IterativeDirectory, Bgm.BgmFile), true);
         BgmPlayer = new(Bgm, _log, Bgm.BgmName, Bgm.Name, Bgm.Flag, !string.IsNullOrEmpty(Bgm.BgmName) ? _titleBoxTextChangedCommand : null);
