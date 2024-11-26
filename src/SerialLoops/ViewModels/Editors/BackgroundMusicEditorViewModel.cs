@@ -40,14 +40,14 @@ public class BackgroundMusicEditorViewModel : EditorViewModel
 
     private ICommand _titleBoxTextChangedCommand;
 
-    public BackgroundMusicEditorViewModel(BackgroundMusicItem bgm, MainWindowViewModel window, Project project, ILogger log) : base(bgm, window, log, project)
+    public BackgroundMusicEditorViewModel(BackgroundMusicItem bgm, MainWindowViewModel window, Project project, ILogger log, bool initializePlayer = true) : base(bgm, window, log, project)
     {
         Bgm = bgm;
 
         _bgmCachedFile = Path.Combine(project.Config.CachesDirectory, "bgm", $"{Bgm.Name}.wav");
 
         _titleBoxTextChangedCommand = ReactiveCommand.Create<string>(TitleBox_TextChanged);
-        BgmPlayer = new(Bgm, _log, Bgm.BgmName, Bgm.Name, Bgm.Flag, !string.IsNullOrEmpty(Bgm.BgmName) ? _titleBoxTextChangedCommand : null);
+        BgmPlayer = new(Bgm, _log, Bgm.BgmName, Bgm.Name, Bgm.Flag, !string.IsNullOrEmpty(Bgm.BgmName) ? _titleBoxTextChangedCommand : null, initializePlayer);
         ManageLoopCommand = ReactiveCommand.CreateFromTask(ManageLoop_Executed);
         AdjustVolumeCommand = ReactiveCommand.CreateFromTask(AdjustVolume_Executed);
         ExtractCommand = ReactiveCommand.CreateFromTask(Extract_Executed);
@@ -61,6 +61,7 @@ public class BackgroundMusicEditorViewModel : EditorViewModel
         {
             _project.Extra.Bgms[_project.Extra.Bgms.IndexOf(_project.Extra.Bgms.First(b => b.Name.GetSubstitutedString(_project) == Bgm.BgmName))].Name = newText.GetOriginalString(_project);
             Bgm.BgmName = newText;
+            Bgm.DisplayName = $"{Bgm.Name} - {Bgm.BgmName}";
             Bgm.UnsavedChanges = true;
         }
     }
@@ -101,7 +102,10 @@ public class BackgroundMusicEditorViewModel : EditorViewModel
     private void Restore_Executed()
     {
         BgmPlayer.Stop();
-        File.Delete(_bgmCachedFile); // Clear the cached WAV as we're restoring the original ADX
+        if (Directory.Exists(_project.Config.CachesDirectory))
+        {
+            File.Delete(_bgmCachedFile); // Clear the cached WAV as we're restoring the original ADX
+        }
         File.Copy(Path.Combine(_project.BaseDirectory, "original", "bgm", Path.GetFileName(Bgm.BgmFile)), Path.Combine(_project.BaseDirectory, Bgm.BgmFile), true);
         File.Copy(Path.Combine(_project.IterativeDirectory, "original", "bgm", Path.GetFileName(Bgm.BgmFile)), Path.Combine(_project.IterativeDirectory, Bgm.BgmFile), true);
         BgmPlayer = new(Bgm, _log, Bgm.BgmName, Bgm.Name, Bgm.Flag, !string.IsNullOrEmpty(Bgm.BgmName) ? _titleBoxTextChangedCommand : null);

@@ -18,6 +18,11 @@
                         <TextBlock Text="{Binding DisplayName}"/>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
+                <ComboBox.ItemContainerTheme>
+                    <ControlTheme TargetType="ComboBoxItem" x:DataType="items:SfxItem" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
+                        <Setter Property="TextSearch.Text" Value="{Binding DisplayName}" />
+                    </ControlTheme>
+                </ComboBox.ItemContainerTheme>
             </ComboBox>
             <controls:ItemLink Item="{Binding SelectedSfx}" Tabs="{Binding Tabs}"/>
         </StackPanel>

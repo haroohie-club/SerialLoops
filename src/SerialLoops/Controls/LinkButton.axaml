@@ -9,6 +9,6 @@
         <TextBlock Grid.Column="1" Classes="link" IsEnabled="True" Name="LinkText"/>
         <!-- TODO: (Maybe?) Remove this kludge (routes around https://github.com/AvaloniaUI/Avalonia/issues/15281) -->
         <Button Grid.Column="1" Cursor="Hand" Background="Transparent" Width="{Binding #LinkText.Bounds.Size.Width}"
-                Height="{Binding #LinkText.Bounds.Size.Height}" Click="Action_Execute"/>
+                Height="{Binding #LinkText.Bounds.Size.Height}" Name="BackingButton"/>
     </Grid>
 </UserControl>

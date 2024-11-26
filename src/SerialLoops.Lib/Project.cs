@@ -47,7 +47,7 @@ public partial class Project
     [JsonIgnore]
     public string ProjectFile => Path.Combine(MainDirectory, $"{Name}.{PROJECT_FORMAT}");
     [JsonIgnore]
-    public Config Config { get; private set; }
+    public Config Config { get; set; }
     [JsonIgnore]
     public ProjectSettings Settings { get; set; }
     [JsonIgnore]
@@ -102,6 +102,8 @@ public partial class Project
     public VoiceMapFile VoiceMap { get; set; }
     [JsonIgnore]
     public Dictionary<int, GraphicsFile> LayoutFiles { get; set; } = [];
+    [JsonIgnore]
+    public Dictionary<ChessFile.ChessPiece, SKBitmap> ChessPieceImages { get; private set; }
 
     // Localization function to make localizing accessible from the lib
     [JsonIgnore]
@@ -373,6 +375,74 @@ public partial class Project
         }
         tracker.Finished++;
 
+        tracker.Focus("Chess Piece Images", 12);
+        try
+        {
+            ChessPieceImages = [];
+            ChessPieceImages.Add(ChessFile.ChessPiece.WhiteKing,
+                ChessPuzzleItem.GetChessPiece(ChessFile.ChessPiece.WhiteKing, Grp));
+            tracker.Finished++;
+            ChessPieceImages.Add(ChessFile.ChessPiece.BlackKing,
+                ChessPuzzleItem.GetChessPiece(ChessFile.ChessPiece.BlackKing, Grp));
+            tracker.Finished++;
+            ChessPieceImages.Add(ChessFile.ChessPiece.WhiteQueen,
+                ChessPuzzleItem.GetChessPiece(ChessFile.ChessPiece.WhiteQueen, Grp));
+            tracker.Finished++;
+            ChessPieceImages.Add(ChessFile.ChessPiece.BlackQueen,
+                ChessPuzzleItem.GetChessPiece(ChessFile.ChessPiece.BlackQueen, Grp));
+            tracker.Finished++;
+            SKBitmap whiteBishop = ChessPuzzleItem.GetChessPiece(ChessFile.ChessPiece.WhiteBishopLeft, Grp);
+            tracker.Finished++;
+            SKBitmap blackBishop = ChessPuzzleItem.GetChessPiece(ChessFile.ChessPiece.BlackBishopLeft, Grp);
+            tracker.Finished++;
+            ChessPieceImages.Add(ChessFile.ChessPiece.WhiteBishopLeft, whiteBishop);
+            ChessPieceImages.Add(ChessFile.ChessPiece.WhiteBishopRight, whiteBishop);
+            ChessPieceImages.Add(ChessFile.ChessPiece.BlackBishopLeft, blackBishop);
+            ChessPieceImages.Add(ChessFile.ChessPiece.BlackBishopRight, blackBishop);
+            SKBitmap whiteKnight = ChessPuzzleItem.GetChessPiece(ChessFile.ChessPiece.WhiteKnightLeft, Grp);
+            tracker.Finished++;
+            SKBitmap blackKnight = ChessPuzzleItem.GetChessPiece(ChessFile.ChessPiece.BlackKnightLeft, Grp);
+            tracker.Finished++;
+            ChessPieceImages.Add(ChessFile.ChessPiece.WhiteKnightLeft, whiteKnight);
+            ChessPieceImages.Add(ChessFile.ChessPiece.WhiteKnightRight, whiteKnight);
+            ChessPieceImages.Add(ChessFile.ChessPiece.BlackKnightLeft, blackKnight);
+            ChessPieceImages.Add(ChessFile.ChessPiece.BlackKnightRight, blackKnight);
+            SKBitmap whiteRook = ChessPuzzleItem.GetChessPiece(ChessFile.ChessPiece.WhiteRookLeft, Grp);
+            tracker.Finished++;
+            SKBitmap blackRook = ChessPuzzleItem.GetChessPiece(ChessFile.ChessPiece.BlackRookLeft, Grp);
+            tracker.Finished++;
+            ChessPieceImages.Add(ChessFile.ChessPiece.WhiteRookLeft, whiteRook);
+            ChessPieceImages.Add(ChessFile.ChessPiece.WhiteRookRight, whiteRook);
+            ChessPieceImages.Add(ChessFile.ChessPiece.BlackRookLeft, blackRook);
+            ChessPieceImages.Add(ChessFile.ChessPiece.BlackRookRight, blackRook);
+            SKBitmap whitePawn = ChessPuzzleItem.GetChessPiece(ChessFile.ChessPiece.WhitePawnA, Grp);
+            tracker.Finished++;
+            SKBitmap blackPawn = ChessPuzzleItem.GetChessPiece(ChessFile.ChessPiece.BlackPawnA, Grp);
+            tracker.Finished++;
+            ChessPieceImages.Add(ChessFile.ChessPiece.WhitePawnA, whitePawn);
+            ChessPieceImages.Add(ChessFile.ChessPiece.WhitePawnB, whitePawn);
+            ChessPieceImages.Add(ChessFile.ChessPiece.WhitePawnC, whitePawn);
+            ChessPieceImages.Add(ChessFile.ChessPiece.WhitePawnD, whitePawn);
+            ChessPieceImages.Add(ChessFile.ChessPiece.WhitePawnE, whitePawn);
+            ChessPieceImages.Add(ChessFile.ChessPiece.WhitePawnF, whitePawn);
+            ChessPieceImages.Add(ChessFile.ChessPiece.WhitePawnG, whitePawn);
+            ChessPieceImages.Add(ChessFile.ChessPiece.WhitePawnH, whitePawn);
+            ChessPieceImages.Add(ChessFile.ChessPiece.BlackPawnA, blackPawn);
+            ChessPieceImages.Add(ChessFile.ChessPiece.BlackPawnB, blackPawn);
+            ChessPieceImages.Add(ChessFile.ChessPiece.BlackPawnC, blackPawn);
+            ChessPieceImages.Add(ChessFile.ChessPiece.BlackPawnD, blackPawn);
+            ChessPieceImages.Add(ChessFile.ChessPiece.BlackPawnE, blackPawn);
+            ChessPieceImages.Add(ChessFile.ChessPiece.BlackPawnF, blackPawn);
+            ChessPieceImages.Add(ChessFile.ChessPiece.BlackPawnG, blackPawn);
+            ChessPieceImages.Add(ChessFile.ChessPiece.BlackPawnH, blackPawn);
+            ChessPieceImages.Add(ChessFile.ChessPiece.Empty, new SKBitmap(16, 32));
+        }
+        catch (Exception ex)
+        {
+            log.LogException($"Failed to load chess pieces", ex);
+            return new(LoadProjectState.FAILED);
+        }
+
         tracker.Focus("Static Files", 6);
         try
         {
@@ -540,6 +610,23 @@ public partial class Project
         catch (Exception ex)
         {
             log.LogException("Failed to load sound effects", ex);
+            return new(LoadProjectState.FAILED);
+        }
+
+        try
+        {
+            tracker.Focus("Chess Puzzles", Dat.Files.Count(f => f.Name.StartsWith("CHS")));
+            Items.AddRange(Dat.Files.AsParallel()
+                .Where(f => f.Name.StartsWith("CHS"))
+                .Select(f =>
+                {
+                    tracker.Finished++;
+                    return new ChessPuzzleItem(f.CastTo<ChessFile>(), Grp);
+                }));
+        }
+        catch (Exception ex)
+        {
+            log.LogException("Failed to load chess puzzles", ex);
             return new(LoadProjectState.FAILED);
         }
 
@@ -1003,9 +1090,9 @@ public partial class Project
             }
             return (project, result);
         }
-        catch (Exception exc)
+        catch (Exception ex)
         {
-            log.LogError($"Error while loading project: {exc.Message}\n\n{exc.StackTrace}");
+            log.LogException(localize("Error while loading project"), ex);
             return (null, new(LoadProjectState.FAILED));
         }
     }

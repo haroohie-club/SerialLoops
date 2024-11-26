@@ -19,7 +19,7 @@
                 <Button Content="{x:Static assets:Strings.Export}" Command="{Binding ExportCommand}"/>
                 <Button Content="{x:Static assets:Strings.Replace}" Command="{Binding ReplaceCommand}"/>
             </StackPanel>
-            <StackPanel IsVisible="{Binding ShowExtras}" HorizontalAlignment="Left">
+            <StackPanel Name="CgPanel" IsVisible="{Binding ShowExtras}" HorizontalAlignment="Left">
                 <TextBox Name="CgBox" Width="200" Text="{Binding Bg.CgName, Mode=OneTime}">
                     <i:Interaction.Behaviors>
                         <ia:EventTriggerBehavior EventName="TextChanged" SourceObject="{Binding #CgBox}">

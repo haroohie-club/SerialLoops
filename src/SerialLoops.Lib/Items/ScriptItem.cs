@@ -31,6 +31,14 @@ public class ScriptItem : Item
     {
         Event = evt;
         _localize = localize;
+
+        PruneLabelsSection(log);
+        Graph.AddVertexRange(Event.ScriptSections);
+    }
+
+    public Dictionary<ScriptSection, List<ScriptItemCommand>> GetScriptCommandTree(Project project, ILogger log)
+    {
+        ScriptCommandInvocation currentCommand = null;
         try
         {
             UpdateEventTableInfo(evtTbl);
@@ -85,8 +93,7 @@ public class ScriptItem : Item
                     {
                         Graph.AddEdge(new()
                         {
-                            Source = section,
-                            Target = ((ScriptSectionScriptParameter)command.Parameters[4]).Section
+                            Source = section, Target = ((ScriptSectionScriptParameter)command.Parameters[4]).Section
                         });
                         Graph.AddEdgeRange(Event.ScriptSections.Where(s =>
                             Event.LabelsSection.Objects.Where(l =>
@@ -147,8 +154,7 @@ public class ScriptItem : Item
                         {
                             Graph.AddEdge(new()
                             {
-                                Source = section,
-                                Target = Event.ScriptSections.First(s => s.Name == "NONEMiss2")
+                                Source = section, Target = Event.ScriptSections.First(s => s.Name == "NONEMiss2")
                             }); // hardcode this section, even tho you can't get to it
                         }
                     }
@@ -223,161 +229,178 @@ public class ScriptItem : Item
             return preview;
         }
 
-        if (commands.Any(c => c.Verb == CommandVerb.EPHEADER)
-            && ((EpisodeHeaderScriptParameter)commands.Last(c => c.Verb == CommandVerb.EPHEADER).Parameters[0])
-            .EpisodeHeaderIndex != EpisodeHeaderScriptParameter.Episode.None)
+        if (commandTree.SelectMany(kv => kv.Value).Any(c => c.Verb == CommandVerb.CHESS_LOAD))
         {
-            preview.EpisodeHeader =
-                (short)((EpisodeHeaderScriptParameter)commands.Last(c => c.Verb == CommandVerb.EPHEADER)
-                    .Parameters[0]).EpisodeHeaderIndex;
+            preview.ChessMode = true;
         }
 
-        // Draw top screen "kinetic" background
-        for (int i = commands.Count - 1; i >= 0; i--)
+        // If we're in chess mode, we don't need to draw any of the top screen stuff as the screens are flipped
+        if (!preview.ChessMode)
         {
-            if (commands[i].Verb == CommandVerb.KBG_DISP &&
-                ((BgScriptParameter)commands[i].Parameters[0]).Background is not null)
+            if (commands.Any(c => c.Verb == CommandVerb.EPHEADER)
+                && ((EpisodeHeaderScriptParameter)commands.Last(c => c.Verb == CommandVerb.EPHEADER).Parameters[0])
+                .EpisodeHeaderIndex != EpisodeHeaderScriptParameter.Episode.None)
             {
-                preview.Kbg = ((BgScriptParameter)commands[i].Parameters[0]).Background;
-                break;
+                preview.EpisodeHeader =
+                    (short)((EpisodeHeaderScriptParameter)commands.Last(c => c.Verb == CommandVerb.EPHEADER)
+                        .Parameters[0]).EpisodeHeaderIndex;
             }
-        }
 
-        // Draw Place
-        for (int i = commands.Count - 1; i >= 0; i--)
-        {
-            if (commands[i].Verb == CommandVerb.SET_PLACE)
+            // Draw top screen "kinetic" background
+            for (int i = commands.Count - 1; i >= 0; i--)
             {
-                if (((BoolScriptParameter)commands[i].Parameters[0]).Value &&
-                    (((PlaceScriptParameter)commands[i].Parameters[1]).Place is not null))
+                if (commands[i].Verb == CommandVerb.KBG_DISP &&
+                    ((BgScriptParameter)commands[i].Parameters[0]).Background is not null)
                 {
-                    preview.Place = ((PlaceScriptParameter)commands[i].Parameters[1]).Place;
-                }
-
-                break;
-            }
-        }
-
-        // Draw top screen chibis
-        List<ChibiItem> chibis = [];
-
-        foreach (StartingChibiEntry chibi in Event.StartingChibisSection?.Objects ?? [])
-        {
-            if (chibi.ChibiIndex > 0)
-            {
-                chibis.Add((ChibiItem)project.Items.First(i =>
-                    i.Type == ItemType.Chibi && ((ChibiItem)i).TopScreenIndex == chibi.ChibiIndex));
-            }
-        }
-
-        for (int i = 0; i < commands.Count; i++)
-        {
-            if (commands[i].Verb == CommandVerb.OP_MODE)
-            {
-                // Kyon auto-added by OP_MODE command
-                ChibiItem chibi = (ChibiItem)project.Items.First(i =>
-                    i.Type == ItemType.Chibi && ((ChibiItem)i).TopScreenIndex == 1);
-                if (!chibis.Contains(chibi))
-                {
-                    chibis.Add(chibi);
+                    preview.Kbg = ((BgScriptParameter)commands[i].Parameters[0]).Background;
+                    break;
                 }
             }
 
-            if (commands[i].Verb == CommandVerb.CHIBI_ENTEREXIT)
+            // Draw Place
+            for (int i = commands.Count - 1; i >= 0; i--)
             {
-                if (((ChibiEnterExitScriptParameter)commands[i].Parameters[1]).Mode ==
-                    ChibiEnterExitScriptParameter.ChibiEnterExitType.ENTER)
+                if (commands[i].Verb == CommandVerb.SET_PLACE)
                 {
-                    ChibiItem chibi = ((ChibiScriptParameter)commands[i].Parameters[0]).Chibi;
+                    if (((BoolScriptParameter)commands[i].Parameters[0]).Value &&
+                        (((PlaceScriptParameter)commands[i].Parameters[1]).Place is not null))
+                    {
+                        preview.Place = ((PlaceScriptParameter)commands[i].Parameters[1]).Place;
+                    }
+
+                    break;
+                }
+            }
+
+            // Draw top screen chibis
+            List<ChibiItem> chibis = [];
+
+            foreach (StartingChibiEntry chibi in Event.StartingChibisSection?.Objects ?? [])
+            {
+                if (chibi.ChibiIndex > 0)
+                {
+                    chibis.Add((ChibiItem)project.Items.First(i =>
+                        i.Type == ItemType.Chibi && ((ChibiItem)i).TopScreenIndex == chibi.ChibiIndex));
+                }
+            }
+
+            for (int i = 0; i < commands.Count; i++)
+            {
+                if (commands[i].Verb == CommandVerb.OP_MODE)
+                {
+                    // Kyon auto-added by OP_MODE command
+                    ChibiItem chibi = (ChibiItem)project.Items.First(i =>
+                        i.Type == ItemType.Chibi && ((ChibiItem)i).TopScreenIndex == 1);
                     if (!chibis.Contains(chibi))
                     {
-                        if (chibi.TopScreenIndex < 1 || chibis.Count == 0)
-                        {
-                            chibis.Add(chibi);
-                        }
-                        else
-                        {
-                            bool inserted = false;
-                            for (int j = 0; j < chibis.Count; j++)
-                            {
-                                if (chibis[j].TopScreenIndex > chibi.TopScreenIndex)
-                                {
-                                    chibis.Insert(j, chibi);
-                                    inserted = true;
-                                    break;
-                                }
-                            }
+                        chibis.Add(chibi);
+                    }
+                }
 
-                            if (!inserted)
+                if (commands[i].Verb == CommandVerb.CHIBI_ENTEREXIT)
+                {
+                    if (((ChibiEnterExitScriptParameter)commands[i].Parameters[1]).Mode ==
+                        ChibiEnterExitScriptParameter.ChibiEnterExitType.ENTER)
+                    {
+                        ChibiItem chibi = ((ChibiScriptParameter)commands[i].Parameters[0]).Chibi;
+                        if (!chibis.Contains(chibi))
+                        {
+                            if (chibi.TopScreenIndex < 1 || chibis.Count == 0)
                             {
                                 chibis.Add(chibi);
                             }
+                            else
+                            {
+                                bool inserted = false;
+                                for (int j = 0; j < chibis.Count; j++)
+                                {
+                                    if (chibis[j].TopScreenIndex > chibi.TopScreenIndex)
+                                    {
+                                        chibis.Insert(j, chibi);
+                                        inserted = true;
+                                        break;
+                                    }
+                                }
+
+                                if (!inserted)
+                                {
+                                    chibis.Add(chibi);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            log.LogWarning($"Chibi {chibi.Name} set to join, but already was present");
                         }
                     }
                     else
                     {
-                        log.LogWarning($"Chibi {chibi.Name} set to join, but already was present");
+                        try
+                        {
+                            chibis.Remove(((ChibiScriptParameter)commands[i].Parameters[0]).Chibi);
+                        }
+                        catch (Exception)
+                        {
+                            log.LogWarning($"Chibi set to leave was not present.");
+                        }
                     }
+                }
+            }
+
+            int chibiStartX, chibiY;
+            if (commands.Any(c => c.Verb == CommandVerb.OP_MODE))
+            {
+                chibiStartX = 100;
+                chibiY = 50;
+            }
+            else
+            {
+                chibiStartX = 80;
+                chibiY = 100;
+            }
+
+            int chibiCurrentX = chibiStartX;
+            int chibiWidth = 0;
+            foreach (ChibiItem chibi in chibis)
+            {
+                SKBitmap chibiFrame = chibi.ChibiAnimations.First().Value.ElementAt(0).Frame;
+                preview.TopScreenChibis.Add((chibi, chibiCurrentX, chibiY));
+                chibiWidth = chibiFrame.Width - 16;
+                if (chibiY == 50)
+                {
+                    chibiY = 100;
+                    chibiCurrentX = 80;
                 }
                 else
                 {
-                    try
-                    {
-                        chibis.Remove(((ChibiScriptParameter)commands[i].Parameters[0]).Chibi);
-                    }
-                    catch (Exception)
-                    {
-                        log.LogWarning($"Chibi set to leave was not present.");
-                    }
+                    chibiCurrentX += chibiWidth;
+                }
+            }
+
+            // Draw top screen chibi emotes
+            if (currentCommand.Verb == CommandVerb.CHIBI_EMOTE)
+            {
+                ChibiItem chibi = ((ChibiScriptParameter)currentCommand.Parameters[0]).Chibi;
+                if (chibis.Contains(chibi))
+                {
+                    int chibiIndex = chibis.IndexOf(chibi);
+                    int internalYOffset =
+                        ((int)((ChibiEmoteScriptParameter)currentCommand.Parameters[1]).Emote - 1) * 32;
+                    int externalXOffset = chibiStartX + chibiWidth * chibiIndex;
+                    preview.ChibiEmote = (internalYOffset, externalXOffset, chibi);
+                }
+                else
+                {
+                    log.LogWarning($"Chibi {chibi.Name} not currently on screen; cannot display emote.");
                 }
             }
         }
-
-        int chibiStartX, chibiY;
-        if (commands.Any(c => c.Verb == CommandVerb.OP_MODE))
-        {
-            chibiStartX = 100;
-            chibiY = 50;
-        }
         else
         {
-            chibiStartX = 80;
-            chibiY = 100;
-        }
-
-        int chibiCurrentX = chibiStartX;
-        int chibiWidth = 0;
-        foreach (ChibiItem chibi in chibis)
-        {
-            SKBitmap chibiFrame = chibi.ChibiAnimations.First().Value.ElementAt(0).Frame;
-            preview.TopScreenChibis.Add((chibi, chibiCurrentX, chibiY));
-            chibiWidth = chibiFrame.Width - 16;
-            if (chibiY == 50)
+            ScriptItemCommand lastChessLoad = commands.LastOrDefault(c => c.Verb == CommandVerb.CHESS_LOAD);
+            if (lastChessLoad is not null)
             {
-                chibiY = 100;
-                chibiCurrentX = 80;
-            }
-            else
-            {
-                chibiCurrentX += chibiWidth;
-            }
-        }
-
-        // Draw top screen chibi emotes
-        if (currentCommand.Verb == CommandVerb.CHIBI_EMOTE)
-        {
-            ChibiItem chibi = ((ChibiScriptParameter)currentCommand.Parameters[0]).Chibi;
-            if (chibis.Contains(chibi))
-            {
-                int chibiIndex = chibis.IndexOf(chibi);
-                int internalYOffset =
-                    ((int)((ChibiEmoteScriptParameter)currentCommand.Parameters[1]).Emote - 1) * 32;
-                int externalXOffset = chibiStartX + chibiWidth * chibiIndex;
-                preview.ChibiEmote = (internalYOffset, externalXOffset, chibi);
-            }
-            else
-            {
-                log.LogWarning($"Chibi {chibi.Name} not currently on screen; cannot display emote.");
+                preview.ChessPuzzle = ((ChessPuzzleScriptParameter)lastChessLoad.Parameters[0]).ChessPuzzle;
             }
         }
 
@@ -590,8 +613,7 @@ public class ScriptItem : Item
                                     Positioning =
                                         new()
                                         {
-                                            X = SpritePositioning.SpritePosition.CENTER.GetSpriteX(),
-                                            Layer = layer
+                                            X = SpritePositioning.SpritePosition.CENTER.GetSpriteX(), Layer = layer
                                         },
                                     PalEffect = spritePaint
                                 };
@@ -694,9 +716,7 @@ public class ScriptItem : Item
                     {
                         sprites[character] = new()
                         {
-                            Sprite = spriteParam.Sprite,
-                            Positioning = sprite.Positioning,
-                            PalEffect = spritePaint
+                            Sprite = spriteParam.Sprite, Positioning = sprite.Positioning, PalEffect = spritePaint
                         };
                     }
 
@@ -710,11 +730,7 @@ public class ScriptItem : Item
                                 {
                                     Sprite = spriteParam.Sprite,
                                     Positioning =
-                                        new()
-                                        {
-                                            X = SpritePositioning.SpritePosition.LEFT.GetSpriteX(),
-                                            Layer = layer
-                                        },
+                                        new() { X = SpritePositioning.SpritePosition.LEFT.GetSpriteX(), Layer = layer },
                                     PalEffect = spritePaint
                                 };
                                 break;
@@ -726,8 +742,7 @@ public class ScriptItem : Item
                                     Positioning =
                                         new()
                                         {
-                                            X = SpritePositioning.SpritePosition.RIGHT.GetSpriteX(),
-                                            Layer = layer
+                                            X = SpritePositioning.SpritePosition.RIGHT.GetSpriteX(), Layer = layer
                                         },
                                     PalEffect = spritePaint
                                 };
@@ -743,8 +758,7 @@ public class ScriptItem : Item
                                     Positioning =
                                         new()
                                         {
-                                            X = SpritePositioning.SpritePosition.CENTER.GetSpriteX(),
-                                            Layer = layer
+                                            X = SpritePositioning.SpritePosition.CENTER.GetSpriteX(), Layer = layer
                                         },
                                     PalEffect = spritePaint
                                 };
@@ -837,41 +851,50 @@ public class ScriptItem : Item
             return (null, preview.ErrorImage);
         }
 
-        if (preview.EpisodeHeader != 0)
+        int verticalOffset = preview.ChessMode ? 0 : 192;
+
+        if (!preview.ChessMode)
         {
-            canvas.DrawBitmap(
-                EpisodeHeaderScriptParameter
-                    .GetTexture((EpisodeHeaderScriptParameter.Episode)preview.EpisodeHeader, project).GetTexture(),
-                new SKPoint(0, 0));
+            if (preview.EpisodeHeader != 0)
+            {
+                canvas.DrawBitmap(
+                    EpisodeHeaderScriptParameter
+                        .GetTexture((EpisodeHeaderScriptParameter.Episode)preview.EpisodeHeader, project).GetTexture(),
+                    new SKPoint(0, 0));
+            }
+            else
+            {
+                if (preview.Kbg is not null)
+                {
+                    canvas.DrawBitmap(preview.Kbg.GetBackground(), new SKPoint(0, 0));
+                }
+
+                if (preview.Place is not null)
+                {
+                    canvas.DrawBitmap(preview.Place.GetPreview(project), new SKPoint(5, 40));
+                }
+
+                foreach (var chibi in preview.TopScreenChibis)
+                {
+                    SKBitmap chibiFrame = chibi.Chibi.ChibiAnimations.First().Value.ElementAt(0).Frame;
+                    canvas.DrawBitmap(chibiFrame, new SKPoint(chibi.X, chibi.Y));
+                }
+
+                if (preview.ChibiEmote.EmotingChibi is not null)
+                {
+                    SKBitmap emotes = project.Grp.GetFileByName("SYS_ADV_T08DNX")
+                        .GetImage(width: 32, transparentIndex: 0);
+                    int chibiY = preview.TopScreenChibis.First(c => c.Chibi == preview.ChibiEmote.EmotingChibi).Y;
+                    canvas.DrawBitmap(emotes,
+                        new SKRect(0, preview.ChibiEmote.InternalYOffset, 32, preview.ChibiEmote.InternalYOffset + 32),
+                        new SKRect(preview.ChibiEmote.ExternalXOffset + 16, chibiY - 32,
+                            preview.ChibiEmote.ExternalXOffset + 48, chibiY));
+                }
+            }
         }
-        else
+        else if (preview.ChessPuzzle is not null)
         {
-            if (preview.Kbg is not null)
-            {
-                canvas.DrawBitmap(preview.Kbg.GetBackground(), new SKPoint(0, 0));
-            }
-
-            if (preview.Place is not null)
-            {
-                canvas.DrawBitmap(preview.Place.GetPreview(project), new SKPoint(5, 40));
-            }
-
-            foreach (var chibi in preview.TopScreenChibis)
-            {
-                SKBitmap chibiFrame = chibi.Chibi.ChibiAnimations.First().Value.ElementAt(0).Frame;
-                canvas.DrawBitmap(chibiFrame, new SKPoint(chibi.X, chibi.Y));
-            }
-
-            if (preview.ChibiEmote.EmotingChibi is not null)
-            {
-                SKBitmap emotes = project.Grp.GetFileByName("SYS_ADV_T08DNX")
-                    .GetImage(width: 32, transparentIndex: 0);
-                int chibiY = preview.TopScreenChibis.First(c => c.Chibi == preview.ChibiEmote.EmotingChibi).Y;
-                canvas.DrawBitmap(emotes,
-                    new SKRect(0, preview.ChibiEmote.InternalYOffset, 32, preview.ChibiEmote.InternalYOffset + 32),
-                    new SKRect(preview.ChibiEmote.ExternalXOffset + 16, chibiY - 32,
-                        preview.ChibiEmote.ExternalXOffset + 48, chibiY));
-            }
+            canvas.DrawBitmap(preview.ChessPuzzle.GetChessboard(project), 8, 188);
         }
 
         // Draw background
@@ -911,11 +934,11 @@ public class ScriptItem : Item
                         SKBitmap bgBitmap = preview.Background.GetBackground();
                         canvas.DrawBitmap(bgBitmap,
                             new SKRect(0, bgBitmap.Height - 192, bgBitmap.Width, bgBitmap.Height),
-                            new SKRect(0, 192, 256, 384));
+                            new SKRect(0, verticalOffset, 256, verticalOffset + 192));
                     }
                     else
                     {
-                        canvas.DrawBitmap(preview.Background.GetBackground(), new SKPoint(0, 192));
+                        canvas.DrawBitmap(preview.Background.GetBackground(), new SKPoint(0, verticalOffset));
                     }
 
                     break;
@@ -927,21 +950,21 @@ public class ScriptItem : Item
                     {
                         SKBitmap bgBitmap = preview.Background.GetBackground();
                         canvas.DrawBitmap(bgBitmap, new SKRect(bgBitmap.Width - 256, 0, bgBitmap.Width, 192),
-                            new SKRect(0, 192, 256, 384));
+                            new SKRect(0, verticalOffset, 256, verticalOffset + 192));
                     }
                     else
                     {
-                        canvas.DrawBitmap(preview.Background.GetBackground(), new SKPoint(0, 192));
+                        canvas.DrawBitmap(preview.Background.GetBackground(), new SKPoint(0, verticalOffset));
                     }
 
                     break;
 
                 case BgType.TEX_CG:
-                    canvas.DrawBitmap(preview.Background.GetBackground(), new SKPoint(0, 192));
+                    canvas.DrawBitmap(preview.Background.GetBackground(), new SKPoint(0, verticalOffset));
                     break;
 
                 default:
-                    canvas.DrawBitmap(preview.Background.GetBackground(), new SKPoint(0, 192),
+                    canvas.DrawBitmap(preview.Background.GetBackground(), new SKPoint(0, verticalOffset),
                         PaletteEffectScriptParameter.GetPaletteEffectPaint(preview.BgPalEffect));
                     break;
             }
@@ -954,16 +977,16 @@ public class ScriptItem : Item
             {
                 case ItemItem.ItemLocation.Left:
                     canvas.DrawBitmap(preview.Item.Item.ItemGraphic.GetImage(transparentIndex: 0), 128 - width,
-                        204);
+                        verticalOffset + 12);
                     break;
 
                 case ItemItem.ItemLocation.Center:
                     canvas.DrawBitmap(preview.Item.Item.ItemGraphic.GetImage(transparentIndex: 0), 128 - width / 2,
-                        204);
+                        verticalOffset + 12);
                     break;
 
                 case ItemItem.ItemLocation.Right:
-                    canvas.DrawBitmap(preview.Item.Item.ItemGraphic.GetImage(transparentIndex: 0), 128, 204);
+                    canvas.DrawBitmap(preview.Item.Item.ItemGraphic.GetImage(transparentIndex: 0), 128, verticalOffset + 12);
                     break;
 
                 default:
@@ -978,7 +1001,7 @@ public class ScriptItem : Item
             if (sprite.Sprite is not null)
             {
                 SKBitmap spriteBitmap = sprite.Sprite.GetClosedMouthAnimation(project)[0].Frame;
-                canvas.DrawBitmap(spriteBitmap, sprite.Positioning.GetSpritePosition(spriteBitmap),
+                canvas.DrawBitmap(spriteBitmap, sprite.Positioning.GetSpritePosition(spriteBitmap, verticalOffset),
                     sprite.PalEffect);
             }
         }
@@ -995,16 +1018,16 @@ public class ScriptItem : Item
             };
             if (!string.IsNullOrEmpty(line.Text))
             {
-                canvas.DrawBitmap(project.DialogueBitmap, new SKRect(0, 24, 32, 36), new SKRect(0, 344, 256, 356));
+                canvas.DrawBitmap(project.DialogueBitmap, new SKRect(0, 24, 32, 36), new SKRect(0, verticalOffset + 152, 256, verticalOffset + 164));
                 SKColor dialogueBoxColor = project.DialogueBitmap.GetPixel(0, 28);
-                canvas.DrawRect(0, 356, 224, 384, new() { Color = dialogueBoxColor });
+                canvas.DrawRect(0, verticalOffset + 164, 256, 28, new() { Color = dialogueBoxColor });
                 canvas.DrawBitmap(project.DialogueBitmap, new SKRect(0, 37, 32, 64),
-                    new SKRect(224, 356, 256, 384));
+                    new SKRect(224, 356, verticalOffset + 64, verticalOffset + 192));
                 canvas.DrawBitmap(project.SpeakerBitmap,
                     new SKRect(0, 16 * ((int)line.Speaker - 1), 64, 16 * ((int)line.Speaker)),
-                    new SKRect(0, 332, 64, 348));
+                    new SKRect(0, verticalOffset + 140, 64, verticalOffset + 156));
 
-                canvas.DrawHaroohieText(line.Text, dialoguePaint, project);
+                canvas.DrawHaroohieText(line.Text, dialoguePaint, project, y: verticalOffset + 160);
             }
         }
 
@@ -1035,7 +1058,31 @@ public class ScriptItem : Item
                 new SKRect(10, 2, 30, 26));
             flyoutCanvas.Flush();
 
-            canvas.DrawBitmap(topicFlyout, 256 - topicFlyout.Width, 320);
+            canvas.DrawBitmap(topicFlyout, 256 - topicFlyout.Width, verticalOffset + 128);
+        }
+
+        // Draw select choices
+        if (preview.CurrentChocies?.Count > 0)
+        {
+            List<SKBitmap> choiceGraphics = [];
+            foreach (string choice in preview.CurrentChocies)
+            {
+                SKBitmap choiceGraphic = new(218, 18);
+                SKCanvas choiceCanvas = new(choiceGraphic);
+                choiceCanvas.DrawRect(1, 1, 216, 16, new() { Color = new(146, 146, 146) });
+                choiceCanvas.DrawRect(2, 2, 214, 14, new() { Color = new(69, 69, 69) });
+                int choiceWidth = project.LangCode.Equals("ja") ? choice.Length * 14 : choice.Sum(c => project.FontReplacement.ReverseLookup(c).Offset);
+                choiceCanvas.DrawHaroohieText(choice, DialogueScriptParameter.Paint00, project, (218 - choiceWidth) / 2, 2);
+                choiceCanvas.Flush();
+                choiceGraphics.Add(choiceGraphic);
+            }
+
+            int graphicY = (192 - (choiceGraphics.Count * 18 + (choiceGraphics.Count - 1) * 8)) / 2 + 184;
+            foreach (SKBitmap choiceGraphic in choiceGraphics)
+            {
+                canvas.DrawBitmap(choiceGraphic, 19, graphicY);
+                graphicY += 26;
+            }
         }
 
         // Draw select choices

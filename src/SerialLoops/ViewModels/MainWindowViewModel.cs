@@ -64,31 +64,31 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public string ShutdownUpdateUrl { get; set; } = null;
 
-    public ICommand NewProjectCommand { get; private set; }
-    public ICommand OpenProjectCommand { get; private set; }
-    public ICommand OpenRecentProjectCommand { get; private set; }
-    public ICommand EditSaveCommand { get; private set; }
-    public ICommand AboutCommand { get; private set; }
-    public ICommand PreferencesCommand { get; private set; }
-    public ICommand CheckForUpdatesCommand { get; private set; }
-    public ICommand ViewLogsCommand { get; private set; }
+    public ICommand NewProjectCommand { get; }
+    public ICommand OpenProjectCommand { get; }
+    public ICommand OpenRecentProjectCommand { get; }
+    public ICommand EditSaveCommand { get; }
+    public ICommand AboutCommand { get; }
+    public ICommand PreferencesCommand { get; }
+    public ICommand CheckForUpdatesCommand { get; }
+    public ICommand ViewLogsCommand { get; }
 
-    public ICommand SaveProjectCommand { get; private set; }
-    public ICommand ProjectSettingsCommand { get; private set; }
-    public ICommand MigrateProjectCommand { get; private set; }
-    public ICommand ExportPatchCommand { get; private set; }
-    public ICommand CloseProjectCommand { get; private set; }
+    public ICommand SaveProjectCommand { get; }
+    public ICommand ProjectSettingsCommand { get; }
+    public ICommand MigrateProjectCommand { get; }
+    public ICommand ExportPatchCommand { get; }
+    public ICommand CloseProjectCommand { get; }
 
-    public ICommand ApplyHacksCommand { get; private set; }
-    public ICommand RenameItemCommand { get; private set; }
-    public ICommand EditUiTextCommand { get; private set; }
-    public ICommand EditTutorialMappingsCommand { get; private set; }
-    public ICommand SearchProjectCommand { get; private set; }
-    public ICommand FindOrphanedItemsCommand { get; private set; }
+    public ICommand ApplyHacksCommand { get; }
+    public ICommand RenameItemCommand { get; }
+    public ICommand EditUiTextCommand { get; }
+    public ICommand EditTutorialMappingsCommand { get; }
+    public ICommand SearchProjectCommand { get; }
+    public ICommand FindOrphanedItemsCommand { get; }
 
-    public ICommand BuildIterativeCommand { get; private set; }
-    public ICommand BuildBaseCommand { get; private set; }
-    public ICommand BuildAndRunCommand { get; private set; }
+    public ICommand BuildIterativeCommand { get; }
+    public ICommand BuildBaseCommand { get; }
+    public ICommand BuildAndRunCommand { get; }
 
     public SfxMixer SfxMixer { get; } = new();
 
@@ -130,15 +130,15 @@ public partial class MainWindowViewModel : ViewModelBase
                     UseShellExecute = true,
                 });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                Log.LogError("Failed to open log file directly. " +
-                             $"Logs can be found at {Path.Combine(CurrentConfig.UserDirectory, "Logs", "SerialLoops.log")}");
+                Log.LogException(string.Format(Strings._Failed_to_open_log_file_directly__Logs_can_be_found_at__0__,
+                    Path.Combine(CurrentConfig.UserDirectory, "Logs", "SerialLoops.log")), ex);
             }
         });
     }
 
-    public async void Initialize(MainWindow window, IConfigFactory configFactory = null)
+    public void Initialize(MainWindow window, IConfigFactory configFactory = null)
     {
         Window = window;
         Log = new(Window);
@@ -150,7 +150,7 @@ public partial class MainWindowViewModel : ViewModelBase
         var fontStyle = new Style(x => x.OfType<Window>());
         var font = FontFamily.Parse(string.IsNullOrEmpty(CurrentConfig.DisplayFont) ? Strings.Default_Font : CurrentConfig.DisplayFont);
         fontStyle.Add(new Setter(Avalonia.Controls.Primitives.TemplatedControl.FontFamilyProperty, font));
-        Application.Current.Styles.Add(fontStyle);
+        Application.Current!.Styles.Add(fontStyle);
 
         ProjectsCache = ProjectsCache.LoadCache(CurrentConfig, Log);
         UpdateRecentProjects();
@@ -162,7 +162,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
         if (CurrentConfig.AutoReopenLastProject && ProjectsCache.RecentProjects.Count > 0)
         {
-            await OpenProjectFromPath(ProjectsCache.RecentProjects[0]);
+            OpenProjectFromPath(ProjectsCache.RecentProjects[0]).GetAwaiter().GetResult();
         }
         else
         {
@@ -172,9 +172,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
     private void OpenHomePanel()
     {
-        HomePanelViewModel homePanelViewModel = new() { MainWindow = this };
-        HomePanel homePanel = new() { ViewModel = homePanelViewModel, DataContext = homePanelViewModel };
-        homePanelViewModel.Initialize(this, homePanel);
+        HomePanel homePanel = new() { DataContext = new HomePanelViewModel(this) };
         Window.MainContent.Content = homePanel;
     }
 
@@ -203,7 +201,6 @@ public partial class MainWindowViewModel : ViewModelBase
         //    new StackLayout { Items = { advancedSearchButton }, Width = 25 }
         //))
         //{ Spacing = new(5, 0) };
-
 
         Title = $"{BASE_TITLE} - {project.Name}";
 
@@ -552,6 +549,11 @@ public partial class MainWindowViewModel : ViewModelBase
                     }
                     CharacterSpriteItem characterSpriteItem = (CharacterSpriteItem)item;
                     characterSpriteItem.Graphics.Write(OpenProject, Log);
+                    break;
+                case ItemDescription.ItemType.Chess_Puzzle:
+                    ChessPuzzleItem chessPuzzleItem = (ChessPuzzleItem)item;
+                    IO.WriteStringFile(Path.Combine("assets", "data", $"{chessPuzzleItem.ChessPuzzle.Index:X3}.s"),
+                        chessPuzzleItem.ChessPuzzle.GetSource([]), OpenProject, Log);
                     break;
                 case ItemDescription.ItemType.Scenario:
                     ScenarioStruct scenario = ((ScenarioItem)item).Scenario;

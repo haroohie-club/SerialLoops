@@ -62,6 +62,8 @@ public class EditorTabsPanelViewModel : ViewModelBase
                 return new ScenarioEditorViewModel((ScenarioItem)item, MainWindow, _log);
             case ItemDescription.ItemType.Character_Sprite:
                 return new CharacterSpriteEditorViewModel((CharacterSpriteItem)item, MainWindow, _log);
+            case ItemDescription.ItemType.Chess_Puzzle:
+                return new ChessPuzzleEditorViewModel((ChessPuzzleItem)item, MainWindow, _log);
             case ItemDescription.ItemType.Group_Selection:
                 return new GroupSelectionEditorViewModel((GroupSelectionItem)item, MainWindow, _log);
             case ItemDescription.ItemType.Script:
@@ -99,5 +101,10 @@ public class EditorTabsPanelViewModel : ViewModelBase
         {
             ((SfxEditorViewModel)closedEditor).SfxPlayerPanel.Stop();
         }
+    }
+
+    public void OnTabMiddleClicked()
+    {
+        Tabs.Remove(SelectedTab);
     }
 }

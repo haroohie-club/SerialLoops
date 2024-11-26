@@ -2792,4 +2792,16 @@ This action is irreversible.</value>
   <data name="There is already a template with that name. Please choose a different name for your template." xml:space="preserve">
     <value>There is already a template with that name. Please choose a different name for your template.</value>
   </data>
+  <data name="Number of Moves" xml:space="preserve">
+    <value>Number of Moves</value><comment>The number of moves available in a given chess puzzle</comment>
+  </data>
+  <data name="Time Limit" xml:space="preserve">
+    <value>Time Limit</value><comment>The time limit for a given chess puzzle</comment>
+  </data>
+  <data name="&quot;Failed to open log file directly. Logs can be found at {0}&quot;" xml:space="preserve">
+    <value>"Failed to open log file directly. Logs can be found at {0}"</value>
+  </data>
+  <data name="Error while loading project" xml:space="preserve">
+    <value>Error while loading project</value>
+  </data>
 </root>
