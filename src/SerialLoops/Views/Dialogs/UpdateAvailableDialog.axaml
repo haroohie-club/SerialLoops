@@ -14,12 +14,7 @@
         Width="{Binding ClientSize.Width}"
         Height="{Binding ClientSize.Height}"
         Icon="/Assets/serial-loops.ico"
-        Closed="DialogClosed"
         Title="{Binding Title}">
-
-    <Design.DataContext>
-       <vm:UpdateAvailableDialogViewModel />
-    </Design.DataContext>
 
     <Grid HorizontalAlignment="Left" VerticalAlignment="Top"
             RowDefinitions="Auto,Auto,Auto,Auto,*,Auto" ColumnDefinitions="Auto,Auto,Auto,Auto" Name="UpdateGrid"
@@ -30,12 +25,12 @@
         <md:MarkdownScrollViewer Width="750" Height="350" Grid.Row="2" Grid.Column="0"
                                  Markdown="{Binding Changelog}" />
         <controls:LinkButton Text="{x:Static assets:Strings.Download_release_from_GitHub}"
-                    Grid.Row="3" Grid.Column="0" OnClick="ReleaseLink_Click"/>
+                    Grid.Row="3" Grid.Column="0" Command="{Binding OpenReleaseLinkCommand}"/>
         <StackPanel Grid.Row="5" Grid.Column="0" Orientation="Horizontal" Spacing="20">
             <Button Content="{x:Static assets:Strings.Download_from_GitHub}" Command="{Binding OpenReleaseLinkCommand}"/>
             <Button Content="{x:Static assets:Strings.Skip_Update}" Command="{Binding CloseCommand}"/>
-            <CheckBox Content="{x:Static assets:Strings.Check_for_Updates}" IsChecked="{Binding Config.CheckForUpdates}" Name="CheckForUpdatesBox"/>
-            <CheckBox Content="{x:Static assets:Strings.Pre_Release_Channel}" IsChecked="{Binding Config.PreReleaseChannel}" Name="PreReleaseChannelBox"/>
+            <CheckBox Content="{x:Static assets:Strings.Check_for_Updates}" IsChecked="{Binding CheckForUpdates}"/>
+            <CheckBox Content="{x:Static assets:Strings.Pre_Release_Channel}" IsChecked="{Binding UsePreReleaseChannel}"/>
         </StackPanel>
     </Grid>
 

@@ -223,12 +223,12 @@ public class BooleanToggleOption : BooleanOption
     public BooleanToggleOption(List<Option> options)
     {
         ToggleButton = new LinkButton { Text = _buttonText, IsEnabled = Enabled };
-        ToggleButton.OnClick = (sender, args) =>
+        ToggleButton.Command = ReactiveCommand.Create(() =>
         {
             options.OfType<BooleanOption>().ToList().ForEach(option => option.Value = Value);
             Value = !Value;
             ToggleButton.Text = _buttonText;
-        };
+        });
     }
 
     protected override Control GetControl()

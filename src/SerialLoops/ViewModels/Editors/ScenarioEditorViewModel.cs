@@ -15,7 +15,6 @@ using SerialLoops.Utility;
 using SerialLoops.ViewModels.Dialogs;
 using SerialLoops.ViewModels.Editors.ScenarioCommandEditors;
 using SerialLoops.Views.Dialogs;
-using SixLabors.ImageSharp;
 using static HaruhiChokuretsuLib.Archive.Event.ScenarioCommand;
 
 namespace SerialLoops.ViewModels.Editors;

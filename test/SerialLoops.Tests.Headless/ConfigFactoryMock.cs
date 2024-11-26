@@ -5,7 +5,7 @@ using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Factories;
 
-namespace SerialLoops.Tests.Shared;
+namespace SerialLoops.Tests.Headless;
 
 public class ConfigFactoryMock(string configPath) : IConfigFactory
 {

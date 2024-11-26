@@ -17,7 +17,7 @@
         <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="3" Margin="2">
             <Button Content="{x:Static assets:Strings.Replace}" Command="{Binding ReplaceCommand}"/>
             <Button Content="{x:Static assets:Strings.Extract}" Command="{Binding ExtractCommand}"/>
-            <Button Content="{x:Static assets:Strings.Restore}" Command="{Binding RestoreCommand}"/>
+            <Button Content="{x:Static assets:Strings.Restore}" Command="{Binding RestoreCommand}" Name="RestoreButton"/>
         </StackPanel>
     </Grid>
 </UserControl>
