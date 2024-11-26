@@ -1,9 +1,11 @@
 ﻿using System.IO;
 using Avalonia.Controls;
+using Avalonia.Controls.Presenters;
+using Avalonia.Controls.Primitives;
+using Avalonia.Controls.Templates;
 using Avalonia.Headless;
-using Avalonia.Input;
-using SerialLoops.ViewModels;
-using SerialLoops.Views;
+using Avalonia.Layout;
+using NUnit.Framework;
 
 namespace SerialLoops.Tests.Headless;
 
@@ -11,6 +13,7 @@ public static class Helpers
 {
     public static void CaptureAndSaveFrame(this Window window, string artifactsDir, string nameOfTest, ref int currentFrame)
     {
+        nameOfTest = nameOfTest.Replace("\"", "").Replace("(", "_").Replace(")", "");
         if (!Directory.Exists(Path.Combine(artifactsDir, nameOfTest)))
         {
             Directory.CreateDirectory(Path.Combine(artifactsDir, nameOfTest));
@@ -20,16 +23,132 @@ public static class Helpers
         TestContext.AddTestAttachment(file, $"{currentFrame}");
     }
 
-    public static void TabToExplorer(this MainWindow mainWindow)
+    public static FuncControlTemplate GetTreeDataGridTemplate()
     {
-        int explorerTabStop = 2 + ((MainWindowViewModel)mainWindow.DataContext).ToolBar.Items.Count; // the menu, the search bar, and each of the tool bar items
-        if (NativeMenu.GetIsNativeMenuExported(mainWindow)) // if the menu is native, it's not a tab stop
+        return new FuncControlTemplate<TreeDataGrid>((parent, scope) =>
         {
-            explorerTabStop--;
-        }
-        for (int i = 0; i <= explorerTabStop; i++)
-        {
-            mainWindow.KeyPressQwerty(PhysicalKey.Tab, RawInputModifiers.None);
-        }
+            return new DockPanel()
+            {
+                Children =
+                {
+                    new TreeDataGridColumnHeadersPresenter()
+                    {
+                        Name = "PART_ColumnHeadersPresenter",
+                        [DockPanel.DockProperty] = Dock.Top,
+                        [!TreeDataGridColumnHeadersPresenter.ElementFactoryProperty] =
+                            parent[!TreeDataGrid.ElementFactoryProperty],
+                        [!TreeDataGridColumnHeadersPresenter.ItemsProperty] = parent[!TreeDataGrid.ColumnsProperty],
+                    }.RegisterInNameScope(scope),
+                    new ScrollViewer()
+                    {
+                        Name = "PART_ScrollViewer",
+                        Template = new FuncControlTemplate<ScrollViewer>((x, ns) =>
+                            new Grid
+                            {
+                                ColumnDefinitions =
+                                    new ColumnDefinitions
+                                    {
+                                        new ColumnDefinition(1, GridUnitType.Star),
+                                        new ColumnDefinition(GridLength.Auto),
+                                    },
+                                RowDefinitions =
+                                    new RowDefinitions
+                                    {
+                                        new RowDefinition(1, GridUnitType.Star), new RowDefinition(GridLength.Auto),
+                                    },
+                                Children =
+                                {
+                                    new ScrollContentPresenter
+                                    {
+                                        Name = "PART_ContentPresenter",
+                                        [~ContentPresenter.ContentProperty] = x[~ContentControl.ContentProperty],
+                                        [~~ScrollContentPresenter.OffsetProperty] =
+                                            x[~~ScrollViewer.OffsetProperty],
+                                    }.RegisterInNameScope(ns),
+                                    new ScrollBar()
+                                    {
+                                        Name = "horizontalScrollBar",
+                                        Orientation = Orientation.Horizontal,
+                                        [~ScrollBar.VisibilityProperty] =
+                                            x[~ScrollViewer.HorizontalScrollBarVisibilityProperty],
+                                        [Grid.RowProperty] = 1,
+                                    }.RegisterInNameScope(ns),
+                                    new ScrollBar()
+                                    {
+                                        Name = "verticalScrollBar",
+                                        Orientation = Orientation.Vertical,
+                                        [~ScrollBar.VisibilityProperty] =
+                                            x[~ScrollViewer.VerticalScrollBarVisibilityProperty],
+                                        [Grid.ColumnProperty] = 1,
+                                    }.RegisterInNameScope(ns),
+                                }
+                            }),
+                        HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,
+                        Content = new TreeDataGridRowsPresenter
+                        {
+                            Name = "PART_RowsPresenter",
+                            [!TreeDataGridRowsPresenter.ColumnsProperty] = parent[!TreeDataGrid.ColumnsProperty],
+                            [!TreeDataGridRowsPresenter.ElementFactoryProperty] =
+                                parent[!TreeDataGrid.ElementFactoryProperty],
+                            [!TreeDataGridRowsPresenter.ItemsProperty] = parent[!TreeDataGrid.RowsProperty],
+                        }.RegisterInNameScope(scope),
+                    }.RegisterInNameScope(scope),
+                }
+            };
+        });
+    }
+
+    public static IControlTemplate GetTreeDataGridRowTemplate()
+    {
+        return new FuncControlTemplate<TreeDataGridRow>((x, ns) =>
+            new DockPanel
+            {
+                Children =
+                {
+                    new TreeDataGridCellsPresenter
+                    {
+                        Name = "PART_CellsPresenter",
+                        [!TreeDataGridCellsPresenter.ElementFactoryProperty] = x[!TreeDataGridRow.ElementFactoryProperty],
+                        [!TreeDataGridCellsPresenter.ItemsProperty] = x[!TreeDataGridRow.ColumnsProperty],
+                        [!TreeDataGridCellsPresenter.RowsProperty] = x[!TreeDataGridRow.RowsProperty],
+                    }.RegisterInNameScope(ns),
+                }
+            });
+    }
+
+    public static IControlTemplate TreeDataGridExpanderCellTemplate()
+    {
+        return new FuncControlTemplate<TreeDataGridExpanderCell>((x, ns) =>
+            new DockPanel
+            {
+                Children =
+                {
+                    new DockPanel
+                    {
+                        Children =
+                        {
+                            new ToggleButton
+                            {
+                                [!!ToggleButton.IsCheckedProperty] = x[!!TreeDataGridExpanderCell.IsExpandedProperty],
+                            },
+                            new Decorator
+                            {
+                                Name = "PART_Content",
+                            }.RegisterInNameScope(ns),
+                        }
+                    },
+                }
+            });
+    }
+
+    public static IControlTemplate GetTreeDataGridTemplateCellTemplate()
+    {
+        return new FuncControlTemplate<TreeDataGridTemplateCell>((x, ns) =>
+            new ContentPresenter
+            {
+                Name = "PART_ContentPresenter",
+                [~ContentPresenter.ContentProperty] = x[~TreeDataGridTemplateCell.ContentProperty],
+                [~ContentPresenter.ContentTemplateProperty] = x[~TreeDataGridTemplateCell.ContentTemplateProperty],
+            });
     }
 }

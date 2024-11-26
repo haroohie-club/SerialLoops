@@ -55,6 +55,7 @@ Name: "dockerdesktop"; Description: "Install Docker Desktop"; GroupDescription: 
 Source: "..\..\src\SerialLoops\bin\Release\net8.0-windows\win-x64\publish\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\..\src\SerialLoops\bin\Release\net8.0-windows\win-x64\publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "devkitProUpdater-3.0.3.exe"; DestDir: {tmp}; Flags: deleteafterinstall; Tasks: devkitarm
+Source: "wsl-install.bat"; DestDir: {tmp}; Flags: deleteafterinstall; Tasks: dockerdesktop
 Source: "Docker Desktop Installer.exe"; DestDir: {tmp}; Flags: deleteafterinstall; Tasks: dockerdesktop
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
@@ -71,6 +72,7 @@ Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: de
 
 [Run]
 Filename: "{tmp}\devkitProUpdater-3.0.3.exe"; WorkingDir: {tmp}; Tasks: devkitarm
+Filename: "{tmp}\wsl-install.bat"; WorkingDir: {tmp}; Tasks: dockerdesktop
 Filename: "{tmp}\Docker Desktop Installer.exe"; WorkingDir: {tmp}; Tasks: dockerdesktop
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
