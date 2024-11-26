@@ -12,11 +12,11 @@ public class TestConsoleLogger : ILogger
     }
     public void LogError(string message, bool lookForWarnings = false)
     {
-        TestContext.Error.WriteLine(message);
+        TestContext.Error.WriteLine($"ERROR: {message}");
     }
     public void LogException(string message, Exception exception)
     {
-        TestContext.Error.WriteLine($"{message} ({exception.Message})\n\n{exception.StackTrace}");
+        LogError($"{message}: {exception.Message}\n\n{exception.StackTrace}");
     }
     public void LogWarning(string message, bool lookForErrors = false)
     {

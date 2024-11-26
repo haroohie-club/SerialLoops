@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:assets="using:SerialLoops.Assets"
         xmlns:gbox="using:GroupBox.Avalonia.Controls"
+        xmlns:i="using:Avalonia.Xaml.Interactivity"
         mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="275"
         MinWidth="400" MinHeight="275"
         Width="400" Height="275"
@@ -14,7 +15,7 @@
         Icon="/Assets/serial-loops.ico"
         Title="{x:Static assets:Strings.Create_New_Project}"
         Name="PCDialog">
-    
+
     <StackPanel Spacing="10" HorizontalAlignment="Center">
         <gbox:GroupBox Header="{x:Static assets:Strings.Project_Options}" Theme="{StaticResource GroupBoxClassic}"
                        MinWidth="300" MinHeight="100">

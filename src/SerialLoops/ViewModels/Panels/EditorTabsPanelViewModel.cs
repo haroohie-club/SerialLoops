@@ -100,4 +100,9 @@ public class EditorTabsPanelViewModel : ViewModelBase
             ((SfxEditorViewModel)closedEditor).SfxPlayerPanel.Stop();
         }
     }
+
+    public void OnTabMiddleClicked()
+    {
+        Tabs.Remove(SelectedTab);
+    }
 }

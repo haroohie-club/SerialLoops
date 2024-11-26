@@ -1,6 +1,6 @@
-using System;
 using Avalonia;
 using Avalonia.Controls;
+using ReactiveUI;
 using SerialLoops.Lib.Items;
 using SerialLoops.ViewModels.Panels;
 
@@ -42,18 +42,25 @@ public partial class ItemLink : UserControl
                 Link.Icon = Item.Type.ToString();
             }
         }
+
+        if (change.Property == TabsProperty || change.Property == ItemProperty)
+        {
+            if (Tabs is not null)
+            {
+                Link.Command = ReactiveCommand.Create(() =>
+                {
+                    if (Item is not null)
+                    {
+                        Tabs.OpenTab(Item);
+                    }
+                });
+            }
+        }
     }
 
     public ItemLink()
     {
         InitializeComponent();
-    }
 
-    public void Link_PointerPressed(object? sender, EventArgs e)
-    {
-        if (Item is not null)
-        {
-            Tabs.OpenTab(Item);
-        }
     }
 }

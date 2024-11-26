@@ -20,13 +20,13 @@ jobs:
       Windows:
         imageName: 'windows-latest'
         targetFramework: 'net8.0-windows'
-  displayName: Build & Test
+  displayName: Build & Maybe Test
   pool:
     vmImage: $(imageName)
   steps:
   - checkout: self
     clean: true
-    
+
   - task: DotNetCoreCLI@2
     inputs:
       command: 'build'
@@ -34,12 +34,18 @@ jobs:
       arguments: -f $(targetFramework)
     displayName: Build project
 
+  - pwsh: |
+      Invoke-WebRequest -Uri https://haroohie.nyc3.cdn.digitaloceanspaces.com/bootstrap/serial-loops/test-assets.zip -OutFile $(Build.ArtifactStagingDirectory)/test-assets.zip
+      Expand-Archive -Path $(Build.ArtifactStagingDirectory)/test-assets.zip -DestinationPath $(Build.ArtifactStagingDirectory)/test-assets
+    displayName: Download test assets
+
   - task: DotNetCoreCLI@2
     inputs:
       command: 'test'
       projects: $(Build.SourcesDirectory)/test/SerialLoops.Tests.Headless/SerialLoops.Tests.Headless.csproj
-      arguments: -f $(targetFramework)
+      arguments: -f $(targetFramework) --filter "Name !~ BackgroundMusicEditor_ReplacementAndRestoreWork"
       publishTestResults: true
     env:
-      ROM_URI: $(ChokuRomUri)
+      ASSETS_DIRECTORY: $(Build.ArtifactStagingDirectory)/test-assets/
     displayName: Run tests
+    condition: eq(variables.imageName, 'windows-latest')

@@ -46,8 +46,17 @@ Documentation for how to use Serial Loops can be found on [our website](https://
 
 ## Installation
 ### Prerequisites
-#### A Nintendo DS Emulator
-To test the game easily, you will want to have a Nintendo DS emulator installed. We recommend using [melonDS](https://melonds.kuribo64.net/) for its accuracy.
+It is recommended that you use a distribution of Serial Loops that automatically installs or comes with the necessary prerequisites. For each platform these are:
+
+* Linux: Flatpak
+* macOS: Installer
+* Windows: Installer
+
+Using these will ensure Serial Loops is ready to use after installation. However, if you would rather use a portable build on Windows/Linux, please check the information on installing
+these prerequisites below.
+
+<details>
+    <summary>View prerequisites for non-Flatpak/installer distributions</summary>
 
 #### Installing devkitARM
 [devkitARM](https://devkitpro.org/wiki/Getting_Started) is required to use Serial Loops on all platforms.
@@ -85,6 +94,11 @@ way of getting the Docker path to work, so you will have to use Make.
 #### Installing OpenAL (Linux)
 If you're running on Linux and _not using one of the package releases_ (the `.deb` or `.rpm`), you will also need to install OpenAL which is used for audio processing.
 
+</details>
+
+#### A Nintendo DS Emulator
+To test the game easily, you will want to have a Nintendo DS emulator installed. We recommend using [melonDS](https://melonds.kuribo64.net/) for its accuracy.
+
 ### Download & Install
 Once you have installed any necessary prerequisites, to install Serial Loops, download the latest release for your platform from the [Releases tab](https://github.com/haroohie-club/SerialLoops/releases).
 
@@ -113,6 +127,15 @@ dotnet build -f net8.0
 ```
 Specifying this prevents dotnet from trying to build the Windows project, which can cause errors.
 
-We recommend [Visual Studio 2022](https://visualstudio.microsoft.com/) on Windows or [Rider](https://www.jetbrains.com/rider/) on Linux/Mac (or Windows!) for development. You can also build from both of these IDEs; however, when building from Rider on Linux/Mac, you must go into **Settings &rarr; Build, Execution, Deployment &rarr; Toolset and Build** and add `TargetFramework=net8.0` to the MSBuild global properties field. This has the same effect as specifying `-f net8.0` on the command line.
+We recommend [Rider](https://www.jetbrains.com/rider/) for development as it has the best Avalonia support and is now free to use for non-commercial purposes; however, on Windows, you can also use [Visual Studio 2022](https://visualstudio.microsoft.com/).
+You can also build from both of these IDEs; however, when building from Rider on Linux/Mac, you must go into **Settings &rarr; Build, Execution, Deployment &rarr; Toolset and Build** and add `TargetFramework=net8.0`
+to the MSBuild global properties field. This has the same effect as specifying `-f net8.0` on the command line.
 
 If you'd like to contribute new features or fixes, we recommend [getting in touch on Discord first](https://discord.gg/nesRSbpeFM) before submitting a pull request!
+
+### Testing
+Serial Loops has headless tests that run to test the UI and other functionality of the program. To run tests locally, you will need to define either a `ui_vals.json` file or set an environment variable.
+
+First, download [these test assets](https://haroohie.nyc3.cdn.digitaloceanspaces.com/bootstrap/serial-loops/test-assets.zip) -OutFile $(Build.ArtifactStagingDirectory)/test-assets.zip) and unzip them to a directory somewhere. Then, specify that directory in the `ui_vals.json` as `AssetsDirectory` or set the environment variable `ASSETS_DIRECTORY` to that path.
+
+Tests can be run via `dotnet test` (make sure to add `-f net8.0` on Linux or Mac) or through the test runners in Rider or Visual Studio.

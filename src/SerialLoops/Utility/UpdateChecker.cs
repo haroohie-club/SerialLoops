@@ -30,19 +30,17 @@ internal class UpdateChecker(MainWindowViewModel mainWindowViewModel)
 
     public async void Check()
     {
-        (string version, string url, JsonArray assets, string changelog) = await GetLatestVersion(_currentVersion);
+        (string version, string url, _, string changelog) = await GetLatestVersion(_currentVersion);
         if (_currentVersion.StartsWith(version)) // version might be something like 0.1.1, but current version will always be 4 digits
         {
             return;
         }
 
         _logger.Log($"An update for Serial Loops is available! ({version})");
-        UpdateAvailableDialog updateDisplay = new();
-        UpdateAvailableDialogViewModel updateDisplayViewModel = new();
-        updateDisplayViewModel.Initialize(_mainWindowViewModel, updateDisplay, version, assets, url, changelog);
-        updateDisplay.DataContext = updateDisplayViewModel;
-        updateDisplay.ViewModel = updateDisplayViewModel;
-        await updateDisplay.ShowDialog(_mainWindowViewModel.Window);
+        await new UpdateAvailableDialog
+        {
+            DataContext = new UpdateAvailableDialogViewModel(_mainWindowViewModel, version, url, changelog)
+        }.ShowDialog(_mainWindowViewModel.Window);
     }
 
     private async Task<(string, string, JsonArray, string)> GetLatestVersion(string currentVersion)
