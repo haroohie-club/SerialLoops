@@ -18,6 +18,11 @@
                         <TextBlock Text="{Binding DisplayName}"/>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
+                <ComboBox.ItemContainerTheme>
+                    <ControlTheme TargetType="ComboBoxItem" x:DataType="items:BackgroundMusicItem" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
+                        <Setter Property="TextSearch.Text" Value="{Binding BgmName}" />
+                    </ControlTheme>
+                </ComboBox.ItemContainerTheme>
             </ComboBox>
             <controls:ItemLink Item="{Binding Music}" Tabs="{Binding Tabs}"/>
         </StackPanel>
