@@ -47,7 +47,7 @@ public partial class Project
     [JsonIgnore]
     public string ProjectFile => Path.Combine(MainDirectory, $"{Name}.{PROJECT_FORMAT}");
     [JsonIgnore]
-    public Config Config { get; private set; }
+    public Config Config { get; set; }
     [JsonIgnore]
     public ProjectSettings Settings { get; set; }
     [JsonIgnore]
@@ -1090,9 +1090,9 @@ public partial class Project
             }
             return (project, result);
         }
-        catch (Exception exc)
+        catch (Exception ex)
         {
-            log.LogError($"Error while loading project: {exc.Message}\n\n{exc.StackTrace}");
+            log.LogException(localize("Error while loading project"), ex);
             return (null, new(LoadProjectState.FAILED));
         }
     }

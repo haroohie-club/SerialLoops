@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics;
 using System.Drawing;
-using System.Text.Json.Nodes;
 using System.Windows.Input;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using SerialLoops.Assets;
 using SerialLoops.Lib;
 using SerialLoops.Views.Dialogs;
@@ -24,26 +24,32 @@ public class UpdateAvailableDialogViewModel : ViewModelBase
     public string Header { get; set; }
     public ICommand OpenReleaseLinkCommand { get; set; }
     public ICommand CloseCommand { get; set; }
+    private Config _config { get; }
+    private ILogger _log;
 
-    private JsonArray _assets;
-    private MainWindowViewModel _mainWindowViewModel;
-    private UpdateAvailableDialog _updateDialog;
-    public Config Config => _mainWindowViewModel.CurrentConfig;
-    public ILogger Log => _mainWindowViewModel.Log;
+    [Reactive]
+    public bool CheckForUpdates { get; set; }
+    [Reactive]
+    public bool UsePreReleaseChannel { get; set; }
 
-    public void Initialize(MainWindowViewModel mainWindowViewModel, UpdateAvailableDialog updateDialog, string version, JsonArray assets, string url, string changelog)
+    public UpdateAvailableDialogViewModel(MainWindowViewModel mainWindowViewModel, string version, string url, string changelog)
     {
-        _mainWindowViewModel = mainWindowViewModel;
-        _updateDialog = updateDialog;
+        _log = mainWindowViewModel.Log;
         Version = version;
-        _assets = assets;
         Url = url;
         Changelog = changelog;
 
         Title = string.Format(Strings.New_Update_Available___0_, Version);
         Header = string.Format(Strings.Serial_Loops_v_0_, Version);
+        _config = mainWindowViewModel.CurrentConfig;
         OpenReleaseLinkCommand = ReactiveCommand.Create(OpenReleaseLink);
-        CloseCommand = ReactiveCommand.Create(_updateDialog.Close);
+        CloseCommand = ReactiveCommand.Create<UpdateAvailableDialog>((dialog) =>
+        {
+            _config.CheckForUpdates = CheckForUpdates;
+            _config.PreReleaseChannel = UsePreReleaseChannel;
+            _config.Save(_log);
+            dialog.Close();
+        });
     }
 
     public void OpenReleaseLink()

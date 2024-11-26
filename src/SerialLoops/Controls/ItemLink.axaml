@@ -5,5 +5,5 @@
              xmlns:controls="using:SerialLoops.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SerialLoops.Controls.ItemLink">
-    <controls:LinkButton Name="Link" OnClick="Link_PointerPressed" Text="NONE" />
+    <controls:LinkButton Name="Link" Text="NONE" />
 </UserControl>

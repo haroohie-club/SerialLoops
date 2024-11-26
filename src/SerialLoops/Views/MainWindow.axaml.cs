@@ -22,7 +22,7 @@ public partial class MainWindow : Window
     public override void Show()
     {
         base.Show();
-        ViewModel = (MainWindowViewModel)DataContext;
+        ViewModel = (MainWindowViewModel)DataContext!;
         ViewModel.Initialize(this, ConfigurationFactory);
         NativeMenu.SetMenu(this, GetInitialMenu(NativeMenu.GetMenu(this)));
     }

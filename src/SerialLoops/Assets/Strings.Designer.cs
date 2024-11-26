@@ -166,6 +166,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &quot;Failed to open log file directly. Logs can be found at {0}&quot;.
+        /// </summary>
+        public static string _Failed_to_open_log_file_directly__Logs_can_be_found_at__0__ {
+            get {
+                return ResourceManager.GetString("\"Failed to open log file directly. Logs can be found at {0}\"", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _File.
         /// </summary>
         public static string _File {
@@ -2308,6 +2317,15 @@ namespace SerialLoops.Assets {
         public static string Error_reading_save_file_ {
             get {
                 return ResourceManager.GetString("Error reading save file.", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error while loading project.
+        /// </summary>
+        public static string Error_while_loading_project {
+            get {
+                return ResourceManager.GetString("Error while loading project", resourceCulture);
             }
         }
         
