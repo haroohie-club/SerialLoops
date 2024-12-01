@@ -520,9 +520,9 @@ public class ScriptEditorViewModel : EditorViewModel
         _script.Event.DialogueLines.Clear();
         _script.Event.DialogueSection.Objects.Clear();
         _script.Event.ConditionalsSection.Objects.RemoveRange(1, _script.Event.ConditionalsSection.Objects.Count - 1);
-        _script.Event.ChoicesSection.Objects.RemoveRange(1, _script.Event.ChoicesSection.Objects.Count - 1);
-        _script.Event.StartingChibisSection.Objects.RemoveRange(1, _script.Event.StartingChibisSection.Objects.Count - 1);
-        _script.Event.MapCharactersSection.Objects.RemoveRange(1, _script.Event.MapCharactersSection.Objects.Count - 1);
+        _script.Event.ChoicesSection?.Objects?.RemoveRange(1, _script.Event.ChoicesSection.Objects.Count - 1);
+        _script.Event.StartingChibisSection?.Objects?.RemoveRange(1, _script.Event.StartingChibisSection.Objects.Count - 1);
+        _script.Event.MapCharactersSection?.Objects?.RemoveRange(1, _script.Event.MapCharactersSection.Objects.Count - 1);
 
         _script.Refresh(_project, _log);
         _script.UnsavedChanges = true;
