@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
-using SerialLoops.Lib;
 using SerialLoops.Lib.Script;
 using SerialLoops.Lib.Script.Parameters;
 

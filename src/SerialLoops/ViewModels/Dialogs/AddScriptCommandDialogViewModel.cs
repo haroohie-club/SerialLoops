@@ -2,7 +2,6 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
-using Avalonia.Dialogs;
 using HaruhiChokuretsuLib.Archive.Event;
 using ReactiveUI;
 using SerialLoops.Views.Dialogs;

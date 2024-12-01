@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using HaruhiChokuretsuLib.Archive.Event;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script.Parameters;
 
