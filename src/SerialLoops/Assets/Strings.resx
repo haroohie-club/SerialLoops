@@ -2761,6 +2761,37 @@ No project is currently open. Would you like to create a new project?</value>
   <data name="DIMMED" xml:space="preserve">
     <value>Dimmed</value>
   </data>
+  <data name="Section name already exists! Please pick a different name for this section." xml:space="preserve">
+    <value>Section name already exists! Please pick a different name for this section.</value>
+  </data>
+  <data name="Duplicate Section Name" xml:space="preserve">
+    <value>Duplicate Section Name</value>
+  </data>
+  <data name="Failed to load script file {0}" xml:space="preserve">
+    <value>Failed to load script file {0}</value>
+  </data>
+  <data name="Cannot Delete Root Section!" xml:space="preserve">
+    <value>Cannot Delete Root Section!</value>
+  </data>
+  <data name="The root section cannot be deleted!" xml:space="preserve">
+    <value>The root section cannot be deleted!</value>
+  </data>
+  <data name="Clear Script?" xml:space="preserve">
+    <value>Clear Script?</value>
+  </data>
+  <data name="Are you sure you want to clear the script?\nThis action is irreversible." xml:space="preserve">
+    <value>Are you sure you want to clear the script?
+This action is irreversible.</value>
+  </data>
+  <data name="Template Description" xml:space="preserve">
+    <value>Template Description</value><comment>Template is a script template</comment>
+  </data>
+  <data name="Template Already Exists" xml:space="preserve">
+    <value>Template Already Exists</value><comment>Template is a script template</comment>
+  </data>
+  <data name="There is already a template with that name. Please choose a different name for your template." xml:space="preserve">
+    <value>There is already a template with that name. Please choose a different name for your template.</value>
+  </data>
   <data name="Number of Moves" xml:space="preserve">
     <value>Number of Moves</value><comment>The number of moves available in a given chess puzzle</comment>
   </data>

@@ -733,12 +733,14 @@ public partial class MainWindowViewModel : ViewModelBase
 
         // PROJECT
         WindowMenu.Add(MenuHeader.PROJECT, new(Strings._Project));
-        WindowMenu[MenuHeader.PROJECT].Menu = [
+        WindowMenu[MenuHeader.PROJECT].Menu =
+        [
             new NativeMenuItem()
             {
                 Header = Strings.Save_Project,
                 Command = SaveProjectCommand,
                 Icon = ControlGenerator.GetIcon("Save", Log),
+                Gesture = SaveHotKey,
             },
             new NativeMenuItem()
             {
@@ -763,7 +765,8 @@ public partial class MainWindowViewModel : ViewModelBase
                 Header = Strings.Close_Project,
                 Command = CloseProjectCommand,
                 Icon = ControlGenerator.GetIcon("Close", Log),
-            }
+                Gesture = CloseProjectKey,
+            },
         ];
         menu.Items.Insert(insertionPoint, WindowMenu[MenuHeader.PROJECT]);
         insertionPoint++;

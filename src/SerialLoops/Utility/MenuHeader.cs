@@ -6,4 +6,5 @@ public enum MenuHeader
     PROJECT,
     TOOLS,
     BUILD,
+    EDIT,
 }

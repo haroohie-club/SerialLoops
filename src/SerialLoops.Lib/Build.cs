@@ -167,15 +167,15 @@ public static class Build
 
         // Save files to disk
         tracker.Focus("Writing Replaced Archives", 3);
-        if (!IO.WriteBinaryFile(Path.Combine(directory, "rom", "data", "dat.bin"), dat.GetBytes(), log))
+        if (!IO.WriteBinaryFile(Path.Combine(directory, "rom", "data", "dat.bin"), dat?.GetBytes(), log))
         {
             return false;
         }
-        if (!IO.WriteBinaryFile(Path.Combine(directory, "rom", "data", "evt.bin"), evt.GetBytes(), log))
+        if (!IO.WriteBinaryFile(Path.Combine(directory, "rom", "data", "evt.bin"), evt?.GetBytes(), log))
         {
             return false;
         }
-        if (!IO.WriteBinaryFile(Path.Combine(directory, "rom", "data", "grp.bin"), grp.GetBytes(), log))
+        if (!IO.WriteBinaryFile(Path.Combine(directory, "rom", "data", "grp.bin"), grp?.GetBytes(), log))
         {
             return false;
         }
@@ -187,7 +187,7 @@ public static class Build
         try
         {
             File.WriteAllBytes(ndsProjectFile, project.Settings.File.Write());
-        } 
+        }
         catch (IOException exc)
         {
             log.LogException("Failed to write NitroPacker NDS project file to disk", exc);

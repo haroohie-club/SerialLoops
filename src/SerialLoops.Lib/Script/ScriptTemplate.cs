@@ -7,6 +7,7 @@ using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script.Parameters;
 using SerialLoops.Lib.Util;
+using SoftCircuits.Collections;
 
 namespace SerialLoops.Lib.Script;
 
@@ -25,7 +26,7 @@ public class ScriptTemplate
         Sections = sections;
     }
 
-    public ScriptTemplate(string templateName, string templateDescription, Dictionary<ScriptSection, List<ScriptItemCommand>> commands, Project project)
+    public ScriptTemplate(string templateName, string templateDescription, OrderedDictionary<ScriptSection, List<ScriptItemCommand>> commands, Project project)
     {
         Name = templateName;
         Description = templateDescription;
@@ -36,12 +37,11 @@ public class ScriptTemplate
     {
         foreach (TemplateSection section in Sections)
         {
-            int sectionIndex = script.Event.ScriptSections.FindIndex(s => s.Name == section.Name);
-            if (sectionIndex < 0)
+            if (script.Event.ScriptSections.FindIndex(s => s.Name == section.Name) < 0)
             {
-                sectionIndex = script.Event.ScriptSections.Count;
                 script.Event.LabelsSection.Objects.Add(new() { Id = (short)(script.Event.LabelsSection.Objects.Count > 0 ? script.Event.LabelsSection.Objects.Max(l => l.Id) + 1 : 1001), Name = section.Name });
                 script.Event.ScriptSections.Add(new() { Name = section.Name, CommandsAvailable = EventFile.CommandsAvailable });
+                script.Event.NumSections++;
             }
         }
         // We add the sections first and then do it a second time in order to allow ScriptSectionParameters to be able to find their sections
@@ -355,10 +355,10 @@ public class TemplateScriptParameter
                     return new DialoguePropertyScriptParameter(localizedName, (CharacterItem)project.Items.First(i => i.Type == ItemDescription.ItemType.Character && (short)((CharacterItem)i).MessageInfo.Character == short.Parse(value)));
 
                 case ScriptParameter.ParameterType.DIALOGUE:
-                    string[] dialougeValues = value.Split("||");
-                    DialogueLine line = new(dialougeValues[1].GetOriginalString(project), evt)
+                    string[] dialogueValues = value.Split("||");
+                    DialogueLine line = new(dialogueValues[1].GetOriginalString(project), evt)
                     {
-                        Speaker = ((CharacterItem)project.Items.First(i => i.Type == ItemDescription.ItemType.Character && (short)((CharacterItem)i).MessageInfo.Character == short.Parse(dialougeValues[0]))).MessageInfo.Character
+                        Speaker = ((CharacterItem)project.Items.First(i => i.Type == ItemDescription.ItemType.Character && (short)((CharacterItem)i).MessageInfo.Character == short.Parse(dialogueValues[0]))).MessageInfo.Character
                     };
                     evt.DialogueSection.Objects.Add(line);
                     evt.DialogueLines.Add(line);

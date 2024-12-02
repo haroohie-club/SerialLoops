@@ -9,6 +9,7 @@ using SerialLoops.Lib.Script;
 using SerialLoops.Lib.Script.Parameters;
 using SerialLoops.Lib.Util;
 using SkiaSharp;
+using SoftCircuits.Collections;
 using static HaruhiChokuretsuLib.Archive.Event.EventFile;
 
 namespace SerialLoops.Lib.Items;
@@ -29,19 +30,18 @@ public class ScriptItem : Item
         evt.Name[0..^1], ItemType.Script)
     {
         Event = evt;
-        UpdateEventTableInfo(evtTbl);
         _localize = localize;
 
         PruneLabelsSection(log);
         Graph.AddVertexRange(Event.ScriptSections);
     }
 
-    public Dictionary<ScriptSection, List<ScriptItemCommand>> GetScriptCommandTree(Project project, ILogger log)
+    public OrderedDictionary<ScriptSection, List<ScriptItemCommand>> GetScriptCommandTree(Project project, ILogger log)
     {
         ScriptCommandInvocation currentCommand = null;
         try
         {
-            Dictionary<ScriptSection, List<ScriptItemCommand>> commands = [];
+            OrderedDictionary<ScriptSection, List<ScriptItemCommand>> commands = [];
             foreach (ScriptSection section in Event.ScriptSections)
             {
                 commands.Add(section, []);
@@ -64,7 +64,7 @@ public class ScriptItem : Item
         }
     }
 
-    public void CalculateGraphEdges(Dictionary<ScriptSection, List<ScriptItemCommand>> commandTree, ILogger log)
+    public void CalculateGraphEdges(OrderedDictionary<ScriptSection, List<ScriptItemCommand>> commandTree, ILogger log)
     {
         try
         {
@@ -194,7 +194,7 @@ public class ScriptItem : Item
         }
     }
 
-    public ScriptPreview GetScriptPreview(Dictionary<ScriptSection, List<ScriptItemCommand>> commandTree,
+    public ScriptPreview GetScriptPreview(OrderedDictionary<ScriptSection, List<ScriptItemCommand>> commandTree,
         ScriptItemCommand currentCommand, Project project, ILogger log)
     {
         ScriptPreview preview = new();
@@ -1069,12 +1069,36 @@ public class ScriptItem : Item
             }
         }
 
+        // Draw select choices
+        if (preview.CurrentChocies?.Count > 0)
+        {
+            List<SKBitmap> choiceGraphics = [];
+            foreach (string choice in preview.CurrentChocies)
+            {
+                SKBitmap choiceGraphic = new(218, 18);
+                SKCanvas choiceCanvas = new(choiceGraphic);
+                choiceCanvas.DrawRect(1, 1, 216, 16, new() { Color = new(146, 146, 146) });
+                choiceCanvas.DrawRect(2, 2, 214, 14, new() { Color = new(69, 69, 69) });
+                int choiceWidth = project.LangCode.Equals("ja") ? choice.Length * 14 : choice.Sum(c => project.FontReplacement.ReverseLookup(c).Offset);
+                choiceCanvas.DrawHaroohieText(choice, DialogueScriptParameter.Paint00, project, (218 - choiceWidth) / 2, 2);
+                choiceCanvas.Flush();
+                choiceGraphics.Add(choiceGraphic);
+            }
+
+            int graphicY = (192 - (choiceGraphics.Count * 18 + (choiceGraphics.Count - 1) * 8)) / 2 + 184;
+            foreach (SKBitmap choiceGraphic in choiceGraphics)
+            {
+                canvas.DrawBitmap(choiceGraphic, 19, graphicY);
+                graphicY += 26;
+            }
+        }
+
         canvas.Flush();
         return (previewBitmap, null);
     }
 
     public (SKBitmap PreviewImage, string ErrorImage) GeneratePreviewImage(
-        Dictionary<ScriptSection, List<ScriptItemCommand>> commandTree, ScriptItemCommand currentCommand,
+        OrderedDictionary<ScriptSection, List<ScriptItemCommand>> commandTree, ScriptItemCommand currentCommand,
         Project project, ILogger log)
     {
         return GeneratePreviewImage(GetScriptPreview(commandTree, currentCommand, project, log), project);

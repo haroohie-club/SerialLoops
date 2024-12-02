@@ -11,6 +11,7 @@ using ReactiveUI.Fody.Helpers;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script.Parameters;
 using SerialLoops.Lib.Util;
+using SoftCircuits.Collections;
 using static HaruhiChokuretsuLib.Archive.Event.EventFile;
 
 namespace SerialLoops.Lib.Script;
@@ -73,7 +74,7 @@ public class ScriptItemCommand : ReactiveObject
         UpdateDisplay();
     }
 
-    public List<ScriptItemCommand> WalkCommandGraph(Dictionary<ScriptSection, List<ScriptItemCommand>> commandTree, AdjacencyGraph<ScriptSection, ScriptSectionEdge> graph)
+    public List<ScriptItemCommand> WalkCommandGraph(OrderedDictionary<ScriptSection, List<ScriptItemCommand>> commandTree, AdjacencyGraph<ScriptSection, ScriptSectionEdge> graph)
     {
         List<ScriptItemCommand> commands = [];
 
@@ -247,7 +248,7 @@ public class ScriptItemCommand : ReactiveObject
                     switch (i)
                     {
                         case 0:
-                            parameters.Add(new SfxScriptParameter(localize("Sound"), (SfxItem)project.Items.First(s => s.Type == ItemDescription.ItemType.SFX && ((SfxItem)s).Index == parameter)));
+                            parameters.Add(new SfxScriptParameter(localize("Sound"), (SfxItem)project.Items.FirstOrDefault(s => s.Type == ItemDescription.ItemType.SFX && ((SfxItem)s).Index == parameter)));
                             break;
                         case 1:
                             parameters.Add(new SfxModeScriptParameter(localize("Mode"), parameter));
@@ -592,13 +593,13 @@ public class ScriptItemCommand : ReactiveObject
                     switch (i)
                     {
                         case 0:
-                            parameters.Add(new ScriptSectionScriptParameter(localize("Clear Block"), eventFile.ScriptSections.FirstOrDefault(s => s.Name == eventFile.LabelsSection.Objects.First(l => l.Id == parameter).Name.Replace("/", ""))));
+                            parameters.Add(new ScriptSectionScriptParameter(localize("Clear Block"), eventFile.ScriptSections.FirstOrDefault(s => s.Name == eventFile.LabelsSection.Objects.FirstOrDefault(l => l.Id == parameter)?.Name.Replace("/", ""))));
                             break;
                         case 1:
-                            parameters.Add(new ScriptSectionScriptParameter(localize("Miss Block"), eventFile.ScriptSections.FirstOrDefault(s => s.Name == eventFile.LabelsSection.Objects.First(l => l.Id == parameter).Name.Replace("/", ""))));
+                            parameters.Add(new ScriptSectionScriptParameter(localize("Miss Block"), eventFile.ScriptSections.FirstOrDefault(s => s.Name == eventFile.LabelsSection.Objects.FirstOrDefault(l => l.Id == parameter)?.Name.Replace("/", ""))));
                             break;
                         case 2:
-                            parameters.Add(new ScriptSectionScriptParameter(localize("Miss 2 Block"), eventFile.ScriptSections.FirstOrDefault(s => s.Name == eventFile.LabelsSection.Objects.First(l => l.Id == parameter).Name.Replace("/", ""))));
+                            parameters.Add(new ScriptSectionScriptParameter(localize("Miss 2 Block"), eventFile.ScriptSections.FirstOrDefault(s => s.Name == eventFile.LabelsSection.Objects.FirstOrDefault(l => l.Id == parameter)?.Name.Replace("/", ""))));
                             break;
                     }
                     break;
@@ -734,9 +735,9 @@ public class ScriptItemCommand : ReactiveObject
 
     public ScriptItemCommand Clone()
     {
-        return new()
+        ScriptItemCommand clonedCommand = new()
         {
-            Invocation = Invocation,
+            Invocation = Invocation.Clone(Script, Project),
             Verb = Verb,
             Parameters = Parameters.Select(p => p.Clone(Project, Script)).ToList(),
             Section = Section,
@@ -744,6 +745,9 @@ public class ScriptItemCommand : ReactiveObject
             Script = Script,
             Project = Project,
         };
+        clonedCommand.UpdateDisplay();
+
+        return clonedCommand;
     }
 
 }

@@ -16,8 +16,8 @@ public class DialogueScriptParameter : ScriptParameter
 
     public override DialogueScriptParameter Clone(Project project, EventFile eventFile)
     {
-        DialogueLine line = new(Line.Text.GetOriginalString(project), eventFile);
-        eventFile.DialogueSection.Objects.Insert(eventFile.DialogueSection.Objects.Count - 1, line);
+        DialogueLine line = new(Line.Text.GetOriginalString(project), eventFile) { Speaker = Line.Speaker };
+        eventFile.DialogueSection.Objects.Add(line);
         return new(Name, line);
     }
 

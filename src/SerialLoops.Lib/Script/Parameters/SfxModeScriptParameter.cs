@@ -19,7 +19,7 @@ public class SfxModeScriptParameter : ScriptParameter
 
     public enum SfxMode : short
     {
-        START = 6,
-        STOP = 7,
+        Start = 6,
+        Stop = 7,
     }
 }

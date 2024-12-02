@@ -694,9 +694,9 @@ public partial class Project
 
         try
         {
-            tracker.Focus("Scripts", Evt.Files.Count - 5);
+            tracker.Focus("Scripts", Evt.Files.Count - NON_SCRIPT_EVT_FILES.Length);
             Items.AddRange(Evt.Files.AsParallel()
-                .Where(e => !NON_SCRIPT_EVT_FILES.Contains(e.Name))
+                .Where(e => !NON_SCRIPT_EVT_FILES.Contains(e?.Name))
                 .Select(e =>
                 {
                     tracker.Finished++;

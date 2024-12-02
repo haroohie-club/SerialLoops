@@ -499,6 +499,16 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to clear the script?
+        ///This action is irreversible..
+        /// </summary>
+        public static string Are_you_sure_you_want_to_clear_the_script__nThis_action_is_irreversible_ {
+            get {
+                return ResourceManager.GetString("Are you sure you want to clear the script?\\nThis action is irreversible.", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Arrow Keys - Move Image.
         /// </summary>
         public static string Arrow_Keys___Move_Image {
@@ -940,6 +950,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot Delete Root Section!.
+        /// </summary>
+        public static string Cannot_Delete_Root_Section_ {
+            get {
+                return ResourceManager.GetString("Cannot Delete Root Section!", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Character.
         /// </summary>
         public static string Character {
@@ -1189,6 +1208,15 @@ namespace SerialLoops.Assets {
         public static string Clear_Script {
             get {
                 return ResourceManager.GetString("Clear Script", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear Script?.
+        /// </summary>
+        public static string Clear_Script_ {
+            get {
+                return ResourceManager.GetString("Clear Script?", resourceCulture);
             }
         }
         
@@ -1919,6 +1947,15 @@ namespace SerialLoops.Assets {
         public static string Drawing_top_screen_tiles___ {
             get {
                 return ResourceManager.GetString("Drawing top screen tiles...", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Duplicate Section Name.
+        /// </summary>
+        public static string Duplicate_Section_Name {
+            get {
+                return ResourceManager.GetString("Duplicate Section Name", resourceCulture);
             }
         }
         
@@ -3009,6 +3046,15 @@ namespace SerialLoops.Assets {
         public static string Failed_to_load_editor_controls_ {
             get {
                 return ResourceManager.GetString("Failed to load editor controls!", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to load script file {0}.
+        /// </summary>
+        public static string Failed_to_load_script_file__0_ {
+            get {
+                return ResourceManager.GetString("Failed to load script file {0}", resourceCulture);
             }
         }
         
@@ -6105,6 +6151,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Section name already exists! Please pick a different name for this section..
+        /// </summary>
+        public static string Section_name_already_exists__Please_pick_a_different_name_for_this_section_ {
+            get {
+                return ResourceManager.GetString("Section name already exists! Please pick a different name for this section.", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select….
         /// </summary>
         public static string Select___ {
@@ -6862,6 +6917,24 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Template Already Exists.
+        /// </summary>
+        public static string Template_Already_Exists {
+            get {
+                return ResourceManager.GetString("Template Already Exists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Template Description.
+        /// </summary>
+        public static string Template_Description {
+            get {
+                return ResourceManager.GetString("Template Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Template Name.
         /// </summary>
         public static string Template_Name {
@@ -6953,6 +7026,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The root section cannot be deleted!.
+        /// </summary>
+        public static string The_root_section_cannot_be_deleted_ {
+            get {
+                return ResourceManager.GetString("The root section cannot be deleted!", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The selected ROM&apos;s hash does not match the expected ROM hash. Please ensure you are using the correct base ROM.
         ///
         ///If you wish to ignore this, please check the &quot;Ignore Hash&quot; checkbox..
@@ -6962,6 +7044,16 @@ namespace SerialLoops.Assets {
                 return ResourceManager.GetString(("The selected ROM\'s hash does not match the expected ROM hash. Please ensure you a" +
                         "re using the correct base ROM.\\n\\nIf you wish to ignore this, please check the \\" +
                         "\"Ignore Hash\\\" checkbox."), resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There is already a template with that name. Please choose a different name for your template..
+        /// </summary>
+        public static string There_is_already_a_template_with_that_name__Please_choose_a_different_name_for_your_template_ {
+            get {
+                return ResourceManager.GetString(("There is already a template with that name. Please choose a different name for yo" +
+                        "ur template."), resourceCulture);
             }
         }
         

@@ -51,11 +51,14 @@ public class BackgroundEditorViewModel : EditorViewModel
 
     private async Task ExportButton_Click()
     {
-        IStorageFile savedFile = await _window.Window.ShowSaveFilePickerAsync(Strings.Export_Background_Image, [new(Strings.PNG_Image) { Patterns = ["*.png"] }], $"{Bg.Name}.png");
-        Export(savedFile);
-    }
-    internal void Export(IStorageFile savedFile)
-    {
+        FilePickerSaveOptions saveOptions = new()
+        {
+            ShowOverwritePrompt = true,
+            FileTypeChoices = [
+                new FilePickerFileType(Strings.PNG_Image) { Patterns = ["*.png"] }
+            ]
+        };
+        IStorageFile savedFile = await Window.Window.ShowSaveFilePickerAsync(Strings.Export_Background_Image, [new FilePickerFileType(Strings.PNG_Image) { Patterns = ["*.png"] }], $"{Bg.Name}.png");
         if (savedFile is not null)
         {
             try
@@ -72,7 +75,7 @@ public class BackgroundEditorViewModel : EditorViewModel
 
     private async Task ReplaceButton_Click()
     {
-        IStorageFile openFile = await _window.Window.ShowOpenFilePickerAsync(Strings.Replace_Background_Image, [new(Strings.Supported_Images) { Patterns = Shared.SupportedImageFiletypes }]);
+        IStorageFile openFile = await Window.Window.ShowOpenFilePickerAsync(Strings.Replace_Background_Image, [new FilePickerFileType(Strings.Supported_Images) { Patterns = Shared.SupportedImageFiletypes }]);
         if (openFile is not null)
         {
             SKBitmap original = Bg.GetBackground();
@@ -81,7 +84,7 @@ public class BackgroundEditorViewModel : EditorViewModel
             SKBitmap finalImage = await new ImageCropResizeDialog()
             {
                 DataContext = cropResizeDialogViewModel,
-            }.ShowDialog<SKBitmap>(_window.Window);
+            }.ShowDialog<SKBitmap>(Window.Window);
             if (finalImage is not null)
             {
                 try
@@ -89,7 +92,7 @@ public class BackgroundEditorViewModel : EditorViewModel
                     LoopyProgressTracker tracker = new();
                     bool success = false;
                     await new ProgressDialog(() => success = Bg.SetBackground(finalImage, tracker, _log, _project.Localize),
-                        () => { }, tracker, string.Format(Strings.Replacing__0____, Bg.DisplayName)).ShowDialog(_window.Window);
+                        () => { }, tracker, string.Format(Strings.Replacing__0____, Bg.DisplayName)).ShowDialog(Window.Window);
                     if (success)
                     {
                         this.RaisePropertyChanged(nameof(BgBitmap));
