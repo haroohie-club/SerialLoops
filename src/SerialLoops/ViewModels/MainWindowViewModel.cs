@@ -99,8 +99,8 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public MainWindowViewModel()
     {
-        SaveHotKey = new(Key.S, KeyModifiers.Control);
-        CloseProjectKey = new(Key.W, KeyModifiers.Control);
+        SaveHotKey = GuiExtensions.CreatePlatformAgnosticCtrlGesture(Key.S);
+        CloseProjectKey = GuiExtensions.CreatePlatformAgnosticCtrlGesture(Key.W);
 
         NewProjectCommand = ReactiveCommand.CreateFromTask(NewProjectCommand_Executed);
         OpenProjectCommand = ReactiveCommand.CreateFromTask(OpenProjectCommand_Executed);
@@ -357,7 +357,7 @@ public partial class MainWindowViewModel : ViewModelBase
     public async Task NewProjectCommand_Executed()
     {
         ProjectCreationDialogViewModel projectCreationDialogViewModel = new(CurrentConfig, this, Log);
-        Project newProject = await new ProjectCreationDialog()
+        Project newProject = await new ProjectCreationDialog
         {
             DataContext = projectCreationDialogViewModel,
         }.ShowDialog<Project>(Window);
@@ -735,32 +735,32 @@ public partial class MainWindowViewModel : ViewModelBase
         WindowMenu.Add(MenuHeader.PROJECT, new(Strings._Project));
         WindowMenu[MenuHeader.PROJECT].Menu =
         [
-            new NativeMenuItem()
+            new NativeMenuItem
             {
                 Header = Strings.Save_Project,
                 Command = SaveProjectCommand,
                 Icon = ControlGenerator.GetIcon("Save", Log),
                 Gesture = SaveHotKey,
             },
-            new NativeMenuItem()
+            new NativeMenuItem
             {
                 Header = Strings.Project_Settings___,
                 Command = ProjectSettingsCommand,
                 Icon = ControlGenerator.GetIcon("Project_Options", Log),
             },
-            new NativeMenuItem()
+            new NativeMenuItem
             {
                 Header = Strings.Migrate_to_new_ROM,
                 Command = MigrateProjectCommand,
                 Icon = ControlGenerator.GetIcon("Migrate_ROM", Log),
             },
-            new NativeMenuItem()
+            new NativeMenuItem
             {
                 Header = Strings.Export_Patch,
                 Command = ExportPatchCommand,
                 Icon = ControlGenerator.GetIcon("Export_Patch", Log),
             },
-            new NativeMenuItem()
+            new NativeMenuItem
             {
                 Header = Strings.Close_Project,
                 Command = CloseProjectCommand,
@@ -775,37 +775,37 @@ public partial class MainWindowViewModel : ViewModelBase
         WindowMenu.Add(MenuHeader.TOOLS, new(Strings._Tools));
         WindowMenu[MenuHeader.TOOLS].Menu =
         [
-            new NativeMenuItem()
+            new NativeMenuItem
             {
                 Header = Strings.Apply_Hacks___,
                 Command = ApplyHacksCommand,
                 Icon = ControlGenerator.GetIcon("Apply_Hacks", Log),
             },
-            new NativeMenuItem()
+            new NativeMenuItem
             {
                 Header = Strings.Rename_Item,
                 Command = RenameItemCommand,
                 Icon = ControlGenerator.GetIcon("Rename_Item", Log),
             },
-            new NativeMenuItem()
+            new NativeMenuItem
             {
                 Header = Strings.Edit_UI_Text___,
                 Command = EditUiTextCommand,
                 Icon = ControlGenerator.GetIcon("Edit_UI_Text", Log),
             },
-            new NativeMenuItem()
+            new NativeMenuItem
             {
                 Header = Strings.Edit_Tutorial_Mappings___,
                 Command = EditTutorialMappingsCommand,
                 Icon = ControlGenerator.GetIcon("Tutorial", Log),
             },
-            new NativeMenuItem()
+            new NativeMenuItem
             {
                 Header = Strings.Search___,
                 Command = SearchProjectCommand,
                 Icon = ControlGenerator.GetIcon("Search", Log),
             },
-            new NativeMenuItem()
+            new NativeMenuItem
             {
                 Header = Strings.Find_Orphaned_Items___,
                 Command = FindOrphanedItemsCommand,
@@ -819,19 +819,19 @@ public partial class MainWindowViewModel : ViewModelBase
         WindowMenu.Add(MenuHeader.BUILD, new(Strings._Build));
         WindowMenu[MenuHeader.BUILD].Menu =
         [
-            new NativeMenuItem()
+            new NativeMenuItem
             {
                 Header = Strings.Build,
                 Command = BuildIterativeCommand,
                 Icon = ControlGenerator.GetIcon("Build", Log),
             },
-            new NativeMenuItem()
+            new NativeMenuItem
             {
                 Header = Strings.Build_from_Scratch,
                 Command = BuildBaseCommand,
                 Icon = ControlGenerator.GetIcon("Build_Scratch", Log),
             },
-            new NativeMenuItem()
+            new NativeMenuItem
             {
                 Header = Strings.Build_and_Run,
                 Command = BuildAndRunCommand,
@@ -843,25 +843,25 @@ public partial class MainWindowViewModel : ViewModelBase
         NativeMenu.SetMenu(Window, menu);
 
         ToolBar.Items.Clear();
-        ToolBar.Items.Add(new ToolbarButton()
+        ToolBar.Items.Add(new ToolbarButton
         {
             Text = Strings.Save,
             Command = SaveProjectCommand,
             Icon = ControlGenerator.GetVectorIcon("Save", Log),
         });
-        ToolBar.Items.Add(new ToolbarButton()
+        ToolBar.Items.Add(new ToolbarButton
         {
             Text = Strings.Build,
             Command = BuildIterativeCommand,
             Icon = ControlGenerator.GetVectorIcon("Build", Log),
         });
-        ToolBar.Items.Add(new ToolbarButton()
+        ToolBar.Items.Add(new ToolbarButton
         {
             Text = Strings.Build_and_Run,
             Command = BuildAndRunCommand,
             Icon = ControlGenerator.GetVectorIcon("Build_Run", Log),
         });
-        ToolBar.Items.Add(new ToolbarButton()
+        ToolBar.Items.Add(new ToolbarButton
         {
             Text = Strings.Search,
             Command = SearchProjectCommand,

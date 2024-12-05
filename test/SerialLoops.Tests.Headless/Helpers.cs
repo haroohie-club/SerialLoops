@@ -27,11 +27,11 @@ public static class Helpers
     {
         return new FuncControlTemplate<TreeDataGrid>((parent, scope) =>
         {
-            return new DockPanel()
+            return new DockPanel
             {
                 Children =
                 {
-                    new TreeDataGridColumnHeadersPresenter()
+                    new TreeDataGridColumnHeadersPresenter
                     {
                         Name = "PART_ColumnHeadersPresenter",
                         [DockPanel.DockProperty] = Dock.Top,
@@ -39,7 +39,7 @@ public static class Helpers
                             parent[!TreeDataGrid.ElementFactoryProperty],
                         [!TreeDataGridColumnHeadersPresenter.ItemsProperty] = parent[!TreeDataGrid.ColumnsProperty],
                     }.RegisterInNameScope(scope),
-                    new ScrollViewer()
+                    new ScrollViewer
                     {
                         Name = "PART_ScrollViewer",
                         Template = new FuncControlTemplate<ScrollViewer>((x, ns) =>
@@ -65,7 +65,7 @@ public static class Helpers
                                         [~~ScrollContentPresenter.OffsetProperty] =
                                             x[~~ScrollViewer.OffsetProperty],
                                     }.RegisterInNameScope(ns),
-                                    new ScrollBar()
+                                    new ScrollBar
                                     {
                                         Name = "horizontalScrollBar",
                                         Orientation = Orientation.Horizontal,
@@ -73,7 +73,7 @@ public static class Helpers
                                             x[~ScrollViewer.HorizontalScrollBarVisibilityProperty],
                                         [Grid.RowProperty] = 1,
                                     }.RegisterInNameScope(ns),
-                                    new ScrollBar()
+                                    new ScrollBar
                                     {
                                         Name = "verticalScrollBar",
                                         Orientation = Orientation.Vertical,

@@ -36,32 +36,32 @@ public partial class ScriptEditorView : UserControl
         window.WindowMenu.Add(MenuHeader.EDIT, new(Strings._Edit));
         window.WindowMenu[MenuHeader.EDIT].Menu =
         [
-            new NativeMenuItem()
+            new NativeMenuItem
             {
                 Header = Strings.Generate_Template,
                 Command = vm.GenerateTemplateCommand,
             },
-            new NativeMenuItem()
+            new NativeMenuItem
             {
                 Header = Strings.Apply_Template,
                 Command = vm.ApplyTemplateCommand,
                 Icon = ControlGenerator.GetIcon("Template", window.Log),
             },
-            new NativeMenuItem()
+            new NativeMenuItem
             {
                 Header = Strings.Cut,
                 Command = vm.CutCommand,
                 Icon = ControlGenerator.GetIcon("Cut", window.Log),
                 Gesture = vm.CutHotKey,
             },
-            new NativeMenuItem()
+            new NativeMenuItem
             {
                 Header = Strings.Copy,
                 Command = vm.CopyCommand,
                 Icon = ControlGenerator.GetIcon("Copy", window.Log),
                 Gesture = vm.CopyHotKey,
             },
-            new NativeMenuItem()
+            new NativeMenuItem
             {
                 Header = Strings.Paste,
                 Command = vm.PasteCommand,

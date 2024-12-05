@@ -68,7 +68,7 @@ public class PlaceItem : Item, IPreviewableGraphic
             MaxWidth = newPlaceBitmap.Width - 2,
             MaxHeight = newPlaceBitmap.Height - 12,
         };
-        placeText.AddText(spaceAdjustedText, new Style()
+        placeText.AddText(spaceAdjustedText, new Style
         {
             TextColor = SKColors.Black,
             FontFamily = msGothicHaruhi.FamilyName,
@@ -85,7 +85,7 @@ public class PlaceItem : Item, IPreviewableGraphic
             MaxWidth = newPlaceBitmap.Width - 2,
             MaxHeight = newPlaceBitmap.Height - 12,
         };
-        placeTextShadow.AddText(spaceAdjustedText, new Style()
+        placeTextShadow.AddText(spaceAdjustedText, new Style
         {
             TextColor = SKColors.Black,
             FontFamily = msGothicHaruhi.FamilyName,

@@ -84,13 +84,13 @@ public class ScriptItem : Item
                                     Event.MapCharactersSection?.Objects.Select(c => c.TalkScriptBlock)
                                         .Contains(l.Id) ?? false)
                                 .Select(l => l.Name.Replace("/", "")).Contains(s.Name)).Select(s =>
-                            new ScriptSectionEdge() { Source = section, Target = s }));
+                            new ScriptSectionEdge { Source = section, Target = s }));
                         Graph.AddEdgeRange(Event.ScriptSections.Where(s =>
                             Event.LabelsSection.Objects.Where(l =>
                                     Event.InteractableObjectsSection.Objects.Select(o => o.ScriptBlock)
                                         .Contains(l.Id))
                                 .Select(l => l.Name.Replace("/", "")).Contains(s.Name)).Select(s =>
-                            new ScriptSectionEdge() { Source = section, Target = s }));
+                            new ScriptSectionEdge { Source = section, Target = s }));
                         @continue = true;
                     }
                     else if (command.Verb == CommandVerb.GOTO)
@@ -131,7 +131,7 @@ public class ScriptItem : Item
                     {
                         Graph.AddEdgeRange(command.Parameters.Cast<ScriptSectionScriptParameter>()
                             .Where(p => p.Section is not null).Select(p =>
-                                new ScriptSectionEdge() { Source = section, Target = p.Section }));
+                                new ScriptSectionEdge { Source = section, Target = p.Section }));
                         ScriptSection miss2Section =
                             Event.ScriptSections.FirstOrDefault(s => s.Name == "NONEMiss2");
                         if (miss2Section is not null)
@@ -151,7 +151,7 @@ public class ScriptItem : Item
                                             .Cast<OptionScriptParameter>()
                                             .Where(p => p.Option.Id > 0).Select(p => p.Option.Id).Contains(l.Id))
                                     .Select(l => l.Name.Replace("/", "")).Contains(s.Name))
-                            .Select(s => new ScriptSectionEdge() { Source = section, Target = s }));
+                            .Select(s => new ScriptSectionEdge { Source = section, Target = s }));
                         @continue = true;
                     }
                     else if (command.Verb == CommandVerb.NEXT_SCENE)

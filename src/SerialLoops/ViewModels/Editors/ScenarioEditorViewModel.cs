@@ -65,7 +65,7 @@ public class ScenarioEditorViewModel : EditorViewModel
     private async void Add()
     {
         int selectedIndex = Math.Min(_scenario.Scenario.Commands.Count - 1, Commands.IndexOf(SelectedCommand));
-        ScenarioVerb? newVerb = await new AddScenarioCommandDialog() { DataContext = new AddScenarioCommandDialogViewModel() }.ShowDialog<ScenarioVerb>(Window.Window);
+        ScenarioVerb? newVerb = await new AddScenarioCommandDialog { DataContext = new AddScenarioCommandDialogViewModel() }.ShowDialog<ScenarioVerb>(Window.Window);
         if (newVerb is not null)
         {
             int param = newVerb switch

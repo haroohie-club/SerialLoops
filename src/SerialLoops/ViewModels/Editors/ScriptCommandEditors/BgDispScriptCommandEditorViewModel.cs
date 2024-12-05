@@ -27,7 +27,7 @@ public class BgDispScriptCommandEditorViewModel : ScriptCommandEditorViewModel
             this.RaiseAndSetIfChanged(ref _bg, value);
             ((BgScriptParameter)Command.Parameters[0]).Background = _bg;
             Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
-                .Objects[Command.Index].Parameters[0] = (short)_bg.Id;
+                .Objects[Command.Index].Parameters[0] = (short?)_bg?.Id ?? 0;
             ScriptEditor.UpdatePreview();
             Script.UnsavedChanges = true;
         }
@@ -45,9 +45,9 @@ public class BgDispScriptCommandEditorViewModel : ScriptCommandEditorViewModel
 
     private async Task ReplaceBg()
     {
-        GraphicSelectionDialogViewModel graphicSelectionDialog = new(new List<IPreviewableGraphic>() { NonePreviewableGraphic.BACKGROUND }.Concat(_window.OpenProject.Items.Where(i => i.Type == ItemDescription.ItemType.Background).Cast<IPreviewableGraphic>()),
+        GraphicSelectionDialogViewModel graphicSelectionDialog = new(new List<IPreviewableGraphic> { NonePreviewableGraphic.BACKGROUND }.Concat(_window.OpenProject.Items.Where(i => i.Type == ItemDescription.ItemType.Background).Cast<IPreviewableGraphic>()),
             Bg, _window.OpenProject, _window.Log, i => i.Name == "NONE" || ((BackgroundItem)i).BackgroundType == HaruhiChokuretsuLib.Archive.Data.BgType.TEX_BG);
-        IPreviewableGraphic bg = await new GraphicSelectionDialog() { DataContext = graphicSelectionDialog }.ShowDialog<IPreviewableGraphic>(_window.Window);
+        IPreviewableGraphic bg = await new GraphicSelectionDialog { DataContext = graphicSelectionDialog }.ShowDialog<IPreviewableGraphic>(_window.Window);
         if (bg is null)
         {
             return;

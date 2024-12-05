@@ -153,7 +153,7 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
     {
         GraphicSelectionDialogViewModel graphicSelectionDialog = new(_window.OpenProject.Items.Where(i => i.Type == ItemDescription.ItemType.Character_Sprite).Cast<CharacterSpriteItem>(),
             CharacterSprite, _window.OpenProject, _window.Log, _specialPredicate);
-        CharacterSpriteItem sprite = await new GraphicSelectionDialog() { DataContext = graphicSelectionDialog }.ShowDialog<CharacterSpriteItem>(_window.Window);
+        CharacterSpriteItem sprite = await new GraphicSelectionDialog { DataContext = graphicSelectionDialog }.ShowDialog<CharacterSpriteItem>(_window.Window);
         if (sprite is not null)
         {
             CharacterSprite = sprite;

@@ -151,10 +151,10 @@ public class ScriptEditorViewModel : EditorViewModel
         ApplyTemplateCommand = ReactiveCommand.CreateFromTask(ApplyTemplate);
         GenerateTemplateCommand = ReactiveCommand.CreateFromTask(GenerateTemplate);
 
-        AddCommandHotKey = new(Key.N, KeyModifiers.Control | KeyModifiers.Shift);
-        CutHotKey = new(Key.X, KeyModifiers.Control);
-        CopyHotKey = new(Key.C, KeyModifiers.Control);
-        PasteHotKey = new(Key.V, KeyModifiers.Control);
+        AddCommandHotKey = GuiExtensions.CreatePlatformAgnosticCtrlGesture(Key.N, KeyModifiers.Shift);
+        CutHotKey = GuiExtensions.CreatePlatformAgnosticCtrlGesture(Key.X);
+        CopyHotKey = GuiExtensions.CreatePlatformAgnosticCtrlGesture(Key.C);
+        PasteHotKey = GuiExtensions.CreatePlatformAgnosticCtrlGesture(Key.V);
         DeleteHotKey = new(Key.Delete);
     }
 
@@ -196,6 +196,7 @@ public class ScriptEditorViewModel : EditorViewModel
                 CommandVerb.HARUHI_METER => new HaruhiMeterScriptCommandEditorViewModel(_selectedCommand, this, _log, noShow: false),
                 CommandVerb.HARUHI_METER_NOSHOW => new HaruhiMeterScriptCommandEditorViewModel(_selectedCommand, this, _log, noShow: true),
                 CommandVerb.PALEFFECT => new PalEffectScriptCommandEditorViewModel(_selectedCommand, this, _log),
+                CommandVerb.BG_FADE => new BgFadeScriptCommandEditorViewModel(_selectedCommand, this, _log, Window),
                 CommandVerb.BACK => new EmptyScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.STOP => new EmptyScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.NOOP2 => new EmptyScriptCommandEditorViewModel(_selectedCommand, this, _log),
@@ -205,7 +206,7 @@ public class ScriptEditorViewModel : EditorViewModel
                 CommandVerb.CHESS_LOAD => new ChessLoadScriptCommandEditorViewModel(_selectedCommand, this, Window, _log),
                 CommandVerb.SCENE_GOTO_CHESS => new SceneGotoScriptCommandEditorViewModel(_selectedCommand, this, _log, Window),
                 CommandVerb.BG_DISP2 => new BgDispScriptCommandEditorViewModel(_selectedCommand, this, _log, Window),
-                _ => new(_selectedCommand, this, _log)
+                _ => new(_selectedCommand, this, _log),
             };
         }
     }
@@ -317,7 +318,7 @@ public class ScriptEditorViewModel : EditorViewModel
         }
 
         CommandVerb? newVerb =
-            await new AddScriptCommandDialog() { DataContext = new AddScriptCommandDialogViewModel() }
+            await new AddScriptCommandDialog { DataContext = new AddScriptCommandDialogViewModel() }
                 .ShowDialog<CommandVerb?>(Window.Window);
         if (newVerb is null)
         {
@@ -366,7 +367,7 @@ public class ScriptEditorViewModel : EditorViewModel
 
     private async Task AddSection()
     {
-        string sectionName = await new AddScriptSectionDialog() { DataContext = new AddScriptSectionDialogViewModel() }
+        string sectionName = await new AddScriptSectionDialog { DataContext = new AddScriptSectionDialogViewModel() }
             .ShowDialog<string>(Window.Window);
         if (string.IsNullOrEmpty(sectionName))
         {
@@ -625,7 +626,7 @@ public class ScriptEditorViewModel : EditorViewModel
 
     private async Task GenerateTemplate()
     {
-        ScriptTemplate template = await new GenerateTemplateDialog() { DataContext = new GenerateTemplateDialogViewModel(Commands, _project, _log) }
+        ScriptTemplate template = await new GenerateTemplateDialog { DataContext = new GenerateTemplateDialogViewModel(Commands, _project, _log) }
                 .ShowDialog<ScriptTemplate>(Window.Window);
         if (template is null)
         {

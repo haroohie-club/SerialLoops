@@ -81,7 +81,7 @@ public class BackgroundEditorViewModel : EditorViewModel
             SKBitmap original = Bg.GetBackground();
             SKBitmap newImage = SKBitmap.Decode(openFile.Path.LocalPath);
             ImageCropResizeDialogViewModel cropResizeDialogViewModel = new(newImage, original.Width, original.Height, _log);
-            SKBitmap finalImage = await new ImageCropResizeDialog()
+            SKBitmap finalImage = await new ImageCropResizeDialog
             {
                 DataContext = cropResizeDialogViewModel,
             }.ShowDialog<SKBitmap>(Window.Window);

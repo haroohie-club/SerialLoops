@@ -124,7 +124,7 @@ public class BackgroundMusicEditorViewModel : EditorViewModel
         using WaveFileReader reader = new(loopAdjustedWav);
         BgmLoopPropertiesDialogViewModel loopPropertiesDialog = new(reader, Bgm.Name, _log,
             ((AdxWaveProvider)BgmPlayer.Sound).LoopEnabled, ((AdxWaveProvider)BgmPlayer.Sound).LoopStartSample, ((AdxWaveProvider)BgmPlayer.Sound).LoopEndSample);
-        BgmLoopPreviewItem loopPreview = await new BgmLoopPropertiesDialog() { DataContext = loopPropertiesDialog }.ShowDialog<BgmLoopPreviewItem>(Window.Window);
+        BgmLoopPreviewItem loopPreview = await new BgmLoopPropertiesDialog { DataContext = loopPropertiesDialog }.ShowDialog<BgmLoopPreviewItem>(Window.Window);
         if (loopPreview is not null)
         {
             _loopEnabled = loopPreview.LoopEnabled;
@@ -159,7 +159,7 @@ public class BackgroundMusicEditorViewModel : EditorViewModel
         File.Copy(_bgmCachedFile, volumeAdjustedWav, true);
         using WaveFileReader reader = new(volumeAdjustedWav);
         BgmVolumePropertiesDialogViewModel volumeDialog = new(reader, Bgm.Name, _log);
-        BgmVolumePreviewItem volumePreview = await new BgmVolumePropertiesDialog() { DataContext = volumeDialog }.ShowDialog<BgmVolumePreviewItem>(Window.Window);
+        BgmVolumePreviewItem volumePreview = await new BgmVolumePropertiesDialog { DataContext = volumeDialog }.ShowDialog<BgmVolumePreviewItem>(Window.Window);
         if (volumePreview is not null)
         {
             LoopyProgressTracker secondTracker = new(Strings.Adjusting_Volume) { Total = 2 };
