@@ -49,7 +49,7 @@ public class BackgroundMusicItem : Item, ISoundItem
                 string mp3ConvertedFile = Path.Combine(Path.GetDirectoryName(bgmCachedFile), $"{Path.GetFileNameWithoutExtension(bgmCachedFile)}-converted.wav");
                 log.Log($"Converting {audioFile} to WAV...");
                 tracker.Focus("Converting from MP3...", 1);
-                using Mp3FileReaderBase mp3Reader = new(audioFile, new Mp3FileReaderBase.FrameDecompressorBuilder(wf => new Mp3FrameDecompressor(wf)));
+                using Mp3FileReaderBase mp3Reader = new(audioFile, new(wf => new Mp3FrameDecompressor(wf)));
                 WaveFileWriter.CreateWaveFile(mp3ConvertedFile, mp3Reader.ToSampleProvider().ToWaveProvider16());
                 audioFile = mp3ConvertedFile;
                 tracker.Finished++;

@@ -116,7 +116,7 @@ public class SKCropResizeCanvas : SKCanvasView
         {
             // Draw image
             canvas.DrawBitmap(SourceBitmap,
-                new SKRect(0, 0, SourceBitmap.Width, SourceBitmap.Height),
+                new(0, 0, SourceBitmap.Width, SourceBitmap.Height),
                 new SKRect(
                     ImageLocation?.X ?? 0f,
                     ImageLocation?.Y ?? 0f,
@@ -143,18 +143,18 @@ public class SKCropResizeCanvas : SKCanvasView
                     SelectionAreaLocation?.Y ?? 0f,
                     (SelectionAreaLocation?.X ?? 0f) + (FinalBitmap?.Width ?? 0f),
                     (SelectionAreaLocation?.Y ?? 0f) + (FinalBitmap?.Height ?? 0f));
-                finalCanvas.DrawImage(surface.Snapshot(), surfaceRect, new SKRect(0, 0, FinalBitmap.Width, FinalBitmap.Height),
+                finalCanvas.DrawImage(surface.Snapshot(), surfaceRect, new(0, 0, FinalBitmap.Width, FinalBitmap.Height),
                     new() { FilterQuality = SKFilterQuality.High });
                 finalCanvas.Flush();
             }
 
             //Draw UI
             SKPath uiPath = new();
-            uiPath.AddRect(new SKRect(0, 0, PreviewWidth ?? 0f, PreviewHeight ?? 0f));
+            uiPath.AddRect(new(0, 0, PreviewWidth ?? 0f, PreviewHeight ?? 0f));
             uiPath.AddRect(areaRect);
             uiPath.FillType = SKPathFillType.EvenOdd;
             this.TryFindResource("CropResizeOverlayColor", ActualThemeVariant, out object? color);
-            canvas.DrawPath(uiPath, new SKPaint { Color = ((Color)color).ToSKColor() });
+            canvas.DrawPath(uiPath, new() { Color = ((Color)color).ToSKColor() });
 
             canvas.Flush();
         }

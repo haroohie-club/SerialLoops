@@ -45,7 +45,7 @@ public static class WaveformRenderer
 
         if (settings.BackgroundColor != SKColors.Transparent)
         {
-            canvas.DrawRect(0, 0, waveformBitmap.Width, waveformBitmap.Height, new SKPaint { Color = settings.BackgroundColor });
+            canvas.DrawRect(0, 0, waveformBitmap.Width, waveformBitmap.Height, new() { Color = settings.BackgroundColor });
         }
         int midpoint = settings.TopHeight;
 

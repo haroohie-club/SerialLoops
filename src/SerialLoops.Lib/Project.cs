@@ -435,7 +435,7 @@ public partial class Project
             ChessPieceImages.Add(ChessFile.ChessPiece.BlackPawnF, blackPawn);
             ChessPieceImages.Add(ChessFile.ChessPiece.BlackPawnG, blackPawn);
             ChessPieceImages.Add(ChessFile.ChessPiece.BlackPawnH, blackPawn);
-            ChessPieceImages.Add(ChessFile.ChessPiece.Empty, new SKBitmap(16, 32));
+            ChessPieceImages.Add(ChessFile.ChessPiece.Empty, new(16, 32));
         }
         catch (Exception ex)
         {

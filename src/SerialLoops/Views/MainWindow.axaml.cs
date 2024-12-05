@@ -33,7 +33,7 @@ public partial class MainWindow : Window
         {
             menu.Items.Clear();
         }
-        NativeMenuItem fileMenu = new NativeMenuItem()
+        NativeMenuItem fileMenu = new()
         {
             Header = Strings._File,
             Menu =

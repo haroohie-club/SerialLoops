@@ -57,7 +57,7 @@ public partial class OptionsGroup : UserControl
     {
         base.Render(context);
         this.TryFindResource("GroupLineColor", ActualThemeVariant, out object? brush);
-        context.DrawRectangle(new Pen((ImmutableSolidColorBrush)brush), new Rect(RenderTransformOrigin.Point, new Point(RenderTransformOrigin.Point.X + Bounds.Size.Width - 2, RenderTransformOrigin.Point.Y + Bounds.Size.Height - 2)), 5);
+        context.DrawRectangle(new Pen((ImmutableSolidColorBrush)brush), new(RenderTransformOrigin.Point, new Point(RenderTransformOrigin.Point.X + Bounds.Size.Width - 2, RenderTransformOrigin.Point.Y + Bounds.Size.Height - 2)), 5);
     }
 }
 
@@ -108,7 +108,7 @@ public class TextOption : Option
 
     public TextOption()
     {
-        _textBox = new TextBox { Text = "", Width = 225 };
+        _textBox = new() { Text = "", Width = 225 };
         _textBox.TextChanged += (sender, args) => { OnChange?.Invoke(Value); };
     }
 
@@ -140,7 +140,7 @@ public class ComboBoxOption : Option
 
     public ComboBoxOption(List<(string Key, string Value)> options)
     {
-        _comboBox = new ComboBox();
+        _comboBox = new();
         _comboBox.Items.AddRange(options.Select(o => new ComboBoxItem { Tag = o.Key, Content = o.Value }));
         _comboBox.SelectionChanged += (sender, args) => { OnChange?.Invoke(Value); };
     }
@@ -174,7 +174,7 @@ public class BooleanOption : Option
 
     public BooleanOption()
     {
-        _checkBox = new CheckBox { IsChecked = false };
+        _checkBox = new() { IsChecked = false };
         _checkBox.IsCheckedChanged += (sender, e) => OnChange?.Invoke(Value);
     }
 
@@ -222,7 +222,7 @@ public class BooleanToggleOption : BooleanOption
 
     public BooleanToggleOption(List<Option> options)
     {
-        ToggleButton = new LinkButton { Text = _buttonText, IsEnabled = Enabled };
+        ToggleButton = new() { Text = _buttonText, IsEnabled = Enabled };
         ToggleButton.Command = ReactiveCommand.Create(() =>
         {
             options.OfType<BooleanOption>().ToList().ForEach(option => option.Value = Value);
@@ -256,11 +256,11 @@ public class FileOption : Option
 
     public FileOption(Window window)
     {
-        _pathBox = new TextBox { Text = "", Width = 225 };
+        _pathBox = new() { Text = "", Width = 225 };
         _pathBox.TextChanged += (sender, args) => { OnChange?.Invoke(Path); };
         _pathBox.IsEnabled = Enabled;
 
-        _pickerButton = new Button() { Content = "Select...", IsEnabled = Enabled };
+        _pickerButton = new() { Content = "Select...", IsEnabled = Enabled };
         _pickerButton.Command = ReactiveCommand.Create(SelectButton_OnClick);
         _window = window;
     }

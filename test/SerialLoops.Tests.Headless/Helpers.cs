@@ -46,15 +46,15 @@ public static class Helpers
                             new Grid
                             {
                                 ColumnDefinitions =
-                                    new ColumnDefinitions
+                                    new()
                                     {
-                                        new ColumnDefinition(1, GridUnitType.Star),
-                                        new ColumnDefinition(GridLength.Auto),
+                                        new(1, GridUnitType.Star),
+                                        new(GridLength.Auto),
                                     },
                                 RowDefinitions =
-                                    new RowDefinitions
+                                    new()
                                     {
-                                        new RowDefinition(1, GridUnitType.Star), new RowDefinition(GridLength.Auto),
+                                        new(1, GridUnitType.Star), new(GridLength.Auto),
                                     },
                                 Children =
                                 {

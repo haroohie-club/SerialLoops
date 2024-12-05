@@ -357,7 +357,7 @@ public static class Extensions
                 int charIndex = project.FontMap.CharMap.IndexOf(text[i]);
                 if ((charIndex + 1) * 16 <= project.FontBitmap.Height)
                 {
-                    canvas.DrawBitmap(project.FontBitmap, new SKRect(0, charIndex * 16, 16, (charIndex + 1) * 16),
+                    canvas.DrawBitmap(project.FontBitmap, new(0, charIndex * 16, 16, (charIndex + 1) * 16),
                         new SKRect(currentX, currentY, currentX + 16, currentY + 16), color);
                 }
             }

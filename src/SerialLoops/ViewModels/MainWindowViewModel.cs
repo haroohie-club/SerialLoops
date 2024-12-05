@@ -370,7 +370,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public async Task OpenProjectCommand_Executed()
     {
-        IStorageFile projectFile = await Window.ShowOpenFilePickerAsync(Strings.Open_Project, [new FilePickerFileType(Strings.Serial_Loops_Project) { Patterns = [$"*.{Project.PROJECT_FORMAT}"] }], CurrentConfig.ProjectsDirectory);
+        IStorageFile projectFile = await Window.ShowOpenFilePickerAsync(Strings.Open_Project, [new(Strings.Serial_Loops_Project) { Patterns = [$"*.{Project.PROJECT_FORMAT}"] }], CurrentConfig.ProjectsDirectory);
         if (projectFile is not null)
         {
             await OpenProjectFromPath(projectFile.Path.LocalPath);
@@ -541,7 +541,7 @@ public partial class MainWindowViewModel : ViewModelBase
                     if (!savedChrData)
                     {
                         IO.WriteStringFile(Path.Combine("assets", "data", $"{OpenProject.ChrData.Index:X3}.s"),
-                            OpenProject.ChrData.GetSource(new Dictionary<string, IncludeEntry[]>()
+                            OpenProject.ChrData.GetSource(new()
                             {
                                 { "GRPBIN", OpenProject.Grp.GetSourceInclude().Split('\n').Where(l => !string.IsNullOrWhiteSpace(l)).Select(l => new IncludeEntry(l)).ToArray() }
                             }), OpenProject, Log);

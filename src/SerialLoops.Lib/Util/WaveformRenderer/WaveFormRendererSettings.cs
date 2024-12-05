@@ -20,8 +20,8 @@ public class WaveFormRendererSettings
         BottomHeight = 50,
         PixelsPerPeak = 1,
         SpacerPixels = 0,
-        TopPeakPaint = new() { Color = new SKColor(230, 0, 83) },
-        BottomPeakPaint = new() { Color = new SKColor(179, 0, 64) },
+        TopPeakPaint = new() { Color = new(230, 0, 83) },
+        BottomPeakPaint = new() { Color = new(179, 0, 64) },
     };
 
     public WaveFormRendererSettings()

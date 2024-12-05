@@ -86,7 +86,7 @@ public class ItemExplorerPanelViewModel : ViewModelBase
 
     private ObservableCollection<ITreeItem> GetSections()
     {
-        return new ObservableCollection<ITreeItem>(Items.GroupBy(i => i.Type).OrderBy(g => LocalizeItemTypes(g.Key))
+        return new(Items.GroupBy(i => i.Type).OrderBy(g => LocalizeItemTypes(g.Key))
             .Select(g => new SectionTreeItem(
                 LocalizeItemTypes(g.Key),
                 g.Select(i => new ItemDescriptionTreeItem(i)),

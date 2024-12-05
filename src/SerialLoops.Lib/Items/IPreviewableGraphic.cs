@@ -27,6 +27,6 @@ public class NonePreviewableGraphic : ItemDescription, IPreviewableGraphic
 
     public SKBitmap GetPreview(Project project)
     {
-        return new SKBitmap(64, 64);
+        return new(64, 64);
     }
 }

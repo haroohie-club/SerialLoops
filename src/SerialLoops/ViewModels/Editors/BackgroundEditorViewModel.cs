@@ -55,10 +55,10 @@ public class BackgroundEditorViewModel : EditorViewModel
         {
             ShowOverwritePrompt = true,
             FileTypeChoices = [
-                new FilePickerFileType(Strings.PNG_Image) { Patterns = ["*.png"] }
+                new(Strings.PNG_Image) { Patterns = ["*.png"] }
             ]
         };
-        IStorageFile savedFile = await Window.Window.ShowSaveFilePickerAsync(Strings.Export_Background_Image, [new FilePickerFileType(Strings.PNG_Image) { Patterns = ["*.png"] }], $"{Bg.Name}.png");
+        IStorageFile savedFile = await Window.Window.ShowSaveFilePickerAsync(Strings.Export_Background_Image, [new(Strings.PNG_Image) { Patterns = ["*.png"] }], $"{Bg.Name}.png");
         if (savedFile is not null)
         {
             try
@@ -75,7 +75,7 @@ public class BackgroundEditorViewModel : EditorViewModel
 
     private async Task ReplaceButton_Click()
     {
-        IStorageFile openFile = await Window.Window.ShowOpenFilePickerAsync(Strings.Replace_Background_Image, [new FilePickerFileType(Strings.Supported_Images) { Patterns = Shared.SupportedImageFiletypes }]);
+        IStorageFile openFile = await Window.Window.ShowOpenFilePickerAsync(Strings.Replace_Background_Image, [new(Strings.Supported_Images) { Patterns = Shared.SupportedImageFiletypes }]);
         if (openFile is not null)
         {
             SKBitmap original = Bg.GetBackground();

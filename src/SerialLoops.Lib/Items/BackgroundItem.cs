@@ -116,7 +116,7 @@ public class BackgroundItem : Item, IPreviewableGraphic
                 List<SKColor> singlePalette = Helpers.GetPaletteFromImage(image, transparentIndex == 0 ? 255 : 256, log);
                 if (singlePalette.Count == 255)
                 {
-                    singlePalette.Insert(0, new SKColor(0, 248, 0));
+                    singlePalette.Insert(0, new(0, 248, 0));
                 }
                 Graphic1.SetPalette(singlePalette);
                 Graphic1.SetImage(image);
@@ -130,7 +130,7 @@ public class BackgroundItem : Item, IPreviewableGraphic
 
                 tracker.Focus(localize("Drawing bottom screen texture..."), 1);
                 SKCanvas textureCanvas = new(newTextureBitmap);
-                textureCanvas.DrawBitmap(image, new SKRect(0, image.Height - newTextureBitmap.Height, newTextureBitmap.Width, image.Height), new SKRect(0, 0, newTextureBitmap.Width, newTextureBitmap.Height));
+                textureCanvas.DrawBitmap(image, new(0, image.Height - newTextureBitmap.Height, newTextureBitmap.Width, image.Height), new SKRect(0, 0, newTextureBitmap.Width, newTextureBitmap.Height));
                 textureCanvas.Flush();
                 tracker.Finished++;
 
@@ -158,7 +158,7 @@ public class BackgroundItem : Item, IPreviewableGraphic
                 List<SKColor> tilePalette = Helpers.GetPaletteFromImage(image, transparentIndex == 0 ? 255 : 256, log);
                 if (tilePalette.Count == 255)
                 {
-                    tilePalette.Insert(0, new SKColor(0, 248, 0));
+                    tilePalette.Insert(0, new(0, 248, 0));
                 }
                 tracker.Finished++;
                 Graphic1.SetPalette(tilePalette);
@@ -177,12 +177,12 @@ public class BackgroundItem : Item, IPreviewableGraphic
 
                 tracker.Focus(localize("Drawing textures..."), 2);
                 SKCanvas canvas1 = new(newGraphic1);
-                canvas1.DrawBitmap(image, new SKRect(0, 0, newGraphic1.Width, newGraphic1.Height), new SKRect(0, 0, newGraphic1.Width, newGraphic1.Height));
+                canvas1.DrawBitmap(image, new(0, 0, newGraphic1.Width, newGraphic1.Height), new SKRect(0, 0, newGraphic1.Width, newGraphic1.Height));
                 canvas1.Flush();
                 tracker.Finished++;
 
                 SKCanvas canvas2 = new(newGraphic2);
-                canvas2.DrawBitmap(image, new SKRect(0, newGraphic1.Height, newGraphic2.Width, newGraphic1.Height + newGraphic2.Height), new SKRect(0, 0, newGraphic2.Width, newGraphic2.Height));
+                canvas2.DrawBitmap(image, new(0, newGraphic1.Height, newGraphic2.Width, newGraphic1.Height + newGraphic2.Height), new SKRect(0, 0, newGraphic2.Width, newGraphic2.Height));
                 canvas2.Flush();
                 tracker.Finished++;
 
@@ -190,7 +190,7 @@ public class BackgroundItem : Item, IPreviewableGraphic
                 List<SKColor> texPalette = Helpers.GetPaletteFromImage(image, transparentIndex == 0 ? 255 : 256, log);
                 if (texPalette.Count == 255)
                 {
-                    texPalette.Insert(0, new SKColor(0, 248, 0));
+                    texPalette.Insert(0, new(0, 248, 0));
                 }
                 tracker.Finished++;
                 Graphic1.SetPalette(texPalette);

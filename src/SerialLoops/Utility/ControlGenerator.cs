@@ -30,7 +30,7 @@ public static class ControlGenerator
         try
         {
             var path = $"avares://SerialLoops/Assets/Icons/{iconName}.svg";
-            return new SvgImage { Source = SvgSource.Load(path, new Uri(path)) };
+            return new() { Source = SvgSource.Load(path, new(path)) };
         }
         catch (Exception ex)
         {
@@ -43,7 +43,7 @@ public static class ControlGenerator
     {
         try
         {
-            return new Avalonia.Svg.Svg(new Uri($"avares://SerialLoops/Assets/Icons/{iconName}.svg"))
+            return new(new Uri($"avares://SerialLoops/Assets/Icons/{iconName}.svg"))
             {
                 Path = $"avares://SerialLoops/Assets/Icons/{iconName}.svg",
                 Width = size,
@@ -78,6 +78,6 @@ public static class ControlGenerator
 
     internal static TextBlock GetTextHeader(string text, int size = 14)
     {
-        return new TextBlock { Text = text, FontWeight = FontWeight.Bold, FontSize = size };
+        return new() { Text = text, FontWeight = FontWeight.Bold, FontSize = size };
     }
 }

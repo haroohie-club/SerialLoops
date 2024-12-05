@@ -47,7 +47,7 @@ internal class UpdateChecker(MainWindowViewModel mainWindowViewModel)
     {
         HttpClient client = new();
         client.DefaultRequestHeaders.UserAgent.Add(
-            new ProductInfoHeaderValue(USER_AGENT, currentVersion)
+            new(USER_AGENT, currentVersion)
         );
 
         try

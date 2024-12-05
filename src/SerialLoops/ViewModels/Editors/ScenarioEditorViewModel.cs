@@ -144,7 +144,7 @@ public class ScenarioEditorViewModel : EditorViewModel
             ScenarioVerb.LOAD_SCENE => new LoadSceneScenarioCommandEditorViewModel(command, Window.OpenProject, Window.EditorTabs),
             ScenarioVerb.PUZZLE_PHASE => new PuzzlePhaseScenarioCommandEditorViewModel(command, Window.OpenProject, Window.EditorTabs),
             ScenarioVerb.ROUTE_SELECT => new RouteSelectScenarioCommandEditorViewModel(command, Window.OpenProject, Window.EditorTabs),
-            _ => new ScenarioCommandEditorViewModel(command, Window.EditorTabs),
+            _ => new(command, Window.EditorTabs),
         };
     }
 }
