@@ -2804,4 +2804,28 @@ This action is irreversible.</value>
   <data name="Error while loading project" xml:space="preserve">
     <value>Error while loading project</value>
   </data>
+  <data name="WIPE_RIGHT" xml:space="preserve">
+    <value>Wipe Right</value>
+  </data>
+  <data name="WIPE_DOWN" xml:space="preserve">
+    <value>Wipe Down</value>
+  </data>
+  <data name="WIPE_DIAGONAL_RIGHT_DOWN" xml:space="preserve">
+    <value>Wipe Diagonal Right Down</value>
+  </data>
+  <data name="BLINDS" xml:space="preserve">
+    <value>Blinds</value>
+  </data>
+  <data name="BLINDS2" xml:space="preserve">
+    <value>Blinds (Alternative)</value>
+  </data>
+  <data name="WIPE_LEFT" xml:space="preserve">
+    <value>Wipe Left</value>
+  </data>
+  <data name="WIPE_UP" xml:space="preserve">
+    <value>Wipe Up</value>
+  </data>
+  <data name="WIPE_DIAGONAL_LEFT_UP" xml:space="preserve">
+    <value>Wipe Diagonal Left Up</value>
+  </data>
 </root>

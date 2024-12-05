@@ -743,6 +743,24 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Blinds.
+        /// </summary>
+        public static string BLINDS {
+            get {
+                return ResourceManager.GetString("BLINDS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Blinds (Alternative).
+        /// </summary>
+        public static string BLINDS2 {
+            get {
+                return ResourceManager.GetString("BLINDS2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Both.
         /// </summary>
         public static string Both {
@@ -7797,6 +7815,60 @@ namespace SerialLoops.Assets {
         public static string White_Space_End {
             get {
                 return ResourceManager.GetString("White Space End", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wipe Diagonal Left Up.
+        /// </summary>
+        public static string WIPE_DIAGONAL_LEFT_UP {
+            get {
+                return ResourceManager.GetString("WIPE_DIAGONAL_LEFT_UP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wipe Diagonal Right Down.
+        /// </summary>
+        public static string WIPE_DIAGONAL_RIGHT_DOWN {
+            get {
+                return ResourceManager.GetString("WIPE_DIAGONAL_RIGHT_DOWN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wipe Down.
+        /// </summary>
+        public static string WIPE_DOWN {
+            get {
+                return ResourceManager.GetString("WIPE_DOWN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wipe Left.
+        /// </summary>
+        public static string WIPE_LEFT {
+            get {
+                return ResourceManager.GetString("WIPE_LEFT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wipe Right.
+        /// </summary>
+        public static string WIPE_RIGHT {
+            get {
+                return ResourceManager.GetString("WIPE_RIGHT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wipe Up.
+        /// </summary>
+        public static string WIPE_UP {
+            get {
+                return ResourceManager.GetString("WIPE_UP", resourceCulture);
             }
         }
         
