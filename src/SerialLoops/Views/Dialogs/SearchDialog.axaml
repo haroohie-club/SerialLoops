@@ -1,0 +1,52 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:SerialLoops.ViewModels.Dialogs"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:assets="using:SerialLoops.Assets"
+        mc:Ignorable="d" d:DesignWidth="550" d:DesignHeight="600"
+        x:DataType="vm:SearchDialogViewModel"
+        x:Class="SerialLoops.Views.Dialogs.SearchDialog"
+        xmlns:i="using:Avalonia.Xaml.Interactivity"
+        xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
+        xmlns:panels="clr-namespace:SerialLoops.Views.Panels"
+        MinWidth="{Binding MinWidth}"
+        MinHeight="{Binding MinHeight}"
+        Width="{Binding Width}"
+        Height="{Binding Height}"
+        Icon="/Assets/serial-loops.ico"
+        Title="{x:Static assets:Strings.Search_Project}">
+    <DockPanel>
+        <Grid RowDefinitions="Auto,Auto,Auto,*" HorizontalAlignment="Center" VerticalAlignment="Top">
+            <StackPanel IsVisible="False">
+                <Button Command="{Binding CloseCommand}" HotKey="{Binding CloseKeyGesture}"></Button>
+            </StackPanel>
+            <TextBox Grid.Row="0" Name="Search" Width="520" Margin="0 10"
+                     Watermark="{x:Static assets:Strings.Search___}">
+                <i:Interaction.Behaviors>
+                    <ia:EventTriggerBehavior EventName="TextChanged" SourceObject="{Binding #Search}">
+                        <ia:InvokeCommandAction Command="{Binding SearchCommand}"
+                                                CommandParameter="{Binding #Search.Text}"/>
+                    </ia:EventTriggerBehavior>
+                    <FocusOnAttachedToVisualTreeBehavior />
+                </i:Interaction.Behaviors>
+            </TextBox>
+            <Grid Grid.Row="1" ColumnDefinitions="Auto,*">
+                <StackPanel Grid.Column="0">
+
+                </StackPanel>
+            </Grid>
+            <TextBlock Grid.Row="2" Text="{Binding ResultsCount}" TextAlignment="Center" Height="40" />
+            <TreeDataGrid Grid.Row="3" Name="Viewer" ShowColumnHeaders="False" CanUserResizeColumns="False" Source="{Binding Source}">
+                <i:Interaction.Behaviors>
+                    <ia:EventTriggerBehavior EventName="KeyUp" SourceObject="{Binding #Viewer}">
+                        <ia:InvokeCommandAction Command="{Binding OpenItemCommand}" CommandParameter="{Binding #Viewer}"/>
+                    </ia:EventTriggerBehavior>
+                    <ia:EventTriggerBehavior EventName="DoubleTapped" SourceObject="{Binding #Viewer}">
+                        <ia:InvokeCommandAction Command="{Binding OpenItemCommand}" CommandParameter="{Binding #Viewer}"/>
+                    </ia:EventTriggerBehavior>
+                </i:Interaction.Behaviors>
+            </TreeDataGrid>
+        </Grid>
+    </DockPanel>
+</Window>

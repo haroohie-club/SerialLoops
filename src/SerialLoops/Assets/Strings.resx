@@ -2804,4 +2804,7 @@ This action is irreversible.</value>
   <data name="Error while loading project" xml:space="preserve">
     <value>Error while loading project</value>
   </data>
+  <data name="Search Project" xml:space="preserve">
+    <value>Search Project</value>
+  </data>
 </root>

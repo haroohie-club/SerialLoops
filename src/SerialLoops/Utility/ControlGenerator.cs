@@ -6,6 +6,8 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Avalonia.Svg;
 using HaruhiChokuretsuLib.Util;
+using SerialLoops.Assets;
+using SerialLoops.Lib.Items;
 
 namespace SerialLoops.Utility;
 
@@ -60,6 +62,33 @@ public static class ControlGenerator
     public static string GetVectorPath(string iconName)
     {
         return $"avares://SerialLoops/Assets/Icons/{iconName}.svg";
+    }
+
+    public static string LocalizeItemTypes(ItemDescription.ItemType type)
+    {
+        return type switch
+        {
+            ItemDescription.ItemType.Background => Strings.Backgrounds,
+            ItemDescription.ItemType.BGM => Strings.BGMs,
+            ItemDescription.ItemType.Character => Strings.Characters,
+            ItemDescription.ItemType.Character_Sprite => Strings.Character_Sprites,
+            ItemDescription.ItemType.Chess_Puzzle => Strings.Chess_Puzzles,
+            ItemDescription.ItemType.Chibi => Strings.Chibis,
+            ItemDescription.ItemType.Group_Selection => Strings.Group_Selections,
+            ItemDescription.ItemType.Item => Strings.Items,
+            ItemDescription.ItemType.Layout => Strings.Layouts,
+            ItemDescription.ItemType.Map => Strings.Maps,
+            ItemDescription.ItemType.Place => Strings.Places,
+            ItemDescription.ItemType.Puzzle => Strings.Puzzles,
+            ItemDescription.ItemType.Scenario => Strings.Scenario,
+            ItemDescription.ItemType.Script => Strings.Scripts,
+            ItemDescription.ItemType.SFX => Strings.SFXs,
+            ItemDescription.ItemType.System_Texture => Strings.System_Textures,
+            ItemDescription.ItemType.Topic => Strings.Topics,
+            ItemDescription.ItemType.Transition => Strings.Transitions,
+            ItemDescription.ItemType.Voice => Strings.Voices,
+            _ => "UNKNOWN TYPE",
+        };
     }
 
     public static StackPanel GetControlWithIcon(Control control, string iconName, ILogger log)
