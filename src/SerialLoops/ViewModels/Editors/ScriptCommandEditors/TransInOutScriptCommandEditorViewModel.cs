@@ -9,7 +9,7 @@ using SerialLoops.Lib.Script.Parameters;
 
 namespace SerialLoops.ViewModels.Editors.ScriptCommandEditors;
 
-public class TransOutScriptCommandEditorViewModel : ScriptCommandEditorViewModel
+public class TransInOutScriptCommandEditorViewModel : ScriptCommandEditorViewModel
 {
     public ObservableCollection<TransitionLocalized> Transitions { get; }
         = new(Enum.GetValues<TransitionScriptParameter.TransitionEffect>().Select(t => new TransitionLocalized(t)));
@@ -27,7 +27,7 @@ public class TransOutScriptCommandEditorViewModel : ScriptCommandEditorViewModel
         }
     }
 
-    public TransOutScriptCommandEditorViewModel(ScriptItemCommand command, ScriptEditorViewModel scriptEditor, ILogger log)
+    public TransInOutScriptCommandEditorViewModel(ScriptItemCommand command, ScriptEditorViewModel scriptEditor, ILogger log)
         : base(command, scriptEditor, log)
     {
         _transition = new(((TransitionScriptParameter)Command.Parameters[0]).Transition);

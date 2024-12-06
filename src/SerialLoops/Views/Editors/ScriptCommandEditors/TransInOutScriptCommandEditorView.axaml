@@ -5,11 +5,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:assets="using:SerialLoops.Assets"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:DataType="vm:TransOutScriptCommandEditorViewModel"
-             x:Class="SerialLoops.Views.Editors.ScriptCommandEditors.TransOutScriptCommandEditorView">
+             x:DataType="vm:TransInOutScriptCommandEditorViewModel"
+             x:Class="SerialLoops.Views.Editors.ScriptCommandEditors.TransInOutScriptCommandEditorView">
     <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto">
         <TextBlock Grid.Column="0" Grid.Row="0" Text="{x:Static assets:Strings.Transition}" Margin="0,7,0,0"/>
-        <ComboBox Grid.Column="1" Grid.Row="4" Margin="10,0,0,0" ItemsSource="{Binding Transitions}" SelectedItem="{Binding Transition}">
+        <ComboBox Grid.Column="1" Grid.Row="0" Margin="10,0,0,0" ItemsSource="{Binding Transitions}" SelectedItem="{Binding Transition}">
             <ComboBox.ItemTemplate>
                 <DataTemplate DataType="vm:TransitionLocalized">
                     <TextBlock Text="{Binding DisplayText}"/>

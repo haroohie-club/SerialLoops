@@ -24,6 +24,10 @@ public partial class ScriptEditorView : UserControl
     {
         base.OnInitialized();
         MainWindowViewModel window = ((ScriptEditorViewModel)DataContext!).Window;
+        if (window.WindowMenu.ContainsKey(MenuHeader.EDIT))
+        {
+            UnloadEditMenu();
+        }
         NativeMenu menu = NativeMenu.GetMenu(window.Window)!;
         ScriptEditorViewModel vm = (ScriptEditorViewModel)DataContext!;
 
@@ -94,6 +98,11 @@ public partial class ScriptEditorView : UserControl
     protected override void OnUnloaded(RoutedEventArgs e)
     {
         base.OnUnloaded(e);
+        UnloadEditMenu();
+    }
+
+    private void UnloadEditMenu()
+    {
         MainWindowViewModel window = ((ScriptEditorViewModel)DataContext!).Window;
         NativeMenu menu = NativeMenu.GetMenu(((ScriptEditorViewModel)DataContext!).Window.Window)!;
 

@@ -4,9 +4,9 @@ using Avalonia.Markup.Xaml;
 
 namespace SerialLoops.Views.Editors.ScriptCommandEditors;
 
-public partial class TransOutScriptCommandEditorView : UserControl
+public partial class SetPlaceScriptCommandEditorView : UserControl
 {
-    public TransOutScriptCommandEditorView()
+    public SetPlaceScriptCommandEditorView()
     {
         InitializeComponent();
     }
