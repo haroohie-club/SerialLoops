@@ -48,15 +48,11 @@ public class BgDispScriptCommandEditorViewModel : ScriptCommandEditorViewModel
         GraphicSelectionDialogViewModel graphicSelectionDialog = new(new List<IPreviewableGraphic> { NonePreviewableGraphic.BACKGROUND }.Concat(_window.OpenProject.Items.Where(i => i.Type == ItemDescription.ItemType.Background).Cast<IPreviewableGraphic>()),
             Bg, _window.OpenProject, _window.Log, i => i.Name == "NONE" || ((BackgroundItem)i).BackgroundType == HaruhiChokuretsuLib.Archive.Data.BgType.TEX_BG);
         IPreviewableGraphic bg = await new GraphicSelectionDialog { DataContext = graphicSelectionDialog }.ShowDialog<IPreviewableGraphic>(_window.Window);
-        if (bg is null)
-        {
-            return;
-        }
-        else if (bg.Text == "NONE")
+        if (bg?.Text == "NONE")
         {
             Bg = null;
         }
-        else
+        else if (bg is not null)
         {
             Bg = (BackgroundItem)bg;
         }

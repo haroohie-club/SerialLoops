@@ -200,6 +200,7 @@ public class ScriptEditorViewModel : EditorViewModel
                 CommandVerb.TRANS_OUT => new TransInOutScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.TRANS_IN => new TransInOutScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.SET_PLACE => new SetPlaceScriptCommandEditorViewModel(_selectedCommand, this, _log, Window),
+                CommandVerb.ITEM_DISPIMG => new ItemDispimgScriptCommandEditorViewModel(_selectedCommand, this, _log, Window),
                 CommandVerb.BACK => new EmptyScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.STOP => new EmptyScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.NOOP2 => new EmptyScriptCommandEditorViewModel(_selectedCommand, this, _log),

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -31,7 +32,7 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
         Tabs = _window.EditorTabs;
         Characters = new(_window.OpenProject.Items.Where(i => i.Type == ItemDescription.ItemType.Character).Cast<CharacterItem>());
         _speaker = _window.OpenProject.GetCharacterBySpeaker(((DialogueScriptParameter)Command.Parameters[0]).Line.Speaker);
-        _specialPredicate = i => i.Name != "NONE" && ((CharacterSpriteItem)i).Sprite.Character == _speaker.MessageInfo.Character;
+        _specialPredicate = i => i.Name == "NONE" || ((CharacterSpriteItem)i).Sprite.Character == _speaker.MessageInfo.Character;
         _dialogueLine = ((DialogueScriptParameter)command.Parameters[0]).Line.Text;
         _characterSprite = ((SpriteScriptParameter)command.Parameters[1]).Sprite;
         SelectCharacterSpriteCommand = ReactiveCommand.CreateFromTask(SelectCharacterSpriteCommand_Executed);
@@ -131,18 +132,9 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
         set
         {
             this.RaiseAndSetIfChanged(ref _characterSprite, value);
-            if (_characterSprite is null)
-            {
-                ((SpriteScriptParameter)Command.Parameters[1]).Sprite = null;
-                Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
-                    .Objects[Command.Index].Parameters[1] = 0;
-            }
-            else
-            {
-                ((SpriteScriptParameter)Command.Parameters[1]).Sprite = _characterSprite;
-                Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
-                    .Objects[Command.Index].Parameters[1] = (short)(_characterSprite.Index);
-            }
+            ((SpriteScriptParameter)Command.Parameters[1]).Sprite = _characterSprite;
+            Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
+                .Objects[Command.Index].Parameters[1] = (short?)_characterSprite?.Index ?? 0;
             ScriptEditor.UpdatePreview();
             Script.UnsavedChanges = true;
         }
@@ -151,12 +143,16 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
 
     private async Task SelectCharacterSpriteCommand_Executed()
     {
-        GraphicSelectionDialogViewModel graphicSelectionDialog = new(_window.OpenProject.Items.Where(i => i.Type == ItemDescription.ItemType.Character_Sprite).Cast<CharacterSpriteItem>(),
+        GraphicSelectionDialogViewModel graphicSelectionDialog = new(new List<IPreviewableGraphic> { NonePreviewableGraphic.CHARACTER_SPRITE }.Concat(_window.OpenProject.Items.Where(i => i.Type == ItemDescription.ItemType.Character_Sprite).Cast<IPreviewableGraphic>()),
             CharacterSprite, _window.OpenProject, _window.Log, _specialPredicate);
-        CharacterSpriteItem sprite = await new GraphicSelectionDialog { DataContext = graphicSelectionDialog }.ShowDialog<CharacterSpriteItem>(_window.Window);
-        if (sprite is not null)
+        IPreviewableGraphic sprite = await new GraphicSelectionDialog { DataContext = graphicSelectionDialog }.ShowDialog<IPreviewableGraphic>(_window.Window);
+        if (sprite?.Text == "NONE")
         {
-            CharacterSprite = sprite;
+            CharacterSprite = null;
+        }
+        else if (sprite is not null)
+        {
+            CharacterSprite = (CharacterSpriteItem)sprite;
         }
     }
 

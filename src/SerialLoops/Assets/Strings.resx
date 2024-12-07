@@ -2828,4 +2828,22 @@ This action is irreversible.</value>
   <data name="WIPE_DIAGONAL_LEFT_UP" xml:space="preserve">
     <value>Wipe Diagonal Left Up</value>
   </data>
+  <data name="Exit" xml:space="preserve">
+    <value>Exit</value><comment>Used as a verb here</comment>
+  </data>
+  <data name="Left" xml:space="preserve">
+    <value>Left</value><comment>As in the direction or side of screen</comment>
+  </data>
+  <data name="Center" xml:space="preserve">
+    <value>Center</value><comment>As in the position on the screen</comment>
+  </data>
+  <data name="Right" xml:space="preserve">
+    <value>Right</value><comment>As in the position on the screen</comment>
+  </data>
+  <data name="Slide" xml:space="preserve">
+    <value>Slide</value><comment>Describing a transition where the item slides onto the screen</comment>
+  </data>
+  <data name="Fade" xml:space="preserve">
+    <value>Fade</value><comment>Describing a transition where the item fades in</comment>
+  </data>
 </root>
