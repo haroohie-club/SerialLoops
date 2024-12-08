@@ -40,6 +40,9 @@
                 <TabControl.Items>
                     <TabItem Header="Starting Chibis" />
                     <TabItem Header="Map Characters" />
+                    <TabItem Header="Choices">
+
+                    </TabItem>
                 </TabControl.Items>
             </TabControl>
             <StackPanel Grid.Column="1" Grid.Row="1" />
