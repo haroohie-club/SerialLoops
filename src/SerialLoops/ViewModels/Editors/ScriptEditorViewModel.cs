@@ -290,7 +290,7 @@ public class ScriptEditorViewModel : EditorViewModel
 
     public bool CanDrag(ITreeItem source)
     {
-        return !(source is ScriptSectionTreeItem);
+        return source is not ScriptSectionTreeItem;
     }
 
     private void RowSelection_SelectionChanged(object sender, TreeSelectionModelSelectionChangedEventArgs<ITreeItem> e)
@@ -513,20 +513,36 @@ public class ScriptEditorViewModel : EditorViewModel
             SectionType = typeof(ScriptSection),
             ObjectType = typeof(ScriptCommandInvocation),
         });
-        _script.Event.LabelsSection.Objects.Clear();
         ScriptSections.Clear();
         ScriptSections.Add(new(_script.Event.ScriptSections[0]));
-        _script.Event.LabelsSection.Objects.Add(new() { Id = 1, Name = "" });
+        if (_script.Event.LabelsSection?.Objects?.Count > 2)
+        {
+            _script.Event.LabelsSection.Objects.RemoveRange(1, _script.Event.LabelsSection.Objects.Count - 2);
+        }
         _commands.Clear();
         _commands.Add(_script.Event.ScriptSections[0], []);
         Commands = _commands;
 
         _script.Event.DialogueLines.Clear();
         _script.Event.DialogueSection.Objects.Clear();
-        _script.Event.ConditionalsSection.Objects.RemoveRange(1, _script.Event.ConditionalsSection.Objects.Count - 1);
-        _script.Event.ChoicesSection?.Objects?.RemoveRange(1, _script.Event.ChoicesSection.Objects.Count - 1);
-        _script.Event.StartingChibisSection?.Objects?.RemoveRange(1, _script.Event.StartingChibisSection.Objects.Count - 1);
-        _script.Event.MapCharactersSection?.Objects?.RemoveRange(1, _script.Event.MapCharactersSection.Objects.Count - 1);
+        if (_script.Event.ConditionalsSection?.Objects?.Count > 2)
+        {
+            _script.Event.ConditionalsSection.Objects.RemoveRange(1, _script.Event.ConditionalsSection.Objects.Count - 2);
+        }
+
+        if (_script.Event.ChoicesSection?.Objects?.Count > 2)
+        {
+            _script.Event.ChoicesSection?.Objects?.RemoveRange(1, _script.Event.ChoicesSection.Objects.Count - 2);
+        }
+
+        if (_script.Event.StartingChibisSection?.Objects?.Count > 2)
+        {
+            _script.Event.StartingChibisSection?.Objects?.RemoveRange(1, _script.Event.StartingChibisSection.Objects.Count - 2);
+        }
+        if (_script.Event.MapCharactersSection?.Objects?.Count > 2)
+        {
+            _script.Event.MapCharactersSection?.Objects?.RemoveRange(1, _script.Event.MapCharactersSection.Objects.Count - 2);
+        }
 
         _script.Refresh(_project, _log);
         _script.UnsavedChanges = true;
