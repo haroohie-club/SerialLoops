@@ -408,14 +408,14 @@ public class ScriptEditorViewModel : EditorViewModel
 
         _script.Event.ScriptSections.Insert(sectionIndex, section);
         _script.Event.NumSections++;
-        _script.Event.LabelsSection.Objects.Insert(sectionIndex - 1,
+        _script.Event.LabelsSection.Objects.Insert(sectionIndex,
             new()
             {
                 Name = $"NONE/{sectionName[4..]}",
                 Id = (short)(_script.Event.LabelsSection.Objects.Count == 0 ? 1001 :
                     sectionIndex == _script.Event.LabelsSection.Objects.Count ?
-                    _script.Event.LabelsSection.Objects[^1].Id + 1 :
-                    _script.Event.LabelsSection.Objects[sectionIndex + 1].Id),
+                    _script.Event.LabelsSection.Objects[^2].Id + 1 :
+                    _script.Event.LabelsSection.Objects[sectionIndex].Id + 1),
             }
         );
         for (int i = sectionIndex + 1; i < _script.Event.LabelsSection.Objects.Count; i++)
