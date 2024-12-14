@@ -2014,11 +2014,11 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Edit Save File - {0}.
+        ///   Looks up a localized string similar to Edit Save File - {0} - {1}.
         /// </summary>
-        public static string Edit_Save_File____0_ {
+        public static string Edit_Save_File____0_____1_ {
             get {
-                return ResourceManager.GetString("Edit Save File - {0}", resourceCulture);
+                return ResourceManager.GetString("Edit Save File - {0} - {1}", resourceCulture);
             }
         }
         

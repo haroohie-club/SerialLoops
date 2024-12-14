@@ -661,7 +661,7 @@
   <data name="Edit Save File" xml:space="preserve">
     <value>编辑存档文件</value>
   </data>
-  <data name="Edit Save File - {0}" xml:space="preserve">
+  <data name="Edit Save File - {0} - {1}" xml:space="preserve">
     <value>编辑存档文件 - {0}</value>
   </data>
   <data name="Edit Save File..." xml:space="preserve">

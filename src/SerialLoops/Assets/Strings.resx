@@ -704,8 +704,8 @@ This action is irreversible.</value>
   <data name="Edit Save File" xml:space="preserve">
     <value>Edit Save File</value>
   </data>
-  <data name="Edit Save File - {0}" xml:space="preserve">
-    <value>Edit Save File - {0}</value>
+  <data name="Edit Save File - {0} - {1}" xml:space="preserve">
+    <value>Edit Save File - {0} - {1}</value>
   </data>
   <data name="Edit Save File..." xml:space="preserve">
     <value>Edit Save File…</value>

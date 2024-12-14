@@ -5,6 +5,8 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SerialLoops.Assets;
 using SerialLoops.Lib.SaveFile;
+using SerialLoops.ViewModels.Dialogs;
+using SerialLoops.Views.Dialogs;
 using SkiaSharp;
 
 namespace SerialLoops.ViewModels.Controls;
@@ -38,7 +40,11 @@ public class SaveSlotPreviewViewModel : ViewModelBase
 
     private async Task EditSlot()
     {
-
+        await new SaveSlotEditorDialog()
+        {
+            DataContext = new SaveSlotEditorDialogViewModel(_save, SlotData, _save.DisplayName, SlotName,
+                _window.OpenProject, _window.Log, _window.EditorTabs),
+        }.ShowDialog(_window.Window);
     }
 
     private void ClearSlot()

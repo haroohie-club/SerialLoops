@@ -1,0 +1,90 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:vm="using:SerialLoops.ViewModels.Dialogs"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:assets="using:SerialLoops.Assets"
+        xmlns:gbox="using:GroupBox.Avalonia.Controls"
+        xmlns:utility="using:SerialLoops.Utility"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        Width="900" Height="800"
+        x:DataType="vm:SaveSlotEditorDialogViewModel"
+        x:Class="SerialLoops.Views.Dialogs.SaveSlotEditorDialog"
+        Title="{Binding Title}">
+    <ScrollViewer>
+        <Grid RowDefinitions="Auto,*" ColumnDefinitions="*">
+            <TextBlock Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" Classes="h1"
+                       Text="{Binding SlotName}" Margin="5,10" />
+            <TabControl Grid.Row="1" Grid.Column="0">
+                <TabItem IsVisible="{Binding IsCommonSave}"
+                         IsSelected="{Binding IsCommonSave}"
+                         Header="{x:Static assets:Strings.Config_Data}">
+                    <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,Auto">
+                        <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center"
+                                    Orientation="Horizontal" Spacing="3">
+                            <TextBlock Text="{x:Static assets:Strings.Number_of_Saves_}" />
+                            <NumericUpDown Value="{Binding NumSaves}" Minimum="0"
+                                           FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
+                        </StackPanel>
+
+                        <gbox:GroupBox Grid.Row="1" Grid.Column="0" Header="{x:Static assets:Strings.Volume_Config}" Margin="10"
+                                       HorizontalAlignment="Center" HorizontalContentAlignment="Center" Theme="{StaticResource GroupBoxClassic}">
+                            <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,Auto">
+                                <TextBlock Grid.Column="0" Grid.Row="0" Margin="0,7,0,0" Text="{x:Static assets:Strings.Music_}" />
+                                <NumericUpDown Grid.Column="1" Grid.Row="0" Margin="10,0,0,0"
+                                               Value="{Binding BgmVolume}" Minimum="0"
+                                               Maximum="100" FormatString="N0" Increment="1"
+                                               ParsingNumberStyle="Integer" />
+
+                                <TextBlock Grid.Column="0" Grid.Row="1" Margin="0,7,0,0" Text="{x:Static assets:Strings.Sound_Effects_}" />
+                                <NumericUpDown Grid.Column="1" Grid.Row="1" Margin="10,0,0,0"
+                                               Value="{Binding SfxVolume}" Minimum="0"
+                                               Maximum="100" FormatString="N0" Increment="1"
+                                               ParsingNumberStyle="Integer" />
+
+                                <TextBlock Grid.Column="0" Grid.Row="2" Margin="0,7,0,0" Text="{x:Static assets:Strings.Dialogue_}" />
+                                <NumericUpDown Grid.Column="1" Grid.Row="2" Margin="10,0,0,0"
+                                               Value="{Binding WordsVolume}" Minimum="0"
+                                               Maximum="100" FormatString="N0" Increment="1"
+                                               ParsingNumberStyle="Integer" />
+
+                                <TextBlock Grid.Column="0" Grid.Row="3" Margin="0,7,0,0" Text="{x:Static assets:Strings.Voices_}" />
+                                <NumericUpDown Grid.Column="1" Grid.Row="3" Margin="10,0,0,0"
+                                               Value="{Binding VoiceVolume}" Minimum="0"
+                                               Maximum="100" FormatString="N0" Increment="1"
+                                               ParsingNumberStyle="Integer" />
+                            </Grid>
+                        </gbox:GroupBox>
+                        <gbox:GroupBox Grid.Row="1" Grid.Column="1" Header="{x:Static assets:Strings.Voices_Config}" Margin="10"
+                                       HorizontalAlignment="Center" HorizontalContentAlignment="Center" Theme="{StaticResource GroupBoxClassic}">
+                            <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,Auto">
+                                <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Spacing="5" Margin="5">
+                                    <CheckBox/>
+                                    <Image Source="{Binding KyonVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
+                                    <TextBlock Text="{Binding KyonName}"/>
+                                </StackPanel>
+                                <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Spacing="5" Margin="5">
+                                    <CheckBox/>
+                                    <Image Source="{Binding HaruhiVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
+                                    <TextBlock Text="{Binding HaruhiName}"/>
+                                </StackPanel>
+                            </Grid>
+                        </gbox:GroupBox>
+                    </Grid>
+                </TabItem>
+                <TabItem IsVisible="{Binding IsSaveSlot}"
+                         IsSelected="{Binding IsSaveSlot}"
+                         Header="{x:Static assets:Strings.Save_Data}">
+
+                </TabItem>
+                <TabItem IsVisible="{Binding IsQuickSave}"
+                         Header="{x:Static assets:Strings.Script_Position}">
+
+                </TabItem>
+                <TabItem Header="{x:Static assets:Strings.Flags}">
+
+                </TabItem>
+            </TabControl>
+        </Grid>
+    </ScrollViewer>
+</Window>

@@ -1,7 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
+using HaruhiChokuretsuLib.Archive.Event;
+using HaruhiChokuretsuLib.Archive.Graphics;
+using HaruhiChokuretsuLib.Util;
 using SerialLoops.Assets;
+using SerialLoops.Lib;
+using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Util;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Gif;
@@ -39,5 +46,27 @@ public static class Shared
         tracker.Focus(Strings.Saving_GIF___, 1);
         gif.SaveAsGif(fileName);
         tracker.Finished++;
+    }
+
+    public static SKBitmap GetCharacterVoicePortrait(Project project, ILogger log, CharacterItem character)
+    {
+        ItemDescription id = project.Items.Find(i => i.Name.Equals("SYSTEX_SYS_CMN_B46"));
+        if (id is not SystemTextureItem tex)
+        {
+            log.LogError(string.Format(Strings.Failed_to_load_character_progress_voice_for__0__, character.DisplayName));
+            return null;
+        }
+        SKBitmap bitmap = tex.GetTexture();
+
+        // Crop a 16x16 bitmap portrait
+        SKBitmap portrait = new(16, 16);
+        int portraitIndex = (int)character.MessageInfo.Character;
+        int charNum = Math.Min(portraitIndex, 10) - 1;
+        int x = (charNum % 4) * 32;
+        int z = (charNum / 4) * 32;
+
+        SKRectI cropRect = new(x + 8, z + 4, x + 24, z + 20);
+        bitmap.ExtractSubset(portrait, cropRect);
+        return portrait;
     }
 }

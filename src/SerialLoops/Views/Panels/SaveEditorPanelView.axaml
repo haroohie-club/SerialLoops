@@ -19,7 +19,7 @@
             </StackPanel>
         </gbox:GroupBox>
 
-        <Button Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center">
+        <Button Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" Command="{Binding EditCommonSaveDataCommand}">
             <StackPanel Orientation="Horizontal" Spacing="3">
                 <Svg Width="22" Height="22" Path="avares://SerialLoops/Assets/Icons/Edit_Save.svg"/>
                 <TextBlock Text="{x:Static assets:Strings.Common_Save_Data___}"/>
