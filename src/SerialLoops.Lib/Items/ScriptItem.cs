@@ -239,6 +239,10 @@ public class ScriptItem : Item
                     preview.Kbg = ((BgScriptParameter)commands[i].Parameters[0]).Background;
                     break;
                 }
+                if (commands[i].Verb == CommandVerb.OP_MODE)
+                {
+                    preview.Kbg = (BackgroundItem)project.Items.First(k => k.Name == "BG_KBG04");
+                }
             }
 
             // Draw Place
