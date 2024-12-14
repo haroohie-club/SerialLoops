@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia.Platform.Storage;
+using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
 using NAudio.Wave;
 using ReactiveUI;
@@ -123,7 +124,7 @@ public class VoicedLineEditorViewModel : EditorViewModel
                 _project.VoiceMap.VoiceMapEntries.Add(new()
                 {
                     VoiceFileName = Path.GetFileNameWithoutExtension(_vce.VoiceFile),
-                    FontSize = 100,
+                    Color = DialogueColor.WHITE,
                     TargetScreen = SubtitleScreen == DsScreen.BOTTOM ? VoiceMapEntry.Screen.BOTTOM : VoiceMapEntry.Screen.TOP,
                     Timer = 350,
                 });
@@ -219,7 +220,18 @@ public class VoicedLineEditorViewModel : EditorViewModel
 
         canvas.DrawHaroohieText(
             _subtitle,
-            DialogueScriptParameter.Paint00,
+            _voiceMapEntry.Color switch
+            {
+                DialogueColor.WHITE => DialogueScriptParameter.Paint00,
+                DialogueColor.YELLOW => DialogueScriptParameter.Paint01,
+                DialogueColor.OFF_WHITE => DialogueScriptParameter.Paint02,
+                DialogueColor.GRAY => DialogueScriptParameter.Paint03,
+                DialogueColor.LAVENDER => DialogueScriptParameter.Paint04,
+                DialogueColor.RED => DialogueScriptParameter.Paint05,
+                DialogueColor.FADED_GRAY => DialogueScriptParameter.Paint06,
+                DialogueColor.BLACK => DialogueScriptParameter.Paint07,
+                _ => DialogueScriptParameter.Paint00,
+            },
             _project,
             _voiceMapEntry.X,
             _voiceMapEntry.Y + (bottomScreen ? 192 : 0),

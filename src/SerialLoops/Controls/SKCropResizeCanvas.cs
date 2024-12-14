@@ -143,7 +143,7 @@ public class SKCropResizeCanvas : SKCanvasView
                     SelectionAreaLocation?.Y ?? 0f,
                     (SelectionAreaLocation?.X ?? 0f) + (FinalBitmap?.Width ?? 0f),
                     (SelectionAreaLocation?.Y ?? 0f) + (FinalBitmap?.Height ?? 0f));
-                finalCanvas.DrawImage(surface.Snapshot(), surfaceRect, new(0, 0, FinalBitmap.Width, FinalBitmap.Height),
+                finalCanvas.DrawImage(surface.Snapshot(), surfaceRect, new SKRect(0, 0, FinalBitmap.Width, FinalBitmap.Height),
                     new() { FilterQuality = SKFilterQuality.High });
                 finalCanvas.Flush();
             }
@@ -213,7 +213,7 @@ public class SKCropResizeCanvas : SKCanvasView
         base.OnPointerMoved(e);
         e.Handled = true;
         PointerPoint point = e.GetCurrentPoint(this);
-            
+
         if (!point.Properties.IsLeftButtonPressed)
         {
             _lastPointerPosition = point.Position;

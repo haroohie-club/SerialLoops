@@ -2846,4 +2846,10 @@ This action is irreversible.</value>
   <data name="Fade" xml:space="preserve">
     <value>Fade</value><comment>Describing a transition where the item fades in</comment>
   </data>
+  <data name="Save changes to save file?" xml:space="preserve">
+    <value>Save changes to save file?</value>
+  </data>
+  <data name="Would you like to save your changes to the save file?" xml:space="preserve">
+    <value>Would you like to save your changes to the save file?</value>
+  </data>
 </root>

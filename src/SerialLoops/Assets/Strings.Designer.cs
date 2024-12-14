@@ -5789,6 +5789,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Save changes to save file?.
+        /// </summary>
+        public static string Save_changes_to_save_file_ {
+            get {
+                return ResourceManager.GetString("Save changes to save file?", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save character sprite GIF.
         /// </summary>
         public static string Save_character_sprite_GIF {
@@ -7932,6 +7941,15 @@ namespace SerialLoops.Assets {
         public static string Worst_Group {
             get {
                 return ResourceManager.GetString("Worst Group", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Would you like to save your changes to the save file?.
+        /// </summary>
+        public static string Would_you_like_to_save_your_changes_to_the_save_file_ {
+            get {
+                return ResourceManager.GetString("Would you like to save your changes to the save file?", resourceCulture);
             }
         }
         
