@@ -7,7 +7,6 @@ using Avalonia.Controls.Templates;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using SerialLoops.Assets;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Models;
@@ -63,14 +62,17 @@ public class ItemExplorerPanelViewModel : ViewModelBase
     public bool ExpandItems { get; set; }
 
     public ICommand SearchCommand { get; set; }
+    public ICommand SearchProjectCommand { get; set; }
     public ICommand OpenItemCommand { get; set; }
 
-    public ItemExplorerPanelViewModel(Project project, EditorTabsPanelViewModel tabs, ILogger log)
+    public ItemExplorerPanelViewModel(Project project, EditorTabsPanelViewModel tabs, ICommand searchProjectCommand, ILogger log)
     {
         _project = project;
         _tabs = tabs;
         _log = log;
+
         Items = new(project.Items);
+        SearchProjectCommand = searchProjectCommand;
         SearchCommand = ReactiveCommand.Create<string>(Search);
         OpenItemCommand = ReactiveCommand.Create<TreeDataGrid>(OpenItem);
     }
@@ -86,39 +88,13 @@ public class ItemExplorerPanelViewModel : ViewModelBase
 
     private ObservableCollection<ITreeItem> GetSections()
     {
-        return new ObservableCollection<ITreeItem>(Items.GroupBy(i => i.Type).OrderBy(g => LocalizeItemTypes(g.Key))
+        return new ObservableCollection<ITreeItem>(Items.GroupBy(i => i.Type)
+            .OrderBy(g => ControlGenerator.LocalizeItemTypes(g.Key))
             .Select(g => new SectionTreeItem(
-                LocalizeItemTypes(g.Key),
+                ControlGenerator.LocalizeItemTypes(g.Key),
                 g.Select(i => new ItemDescriptionTreeItem(i)),
                 ControlGenerator.GetVectorIcon(g.Key.ToString(), _log, size: 16)
             )));
-    }
-
-    private static string LocalizeItemTypes(ItemDescription.ItemType type)
-    {
-        return type switch
-        {
-            ItemDescription.ItemType.Background => Strings.Backgrounds,
-            ItemDescription.ItemType.BGM => Strings.BGMs,
-            ItemDescription.ItemType.Character => Strings.Characters,
-            ItemDescription.ItemType.Character_Sprite => Strings.Character_Sprites,
-            ItemDescription.ItemType.Chess_Puzzle => Strings.Chess_Puzzles,
-            ItemDescription.ItemType.Chibi => Strings.Chibis,
-            ItemDescription.ItemType.Group_Selection => Strings.Group_Selections,
-            ItemDescription.ItemType.Item => Strings.Items,
-            ItemDescription.ItemType.Layout => Strings.Layouts,
-            ItemDescription.ItemType.Map => Strings.Maps,
-            ItemDescription.ItemType.Place => Strings.Places,
-            ItemDescription.ItemType.Puzzle => Strings.Puzzles,
-            ItemDescription.ItemType.Scenario => Strings.Scenario,
-            ItemDescription.ItemType.Script => Strings.Scripts,
-            ItemDescription.ItemType.SFX => Strings.SFXs,
-            ItemDescription.ItemType.System_Texture => Strings.System_Textures,
-            ItemDescription.ItemType.Topic => Strings.Topics,
-            ItemDescription.ItemType.Transition => Strings.Transitions,
-            ItemDescription.ItemType.Voice => Strings.Voices,
-            _ => "UNKNOWN TYPE",
-        };
     }
 
     private void Search(string query)

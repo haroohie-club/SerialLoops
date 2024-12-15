@@ -84,7 +84,6 @@ public partial class MainWindowViewModel : ViewModelBase
     public ICommand EditUiTextCommand { get; }
     public ICommand EditTutorialMappingsCommand { get; }
     public ICommand SearchProjectCommand { get; }
-    public ICommand FindOrphanedItemsCommand { get; }
 
     public ICommand BuildIterativeCommand { get; }
     public ICommand BuildBaseCommand { get; }
@@ -95,11 +94,14 @@ public partial class MainWindowViewModel : ViewModelBase
     [Reactive]
     public KeyGesture SaveHotKey { get; set; }
     [Reactive]
+    public KeyGesture SearchHotKey { get; set; }
+    [Reactive]
     public KeyGesture CloseProjectKey { get; set; }
 
     public MainWindowViewModel()
     {
         SaveHotKey = new(Key.S, KeyModifiers.Control);
+        SearchHotKey = new(Key.F, KeyModifiers.Control);
         CloseProjectKey = new(Key.W, KeyModifiers.Control);
 
         NewProjectCommand = ReactiveCommand.CreateFromTask(NewProjectCommand_Executed);
@@ -111,6 +113,7 @@ public partial class MainWindowViewModel : ViewModelBase
         CheckForUpdatesCommand = ReactiveCommand.Create(() => new UpdateChecker(this).Check());
 
         SaveProjectCommand = ReactiveCommand.Create(SaveProject_Executed);
+        SearchProjectCommand = ReactiveCommand.Create(SearchProject_Executed);
 
         ApplyHacksCommand = ReactiveCommand.CreateFromTask(ApplyHacksCommand_Executed);
         ProjectSettingsCommand = ReactiveCommand.CreateFromTask(ProjectSettingsCommand_Executed);
@@ -179,7 +182,7 @@ public partial class MainWindowViewModel : ViewModelBase
     internal void OpenProjectView(Project project, IProgressTracker tracker)
     {
         EditorTabs = new(this, project, Log);
-        ItemExplorer = new(OpenProject, EditorTabs, Log);
+        ItemExplorer = new(OpenProject, EditorTabs, SearchProjectCommand, Log);
         ProjectPanel = new()
         {
             DataContext = new OpenProjectPanelViewModel(ItemExplorer, EditorTabs),
@@ -193,14 +196,6 @@ public partial class MainWindowViewModel : ViewModelBase
         _blankNameplateBaseArrow = SKBitmap.Decode(blankNameplateBaseArrowStream);
         using Stream typefaceStream = AssetLoader.Open(new("avares://SerialLoops/Assets/Graphics/MS-Gothic-Haruhi.ttf"));
         _msGothicHaruhi = SKTypeface.FromStream(typefaceStream);
-
-        //Button advancedSearchButton = new() { Content = "...", Width = 25, Command = SearchProjectCommand };
-        //advancedSearchButton.Click += Search_Executed;
-        //TableLayout searchBarLayout = new(new TableRow(
-        //    SearchBox,
-        //    new StackLayout { Items = { advancedSearchButton }, Width = 25 }
-        //))
-        //{ Spacing = new(5, 0) };
 
         Title = $"{BASE_TITLE} - {project.Name}";
 
@@ -617,6 +612,20 @@ public partial class MainWindowViewModel : ViewModelBase
         }
     }
 
+    public void SearchProject_Executed()
+    {
+        if (OpenProject == null)
+        {
+            return;
+        }
+
+        SearchDialogViewModel searchDialogViewModel = new();
+        SearchDialog searchDialog = new();
+        searchDialogViewModel.Initialize(searchDialog, OpenProject, EditorTabs, Log);
+        searchDialog.DataContext = searchDialogViewModel;
+        searchDialog.ShowDialog(Window);
+    }
+
     public async Task BuildIterative_Executed()
     {
         if (OpenProject is not null)
@@ -804,13 +813,8 @@ public partial class MainWindowViewModel : ViewModelBase
                 Header = Strings.Search___,
                 Command = SearchProjectCommand,
                 Icon = ControlGenerator.GetIcon("Search", Log),
-            },
-            new NativeMenuItem()
-            {
-                Header = Strings.Find_Orphaned_Items___,
-                Command = FindOrphanedItemsCommand,
-                Icon = ControlGenerator.GetIcon("Orphan_Search", Log),
-            },
+                Gesture = SearchHotKey
+            }
         ];
         menu.Items.Insert(insertionPoint, WindowMenu[MenuHeader.TOOLS]);
         insertionPoint++;

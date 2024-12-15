@@ -3,6 +3,7 @@
              xmlns:vm="using:SerialLoops.ViewModels.Panels"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:assets="using:SerialLoops.Assets"
              xmlns:i="using:Avalonia.Xaml.Interactivity"
              xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -10,14 +11,17 @@
              x:Class="SerialLoops.Views.Panels.ItemExplorerPanel">
 
     <Grid RowDefinitions="Auto,*">
-        <TextBox Grid.Row="0" Name="Search">
-            <i:Interaction.Behaviors>
-                <ia:EventTriggerBehavior EventName="TextChanged" SourceObject="{Binding #Search}">
-                    <ia:InvokeCommandAction Command="{Binding SearchCommand}" CommandParameter="{Binding #Search.Text}"/>
-                </ia:EventTriggerBehavior>
-            </i:Interaction.Behaviors>
-        </TextBox>
-        <TreeDataGrid Grid.Row="1" Name="Viewer" Source="{Binding Source}">
+        <StackPanel Grid.Row="0" Margin="10" Orientation="Horizontal" HorizontalAlignment="Stretch" Spacing="10">
+            <TextBox Name="Search" Focusable="True" Width="240" Height="30" Watermark="{x:Static assets:Strings.Search___}">
+                <i:Interaction.Behaviors>
+                    <ia:EventTriggerBehavior EventName="TextChanged" SourceObject="{Binding #Search}">
+                        <ia:InvokeCommandAction Command="{Binding SearchCommand}" CommandParameter="{Binding #Search.Text}"/>
+                    </ia:EventTriggerBehavior>
+                </i:Interaction.Behaviors>
+            </TextBox>
+            <Button Command="{Binding SearchProjectCommand}" Width="30" Height="30">...</Button>
+        </StackPanel>
+        <TreeDataGrid Grid.Row="1" Margin="5" ShowColumnHeaders="False" CanUserResizeColumns="False" Name="Viewer" Source="{Binding Source}">
             <i:Interaction.Behaviors>
                 <ia:EventTriggerBehavior EventName="KeyUp" SourceObject="{Binding #Viewer}">
                     <ia:InvokeCommandAction Command="{Binding OpenItemCommand}" CommandParameter="{Binding #Viewer}"/>
