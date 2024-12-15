@@ -84,7 +84,6 @@ public partial class MainWindowViewModel : ViewModelBase
     public ICommand EditUiTextCommand { get; }
     public ICommand EditTutorialMappingsCommand { get; }
     public ICommand SearchProjectCommand { get; }
-    public ICommand FindOrphanedItemsCommand { get; }
 
     public ICommand BuildIterativeCommand { get; }
     public ICommand BuildBaseCommand { get; }
@@ -815,13 +814,7 @@ public partial class MainWindowViewModel : ViewModelBase
                 Command = SearchProjectCommand,
                 Icon = ControlGenerator.GetIcon("Search", Log),
                 Gesture = SearchHotKey
-            },
-            new NativeMenuItem()
-            {
-                Header = Strings.Find_Orphaned_Items___,
-                Command = FindOrphanedItemsCommand,
-                Icon = ControlGenerator.GetIcon("Orphan_Search", Log),
-            },
+            }
         ];
         menu.Items.Insert(insertionPoint, WindowMenu[MenuHeader.TOOLS]);
         insertionPoint++;

@@ -20,6 +20,7 @@ public class SectionTreeItem(string sectionName, IEnumerable<ITreeItem> children
         StackPanel panel = new()
         {
             Orientation = Orientation.Horizontal,
+            VerticalAlignment = VerticalAlignment.Center,
             Spacing = 3,
         };
         if (Icon is not null)
@@ -30,7 +31,7 @@ public class SectionTreeItem(string sectionName, IEnumerable<ITreeItem> children
             }
             panel.Children.Add(Icon);
         }
-        panel.Children.Add(new TextBlock { Text = Text });
+        panel.Children.Add(new TextBlock { Text = Text, VerticalAlignment = VerticalAlignment.Center });
         return panel;
     }
 }

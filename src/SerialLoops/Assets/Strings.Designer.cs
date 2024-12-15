@@ -427,7 +427,7 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All Off.
+        ///   Looks up a localized string similar to Toggle All Off.
         /// </summary>
         public static string All_Off {
             get {
@@ -436,7 +436,7 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All On.
+        ///   Looks up a localized string similar to Toggle All On.
         /// </summary>
         public static string All_On {
             get {

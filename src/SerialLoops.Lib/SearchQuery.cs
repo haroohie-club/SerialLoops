@@ -26,6 +26,7 @@ public class SearchQuery
         Background_Type = 15,
         Episode_Number = 16,
         Episode_Unique = 17,
+        Orphaned_Items = 18
     }
 
     public static SearchQuery Create(string text)

@@ -202,11 +202,11 @@
     <value>All data will be erased prompt message box</value>
   </data>
   <data name="All Off" xml:space="preserve">
-    <value>All Off</value>
+    <value>Toggle All Off</value>
     <comment>Turn all boolean options off</comment>
   </data>
   <data name="All On" xml:space="preserve">
-    <value>All On</value>
+    <value>Toggle All On</value>
     <comment>Turn all boolean options on</comment>
   </data>
   <data name="Animation" xml:space="preserve">
