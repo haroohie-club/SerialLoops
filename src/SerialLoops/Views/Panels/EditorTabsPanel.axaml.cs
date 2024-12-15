@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using Avalonia.Controls;
 using SerialLoops.ViewModels.Editors;
 using SerialLoops.ViewModels.Panels;

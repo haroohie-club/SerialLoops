@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading;
-using HaruhiChokuretsuLib.Archive.Event;
-using HaruhiChokuretsuLib.Archive.Graphics;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Assets;
 using SerialLoops.Lib;

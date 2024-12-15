@@ -82,7 +82,7 @@
 
                 </TabItem>
                 <TabItem Header="{x:Static assets:Strings.Flags}">
-
+                    <Image Source="{Binding KyonVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
                 </TabItem>
             </TabControl>
         </Grid>

@@ -22,7 +22,6 @@ public class SaveSlotEditorDialogViewModel : ViewModelBase
     public string Title { get; }
     public SaveSection SaveSection { get; }
     public string SlotName { get; }
-    public string FirstTabName { get; }
     private Project _project;
     private EditorTabsPanelViewModel _tabs;
 

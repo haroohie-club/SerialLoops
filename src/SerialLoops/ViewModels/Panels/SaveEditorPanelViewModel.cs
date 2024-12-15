@@ -1,7 +1,5 @@
-using System.Runtime.InteropServices.JavaScript;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using HaruhiChokuretsuLib.Save;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
 using SerialLoops.Assets;
