@@ -110,6 +110,7 @@ public partial class Project
     public Func<string, string> Localize { get; set; }
 
     private static readonly string[] NON_SCRIPT_EVT_FILES = ["CHESSS", "EVTTBLS", "TOPICS", "SCENARIOS", "TUTORIALS", "VOICEMAPS"];
+    private static readonly ItemType[] IGNORED_ORPHAN_TYPES = [ ItemType.Layout, ItemType.Scenario ];
 
     public Project()
     {
@@ -1357,6 +1358,15 @@ public partial class Project
                     return ItemIsInEpisode(item, episodeNumUnique, unique: true);
                 }
                 return false;
+
+            case SearchQuery.DataHolder.Orphaned_Items:
+                if (IGNORED_ORPHAN_TYPES.Contains(item.Type)
+                    // assume SFX that are in groups are referenced in code. william doesn't quite know what jonko means here but he trusts the process
+                    || (item is SfxItem sfx && sfx.Name.Contains("SSE") && sfx.AssociatedGroups.Count > 0))
+                {
+                    return false;
+                }
+                return item.GetReferencesTo(this).Count == 0;
 
             default:
                 logger.LogError($"Unimplemented search scope: {scope}");

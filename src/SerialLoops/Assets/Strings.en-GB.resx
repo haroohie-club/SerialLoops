@@ -2483,4 +2483,7 @@
   <data name="There is no recorded base ROM hash for this project. This is likely because this project was created with an older version of Serial Loops. Please select the base ROM used for this project so the hash can be recorded now." xml:space="preserve">
     <value>There is no recorded base ROM hash for this project. This is likely because this project was created with an older version of Serial Loops. Please select the base ROM used for this project so the hash can be recorded now.</value>
   </data>
+  <data name="Search Project" xml:space="preserve">
+    <value>Search Project</value>
+  </data>
 </root>
