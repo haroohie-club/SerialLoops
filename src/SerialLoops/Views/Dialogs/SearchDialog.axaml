@@ -9,25 +9,25 @@
         x:Class="SerialLoops.Views.Dialogs.SearchDialog"
         xmlns:i="using:Avalonia.Xaml.Interactivity"
         xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
-        xmlns:panels="clr-namespace:SerialLoops.Views.Panels"
         MinWidth="{Binding MinWidth}"
         MinHeight="{Binding MinHeight}"
         Width="{Binding Width}"
         Height="{Binding Height}"
         Icon="/Assets/serial-loops.ico"
-        Title="{x:Static assets:Strings.Search_Project}">
+        Title="{x:Static assets:Strings.Search_Project}"
+        Name="SearchDialog">
     <DockPanel>
         <Grid RowDefinitions="Auto,Auto,Auto,*" HorizontalAlignment="Center" VerticalAlignment="Top">
             <StackPanel IsVisible="False">
-                <Button Command="{Binding CloseCommand}" HotKey="{Binding CloseKeyGesture}"></Button>
-                <Button Command="{Binding DeepSearchCommand}" HotKey="{Binding DeepSearchGesture}"></Button>
+                <Button Command="{Binding CloseCommand}" CommandParameter="{Binding #SearchDialog}" HotKey="{Binding CloseHotKey}"></Button>
+                <Button Command="{Binding DeepSearchCommand}" CommandParameter="{Binding #SearchDialog}" HotKey="{Binding DeepSearchHotKey}"></Button>
             </StackPanel>
             <TextBox Grid.Row="0" Name="Search" Width="520" Margin="0 10"
                      Watermark="{x:Static assets:Strings.Search___}">
                 <i:Interaction.Behaviors>
                     <ia:EventTriggerBehavior EventName="TextChanged" SourceObject="{Binding #Search}">
                         <ia:InvokeCommandAction Command="{Binding SearchCommand}"
-                                                CommandParameter="{Binding #Search.Text}"/>
+                                                CommandParameter="{Binding #SearchDialog}"/>
                     </ia:EventTriggerBehavior>
                     <FocusOnAttachedToVisualTreeBehavior />
                 </i:Interaction.Behaviors>
@@ -36,7 +36,11 @@
                 <!-- Scope filters -->
                 <StackPanel Grid.Column="0" Spacing="5" Margin="0 0 5 0">
                     <TextBlock FontWeight="Bold" Text="{x:Static assets:Strings.Search_Scope}" />
-                    <Grid Name="ScopeFiltersGrid" ColumnDefinitions="*,Auto,*,Auto" RowDefinitions="*,*,*,*,*,*,Auto" />
+                    <ItemsRepeater>
+                        <ItemsRepeater.Layout>
+                            <UniformGridLayout Orientation="Vertical" MaximumRowsOrColumns="5"/>
+                        </ItemsRepeater.Layout>
+                    </ItemsRepeater>
                 </StackPanel>
                 <!-- Item type filters -->
                 <StackPanel Grid.Column="1" Spacing="5" Margin="5 0 0 0">

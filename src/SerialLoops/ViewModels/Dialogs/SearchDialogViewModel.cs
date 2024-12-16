@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Controls.Templates;
@@ -39,16 +39,18 @@ public class SearchDialogViewModel : ViewModelBase
     [Reactive]
     public string SearchStatusLabel { get; private set; } = Strings.Search_Project;
     [Reactive]
-    public KeyGesture CloseKeyGesture { get; private set;  }
+    public KeyGesture CloseHotKey { get; private set;  }
     [Reactive]
-    public KeyGesture DeepSearchGesture { get; private set;  }
+    public KeyGesture DeepSearchHotKey { get; private set;  }
     [Reactive]
     public HierarchicalTreeDataGridSource<ITreeItem> Source { get; private set; }
 
     private ILogger _log;
     private Project _project;
     private EditorTabsPanelViewModel _tabs;
-    private SearchDialog _searchDialog;
+
+    [Reactive]
+    public string SearchText { get; set; }
 
     private List<CheckBox> _itemFilterCheckBoxes = [];
     private HashSet<SearchQuery.DataHolder> _checkedSearchScopes = [SearchQuery.DataHolder.Title];
@@ -81,7 +83,7 @@ public class SearchDialogViewModel : ViewModelBase
 
     private ObservableCollection<ITreeItem> GetSections()
     {
-        return new ObservableCollection<ITreeItem>(Items.GroupBy(i => i.Type)
+        return new(Items.GroupBy(i => i.Type)
             .OrderBy(g => ControlGenerator.LocalizeItemTypes(g.Key))
             .Select(g => new SectionTreeItem(
                 ControlGenerator.LocalizeItemTypes(g.Key),
@@ -92,7 +94,7 @@ public class SearchDialogViewModel : ViewModelBase
 
     private SearchQuery GetQuery(string query)
     {
-        return new SearchQuery
+        return new()
         {
             Term = query,
             Scopes = _checkedSearchScopes,
@@ -101,41 +103,39 @@ public class SearchDialogViewModel : ViewModelBase
     }
 
 
-    public void Initialize(SearchDialog searchDialog, Project project, EditorTabsPanelViewModel tabs, ILogger log)
+    public SearchDialogViewModel(Project project, EditorTabsPanelViewModel tabs, ILogger log)
     {
-        _searchDialog = searchDialog;
         _project = project;
         _tabs = tabs;
         _log = log;
 
-        SearchCommand = ReactiveCommand.Create<string>(Search);
-        DeepSearchCommand = ReactiveCommand.Create(() => Search(_searchDialog.Search.Text, true));
-        ReactiveCommand.Create<TextBox>(box => box.Focus());
+        SearchCommand = ReactiveCommand.CreateFromTask<SearchDialog>(Search);
+        DeepSearchCommand = ReactiveCommand.CreateFromTask<SearchDialog>(DeepSearch);
         OpenItemCommand = ReactiveCommand.Create<TreeDataGrid>(OpenItem);
-        CloseCommand = ReactiveCommand.Create(_searchDialog.Close);
-        CloseKeyGesture = new KeyGesture(Key.Escape);
-        DeepSearchGesture = new KeyGesture(Key.Enter);
+        CloseCommand = ReactiveCommand.Create<SearchDialog>(dialog => dialog.Close());
+        CloseHotKey = new(Key.Escape);
+        DeepSearchHotKey = new(Key.Enter);
 
         PopulateSearchScopeFilters();
         PopulateSearchItemFilters();
     }
 
-    public void DeepSearch(string text) => Search(text, true);
-    public void Search(string text) => Search(text, false);
+    public async Task DeepSearch(SearchDialog dialog) => await Search(dialog, true);
+    public async Task Search(SearchDialog dialog) => await Search(dialog, false);
 
-    public async void Search(string text, bool force)
+    public async Task Search(SearchDialog dialog, bool force)
     {
-        SearchQuery query = GetQuery(text ?? string.Empty);
+        SearchQuery query = GetQuery(SearchText ?? string.Empty);
 
         switch (query.QuickSearch)
         {
             case false when !force:
                 SearchStatusLabel = Strings.Press_ENTER_to_execute_search;
                 return;
-            case true when string.IsNullOrWhiteSpace(text):
+            case true when string.IsNullOrWhiteSpace(SearchText):
             {
                 SearchStatusLabel = Strings.Search_Project;
-                Items = new ObservableCollection<ItemDescription>();
+                Items = new();
                 break;
             }
             case true:
@@ -150,7 +150,7 @@ public class SearchDialogViewModel : ViewModelBase
                 SearchStatusLabel = Strings.Press_ENTER_to_execute_search;
                 if (query.Scopes.Count is 0 || query.Types.Count is 0)
                 {
-                    await _searchDialog.ShowMessageBoxAsync(Strings.Please_select_at_least_one_search_scope_and_item_filter_, Strings.Invalid_search_terms, ButtonEnum.Ok, Icon.Error, _log);
+                    await dialog.ShowMessageBoxAsync(Strings.Please_select_at_least_one_search_scope_and_item_filter_, Strings.Invalid_search_terms, ButtonEnum.Ok, Icon.Error, _log);
                     return;
                 }
                 LoopyProgressTracker tracker = new(Strings.Searching);
@@ -160,7 +160,7 @@ public class SearchDialogViewModel : ViewModelBase
                     {
                         Items = new(results);
                         SearchStatusLabel = string.Format(Strings._0__results_found, _items.Count);
-                    }, tracker, string.Format(Strings.Searching__0____, _project.Name)).ShowDialog(_searchDialog);;
+                    }, tracker, string.Format(Strings.Searching__0____, _project.Name)).ShowDialog(dialog);;
                 break;
             }
         }
@@ -168,13 +168,11 @@ public class SearchDialogViewModel : ViewModelBase
 
     public void OpenItem(TreeDataGrid viewer)
     {
-        ItemDescription item = _project.FindItem(((ITreeItem)viewer.RowSelection.SelectedItem)?.Text);
+        ItemDescription item = _project.FindItem(((ITreeItem)viewer.RowSelection?.SelectedItem)?.Text);
         if (item is null)
         {
             return;
         }
-
-        _searchDialog.Close();
         _tabs.OpenTab(item);
     }
 
@@ -194,7 +192,7 @@ public class SearchDialogViewModel : ViewModelBase
 
             var box = new CheckBox {
                 IsChecked = _checkedSearchScopes.Contains(scope),
-                Margin = new Thickness(10, 0)
+                Margin = new(10, 0)
             };
             box.SetValue(Grid.ColumnProperty, col + 1);
             box.SetValue(Grid.RowProperty, row);
@@ -208,8 +206,8 @@ public class SearchDialogViewModel : ViewModelBase
                 _checkedSearchScopes.Add(scope);
             };
 
-            _searchDialog.ScopeFiltersGrid.Children.Add(label);
-            _searchDialog.ScopeFiltersGrid.Children.Add(box);
+            // _searchDialog.ScopeFiltersGrid.Children.Add(label);
+            // _searchDialog.ScopeFiltersGrid.Children.Add(box);
 
             row++;
             if (row > 6)
@@ -239,7 +237,7 @@ public class SearchDialogViewModel : ViewModelBase
 
             var box = new CheckBox {
                 IsChecked = _checkedItemScopes.Contains(type),
-                Margin = new Thickness(10, 0)
+                Margin = new(10, 0)
             };
             box.SetValue(Grid.ColumnProperty, col + 1);
             box.SetValue(Grid.RowProperty, row);
@@ -254,8 +252,8 @@ public class SearchDialogViewModel : ViewModelBase
             };
             _itemFilterCheckBoxes.Add(box);
 
-            _searchDialog.TypeFiltersGrid.Children.Add(label);
-            _searchDialog.TypeFiltersGrid.Children.Add(box);
+            // _searchDialog.TypeFiltersGrid.Children.Add(label);
+            // _searchDialog.TypeFiltersGrid.Children.Add(box);
 
             // Span across 3 cols
             row++;
@@ -279,14 +277,13 @@ public class SearchDialogViewModel : ViewModelBase
             Orientation = Orientation.Horizontal,
             HorizontalAlignment = HorizontalAlignment.Center,
             VerticalAlignment = VerticalAlignment.Center,
-            Margin = new Thickness(0, 5),
+            Margin = new(0, 5),
             Children = { toggleButton }
         };
         toggleStack.SetValue(Grid.ColumnProperty, col);
         toggleStack.SetValue(Grid.RowProperty, row);
         toggleStack.SetValue(Grid.ColumnSpanProperty, 2);
 
-        _searchDialog.TypeFiltersGrid.Children.Add(toggleStack);
+        // _searchDialog.TypeFiltersGrid.Children.Add(toggleStack);
     }
-
 }
