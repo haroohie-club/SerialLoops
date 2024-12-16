@@ -619,7 +619,7 @@ public partial class MainWindowViewModel : ViewModelBase
             return;
         }
         SearchDialog searchDialog = new() { DataContext = new SearchDialogViewModel(OpenProject, EditorTabs, Log) };
-        searchDialog.ShowDialog(Window);
+        searchDialog.Show(Window);
     }
 
     public async Task BuildIterative_Executed()

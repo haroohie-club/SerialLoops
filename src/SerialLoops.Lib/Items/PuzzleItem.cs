@@ -11,7 +11,7 @@ public class PuzzleItem : Item
     public PuzzleFile Puzzle { get; set; }
     public SKBitmap SingularityImage { get; set; }
 
-    public PuzzleItem(PuzzleFile puzzleFile, Project project, ILogger log) : base(puzzleFile.Name[0..^1], ItemType.Puzzle)
+    public PuzzleItem(PuzzleFile puzzleFile, Project project, ILogger log) : base(puzzleFile.Name[..^1], ItemType.Puzzle)
     {
         Puzzle = puzzleFile;
         Refresh(project, log);

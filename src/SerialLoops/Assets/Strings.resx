@@ -1608,7 +1608,7 @@ Please set the path to a Nintendo DS emulator or specify a Nintendo DS emulator 
   <data name="Option 4" xml:space="preserve">
     <value>Option 4</value>
   </data>
-  <data name="Orphaned Items" xml:space="preserve">
+  <data name="Orphaned_Items" xml:space="preserve">
     <value>Orphaned Items</value>
   </data>
   <data name="Outline Color" xml:space="preserve">

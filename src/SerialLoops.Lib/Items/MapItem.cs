@@ -14,7 +14,7 @@ public class MapItem : Item
     public MapItem(string name) : base(name, ItemType.Map)
     {
     }
-    public MapItem(MapFile map, int qmapIndex, Project project) : base(map.Name[0..^1], ItemType.Map)
+    public MapItem(MapFile map, int qmapIndex, Project project) : base(map.Name[..^1], ItemType.Map)
     {
         Map = map;
         QmapIndex = qmapIndex;

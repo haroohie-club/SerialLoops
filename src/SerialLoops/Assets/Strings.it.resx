@@ -1735,7 +1735,7 @@
   <data name="FLAC files" xml:space="preserve">
     <value>file FLAC</value>
   </data>
-  <data name="Orphaned Items" xml:space="preserve">
+  <data name="Orphaned_Items" xml:space="preserve">
     <value>Oggetti senza collegamenti</value>
   </data>
   <data name="Search for items by name, ID, or type." xml:space="preserve">
