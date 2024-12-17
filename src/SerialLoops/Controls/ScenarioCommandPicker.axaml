@@ -1,0 +1,26 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="using:SerialLoops.ViewModels.Controls"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:ScenarioCommandPickerViewModel"
+             x:Class="SerialLoops.Controls.ScenarioCommandPicker">
+    <StackPanel Orientation="Horizontal" Spacing="5">
+        <TextBlock Text="{Binding ScenarioCommandIndex}" Margin="0,7,0,0"/>
+        <Button Content="{Binding ScenarioCommandText}">
+            <Button.Flyout>
+                <Flyout>
+                    <ScrollViewer>
+                        <Grid Width="300" Height="200">
+                            <ListBox ItemsSource="{Binding ScenarioCommands}"
+                                     SelectedIndex="{Binding ScenarioCommandIndex}"
+                                     AutoScrollToSelectedItem="True"/>
+                        </Grid>
+                    </ScrollViewer>
+                </Flyout>
+            </Button.Flyout>
+        </Button>
+    </StackPanel>
+</UserControl>
+

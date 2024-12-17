@@ -2855,4 +2855,7 @@ This action is irreversible.</value>
   <data name="Search Project" xml:space="preserve">
     <value>Search Project</value>
   </data>
+  <data name="Friendship Levels" xml:space="preserve">
+    <value>Friendship Levels</value>
+  </data>
 </root>

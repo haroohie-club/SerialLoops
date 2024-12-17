@@ -9,7 +9,6 @@ using HaruhiChokuretsuLib.Util;
 using SerialLoops.Assets;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
-using SerialLoops.ViewModels.Dialogs;
 
 namespace SerialLoops.Utility;
 

@@ -26,7 +26,7 @@ public class Flags
             return string.Format(project.Localize("{0} Obtained"), topic.DisplayName);
         }
 
-        TopicItem readTopic = (TopicItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Topic && 
+        TopicItem readTopic = (TopicItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Topic &&
                                                                            ((((TopicItem)i).TopicEntry.Type == TopicType.Main && ((TopicItem)i).HiddenMainTopic is not null && ((TopicItem)i).TopicEntry.Id + 3463 == flag) ||
                                                                             (((TopicItem)i).TopicEntry.Type != TopicType.Main && ((TopicItem)i).TopicEntry.Id + 3451 == flag)));
         if (readTopic is not null)
@@ -46,7 +46,7 @@ public class Flags
             return string.Format(project.Localize("{0} ({1}) Seen"), bg.CgName, bg.DisplayName);
         }
 
-        GroupSelectionItem groupSelection = (GroupSelectionItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Group_Selection && 
+        GroupSelectionItem groupSelection = (GroupSelectionItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Group_Selection &&
             ((GroupSelectionItem)i).Selection.Activities.Any(a => a?.Routes.Any(r => r?.Flag == flag) ?? false));
         if (groupSelection is not null)
         {
@@ -54,7 +54,7 @@ public class Flags
             return string.Format(project.Localize("Route \"{0}\" Completed"), route.Title.GetSubstitutedString(project));
         }
 
-        ScriptItem script = (ScriptItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Script &&
+        ScriptItem script = (ScriptItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Script && ((ScriptItem)i).StartReadFlag > 0 &&
                                                                           flag >= ((ScriptItem)i).StartReadFlag && flag < ((ScriptItem)i).StartReadFlag + ((ScriptItem)i).Event.ScriptSections.Count);
         if (script is not null)
         {
