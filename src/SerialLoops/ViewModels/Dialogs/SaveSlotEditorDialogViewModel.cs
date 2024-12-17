@@ -257,11 +257,11 @@ public class SaveSlotEditorDialogViewModel : ViewModelBase
     {
         if (string.IsNullOrWhiteSpace(FlagFilter))
         {
-            return;
+            FlagFilter = "";
         }
         _filteredFlags = [.. HideUnsetFlags
-            ? _filteredFlags.Where(f => f.IsSet && f.Description.Contains(FlagFilter, StringComparison.OrdinalIgnoreCase))
-            : _filteredFlags.Where(f => f.Description.Contains(FlagFilter.Trim(), StringComparison.OrdinalIgnoreCase))];
+            ? _flags.Where(f => f.IsSet && f.Description.Contains(FlagFilter, StringComparison.OrdinalIgnoreCase))
+            : _flags.Where(f => f.Description.Contains(FlagFilter.Trim(), StringComparison.OrdinalIgnoreCase))];
         NumPages = _filteredFlags.Length / 12 + (_filteredFlags.Length % 12 == 0 ? 0 : 1);
         FlagPage = 1;
     }
