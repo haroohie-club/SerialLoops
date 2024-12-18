@@ -713,7 +713,7 @@ public class ScriptItemCommand : ReactiveObject
         switch (Verb)
         {
             case CommandVerb.DIALOGUE:
-                str += $" {((DialogueScriptParameter)Parameters[0]).Line.Text.GetSubstitutedString(Project)[0..Math.Min(((DialogueScriptParameter)Parameters[0]).Line.Text.Length, 10)]}...";
+                str += $" {((DialogueScriptParameter)Parameters[0]).Line.Text.GetSubstitutedString(Project)[..Math.Min(((DialogueScriptParameter)Parameters[0]).Line.Text.Length, 10)]}...";
                 break;
             case CommandVerb.GOTO:
                 str += $" {((ScriptSectionScriptParameter)Parameters[0]).Section.Name}";

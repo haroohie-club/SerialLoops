@@ -27,7 +27,7 @@ public class ScriptItem : Item
     }
 
     public ScriptItem(EventFile evt, EventTable evtTbl, Func<string, string> localize, ILogger log) : base(
-        evt.Name[0..^1], ItemType.Script)
+        evt.Name[..^1], ItemType.Script)
     {
         Event = evt;
         _localize = localize;

@@ -7,7 +7,6 @@ using Avalonia.Platform;
 using Avalonia.Svg;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Assets;
-using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 
 namespace SerialLoops.Utility;
@@ -89,25 +88,6 @@ public static class ControlGenerator
             ItemDescription.ItemType.Transition => Strings.Transitions,
             ItemDescription.ItemType.Voice => Strings.Voices,
             _ => "UNKNOWN TYPE",
-        };
-    }
-
-    public static string LocalizeSearchScopes(SearchQuery.DataHolder scope)
-    {
-        return scope switch
-        {
-            SearchQuery.DataHolder.Title => Strings.Title,
-            SearchQuery.DataHolder.Background_ID => Strings.Background_ID,
-
-            SearchQuery.DataHolder.Dialogue_Text => Strings.Dialogue_Text,
-            SearchQuery.DataHolder.Flag => Strings.Flag,
-            SearchQuery.DataHolder.Speaker_Name => Strings.Speaker_Name,
-            SearchQuery.DataHolder.Conditional => Strings.Conditional,
-            SearchQuery.DataHolder.Background_Type => Strings.Background_Type,
-            SearchQuery.DataHolder.Episode_Number => Strings.Episode_Number,
-            SearchQuery.DataHolder.Episode_Unique => Strings.Episode_Unique,
-            SearchQuery.DataHolder.Orphaned_Items => Strings.Orphaned_Items,
-            _ => "UNKNOWN SCOPE",
         };
     }
 

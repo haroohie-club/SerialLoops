@@ -12,7 +12,7 @@ public class PlaceItem : Item, IPreviewableGraphic
     public GraphicsFile PlaceGraphic { get; set; }
     public string PlaceName { get; set; }
 
-    public PlaceItem(int index, GraphicsFile placeGrp) : base(placeGrp.Name[0..^3], ItemType.Place)
+    public PlaceItem(int index, GraphicsFile placeGrp) : base(placeGrp.Name[..^3], ItemType.Place)
     {
         Index = index;
         CanRename = false;

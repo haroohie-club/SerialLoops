@@ -431,7 +431,7 @@ public class SKColorJsonConverter : JsonConverter<SKColor>
             byte.Parse(html[2..4], NumberStyles.HexNumber),
             byte.Parse(html[4..6], NumberStyles.HexNumber),
             byte.Parse(html[6..8], NumberStyles.HexNumber),
-            byte.Parse(html[0..2], NumberStyles.HexNumber)
+            byte.Parse(html[..2], NumberStyles.HexNumber)
         );
     }
 

@@ -26,11 +26,11 @@ public class ChibiItem : Item, IPreviewableGraphic
         Chibi = chibi;
         ChibiIndex = chibiIndex + 1;
         string firstAnimationName = project.Grp.GetFileByIndex(Chibi.ChibiEntries[0].Animation).Name;
-        Name = $"CHIBI_{firstAnimationName[0..firstAnimationName.IndexOf('_')]}";
-        DisplayName = $"CHIBI_{firstAnimationName[0..firstAnimationName.IndexOf('_')]}";
-        TopScreenIndex = chibiIndices.IndexOf(firstAnimationName[0..3]);
+        Name = $"CHIBI_{firstAnimationName[..firstAnimationName.IndexOf('_')]}";
+        DisplayName = $"CHIBI_{firstAnimationName[..firstAnimationName.IndexOf('_')]}";
+        TopScreenIndex = chibiIndices.IndexOf(firstAnimationName[..3]);
         ChibiEntries.AddRange(Chibi.ChibiEntries.Where(c => c.Animation > 0)
-            .Select(c => (project.Grp.GetFileByIndex(c.Animation).Name[0..^3], new ChibiGraphics(c, project))));
+            .Select(c => (project.Grp.GetFileByIndex(c.Animation).Name[..^3], new ChibiGraphics(c, project))));
         ChibiEntries.ForEach(e => ChibiEntryModifications.Add(e.Name, false));
         ChibiEntries.ForEach(e => ChibiAnimations.Add(e.Name, GetChibiAnimation(e.Name, project.Grp)));
     }

@@ -4812,7 +4812,7 @@ namespace SerialLoops.Assets {
         /// </summary>
         public static string Orphaned_Items {
             get {
-                return ResourceManager.GetString("Orphaned Items", resourceCulture);
+                return ResourceManager.GetString("Orphaned_Items", resourceCulture);
             }
         }
         
