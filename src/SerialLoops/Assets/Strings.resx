@@ -1369,8 +1369,8 @@ In order to preserve state, no hacks were applied.</value>
     <value>Layouts</value>
     <comment>Plural layout items</comment>
   </data>
-  <data name="Listened to {0}" xml:space="preserve">
-    <value>Listened to {0}</value>
+  <data name="Listened to {0} (F{1:D2})" xml:space="preserve">
+    <value>Listened to {0} (F{1:D2})</value>
     <comment>{0} is the name of a BGM that's been encountered while playing the game</comment>
   </data>
   <data name="Load Game menu ticker tape" xml:space="preserve">
@@ -1921,8 +1921,8 @@ Please set the path to a Nintendo DS emulator or specify a Nintendo DS emulator 
     <value>ROM Hash Mismatch</value>
     <comment>Message box title when there is a mismatch between the expected ROM hash and the selected ROM hash on project import</comment>
   </data>
-  <data name="Route &quot;{0}&quot; Completed" xml:space="preserve">
-    <value>Route "{0}" Completed</value>
+  <data name="Route &quot;{0}&quot; Completed (F{1:D2})" xml:space="preserve">
+    <value>Route "{0}" Completed (F{1:D2})</value>
     <comment>{0} is the name of a route following a group selection that has been completed</comment>
   </data>
   <data name="Routes" xml:space="preserve">
@@ -2036,8 +2036,8 @@ Please set the path to a Nintendo DS emulator or specify a Nintendo DS emulator 
   <data name="Script Section" xml:space="preserve">
     <value>Script Section</value>
   </data>
-  <data name="Script {0} Section {1} Completed" xml:space="preserve">
-    <value>Script {0} Section {1} Completed</value>
+  <data name="Script {0} Section {1} Completed (F{2:D2})" xml:space="preserve">
+    <value>Script {0} Section {1} Completed (F{2:D2})</value>
     <comment>{0} is the display name of a script and {1} is the name of the section of that script that has been completed</comment>
   </data>
   <data name="Script:" xml:space="preserve">
@@ -2604,8 +2604,8 @@ No project is currently open. Would you like to create a new project?</value>
   <data name="_Tools" xml:space="preserve">
     <value>_Tools</value>
   </data>
-  <data name="{0} ({1}) Seen" xml:space="preserve">
-    <value>{0} ({1}) Seen</value>
+  <data name="{0} ({1}) Seen (F{2:D2})" xml:space="preserve">
+    <value>{0} ({1}) Seen (F{2:D2})</value>
     <comment>{0} is the internal name and {1} is the display name of a CG that has been encountered during the game</comment>
   </data>
   <data name="{0} - Adjust Volume" xml:space="preserve">
@@ -2616,8 +2616,8 @@ No project is currently open. Would you like to create a new project?</value>
     <value>{0} - Manage Loop</value>
     <comment>{0} is the title of a BGM track</comment>
   </data>
-  <data name="{0} Obtained" xml:space="preserve">
-    <value>{0} Obtained</value>
+  <data name="{0} Obtained (F{1:D2})" xml:space="preserve">
+    <value>{0} Obtained (F{1:D2})</value>
     <comment>{0} is the name of a topic that's been obtained</comment>
   </data>
   <data name="{0} results" xml:space="preserve">
@@ -2628,8 +2628,8 @@ No project is currently open. Would you like to create a new project?</value>
     <value>{0} results found</value>
     <comment>{0} is the number of search results</comment>
   </data>
-  <data name="{0} Watched in Extras" xml:space="preserve">
-    <value>{0} Watched in Extras</value>
+  <data name="{0} Watched in Extras (F{1:D2})" xml:space="preserve">
+    <value>{0} Watched in Extras (F{1:D2})</value>
     <comment>{0} is the name of a topic that has had its associated scene watched in the Extras mode</comment>
   </data>
   <data name="Failed to replace screen image: image too complex (generated more than 255 tiles); please use a simpler image" xml:space="preserve">
@@ -2857,5 +2857,8 @@ This action is irreversible.</value>
   </data>
   <data name="Friendship Levels" xml:space="preserve">
     <value>Friendship Levels</value>
+  </data>
+  <data name="Tutorial {0} Completed (F{1:D2})" xml:space="preserve">
+    <value>Tutorial {0} Completed (F{1:D2})</value><comment>A flag marking that the tutorial in question has been completed</comment>
   </data>
 </root>

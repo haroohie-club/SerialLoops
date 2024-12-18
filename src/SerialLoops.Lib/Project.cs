@@ -782,9 +782,9 @@ public partial class Project
                 // Main topics have shadow topics that are located at ID + 40 (this is actually how the game finds them)
                 // So if we're a main topic and we see another topic 40 back, we know we're one of these shadow topics and should really be
                 // rolled into the original main topic
-                if (topic.Type == TopicType.Main && Items.AsParallel().Any(i => i.Type == ItemDescription.ItemType.Topic && ((TopicItem)i).TopicEntry.Id == topic.Id - 40))
+                if (topic.Type == TopicType.Main && Items.AsParallel().Any(i => i.Type == ItemType.Topic && ((TopicItem)i).TopicEntry.Id == topic.Id - 40))
                 {
-                    ((TopicItem)Items.AsParallel().First(i => i.Type == ItemDescription.ItemType.Topic && ((TopicItem)i).TopicEntry.Id == topic.Id - 40)).HiddenMainTopic = topic;
+                    ((TopicItem)Items.AsParallel().First(i => i.Type == ItemType.Topic && ((TopicItem)i).TopicEntry.Id == topic.Id - 40)).HiddenMainTopic = topic;
                 }
                 else
                 {
@@ -1020,7 +1020,7 @@ public partial class Project
                 prevScriptIndex = entry.EventFileIndex;
             }
         }
-        Items.Where(i => i.Type == ItemDescription.ItemType.Script).Cast<ScriptItem>().ToList().ForEach(s => s.UpdateEventTableInfo(EventTableFile.EvtTbl));
+        Items.Where(i => i.Type == ItemType.Script).Cast<ScriptItem>().ToList().ForEach(s => s.UpdateEventTableInfo(EventTableFile.EvtTbl));
     }
 
     public void MigrateProject(string newRom, ILogger log, IProgressTracker tracker)
@@ -1259,7 +1259,7 @@ public partial class Project
             case SearchQuery.DataHolder.Background_ID:
                 if (int.TryParse(term, out int backgroundId))
                 {
-                    return item.Type == ItemDescription.ItemType.Background && ((BackgroundItem)item).Id == backgroundId;
+                    return item.Type == ItemType.Background && ((BackgroundItem)item).Id == backgroundId;
                 }
                 return false;
 
@@ -1390,13 +1390,13 @@ public partial class Project
                 if (unique)
                 {
 
-                    return references.Where(r => r.Type == ItemDescription.ItemType.Script).Any() &&
-                           references.Where(r => r.Type == ItemDescription.ItemType.Script)
+                    return references.Where(r => r.Type == ItemType.Script).Any() &&
+                           references.Where(r => r.Type == ItemType.Script)
                                .All(r => ScriptIsInEpisode((ScriptItem)r, scenarioEpIndex, scenarioNextEpIndex));
                 }
                 else
                 {
-                    return references.Any(r => r.Type == ItemDescription.ItemType.Script && ScriptIsInEpisode((ScriptItem)r, scenarioEpIndex, scenarioNextEpIndex));
+                    return references.Any(r => r.Type == ItemType.Script && ScriptIsInEpisode((ScriptItem)r, scenarioEpIndex, scenarioNextEpIndex));
                 }
             }
         }
@@ -1409,7 +1409,7 @@ public partial class Project
         if (scriptFileScenarioIndex < 0)
         {
             List<ItemDescription> references = script.GetReferencesTo(this);
-            ItemDescription groupSelection = references.Find(r => r.Type == ItemDescription.ItemType.Group_Selection);
+            ItemDescription groupSelection = references.Find(r => r.Type == ItemType.Group_Selection);
             if (groupSelection is not null)
             {
                 scriptFileScenarioIndex = Scenario.Commands.FindIndex(c => c.Verb == ScenarioCommand.ScenarioVerb.ROUTE_SELECT && c.Parameter == ((GroupSelectionItem)groupSelection).Index);

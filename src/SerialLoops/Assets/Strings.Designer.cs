@@ -67,11 +67,11 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} ({1}) Seen.
+        ///   Looks up a localized string similar to {0} ({1}) Seen (F{2:D2}).
         /// </summary>
-        public static string _0____1___Seen {
+        public static string _0____1___Seen__F_2_D2__ {
             get {
-                return ResourceManager.GetString("{0} ({1}) Seen", resourceCulture);
+                return ResourceManager.GetString("{0} ({1}) Seen (F{2:D2})", resourceCulture);
             }
         }
         
@@ -94,11 +94,11 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} Obtained.
+        ///   Looks up a localized string similar to {0} Obtained (F{1:D2}).
         /// </summary>
-        public static string _0__Obtained {
+        public static string _0__Obtained__F_1_D2__ {
             get {
-                return ResourceManager.GetString("{0} Obtained", resourceCulture);
+                return ResourceManager.GetString("{0} Obtained (F{1:D2})", resourceCulture);
             }
         }
         
@@ -121,11 +121,11 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} Watched in Extras.
+        ///   Looks up a localized string similar to {0} Watched in Extras (F{1:D2}).
         /// </summary>
-        public static string _0__Watched_in_Extras {
+        public static string _0__Watched_in_Extras__F_1_D2__ {
             get {
-                return ResourceManager.GetString("{0} Watched in Extras", resourceCulture);
+                return ResourceManager.GetString("{0} Watched in Extras (F{1:D2})", resourceCulture);
             }
         }
         
@@ -4059,11 +4059,11 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Listened to {0}.
+        ///   Looks up a localized string similar to Listened to {0} (F{1:D2}).
         /// </summary>
-        public static string Listened_to__0_ {
+        public static string Listened_to__0___F_1_D2__ {
             get {
-                return ResourceManager.GetString("Listened to {0}", resourceCulture);
+                return ResourceManager.GetString("Listened to {0} (F{1:D2})", resourceCulture);
             }
         }
         
@@ -5744,11 +5744,11 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Route &quot;{0}&quot; Completed.
+        ///   Looks up a localized string similar to Route &quot;{0}&quot; Completed (F{1:D2}).
         /// </summary>
-        public static string Route___0___Completed {
+        public static string Route___0___Completed__F_1_D2__ {
             get {
-                return ResourceManager.GetString("Route \"{0}\" Completed", resourceCulture);
+                return ResourceManager.GetString("Route \"{0}\" Completed (F{1:D2})", resourceCulture);
             }
         }
         
@@ -6079,11 +6079,11 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Script {0} Section {1} Completed.
+        ///   Looks up a localized string similar to Script {0} Section {1} Completed (F{2:D2}).
         /// </summary>
-        public static string Script__0__Section__1__Completed {
+        public static string Script__0__Section__1__Completed__F_2_D2__ {
             get {
-                return ResourceManager.GetString("Script {0} Section {1} Completed", resourceCulture);
+                return ResourceManager.GetString("Script {0} Section {1} Completed (F{2:D2})", resourceCulture);
             }
         }
         
@@ -7491,6 +7491,15 @@ namespace SerialLoops.Assets {
         public static string Tutorial__0_ {
             get {
                 return ResourceManager.GetString("Tutorial {0}", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tutorial {0} Completed (F{1:D2}).
+        /// </summary>
+        public static string Tutorial__0__Completed__F_1_D2__ {
+            get {
+                return ResourceManager.GetString("Tutorial {0} Completed (F{1:D2})", resourceCulture);
             }
         }
         

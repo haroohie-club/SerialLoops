@@ -1284,7 +1284,7 @@
   <data name="Language Template" xml:space="preserve">
     <value>语言模板</value>
   </data>
-  <data name="Listened to {0}" xml:space="preserve">
+  <data name="Listened to {0} (F{1:D2})" xml:space="preserve">
     <value>已收听 {0}</value>
     <comment>{0} is the name of a BGM that's been encountered while playing the game</comment>
   </data>
@@ -1816,7 +1816,7 @@
     <value>ROM 哈希值不匹配</value>
     <comment>Message box title when there is a mismatch between the expected ROM hash and the selected ROM hash on project import</comment>
   </data>
-  <data name="Route &quot;{0}&quot; Completed" xml:space="preserve">
+  <data name="Route &quot;{0}&quot; Completed (F{1:D2})" xml:space="preserve">
     <value>路线“{0}”已完成</value>
     <comment>{0} is the name of a route following a group selection that has been completed</comment>
   </data>
@@ -1928,7 +1928,7 @@
   <data name="Script Section" xml:space="preserve">
     <value>脚本节</value>
   </data>
-  <data name="Script {0} Section {1} Completed" xml:space="preserve">
+  <data name="Script {0} Section {1} Completed (F{2:D2})" xml:space="preserve">
     <value>脚本 {0} 节 {1} 已完成</value>
     <comment>{0} is the display name of a script and {1} is the name of the section of that script that has been completed</comment>
   </data>
@@ -2468,7 +2468,7 @@
   <data name="_Tools" xml:space="preserve">
     <value>工具 (_T)</value>
   </data>
-  <data name="{0} ({1}) Seen" xml:space="preserve">
+  <data name="{0} ({1}) Seen (F{2:D2})" xml:space="preserve">
     <value>已见过 {0}（{1}）</value>
     <comment>{0} is the internal name and {1} is the display name of a CG that has been encountered during the game</comment>
   </data>
@@ -2480,7 +2480,7 @@
     <value>{0} - 管理循环</value>
     <comment>{0} is the title of a BGM track</comment>
   </data>
-  <data name="{0} Obtained" xml:space="preserve">
+  <data name="{0} Obtained (F{1:D2})" xml:space="preserve">
     <value>已获得 {0}</value>
     <comment>{0} is the name of a topic that's been obtained</comment>
   </data>
@@ -2492,7 +2492,7 @@
     <value>找到 {0} 个结果</value>
     <comment>{0} is the number of search results</comment>
   </data>
-  <data name="{0} Watched in Extras" xml:space="preserve">
+  <data name="{0} Watched in Extras (F{1:D2})" xml:space="preserve">
     <value>已在额外内容看过 {0}</value>
     <comment>{0} is the name of a topic that has had its associated scene watched in the Extras mode</comment>
   </data>

@@ -34,6 +34,7 @@ public class ScriptItem : Item
 
         PruneLabelsSection(log);
         Graph.AddVertexRange(Event.ScriptSections);
+        UpdateEventTableInfo(evtTbl);
     }
 
     public OrderedDictionary<ScriptSection, List<ScriptItemCommand>> GetScriptCommandTree(Project project, ILogger log)
