@@ -518,7 +518,7 @@ public partial class Project
                 if (entry.BgIndex1 > 0)
                 {
                     GraphicsFile nameGraphic = Grp.GetFileByIndex(entry.BgIndex1);
-                    string name = $"BG_{nameGraphic.Name[0..nameGraphic.Name.LastIndexOf('_')]}";
+                    string name = $"BG_{nameGraphic.Name[..nameGraphic.Name.LastIndexOf('_')]}";
                     string bgNameBackup = name;
                     for (int j = 1; names.Contains(name); j++)
                     {
@@ -820,21 +820,21 @@ public partial class Project
             tracker.Finished++;
             foreach (SystemTexture extraSysTex in systemTextureFile.SystemTextures.Where(s => Grp.Files.AsParallel().Where(g => g.Name.StartsWith("XTR")).Distinct().Select(g => g.Index).Contains(s.GrpIndex)))
             {
-                Items.Add(new SystemTextureItem(extraSysTex, this, $"SYSTEX_{Grp.GetFileByIndex(extraSysTex.GrpIndex).Name[0..^3]}"));
+                Items.Add(new SystemTextureItem(extraSysTex, this, $"SYSTEX_{Grp.GetFileByIndex(extraSysTex.GrpIndex).Name[..^3]}"));
                 tracker.Finished++;
             }
             // Exclude B12 as that's the nameplates we replace in the character items and PPT_001 as that's the puzzle phase singularity we'll be replacing in the puzzle items
             // We also exclude the "special" graphics as they do not include all of them in the SYSTEX file (should be made to be edited manually)
             foreach (SystemTexture sysSysTex in systemTextureFile.SystemTextures.Where(s => Grp.Files.AsParallel().Where(g => g.Name.StartsWith("SYS") && !g.Name.Contains("_SPC_") && g.Name != "SYS_CMN_B12DNX" && g.Name != "SYS_PPT_001DNX").Select(g => g.Index).Contains(s.GrpIndex)).DistinctBy(s => s.GrpIndex))
             {
-                if (Grp.GetFileByIndex(sysSysTex.GrpIndex).Name[0..^4].EndsWith("T6"))
+                if (Grp.GetFileByIndex(sysSysTex.GrpIndex).Name[..^4].EndsWith("T6"))
                 {
                     // special case the ep headers
-                    Items.Add(new SystemTextureItem(sysSysTex, this, $"SYSTEX_{Grp.GetFileByIndex(sysSysTex.GrpIndex).Name[0..^3]}", height: 192));
+                    Items.Add(new SystemTextureItem(sysSysTex, this, $"SYSTEX_{Grp.GetFileByIndex(sysSysTex.GrpIndex).Name[..^3]}", height: 192));
                 }
                 else
                 {
-                    Items.Add(new SystemTextureItem(sysSysTex, this, $"SYSTEX_{Grp.GetFileByIndex(sysSysTex.GrpIndex).Name[0..^3]}"));
+                    Items.Add(new SystemTextureItem(sysSysTex, this, $"SYSTEX_{Grp.GetFileByIndex(sysSysTex.GrpIndex).Name[..^3]}"));
                 }
                 tracker.Finished++;
             }

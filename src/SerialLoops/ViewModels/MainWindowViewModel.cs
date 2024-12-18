@@ -618,12 +618,8 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             return;
         }
-
-        SearchDialogViewModel searchDialogViewModel = new();
-        SearchDialog searchDialog = new();
-        searchDialogViewModel.Initialize(searchDialog, OpenProject, EditorTabs, Log);
-        searchDialog.DataContext = searchDialogViewModel;
-        searchDialog.ShowDialog(Window);
+        SearchDialog searchDialog = new() { DataContext = new SearchDialogViewModel(OpenProject, EditorTabs, Log) };
+        searchDialog.Show(Window);
     }
 
     public async Task BuildIterative_Executed()
