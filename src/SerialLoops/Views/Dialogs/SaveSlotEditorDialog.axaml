@@ -7,6 +7,8 @@
         xmlns:controls="using:SerialLoops.Controls"
         xmlns:dialogs="using:SerialLoops.Views.Dialogs"
         xmlns:gbox="using:GroupBox.Avalonia.Controls"
+        xmlns:hlibe="using:HaruhiChokuretsuLib.Archive.Event"
+        xmlns:libi="using:SerialLoops.Lib.Items"
         xmlns:utility="using:SerialLoops.Utility"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         Width="900" Height="800"
@@ -14,6 +16,9 @@
         x:Class="SerialLoops.Views.Dialogs.SaveSlotEditorDialog"
         Title="{Binding Title}"
         Name="Dialog">
+    <Window.Resources>
+        <utility:IntSubtractionConverter x:Key="SubtractionConverter"/>
+    </Window.Resources>
     <Grid RowDefinitions="Auto,*,Auto" ColumnDefinitions="*">
         <TextBlock Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" Classes="h1"
                    Text="{Binding SlotName}" Margin="5,10" />
@@ -292,7 +297,54 @@
             <TabItem IsVisible="{Binding IsQuickSave}"
                      Header="{x:Static assets:Strings.Script_Position}">
                 <ScrollViewer>
+                    <Grid RowDefinitions="Auto,Auto,Auto,*" ColumnDefinitions="Auto,*">
+                        <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Spacing="5">
+                            <TextBlock Margin="0,7,0,0" Text="{x:Static assets:Strings.Script_}"/>
+                            <ComboBox ItemsSource="{Binding ScriptItems}" SelectedItem="{Binding SelectedScriptItem}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate DataType="libi:ScriptItem">
+                                        <TextBlock Text="{Binding DisplayName}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                                <ComboBox.ItemContainerTheme>
+                                    <ControlTheme TargetType="ComboBoxItem" x:DataType="libi:ScriptItem" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
+                                        <Setter Property="TextSearch.Text" Value="{Binding DisplayName}"/>
+                                    </ControlTheme>
+                                </ComboBox.ItemContainerTheme>
+                            </ComboBox>
+                            <controls:ItemLink Item="{Binding SelectedScriptItem}" Tabs="{Binding Tabs}"/>
+                        </StackPanel>
 
+                        <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Spacing="5">
+                            <TextBlock Margin="0,7,0,0" Text="{x:Static assets:Strings.Script_Section}"/>
+                            <ComboBox ItemsSource="{Binding ScriptSections}" SelectedItem="{Binding SelectedScriptSection}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate DataType="hlibe:ScriptSection">
+                                        <TextBlock Text="{Binding Name}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                                <ComboBox.ItemContainerTheme>
+                                    <ControlTheme TargetType="ComboBoxItem" x:DataType="hlibe:ScriptSection" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
+                                        <Setter Property="TextSearch.Text" Value="{Binding Name}"/>
+                                    </ControlTheme>
+                                </ComboBox.ItemContainerTheme>
+                            </ComboBox>
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Spacing="5">
+                            <TextBlock Margin="0,7,0,0" Text="{x:Static assets:Strings.Command_Index_}"/>
+                            <NumericUpDown Value="{Binding ScriptCommandIndex}"
+                                           Minimum="0" Maximum="{Binding SelectedScriptSection.Objects.Count, Converter={StaticResource SubtractionConverter}, ConverterParameter=1}"
+                                           FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
+                        </StackPanel>
+
+                        <Grid Grid.Row="0" Grid.Column="1" Grid.RowSpan="4">
+                            <Image IsVisible="{Binding ScriptPreview, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                   Source="{Binding ScriptPreview, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
+                            <Image IsVisible="{Binding ScriptPreview, Converter={x:Static ObjectConverters.IsNull}}"
+                                   Source="{Binding ErrorImagePath}"/>
+                        </Grid>
+                    </Grid>
                 </ScrollViewer>
             </TabItem>
             <TabItem Header="{x:Static assets:Strings.Flags}">

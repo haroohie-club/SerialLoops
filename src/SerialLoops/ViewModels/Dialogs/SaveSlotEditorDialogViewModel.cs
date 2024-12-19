@@ -13,11 +13,14 @@ using SerialLoops.Assets;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.SaveFile;
+using SerialLoops.Lib.Script;
+using SerialLoops.Lib.Script.Parameters;
 using SerialLoops.Utility;
 using SerialLoops.ViewModels.Controls;
 using SerialLoops.ViewModels.Panels;
 using SerialLoops.Views.Dialogs;
 using SkiaSharp;
+using SoftCircuits.Collections;
 
 namespace SerialLoops.ViewModels.Dialogs;
 
@@ -33,7 +36,7 @@ public class SaveSlotEditorDialogViewModel : ViewModelBase
     public SaveSection SaveSection { get; }
     public string SlotName { get; }
     private Project _project;
-    private EditorTabsPanelViewModel _tabs;
+    public EditorTabsPanelViewModel Tabs { get; }
 
     public bool IsCommonSave { get; }
     public bool IsSaveSlot { get; }
@@ -61,12 +64,67 @@ public class SaveSlotEditorDialogViewModel : ViewModelBase
         SaveSection = saveSection;
         SlotName = slotName;
         _project = project;
-        _tabs = tabs;
+        Tabs = tabs;
 
         if (SaveSection is QuickSaveSlotData quickSave)
         {
             IsQuickSave = true;
             _quickSave = quickSave;
+            ScriptItems = new(_project.Items.Where(i => i.Type == ItemDescription.ItemType.Script).Cast<ScriptItem>());
+            _selectedScriptItem = ScriptItems.FirstOrDefault(i => i.Event.Index == _quickSave.CurrentScript);
+            if (_selectedScriptItem is not null)
+            {
+                _currentCommandTree = _selectedScriptItem.GetScriptCommandTree(_project, _log);
+                _selectedScriptItem.CalculateGraphEdges(_currentCommandTree, _log);
+                ScriptSections = new(_selectedScriptItem.Event.ScriptSections);
+                SelectedScriptSection = ScriptSections[_quickSave.CurrentScriptBlock];
+                _scriptCommandIndex = _quickSave.CurrentScriptCommand;
+            }
+
+            List<(ChibiItem Chibi, int X, int Y)> topScreenChibis = [];
+            int chibiCurrentX = 80;
+            const int chibiY = 100;
+            for (int i = 1; i <= 5; i++)
+            {
+                if (!_quickSave.TopScreenChibis.HasFlag((CharacterMask)(1 << i)))
+                {
+                    continue;
+                }
+
+                ChibiItem chibi = (ChibiItem)_project.Items.First(it => it.Type == ItemDescription.ItemType.Chibi && ((ChibiItem)it).TopScreenIndex == i);
+                topScreenChibis.Add((chibi, chibiCurrentX, chibiY));
+                chibiCurrentX += chibi.ChibiAnimations.First().Value.ElementAt(0).Frame.Width - 16;
+            }
+
+            _scriptPreview = new()
+            {
+                Background = (BackgroundItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == (_quickSave.CgIndex != 0 ? _quickSave.CgIndex : _quickSave.BgIndex)),
+                BgPalEffect = (PaletteEffectScriptParameter.PaletteEffect)_quickSave.BgPalEffect,
+                EpisodeHeader = _quickSave.EpisodeHeader,
+                Kbg = (BackgroundItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == _quickSave.KbgIndex),
+                Place = (PlaceItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Place && ((PlaceItem)i).Index == _quickSave.Place),
+                TopScreenChibis = topScreenChibis,
+                Sprites =
+                [
+                    new()
+                    {
+                        Sprite = (CharacterSpriteItem)_project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Character_Sprite && ((CharacterSpriteItem)i).Index == _quickSave.FirstCharacterSprite),
+                        Positioning = new() { X = _quickSave.Sprite1XOffset, Layer = 2 },
+                    },
+                    new()
+                    {
+                        Sprite = (CharacterSpriteItem)_project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Character_Sprite && ((CharacterSpriteItem)i).Index == _quickSave.SecondCharacterSprite),
+                        Positioning = new() { X = _quickSave.Sprite2XOffset, Layer = 1 },
+                    },
+                    new()
+                    {
+                        Sprite = (CharacterSpriteItem)_project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Character_Sprite && ((CharacterSpriteItem)i).Index == _quickSave.ThirdCharacterSprite),
+                        Positioning = new() { X = _quickSave.Sprite3XOffset, Layer = 0 },
+                    },
+                ],
+            };
+
+            (ScriptPreview, ErrorImagePath) = ScriptItem.GeneratePreviewImage(_scriptPreview, _project);
         }
         if (SaveSection is SaveSlotData saveSlot)
         {
@@ -272,7 +330,44 @@ public class SaveSlotEditorDialogViewModel : ViewModelBase
 
         if (IsQuickSave)
         {
-
+            _quickSave.CurrentScript = SelectedScriptItem.Event.Index;
+            _quickSave.CurrentScriptBlock = SelectedScriptItem.Event.ScriptSections.IndexOf(SelectedScriptSection);
+            _quickSave.CurrentScriptCommand = ScriptCommandIndex;
+            _quickSave.KbgIndex = (short)(_scriptPreview.Kbg?.Id ?? 0);
+            _quickSave.Place = (short)(_scriptPreview.Place?.Index ?? 0);
+            if (_scriptPreview.Background.BackgroundType == HaruhiChokuretsuLib.Archive.Data.BgType.TEX_BG)
+            {
+                _quickSave.BgIndex = (short)_scriptPreview.Background.Id;
+            }
+            else
+            {
+                OrderedDictionary<ScriptSection, List<ScriptItemCommand>> commandTree = SelectedScriptItem.GetScriptCommandTree(_project, _log);
+                ScriptItemCommand currentCommand = commandTree[SelectedScriptItem.Event.ScriptSections[_quickSave.CurrentScriptBlock]][ScriptCommandIndex];
+                List<ScriptItemCommand> commands = currentCommand.WalkCommandGraph(commandTree, SelectedScriptItem.Graph);
+                for (int i = commands.Count - 1; i >= 0; i--)
+                {
+                    if (commands[i].Verb == EventFile.CommandVerb.BG_DISP || commands[i].Verb == EventFile.CommandVerb.BG_DISP2 || (commands[i].Verb == EventFile.CommandVerb.BG_FADE && (((BgScriptParameter)commands[i].Parameters[0]).Background is not null)))
+                    {
+                        _quickSave.BgIndex = (short)((BgScriptParameter)commands[i].Parameters[0]).Background.Id;
+                    }
+                }
+                _quickSave.CgIndex = (short)_scriptPreview.Background.Id;
+            }
+            _quickSave.BgPalEffect = (short)_scriptPreview.BgPalEffect;
+            _quickSave.EpisodeHeader = _scriptPreview.EpisodeHeader;
+            for (int i = 1; i <= 5; i++)
+            {
+                if (_scriptPreview.TopScreenChibis.Any(c => c.Chibi.TopScreenIndex == i))
+                {
+                    _quickSave.TopScreenChibis |= (CharacterMask)(1 << i);
+                }
+            }
+            _quickSave.FirstCharacterSprite = _scriptPreview.Sprites.ElementAtOrDefault(0).Sprite?.Index ?? 0;
+            _quickSave.SecondCharacterSprite = _scriptPreview.Sprites.ElementAtOrDefault(1).Sprite?.Index ?? 0;
+            _quickSave.ThirdCharacterSprite = _scriptPreview.Sprites.ElementAtOrDefault(2).Sprite?.Index ?? 0;
+            _quickSave.Sprite1XOffset = (short)(_scriptPreview.Sprites.ElementAtOrDefault(0).Positioning?.X ?? 0);
+            _quickSave.Sprite2XOffset = (short)(_scriptPreview.Sprites.ElementAtOrDefault(1).Positioning?.X ?? 0);
+            _quickSave.Sprite3XOffset = (short)(_scriptPreview.Sprites.ElementAtOrDefault(2).Positioning?.X ?? 0);
         }
 
         dialog.Close();
@@ -412,6 +507,56 @@ public class SaveSlotEditorDialogViewModel : ViewModelBase
 
     public List<RecentObjective> RecentObjectives { get; set; }
     public List<ReactivePowerStatus> PowerStatuses { get; set; }
+
+    // Quick Save Data
+    public ObservableCollection<ScriptItem> ScriptItems { get; }
+    private OrderedDictionary<ScriptSection, List<ScriptItemCommand>> _currentCommandTree;
+    private ScriptItem _selectedScriptItem;
+    public ScriptItem SelectedScriptItem
+    {
+        get => _selectedScriptItem;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _selectedScriptItem, value);
+            _currentCommandTree = _selectedScriptItem.GetScriptCommandTree(_project, _log);
+            _selectedScriptItem.CalculateGraphEdges(_currentCommandTree, _log);
+            ScriptSections.Clear();
+            ScriptSections.AddRange(_selectedScriptItem.Event.ScriptSections);
+            SelectedScriptSection = ScriptSections.First();
+        }
+    }
+    public ObservableCollection<ScriptSection> ScriptSections { get; }
+    private ScriptSection _selectedScriptSection;
+    public ScriptSection SelectedScriptSection
+    {
+        get => _selectedScriptSection;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _selectedScriptSection, value);
+            ScriptCommandIndex = 0;
+        }
+    }
+    private int _scriptCommandIndex;
+    public int ScriptCommandIndex
+    {
+        get => _scriptCommandIndex;
+        set
+        {
+            if (SelectedScriptSection is null)
+            {
+                return;
+            }
+            this.RaiseAndSetIfChanged(ref _scriptCommandIndex, value);
+            _scriptPreview = _selectedScriptItem.GetScriptPreview(_currentCommandTree,
+                _currentCommandTree[SelectedScriptSection][_scriptCommandIndex], _project, _log);
+            (ScriptPreview, ErrorImagePath) = ScriptItem.GeneratePreviewImage(_scriptPreview, _project);
+        }
+    }
+    private ScriptPreview _scriptPreview;
+    [Reactive]
+    public SKBitmap ScriptPreview { get; set; }
+    [Reactive]
+    public string ErrorImagePath { get; set; }
 
     // Flag Data
     private LocalizedFlag[] _flags;
