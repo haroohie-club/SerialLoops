@@ -3,7 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:vm="using:SerialLoops.ViewModels.Editors"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:sk="using:SkiaSharp"
+             xmlns:assets="using:SerialLoops.Assets"
              xmlns:utility="using:SerialLoops.Utility"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:LayoutEditorViewModel"
@@ -37,9 +37,19 @@
                 </Style>
             </ItemsControl.Styles>
         </ItemsControl>
-        <Image Grid.Row="0" Grid.Column="1"/>
-        <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Vertical" Spacing="3">
 
+        <Canvas Grid.Row="0" Grid.Column="1" IsVisible="{Binding SelectedLayoutEntry, Converter={x:Static ObjectConverters.IsNotNull}}"
+                Width="{Binding SelectedLayoutEntry.FullImage.Width}" Height="{Binding SelectedLayoutEntry.FullImage.Height}">
+            <Image Source="{Binding SelectedLayoutEntry.FullImage, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
+            <Border Canvas.Left="{Binding SelectedLayoutEntry.TextureX}" Canvas.Top="{Binding SelectedLayoutEntry.TextureY}"
+                    Width="{Binding SelectedLayoutEntry.TextureW}" Height="{Binding SelectedLayoutEntry.TextureH}"
+                    Background="Transparent" BorderBrush="Red" BorderThickness="3"/>
+        </Canvas>
+
+        <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Vertical" Spacing="3" VerticalAlignment="Center">
+            <Button Content="{x:Static assets:Strings.Export_Layout_Preview}" Command="{Binding ExportLayoutCommand}"/>
+            <Button Content="{x:Static assets:Strings.Export_Source_Preview}" Command="{Binding ExportSourceCommand}"
+                    IsEnabled="{Binding SelectedLayoutEntry, Converter={x:Static ObjectConverters.IsNotNull}}"/>
         </StackPanel>
 
         <ScrollViewer Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3">

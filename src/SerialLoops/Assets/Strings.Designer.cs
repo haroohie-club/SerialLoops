@@ -2484,6 +2484,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Export Layout Preview.
+        /// </summary>
+        public static string Export_Layout_Preview {
+            get {
+                return ResourceManager.GetString("Export Layout Preview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export Patch.
         /// </summary>
         public static string Export_Patch {
@@ -2516,6 +2525,15 @@ namespace SerialLoops.Assets {
         public static string Export_SFX {
             get {
                 return ResourceManager.GetString("Export SFX", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export Source Preview.
+        /// </summary>
+        public static string Export_Source_Preview {
+            get {
+                return ResourceManager.GetString("Export Source Preview", resourceCulture);
             }
         }
         
