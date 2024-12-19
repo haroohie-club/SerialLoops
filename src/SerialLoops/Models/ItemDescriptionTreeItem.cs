@@ -1,10 +1,13 @@
 ﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
 using System.Windows.Input;
 using Avalonia.Controls;
 using Avalonia.Layout;
 using ReactiveUI;
 using SerialLoops.Assets;
 using SerialLoops.Lib.Items;
+using SerialLoops.Utility;
 using SerialLoops.ViewModels;
 using SerialLoops.ViewModels.Dialogs;
 using SerialLoops.Views.Dialogs;
@@ -14,11 +17,19 @@ namespace SerialLoops.Models;
 public class ItemDescriptionTreeItem : ITreeItem, IViewFor<ItemDescription>
 {
     private TextBlock _textBlock = new();
+    private TextBox _textBox = new();
     StackPanel _panel = new()
     {
         Orientation = Orientation.Horizontal,
         Spacing = 3,
         Margin = new(2),
+    };
+
+    private StackPanel _editablePanel = new()
+    {
+        Orientation = Orientation.Horizontal,
+        Spacing = 3,
+        IsEnabled = true,
     };
 
     private MainWindowViewModel _window;
@@ -43,11 +54,35 @@ public class ItemDescriptionTreeItem : ITreeItem, IViewFor<ItemDescription>
             MenuItem references = new() { Header = Strings.Find_References___, Command = findReferencesCommand};
             _panel.ContextMenu.Items.Add(references);
         }
+
+        this.Bind(ViewModel, vm => vm.DisplayName, v => v._textBox.Text);
+        _textBox.Unloaded += (sender, args) =>
+        {
+            if (ViewModel is not null)
+            {
+                _window.ItemExplorer.Source.SortBy(_window.ItemExplorer.Source.Columns[0], ListSortDirection.Ascending);
+                _window.OpenProject.ItemNames[ViewModel.Name] = ViewModel.DisplayName;
+                _window.OpenProject.Save(_window.Log);
+            }
+        };
+        _editablePanel.Children.Add(_textBox);
     }
 
     public Control GetDisplay()
     {
         return _panel;
+    }
+
+    public Control GetEditableDisplay()
+    {
+        if (ViewModel?.CanRename ?? false)
+        {
+            return _editablePanel;
+        }
+        else
+        {
+            return _panel;
+        }
     }
 
     object IViewFor.ViewModel

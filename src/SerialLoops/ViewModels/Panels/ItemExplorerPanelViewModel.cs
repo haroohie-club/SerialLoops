@@ -38,12 +38,16 @@ public class ItemExplorerPanelViewModel : ViewModelBase
                             return val?.GetDisplay();
                         }), cellEditingTemplate: new FuncDataTemplate<ITreeItem>((val, namescope) =>
                         {
-                            // Eventually we can maybe do rename logic here
+                            if (val is ItemDescriptionTreeItem item)
+                            {
+                                return item.GetEditableDisplay();
+                            }
+
                             return val?.GetDisplay();
                         }), options: new() { BeginEditGestures = BeginEditGestures.F2 }),
                         i => i.Children
-                    )
-                }
+                    ),
+                },
             };
 
             if (ExpandItems)
@@ -81,7 +85,7 @@ public class ItemExplorerPanelViewModel : ViewModelBase
 
     public void OpenItem(TreeDataGrid viewer)
     {
-        ItemDescription item = _project.FindItem(((ITreeItem)viewer.RowSelection.SelectedItem)?.Text);
+        ItemDescription item = _project.FindItem(((ITreeItem)viewer.RowSelection?.SelectedItem)?.Text);
         if (item is not null)
         {
             _tabs.OpenTab(item);
