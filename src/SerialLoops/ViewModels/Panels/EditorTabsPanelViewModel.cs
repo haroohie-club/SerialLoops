@@ -82,7 +82,7 @@ public class EditorTabsPanelViewModel : ViewModelBase
             case ItemDescription.ItemType.Voice:
                 return new VoicedLineEditorViewModel((VoicedLineItem)item, MainWindow, _log);
             case ItemDescription.ItemType.Save:
-                return new SaveEditorPanelViewModel((SaveItem)item, MainWindow, _log);
+                return new SaveEditorViewModel((SaveItem)item, MainWindow, _log);
             default:
                 _log.LogError(Strings.Invalid_item_type_);
                 return null;
@@ -113,7 +113,7 @@ public class EditorTabsPanelViewModel : ViewModelBase
             ButtonResult result = await MainWindow.Window.ShowMessageBoxAsync(Strings.Save_changes_to_save_file_,
                 Strings.Would_you_like_to_save_your_changes_to_the_save_file_,
                 ButtonEnum.YesNoCancel, Icon.Question, _log);
-            SaveEditorPanelViewModel saveEditor = (SaveEditorPanelViewModel)closedEditor;
+            SaveEditorViewModel saveEditor = (SaveEditorViewModel)closedEditor;
             switch (result)
             {
                 case ButtonResult.Yes:

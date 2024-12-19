@@ -2861,4 +2861,25 @@ This action is irreversible.</value>
   <data name="Tutorial {0} Completed (F{1:D2})" xml:space="preserve">
     <value>Tutorial {0} Completed (F{1:D2})</value><comment>A flag marking that the tutorial in question has been completed</comment>
   </data>
+  <data name="Most Recent Objectives" xml:space="preserve">
+    <value>Most Recent Objectives</value><comment>As in the group selection objectives</comment>
+  </data>
+  <data name="First Selection" xml:space="preserve">
+    <value>First Selection</value><comment>Indicates route was picked in the first group selection</comment>
+  </data>
+  <data name="Second Selection" xml:space="preserve">
+    <value>Second Selection</value><comment>Indicates route was picked in the second selection</comment>
+  </data>
+  <data name="Kyon Present" xml:space="preserve">
+    <value>Kyon Present</value>
+  </data>
+  <data name="Asahina Present" xml:space="preserve">
+    <value>Asahina Present</value>
+  </data>
+  <data name="Nagato Present" xml:space="preserve">
+    <value>Nagato Present</value>
+  </data>
+  <data name="Koizumi Present" xml:space="preserve">
+    <value>Koizumi Present</value>
+  </data>
 </root>

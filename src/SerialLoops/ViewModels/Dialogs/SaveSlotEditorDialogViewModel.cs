@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
@@ -83,6 +84,7 @@ public class SaveSlotEditorDialogViewModel : ViewModelBase
             KoizumiFriendshipLevel = _saveSlot.KoizumiFriendshipLevel;
             TsuruyaFriendshipLevel = _saveSlot.TsuruyaFriendshipLevel;
             UnknownFriendshipLevel = _saveSlot.UnknownFriendshipLevel;
+            RecentObjectives = [new("A", _saveSlot.ObjectiveA), new("B", _saveSlot.ObjectiveB), new("C", _saveSlot.ObjectiveC), new("D", _saveSlot.ObjectiveD)];
         }
         else if (SaveSection is CommonSaveData commonSave)
         {
@@ -237,6 +239,18 @@ public class SaveSlotEditorDialogViewModel : ViewModelBase
             _saveSlot.SaveTime = new(DateOnly.FromDateTime(SaveDate), TimeOnly.FromTimeSpan(SaveTime), TimeSpan.Zero);
             _saveSlot.ScenarioPosition = ScenarioCommandPickerVm.ScenarioCommandIndex;
             _saveSlot.EpisodeNumber = Episode;
+            _saveSlot.ObjectiveA = RecentObjectives[0].GetCharacterMask();
+            _saveSlot.ObjectiveB = RecentObjectives[1].GetCharacterMask();
+            _saveSlot.ObjectiveC = RecentObjectives[2].GetCharacterMask();
+            _saveSlot.ObjectiveD = RecentObjectives[3].GetCharacterMask();
+            for (int i = RecentObjectives.Count - 1; i >= 0; i--)
+            {
+                if (RecentObjectives[i].KyonPresent)
+                {
+                    _saveSlot.KyonObjectiveIndex = i;
+                    break;
+                }
+            }
             _saveSlot.HaruhiFriendshipLevel = HaruhiFriendshipLevel;
             _saveSlot.MikuruFriendshipLevel = AsahinaFriendshipLevel;
             _saveSlot.NagatoFriendshipLevel = NagatoFriendshipLevel;
@@ -385,6 +399,8 @@ public class SaveSlotEditorDialogViewModel : ViewModelBase
     [Reactive] public byte TsuruyaFriendshipLevel { get; set; }
     [Reactive] public byte UnknownFriendshipLevel { get; set; }
 
+    public List<RecentObjective> RecentObjectives { get; set; }
+
     // Flag Data
     private LocalizedFlag[] _flags;
     private LocalizedFlag[] _filteredFlags;
@@ -416,4 +432,36 @@ public class LocalizedFlag(int id, Project project, bool isSet)
     public int Id { get; } = id;
     public string Description { get; } = Flags.GetFlagNickname(id, project);
     public bool IsSet { get; set; } = isSet;
+}
+
+public class RecentObjective(string letter, CharacterMask objective) : ReactiveObject
+{
+    public string Letter { get; } = letter;
+    [Reactive]
+    public bool FirstSelection { get; set; } = objective.HasFlag(CharacterMask.SELECTION1);
+    [Reactive]
+    public bool SecondSelection { get; set; } = objective.HasFlag(CharacterMask.SELECTION2);
+    [Reactive]
+    public bool KyonPresent { get; set; } = objective.HasFlag(CharacterMask.KYON);
+    [Reactive]
+    public bool HaruhiPresent { get; set; } = objective.HasFlag(CharacterMask.HARUHI);
+    [Reactive]
+    public bool AsahinaPresent { get; set; } = objective.HasFlag(CharacterMask.MIKURU);
+    [Reactive]
+    public bool NagatoPresent { get; set; } = objective.HasFlag(CharacterMask.NAGATO);
+    [Reactive]
+    public bool KoizumiPresent { get; set; } = objective.HasFlag(CharacterMask.KOIZUMI);
+
+    public CharacterMask GetCharacterMask()
+    {
+        CharacterMask mask = 0;
+        mask |= KyonPresent ? CharacterMask.KYON : 0;
+        mask |= HaruhiPresent ? CharacterMask.HARUHI : 0;
+        mask |= AsahinaPresent ? CharacterMask.MIKURU : 0;
+        mask |= NagatoPresent ? CharacterMask.NAGATO : 0;
+        mask |= KoizumiPresent ? CharacterMask.KOIZUMI : 0;
+        mask |= FirstSelection ? CharacterMask.SELECTION1 : 0;
+        mask |= SecondSelection ? CharacterMask.SELECTION2 : 0;
+        return mask;
+    }
 }

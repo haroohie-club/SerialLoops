@@ -527,6 +527,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Asahina Present.
+        /// </summary>
+        public static string Asahina_Present {
+            get {
+                return ResourceManager.GetString("Asahina Present", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Asahina puzzle phase selected description.
         /// </summary>
         public static string Asahina_puzzle_phase_selected_description {
@@ -3366,6 +3375,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to First Selection.
+        /// </summary>
+        public static string First_Selection {
+            get {
+                return ResourceManager.GetString("First Selection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to FLAC files.
         /// </summary>
         public static string FLAC_files {
@@ -3951,6 +3969,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Koizumi Present.
+        /// </summary>
+        public static string Koizumi_Present {
+            get {
+                return ResourceManager.GetString("Koizumi Present", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Koizumi puzzle phase selected description.
         /// </summary>
         public static string Koizumi_puzzle_phase_selected_description {
@@ -3974,6 +4001,15 @@ namespace SerialLoops.Assets {
         public static string Kyon_companion_selected_description {
             get {
                 return ResourceManager.GetString("Kyon companion selected description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kyon Present.
+        /// </summary>
+        public static string Kyon_Present {
+            get {
+                return ResourceManager.GetString("Kyon Present", resourceCulture);
             }
         }
         
@@ -4320,6 +4356,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Most Recent Objectives.
+        /// </summary>
+        public static string Most_Recent_Objectives {
+            get {
+                return ResourceManager.GetString("Most Recent Objectives", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Move Command Down.
         /// </summary>
         public static string Move_Command_Down {
@@ -4379,6 +4424,15 @@ namespace SerialLoops.Assets {
         public static string Nagato_companion_selected_description {
             get {
                 return ResourceManager.GetString("Nagato companion selected description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nagato Present.
+        /// </summary>
+        public static string Nagato_Present {
+            get {
+                return ResourceManager.GetString("Nagato Present", resourceCulture);
             }
         }
         
@@ -6219,6 +6273,15 @@ namespace SerialLoops.Assets {
         public static string Second_prompt_on_data_being_erased {
             get {
                 return ResourceManager.GetString("Second prompt on data being erased", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Second Selection.
+        /// </summary>
+        public static string Second_Selection {
+            get {
+                return ResourceManager.GetString("Second Selection", resourceCulture);
             }
         }
         

@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:assets="using:SerialLoops.Assets"
         xmlns:controls="using:SerialLoops.Controls"
+        xmlns:dialogs="using:SerialLoops.Views.Dialogs"
         xmlns:gbox="using:GroupBox.Avalonia.Controls"
         xmlns:utility="using:SerialLoops.Utility"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -148,7 +149,7 @@
                          IsSelected="{Binding IsSaveSlot}"
                          Header="{x:Static assets:Strings.Save_Data}"
                          GotFocus="CharacterPortraitTab_OnGotFocus">
-                    <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,Auto">
+                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,Auto">
                         <TextBlock Grid.Row="0" Grid.Column="0" Margin="0,7,0,0" Text="{x:Static assets:Strings.Save_Time_}"/>
                         <StackPanel Grid.Row="0" Grid.Column="1" Margin="10,0,0,0" Orientation="Horizontal" Spacing="3">
                             <CalendarDatePicker SelectedDate="{Binding SaveDate}"/>
@@ -162,7 +163,49 @@
                         <NumericUpDown Grid.Row="2" Grid.Column="1" Margin="10,0,0,0" Value="{Binding Episode}" Minimum="1"
                                        Maximum="5" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
 
-                        <gbox:GroupBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Header="{x:Static assets:Strings.Friendship_Levels}" Margin="10"
+                        <gbox:GroupBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Header="{x:Static assets:Strings.Most_Recent_Objectives}" Margin="10"
+                                       HorizontalAlignment="Center" HorizontalContentAlignment="Center" Theme="{StaticResource GroupBoxClassic}">
+                            <ItemsRepeater ItemsSource="{Binding RecentObjectives}">
+                                <ItemsRepeater.Layout>
+                                    <UniformGridLayout Orientation="Vertical" MaximumRowsOrColumns="2"/>
+                                </ItemsRepeater.Layout>
+                                <ItemsRepeater.ItemTemplate>
+                                    <DataTemplate DataType="vm:RecentObjective">
+                                        <gbox:GroupBox Header="{Binding Letter}" Margin="10" HorizontalAlignment="Center"
+                                                       HorizontalContentAlignment="Center" Theme="{StaticResource GroupBoxClassic}">
+                                            <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,Auto,Auto,Auto,Auto">
+                                                <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding FirstSelection}"
+                                                          Content="1" ToolTip.Tip="{x:Static assets:Strings.First_Selection}"/>
+                                                <CheckBox Grid.Row="0" Grid.Column="3" IsChecked="{Binding SecondSelection}"
+                                                          Content="2" ToolTip.Tip="{x:Static assets:Strings.Second_Selection}"/>
+                                                <CheckBox Grid.Row="1" Grid.Column="0" IsChecked="{Binding KyonPresent}"
+                                                          ToolTip.Tip="{x:Static assets:Strings.Kyon_Present}" Margin="10,0">
+                                                    <Image Source="{Binding $parent[dialogs:SaveSlotEditorDialog].((vm:SaveSlotEditorDialogViewModel)DataContext).KyonVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
+                                                </CheckBox>
+                                                <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding HaruhiPresent}"
+                                                          ToolTip.Tip="{x:Static assets:Strings.Haruhi_Present}" Margin="10,0">
+                                                    <Image Source="{Binding $parent[dialogs:SaveSlotEditorDialog].((vm:SaveSlotEditorDialogViewModel)DataContext).HaruhiVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
+                                                </CheckBox>
+                                                <CheckBox Grid.Row="1" Grid.Column="2" IsChecked="{Binding AsahinaPresent}"
+                                                          ToolTip.Tip="{x:Static assets:Strings.Asahina_Present}" Margin="10,0">
+                                                    <Image Source="{Binding $parent[dialogs:SaveSlotEditorDialog].((vm:SaveSlotEditorDialogViewModel)DataContext).AsahinaVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
+                                                </CheckBox>
+                                                <CheckBox Grid.Row="1" Grid.Column="3" IsChecked="{Binding NagatoPresent}"
+                                                          ToolTip.Tip="{x:Static assets:Strings.Nagato_Present}" Margin="10,0">
+                                                    <Image Source="{Binding $parent[dialogs:SaveSlotEditorDialog].((vm:SaveSlotEditorDialogViewModel)DataContext).NagatoVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
+                                                </CheckBox>
+                                                <CheckBox Grid.Row="1" Grid.Column="4" IsChecked="{Binding KoizumiPresent}"
+                                                          ToolTip.Tip="{x:Static assets:Strings.Koizumi_Present}" Margin="10,0">
+                                                    <Image Source="{Binding $parent[dialogs:SaveSlotEditorDialog].((vm:SaveSlotEditorDialogViewModel)DataContext).KoizumiVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
+                                                </CheckBox>
+                                            </Grid>
+                                        </gbox:GroupBox>
+                                    </DataTemplate>
+                                </ItemsRepeater.ItemTemplate>
+                            </ItemsRepeater>
+                        </gbox:GroupBox>
+
+                        <gbox:GroupBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Header="{x:Static assets:Strings.Friendship_Levels}" Margin="10"
                                        HorizontalAlignment="Center" HorizontalContentAlignment="Center" Theme="{StaticResource GroupBoxClassic}">
                             <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,Auto">
                                 <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Spacing="5">

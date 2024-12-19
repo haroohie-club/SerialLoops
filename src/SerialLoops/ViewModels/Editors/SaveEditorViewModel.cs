@@ -6,12 +6,12 @@ using SerialLoops.Assets;
 using SerialLoops.Lib.SaveFile;
 using SerialLoops.ViewModels.Controls;
 using SerialLoops.ViewModels.Dialogs;
-using SerialLoops.ViewModels.Editors;
+using SerialLoops.ViewModels.Panels;
 using SerialLoops.Views.Dialogs;
 
-namespace SerialLoops.ViewModels.Panels;
+namespace SerialLoops.ViewModels.Editors;
 
-public class SaveEditorPanelViewModel : EditorViewModel
+public class SaveEditorViewModel : EditorViewModel
 {
     public SaveItem Save { get; }
     public SaveSlotPreviewViewModel Slot1ViewModel => new(Save, Save.Save.CheckpointSaveSlots[0], 1, Window);
@@ -20,7 +20,7 @@ public class SaveEditorPanelViewModel : EditorViewModel
 
     public ICommand EditCommonSaveDataCommand { get; }
 
-    public SaveEditorPanelViewModel(SaveItem save, MainWindowViewModel window, ILogger log, EditorTabsPanelViewModel tabs = null) :
+    public SaveEditorViewModel(SaveItem save, MainWindowViewModel window, ILogger log, EditorTabsPanelViewModel tabs = null) :
         base(save, window, log, tabs: tabs)
     {
         Save = save;
