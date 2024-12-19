@@ -168,17 +168,17 @@
                                                 <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Spacing="5">
                                                     <TextBlock Margin="0,7,0,0" Text="{x:Static assets:Strings.Remaining_Uses}"/>
                                                     <NumericUpDown Value="{Binding RemainingUses}" Minimum="0"
-                                                                   Maximum="5" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
+                                                                   Maximum="9" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
                                                 </StackPanel>
                                                 <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Spacing="5">
                                                     <TextBlock Margin="0,7,0,0" Text="{x:Static assets:Strings.Uses_Since_Level_Up}"/>
                                                     <NumericUpDown Value="{Binding UsesSinceLevelUp}" Minimum="0"
-                                                                   Maximum="40" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
+                                                                   Maximum="10" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
                                                 </StackPanel>
                                                 <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Spacing="5">
                                                     <TextBlock Margin="0,7,0,0" Text="{x:Static assets:Strings.Uses_to_Level_Up}"/>
                                                     <NumericUpDown Value="{Binding UsesToLevelUp}" Minimum="1"
-                                                                   Maximum="40" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
+                                                                   Maximum="10" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
                                                 </StackPanel>
                                             </Grid>
                                         </gbox:GroupBox>
