@@ -1,0 +1,77 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="using:SerialLoops.ViewModels.Editors"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:sk="using:SkiaSharp"
+             xmlns:utility="using:SerialLoops.Utility"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:LayoutEditorViewModel"
+             x:Class="SerialLoops.Views.Editors.LayoutEditorView">
+    <UserControl.Resources>
+        <utility:SKAvaloniaBrushConverter x:Key="BrushConverter"/>
+        <utility:SKAvaloniaColorConverter x:Key="ColorConverter"/>
+    </UserControl.Resources>
+    <Grid RowDefinitions="Auto,*" ColumnDefinitions="Auto,Auto,Auto">
+        <ItemsControl Grid.Row="0" Grid.Column="0" ItemsSource="{Binding LayoutEntries}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas Width="256" Height="192" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.DataTemplates>
+                <DataTemplate DataType="vm:LayoutEntryWithImage">
+                    <Canvas Width="{Binding Width}" Height="{Binding Height}">
+                        <Image Source="{Binding CroppedImage, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
+                               Stretch="Fill" Width="{Binding Width}" Height="{Binding Height}"/>
+                        <Border Background="Transparent" BorderBrush="Red" BorderThickness="3"
+                                Width="{Binding Width}" Height="{Binding Height}"
+                                IsVisible="{Binding IsSelected}"/>
+                    </Canvas>
+                </DataTemplate>
+            </ItemsControl.DataTemplates>
+            <ItemsControl.Styles>
+                <Style Selector="ItemsControl > ContentPresenter" x:DataType="vm:LayoutEntryWithImage">
+                    <Setter Property="(Canvas.Left)" Value="{Binding ScreenX}"/>
+                    <Setter Property="(Canvas.Top)" Value="{Binding ScreenY}"/>
+                </Style>
+            </ItemsControl.Styles>
+        </ItemsControl>
+        <Image Grid.Row="0" Grid.Column="1"/>
+        <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Vertical" Spacing="3">
+
+        </StackPanel>
+
+        <ScrollViewer Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3">
+            <Grid>
+                <DataGrid ItemsSource="{Binding LayoutEntries}" AreRowGroupHeadersFrozen="True"
+                          CanUserResizeColumns="True" CanUserSortColumns="False" IsReadOnly="False" GridLinesVisibility="All"
+                          BorderThickness="1" BorderBrush="Gray" SelectedItem="{Binding SelectedLayoutEntry}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Screen X" Binding="{Binding ScreenX}"/>
+                        <DataGridTextColumn Header="Screen Y" Binding="{Binding ScreenY}"/>
+                        <DataGridTextColumn Header="Screen Width" Binding="{Binding ScreenWidth}"/>
+                        <DataGridTextColumn Header="Screen Height" Binding="{Binding ScreenHeight}"/>
+                        <DataGridTextColumn Header="Texture X" Binding="{Binding TextureX}"/>
+                        <DataGridTextColumn Header="Texture Y" Binding="{Binding TextureY}"/>
+                        <DataGridTextColumn Header="Texture Width" Binding="{Binding TextureW}"/>
+                        <DataGridTextColumn Header="Texture Height" Binding="{Binding TextureH}"/>
+                        <DataGridTemplateColumn Header="Tint">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Border Background="{Binding Tint, Converter={StaticResource BrushConverter}}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <ColorPicker Color="{Binding Tint, Converter={StaticResource ColorConverter}}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</UserControl>
+
