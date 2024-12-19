@@ -1022,6 +1022,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Character Power Statuses.
+        /// </summary>
+        public static string Character_Power_Statuses {
+            get {
+                return ResourceManager.GetString("Character Power Statuses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Character Sprite.
         /// </summary>
         public static string Character_Sprite {
@@ -4095,6 +4104,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Level.
+        /// </summary>
+        public static string Level {
+            get {
+                return ResourceManager.GetString("Level", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Listened to {0} (F{1:D2}).
         /// </summary>
         public static string Listened_to__0___F_1_D2__ {
@@ -5461,6 +5479,15 @@ namespace SerialLoops.Assets {
         public static string Refresh_Maps_List {
             get {
                 return ResourceManager.GetString("Refresh Maps List", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remaining Uses.
+        /// </summary>
+        public static string Remaining_Uses {
+            get {
+                return ResourceManager.GetString("Remaining Uses", resourceCulture);
             }
         }
         
@@ -7761,6 +7788,24 @@ namespace SerialLoops.Assets {
         public static string Use_Pre_Release_Update_Channel {
             get {
                 return ResourceManager.GetString("Use Pre-Release Update Channel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Uses Since Level Up.
+        /// </summary>
+        public static string Uses_Since_Level_Up {
+            get {
+                return ResourceManager.GetString("Uses Since Level Up", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Uses to Level Up.
+        /// </summary>
+        public static string Uses_to_Level_Up {
+            get {
+                return ResourceManager.GetString("Uses to Level Up", resourceCulture);
             }
         }
         

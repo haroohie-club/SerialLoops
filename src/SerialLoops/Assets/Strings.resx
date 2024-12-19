@@ -2882,4 +2882,19 @@ This action is irreversible.</value>
   <data name="Koizumi Present" xml:space="preserve">
     <value>Koizumi Present</value>
   </data>
+  <data name="Character Power Statuses" xml:space="preserve">
+    <value>Character Power Statuses</value>
+  </data>
+  <data name="Level" xml:space="preserve">
+    <value>Level</value><comment>The level of a character power</comment>
+  </data>
+  <data name="Remaining Uses" xml:space="preserve">
+    <value>Remaining Uses</value><comment>The uses remaining for this character power</comment>
+  </data>
+  <data name="Uses Since Level Up" xml:space="preserve">
+    <value>Uses Since Level Up</value><comment>The number of times the power has been used since the last level up</comment>
+  </data>
+  <data name="Uses to Level Up" xml:space="preserve">
+    <value>Uses to Level Up</value><comment>The number of times the power must be used to level up</comment>
+  </data>
 </root>

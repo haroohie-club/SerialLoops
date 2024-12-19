@@ -14,16 +14,16 @@
         x:Class="SerialLoops.Views.Dialogs.SaveSlotEditorDialog"
         Title="{Binding Title}"
         Name="Dialog">
-    <ScrollViewer>
-        <Grid RowDefinitions="Auto,*,Auto" ColumnDefinitions="*">
-            <TextBlock Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" Classes="h1"
-                       Text="{Binding SlotName}" Margin="5,10" />
-            <TabControl Grid.Row="1" Grid.Column="0">
-                <TabItem IsVisible="{Binding IsCommonSave}"
-                         IsSelected="{Binding IsCommonSave}"
-                         Header="{x:Static assets:Strings.Config_Data}"
-                         GotFocus="CharacterPortraitTab_OnGotFocus">
-                    <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="*,*">
+    <Grid RowDefinitions="Auto,*,Auto" ColumnDefinitions="*">
+        <TextBlock Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" Classes="h1"
+                   Text="{Binding SlotName}" Margin="5,10" />
+        <TabControl Grid.Row="1" Grid.Column="0">
+            <TabItem IsVisible="{Binding IsCommonSave}"
+                     IsSelected="{Binding IsCommonSave}"
+                     Header="{x:Static assets:Strings.Config_Data}"
+                     GotFocus="CharacterPortraitTab_OnGotFocus">
+                <ScrollViewer>
+                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,*">
                         <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center"
                                     Orientation="Horizontal" Spacing="3">
                             <TextBlock Text="{x:Static assets:Strings.Number_of_Saves_}" />
@@ -143,12 +143,52 @@
                                 <RadioButton GroupName="BatchDialogueDisplay" Content="{x:Static assets:Strings.On}" IsChecked="{Binding BatchDialogueDisplay}"/>
                             </StackPanel>
                         </gbox:GroupBox>
+
+                        <gbox:GroupBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Header="{x:Static assets:Strings.Character_Power_Statuses}" Margin="10"
+                                       HorizontalAlignment="Center" HorizontalContentAlignment="Center" Theme="{StaticResource GroupBoxClassic}">
+                            <ItemsRepeater ItemsSource="{Binding PowerStatuses}">
+                                <ItemsRepeater.Layout>
+                                    <UniformGridLayout MaximumRowsOrColumns="1" Orientation="Horizontal" MinRowSpacing="15"/>
+                                </ItemsRepeater.Layout>
+                                <ItemsRepeater.ItemTemplate>
+                                    <DataTemplate DataType="vm:ReactivePowerStatus">
+                                        <gbox:GroupBox Header="{Binding Name}" Margin="10"
+                                                       HorizontalAlignment="Center" HorizontalContentAlignment="Center" Theme="{StaticResource GroupBoxClassic}">
+                                            <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,Auto">
+                                                <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Spacing="5">
+                                                    <TextBlock Margin="0,7,0,0" Text="{x:Static assets:Strings.Level}"/>
+                                                    <NumericUpDown Value="{Binding Level}" Minimum="1"
+                                                                   Maximum="5" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
+                                                </StackPanel>
+                                                <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Spacing="5">
+                                                    <TextBlock Margin="0,7,0,0" Text="{x:Static assets:Strings.Remaining_Uses}"/>
+                                                    <NumericUpDown Value="{Binding RemainingUses}" Minimum="0"
+                                                                   Maximum="5" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
+                                                </StackPanel>
+                                                <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Spacing="5">
+                                                    <TextBlock Margin="0,7,0,0" Text="{x:Static assets:Strings.Uses_Since_Level_Up}"/>
+                                                    <NumericUpDown Value="{Binding UsesSinceLevelUp}" Minimum="0"
+                                                                   Maximum="40" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
+                                                </StackPanel>
+                                                <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Spacing="5">
+                                                    <TextBlock Margin="0,7,0,0" Text="{x:Static assets:Strings.Uses_to_Level_Up}"/>
+                                                    <NumericUpDown Value="{Binding UsesToLevelUp}" Minimum="1"
+                                                                   Maximum="40" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
+                                                </StackPanel>
+                                            </Grid>
+                                        </gbox:GroupBox>
+                                    </DataTemplate>
+                                </ItemsRepeater.ItemTemplate>
+                            </ItemsRepeater>
+                        </gbox:GroupBox>
                     </Grid>
-                </TabItem>
-                <TabItem IsVisible="{Binding IsSaveSlot}"
-                         IsSelected="{Binding IsSaveSlot}"
-                         Header="{x:Static assets:Strings.Save_Data}"
-                         GotFocus="CharacterPortraitTab_OnGotFocus">
+                </ScrollViewer>
+            </TabItem>
+            <TabItem IsVisible="{Binding IsSaveSlot}"
+                     IsSelected="{Binding IsSaveSlot}"
+                     Header="{x:Static assets:Strings.Save_Data}"
+                     GotFocus="CharacterPortraitTab_OnGotFocus">
+                <ScrollViewer>
                     <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,Auto">
                         <TextBlock Grid.Row="0" Grid.Column="0" Margin="0,7,0,0" Text="{x:Static assets:Strings.Save_Time_}"/>
                         <StackPanel Grid.Row="0" Grid.Column="1" Margin="10,0,0,0" Orientation="Horizontal" Spacing="3">
@@ -247,12 +287,16 @@
                             </Grid>
                         </gbox:GroupBox>
                     </Grid>
-                </TabItem>
-                <TabItem IsVisible="{Binding IsQuickSave}"
-                         Header="{x:Static assets:Strings.Script_Position}">
+                </ScrollViewer>
+            </TabItem>
+            <TabItem IsVisible="{Binding IsQuickSave}"
+                     Header="{x:Static assets:Strings.Script_Position}">
+                <ScrollViewer>
 
-                </TabItem>
-                <TabItem Header="{x:Static assets:Strings.Flags}">
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Header="{x:Static assets:Strings.Flags}">
+                <ScrollViewer>
                     <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*">
                         <StackPanel Grid.Row="0" HorizontalAlignment="Center" Orientation="Horizontal" Spacing="3">
                             <CheckBox IsChecked="{Binding HideUnsetFlags}"/>
@@ -302,14 +346,14 @@
                             </Button>
                         </StackPanel>
                     </Grid>
-                </TabItem>
-            </TabControl>
-            <StackPanel HorizontalAlignment="Right" Margin="10" Spacing="3" Grid.Row="2" Orientation="Horizontal">
-                <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}"
-                        CommandParameter="{Binding #Dialog}" IsCancel="True"/>
-                <Button Content="{x:Static assets:Strings.Save}" Command="{Binding SaveCommand}"
-                        CommandParameter="{Binding #Dialog}" IsDefault="True"/>
-            </StackPanel>
-        </Grid>
-    </ScrollViewer>
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
+        <StackPanel HorizontalAlignment="Right" Margin="10" Spacing="3" Grid.Row="2" Orientation="Horizontal">
+            <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}"
+                    CommandParameter="{Binding #Dialog}" IsCancel="True"/>
+            <Button Content="{x:Static assets:Strings.Save}" Command="{Binding SaveCommand}"
+                    CommandParameter="{Binding #Dialog}" IsDefault="True"/>
+        </StackPanel>
+    </Grid>
 </Window>

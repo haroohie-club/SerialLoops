@@ -124,6 +124,13 @@ public class SaveSlotEditorDialogViewModel : ViewModelBase
                                 SaveOptions.PuzzleInvestigationOptions.DIALOGUE_SKIPPING_SKIP_ALREADY_READ) != 0;
             BatchDialogueDisplay = (commonSave.Options.StoryOptions &
                                     SaveOptions.PuzzleInvestigationOptions.BATCH_DIALOGUE_DISPLAY_ON) != 0;
+
+            PowerStatuses =
+            [
+                new(project.GetCharacterBySpeaker(Speaker.MIKURU).DisplayName[4..], commonSave.MikuruPowerStatus),
+                new(project.GetCharacterBySpeaker(Speaker.NAGATO).DisplayName[4..], commonSave.NagatoPowerStatus),
+                new(project.GetCharacterBySpeaker(Speaker.KOIZUMI).DisplayName[4..], commonSave.KoizumiPowerStatus),
+            ];
         }
 
         _flags = new LocalizedFlag[Flags.NUM_FLAGS];
@@ -232,6 +239,10 @@ public class SaveSlotEditorDialogViewModel : ViewModelBase
                 _commonSaveData.Options.StoryOptions |=
                     SaveOptions.PuzzleInvestigationOptions.BATCH_DIALOGUE_DISPLAY_ON;
             }
+
+            PowerStatuses[0].SetStatus(_commonSaveData.MikuruPowerStatus);
+            PowerStatuses[1].SetStatus(_commonSaveData.NagatoPowerStatus);
+            PowerStatuses[2].SetStatus(_commonSaveData.KoizumiPowerStatus);
         }
 
         if (IsSaveSlot)
@@ -400,6 +411,7 @@ public class SaveSlotEditorDialogViewModel : ViewModelBase
     [Reactive] public byte UnknownFriendshipLevel { get; set; }
 
     public List<RecentObjective> RecentObjectives { get; set; }
+    public List<ReactivePowerStatus> PowerStatuses { get; set; }
 
     // Flag Data
     private LocalizedFlag[] _flags;
@@ -463,5 +475,22 @@ public class RecentObjective(string letter, CharacterMask objective) : ReactiveO
         mask |= FirstSelection ? CharacterMask.SELECTION1 : 0;
         mask |= SecondSelection ? CharacterMask.SELECTION2 : 0;
         return mask;
+    }
+}
+
+public class ReactivePowerStatus(string name, CharacterPowerStatus status) : ReactiveObject
+{
+    public string Name { get; } = name;
+    [Reactive] public byte Level { get; set; } = status.Level;
+    [Reactive] public byte RemainingUses { get; set; } = status.RemainingUses;
+    [Reactive] public byte UsesSinceLevelUp { get; set; } = status.UsesSinceLevelUp;
+    [Reactive] public byte UsesToLevelUp { get; set; } = status.UsesToLevelUp;
+
+    public void SetStatus(CharacterPowerStatus status)
+    {
+        status.Level = Level;
+        status.RemainingUses = RemainingUses;
+        status.UsesSinceLevelUp = UsesSinceLevelUp;
+        status.UsesToLevelUp = UsesToLevelUp;
     }
 }
