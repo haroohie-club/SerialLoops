@@ -12,11 +12,9 @@
         Title="{Binding Title}">
     <ScrollViewer>
         <Grid>
-            <TreeDataGrid Background="{StaticResource AccentColor}" Margin="10" ShowColumnHeaders="False" CanUserResizeColumns="False" Name="Viewer" Source="{Binding Source}">
+            <TreeDataGrid Background="{StaticResource AccentColor}" Margin="10" ShowColumnHeaders="False" CanUserResizeColumns="False" Name="Viewer" Source="{Binding Source}"
+                          KeyUp="Viewer_OnKeyUp">
                 <i:Interaction.Behaviors>
-                    <ia:EventTriggerBehavior EventName="KeyUp" SourceObject="{Binding #Viewer}">
-                        <ia:InvokeCommandAction Command="{Binding OpenItemCommand}" CommandParameter="{Binding #Viewer}"/>
-                    </ia:EventTriggerBehavior>
                     <ia:EventTriggerBehavior EventName="DoubleTapped" SourceObject="{Binding #Viewer}">
                         <ia:InvokeCommandAction Command="{Binding OpenItemCommand}" CommandParameter="{Binding #Viewer}"/>
                     </ia:EventTriggerBehavior>

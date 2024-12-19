@@ -1,13 +1,11 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows.Input;
 using Avalonia.Controls;
 using Avalonia.Layout;
 using ReactiveUI;
 using SerialLoops.Assets;
 using SerialLoops.Lib.Items;
-using SerialLoops.Utility;
 using SerialLoops.ViewModels;
 using SerialLoops.ViewModels.Dialogs;
 using SerialLoops.Views.Dialogs;
