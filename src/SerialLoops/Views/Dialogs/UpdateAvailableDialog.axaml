@@ -14,6 +14,7 @@
         Width="{Binding ClientSize.Width}"
         Height="{Binding ClientSize.Height}"
         Icon="/Assets/serial-loops.ico"
+        Name="Dialog"
         Title="{Binding Title}">
 
     <Grid HorizontalAlignment="Left" VerticalAlignment="Top"
@@ -28,7 +29,7 @@
                     Grid.Row="3" Grid.Column="0" Command="{Binding OpenReleaseLinkCommand}"/>
         <StackPanel Grid.Row="5" Grid.Column="0" Orientation="Horizontal" Spacing="20">
             <Button Content="{x:Static assets:Strings.Download_from_GitHub}" Command="{Binding OpenReleaseLinkCommand}"/>
-            <Button Content="{x:Static assets:Strings.Skip_Update}" Command="{Binding CloseCommand}"/>
+            <Button Content="{x:Static assets:Strings.Skip_Update}" Command="{Binding CloseCommand}" CommandParameter="{Binding #Dialog}"/>
             <CheckBox Content="{x:Static assets:Strings.Check_for_Updates}" IsChecked="{Binding CheckForUpdates}"/>
             <CheckBox Content="{x:Static assets:Strings.Pre_Release_Channel}" IsChecked="{Binding UsePreReleaseChannel}"/>
         </StackPanel>
