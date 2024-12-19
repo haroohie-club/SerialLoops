@@ -19,6 +19,7 @@ public class ItemExplorerPanelViewModel : ViewModelBase
     private Project _project;
     private EditorTabsPanelViewModel _tabs;
     private ILogger _log;
+    private MainWindowViewModel _window;
 
     private ObservableCollection<ItemDescription> _items;
     public ObservableCollection<ItemDescription> Items
@@ -65,13 +66,14 @@ public class ItemExplorerPanelViewModel : ViewModelBase
     public ICommand SearchProjectCommand { get; set; }
     public ICommand OpenItemCommand { get; set; }
 
-    public ItemExplorerPanelViewModel(Project project, EditorTabsPanelViewModel tabs, ICommand searchProjectCommand, ILogger log)
+    public ItemExplorerPanelViewModel(ICommand searchProjectCommand, MainWindowViewModel window)
     {
-        _project = project;
-        _tabs = tabs;
-        _log = log;
+        _project = window.OpenProject;
+        _tabs = window.EditorTabs;
+        _log = window.Log;
+        _window = window;
 
-        Items = new(project.Items);
+        Items = new(_project.Items);
         SearchProjectCommand = searchProjectCommand;
         SearchCommand = ReactiveCommand.Create<string>(Search);
         OpenItemCommand = ReactiveCommand.Create<TreeDataGrid>(OpenItem);
@@ -92,7 +94,7 @@ public class ItemExplorerPanelViewModel : ViewModelBase
             .OrderBy(g => ControlGenerator.LocalizeItemTypes(g.Key))
             .Select(g => new SectionTreeItem(
                 ControlGenerator.LocalizeItemTypes(g.Key),
-                g.Select(i => new ItemDescriptionTreeItem(i)),
+                g.Select(i => new ItemDescriptionTreeItem(i, _window)),
                 ControlGenerator.GetVectorIcon(g.Key.ToString(), _log, size: 16)
             )));
     }

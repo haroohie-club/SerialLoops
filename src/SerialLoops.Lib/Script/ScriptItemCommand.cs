@@ -719,7 +719,8 @@ public class ScriptItemCommand : ReactiveObject
                 str += $" {((ScriptSectionScriptParameter)Parameters[0]).Section.Name}";
                 break;
             case CommandVerb.VGOTO:
-                str += $" {((ConditionalScriptParameter)Parameters[0]).Conditional}, {((ScriptSectionScriptParameter)Parameters[1]).Section.Name}";
+                string conditional = ((ConditionalScriptParameter)Parameters[0]).Conditional;
+                str += $" '{(conditional.Length > 10 ? $"{conditional[..10]}..." : conditional)}', {((ScriptSectionScriptParameter)Parameters[1]).Section.Name}";
                 break;
             case CommandVerb.WAIT:
                 str += $" {((ShortScriptParameter)Parameters[0]).Value}";

@@ -182,7 +182,7 @@ public partial class MainWindowViewModel : ViewModelBase
     internal void OpenProjectView(Project project, IProgressTracker tracker)
     {
         EditorTabs = new(this, project, Log);
-        ItemExplorer = new(OpenProject, EditorTabs, SearchProjectCommand, Log);
+        ItemExplorer = new(SearchProjectCommand, this);
         ProjectPanel = new()
         {
             DataContext = new OpenProjectPanelViewModel(ItemExplorer, EditorTabs),

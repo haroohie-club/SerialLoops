@@ -1,0 +1,28 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:vm="using:SerialLoops.ViewModels.Dialogs"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="using:Avalonia.Xaml.Interactivity"
+        xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        Width="300" Height="400"
+        x:DataType="vm:ItemReferencesDialogViewModel"
+        x:Class="SerialLoops.Views.Dialogs.ItemReferencesDialog"
+        Title="{Binding Title}">
+    <ScrollViewer>
+        <Grid>
+            <TreeDataGrid Background="{StaticResource AccentColor}" Margin="10" ShowColumnHeaders="False" CanUserResizeColumns="False" Name="Viewer" Source="{Binding Source}">
+                <i:Interaction.Behaviors>
+                    <ia:EventTriggerBehavior EventName="KeyUp" SourceObject="{Binding #Viewer}">
+                        <ia:InvokeCommandAction Command="{Binding OpenItemCommand}" CommandParameter="{Binding #Viewer}"/>
+                    </ia:EventTriggerBehavior>
+                    <ia:EventTriggerBehavior EventName="DoubleTapped" SourceObject="{Binding #Viewer}">
+                        <ia:InvokeCommandAction Command="{Binding OpenItemCommand}" CommandParameter="{Binding #Viewer}"/>
+                    </ia:EventTriggerBehavior>
+                </i:Interaction.Behaviors>
+            </TreeDataGrid>
+        </Grid>
+    </ScrollViewer>
+</Window>
+
