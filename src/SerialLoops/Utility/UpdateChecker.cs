@@ -28,7 +28,7 @@ internal class UpdateChecker(MainWindowViewModel mainWindowViewModel)
     private ILogger _logger => _mainWindowViewModel.Log;
     private bool _preReleaseChannel => _mainWindowViewModel.CurrentConfig.PreReleaseChannel;
 
-    public async void Check()
+    public async Task Check()
     {
         (string version, string url, _, string changelog) = await GetLatestVersion(_currentVersion);
         if (_currentVersion.StartsWith(version)) // version might be something like 0.1.1, but current version will always be 4 digits
