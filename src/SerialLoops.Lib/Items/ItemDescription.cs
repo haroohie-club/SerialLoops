@@ -60,7 +60,6 @@ public partial class ItemDescription : ReactiveObject
         Topic,
         Transition,
         Voice,
-        Save, // Not a real item so I'm not adhering to alpha order here; should never show up in a project
     }
 
     public List<ItemDescription> GetReferencesTo(Project project)

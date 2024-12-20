@@ -470,24 +470,6 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public async Task EditSaveFileCommand_Executed()
     {
-        if (OpenProject is not null)
-        {
-            IStorageFile saveFile = await Window.ShowOpenFilePickerAsync(Strings.Open_Chokuretsu_Save_File,
-                [new(Strings.Chokuretsu_Save_File) { Patterns = ["*.sav"] }]);
-            if (saveFile is null)
-            {
-                return;
-            }
-
-            string path = saveFile.TryGetLocalPath();
-            SaveItem saveItem = new SaveItem(path, Path.GetFileNameWithoutExtension(path));
-            OpenProject.Items.Add(saveItem);
-            EditorTabs.OpenTab(saveItem);
-        }
-        else
-        {
-
-        }
     }
 
     public void SaveProject_Executed()
@@ -595,17 +577,6 @@ public partial class MainWindowViewModel : ViewModelBase
                     if (OpenProject.VoiceMap is not null)
                     {
                         changedSubs = true;
-                    }
-                    break;
-                case ItemDescription.ItemType.Save:
-                    SaveItem save = (SaveItem)item;
-                    try
-                    {
-                        File.WriteAllBytes(save.SaveLoc, save.Save.GetBytes());
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.LogException(Strings.Failed_to_save_Chokuretsu_save_file_, ex);
                     }
                     break;
                 default:
