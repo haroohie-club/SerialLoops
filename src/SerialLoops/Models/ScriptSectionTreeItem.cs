@@ -10,10 +10,14 @@ namespace SerialLoops.Models;
 
 public class ScriptSectionTreeItem : ITreeItem, IViewFor<ReactiveScriptSection>
 {
-    private TextBlock _textBlock = new();
+    private TextBlock _textBlock = new()
+    {
+        VerticalAlignment = VerticalAlignment.Center,
+    };
     StackPanel _panel = new()
     {
         Orientation = Orientation.Horizontal,
+        VerticalAlignment = VerticalAlignment.Center,
         Spacing = 3,
         Margin = new(2),
     };
