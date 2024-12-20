@@ -140,6 +140,7 @@
     </Compile>
     <Compile Update="Views\Editors\ScenarioCommandEditors\ScenarioCommandEditorView.axaml.cs">
       <DependentUpon>ScenarioCommandEditorView.axaml</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
