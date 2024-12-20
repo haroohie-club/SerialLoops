@@ -556,10 +556,12 @@ public partial class MainWindowViewModel : ViewModelBase
                 OpenProject.Load(CurrentConfig, Log, tracker);
             }, () =>
             {
+                SaveItem saveItem = new(savePath, Path.GetFileNameWithoutExtension(savePath));
+                OpenProject.Items.Add(saveItem);
                 Window.MainContent.Content = new SaveEditorView
                 {
                     DataContext =
-                        new SaveEditorViewModel(new(savePath, Path.GetFileName(savePath)), this, Log, null),
+                        new SaveEditorViewModel(saveItem, this, Log, null),
                 };
                 if (WindowMenu.ContainsKey(MenuHeader.TOOLS))
                 {
