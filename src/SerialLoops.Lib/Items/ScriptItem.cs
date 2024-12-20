@@ -34,6 +34,7 @@ public class ScriptItem : Item
 
         PruneLabelsSection(log);
         Graph.AddVertexRange(Event.ScriptSections);
+        UpdateEventTableInfo(evtTbl);
     }
 
     public OrderedDictionary<ScriptSection, List<ScriptItemCommand>> GetScriptCommandTree(Project project, ILogger log)
@@ -84,13 +85,13 @@ public class ScriptItem : Item
                                     Event.MapCharactersSection?.Objects.Select(c => c.TalkScriptBlock)
                                         .Contains(l.Id) ?? false)
                                 .Select(l => l.Name.Replace("/", "")).Contains(s.Name)).Select(s =>
-                            new ScriptSectionEdge() { Source = section, Target = s }));
+                            new ScriptSectionEdge { Source = section, Target = s }));
                         Graph.AddEdgeRange(Event.ScriptSections.Where(s =>
                             Event.LabelsSection.Objects.Where(l =>
                                     Event.InteractableObjectsSection.Objects.Select(o => o.ScriptBlock)
                                         .Contains(l.Id))
                                 .Select(l => l.Name.Replace("/", "")).Contains(s.Name)).Select(s =>
-                            new ScriptSectionEdge() { Source = section, Target = s }));
+                            new ScriptSectionEdge { Source = section, Target = s }));
                         @continue = true;
                     }
                     else if (command.Verb == CommandVerb.GOTO)
@@ -131,7 +132,7 @@ public class ScriptItem : Item
                     {
                         Graph.AddEdgeRange(command.Parameters.Cast<ScriptSectionScriptParameter>()
                             .Where(p => p.Section is not null).Select(p =>
-                                new ScriptSectionEdge() { Source = section, Target = p.Section }));
+                                new ScriptSectionEdge { Source = section, Target = p.Section }));
                         ScriptSection miss2Section =
                             Event.ScriptSections.FirstOrDefault(s => s.Name == "NONEMiss2");
                         if (miss2Section is not null)
@@ -151,7 +152,7 @@ public class ScriptItem : Item
                                             .Cast<OptionScriptParameter>()
                                             .Where(p => p.Option.Id > 0).Select(p => p.Option.Id).Contains(l.Id))
                                     .Select(l => l.Name.Replace("/", "")).Contains(s.Name))
-                            .Select(s => new ScriptSectionEdge() { Source = section, Target = s }));
+                            .Select(s => new ScriptSectionEdge { Source = section, Target = s }));
                         @continue = true;
                     }
                     else if (command.Verb == CommandVerb.NEXT_SCENE)
@@ -238,6 +239,10 @@ public class ScriptItem : Item
                 {
                     preview.Kbg = ((BgScriptParameter)commands[i].Parameters[0]).Background;
                     break;
+                }
+                if (commands[i].Verb == CommandVerb.OP_MODE)
+                {
+                    preview.Kbg = (BackgroundItem)project.Items.First(k => k.Name == "BG_KBG04");
                 }
             }
 
@@ -870,7 +875,7 @@ public class ScriptItem : Item
                         .GetImage(width: 32, transparentIndex: 0);
                     int chibiY = preview.TopScreenChibis.First(c => c.Chibi == preview.ChibiEmote.EmotingChibi).Y;
                     canvas.DrawBitmap(emotes,
-                        new SKRect(0, preview.ChibiEmote.InternalYOffset, 32, preview.ChibiEmote.InternalYOffset + 32),
+                        new(0, preview.ChibiEmote.InternalYOffset, 32, preview.ChibiEmote.InternalYOffset + 32),
                         new SKRect(preview.ChibiEmote.ExternalXOffset + 16, chibiY - 32,
                             preview.ChibiEmote.ExternalXOffset + 48, chibiY));
                 }
@@ -893,17 +898,17 @@ public class ScriptItem : Item
                         BgScrollDirectionScriptParameter.BgScrollDirection.DOWN)
                     {
                         canvas.DrawBitmap(dualScreenBg,
-                            new SKRect(0, preview.Background.Graphic2.Height - 192, 256,
+                            new(0, preview.Background.Graphic2.Height - 192, 256,
                                 preview.Background.Graphic2.Height), new SKRect(0, 0, 256, 192));
                         int bottomScreenX = dualScreenBg.Height - 192;
-                        canvas.DrawBitmap(dualScreenBg, new SKRect(0, bottomScreenX, 256, bottomScreenX + 192),
+                        canvas.DrawBitmap(dualScreenBg, new(0, bottomScreenX, 256, bottomScreenX + 192),
                             new SKRect(0, 192, 256, 384));
                     }
                     else
                     {
-                        canvas.DrawBitmap(dualScreenBg, new SKRect(0, 0, 256, 192), new SKRect(0, 0, 256, 192));
+                        canvas.DrawBitmap(dualScreenBg, new(0, 0, 256, 192), new SKRect(0, 0, 256, 192));
                         canvas.DrawBitmap(dualScreenBg,
-                            new SKRect(0, preview.Background.Graphic2.Height, 256,
+                            new(0, preview.Background.Graphic2.Height, 256,
                                 preview.Background.Graphic2.Height + 192), new SKRect(0, 192, 256, 384));
                     }
 
@@ -917,7 +922,7 @@ public class ScriptItem : Item
                     {
                         SKBitmap bgBitmap = preview.Background.GetBackground();
                         canvas.DrawBitmap(bgBitmap,
-                            new SKRect(0, bgBitmap.Height - 192, bgBitmap.Width, bgBitmap.Height),
+                            new(0, bgBitmap.Height - 192, bgBitmap.Width, bgBitmap.Height),
                             new SKRect(0, verticalOffset, 256, verticalOffset + 192));
                     }
                     else
@@ -933,7 +938,7 @@ public class ScriptItem : Item
                         BgScrollDirectionScriptParameter.BgScrollDirection.RIGHT)
                     {
                         SKBitmap bgBitmap = preview.Background.GetBackground();
-                        canvas.DrawBitmap(bgBitmap, new SKRect(bgBitmap.Width - 256, 0, bgBitmap.Width, 192),
+                        canvas.DrawBitmap(bgBitmap, new(bgBitmap.Width - 256, 0, bgBitmap.Width, 192),
                             new SKRect(0, verticalOffset, 256, verticalOffset + 192));
                     }
                     else
@@ -1002,13 +1007,13 @@ public class ScriptItem : Item
             };
             if (!string.IsNullOrEmpty(line.Text))
             {
-                canvas.DrawBitmap(project.DialogueBitmap, new SKRect(0, 24, 32, 36), new SKRect(0, verticalOffset + 152, 256, verticalOffset + 164));
+                canvas.DrawBitmap(project.DialogueBitmap, new(0, 24, 32, 36), new SKRect(0, verticalOffset + 152, 256, verticalOffset + 164));
                 SKColor dialogueBoxColor = project.DialogueBitmap.GetPixel(0, 28);
                 canvas.DrawRect(0, verticalOffset + 164, 256, 28, new() { Color = dialogueBoxColor });
-                canvas.DrawBitmap(project.DialogueBitmap, new SKRect(0, 37, 32, 64),
+                canvas.DrawBitmap(project.DialogueBitmap, new(0, 37, 32, 64),
                     new SKRect(224, 356, verticalOffset + 64, verticalOffset + 192));
                 canvas.DrawBitmap(project.SpeakerBitmap,
-                    new SKRect(0, 16 * ((int)line.Speaker - 1), 64, 16 * ((int)line.Speaker)),
+                    new(0, 16 * ((int)line.Speaker - 1), 64, 16 * ((int)line.Speaker)),
                     new SKRect(0, verticalOffset + 140, 64, verticalOffset + 156));
 
                 canvas.DrawHaroohieText(line.Text, dialoguePaint, project, y: verticalOffset + 160);
@@ -1020,11 +1025,11 @@ public class ScriptItem : Item
         {
             SKBitmap flyoutSysTex = project.Grp.GetFileByName("SYS_ADV_B01DNX").GetImage(transparentIndex: 0);
             SKBitmap topicFlyout = new(76, 32);
-            SKCanvas flyoutCanvas = new SKCanvas(topicFlyout);
+            SKCanvas flyoutCanvas = new(topicFlyout);
 
-            flyoutCanvas.DrawBitmap(flyoutSysTex, new SKRect(0, 20, 32, 32),
+            flyoutCanvas.DrawBitmap(flyoutSysTex, new(0, 20, 32, 32),
                 new SKRect(0, 12, 32, 24));
-            flyoutCanvas.DrawBitmap(flyoutSysTex, new SKRect(0, 0, 44, 20),
+            flyoutCanvas.DrawBitmap(flyoutSysTex, new(0, 0, 44, 20),
                 new SKRect(32, 6, 76, 26));
 
             SKBitmap topicCards = project.Grp.GetFileByName("SYS_CMN_B09DNX").GetImage(transparentIndex: 0);
@@ -1038,7 +1043,7 @@ public class ScriptItem : Item
                 _ => 100,
             };
 
-            flyoutCanvas.DrawBitmap(topicCards, new SKRect(srcX, 0, srcX + 20, 24),
+            flyoutCanvas.DrawBitmap(topicCards, new(srcX, 0, srcX + 20, 24),
                 new SKRect(10, 2, 30, 26));
             flyoutCanvas.Flush();
 

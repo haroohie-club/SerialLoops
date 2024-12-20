@@ -87,7 +87,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' != 'net8.0-windows'">
-    <PackageReference Include="OpenTK" Version="4.8.2" />
+    <PackageReference Include="OpenTK" Version="4.9.3" />
   </ItemGroup>
 
   <ItemGroup>
@@ -116,6 +116,10 @@
     </Compile>
     <Compile Update="Views\Dialogs\ItemReferencesDialog.axaml.cs">
       <DependentUpon>ItemReferencesDialog.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Editors\SaveEditorView.axaml.cs">
+      <DependentUpon>SaveEditorView.axaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

@@ -62,6 +62,9 @@
             <Setter Property="FontSize" Value="24"/>
             <Setter Property="FontWeight" Value="Bold"/>
         </Style>
+        <Style Selector="TextBlock.b">
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
         <Style Selector="TextBlock.link">
             <Setter Property="TextDecorations" Value="Underline"/>
         </Style>

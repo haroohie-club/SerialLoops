@@ -43,7 +43,7 @@ public partial class ProjectCreationDialogViewModel : ViewModelBase
 
     private async Task PickRom()
     {
-        IStorageFile rom = await _mainWindow.Window.ShowOpenFilePickerAsync(Strings.Open_ROM, [new FilePickerFileType(Strings.Chokuretsu_ROM) { Patterns = ["*.nds"] }]);
+        IStorageFile rom = await _mainWindow.Window.ShowOpenFilePickerAsync(Strings.Open_ROM, [new(Strings.Chokuretsu_ROM) { Patterns = ["*.nds"] }]);
         if (rom is not null)
         {
             RomPath = rom.Path.LocalPath;

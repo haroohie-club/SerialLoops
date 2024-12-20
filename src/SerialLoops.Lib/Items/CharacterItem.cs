@@ -26,22 +26,22 @@ public class CharacterItem : Item
 
     public static readonly Dictionary<string, SKColor> BuiltInColors = new()
     {
-        { "Kyon", new SKColor(240, 240, 0) },
-        { "Haruhi", new SKColor(240, 0, 104) },
-        { "Asahina", new SKColor(240, 112, 0) },
-        { "Nagato", new SKColor(0, 192, 240) },
-        { "Koizumi", new SKColor(172, 96, 248) },
-        { "Sister", new SKColor(224, 0, 240) },
-        { "Tsuruya", new SKColor(0, 192, 0) },
-        { "Taniguchi", new SKColor(200, 104, 104) },
-        { "Kunikida", new SKColor(200, 104, 0) },
-        { "President", new SKColor(192, 192, 0) },
-        { "Other", new SKColor(80, 80, 80) },
-        { "Other 2", new SKColor(112, 112, 112) },
-        { "Okabe", new SKColor(144, 88, 80) },
-        { "Girl", new SKColor(48, 240, 152) },
-        { "No Nameplate", new SKColor(0, 0, 0, 0) },
-        { "Email", new SKColor(0, 240, 144) },
+        { "Kyon", new(240, 240, 0) },
+        { "Haruhi", new(240, 0, 104) },
+        { "Asahina", new(240, 112, 0) },
+        { "Nagato", new(0, 192, 240) },
+        { "Koizumi", new(172, 96, 248) },
+        { "Sister", new(224, 0, 240) },
+        { "Tsuruya", new(0, 192, 0) },
+        { "Taniguchi", new(200, 104, 104) },
+        { "Kunikida", new(200, 104, 0) },
+        { "President", new(192, 192, 0) },
+        { "Other", new(80, 80, 80) },
+        { "Other 2", new(112, 112, 112) },
+        { "Okabe", new(144, 88, 80) },
+        { "Girl", new(48, 240, 152) },
+        { "No Nameplate", new(0, 0, 0, 0) },
+        { "Email", new(0, 240, 144) },
     };
 
     public SKBitmap GetNewNameplate(SKBitmap blankNameplate, SKBitmap blankNameplateBaseArrow, Project project, bool transparent = false)
@@ -69,8 +69,8 @@ public class CharacterItem : Item
                 int charIndex = project.FontMap.CharMap.IndexOf(NameplateProperties.Name.GetOriginalString(project)[i]);
                 if ((charIndex + 1) * 16 <= project.FontBitmap.Height)
                 {
-                    newCanvas.DrawBitmap(project.FontBitmap, new SKRect(0, charIndex * 16, 16, (charIndex + 1) * 16),
-                        new SKRect(currentX, currentY, currentX + (int)(16 * widthFactor), currentY + 16), new SKPaint()
+                    newCanvas.DrawBitmap(project.FontBitmap, new(0, charIndex * 16, 16, (charIndex + 1) * 16),
+                        new SKRect(currentX, currentY, currentX + (int)(16 * widthFactor), currentY + 16), new()
                         {
                             ColorFilter = SKColorFilter.CreateColorMatrix(new float[]
                             {
@@ -128,7 +128,7 @@ public class CharacterItem : Item
 
         // Draw in the remaining components of the nameplate
         newCanvas.DrawBitmap(blankNameplateBaseArrow, new SKPoint(0, 3),
-            new SKPaint()
+            new()
             {
                 ColorFilter = SKColorFilter.CreateColorMatrix(new float[]
                 {

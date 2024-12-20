@@ -84,6 +84,28 @@ public class SKAvaloniaBrushConverter : IValueConverter
     }
 }
 
+public class IntGreaterThanConverter : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        if (targetType == typeof(int))
+        {
+            return (int)value > int.Parse((string)parameter);
+        }
+        if (targetType == typeof(short))
+        {
+            return (short)value > int.Parse((string)parameter);
+        }
+
+        return null;
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        return 0;
+    }
+}
+
 public class DoubleSubtractionConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

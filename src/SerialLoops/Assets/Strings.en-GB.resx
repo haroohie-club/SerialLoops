@@ -639,7 +639,7 @@
   <data name="Edit Save File" xml:space="preserve">
     <value>Edit Save File</value>
   </data>
-  <data name="Edit Save File - {0}" xml:space="preserve">
+  <data name="Edit Save File - {0} - {1}" xml:space="preserve">
     <value>Edit Save File - {0}</value>
   </data>
   <data name="Edit Save File..." xml:space="preserve">
@@ -2351,7 +2351,7 @@
   <data name="Error" xml:space="preserve">
     <value>Error</value>
   </data>
-  <data name="{0} Obtained" xml:space="preserve">
+  <data name="{0} Obtained (F{1:D2})" xml:space="preserve">
     <value>{0} Obtained</value>
     <comment>{0} is the name of a topic that's been obtained</comment>
   </data>
@@ -2371,7 +2371,7 @@
   <data name="Add to Event Table" xml:space="preserve">
     <value>Add to Event Table</value>
   </data>
-  <data name="Route &quot;{0}&quot; Completed" xml:space="preserve">
+  <data name="Route &quot;{0}&quot; Completed (F{1:D2})" xml:space="preserve">
     <value>Route "{0}" Completed</value>
     <comment>{0} is the name of a route following a group selection that has been completed</comment>
   </data>
@@ -2391,7 +2391,7 @@
     <value>Add Read Flag</value>
     <comment>As in "add a read flag to the script"</comment>
   </data>
-  <data name="Listened to {0}" xml:space="preserve">
+  <data name="Listened to {0} (F{1:D2})" xml:space="preserve">
     <value>Listened to {0}</value>
     <comment>{0} is the name of a BGM that's been encountered while playing the game</comment>
   </data>
@@ -2401,7 +2401,7 @@
   <data name="SFX Group" xml:space="preserve">
     <value>SFX Group</value>
   </data>
-  <data name="{0} Watched in Extras" xml:space="preserve">
+  <data name="{0} Watched in Extras (F{1:D2})" xml:space="preserve">
     <value>{0} Watched in Extras</value>
     <comment>{0} is the name of a topic that has had its associated scene watched in the Extras mode</comment>
   </data>
@@ -2444,7 +2444,7 @@
   <data name="Failed to parse script parameter {0} of type {1} with parameter '{2}'!" xml:space="preserve">
     <value>Failed to parse script parameter {0} of type {1} with parameter '{2}'!</value>
   </data>
-  <data name="{0} ({1}) Seen" xml:space="preserve">
+  <data name="{0} ({1}) Seen (F{2:D2})" xml:space="preserve">
     <value>{0} ({1}) Seen</value>
     <comment>{0} is the internal name and {1} is the display name of a CG that has been encountered during the game</comment>
   </data>
@@ -2462,7 +2462,7 @@
   <data name="Exporting Project" xml:space="preserve">
     <value>Exporting Project</value>
   </data>
-  <data name="Script {0} Section {1} Completed" xml:space="preserve">
+  <data name="Script {0} Section {1} Completed (F{2:D2})" xml:space="preserve">
     <value>Script {0} Section {1} Completed</value>
     <comment>{0} is the display name of a script and {1} is the name of the section of that script that has been completed</comment>
   </data>

@@ -1,0 +1,32 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="using:SerialLoops.ViewModels.Controls"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:utility="using:SerialLoops.Utility"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:SaveSlotPreviewViewModel"
+             x:Class="SerialLoops.Controls.SaveSlotPreview">
+    <UserControl.Resources>
+        <utility:IntGreaterThanConverter x:Key="IntGreaterThan"/>
+    </UserControl.Resources>
+
+    <Grid RowDefinitions="Auto" ColumnDefinitions="Auto,Auto">
+        <Image Grid.Row="0" Grid.Column="0"
+               Source="{Binding SaveSlotPreview, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
+
+        <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="5">
+            <TextBlock Text="{Binding SlotName}"/>
+            <StackPanel Orientation="Horizontal" Spacing="5">
+                <Button Command="{Binding SlotEditCommand}">
+                    <Svg Width="22" Height="22" Path="avares://SerialLoops/Assets/Icons/Edit_Save.svg"/>
+                </Button>
+                <Button IsEnabled="{Binding SlotData.EpisodeNumber, Converter={StaticResource IntGreaterThan}, ConverterParameter=0, Mode=OneWay}"
+                        Command="{Binding SlotClearCommand}">
+                    <Svg Width="22" Height="22" Path="avares://SerialLoops/Assets/Icons/Clear.svg"/>
+                </Button>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>
+

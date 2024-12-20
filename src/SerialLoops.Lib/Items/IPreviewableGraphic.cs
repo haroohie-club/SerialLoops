@@ -16,7 +16,7 @@ public interface IPreviewableGraphic
         return preview.Resize(new SKImageInfo((int)(preview.Width * scale), (int)(preview.Height * scale)), SKFilterQuality.None);
     }
 }
-    
+
 public class NonePreviewableGraphic : ItemDescription, IPreviewableGraphic
 {
     public static readonly NonePreviewableGraphic BACKGROUND = new(ItemType.Background);
@@ -27,6 +27,6 @@ public class NonePreviewableGraphic : ItemDescription, IPreviewableGraphic
 
     public SKBitmap GetPreview(Project project)
     {
-        return new SKBitmap(64, 64);
+        return new(64, 64);
     }
 }

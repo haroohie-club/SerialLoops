@@ -67,11 +67,11 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} ({1}) Seen.
+        ///   Looks up a localized string similar to {0} ({1}) Seen (F{2:D2}).
         /// </summary>
-        public static string _0____1___Seen {
+        public static string _0____1___Seen__F_2_D2__ {
             get {
-                return ResourceManager.GetString("{0} ({1}) Seen", resourceCulture);
+                return ResourceManager.GetString("{0} ({1}) Seen (F{2:D2})", resourceCulture);
             }
         }
         
@@ -94,11 +94,11 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} Obtained.
+        ///   Looks up a localized string similar to {0} Obtained (F{1:D2}).
         /// </summary>
-        public static string _0__Obtained {
+        public static string _0__Obtained__F_1_D2__ {
             get {
-                return ResourceManager.GetString("{0} Obtained", resourceCulture);
+                return ResourceManager.GetString("{0} Obtained (F{1:D2})", resourceCulture);
             }
         }
         
@@ -121,11 +121,11 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} Watched in Extras.
+        ///   Looks up a localized string similar to {0} Watched in Extras (F{1:D2}).
         /// </summary>
-        public static string _0__Watched_in_Extras {
+        public static string _0__Watched_in_Extras__F_1_D2__ {
             get {
-                return ResourceManager.GetString("{0} Watched in Extras", resourceCulture);
+                return ResourceManager.GetString("{0} Watched in Extras (F{1:D2})", resourceCulture);
             }
         }
         
@@ -527,6 +527,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Asahina Present.
+        /// </summary>
+        public static string Asahina_Present {
+            get {
+                return ResourceManager.GetString("Asahina Present", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Asahina puzzle phase selected description.
         /// </summary>
         public static string Asahina_puzzle_phase_selected_description {
@@ -739,6 +748,24 @@ namespace SerialLoops.Assets {
         public static string Black_Space_End {
             get {
                 return ResourceManager.GetString("Black Space End", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Blinds.
+        /// </summary>
+        public static string BLINDS {
+            get {
+                return ResourceManager.GetString("BLINDS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Blinds (Alternative).
+        /// </summary>
+        public static string BLINDS2 {
+            get {
+                return ResourceManager.GetString("BLINDS2", resourceCulture);
             }
         }
         
@@ -959,6 +986,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Center.
+        /// </summary>
+        public static string Center {
+            get {
+                return ResourceManager.GetString("Center", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Character.
         /// </summary>
         public static string Character {
@@ -982,6 +1018,15 @@ namespace SerialLoops.Assets {
         public static string Character_distribution_instructions {
             get {
                 return ResourceManager.GetString("Character distribution instructions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Character Power Statuses.
+        /// </summary>
+        public static string Character_Power_Statuses {
+            get {
+                return ResourceManager.GetString("Character Power Statuses", resourceCulture);
             }
         }
         
@@ -1987,11 +2032,11 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Edit Save File - {0}.
+        ///   Looks up a localized string similar to Edit Save File - {0} - {1}.
         /// </summary>
-        public static string Edit_Save_File____0_ {
+        public static string Edit_Save_File____0_____1_ {
             get {
-                return ResourceManager.GetString("Edit Save File - {0}", resourceCulture);
+                return ResourceManager.GetString("Edit Save File - {0} - {1}", resourceCulture);
             }
         }
         
@@ -2430,6 +2475,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Exit.
+        /// </summary>
+        public static string Exit {
+            get {
+                return ResourceManager.GetString("Exit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Expected ROM SHA-1 Hash: {0}.
         /// </summary>
         public static string Expected_ROM_SHA_1_Hash___0_ {
@@ -2606,6 +2660,15 @@ namespace SerialLoops.Assets {
         public static string Extras_unlocked_message_box {
             get {
                 return ResourceManager.GetString("Extras unlocked message box", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fade.
+        /// </summary>
+        public static string Fade {
+            get {
+                return ResourceManager.GetString("Fade", resourceCulture);
             }
         }
         
@@ -3339,6 +3402,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to First Selection.
+        /// </summary>
+        public static string First_Selection {
+            get {
+                return ResourceManager.GetString("First Selection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to FLAC files.
         /// </summary>
         public static string FLAC_files {
@@ -3398,6 +3470,15 @@ namespace SerialLoops.Assets {
         public static string French {
             get {
                 return ResourceManager.GetString("French", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Friendship Levels.
+        /// </summary>
+        public static string Friendship_Levels {
+            get {
+                return ResourceManager.GetString("Friendship Levels", resourceCulture);
             }
         }
         
@@ -3915,6 +3996,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Koizumi Present.
+        /// </summary>
+        public static string Koizumi_Present {
+            get {
+                return ResourceManager.GetString("Koizumi Present", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Koizumi puzzle phase selected description.
         /// </summary>
         public static string Koizumi_puzzle_phase_selected_description {
@@ -3938,6 +4028,15 @@ namespace SerialLoops.Assets {
         public static string Kyon_companion_selected_description {
             get {
                 return ResourceManager.GetString("Kyon companion selected description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kyon Present.
+        /// </summary>
+        public static string Kyon_Present {
+            get {
+                return ResourceManager.GetString("Kyon Present", resourceCulture);
             }
         }
         
@@ -4014,11 +4113,29 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Listened to {0}.
+        ///   Looks up a localized string similar to Left.
         /// </summary>
-        public static string Listened_to__0_ {
+        public static string Left {
             get {
-                return ResourceManager.GetString("Listened to {0}", resourceCulture);
+                return ResourceManager.GetString("Left", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Level.
+        /// </summary>
+        public static string Level {
+            get {
+                return ResourceManager.GetString("Level", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Listened to {0} (F{1:D2}).
+        /// </summary>
+        public static string Listened_to__0___F_1_D2__ {
+            get {
+                return ResourceManager.GetString("Listened to {0} (F{1:D2})", resourceCulture);
             }
         }
         
@@ -4275,6 +4392,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Most Recent Objectives.
+        /// </summary>
+        public static string Most_Recent_Objectives {
+            get {
+                return ResourceManager.GetString("Most Recent Objectives", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Move Command Down.
         /// </summary>
         public static string Move_Command_Down {
@@ -4334,6 +4460,15 @@ namespace SerialLoops.Assets {
         public static string Nagato_companion_selected_description {
             get {
                 return ResourceManager.GetString("Nagato companion selected description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nagato Present.
+        /// </summary>
+        public static string Nagato_Present {
+            get {
+                return ResourceManager.GetString("Nagato Present", resourceCulture);
             }
         }
         
@@ -5366,6 +5501,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remaining Uses.
+        /// </summary>
+        public static string Remaining_Uses {
+            get {
+                return ResourceManager.GetString("Remaining Uses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remember Project Workspace.
         /// </summary>
         public static string Remember_Project_Workspace {
@@ -5681,6 +5825,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Right.
+        /// </summary>
+        public static string Right {
+            get {
+                return ResourceManager.GetString("Right", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ROM Hash Mismatch.
         /// </summary>
         public static string ROM_Hash_Mismatch {
@@ -5690,11 +5843,11 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Route &quot;{0}&quot; Completed.
+        ///   Looks up a localized string similar to Route &quot;{0}&quot; Completed (F{1:D2}).
         /// </summary>
-        public static string Route___0___Completed {
+        public static string Route___0___Completed__F_1_D2__ {
             get {
-                return ResourceManager.GetString("Route \"{0}\" Completed", resourceCulture);
+                return ResourceManager.GetString("Route \"{0}\" Completed (F{1:D2})", resourceCulture);
             }
         }
         
@@ -5740,6 +5893,15 @@ namespace SerialLoops.Assets {
         public static string Save_BGM_as_WAV {
             get {
                 return ResourceManager.GetString("Save BGM as WAV", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save changes to save file?.
+        /// </summary>
+        public static string Save_changes_to_save_file_ {
+            get {
+                return ResourceManager.GetString("Save changes to save file?", resourceCulture);
             }
         }
         
@@ -6016,11 +6178,11 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Script {0} Section {1} Completed.
+        ///   Looks up a localized string similar to Script {0} Section {1} Completed (F{2:D2}).
         /// </summary>
-        public static string Script__0__Section__1__Completed {
+        public static string Script__0__Section__1__Completed__F_2_D2__ {
             get {
-                return ResourceManager.GetString("Script {0} Section {1} Completed", resourceCulture);
+                return ResourceManager.GetString("Script {0} Section {1} Completed (F{2:D2})", resourceCulture);
             }
         }
         
@@ -6156,6 +6318,15 @@ namespace SerialLoops.Assets {
         public static string Second_prompt_on_data_being_erased {
             get {
                 return ResourceManager.GetString("Second prompt on data being erased", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Second Selection.
+        /// </summary>
+        public static string Second_Selection {
+            get {
+                return ResourceManager.GetString("Second Selection", resourceCulture);
             }
         }
         
@@ -6525,6 +6696,15 @@ namespace SerialLoops.Assets {
         public static string Skip_Update {
             get {
                 return ResourceManager.GetString("Skip Update", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Slide.
+        /// </summary>
+        public static string Slide {
+            get {
+                return ResourceManager.GetString("Slide", resourceCulture);
             }
         }
         
@@ -7423,6 +7603,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tutorial {0} Completed (F{1:D2}).
+        /// </summary>
+        public static string Tutorial__0__Completed__F_1_D2__ {
+            get {
+                return ResourceManager.GetString("Tutorial {0} Completed (F{1:D2})", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Type.
         /// </summary>
         public static string Type {
@@ -7617,6 +7806,24 @@ namespace SerialLoops.Assets {
         public static string Use_Pre_Release_Update_Channel {
             get {
                 return ResourceManager.GetString("Use Pre-Release Update Channel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Uses Since Level Up.
+        /// </summary>
+        public static string Uses_Since_Level_Up {
+            get {
+                return ResourceManager.GetString("Uses Since Level Up", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Uses to Level Up.
+        /// </summary>
+        public static string Uses_to_Level_Up {
+            get {
+                return ResourceManager.GetString("Uses to Level Up", resourceCulture);
             }
         }
         
@@ -7828,11 +8035,74 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Wipe Diagonal Left Up.
+        /// </summary>
+        public static string WIPE_DIAGONAL_LEFT_UP {
+            get {
+                return ResourceManager.GetString("WIPE_DIAGONAL_LEFT_UP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wipe Diagonal Right Down.
+        /// </summary>
+        public static string WIPE_DIAGONAL_RIGHT_DOWN {
+            get {
+                return ResourceManager.GetString("WIPE_DIAGONAL_RIGHT_DOWN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wipe Down.
+        /// </summary>
+        public static string WIPE_DOWN {
+            get {
+                return ResourceManager.GetString("WIPE_DOWN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wipe Left.
+        /// </summary>
+        public static string WIPE_LEFT {
+            get {
+                return ResourceManager.GetString("WIPE_LEFT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wipe Right.
+        /// </summary>
+        public static string WIPE_RIGHT {
+            get {
+                return ResourceManager.GetString("WIPE_RIGHT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wipe Up.
+        /// </summary>
+        public static string WIPE_UP {
+            get {
+                return ResourceManager.GetString("WIPE_UP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Worst Group.
         /// </summary>
         public static string Worst_Group {
             get {
                 return ResourceManager.GetString("Worst Group", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Would you like to save your changes to the save file?.
+        /// </summary>
+        public static string Would_you_like_to_save_your_changes_to_the_save_file_ {
+            get {
+                return ResourceManager.GetString("Would you like to save your changes to the save file?", resourceCulture);
             }
         }
         

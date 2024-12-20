@@ -37,7 +37,7 @@ public class SystemTextureEditorViewModel : EditorViewModel
 
     private async Task ExportButton_Click()
     {
-        IStorageFile savedFile = await Window.Window.ShowSaveFilePickerAsync(Strings.Export_System_Texture, [new FilePickerFileType(Strings.PNG_Image) { Patterns = ["*.png"] }], $"{SystemTexture.Grp.Index:D4}.png");
+        IStorageFile savedFile = await Window.Window.ShowSaveFilePickerAsync(Strings.Export_System_Texture, [new(Strings.PNG_Image) { Patterns = ["*.png"] }], $"{SystemTexture.Grp.Index:D4}.png");
         if (savedFile is not null)
         {
             try
@@ -65,12 +65,12 @@ public class SystemTextureEditorViewModel : EditorViewModel
     private async Task ReplaceImage(bool replacePalette)
     {
         SKBitmap original = SystemTexture.GetTexture();
-        IStorageFile openFile = await Window.Window.ShowOpenFilePickerAsync(Strings.Replace_System_Texture, [new FilePickerFileType(Strings.Supported_Images) { Patterns = Shared.SupportedImageFiletypes }]);
+        IStorageFile openFile = await Window.Window.ShowOpenFilePickerAsync(Strings.Replace_System_Texture, [new(Strings.Supported_Images) { Patterns = Shared.SupportedImageFiletypes }]);
         if (openFile is not null)
         {
             SKBitmap newImage = SKBitmap.Decode(openFile.Path.LocalPath);
             ImageCropResizeDialogViewModel cropResizeDialogViewModel = new(newImage, original.Width, original.Height, _log);
-            SKBitmap finalImage = await new ImageCropResizeDialog()
+            SKBitmap finalImage = await new ImageCropResizeDialog
             {
                 DataContext = cropResizeDialogViewModel,
             }.ShowDialog<SKBitmap>(Window.Window);

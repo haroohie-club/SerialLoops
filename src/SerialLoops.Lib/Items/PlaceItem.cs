@@ -34,7 +34,7 @@ public class PlaceItem : Item, IPreviewableGraphic
             for (int x = 0; x < 2; x++)
             {
                 canvas.DrawBitmap(placeGraphic,
-                    new SKRect(x * placeGraphic.Width / 2, y * placeGraphic.Height / 4, (x + 1) * placeGraphic.Width / 2, (y + 1) * placeGraphic.Height / 4),
+                    new(x * placeGraphic.Width / 2, y * placeGraphic.Height / 4, (x + 1) * placeGraphic.Width / 2, (y + 1) * placeGraphic.Height / 4),
                     new SKRect(col * placeGraphic.Width / 2, row * placeGraphic.Height / 4, (col + 1) * placeGraphic.Width / 2, (row + 1) * placeGraphic.Height / 4));
                 row++;
                 if (row >= 4)
@@ -60,7 +60,7 @@ public class PlaceItem : Item, IPreviewableGraphic
         SKBitmap newPlaceBitmap = new(PlaceGraphic.Width, PlaceGraphic.Height);
         SKCanvas canvas = new(newPlaceBitmap);
         SKColor bgColor = new(0, 249, 0);
-        canvas.DrawRegion(new(new SKRectI(0, 0, newPlaceBitmap.Width, newPlaceBitmap.Height)), new SKPaint { Color = bgColor });
+        canvas.DrawRegion(new(new SKRectI(0, 0, newPlaceBitmap.Width, newPlaceBitmap.Height)), new() { Color = bgColor });
         TextBlock placeText = new()
         {
             Alignment = TextAlignment.Left,
@@ -68,13 +68,13 @@ public class PlaceItem : Item, IPreviewableGraphic
             MaxWidth = newPlaceBitmap.Width - 2,
             MaxHeight = newPlaceBitmap.Height - 12,
         };
-        placeText.AddText(spaceAdjustedText, new Style()
+        placeText.AddText(spaceAdjustedText, new Style
         {
             TextColor = SKColors.Black,
             FontFamily = msGothicHaruhi.FamilyName,
             FontSize = 15.0f,
             LetterSpacing = -1,
-            HaloColor = new SKColor(160, 160, 160),
+            HaloColor = new(160, 160, 160),
             HaloBlur = 0,
             HaloWidth = 4,
         });
@@ -85,18 +85,18 @@ public class PlaceItem : Item, IPreviewableGraphic
             MaxWidth = newPlaceBitmap.Width - 2,
             MaxHeight = newPlaceBitmap.Height - 12,
         };
-        placeTextShadow.AddText(spaceAdjustedText, new Style()
+        placeTextShadow.AddText(spaceAdjustedText, new Style
         {
             TextColor = SKColors.Black,
             FontFamily = msGothicHaruhi.FamilyName,
             FontSize = 15.0f,
             LetterSpacing = -1,
-            HaloColor = new SKColor(88, 88, 88),
+            HaloColor = new(88, 88, 88),
             HaloBlur = 0,
             HaloWidth = 4,
         });
-        placeTextShadow.Paint(canvas, new SKPoint(2, 7), new() { Edging = SKFontEdging.Alias });
-        placeText.Paint(canvas, new SKPoint(1, 6), new() { Edging = SKFontEdging.SubpixelAntialias });
+        placeTextShadow.Paint(canvas, new(2, 7), new() { Edging = SKFontEdging.Alias });
+        placeText.Paint(canvas, new(1, 6), new() { Edging = SKFontEdging.SubpixelAntialias });
         canvas.Flush();
 
         // Antialiasing creates some semitransparent pixels on top of our green background, which causes them to render as green

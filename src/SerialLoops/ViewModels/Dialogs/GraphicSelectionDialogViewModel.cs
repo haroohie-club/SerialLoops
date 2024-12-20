@@ -64,7 +64,7 @@ public class GraphicSelectionDialogViewModel : ViewModelBase
         _project = project;
         _log = log;
         _specialPredicate = specialPredicate ?? (i => true);
-        _items = items.Where(i => specialPredicate((ItemDescription)i));
+        _items = specialPredicate is not null ? items.Where(i => specialPredicate((ItemDescription)i)) : items;
         Items = new(_items);
         CurrentSelection = currentSelection;
         ConfirmCommand = ReactiveCommand.Create<GraphicSelectionDialog>((dialog) => dialog.Close(CurrentSelection));

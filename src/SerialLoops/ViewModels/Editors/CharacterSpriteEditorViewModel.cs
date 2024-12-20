@@ -151,7 +151,7 @@ public class CharacterSpriteEditorViewModel : EditorViewModel
             animationFrames = _sprite.GetClosedMouthAnimation(Window.OpenProject);
         }
 
-        IStorageFile saveFile = await Window.Window.ShowSaveFilePickerAsync(Strings.Save_character_sprite_GIF, [new FilePickerFileType(Strings.GIF_file) { Patterns = ["*.gif"] }]);
+        IStorageFile saveFile = await Window.Window.ShowSaveFilePickerAsync(Strings.Save_character_sprite_GIF, [new(Strings.GIF_file) { Patterns = ["*.gif"] }]);
         if (saveFile is not null)
         {
             List<SKBitmap> frames = [];

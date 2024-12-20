@@ -1041,7 +1041,7 @@
   <data name="Save chibi GIF" xml:space="preserve">
     <value>Salva Chibi come GIF</value>
   </data>
-  <data name="Edit Save File - {0}" xml:space="preserve">
+  <data name="Edit Save File - {0} - {1}" xml:space="preserve">
     <value>Modifica Salvataggio - {0}</value>
   </data>
   <data name="Script Section" xml:space="preserve">

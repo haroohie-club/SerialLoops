@@ -102,9 +102,9 @@ public class ALWavePlayer : IWavePlayer, IDisposable
         AL.GenBuffers(1, ref _otherBuffer);
 
         _buffer = new byte[BufferSize];
-        _accumulator = new Accumulator(waveProvider, _buffer);
+        _accumulator = new(waveProvider, _buffer);
 
-        _signaller = new System.Threading.ManualResetEventSlim(false);
+        _signaller = new(false);
         PlaybackState = PlaybackState.Paused;
     }
 
@@ -127,14 +127,14 @@ public class ALWavePlayer : IWavePlayer, IDisposable
         PlaybackState = PlaybackState.Playing;
         if (_playerCanceller == null)
         {
-            _playerCanceller = new System.Threading.CancellationTokenSource();
+            _playerCanceller = new();
             Player = PlayLoop(_playerCanceller.Token).ContinueWith(PlayerStopped);
         }
     }
 
     private void PlayerStopped(Task t)
     {
-        PlaybackStopped?.Invoke(this, new StoppedEventArgs(t?.Exception));
+        PlaybackStopped?.Invoke(this, new(t?.Exception));
     }
 
     public void Stop()
@@ -153,7 +153,7 @@ public class ALWavePlayer : IWavePlayer, IDisposable
         }
         else
         {
-            PlaybackStopped?.Invoke(this, new StoppedEventArgs());
+            PlaybackStopped?.Invoke(this, new());
         }
     }
 

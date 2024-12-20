@@ -102,7 +102,7 @@ public class SelectScriptCommandEditorViewModel : ScriptCommandEditorViewModel
     {
         OpenProject = project;
         AvailableChoices =
-            new(new List<ChoicesSectionEntry>() { new() { Text = "NONE", Id = 0 } }.Concat(Script.Event.ChoicesSection
+            new(new List<ChoicesSectionEntry> { new() { Text = "NONE", Id = 0 } }.Concat(Script.Event.ChoicesSection
                 .Objects.Skip(1).SkipLast(1)));
         _option1 = ((OptionScriptParameter)Command.Parameters[0]).Option.Id == 0 ? AvailableChoices[0] : ((OptionScriptParameter)Command.Parameters[0]).Option;
         _option2 = ((OptionScriptParameter)Command.Parameters[1]).Option.Id == 0 ? AvailableChoices[0] : ((OptionScriptParameter)Command.Parameters[1]).Option;

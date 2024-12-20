@@ -10,8 +10,8 @@
 
   <ItemGroup>
     <PackageReference Include="BunLabs.NAudio.Flac" Version="2.0.1" />
-    <PackageReference Include="HarfBuzzSharp.NativeAssets.Linux" Version="7.3.0.3" />
-    <PackageReference Include="HarfBuzzSharp.NativeAssets.macOS" Version="7.3.0.3" />
+    <PackageReference Include="HarfBuzzSharp.NativeAssets.Linux" Version="8.3.0.1" />
+    <PackageReference Include="HarfBuzzSharp.NativeAssets.macOS" Version="8.3.0.1" />
     <PackageReference Include="HaruhiChokuretsuLib" Version="0.47.1" />
     <PackageReference Include="NAudio.Vorbis" Version="1.5.0" />
     <PackageReference Include="NitroPacker.Core" Version="2.6.0" />
