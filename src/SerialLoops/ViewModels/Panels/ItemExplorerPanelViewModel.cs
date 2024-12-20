@@ -88,7 +88,7 @@ public class ItemExplorerPanelViewModel : ViewModelBase
 
     private ObservableCollection<ITreeItem> GetSections()
     {
-        return new ObservableCollection<ITreeItem>(Items
+        return new(Items
             .Where(i => i.Type != ItemDescription.ItemType.Save)
             .GroupBy(i => i.Type)
             .OrderBy(g => ControlGenerator.LocalizeItemTypes(g.Key))

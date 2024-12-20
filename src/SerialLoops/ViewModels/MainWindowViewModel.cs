@@ -480,7 +480,7 @@ public partial class MainWindowViewModel : ViewModelBase
             }
 
             string path = saveFile.TryGetLocalPath();
-            SaveItem saveItem = new SaveItem(path, Path.GetFileNameWithoutExtension(path));
+            SaveItem saveItem = new(path, Path.GetFileNameWithoutExtension(path));
             OpenProject.Items.Add(saveItem);
             EditorTabs.OpenTab(saveItem);
         }
