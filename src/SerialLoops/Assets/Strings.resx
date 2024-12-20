@@ -328,7 +328,7 @@
     <value>Build</value>
   </data>
   <data name="Build and Run" xml:space="preserve">
-    <value>Build and Run</value>
+    <value>Build &amp; Run</value>
   </data>
   <data name="Build failed!" xml:space="preserve">
     <value>Build failed!</value>

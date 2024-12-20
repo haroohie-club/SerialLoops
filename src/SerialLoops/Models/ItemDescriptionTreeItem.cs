@@ -14,11 +14,15 @@ namespace SerialLoops.Models;
 
 public class ItemDescriptionTreeItem : ITreeItem, IViewFor<ItemDescription>
 {
-    private TextBlock _textBlock = new();
+    private TextBlock _textBlock = new()
+    {
+        VerticalAlignment = VerticalAlignment.Center,
+    };
     private TextBox _textBox = new();
     StackPanel _panel = new()
     {
         Orientation = Orientation.Horizontal,
+        VerticalAlignment = VerticalAlignment.Center,
         Spacing = 3,
         Margin = new(2),
     };
@@ -26,6 +30,7 @@ public class ItemDescriptionTreeItem : ITreeItem, IViewFor<ItemDescription>
     private StackPanel _editablePanel = new()
     {
         Orientation = Orientation.Horizontal,
+        VerticalAlignment = VerticalAlignment.Center,
         Spacing = 3,
         IsEnabled = true,
     };
