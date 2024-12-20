@@ -72,6 +72,18 @@ public class SKAvaloniaColorConverter : IValueConverter
     }
 }
 
+public class SKAvaloniaBrushConverter : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        return new SolidColorBrush(((SKColor)value).ToAvalonia());
+    }
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        return ((SolidColorBrush)value).Color.ToSKColor();
+    }
+}
+
 public class IntGreaterThanConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

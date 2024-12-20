@@ -126,6 +126,10 @@ public static class Build
                     {
                         ReplaceSingleScreenGraphicsFile(grp, file, index, project.Localize, log);
                     }
+                    else if (Path.GetExtension(file).Equals(".lay", StringComparison.OrdinalIgnoreCase))
+                    {
+                        ReplaceSingleLayoutGraphicsFile(grp, file, index, project.Localize, log);
+                    }
                     else if (Path.GetExtension(file).Equals(".s", StringComparison.OrdinalIgnoreCase))
                     {
                         if (string.IsNullOrEmpty(config.DevkitArmPath))
@@ -146,8 +150,7 @@ public static class Build
                             log.LogWarning($"Source file found at '{file}', outside of data and events directory; skipping...");
                         }
                     }
-                    else if (Path.GetExtension(file).Equals(".bna", StringComparison.OrdinalIgnoreCase)
-                             || Path.GetExtension(file).Equals(".lay", StringComparison.OrdinalIgnoreCase))
+                    else if (Path.GetExtension(file).Equals(".bna", StringComparison.OrdinalIgnoreCase))
                     {
                         ReplaceSingleBinaryFile(grp, file, index, project.Localize, log);
                     }
@@ -261,6 +264,25 @@ public static class Build
             screenFile.Edited = true;
 
             grp.Files[grp.Files.IndexOf(screenFile)] = screenFile;
+        }
+        catch (Exception ex)
+        {
+            log.LogException(string.Format(localize("Failed replacing graphics file {0} with file '{1}'"), index, filePath), ex);
+        }
+    }
+
+    private static void ReplaceSingleLayoutGraphicsFile(ArchiveFile<GraphicsFile> grp, string filePath, int index, Func<string, string> localize, ILogger log)
+    {
+        try
+        {
+            GraphicsFile layoutFile = grp.GetFileByIndex(index);
+
+            var layoutEntries = JsonSerializer.Deserialize<List<LayoutEntry>>(File.ReadAllText(filePath), Project.SERIALIZER_OPTIONS);
+            layoutFile.LayoutEntries = layoutEntries;
+            layoutFile.Data = [.. layoutFile.GetBytes()];
+            layoutFile.Edited = true;
+
+            grp.Files[grp.Files.IndexOf(layoutFile)] = layoutFile;
         }
         catch (Exception ex)
         {

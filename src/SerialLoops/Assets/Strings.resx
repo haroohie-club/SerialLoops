@@ -2897,4 +2897,10 @@ This action is irreversible.</value>
   <data name="Uses to Level Up" xml:space="preserve">
     <value>Uses to Level Up</value><comment>The number of times the power must be used to level up</comment>
   </data>
+  <data name="Export Layout Preview" xml:space="preserve">
+    <value>Export Layout Preview</value><comment>Button that exports a preview of the current layout item</comment>
+  </data>
+  <data name="Export Source Preview" xml:space="preserve">
+    <value>Export Source Preview</value><comment>Button that exports a preview of the current source image of a particular layout entry</comment>
+  </data>
 </root>
