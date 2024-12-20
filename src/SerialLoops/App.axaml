@@ -40,11 +40,12 @@
             <Setter Property="Padding" Value="5" />
         </Style>
         <Style Selector="Button.ToolbarButton > StackPanel > TextBlock">
-            <Setter Property="Padding" Value="0, 3" />
+            <Setter Property="Padding" Value="0, 2" />
             <Setter Property="HorizontalAlignment" Value="Center" />
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="TextAlignment" Value="Center" />
             <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="LineHeight" Value="13" />
             <Setter Property="FontSize" Value="12.5" />
         </Style>
 
