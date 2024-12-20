@@ -74,7 +74,7 @@
                 </StackPanel>
             </Grid>
             <TextBlock Grid.Row="2" Margin="10" FontWeight="Bold" Text="{Binding SearchStatusLabel}" TextAlignment="Center" />
-            <TreeDataGrid Grid.Row="3" Name="Viewer" ShowColumnHeaders="False" CanUserResizeColumns="False" Source="{Binding Source}">
+            <TreeDataGrid Background="{StaticResource AccentColor}" Grid.Row="3" Name="Viewer" ShowColumnHeaders="False" CanUserResizeColumns="False" Source="{Binding Source}">
                 <i:Interaction.Behaviors>
                     <ia:EventTriggerBehavior EventName="KeyUp" SourceObject="{Binding #Viewer}">
                         <ia:InvokeCommandAction Command="{Binding OpenItemCommand}" CommandParameter="{Binding #Viewer}"/>
