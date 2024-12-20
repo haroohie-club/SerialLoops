@@ -4,6 +4,7 @@ using System.Windows.Input;
 using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Controls.Templates;
+using Avalonia.Input;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -13,6 +14,7 @@ using SerialLoops.Lib.Items;
 using SerialLoops.Models;
 using SerialLoops.Utility;
 using SerialLoops.ViewModels.Panels;
+using SerialLoops.Views.Dialogs;
 
 namespace SerialLoops.ViewModels.Dialogs;
 
@@ -20,6 +22,11 @@ public class ItemReferencesDialogViewModel : ViewModelBase
 {
     private readonly ILogger _log;
     private Project _project;
+    [Reactive]
+    public KeyGesture CloseHotKey { get; private set; }
+
+    [Reactive]
+    public string FoundReferencesLabel { get; private set; } = string.Empty;
     public EditorTabsPanelViewModel Tabs { get; }
     public ItemDescription Item { get; }
 
@@ -50,16 +57,21 @@ public class ItemReferencesDialogViewModel : ViewModelBase
     }
 
     public ICommand OpenItemCommand { get; }
+    public ICommand CloseCommand { get; }
 
     public ItemReferencesDialogViewModel(ItemDescription item, Project project, EditorTabsPanelViewModel tabs, ILogger log)
     {
         _log = log;
         _project = project;
+
         Tabs = tabs;
         Item = item;
         Title = string.Format(Strings.References_to__0_, Item.DisplayName);
         Items = new(item.GetReferencesTo(project));
+        FoundReferencesLabel = string.Format(Strings._0__results_found, Items.Count);
         OpenItemCommand = ReactiveCommand.Create<TreeDataGrid>(OpenItem);
+        CloseCommand = ReactiveCommand.Create<ItemReferencesDialog>(dialog => dialog.Close());
+        CloseHotKey = new(Key.Escape);
     }
 
     public void OpenItem(TreeDataGrid viewer)

@@ -5,14 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:i="using:Avalonia.Xaml.Interactivity"
         xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        Width="300" Height="400"
+        mc:Ignorable="d" d:DesignWidth="550" d:DesignHeight="300"
+        Width="900" Height="400"
         x:DataType="vm:ItemReferencesDialogViewModel"
         x:Class="SerialLoops.Views.Dialogs.ItemReferencesDialog"
         Title="{Binding Title}">
     <ScrollViewer>
-        <Grid>
-            <TreeDataGrid Background="{StaticResource AccentColor}" Margin="10" ShowColumnHeaders="False" CanUserResizeColumns="False" Name="Viewer" Source="{Binding Source}"
+        <Grid RowDefinitions="Auto,*" Width="550">
+            <StackPanel IsVisible="False">
+                <Button Command="{Binding CloseCommand}" HotKey="{Binding CloseHotKey}"></Button>
+            </StackPanel>
+            <TextBlock Grid.Row="0" Margin="10" FontWeight="Bold" Text="{Binding FoundReferencesLabel}" TextAlignment="Center" />
+            <TreeDataGrid Grid.Row="1" Background="{StaticResource AccentColor}" Margin="10" ShowColumnHeaders="False" CanUserResizeColumns="False" Name="Viewer" Source="{Binding Source}"
                           KeyUp="Viewer_OnKeyUp">
                 <i:Interaction.Behaviors>
                     <ia:EventTriggerBehavior EventName="DoubleTapped" SourceObject="{Binding #Viewer}">
