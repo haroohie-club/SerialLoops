@@ -165,7 +165,7 @@ public partial class MainWindowViewModel : ViewModelBase
             CheckForUpdatesCommand.Execute(null);
         }
 
-        if (Args.Length > 0)
+        if (Args?.Length > 0)
         {
             if (Args[0].EndsWith(".slproj"))
             {

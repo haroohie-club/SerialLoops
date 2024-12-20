@@ -3,7 +3,8 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
-# Archive files used for testing
+# Test files
+assets/
 bgm/
 vce/
 dat.bin
