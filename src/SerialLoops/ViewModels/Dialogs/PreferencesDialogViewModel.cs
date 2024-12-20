@@ -129,7 +129,7 @@ public class PreferencesDialogViewModel : ViewModelBase
             new ComboBoxOption([
                 ("", string.Format(Strings.Default_Font_Display, Strings.Default_Font)),
                 ..SystemFonts.Collection.Families.Select(_ => (_.Name, _.Name)),
-            ])
+            ], font: true)
             {
                 OptionName = Strings.Display_Font,
                 Value = Configuration.DisplayFont ?? "",

@@ -842,7 +842,7 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Build and Run.
+        ///   Looks up a localized string similar to Build &amp; Run.
         /// </summary>
         public static string Build_and_Run {
             get {
@@ -1738,8 +1738,8 @@ namespace SerialLoops.Assets {
         /// </summary>
         public static string devkitARM_is_not_detected_at_the_default_or_specified_install_location__Please_set_devkitARM_path_ {
             get {
-                return ResourceManager.GetString(("devkitARM is not detected at the default or specified install location. Please se" +
-                        "t devkitARM path."), resourceCulture);
+                return ResourceManager.GetString("devkitARM is not detected at the default or specified install location. Please se" +
+                        "t devkitARM path.", resourceCulture);
             }
         }
         
@@ -2405,8 +2405,8 @@ namespace SerialLoops.Assets {
         /// </summary>
         public static string Error__duplicate_hack_detected__A_file_with_the_same_name_as_a_file_in_this_hack_has_already_been_imported_ {
             get {
-                return ResourceManager.GetString(("Error: duplicate hack detected! A file with the same name as a file in this hack " +
-                        "has already been imported."), resourceCulture);
+                return ResourceManager.GetString("Error: duplicate hack detected! A file with the same name as a file in this hack " +
+                        "has already been imported.", resourceCulture);
             }
         }
         
@@ -2415,8 +2415,8 @@ namespace SerialLoops.Assets {
         /// </summary>
         public static string Error__duplicate_hack_detected__A_hack_with_the_same_name_has_already_been_imported_ {
             get {
-                return ResourceManager.GetString(("Error: duplicate hack detected! A hack with the same name has already been import" +
-                        "ed."), resourceCulture);
+                return ResourceManager.GetString("Error: duplicate hack detected! A hack with the same name has already been import" +
+                        "ed.", resourceCulture);
             }
         }
         
@@ -2862,8 +2862,8 @@ namespace SerialLoops.Assets {
         /// </summary>
         public static string Failed_to_apply_the_following_hacks_to_the_ROM__n_0__n_nPlease_check_the_log_file_for_more_information__n_nIn_order_to_preserve_state__no_hacks_were_applied_ {
             get {
-                return ResourceManager.GetString(("Failed to apply the following hacks to the ROM:\\n{0}\\n\\nPlease check the log file" +
-                        " for more information.\\n\\nIn order to preserve state, no hacks were applied."), resourceCulture);
+                return ResourceManager.GetString("Failed to apply the following hacks to the ROM:\\n{0}\\n\\nPlease check the log file" +
+                        " for more information.\\n\\nIn order to preserve state, no hacks were applied.", resourceCulture);
             }
         }
         
@@ -2935,8 +2935,8 @@ namespace SerialLoops.Assets {
         /// </summary>
         public static string Failed_to_delete_files_for_hack___0______this_hack_is_likely_applied_in_the_ROM_base_and_can_t_be_disabled_ {
             get {
-                return ResourceManager.GetString(("Failed to delete files for hack \'{0}\' -- this hack is likely applied in the ROM b" +
-                        "ase and can\'t be disabled."), resourceCulture);
+                return ResourceManager.GetString("Failed to delete files for hack \'{0}\' -- this hack is likely applied in the ROM b" +
+                        "ase and can\'t be disabled.", resourceCulture);
             }
         }
         
@@ -3026,8 +3026,8 @@ namespace SerialLoops.Assets {
         /// </summary>
         public static string Failed_to_find_character_item____have_you_saved_all_of_your_changes_to_character_names_ {
             get {
-                return ResourceManager.GetString(("Failed to find character item -- have you saved all of your changes to character " +
-                        "names?"), resourceCulture);
+                return ResourceManager.GetString("Failed to find character item -- have you saved all of your changes to character " +
+                        "names?", resourceCulture);
             }
         }
         
@@ -3189,8 +3189,8 @@ namespace SerialLoops.Assets {
         /// </summary>
         public static string Failed_to_replace_screen_image__image_too_complex__generated_more_than_255_tiles___please_use_a_simpler_image {
             get {
-                return ResourceManager.GetString(("Failed to replace screen image: image too complex (generated more than 255 tiles)" +
-                        "; please use a simpler image"), resourceCulture);
+                return ResourceManager.GetString("Failed to replace screen image: image too complex (generated more than 255 tiles)" +
+                        "; please use a simpler image", resourceCulture);
             }
         }
         
@@ -4595,8 +4595,8 @@ namespace SerialLoops.Assets {
         /// </summary>
         public static string No_emulator_path_has_been_set__nPlease_set_the_path_to_a_Nintendo_DS_emulator_in_Preferences_to_use_Build___Run_ {
             get {
-                return ResourceManager.GetString(("No emulator path has been set.\\nPlease set the path to a Nintendo DS emulator in " +
-                        "Preferences to use Build & Run."), resourceCulture);
+                return ResourceManager.GetString("No emulator path has been set.\\nPlease set the path to a Nintendo DS emulator in " +
+                        "Preferences to use Build & Run.", resourceCulture);
             }
         }
         
@@ -6045,9 +6045,9 @@ namespace SerialLoops.Assets {
         /// </summary>
         public static string Saved_but_unbuilt_files_were_detected_in_the_project_directory__Would_you_like_to_build_before_loading_the_project__Not_building_could_result_in_these_files_being_overwritten_ {
             get {
-                return ResourceManager.GetString(("Saved but unbuilt files were detected in the project directory. Would you like to" +
+                return ResourceManager.GetString("Saved but unbuilt files were detected in the project directory. Would you like to" +
                         " build before loading the project? Not building could result in these files bein" +
-                        "g overwritten."), resourceCulture);
+                        "g overwritten.", resourceCulture);
             }
         }
         
@@ -7200,8 +7200,8 @@ namespace SerialLoops.Assets {
         /// </summary>
         public static string The_base_ROM_hash_does_not_match_the_expected_hash__Please_check_the___Ignore_Hash___checkbox_if_you_wish_to_override_this_ {
             get {
-                return ResourceManager.GetString(("The base ROM hash does not match the expected hash! Please check the \\\"Ignore Has" +
-                        "h\\\" checkbox if you wish to override this."), resourceCulture);
+                return ResourceManager.GetString("The base ROM hash does not match the expected hash! Please check the \\\"Ignore Has" +
+                        "h\\\" checkbox if you wish to override this.", resourceCulture);
             }
         }
         
@@ -7230,9 +7230,9 @@ namespace SerialLoops.Assets {
         /// </summary>
         public static string The_selected_ROM_s_hash_does_not_match_the_expected_ROM_hash__Please_ensure_you_are_using_the_correct_base_ROM__n_nIf_you_wish_to_ignore_this__please_check_the___Ignore_Hash___checkbox_ {
             get {
-                return ResourceManager.GetString(("The selected ROM\'s hash does not match the expected ROM hash. Please ensure you a" +
+                return ResourceManager.GetString("The selected ROM\'s hash does not match the expected ROM hash. Please ensure you a" +
                         "re using the correct base ROM.\\n\\nIf you wish to ignore this, please check the \\" +
-                        "\"Ignore Hash\\\" checkbox."), resourceCulture);
+                        "\"Ignore Hash\\\" checkbox.", resourceCulture);
             }
         }
         
@@ -7241,8 +7241,8 @@ namespace SerialLoops.Assets {
         /// </summary>
         public static string There_is_already_a_template_with_that_name__Please_choose_a_different_name_for_your_template_ {
             get {
-                return ResourceManager.GetString(("There is already a template with that name. Please choose a different name for yo" +
-                        "ur template."), resourceCulture);
+                return ResourceManager.GetString("There is already a template with that name. Please choose a different name for yo" +
+                        "ur template.", resourceCulture);
             }
         }
         
@@ -7251,9 +7251,9 @@ namespace SerialLoops.Assets {
         /// </summary>
         public static string There_is_no_recorded_base_ROM_hash_for_this_project__This_is_likely_because_this_project_was_created_with_an_older_version_of_Serial_Loops__Please_select_the_base_ROM_used_for_this_project_so_the_hash_can_be_recorded_now_ {
             get {
-                return ResourceManager.GetString(("There is no recorded base ROM hash for this project. This is likely because this " +
+                return ResourceManager.GetString("There is no recorded base ROM hash for this project. This is likely because this " +
                         "project was created with an older version of Serial Loops. Please select the bas" +
-                        "e ROM used for this project so the hash can be recorded now."), resourceCulture);
+                        "e ROM used for this project so the hash can be recorded now.", resourceCulture);
             }
         }
         
@@ -7271,8 +7271,8 @@ namespace SerialLoops.Assets {
         /// </summary>
         public static string This_system_texture_uses_a_common_palette__so_palette_replacement_has_been_disabled {
             get {
-                return ResourceManager.GetString(("This system texture uses a common palette, so palette replacement has been disabl" +
-                        "ed"), resourceCulture);
+                return ResourceManager.GetString("This system texture uses a common palette, so palette replacement has been disabl" +
+                        "ed", resourceCulture);
             }
         }
         
@@ -7363,8 +7363,8 @@ namespace SerialLoops.Assets {
         /// </summary>
         public static string To_edit_Save_Files__you_need_to_have_a_project_open__nNo_project_is_currently_open__Would_you_like_to_create_a_new_project_ {
             get {
-                return ResourceManager.GetString(("To edit Save Files, you need to have a project open.\\nNo project is currently ope" +
-                        "n. Would you like to create a new project?"), resourceCulture);
+                return ResourceManager.GetString("To edit Save Files, you need to have a project open.\\nNo project is currently ope" +
+                        "n. Would you like to create a new project?", resourceCulture);
             }
         }
         
@@ -8138,8 +8138,8 @@ namespace SerialLoops.Assets {
         /// </summary>
         public static string You_have_unsaved_changes_in__0__item_s___Would_you_like_to_save_before_closing_the_project_ {
             get {
-                return ResourceManager.GetString(("You have unsaved changes in {0} item(s). Would you like to save before closing th" +
-                        "e project?"), resourceCulture);
+                return ResourceManager.GetString("You have unsaved changes in {0} item(s). Would you like to save before closing th" +
+                        "e project?", resourceCulture);
             }
         }
         
