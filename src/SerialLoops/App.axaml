@@ -4,7 +4,6 @@
              x:Class="SerialLoops.App"
              xmlns:dialoghost="using:DialogHostAvalonia"
              xmlns:local="using:SerialLoops"
-             xmlns:md="using:Markdown.Avalonia"
              xmlns:mintoolbarthemes="using:MiniToolbar.Avalonia.Themes"
              xmlns:tabaloniathemes="using:Tabalonia.Themes.Custom"
              RequestedThemeVariant="Default">
