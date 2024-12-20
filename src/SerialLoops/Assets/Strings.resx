@@ -2903,4 +2903,16 @@ This action is irreversible.</value>
   <data name="Export Source Preview" xml:space="preserve">
     <value>Export Source Preview</value><comment>Button that exports a preview of the current source image of a particular layout entry</comment>
   </data>
+  <data name="Temporary Project Already Exists!" xml:space="preserve">
+    <value>Temporary Project Already Exists!</value>
+  </data>
+  <data name="In order to edit this save file, Serial Loops needs to make a temporary project. However, a project called &quot;{0}&quot; already exists. Would you like to overwrite this project?" xml:space="preserve">
+    <value>In order to edit this save file, Serial Loops needs to make a temporary project. However, a project called "{0}" already exists. Would you like to overwrite this project?</value>
+  </data>
+  <data name="Save Save File" xml:space="preserve">
+    <value>Save Save File</value>
+  </data>
+  <data name="Close Save File" xml:space="preserve">
+    <value>Close Save File</value>
+  </data>
 </root>
