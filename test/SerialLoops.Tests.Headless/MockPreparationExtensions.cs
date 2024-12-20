@@ -57,7 +57,7 @@ public static class MockPreparationExtensions
     public static void SetupMockedFile<T>(this Mock<ArchiveFile<T>> archiveFile, string file, string dir, int index, ILogger log, ref int offset) where T : FileInArchive, new()
     {
         string fileName = file.Replace(".", "");
-        T fileInArchive = new T() { Index = index, Name = fileName };
+        T fileInArchive = new() { Index = index, Name = fileName };
         fileInArchive.Initialize(File.ReadAllBytes(Path.Combine(dir, file)), offset++, log);
         archiveFile.SetupFileAccessMocks(fileInArchive, index, fileName);
     }

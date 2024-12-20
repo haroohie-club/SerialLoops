@@ -15,6 +15,7 @@ using Avalonia.Platform.Storage;
 using Avalonia.Styling;
 using HaruhiChokuretsuLib.Archive;
 using HaruhiChokuretsuLib.Archive.Event;
+using HaruhiChokuretsuLib.Archive.Graphics;
 using MiniToolbar.Avalonia;
 using MsBox.Avalonia.Enums;
 using ReactiveUI;
@@ -24,6 +25,7 @@ using SerialLoops.Controls;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Factories;
 using SerialLoops.Lib.Items;
+using SerialLoops.Lib.SaveFile;
 using SerialLoops.Lib.Util;
 using SerialLoops.Utility;
 using SerialLoops.ViewModels.Dialogs;
@@ -103,15 +105,15 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public MainWindowViewModel()
     {
-        SaveHotKey = new(Key.S, KeyModifiers.Control);
-        SearchHotKey = new(Key.F, KeyModifiers.Control);
-        CloseProjectKey = new(Key.W, KeyModifiers.Control);
+        SaveHotKey = GuiExtensions.CreatePlatformAgnosticCtrlGesture(Key.S);
+        SearchHotKey = GuiExtensions.CreatePlatformAgnosticCtrlGesture(Key.F);
+        CloseProjectKey = GuiExtensions.CreatePlatformAgnosticCtrlGesture(Key.W);
 
         NewProjectCommand = ReactiveCommand.CreateFromTask(NewProjectCommand_Executed);
         OpenProjectCommand = ReactiveCommand.CreateFromTask(OpenProjectCommand_Executed);
         OpenRecentProjectCommand = ReactiveCommand.CreateFromTask<string>(OpenRecentProjectCommand_Executed);
         ImportProjectCommand = ReactiveCommand.CreateFromTask(ImportProjectCommand_Executed);
-        EditSaveCommand = ReactiveCommand.Create(EditSaveFileCommand_Executed);
+        EditSaveCommand = ReactiveCommand.CreateFromTask(EditSaveFileCommand_Executed);
         AboutCommand = ReactiveCommand.CreateFromTask(AboutCommand_Executed);
         PreferencesCommand = ReactiveCommand.CreateFromTask(PreferencesCommand_Executed);
         CheckForUpdatesCommand = ReactiveCommand.CreateFromTask(new UpdateChecker(this).Check);
@@ -367,7 +369,7 @@ public partial class MainWindowViewModel : ViewModelBase
     public async Task NewProjectCommand_Executed()
     {
         ProjectCreationDialogViewModel projectCreationDialogViewModel = new(CurrentConfig, this, Log);
-        Project newProject = await new ProjectCreationDialog()
+        Project newProject = await new ProjectCreationDialog
         {
             DataContext = projectCreationDialogViewModel,
         }.ShowDialog<Project>(Window);
@@ -380,7 +382,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public async Task OpenProjectCommand_Executed()
     {
-        IStorageFile projectFile = await Window.ShowOpenFilePickerAsync(Strings.Open_Project, [new FilePickerFileType(Strings.Serial_Loops_Project) { Patterns = [$"*.{Project.PROJECT_FORMAT}"] }], CurrentConfig.ProjectsDirectory);
+        IStorageFile projectFile = await Window.ShowOpenFilePickerAsync(Strings.Open_Project, [new(Strings.Serial_Loops_Project) { Patterns = [$"*.{Project.PROJECT_FORMAT}"] }], CurrentConfig.ProjectsDirectory);
         if (projectFile is not null)
         {
             await OpenProjectFromPath(projectFile.Path.LocalPath);
@@ -513,14 +515,31 @@ public partial class MainWindowViewModel : ViewModelBase
         }
     }
 
-    public void EditSaveFileCommand_Executed()
+    public async Task EditSaveFileCommand_Executed()
     {
+        if (OpenProject is not null)
+        {
+            IStorageFile saveFile = await Window.ShowOpenFilePickerAsync(Strings.Open_Chokuretsu_Save_File,
+                [new(Strings.Chokuretsu_Save_File) { Patterns = ["*.sav"] }]);
+            if (saveFile is null)
+            {
+                return;
+            }
 
+            string path = saveFile.TryGetLocalPath();
+            SaveItem saveItem = new SaveItem(path, Path.GetFileNameWithoutExtension(path));
+            OpenProject.Items.Add(saveItem);
+            EditorTabs.OpenTab(saveItem);
+        }
+        else
+        {
+
+        }
     }
 
     public void SaveProject_Executed()
     {
-        if (OpenProject == null)
+        if (OpenProject is null)
         {
             return;
         }
@@ -582,7 +601,7 @@ public partial class MainWindowViewModel : ViewModelBase
                     if (!savedChrData)
                     {
                         IO.WriteStringFile(Path.Combine("assets", "data", $"{OpenProject.ChrData.Index:X3}.s"),
-                            OpenProject.ChrData.GetSource(new Dictionary<string, IncludeEntry[]>()
+                            OpenProject.ChrData.GetSource(new()
                             {
                                 { "GRPBIN", OpenProject.Grp.GetSourceInclude().Split('\n').Where(l => !string.IsNullOrWhiteSpace(l)).Select(l => new IncludeEntry(l)).ToArray() }
                             }), OpenProject, Log);
@@ -612,6 +631,14 @@ public partial class MainWindowViewModel : ViewModelBase
                     evt.CollectGarbage();
                     IO.WriteStringFile(Path.Combine("assets", "events", $"{evt.Index:X3}.s"), evt.GetSource(includes), OpenProject, Log);
                     break;
+                case ItemDescription.ItemType.Layout:
+                    GraphicsFile layout = ((LayoutItem)item).Layout;
+                    if (!changedLayouts.Contains(layout.Index))
+                    {
+                        changedLayouts.Add(layout.Index);
+                        IO.WriteStringFile(Path.Combine("assets", "graphics", $"{layout.Index:X3}.lay"), JsonSerializer.Serialize(layout.LayoutEntries, Project.SERIALIZER_OPTIONS), OpenProject, Log);
+                    }
+                    break;
                 case ItemDescription.ItemType.System_Texture:
                     ((SystemTextureItem)item).Write(OpenProject, Log);
                     break;
@@ -623,6 +650,17 @@ public partial class MainWindowViewModel : ViewModelBase
                     if (OpenProject.VoiceMap is not null)
                     {
                         changedSubs = true;
+                    }
+                    break;
+                case ItemDescription.ItemType.Save:
+                    SaveItem save = (SaveItem)item;
+                    try
+                    {
+                        File.WriteAllBytes(save.SaveLoc, save.Save.GetBytes());
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.LogException(Strings.Failed_to_save_Chokuretsu_save_file_, ex);
                     }
                     break;
                 default:
@@ -786,32 +824,32 @@ public partial class MainWindowViewModel : ViewModelBase
         WindowMenu.Add(MenuHeader.PROJECT, new(Strings._Project));
         WindowMenu[MenuHeader.PROJECT].Menu =
         [
-            new NativeMenuItem()
+            new NativeMenuItem
             {
                 Header = Strings.Save_Project,
                 Command = SaveProjectCommand,
                 Icon = ControlGenerator.GetIcon("Save", Log),
                 Gesture = SaveHotKey,
             },
-            new NativeMenuItem()
+            new NativeMenuItem
             {
                 Header = Strings.Project_Settings___,
                 Command = ProjectSettingsCommand,
                 Icon = ControlGenerator.GetIcon("Project_Options", Log),
             },
-            new NativeMenuItem()
+            new NativeMenuItem
             {
                 Header = Strings.Migrate_to_new_ROM,
                 Command = MigrateProjectCommand,
                 Icon = ControlGenerator.GetIcon("Migrate_ROM", Log),
             },
-            new NativeMenuItem()
+            new NativeMenuItem
             {
                 Header = Strings.Export_Patch,
                 Command = ExportPatchCommand,
                 Icon = ControlGenerator.GetIcon("Export_Patch", Log),
             },
-            new NativeMenuItem()
+            new NativeMenuItem
             {
                 Header = Strings.Close_Project,
                 Command = CloseProjectCommand,
@@ -826,36 +864,36 @@ public partial class MainWindowViewModel : ViewModelBase
         WindowMenu.Add(MenuHeader.TOOLS, new(Strings._Tools));
         WindowMenu[MenuHeader.TOOLS].Menu =
         [
-            new NativeMenuItem()
+            new NativeMenuItem
             {
                 Header = Strings.Apply_Hacks___,
                 Command = ApplyHacksCommand,
                 Icon = ControlGenerator.GetIcon("Apply_Hacks", Log),
             },
-            new NativeMenuItem()
+            new NativeMenuItem
             {
                 Header = Strings.Rename_Item,
                 Command = RenameItemCommand,
                 Icon = ControlGenerator.GetIcon("Rename_Item", Log),
             },
-            new NativeMenuItem()
+            new NativeMenuItem
             {
                 Header = Strings.Edit_UI_Text___,
                 Command = EditUiTextCommand,
                 Icon = ControlGenerator.GetIcon("Edit_UI_Text", Log),
             },
-            new NativeMenuItem()
+            new NativeMenuItem
             {
                 Header = Strings.Edit_Tutorial_Mappings___,
                 Command = EditTutorialMappingsCommand,
                 Icon = ControlGenerator.GetIcon("Tutorial", Log),
             },
-            new NativeMenuItem()
+            new NativeMenuItem
             {
                 Header = Strings.Search___,
                 Command = SearchProjectCommand,
                 Icon = ControlGenerator.GetIcon("Search", Log),
-                Gesture = SearchHotKey
+                Gesture = SearchHotKey,
             }
         ];
         menu.Items.Insert(insertionPoint, WindowMenu[MenuHeader.TOOLS]);
@@ -865,19 +903,19 @@ public partial class MainWindowViewModel : ViewModelBase
         WindowMenu.Add(MenuHeader.BUILD, new(Strings._Build));
         WindowMenu[MenuHeader.BUILD].Menu =
         [
-            new NativeMenuItem()
+            new NativeMenuItem
             {
                 Header = Strings.Build,
                 Command = BuildIterativeCommand,
                 Icon = ControlGenerator.GetIcon("Build", Log),
             },
-            new NativeMenuItem()
+            new NativeMenuItem
             {
                 Header = Strings.Build_from_Scratch,
                 Command = BuildBaseCommand,
                 Icon = ControlGenerator.GetIcon("Build_Scratch", Log),
             },
-            new NativeMenuItem()
+            new NativeMenuItem
             {
                 Header = Strings.Build_and_Run,
                 Command = BuildAndRunCommand,
@@ -889,25 +927,25 @@ public partial class MainWindowViewModel : ViewModelBase
         NativeMenu.SetMenu(Window, menu);
 
         ToolBar.Items.Clear();
-        ToolBar.Items.Add(new ToolbarButton()
+        ToolBar.Items.Add(new ToolbarButton
         {
             Text = Strings.Save,
             Command = SaveProjectCommand,
             Icon = ControlGenerator.GetVectorIcon("Save", Log),
         });
-        ToolBar.Items.Add(new ToolbarButton()
+        ToolBar.Items.Add(new ToolbarButton
         {
             Text = Strings.Build,
             Command = BuildIterativeCommand,
             Icon = ControlGenerator.GetVectorIcon("Build", Log),
         });
-        ToolBar.Items.Add(new ToolbarButton()
+        ToolBar.Items.Add(new ToolbarButton
         {
             Text = Strings.Build_and_Run,
             Command = BuildAndRunCommand,
             Icon = ControlGenerator.GetVectorIcon("Build_Run", Log),
         });
-        ToolBar.Items.Add(new ToolbarButton()
+        ToolBar.Items.Add(new ToolbarButton
         {
             Text = Strings.Search,
             Command = SearchProjectCommand,

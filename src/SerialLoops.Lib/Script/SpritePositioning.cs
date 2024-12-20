@@ -10,7 +10,7 @@ public class SpritePositioning
 
     public SKPoint GetSpritePosition(SKBitmap sprite, int verticalOffset)
     {
-        return new SKPoint(X, 192 + verticalOffset - sprite.Height);
+        return new(X, 192 + verticalOffset - sprite.Height);
     }
 
     public enum SpritePosition

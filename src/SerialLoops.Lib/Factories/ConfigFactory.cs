@@ -94,7 +94,7 @@ public class ConfigFactory : IConfigFactory
             {
                 Process flatpakProc = new()
                 {
-                    StartInfo = new ProcessStartInfo("flatpak", ["info", emulatorFlatpak])
+                    StartInfo = new("flatpak", ["info", emulatorFlatpak])
                     {
                         RedirectStandardError = true, RedirectStandardOutput = true
                     }
@@ -123,7 +123,7 @@ public class ConfigFactory : IConfigFactory
             log.LogWarning("Valid emulator path not found in config.json.");
         }
 
-        return new Config
+        return new()
         {
             UserDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "SerialLoops"),
             CurrentCultureName = CultureInfo.CurrentCulture.Name,

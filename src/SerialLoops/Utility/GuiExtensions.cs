@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using HaruhiChokuretsuLib.Util;
@@ -14,6 +16,13 @@ namespace SerialLoops.Utility;
 
 public static class GuiExtensions
 {
+    public static KeyGesture CreatePlatformAgnosticCtrlGesture(Key hotKey, KeyModifiers extraModifers = KeyModifiers.None)
+    {
+        return RuntimeInformation.IsOSPlatform(OSPlatform.OSX)
+            ? new(hotKey, KeyModifiers.Meta | extraModifers)
+            : new(hotKey, KeyModifiers.Control | extraModifers);
+    }
+
     public static async Task<IStorageFile> ShowOpenFilePickerAsync(this Window window, string title, IReadOnlyList<FilePickerFileType> fileFilter, string suggestedStartLocation = "")
     {
         FilePickerOpenOptions options = new()

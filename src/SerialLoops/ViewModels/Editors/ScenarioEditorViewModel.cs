@@ -65,7 +65,7 @@ public class ScenarioEditorViewModel : EditorViewModel
     private async void Add()
     {
         int selectedIndex = Math.Min(_scenario.Scenario.Commands.Count - 1, Commands.IndexOf(SelectedCommand));
-        ScenarioVerb? newVerb = await new AddScenarioCommandDialog() { DataContext = new AddScenarioCommandDialogViewModel() }.ShowDialog<ScenarioVerb>(Window.Window);
+        ScenarioVerb? newVerb = await new AddScenarioCommandDialog { DataContext = new AddScenarioCommandDialogViewModel() }.ShowDialog<ScenarioVerb>(Window.Window);
         if (newVerb is not null)
         {
             int param = newVerb switch
@@ -144,7 +144,7 @@ public class ScenarioEditorViewModel : EditorViewModel
             ScenarioVerb.LOAD_SCENE => new LoadSceneScenarioCommandEditorViewModel(command, Window.OpenProject, Window.EditorTabs),
             ScenarioVerb.PUZZLE_PHASE => new PuzzlePhaseScenarioCommandEditorViewModel(command, Window.OpenProject, Window.EditorTabs),
             ScenarioVerb.ROUTE_SELECT => new RouteSelectScenarioCommandEditorViewModel(command, Window.OpenProject, Window.EditorTabs),
-            _ => new ScenarioCommandEditorViewModel(command, Window.EditorTabs),
+            _ => new(command, Window.EditorTabs),
         };
     }
 }

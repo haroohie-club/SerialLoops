@@ -169,9 +169,9 @@ public class VoicedLineEditorViewModel : EditorViewModel
 
     private async Task Replace()
     {
-        IStorageFile openFile = await Window.Window.ShowOpenFilePickerAsync(Strings.Replace_voiced_line, [new FilePickerFileType(Strings.Supported_Audio_Files) { Patterns = Shared.SupportedAudioFiletypes },
-            new FilePickerFileType(Strings.WAV_files) { Patterns = ["*.wav"] }, new FilePickerFileType(Strings.FLAC_files) { Patterns = ["*.flac"] },
-            new FilePickerFileType(Strings.MP3_files) { Patterns = ["*.mp3"] }, new FilePickerFileType(Strings.Vorbis_files) { Patterns = ["*.ogg"] }]);
+        IStorageFile openFile = await Window.Window.ShowOpenFilePickerAsync(Strings.Replace_voiced_line, [new(Strings.Supported_Audio_Files) { Patterns = Shared.SupportedAudioFiletypes },
+            new(Strings.WAV_files) { Patterns = ["*.wav"] }, new(Strings.FLAC_files) { Patterns = ["*.flac"] },
+            new(Strings.MP3_files) { Patterns = ["*.mp3"] }, new(Strings.Vorbis_files) { Patterns = ["*.ogg"] }]);
         if (openFile is not null)
         {
             LoopyProgressTracker tracker = new();
@@ -183,7 +183,7 @@ public class VoicedLineEditorViewModel : EditorViewModel
 
     private async Task Export()
     {
-        IStorageFile saveFile = await Window.Window.ShowSaveFilePickerAsync(Strings.Save_voiced_line_as_WAV, [new FilePickerFileType(Strings.WAV_File) { Patterns = ["*.wav"] }]);
+        IStorageFile saveFile = await Window.Window.ShowSaveFilePickerAsync(Strings.Save_voiced_line_as_WAV, [new(Strings.WAV_File) { Patterns = ["*.wav"] }]);
         if (saveFile is not null)
         {
             WaveFileWriter.CreateWaveFile(saveFile.Path.LocalPath, _vce.GetWaveProvider(_log));
@@ -200,7 +200,7 @@ public class VoicedLineEditorViewModel : EditorViewModel
         SubtitlesPreview = new(256, 384);
         SKCanvas canvas = new(SubtitlesPreview);
         canvas.DrawColor(SKColors.DarkGray);
-        canvas.DrawLine(new SKPoint { X = 0, Y = 192 }, new SKPoint { X = 256, Y = 192 }, DialogueScriptParameter.Paint00);
+        canvas.DrawLine(new() { X = 0, Y = 192 }, new() { X = 256, Y = 192 }, DialogueScriptParameter.Paint00);
 
         bool bottomScreen = _voiceMapEntry.TargetScreen == VoiceMapEntry.Screen.BOTTOM;
         if (bottomScreen)
@@ -220,7 +220,18 @@ public class VoicedLineEditorViewModel : EditorViewModel
 
         canvas.DrawHaroohieText(
             _subtitle,
-            DialogueScriptParameter.Paint00,
+            _voiceMapEntry.Color switch
+            {
+                DialogueColor.WHITE => DialogueScriptParameter.Paint00,
+                DialogueColor.YELLOW => DialogueScriptParameter.Paint01,
+                DialogueColor.OFF_WHITE => DialogueScriptParameter.Paint02,
+                DialogueColor.GRAY => DialogueScriptParameter.Paint03,
+                DialogueColor.LAVENDER => DialogueScriptParameter.Paint04,
+                DialogueColor.RED => DialogueScriptParameter.Paint05,
+                DialogueColor.FADED_GRAY => DialogueScriptParameter.Paint06,
+                DialogueColor.BLACK => DialogueScriptParameter.Paint07,
+                _ => DialogueScriptParameter.Paint00,
+            },
             _project,
             _voiceMapEntry.X,
             _voiceMapEntry.Y + (bottomScreen ? 192 : 0),

@@ -704,8 +704,8 @@ This action is irreversible.</value>
   <data name="Edit Save File" xml:space="preserve">
     <value>Edit Save File</value>
   </data>
-  <data name="Edit Save File - {0}" xml:space="preserve">
-    <value>Edit Save File - {0}</value>
+  <data name="Edit Save File - {0} - {1}" xml:space="preserve">
+    <value>Edit Save File - {0} - {1}</value>
   </data>
   <data name="Edit Save File..." xml:space="preserve">
     <value>Edit Save File…</value>
@@ -1369,8 +1369,8 @@ In order to preserve state, no hacks were applied.</value>
     <value>Layouts</value>
     <comment>Plural layout items</comment>
   </data>
-  <data name="Listened to {0}" xml:space="preserve">
-    <value>Listened to {0}</value>
+  <data name="Listened to {0} (F{1:D2})" xml:space="preserve">
+    <value>Listened to {0} (F{1:D2})</value>
     <comment>{0} is the name of a BGM that's been encountered while playing the game</comment>
   </data>
   <data name="Load Game menu ticker tape" xml:space="preserve">
@@ -1921,8 +1921,8 @@ Please set the path to a Nintendo DS emulator or specify a Nintendo DS emulator 
     <value>ROM Hash Mismatch</value>
     <comment>Message box title when there is a mismatch between the expected ROM hash and the selected ROM hash on project import</comment>
   </data>
-  <data name="Route &quot;{0}&quot; Completed" xml:space="preserve">
-    <value>Route "{0}" Completed</value>
+  <data name="Route &quot;{0}&quot; Completed (F{1:D2})" xml:space="preserve">
+    <value>Route "{0}" Completed (F{1:D2})</value>
     <comment>{0} is the name of a route following a group selection that has been completed</comment>
   </data>
   <data name="Routes" xml:space="preserve">
@@ -2036,8 +2036,8 @@ Please set the path to a Nintendo DS emulator or specify a Nintendo DS emulator 
   <data name="Script Section" xml:space="preserve">
     <value>Script Section</value>
   </data>
-  <data name="Script {0} Section {1} Completed" xml:space="preserve">
-    <value>Script {0} Section {1} Completed</value>
+  <data name="Script {0} Section {1} Completed (F{2:D2})" xml:space="preserve">
+    <value>Script {0} Section {1} Completed (F{2:D2})</value>
     <comment>{0} is the display name of a script and {1} is the name of the section of that script that has been completed</comment>
   </data>
   <data name="Script:" xml:space="preserve">
@@ -2604,8 +2604,8 @@ No project is currently open. Would you like to create a new project?</value>
   <data name="_Tools" xml:space="preserve">
     <value>_Tools</value>
   </data>
-  <data name="{0} ({1}) Seen" xml:space="preserve">
-    <value>{0} ({1}) Seen</value>
+  <data name="{0} ({1}) Seen (F{2:D2})" xml:space="preserve">
+    <value>{0} ({1}) Seen (F{2:D2})</value>
     <comment>{0} is the internal name and {1} is the display name of a CG that has been encountered during the game</comment>
   </data>
   <data name="{0} - Adjust Volume" xml:space="preserve">
@@ -2616,8 +2616,8 @@ No project is currently open. Would you like to create a new project?</value>
     <value>{0} - Manage Loop</value>
     <comment>{0} is the title of a BGM track</comment>
   </data>
-  <data name="{0} Obtained" xml:space="preserve">
-    <value>{0} Obtained</value>
+  <data name="{0} Obtained (F{1:D2})" xml:space="preserve">
+    <value>{0} Obtained (F{1:D2})</value>
     <comment>{0} is the name of a topic that's been obtained</comment>
   </data>
   <data name="{0} results" xml:space="preserve">
@@ -2628,8 +2628,8 @@ No project is currently open. Would you like to create a new project?</value>
     <value>{0} results found</value>
     <comment>{0} is the number of search results</comment>
   </data>
-  <data name="{0} Watched in Extras" xml:space="preserve">
-    <value>{0} Watched in Extras</value>
+  <data name="{0} Watched in Extras (F{1:D2})" xml:space="preserve">
+    <value>{0} Watched in Extras (F{1:D2})</value>
     <comment>{0} is the name of a topic that has had its associated scene watched in the Extras mode</comment>
   </data>
   <data name="Failed to replace screen image: image too complex (generated more than 255 tiles); please use a simpler image" xml:space="preserve">
@@ -2804,8 +2804,104 @@ This action is irreversible.</value>
   <data name="Error while loading project" xml:space="preserve">
     <value>Error while loading project</value>
   </data>
+  <data name="WIPE_RIGHT" xml:space="preserve">
+    <value>Wipe Right</value>
+  </data>
+  <data name="WIPE_DOWN" xml:space="preserve">
+    <value>Wipe Down</value>
+  </data>
+  <data name="WIPE_DIAGONAL_RIGHT_DOWN" xml:space="preserve">
+    <value>Wipe Diagonal Right Down</value>
+  </data>
+  <data name="BLINDS" xml:space="preserve">
+    <value>Blinds</value>
+  </data>
+  <data name="BLINDS2" xml:space="preserve">
+    <value>Blinds (Alternative)</value>
+  </data>
+  <data name="WIPE_LEFT" xml:space="preserve">
+    <value>Wipe Left</value>
+  </data>
+  <data name="WIPE_UP" xml:space="preserve">
+    <value>Wipe Up</value>
+  </data>
+  <data name="WIPE_DIAGONAL_LEFT_UP" xml:space="preserve">
+    <value>Wipe Diagonal Left Up</value>
+  </data>
+  <data name="Exit" xml:space="preserve">
+    <value>Exit</value><comment>Used as a verb here</comment>
+  </data>
+  <data name="Left" xml:space="preserve">
+    <value>Left</value><comment>As in the direction or side of screen</comment>
+  </data>
+  <data name="Center" xml:space="preserve">
+    <value>Center</value><comment>As in the position on the screen</comment>
+  </data>
+  <data name="Right" xml:space="preserve">
+    <value>Right</value><comment>As in the position on the screen</comment>
+  </data>
+  <data name="Slide" xml:space="preserve">
+    <value>Slide</value><comment>Describing a transition where the item slides onto the screen</comment>
+  </data>
+  <data name="Fade" xml:space="preserve">
+    <value>Fade</value><comment>Describing a transition where the item fades in</comment>
+  </data>
+  <data name="Save changes to save file?" xml:space="preserve">
+    <value>Save changes to save file?</value>
+  </data>
+  <data name="Would you like to save your changes to the save file?" xml:space="preserve">
+    <value>Would you like to save your changes to the save file?</value>
+  </data>
   <data name="Search Project" xml:space="preserve">
     <value>Search Project</value>
+  </data>
+  <data name="Friendship Levels" xml:space="preserve">
+    <value>Friendship Levels</value>
+  </data>
+  <data name="Tutorial {0} Completed (F{1:D2})" xml:space="preserve">
+    <value>Tutorial {0} Completed (F{1:D2})</value><comment>A flag marking that the tutorial in question has been completed</comment>
+  </data>
+  <data name="Most Recent Objectives" xml:space="preserve">
+    <value>Most Recent Objectives</value><comment>As in the group selection objectives</comment>
+  </data>
+  <data name="First Selection" xml:space="preserve">
+    <value>First Selection</value><comment>Indicates route was picked in the first group selection</comment>
+  </data>
+  <data name="Second Selection" xml:space="preserve">
+    <value>Second Selection</value><comment>Indicates route was picked in the second selection</comment>
+  </data>
+  <data name="Kyon Present" xml:space="preserve">
+    <value>Kyon Present</value>
+  </data>
+  <data name="Asahina Present" xml:space="preserve">
+    <value>Asahina Present</value>
+  </data>
+  <data name="Nagato Present" xml:space="preserve">
+    <value>Nagato Present</value>
+  </data>
+  <data name="Koizumi Present" xml:space="preserve">
+    <value>Koizumi Present</value>
+  </data>
+  <data name="Character Power Statuses" xml:space="preserve">
+    <value>Character Power Statuses</value>
+  </data>
+  <data name="Level" xml:space="preserve">
+    <value>Level</value><comment>The level of a character power</comment>
+  </data>
+  <data name="Remaining Uses" xml:space="preserve">
+    <value>Remaining Uses</value><comment>The uses remaining for this character power</comment>
+  </data>
+  <data name="Uses Since Level Up" xml:space="preserve">
+    <value>Uses Since Level Up</value><comment>The number of times the power has been used since the last level up</comment>
+  </data>
+  <data name="Uses to Level Up" xml:space="preserve">
+    <value>Uses to Level Up</value><comment>The number of times the power must be used to level up</comment>
+  </data>
+  <data name="Export Layout Preview" xml:space="preserve">
+    <value>Export Layout Preview</value><comment>Button that exports a preview of the current layout item</comment>
+  </data>
+  <data name="Export Source Preview" xml:space="preserve">
+    <value>Export Source Preview</value><comment>Button that exports a preview of the current source image of a particular layout entry</comment>
   </data>
   <data name="Ignore Hash?" xml:space="preserve">
     <value>Ignore Hash?</value><comment>This is in the project import dialog and indicates the ROM hash should be ignored</comment>

@@ -20,8 +20,8 @@ namespace SerialLoops.Utility;
 
 public static partial class SLConverters
 {
-    public static FuncValueConverter<ItemDescription.ItemType, Bitmap> ItemTypeToIconConverter => new((type) => new Bitmap(AssetLoader.Open(new Uri($"avares://SerialLoops/Assets/Icons/{type.ToString().Replace(' ', '_')}.png"))));
-    public static FuncValueConverter<SKBitmap, SKAvaloniaImage> SKBitmapToAvaloniaConverter => new((bitmap) => new SKAvaloniaImage(bitmap));
+    public static FuncValueConverter<ItemDescription.ItemType, Bitmap> ItemTypeToIconConverter => new((type) => new(AssetLoader.Open(new($"avares://SerialLoops/Assets/Icons/{type.ToString().Replace(' ', '_')}.png"))));
+    public static FuncValueConverter<SKBitmap, SKAvaloniaImage> SKBitmapToAvaloniaConverter => new((bitmap) => new(bitmap));
     public static FuncValueConverter<DsScreen, bool> TopScreenSelectableConverter => new((screen) => screen != DsScreen.TOP);
     public static FuncValueConverter<DsScreen, bool> BottomScreenSelectableConverter => new((screen) => screen != DsScreen.BOTTOM);
     public static FuncValueConverter<DsScreen, bool> BothScreensSelectedConverter => new((screen) => screen == DsScreen.BOTH);
@@ -69,6 +69,40 @@ public class SKAvaloniaColorConverter : IValueConverter
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
     {
         return ((Color)value).ToSKColor();
+    }
+}
+
+public class SKAvaloniaBrushConverter : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        return new SolidColorBrush(((SKColor)value).ToAvalonia());
+    }
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        return ((SolidColorBrush)value).Color.ToSKColor();
+    }
+}
+
+public class IntGreaterThanConverter : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        if (targetType == typeof(int))
+        {
+            return (int)value > int.Parse((string)parameter);
+        }
+        if (targetType == typeof(short))
+        {
+            return (short)value > int.Parse((string)parameter);
+        }
+
+        return null;
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        return 0;
     }
 }
 

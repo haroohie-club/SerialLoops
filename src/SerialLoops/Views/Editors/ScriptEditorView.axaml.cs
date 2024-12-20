@@ -24,6 +24,10 @@ public partial class ScriptEditorView : UserControl
     {
         base.OnInitialized();
         MainWindowViewModel window = ((ScriptEditorViewModel)DataContext!).Window;
+        if (window.WindowMenu.ContainsKey(MenuHeader.EDIT))
+        {
+            UnloadEditMenu();
+        }
         NativeMenu menu = NativeMenu.GetMenu(window.Window)!;
         ScriptEditorViewModel vm = (ScriptEditorViewModel)DataContext!;
 
@@ -36,32 +40,32 @@ public partial class ScriptEditorView : UserControl
         window.WindowMenu.Add(MenuHeader.EDIT, new(Strings._Edit));
         window.WindowMenu[MenuHeader.EDIT].Menu =
         [
-            new NativeMenuItem()
+            new NativeMenuItem
             {
                 Header = Strings.Generate_Template,
                 Command = vm.GenerateTemplateCommand,
             },
-            new NativeMenuItem()
+            new NativeMenuItem
             {
                 Header = Strings.Apply_Template,
                 Command = vm.ApplyTemplateCommand,
                 Icon = ControlGenerator.GetIcon("Template", window.Log),
             },
-            new NativeMenuItem()
+            new NativeMenuItem
             {
                 Header = Strings.Cut,
                 Command = vm.CutCommand,
                 Icon = ControlGenerator.GetIcon("Cut", window.Log),
                 Gesture = vm.CutHotKey,
             },
-            new NativeMenuItem()
+            new NativeMenuItem
             {
                 Header = Strings.Copy,
                 Command = vm.CopyCommand,
                 Icon = ControlGenerator.GetIcon("Copy", window.Log),
                 Gesture = vm.CopyHotKey,
             },
-            new NativeMenuItem()
+            new NativeMenuItem
             {
                 Header = Strings.Paste,
                 Command = vm.PasteCommand,
@@ -94,6 +98,11 @@ public partial class ScriptEditorView : UserControl
     protected override void OnUnloaded(RoutedEventArgs e)
     {
         base.OnUnloaded(e);
+        UnloadEditMenu();
+    }
+
+    private void UnloadEditMenu()
+    {
         MainWindowViewModel window = ((ScriptEditorViewModel)DataContext!).Window;
         NativeMenu menu = NativeMenu.GetMenu(((ScriptEditorViewModel)DataContext!).Window.Window)!;
 

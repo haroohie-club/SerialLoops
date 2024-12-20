@@ -56,7 +56,7 @@ public class SKAvaloniaImage : IImage, IDisposable
             _drawOperation = new()
             {
                 Bitmap = _bitmap,
-                Bounds = sourceRect,
+                Bounds = destRect,
             };
             context.Custom(_drawOperation);
         }

@@ -1,6 +1,7 @@
 using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Threading;
 
 namespace SerialLoops.Controls;
 
@@ -14,8 +15,13 @@ public partial class LinkButton : UserControl
         get => IconPath.Path;
         set
         {
-            IconPath.Path = string.IsNullOrEmpty(value) ? string.Empty : $"avares://SerialLoops/Assets/Icons/{value}.svg";
-            IconPath.IsVisible = !string.IsNullOrEmpty(value);
+            Dispatcher.UIThread.Invoke(() =>
+            {
+                IconPath.Path = string.IsNullOrEmpty(value)
+                    ? null
+                    : $"avares://SerialLoops/Assets/Icons/{value}.svg";
+                IconPath.IsVisible = !string.IsNullOrEmpty(value);
+            });
         }
     }
     public string Text

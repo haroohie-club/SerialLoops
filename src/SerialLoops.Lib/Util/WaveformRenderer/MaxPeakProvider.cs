@@ -18,6 +18,6 @@ public class MaxPeakProvider : PeakProvider
         var samplesRead = Provider.Read(ReadBuffer, 0, ReadBuffer.Length - (ReadBuffer.Length % Provider.WaveFormat.BlockAlign));
         var max = (samplesRead == 0) ? 0 : ReadBuffer.Take(samplesRead).Max();
         var min = (samplesRead == 0) ? 0 : ReadBuffer.Take(samplesRead).Min();
-        return new PeakInfo(min, max);
+        return new(min, max);
     }
 }

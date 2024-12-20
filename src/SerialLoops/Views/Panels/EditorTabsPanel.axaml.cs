@@ -12,8 +12,8 @@ public partial class EditorTabsPanel : Panel
         InitializeComponent();
     }
 
-    private void Tabs_ContainerClearing(object? sender, ContainerClearingEventArgs e)
+    private async void Tabs_ContainerClearing(object? sender, ContainerClearingEventArgs e)
     {
-        ((EditorTabsPanelViewModel)DataContext!).OnTabClosed((EditorViewModel)e.Container.DataContext);
+        await ((EditorTabsPanelViewModel)DataContext!).OnTabClosed((EditorViewModel)e.Container.DataContext);
     }
 }

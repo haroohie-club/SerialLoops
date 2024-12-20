@@ -1,11 +1,16 @@
 ﻿using System.Collections.ObjectModel;
+using System.IO;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using HaruhiChokuretsuLib.Util;
+using MsBox.Avalonia.Enums;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SerialLoops.Assets;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
+using SerialLoops.Lib.SaveFile;
+using SerialLoops.Utility;
 using SerialLoops.ViewModels.Editors;
 
 namespace SerialLoops.ViewModels.Panels;
@@ -66,6 +71,8 @@ public class EditorTabsPanelViewModel : ViewModelBase
                 return new ChessPuzzleEditorViewModel((ChessPuzzleItem)item, MainWindow, _log);
             case ItemDescription.ItemType.Group_Selection:
                 return new GroupSelectionEditorViewModel((GroupSelectionItem)item, MainWindow, _log);
+            case ItemDescription.ItemType.Layout:
+                return new LayoutEditorViewModel((LayoutItem)item, MainWindow, _log);
             case ItemDescription.ItemType.Script:
                 return new ScriptEditorViewModel((ScriptItem)item, MainWindow, _log);
             case ItemDescription.ItemType.SFX:
@@ -76,6 +83,8 @@ public class EditorTabsPanelViewModel : ViewModelBase
                 return new TopicEditorViewModel((TopicItem)item, MainWindow, _log);
             case ItemDescription.ItemType.Voice:
                 return new VoicedLineEditorViewModel((VoicedLineItem)item, MainWindow, _log);
+            case ItemDescription.ItemType.Save:
+                return new SaveEditorViewModel((SaveItem)item, MainWindow, _log);
             default:
                 _log.LogError(Strings.Invalid_item_type_);
                 return null;
@@ -87,7 +96,7 @@ public class EditorTabsPanelViewModel : ViewModelBase
 
     }
 
-    public void OnTabClosed(EditorViewModel closedEditor)
+    public async Task OnTabClosed(EditorViewModel closedEditor)
     {
         if (closedEditor.Description.Type == ItemDescription.ItemType.BGM)
         {
@@ -100,6 +109,27 @@ public class EditorTabsPanelViewModel : ViewModelBase
         else if (closedEditor.Description.Type == ItemDescription.ItemType.SFX)
         {
             ((SfxEditorViewModel)closedEditor).SfxPlayerPanel.Stop();
+        }
+        else if (closedEditor.Description.Type == ItemDescription.ItemType.Save)
+        {
+            ButtonResult result = await MainWindow.Window.ShowMessageBoxAsync(Strings.Save_changes_to_save_file_,
+                Strings.Would_you_like_to_save_your_changes_to_the_save_file_,
+                ButtonEnum.YesNoCancel, Icon.Question, _log);
+            SaveEditorViewModel saveEditor = (SaveEditorViewModel)closedEditor;
+            switch (result)
+            {
+                case ButtonResult.Yes:
+                    File.WriteAllBytes(saveEditor.Save.SaveLoc, saveEditor.Save.Save.GetBytes());
+                    _project.Items.Remove(saveEditor.Save);
+                    break;
+                case ButtonResult.No:
+                    _project.Items.Remove(saveEditor.Save);
+                    break;
+                default:
+                case ButtonResult.Cancel:
+                    OpenTab(saveEditor.Save);
+                    break;
+            }
         }
     }
 

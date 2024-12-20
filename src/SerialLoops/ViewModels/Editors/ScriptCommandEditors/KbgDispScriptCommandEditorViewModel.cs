@@ -53,9 +53,9 @@ public class KbgDispScriptCommandEditorViewModel : ScriptCommandEditorViewModel
     private async Task ReplaceKbg()
     {
         // Order of the predicate matters here as "NONE" short circuits the NonePreviewableGraphic, preventing it from being cast
-        GraphicSelectionDialogViewModel graphicSelectionDialog = new(new List<IPreviewableGraphic>() { NonePreviewableGraphic.BACKGROUND }.Concat(_window.OpenProject.Items.Where(i => i.Type == ItemDescription.ItemType.Background).Cast<IPreviewableGraphic>()),
+        GraphicSelectionDialogViewModel graphicSelectionDialog = new(new List<IPreviewableGraphic> { NonePreviewableGraphic.BACKGROUND }.Concat(_window.OpenProject.Items.Where(i => i.Type == ItemDescription.ItemType.Background).Cast<IPreviewableGraphic>()),
             Kbg, _window.OpenProject, _window.Log, i => i.Name == "NONE" || ((BackgroundItem)i).BackgroundType == BgType.KINETIC_SCREEN);
-        IPreviewableGraphic bgItem = await new GraphicSelectionDialog() { DataContext = graphicSelectionDialog }.ShowDialog<IPreviewableGraphic>(_window.Window);
+        IPreviewableGraphic bgItem = await new GraphicSelectionDialog { DataContext = graphicSelectionDialog }.ShowDialog<IPreviewableGraphic>(_window.Window);
         if (bgItem is null || bgItem == Kbg)
         {
             return;

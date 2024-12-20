@@ -116,7 +116,7 @@ public class SKCropResizeCanvas : SKCanvasView
         {
             // Draw image
             canvas.DrawBitmap(SourceBitmap,
-                new SKRect(0, 0, SourceBitmap.Width, SourceBitmap.Height),
+                new(0, 0, SourceBitmap.Width, SourceBitmap.Height),
                 new SKRect(
                     ImageLocation?.X ?? 0f,
                     ImageLocation?.Y ?? 0f,
@@ -150,11 +150,11 @@ public class SKCropResizeCanvas : SKCanvasView
 
             //Draw UI
             SKPath uiPath = new();
-            uiPath.AddRect(new SKRect(0, 0, PreviewWidth ?? 0f, PreviewHeight ?? 0f));
+            uiPath.AddRect(new(0, 0, PreviewWidth ?? 0f, PreviewHeight ?? 0f));
             uiPath.AddRect(areaRect);
             uiPath.FillType = SKPathFillType.EvenOdd;
             this.TryFindResource("CropResizeOverlayColor", ActualThemeVariant, out object? color);
-            canvas.DrawPath(uiPath, new SKPaint { Color = ((Color)color).ToSKColor() });
+            canvas.DrawPath(uiPath, new() { Color = ((Color)color).ToSKColor() });
 
             canvas.Flush();
         }
@@ -213,7 +213,7 @@ public class SKCropResizeCanvas : SKCanvasView
         base.OnPointerMoved(e);
         e.Handled = true;
         PointerPoint point = e.GetCurrentPoint(this);
-            
+
         if (!point.Properties.IsLeftButtonPressed)
         {
             _lastPointerPosition = point.Position;

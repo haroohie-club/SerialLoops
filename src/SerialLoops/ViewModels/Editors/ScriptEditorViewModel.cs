@@ -89,7 +89,7 @@ public class ScriptEditorViewModel : EditorViewModel
                     new HierarchicalExpanderColumn<ITreeItem>(
                         new TemplateColumn<ITreeItem>(null,
                             new FuncDataTemplate<ITreeItem>((val, namescope) => val?.GetDisplay()),
-                            options: new TemplateColumnOptions<ITreeItem>() { IsTextSearchEnabled = true }),
+                            options: new() { IsTextSearchEnabled = true }),
                         i => i.Children
                     ),
                 },
@@ -150,10 +150,10 @@ public class ScriptEditorViewModel : EditorViewModel
         ApplyTemplateCommand = ReactiveCommand.CreateFromTask(ApplyTemplate);
         GenerateTemplateCommand = ReactiveCommand.CreateFromTask(GenerateTemplate);
 
-        AddCommandHotKey = new(Key.N, KeyModifiers.Control | KeyModifiers.Shift);
-        CutHotKey = new(Key.X, KeyModifiers.Control);
-        CopyHotKey = new(Key.C, KeyModifiers.Control);
-        PasteHotKey = new(Key.V, KeyModifiers.Control);
+        AddCommandHotKey = GuiExtensions.CreatePlatformAgnosticCtrlGesture(Key.N, KeyModifiers.Shift);
+        CutHotKey = GuiExtensions.CreatePlatformAgnosticCtrlGesture(Key.X);
+        CopyHotKey = GuiExtensions.CreatePlatformAgnosticCtrlGesture(Key.C);
+        PasteHotKey = GuiExtensions.CreatePlatformAgnosticCtrlGesture(Key.V);
         DeleteHotKey = new(Key.Delete);
     }
 
@@ -195,6 +195,11 @@ public class ScriptEditorViewModel : EditorViewModel
                 CommandVerb.HARUHI_METER => new HaruhiMeterScriptCommandEditorViewModel(_selectedCommand, this, _log, noShow: false),
                 CommandVerb.HARUHI_METER_NOSHOW => new HaruhiMeterScriptCommandEditorViewModel(_selectedCommand, this, _log, noShow: true),
                 CommandVerb.PALEFFECT => new PalEffectScriptCommandEditorViewModel(_selectedCommand, this, _log),
+                CommandVerb.BG_FADE => new BgFadeScriptCommandEditorViewModel(_selectedCommand, this, _log, Window),
+                CommandVerb.TRANS_OUT => new TransInOutScriptCommandEditorViewModel(_selectedCommand, this, _log),
+                CommandVerb.TRANS_IN => new TransInOutScriptCommandEditorViewModel(_selectedCommand, this, _log),
+                CommandVerb.SET_PLACE => new SetPlaceScriptCommandEditorViewModel(_selectedCommand, this, _log, Window),
+                CommandVerb.ITEM_DISPIMG => new ItemDispimgScriptCommandEditorViewModel(_selectedCommand, this, _log, Window),
                 CommandVerb.BACK => new EmptyScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.STOP => new EmptyScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.NOOP2 => new EmptyScriptCommandEditorViewModel(_selectedCommand, this, _log),
@@ -204,7 +209,7 @@ public class ScriptEditorViewModel : EditorViewModel
                 CommandVerb.CHESS_LOAD => new ChessLoadScriptCommandEditorViewModel(_selectedCommand, this, Window, _log),
                 CommandVerb.SCENE_GOTO_CHESS => new SceneGotoScriptCommandEditorViewModel(_selectedCommand, this, _log, Window),
                 CommandVerb.BG_DISP2 => new BgDispScriptCommandEditorViewModel(_selectedCommand, this, _log, Window),
-                _ => new ScriptCommandEditorViewModel(_selectedCommand, this, _log)
+                _ => new(_selectedCommand, this, _log),
             };
         }
     }
@@ -284,7 +289,7 @@ public class ScriptEditorViewModel : EditorViewModel
 
     public bool CanDrag(ITreeItem source)
     {
-        return !(source is ScriptSectionTreeItem);
+        return source is not ScriptSectionTreeItem;
     }
 
     private void RowSelection_SelectionChanged(object sender, TreeSelectionModelSelectionChangedEventArgs<ITreeItem> e)
@@ -316,7 +321,7 @@ public class ScriptEditorViewModel : EditorViewModel
         }
 
         CommandVerb? newVerb =
-            await new AddScriptCommandDialog() { DataContext = new AddScriptCommandDialogViewModel() }
+            await new AddScriptCommandDialog { DataContext = new AddScriptCommandDialogViewModel() }
                 .ShowDialog<CommandVerb?>(Window.Window);
         if (newVerb is null)
         {
@@ -365,7 +370,7 @@ public class ScriptEditorViewModel : EditorViewModel
 
     private async Task AddSection()
     {
-        string sectionName = await new AddScriptSectionDialog() { DataContext = new AddScriptSectionDialogViewModel() }
+        string sectionName = await new AddScriptSectionDialog { DataContext = new AddScriptSectionDialogViewModel() }
             .ShowDialog<string>(Window.Window);
         if (string.IsNullOrEmpty(sectionName))
         {
@@ -402,14 +407,14 @@ public class ScriptEditorViewModel : EditorViewModel
 
         _script.Event.ScriptSections.Insert(sectionIndex, section);
         _script.Event.NumSections++;
-        _script.Event.LabelsSection.Objects.Insert(sectionIndex - 1,
+        _script.Event.LabelsSection.Objects.Insert(sectionIndex,
             new()
             {
                 Name = $"NONE/{sectionName[4..]}",
                 Id = (short)(_script.Event.LabelsSection.Objects.Count == 0 ? 1001 :
                     sectionIndex == _script.Event.LabelsSection.Objects.Count ?
-                    _script.Event.LabelsSection.Objects[^1].Id + 1 :
-                    _script.Event.LabelsSection.Objects[sectionIndex + 1].Id),
+                    _script.Event.LabelsSection.Objects[^2].Id + 1 :
+                    _script.Event.LabelsSection.Objects[sectionIndex].Id + 1),
             }
         );
         for (int i = sectionIndex + 1; i < _script.Event.LabelsSection.Objects.Count; i++)
@@ -507,20 +512,36 @@ public class ScriptEditorViewModel : EditorViewModel
             SectionType = typeof(ScriptSection),
             ObjectType = typeof(ScriptCommandInvocation),
         });
-        _script.Event.LabelsSection.Objects.Clear();
         ScriptSections.Clear();
         ScriptSections.Add(new(_script.Event.ScriptSections[0]));
-        _script.Event.LabelsSection.Objects.Add(new() { Id = 1, Name = "" });
+        if (_script.Event.LabelsSection?.Objects?.Count > 2)
+        {
+            _script.Event.LabelsSection.Objects.RemoveRange(1, _script.Event.LabelsSection.Objects.Count - 2);
+        }
         _commands.Clear();
         _commands.Add(_script.Event.ScriptSections[0], []);
         Commands = _commands;
 
         _script.Event.DialogueLines.Clear();
         _script.Event.DialogueSection.Objects.Clear();
-        _script.Event.ConditionalsSection.Objects.RemoveRange(1, _script.Event.ConditionalsSection.Objects.Count - 1);
-        _script.Event.ChoicesSection?.Objects?.RemoveRange(1, _script.Event.ChoicesSection.Objects.Count - 1);
-        _script.Event.StartingChibisSection?.Objects?.RemoveRange(1, _script.Event.StartingChibisSection.Objects.Count - 1);
-        _script.Event.MapCharactersSection?.Objects?.RemoveRange(1, _script.Event.MapCharactersSection.Objects.Count - 1);
+        if (_script.Event.ConditionalsSection?.Objects?.Count > 2)
+        {
+            _script.Event.ConditionalsSection.Objects.RemoveRange(1, _script.Event.ConditionalsSection.Objects.Count - 2);
+        }
+
+        if (_script.Event.ChoicesSection?.Objects?.Count > 2)
+        {
+            _script.Event.ChoicesSection?.Objects?.RemoveRange(1, _script.Event.ChoicesSection.Objects.Count - 2);
+        }
+
+        if (_script.Event.StartingChibisSection?.Objects?.Count > 2)
+        {
+            _script.Event.StartingChibisSection?.Objects?.RemoveRange(1, _script.Event.StartingChibisSection.Objects.Count - 2);
+        }
+        if (_script.Event.MapCharactersSection?.Objects?.Count > 2)
+        {
+            _script.Event.MapCharactersSection?.Objects?.RemoveRange(1, _script.Event.MapCharactersSection.Objects.Count - 2);
+        }
 
         _script.Refresh(_project, _log);
         _script.UnsavedChanges = true;
@@ -624,7 +645,7 @@ public class ScriptEditorViewModel : EditorViewModel
 
     private async Task GenerateTemplate()
     {
-        ScriptTemplate template = await new GenerateTemplateDialog() { DataContext = new GenerateTemplateDialogViewModel(Commands, _project, _log) }
+        ScriptTemplate template = await new GenerateTemplateDialog { DataContext = new GenerateTemplateDialogViewModel(Commands, _project, _log) }
                 .ShowDialog<ScriptTemplate>(Window.Window);
         if (template is null)
         {

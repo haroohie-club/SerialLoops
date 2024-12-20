@@ -33,25 +33,25 @@ public partial class MainWindow : Window
         {
             menu.Items.Clear();
         }
-        NativeMenuItem fileMenu = new NativeMenuItem()
+        NativeMenuItem fileMenu = new()
         {
             Header = Strings._File,
             Menu =
             [
-                new NativeMenuItem()
+                new NativeMenuItem
                 {
                     Header = Strings.New_Project___,
                     Icon = ControlGenerator.GetIcon("New", ViewModel.Log),
                     Command = ViewModel.NewProjectCommand,
                 },
-                new NativeMenuItem()
+                new NativeMenuItem
                 {
                     Header = Strings.Open_Project,
                     Icon = ControlGenerator.GetIcon("Open", ViewModel.Log),
                     Command = ViewModel.OpenProjectCommand,
                 },
                 ViewModel.RecentProjectsMenu,
-                new NativeMenuItem()
+                new NativeMenuItem
                 {
                     Header= Strings.Import_Project,
                     Command = ViewModel.ImportProjectCommand,
@@ -69,30 +69,30 @@ public partial class MainWindow : Window
         if (!NativeMenu.GetIsNativeMenuExported(this))
         {
             fileMenu.Menu.Items.Add(new NativeMenuItemSeparator());
-            fileMenu.Menu.Items.Add(new NativeMenuItem()
+            fileMenu.Menu.Items.Add(new NativeMenuItem
             {
                 Header = Strings._Preferences___,
                 Icon = ControlGenerator.GetIcon("Options", ViewModel.Log),
                 Command = ViewModel.PreferencesCommand,
             });
-            fileMenu.Menu.Items.Add(new NativeMenuItem()
+            fileMenu.Menu.Items.Add(new NativeMenuItem
             {
                 Header = Strings._Check_for_Updates___,
                 Icon = ControlGenerator.GetIcon("Update", ViewModel.Log),
                 Command = ViewModel.CheckForUpdatesCommand,
             });
-            fileMenu.Menu.Items.Add(new NativeMenuItem()
+            fileMenu.Menu.Items.Add(new NativeMenuItem
             {
                 Header = Strings.View__Logs,
                 Command = ViewModel.ViewLogsCommand,
             });
 
-            menu.Items.Add(new NativeMenuItem()
+            menu.Items.Add(new NativeMenuItem
             {
                 Header = Strings._Help,
                 Menu =
                 [
-                    new NativeMenuItem()
+                    new NativeMenuItem
                     {
                         Header = Strings.About___,
                         Icon = ControlGenerator.GetIcon("Help", ViewModel.Log),

@@ -244,33 +244,33 @@ public static class Extensions
         }
 
         // Collect dialogue garbage
-        IEnumerable<string> dialogueContainingCommands = new[] { CommandVerb.DIALOGUE, CommandVerb.PIN_MNL }.Select(c => c.ToString());
-        List<UsedIndex> dialogueUsedIndices = [];
-        foreach (ScriptCommandInvocation dialogueCommand in evt.ScriptSections.SelectMany(s => s.Objects)
-                     .Where((c => dialogueContainingCommands.Contains(c.Command.Mnemonic))))
-        {
-            dialogueUsedIndices.Add(new() { Command = dialogueCommand, Index = dialogueCommand.Parameters[0] });
-        }
-
-        if (dialogueUsedIndices.DistinctBy(i => i.Index).Count() < evt.DialogueSection.Objects.Count)
-        {
-            for (short i = 0; i < evt.DialogueSection.Objects.Count; i++)
-            {
-                if (dialogueUsedIndices.All(idx => idx.Index != i))
-                {
-                    evt.DialogueSection.Objects.RemoveAt(i);
-                    evt.DialogueLines.RemoveAt(i--);
-                    for (int j = 0; j < dialogueUsedIndices.Count; j++)
-                    {
-                        if (dialogueUsedIndices[j].Index >= i)
-                        {
-                            dialogueUsedIndices[j].Command.Parameters[0]--;
-                            dialogueUsedIndices[j].Index--;
-                        }
-                    }
-                }
-            }
-        }
+        // IEnumerable<string> dialogueContainingCommands = new[] { CommandVerb.DIALOGUE, CommandVerb.PIN_MNL }.Select(c => c.ToString());
+        // List<UsedIndex> dialogueUsedIndices = [];
+        // foreach (ScriptCommandInvocation dialogueCommand in evt.ScriptSections.SelectMany(s => s.Objects)
+        //              .Where((c => dialogueContainingCommands.Contains(c.Command.Mnemonic))))
+        // {
+        //     dialogueUsedIndices.Add(new() { Command = dialogueCommand, Index = dialogueCommand.Parameters[0] });
+        // }
+        //
+        // if (dialogueUsedIndices.DistinctBy(i => i.Index).Count() < evt.DialogueSection.Objects.Count)
+        // {
+        //     for (short i = 0; i < evt.DialogueSection.Objects.Count; i++)
+        //     {
+        //         if (dialogueUsedIndices.All(idx => idx.Index != i))
+        //         {
+        //             evt.DialogueSection.Objects.RemoveAt(i);
+        //             evt.DialogueLines.RemoveAt(i--);
+        //             for (int j = 0; j < dialogueUsedIndices.Count; j++)
+        //             {
+        //                 if (dialogueUsedIndices[j].Index >= i)
+        //                 {
+        //                     dialogueUsedIndices[j].Command.Parameters[0]--;
+        //                     dialogueUsedIndices[j].Index--;
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
     }
 
     private class UsedIndex
@@ -357,7 +357,7 @@ public static class Extensions
                 int charIndex = project.FontMap.CharMap.IndexOf(text[i]);
                 if ((charIndex + 1) * 16 <= project.FontBitmap.Height)
                 {
-                    canvas.DrawBitmap(project.FontBitmap, new SKRect(0, charIndex * 16, 16, (charIndex + 1) * 16),
+                    canvas.DrawBitmap(project.FontBitmap, new(0, charIndex * 16, 16, (charIndex + 1) * 16),
                         new SKRect(currentX, currentY, currentX + 16, currentY + 16), color);
                 }
             }
