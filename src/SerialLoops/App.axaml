@@ -35,6 +35,7 @@
 
         <!-- Toolbar styling -->
         <Style Selector="Button.ToolbarButton">
+            <!-- We use toolbar height here so these buttons are always proportional & square in the bar -->
             <Setter Property="Width" Value="{DynamicResource ToolbarNormalHeight}" />
             <Setter Property="Height" Value="{DynamicResource ToolbarNormalHeight}" />
             <Setter Property="Padding" Value="5" />
