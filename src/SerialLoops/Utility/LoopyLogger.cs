@@ -105,20 +105,7 @@ public class LoopyLogger : ILogger
 
     public void LogCrash(Exception ex)
     {
-        if (!string.IsNullOrEmpty(_logFile))
-        {
-            for (int i = 0; i < 10; i++)
-            {
-                try
-                {
-                    File.AppendAllText(_logFile, $"{Stamp}SERIAL LOOPS CRASH: {ex.Message}\n\n{ex.StackTrace}");
-                    break;
-                }
-                catch (IOException)
-                {
-                    Thread.Sleep(100);
-                }
-            }
-        }
+        File.AppendAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "sl_crash.log"),
+            $"{Stamp}SERIAL LOOPS CRASH: {ex.Message}\n\n{ex.StackTrace}");
     }
 }

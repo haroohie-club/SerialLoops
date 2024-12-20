@@ -550,7 +550,7 @@ public partial class Project
         }
         try
         {
-            if (VoiceMapIsV06OrHigher())
+            if (VoiceMapIsV06OrHigher() || VoiceMapIsV08OrHigher())
             {
                 VoiceMap = Evt.GetFileByName("VOICEMAPS").CastTo<VoiceMapFile>();
             }
@@ -1000,6 +1000,11 @@ public partial class Project
     public bool VoiceMapIsV06OrHigher()
     {
         return Evt.Files.AsParallel().Any(f => f.Name == "VOICEMAPS") && Encoding.ASCII.GetString(Evt.GetFileByName("VOICEMAPS").Data.Skip(0x08).Take(4).ToArray()) == "SUBS";
+    }
+
+    public bool VoiceMapIsV08OrHigher()
+    {
+        return Evt.Files.AsParallel().Any(f => f.Name == "VOICEMAPS") && Encoding.ASCII.GetString(Evt.GetFileByName("VOICEMAPS").Data.Skip(0x08).Take(4).ToArray()) == "SUB2";
     }
 
     public void RecalculateEventTable()

@@ -41,6 +41,8 @@ public partial class MainWindowViewModel : ViewModelBase
 {
     private const string BASE_TITLE = "Serial Loops";
 
+    public string[] Args { get; set; }
+
     [Reactive]
     public string Title { get; set; } = BASE_TITLE;
     public Size MinSize => new(769, 420);
@@ -111,7 +113,7 @@ public partial class MainWindowViewModel : ViewModelBase
         EditSaveCommand = ReactiveCommand.Create(EditSaveFileCommand_Executed);
         AboutCommand = ReactiveCommand.CreateFromTask(AboutCommand_Executed);
         PreferencesCommand = ReactiveCommand.CreateFromTask(PreferencesCommand_Executed);
-        CheckForUpdatesCommand = ReactiveCommand.CreateFromTask(() => new UpdateChecker(this).Check());
+        CheckForUpdatesCommand = ReactiveCommand.CreateFromTask(new UpdateChecker(this).Check);
 
         SaveProjectCommand = ReactiveCommand.Create(SaveProject_Executed);
         SearchProjectCommand = ReactiveCommand.Create(SearchProject_Executed);
@@ -164,7 +166,14 @@ public partial class MainWindowViewModel : ViewModelBase
             CheckForUpdatesCommand.Execute(null);
         }
 
-        if (CurrentConfig.AutoReopenLastProject && ProjectsCache.RecentProjects.Count > 0)
+        if (Args?.Length > 0)
+        {
+            if (Args[0].EndsWith(".slproj"))
+            {
+                OpenRecentProjectCommand.Execute(Args[0]);
+            }
+        }
+        else if (CurrentConfig.AutoReopenLastProject && ProjectsCache.RecentProjects.Count > 0)
         {
             OpenRecentProjectCommand.Execute(ProjectsCache.RecentProjects[0]);
         }
@@ -183,7 +192,7 @@ public partial class MainWindowViewModel : ViewModelBase
     internal void OpenProjectView(Project project, IProgressTracker tracker)
     {
         EditorTabs = new(this, project, Log);
-        ItemExplorer = new(OpenProject, EditorTabs, SearchProjectCommand, Log);
+        ItemExplorer = new(SearchProjectCommand, this);
         ProjectPanel = new()
         {
             DataContext = new OpenProjectPanelViewModel(ItemExplorer, EditorTabs),

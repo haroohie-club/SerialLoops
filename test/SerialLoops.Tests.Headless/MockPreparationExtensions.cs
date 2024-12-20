@@ -27,7 +27,7 @@ public static class MockPreparationExtensions
         mockedWindowVm.Window = window;
         mockedWindowVm.OpenProject = project;
         EditorTabsPanelViewModel editorTabs = new(mockedWindowVm, project, log);
-        ItemExplorerPanelViewModel itemExplorer = new(project, editorTabs, null, log);
+        ItemExplorerPanelViewModel itemExplorer = new(null, mockedWindowVm);
         mockedWindowVm.EditorTabs = editorTabs;
         mockedWindowVm.ItemExplorer = itemExplorer;
         mockedWindowVm.Window.DataContext = mockedWindowVm;

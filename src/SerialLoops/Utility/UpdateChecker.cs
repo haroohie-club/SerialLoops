@@ -39,7 +39,7 @@ internal class UpdateChecker(MainWindowViewModel mainWindowViewModel)
         _logger.Log($"An update for Serial Loops is available! ({version})");
         await new UpdateAvailableDialog
         {
-            DataContext = new UpdateAvailableDialogViewModel(_mainWindowViewModel, version, url, changelog)
+            DataContext = new UpdateAvailableDialogViewModel(_mainWindowViewModel, version, url, changelog),
         }.ShowDialog(_mainWindowViewModel.Window);
     }
 

@@ -2,10 +2,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:assets="using:SerialLoops.Assets"
              x:Class="SerialLoops.App"
-             xmlns:local="using:SerialLoops"
-             xmlns:tabaloniathemes="using:Tabalonia.Themes.Custom"
-             xmlns:mintoolbarthemes="using:MiniToolbar.Avalonia.Themes"
              xmlns:dialoghost="using:DialogHostAvalonia"
+             xmlns:local="using:SerialLoops"
+             xmlns:mintoolbarthemes="using:MiniToolbar.Avalonia.Themes"
+             xmlns:tabaloniathemes="using:Tabalonia.Themes.Custom"
              RequestedThemeVariant="Default">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
     <Application.DataTemplates>
@@ -33,6 +33,27 @@
         <StyleInclude Source="avares://Avalonia.Controls.TreeDataGrid/Themes/Fluent.axaml"/>
         <StyleInclude Source="avares://Avalonia.Controls.ColorPicker/Themes/Fluent/Fluent.xaml" />
         <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
+        <StyleInclude Source="avares://Avalonia.Controls.ColorPicker/Themes/Fluent/Fluent.xaml"/>
+        <StyleInclude Source="avares://Avalonia.Controls.TreeDataGrid/Themes/Fluent.axaml"/>
+
+        <!-- Toolbar styling -->
+        <Style Selector="Button.ToolbarButton">
+            <!-- We use toolbar height here so these buttons are always proportional & square in the bar -->
+            <Setter Property="Width" Value="{DynamicResource ToolbarNormalHeight}" />
+            <Setter Property="Height" Value="{DynamicResource ToolbarNormalHeight}" />
+            <Setter Property="Padding" Value="5" />
+        </Style>
+        <Style Selector="Button.ToolbarButton > StackPanel > TextBlock">
+            <Setter Property="Padding" Value="0, 2" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="TextAlignment" Value="Center" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="LineHeight" Value="13" />
+            <Setter Property="FontSize" Value="12.5" />
+        </Style>
+
+        <!-- Text styling -->
         <Style Selector="TextBlock.h1">
             <Setter Property="FontSize" Value="32"/>
             <Setter Property="FontWeight" Value="Bold"/>
@@ -63,12 +84,18 @@
                     <SolidColorBrush x:Key="LinkColor">Blue</SolidColorBrush>
                     <SolidColorBrush x:Key="DisabledLinkColor">DarkGray</SolidColorBrush>
                     <SolidColorBrush x:Key="GroupLineColor">DarkGray</SolidColorBrush>
+                    <SolidColorBrush x:Key="AccentColor">#CCCCCC</SolidColorBrush>
+                    <SolidColorBrush x:Key="ToolbarBackgroundColor">Transparent</SolidColorBrush>
+                    <SolidColorBrush x:Key="ToolbarTextColor">DarkGray</SolidColorBrush>
                     <Color x:Key="CropResizeOverlayColor">#55000000</Color>
                 </ResourceDictionary>
                 <ResourceDictionary x:Key="Dark">
                     <SolidColorBrush x:Key="LinkColor">Cyan</SolidColorBrush>
                     <SolidColorBrush x:Key="DisabledLinkColor">Gray</SolidColorBrush>
                     <SolidColorBrush x:Key="GroupLineColor">WhiteSmoke</SolidColorBrush>
+                    <SolidColorBrush x:Key="AccentColor">#222222</SolidColorBrush>
+                    <SolidColorBrush x:Key="ToolbarBackgroundColor">Transparent</SolidColorBrush>
+                    <SolidColorBrush x:Key="ToolbarTextColor">Gray</SolidColorBrush>
                     <Color x:Key="CropResizeOverlayColor">#AAFFFFFF</Color>
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
