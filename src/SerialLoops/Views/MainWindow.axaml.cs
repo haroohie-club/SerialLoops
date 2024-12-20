@@ -53,11 +53,17 @@ public partial class MainWindow : Window
                 ViewModel.RecentProjectsMenu,
                 new NativeMenuItem()
                 {
+                    Header= Strings.Import_Project,
+                    Command = ViewModel.ImportProjectCommand,
+                },
+                new NativeMenuItemSeparator(),
+                new NativeMenuItem()
+                {
                     Header = Strings.Edit_Save_File,
                     Icon = ControlGenerator.GetIcon("Edit_Save", ViewModel.Log),
                     Command = ViewModel.EditSaveCommand,
-                }
-            ]
+                },
+            ],
         };
         menu.Items.Add(fileMenu);
         if (!NativeMenu.GetIsNativeMenuExported(this))
