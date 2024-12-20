@@ -114,13 +114,12 @@
       <DependentUpon>SearchDialog.axaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-<<<<<<< HEAD
     <Compile Update="Views\Editors\SaveEditorView.axaml.cs">
       <DependentUpon>SaveEditorView.axaml</DependentUpon>
-=======
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\Dialogs\ItemReferencesDialog.axaml.cs">
       <DependentUpon>ItemReferencesDialog.axaml</DependentUpon>
->>>>>>> Avalonia
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\Editors\SaveEditorView.axaml.cs">
