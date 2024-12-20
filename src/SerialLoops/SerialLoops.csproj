@@ -118,6 +118,10 @@
       <DependentUpon>ItemReferencesDialog.axaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\Editors\SaveEditorView.axaml.cs">
+      <DependentUpon>SaveEditorView.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

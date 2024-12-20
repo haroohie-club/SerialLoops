@@ -83,6 +83,8 @@ public class EditorTabsPanelViewModel : ViewModelBase
                 return new TopicEditorViewModel((TopicItem)item, MainWindow, _log);
             case ItemDescription.ItemType.Voice:
                 return new VoicedLineEditorViewModel((VoicedLineItem)item, MainWindow, _log);
+            case ItemDescription.ItemType.Save:
+                return new SaveEditorViewModel((SaveItem)item, MainWindow, _log);
             default:
                 _log.LogError(Strings.Invalid_item_type_);
                 return null;
@@ -108,9 +110,26 @@ public class EditorTabsPanelViewModel : ViewModelBase
         {
             ((SfxEditorViewModel)closedEditor).SfxPlayerPanel.Stop();
         }
-        else if (closedEditor.Description.Type == ItemDescription.ItemType.Voice)
+        else if (closedEditor.Description.Type == ItemDescription.ItemType.Save)
         {
-            ((VoicedLineEditorViewModel)closedEditor).VcePlayer.Stop();
+            ButtonResult result = await MainWindow.Window.ShowMessageBoxAsync(Strings.Save_changes_to_save_file_,
+                Strings.Would_you_like_to_save_your_changes_to_the_save_file_,
+                ButtonEnum.YesNoCancel, Icon.Question, _log);
+            SaveEditorViewModel saveEditor = (SaveEditorViewModel)closedEditor;
+            switch (result)
+            {
+                case ButtonResult.Yes:
+                    File.WriteAllBytes(saveEditor.Save.SaveLoc, saveEditor.Save.Save.GetBytes());
+                    _project.Items.Remove(saveEditor.Save);
+                    break;
+                case ButtonResult.No:
+                    _project.Items.Remove(saveEditor.Save);
+                    break;
+                default:
+                case ButtonResult.Cancel:
+                    OpenTab(saveEditor.Save);
+                    break;
+            }
         }
     }
 
