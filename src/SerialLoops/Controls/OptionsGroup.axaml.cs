@@ -138,10 +138,17 @@ public class ComboBoxOption : Option
         set => _comboBox.SelectedIndex = _comboBox.Items.ToList().FindIndex(i => value.Equals((string)((ComboBoxItem)i).Tag));
     }
 
-    public ComboBoxOption(List<(string Key, string Value)> options)
+    public ComboBoxOption(List<(string Key, string Value)> options, bool font = false)
     {
         _comboBox = new();
         _comboBox.Items.AddRange(options.Select(o => new ComboBoxItem { Tag = o.Key, Content = o.Value }));
+        if (font)
+        {
+            foreach (ComboBoxItem item in _comboBox.Items)
+            {
+                item.FontFamily = new((string)item.Content ?? FontFamily.DefaultFontFamilyName);
+            }
+        }
         _comboBox.SelectionChanged += (sender, args) => { OnChange?.Invoke(Value); };
     }
 

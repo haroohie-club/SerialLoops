@@ -842,7 +842,7 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Build and Run.
+        ///   Looks up a localized string similar to Build &amp; Run.
         /// </summary>
         public static string Build_and_Run {
             get {

@@ -114,6 +114,10 @@
       <DependentUpon>SearchDialog.axaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\Dialogs\ItemReferencesDialog.axaml.cs">
+      <DependentUpon>ItemReferencesDialog.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

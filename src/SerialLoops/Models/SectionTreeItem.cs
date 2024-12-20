@@ -21,7 +21,7 @@ public class SectionTreeItem(string sectionName, IEnumerable<ITreeItem> children
         {
             Orientation = Orientation.Horizontal,
             VerticalAlignment = VerticalAlignment.Center,
-            Spacing = 3,
+            Spacing = 5,
         };
         if (Icon is not null)
         {

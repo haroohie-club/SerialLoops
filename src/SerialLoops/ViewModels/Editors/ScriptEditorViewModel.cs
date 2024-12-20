@@ -13,7 +13,6 @@ using Avalonia.Controls.Selection;
 using Avalonia.Controls.Templates;
 using Avalonia.Input;
 using Avalonia.Platform;
-using AvaloniaEdit.Utils;
 using DynamicData;
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
@@ -702,6 +701,6 @@ public class ReactiveScriptSection(ScriptSection section) : ReactiveObject
     internal void SetCommands(IEnumerable<ScriptItemCommand> commands)
     {
         Commands.Clear();
-        ExtensionMethods.AddRange(Commands, commands.Select(c => new ScriptCommandTreeItem(c)));
+        Commands.AddRange(commands.Select(c => new ScriptCommandTreeItem(c)));
     }
 }

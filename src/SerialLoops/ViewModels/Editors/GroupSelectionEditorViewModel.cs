@@ -25,7 +25,7 @@ public class GroupSelectionEditorViewModel : EditorViewModel
         Tabs = window.EditorTabs;
         GroupSelection = groupSelection;
         OpenProject = window.OpenProject;
-        Activities = new(groupSelection.Selection.Activities.Select(a =>
+        Activities = new(groupSelection.Selection.Activities.Where(a => a is not null).Select(a =>
             new ScenarioActivityViewModel(this, a)));
     }
 }
