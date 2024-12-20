@@ -167,9 +167,13 @@ public partial class MainWindowViewModel : ViewModelBase
 
         if (Args?.Length > 0)
         {
-            if (Args[0].EndsWith(".slproj"))
+            if (Args[0].EndsWith(".slproj", StringComparison.OrdinalIgnoreCase))
             {
                 OpenRecentProjectCommand.Execute(Args[0]);
+            }
+            else if (Args[0].EndsWith(".slzip", StringComparison.OrdinalIgnoreCase))
+            {
+
             }
         }
         else if (CurrentConfig.AutoReopenLastProject && ProjectsCache.RecentProjects.Count > 0)
@@ -451,6 +455,11 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             await CloseProjectView();
         }
+    }
+
+    public void ImportProjectCommand_Executed()
+    {
+
     }
 
     public async Task PreferencesCommand_Executed()
