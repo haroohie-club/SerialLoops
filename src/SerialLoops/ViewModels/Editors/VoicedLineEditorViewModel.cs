@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia.Platform.Storage;
+using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
 using NAudio.Wave;
 using ReactiveUI;
@@ -123,7 +124,7 @@ public class VoicedLineEditorViewModel : EditorViewModel
                 _project.VoiceMap.VoiceMapEntries.Add(new()
                 {
                     VoiceFileName = Path.GetFileNameWithoutExtension(_vce.VoiceFile),
-                    FontSize = 100,
+                    Color = DialogueColor.WHITE,
                     TargetScreen = SubtitleScreen == DsScreen.BOTTOM ? VoiceMapEntry.Screen.BOTTOM : VoiceMapEntry.Screen.TOP,
                     Timer = 350,
                 });

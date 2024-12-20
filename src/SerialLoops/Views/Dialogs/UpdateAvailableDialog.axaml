@@ -3,18 +3,19 @@
         xmlns:vm="using:SerialLoops.ViewModels.Dialogs"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:controls="using:SerialLoops.Controls"
-        xmlns:md="using:Markdown.Avalonia"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:DataType="vm:UpdateAvailableDialogViewModel"
         x:Class="SerialLoops.Views.Dialogs.UpdateAvailableDialog"
         xmlns:assets="using:SerialLoops.Assets"
+        xmlns:controls="using:SerialLoops.Controls"
+        xmlns:md="using:Markdown.Avalonia"
         MinWidth="{Binding MinSize.Width}"
         MinHeight="{Binding MinSize.Height}"
         Width="{Binding ClientSize.Width}"
         Height="{Binding ClientSize.Height}"
         Icon="/Assets/serial-loops.ico"
-        Title="{Binding Title}">
+        Title="{Binding Title}"
+        Name="Dialog">
 
     <Grid HorizontalAlignment="Left" VerticalAlignment="Top"
             RowDefinitions="Auto,Auto,Auto,Auto,*,Auto" ColumnDefinitions="Auto,Auto,Auto,Auto" Name="UpdateGrid"
@@ -23,12 +24,12 @@
         <controls:LabelWithIcon Text="{x:Static assets:Strings.A_new_update_for_Serial_Loops_is_available_}"
                                 Icon="Update" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left"/>
         <md:MarkdownScrollViewer Width="750" Height="350" Grid.Row="2" Grid.Column="0"
-                                 Markdown="{Binding Changelog}" />
+                                 Markdown="{Binding Changelog}"/>
         <controls:LinkButton Text="{x:Static assets:Strings.Download_release_from_GitHub}"
                     Grid.Row="3" Grid.Column="0" Command="{Binding OpenReleaseLinkCommand}"/>
         <StackPanel Grid.Row="5" Grid.Column="0" Orientation="Horizontal" Spacing="20">
             <Button Content="{x:Static assets:Strings.Download_from_GitHub}" Command="{Binding OpenReleaseLinkCommand}"/>
-            <Button Content="{x:Static assets:Strings.Skip_Update}" Command="{Binding CloseCommand}"/>
+            <Button Content="{x:Static assets:Strings.Skip_Update}" Command="{Binding CloseCommand}" CommandParameter="{Binding #Dialog}"/>
             <CheckBox Content="{x:Static assets:Strings.Check_for_Updates}" IsChecked="{Binding CheckForUpdates}"/>
             <CheckBox Content="{x:Static assets:Strings.Pre_Release_Channel}" IsChecked="{Binding UsePreReleaseChannel}"/>
         </StackPanel>

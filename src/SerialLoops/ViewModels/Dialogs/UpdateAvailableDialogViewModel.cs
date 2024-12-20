@@ -16,9 +16,15 @@ public class UpdateAvailableDialogViewModel : ViewModelBase
     public Size ClientSize { get; set; } = new(1000, 650);
     public Size GridSize => new(ClientSize.Width - 40, ClientSize.Height - 40);
 
-    public string Version { get; set; }
-    public string Url { get; set; }
-    public string Changelog { get; set; }
+    public string Version { get; }
+    public string Url { get; }
+
+    private string _changelog;
+    public string Changelog
+    {
+        get => _changelog;
+        set => this.RaiseAndSetIfChanged(ref _changelog, value);
+    }
 
     public string Title { get; set; }
     public string Header { get; set; }
@@ -37,11 +43,14 @@ public class UpdateAvailableDialogViewModel : ViewModelBase
         _log = mainWindowViewModel.Log;
         Version = version;
         Url = url;
-        Changelog = changelog;
+        _changelog = changelog;
 
         Title = string.Format(Strings.New_Update_Available___0_, Version);
         Header = string.Format(Strings.Serial_Loops_v_0_, Version);
         _config = mainWindowViewModel.CurrentConfig;
+        CheckForUpdates = _config.CheckForUpdates;
+        UsePreReleaseChannel = _config.PreReleaseChannel;
+
         OpenReleaseLinkCommand = ReactiveCommand.Create(OpenReleaseLink);
         CloseCommand = ReactiveCommand.Create<UpdateAvailableDialog>((dialog) =>
         {
@@ -52,7 +61,7 @@ public class UpdateAvailableDialogViewModel : ViewModelBase
         });
     }
 
-    public void OpenReleaseLink()
+    private void OpenReleaseLink()
     {
         Process.Start(new ProcessStartInfo(Url) { UseShellExecute = true });
     }

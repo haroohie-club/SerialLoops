@@ -2,10 +2,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:assets="using:SerialLoops.Assets"
              x:Class="SerialLoops.App"
-             xmlns:local="using:SerialLoops"
-             xmlns:tabaloniathemes="using:Tabalonia.Themes.Custom"
-             xmlns:mintoolbarthemes="using:MiniToolbar.Avalonia.Themes"
              xmlns:dialoghost="using:DialogHostAvalonia"
+             xmlns:local="using:SerialLoops"
+             xmlns:md="using:Markdown.Avalonia"
+             xmlns:mintoolbarthemes="using:MiniToolbar.Avalonia.Themes"
+             xmlns:tabaloniathemes="using:Tabalonia.Themes.Custom"
              RequestedThemeVariant="Default">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
     <Application.DataTemplates>
@@ -30,8 +31,8 @@
         <dialoghost:DialogHostStyles />
         <tabaloniathemes:CustomTheme/>
         <mintoolbarthemes:MiniToolbarStyles/>
+        <StyleInclude Source="avares://Avalonia.Controls.ColorPicker/Themes/Fluent/Fluent.xaml"/>
         <StyleInclude Source="avares://Avalonia.Controls.TreeDataGrid/Themes/Fluent.axaml"/>
-        <StyleInclude Source="avares://Avalonia.Controls.ColorPicker/Themes/Fluent/Fluent.xaml" />
         <Style Selector="TextBlock.h1">
             <Setter Property="FontSize" Value="32"/>
             <Setter Property="FontWeight" Value="Bold"/>

@@ -30,6 +30,8 @@ public partial class App : Application
             {
                 DataContext = new MainWindowViewModel(),
             };
+
+            ((MainWindowViewModel)desktop.MainWindow.DataContext).Args = desktop.Args;
         }
 
         base.OnFrameworkInitializationCompleted();
