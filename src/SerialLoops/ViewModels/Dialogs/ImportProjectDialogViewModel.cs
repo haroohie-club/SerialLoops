@@ -39,18 +39,23 @@ public class ImportProjectDialogViewModel : ViewModelBase
     public ICommand ImportCommand { get; }
     public ICommand CancelCommand { get; }
 
-    public ImportProjectDialogViewModel(ILogger log)
+    public ImportProjectDialogViewModel(string slzipPath, ILogger log)
     {
         _log = log;
 
         RomHashString = string.Format(Strings.Expected_ROM_SHA_1_Hash___0_,
             Strings.Select_an_exported_project_to_see_expected_ROM_hash);
-        SlzipPath = Strings.No_exported_project_selected;
+        SlzipPath = string.IsNullOrEmpty(slzipPath) ? Strings.No_exported_project_selected : slzipPath;
+        if (!string.IsNullOrEmpty(slzipPath))
+        {
+            SetExpectedRomHash();
+        }
         RomPath = Strings.None_Selected;
 
         SelectExportedProjectCommand = ReactiveCommand.CreateFromTask<ImportProjectDialog>(SelectExportedProject);
         OpenRomCommand = ReactiveCommand.CreateFromTask<ImportProjectDialog>(OpenRom);
-        IgnoreHashCommand = ReactiveCommand.Create(() => CanImport = IgnoreHash || _expectedRomHash.Equals(_actualRomHash));
+        // When we receive this command, the checkbox hasn't changed yet, so we invert the boolean
+        IgnoreHashCommand = ReactiveCommand.Create(() => CanImport = !IgnoreHash || _expectedRomHash.Equals(_actualRomHash));
         ImportCommand = ReactiveCommand.Create<ImportProjectDialog>(dialog => dialog.Close((SlzipPath, RomPath)));
         CancelCommand = ReactiveCommand.Create<ImportProjectDialog>(dialog => dialog.Close());
     }
@@ -62,12 +67,17 @@ public class ImportProjectDialogViewModel : ViewModelBase
         if (!string.IsNullOrEmpty(slzipPath))
         {
             SlzipPath = slzipPath;
-            using FileStream slzipFs = File.OpenRead(slzipPath);
-            using ZipArchive slzip = new(slzipFs);
-            _expectedRomHash = slzip.Comment;
-            RomHashString = string.Format(Strings.Expected_ROM_SHA_1_Hash___0_, _expectedRomHash);
+            SetExpectedRomHash();
             await CompareRomHashes(dialog);
         }
+    }
+
+    private void SetExpectedRomHash()
+    {
+        using FileStream slzipFs = File.OpenRead(SlzipPath);
+        using ZipArchive slzip = new(slzipFs);
+        _expectedRomHash = slzip.Comment;
+        RomHashString = string.Format(Strings.Expected_ROM_SHA_1_Hash___0_, _expectedRomHash);
     }
 
     private async Task OpenRom(ImportProjectDialog dialog)

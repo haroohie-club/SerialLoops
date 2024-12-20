@@ -112,7 +112,7 @@ public partial class MainWindowViewModel : ViewModelBase
         NewProjectCommand = ReactiveCommand.CreateFromTask(NewProjectCommand_Executed);
         OpenProjectCommand = ReactiveCommand.CreateFromTask(OpenProjectCommand_Executed);
         OpenRecentProjectCommand = ReactiveCommand.CreateFromTask<string>(OpenRecentProjectCommand_Executed);
-        ImportProjectCommand = ReactiveCommand.CreateFromTask(ImportProjectCommand_Executed);
+        ImportProjectCommand = ReactiveCommand.CreateFromTask<string>(ImportProjectCommand_Executed);
         EditSaveCommand = ReactiveCommand.CreateFromTask(EditSaveFileCommand_Executed);
         AboutCommand = ReactiveCommand.CreateFromTask(AboutCommand_Executed);
         PreferencesCommand = ReactiveCommand.CreateFromTask(PreferencesCommand_Executed);
@@ -177,7 +177,8 @@ public partial class MainWindowViewModel : ViewModelBase
             }
             else if (Args[0].EndsWith(".slzip", StringComparison.OrdinalIgnoreCase))
             {
-
+                OpenHomePanel();
+                ImportProjectCommand.Execute(Args[0]);
             }
         }
         else if (CurrentConfig.AutoReopenLastProject && ProjectsCache.RecentProjects.Count > 0)
@@ -461,11 +462,11 @@ public partial class MainWindowViewModel : ViewModelBase
         }
     }
 
-    public async Task ImportProjectCommand_Executed()
+    public async Task ImportProjectCommand_Executed(string slzipPath)
     {
-        (string slzipPath, string romPath) = await new ImportProjectDialog()
+        (slzipPath, string romPath) = await new ImportProjectDialog()
         {
-            DataContext = new ImportProjectDialogViewModel(Log),
+            DataContext = new ImportProjectDialogViewModel(slzipPath, Log),
         }.ShowDialog<(string, string)>(Window);
         if (!string.IsNullOrEmpty(slzipPath) && !string.IsNullOrEmpty(romPath))
         {
