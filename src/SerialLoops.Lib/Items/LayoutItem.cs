@@ -13,7 +13,7 @@ public class LayoutItem(int layoutIndex, List<GraphicsFile> grps, int startEntry
     public int StartEntry { get; set; } = startEntry;
     public int NumEntries { get; set; } = numEntries;
 
-    private readonly Dictionary<int, SKBitmap> _tilesDict = grps.Select((g, i) => (i, g.GetImage(transparentIndex: 0))).ToDictionary();
+    public readonly Dictionary<int, SKBitmap> TilesDict = grps.Select((g, i) => (i, g.GetImage(transparentIndex: 0))).ToDictionary();
 
     public override void Refresh(Project project, ILogger log)
     {
@@ -24,16 +24,14 @@ public class LayoutItem(int layoutIndex, List<GraphicsFile> grps, int startEntry
         return Layout.GetLayout(GraphicsFiles, Layout.LayoutEntries.Skip(StartEntry).Take(NumEntries).ToList(), darkMode: false, preprocessedList: true).bitmap;
     }
 
-    public (SKBitmap tile, SKRect dest) GetLayoutEntryRender(int index)
+    public SKBitmap GetLayoutEntryRender(int index)
     {
         if (index < 0 || Layout.LayoutEntries[index].RelativeShtxIndex < 0)
         {
-            return (null, new());
+            return null;
         }
-        else
-        {
-            return (Layout.LayoutEntries[index].GetTileBitmap(_tilesDict), Layout.LayoutEntries[index].GetDestination());
-        }
+
+        return Layout.LayoutEntries[index].GetTileBitmap(TilesDict);
     }
 
     SKBitmap IPreviewableGraphic.GetPreview(Project project)
