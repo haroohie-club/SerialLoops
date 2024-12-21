@@ -31,6 +31,7 @@
         <ScrollViewer Grid.Row="2">
             <Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}">
                 <!-- Scrolling BG -->
+                <!-- I'm not happy with how this was implemented, but I couldn't get Canvas.Background to work so 🤷‍♀️ -->
                 <ItemsRepeater ItemsSource="{Binding ScrollingBgTileSource}" IsVisible="{Binding ScrollingBgDisplayed}">
                     <ItemsRepeater.Layout>
                         <UniformGridLayout MaximumRowsOrColumns="{Binding ScrollingBgHorizontalTileCount}"
