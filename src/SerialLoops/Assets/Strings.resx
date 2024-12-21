@@ -294,10 +294,10 @@
     <comment>As in "below the top of the screen"; subtitle location</comment>
   </data>
   <data name="BGM" xml:space="preserve">
-    <value>BGM</value>
+    <value>BGM</value><comment>Background Music</comment>
   </data>
   <data name="BGMs" xml:space="preserve">
-    <value>BGMs</value>
+    <value>BGMs</value><comment>Background Music (plural)</comment>
   </data>
   <data name="Black Space Begin" xml:space="preserve">
     <value>Black Space Begin</value>
@@ -2902,5 +2902,17 @@ This action is irreversible.</value>
   </data>
   <data name="Export Source Preview" xml:space="preserve">
     <value>Export Source Preview</value><comment>Button that exports a preview of the current source image of a particular layout entry</comment>
+  </data>
+  <data name="BG Layer" xml:space="preserve">
+    <value>BG Layer</value><comment>Background Layer</comment>
+  </data>
+  <data name="BG Object Layer" xml:space="preserve">
+    <value>BG Object Layer</value><comment>Background Object Layer (intermediate layer between background and object layers)</comment>
+  </data>
+  <data name="Object Layer" xml:space="preserve">
+    <value>Object Layer</value>
+  </data>
+  <data name="Scrolling BG" xml:space="preserve">
+    <value>Scrolling BG</value><comment>The scrolling background used in the puzzle phase maps</comment>
   </data>
 </root>

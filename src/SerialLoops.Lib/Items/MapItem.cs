@@ -1,4 +1,5 @@
-﻿using HaruhiChokuretsuLib.Archive;
+﻿using System.Collections.Generic;
+using HaruhiChokuretsuLib.Archive;
 using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Graphics;
 using HaruhiChokuretsuLib.Util;
@@ -11,13 +12,19 @@ public class MapItem : Item
     public MapFile Map { get; set; }
     public int QmapIndex { get; set; }
 
-    public MapItem(string name) : base(name, ItemType.Map)
-    {
-    }
+    public GraphicsFile Layout { get; }
+    public SKBitmap BgBitmap { get; set; }
+    public SKBitmap BgObjBitmap { get; set; }
+    public SKBitmap ObjBitmap { get; set; }
+
     public MapItem(MapFile map, int qmapIndex, Project project) : base(map.Name[..^1], ItemType.Map)
     {
         Map = map;
         QmapIndex = qmapIndex;
+        Layout = project.Grp.GetFileByIndex(Map.Settings.LayoutFileIndex);
+        BgBitmap = project.Grp.GetFileByIndex(Map.Settings.TextureFileIndices[0]).GetImage();
+        BgObjBitmap = project.Grp.GetFileByIndex(Map.Settings.TextureFileIndices[1]).GetImage();
+        ObjBitmap = project.Grp.GetFileByIndex(Map.Settings.TextureFileIndices[2]).GetImage();
     }
 
     public SKPoint GetOrigin(ArchiveFile<GraphicsFile> grp)

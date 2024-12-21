@@ -707,6 +707,24 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to BG Layer.
+        /// </summary>
+        public static string BG_Layer {
+            get {
+                return ResourceManager.GetString("BG Layer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to BG Object Layer.
+        /// </summary>
+        public static string BG_Object_Layer {
+            get {
+                return ResourceManager.GetString("BG Object Layer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to BGM.
         /// </summary>
         public static string BGM {
@@ -4790,6 +4808,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Object Layer.
+        /// </summary>
+        public static string Object_Layer {
+            get {
+                return ResourceManager.GetString("Object Layer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Off.
         /// </summary>
         public static string Off {
@@ -6237,6 +6264,15 @@ namespace SerialLoops.Assets {
         public static string Scroll_Speed {
             get {
                 return ResourceManager.GetString("Scroll Speed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scrolling BG.
+        /// </summary>
+        public static string Scrolling_BG {
+            get {
+                return ResourceManager.GetString("Scrolling BG", resourceCulture);
             }
         }
         
