@@ -184,9 +184,9 @@ public class MapEditorViewModel : EditorViewModel
         CanvasHeight = map.Layout.LayoutEntries.Max(l => l.ScreenY + l.ScreenH);
         for (int i = 0; i < map.Layout.LayoutEntries.Count; i++)
         {
-            if (map.Map.Settings.BackgroundLayoutStartIndex > 0)
+            if (map.Map.Settings.ScrollingBgDefinitionLayoutIndex > 0)
             {
-                if (i >= map.Map.Settings.BackgroundLayoutStartIndex && i <= map.Map.Settings.BackgroundLayoutEndIndex)
+                if (i >= map.Map.Settings.ScrollingBgLayoutStartIndex && i <= map.Map.Settings.ScrollingBgLayoutEndIndex)
                 {
                     ScrollingBg.Add(new(Layout, i));
                     continue;
@@ -210,12 +210,12 @@ public class MapEditorViewModel : EditorViewModel
                     break;
                 case 0:
                 case 1:
-                    if (map.Map.Settings.UnknownLayoutIndex20 > 0 && i >= map.Map.Settings.UnknownLayoutIndex20 && i <= map.Map.Settings.UnknownLayoutIndex24)
+                    if (map.Map.Settings.LayoutOcclusionLayerStartIndex > 0 && i >= map.Map.Settings.LayoutOcclusionLayerStartIndex && i <= map.Map.Settings.LayoutOcclusionLayerEndIndex)
                     {
                         BgOcclusionLayer.Add(new(Layout, i) { Layer = map.Layout.LayoutEntries[i].RelativeShtxIndex });
                     }
-                    else if (map.Map.Settings.UnknownLayoutIndex20 > 0 && i > map.Map.Settings.UnknownLayoutIndex24
-                             || map.Map.Settings.UnknownLayoutIndex20 == 0 && i > map.Map.Settings.UnknownLayoutIndex1C)
+                    else if (map.Map.Settings.LayoutOcclusionLayerStartIndex > 0 && i > map.Map.Settings.LayoutOcclusionLayerStartIndex
+                             || map.Map.Settings.LayoutOcclusionLayerStartIndex == 0 && i > map.Map.Settings.LayoutBgLayerEndIndex)
                     {
                         BgJunkLayer.Add(new(Layout, i) { Layer = map.Layout.LayoutEntries[i].RelativeShtxIndex });
                     }
@@ -245,7 +245,7 @@ public class MapEditorViewModel : EditorViewModel
 
             for (int i = 0; i < tiles; i++)
             {
-                switch (map.Map.Settings.Unknown34)
+                switch (map.Map.Settings.TransformMode)
                 {
                     case 4:
                         if (i % 2 == 1)

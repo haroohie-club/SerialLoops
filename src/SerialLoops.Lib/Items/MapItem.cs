@@ -30,15 +30,15 @@ public class MapItem : Item
     public SKPoint GetOrigin(ArchiveFile<GraphicsFile> grp)
     {
         GraphicsFile layout = grp.GetFileByIndex(Map.Settings.LayoutFileIndex);
-        return new(layout.LayoutEntries[Map.Settings.LayoutSizeDefinitionIndex].ScreenX, layout.LayoutEntries[Map.Settings.LayoutSizeDefinitionIndex].ScreenY);
+        return new(layout.LayoutEntries[Map.Settings.LayoutBgLayerStartIndex].ScreenX, layout.LayoutEntries[Map.Settings.LayoutBgLayerStartIndex].ScreenY);
     }
 
     public SKBitmap GetMapImage(ArchiveFile<GraphicsFile> grp, bool displayPathingMap, bool displayMapStart)
     {
         SKBitmap map;
-        if (Map.Settings.BackgroundLayoutStartIndex > 0)
+        if (Map.Settings.ScrollingBgDefinitionLayoutIndex > 0)
         {
-            map = Map.GetMapImages(grp, 0, Map.Settings.BackgroundLayoutStartIndex);
+            map = Map.GetMapImages(grp, 0, Map.Settings.ScrollingBgLayoutStartIndex);
         }
         else
         {
