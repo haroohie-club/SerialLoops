@@ -110,27 +110,6 @@
                     </ItemsControl.Styles>
                 </ItemsControl>
 
-                <!-- Unknown Layer -->
-                <ItemsControl ItemsSource="{Binding BgOcclusionLayer}" IsVisible="{Binding BgOcclusionLayerDisplayed}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="models:LayoutEntryWithImage">
-                            <Image Source="{Binding CroppedImage, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
-                                   Stretch="Fill" Width="{Binding Width}" Height="{Binding Height}"/>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                    <ItemsControl.Styles>
-                        <Style Selector="ItemsControl > ContentPresenter" x:DataType="models:LayoutEntryWithImage">
-                            <Setter Property="(Canvas.Left)" Value="{Binding ScreenX}"/>
-                            <Setter Property="(Canvas.Top)" Value="{Binding ScreenY}"/>
-                        </Style>
-                    </ItemsControl.Styles>
-                </ItemsControl>
-
                 <!-- BG Junk Layer -->
                 <ItemsControl ItemsSource="{Binding BgJunkLayer}" IsVisible="{Binding BgJunkLayerDisplayed}">
                     <ItemsControl.ItemsPanel>
@@ -154,6 +133,27 @@
 
                 <!-- Object Layer -->
                 <ItemsControl ItemsSource="{Binding ObjectLayer}" IsVisible="{Binding ObjectLayerDisplayed}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="models:LayoutEntryWithImage">
+                            <Image Source="{Binding CroppedImage, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
+                                   Stretch="Fill" Width="{Binding Width}" Height="{Binding Height}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.Styles>
+                        <Style Selector="ItemsControl > ContentPresenter" x:DataType="models:LayoutEntryWithImage">
+                            <Setter Property="(Canvas.Left)" Value="{Binding ScreenX}"/>
+                            <Setter Property="(Canvas.Top)" Value="{Binding ScreenY}"/>
+                        </Style>
+                    </ItemsControl.Styles>
+                </ItemsControl>
+
+                <!-- Occlusion Layer -->
+                <ItemsControl ItemsSource="{Binding BgOcclusionLayer}" IsVisible="{Binding BgOcclusionLayerDisplayed}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
