@@ -3861,6 +3861,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Info Layer.
+        /// </summary>
+        public static string Info_Layer {
+            get {
+                return ResourceManager.GetString("Info Layer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid audio file selected..
         /// </summary>
         public static string Invalid_audio_file_selected_ {

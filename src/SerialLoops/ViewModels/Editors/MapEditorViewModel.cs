@@ -9,6 +9,7 @@ using Avalonia.Platform.Storage;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Models;
 using SerialLoops.Utility;
@@ -20,6 +21,7 @@ public class MapEditorViewModel : EditorViewModel
 {
     private MapItem _map;
     public LayoutItem Layout { get; }
+    public ObservableCollection<LayoutEntryWithImage> InfoLayer { get; } = [];
     public ObservableCollection<LayoutEntryWithImage> BgLayer { get; } = [];
     public ObservableCollection<LayoutEntryWithImage> ObjectLayer { get; } = [];
     public ObservableCollection<LayoutEntryWithImage> ScrollingBg { get; } = [];
@@ -52,6 +54,8 @@ public class MapEditorViewModel : EditorViewModel
     }
     [Reactive]
     public bool ObjectLayerDisplayed { get; set; } = true;
+    [Reactive]
+    public bool InfoLayerDisplayed { get; set; }
     [Reactive]
     public bool ScrollingBgDisplayed { get; set; }
     [Reactive]
@@ -101,7 +105,8 @@ public class MapEditorViewModel : EditorViewModel
             switch (map.Layout.LayoutEntries[i].RelativeShtxIndex)
             {
                 default:
-                    continue;
+                    InfoLayer.Add(new(Layout, i) { Layer = map.Layout.LayoutEntries[i].RelativeShtxIndex });
+                    break;
                 case 0:
                 case 1:
                     BgLayer.Add(new(Layout, i) { Layer = map.Layout.LayoutEntries[i].RelativeShtxIndex });
@@ -165,7 +170,7 @@ public class MapEditorViewModel : EditorViewModel
         {
             await File.WriteAllTextAsync(exportPath, JsonSerializer.Serialize(_map.Map));
             await File.WriteAllTextAsync(Path.Combine(Path.GetDirectoryName(exportPath), $"{Path.GetFileNameWithoutExtension(exportPath)}_lay.json"),
-                JsonSerializer.Serialize(_map.Layout.LayoutEntries));
+                JsonSerializer.Serialize(_map.Layout.LayoutEntries, Project.SERIALIZER_OPTIONS));
         }
     }
 }

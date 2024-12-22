@@ -2915,4 +2915,7 @@ This action is irreversible.</value>
   <data name="Scrolling BG" xml:space="preserve">
     <value>Scrolling BG</value><comment>The scrolling background used in the puzzle phase maps</comment>
   </data>
+  <data name="Info Layer" xml:space="preserve">
+    <value>Info Layer</value><comment>The layer of a map that contains information rather than actual graphics</comment>
+  </data>
 </root>

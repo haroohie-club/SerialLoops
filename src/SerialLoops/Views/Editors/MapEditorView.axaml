@@ -9,6 +9,10 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:MapEditorViewModel"
              x:Class="SerialLoops.Views.Editors.MapEditorView">
+    <UserControl.Resources>
+        <utility:SKAvaloniaBrushConverter x:Key="BrushConverter"/>
+    </UserControl.Resources>
+
     <Grid RowDefinitions="Auto,Auto,Auto,*">
         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="20" Spacing="10" HorizontalAlignment="Center">
             <CheckBox IsChecked="{Binding BgLayerDisplayed}" Content="{x:Static assets:Strings.BG_Layer}"
@@ -18,6 +22,8 @@
             <CheckBox IsChecked="{Binding ObjectLayerDisplayed}" Content="{x:Static assets:Strings.Object_Layer}"
                       HorizontalAlignment="Center"/>
             <CheckBox IsChecked="{Binding ScrollingBgDisplayed}" Content="{x:Static assets:Strings.Scrolling_BG}"
+                      HorizontalAlignment="Center"/>
+            <CheckBox IsChecked="{Binding InfoLayerDisplayed}" Content="{x:Static assets:Strings.Info_Layer}"
                       HorizontalAlignment="Center"/>
         </StackPanel>
 
@@ -99,6 +105,27 @@
                         <DataTemplate DataType="models:LayoutEntryWithImage">
                             <Image Source="{Binding CroppedImage, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
                                    Stretch="Fill" Width="{Binding Width}" Height="{Binding Height}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.Styles>
+                        <Style Selector="ItemsControl > ContentPresenter" x:DataType="models:LayoutEntryWithImage">
+                            <Setter Property="(Canvas.Left)" Value="{Binding ScreenX}"/>
+                            <Setter Property="(Canvas.Top)" Value="{Binding ScreenY}"/>
+                        </Style>
+                    </ItemsControl.Styles>
+                </ItemsControl>
+
+                <!-- Info Layer -->
+                <ItemsControl ItemsSource="{Binding InfoLayer}" IsVisible="{Binding InfoLayerDisplayed}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="models:LayoutEntryWithImage">
+                            <Rectangle Stroke="{Binding Tint, Converter={StaticResource BrushConverter}}"
+                                       StrokeThickness="4" Width="{Binding ScreenWidth}" Height="{Binding ScreenHeight}"/>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                     <ItemsControl.Styles>
