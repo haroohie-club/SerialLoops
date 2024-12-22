@@ -137,6 +137,12 @@ public class LayoutEntryWithImage : ReactiveObject
         }
     }
 
+    // Used for maps to filter within layers
+    [Reactive]
+    public int Layer { get; set; }
+    [Reactive]
+    public bool IsVisible { get; set; } = true;
+
     public LayoutEntryWithImage(LayoutItem layout, int idx)
     {
         _layout = layout;

@@ -15,14 +15,35 @@ public class MapEditorViewModel : EditorViewModel
 {
     public LayoutItem Layout { get; }
     public ObservableCollection<LayoutEntryWithImage> BgLayer { get; } = [];
-    public ObservableCollection<LayoutEntryWithImage> BgObjectLayer { get; } = [];
     public ObservableCollection<LayoutEntryWithImage> ObjectLayer { get; } = [];
     public ObservableCollection<LayoutEntryWithImage> ScrollingBg { get; } = [];
 
-    [Reactive]
-    public bool BgLayerDisplayed { get; set; } = true;
-    [Reactive]
-    public bool BgObjectLayerDisplayed { get; set; } = true;
+    private bool _bgLayerDisplayed = true;
+    public bool BgLayerDisplayed
+    {
+        get => _bgLayerDisplayed;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _bgLayerDisplayed, value);
+            foreach (LayoutEntryWithImage layoutEntry in BgLayer.Where(l => l.Layer == 0))
+            {
+                layoutEntry.IsVisible = _bgLayerDisplayed;
+            }
+        }
+    }
+    private bool _bgObjectLayerDisplayed = true;
+    public bool BgObjectLayerDisplayed
+    {
+        get => _bgObjectLayerDisplayed;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _bgObjectLayerDisplayed, value);
+            foreach (LayoutEntryWithImage layoutEntry in BgLayer.Where(l => l.Layer == 1))
+            {
+                layoutEntry.IsVisible = _bgObjectLayerDisplayed;
+            }
+        }
+    }
     [Reactive]
     public bool ObjectLayerDisplayed { get; set; } = true;
     [Reactive]
@@ -73,13 +94,11 @@ public class MapEditorViewModel : EditorViewModel
                 default:
                     continue;
                 case 0:
-                    BgLayer.Add(new(Layout, i));
-                    break;
                 case 1:
-                    BgObjectLayer.Add(new(Layout, i));
+                    BgLayer.Add(new(Layout, i) { Layer = map.Layout.LayoutEntries[i].RelativeShtxIndex });
                     break;
                 case 2:
-                    ObjectLayer.Add(new(Layout, i));
+                    ObjectLayer.Add(new(Layout, i) { Layer = map.Layout.LayoutEntries[i].RelativeShtxIndex });
                     break;
             }
         }
