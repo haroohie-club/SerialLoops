@@ -2918,4 +2918,19 @@ This action is irreversible.</value>
   <data name="Info Layer" xml:space="preserve">
     <value>Info Layer</value><comment>The layer of a map that contains information rather than actual graphics</comment>
   </data>
+  <data name="BG Occlusion Layer" xml:space="preserve">
+    <value>BG Occlusion Layer</value><comment>Background Occlusion Layer (BG objects that should occlude everything else, i.e. should be drawn on top of even objects)</comment>
+  </data>
+  <data name="BG Junk Layer" xml:space="preserve">
+    <value>BG Junk Layer</value><comment>BG Junk Layer, i.e. stuff that's not displayed in-game but is stored in the maps</comment>
+  </data>
+  <data name="Draw Origin" xml:space="preserve">
+    <value>Draw Origin</value><comment>Draws the origin (i.e. coordinate 0,0) of the map</comment>
+  </data>
+  <data name="Draw Boundary" xml:space="preserve">
+    <value>Draw Boundary</value><comment>Draws the bounds of the map</comment>
+  </data>
+  <data name="Object Junk Layer" xml:space="preserve">
+    <value>Object Junk Layer</value><comment>The map layer containing objects that aren't included in-game</comment>
+  </data>
 </root>

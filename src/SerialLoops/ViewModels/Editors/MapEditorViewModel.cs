@@ -1,11 +1,14 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia;
+using Avalonia.Media;
 using Avalonia.Platform.Storage;
+using Avalonia.Skia;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -23,8 +26,10 @@ public class MapEditorViewModel : EditorViewModel
     public LayoutItem Layout { get; }
     public ObservableCollection<LayoutEntryWithImage> InfoLayer { get; } = [];
     public ObservableCollection<LayoutEntryWithImage> BgLayer { get; } = [];
+    public ObservableCollection<LayoutEntryWithImage> BgOcclusionLayer { get; } = [];
     public ObservableCollection<LayoutEntryWithImage> ObjectLayer { get; } = [];
     public ObservableCollection<LayoutEntryWithImage> ScrollingBg { get; } = [];
+    public ObservableCollection<LayoutEntryWithImage> BgJunkLayer { get; } = [];
 
     private bool _bgLayerDisplayed = true;
     public bool BgLayerDisplayed
@@ -55,13 +60,22 @@ public class MapEditorViewModel : EditorViewModel
     [Reactive]
     public bool ObjectLayerDisplayed { get; set; } = true;
     [Reactive]
-    public bool InfoLayerDisplayed { get; set; }
+    public bool BgOcclusionLayerDisplayed { get; set; } = true;
     [Reactive]
     public bool ScrollingBgDisplayed { get; set; }
+    [Reactive]
+    public bool InfoLayerDisplayed { get; set; }
+    [Reactive]
+    public bool BgJunkLayerDisplayed { get; set; }
+
     [Reactive]
     public bool DrawPathingMap { get; set; }
     [Reactive]
     public bool DrawStartingPoint { get; set; }
+    [Reactive]
+    public bool DrawOrigin { get; set; }
+    [Reactive]
+    public bool DrawBoundary { get; set; }
 
     [Reactive]
     public int CanvasWidth { get; set; }
@@ -79,6 +93,82 @@ public class MapEditorViewModel : EditorViewModel
     public int StartingPointX { get; set; }
     [Reactive]
     public int StartingPointY { get; set; }
+
+    private LayoutEntryWithImage _origin;
+    public short OriginX
+    {
+        get => _origin.ScreenX;
+        set
+        {
+            _origin.ScreenX = value;
+            this.RaisePropertyChanged();
+        }
+    }
+    public short OriginY
+    {
+        get => _origin.ScreenY;
+        set
+        {
+            _origin.ScreenY = value;
+            this.RaisePropertyChanged();
+        }
+    }
+    public SKColor OriginColor
+    {
+        get => _origin.Tint;
+        set
+        {
+            _origin.Tint = value;
+            this.RaisePropertyChanged();
+        }
+    }
+
+    private LayoutEntryWithImage _boundary;
+    public short BoundaryX
+    {
+        get => _boundary.ScreenX;
+        set
+        {
+            _boundary.ScreenX = value;
+            this.RaisePropertyChanged();
+        }
+    }
+    public short BoundaryY
+    {
+        get => _boundary.ScreenY;
+        set
+        {
+            _boundary.ScreenY = value;
+            this.RaisePropertyChanged();
+        }
+    }
+    public short BoundaryWidth
+    {
+        get => _boundary.ScreenWidth;
+        set
+        {
+            _boundary.ScreenWidth = value;
+            this.RaisePropertyChanged();
+        }
+    }
+    public short BoundaryHeight
+    {
+        get => _boundary.ScreenHeight;
+        set
+        {
+            _boundary.ScreenHeight = value;
+            this.RaisePropertyChanged();
+        }
+    }
+    public SKColor BoundaryColor
+    {
+        get => _boundary.Tint;
+        set
+        {
+            _boundary.Tint = value;
+            this.RaisePropertyChanged();
+        }
+    }
 
     public ObservableCollection<PathingMapIndicator> PathingMap { get; }
 
@@ -102,14 +192,37 @@ public class MapEditorViewModel : EditorViewModel
                     continue;
                 }
             }
+
             switch (map.Layout.LayoutEntries[i].RelativeShtxIndex)
             {
                 default:
+                    if (i == 0)
+                    {
+                        _origin = new(Layout, i);
+                        continue;
+                    }
+                    if (i == 1)
+                    {
+                        _boundary = new(Layout, i);
+                        continue;
+                    }
                     InfoLayer.Add(new(Layout, i) { Layer = map.Layout.LayoutEntries[i].RelativeShtxIndex });
                     break;
                 case 0:
                 case 1:
-                    BgLayer.Add(new(Layout, i) { Layer = map.Layout.LayoutEntries[i].RelativeShtxIndex });
+                    if (map.Map.Settings.UnknownLayoutIndex20 > 0 && i >= map.Map.Settings.UnknownLayoutIndex20 && i <= map.Map.Settings.UnknownLayoutIndex24)
+                    {
+                        BgOcclusionLayer.Add(new(Layout, i) { Layer = map.Layout.LayoutEntries[i].RelativeShtxIndex });
+                    }
+                    else if (map.Map.Settings.UnknownLayoutIndex20 > 0 && i > map.Map.Settings.UnknownLayoutIndex24
+                             || map.Map.Settings.UnknownLayoutIndex20 == 0 && i > map.Map.Settings.UnknownLayoutIndex1C)
+                    {
+                        BgJunkLayer.Add(new(Layout, i) { Layer = map.Layout.LayoutEntries[i].RelativeShtxIndex });
+                    }
+                    else
+                    {
+                        BgLayer.Add(new(Layout, i) { Layer = map.Layout.LayoutEntries[i].RelativeShtxIndex });
+                    }
                     break;
                 case 2:
                     ObjectLayer.Add(new(Layout, i) { Layer = map.Layout.LayoutEntries[i].RelativeShtxIndex });
@@ -127,10 +240,21 @@ public class MapEditorViewModel : EditorViewModel
             int tileX = CanvasWidth / ScrollingBgTileWidth + 1;
             int tileY = CanvasHeight / ScrollingBgTileHeight + 1;
             int tiles = tileX * tileY;
+            int scaleX = 1;
+            int scaleY = 1;
 
             for (int i = 0; i < tiles; i++)
             {
-                ScrollingBgTileSource.Add(new(ScrollingBg, ScrollingBgTileWidth, ScrollingBgTileHeight));
+                switch (map.Map.Settings.Unknown34)
+                {
+                    case 4:
+                        if (i % 2 == 1)
+                        {
+                            scaleX = -1;
+                        }
+                        break;
+                }
+                ScrollingBgTileSource.Add(new(ScrollingBg, ScrollingBgTileWidth, ScrollingBgTileHeight, scaleX, scaleY));
             }
 
             ScrollingBgHorizontalTileCount = tileX;
@@ -168,16 +292,18 @@ public class MapEditorViewModel : EditorViewModel
 
         if (!string.IsNullOrEmpty(exportPath))
         {
-            await File.WriteAllTextAsync(exportPath, JsonSerializer.Serialize(_map.Map));
+            await File.WriteAllTextAsync(exportPath, JsonSerializer.Serialize(_map.Map, Project.SERIALIZER_OPTIONS));
             await File.WriteAllTextAsync(Path.Combine(Path.GetDirectoryName(exportPath), $"{Path.GetFileNameWithoutExtension(exportPath)}_lay.json"),
                 JsonSerializer.Serialize(_map.Layout.LayoutEntries, Project.SERIALIZER_OPTIONS));
         }
     }
 }
 
-public class ScrollingBgWrapper(ObservableCollection<LayoutEntryWithImage> scrollingBg, int tileWidth, int tileHeight) : ReactiveObject
+public class ScrollingBgWrapper(ObservableCollection<LayoutEntryWithImage> scrollingBg, int tileWidth, int tileHeight, int scaleX, int scaleY) : ReactiveObject
 {
     public ObservableCollection<LayoutEntryWithImage> ScrollingBg { get; set; } = scrollingBg;
     [Reactive] public int TileWidth { get; set; } = tileWidth;
     [Reactive] public int TileHeight { get; set; } = tileHeight;
+    [Reactive] public int ScaleX { get; set; } = scaleX;
+    [Reactive] public int ScaleY { get; set; } = scaleY;
 }

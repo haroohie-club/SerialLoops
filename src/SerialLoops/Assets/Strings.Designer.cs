@@ -707,6 +707,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to BG Junk Layer.
+        /// </summary>
+        public static string BG_Junk_Layer {
+            get {
+                return ResourceManager.GetString("BG Junk Layer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to BG Layer.
         /// </summary>
         public static string BG_Layer {
@@ -721,6 +730,15 @@ namespace SerialLoops.Assets {
         public static string BG_Object_Layer {
             get {
                 return ResourceManager.GetString("BG Object Layer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to BG Occlusion Layer.
+        /// </summary>
+        public static string BG_Occlusion_Layer {
+            get {
+                return ResourceManager.GetString("BG Occlusion Layer", resourceCulture);
             }
         }
         
@@ -1965,6 +1983,24 @@ namespace SerialLoops.Assets {
         public static string Downsampling___ {
             get {
                 return ResourceManager.GetString("Downsampling...", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Draw Boundary.
+        /// </summary>
+        public static string Draw_Boundary {
+            get {
+                return ResourceManager.GetString("Draw Boundary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Draw Origin.
+        /// </summary>
+        public static string Draw_Origin {
+            get {
+                return ResourceManager.GetString("Draw Origin", resourceCulture);
             }
         }
         
@@ -4813,6 +4849,15 @@ namespace SerialLoops.Assets {
         public static string objcopy_not_found_at___0__ {
             get {
                 return ResourceManager.GetString("objcopy not found at \'{0}\'", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Object Junk Layer.
+        /// </summary>
+        public static string Object_Junk_Layer {
+            get {
+                return ResourceManager.GetString("Object Junk Layer", resourceCulture);
             }
         }
         
