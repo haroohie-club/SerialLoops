@@ -33,11 +33,19 @@
                           HorizontalAlignment="Center"/>
                 <CheckBox IsChecked="{Binding BgJunkLayerDisplayed}" Content="{x:Static assets:Strings.BG_Junk_Layer}"
                           HorizontalAlignment="Center"/>
+                <CheckBox IsChecked="{Binding ObjectJunkLayerDisplayed}" Content="{x:Static assets:Strings.Object_Junk_Layer}"
+                          HorizontalAlignment="Center"/>
             </StackPanel>
         </StackPanel>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="20" Spacing="10" HorizontalAlignment="Center">
             <CheckBox IsChecked="{Binding DrawPathingMap}" Content="{x:Static assets:Strings.Draw_Pathing_Map}"
+                      HorizontalAlignment="Center"/>
+            <CheckBox IsChecked="{Binding Unknown2sDisplayed}" Content="{x:Static assets:Strings.Unknown}"
+                      HorizontalAlignment="Center"/>
+            <CheckBox IsChecked="{Binding ObjectPositionsDisplayed}" Content="{x:Static assets:Strings.Object_Locations}"
+                      HorizontalAlignment="Center"/>
+            <CheckBox IsChecked="{Binding InteractableObjectsDisplayed}" Content="{x:Static assets:Strings.Interactable_Objects}"
                       HorizontalAlignment="Center"/>
             <CheckBox IsChecked="{Binding DrawStartingPoint}" Content="{x:Static assets:Strings.Draw_Starting_Point}"
                       HorizontalAlignment="Center"/>
@@ -45,10 +53,6 @@
                       HorizontalAlignment="Center"/>
             <CheckBox IsChecked="{Binding DrawBoundary}" Content="{x:Static assets:Strings.Draw_Boundary}"
                       HorizontalAlignment="Center"/>
-        </StackPanel>
-
-        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="20" Spacing="10" HorizontalAlignment="Center">
-            <Button Content="{x:Static assets:Strings.Export}" Command="{Binding ExportCommand}"/>
         </StackPanel>
 
         <ScrollViewer Grid.Row="3">
@@ -152,6 +156,27 @@
                     </ItemsControl.Styles>
                 </ItemsControl>
 
+                <!-- Object Junk Layer -->
+                <ItemsControl ItemsSource="{Binding ObjectJunkLayer}" IsVisible="{Binding ObjectJunkLayerDisplayed}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="models:LayoutEntryWithImage">
+                            <Image Source="{Binding CroppedImage, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
+                                   Stretch="Fill" Width="{Binding Width}" Height="{Binding Height}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.Styles>
+                        <Style Selector="ItemsControl > ContentPresenter" x:DataType="models:LayoutEntryWithImage">
+                            <Setter Property="(Canvas.Left)" Value="{Binding ScreenX}"/>
+                            <Setter Property="(Canvas.Top)" Value="{Binding ScreenY}"/>
+                        </Style>
+                    </ItemsControl.Styles>
+                </ItemsControl>
+
                 <!-- Occlusion Layer -->
                 <ItemsControl ItemsSource="{Binding BgOcclusionLayer}" IsVisible="{Binding BgOcclusionLayerDisplayed}">
                     <ItemsControl.ItemsPanel>
@@ -181,7 +206,7 @@
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="models:PathingMapIndicator">
+                        <DataTemplate DataType="models:HighlightedSpace">
                             <Path Fill="{Binding Color}">
                                 <Path.Data>
                                     <PathGeometry>
@@ -216,6 +241,78 @@
                             <Setter Property="(Canvas.Top)" Value="{Binding ScreenY}"/>
                         </Style>
                     </ItemsControl.Styles>
+                </ItemsControl>
+
+                <!-- Interactable Objects -->
+                <ItemsControl ItemsSource="{Binding InteractableObjects}" IsVisible="{Binding InteractableObjectsDisplayed}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="models:HighlightedSpace">
+                            <Path Fill="{Binding Color}" ToolTip.Tip="{Binding ToolTip}">
+                                <Path.Data>
+                                    <PathGeometry>
+                                        <PathFigure StartPoint="{Binding Top}" IsClosed="True" IsFilled="True">
+                                            <LineSegment Point="{Binding Left}"/>
+                                            <LineSegment Point="{Binding Bottom}"/>
+                                            <LineSegment Point="{Binding Right}"/>
+                                        </PathFigure>
+                                    </PathGeometry>
+                                </Path.Data>
+                            </Path>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <!-- Unknown 2 Objects -->
+                <ItemsControl ItemsSource="{Binding Unknown2s}" IsVisible="{Binding Unknown2sDisplayed}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="models:HighlightedSpace">
+                            <Path Fill="{Binding Color}" ToolTip.Tip="{Binding ToolTip}">
+                                <Path.Data>
+                                    <PathGeometry>
+                                        <PathFigure StartPoint="{Binding Top}" IsClosed="True" IsFilled="True">
+                                            <LineSegment Point="{Binding Left}"/>
+                                            <LineSegment Point="{Binding Bottom}"/>
+                                            <LineSegment Point="{Binding Right}"/>
+                                        </PathFigure>
+                                    </PathGeometry>
+                                </Path.Data>
+                            </Path>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <!-- Object Locations -->
+                <ItemsControl ItemsSource="{Binding ObjectPositions}" IsVisible="{Binding ObjectPositionsDisplayed}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="models:HighlightedSpace">
+                            <Path Fill="{Binding Color}" ToolTip.Tip="{Binding ToolTip}">
+                                <Path.Data>
+                                    <PathGeometry>
+                                        <PathFigure StartPoint="{Binding Top}" IsClosed="True" IsFilled="True">
+                                            <LineSegment Point="{Binding Left}"/>
+                                            <LineSegment Point="{Binding Bottom}"/>
+                                            <LineSegment Point="{Binding Right}"/>
+                                        </PathFigure>
+                                    </PathGeometry>
+                                </Path.Data>
+                            </Path>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
                 </ItemsControl>
 
                 <!-- Origin should be centered, so we use converters to make the visualization's center be precisely on its point -->

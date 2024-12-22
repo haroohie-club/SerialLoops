@@ -3906,6 +3906,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Interactable Objects.
+        /// </summary>
+        public static string Interactable_Objects {
+            get {
+                return ResourceManager.GetString("Interactable Objects", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid audio file selected..
         /// </summary>
         public static string Invalid_audio_file_selected_ {
@@ -4867,6 +4876,15 @@ namespace SerialLoops.Assets {
         public static string Object_Layer {
             get {
                 return ResourceManager.GetString("Object Layer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Object Locations.
+        /// </summary>
+        public static string Object_Locations {
+            get {
+                return ResourceManager.GetString("Object Locations", resourceCulture);
             }
         }
         

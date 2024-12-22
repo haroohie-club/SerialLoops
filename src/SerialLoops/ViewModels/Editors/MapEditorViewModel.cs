@@ -17,6 +17,7 @@ using SerialLoops.Lib.Items;
 using SerialLoops.Models;
 using SerialLoops.Utility;
 using SkiaSharp;
+using IO = SerialLoops.Lib.IO;
 
 namespace SerialLoops.ViewModels.Editors;
 
@@ -30,6 +31,11 @@ public class MapEditorViewModel : EditorViewModel
     public ObservableCollection<LayoutEntryWithImage> ObjectLayer { get; } = [];
     public ObservableCollection<LayoutEntryWithImage> ScrollingBg { get; } = [];
     public ObservableCollection<LayoutEntryWithImage> BgJunkLayer { get; } = [];
+    public ObservableCollection<LayoutEntryWithImage> ObjectJunkLayer { get; } = [];
+
+    public ObservableCollection<HighlightedSpace> InteractableObjects { get; } = [];
+    public ObservableCollection<HighlightedSpace> Unknown2s { get; } = [];
+    public ObservableCollection<HighlightedSpace> ObjectPositions { get; } = [];
 
     private bool _bgLayerDisplayed = true;
     public bool BgLayerDisplayed
@@ -67,6 +73,15 @@ public class MapEditorViewModel : EditorViewModel
     public bool InfoLayerDisplayed { get; set; }
     [Reactive]
     public bool BgJunkLayerDisplayed { get; set; }
+    [Reactive]
+    public bool ObjectJunkLayerDisplayed { get; set; }
+
+    [Reactive]
+    public bool InteractableObjectsDisplayed { get; set; }
+    [Reactive]
+    public bool Unknown2sDisplayed { get; set; }
+    [Reactive]
+    public bool ObjectPositionsDisplayed { get; set; }
 
     [Reactive]
     public bool DrawPathingMap { get; set; }
@@ -170,7 +185,7 @@ public class MapEditorViewModel : EditorViewModel
         }
     }
 
-    public ObservableCollection<PathingMapIndicator> PathingMap { get; }
+    public ObservableCollection<HighlightedSpace> PathingMap { get; }
 
     public ICommand ExportCommand { get; }
 
@@ -191,6 +206,12 @@ public class MapEditorViewModel : EditorViewModel
                     ScrollingBg.Add(new(Layout, i));
                     continue;
                 }
+            }
+
+            if (map.Map.UnknownMapObject3s.Select(u => u.UnknownShort3).Contains((short)i))
+            {
+                ObjectLayer.Add(new(Layout, i) { Layer = map.Layout.LayoutEntries[i].RelativeShtxIndex });
+                continue;
             }
 
             switch (map.Layout.LayoutEntries[i].RelativeShtxIndex)
@@ -225,7 +246,7 @@ public class MapEditorViewModel : EditorViewModel
                     }
                     break;
                 case 2:
-                    ObjectLayer.Add(new(Layout, i) { Layer = map.Layout.LayoutEntries[i].RelativeShtxIndex });
+                    ObjectJunkLayer.Add(new(Layout, i) { Layer = map.Layout.LayoutEntries[i].RelativeShtxIndex });
                     break;
             }
         }
@@ -281,6 +302,12 @@ public class MapEditorViewModel : EditorViewModel
             StartingPointX = (int)gridZero.X - map.Map.Settings.StartingPosition.x * 16 + map.Map.Settings.StartingPosition.y * 16;
             StartingPointY = (int)gridZero.Y + map.Map.Settings.StartingPosition.x * 8 + map.Map.Settings.StartingPosition.y * 8 + 8;
         }
+
+        InteractableObjects = new(map.Map.InteractableObjects[..^1].Select(io => new HighlightedSpace(io, gridZero, window.OpenProject)));
+
+        Unknown2s = new(map.Map.UnknownMapObject2s[..^1].Select(u => new HighlightedSpace(u, gridZero)));
+
+        ObjectPositions = new(map.Map.UnknownMapObject3s[..^1].Select(u => new HighlightedSpace(u, gridZero)));
 
         ExportCommand = ReactiveCommand.CreateFromTask(Export);
     }

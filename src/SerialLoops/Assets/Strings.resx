@@ -2933,4 +2933,10 @@ This action is irreversible.</value>
   <data name="Object Junk Layer" xml:space="preserve">
     <value>Object Junk Layer</value><comment>The map layer containing objects that aren't included in-game</comment>
   </data>
+  <data name="Interactable Objects" xml:space="preserve">
+    <value>Interactable Objects</value>
+  </data>
+  <data name="Object Locations" xml:space="preserve">
+    <value>Object Locations</value><comment>Locations of objects on the map (that can occlude or not)</comment>
+  </data>
 </root>
