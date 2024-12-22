@@ -9,7 +9,7 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:MapEditorViewModel"
              x:Class="SerialLoops.Views.Editors.MapEditorView">
-    <Grid RowDefinitions="Auto,Auto,Auto">
+    <Grid RowDefinitions="Auto,Auto,Auto,*">
         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="20" Spacing="10" HorizontalAlignment="Center">
             <CheckBox IsChecked="{Binding BgLayerDisplayed}" Content="{x:Static assets:Strings.BG_Layer}"
                       HorizontalAlignment="Center"/>
@@ -28,7 +28,11 @@
                       HorizontalAlignment="Center"/>
         </StackPanel>
 
-        <ScrollViewer Grid.Row="2">
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="20" Spacing="10" HorizontalAlignment="Center">
+            <Button Content="{x:Static assets:Strings.Export}" Command="{Binding ExportCommand}"/>
+        </StackPanel>
+
+        <ScrollViewer Grid.Row="3">
             <Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}">
                 <!-- Scrolling BG -->
                 <!-- I'm not happy with how this was implemented, but I couldn't get Canvas.Background to work so 🤷‍♀️ -->

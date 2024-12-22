@@ -1,18 +1,24 @@
 ﻿using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
+using System.Text.Json;
+using System.Threading.Tasks;
+using System.Windows.Input;
 using Avalonia;
-using Avalonia.Media;
+using Avalonia.Platform.Storage;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SerialLoops.Lib.Items;
 using SerialLoops.Models;
+using SerialLoops.Utility;
 using SkiaSharp;
 
 namespace SerialLoops.ViewModels.Editors;
 
 public class MapEditorViewModel : EditorViewModel
 {
+    private MapItem _map;
     public LayoutItem Layout { get; }
     public ObservableCollection<LayoutEntryWithImage> BgLayer { get; } = [];
     public ObservableCollection<LayoutEntryWithImage> ObjectLayer { get; } = [];
@@ -72,8 +78,11 @@ public class MapEditorViewModel : EditorViewModel
 
     public ObservableCollection<PathingMapIndicator> PathingMap { get; }
 
+    public ICommand ExportCommand { get; }
+
     public MapEditorViewModel(MapItem map, MainWindowViewModel window, ILogger log) : base(map, window, log)
     {
+        _map = map;
         Layout = new(map.Layout,
             [.. map.Map.Settings.TextureFileIndices.Select(idx => window.OpenProject.Grp.GetFileByIndex(idx))],
             0, map.Layout.LayoutEntries.Count, map.DisplayName);
@@ -142,6 +151,21 @@ public class MapEditorViewModel : EditorViewModel
         {
             StartingPointX = (int)gridZero.X - map.Map.Settings.StartingPosition.x * 16 + map.Map.Settings.StartingPosition.y * 16;
             StartingPointY = (int)gridZero.Y + map.Map.Settings.StartingPosition.x * 8 + map.Map.Settings.StartingPosition.y * 8 + 8;
+        }
+
+        ExportCommand = ReactiveCommand.CreateFromTask(Export);
+    }
+
+    private async Task Export()
+    {
+        string exportPath = (await Window.Window.ShowSaveFilePickerAsync("Export Map",
+            [new("JSON") { Patterns = ["*.json"] }], _map.DisplayName))?.TryGetLocalPath();
+
+        if (!string.IsNullOrEmpty(exportPath))
+        {
+            await File.WriteAllTextAsync(exportPath, JsonSerializer.Serialize(_map.Map));
+            await File.WriteAllTextAsync(Path.Combine(Path.GetDirectoryName(exportPath), $"{Path.GetFileNameWithoutExtension(exportPath)}_lay.json"),
+                JsonSerializer.Serialize(_map.Layout.LayoutEntries));
         }
     }
 }
