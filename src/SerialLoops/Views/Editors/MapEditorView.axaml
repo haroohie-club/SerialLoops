@@ -38,21 +38,25 @@
             </StackPanel>
         </StackPanel>
 
-        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="20" Spacing="10" HorizontalAlignment="Center">
-            <CheckBox IsChecked="{Binding DrawPathingMap}" Content="{x:Static assets:Strings.Draw_Pathing_Map}"
-                      HorizontalAlignment="Center"/>
-            <CheckBox IsChecked="{Binding Unknown2sDisplayed}" Content="{x:Static assets:Strings.Unknown}"
-                      HorizontalAlignment="Center"/>
-            <CheckBox IsChecked="{Binding ObjectPositionsDisplayed}" Content="{x:Static assets:Strings.Object_Locations}"
-                      HorizontalAlignment="Center"/>
-            <CheckBox IsChecked="{Binding InteractableObjectsDisplayed}" Content="{x:Static assets:Strings.Interactable_Objects}"
-                      HorizontalAlignment="Center"/>
-            <CheckBox IsChecked="{Binding DrawStartingPoint}" Content="{x:Static assets:Strings.Draw_Starting_Point}"
-                      HorizontalAlignment="Center"/>
-            <CheckBox IsChecked="{Binding DrawOrigin}" Content="{x:Static assets:Strings.Draw_Origin}"
-                      HorizontalAlignment="Center"/>
-            <CheckBox IsChecked="{Binding DrawBoundary}" Content="{x:Static assets:Strings.Draw_Boundary}"
-                      HorizontalAlignment="Center"/>
+        <StackPanel Grid.Row="1" Orientation="Vertical" Margin="20" Spacing="10" HorizontalAlignment="Center">
+            <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
+                <CheckBox IsChecked="{Binding Unknown2sDisplayed}" Content="{x:Static assets:Strings.Unknown}"
+                          HorizontalAlignment="Center"/>
+                <CheckBox IsChecked="{Binding ObjectPositionsDisplayed}" Content="{x:Static assets:Strings.Object_Locations}"
+                          HorizontalAlignment="Center"/>
+                <CheckBox IsChecked="{Binding InteractableObjectsDisplayed}" Content="{x:Static assets:Strings.Interactable_Objects}"
+                          HorizontalAlignment="Center"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
+                <CheckBox IsChecked="{Binding DrawPathingMap}" Content="{x:Static assets:Strings.Draw_Pathing_Map}"
+                          HorizontalAlignment="Center"/>
+                <CheckBox IsChecked="{Binding DrawStartingPoint}" Content="{x:Static assets:Strings.Draw_Starting_Point}"
+                          HorizontalAlignment="Center"/>
+                <CheckBox IsChecked="{Binding DrawOrigin}" Content="{x:Static assets:Strings.Draw_Origin}"
+                          HorizontalAlignment="Center"/>
+                <CheckBox IsChecked="{Binding DrawBoundary}" Content="{x:Static assets:Strings.Draw_Boundary}"
+                          HorizontalAlignment="Center"/>
+            </StackPanel>
         </StackPanel>
 
         <ScrollViewer Grid.Row="3">

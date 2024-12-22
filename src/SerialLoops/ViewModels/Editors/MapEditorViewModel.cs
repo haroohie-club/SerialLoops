@@ -208,7 +208,7 @@ public class MapEditorViewModel : EditorViewModel
                 }
             }
 
-            if (map.Map.UnknownMapObject3s.Select(u => u.UnknownShort3).Contains((short)i))
+            if (map.Map.UnknownMapObject3s[..^1].Select(u => u.UnknownShort3).Contains((short)i))
             {
                 ObjectLayer.Add(new(Layout, i) { Layer = map.Layout.LayoutEntries[i].RelativeShtxIndex });
                 continue;
