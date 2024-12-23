@@ -3789,6 +3789,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ignore Hash?.
+        /// </summary>
+        public static string Ignore_Hash_ {
+            get {
+                return ResourceManager.GetString("Ignore Hash?", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Image Files.
         /// </summary>
         public static string Image_Files {
