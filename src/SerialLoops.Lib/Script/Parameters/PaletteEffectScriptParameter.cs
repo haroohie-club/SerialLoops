@@ -8,6 +8,11 @@ public class PaletteEffectScriptParameter : ScriptParameter
     public PaletteEffect Effect { get; set; }
     public override short[] GetValues(object obj = null) => new short[] { (short)Effect };
 
+    public override string GetValueString(Project project)
+    {
+        return project.Localize(Effect.ToString());
+    }
+
     public PaletteEffectScriptParameter(string name, short effect) : base(name, ParameterType.PALETTE_EFFECT)
     {
         Effect = (PaletteEffect)effect;
