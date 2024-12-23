@@ -1,0 +1,27 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="using:SerialLoops.ViewModels.Editors.ScriptCommandEditors"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:assets="using:SerialLoops.Assets"
+             xmlns:items="using:SerialLoops.Lib.Items"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:LoadIsomapScriptCommandEditorViewModel"
+             x:Class="SerialLoops.Views.Editors.ScriptCommandEditors.LoadIsomapScriptCommandEditorView">
+    <Grid RowDefinitions="Auto" ColumnDefinitions="Auto,Auto">
+        <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Map}"/>
+        <ComboBox Grid.Column="1" Margin="10,0,0,0" ItemsSource="{Binding Maps}" SelectedItem="{Binding SelectedMap}">
+            <ComboBox.ItemTemplate>
+                <DataTemplate x:DataType="items:MapItem">
+                    <TextBlock Text="{Binding DisplayName}"/>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+            <ComboBox.ItemContainerTheme>
+                <ControlTheme TargetType="ComboBoxItem" x:DataType="items:MapItem" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
+                    <Setter Property="TextSearch.Text" Value="{Binding DisplayName}" />
+                </ControlTheme>
+            </ComboBox.ItemContainerTheme>
+        </ComboBox>
+    </Grid>
+</UserControl>
+
