@@ -1290,6 +1290,31 @@ public partial class Project
                 }
                 return false;
 
+            case SearchQuery.DataHolder.Command:
+                if (item is ScriptItem commandScript)
+                {
+                    EventFile.CommandVerb command = EventFile.CommandVerb.BACK;
+                    List<string> parameters = [];
+                    int firstParen = term.IndexOf('(');
+                    if (firstParen > 0)
+                    {
+                        command = Enum.Parse<EventFile.CommandVerb>(term[..firstParen]);
+                        parameters.AddRange(term[firstParen..term.IndexOf(')')].Split(','));
+                    }
+                    else
+                    {
+                        command = Enum.Parse<EventFile.CommandVerb>(term);
+                    }
+
+                    return commandScript.GetScriptCommandTree(this, logger)
+                        .Any(s => s.Value.Any(c => c.Verb == command &&
+                                                   parameters.Count <= c.Parameters.Count &&
+                                                   c.Parameters.Zip(parameters)
+                                                       .All(z => string.IsNullOrWhiteSpace(z.Second) || z.Second == "*" ||
+                                                                 (z.First?.ToString()?.Contains(z.Second, StringComparison.OrdinalIgnoreCase) ?? false))));
+                }
+                return false;
+
             case SearchQuery.DataHolder.Flag:
                 if (item is ScriptItem flagScript)
                 {

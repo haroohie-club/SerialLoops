@@ -20,13 +20,14 @@ public class SearchQuery
 
         // Deep search filters
         Dialogue_Text = 11,
-        Flag = 12,
-        Speaker_Name = 13,
-        Conditional = 14,
-        Background_Type = 15,
-        Episode_Number = 16,
-        Episode_Unique = 17,
-        Orphaned_Items = 18
+        Command = 12,
+        Flag = 13,
+        Speaker_Name = 14,
+        Conditional = 15,
+        Background_Type = 16,
+        Episode_Number = 17,
+        Episode_Unique = 18,
+        Orphaned_Items = 19
     }
 
     public static SearchQuery Create(string text)
