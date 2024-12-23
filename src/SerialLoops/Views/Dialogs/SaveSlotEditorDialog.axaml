@@ -298,7 +298,7 @@
                      Header="{x:Static assets:Strings.Script_Position}">
                 <ScrollViewer>
                     <Grid RowDefinitions="Auto,Auto,Auto,*" ColumnDefinitions="Auto,*">
-                        <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Spacing="5">
+                        <StackPanel Margin="10,5" Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Spacing="5">
                             <TextBlock Margin="0,7,0,0" Text="{x:Static assets:Strings.Script_}"/>
                             <ComboBox ItemsSource="{Binding ScriptItems}" SelectedItem="{Binding SelectedScriptItem}">
                                 <ComboBox.ItemTemplate>
@@ -312,10 +312,11 @@
                                     </ControlTheme>
                                 </ComboBox.ItemContainerTheme>
                             </ComboBox>
-                            <controls:ItemLink Item="{Binding SelectedScriptItem}" Tabs="{Binding Tabs}"/>
+                            <controls:ItemLink Item="{Binding SelectedScriptItem}" Tabs="{Binding Tabs}"
+                                               IsVisible="{Binding Tabs, Converter={x:Static ObjectConverters.IsNotNull}}"/>
                         </StackPanel>
 
-                        <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Spacing="5">
+                        <StackPanel Margin="10,5" Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Spacing="5">
                             <TextBlock Margin="0,7,0,0" Text="{x:Static assets:Strings.Script_Section}"/>
                             <ComboBox ItemsSource="{Binding ScriptSections}" SelectedItem="{Binding SelectedScriptSection}">
                                 <ComboBox.ItemTemplate>
@@ -331,17 +332,19 @@
                             </ComboBox>
                         </StackPanel>
 
-                        <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Spacing="5">
+                        <StackPanel Margin="10,5" Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Spacing="5">
                             <TextBlock Margin="0,7,0,0" Text="{x:Static assets:Strings.Command_Index_}"/>
                             <NumericUpDown Value="{Binding ScriptCommandIndex}"
                                            Minimum="0" Maximum="{Binding SelectedScriptSection.Objects.Count, Converter={StaticResource SubtractionConverter}, ConverterParameter=1}"
                                            FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
                         </StackPanel>
 
-                        <Grid Grid.Row="0" Grid.Column="1" Grid.RowSpan="4">
+                        <Grid Grid.Row="0" Grid.Column="1" Grid.RowSpan="4" Margin="20,0">
                             <Image IsVisible="{Binding ScriptPreview, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                   Width="256" Height="384"
                                    Source="{Binding ScriptPreview, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
                             <Image IsVisible="{Binding ScriptPreview, Converter={x:Static ObjectConverters.IsNull}}"
+                                   Width="256" Height="384"
                                    Source="{Binding ErrorImagePath}"/>
                         </Grid>
                     </Grid>

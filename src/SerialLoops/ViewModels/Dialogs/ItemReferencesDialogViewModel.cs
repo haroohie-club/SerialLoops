@@ -85,7 +85,7 @@ public class ItemReferencesDialogViewModel : ViewModelBase
 
     private ObservableCollection<ITreeItem> GetSections()
     {
-        return new ObservableCollection<ITreeItem>(Items.GroupBy(i => i.Type)
+        return new(Items.GroupBy(i => i.Type)
             .OrderBy(g => ControlGenerator.LocalizeItemTypes(g.Key))
             .Select(g => new SectionTreeItem(
                 ControlGenerator.LocalizeItemTypes(g.Key),

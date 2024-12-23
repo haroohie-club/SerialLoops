@@ -1329,6 +1329,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Close Save File.
+        /// </summary>
+        public static string Close_Save_File {
+            get {
+                return ResourceManager.GetString("Close Save File", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Collected all Haruhi topics message box.
         /// </summary>
         public static string Collected_all_Haruhi_topics_message_box {
@@ -2435,6 +2444,15 @@ namespace SerialLoops.Assets {
             get {
                 return ResourceManager.GetString(("Error: duplicate hack detected! A hack with the same name has already been import" +
                         "ed."), resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error getting script command tree for script {0} ({1}): {2} {3}.
+        /// </summary>
+        public static string Error_getting_script_command_tree_for_script__0____1__ {
+            get {
+                return ResourceManager.GetString("Error getting script command tree for script {0} ({1})", resourceCulture);
             }
         }
         
@@ -3857,6 +3875,17 @@ namespace SerialLoops.Assets {
         public static string Importing_Project {
             get {
                 return ResourceManager.GetString("Importing Project", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to In order to edit this save file, Serial Loops needs to make a temporary project. However, a project called &quot;{0}&quot; already exists. Would you like to overwrite this project?.
+        /// </summary>
+        public static string In_order_to_edit_this_save_file__Serial_Loops_needs_to_make_a_temporary_project__However__a_project_called___0___already_exists__Would_you_like_to_overwrite_this_project_ {
+            get {
+                return ResourceManager.GetString(("In order to edit this save file, Serial Loops needs to make a temporary project. " +
+                        "However, a project called \"{0}\" already exists. Would you like to overwrite this" +
+                        " project?"), resourceCulture);
             }
         }
         
@@ -6068,6 +6097,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Save Save File.
+        /// </summary>
+        public static string Save_Save_File {
+            get {
+                return ResourceManager.GetString("Save Save File", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save Time: .
         /// </summary>
         public static string Save_Time_ {
@@ -7183,6 +7221,15 @@ namespace SerialLoops.Assets {
         public static string Template_Properties {
             get {
                 return ResourceManager.GetString("Template Properties", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Temporary Project Already Exists!.
+        /// </summary>
+        public static string Temporary_Project_Already_Exists_ {
+            get {
+                return ResourceManager.GetString("Temporary Project Already Exists!", resourceCulture);
             }
         }
         
