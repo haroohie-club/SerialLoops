@@ -1,0 +1,49 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:vm="using:SerialLoops.ViewModels.Dialogs"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:assets="using:SerialLoops.Assets"
+        xmlns:i="using:Avalonia.Xaml.Interactivity"
+        xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:DataType="vm:ImportProjectDialogViewModel"
+        x:Class="SerialLoops.Views.Dialogs.ImportProjectDialog"
+        Icon="/Assets/serial-loops.ico"
+        Title="{x:Static assets:Strings.Import_Project}"
+        SizeToContent="WidthAndHeight"
+        Name="Dialog">
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,Auto" HorizontalAlignment="Center">
+        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding RomHashString}"
+                   Margin="15,10" HorizontalAlignment="Center" TextAlignment="Center"/>
+
+        <Button Grid.Row="1" Grid.Column="0" Content="{x:Static assets:Strings.Open_Exported_Project}"
+                Command="{Binding SelectExportedProjectCommand}" CommandParameter="{Binding #Dialog}"
+                Margin="0,10" HorizontalAlignment="Center"/>
+        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding SlzipPath}" HorizontalAlignment="Center"
+                   Margin="0,10" TextWrapping="Wrap" Width="200" TextAlignment="Center"/>
+
+        <Button Grid.Row="2" Grid.Column="0" Content="{x:Static assets:Strings.Open_ROM}" HorizontalAlignment="Center"
+                Margin="0,10" Command="{Binding OpenRomCommand}" CommandParameter="{Binding #Dialog}"/>
+        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding RomPath}" HorizontalAlignment="Center"
+                   Margin="0,10" Width="200" TextWrapping="Wrap" TextAlignment="Center"/>
+
+        <CheckBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" IsChecked="{Binding IgnoreHash}"
+                  Margin="0,10" Content="{x:Static assets:Strings.Ignore_Hash_}" Name="IgnoreHashBox" HorizontalAlignment="Center">
+            <i:Interaction.Behaviors>
+                <ia:EventTriggerBehavior EventName="IsCheckedChanged" SourceObject="{Binding #IgnoreHashBox}">
+                    <ia:InvokeCommandAction Command="{Binding IgnoreHashCommand}"/>
+                </ia:EventTriggerBehavior>
+            </i:Interaction.Behaviors>
+        </CheckBox>
+
+        <StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal" Spacing="3">
+            <Button Content="{x:Static assets:Strings.Import}" Command="{Binding ImportCommand}"
+                    CommandParameter="{Binding #Dialog}" IsDefault="True"
+                    Margin="0,10" IsEnabled="{Binding CanImport}" HorizontalAlignment="Center"/>
+            <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}"
+                    Margin="0,10" CommandParameter="{Binding #Dialog}" IsCancel="True" HorizontalAlignment="Center"/>
+        </StackPanel>
+    </Grid>
+</Window>
+

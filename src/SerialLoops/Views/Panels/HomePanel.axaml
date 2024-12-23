@@ -27,6 +27,10 @@
                     <controls:LinkButton Command="{Binding MainWindow.OpenProjectCommand}" Text="{x:Static assets:Strings.Open_Project}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Spacing="5">
+                    <!-- <Svg Path="avares://SerialLoops/Assets/Icons/Import.svg" Width="16"/> -->
+                    <controls:LinkButton Command="{Binding MainWindow.ImportProjectCommand}" Text="{x:Static assets:Strings.Import_Project}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Spacing="5">
                     <Svg Path="avares://SerialLoops/Assets/Icons/Edit_Save.svg" Width="16"/>
                     <controls:LinkButton Command="{Binding MainWindow.EditSaveCommand}" Text="{x:Static assets:Strings.Edit_Save_File}"/>
                 </StackPanel>
