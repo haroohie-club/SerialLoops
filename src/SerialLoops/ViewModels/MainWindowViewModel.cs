@@ -71,6 +71,7 @@ public partial class MainWindowViewModel : ViewModelBase
     public ICommand NewProjectCommand { get; }
     public ICommand OpenProjectCommand { get; }
     public ICommand OpenRecentProjectCommand { get; }
+    public ICommand ImportProjectCommand { get; }
     public ICommand EditSaveCommand { get; }
     public ICommand AboutCommand { get; }
     public ICommand PreferencesCommand { get; }
@@ -111,6 +112,7 @@ public partial class MainWindowViewModel : ViewModelBase
         NewProjectCommand = ReactiveCommand.CreateFromTask(NewProjectCommand_Executed);
         OpenProjectCommand = ReactiveCommand.CreateFromTask(OpenProjectCommand_Executed);
         OpenRecentProjectCommand = ReactiveCommand.CreateFromTask<string>(OpenRecentProjectCommand_Executed);
+        ImportProjectCommand = ReactiveCommand.CreateFromTask<string>(ImportProjectCommand_Executed);
         EditSaveCommand = ReactiveCommand.CreateFromTask(EditSaveFileCommand_Executed);
         AboutCommand = ReactiveCommand.CreateFromTask(AboutCommand_Executed);
         PreferencesCommand = ReactiveCommand.CreateFromTask(PreferencesCommand_Executed);
@@ -169,9 +171,14 @@ public partial class MainWindowViewModel : ViewModelBase
 
         if (Args?.Length > 0)
         {
-            if (Args[0].EndsWith(".slproj"))
+            if (Args[0].EndsWith(".slproj", StringComparison.OrdinalIgnoreCase))
             {
                 OpenRecentProjectCommand.Execute(Args[0]);
+            }
+            else if (Args[0].EndsWith(".slzip", StringComparison.OrdinalIgnoreCase))
+            {
+                OpenHomePanel();
+                ImportProjectCommand.Execute(Args[0]);
             }
         }
         else if (CurrentConfig.AutoReopenLastProject && ProjectsCache.RecentProjects.Count > 0)
@@ -392,7 +399,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         Project.LoadProjectResult result = new(Project.LoadProjectState.FAILED); // start us off with a failure
         LoopyProgressTracker tracker = new();
-        await new ProgressDialog(() => (OpenProject, result) = Project.OpenProject(path, CurrentConfig, s => s, Log, tracker),
+        await new ProgressDialog(() => (OpenProject, result) = Project.OpenProject(path, CurrentConfig, Strings.ResourceManager.GetString, Log, tracker),
             () => { }, tracker, Strings.Loading_Project).ShowDialog(Window);
         if (OpenProject is not null && result.State == Project.LoadProjectState.LOOSELEAF_FILES)
         {
@@ -452,6 +459,37 @@ public partial class MainWindowViewModel : ViewModelBase
         else
         {
             await CloseProjectView();
+        }
+    }
+
+    public async Task ImportProjectCommand_Executed(string slzipPath)
+    {
+        (slzipPath, string romPath) = await new ImportProjectDialog()
+        {
+            DataContext = new ImportProjectDialogViewModel(slzipPath, Log),
+        }.ShowDialog<(string, string)>(Window);
+        if (!string.IsNullOrEmpty(slzipPath) && !string.IsNullOrEmpty(romPath))
+        {
+            if (await CloseProject_Executed(null))
+            {
+                return;
+            }
+
+            Project.LoadProjectResult result = new() { State = Project.LoadProjectState.FAILED };
+            LoopyProgressTracker tracker = new();
+            await new ProgressDialog(
+                () => (OpenProject, result) = Project.Import(slzipPath, romPath, CurrentConfig,
+                    Strings.ResourceManager.GetString, Log, tracker),
+                () => { }, tracker, Strings.Importing_Project).ShowDialog(Window);
+
+            if (OpenProject is not null)
+            {
+                OpenProjectView(OpenProject, tracker);
+            }
+            else
+            {
+                await CloseProjectView();
+            }
         }
     }
 
