@@ -92,9 +92,9 @@ public class AsmHacksDialogViewModel : ViewModelBase
                 parametersLayout.Children.Add(parameterComboBox);
             }
         }
-        GroupBox.Avalonia.Controls.GroupBox paramtersBox = new() { Header = Strings.Parameters, Content = parametersLayout };
-        paramtersBox.Theme = (ControlTheme)paramtersBox.FindResource("GroupBoxClassic");
-        descriptionPanel.Children.Add(paramtersBox);
+        GroupBox.Avalonia.Controls.GroupBox parametersBox = new() { Header = Strings.Parameters, Content = parametersLayout };
+        parametersBox.Theme = (ControlTheme)parametersBox.FindResource("GroupBoxClassic");
+        descriptionPanel.Children.Add(parametersBox);
     }
 
     public async Task ImportHackCommand_Executed(AsmHacksDialog dialog)

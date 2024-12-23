@@ -1545,6 +1545,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create ASM Hack.
+        /// </summary>
+        public static string Create_ASM_Hack {
+            get {
+                return ResourceManager.GetString("Create ASM Hack", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create New Project.
         /// </summary>
         public static string Create_New_Project {
@@ -6435,6 +6444,15 @@ namespace SerialLoops.Assets {
         public static string Select_Graphic {
             get {
                 return ResourceManager.GetString("Select Graphic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select Hack Files.
+        /// </summary>
+        public static string Select_Hack_Files {
+            get {
+                return ResourceManager.GetString("Select Hack Files", resourceCulture);
             }
         }
         

@@ -1,0 +1,30 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:vm="using:SerialLoops.ViewModels.Dialogs"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:assets="using:SerialLoops.Assets"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:DataType="vm:AsmHackCreationDialogViewModel"
+        x:Class="SerialLoops.Views.Dialogs.AsmHackCreationDialog"
+        SizeToContent="WidthAndHeight"
+        Title="{x:Static assets:Strings.Create_ASM_Hack}">
+    <Grid RowDefinitions="Auto,*" ColumnDefinitions="Auto,Auto">
+        <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Spacing="5" Margin="10"
+                    HorizontalAlignment="Center">
+            <Button HorizontalAlignment="Center" Content="{x:Static assets:Strings.Select_Hack_Files}"
+                    Command="{Binding SelectHackFilesCommand}"/>
+        </StackPanel>
+
+
+        <ItemsRepeater Grid.Row="1" Grid.Column="0" ItemsSource="{Binding HackFiles}">
+            <ItemsRepeater.Layout>
+                <StackLayout Orientation="Vertical" Spacing="5"/>
+            </ItemsRepeater.Layout>
+            <ItemsRepeater.ItemTemplate>
+
+            </ItemsRepeater.ItemTemplate>
+        </ItemsRepeater>
+    </Grid>
+</Window>
+
