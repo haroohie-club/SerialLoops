@@ -7,6 +7,11 @@ public class ConditionalScriptParameter : ScriptParameter
     public string Conditional { get; set; }
     public override short[] GetValues(object obj = null) => new short[] { (short)((EventFile)obj).ConditionalsSection.Objects.FindIndex(c => c.Equals(Conditional)) };
 
+    public override string GetValueString(Project project)
+    {
+        return Conditional;
+    }
+
     public ConditionalScriptParameter(string name, string value) : base(name, ParameterType.CONDITIONAL)
     {
         Conditional = value;

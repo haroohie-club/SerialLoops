@@ -7,6 +7,11 @@ public class TextEntranceEffectScriptParameter : ScriptParameter
     public TextEntranceEffect EntranceEffect { get; set; }
     public override short[] GetValues(object obj = null) => new short[] { (short)EntranceEffect };
 
+    public override string GetValueString(Project project)
+    {
+        return project.Localize(EntranceEffect.ToString());
+    }
+
     public TextEntranceEffectScriptParameter(string name, short entranceEffect) : base(name, ParameterType.TEXT_ENTRANCE_EFFECT)
     {
         EntranceEffect = (TextEntranceEffect)entranceEffect;

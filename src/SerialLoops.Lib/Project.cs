@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -1268,6 +1269,100 @@ public partial class Project
                 }
                 return false;
 
+            case SearchQuery.DataHolder.Archive_Index:
+                if (int.TryParse(term, out int archiveIdx) || ((term?.StartsWith("0x") ?? false) && int.TryParse(term[2..], NumberStyles.HexNumber, CultureInfo.CurrentCulture.NumberFormat, out archiveIdx)))
+                {
+                    switch (item.Type)
+                    {
+                        case ItemType.Background:
+                            return ((BackgroundItem)item).Graphic1.Index == archiveIdx || (((BackgroundItem)item).Graphic2?.Index ?? -1) == archiveIdx;
+                        case ItemType.Character:
+                            return MessInfo.Index == archiveIdx;
+                        case ItemType.Character_Sprite:
+                            CharacterSpriteItem sprite = (CharacterSpriteItem)item;
+                            return new[]
+                                       {
+                                           sprite.Sprite.TextureIndex1, sprite.Sprite.TextureIndex2,
+                                           sprite.Sprite.TextureIndex3, sprite.Sprite.LayoutIndex,
+                                           sprite.Sprite.EyeAnimationIndex, sprite.Sprite.MouthAnimationIndex,
+                                           sprite.Sprite.EyeTextureIndex, sprite.Sprite.MouthTextureIndex
+                                       }
+                                       .Contains((short)archiveIdx);
+                        case ItemType.Chess_Puzzle:
+                            return ((ChessPuzzleItem)item).ChessPuzzle.Index == archiveIdx;
+                        case ItemType.Chibi:
+                            return ((ChibiItem)item).Chibi.ChibiEntries.Select(c => c.Texture)
+                                .Contains((short)archiveIdx) || ((ChibiItem)item).Chibi.ChibiEntries
+                                .Select(c => c.Animation).Contains((short)archiveIdx);
+                        case ItemType.Group_Selection:
+                        case ItemType.Scenario:
+                            return archiveIdx == Evt.GetFileByName("SCENARIOS").Index;
+                        case ItemType.Item:
+                            return ((ItemItem)item).ItemGraphic.Index == archiveIdx;
+                        case ItemType.Layout:
+                            return ((LayoutItem)item).Layout.Index == archiveIdx;
+                        case ItemType.Map:
+                            return ((MapItem)item).Map.Index == archiveIdx;
+                        case ItemType.Place:
+                            return ((PlaceItem)item).PlaceGraphic.Index == archiveIdx;
+                        case ItemType.Puzzle:
+                            return ((PuzzleItem)item).Puzzle.Index == archiveIdx;
+                        case ItemType.Script:
+                            return ((ScriptItem)item).Event.Index == archiveIdx;
+                        case ItemType.System_Texture:
+                            return ((SystemTextureItem)item).SysTex.GrpIndex == archiveIdx;
+                        case ItemType.Topic:
+                            return archiveIdx == Evt.GetFileByName("TOPICS").Index;
+                    }
+                }
+                return false;
+
+            case SearchQuery.DataHolder.Archive_Filename:
+                switch (item.Type)
+                {
+                    case ItemType.Background:
+                        return ((BackgroundItem)item).Graphic1.Name.Contains(term, StringComparison.OrdinalIgnoreCase) || (((BackgroundItem)item).Graphic2?.Name?.Contains(term, StringComparison.OrdinalIgnoreCase) ?? false);
+                    case ItemType.Character:
+                        return MessInfo.Name.Contains(term, StringComparison.OrdinalIgnoreCase);
+                    case ItemType.Character_Sprite:
+                        CharacterSpriteItem sprite = (CharacterSpriteItem)item;
+                        string[] sprNames = [.. new[]
+                        {
+                            sprite.Sprite.TextureIndex1, sprite.Sprite.TextureIndex2, sprite.Sprite.TextureIndex3,
+                            sprite.Sprite.LayoutIndex, sprite.Sprite.EyeAnimationIndex,
+                            sprite.Sprite.MouthAnimationIndex, sprite.Sprite.EyeTextureIndex,
+                            sprite.Sprite.MouthTextureIndex
+                        }.Select(i => Grp.GetFileByIndex(i).Name)];
+                        return sprNames.Any(n => n.Contains(term, StringComparison.OrdinalIgnoreCase));
+                    case ItemType.Chess_Puzzle:
+                        return ((ChessPuzzleItem)item).ChessPuzzle.Name.Contains(term, StringComparison.OrdinalIgnoreCase);
+                    case ItemType.Chibi:
+                        return ((ChibiItem)item).Chibi.ChibiEntries.Select(c => Grp.GetFileByIndex(c.Texture)?.Name)
+                            .Any(n => n?.Contains(term, StringComparison.OrdinalIgnoreCase) ?? false)
+                            || ((ChibiItem)item).Chibi.ChibiEntries.Select(c => Grp.GetFileByIndex(c.Animation)?.Name)
+                            .Any(n => n?.Contains(term, StringComparison.OrdinalIgnoreCase) ?? false);
+                    case ItemType.Group_Selection:
+                    case ItemType.Scenario:
+                        return "SCENARIOS".Contains(term, StringComparison.OrdinalIgnoreCase);
+                    case ItemType.Item:
+                        return ((ItemItem)item).ItemGraphic.Name.Contains(term, StringComparison.OrdinalIgnoreCase);
+                    case ItemType.Layout:
+                        return ((LayoutItem)item).Layout.Name.Contains(term, StringComparison.OrdinalIgnoreCase);
+                    case ItemType.Map:
+                        return ((MapItem)item).Map.Name.Contains(term, StringComparison.OrdinalIgnoreCase);
+                    case ItemType.Place:
+                        return ((PlaceItem)item).PlaceGraphic.Name.Contains(term, StringComparison.OrdinalIgnoreCase);
+                    case ItemType.Puzzle:
+                        return ((PuzzleItem)item).Puzzle.Name.Contains(term, StringComparison.OrdinalIgnoreCase);
+                    case ItemType.Script:
+                        return ((ScriptItem)item).Event.Name.Contains(term, StringComparison.OrdinalIgnoreCase);
+                    case ItemType.System_Texture:
+                        return Grp.GetFileByIndex(((SystemTextureItem)item).SysTex.GrpIndex).Name.Contains(term, StringComparison.OrdinalIgnoreCase);
+                    case ItemType.Topic:
+                        return "TOPICS".Contains(term, StringComparison.OrdinalIgnoreCase);
+                }
+                return false;
+
             case SearchQuery.DataHolder.Dialogue_Text:
                 if (item is ScriptItem dialogueScript)
                 {
@@ -1287,6 +1382,32 @@ public partial class Project
                                 .Any(p => ((DialogueScriptParameter)p).Line.Text
                                     .GetSubstitutedString(this).Contains(term, StringComparison.OrdinalIgnoreCase))));
                     }
+                }
+                return false;
+
+            case SearchQuery.DataHolder.Command:
+                if (item is ScriptItem commandScript)
+                {
+                    EventFile.CommandVerb command;
+                    List<string> parameters = [];
+                    int firstParen = term.IndexOf('(');
+                    if (firstParen > 0)
+                    {
+                        command = Enum.Parse<EventFile.CommandVerb>(term[..firstParen]);
+                        parameters.AddRange(term[(firstParen+1)..term.IndexOf(')')].Split(','));
+                    }
+                    else
+                    {
+                        command = Enum.Parse<EventFile.CommandVerb>(term);
+                    }
+
+                    return commandScript.GetScriptCommandTree(this, logger)
+                        .Any(s => s.Value.Any(c => c.Verb == command &&
+                                                   parameters.Count <= c.Parameters.Count &&
+                                                   c.Parameters.Zip(parameters)
+                                                       .All(z => string.IsNullOrWhiteSpace(z.Second) || z.Second == "*" ||
+                                                                 (z.Second.StartsWith("!") && !(z.First?.GetValueString(this)?.Contains(z.Second, StringComparison.OrdinalIgnoreCase) ?? false)) ||
+                                                                 (z.First?.GetValueString(this)?.Contains(z.Second, StringComparison.OrdinalIgnoreCase) ?? false))));
                 }
                 return false;
 
