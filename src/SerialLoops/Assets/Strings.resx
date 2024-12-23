@@ -2939,4 +2939,7 @@ This action is irreversible.</value>
   <data name="Object Locations" xml:space="preserve">
     <value>Object Locations</value><comment>Locations of objects on the map (that can occlude or not)</comment>
   </data>
+  <data name="Camera Trucking" xml:space="preserve">
+    <value>Camera Trucking</value><comment>Refers to items defining camera movement at the beginning of the puzzle phase</comment>
+  </data>
 </root>

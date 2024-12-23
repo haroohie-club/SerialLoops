@@ -46,6 +46,8 @@
                           HorizontalAlignment="Center"/>
                 <CheckBox IsChecked="{Binding InteractableObjectsDisplayed}" Content="{x:Static assets:Strings.Interactable_Objects}"
                           HorizontalAlignment="Center"/>
+                <CheckBox IsChecked="{Binding DrawCameraTruckingDefinitions}" Content="{x:Static assets:Strings.Camera_Trucking}"
+                          HorizontalAlignment="Center"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
                 <CheckBox IsChecked="{Binding DrawPathingMap}" Content="{x:Static assets:Strings.Draw_Pathing_Map}"
@@ -317,6 +319,27 @@
                             </Path>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <!-- Camera Trucking Info -->
+                <ItemsControl ItemsSource="{Binding CameraTruckingDefinitions}" IsVisible="{Binding DrawCameraTruckingDefinitions}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="models:LayoutEntryWithImage">
+                            <Rectangle Stroke="{Binding Tint, Converter={StaticResource BrushConverter}}"
+                                       StrokeThickness="4" Width="{Binding ScreenWidth}" Height="{Binding ScreenHeight}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.Styles>
+                        <Style Selector="ItemsControl > ContentPresenter" x:DataType="models:LayoutEntryWithImage">
+                            <Setter Property="(Canvas.Left)" Value="{Binding ScreenX}"/>
+                            <Setter Property="(Canvas.Top)" Value="{Binding ScreenY}"/>
+                        </Style>
+                    </ItemsControl.Styles>
                 </ItemsControl>
 
                 <!-- Origin should be centered, so we use converters to make the visualization's center be precisely on its point -->

@@ -986,6 +986,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Camera Trucking.
+        /// </summary>
+        public static string Camera_Trucking {
+            get {
+                return ResourceManager.GetString("Camera Trucking", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Can&apos;t Rename Item.
         /// </summary>
         public static string Can_t_Rename_Item {

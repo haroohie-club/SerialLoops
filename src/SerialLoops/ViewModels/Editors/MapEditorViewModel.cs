@@ -6,6 +6,8 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.Shapes;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using Avalonia.Skia;
@@ -18,6 +20,7 @@ using SerialLoops.Models;
 using SerialLoops.Utility;
 using SkiaSharp;
 using IO = SerialLoops.Lib.IO;
+using Path = System.IO.Path;
 
 namespace SerialLoops.ViewModels.Editors;
 
@@ -30,6 +33,7 @@ public class MapEditorViewModel : EditorViewModel
     public ObservableCollection<LayoutEntryWithImage> BgOcclusionLayer { get; } = [];
     public ObservableCollection<LayoutEntryWithImage> ObjectLayer { get; } = [];
     public ObservableCollection<LayoutEntryWithImage> ScrollingBg { get; } = [];
+    public ObservableCollection<LayoutEntryWithImage> CameraTruckingDefinitions { get; } = [];
     public ObservableCollection<LayoutEntryWithImage> BgJunkLayer { get; } = [];
     public ObservableCollection<LayoutEntryWithImage> ObjectJunkLayer { get; } = [];
 
@@ -91,6 +95,8 @@ public class MapEditorViewModel : EditorViewModel
     public bool DrawOrigin { get; set; }
     [Reactive]
     public bool DrawBoundary { get; set; }
+    [Reactive]
+    public bool DrawCameraTruckingDefinitions { get; set; }
 
     [Reactive]
     public int CanvasWidth { get; set; }
@@ -199,6 +205,13 @@ public class MapEditorViewModel : EditorViewModel
         CanvasHeight = map.Layout.LayoutEntries.Max(l => l.ScreenY + l.ScreenH);
         for (int i = 0; i < map.Layout.LayoutEntries.Count; i++)
         {
+            if (map.Map.Settings.IntroCameraTruckingDefsStartIndex > 0 && i >= map.Map.Settings.IntroCameraTruckingDefsStartIndex
+                && i <= map.Map.Settings.IntroCameraTruckingDefsEndIndex)
+            {
+                CameraTruckingDefinitions.Add(new(Layout, i));
+                continue;
+            }
+
             if (map.Map.Settings.ScrollingBgDefinitionLayoutIndex > 0)
             {
                 if (i >= map.Map.Settings.ScrollingBgLayoutStartIndex && i <= map.Map.Settings.ScrollingBgLayoutEndIndex)
