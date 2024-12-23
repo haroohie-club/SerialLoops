@@ -499,6 +499,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Archive Filename.
+        /// </summary>
+        public static string Archive_Filename {
+            get {
+                return ResourceManager.GetString("Archive_Filename", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Archive Index.
         /// </summary>
         public static string Archive_Index {

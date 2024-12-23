@@ -2905,4 +2905,7 @@ This action is irreversible.</value>
   <data name="Archive_Index" xml:space="preserve">
     <value>Archive Index</value>
   </data>
+  <data name="Archive_Filename" xml:space="preserve">
+    <value>Archive Filename</value>
+  </data>
 </root>

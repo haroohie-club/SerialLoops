@@ -10,7 +10,7 @@ public class SearchQuery
     public string Term { get; set; }
     public HashSet<DataHolder> Scopes { get; set; } = [DataHolder.Title];
     public HashSet<ItemDescription.ItemType> Types { get; set; } = [.. Enum.GetValues<ItemDescription.ItemType>()];
-    public bool QuickSearch => !Scopes.Any(scope => (int)scope > 10);
+    public bool QuickSearch => !Scopes.Any(scope => (int)scope >= 10);
 
     public enum DataHolder
     {
@@ -18,9 +18,9 @@ public class SearchQuery
         Title = 1,
         Background_ID = 2,
         Archive_Index = 3,
-        Archive_Filename = 4,
 
         // Deep search filters
+        Archive_Filename = 10,
         Dialogue_Text = 11,
         Command = 12,
         Flag = 13,

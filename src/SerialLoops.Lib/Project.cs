@@ -1324,22 +1324,23 @@ public partial class Project
                         return ((BackgroundItem)item).Graphic1.Name.Contains(term, StringComparison.OrdinalIgnoreCase) || (((BackgroundItem)item).Graphic2?.Name?.Contains(term, StringComparison.OrdinalIgnoreCase) ?? false);
                     case ItemType.Character:
                         return MessInfo.Name.Contains(term, StringComparison.OrdinalIgnoreCase);
-                    // case ItemType.Character_Sprite:
-                    //     CharacterSpriteItem sprite = (CharacterSpriteItem)item;
-                    //     return new[]
-                    //                {
-                    //                    sprite.Sprite., sprite.Sprite.TextureIndex2,
-                    //                    sprite.Sprite.TextureIndex3, sprite.Sprite.LayoutIndex,
-                    //                    sprite.Sprite.EyeAnimationIndex, sprite.Sprite.MouthAnimationIndex,
-                    //                    sprite.Sprite.EyeTextureIndex, sprite.Sprite.MouthTextureIndex
-                    //                }
-                    //                .Contains((short)archiveIdx);
+                    case ItemType.Character_Sprite:
+                        CharacterSpriteItem sprite = (CharacterSpriteItem)item;
+                        string[] sprNames = [.. new[]
+                        {
+                            sprite.Sprite.TextureIndex1, sprite.Sprite.TextureIndex2, sprite.Sprite.TextureIndex3,
+                            sprite.Sprite.LayoutIndex, sprite.Sprite.EyeAnimationIndex,
+                            sprite.Sprite.MouthAnimationIndex, sprite.Sprite.EyeTextureIndex,
+                            sprite.Sprite.MouthTextureIndex
+                        }.Select(i => Grp.GetFileByIndex(i).Name)];
+                        return sprNames.Any(n => n.Contains(term, StringComparison.OrdinalIgnoreCase));
                     case ItemType.Chess_Puzzle:
                         return ((ChessPuzzleItem)item).ChessPuzzle.Name.Contains(term, StringComparison.OrdinalIgnoreCase);
-                    // case ItemType.Chibi:
-                    //     return ((ChibiItem)item).Chibi.ChibiEntries.Select(c => c.Texture)
-                    //         .Contains((short)archiveIdx) || ((ChibiItem)item).Chibi.ChibiEntries
-                    //         .Select(c => c.Animation).Contains((short)archiveIdx);
+                    case ItemType.Chibi:
+                        return ((ChibiItem)item).Chibi.ChibiEntries.Select(c => Grp.GetFileByIndex(c.Texture)?.Name)
+                            .Any(n => n?.Contains(term, StringComparison.OrdinalIgnoreCase) ?? false)
+                            || ((ChibiItem)item).Chibi.ChibiEntries.Select(c => Grp.GetFileByIndex(c.Animation)?.Name)
+                            .Any(n => n?.Contains(term, StringComparison.OrdinalIgnoreCase) ?? false);
                     case ItemType.Group_Selection:
                     case ItemType.Scenario:
                         return "SCENARIOS".Contains(term, StringComparison.OrdinalIgnoreCase);
