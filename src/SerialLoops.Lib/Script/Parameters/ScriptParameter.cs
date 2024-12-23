@@ -7,6 +7,7 @@ public abstract class ScriptParameter
     public ParameterType Type { get; protected set; }
     public string Name { get; protected set; }
     public abstract short[] GetValues(object obj = null);
+    public abstract string GetValueString(Project project);
 
     protected ScriptParameter(string name, ParameterType type)
     {

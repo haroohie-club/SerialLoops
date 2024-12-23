@@ -392,7 +392,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         Project.LoadProjectResult result = new(Project.LoadProjectState.FAILED); // start us off with a failure
         LoopyProgressTracker tracker = new();
-        await new ProgressDialog(() => (OpenProject, result) = Project.OpenProject(path, CurrentConfig, s => s, Log, tracker),
+        await new ProgressDialog(() => (OpenProject, result) = Project.OpenProject(path, CurrentConfig, Strings.ResourceManager.GetString, Log, tracker),
             () => { }, tracker, Strings.Loading_Project).ShowDialog(Window);
         if (OpenProject is not null && result.State == Project.LoadProjectState.LOOSELEAF_FILES)
         {

@@ -521,7 +521,7 @@
   <data name="Crop &amp; Scale" xml:space="preserve">
     <value>Crop &amp; Scale</value>
   </data>
-  <data name="Cross Space {0}&quot;" xml:space="preserve">
+  <data name="Cross Space {0}" xml:space="preserve">
     <value>Cross Space {0}"</value>
     <comment>As on a chessboard</comment>
   </data>
@@ -756,9 +756,6 @@
   </data>
   <data name="Erase data options title" xml:space="preserve">
     <value>Erase data options title</value>
-  </data>
-  <data name="Error getting script command tree for script {0} ({1})" xml:space="preserve">
-    <value>Error getting script command tree for script {0} ({1})</value>
   </data>
   <data name="Error pruning labels!" xml:space="preserve">
     <value>Error pruning labels!</value>

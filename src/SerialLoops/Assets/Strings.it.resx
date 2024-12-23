@@ -966,9 +966,6 @@
   <data name="System_Texture" xml:space="preserve">
     <value>Texture di sistema</value>
   </data>
-  <data name="Error getting script command tree for script {0} ({1})" xml:space="preserve">
-    <value>Errore nell'ottenere command tree per lo script {0} ({1})</value>
-  </data>
   <data name="Sound (Options)" xml:space="preserve">
     <value>Audio (Opzioni)</value>
   </data>
@@ -1957,7 +1954,7 @@
   <data name="Group_Selection" xml:space="preserve">
     <value>Divisione gruppo</value>
   </data>
-  <data name="Cross Space {0}&quot;" xml:space="preserve">
+  <data name="Cross Space {0}" xml:space="preserve">
     <value>Cross Spazio {0}"</value>
     <comment>As on a chessboard</comment>
   </data>

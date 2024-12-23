@@ -18,6 +18,18 @@ public class FriendshipLevelScriptParameter : ScriptParameter
 
     public override short[] GetValues(object obj = null) => new short[] { (short)Character };
 
+    public override string GetValueString(Project project)
+    {
+        return Character switch
+        {
+            FriendshipCharacter.Haruhi => project.GetCharacterBySpeaker(Speaker.HARUHI).DisplayName,
+            FriendshipCharacter.Mikuru => project.GetCharacterBySpeaker(Speaker.MIKURU).DisplayName,
+            FriendshipCharacter.Nagato => project.GetCharacterBySpeaker(Speaker.NAGATO).DisplayName,
+            FriendshipCharacter.Koizumi => project.GetCharacterBySpeaker(Speaker.KOIZUMI).DisplayName,
+            _ => project.GetCharacterBySpeaker(Speaker.TSURUYA).DisplayName,
+        };
+    }
+
     public FriendshipLevelScriptParameter(string name, short character) : base(name, ParameterType.FRIENDSHIP_LEVEL)
     {
         Character = (FriendshipCharacter)character;

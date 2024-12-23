@@ -7,6 +7,11 @@ public class SpriteEntranceScriptParameter : ScriptParameter
     public SpriteEntranceTransition EntranceTransition { get; set; }
     public override short[] GetValues(object obj = null) => new short[] { (short)EntranceTransition };
 
+    public override string GetValueString(Project project)
+    {
+        return project.Localize(EntranceTransition.ToString());
+    }
+
     public SpriteEntranceScriptParameter(string name, short entranceTransition) : base(name, ParameterType.SPRITE_ENTRANCE)
     {
         EntranceTransition = (SpriteEntranceTransition)entranceTransition;

@@ -569,8 +569,8 @@ This action is irreversible.</value>
   <data name="Crop &amp; Scale" xml:space="preserve">
     <value>Crop &amp; Scale</value>
   </data>
-  <data name="Cross Space {0}&quot;" xml:space="preserve">
-    <value>Cross Space {0}"</value>
+  <data name="Cross Space {0}" xml:space="preserve">
+    <value>Cross Space {0}</value>
     <comment>As on a chessboard</comment>
   </data>
   <data name="Crossfade Time (Frames)" xml:space="preserve">
@@ -824,10 +824,6 @@ This action is irreversible.</value>
   </data>
   <data name="Error" xml:space="preserve">
     <value>Error</value>
-  </data>
-  <data name="Error getting script command tree for script {0} ({1})" xml:space="preserve">
-    <value>Error getting script command tree for script {0} ({1}): {2} {3}</value>
-    <comment>{0} is the script display name, {1} is the script's underlying name</comment>
   </data>
   <data name="Error pruning labels!" xml:space="preserve">
     <value>Error pruning labels!</value>
@@ -2902,5 +2898,8 @@ This action is irreversible.</value>
   </data>
   <data name="Export Source Preview" xml:space="preserve">
     <value>Export Source Preview</value><comment>Button that exports a preview of the current source image of a particular layout entry</comment>
+  </data>
+  <data name="Error getting script command tree for script {0} ({1}): {2} {3}" xml:space="preserve">
+    <value>Error getting script command tree for script {0} ({1}): {2} {3}</value><comment>{0} is the script display name, {1} is the script's underlying name, {2} is the command and {3} is the command's parameters</comment>
   </data>
 </root>

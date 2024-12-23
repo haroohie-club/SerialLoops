@@ -59,7 +59,7 @@ public class SearchDialogViewModel : ViewModelBase
     public ObservableCollection<LocalizedSearchScope> SearchScopes { get; } =
         new(Enum.GetValues<SearchQuery.DataHolder>().Select(h => new LocalizedSearchScope(h)));
     public ObservableCollection<LocalizedItemScope> ItemScopes { get; } =
-        new(Enum.GetValues<ItemDescription.ItemType>().Select(i => new LocalizedItemScope(i)));
+        new(Enum.GetValues<ItemDescription.ItemType>().Where(i => i != ItemDescription.ItemType.Save).Select(i => new LocalizedItemScope(i)));
 
     private ObservableCollection<ItemDescription> _items = [];
     public ObservableCollection<ItemDescription> Items

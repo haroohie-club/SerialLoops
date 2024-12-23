@@ -1599,11 +1599,11 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cross Space {0}&quot;.
+        ///   Looks up a localized string similar to Cross Space {0}.
         /// </summary>
-        public static string Cross_Space__0__ {
+        public static string Cross_Space__0_ {
             get {
-                return ResourceManager.GetString("Cross Space {0}\"", resourceCulture);
+                return ResourceManager.GetString("Cross Space {0}", resourceCulture);
             }
         }
         
@@ -2423,9 +2423,9 @@ namespace SerialLoops.Assets {
         /// <summary>
         ///   Looks up a localized string similar to Error getting script command tree for script {0} ({1}): {2} {3}.
         /// </summary>
-        public static string Error_getting_script_command_tree_for_script__0____1__ {
+        public static string Error_getting_script_command_tree_for_script__0____1_____2___3_ {
             get {
-                return ResourceManager.GetString("Error getting script command tree for script {0} ({1})", resourceCulture);
+                return ResourceManager.GetString("Error getting script command tree for script {0} ({1}): {2} {3}", resourceCulture);
             }
         }
         
