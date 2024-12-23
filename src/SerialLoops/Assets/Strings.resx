@@ -2902,4 +2902,7 @@ This action is irreversible.</value>
   <data name="Error getting script command tree for script {0} ({1}): {2} {3}" xml:space="preserve">
     <value>Error getting script command tree for script {0} ({1}): {2} {3}</value><comment>{0} is the script display name, {1} is the script's underlying name, {2} is the command and {3} is the command's parameters</comment>
   </data>
+  <data name="Archive_Index" xml:space="preserve">
+    <value>Archive Index</value>
+  </data>
 </root>

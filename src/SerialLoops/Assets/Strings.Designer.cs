@@ -499,6 +499,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Archive Index.
+        /// </summary>
+        public static string Archive_Index {
+            get {
+                return ResourceManager.GetString("Archive_Index", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to clear the script?
         ///This action is irreversible..
         /// </summary>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -1265,6 +1266,99 @@ public partial class Project
                 if (int.TryParse(term, out int backgroundId))
                 {
                     return item.Type == ItemType.Background && ((BackgroundItem)item).Id == backgroundId;
+                }
+                return false;
+
+            case SearchQuery.DataHolder.Archive_Index:
+                if (int.TryParse(term, out int archiveIdx) || ((term?.StartsWith("0x") ?? false) && int.TryParse(term[2..], NumberStyles.HexNumber, CultureInfo.CurrentCulture.NumberFormat, out archiveIdx)))
+                {
+                    switch (item.Type)
+                    {
+                        case ItemType.Background:
+                            return ((BackgroundItem)item).Graphic1.Index == archiveIdx || (((BackgroundItem)item).Graphic2?.Index ?? -1) == archiveIdx;
+                        case ItemType.Character:
+                            return MessInfo.Index == archiveIdx;
+                        case ItemType.Character_Sprite:
+                            CharacterSpriteItem sprite = (CharacterSpriteItem)item;
+                            return new[]
+                                       {
+                                           sprite.Sprite.TextureIndex1, sprite.Sprite.TextureIndex2,
+                                           sprite.Sprite.TextureIndex3, sprite.Sprite.LayoutIndex,
+                                           sprite.Sprite.EyeAnimationIndex, sprite.Sprite.MouthAnimationIndex,
+                                           sprite.Sprite.EyeTextureIndex, sprite.Sprite.MouthTextureIndex
+                                       }
+                                       .Contains((short)archiveIdx);
+                        case ItemType.Chess_Puzzle:
+                            return ((ChessPuzzleItem)item).ChessPuzzle.Index == archiveIdx;
+                        case ItemType.Chibi:
+                            return ((ChibiItem)item).Chibi.ChibiEntries.Select(c => c.Texture)
+                                .Contains((short)archiveIdx) || ((ChibiItem)item).Chibi.ChibiEntries
+                                .Select(c => c.Animation).Contains((short)archiveIdx);
+                        case ItemType.Group_Selection:
+                        case ItemType.Scenario:
+                            return archiveIdx == Evt.GetFileByName("SCENARIOS").Index;
+                        case ItemType.Item:
+                            return ((ItemItem)item).ItemGraphic.Index == archiveIdx;
+                        case ItemType.Layout:
+                            return ((LayoutItem)item).Layout.Index == archiveIdx;
+                        case ItemType.Map:
+                            return ((MapItem)item).Map.Index == archiveIdx;
+                        case ItemType.Place:
+                            return ((PlaceItem)item).PlaceGraphic.Index == archiveIdx;
+                        case ItemType.Puzzle:
+                            return ((PuzzleItem)item).Puzzle.Index == archiveIdx;
+                        case ItemType.Script:
+                            return ((ScriptItem)item).Event.Index == archiveIdx;
+                        case ItemType.System_Texture:
+                            return ((SystemTextureItem)item).SysTex.GrpIndex == archiveIdx;
+                        case ItemType.Topic:
+                            return archiveIdx == Evt.GetFileByName("TOPICS").Index;
+                    }
+                }
+                return false;
+
+            case SearchQuery.DataHolder.Archive_Filename:
+                switch (item.Type)
+                {
+                    case ItemType.Background:
+                        return ((BackgroundItem)item).Graphic1.Name.Contains(term, StringComparison.OrdinalIgnoreCase) || (((BackgroundItem)item).Graphic2?.Name?.Contains(term, StringComparison.OrdinalIgnoreCase) ?? false);
+                    case ItemType.Character:
+                        return MessInfo.Name.Contains(term, StringComparison.OrdinalIgnoreCase);
+                    // case ItemType.Character_Sprite:
+                    //     CharacterSpriteItem sprite = (CharacterSpriteItem)item;
+                    //     return new[]
+                    //                {
+                    //                    sprite.Sprite., sprite.Sprite.TextureIndex2,
+                    //                    sprite.Sprite.TextureIndex3, sprite.Sprite.LayoutIndex,
+                    //                    sprite.Sprite.EyeAnimationIndex, sprite.Sprite.MouthAnimationIndex,
+                    //                    sprite.Sprite.EyeTextureIndex, sprite.Sprite.MouthTextureIndex
+                    //                }
+                    //                .Contains((short)archiveIdx);
+                    case ItemType.Chess_Puzzle:
+                        return ((ChessPuzzleItem)item).ChessPuzzle.Name.Contains(term, StringComparison.OrdinalIgnoreCase);
+                    // case ItemType.Chibi:
+                    //     return ((ChibiItem)item).Chibi.ChibiEntries.Select(c => c.Texture)
+                    //         .Contains((short)archiveIdx) || ((ChibiItem)item).Chibi.ChibiEntries
+                    //         .Select(c => c.Animation).Contains((short)archiveIdx);
+                    case ItemType.Group_Selection:
+                    case ItemType.Scenario:
+                        return "SCENARIOS".Contains(term, StringComparison.OrdinalIgnoreCase);
+                    case ItemType.Item:
+                        return ((ItemItem)item).ItemGraphic.Name.Contains(term, StringComparison.OrdinalIgnoreCase);
+                    case ItemType.Layout:
+                        return ((LayoutItem)item).Layout.Name.Contains(term, StringComparison.OrdinalIgnoreCase);
+                    case ItemType.Map:
+                        return ((MapItem)item).Map.Name.Contains(term, StringComparison.OrdinalIgnoreCase);
+                    case ItemType.Place:
+                        return ((PlaceItem)item).PlaceGraphic.Name.Contains(term, StringComparison.OrdinalIgnoreCase);
+                    case ItemType.Puzzle:
+                        return ((PuzzleItem)item).Puzzle.Name.Contains(term, StringComparison.OrdinalIgnoreCase);
+                    case ItemType.Script:
+                        return ((ScriptItem)item).Event.Name.Contains(term, StringComparison.OrdinalIgnoreCase);
+                    case ItemType.System_Texture:
+                        return Grp.GetFileByIndex(((SystemTextureItem)item).SysTex.GrpIndex).Name.Contains(term, StringComparison.OrdinalIgnoreCase);
+                    case ItemType.Topic:
+                        return "TOPICS".Contains(term, StringComparison.OrdinalIgnoreCase);
                 }
                 return false;
 

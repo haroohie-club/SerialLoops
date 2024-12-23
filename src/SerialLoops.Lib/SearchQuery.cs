@@ -17,6 +17,8 @@ public class SearchQuery
         // Quick search filters
         Title = 1,
         Background_ID = 2,
+        Archive_Index = 3,
+        Archive_Filename = 4,
 
         // Deep search filters
         Dialogue_Text = 11,
