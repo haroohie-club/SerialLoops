@@ -7,6 +7,11 @@ public class ChibiEmoteScriptParameter : ScriptParameter
     public ChibiEmote Emote { get; set; }
     public override short[] GetValues(object obj = null) => new short[] { (short)Emote };
 
+    public override string GetValueString(Project project)
+    {
+        return project.Localize(Emote.ToString());
+    }
+
     public ChibiEmoteScriptParameter(string name, short emote) : base(name, ParameterType.CHIBI_EMOTE)
     {
         Emote = (ChibiEmote)emote;

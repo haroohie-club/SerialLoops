@@ -9,6 +9,11 @@ public class EpisodeHeaderScriptParameter(string name, short epHeaderIndex) : Sc
     public Episode EpisodeHeaderIndex { get; set; } = (Episode)epHeaderIndex;
     public override short[] GetValues(object obj = null) => new short[] { (short)EpisodeHeaderIndex };
 
+    public override string GetValueString(Project project)
+    {
+        return project.Localize(EpisodeHeaderIndex.ToString());
+    }
+
     public override EpisodeHeaderScriptParameter Clone(Project project, EventFile eventFile)
     {
         return new(Name, (short)EpisodeHeaderIndex);

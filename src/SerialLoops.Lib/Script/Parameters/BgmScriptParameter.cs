@@ -8,6 +8,11 @@ public class BgmScriptParameter : ScriptParameter
     public BackgroundMusicItem Bgm { get; set; }
     public override short[] GetValues(object obj = null) => new short[] { (short)Bgm.Index };
 
+    public override string GetValueString(Project project)
+    {
+        return Bgm?.DisplayName;
+    }
+
     public BgmScriptParameter(string name, BackgroundMusicItem bgm) : base(name, ParameterType.BGM)
     {
         Bgm = bgm;

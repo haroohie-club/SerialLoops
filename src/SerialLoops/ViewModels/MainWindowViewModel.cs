@@ -33,6 +33,7 @@ using SerialLoops.ViewModels.Editors;
 using SerialLoops.ViewModels.Panels;
 using SerialLoops.Views;
 using SerialLoops.Views.Dialogs;
+using SerialLoops.Views.Editors;
 using SerialLoops.Views.Panels;
 using SkiaSharp;
 
@@ -71,6 +72,7 @@ public partial class MainWindowViewModel : ViewModelBase
     public ICommand NewProjectCommand { get; }
     public ICommand OpenProjectCommand { get; }
     public ICommand OpenRecentProjectCommand { get; }
+    public ICommand ImportProjectCommand { get; }
     public ICommand EditSaveCommand { get; }
     public ICommand AboutCommand { get; }
     public ICommand PreferencesCommand { get; }
@@ -111,6 +113,7 @@ public partial class MainWindowViewModel : ViewModelBase
         NewProjectCommand = ReactiveCommand.CreateFromTask(NewProjectCommand_Executed);
         OpenProjectCommand = ReactiveCommand.CreateFromTask(OpenProjectCommand_Executed);
         OpenRecentProjectCommand = ReactiveCommand.CreateFromTask<string>(OpenRecentProjectCommand_Executed);
+        ImportProjectCommand = ReactiveCommand.CreateFromTask<string>(ImportProjectCommand_Executed);
         EditSaveCommand = ReactiveCommand.CreateFromTask(EditSaveFileCommand_Executed);
         AboutCommand = ReactiveCommand.CreateFromTask(AboutCommand_Executed);
         PreferencesCommand = ReactiveCommand.CreateFromTask(PreferencesCommand_Executed);
@@ -169,9 +172,14 @@ public partial class MainWindowViewModel : ViewModelBase
 
         if (Args?.Length > 0)
         {
-            if (Args[0].EndsWith(".slproj"))
+            if (Args[0].EndsWith(".slproj", StringComparison.OrdinalIgnoreCase))
             {
                 OpenRecentProjectCommand.Execute(Args[0]);
+            }
+            else if (Args[0].EndsWith(".slzip", StringComparison.OrdinalIgnoreCase))
+            {
+                OpenHomePanel();
+                ImportProjectCommand.Execute(Args[0]);
             }
         }
         else if (CurrentConfig.AutoReopenLastProject && ProjectsCache.RecentProjects.Count > 0)
@@ -220,6 +228,13 @@ public partial class MainWindowViewModel : ViewModelBase
         bool cancel = false;
         if (OpenProject is not null)
         {
+            if (EditorTabs is null)
+            {
+                // If there are no editor tabs, we're in standalone save editor mode
+                Directory.Delete(OpenProject.MainDirectory, true); // Clean up after ourselves
+                return false;
+            }
+
             // Warn against unsaved items
             IEnumerable<ItemDescription> unsavedItems = OpenProject.Items.Where(i => i.UnsavedChanges);
             if (unsavedItems.Any())
@@ -265,6 +280,10 @@ public partial class MainWindowViewModel : ViewModelBase
             ProjectsCache.HadProjectOpenOnLastClose = true;
             ProjectsCache.Save(Log);
         }
+        else
+        {
+            cancel = true;
+        }
         return cancel;
     }
 
@@ -300,12 +319,21 @@ public partial class MainWindowViewModel : ViewModelBase
         ToolBar.Items.Clear();
 
         NativeMenu menu = NativeMenu.GetMenu(Window);
-        menu.Items.Remove(WindowMenu[MenuHeader.PROJECT]);
-        WindowMenu.Remove(MenuHeader.PROJECT);
-        menu.Items.Remove(WindowMenu[MenuHeader.TOOLS]);
-        WindowMenu.Remove(MenuHeader.TOOLS);
-        menu.Items.Remove(WindowMenu[MenuHeader.BUILD]);
-        WindowMenu.Remove(MenuHeader.BUILD);
+        if (WindowMenu.ContainsKey(MenuHeader.PROJECT))
+        {
+            menu.Items.Remove(WindowMenu[MenuHeader.PROJECT]);
+            WindowMenu.Remove(MenuHeader.PROJECT);
+        }
+        if (WindowMenu.ContainsKey(MenuHeader.TOOLS))
+        {
+            menu.Items.Remove(WindowMenu[MenuHeader.TOOLS]);
+            WindowMenu.Remove(MenuHeader.TOOLS);
+        }
+        if (WindowMenu.ContainsKey(MenuHeader.BUILD))
+        {
+            menu.Items.Remove(WindowMenu[MenuHeader.BUILD]);
+            WindowMenu.Remove(MenuHeader.BUILD);
+        }
         ProjectsCache.HadProjectOpenOnLastClose = false;
         UpdateRecentProjects();
     }
@@ -392,7 +420,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         Project.LoadProjectResult result = new(Project.LoadProjectState.FAILED); // start us off with a failure
         LoopyProgressTracker tracker = new();
-        await new ProgressDialog(() => (OpenProject, result) = Project.OpenProject(path, CurrentConfig, s => s, Log, tracker),
+        await new ProgressDialog(() => (OpenProject, result) = Project.OpenProject(path, CurrentConfig, Strings.ResourceManager.GetString, Log, tracker),
             () => { }, tracker, Strings.Loading_Project).ShowDialog(Window);
         if (OpenProject is not null && result.State == Project.LoadProjectState.LOOSELEAF_FILES)
         {
@@ -455,6 +483,37 @@ public partial class MainWindowViewModel : ViewModelBase
         }
     }
 
+    public async Task ImportProjectCommand_Executed(string slzipPath)
+    {
+        (slzipPath, string romPath) = await new ImportProjectDialog()
+        {
+            DataContext = new ImportProjectDialogViewModel(slzipPath, Log),
+        }.ShowDialog<(string, string)>(Window);
+        if (!string.IsNullOrEmpty(slzipPath) && !string.IsNullOrEmpty(romPath))
+        {
+            if (await CloseProject_Executed(null))
+            {
+                return;
+            }
+
+            Project.LoadProjectResult result = new() { State = Project.LoadProjectState.FAILED };
+            LoopyProgressTracker tracker = new();
+            await new ProgressDialog(
+                () => (OpenProject, result) = Project.Import(slzipPath, romPath, CurrentConfig,
+                    Strings.ResourceManager.GetString, Log, tracker),
+                () => { }, tracker, Strings.Importing_Project).ShowDialog(Window);
+
+            if (OpenProject is not null)
+            {
+                OpenProjectView(OpenProject, tracker);
+            }
+            else
+            {
+                await CloseProjectView();
+            }
+        }
+    }
+
     public async Task PreferencesCommand_Executed()
     {
         PreferencesDialogViewModel preferencesDialogViewModel = new();
@@ -480,23 +539,103 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public async Task EditSaveFileCommand_Executed()
     {
+        IStorageFile saveFile = await Window.ShowOpenFilePickerAsync(Strings.Open_Chokuretsu_Save_File,
+            [new(Strings.Chokuretsu_Save_File) { Patterns = ["*.sav"] }]);
+        if (saveFile is null)
+        {
+            return;
+        }
+        string savePath = saveFile.TryGetLocalPath();
+
         if (OpenProject is not null)
         {
-            IStorageFile saveFile = await Window.ShowOpenFilePickerAsync(Strings.Open_Chokuretsu_Save_File,
-                [new(Strings.Chokuretsu_Save_File) { Patterns = ["*.sav"] }]);
-            if (saveFile is null)
-            {
-                return;
-            }
-
-            string path = saveFile.TryGetLocalPath();
-            SaveItem saveItem = new SaveItem(path, Path.GetFileNameWithoutExtension(path));
+            SaveItem saveItem = new(savePath, Path.GetFileNameWithoutExtension(savePath));
             OpenProject.Items.Add(saveItem);
             EditorTabs.OpenTab(saveItem);
         }
         else
         {
+            string rom = Path.Combine(Path.GetDirectoryName(savePath) ?? string.Empty, $"{Path.GetFileNameWithoutExtension(savePath)}.nds");
+            if (!File.Exists(rom))
+            {
+                IStorageFile romFile = await Window.ShowOpenFilePickerAsync(Strings.Open_ROM,
+                    [new(Strings.NDS_ROM) { Patterns = ["*.nds"] }]);
+                if (romFile is null)
+                {
+                    return;
+                }
+                rom = romFile.TryGetLocalPath();
+            }
 
+            string projectName = $"{Path.GetFileNameWithoutExtension(savePath)}_Temp";
+            string tempProjectDirectory = Path.Combine(CurrentConfig.ProjectsDirectory, projectName);
+            if (Directory.Exists(tempProjectDirectory))
+            {
+                if (await Window.ShowMessageBoxAsync(Strings.Temporary_Project_Already_Exists_,
+                        string.Format(
+                            Strings.In_order_to_edit_this_save_file__Serial_Loops_needs_to_make_a_temporary_project__However__a_project_called___0___already_exists__Would_you_like_to_overwrite_this_project_,
+                            projectName),
+                        ButtonEnum.YesNo, Icon.Warning, Log) == ButtonResult.Yes)
+                {
+                    Directory.Delete(tempProjectDirectory, true);
+                }
+                else
+                {
+                    return;
+                }
+            }
+            OpenProject = new(projectName, "en", CurrentConfig, Strings.ResourceManager.GetString, Log);
+            LoopyProgressTracker tracker = new();
+            await new ProgressDialog(() =>
+            {
+                ((IProgressTracker)tracker).Focus(Strings.Creating_Project, 1);
+                IO.OpenRom(OpenProject, rom, Log, tracker);
+                tracker.Finished++;
+                OpenProject.Load(CurrentConfig, Log, tracker);
+            }, () =>
+            {
+                SaveItem saveItem = new(savePath, Path.GetFileNameWithoutExtension(savePath));
+                OpenProject.Items.Add(saveItem);
+                Window.MainContent.Content = new SaveEditorView
+                {
+                    DataContext =
+                        new SaveEditorViewModel(saveItem, this, Log, null),
+                };
+                if (WindowMenu.ContainsKey(MenuHeader.TOOLS))
+                {
+                    // Skip adding the new menu items if they're already here
+                    return;
+                }
+
+                // Add a few commands to the menu
+                NativeMenu menu = NativeMenu.GetMenu(Window);
+                int insertionPoint = menu.Items.Count;
+                if (((NativeMenuItem)menu.Items.Last()).Header.Equals(Strings._Help))
+                {
+                    insertionPoint--;
+                }
+
+                // PROJECT
+                WindowMenu.Add(MenuHeader.PROJECT, new(Strings._Project));
+                WindowMenu[MenuHeader.PROJECT].Menu =
+                [
+                    new NativeMenuItem
+                    {
+                        Header = Strings.Save_Save_File,
+                        Command = SaveProjectCommand,
+                        Icon = ControlGenerator.GetIcon("Save", Log),
+                        Gesture = SaveHotKey,
+                    },
+                    new NativeMenuItem
+                    {
+                        Header = Strings.Close_Save_File,
+                        Command = CloseProjectCommand,
+                        Icon = ControlGenerator.GetIcon("Close", Log),
+                        Gesture = CloseProjectKey,
+                    },
+                ];
+                menu.Items.Insert(insertionPoint, WindowMenu[MenuHeader.PROJECT]);
+            }, tracker, Strings.Creating_Project).ShowDialog(Window);
         }
     }
 

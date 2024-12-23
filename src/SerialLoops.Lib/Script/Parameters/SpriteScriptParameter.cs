@@ -8,6 +8,11 @@ public class SpriteScriptParameter : ScriptParameter
     public CharacterSpriteItem Sprite { get; set; }
     public override short[] GetValues(object obj = null) => new short[] { (short)(Sprite?.Index ?? 0) };
 
+    public override string GetValueString(Project project)
+    {
+        return Sprite?.DisplayName;
+    }
+
     public SpriteScriptParameter(string name, CharacterSpriteItem sprite) : base(name, ParameterType.SPRITE)
     {
         Sprite = sprite;

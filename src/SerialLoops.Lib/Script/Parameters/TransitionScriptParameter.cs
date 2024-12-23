@@ -7,6 +7,11 @@ public class TransitionScriptParameter : ScriptParameter
     public TransitionEffect Transition { get; set; }
     public override short[] GetValues(object obj = null) => new short[] { (short)Transition };
 
+    public override string GetValueString(Project project)
+    {
+        return project.Localize(Transition.ToString());
+    }
+
     public TransitionScriptParameter(string name, short transition) : base(name, ParameterType.TRANSITION)
     {
         Transition = (TransitionEffect)transition;

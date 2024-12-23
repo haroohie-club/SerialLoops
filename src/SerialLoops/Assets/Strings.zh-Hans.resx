@@ -531,7 +531,7 @@
   <data name="Crop &amp; Scale" xml:space="preserve">
     <value>剪裁&amp;缩放</value>
   </data>
-  <data name="Cross Space {0}&quot;" xml:space="preserve">
+  <data name="Cross Space {0}" xml:space="preserve">
     <value>交叉空间 {0}"</value>
     <comment>As on a chessboard</comment>
   </data>
@@ -781,10 +781,6 @@
   </data>
   <data name="Error" xml:space="preserve">
     <value>错误</value>
-  </data>
-  <data name="Error getting script command tree for script {0} ({1})" xml:space="preserve">
-    <value>获取脚本 {0}（{1}）的脚本命令树时出错</value>
-    <comment>{0} is the script display name, {1} is the script's underlying name</comment>
   </data>
   <data name="Error pruning labels!" xml:space="preserve">
     <value>修剪标签时出错！</value>

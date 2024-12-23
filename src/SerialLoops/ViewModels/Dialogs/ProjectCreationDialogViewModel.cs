@@ -70,6 +70,7 @@ public partial class ProjectCreationDialogViewModel : ViewModelBase
                 Lib.IO.OpenRom(newProject, RomPath, _log, tracker);
                 tracker.Finished++;
                 newProject.Load(_config, _log, tracker);
+                newProject.SetBaseRomHash(RomPath);
             }, () => dialog.Close(newProject), tracker, Strings.Creating_Project).ShowDialog(_mainWindow.Window);
         }
     }
