@@ -1,0 +1,137 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="using:SerialLoops.Views.Editors"
+             xmlns:vm="using:SerialLoops.ViewModels.Editors"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:assets="using:SerialLoops.Assets"
+             xmlns:controls="using:SerialLoops.Controls"
+             xmlns:gbox="using:GroupBox.Avalonia.Controls"
+             xmlns:models="using:SerialLoops.Models"
+             xmlns:utility="using:SerialLoops.Utility"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:PuzzleEditorViewModel"
+             x:Class="SerialLoops.Views.Editors.PuzzleEditorView">
+    <ScrollViewer>
+        <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,Auto">
+            <gbox:GroupBox Grid.Row="0" Grid.Column="0" Header="{x:Static assets:Strings.Associated_Main_Topics}"
+                           Margin="20, 10" Theme="{StaticResource GroupBoxClassic}">
+                <ItemsRepeater ItemsSource="{Binding AssociatedMainTopics}">
+                    <ItemsRepeater.Layout>
+                        <StackLayout Orientation="Vertical" Spacing="10"/>
+                    </ItemsRepeater.Layout>
+                    <ItemsRepeater.ItemTemplate>
+                        <DataTemplate DataType="vm:TopicWithUnknown">
+                            <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <controls:ItemLink Item="{Binding Topic}" Tabs="{Binding $parent[local:PuzzleEditorView].((vm:PuzzleEditorViewModel)DataContext).Tabs}"/>
+                                <StackPanel Orientation="Horizontal" Spacing="3">
+                                    <TextBlock Text="{x:Static assets:Strings.Unknown}"/>
+                                    <TextBlock Text="{Binding Unknown}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsRepeater.ItemTemplate>
+                </ItemsRepeater>
+            </gbox:GroupBox>
+
+            <gbox:GroupBox Grid.Row="1" Grid.Column="0" Header="{x:Static assets:Strings.Haruhi_Routes}"
+                           Margin="20, 10" Theme="{StaticResource GroupBoxClassic}">
+                <ItemsRepeater ItemsSource="{Binding HaruhiRoutes}">
+                    <ItemsRepeater.Layout>
+                        <StackLayout Orientation="Vertical" Spacing="5"/>
+                    </ItemsRepeater.Layout>
+                    <ItemsRepeater.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </DataTemplate>
+                    </ItemsRepeater.ItemTemplate>
+                </ItemsRepeater>
+            </gbox:GroupBox>
+
+            <gbox:GroupBox Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Header="{x:Static assets:Strings.Settings}"
+                           Margin="20, 10" Theme="{StaticResource GroupBoxClassic}">
+                <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static assets:Strings.Map}"/>
+                    <controls:ItemLink Grid.Row="0" Grid.Column="1" Margin="10,0,0,0" Item="{Binding Map}" Tabs="{Binding Tabs}"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Base_Time}"/>
+                    <NumericUpDown Grid.Row="1" Grid.Column="1" Margin="10,0,0,0" Minimum="0" Maximum="999"
+                                   Value="{Binding BaseTime}" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Number_of_Singularities}"/>
+                    <NumericUpDown Grid.Row="2" Grid.Column="1" Margin="10,0,0,0" Minimum="0" Maximum="99"
+                                   Value="{Binding NumSingularities}" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
+
+                    <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Unknown_04}"/>
+                    <NumericUpDown Grid.Row="3" Grid.Column="1" Margin="10,0,0,0" Minimum="0" Maximum="999"
+                                   Value="{Binding Unknown04}" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
+
+                    <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Continue_on_Failure}"/>
+                    <CheckBox Grid.Row="4" Grid.Column="1" Margin="10,0,0,0" IsChecked="{Binding ContinueOnFailure}"/>
+
+                    <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Accompanying_Character}"/>
+                    <ComboBox Grid.Row="5" Grid.Column="1" Margin="10,0,0,0" ItemsSource="{Binding Characters}" SelectedItem="{Binding AccompanyingCharacter}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate DataType="models:CharacterFilter">
+                                <TextBlock Text="{Binding DisplayName}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                        <ComboBox.ItemContainerTheme>
+                            <ControlTheme TargetType="ComboBoxItem" x:DataType="models:CharacterFilter" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
+                                <Setter Property="TextSearch.Text" Value="{Binding DisplayName}" />
+                            </ControlTheme>
+                        </ComboBox.ItemContainerTheme>
+                    </ComboBox>
+
+                    <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Power_Character_1}"/>
+                    <ComboBox Grid.Row="6" Grid.Column="1" Margin="10,0,0,0" ItemsSource="{Binding Characters}" SelectedItem="{Binding PowerCharacter1}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate DataType="models:CharacterFilter">
+                                <TextBlock Text="{Binding DisplayName}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                        <ComboBox.ItemContainerTheme>
+                            <ControlTheme TargetType="ComboBoxItem" x:DataType="models:CharacterFilter" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
+                                <Setter Property="TextSearch.Text" Value="{Binding DisplayName}" />
+                            </ControlTheme>
+                        </ComboBox.ItemContainerTheme>
+                    </ComboBox>
+
+                    <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Power_Character_2}"/>
+                    <ComboBox Grid.Row="7" Grid.Column="1" Margin="10,0,0,0" ItemsSource="{Binding Characters}" SelectedItem="{Binding PowerCharacter2}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate DataType="models:CharacterFilter">
+                                <TextBlock Text="{Binding DisplayName}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                        <ComboBox.ItemContainerTheme>
+                            <ControlTheme TargetType="ComboBoxItem" x:DataType="models:CharacterFilter" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
+                                <Setter Property="TextSearch.Text" Value="{Binding DisplayName}" />
+                            </ControlTheme>
+                        </ComboBox.ItemContainerTheme>
+                    </ComboBox>
+
+                    <TextBlock Grid.Row="8" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Singularity}"/>
+                    <Image Grid.Row="8" Grid.Column="1" Margin="10,0,0,0" Source="{Binding Singularity, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
+
+                    <TextBlock Grid.Row="9" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Topic_Set}"/>
+                    <NumericUpDown Grid.Row="9" Grid.Column="1" Margin="10,0,0,0" Minimum="0" Maximum="20"
+                                   Value="{Binding TopicSet}" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
+
+                    <TextBlock Grid.Row="10" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Unknown_15}"/>
+                    <NumericUpDown Grid.Row="10" Grid.Column="1" Margin="10,0,0,0" Minimum="0" Maximum="65535"
+                                   Value="{Binding Unknown15}" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
+
+                    <TextBlock Grid.Row="11" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Unknown_16}"/>
+                    <NumericUpDown Grid.Row="11" Grid.Column="1" Margin="10,0,0,0" Minimum="0" Maximum="65535"
+                                   Value="{Binding Unknown16}" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
+
+                    <TextBlock Grid.Row="12" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Unknown_17}"/>
+                    <NumericUpDown Grid.Row="12" Grid.Column="1" Margin="10,0,0,0" Minimum="0" Maximum="65535"
+                                   Value="{Binding Unknown17}" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
+                </Grid>
+            </gbox:GroupBox>
+        </Grid>
+    </ScrollViewer>
+</UserControl>
+

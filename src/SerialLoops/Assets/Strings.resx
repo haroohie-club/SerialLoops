@@ -2939,4 +2939,10 @@ This action is irreversible.</value>
   <data name="Object Locations" xml:space="preserve">
     <value>Object Locations</value><comment>Locations of objects on the map (that can occlude or not)</comment>
   </data>
+  <data name="Any Character" xml:space="preserve">
+    <value>Any</value>
+  </data>
+  <data name="No Character" xml:space="preserve">
+    <value>None</value>
+  </data>
 </root>
