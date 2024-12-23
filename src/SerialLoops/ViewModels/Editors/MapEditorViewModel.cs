@@ -1,16 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Controls.Shapes;
-using Avalonia.Media;
 using Avalonia.Platform.Storage;
-using Avalonia.Skia;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -19,7 +14,6 @@ using SerialLoops.Lib.Items;
 using SerialLoops.Models;
 using SerialLoops.Utility;
 using SkiaSharp;
-using IO = SerialLoops.Lib.IO;
 using Path = System.IO.Path;
 
 namespace SerialLoops.ViewModels.Editors;

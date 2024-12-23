@@ -1,6 +1,5 @@
 using System.Collections.ObjectModel;
 using System.Linq;
-using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
 using SerialLoops.Lib.Items;
