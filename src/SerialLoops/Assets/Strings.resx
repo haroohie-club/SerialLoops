@@ -2903,7 +2903,6 @@ This action is irreversible.</value>
   <data name="Export Source Preview" xml:space="preserve">
     <value>Export Source Preview</value><comment>Button that exports a preview of the current source image of a particular layout entry</comment>
   </data>
-<<<<<<< HEAD
   <data name="BG Layer" xml:space="preserve">
     <value>BG Layer</value><comment>Background Layer</comment>
   </data>
