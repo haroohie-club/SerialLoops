@@ -1374,6 +1374,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Close Save File.
+        /// </summary>
+        public static string Close_Save_File {
+            get {
+                return ResourceManager.GetString("Close Save File", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Collected all Haruhi topics message box.
         /// </summary>
         public static string Collected_all_Haruhi_topics_message_box {
@@ -3933,6 +3942,17 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to In order to edit this save file, Serial Loops needs to make a temporary project. However, a project called &quot;{0}&quot; already exists. Would you like to overwrite this project?.
+        /// </summary>
+        public static string In_order_to_edit_this_save_file__Serial_Loops_needs_to_make_a_temporary_project__However__a_project_called___0___already_exists__Would_you_like_to_overwrite_this_project_ {
+            get {
+                return ResourceManager.GetString(("In order to edit this save file, Serial Loops needs to make a temporary project. " +
+                        "However, a project called \"{0}\" already exists. Would you like to overwrite this" +
+                        " project?"), resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Include lip flap animation?.
         /// </summary>
         public static string Include_lip_flap_animation_ {
@@ -6185,6 +6205,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Save Save File.
+        /// </summary>
+        public static string Save_Save_File {
+            get {
+                return ResourceManager.GetString("Save Save File", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save Time: .
         /// </summary>
         public static string Save_Time_ {
@@ -7309,6 +7338,15 @@ namespace SerialLoops.Assets {
         public static string Template_Properties {
             get {
                 return ResourceManager.GetString("Template Properties", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Temporary Project Already Exists!.
+        /// </summary>
+        public static string Temporary_Project_Already_Exists_ {
+            get {
+                return ResourceManager.GetString("Temporary Project Already Exists!", resourceCulture);
             }
         }
         
