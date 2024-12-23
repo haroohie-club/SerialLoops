@@ -2903,4 +2903,7 @@ This action is irreversible.</value>
   <data name="Export Source Preview" xml:space="preserve">
     <value>Export Source Preview</value><comment>Button that exports a preview of the current source image of a particular layout entry</comment>
   </data>
+  <data name="Ignore Hash?" xml:space="preserve">
+    <value>Ignore Hash?</value><comment>This is in the project import dialog and indicates the ROM hash should be ignored</comment>
+  </data>
 </root>
