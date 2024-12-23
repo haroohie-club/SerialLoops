@@ -499,6 +499,24 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Archive Filename.
+        /// </summary>
+        public static string Archive_Filename {
+            get {
+                return ResourceManager.GetString("Archive_Filename", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Archive Index.
+        /// </summary>
+        public static string Archive_Index {
+            get {
+                return ResourceManager.GetString("Archive_Index", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to clear the script?
         ///This action is irreversible..
         /// </summary>
@@ -1644,11 +1662,11 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cross Space {0}&quot;.
+        ///   Looks up a localized string similar to Cross Space {0}.
         /// </summary>
-        public static string Cross_Space__0__ {
+        public static string Cross_Space__0_ {
             get {
-                return ResourceManager.GetString("Cross Space {0}\"", resourceCulture);
+                return ResourceManager.GetString("Cross Space {0}", resourceCulture);
             }
         }
         
@@ -2489,6 +2507,15 @@ namespace SerialLoops.Assets {
         public static string Error_getting_script_command_tree_for_script__0____1__ {
             get {
                 return ResourceManager.GetString("Error getting script command tree for script {0} ({1})", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error getting script command tree for script {0} ({1}): {2} {3}.
+        /// </summary>
+        public static string Error_getting_script_command_tree_for_script__0____1_____2___3_ {
+            get {
+                return ResourceManager.GetString("Error getting script command tree for script {0} ({1}): {2} {3}", resourceCulture);
             }
         }
         

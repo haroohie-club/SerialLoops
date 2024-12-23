@@ -9,6 +9,11 @@ public class BoolScriptParameter(string name, bool value, short trueValue = 1, s
     public short FalseValue { get; set; } = falseValue;
     public override short[] GetValues(object obj = null) => [Value ? TrueValue : FalseValue];
 
+    public override string GetValueString(Project project)
+    {
+        return Value.ToString();
+    }
+
     public override BoolScriptParameter Clone(Project project, EventFile eventFile)
     {
         return new(Name, Value);

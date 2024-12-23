@@ -8,6 +8,11 @@ public class ItemLocationScriptParameter(string name, short itemLocation) : Scri
     public ItemItem.ItemLocation Location { get; set; } = (ItemItem.ItemLocation)itemLocation;
     public override short[] GetValues(object obj = null) => [(short)Location];
 
+    public override string GetValueString(Project project)
+    {
+        return project.Localize(Location.ToString());
+    }
+
     public override ItemLocationScriptParameter Clone(Project project, EventFile eventFile)
     {
         return new(Name, (short)Location);

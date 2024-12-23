@@ -8,6 +8,11 @@ public class SfxScriptParameter : ScriptParameter
     public SfxItem Sfx { get; set; }
     public override short[] GetValues(object obj = null) => new short[] { Sfx.Index };
 
+    public override string GetValueString(Project project)
+    {
+        return Sfx?.DisplayName;
+    }
+
     public SfxScriptParameter(string name, SfxItem sfx) : base(name, ParameterType.SFX)
     {
         Sfx = sfx;

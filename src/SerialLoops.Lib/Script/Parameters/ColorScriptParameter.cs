@@ -12,6 +12,11 @@ public class ColorScriptParameter : ScriptParameter
     public SKColor Color { get; set; }
     public override short[] GetValues(object obj = null) => new short[] { _red, _green, _blue };
 
+    public override string GetValueString(Project project)
+    {
+        return project.Localize(Color.ToString());
+    }
+
     public ColorScriptParameter(string name, short red) : base(name, ParameterType.COLOR)
     {
         _red = (byte)red;

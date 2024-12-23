@@ -7,6 +7,11 @@ public class SpriteShakeScriptParameter : ScriptParameter
     public SpriteShakeEffect ShakeEffect { get; set; }
     public override short[] GetValues(object obj = null) => new short[] { (short)ShakeEffect };
 
+    public override string GetValueString(Project project)
+    {
+        return project.Localize(ShakeEffect.ToString());
+    }
+
     public SpriteShakeScriptParameter(string name, short shakeEffect) : base(name, ParameterType.SPRITE_SHAKE)
     {
         ShakeEffect = (SpriteShakeEffect)shakeEffect;
