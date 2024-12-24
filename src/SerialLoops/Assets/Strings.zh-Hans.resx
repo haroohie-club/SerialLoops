@@ -2017,7 +2017,7 @@
   <data name="Serial Loops v{0}" xml:space="preserve">
     <value>Serial Loops v{0}</value>
   </data>
-  <data name="Serialized ASM hack" xml:space="preserve">
+  <data name="Serial Loops ASM Hack" xml:space="preserve">
     <value>序列化 ASM 修改</value>
   </data>
   <data name="Set" xml:space="preserve">

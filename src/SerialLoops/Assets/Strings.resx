@@ -2129,8 +2129,8 @@ Please set the path to a Nintendo DS emulator or specify a Nintendo DS emulator 
   <data name="Serial Loops v{0}" xml:space="preserve">
     <value>Serial Loops v{0}</value>
   </data>
-  <data name="Serialized ASM hack" xml:space="preserve">
-    <value>Serialized ASM hack</value>
+  <data name="Serial Loops ASM Hack" xml:space="preserve">
+    <value>Serial Loops ASM Hack</value>
   </data>
   <data name="Set" xml:space="preserve">
     <value>Set</value>
@@ -2944,5 +2944,14 @@ This action is irreversible.</value>
   </data>
   <data name="Symbols" xml:space="preserve">
     <value>Symbols</value><comment>Refers to defined variables or functions in code</comment>
+  </data>
+  <data name="Export Hack" xml:space="preserve">
+    <value>Export Hack</value>
+  </data>
+  <data name="Hack Created Successfully!" xml:space="preserve">
+    <value>Hack Created Successfully!</value>
+  </data>
+  <data name="The hack file has been successfully created. To import it, open the ASM hacks dialog and select &quot;Import Hack&quot;." xml:space="preserve">
+    <value>The hack file has been successfully created. To import it, open the ASM hacks dialog and select "Import Hack".</value>
   </data>
 </root>

@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia.Platform.Storage;
 using HaruhiChokuretsuLib.Util;
-using OpenTK.Graphics.OpenGL4;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SerialLoops.Assets;
@@ -28,7 +27,6 @@ public partial class AsmHackCreationDialogViewModel : ViewModelBase
     public string Name { get; set; }
     [Reactive]
     public string Description { get; set; }
-    public List<InjectionSite> InjectionSites { get; } = [];
 
     private ILogger _log;
     public ICommand SelectHackFilesCommand { get; set; }
@@ -39,7 +37,7 @@ public partial class AsmHackCreationDialogViewModel : ViewModelBase
     {
         _log = log;
         SelectHackFilesCommand = ReactiveCommand.CreateFromTask<AsmHackCreationDialog>(SelectHackFiles);
-        SaveCommand = ReactiveCommand.Create<AsmHackCreationDialog>(dialog => dialog.Close(((Name, Description, HackFiles.ToArray(), InjectionSites.ToArray()))));
+        SaveCommand = ReactiveCommand.Create<AsmHackCreationDialog>(dialog => dialog.Close((Name, Description, HackFiles.ToArray())));
         CancelCommand = ReactiveCommand.Create<AsmHackCreationDialog>(dialog => dialog.Close());
     }
 
@@ -64,26 +62,6 @@ public partial class AsmHackCreationDialogViewModel : ViewModelBase
 
         hackFiles.AddRange(paths.Select(File.ReadAllText));
 
-        for (int i = 0; i < hackFiles.Count; i++)
-        {
-            if (paths[i].EndsWith(".s", StringComparison.OrdinalIgnoreCase))
-            {
-                var injectionSiteMatches = InjectionSitesRegex().Matches(hackFiles[i]);
-                foreach (Match match in injectionSiteMatches)
-                {
-                    string injectionSite = match.Groups["injectionSite"].Value;
-                    if (!uint.TryParse(injectionSite, NumberStyles.HexNumber,
-                            CultureInfo.CurrentCulture.NumberFormat, out uint injectionSiteAddress))
-                    {
-                        _log.LogWarning($"Failed to parse injection site {injectionSite}");
-                        continue;
-                    }
-                    // If it's overlay code, temporarily set it to overlay 1 until we can ask the user which overlay it belongs to
-                    InjectionSites.Add(new() { Code = (injectionSiteAddress < 0x020C7660 ? "ARM9" : "01"),  Location = injectionSite });
-                }
-            }
-        }
-
         List<string> definedSymbols = [];
         for (int i = 0; i < hackFiles.Count; i++)
         {
@@ -103,6 +81,24 @@ public partial class AsmHackCreationDialogViewModel : ViewModelBase
 
         for (int i = 0; i < hackFiles.Count; i++)
         {
+            List<InjectionSite> injectionSites = [];
+            if (paths[i].EndsWith(".s", StringComparison.OrdinalIgnoreCase))
+            {
+                var injectionSiteMatches = InjectionSitesRegex().Matches(hackFiles[i]);
+                foreach (Match match in injectionSiteMatches)
+                {
+                    string injectionSite = match.Groups["injectionSite"].Value;
+                    if (!uint.TryParse(injectionSite, NumberStyles.HexNumber,
+                            CultureInfo.CurrentCulture.NumberFormat, out uint injectionSiteAddress))
+                    {
+                        _log.LogWarning($"Failed to parse injection site {injectionSite}");
+                        continue;
+                    }
+                    // If it's overlay code, temporarily set it to overlay 1 until we can ask the user which overlay it belongs to
+                    injectionSites.Add(new() { Code = (injectionSiteAddress < 0x020C7660 ? "ARM9" : "01"),  Location = injectionSite });
+                }
+            }
+
             string[] symbols;
             if (paths[i].EndsWith(".s", StringComparison.OrdinalIgnoreCase))
             {
@@ -120,7 +116,7 @@ public partial class AsmHackCreationDialogViewModel : ViewModelBase
             var paramMatches = ParamRegex().Matches(hackFiles[i]);
             string[] parameters = [.. paramMatches.Select(m => m.Groups["name"].Value)];
 
-            HackFiles.Add(new(paths[i], hackFiles[i], symbols, parameters, InjectionSites));
+            HackFiles.Add(new(paths[i], hackFiles[i], symbols, parameters, injectionSites));
         }
     }
 
@@ -138,12 +134,16 @@ public partial class AsmHackCreationDialogViewModel : ViewModelBase
     private static partial Regex InjectionSitesRegex();
 }
 
-public class HackFileContainer(string hackFilePath, string hackFileContent, IEnumerable<string> symbols, IEnumerable<string> parameters, IEnumerable<InjectionSite> injectionSites) : ReactiveObject
+public partial class HackFileContainer(string hackFilePath, string hackFileContent, IEnumerable<string> symbols, IEnumerable<string> parameters, IEnumerable<InjectionSite> injectionSites) : ReactiveObject
 {
-    private InjectionSite[] _injectionSites = [.. injectionSites];
+    private bool _arepl = AreplRegex().IsMatch(hackFileContent)
+                          && NameIsAddressRegex().IsMatch(Path.GetFileName(hackFilePath));
+
     public string HackFilePath { get; } = hackFilePath;
     public string HackFileName => Path.GetFileName(HackFilePath);
     public string HackFileContent { get; } = hackFileContent;
+
+    public InjectionSite[] InjectionSites { get; set; } = [.. injectionSites];
 
     public ObservableCollection<string> Locations { get; } = new(Enum.GetNames<HackLocation>());
     private HackLocation _location = HackLocation.ARM9;
@@ -157,13 +157,18 @@ public class HackFileContainer(string hackFilePath, string hackFileContent, IEnu
                 return;
             }
             this.RaiseAndSetIfChanged(ref _location, Enum.Parse<HackLocation>(value));
-            foreach (InjectionSite injectionSite in _injectionSites)
+            foreach (InjectionSite injectionSite in InjectionSites)
             {
                 injectionSite.Code = _location == HackLocation.ARM9 ? "ARM9" : $"{(int)_location:D2}";
             }
         }
     }
-    public string Destination => _location switch
+    public string Destination => _arepl ? _location switch
+    {
+        HackLocation.ARM9 => $"replSource/{Path.GetFileNameWithoutExtension(HackFileName)}/{HackFileName}",
+        _ => $"overlays/main{(int)_location:X4}/replSource/{Path.GetFileNameWithoutExtension(HackFileName)}/{HackFileName}",
+    }
+        : _location switch
     {
         HackLocation.ARM9 => $"source/{HackFileName}",
         _ => $"overlays/main{(int)_location:X4}/source/{HackFileName}",
@@ -171,6 +176,11 @@ public class HackFileContainer(string hackFilePath, string hackFileContent, IEnu
 
     public ObservableCollection<HackSymbolContainer> Symbols { get; } = new(symbols.Select(s => new HackSymbolContainer(s)));
     public ObservableCollection<HackParameterContainer> Parameters { get; } = new(parameters.Select(p => new HackParameterContainer(p)));
+
+    [GeneratedRegex(@"arepl_[\dA-Fa-f]{7,8}:")]
+    private static partial Regex AreplRegex();
+    [GeneratedRegex(@"^[\dA-Fa-f]{7,8}.s$")]
+    private static partial Regex NameIsAddressRegex();
 }
 
 public class HackSymbolContainer(string symbol) : ReactiveObject

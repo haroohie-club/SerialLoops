@@ -216,7 +216,8 @@ public class HackParameterValue
 
 public enum HackLocation
 {
-    ARM9,
+    ARM9 = -1,
+    Overlay_00,
     Overlay_01,
     Overlay_02,
     Overlay_03,

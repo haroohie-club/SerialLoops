@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -300,8 +301,8 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         AsmHackCreationDialogViewModel hackCreationModel = new(Log);
         AsmHackCreationDialog hackCreationDialog = new() { DataContext = hackCreationModel };
-        (string name, string description, HackFileContainer[] hackFiles, InjectionSite[] injectionSites) =
-            await hackCreationDialog.ShowDialog<(string, string, HackFileContainer[], InjectionSite[])>(Window);
+        (string name, string description, HackFileContainer[] hackFiles) =
+            await hackCreationDialog.ShowDialog<(string, string, HackFileContainer[])>(Window);
         if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(description) || hackFiles is null || hackFiles.Length == 0)
         {
             return;
@@ -313,7 +314,7 @@ public partial class MainWindowViewModel : ViewModelBase
             Description = description,
             Files = hackFiles.Select(h => new HackFile()
             {
-                File = h.HackFilePath,
+                File = h.HackFileName,
                 Destination = h.Destination,
                 Parameters = h.Parameters.Select(p => new HackParameter()
                 {
@@ -327,10 +328,29 @@ public partial class MainWindowViewModel : ViewModelBase
                 }).ToArray(),
                 Symbols = h.Symbols.Select(s => $"{s.Symbol} = 0x{s.LocationString}").ToArray(),
             }).ToList(),
-            InjectionSites = [.. injectionSites],
+            InjectionSites = [.. hackFiles.SelectMany(f => f.InjectionSites)],
         };
 
-        CurrentConfig.Hacks.Add(asmHack);
+        string hackSaveFile = (await Window.ShowSaveFilePickerAsync(Strings.Export_Hack,
+            [new(Strings.Serial_Loops_ASM_Hack) { Patterns = ["*.slhack"] }],
+            $"{asmHack.Name}.slhack")).TryGetLocalPath();
+        if (!string.IsNullOrEmpty(hackSaveFile))
+        {
+            string tempDir = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            Directory.CreateDirectory(tempDir);
+
+            await File.WriteAllTextAsync(Path.Combine(tempDir, "hack.json"), JsonSerializer.Serialize(asmHack));
+            foreach (HackFileContainer hackFile in hackFiles)
+            {
+                File.Copy(hackFile.HackFilePath, Path.Combine(tempDir, hackFile.HackFileName));
+            }
+
+            using FileStream fs = File.Create(hackSaveFile);
+            ZipFile.CreateFromDirectory(tempDir, fs);
+
+            await Window.ShowMessageBoxAsync(Strings.Hack_Created_Successfully_, Strings.The_hack_file_has_been_successfully_created__To_import_it__open_the_ASM_hacks_dialog_and_select__Import_Hack__,
+                ButtonEnum.Ok, Icon.Success, Log);
+        }
     }
 
     public async Task ProjectSettingsCommand_Executed()

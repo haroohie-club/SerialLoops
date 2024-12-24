@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -62,7 +63,10 @@ public class AsmHacksDialogViewModel : ViewModelBase
         {
             try
             {
-                _hackParameters.Add(file, file.Parameters.Select(p => new SelectedHackParameter { Parameter = p, Selection = 0 }).ToArray());
+                if (!_hackParameters.ContainsKey(file))
+                {
+                    _hackParameters.Add(file, file.Parameters.Select(p => new SelectedHackParameter { Parameter = p, Selection = 0 }).ToArray());
+                }
             }
             catch (Exception ex)
             {
@@ -106,12 +110,19 @@ public class AsmHacksDialogViewModel : ViewModelBase
         descriptionPanel.Children.Add(parametersBox);
     }
 
-    public async Task ImportHackCommand_Executed(AsmHacksDialog dialog)
+    private async Task ImportHackCommand_Executed(AsmHacksDialog dialog)
     {
-        IStorageFile file = await dialog.ShowOpenFilePickerAsync(Strings.Import_a_Hack, [new(Strings.Serialized_ASM_hack) { Patterns = ["*.slhack"] }]);
-        if (file is not null)
+        IStorageFile file = await dialog.ShowOpenFilePickerAsync(Strings.Import_a_Hack, [new(Strings.Serial_Loops_ASM_Hack) { Patterns = ["*.slhack"] }]);
+        string path = file?.TryGetLocalPath();
+        if (!string.IsNullOrEmpty(path))
         {
-            AsmHack hack = JsonSerializer.Deserialize<AsmHack>(File.ReadAllText(file.Path.LocalPath));
+            await using FileStream fs = File.OpenRead(path);
+            ZipArchive asmHackZip = new(fs, ZipArchiveMode.Read);
+            string tempDir = Path.Combine(Path.GetTempPath(), $"slhack-{Path.GetRandomFileName()}");
+            Directory.CreateDirectory(tempDir);
+            asmHackZip.ExtractToDirectory(tempDir);
+
+            AsmHack hack = JsonSerializer.Deserialize<AsmHack>(File.ReadAllText(Path.Combine(tempDir, "hack.json")));
 
             if (Configuration.Hacks.Any(h => h.Files.Any(f => hack.Files.Contains(f))))
             {
@@ -126,7 +137,7 @@ public class AsmHacksDialogViewModel : ViewModelBase
 
             foreach (HackFile hackFile in hack.Files)
             {
-                File.Copy(Path.Combine(Path.GetDirectoryName(file.Path.LocalPath), hackFile.File), Path.Combine(Configuration.HacksDirectory, hackFile.File));
+                File.Copy(Path.Combine(tempDir, hackFile.File), Path.Combine(Configuration.HacksDirectory, hackFile.File));
             }
 
             hack.IsApplied = hack.Applied(_project);
@@ -136,7 +147,7 @@ public class AsmHacksDialogViewModel : ViewModelBase
         }
     }
 
-    public async Task SaveCommand_Executed(AsmHacksDialog dialog)
+    private async Task SaveCommand_Executed(AsmHacksDialog dialog)
     {
         List<AsmHack> appliedHacks = [];
         List<AsmHack> alreadyAppliedHacks = [];
