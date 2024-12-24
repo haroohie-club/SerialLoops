@@ -7,6 +7,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia.Controls;
+using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using Avalonia.Styling;
@@ -89,7 +90,15 @@ public class AsmHacksDialogViewModel : ViewModelBase
                     SelectedHack.ValueChanged = true;
                     _hackParameters[file][currentParam].Selection = parameterComboBox.SelectedIndex;
                 };
-                parametersLayout.Children.Add(parameterComboBox);
+
+                StackPanel paramDescPanel = new() { Orientation = Orientation.Horizontal, Spacing = 5 };
+                paramDescPanel.Children.Add(new TextBlock()
+                {
+                    Text = _hackParameters[file][currentParam].Parameter.DescriptiveName,
+                    VerticalAlignment = VerticalAlignment.Center,
+                });
+                paramDescPanel.Children.Add(parameterComboBox);
+                parametersLayout.Children.Add(paramDescPanel);
             }
         }
         GroupBox.Avalonia.Controls.GroupBox parametersBox = new() { Header = Strings.Parameters, Content = parametersLayout };

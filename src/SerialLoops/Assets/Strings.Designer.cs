@@ -3708,6 +3708,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hack Description.
+        /// </summary>
+        public static string Hack_Description {
+            get {
+                return ResourceManager.GetString("Hack Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Haroohie.
         /// </summary>
         public static string Haroohie {
@@ -5017,11 +5026,29 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Parameter Name.
+        /// </summary>
+        public static string Parameter_Name {
+            get {
+                return ResourceManager.GetString("Parameter Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Parameter Value.
         /// </summary>
         public static string Parameter_Value {
             get {
                 return ResourceManager.GetString("Parameter Value", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter Values.
+        /// </summary>
+        public static string Parameter_Values {
+            get {
+                return ResourceManager.GetString("Parameter Values", resourceCulture);
             }
         }
         
@@ -7140,6 +7167,15 @@ namespace SerialLoops.Assets {
         public static string Supported_Images {
             get {
                 return ResourceManager.GetString("Supported Images", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Symbols.
+        /// </summary>
+        public static string Symbols {
+            get {
+                return ResourceManager.GetString("Symbols", resourceCulture);
             }
         }
         

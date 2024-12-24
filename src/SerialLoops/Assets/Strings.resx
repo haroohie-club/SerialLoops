@@ -2933,4 +2933,16 @@ This action is irreversible.</value>
   <data name="Select Hack Files" xml:space="preserve">
     <value>Select Hack Files</value>
   </data>
+  <data name="Parameter Name" xml:space="preserve">
+    <value>Parameter Name</value>
+  </data>
+  <data name="Parameter Values" xml:space="preserve">
+    <value>Parameter Values</value>
+  </data>
+  <data name="Hack Description" xml:space="preserve">
+    <value>Hack Description</value>
+  </data>
+  <data name="Symbols" xml:space="preserve">
+    <value>Symbols</value><comment>Refers to defined variables or functions in code</comment>
+  </data>
 </root>

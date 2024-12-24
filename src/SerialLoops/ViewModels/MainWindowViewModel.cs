@@ -24,6 +24,7 @@ using SerialLoops.Assets;
 using SerialLoops.Controls;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Factories;
+using SerialLoops.Lib.Hacks;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.SaveFile;
 using SerialLoops.Lib.Util;
@@ -86,7 +87,7 @@ public partial class MainWindowViewModel : ViewModelBase
     public ICommand CloseProjectCommand { get; }
 
     public ICommand ApplyHacksCommand { get; }
-    public ICommand RenameItemCommand { get; }
+    public ICommand CreateAsmHackCommand { get; }
     public ICommand EditUiTextCommand { get; }
     public ICommand EditTutorialMappingsCommand { get; }
     public ICommand SearchProjectCommand { get; }
@@ -123,6 +124,7 @@ public partial class MainWindowViewModel : ViewModelBase
         SearchProjectCommand = ReactiveCommand.Create(SearchProject_Executed);
 
         ApplyHacksCommand = ReactiveCommand.CreateFromTask(ApplyHacksCommand_Executed);
+        CreateAsmHackCommand = ReactiveCommand.CreateFromTask(CreateAsmHackCommand_Executed);
         ProjectSettingsCommand = ReactiveCommand.CreateFromTask(ProjectSettingsCommand_Executed);
         CloseProjectCommand = ReactiveCommand.CreateFromTask(CloseProjectView);
 
@@ -292,6 +294,43 @@ public partial class MainWindowViewModel : ViewModelBase
         AsmHacksDialogViewModel hacksModel = new(OpenProject, CurrentConfig, Log);
         AsmHacksDialog hacksDialog = new(hacksModel);
         await hacksDialog.ShowDialog(Window);
+    }
+
+    public async Task CreateAsmHackCommand_Executed()
+    {
+        AsmHackCreationDialogViewModel hackCreationModel = new(Log);
+        AsmHackCreationDialog hackCreationDialog = new() { DataContext = hackCreationModel };
+        (string name, string description, HackFileContainer[] hackFiles, InjectionSite[] injectionSites) =
+            await hackCreationDialog.ShowDialog<(string, string, HackFileContainer[], InjectionSite[])>(Window);
+        if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(description) || hackFiles is null || hackFiles.Length == 0)
+        {
+            return;
+        }
+
+        AsmHack asmHack = new()
+        {
+            Name = name,
+            Description = description,
+            Files = hackFiles.Select(h => new HackFile()
+            {
+                File = h.HackFilePath,
+                Destination = h.Destination,
+                Parameters = h.Parameters.Select(p => new HackParameter()
+                {
+                    Name = p.Name,
+                    DescriptiveName = p.DescriptiveName,
+                    Values = p.Values.Select(v => new HackParameterValue()
+                    {
+                        Name = v.Name,
+                        Value = v.Value,
+                    }).ToArray(),
+                }).ToArray(),
+                Symbols = h.Symbols.Select(s => $"{s.Symbol} = 0x{s.LocationString}").ToArray(),
+            }).ToList(),
+            InjectionSites = [.. injectionSites],
+        };
+
+        CurrentConfig.Hacks.Add(asmHack);
     }
 
     public async Task ProjectSettingsCommand_Executed()
@@ -974,9 +1013,8 @@ public partial class MainWindowViewModel : ViewModelBase
             },
             new NativeMenuItem
             {
-                Header = Strings.Rename_Item,
-                Command = RenameItemCommand,
-                Icon = ControlGenerator.GetIcon("Rename_Item", Log),
+                Header = Strings.Create_ASM_Hack,
+                Command = CreateAsmHackCommand,
             },
             new NativeMenuItem
             {

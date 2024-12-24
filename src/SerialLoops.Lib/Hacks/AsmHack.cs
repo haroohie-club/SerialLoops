@@ -213,3 +213,33 @@ public class HackParameterValue
         return Name.GetHashCode();
     }
 }
+
+public enum HackLocation
+{
+    ARM9,
+    Overlay_01,
+    Overlay_02,
+    Overlay_03,
+    Overlay_04,
+    Overlay_05,
+    Overlay_06,
+    Overlay_07,
+    Overlay_08,
+    Overlay_09,
+    Overlay_10,
+    Overlay_11,
+    Overlay_12,
+    Overlay_13,
+    Overlay_14,
+    Overlay_15,
+    Overlay_16,
+    Overlay_17,
+    Overlay_18,
+    Overlay_19,
+    Overlay_20,
+    Overlay_21,
+    Overlay_22,
+    Overlay_23,
+    Overlay_24,
+    Overlay_25,
+}
