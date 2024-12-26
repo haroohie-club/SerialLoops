@@ -2194,6 +2194,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter.
+        /// </summary>
+        public static string Enter {
+            get {
+                return ResourceManager.GetString("Enter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter/Exit.
         /// </summary>
         public static string Enter_Exit {

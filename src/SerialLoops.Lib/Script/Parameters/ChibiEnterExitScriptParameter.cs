@@ -24,7 +24,7 @@ public class ChibiEnterExitScriptParameter : ScriptParameter
 
     public enum ChibiEnterExitType
     {
-        ENTER = 0,
-        EXIT = 1,
+        Enter = 0,
+        Exit = 1,
     }
 }

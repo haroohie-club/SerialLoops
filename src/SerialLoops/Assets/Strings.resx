@@ -2945,4 +2945,7 @@ This action is irreversible.</value>
   <data name="SWEAT_DROP" xml:space="preserve">
     <value>Sweat Drop</value>
   </data>
+  <data name="Enter" xml:space="preserve">
+    <value>Enter</value>
+  </data>
 </root>

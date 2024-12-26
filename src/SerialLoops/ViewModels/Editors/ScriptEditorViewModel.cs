@@ -209,6 +209,7 @@ public class ScriptEditorViewModel : EditorViewModel
                 CommandVerb.NEXT_SCENE => new EmptyScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.SKIP_SCENE => new SkipSceneScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.MODIFY_FRIENDSHIP => new ModifyFriendshipScriptCommandEditorViewModel(_selectedCommand, this, _log),
+                CommandVerb.CHIBI_ENTEREXIT => new ChibiEnterExitScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.AVOID_DISP => new EmptyScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.CHESS_LOAD => new ChessLoadScriptCommandEditorViewModel(_selectedCommand, this, Window, _log),
                 CommandVerb.SCENE_GOTO_CHESS => new SceneGotoScriptCommandEditorViewModel(_selectedCommand, this, _log, Window),
