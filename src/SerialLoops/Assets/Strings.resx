@@ -2930,4 +2930,19 @@ This action is irreversible.</value>
   <data name="Map Character Set" xml:space="preserve">
     <value>Map Character Set</value>
   </data>
+  <data name="EXCLAMATION_POINT" xml:space="preserve">
+    <value>Exclamation Point</value>
+  </data>
+  <data name="LIGHT_BULB" xml:space="preserve">
+    <value>Light Bulb</value>
+  </data>
+  <data name="ANGER_MARK" xml:space="preserve">
+    <value>Anger Mark</value>
+  </data>
+  <data name="MUSIC_NOTE" xml:space="preserve">
+    <value>Music Note</value>
+  </data>
+  <data name="SWEAT_DROP" xml:space="preserve">
+    <value>Sweat Drop</value>
+  </data>
 </root>

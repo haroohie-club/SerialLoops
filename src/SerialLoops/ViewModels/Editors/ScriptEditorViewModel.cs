@@ -205,6 +205,7 @@ public class ScriptEditorViewModel : EditorViewModel
                 CommandVerb.NOOP2 => new EmptyScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.INVEST_START => new InvestStartScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.INVEST_END => new EmptyScriptCommandEditorViewModel(_selectedCommand, this, _log),
+                CommandVerb.CHIBI_EMOTE => new ChibiEmoteScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.NEXT_SCENE => new EmptyScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.AVOID_DISP => new EmptyScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.CHESS_LOAD => new ChessLoadScriptCommandEditorViewModel(_selectedCommand, this, Window, _log),

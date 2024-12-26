@@ -445,6 +445,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Anger Mark.
+        /// </summary>
+        public static string ANGER_MARK {
+            get {
+                return ResourceManager.GetString("ANGER_MARK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Animation.
         /// </summary>
         public static string Animation {
@@ -2511,6 +2520,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Exclamation Point.
+        /// </summary>
+        public static string EXCLAMATION_POINT {
+            get {
+                return ResourceManager.GetString("EXCLAMATION_POINT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exit.
         /// </summary>
         public static string Exit {
@@ -4187,6 +4205,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Light Bulb.
+        /// </summary>
+        public static string LIGHT_BULB {
+            get {
+                return ResourceManager.GetString("LIGHT_BULB", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Listened to {0} (F{1:D2}).
         /// </summary>
         public static string Listened_to__0___F_1_D2__ {
@@ -4507,6 +4534,15 @@ namespace SerialLoops.Assets {
         public static string Music_ {
             get {
                 return ResourceManager.GetString("Music:", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Music Note.
+        /// </summary>
+        public static string MUSIC_NOTE {
+            get {
+                return ResourceManager.GetString("MUSIC_NOTE", resourceCulture);
             }
         }
         
@@ -7131,6 +7167,15 @@ namespace SerialLoops.Assets {
         public static string Supported_Images {
             get {
                 return ResourceManager.GetString("Supported Images", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sweat Drop.
+        /// </summary>
+        public static string SWEAT_DROP {
+            get {
+                return ResourceManager.GetString("SWEAT_DROP", resourceCulture);
             }
         }
         
