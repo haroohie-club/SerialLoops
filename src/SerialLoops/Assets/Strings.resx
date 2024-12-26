@@ -2927,4 +2927,7 @@ This action is irreversible.</value>
   <data name="Ignore Hash?" xml:space="preserve">
     <value>Ignore Hash?</value><comment>This is in the project import dialog and indicates the ROM hash should be ignored</comment>
   </data>
+  <data name="Map Character Set" xml:space="preserve">
+    <value>Map Character Set</value>
+  </data>
 </root>

@@ -4322,6 +4322,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Map Character Set.
+        /// </summary>
+        public static string Map_Character_Set {
+            get {
+                return ResourceManager.GetString("Map Character Set", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Map Characters.
         /// </summary>
         public static string Map_Characters {
