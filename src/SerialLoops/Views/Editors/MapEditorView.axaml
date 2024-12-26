@@ -5,6 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:assets="using:SerialLoops.Assets"
              xmlns:models="using:SerialLoops.Models"
+             xmlns:paz="using:Avalonia.Controls.PanAndZoom"
              xmlns:utility="using:SerialLoops.Utility"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:MapEditorViewModel"
@@ -62,298 +63,302 @@
         </StackPanel>
 
         <ScrollViewer Grid.Row="3">
-            <Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}">
-                <!-- Scrolling BG -->
-                <!-- I'm not happy with how this was implemented, but I couldn't get Canvas.Background to work so 🤷‍♀️ -->
-                <ItemsRepeater ItemsSource="{Binding ScrollingBgTileSource}" IsVisible="{Binding ScrollingBgDisplayed}">
-                    <ItemsRepeater.Layout>
-                        <UniformGridLayout MaximumRowsOrColumns="{Binding ScrollingBgHorizontalTileCount}"
-                                           Orientation="Horizontal" MinColumnSpacing="0" MinRowSpacing="0"/>
-                    </ItemsRepeater.Layout>
-                    <ItemsRepeater.ItemTemplate>
-                        <DataTemplate DataType="vm:ScrollingBgWrapper">
-                            <ItemsControl ItemsSource="{Binding ScrollingBg}">
-                                <ItemsControl.RenderTransform>
-                                    <ScaleTransform ScaleX="{Binding ScaleX}" ScaleY="{Binding ScaleY}"/>
-                                </ItemsControl.RenderTransform>
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <Canvas Width="{Binding TileWidth}" Height="{Binding TileHeight}"/>
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate DataType="models:LayoutEntryWithImage">
-                                        <Image Source="{Binding CroppedImage, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
-                                               Stretch="Fill" Width="{Binding Width}" Height="{Binding Height}"/>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                                <ItemsControl.Styles>
-                                    <Style Selector="ItemsControl > ContentPresenter" x:DataType="models:LayoutEntryWithImage">
-                                        <Setter Property="(Canvas.Left)" Value="{Binding ScreenX}"/>
-                                        <Setter Property="(Canvas.Top)" Value="{Binding ScreenY}"/>
-                                    </Style>
-                                </ItemsControl.Styles>
-                            </ItemsControl>
-                        </DataTemplate>
-                    </ItemsRepeater.ItemTemplate>
-                </ItemsRepeater>
+            <paz:ZoomBorder Stretch="None" ZoomSpeed="1.2" ClipToBounds="True" Focusable="True"
+                            VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                            EnablePan="True" PanButton="Left">
+                <Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}">
+                    <!-- Scrolling BG -->
+                    <!-- I'm not happy with how this was implemented, but I couldn't get Canvas.Background to work so 🤷‍♀️ -->
+                    <ItemsRepeater ItemsSource="{Binding ScrollingBgTileSource}" IsVisible="{Binding ScrollingBgDisplayed}">
+                        <ItemsRepeater.Layout>
+                            <UniformGridLayout MaximumRowsOrColumns="{Binding ScrollingBgHorizontalTileCount}"
+                                               Orientation="Horizontal" MinColumnSpacing="0" MinRowSpacing="0"/>
+                        </ItemsRepeater.Layout>
+                        <ItemsRepeater.ItemTemplate>
+                            <DataTemplate DataType="vm:ScrollingBgWrapper">
+                                <ItemsControl ItemsSource="{Binding ScrollingBg}">
+                                    <ItemsControl.RenderTransform>
+                                        <ScaleTransform ScaleX="{Binding ScaleX}" ScaleY="{Binding ScaleY}"/>
+                                    </ItemsControl.RenderTransform>
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <Canvas Width="{Binding TileWidth}" Height="{Binding TileHeight}"/>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate DataType="models:LayoutEntryWithImage">
+                                            <Image Source="{Binding CroppedImage, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
+                                                   Stretch="Fill" Width="{Binding Width}" Height="{Binding Height}"/>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                    <ItemsControl.Styles>
+                                        <Style Selector="ItemsControl > ContentPresenter" x:DataType="models:LayoutEntryWithImage">
+                                            <Setter Property="(Canvas.Left)" Value="{Binding ScreenX}"/>
+                                            <Setter Property="(Canvas.Top)" Value="{Binding ScreenY}"/>
+                                        </Style>
+                                    </ItemsControl.Styles>
+                                </ItemsControl>
+                            </DataTemplate>
+                        </ItemsRepeater.ItemTemplate>
+                    </ItemsRepeater>
 
-                <!-- Background Layer -->
-                <ItemsControl ItemsSource="{Binding BgLayer}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="models:LayoutEntryWithImage">
-                            <Image Source="{Binding CroppedImage, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
-                                   Stretch="Fill" Width="{Binding Width}" Height="{Binding Height}"/>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                    <ItemsControl.Styles>
-                        <Style Selector="ItemsControl > ContentPresenter" x:DataType="models:LayoutEntryWithImage">
-                            <Setter Property="(Canvas.Left)" Value="{Binding ScreenX}"/>
-                            <Setter Property="(Canvas.Top)" Value="{Binding ScreenY}"/>
-                            <Setter Property="IsVisible" Value="{Binding IsVisible}"/>
-                        </Style>
-                    </ItemsControl.Styles>
-                </ItemsControl>
+                    <!-- Background Layer -->
+                    <ItemsControl ItemsSource="{Binding BgLayer}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="models:LayoutEntryWithImage">
+                                <Image Source="{Binding CroppedImage, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
+                                       Stretch="Fill" Width="{Binding Width}" Height="{Binding Height}"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        <ItemsControl.Styles>
+                            <Style Selector="ItemsControl > ContentPresenter" x:DataType="models:LayoutEntryWithImage">
+                                <Setter Property="(Canvas.Left)" Value="{Binding ScreenX}"/>
+                                <Setter Property="(Canvas.Top)" Value="{Binding ScreenY}"/>
+                                <Setter Property="IsVisible" Value="{Binding IsVisible}"/>
+                            </Style>
+                        </ItemsControl.Styles>
+                    </ItemsControl>
 
-                <!-- BG Junk Layer -->
-                <ItemsControl ItemsSource="{Binding BgJunkLayer}" IsVisible="{Binding BgJunkLayerDisplayed}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="models:LayoutEntryWithImage">
-                            <Image Source="{Binding CroppedImage, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
-                                   Stretch="Fill" Width="{Binding Width}" Height="{Binding Height}"/>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                    <ItemsControl.Styles>
-                        <Style Selector="ItemsControl > ContentPresenter" x:DataType="models:LayoutEntryWithImage">
-                            <Setter Property="(Canvas.Left)" Value="{Binding ScreenX}"/>
-                            <Setter Property="(Canvas.Top)" Value="{Binding ScreenY}"/>
-                        </Style>
-                    </ItemsControl.Styles>
-                </ItemsControl>
+                    <!-- BG Junk Layer -->
+                    <ItemsControl ItemsSource="{Binding BgJunkLayer}" IsVisible="{Binding BgJunkLayerDisplayed}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="models:LayoutEntryWithImage">
+                                <Image Source="{Binding CroppedImage, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
+                                       Stretch="Fill" Width="{Binding Width}" Height="{Binding Height}"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        <ItemsControl.Styles>
+                            <Style Selector="ItemsControl > ContentPresenter" x:DataType="models:LayoutEntryWithImage">
+                                <Setter Property="(Canvas.Left)" Value="{Binding ScreenX}"/>
+                                <Setter Property="(Canvas.Top)" Value="{Binding ScreenY}"/>
+                            </Style>
+                        </ItemsControl.Styles>
+                    </ItemsControl>
 
-                <!-- Object Layer -->
-                <ItemsControl ItemsSource="{Binding ObjectLayer}" IsVisible="{Binding ObjectLayerDisplayed}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="models:LayoutEntryWithImage">
-                            <Image Source="{Binding CroppedImage, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
-                                   Stretch="Fill" Width="{Binding Width}" Height="{Binding Height}"/>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                    <ItemsControl.Styles>
-                        <Style Selector="ItemsControl > ContentPresenter" x:DataType="models:LayoutEntryWithImage">
-                            <Setter Property="(Canvas.Left)" Value="{Binding ScreenX}"/>
-                            <Setter Property="(Canvas.Top)" Value="{Binding ScreenY}"/>
-                        </Style>
-                    </ItemsControl.Styles>
-                </ItemsControl>
+                    <!-- Object Layer -->
+                    <ItemsControl ItemsSource="{Binding ObjectLayer}" IsVisible="{Binding ObjectLayerDisplayed}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="models:LayoutEntryWithImage">
+                                <Image Source="{Binding CroppedImage, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
+                                       Stretch="Fill" Width="{Binding Width}" Height="{Binding Height}"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        <ItemsControl.Styles>
+                            <Style Selector="ItemsControl > ContentPresenter" x:DataType="models:LayoutEntryWithImage">
+                                <Setter Property="(Canvas.Left)" Value="{Binding ScreenX}"/>
+                                <Setter Property="(Canvas.Top)" Value="{Binding ScreenY}"/>
+                            </Style>
+                        </ItemsControl.Styles>
+                    </ItemsControl>
 
-                <!-- Object Junk Layer -->
-                <ItemsControl ItemsSource="{Binding ObjectJunkLayer}" IsVisible="{Binding ObjectJunkLayerDisplayed}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="models:LayoutEntryWithImage">
-                            <Image Source="{Binding CroppedImage, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
-                                   Stretch="Fill" Width="{Binding Width}" Height="{Binding Height}"/>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                    <ItemsControl.Styles>
-                        <Style Selector="ItemsControl > ContentPresenter" x:DataType="models:LayoutEntryWithImage">
-                            <Setter Property="(Canvas.Left)" Value="{Binding ScreenX}"/>
-                            <Setter Property="(Canvas.Top)" Value="{Binding ScreenY}"/>
-                        </Style>
-                    </ItemsControl.Styles>
-                </ItemsControl>
+                    <!-- Object Junk Layer -->
+                    <ItemsControl ItemsSource="{Binding ObjectJunkLayer}" IsVisible="{Binding ObjectJunkLayerDisplayed}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="models:LayoutEntryWithImage">
+                                <Image Source="{Binding CroppedImage, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
+                                       Stretch="Fill" Width="{Binding Width}" Height="{Binding Height}"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        <ItemsControl.Styles>
+                            <Style Selector="ItemsControl > ContentPresenter" x:DataType="models:LayoutEntryWithImage">
+                                <Setter Property="(Canvas.Left)" Value="{Binding ScreenX}"/>
+                                <Setter Property="(Canvas.Top)" Value="{Binding ScreenY}"/>
+                            </Style>
+                        </ItemsControl.Styles>
+                    </ItemsControl>
 
-                <!-- Occlusion Layer -->
-                <ItemsControl ItemsSource="{Binding BgOcclusionLayer}" IsVisible="{Binding BgOcclusionLayerDisplayed}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="models:LayoutEntryWithImage">
-                            <Image Source="{Binding CroppedImage, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
-                                   Stretch="Fill" Width="{Binding Width}" Height="{Binding Height}"/>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                    <ItemsControl.Styles>
-                        <Style Selector="ItemsControl > ContentPresenter" x:DataType="models:LayoutEntryWithImage">
-                            <Setter Property="(Canvas.Left)" Value="{Binding ScreenX}"/>
-                            <Setter Property="(Canvas.Top)" Value="{Binding ScreenY}"/>
-                        </Style>
-                    </ItemsControl.Styles>
-                </ItemsControl>
+                    <!-- Occlusion Layer -->
+                    <ItemsControl ItemsSource="{Binding BgOcclusionLayer}" IsVisible="{Binding BgOcclusionLayerDisplayed}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="models:LayoutEntryWithImage">
+                                <Image Source="{Binding CroppedImage, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
+                                       Stretch="Fill" Width="{Binding Width}" Height="{Binding Height}"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        <ItemsControl.Styles>
+                            <Style Selector="ItemsControl > ContentPresenter" x:DataType="models:LayoutEntryWithImage">
+                                <Setter Property="(Canvas.Left)" Value="{Binding ScreenX}"/>
+                                <Setter Property="(Canvas.Top)" Value="{Binding ScreenY}"/>
+                            </Style>
+                        </ItemsControl.Styles>
+                    </ItemsControl>
 
-                <!-- Pathing Map -->
-                <ItemsControl ItemsSource="{Binding PathingMap}" IsVisible="{Binding DrawPathingMap}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="models:HighlightedSpace">
-                            <Path Fill="{Binding Color}">
-                                <Path.Data>
-                                    <PathGeometry>
-                                        <PathFigure StartPoint="{Binding Top}" IsClosed="True" IsFilled="True">
-                                            <LineSegment Point="{Binding Left}"/>
-                                            <LineSegment Point="{Binding Bottom}"/>
-                                            <LineSegment Point="{Binding Right}"/>
-                                        </PathFigure>
-                                    </PathGeometry>
-                                </Path.Data>
-                            </Path>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                    <!-- Pathing Map -->
+                    <ItemsControl ItemsSource="{Binding PathingMap}" IsVisible="{Binding DrawPathingMap}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="models:HighlightedSpace">
+                                <Path Fill="{Binding Color}">
+                                    <Path.Data>
+                                        <PathGeometry>
+                                            <PathFigure StartPoint="{Binding Top}" IsClosed="True" IsFilled="True">
+                                                <LineSegment Point="{Binding Left}"/>
+                                                <LineSegment Point="{Binding Bottom}"/>
+                                                <LineSegment Point="{Binding Right}"/>
+                                            </PathFigure>
+                                        </PathGeometry>
+                                    </Path.Data>
+                                </Path>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
 
-                <!-- Info Layer -->
-                <ItemsControl ItemsSource="{Binding InfoLayer}" IsVisible="{Binding InfoLayerDisplayed}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="models:LayoutEntryWithImage">
-                            <Rectangle Stroke="{Binding Tint, Converter={StaticResource BrushConverter}}"
-                                       StrokeThickness="4" Width="{Binding ScreenWidth}" Height="{Binding ScreenHeight}"/>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                    <ItemsControl.Styles>
-                        <Style Selector="ItemsControl > ContentPresenter" x:DataType="models:LayoutEntryWithImage">
-                            <Setter Property="(Canvas.Left)" Value="{Binding ScreenX}"/>
-                            <Setter Property="(Canvas.Top)" Value="{Binding ScreenY}"/>
-                        </Style>
-                    </ItemsControl.Styles>
-                </ItemsControl>
+                    <!-- Info Layer -->
+                    <ItemsControl ItemsSource="{Binding InfoLayer}" IsVisible="{Binding InfoLayerDisplayed}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="models:LayoutEntryWithImage">
+                                <Rectangle Stroke="{Binding Tint, Converter={StaticResource BrushConverter}}"
+                                           StrokeThickness="4" Width="{Binding ScreenWidth}" Height="{Binding ScreenHeight}"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        <ItemsControl.Styles>
+                            <Style Selector="ItemsControl > ContentPresenter" x:DataType="models:LayoutEntryWithImage">
+                                <Setter Property="(Canvas.Left)" Value="{Binding ScreenX}"/>
+                                <Setter Property="(Canvas.Top)" Value="{Binding ScreenY}"/>
+                            </Style>
+                        </ItemsControl.Styles>
+                    </ItemsControl>
 
-                <!-- Interactable Objects -->
-                <ItemsControl ItemsSource="{Binding InteractableObjects}" IsVisible="{Binding InteractableObjectsDisplayed}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="models:HighlightedSpace">
-                            <Path Fill="{Binding Color}" ToolTip.Tip="{Binding ToolTip}">
-                                <Path.Data>
-                                    <PathGeometry>
-                                        <PathFigure StartPoint="{Binding Top}" IsClosed="True" IsFilled="True">
-                                            <LineSegment Point="{Binding Left}"/>
-                                            <LineSegment Point="{Binding Bottom}"/>
-                                            <LineSegment Point="{Binding Right}"/>
-                                        </PathFigure>
-                                    </PathGeometry>
-                                </Path.Data>
-                            </Path>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                    <!-- Interactable Objects -->
+                    <ItemsControl ItemsSource="{Binding InteractableObjects}" IsVisible="{Binding InteractableObjectsDisplayed}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="models:HighlightedSpace">
+                                <Path Fill="{Binding Color}" ToolTip.Tip="{Binding ToolTip}">
+                                    <Path.Data>
+                                        <PathGeometry>
+                                            <PathFigure StartPoint="{Binding Top}" IsClosed="True" IsFilled="True">
+                                                <LineSegment Point="{Binding Left}"/>
+                                                <LineSegment Point="{Binding Bottom}"/>
+                                                <LineSegment Point="{Binding Right}"/>
+                                            </PathFigure>
+                                        </PathGeometry>
+                                    </Path.Data>
+                                </Path>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
 
-                <!-- Unknown 2 Objects -->
-                <ItemsControl ItemsSource="{Binding Unknown2s}" IsVisible="{Binding Unknown2sDisplayed}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="models:HighlightedSpace">
-                            <Path Fill="{Binding Color}" ToolTip.Tip="{Binding ToolTip}">
-                                <Path.Data>
-                                    <PathGeometry>
-                                        <PathFigure StartPoint="{Binding Top}" IsClosed="True" IsFilled="True">
-                                            <LineSegment Point="{Binding Left}"/>
-                                            <LineSegment Point="{Binding Bottom}"/>
-                                            <LineSegment Point="{Binding Right}"/>
-                                        </PathFigure>
-                                    </PathGeometry>
-                                </Path.Data>
-                            </Path>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                    <!-- Unknown 2 Objects -->
+                    <ItemsControl ItemsSource="{Binding Unknown2s}" IsVisible="{Binding Unknown2sDisplayed}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="models:HighlightedSpace">
+                                <Path Fill="{Binding Color}" ToolTip.Tip="{Binding ToolTip}">
+                                    <Path.Data>
+                                        <PathGeometry>
+                                            <PathFigure StartPoint="{Binding Top}" IsClosed="True" IsFilled="True">
+                                                <LineSegment Point="{Binding Left}"/>
+                                                <LineSegment Point="{Binding Bottom}"/>
+                                                <LineSegment Point="{Binding Right}"/>
+                                            </PathFigure>
+                                        </PathGeometry>
+                                    </Path.Data>
+                                </Path>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
 
-                <!-- Object Locations -->
-                <ItemsControl ItemsSource="{Binding ObjectPositions}" IsVisible="{Binding ObjectPositionsDisplayed}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="models:HighlightedSpace">
-                            <Path Fill="{Binding Color}" ToolTip.Tip="{Binding ToolTip}">
-                                <Path.Data>
-                                    <PathGeometry>
-                                        <PathFigure StartPoint="{Binding Top}" IsClosed="True" IsFilled="True">
-                                            <LineSegment Point="{Binding Left}"/>
-                                            <LineSegment Point="{Binding Bottom}"/>
-                                            <LineSegment Point="{Binding Right}"/>
-                                        </PathFigure>
-                                    </PathGeometry>
-                                </Path.Data>
-                            </Path>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                    <!-- Object Locations -->
+                    <ItemsControl ItemsSource="{Binding ObjectPositions}" IsVisible="{Binding ObjectPositionsDisplayed}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="models:HighlightedSpace">
+                                <Path Fill="{Binding Color}" ToolTip.Tip="{Binding ToolTip}">
+                                    <Path.Data>
+                                        <PathGeometry>
+                                            <PathFigure StartPoint="{Binding Top}" IsClosed="True" IsFilled="True">
+                                                <LineSegment Point="{Binding Left}"/>
+                                                <LineSegment Point="{Binding Bottom}"/>
+                                                <LineSegment Point="{Binding Right}"/>
+                                            </PathFigure>
+                                        </PathGeometry>
+                                    </Path.Data>
+                                </Path>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
 
-                <!-- Camera Trucking Info -->
-                <ItemsControl ItemsSource="{Binding CameraTruckingDefinitions}" IsVisible="{Binding DrawCameraTruckingDefinitions}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="models:LayoutEntryWithImage">
-                            <Rectangle Stroke="{Binding Tint, Converter={StaticResource BrushConverter}}"
-                                       StrokeThickness="4" Width="{Binding ScreenWidth}" Height="{Binding ScreenHeight}"/>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                    <ItemsControl.Styles>
-                        <Style Selector="ItemsControl > ContentPresenter" x:DataType="models:LayoutEntryWithImage">
-                            <Setter Property="(Canvas.Left)" Value="{Binding ScreenX}"/>
-                            <Setter Property="(Canvas.Top)" Value="{Binding ScreenY}"/>
-                        </Style>
-                    </ItemsControl.Styles>
-                </ItemsControl>
+                    <!-- Camera Trucking Info -->
+                    <ItemsControl ItemsSource="{Binding CameraTruckingDefinitions}" IsVisible="{Binding DrawCameraTruckingDefinitions}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="models:LayoutEntryWithImage">
+                                <Rectangle Stroke="{Binding Tint, Converter={StaticResource BrushConverter}}"
+                                           StrokeThickness="4" Width="{Binding ScreenWidth}" Height="{Binding ScreenHeight}"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        <ItemsControl.Styles>
+                            <Style Selector="ItemsControl > ContentPresenter" x:DataType="models:LayoutEntryWithImage">
+                                <Setter Property="(Canvas.Left)" Value="{Binding ScreenX}"/>
+                                <Setter Property="(Canvas.Top)" Value="{Binding ScreenY}"/>
+                            </Style>
+                        </ItemsControl.Styles>
+                    </ItemsControl>
 
-                <!-- Origin should be centered, so we use converters to make the visualization's center be precisely on its point -->
-                <Ellipse Fill="{Binding OriginColor, Converter={StaticResource BrushConverter}}" Width="8" Height="8" IsVisible="{Binding DrawOrigin}"
-                         Canvas.Left="{Binding OriginX, Converter={StaticResource SubtractionConverter}, ConverterParameter=4}"
-                         Canvas.Top="{Binding OriginY, Converter={StaticResource SubtractionConverter}, ConverterParameter=4}"/>
+                    <!-- Origin should be centered, so we use converters to make the visualization's center be precisely on its point -->
+                    <Ellipse Fill="{Binding OriginColor, Converter={StaticResource BrushConverter}}" Width="8" Height="8" IsVisible="{Binding DrawOrigin}"
+                             Canvas.Left="{Binding OriginX, Converter={StaticResource SubtractionConverter}, ConverterParameter=4}"
+                             Canvas.Top="{Binding OriginY, Converter={StaticResource SubtractionConverter}, ConverterParameter=4}"/>
 
-                <Rectangle Stroke="{Binding BoundaryColor, Converter={StaticResource BrushConverter}}" StrokeThickness="3" IsVisible="{Binding DrawBoundary}"
-                           Canvas.Left="{Binding BoundaryX}" Canvas.Top="{Binding BoundaryY}"
-                           Width="{Binding BoundaryWidth}" Height="{Binding BoundaryHeight}"/>
+                    <Rectangle Stroke="{Binding BoundaryColor, Converter={StaticResource BrushConverter}}" StrokeThickness="3" IsVisible="{Binding DrawBoundary}"
+                               Canvas.Left="{Binding BoundaryX}" Canvas.Top="{Binding BoundaryY}"
+                               Width="{Binding BoundaryWidth}" Height="{Binding BoundaryHeight}"/>
 
-                <Svg Path="avares://SerialLoops/Assets/Icons/Camera.svg" Width="32" Height="32" Canvas.Left="{Binding StartingPointX}"
-                     Canvas.Top="{Binding StartingPointY}" IsVisible="{Binding DrawStartingPoint}"/>
-            </Canvas>
+                    <Svg Path="avares://SerialLoops/Assets/Icons/Camera.svg" Width="32" Height="32" Canvas.Left="{Binding StartingPointX}"
+                         Canvas.Top="{Binding StartingPointY}" IsVisible="{Binding DrawStartingPoint}"/>
+                </Canvas>
+            </paz:ZoomBorder>
         </ScrollViewer>
     </Grid>
 </UserControl>
