@@ -2,9 +2,9 @@
 
 namespace SerialLoops.Views.Dialogs;
 
-public partial class ImportProjectDialog : Window
+public partial class ExportPatchDialog : Window
 {
-    public ImportProjectDialog()
+    public ExportPatchDialog()
     {
         InitializeComponent();
     }

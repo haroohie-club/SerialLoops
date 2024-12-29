@@ -82,6 +82,7 @@ public partial class MainWindowViewModel : ViewModelBase
     public ICommand SaveProjectCommand { get; }
     public ICommand ProjectSettingsCommand { get; }
     public ICommand MigrateProjectCommand { get; }
+    public ICommand ExportProjectCommand { get; }
     public ICommand ExportPatchCommand { get; }
     public ICommand CloseProjectCommand { get; }
 
@@ -124,6 +125,8 @@ public partial class MainWindowViewModel : ViewModelBase
 
         ApplyHacksCommand = ReactiveCommand.CreateFromTask(ApplyHacksCommand_Executed);
         ProjectSettingsCommand = ReactiveCommand.CreateFromTask(ProjectSettingsCommand_Executed);
+        ExportProjectCommand = ReactiveCommand.CreateFromTask(ExportProjectCommand_Executed);
+        ExportPatchCommand = ReactiveCommand.CreateFromTask(ExportPatchCommand_Executed);
         CloseProjectCommand = ReactiveCommand.CreateFromTask(CloseProjectView);
 
         BuildIterativeCommand = ReactiveCommand.CreateFromTask(BuildIterative_Executed);
@@ -287,14 +290,14 @@ public partial class MainWindowViewModel : ViewModelBase
         return cancel;
     }
 
-    public async Task ApplyHacksCommand_Executed()
+    private async Task ApplyHacksCommand_Executed()
     {
         AsmHacksDialogViewModel hacksModel = new(OpenProject, CurrentConfig, Log);
         AsmHacksDialog hacksDialog = new(hacksModel);
         await hacksDialog.ShowDialog(Window);
     }
 
-    public async Task ProjectSettingsCommand_Executed()
+    private async Task ProjectSettingsCommand_Executed()
     {
         ProjectSettingsDialogViewModel projectSettingsDialogViewModel = new();
         ProjectSettingsDialog projectSettingsDialog = new();
@@ -303,7 +306,23 @@ public partial class MainWindowViewModel : ViewModelBase
         await projectSettingsDialog.ShowDialog(Window);
     }
 
-    public async Task CloseProjectView()
+    private async Task ExportProjectCommand_Executed()
+    {
+        string exportPath = (await Window.ShowSaveFilePickerAsync(Strings.Export_Project,
+            [new(Strings.Exported_Project) { Patterns = ["*.slzip"] }], $"{OpenProject.Name}.slzip"))?.TryGetLocalPath();
+        if (!string.IsNullOrEmpty(exportPath))
+        {
+            OpenProject.Export(exportPath, Log);
+        }
+    }
+
+    private async Task ExportPatchCommand_Executed()
+    {
+        ExportPatchDialogViewModel exportPatchDialogVm = new(OpenProject, Log);
+        await new ExportPatchDialog { DataContext = exportPatchDialogVm }.ShowDialog(Window);
+    }
+
+    private async Task CloseProjectView()
     {
         if (await CloseProject_Executed(null))
         {
@@ -944,6 +963,12 @@ public partial class MainWindowViewModel : ViewModelBase
                 Header = Strings.Migrate_to_new_ROM,
                 Command = MigrateProjectCommand,
                 Icon = ControlGenerator.GetIcon("Migrate_ROM", Log),
+            },
+            new NativeMenuItem
+            {
+                Header = Strings.Export_Project,
+                Command = ExportProjectCommand,
+                // Icon = ControlGenerator.GetIcon("Export_Project", Log),
             },
             new NativeMenuItem
             {
