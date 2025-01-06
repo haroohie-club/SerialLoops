@@ -1,5 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
+using Avalonia;
+using Avalonia.Media;
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
@@ -25,17 +27,34 @@ public class GroupSelectionEditorViewModel : EditorViewModel
         Tabs = window.EditorTabs;
         GroupSelection = groupSelection;
         OpenProject = window.OpenProject;
-        Activities = new(groupSelection.Selection.Activities.Where(a => a is not null).Select(a =>
-            new ScenarioActivityViewModel(this, a)));
+        Activities = new(groupSelection.Selection.Activities.Where(a => a is not null).Select((a, i) =>
+            new ScenarioActivityViewModel(this, a, i)));
     }
 }
 
-public class ScenarioActivityViewModel(GroupSelectionEditorViewModel selection, ScenarioActivity activity) : ViewModelBase
+public class ScenarioActivityViewModel(GroupSelectionEditorViewModel selection, ScenarioActivity activity, int index) : ViewModelBase
 {
     private GroupSelectionEditorViewModel _selection = selection;
 
     [Reactive]
     public ScenarioActivity Activity { get; set; } = activity;
+
+    private int _index = index;
+
+    public int Index
+    {
+        get => _index;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _index, value);
+            BackgroundColor = GetBackgroundColor(_index);
+            Rect canvasPos = GetCanvasPos(_index);
+            CanvasLeft = canvasPos.Left;
+            CanvasTop = canvasPos.Top;
+            CanvasWidth = canvasPos.Width;
+            CanvasHeight = canvasPos.Height;
+        }
+    }
 
     private string _title = activity.Title;
     public string Title
@@ -45,7 +64,7 @@ public class ScenarioActivityViewModel(GroupSelectionEditorViewModel selection, 
         {
             this.RaiseAndSetIfChanged(ref _title, value.GetOriginalString(selection.OpenProject));
             Activity.Title = _title;
-            // _selection.GroupSelection.UnsavedChanges = true;
+            _selection.GroupSelection.UnsavedChanges = true;
         }
     }
 
@@ -57,7 +76,7 @@ public class ScenarioActivityViewModel(GroupSelectionEditorViewModel selection, 
         {
             this.RaiseAndSetIfChanged(ref _futureDesc, value.GetOriginalString(_selection.OpenProject));
             Activity.FutureDesc = _futureDesc;
-            // _selection.GroupSelection.UnsavedChanges = true;
+            _selection.GroupSelection.UnsavedChanges = true;
         }
     }
 
@@ -69,12 +88,49 @@ public class ScenarioActivityViewModel(GroupSelectionEditorViewModel selection, 
         {
             this.RaiseAndSetIfChanged(ref _pastDesc, value.GetSubstitutedString(_selection.OpenProject));
             Activity.PastDesc = _pastDesc;
-            // _selection.GroupSelection.UnsavedChanges = true;
+            _selection.GroupSelection.UnsavedChanges = true;
         }
     }
 
     [Reactive]
     public ObservableCollection<ScenarioRouteViewModel> Routes { get; set; } = new(activity.Routes.Select(r => new ScenarioRouteViewModel(selection, r)));
+
+    // Drawing properties
+    [Reactive]
+    public SolidColorBrush BackgroundColor { get; private set; } = GetBackgroundColor(index);
+
+    [Reactive]
+    public double CanvasLeft { get; private set; } = GetCanvasPos(index).Left;
+    [Reactive]
+    public double CanvasTop { get; private set; } = GetCanvasPos(index).Top;
+    [Reactive]
+    public double CanvasWidth { get; private set; } = GetCanvasPos(index).Width;
+    [Reactive]
+    public double CanvasHeight { get; private set; } = GetCanvasPos(index).Height;
+
+    private static Rect GetCanvasPos(int index)
+    {
+        return index switch
+        {
+            0 => new(33, 1, 110, 74),
+            1 => new(33, 77, 110, 74),
+            2 => new(145, 1, 110, 74),
+            3 => new(145, 77, 110, 74),
+            _ => new(0, 0, 0, 0),
+        };
+    }
+
+    private static SolidColorBrush GetBackgroundColor(int index)
+    {
+        return index switch
+        {
+            0 => new(new Color(255, 191, 95, 95)),
+            1 => new(new Color(255, 97, 97, 195)),
+            2 => new(new Color(255, 85, 195, 85)),
+            3 => new(new Color(255, 195, 166, 52)),
+            _ => new(new Color(255, 52, 52, 52)),
+        };
+    }
 }
 
 public class ScenarioRouteViewModel(GroupSelectionEditorViewModel selection, ScenarioRoute route) : ViewModelBase
