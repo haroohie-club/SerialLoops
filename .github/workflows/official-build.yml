@@ -289,7 +289,9 @@ jobs:
             If your Mac is newer, you will probably want the ARM installer. If it is older, you may want the x64 one. If unsure, download the ARM one first and attempt to run it &ndash; it will throw an error saying it can't be run on this computer if your computer is not able to run it. If that's the case, download the x64 one instead.
 
             ### Linux
-            We recommend using the provided flatpak as it is the easiest to use. First, install flatpak if you haven't already. Then, download the flatpak and double click it or run `flatpak install` on it from the terminal. It will then install itself, bringing all the necessary dependencies with it.
+            We recommend using the provided Flatpak as it is the easiest to use. First, install [Flatpak](https://flatpak.org/setup/) if you haven't already. Then, download the Serial Loops Flatpak artifact and double click it or run `flatpak install` on it from the terminal. It will then install itself, bringing all the necessary dependencies with it.
+
+            You can also install the official [melonDS Flatpak from Flathub](https://flathub.org/apps/net.kuribo64.melonDS) to use as your emulator. We reocmmend installing it from the [flathub-beta](https://docs.flathub.org/docs/for-users/installation/#flathub-beta-repository) repository as that is where the most up-to-date versions tend to be pushed.
 
             If you would rather manually install, follow the below instructions:
             * The `.deb` package is intended for Debian-based distros (e.g. Ubuntu). Install it with `sudo apt install -f ./SerialLoops-linux-x64-${{ env.SLVersion }}.deb`.

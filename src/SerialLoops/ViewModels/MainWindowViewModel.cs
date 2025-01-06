@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ using Avalonia.Platform;
 using Avalonia.Platform.Storage;
 using Avalonia.Styling;
 using HaruhiChokuretsuLib.Archive;
+using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Archive.Graphics;
 using MiniToolbar.Avalonia;
@@ -24,6 +26,7 @@ using SerialLoops.Assets;
 using SerialLoops.Controls;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Factories;
+using SerialLoops.Lib.Hacks;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.SaveFile;
 using SerialLoops.Lib.Util;
@@ -86,7 +89,7 @@ public partial class MainWindowViewModel : ViewModelBase
     public ICommand CloseProjectCommand { get; }
 
     public ICommand ApplyHacksCommand { get; }
-    public ICommand RenameItemCommand { get; }
+    public ICommand CreateAsmHackCommand { get; }
     public ICommand EditUiTextCommand { get; }
     public ICommand EditTutorialMappingsCommand { get; }
     public ICommand SearchProjectCommand { get; }
@@ -123,6 +126,7 @@ public partial class MainWindowViewModel : ViewModelBase
         SearchProjectCommand = ReactiveCommand.Create(SearchProject_Executed);
 
         ApplyHacksCommand = ReactiveCommand.CreateFromTask(ApplyHacksCommand_Executed);
+        CreateAsmHackCommand = ReactiveCommand.CreateFromTask(CreateAsmHackCommand_Executed);
         ProjectSettingsCommand = ReactiveCommand.CreateFromTask(ProjectSettingsCommand_Executed);
         CloseProjectCommand = ReactiveCommand.CreateFromTask(CloseProjectView);
 
@@ -292,6 +296,62 @@ public partial class MainWindowViewModel : ViewModelBase
         AsmHacksDialogViewModel hacksModel = new(OpenProject, CurrentConfig, Log);
         AsmHacksDialog hacksDialog = new(hacksModel);
         await hacksDialog.ShowDialog(Window);
+    }
+
+    public async Task CreateAsmHackCommand_Executed()
+    {
+        AsmHackCreationDialogViewModel hackCreationModel = new(Log);
+        AsmHackCreationDialog hackCreationDialog = new() { DataContext = hackCreationModel };
+        (string name, string description, HackFileContainer[] hackFiles) =
+            await hackCreationDialog.ShowDialog<(string, string, HackFileContainer[])>(Window);
+        if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(description) || hackFiles is null || hackFiles.Length == 0)
+        {
+            return;
+        }
+
+        AsmHack asmHack = new()
+        {
+            Name = name,
+            Description = description,
+            Files = hackFiles.Select(h => new HackFile()
+            {
+                File = h.HackFileName,
+                Destination = h.Destination,
+                Parameters = h.Parameters.Select(p => new HackParameter()
+                {
+                    Name = p.Name,
+                    DescriptiveName = p.DescriptiveName,
+                    Values = p.Values.Select(v => new HackParameterValue()
+                    {
+                        Name = v.Name,
+                        Value = v.Value,
+                    }).ToArray(),
+                }).ToArray(),
+                Symbols = h.Symbols.Select(s => $"{s.Symbol} = 0x{s.LocationString}").ToArray(),
+            }).ToList(),
+            InjectionSites = [.. hackFiles.SelectMany(f => f.InjectionSites)],
+        };
+
+        string hackSaveFile = (await Window.ShowSaveFilePickerAsync(Strings.Export_Hack,
+            [new(Strings.Serial_Loops_ASM_Hack) { Patterns = ["*.slhack"] }],
+            $"{asmHack.Name}.slhack")).TryGetLocalPath();
+        if (!string.IsNullOrEmpty(hackSaveFile))
+        {
+            string tempDir = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            Directory.CreateDirectory(tempDir);
+
+            await File.WriteAllTextAsync(Path.Combine(tempDir, "hack.json"), JsonSerializer.Serialize(asmHack));
+            foreach (HackFileContainer hackFile in hackFiles)
+            {
+                File.Copy(hackFile.HackFilePath, Path.Combine(tempDir, hackFile.HackFileName));
+            }
+
+            using FileStream fs = File.Create(hackSaveFile);
+            ZipFile.CreateFromDirectory(tempDir, fs);
+
+            await Window.ShowMessageBoxAsync(Strings.Hack_Created_Successfully_, Strings.The_hack_file_has_been_successfully_created__To_import_it__open_the_ASM_hacks_dialog_and_select__Import_Hack__,
+                ButtonEnum.Ok, Icon.Success, Log);
+        }
     }
 
     public async Task ProjectSettingsCommand_Executed()
@@ -741,6 +801,10 @@ public partial class MainWindowViewModel : ViewModelBase
                         IO.WriteStringFile(Path.Combine("assets", "graphics", $"{layout.Index:X3}.lay"), JsonSerializer.Serialize(layout.LayoutEntries, Project.SERIALIZER_OPTIONS), OpenProject, Log);
                     }
                     break;
+                case ItemDescription.ItemType.Puzzle:
+                    PuzzleFile puzzle = ((PuzzleItem)item).Puzzle;
+                    IO.WriteStringFile(Path.Combine("assets", "data", $"{puzzle.Index:X3}.s"), puzzle.GetSource(includes), OpenProject, Log);
+                    break;
                 case ItemDescription.ItemType.System_Texture:
                     ((SystemTextureItem)item).Write(OpenProject, Log);
                     break;
@@ -974,9 +1038,8 @@ public partial class MainWindowViewModel : ViewModelBase
             },
             new NativeMenuItem
             {
-                Header = Strings.Rename_Item,
-                Command = RenameItemCommand,
-                Icon = ControlGenerator.GetIcon("Rename_Item", Log),
+                Header = Strings.Create_ASM_Hack,
+                Command = CreateAsmHackCommand,
             },
             new NativeMenuItem
             {
