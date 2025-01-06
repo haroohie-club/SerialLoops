@@ -71,5 +71,51 @@
                 ]
             }
         ]
+    },
+    {
+        "Name": "Enable Debug Printing",
+        "Description": "Enables the game\u0027s built-in debug printing and redirects its output to the emulator console.",
+        "InjectionSites": [
+            {
+                "Code": "ARM9",
+                "Location": "0202293C"
+            },
+            {
+                "Code": "ARM9",
+                "Location": "02022944"
+            }
+        ],
+        "Files": [
+            {
+                "File": "dbgPrintEnable_asm.s",
+                "Destination": "source/dbgPrintEnable_asm.s",
+                "Symbols": [],
+                "Parameters": []
+            },
+            {
+                "File": "print.s",
+                "Destination": "source/print.s",
+                "Symbols": [],
+                "Parameters": []
+            },
+            {
+                "File": "2022794.s",
+                "Destination": "replSource/2022794/2022794.s",
+                "Symbols": [],
+                "Parameters": []
+            },
+            {
+                "File": "202279C.s",
+                "Destination": "replSource/202279C/202279C.s",
+                "Symbols": [],
+                "Parameters": []
+            },
+            {
+                "File": "2078DB0.s",
+                "Destination": "replSource/2078DB0/2078DB0.s",
+                "Symbols": [],
+                "Parameters": []
+            }
+        ]
     }
 ]
