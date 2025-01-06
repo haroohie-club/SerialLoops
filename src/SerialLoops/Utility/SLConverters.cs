@@ -119,6 +119,19 @@ public class DoubleSubtractionConverter : IValueConverter
     }
 }
 
+public class ShortSubtractionConverter : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        return (short)value - short.Parse((string)parameter);
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        return (short)value + short.Parse((string)parameter);
+    }
+}
+
 public class IntSubtractionConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
