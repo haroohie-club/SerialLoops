@@ -3035,6 +3035,24 @@ This action is irreversible.</value>
   <data name="The hack file has been successfully created. To import it, open the ASM hacks dialog and select &quot;Import Hack&quot;." xml:space="preserve">
     <value>The hack file has been successfully created. To import it, open the ASM hacks dialog and select "Import Hack".</value>
   </data>
+  <data name="Note: When exporting an xdelta patch, the base ROM you should use is likely different than the one you used when creating the project. Please choose the base Japanese ROM (SHA-1 can be confirmed below) to ensure that people who want to play your hack only need to patch the game once." xml:space="preserve">
+    <value>Note: When exporting an XDelta patch, the base ROM you should use is likely different than the one you used when creating the project. Please choose the base Japanese ROM (SHA-1 can be confirmed below) to ensure that people who want to play your hack only need to patch the game once.</value>
+  </data>
+  <data name="No base ROM selected!" xml:space="preserve">
+    <value>No base ROM selected!</value>
+  </data>
+  <data name="Please select a base ROM before attempting to create the XDelta patch!" xml:space="preserve">
+    <value>Please select a base ROM before attempting to create the XDelta patch!</value>
+  </data>
+  <data name="No path to XDelta file selected!" xml:space="preserve">
+    <value>No path to XDelta file selected!</value>
+  </data>
+  <data name="Please select a path to save the XDelta patch to before attempting to create it." xml:space="preserve">
+    <value>Please select a path to save the XDelta patch to before attempting to create it.</value>
+  </data>
+  <data name="Failed to create XDelta patch!" xml:space="preserve">
+    <value>Failed to create XDelta patch!</value>
+  </data>
   <data name="Any Character" xml:space="preserve">
     <value>Any</value>
   </data>

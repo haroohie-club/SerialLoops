@@ -62,7 +62,7 @@ public class ImportProjectDialogViewModel : ViewModelBase
     private async Task SelectExportedProject(ImportProjectDialog dialog)
     {
         string slzipPath = (await dialog.ShowOpenFilePickerAsync(Strings.Import_Project,
-            [new("Serial Loops exported project") { Patterns = ["*.slzip"] }]))?.TryGetLocalPath();
+            [new(Strings.Exported_Project) { Patterns = ["*.slzip"] }]))?.TryGetLocalPath();
         if (!string.IsNullOrEmpty(slzipPath))
         {
             SlzipPath = slzipPath;
@@ -82,7 +82,7 @@ public class ImportProjectDialogViewModel : ViewModelBase
     private async Task OpenRom(ImportProjectDialog dialog)
     {
         string rom = (await dialog.ShowOpenFilePickerAsync(Strings.Import_Project,
-            [new("Serial Loops exported project") { Patterns = ["*.nds"] }])).TryGetLocalPath();
+            [new(Strings.NDS_ROM) { Patterns = ["*.nds"] }])).TryGetLocalPath();
         if (!string.IsNullOrEmpty(rom))
         {
             _actualRomHash = string.Join("", SHA1.HashData(File.ReadAllBytes(rom)).Select(b => $"{b:X2}"));
