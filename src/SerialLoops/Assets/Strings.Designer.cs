@@ -3084,6 +3084,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to create XDelta patch!.
+        /// </summary>
+        public static string Failed_to_create_XDelta_patch_ {
+            get {
+                return ResourceManager.GetString("Failed to create XDelta patch!", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to decode original file too, giving up!.
         /// </summary>
         public static string Failed_to_decode_original_file_too__giving_up_ {
@@ -4835,6 +4844,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No base ROM selected!.
+        /// </summary>
+        public static string No_base_ROM_selected_ {
+            get {
+                return ResourceManager.GetString("No base ROM selected!", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to None.
         /// </summary>
         public static string No_Character {
@@ -4887,6 +4905,15 @@ namespace SerialLoops.Assets {
         public static string No_hacks_applied_ {
             get {
                 return ResourceManager.GetString("No hacks applied!", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No path to XDelta file selected!.
+        /// </summary>
+        public static string No_path_to_XDelta_file_selected_ {
+            get {
+                return ResourceManager.GetString("No path to XDelta file selected!", resourceCulture);
             }
         }
         
@@ -4986,6 +5013,15 @@ namespace SerialLoops.Assets {
         public static string NORMAL_TEXT_ENTRANCE {
             get {
                 return ResourceManager.GetString("NORMAL_TEXT_ENTRANCE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Note: When exporting an XDelta patch, the base ROM you should use is likely different than the one you used when creating the project. Please choose the base Japanese ROM (SHA-1 can be confirmed below) to ensure that people who want to play your hack only need to patch the game once..
+        /// </summary>
+        public static string Note__When_exporting_an_xdelta_patch__the_base_ROM_you_should_use_is_likely_different_than_the_one_you_used_when_creating_the_project__Please_choose_the_base_Japanese_ROM__SHA_1_can_be_confirmed_below__to_ensure_that_people_who_want_to_play_your_hack_only_need_to_patch_the_game_once_ {
+            get {
+                return ResourceManager.GetString(@"Note: When exporting an xdelta patch, the base ROM you should use is likely different than the one you used when creating the project. Please choose the base Japanese ROM (SHA-1 can be confirmed below) to ensure that people who want to play your hack only need to patch the game once.", resourceCulture);
             }
         }
         
@@ -5436,6 +5472,24 @@ namespace SerialLoops.Assets {
         public static string Please_enter_a_value_for_the_section_name {
             get {
                 return ResourceManager.GetString("Please enter a value for the section name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select a base ROM before attempting to create the XDelta patch!.
+        /// </summary>
+        public static string Please_select_a_base_ROM_before_attempting_to_create_the_XDelta_patch_ {
+            get {
+                return ResourceManager.GetString("Please select a base ROM before attempting to create the XDelta patch!", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select a path to save the XDelta patch to before attempting to create it..
+        /// </summary>
+        public static string Please_select_a_path_to_save_the_XDelta_patch_to_before_attempting_to_create_it_ {
+            get {
+                return ResourceManager.GetString("Please select a path to save the XDelta patch to before attempting to create it.", resourceCulture);
             }
         }
         
