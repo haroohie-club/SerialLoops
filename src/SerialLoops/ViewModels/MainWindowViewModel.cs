@@ -15,6 +15,7 @@ using Avalonia.Platform;
 using Avalonia.Platform.Storage;
 using Avalonia.Styling;
 using HaruhiChokuretsuLib.Archive;
+using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Archive.Graphics;
 using MiniToolbar.Avalonia;
@@ -818,6 +819,10 @@ public partial class MainWindowViewModel : ViewModelBase
                         changedLayouts.Add(layout.Index);
                         IO.WriteStringFile(Path.Combine("assets", "graphics", $"{layout.Index:X3}.lay"), JsonSerializer.Serialize(layout.LayoutEntries, Project.SERIALIZER_OPTIONS), OpenProject, Log);
                     }
+                    break;
+                case ItemDescription.ItemType.Puzzle:
+                    PuzzleFile puzzle = ((PuzzleItem)item).Puzzle;
+                    IO.WriteStringFile(Path.Combine("assets", "data", $"{puzzle.Index:X3}.s"), puzzle.GetSource(includes), OpenProject, Log);
                     break;
                 case ItemDescription.ItemType.System_Texture:
                     ((SystemTextureItem)item).Write(OpenProject, Log);

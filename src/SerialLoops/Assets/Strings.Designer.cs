@@ -463,6 +463,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Any.
+        /// </summary>
+        public static string Any_Character {
+            get {
+                return ResourceManager.GetString("Any Character", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Apply.
         /// </summary>
         public static string Apply {
@@ -4786,6 +4795,15 @@ namespace SerialLoops.Assets {
         public static string No_base_ROM_selected_ {
             get {
                 return ResourceManager.GetString("No base ROM selected!", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to None.
+        /// </summary>
+        public static string No_Character {
+            get {
+                return ResourceManager.GetString("No Character", resourceCulture);
             }
         }
         

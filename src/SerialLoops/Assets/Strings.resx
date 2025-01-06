@@ -3053,4 +3053,10 @@ This action is irreversible.</value>
   <data name="Failed to create XDelta patch!" xml:space="preserve">
     <value>Failed to create XDelta patch!</value>
   </data>
+  <data name="Any Character" xml:space="preserve">
+    <value>Any</value>
+  </data>
+  <data name="No Character" xml:space="preserve">
+    <value>None</value>
+  </data>
 </root>
