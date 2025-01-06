@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Util;
 using MsBox.Avalonia.Enums;
 using ReactiveUI;
@@ -75,6 +76,8 @@ public class EditorTabsPanelViewModel : ViewModelBase
                 return new LayoutEditorViewModel((LayoutItem)item, MainWindow, _log);
             case ItemDescription.ItemType.Map:
                 return new MapEditorViewModel((MapItem)item, MainWindow, _log);
+            case ItemDescription.ItemType.Puzzle:
+                return new PuzzleEditorViewModel((PuzzleItem)item, MainWindow, _log);
             case ItemDescription.ItemType.Script:
                 return new ScriptEditorViewModel((ScriptItem)item, MainWindow, _log);
             case ItemDescription.ItemType.SFX:

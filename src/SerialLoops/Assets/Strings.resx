@@ -3035,4 +3035,10 @@ This action is irreversible.</value>
   <data name="The hack file has been successfully created. To import it, open the ASM hacks dialog and select &quot;Import Hack&quot;." xml:space="preserve">
     <value>The hack file has been successfully created. To import it, open the ASM hacks dialog and select "Import Hack".</value>
   </data>
+  <data name="Any Character" xml:space="preserve">
+    <value>Any</value>
+  </data>
+  <data name="No Character" xml:space="preserve">
+    <value>None</value>
+  </data>
 </root>
