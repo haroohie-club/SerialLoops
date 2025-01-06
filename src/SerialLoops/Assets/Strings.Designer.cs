@@ -1617,6 +1617,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create ASM Hack.
+        /// </summary>
+        public static string Create_ASM_Hack {
+            get {
+                return ResourceManager.GetString("Create ASM Hack", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create New Project.
         /// </summary>
         public static string Create_New_Project {
@@ -2624,6 +2633,15 @@ namespace SerialLoops.Assets {
         public static string Export_GIF {
             get {
                 return ResourceManager.GetString("Export GIF", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export Hack.
+        /// </summary>
+        public static string Export_Hack {
+            get {
+                return ResourceManager.GetString("Export Hack", resourceCulture);
             }
         }
         
@@ -3758,6 +3776,24 @@ namespace SerialLoops.Assets {
         public static string Groups___0_ {
             get {
                 return ResourceManager.GetString("Groups: {0}", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hack Created Successfully!.
+        /// </summary>
+        public static string Hack_Created_Successfully_ {
+            get {
+                return ResourceManager.GetString("Hack Created Successfully!", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hack Description.
+        /// </summary>
+        public static string Hack_Description {
+            get {
+                return ResourceManager.GetString("Hack Description", resourceCulture);
             }
         }
         
@@ -5116,11 +5152,29 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Parameter Name.
+        /// </summary>
+        public static string Parameter_Name {
+            get {
+                return ResourceManager.GetString("Parameter Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Parameter Value.
         /// </summary>
         public static string Parameter_Value {
             get {
                 return ResourceManager.GetString("Parameter Value", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter Values.
+        /// </summary>
+        public static string Parameter_Values {
+            get {
+                return ResourceManager.GetString("Parameter Values", resourceCulture);
             }
         }
         
@@ -6621,6 +6675,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select Hack Files.
+        /// </summary>
+        public static string Select_Hack_Files {
+            get {
+                return ResourceManager.GetString("Select Hack Files", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select Icon.
         /// </summary>
         public static string Select_Icon {
@@ -6657,6 +6720,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Serial Loops ASM Hack.
+        /// </summary>
+        public static string Serial_Loops_ASM_Hack {
+            get {
+                return ResourceManager.GetString("Serial Loops ASM Hack", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Serial Loops Exported Project.
         /// </summary>
         public static string Serial_Loops_Exported_Project {
@@ -6680,15 +6752,6 @@ namespace SerialLoops.Assets {
         public static string Serial_Loops_v_0_ {
             get {
                 return ResourceManager.GetString("Serial Loops v{0}", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Serialized ASM hack.
-        /// </summary>
-        public static string Serialized_ASM_hack {
-            get {
-                return ResourceManager.GetString("Serialized ASM hack", resourceCulture);
             }
         }
         
@@ -7243,6 +7306,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Symbols.
+        /// </summary>
+        public static string Symbols {
+            get {
+                return ResourceManager.GetString("Symbols", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to System data damaged &amp; reset message box.
         /// </summary>
         public static string System_data_damaged___reset_message_box {
@@ -7420,6 +7492,16 @@ namespace SerialLoops.Assets {
         public static string The_changes_made_will_require_Serial_Loops_to_be_restarted__Is_that_okay_ {
             get {
                 return ResourceManager.GetString("The changes made will require Serial Loops to be restarted. Is that okay?", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The hack file has been successfully created. To import it, open the ASM hacks dialog and select &quot;Import Hack&quot;..
+        /// </summary>
+        public static string The_hack_file_has_been_successfully_created__To_import_it__open_the_ASM_hacks_dialog_and_select__Import_Hack__ {
+            get {
+                return ResourceManager.GetString(("The hack file has been successfully created. To import it, open the ASM hacks dia" +
+                        "log and select \"Import Hack\"."), resourceCulture);
             }
         }
         
