@@ -65,25 +65,47 @@ public class HighlightedSpace : ReactiveObject
         ToolTip = obj.ObjectName.GetSubstitutedString(project);
     }
 
-    public HighlightedSpace(UnknownMapObject2 obj, Point gridZero)
+    public HighlightedSpace(UnknownMapObject2 obj, Point gridZero, bool slgMode)
     {
-        // x & y reversed from SLG mode
-        Point origin = new(gridZero.X - obj.UnknownShort2 * 16 + obj.UnknownShort1 * 16, gridZero.Y + obj.UnknownShort2 * 8 + obj.UnknownShort1 * 8);
-        Top = origin;
-        Left = new(origin.X - 16, origin.Y + 8);
-        Bottom = new(origin.X, origin.Y + 16);
-        Right = new(origin.X + 16, origin.Y + 8);
+        if (slgMode)
+        {
+            Point origin = new(gridZero.X - obj.UnknownShort1 * 32 + obj.UnknownShort2 * 32, gridZero.Y + obj.UnknownShort1 * 16 + obj.UnknownShort2 * 16);
+            Top = origin;
+            Left = new(origin.X - 32, origin.Y + 16);
+            Bottom = new(origin.X, origin.Y + 32);
+            Right = new(origin.X + 32, origin.Y + 16);
+        }
+        else
+        {
+            // x & y reversed from SLG mode
+            Point origin = new(gridZero.X - obj.UnknownShort2 * 16 + obj.UnknownShort1 * 16, gridZero.Y + obj.UnknownShort2 * 8 + obj.UnknownShort1 * 8);
+            Top = origin;
+            Left = new(origin.X - 16, origin.Y + 8);
+            Bottom = new(origin.X, origin.Y + 16);
+            Right = new(origin.X + 16, origin.Y + 8);
+        }
         Color = new(Colors.Goldenrod, 0.5);
     }
 
-    public HighlightedSpace(UnknownMapObject3 obj, Point gridZero)
+    public HighlightedSpace(UnknownMapObject3 obj, Point gridZero, bool slgMode)
     {
-        // x & y reversed from SLG mode
-        Point origin = new(gridZero.X - obj.UnknownShort2 * 16 + obj.UnknownShort1 * 16, gridZero.Y + obj.UnknownShort2 * 8 + obj.UnknownShort1 * 8);
-        Top = origin;
-        Left = new(origin.X - 16, origin.Y + 8);
-        Bottom = new(origin.X, origin.Y + 16);
-        Right = new(origin.X + 16, origin.Y + 8);
+        if (slgMode)
+        {
+            Point origin = new(gridZero.X - obj.UnknownShort1 * 32 + obj.UnknownShort2 * 32, gridZero.Y + obj.UnknownShort1 * 16 + obj.UnknownShort2 * 16);
+            Top = origin;
+            Left = new(origin.X - 32, origin.Y + 16);
+            Bottom = new(origin.X, origin.Y + 32);
+            Right = new(origin.X + 32, origin.Y + 16);
+        }
+        else
+        {
+            // x & y reversed from SLG mode
+            Point origin = new(gridZero.X - obj.UnknownShort2 * 16 + obj.UnknownShort1 * 16, gridZero.Y + obj.UnknownShort2 * 8 + obj.UnknownShort1 * 8);
+            Top = origin;
+            Left = new(origin.X - 16, origin.Y + 8);
+            Bottom = new(origin.X, origin.Y + 16);
+            Right = new(origin.X + 16, origin.Y + 8);
+        }
         Color = new(Colors.Fuchsia, 0.5);
     }
 }

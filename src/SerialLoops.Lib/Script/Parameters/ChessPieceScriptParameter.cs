@@ -7,6 +7,11 @@ public class ChessPieceScriptParameter : ScriptParameter
     public short ChessPiece { get; set; }
     public override short[] GetValues(object obj = null) => new short[] { ChessPiece };
 
+    public override string GetValueString(Project project)
+    {
+        return ChessPiece.ToString();
+    }
+
     public ChessPieceScriptParameter(string name, short chessPiece) : base(name, ParameterType.CHESS_PIECE)
     {
         ChessPiece = chessPiece;

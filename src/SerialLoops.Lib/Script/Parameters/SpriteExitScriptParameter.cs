@@ -7,6 +7,11 @@ public class SpriteExitScriptParameter : ScriptParameter
     public SpriteExitTransition ExitTransition { get; set; }
     public override short[] GetValues(object obj = null) => new short[] { (short)ExitTransition };
 
+    public override string GetValueString(Project project)
+    {
+        return project.Localize(ExitTransition.ToString());
+    }
+
     public SpriteExitScriptParameter(string name, short exitTransition) : base(name, ParameterType.SPRITE_EXIT)
     {
         ExitTransition = (SpriteExitTransition)exitTransition;

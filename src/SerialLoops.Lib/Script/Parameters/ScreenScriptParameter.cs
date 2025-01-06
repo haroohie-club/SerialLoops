@@ -7,6 +7,11 @@ public class ScreenScriptParameter : ScriptParameter
     public DsScreen Screen { get; set; }
     public override short[] GetValues(object obj = null) => new short[] { (short)Screen };
 
+    public override string GetValueString(Project project)
+    {
+        return project.Localize(Screen.ToString());
+    }
+
     public ScreenScriptParameter(string name, short screen) : base(name, ParameterType.SCREEN)
     {
         Screen = (DsScreen)screen;

@@ -9,6 +9,11 @@ public class DialoguePropertyScriptParameter : ScriptParameter
     public CharacterItem Character { get; set; }
     public override short[] GetValues(object obj = null) => new short[] { (short)((MessageInfoFile)obj).MessageInfos.FindIndex(m => m.Character == Character.MessageInfo.Character) };
 
+    public override string GetValueString(Project project)
+    {
+        return Character.DisplayName;
+    }
+
     public DialoguePropertyScriptParameter(string name, CharacterItem character) : base(name, ParameterType.CHARACTER)
     {
         Character = character;

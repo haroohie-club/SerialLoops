@@ -7,6 +7,11 @@ public class ColorMonochromeScriptParameter : ScriptParameter
     public ColorMonochrome ColorType { get; set; }
     public override short[] GetValues(object obj = null) => new short[] { (short)ColorType };
 
+    public override string GetValueString(Project project)
+    {
+        return project.Localize(ColorType.ToString());
+    }
+
     public ColorMonochromeScriptParameter(string name, short colorType) : base(name, ParameterType.COLOR_MONOCHROME)
     {
         ColorType = (ColorMonochrome)colorType;
