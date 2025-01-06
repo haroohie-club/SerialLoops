@@ -312,9 +312,9 @@ public class MapEditorViewModel : EditorViewModel
 
         InteractableObjects = new(map.Map.InteractableObjects[..^1].Select(io => new HighlightedSpace(io, gridZero, window.OpenProject)));
 
-        Unknown2s = new(map.Map.UnknownMapObject2s[..^1].Select(u => new HighlightedSpace(u, gridZero)));
+        Unknown2s = new(map.Map.UnknownMapObject2s[..^1].Select(u => new HighlightedSpace(u, gridZero, map.Map.Settings.SlgMode)));
 
-        ObjectPositions = new(map.Map.UnknownMapObject3s[..^1].Select(u => new HighlightedSpace(u, gridZero)));
+        ObjectPositions = new(map.Map.UnknownMapObject3s[..^1].Select(u => new HighlightedSpace(u, gridZero, map.Map.Settings.SlgMode)));
 
         ExportCommand = ReactiveCommand.CreateFromTask(Export);
     }
