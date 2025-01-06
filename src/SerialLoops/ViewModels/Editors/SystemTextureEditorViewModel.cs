@@ -68,8 +68,7 @@ public class SystemTextureEditorViewModel : EditorViewModel
         IStorageFile openFile = await Window.Window.ShowOpenFilePickerAsync(Strings.Replace_System_Texture, [new(Strings.Supported_Images) { Patterns = Shared.SupportedImageFiletypes }]);
         if (openFile is not null)
         {
-            SKBitmap newImage = SKBitmap.Decode(openFile.Path.LocalPath);
-            ImageCropResizeDialogViewModel cropResizeDialogViewModel = new(newImage, original.Width, original.Height, _log);
+            ImageCropResizeDialogViewModel cropResizeDialogViewModel = new(openFile.TryGetLocalPath(), original.Width, original.Height, _log);
             SKBitmap finalImage = await new ImageCropResizeDialog
             {
                 DataContext = cropResizeDialogViewModel,

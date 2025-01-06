@@ -5,6 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:assets="using:SerialLoops.Assets"
              xmlns:utility="using:SerialLoops.Utility"
+             xmlns:models="clr-namespace:SerialLoops.Models"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:LayoutEditorViewModel"
              x:Class="SerialLoops.Views.Editors.LayoutEditorView">
@@ -20,7 +21,7 @@
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
             <ItemsControl.DataTemplates>
-                <DataTemplate DataType="vm:LayoutEntryWithImage">
+                <DataTemplate DataType="models:LayoutEntryWithImage">
                     <Canvas Width="{Binding Width}" Height="{Binding Height}">
                         <Image Source="{Binding CroppedImage, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
                                Stretch="Fill" Width="{Binding Width}" Height="{Binding Height}"/>
@@ -31,7 +32,7 @@
                 </DataTemplate>
             </ItemsControl.DataTemplates>
             <ItemsControl.Styles>
-                <Style Selector="ItemsControl > ContentPresenter" x:DataType="vm:LayoutEntryWithImage">
+                <Style Selector="ItemsControl > ContentPresenter" x:DataType="models:LayoutEntryWithImage">
                     <Setter Property="(Canvas.Left)" Value="{Binding ScreenX}"/>
                     <Setter Property="(Canvas.Top)" Value="{Binding ScreenY}"/>
                 </Style>
