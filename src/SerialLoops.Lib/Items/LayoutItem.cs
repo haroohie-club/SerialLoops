@@ -6,14 +6,32 @@ using SkiaSharp;
 
 namespace SerialLoops.Lib.Items;
 
-public class LayoutItem(int layoutIndex, List<GraphicsFile> grps, int startEntry, int numEntries, string name, Project project) : Item(name, ItemType.Layout), IPreviewableGraphic
+public class LayoutItem : Item, IPreviewableGraphic
 {
-    public GraphicsFile Layout { get; set; } = project.LayoutFiles[layoutIndex];
-    public List<GraphicsFile> GraphicsFiles { get; set; } = grps;
-    public int StartEntry { get; set; } = startEntry;
-    public int NumEntries { get; set; } = numEntries;
+    public GraphicsFile Layout { get; set; }
+    public List<GraphicsFile> GraphicsFiles { get; set; }
+    public int StartEntry { get; set; }
+    public int NumEntries { get; set; }
 
-    public readonly Dictionary<int, SKBitmap> TilesDict = grps.Select((g, i) => (i, g.GetImage(transparentIndex: 0))).ToDictionary();
+    public Dictionary<int, SKBitmap> TilesDict { get; }
+
+    public LayoutItem(int layoutIndex, List<GraphicsFile> grps, int startEntry, int numEntries, string name, Project project) : base(name, ItemType.Layout)
+    {
+        Layout = project.LayoutFiles[layoutIndex];
+        GraphicsFiles = grps;
+        StartEntry = startEntry;
+        NumEntries = numEntries;
+        TilesDict = grps.Select((g, i) => (i, g.GetImage(transparentIndex: 0))).ToDictionary();
+    }
+
+    public LayoutItem(GraphicsFile layout, List<GraphicsFile> grps, int startEntry, int numEntries, string name) : base(name, ItemType.Layout)
+    {
+        Layout = layout;
+        GraphicsFiles = grps;
+        StartEntry = startEntry;
+        NumEntries = numEntries;
+        TilesDict = grps.Select((g, i) => (i, g.GetImage(transparentIndex: 0))).ToDictionary();
+    }
 
     public override void Refresh(Project project, ILogger log)
     {

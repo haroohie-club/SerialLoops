@@ -3,8 +3,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:SerialLoops.ViewModels.Editors"
-             xmlns:i="using:Avalonia.Xaml.Interactivity"
-             xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
              xmlns:items="using:SerialLoops.Lib.Items"
              xmlns:assets="using:SerialLoops.Assets"
              xmlns:controls="using:SerialLoops.Controls"

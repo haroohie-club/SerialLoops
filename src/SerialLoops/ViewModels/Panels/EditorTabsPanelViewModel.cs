@@ -73,6 +73,8 @@ public class EditorTabsPanelViewModel : ViewModelBase
                 return new GroupSelectionEditorViewModel((GroupSelectionItem)item, MainWindow, _log);
             case ItemDescription.ItemType.Layout:
                 return new LayoutEditorViewModel((LayoutItem)item, MainWindow, _log);
+            case ItemDescription.ItemType.Map:
+                return new MapEditorViewModel((MapItem)item, MainWindow, _log);
             case ItemDescription.ItemType.Script:
                 return new ScriptEditorViewModel((ScriptItem)item, MainWindow, _log);
             case ItemDescription.ItemType.SFX:
