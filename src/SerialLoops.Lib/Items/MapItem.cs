@@ -11,27 +11,33 @@ public class MapItem : Item
     public MapFile Map { get; set; }
     public int QmapIndex { get; set; }
 
-    public MapItem(string name) : base(name, ItemType.Map)
-    {
-    }
+    public GraphicsFile Layout { get; }
+    public SKBitmap BgBitmap { get; set; }
+    public SKBitmap BgObjBitmap { get; set; }
+    public SKBitmap ObjBitmap { get; set; }
+
     public MapItem(MapFile map, int qmapIndex, Project project) : base(map.Name[..^1], ItemType.Map)
     {
         Map = map;
         QmapIndex = qmapIndex;
+        Layout = project.Grp.GetFileByIndex(Map.Settings.LayoutFileIndex);
+        BgBitmap = project.Grp.GetFileByIndex(Map.Settings.TextureFileIndices[0]).GetImage();
+        BgObjBitmap = project.Grp.GetFileByIndex(Map.Settings.TextureFileIndices[1]).GetImage();
+        ObjBitmap = project.Grp.GetFileByIndex(Map.Settings.TextureFileIndices[2]).GetImage();
     }
 
     public SKPoint GetOrigin(ArchiveFile<GraphicsFile> grp)
     {
         GraphicsFile layout = grp.GetFileByIndex(Map.Settings.LayoutFileIndex);
-        return new(layout.LayoutEntries[Map.Settings.LayoutSizeDefinitionIndex].ScreenX, layout.LayoutEntries[Map.Settings.LayoutSizeDefinitionIndex].ScreenY);
+        return new(layout.LayoutEntries[Map.Settings.LayoutBgLayerStartIndex].ScreenX, layout.LayoutEntries[Map.Settings.LayoutBgLayerStartIndex].ScreenY);
     }
 
     public SKBitmap GetMapImage(ArchiveFile<GraphicsFile> grp, bool displayPathingMap, bool displayMapStart)
     {
         SKBitmap map;
-        if (Map.Settings.BackgroundLayoutStartIndex > 0)
+        if (Map.Settings.ScrollingBgDefinitionLayoutIndex > 0)
         {
-            map = Map.GetMapImages(grp, 0, Map.Settings.BackgroundLayoutStartIndex);
+            map = Map.GetMapImages(grp, 0, Map.Settings.ScrollingBgLayoutStartIndex);
         }
         else
         {

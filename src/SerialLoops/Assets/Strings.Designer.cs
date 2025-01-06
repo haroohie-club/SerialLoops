@@ -734,6 +734,42 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to BG Junk Layer.
+        /// </summary>
+        public static string BG_Junk_Layer {
+            get {
+                return ResourceManager.GetString("BG Junk Layer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to BG Layer.
+        /// </summary>
+        public static string BG_Layer {
+            get {
+                return ResourceManager.GetString("BG Layer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to BG Object Layer.
+        /// </summary>
+        public static string BG_Object_Layer {
+            get {
+                return ResourceManager.GetString("BG Object Layer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to BG Occlusion Layer.
+        /// </summary>
+        public static string BG_Occlusion_Layer {
+            get {
+                return ResourceManager.GetString("BG Occlusion Layer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to BGM.
         /// </summary>
         public static string BGM {
@@ -973,6 +1009,15 @@ namespace SerialLoops.Assets {
         public static string Caching_BGM {
             get {
                 return ResourceManager.GetString("Caching BGM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Camera Trucking.
+        /// </summary>
+        public static string Camera_Trucking {
+            get {
+                return ResourceManager.GetString("Camera Trucking", resourceCulture);
             }
         }
         
@@ -1983,6 +2028,24 @@ namespace SerialLoops.Assets {
         public static string Downsampling___ {
             get {
                 return ResourceManager.GetString("Downsampling...", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Draw Boundary.
+        /// </summary>
+        public static string Draw_Boundary {
+            get {
+                return ResourceManager.GetString("Draw Boundary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Draw Origin.
+        /// </summary>
+        public static string Draw_Origin {
+            get {
+                return ResourceManager.GetString("Draw Origin", resourceCulture);
             }
         }
         
@@ -3926,6 +3989,24 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Info Layer.
+        /// </summary>
+        public static string Info_Layer {
+            get {
+                return ResourceManager.GetString("Info Layer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interactable Objects.
+        /// </summary>
+        public static string Interactable_Objects {
+            get {
+                return ResourceManager.GetString("Interactable Objects", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid audio file selected..
         /// </summary>
         public static string Invalid_audio_file_selected_ {
@@ -4896,6 +4977,33 @@ namespace SerialLoops.Assets {
         public static string objcopy_not_found_at___0__ {
             get {
                 return ResourceManager.GetString("objcopy not found at \'{0}\'", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Object Junk Layer.
+        /// </summary>
+        public static string Object_Junk_Layer {
+            get {
+                return ResourceManager.GetString("Object Junk Layer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Object Layer.
+        /// </summary>
+        public static string Object_Layer {
+            get {
+                return ResourceManager.GetString("Object Layer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Object Locations.
+        /// </summary>
+        public static string Object_Locations {
+            get {
+                return ResourceManager.GetString("Object Locations", resourceCulture);
             }
         }
         
@@ -6356,6 +6464,15 @@ namespace SerialLoops.Assets {
         public static string Scroll_Speed {
             get {
                 return ResourceManager.GetString("Scroll Speed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scrolling BG.
+        /// </summary>
+        public static string Scrolling_BG {
+            get {
+                return ResourceManager.GetString("Scrolling BG", resourceCulture);
             }
         }
         
