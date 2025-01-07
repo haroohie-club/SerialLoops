@@ -3,21 +3,33 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:vm="using:SerialLoops.ViewModels.Editors"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:utility="using:SerialLoops.Utility"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:GroupSelectionEditorViewModel"
              x:Class="SerialLoops.Views.Editors.GroupSelectionEditorView">
 
     <ScrollViewer>
         <ItemsControl ItemsSource="{Binding Activities}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas Width="512" Height="394"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
             <ItemsControl.DataTemplates>
                 <DataTemplate DataType="vm:ScenarioActivityViewModel">
-                    <Canvas Width="256" Height="192">
-                        <Rectangle Fill="{Binding BackgroundColor}" Canvas.Left="{Binding CanvasLeft}"
-                                   Canvas.Top="{Binding CanvasTop}" Width="{Binding CanvasWidth}"
-                                   Height="{Binding CanvasHeight}"/>
+                    <Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"
+                            Background="{Binding BackgroundColor}">
+                        <Image Source="{Binding Letter, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
+                               Canvas.Left="134" Canvas.Top="22" Width="64" Height="64"/>
                     </Canvas>
                 </DataTemplate>
             </ItemsControl.DataTemplates>
+            <ItemsControl.Styles>
+                <Style Selector="ItemsControl > ContentPresenter" x:DataType="vm:ScenarioActivityViewModel">
+                    <Setter Property="(Canvas.Left)" Value="{Binding CanvasLeft}"/>
+                    <Setter Property="(Canvas.Top)" Value="{Binding CanvasTop}"/>
+                </Style>
+            </ItemsControl.Styles>
         </ItemsControl>
     </ScrollViewer>
 </UserControl>

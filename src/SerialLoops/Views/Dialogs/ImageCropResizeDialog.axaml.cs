@@ -1,8 +1,5 @@
 using Avalonia.Controls;
 using Avalonia.Input;
-using Avalonia.Interactivity;
-using Avalonia.Media;
-using Avalonia.Skia.Helpers;
 
 namespace SerialLoops.Views.Dialogs;
 

@@ -6,7 +6,6 @@ using Avalonia.Skia.Helpers;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using SerialLoops.Models;
 using SerialLoops.Views.Dialogs;
 using SkiaSharp;
 
