@@ -1893,7 +1893,7 @@
   <data name="Serial Loops v{0}" xml:space="preserve">
     <value>Serial Loops v{0}</value>
   </data>
-  <data name="Serialized ASM hack" xml:space="preserve">
+  <data name="Serial Loops ASM Hack" xml:space="preserve">
     <value>Serialised ASM hack</value>
   </data>
   <data name="Set" xml:space="preserve">

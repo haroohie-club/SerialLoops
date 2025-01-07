@@ -2129,8 +2129,8 @@ Please set the path to a Nintendo DS emulator or specify a Nintendo DS emulator 
   <data name="Serial Loops v{0}" xml:space="preserve">
     <value>Serial Loops v{0}</value>
   </data>
-  <data name="Serialized ASM hack" xml:space="preserve">
-    <value>Serialized ASM hack</value>
+  <data name="Serial Loops ASM Hack" xml:space="preserve">
+    <value>Serial Loops ASM Hack</value>
   </data>
   <data name="Set" xml:space="preserve">
     <value>Set</value>
@@ -3007,5 +3007,56 @@ This action is irreversible.</value>
   </data>
   <data name="Ignore Hash?" xml:space="preserve">
     <value>Ignore Hash?</value><comment>This is in the project import dialog and indicates the ROM hash should be ignored</comment>
+  </data>
+  <data name="Create ASM Hack" xml:space="preserve">
+    <value>Create ASM Hack</value>
+  </data>
+  <data name="Select Hack Files" xml:space="preserve">
+    <value>Select Hack Files</value>
+  </data>
+  <data name="Parameter Name" xml:space="preserve">
+    <value>Parameter Name</value>
+  </data>
+  <data name="Parameter Values" xml:space="preserve">
+    <value>Parameter Values</value>
+  </data>
+  <data name="Hack Description" xml:space="preserve">
+    <value>Hack Description</value>
+  </data>
+  <data name="Symbols" xml:space="preserve">
+    <value>Symbols</value><comment>Refers to defined variables or functions in code</comment>
+  </data>
+  <data name="Export Hack" xml:space="preserve">
+    <value>Export Hack</value>
+  </data>
+  <data name="Hack Created Successfully!" xml:space="preserve">
+    <value>Hack Created Successfully!</value>
+  </data>
+  <data name="The hack file has been successfully created. To import it, open the ASM hacks dialog and select &quot;Import Hack&quot;." xml:space="preserve">
+    <value>The hack file has been successfully created. To import it, open the ASM hacks dialog and select "Import Hack".</value>
+  </data>
+  <data name="Note: When exporting an xdelta patch, the base ROM you should use is likely different than the one you used when creating the project. Please choose the base Japanese ROM (SHA-1 can be confirmed below) to ensure that people who want to play your hack only need to patch the game once." xml:space="preserve">
+    <value>Note: When exporting an XDelta patch, the base ROM you should use is likely different than the one you used when creating the project. Please choose the base Japanese ROM (SHA-1 can be confirmed below) to ensure that people who want to play your hack only need to patch the game once.</value>
+  </data>
+  <data name="No base ROM selected!" xml:space="preserve">
+    <value>No base ROM selected!</value>
+  </data>
+  <data name="Please select a base ROM before attempting to create the XDelta patch!" xml:space="preserve">
+    <value>Please select a base ROM before attempting to create the XDelta patch!</value>
+  </data>
+  <data name="No path to XDelta file selected!" xml:space="preserve">
+    <value>No path to XDelta file selected!</value>
+  </data>
+  <data name="Please select a path to save the XDelta patch to before attempting to create it." xml:space="preserve">
+    <value>Please select a path to save the XDelta patch to before attempting to create it.</value>
+  </data>
+  <data name="Failed to create XDelta patch!" xml:space="preserve">
+    <value>Failed to create XDelta patch!</value>
+  </data>
+  <data name="Any Character" xml:space="preserve">
+    <value>Any</value>
+  </data>
+  <data name="No Character" xml:space="preserve">
+    <value>None</value>
   </data>
 </root>

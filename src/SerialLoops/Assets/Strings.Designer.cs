@@ -463,6 +463,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Any.
+        /// </summary>
+        public static string Any_Character {
+            get {
+                return ResourceManager.GetString("Any Character", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Apply.
         /// </summary>
         public static string Apply {
@@ -1617,6 +1626,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create ASM Hack.
+        /// </summary>
+        public static string Create_ASM_Hack {
+            get {
+                return ResourceManager.GetString("Create ASM Hack", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create New Project.
         /// </summary>
         public static string Create_New_Project {
@@ -2628,6 +2646,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Export Hack.
+        /// </summary>
+        public static string Export_Hack {
+            get {
+                return ResourceManager.GetString("Export Hack", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export Item Names.
         /// </summary>
         public static string Export_Item_Names {
@@ -3026,6 +3053,15 @@ namespace SerialLoops.Assets {
         public static string Failed_to_create_directory_on_specified_path_ {
             get {
                 return ResourceManager.GetString("Failed to create directory on specified path!", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to create XDelta patch!.
+        /// </summary>
+        public static string Failed_to_create_XDelta_patch_ {
+            get {
+                return ResourceManager.GetString("Failed to create XDelta patch!", resourceCulture);
             }
         }
         
@@ -3758,6 +3794,24 @@ namespace SerialLoops.Assets {
         public static string Groups___0_ {
             get {
                 return ResourceManager.GetString("Groups: {0}", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hack Created Successfully!.
+        /// </summary>
+        public static string Hack_Created_Successfully_ {
+            get {
+                return ResourceManager.GetString("Hack Created Successfully!", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hack Description.
+        /// </summary>
+        public static string Hack_Description {
+            get {
+                return ResourceManager.GetString("Hack Description", resourceCulture);
             }
         }
         
@@ -4736,6 +4790,24 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No base ROM selected!.
+        /// </summary>
+        public static string No_base_ROM_selected_ {
+            get {
+                return ResourceManager.GetString("No base ROM selected!", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to None.
+        /// </summary>
+        public static string No_Character {
+            get {
+                return ResourceManager.GetString("No Character", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No Emulator Path.
         /// </summary>
         public static string No_Emulator_Path {
@@ -4779,6 +4851,15 @@ namespace SerialLoops.Assets {
         public static string No_hacks_applied_ {
             get {
                 return ResourceManager.GetString("No hacks applied!", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No path to XDelta file selected!.
+        /// </summary>
+        public static string No_path_to_XDelta_file_selected_ {
+            get {
+                return ResourceManager.GetString("No path to XDelta file selected!", resourceCulture);
             }
         }
         
@@ -4878,6 +4959,15 @@ namespace SerialLoops.Assets {
         public static string NORMAL_TEXT_ENTRANCE {
             get {
                 return ResourceManager.GetString("NORMAL_TEXT_ENTRANCE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Note: When exporting an XDelta patch, the base ROM you should use is likely different than the one you used when creating the project. Please choose the base Japanese ROM (SHA-1 can be confirmed below) to ensure that people who want to play your hack only need to patch the game once..
+        /// </summary>
+        public static string Note__When_exporting_an_xdelta_patch__the_base_ROM_you_should_use_is_likely_different_than_the_one_you_used_when_creating_the_project__Please_choose_the_base_Japanese_ROM__SHA_1_can_be_confirmed_below__to_ensure_that_people_who_want_to_play_your_hack_only_need_to_patch_the_game_once_ {
+            get {
+                return ResourceManager.GetString(@"Note: When exporting an xdelta patch, the base ROM you should use is likely different than the one you used when creating the project. Please choose the base Japanese ROM (SHA-1 can be confirmed below) to ensure that people who want to play your hack only need to patch the game once.", resourceCulture);
             }
         }
         
@@ -5116,11 +5206,29 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Parameter Name.
+        /// </summary>
+        public static string Parameter_Name {
+            get {
+                return ResourceManager.GetString("Parameter Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Parameter Value.
         /// </summary>
         public static string Parameter_Value {
             get {
                 return ResourceManager.GetString("Parameter Value", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter Values.
+        /// </summary>
+        public static string Parameter_Values {
+            get {
+                return ResourceManager.GetString("Parameter Values", resourceCulture);
             }
         }
         
@@ -5310,6 +5418,24 @@ namespace SerialLoops.Assets {
         public static string Please_enter_a_value_for_the_section_name {
             get {
                 return ResourceManager.GetString("Please enter a value for the section name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select a base ROM before attempting to create the XDelta patch!.
+        /// </summary>
+        public static string Please_select_a_base_ROM_before_attempting_to_create_the_XDelta_patch_ {
+            get {
+                return ResourceManager.GetString("Please select a base ROM before attempting to create the XDelta patch!", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select a path to save the XDelta patch to before attempting to create it..
+        /// </summary>
+        public static string Please_select_a_path_to_save_the_XDelta_patch_to_before_attempting_to_create_it_ {
+            get {
+                return ResourceManager.GetString("Please select a path to save the XDelta patch to before attempting to create it.", resourceCulture);
             }
         }
         
@@ -6621,6 +6747,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select Hack Files.
+        /// </summary>
+        public static string Select_Hack_Files {
+            get {
+                return ResourceManager.GetString("Select Hack Files", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select Icon.
         /// </summary>
         public static string Select_Icon {
@@ -6657,6 +6792,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Serial Loops ASM Hack.
+        /// </summary>
+        public static string Serial_Loops_ASM_Hack {
+            get {
+                return ResourceManager.GetString("Serial Loops ASM Hack", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Serial Loops Exported Project.
         /// </summary>
         public static string Serial_Loops_Exported_Project {
@@ -6680,15 +6824,6 @@ namespace SerialLoops.Assets {
         public static string Serial_Loops_v_0_ {
             get {
                 return ResourceManager.GetString("Serial Loops v{0}", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Serialized ASM hack.
-        /// </summary>
-        public static string Serialized_ASM_hack {
-            get {
-                return ResourceManager.GetString("Serialized ASM hack", resourceCulture);
             }
         }
         
@@ -7243,6 +7378,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Symbols.
+        /// </summary>
+        public static string Symbols {
+            get {
+                return ResourceManager.GetString("Symbols", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to System data damaged &amp; reset message box.
         /// </summary>
         public static string System_data_damaged___reset_message_box {
@@ -7420,6 +7564,16 @@ namespace SerialLoops.Assets {
         public static string The_changes_made_will_require_Serial_Loops_to_be_restarted__Is_that_okay_ {
             get {
                 return ResourceManager.GetString("The changes made will require Serial Loops to be restarted. Is that okay?", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The hack file has been successfully created. To import it, open the ASM hacks dialog and select &quot;Import Hack&quot;..
+        /// </summary>
+        public static string The_hack_file_has_been_successfully_created__To_import_it__open_the_ASM_hacks_dialog_and_select__Import_Hack__ {
+            get {
+                return ResourceManager.GetString(("The hack file has been successfully created. To import it, open the ASM hacks dia" +
+                        "log and select \"Import Hack\"."), resourceCulture);
             }
         }
         

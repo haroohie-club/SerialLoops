@@ -1321,7 +1321,7 @@
   <data name="Patching ARM9" xml:space="preserve">
     <value>Patchando ARM9</value>
   </data>
-  <data name="Serialized ASM hack" xml:space="preserve">
+  <data name="Serial Loops ASM Hack" xml:space="preserve">
     <value>Hack ASM serializzato</value>
   </data>
   <data name="Number of Singularities" xml:space="preserve">
