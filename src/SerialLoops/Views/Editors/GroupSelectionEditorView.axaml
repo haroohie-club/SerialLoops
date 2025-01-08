@@ -21,6 +21,12 @@
                             Background="{Binding BackgroundColor}">
                         <Image Source="{Binding Letter, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
                                Canvas.Left="134" Canvas.Top="22" Width="64" Height="64"/>
+                        <Image Source="{Binding TitlePlateSlope, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
+                               Canvas.Left="52" Canvas.Top="116" Width="32" Height="32"/>
+                        <Image Source="{Binding TitlePlateMain, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
+                               Canvas.Left="84" Canvas.Top="84" Width="136" Height="64" Stretch="Fill"/>
+                        <Image Source="{Binding TitlePlateText, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
+                               Canvas.Left="82" Canvas.Top="118" Width="136" Height="32"/>
                     </Canvas>
                 </DataTemplate>
             </ItemsControl.DataTemplates>

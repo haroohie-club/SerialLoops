@@ -8,6 +8,7 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
+using SerialLoops.Lib.Script.Parameters;
 using SerialLoops.Lib.Util;
 using SerialLoops.ViewModels.Panels;
 using SkiaSharp;
@@ -114,6 +115,17 @@ public class ScenarioActivityViewModel : ViewModelBase
         CanvasWidth = canvasPos.Width;
         CanvasHeight = canvasPos.Height;
         Letter = GetLetter(index);
+
+        TitlePlateSlope = new(16, 16);
+        TitlePlateMain = new(16, 32);
+        _layoutSource.ExtractSubset(TitlePlateSlope, new(32, 48, 48, 64));
+        _layoutSource.ExtractSubset(TitlePlateMain, new(48, 32, 64, 64));
+
+        TitlePlateText = new(68, 16);
+        using SKCanvas titlePlateCanvas = new(TitlePlateText);
+        titlePlateCanvas.DrawHaroohieText(activity.Title, DialogueScriptParameter.Paint00, selection.OpenProject, 0, 0);
+        titlePlateCanvas.Flush();
+        TitlePlateMain.Resize(new SKSizeI(136, 32), SKSamplingOptions.Default);
     }
 
     // Drawing properties
@@ -133,6 +145,11 @@ public class ScenarioActivityViewModel : ViewModelBase
 
     [Reactive]
     public SKBitmap Letter { get; private set; }
+
+    public SKBitmap TitlePlateSlope { get; }
+    public SKBitmap TitlePlateMain { get; }
+    [Reactive]
+    public SKBitmap TitlePlateText { get; set; }
 
     private static Rect GetCanvasPos(int index)
     {
