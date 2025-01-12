@@ -5,8 +5,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:assets="using:SerialLoops.Assets"
              xmlns:controls="using:SerialLoops.Controls"
+             xmlns:editors="using:SerialLoops.Views.Editors"
              xmlns:i="using:Avalonia.Xaml.Interactivity"
              xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
+             xmlns:li="using:SerialLoops.Lib.Items"
              xmlns:sk="using:SkiaSharp"
              xmlns:utility="using:SerialLoops.Utility"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -100,15 +102,15 @@
                         </TextBox>
                     </StackPanel>
 
-                    <ItemsRepeater ItemsSource="{Binding Routes}" Height="300">
+                    <ItemsRepeater ItemsSource="{Binding Routes}" MinHeight="800">
                         <ItemsRepeater.Layout>
                             <UniformGridLayout Orientation="Horizontal" MaximumRowsOrColumns="5" ItemsJustification="Center"
-                                               MinColumnSpacing="32" MinRowSpacing="32" MinItemWidth="150" MinItemHeight="112"/>
+                                               MinColumnSpacing="32" MinRowSpacing="32" MinItemWidth="200" MinItemHeight="300"/>
                         </ItemsRepeater.Layout>
                         <ItemsRepeater.ItemTemplate>
                             <DataTemplate DataType="vm:ScenarioRouteViewModel">
                                 <StackPanel Orientation="Vertical" Spacing="16">
-                                    <TextBox Text="{Binding Title}" HorizontalAlignment="Center"/>
+                                    <TextBox Text="{Binding Title}" HorizontalAlignment="Center" Width="200"/>
                                     <controls:ItemLink Item="{Binding Script}" Tabs="{Binding Tabs}"
                                                        HorizontalAlignment="Center"/>
                                     <ItemsRepeater ItemsSource="{Binding CharacterIcons}" HorizontalAlignment="Center">
@@ -123,6 +125,17 @@
                                             </DataTemplate>
                                         </ItemsRepeater.ItemTemplate>
                                     </ItemsRepeater>
+                                    <StackPanel Orientation="Vertical" Spacing="5" HorizontalAlignment="Center">
+                                        <TextBlock Text="{x:Static assets:Strings.Kyonless_Topics}" HorizontalAlignment="Center"/>
+                                        <ListBox ItemsSource="{Binding KyonlessTopics}" HorizontalAlignment="Center"
+                                                 Height="160">
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate DataType="li:TopicItem">
+                                                    <TextBlock Text="{Binding DisplayName}"/>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+                                    </StackPanel>
                                 </StackPanel>
                             </DataTemplate>
                         </ItemsRepeater.ItemTemplate>
