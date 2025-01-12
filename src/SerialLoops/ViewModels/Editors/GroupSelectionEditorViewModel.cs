@@ -119,7 +119,7 @@ public class ScenarioActivityViewModel : ViewModelBase
         get => _pastDesc.GetSubstitutedString(_selection.OpenProject);
         set
         {
-            this.RaiseAndSetIfChanged(ref _pastDesc, value.GetSubstitutedString(_selection.OpenProject));
+            this.RaiseAndSetIfChanged(ref _pastDesc, value.GetOriginalString(_selection.OpenProject));
             Activity.PastDesc = _pastDesc;
             SetSelectedDescriptionImage(_pastDesc);
             _selection.GroupSelection.UnsavedChanges = true;
