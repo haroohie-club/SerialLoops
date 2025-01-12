@@ -40,6 +40,18 @@
                             <Image Source="{Binding TitlePlateText, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
                                    Canvas.Left="82" Canvas.Top="118" Width="136" Height="32"/>
 
+                            <ItemsRepeater ItemsSource="{Binding LockedIcons}"
+                                           Canvas.Left="10" Canvas.Top="60">
+                                <ItemsRepeater.Layout>
+                                    <UniformGridLayout MinItemHeight="48" MinItemWidth="48" MinColumnSpacing="16" MaximumRowsOrColumns="2"/>
+                                </ItemsRepeater.Layout>
+                                <ItemsRepeater.ItemTemplate>
+                                    <DataTemplate DataType="sk:SKBitmap">
+                                        <Image Source="{Binding Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
+                                    </DataTemplate>
+                                </ItemsRepeater.ItemTemplate>
+                            </ItemsRepeater>
+
                             <Border Background="Transparent" BorderThickness="2" BorderBrush="Red" IsVisible="{Binding Selected}"
                                     Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
                         </Canvas>

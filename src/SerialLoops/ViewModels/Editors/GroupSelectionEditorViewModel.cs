@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Input;
 using Avalonia;
 using Avalonia.Media;
+using DynamicData;
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
@@ -46,6 +47,9 @@ public class GroupSelectionEditorViewModel : EditorViewModel
 
             CharacterPortraits.Add(speaker, characterPortrait);
         }
+        SKBitmap anyPortrait = new(24, 24);
+        characterPortraitImage.ExtractSubset(anyPortrait, new(96, 96, 120, 120));
+        CharacterPortraits.Add(Speaker.INFO, anyPortrait);
 
         // We don't do the Where in advance because we need the index to be accurate
         Activities = new(groupSelection.Selection.Activities.Select((a, i) => a is not null ? new ScenarioActivityViewModel(this, a, i) : null)
@@ -166,6 +170,23 @@ public class ScenarioActivityViewModel : ViewModelBase
         });
         SelectFutureDescCommand = ReactiveCommand.Create(() => SetSelectedDescriptionImage(_futureDesc));
         SelectPastDescCommand = ReactiveCommand.Create(() => SetSelectedDescriptionImage(_pastDesc));
+
+        LockedIcons = [];
+        if (Activity.RequiredBrigadeMember != ScenarioActivity.BrigadeMember.NONE)
+        {
+            LockedIcons.Add(Activity.RequiredBrigadeMember switch
+            {
+                ScenarioActivity.BrigadeMember.MIKURU => _selection.CharacterPortraits[Speaker.MIKURU].Resize(new SKSizeI(48, 48), SKSamplingOptions.Default),
+                ScenarioActivity.BrigadeMember.NAGATO => _selection.CharacterPortraits[Speaker.NAGATO].Resize(new SKSizeI(48, 48), SKSamplingOptions.Default),
+                ScenarioActivity.BrigadeMember.KOIZUMI => _selection.CharacterPortraits[Speaker.KOIZUMI].Resize(new SKSizeI(48, 48), SKSamplingOptions.Default),
+                ScenarioActivity.BrigadeMember.ANY => _selection.CharacterPortraits[Speaker.INFO].Resize(new SKSizeI(48, 48), SKSamplingOptions.Default),
+                _ => null,
+            });
+        }
+        if (Activity.HaruhiPresent)
+        {
+            LockedIcons.Add(_selection.CharacterPortraits[Speaker.HARUHI].Resize(new SKSizeI(24, 24), SKSamplingOptions.Default));
+        }
     }
 
     // Drawing properties
@@ -190,6 +211,8 @@ public class ScenarioActivityViewModel : ViewModelBase
     public SKBitmap TitlePlateMain { get; }
     [Reactive]
     public SKBitmap TitlePlateText { get; set; }
+
+    public ObservableCollection<SKBitmap> LockedIcons { get; }
 
     private static Rect GetCanvasPos(int index)
     {
