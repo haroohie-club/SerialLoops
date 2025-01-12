@@ -1,5 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Input;
 using Avalonia;
 using Avalonia.Media;
 using HaruhiChokuretsuLib.Archive.Event;
@@ -21,14 +23,30 @@ public class GroupSelectionEditorViewModel : EditorViewModel
     public GroupSelectionItem GroupSelection { get; set; }
     [Reactive]
     public ObservableCollection<ScenarioActivityViewModel> Activities { get; set; }
-    public Project OpenProject { get; set; }
+    [Reactive]
+    public ScenarioActivityViewModel SelectedActivity { get; set; }
+    public Project OpenProject { get; }
     public EditorTabsPanelViewModel Tabs { get; }
+    public Dictionary<Speaker, SKBitmap> CharacterPortraits { get; } = [];
 
     public GroupSelectionEditorViewModel(GroupSelectionItem groupSelection, MainWindowViewModel window, ILogger log) : base(groupSelection, window, log)
     {
         Tabs = window.EditorTabs;
         GroupSelection = groupSelection;
         OpenProject = window.OpenProject;
+
+        SKBitmap characterPortraitImage = OpenProject.Grp.GetFileByIndex(0xBAA).GetImage(transparentIndex: 0);
+        foreach (Speaker speaker in new[] { Speaker.KYON, Speaker.HARUHI, Speaker.MIKURU, Speaker.NAGATO, Speaker.KOIZUMI })
+        {
+            int yOffset = (((int)speaker - 1) / 4) * 32;
+            int xOffset = (((int)speaker - 1) % 4) * 32;
+
+            SKBitmap characterPortrait = new(32, 32);
+            characterPortraitImage.ExtractSubset(characterPortrait, new(xOffset, yOffset, xOffset + 32, yOffset + 32));
+
+            CharacterPortraits.Add(speaker, characterPortrait);
+        }
+
         // We don't do the Where in advance because we need the index to be accurate
         Activities = new(groupSelection.Selection.Activities.Select((a, i) => a is not null ? new ScenarioActivityViewModel(this, a, i) : null)
             .Where(a => a is not null));
@@ -40,7 +58,14 @@ public class ScenarioActivityViewModel : ViewModelBase
     private GroupSelectionEditorViewModel _selection;
 
     [Reactive]
+    public bool Selected { get; set; }
+
+    [Reactive]
     public ScenarioActivity Activity { get; set; }
+
+    public ICommand SelectActivityCommand { get; }
+    public ICommand SelectFutureDescCommand { get; }
+    public ICommand SelectPastDescCommand { get; }
 
     private int _index;
     public int Index
@@ -66,6 +91,7 @@ public class ScenarioActivityViewModel : ViewModelBase
         {
             this.RaiseAndSetIfChanged(ref _title, value.GetOriginalString(_selection.OpenProject));
             Activity.Title = _title;
+            SetTitleTextImage();
             _selection.GroupSelection.UnsavedChanges = true;
         }
     }
@@ -78,6 +104,7 @@ public class ScenarioActivityViewModel : ViewModelBase
         {
             this.RaiseAndSetIfChanged(ref _futureDesc, value.GetOriginalString(_selection.OpenProject));
             Activity.FutureDesc = _futureDesc;
+            SetSelectedDescriptionImage(_futureDesc);
             _selection.GroupSelection.UnsavedChanges = true;
         }
     }
@@ -90,9 +117,13 @@ public class ScenarioActivityViewModel : ViewModelBase
         {
             this.RaiseAndSetIfChanged(ref _pastDesc, value.GetSubstitutedString(_selection.OpenProject));
             Activity.PastDesc = _pastDesc;
+            SetSelectedDescriptionImage(_pastDesc);
             _selection.GroupSelection.UnsavedChanges = true;
         }
     }
+
+    [Reactive]
+    public SKBitmap SelectedDescriptionImage { get; set; }
 
     [Reactive]
     public ObservableCollection<ScenarioRouteViewModel> Routes { get; set; }
@@ -121,11 +152,20 @@ public class ScenarioActivityViewModel : ViewModelBase
         _layoutSource.ExtractSubset(TitlePlateSlope, new(32, 48, 48, 64));
         _layoutSource.ExtractSubset(TitlePlateMain, new(48, 32, 64, 64));
 
-        TitlePlateText = new(68, 16);
-        using SKCanvas titlePlateCanvas = new(TitlePlateText);
-        titlePlateCanvas.DrawHaroohieText(activity.Title, DialogueScriptParameter.Paint00, selection.OpenProject, 0, 0);
-        titlePlateCanvas.Flush();
-        TitlePlateMain.Resize(new SKSizeI(136, 32), SKSamplingOptions.Default);
+        SetTitleTextImage();
+
+        SelectActivityCommand = ReactiveCommand.Create(() =>
+        {
+            if (_selection.SelectedActivity is not null)
+            {
+                _selection.SelectedActivity.Selected = false;
+            }
+            Selected = true;
+            SelectedDescriptionImage = null;
+            _selection.SelectedActivity = this;
+        });
+        SelectFutureDescCommand = ReactiveCommand.Create(() => SetSelectedDescriptionImage(_futureDesc));
+        SelectPastDescCommand = ReactiveCommand.Create(() => SetSelectedDescriptionImage(_pastDesc));
     }
 
     // Drawing properties
@@ -208,16 +248,41 @@ public class ScenarioActivityViewModel : ViewModelBase
 
         return letter;
     }
+
+    private void SetTitleTextImage()
+    {
+        TitlePlateText = new(68, 16);
+        using SKCanvas titlePlateCanvas = new(TitlePlateText);
+        titlePlateCanvas.DrawHaroohieText(Activity.Title, DialogueScriptParameter.Paint00, _selection.OpenProject, 0, 0);
+        titlePlateCanvas.Flush();
+        TitlePlateText = TitlePlateText.Resize(new SKSizeI(136, 32), SKSamplingOptions.Default);
+    }
+
+    private void SetSelectedDescriptionImage(string description)
+    {
+        SelectedDescriptionImage = new(256, 40);
+        using SKCanvas canvas = new(SelectedDescriptionImage);
+        canvas.DrawBitmap(_selection.OpenProject.DialogueBitmap, new(0, 24, 32, 36), new SKRect(0, 0, 256, 12));
+        SKColor dialogueBoxColor = _selection.OpenProject.DialogueBitmap.GetPixel(0, 28);
+        canvas.DrawRect(0, 12, 256, 28, new() { Color = dialogueBoxColor });
+        canvas.DrawBitmap(_selection.OpenProject.DialogueBitmap, new(0, 37, 32, 64),
+            new SKRect(224, 13, 256, 40));
+        canvas.DrawHaroohieText(description, DialogueScriptParameter.Paint00, _selection.OpenProject, y: 8);
+        canvas.Flush();
+        SelectedDescriptionImage = SelectedDescriptionImage.Resize(new SKSizeI(512, 80), SKSamplingOptions.Default);
+    }
 }
 
-public class ScenarioRouteViewModel(GroupSelectionEditorViewModel selection, ScenarioRoute route) : ViewModelBase
+public class ScenarioRouteViewModel : ViewModelBase
 {
-    private GroupSelectionEditorViewModel _selection = selection;
+    private GroupSelectionEditorViewModel _selection;
+
+    public EditorTabsPanelViewModel Tabs => _selection.Tabs;
 
     [Reactive]
-    public ScenarioRoute Route { get; set; } = route;
+    public ScenarioRoute Route { get; set; }
 
-    private string _title = route.Title;
+    private string _title;
     public string Title
     {
         get => _title.GetSubstitutedString(_selection.OpenProject);
@@ -225,17 +290,13 @@ public class ScenarioRouteViewModel(GroupSelectionEditorViewModel selection, Sce
         {
             this.RaiseAndSetIfChanged(ref _title, value.GetOriginalString(_selection.OpenProject));
             Route.Title = _title;
-            // _selection.GroupSelection.UnsavedChanges = true;
+            _selection.GroupSelection.UnsavedChanges = true;
         }
     }
 
-    public ObservableCollection<TopicItem> KyonlessTopics { get; set; } = new(route.KyonlessTopics.Select(t =>
-            (TopicItem)selection.OpenProject.Items.FirstOrDefault(i =>
-                i.Type == ItemDescription.ItemType.Topic && ((TopicItem)i).TopicEntry.Id == t))
-        .Where(t => t is not null));
+    public ObservableCollection<TopicItem> KyonlessTopics { get; set; }
 
-    private ScriptItem _script = (ScriptItem)selection.OpenProject.Items.FirstOrDefault(i =>
-        i.Type == ItemDescription.ItemType.Script && ((ScriptItem)i).Event.Index == route.ScriptIndex);
+    private ScriptItem _script;
     public ScriptItem Script
     {
         get => _script;
@@ -243,7 +304,24 @@ public class ScenarioRouteViewModel(GroupSelectionEditorViewModel selection, Sce
         {
             this.RaiseAndSetIfChanged(ref _script, value);
             Route.ScriptIndex = (short)_script.Event.Index;
-            // selection.GroupSelection.UnsavedChanges = true;
+            _selection.GroupSelection.UnsavedChanges = true;
         }
     }
+
+    public ScenarioRouteViewModel(GroupSelectionEditorViewModel selection, ScenarioRoute route)
+    {
+        _selection = selection;
+        Route = route;
+        _title = route.Title;
+        KyonlessTopics = new(route.KyonlessTopics.Select(t =>
+                (TopicItem)selection.OpenProject.Items.FirstOrDefault(i =>
+                    i.Type == ItemDescription.ItemType.Topic && ((TopicItem)i).TopicEntry.Id == t))
+            .Where(t => t is not null));
+        _script = (ScriptItem)selection.OpenProject.Items.FirstOrDefault(i =>
+            i.Type == ItemDescription.ItemType.Script && ((ScriptItem)i).Event.Index == route.ScriptIndex);
+
+        CharacterIcons = new(Route.CharactersInvolved.Select(s => _selection.CharacterPortraits[s]));
+    }
+
+    public ObservableCollection<SKBitmap> CharacterIcons { get; }
 }

@@ -98,7 +98,7 @@ public class PuzzleEditorViewModel : EditorViewModel
         set
         {
             this.RaiseAndSetIfChanged(ref _accompanyingCharacter, value);
-            _puzzle.Puzzle.Settings.AccompanyingCharacter = _accompanyingCharacter?.Character.MessageInfo.Character ?? 0;
+            _puzzle.Puzzle.Settings.AccompanyingCharacter = _accompanyingCharacter?.Character?.MessageInfo.Character ?? 0;
             _puzzle.UnsavedChanges = true;
         }
     }
@@ -109,7 +109,7 @@ public class PuzzleEditorViewModel : EditorViewModel
         set
         {
             this.RaiseAndSetIfChanged(ref _powerCharacter1, value);
-            _puzzle.Puzzle.Settings.PowerCharacter1 = _powerCharacter1?.Character.MessageInfo.Character ?? 0;
+            _puzzle.Puzzle.Settings.PowerCharacter1 = _powerCharacter1?.Character?.MessageInfo.Character ?? 0;
             _puzzle.UnsavedChanges = true;
         }
     }
@@ -120,7 +120,7 @@ public class PuzzleEditorViewModel : EditorViewModel
         set
         {
             this.RaiseAndSetIfChanged(ref _powerCharacter2, value);
-            _puzzle.Puzzle.Settings.PowerCharacter1 = _powerCharacter2?.Character.MessageInfo.Character ?? 0;
+            _puzzle.Puzzle.Settings.PowerCharacter1 = _powerCharacter2?.Character?.MessageInfo.Character ?? 0;
             _puzzle.UnsavedChanges = true;
         }
     }
