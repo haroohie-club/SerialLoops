@@ -984,7 +984,7 @@ public partial class Project
             {
                 if (ItemNames.TryGetValue(Items[i].Name, out string value))
                 {
-                    Items[i].Rename(value);
+                    Items[i].DisplayName = value;
                 }
                 else
                 {

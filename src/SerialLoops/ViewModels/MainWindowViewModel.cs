@@ -778,6 +778,30 @@ public partial class MainWindowViewModel : ViewModelBase
                         savedExtra = true;
                     }
                     break;
+                case ItemDescription.ItemType.Character:
+                    CharacterItem characterItem = (CharacterItem)item;
+                    if (characterItem.NameplateProperties.Name != item.DisplayName[4..])
+                    {
+                        characterItem.Rename($"CHR_{characterItem.NameplateProperties.Name}", OpenProject);
+                        nameplateCanvas.DrawBitmap(
+                            characterItem.GetNewNameplate(_blankNameplate, _blankNameplateBaseArrow, OpenProject),
+                            new SKRect(0, 16 * ((int)characterItem.MessageInfo.Character - 1), 64,
+                                16 * ((int)characterItem.MessageInfo.Character)));
+                        speakerCanvas.DrawBitmap(
+                            characterItem.GetNewNameplate(_blankNameplate, _blankNameplateBaseArrow, OpenProject,
+                                transparent: true),
+                            new SKRect(0, 16 * ((int)characterItem.MessageInfo.Character - 1), 64,
+                                16 * ((int)characterItem.MessageInfo.Character)));
+                        changedNameplates = true;
+                    }
+
+                    if (!savedMessInfo)
+                    {
+                        IO.WriteStringFile(Path.Combine("assets", "data", $"{OpenProject.MessInfo.Index:X3}.s"),
+                            OpenProject.MessInfo.GetSource([]), OpenProject, Log);
+                        savedMessInfo = true;
+                    }
+                    break;
                 case ItemDescription.ItemType.Character_Sprite:
                     if (!savedChrData)
                     {
@@ -831,7 +855,6 @@ public partial class MainWindowViewModel : ViewModelBase
                     changedTopics = true;
                     break;
                 case ItemDescription.ItemType.Voice:
-                    VoicedLineItem vce = (VoicedLineItem)item;
                     if (OpenProject.VoiceMap is not null)
                     {
                         changedSubs = true;
