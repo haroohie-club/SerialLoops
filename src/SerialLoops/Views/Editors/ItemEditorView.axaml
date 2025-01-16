@@ -1,0 +1,20 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="using:SerialLoops.ViewModels.Editors"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:assets="using:SerialLoops.Assets"
+             xmlns:utility="using:SerialLoops.Utility"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:ItemEditorViewModel"
+             x:Class="SerialLoops.Views.Editors.ItemEditorView">
+    <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto">
+        <Image Grid.Row="0" Source="{Binding ItemBitmap, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="3">
+            <Button Content="{x:Static assets:Strings.Export}" Command="{Binding ExportCommand}"/>
+            <Button Content="{x:Static assets:Strings.Import}" Command="{Binding ImportCommand}"/>
+        </StackPanel>
+    </Grid>
+</UserControl>
+
