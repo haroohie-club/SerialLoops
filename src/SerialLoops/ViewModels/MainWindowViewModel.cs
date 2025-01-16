@@ -796,6 +796,23 @@ public partial class MainWindowViewModel : ViewModelBase
                     IO.WriteStringFile(Path.Combine("assets", "data", $"{chessPuzzleItem.ChessPuzzle.Index:X3}.s"),
                         chessPuzzleItem.ChessPuzzle.GetSource([]), OpenProject, Log);
                     break;
+                case ItemDescription.ItemType.Place:
+                    PlaceItem placeItem = (PlaceItem)item;
+                    if (placeItem.PlaceName != item.DisplayName[4..])
+                    {
+                        placeItem.Rename($"PLC_{placeItem.PlaceName}");
+                    }
+
+                    MemoryStream placeStream = new();
+                    SKBitmap newPlaceImage =
+                        PlaceItem.Unscramble(PlaceItem.Unscramble(placeItem.GetNewPlaceGraphic(_msGothicHaruhi)));
+                    placeItem.PlaceGraphic.SetImage(newPlaceImage);
+                    newPlaceImage.Encode(placeStream, SKEncodedImageFormat.Png, 1);
+                    IO.WriteBinaryFile(Path.Combine("assets", "graphics", $"{placeItem.PlaceGraphic.Index:X3}.png"),
+                        placeStream.ToArray(), OpenProject, Log);
+                    IO.WriteStringFile(Path.Combine("assets", "graphics", $"{placeItem.PlaceGraphic.Index:X3}.gi"),
+                        placeItem.PlaceGraphic.GetGraphicInfoFile(), OpenProject, Log);
+                    break;
                 case ItemDescription.ItemType.Scenario:
                     ScenarioStruct scenario = ((ScenarioItem)item).Scenario;
                     IO.WriteStringFile(
