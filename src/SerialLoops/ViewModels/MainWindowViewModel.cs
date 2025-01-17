@@ -128,6 +128,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
         ApplyHacksCommand = ReactiveCommand.CreateFromTask(ApplyHacksCommand_Executed);
         CreateAsmHackCommand = ReactiveCommand.CreateFromTask(CreateAsmHackCommand_Executed);
+        EditUiTextCommand = ReactiveCommand.CreateFromTask(EditUiTextCommand_Executed);
         ProjectSettingsCommand = ReactiveCommand.CreateFromTask(ProjectSettingsCommand_Executed);
         ExportProjectCommand = ReactiveCommand.CreateFromTask(ExportProjectCommand_Executed);
         ExportPatchCommand = ReactiveCommand.CreateFromTask(ExportPatchCommand_Executed);
@@ -355,6 +356,13 @@ public partial class MainWindowViewModel : ViewModelBase
             await Window.ShowMessageBoxAsync(Strings.Hack_Created_Successfully_, Strings.The_hack_file_has_been_successfully_created__To_import_it__open_the_ASM_hacks_dialog_and_select__Import_Hack__,
                 ButtonEnum.Ok, Icon.Success, Log);
         }
+    }
+
+    private async Task EditUiTextCommand_Executed()
+    {
+        EditUiTextDialogViewModel editUiTextDialogViewModel = new(OpenProject, Log);
+        EditUiTextDialog editUiTextDialog = new() { DataContext = editUiTextDialogViewModel };
+        await editUiTextDialog.ShowDialog(Window);
     }
 
     private async Task ProjectSettingsCommand_Executed()
