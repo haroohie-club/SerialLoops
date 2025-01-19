@@ -13,9 +13,9 @@
     <Grid RowDefinitions="Auto,Auto,Auto,*" ColumnDefinitions="*,Auto">
         <controls:SoundPlayerPanel Name="Player" Grid.Row="0" Grid.Column="0" DataContext="{Binding VcePlayer}"/>
         <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Spacing="3" Margin="5">
-            <Button Content="{x:Static assets:Strings.Replace}"/>
-            <Button Content="{x:Static assets:Strings.Export}"/>
-            <Button Content="{x:Static assets:Strings.Restore}"/>
+            <Button Content="{x:Static assets:Strings.Replace}" Command="{Binding ReplaceCommand}"/>
+            <Button Content="{x:Static assets:Strings.Export}" Command="{Binding ExportCommand}"/>
+            <Button Content="{x:Static assets:Strings.Restore}" Command="{Binding RestoreCommand}"/>
         </StackPanel>
         <gbox:GroupBox Header="{x:Static assets:Strings.Edit_Subtitle}" Theme="{StaticResource GroupBoxClassic}" Margin="5"
                        IsVisible="{Binding SubsEnabled}" Grid.Row="2" Grid.Column="0">
