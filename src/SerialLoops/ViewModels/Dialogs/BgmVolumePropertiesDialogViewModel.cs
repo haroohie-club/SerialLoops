@@ -46,7 +46,7 @@ public class BgmVolumePropertiesDialogViewModel : ViewModelBase
     public ICommand SaveCommand { get; set; }
     public ICommand CancelCommand { get; set; }
 
-    private float _maxAmplitude;
+    private readonly float _maxAmplitude;
 
     public BgmVolumePropertiesDialogViewModel(WaveStream wav, string title, float maxAmplitude, ILogger log)
     {
