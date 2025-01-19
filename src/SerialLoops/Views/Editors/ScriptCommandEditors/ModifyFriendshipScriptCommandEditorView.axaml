@@ -26,7 +26,7 @@
         <TextBlock Grid.Row="1" Grid.Column="0" Text="{x:Static assets:Strings.Modify_by}"/>
         <NumericUpDown Grid.Row="1" Grid.Column="1" Margin="10,0,0,0"
                        Value="{Binding ModifiedAmount}"
-                       Minimum="-40" Maximum="40" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
+                       Minimum="-64" Maximum="64" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
     </Grid>
 </UserControl>
 
