@@ -4963,6 +4963,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Normalize.
+        /// </summary>
+        public static string Normalize {
+            get {
+                return ResourceManager.GetString("Normalize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Note: When exporting an XDelta patch, the base ROM you should use is likely different than the one you used when creating the project. Please choose the base Japanese ROM (SHA-1 can be confirmed below) to ensure that people who want to play your hack only need to patch the game once..
         /// </summary>
         public static string Note__When_exporting_an_xdelta_patch__the_base_ROM_you_should_use_is_likely_different_than_the_one_you_used_when_creating_the_project__Please_choose_the_base_Japanese_ROM__SHA_1_can_be_confirmed_below__to_ensure_that_people_who_want_to_play_your_hack_only_need_to_patch_the_game_once_ {

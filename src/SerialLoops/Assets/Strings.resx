@@ -3059,4 +3059,7 @@ This action is irreversible.</value>
   <data name="No Character" xml:space="preserve">
     <value>None</value>
   </data>
+  <data name="Normalize" xml:space="preserve">
+    <value>Normalize</value><comment>As in "normalize the audio volume so that max volume is similar to all other audio volumes"</comment>
+  </data>
 </root>

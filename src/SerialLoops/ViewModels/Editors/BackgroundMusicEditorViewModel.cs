@@ -157,8 +157,8 @@ public class BackgroundMusicEditorViewModel : EditorViewModel
         }
         string volumeAdjustedWav = Path.Combine(Path.GetDirectoryName(_bgmCachedFile), $"{Path.GetFileNameWithoutExtension(_bgmCachedFile)}-volume.wav");
         File.Copy(_bgmCachedFile, volumeAdjustedWav, true);
-        using WaveFileReader reader = new(volumeAdjustedWav);
-        BgmVolumePropertiesDialogViewModel volumeDialog = new(reader, Bgm.Name, _log);
+        await using WaveFileReader reader = new(volumeAdjustedWav);
+        BgmVolumePropertiesDialogViewModel volumeDialog = new(reader, Bgm.Name, _project.AverageBgmMaxAmplitude, _log);
         BgmVolumePreviewItem volumePreview = await new BgmVolumePropertiesDialog { DataContext = volumeDialog }.ShowDialog<BgmVolumePreviewItem>(Window.Window);
         if (volumePreview is not null)
         {
