@@ -25,10 +25,24 @@
                     <TextBox Text="{Binding Subtitle, Mode=TwoWay}" Watermark="{x:Static assets:Strings.Enter_subtitle_text___}" Width="400"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="20">
+                    <ComboBox ItemsSource="{Binding SubtitleColors}" SelectedItem="{Binding SubtitleColor}"
+                              VerticalAlignment="Center">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate DataType="vm:LocalizedDialogueColor">
+                                <TextBlock Text="{Binding DisplayText}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                        <ComboBox.ItemContainerTheme>
+                            <ControlTheme TargetType="ComboBoxItem" x:DataType="vm:LocalizedDialogueColor" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
+                                <Setter Property="TextSearch.Text" Value="{Binding DisplayText}" />
+                            </ControlTheme>
+                        </ComboBox.ItemContainerTheme>
+                    </ComboBox>
                     <StackPanel Spacing="3" Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock Text="{x:Static assets:Strings.Target_Screen}"/>
                         <controls:ScreenSelector DataContext="{Binding ScreenSelector}"/>
                     </StackPanel>
+                    <CheckBox Content="{x:Static assets:Strings.Force_Drop_Shadow}" IsChecked="{Binding ForceDropShadow}"/>
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="3">
                         <TextBlock Text="{x:Static assets:Strings.Screen_Position}"/>
                         <StackPanel Orientation="Vertical" Spacing="2">

@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -39,6 +41,23 @@ public class VoicedLineEditorViewModel : EditorViewModel
     [Reactive]
     public SKBitmap SubtitlesPreview { get; set; } = new(256, 384);
 
+    public ObservableCollection<LocalizedDialogueColor> SubtitleColors { get; }
+    private LocalizedDialogueColor _subtitleColor;
+    public LocalizedDialogueColor SubtitleColor
+    {
+        get => _subtitleColor;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _subtitleColor, value);
+            if (_voiceMapEntry is not null)
+            {
+                _voiceMapEntry.Color = _subtitleColor.Color;
+                UpdatePreview();
+                Description.UnsavedChanges = true;
+            }
+        }
+    }
+
     private DsScreen _subtitleScreen;
     public DsScreen SubtitleScreen
     {
@@ -48,9 +67,36 @@ public class VoicedLineEditorViewModel : EditorViewModel
             this.RaiseAndSetIfChanged(ref _subtitleScreen, value);
             if (_voiceMapEntry is not null)
             {
-                _voiceMapEntry.TargetScreen = SubtitleScreen == DsScreen.BOTTOM ? VoiceMapEntry.Screen.BOTTOM : VoiceMapEntry.Screen.TOP;
+                _voiceMapEntry.TargetScreen = SubtitleScreen == DsScreen.BOTTOM ? VoiceMapEntry.Screen.BOTTOM : _forceDropShadow ? VoiceMapEntry.Screen.TOP_FORCE_SHADOW : VoiceMapEntry.Screen.TOP;
                 UpdatePreview();
                 Description.UnsavedChanges = true;
+            }
+        }
+    }
+
+    private bool _forceDropShadow;
+    public bool ForceDropShadow
+    {
+        get => _forceDropShadow;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _forceDropShadow, value);
+            if (_voiceMapEntry is not null)
+            {
+                if ((_voiceMapEntry.TargetScreen == VoiceMapEntry.Screen.TOP ||
+                    _voiceMapEntry.TargetScreen == VoiceMapEntry.Screen.TOP_FORCE_SHADOW) && _forceDropShadow)
+                {
+                    _voiceMapEntry.TargetScreen = VoiceMapEntry.Screen.TOP_FORCE_SHADOW;
+                    UpdatePreview();
+                    Description.UnsavedChanges = true;
+                }
+                else if (_voiceMapEntry.TargetScreen == VoiceMapEntry.Screen.TOP ||
+                         _voiceMapEntry.TargetScreen == VoiceMapEntry.Screen.TOP_FORCE_SHADOW)
+                {
+                    _voiceMapEntry.TargetScreen = VoiceMapEntry.Screen.TOP;
+                    UpdatePreview();
+                    Description.UnsavedChanges = true;
+                }
             }
         }
     }
@@ -162,8 +208,11 @@ public class VoicedLineEditorViewModel : EditorViewModel
         _voiceMapEntry = _project.VoiceMap.VoiceMapEntries.FirstOrDefault(v => v.VoiceFileName.Equals(Path.GetFileNameWithoutExtension(_vce.VoiceFile)));
         if (_voiceMapEntry is not null)
         {
+            SubtitleColors = new(Enum.GetValues<DialogueColor>().Select(c => new LocalizedDialogueColor(c)));
+            _subtitleColor = SubtitleColors.First(c => c.Color == _voiceMapEntry.Color);
             _subtitle = _voiceMapEntry.Subtitle;
             _subtitleScreen = _voiceMapEntry.TargetScreen == VoiceMapEntry.Screen.BOTTOM ? DsScreen.BOTTOM : DsScreen.TOP;
+            _forceDropShadow = _voiceMapEntry.TargetScreen == VoiceMapEntry.Screen.TOP_FORCE_SHADOW;
             _yPos = _voiceMapEntry.YPos;
             UpdatePreview();
         }
@@ -263,4 +312,12 @@ public class VoicedLineEditorViewModel : EditorViewModel
 
         canvas.Flush();
     }
+}
+
+public class LocalizedDialogueColor(DialogueColor color) : ReactiveObject
+{
+    [Reactive]
+    public DialogueColor Color { get; set; } = color;
+
+    public string DisplayText => Strings.ResourceManager.GetString(Color.ToString());
 }
