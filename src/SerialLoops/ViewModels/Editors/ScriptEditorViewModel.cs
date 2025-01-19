@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.Versioning;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -20,6 +21,7 @@ using MsBox.Avalonia.Enums;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SerialLoops.Assets;
+using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
 using SerialLoops.Lib.Util;
@@ -117,6 +119,9 @@ public class ScriptEditorViewModel : EditorViewModel
 
     public Vector? ScrollPosition { get; set; }
 
+    public ObservableCollection<StartingChibiWithImage> UnusedChibis { get; }
+    public ObservableCollection<StartingChibiWithImage> StartingChibis { get; }
+
     public ScriptEditorViewModel(ScriptItem script, MainWindowViewModel window, ILogger log) : base(script, window, log)
     {
         _script = script;
@@ -124,6 +129,26 @@ public class ScriptEditorViewModel : EditorViewModel
         _project = window.OpenProject;
         PopulateScriptCommands();
         _script.CalculateGraphEdges(_commands, _log);
+
+        if (_script.Event.StartingChibisSection is not null)
+        {
+            StartingChibis = [];
+            UnusedChibis = [];
+            StartingChibis.AddRange(_script.Event.StartingChibisSection.Objects.Where(c => c.ChibiIndex > 0).Select(c => new StartingChibiWithImage(c,
+                ((ChibiItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Chibi
+                                                      && ((ChibiItem)i).ChibiIndex == c.ChibiIndex)).ChibiAnimations.First().Value[0].Frame,
+                StartingChibis, UnusedChibis, _script, _project)));
+            short[] usedIndices = StartingChibis.Select(c => c.StartingChibi.ChibiIndex).ToArray();
+            for (short i = 1; i <= 5; i++)
+            {
+                if (usedIndices.Contains(i))
+                {
+                    continue;
+                }
+                UnusedChibis.Add(new(new StartingChibiEntry() { ChibiIndex = i }, ((ChibiItem)_project.Items.First(c => c.Type == ItemDescription.ItemType.Chibi
+                    && ((ChibiItem)c).ChibiIndex == i)).ChibiAnimations.First().Value[0].Frame, StartingChibis, UnusedChibis, _script, _project));
+            }
+        }
     }
 
     public void PopulateScriptCommands(bool refresh = false)
@@ -703,5 +728,68 @@ public class ReactiveScriptSection(ScriptSection section) : ReactiveObject
     {
         Commands.Clear();
         Commands.AddRange(commands.Select(c => new ScriptCommandTreeItem(c)));
+    }
+}
+
+public class StartingChibiWithImage : ReactiveObject
+{
+    public StartingChibiEntry StartingChibi { get; }
+
+    [Reactive]
+    public SKBitmap ChibiBitmap { get; set; }
+
+    public ICommand AddStartingChibiCommand { get; }
+
+    public ICommand RemoveStartingChibiCommand { get; }
+
+    public StartingChibiWithImage(StartingChibiEntry startingChibi, SKBitmap chibiBitmap,
+        ObservableCollection<StartingChibiWithImage> usedChibis, ObservableCollection<StartingChibiWithImage> unusedChibis,
+        ScriptItem script, Project project)
+    {
+        StartingChibi = startingChibi;
+        ChibiBitmap = chibiBitmap;
+
+        AddStartingChibiCommand = ReactiveCommand.Create(() =>
+        {
+            unusedChibis.Remove(this);
+            for (short i = 0; i <= usedChibis.Count; i++)
+            {
+                if (i == usedChibis.Count)
+                {
+                    usedChibis.Add(this);
+                    break;
+                }
+
+                if (usedChibis[i].StartingChibi.ChibiIndex > startingChibi.ChibiIndex)
+                {
+                    usedChibis.Insert(i, this);
+                    break;
+                }
+            }
+            script.Event.StartingChibisSection.Objects.Add(StartingChibi);
+            script.UnsavedChanges = true;
+
+        });
+        RemoveStartingChibiCommand = ReactiveCommand.Create(() =>
+        {
+            usedChibis.Remove(this);
+            for (short i = 0; i <= unusedChibis.Count; i++)
+            {
+                if (i == unusedChibis.Count)
+                {
+                    unusedChibis.Add(this);
+                    break;
+                }
+
+                if (unusedChibis[i].StartingChibi.ChibiIndex > startingChibi.ChibiIndex)
+                {
+                    unusedChibis.Insert(i, this);
+                    break;
+                }
+            }
+            script.Event.StartingChibisSection.Objects.Remove(
+                script.Event.StartingChibisSection.Objects.First(c => c.ChibiIndex == StartingChibi.ChibiIndex));
+            script.UnsavedChanges = true;
+        });
     }
 }
