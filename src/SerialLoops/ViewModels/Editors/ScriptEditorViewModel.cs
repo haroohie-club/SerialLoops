@@ -136,7 +136,7 @@ public class ScriptEditorViewModel : EditorViewModel
             StartingChibis.AddRange(_script.Event.StartingChibisSection.Objects.Where(c => c.ChibiIndex > 0).Select(c => new StartingChibiWithImage(c,
                 ((ChibiItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Chibi
                                                       && ((ChibiItem)i).ChibiIndex == c.ChibiIndex)).ChibiAnimations.First().Value[0].Frame,
-                StartingChibis, UnusedChibis, _script, _project)));
+                StartingChibis, UnusedChibis, _script)));
             short[] usedIndices = StartingChibis.Select(c => c.StartingChibi.ChibiIndex).ToArray();
             for (short i = 1; i <= 5; i++)
             {
@@ -145,7 +145,7 @@ public class ScriptEditorViewModel : EditorViewModel
                     continue;
                 }
                 UnusedChibis.Add(new(new StartingChibiEntry() { ChibiIndex = i }, ((ChibiItem)_project.Items.First(c => c.Type == ItemDescription.ItemType.Chibi
-                    && ((ChibiItem)c).ChibiIndex == i)).ChibiAnimations.First().Value[0].Frame, StartingChibis, UnusedChibis, _script, _project));
+                    && ((ChibiItem)c).ChibiIndex == i)).ChibiAnimations.First().Value[0].Frame, StartingChibis, UnusedChibis, _script));
             }
         }
     }
@@ -743,7 +743,7 @@ public class StartingChibiWithImage : ReactiveObject
 
     public StartingChibiWithImage(StartingChibiEntry startingChibi, SKBitmap chibiBitmap,
         ObservableCollection<StartingChibiWithImage> usedChibis, ObservableCollection<StartingChibiWithImage> unusedChibis,
-        ScriptItem script, Project project)
+        ScriptItem script)
     {
         StartingChibi = startingChibi;
         ChibiBitmap = chibiBitmap;
