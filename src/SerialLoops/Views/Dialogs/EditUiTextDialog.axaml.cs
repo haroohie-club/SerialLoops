@@ -2,9 +2,9 @@ using Avalonia.Controls;
 
 namespace SerialLoops.Views.Dialogs;
 
-public partial class AsmHackCreationDialog : Window
+public partial class EditUiTextDialog : Window
 {
-    public AsmHackCreationDialog()
+    public EditUiTextDialog()
     {
         InitializeComponent();
     }

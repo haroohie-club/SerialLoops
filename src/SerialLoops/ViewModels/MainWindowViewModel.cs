@@ -5,6 +5,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia;
@@ -128,6 +129,8 @@ public partial class MainWindowViewModel : ViewModelBase
 
         ApplyHacksCommand = ReactiveCommand.CreateFromTask(ApplyHacksCommand_Executed);
         CreateAsmHackCommand = ReactiveCommand.CreateFromTask(CreateAsmHackCommand_Executed);
+        EditUiTextCommand = ReactiveCommand.CreateFromTask(EditUiTextCommand_Executed);
+        EditTutorialMappingsCommand = ReactiveCommand.CreateFromTask(EditTutorialMappingsCommand_Executed);
         ProjectSettingsCommand = ReactiveCommand.CreateFromTask(ProjectSettingsCommand_Executed);
         ExportProjectCommand = ReactiveCommand.CreateFromTask(ExportProjectCommand_Executed);
         ExportPatchCommand = ReactiveCommand.CreateFromTask(ExportPatchCommand_Executed);
@@ -355,6 +358,20 @@ public partial class MainWindowViewModel : ViewModelBase
             await Window.ShowMessageBoxAsync(Strings.Hack_Created_Successfully_, Strings.The_hack_file_has_been_successfully_created__To_import_it__open_the_ASM_hacks_dialog_and_select__Import_Hack__,
                 ButtonEnum.Ok, Icon.Success, Log);
         }
+    }
+
+    private async Task EditUiTextCommand_Executed()
+    {
+        EditUiTextDialogViewModel editUiTextDialogViewModel = new(OpenProject, Log);
+        EditUiTextDialog editUiTextDialog = new() { DataContext = editUiTextDialogViewModel };
+        await editUiTextDialog.ShowDialog(Window);
+    }
+
+    private async Task EditTutorialMappingsCommand_Executed()
+    {
+        EditTutorialMappingsDialogViewModel viewModel = new(OpenProject, EditorTabs, Log);
+        EditTutorialMappingsDialog dialog = new() { DataContext = viewModel };
+        await dialog.ShowDialog(Window);
     }
 
     private async Task ProjectSettingsCommand_Executed()
@@ -730,6 +747,7 @@ public partial class MainWindowViewModel : ViewModelBase
         bool savedChrData = false;
         bool savedExtra = false;
         bool savedMessInfo = false;
+        bool changedScenario = false;
         bool changedNameplates = false;
         bool changedTopics = false;
         bool changedSubs = false;
@@ -778,6 +796,30 @@ public partial class MainWindowViewModel : ViewModelBase
                         savedExtra = true;
                     }
                     break;
+                case ItemDescription.ItemType.Character:
+                    CharacterItem characterItem = (CharacterItem)item;
+                    if (characterItem.NameplateProperties.Name != item.DisplayName[4..])
+                    {
+                        characterItem.Rename($"CHR_{characterItem.NameplateProperties.Name}", OpenProject);
+                        nameplateCanvas.DrawBitmap(
+                            characterItem.GetNewNameplate(_blankNameplate, _blankNameplateBaseArrow, OpenProject),
+                            new SKRect(0, 16 * ((int)characterItem.MessageInfo.Character - 1), 64,
+                                16 * ((int)characterItem.MessageInfo.Character)));
+                        speakerCanvas.DrawBitmap(
+                            characterItem.GetNewNameplate(_blankNameplate, _blankNameplateBaseArrow, OpenProject,
+                                transparent: true),
+                            new SKRect(0, 16 * ((int)characterItem.MessageInfo.Character - 1), 64,
+                                16 * ((int)characterItem.MessageInfo.Character)));
+                        changedNameplates = true;
+                    }
+
+                    if (!savedMessInfo)
+                    {
+                        IO.WriteStringFile(Path.Combine("assets", "data", $"{OpenProject.MessInfo.Index:X3}.s"),
+                            OpenProject.MessInfo.GetSource([]), OpenProject, Log);
+                        savedMessInfo = true;
+                    }
+                    break;
                 case ItemDescription.ItemType.Character_Sprite:
                     if (!savedChrData)
                     {
@@ -796,21 +838,30 @@ public partial class MainWindowViewModel : ViewModelBase
                     IO.WriteStringFile(Path.Combine("assets", "data", $"{chessPuzzleItem.ChessPuzzle.Index:X3}.s"),
                         chessPuzzleItem.ChessPuzzle.GetSource([]), OpenProject, Log);
                     break;
-                case ItemDescription.ItemType.Scenario:
-                    ScenarioStruct scenario = ((ScenarioItem)item).Scenario;
-                    IO.WriteStringFile(
-                        Path.Combine("assets", "events", $"{OpenProject.Evt.GetFileByName("SCENARIOS").Index:X3}.s"),
-                        scenario.GetSource(includes, Log), OpenProject, Log);
+                case ItemDescription.ItemType.Group_Selection:
+                    GroupSelectionItem groupSelectionItem = (GroupSelectionItem)item;
+                    OpenProject.Scenario.Selects[groupSelectionItem.Index] = groupSelectionItem.Selection;
+                    changedScenario = true;
                     break;
-                case ItemDescription.ItemType.Script:
-                    if (!savedEventTable)
+                case ItemDescription.ItemType.Place:
+                    PlaceItem placeItem = (PlaceItem)item;
+                    if (placeItem.PlaceName != item.DisplayName[4..])
                     {
-                        OpenProject.RecalculateEventTable();
-                        IO.WriteStringFile(Path.Combine("assets", "events", $"{OpenProject.EventTableFile.Index:X3}.s"), OpenProject.EventTableFile.GetSource(includes), OpenProject, Log);
+                        placeItem.Rename($"PLC_{placeItem.PlaceName}", OpenProject);
                     }
-                    EventFile evt = ((ScriptItem)item).Event;
-                    evt.CollectGarbage();
-                    IO.WriteStringFile(Path.Combine("assets", "events", $"{evt.Index:X3}.s"), evt.GetSource(includes), OpenProject, Log);
+
+                    MemoryStream placeStream = new();
+                    SKBitmap newPlaceImage =
+                        PlaceItem.Unscramble(PlaceItem.Unscramble(placeItem.GetNewPlaceGraphic(_msGothicHaruhi)));
+                    placeItem.PlaceGraphic.SetImage(newPlaceImage);
+                    newPlaceImage.Encode(placeStream, SKEncodedImageFormat.Png, 1);
+                    IO.WriteBinaryFile(Path.Combine("assets", "graphics", $"{placeItem.PlaceGraphic.Index:X3}.png"),
+                        placeStream.ToArray(), OpenProject, Log);
+                    IO.WriteStringFile(Path.Combine("assets", "graphics", $"{placeItem.PlaceGraphic.Index:X3}.gi"),
+                        placeItem.PlaceGraphic.GetGraphicInfoFile(), OpenProject, Log);
+                    break;
+                case ItemDescription.ItemType.Item:
+                    ((ItemItem)item).Write(OpenProject, Log);
                     break;
                 case ItemDescription.ItemType.Layout:
                     GraphicsFile layout = ((LayoutItem)item).Layout;
@@ -823,6 +874,21 @@ public partial class MainWindowViewModel : ViewModelBase
                 case ItemDescription.ItemType.Puzzle:
                     PuzzleFile puzzle = ((PuzzleItem)item).Puzzle;
                     IO.WriteStringFile(Path.Combine("assets", "data", $"{puzzle.Index:X3}.s"), puzzle.GetSource(includes), OpenProject, Log);
+                    break;
+                case ItemDescription.ItemType.Scenario:
+                    ScenarioStruct scenario = ((ScenarioItem)item).Scenario;
+                    OpenProject.Scenario.Commands = scenario.Commands;
+                    changedScenario = true;
+                    break;
+                case ItemDescription.ItemType.Script:
+                    if (!savedEventTable)
+                    {
+                        OpenProject.RecalculateEventTable();
+                        IO.WriteStringFile(Path.Combine("assets", "events", $"{OpenProject.EventTableFile.Index:X3}.s"), OpenProject.EventTableFile.GetSource(includes), OpenProject, Log);
+                    }
+                    EventFile evt = ((ScriptItem)item).Event;
+                    evt.CollectGarbage();
+                    IO.WriteStringFile(Path.Combine("assets", "events", $"{evt.Index:X3}.s"), evt.GetSource(includes), OpenProject, Log);
                     break;
                 case ItemDescription.ItemType.System_Texture:
                     ((SystemTextureItem)item).Write(OpenProject, Log);
@@ -854,6 +920,13 @@ public partial class MainWindowViewModel : ViewModelBase
             }
 
             item.UnsavedChanges = false;
+        }
+
+        if (changedScenario)
+        {
+            IO.WriteStringFile(
+                Path.Combine("assets", "events", $"{OpenProject.Evt.GetFileByName("SCENARIOS").Index:X3}.s"),
+                OpenProject.Scenario.GetSource(includes, Log), OpenProject, Log);
         }
 
         if (changedNameplates)

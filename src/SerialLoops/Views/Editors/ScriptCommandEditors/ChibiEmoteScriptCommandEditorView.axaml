@@ -1,0 +1,41 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="using:SerialLoops.ViewModels.Editors.ScriptCommandEditors"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:assets="using:SerialLoops.Assets"
+             xmlns:items="using:SerialLoops.Lib.Items"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:ChibiEmoteScriptCommandEditorViewModel"
+             x:Class="SerialLoops.Views.Editors.ScriptCommandEditors.ChibiEmoteScriptCommandEditorView">
+    <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,Auto">
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static assets:Strings.Chibi}"/>
+        <ComboBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding Chibis}" SelectedItem="{Binding Chibi}">
+            <ComboBox.ItemTemplate>
+                <DataTemplate DataType="items:ChibiItem">
+                    <TextBlock Text="{Binding DisplayName}"/>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+            <ComboBox.ItemContainerTheme>
+                <ControlTheme TargetType="ComboBoxItem" x:DataType="items:ChibiItem" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
+                    <Setter Property="TextSearch.Text" Value="{Binding DisplayName}" />
+                </ControlTheme>
+            </ComboBox.ItemContainerTheme>
+        </ComboBox>
+
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="{x:Static assets:Strings.Emote}"/>
+        <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding ChibiEmotes}" SelectedItem="{Binding ChibiEmote}">
+            <ComboBox.ItemTemplate>
+                <DataTemplate DataType="vm:LocalizedChibiEmote">
+                    <TextBlock Text="{Binding DisplayName}"/>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+            <ComboBox.ItemContainerTheme>
+                <ControlTheme TargetType="ComboBoxItem" x:DataType="vm:LocalizedChibiEmote" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
+                    <Setter Property="TextSearch.Text" Value="{Binding DisplayName}" />
+                </ControlTheme>
+            </ComboBox.ItemContainerTheme>
+        </ComboBox>
+    </Grid>
+</UserControl>
+
