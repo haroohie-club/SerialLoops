@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Audio.ADX;
 using HaruhiChokuretsuLib.Util;
 using NAudio.Flac;
@@ -24,7 +25,7 @@ public class VoicedLineItem : Item, ISoundItem
         _vceFile = voiceFile;
         Index = index;
     }
-        
+
     public IWaveProvider GetWaveProvider(ILogger log, bool loop = false)
     {
         byte[] adxBytes = [];
@@ -61,7 +62,7 @@ public class VoicedLineItem : Item, ISoundItem
         return new AdxWaveProvider(decoder);
     }
 
-    public void Replace(string audioFile, string baseDirectory, string iterativeDirectory, string vceCachedFile, ILogger log)
+    public void Replace(string audioFile, string baseDirectory, string iterativeDirectory, string vceCachedFile, ILogger log, VoiceMapFile.VoiceMapEntry vceMapEntry = null)
     {
         // The MP3 decoder is able to create wave files but for whatever reason messes with the ADX encoder
         // So we just convert to WAV AOT
@@ -78,18 +79,21 @@ public class VoicedLineItem : Item, ISoundItem
             WaveFileWriter.CreateWaveFile(vceCachedFile, vorbisReader.ToSampleProvider().ToWaveProvider16());
             audioFile = vceCachedFile;
         }
+
         using WaveStream audio = Path.GetExtension(audioFile).ToLower() switch
         {
             ".wav" => new WaveFileReader(audioFile),
             ".flac" => new FlacReader(audioFile),
             _ => null,
         };
+
         if (audio is null)
         {
             log.LogError("Invalid audio file selected.");
             log.LogWarning(audioFile);
             return;
         }
+
         if (audio.WaveFormat.Channels > 1 || audio.WaveFormat.SampleRate > SoundItem.MAX_SAMPLERATE)
         {
             string newAudioFile = "";
@@ -115,19 +119,25 @@ public class VoicedLineItem : Item, ISoundItem
                 }
             }
 
-            log.Log($"Encoding audio to AHX...");
-            audioFile = newAudioFile;
+            log.Log("Encoding audio to AHX...");
             AdxUtil.EncodeWav(newAudioFile, Path.Combine(baseDirectory, VoiceFile), true);
         }
         else
         {
-            log.Log($"Encoding audio to AHX...");
+            log.Log("Encoding audio to AHX...");
             AdxUtil.EncodeAudio(audio, Path.Combine(baseDirectory, VoiceFile), true);
         }
         File.Copy(Path.Combine(baseDirectory, VoiceFile), Path.Combine(iterativeDirectory, VoiceFile), true);
+
+        // Adjust subtitle length to new voice item length
+        if (vceMapEntry is not null)
+        {
+            vceMapEntry.Timer = (int)(audio.TotalTime.TotalSeconds * 180 + 30);
+            UnsavedChanges = true;
+        }
     }
 
     public override void Refresh(Project project, ILogger log)
     {
-    }        
+    }
 }

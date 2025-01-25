@@ -2916,6 +2916,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Faded Gray.
+        /// </summary>
+        public static string FADED_GRAY {
+            get {
+                return ResourceManager.GetString("FADED_GRAY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed attempting to cache audio file.
         /// </summary>
         public static string Failed_attempting_to_cache_audio_file {
@@ -3627,6 +3636,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Force Drop Shadow.
+        /// </summary>
+        public static string Force_Drop_Shadow {
+            get {
+                return ResourceManager.GetString("Force Drop Shadow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Frames.
         /// </summary>
         public static string Frames {
@@ -3767,6 +3785,15 @@ namespace SerialLoops.Assets {
         public static string GIF_file {
             get {
                 return ResourceManager.GetString("GIF file", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gray.
+        /// </summary>
+        public static string GRAY {
+            get {
+                return ResourceManager.GetString("GRAY", resourceCulture);
             }
         }
         
@@ -4327,6 +4354,15 @@ namespace SerialLoops.Assets {
         public static string Language_Template {
             get {
                 return ResourceManager.GetString("Language Template", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lavender.
+        /// </summary>
+        public static string LAVENDER {
+            get {
+                return ResourceManager.GetString("LAVENDER", resourceCulture);
             }
         }
         
@@ -5134,6 +5170,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Off White.
+        /// </summary>
+        public static string OFF_WHITE {
+            get {
+                return ResourceManager.GetString("OFF_WHITE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to On.
         /// </summary>
         public static string On {
@@ -5850,6 +5895,15 @@ namespace SerialLoops.Assets {
         public static string Recents {
             get {
                 return ResourceManager.GetString("Recents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Red.
+        /// </summary>
+        public static string RED {
+            get {
+                return ResourceManager.GetString("RED", resourceCulture);
             }
         }
         
@@ -8574,6 +8628,15 @@ namespace SerialLoops.Assets {
         public static string XDelta_patch {
             get {
                 return ResourceManager.GetString("XDelta patch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yellow.
+        /// </summary>
+        public static string YELLOW {
+            get {
+                return ResourceManager.GetString("YELLOW", resourceCulture);
             }
         }
         

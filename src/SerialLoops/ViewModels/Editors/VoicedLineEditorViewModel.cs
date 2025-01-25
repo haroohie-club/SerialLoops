@@ -1,9 +1,12 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia.Platform.Storage;
 using HaruhiChokuretsuLib.Archive.Event;
+using HaruhiChokuretsuLib.Audio.ADX;
 using HaruhiChokuretsuLib.Util;
 using NAudio.Wave;
 using ReactiveUI;
@@ -38,6 +41,23 @@ public class VoicedLineEditorViewModel : EditorViewModel
     [Reactive]
     public SKBitmap SubtitlesPreview { get; set; } = new(256, 384);
 
+    public ObservableCollection<LocalizedDialogueColor> SubtitleColors { get; }
+    private LocalizedDialogueColor _subtitleColor;
+    public LocalizedDialogueColor SubtitleColor
+    {
+        get => _subtitleColor;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _subtitleColor, value);
+            if (_voiceMapEntry is not null)
+            {
+                _voiceMapEntry.Color = _subtitleColor.Color;
+                UpdatePreview();
+                Description.UnsavedChanges = true;
+            }
+        }
+    }
+
     private DsScreen _subtitleScreen;
     public DsScreen SubtitleScreen
     {
@@ -47,9 +67,36 @@ public class VoicedLineEditorViewModel : EditorViewModel
             this.RaiseAndSetIfChanged(ref _subtitleScreen, value);
             if (_voiceMapEntry is not null)
             {
-                _voiceMapEntry.TargetScreen = SubtitleScreen == DsScreen.BOTTOM ? VoiceMapEntry.Screen.BOTTOM : VoiceMapEntry.Screen.TOP;
+                _voiceMapEntry.TargetScreen = SubtitleScreen == DsScreen.BOTTOM ? VoiceMapEntry.Screen.BOTTOM : _forceDropShadow ? VoiceMapEntry.Screen.TOP_FORCE_SHADOW : VoiceMapEntry.Screen.TOP;
                 UpdatePreview();
                 Description.UnsavedChanges = true;
+            }
+        }
+    }
+
+    private bool _forceDropShadow;
+    public bool ForceDropShadow
+    {
+        get => _forceDropShadow;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _forceDropShadow, value);
+            if (_voiceMapEntry is not null)
+            {
+                if ((_voiceMapEntry.TargetScreen == VoiceMapEntry.Screen.TOP ||
+                    _voiceMapEntry.TargetScreen == VoiceMapEntry.Screen.TOP_FORCE_SHADOW) && _forceDropShadow)
+                {
+                    _voiceMapEntry.TargetScreen = VoiceMapEntry.Screen.TOP_FORCE_SHADOW;
+                    UpdatePreview();
+                    Description.UnsavedChanges = true;
+                }
+                else if (_voiceMapEntry.TargetScreen == VoiceMapEntry.Screen.TOP ||
+                         _voiceMapEntry.TargetScreen == VoiceMapEntry.Screen.TOP_FORCE_SHADOW)
+                {
+                    _voiceMapEntry.TargetScreen = VoiceMapEntry.Screen.TOP;
+                    UpdatePreview();
+                    Description.UnsavedChanges = true;
+                }
             }
         }
     }
@@ -121,12 +168,13 @@ public class VoicedLineEditorViewModel : EditorViewModel
             this.RaiseAndSetIfChanged(ref _subtitle, _project.LangCode.Equals("ja") ? value : value.GetOriginalString(_project));
             if (_voiceMapEntry is null)
             {
+                AdxHeader header = new(File.ReadAllBytes(Path.Combine(_project.IterativeDirectory, _vce.VoiceFile)), _log);
                 _project.VoiceMap.VoiceMapEntries.Add(new()
                 {
                     VoiceFileName = Path.GetFileNameWithoutExtension(_vce.VoiceFile),
                     Color = DialogueColor.WHITE,
                     TargetScreen = SubtitleScreen == DsScreen.BOTTOM ? VoiceMapEntry.Screen.BOTTOM : VoiceMapEntry.Screen.TOP,
-                    Timer = 350,
+                    Timer = (int)((double)header.TotalSamples / header.SampleRate * 180 + 30),
                 });
                 _project.VoiceMap.VoiceMapEntries[^1].SetSubtitle(_subtitle, _project.FontReplacement);
                 _project.VoiceMap.VoiceMapEntries[^1].YPos = _yPos;
@@ -160,8 +208,11 @@ public class VoicedLineEditorViewModel : EditorViewModel
         _voiceMapEntry = _project.VoiceMap.VoiceMapEntries.FirstOrDefault(v => v.VoiceFileName.Equals(Path.GetFileNameWithoutExtension(_vce.VoiceFile)));
         if (_voiceMapEntry is not null)
         {
+            SubtitleColors = new(Enum.GetValues<DialogueColor>().Select(c => new LocalizedDialogueColor(c)));
+            _subtitleColor = SubtitleColors.First(c => c.Color == _voiceMapEntry.Color);
             _subtitle = _voiceMapEntry.Subtitle;
             _subtitleScreen = _voiceMapEntry.TargetScreen == VoiceMapEntry.Screen.BOTTOM ? DsScreen.BOTTOM : DsScreen.TOP;
+            _forceDropShadow = _voiceMapEntry.TargetScreen == VoiceMapEntry.Screen.TOP_FORCE_SHADOW;
             _yPos = _voiceMapEntry.YPos;
             UpdatePreview();
         }
@@ -176,8 +227,10 @@ public class VoicedLineEditorViewModel : EditorViewModel
         {
             LoopyProgressTracker tracker = new();
             VcePlayer.Stop();
-            await new ProgressDialog(() => _vce.Replace(openFile.Path.LocalPath, _project.BaseDirectory, _project.IterativeDirectory, Path.Combine(_project.Config.CachesDirectory, "vce", $"{_vce.Name}.wav"), _log),
+            await new ProgressDialog(() => _vce.Replace(openFile.Path.LocalPath, _project.BaseDirectory, _project.IterativeDirectory, Path.Combine(_project.Config.CachesDirectory, "vce", $"{_vce.Name}.wav"), _log,
+                    _voiceMapEntry),
                 () => { }, tracker, Strings.Replace_voiced_line).ShowDialog(Window.Window);
+            VcePlayer.Stop();
         }
     }
 
@@ -192,7 +245,16 @@ public class VoicedLineEditorViewModel : EditorViewModel
 
     private void Restore()
     {
-
+        VcePlayer.Stop();
+        File.Copy(Path.Combine(_project.BaseDirectory, "original", "vce", Path.GetFileName(_vce.VoiceFile)), Path.Combine(_project.BaseDirectory, _vce.VoiceFile), true);
+        File.Copy(Path.Combine(_project.IterativeDirectory, "original", "vce", Path.GetFileName(_vce.VoiceFile)), Path.Combine(_project.IterativeDirectory, _vce.VoiceFile), true);
+        AdxHeader header = new(File.ReadAllBytes(Path.Combine(_project.IterativeDirectory, _vce.VoiceFile)), _log);
+        if (_voiceMapEntry is not null)
+        {
+            _voiceMapEntry.Timer = (int)((double)header.TotalSamples / header.SampleRate * 180 + 30);
+            _vce.UnsavedChanges = true;
+        }
+        VcePlayer.Stop();
     }
 
     private void UpdatePreview()
@@ -202,8 +264,7 @@ public class VoicedLineEditorViewModel : EditorViewModel
         canvas.DrawColor(SKColors.DarkGray);
         canvas.DrawLine(new() { X = 0, Y = 192 }, new() { X = 256, Y = 192 }, DialogueScriptParameter.Paint00);
 
-        bool bottomScreen = _voiceMapEntry.TargetScreen == VoiceMapEntry.Screen.BOTTOM;
-        if (bottomScreen)
+        if (_voiceMapEntry.TargetScreen == VoiceMapEntry.Screen.BOTTOM)
         {
             for (int i = 0; i <= 1; i++)
             {
@@ -212,10 +273,21 @@ public class VoicedLineEditorViewModel : EditorViewModel
                     DialogueScriptParameter.Paint07,
                     _project,
                     i + _voiceMapEntry.X,
-                    1 + _voiceMapEntry.Y + (bottomScreen ? 192 : 0),
+                    1 + _voiceMapEntry.Y + 192,
                     false
                 );
             }
+        }
+        else if (_voiceMapEntry.TargetScreen == VoiceMapEntry.Screen.TOP_FORCE_SHADOW)
+        {
+            canvas.DrawHaroohieText(
+                _subtitle,
+                DialogueScriptParameter.Paint07,
+                _project,
+                1 + _voiceMapEntry.X,
+                1 + _voiceMapEntry.Y,
+                false
+            );
         }
 
         canvas.DrawHaroohieText(
@@ -234,10 +306,18 @@ public class VoicedLineEditorViewModel : EditorViewModel
             },
             _project,
             _voiceMapEntry.X,
-            _voiceMapEntry.Y + (bottomScreen ? 192 : 0),
+            _voiceMapEntry.Y + (_voiceMapEntry.TargetScreen == VoiceMapEntry.Screen.BOTTOM ? 192 : 0),
             false
         );
 
         canvas.Flush();
     }
+}
+
+public class LocalizedDialogueColor(DialogueColor color) : ReactiveObject
+{
+    [Reactive]
+    public DialogueColor Color { get; set; } = color;
+
+    public string DisplayText => Strings.ResourceManager.GetString(Color.ToString());
 }
