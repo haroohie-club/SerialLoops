@@ -71,6 +71,8 @@ public class EditorTabsPanelViewModel : ViewModelBase
                 return new ChessPuzzleEditorViewModel((ChessPuzzleItem)item, MainWindow, _log);
             case ItemDescription.ItemType.Group_Selection:
                 return new GroupSelectionEditorViewModel((GroupSelectionItem)item, MainWindow, _log);
+            case ItemDescription.ItemType.Item:
+                return new ItemEditorViewModel((ItemItem)item, MainWindow, _log);
             case ItemDescription.ItemType.Layout:
                 return new LayoutEditorViewModel((LayoutItem)item, MainWindow, _log);
             case ItemDescription.ItemType.Map:

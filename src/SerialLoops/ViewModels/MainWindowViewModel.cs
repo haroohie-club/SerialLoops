@@ -835,6 +835,21 @@ public partial class MainWindowViewModel : ViewModelBase
                     OpenProject.Scenario.Selects[groupSelectionItem.Index] = groupSelectionItem.Selection;
                     changedScenario = true;
                     break;
+                case ItemDescription.ItemType.Item:
+                    ((ItemItem)item).Write(OpenProject, Log);
+                    break;
+                case ItemDescription.ItemType.Layout:
+                    GraphicsFile layout = ((LayoutItem)item).Layout;
+                    if (!changedLayouts.Contains(layout.Index))
+                    {
+                        changedLayouts.Add(layout.Index);
+                        IO.WriteStringFile(Path.Combine("assets", "graphics", $"{layout.Index:X3}.lay"), JsonSerializer.Serialize(layout.LayoutEntries, Project.SERIALIZER_OPTIONS), OpenProject, Log);
+                    }
+                    break;
+                case ItemDescription.ItemType.Puzzle:
+                    PuzzleFile puzzle = ((PuzzleItem)item).Puzzle;
+                    IO.WriteStringFile(Path.Combine("assets", "data", $"{puzzle.Index:X3}.s"), puzzle.GetSource(includes), OpenProject, Log);
+                    break;
                 case ItemDescription.ItemType.Scenario:
                     ScenarioStruct scenario = ((ScenarioItem)item).Scenario;
                     OpenProject.Scenario.Commands = scenario.Commands;
@@ -850,18 +865,6 @@ public partial class MainWindowViewModel : ViewModelBase
                     evt.CollectGarbage();
                     IO.WriteStringFile(Path.Combine("assets", "events", $"{evt.Index:X3}.s"), evt.GetSource(includes), OpenProject, Log);
                     break;
-                case ItemDescription.ItemType.Layout:
-                    GraphicsFile layout = ((LayoutItem)item).Layout;
-                    if (!changedLayouts.Contains(layout.Index))
-                    {
-                        changedLayouts.Add(layout.Index);
-                        IO.WriteStringFile(Path.Combine("assets", "graphics", $"{layout.Index:X3}.lay"), JsonSerializer.Serialize(layout.LayoutEntries, Project.SERIALIZER_OPTIONS), OpenProject, Log);
-                    }
-                    break;
-                case ItemDescription.ItemType.Puzzle:
-                    PuzzleFile puzzle = ((PuzzleItem)item).Puzzle;
-                    IO.WriteStringFile(Path.Combine("assets", "data", $"{puzzle.Index:X3}.s"), puzzle.GetSource(includes), OpenProject, Log);
-                    break;
                 case ItemDescription.ItemType.System_Texture:
                     ((SystemTextureItem)item).Write(OpenProject, Log);
                     break;
@@ -869,6 +872,7 @@ public partial class MainWindowViewModel : ViewModelBase
                     changedTopics = true;
                     break;
                 case ItemDescription.ItemType.Voice:
+                    VoicedLineItem vce = (VoicedLineItem)item;
                     if (OpenProject.VoiceMap is not null)
                     {
                         changedSubs = true;
