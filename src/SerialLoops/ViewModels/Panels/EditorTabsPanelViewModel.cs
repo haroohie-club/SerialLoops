@@ -2,7 +2,6 @@
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Util;
 using MsBox.Avalonia.Enums;
 using ReactiveUI;
@@ -64,8 +63,8 @@ public class EditorTabsPanelViewModel : ViewModelBase
                 return new BackgroundEditorViewModel((BackgroundItem)item, MainWindow, _project, _log);
             case ItemDescription.ItemType.BGM:
                 return new BackgroundMusicEditorViewModel((BackgroundMusicItem)item, MainWindow, _project, _log);
-            case ItemDescription.ItemType.Scenario:
-                return new ScenarioEditorViewModel((ScenarioItem)item, MainWindow, _log);
+            case ItemDescription.ItemType.Character:
+                return new CharacterEditorViewModel((CharacterItem)item, MainWindow, _log);
             case ItemDescription.ItemType.Character_Sprite:
                 return new CharacterSpriteEditorViewModel((CharacterSpriteItem)item, MainWindow, _log);
             case ItemDescription.ItemType.Chess_Puzzle:
@@ -80,6 +79,8 @@ public class EditorTabsPanelViewModel : ViewModelBase
                 return new MapEditorViewModel((MapItem)item, MainWindow, _log);
             case ItemDescription.ItemType.Puzzle:
                 return new PuzzleEditorViewModel((PuzzleItem)item, MainWindow, _log);
+            case ItemDescription.ItemType.Scenario:
+                return new ScenarioEditorViewModel((ScenarioItem)item, MainWindow, _log);
             case ItemDescription.ItemType.Script:
                 return new ScriptEditorViewModel((ScriptItem)item, MainWindow, _log);
             case ItemDescription.ItemType.SFX:
