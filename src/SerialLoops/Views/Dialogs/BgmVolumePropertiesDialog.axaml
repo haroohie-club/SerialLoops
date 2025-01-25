@@ -4,11 +4,10 @@
         xmlns:vm="using:SerialLoops.ViewModels.Dialogs"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        xmlns:i="using:Avalonia.Xaml.Interactivity"
-        xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
         xmlns:assets="using:SerialLoops.Assets"
         xmlns:controls="using:SerialLoops.Controls"
         xmlns:utility="using:SerialLoops.Utility"
+        Width="800" Height="400"
         x:DataType="vm:BgmVolumePropertiesDialogViewModel"
         x:Class="SerialLoops.Views.Dialogs.BgmVolumePropertiesDialog"
         Title="{Binding Title}"
@@ -17,18 +16,15 @@
     <Window.Resources>
         <utility:IntAdditionConverter x:Key="AdditionConverter"/>
     </Window.Resources>
-    
+
     <StackPanel Orientation="Vertical" Spacing="5" Margin="10">
         <StackPanel Orientation="Horizontal" Spacing="5">
             <controls:SoundPlayerPanel DataContext="{Binding VolumePreviewPlayer}"/>
-            <Slider Name="VolumeSlider" Minimum="0" Maximum="200" Height="{Binding Waveform.Height}"
-                    Orientation="Vertical" Value="{Binding Volume}">
-                <i:Interaction.Behaviors>
-                    <ia:EventTriggerBehavior EventName="ValueChanged" SourceObject="{Binding #VolumeSlider}">
-                        <ia:InvokeCommandAction Command="{Binding VolumeSliderValueChangedCommand}"/>
-                    </ia:EventTriggerBehavior>
-                </i:Interaction.Behaviors>
-            </Slider>
+            <StackPanel Orientation="Vertical" Spacing="5">
+                <Slider Name="VolumeSlider" Minimum="0" Maximum="200" Height="{Binding Waveform.Height}"
+                        Orientation="Vertical" Value="{Binding Volume}" />
+                <Button Content="{x:Static assets:Strings.Normalize}" Command="{Binding NormalizeCommand}"/>
+            </StackPanel>
             <Image Source="{Binding Waveform, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
                    Width="{Binding Waveform.Width}" Height="{Binding Waveform.Height}"/>
         </StackPanel>

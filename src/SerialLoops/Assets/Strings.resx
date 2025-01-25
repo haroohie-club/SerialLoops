@@ -3107,4 +3107,7 @@ This action is irreversible.</value>
   <data name="FADED_GRAY" xml:space="preserve">
     <value>Faded Gray</value>
   </data>
+  <data name="Normalize" xml:space="preserve">
+    <value>Normalize</value><comment>As in "normalize the audio volume so that max volume is similar to all other audio volumes"</comment>
+  </data>
 </root>

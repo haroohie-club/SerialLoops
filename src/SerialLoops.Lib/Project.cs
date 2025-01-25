@@ -18,6 +18,7 @@ using HaruhiChokuretsuLib.Audio.SDAT;
 using HaruhiChokuretsuLib.Font;
 using HaruhiChokuretsuLib.Util;
 using HaruhiChokuretsuLib.Util.Exceptions;
+using NAudio.Wave;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script.Parameters;
 using SerialLoops.Lib.Util;
@@ -105,6 +106,8 @@ public partial class Project
     public Dictionary<int, GraphicsFile> LayoutFiles { get; set; } = [];
     [JsonIgnore]
     public Dictionary<ChessFile.ChessPiece, SKBitmap> ChessPieceImages { get; private set; }
+    [JsonIgnore]
+    public float AverageBgmMaxAmplitude { get; private set; }
 
     // Localization function to make localizing accessible from the lib
     [JsonIgnore]
@@ -566,11 +569,16 @@ public partial class Project
         {
             string[] bgmFiles = SoundDS.BgmSection.AsParallel().Where(bgm => bgm is not null).Select(bgm => Path.Combine(IterativeDirectory, "rom", "data", bgm)).ToArray();
             tracker.Focus("BGM Tracks", bgmFiles.Length);
+            List<float> maxes = [];
             Items.AddRange(bgmFiles.AsParallel().Select((bgm, i) =>
             {
                 tracker.Finished++;
-                return new BackgroundMusicItem(bgm, i, this);
+                BackgroundMusicItem bgmItem = new(bgm, i, this);
+                maxes.Add(bgmItem.GetWaveProvider(log, false).GetMaxAmplitude());
+                return bgmItem;
             }));
+
+            AverageBgmMaxAmplitude = maxes.Average();
         }
         catch (Exception ex)
         {

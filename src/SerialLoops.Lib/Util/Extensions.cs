@@ -10,6 +10,7 @@ using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Archive.Graphics;
 using HaruhiChokuretsuLib.Font;
+using NAudio.Wave;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script.Parameters;
 using SkiaSharp;
@@ -34,6 +35,25 @@ public static class Extensions
     public static string GetGraphicInfoFile(this GraphicsFile grp)
     {
         return JsonSerializer.Serialize(new GraphicInfo(grp));
+    }
+
+    public static float GetMaxAmplitude(this IWaveProvider waveProvider)
+    {
+        return waveProvider.ToSampleProvider().GetMaxAmplitude();
+    }
+
+    public static float GetMaxAmplitude(this ISampleProvider sampleProvider)
+    {
+        float max = 0;
+        float[] buffer = new float[sampleProvider.WaveFormat.SampleRate];
+        int read;
+        do
+        {
+            read = sampleProvider.Read(buffer, 0, buffer.Length);
+            max = Math.Max(max, buffer.Max());
+        } while (read > 0);
+
+        return max;
     }
 
     public static string GetSubstitutedString(this string line, Project project)
