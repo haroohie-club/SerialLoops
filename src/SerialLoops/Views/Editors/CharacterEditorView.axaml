@@ -1,0 +1,58 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="using:SerialLoops.ViewModels.Editors"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:assets="using:SerialLoops.Assets"
+             xmlns:controls="using:SerialLoops.Controls"
+             xmlns:li="using:SerialLoops.Lib.Items"
+             xmlns:utility="using:SerialLoops.Utility"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:CharacterEditorViewModel"
+             x:Class="SerialLoops.Views.Editors.CharacterEditorView">
+    <UserControl.Resources>
+        <utility:SKAvaloniaColorConverter x:Key="ColorConverter"/>
+    </UserControl.Resources>
+
+    <Grid ColumnDefinitions="Auto,Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+        <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Character}"/>
+        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding CharacterName}"/>
+
+        <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Text_Color}"/>
+        <ColorPicker Grid.Row="1" Grid.Column="1" Color="{Binding TextColor, Converter={StaticResource ColorConverter}}"
+                     IsColorPaletteVisible="True" Palette="{Binding ColorPalette}"/>
+
+        <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Plate_Color}"/>
+        <ColorPicker Grid.Row="2" Grid.Column="1" Color="{Binding PlateColor, Converter={StaticResource ColorConverter}}"
+                     IsColorPaletteVisible="True" Palette="{Binding ColorPalette}"/>
+
+        <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Outline_Color}"/>
+        <ColorPicker Grid.Row="3" Grid.Column="1" Color="{Binding OutlineColor, Converter={StaticResource ColorConverter}}"/>
+        <CheckBox Grid.Row="3" Grid.Column="2" VerticalAlignment="Center" Content="{x:Static assets:Strings.Has_Outline_}"
+                  IsChecked="{Binding HasOutline}"/>
+
+        <Image Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Stretch="None" Margin="15"
+               Source="{Binding NameplateBitmap, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
+
+        <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Voice_Font}"/>
+        <ComboBox Grid.Row="5" Grid.Column="1" ItemsSource="{Binding Sfxs}" SelectedItem="{Binding VoiceFont}">
+            <ComboBox.ItemTemplate>
+                <DataTemplate DataType="li:SfxItem">
+                    <TextBlock Text="{Binding DisplayName}"/>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+            <ComboBox.ItemContainerTheme>
+                <ControlTheme TargetType="ComboBoxItem" x:DataType="li:SfxItem" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
+                    <Setter Property="TextSearch.Text" Value="{Binding DisplayName}" />
+                </ControlTheme>
+            </ComboBox.ItemContainerTheme>
+        </ComboBox>
+        <controls:ItemLink Grid.Row="5" Grid.Column="2" Item="{Binding VoiceFont}"
+                           Tabs="{Binding Tabs}"/>
+
+        <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Text_Timer}"/>
+        <NumericUpDown Grid.Row="6" Grid.Column="1" Value="{Binding TextTimer}"
+                       FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
+    </Grid>
+</UserControl>
+
