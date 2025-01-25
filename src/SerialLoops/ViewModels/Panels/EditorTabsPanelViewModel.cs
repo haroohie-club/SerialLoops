@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using HaruhiChokuretsuLib.Util;
@@ -21,11 +22,13 @@ public class EditorTabsPanelViewModel : ViewModelBase
     private readonly ILogger _log;
 
     public MainWindowViewModel MainWindow { get; private set; }
+
     [Reactive]
     public EditorViewModel SelectedTab { get; set; }
+    [Reactive]
+    public bool ShowTabsPanel { get; set; }
 
     public ICommand TabSwitchedCommand { get; set; }
-
     public ObservableCollection<EditorViewModel> Tabs { get; set; } = [];
 
     public EditorTabsPanelViewModel(MainWindowViewModel mainWindow, Project project, ILogger log)
@@ -43,6 +46,7 @@ public class EditorTabsPanelViewModel : ViewModelBase
             if (tab.Description.DisplayName.Equals(item.DisplayName))
             {
                 SelectedTab = tab;
+                ShowTabsPanel = Tabs.Any();
                 return;
             }
         }
@@ -53,6 +57,7 @@ public class EditorTabsPanelViewModel : ViewModelBase
             Tabs.Add(newTab);
             SelectedTab = newTab;
         }
+        ShowTabsPanel = Tabs.Any();
     }
 
     private EditorViewModel CreateTab(ItemDescription item)
@@ -141,10 +146,12 @@ public class EditorTabsPanelViewModel : ViewModelBase
                     break;
             }
         }
+        ShowTabsPanel = Tabs.Any();
     }
 
     public void OnTabMiddleClicked()
     {
         Tabs.Remove(SelectedTab);
+        ShowTabsPanel = Tabs.Any();
     }
 }

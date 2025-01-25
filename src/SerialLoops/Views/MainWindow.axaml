@@ -15,7 +15,10 @@
         Closing="Window_Closing"
         Closed="Window_Closed"
         Icon="/Assets/serial-loops.ico"
-        Title="{Binding Title}">
+        Title="{Binding Title}"
+        TransparencyLevelHint="AcrylicBlur"
+        Background="Transparent"
+        ExtendClientAreaToDecorationsHint="True">
 
     <Design.DataContext>
         <!-- This only sets the DataContext for the previewer in an IDE,
@@ -27,17 +30,30 @@
         <NativeMenu />
     </NativeMenu.Menu>
 
-    <Grid RowDefinitions="Auto,*">
-        <StackPanel IsVisible="False">
-            <Button Command="{Binding SaveProjectCommand}" HotKey="{Binding SaveHotKey}"/>
-            <Button Command="{Binding SearchProjectCommand}" HotKey="{Binding SearchHotKey}"/>
-            <Button Command="{Binding CloseProjectCommand}" HotKey="{Binding CloseProjectKey}"/>
-        </StackPanel>
-        <StackPanel Grid.Row="0">
-            <NativeMenuBar Name="MenuBar"/>
-            <toolbar:Toolbar Height="60" Name="ToolBar" HorizontalAlignment="Right"/>
-        </StackPanel>
-        <ContentControl Name="MainContent" Grid.Row="1"/>
-    </Grid>
+    <Panel>
+        <ExperimentalAcrylicBorder IsHitTestVisible="False">
+            <ExperimentalAcrylicBorder.Material>
+                <ExperimentalAcrylicMaterial
+                    BackgroundSource="Digger"
+                    TintColor="{DynamicResource ResourceKey=BackgroundTint}"
+                    FallbackColor="{DynamicResource ResourceKey=BackgroundTint}"
+                    TintOpacity="{DynamicResource ResourceKey=BackgroundAcrylicTintStrength}"
+                    MaterialOpacity="{DynamicResource ResourceKey=BackgroundAcrylicOpacity}" />
+            </ExperimentalAcrylicBorder.Material>
+        </ExperimentalAcrylicBorder>
+
+        <Grid RowDefinitions="Auto,*">
+            <StackPanel IsVisible="False">
+                <Button Command="{Binding SaveProjectCommand}" HotKey="{Binding SaveHotKey}"/>
+                <Button Command="{Binding SearchProjectCommand}" HotKey="{Binding SearchHotKey}"/>
+                <Button Command="{Binding CloseProjectCommand}" HotKey="{Binding CloseProjectKey}"/>
+            </StackPanel>
+            <StackPanel Grid.Row="0">
+                <NativeMenuBar Name="MenuBar"/>
+                <toolbar:Toolbar Height="60" Name="ToolBar" HorizontalAlignment="Right"/>
+            </StackPanel>
+            <ContentControl Name="MainContent" Grid.Row="1"/>
+        </Grid>
+    </Panel>
 
 </Window>
