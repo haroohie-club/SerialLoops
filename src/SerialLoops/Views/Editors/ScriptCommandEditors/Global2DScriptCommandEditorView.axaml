@@ -1,0 +1,20 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="using:SerialLoops.ViewModels.Editors.ScriptCommandEditors"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:assets="using:SerialLoops.Assets"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:Global2DScriptCommandEditorViewModel"
+             x:Class="SerialLoops.Views.Editors.ScriptCommandEditors.Global2DScriptCommandEditorView">
+    <Grid RowDefinitions="Auto" ColumnDefinitions="Auto,Auto">
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static assets:Strings.Value}"
+                   VerticalAlignment="Center"/>
+        <NumericUpDown Grid.Column="1" Grid.Row="0" Margin="10,0,0,0"
+                       Minimum="{Binding MinShort}"
+                       Maximum="{Binding MaxShort}"
+                       Value="{Binding Value}"
+                       FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
+    </Grid>
+</UserControl>
+
