@@ -3,6 +3,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:vm="using:SerialLoops.ViewModels.Editors"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:i="using:Avalonia.Xaml.Interactivity"
+             xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              xmlns:utility="using:SerialLoops.Utility"
              x:DataType="vm:ScriptEditorViewModel"
@@ -47,7 +49,47 @@
                    Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Width="256"/>
             <TabControl Grid.Column="1" Grid.Row="0">
                 <TabControl.Items>
-                    <TabItem Header="Starting Chibis" />
+                    <TabItem Header="Starting Chibis">
+                        <StackPanel Orientation="Vertical" Spacing="10">
+                            <ItemsRepeater ItemsSource="{Binding StartingChibis}" Width="256" Height="86">
+                                <ItemsRepeater.Layout>
+                                    <UniformGridLayout MinColumnSpacing="-5" Orientation="Horizontal" ItemsJustification="End"
+                                                       MaximumRowsOrColumns="5"/>
+                                </ItemsRepeater.Layout>
+                                <ItemsRepeater.ItemTemplate>
+                                    <DataTemplate DataType="vm:StartingChibiWithImage">
+                                        <Image Source="{Binding ChibiBitmap, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
+                                               Stretch="None">
+                                            <i:Interaction.Behaviors>
+                                                <ia:EventTriggerBehavior EventName="PointerPressed" SourceObject="{Binding $parent[Image]}">
+                                                    <ia:InvokeCommandAction Command="{Binding RemoveStartingChibiCommand}"/>
+                                                </ia:EventTriggerBehavior>
+                                            </i:Interaction.Behaviors>
+                                        </Image>
+                                    </DataTemplate>
+                                </ItemsRepeater.ItemTemplate>
+                            </ItemsRepeater>
+
+                            <ItemsRepeater ItemsSource="{Binding UnusedChibis}" Width="256" Height="86">
+                                <ItemsRepeater.Layout>
+                                    <UniformGridLayout MinColumnSpacing="-5" Orientation="Horizontal" ItemsJustification="End"
+                                                       MaximumRowsOrColumns="5"/>
+                                </ItemsRepeater.Layout>
+                                <ItemsRepeater.ItemTemplate>
+                                    <DataTemplate DataType="vm:StartingChibiWithImage">
+                                        <Image Source="{Binding ChibiBitmap, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
+                                               Stretch="None">
+                                            <i:Interaction.Behaviors>
+                                                <ia:EventTriggerBehavior EventName="PointerPressed" SourceObject="{Binding $parent[Image]}">
+                                                    <ia:InvokeCommandAction Command="{Binding AddStartingChibiCommand}"/>
+                                                </ia:EventTriggerBehavior>
+                                            </i:Interaction.Behaviors>
+                                        </Image>
+                                    </DataTemplate>
+                                </ItemsRepeater.ItemTemplate>
+                            </ItemsRepeater>
+                        </StackPanel>
+                    </TabItem>
                     <TabItem Header="Map Characters" />
                     <TabItem Header="Choices">
 
