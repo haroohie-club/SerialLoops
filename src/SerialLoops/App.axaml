@@ -6,7 +6,7 @@
              xmlns:local="using:SerialLoops"
              xmlns:mintoolbarthemes="using:MiniToolbar.Avalonia.Themes"
              xmlns:tabaloniathemes="using:Tabalonia.Themes.Custom"
-             xmlns:system="clr-namespace:System;assembly=System.Runtime"
+             xmlns:system="using:System"
              RequestedThemeVariant="Default">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
     <Application.DataTemplates>
