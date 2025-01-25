@@ -508,22 +508,25 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         Project.LoadProjectResult result = new(Project.LoadProjectState.FAILED); // start us off with a failure
         LoopyProgressTracker tracker = new();
+        string projectFileName = Path.GetFileName(path);
         await new ProgressDialog(() => (OpenProject, result) = Project.OpenProject(path, CurrentConfig, Strings.ResourceManager.GetString, Log, tracker),
-            () => { }, tracker, Strings.Loading_Project).ShowDialog(Window);
+            () => { }, tracker, string.Format(Strings.Loading_Project____0__, projectFileName)).ShowDialog(Window);
         if (OpenProject is not null && result.State == Project.LoadProjectState.LOOSELEAF_FILES)
         {
-            if ((await Window.ShowMessageBoxAsync(Strings.Build_Unbuilt_Files_,
+            if (await Window.ShowMessageBoxAsync(
+                    Strings.Build_Unbuilt_Files_,
                     Strings.Saved_but_unbuilt_files_were_detected_in_the_project_directory__Would_you_like_to_build_before_loading_the_project__Not_building_could_result_in_these_files_being_overwritten_,
-                    ButtonEnum.YesNo, Icon.Question, Log)) == ButtonResult.Yes)
+                    ButtonEnum.YesNo, Icon.Question, Log) == ButtonResult.Yes)
             {
                 LoopyProgressTracker secondTracker = new();
                 await new ProgressDialog(() => Build.BuildIterative(OpenProject, CurrentConfig, Log, secondTracker),
-                    () => { }, secondTracker, "Loading Project").ShowDialog(Window);
+                    () => { }, secondTracker,
+                    string.Format(Strings.Loading_Project____0__, projectFileName)).ShowDialog(Window);
             }
 
             LoopyProgressTracker thirdTracker = new();
-            await new ProgressDialog(() => OpenProject.LoadArchives(Log, thirdTracker), () => { }, thirdTracker,
-                "Loading Project").ShowDialog(Window);
+            await new ProgressDialog(() => OpenProject.LoadArchives(Log, thirdTracker),
+                () => { }, thirdTracker, string.Format(Strings.Loading_Project____0__, projectFileName)).ShowDialog(Window);
         }
         else if (result.State == Project.LoadProjectState.CORRUPTED_FILE)
         {

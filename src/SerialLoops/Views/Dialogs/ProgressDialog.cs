@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Avalonia.Controls;
+using Avalonia.Media;
 using Avalonia.Platform;
 using Avalonia.Threading;
 using SerialLoops.Controls;
@@ -20,13 +21,21 @@ public class ProgressDialog : Window
         _onComplete = onComplete;
 
         Icon = new(AssetLoader.Open(new("avares://SerialLoops/Assets/serial-loops.ico")));
+        _tracker.TitleText.Text = title;
         Title = title;
-        MinWidth = 300;
+
+        MinWidth = 350;
         MinHeight = 100;
-        MaxWidth = 300;
+        MaxWidth = 350;
         MaxHeight = 100;
         Content = tracker;
-        Topmost = true;
+        CanResize = false;
+
+        WindowStartupLocation = WindowStartupLocation.CenterScreen;
+        Background = Brushes.Transparent;
+        TransparencyLevelHint = [ WindowTransparencyLevel.AcrylicBlur ];
+        ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.NoChrome;
+        ExtendClientAreaToDecorationsHint = true;
     }
 
     protected async override void OnInitialized()
@@ -35,10 +44,7 @@ public class ProgressDialog : Window
         await Task.Run(() =>
         {
             _loadingTask();
-            Dispatcher.UIThread.Invoke(() =>
-            {
-                _onComplete();
-            });
+            Dispatcher.UIThread.Invoke(() => { _onComplete(); });
         });
         Close();
     }

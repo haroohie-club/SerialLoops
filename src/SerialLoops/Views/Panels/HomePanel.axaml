@@ -11,7 +11,7 @@
 
     <StackPanel HorizontalAlignment="Center">
         <StackPanel Margin="15" Spacing="5" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <Svg Path="avares://SerialLoops/Assets/Icons/AppIcon.svg" Width="96"/>
+            <Image Source="avares://SerialLoops/Assets/Icons/AppIcon.png" Width="100" Height="100" />
             <TextBlock Classes="h1" Text="Serial Loops"/>
         </StackPanel>
         <DockPanel>

@@ -1388,8 +1388,8 @@ In order to preserve state, no hacks were applied.</value>
   <data name="Loading Archives (grp.bin)" xml:space="preserve">
     <value>Loading Archives (grp.bin)</value>
   </data>
-  <data name="Loading Project" xml:space="preserve">
-    <value>Loading Project</value>
+  <data name="Loading Project: &quot;{0}&quot;" xml:space="preserve">
+    <value>Loading Project: "{0}"</value>
   </data>
   <data name="Loading prompt message box" xml:space="preserve">
     <value>Loading prompt message box</value>
@@ -3085,5 +3085,11 @@ This action is irreversible.</value>
   </data>
   <data name="Import Item Image" xml:space="preserve">
     <value>Import Item Image</value>
+  </data>
+  <data name="Loading Project" xml:space="preserve">
+    <value>Loading Project</value>
+  </data>
+  <data name="Open an item using the explorer to start editing!" xml:space="preserve">
+    <value>Open an item using the explorer to start editing!</value>
   </data>
 </root>

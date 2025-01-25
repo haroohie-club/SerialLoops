@@ -6,6 +6,7 @@
              xmlns:local="using:SerialLoops"
              xmlns:mintoolbarthemes="using:MiniToolbar.Avalonia.Themes"
              xmlns:tabaloniathemes="using:Tabalonia.Themes.Custom"
+             xmlns:system="clr-namespace:System;assembly=System.Runtime"
              RequestedThemeVariant="Default">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
     <Application.DataTemplates>
@@ -65,6 +66,15 @@
         <Style Selector="TextBlock.b">
             <Setter Property="FontWeight" Value="Bold"/>
         </Style>
+        <Style Selector="TextBlock.secondary">
+            <Setter Property="Foreground" Value="{DynamicResource SecondaryColor}"/>
+        </Style>
+        <Style Selector="TextBlock.keyprompt">
+            <Setter Property="Background" Value="{DynamicResource KeybindBackgroundColor}"/>
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="2"/>
+        </Style>
         <Style Selector="TextBlock.link">
             <Setter Property="TextDecorations" Value="Underline"/>
         </Style>
@@ -84,22 +94,41 @@
         <ResourceDictionary>
             <ResourceDictionary.ThemeDictionaries>
                 <ResourceDictionary x:Key="Light">
+                    <Color x:Key="BackgroundTint">White</Color>
+                    <system:Double x:Key="BackgroundAcrylicOpacity">0.65</system:Double>
+                    <system:Double x:Key="BackgroundAcrylicTintStrength">0.9</system:Double>
+                    <IImage x:Key="ColoredIconPath">avares://SerialLoops/Assets/Icons/AppIconLight.png</IImage>
                     <SolidColorBrush x:Key="LinkColor">Blue</SolidColorBrush>
-                    <SolidColorBrush x:Key="DisabledLinkColor">DarkGray</SolidColorBrush>
-                    <SolidColorBrush x:Key="GroupLineColor">DarkGray</SolidColorBrush>
+                    <SolidColorBrush x:Key="SecondaryColor">#77000000</SolidColorBrush>
+                    <SolidColorBrush x:Key="KeybindBackgroundColor">#44000000</SolidColorBrush>
+                    <SolidColorBrush x:Key="DisabledLinkColor">#77000000</SolidColorBrush>
+                    <SolidColorBrush x:Key="GroupLineColor">#55000000</SolidColorBrush>
                     <SolidColorBrush x:Key="AccentColor">#CCCCCC</SolidColorBrush>
                     <SolidColorBrush x:Key="ToolbarBackgroundColor">Transparent</SolidColorBrush>
-                    <SolidColorBrush x:Key="ToolbarTextColor">DarkGray</SolidColorBrush>
+                    <SolidColorBrush x:Key="ToolbarTextColor">#55000000</SolidColorBrush>
+                    <SolidColorBrush x:Key="ToolbarBorderColor">Transparent</SolidColorBrush>
                     <Color x:Key="CropResizeOverlayColor">#55000000</Color>
+
+                    <SolidColorBrush x:Key="TabItemBackgroundBrush" Color="Transparent" />
                 </ResourceDictionary>
                 <ResourceDictionary x:Key="Dark">
+                    <Color x:Key="BackgroundTint">Black</Color>
+                    <system:Double x:Key="BackgroundAcrylicOpacity">0.4</system:Double>
+                    <system:Double x:Key="BackgroundAcrylicTintStrength">1</system:Double>
+                    <IImage x:Key="ColoredIconPath">avares://SerialLoops/Assets/Icons/AppIconDark.png</IImage>
                     <SolidColorBrush x:Key="LinkColor">Cyan</SolidColorBrush>
+                    <SolidColorBrush x:Key="SecondaryColor">Gray</SolidColorBrush>
+                    <SolidColorBrush x:Key="KeybindBackgroundColor">DimGray</SolidColorBrush>
                     <SolidColorBrush x:Key="DisabledLinkColor">Gray</SolidColorBrush>
                     <SolidColorBrush x:Key="GroupLineColor">WhiteSmoke</SolidColorBrush>
                     <SolidColorBrush x:Key="AccentColor">#222222</SolidColorBrush>
                     <SolidColorBrush x:Key="ToolbarBackgroundColor">Transparent</SolidColorBrush>
                     <SolidColorBrush x:Key="ToolbarTextColor">Gray</SolidColorBrush>
+                    <SolidColorBrush x:Key="ToolbarBorderColor">Transparent</SolidColorBrush>
                     <Color x:Key="CropResizeOverlayColor">#AAFFFFFF</Color>
+
+                    <SolidColorBrush x:Key="TabControlWindowActiveBackgroundBrush" Color="Transparent" />
+                    <SolidColorBrush x:Key="TabControlWindowInactiveBackgroundBrush" Color="Transparent" />
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
         </ResourceDictionary>

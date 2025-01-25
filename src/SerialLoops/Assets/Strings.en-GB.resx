@@ -2483,4 +2483,7 @@
   <data name="Search Project" xml:space="preserve">
     <value>Search Project</value>
   </data>
+  <data name="Loading Project: &quot;{0}&quot;" xml:space="preserve">
+    <value>Loading Project: "{0}"</value>
+  </data>
 </root>
