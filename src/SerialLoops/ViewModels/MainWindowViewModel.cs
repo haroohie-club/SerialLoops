@@ -130,6 +130,7 @@ public partial class MainWindowViewModel : ViewModelBase
         ApplyHacksCommand = ReactiveCommand.CreateFromTask(ApplyHacksCommand_Executed);
         CreateAsmHackCommand = ReactiveCommand.CreateFromTask(CreateAsmHackCommand_Executed);
         EditUiTextCommand = ReactiveCommand.CreateFromTask(EditUiTextCommand_Executed);
+        EditTutorialMappingsCommand = ReactiveCommand.CreateFromTask(EditTutorialMappingsCommand_Executed);
         ProjectSettingsCommand = ReactiveCommand.CreateFromTask(ProjectSettingsCommand_Executed);
         ExportProjectCommand = ReactiveCommand.CreateFromTask(ExportProjectCommand_Executed);
         ExportPatchCommand = ReactiveCommand.CreateFromTask(ExportPatchCommand_Executed);
@@ -364,6 +365,13 @@ public partial class MainWindowViewModel : ViewModelBase
         EditUiTextDialogViewModel editUiTextDialogViewModel = new(OpenProject, Log);
         EditUiTextDialog editUiTextDialog = new() { DataContext = editUiTextDialogViewModel };
         await editUiTextDialog.ShowDialog(Window);
+    }
+
+    private async Task EditTutorialMappingsCommand_Executed()
+    {
+        EditTutorialMappingsDialogViewModel viewModel = new(OpenProject, EditorTabs, Log);
+        EditTutorialMappingsDialog dialog = new() { DataContext = viewModel };
+        await dialog.ShowDialog(Window);
     }
 
     private async Task ProjectSettingsCommand_Executed()
@@ -837,6 +845,23 @@ public partial class MainWindowViewModel : ViewModelBase
                     GroupSelectionItem groupSelectionItem = (GroupSelectionItem)item;
                     OpenProject.Scenario.Selects[groupSelectionItem.Index] = groupSelectionItem.Selection;
                     changedScenario = true;
+                    break;
+                case ItemDescription.ItemType.Place:
+                    PlaceItem placeItem = (PlaceItem)item;
+                    if (placeItem.PlaceName != item.DisplayName[4..])
+                    {
+                        placeItem.Rename($"PLC_{placeItem.PlaceName}", OpenProject);
+                    }
+
+                    MemoryStream placeStream = new();
+                    SKBitmap newPlaceImage =
+                        PlaceItem.Unscramble(PlaceItem.Unscramble(placeItem.GetNewPlaceGraphic(_msGothicHaruhi)));
+                    placeItem.PlaceGraphic.SetImage(newPlaceImage);
+                    newPlaceImage.Encode(placeStream, SKEncodedImageFormat.Png, 1);
+                    IO.WriteBinaryFile(Path.Combine("assets", "graphics", $"{placeItem.PlaceGraphic.Index:X3}.png"),
+                        placeStream.ToArray(), OpenProject, Log);
+                    IO.WriteStringFile(Path.Combine("assets", "graphics", $"{placeItem.PlaceGraphic.Index:X3}.gi"),
+                        placeItem.PlaceGraphic.GetGraphicInfoFile(), OpenProject, Log);
                     break;
                 case ItemDescription.ItemType.Item:
                     ((ItemItem)item).Write(OpenProject, Log);
