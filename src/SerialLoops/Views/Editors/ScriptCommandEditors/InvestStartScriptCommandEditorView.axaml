@@ -1,0 +1,44 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="using:SerialLoops.ViewModels.Editors.ScriptCommandEditors"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:assets="using:SerialLoops.Assets"
+             xmlns:editor="using:SerialLoops.ViewModels.Editors"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:InvestStartScriptCommandEditorViewModel"
+             x:Class="SerialLoops.Views.Editors.ScriptCommandEditors.InvestStartScriptCommandEditorView">
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,Auto">
+        <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Map_Character_Set}"/>
+        <NumericUpDown Grid.Column="1" Grid.Row="0" Minimum="0" Maximum="{Binding MaxShort}" Value="{Binding MapCharacterSet}"
+                       Margin="10,0,0,0" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
+
+        <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.unknown01}"/>
+        <NumericUpDown Grid.Column="1" Grid.Row="1" Minimum="{Binding MinShort}" Maximum="{Binding MaxShort}" Value="{Binding Unknown1}"
+                       Margin="10,0,0,0" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
+
+        <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.unknown02}"/>
+        <NumericUpDown Grid.Column="1" Grid.Row="2" Minimum="{Binding MinShort}" Maximum="{Binding MaxShort}" Value="{Binding Unknown2}"
+                       Margin="10,0,0,0" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
+
+        <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.unknown03}"/>
+        <NumericUpDown Grid.Column="1" Grid.Row="3" Minimum="{Binding MinShort}" Maximum="{Binding MaxShort}" Value="{Binding Unknown3}"
+                       Margin="10,0,0,0" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
+
+        <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.End_Script_Section}"/>
+        <ComboBox Grid.Row="4" Grid.Column="1" ItemsSource="{Binding ScriptEditor.ScriptSections}" SelectedItem="{Binding EndScriptSection}"
+                  Margin="10,0,0,0">
+            <ComboBox.ItemTemplate>
+                <DataTemplate DataType="editor:ReactiveScriptSection">
+                    <TextBlock Text="{Binding Name}"/>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+            <ComboBox.ItemContainerTheme>
+                <ControlTheme TargetType="ComboBoxItem" x:DataType="editor:ReactiveScriptSection" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
+                    <Setter Property="TextSearch.Text" Value="{Binding Name}" />
+                </ControlTheme>
+            </ComboBox.ItemContainerTheme>
+        </ComboBox>
+    </Grid>
+</UserControl>
+

@@ -33,9 +33,10 @@ public partial class ItemDescription : ReactiveObject
         }
     }
 
-    public void Rename(string newName)
+    public void Rename(string newName, Project project)
     {
         DisplayName = newName;
+        project.ItemNames[Name] = DisplayName;
     }
 
     // Enum with values for each type of item

@@ -117,6 +117,9 @@ public class ScriptEditorViewModel : EditorViewModel
 
     public Vector? ScrollPosition { get; set; }
 
+    public ObservableCollection<StartingChibiWithImage> UnusedChibis { get; }
+    public ObservableCollection<StartingChibiWithImage> StartingChibis { get; }
+
     public ScriptEditorViewModel(ScriptItem script, MainWindowViewModel window, ILogger log) : base(script, window, log)
     {
         _script = script;
@@ -124,6 +127,26 @@ public class ScriptEditorViewModel : EditorViewModel
         _project = window.OpenProject;
         PopulateScriptCommands();
         _script.CalculateGraphEdges(_commands, _log);
+
+        if (_script.Event.StartingChibisSection is not null)
+        {
+            StartingChibis = [];
+            UnusedChibis = [];
+            StartingChibis.AddRange(_script.Event.StartingChibisSection.Objects.Where(c => c.ChibiIndex > 0).Select(c => new StartingChibiWithImage(c,
+                ((ChibiItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Chibi
+                                                      && ((ChibiItem)i).ChibiIndex == c.ChibiIndex)).ChibiAnimations.First().Value[0].Frame,
+                StartingChibis, UnusedChibis, _script)));
+            short[] usedIndices = StartingChibis.Select(c => c.StartingChibi.ChibiIndex).ToArray();
+            for (short i = 1; i <= 5; i++)
+            {
+                if (usedIndices.Contains(i))
+                {
+                    continue;
+                }
+                UnusedChibis.Add(new(new StartingChibiEntry() { ChibiIndex = i }, ((ChibiItem)_project.Items.First(c => c.Type == ItemDescription.ItemType.Chibi
+                    && ((ChibiItem)c).ChibiIndex == i)).ChibiAnimations.First().Value[0].Frame, StartingChibis, UnusedChibis, _script));
+            }
+        }
     }
 
     public void PopulateScriptCommands(bool refresh = false)
@@ -203,10 +226,16 @@ public class ScriptEditorViewModel : EditorViewModel
                 CommandVerb.BACK => new EmptyScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.STOP => new EmptyScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.NOOP2 => new EmptyScriptCommandEditorViewModel(_selectedCommand, this, _log),
+                CommandVerb.INVEST_START => new InvestStartScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.LOAD_ISOMAP => new LoadIsomapScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.INVEST_END => new EmptyScriptCommandEditorViewModel(_selectedCommand, this, _log),
+                CommandVerb.CHIBI_EMOTE => new ChibiEmoteScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.NEXT_SCENE => new EmptyScriptCommandEditorViewModel(_selectedCommand, this, _log),
+                CommandVerb.SKIP_SCENE => new SkipSceneScriptCommandEditorViewModel(_selectedCommand, this, _log),
+                CommandVerb.MODIFY_FRIENDSHIP => new ModifyFriendshipScriptCommandEditorViewModel(_selectedCommand, this, _log),
+                CommandVerb.CHIBI_ENTEREXIT => new ChibiEnterExitScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.AVOID_DISP => new EmptyScriptCommandEditorViewModel(_selectedCommand, this, _log),
+                CommandVerb.GLOBAL2D => new Global2DScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.CHESS_LOAD => new ChessLoadScriptCommandEditorViewModel(_selectedCommand, this, Window, _log),
                 CommandVerb.SCENE_GOTO_CHESS => new SceneGotoScriptCommandEditorViewModel(_selectedCommand, this, _log, Window),
                 CommandVerb.BG_DISP2 => new BgDispScriptCommandEditorViewModel(_selectedCommand, this, _log, Window),
@@ -703,5 +732,68 @@ public class ReactiveScriptSection(ScriptSection section) : ReactiveObject
     {
         Commands.Clear();
         Commands.AddRange(commands.Select(c => new ScriptCommandTreeItem(c)));
+    }
+}
+
+public class StartingChibiWithImage : ReactiveObject
+{
+    public StartingChibiEntry StartingChibi { get; }
+
+    [Reactive]
+    public SKBitmap ChibiBitmap { get; set; }
+
+    public ICommand AddStartingChibiCommand { get; }
+
+    public ICommand RemoveStartingChibiCommand { get; }
+
+    public StartingChibiWithImage(StartingChibiEntry startingChibi, SKBitmap chibiBitmap,
+        ObservableCollection<StartingChibiWithImage> usedChibis, ObservableCollection<StartingChibiWithImage> unusedChibis,
+        ScriptItem script)
+    {
+        StartingChibi = startingChibi;
+        ChibiBitmap = chibiBitmap;
+
+        AddStartingChibiCommand = ReactiveCommand.Create(() =>
+        {
+            unusedChibis.Remove(this);
+            for (short i = 0; i <= usedChibis.Count; i++)
+            {
+                if (i == usedChibis.Count)
+                {
+                    usedChibis.Add(this);
+                    break;
+                }
+
+                if (usedChibis[i].StartingChibi.ChibiIndex > startingChibi.ChibiIndex)
+                {
+                    usedChibis.Insert(i, this);
+                    break;
+                }
+            }
+            script.Event.StartingChibisSection.Objects.Add(StartingChibi);
+            script.UnsavedChanges = true;
+
+        });
+        RemoveStartingChibiCommand = ReactiveCommand.Create(() =>
+        {
+            usedChibis.Remove(this);
+            for (short i = 0; i <= unusedChibis.Count; i++)
+            {
+                if (i == unusedChibis.Count)
+                {
+                    unusedChibis.Add(this);
+                    break;
+                }
+
+                if (unusedChibis[i].StartingChibi.ChibiIndex > startingChibi.ChibiIndex)
+                {
+                    unusedChibis.Insert(i, this);
+                    break;
+                }
+            }
+            script.Event.StartingChibisSection.Objects.Remove(
+                script.Event.StartingChibisSection.Objects.First(c => c.ChibiIndex == StartingChibi.ChibiIndex));
+            script.UnsavedChanges = true;
+        });
     }
 }
