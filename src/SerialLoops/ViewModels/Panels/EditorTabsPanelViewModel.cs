@@ -77,6 +77,8 @@ public class EditorTabsPanelViewModel : ViewModelBase
                 return new LayoutEditorViewModel((LayoutItem)item, MainWindow, _log);
             case ItemDescription.ItemType.Map:
                 return new MapEditorViewModel((MapItem)item, MainWindow, _log);
+            case ItemDescription.ItemType.Place:
+                return new PlaceEditorViewModel((PlaceItem)item, MainWindow, _log);
             case ItemDescription.ItemType.Puzzle:
                 return new PuzzleEditorViewModel((PuzzleItem)item, MainWindow, _log);
             case ItemDescription.ItemType.Scenario:
