@@ -51,14 +51,11 @@ public class SKAvaloniaImage : IImage, IDisposable
     public void Dispose() => throw new NotImplementedException();
     public void Draw(DrawingContext context, Rect sourceRect, Rect destRect)
     {
-        if (_drawOperation is null)
+        _drawOperation ??= new()
         {
-            _drawOperation = new()
-            {
-                Bitmap = _bitmap,
-                Bounds = destRect,
-            };
-            context.Custom(_drawOperation);
-        }
+            Bitmap = _bitmap,
+            Bounds = destRect,
+        };
+        context.Custom(_drawOperation);
     }
 }

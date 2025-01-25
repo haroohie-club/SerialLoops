@@ -3080,4 +3080,10 @@ This action is irreversible.</value>
   <data name="Enter" xml:space="preserve">
     <value>Enter</value>
   </data>
+  <data name="Export Item Image" xml:space="preserve">
+    <value>Export Item Image</value>
+  </data>
+  <data name="Import Item Image" xml:space="preserve">
+    <value>Import Item Image</value>
+  </data>
 </root>

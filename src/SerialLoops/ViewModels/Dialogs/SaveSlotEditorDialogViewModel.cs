@@ -301,6 +301,18 @@ public class SaveSlotEditorDialogViewModel : ViewModelBase
             PowerStatuses[0].SetStatus(_commonSaveData.MikuruPowerStatus);
             PowerStatuses[1].SetStatus(_commonSaveData.NagatoPowerStatus);
             PowerStatuses[2].SetStatus(_commonSaveData.KoizumiPowerStatus);
+
+            foreach (LocalizedFlag flag in _flags)
+            {
+                if (flag.IsSet)
+                {
+                    _commonSaveData.SetFlag(flag.Id);
+                }
+                else
+                {
+                    _commonSaveData.ClearFlag(flag.Id);
+                }
+            }
         }
 
         if (IsSaveSlot)
@@ -326,6 +338,18 @@ public class SaveSlotEditorDialogViewModel : ViewModelBase
             _saveSlot.KoizumiFriendshipLevel = KoizumiFriendshipLevel;
             _saveSlot.TsuruyaFriendshipLevel = TsuruyaFriendshipLevel;
             _saveSlot.UnknownFriendshipLevel = UnknownFriendshipLevel;
+
+            foreach (LocalizedFlag flag in _flags)
+            {
+                if (flag.IsSet)
+                {
+                    _saveSlot.SetFlag(flag.Id);
+                }
+                else
+                {
+                    _saveSlot.ClearFlag(flag.Id);
+                }
+            }
         }
 
         if (IsQuickSave)

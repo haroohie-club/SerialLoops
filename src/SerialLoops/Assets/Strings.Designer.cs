@@ -2682,6 +2682,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Export Item Image.
+        /// </summary>
+        public static string Export_Item_Image {
+            get {
+                return ResourceManager.GetString("Export Item Image", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export Item Names.
         /// </summary>
         public static string Export_Item_Names {
@@ -3992,6 +4001,15 @@ namespace SerialLoops.Assets {
         public static string Import_Hack {
             get {
                 return ResourceManager.GetString("Import Hack", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import Item Image.
+        /// </summary>
+        public static string Import_Item_Image {
+            get {
+                return ResourceManager.GetString("Import Item Image", resourceCulture);
             }
         }
         
