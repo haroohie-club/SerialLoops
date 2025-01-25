@@ -850,10 +850,12 @@ public partial class Project
         try
         {
             LayoutFiles.Clear();
-            LayoutFiles.Add(0xC45, Grp.GetFileByIndex(0xC45));
-
             tracker.Focus("Layouts", 22);
-            List <GraphicsFile> graphics = [
+
+            // Puzzle phase layouts
+            LayoutFiles.Add(0xC45, Grp.GetFileByIndex(0xC45));
+            List <GraphicsFile> puzzlePhaseGraphics =
+            [
                 Grp.GetFileByIndex(0xC48),
                 Grp.GetFileByIndex(0xC4A),
                 Grp.GetFileByIndex(0xC4C),
@@ -877,47 +879,47 @@ public partial class Project
                 Grp.GetFileByIndex(0xC67),
             ];
 
-            Items.Add(new LayoutItem(0xC45, graphics, 54, 13, "LYT_ACCIDENT_OUTBREAK", this));
+            Items.Add(new LayoutItem(0xC45, puzzlePhaseGraphics, 54, 13, "LYT_ACCIDENT_OUTBREAK", this));
             tracker.Finished++;
-            Items.Add(new LayoutItem(0xC45, graphics, 67, 5, "LYT_MAIN_TOPIC_DELAYED", this));
+            Items.Add(new LayoutItem(0xC45, puzzlePhaseGraphics, 67, 5, "LYT_MAIN_TOPIC_DELAYED", this));
             tracker.Finished++;
-            Items.Add(new LayoutItem(0xC45, graphics, 72, 12, "LYT_DELAY_CHANCE", this));
+            Items.Add(new LayoutItem(0xC45, puzzlePhaseGraphics, 72, 12, "LYT_DELAY_CHANCE", this));
             tracker.Finished++;
-            Items.Add(new LayoutItem(0xC45, graphics, 84, 2, "LYT_TOPIC_CHOOSE", this));
+            Items.Add(new LayoutItem(0xC45, puzzlePhaseGraphics, 84, 2, "LYT_TOPIC_CHOOSE", this));
             tracker.Finished++;
-            Items.Add(new LayoutItem(0xC45, graphics, 122, 8, "LYT_READY", this));
+            Items.Add(new LayoutItem(0xC45, puzzlePhaseGraphics, 122, 8, "LYT_READY", this));
             tracker.Finished++;
-            Items.Add(new LayoutItem(0xC45, graphics, 130, 3, "LYT_GO", this));
+            Items.Add(new LayoutItem(0xC45, puzzlePhaseGraphics, 130, 3, "LYT_GO", this));
             tracker.Finished++;
-            Items.Add(new LayoutItem(0xC45, graphics, 134, 4, "LYT_TIME_RESULT", this));
+            Items.Add(new LayoutItem(0xC45, puzzlePhaseGraphics, 134, 4, "LYT_TIME_RESULT", this));
             tracker.Finished++;
-            Items.Add(new LayoutItem(0xC45, graphics, 138, 2, "LYT_ACCIDENT_RESULT", this));
+            Items.Add(new LayoutItem(0xC45, puzzlePhaseGraphics, 138, 2, "LYT_ACCIDENT_RESULT", this));
             tracker.Finished++;
-            Items.Add(new LayoutItem(0xC45, graphics, 140, 2, "LYT_POWER_UP_RESULT", this));
+            Items.Add(new LayoutItem(0xC45, puzzlePhaseGraphics, 140, 2, "LYT_POWER_UP_RESULT", this));
             tracker.Finished++;
-            Items.Add(new LayoutItem(0xC45, graphics, 142, 2, "LYT_BASE_TIME_LIMIT", this));
+            Items.Add(new LayoutItem(0xC45, puzzlePhaseGraphics, 142, 2, "LYT_BASE_TIME_LIMIT", this));
             tracker.Finished++;
-            Items.Add(new LayoutItem(0xC45, graphics, 148, 2, "LYT_HRH_DISTRACTION_BONUS", this));
+            Items.Add(new LayoutItem(0xC45, puzzlePhaseGraphics, 148, 2, "LYT_HRH_DISTRACTION_BONUS", this));
             tracker.Finished++;
-            Items.Add(new LayoutItem(0xC45, graphics, 154, 5, "LYT_TOTAL_SCORE", this));
+            Items.Add(new LayoutItem(0xC45, puzzlePhaseGraphics, 154, 5, "LYT_TOTAL_SCORE", this));
             tracker.Finished++;
-            Items.Add(new LayoutItem(0xC45, graphics, 163, 3, "LYT_MAIN_TOPICS_OBTAINED", this));
+            Items.Add(new LayoutItem(0xC45, puzzlePhaseGraphics, 163, 3, "LYT_MAIN_TOPICS_OBTAINED", this));
             tracker.Finished++;
-            Items.Add(new LayoutItem(0xC45, graphics, 163, 3, "LYT_ACCIDENT_BUTTON", this));
+            Items.Add(new LayoutItem(0xC45, puzzlePhaseGraphics, 163, 3, "LYT_ACCIDENT_BUTTON", this));
             tracker.Finished++;
-            Items.Add(new LayoutItem(0xC45, graphics, 175, 2, "LYT_MAIN_TOPIC", this));
+            Items.Add(new LayoutItem(0xC45, puzzlePhaseGraphics, 175, 2, "LYT_MAIN_TOPIC", this));
             tracker.Finished++;
-            Items.Add(new LayoutItem(0xC45, graphics, 177, 1, "LYT_COUNTER", this));
+            Items.Add(new LayoutItem(0xC45, puzzlePhaseGraphics, 177, 1, "LYT_COUNTER", this));
             tracker.Finished++;
-            Items.Add(new LayoutItem(0xC45, graphics, 199, 27, "LYT_CHARACTER_TOPICS_OBTAINED", this));
+            Items.Add(new LayoutItem(0xC45, puzzlePhaseGraphics, 199, 27, "LYT_CHARACTER_TOPICS_OBTAINED", this));
             tracker.Finished++;
-            Items.Add(new LayoutItem(0xC45, graphics, 226, 4, "LYT_TIME_LIMIT", this));
+            Items.Add(new LayoutItem(0xC45, puzzlePhaseGraphics, 226, 4, "LYT_TIME_LIMIT", this));
             tracker.Finished++;
-            Items.Add(new LayoutItem(0xC45, graphics, 235, 2, "LYT_ACCIDENT_AVOIDED", this));
+            Items.Add(new LayoutItem(0xC45, puzzlePhaseGraphics, 235, 2, "LYT_ACCIDENT_AVOIDED", this));
             tracker.Finished++;
-            Items.Add(new LayoutItem(0xC45, graphics, 286, 2, "LYT_SEARCH_BUTTON", this));
+            Items.Add(new LayoutItem(0xC45, puzzlePhaseGraphics, 286, 2, "LYT_SEARCH_BUTTON", this));
             tracker.Finished++;
-            Items.Add(new LayoutItem(0xC45, graphics, 307, 1, "LYT_MIN_ERASED_GOAL", this));
+            Items.Add(new LayoutItem(0xC45, puzzlePhaseGraphics, 307, 1, "LYT_MIN_ERASED_GOAL", this));
             tracker.Finished++;
         }
         catch (Exception ex)

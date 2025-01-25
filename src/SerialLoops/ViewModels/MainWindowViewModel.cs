@@ -5,6 +5,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia;
@@ -730,6 +731,7 @@ public partial class MainWindowViewModel : ViewModelBase
         bool savedChrData = false;
         bool savedExtra = false;
         bool savedMessInfo = false;
+        bool changedScenario = false;
         bool changedNameplates = false;
         bool changedTopics = false;
         bool changedSubs = false;
@@ -796,11 +798,15 @@ public partial class MainWindowViewModel : ViewModelBase
                     IO.WriteStringFile(Path.Combine("assets", "data", $"{chessPuzzleItem.ChessPuzzle.Index:X3}.s"),
                         chessPuzzleItem.ChessPuzzle.GetSource([]), OpenProject, Log);
                     break;
+                case ItemDescription.ItemType.Group_Selection:
+                    GroupSelectionItem groupSelectionItem = (GroupSelectionItem)item;
+                    OpenProject.Scenario.Selects[groupSelectionItem.Index] = groupSelectionItem.Selection;
+                    changedScenario = true;
+                    break;
                 case ItemDescription.ItemType.Scenario:
                     ScenarioStruct scenario = ((ScenarioItem)item).Scenario;
-                    IO.WriteStringFile(
-                        Path.Combine("assets", "events", $"{OpenProject.Evt.GetFileByName("SCENARIOS").Index:X3}.s"),
-                        scenario.GetSource(includes, Log), OpenProject, Log);
+                    OpenProject.Scenario.Commands = scenario.Commands;
+                    changedScenario = true;
                     break;
                 case ItemDescription.ItemType.Script:
                     if (!savedEventTable)
@@ -854,6 +860,13 @@ public partial class MainWindowViewModel : ViewModelBase
             }
 
             item.UnsavedChanges = false;
+        }
+
+        if (changedScenario)
+        {
+            IO.WriteStringFile(
+                Path.Combine("assets", "events", $"{OpenProject.Evt.GetFileByName("SCENARIOS").Index:X3}.s"),
+                OpenProject.Scenario.GetSource(includes, Log), OpenProject, Log);
         }
 
         if (changedNameplates)
