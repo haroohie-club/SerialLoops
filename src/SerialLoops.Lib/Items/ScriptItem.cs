@@ -289,7 +289,7 @@ public class ScriptItem : Item
                 if (commands[i].Verb == CommandVerb.CHIBI_ENTEREXIT)
                 {
                     if (((ChibiEnterExitScriptParameter)commands[i].Parameters[1]).Mode ==
-                        ChibiEnterExitScriptParameter.ChibiEnterExitType.ENTER)
+                        ChibiEnterExitScriptParameter.ChibiEnterExitType.Enter)
                     {
                         ChibiItem chibi = ((ChibiScriptParameter)commands[i].Parameters[0]).Chibi;
                         if (!chibis.Contains(chibi))
