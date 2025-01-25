@@ -3086,4 +3086,25 @@ This action is irreversible.</value>
   <data name="Import Item Image" xml:space="preserve">
     <value>Import Item Image</value>
   </data>
+  <data name="Force Drop Shadow" xml:space="preserve">
+    <value>Force Drop Shadow</value>
+  </data>
+  <data name="YELLOW" xml:space="preserve">
+    <value>Yellow</value>
+  </data>
+  <data name="OFF_WHITE" xml:space="preserve">
+    <value>Off White</value>
+  </data>
+  <data name="GRAY" xml:space="preserve">
+    <value>Gray</value>
+  </data>
+  <data name="LAVENDER" xml:space="preserve">
+    <value>Lavender</value>
+  </data>
+  <data name="RED" xml:space="preserve">
+    <value>Red</value>
+  </data>
+  <data name="FADED_GRAY" xml:space="preserve">
+    <value>Faded Gray</value>
+  </data>
 </root>
