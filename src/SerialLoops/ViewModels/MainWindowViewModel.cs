@@ -130,6 +130,7 @@ public partial class MainWindowViewModel : ViewModelBase
         ApplyHacksCommand = ReactiveCommand.CreateFromTask(ApplyHacksCommand_Executed);
         CreateAsmHackCommand = ReactiveCommand.CreateFromTask(CreateAsmHackCommand_Executed);
         EditUiTextCommand = ReactiveCommand.CreateFromTask(EditUiTextCommand_Executed);
+        EditTutorialMappingsCommand = ReactiveCommand.CreateFromTask(EditTutorialMappingsCommand_Executed);
         ProjectSettingsCommand = ReactiveCommand.CreateFromTask(ProjectSettingsCommand_Executed);
         ExportProjectCommand = ReactiveCommand.CreateFromTask(ExportProjectCommand_Executed);
         ExportPatchCommand = ReactiveCommand.CreateFromTask(ExportPatchCommand_Executed);
@@ -364,6 +365,13 @@ public partial class MainWindowViewModel : ViewModelBase
         EditUiTextDialogViewModel editUiTextDialogViewModel = new(OpenProject, Log);
         EditUiTextDialog editUiTextDialog = new() { DataContext = editUiTextDialogViewModel };
         await editUiTextDialog.ShowDialog(Window);
+    }
+
+    private async Task EditTutorialMappingsCommand_Executed()
+    {
+        EditTutorialMappingsDialogViewModel viewModel = new(OpenProject, EditorTabs, Log);
+        EditTutorialMappingsDialog dialog = new() { DataContext = viewModel };
+        await dialog.ShowDialog(Window);
     }
 
     private async Task ProjectSettingsCommand_Executed()
