@@ -17,6 +17,7 @@ using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Util;
 using SerialLoops.Tests.Shared;
 using SerialLoops.ViewModels;
+using SerialLoops.ViewModels.Dialogs;
 using SerialLoops.ViewModels.Editors;
 using SerialLoops.Views.Editors;
 using SixLabors.ImageSharp;
@@ -126,7 +127,7 @@ public class BackgroundEditorTests
 
         using FileStream fs = File.OpenRead(Path.Combine(_uiVals.AssetsDirectory, replacementImage));
         using MemoryStream initialBg = new(File.ReadAllBytes(Path.Combine(_uiVals.AssetsDirectory, replacementImage)));
-        bgItem.SetBackground(SKBitmap.Decode(fs), new LoopyProgressTracker(), _log, _project.Localize);
+        bgItem.SetBackground(SKBitmap.Decode(fs), new ProgressDialogViewModel("Test"), _log, _project.Localize);
 
         using MemoryStream finalBg = new();
         editorVm.BgBitmap.Encode(finalBg, SKEncodedImageFormat.Png, GraphicsFile.PNG_QUALITY);
@@ -150,7 +151,7 @@ public class BackgroundEditorTests
         using MemoryStream initialBg = new();
         editorVm.BgBitmap.Encode(initialBg, SKEncodedImageFormat.Png, GraphicsFile.PNG_QUALITY);
         initialBg.Seek(0, SeekOrigin.Begin);
-        Assert.DoesNotThrow(() => bgItem.SetBackground(SKBitmap.Decode(fs), new LoopyProgressTracker(), _log, _project.Localize));
+        Assert.DoesNotThrow(() => bgItem.SetBackground(SKBitmap.Decode(fs), new ProgressDialogViewModel("Test"), _log, _project.Localize));
 
         using MemoryStream finalBg = new();
         editorVm.BgBitmap.Encode(finalBg, SKEncodedImageFormat.Png, GraphicsFile.PNG_QUALITY);

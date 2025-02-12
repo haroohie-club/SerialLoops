@@ -63,15 +63,16 @@ public partial class ProjectCreationDialogViewModel : ViewModelBase
         else
         {
             Project newProject = new(ProjectName, LanguageTemplateCode, _config, Strings.ResourceManager.GetString, _log);
-            LoopyProgressTracker tracker = new();
-            await new ProgressDialog(() =>
+            ProgressDialogViewModel tracker = new(Strings.Creating_Project);
+            tracker.InitializeTasks(() =>
             {
                 ((IProgressTracker)tracker).Focus(Strings.Creating_Project, 1);
                 Lib.IO.OpenRom(newProject, RomPath, _log, tracker);
                 tracker.Finished++;
                 newProject.Load(_config, _log, tracker);
                 newProject.SetBaseRomHash(RomPath);
-            }, () => dialog.Close(newProject), tracker, Strings.Creating_Project).ShowDialog(_mainWindow.Window);
+            }, () => dialog.Close(newProject));
+            await new ProgressDialog { DataContext = tracker }.ShowDialog(_mainWindow.Window);
         }
     }
 }

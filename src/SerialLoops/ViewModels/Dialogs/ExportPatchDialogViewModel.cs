@@ -97,13 +97,14 @@ public class ExportPatchDialogViewModel
             return;
         }
 
-        LoopyProgressTracker tracker = new();
+        ProgressDialogViewModel tracker = new(Strings.Creating_Patch);
+        tracker.InitializeTasks(
+            () => Patch.CreatePatch(RomPath, Path.Combine(_project.MainDirectory, $"{_project.Name}.nds"),
+                XDeltaPath, _log),
+            () => { });
         try
         {
-            await new ProgressDialog(
-                () => Patch.CreatePatch(RomPath, Path.Combine(_project.MainDirectory, $"{_project.Name}.nds"),
-                    XDeltaPath, _log),
-                () => { }, tracker, Strings.Creating_Patch).ShowDialog(dialog);
+            await new ProgressDialog { DataContext = tracker }.ShowDialog(dialog);
             await dialog.ShowMessageBoxAsync(Strings.Patch_Created_, Strings.Success_, ButtonEnum.Ok, Icon.Success,
                 _log);
         }

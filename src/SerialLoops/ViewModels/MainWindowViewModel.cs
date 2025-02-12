@@ -494,7 +494,7 @@ public partial class MainWindowViewModel : ViewModelBase
         if (newProject is not null)
         {
             OpenProject = newProject;
-            OpenProjectView(OpenProject, new LoopyProgressTracker());
+            OpenProjectView(OpenProject, new ProgressDialogViewModel(Strings.Open_Project));
         }
     }
 
@@ -515,10 +515,11 @@ public partial class MainWindowViewModel : ViewModelBase
     public async Task OpenProjectFromPath(string path)
     {
         Project.LoadProjectResult result = new(Project.LoadProjectState.FAILED); // start us off with a failure
-        LoopyProgressTracker tracker = new();
         string projectFileName = Path.GetFileName(path);
-        await new ProgressDialog(() => (OpenProject, result) = Project.OpenProject(path, CurrentConfig, Strings.ResourceManager.GetString, Log, tracker),
-            () => { }, tracker, string.Format(Strings.Loading_Project____0__, projectFileName)).ShowDialog(Window);
+        ProgressDialogViewModel tracker = new(string.Format(Strings.Loading_Project____0__, projectFileName));
+        tracker.InitializeTasks(() => (OpenProject, result) = Project.OpenProject(path, CurrentConfig, Strings.ResourceManager.GetString, Log, tracker),
+            () => { });
+        await new ProgressDialog { DataContext = tracker }.ShowDialog(Window);
         if (OpenProject is not null && result.State == Project.LoadProjectState.LOOSELEAF_FILES)
         {
             if (await Window.ShowMessageBoxAsync(
@@ -526,15 +527,16 @@ public partial class MainWindowViewModel : ViewModelBase
                     Strings.Saved_but_unbuilt_files_were_detected_in_the_project_directory__Would_you_like_to_build_before_loading_the_project__Not_building_could_result_in_these_files_being_overwritten_,
                     ButtonEnum.YesNo, Icon.Question, Log) == ButtonResult.Yes)
             {
-                LoopyProgressTracker secondTracker = new();
-                await new ProgressDialog(() => Build.BuildIterative(OpenProject, CurrentConfig, Log, secondTracker),
-                    () => { }, secondTracker,
-                    string.Format(Strings.Loading_Project____0__, projectFileName)).ShowDialog(Window);
+                ProgressDialogViewModel secondTracker = new(string.Format(Strings.Loading_Project____0__, projectFileName));
+                secondTracker.InitializeTasks(() => Build.BuildIterative(OpenProject, CurrentConfig, Log, secondTracker),
+                    () => { });
+                await new ProgressDialog { DataContext = secondTracker }.ShowDialog(Window);
             }
 
-            LoopyProgressTracker thirdTracker = new();
-            await new ProgressDialog(() => OpenProject.LoadArchives(Log, thirdTracker),
-                () => { }, thirdTracker, string.Format(Strings.Loading_Project____0__, projectFileName)).ShowDialog(Window);
+            ProgressDialogViewModel thirdTracker = new(string.Format(Strings.Loading_Project____0__, projectFileName));
+            thirdTracker.InitializeTasks(() => OpenProject.LoadArchives(Log, thirdTracker),
+                () => { });
+            await new ProgressDialog { DataContext = thirdTracker }.ShowDialog(Window);
         }
         else if (result.State == Project.LoadProjectState.CORRUPTED_FILE)
         {
@@ -596,11 +598,11 @@ public partial class MainWindowViewModel : ViewModelBase
             }
 
             Project.LoadProjectResult result = new() { State = Project.LoadProjectState.FAILED };
-            LoopyProgressTracker tracker = new();
-            await new ProgressDialog(
-                () => (OpenProject, result) = Project.Import(slzipPath, romPath, CurrentConfig,
+            ProgressDialogViewModel tracker = new(Strings.Importing_Project);
+            tracker.InitializeTasks(() => (OpenProject, result) = Project.Import(slzipPath, romPath, CurrentConfig,
                     Strings.ResourceManager.GetString, Log, tracker),
-                () => { }, tracker, Strings.Importing_Project).ShowDialog(Window);
+                () => { });
+            await new ProgressDialog { DataContext = tracker }.ShowDialog(Window);
 
             if (OpenProject is not null)
             {
@@ -684,8 +686,8 @@ public partial class MainWindowViewModel : ViewModelBase
                 }
             }
             OpenProject = new(projectName, "en", CurrentConfig, Strings.ResourceManager.GetString, Log);
-            LoopyProgressTracker tracker = new();
-            await new ProgressDialog(() =>
+            ProgressDialogViewModel tracker = new(Strings.Creating_Project);
+            tracker.InitializeTasks(() =>
             {
                 ((IProgressTracker)tracker).Focus(Strings.Creating_Project, 1);
                 IO.OpenRom(OpenProject, rom, Log, tracker);
@@ -734,7 +736,8 @@ public partial class MainWindowViewModel : ViewModelBase
                     },
                 ];
                 menu.Items.Insert(insertionPoint, WindowMenu[MenuHeader.PROJECT]);
-            }, tracker, Strings.Creating_Project).ShowDialog(Window);
+            });
+            await new ProgressDialog { DataContext = tracker }.ShowDialog(Window);
         }
     }
 
@@ -972,20 +975,20 @@ public partial class MainWindowViewModel : ViewModelBase
         if (OpenProject is not null)
         {
             bool buildSucceeded = true; // imo it's better to have a false negative than a false positive here
-            LoopyProgressTracker tracker = new(Strings.Building_);
-            await new ProgressDialog(
-                () => buildSucceeded = Build.BuildIterative(OpenProject, CurrentConfig, Log, tracker), async () =>
+            ProgressDialogViewModel tracker = new(Strings.Building_Iteratively, Strings.Building_);
+            tracker.InitializeTasks(() => buildSucceeded = Build.BuildIterative(OpenProject, CurrentConfig, Log, tracker), async () =>
+            {
+                if (buildSucceeded)
                 {
-                    if (buildSucceeded)
-                    {
-                        Log.Log("Build succeeded!");
-                        await Window.ShowMessageBoxAsync(Strings.Build_Result, Strings.Build_succeeded_, ButtonEnum.Ok, Icon.Success, Log);
-                    }
-                    else
-                    {
-                        Log.LogError(Strings.Build_failed_);
-                    }
-                }, tracker, Strings.Building_Iteratively).ShowDialog(Window);
+                    Log.Log("Build succeeded!");
+                    await Window.ShowMessageBoxAsync(Strings.Build_Result, Strings.Build_succeeded_, ButtonEnum.Ok, Icon.Success, Log);
+                }
+                else
+                {
+                    Log.LogError(Strings.Build_failed_);
+                }
+            });
+            await new ProgressDialog { DataContext = tracker }.ShowDialog(Window);
         }
     }
 
@@ -993,20 +996,21 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         if (OpenProject is not null)
         {
-            bool buildSucceeded = true; LoopyProgressTracker tracker = new(Strings.Building_);
-            await new ProgressDialog(
-                () => buildSucceeded = Build.BuildBase(OpenProject, CurrentConfig, Log, tracker), async () =>
+            bool buildSucceeded = true;
+            ProgressDialogViewModel tracker = new(Strings.Building_from_Scratch, Strings.Building_);
+            tracker.InitializeTasks(() => buildSucceeded = Build.BuildBase(OpenProject, CurrentConfig, Log, tracker), async () =>
+            {
+                if (buildSucceeded)
                 {
-                    if (buildSucceeded)
-                    {
-                        Log.Log("Build succeeded!");
-                        await Window.ShowMessageBoxAsync(Strings.Build_Result, Strings.Build_succeeded_, ButtonEnum.Ok, Icon.Success, Log);
-                    }
-                    else
-                    {
-                        Log.LogError(Strings.Build_failed_);
-                    }
-                }, tracker, Strings.Building_Iteratively).ShowDialog(Window);
+                    Log.Log("Build succeeded!");
+                    await Window.ShowMessageBoxAsync(Strings.Build_Result, Strings.Build_succeeded_, ButtonEnum.Ok, Icon.Success, Log);
+                }
+                else
+                {
+                    Log.LogError(Strings.Build_failed_);
+                }
+            });
+            await new ProgressDialog { DataContext = tracker } .ShowDialog(Window);
         }
     }
 
@@ -1022,9 +1026,9 @@ public partial class MainWindowViewModel : ViewModelBase
                 await PreferencesCommand_Executed();
                 return;
             }
-            bool buildSucceeded = true; LoopyProgressTracker tracker = new(Strings.Building_);
-            await new ProgressDialog(
-                () => buildSucceeded = Build.BuildIterative(OpenProject, CurrentConfig, Log, tracker), async () =>
+            bool buildSucceeded = true;
+            ProgressDialogViewModel tracker = new(Strings.Building_and_Running, Strings.Building_);
+            tracker.InitializeTasks(() => buildSucceeded = Build.BuildIterative(OpenProject, CurrentConfig, Log, tracker), async () =>
                 {
                     if (buildSucceeded)
                     {
@@ -1063,7 +1067,8 @@ public partial class MainWindowViewModel : ViewModelBase
                     {
                         Log.LogError(Strings.Build_failed_);
                     }
-                }, tracker, Strings.Building_and_Running).ShowDialog(Window);
+                });
+            await new ProgressDialog { DataContext = tracker }.ShowDialog(Window);
         }
     }
 

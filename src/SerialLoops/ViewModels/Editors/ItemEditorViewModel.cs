@@ -58,9 +58,10 @@ public class ItemEditorViewModel : EditorViewModel
             {
                 try
                 {
-                    LoopyProgressTracker tracker = new();
-                    await new ProgressDialog(() => _item.SetImage(finalImage, tracker, _log),
-                        () => { }, tracker, string.Format(Strings.Replacing__0____, _item.DisplayName)).ShowDialog(Window.Window);
+                    ProgressDialogViewModel tracker = new(string.Format(Strings.Replacing__0____, _item.DisplayName));
+                    tracker.InitializeTasks(() => _item.SetImage(finalImage, tracker, _log),
+                        () => { });
+                    await new ProgressDialog { DataContext = tracker }.ShowDialog(Window.Window);
                     this.RaisePropertyChanged(nameof(ItemBitmap));
                     Description.UnsavedChanges = true;
                 }
