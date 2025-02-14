@@ -88,10 +88,12 @@ public class BackgroundEditorViewModel : EditorViewModel
             {
                 try
                 {
-                    LoopyProgressTracker tracker = new();
+                    ProgressDialogViewModel tracker = new(string.Format(Strings.Replacing__0____, Bg.DisplayName));
                     bool success = false;
-                    await new ProgressDialog(() => success = Bg.SetBackground(finalImage, tracker, _log, _project.Localize),
-                        () => { }, tracker, string.Format(Strings.Replacing__0____, Bg.DisplayName)).ShowDialog(Window.Window);
+                    tracker.InitializeTasks(
+                        () => success = Bg.SetBackground(finalImage, tracker, _log, _project.Localize),
+                        () => { });
+                    await new ProgressDialog { DataContext = tracker }.ShowDialog(Window.Window);
                     if (success)
                     {
                         this.RaisePropertyChanged(nameof(BgBitmap));

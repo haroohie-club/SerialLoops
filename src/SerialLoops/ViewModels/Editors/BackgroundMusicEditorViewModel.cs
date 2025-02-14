@@ -71,9 +71,11 @@ public class BackgroundMusicEditorViewModel : EditorViewModel
         IStorageFile file = await Window.Window.ShowSaveFilePickerAsync(Strings.Save_BGM_as_WAV, [new(Strings.WAV_File) { Patterns = ["*.wav"] }]);
         if (file is not null)
         {
-            LoopyProgressTracker tracker = new();
-            await new ProgressDialog(() => WaveFileWriter.CreateWaveFile(file.Path.LocalPath, Bgm.GetWaveProvider(_log, false)),
-                () => { }, tracker, Strings.Exporting_BGM).ShowDialog(Window.Window);
+            ProgressDialogViewModel tracker = new(Strings.Exporting_BGM);
+            tracker.InitializeTasks(
+                () => WaveFileWriter.CreateWaveFile(file.Path.LocalPath, Bgm.GetWaveProvider(_log, false)),
+                () => { });
+            await new ProgressDialog { DataContext = tracker }.ShowDialog(Window.Window);
         }
     }
 
@@ -89,13 +91,14 @@ public class BackgroundMusicEditorViewModel : EditorViewModel
         ]);
         if (file is not null)
         {
-            LoopyProgressTracker firstTracker = new(Strings.Replacing_BGM);
-            LoopyProgressTracker secondTracker = new(Strings.Replacing_BGM);
+            ProgressDialogViewModel firstTracker = new(Strings.Replace_BGM_track, Strings.Replacing_BGM);
+            ProgressDialogViewModel secondTracker = new(Strings.Replace_BGM_track, Strings.Replacing_BGM);
             BgmPlayer.Stop();
             Shared.AudioReplacementCancellation.Cancel();
             Shared.AudioReplacementCancellation = new();
-            await new ProgressDialog(() => Bgm.Replace(file.Path.LocalPath, _project.BaseDirectory, _project.IterativeDirectory, _bgmCachedFile, _loopEnabled, _loopStartSample, _loopEndSample, _log, secondTracker, Shared.AudioReplacementCancellation.Token),
-                () => BgmPlayer = new(Bgm, _log, Bgm.BgmName, Bgm.Name, Bgm.Flag, !string.IsNullOrEmpty(Bgm.BgmName) ? _titleBoxTextChangedCommand : null), firstTracker, Strings.Replace_BGM_track).ShowDialog(Window.Window);
+            firstTracker.InitializeTasks(() => Bgm.Replace(file.Path.LocalPath, _project.BaseDirectory, _project.IterativeDirectory, _bgmCachedFile, _loopEnabled, _loopStartSample, _loopEndSample, _log, secondTracker, Shared.AudioReplacementCancellation.Token),
+            () => BgmPlayer = new(Bgm, _log, Bgm.BgmName, Bgm.Name, Bgm.Flag, !string.IsNullOrEmpty(Bgm.BgmName) ? _titleBoxTextChangedCommand : null));
+            await new ProgressDialog { DataContext = firstTracker }.ShowDialog(Window.Window);
         }
     }
 
@@ -114,10 +117,11 @@ public class BackgroundMusicEditorViewModel : EditorViewModel
     private async Task ManageLoop_Executed()
     {
         BgmPlayer.Stop();
-        LoopyProgressTracker firstTracker = new(Strings.Adjusting_Loop_Info);
+        ProgressDialogViewModel firstTracker = new(Strings.Caching_BGM, Strings.Adjusting_Loop_Info);
+        firstTracker.InitializeTasks(() => WaveFileWriter.CreateWaveFile(_bgmCachedFile, Bgm.GetWaveProvider(_log, false)), () => { });
         if (!File.Exists(_bgmCachedFile))
         {
-            await new ProgressDialog(() => WaveFileWriter.CreateWaveFile(_bgmCachedFile, Bgm.GetWaveProvider(_log, false)), () => { }, firstTracker, Strings.Caching_BGM).ShowDialog(Window.Window);
+            await new ProgressDialog { DataContext = firstTracker }.ShowDialog(Window.Window);
         }
         string loopAdjustedWav = Path.Combine(Path.GetDirectoryName(_bgmCachedFile), $"{Path.GetFileNameWithoutExtension(_bgmCachedFile)}-loop.wav");
         File.Copy(_bgmCachedFile, loopAdjustedWav, true);
@@ -132,9 +136,9 @@ public class BackgroundMusicEditorViewModel : EditorViewModel
             _loopEndSample = loopPreview.EndSample;
             Shared.AudioReplacementCancellation.Cancel();
             Shared.AudioReplacementCancellation = new();
-            LoopyProgressTracker secondTracker = new(Strings.Adjusting_Loop_Info);
-            LoopyProgressTracker thirdTracker = new(Strings.Adjusting_Loop_Info);
-            await new ProgressDialog(() =>
+            ProgressDialogViewModel secondTracker = new(Strings.Set_BGM_loop_info, Strings.Adjusting_Loop_Info);
+            ProgressDialogViewModel thirdTracker = new(Strings.Set_BGM_loop_info, Strings.Adjusting_Loop_Info);
+            thirdTracker.InitializeTasks(() =>
                 {
                     Bgm.Replace(_bgmCachedFile, _project.BaseDirectory, _project.IterativeDirectory, _bgmCachedFile, _loopEnabled, _loopStartSample, _loopEndSample, _log, secondTracker, Shared.AudioReplacementCancellation.Token);
                     reader.Dispose();
@@ -143,17 +147,19 @@ public class BackgroundMusicEditorViewModel : EditorViewModel
                 () =>
                 {
                     BgmPlayer = new(Bgm, _log, Bgm.BgmName, Bgm.Name, Bgm.Flag, !string.IsNullOrEmpty(Bgm.BgmName) ? _titleBoxTextChangedCommand : null);
-                }, thirdTracker, Strings.Set_BGM_loop_info).ShowDialog(Window.Window);
+                });
+            await new ProgressDialog { DataContext = thirdTracker }.ShowDialog(Window.Window);
         }
     }
 
     private async Task AdjustVolume_Executed()
     {
         BgmPlayer.Stop();
-        LoopyProgressTracker firstTracker = new(Strings.Adjusting_Volume);
+        ProgressDialogViewModel firstTracker = new(Strings.Caching_BGM, Strings.Adjusting_Volume);
+        firstTracker.InitializeTasks(() => WaveFileWriter.CreateWaveFile(_bgmCachedFile, Bgm.GetWaveProvider(_log, false)), () => { });
         if (!File.Exists(_bgmCachedFile))
         {
-            await new ProgressDialog(() => WaveFileWriter.CreateWaveFile(_bgmCachedFile, Bgm.GetWaveProvider(_log, false)), () => { }, firstTracker, Strings.Caching_BGM).ShowDialog(Window.Window);
+            await new ProgressDialog { DataContext = firstTracker }.ShowDialog(Window.Window);
         }
         string volumeAdjustedWav = Path.Combine(Path.GetDirectoryName(_bgmCachedFile), $"{Path.GetFileNameWithoutExtension(_bgmCachedFile)}-volume.wav");
         File.Copy(_bgmCachedFile, volumeAdjustedWav, true);
@@ -162,12 +168,12 @@ public class BackgroundMusicEditorViewModel : EditorViewModel
         BgmVolumePreviewItem volumePreview = await new BgmVolumePropertiesDialog { DataContext = volumeDialog }.ShowDialog<BgmVolumePreviewItem>(Window.Window);
         if (volumePreview is not null)
         {
-            LoopyProgressTracker secondTracker = new(Strings.Adjusting_Volume) { Total = 2 };
-            LoopyProgressTracker thirdTracker = new(Strings.Adjusting_Volume);
+            ProgressDialogViewModel secondTracker = new(Strings.Replace_BGM_track, Strings.Adjusting_Volume) { Total = 2 };
+            ProgressDialogViewModel thirdTracker = new(Strings.Replace_BGM_track, Strings.Adjusting_Volume);
             BgmPlayer.Stop();
             Shared.AudioReplacementCancellation.Cancel();
             Shared.AudioReplacementCancellation = new();
-            await new ProgressDialog(() =>
+            thirdTracker.InitializeTasks(() =>
             {
                 WaveFileWriter.CreateWaveFile(_bgmCachedFile, volumeDialog.VolumePreview.GetWaveProvider(_log, false));
                 secondTracker.Finished++;
@@ -178,7 +184,8 @@ public class BackgroundMusicEditorViewModel : EditorViewModel
             }, () =>
             {
                 BgmPlayer = new(Bgm, _log, Bgm.BgmName, Bgm.Name, Bgm.Flag, !string.IsNullOrEmpty(Bgm.BgmName) ? _titleBoxTextChangedCommand : null);
-            }, thirdTracker, Strings.Replace_BGM_track).ShowDialog(Window.Window);
+            });
+            await new ProgressDialog { DataContext = thirdTracker }.ShowDialog(Window.Window);
         }
     }
 }

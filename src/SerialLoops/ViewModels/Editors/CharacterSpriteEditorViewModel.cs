@@ -13,6 +13,7 @@ using SerialLoops.Controls;
 using SerialLoops.Lib.Items;
 using SerialLoops.Utility;
 using SerialLoops.ViewModels.Controls;
+using SerialLoops.ViewModels.Dialogs;
 using SerialLoops.Views.Dialogs;
 using SkiaSharp;
 
@@ -163,10 +164,10 @@ public class CharacterSpriteEditorViewModel : EditorViewModel
                 }
             }
 
-            LoopyProgressTracker tracker = new();
-            await new ProgressDialog(() => frames.SaveGif(saveFile.Path.LocalPath, tracker),
-                async () => await Window.Window.ShowMessageBoxAsync(Strings.Success_, Strings.GIF_exported_, MsBox.Avalonia.Enums.ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Success, _log),
-                tracker, Strings.Exporting_GIF___).ShowDialog(Window.Window);
+            ProgressDialogViewModel tracker = new(Strings.Exporting_GIF___);
+            tracker.InitializeTasks(() => frames.SaveGif(saveFile.Path.LocalPath, tracker),
+                async void () => await Window.Window.ShowMessageBoxAsync(Strings.Success_, Strings.GIF_exported_, MsBox.Avalonia.Enums.ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Success, _log));
+            await new ProgressDialog { DataContext = tracker }.ShowDialog(Window.Window);
         }
     }
 }

@@ -18,6 +18,7 @@ using SerialLoops.Lib.Script.Parameters;
 using SerialLoops.Lib.Util;
 using SerialLoops.Utility;
 using SerialLoops.ViewModels.Controls;
+using SerialLoops.ViewModels.Dialogs;
 using SerialLoops.Views.Dialogs;
 using SkiaSharp;
 using static HaruhiChokuretsuLib.Archive.Event.VoiceMapFile;
@@ -225,11 +226,12 @@ public class VoicedLineEditorViewModel : EditorViewModel
             new(Strings.MP3_files) { Patterns = ["*.mp3"] }, new(Strings.Vorbis_files) { Patterns = ["*.ogg"] }]);
         if (openFile is not null)
         {
-            LoopyProgressTracker tracker = new();
+            ProgressDialogViewModel tracker = new(Strings.Replace_voiced_line);
             VcePlayer.Stop();
-            await new ProgressDialog(() => _vce.Replace(openFile.Path.LocalPath, _project.BaseDirectory, _project.IterativeDirectory, Path.Combine(_project.Config.CachesDirectory, "vce", $"{_vce.Name}.wav"), _log,
+            tracker.InitializeTasks(() => _vce.Replace(openFile.Path.LocalPath, _project.BaseDirectory, _project.IterativeDirectory, Path.Combine(_project.Config.CachesDirectory, "vce", $"{_vce.Name}.wav"), _log,
                     _voiceMapEntry),
-                () => { }, tracker, Strings.Replace_voiced_line).ShowDialog(Window.Window);
+                () => { });
+            await new ProgressDialog { DataContext = tracker }.ShowDialog(Window.Window);
             VcePlayer.Stop();
         }
     }

@@ -168,14 +168,15 @@ public class SearchDialogViewModel : ViewModelBase
                     return;
                 }
 
-                LoopyProgressTracker tracker = new(Strings.Searching);
+                ProgressDialogViewModel tracker = new(string.Format(Strings.Searching__0____, _project.Name));
                 List<ItemDescription> results = [];
-                await new ProgressDialog(() => results = _project.GetSearchResults(query, _log, tracker),
+                tracker.InitializeTasks(() => results = _project.GetSearchResults(query, _log, tracker),
                     () =>
                     {
                         Items = new(results);
                         SearchStatusLabel = string.Format(Strings._0__results_found, _items.Count);
-                    }, tracker, string.Format(Strings.Searching__0____, _project.Name)).ShowDialog(dialog);
+                    });
+                await new ProgressDialog { DataContext = tracker }.ShowDialog(dialog);
                 break;
             }
         }

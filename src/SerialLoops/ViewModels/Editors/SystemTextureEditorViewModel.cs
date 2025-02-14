@@ -77,9 +77,9 @@ public class SystemTextureEditorViewModel : EditorViewModel
             {
                 try
                 {
-                    LoopyProgressTracker tracker = new();
-                    await new ProgressDialog(() => SystemTexture.SetTexture(finalImage, replacePalette, _log),
-                        () => { }, tracker, string.Format(Strings.Replacing__0____, SystemTexture.DisplayName)).ShowDialog(Window.Window);
+                    ProgressDialogViewModel tracker = new(string.Format(Strings.Replacing__0____, SystemTexture.DisplayName));
+                    tracker.InitializeTasks(() => SystemTexture.SetTexture(finalImage, replacePalette, _log), () => { });
+                    await new ProgressDialog { DataContext = tracker }.ShowDialog(Window.Window);
                     this.RaisePropertyChanged(nameof(SystemTextureBitmap));
                     Description.UnsavedChanges = true;
                 }

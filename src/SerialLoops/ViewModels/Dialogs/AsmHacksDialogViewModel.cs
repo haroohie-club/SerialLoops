@@ -195,14 +195,15 @@ public class AsmHacksDialogViewModel : ViewModelBase
 
         try
         {
-            LoopyProgressTracker tracker = new();
-            await new ProgressDialog(() =>
+            ProgressDialogViewModel tracker = new(Strings.Patching_ARM9);
+            tracker.InitializeTasks(() =>
             {
                 ARM9AsmHack.Insert(Path.Combine(_project.BaseDirectory, "src"), arm9, 0x02005ECC, Configuration.UseDocker ? Configuration.DevkitArmDockerTag : string.Empty,
-                    (object sender, DataReceivedEventArgs e) => { _log.Log(e.Data); ((IProgressTracker)tracker).Focus(e.Data, 1); },
-                    (object sender, DataReceivedEventArgs e) => _log.LogWarning(e.Data),
+                    (_, e) => { _log.Log(e.Data); ((IProgressTracker)tracker).Focus(e.Data, 1); },
+                    (_, e) => _log.LogWarning(e.Data),
                     devkitArmPath: Configuration.DevkitArmPath);
-            }, () => { }, tracker, Strings.Patching_ARM9).ShowDialog(dialog);
+            }, () => { });
+            await new ProgressDialog { DataContext = tracker }.ShowDialog(dialog);
         }
         catch (Exception ex)
         {
@@ -253,14 +254,16 @@ public class AsmHacksDialogViewModel : ViewModelBase
                 {
                     try
                     {
-                        LoopyProgressTracker tracker = new();
-                        await new ProgressDialog(() =>
+                        ProgressDialogViewModel tracker =
+                            new(string.Format(Strings.Patching_Overlay__0_, overlays[i].Name));
+                        tracker.InitializeTasks(() =>
                         {
                             OverlayAsmHack.Insert(overlaySourceDir, overlays[i], newRomInfoPath, Configuration.UseDocker ? Configuration.DevkitArmDockerTag : string.Empty,
                                 (object sender, DataReceivedEventArgs e) => { _log.Log(e.Data); ((IProgressTracker)tracker).Focus(e.Data, 1); },
                                 (object sender, DataReceivedEventArgs e) => _log.LogWarning(e.Data),
                                 devkitArmPath: Configuration.DevkitArmPath);
-                        }, () => { }, tracker, string.Format(Strings.Patching_Overlay__0_, overlays[i].Name)).ShowDialog(dialog);
+                        }, () => { });
+                        await new ProgressDialog { DataContext = tracker }.ShowDialog(dialog);
                     }
                     catch (Exception ex)
                     {
