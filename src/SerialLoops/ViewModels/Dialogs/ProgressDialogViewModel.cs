@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia.Threading;
@@ -32,7 +31,7 @@ public class ProgressDialogViewModel : ViewModelBase, IProgressTracker
     public ProgressDialogViewModel(string title, string processVerb = "")
     {
         Title = title;
-        InitializedCommand = ReactiveCommand.CreateFromTask(OnInitialized);
+        InitializedCommand = ReactiveCommand.CreateFromTask(OnLoaded);
 
         if (string.IsNullOrEmpty(processVerb))
         {
@@ -47,7 +46,7 @@ public class ProgressDialogViewModel : ViewModelBase, IProgressTracker
         _onComplete = onComplete;
     }
 
-    private async Task OnInitialized()
+    public async Task OnLoaded()
     {
         await Task.Run(() =>
         {
