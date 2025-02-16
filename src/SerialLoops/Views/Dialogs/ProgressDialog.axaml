@@ -8,7 +8,9 @@
         x:Class="SerialLoops.Views.Dialogs.ProgressDialog"
         Title="{Binding Title}"
         MinWidth="350" MinHeight="100" MaxWidth="350" MaxHeight="100" CanResize="False"
-        WindowStartupLocation="CenterScreen" Background="Transparent"
+        WindowStartupLocation="CenterScreen"
+        TransparencyLevelHint="AcrylicBlur"
+        Background="{DynamicResource FallbackBackgroundColor}"
         Closing="Window_OnClosing" Loaded="Window_OnLoaded"
         Name="Dialog">
 

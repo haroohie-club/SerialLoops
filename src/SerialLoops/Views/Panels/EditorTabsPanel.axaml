@@ -52,13 +52,13 @@
                 <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto" HorizontalAlignment="Center">
                     <TextBlock Margin="5 3" Grid.Column="0" Grid.Row="0" Classes="secondary" HorizontalAlignment="Right" Text="{x:Static assets:Strings.Save_Project}" />
                     <StackPanel Margin="5 3" Grid.Column="1" Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="4">
-                        <TextBlock Classes="keyprompt" Text="CTRL" />
+                        <TextBlock Classes="keyprompt" Text="{OnPlatform Default='Ctrl', macOS='Command'}" />
                         <TextBlock Classes="secondary" Text="+" />
                         <TextBlock Classes="keyprompt" Text="S" />
                     </StackPanel>
                     <TextBlock Margin="5 3" Grid.Column="0" Grid.Row="1" Classes="secondary"  HorizontalAlignment="Right" Text="{x:Static assets:Strings.Search_Project}" />
                     <StackPanel Margin="5 3" Grid.Column="1" Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="4">
-                        <TextBlock Classes="keyprompt" Text="CTRL" />
+                        <TextBlock Classes="keyprompt" Text="{OnPlatform Default='Ctrl', macOS='Command'}" />
                         <TextBlock Classes="secondary" Text="+" />
                         <TextBlock Classes="keyprompt" Text="F" />
                     </StackPanel>
