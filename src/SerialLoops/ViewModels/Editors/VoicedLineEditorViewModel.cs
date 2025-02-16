@@ -42,7 +42,7 @@ public class VoicedLineEditorViewModel : EditorViewModel
     [Reactive]
     public SKBitmap SubtitlesPreview { get; set; } = new(256, 384);
 
-    public ObservableCollection<LocalizedDialogueColor> SubtitleColors { get; }
+    public ObservableCollection<LocalizedDialogueColor> SubtitleColors { get; } = new(Enum.GetValues<DialogueColor>().Select(c => new LocalizedDialogueColor(c)));
     private LocalizedDialogueColor _subtitleColor;
     public LocalizedDialogueColor SubtitleColor
     {
@@ -209,8 +209,8 @@ public class VoicedLineEditorViewModel : EditorViewModel
         _voiceMapEntry = _project.VoiceMap.VoiceMapEntries.FirstOrDefault(v => v.VoiceFileName.Equals(Path.GetFileNameWithoutExtension(_vce.VoiceFile)));
         if (_voiceMapEntry is not null)
         {
-            SubtitleColors = new(Enum.GetValues<DialogueColor>().Select(c => new LocalizedDialogueColor(c)));
-            _subtitleColor = SubtitleColors.First(c => c.Color == _voiceMapEntry.Color);
+            _subtitleColor = (int)_voiceMapEntry.Color == 100 ? SubtitleColors.First(c => c.Color == DialogueColor.WHITE) :
+                SubtitleColors.First(c => c.Color == _voiceMapEntry.Color);
             _subtitle = _voiceMapEntry.Subtitle;
             _subtitleScreen = _voiceMapEntry.TargetScreen == VoiceMapEntry.Screen.BOTTOM ? DsScreen.BOTTOM : DsScreen.TOP;
             _forceDropShadow = _voiceMapEntry.TargetScreen == VoiceMapEntry.Screen.TOP_FORCE_SHADOW;
