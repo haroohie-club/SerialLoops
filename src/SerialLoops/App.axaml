@@ -95,6 +95,14 @@
             <ResourceDictionary.ThemeDictionaries>
                 <ResourceDictionary x:Key="Light">
                     <Color x:Key="BackgroundTint">White</Color>
+                    <OnPlatform x:Key="FallbackBackgroundColor">
+                        <OnPlatform.Default>
+                            <SolidColorBrush>Transparent</SolidColorBrush>
+                        </OnPlatform.Default>
+                        <OnPlatform.Linux>
+                            <SolidColorBrush>#F5DDDDDD</SolidColorBrush>
+                        </OnPlatform.Linux>
+                    </OnPlatform>
                     <system:Double x:Key="BackgroundAcrylicOpacity">0.65</system:Double>
                     <system:Double x:Key="BackgroundAcrylicTintStrength">0.9</system:Double>
                     <IImage x:Key="ColoredIconPath">avares://SerialLoops/Assets/Icons/AppIconLight.png</IImage>
@@ -113,6 +121,14 @@
                 </ResourceDictionary>
                 <ResourceDictionary x:Key="Dark">
                     <Color x:Key="BackgroundTint">Black</Color>
+                    <OnPlatform x:Key="FallbackBackgroundColor">
+                        <OnPlatform.Default>
+                            <SolidColorBrush>Transparent</SolidColorBrush>
+                        </OnPlatform.Default>
+                        <OnPlatform.Linux>
+                            <SolidColorBrush>#F5222222</SolidColorBrush>
+                        </OnPlatform.Linux>
+                    </OnPlatform>
                     <system:Double x:Key="BackgroundAcrylicOpacity">0.4</system:Double>
                     <system:Double x:Key="BackgroundAcrylicTintStrength">1</system:Double>
                     <IImage x:Key="ColoredIconPath">avares://SerialLoops/Assets/Icons/AppIconDark.png</IImage>

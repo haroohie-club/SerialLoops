@@ -17,7 +17,7 @@
         Icon="/Assets/serial-loops.ico"
         Title="{Binding Title}"
         TransparencyLevelHint="AcrylicBlur"
-        Background="Transparent"
+        Background="{DynamicResource FallbackBackgroundColor}"
         ExtendClientAreaToDecorationsHint="True">
 
     <Design.DataContext>
@@ -31,16 +31,23 @@
     </NativeMenu.Menu>
 
     <Panel>
-        <ExperimentalAcrylicBorder IsHitTestVisible="False">
-            <ExperimentalAcrylicBorder.Material>
-                <ExperimentalAcrylicMaterial
-                    BackgroundSource="Digger"
-                    TintColor="{DynamicResource ResourceKey=BackgroundTint}"
-                    FallbackColor="{DynamicResource ResourceKey=BackgroundTint}"
-                    TintOpacity="{DynamicResource ResourceKey=BackgroundAcrylicTintStrength}"
-                    MaterialOpacity="{DynamicResource ResourceKey=BackgroundAcrylicOpacity}" />
-            </ExperimentalAcrylicBorder.Material>
-        </ExperimentalAcrylicBorder>
+        <OnPlatform>
+            <OnPlatform.Default>
+                <ExperimentalAcrylicBorder IsHitTestVisible="False" >
+                    <ExperimentalAcrylicBorder.Material>
+                        <ExperimentalAcrylicMaterial
+                            BackgroundSource="Digger"
+                            TintColor="{DynamicResource BackgroundTint}"
+                            FallbackColor="{DynamicResource BackgroundTint}"
+                            TintOpacity="{DynamicResource BackgroundAcrylicTintStrength}"
+                            MaterialOpacity="{DynamicResource BackgroundAcrylicOpacity}" />
+                    </ExperimentalAcrylicBorder.Material>
+                </ExperimentalAcrylicBorder>
+            </OnPlatform.Default>
+            <OnPlatform.Linux>
+                <Panel IsVisible="False"/>
+            </OnPlatform.Linux>
+        </OnPlatform>
 
         <Grid RowDefinitions="Auto,*">
             <StackPanel IsVisible="False">
