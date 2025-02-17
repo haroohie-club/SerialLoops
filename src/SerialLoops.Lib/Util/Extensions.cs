@@ -21,6 +21,8 @@ namespace SerialLoops.Lib.Util;
 
 public static class Extensions
 {
+    public static SKSamplingOptions HighQualitySamplingOptions => new(SKFilterMode.Linear, SKMipmapMode.Linear);
+
     public static int GetSpriteX(this SpritePosition position)
     {
         return position switch

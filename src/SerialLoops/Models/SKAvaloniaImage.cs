@@ -4,7 +4,7 @@ using Avalonia.Media;
 using Avalonia.Platform;
 using Avalonia.Rendering.SceneGraph;
 using Avalonia.Skia;
-using SerialLoops.Utility;
+using SerialLoops.Lib.Util;
 using SkiaSharp;
 
 namespace SerialLoops.Models;
@@ -26,7 +26,7 @@ public class SKBitmapDrawOperation : ICustomDrawOperation
             {
                 lease.SkCanvas.DrawImage(SKImage.FromBitmap(bitmap),
                     SKRect.Create((float)Bounds.X, (float)Bounds.Y, (float)Bounds.Width, (float)Bounds.Height),
-                    Shared.HighQualitySamplingOptions);
+                    Extensions.HighQualitySamplingOptions);
             }
         }
     }

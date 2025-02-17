@@ -5,6 +5,7 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SerialLoops.Assets;
 using SerialLoops.Lib;
+using SerialLoops.Lib.Util;
 using SerialLoops.Utility;
 using SerialLoops.Views.Dialogs;
 using SkiaSharp;
@@ -67,7 +68,7 @@ public class ProjectSettingsDialogViewModel : ViewModelBase
         if (fileImage is not null)
         {
             SKBitmap newIcon = new(32, 32);
-            fileImage.ScalePixels(newIcon, Shared.HighQualitySamplingOptions);
+            fileImage.ScalePixels(newIcon, Extensions.HighQualitySamplingOptions);
             Icon = newIcon;
             return;
         }

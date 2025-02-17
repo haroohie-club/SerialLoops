@@ -21,8 +21,6 @@ public static class Shared
     public static string[] SupportedImageFiletypes => ["*.bmp", "*.gif", "*.heif", "*.jpg", "*.jpeg", "*.png", "*.webp",];
     public static string[] SupportedAudioFiletypes => ["*.wav", "*.flac", "*.mp3", "*.ogg",];
 
-    public static SKSamplingOptions HighQualitySamplingOptions => new(SKFilterMode.Linear, SKMipmapMode.Linear);
-
     public static void SaveGif(this IEnumerable<SKBitmap> frames, string fileName, IProgressTracker tracker)
     {
         using Image<Rgba32> gif = new(frames.Max(f => f.Width), frames.Max(f => f.Height));

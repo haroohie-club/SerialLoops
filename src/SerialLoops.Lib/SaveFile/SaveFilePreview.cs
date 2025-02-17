@@ -39,7 +39,7 @@ public class SaveFilePreview(SaveSlotData slotData, Project project)
                 (int)(WIDTH * SCALE),
                 (int)(HEIGHT * SCALE)
             ),
-            SKFilterQuality.None
+            SKSamplingOptions.Default
         );
     }
 

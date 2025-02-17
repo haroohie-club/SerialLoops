@@ -19,7 +19,6 @@ using MsBox.Avalonia.Enums;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SerialLoops.Assets;
-using SerialLoops.Controls;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Hacks;
 using SerialLoops.Lib.Util;

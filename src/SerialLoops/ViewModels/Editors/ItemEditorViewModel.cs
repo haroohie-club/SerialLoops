@@ -7,7 +7,6 @@ using HaruhiChokuretsuLib.Archive.Graphics;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
 using SerialLoops.Assets;
-using SerialLoops.Controls;
 using SerialLoops.Lib.Items;
 using SerialLoops.Utility;
 using SerialLoops.ViewModels.Dialogs;

@@ -12,7 +12,6 @@ using NAudio.Wave;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SerialLoops.Assets;
-using SerialLoops.Controls;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script.Parameters;
 using SerialLoops.Lib.Util;
