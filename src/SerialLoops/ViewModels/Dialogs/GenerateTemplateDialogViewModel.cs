@@ -33,6 +33,7 @@ public class GenerateTemplateDialogViewModel
     {
         _commands = commands;
         _project = project;
+        _log = log;
         CreateCommand = ReactiveCommand.CreateFromTask<GenerateTemplateDialog>(GenerateTemplate);
         CancelCommand = ReactiveCommand.Create<GenerateTemplateDialog>((dialog) => dialog.Close());
     }

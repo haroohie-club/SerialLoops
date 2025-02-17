@@ -8,29 +8,18 @@
         xmlns:controls="using:SerialLoops.Controls"
         xmlns:i="using:Avalonia.Xaml.Interactivity"
         xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
-        MinWidth="{Binding MinWidth}"
-        MinHeight="{Binding MinHeight}"
-        Width="{Binding Width}"
-        Height="{Binding Height}"
+        MinWidth="850" MinHeight="700"
+        Width="900" Height="750"
+        TransparencyLevelHint="AcrylicBlur"
+        Background="{DynamicResource FallbackBackgroundColor}"
+        ExtendClientAreaToDecorationsHint="True"
         Icon="/Assets/serial-loops.ico"
         x:DataType="vm:SearchDialogViewModel"
         x:Class="SerialLoops.Views.Dialogs.SearchDialog"
         Title="{x:Static assets:Strings.Search_Project}"
-        Name="Dialog"
-        TransparencyLevelHint="AcrylicBlur"
-        Background="Transparent"
-        ExtendClientAreaToDecorationsHint="True">
+        Name="Dialog">
     <Panel>
-        <ExperimentalAcrylicBorder IsHitTestVisible="False">
-            <ExperimentalAcrylicBorder.Material>
-                <ExperimentalAcrylicMaterial
-                    BackgroundSource="Digger"
-                    TintColor="{DynamicResource ResourceKey=BackgroundTint}"
-                    FallbackColor="{DynamicResource ResourceKey=BackgroundTint}"
-                    TintOpacity="{DynamicResource ResourceKey=BackgroundAcrylicTintStrength}"
-                    MaterialOpacity="{DynamicResource ResourceKey=BackgroundAcrylicOpacity}" />
-            </ExperimentalAcrylicBorder.Material>
-        </ExperimentalAcrylicBorder>
+        <controls:AcrylicBorderHandler/>
 
         <DockPanel>
             <Grid RowDefinitions="Auto,Auto,Auto,*" HorizontalAlignment="Center" VerticalAlignment="Top">

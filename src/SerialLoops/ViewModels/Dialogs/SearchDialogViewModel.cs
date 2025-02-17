@@ -13,7 +13,6 @@ using MsBox.Avalonia.Enums;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SerialLoops.Assets;
-using SerialLoops.Controls;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Models;
@@ -25,10 +24,6 @@ namespace SerialLoops.ViewModels.Dialogs;
 
 public class SearchDialogViewModel : ViewModelBase
 {
-    public int MinWidth => 850;
-    public int MinHeight => 700;
-    public int Width { get; set; } = 900;
-    public int Height { get; set; } = 750;
     public ICommand OpenItemCommand { get; }
     public ICommand SearchCommand { get; }
     public ICommand DeepSearchCommand { get; }

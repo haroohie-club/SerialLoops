@@ -13,7 +13,7 @@ public interface IPreviewableGraphic
     {
         SKBitmap preview = GetPreview(project);
         float scale = Math.Min(maxWidth / (float)preview.Width, maxHeight / (float)preview.Height);
-        return preview.Resize(new SKImageInfo((int)(preview.Width * scale), (int)(preview.Height * scale)), SKFilterQuality.None);
+        return preview.Resize(new SKImageInfo((int)(preview.Width * scale), (int)(preview.Height * scale)), SKSamplingOptions.Default);
     }
 }
 

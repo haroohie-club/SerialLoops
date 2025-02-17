@@ -5,7 +5,6 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Text.Json;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia;
@@ -24,7 +23,6 @@ using MsBox.Avalonia.Enums;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SerialLoops.Assets;
-using SerialLoops.Controls;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Factories;
 using SerialLoops.Lib.Hacks;
@@ -300,7 +298,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private async Task ApplyHacksCommand_Executed()
     {
         AsmHacksDialogViewModel hacksModel = new(OpenProject, CurrentConfig, Log);
-        AsmHacksDialog hacksDialog = new(hacksModel);
+        AsmHacksDialog hacksDialog = new() { DataContext = hacksModel};
         await hacksDialog.ShowDialog(Window);
     }
 
@@ -1028,7 +1026,7 @@ public partial class MainWindowViewModel : ViewModelBase
             }
             bool buildSucceeded = true;
             ProgressDialogViewModel tracker = new(Strings.Building_and_Running, Strings.Building_);
-            tracker.InitializeTasks(() => buildSucceeded = Build.BuildIterative(OpenProject, CurrentConfig, Log, tracker), async () =>
+            tracker.InitializeTasks(() => buildSucceeded = Build.BuildIterative(OpenProject, CurrentConfig, Log, tracker), () =>
                 {
                     if (buildSucceeded)
                     {

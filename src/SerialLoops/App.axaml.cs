@@ -37,23 +37,23 @@ public partial class App : Application
         base.OnFrameworkInitializationCompleted();
     }
 
-    private void About_Click(object? sender, EventArgs e)
+    private void About_Click(object sender, EventArgs e)
     {
-        ((MainWindow)_desktop.MainWindow).ViewModel.AboutCommand.Execute(Unit.Default);
+        ((MainWindow)_desktop.MainWindow)!.ViewModel.AboutCommand.Execute(Unit.Default);
     }
 
-    private void Preferences_Click(object? sender, EventArgs e)
+    private void Preferences_Click(object sender, EventArgs e)
     {
-        ((MainWindow)_desktop.MainWindow).ViewModel.PreferencesCommand.Execute(Unit.Default);
+        ((MainWindow)_desktop.MainWindow)!.ViewModel.PreferencesCommand.Execute(Unit.Default);
     }
 
-    private void Updates_Click(object? sender, EventArgs e)
+    private void Updates_Click(object sender, EventArgs e)
     {
-        ((MainWindow)_desktop.MainWindow).ViewModel.CheckForUpdatesCommand.Execute(Unit.Default);
+        ((MainWindow)_desktop.MainWindow)!.ViewModel.CheckForUpdatesCommand.Execute(Unit.Default);
     }
 
-    private void Logs_Click(object? sender, EventArgs e)
+    private void Logs_Click(object sender, EventArgs e)
     {
-        ((MainWindow)_desktop.MainWindow).ViewModel.ViewLogsCommand.Execute(Unit.Default);
+        ((MainWindow)_desktop.MainWindow)!.ViewModel.ViewLogsCommand.Execute(Unit.Default);
     }
 }

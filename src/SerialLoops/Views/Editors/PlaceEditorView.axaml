@@ -10,7 +10,8 @@
              x:Class="SerialLoops.Views.Editors.PlaceEditorView">
     <Grid RowDefinitions="Auto,Auto">
         <Image Grid.Row="0" Stretch="None"
-               Source="{Binding Preview, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
+               Source="{Binding Preview, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
+               HorizontalAlignment="Left"/>
         <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="3">
             <TextBlock Text="{x:Static assets:Strings.Place_Name}"/>
             <TextBox Text="{Binding PlaceName}"/>

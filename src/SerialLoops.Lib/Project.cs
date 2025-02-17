@@ -18,7 +18,6 @@ using HaruhiChokuretsuLib.Audio.SDAT;
 using HaruhiChokuretsuLib.Font;
 using HaruhiChokuretsuLib.Util;
 using HaruhiChokuretsuLib.Util.Exceptions;
-using NAudio.Wave;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script.Parameters;
 using SerialLoops.Lib.Util;
@@ -1233,7 +1232,7 @@ public partial class Project
         return GetSearchResults(SearchQuery.Create(query), logger);
     }
 
-    public List<ItemDescription> GetSearchResults(SearchQuery query, ILogger log, IProgressTracker? tracker = null)
+    public List<ItemDescription> GetSearchResults(SearchQuery query, ILogger log, IProgressTracker tracker = null)
     {
         var term = query.Term.Trim();
         var searchable = Items.Where(i => query.Types.Contains(i.Type)).ToList();

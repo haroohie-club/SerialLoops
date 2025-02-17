@@ -5,52 +5,61 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:assets="using:SerialLoops.Assets"
         xmlns:controls="using:SerialLoops.Controls"
-        xmlns:gbox="using:GroupBox.Avalonia.Controls"
         xmlns:li="using:SerialLoops.Lib.Items"
         MinWidth="400" MinHeight="600"
         Width="400" Height="600"
+        TransparencyLevelHint="AcrylicBlur"
+        Background="{DynamicResource FallbackBackgroundColor}"
+        ExtendClientAreaToDecorationsHint="True"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:DataType="vm:EditTutorialMappingsDialogViewModel"
         x:Class="SerialLoops.Views.Dialogs.EditTutorialMappingsDialog"
+        Icon="/Assets/serial-loops.ico"
         Title="{x:Static assets:Strings.Edit_Tutorial_Mappings}"
         Name="Dialog">
-    <Grid RowDefinitions="*,Auto">
-        <ScrollViewer Grid.Row="0">
-            <ItemsRepeater ItemsSource="{Binding Tutorials}">
-                <ItemsRepeater.Layout>
-                    <StackLayout Orientation="Vertical" Spacing="15"/>
-                </ItemsRepeater.Layout>
-                <ItemsRepeater.ItemTemplate>
-                    <DataTemplate DataType="vm:TutorialMapping">
-                        <gbox:GroupBox Header="{Binding TutorialName}" Theme="{StaticResource GroupBoxClassic}">
-                            <StackPanel Orientation="Horizontal" Margin="10" Spacing="5">
-                                <TextBlock Text="{x:Static assets:Strings.Associated_Script}"/>
-                                <ComboBox ItemsSource="{Binding Scripts}" SelectedItem="{Binding Script}">
-                                    <ComboBox.ItemTemplate>
-                                        <DataTemplate DataType="li:ScriptItem">
-                                            <TextBlock Text="{Binding DisplayName}"/>
-                                        </DataTemplate>
-                                    </ComboBox.ItemTemplate>
-                                    <ComboBox.ItemContainerTheme>
-                                        <ControlTheme TargetType="ComboBoxItem" x:DataType="li:ScriptItem" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
-                                            <Setter Property="TextSearch.Text" Value="{Binding DisplayName}" />
-                                        </ControlTheme>
-                                    </ComboBox.ItemContainerTheme>
-                                </ComboBox>
-                                <controls:ItemLink Item="{Binding Script}" Tabs="{Binding Tabs}"/>
-                            </StackPanel>
-                        </gbox:GroupBox>
-                    </DataTemplate>
-                </ItemsRepeater.ItemTemplate>
-            </ItemsRepeater>
-        </ScrollViewer>
+    <Panel>
+        <controls:AcrylicBorderHandler/>
 
-        <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="3">
-            <Button Content="{x:Static assets:Strings.Save}" Command="{Binding SaveCommand}"
-                    CommandParameter="{Binding #Dialog}" HorizontalAlignment="Right"/>
-            <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}"
-                    CommandParameter="{Binding #Dialog}" HorizontalAlignment="Right"/>
-        </StackPanel>
-    </Grid>
+        <Grid RowDefinitions="*,Auto" Margin="10 30">
+            <ScrollViewer Grid.Row="0">
+                <ItemsRepeater ItemsSource="{Binding Tutorials}">
+                    <ItemsRepeater.Layout>
+                        <StackLayout Orientation="Vertical" Spacing="15"/>
+                    </ItemsRepeater.Layout>
+                    <ItemsRepeater.ItemTemplate>
+                        <DataTemplate DataType="vm:TutorialMapping">
+                            <HeaderedContentControl Header="{Binding TutorialName}">
+                                <StackPanel Orientation="Horizontal" Margin="10" Spacing="5">
+                                    <TextBlock Text="{x:Static assets:Strings.Associated_Script}"/>
+                                    <ComboBox ItemsSource="{Binding Scripts}" SelectedItem="{Binding Script}">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate DataType="li:ScriptItem">
+                                                <TextBlock Text="{Binding DisplayName}"/>
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                        <ComboBox.ItemContainerTheme>
+                                            <ControlTheme TargetType="ComboBoxItem" x:DataType="li:ScriptItem" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
+                                                <Setter Property="TextSearch.Text" Value="{Binding DisplayName}" />
+                                            </ControlTheme>
+                                        </ComboBox.ItemContainerTheme>
+                                    </ComboBox>
+                                    <controls:ItemLink Item="{Binding Script}" Tabs="{Binding Tabs}"/>
+                                </StackPanel>
+                            </HeaderedContentControl>
+                        </DataTemplate>
+                    </ItemsRepeater.ItemTemplate>
+                </ItemsRepeater>
+            </ScrollViewer>
+
+            <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="3">
+                <Button Content="{x:Static assets:Strings.Save}" Command="{Binding SaveCommand}"
+                        CommandParameter="{Binding #Dialog}" HorizontalAlignment="Right"
+                        IsDefault="True"/>
+                <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}"
+                        CommandParameter="{Binding #Dialog}" HorizontalAlignment="Right"
+                        IsCancel="True"/>
+            </StackPanel>
+        </Grid>
+    </Panel>
 </Window>
 

@@ -8,10 +8,10 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
-using Avalonia.Styling;
 using HaroohieClub.NitroPacker.Patcher.Nitro;
 using HaroohieClub.NitroPacker.Patcher.Overlay;
 using HaruhiChokuretsuLib.Util;
@@ -19,7 +19,6 @@ using MsBox.Avalonia.Enums;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SerialLoops.Assets;
-using SerialLoops.Controls;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Hacks;
 using SerialLoops.Lib.Util;
@@ -105,8 +104,7 @@ public class AsmHacksDialogViewModel : ViewModelBase
                 parametersLayout.Children.Add(paramDescPanel);
             }
         }
-        GroupBox.Avalonia.Controls.GroupBox parametersBox = new() { Header = Strings.Parameters, Content = parametersLayout };
-        parametersBox.Theme = (ControlTheme)parametersBox.FindResource("GroupBoxClassic");
+        HeaderedContentControl parametersBox = new() { Header = Strings.Parameters, Content = parametersLayout };
         descriptionPanel.Children.Add(parametersBox);
     }
 

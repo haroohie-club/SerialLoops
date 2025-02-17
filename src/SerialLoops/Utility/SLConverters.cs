@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Avalonia;
+using Avalonia.Data;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
@@ -106,19 +107,6 @@ public class IntGreaterThanConverter : IValueConverter
     }
 }
 
-public class DoubleSubtractionConverter : IValueConverter
-{
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-        return (double)value - double.Parse((string)parameter);
-    }
-
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-        return (double)value + double.Parse((string)parameter);
-    }
-}
-
 public class ShortSubtractionConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -170,5 +158,32 @@ public class BgmLoopSampleToTimestampConverter : IMultiValueConverter
             return (decimal)loopPreview.GetTimestampFromSample(sample);
         }
         return (decimal)0.0;
+    }
+}
+
+// borrowed implementation from: https://github.com/AvaloniaUI/Avalonia/discussions/11902
+public class GapClipMaskConverter : IMultiValueConverter
+{
+    public static readonly GapClipMaskConverter Instance = new();
+
+    public object Convert(IList<object?> values, Type targetType, object? parameter,
+        CultureInfo culture)
+    {
+        if (values is not [Rect bounds, Rect gap]
+            || bounds == default
+            || gap == default)
+        {
+            return new BindingNotification(
+                new ArgumentException(
+                    "GapClipMaskConverter expects two non-empty rectangles (type Avalonia.Rect)."),
+                BindingErrorType.Error);
+        }
+
+        gap = bounds.Intersect(gap);
+
+        return new CombinedGeometry(
+            GeometryCombineMode.Exclude,
+            new RectangleGeometry { Rect = new(bounds.Size) },
+            new RectangleGeometry { Rect = new(gap.Position - bounds.Position, gap.Size) });
     }
 }

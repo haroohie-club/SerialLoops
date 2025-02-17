@@ -2,6 +2,7 @@
 using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Graphics;
 using HaruhiChokuretsuLib.Util;
+using SerialLoops.Lib.Util;
 using SkiaSharp;
 
 namespace SerialLoops.Lib.Items;
@@ -125,7 +126,7 @@ public class MapItem : Item
     {
         SKBitmap icon = new(size, size);
         SKImage image = SKImage.FromEncodedData($"MapIcons/{name}.png");
-        SKBitmap.FromImage(image).ScalePixels(icon, SKFilterQuality.Medium);
+        SKBitmap.FromImage(image).ScalePixels(icon, Extensions.HighQualitySamplingOptions);
         return icon;
     }
 

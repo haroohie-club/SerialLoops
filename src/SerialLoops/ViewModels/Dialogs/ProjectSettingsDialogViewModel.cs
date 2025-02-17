@@ -5,6 +5,7 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SerialLoops.Assets;
 using SerialLoops.Lib;
+using SerialLoops.Lib.Util;
 using SerialLoops.Utility;
 using SerialLoops.Views.Dialogs;
 using SkiaSharp;
@@ -13,11 +14,6 @@ namespace SerialLoops.ViewModels.Dialogs;
 
 public class ProjectSettingsDialogViewModel : ViewModelBase
 {
-    public int MinWidth => 550;
-    public int MinHeight => 600;
-    public int Width { get; set; } = 550;
-    public int Height { get; set; } = 600;
-
     public ICommand ReplaceCommand { get; private set; }
     public ICommand ApplyCommand { get; private set; }
     public ICommand CancelCommand { get; private set; }
@@ -31,7 +27,7 @@ public class ProjectSettingsDialogViewModel : ViewModelBase
         get
         {
             SKBitmap preview = new(64, 64);
-            _icon.ScalePixels(preview, SKFilterQuality.None);
+            _icon.ScalePixels(preview, SKSamplingOptions.Default);
             return preview;
         }
         set => this.RaiseAndSetIfChanged(ref _icon, value);
@@ -67,7 +63,7 @@ public class ProjectSettingsDialogViewModel : ViewModelBase
         if (fileImage is not null)
         {
             SKBitmap newIcon = new(32, 32);
-            fileImage.ScalePixels(newIcon, SKFilterQuality.High);
+            fileImage.ScalePixels(newIcon, Extensions.HighQualitySamplingOptions);
             Icon = newIcon;
             return;
         }

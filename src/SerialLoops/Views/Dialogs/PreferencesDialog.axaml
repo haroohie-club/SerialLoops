@@ -8,35 +8,40 @@
         xmlns:controls="using:SerialLoops.Controls"
         x:DataType="vm:PreferencesDialogViewModel"
         x:Class="SerialLoops.Views.Dialogs.PreferencesDialog"
-        MinWidth="{Binding MinWidth}"
-        MinHeight="{Binding MinHeight}"
-        Width="{Binding Width}"
-        Height="{Binding Height}"
+        MinWidth="550" MinHeight="600"
+        Width="550" Height="600"
+        TransparencyLevelHint="AcrylicBlur"
+        Background="{DynamicResource FallbackBackgroundColor}"
+        ExtendClientAreaToDecorationsHint="True"
         Icon="/Assets/serial-loops.ico"
         Title="{x:Static assets:Strings.Preferences}">
-    <DockPanel>
-        <StackPanel Spacing="5" Margin="5">
-            <TabControl IsTabStop="True">
-                <TabControl.Items>
-                    <TabItem Header="Serial Loops" Name="SerialLoopsTab">
-                        <controls:OptionsGroup Name="SerialLoopsOptions" Width="500"/>
-                    </TabItem>
-                    <TabItem Header="{x:Static assets:Strings.Projects}" Name="ProjectsTab">
-                        <controls:OptionsGroup Name="ProjectOptions" Width="500"/>
-                    </TabItem>
-                    <TabItem Header="{x:Static assets:Strings.Build}" Name="BuildTab">
-                        <controls:OptionsGroup Name="BuildOptions" Width="500"/>
-                    </TabItem>
-                </TabControl.Items>
-            </TabControl>
-            <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Spacing="5" Width="500">
-                <StackPanel Orientation="Horizontal" Spacing="5" Margin="5">
-                    <Button Content="{x:Static assets:Strings.Save}" Command="{Binding SaveCommand}" Name="SaveButton"/>
-                    <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}" IsCancel="True" Name="CancelButton"/>
+    <Panel>
+        <controls:AcrylicBorderHandler/>
+
+        <DockPanel Margin="10 30">
+            <StackPanel Spacing="5" Margin="5">
+                <TabControl IsTabStop="True">
+                    <TabControl.Items>
+                        <TabItem Header="Serial Loops" Name="SerialLoopsTab">
+                            <controls:OptionsGroup Name="SerialLoopsOptions" Width="500"/>
+                        </TabItem>
+                        <TabItem Header="{x:Static assets:Strings.Projects}" Name="ProjectsTab">
+                            <controls:OptionsGroup Name="ProjectOptions" Width="500"/>
+                        </TabItem>
+                        <TabItem Header="{x:Static assets:Strings.Build}" Name="BuildTab">
+                            <controls:OptionsGroup Name="BuildOptions" Width="500"/>
+                        </TabItem>
+                    </TabControl.Items>
+                </TabControl>
+                <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Spacing="5" Width="500">
+                    <StackPanel Orientation="Horizontal" Spacing="5" Margin="5">
+                        <Button Content="{x:Static assets:Strings.Save}" Command="{Binding SaveCommand}" Name="SaveButton"/>
+                        <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}" IsCancel="True" Name="CancelButton"/>
+                    </StackPanel>
+                    <controls:LabelWithIcon Name="RestartRequiredLabel" IsVisible="{Binding RequireRestart}"
+                                            Text="{x:Static assets:Strings.Restart_required}" Icon="Warning"/>
                 </StackPanel>
-                <controls:LabelWithIcon Name="RestartRequiredLabel" IsVisible="{Binding RequireRestart}"
-                                        Text="{x:Static assets:Strings.Restart_required}" Icon="Warning"/>
             </StackPanel>
-        </StackPanel>
-    </DockPanel>
+        </DockPanel>
+    </Panel>
 </Window>

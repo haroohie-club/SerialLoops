@@ -4,7 +4,6 @@ using System.Linq;
 using System.Windows.Input;
 using Avalonia;
 using Avalonia.Media;
-using DynamicData;
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;

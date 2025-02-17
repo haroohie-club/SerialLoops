@@ -6,12 +6,14 @@
         xmlns:assets="using:SerialLoops.Assets"
         xmlns:controls="using:SerialLoops.Controls"
         xmlns:dialogs="using:SerialLoops.Views.Dialogs"
-        xmlns:gbox="using:GroupBox.Avalonia.Controls"
         xmlns:hlibe="using:HaruhiChokuretsuLib.Archive.Event"
         xmlns:libi="using:SerialLoops.Lib.Items"
         xmlns:utility="using:SerialLoops.Utility"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         Width="900" Height="800"
+        TransparencyLevelHint="AcrylicBlur"
+        Background="{DynamicResource FallbackBackgroundColor}"
+        ExtendClientAreaToDecorationsHint="True"
         x:DataType="vm:SaveSlotEditorDialogViewModel"
         x:Class="SerialLoops.Views.Dialogs.SaveSlotEditorDialog"
         Title="{Binding Title}"
@@ -19,396 +21,401 @@
     <Window.Resources>
         <utility:IntSubtractionConverter x:Key="SubtractionConverter"/>
     </Window.Resources>
-    <Grid RowDefinitions="Auto,*,Auto" ColumnDefinitions="*">
-        <TextBlock Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" Classes="h1"
-                   Text="{Binding SlotName}" Margin="5,10" />
-        <TabControl Grid.Row="1" Grid.Column="0">
-            <TabItem IsVisible="{Binding IsCommonSave}"
-                     IsSelected="{Binding IsCommonSave}"
-                     Header="{x:Static assets:Strings.Config_Data}"
-                     GotFocus="CharacterPortraitTab_OnGotFocus">
-                <ScrollViewer>
-                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,*">
-                        <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center"
-                                    Orientation="Horizontal" Spacing="3">
-                            <TextBlock Text="{x:Static assets:Strings.Number_of_Saves_}" />
-                            <NumericUpDown Value="{Binding NumSaves}" Minimum="0"
-                                           FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
-                        </StackPanel>
 
-                        <gbox:GroupBox Grid.Row="1" Grid.Column="0" Header="{x:Static assets:Strings.Volume_Config}" Margin="10"
-                                       HorizontalAlignment="Center" HorizontalContentAlignment="Center" Theme="{StaticResource GroupBoxClassic}">
-                            <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,Auto" VerticalAlignment="Center">
-                                <TextBlock Grid.Column="0" Grid.Row="0" Margin="0,7,0,0" Text="{x:Static assets:Strings.Music_}" />
-                                <NumericUpDown Grid.Column="1" Grid.Row="0" Margin="10,0,0,0"
-                                               Value="{Binding BgmVolume}" Minimum="0"
-                                               Maximum="100" FormatString="N0" Increment="1"
-                                               ParsingNumberStyle="Integer" />
+    <Panel>
+        <controls:AcrylicBorderHandler/>
 
-                                <TextBlock Grid.Column="0" Grid.Row="1" Margin="0,7,0,0" Text="{x:Static assets:Strings.Sound_Effects_}" />
-                                <NumericUpDown Grid.Column="1" Grid.Row="1" Margin="10,0,0,0"
-                                               Value="{Binding SfxVolume}" Minimum="0"
-                                               Maximum="100" FormatString="N0" Increment="1"
-                                               ParsingNumberStyle="Integer" />
-
-                                <TextBlock Grid.Column="0" Grid.Row="2" Margin="0,7,0,0" Text="{x:Static assets:Strings.Dialogue_}" />
-                                <NumericUpDown Grid.Column="1" Grid.Row="2" Margin="10,0,0,0"
-                                               Value="{Binding WordsVolume}" Minimum="0"
-                                               Maximum="100" FormatString="N0" Increment="1"
-                                               ParsingNumberStyle="Integer" />
-
-                                <TextBlock Grid.Column="0" Grid.Row="3" Margin="0,7,0,0" Text="{x:Static assets:Strings.Voices_}" />
-                                <NumericUpDown Grid.Column="1" Grid.Row="3" Margin="10,0,0,0"
-                                               Value="{Binding VoiceVolume}" Minimum="0"
-                                               Maximum="100" FormatString="N0" Increment="1"
-                                               ParsingNumberStyle="Integer" />
-                            </Grid>
-                        </gbox:GroupBox>
-                        <gbox:GroupBox Grid.Row="1" Grid.Column="1" Header="{x:Static assets:Strings.Voices_Config}" Margin="10"
-                                       HorizontalAlignment="Center" HorizontalContentAlignment="Center" Theme="{StaticResource GroupBoxClassic}">
-                            <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,Auto">
-                                <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Spacing="5" Margin="5">
-                                    <CheckBox IsChecked="{Binding KyonVoiceEnabled}"/>
-                                    <Image Source="{Binding KyonVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
-                                    <TextBlock Margin="0,5,0,0" Text="{Binding KyonName}"/>
-                                </StackPanel>
-                                <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Spacing="5" Margin="5">
-                                    <CheckBox IsChecked="{Binding HaruhiVoiceEnabled}"/>
-                                    <Image Source="{Binding HaruhiVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
-                                    <TextBlock Margin="0,5,0,0" Text="{Binding HaruhiName}"/>
-                                </StackPanel>
-                                <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Spacing="5" Margin="5">
-                                    <CheckBox IsChecked="{Binding AsahinaVoiceEnabled}"/>
-                                    <Image Source="{Binding AsahinaVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
-                                    <TextBlock Margin="0,5,0,0" Text="{Binding AsahinaName}"/>
-                                </StackPanel>
-                                <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Spacing="5" Margin="5">
-                                    <CheckBox IsChecked="{Binding NagatoVoiceEnabled}"/>
-                                    <Image Source="{Binding NagatoVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
-                                    <TextBlock Margin="0,5,0,0" Text="{Binding NagatoName}"/>
-                                </StackPanel>
-                                <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Spacing="5" Margin="5">
-                                    <CheckBox IsChecked="{Binding KoizumiVoiceEnabled}"/>
-                                    <Image Source="{Binding KoizumiVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
-                                    <TextBlock Margin="0,5,0,0" Text="{Binding KoizumiName}"/>
-                                </StackPanel>
-                                <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Spacing="5" Margin="5">
-                                    <CheckBox IsChecked="{Binding SisterVoiceEnabled}"/>
-                                    <Image Source="{Binding SisterVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
-                                    <TextBlock Margin="0,5,0,0" Text="{Binding SisterName}"/>
-                                </StackPanel>
-                                <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal" Spacing="5" Margin="5">
-                                    <CheckBox IsChecked="{Binding TsuruyaVoiceEnabled}"/>
-                                    <Image Source="{Binding TsuruyaVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
-                                    <TextBlock Margin="0,5,0,0" Text="{Binding TsuruyaName}"/>
-                                </StackPanel>
-                                <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" Spacing="5" Margin="5">
-                                    <CheckBox IsChecked="{Binding TaniguchiVoiceEnabled}"/>
-                                    <Image Source="{Binding TaniguchiVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
-                                    <TextBlock Margin="0,5,0,0" Text="{Binding TaniguchiName}"/>
-                                </StackPanel>
-                                <StackPanel Grid.Row="4" Grid.Column="0" Orientation="Horizontal" Spacing="5" Margin="5">
-                                    <CheckBox IsChecked="{Binding KunikidaVoiceEnabled}"/>
-                                    <Image Source="{Binding KunikidaVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
-                                    <TextBlock Margin="0,5,0,0" Text="{Binding KunikidaName}"/>
-                                </StackPanel>
-                                <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal" Spacing="5" Margin="5">
-                                    <CheckBox IsChecked="{Binding MysteryGirlVoiceEnabled}"/>
-                                    <Image Source="{Binding MysteryGirlVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
-                                    <TextBlock Margin="0,5,0,0" Text="{Binding MysteryGirlName}"/>
-                                </StackPanel>
-                            </Grid>
-                        </gbox:GroupBox>
-                        <gbox:GroupBox Grid.Row="2" Grid.Column="0" Header="{x:Static assets:Strings.Puzzle_Interrupt_Scenes}" Margin="10"
-                                       HorizontalAlignment="Center" HorizontalContentAlignment="Center" Theme="{StaticResource GroupBoxClassic}">
-                            <StackPanel Orientation="Vertical" Spacing="5">
-                                <RadioButton GroupName="PuzzleInterruptScenes" Content="{x:Static assets:Strings.Off}" IsChecked="{Binding PuzzleInterruptScenesOff}"/>
-                                <RadioButton GroupName="PuzzleInterruptScenes" Content="{x:Static assets:Strings.Unseen_Only}" IsChecked="{Binding PuzzleInterruptScenesUnseenOnly}"/>
-                                <RadioButton GroupName="PuzzleInterruptScenes" Content="{x:Static assets:Strings.On}" IsChecked="{Binding PuzzleInterruptScenesOn}"/>
+        <Grid RowDefinitions="Auto,*,Auto" ColumnDefinitions="*" Margin="10 30">
+            <TextBlock Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" Classes="h1"
+                       Text="{Binding SlotName}" Margin="5,10" />
+            <TabControl Grid.Row="1" Grid.Column="0">
+                <TabItem IsVisible="{Binding IsCommonSave}"
+                         IsSelected="{Binding IsCommonSave}"
+                         Header="{x:Static assets:Strings.Config_Data}"
+                         GotFocus="CharacterPortraitTab_OnGotFocus">
+                    <ScrollViewer>
+                        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,*">
+                            <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center"
+                                        Orientation="Horizontal" Spacing="3">
+                                <TextBlock Text="{x:Static assets:Strings.Number_of_Saves_}" />
+                                <NumericUpDown Value="{Binding NumSaves}" Minimum="0"
+                                               FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
                             </StackPanel>
-                        </gbox:GroupBox>
-                        <gbox:GroupBox Grid.Row="2" Grid.Column="1" Header="{x:Static assets:Strings.Topic_Stock_Mode}" Margin="10"
-                                       HorizontalAlignment="Center" HorizontalContentAlignment="Center" Theme="{StaticResource GroupBoxClassic}">
-                            <StackPanel Orientation="Vertical" Spacing="5">
-                                <RadioButton GroupName="TopicStockMode" Content="{x:Static assets:Strings.Off}" IsChecked="True"/>
-                                <RadioButton GroupName="TopicStockMode" Content="{x:Static assets:Strings.On}" IsChecked="{Binding TopicStockMode}"/>
-                            </StackPanel>
-                        </gbox:GroupBox>
-                        <gbox:GroupBox Grid.Row="3" Grid.Column="0" Header="{x:Static assets:Strings.Dialogue_Skipping}" Margin="10"
-                                       HorizontalAlignment="Center" HorizontalContentAlignment="Center" Theme="{StaticResource GroupBoxClassic}">
-                            <StackPanel Orientation="Vertical" Spacing="5">
-                                <RadioButton GroupName="DialogueSkipping" Content="{x:Static assets:Strings.Fast_Forward}" IsChecked="True"/>
-                                <RadioButton GroupName="DialogueSkipping" Content="{x:Static assets:Strings.Skip_Already_Read}" IsChecked="{Binding DialogueSkipping}"/>
-                            </StackPanel>
-                        </gbox:GroupBox>
-                        <gbox:GroupBox Grid.Row="3" Grid.Column="1" Header="{x:Static assets:Strings.Batch_Dialogue_Display}" Margin="10"
-                                       HorizontalAlignment="Center" HorizontalContentAlignment="Center" Theme="{StaticResource GroupBoxClassic}">
-                            <StackPanel Orientation="Vertical" Spacing="5">
-                                <RadioButton GroupName="BatchDialogueDisplay" Content="{x:Static assets:Strings.Off}" IsChecked="True"/>
-                                <RadioButton GroupName="BatchDialogueDisplay" Content="{x:Static assets:Strings.On}" IsChecked="{Binding BatchDialogueDisplay}"/>
-                            </StackPanel>
-                        </gbox:GroupBox>
 
-                        <gbox:GroupBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Header="{x:Static assets:Strings.Character_Power_Statuses}" Margin="10"
-                                       HorizontalAlignment="Center" HorizontalContentAlignment="Center" Theme="{StaticResource GroupBoxClassic}">
-                            <ItemsRepeater ItemsSource="{Binding PowerStatuses}">
-                                <ItemsRepeater.Layout>
-                                    <UniformGridLayout MaximumRowsOrColumns="1" Orientation="Horizontal" MinRowSpacing="15"/>
-                                </ItemsRepeater.Layout>
-                                <ItemsRepeater.ItemTemplate>
-                                    <DataTemplate DataType="vm:ReactivePowerStatus">
-                                        <gbox:GroupBox Header="{Binding Name}" Margin="10"
-                                                       HorizontalAlignment="Center" HorizontalContentAlignment="Center" Theme="{StaticResource GroupBoxClassic}">
-                                            <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,Auto">
-                                                <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Spacing="5">
-                                                    <TextBlock Margin="0,7,0,0" Text="{x:Static assets:Strings.Level}"/>
-                                                    <NumericUpDown Value="{Binding Level}" Minimum="1"
-                                                                   Maximum="5" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
-                                                </StackPanel>
-                                                <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Spacing="5">
-                                                    <TextBlock Margin="0,7,0,0" Text="{x:Static assets:Strings.Remaining_Uses}"/>
-                                                    <NumericUpDown Value="{Binding RemainingUses}" Minimum="0"
-                                                                   Maximum="9" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
-                                                </StackPanel>
-                                                <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Spacing="5">
-                                                    <TextBlock Margin="0,7,0,0" Text="{x:Static assets:Strings.Uses_Since_Level_Up}"/>
-                                                    <NumericUpDown Value="{Binding UsesSinceLevelUp}" Minimum="0"
-                                                                   Maximum="10" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
-                                                </StackPanel>
-                                                <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Spacing="5">
-                                                    <TextBlock Margin="0,7,0,0" Text="{x:Static assets:Strings.Uses_to_Level_Up}"/>
-                                                    <NumericUpDown Value="{Binding UsesToLevelUp}" Minimum="1"
-                                                                   Maximum="10" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
-                                                </StackPanel>
-                                            </Grid>
-                                        </gbox:GroupBox>
-                                    </DataTemplate>
-                                </ItemsRepeater.ItemTemplate>
-                            </ItemsRepeater>
-                        </gbox:GroupBox>
-                    </Grid>
-                </ScrollViewer>
-            </TabItem>
-            <TabItem IsVisible="{Binding IsSaveSlot}"
-                     IsSelected="{Binding IsSaveSlot}"
-                     Header="{x:Static assets:Strings.Save_Data}"
-                     GotFocus="CharacterPortraitTab_OnGotFocus">
-                <ScrollViewer>
-                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,Auto">
-                        <TextBlock Grid.Row="0" Grid.Column="0" Margin="0,7,0,0" Text="{x:Static assets:Strings.Save_Time_}"/>
-                        <StackPanel Grid.Row="0" Grid.Column="1" Margin="10,0,0,0" Orientation="Horizontal" Spacing="3">
-                            <CalendarDatePicker SelectedDate="{Binding SaveDate}"/>
-                            <TimePicker SelectedTime="{Binding SaveTime}"/>
-                        </StackPanel>
+                            <HeaderedContentControl Grid.Row="1" Grid.Column="0" Header="{x:Static assets:Strings.Volume_Config}" Margin="10"
+                                           HorizontalAlignment="Center" HorizontalContentAlignment="Center">
+                                <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,Auto" VerticalAlignment="Center">
+                                    <TextBlock Grid.Column="0" Grid.Row="0" Margin="0,7,0,0" Text="{x:Static assets:Strings.Music_}" />
+                                    <NumericUpDown Grid.Column="1" Grid.Row="0" Margin="10,0,0,0"
+                                                   Value="{Binding BgmVolume}" Minimum="0"
+                                                   Maximum="100" FormatString="N0" Increment="1"
+                                                   ParsingNumberStyle="Integer" />
 
-                        <TextBlock Grid.Row="1" Grid.Column="0" Margin="0,7,0,0" Text="{x:Static assets:Strings.Scenario_Command_Index_}"/>
-                        <controls:ScenarioCommandPicker Grid.Row="1" Grid.Column="1" DataContext="{Binding ScenarioCommandPickerVm}"/>
+                                    <TextBlock Grid.Column="0" Grid.Row="1" Margin="0,7,0,0" Text="{x:Static assets:Strings.Sound_Effects_}" />
+                                    <NumericUpDown Grid.Column="1" Grid.Row="1" Margin="10,0,0,0"
+                                                   Value="{Binding SfxVolume}" Minimum="0"
+                                                   Maximum="100" FormatString="N0" Increment="1"
+                                                   ParsingNumberStyle="Integer" />
 
-                        <TextBlock Grid.Row="2" Grid.Column="0" Margin="0,7,0,0" Text="{x:Static assets:Strings.Episode_Number}"/>
-                        <NumericUpDown Grid.Row="2" Grid.Column="1" Margin="10,0,0,0" Value="{Binding Episode}" Minimum="1"
-                                       Maximum="5" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
+                                    <TextBlock Grid.Column="0" Grid.Row="2" Margin="0,7,0,0" Text="{x:Static assets:Strings.Dialogue_}" />
+                                    <NumericUpDown Grid.Column="1" Grid.Row="2" Margin="10,0,0,0"
+                                                   Value="{Binding WordsVolume}" Minimum="0"
+                                                   Maximum="100" FormatString="N0" Increment="1"
+                                                   ParsingNumberStyle="Integer" />
 
-                        <gbox:GroupBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Header="{x:Static assets:Strings.Most_Recent_Objectives}" Margin="10"
-                                       HorizontalAlignment="Center" HorizontalContentAlignment="Center" Theme="{StaticResource GroupBoxClassic}">
-                            <ItemsRepeater ItemsSource="{Binding RecentObjectives}">
-                                <ItemsRepeater.Layout>
-                                    <UniformGridLayout Orientation="Vertical" MaximumRowsOrColumns="2"/>
-                                </ItemsRepeater.Layout>
-                                <ItemsRepeater.ItemTemplate>
-                                    <DataTemplate DataType="vm:RecentObjective">
-                                        <gbox:GroupBox Header="{Binding Letter}" Margin="10" HorizontalAlignment="Center"
-                                                       HorizontalContentAlignment="Center" Theme="{StaticResource GroupBoxClassic}">
-                                            <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,Auto,Auto,Auto,Auto">
-                                                <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding FirstSelection}"
-                                                          Content="1" ToolTip.Tip="{x:Static assets:Strings.First_Selection}"/>
-                                                <CheckBox Grid.Row="0" Grid.Column="3" IsChecked="{Binding SecondSelection}"
-                                                          Content="2" ToolTip.Tip="{x:Static assets:Strings.Second_Selection}"/>
-                                                <CheckBox Grid.Row="1" Grid.Column="0" IsChecked="{Binding KyonPresent}"
-                                                          ToolTip.Tip="{x:Static assets:Strings.Kyon_Present}" Margin="10,0">
-                                                    <Image Source="{Binding $parent[dialogs:SaveSlotEditorDialog].((vm:SaveSlotEditorDialogViewModel)DataContext).KyonVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
-                                                </CheckBox>
-                                                <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding HaruhiPresent}"
-                                                          ToolTip.Tip="{x:Static assets:Strings.Haruhi_Present}" Margin="10,0">
-                                                    <Image Source="{Binding $parent[dialogs:SaveSlotEditorDialog].((vm:SaveSlotEditorDialogViewModel)DataContext).HaruhiVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
-                                                </CheckBox>
-                                                <CheckBox Grid.Row="1" Grid.Column="2" IsChecked="{Binding AsahinaPresent}"
-                                                          ToolTip.Tip="{x:Static assets:Strings.Asahina_Present}" Margin="10,0">
-                                                    <Image Source="{Binding $parent[dialogs:SaveSlotEditorDialog].((vm:SaveSlotEditorDialogViewModel)DataContext).AsahinaVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
-                                                </CheckBox>
-                                                <CheckBox Grid.Row="1" Grid.Column="3" IsChecked="{Binding NagatoPresent}"
-                                                          ToolTip.Tip="{x:Static assets:Strings.Nagato_Present}" Margin="10,0">
-                                                    <Image Source="{Binding $parent[dialogs:SaveSlotEditorDialog].((vm:SaveSlotEditorDialogViewModel)DataContext).NagatoVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
-                                                </CheckBox>
-                                                <CheckBox Grid.Row="1" Grid.Column="4" IsChecked="{Binding KoizumiPresent}"
-                                                          ToolTip.Tip="{x:Static assets:Strings.Koizumi_Present}" Margin="10,0">
-                                                    <Image Source="{Binding $parent[dialogs:SaveSlotEditorDialog].((vm:SaveSlotEditorDialogViewModel)DataContext).KoizumiVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
-                                                </CheckBox>
-                                            </Grid>
-                                        </gbox:GroupBox>
-                                    </DataTemplate>
-                                </ItemsRepeater.ItemTemplate>
-                            </ItemsRepeater>
-                        </gbox:GroupBox>
-
-                        <gbox:GroupBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Header="{x:Static assets:Strings.Friendship_Levels}" Margin="10"
-                                       HorizontalAlignment="Center" HorizontalContentAlignment="Center" Theme="{StaticResource GroupBoxClassic}">
-                            <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,Auto">
-                                <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Spacing="5">
-                                    <Image Source="{Binding HaruhiVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
-                                    <TextBlock Text="{Binding HaruhiName}" Margin="0,7,0,0"/>
-                                    <NumericUpDown Value="{Binding HaruhiFriendshipLevel}" Minimum="1"
-                                                   Maximum="255" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
-                                </StackPanel>
-                                <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Spacing="5">
-                                    <Image Source="{Binding AsahinaVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
-                                    <TextBlock Text="{Binding AsahinaName}" Margin="0,7,0,0"/>
-                                    <NumericUpDown Value="{Binding AsahinaFriendshipLevel}" Minimum="1"
-                                                   Maximum="255" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
-                                </StackPanel>
-                                <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Spacing="5">
-                                    <Image Source="{Binding NagatoVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
-                                    <TextBlock Text="{Binding NagatoName}" Margin="0,7,0,0"/>
-                                    <NumericUpDown Value="{Binding NagatoFriendshipLevel}" Minimum="1"
-                                                   Maximum="255" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
-                                </StackPanel>
-                                <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Spacing="5">
-                                    <Image Source="{Binding KoizumiVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
-                                    <TextBlock Text="{Binding KoizumiName}" Margin="0,7,0,0"/>
-                                    <NumericUpDown Value="{Binding KoizumiFriendshipLevel}" Minimum="1"
-                                                   Maximum="255" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
-                                </StackPanel>
-                                <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Spacing="5">
-                                    <Image Source="{Binding TsuruyaVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
-                                    <TextBlock Text="{Binding TsuruyaName}" Margin="0,7,0,0"/>
-                                    <NumericUpDown Value="{Binding TsuruyaFriendshipLevel}" Minimum="1"
-                                                   Maximum="255" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
-                                </StackPanel>
-                                <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Spacing="5">
-                                    <Border Width="16" Height="16" Background="Transparent"/>
-                                    <TextBlock Text="{x:Static assets:Strings.Unknown}" Margin="0,7,0,0"/>
-                                    <NumericUpDown Value="{Binding UnknownFriendshipLevel}" Minimum="1"
-                                                   Maximum="255" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
-                                </StackPanel>
-                            </Grid>
-                        </gbox:GroupBox>
-                    </Grid>
-                </ScrollViewer>
-            </TabItem>
-            <TabItem IsVisible="{Binding IsQuickSave}"
-                     Header="{x:Static assets:Strings.Script_Position}">
-                <ScrollViewer>
-                    <Grid RowDefinitions="Auto,Auto,Auto,*" ColumnDefinitions="Auto,*">
-                        <StackPanel Margin="10,5" Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Spacing="5">
-                            <TextBlock Margin="0,7,0,0" Text="{x:Static assets:Strings.Script_}"/>
-                            <ComboBox ItemsSource="{Binding ScriptItems}" SelectedItem="{Binding SelectedScriptItem}">
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate DataType="libi:ScriptItem">
-                                        <TextBlock Text="{Binding DisplayName}"/>
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
-                                <ComboBox.ItemContainerTheme>
-                                    <ControlTheme TargetType="ComboBoxItem" x:DataType="libi:ScriptItem" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
-                                        <Setter Property="TextSearch.Text" Value="{Binding DisplayName}"/>
-                                    </ControlTheme>
-                                </ComboBox.ItemContainerTheme>
-                            </ComboBox>
-                            <controls:ItemLink Item="{Binding SelectedScriptItem}" Tabs="{Binding Tabs}"
-                                               IsVisible="{Binding Tabs, Converter={x:Static ObjectConverters.IsNotNull}}"/>
-                        </StackPanel>
-
-                        <StackPanel Margin="10,5" Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Spacing="5">
-                            <TextBlock Margin="0,7,0,0" Text="{x:Static assets:Strings.Script_Section}"/>
-                            <ComboBox ItemsSource="{Binding ScriptSections}" SelectedItem="{Binding SelectedScriptSection}">
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate DataType="hlibe:ScriptSection">
-                                        <TextBlock Text="{Binding Name}"/>
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
-                                <ComboBox.ItemContainerTheme>
-                                    <ControlTheme TargetType="ComboBoxItem" x:DataType="hlibe:ScriptSection" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
-                                        <Setter Property="TextSearch.Text" Value="{Binding Name}"/>
-                                    </ControlTheme>
-                                </ComboBox.ItemContainerTheme>
-                            </ComboBox>
-                        </StackPanel>
-
-                        <StackPanel Margin="10,5" Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Spacing="5">
-                            <TextBlock Margin="0,7,0,0" Text="{x:Static assets:Strings.Command_Index_}"/>
-                            <NumericUpDown Value="{Binding ScriptCommandIndex}"
-                                           Minimum="0" Maximum="{Binding SelectedScriptSection.Objects.Count, Converter={StaticResource SubtractionConverter}, ConverterParameter=1}"
-                                           FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
-                        </StackPanel>
-
-                        <Grid Grid.Row="0" Grid.Column="1" Grid.RowSpan="4" Margin="20,0">
-                            <Image IsVisible="{Binding ScriptPreview, Converter={x:Static ObjectConverters.IsNotNull}}"
-                                   Width="256" Height="384"
-                                   Source="{Binding ScriptPreview, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
-                            <Image IsVisible="{Binding ScriptPreview, Converter={x:Static ObjectConverters.IsNull}}"
-                                   Width="256" Height="384"
-                                   Source="{Binding ErrorImagePath}"/>
-                        </Grid>
-                    </Grid>
-                </ScrollViewer>
-            </TabItem>
-            <TabItem Header="{x:Static assets:Strings.Flags}">
-                <ScrollViewer>
-                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*">
-                        <StackPanel Grid.Row="0" HorizontalAlignment="Center" Orientation="Horizontal" Spacing="3">
-                            <CheckBox IsChecked="{Binding HideUnsetFlags}"/>
-                            <TextBlock Text="{x:Static assets:Strings.Hide_Unset_Flags}" Margin="0,5,0,0"/>
-                            <TextBox UseLayoutRounding="True" Watermark="{x:Static assets:Strings.Filter_by_name}"
-                                     Text="{Binding FlagFilter}"/>
-                            <Button Command="{Binding FilterFlagsCommand}">
-                                <StackPanel Orientation="Horizontal" Spacing="6">
-                                    <Svg Path="avares://SerialLoops/Assets/Icons/Search.svg" Width="16" Height="16"/>
-                                    <TextBlock Text="{x:Static assets:Strings.Filter}"/>
-                                </StackPanel>
-                            </Button>
-                        </StackPanel>
-
-                        <StackPanel Grid.Row="1" Spacing="10" Orientation="Horizontal">
-                            <TextBlock Text="{x:Static assets:Strings.Value}" Margin="0,0,10,0" Classes="b"/>
-                            <TextBlock Text="{x:Static assets:Strings.Flag_Description}" Classes="b"/>
-                        </StackPanel>
-
-                        <ItemsRepeater Grid.Row="2" ItemsSource="{Binding VisibleFlags}">
-                            <ItemsRepeater.Layout>
-                                <StackLayout Spacing="5" Orientation="Vertical"/>
-                            </ItemsRepeater.Layout>
-                            <ItemsRepeater.ItemTemplate>
-                                <DataTemplate x:DataType="vm:LocalizedFlag">
-                                    <StackPanel Orientation="Horizontal" Spacing="10">
-                                        <CheckBox IsChecked="{Binding IsSet}"/>
-                                        <TextBlock Text="{Binding Description}" Margin="18,5,0,0"/>
+                                    <TextBlock Grid.Column="0" Grid.Row="3" Margin="0,7,0,0" Text="{x:Static assets:Strings.Voices_}" />
+                                    <NumericUpDown Grid.Column="1" Grid.Row="3" Margin="10,0,0,0"
+                                                   Value="{Binding VoiceVolume}" Minimum="0"
+                                                   Maximum="100" FormatString="N0" Increment="1"
+                                                   ParsingNumberStyle="Integer" />
+                                </Grid>
+                            </HeaderedContentControl>
+                            <HeaderedContentControl Grid.Row="1" Grid.Column="1" Header="{x:Static assets:Strings.Voices_Config}" Margin="10"
+                                           HorizontalAlignment="Center" HorizontalContentAlignment="Center">
+                                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,Auto">
+                                    <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Spacing="5" Margin="5">
+                                        <CheckBox IsChecked="{Binding KyonVoiceEnabled}"/>
+                                        <Image Source="{Binding KyonVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
+                                        <TextBlock Margin="0,5,0,0" Text="{Binding KyonName}"/>
                                     </StackPanel>
-                                </DataTemplate>
-                            </ItemsRepeater.ItemTemplate>
-                        </ItemsRepeater>
+                                    <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Spacing="5" Margin="5">
+                                        <CheckBox IsChecked="{Binding HaruhiVoiceEnabled}"/>
+                                        <Image Source="{Binding HaruhiVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
+                                        <TextBlock Margin="0,5,0,0" Text="{Binding HaruhiName}"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Spacing="5" Margin="5">
+                                        <CheckBox IsChecked="{Binding AsahinaVoiceEnabled}"/>
+                                        <Image Source="{Binding AsahinaVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
+                                        <TextBlock Margin="0,5,0,0" Text="{Binding AsahinaName}"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Spacing="5" Margin="5">
+                                        <CheckBox IsChecked="{Binding NagatoVoiceEnabled}"/>
+                                        <Image Source="{Binding NagatoVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
+                                        <TextBlock Margin="0,5,0,0" Text="{Binding NagatoName}"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Spacing="5" Margin="5">
+                                        <CheckBox IsChecked="{Binding KoizumiVoiceEnabled}"/>
+                                        <Image Source="{Binding KoizumiVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
+                                        <TextBlock Margin="0,5,0,0" Text="{Binding KoizumiName}"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Spacing="5" Margin="5">
+                                        <CheckBox IsChecked="{Binding SisterVoiceEnabled}"/>
+                                        <Image Source="{Binding SisterVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
+                                        <TextBlock Margin="0,5,0,0" Text="{Binding SisterName}"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal" Spacing="5" Margin="5">
+                                        <CheckBox IsChecked="{Binding TsuruyaVoiceEnabled}"/>
+                                        <Image Source="{Binding TsuruyaVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
+                                        <TextBlock Margin="0,5,0,0" Text="{Binding TsuruyaName}"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" Spacing="5" Margin="5">
+                                        <CheckBox IsChecked="{Binding TaniguchiVoiceEnabled}"/>
+                                        <Image Source="{Binding TaniguchiVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
+                                        <TextBlock Margin="0,5,0,0" Text="{Binding TaniguchiName}"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Row="4" Grid.Column="0" Orientation="Horizontal" Spacing="5" Margin="5">
+                                        <CheckBox IsChecked="{Binding KunikidaVoiceEnabled}"/>
+                                        <Image Source="{Binding KunikidaVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
+                                        <TextBlock Margin="0,5,0,0" Text="{Binding KunikidaName}"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal" Spacing="5" Margin="5">
+                                        <CheckBox IsChecked="{Binding MysteryGirlVoiceEnabled}"/>
+                                        <Image Source="{Binding MysteryGirlVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
+                                        <TextBlock Margin="0,5,0,0" Text="{Binding MysteryGirlName}"/>
+                                    </StackPanel>
+                                </Grid>
+                            </HeaderedContentControl>
+                            <HeaderedContentControl Grid.Row="2" Grid.Column="0" Header="{x:Static assets:Strings.Puzzle_Interrupt_Scenes}" Margin="10"
+                                           HorizontalAlignment="Center" HorizontalContentAlignment="Center">
+                                <StackPanel Orientation="Vertical" Spacing="5">
+                                    <RadioButton GroupName="PuzzleInterruptScenes" Content="{x:Static assets:Strings.Off}" IsChecked="{Binding PuzzleInterruptScenesOff}"/>
+                                    <RadioButton GroupName="PuzzleInterruptScenes" Content="{x:Static assets:Strings.Unseen_Only}" IsChecked="{Binding PuzzleInterruptScenesUnseenOnly}"/>
+                                    <RadioButton GroupName="PuzzleInterruptScenes" Content="{x:Static assets:Strings.On}" IsChecked="{Binding PuzzleInterruptScenesOn}"/>
+                                </StackPanel>
+                            </HeaderedContentControl>
+                            <HeaderedContentControl Grid.Row="2" Grid.Column="1" Header="{x:Static assets:Strings.Topic_Stock_Mode}" Margin="10"
+                                           HorizontalAlignment="Center" HorizontalContentAlignment="Center">
+                                <StackPanel Orientation="Vertical" Spacing="5">
+                                    <RadioButton GroupName="TopicStockMode" Content="{x:Static assets:Strings.Off}" IsChecked="True"/>
+                                    <RadioButton GroupName="TopicStockMode" Content="{x:Static assets:Strings.On}" IsChecked="{Binding TopicStockMode}"/>
+                                </StackPanel>
+                            </HeaderedContentControl>
+                            <HeaderedContentControl Grid.Row="3" Grid.Column="0" Header="{x:Static assets:Strings.Dialogue_Skipping}" Margin="10"
+                                           HorizontalAlignment="Center" HorizontalContentAlignment="Center">
+                                <StackPanel Orientation="Vertical" Spacing="5">
+                                    <RadioButton GroupName="DialogueSkipping" Content="{x:Static assets:Strings.Fast_Forward}" IsChecked="True"/>
+                                    <RadioButton GroupName="DialogueSkipping" Content="{x:Static assets:Strings.Skip_Already_Read}" IsChecked="{Binding DialogueSkipping}"/>
+                                </StackPanel>
+                            </HeaderedContentControl>
+                            <HeaderedContentControl Grid.Row="3" Grid.Column="1" Header="{x:Static assets:Strings.Batch_Dialogue_Display}" Margin="10"
+                                           HorizontalAlignment="Center" HorizontalContentAlignment="Center">
+                                <StackPanel Orientation="Vertical" Spacing="5">
+                                    <RadioButton GroupName="BatchDialogueDisplay" Content="{x:Static assets:Strings.Off}" IsChecked="True"/>
+                                    <RadioButton GroupName="BatchDialogueDisplay" Content="{x:Static assets:Strings.On}" IsChecked="{Binding BatchDialogueDisplay}"/>
+                                </StackPanel>
+                            </HeaderedContentControl>
 
-                        <TextBlock Grid.Row="3" HorizontalAlignment="Center" Text="{Binding ResultsLabel}"/>
+                            <HeaderedContentControl Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Header="{x:Static assets:Strings.Character_Power_Statuses}" Margin="10"
+                                           HorizontalAlignment="Center" HorizontalContentAlignment="Center">
+                                <ItemsRepeater ItemsSource="{Binding PowerStatuses}">
+                                    <ItemsRepeater.Layout>
+                                        <UniformGridLayout MaximumRowsOrColumns="1" Orientation="Horizontal" MinRowSpacing="15"/>
+                                    </ItemsRepeater.Layout>
+                                    <ItemsRepeater.ItemTemplate>
+                                        <DataTemplate DataType="vm:ReactivePowerStatus">
+                                            <HeaderedContentControl Header="{Binding Name}" Margin="10"
+                                                           HorizontalAlignment="Center" HorizontalContentAlignment="Center">
+                                                <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,Auto">
+                                                    <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Spacing="5">
+                                                        <TextBlock Margin="0,7,0,0" Text="{x:Static assets:Strings.Level}"/>
+                                                        <NumericUpDown Value="{Binding Level}" Minimum="1"
+                                                                       Maximum="5" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
+                                                    </StackPanel>
+                                                    <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Spacing="5">
+                                                        <TextBlock Margin="0,7,0,0" Text="{x:Static assets:Strings.Remaining_Uses}"/>
+                                                        <NumericUpDown Value="{Binding RemainingUses}" Minimum="0"
+                                                                       Maximum="9" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
+                                                    </StackPanel>
+                                                    <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Spacing="5">
+                                                        <TextBlock Margin="0,7,0,0" Text="{x:Static assets:Strings.Uses_Since_Level_Up}"/>
+                                                        <NumericUpDown Value="{Binding UsesSinceLevelUp}" Minimum="0"
+                                                                       Maximum="10" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
+                                                    </StackPanel>
+                                                    <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Spacing="5">
+                                                        <TextBlock Margin="0,7,0,0" Text="{x:Static assets:Strings.Uses_to_Level_Up}"/>
+                                                        <NumericUpDown Value="{Binding UsesToLevelUp}" Minimum="1"
+                                                                       Maximum="10" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
+                                                    </StackPanel>
+                                                </Grid>
+                                            </HeaderedContentControl>
+                                        </DataTemplate>
+                                    </ItemsRepeater.ItemTemplate>
+                                </ItemsRepeater>
+                            </HeaderedContentControl>
+                        </Grid>
+                    </ScrollViewer>
+                </TabItem>
+                <TabItem IsVisible="{Binding IsSaveSlot}"
+                         IsSelected="{Binding IsSaveSlot}"
+                         Header="{x:Static assets:Strings.Save_Data}"
+                         GotFocus="CharacterPortraitTab_OnGotFocus">
+                    <ScrollViewer>
+                        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,Auto">
+                            <TextBlock Grid.Row="0" Grid.Column="0" Margin="0,7,0,0" Text="{x:Static assets:Strings.Save_Time_}"/>
+                            <StackPanel Grid.Row="0" Grid.Column="1" Margin="10,0,0,0" Orientation="Horizontal" Spacing="3">
+                                <CalendarDatePicker SelectedDate="{Binding SaveDate}"/>
+                                <TimePicker SelectedTime="{Binding SaveTime}"/>
+                            </StackPanel>
 
-                        <StackPanel Orientation="Horizontal" Grid.Row="4" HorizontalAlignment="Center" Spacing="4">
-                            <Button Command="{Binding PreviousFlagsCommand}">
-                                <Svg Path="avares://SerialLoops/Assets/Icons/Previous_Page.svg" Width="16" Height="16"/>
-                            </Button>
-                            <NumericUpDown Value="{Binding FlagPage}" ShowButtonSpinner="False"
-                                           Minimum="1" Maximum="{Binding NumPages}"
-                                           FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
-                            <TextBlock Text="/" Margin="0,10,0,0"/>
-                            <TextBlock Text="{Binding NumPages}" Margin="0,10,0,0"/>
-                            <Button Command="{Binding NextFlagsCommand}">
-                                <Svg Path="avares://SerialLoops/Assets/Icons/Next_Page.svg" Width="16" Height="16"/>
-                            </Button>
-                        </StackPanel>
-                    </Grid>
-                </ScrollViewer>
-            </TabItem>
-        </TabControl>
-        <StackPanel HorizontalAlignment="Right" Margin="10" Spacing="3" Grid.Row="2" Orientation="Horizontal">
-            <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}"
-                    CommandParameter="{Binding #Dialog}" IsCancel="True"/>
-            <Button Content="{x:Static assets:Strings.Save}" Command="{Binding SaveCommand}"
-                    CommandParameter="{Binding #Dialog}" IsDefault="True"/>
-        </StackPanel>
-    </Grid>
+                            <TextBlock Grid.Row="1" Grid.Column="0" Margin="0,7,0,0" Text="{x:Static assets:Strings.Scenario_Command_Index_}"/>
+                            <controls:ScenarioCommandPicker Grid.Row="1" Grid.Column="1" DataContext="{Binding ScenarioCommandPickerVm}"/>
+
+                            <TextBlock Grid.Row="2" Grid.Column="0" Margin="0,7,0,0" Text="{x:Static assets:Strings.Episode_Number}"/>
+                            <NumericUpDown Grid.Row="2" Grid.Column="1" Margin="10,0,0,0" Value="{Binding Episode}" Minimum="1"
+                                           Maximum="5" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
+
+                            <HeaderedContentControl Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Header="{x:Static assets:Strings.Most_Recent_Objectives}" Margin="10"
+                                           HorizontalAlignment="Center" HorizontalContentAlignment="Center">
+                                <ItemsRepeater ItemsSource="{Binding RecentObjectives}">
+                                    <ItemsRepeater.Layout>
+                                        <UniformGridLayout Orientation="Vertical" MaximumRowsOrColumns="2"/>
+                                    </ItemsRepeater.Layout>
+                                    <ItemsRepeater.ItemTemplate>
+                                        <DataTemplate DataType="vm:RecentObjective">
+                                            <HeaderedContentControl Header="{Binding Letter}" Margin="10" HorizontalAlignment="Center"
+                                                           HorizontalContentAlignment="Center">
+                                                <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,Auto,Auto,Auto,Auto">
+                                                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding FirstSelection}"
+                                                              Content="1" ToolTip.Tip="{x:Static assets:Strings.First_Selection}"/>
+                                                    <CheckBox Grid.Row="0" Grid.Column="3" IsChecked="{Binding SecondSelection}"
+                                                              Content="2" ToolTip.Tip="{x:Static assets:Strings.Second_Selection}"/>
+                                                    <CheckBox Grid.Row="1" Grid.Column="0" IsChecked="{Binding KyonPresent}"
+                                                              ToolTip.Tip="{x:Static assets:Strings.Kyon_Present}" Margin="10,0">
+                                                        <Image Source="{Binding $parent[dialogs:SaveSlotEditorDialog].((vm:SaveSlotEditorDialogViewModel)DataContext).KyonVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
+                                                    </CheckBox>
+                                                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding HaruhiPresent}"
+                                                              ToolTip.Tip="{x:Static assets:Strings.Haruhi_Present}" Margin="10,0">
+                                                        <Image Source="{Binding $parent[dialogs:SaveSlotEditorDialog].((vm:SaveSlotEditorDialogViewModel)DataContext).HaruhiVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
+                                                    </CheckBox>
+                                                    <CheckBox Grid.Row="1" Grid.Column="2" IsChecked="{Binding AsahinaPresent}"
+                                                              ToolTip.Tip="{x:Static assets:Strings.Asahina_Present}" Margin="10,0">
+                                                        <Image Source="{Binding $parent[dialogs:SaveSlotEditorDialog].((vm:SaveSlotEditorDialogViewModel)DataContext).AsahinaVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
+                                                    </CheckBox>
+                                                    <CheckBox Grid.Row="1" Grid.Column="3" IsChecked="{Binding NagatoPresent}"
+                                                              ToolTip.Tip="{x:Static assets:Strings.Nagato_Present}" Margin="10,0">
+                                                        <Image Source="{Binding $parent[dialogs:SaveSlotEditorDialog].((vm:SaveSlotEditorDialogViewModel)DataContext).NagatoVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
+                                                    </CheckBox>
+                                                    <CheckBox Grid.Row="1" Grid.Column="4" IsChecked="{Binding KoizumiPresent}"
+                                                              ToolTip.Tip="{x:Static assets:Strings.Koizumi_Present}" Margin="10,0">
+                                                        <Image Source="{Binding $parent[dialogs:SaveSlotEditorDialog].((vm:SaveSlotEditorDialogViewModel)DataContext).KoizumiVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
+                                                    </CheckBox>
+                                                </Grid>
+                                            </HeaderedContentControl>
+                                        </DataTemplate>
+                                    </ItemsRepeater.ItemTemplate>
+                                </ItemsRepeater>
+                            </HeaderedContentControl>
+
+                            <HeaderedContentControl Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Header="{x:Static assets:Strings.Friendship_Levels}" Margin="10"
+                                           HorizontalAlignment="Center" HorizontalContentAlignment="Center">
+                                <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,Auto">
+                                    <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Spacing="5">
+                                        <Image Source="{Binding HaruhiVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
+                                        <TextBlock Text="{Binding HaruhiName}" Margin="0,7,0,0"/>
+                                        <NumericUpDown Value="{Binding HaruhiFriendshipLevel}" Minimum="1"
+                                                       Maximum="255" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
+                                    </StackPanel>
+                                    <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Spacing="5">
+                                        <Image Source="{Binding AsahinaVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
+                                        <TextBlock Text="{Binding AsahinaName}" Margin="0,7,0,0"/>
+                                        <NumericUpDown Value="{Binding AsahinaFriendshipLevel}" Minimum="1"
+                                                       Maximum="255" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
+                                    </StackPanel>
+                                    <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Spacing="5">
+                                        <Image Source="{Binding NagatoVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
+                                        <TextBlock Text="{Binding NagatoName}" Margin="0,7,0,0"/>
+                                        <NumericUpDown Value="{Binding NagatoFriendshipLevel}" Minimum="1"
+                                                       Maximum="255" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
+                                    </StackPanel>
+                                    <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Spacing="5">
+                                        <Image Source="{Binding KoizumiVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
+                                        <TextBlock Text="{Binding KoizumiName}" Margin="0,7,0,0"/>
+                                        <NumericUpDown Value="{Binding KoizumiFriendshipLevel}" Minimum="1"
+                                                       Maximum="255" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
+                                    </StackPanel>
+                                    <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Spacing="5">
+                                        <Image Source="{Binding TsuruyaVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
+                                        <TextBlock Text="{Binding TsuruyaName}" Margin="0,7,0,0"/>
+                                        <NumericUpDown Value="{Binding TsuruyaFriendshipLevel}" Minimum="1"
+                                                       Maximum="255" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
+                                    </StackPanel>
+                                    <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Spacing="5">
+                                        <Border Width="16" Height="16" Background="Transparent"/>
+                                        <TextBlock Text="{x:Static assets:Strings.Unknown}" Margin="0,7,0,0"/>
+                                        <NumericUpDown Value="{Binding UnknownFriendshipLevel}" Minimum="1"
+                                                       Maximum="255" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
+                                    </StackPanel>
+                                </Grid>
+                            </HeaderedContentControl>
+                        </Grid>
+                    </ScrollViewer>
+                </TabItem>
+                <TabItem IsVisible="{Binding IsQuickSave}"
+                         Header="{x:Static assets:Strings.Script_Position}">
+                    <ScrollViewer>
+                        <Grid RowDefinitions="Auto,Auto,Auto,*" ColumnDefinitions="Auto,*">
+                            <StackPanel Margin="10,5" Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Spacing="5">
+                                <TextBlock Margin="0,7,0,0" Text="{x:Static assets:Strings.Script_}"/>
+                                <ComboBox ItemsSource="{Binding ScriptItems}" SelectedItem="{Binding SelectedScriptItem}">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate DataType="libi:ScriptItem">
+                                            <TextBlock Text="{Binding DisplayName}"/>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                    <ComboBox.ItemContainerTheme>
+                                        <ControlTheme TargetType="ComboBoxItem" x:DataType="libi:ScriptItem" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
+                                            <Setter Property="TextSearch.Text" Value="{Binding DisplayName}"/>
+                                        </ControlTheme>
+                                    </ComboBox.ItemContainerTheme>
+                                </ComboBox>
+                                <controls:ItemLink Item="{Binding SelectedScriptItem}" Tabs="{Binding Tabs}"
+                                                   IsVisible="{Binding Tabs, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+                            </StackPanel>
+
+                            <StackPanel Margin="10,5" Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Spacing="5">
+                                <TextBlock Margin="0,7,0,0" Text="{x:Static assets:Strings.Script_Section}"/>
+                                <ComboBox ItemsSource="{Binding ScriptSections}" SelectedItem="{Binding SelectedScriptSection}">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate DataType="hlibe:ScriptSection">
+                                            <TextBlock Text="{Binding Name}"/>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                    <ComboBox.ItemContainerTheme>
+                                        <ControlTheme TargetType="ComboBoxItem" x:DataType="hlibe:ScriptSection" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
+                                            <Setter Property="TextSearch.Text" Value="{Binding Name}"/>
+                                        </ControlTheme>
+                                    </ComboBox.ItemContainerTheme>
+                                </ComboBox>
+                            </StackPanel>
+
+                            <StackPanel Margin="10,5" Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Spacing="5">
+                                <TextBlock Margin="0,7,0,0" Text="{x:Static assets:Strings.Command_Index_}"/>
+                                <NumericUpDown Value="{Binding ScriptCommandIndex}"
+                                               Minimum="0" Maximum="{Binding SelectedScriptSection.Objects.Count, Converter={StaticResource SubtractionConverter}, ConverterParameter=1}"
+                                               FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
+                            </StackPanel>
+
+                            <Grid Grid.Row="0" Grid.Column="1" Grid.RowSpan="4" Margin="20,0">
+                                <Image IsVisible="{Binding ScriptPreview, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                       Width="256" Height="384"
+                                       Source="{Binding ScriptPreview, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
+                                <Image IsVisible="{Binding ScriptPreview, Converter={x:Static ObjectConverters.IsNull}}"
+                                       Width="256" Height="384"
+                                       Source="{Binding ErrorImagePath}"/>
+                            </Grid>
+                        </Grid>
+                    </ScrollViewer>
+                </TabItem>
+                <TabItem Header="{x:Static assets:Strings.Flags}">
+                    <ScrollViewer>
+                        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*">
+                            <StackPanel Grid.Row="0" HorizontalAlignment="Center" Orientation="Horizontal" Spacing="3">
+                                <CheckBox IsChecked="{Binding HideUnsetFlags}"/>
+                                <TextBlock Text="{x:Static assets:Strings.Hide_Unset_Flags}" Margin="0,5,0,0"/>
+                                <TextBox UseLayoutRounding="True" Watermark="{x:Static assets:Strings.Filter_by_name}"
+                                         Text="{Binding FlagFilter}"/>
+                                <Button Command="{Binding FilterFlagsCommand}">
+                                    <StackPanel Orientation="Horizontal" Spacing="6">
+                                        <Svg Path="avares://SerialLoops/Assets/Icons/Search.svg" Width="16" Height="16"/>
+                                        <TextBlock Text="{x:Static assets:Strings.Filter}"/>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="1" Spacing="10" Orientation="Horizontal">
+                                <TextBlock Text="{x:Static assets:Strings.Value}" Margin="0,0,10,0" Classes="b"/>
+                                <TextBlock Text="{x:Static assets:Strings.Flag_Description}" Classes="b"/>
+                            </StackPanel>
+
+                            <ItemsRepeater Grid.Row="2" ItemsSource="{Binding VisibleFlags}">
+                                <ItemsRepeater.Layout>
+                                    <StackLayout Spacing="5" Orientation="Vertical"/>
+                                </ItemsRepeater.Layout>
+                                <ItemsRepeater.ItemTemplate>
+                                    <DataTemplate x:DataType="vm:LocalizedFlag">
+                                        <StackPanel Orientation="Horizontal" Spacing="10">
+                                            <CheckBox IsChecked="{Binding IsSet}"/>
+                                            <TextBlock Text="{Binding Description}" Margin="18,5,0,0"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsRepeater.ItemTemplate>
+                            </ItemsRepeater>
+
+                            <TextBlock Grid.Row="3" HorizontalAlignment="Center" Text="{Binding ResultsLabel}"/>
+
+                            <StackPanel Orientation="Horizontal" Grid.Row="4" HorizontalAlignment="Center" Spacing="4">
+                                <Button Command="{Binding PreviousFlagsCommand}">
+                                    <Svg Path="avares://SerialLoops/Assets/Icons/Previous_Page.svg" Width="16" Height="16"/>
+                                </Button>
+                                <NumericUpDown Value="{Binding FlagPage}" ShowButtonSpinner="False"
+                                               Minimum="1" Maximum="{Binding NumPages}"
+                                               FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
+                                <TextBlock Text="/" Margin="0,10,0,0"/>
+                                <TextBlock Text="{Binding NumPages}" Margin="0,10,0,0"/>
+                                <Button Command="{Binding NextFlagsCommand}">
+                                    <Svg Path="avares://SerialLoops/Assets/Icons/Next_Page.svg" Width="16" Height="16"/>
+                                </Button>
+                            </StackPanel>
+                        </Grid>
+                    </ScrollViewer>
+                </TabItem>
+            </TabControl>
+            <StackPanel HorizontalAlignment="Right" Margin="10" Spacing="3" Grid.Row="2" Orientation="Horizontal">
+                <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}"
+                        CommandParameter="{Binding #Dialog}" IsCancel="True"/>
+                <Button Content="{x:Static assets:Strings.Save}" Command="{Binding SaveCommand}"
+                        CommandParameter="{Binding #Dialog}" IsDefault="True"/>
+            </StackPanel>
+        </Grid>
+    </Panel>
 </Window>

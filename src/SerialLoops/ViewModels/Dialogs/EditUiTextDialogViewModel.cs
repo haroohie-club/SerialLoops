@@ -1,9 +1,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
 using System.Windows.Input;
-using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;

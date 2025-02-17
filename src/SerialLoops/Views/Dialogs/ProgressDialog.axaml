@@ -3,26 +3,20 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:vm="using:SerialLoops.ViewModels.Dialogs"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:controls="using:SerialLoops.Controls"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:DataType="vm:ProgressDialogViewModel"
         x:Class="SerialLoops.Views.Dialogs.ProgressDialog"
         Title="{Binding Title}"
         MinWidth="350" MinHeight="100" MaxWidth="350" MaxHeight="100" CanResize="False"
-        WindowStartupLocation="CenterScreen" Background="Transparent"
+        WindowStartupLocation="CenterScreen"
+        TransparencyLevelHint="AcrylicBlur"
+        Background="{DynamicResource FallbackBackgroundColor}"
         Closing="Window_OnClosing" Loaded="Window_OnLoaded"
         Name="Dialog">
 
     <Panel>
-        <ExperimentalAcrylicBorder IsHitTestVisible="False">
-            <ExperimentalAcrylicBorder.Material>
-                <ExperimentalAcrylicMaterial
-                    BackgroundSource="Digger"
-                    TintColor="{DynamicResource ResourceKey=BackgroundTint}"
-                    FallbackColor="{DynamicResource ResourceKey=BackgroundTint}"
-                    TintOpacity="{DynamicResource ResourceKey=BackgroundAcrylicTintStrength}"
-                    MaterialOpacity="{DynamicResource ResourceKey=BackgroundAcrylicOpacity}" />
-            </ExperimentalAcrylicBorder.Material>
-        </ExperimentalAcrylicBorder>
+        <controls:AcrylicBorderHandler/>
 
         <StackPanel Orientation="Vertical" Spacing="10" HorizontalAlignment="Center" VerticalAlignment="Center">
             <StackPanel Orientation="Horizontal" Spacing="3" Margin="10">

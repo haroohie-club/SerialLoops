@@ -9,7 +9,7 @@ public partial class GraphicSelectionDialog : Window
         InitializeComponent();
     }
 
-    private void Window_Loaded(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    private void Window_Loaded(object sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         Filter.Focus();
     }

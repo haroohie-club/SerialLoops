@@ -6,18 +6,17 @@
              xmlns:assets="using:SerialLoops.Assets"
              xmlns:controls="using:SerialLoops.Controls"
              xmlns:utility="using:SerialLoops.Utility"
-             xmlns:gbox="using:GroupBox.Avalonia.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:VoicedLineEditorViewModel"
              x:Class="SerialLoops.Views.Editors.VoicedLineEditorView">
-    <Grid RowDefinitions="Auto,Auto,Auto,*" ColumnDefinitions="*,Auto">
+    <Grid RowDefinitions="Auto,Auto,Auto,*" ColumnDefinitions="*,Auto" Margin="10">
         <controls:SoundPlayerPanel Name="Player" Grid.Row="0" Grid.Column="0" DataContext="{Binding VcePlayer}"/>
         <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Spacing="3" Margin="5">
             <Button Content="{x:Static assets:Strings.Replace}" Command="{Binding ReplaceCommand}"/>
             <Button Content="{x:Static assets:Strings.Export}" Command="{Binding ExportCommand}"/>
             <Button Content="{x:Static assets:Strings.Restore}" Command="{Binding RestoreCommand}"/>
         </StackPanel>
-        <gbox:GroupBox Header="{x:Static assets:Strings.Edit_Subtitle}" Theme="{StaticResource GroupBoxClassic}" Margin="5"
+        <HeaderedContentControl Header="{x:Static assets:Strings.Edit_Subtitle}" Margin="5"
                        IsVisible="{Binding SubsEnabled}" Grid.Row="2" Grid.Column="0">
             <StackPanel Spacing="5" Orientation="Vertical">
                 <StackPanel Spacing="3" Orientation="Horizontal">
@@ -46,15 +45,15 @@
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="3">
                         <TextBlock Text="{x:Static assets:Strings.Screen_Position}"/>
                         <StackPanel Orientation="Vertical" Spacing="2">
-                            <RadioButton GroupName="YPos" IsChecked="{Binding TopY}" Content="{x:Static assets:Strings.Top}"/>
-                            <RadioButton GroupName="YPos" IsChecked="{Binding BelowTopY}" Content="{x:Static assets:Strings.Below_Top}"/>
-                            <RadioButton GroupName="YPos" IsChecked="{Binding AboveBottomY}" Content="{x:Static assets:Strings.Above_Bottom}"/>
-                            <RadioButton GroupName="YPos" IsChecked="{Binding BottomY}" Content="{x:Static assets:Strings.Bottom}"/>
+                            <RadioButton GroupName="YPos"  IsChecked="{Binding TopY, Mode=TwoWay}" Content="{x:Static assets:Strings.Top}"/>
+                            <RadioButton GroupName="YPos" IsChecked="{Binding BelowTopY, Mode=TwoWay}" Content="{x:Static assets:Strings.Below_Top}"/>
+                            <RadioButton GroupName="YPos" IsChecked="{Binding AboveBottomY, Mode=TwoWay}" Content="{x:Static assets:Strings.Above_Bottom}"/>
+                            <RadioButton GroupName="YPos" IsChecked="{Binding BottomY, Mode=TwoWay}" Content="{x:Static assets:Strings.Bottom}"/>
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
             </StackPanel>
-        </gbox:GroupBox>
+        </HeaderedContentControl>
         <Image Source="{Binding SubtitlesPreview, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
                Grid.Row="0" Grid.RowSpan="3" Grid.Column="1"/>
     </Grid>

@@ -3,6 +3,7 @@
         xmlns:vm="using:SerialLoops.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:controls="using:SerialLoops.Controls"
         xmlns:toolbar="using:MiniToolbar.Avalonia"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="SerialLoops.Views.MainWindow"
@@ -17,7 +18,7 @@
         Icon="/Assets/serial-loops.ico"
         Title="{Binding Title}"
         TransparencyLevelHint="AcrylicBlur"
-        Background="Transparent"
+        Background="{DynamicResource FallbackBackgroundColor}"
         ExtendClientAreaToDecorationsHint="True">
 
     <Design.DataContext>
@@ -31,17 +32,7 @@
     </NativeMenu.Menu>
 
     <Panel>
-        <ExperimentalAcrylicBorder IsHitTestVisible="False">
-            <ExperimentalAcrylicBorder.Material>
-                <ExperimentalAcrylicMaterial
-                    BackgroundSource="Digger"
-                    TintColor="{DynamicResource ResourceKey=BackgroundTint}"
-                    FallbackColor="{DynamicResource ResourceKey=BackgroundTint}"
-                    TintOpacity="{DynamicResource ResourceKey=BackgroundAcrylicTintStrength}"
-                    MaterialOpacity="{DynamicResource ResourceKey=BackgroundAcrylicOpacity}" />
-            </ExperimentalAcrylicBorder.Material>
-        </ExperimentalAcrylicBorder>
-
+        <controls:AcrylicBorderHandler/>
         <Grid RowDefinitions="Auto,*">
             <StackPanel IsVisible="False">
                 <Button Command="{Binding SaveProjectCommand}" HotKey="{Binding SaveHotKey}"/>
