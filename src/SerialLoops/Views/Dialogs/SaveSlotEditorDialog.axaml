@@ -6,7 +6,6 @@
         xmlns:assets="using:SerialLoops.Assets"
         xmlns:controls="using:SerialLoops.Controls"
         xmlns:dialogs="using:SerialLoops.Views.Dialogs"
-        xmlns:gbox="using:GroupBox.Avalonia.Controls"
         xmlns:hlibe="using:HaruhiChokuretsuLib.Archive.Event"
         xmlns:libi="using:SerialLoops.Lib.Items"
         xmlns:utility="using:SerialLoops.Utility"
@@ -43,8 +42,8 @@
                                                FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
                             </StackPanel>
 
-                            <gbox:GroupBox Grid.Row="1" Grid.Column="0" Header="{x:Static assets:Strings.Volume_Config}" Margin="10"
-                                           HorizontalAlignment="Center" HorizontalContentAlignment="Center" Theme="{StaticResource GroupBoxClassic}">
+                            <HeaderedContentControl Grid.Row="1" Grid.Column="0" Header="{x:Static assets:Strings.Volume_Config}" Margin="10"
+                                           HorizontalAlignment="Center" HorizontalContentAlignment="Center">
                                 <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,Auto" VerticalAlignment="Center">
                                     <TextBlock Grid.Column="0" Grid.Row="0" Margin="0,7,0,0" Text="{x:Static assets:Strings.Music_}" />
                                     <NumericUpDown Grid.Column="1" Grid.Row="0" Margin="10,0,0,0"
@@ -70,9 +69,9 @@
                                                    Maximum="100" FormatString="N0" Increment="1"
                                                    ParsingNumberStyle="Integer" />
                                 </Grid>
-                            </gbox:GroupBox>
-                            <gbox:GroupBox Grid.Row="1" Grid.Column="1" Header="{x:Static assets:Strings.Voices_Config}" Margin="10"
-                                           HorizontalAlignment="Center" HorizontalContentAlignment="Center" Theme="{StaticResource GroupBoxClassic}">
+                            </HeaderedContentControl>
+                            <HeaderedContentControl Grid.Row="1" Grid.Column="1" Header="{x:Static assets:Strings.Voices_Config}" Margin="10"
+                                           HorizontalAlignment="Center" HorizontalContentAlignment="Center">
                                 <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,Auto">
                                     <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Spacing="5" Margin="5">
                                         <CheckBox IsChecked="{Binding KyonVoiceEnabled}"/>
@@ -125,47 +124,47 @@
                                         <TextBlock Margin="0,5,0,0" Text="{Binding MysteryGirlName}"/>
                                     </StackPanel>
                                 </Grid>
-                            </gbox:GroupBox>
-                            <gbox:GroupBox Grid.Row="2" Grid.Column="0" Header="{x:Static assets:Strings.Puzzle_Interrupt_Scenes}" Margin="10"
-                                           HorizontalAlignment="Center" HorizontalContentAlignment="Center" Theme="{StaticResource GroupBoxClassic}">
+                            </HeaderedContentControl>
+                            <HeaderedContentControl Grid.Row="2" Grid.Column="0" Header="{x:Static assets:Strings.Puzzle_Interrupt_Scenes}" Margin="10"
+                                           HorizontalAlignment="Center" HorizontalContentAlignment="Center">
                                 <StackPanel Orientation="Vertical" Spacing="5">
                                     <RadioButton GroupName="PuzzleInterruptScenes" Content="{x:Static assets:Strings.Off}" IsChecked="{Binding PuzzleInterruptScenesOff}"/>
                                     <RadioButton GroupName="PuzzleInterruptScenes" Content="{x:Static assets:Strings.Unseen_Only}" IsChecked="{Binding PuzzleInterruptScenesUnseenOnly}"/>
                                     <RadioButton GroupName="PuzzleInterruptScenes" Content="{x:Static assets:Strings.On}" IsChecked="{Binding PuzzleInterruptScenesOn}"/>
                                 </StackPanel>
-                            </gbox:GroupBox>
-                            <gbox:GroupBox Grid.Row="2" Grid.Column="1" Header="{x:Static assets:Strings.Topic_Stock_Mode}" Margin="10"
-                                           HorizontalAlignment="Center" HorizontalContentAlignment="Center" Theme="{StaticResource GroupBoxClassic}">
+                            </HeaderedContentControl>
+                            <HeaderedContentControl Grid.Row="2" Grid.Column="1" Header="{x:Static assets:Strings.Topic_Stock_Mode}" Margin="10"
+                                           HorizontalAlignment="Center" HorizontalContentAlignment="Center">
                                 <StackPanel Orientation="Vertical" Spacing="5">
                                     <RadioButton GroupName="TopicStockMode" Content="{x:Static assets:Strings.Off}" IsChecked="True"/>
                                     <RadioButton GroupName="TopicStockMode" Content="{x:Static assets:Strings.On}" IsChecked="{Binding TopicStockMode}"/>
                                 </StackPanel>
-                            </gbox:GroupBox>
-                            <gbox:GroupBox Grid.Row="3" Grid.Column="0" Header="{x:Static assets:Strings.Dialogue_Skipping}" Margin="10"
-                                           HorizontalAlignment="Center" HorizontalContentAlignment="Center" Theme="{StaticResource GroupBoxClassic}">
+                            </HeaderedContentControl>
+                            <HeaderedContentControl Grid.Row="3" Grid.Column="0" Header="{x:Static assets:Strings.Dialogue_Skipping}" Margin="10"
+                                           HorizontalAlignment="Center" HorizontalContentAlignment="Center">
                                 <StackPanel Orientation="Vertical" Spacing="5">
                                     <RadioButton GroupName="DialogueSkipping" Content="{x:Static assets:Strings.Fast_Forward}" IsChecked="True"/>
                                     <RadioButton GroupName="DialogueSkipping" Content="{x:Static assets:Strings.Skip_Already_Read}" IsChecked="{Binding DialogueSkipping}"/>
                                 </StackPanel>
-                            </gbox:GroupBox>
-                            <gbox:GroupBox Grid.Row="3" Grid.Column="1" Header="{x:Static assets:Strings.Batch_Dialogue_Display}" Margin="10"
-                                           HorizontalAlignment="Center" HorizontalContentAlignment="Center" Theme="{StaticResource GroupBoxClassic}">
+                            </HeaderedContentControl>
+                            <HeaderedContentControl Grid.Row="3" Grid.Column="1" Header="{x:Static assets:Strings.Batch_Dialogue_Display}" Margin="10"
+                                           HorizontalAlignment="Center" HorizontalContentAlignment="Center">
                                 <StackPanel Orientation="Vertical" Spacing="5">
                                     <RadioButton GroupName="BatchDialogueDisplay" Content="{x:Static assets:Strings.Off}" IsChecked="True"/>
                                     <RadioButton GroupName="BatchDialogueDisplay" Content="{x:Static assets:Strings.On}" IsChecked="{Binding BatchDialogueDisplay}"/>
                                 </StackPanel>
-                            </gbox:GroupBox>
+                            </HeaderedContentControl>
 
-                            <gbox:GroupBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Header="{x:Static assets:Strings.Character_Power_Statuses}" Margin="10"
-                                           HorizontalAlignment="Center" HorizontalContentAlignment="Center" Theme="{StaticResource GroupBoxClassic}">
+                            <HeaderedContentControl Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Header="{x:Static assets:Strings.Character_Power_Statuses}" Margin="10"
+                                           HorizontalAlignment="Center" HorizontalContentAlignment="Center">
                                 <ItemsRepeater ItemsSource="{Binding PowerStatuses}">
                                     <ItemsRepeater.Layout>
                                         <UniformGridLayout MaximumRowsOrColumns="1" Orientation="Horizontal" MinRowSpacing="15"/>
                                     </ItemsRepeater.Layout>
                                     <ItemsRepeater.ItemTemplate>
                                         <DataTemplate DataType="vm:ReactivePowerStatus">
-                                            <gbox:GroupBox Header="{Binding Name}" Margin="10"
-                                                           HorizontalAlignment="Center" HorizontalContentAlignment="Center" Theme="{StaticResource GroupBoxClassic}">
+                                            <HeaderedContentControl Header="{Binding Name}" Margin="10"
+                                                           HorizontalAlignment="Center" HorizontalContentAlignment="Center">
                                                 <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,Auto">
                                                     <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Spacing="5">
                                                         <TextBlock Margin="0,7,0,0" Text="{x:Static assets:Strings.Level}"/>
@@ -188,11 +187,11 @@
                                                                        Maximum="10" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
                                                     </StackPanel>
                                                 </Grid>
-                                            </gbox:GroupBox>
+                                            </HeaderedContentControl>
                                         </DataTemplate>
                                     </ItemsRepeater.ItemTemplate>
                                 </ItemsRepeater>
-                            </gbox:GroupBox>
+                            </HeaderedContentControl>
                         </Grid>
                     </ScrollViewer>
                 </TabItem>
@@ -215,16 +214,16 @@
                             <NumericUpDown Grid.Row="2" Grid.Column="1" Margin="10,0,0,0" Value="{Binding Episode}" Minimum="1"
                                            Maximum="5" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
 
-                            <gbox:GroupBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Header="{x:Static assets:Strings.Most_Recent_Objectives}" Margin="10"
-                                           HorizontalAlignment="Center" HorizontalContentAlignment="Center" Theme="{StaticResource GroupBoxClassic}">
+                            <HeaderedContentControl Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Header="{x:Static assets:Strings.Most_Recent_Objectives}" Margin="10"
+                                           HorizontalAlignment="Center" HorizontalContentAlignment="Center">
                                 <ItemsRepeater ItemsSource="{Binding RecentObjectives}">
                                     <ItemsRepeater.Layout>
                                         <UniformGridLayout Orientation="Vertical" MaximumRowsOrColumns="2"/>
                                     </ItemsRepeater.Layout>
                                     <ItemsRepeater.ItemTemplate>
                                         <DataTemplate DataType="vm:RecentObjective">
-                                            <gbox:GroupBox Header="{Binding Letter}" Margin="10" HorizontalAlignment="Center"
-                                                           HorizontalContentAlignment="Center" Theme="{StaticResource GroupBoxClassic}">
+                                            <HeaderedContentControl Header="{Binding Letter}" Margin="10" HorizontalAlignment="Center"
+                                                           HorizontalContentAlignment="Center">
                                                 <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,Auto,Auto,Auto,Auto">
                                                     <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding FirstSelection}"
                                                               Content="1" ToolTip.Tip="{x:Static assets:Strings.First_Selection}"/>
@@ -251,14 +250,14 @@
                                                         <Image Source="{Binding $parent[dialogs:SaveSlotEditorDialog].((vm:SaveSlotEditorDialogViewModel)DataContext).KoizumiVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
                                                     </CheckBox>
                                                 </Grid>
-                                            </gbox:GroupBox>
+                                            </HeaderedContentControl>
                                         </DataTemplate>
                                     </ItemsRepeater.ItemTemplate>
                                 </ItemsRepeater>
-                            </gbox:GroupBox>
+                            </HeaderedContentControl>
 
-                            <gbox:GroupBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Header="{x:Static assets:Strings.Friendship_Levels}" Margin="10"
-                                           HorizontalAlignment="Center" HorizontalContentAlignment="Center" Theme="{StaticResource GroupBoxClassic}">
+                            <HeaderedContentControl Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Header="{x:Static assets:Strings.Friendship_Levels}" Margin="10"
+                                           HorizontalAlignment="Center" HorizontalContentAlignment="Center">
                                 <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,Auto">
                                     <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Spacing="5">
                                         <Image Source="{Binding HaruhiVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
@@ -297,7 +296,7 @@
                                                        Maximum="255" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
                                     </StackPanel>
                                 </Grid>
-                            </gbox:GroupBox>
+                            </HeaderedContentControl>
                         </Grid>
                     </ScrollViewer>
                 </TabItem>

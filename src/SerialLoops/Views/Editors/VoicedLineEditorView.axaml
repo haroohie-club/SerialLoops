@@ -6,7 +6,6 @@
              xmlns:assets="using:SerialLoops.Assets"
              xmlns:controls="using:SerialLoops.Controls"
              xmlns:utility="using:SerialLoops.Utility"
-             xmlns:gbox="using:GroupBox.Avalonia.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:VoicedLineEditorViewModel"
              x:Class="SerialLoops.Views.Editors.VoicedLineEditorView">
@@ -17,7 +16,7 @@
             <Button Content="{x:Static assets:Strings.Export}" Command="{Binding ExportCommand}"/>
             <Button Content="{x:Static assets:Strings.Restore}" Command="{Binding RestoreCommand}"/>
         </StackPanel>
-        <gbox:GroupBox Header="{x:Static assets:Strings.Edit_Subtitle}" Theme="{StaticResource GroupBoxClassic}" Margin="5"
+        <HeaderedContentControl Header="{x:Static assets:Strings.Edit_Subtitle}" Margin="5"
                        IsVisible="{Binding SubsEnabled}" Grid.Row="2" Grid.Column="0">
             <StackPanel Spacing="5" Orientation="Vertical">
                 <StackPanel Spacing="3" Orientation="Horizontal">
@@ -54,7 +53,7 @@
                     </StackPanel>
                 </StackPanel>
             </StackPanel>
-        </gbox:GroupBox>
+        </HeaderedContentControl>
         <Image Source="{Binding SubtitlesPreview, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
                Grid.Row="0" Grid.RowSpan="3" Grid.Column="1"/>
     </Grid>

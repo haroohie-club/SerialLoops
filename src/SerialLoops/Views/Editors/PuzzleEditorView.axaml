@@ -6,7 +6,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:assets="using:SerialLoops.Assets"
              xmlns:controls="using:SerialLoops.Controls"
-             xmlns:gbox="using:GroupBox.Avalonia.Controls"
              xmlns:models="using:SerialLoops.Models"
              xmlns:utility="using:SerialLoops.Utility"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -14,8 +13,8 @@
              x:Class="SerialLoops.Views.Editors.PuzzleEditorView">
     <ScrollViewer>
         <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,Auto">
-            <gbox:GroupBox Grid.Row="0" Grid.Column="0" Header="{x:Static assets:Strings.Associated_Main_Topics}"
-                           Margin="20, 10" Theme="{StaticResource GroupBoxClassic}">
+            <HeaderedContentControl Grid.Row="0" Grid.Column="0" Header="{x:Static assets:Strings.Associated_Main_Topics}"
+                           Margin="20, 10">
                 <ItemsRepeater ItemsSource="{Binding AssociatedMainTopics}">
                     <ItemsRepeater.Layout>
                         <StackLayout Orientation="Vertical" Spacing="10"/>
@@ -32,10 +31,10 @@
                         </DataTemplate>
                     </ItemsRepeater.ItemTemplate>
                 </ItemsRepeater>
-            </gbox:GroupBox>
+            </HeaderedContentControl>
 
-            <gbox:GroupBox Grid.Row="1" Grid.Column="0" Header="{x:Static assets:Strings.Haruhi_Routes}"
-                           Margin="20, 10" Theme="{StaticResource GroupBoxClassic}">
+            <HeaderedContentControl Grid.Row="1" Grid.Column="0" Header="{x:Static assets:Strings.Haruhi_Routes}"
+                           Margin="20, 10">
                 <ItemsRepeater ItemsSource="{Binding HaruhiRoutes}">
                     <ItemsRepeater.Layout>
                         <StackLayout Orientation="Vertical" Spacing="5"/>
@@ -46,10 +45,10 @@
                         </DataTemplate>
                     </ItemsRepeater.ItemTemplate>
                 </ItemsRepeater>
-            </gbox:GroupBox>
+            </HeaderedContentControl>
 
-            <gbox:GroupBox Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Header="{x:Static assets:Strings.Settings}"
-                           Margin="20, 10" Theme="{StaticResource GroupBoxClassic}">
+            <HeaderedContentControl Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Header="{x:Static assets:Strings.Settings}"
+                           Margin="20, 10">
                 <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
                     <TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static assets:Strings.Map}"/>
                     <controls:ItemLink Grid.Row="0" Grid.Column="1" Margin="10,0,0,0" Item="{Binding Map}" Tabs="{Binding Tabs}"/>
@@ -130,7 +129,7 @@
                     <NumericUpDown Grid.Row="12" Grid.Column="1" Margin="10,0,0,0" Minimum="0" Maximum="65535"
                                    Value="{Binding Unknown17}" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
                 </Grid>
-            </gbox:GroupBox>
+            </HeaderedContentControl>
         </Grid>
     </ScrollViewer>
 </UserControl>

@@ -6,7 +6,6 @@
              xmlns:assets="using:SerialLoops.Assets"
              xmlns:controls="using:SerialLoops.Controls"
              xmlns:items="clr-namespace:SerialLoops.Lib.Items;assembly=SerialLoops.Lib"
-             xmlns:gbox="using:GroupBox.Avalonia.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:TopicEditorViewModel"
              x:Class="SerialLoops.Views.Editors.TopicEditorView">
@@ -42,7 +41,7 @@
         <NumericUpDown Grid.Column="1" Grid.Row="6" Margin="10,0,0,0" Value="{Binding PuzzlePhaseGroup}" Minimum="1" Maximum="6"
                        FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
 
-        <gbox:GroupBox Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="7" Header="{x:Static assets:Strings.Times}" Theme="{StaticResource GroupBoxClassic}">
+        <HeaderedContentControl Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="7" Header="{x:Static assets:Strings.Times}">
             <Grid ColumnDefinitions="Auto,Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto">
                 <TextBlock Grid.Column="0" Grid.Row="0" Margin="0,7,0,0" Text="{x:Static assets:Strings.Base_Time_Gain}"/>
                 <StackPanel Grid.Column="1" Grid.Row="0" Margin="10,0,0,0" Orientation="Horizontal" Spacing="3">
@@ -95,7 +94,7 @@
                     <TextBlock Text="{x:Static assets:Strings.sec}"/>
                 </StackPanel>
             </Grid>
-        </gbox:GroupBox>
+        </HeaderedContentControl>
     </Grid>
 </UserControl>
 

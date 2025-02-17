@@ -1,6 +1,7 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:assets="using:SerialLoops.Assets"
+             xmlns:utility="using:SerialLoops.Utility"
              x:Class="SerialLoops.App"
              xmlns:dialoghost="using:DialogHostAvalonia"
              xmlns:local="using:SerialLoops"
@@ -9,34 +10,34 @@
              xmlns:system="using:System"
              RequestedThemeVariant="Default"
              Name="Serial Loops">
-             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+    <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
     <Application.DataTemplates>
-        <local:ViewLocator/>
+        <local:ViewLocator />
     </Application.DataTemplates>
 
     <NativeMenu.Menu>
         <NativeMenu>
             <NativeMenuItem Header="{x:Static assets:Strings.About_Serial_Loops}" Icon="/Assets/serial-loops.ico"
-                            Click="About_Click"/>
+                            Click="About_Click" />
             <NativeMenuItemSeparator />
             <NativeMenuItem Header="{x:Static assets:Strings._Preferences___}"
-                            Icon="avares://SerialLoops/Assets/Icons/Options.png" Click="Preferences_Click"/>
+                            Icon="avares://SerialLoops/Assets/Icons/Options.png" Click="Preferences_Click" />
             <NativeMenuItem Header="{x:Static assets:Strings._Check_for_Updates___}"
-                            Icon="avares://SerialLoops/Assets/Icons/Update.png" Click="Updates_Click"/>
-            <NativeMenuItem Header="{x:Static assets:Strings.View__Logs}" Click="Logs_Click"/>
+                            Icon="avares://SerialLoops/Assets/Icons/Update.png" Click="Updates_Click" />
+            <NativeMenuItem Header="{x:Static assets:Strings.View__Logs}" Click="Logs_Click" />
         </NativeMenu>
     </NativeMenu.Menu>
 
     <Application.Styles>
         <FluentTheme />
         <dialoghost:DialogHostStyles />
-        <tabaloniathemes:CustomTheme/>
-        <mintoolbarthemes:MiniToolbarStyles/>
-        <StyleInclude Source="avares://Avalonia.Controls.TreeDataGrid/Themes/Fluent.axaml"/>
+        <tabaloniathemes:CustomTheme />
+        <mintoolbarthemes:MiniToolbarStyles />
+        <StyleInclude Source="avares://Avalonia.Controls.TreeDataGrid/Themes/Fluent.axaml" />
         <StyleInclude Source="avares://Avalonia.Controls.ColorPicker/Themes/Fluent/Fluent.xaml" />
-        <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
-        <StyleInclude Source="avares://Avalonia.Controls.ColorPicker/Themes/Fluent/Fluent.xaml"/>
-        <StyleInclude Source="avares://Avalonia.Controls.TreeDataGrid/Themes/Fluent.axaml"/>
+        <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
+        <StyleInclude Source="avares://Avalonia.Controls.ColorPicker/Themes/Fluent/Fluent.xaml" />
+        <StyleInclude Source="avares://Avalonia.Controls.TreeDataGrid/Themes/Fluent.axaml" />
 
         <!-- Toolbar styling -->
         <Style Selector="Button.ToolbarButton">
@@ -57,37 +58,88 @@
 
         <!-- Text styling -->
         <Style Selector="TextBlock.h1">
-            <Setter Property="FontSize" Value="32"/>
-            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="32" />
+            <Setter Property="FontWeight" Value="Bold" />
         </Style>
         <Style Selector="TextBlock.h2">
-            <Setter Property="FontSize" Value="24"/>
-            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="24" />
+            <Setter Property="FontWeight" Value="Bold" />
         </Style>
         <Style Selector="TextBlock.b">
-            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontWeight" Value="Bold" />
         </Style>
         <Style Selector="TextBlock.secondary">
-            <Setter Property="Foreground" Value="{DynamicResource SecondaryColor}"/>
+            <Setter Property="Foreground" Value="{DynamicResource SecondaryColor}" />
         </Style>
         <Style Selector="TextBlock.keyprompt">
-            <Setter Property="Background" Value="{DynamicResource KeybindBackgroundColor}"/>
-            <Setter Property="FontSize" Value="10"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="Padding" Value="2"/>
+            <Setter Property="Background" Value="{DynamicResource KeybindBackgroundColor}" />
+            <Setter Property="FontSize" Value="10" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="Padding" Value="2" />
         </Style>
         <Style Selector="TextBlock.link">
-            <Setter Property="TextDecorations" Value="Underline"/>
+            <Setter Property="TextDecorations" Value="Underline" />
         </Style>
         <Style Selector="TextBlock.link:not(:disabled)">
-            <Setter Property="Foreground" Value="{DynamicResource ResourceKey=LinkColor}"/>
+            <Setter Property="Foreground" Value="{DynamicResource ResourceKey=LinkColor}" />
             <Setter Property="Cursor" Value="Hand" />
         </Style>
         <Style Selector="TextBlock.link:disabled">
-            <Setter Property="Foreground" Value="{DynamicResource ResourceKey=DisabledLinkColor}"/>
+            <Setter Property="Foreground" Value="{DynamicResource ResourceKey=DisabledLinkColor}" />
         </Style>
         <Style Selector="ComboBox">
-            <Setter Property="IsTextSearchEnabled" Value="True"/>
+            <Setter Property="IsTextSearchEnabled" Value="True" />
+        </Style>
+
+        <Style Selector="HeaderedContentControl">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Header -->
+                        <Border Grid.Row="0" Grid.Column="0"
+                                ZIndex="1"
+                                Background="{DynamicResource FallbackBackgroundColor}"
+                                Padding="5,0,5,0"
+                                Margin="5,0,0,0"
+                                Name="Header">
+                            <TextBlock
+                                Text="{TemplateBinding Header}"
+                                FontWeight="Bold" />
+                        </Border>
+
+                        <!-- Content Area -->
+                        <Border Grid.Row="0" Grid.Column="0"
+                                Grid.RowSpan="2"
+                                Padding="0,5,0,0"
+                                Grid.ColumnSpan="2"
+                                CornerRadius="4"
+                                Margin="0,10,0,0"
+                                BorderBrush="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                                BorderThickness="1"
+                                Name="Border">
+                            <Border.Clip>
+                                <MultiBinding Converter="{x:Static utility:GapClipMaskConverter.Instance}">
+                                    <Binding ElementName="Border" Path="Bounds" />
+                                    <Binding ElementName="Header" Path="Bounds" />
+                                </MultiBinding>
+                            </Border.Clip>
+                            <ContentPresenter
+                                Name="PART_ContentPresenter"
+                                Padding="8"
+                                Content="{TemplateBinding Content}" />
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter>
         </Style>
     </Application.Styles>
 

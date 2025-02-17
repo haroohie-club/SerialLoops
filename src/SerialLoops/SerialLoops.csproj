@@ -72,7 +72,6 @@
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.2.4" />
     <!--The behaviors packages past 11.1.0.4 break our middle click to close functionality, so we're staying on that package for now.-->
     <PackageReference Include="Avalonia.Xaml.Behaviors" Version="11.1.0.4" />
-    <PackageReference Include="BinToss.GroupBox.Avalonia" Version="1.0.0" />
     <PackageReference Include="DialogHost.Avalonia" Version="0.9.2" />
     <PackageReference Include="Dotnet.Bundle" Version="0.9.13" />
     <PackageReference Include="Markdown.Avalonia" Version="11.0.2" />

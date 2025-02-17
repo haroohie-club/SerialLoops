@@ -5,7 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:assets="using:SerialLoops.Assets"
         xmlns:controls="using:SerialLoops.Controls"
-        xmlns:gbox="using:GroupBox.Avalonia.Controls"
         xmlns:li="using:SerialLoops.Lib.Items"
         MinWidth="400" MinHeight="600"
         Width="400" Height="600"
@@ -29,7 +28,7 @@
                     </ItemsRepeater.Layout>
                     <ItemsRepeater.ItemTemplate>
                         <DataTemplate DataType="vm:TutorialMapping">
-                            <gbox:GroupBox Header="{Binding TutorialName}" Theme="{StaticResource GroupBoxClassic}">
+                            <HeaderedContentControl Header="{Binding TutorialName}">
                                 <StackPanel Orientation="Horizontal" Margin="10" Spacing="5">
                                     <TextBlock Text="{x:Static assets:Strings.Associated_Script}"/>
                                     <ComboBox ItemsSource="{Binding Scripts}" SelectedItem="{Binding Script}">
@@ -46,7 +45,7 @@
                                     </ComboBox>
                                     <controls:ItemLink Item="{Binding Script}" Tabs="{Binding Tabs}"/>
                                 </StackPanel>
-                            </gbox:GroupBox>
+                            </HeaderedContentControl>
                         </DataTemplate>
                     </ItemsRepeater.ItemTemplate>
                 </ItemsRepeater>

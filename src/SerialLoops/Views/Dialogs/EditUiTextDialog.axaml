@@ -5,7 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:assets="using:SerialLoops.Assets"
         xmlns:controls="using:SerialLoops.Controls"
-        xmlns:gbox="using:GroupBox.Avalonia.Controls"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         MinWidth="400" MinHeight="600"
         Width="400" Height="600"
@@ -28,9 +27,9 @@
                     </ItemsRepeater.Layout>
                     <ItemsRepeater.ItemTemplate>
                         <DataTemplate DataType="vm:UiTextWithDescription">
-                            <gbox:GroupBox Header="{Binding Description}" Theme="{StaticResource GroupBoxClassic}">
+                            <HeaderedContentControl Header="{Binding Description}">
                                 <TextBox Text="{Binding UiText}" Width="400" Height="80" AcceptsReturn="True"/>
-                            </gbox:GroupBox>
+                            </HeaderedContentControl>
                         </DataTemplate>
                     </ItemsRepeater.ItemTemplate>
                 </ItemsRepeater>

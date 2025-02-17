@@ -5,7 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:assets="using:SerialLoops.Assets"
         xmlns:controls="using:SerialLoops.Controls"
-        xmlns:gbox="using:GroupBox.Avalonia.Controls"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:DataType="vm:AsmHackCreationDialogViewModel"
         x:Class="SerialLoops.Views.Dialogs.AsmHackCreationDialog"
@@ -48,8 +47,7 @@
                             </ComboBox.ItemContainerTheme>
                         </ComboBox>
 
-                        <gbox:GroupBox Grid.Row="1" Header="{x:Static assets:Strings.Symbols}" Margin="3" Padding="5"
-                                       Theme="{StaticResource GroupBoxClassic}">
+                        <HeaderedContentControl Grid.Row="1" Header="{x:Static assets:Strings.Symbols}" Margin="3" Padding="5">
                             <ItemsRepeater ItemsSource="{Binding Symbols}">
                                 <ItemsRepeater.Layout>
                                     <StackLayout Orientation="Vertical" Spacing="10"/>
@@ -63,7 +61,7 @@
                                     </DataTemplate>
                                 </ItemsRepeater.ItemTemplate>
                             </ItemsRepeater>
-                        </gbox:GroupBox>
+                        </HeaderedContentControl>
 
                         <TextBlock Grid.Row="2" Text="{x:Static assets:Strings.Parameters}" Margin="3"/>
                         <ItemsRepeater Grid.Row="3" ItemsSource="{Binding Parameters}">
@@ -72,13 +70,11 @@
                             </ItemsRepeater.Layout>
                             <ItemsRepeater.ItemTemplate>
                                 <DataTemplate DataType="vm:HackParameterContainer">
-                                    <gbox:GroupBox Header="{Binding Name}" Margin="5" Padding="5"
-                                                   Theme="{StaticResource GroupBoxClassic}">
+                                    <HeaderedContentControl Header="{Binding Name}" Margin="5" Padding="5">
                                         <Grid RowDefinitions="Auto,*" ColumnDefinitions="Auto,Auto">
                                             <TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static assets:Strings.Parameter_Name}"/>
                                             <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding DescriptiveName}"/>
-                                            <gbox:GroupBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Header="{x:Static assets:Strings.Parameter_Value}"
-                                                           Theme="{StaticResource GroupBoxClassic}">
+                                            <HeaderedContentControl Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Header="{x:Static assets:Strings.Parameter_Value}">
                                                 <StackPanel Orientation="Vertical" Spacing="5">
                                                     <ItemsRepeater ItemsSource="{Binding Values}">
                                                         <ItemsRepeater.Layout>
@@ -102,9 +98,9 @@
                                                         <Svg Path="avares://SerialLoops/Assets/Icons/Add.svg" Width="16" Height="16"/>
                                                     </Button>
                                                 </StackPanel>
-                                            </gbox:GroupBox>
+                                            </HeaderedContentControl>
                                         </Grid>
-                                    </gbox:GroupBox>
+                                    </HeaderedContentControl>
                                 </DataTemplate>
                             </ItemsRepeater.ItemTemplate>
                         </ItemsRepeater>

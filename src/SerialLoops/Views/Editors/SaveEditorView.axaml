@@ -5,19 +5,17 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:assets="using:SerialLoops.Assets"
              xmlns:controls="using:SerialLoops.Controls"
-             xmlns:gbox="using:GroupBox.Avalonia.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:SaveEditorViewModel"
              x:Class="SerialLoops.Views.Editors.SaveEditorView">
     <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*" HorizontalAlignment="Center">
-        <gbox:GroupBox Grid.Row="0" Margin="5" Header="{x:Static assets:Strings.Save_Files}"
-                       Theme="{StaticResource GroupBoxClassic}">
+        <HeaderedContentControl Grid.Row="0" Margin="5" Header="{x:Static assets:Strings.Save_Files}">
             <StackPanel Orientation="Vertical" Spacing="5" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <controls:SaveSlotPreview DataContext="{Binding Slot1ViewModel}"/>
                 <controls:SaveSlotPreview DataContext="{Binding Slot2ViewModel}"/>
                 <controls:SaveSlotPreview DataContext="{Binding QuickSaveViewModel}"/>
             </StackPanel>
-        </gbox:GroupBox>
+        </HeaderedContentControl>
 
         <Button Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" Command="{Binding EditCommonSaveDataCommand}">
             <StackPanel Orientation="Horizontal" Spacing="3">
