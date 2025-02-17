@@ -31,7 +31,7 @@ public class ProjectSettingsDialogViewModel : ViewModelBase
         get
         {
             SKBitmap preview = new(64, 64);
-            _icon.ScalePixels(preview, SKFilterQuality.None);
+            _icon.ScalePixels(preview, SKSamplingOptions.Default);
             return preview;
         }
         set => this.RaiseAndSetIfChanged(ref _icon, value);
@@ -67,7 +67,7 @@ public class ProjectSettingsDialogViewModel : ViewModelBase
         if (fileImage is not null)
         {
             SKBitmap newIcon = new(32, 32);
-            fileImage.ScalePixels(newIcon, SKFilterQuality.High);
+            fileImage.ScalePixels(newIcon, Shared.HighQualitySamplingOptions);
             Icon = newIcon;
             return;
         }

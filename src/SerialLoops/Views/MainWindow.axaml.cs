@@ -108,16 +108,16 @@ public partial class MainWindow : Window
         return menu;
     }
 
-    private async void Window_Closing(object? sender, WindowClosingEventArgs e)
+    private async void Window_Closing(object sender, WindowClosingEventArgs e)
     {
         await ViewModel.CloseProject_Executed(e);
     }
 
-    private void Window_Closed(object? sender, EventArgs e)
+    private void Window_Closed(object sender, EventArgs e)
     {
         if (RestartOnClose)
         {
-            Process.Start(new ProcessStartInfo(Environment.ProcessPath) { UseShellExecute = true });
+            Process.Start(new ProcessStartInfo(Environment.ProcessPath!) { UseShellExecute = true });
         }
     }
 }

@@ -16,18 +16,18 @@ public partial class BgmLoopPropertiesDialog : Window
         base.OnLoaded(e);
 
         // Order here matters. Do not change the order. I do not know why. Please don't change the order.
-        EndSampleSlider.Value = (double)EndSampleBox.Value;
-        StartSampleSlider.Value = (double)StartSampleBox.Value;
+        EndSampleSlider.Value = (double)EndSampleBox.Value!;
+        StartSampleSlider.Value = (double)StartSampleBox.Value!;
     }
 
     protected override void OnClosing(WindowClosingEventArgs e)
     {
         base.OnClosing(e);
 
-        ((BgmLoopPropertiesDialogViewModel)DataContext).LoopPreviewPlayer.Stop();
+        ((BgmLoopPropertiesDialogViewModel)DataContext)!.LoopPreviewPlayer.Stop();
     }
 
-    private void StartSlider_ValueChanged(object? sender, Avalonia.Controls.Primitives.RangeBaseValueChangedEventArgs e)
+    private void StartSlider_ValueChanged(object sender, Avalonia.Controls.Primitives.RangeBaseValueChangedEventArgs e)
     {
         BgmLoopPropertiesDialogViewModel viewModel = (BgmLoopPropertiesDialogViewModel)DataContext;
         if (StartSampleSlider.Value > EndSampleSlider.Value)
@@ -38,12 +38,12 @@ public partial class BgmLoopPropertiesDialog : Window
             return;
         }
         StartSampleBox.Value = (decimal)StartSampleSlider.Value;
-        viewModel.LoopPreview.StartSample = viewModel.LoopPreview.GetSampleFromTimestamp(StartSampleSlider.Value);
+        viewModel!.LoopPreview.StartSample = viewModel.LoopPreview.GetSampleFromTimestamp(StartSampleSlider.Value);
         viewModel.LoopPreviewPlayer.Stop();
         viewModel.LoopPreviewPlayer.Sound = viewModel.LoopPreview.Wave;
     }
 
-    private void EndSlider_ValueChanged(object? sender, Avalonia.Controls.Primitives.RangeBaseValueChangedEventArgs e)
+    private void EndSlider_ValueChanged(object sender, Avalonia.Controls.Primitives.RangeBaseValueChangedEventArgs e)
     {
         BgmLoopPropertiesDialogViewModel viewModel = (BgmLoopPropertiesDialogViewModel)DataContext;
         if (EndSampleSlider.Value < StartSampleSlider.Value)
@@ -54,7 +54,7 @@ public partial class BgmLoopPropertiesDialog : Window
             return;
         }
         EndSampleBox.Value = (decimal)EndSampleSlider.Value;
-        viewModel.LoopPreview.EndSample = viewModel.LoopPreview.GetSampleFromTimestamp(EndSampleSlider.Value);
+        viewModel!.LoopPreview.EndSample = viewModel.LoopPreview.GetSampleFromTimestamp(EndSampleSlider.Value);
         viewModel.LoopPreviewPlayer.Stop();
     }
 }

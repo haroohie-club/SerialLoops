@@ -20,9 +20,9 @@ public class LoadIsomapScriptCommandEditorViewModel(ScriptItemCommand command, S
         set
         {
             this.RaiseAndSetIfChanged(ref _selectedMap, value);
-            ((MapScriptParameter)command.Parameters[0]).Map = _selectedMap;
-            Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(command.Section)]
-                .Objects[command.Index].Parameters[0] = (short)_selectedMap.Map.Index;
+            ((MapScriptParameter)Command.Parameters[0]).Map = _selectedMap;
+            Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
+                .Objects[Command.Index].Parameters[0] = (short)_selectedMap.Map.Index;
             Script.UnsavedChanges = true;
         }
     }

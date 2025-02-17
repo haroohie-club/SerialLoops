@@ -7,8 +7,8 @@ namespace SerialLoops.Controls;
 
 public partial class LinkButton : UserControl
 {
-    public static readonly AvaloniaProperty<ICommand> CommandProperty = AvaloniaProperty.Register<ItemLink, ICommand>(nameof(Command));
-    public static readonly AvaloniaProperty<string> TextProperty = AvaloniaProperty.Register<ItemLink, string>(nameof(Text));
+    public static readonly AvaloniaProperty<ICommand> CommandProperty = AvaloniaProperty.Register<LinkButton, ICommand>(nameof(Command));
+    public static readonly AvaloniaProperty<string> TextProperty = AvaloniaProperty.Register<LinkButton, string>(nameof(Text));
 
     public string Icon
     {

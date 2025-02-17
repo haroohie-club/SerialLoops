@@ -4,6 +4,7 @@ using Avalonia.Media;
 using Avalonia.Platform;
 using Avalonia.Rendering.SceneGraph;
 using Avalonia.Skia;
+using SerialLoops.Utility;
 using SkiaSharp;
 
 namespace SerialLoops.Models;
@@ -18,15 +19,14 @@ public class SKBitmapDrawOperation : ICustomDrawOperation
     public bool HitTest(Point p) => Bounds.Contains(p);
     public void Render(ImmediateDrawingContext context)
     {
-        if (Bitmap is SKBitmap bitmap && context.PlatformImpl.GetFeature<ISkiaSharpApiLeaseFeature>() is ISkiaSharpApiLeaseFeature leaseFeature)
+        if (Bitmap is { } bitmap && context.PlatformImpl.GetFeature<ISkiaSharpApiLeaseFeature>() is { } leaseFeature)
         {
             ISkiaSharpApiLease lease = leaseFeature.Lease();
             using (lease)
             {
-                lease.SkCanvas.DrawBitmap(bitmap, SKRect.Create((float)Bounds.X, (float)Bounds.Y, (float)Bounds.Width, (float)Bounds.Height), new()
-                {
-                    FilterQuality = SKFilterQuality.High,
-                });
+                lease.SkCanvas.DrawImage(SKImage.FromBitmap(bitmap),
+                    SKRect.Create((float)Bounds.X, (float)Bounds.Y, (float)Bounds.Width, (float)Bounds.Height),
+                    Shared.HighQualitySamplingOptions);
             }
         }
     }

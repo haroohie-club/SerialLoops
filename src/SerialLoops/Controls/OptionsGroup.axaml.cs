@@ -56,7 +56,7 @@ public partial class OptionsGroup : UserControl
     public override void Render(DrawingContext context)
     {
         base.Render(context);
-        this.TryFindResource("GroupLineColor", ActualThemeVariant, out object? brush);
+        this.TryFindResource("GroupLineColor", ActualThemeVariant, out object brush);
         context.DrawRectangle(new Pen((ImmutableSolidColorBrush)brush), new(RenderTransformOrigin.Point, new Point(RenderTransformOrigin.Point.X + Bounds.Size.Width - 2, RenderTransformOrigin.Point.Y + Bounds.Size.Height - 2)), 5);
     }
 }

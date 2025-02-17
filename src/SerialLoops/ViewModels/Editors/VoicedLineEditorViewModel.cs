@@ -109,9 +109,9 @@ public class VoicedLineEditorViewModel : EditorViewModel
         get => _yPos == VoiceMapEntry.YPosition.TOP;
         set
         {
-            this.RaiseAndSetIfChanged(ref _yPos, VoiceMapEntry.YPosition.TOP);
-            if (_voiceMapEntry is not null)
+            if (_voiceMapEntry is not null && value)
             {
+                _yPos = VoiceMapEntry.YPosition.TOP;
                 _voiceMapEntry.YPos = _yPos;
                 UpdatePreview();
                 Description.UnsavedChanges = true;
@@ -123,9 +123,9 @@ public class VoicedLineEditorViewModel : EditorViewModel
         get => _yPos == VoiceMapEntry.YPosition.BELOW_TOP;
         set
         {
-            this.RaiseAndSetIfChanged(ref _yPos, VoiceMapEntry.YPosition.BELOW_TOP);
-            if (_voiceMapEntry is not null)
+            if (_voiceMapEntry is not null && value)
             {
+                _yPos = VoiceMapEntry.YPosition.BELOW_TOP;
                 _voiceMapEntry.YPos = _yPos;
                 UpdatePreview();
                 Description.UnsavedChanges = true;
@@ -137,9 +137,9 @@ public class VoicedLineEditorViewModel : EditorViewModel
         get => _yPos == VoiceMapEntry.YPosition.ABOVE_BOTTOM;
         set
         {
-            this.RaiseAndSetIfChanged(ref _yPos, VoiceMapEntry.YPosition.ABOVE_BOTTOM);
-            if (_voiceMapEntry is not null)
+            if (_voiceMapEntry is not null && value)
             {
+                _yPos = VoiceMapEntry.YPosition.ABOVE_BOTTOM;
                 _voiceMapEntry.YPos = _yPos;
                 UpdatePreview();
                 Description.UnsavedChanges = true;
@@ -151,9 +151,9 @@ public class VoicedLineEditorViewModel : EditorViewModel
         get => _yPos == VoiceMapEntry.YPosition.BOTTOM;
         set
         {
-            this.RaiseAndSetIfChanged(ref _yPos, VoiceMapEntry.YPosition.BOTTOM);
-            if (_voiceMapEntry is not null)
+            if (_voiceMapEntry is not null && value)
             {
+                _yPos = VoiceMapEntry.YPosition.BOTTOM;
                 _voiceMapEntry.YPos = _yPos;
                 UpdatePreview();
                 Description.UnsavedChanges = true;
