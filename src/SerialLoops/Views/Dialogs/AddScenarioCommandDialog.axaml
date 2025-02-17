@@ -9,10 +9,12 @@
         x:DataType="vm:AddScenarioCommandDialogViewModel"
         x:Class="SerialLoops.Views.Dialogs.AddScenarioCommandDialog"
         SizeToContent="WidthAndHeight"
-        Title="{x:Static assets:Strings.Add_Command}"
-        Name="AddCommandDialog"
         TransparencyLevelHint="AcrylicBlur"
-        Background="{DynamicResource FallbackBackgroundColor}">
+        Background="{DynamicResource FallbackBackgroundColor}"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaChromeHints="NoChrome"
+        Title="{x:Static assets:Strings.Add_Command}"
+        Name="AddCommandDialog">
     <Panel>
         <controls:AcrylicBorderHandler/>
 
