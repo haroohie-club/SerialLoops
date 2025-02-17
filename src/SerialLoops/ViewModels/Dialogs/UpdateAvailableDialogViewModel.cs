@@ -12,10 +12,6 @@ namespace SerialLoops.ViewModels.Dialogs;
 
 public class UpdateAvailableDialogViewModel : ViewModelBase
 {
-    public Size MinSize => new(600, 375);
-    public Size ClientSize { get; set; } = new(1000, 650);
-    public Size GridSize => new(ClientSize.Width - 40, ClientSize.Height - 40);
-
     public string Version { get; }
     public string Url { get; }
 

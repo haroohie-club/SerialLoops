@@ -4,121 +4,130 @@
         xmlns:vm="using:SerialLoops.ViewModels.Dialogs"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:assets="using:SerialLoops.Assets"
+        xmlns:controls="using:SerialLoops.Controls"
         xmlns:gbox="using:GroupBox.Avalonia.Controls"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:DataType="vm:AsmHackCreationDialogViewModel"
         x:Class="SerialLoops.Views.Dialogs.AsmHackCreationDialog"
         SizeToContent="Width" Height="500"
+        Icon="/Assets/serial-loops.ico"
         Title="{x:Static assets:Strings.Create_ASM_Hack}"
-        Name="Dialog">
-    <Grid RowDefinitions="Auto,*,Auto" ColumnDefinitions="Auto,Auto">
-        <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Spacing="5" Margin="10"
-                    HorizontalAlignment="Center">
-            <Button HorizontalAlignment="Center" Content="{x:Static assets:Strings.Select_Hack_Files}"
-                    Command="{Binding SelectHackFilesCommand}"
-                    CommandParameter="{Binding #Dialog}"/>
-        </StackPanel>
+        Name="Dialog"
+        TransparencyLevelHint="AcrylicBlur"
+        Background="{DynamicResource FallbackBackgroundColor}"
+        ExtendClientAreaToDecorationsHint="True">
+    <Panel>
+        <controls:AcrylicBorderHandler/>
 
-        <Grid Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" RowDefinitions="Auto,Auto,Auto,Auto,*">
-            <TextBlock Grid.Row="0" Text="{x:Static assets:Strings.Name}" Margin="3"/>
-            <TextBox Grid.Row="1" Width="300" Text="{Binding Name}"/>
-            <TextBlock Grid.Row="2" Text="{x:Static assets:Strings.Hack_Description}" Margin="3"/>
-            <TextBox Grid.Row="3" NewLine="True" MinLines="5" MaxLines="5" Width="300" TextWrapping="Wrap" Text="{Binding Description}"/>
+        <Grid RowDefinitions="Auto,*,Auto" ColumnDefinitions="Auto,Auto" Margin="10 30">
+            <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Spacing="5" Margin="10"
+                        HorizontalAlignment="Center">
+                <Button HorizontalAlignment="Center" Content="{x:Static assets:Strings.Select_Hack_Files}"
+                        Command="{Binding SelectHackFilesCommand}"
+                        CommandParameter="{Binding #Dialog}"/>
+            </StackPanel>
 
-            <ScrollViewer Grid.Row="4">
-                <Grid RowDefinitions="Auto,*,Auto,*" DataContext="{Binding SelectedHackFile}">
-                    <ComboBox Grid.Row="0" ItemsSource="{Binding Locations}" SelectedValue="{Binding Location}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding}"/>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                        <ComboBox.ItemContainerTheme>
-                            <ControlTheme TargetType="ComboBoxItem" x:DataType="x:String" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
-                                <Setter Property="TextSearch.Text" Value="{Binding}" />
-                            </ControlTheme>
-                        </ComboBox.ItemContainerTheme>
-                    </ComboBox>
+            <Grid Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" RowDefinitions="Auto,Auto,Auto,Auto,*">
+                <TextBlock Grid.Row="0" Text="{x:Static assets:Strings.Name}" Margin="3"/>
+                <TextBox Grid.Row="1" Width="300" Text="{Binding Name}"/>
+                <TextBlock Grid.Row="2" Text="{x:Static assets:Strings.Hack_Description}" Margin="3"/>
+                <TextBox Grid.Row="3" NewLine="True" MinLines="5" MaxLines="5" Width="300" TextWrapping="Wrap" Text="{Binding Description}"/>
 
-                    <gbox:GroupBox Grid.Row="1" Header="{x:Static assets:Strings.Symbols}" Margin="3" Padding="5"
-                                   Theme="{StaticResource GroupBoxClassic}">
-                        <ItemsRepeater ItemsSource="{Binding Symbols}">
+                <ScrollViewer Grid.Row="4">
+                    <Grid RowDefinitions="Auto,*,Auto,*" DataContext="{Binding SelectedHackFile}">
+                        <ComboBox Grid.Row="0" ItemsSource="{Binding Locations}" SelectedValue="{Binding Location}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                            <ComboBox.ItemContainerTheme>
+                                <ControlTheme TargetType="ComboBoxItem" x:DataType="x:String" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
+                                    <Setter Property="TextSearch.Text" Value="{Binding}" />
+                                </ControlTheme>
+                            </ComboBox.ItemContainerTheme>
+                        </ComboBox>
+
+                        <gbox:GroupBox Grid.Row="1" Header="{x:Static assets:Strings.Symbols}" Margin="3" Padding="5"
+                                       Theme="{StaticResource GroupBoxClassic}">
+                            <ItemsRepeater ItemsSource="{Binding Symbols}">
+                                <ItemsRepeater.Layout>
+                                    <StackLayout Orientation="Vertical" Spacing="10"/>
+                                </ItemsRepeater.Layout>
+                                <ItemsRepeater.ItemTemplate>
+                                    <DataTemplate DataType="vm:HackSymbolContainer">
+                                        <StackPanel Orientation="Horizontal" Spacing="5">
+                                            <TextBlock Text="{Binding Symbol}" VerticalAlignment="Center"/>
+                                            <TextBox Text="{Binding LocationString}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsRepeater.ItemTemplate>
+                            </ItemsRepeater>
+                        </gbox:GroupBox>
+
+                        <TextBlock Grid.Row="2" Text="{x:Static assets:Strings.Parameters}" Margin="3"/>
+                        <ItemsRepeater Grid.Row="3" ItemsSource="{Binding Parameters}">
                             <ItemsRepeater.Layout>
                                 <StackLayout Orientation="Vertical" Spacing="10"/>
                             </ItemsRepeater.Layout>
                             <ItemsRepeater.ItemTemplate>
-                                <DataTemplate DataType="vm:HackSymbolContainer">
-                                    <StackPanel Orientation="Horizontal" Spacing="5">
-                                        <TextBlock Text="{Binding Symbol}" VerticalAlignment="Center"/>
-                                        <TextBox Text="{Binding LocationString}"/>
-                                    </StackPanel>
+                                <DataTemplate DataType="vm:HackParameterContainer">
+                                    <gbox:GroupBox Header="{Binding Name}" Margin="5" Padding="5"
+                                                   Theme="{StaticResource GroupBoxClassic}">
+                                        <Grid RowDefinitions="Auto,*" ColumnDefinitions="Auto,Auto">
+                                            <TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static assets:Strings.Parameter_Name}"/>
+                                            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding DescriptiveName}"/>
+                                            <gbox:GroupBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Header="{x:Static assets:Strings.Parameter_Value}"
+                                                           Theme="{StaticResource GroupBoxClassic}">
+                                                <StackPanel Orientation="Vertical" Spacing="5">
+                                                    <ItemsRepeater ItemsSource="{Binding Values}">
+                                                        <ItemsRepeater.Layout>
+                                                            <StackLayout Orientation="Vertical" Spacing="5"/>
+                                                        </ItemsRepeater.Layout>
+                                                        <ItemsRepeater.ItemTemplate>
+                                                            <DataTemplate DataType="vm:HackParameterValueContainer">
+                                                                <StackPanel Orientation="Horizontal" Spacing="3">
+                                                                    <TextBlock Text="{x:Static assets:Strings.Name}" VerticalAlignment="Center"/>
+                                                                    <TextBox Text="{Binding Name}"/>
+                                                                    <TextBlock Text="{x:Static assets:Strings.Value}" VerticalAlignment="Center"/>
+                                                                    <TextBox Text="{Binding Value}"/>
+                                                                    <Button Command="{Binding RemoveValueCommand}">
+                                                                        <Svg Path="avares://SerialLoops/Assets/Icons/Remove.svg" Width="16" Height="16"/>
+                                                                    </Button>
+                                                                </StackPanel>
+                                                            </DataTemplate>
+                                                        </ItemsRepeater.ItemTemplate>
+                                                    </ItemsRepeater>
+                                                    <Button HorizontalAlignment="Center" Command="{Binding AddValueCommand}">
+                                                        <Svg Path="avares://SerialLoops/Assets/Icons/Add.svg" Width="16" Height="16"/>
+                                                    </Button>
+                                                </StackPanel>
+                                            </gbox:GroupBox>
+                                        </Grid>
+                                    </gbox:GroupBox>
                                 </DataTemplate>
                             </ItemsRepeater.ItemTemplate>
                         </ItemsRepeater>
-                    </gbox:GroupBox>
+                    </Grid>
+                </ScrollViewer>
+            </Grid>
 
-                    <TextBlock Grid.Row="2" Text="{x:Static assets:Strings.Parameters}" Margin="3"/>
-                    <ItemsRepeater Grid.Row="3" ItemsSource="{Binding Parameters}">
-                        <ItemsRepeater.Layout>
-                            <StackLayout Orientation="Vertical" Spacing="10"/>
-                        </ItemsRepeater.Layout>
-                        <ItemsRepeater.ItemTemplate>
-                            <DataTemplate DataType="vm:HackParameterContainer">
-                                <gbox:GroupBox Header="{Binding Name}" Margin="5" Padding="5"
-                                               Theme="{StaticResource GroupBoxClassic}">
-                                    <Grid RowDefinitions="Auto,*" ColumnDefinitions="Auto,Auto">
-                                        <TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static assets:Strings.Parameter_Name}"/>
-                                        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding DescriptiveName}"/>
-                                        <gbox:GroupBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Header="{x:Static assets:Strings.Parameter_Value}"
-                                                       Theme="{StaticResource GroupBoxClassic}">
-                                            <StackPanel Orientation="Vertical" Spacing="5">
-                                                <ItemsRepeater ItemsSource="{Binding Values}">
-                                                    <ItemsRepeater.Layout>
-                                                        <StackLayout Orientation="Vertical" Spacing="5"/>
-                                                    </ItemsRepeater.Layout>
-                                                    <ItemsRepeater.ItemTemplate>
-                                                        <DataTemplate DataType="vm:HackParameterValueContainer">
-                                                            <StackPanel Orientation="Horizontal" Spacing="3">
-                                                                <TextBlock Text="{x:Static assets:Strings.Name}" VerticalAlignment="Center"/>
-                                                                <TextBox Text="{Binding Name}"/>
-                                                                <TextBlock Text="{x:Static assets:Strings.Value}" VerticalAlignment="Center"/>
-                                                                <TextBox Text="{Binding Value}"/>
-                                                                <Button Command="{Binding RemoveValueCommand}">
-                                                                    <Svg Path="avares://SerialLoops/Assets/Icons/Remove.svg" Width="16" Height="16"/>
-                                                                </Button>
-                                                            </StackPanel>
-                                                        </DataTemplate>
-                                                    </ItemsRepeater.ItemTemplate>
-                                                </ItemsRepeater>
-                                                <Button HorizontalAlignment="Center" Command="{Binding AddValueCommand}">
-                                                    <Svg Path="avares://SerialLoops/Assets/Icons/Add.svg" Width="16" Height="16"/>
-                                                </Button>
-                                            </StackPanel>
-                                        </gbox:GroupBox>
-                                    </Grid>
-                                </gbox:GroupBox>
-                            </DataTemplate>
-                        </ItemsRepeater.ItemTemplate>
-                    </ItemsRepeater>
-                </Grid>
-            </ScrollViewer>
+            <ListBox Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" ItemsSource="{Binding HackFiles}"
+                     SelectedItem="{Binding SelectedHackFile}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate DataType="vm:HackFileContainer">
+                        <TextBlock Text="{Binding HackFileName}"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Spacing="3">
+                <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}"
+                        CommandParameter="{Binding #Dialog}"/>
+                <Button Content="{x:Static assets:Strings.Save}" Command="{Binding SaveCommand}"
+                        CommandParameter="{Binding #Dialog}"/>
+            </StackPanel>
         </Grid>
-
-        <ListBox Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" ItemsSource="{Binding HackFiles}"
-                 SelectedItem="{Binding SelectedHackFile}">
-            <ListBox.ItemTemplate>
-                <DataTemplate DataType="vm:HackFileContainer">
-                    <TextBlock Text="{Binding HackFileName}"/>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-
-        <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Spacing="3">
-            <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}"
-                    CommandParameter="{Binding #Dialog}"/>
-            <Button Content="{x:Static assets:Strings.Save}" Command="{Binding SaveCommand}"
-                    CommandParameter="{Binding #Dialog}"/>
-        </StackPanel>
-    </Grid>
+    </Panel>
 </Window>
 

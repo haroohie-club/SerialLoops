@@ -4,19 +4,27 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:assets="using:SerialLoops.Assets"
+        xmlns:controls="using:SerialLoops.Controls"
         SizeToContent="WidthAndHeight"
+        TransparencyLevelHint="AcrylicBlur"
+        Background="{DynamicResource FallbackBackgroundColor}"
+        ExtendClientAreaToDecorationsHint="True"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:DataType="vm:GenerateTemplateDialogViewModel"
         x:Class="SerialLoops.Views.Dialogs.GenerateTemplateDialog"
         Title="{x:Static assets:Strings.Template_Properties}"
         Name="GenTemplateDialog">
-    <StackPanel Orientation="Vertical" Margin="20" Spacing="10">
-        <TextBox Width="300" Watermark="{x:Static assets:Strings.Template_Name}" Text="{Binding TemplateName}"/>
-        <TextBox Width="300" Height="75" AcceptsReturn="True" Text="{Binding TemplateDescription}" Watermark="{x:Static assets:Strings.Template_Description}"/>
+    <Panel>
+        <controls:AcrylicBorderHandler/>
 
-        <StackPanel Orientation="Horizontal" Spacing="5" Margin="20" HorizontalAlignment="Center">
-            <Button Content="{x:Static assets:Strings.Create}" Command="{Binding CreateCommand}" CommandParameter="{Binding #GenTemplateDialog}" IsDefault="True"/>
-            <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}" CommandParameter="{Binding #GenTemplateDialog}" IsCancel="True"/>
+        <StackPanel Orientation="Vertical" Margin="20 30" Spacing="10">
+            <TextBox Width="300" Watermark="{x:Static assets:Strings.Template_Name}" Text="{Binding TemplateName}"/>
+            <TextBox Width="300" Height="75" AcceptsReturn="True" Text="{Binding TemplateDescription}" Watermark="{x:Static assets:Strings.Template_Description}"/>
+
+            <StackPanel Orientation="Horizontal" Spacing="5" Margin="20" HorizontalAlignment="Center">
+                <Button Content="{x:Static assets:Strings.Create}" Command="{Binding CreateCommand}" CommandParameter="{Binding #GenTemplateDialog}" IsDefault="True"/>
+                <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}" CommandParameter="{Binding #GenTemplateDialog}" IsCancel="True"/>
+            </StackPanel>
         </StackPanel>
-    </StackPanel>
+    </Panel>
 </Window>

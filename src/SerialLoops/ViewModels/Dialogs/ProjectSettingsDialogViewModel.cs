@@ -14,11 +14,6 @@ namespace SerialLoops.ViewModels.Dialogs;
 
 public class ProjectSettingsDialogViewModel : ViewModelBase
 {
-    public int MinWidth => 550;
-    public int MinHeight => 600;
-    public int Width { get; set; } = 550;
-    public int Height { get; set; } = 600;
-
     public ICommand ReplaceCommand { get; private set; }
     public ICommand ApplyCommand { get; private set; }
     public ICommand CancelCommand { get; private set; }

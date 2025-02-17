@@ -3,40 +3,46 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:vm="using:SerialLoops.ViewModels.Dialogs"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         xmlns:assets="using:SerialLoops.Assets"
         xmlns:controls="using:SerialLoops.Controls"
         xmlns:utility="using:SerialLoops.Utility"
-        Width="800" Height="400"
+        TransparencyLevelHint="AcrylicBlur"
+        Background="{DynamicResource FallbackBackgroundColor}"
+        ExtendClientAreaToDecorationsHint="True"
+        SizeToContent="WidthAndHeight"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:DataType="vm:BgmVolumePropertiesDialogViewModel"
         x:Class="SerialLoops.Views.Dialogs.BgmVolumePropertiesDialog"
-        Title="{Binding Title}"
         Icon="/Assets/serial-loops.ico"
+        Title="{Binding Title}"
         Name="BgmVolumeDialog">
     <Window.Resources>
         <utility:IntAdditionConverter x:Key="AdditionConverter"/>
     </Window.Resources>
+    <Panel>
+        <controls:AcrylicBorderHandler/>
 
-    <StackPanel Orientation="Vertical" Spacing="5" Margin="10">
-        <StackPanel Orientation="Horizontal" Spacing="5">
-            <controls:SoundPlayerPanel DataContext="{Binding VolumePreviewPlayer}"/>
-            <StackPanel Orientation="Vertical" Spacing="5">
-                <Slider Name="VolumeSlider" Minimum="0" Maximum="200" Height="{Binding Waveform.Height}"
-                        Orientation="Vertical" Value="{Binding Volume}" />
-                <Button Content="{x:Static assets:Strings.Normalize}" Command="{Binding NormalizeCommand}"/>
+        <StackPanel Orientation="Vertical" Spacing="5" Margin="10 30">
+            <StackPanel Orientation="Horizontal" Spacing="5">
+                <controls:SoundPlayerPanel DataContext="{Binding VolumePreviewPlayer}"/>
+                <StackPanel Orientation="Vertical" Spacing="5">
+                    <Slider Name="VolumeSlider" Minimum="0" Maximum="200" Height="{Binding Waveform.Height}"
+                            Orientation="Vertical" Value="{Binding Volume}" />
+                    <Button Content="{x:Static assets:Strings.Normalize}" Command="{Binding NormalizeCommand}"/>
+                </StackPanel>
+                <Image Source="{Binding Waveform, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
+                       Width="{Binding Waveform.Width}" Height="{Binding Waveform.Height}"/>
             </StackPanel>
-            <Image Source="{Binding Waveform, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
-                   Width="{Binding Waveform.Width}" Height="{Binding Waveform.Height}"/>
-        </StackPanel>
-        <StackPanel Orientation="Vertical" Spacing="3" HorizontalAlignment="Right"
-                    Width="{Binding Waveform.Width, Converter={StaticResource AdditionConverter},
-                    ConverterParameter=105}">
-            <StackPanel Orientation="Horizontal" Spacing="3">
-                <Button Content="{x:Static assets:Strings.Save}" Command="{Binding SaveCommand}"
-                        CommandParameter="{Binding #BgmVolumeDialog}"/>
-                <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}"
-                        CommandParameter="{Binding #BgmVolumeDialog}" IsCancel="true"/>
+            <StackPanel Orientation="Vertical" Spacing="3" HorizontalAlignment="Right"
+                        Width="{Binding Waveform.Width, Converter={StaticResource AdditionConverter},
+                        ConverterParameter=105}">
+                <StackPanel Orientation="Horizontal" Spacing="3">
+                    <Button Content="{x:Static assets:Strings.Save}" Command="{Binding SaveCommand}"
+                            CommandParameter="{Binding #BgmVolumeDialog}" IsDefault="True"/>
+                    <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}"
+                            CommandParameter="{Binding #BgmVolumeDialog}" IsCancel="True"/>
+                </StackPanel>
             </StackPanel>
         </StackPanel>
-    </StackPanel>
+    </Panel>
 </Window>

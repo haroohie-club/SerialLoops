@@ -7,23 +7,19 @@
         xmlns:controls="using:SerialLoops.Controls"
         xmlns:utility="using:SerialLoops.Utility"
         mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="500"
-        MinWidth="{Binding Width}"
-        MinHeight="{Binding Height}"
-        MaxWidth="{Binding Width}"
-        MaxHeight="{Binding Height}"
+        MinWidth="500" MinHeight="450"
+        MaxWidth="500" MaxHeight="450"
+        TransparencyLevelHint="AcrylicBlur"
+        Background="{DynamicResource FallbackBackgroundColor}"
+        ExtendClientAreaToDecorationsHint="True"
         x:DataType="vm:AboutDialogViewModel"
         x:Class="SerialLoops.Views.Dialogs.AboutDialog"
         Icon="/Assets/serial-loops.ico"
-        Title="{x:Static assets:Strings.About}"
-        TransparencyLevelHint="AcrylicBlur"
-        Background="{DynamicResource FallbackBackgroundColor}">
-    <Window.Resources>
-        <utility:DoubleSubtractionConverter x:Key="DoubleSubtractionConverter"/>
-    </Window.Resources>
+        Title="{x:Static assets:Strings.About}">
     <Panel>
         <controls:AcrylicBorderHandler/>
 
-        <TabControl Margin="5">
+        <TabControl Margin="5 30">
             <TabControl.Items>
                 <TabItem Header="{x:Static assets:Strings.About}">
                     <StackPanel Spacing="15" Margin="5" Orientation="Vertical">
@@ -35,36 +31,26 @@
                     <StackPanel Spacing="10" Margin="5" Orientation="Vertical">
                         <TextBlock Classes="h2" Text="{x:Static assets:Strings.Development}"/>
                         <StackPanel Spacing="5" Orientation="Vertical">
-                            <Grid ColumnDefinitions="Auto,*,Auto" Width="{Binding Width,
-                                  Converter={StaticResource DoubleSubtractionConverter},
-                                  ConverterParameter=50}">
+                            <Grid ColumnDefinitions="Auto,*,Auto" Width="450">
                                 <TextBlock Grid.Column="0" Text="Jonko"/>
                                 <TextBlock Grid.Column="2" Text="{x:Static assets:Strings.Systems_architect___reverse_engineering_work}"/>
                             </Grid>
-                            <Grid ColumnDefinitions="Auto,*,Auto" Width="{Binding Width,
-                                  Converter={StaticResource DoubleSubtractionConverter},
-                                  ConverterParameter=50}">
+                            <Grid ColumnDefinitions="Auto,*,Auto" Width="450">
                                 <TextBlock Grid.Column="0" Text="William278"/>
                                 <TextBlock Grid.Column="2" Text="{x:Static assets:Strings.UX_architect___design_work}"/>
                             </Grid>
                         </StackPanel>
                         <TextBlock Classes="h2" Text="{x:Static assets:Strings.Translation}"/>
                         <StackPanel Spacing="5" Orientation="Vertical">
-                            <Grid ColumnDefinitions="Auto,*,Auto" Width="{Binding Width,
-                                  Converter={StaticResource DoubleSubtractionConverter},
-                                  ConverterParameter=50}">
+                            <Grid ColumnDefinitions="Auto,*,Auto" Width="450">
                                 <TextBlock Grid.Column="0" Text="Xzonn"/>
                                 <TextBlock Grid.Column="2" Text="{x:Static assets:Strings.Chinese__Simplified_}"/>
                             </Grid>
-                            <Grid ColumnDefinitions="Auto,*,Auto" Width="{Binding Width,
-                                  Converter={StaticResource DoubleSubtractionConverter},
-                                  ConverterParameter=50}">
+                            <Grid ColumnDefinitions="Auto,*,Auto" Width="450">
                                 <TextBlock Grid.Column="0" Text="Oropuro_49, Fuyuko Ayumu"/>
                                 <TextBlock Grid.Column="2" Text="{x:Static assets:Strings.Italian}"/>
                             </Grid>
-                            <Grid ColumnDefinitions="Auto,*,Auto" Width="{Binding Width,
-                                  Converter={StaticResource DoubleSubtractionConverter},
-                                  ConverterParameter=50}">
+                            <Grid ColumnDefinitions="Auto,*,Auto" Width="450">
                                 <TextBlock Grid.Column="0" Text="Amelia Chaplin"/>
                                 <TextBlock Grid.Column="2" Text="{x:Static assets:Strings.Japanese}"/>
                             </Grid>

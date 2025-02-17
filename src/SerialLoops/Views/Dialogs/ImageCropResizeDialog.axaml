@@ -4,72 +4,79 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:assets="using:SerialLoops.Assets"
+        xmlns:controls="using:SerialLoops.Controls"
         xmlns:gbox="using:GroupBox.Avalonia.Controls"
         xmlns:paz="using:Avalonia.Controls.PanAndZoom"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:DataType="vm:ImageCropResizeDialogViewModel"
         x:Class="SerialLoops.Views.Dialogs.ImageCropResizeDialog"
-        MinWidth="900"
-        MinHeight="750"
-        Padding="10"
+        SizeToContent="WidthAndHeight"
+        CanResize="False"
+        TransparencyLevelHint="AcrylicBlur"
+        Background="{DynamicResource FallbackBackgroundColor}"
+        ExtendClientAreaToDecorationsHint="True"
         Icon="/Assets/serial-loops.ico"
         Title="{x:Static assets:Strings.Crop___Scale}"
-        Name="ICRDialog">
-    <StackPanel Orientation="Vertical" Spacing="5" HorizontalAlignment="Center">
-        <StackPanel Orientation="Horizontal" Margin="5">
-            <Canvas Width="650" Height="600" ClipToBounds="True" Name="MainCanvas">
-                <paz:ZoomBorder Stretch="None" ZoomSpeed="1.2" ClipToBounds="True" Focusable="True"
-                                VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
-                                EnablePan="True" PanButton="Left" Name="Paz"
-                                KeyDown="Paz_OnKeyDown">
-                    <Image Source="{Binding StartImage}"/>
-                </paz:ZoomBorder>
-                <Rectangle Fill="Gray" Opacity="0.5"
-                           Canvas.Left="0"
-                           Canvas.Top="{Binding BoxHeight}"
-                           Width="{Binding BoxWidth}"
-                           Height="{Binding PreviewHeight}"/>
-                <Rectangle Fill="Gray" Opacity="0.5"
-                           Canvas.Left="{Binding BoxWidth}"
-                           Canvas.Top="0"
-                           Width="{Binding PreviewWidth}"
-                           Height="{Binding BoxHeight}"/>
-                <Rectangle Fill="Gray" Opacity="0.5"
-                           Canvas.Left="{Binding BoxWidth}"
-                           Canvas.Top="{Binding BoxHeight}"
-                           Width="{Binding PreviewWidth}"
-                           Height="{Binding PreviewHeight}"/>
-            </Canvas>
-            <StackPanel Orientation="Vertical" Spacing="5">
-                <gbox:GroupBox Header="{x:Static assets:Strings.Scale_Image}" Theme="{StaticResource GroupBoxClassic}"
-                               Width="200" Padding="5">
-                    <StackPanel Orientation="Vertical" Spacing="5" Margin="5">
-                        <StackPanel Orientation="Horizontal" Spacing="3" VerticalAlignment="Center" HorizontalAlignment="Right">
-                            <TextBlock Text="{x:Static assets:Strings.Size_}"/>
-                            <StackPanel Orientation="Vertical">
-                                <!-- <NumericUpDown Name="WidthStepper" Value="{Binding #PreviewCanvas.PreviewWidth}" /> -->
-                                <!-- <NumericUpDown Name="HeightStepper" Value="{Binding #PreviewCanvas.PreviewHeight}" /> -->
+        Name="IcrDialog">
+    <Panel>
+        <controls:AcrylicBorderHandler/>
+
+        <StackPanel Orientation="Vertical" Spacing="5" HorizontalAlignment="Center" Margin="10 30">
+            <StackPanel Orientation="Horizontal" Margin="5">
+                <Canvas Width="650" Height="600" ClipToBounds="True" Name="MainCanvas">
+                    <paz:ZoomBorder Stretch="None" ZoomSpeed="1.2" ClipToBounds="True" Focusable="True"
+                                    VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                                    EnablePan="True" PanButton="Left" Name="Paz"
+                                    KeyDown="Paz_OnKeyDown">
+                        <Image Source="{Binding StartImage}"/>
+                    </paz:ZoomBorder>
+                    <Rectangle Fill="Gray" Opacity="0.5"
+                               Canvas.Left="0"
+                               Canvas.Top="{Binding BoxHeight}"
+                               Width="{Binding BoxWidth}"
+                               Height="{Binding PreviewHeight}"/>
+                    <Rectangle Fill="Gray" Opacity="0.5"
+                               Canvas.Left="{Binding BoxWidth}"
+                               Canvas.Top="0"
+                               Width="{Binding PreviewWidth}"
+                               Height="{Binding BoxHeight}"/>
+                    <Rectangle Fill="Gray" Opacity="0.5"
+                               Canvas.Left="{Binding BoxWidth}"
+                               Canvas.Top="{Binding BoxHeight}"
+                               Width="{Binding PreviewWidth}"
+                               Height="{Binding PreviewHeight}"/>
+                </Canvas>
+                <StackPanel Orientation="Vertical" Spacing="5">
+                    <gbox:GroupBox Header="{x:Static assets:Strings.Scale_Image}" Theme="{StaticResource GroupBoxClassic}"
+                                   Width="200" Padding="5">
+                        <StackPanel Orientation="Vertical" Spacing="5" Margin="5">
+                            <StackPanel Orientation="Horizontal" Spacing="3" VerticalAlignment="Center" HorizontalAlignment="Right">
+                                <TextBlock Text="{x:Static assets:Strings.Size_}"/>
+                                <StackPanel Orientation="Vertical">
+                                    <!-- <NumericUpDown Name="WidthStepper" Value="{Binding #PreviewCanvas.PreviewWidth}" /> -->
+                                    <!-- <NumericUpDown Name="HeightStepper" Value="{Binding #PreviewCanvas.PreviewHeight}" /> -->
+                                </StackPanel>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Spacing="3" VerticalAlignment="Center">
+                                <TextBlock Text="{x:Static assets:Strings.Preserve_Aspect_Ratio_}"/>
+                                <CheckBox IsChecked="{Binding PreserveAspectRatio}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Spacing="3" VerticalAlignment="Center">
+                                <TextBlock Text="{x:Static assets:Strings.Scale_to_Fit_}"/>
+                                <Button Content="{x:Static assets:Strings.Apply}" Command="{Binding ScaleToFitCommand}"
+                                        CommandParameter="{Binding #IcrDialog}"/>
                             </StackPanel>
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal" Spacing="3" VerticalAlignment="Center">
-                            <TextBlock Text="{x:Static assets:Strings.Preserve_Aspect_Ratio_}"/>
-                            <CheckBox IsChecked="{Binding PreserveAspectRatio}"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" Spacing="3" VerticalAlignment="Center">
-                            <TextBlock Text="{x:Static assets:Strings.Scale_to_Fit_}"/>
-                            <Button Content="{x:Static assets:Strings.Apply}" Command="{Binding ScaleToFitCommand}"
-                                    CommandParameter="{Binding #ICRDialog}"/>
-                        </StackPanel>
+                    </gbox:GroupBox>
+                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Width="200" Margin="5">
+                        <TextBlock Text="{x:Static assets:Strings.Arrow_Keys___Move_Image}"/>
                     </StackPanel>
-                </gbox:GroupBox>
-                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Width="200" Margin="5">
-                    <TextBlock Text="{x:Static assets:Strings.Arrow_Keys___Move_Image}"/>
                 </StackPanel>
             </StackPanel>
+            <StackPanel Orientation="Horizontal" Spacing="3" Margin="5">
+                <Button Content="{x:Static assets:Strings.Save}" Command="{Binding SaveCommand}" CommandParameter="{Binding ElementName=IcrDialog}"/>
+                <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}" CommandParameter="{Binding ElementName=IcrDialog}"/>
+            </StackPanel>
         </StackPanel>
-        <StackPanel Orientation="Horizontal" Spacing="3" Margin="5">
-            <Button Content="{x:Static assets:Strings.Save}" Command="{Binding SaveCommand}" CommandParameter="{Binding ElementName=ICRDialog}"/>
-            <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}" CommandParameter="{Binding ElementName=ICRDialog}"/>
-        </StackPanel>
-    </StackPanel>
+    </Panel>
 </Window>
