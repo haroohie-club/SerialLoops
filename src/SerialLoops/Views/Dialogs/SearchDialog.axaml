@@ -18,19 +18,10 @@
         Title="{x:Static assets:Strings.Search_Project}"
         Name="Dialog"
         TransparencyLevelHint="AcrylicBlur"
-        Background="Transparent"
+        Background="{DynamicResource FallbackBackgroundColor}"
         ExtendClientAreaToDecorationsHint="True">
     <Panel>
-        <ExperimentalAcrylicBorder IsHitTestVisible="False">
-            <ExperimentalAcrylicBorder.Material>
-                <ExperimentalAcrylicMaterial
-                    BackgroundSource="Digger"
-                    TintColor="{DynamicResource ResourceKey=BackgroundTint}"
-                    FallbackColor="{DynamicResource ResourceKey=BackgroundTint}"
-                    TintOpacity="{DynamicResource ResourceKey=BackgroundAcrylicTintStrength}"
-                    MaterialOpacity="{DynamicResource ResourceKey=BackgroundAcrylicOpacity}" />
-            </ExperimentalAcrylicBorder.Material>
-        </ExperimentalAcrylicBorder>
+        <controls:AcrylicBorderHandler/>
 
         <DockPanel>
             <Grid RowDefinitions="Auto,Auto,Auto,*" HorizontalAlignment="Center" VerticalAlignment="Top">
