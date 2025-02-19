@@ -182,7 +182,7 @@ jobs:
         with:
           dotnet-version: '8.0.x'
       - name: Build & Publish Serial Loops
-        run: dotnet publish src/SerialLoops/SerialLoops.csproj -c Release -f net8.0 /p:DebugType=None /p:DebugSymbols=false /p:PublishSingleFile=true
+        run: dotnet publish src/SerialLoops/SerialLoops.csproj -c Release -f net8.0 --no-self-contained /p:DebugType=None /p:DebugSymbols=false
       - name: Create tarball
         run: |
           chmod +x ./src/SerialLoops/bin/Release/net8.0/publish/SerialLoops
