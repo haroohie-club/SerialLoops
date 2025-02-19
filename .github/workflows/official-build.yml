@@ -86,15 +86,21 @@ jobs:
       - name: Set up AppDir
         run: |
           sed -i "s/#VERSION#/$SLVersion/g" ./install/linux/appimage/AppImageBuilder.yml
-          mkdir -p ./install/linux/appimage/AppDir/usr/bin
+          mkdir -p ./AppDir/usr/bin
           chmod +x ./src/SerialLoops/bin/Release/net8.0/linux-x64/publish/SerialLoops
-          mv ./src/SerialLoops/bin/Release/net8.0/linux-x64/publish/* ./install/linux/appimage/AppDir/usr/bin/
-          mkdir -p ./install/linux/appimage/AppDir/usr/share/icons/default/scalable/apps/
-          cp ./src/SerialLoops/Assets/Icons/AppIcon.svg ./install/linux/appimage/AppDir/usr/share/icons/default/scalable/apps/club.haroohie.SerialLoops.svg
+          mv ./src/SerialLoops/bin/Release/net8.0/linux-x64/publish/* ./AppDir/usr/bin/
+          mkdir -p ./AppDir/usr/share/icons/default/scalable/apps/
+          cp ./src/SerialLoops/Assets/Icons/AppIcon.svg ./AppDir/usr/share/icons/default/scalable/apps/club.haroohie.SerialLoops.svg
       - name: Build AppImage
         uses: AppImageCrafters/build-appimage@master
         with:
           recipe: "./install/linux/appimage/AppImageBuilder.yml"
+      - name: Upload AppImage
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-x64-appimage
+          path: SerialLoops.AppImage
+          retention-days: 1
 
   linux-dpkg-tarball:
     runs-on: ubuntu-latest
@@ -238,12 +244,16 @@ jobs:
 
   release:
     runs-on: ubuntu-latest
-    needs: [ linux-flatpak, linux-dpkg-tarball, linux-rpm, macos-pkg, windows ]
+    needs: [ linux-flatpak, linux-appimage, linux-dpkg-tarball, linux-rpm, macos-pkg, windows ]
     steps:
       - name: Download Linux flatpak
         uses: actions/download-artifact@v4.1.8
         with:
           name: linux-x64-flatpak
+      - name: Download Linux AppImage
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: linux-x64-appimage
       - name: Download Linux tarball
         uses: actions/download-artifact@v4.1.8
         with:
@@ -278,6 +288,7 @@ jobs:
           New-Item -Type Directory -Path release
           Get-ChildItem .
           Move-Item -Path SerialLoops.flatpak -Destination release/SerialLoops-linux-x64-v$($env:SLVersion).flatpak
+          Move-Item -Path SerialLoops.AppImage -Destination release/SerialLoops-linux-x64-v$($env:SLVersion).AppImage
           Move-Item -Path SerialLoops.tar.gz -Destination release/SerialLoops-linux-x64-v$($env:SLVersion).tar.gz
           Move-Item -Path SerialLoops.deb -Destination release/SerialLoops-linux-x64-$($env:SLVersion).deb
           Move-Item -Path SerialLoops.rpm -Destination release/SerialLoops-linux-x64-$($env:SLVersion)-1.fc39.x86_64.rpm
