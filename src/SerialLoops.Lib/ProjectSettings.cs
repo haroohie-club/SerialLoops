@@ -19,7 +19,7 @@ public class ProjectSettings(NdsProjectFile file, ILogger log)
         get => _banner.GameName[0];
         set
         {
-            string name = value.Length > 128 ? value[..63] : value;
+            string name = value.Length > 128 ? value[..128] : value;
             for (int i = 0; i < _banner.GameName.Length; i++)
             {
                 _banner.GameName[i] = name.Replace("\r\n", "\n");
@@ -34,7 +34,7 @@ public class ProjectSettings(NdsProjectFile file, ILogger log)
             Rgba8Bitmap bitmap = _banner.GetIcon();
             return new(bitmap.Width, bitmap.Height)
             {
-                Pixels = bitmap.Pixels.Select(p => new SKColor(p)).ToArray()
+                Pixels = bitmap.Pixels.Select(p => new SKColor(p)).ToArray(),
             };
         }
         set
@@ -42,10 +42,10 @@ public class ProjectSettings(NdsProjectFile file, ILogger log)
             GraphicsFile grp = new()
             {
                 Name = "ICON",
-                PixelData = new(),
-                PaletteData = new(),
+                PixelData = [],
+                PaletteData = [],
             };
-            grp.Initialize(Array.Empty<byte>(), 0, log);
+            grp.Initialize([], 0, log);
             grp.FileFunction = GraphicsFile.Function.SHTX;
             grp.ImageForm = GraphicsFile.Form.TILE;
             grp.ImageTileForm = GraphicsFile.TileForm.GBA_4BPP;

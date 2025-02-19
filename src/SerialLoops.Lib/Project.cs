@@ -1096,7 +1096,7 @@ public partial class Project
             tracker.Finished++;
 
             // If we detect an old NP format, auto-migrate it
-            if (!File.Exists(Path.Combine(config.ProjectsDirectory, project.Name, "base", $"{project.Name}.json")))
+            if (!File.Exists(Path.Combine(config.ProjectsDirectory, project.Name, "base", "rom", $"{project.Name}.json")))
             {
                 NdsProjectFile.ConvertProjectFile(Path.Combine(config.ProjectsDirectory, project.Name, "base", "rom", $"{project.Name}.xml"));
                 NdsProjectFile.ConvertProjectFile(Path.Combine(config.ProjectsDirectory, project.Name, "iterative", "rom", $"{project.Name}.xml"));
@@ -1140,7 +1140,7 @@ public partial class Project
             using FileStream slzipFs = File.Create(slzipFile);
             using ZipArchive slzip = new(slzipFs, ZipArchiveMode.Create);
             log.Log($"Adding '{ProjectFile}' to slzip...");
-            slzip.CreateEntryFromFile(ProjectFile, Path.GetFileName(ProjectFile));
+            slzip.CreateEntryFromFile(ProjectFile, Path.GetFileName(ProjectFile)!);
             slzip.Comment = BaseRomHash;
             log.Log("Adding charset.json to slzip...");
             slzip.CreateEntryFromFile(Path.Combine(MainDirectory, "font", "charset.json"), Path.Combine("font", "charset.json"));
@@ -1160,6 +1160,7 @@ public partial class Project
                 slzip.CreateEntryFromFile(file, Path.GetRelativePath(MainDirectory, file));
             }
             slzip.CreateEntryFromFile(Path.Combine(BaseDirectory, "rom", $"{Name}.json"), Path.Combine("base", "rom", $"{Name}.json"));
+            slzip.CreateEntryFromFile(Path.Combine(BaseDirectory, "rom", "banner.bin"), Path.Combine("base", "rom", "banner.bin"));
             foreach (string file in Directory.GetFiles(Path.Combine(BaseDirectory, "rom", "data", "bgm"), "*"))
             {
                 log.Log($"Adding '{file}' to slzip...");
