@@ -81,6 +81,7 @@ modules:
       - dotnet publish src/SerialLoops/SerialLoops.csproj -c Release -f net8.0 --no-self-contained --source ./nuget-sources
       - mkdir -p ${FLATPAK_DEST}/bin
       - cp -r src/SerialLoops/bin/Release/net8.0/publish/* ${FLATPAK_DEST}/bin
+      - sed -i "s/#VERSION#/$SLVersion/g" club.haroohie.SerialLoops.desktop
       - install -Dm644 AppIcon.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/club.haroohie.SerialLoops.svg
       - install -Dm644 club.haroohie.SerialLoops.metainfo.xml ${FLATPAK_DEST}/share/metainfo/club.haroohie.SerialLoops.metainfo.xml
       - install -Dm644 club.haroohie.SerialLoops.desktop ${FLATPAK_DEST}/share/applications/club.haroohie.SerialLoops.desktop
