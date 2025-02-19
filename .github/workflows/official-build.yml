@@ -94,7 +94,7 @@ jobs:
       - name: Build AppImage
         uses: addnab/docker-run-action@v3
         with:
-          image: appimagecrafters/appimage-builder:latest
+          image: appimagecrafters/appimage-builder:1.1.0
           options: -v ${{ github.workspace }}:/work -w /work -e "SLVersion" -e "SLAssemblyVersion"
           run: appimage-builder --recipe=./install/linux/appimage/AppImageBuilder.yml --skip-tests
       - name: Upload AppImage
