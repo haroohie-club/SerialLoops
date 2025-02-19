@@ -6,7 +6,7 @@ AppDir:
     id: club.haroohie.SerialLoops
     name: Serial Loops
     icon: club.haroohie.SerialLoops
-    version: 0.3.0
+    version: #VERSION#
     exec: usr/bin/SerialLoops
     exec_args: $@
   apt:

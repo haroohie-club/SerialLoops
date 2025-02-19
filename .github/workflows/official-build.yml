@@ -85,6 +85,7 @@ jobs:
         run: dotnet publish src/SerialLoops/SerialLoops.csproj -c Release -f net8.0 -r linux-x64 --self-contained /p:DebugType=None /p:DebugSymbols=false /p:PublishSingleFile=true
       - name: Set up AppDir
         run: |
+          sed -i "s/#VERSION#/$SLVersion/g" ./install/linux/appimage/AppImageBuilder.yml
           mkdir -p ./install/linux/appimage/AppDir/usr/bin
           chmod +x ./src/SerialLoops/bin/Release/net8.0/linux-x64/publish/SerialLoops
           mv ./src/SerialLoops/bin/Release/net8.0/linux-x64/publish/* ./install/linux/appimage/AppDir/usr/bin/
