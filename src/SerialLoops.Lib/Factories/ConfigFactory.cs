@@ -59,22 +59,17 @@ public class ConfigFactory : IConfigFactory
         string devkitArmDir = Environment.GetEnvironmentVariable("DEVKITARM") ?? string.Empty;
         if (!string.IsNullOrEmpty(devkitArmDir) && !Directory.Exists(devkitArmDir))
         {
-            devkitArmDir = "";
+            devkitArmDir = string.Empty;
         }
         if (string.IsNullOrEmpty(devkitArmDir))
         {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                devkitArmDir = Path.Combine("C:", "devkitPro", "devkitARM");
-            }
-            else
-            {
-                devkitArmDir = Path.Combine("/opt", "devkitpro", "devkitARM");
-            }
+            devkitArmDir = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+                ? Path.Combine("C:", "devkitPro", "devkitARM")
+                : PatchableConstants.UnixDefaultDevkitArmDir;
         }
         if (!Directory.Exists(devkitArmDir))
         {
-            devkitArmDir = "";
+            devkitArmDir = string.Empty;
         }
 
         // TODO: Probably make a way of defining "presets" of common emulator install paths on different platforms.
@@ -94,10 +89,10 @@ public class ConfigFactory : IConfigFactory
             {
                 Process flatpakProc = new()
                 {
-                    StartInfo = new("flatpak", ["info", emulatorFlatpak])
+                    StartInfo = new(PatchableConstants.FlatpakProcess, [..PatchableConstants.FlatpakProcessBaseArgs, "info", emulatorFlatpak])
                     {
-                        RedirectStandardError = true, RedirectStandardOutput = true
-                    }
+                        RedirectStandardError = true, RedirectStandardOutput = true,
+                    },
                 };
                 flatpakProc.OutputDataReceived += (_, args) => log.Log(args.Data ?? string.Empty);
                 flatpakProc.ErrorDataReceived += (_, args) =>
@@ -108,8 +103,8 @@ public class ConfigFactory : IConfigFactory
                     }
                 };
                 flatpakProc.Start();
-                flatpakProc?.WaitForExit();
-                emulatorExists = flatpakProc?.ExitCode == 0;
+                flatpakProc.WaitForExit();
+                emulatorExists = flatpakProc.ExitCode == 0;
             }
             catch
             {
