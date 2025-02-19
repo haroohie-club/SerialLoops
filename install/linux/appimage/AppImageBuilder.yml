@@ -1,7 +1,7 @@
 # appimage-builder recipe see https://appimage-builder.readthedocs.io for details
 version: 1
 AppDir:
-  path: /work/install/linux/appimage/AppDir
+  path: install/linux/appimage/AppDir
   app_info:
     id: club.haroohie.SerialLoops
     name: Serial Loops

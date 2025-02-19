@@ -72,6 +72,29 @@ jobs:
           path: SerialLoops.flatpak
           retention-days: 1
 
+  linux-appimage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4.1.0
+        with:
+          dotnet-version: '8.0.x'
+      - name: Build & Publish Serial Loops
+        run: dotnet publish src/SerialLoops/SerialLoops.csproj -c Release -f net8.0 -r linux-x64 --self-contained /p:DebugType=None /p:DebugSymbols=false /p:PublishSingleFile=true
+      - name: Set up AppDir
+        run: |
+          mkdir -p ./install/linux/appimage/AppDir/usr/bin
+          chmod +x ./src/SerialLoops/bin/Release/net8.0/linux-x64/publish/SerialLoops
+          mv ./src/SerialLoops/bin/Release/net8.0/linux-x64/publish/* ./install/linux/appimage/AppDir/usr/bin/
+          mkdir -p ./install/linux/appimage/AppDir/usr/share/icons/default/scalable/apps/
+          cp ./src/SerialLoops/Assets/Icons/AppIcon.svg ./install/linux/appimage/AppDir/usr/share/icons/default/scalable/apps/club.haroohie.SerialLoops.svg
+      - name: Build AppImage
+        uses: AppImageCrafters/build-appimage@master
+        with:
+          recipe: "./install/linux/appimage/AppImageBuilder.yml"
+
   linux-dpkg-tarball:
     runs-on: ubuntu-latest
     steps:
