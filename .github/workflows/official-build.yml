@@ -92,9 +92,11 @@ jobs:
           mkdir -p ./AppDir/usr/share/icons/default/scalable/apps/
           cp ./src/SerialLoops/Assets/Icons/AppIcon.svg ./AppDir/usr/share/icons/default/scalable/apps/club.haroohie.SerialLoops.svg
       - name: Build AppImage
-        uses: AppImageCrafters/build-appimage@master
+        uses: addnab/docker-run-action@v3
         with:
-          recipe: "./install/linux/appimage/AppImageBuilder.yml"
+          image: appimagecrafters/appimage-builder:latest
+          options: -v ${{ github.workspace }}:/work -e "SLVersion" -e "SLAssemblyVersion"
+          run: appimage-builder --recipe=./install/linux/appimage/AppImageBuilder.yml --skip-tests
       - name: Upload AppImage
         uses: actions/upload-artifact@v4
         with:
