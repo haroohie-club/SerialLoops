@@ -86,16 +86,16 @@ jobs:
       - name: Set up AppDir
         run: |
           sed -i "s/#VERSION#/$SLVersion/g" ./install/linux/appimage/AppImageBuilder.yml
-          mkdir -p ./AppDir/usr/bin
+          mkdir -p ./install/linux/appimage/AppDir/usr/bin
           chmod +x ./src/SerialLoops/bin/Release/net8.0/linux-x64/publish/SerialLoops
-          mv ./src/SerialLoops/bin/Release/net8.0/linux-x64/publish/* ./AppDir/usr/bin/
-          mkdir -p ./AppDir/usr/share/icons/default/scalable/apps/
-          cp ./src/SerialLoops/Assets/Icons/AppIcon.svg ./AppDir/usr/share/icons/default/scalable/apps/club.haroohie.SerialLoops.svg
+          mv ./src/SerialLoops/bin/Release/net8.0/linux-x64/publish/* ./install/linux/appimage/AppDir/usr/bin/
+          mkdir -p ./install/linux/appimage/AppDir/usr/share/icons/default/scalable/apps/
+          cp ./src/SerialLoops/Assets/Icons/AppIcon.svg ./install/linux/appimage/AppDir/usr/share/icons/default/scalable/apps/club.haroohie.SerialLoops.svg
       - name: Build AppImage
         uses: addnab/docker-run-action@v3
         with:
-          image: appimagecrafters/appimage-builder:1.1.0
-          options: -v ${{ github.workspace }}:/work -w /work -e "SLVersion" -e "SLAssemblyVersion"
+          image: ghcr.io/haroohie-club/appimage-builder:main
+          options: -v ${{ github.workspace }}:/work -w /work
           run: appimage-builder --recipe=./install/linux/appimage/AppImageBuilder.yml --skip-tests
       - name: Upload AppImage
         uses: actions/upload-artifact@v4
