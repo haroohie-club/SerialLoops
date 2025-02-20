@@ -119,13 +119,13 @@ jobs:
         run: |
           chmod +x ./src/SerialLoops/bin/Release/net8.0/linux-x64/publish/SerialLoops
           pushd ./src/SerialLoops/bin/Release/net8.0/linux-x64/publish
-          tar -czvf ../SerialLoops-x64.tar.gz --transform "s,^\.\/,SerialLoops-$SLVersion/," .
+          tar -czvf ../SerialLoops.tar.gz --transform "s,^\.\/,SerialLoops-$SLVersion/," .
           popd
       - name: Upload x64 tarball
         uses: actions/upload-artifact@v4
         with:
           name: linux-x64-tarball
-          path: src/SerialLoops/bin/Release/net8.0/linux-x64/SerialLoops-x64.tar.gz
+          path: src/SerialLoops/bin/Release/net8.0/linux-x64/SerialLoops.tar.gz
           retention-days: 1
       - name: Create deb package
         shell: pwsh
@@ -170,30 +170,6 @@ jobs:
         with:
           name: linux-x64-rpm
           path: SerialLoops.rpm
-          retention-days: 1
-
-  linux-tarball-univ:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out
-        uses: actions/checkout@v4
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4.1.0
-        with:
-          dotnet-version: '8.0.x'
-      - name: Build & Publish Serial Loops
-        run: dotnet publish src/SerialLoops/SerialLoops.csproj -c Release -f net8.0 --no-self-contained /p:DebugType=None /p:DebugSymbols=false
-      - name: Create tarball
-        run: |
-          chmod +x ./src/SerialLoops/bin/Release/net8.0/publish/SerialLoops
-          pushd ./src/SerialLoops/bin/Release/net8.0/publish
-          tar -czvf ../SerialLoops-univ.tar.gz --transform "s,^\.\/,SerialLoops-$SLVersion/," .
-          popd
-      - name: Upload universal tarball
-        uses: actions/upload-artifact@v4
-        with:
-          name: linux-univ-tarball
-          path: src/SerialLoops/bin/Release/net8.0/SerialLoops-univ.tar.gz
           retention-days: 1
 
   macos-pkg:
@@ -270,7 +246,7 @@ jobs:
 
   release:
     runs-on: ubuntu-latest
-    needs: [ linux-flatpak, linux-appimage, linux-dpkg-tarball, linux-rpm, linux-tarball-univ, macos-pkg, windows ]
+    needs: [ linux-flatpak, linux-appimage, linux-dpkg-tarball, linux-rpm, macos-pkg, windows ]
     steps:
       - name: Download Linux flatpak
         uses: actions/download-artifact@v4.1.8
@@ -280,14 +256,10 @@ jobs:
         uses: actions/download-artifact@v4.1.8
         with:
           name: linux-x64-appimage
-      - name: Download Linux full tarball
+      - name: Download Linux tarball
         uses: actions/download-artifact@v4.1.8
         with:
           name: linux-x64-tarball
-      - name: Download Linux universal tarball
-        uses: actions/download-artifact@v4.1.8
-        with:
-          name: linux-univ-tarball
       - name: Download Linux dpkg
         uses: actions/download-artifact@v4.1.8
         with:
@@ -319,8 +291,7 @@ jobs:
           Get-ChildItem .
           Move-Item -Path SerialLoops.flatpak -Destination release/SerialLoops-linux-x64-v$($env:SLVersion).flatpak
           Move-Item -Path SerialLoops.AppImage -Destination release/SerialLoops-linux-x64-v$($env:SLVersion).AppImage
-          Move-Item -Path SerialLoops-x64.tar.gz -Destination release/SerialLoops-linux-x64-v$($env:SLVersion).tar.gz
-          Move-Item -Path SerialLoops-univ.tar.gz -Destination release/SerialLoops-linux-univ-v$($env:SLVersion).tar.gz
+          Move-Item -Path SerialLoops.tar.gz -Destination release/SerialLoops-linux-x64-v$($env:SLVersion).tar.gz
           Move-Item -Path SerialLoops.deb -Destination release/SerialLoops-linux-x64-$($env:SLVersion).deb
           Move-Item -Path SerialLoops.rpm -Destination release/SerialLoops-linux-x64-$($env:SLVersion)-1.fc39.x86_64.rpm
           Move-Item -Path SerialLoops-osx-arm64.pkg -Destination release/SerialLoops-macOS-arm-v$($env:SLVersion)-installer.pkg
@@ -360,9 +331,7 @@ jobs:
             You can also install the official [melonDS Flatpak from Flathub](https://flathub.org/apps/net.kuribo64.melonDS) to use as your emulator. We recommend installing it from the [flathub-beta](https://docs.flathub.org/docs/for-users/installation/#flathub-beta-repository) repository as that is where the most up-to-date versions tend to be pushed.
 
             The main benefit of the Flatpak is that it is packaged with devkitARM for ease of use. However, if you already have devkitARM installed or would like to use something more lightweight, we also provide the following options (all of which require [installing devkitARM yourself](https://devkitpro.org/wiki/Getting_Started)):
-            * The AppImage is designed to run on all Linux distros and is an easy option for
+            * The AppImage is designed to run on all Linux distros and is an easy, click-once option.
             * The `.deb` package is intended for Debian-based distros (e.g. Ubuntu). Install it with `sudo apt install -f ./SerialLoops-linux-x64-${{ env.SLVersion }}.deb`.
             * The `.rpm` package is intended for Red Hat distros (e.g. Fedora). Install it with `sudo dnf install ./SerialLoops-linux-x64-${{ env.SLVersion }}-1.fc39.x86_64.rpm`.
-            * You may also opt to simply use the binaries packaged in one of the `.tar.gz` archives; when doing so, ensure you install the OpenAL binaries so audio playback works.
-              - The "x64" `.tar.gz` includes the dotnet binary and thus only requires installing OpenAL.
-              - The "univ" `.tar.gz` can run on several different architectures (notably ARM64) as it does not include dotnet. Be sure to install [dotnet](https://dot.net/) for your distribution & architecture before running it.
+            * You may also opt to simply use the binaries packaged in the `.tar.gz` archive; when doing so, ensure you install the OpenAL binaries so audio playback works.
