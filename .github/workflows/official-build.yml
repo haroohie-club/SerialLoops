@@ -318,7 +318,7 @@ jobs:
             Simply download the Windows installer application and run it. It will walk you through installation, including installing the necessary dependencies. Alternatively, you can download the zip file for a portable application; however, dependencies are not included with this option.
 
             ### macOS
-            Pick the macOS pkg installer that fits your computer's architecture. Before executing it, you will need to open the Terminal application and run `xattr -cr /User/yourusernamehere/Downloads/pkginstallernamehere.pkg`, replacing "yourusernamehere" with your username and "pkginstallernamehere.pkg" with the appropriate pkg installer filename. Running this command makes it so that the pkg installer is runnable even though we don't codesign it.
+            Pick the macOS pkg installer that fits your computer's architecture. Before executing it, you will need to open the Terminal application and run `xattr -cr /User/yourusernamehere/Downloads/pkginstallernamehere.pkg`, replacing "yourusernamehere" with your username and "pkginstallernamehere.pkg" with the appropriate pkg installer filename. This is required because we currently don't codesign the installer, meaning macOS will refuse to run it without explicit approval from you.
 
             The pkg installer will guide you through installing Serial Loops and will automatically install the dependencies devkitARM and make if necessary.
 
