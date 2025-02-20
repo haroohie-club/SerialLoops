@@ -10,6 +10,7 @@ using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Archive.Graphics;
 using HaruhiChokuretsuLib.Font;
+using HaruhiChokuretsuLib.Util;
 using NAudio.Wave;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script.Parameters;
@@ -39,20 +40,28 @@ public static class Extensions
         return JsonSerializer.Serialize(new GraphicInfo(grp));
     }
 
-    public static float GetMaxAmplitude(this IWaveProvider waveProvider)
+    public static float GetMaxAmplitude(this IWaveProvider waveProvider, ILogger log)
     {
-        return waveProvider.ToSampleProvider().GetMaxAmplitude();
+        return waveProvider.ToSampleProvider().GetMaxAmplitude(log);
     }
 
-    public static float GetMaxAmplitude(this ISampleProvider sampleProvider)
+    public static float GetMaxAmplitude(this ISampleProvider sampleProvider, ILogger log)
     {
         float max = 0;
         float[] buffer = new float[sampleProvider.WaveFormat.SampleRate];
         int read;
         do
         {
-            read = sampleProvider.Read(buffer, 0, buffer.Length);
-            max = Math.Max(max, buffer.Max());
+            try
+            {
+                read = sampleProvider.Read(buffer, 0, buffer.Length);
+                max = Math.Max(max, buffer.Max());
+            }
+            catch (Exception ex)
+            {
+                read = 0;
+                log.LogWarning($"Failed to read all samples during max amplitude calculation: {ex.Message}");
+            }
         } while (read > 0);
 
         return max;

@@ -573,7 +573,7 @@ public partial class Project
             {
                 tracker.Finished++;
                 BackgroundMusicItem bgmItem = new(bgm, i, this);
-                maxes.Add(bgmItem.GetWaveProvider(log, false).GetMaxAmplitude());
+                maxes.Add(bgmItem.GetWaveProvider(log, false).GetMaxAmplitude(log));
                 return bgmItem;
             }));
 
