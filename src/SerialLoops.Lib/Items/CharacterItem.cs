@@ -46,6 +46,11 @@ public class CharacterItem : Item
 
     public SKBitmap GetNewNameplate(SKBitmap blankNameplate, SKBitmap blankNameplateBaseArrow, Project project, bool transparent = false)
     {
+        if (NameplateProperties.Name is null)
+        {
+            return null;
+        }
+
         SKBitmap newNameplate = new(64, 16);
         SKCanvas newCanvas = new(newNameplate);
         newCanvas.DrawBitmap(blankNameplate, new SKPoint(0, 0));
@@ -72,7 +77,7 @@ public class CharacterItem : Item
                     newCanvas.DrawBitmap(project.FontBitmap, new(0, charIndex * 16, 16, (charIndex + 1) * 16),
                         new SKRect(currentX, currentY, currentX + (int)(16 * widthFactor), currentY + 16), new()
                         {
-                            ColorFilter = SKColorFilter.CreateColorMatrix(new float[]
+                            ColorFilter = SKColorFilter.CreateColorMatrix(new[]
                             {
                                 NameplateProperties.NameColor.Red / 255.0f, 0.0f, 0.0f, 0.0f, 0.0f,
                                 0.0f, NameplateProperties.NameColor.Green / 255.0f, 0.0f, 0.0f, 0.0f,
@@ -103,8 +108,8 @@ public class CharacterItem : Item
                 for (int x = 0; x < newNameplate.Width; x++)
                 {
                     SKColor pixel = newNameplate.GetPixel(x, y);
-                    SKColor[] neighborPixels = new SKColor[]
-                    {
+                    SKColor[] neighborPixels =
+                    [
                         newNameplate.GetPixel(x + 1, y),
                         newNameplate.GetPixel(x - 1, y),
                         newNameplate.GetPixel(x, y + 1),
@@ -113,7 +118,7 @@ public class CharacterItem : Item
                         newNameplate.GetPixel(x - 1, y + 1),
                         newNameplate.GetPixel(x + 1, y - 1),
                         newNameplate.GetPixel(x - 1, y - 1),
-                    };
+                    ];
                     if (Helpers.ColorDistance(pixel, NameplateProperties.NameColor) > 50 && neighborPixels.Any(p => Helpers.ColorDistance(p, NameplateProperties.NameColor) < 50))
                     {
                         newNameplate.SetPixel(x, y, NameplateProperties.OutlineColor);

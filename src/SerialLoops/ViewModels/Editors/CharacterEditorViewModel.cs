@@ -107,8 +107,8 @@ public class CharacterEditorViewModel : EditorViewModel
     [Reactive]
     public SKBitmap NameplateBitmap { get; set; }
 
-    private SKBitmap _blankNameplateBitmap;
-    private SKBitmap _blankNameplateBaseArrowBitmap;
+    private readonly SKBitmap _blankNameplateBitmap;
+    private readonly SKBitmap _blankNameplateBaseArrowBitmap;
 
     public CharacterColorPalette ColorPalette { get; } = new();
 
