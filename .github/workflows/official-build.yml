@@ -121,7 +121,7 @@ jobs:
           pushd ./src/SerialLoops/bin/Release/net8.0/linux-x64/publish
           tar -czvf ../SerialLoops.tar.gz --transform "s,^\.\/,SerialLoops-$SLVersion/," .
           popd
-      - name: Upload x64 tarball
+      - name: Upload tarball
         uses: actions/upload-artifact@v4
         with:
           name: linux-x64-tarball
