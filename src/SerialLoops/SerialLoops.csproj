@@ -100,9 +100,6 @@
     <Compile Update="Controls\SoundPlayerPanel.axaml.cs">
       <DependentUpon>SoundPlayerPanel.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Program.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Compile>
     <Compile Update="Views\Dialogs\ProjectSettingsDialog.axaml.cs">
       <DependentUpon>ProjectSettingsDialog.axaml</DependentUpon>
       <SubType>Code</SubType>
