@@ -31,16 +31,6 @@ modules:
     build-commands:
     - /usr/lib/sdk/dotnet8/bin/install.sh
 
-  - name: devkitARM
-    buildsystem: simple
-    sources:
-      - type: archive
-        url: https://haroohie.nyc3.cdn.digitaloceanspaces.com/bootstrap/serial-loops/dkp.zip
-        sha256: 91d9d524d5150ae892de4457c4cbb7eaa5edcb2449a85366def678242b1f60e2
-    build-commands:
-      - mkdir -p ${FLATPAK_DEST}/opt/
-      - cp -r ./* ${FLATPAK_DEST}/opt/
-
   - name: make
     buildsystem: autotools
     sources:
@@ -65,6 +55,7 @@ modules:
         url: https://github.com/haroohie-club/SerialLoops.git
         branch: Avalonia
       - ./nuget-sources.json
+      - ./devkitarm.tar.gz
       - type: patch
         path: patches/sandbox.patch
       - type: file
@@ -76,6 +67,8 @@ modules:
       - type: file
         path: VERSION
     build-commands:
+      - mkdir -p ${FLATPAK_DEST}/opt/
+      - tar -xvf devkitarm.tar.gz -C ${FLATPAK_DEST}/
       - export SLVersion=$(cat VERSION)
       - export SLAssemblyVersion=$(sed -n 's/pre/9999/p' VERSION)
       - dotnet publish src/SerialLoops/SerialLoops.csproj -c Release -f net8.0 --no-self-contained --source ./nuget-sources
