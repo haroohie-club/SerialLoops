@@ -49,7 +49,7 @@ jobs:
           image: devkitpro/devkitarm:latest
           options: -v ${{ github.workspace }}:/work -w /work
           run: tar -czvf devkitarm.tar.gz /opt/devkitpro/devkitARM
-      - name: Upload devkitARM zip
+      - name: Publish devkitARM tarball
         uses: actions/upload-artifact@v4
         with:
           name: devkitARM
