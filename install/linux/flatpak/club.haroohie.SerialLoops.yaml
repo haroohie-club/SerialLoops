@@ -68,7 +68,7 @@ modules:
         path: VERSION
     build-commands:
       - mkdir -p ${FLATPAK_DEST}/opt/
-      - tar -xvf devkitarm.tar.gz -C ${FLATPAK_DEST}/
+      - tar -xvf ./devkitarm.tar.gz -C ${FLATPAK_DEST}/
       - export SLVersion=$(cat VERSION)
       - export SLAssemblyVersion=$(sed -n 's/pre/9999/p' VERSION)
       - dotnet publish src/SerialLoops/SerialLoops.csproj -c Release -f net8.0 --no-self-contained --source ./nuget-sources
