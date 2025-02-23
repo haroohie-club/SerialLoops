@@ -55,7 +55,6 @@ modules:
         url: https://github.com/haroohie-club/SerialLoops.git
         branch: Avalonia
       - ./nuget-sources.json
-      - ./devkitarm.tar.gz
       - type: patch
         path: patches/sandbox.patch
       - type: file
@@ -66,10 +65,9 @@ modules:
         path: ../../../src/SerialLoops/Assets/Icons/AppIcon.svg
       - type: file
         path: VERSION
+      - type: file
+        path: devkitarm.tar.gz
     build-commands:
-      - ls -l
-      - ls -l ..
-      - ls -l ../..
       - tar -xvf devkitarm.tar.gz -C ${FLATPAK_DEST}/
       - export SLVersion=$(cat VERSION)
       - export SLAssemblyVersion=$(sed -n 's/pre/9999/p' VERSION)
