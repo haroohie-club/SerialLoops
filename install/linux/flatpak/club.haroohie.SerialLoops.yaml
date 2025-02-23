@@ -55,8 +55,8 @@ modules:
         url: https://github.com/haroohie-club/SerialLoops.git
         branch: Avalonia
       - ./nuget-sources.json
-      # - type: patch
-      #   path: patches/sandbox.patch
+      - type: patch
+        path: patches/sandbox.patch
       - type: file
         path: club.haroohie.SerialLoops.metainfo.xml
       - type: file
