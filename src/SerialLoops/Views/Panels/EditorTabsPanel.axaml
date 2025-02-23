@@ -48,7 +48,7 @@
                     Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center">
             <Image Source="{DynamicResource ColoredIconPath}" Opacity="0.65" Width="250" Height="250" />
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="7">
-                <TextBlock Classes="secondary" Text="{x:Static assets:Strings.Open_an_item_using_the_explorer_to_start_editing_}" />
+                <TextBlock Classes="secondary" Text="{x:Static assets:Strings.Open_an_item_using_the_explorer_to_start_editing_}" HorizontalAlignment="Center" />
                 <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto" HorizontalAlignment="Center">
                     <TextBlock Margin="5 3" Grid.Column="0" Grid.Row="0" Classes="secondary" HorizontalAlignment="Right" Text="{x:Static assets:Strings.Save_Project}" />
                     <StackPanel Margin="5 3" Grid.Column="1" Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="4">
