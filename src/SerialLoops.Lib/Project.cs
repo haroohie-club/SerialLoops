@@ -133,7 +133,7 @@ public partial class Project
             Directory.CreateDirectory(BaseDirectory);
             Directory.CreateDirectory(IterativeDirectory);
             Directory.CreateDirectory(Path.Combine(MainDirectory, "font"));
-            File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "charset.json"), Path.Combine(MainDirectory, "font", "charset.json"));
+            File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "charset.json"), Path.Combine(MainDirectory, "font", "charset.json"), overwrite: true);
         }
         catch (Exception ex)
         {
@@ -1038,7 +1038,7 @@ public partial class Project
         Items.Where(i => i.Type == ItemType.Script).Cast<ScriptItem>().ToList().ForEach(s => s.UpdateEventTableInfo(EventTableFile.EvtTbl));
     }
 
-    public void MigrateProject(string newRom, ILogger log, IProgressTracker tracker)
+    public void MigrateProject(string newRom, Config config, ILogger log, IProgressTracker tracker)
     {
         log.Log($"Attempting to migrate base ROM to {newRom}");
 
@@ -1049,6 +1049,8 @@ public partial class Project
         IO.CopyFiles(Path.Combine(tempDir, "data", "vce"), Path.Combine(BaseDirectory, "original", "vce"), log, "*.bin");
         IO.CopyFiles(Path.Combine(tempDir, "overlay"), Path.Combine(BaseDirectory, "original", "overlay"), log, "*.bin");
         IO.CopyFiles(Path.Combine(tempDir, "data", "movie"), Path.Combine(BaseDirectory, "rom", "data", "movie"), log, "*.mods");
+
+        Build.BuildBase(this, config, log, tracker);
 
         Directory.Delete(tempDir, true);
     }

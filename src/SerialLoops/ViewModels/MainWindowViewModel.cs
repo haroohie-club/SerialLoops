@@ -130,6 +130,7 @@ public partial class MainWindowViewModel : ViewModelBase
         EditUiTextCommand = ReactiveCommand.CreateFromTask(EditUiTextCommand_Executed);
         EditTutorialMappingsCommand = ReactiveCommand.CreateFromTask(EditTutorialMappingsCommand_Executed);
         ProjectSettingsCommand = ReactiveCommand.CreateFromTask(ProjectSettingsCommand_Executed);
+        MigrateProjectCommand = ReactiveCommand.CreateFromTask(MigrateProjectCommand_Executed);
         ExportProjectCommand = ReactiveCommand.CreateFromTask(ExportProjectCommand_Executed);
         ExportPatchCommand = ReactiveCommand.CreateFromTask(ExportPatchCommand_Executed);
         CloseProjectCommand = ReactiveCommand.CreateFromTask(CloseProjectView);
@@ -379,6 +380,25 @@ public partial class MainWindowViewModel : ViewModelBase
         projectSettingsDialogViewModel.Initialize(projectSettingsDialog, OpenProject.Settings, Log);
         projectSettingsDialog.DataContext = projectSettingsDialogViewModel;
         await projectSettingsDialog.ShowDialog(Window);
+    }
+
+    private async Task MigrateProjectCommand_Executed()
+    {
+        ProjectCreationDialogViewModel migrateDialogVm = new(CurrentConfig, this, Log, migrate: true);
+        (string newRom, string newLangCode) = await new ProjectCreationDialog { DataContext = migrateDialogVm }.ShowDialog<(string, string)>(Window);
+        if (!string.IsNullOrEmpty(newRom))
+        {
+            ProgressDialogViewModel tracker = new(Strings.Migrating_to_new_ROM);
+            tracker.InitializeTasks(() =>
+            {
+                OpenProject.MigrateProject(newRom, CurrentConfig, Log, tracker);
+                OpenProject = new(OpenProject.Name, newLangCode, CurrentConfig, Strings.ResourceManager.GetString, Log);
+                OpenProject.Load(CurrentConfig, Log, tracker);
+                OpenProject.SetBaseRomHash(newRom);
+            }, async void () => await Window.ShowMessageBoxAsync(Strings.Migration_Complete_, Strings.Migrated_to_new_ROM_, ButtonEnum.Ok, Icon.Success, Log));
+            await new ProgressDialog() { DataContext = tracker }.ShowDialog(Window);
+            OpenProjectView(OpenProject, tracker);
+        }
     }
 
     private async Task ExportProjectCommand_Executed()
@@ -1078,8 +1098,8 @@ public partial class MainWindowViewModel : ViewModelBase
             return;
         }
         NativeMenu menu = NativeMenu.GetMenu(Window);
-        int insertionPoint = menu.Items.Count;
-        if (((NativeMenuItem)menu.Items.Last()).Header.Equals(Strings._Help))
+        int insertionPoint = menu!.Items.Count;
+        if (((NativeMenuItem)menu.Items.Last()).Header!.Equals(Strings._Help))
         {
             insertionPoint--;
         }

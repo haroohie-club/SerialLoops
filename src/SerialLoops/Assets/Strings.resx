@@ -3074,4 +3074,7 @@ This action is irreversible.</value>
   <data name="Normalize" xml:space="preserve">
     <value>Normalize</value><comment>As in "normalize the audio volume so that max volume is similar to all other audio volumes"</comment>
   </data>
+  <data name="Migrate" xml:space="preserve">
+    <value>Migrate</value>
+  </data>
 </root>

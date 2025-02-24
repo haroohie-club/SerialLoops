@@ -4583,6 +4583,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Migrate.
+        /// </summary>
+        public static string Migrate {
+            get {
+                return ResourceManager.GetString("Migrate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Migrate Project.
         /// </summary>
         public static string Migrate_Project {
