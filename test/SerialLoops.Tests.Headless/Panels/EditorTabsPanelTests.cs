@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Text.Json;
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Headless;
 using Avalonia.Headless.NUnit;
@@ -32,23 +33,23 @@ public class EditorTabsPanelTests
     private ExtraFile _extra;
 
     [OneTimeSetUp]
-    public void OneTimeSetup()
+    public async Task OneTimeSetup()
     {
         _log = new();
         if (Path.Exists("ui_vals.json"))
         {
-            _uiVals = JsonSerializer.Deserialize<UiVals>(File.ReadAllText("ui_vals.json"));
+            _uiVals = JsonSerializer.Deserialize<UiVals>(await File.ReadAllTextAsync("ui_vals.json"));
         }
         else
         {
-            _uiVals = UiVals.DownloadTestAssets().GetAwaiter().GetResult();
+            _uiVals = await UiVals.DownloadTestAssets();
         }
 
         _extra = new();
-        _extra.Initialize(File.ReadAllBytes(Path.Combine(_uiVals.AssetsDirectory, "EXTRA.bin")), 0, _log);
+        _extra.Initialize(await File.ReadAllBytesAsync(Path.Combine(_uiVals.AssetsDirectory, "EXTRA.bin")), 0, _log);
 
         _bgTableFile = new();
-        _bgTableFile.Initialize(File.ReadAllBytes(Path.Combine(_uiVals.AssetsDirectory, "BGTBL.bin")), 1, _log);
+        _bgTableFile.Initialize(await File.ReadAllBytesAsync(Path.Combine(_uiVals.AssetsDirectory, "BGTBL.bin")), 1, _log);
     }
 
     [SetUp]
