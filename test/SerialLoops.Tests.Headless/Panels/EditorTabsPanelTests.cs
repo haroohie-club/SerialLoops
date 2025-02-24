@@ -1,6 +1,6 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Text.Json;
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Headless;
 using Avalonia.Headless.NUnit;
@@ -42,10 +42,7 @@ public class EditorTabsPanelTests
         }
         else
         {
-            _uiVals = new()
-            {
-                AssetsDirectory = Environment.GetEnvironmentVariable("ASSETS_DIRECTORY")!,
-            };
+            _uiVals = UiVals.DownloadTestAssets().GetAwaiter().GetResult();
         }
 
         _extra = new();

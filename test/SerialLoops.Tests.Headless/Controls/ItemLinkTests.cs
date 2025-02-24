@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text.Json;
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Headless;
 using Avalonia.Headless.NUnit;
@@ -27,8 +28,9 @@ public class ItemLinkTests
     private Project _project;
     private ExtraFile _extra;
 
-    [SetUp]
-    public void Setup()
+    // TODO: once https://github.com/AvaloniaUI/Avalonia/pull/18306 merges, put this attribute back and remove the direct call
+    // [SetUp]
+    public async Task Setup()
     {
         _log = new();
         if (Path.Exists("ui_vals.json"))
@@ -37,7 +39,7 @@ public class ItemLinkTests
         }
         else
         {
-            _uiVals = new() { AssetsDirectory = Environment.GetEnvironmentVariable("ASSETS_DIRECTORY")!, };
+            _uiVals = await UiVals.DownloadTestAssets();
         }
 
         Mock<Project> projectMock = new();
@@ -55,8 +57,10 @@ public class ItemLinkTests
     }
 
     [AvaloniaTest]
-    public void ItemLink_ClickOpensTab()
+    public async Task ItemLink_ClickOpensTab()
     {
+        await Setup();
+
         EditorTabsPanelViewModel tabs = new(_mainWindowViewModel, _project, _log);
         BackgroundItem bg = new("BG_TEST");
         ItemLink link = new() { Tabs = tabs, Item = bg };
