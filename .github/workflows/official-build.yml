@@ -146,16 +146,17 @@ jobs:
       matrix: 
         type: [ { rid:  'osx-x64', arch: 'x86_64 ' },  { rid: 'osx-arm64', arch: 'arm64' } ]
     steps:
+      - name: Check out Serial Loops
+        uses: actions/checkout@v4
       - name: Check out portaudio
         uses: actions/checkout@v4
         with:
           repository: 'PortAudio/portaudio'
+          path: portaudio
       - name: cmake configure
         run: cmake ${{ github.workspace }}/portaudio -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/build/lib -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DPA_BUILD_SHARED_LIBS=true -DCMAKE_OSX_ARCHITECTURES=${{ matrix.type.arch }}
       - name: make
         run: pushd ${{ github.workspace }}/portaudio && make && popd
-      - name: Check out Serial Loops
-        uses: actions/checkout@v4
       - name: Setup .NET
         uses: actions/setup-dotnet@v4.1.0
         with:
