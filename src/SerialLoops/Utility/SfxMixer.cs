@@ -17,7 +17,7 @@ public class SfxMixer
 #if WINDOWS
         _player = new() { DesiredLatency = 100 };
 #else
-        _player = new(50);
+        _player = new(100);
 #endif
     }
 }

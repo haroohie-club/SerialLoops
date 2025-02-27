@@ -26,7 +26,7 @@ public class BgmVceMixer
 #if WINDOWS
         _player = new() { DeviceNumber = -1 };
 #else
-        _player = new(8192);
+        _player = new(4096);
 #endif
         _player.Init(WaveProvider);
     }
