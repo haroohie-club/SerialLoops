@@ -12,9 +12,12 @@
     <ApplicationIcon>Assets\serial-loops.ico</ApplicationIcon>
   </PropertyGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="$([System.OperatingSystem]::IsMacOS()) And !Exists('$(OutDir)runtimes/osx/native/libportaudio.dylib') And '$(CIBuild)' != 'true'">
-    <Exec Command="/bin/bash -C install-portaudio-macos.sh ../src/SerialLoops/$(OutDir)runtimes/osx/native/" WorkingDirectory="../.."/>
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent" Condition="$([System.OperatingSystem]::IsMacOS()) And !Exists('libportaudio.dylib') And '$(CIBuild)' != 'true'">
+    <Exec Command="/bin/bash -C install-portaudio-macos.sh ../src/SerialLoops/libportaudio.dylib" WorkingDirectory="../.."/>
   </Target>
+  <ItemGroup Condition="$([System.OperatingSystem]::IsMacOS())">
+    <None Include="libportaudio.dylib" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest"/>
+  </ItemGroup>
 
   <PropertyGroup>
     <CFBundleName>Serial Loops</CFBundleName>
