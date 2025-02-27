@@ -33,6 +33,7 @@ public class LoopyLogger : ILogger
     }
 
     private static string Stamp => $"\n({Environment.ProcessId}) {DateTimeOffset.Now} - ";
+    public static string CrashLogLocation => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "sl_crash.log");
 
     public void Log(string message)
     {
@@ -105,7 +106,8 @@ public class LoopyLogger : ILogger
 
     public void LogCrash(Exception ex)
     {
-        File.AppendAllText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "sl_crash.log"),
-            $"{Stamp}SERIAL LOOPS CRASH: {ex.Message}\n\n{ex.StackTrace}");
+        string crashLog = $"{Stamp}SERIAL LOOPS CRASH: {ex.Message}\n\n{ex.StackTrace}";
+        Console.WriteLine(crashLog);
+        File.AppendAllText(CrashLogLocation, crashLog);
     }
 }
