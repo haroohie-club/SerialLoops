@@ -365,3 +365,4 @@ MigrationBackup/
 
 # macOS stuff
 .DS_Store
+portaudio/
