@@ -52,11 +52,11 @@ modules:
       - make
       - make install
 
-  - name: OpenAL
+  - name: PortAudio
     buildsystem: cmake
     sources:
       - type: git
-        url: https://github.com/kcat/openal-soft.git
+        url: https://github.com/PortAudio/portaudio.git
 
   - name: SerialLoops
     buildsystem: simple

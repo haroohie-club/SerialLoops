@@ -13,7 +13,7 @@ public class SoundPlayerPanelViewModel : ViewModelBase
 {
     private ILogger _log;
     private ISoundItem _item;
-    internal SoundPlayer _player;
+    internal BgmVceMixer _player;
 
     [Reactive]
     public IWaveProvider Sound { get; set; }

@@ -91,8 +91,8 @@ way of getting the Docker path to work, so you will have to use Make.
     - On Windows, you will additionally need to install [Windows Subsystem for Linux (WSL)](https://learn.microsoft.com/en-us/windows/wsl/install).
       From an admin PowerShell or Terminal window (Winkey + X + A), simply type `wsl --install` to install it.
 
-#### Installing OpenAL (Linux)
-If you're running on Linux and _not using one of the package releases_ (the `.deb` or `.rpm`), you will also need to install OpenAL which is used for audio processing.
+#### Installing PortAudio (Linux)
+If you're running on Linux and _not using one of the package releases_ (the Flatpak, AppImage, `.deb` or `.rpm`), you will also need to install PortAudio which is used for audio processing.
 
 </details>
 
