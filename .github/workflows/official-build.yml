@@ -143,10 +143,18 @@ jobs:
   macos-pkg:
     runs-on: macos-latest
     strategy:
-      matrix:
-        rid: ['osx-x64', 'osx-arm64']
+      matrix: 
+        type: [ { rid:  'osx-x64', arch: 'x86_64 ' },  { rid: 'osx-arm64', arch: 'arm64' } ]
     steps:
-      - name: Check out
+      - name: Check out portaudio
+        uses: actions/checkout@v4
+        with:
+          repository: 'PortAudio/portaudio'
+      - name: cmake configure
+        run: cmake ${{ github.workspace }}/portaudio -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/build/lib -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DPA_BUILD_SHARED_LIBS=true -DCMAKE_OSX_ARCHITECTURES=${{ matrix.type.arch }}
+      - name: make
+        run: pushd ${{ github.workspace }}/portaudio && make && popd
+      - name: Check out Serial Loops
         uses: actions/checkout@v4
       - name: Setup .NET
         uses: actions/setup-dotnet@v4.1.0
@@ -158,21 +166,23 @@ jobs:
           python-version: '3.13'
       - run: pip install macos-pkg-builder
       - name: Restore
-        run: dotnet restore src/SerialLoops/SerialLoops.csproj -r ${{ matrix.rid }}
+        run: dotnet restore src/SerialLoops/SerialLoops.csproj -r ${{ matrix.type.rid }}
       - name: Build .app
-        run: dotnet msbuild src/SerialLoops/SerialLoops.csproj -t:BundleApp -p:Configuration=Release -p:TargetFramework=net8.0 -p:RuntimeIdentifier=${{ matrix.rid }} -p:UseAppHost=true --p:SelfContained=true -p:DebugType=None -p:DebugSymbols=false -p:PublishSingleFile=true
+        run: dotnet msbuild src/SerialLoops/SerialLoops.csproj -t:BundleApp -p:Configuration=Release -p:TargetFramework=net8.0 -p:RuntimeIdentifier=${{ matrix.type.rid }} -p:UseAppHost=true -p:SelfContained=true -p:DebugType=None -p:DebugSymbols=false -p:PublishSingleFile=true
+      - name: Copy in portaudio
+        run: cp -L ${{ github.workspace }}/portaudio/libportaudio.dylib "src/SerialLoops/bin/Release/net8.0/${{ matrix.type.rid }}/publish/Serial Loops.app/Contents/MacOS/libportaudio.dylib"
       - name: Build pkg installer
         run: |
           mkdir "install/macos/Serial Loops.app"
-          cp -r "src/SerialLoops/bin/Release/net8.0/${{ matrix.rid }}/publish/Serial Loops.app" "install/macos/"
+          cp -r "src/SerialLoops/bin/Release/net8.0/${{ matrix.type.rid }}/publish/Serial Loops.app" "install/macos/"
           cd install/macos/
           chmod +x "./Serial Loops.app/Contents/MacOS/SerialLoops"
-          python serial_loops_pkg_builder.py $SLVersion ${{ matrix.rid }}
+          python serial_loops_pkg_builder.py $SLVersion ${{ matrix.type.rid }}
       - name: Upload pkg installer
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.rid }}-installer
-          path: install/macos/SerialLoops-${{ matrix.rid }}.pkg
+          name: ${{ matrix.type.rid }}-installer
+          path: install/macos/SerialLoops-${{ matrix.type.rid }}.pkg
           retention-days: 1
 
   windows:
