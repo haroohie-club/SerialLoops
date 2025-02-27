@@ -169,7 +169,7 @@ jobs:
       - name: Restore
         run: dotnet restore src/SerialLoops/SerialLoops.csproj -r ${{ matrix.type.rid }}
       - name: Build .app
-        run: dotnet msbuild src/SerialLoops/SerialLoops.csproj -t:BundleApp -p:Configuration=Release -p:TargetFramework=net8.0 -p:RuntimeIdentifier=${{ matrix.type.rid }} -p:UseAppHost=true -p:SelfContained=true -p:DebugType=None -p:DebugSymbols=false -p:PublishSingleFile=true
+        run: dotnet msbuild src/SerialLoops/SerialLoops.csproj -t:BundleApp -p:Configuration=Release -p:TargetFramework=net8.0 -p:RuntimeIdentifier=${{ matrix.type.rid }} -p:UseAppHost=true -p:SelfContained=true -p:DebugType=None -p:DebugSymbols=false -p:PublishSingleFile=true /p:CIBuild=true
       - name: Copy in portaudio
         run: cp -L ${{ github.workspace }}/portaudio/libportaudio.dylib "src/SerialLoops/bin/Release/net8.0/${{ matrix.type.rid }}/publish/Serial Loops.app/Contents/MacOS/libportaudio.dylib"
       - name: Build pkg installer
