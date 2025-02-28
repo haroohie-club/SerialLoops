@@ -16,13 +16,13 @@
     <Exec Command="/bin/bash -C install-portaudio-macos.sh ../src/SerialLoops/libportaudio.dylib $(rid)" WorkingDirectory="../.."/>
   </Target>
   <ItemGroup Condition="$([System.OperatingSystem]::IsMacOS())">
-    <Content Include="libportaudio.dylib">
+    <None Include="libportaudio.dylib">
       <TargetPath>runtimes/osx/native/libportaudio.dylib</TargetPath>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="libportaudio.dylib">
+    </None>
+    <None Include="libportaudio.dylib">
       <CopyToPublishDirectory>Always</CopyToPublishDirectory>
-    </Content>
+    </None>
   </ItemGroup>
 
   <PropertyGroup>
