@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Reflection;
 using Avalonia;
 using Avalonia.ReactiveUI;
 using SerialLoops.Utility;
@@ -15,6 +17,10 @@ internal sealed class Program
     {
         try
         {
+            // if (OperatingSystem.IsMacOS())
+            // {
+            //     Environment.SetEnvironmentVariable("DYLD_LIBRARY_PATH", Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
+            // }
             BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
         }
         catch (Exception ex)

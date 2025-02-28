@@ -20,6 +20,9 @@
       <TargetPath>runtimes/osx/native/libportaudio.dylib</TargetPath>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="libportaudio.dylib">
+      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 
   <PropertyGroup>
