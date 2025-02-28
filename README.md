@@ -125,6 +125,8 @@ sudo /Applications/CMake.app/Contents/bin/cmake-gui --install
 ```
 This will symlink the CMake binaries to `/usr/local/bin` which is necessary for the build to work.
 
+On Linux, you will need to install the SDL2 binaries for your distribution.
+
 ### Building
 To build Serial Loops for your platform, run:
 ```bash
