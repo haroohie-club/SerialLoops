@@ -1,6 +1,8 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using SerialLoops.ViewModels.Panels;
 
 namespace SerialLoops.Views.Panels;
@@ -26,5 +28,10 @@ public partial class ItemExplorerPanel : Panel
         {
             ((ItemExplorerPanelViewModel)DataContext)?.OpenItemCommand.Execute(Viewer);
         }
+    }
+
+    private void Viewer_OnLoaded(object sender, RoutedEventArgs e)
+    {
+        ((ScrollViewer)Viewer.Scroll)!.HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled;
     }
 }
