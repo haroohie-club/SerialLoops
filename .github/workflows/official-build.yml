@@ -152,7 +152,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: 'libsdl-org/SDL'
-          branch: release-2.32.x
+          ref: release-2.32.x
           path: SDL
       - name: SDL configure
         run: pushd ${{ github.workspace }}/SDL && cmake -S . -B build -DSDL_SHARED=ON -DCMAKE_SYSTEM_NAME=Darwin -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" && popd

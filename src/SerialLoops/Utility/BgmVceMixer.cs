@@ -1,5 +1,7 @@
 ﻿using System;
+#if !WINDOWS
 using NAudio.Sdl2;
+#endif
 using NAudio.Wave;
 
 namespace SerialLoops.Utility;
