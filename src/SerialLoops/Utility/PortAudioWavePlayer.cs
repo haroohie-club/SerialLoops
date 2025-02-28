@@ -44,7 +44,7 @@ public class PortAudioWavePlayer : IWavePlayer
 
     public PortAudioWavePlayer(int latency)
     {
-        PortAudio.LoadNativeLibrary();
+        // PortAudio.LoadNativeLibrary();
         PortAudio.Initialize();
         for (int i = 0; i < PortAudio.DeviceCount; i++)
         {
