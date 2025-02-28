@@ -1260,7 +1260,7 @@
   <data name="Sound options ticker tape" xml:space="preserve">
     <value>Pannello Informazioni Effetti sonori</value>
   </data>
-  <data name="Clear Block" xml:space="preserve">
+  <data name="Clear Section" xml:space="preserve">
     <value>Sezione Vittoria</value>
   </data>
   <data name="Set/Clear" xml:space="preserve">
@@ -1856,7 +1856,7 @@
   <data name="Off" xml:space="preserve">
     <value>Off</value>
   </data>
-  <data name="Miss Block" xml:space="preserve">
+  <data name="Miss Section" xml:space="preserve">
     <value>Sezione Persa</value>
   </data>
   <data name="Failed to set viewr contents for script command list panel." xml:space="preserve">
@@ -1958,7 +1958,7 @@
     <value>Cross Spazio {0}"</value>
     <comment>As on a chessboard</comment>
   </data>
-  <data name="Miss 2 Block" xml:space="preserve">
+  <data name="Miss 2 Section" xml:space="preserve">
     <value>Perse 2 Sezioni</value>
   </data>
   <data name="No saves Load Game menu ticker tape" xml:space="preserve">
@@ -2216,7 +2216,7 @@
   <data name="Unseen Only" xml:space="preserve">
     <value>Solo non vedere</value>
   </data>
-  <data name="Script Block:" xml:space="preserve">
+  <data name="Script Section:" xml:space="preserve">
     <value>Block: </value>
   </data>
   <data name="Saving prompt message box" xml:space="preserve">

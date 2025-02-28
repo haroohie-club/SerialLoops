@@ -449,7 +449,7 @@
     <value>Clear all commands from the game scenario?
 This action is irreversible.</value>
   </data>
-  <data name="Clear Block" xml:space="preserve">
+  <data name="Clear Section" xml:space="preserve">
     <value>Win Section</value>
   </data>
   <data name="Clear Scenario" xml:space="preserve">
@@ -1439,10 +1439,10 @@ In order to preserve state, no hacks were applied.</value>
   <data name="Mikuru Time Percentage" xml:space="preserve">
     <value>Mikuru Time Percentage</value>
   </data>
-  <data name="Miss 2 Block" xml:space="preserve">
+  <data name="Miss 2 Section" xml:space="preserve">
     <value>Lose 2 Section</value>
   </data>
-  <data name="Miss Block" xml:space="preserve">
+  <data name="Miss Section" xml:space="preserve">
     <value>Lose Section</value>
   </data>
   <data name="Missing:" xml:space="preserve">
@@ -2027,8 +2027,8 @@ Please set the path to a Nintendo DS emulator or specify a Nintendo DS emulator 
   <data name="Script" xml:space="preserve">
     <value>Script</value>
   </data>
-  <data name="Script Block:" xml:space="preserve">
-    <value>Block: </value>
+  <data name="Script Section:" xml:space="preserve">
+    <value>Section:</value>
   </data>
   <data name="Script Position" xml:space="preserve">
     <value>Script Position</value>

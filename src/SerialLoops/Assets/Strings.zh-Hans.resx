@@ -414,7 +414,7 @@
   <data name="Clear all commands from the game scenario?\nThis action is irreversible." xml:space="preserve">
     <value>清除游戏场景中的所有命令？\n此行为不可逆。</value>
   </data>
-  <data name="Clear Block" xml:space="preserve">
+  <data name="Clear Section" xml:space="preserve">
     <value>胜利部分</value>
   </data>
   <data name="Clear Scenario" xml:space="preserve">
@@ -1350,10 +1350,10 @@
   <data name="Mikuru Time Percentage" xml:space="preserve">
     <value>实玖瑠时间百分比</value>
   </data>
-  <data name="Miss 2 Block" xml:space="preserve">
+  <data name="Miss 2 Section" xml:space="preserve">
     <value>失败 2 部分</value>
   </data>
-  <data name="Miss Block" xml:space="preserve">
+  <data name="Miss Section" xml:space="preserve">
     <value>失败部分</value>
   </data>
   <data name="Missing:" xml:space="preserve">
@@ -1915,7 +1915,7 @@
   <data name="Script" xml:space="preserve">
     <value>脚本</value>
   </data>
-  <data name="Script Block:" xml:space="preserve">
+  <data name="Script Section:" xml:space="preserve">
     <value>区块：</value>
   </data>
   <data name="Script Position" xml:space="preserve">
