@@ -35,7 +35,7 @@ public class ProjectSettingsDialogViewModel : ViewModelBase
 
     private ProjectSettings _settings;
     public ILogger Log { get; set; }
-    public bool Applied { get; set; }
+
     private ProjectSettingsDialog _settingsDialog;
 
     public void Initialize(ProjectSettingsDialog settingsDialog, ProjectSettings settings, ILogger log)
@@ -90,7 +90,6 @@ public class ProjectSettingsDialogViewModel : ViewModelBase
             _settings.Icon = _icon;
         }
 
-        Applied = true;
         _settingsDialog.Close();
     }
 }
