@@ -151,7 +151,7 @@ jobs:
       - name: Check out SDL
         uses: actions/checkout@v4
         with:
-          repository: 'libsdl-org/SDL.git'
+          repository: 'libsdl-org/SDL'
           branch: release-2.32.x
           path: SDL
       - name: SDL configure
