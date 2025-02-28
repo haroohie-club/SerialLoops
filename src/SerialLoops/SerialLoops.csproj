@@ -102,8 +102,6 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' != 'net8.0-windows'">
-    <PackageReference Include="Nito.AsyncEx.Coordination" Version="5.1.2" />
-    <PackageReference Include="PortAudioSharp" Version="0.3.0" />
     <PackageReference Include="NAudio.Sdl2" Version="2.2.6" />
   </ItemGroup>
 

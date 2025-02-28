@@ -8,8 +8,6 @@ public class BgmVceMixer
 {
 #if WINDOWS
     private WaveOut _player;
-#elif LINUX
-    private PortAudioWavePlayer _player;
 #else
     private WaveOutSdl _player;
 #endif
@@ -28,8 +26,6 @@ public class BgmVceMixer
 
 #if WINDOWS
         _player = new() { DeviceNumber = -1 };
-#elif LINUX
-        _player = new(4096);
 #else
         _player = new() { DesiredLatency = 10 };
 #endif
