@@ -6,7 +6,7 @@ namespace SerialLoops.Lib.Script.Parameters;
 public class MapScriptParameter : ScriptParameter
 {
     public MapItem Map { get; set; }
-    public override short[] GetValues(object obj = null) => new short[] { (short)Map.Map.Index };
+    public override short[] GetValues(object obj = null) => [(short)Map.Map.Index];
 
     public override string GetValueString(Project project)
     {

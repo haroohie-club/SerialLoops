@@ -16,7 +16,7 @@ public class FriendshipLevelScriptParameter : ScriptParameter
 
     public FriendshipCharacter Character { get; set; }
 
-    public override short[] GetValues(object obj = null) => new short[] { (short)Character };
+    public override short[] GetValues(object obj = null) => [(short)Character];
 
     public override string GetValueString(Project project)
     {

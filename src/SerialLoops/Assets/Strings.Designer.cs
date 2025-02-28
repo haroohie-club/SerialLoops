@@ -806,20 +806,11 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Black Space Begin.
+        ///   Looks up a localized string similar to Black Move.
         /// </summary>
-        public static string Black_Space_Begin {
+        public static string Black_Move {
             get {
-                return ResourceManager.GetString("Black Space Begin", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Black Space End.
-        /// </summary>
-        public static string Black_Space_End {
-            get {
-                return ResourceManager.GetString("Black Space End", resourceCulture);
+                return ResourceManager.GetString("Black Move", resourceCulture);
             }
         }
         
@@ -8524,20 +8515,11 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to White Space Begin.
+        ///   Looks up a localized string similar to White Move.
         /// </summary>
-        public static string White_Space_Begin {
+        public static string White_Move {
             get {
-                return ResourceManager.GetString("White Space Begin", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to White Space End.
-        /// </summary>
-        public static string White_Space_End {
-            get {
-                return ResourceManager.GetString("White Space End", resourceCulture);
+                return ResourceManager.GetString("White Move", resourceCulture);
             }
         }
         

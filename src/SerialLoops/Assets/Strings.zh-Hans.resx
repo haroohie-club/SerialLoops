@@ -273,14 +273,6 @@
   <data name="BGMs" xml:space="preserve">
     <value>BGM</value>
   </data>
-  <data name="Black Space Begin" xml:space="preserve">
-    <value>黑格开始</value>
-    <comment>As on a chessboard</comment>
-  </data>
-  <data name="Black Space End" xml:space="preserve">
-    <value>黑格结束</value>
-    <comment>As on a chessboard</comment>
-  </data>
   <data name="Both" xml:space="preserve">
     <value>两个</value>
     <comment>Checkbox for "Both Screens"</comment>
@@ -2412,14 +2404,6 @@
   </data>
   <data name="While attempting to build,  file #{0:X3} in archive {1} was found to be corrupt. Serial Loops can delete this file from your base directory automatically which may allow you to load the rest of the project, but any changes made to that file will be lost. Alternatively, you can attempt to edit the file manually to fix it. How would you like to proceed? Press OK to proceed with deleting the file and Cancel to attempt to deal with it manually." xml:space="preserve">
     <value>在尝试构建时，发现归档文件 {1} 中的文件#{0:X3} 已损坏。Serial Loops 可以自动从基本目录中删除此文件，这可能允许您加载项目的其余部分，但对该文件所做的任何更改都将丢失。或者，您可以尝试手动编辑文件以修复它。您想如何继续？按“确定”继续删除文件，按“取消”尝试手动处理。</value>
-  </data>
-  <data name="White Space Begin" xml:space="preserve">
-    <value>空白开始</value>
-    <comment>As on a chessboard</comment>
-  </data>
-  <data name="White Space End" xml:space="preserve">
-    <value>空白结束</value>
-    <comment>As on a chessboard</comment>
   </data>
   <data name="Worst Group" xml:space="preserve">
     <value>最差组</value>

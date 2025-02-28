@@ -6,7 +6,7 @@ namespace SerialLoops.Lib.Script.Parameters;
 public class SpriteScriptParameter : ScriptParameter
 {
     public CharacterSpriteItem Sprite { get; set; }
-    public override short[] GetValues(object obj = null) => new short[] { (short)(Sprite?.Index ?? 0) };
+    public override short[] GetValues(object obj = null) => [(short)(Sprite?.Index ?? 0)];
 
     public override string GetValueString(Project project)
     {

@@ -208,10 +208,6 @@
   <data name="&quot;Kinetic&quot; Background" xml:space="preserve">
     <value>"Kinetic" Sfondo</value>
   </data>
-  <data name="Black Space End" xml:space="preserve">
-    <value>Spazio Nero Finale</value>
-    <comment>As on a chessboard</comment>
-  </data>
   <data name="Adjusting Loop Info" xml:space="preserve">
     <value>Configura info Loop</value>
   </data>
@@ -327,10 +323,6 @@
   </data>
   <data name="Chess_Puzzle" xml:space="preserve">
     <value>Scacchi</value>
-  </data>
-  <data name="Black Space Begin" xml:space="preserve">
-    <value>Spazio Nero Iniziale</value>
-    <comment>As on a chessboard</comment>
   </data>
   <data name="Color" xml:space="preserve">
     <value>Colore</value>
@@ -2025,10 +2017,6 @@
   <data name="Vorbis files" xml:space="preserve">
     <value>Vorbis files</value>
   </data>
-  <data name="White Space End" xml:space="preserve">
-    <value>Spazio bianco finale</value>
-    <comment>As on a chessboard</comment>
-  </data>
   <data name="Quicksave data damaged &amp; reset message box" xml:space="preserve">
     <value>Messaggio Riparazione dati danneggiati e reset</value>
   </data>
@@ -2190,10 +2178,6 @@
   </data>
   <data name="Update Now" xml:space="preserve">
     <value>Aggiorna adesso</value>
-  </data>
-  <data name="White Space Begin" xml:space="preserve">
-    <value>Spazio bianco inizio</value>
-    <comment>As on a chessboard</comment>
   </data>
   <data name="Scenario Command Index:" xml:space="preserve">
     <value>Index comandi scenario: </value>

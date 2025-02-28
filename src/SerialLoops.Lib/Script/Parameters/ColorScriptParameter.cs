@@ -10,7 +10,7 @@ public class ColorScriptParameter : ScriptParameter
     private byte _blue;
 
     public SKColor Color { get; set; }
-    public override short[] GetValues(object obj = null) => new short[] { _red, _green, _blue };
+    public override short[] GetValues(object obj = null) => [_red, _green, _blue];
 
     public override string GetValueString(Project project)
     {

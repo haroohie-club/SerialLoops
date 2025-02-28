@@ -117,6 +117,9 @@ public class ScriptEditorViewModel : EditorViewModel
 
     public Vector? ScrollPosition { get; set; }
 
+    [Reactive]
+    public ChessPuzzleItem CurrentChessBoard { get; set; }
+
     public ObservableCollection<StartingChibiWithImage> UnusedChibis { get; }
     public ObservableCollection<StartingChibiWithImage> StartingChibis { get; }
 
@@ -256,8 +259,10 @@ public class ScriptEditorViewModel : EditorViewModel
             }
             else
             {
-                (SKBitmap previewBitmap, string errorImage) =
-                    _script.GeneratePreviewImage(_commands, SelectedCommand, _project, _log);
+                ScriptPreview preview = _script.GetScriptPreview(_commands, _selectedCommand, _project, _log);
+                CurrentChessBoard = preview.ChessPuzzle;
+
+                (SKBitmap previewBitmap, string errorImage) = ScriptItem.GeneratePreviewImage(preview, _project);
                 if (previewBitmap is null)
                 {
                     previewBitmap = new(256, 384);

@@ -22,6 +22,8 @@ public class ScriptItem : Item
     public AdjacencyGraph<ScriptSection, ScriptSectionEdge> Graph { get; set; } = new();
     private readonly Func<string, string> _localize;
 
+
+
     public ScriptItem(string name) : base(name, ItemType.Script)
     {
     }
@@ -390,6 +392,14 @@ public class ScriptItem : Item
             if (lastChessLoad is not null)
             {
                 preview.ChessPuzzle = ((ChessPuzzleScriptParameter)lastChessLoad.Parameters[0]).ChessPuzzle;
+            }
+
+            ScriptItemCommand lastChessReset = commands.LastOrDefault(c => c.Verb == CommandVerb.CHESS_RESET);
+            ScriptItemCommand[] chessMoves = commands.Where(c => c.Verb == CommandVerb.CHESS_MOVE
+                                                                 && commands.IndexOf(c) > commands.IndexOf(lastChessReset)).ToArray();
+            foreach (ScriptItemCommand chessMove in chessMoves)
+            {
+                preview.ChessPuzzle.ChessPuzzle.Chessboard.Swap(ChessPuzzleItem)
             }
         }
 

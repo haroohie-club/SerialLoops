@@ -299,14 +299,6 @@
   <data name="BGMs" xml:space="preserve">
     <value>BGMs</value><comment>Background Music (plural)</comment>
   </data>
-  <data name="Black Space Begin" xml:space="preserve">
-    <value>Black Space Begin</value>
-    <comment>As on a chessboard</comment>
-  </data>
-  <data name="Black Space End" xml:space="preserve">
-    <value>Black Space End</value>
-    <comment>As on a chessboard</comment>
-  </data>
   <data name="Both" xml:space="preserve">
     <value>Both</value>
     <comment>Checkbox for "Both Screens"</comment>
@@ -2546,14 +2538,6 @@ No project is currently open. Would you like to create a new project?</value>
   <data name="While attempting to build,  file #{0:X3} in archive {1} was found to be corrupt. Serial Loops can delete this file from your base directory automatically which may allow you to load the rest of the project, but any changes made to that file will be lost. Alternatively, you can attempt to edit the file manually to fix it. How would you like to proceed? Press OK to proceed with deleting the file and Cancel to attempt to deal with it manually." xml:space="preserve">
     <value>While attempting to build, file #{0:X3} in archive {1} was found to be corrupt. Serial Loops can delete this file from your base directory automatically which may allow you to load the rest of the project, but any changes made to that file will be lost. Alternatively, you can attempt to edit the file manually to fix it. How would you like to proceed? Press OK to proceed with deleting the file and Cancel to attempt to deal with it manually.</value>
   </data>
-  <data name="White Space Begin" xml:space="preserve">
-    <value>White Space Begin</value>
-    <comment>As on a chessboard</comment>
-  </data>
-  <data name="White Space End" xml:space="preserve">
-    <value>White Space End</value>
-    <comment>As on a chessboard</comment>
-  </data>
   <data name="Worst Group" xml:space="preserve">
     <value>Worst Group</value>
   </data>
@@ -3073,5 +3057,11 @@ This action is irreversible.</value>
   </data>
   <data name="Normalize" xml:space="preserve">
     <value>Normalize</value><comment>As in "normalize the audio volume so that max volume is similar to all other audio volumes"</comment>
+  </data>
+  <data name="White Move" xml:space="preserve">
+    <value>White Move</value><comment>As on a chessboard</comment>
+  </data>
+  <data name="Black Move" xml:space="preserve">
+    <value>Black Move</value><comment>As on a chessboard</comment>
   </data>
 </root>

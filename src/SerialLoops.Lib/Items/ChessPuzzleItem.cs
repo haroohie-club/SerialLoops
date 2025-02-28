@@ -133,8 +133,24 @@ public class ChessPuzzleItem : Item
         return new(destPos * 20 % 160 + 2, destPos / 8 * 21 + 4);
     }
 
+    public static SKPoint GetChessSpacePosition(int spacePos)
+    {
+        int file = (spacePos >> 4) & 0b111;
+        int rank = spacePos & 0b111;
+        int piecePos = rank * 8 + file;
+        return GetChessPiecePosition(piecePos);
+    }
+
     public static int GetChessPieceIndexFromPosition(SKPoint point)
     {
-        return ((int)point.Y - 4) * 21 / 8 + ((int)point.X - 2) * 20;
+        return ((int)point.X - 4) / 21 * 8 + ((int)point.Y - 2) / 20;
+    }
+
+    public static int GetChessSpaceIndexFromPosition(SKPoint point, bool white = true)
+    {
+        int pieceIndex = GetChessPieceIndexFromPosition(new(point.Y, point.X));
+        int file = pieceIndex % 8;
+        int rank = pieceIndex / 8;
+        return file * 16 + rank + (white ? 0 : 8);
     }
 }

@@ -5,7 +5,7 @@ namespace SerialLoops.Lib.Script.Parameters;
 public class TransitionScriptParameter : ScriptParameter
 {
     public TransitionEffect Transition { get; set; }
-    public override short[] GetValues(object obj = null) => new short[] { (short)Transition };
+    public override short[] GetValues(object obj = null) => [(short)Transition];
 
     public override string GetValueString(Project project)
     {
