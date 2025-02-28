@@ -91,8 +91,8 @@ way of getting the Docker path to work, so you will have to use Make.
     - On Windows, you will additionally need to install [Windows Subsystem for Linux (WSL)](https://learn.microsoft.com/en-us/windows/wsl/install).
       From an admin PowerShell or Terminal window (Winkey + X + A), simply type `wsl --install` to install it.
 
-#### Installing PortAudio (Linux)
-If you're running on Linux and _not using one of the package releases_ (the Flatpak, AppImage, `.deb` or `.rpm`), you will also need to install PortAudio which is used for audio processing.
+#### Installing SDL2 (Linux)
+If you're running on Linux and _not using one of the package releases_ (the Flatpak, AppImage, `.deb` or `.rpm`), you will also need to install SDL2 which is used for audio processing.
 
 </details>
 

@@ -52,11 +52,12 @@ modules:
       - make
       - make install
 
-  - name: PortAudio
+  - name: SDL
     buildsystem: cmake
     sources:
       - type: git
-        url: https://github.com/PortAudio/portaudio.git
+        url: https://github.com/libsdl-org/SDL.git
+        branch: release-2.32.x
 
   - name: SerialLoops
     buildsystem: simple

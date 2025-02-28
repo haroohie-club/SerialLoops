@@ -143,12 +143,12 @@ jobs:
   macos-pkg:
     runs-on: macos-latest
     strategy:
-      matrix: 
+      matrix:
         type: [ { rid:  'osx-x64', arch: 'x86_64 ' },  { rid: 'osx-arm64', arch: 'arm64' } ]
     steps:
       - name: Check out Serial Loops
         uses: actions/checkout@v4
-      - name: Check out portaudio
+      - name: Check out SDL
         uses: actions/checkout@v4
         with:
           repository: 'libsdl-org/SDL.git'
@@ -308,4 +308,4 @@ jobs:
             If you would rather manually install, follow the below instructions:
             * The `.deb` package is intended for Debian-based distros (e.g. Ubuntu). Install it with `sudo apt install -f ./SerialLoops-linux-x64-${{ env.SLVersion }}.deb`.
             * The `.rpm` package is intended for Red Hat distros (e.g. Fedora). Install it with `sudo dnf install ./SerialLoops-linux-x64-${{ env.SLVersion }}-1.fc39.x86_64.rpm`.
-            * For other Linux distros, please use the binaries packaged in the `.tar.gz` archive; when doing so, ensure you install the PortAudio binaries so audio playback works.
+            * For other Linux distros, please use the binaries packaged in the `.tar.gz` archive; when doing so, ensure you install the SDL2 binaries so audio playback works.

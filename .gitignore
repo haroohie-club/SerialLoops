@@ -365,6 +365,5 @@ MigrationBackup/
 
 # macOS stuff
 .DS_Store
-portaudio/
-libportaudio.dylib
+SDL/
 libSDL2.dylib
