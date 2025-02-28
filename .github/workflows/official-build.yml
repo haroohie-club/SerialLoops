@@ -151,12 +151,13 @@ jobs:
       - name: Check out portaudio
         uses: actions/checkout@v4
         with:
-          repository: 'PortAudio/portaudio'
-          path: portaudio
-      - name: cmake configure
-        run: pushd ${{ github.workspace }}/portaudio && cmake . -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=./build/lib -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DPA_BUILD_SHARED_LIBS=true -DCMAKE_OSX_ARCHITECTURES=${{ matrix.type.arch }} && popd
-      - name: make
-        run: pushd ${{ github.workspace }}/portaudio && make && popd
+          repository: 'libsdl-org/SDL.git'
+          branch: release-2.32.x
+          path: SDL
+      - name: SDL configure
+        run: pushd ${{ github.workspace }}/SDL && cmake -S . -B build -DSDL_SHARED=ON -DCMAKE_SYSTEM_NAME=Darwin -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" && popd
+      - name: SDL make
+        run: pushd ${{ github.workspace }}/SDL && cmake --build build && popd
       - name: Setup .NET
         uses: actions/setup-dotnet@v4.1.0
         with:
@@ -166,8 +167,8 @@ jobs:
         with:
           python-version: '3.13'
       - run: pip install macos-pkg-builder
-      - name: Copy in portaudio
-        run: cp -L ${{ github.workspace }}/portaudio/libportaudio.dylib "src/SerialLoops/libportaudio.dylib"
+      - name: Copy in SDL
+        run: cp -L ${{ github.workspace }}/SDL/build/libSDL2-2.0.dylib "src/SerialLoops/libSDL2.dylib"
       - name: Restore
         run: dotnet restore src/SerialLoops/SerialLoops.csproj -r ${{ matrix.type.rid }}
       - name: Build .app

@@ -367,3 +367,4 @@ MigrationBackup/
 .DS_Store
 portaudio/
 libportaudio.dylib
+libSDL2.dylib

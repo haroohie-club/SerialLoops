@@ -1,4 +1,5 @@
 ﻿using System;
+using NAudio.Sdl2;
 using NAudio.Wave;
 
 namespace SerialLoops.Utility;
@@ -7,8 +8,10 @@ public class BgmVceMixer
 {
 #if WINDOWS
     private WaveOut _player;
-#else
+#elif LINUX
     private PortAudioWavePlayer _player;
+#else
+    private WaveOutSdl _player;
 #endif
     public IWaveProvider WaveProvider { get; set; }
     public PlaybackState PlaybackState => _player.PlaybackState;
@@ -25,8 +28,10 @@ public class BgmVceMixer
 
 #if WINDOWS
         _player = new() { DeviceNumber = -1 };
-#else
+#elif LINUX
         _player = new(4096);
+#else
+        _player = new() { DesiredLatency = 10 };
 #endif
         _player.Init(WaveProvider);
     }
