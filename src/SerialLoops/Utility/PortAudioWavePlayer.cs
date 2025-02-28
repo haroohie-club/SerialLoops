@@ -123,7 +123,7 @@ public class PortAudioWavePlayer : IWavePlayer
         _fillSourceBufferWorkerCts.TryReset();
         while (!_fillSourceBufferWorkerCts.Token.IsCancellationRequested)
         {
-            var bufferSpace = _sourceBuffer.MaxLength - _sourceBuffer.Count;
+            int bufferSpace = _sourceBuffer.MaxLength - _sourceBuffer.Count;
             if (bufferSpace > 0)
             {
                 FillSourceBuffer(bufferSpace);
