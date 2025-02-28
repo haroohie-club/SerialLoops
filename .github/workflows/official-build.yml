@@ -154,9 +154,9 @@ jobs:
           repository: 'libsdl-org/SDL'
           ref: release-2.32.x
           path: SDL
-      - name: SDL configure
+      - name: SDL cmake configure
         run: pushd ${{ github.workspace }}/SDL && cmake -S . -B build -DSDL_SHARED=ON -DCMAKE_SYSTEM_NAME=Darwin -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" && popd
-      - name: SDL make
+      - name: SDL cmake build
         run: pushd ${{ github.workspace }}/SDL && cmake --build build && popd
       - name: Setup .NET
         uses: actions/setup-dotnet@v4.1.0
