@@ -3064,4 +3064,13 @@ This action is irreversible.</value>
   <data name="Black Move" xml:space="preserve">
     <value>Black Move</value><comment>As on a chessboard</comment>
   </data>
+  <data name="View Crash Log" xml:space="preserve">
+    <value>View Crash Log</value>
+  </data>
+  <data name="No Crash Log" xml:space="preserve">
+    <value>No Crash Log</value>
+  </data>
+  <data name="There are no Serial Loops crash logs. No crashes so far!" xml:space="preserve">
+    <value>There are no Serial Loops crash logs. No crashes so far!</value>
+  </data>
 </root>

@@ -56,4 +56,9 @@ public partial class App : Application
     {
         ((MainWindow)_desktop.MainWindow)!.ViewModel.ViewLogsCommand.Execute(Unit.Default);
     }
+
+    private void CrashLog_Click(object sender, EventArgs e)
+    {
+        ((MainWindow)_desktop.MainWindow)!.ViewModel.ViewCrashLogCommand.Execute(Unit.Default);
+    }
 }

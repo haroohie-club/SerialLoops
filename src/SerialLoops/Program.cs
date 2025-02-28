@@ -11,7 +11,7 @@ internal sealed class Program
     // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
     // yet and stuff might break.
     [STAThread]
-    public static void Main(string[] args)
+    public static int Main(string[] args)
     {
         try
         {
@@ -21,7 +21,10 @@ internal sealed class Program
         {
             LoopyLogger logger = new(null);
             logger.LogCrash(ex);
+            return 1;
         }
+
+        return 0;
     }
 
     // Avalonia configuration, don't remove; also used by visual designer.

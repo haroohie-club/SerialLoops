@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using HaroohieClub.NitroPacker.Core;
+using HaroohieClub.NitroPacker;
 using HaruhiChokuretsuLib.Util;
 using SerialLoops.Lib.Util;
 
@@ -81,7 +81,7 @@ public static class IO
                 new("vce", [], []),
             ],
             [
-                new(Path.Combine(project.BaseDirectory, "rom", $"{project.Name}.xml")),
+                new(Path.Combine(project.BaseDirectory, "rom", $"{project.Name}.json")),
             ]);
         IODirectory srcDirectoryTree = new("src",
             [
