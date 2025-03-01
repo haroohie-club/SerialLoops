@@ -166,7 +166,7 @@ public class GapClipMaskConverter : IMultiValueConverter
 {
     public static readonly GapClipMaskConverter Instance = new();
 
-    public object Convert(IList<object?> values, Type targetType, object? parameter,
+    public object Convert(IList<object> values, Type targetType, object parameter,
         CultureInfo culture)
     {
         if (values is not [Rect bounds, Rect gap]

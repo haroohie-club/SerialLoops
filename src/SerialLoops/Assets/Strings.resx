@@ -3074,6 +3074,15 @@ This action is irreversible.</value>
   <data name="Normalize" xml:space="preserve">
     <value>Normalize</value><comment>As in "normalize the audio volume so that max volume is similar to all other audio volumes"</comment>
   </data>
+  <data name="View Crash Log" xml:space="preserve">
+    <value>View Crash Log</value>
+  </data>
+  <data name="No Crash Log" xml:space="preserve">
+    <value>No Crash Log</value>
+  </data>
+  <data name="There are no Serial Loops crash logs. No crashes so far!" xml:space="preserve">
+    <value>There are no Serial Loops crash logs. No crashes so far!</value>
+  </data>
   <data name="Y_TOP" xml:space="preserve">
     <value>Top</value>
   </data>
