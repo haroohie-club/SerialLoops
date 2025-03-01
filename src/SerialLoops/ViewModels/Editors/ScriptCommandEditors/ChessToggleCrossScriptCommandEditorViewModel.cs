@@ -11,14 +11,14 @@ using SkiaSharp;
 
 namespace SerialLoops.ViewModels.Editors.ScriptCommandEditors;
 
-public class ChessToggleHighlightScriptCommandEditorViewModel : ScriptCommandEditorViewModel
+public class ChessToggleCrossScriptCommandEditorViewModel : ScriptCommandEditorViewModel
 {
     [Reactive]
     public SKBitmap Chessboard { get; set; }
 
-    public ObservableCollection<HighlightedChessSpace> HighlightedSpaces { get; } = [];
+    public ObservableCollection<HighlightedChessSpace> CrossedSpaces { get; } = [];
 
-    public ChessToggleHighlightScriptCommandEditorViewModel(ScriptItemCommand command, ScriptEditorViewModel scriptEditor, ILogger log)
+    public ChessToggleCrossScriptCommandEditorViewModel(ScriptItemCommand command, ScriptEditorViewModel scriptEditor, ILogger log)
         : base(command, scriptEditor, log)
     {
         for (int i = 0; i < Command.Parameters.Count; i++)
@@ -34,24 +34,25 @@ public class ChessToggleHighlightScriptCommandEditorViewModel : ScriptCommandEdi
             {
                 SKPoint spacePos = ChessPuzzleItem.GetChessPiecePosition(pieceIndex);
                 spacePos.Y += 16;
-                HighlightedSpaces.Add(new(GetBrush(spaceIndex), spacePos, i, spaceIndex));
+                CrossedSpaces.Add(new(Brushes.Transparent, spacePos, i, spaceIndex) { SvgFill = GetSvgFill(spaceIndex)});
             }
         }
     }
 
-    private bool IsRemove(int spaceIndex) => ScriptEditor.CurrentCrossedSpaces.Contains((short)spaceIndex);
+    private bool IsRemove(int spaceIndex) => ScriptEditor.CurrentHighlightedSpaces.Contains((short)spaceIndex);
 
-    private IImmutableSolidColorBrush GetBrush(int spaceIndex)
+    private string GetSvgFill(int spaceIndex)
     {
-        return IsRemove(spaceIndex) ? Brushes.Black : Brushes.Goldenrod;
+        return IsRemove(spaceIndex) ? "path { fill: #000000 !important }" : "path { fill: #FF0000 !important }";
     }
 
     public void LoadChessboard()
     {
         Chessboard = ScriptEditor.CurrentChessBoard?.GetChessboard(ScriptEditor.Window.OpenProject);
-        foreach (HighlightedChessSpace highlightedSpace in HighlightedSpaces)
+        foreach (HighlightedChessSpace highlightedSpace in CrossedSpaces)
         {
-            highlightedSpace.Fill = GetBrush(highlightedSpace.SpaceIndex);
+            highlightedSpace.Fill = Brushes.Transparent;
+            highlightedSpace.SvgFill = GetSvgFill(highlightedSpace.SpaceIndex);
         }
     }
 
@@ -60,22 +61,22 @@ public class ChessToggleHighlightScriptCommandEditorViewModel : ScriptCommandEdi
         int chessPieceIndex = ChessPuzzleItem.GetChessPieceIndexFromPosition(new((float)position.X, (float)position.Y - 16));
         SKPoint spacePos = ChessPuzzleItem.GetChessPiecePosition(chessPieceIndex);
         spacePos.Y += 16;
-        HighlightedChessSpace existingSpace = HighlightedSpaces.FirstOrDefault(g => g.Position == spacePos);
-        if (!HighlightedSpaces.Remove(existingSpace) && HighlightedSpaces.Count < Command.Parameters.Count)
+        HighlightedChessSpace existingSpace = CrossedSpaces.FirstOrDefault(g => g.Position == spacePos);
+        if (!CrossedSpaces.Remove(existingSpace) && CrossedSpaces.Count < Command.Parameters.Count)
         {
             int spaceIndex = ChessPuzzleItem.ConvertPieceIndexToSpaceIndex(chessPieceIndex);
 
-            HighlightedSpaces.Add(new(GetBrush(spaceIndex), spacePos, HighlightedSpaces.Count, spaceIndex));
+            CrossedSpaces.Add(new(Brushes.Transparent, spacePos, CrossedSpaces.Count, spaceIndex) { SvgFill = GetSvgFill(spaceIndex)});
         }
 
         bool hasValues = true;
         for (int i = 0; i < Command.Parameters.Count; i++)
         {
-            if (i < HighlightedSpaces.Count)
+            if (i < CrossedSpaces.Count)
             {
-                ((ChessSpaceScriptParameter)Command.Parameters[i]).SpaceIndex = (short)HighlightedSpaces[i].SpaceIndex;
+                ((ChessSpaceScriptParameter)Command.Parameters[i]).SpaceIndex = (short)CrossedSpaces[i].SpaceIndex;
                 Command.Script.ScriptSections[Command.Script.ScriptSections.IndexOf(Command.Section)]
-                    .Objects[Command.Index].Parameters[i] = (short)HighlightedSpaces[i].SpaceIndex;
+                    .Objects[Command.Index].Parameters[i] = (short)CrossedSpaces[i].SpaceIndex;
             }
             else if (hasValues)
             {

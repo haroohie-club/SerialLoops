@@ -1,0 +1,66 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="using:SerialLoops.ViewModels.Editors.ScriptCommandEditors"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:assets="using:SerialLoops.Assets"
+             xmlns:utility="using:SerialLoops.Utility"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:ChessToggleCrossScriptCommandEditorViewModel"
+             x:Class="SerialLoops.Views.Editors.ScriptCommandEditors.ChessToggleCrossScriptCommandEditorView"
+             Loaded="Control_OnLoaded">
+    <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto">
+        <StackPanel Grid.Row="0" Grid.Column="0" Spacing="20" Orientation="Horizontal">
+            <StackPanel Orientation="Vertical" Spacing="5">
+                <Svg Path="avares://SerialLoops/Assets/Icons/Close.svg" Width="20" Height="20" Opacity="0.5">
+                    <Svg.Styles>
+                        <Style Selector="Svg">
+                            <Setter Property="Css" Value="path { fill: #FF0000 !important }" />
+                        </Style>
+                    </Svg.Styles>
+                </Svg>
+                <TextBlock Text="{x:Static assets:Strings.Set}"/>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" Spacing="5">
+                <Svg Path="avares://SerialLoops/Assets/Icons/Close.svg" Width="20" Height="20" Opacity="0.5">
+                    <Svg.Styles>
+                        <Style Selector="Svg">
+                            <Setter Property="Css" Value="path { fill: #000000 !important }" />
+                        </Style>
+                    </Svg.Styles>
+                </Svg>
+                <TextBlock Text="{x:Static assets:Strings.Delete}"/>
+            </StackPanel>
+        </StackPanel>
+
+        <Canvas Grid.Row="1" Grid.Column="0" Margin="10 0 0 0" Width="{Binding Chessboard.Width}"
+                Height="{Binding Chessboard.Height}" PointerPressed="Chessboard_OnPointerPressed">
+            <Image Canvas.Left="0" Canvas.Top="0" Source="{Binding Chessboard, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
+            <ItemsControl Canvas.Left="0" Canvas.Top="0" ItemsSource="{Binding CrossedSpaces}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas Width="{Binding Chessboard.Width}" Height="{Binding Chessboard.Height}"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.DataTemplates>
+                    <DataTemplate x:DataType="vm:HighlightedChessSpace">
+                        <Svg Path="avares://SerialLoops/Assets/Icons/Close.svg" Width="20" Height="20" Opacity="0.5">
+                            <Svg.Styles>
+                                <Style Selector="Svg">
+                                    <Setter Property="Css" Value="{Binding SvgFill}" />
+                                </Style>
+                            </Svg.Styles>
+                        </Svg>
+                    </DataTemplate>
+                </ItemsControl.DataTemplates>
+                <ItemsControl.Styles>
+                    <Style Selector="ItemsControl > ContentPresenter" x:DataType="vm:HighlightedChessSpace">
+                        <Setter Property="(Canvas.Left)" Value="{Binding Position.X}"/>
+                        <Setter Property="(Canvas.Top)" Value="{Binding Position.Y}"/>
+                    </Style>
+                </ItemsControl.Styles>
+            </ItemsControl>
+        </Canvas>
+    </Grid>
+</UserControl>
+

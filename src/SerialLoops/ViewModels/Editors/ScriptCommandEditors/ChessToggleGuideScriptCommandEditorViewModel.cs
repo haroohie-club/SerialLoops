@@ -133,6 +133,9 @@ public class HighlightedChessSpace(IImmutableSolidColorBrush fill, SKPoint posit
     [Reactive]
     public IImmutableSolidColorBrush Fill { get; set; } = fill;
 
+    [Reactive]
+    public string SvgFill { get; set; } = string.Empty;
+
     public SKPoint Position { get; } = position;
 
     public int ParamIndex { get; } = paramIndex;

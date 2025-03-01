@@ -25,6 +25,6 @@ public class ScriptPreview
     public List<short> ChessHighlightedSpaces { get; set; } = [];
     public List<short> ChessGuidePieces { get; set; } = [];
     public List<short> ChessGuideSpaces { get; set; } = [];
-    public List<short> ChessCrossSpaces { get; set; } = [];
+    public List<short> ChessCrossedSpaces { get; set; } = [];
     public string ErrorImage { get; set; }
 }

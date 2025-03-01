@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
@@ -464,13 +465,32 @@ public class ScriptItem : Item
             preview.ChessHighlightedSpaces.Clear();
             foreach (ScriptItemCommand chessHighlightCommand in chessHighlightCommands)
             {
-                ChessSpaceScriptParameter[] chessSpaceParams = chessHighlightCommand.Parameters.Cast<ChessSpaceScriptParameter>().ToArray();
+                ChessSpaceScriptParameter[] chessHighlightParams = chessHighlightCommand.Parameters.Cast<ChessSpaceScriptParameter>().ToArray();
                 // Loop through highlight commands, toggling highlighted spaces on and off
-                short[] thisCommandsChessHighlights = chessSpaceParams
+                short[] thisCommandsChessHighlights = chessHighlightParams
                     .Where(s => s.SpaceIndex != 0 && !preview.ChessHighlightedSpaces.Contains(s.SpaceIndex))
                     .Select(s => s.SpaceIndex).ToArray();
                 preview.ChessHighlightedSpaces.Clear();
                 preview.ChessHighlightedSpaces.AddRange(thisCommandsChessHighlights);
+            }
+
+            // Find crossed spaces
+            ScriptItemCommand[] chessCrossCommands = commands.Where(c => c.Verb == CommandVerb.CHESS_TOGGLE_CROSS
+                                                                             && commands.IndexOf(c) > commands.IndexOf(lastChessLoad)
+                                                                             && commands.IndexOf(c) > commands.IndexOf(lastChessReset)
+                                                                             && commands.IndexOf(c) > commands.IndexOf(lastChessClearAnnotations)
+                                                                             && commands.IndexOf(c) != commands.Count - 1).ToArray();
+
+            preview.ChessCrossedSpaces.Clear();
+            foreach (ScriptItemCommand chessCrossCommand in chessCrossCommands)
+            {
+                ChessSpaceScriptParameter[] chessCrossParams = chessCrossCommand.Parameters.Cast<ChessSpaceScriptParameter>().ToArray();
+                // Loop through highlight commands, toggling highlighted spaces on and off
+                short[] thisCommandsChessCrosses = chessCrossParams
+                    .Where(s => s.SpaceIndex != 0 && !preview.ChessCrossedSpaces.Contains(s.SpaceIndex))
+                    .Select(s => s.SpaceIndex).ToArray();
+                preview.ChessCrossedSpaces.Clear();
+                preview.ChessCrossedSpaces.AddRange(thisCommandsChessCrosses);
             }
         }
 
@@ -973,6 +993,11 @@ public class ScriptItem : Item
             foreach (SKPoint rectOrigin in preview.ChessHighlightedSpaces.Select(h => ChessPuzzleItem.GetChessSpacePosition(h)))
             {
                 canvas.DrawRect(rectOrigin.X + 5, rectOrigin.Y + 203, 20, 19, new() { Color = SKColors.Gold.WithAlpha(128) });
+            }
+
+            foreach (SKPoint rectOrigin in preview.ChessCrossedSpaces.Select(c => ChessPuzzleItem.GetChessSpacePosition(c)))
+            {
+                canvas.DrawRect(rectOrigin.X + 5, rectOrigin.Y + 203, 20, 19, new() { Color = SKColors.Purple.WithAlpha(128) });
             }
         }
 
