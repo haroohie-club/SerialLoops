@@ -5,6 +5,7 @@ using Avalonia;
 using AvaloniaEdit.Utils;
 using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
+using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SerialLoops.Lib;
@@ -31,6 +32,9 @@ public class MapCharactersSubEditorViewModel : ViewModelBase
     public ObservableCollection<ReactiveMapCharacter> MapCharacters { get; } = [];
     [Reactive]
     public ReactiveMapCharacter SelectedMapCharacter { get; set; }
+
+    public ObservableCollection<HighlightedSpace> ObjectPositions { get; } = [];
+    public ObservableCollection<HighlightedSpace> CharacterPositions { get; } = [];
 
 
     [Reactive]
@@ -135,6 +139,11 @@ public class MapCharactersSubEditorViewModel : ViewModelBase
             }
         }
 
+        for (int i = 0; i < _map.Map.ObjectMarkers[..^1].Count; i++)
+        {
+            ObjectLayer.Swap(i, ObjectLayer.ToList()[i..].FindIndex(o => o.Index == _map.Map.ObjectMarkers[i].LayoutIndex) + i);
+        }
+
         LoadMapCharacters();
     }
 
@@ -159,10 +168,10 @@ public class MapCharactersSubEditorViewModel : ViewModelBase
                 .Select(c => new ReactiveMapCharacter(c, Origin, _window.OpenProject)));
         }
 
+        List<ObjectMarker> markers = new(Map.Map.ObjectMarkers[..^1]);
         foreach (ReactiveMapCharacter character in MapCharacters)
         {
-            int spaceIndex = Map.Map.ObjectMarkers.FindIndex(m =>
-                m.ObjectX > character.MapCharacter.X && m.ObjectY > character.MapCharacter.Y);
+            int spaceIndex = markers.FindIndex(m => m.ObjectX > character.MapCharacter.X && m.ObjectY > character.MapCharacter.Y);
 
             if (spaceIndex < 0)
             {
@@ -170,7 +179,8 @@ public class MapCharactersSubEditorViewModel : ViewModelBase
             }
             else
             {
-                ObjectLayer.Insert(spaceIndex, character);
+                int layoutIndex = ObjectLayer.ToList().FindIndex(l => l.Index == markers[spaceIndex].LayoutIndex);
+                ObjectLayer.Insert(layoutIndex, character);
             }
         }
     }

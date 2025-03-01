@@ -51,7 +51,7 @@ public partial class MapCharactersSubEditor : UserControl
             de.DragEffects = DragDropEffects.Move;
 
             ReactiveMapCharacter character = de.Data.Get(nameof(ReactiveMapCharacter)) as ReactiveMapCharacter;
-            Point point = de.GetPosition((Canvas)mapCharactersSubEditor.Content!);
+            Point point = de.GetPosition((Canvas)((Grid)mapCharactersSubEditor.Content!).Children[0]);
             SKPoint gridPoint = ((MapCharactersSubEditorViewModel)DataContext)!.AllGridPositions
                 .MinBy(p => p.Key.Distance(point)).Value;
             ((MapCharactersSubEditorViewModel)DataContext).UpdateMapCharacter(character, (short)gridPoint.X, (short)gridPoint.Y);
