@@ -1,4 +1,5 @@
 ﻿using System;
+using HaruhiChokuretsuLib.Archive.Graphics;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SerialLoops.Lib.Items;
@@ -15,6 +16,9 @@ public class LayoutEntryWithImage : ReactiveObject
     public SKBitmap CroppedImage { get; set; }
     [Reactive]
     public bool IsSelected { get; set; }
+
+    [Reactive]
+    public bool HitTestVisible { get; set; } = true;
 
     private short _screenX;
     public short ScreenX
@@ -158,5 +162,9 @@ public class LayoutEntryWithImage : ReactiveObject
         _screenX = _layout.Layout.LayoutEntries[_index].ScreenX;
         _screenY = _layout.Layout.LayoutEntries[_index].ScreenY;
         _tint = _layout.Layout.LayoutEntries[_index].Tint;
+    }
+
+    public LayoutEntryWithImage()
+    {
     }
 }

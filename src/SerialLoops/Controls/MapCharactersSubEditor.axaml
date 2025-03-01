@@ -1,0 +1,78 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="using:SerialLoops.ViewModels.Controls"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:models="using:SerialLoops.Models"
+             xmlns:utility="using:SerialLoops.Utility"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:MapCharactersSubEditorViewModel"
+             x:Class="SerialLoops.Controls.MapCharactersSubEditor">
+    <Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}">
+        <!-- Background Layer -->
+        <ItemsControl ItemsSource="{Binding BgLayer}" IsHitTestVisible="False">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="models:LayoutEntryWithImage">
+                    <Image Source="{Binding CroppedImage, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
+                           Stretch="Fill" Width="{Binding Width}" Height="{Binding Height}"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <ItemsControl.Styles>
+                <Style Selector="ItemsControl > ContentPresenter" x:DataType="models:LayoutEntryWithImage">
+                    <Setter Property="(Canvas.Left)" Value="{Binding ScreenX}"/>
+                    <Setter Property="(Canvas.Top)" Value="{Binding ScreenY}"/>
+                    <Setter Property="IsVisible" Value="{Binding IsVisible}"/>
+                </Style>
+            </ItemsControl.Styles>
+        </ItemsControl>
+
+        <!-- Object Layer -->
+        <ItemsControl ItemsSource="{Binding ObjectLayer}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="models:LayoutEntryWithImage">
+                    <Image Source="{Binding CroppedImage, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
+                           Stretch="Fill" Width="{Binding Width}" Height="{Binding Height}"
+                           IsHitTestVisible="{Binding HitTestVisible}"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <ItemsControl.Styles>
+                <Style Selector="ItemsControl > ContentPresenter" x:DataType="models:LayoutEntryWithImage">
+                    <Setter Property="(Canvas.Left)" Value="{Binding ScreenX}"/>
+                    <Setter Property="(Canvas.Top)" Value="{Binding ScreenY}"/>
+                </Style>
+            </ItemsControl.Styles>
+        </ItemsControl>
+
+        <!-- Occlusion Layer -->
+        <ItemsControl ItemsSource="{Binding OcclusionLayer}" IsHitTestVisible="False">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="models:LayoutEntryWithImage">
+                    <Image Source="{Binding CroppedImage, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
+                           Stretch="Fill" Width="{Binding Width}" Height="{Binding Height}"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <ItemsControl.Styles>
+                <Style Selector="ItemsControl > ContentPresenter" x:DataType="models:LayoutEntryWithImage">
+                    <Setter Property="(Canvas.Left)" Value="{Binding ScreenX}"/>
+                    <Setter Property="(Canvas.Top)" Value="{Binding ScreenY}"/>
+                </Style>
+            </ItemsControl.Styles>
+        </ItemsControl>
+    </Canvas>
+</UserControl>
+

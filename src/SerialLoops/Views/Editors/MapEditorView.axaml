@@ -188,7 +188,7 @@
                     </ItemsControl>
 
                     <!-- Occlusion Layer -->
-                    <ItemsControl ItemsSource="{Binding BgOcclusionLayer}" IsVisible="{Binding BgOcclusionLayerDisplayed}">
+                    <ItemsControl ItemsSource="{Binding OcclusionLayer}" IsVisible="{Binding BgOcclusionLayerDisplayed}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
