@@ -23,7 +23,7 @@ public partial class ChessPuzzleEditorView : UserControl
         pieceBg!.Background = Brushes.Gold;
     }
 
-    private void InputElement_OnPointerExited(object sender, PointerEventArgs e)
+    private void ChessPiece_OnPointerExited(object sender, PointerEventArgs e)
     {
         Panel pieceBg = sender as Panel;
         if (((ChessPieceOnBoard)pieceBg?.DataContext)?.Piece == ChessFile.ChessPiece.Empty)
