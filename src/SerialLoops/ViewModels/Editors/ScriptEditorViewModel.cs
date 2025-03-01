@@ -25,6 +25,7 @@ using SerialLoops.Lib.Script;
 using SerialLoops.Lib.Util;
 using SerialLoops.Models;
 using SerialLoops.Utility;
+using SerialLoops.ViewModels.Controls;
 using SerialLoops.ViewModels.Dialogs;
 using SerialLoops.ViewModels.Editors.ScriptCommandEditors;
 using SerialLoops.Views.Dialogs;
@@ -120,6 +121,8 @@ public class ScriptEditorViewModel : EditorViewModel
     public ObservableCollection<StartingChibiWithImage> UnusedChibis { get; }
     public ObservableCollection<StartingChibiWithImage> StartingChibis { get; }
 
+    public MapCharactersSubEditorViewModel MapCharactersSubEditorVm { get; set; }
+
     public ScriptEditorViewModel(ScriptItem script, MainWindowViewModel window, ILogger log) : base(script, window, log)
     {
         _script = script;
@@ -146,6 +149,11 @@ public class ScriptEditorViewModel : EditorViewModel
                 UnusedChibis.Add(new(new StartingChibiEntry() { ChibiIndex = i }, ((ChibiItem)_project.Items.First(c => c.Type == ItemDescription.ItemType.Chibi
                     && ((ChibiItem)c).ChibiIndex == i)).ChibiAnimations.First().Value[0].Frame, StartingChibis, UnusedChibis, _script));
             }
+        }
+
+        if (_script.Event.MapCharactersSection is not null)
+        {
+            MapCharactersSubEditorVm = new(_script, _commands, Window);
         }
     }
 

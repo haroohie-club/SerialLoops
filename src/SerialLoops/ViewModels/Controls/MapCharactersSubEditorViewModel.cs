@@ -1,12 +1,18 @@
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using AvaloniaEdit.Utils;
+using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
+using SerialLoops.Lib.Script;
+using SerialLoops.Lib.Script.Parameters;
 using SerialLoops.Models;
 using SkiaSharp;
+using SoftCircuits.Collections;
 
 namespace SerialLoops.ViewModels.Controls;
 
@@ -16,12 +22,16 @@ public class MapCharactersSubEditorViewModel : ViewModelBase
     public ObservableCollection<LayoutEntryWithImage> OcclusionLayer { get; } = [];
     public ObservableCollection<LayoutEntryWithImage> ObjectLayer { get; } = [];
 
+    private readonly List<ReactiveMapCharacter> _mapCharacters = [];
+
     [Reactive]
     public int CanvasWidth { get; set; }
     [Reactive]
     public int CanvasHeight { get; set; }
 
     private MainWindowViewModel _window;
+
+    public ObservableCollection<MapItem> Maps { get; } = [];
 
     private MapItem _map;
     public MapItem Map
@@ -36,7 +46,7 @@ public class MapCharactersSubEditorViewModel : ViewModelBase
 
             if (Map is null)
             {
-                if (_script is null)
+                if (_mapCharacters.Count == 0)
                 {
                     CanvasWidth = 0;
                     CanvasHeight = 0;
@@ -55,11 +65,21 @@ public class MapCharactersSubEditorViewModel : ViewModelBase
 
     private ScriptItem _script;
 
-    public MapCharactersSubEditorViewModel(ScriptItem script, MapItem map, MainWindowViewModel window)
+    public MapCharactersSubEditorViewModel(ScriptItem script, OrderedDictionary<ScriptSection, List<ScriptItemCommand>> commands, MainWindowViewModel window)
     {
         _script = script;
-        Map = map;
         _window = window;
+
+        Maps.AddRange(commands.Values
+            .SelectMany(c => c)
+            .Where(c => c.Verb == EventFile.CommandVerb.LOAD_ISOMAP)
+            .Select(c => ((MapScriptParameter)c.Parameters[0]).Map));
+        Map = Maps.FirstOrDefault();
+        SKPoint origin = Map?.GetOrigin(window.OpenProject.Grp) ?? new(0, 0);
+        _mapCharacters.AddRange(_script.Event.MapCharactersSection.Objects
+            .Where(c => c.CharacterIndex != 0)
+            .Select(c => new ReactiveMapCharacter(c, origin, window.OpenProject)));
+        LoadMapCharacters();
     }
 
     private void SetMap()
@@ -67,8 +87,8 @@ public class MapCharactersSubEditorViewModel : ViewModelBase
         LayoutItem layout = new(_map.Layout,
             [.. _map.Map.Settings.TextureFileIndices.Select(idx => _window.OpenProject.Grp.GetFileByIndex(idx))],
             0, _map.Layout.LayoutEntries.Count, _map.DisplayName);
-        CanvasWidth = _map.Layout.LayoutEntries.Max(l => (l.ScreenX + l.ScreenW) / 2);
-        CanvasHeight = _map.Layout.LayoutEntries.Max(l => (l.ScreenY + l.ScreenH) / 2);
+        CanvasWidth = _map.Layout.LayoutEntries.Max(l => l.ScreenX + l.ScreenW);
+        CanvasHeight = _map.Layout.LayoutEntries.Max(l => l.ScreenY + l.ScreenH);
 
         for (int i = 0; i < _map.Layout.LayoutEntries.Count; i++)
         {
@@ -98,6 +118,26 @@ public class MapCharactersSubEditorViewModel : ViewModelBase
                     break;
             }
         }
+
+        LoadMapCharacters();
+    }
+
+    private void LoadMapCharacters()
+    {
+        foreach (ReactiveMapCharacter character in _mapCharacters)
+        {
+            int objectLayerIndex = 0;
+            foreach (ObjectMarker objectMarker in Map.Map.ObjectMarkers)
+            {
+                if (objectMarker.ObjectX > character.MapCharacter.X ||
+                    objectMarker.ObjectY > character.MapCharacter.Y)
+                {
+                    ObjectLayer.Insert(objectLayerIndex++, character);
+                }
+
+                objectLayerIndex++;
+            }
+        }
     }
 }
 
@@ -109,15 +149,13 @@ public class ReactiveMapCharacter : LayoutEntryWithImage
     {
         MapCharacter = mapCharacter;
         SKPoint mapPos = MapItem.GetPositionFromGrid(mapCharacter.X, mapCharacter.Y, origin, slgMode: false);
-        ScreenX = (short)(mapPos.X / 2);
-        ScreenY = (short)(mapPos.Y / 2);
 
-        SKBitmap chibiBitmap = ((ChibiItem)project.Items.First(i =>
+        CroppedImage = ((ChibiItem)project.Items.First(i =>
                 i.Type == ItemDescription.ItemType.Chibi && ((ChibiItem)i).ChibiIndex == mapCharacter.CharacterIndex))
-            .ChibiAnimations.First().Value[0].Frame;
-        CroppedImage = new(chibiBitmap.Width/ 2, chibiBitmap.Height / 2);
+            .ChibiAnimations.ElementAt(mapCharacter.FacingDirection).Value[0].Frame;
+        ScreenX = (short)(mapPos.X - CroppedImage.Width / 2);
+        ScreenY = (short)(mapPos.Y - CroppedImage.Height / 2 - 24);
         ScreenWidth = (short)CroppedImage.Width;
         ScreenHeight = (short)CroppedImage.Height;
-        chibiBitmap.ScalePixels(chibiBitmap, SKSamplingOptions.Default);
     }
 }

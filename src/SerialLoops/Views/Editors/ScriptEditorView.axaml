@@ -3,10 +3,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:vm="using:SerialLoops.ViewModels.Editors"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:assets="using:SerialLoops.Assets"
+             xmlns:controls="using:SerialLoops.Controls"
              xmlns:i="using:Avalonia.Xaml.Interactivity"
              xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              xmlns:utility="using:SerialLoops.Utility"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:ScriptEditorViewModel"
              x:Class="SerialLoops.Views.Editors.ScriptEditorView">
     <Grid RowDefinitions="Auto,Auto,*">
@@ -49,7 +51,8 @@
                    Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Width="256"/>
             <TabControl Grid.Column="1" Grid.Row="0">
                 <TabControl.Items>
-                    <TabItem Header="Starting Chibis">
+
+                    <TabItem Header="{x:Static assets:Strings.Starting_Chibis}">
                         <StackPanel Orientation="Vertical" Spacing="10">
                             <ItemsRepeater ItemsSource="{Binding StartingChibis}" Width="256" Height="86">
                                 <ItemsRepeater.Layout>
@@ -90,9 +93,13 @@
                             </ItemsRepeater>
                         </StackPanel>
                     </TabItem>
-                    <TabItem Header="Map Characters" />
-                    <TabItem Header="Choices">
 
+                    <TabItem Header="{x:Static assets:Strings.Choices}">
+
+                    </TabItem>
+
+                    <TabItem Header="{x:Static assets:Strings.Map_Characters}">
+                        <controls:MapCharactersSubEditor DataContext="{Binding MapCharactersSubEditorVm}"/>
                     </TabItem>
                 </TabControl.Items>
             </TabControl>

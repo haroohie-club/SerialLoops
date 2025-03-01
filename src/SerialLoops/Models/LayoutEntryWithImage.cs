@@ -27,6 +27,10 @@ public class LayoutEntryWithImage : ReactiveObject
         set
         {
             this.RaiseAndSetIfChanged(ref _screenX, value);
+            if (_layout is null)
+            {
+                return;
+            }
             _layout.Layout.LayoutEntries[_index].ScreenX = _screenX;
             CroppedImage = _layout.GetLayoutEntryRender(_index);
             _layout.UnsavedChanges = true;
@@ -39,6 +43,10 @@ public class LayoutEntryWithImage : ReactiveObject
         set
         {
             this.RaiseAndSetIfChanged(ref _screenY, value);
+            if (_layout is null)
+            {
+                return;
+            }
             _layout.Layout.LayoutEntries[_index].ScreenY = _screenY;
             CroppedImage = _layout.GetLayoutEntryRender(_index);
             _layout.UnsavedChanges = true;
@@ -56,6 +64,10 @@ public class LayoutEntryWithImage : ReactiveObject
         {
             this.RaiseAndSetIfChanged(ref _screenW, value);
             this.RaisePropertyChanged(nameof(Width));
+            if (_layout is null)
+            {
+                return;
+            }
             _layout.Layout.LayoutEntries[_index].ScreenW = _screenW;
             CroppedImage = _layout.GetLayoutEntryRender(_index);
             _layout.UnsavedChanges = true;
@@ -73,6 +85,10 @@ public class LayoutEntryWithImage : ReactiveObject
         {
             this.RaiseAndSetIfChanged(ref _screenH, value);
             this.RaisePropertyChanged(nameof(Height));
+            if (_layout is null)
+            {
+                return;
+            }
             _layout.Layout.LayoutEntries[_index].ScreenH = _screenH;
             CroppedImage = _layout.GetLayoutEntryRender(_index);
             _layout.UnsavedChanges = true;
