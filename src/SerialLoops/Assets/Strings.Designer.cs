@@ -1293,6 +1293,24 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Clear All Guides.
+        /// </summary>
+        public static string Clear_All_Guides {
+            get {
+                return ResourceManager.GetString("Clear All Guides", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear Move.
+        /// </summary>
+        public static string Clear_Move {
+            get {
+                return ResourceManager.GetString("Clear Move", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Clear Scenario.
         /// </summary>
         public static string Clear_Scenario {

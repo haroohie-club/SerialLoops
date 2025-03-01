@@ -423,15 +423,32 @@ public class ScriptItem : Item
                 }
             }
 
-            ScriptItemCommand[] chessGuides = commands.Where(c => c.Verb == CommandVerb.CHESS_TOGGLE_GUIDE
+            // Find chess guide commands that occurred after last load/reset
+            ScriptItemCommand[] chessGuideCommands = commands.Where(c => c.Verb == CommandVerb.CHESS_TOGGLE_GUIDE
                                                                   && commands.IndexOf(c) > commands.IndexOf(lastChessLoad)
                                                                   && commands.IndexOf(c) > commands.IndexOf(lastChessReset)
                                                                   && commands.IndexOf(c) != commands.Count - 1).ToArray();
 
-            foreach (ScriptItemCommand chessGuide in chessGuides)
+            preview.ChessGuidePieces.Clear();
+            foreach (ScriptItemCommand chessGuideCommand in chessGuideCommands)
             {
-
+                ChessSpaceScriptParameter[] chessGuideParams = chessGuideCommand.Parameters[..4].Cast<ChessSpaceScriptParameter>().ToArray();
+                if (chessGuideParams.Any(s => s.SpaceIndex > 128))
+                {
+                    preview.ChessGuidePieces.Clear();
+                    continue;
+                }
+                // Loop through chess guide commands, toggling guide spots on and off
+                short[] thisCommandsChessGuides = chessGuideParams
+                    .Where(s => s.SpaceIndex != 0 && !preview.ChessGuidePieces.Contains(s.SpaceIndex))
+                    .Select(s => s.SpaceIndex).ToArray();
+                preview.ChessGuidePieces.Clear();
+                preview.ChessGuidePieces.AddRange(thisCommandsChessGuides);
             }
+
+            // Find all highlighted guide spaces
+            preview.ChessGuideSpaces.Clear();
+            preview.ChessGuideSpaces.AddRange(preview.ChessGuidePieces.SelectMany(g => preview.ChessPuzzle.GetGuideSpaces(g).Select(i => (short)i).Distinct()));
         }
 
         // Draw background
@@ -924,6 +941,11 @@ public class ScriptItem : Item
         else if (preview.ChessPuzzle is not null)
         {
             canvas.DrawBitmap(preview.ChessPuzzle.GetChessboard(project), 8, 188);
+
+            foreach (SKPoint rectOrigin in preview.ChessGuideSpaces.Select(chessGuideSpace => ChessPuzzleItem.GetChessPiecePosition(chessGuideSpace)))
+            {
+                canvas.DrawRect(rectOrigin.X + 5, rectOrigin.Y + 203, 20, 19, new() { Color = SKColors.DarkRed.WithAlpha(128) });
+            }
         }
 
         // Draw background

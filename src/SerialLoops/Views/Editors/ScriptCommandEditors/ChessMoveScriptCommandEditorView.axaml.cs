@@ -12,14 +12,14 @@ public partial class ChessMoveScriptCommandEditorView : UserControl
         InitializeComponent();
     }
 
-    private void WhiteBoard_OnPointerPressed(object sender, PointerPressedEventArgs e)
+    private void Board1_OnPointerPressed(object sender, PointerPressedEventArgs e)
     {
-        ((ChessMoveScriptCommandEditorViewModel)DataContext)!.Board1Click(e.GetPosition((Image)sender));
+        ((ChessMoveScriptCommandEditorViewModel)DataContext)!.Board1Click(e.GetPosition((Canvas)sender));
     }
 
-    private void BlackBoard_OnPointerPressed(object sender, PointerPressedEventArgs e)
+    private void Board2_OnPointerPressed(object sender, PointerPressedEventArgs e)
     {
-        ((ChessMoveScriptCommandEditorViewModel)DataContext)!.Board2Click(e.GetPosition((Image)sender));
+        ((ChessMoveScriptCommandEditorViewModel)DataContext)!.Board2Click(e.GetPosition((Canvas)sender));
     }
 
     private void Control_OnLoaded(object sender, RoutedEventArgs e)

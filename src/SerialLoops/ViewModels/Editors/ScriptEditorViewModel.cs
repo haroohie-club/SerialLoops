@@ -119,6 +119,7 @@ public class ScriptEditorViewModel : EditorViewModel
 
     [Reactive]
     public ChessPuzzleItem CurrentChessBoard { get; set; }
+    public ObservableCollection<short> CurrentGuidePieces { get; } = [];
 
     public ObservableCollection<StartingChibiWithImage> UnusedChibis { get; }
     public ObservableCollection<StartingChibiWithImage> StartingChibis { get; }
@@ -242,6 +243,7 @@ public class ScriptEditorViewModel : EditorViewModel
                 CommandVerb.CHESS_LOAD => new ChessLoadScriptCommandEditorViewModel(_selectedCommand, this, Window, _log),
                 CommandVerb.CHESS_VGOTO => new ChessVgotoScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.CHESS_MOVE => new ChessMoveScriptCommandEditorViewModel(_selectedCommand, this, _log),
+                CommandVerb.CHESS_TOGGLE_GUIDE => new ChessToggleGuideScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.SCENE_GOTO_CHESS => new SceneGotoScriptCommandEditorViewModel(_selectedCommand, this, _log, Window),
                 CommandVerb.BG_DISP2 => new BgDispScriptCommandEditorViewModel(_selectedCommand, this, _log, Window),
                 _ => new(_selectedCommand, this, _log),
@@ -261,6 +263,8 @@ public class ScriptEditorViewModel : EditorViewModel
             {
                 ScriptPreview preview = _script.GetScriptPreview(_commands, _selectedCommand, _project, _log);
                 CurrentChessBoard = preview.ChessPuzzle;
+                CurrentGuidePieces.Clear();
+                CurrentGuidePieces.AddRange(preview.ChessGuidePieces);
 
                 (SKBitmap previewBitmap, string errorImage) = ScriptItem.GeneratePreviewImage(preview, _project);
                 if (previewBitmap is null)

@@ -3073,4 +3073,10 @@ This action is irreversible.</value>
   <data name="There are no Serial Loops crash logs. No crashes so far!" xml:space="preserve">
     <value>There are no Serial Loops crash logs. No crashes so far!</value>
   </data>
+  <data name="Clear Move" xml:space="preserve">
+    <value>Clear Move</value><comment>As in "delete a chess move"</comment>
+  </data>
+  <data name="Clear All Guides" xml:space="preserve">
+    <value>Clear All Guides</value><comment>As in "delete all guide markers on the chess board"</comment>
+  </data>
 </root>

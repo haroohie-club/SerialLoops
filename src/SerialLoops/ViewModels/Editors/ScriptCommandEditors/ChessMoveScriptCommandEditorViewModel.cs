@@ -1,5 +1,7 @@
+using System.Windows.Input;
 using Avalonia;
 using HaruhiChokuretsuLib.Util;
+using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
@@ -19,9 +21,9 @@ public class ChessMoveScriptCommandEditorViewModel : ScriptCommandEditorViewMode
         get => _move1BeginPoint;
         set
         {
-            _move1BeginPoint = value;
+            this.RaiseAndSetIfChanged(ref _move1BeginPoint, value);
             Move1BeginX = (_move1BeginPoint?.X ?? 0) - 2;
-            Move1BeginY = (_move1BeginPoint?.Y ?? 0) + 8;
+            Move1BeginY = (_move1BeginPoint?.Y ?? 0) + 16;
         }
     }
     private SKPoint? _move1EndPoint;
@@ -30,9 +32,9 @@ public class ChessMoveScriptCommandEditorViewModel : ScriptCommandEditorViewMode
         get => _move1EndPoint;
         set
         {
-            _move1EndPoint = value;
+            this.RaiseAndSetIfChanged(ref _move1EndPoint, value);
             Move1EndX = (_move1EndPoint?.X ?? 0) - 2;
-            Move1EndY = (_move1EndPoint?.Y ?? 0) + 8;
+            Move1EndY = (_move1EndPoint?.Y ?? 0) + 16;
         }
     }
 
@@ -42,9 +44,9 @@ public class ChessMoveScriptCommandEditorViewModel : ScriptCommandEditorViewMode
         get => _move2BeginPoint;
         set
         {
-            _move2BeginPoint = value;
+            this.RaiseAndSetIfChanged(ref _move2BeginPoint, value);
             Move2BeginX = (_move2BeginPoint?.X ?? 0) - 2;
-            Move2BeginY = (_move2BeginPoint?.Y ?? 0) + 8;
+            Move2BeginY = (_move2BeginPoint?.Y ?? 0) + 16;
         }
     }
     private SKPoint? _move2EndPoint;
@@ -53,9 +55,9 @@ public class ChessMoveScriptCommandEditorViewModel : ScriptCommandEditorViewMode
         get => _move2EndPoint;
         set
         {
-            _move2EndPoint = value;
+            this.RaiseAndSetIfChanged(ref _move2EndPoint, value);
             Move2EndX = (_move2EndPoint?.X ?? 0) - 2;
-            Move2EndY = (_move2EndPoint?.Y ?? 0) + 8;
+            Move2EndY = (_move2EndPoint?.Y ?? 0) + 16;
         }
     }
 
@@ -77,6 +79,9 @@ public class ChessMoveScriptCommandEditorViewModel : ScriptCommandEditorViewMode
     [Reactive]
     public float Move2EndY { get; set; }
 
+    public ICommand ClearMove1Command { get; }
+    public ICommand ClearMove2Command { get; }
+
     public ChessMoveScriptCommandEditorViewModel(ScriptItemCommand command, ScriptEditorViewModel scriptEditor, ILogger log)
         : base(command, scriptEditor, log)
     {
@@ -96,6 +101,37 @@ public class ChessMoveScriptCommandEditorViewModel : ScriptCommandEditorViewMode
             Move2BeginPoint = ChessPuzzleItem.GetChessSpacePosition(move2SpaceBeginIndex);
             Move2EndPoint = ChessPuzzleItem.GetChessSpacePosition(move2SpaceEndIndex);
         }
+
+        ClearMove1Command = ReactiveCommand.Create(ClearMove1);
+        ClearMove2Command = ReactiveCommand.Create(ClearMove2);
+    }
+
+    private void ClearMove1()
+    {
+        Move1BeginPoint = null;
+        Move1EndPoint = null;
+        ((ChessSpaceScriptParameter)Command.Parameters[0]).SpaceIndex = 0;
+        Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
+            .Objects[Command.Index].Parameters[0] = 0;
+        ((ChessSpaceScriptParameter)Command.Parameters[1]).SpaceIndex = 0;
+        Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
+            .Objects[Command.Index].Parameters[1] = 0;
+        Script.UnsavedChanges = true;
+        ScriptEditor.UpdatePreview();
+    }
+
+    private void ClearMove2()
+    {
+        Move2BeginPoint = null;
+        Move2EndPoint = null;
+        ((ChessSpaceScriptParameter)Command.Parameters[2]).SpaceIndex = 0;
+        Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
+            .Objects[Command.Index].Parameters[2] = 0;
+        ((ChessSpaceScriptParameter)Command.Parameters[3]).SpaceIndex = 0;
+        Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
+            .Objects[Command.Index].Parameters[3] = 0;
+        Script.UnsavedChanges = true;
+        ScriptEditor.UpdatePreview();
     }
 
     public void LoadChessboard()
@@ -115,9 +151,9 @@ public class ChessMoveScriptCommandEditorViewModel : ScriptCommandEditorViewMode
 
     private void BoardClick(Point position, int paramStartIndex)
     {
-        if ((paramStartIndex == 0 ? Move1EndPoint : Move2EndPoint) is not null)
+        if ((paramStartIndex == 0 ? Move1EndPoint : Move2EndPoint) is not null || (paramStartIndex == 0 ? Move1BeginPoint : Move2BeginPoint) is null)
         {
-            int chessPieceIndex = ChessPuzzleItem.GetChessPieceIndexFromPosition(new((float)position.Y, (float)position.X));
+            int chessPieceIndex = ChessPuzzleItem.GetChessPieceIndexFromPosition(new((float)position.X, (float)position.Y - 16));
             if (chessPieceIndex > ScriptEditor.CurrentChessBoard.ChessPuzzle.Chessboard.Length)
             {
                 return;
@@ -147,7 +183,7 @@ public class ChessMoveScriptCommandEditorViewModel : ScriptCommandEditorViewMode
         }
         else
         {
-            int chessPieceIndex = ChessPuzzleItem.GetChessPieceIndexFromPosition(new((float)position.Y, (float)position.X));
+            int chessPieceIndex = ChessPuzzleItem.GetChessPieceIndexFromPosition(new((float)position.X, (float)position.Y - 16));
             if (chessPieceIndex > ScriptEditor.CurrentChessBoard.ChessPuzzle.Chessboard.Length)
             {
                 return;
