@@ -248,6 +248,8 @@ public class ScriptEditorViewModel : EditorViewModel
                 CommandVerb.CHESS_TOGGLE_GUIDE => new ChessToggleGuideScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.CHESS_TOGGLE_HIGHLIGHT => new ChessToggleHighlightScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.CHESS_TOGGLE_CROSS => new ChessToggleCrossScriptCommandEditorViewModel(_selectedCommand, this, _log),
+                CommandVerb.CHESS_CLEAR_ANNOTATIONS => new EmptyScriptCommandEditorViewModel(_selectedCommand, this, _log),
+                CommandVerb.CHESS_RESET => new EmptyScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.SCENE_GOTO_CHESS => new SceneGotoScriptCommandEditorViewModel(_selectedCommand, this, _log, Window),
                 CommandVerb.BG_DISP2 => new BgDispScriptCommandEditorViewModel(_selectedCommand, this, _log, Window),
                 _ => new(_selectedCommand, this, _log),
