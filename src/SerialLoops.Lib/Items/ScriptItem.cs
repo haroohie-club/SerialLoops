@@ -395,7 +395,7 @@ public class ScriptItem : Item
                 preview.ChessPuzzle = ((ChessPuzzleScriptParameter)lastChessLoad.Parameters[0]).ChessPuzzle.Clone();
             }
 
-            // Find chess reset so we can ignore commands before it
+            // Find CHESS_RESET so we can ignore commands before it
             ScriptItemCommand lastChessReset = commands.LastOrDefault(c => c.Verb == CommandVerb.CHESS_RESET);
 
             // Find chess moves that occurred after last load/reset
@@ -423,10 +423,14 @@ public class ScriptItem : Item
                 }
             }
 
+            // Find last CHESS_CLEAR_ANNOTATIONS so we can ignore any annotations after it
+            ScriptItemCommand lastChessClearAnnotations = commands.LastOrDefault(c => c.Verb == CommandVerb.CHESS_CLEAR_ANNOTATIONS);
+
             // Find chess guide commands that occurred after last load/reset
             ScriptItemCommand[] chessGuideCommands = commands.Where(c => c.Verb == CommandVerb.CHESS_TOGGLE_GUIDE
                                                                   && commands.IndexOf(c) > commands.IndexOf(lastChessLoad)
                                                                   && commands.IndexOf(c) > commands.IndexOf(lastChessReset)
+                                                                  && commands.IndexOf(c) > commands.IndexOf(lastChessClearAnnotations)
                                                                   && commands.IndexOf(c) != commands.Count - 1).ToArray();
 
             preview.ChessGuidePieces.Clear();
@@ -449,6 +453,25 @@ public class ScriptItem : Item
             // Find all highlighted guide spaces
             preview.ChessGuideSpaces.Clear();
             preview.ChessGuideSpaces.AddRange(preview.ChessGuidePieces.SelectMany(g => preview.ChessPuzzle.GetGuideSpaces(g).Select(i => (short)i).Distinct()));
+
+            // Find highlighted spaces
+            ScriptItemCommand[] chessHighlightCommands = commands.Where(c => c.Verb == CommandVerb.CHESS_TOGGLE_HIGHLIGHT
+                                                                             && commands.IndexOf(c) > commands.IndexOf(lastChessLoad)
+                                                                             && commands.IndexOf(c) > commands.IndexOf(lastChessReset)
+                                                                             && commands.IndexOf(c) > commands.IndexOf(lastChessClearAnnotations)
+                                                                             && commands.IndexOf(c) != commands.Count - 1).ToArray();
+
+            preview.ChessHighlightedSpaces.Clear();
+            foreach (ScriptItemCommand chessHighlightCommand in chessHighlightCommands)
+            {
+                ChessSpaceScriptParameter[] chessSpaceParams = chessHighlightCommand.Parameters.Cast<ChessSpaceScriptParameter>().ToArray();
+                // Loop through highlight commands, toggling highlighted spaces on and off
+                short[] thisCommandsChessHighlights = chessSpaceParams
+                    .Where(s => s.SpaceIndex != 0 && !preview.ChessHighlightedSpaces.Contains(s.SpaceIndex))
+                    .Select(s => s.SpaceIndex).ToArray();
+                preview.ChessHighlightedSpaces.Clear();
+                preview.ChessHighlightedSpaces.AddRange(thisCommandsChessHighlights);
+            }
         }
 
         // Draw background
@@ -942,9 +965,14 @@ public class ScriptItem : Item
         {
             canvas.DrawBitmap(preview.ChessPuzzle.GetChessboard(project), 8, 188);
 
-            foreach (SKPoint rectOrigin in preview.ChessGuideSpaces.Select(chessGuideSpace => ChessPuzzleItem.GetChessPiecePosition(chessGuideSpace)))
+            foreach (SKPoint rectOrigin in preview.ChessGuideSpaces.Select(g => ChessPuzzleItem.GetChessPiecePosition(g)))
             {
                 canvas.DrawRect(rectOrigin.X + 5, rectOrigin.Y + 203, 20, 19, new() { Color = SKColors.DarkRed.WithAlpha(128) });
+            }
+
+            foreach (SKPoint rectOrigin in preview.ChessHighlightedSpaces.Select(h => ChessPuzzleItem.GetChessSpacePosition(h)))
+            {
+                canvas.DrawRect(rectOrigin.X + 5, rectOrigin.Y + 203, 20, 19, new() { Color = SKColors.Gold.WithAlpha(128) });
             }
         }
 

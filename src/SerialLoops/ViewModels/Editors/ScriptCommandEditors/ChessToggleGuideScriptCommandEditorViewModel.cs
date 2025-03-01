@@ -18,7 +18,7 @@ public class ChessToggleGuideScriptCommandEditorViewModel : ScriptCommandEditorV
     [Reactive]
     public SKBitmap Chessboard { get; set; }
 
-    public ObservableCollection<GuideSpace> GuidePieces { get; } = [];
+    public ObservableCollection<HighlightedChessSpace> GuidePieces { get; } = [];
 
     private bool _clearAll;
 
@@ -76,7 +76,7 @@ public class ChessToggleGuideScriptCommandEditorViewModel : ScriptCommandEditorV
     public void LoadChessboard()
     {
         Chessboard = ScriptEditor.CurrentChessBoard?.GetChessboard(ScriptEditor.Window.OpenProject);
-        foreach (GuideSpace guideSpace in GuidePieces)
+        foreach (HighlightedChessSpace guideSpace in GuidePieces)
         {
             guideSpace.Fill = GetBrush(guideSpace.SpaceIndex);
         }
@@ -97,11 +97,11 @@ public class ChessToggleGuideScriptCommandEditorViewModel : ScriptCommandEditorV
 
         SKPoint spacePos = ChessPuzzleItem.GetChessPiecePosition(chessPieceIndex);
         spacePos.Y += 16;
-        GuideSpace existingSpace = GuidePieces.FirstOrDefault(g => g.Position == spacePos);
+        HighlightedChessSpace existingSpace = GuidePieces.FirstOrDefault(g => g.Position == spacePos);
         if (!GuidePieces.Remove(existingSpace) && GuidePieces.Count <= 1)
         {
             int spaceIndex = ChessPuzzleItem.ConvertPieceIndexToSpaceIndex(chessPieceIndex);
-            
+
             // TODO: update documentation to reflect that param 1 is for toggling on and param 2 is for toggling off, lol
             int newParamIndex = IsRemove(spaceIndex) ? 0 : 1;
             GuidePieces.Add(new(GetBrush(spaceIndex), spacePos, newParamIndex, spaceIndex));
@@ -128,7 +128,7 @@ public class ChessToggleGuideScriptCommandEditorViewModel : ScriptCommandEditorV
     }
 }
 
-public class GuideSpace(IImmutableSolidColorBrush fill, SKPoint position, int paramIndex, int spaceIndex) : ReactiveObject
+public class HighlightedChessSpace(IImmutableSolidColorBrush fill, SKPoint position, int paramIndex, int spaceIndex) : ReactiveObject
 {
     [Reactive]
     public IImmutableSolidColorBrush Fill { get; set; } = fill;

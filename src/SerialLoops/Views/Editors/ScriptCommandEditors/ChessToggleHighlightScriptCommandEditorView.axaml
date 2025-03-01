@@ -6,13 +6,13 @@
              xmlns:assets="using:SerialLoops.Assets"
              xmlns:utility="using:SerialLoops.Utility"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:DataType="vm:ChessToggleGuideScriptCommandEditorViewModel"
-             x:Class="SerialLoops.Views.Editors.ScriptCommandEditors.ChessToggleGuideScriptCommandEditorView"
+             x:DataType="vm:ChessToggleHighlightScriptCommandEditorViewModel"
+             x:Class="SerialLoops.Views.Editors.ScriptCommandEditors.ChessToggleHighlightScriptCommandEditorView"
              Loaded="Control_OnLoaded">
-    <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,Auto">
-        <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Spacing="20" Orientation="Horizontal">
+    <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto">
+        <StackPanel Grid.Row="0" Grid.Column="0" Spacing="20" Orientation="Horizontal">
             <StackPanel Orientation="Vertical" Spacing="5">
-                <Rectangle Width="20" Height="20" Fill="Red" Opacity="0.5"/>
+                <Rectangle Width="20" Height="20" Fill="Goldenrod" Opacity="0.5"/>
                 <TextBlock Text="{x:Static assets:Strings.Set}"/>
             </StackPanel>
             <StackPanel Orientation="Vertical" Spacing="5">
@@ -24,7 +24,7 @@
         <Canvas Grid.Row="1" Grid.Column="0" Margin="10 0 0 0" Width="{Binding Chessboard.Width}"
                 Height="{Binding Chessboard.Height}" PointerPressed="Chessboard_OnPointerPressed">
             <Image Canvas.Left="0" Canvas.Top="0" Source="{Binding Chessboard, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
-            <ItemsControl Canvas.Left="0" Canvas.Top="0" ItemsSource="{Binding GuidePieces}">
+            <ItemsControl Canvas.Left="0" Canvas.Top="0" ItemsSource="{Binding HighlightedSpaces}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <Canvas Width="{Binding Chessboard.Width}" Height="{Binding Chessboard.Height}"/>
@@ -43,8 +43,6 @@
                 </ItemsControl.Styles>
             </ItemsControl>
         </Canvas>
-        <CheckBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Content="{x:Static assets:Strings.Clear_All_Guides}"
-                  IsChecked="{Binding ClearAll}"/>
     </Grid>
 </UserControl>
 
