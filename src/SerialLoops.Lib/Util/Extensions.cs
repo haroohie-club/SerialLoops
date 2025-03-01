@@ -248,6 +248,10 @@ public static class Extensions
         {
             for (short i = 0; i < evt.ConditionalsSection.Objects.Count; i++)
             {
+                if (evt.ConditionalsSection.Objects[i] is null)
+                {
+                    continue;
+                }
                 if (!conditionalUsedIndices.Select(idx => idx.Index).Contains(i))
                 {
                     evt.ConditionalsSection.Objects.RemoveAt(i);

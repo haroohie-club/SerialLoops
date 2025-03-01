@@ -80,6 +80,7 @@ public partial class MainWindowViewModel : ViewModelBase
     public ICommand PreferencesCommand { get; }
     public ICommand CheckForUpdatesCommand { get; }
     public ICommand ViewLogsCommand { get; }
+    public ICommand ViewCrashLogCommand { get; }
 
     public ICommand SaveProjectCommand { get; }
     public ICommand ProjectSettingsCommand { get; }
@@ -153,6 +154,29 @@ public partial class MainWindowViewModel : ViewModelBase
             {
                 Log.LogException(string.Format(Strings._Failed_to_open_log_file_directly__Logs_can_be_found_at__0__,
                     Path.Combine(CurrentConfig.UserDirectory, "Logs", "SerialLoops.log")), ex);
+            }
+        });
+        ViewCrashLogCommand = ReactiveCommand.CreateFromTask(async Task () =>
+        {
+            if (!File.Exists(LoopyLogger.CrashLogLocation))
+            {
+                await Window.ShowMessageBoxAsync(Strings.No_Crash_Log,
+                    Strings.There_are_no_Serial_Loops_crash_logs__No_crashes_so_far_, ButtonEnum.Ok, Icon.Info, Log);
+                return;
+            }
+
+            try
+            {
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = Path.Combine(LoopyLogger.CrashLogLocation),
+                    UseShellExecute = true,
+                });
+            }
+            catch (Exception ex)
+            {
+                Log.LogException(string.Format(Strings._Failed_to_open_log_file_directly__Logs_can_be_found_at__0__,
+                    LoopyLogger.CrashLogLocation), ex);
             }
         });
     }

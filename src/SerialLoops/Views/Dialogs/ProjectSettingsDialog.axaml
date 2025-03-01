@@ -34,7 +34,7 @@
                                 </StackPanel>
                                 <StackPanel Orientation="Vertical" Spacing="5" HorizontalAlignment="Center" VerticalAlignment="Center">
                                     <TextBlock Text="{x:Static assets:Strings.Game_Title}" />
-                                    <TextBox IsEnabled="True" Text="{Binding GameTitle}"
+                                    <TextBox Text="{Binding GameTitle}" AcceptsReturn="True"
                                              MaxLines="3" MinLines="3" Width="350" MaxWidth="350" />
                                 </StackPanel>
                             </StackPanel>

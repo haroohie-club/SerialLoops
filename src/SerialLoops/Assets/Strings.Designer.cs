@@ -4934,6 +4934,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No Crash Log.
+        /// </summary>
+        public static string No_Crash_Log {
+            get {
+                return ResourceManager.GetString("No Crash Log", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No Emulator Path.
         /// </summary>
         public static string No_Emulator_Path {
@@ -7771,6 +7780,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There are no Serial Loops crash logs. No crashes so far!.
+        /// </summary>
+        public static string There_are_no_Serial_Loops_crash_logs__No_crashes_so_far_ {
+            get {
+                return ResourceManager.GetString("There are no Serial Loops crash logs. No crashes so far!", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There is already a template with that name. Please choose a different name for your template..
         /// </summary>
         public static string There_is_already_a_template_with_that_name__Please_choose_a_different_name_for_your_template_ {
@@ -8376,6 +8394,15 @@ namespace SerialLoops.Assets {
         public static string View__Logs {
             get {
                 return ResourceManager.GetString("View _Logs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View Crash Log.
+        /// </summary>
+        public static string View_Crash_Log {
+            get {
+                return ResourceManager.GetString("View Crash Log", resourceCulture);
             }
         }
         

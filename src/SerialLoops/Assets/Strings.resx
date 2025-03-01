@@ -3077,4 +3077,13 @@ This action is irreversible.</value>
   <data name="Migrate" xml:space="preserve">
     <value>Migrate</value>
   </data>
+  <data name="View Crash Log" xml:space="preserve">
+    <value>View Crash Log</value>
+  </data>
+  <data name="No Crash Log" xml:space="preserve">
+    <value>No Crash Log</value>
+  </data>
+  <data name="There are no Serial Loops crash logs. No crashes so far!" xml:space="preserve">
+    <value>There are no Serial Loops crash logs. No crashes so far!</value>
+  </data>
 </root>
