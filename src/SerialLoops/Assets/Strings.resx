@@ -3058,11 +3058,11 @@ This action is irreversible.</value>
   <data name="Normalize" xml:space="preserve">
     <value>Normalize</value><comment>As in "normalize the audio volume so that max volume is similar to all other audio volumes"</comment>
   </data>
-  <data name="White Move" xml:space="preserve">
-    <value>White Move</value><comment>As on a chessboard</comment>
+  <data name="Move 1" xml:space="preserve">
+    <value>Move 1</value><comment>As on a chessboard</comment>
   </data>
-  <data name="Black Move" xml:space="preserve">
-    <value>Black Move</value><comment>As on a chessboard</comment>
+  <data name="Move 2" xml:space="preserve">
+    <value>Move 2</value><comment>As on a chessboard</comment>
   </data>
   <data name="View Crash Log" xml:space="preserve">
     <value>View Crash Log</value>

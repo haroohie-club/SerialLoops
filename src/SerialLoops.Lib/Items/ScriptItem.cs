@@ -391,15 +391,32 @@ public class ScriptItem : Item
             ScriptItemCommand lastChessLoad = commands.LastOrDefault(c => c.Verb == CommandVerb.CHESS_LOAD);
             if (lastChessLoad is not null)
             {
-                preview.ChessPuzzle = ((ChessPuzzleScriptParameter)lastChessLoad.Parameters[0]).ChessPuzzle;
+                preview.ChessPuzzle = ((ChessPuzzleScriptParameter)lastChessLoad.Parameters[0]).ChessPuzzle.Clone();
             }
 
             ScriptItemCommand lastChessReset = commands.LastOrDefault(c => c.Verb == CommandVerb.CHESS_RESET);
             ScriptItemCommand[] chessMoves = commands.Where(c => c.Verb == CommandVerb.CHESS_MOVE
-                                                                 && commands.IndexOf(c) > commands.IndexOf(lastChessReset)).ToArray();
+                                                                 && commands.IndexOf(c) > commands.IndexOf(lastChessLoad)
+                                                                 && commands.IndexOf(c) > commands.IndexOf(lastChessReset)
+                                                                 && commands.IndexOf(c) != commands.Count - 1).ToArray();
             foreach (ScriptItemCommand chessMove in chessMoves)
             {
-                preview.ChessPuzzle.ChessPuzzle.Chessboard.Swap(ChessPuzzleItem)
+                int move1StartIndex = ChessPuzzleItem.ConvertSpaceIndexToPieceIndex(((ChessSpaceScriptParameter)chessMove.Parameters[0]).SpaceIndex);
+                int move1EndIndex = ChessPuzzleItem.ConvertSpaceIndexToPieceIndex(((ChessSpaceScriptParameter)chessMove.Parameters[1]).SpaceIndex);
+                int move2StartIndex = ChessPuzzleItem.ConvertSpaceIndexToPieceIndex(((ChessSpaceScriptParameter)chessMove.Parameters[2]).SpaceIndex);
+                int move2EndIndex = ChessPuzzleItem.ConvertSpaceIndexToPieceIndex(((ChessSpaceScriptParameter)chessMove.Parameters[3]).SpaceIndex);
+
+                if (move1StartIndex != move1EndIndex)
+                {
+                    preview.ChessPuzzle.ChessPuzzle.Chessboard[move1EndIndex] = preview.ChessPuzzle.ChessPuzzle.Chessboard[move1StartIndex];
+                    preview.ChessPuzzle.ChessPuzzle.Chessboard[move1StartIndex] = ChessFile.ChessPiece.Empty;
+                }
+
+                if (move2StartIndex != move2EndIndex)
+                {
+                    preview.ChessPuzzle.ChessPuzzle.Chessboard[move2EndIndex] = preview.ChessPuzzle.ChessPuzzle.Chessboard[move2StartIndex];
+                    preview.ChessPuzzle.ChessPuzzle.Chessboard[move2StartIndex] = ChessFile.ChessPiece.Empty;
+                }
             }
         }
 
@@ -1009,12 +1026,14 @@ public class ScriptItem : Item
         if (preview.LastDialogueCommand is not null)
         {
             DialogueLine line = ((DialogueScriptParameter)preview.LastDialogueCommand.Parameters[0]).Line;
-            SKPaint dialoguePaint = line.Speaker switch
-            {
-                Speaker.MONOLOGUE => DialogueScriptParameter.Paint01,
-                Speaker.INFO => DialogueScriptParameter.Paint04,
-                _ => DialogueScriptParameter.Paint00,
-            };
+            SKPaint dialoguePaint = preview.LastDialogueCommand.Verb == CommandVerb.PIN_MNL
+                ? DialogueScriptParameter.Paint01
+                : line.Speaker switch
+                {
+                    Speaker.MONOLOGUE => DialogueScriptParameter.Paint01,
+                    Speaker.INFO => DialogueScriptParameter.Paint04,
+                    _ => DialogueScriptParameter.Paint00,
+                };
             if (!string.IsNullOrEmpty(line.Text))
             {
                 canvas.DrawBitmap(project.DialogueBitmap, new(0, 24, 32, 36), new SKRect(0, verticalOffset + 152, 256, verticalOffset + 164));
@@ -1022,9 +1041,12 @@ public class ScriptItem : Item
                 canvas.DrawRect(0, verticalOffset + 164, 256, 28, new() { Color = dialogueBoxColor });
                 canvas.DrawBitmap(project.DialogueBitmap, new(0, 37, 32, 64),
                     new SKRect(224, verticalOffset + 165, 256, verticalOffset + 192));
-                canvas.DrawBitmap(project.SpeakerBitmap,
-                    new(0, 16 * ((int)line.Speaker - 1), 64, 16 * ((int)line.Speaker)),
-                    new SKRect(0, verticalOffset + 140, 64, verticalOffset + 156));
+                if (preview.LastDialogueCommand.Verb != CommandVerb.PIN_MNL)
+                {
+                    canvas.DrawBitmap(project.SpeakerBitmap,
+                        new(0, 16 * ((int)line.Speaker - 1), 64, 16 * ((int)line.Speaker)),
+                        new SKRect(0, verticalOffset + 140, 64, verticalOffset + 156));
+                }
 
                 canvas.DrawHaroohieText(line.Text, dialoguePaint, project, y: verticalOffset + 160);
             }

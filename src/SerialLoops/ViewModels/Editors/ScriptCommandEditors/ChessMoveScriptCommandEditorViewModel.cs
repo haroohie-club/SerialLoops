@@ -10,159 +10,166 @@ namespace SerialLoops.ViewModels.Editors.ScriptCommandEditors;
 
 public class ChessMoveScriptCommandEditorViewModel : ScriptCommandEditorViewModel
 {
-    public SKBitmap Chessboard => ScriptEditor.CurrentChessBoard?.GetChessboard(ScriptEditor.Window.OpenProject);
+    [Reactive]
+    public SKBitmap Chessboard { get; set; }
 
-    private SKPoint? _whiteSpaceBeginPoint;
-    public SKPoint? WhiteSpaceBeginPoint
+    private SKPoint? _move1BeginPoint;
+    public SKPoint? Move1BeginPoint
     {
-        get => _whiteSpaceBeginPoint;
+        get => _move1BeginPoint;
         set
         {
-            _whiteSpaceBeginPoint = value;
-            WhiteSpaceBeginX = (_whiteSpaceBeginPoint?.X ?? 0) - 2;
-            WhiteSpaceBeginY = (_whiteSpaceBeginPoint?.Y ?? 0) + 8;
+            _move1BeginPoint = value;
+            Move1BeginX = (_move1BeginPoint?.X ?? 0) - 2;
+            Move1BeginY = (_move1BeginPoint?.Y ?? 0) + 8;
         }
     }
-    private SKPoint? _whiteSpaceEndPoint;
-    public SKPoint? WhiteSpaceEndPoint
+    private SKPoint? _move1EndPoint;
+    public SKPoint? Move1EndPoint
     {
-        get => _whiteSpaceEndPoint;
+        get => _move1EndPoint;
         set
         {
-            _whiteSpaceEndPoint = value;
-            WhiteSpaceEndX = (_whiteSpaceEndPoint?.X ?? 0) - 2;
-            WhiteSpaceEndY = (_whiteSpaceEndPoint?.Y ?? 0) + 8;
-        }
-    }
-
-    private SKPoint? _blackSpaceBeginPoint;
-    public SKPoint? BlackSpaceBeginPoint
-    {
-        get => _blackSpaceBeginPoint;
-        set
-        {
-            _blackSpaceBeginPoint = value;
-            BlackSpaceBeginX = (_blackSpaceBeginPoint?.X ?? 0) - 2;
-            BlackSpaceBeginY = (_blackSpaceBeginPoint?.Y ?? 0) + 8;
-        }
-    }
-    private SKPoint? _blackSpaceEndPoint;
-    public SKPoint? BlackSpaceEndPoint
-    {
-        get => _blackSpaceEndPoint;
-        set
-        {
-            _blackSpaceEndPoint = value;
-            BlackSpaceEndX = (_blackSpaceEndPoint?.X ?? 0) - 2;
-            BlackSpaceEndY = (_blackSpaceEndPoint?.Y ?? 0) + 8;
+            _move1EndPoint = value;
+            Move1EndX = (_move1EndPoint?.X ?? 0) - 2;
+            Move1EndY = (_move1EndPoint?.Y ?? 0) + 8;
         }
     }
 
-    [Reactive]
-    public float WhiteSpaceBeginX { get; set; }
-    [Reactive]
-    public float WhiteSpaceBeginY { get; set; }
-    [Reactive]
-    public float WhiteSpaceEndX { get; set; }
-    [Reactive]
-    public float WhiteSpaceEndY { get; set; }
+    private SKPoint? _move2BeginPoint;
+    public SKPoint? Move2BeginPoint
+    {
+        get => _move2BeginPoint;
+        set
+        {
+            _move2BeginPoint = value;
+            Move2BeginX = (_move2BeginPoint?.X ?? 0) - 2;
+            Move2BeginY = (_move2BeginPoint?.Y ?? 0) + 8;
+        }
+    }
+    private SKPoint? _move2EndPoint;
+    public SKPoint? Move2EndPoint
+    {
+        get => _move2EndPoint;
+        set
+        {
+            _move2EndPoint = value;
+            Move2EndX = (_move2EndPoint?.X ?? 0) - 2;
+            Move2EndY = (_move2EndPoint?.Y ?? 0) + 8;
+        }
+    }
 
     [Reactive]
-    public float BlackSpaceBeginX { get; set; }
+    public float Move1BeginX { get; set; }
     [Reactive]
-    public float BlackSpaceBeginY { get; set; }
+    public float Move1BeginY { get; set; }
     [Reactive]
-    public float BlackSpaceEndX { get; set; }
+    public float Move1EndX { get; set; }
     [Reactive]
-    public float BlackSpaceEndY { get; set; }
+    public float Move1EndY { get; set; }
+
+    [Reactive]
+    public float Move2BeginX { get; set; }
+    [Reactive]
+    public float Move2BeginY { get; set; }
+    [Reactive]
+    public float Move2EndX { get; set; }
+    [Reactive]
+    public float Move2EndY { get; set; }
 
     public ChessMoveScriptCommandEditorViewModel(ScriptItemCommand command, ScriptEditorViewModel scriptEditor, ILogger log)
         : base(command, scriptEditor, log)
     {
-        short whiteSpaceBeginIndex = ((ChessSpaceScriptParameter)command.Parameters[0]).SpaceIndex;
-        short whiteSpaceEndIndex = ((ChessSpaceScriptParameter)command.Parameters[1]).SpaceIndex;
-        short blackSpaceBeginIndex = ((ChessSpaceScriptParameter)command.Parameters[2]).SpaceIndex;
-        short blackSpaceEndIndex =  ((ChessSpaceScriptParameter)command.Parameters[3]).SpaceIndex;
+        short move1SpaceBeginIndex = ((ChessSpaceScriptParameter)command.Parameters[0]).SpaceIndex;
+        short move1SpaceEndIndex = ((ChessSpaceScriptParameter)command.Parameters[1]).SpaceIndex;
+        short move2SpaceBeginIndex = ((ChessSpaceScriptParameter)command.Parameters[2]).SpaceIndex;
+        short move2SpaceEndIndex =  ((ChessSpaceScriptParameter)command.Parameters[3]).SpaceIndex;
 
-        if (whiteSpaceBeginIndex != 0 || whiteSpaceEndIndex != 0)
+        if (move1SpaceBeginIndex != move1SpaceEndIndex)
         {
-            WhiteSpaceBeginPoint = ChessPuzzleItem.GetChessSpacePosition(whiteSpaceBeginIndex);
-            WhiteSpaceEndPoint = ChessPuzzleItem.GetChessSpacePosition(whiteSpaceEndIndex);
+            Move1BeginPoint = ChessPuzzleItem.GetChessSpacePosition(move1SpaceBeginIndex);
+            Move1EndPoint = ChessPuzzleItem.GetChessSpacePosition(move1SpaceEndIndex);
         }
 
-        if (blackSpaceBeginIndex != 0 || blackSpaceEndIndex != 0)
+        if (move2SpaceBeginIndex != move2SpaceEndIndex)
         {
-            BlackSpaceBeginPoint = ChessPuzzleItem.GetChessSpacePosition(blackSpaceBeginIndex);
-            BlackSpaceEndPoint = ChessPuzzleItem.GetChessSpacePosition(blackSpaceEndIndex);
+            Move2BeginPoint = ChessPuzzleItem.GetChessSpacePosition(move2SpaceBeginIndex);
+            Move2EndPoint = ChessPuzzleItem.GetChessSpacePosition(move2SpaceEndIndex);
         }
     }
 
-    public void WhiteBoardClick(Point position)
+    public void LoadChessboard()
     {
-        if (WhiteSpaceEndPoint is not null)
-        {
-            WhiteSpaceEndPoint = null;
-            short newIndex = (short)ChessPuzzleItem.GetChessSpaceIndexFromPosition(new((float)position.X, (float)position.Y));
-            if (newIndex == ((ChessSpaceScriptParameter)Command.Parameters[0]).SpaceIndex)
-            {
-                return;
-            }
-
-            WhiteSpaceBeginPoint = ChessPuzzleItem.GetChessSpacePosition(newIndex);
-
-            ((ChessSpaceScriptParameter)Command.Parameters[0]).SpaceIndex = newIndex;
-            Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
-                .Objects[Command.Index].Parameters[0] = newIndex;
-        }
-        else
-        {
-            short newIndex = (short)ChessPuzzleItem.GetChessSpaceIndexFromPosition(new((float)position.X, (float)position.Y));
-            if (newIndex == ((ChessSpaceScriptParameter)Command.Parameters[0]).SpaceIndex || newIndex == ((ChessSpaceScriptParameter)Command.Parameters[1]).SpaceIndex)
-            {
-                return;
-            }
-
-            WhiteSpaceEndPoint = ChessPuzzleItem.GetChessSpacePosition(newIndex);
-
-            ((ChessSpaceScriptParameter)Command.Parameters[1]).SpaceIndex = newIndex;
-            Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
-                .Objects[Command.Index].Parameters[1] = newIndex;
-        }
-
-        Script.UnsavedChanges = true;
-        ScriptEditor.UpdatePreview();
+        Chessboard = ScriptEditor.CurrentChessBoard?.GetChessboard(ScriptEditor.Window.OpenProject);
     }
 
-    public void BlackBoardClick(Point position)
+    public void Board1Click(Point position)
     {
-        if (BlackSpaceEndPoint is not null)
+        BoardClick(position, 0);
+    }
+
+    public void Board2Click(Point position)
+    {
+        BoardClick(position, 2);
+    }
+
+    private void BoardClick(Point position, int paramStartIndex)
+    {
+        if ((paramStartIndex == 0 ? Move1EndPoint : Move2EndPoint) is not null)
         {
-            BlackSpaceEndPoint = null;
-            short newIndex = (short)ChessPuzzleItem.GetChessSpaceIndexFromPosition(new((float)position.X, (float)position.Y));
-            if (newIndex == ((ChessSpaceScriptParameter)Command.Parameters[2]).SpaceIndex)
+            int chessPieceIndex = ChessPuzzleItem.GetChessPieceIndexFromPosition(new((float)position.Y, (float)position.X));
+            if (chessPieceIndex > ScriptEditor.CurrentChessBoard.ChessPuzzle.Chessboard.Length)
             {
                 return;
             }
+            if (paramStartIndex == 0)
+            {
+                Move1EndPoint = null;
+            }
+            else
+            {
+                Move2EndPoint = null;
+            }
+            short newIndex = (short)ChessPuzzleItem.ConvertPieceIndexToSpaceIndex(chessPieceIndex);
 
-            BlackSpaceBeginPoint = ChessPuzzleItem.GetChessSpacePosition(newIndex);
+            if (paramStartIndex == 0)
+            {
+                Move1BeginPoint = ChessPuzzleItem.GetChessSpacePosition(newIndex);
+            }
+            else
+            {
+                Move2BeginPoint = ChessPuzzleItem.GetChessSpacePosition(newIndex);
+            }
 
-            ((ChessSpaceScriptParameter)Command.Parameters[2]).SpaceIndex = newIndex;
+            ((ChessSpaceScriptParameter)Command.Parameters[paramStartIndex]).SpaceIndex = newIndex;
             Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
-                .Objects[Command.Index].Parameters[2] = newIndex;
+                .Objects[Command.Index].Parameters[paramStartIndex] = newIndex;
         }
         else
         {
-            short newIndex = (short)ChessPuzzleItem.GetChessSpaceIndexFromPosition(new((float)position.X, (float)position.Y));
-            if (newIndex == ((ChessSpaceScriptParameter)Command.Parameters[2]).SpaceIndex || newIndex == ((ChessSpaceScriptParameter)Command.Parameters[3]).SpaceIndex)
+            int chessPieceIndex = ChessPuzzleItem.GetChessPieceIndexFromPosition(new((float)position.Y, (float)position.X));
+            if (chessPieceIndex > ScriptEditor.CurrentChessBoard.ChessPuzzle.Chessboard.Length)
+            {
+                return;
+            }
+            short newIndex = (short)ChessPuzzleItem.ConvertPieceIndexToSpaceIndex(chessPieceIndex);
+            if (newIndex == ((ChessSpaceScriptParameter)Command.Parameters[paramStartIndex]).SpaceIndex)
             {
                 return;
             }
 
-            BlackSpaceEndPoint = ChessPuzzleItem.GetChessSpacePosition(newIndex);
+            if (paramStartIndex == 0)
+            {
+                Move1EndPoint = ChessPuzzleItem.GetChessSpacePosition(newIndex);
+            }
+            else
+            {
+                Move2EndPoint = ChessPuzzleItem.GetChessSpacePosition(newIndex);
+            }
 
-            ((ChessSpaceScriptParameter)Command.Parameters[3]).SpaceIndex = newIndex;
+            ((ChessSpaceScriptParameter)Command.Parameters[paramStartIndex + 1]).SpaceIndex = newIndex;
             Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
-                .Objects[Command.Index].Parameters[3] = newIndex;
+                .Objects[Command.Index].Parameters[paramStartIndex + 1] = newIndex;
         }
 
         Script.UnsavedChanges = true;

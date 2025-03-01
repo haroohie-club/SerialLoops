@@ -806,15 +806,6 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Black Move.
-        /// </summary>
-        public static string Black_Move {
-            get {
-                return ResourceManager.GetString("Black Move", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Blinds.
         /// </summary>
         public static string BLINDS {
@@ -4691,6 +4682,24 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Move 1.
+        /// </summary>
+        public static string Move_1 {
+            get {
+                return ResourceManager.GetString("Move 1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move 2.
+        /// </summary>
+        public static string Move_2 {
+            get {
+                return ResourceManager.GetString("Move 2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Move Command Down.
         /// </summary>
         public static string Move_Command_Down {
@@ -8538,15 +8547,6 @@ namespace SerialLoops.Assets {
         public static string WHITE {
             get {
                 return ResourceManager.GetString("WHITE", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to White Move.
-        /// </summary>
-        public static string White_Move {
-            get {
-                return ResourceManager.GetString("White Move", resourceCulture);
             }
         }
         

@@ -10,13 +10,18 @@ public class ChessPuzzleItem : Item
 {
     public ChessFile ChessPuzzle { get; set; }
 
-    public ChessPuzzleItem(ChessFile chessFile, ArchiveFile<GraphicsFile> grp) : base(chessFile.Name[..^1], ItemType.Chess_Puzzle)
+    public ChessPuzzleItem(ChessFile chessFile) : base(chessFile.Name[..^1], ItemType.Chess_Puzzle)
     {
         ChessPuzzle = chessFile;
     }
 
     public override void Refresh(Project project, ILogger log)
     {
+    }
+
+    public ChessPuzzleItem Clone()
+    {
+        return new(ChessPuzzle.CastTo<ChessFile>());
     }
 
     public static SKBitmap GetEmptyChessboard(ArchiveFile<GraphicsFile> grp)
@@ -128,6 +133,20 @@ public class ChessPuzzleItem : Item
             new SKRect(destPoint.X, destPoint.Y,destPoint.X + 16, destPoint.Y + 32));
     }
 
+    public static int ConvertSpaceIndexToPieceIndex(int spacePos)
+    {
+        int file = (spacePos >> 4) & 0b111;
+        int rank = spacePos & 0b111;
+        return rank * 8 + file;
+    }
+
+    public static int ConvertPieceIndexToSpaceIndex(int pieceIndex)
+    {
+        int file = pieceIndex % 8;
+        int rank = pieceIndex / 8;
+        return file * 16 + rank;
+    }
+
     public static SKPoint GetChessPiecePosition(int destPos)
     {
         return new(destPos * 20 % 160 + 2, destPos / 8 * 21 + 4);
@@ -135,10 +154,7 @@ public class ChessPuzzleItem : Item
 
     public static SKPoint GetChessSpacePosition(int spacePos)
     {
-        int file = (spacePos >> 4) & 0b111;
-        int rank = spacePos & 0b111;
-        int piecePos = rank * 8 + file;
-        return GetChessPiecePosition(piecePos);
+        return GetChessPiecePosition(ConvertSpaceIndexToPieceIndex(spacePos));
     }
 
     public static int GetChessPieceIndexFromPosition(SKPoint point)
@@ -146,11 +162,8 @@ public class ChessPuzzleItem : Item
         return ((int)point.X - 4) / 21 * 8 + ((int)point.Y - 2) / 20;
     }
 
-    public static int GetChessSpaceIndexFromPosition(SKPoint point, bool white = true)
+    public static int GetChessSpaceIndexFromPosition(SKPoint point)
     {
-        int pieceIndex = GetChessPieceIndexFromPosition(new(point.Y, point.X));
-        int file = pieceIndex % 8;
-        int rank = pieceIndex / 8;
-        return file * 16 + rank + (white ? 0 : 8);
+        return ConvertPieceIndexToSpaceIndex(GetChessPieceIndexFromPosition(new(point.Y, point.X)));
     }
 }

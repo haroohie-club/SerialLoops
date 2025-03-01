@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using SerialLoops.ViewModels.Editors.ScriptCommandEditors;
 
 namespace SerialLoops.Views.Editors.ScriptCommandEditors;
@@ -13,12 +14,17 @@ public partial class ChessMoveScriptCommandEditorView : UserControl
 
     private void WhiteBoard_OnPointerPressed(object sender, PointerPressedEventArgs e)
     {
-        ((ChessMoveScriptCommandEditorViewModel)DataContext)!.WhiteBoardClick(e.GetPosition((Image)sender));
+        ((ChessMoveScriptCommandEditorViewModel)DataContext)!.Board1Click(e.GetPosition((Image)sender));
     }
 
     private void BlackBoard_OnPointerPressed(object sender, PointerPressedEventArgs e)
     {
-        ((ChessMoveScriptCommandEditorViewModel)DataContext)!.BlackBoardClick(e.GetPosition((Image)sender));
+        ((ChessMoveScriptCommandEditorViewModel)DataContext)!.Board2Click(e.GetPosition((Image)sender));
+    }
+
+    private void Control_OnLoaded(object sender, RoutedEventArgs e)
+    {
+        ((ChessMoveScriptCommandEditorViewModel)DataContext)!.LoadChessboard();
     }
 }
 

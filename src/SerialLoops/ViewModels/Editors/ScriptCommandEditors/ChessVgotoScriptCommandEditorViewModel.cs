@@ -9,8 +9,8 @@ namespace SerialLoops.ViewModels.Editors.ScriptCommandEditors;
 public class ChessVgotoScriptCommandEditorViewModel(ScriptItemCommand command, ScriptEditorViewModel scriptEditor, ILogger log)
     : ScriptCommandEditorViewModel(command, scriptEditor, log)
 {
-    private ReactiveScriptSection _clearSection = scriptEditor.ScriptSections[
-        command.Script.ScriptSections.IndexOf(((ScriptSectionScriptParameter)command.Parameters[0]).Section)];
+    private ReactiveScriptSection _clearSection = scriptEditor.ScriptSections.ElementAtOrDefault(
+        command.Script.ScriptSections.IndexOf(((ScriptSectionScriptParameter)command.Parameters[0]).Section));
     public ReactiveScriptSection ClearSection
     {
         get => _clearSection;
@@ -26,8 +26,8 @@ public class ChessVgotoScriptCommandEditorViewModel(ScriptItemCommand command, S
         }
     }
 
-    private ReactiveScriptSection _missSection = scriptEditor.ScriptSections[
-        command.Script.ScriptSections.IndexOf(((ScriptSectionScriptParameter)command.Parameters[1]).Section)];
+    private ReactiveScriptSection _missSection = scriptEditor.ScriptSections.ElementAtOrDefault(
+        command.Script.ScriptSections.IndexOf(((ScriptSectionScriptParameter)command.Parameters[1]).Section));
     public ReactiveScriptSection MissSection
     {
         get => _missSection;
@@ -43,8 +43,8 @@ public class ChessVgotoScriptCommandEditorViewModel(ScriptItemCommand command, S
         }
     }
 
-    private ReactiveScriptSection _miss2Section = scriptEditor.ScriptSections[
-        command.Script.ScriptSections.IndexOf(((ScriptSectionScriptParameter)command.Parameters[2]).Section)];
+    private ReactiveScriptSection _miss2Section = scriptEditor.ScriptSections.ElementAtOrDefault(
+        command.Script.ScriptSections.IndexOf(((ScriptSectionScriptParameter)command.Parameters[2]).Section));
     public ReactiveScriptSection Miss2Section
     {
         get => _miss2Section;

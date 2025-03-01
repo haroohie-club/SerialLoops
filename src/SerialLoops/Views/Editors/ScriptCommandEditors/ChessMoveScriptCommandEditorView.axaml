@@ -4,33 +4,32 @@
              xmlns:vm="using:SerialLoops.ViewModels.Editors.ScriptCommandEditors"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:assets="using:SerialLoops.Assets"
-             xmlns:i="using:Avalonia.Xaml.Interactivity"
-             xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
              xmlns:utility="using:SerialLoops.Utility"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:ChessMoveScriptCommandEditorViewModel"
-             x:Class="SerialLoops.Views.Editors.ScriptCommandEditors.ChessMoveScriptCommandEditorView">
+             x:Class="SerialLoops.Views.Editors.ScriptCommandEditors.ChessMoveScriptCommandEditorView"
+             Loaded="Control_OnLoaded">
     <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto">
-        <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.White_Move}"/>
+        <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Move_1}"/>
         <Canvas Grid.Row="0" Grid.Column="1" Margin="10 0 0 0"
                 Width="{Binding Chessboard.Width}" Height="{Binding Chessboard.Height}">
             <Image Canvas.Left="0" Canvas.Top="0" Source="{Binding Chessboard, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
-                   PointerPressed="WhiteBoard_OnPointerPressed" Name="WhiteBoard"/>
-            <Rectangle Canvas.Left="{Binding WhiteSpaceBeginX}" Canvas.Top="{Binding WhiteSpaceBeginY}"
-                       Width="20" Height="20" Fill="DarkRed" Opacity="0.5" IsVisible="{Binding WhiteSpaceBeginPoint, Converter={x:Static ObjectConverters.IsNotNull}}"/>
-            <Rectangle Canvas.Left="{Binding WhiteSpaceEndX}" Canvas.Top="{Binding WhiteSpaceEndY}"
-                       Width="20" Height="20" Fill="Green" Opacity="0.5" IsVisible="{Binding WhiteSpaceEndPoint, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+                   PointerPressed="WhiteBoard_OnPointerPressed" Name="Board1"/>
+            <Rectangle Canvas.Left="{Binding Move1BeginX}" Canvas.Top="{Binding Move1BeginY}"
+                       Width="20" Height="20" Fill="DarkRed" Opacity="0.5" IsVisible="{Binding Move1BeginPoint, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+            <Rectangle Canvas.Left="{Binding Move1EndX}" Canvas.Top="{Binding Move1EndY}"
+                       Width="20" Height="20" Fill="Green" Opacity="0.5" IsVisible="{Binding Move1EndPoint, Converter={x:Static ObjectConverters.IsNotNull}}"/>
         </Canvas>
 
-        <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Black_Move}"/>
+        <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Move_2}"/>
         <Canvas Grid.Row="1" Grid.Column="1" Margin="10 0 0 0"
                 Width="{Binding Chessboard.Width}" Height="{Binding Chessboard.Height}">
             <Image Canvas.Left="0" Canvas.Top="0" Source="{Binding Chessboard, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
-                   PointerPressed="BlackBoard_OnPointerPressed" Name="BlackBoard"/>
-            <Rectangle Canvas.Left="{Binding BlackSpaceBeginX}" Canvas.Top="{Binding BlackSpaceBeginY}"
-                       Width="20" Height="20" Fill="DarkRed" Opacity="0.5" IsVisible="{Binding BlackSpaceBeginPoint, Converter={x:Static ObjectConverters.IsNotNull}}"/>
-            <Rectangle Canvas.Left="{Binding BlackSpaceEndX}" Canvas.Top="{Binding BlackSpaceEndY}"
-                       Width="20" Height="20" Fill="Green" Opacity="0.5" IsVisible="{Binding BlackSpaceEndPoint, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+                   PointerPressed="BlackBoard_OnPointerPressed" Name="Board2"/>
+            <Rectangle Canvas.Left="{Binding Move2BeginX}" Canvas.Top="{Binding Move2BeginY}"
+                       Width="20" Height="20" Fill="DarkRed" Opacity="0.5" IsVisible="{Binding Move2BeginPoint, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+            <Rectangle Canvas.Left="{Binding Move2EndX}" Canvas.Top="{Binding Move2EndY}"
+                       Width="20" Height="20" Fill="Green" Opacity="0.5" IsVisible="{Binding Move2EndPoint, Converter={x:Static ObjectConverters.IsNotNull}}"/>
         </Canvas>
     </Grid>
 </UserControl>
