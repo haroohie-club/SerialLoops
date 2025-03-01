@@ -388,13 +388,17 @@ public class ScriptItem : Item
         }
         else
         {
+            // Load in the chessboard
             ScriptItemCommand lastChessLoad = commands.LastOrDefault(c => c.Verb == CommandVerb.CHESS_LOAD);
             if (lastChessLoad is not null)
             {
                 preview.ChessPuzzle = ((ChessPuzzleScriptParameter)lastChessLoad.Parameters[0]).ChessPuzzle.Clone();
             }
 
+            // Find chess reset so we can ignore commands before it
             ScriptItemCommand lastChessReset = commands.LastOrDefault(c => c.Verb == CommandVerb.CHESS_RESET);
+
+            // Find chess moves that occurred after last load/reset
             ScriptItemCommand[] chessMoves = commands.Where(c => c.Verb == CommandVerb.CHESS_MOVE
                                                                  && commands.IndexOf(c) > commands.IndexOf(lastChessLoad)
                                                                  && commands.IndexOf(c) > commands.IndexOf(lastChessReset)
@@ -418,6 +422,16 @@ public class ScriptItem : Item
                     preview.ChessPuzzle.ChessPuzzle.Chessboard[move2StartIndex] = ChessFile.ChessPiece.Empty;
                 }
             }
+
+            ScriptItemCommand[] chessGuides = commands.Where(c => c.Verb == CommandVerb.CHESS_TOGGLE_GUIDE
+                                                                  && commands.IndexOf(c) > commands.IndexOf(lastChessLoad)
+                                                                  && commands.IndexOf(c) > commands.IndexOf(lastChessReset)
+                                                                  && commands.IndexOf(c) != commands.Count - 1).ToArray();
+
+            foreach (ScriptItemCommand chessGuide in chessGuides)
+            {
+
+            }
         }
 
         // Draw background
@@ -428,7 +442,6 @@ public class ScriptItem : Item
                                                                       c.Verb == CommandVerb.BG_DISPCG ||
                                                                       c.Verb == CommandVerb.BG_FADE ||
                                                                       c.Verb == CommandVerb.BG_REVERT);
-        SKPaint palEffectPaint = PaletteEffectScriptParameter.IdentityPaint;
         if (palCommand is not null && lastBgCommand is not null &&
             commands.IndexOf(palCommand) > commands.IndexOf(lastBgCommand))
         {

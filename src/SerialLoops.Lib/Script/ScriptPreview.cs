@@ -22,5 +22,8 @@ public class ScriptPreview
     public List<string> CurrentChocies { get; set; }
     public bool ChessMode { get; set; }
     public ChessPuzzleItem ChessPuzzle { get; set; }
+    public List<int> ChessHighlightedSpaces { get; set; } = [];
+    public List<int> ChessGuideSpaces { get; set; } = [];
+    public List<int> ChessCrossSpaces { get; set; } = [];
     public string ErrorImage { get; set; }
 }
