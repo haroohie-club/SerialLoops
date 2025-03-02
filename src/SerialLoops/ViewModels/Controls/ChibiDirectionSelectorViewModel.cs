@@ -40,10 +40,14 @@ public class ChibiDirectionSelectorViewModel : ViewModelBase
         DirectionChangedAction = directionChangedAction;
     }
 
-    public void SetAvailableDirections( List<(string Name, ChibiItem.ChibiGraphics Chibi)> chibiEntries)
+    public void SetAvailableDirections(List<(string Name, ChibiItem.ChibiGraphics Chibi)> chibiEntries)
     {
         List<bool> availableDirections;
-        if (chibiEntries.Count < 4)
+        if (chibiEntries is null)
+        {
+            availableDirections = [false, false, false, false];
+        }
+        else if (chibiEntries.Count < 4)
         {
             availableDirections =
             [

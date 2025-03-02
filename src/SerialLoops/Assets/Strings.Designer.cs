@@ -310,6 +310,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Chibi.
+        /// </summary>
+        public static string Add_Chibi {
+            get {
+                return ResourceManager.GetString("Add Chibi", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add Command.
         /// </summary>
         public static string Add_Command {
@@ -6030,6 +6039,15 @@ namespace SerialLoops.Assets {
         public static string Remove_Starting_Chibis {
             get {
                 return ResourceManager.GetString("Remove Starting Chibis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove Talk Link.
+        /// </summary>
+        public static string Remove_Talk_Link {
+            get {
+                return ResourceManager.GetString("Remove Talk Link", resourceCulture);
             }
         }
         

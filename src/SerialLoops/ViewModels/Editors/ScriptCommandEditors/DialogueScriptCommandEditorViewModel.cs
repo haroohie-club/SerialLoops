@@ -66,11 +66,11 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
             if (value is null)
                 return;
 
-            if (_speaker == TextVoiceFont)
+            if (_speaker.MessageInfo.Character == TextVoiceFont.MessageInfo.Character)
             {
                 TextVoiceFont = value;
             }
-            if (_speaker == TextSpeed)
+            if (_speaker.MessageInfo.Character == TextSpeed.MessageInfo.Character)
             {
                 TextSpeed = value;
             }
@@ -229,7 +229,7 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
             this.RaiseAndSetIfChanged(ref _textVoiceFont, value);
             ((DialoguePropertyScriptParameter)Command.Parameters[6]).Character = _textVoiceFont;
             Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
-                .Objects[Command.Index].Parameters[6] = (short)_textVoiceFont.MessageInfo.Character;
+                    .Objects[Command.Index].Parameters[6] = (short)ScriptEditor.Window.OpenProject.MessInfo.MessageInfos.IndexOf(_textVoiceFont.MessageInfo);
             Script.UnsavedChanges = true;
         }
     }
@@ -243,7 +243,7 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
             this.RaiseAndSetIfChanged(ref _textSpeed, value);
             ((DialoguePropertyScriptParameter)Command.Parameters[7]).Character = _textSpeed;
             Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
-                .Objects[Command.Index].Parameters[7] = (short)_textSpeed.MessageInfo.Character;
+                .Objects[Command.Index].Parameters[7] = (short)ScriptEditor.Window.OpenProject.MessInfo.MessageInfos.IndexOf(_textSpeed.MessageInfo);
             Script.UnsavedChanges = true;
         }
     }

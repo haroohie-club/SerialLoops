@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Presenters;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
@@ -50,7 +49,7 @@ public partial class MapCharactersSubEditor : UserControl
             de.DragEffects = DragDropEffects.Move;
 
             ReactiveMapCharacter character = de.Data.Get(nameof(ReactiveMapCharacter)) as ReactiveMapCharacter;
-            Point point = de.GetPosition((Canvas)((Grid)mapCharactersSubEditor.Content!).Children[0]);
+            Point point = de.GetPosition(MapCanvas);
             SKPoint gridPoint = ((MapCharactersSubEditorViewModel)DataContext)!.AllGridPositions
                 .MinBy(p => p.Key.Distance(point)).Value;
             ((MapCharactersSubEditorViewModel)DataContext).UpdateMapCharacter(character, (short)gridPoint.X, (short)gridPoint.Y);

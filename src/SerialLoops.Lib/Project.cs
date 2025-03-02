@@ -1100,6 +1100,7 @@ public partial class Project
             {
                 NdsProjectFile.ConvertProjectFile(Path.Combine(config.ProjectsDirectory, project.Name, "base", "rom", $"{project.Name}.xml"));
                 NdsProjectFile.ConvertProjectFile(Path.Combine(config.ProjectsDirectory, project.Name, "iterative", "rom", $"{project.Name}.xml"));
+                NdsProjectFile.ConvertProjectFile(Path.Combine(config.ProjectsDirectory, project.Name, "base", "original", $"{project.Name}.xml"));
             }
 
             LoadProjectResult result = project.Load(config, log, tracker);

@@ -1,5 +1,4 @@
 ﻿using System;
-using HaruhiChokuretsuLib.Archive.Graphics;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SerialLoops.Lib.Items;

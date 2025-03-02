@@ -3083,4 +3083,10 @@ This action is irreversible.</value>
   <data name="There are no Serial Loops crash logs. No crashes so far!" xml:space="preserve">
     <value>There are no Serial Loops crash logs. No crashes so far!</value>
   </data>
+  <data name="Remove Talk Link" xml:space="preserve">
+    <value>Remove Talk Link</value><comment>Remove the association with a script section when you talk to this map character</comment>
+  </data>
+  <data name="Add Chibi" xml:space="preserve">
+    <value>Add Chibi</value><comment>...to the current map</comment>
+  </data>
 </root>

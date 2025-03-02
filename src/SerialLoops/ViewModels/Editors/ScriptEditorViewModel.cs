@@ -37,7 +37,7 @@ namespace SerialLoops.ViewModels.Editors;
 
 public class ScriptEditorViewModel : EditorViewModel
 {
-    private ScriptItem _script;
+    private readonly ScriptItem _script;
     private ScriptItemCommand _selectedCommand;
     private OrderedDictionary<ScriptSection, List<ScriptItemCommand>> _commands = [];
 
@@ -151,10 +151,7 @@ public class ScriptEditorViewModel : EditorViewModel
             }
         }
 
-        if (_script.Event.MapCharactersSection is not null)
-        {
-            MapCharactersSubEditorVm = new(_script, _commands, Window);
-        }
+        MapCharactersSubEditorVm = new(_script, this);
     }
 
     public void PopulateScriptCommands(bool refresh = false)
