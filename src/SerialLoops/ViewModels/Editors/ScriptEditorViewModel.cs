@@ -41,15 +41,18 @@ public class ScriptEditorViewModel : EditorViewModel
     private ScriptItemCommand _selectedCommand;
     private OrderedDictionary<ScriptSection, List<ScriptItemCommand>> _commands = [];
 
-    public ICommand AddScriptCommandCommand { get; set; }
-    public ICommand AddScriptSectionCommand { get; set;  }
-    public ICommand DeleteScriptCommandOrSectionCommand { get; set; }
-    public ICommand ClearScriptCommand { get; set; }
-    public ICommand CutCommand { get; set; }
-    public ICommand CopyCommand { get; set; }
-    public ICommand PasteCommand { get; set; }
-    public ICommand ApplyTemplateCommand { get; set; }
-    public ICommand GenerateTemplateCommand { get; set; }
+    public ICommand AddScriptCommandCommand { get; }
+    public ICommand AddScriptSectionCommand { get; }
+    public ICommand DeleteScriptCommandOrSectionCommand { get; }
+    public ICommand ClearScriptCommand { get; }
+    public ICommand CutCommand { get; }
+    public ICommand CopyCommand { get; }
+    public ICommand PasteCommand { get; }
+    public ICommand ApplyTemplateCommand { get; }
+    public ICommand GenerateTemplateCommand { get; }
+
+    public ICommand AddStartingChibisCommand { get; }
+    public ICommand RemoveStartingChibisCommand { get; }
 
     public KeyGesture AddCommandHotKey { get; set; }
     public KeyGesture CutHotKey { get; set; }
@@ -118,9 +121,11 @@ public class ScriptEditorViewModel : EditorViewModel
 
     public Vector? ScrollPosition { get; set; }
 
-    public ObservableCollection<StartingChibiWithImage> UnusedChibis { get; }
-    public ObservableCollection<StartingChibiWithImage> StartingChibis { get; }
+    public ObservableCollection<StartingChibiWithImage> UnusedChibis { get; } = [];
+    public ObservableCollection<StartingChibiWithImage> StartingChibis { get; } = [];
 
+    [Reactive]
+    public bool HasStartingChibis { get; set; }
     public MapCharactersSubEditorViewModel MapCharactersSubEditorVm { get; set; }
 
     public ScriptEditorViewModel(ScriptItem script, MainWindowViewModel window, ILogger log) : base(script, window, log)
@@ -128,39 +133,6 @@ public class ScriptEditorViewModel : EditorViewModel
         _script = script;
         ScriptSections = new(script.Event.ScriptSections.Select(s => new ReactiveScriptSection(s)));
         _project = window.OpenProject;
-        PopulateScriptCommands();
-        _script.CalculateGraphEdges(_commands, _log);
-
-        if (_script.Event.StartingChibisSection is not null)
-        {
-            StartingChibis = [];
-            UnusedChibis = [];
-            StartingChibis.AddRange(_script.Event.StartingChibisSection.Objects.Where(c => c.ChibiIndex > 0).Select(c => new StartingChibiWithImage(c,
-                ((ChibiItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Chibi
-                                                      && ((ChibiItem)i).ChibiIndex == c.ChibiIndex)).ChibiAnimations.First().Value[0].Frame,
-                StartingChibis, UnusedChibis, _script)));
-            short[] usedIndices = StartingChibis.Select(c => c.StartingChibi.ChibiIndex).ToArray();
-            for (short i = 1; i <= 5; i++)
-            {
-                if (usedIndices.Contains(i))
-                {
-                    continue;
-                }
-                UnusedChibis.Add(new(new StartingChibiEntry() { ChibiIndex = i }, ((ChibiItem)_project.Items.First(c => c.Type == ItemDescription.ItemType.Chibi
-                    && ((ChibiItem)c).ChibiIndex == i)).ChibiAnimations.First().Value[0].Frame, StartingChibis, UnusedChibis, _script));
-            }
-        }
-
-        MapCharactersSubEditorVm = new(_script, this);
-    }
-
-    public void PopulateScriptCommands(bool refresh = false)
-    {
-        if (refresh)
-        {
-            _script.Refresh(_project, _log);
-        }
-
         Commands = _script.GetScriptCommandTree(_project, _log);
         _script.CalculateGraphEdges(_commands, _log);
         foreach (ReactiveScriptSection section in ScriptSections)
@@ -168,6 +140,33 @@ public class ScriptEditorViewModel : EditorViewModel
             section.SetCommands(_commands[section.Section]);
         }
         Source.ExpandAll();
+        _script.CalculateGraphEdges(_commands, _log);
+
+        if (_script.Event.StartingChibisSection is not null)
+        {
+            HasStartingChibis = true;
+            StartingChibis.AddRange(_script.Event.StartingChibisSection.Objects.Where(c => c.ChibiIndex > 0).Select(c => new StartingChibiWithImage(c,
+                ((ChibiItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Chibi
+                                                      && ((ChibiItem)i).ChibiIndex == c.ChibiIndex)).ChibiAnimations.First().Value[0].Frame,
+                StartingChibis, UnusedChibis, _script, this)));
+            short[] usedIndices = StartingChibis.Select(c => c.StartingChibi.ChibiIndex).ToArray();
+            for (short i = 1; i <= 5; i++)
+            {
+                if (usedIndices.Contains(i))
+                {
+                    continue;
+                }
+                UnusedChibis.Add(new(new() { ChibiIndex = i }, ((ChibiItem)_project.Items.First(c => c.Type == ItemDescription.ItemType.Chibi
+                                                                                                     && ((ChibiItem)c).ChibiIndex == i)).ChibiAnimations.First().Value[0].Frame, StartingChibis, UnusedChibis, _script, this));
+            }
+        }
+        else
+        {
+            HasStartingChibis = false;
+        }
+
+        MapCharactersSubEditorVm = new(_script, this);
+
         AddScriptCommandCommand = ReactiveCommand.CreateFromTask(AddCommand);
         AddScriptSectionCommand = ReactiveCommand.CreateFromTask(AddSection);
         DeleteScriptCommandOrSectionCommand = ReactiveCommand.CreateFromTask(Delete);
@@ -177,6 +176,8 @@ public class ScriptEditorViewModel : EditorViewModel
         PasteCommand = ReactiveCommand.Create(Paste);
         ApplyTemplateCommand = ReactiveCommand.CreateFromTask(ApplyTemplate);
         GenerateTemplateCommand = ReactiveCommand.CreateFromTask(GenerateTemplate);
+        AddStartingChibisCommand = ReactiveCommand.Create(AddStartingChibis);
+        RemoveStartingChibisCommand = ReactiveCommand.Create(RemoveStartingChibis);
 
         AddCommandHotKey = GuiExtensions.CreatePlatformAgnosticCtrlGesture(Key.N, KeyModifiers.Shift);
         CutHotKey = GuiExtensions.CreatePlatformAgnosticCtrlGesture(Key.X);
@@ -691,6 +692,31 @@ public class ScriptEditorViewModel : EditorViewModel
             JsonSerializer.Serialize(template), _log);
         _project.Config.ScriptTemplates.Add(template);
     }
+
+    private void AddStartingChibis()
+    {
+        _script.Event.StartingChibisSection = new() { Name = "STARTINGCHIBIS" };
+        _script.Event.StartingChibisSection.Objects.Add(new()); // Blank chibi entry
+        _script.Event.NumSections += 2;
+        for (short i = 1; i <= 5; i++)
+        {
+            UnusedChibis.Add(new(new() { ChibiIndex = i }, ((ChibiItem)_project.Items.First(c => c.Type == ItemDescription.ItemType.Chibi
+                && ((ChibiItem)c).ChibiIndex == i)).ChibiAnimations.First().Value[0].Frame, StartingChibis, UnusedChibis, _script, this));
+        }
+        HasStartingChibis = true;
+        _script.UnsavedChanges = true;
+        UpdatePreview();
+    }
+
+    private void RemoveStartingChibis()
+    {
+        _script.Event.StartingChibisSection = null;
+        _script.Event.NumSections -= 2;
+        UnusedChibis.Clear();
+        HasStartingChibis = false;
+        _script.UnsavedChanges = true;
+        UpdatePreview();
+    }
 }
 
 public class ReactiveScriptSection(ScriptSection section) : ReactiveObject
@@ -753,7 +779,7 @@ public class StartingChibiWithImage : ReactiveObject
 
     public StartingChibiWithImage(StartingChibiEntry startingChibi, SKBitmap chibiBitmap,
         ObservableCollection<StartingChibiWithImage> usedChibis, ObservableCollection<StartingChibiWithImage> unusedChibis,
-        ScriptItem script)
+        ScriptItem script, ScriptEditorViewModel scriptEditor)
     {
         StartingChibi = startingChibi;
         ChibiBitmap = chibiBitmap;
@@ -777,7 +803,7 @@ public class StartingChibiWithImage : ReactiveObject
             }
             script.Event.StartingChibisSection.Objects.Add(StartingChibi);
             script.UnsavedChanges = true;
-
+            scriptEditor.UpdatePreview();
         });
         RemoveStartingChibiCommand = ReactiveCommand.Create(() =>
         {
@@ -799,6 +825,7 @@ public class StartingChibiWithImage : ReactiveObject
             script.Event.StartingChibisSection.Objects.Remove(
                 script.Event.StartingChibisSection.Objects.First(c => c.ChibiIndex == StartingChibi.ChibiIndex));
             script.UnsavedChanges = true;
+            scriptEditor.UpdatePreview();
         });
     }
 }

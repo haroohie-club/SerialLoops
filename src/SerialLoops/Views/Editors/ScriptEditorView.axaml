@@ -53,45 +53,57 @@
                 <TabControl.Items>
 
                     <TabItem Header="{x:Static assets:Strings.Starting_Chibis}">
-                        <StackPanel Orientation="Vertical" Spacing="10">
-                            <ItemsRepeater ItemsSource="{Binding StartingChibis}" Width="256" Height="86">
-                                <ItemsRepeater.Layout>
-                                    <UniformGridLayout MinColumnSpacing="-5" Orientation="Horizontal" ItemsJustification="End"
-                                                       MaximumRowsOrColumns="5"/>
-                                </ItemsRepeater.Layout>
-                                <ItemsRepeater.ItemTemplate>
-                                    <DataTemplate DataType="vm:StartingChibiWithImage">
-                                        <Image Source="{Binding ChibiBitmap, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
-                                               Stretch="None">
-                                            <i:Interaction.Behaviors>
-                                                <ia:EventTriggerBehavior EventName="PointerPressed" SourceObject="{Binding $parent[Image]}">
-                                                    <ia:InvokeCommandAction Command="{Binding RemoveStartingChibiCommand}"/>
-                                                </ia:EventTriggerBehavior>
-                                            </i:Interaction.Behaviors>
-                                        </Image>
-                                    </DataTemplate>
-                                </ItemsRepeater.ItemTemplate>
-                            </ItemsRepeater>
+                        <Panel>
+                            <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,Auto" IsVisible="{Binding HasStartingChibis}">
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static assets:Strings.Starting_Chibis}"
+                                           VerticalAlignment="Center"/>
+                                <ItemsRepeater Grid.Row="0" Grid.Column="1" ItemsSource="{Binding StartingChibis}" Width="256" Height="86">
+                                    <ItemsRepeater.Layout>
+                                        <UniformGridLayout MinColumnSpacing="-5" Orientation="Horizontal" ItemsJustification="End"
+                                                           MaximumRowsOrColumns="5"/>
+                                    </ItemsRepeater.Layout>
+                                    <ItemsRepeater.ItemTemplate>
+                                        <DataTemplate DataType="vm:StartingChibiWithImage">
+                                            <Image Source="{Binding ChibiBitmap, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
+                                                   Stretch="None">
+                                                <i:Interaction.Behaviors>
+                                                    <ia:EventTriggerBehavior EventName="PointerPressed" SourceObject="{Binding $parent[Image]}">
+                                                        <ia:InvokeCommandAction Command="{Binding RemoveStartingChibiCommand}"/>
+                                                    </ia:EventTriggerBehavior>
+                                                </i:Interaction.Behaviors>
+                                            </Image>
+                                        </DataTemplate>
+                                    </ItemsRepeater.ItemTemplate>
+                                </ItemsRepeater>
 
-                            <ItemsRepeater ItemsSource="{Binding UnusedChibis}" Width="256" Height="86">
-                                <ItemsRepeater.Layout>
-                                    <UniformGridLayout MinColumnSpacing="-5" Orientation="Horizontal" ItemsJustification="End"
-                                                       MaximumRowsOrColumns="5"/>
-                                </ItemsRepeater.Layout>
-                                <ItemsRepeater.ItemTemplate>
-                                    <DataTemplate DataType="vm:StartingChibiWithImage">
-                                        <Image Source="{Binding ChibiBitmap, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
-                                               Stretch="None">
-                                            <i:Interaction.Behaviors>
-                                                <ia:EventTriggerBehavior EventName="PointerPressed" SourceObject="{Binding $parent[Image]}">
-                                                    <ia:InvokeCommandAction Command="{Binding AddStartingChibiCommand}"/>
-                                                </ia:EventTriggerBehavior>
-                                            </i:Interaction.Behaviors>
-                                        </Image>
-                                    </DataTemplate>
-                                </ItemsRepeater.ItemTemplate>
-                            </ItemsRepeater>
-                        </StackPanel>
+                                <TextBlock Grid.Row="1" Grid.Column="0" Text="{x:Static assets:Strings.Chibis}"
+                                           VerticalAlignment="Center"/>
+                                <ItemsRepeater Grid.Row="1" Grid.Column="1" ItemsSource="{Binding UnusedChibis}" Width="256" Height="86">
+                                    <ItemsRepeater.Layout>
+                                        <UniformGridLayout MinColumnSpacing="-5" Orientation="Horizontal" ItemsJustification="End"
+                                                           MaximumRowsOrColumns="5"/>
+                                    </ItemsRepeater.Layout>
+                                    <ItemsRepeater.ItemTemplate>
+                                        <DataTemplate DataType="vm:StartingChibiWithImage">
+                                            <Image Source="{Binding ChibiBitmap, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
+                                                   Stretch="None">
+                                                <i:Interaction.Behaviors>
+                                                    <ia:EventTriggerBehavior EventName="PointerPressed" SourceObject="{Binding $parent[Image]}">
+                                                        <ia:InvokeCommandAction Command="{Binding AddStartingChibiCommand}"/>
+                                                    </ia:EventTriggerBehavior>
+                                                </i:Interaction.Behaviors>
+                                            </Image>
+                                        </DataTemplate>
+                                    </ItemsRepeater.ItemTemplate>
+                                </ItemsRepeater>
+
+                                <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Content="{x:Static assets:Strings.Remove_Starting_Chibis}"
+                                        Command="{Binding RemoveStartingChibisCommand}"/>
+                            </Grid>
+
+                            <Button Content="{x:Static assets:Strings.Add_Starting_Chibis}" IsVisible="{Binding !HasStartingChibis}"
+                                    Command="{Binding AddStartingChibisCommand}"/>
+                        </Panel>
                     </TabItem>
 
                     <TabItem Header="{x:Static assets:Strings.Choices}">
@@ -100,6 +112,10 @@
 
                     <TabItem Header="{x:Static assets:Strings.Map_Characters}">
                         <controls:MapCharactersSubEditor DataContext="{Binding MapCharactersSubEditorVm}"/>
+                    </TabItem>
+
+                    <TabItem Header="{x:Static assets:Strings.Interactable_Objects}">
+
                     </TabItem>
                 </TabControl.Items>
             </TabControl>

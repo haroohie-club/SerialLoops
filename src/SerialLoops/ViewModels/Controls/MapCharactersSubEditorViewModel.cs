@@ -1,18 +1,23 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia;
 using AvaloniaEdit.Utils;
+using HarfBuzzSharp;
 using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
+using MsBox.Avalonia.Enums;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using SerialLoops.Assets;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script.Parameters;
 using SerialLoops.Models;
+using SerialLoops.Utility;
 using SerialLoops.ViewModels.Editors;
 using SkiaSharp;
 
@@ -122,8 +127,14 @@ public class MapCharactersSubEditorViewModel : ViewModelBase
             LoadMapCharacters(refresh: true);
         }
 
-        RemoveMapCharactersCommand = ReactiveCommand.Create(() =>
+        RemoveMapCharactersCommand = ReactiveCommand.CreateFromTask(async Task () =>
         {
+            if (await ScriptEditor.Window.Window.ShowMessageBoxAsync(Strings.Delete_Map_Characters_,
+                    Strings.Are_you_sure_you_want_to_delete_the_map_characters_section_,
+                    ButtonEnum.YesNo, Icon.Warning, ScriptEditor.Window.Log) != ButtonResult.Yes)
+            {
+                return;
+            }
             HasMapCharacters = false;
             _script.Event.MapCharactersSection = null;
             _script.Event.NumSections -= 2;

@@ -554,6 +554,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete the map characters section?.
+        /// </summary>
+        public static string Are_you_sure_you_want_to_delete_the_map_characters_section_ {
+            get {
+                return ResourceManager.GetString("Are you sure you want to delete the map characters section?", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Arrow Keys - Move Image.
         /// </summary>
         public static string Arrow_Keys___Move_Image {
@@ -1811,6 +1820,15 @@ namespace SerialLoops.Assets {
         public static string Delete {
             get {
                 return ResourceManager.GetString("Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete Map Characters?.
+        /// </summary>
+        public static string Delete_Map_Characters_ {
+            get {
+                return ResourceManager.GetString("Delete Map Characters?", resourceCulture);
             }
         }
         

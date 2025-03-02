@@ -21,10 +21,10 @@ namespace SerialLoops.ViewModels.Editors.ScriptCommandEditors;
 
 public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorViewModel
 {
-    private MainWindowViewModel _window;
+    private readonly MainWindowViewModel _window;
     public EditorTabsPanelViewModel Tabs { get; set; }
     private Func<ItemDescription, bool> _specialPredicate;
-    private Timer _dialogueUpdateTimer;
+    private readonly Timer _dialogueUpdateTimer;
 
     public DialogueScriptCommandEditorViewModel(ScriptItemCommand command, ScriptEditorViewModel scriptEditor, ILogger log, MainWindowViewModel window) : base(command, scriptEditor, log)
     {
@@ -49,7 +49,7 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
         _disableLipFlap = ((BoolScriptParameter)command.Parameters[11]).Value;
 
         _dialogueUpdateTimer = new(TimeSpan.FromMilliseconds(250));
-        _dialogueUpdateTimer.Elapsed += (sender, args) =>
+        _dialogueUpdateTimer.Elapsed += (_, _) =>
         {
             ScriptEditor.UpdatePreview();
             _dialogueUpdateTimer.Stop();

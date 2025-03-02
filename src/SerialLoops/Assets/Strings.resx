@@ -3089,4 +3089,10 @@ This action is irreversible.</value>
   <data name="Add Chibi" xml:space="preserve">
     <value>Add Chibi</value><comment>...to the current map</comment>
   </data>
+  <data name="Are you sure you want to delete the map characters section?" xml:space="preserve">
+    <value>Are you sure you want to delete the map characters section?</value>
+  </data>
+  <data name="Delete Map Characters?" xml:space="preserve">
+    <value>Delete Map Characters?</value>
+  </data>
 </root>
