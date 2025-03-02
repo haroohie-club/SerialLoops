@@ -1,4 +1,6 @@
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
@@ -13,22 +15,19 @@ namespace SerialLoops.Controls;
 
 public partial class MapCharactersSubEditor : UserControl
 {
+    private CancellationTokenSource _cts = new();
+
     public MapCharactersSubEditor()
     {
         InitializeComponent();
     }
 
-    private async void DoDrag(object sender, PointerPressedEventArgs e)
-    {
-        DataObject dragData = new();
-        dragData.Set(nameof(ReactiveMapCharacter), ((Panel)sender).DataContext!);
-
-        await DragDrop.DoDragDrop(e, dragData, DragDropEffects.Move);
-    }
-
-
     private void Control_OnLoaded(object sender, RoutedEventArgs e)
     {
+        AddHandler(DragDrop.DragOverEvent, DragOver);
+        AddHandler(DragDrop.DropEvent, Drop);
+        return;
+
         void DragOver(object s, DragEventArgs de)
         {
             if (de.Source is Control && s is MapCharactersSubEditor)
@@ -56,14 +55,27 @@ public partial class MapCharactersSubEditor : UserControl
                 .MinBy(p => p.Key.Distance(point)).Value;
             ((MapCharactersSubEditorViewModel)DataContext).UpdateMapCharacter(character, (short)gridPoint.X, (short)gridPoint.Y);
         }
+    }
 
-        AddHandler(DragDrop.DragOverEvent, DragOver);
-        AddHandler(DragDrop.DropEvent, Drop);
+    private async void DoDrag(object sender, PointerPressedEventArgs e)
+    {
+        DataObject dragData = new();
+        ReactiveMapCharacter character = ((Panel)sender).DataContext as ReactiveMapCharacter;;
+        dragData.Set(nameof(ReactiveMapCharacter), character!);
+        ((MapCharactersSubEditorViewModel)DataContext)!.SelectedMapCharacter = character;
+
+        // This makes it so that drag/drop doesn't start immediately after clicking
+        _cts = new();
+        await Task.Delay(100);
+        if (_cts.IsCancellationRequested)
+            return;
+
+        await DragDrop.DoDragDrop(e, dragData, DragDropEffects.Move);
     }
 
     private void MapCharacter_OnPointerReleased(object sender, PointerReleasedEventArgs e)
     {
-        ((MapCharactersSubEditorViewModel)DataContext)!.SelectedMapCharacter = ((Panel)sender).DataContext as ReactiveMapCharacter;
+        _cts.Cancel();
     }
 
     private void MapCharacter_OnPointerEntered(object sender, PointerEventArgs e)

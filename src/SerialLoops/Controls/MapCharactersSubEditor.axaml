@@ -4,8 +4,10 @@
              xmlns:vm="using:SerialLoops.ViewModels.Controls"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:assets="using:SerialLoops.Assets"
+             xmlns:controls="using:SerialLoops.Controls"
              xmlns:models="using:SerialLoops.Models"
              xmlns:utility="using:SerialLoops.Utility"
+             xmlns:items="using:SerialLoops.Lib.Items"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:MapCharactersSubEditorViewModel"
              x:Class="SerialLoops.Controls.MapCharactersSubEditor"
@@ -81,60 +83,27 @@
                     </Style>
                 </ItemsControl.Styles>
             </ItemsControl>
-
-            <!-- Object Locations -->
-            <ItemsControl ItemsSource="{Binding ObjectPositions}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate DataType="models:HighlightedSpace">
-                        <Path Fill="{Binding Color}" ToolTip.Tip="{Binding ToolTip}">
-                            <Path.Data>
-                                <PathGeometry>
-                                    <PathFigure StartPoint="{Binding Top}" IsClosed="True" IsFilled="True">
-                                        <LineSegment Point="{Binding Left}"/>
-                                        <LineSegment Point="{Binding Bottom}"/>
-                                        <LineSegment Point="{Binding Right}"/>
-                                    </PathFigure>
-                                </PathGeometry>
-                            </Path.Data>
-                        </Path>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-
-            <!-- Character Locations -->
-            <ItemsControl ItemsSource="{Binding CharacterPositions}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate DataType="models:HighlightedSpace">
-                        <Path Fill="Chartreuse" Opacity="0.5" ToolTip.Tip="{Binding ToolTip}">
-                            <Path.Data>
-                                <PathGeometry>
-                                    <PathFigure StartPoint="{Binding Top}" IsClosed="True" IsFilled="True">
-                                        <LineSegment Point="{Binding Left}"/>
-                                        <LineSegment Point="{Binding Bottom}"/>
-                                        <LineSegment Point="{Binding Right}"/>
-                                    </PathFigure>
-                                </PathGeometry>
-                            </Path.Data>
-                        </Path>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
         </Canvas>
 
-        <Grid Grid.Column="1" ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto"
-              IsVisible="{Binding SelectedMapCharacter, Converter={x:Static ObjectConverters.IsNotNull}}">
+        <Grid Grid.Column="1" ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto" MinWidth="300"
+              IsEnabled="{Binding SelectedMapCharacter, Converter={x:Static ObjectConverters.IsNotNull}}">
             <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Chibi}"/>
-            <ComboBox Grid.Row="0" Grid.Column="1" Margin="10 0 0 0"/>
+            <ComboBox Grid.Row="0" Grid.Column="1" Margin="10,0,0,0"
+                      ItemsSource="{Binding Chibis}" SelectedItem="{Binding SelectedMapCharacter.Chibi}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate DataType="items:ChibiItem">
+                        <TextBlock Text="{Binding DisplayName}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+                <ComboBox.ItemContainerTheme>
+                    <ControlTheme TargetType="ComboBoxItem" x:DataType="items:ChibiItem">
+                        <Setter Property="TextSearch.Text" Value="{Binding DisplayName}" />
+                    </ControlTheme>
+                </ComboBox.ItemContainerTheme>
+            </ComboBox>
+
+            <controls:ChibiDirectionSelector Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                                             DataContext="{Binding ChibiDirectionSelector}"/>
         </Grid>
     </Grid>
 </UserControl>

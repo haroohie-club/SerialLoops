@@ -30,11 +30,22 @@ public class MapCharactersSubEditorViewModel : ViewModelBase
     public ObservableCollection<LayoutEntryWithImage> ObjectLayer { get; } = [];
 
     public ObservableCollection<ReactiveMapCharacter> MapCharacters { get; } = [];
-    [Reactive]
-    public ReactiveMapCharacter SelectedMapCharacter { get; set; }
 
-    public ObservableCollection<HighlightedSpace> ObjectPositions { get; } = [];
-    public ObservableCollection<HighlightedSpace> CharacterPositions { get; } = [];
+    private ReactiveMapCharacter _selectedMapCharacter;
+    public ReactiveMapCharacter SelectedMapCharacter
+    {
+        get => _selectedMapCharacter;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _selectedMapCharacter, value);
+            ChibiDirectionSelector = new(_selectedMapCharacter.FacingDirection, direction =>
+            {
+                _selectedMapCharacter.FacingDirection = direction;
+            });
+            ChibiDirectionSelector.SetAvailableDirections(_selectedMapCharacter.Chibi.ChibiEntries);
+        }
+    }
+    public ObservableCollection<ChibiItem> Chibis { get; } = [];
 
 
     [Reactive]
@@ -43,6 +54,9 @@ public class MapCharactersSubEditorViewModel : ViewModelBase
     public int CanvasHeight { get; set; }
 
     private MainWindowViewModel _window;
+
+    [Reactive]
+    public ChibiDirectionSelectorViewModel ChibiDirectionSelector { get; set; }
 
     public ObservableCollection<MapItem> Maps { get; } = [];
 
@@ -83,6 +97,7 @@ public class MapCharactersSubEditorViewModel : ViewModelBase
     {
         _script = script;
         _window = window;
+        Chibis = new(window.OpenProject.Items.Where(i => i.Type == ItemDescription.ItemType.Chibi).Cast<ChibiItem>());
 
         Maps.AddRange(commands.Values
             .SelectMany(c => c)
@@ -165,7 +180,7 @@ public class MapCharactersSubEditorViewModel : ViewModelBase
             MapCharacters.Clear();
             MapCharacters.AddRange(_script.Event.MapCharactersSection.Objects
                 .Where(c => c.CharacterIndex != 0)
-                .Select(c => new ReactiveMapCharacter(c, Origin, _window.OpenProject)));
+                .Select(c => new ReactiveMapCharacter(c, Origin, _window.OpenProject, _script, this)));
         }
 
         List<ObjectMarker> markers = new(Map.Map.ObjectMarkers[..^1]);
@@ -203,16 +218,60 @@ public class MapCharactersSubEditorViewModel : ViewModelBase
 
 public class ReactiveMapCharacter : LayoutEntryWithImage
 {
+    private ScriptItem _script;
+    private SKPoint _origin;
+    private MapCharactersSubEditorViewModel _parent;
+
+    public List<bool> ValidDirections { get; private set; }
+
     public MapCharactersSectionEntry MapCharacter { get; set; }
 
-    public ReactiveMapCharacter(MapCharactersSectionEntry mapCharacter, SKPoint origin, Project project)
+    private ChibiItem _chibi;
+    public ChibiItem Chibi
     {
-        MapCharacter = mapCharacter;
-        SKPoint mapPos = MapItem.GetPositionFromGrid(mapCharacter.X, mapCharacter.Y, origin, slgMode: false);
+        get => _chibi;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _chibi, value);
+            MapCharacter.CharacterIndex = _chibi.ChibiIndex;
+            _parent.ChibiDirectionSelector?.SetAvailableDirections(_chibi.ChibiEntries);
+            if (MapCharacter.FacingDirection >= _chibi.ChibiEntries.Count)
+            {
+                FacingDirection = ChibiItem.Direction.DOWN_LEFT;
+            }
+            SetUpChibi();
+            _script.UnsavedChanges = true;
+        }
+    }
 
-        CroppedImage = ((ChibiItem)project.Items.First(i =>
-                i.Type == ItemDescription.ItemType.Chibi && ((ChibiItem)i).ChibiIndex == mapCharacter.CharacterIndex))
-            .ChibiAnimations.ElementAt(mapCharacter.FacingDirection).Value[0].Frame;
+    public ChibiItem.Direction FacingDirection
+    {
+        get => (ChibiItem.Direction)MapCharacter.FacingDirection;
+        set
+        {
+            MapCharacter.FacingDirection = (short)value;
+            this.RaisePropertyChanged();
+            SetUpChibi();
+            _script.UnsavedChanges = true;
+        }
+    }
+
+    public ReactiveMapCharacter(MapCharactersSectionEntry mapCharacter, SKPoint origin, Project project, ScriptItem script,
+        MapCharactersSubEditorViewModel parent)
+    {
+        _script = script;
+        _origin = origin;
+        _parent = parent;
+        MapCharacter = mapCharacter;
+        _chibi = (ChibiItem)project.Items.First(i =>
+            i.Type == ItemDescription.ItemType.Chibi && ((ChibiItem)i).ChibiIndex == MapCharacter.CharacterIndex);
+        SetUpChibi();
+    }
+
+    private void SetUpChibi()
+    {
+        SKPoint mapPos = MapItem.GetPositionFromGrid(MapCharacter.X, MapCharacter.Y, _origin, slgMode: false);
+        CroppedImage = _chibi.ChibiAnimations.ElementAt(MapCharacter.FacingDirection).Value[0].Frame;
         ScreenX = (short)(mapPos.X - CroppedImage.Width / 2);
         ScreenY = (short)(mapPos.Y - CroppedImage.Height / 2 - 24);
         ScreenWidth = (short)CroppedImage.Width;
