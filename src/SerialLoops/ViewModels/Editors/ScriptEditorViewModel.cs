@@ -53,6 +53,10 @@ public class ScriptEditorViewModel : EditorViewModel
 
     public ICommand AddStartingChibisCommand { get; }
     public ICommand RemoveStartingChibisCommand { get; }
+    public ICommand AddInteractableObjectsSectionCommand { get; }
+    public ICommand RemoveInteractableObjectsSectionCommand { get; }
+    public ICommand AddInteractableObjectCommand { get; }
+    public ICommand RemoveInteractableObjectCommand { get; }
 
     public KeyGesture AddCommandHotKey { get; set; }
     public KeyGesture CutHotKey { get; set; }
@@ -127,6 +131,14 @@ public class ScriptEditorViewModel : EditorViewModel
     [Reactive]
     public bool HasStartingChibis { get; set; }
     public MapCharactersSubEditorViewModel MapCharactersSubEditorVm { get; set; }
+    [Reactive]
+    public bool HasInteractableObjects { get; set; }
+
+    public ObservableCollection<ReactiveInteractableObject> InteractableObjects { get; } = [];
+    [Reactive]
+    public ReactiveInteractableObject SelectedInteractableObject { get; set; }
+    public ObservableCollection<ReactiveInteractableObject> UnusedInteractableObjects { get; } = [];
+
 
     public ScriptEditorViewModel(ScriptItem script, MainWindowViewModel window, ILogger log) : base(script, window, log)
     {
@@ -167,6 +179,20 @@ public class ScriptEditorViewModel : EditorViewModel
 
         MapCharactersSubEditorVm = new(_script, this);
 
+        if (_script.Event.InteractableObjectsSection is not null)
+        {
+            HasInteractableObjects = true;
+            InteractableObjects.AddRange(_script.Event.InteractableObjectsSection.Objects.Where(o => o.ObjectId > 0).Select(o => new ReactiveInteractableObject(o,
+                MapCharactersSubEditorVm.Maps.ToArray(), _script, this)));
+            UnusedInteractableObjects.AddRange(MapCharactersSubEditorVm.Maps.SelectMany(m => m.Map.InteractableObjects)
+                .Where(o => o.ObjectId > 0 && InteractableObjects.All(i => i.InteractableObject.ObjectId != o.ObjectId))
+                .Select(o => new ReactiveInteractableObject(new() { ObjectId = (short)o.ObjectId },  MapCharactersSubEditorVm.Maps.ToArray(), _script, this)));
+        }
+        else
+        {
+            HasInteractableObjects = false;
+        }
+
         AddScriptCommandCommand = ReactiveCommand.CreateFromTask(AddCommand);
         AddScriptSectionCommand = ReactiveCommand.CreateFromTask(AddSection);
         DeleteScriptCommandOrSectionCommand = ReactiveCommand.CreateFromTask(Delete);
@@ -178,6 +204,10 @@ public class ScriptEditorViewModel : EditorViewModel
         GenerateTemplateCommand = ReactiveCommand.CreateFromTask(GenerateTemplate);
         AddStartingChibisCommand = ReactiveCommand.Create(AddStartingChibis);
         RemoveStartingChibisCommand = ReactiveCommand.Create(RemoveStartingChibis);
+        AddInteractableObjectsSectionCommand = ReactiveCommand.Create(AddInteractableObjectsSection);
+        RemoveInteractableObjectsSectionCommand = ReactiveCommand.Create(RemoveInteractableObjectsSection);
+        AddInteractableObjectCommand = ReactiveCommand.CreateFromTask(AddInteractableObject);
+        RemoveInteractableObjectCommand = ReactiveCommand.Create(RemoveInteractableObject);
 
         AddCommandHotKey = GuiExtensions.CreatePlatformAgnosticCtrlGesture(Key.N, KeyModifiers.Shift);
         CutHotKey = GuiExtensions.CreatePlatformAgnosticCtrlGesture(Key.X);
@@ -447,16 +477,10 @@ public class ScriptEditorViewModel : EditorViewModel
             new()
             {
                 Name = $"NONE/{sectionName[4..]}",
-                Id = (short)(_script.Event.LabelsSection.Objects.Count == 0 ? 1001 :
-                    sectionIndex == _script.Event.LabelsSection.Objects.Count ?
-                    _script.Event.LabelsSection.Objects[^2].Id + 1 :
-                    _script.Event.LabelsSection.Objects[sectionIndex].Id + 1),
+                Id = (short)(_script.Event.LabelsSection.Objects.Count == 1 ? 1001 :
+                    _script.Event.LabelsSection.Objects.Max(l => l.Id) + 1),
             }
         );
-        for (int i = sectionIndex + 1; i < _script.Event.LabelsSection.Objects.Count; i++)
-        {
-            _script.Event.LabelsSection.Objects[i].Id++;
-        }
 
         ScriptSections.Insert(sectionIndex, reactiveSection);
         _script.Refresh(_project, _log);
@@ -717,6 +741,60 @@ public class ScriptEditorViewModel : EditorViewModel
         _script.UnsavedChanges = true;
         UpdatePreview();
     }
+
+    private void AddInteractableObjectsSection()
+    {
+        _script.Event.InteractableObjectsSection = new() { Name = "INTERACTABLEOBJECTS" };
+        _script.Event.InteractableObjectsSection.Objects.Add(new()); // Blank interactable object
+        _script.Event.NumSections += 2;
+        UnusedInteractableObjects.Clear();
+        UnusedInteractableObjects.AddRange(MapCharactersSubEditorVm.Maps.SelectMany(m => m.Map.InteractableObjects)
+            .Where(o => o.ObjectId > 0)
+            .Select(o => new ReactiveInteractableObject(new() { ObjectId = (short)o.ObjectId },  MapCharactersSubEditorVm.Maps.ToArray(), _script, this)));
+        HasInteractableObjects = true;
+        _script.UnsavedChanges = true;
+    }
+
+    private void RemoveInteractableObjectsSection()
+    {
+        _script.Event.InteractableObjectsSection = null;
+        _script.Event.NumSections -= 2;
+        HasInteractableObjects = false;
+        InteractableObjects.Clear();
+        _script.UnsavedChanges = true;
+        _script.Refresh(_project, _log);
+        UpdatePreview();
+    }
+
+    private async Task AddInteractableObject()
+    {
+        AddInteractableObjectDialogViewModel addInteractableObjectDialogViewModel = new(UnusedInteractableObjects);
+        ReactiveInteractableObject obj =
+            await new AddInteractableObjectDialog { DataContext = addInteractableObjectDialogViewModel }
+                .ShowDialog<ReactiveInteractableObject>(Window.Window);
+        if (obj is not null)
+        {
+            _script.Event.InteractableObjectsSection.Objects.Insert(_script.Event.InteractableObjectsSection.Objects.Count - 1, obj.InteractableObject);
+            InteractableObjects.Add(obj);
+            UnusedInteractableObjects.Remove(obj);
+        }
+    }
+
+    private void RemoveInteractableObject()
+    {
+        if (SelectedInteractableObject is null)
+        {
+            return;
+        }
+        _script.Event.InteractableObjectsSection.Objects.Remove(SelectedInteractableObject.InteractableObject);
+        InteractableObjects.Remove(SelectedInteractableObject);
+        SelectedInteractableObject.InteractSection = null;
+        UnusedInteractableObjects.Add(SelectedInteractableObject);
+        SelectedInteractableObject = null;
+        _script.UnsavedChanges = true;
+        _script.Refresh(_project, _log);
+        UpdatePreview();
+    }
 }
 
 public class ReactiveScriptSection(ScriptSection section) : ReactiveObject
@@ -827,5 +905,36 @@ public class StartingChibiWithImage : ReactiveObject
             script.UnsavedChanges = true;
             scriptEditor.UpdatePreview();
         });
+    }
+}
+
+public class ReactiveInteractableObject(
+    InteractableObjectEntry interactableObject,
+    MapItem[] maps,
+    ScriptItem script,
+    ScriptEditorViewModel scriptEditor)
+    : ReactiveObject
+{
+    public InteractableObjectEntry InteractableObject { get; } = interactableObject;
+
+
+    public string Description => maps.SelectMany(m => m.Map.InteractableObjects)
+                                     .FirstOrDefault(i => i.ObjectId == InteractableObject.ObjectId)?.ObjectName?.GetSubstitutedString(scriptEditor.Window.OpenProject)
+                                 ?? $"{InteractableObject.ObjectId}";
+
+    public ObservableCollection<ReactiveScriptSection> ScriptSections => scriptEditor.ScriptSections;
+    public ReactiveScriptSection InteractSection
+    {
+        get => scriptEditor.ScriptSections.FirstOrDefault(s => s.Name.Equals(script.Event.LabelsSection.Objects
+            .FirstOrDefault(l => l.Id == InteractableObject.ScriptBlock)?.Name.Replace("/", "")));
+        set
+        {
+            InteractableObject.ScriptBlock = script.Event.LabelsSection.Objects
+                .First(l => l.Name.Replace("/", "").Equals(value.Name)).Id;
+            this.RaisePropertyChanged();
+            script.Refresh(scriptEditor.Window.OpenProject, scriptEditor.Window.Log);
+            scriptEditor.UpdatePreview();
+            script.UnsavedChanges = true;
+        }
     }
 }

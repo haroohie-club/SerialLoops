@@ -3095,4 +3095,16 @@ This action is irreversible.</value>
   <data name="Delete Map Characters?" xml:space="preserve">
     <value>Delete Map Characters?</value>
   </data>
+  <data name="Add Interactable Object" xml:space="preserve">
+    <value>Add Interactable Object</value>
+  </data>
+  <data name="Remove Interactable Object" xml:space="preserve">
+    <value>Remove Interactable Object</value>
+  </data>
+  <data name="Add Interactable Objects" xml:space="preserve">
+    <value>Add Interactable Objects</value>
+  </data>
+  <data name="Remove Interactable Objects" xml:space="preserve">
+    <value>Remove Interactable Objects</value>
+  </data>
 </root>

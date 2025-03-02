@@ -337,6 +337,24 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Interactable Object.
+        /// </summary>
+        public static string Add_Interactable_Object {
+            get {
+                return ResourceManager.GetString("Add Interactable Object", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Interactable Objects.
+        /// </summary>
+        public static string Add_Interactable_Objects {
+            get {
+                return ResourceManager.GetString("Add Interactable Objects", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add Map Characters.
         /// </summary>
         public static string Add_Map_Characters {
@@ -6021,6 +6039,24 @@ namespace SerialLoops.Assets {
         public static string Remove_Command_Section {
             get {
                 return ResourceManager.GetString("Remove Command/Section", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove Interactable Object.
+        /// </summary>
+        public static string Remove_Interactable_Object {
+            get {
+                return ResourceManager.GetString("Remove Interactable Object", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove Interactable Objects.
+        /// </summary>
+        public static string Remove_Interactable_Objects {
+            get {
+                return ResourceManager.GetString("Remove Interactable Objects", resourceCulture);
             }
         }
         
