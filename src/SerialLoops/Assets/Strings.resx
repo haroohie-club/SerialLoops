@@ -3083,4 +3083,16 @@ This action is irreversible.</value>
   <data name="There are no Serial Loops crash logs. No crashes so far!" xml:space="preserve">
     <value>There are no Serial Loops crash logs. No crashes so far!</value>
   </data>
+  <data name="Y_TOP" xml:space="preserve">
+    <value>Top</value>
+  </data>
+  <data name="Y_BELOW_TOP" xml:space="preserve">
+    <value>Below Top</value>
+  </data>
+  <data name="Y_ABOVE_BOTTOM" xml:space="preserve">
+    <value>Above Bottom</value>
+  </data>
+  <data name="Y_BOTTOM" xml:space="preserve">
+    <value>Bottom</value>
+  </data>
 </root>

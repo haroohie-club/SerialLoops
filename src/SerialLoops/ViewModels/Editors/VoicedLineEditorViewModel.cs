@@ -102,61 +102,18 @@ public class VoicedLineEditorViewModel : EditorViewModel
     }
 
     private VoiceMapEntry.YPosition _yPos;
+    public ObservableCollection<LocalizedSubtitlePosition> SubtitlePositions { get; } =
+        new(Enum.GetValues<VoiceMapEntry.YPosition>().Select(p => new LocalizedSubtitlePosition(p)));
 
-    public bool TopY
+    public LocalizedSubtitlePosition SubtitlePosition
     {
-        get => _yPos == VoiceMapEntry.YPosition.TOP;
+        get => SubtitlePositions.FirstOrDefault(p => p.Position == _yPos);
         set
         {
-            if (_voiceMapEntry is not null && value)
-            {
-                _yPos = VoiceMapEntry.YPosition.TOP;
-                _voiceMapEntry.YPos = _yPos;
-                UpdatePreview();
-                Description.UnsavedChanges = true;
-            }
-        }
-    }
-    public bool BelowTopY
-    {
-        get => _yPos == VoiceMapEntry.YPosition.BELOW_TOP;
-        set
-        {
-            if (_voiceMapEntry is not null && value)
-            {
-                _yPos = VoiceMapEntry.YPosition.BELOW_TOP;
-                _voiceMapEntry.YPos = _yPos;
-                UpdatePreview();
-                Description.UnsavedChanges = true;
-            }
-        }
-    }
-    public bool AboveBottomY
-    {
-        get => _yPos == VoiceMapEntry.YPosition.ABOVE_BOTTOM;
-        set
-        {
-            if (_voiceMapEntry is not null && value)
-            {
-                _yPos = VoiceMapEntry.YPosition.ABOVE_BOTTOM;
-                _voiceMapEntry.YPos = _yPos;
-                UpdatePreview();
-                Description.UnsavedChanges = true;
-            }
-        }
-    }
-    public bool BottomY
-    {
-        get => _yPos == VoiceMapEntry.YPosition.BOTTOM;
-        set
-        {
-            if (_voiceMapEntry is not null && value)
-            {
-                _yPos = VoiceMapEntry.YPosition.BOTTOM;
-                _voiceMapEntry.YPos = _yPos;
-                UpdatePreview();
-                Description.UnsavedChanges = true;
-            }
+            _yPos = value.Position;
+            _voiceMapEntry.YPos = _yPos;
+            UpdatePreview();
+            Description.UnsavedChanges = true;
         }
     }
 
@@ -321,4 +278,12 @@ public class LocalizedDialogueColor(DialogueColor color) : ReactiveObject
     public DialogueColor Color { get; set; } = color;
 
     public string DisplayText => Strings.ResourceManager.GetString(Color.ToString());
+}
+
+public class LocalizedSubtitlePosition(VoiceMapEntry.YPosition position) : ReactiveObject
+{
+    [Reactive]
+    public VoiceMapEntry.YPosition Position { get; set; } = position;
+
+    public override string ToString() => Strings.ResourceManager.GetString($"Y_{Position}");
 }
