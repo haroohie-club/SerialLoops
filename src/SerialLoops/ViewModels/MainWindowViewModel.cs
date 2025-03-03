@@ -14,6 +14,7 @@ using Avalonia.Media;
 using Avalonia.Platform;
 using Avalonia.Platform.Storage;
 using Avalonia.Styling;
+using Avalonia.Threading;
 using HaruhiChokuretsuLib.Archive;
 using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
@@ -250,9 +251,41 @@ public partial class MainWindowViewModel : ViewModelBase
 
         Title = $"{BASE_TITLE} - {project.Name}";
 
-        //LoadCachedData(project, tracker);
+        LoadCachedData();
 
         Window.MainContent.Content = ProjectPanel;
+    }
+
+    private void LoadCachedData()
+    {
+        try
+        {
+            if (!CurrentConfig.RememberProjectWorkspace ||
+                !ProjectsCache.RecentWorkspaces.TryGetValue(OpenProject.ProjectFile, out RecentWorkspace previousWorkspace))
+            {
+                return;
+            }
+
+            foreach (ItemDescription item in previousWorkspace.Tabs.Select(itemName => OpenProject.FindItem(itemName)))
+            {
+                if (item is not null)
+                {
+                    Dispatcher.UIThread.Invoke(() => EditorTabs.OpenTab(item));
+                }
+            }
+
+            if (EditorTabs.Tabs.Count > 0)
+            {
+                EditorTabs.SelectedTab = EditorTabs.Tabs[previousWorkspace.SelectedTabIndex];
+            }
+        }
+        catch (Exception ex)
+        {
+            Log.LogException(Strings.Failed_to_load_cached_data, ex);
+            ProjectsCache.RecentWorkspaces.Remove(OpenProject.ProjectFile);
+            ProjectsCache.RecentProjects.Remove(OpenProject.ProjectFile);
+            ProjectsCache.Save(Log);
+        }
     }
 
     public async Task<bool> CloseProject_Executed(WindowClosingEventArgs e)
@@ -304,11 +337,11 @@ public partial class MainWindowViewModel : ViewModelBase
             }
 
             // Record open items
-            List<string> openItems = EditorTabs.Tabs.Cast<EditorViewModel>()
-                .Select(e => e.Description)
-                .Select(i => i.Name)
+            List<string> openItems = EditorTabs.Tabs
+                .Select(t => t.Description)
+                .Select(i => i.DisplayName)
                 .ToList();
-            ProjectsCache.CacheRecentProject(OpenProject.ProjectFile, openItems);
+            ProjectsCache.CacheRecentProject(OpenProject.ProjectFile, openItems, EditorTabs.Tabs.IndexOf(EditorTabs.SelectedTab));
             ProjectsCache.HadProjectOpenOnLastClose = true;
             ProjectsCache.Save(Log);
         }

@@ -72,8 +72,6 @@ public class ConfigFactory : IConfigFactory
             devkitArmDir = string.Empty;
         }
 
-        // TODO: Probably make a way of defining "presets" of common emulator install paths on different platforms.
-        // Ideally this should be as painless as possible.
         bool emulatorExists = false;
         string emulatorPath = string.Empty;
         string emulatorFlatpak = string.Empty;

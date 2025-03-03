@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Drawing;
 using System.Windows.Input;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;

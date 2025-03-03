@@ -1077,6 +1077,7 @@ public partial class Project
         {
             return null;
         }
+
         return Items.FirstOrDefault(i => i.DisplayName == name);
     }
 
