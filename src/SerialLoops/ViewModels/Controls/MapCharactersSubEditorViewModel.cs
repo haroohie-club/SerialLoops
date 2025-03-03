@@ -127,24 +127,7 @@ public class MapCharactersSubEditorViewModel : ViewModelBase
             LoadMapCharacters(refresh: true);
         }
 
-        RemoveMapCharactersCommand = ReactiveCommand.CreateFromTask(async Task () =>
-        {
-            if (await ScriptEditor.Window.Window.ShowMessageBoxAsync(Strings.Delete_Map_Characters_,
-                    Strings.Are_you_sure_you_want_to_delete_the_map_characters_section_,
-                    ButtonEnum.YesNo, Icon.Warning, ScriptEditor.Window.Log) != ButtonResult.Yes)
-            {
-                return;
-            }
-            HasMapCharacters = false;
-            _script.Event.MapCharactersSection = null;
-            _script.Event.NumSections -= 2;
-            SelectedMapCharacter = null;
-            MapCharacters.Clear();
-            Map = null;
-            Maps.Clear();
-            ScriptEditor.UpdatePreview();
-            _script.UnsavedChanges = true;
-        });
+        RemoveMapCharactersCommand = ReactiveCommand.CreateFromTask(async Task () => await RemoveMapCharactersSection(true));
         AddMapCharactersCommand = ReactiveCommand.Create(() =>
         {
             _script.Event.MapCharactersSection = new() { Name = "MAPCHARACTERS" };
@@ -302,6 +285,28 @@ public class MapCharactersSubEditorViewModel : ViewModelBase
             return;
         }
 
+        _script.UnsavedChanges = true;
+    }
+
+    public async Task RemoveMapCharactersSection(bool prompt)
+    {
+        if (prompt)
+        {
+            if (await ScriptEditor.Window.Window.ShowMessageBoxAsync(Strings.Delete_Map_Characters_,
+                    Strings.Are_you_sure_you_want_to_delete_the_map_characters_section_,
+                    ButtonEnum.YesNo, Icon.Warning, ScriptEditor.Window.Log) != ButtonResult.Yes)
+            {
+                return;
+            }
+        }
+        HasMapCharacters = false;
+        _script.Event.MapCharactersSection = null;
+        _script.Event.NumSections -= 2;
+        SelectedMapCharacter = null;
+        MapCharacters.Clear();
+        Map = null;
+        Maps.Clear();
+        ScriptEditor.UpdatePreview();
         _script.UnsavedChanges = true;
     }
 }

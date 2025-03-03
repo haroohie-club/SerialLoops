@@ -7,7 +7,6 @@
              xmlns:controls="using:SerialLoops.Controls"
              xmlns:i="using:Avalonia.Xaml.Interactivity"
              xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
-             xmlns:local="using:SerialLoops.Views.Editors"
              xmlns:utility="using:SerialLoops.Utility"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:ScriptEditorViewModel"
@@ -49,7 +48,7 @@
 
         <Grid Grid.Column="2" Grid.Row="1" ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto">
             <Image Source="{Binding PreviewBitmap, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
-                   Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Width="256"/>
+                   Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Width="256" VerticalAlignment="Top"/>
             <TabControl Grid.Column="1" Grid.Row="0">
                 <TabControl.Items>
 
@@ -117,7 +116,7 @@
 
                     <TabItem Header="{x:Static assets:Strings.Interactable_Objects}">
                         <Panel>
-                            <Grid RowDefinitions="*,Auto,Auto" ColumnDefinitions="Auto,Auto" IsVisible="{Binding HasInteractableObjects}">
+                            <Grid RowDefinitions="*,Auto,Auto" ColumnDefinitions="Auto,Auto">
                                 <ListBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
                                          ItemsSource="{Binding InteractableObjects}" SelectedItem="{Binding SelectedInteractableObject}">
                                     <ListBox.ItemTemplate>
@@ -144,10 +143,7 @@
                                 </ListBox>
                                 <Button Grid.Row="1" Grid.Column="0" Content="{x:Static assets:Strings.Add_Interactable_Object}" Command="{Binding AddInteractableObjectCommand}"/>
                                 <Button Grid.Row="1" Grid.Column="1" Content="{x:Static assets:Strings.Remove_Interactable_Object}" Command="{Binding RemoveInteractableObjectCommand}"/>
-
-                                <Button Grid.Row="2" Grid.Column="0" Content="{x:Static assets:Strings.Remove_Interactable_Objects}" Command="{Binding RemoveInteractableObjectsSectionCommand}"/>
                             </Grid>
-                            <Button IsVisible="{Binding !HasInteractableObjects}" Content="{x:Static assets:Strings.Add_Interactable_Objects}" Command="{Binding AddInteractableObjectsSectionCommand}"/>
                         </Panel>
                     </TabItem>
                 </TabControl.Items>
