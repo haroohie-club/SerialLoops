@@ -68,7 +68,7 @@ public class BgmVolumePropertiesDialogViewModel : ViewModelBase
     private void Normalize()
     {
         VolumePreviewPlayer.Stop();
-        float volumeNormalizationFactor = _maxAmplitude / VolumePreview.Provider.GetMaxAmplitude();
+        float volumeNormalizationFactor = _maxAmplitude / VolumePreview.Provider.GetMaxAmplitude(_log);
         if (volumeNormalizationFactor < 1)
         {
             Volume *= volumeNormalizationFactor;
