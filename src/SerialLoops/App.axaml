@@ -63,6 +63,11 @@
                     <Setter Property="Margin" Value="10 5 0 0"/>
                 </Style>
             </OnPlatform.Windows>
+            <OnPlatform.Default>
+                <Style Selector="NativeMenuBar">
+                    <Setter Property="Margin" Value="0"/>
+                </Style>
+            </OnPlatform.Default>
         </OnPlatform>
 
         <!-- Text styling -->
