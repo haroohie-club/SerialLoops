@@ -23,6 +23,7 @@ public class ConfigFactoryMock(string configPath) : IConfigFactory
         else
         {
             Config newConfig = ConfigFactory.GetDefault(log);
+            newConfig.RememberProjectWorkspace = false;
             newConfig.ConfigPath = _configPath;
             newConfig.CurrentCultureName = "en-US"; // there's a chance that the locale will be something we don't recognize (like Invariant culture) so we force this for tests
             newConfig.InitializeHacks(log);

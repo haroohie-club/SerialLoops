@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using HaroohieClub.NitroPacker.Core;
+using HaroohieClub.NitroPacker;
 using HaruhiChokuretsuLib.Archive;
 using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
@@ -25,6 +25,8 @@ public static class Build
         bool result = DoBuild(project.IterativeDirectory, project, config, log, tracker);
         CopyToArchivesToIterativeOriginal(Path.Combine(project.IterativeDirectory, "rom", "data"),
             Path.Combine(project.IterativeDirectory, "original", "archives"), log, tracker);
+        ReplicateProjectSettingsAndBanner(Path.Combine(project.IterativeDirectory, "rom"),
+            Path.Combine(project.BaseDirectory, "rom"), project.Name, log, tracker);
         if (result)
         {
             CleanIterative(project, log, tracker);
@@ -37,6 +39,8 @@ public static class Build
         bool result = DoBuild(project.BaseDirectory, project, config, log, tracker);
         CopyToArchivesToIterativeOriginal(Path.Combine(project.BaseDirectory, "rom", "data"),
             Path.Combine(project.IterativeDirectory, "original", "archives"), log, tracker);
+        ReplicateProjectSettingsAndBanner(Path.Combine(project.BaseDirectory, "rom"),
+            Path.Combine(project.IterativeDirectory, "rom"), project.Name, log, tracker);
         if (result)
         {
             CleanIterative(project, log, tracker);
@@ -103,7 +107,7 @@ public static class Build
             log.LogException("Failed to write include files to disk.", exc);
             return false;
         }
-        tracker.Finished+= 4;
+        tracker.Finished += 4;
 
         // Replace files
         string[] files = Directory.GetFiles(Path.Combine(directory, "assets"), "*.*", SearchOption.AllDirectories);
@@ -182,14 +186,14 @@ public static class Build
         {
             return false;
         }
-        tracker.Finished+= 3;
+        tracker.Finished += 3;
 
         // Save project file to disk
-        string ndsProjectFile = Path.Combine(directory, "rom", $"{project.Name}.xml");
+        string ndsProjectFile = Path.Combine(directory, "rom", $"{project.Name}.json");
         tracker.Focus("Writing NitroPacker Project File", 1);
         try
         {
-            File.WriteAllBytes(ndsProjectFile, project.Settings.File.Write());
+            project.Settings.File.Serialize(ndsProjectFile);
         }
         catch (IOException exc)
         {
@@ -215,19 +219,38 @@ public static class Build
 
     private static void CopyToArchivesToIterativeOriginal(string newDataDir, string iterativeOriginalDir, ILogger log, IProgressTracker tracker)
     {
-        tracker.Focus("Copying Archives to Iterative Originals", 3);
+        tracker.Focus("Copying Archives to Iterative Originals", 4);
         try
         {
             File.Copy(Path.Combine(newDataDir, "dat.bin"), Path.Combine(iterativeOriginalDir, "dat.bin"), overwrite: true);
+            tracker.Finished++;
             File.Copy(Path.Combine(newDataDir, "evt.bin"), Path.Combine(iterativeOriginalDir, "evt.bin"), overwrite: true);
+            tracker.Finished++;
             File.Copy(Path.Combine(newDataDir, "grp.bin"), Path.Combine(iterativeOriginalDir, "grp.bin"), overwrite: true);
+            tracker.Finished++;
             File.Copy(Path.Combine(newDataDir, "snd.bin"), Path.Combine(iterativeOriginalDir, "snd.bin"), overwrite: true);
+            tracker.Finished++;
         }
         catch (IOException exc)
         {
             log.LogException($"Failed to copy newly built archives to the iterative originals directory", exc);
         }
-        tracker.Finished+= 3;
+    }
+
+    private static void ReplicateProjectSettingsAndBanner(string sourceDir, string targetDir, string projectName, ILogger log, IProgressTracker tracker)
+    {
+        tracker.Focus("Replicating Project Settings & Banner", 2);
+        try
+        {
+            File.Copy(Path.Combine(sourceDir, $"{projectName}.json"), Path.Combine(targetDir, $"{projectName}.json"), overwrite: true);
+            tracker.Finished++;
+            File.Copy(Path.Combine(sourceDir, "banner.bin"), Path.Combine(targetDir, "banner.bin"), overwrite: true);
+            tracker.Finished++;
+        }
+        catch (IOException exc)
+        {
+            log.LogException($"Failed to copy project settings and/or banner to {targetDir}", exc);
+        }
     }
 
     private static void ReplaceSingleGraphicsFile(ArchiveFile<GraphicsFile> grp, string filePath, int index, Func<string, string> localize, ILogger log)

@@ -229,8 +229,8 @@ public class AsmHacksDialogViewModel : ViewModelBase
         // Get the overlays
         List<Overlay> overlays = [];
         string originalOverlaysDir = Path.Combine(_project.BaseDirectory, "original", "overlay");
-        string romInfoPath = Path.Combine(_project.BaseDirectory, "original", $"{_project.Name}.xml");
-        string newRomInfoPath = Path.Combine(_project.BaseDirectory, "rom", $"{_project.Name}.xml");
+        string romInfoPath = Path.Combine(_project.BaseDirectory, "original", $"{_project.Name}.json");
+        string newRomInfoPath = Path.Combine(_project.BaseDirectory, "rom", $"{_project.Name}.json");
 
         foreach (string file in Directory.GetFiles(originalOverlaysDir))
         {

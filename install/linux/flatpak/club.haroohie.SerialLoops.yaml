@@ -31,16 +31,6 @@ modules:
     build-commands:
     - /usr/lib/sdk/dotnet8/bin/install.sh
 
-  - name: devkitARM
-    buildsystem: simple
-    sources:
-      - type: archive
-        url: https://haroohie.nyc3.cdn.digitaloceanspaces.com/bootstrap/serial-loops/dkp.zip
-        sha256: 91d9d524d5150ae892de4457c4cbb7eaa5edcb2449a85366def678242b1f60e2
-    build-commands:
-      - mkdir -p ${FLATPAK_DEST}/opt/
-      - cp -r ./* ${FLATPAK_DEST}/opt/
-
   - name: make
     buildsystem: autotools
     sources:
@@ -76,12 +66,16 @@ modules:
         path: ../../../src/SerialLoops/Assets/Icons/AppIcon.svg
       - type: file
         path: VERSION
+      - type: file
+        path: devkitarm.tar.gz
     build-commands:
+      - tar -xvf devkitarm.tar.gz -C ${FLATPAK_DEST}/
       - export SLVersion=$(cat VERSION)
       - export SLAssemblyVersion=$(sed -n 's/pre/9999/p' VERSION)
       - dotnet publish src/SerialLoops/SerialLoops.csproj -c Release -f net8.0 --no-self-contained --source ./nuget-sources
       - mkdir -p ${FLATPAK_DEST}/bin
       - cp -r src/SerialLoops/bin/Release/net8.0/publish/* ${FLATPAK_DEST}/bin
+      - sed -i "s/#VERSION#/$SLVersion/g" club.haroohie.SerialLoops.desktop
       - install -Dm644 AppIcon.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/club.haroohie.SerialLoops.svg
       - install -Dm644 club.haroohie.SerialLoops.metainfo.xml ${FLATPAK_DEST}/share/metainfo/club.haroohie.SerialLoops.metainfo.xml
       - install -Dm644 club.haroohie.SerialLoops.desktop ${FLATPAK_DEST}/share/applications/club.haroohie.SerialLoops.desktop

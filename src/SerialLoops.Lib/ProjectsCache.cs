@@ -12,7 +12,7 @@ public class ProjectsCache
     [JsonIgnore]
     public string CacheFilePath { get; set; }
     public List<string> RecentProjects { get; set; }
-    public Dictionary<string, List<string>> RecentWorkspaces { get; set; }
+    public Dictionary<string, RecentWorkspace> RecentWorkspaces { get; set; }
     public bool HadProjectOpenOnLastClose { get; set; }
 
     public void Save(ILogger log)
@@ -20,7 +20,7 @@ public class ProjectsCache
         log.Log($"Caching recent projects and workspaces to '{CacheFilePath}'...");
         IO.WriteStringFile(CacheFilePath, JsonSerializer.Serialize(this), log);
     }
-        
+
     public static ProjectsCache LoadCache(Config config, ILogger log)
     {
         string recentProjectsJson = Path.Combine(config.UserDirectory, "projects_cache.json");
@@ -39,39 +39,39 @@ public class ProjectsCache
             recentProjects.CacheFilePath = recentProjectsJson;
             return recentProjects;
         }
-        catch (JsonException exc)
+        catch (JsonException ex)
         {
-            log.LogException("Exception occurred while parsing projects_cache.json!", exc);
+            log.LogWarning($"Exception occurred while parsing projects_cache.json: {ex.Message}");
             ProjectsCache defaultRecentProjects = GetDefault();
             IO.WriteStringFile(recentProjectsJson, JsonSerializer.Serialize(defaultRecentProjects), log);
             return defaultRecentProjects;
         }
     }
-        
+
     private static ProjectsCache GetDefault()
     {
         return new()
         {
             RecentProjects = [],
-            RecentWorkspaces = []
+            RecentWorkspaces = [],
         };
     }
 
-    public void CacheRecentProject(string projectPath, List<string> workspaceItems)
+    public void CacheRecentProject(string projectPath, List<string> workspaceItems, int selectedTabIndex)
     {
-        if (RecentProjects.Contains(projectPath))
+        if (RecentProjects.Remove(projectPath))
         {
-            RecentProjects.Remove(projectPath);
             RecentWorkspaces.Remove(projectPath);
         }
         if (RecentProjects.Count >= MAX_RECENT_PROJECTS)
         {
-            string lastProject = RecentProjects[RecentProjects.Count - 1];
+            string lastProject = RecentProjects[^1];
             RecentProjects.Remove(lastProject);
             RecentWorkspaces.Remove(lastProject);
         }
         RecentProjects.Insert(0, projectPath);
-        RecentWorkspaces.Add(projectPath, workspaceItems);
+        RecentWorkspaces.Add(projectPath, new(workspaceItems, selectedTabIndex));
     }
-        
 }
+
+public record struct RecentWorkspace(List<string> Tabs, int SelectedTabIndex);
