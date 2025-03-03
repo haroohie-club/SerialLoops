@@ -5,7 +5,7 @@ namespace SerialLoops.Lib.Script.Parameters;
 public class ChessPieceScriptParameter : ScriptParameter
 {
     public short ChessPiece { get; set; }
-    public override short[] GetValues(object obj = null) => new short[] { ChessPiece };
+    public override short[] GetValues(object obj = null) => [ChessPiece];
 
     public override string GetValueString(Project project)
     {

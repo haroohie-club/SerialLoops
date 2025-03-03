@@ -56,6 +56,15 @@
             <Setter Property="FontSize" Value="12.5" />
         </Style>
 
+        <!-- Windows menu styling -->
+        <OnPlatform>
+            <OnPlatform.Windows>
+                <Style Selector="NativeMenuBar">
+                    <Setter Property="Margin" Value="10 5 0 0"/>
+                </Style>
+            </OnPlatform.Windows>
+        </OnPlatform>
+
         <!-- Text styling -->
         <Style Selector="TextBlock.h1">
             <Setter Property="FontSize" Value="32" />

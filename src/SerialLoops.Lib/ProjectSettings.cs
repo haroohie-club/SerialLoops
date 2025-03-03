@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using HaroohieClub.NitroPacker;
 using HaroohieClub.NitroPacker.Nitro.Card.Banners;
 using HaroohieClub.NitroPacker.Nitro.Gx;
