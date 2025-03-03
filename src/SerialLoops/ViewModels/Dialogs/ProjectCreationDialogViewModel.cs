@@ -26,17 +26,23 @@ public partial class ProjectCreationDialogViewModel : ViewModelBase
     [Reactive]
     public string RomPath { get; set; } = Strings.None_Selected;
 
+    public bool Migrate { get; set; }
+
+    public string Title => Migrate ? Strings.Migrate_Project : Strings.Create_New_Project;
+    public string ButtonText => Migrate ? Strings.Migrate : Strings.Create;
+
     public ICommand PickRomCommand { get; set; }
     public ICommand CreateCommand { get; set; }
     public ICommand CancelCommand { get; set; }
 
-    public ProjectCreationDialogViewModel(Config config, MainWindowViewModel mainWindow, ILogger log)
+    public ProjectCreationDialogViewModel(Config config, MainWindowViewModel mainWindow, ILogger log, bool migrate = false)
     {
         _log = log;
         _mainWindow = mainWindow;
         _config = config;
+        Migrate = migrate;
         PickRomCommand = ReactiveCommand.CreateFromTask(PickRom);
-        CreateCommand = ReactiveCommand.CreateFromTask<ProjectCreationDialog>(CreateProject);
+        CreateCommand = Migrate ? ReactiveCommand.Create<ProjectCreationDialog>(dialog => dialog.Close((RomPath, LanguageTemplateCode))) : ReactiveCommand.CreateFromTask<ProjectCreationDialog>(CreateProject);
         CancelCommand = ReactiveCommand.Create<ProjectCreationDialog>((dialog) => dialog.Close());
     }
 
