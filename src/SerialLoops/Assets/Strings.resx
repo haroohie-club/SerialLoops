@@ -3064,6 +3064,9 @@ This action is irreversible.</value>
   <data name="Move 2" xml:space="preserve">
     <value>Move 2</value><comment>As on a chessboard</comment>
   </data>
+  <data name="Migrate" xml:space="preserve">
+    <value>Migrate</value>
+  </data>
   <data name="View Crash Log" xml:space="preserve">
     <value>View Crash Log</value>
   </data>
@@ -3072,6 +3075,18 @@ This action is irreversible.</value>
   </data>
   <data name="There are no Serial Loops crash logs. No crashes so far!" xml:space="preserve">
     <value>There are no Serial Loops crash logs. No crashes so far!</value>
+  </data>
+  <data name="Y_TOP" xml:space="preserve">
+    <value>Top</value>
+  </data>
+  <data name="Y_BELOW_TOP" xml:space="preserve">
+    <value>Below Top</value>
+  </data>
+  <data name="Y_ABOVE_BOTTOM" xml:space="preserve">
+    <value>Above Bottom</value>
+  </data>
+  <data name="Y_BOTTOM" xml:space="preserve">
+    <value>Bottom</value>
   </data>
   <data name="Clear Move" xml:space="preserve">
     <value>Clear Move</value><comment>As in "delete a chess move"</comment>

@@ -14,7 +14,7 @@
         x:DataType="vm:ProjectCreationDialogViewModel"
         x:Class="SerialLoops.Views.Dialogs.ProjectCreationDialog"
         Icon="/Assets/serial-loops.ico"
-        Title="{x:Static assets:Strings.Create_New_Project}"
+        Title="{Binding Title}"
         Name="PcDialog">
     <Panel>
         <controls:AcrylicBorderHandler/>
@@ -22,7 +22,7 @@
         <StackPanel Spacing="10" HorizontalAlignment="Center" Margin="10 30">
             <HeaderedContentControl Header="{x:Static assets:Strings.Project_Options}" MinWidth="300" MinHeight="100">
                 <StackPanel Spacing="10" VerticalAlignment="Center" Orientation="Vertical">
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Spacing="10">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Spacing="10" IsVisible="{Binding !Migrate}">
                         <TextBlock Text="{x:Static assets:Strings.Name}"/>
                         <TextBox Name="NameBox" Watermark="Haroohie" Width="150" Text="{Binding ProjectName}"/>
                     </StackPanel>
@@ -54,7 +54,7 @@
                 </StackPanel>
             </HeaderedContentControl>
             <StackPanel Orientation="Horizontal" Margin="5" Spacing="10">
-                <Button Content="{x:Static assets:Strings.Create}" Command="{Binding CreateCommand}" CommandParameter="{Binding #PcDialog}"
+                <Button Content="{Binding ButtonText}" Command="{Binding CreateCommand}" CommandParameter="{Binding #PcDialog}"
                         Name="CreateButton"/>
                 <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}" CommandParameter="{Binding #PcDialog}"
                         Name="CancelButton"/>

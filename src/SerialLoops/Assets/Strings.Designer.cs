@@ -4583,6 +4583,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Migrate.
+        /// </summary>
+        public static string Migrate {
+            get {
+                return ResourceManager.GetString("Migrate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Migrate Project.
         /// </summary>
         public static string Migrate_Project {
@@ -8673,6 +8682,42 @@ namespace SerialLoops.Assets {
         public static string XDelta_patch {
             get {
                 return ResourceManager.GetString("XDelta patch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Above Bottom.
+        /// </summary>
+        public static string Y_ABOVE_BOTTOM {
+            get {
+                return ResourceManager.GetString("Y_ABOVE_BOTTOM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Below Top.
+        /// </summary>
+        public static string Y_BELOW_TOP {
+            get {
+                return ResourceManager.GetString("Y_BELOW_TOP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bottom.
+        /// </summary>
+        public static string Y_BOTTOM {
+            get {
+                return ResourceManager.GetString("Y_BOTTOM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Top.
+        /// </summary>
+        public static string Y_TOP {
+            get {
+                return ResourceManager.GetString("Y_TOP", resourceCulture);
             }
         }
         
