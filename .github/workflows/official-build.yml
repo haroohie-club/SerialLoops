@@ -43,6 +43,18 @@ jobs:
           name: nuget-sources
           path: nuget-sources.json
           retention-days: 1
+      - name: Export devkitARM latest
+        uses: addnab/docker-run-action@v3
+        with:
+          image: devkitpro/devkitarm:latest
+          options: -v ${{ github.workspace }}:/work -w /work
+          run: tar -czvf devkitarm.tar.gz /opt/devkitpro/devkitARM
+      - name: Publish devkitARM tarball
+        uses: actions/upload-artifact@v4
+        with:
+          name: devkitARM
+          path: devkitarm.tar.gz
+          retention-days: 1
   linux-flatpak:
     needs: linux-flatpak-setup
     runs-on: ubuntu-latest
@@ -56,6 +68,11 @@ jobs:
         uses: actions/download-artifact@v4.1.8
         with:
           name: nuget-sources
+          path: install/linux/flatpak/
+      - name: Download devkitARM
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: devkitARM
           path: install/linux/flatpak/
       - name: Export version
         run: echo $SLVersion > install/linux/flatpak/VERSION
