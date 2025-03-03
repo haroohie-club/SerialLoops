@@ -6,7 +6,7 @@ namespace SerialLoops.Lib.Script.Parameters;
 public class BgmScriptParameter : ScriptParameter
 {
     public BackgroundMusicItem Bgm { get; set; }
-    public override short[] GetValues(object obj = null) => new short[] { (short)Bgm.Index };
+    public override short[] GetValues(object obj = null) => [(short)Bgm.Index];
 
     public override string GetValueString(Project project)
     {

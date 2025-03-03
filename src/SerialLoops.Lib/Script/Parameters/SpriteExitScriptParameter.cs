@@ -5,7 +5,7 @@ namespace SerialLoops.Lib.Script.Parameters;
 public class SpriteExitScriptParameter : ScriptParameter
 {
     public SpriteExitTransition ExitTransition { get; set; }
-    public override short[] GetValues(object obj = null) => new short[] { (short)ExitTransition };
+    public override short[] GetValues(object obj = null) => [(short)ExitTransition];
 
     public override string GetValueString(Project project)
     {

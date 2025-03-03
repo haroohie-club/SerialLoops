@@ -629,7 +629,7 @@ public partial class Project
                 .Select(f =>
                 {
                     tracker.Finished++;
-                    return new ChessPuzzleItem(f.CastTo<ChessFile>(), Grp);
+                    return new ChessPuzzleItem(f.CastTo<ChessFile>());
                 }));
         }
         catch (Exception ex)

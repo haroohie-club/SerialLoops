@@ -22,5 +22,9 @@ public class ScriptPreview
     public List<string> CurrentChocies { get; set; }
     public bool ChessMode { get; set; }
     public ChessPuzzleItem ChessPuzzle { get; set; }
+    public List<short> ChessHighlightedSpaces { get; set; } = [];
+    public List<short> ChessGuidePieces { get; set; } = [];
+    public List<short> ChessGuideSpaces { get; set; } = [];
+    public List<short> ChessCrossedSpaces { get; set; } = [];
     public string ErrorImage { get; set; }
 }

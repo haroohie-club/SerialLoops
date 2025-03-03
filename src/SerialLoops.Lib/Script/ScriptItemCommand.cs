@@ -607,16 +607,16 @@ public class ScriptItemCommand : ReactiveObject
                     switch (i)
                     {
                         case 0:
-                            parameters.Add(new ChessSpaceScriptParameter(localize("White Space Begin"), parameter));
+                            parameters.Add(new ChessSpaceScriptParameter(localize("Move 1 Space Begin"), parameter));
                             break;
                         case 1:
-                            parameters.Add(new ChessSpaceScriptParameter(localize("White Space End"), parameter));
+                            parameters.Add(new ChessSpaceScriptParameter(localize("Move 1 Space End"), parameter));
                             break;
                         case 2:
-                            parameters.Add(new ChessSpaceScriptParameter(localize("Black Space Begin"), parameter));
+                            parameters.Add(new ChessSpaceScriptParameter(localize("Move 2 Space Begin"), parameter));
                             break;
                         case 3:
-                            parameters.Add(new ChessSpaceScriptParameter(localize("Black Space End"), parameter));
+                            parameters.Add(new ChessSpaceScriptParameter(localize("Move 2 Space End"), parameter));
                             break;
                     }
                     break;
@@ -624,16 +624,16 @@ public class ScriptItemCommand : ReactiveObject
                     switch (i)
                     {
                         case 0:
-                            parameters.Add(new ChessPieceScriptParameter(localize("Piece 1"), parameter));
+                            parameters.Add(new ChessSpaceScriptParameter(localize("Piece 1"), parameter));
                             break;
                         case 1:
-                            parameters.Add(new ChessPieceScriptParameter(localize("Piece 2"), parameter));
+                            parameters.Add(new ChessSpaceScriptParameter(localize("Piece 2"), parameter));
                             break;
                         case 2:
-                            parameters.Add(new ChessPieceScriptParameter(localize("Piece 3"), parameter));
+                            parameters.Add(new ChessSpaceScriptParameter(localize("Piece 3"), parameter));
                             break;
                         case 3:
-                            parameters.Add(new ChessPieceScriptParameter(localize("Piece 4"), parameter));
+                            parameters.Add(new ChessSpaceScriptParameter(localize("Piece 4"), parameter));
                             break;
                     }
                     break;

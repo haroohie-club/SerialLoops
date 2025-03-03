@@ -806,24 +806,6 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Black Space Begin.
-        /// </summary>
-        public static string Black_Space_Begin {
-            get {
-                return ResourceManager.GetString("Black Space Begin", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Black Space End.
-        /// </summary>
-        public static string Black_Space_End {
-            get {
-                return ResourceManager.GetString("Black Space End", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Blinds.
         /// </summary>
         public static string BLINDS {
@@ -1311,11 +1293,20 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Win Section.
+        ///   Looks up a localized string similar to Clear All Guides.
         /// </summary>
-        public static string Clear_Block {
+        public static string Clear_All_Guides {
             get {
-                return ResourceManager.GetString("Clear Block", resourceCulture);
+                return ResourceManager.GetString("Clear All Guides", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear Move.
+        /// </summary>
+        public static string Clear_Move {
+            get {
+                return ResourceManager.GetString("Clear Move", resourceCulture);
             }
         }
         
@@ -1343,6 +1334,15 @@ namespace SerialLoops.Assets {
         public static string Clear_Script_ {
             get {
                 return ResourceManager.GetString("Clear Script?", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Win Section.
+        /// </summary>
+        public static string Clear_Section {
+            get {
+                return ResourceManager.GetString("Clear Section", resourceCulture);
             }
         }
         
@@ -4657,18 +4657,18 @@ namespace SerialLoops.Assets {
         /// <summary>
         ///   Looks up a localized string similar to Lose 2 Section.
         /// </summary>
-        public static string Miss_2_Block {
+        public static string Miss_2_Section {
             get {
-                return ResourceManager.GetString("Miss 2 Block", resourceCulture);
+                return ResourceManager.GetString("Miss 2 Section", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Lose Section.
         /// </summary>
-        public static string Miss_Block {
+        public static string Miss_Section {
             get {
-                return ResourceManager.GetString("Miss Block", resourceCulture);
+                return ResourceManager.GetString("Miss Section", resourceCulture);
             }
         }
         
@@ -4705,6 +4705,24 @@ namespace SerialLoops.Assets {
         public static string Most_Recent_Objectives {
             get {
                 return ResourceManager.GetString("Most Recent Objectives", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move 1.
+        /// </summary>
+        public static string Move_1 {
+            get {
+                return ResourceManager.GetString("Move 1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move 2.
+        /// </summary>
+        public static string Move_2 {
+            get {
+                return ResourceManager.GetString("Move 2", resourceCulture);
             }
         }
         
@@ -6657,15 +6675,6 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Block: .
-        /// </summary>
-        public static string Script_Block_ {
-            get {
-                return ResourceManager.GetString("Script Block:", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Script Position.
         /// </summary>
         public static string Script_Position {
@@ -6680,6 +6689,15 @@ namespace SerialLoops.Assets {
         public static string Script_Section {
             get {
                 return ResourceManager.GetString("Script Section", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Section:.
+        /// </summary>
+        public static string Script_Section_ {
+            get {
+                return ResourceManager.GetString("Script Section:", resourceCulture);
             }
         }
         
@@ -8556,24 +8574,6 @@ namespace SerialLoops.Assets {
         public static string WHITE {
             get {
                 return ResourceManager.GetString("WHITE", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to White Space Begin.
-        /// </summary>
-        public static string White_Space_Begin {
-            get {
-                return ResourceManager.GetString("White Space Begin", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to White Space End.
-        /// </summary>
-        public static string White_Space_End {
-            get {
-                return ResourceManager.GetString("White Space End", resourceCulture);
             }
         }
         
