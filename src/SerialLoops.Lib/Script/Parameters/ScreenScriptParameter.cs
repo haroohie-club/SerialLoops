@@ -5,7 +5,7 @@ namespace SerialLoops.Lib.Script.Parameters;
 public class ScreenScriptParameter : ScriptParameter
 {
     public DsScreen Screen { get; set; }
-    public override short[] GetValues(object obj = null) => new short[] { (short)Screen };
+    public override short[] GetValues(object obj = null) => [(short)Screen];
 
     public override string GetValueString(Project project)
     {

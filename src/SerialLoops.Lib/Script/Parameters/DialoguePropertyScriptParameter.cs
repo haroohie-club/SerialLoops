@@ -7,7 +7,8 @@ namespace SerialLoops.Lib.Script.Parameters;
 public class DialoguePropertyScriptParameter : ScriptParameter
 {
     public CharacterItem Character { get; set; }
-    public override short[] GetValues(object obj = null) => new short[] { (short)((MessageInfoFile)obj).MessageInfos.FindIndex(m => m.Character == Character.MessageInfo.Character) };
+    public override short[] GetValues(object obj = null) => [(short)((MessageInfoFile)obj).MessageInfos.FindIndex(m => m.Character == Character.MessageInfo.Character),
+    ];
 
     public override string GetValueString(Project project)
     {

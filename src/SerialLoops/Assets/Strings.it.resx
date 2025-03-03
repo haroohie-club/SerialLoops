@@ -208,10 +208,6 @@
   <data name="&quot;Kinetic&quot; Background" xml:space="preserve">
     <value>"Kinetic" Sfondo</value>
   </data>
-  <data name="Black Space End" xml:space="preserve">
-    <value>Spazio Nero Finale</value>
-    <comment>As on a chessboard</comment>
-  </data>
   <data name="Adjusting Loop Info" xml:space="preserve">
     <value>Configura info Loop</value>
   </data>
@@ -327,10 +323,6 @@
   </data>
   <data name="Chess_Puzzle" xml:space="preserve">
     <value>Scacchi</value>
-  </data>
-  <data name="Black Space Begin" xml:space="preserve">
-    <value>Spazio Nero Iniziale</value>
-    <comment>As on a chessboard</comment>
   </data>
   <data name="Color" xml:space="preserve">
     <value>Colore</value>
@@ -1260,7 +1252,7 @@
   <data name="Sound options ticker tape" xml:space="preserve">
     <value>Pannello Informazioni Effetti sonori</value>
   </data>
-  <data name="Clear Block" xml:space="preserve">
+  <data name="Clear Section" xml:space="preserve">
     <value>Sezione Vittoria</value>
   </data>
   <data name="Set/Clear" xml:space="preserve">
@@ -1856,7 +1848,7 @@
   <data name="Off" xml:space="preserve">
     <value>Off</value>
   </data>
-  <data name="Miss Block" xml:space="preserve">
+  <data name="Miss Section" xml:space="preserve">
     <value>Sezione Persa</value>
   </data>
   <data name="Failed to set viewr contents for script command list panel." xml:space="preserve">
@@ -1958,7 +1950,7 @@
     <value>Cross Spazio {0}"</value>
     <comment>As on a chessboard</comment>
   </data>
-  <data name="Miss 2 Block" xml:space="preserve">
+  <data name="Miss 2 Section" xml:space="preserve">
     <value>Perse 2 Sezioni</value>
   </data>
   <data name="No saves Load Game menu ticker tape" xml:space="preserve">
@@ -2024,10 +2016,6 @@
   </data>
   <data name="Vorbis files" xml:space="preserve">
     <value>Vorbis files</value>
-  </data>
-  <data name="White Space End" xml:space="preserve">
-    <value>Spazio bianco finale</value>
-    <comment>As on a chessboard</comment>
   </data>
   <data name="Quicksave data damaged &amp; reset message box" xml:space="preserve">
     <value>Messaggio Riparazione dati danneggiati e reset</value>
@@ -2191,10 +2179,6 @@
   <data name="Update Now" xml:space="preserve">
     <value>Aggiorna adesso</value>
   </data>
-  <data name="White Space Begin" xml:space="preserve">
-    <value>Spazio bianco inizio</value>
-    <comment>As on a chessboard</comment>
-  </data>
   <data name="Scenario Command Index:" xml:space="preserve">
     <value>Index comandi scenario: </value>
   </data>
@@ -2216,7 +2200,7 @@
   <data name="Unseen Only" xml:space="preserve">
     <value>Solo non vedere</value>
   </data>
-  <data name="Script Block:" xml:space="preserve">
+  <data name="Script Section:" xml:space="preserve">
     <value>Block: </value>
   </data>
   <data name="Saving prompt message box" xml:space="preserve">

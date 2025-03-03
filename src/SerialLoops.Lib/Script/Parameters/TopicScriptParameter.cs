@@ -7,7 +7,7 @@ namespace SerialLoops.Lib.Script.Parameters;
 public class TopicScriptParameter : ScriptParameter
 {
     public short TopicId { get; set; }
-    public override short[] GetValues(object obj = null) => new short[] { TopicId };
+    public override short[] GetValues(object obj = null) => [TopicId];
 
     public override string GetValueString(Project project)
     {

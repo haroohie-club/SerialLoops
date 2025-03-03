@@ -123,8 +123,14 @@ public class ScriptEditorViewModel : EditorViewModel
 
     public Vector? ScrollPosition { get; set; }
 
-    public ObservableCollection<StartingChibiWithImage> UnusedChibis { get; } = [];
-    public ObservableCollection<StartingChibiWithImage> StartingChibis { get; } = [];
+    [Reactive]
+    public ChessPuzzleItem CurrentChessBoard { get; set; }
+    public ObservableCollection<short> CurrentGuidePieces { get; } = [];
+    public ObservableCollection<short> CurrentHighlightedSpaces { get; } = [];
+    public ObservableCollection<short> CurrentCrossedSpaces { get; } = [];
+
+    public ObservableCollection<StartingChibiWithImage> UnusedChibis { get; }
+    public ObservableCollection<StartingChibiWithImage> StartingChibis { get; }
 
     [Reactive]
     public bool HasStartingChibis { get; set; }
@@ -259,6 +265,13 @@ public class ScriptEditorViewModel : EditorViewModel
                 CommandVerb.AVOID_DISP => new EmptyScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.GLOBAL2D => new Global2DScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.CHESS_LOAD => new ChessLoadScriptCommandEditorViewModel(_selectedCommand, this, Window, _log),
+                CommandVerb.CHESS_VGOTO => new ChessVgotoScriptCommandEditorViewModel(_selectedCommand, this, _log),
+                CommandVerb.CHESS_MOVE => new ChessMoveScriptCommandEditorViewModel(_selectedCommand, this, _log),
+                CommandVerb.CHESS_TOGGLE_GUIDE => new ChessToggleGuideScriptCommandEditorViewModel(_selectedCommand, this, _log),
+                CommandVerb.CHESS_TOGGLE_HIGHLIGHT => new ChessToggleHighlightScriptCommandEditorViewModel(_selectedCommand, this, _log),
+                CommandVerb.CHESS_TOGGLE_CROSS => new ChessToggleCrossScriptCommandEditorViewModel(_selectedCommand, this, _log),
+                CommandVerb.CHESS_CLEAR_ANNOTATIONS => new EmptyScriptCommandEditorViewModel(_selectedCommand, this, _log),
+                CommandVerb.CHESS_RESET => new EmptyScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.SCENE_GOTO_CHESS => new SceneGotoScriptCommandEditorViewModel(_selectedCommand, this, _log, Window),
                 CommandVerb.BG_DISP2 => new BgDispScriptCommandEditorViewModel(_selectedCommand, this, _log, Window),
                 _ => new(_selectedCommand, this, _log),
@@ -276,8 +289,16 @@ public class ScriptEditorViewModel : EditorViewModel
             }
             else
             {
-                (SKBitmap previewBitmap, string errorImage) =
-                    _script.GeneratePreviewImage(_commands, SelectedCommand, _project, _log);
+                ScriptPreview preview = _script.GetScriptPreview(_commands, _selectedCommand, _project, _log);
+                CurrentChessBoard = preview.ChessPuzzle;
+                CurrentGuidePieces.Clear();
+                CurrentGuidePieces.AddRange(preview.ChessGuidePieces);
+                CurrentHighlightedSpaces.Clear();
+                CurrentHighlightedSpaces.AddRange(preview.ChessHighlightedSpaces);
+                CurrentCrossedSpaces.Clear();
+                CurrentCrossedSpaces.AddRange(preview.ChessCrossedSpaces);
+
+                (SKBitmap previewBitmap, string errorImage) = ScriptItem.GeneratePreviewImage(preview, _project);
                 if (previewBitmap is null)
                 {
                     previewBitmap = new(256, 384);

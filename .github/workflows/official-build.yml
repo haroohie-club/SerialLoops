@@ -1,8 +1,8 @@
 name: Serial Loops Official Build
 run-name: "Official release build for Serial Loops"
 on:
-  # schedule:
-  #   - cron: '0 23 * * *'
+  schedule:
+    - cron: '0 0 * * *' # runs daily at 00:00
   workflow_dispatch:
     inputs:
       version:
@@ -22,7 +22,19 @@ env:
   SLAssemblyVersion: ${{ inputs.version == '' && format('0.3.9999.a{0}', github.run_number) || inputs.version }}
 
 jobs:
+  check-new-commits:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if new commits
+        run: echo "NEW_COMMIT_COUNT=$(git log --oneline --since '24 hours ago' | wc -l)" >> $GITHUB_ENV
+        if: ${{ github.event_name == 'schedule' }}
+      - name: Pass because dispatched
+        run: echo "NEW_COMMIT_COUNT=1" >> $GITHUB_ENV
+        if: ${{ github.event_name != 'schedule' }}
+
   linux-flatpak-setup:
+    needs: check-new-commits
+    if: ${{ github.env.NEW_COMMIT_COUNT > 0 }}
     runs-on: ubuntu-latest
     steps:
       - name: Check out
@@ -43,6 +55,18 @@ jobs:
           name: nuget-sources
           path: nuget-sources.json
           retention-days: 1
+      - name: Export devkitARM latest
+        uses: addnab/docker-run-action@v3
+        with:
+          image: devkitpro/devkitarm:latest
+          options: -v ${{ github.workspace }}:/work -w /work
+          run: tar -czvf devkitarm.tar.gz /opt/devkitpro/devkitARM
+      - name: Publish devkitARM tarball
+        uses: actions/upload-artifact@v4
+        with:
+          name: devkitARM
+          path: devkitarm.tar.gz
+          retention-days: 1
   linux-flatpak:
     needs: linux-flatpak-setup
     runs-on: ubuntu-latest
@@ -56,6 +80,11 @@ jobs:
         uses: actions/download-artifact@v4.1.8
         with:
           name: nuget-sources
+          path: install/linux/flatpak/
+      - name: Download devkitARM
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: devkitARM
           path: install/linux/flatpak/
       - name: Export version
         run: echo $SLVersion > install/linux/flatpak/VERSION
@@ -72,7 +101,41 @@ jobs:
           path: SerialLoops.flatpak
           retention-days: 1
 
+  linux-appimage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4.1.0
+        with:
+          dotnet-version: '8.0.x'
+      - name: Build & Publish Serial Loops
+        run: dotnet publish src/SerialLoops/SerialLoops.csproj -c Release -f net8.0 -r linux-x64 --self-contained /p:DebugType=None /p:DebugSymbols=false /p:PublishSingleFile=true
+      - name: Set up AppDir
+        run: |
+          sed -i "s/#VERSION#/$SLVersion/g" ./install/linux/appimage/AppImageBuilder.yml
+          mkdir -p ./install/linux/appimage/AppDir/usr/bin
+          chmod +x ./src/SerialLoops/bin/Release/net8.0/linux-x64/publish/SerialLoops
+          mv ./src/SerialLoops/bin/Release/net8.0/linux-x64/publish/* ./install/linux/appimage/AppDir/usr/bin/
+          mkdir -p ./install/linux/appimage/AppDir/usr/share/icons/default/scalable/apps/
+          cp ./src/SerialLoops/Assets/Icons/AppIcon.svg ./install/linux/appimage/AppDir/usr/share/icons/default/scalable/apps/club.haroohie.SerialLoops.svg
+      - name: Build AppImage
+        uses: addnab/docker-run-action@v3
+        with:
+          image: ghcr.io/haroohie-club/appimage-builder:main
+          options: -v ${{ github.workspace }}:/work -w /work
+          run: appimage-builder --recipe=./install/linux/appimage/AppImageBuilder.yml --skip-tests
+      - name: Upload AppImage
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-x64-appimage
+          path: SerialLoops.AppImage
+          retention-days: 1
+
   linux-dpkg-tarball:
+    needs: check-new-commits
+    if: ${{ github.env.NEW_COMMIT_COUNT > 0 }}
     runs-on: ubuntu-latest
     steps:
       - name: Check out
@@ -117,6 +180,8 @@ jobs:
           retention-days: 1
 
   linux-rpm:
+    needs: check-new-commits
+    if: ${{ github.env.NEW_COMMIT_COUNT > 0 }}
     runs-on: ubuntu-latest
     container:
       image: fedora:39
@@ -141,6 +206,8 @@ jobs:
           retention-days: 1
 
   macos-pkg:
+    needs: check-new-commits
+    if: ${{ github.env.NEW_COMMIT_COUNT > 0 }}
     runs-on: macos-latest
     strategy:
       matrix:
@@ -176,6 +243,8 @@ jobs:
           retention-days: 1
 
   windows:
+    needs: check-new-commits
+    if: ${{ github.env.NEW_COMMIT_COUNT > 0 }}
     runs-on: windows-latest
     steps:
       - name: Check out
@@ -213,13 +282,18 @@ jobs:
           retention-days: 1
 
   release:
+    if: ${{ github.env.NEW_COMMIT_COUNT > 0 }}
     runs-on: ubuntu-latest
-    needs: [ linux-flatpak, linux-dpkg-tarball, linux-rpm, macos-pkg, windows ]
+    needs: [ linux-flatpak, linux-appimage, linux-dpkg-tarball, linux-rpm, macos-pkg, windows ]
     steps:
       - name: Download Linux flatpak
         uses: actions/download-artifact@v4.1.8
         with:
           name: linux-x64-flatpak
+      - name: Download Linux AppImage
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: linux-x64-appimage
       - name: Download Linux tarball
         uses: actions/download-artifact@v4.1.8
         with:
@@ -254,6 +328,7 @@ jobs:
           New-Item -Type Directory -Path release
           Get-ChildItem .
           Move-Item -Path SerialLoops.flatpak -Destination release/SerialLoops-linux-x64-v$($env:SLVersion).flatpak
+          Move-Item -Path SerialLoops.AppImage -Destination release/SerialLoops-linux-x64-v$($env:SLVersion).AppImage
           Move-Item -Path SerialLoops.tar.gz -Destination release/SerialLoops-linux-x64-v$($env:SLVersion).tar.gz
           Move-Item -Path SerialLoops.deb -Destination release/SerialLoops-linux-x64-$($env:SLVersion).deb
           Move-Item -Path SerialLoops.rpm -Destination release/SerialLoops-linux-x64-$($env:SLVersion)-1.fc39.x86_64.rpm
@@ -281,7 +356,7 @@ jobs:
             Simply download the Windows installer application and run it. It will walk you through installation, including installing the necessary dependencies. Alternatively, you can download the zip file for a portable application; however, dependencies are not included with this option.
 
             ### macOS
-            Pick the macOS pkg installer that fits your computer's architecture. Before executing it, you will need to open the Terminal application and run `xattr -cr /User/yourusernamehere/Downloads/pkginstallernamehere.pkg`, replacing "yourusernamehere" with your username and "pkginstallernamehere.pkg" with the appropriate pkg installer filename. Running this command makes it so that the pkg installer is runnable even though we don't codesign it.
+            Pick the macOS pkg installer that fits your computer's architecture. Before executing it, you will need to open the Terminal application and run `xattr -cr /User/yourusernamehere/Downloads/SerialLoops-macOS-[arm|x64]-${{ env.SLVersion }}-installer.pkg`, replacing "yourusernamehere" with your username and choosing between `arm` or `x64` as appropriate for the filename. This is required because we currently don't codesign the installer, meaning macOS will refuse to run it without explicit approval from you.
 
             The pkg installer will guide you through installing Serial Loops and will automatically install the dependencies devkitARM and make if necessary.
 
@@ -291,9 +366,10 @@ jobs:
             ### Linux
             We recommend using the provided Flatpak as it is the easiest to use. First, install [Flatpak](https://flatpak.org/setup/) if you haven't already. Then, download the Serial Loops Flatpak artifact and double click it or run `flatpak install` on it from the terminal. It will then install itself, bringing all the necessary dependencies with it.
 
-            You can also install the official [melonDS Flatpak from Flathub](https://flathub.org/apps/net.kuribo64.melonDS) to use as your emulator. We reocmmend installing it from the [flathub-beta](https://docs.flathub.org/docs/for-users/installation/#flathub-beta-repository) repository as that is where the most up-to-date versions tend to be pushed.
+            You can also install the official [melonDS Flatpak from Flathub](https://flathub.org/apps/net.kuribo64.melonDS) to use as your emulator. We recommend installing it from the [flathub-beta](https://docs.flathub.org/docs/for-users/installation/#flathub-beta-repository) repository as that is where the most up-to-date versions tend to be pushed.
 
-            If you would rather manually install, follow the below instructions:
+            The main benefit of the Flatpak is that it is packaged with devkitARM for ease of use. However, if you already have devkitARM installed or would like to use something more lightweight, we also provide the following options (all of which require [installing devkitARM yourself](https://devkitpro.org/wiki/Getting_Started)):
+            * The AppImage is designed to run on all Linux distros and is an easy, click-once option.
             * The `.deb` package is intended for Debian-based distros (e.g. Ubuntu). Install it with `sudo apt install -f ./SerialLoops-linux-x64-${{ env.SLVersion }}.deb`.
             * The `.rpm` package is intended for Red Hat distros (e.g. Fedora). Install it with `sudo dnf install ./SerialLoops-linux-x64-${{ env.SLVersion }}-1.fc39.x86_64.rpm`.
-            * For other Linux distros, please use the binaries packaged in the `.tar.gz` archive; when doing so, ensure you install the OpenAL binaries so audio playback works.
+            * You may also opt to simply use the binaries packaged in the `.tar.gz` archive; when doing so, ensure you install the OpenAL binaries so audio playback works.
