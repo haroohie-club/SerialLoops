@@ -129,8 +129,8 @@ public class ScriptEditorViewModel : EditorViewModel
     public ObservableCollection<short> CurrentHighlightedSpaces { get; } = [];
     public ObservableCollection<short> CurrentCrossedSpaces { get; } = [];
 
-    public ObservableCollection<StartingChibiWithImage> UnusedChibis { get; }
-    public ObservableCollection<StartingChibiWithImage> StartingChibis { get; }
+    public ObservableCollection<StartingChibiWithImage> UnusedChibis { get; } = [];
+    public ObservableCollection<StartingChibiWithImage> StartingChibis { get; } = [];
 
     [Reactive]
     public bool HasStartingChibis { get; set; }
