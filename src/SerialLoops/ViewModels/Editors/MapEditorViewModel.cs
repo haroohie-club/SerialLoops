@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia;
 using Avalonia.Platform.Storage;
+using DynamicData;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -32,6 +33,7 @@ public class MapEditorViewModel : EditorViewModel
     public ObservableCollection<LayoutEntryWithImage> ObjectJunkLayer { get; } = [];
 
     public ObservableCollection<HighlightedSpace> InteractableObjects { get; } = [];
+    public ObservableCollection<LayoutEntryWithImage> InteractableObjectsHiglightLayer { get; } = [];
     public ObservableCollection<HighlightedSpace> Unknown2s { get; } = [];
     public ObservableCollection<HighlightedSpace> ObjectPositions { get; } = [];
 
@@ -199,6 +201,11 @@ public class MapEditorViewModel : EditorViewModel
         CanvasHeight = map.Layout.LayoutEntries.Max(l => l.ScreenY + l.ScreenH);
         for (int i = 0; i < map.Layout.LayoutEntries.Count; i++)
         {
+            if (map.Map.InteractableObjects[..^1].Any(io => io.ObjectId == i))
+            {
+                InteractableObjectsHiglightLayer.Add(new(Layout, i));
+            }
+
             if (map.Map.Settings.IntroCameraTruckingDefsStartIndex > 0 && i >= map.Map.Settings.IntroCameraTruckingDefsStartIndex
                 && i <= map.Map.Settings.IntroCameraTruckingDefsEndIndex)
             {
