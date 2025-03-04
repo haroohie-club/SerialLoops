@@ -3118,4 +3118,9 @@ This action is irreversible.</value>
   <data name="Remove Interactable Objects" xml:space="preserve">
     <value>Remove Interactable Objects</value>
   </data>
+  <data name="InteractableObjectsAsmHackMessage" xml:space="preserve">
+    <value>By default, the game ignores the IDs of these objects and applies them in order.
+To make this tooling more useful, we highly recommend applying the
+"Sensible Interactable Object Selection" hack by going to Tools → Apply ASM Hacks.</value>
+  </data>
 </root>

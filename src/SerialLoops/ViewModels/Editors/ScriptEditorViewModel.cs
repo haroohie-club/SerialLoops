@@ -612,6 +612,8 @@ public class ScriptEditorViewModel : EditorViewModel
         if (_script.Event.InteractableObjectsSection?.Objects?.Count > 1)
         {
             _script.Event.InteractableObjectsSection?.Objects?.RemoveRange(0, _script.Event.InteractableObjectsSection.Objects.Count - 2);
+            UnusedInteractableObjects.AddRange(InteractableObjects);
+            InteractableObjects.Clear();
         }
 
         _script.Refresh(_project, _log);
@@ -756,7 +758,8 @@ public class ScriptEditorViewModel : EditorViewModel
 
     private async Task AddInteractableObject()
     {
-        AddInteractableObjectDialogViewModel addInteractableObjectDialogViewModel = new(UnusedInteractableObjects);
+        AddInteractableObjectDialogViewModel addInteractableObjectDialogViewModel = new(UnusedInteractableObjects,
+            _project.Config.Hacks.FirstOrDefault(h => h.Name.Equals("Sensible Interactable Object Selection"))?.IsApplied ?? false);
         ReactiveInteractableObject obj =
             await new AddInteractableObjectDialog { DataContext = addInteractableObjectDialogViewModel }
                 .ShowDialog<ReactiveInteractableObject>(Window.Window);

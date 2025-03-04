@@ -4151,6 +4151,17 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to By default, the game ignores the IDs of these objects and applies them in order.
+        ///To make this tooling more useful, we highly recommend applying the
+        ///&quot;Sensible Interactable Object Selection&quot; hack by going to Tools → Apply ASM Hacks..
+        /// </summary>
+        public static string InteractableObjectsAsmHackMessage {
+            get {
+                return ResourceManager.GetString("InteractableObjectsAsmHackMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid audio file selected..
         /// </summary>
         public static string Invalid_audio_file_selected_ {
