@@ -46,7 +46,7 @@
 
         <GridSplitter Grid.Column="1" Grid.Row="0" Grid.RowSpan="3" Background="{StaticResource GroupLineColor}" ResizeDirection="Columns"/>
 
-        <Grid Grid.Column="2" Grid.Row="1" ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto">
+        <Grid Grid.Column="2" Grid.Row="1" ColumnDefinitions="Auto,*" RowDefinitions="*,Auto">
             <Image Source="{Binding PreviewBitmap, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
                    Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Width="256" VerticalAlignment="Top"/>
             <TabControl Grid.Column="1" Grid.Row="0">

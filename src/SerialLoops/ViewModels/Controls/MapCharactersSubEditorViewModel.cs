@@ -173,6 +173,7 @@ public class MapCharactersSubEditorViewModel : ViewModelBase
 
     private void RefreshMaps()
     {
+        Maps.Clear();
         Maps.AddRange(ScriptEditor.Commands.Values
             .SelectMany(c => c)
             .Where(c => c.Verb == EventFile.CommandVerb.LOAD_ISOMAP)
