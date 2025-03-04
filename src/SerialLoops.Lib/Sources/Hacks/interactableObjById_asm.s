@@ -1,19 +1,19 @@
 mapSettingsOffset: .word 0x020B4E18
 
-@ Loads the ID of an interactable object into memory and stores it
+@ Makes the event files compare the IDs of interactable objects rather than just their indices
 ahook_02066678:
-    push {r1-r5}
+    push {r1}
     ldr r1, =mapSettingsOffset
     ldr r1, [r1]
     ldr r1, [r1]
     ldr r1, [r1, #0x6C]             @ Load the map's interactable objects section
-    
+
     mov r0, r0, lsl #4              @ interactable objects are 16-bytes long, so idx << 4 shifts us to the correct spot in the array
     add r0, r0, #4                  @ ID is stored at 0x04 in the struct
     ldr r0, [r1, r0]                @ load the ID into r0
     mov r7, r0                      @ replicate the replaced instruction
 
-    pop {r1-r5}
+    pop {r1}
     bx lr
 
 ahook_020666B0:
