@@ -111,7 +111,9 @@
                     </TabItem>
 
                     <TabItem Header="{x:Static assets:Strings.Map_Characters}">
-                        <controls:MapCharactersSubEditor DataContext="{Binding MapCharactersSubEditorVm}"/>
+                        <ScrollViewer>
+                            <controls:MapCharactersSubEditor DataContext="{Binding MapCharactersSubEditorVm}"/>
+                        </ScrollViewer>
                     </TabItem>
 
                     <TabItem Header="{x:Static assets:Strings.Interactable_Objects}">
