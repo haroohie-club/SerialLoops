@@ -262,7 +262,7 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate DataType="models:HighlightedSpace">
-                                <Path Fill="{Binding Color}" ToolTip.Tip="{Binding ToolTip}">
+                                <Path Fill="{Binding Color}">
                                     <Path.Data>
                                         <PathGeometry>
                                             <PathFigure StartPoint="{Binding Top}" IsClosed="True" IsFilled="True">
@@ -285,7 +285,8 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate DataType="models:LayoutEntryWithImage">
                                 <Rectangle Stroke="{Binding Tint, Converter={StaticResource BrushConverter}}"
-                                           StrokeThickness="4" Width="{Binding ScreenWidth}" Height="{Binding ScreenHeight}"/>
+                                           StrokeThickness="2" Width="{Binding ScreenWidth}" Height="{Binding ScreenHeight}"
+                                           Fill="#05FFFFFF" ToolTip.Tip="{Binding ToolTip}"/>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                         <ItemsControl.Styles>
@@ -305,7 +306,7 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate DataType="models:HighlightedSpace">
-                                <Path Fill="{Binding Color}" ToolTip.Tip="{Binding ToolTip}">
+                                <Path Fill="{Binding Color}">
                                     <Path.Data>
                                         <PathGeometry>
                                             <PathFigure StartPoint="{Binding Top}" IsClosed="True" IsFilled="True">
@@ -329,7 +330,7 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate DataType="models:HighlightedSpace">
-                                <Path Fill="{Binding Color}" ToolTip.Tip="{Binding ToolTip}">
+                                <Path Fill="{Binding Color}">
                                     <Path.Data>
                                         <PathGeometry>
                                             <PathFigure StartPoint="{Binding Top}" IsClosed="True" IsFilled="True">

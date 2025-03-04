@@ -23,8 +23,6 @@ public class HighlightedSpace : ReactiveObject
     public Point Bottom { get; set; }
     [Reactive]
     public SolidColorBrush Color { get; set; }
-    [Reactive]
-    public string ToolTip { get; set; }
 
     public HighlightedSpace(byte[][] walkabilityMap, int x, int y, Point gridZero, bool slgMode)
     {
@@ -43,7 +41,7 @@ public class HighlightedSpace : ReactiveObject
         };
     }
 
-    public HighlightedSpace(InteractableObject obj, Point gridZero, Project project)
+    public HighlightedSpace(InteractableObject obj, Point gridZero)
     {
         // x & y reversed from SLG mode
         Point origin = new(gridZero.X - obj.ObjectY * 16 + obj.ObjectX * 16, gridZero.Y + obj.ObjectY * 8 + obj.ObjectX * 8);
@@ -52,7 +50,6 @@ public class HighlightedSpace : ReactiveObject
         Bottom = new(origin.X, origin.Y + 16);
         Right = new(origin.X + 16, origin.Y + 8);
         Color = new(Colors.PaleVioletRed, 0.5);
-        ToolTip = obj.ObjectName.GetSubstitutedString(project);
     }
 
     public HighlightedSpace(UnknownMapObject2 obj, Point gridZero, bool slgMode)

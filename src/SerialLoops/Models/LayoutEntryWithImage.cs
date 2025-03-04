@@ -1,6 +1,7 @@
 ﻿using System;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SkiaSharp;
 
@@ -156,13 +157,16 @@ public class LayoutEntryWithImage : ReactiveObject
         }
     }
 
+    [Reactive]
+    public string ToolTip { get; set; }
+
     // Used for maps to filter within layers
     [Reactive]
     public int Layer { get; set; }
     [Reactive]
     public bool IsVisible { get; set; } = true;
 
-    public LayoutEntryWithImage(LayoutItem layout, int idx)
+    public LayoutEntryWithImage(LayoutItem layout, int idx, string tooltip = null)
     {
         _layout = layout;
         Index = idx;
@@ -177,6 +181,7 @@ public class LayoutEntryWithImage : ReactiveObject
         _screenX = _layout.Layout.LayoutEntries[Index].ScreenX;
         _screenY = _layout.Layout.LayoutEntries[Index].ScreenY;
         _tint = _layout.Layout.LayoutEntries[Index].Tint;
+        ToolTip = tooltip;
     }
 
     public LayoutEntryWithImage()
