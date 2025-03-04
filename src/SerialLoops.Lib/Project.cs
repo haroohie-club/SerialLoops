@@ -9,7 +9,7 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
-using HaroohieClub.NitroPacker.Core;
+using HaroohieClub.NitroPacker;
 using HaruhiChokuretsuLib.Archive;
 using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
@@ -133,7 +133,7 @@ public partial class Project
             Directory.CreateDirectory(BaseDirectory);
             Directory.CreateDirectory(IterativeDirectory);
             Directory.CreateDirectory(Path.Combine(MainDirectory, "font"));
-            File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "charset.json"), Path.Combine(MainDirectory, "font", "charset.json"));
+            File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "charset.json"), Path.Combine(MainDirectory, "font", "charset.json"), overwrite: true);
         }
         catch (Exception ex)
         {
@@ -191,11 +191,10 @@ public partial class Project
     public void LoadProjectSettings(ILogger log, IProgressTracker tracker)
     {
         tracker.Focus("Project Settings", 1);
-        string projPath = Path.Combine(IterativeDirectory, "rom", $"{Name}.xml");
+        string projPath = Path.Combine(IterativeDirectory, "rom", $"{Name}.json");
         try
         {
-            byte[] projectFile = File.ReadAllBytes(projPath);
-            Settings = new(NdsProjectFile.FromByteArray<NdsProjectFile>(projectFile), log);
+            Settings = new(NdsProjectFile.Deserialize(projPath), log);
         }
         catch (Exception ex)
         {
@@ -573,7 +572,7 @@ public partial class Project
             {
                 tracker.Finished++;
                 BackgroundMusicItem bgmItem = new(bgm, i, this);
-                maxes.Add(bgmItem.GetWaveProvider(log, false).GetMaxAmplitude());
+                maxes.Add(bgmItem.GetWaveProvider(log, false).GetMaxAmplitude(log));
                 return bgmItem;
             }));
 
@@ -630,7 +629,7 @@ public partial class Project
                 .Select(f =>
                 {
                     tracker.Finished++;
-                    return new ChessPuzzleItem(f.CastTo<ChessFile>(), Grp);
+                    return new ChessPuzzleItem(f.CastTo<ChessFile>());
                 }));
         }
         catch (Exception ex)
@@ -1038,7 +1037,7 @@ public partial class Project
         Items.Where(i => i.Type == ItemType.Script).Cast<ScriptItem>().ToList().ForEach(s => s.UpdateEventTableInfo(EventTableFile.EvtTbl));
     }
 
-    public void MigrateProject(string newRom, ILogger log, IProgressTracker tracker)
+    public void MigrateProject(string newRom, Config config, ILogger log, IProgressTracker tracker)
     {
         log.Log($"Attempting to migrate base ROM to {newRom}");
 
@@ -1049,6 +1048,8 @@ public partial class Project
         IO.CopyFiles(Path.Combine(tempDir, "data", "vce"), Path.Combine(BaseDirectory, "original", "vce"), log, "*.bin");
         IO.CopyFiles(Path.Combine(tempDir, "overlay"), Path.Combine(BaseDirectory, "original", "overlay"), log, "*.bin");
         IO.CopyFiles(Path.Combine(tempDir, "data", "movie"), Path.Combine(BaseDirectory, "rom", "data", "movie"), log, "*.mods");
+
+        Build.BuildBase(this, config, log, tracker);
 
         Directory.Delete(tempDir, true);
     }
@@ -1078,6 +1079,7 @@ public partial class Project
         {
             return null;
         }
+
         return Items.FirstOrDefault(i => i.DisplayName == name);
     }
 
@@ -1095,6 +1097,14 @@ public partial class Project
             Project project = JsonSerializer.Deserialize<Project>(File.ReadAllText(projFile), SERIALIZER_OPTIONS);
             project.Localize = localize;
             tracker.Finished++;
+
+            // If we detect an old NP format, auto-migrate it
+            if (!File.Exists(Path.Combine(config.ProjectsDirectory, project.Name, "base", "rom", $"{project.Name}.json")))
+            {
+                NdsProjectFile.ConvertProjectFile(Path.Combine(config.ProjectsDirectory, project.Name, "base", "rom", $"{project.Name}.xml"));
+                NdsProjectFile.ConvertProjectFile(Path.Combine(config.ProjectsDirectory, project.Name, "iterative", "rom", $"{project.Name}.xml"));
+            }
+
             LoadProjectResult result = project.Load(config, log, tracker);
             if (result.State == LoadProjectState.LOOSELEAF_FILES)
             {
@@ -1133,7 +1143,7 @@ public partial class Project
             using FileStream slzipFs = File.Create(slzipFile);
             using ZipArchive slzip = new(slzipFs, ZipArchiveMode.Create);
             log.Log($"Adding '{ProjectFile}' to slzip...");
-            slzip.CreateEntryFromFile(ProjectFile, Path.GetFileName(ProjectFile));
+            slzip.CreateEntryFromFile(ProjectFile, Path.GetFileName(ProjectFile)!);
             slzip.Comment = BaseRomHash;
             log.Log("Adding charset.json to slzip...");
             slzip.CreateEntryFromFile(Path.Combine(MainDirectory, "font", "charset.json"), Path.Combine("font", "charset.json"));
@@ -1152,7 +1162,8 @@ public partial class Project
                 log.Log($"Adding '{file}' to slzip...");
                 slzip.CreateEntryFromFile(file, Path.GetRelativePath(MainDirectory, file));
             }
-            slzip.CreateEntryFromFile(Path.Combine(BaseDirectory, "rom", $"{Name}.xml"), Path.Combine("base", "rom", $"{Name}.xml"));
+            slzip.CreateEntryFromFile(Path.Combine(BaseDirectory, "rom", $"{Name}.json"), Path.Combine("base", "rom", $"{Name}.json"));
+            slzip.CreateEntryFromFile(Path.Combine(BaseDirectory, "rom", "banner.bin"), Path.Combine("base", "rom", "banner.bin"));
             foreach (string file in Directory.GetFiles(Path.Combine(BaseDirectory, "rom", "data", "bgm"), "*"))
             {
                 log.Log($"Adding '{file}' to slzip...");
@@ -1182,7 +1193,7 @@ public partial class Project
             using FileStream slzipFs = File.OpenRead(slzipFile);
             using ZipArchive slzip = new(slzipFs, ZipArchiveMode.Read);
             string slprojTemp = Path.GetTempFileName();
-            slzip.Entries.FirstOrDefault(f => f.Name.EndsWith(".slproj")).ExtractToFile(slprojTemp, overwrite: true);
+            slzip.Entries.FirstOrDefault(f => f.Name.EndsWith(".slproj"))?.ExtractToFile(slprojTemp, overwrite: true);
             Project project = JsonSerializer.Deserialize<Project>(File.ReadAllText(slprojTemp), SERIALIZER_OPTIONS);
             project.Config = config;
             File.Delete(slprojTemp);
@@ -1202,13 +1213,13 @@ public partial class Project
 
             IO.OpenRom(project, romPath, log, tracker);
             slzip.ExtractToDirectory(project.MainDirectory, overwriteFiles: true);
-            string newNdsProjFile = Path.Combine("rom", $"{project.Name}.xml");
+            string newNdsProjFile = Path.Combine("rom", $"{project.Name}.json");
             if (!project.Name.Equals(oldProjectName))
             {
-                string oldNdsProjFile = Path.Combine("rom", $"{oldProjectName}.xml");
+                string oldNdsProjFile = Path.Combine("rom", $"{oldProjectName}.json");
                 File.Move(Path.Combine(project.BaseDirectory, oldNdsProjFile), Path.Combine(project.BaseDirectory, newNdsProjFile), overwrite: true);
             }
-            project.Settings = new(NdsProjectFile.FromByteArray<NdsProjectFile>(File.ReadAllBytes(Path.Combine(project.BaseDirectory, newNdsProjFile))), log);
+            project.Settings = new(NdsProjectFile.Deserialize(Path.Combine(project.BaseDirectory, newNdsProjFile)), log);
             Directory.CreateDirectory(project.IterativeDirectory);
             IO.CopyFiles(project.BaseDirectory, project.IterativeDirectory, log, recursive: true);
             Build.BuildBase(project, config, log, tracker);

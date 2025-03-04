@@ -266,14 +266,6 @@
   <data name="BGMs" xml:space="preserve">
     <value>BGMs</value>
   </data>
-  <data name="Black Space Begin" xml:space="preserve">
-    <value>Black Space Begin</value>
-    <comment>As on a chessboard</comment>
-  </data>
-  <data name="Black Space End" xml:space="preserve">
-    <value>Black Space End</value>
-    <comment>As on a chessboard</comment>
-  </data>
   <data name="Both" xml:space="preserve">
     <value>Both</value>
     <comment>Checkbox for "Both Screens"</comment>
@@ -404,7 +396,7 @@
   <data name="Clear all commands from the game scenario?\nThis action is irreversible." xml:space="preserve">
     <value>Clear all commands from the game scenario?\nThis action is irreversible.</value>
   </data>
-  <data name="Clear Block" xml:space="preserve">
+  <data name="Clear Section" xml:space="preserve">
     <value>Win Section</value>
   </data>
   <data name="Clear Scenario" xml:space="preserve">
@@ -1265,10 +1257,10 @@
   <data name="Mikuru Time Percentage" xml:space="preserve">
     <value>Mikuru Time Percentage</value>
   </data>
-  <data name="Miss 2 Block" xml:space="preserve">
+  <data name="Miss 2 Section" xml:space="preserve">
     <value>Lose 2 Section</value>
   </data>
-  <data name="Miss Block" xml:space="preserve">
+  <data name="Miss Section" xml:space="preserve">
     <value>Lose Section</value>
   </data>
   <data name="Missing:" xml:space="preserve">
@@ -1802,8 +1794,8 @@
   <data name="Script" xml:space="preserve">
     <value>Script</value>
   </data>
-  <data name="Script Block:" xml:space="preserve">
-    <value>Block: </value>
+  <data name="Script Section:" xml:space="preserve">
+    <value>Section: </value>
   </data>
   <data name="Script Position" xml:space="preserve">
     <value>Script Position</value>
@@ -2260,14 +2252,6 @@
   </data>
   <data name="While attempting to build,  file #{0:X3} in archive {1} was found to be corrupt. Serial Loops can delete this file from your base directory automatically which may allow you to load the rest of the project, but any changes made to that file will be lost. Alternatively, you can attempt to edit the file manually to fix it. How would you like to proceed? Press OK to proceed with deleting the file and Cancel to attempt to deal with it manually." xml:space="preserve">
     <value>While attempting to build,  file #{0:X3} in archive {1} was found to be corrupt. Serial Loops can delete this file from your base directory automatically which may allow you to load the rest of the project, but any changes made to that file will be lost. Alternatively, you can attempt to edit the file manually to fix it. How would you like to proceed? Press OK to proceed with deleting the file and Cancel to attempt to deal with it manually.</value>
-  </data>
-  <data name="White Space Begin" xml:space="preserve">
-    <value>White Space Begin</value>
-    <comment>As on a chessboard</comment>
-  </data>
-  <data name="White Space End" xml:space="preserve">
-    <value>White Space End</value>
-    <comment>As on a chessboard</comment>
   </data>
   <data name="Worst Group" xml:space="preserve">
     <value>Worst Group</value>

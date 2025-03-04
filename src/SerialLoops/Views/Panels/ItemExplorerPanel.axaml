@@ -22,7 +22,7 @@
             <Button Command="{Binding SearchProjectCommand}" Width="30" Height="30">...</Button>
         </StackPanel>
         <TreeDataGrid Grid.Row="1" Margin="5" ShowColumnHeaders="False" CanUserResizeColumns="False" Name="Viewer" Source="{Binding Source}"
-                      KeyUp="Viewer_OnKeyUp">
+                      KeyUp="Viewer_OnKeyUp" Loaded="Viewer_OnLoaded">
             <i:Interaction.Behaviors>
                 <ia:EventTriggerBehavior EventName="DoubleTapped" SourceObject="{Binding #Viewer}">
                     <ia:InvokeCommandAction Command="{Binding OpenItemCommand}" CommandParameter="{Binding #Viewer}"/>

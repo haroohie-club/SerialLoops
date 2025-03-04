@@ -5,7 +5,7 @@ namespace SerialLoops.Lib.Script.Parameters;
 public class BgScrollDirectionScriptParameter : ScriptParameter
 {
     public BgScrollDirection ScrollDirection { get; set; }
-    public override short[] GetValues(object obj = null) => new short[] { (short)ScrollDirection };
+    public override short[] GetValues(object obj = null) => [(short)ScrollDirection];
 
     public override string GetValueString(Project project)
     {

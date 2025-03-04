@@ -25,6 +25,7 @@
             <NativeMenuItem Header="{x:Static assets:Strings._Check_for_Updates___}"
                             Icon="avares://SerialLoops/Assets/Icons/Update.png" Click="Updates_Click" />
             <NativeMenuItem Header="{x:Static assets:Strings.View__Logs}" Click="Logs_Click" />
+            <NativeMenuItem Header="{x:Static assets:Strings.View_Crash_Log}" Click="CrashLog_Click"/>
         </NativeMenu>
     </NativeMenu.Menu>
 
@@ -37,7 +38,6 @@
         <StyleInclude Source="avares://Avalonia.Controls.ColorPicker/Themes/Fluent/Fluent.xaml" />
         <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
         <StyleInclude Source="avares://Avalonia.Controls.ColorPicker/Themes/Fluent/Fluent.xaml" />
-        <StyleInclude Source="avares://Avalonia.Controls.TreeDataGrid/Themes/Fluent.axaml" />
 
         <!-- Toolbar styling -->
         <Style Selector="Button.ToolbarButton">
@@ -55,6 +55,20 @@
             <Setter Property="LineHeight" Value="13" />
             <Setter Property="FontSize" Value="12.5" />
         </Style>
+
+        <!-- Windows menu styling -->
+        <OnPlatform>
+            <OnPlatform.Windows>
+                <Style Selector="NativeMenuBar">
+                    <Setter Property="Margin" Value="10 5 0 0"/>
+                </Style>
+            </OnPlatform.Windows>
+            <OnPlatform.Default>
+                <Style Selector="NativeMenuBar">
+                    <Setter Property="Margin" Value="0"/>
+                </Style>
+            </OnPlatform.Default>
+        </OnPlatform>
 
         <!-- Text styling -->
         <Style Selector="TextBlock.h1">
@@ -139,6 +153,25 @@
                         </Border>
                     </Grid>
                 </ControlTemplate>
+            </Setter>
+        </Style>
+
+        <!--From https://github.com/AvaloniaUI/Avalonia/issues/3016-->
+        <!--Use Classes="RadioButtonListBox" in any ListBox to represent its items as RadioButtons-->
+        <Style Selector="ListBox.RadioButtonListBox">
+            <Setter Property="BorderBrush" Value="Transparent"/>
+        </Style>
+        <Style Selector="ListBox.RadioButtonListBox ListBoxItem">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate x:DataType="ListBoxItem">
+                        <Border Background="Transparent" >
+                            <RadioButton Content="{TemplateBinding ContentPresenter.Content}"
+                                         VerticalAlignment="Center"
+                                         IsChecked="{Binding Path=IsSelected,RelativeSource={RelativeSource TemplatedParent},Mode=TwoWay}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
             </Setter>
         </Style>
     </Application.Styles>

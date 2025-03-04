@@ -6,7 +6,7 @@ namespace SerialLoops.Lib.Script.Parameters;
 public class VoicedLineScriptParameter : ScriptParameter
 {
     public VoicedLineItem VoiceLine { get; set; }
-    public override short[] GetValues(object obj = null) => new short[] { (short)(VoiceLine?.Index ?? 0) };
+    public override short[] GetValues(object obj = null) => [(short)(VoiceLine?.Index ?? 0)];
 
     public override string GetValueString(Project project)
     {

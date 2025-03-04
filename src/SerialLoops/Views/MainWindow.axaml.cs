@@ -33,6 +33,7 @@ public partial class MainWindow : Window
         {
             menu.Items.Clear();
         }
+
         NativeMenuItem fileMenu = new()
         {
             Header = Strings._File,
@@ -85,6 +86,11 @@ public partial class MainWindow : Window
             {
                 Header = Strings.View__Logs,
                 Command = ViewModel.ViewLogsCommand,
+            });
+            fileMenu.Menu.Items.Add(new NativeMenuItem
+            {
+                Header = Strings.View_Crash_Log,
+                Command = ViewModel.ViewCrashLogCommand,
             });
 
             menu.Items.Add(new NativeMenuItem

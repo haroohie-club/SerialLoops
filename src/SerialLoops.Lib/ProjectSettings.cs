@@ -1,28 +1,27 @@
-﻿using System;
-using System.Linq;
-using HaroohieClub.NitroPacker.Core;
+﻿using System.Linq;
+using HaroohieClub.NitroPacker;
+using HaroohieClub.NitroPacker.Nitro.Card.Banners;
 using HaroohieClub.NitroPacker.Nitro.Gx;
 using HaruhiChokuretsuLib.Archive.Graphics;
 using HaruhiChokuretsuLib.Util;
 using SkiaSharp;
-using static HaroohieClub.NitroPacker.Nitro.Card.Rom.RomBanner;
 
 namespace SerialLoops.Lib;
 
 public class ProjectSettings(NdsProjectFile file, ILogger log)
 {
     public NdsProjectFile File { get; } = file;
-    private BannerV1 Banner => File.RomInfo.Banner.Banner;
-    private readonly ILogger _log = log;
+    private BannerV1 _banner => (BannerV1)File.RomInfo.Banner.Banner;
 
-    public string Name {
-        get => Banner.GameName[0];
+    public string Name
+    {
+        get => _banner.GameName[0];
         set
         {
-            string name = value.Length > 128 ? value[..63] : value;
-            for (int i = 0; i < Banner.GameName.Length; i++)
+            string name = value.Length > 128 ? value[..128] : value;
+            for (int i = 0; i < _banner.GameName.Length; i++)
             {
-                Banner.GameName[i] = name.Replace("\r\n", "\n");
+                _banner.GameName[i] = name.Replace("\r\n", "\n");
             }
         }
     }
@@ -31,10 +30,10 @@ public class ProjectSettings(NdsProjectFile file, ILogger log)
     {
         get
         {
-            Rgba8Bitmap bitmap = Banner.GetIcon();
+            Rgba8Bitmap bitmap = _banner.GetIcon();
             return new(bitmap.Width, bitmap.Height)
             {
-                Pixels = bitmap.Pixels.Select(p => new SKColor(p)).ToArray()
+                Pixels = bitmap.Pixels.Select(p => new SKColor(p)).ToArray(),
             };
         }
         set
@@ -42,10 +41,10 @@ public class ProjectSettings(NdsProjectFile file, ILogger log)
             GraphicsFile grp = new()
             {
                 Name = "ICON",
-                PixelData = new(),
-                PaletteData = new(),
+                PixelData = [],
+                PaletteData = [],
             };
-            grp.Initialize(Array.Empty<byte>(), 0, _log);
+            grp.Initialize([], 0, log);
             grp.FileFunction = GraphicsFile.Function.SHTX;
             grp.ImageForm = GraphicsFile.Form.TILE;
             grp.ImageTileForm = GraphicsFile.TileForm.GBA_4BPP;
@@ -54,8 +53,8 @@ public class ProjectSettings(NdsProjectFile file, ILogger log)
             grp.Palette = new(new SKColor[16]);
             grp.SetImage(value, setPalette: true, transparentIndex: 0, newSize: true);
 
-            Banner.Image = grp.PixelData.ToArray();
-            Banner.Pltt = grp.PaletteData.ToArray();
+            _banner.Image = grp.PixelData.ToArray();
+            _banner.Palette = grp.PaletteData.ToArray();
         }
     }
 }

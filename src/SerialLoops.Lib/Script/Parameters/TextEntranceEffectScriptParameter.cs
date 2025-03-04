@@ -5,7 +5,7 @@ namespace SerialLoops.Lib.Script.Parameters;
 public class TextEntranceEffectScriptParameter : ScriptParameter
 {
     public TextEntranceEffect EntranceEffect { get; set; }
-    public override short[] GetValues(object obj = null) => new short[] { (short)EntranceEffect };
+    public override short[] GetValues(object obj = null) => [(short)EntranceEffect];
 
     public override string GetValueString(Project project)
     {

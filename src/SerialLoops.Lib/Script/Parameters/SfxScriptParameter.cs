@@ -6,7 +6,7 @@ namespace SerialLoops.Lib.Script.Parameters;
 public class SfxScriptParameter : ScriptParameter
 {
     public SfxItem Sfx { get; set; }
-    public override short[] GetValues(object obj = null) => new short[] { Sfx.Index };
+    public override short[] GetValues(object obj = null) => [Sfx.Index];
 
     public override string GetValueString(Project project)
     {
