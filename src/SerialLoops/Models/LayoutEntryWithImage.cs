@@ -1,4 +1,5 @@
 ﻿using System;
+using ReactiveHistory;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SerialLoops.Lib.Items;
@@ -8,6 +9,7 @@ namespace SerialLoops.Models;
 
 public class LayoutEntryWithImage : ReactiveObject
 {
+    private StackHistory _history;
     private LayoutItem _layout;
     private int _index;
     public SKBitmap FullImage { get; }
@@ -143,8 +145,9 @@ public class LayoutEntryWithImage : ReactiveObject
     [Reactive]
     public bool IsVisible { get; set; } = true;
 
-    public LayoutEntryWithImage(LayoutItem layout, int idx)
+    public LayoutEntryWithImage(LayoutItem layout, int idx, StackHistory history = null)
     {
+        _history = history;
         _layout = layout;
         _index = idx;
         FullImage = _layout.Layout.LayoutEntries[_index].RelativeShtxIndex >= 0 ? _layout.TilesDict[_layout.Layout.LayoutEntries[_index].RelativeShtxIndex] : null;
@@ -158,5 +161,20 @@ public class LayoutEntryWithImage : ReactiveObject
         _screenX = _layout.Layout.LayoutEntries[_index].ScreenX;
         _screenY = _layout.Layout.LayoutEntries[_index].ScreenY;
         _tint = _layout.Layout.LayoutEntries[_index].Tint;
+
+        if (_history is null)
+        {
+            return;
+        }
+
+        this.WhenAnyValue(l => l.TextureX).ObserveWithHistory(tx => TextureX = tx, TextureX, _history);
+        this.WhenAnyValue(l => l.TextureY).ObserveWithHistory(ty => TextureY = ty, TextureY, _history);
+        this.WhenAnyValue(l => l.TextureW).ObserveWithHistory(tw => TextureW = tw, TextureW, _history);
+        this.WhenAnyValue(l => l.TextureH).ObserveWithHistory(th => TextureH = th, TextureH, _history);
+        this.WhenAnyValue(l => l.ScreenX).ObserveWithHistory(sx => ScreenX = sx, ScreenX, _history);
+        this.WhenAnyValue(l => l.ScreenY).ObserveWithHistory(sy => ScreenY = sy, ScreenY, _history);
+        this.WhenAnyValue(l => l.ScreenWidth).ObserveWithHistory(sw => ScreenWidth = sw, ScreenWidth, _history);
+        this.WhenAnyValue(l => l.ScreenHeight).ObserveWithHistory(sh => ScreenHeight = sh, ScreenHeight, _history);
+        this.WhenAnyValue(l => l.Tint).ObserveWithHistory(t => Tint = t, Tint, _history);
     }
 }

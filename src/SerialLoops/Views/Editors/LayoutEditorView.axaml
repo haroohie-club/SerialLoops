@@ -14,6 +14,11 @@
         <utility:SKAvaloniaColorConverter x:Key="ColorConverter"/>
     </UserControl.Resources>
     <Grid RowDefinitions="Auto,*" ColumnDefinitions="Auto,Auto,Auto">
+        <Panel IsVisible="False">
+            <Button Command="{Binding UndoCommand}" HotKey="{Binding UndoGesture}"/>
+            <Button Command="{Binding RedoCommand}" HotKey="{Binding RedoGesture}"/>
+        </Panel>
+
         <ItemsControl Grid.Row="0" Grid.Column="0" ItemsSource="{Binding LayoutEntries}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
