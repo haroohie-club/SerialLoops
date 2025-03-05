@@ -9,6 +9,11 @@
              x:Class="SerialLoops.Views.Editors.ScenarioEditorView"
              Name="ScenarioEditor">
     <Grid RowDefinitions="Auto,*" ColumnDefinitions="Auto,*">
+        <Panel IsVisible="False">
+            <Button Command="{Binding UndoCommand}" HotKey="{Binding UndoGesture}"/>
+            <Button Command="{Binding RedoCommand}" HotKey="{Binding RedoGesture}"/>
+        </Panel>
+
         <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right"
                     Width="{Binding #CommandsBox.Width}" Spacing="5" Margin="5">
             <Button ToolTip.Tip="Add Command" Width="22" Command="{Binding AddCommand}">

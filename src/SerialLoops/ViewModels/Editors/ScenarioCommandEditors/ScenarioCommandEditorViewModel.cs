@@ -1,4 +1,5 @@
-﻿using ReactiveUI;
+﻿using ReactiveHistory;
+using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SerialLoops.Models;
 using SerialLoops.ViewModels.Panels;
@@ -25,7 +26,7 @@ public class ScenarioCommandEditorViewModel : ViewModelBase
         }
     }
 
-    public ScenarioCommandEditorViewModel(PrettyScenarioCommand command, EditorTabsPanelViewModel tabs)
+    public ScenarioCommandEditorViewModel(PrettyScenarioCommand command, EditorTabsPanelViewModel tabs, StackHistory history)
     {
         SelectedScenarioCommand = command;
         if (!int.TryParse(command.Parameter, out _parameter))
@@ -33,6 +34,8 @@ public class ScenarioCommandEditorViewModel : ViewModelBase
             _parameter = 0;
         }
         Tabs = tabs;
+
+        this.WhenAnyValue(e => e.Parameter).ObserveWithHistory(p => Parameter = p, Parameter, history);
     }
 
     public short MaxValue => short.MaxValue;

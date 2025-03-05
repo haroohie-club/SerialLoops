@@ -39,13 +39,14 @@ public class LayoutEditorViewModel : EditorViewModel
     }
 
     private StackHistory _history;
+
+    public ICommand ExportLayoutCommand { get; }
+    public ICommand ExportSourceCommand { get; }
+
     public ICommand UndoCommand { get; }
     public ICommand RedoCommand { get; }
     public KeyGesture UndoGesture { get; }
     public KeyGesture RedoGesture { get; }
-
-    public ICommand ExportLayoutCommand { get; }
-    public ICommand ExportSourceCommand { get; }
 
     public LayoutEditorViewModel(LayoutItem item, MainWindowViewModel window, ILogger log) : base(item, window, log)
     {

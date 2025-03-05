@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
+using ReactiveHistory;
 using ReactiveUI;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
@@ -26,10 +27,12 @@ public class LoadSceneScenarioCommandEditorViewModel : ScenarioCommandEditorView
         }
     }
 
-    public LoadSceneScenarioCommandEditorViewModel(PrettyScenarioCommand command, Project project, EditorTabsPanelViewModel tabs) : base(command, tabs)
+    public LoadSceneScenarioCommandEditorViewModel(PrettyScenarioCommand command, Project project, EditorTabsPanelViewModel tabs, StackHistory history) : base(command, tabs, history)
     {
         Scripts = new(project.Items.Where(i => i.Type == ItemDescription.ItemType.Script).Cast<ScriptItem>());
         _scene = Scripts.FirstOrDefault(s => s.DisplayName == command.Parameter);
-        _parameter = _scene.Event.Index;
+        _parameter = _scene?.Event.Index ?? 1;
+
+        this.WhenAnyValue(e => e.Scene).ObserveWithHistory(s => Scene = s, Scene, history);
     }
 }
