@@ -11,6 +11,11 @@
              x:DataType="vm:CharacterSpriteEditorViewModel"
              x:Class="SerialLoops.Views.Editors.CharacterSpriteEditorView">
     <StackPanel Spacing="10" Orientation="Vertical">
+        <Panel IsVisible="False">
+            <Button Command="{Binding UndoCommand}" HotKey="{Binding UndoGesture}"/>
+            <Button Command="{Binding RedoCommand}" HotKey="{Binding RedoGesture}"/>
+        </Panel>
+
         <controls:AnimatedImage DataContext="{Binding AnimatedImage}" />
         <StackPanel Orientation="Horizontal" Spacing="5">
             <StackPanel Orientation="Horizontal" Spacing="3" VerticalAlignment="Center">
