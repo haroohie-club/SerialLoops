@@ -11,6 +11,11 @@
              x:DataType="vm:VoicedLineEditorViewModel"
              x:Class="SerialLoops.Views.Editors.VoicedLineEditorView">
     <Grid RowDefinitions="Auto,Auto,Auto,*" ColumnDefinitions="*,Auto" Margin="10">
+        <Panel IsVisible="False">
+            <Button Command="{Binding UndoCommand}" HotKey="{Binding UndoGesture}"/>
+            <Button Command="{Binding RedoCommand}" HotKey="{Binding RedoGesture}"/>
+        </Panel>
+
         <controls:SoundPlayerPanel Name="Player" Grid.Row="0" Grid.Column="0" DataContext="{Binding VcePlayer}"/>
         <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Spacing="3" Margin="5">
             <Button Content="{x:Static assets:Strings.Replace}" Command="{Binding ReplaceCommand}"/>

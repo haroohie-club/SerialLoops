@@ -4,11 +4,13 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Avalonia.Input;
 using Avalonia.Platform.Storage;
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Audio.ADX;
 using HaruhiChokuretsuLib.Util;
 using NAudio.Wave;
+using ReactiveHistory;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SerialLoops.Assets;
@@ -110,7 +112,7 @@ public class VoicedLineEditorViewModel : EditorViewModel
         get => SubtitlePositions.FirstOrDefault(p => p.Position == _yPos);
         set
         {
-            _yPos = value.Position;
+            this.RaiseAndSetIfChanged(ref _yPos, value.Position);
             _voiceMapEntry.YPos = _yPos;
             UpdatePreview();
             Description.UnsavedChanges = true;
@@ -148,8 +150,17 @@ public class VoicedLineEditorViewModel : EditorViewModel
 
     public bool SubsEnabled => Window.OpenProject.VoiceMap is not null;
 
+    private StackHistory _history;
+
+    public ICommand UndoCommand { get; }
+    public ICommand RedoCommand { get; }
+    public KeyGesture UndoGesture { get; }
+    public KeyGesture RedoGesture { get; }
+
     public VoicedLineEditorViewModel(VoicedLineItem item, MainWindowViewModel window, ILogger log) : base(item, window, log, window.OpenProject)
     {
+        _history = new();
+
         _vce = item;
         VcePlayer = new(_vce, log, null);
         ReplaceCommand = ReactiveCommand.CreateFromTask(Replace);
@@ -172,7 +183,17 @@ public class VoicedLineEditorViewModel : EditorViewModel
             _forceDropShadow = _voiceMapEntry.TargetScreen == VoiceMapEntry.Screen.TOP_FORCE_SHADOW;
             _yPos = _voiceMapEntry.YPos;
             UpdatePreview();
+
+            this.WhenAnyValue(v => v.SubtitleColor).ObserveWithHistory(c => SubtitleColor = c, SubtitleColor, _history);
+            this.WhenAnyValue(v => v.SubtitleScreen).ObserveWithHistory(s => SubtitleScreen = s, SubtitleScreen, _history);
+            this.WhenAnyValue(v => v.ForceDropShadow).ObserveWithHistory(d => ForceDropShadow = d, ForceDropShadow, _history);
+            this.WhenAnyValue(v => v.SubtitlePosition).ObserveWithHistory(p => SubtitlePosition = p, SubtitlePosition, _history);
         }
+
+        UndoCommand = ReactiveCommand.Create(() => _history.Undo());
+        RedoCommand = ReactiveCommand.Create(() => _history.Redo());
+        UndoGesture = GuiExtensions.CreatePlatformAgnosticCtrlGesture(Key.Z);
+        RedoGesture = GuiExtensions.CreatePlatformAgnosticCtrlGesture(Key.Y);
     }
 
     private async Task Replace()
