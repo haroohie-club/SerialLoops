@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia.Input;
@@ -90,8 +89,8 @@ public class CharacterSpriteEditorViewModel : EditorViewModel
         _character = (CharacterItem)mainWindow.OpenProject.Items.First(i => i.Type == ItemDescription.ItemType.Character && ((CharacterItem)i).MessageInfo.Character == item.Sprite.Character);
         _isLarge = _sprite.Sprite.IsLarge;
 
-        // this.ObservableForProperty(x => x.Character)
-        // this.ObservableForProperty(x => x.IsLarge).Value().ObserveWithHistory(isLarge => IsLarge = isLarge, IsLarge, _history);
+        this.WhenAnyValue(c => c.Character).ObserveWithHistory(c => Character = c, Character, _history);
+        this.WhenAnyValue(c => c.IsLarge).ObserveWithHistory(l => IsLarge = l, IsLarge, _history);
 
         ReplaceCommand = ReactiveCommand.CreateFromTask(ReplaceSprite);
         ExportFramesCommand = ReactiveCommand.CreateFromTask(ExportFrames);
