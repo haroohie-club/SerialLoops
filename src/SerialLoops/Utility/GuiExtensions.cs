@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media;
@@ -127,5 +129,12 @@ public static class GuiExtensions
     public static Color ToAvalonia(this SKColor color)
     {
         return new(color.Alpha, color.Red, color.Green, color.Blue);
+    }
+
+    public static double Distance(this Point point, Point other)
+    {
+        double xDistance = Math.Abs(point.X - other.X);
+        double yDistance = Math.Abs(point.Y - other.Y);
+        return Math.Sqrt(xDistance * xDistance + yDistance * yDistance);
     }
 }

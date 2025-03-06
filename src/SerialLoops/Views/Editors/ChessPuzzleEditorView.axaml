@@ -12,12 +12,12 @@
     <UserControl.Styles>
         <Style Selector="ItemsControl.ItemsDragAndDrop">
             <Style.Resources>
-                <b:ItemsControlDropHandler x:Key="ItemsControlDropHandler"/>
+                <b:ChessItemsControlDropHandler x:Key="ChessItemsControlDropHandler"/>
             </Style.Resources>
             <Setter Property="(Interaction.Behaviors)">
                 <BehaviorCollectionTemplate>
                     <BehaviorCollection>
-                        <ContextDropBehavior Handler="{StaticResource ItemsControlDropHandler}"/>
+                        <ContextDropBehavior Handler="{StaticResource ChessItemsControlDropHandler}"/>
                     </BehaviorCollection>
                 </BehaviorCollectionTemplate>
             </Setter>
@@ -32,7 +32,6 @@
                 </BehaviorCollectionTemplate>
             </Setter>
         </Style>
-
     </UserControl.Styles>
 
     <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto" Margin="10">
@@ -45,7 +44,7 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.DataTemplates>
                 <DataTemplate DataType="vm:ChessPieceOnBoard">
-                    <Panel PointerEntered="ChessPiece_OnPointerEntered" PointerExited="InputElement_OnPointerExited" Opacity="0.5">
+                    <Panel PointerEntered="ChessPiece_OnPointerEntered" PointerExited="ChessPiece_OnPointerExited" Opacity="0.5">
                         <Image Source="{Binding Image, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
                     </Panel>
                 </DataTemplate>

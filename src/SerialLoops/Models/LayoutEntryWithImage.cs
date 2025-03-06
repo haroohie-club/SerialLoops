@@ -1,6 +1,7 @@
 ﻿using System;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SkiaSharp;
 
@@ -9,12 +10,15 @@ namespace SerialLoops.Models;
 public class LayoutEntryWithImage : ReactiveObject
 {
     private LayoutItem _layout;
-    private int _index;
+    public int Index { get; }
     public SKBitmap FullImage { get; }
     [Reactive]
     public SKBitmap CroppedImage { get; set; }
     [Reactive]
     public bool IsSelected { get; set; }
+
+    [Reactive]
+    public bool HitTestVisible { get; set; } = true;
 
     private short _screenX;
     public short ScreenX
@@ -23,8 +27,12 @@ public class LayoutEntryWithImage : ReactiveObject
         set
         {
             this.RaiseAndSetIfChanged(ref _screenX, value);
-            _layout.Layout.LayoutEntries[_index].ScreenX = _screenX;
-            CroppedImage = _layout.GetLayoutEntryRender(_index);
+            if (_layout is null)
+            {
+                return;
+            }
+            _layout.Layout.LayoutEntries[Index].ScreenX = _screenX;
+            CroppedImage = _layout.GetLayoutEntryRender(Index);
             _layout.UnsavedChanges = true;
         }
     }
@@ -35,8 +43,12 @@ public class LayoutEntryWithImage : ReactiveObject
         set
         {
             this.RaiseAndSetIfChanged(ref _screenY, value);
-            _layout.Layout.LayoutEntries[_index].ScreenY = _screenY;
-            CroppedImage = _layout.GetLayoutEntryRender(_index);
+            if (_layout is null)
+            {
+                return;
+            }
+            _layout.Layout.LayoutEntries[Index].ScreenY = _screenY;
+            CroppedImage = _layout.GetLayoutEntryRender(Index);
             _layout.UnsavedChanges = true;
         }
     }
@@ -52,8 +64,12 @@ public class LayoutEntryWithImage : ReactiveObject
         {
             this.RaiseAndSetIfChanged(ref _screenW, value);
             this.RaisePropertyChanged(nameof(Width));
-            _layout.Layout.LayoutEntries[_index].ScreenW = _screenW;
-            CroppedImage = _layout.GetLayoutEntryRender(_index);
+            if (_layout is null)
+            {
+                return;
+            }
+            _layout.Layout.LayoutEntries[Index].ScreenW = _screenW;
+            CroppedImage = _layout.GetLayoutEntryRender(Index);
             _layout.UnsavedChanges = true;
         }
     }
@@ -69,8 +85,12 @@ public class LayoutEntryWithImage : ReactiveObject
         {
             this.RaiseAndSetIfChanged(ref _screenH, value);
             this.RaisePropertyChanged(nameof(Height));
-            _layout.Layout.LayoutEntries[_index].ScreenH = _screenH;
-            CroppedImage = _layout.GetLayoutEntryRender(_index);
+            if (_layout is null)
+            {
+                return;
+            }
+            _layout.Layout.LayoutEntries[Index].ScreenH = _screenH;
+            CroppedImage = _layout.GetLayoutEntryRender(Index);
             _layout.UnsavedChanges = true;
         }
     }
@@ -82,8 +102,8 @@ public class LayoutEntryWithImage : ReactiveObject
         set
         {
             this.RaiseAndSetIfChanged(ref _textureX, value);
-            _layout.Layout.LayoutEntries[_index].TextureX = _textureX;
-            CroppedImage = _layout.GetLayoutEntryRender(_index);
+            _layout.Layout.LayoutEntries[Index].TextureX = _textureX;
+            CroppedImage = _layout.GetLayoutEntryRender(Index);
             _layout.UnsavedChanges = true;
         }
     }
@@ -94,8 +114,8 @@ public class LayoutEntryWithImage : ReactiveObject
         set
         {
             this.RaiseAndSetIfChanged(ref _textureY, value);
-            _layout.Layout.LayoutEntries[_index].TextureY = _textureY;
-            CroppedImage = _layout.GetLayoutEntryRender(_index);
+            _layout.Layout.LayoutEntries[Index].TextureY = _textureY;
+            CroppedImage = _layout.GetLayoutEntryRender(Index);
             _layout.UnsavedChanges = true;
         }
     }
@@ -106,8 +126,8 @@ public class LayoutEntryWithImage : ReactiveObject
         set
         {
             this.RaiseAndSetIfChanged(ref _textureW, value);
-            _layout.Layout.LayoutEntries[_index].TextureW = _textureW;
-            CroppedImage = _layout.GetLayoutEntryRender(_index);
+            _layout.Layout.LayoutEntries[Index].TextureW = _textureW;
+            CroppedImage = _layout.GetLayoutEntryRender(Index);
             _layout.UnsavedChanges = true;
         }
     }
@@ -118,8 +138,8 @@ public class LayoutEntryWithImage : ReactiveObject
         set
         {
             this.RaiseAndSetIfChanged(ref _textureH, value);
-            _layout.Layout.LayoutEntries[_index].TextureH = _textureH;
-            CroppedImage = _layout.GetLayoutEntryRender(_index);
+            _layout.Layout.LayoutEntries[Index].TextureH = _textureH;
+            CroppedImage = _layout.GetLayoutEntryRender(Index);
             _layout.UnsavedChanges = true;
         }
     }
@@ -131,11 +151,14 @@ public class LayoutEntryWithImage : ReactiveObject
         set
         {
             this.RaiseAndSetIfChanged(ref _tint, value);
-            _layout.Layout.LayoutEntries[_index].Tint = _tint;
-            CroppedImage = _layout.GetLayoutEntryRender(_index);
+            _layout.Layout.LayoutEntries[Index].Tint = _tint;
+            CroppedImage = _layout.GetLayoutEntryRender(Index);
             _layout.UnsavedChanges = true;
         }
     }
+
+    [Reactive]
+    public string ToolTip { get; set; }
 
     // Used for maps to filter within layers
     [Reactive]
@@ -143,20 +166,25 @@ public class LayoutEntryWithImage : ReactiveObject
     [Reactive]
     public bool IsVisible { get; set; } = true;
 
-    public LayoutEntryWithImage(LayoutItem layout, int idx)
+    public LayoutEntryWithImage(LayoutItem layout, int idx, string tooltip = null)
     {
         _layout = layout;
-        _index = idx;
-        FullImage = _layout.Layout.LayoutEntries[_index].RelativeShtxIndex >= 0 ? _layout.TilesDict[_layout.Layout.LayoutEntries[_index].RelativeShtxIndex] : null;
-        CroppedImage = _layout.GetLayoutEntryRender(_index);
-        _textureX = _layout.Layout.LayoutEntries[_index].TextureX;
-        _textureY = _layout.Layout.LayoutEntries[_index].TextureY;
-        _textureW = _layout.Layout.LayoutEntries[_index].TextureW;
-        _textureH = _layout.Layout.LayoutEntries[_index].TextureH;
-        _screenW = _layout.Layout.LayoutEntries[_index].ScreenW;
-        _screenH = _layout.Layout.LayoutEntries[_index].ScreenH;
-        _screenX = _layout.Layout.LayoutEntries[_index].ScreenX;
-        _screenY = _layout.Layout.LayoutEntries[_index].ScreenY;
-        _tint = _layout.Layout.LayoutEntries[_index].Tint;
+        Index = idx;
+        FullImage = _layout.Layout.LayoutEntries[Index].RelativeShtxIndex >= 0 ? _layout.TilesDict[_layout.Layout.LayoutEntries[Index].RelativeShtxIndex] : null;
+        CroppedImage = _layout.GetLayoutEntryRender(Index);
+        _textureX = _layout.Layout.LayoutEntries[Index].TextureX;
+        _textureY = _layout.Layout.LayoutEntries[Index].TextureY;
+        _textureW = _layout.Layout.LayoutEntries[Index].TextureW;
+        _textureH = _layout.Layout.LayoutEntries[Index].TextureH;
+        _screenW = _layout.Layout.LayoutEntries[Index].ScreenW;
+        _screenH = _layout.Layout.LayoutEntries[Index].ScreenH;
+        _screenX = _layout.Layout.LayoutEntries[Index].ScreenX;
+        _screenY = _layout.Layout.LayoutEntries[Index].ScreenY;
+        _tint = _layout.Layout.LayoutEntries[Index].Tint;
+        ToolTip = tooltip;
+    }
+
+    public LayoutEntryWithImage()
+    {
     }
 }

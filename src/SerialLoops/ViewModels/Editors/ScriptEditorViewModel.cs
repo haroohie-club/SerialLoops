@@ -25,6 +25,7 @@ using SerialLoops.Lib.Script;
 using SerialLoops.Lib.Util;
 using SerialLoops.Models;
 using SerialLoops.Utility;
+using SerialLoops.ViewModels.Controls;
 using SerialLoops.ViewModels.Dialogs;
 using SerialLoops.ViewModels.Editors.ScriptCommandEditors;
 using SerialLoops.Views.Dialogs;
@@ -36,19 +37,24 @@ namespace SerialLoops.ViewModels.Editors;
 
 public class ScriptEditorViewModel : EditorViewModel
 {
-    private ScriptItem _script;
+    private readonly ScriptItem _script;
     private ScriptItemCommand _selectedCommand;
     private OrderedDictionary<ScriptSection, List<ScriptItemCommand>> _commands = [];
 
-    public ICommand AddScriptCommandCommand { get; set; }
-    public ICommand AddScriptSectionCommand { get; set;  }
-    public ICommand DeleteScriptCommandOrSectionCommand { get; set; }
-    public ICommand ClearScriptCommand { get; set; }
-    public ICommand CutCommand { get; set; }
-    public ICommand CopyCommand { get; set; }
-    public ICommand PasteCommand { get; set; }
-    public ICommand ApplyTemplateCommand { get; set; }
-    public ICommand GenerateTemplateCommand { get; set; }
+    public ICommand AddScriptCommandCommand { get; }
+    public ICommand AddScriptSectionCommand { get; }
+    public ICommand DeleteScriptCommandOrSectionCommand { get; }
+    public ICommand ClearScriptCommand { get; }
+    public ICommand CutCommand { get; }
+    public ICommand CopyCommand { get; }
+    public ICommand PasteCommand { get; }
+    public ICommand ApplyTemplateCommand { get; }
+    public ICommand GenerateTemplateCommand { get; }
+
+    public ICommand AddStartingChibisCommand { get; }
+    public ICommand RemoveStartingChibisCommand { get; }
+    public ICommand AddInteractableObjectCommand { get; }
+    public ICommand RemoveInteractableObjectCommand { get; }
 
     public KeyGesture AddCommandHotKey { get; set; }
     public KeyGesture CutHotKey { get; set; }
@@ -123,45 +129,24 @@ public class ScriptEditorViewModel : EditorViewModel
     public ObservableCollection<short> CurrentHighlightedSpaces { get; } = [];
     public ObservableCollection<short> CurrentCrossedSpaces { get; } = [];
 
-    public ObservableCollection<StartingChibiWithImage> UnusedChibis { get; }
-    public ObservableCollection<StartingChibiWithImage> StartingChibis { get; }
+    public ObservableCollection<StartingChibiWithImage> UnusedChibis { get; } = [];
+    public ObservableCollection<StartingChibiWithImage> StartingChibis { get; } = [];
+
+    [Reactive]
+    public bool HasStartingChibis { get; set; }
+    public MapCharactersSubEditorViewModel MapCharactersSubEditorVm { get; set; }
+
+    public ObservableCollection<ReactiveInteractableObject> InteractableObjects { get; } = [];
+    [Reactive]
+    public ReactiveInteractableObject SelectedInteractableObject { get; set; }
+    public ObservableCollection<ReactiveInteractableObject> UnusedInteractableObjects { get; } = [];
+
 
     public ScriptEditorViewModel(ScriptItem script, MainWindowViewModel window, ILogger log) : base(script, window, log)
     {
         _script = script;
         ScriptSections = new(script.Event.ScriptSections.Select(s => new ReactiveScriptSection(s)));
         _project = window.OpenProject;
-        PopulateScriptCommands();
-        _script.CalculateGraphEdges(_commands, _log);
-
-        if (_script.Event.StartingChibisSection is not null)
-        {
-            StartingChibis = [];
-            UnusedChibis = [];
-            StartingChibis.AddRange(_script.Event.StartingChibisSection.Objects.Where(c => c.ChibiIndex > 0).Select(c => new StartingChibiWithImage(c,
-                ((ChibiItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Chibi
-                                                      && ((ChibiItem)i).ChibiIndex == c.ChibiIndex)).ChibiAnimations.First().Value[0].Frame,
-                StartingChibis, UnusedChibis, _script)));
-            short[] usedIndices = StartingChibis.Select(c => c.StartingChibi.ChibiIndex).ToArray();
-            for (short i = 1; i <= 5; i++)
-            {
-                if (usedIndices.Contains(i))
-                {
-                    continue;
-                }
-                UnusedChibis.Add(new(new StartingChibiEntry() { ChibiIndex = i }, ((ChibiItem)_project.Items.First(c => c.Type == ItemDescription.ItemType.Chibi
-                    && ((ChibiItem)c).ChibiIndex == i)).ChibiAnimations.First().Value[0].Frame, StartingChibis, UnusedChibis, _script));
-            }
-        }
-    }
-
-    public void PopulateScriptCommands(bool refresh = false)
-    {
-        if (refresh)
-        {
-            _script.Refresh(_project, _log);
-        }
-
         Commands = _script.GetScriptCommandTree(_project, _log);
         _script.CalculateGraphEdges(_commands, _log);
         foreach (ReactiveScriptSection section in ScriptSections)
@@ -169,6 +154,39 @@ public class ScriptEditorViewModel : EditorViewModel
             section.SetCommands(_commands[section.Section]);
         }
         Source.ExpandAll();
+        _script.CalculateGraphEdges(_commands, _log);
+
+        if (_script.Event.StartingChibisSection is not null)
+        {
+            HasStartingChibis = true;
+            StartingChibis.AddRange(_script.Event.StartingChibisSection.Objects.Where(c => c.ChibiIndex > 0).Select(c => new StartingChibiWithImage(c,
+                ((ChibiItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Chibi
+                                                      && ((ChibiItem)i).ChibiIndex == c.ChibiIndex)).ChibiAnimations.First().Value[0].Frame,
+                StartingChibis, UnusedChibis, _script, this)));
+            short[] usedIndices = StartingChibis.Select(c => c.StartingChibi.ChibiIndex).ToArray();
+            for (short i = 1; i <= 5; i++)
+            {
+                if (usedIndices.Contains(i))
+                {
+                    continue;
+                }
+                UnusedChibis.Add(new(new() { ChibiIndex = i }, ((ChibiItem)_project.Items.First(c => c.Type == ItemDescription.ItemType.Chibi
+                                                                                                     && ((ChibiItem)c).ChibiIndex == i)).ChibiAnimations.First().Value[0].Frame, StartingChibis, UnusedChibis, _script, this));
+            }
+        }
+        else
+        {
+            HasStartingChibis = false;
+        }
+
+        MapCharactersSubEditorVm = new(_script, this);
+
+        InteractableObjects.AddRange(_script.Event.InteractableObjectsSection.Objects.Where(o => o.ObjectId > 0).Select(o => new ReactiveInteractableObject(o,
+            MapCharactersSubEditorVm.Maps.ToArray(), _script, this)));
+        UnusedInteractableObjects.AddRange(MapCharactersSubEditorVm.Maps.SelectMany(m => m.Map.InteractableObjects)
+            .Where(o => o.ObjectId > 0 && InteractableObjects.All(i => i.InteractableObject.ObjectId != o.ObjectId))
+            .Select(o => new ReactiveInteractableObject(new() { ObjectId = (short)o.ObjectId },  MapCharactersSubEditorVm.Maps.ToArray(), _script, this)));
+
         AddScriptCommandCommand = ReactiveCommand.CreateFromTask(AddCommand);
         AddScriptSectionCommand = ReactiveCommand.CreateFromTask(AddSection);
         DeleteScriptCommandOrSectionCommand = ReactiveCommand.CreateFromTask(Delete);
@@ -178,6 +196,10 @@ public class ScriptEditorViewModel : EditorViewModel
         PasteCommand = ReactiveCommand.Create(Paste);
         ApplyTemplateCommand = ReactiveCommand.CreateFromTask(ApplyTemplate);
         GenerateTemplateCommand = ReactiveCommand.CreateFromTask(GenerateTemplate);
+        AddStartingChibisCommand = ReactiveCommand.Create(AddStartingChibis);
+        RemoveStartingChibisCommand = ReactiveCommand.Create(RemoveStartingChibis);
+        AddInteractableObjectCommand = ReactiveCommand.CreateFromTask(AddInteractableObject);
+        RemoveInteractableObjectCommand = ReactiveCommand.Create(RemoveInteractableObject);
 
         AddCommandHotKey = GuiExtensions.CreatePlatformAgnosticCtrlGesture(Key.N, KeyModifiers.Shift);
         CutHotKey = GuiExtensions.CreatePlatformAgnosticCtrlGesture(Key.X);
@@ -462,16 +484,10 @@ public class ScriptEditorViewModel : EditorViewModel
             new()
             {
                 Name = $"NONE/{sectionName[4..]}",
-                Id = (short)(_script.Event.LabelsSection.Objects.Count == 0 ? 1001 :
-                    sectionIndex == _script.Event.LabelsSection.Objects.Count ?
-                    _script.Event.LabelsSection.Objects[^2].Id + 1 :
-                    _script.Event.LabelsSection.Objects[sectionIndex].Id + 1),
+                Id = (short)(_script.Event.LabelsSection.Objects.Count == 1 ? 1001 :
+                    _script.Event.LabelsSection.Objects.Max(l => l.Id) + 1),
             }
         );
-        for (int i = sectionIndex + 1; i < _script.Event.LabelsSection.Objects.Count; i++)
-        {
-            _script.Event.LabelsSection.Objects[i].Id++;
-        }
 
         ScriptSections.Insert(sectionIndex, reactiveSection);
         _script.Refresh(_project, _log);
@@ -575,9 +591,9 @@ public class ScriptEditorViewModel : EditorViewModel
 
         _script.Event.DialogueLines.Clear();
         _script.Event.DialogueSection.Objects.Clear();
-        if (_script.Event.ConditionalsSection?.Objects?.Count > 2)
+        if (_script.Event.ConditionalsSection?.Objects?.Count > 1)
         {
-            _script.Event.ConditionalsSection.Objects.RemoveRange(1, _script.Event.ConditionalsSection.Objects.Count - 2);
+            _script.Event.ConditionalsSection.Objects.RemoveRange(0, _script.Event.ConditionalsSection.Objects.Count - 2);
         }
 
         if (_script.Event.ChoicesSection?.Objects?.Count > 2)
@@ -585,13 +601,19 @@ public class ScriptEditorViewModel : EditorViewModel
             _script.Event.ChoicesSection?.Objects?.RemoveRange(1, _script.Event.ChoicesSection.Objects.Count - 2);
         }
 
-        if (_script.Event.StartingChibisSection?.Objects?.Count > 2)
+        if (HasStartingChibis)
         {
-            _script.Event.StartingChibisSection?.Objects?.RemoveRange(1, _script.Event.StartingChibisSection.Objects.Count - 2);
+            RemoveStartingChibis();
         }
-        if (_script.Event.MapCharactersSection?.Objects?.Count > 2)
+        if (MapCharactersSubEditorVm.HasMapCharacters)
         {
-            _script.Event.MapCharactersSection?.Objects?.RemoveRange(1, _script.Event.MapCharactersSection.Objects.Count - 2);
+            await MapCharactersSubEditorVm.RemoveMapCharactersSection(false);
+        }
+        if (_script.Event.InteractableObjectsSection?.Objects?.Count > 1)
+        {
+            _script.Event.InteractableObjectsSection?.Objects?.RemoveRange(0, _script.Event.InteractableObjectsSection.Objects.Count - 2);
+            UnusedInteractableObjects.AddRange(InteractableObjects);
+            InteractableObjects.Clear();
         }
 
         _script.Refresh(_project, _log);
@@ -707,6 +729,63 @@ public class ScriptEditorViewModel : EditorViewModel
             JsonSerializer.Serialize(template), _log);
         _project.Config.ScriptTemplates.Add(template);
     }
+
+    private void AddStartingChibis()
+    {
+        _script.Event.StartingChibisSection = new() { Name = "STARTINGCHIBIS" };
+        _script.Event.StartingChibisSection.Objects.Add(new()); // Blank chibi entry
+        _script.Event.NumSections += 2;
+        for (short i = 1; i <= 5; i++)
+        {
+            UnusedChibis.Add(new(new() { ChibiIndex = i }, ((ChibiItem)_project.Items.First(c => c.Type == ItemDescription.ItemType.Chibi
+                && ((ChibiItem)c).ChibiIndex == i)).ChibiAnimations.First().Value[0].Frame, StartingChibis, UnusedChibis, _script, this));
+        }
+        HasStartingChibis = true;
+        _script.UnsavedChanges = true;
+        UpdatePreview();
+    }
+
+    private void RemoveStartingChibis()
+    {
+        _script.Event.StartingChibisSection = null;
+        _script.Event.NumSections -= 2;
+        StartingChibis.Clear();
+        UnusedChibis.Clear();
+        HasStartingChibis = false;
+        _script.UnsavedChanges = true;
+        UpdatePreview();
+    }
+
+    private async Task AddInteractableObject()
+    {
+        AddInteractableObjectDialogViewModel addInteractableObjectDialogViewModel = new(UnusedInteractableObjects,
+            _project.Config.Hacks.FirstOrDefault(h => h.Name.Equals("Sensible Interactable Object Selection"))?.IsApplied ?? false);
+        ReactiveInteractableObject obj =
+            await new AddInteractableObjectDialog { DataContext = addInteractableObjectDialogViewModel }
+                .ShowDialog<ReactiveInteractableObject>(Window.Window);
+        if (obj is not null)
+        {
+            _script.Event.InteractableObjectsSection.Objects.Insert(_script.Event.InteractableObjectsSection.Objects.Count - 1, obj.InteractableObject);
+            InteractableObjects.Add(obj);
+            UnusedInteractableObjects.Remove(obj);
+        }
+    }
+
+    private void RemoveInteractableObject()
+    {
+        if (SelectedInteractableObject is null)
+        {
+            return;
+        }
+        _script.Event.InteractableObjectsSection.Objects.Remove(SelectedInteractableObject.InteractableObject);
+        InteractableObjects.Remove(SelectedInteractableObject);
+        SelectedInteractableObject.InteractSection = null;
+        UnusedInteractableObjects.Add(SelectedInteractableObject);
+        SelectedInteractableObject = null;
+        _script.UnsavedChanges = true;
+        _script.Refresh(_project, _log);
+        UpdatePreview();
+    }
 }
 
 public class ReactiveScriptSection(ScriptSection section) : ReactiveObject
@@ -769,7 +848,7 @@ public class StartingChibiWithImage : ReactiveObject
 
     public StartingChibiWithImage(StartingChibiEntry startingChibi, SKBitmap chibiBitmap,
         ObservableCollection<StartingChibiWithImage> usedChibis, ObservableCollection<StartingChibiWithImage> unusedChibis,
-        ScriptItem script)
+        ScriptItem script, ScriptEditorViewModel scriptEditor)
     {
         StartingChibi = startingChibi;
         ChibiBitmap = chibiBitmap;
@@ -793,7 +872,7 @@ public class StartingChibiWithImage : ReactiveObject
             }
             script.Event.StartingChibisSection.Objects.Add(StartingChibi);
             script.UnsavedChanges = true;
-
+            scriptEditor.UpdatePreview();
         });
         RemoveStartingChibiCommand = ReactiveCommand.Create(() =>
         {
@@ -815,6 +894,38 @@ public class StartingChibiWithImage : ReactiveObject
             script.Event.StartingChibisSection.Objects.Remove(
                 script.Event.StartingChibisSection.Objects.First(c => c.ChibiIndex == StartingChibi.ChibiIndex));
             script.UnsavedChanges = true;
+            scriptEditor.UpdatePreview();
         });
+    }
+}
+
+public class ReactiveInteractableObject(
+    InteractableObjectEntry interactableObject,
+    MapItem[] maps,
+    ScriptItem script,
+    ScriptEditorViewModel scriptEditor)
+    : ReactiveObject
+{
+    public InteractableObjectEntry InteractableObject { get; } = interactableObject;
+
+
+    public string Description => maps.SelectMany(m => m.Map.InteractableObjects)
+                                     .FirstOrDefault(i => i.ObjectId == InteractableObject.ObjectId)?.ObjectName?.GetSubstitutedString(scriptEditor.Window.OpenProject)
+                                 ?? $"{InteractableObject.ObjectId}";
+
+    public ObservableCollection<ReactiveScriptSection> ScriptSections => scriptEditor.ScriptSections;
+    public ReactiveScriptSection InteractSection
+    {
+        get => scriptEditor.ScriptSections.FirstOrDefault(s => s.Name.Equals(script.Event.LabelsSection.Objects
+            .FirstOrDefault(l => l.Id == InteractableObject.ScriptBlock)?.Name.Replace("/", "")));
+        set
+        {
+            InteractableObject.ScriptBlock = script.Event.LabelsSection.Objects
+                .First(l => l.Name.Replace("/", "").Equals(value.Name)).Id;
+            this.RaisePropertyChanged();
+            script.Refresh(scriptEditor.Window.OpenProject, scriptEditor.Window.Log);
+            scriptEditor.UpdatePreview();
+            script.UnsavedChanges = true;
+        }
     }
 }

@@ -33,7 +33,7 @@
 
     <Panel>
         <controls:AcrylicBorderHandler/>
-        <Grid RowDefinitions="Auto,*">
+        <Grid RowDefinitions="Auto,*" Margin="5">
             <StackPanel IsVisible="False">
                 <Button Command="{Binding SaveProjectCommand}" HotKey="{Binding SaveHotKey}"/>
                 <Button Command="{Binding SearchProjectCommand}" HotKey="{Binding SearchHotKey}"/>

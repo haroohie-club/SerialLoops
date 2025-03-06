@@ -112,6 +112,18 @@ public class MapItem : Item
         return mapWithGrid;
     }
 
+    public SKPoint GetPositionFromGrid(int x, int y, SKPoint origin)
+    {
+        return GetPositionFromGrid(x, y, origin, Map.Settings.SlgMode);
+    }
+
+    public static SKPoint GetPositionFromGrid(int x, int y, SKPoint origin, bool slgMode)
+    {
+        return slgMode
+            ? new(origin.X - x * 32 + y * 32, origin.Y + x * 16 + y * 16)
+            : new(origin.X - y * 16 + x * 16, origin.Y + y * 8 + x * 8);
+    }
+
     private SKPaint GetPathingCellPaint(int x, int y)
     {
         return Map.PathingMap[x][y] switch

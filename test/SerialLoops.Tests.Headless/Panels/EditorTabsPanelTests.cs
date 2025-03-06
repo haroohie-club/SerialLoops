@@ -107,8 +107,8 @@ public class EditorTabsPanelTests
         ItemExplorerPanel itemExplorerPanel = window.FindDescendantOfType<ItemExplorerPanel>();
         DragTabItem tab = editorTabsPanel.FindDescendantOfType<DragTabItem>();
         StackPanel header = tab.FindDescendantOfType<StackPanel>();
-        window.MouseDown(new(itemExplorerPanel.Width + header.Bounds.Center.X, 100), MouseButton.Middle);
-        window.MouseUp(new(itemExplorerPanel.Width + header.Bounds.Center.X, 100), MouseButton.Middle);
+        window.MouseDown(new(itemExplorerPanel.Width + header.Bounds.Center.X, 105), MouseButton.Middle);
+        window.MouseUp(new(itemExplorerPanel.Width + header.Bounds.Center.X, 105), MouseButton.Middle);
         window.CaptureAndSaveFrame(Path.Combine(_uiVals.AssetsDirectory, "artifacts"), TestContext.CurrentContext.Test.Name, ref currentFrame);
         Assert.That(mainWindow.EditorTabs.Tabs, Has.Count.EqualTo(0));
     }

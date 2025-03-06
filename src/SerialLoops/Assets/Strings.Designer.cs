@@ -310,6 +310,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Chibi.
+        /// </summary>
+        public static string Add_Chibi {
+            get {
+                return ResourceManager.GetString("Add Chibi", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add Command.
         /// </summary>
         public static string Add_Command {
@@ -324,6 +333,24 @@ namespace SerialLoops.Assets {
         public static string Add_Frames {
             get {
                 return ResourceManager.GetString("Add Frames", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Interactable Object.
+        /// </summary>
+        public static string Add_Interactable_Object {
+            get {
+                return ResourceManager.GetString("Add Interactable Object", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Interactable Objects.
+        /// </summary>
+        public static string Add_Interactable_Objects {
+            get {
+                return ResourceManager.GetString("Add Interactable Objects", resourceCulture);
             }
         }
         
@@ -541,6 +568,15 @@ namespace SerialLoops.Assets {
         public static string Are_you_sure_you_want_to_clear_the_script__nThis_action_is_irreversible_ {
             get {
                 return ResourceManager.GetString("Are you sure you want to clear the script?\\nThis action is irreversible.", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete the map characters section?.
+        /// </summary>
+        public static string Are_you_sure_you_want_to_delete_the_map_characters_section_ {
+            get {
+                return ResourceManager.GetString("Are you sure you want to delete the map characters section?", resourceCulture);
             }
         }
         
@@ -1802,6 +1838,15 @@ namespace SerialLoops.Assets {
         public static string Delete {
             get {
                 return ResourceManager.GetString("Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete Map Characters?.
+        /// </summary>
+        public static string Delete_Map_Characters_ {
+            get {
+                return ResourceManager.GetString("Delete Map Characters?", resourceCulture);
             }
         }
         
@@ -4106,6 +4151,17 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to By default, the game ignores the IDs of these objects and applies them in order.
+        ///To make this tooling more useful, we highly recommend applying the
+        ///&quot;Sensible Interactable Object Selection&quot; hack by going to Tools → Apply ASM Hacks..
+        /// </summary>
+        public static string InteractableObjectsAsmHackMessage {
+            get {
+                return ResourceManager.GetString("InteractableObjectsAsmHackMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid audio file selected..
         /// </summary>
         public static string Invalid_audio_file_selected_ {
@@ -6025,6 +6081,24 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove Interactable Object.
+        /// </summary>
+        public static string Remove_Interactable_Object {
+            get {
+                return ResourceManager.GetString("Remove Interactable Object", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove Interactable Objects.
+        /// </summary>
+        public static string Remove_Interactable_Objects {
+            get {
+                return ResourceManager.GetString("Remove Interactable Objects", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove Map Characters.
         /// </summary>
         public static string Remove_Map_Characters {
@@ -6057,6 +6131,15 @@ namespace SerialLoops.Assets {
         public static string Remove_Starting_Chibis {
             get {
                 return ResourceManager.GetString("Remove Starting Chibis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove Talk Link.
+        /// </summary>
+        public static string Remove_Talk_Link {
+            get {
+                return ResourceManager.GetString("Remove Talk Link", resourceCulture);
             }
         }
         

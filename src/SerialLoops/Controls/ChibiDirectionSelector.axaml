@@ -1,0 +1,30 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="using:SerialLoops.ViewModels.Controls"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:ChibiDirectionSelectorViewModel"
+             x:Class="SerialLoops.Controls.ChibiDirectionSelector">
+    <ListBox ItemsSource="{Binding Directions}" SelectedItem="{Binding SelectedDirection}">
+        <ListBox.ItemsPanel>
+            <ItemsPanelTemplate>
+                <UniformGrid Rows="2" Columns="2"/>
+            </ItemsPanelTemplate>
+        </ListBox.ItemsPanel>
+        <ListBox.ItemTemplate>
+            <DataTemplate x:DataType="vm:DirectionWithButton">
+                <Svg Path="{Binding IconPath}" Width="40"/>
+            </DataTemplate>
+        </ListBox.ItemTemplate>
+        <ListBox.Styles>
+            <Style Selector="ListBoxItem" x:DataType="vm:DirectionWithButton">
+                <Setter Property="IsEnabled" Value="{Binding Enabled}"/>
+            </Style>
+            <Style Selector="ListBoxItem:disabled > Svg">
+                <Setter Property="Css" Value="path { fill: #777777 !important }"/>
+            </Style>
+        </ListBox.Styles>
+    </ListBox>
+</UserControl>
+

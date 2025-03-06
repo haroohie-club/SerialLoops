@@ -396,7 +396,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
         string hackSaveFile = (await Window.ShowSaveFilePickerAsync(Strings.Export_Hack,
             [new(Strings.Serial_Loops_ASM_Hack) { Patterns = ["*.slhack"] }],
-            $"{asmHack.Name}.slhack")).TryGetLocalPath();
+            $"{asmHack.Name}.slhack"))?.TryGetLocalPath();
         if (!string.IsNullOrEmpty(hackSaveFile))
         {
             string tempDir = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());

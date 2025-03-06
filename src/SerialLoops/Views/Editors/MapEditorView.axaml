@@ -188,7 +188,7 @@
                     </ItemsControl>
 
                     <!-- Occlusion Layer -->
-                    <ItemsControl ItemsSource="{Binding BgOcclusionLayer}" IsVisible="{Binding BgOcclusionLayerDisplayed}">
+                    <ItemsControl ItemsSource="{Binding OcclusionLayer}" IsVisible="{Binding BgOcclusionLayerDisplayed}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
@@ -262,7 +262,7 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate DataType="models:HighlightedSpace">
-                                <Path Fill="{Binding Color}" ToolTip.Tip="{Binding ToolTip}">
+                                <Path Fill="{Binding Color}">
                                     <Path.Data>
                                         <PathGeometry>
                                             <PathFigure StartPoint="{Binding Top}" IsClosed="True" IsFilled="True">
@@ -276,6 +276,26 @@
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
+                    <ItemsControl ItemsSource="{Binding InteractableObjectsHiglightLayer}" IsVisible="{Binding InteractableObjectsDisplayed}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="models:LayoutEntryWithImage">
+                                <Rectangle Stroke="{Binding Tint, Converter={StaticResource BrushConverter}}"
+                                           StrokeThickness="2" Width="{Binding ScreenWidth}" Height="{Binding ScreenHeight}"
+                                           Fill="#05FFFFFF" ToolTip.Tip="{Binding ToolTip}"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        <ItemsControl.Styles>
+                            <Style Selector="ItemsControl > ContentPresenter" x:DataType="models:LayoutEntryWithImage">
+                                <Setter Property="(Canvas.Left)" Value="{Binding ScreenX}"/>
+                                <Setter Property="(Canvas.Top)" Value="{Binding ScreenY}"/>
+                            </Style>
+                        </ItemsControl.Styles>
+                    </ItemsControl>
 
                     <!-- Unknown 2 Objects -->
                     <ItemsControl ItemsSource="{Binding Unknown2s}" IsVisible="{Binding Unknown2sDisplayed}">
@@ -286,7 +306,7 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate DataType="models:HighlightedSpace">
-                                <Path Fill="{Binding Color}" ToolTip.Tip="{Binding ToolTip}">
+                                <Path Fill="{Binding Color}">
                                     <Path.Data>
                                         <PathGeometry>
                                             <PathFigure StartPoint="{Binding Top}" IsClosed="True" IsFilled="True">
@@ -310,7 +330,7 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate DataType="models:HighlightedSpace">
-                                <Path Fill="{Binding Color}" ToolTip.Tip="{Binding ToolTip}">
+                                <Path Fill="{Binding Color}">
                                     <Path.Data>
                                         <PathGeometry>
                                             <PathFigure StartPoint="{Binding Top}" IsClosed="True" IsFilled="True">

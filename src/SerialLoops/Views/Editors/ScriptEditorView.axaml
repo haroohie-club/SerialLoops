@@ -3,10 +3,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:vm="using:SerialLoops.ViewModels.Editors"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:assets="using:SerialLoops.Assets"
+             xmlns:controls="using:SerialLoops.Controls"
              xmlns:i="using:Avalonia.Xaml.Interactivity"
              xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              xmlns:utility="using:SerialLoops.Utility"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:ScriptEditorViewModel"
              x:Class="SerialLoops.Views.Editors.ScriptEditorView">
     <Grid RowDefinitions="Auto,Auto,*">
@@ -44,55 +46,107 @@
 
         <GridSplitter Grid.Column="1" Grid.Row="0" Grid.RowSpan="3" Background="{StaticResource GroupLineColor}" ResizeDirection="Columns"/>
 
-        <Grid Grid.Column="2" Grid.Row="1" ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto">
+        <Grid Grid.Column="2" Grid.Row="1" ColumnDefinitions="Auto,*" RowDefinitions="*,Auto">
             <Image Source="{Binding PreviewBitmap, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
-                   Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Width="256"/>
+                   Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Width="256" VerticalAlignment="Top"/>
             <TabControl Grid.Column="1" Grid.Row="0">
                 <TabControl.Items>
-                    <TabItem Header="Starting Chibis">
-                        <StackPanel Orientation="Vertical" Spacing="10">
-                            <ItemsRepeater ItemsSource="{Binding StartingChibis}" Width="256" Height="86">
-                                <ItemsRepeater.Layout>
-                                    <UniformGridLayout MinColumnSpacing="-5" Orientation="Horizontal" ItemsJustification="End"
-                                                       MaximumRowsOrColumns="5"/>
-                                </ItemsRepeater.Layout>
-                                <ItemsRepeater.ItemTemplate>
-                                    <DataTemplate DataType="vm:StartingChibiWithImage">
-                                        <Image Source="{Binding ChibiBitmap, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
-                                               Stretch="None">
-                                            <i:Interaction.Behaviors>
-                                                <ia:EventTriggerBehavior EventName="PointerPressed" SourceObject="{Binding $parent[Image]}">
-                                                    <ia:InvokeCommandAction Command="{Binding RemoveStartingChibiCommand}"/>
-                                                </ia:EventTriggerBehavior>
-                                            </i:Interaction.Behaviors>
-                                        </Image>
-                                    </DataTemplate>
-                                </ItemsRepeater.ItemTemplate>
-                            </ItemsRepeater>
 
-                            <ItemsRepeater ItemsSource="{Binding UnusedChibis}" Width="256" Height="86">
-                                <ItemsRepeater.Layout>
-                                    <UniformGridLayout MinColumnSpacing="-5" Orientation="Horizontal" ItemsJustification="End"
-                                                       MaximumRowsOrColumns="5"/>
-                                </ItemsRepeater.Layout>
-                                <ItemsRepeater.ItemTemplate>
-                                    <DataTemplate DataType="vm:StartingChibiWithImage">
-                                        <Image Source="{Binding ChibiBitmap, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
-                                               Stretch="None">
-                                            <i:Interaction.Behaviors>
-                                                <ia:EventTriggerBehavior EventName="PointerPressed" SourceObject="{Binding $parent[Image]}">
-                                                    <ia:InvokeCommandAction Command="{Binding AddStartingChibiCommand}"/>
-                                                </ia:EventTriggerBehavior>
-                                            </i:Interaction.Behaviors>
-                                        </Image>
-                                    </DataTemplate>
-                                </ItemsRepeater.ItemTemplate>
-                            </ItemsRepeater>
-                        </StackPanel>
+                    <TabItem Header="{x:Static assets:Strings.Starting_Chibis}">
+                        <Panel>
+                            <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,Auto" IsVisible="{Binding HasStartingChibis}">
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static assets:Strings.Starting_Chibis}"
+                                           VerticalAlignment="Center"/>
+                                <ItemsRepeater Grid.Row="0" Grid.Column="1" ItemsSource="{Binding StartingChibis}" Width="256" Height="86">
+                                    <ItemsRepeater.Layout>
+                                        <UniformGridLayout MinColumnSpacing="-5" Orientation="Horizontal" ItemsJustification="End"
+                                                           MaximumRowsOrColumns="5"/>
+                                    </ItemsRepeater.Layout>
+                                    <ItemsRepeater.ItemTemplate>
+                                        <DataTemplate DataType="vm:StartingChibiWithImage">
+                                            <Image Source="{Binding ChibiBitmap, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
+                                                   Stretch="None">
+                                                <i:Interaction.Behaviors>
+                                                    <ia:EventTriggerBehavior EventName="PointerPressed" SourceObject="{Binding $parent[Image]}">
+                                                        <ia:InvokeCommandAction Command="{Binding RemoveStartingChibiCommand}"/>
+                                                    </ia:EventTriggerBehavior>
+                                                </i:Interaction.Behaviors>
+                                            </Image>
+                                        </DataTemplate>
+                                    </ItemsRepeater.ItemTemplate>
+                                </ItemsRepeater>
+
+                                <TextBlock Grid.Row="1" Grid.Column="0" Text="{x:Static assets:Strings.Chibis}"
+                                           VerticalAlignment="Center"/>
+                                <ItemsRepeater Grid.Row="1" Grid.Column="1" ItemsSource="{Binding UnusedChibis}" Width="256" Height="86">
+                                    <ItemsRepeater.Layout>
+                                        <UniformGridLayout MinColumnSpacing="-5" Orientation="Horizontal" ItemsJustification="End"
+                                                           MaximumRowsOrColumns="5"/>
+                                    </ItemsRepeater.Layout>
+                                    <ItemsRepeater.ItemTemplate>
+                                        <DataTemplate DataType="vm:StartingChibiWithImage">
+                                            <Image Source="{Binding ChibiBitmap, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
+                                                   Stretch="None">
+                                                <i:Interaction.Behaviors>
+                                                    <ia:EventTriggerBehavior EventName="PointerPressed" SourceObject="{Binding $parent[Image]}">
+                                                        <ia:InvokeCommandAction Command="{Binding AddStartingChibiCommand}"/>
+                                                    </ia:EventTriggerBehavior>
+                                                </i:Interaction.Behaviors>
+                                            </Image>
+                                        </DataTemplate>
+                                    </ItemsRepeater.ItemTemplate>
+                                </ItemsRepeater>
+
+                                <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Content="{x:Static assets:Strings.Remove_Starting_Chibis}"
+                                        Command="{Binding RemoveStartingChibisCommand}"/>
+                            </Grid>
+
+                            <Button Content="{x:Static assets:Strings.Add_Starting_Chibis}" IsVisible="{Binding !HasStartingChibis}"
+                                    Command="{Binding AddStartingChibisCommand}"/>
+                        </Panel>
                     </TabItem>
-                    <TabItem Header="Map Characters" />
-                    <TabItem Header="Choices">
 
+                    <TabItem Header="{x:Static assets:Strings.Choices}">
+
+                    </TabItem>
+
+                    <TabItem Header="{x:Static assets:Strings.Map_Characters}">
+                        <ScrollViewer>
+                            <controls:MapCharactersSubEditor DataContext="{Binding MapCharactersSubEditorVm}"/>
+                        </ScrollViewer>
+                    </TabItem>
+
+                    <TabItem Header="{x:Static assets:Strings.Interactable_Objects}">
+                        <Panel>
+                            <Grid RowDefinitions="*,Auto,Auto" ColumnDefinitions="Auto,Auto">
+                                <ListBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+                                         ItemsSource="{Binding InteractableObjects}" SelectedItem="{Binding SelectedInteractableObject}">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate x:DataType="vm:ReactiveInteractableObject">
+                                            <StackPanel Orientation="Horizontal" Spacing="20">
+                                                <ComboBox Margin="10,0,0,0"
+                                                          ItemsSource="{Binding ScriptSections}"
+                                                          SelectedItem="{Binding InteractSection}">
+                                                    <ComboBox.ItemTemplate>
+                                                        <DataTemplate DataType="vm:ReactiveScriptSection">
+                                                            <TextBlock Text="{Binding  Name}"/>
+                                                        </DataTemplate>
+                                                    </ComboBox.ItemTemplate>
+                                                    <ComboBox.ItemContainerTheme>
+                                                        <ControlTheme TargetType="ComboBoxItem" x:DataType="vm:ReactiveScriptSection">
+                                                            <Setter Property="TextSearch.Text" Value="{Binding Name}" />
+                                                        </ControlTheme>
+                                                    </ComboBox.ItemContainerTheme>
+                                                </ComboBox>
+                                                <TextBlock Text="{Binding Description}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                                <Button Grid.Row="1" Grid.Column="0" Content="{x:Static assets:Strings.Add_Interactable_Object}" Command="{Binding AddInteractableObjectCommand}"/>
+                                <Button Grid.Row="1" Grid.Column="1" Content="{x:Static assets:Strings.Remove_Interactable_Object}" Command="{Binding RemoveInteractableObjectCommand}"/>
+                            </Grid>
+                        </Panel>
                     </TabItem>
                 </TabControl.Items>
             </TabControl>

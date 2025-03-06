@@ -257,8 +257,8 @@ public class AsmHacksDialogViewModel : ViewModelBase
                         tracker.InitializeTasks(() =>
                         {
                             OverlayAsmHack.Insert(overlaySourceDir, overlays[i], newRomInfoPath, Configuration.UseDocker ? Configuration.DevkitArmDockerTag : string.Empty,
-                                (object sender, DataReceivedEventArgs e) => { _log.Log(e.Data); ((IProgressTracker)tracker).Focus(e.Data, 1); },
-                                (object sender, DataReceivedEventArgs e) => _log.LogWarning(e.Data),
+                                (_, e) => { _log.Log(e.Data); ((IProgressTracker)tracker).Focus(e.Data, 1); },
+                                (_, e) => _log.LogWarning(e.Data),
                                 devkitArmPath: Configuration.DevkitArmPath);
                         }, () => { });
                         await new ProgressDialog { DataContext = tracker }.ShowDialog(dialog);

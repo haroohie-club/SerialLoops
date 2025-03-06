@@ -1,0 +1,166 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="using:SerialLoops.ViewModels.Controls"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:assets="using:SerialLoops.Assets"
+             xmlns:controls="using:SerialLoops.Controls"
+             xmlns:models="using:SerialLoops.Models"
+             xmlns:utility="using:SerialLoops.Utility"
+             xmlns:items="using:SerialLoops.Lib.Items"
+             xmlns:editors="clr-namespace:SerialLoops.ViewModels.Editors"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:MapCharactersSubEditorViewModel"
+             x:Class="SerialLoops.Controls.MapCharactersSubEditor"
+             Loaded="Control_OnLoaded">
+
+    <Grid RowDefinitions="Auto,*,Auto">
+        <Button Grid.Row="0" Content="{x:Static assets:Strings.Add_Map_Characters}"
+                Command="{Binding AddMapCharactersCommand}"
+                IsVisible="{Binding !HasMapCharacters}"/>
+
+        <Grid Grid.Row="1" RowDefinitions="Auto,*" ColumnDefinitions="*" IsVisible="{Binding HasMapCharacters}">
+            <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Spacing="10">
+                <ComboBox ItemsSource="{Binding Maps}" SelectedItem="{Binding Map}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate DataType="items:MapItem">
+                            <TextBlock Text="{Binding DisplayName}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                    <ComboBox.ItemContainerTheme>
+                        <ControlTheme TargetType="ComboBoxItem" x:DataType="items:MapItem">
+                            <Setter Property="TextSearch.Text" Value="{Binding DisplayName}" />
+                        </ControlTheme>
+                    </ComboBox.ItemContainerTheme>
+                </ComboBox>
+
+                <Button Content="{x:Static assets:Strings.Refresh_Maps_List}" Command="{Binding RefreshMapsCommand}"/>
+            </StackPanel>
+
+            <ScrollViewer Grid.Row="1" Grid.Column="0">
+                <WrapPanel Orientation="Horizontal">
+                    <Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"
+                            DragDrop.AllowDrop="True" Name="MapCanvas">
+                        <!-- Background Layer -->
+                        <ItemsControl ItemsSource="{Binding BgLayer}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="models:LayoutEntryWithImage">
+                                    <Image Source="{Binding CroppedImage, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
+                                           Stretch="Fill" Width="{Binding Width}" Height="{Binding Height}"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                            <ItemsControl.Styles>
+                                <Style Selector="ItemsControl > ContentPresenter" x:DataType="models:LayoutEntryWithImage">
+                                    <Setter Property="(Canvas.Left)" Value="{Binding ScreenX}"/>
+                                    <Setter Property="(Canvas.Top)" Value="{Binding ScreenY}"/>
+                                    <Setter Property="IsVisible" Value="{Binding IsVisible}"/>
+                                </Style>
+                            </ItemsControl.Styles>
+                        </ItemsControl>
+
+                        <!-- Object Layer -->
+                        <ItemsControl ItemsSource="{Binding ObjectLayer}" Name="ObjectLayerItems">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="models:LayoutEntryWithImage">
+                                    <Panel Opacity="0.5" PointerEntered="MapCharacter_OnPointerEntered" PointerExited="MapCharacter_OnPointerExited"
+                                           PointerPressed="DoDrag" PointerReleased="MapCharacter_OnPointerReleased">
+                                        <Image Source="{Binding CroppedImage, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
+                                               Stretch="Fill" Width="{Binding Width}" Height="{Binding Height}"
+                                               IsHitTestVisible="{Binding HitTestVisible}"/>
+                                    </Panel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                            <ItemsControl.Styles>
+                                <Style Selector="ItemsControl > ContentPresenter" x:DataType="models:LayoutEntryWithImage">
+                                    <Setter Property="(Canvas.Left)" Value="{Binding ScreenX}"/>
+                                    <Setter Property="(Canvas.Top)" Value="{Binding ScreenY}"/>
+                                </Style>
+                            </ItemsControl.Styles>
+                        </ItemsControl>
+
+                        <!-- Occlusion Layer -->
+                        <ItemsControl ItemsSource="{Binding OcclusionLayer}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="models:LayoutEntryWithImage">
+                                    <Image Source="{Binding CroppedImage, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
+                                           Stretch="Fill" Width="{Binding Width}" Height="{Binding Height}"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                            <ItemsControl.Styles>
+                                <Style Selector="ItemsControl > ContentPresenter" x:DataType="models:LayoutEntryWithImage">
+                                    <Setter Property="(Canvas.Left)" Value="{Binding ScreenX}"/>
+                                    <Setter Property="(Canvas.Top)" Value="{Binding ScreenY}"/>
+                                </Style>
+                            </ItemsControl.Styles>
+                        </ItemsControl>
+                    </Canvas>
+
+                    <Grid HorizontalAlignment="Center" ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto" MinWidth="300"
+                          IsEnabled="{Binding SelectedMapCharacter, Converter={x:Static ObjectConverters.IsNotNull}}">
+                        <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Chibi}"/>
+                        <ComboBox Grid.Row="0" Grid.Column="1" Margin="10,0,0,0"
+                                  ItemsSource="{Binding Chibis}" SelectedItem="{Binding SelectedMapCharacter.Chibi}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate DataType="items:ChibiItem">
+                                    <TextBlock Text="{Binding DisplayName}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                            <ComboBox.ItemContainerTheme>
+                                <ControlTheme TargetType="ComboBoxItem" x:DataType="items:ChibiItem">
+                                    <Setter Property="TextSearch.Text" Value="{Binding DisplayName}" />
+                                </ControlTheme>
+                            </ComboBox.ItemContainerTheme>
+                        </ComboBox>
+
+                        <controls:ChibiDirectionSelector Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                                                         DataContext="{Binding ChibiDirectionSelector}"/>
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="{x:Static assets:Strings.Script_Section}"/>
+                        <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Spacing="10" Margin="10,0,0,0">
+                            <ComboBox Margin="10,0,0,0"
+                                      ItemsSource="{Binding ScriptEditor.ScriptSections}"
+                                      SelectedItem="{Binding SelectedMapCharacter.TalkSection}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate DataType="editors:ReactiveScriptSection">
+                                        <TextBlock Text="{Binding  Name}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                                <ComboBox.ItemContainerTheme>
+                                    <ControlTheme TargetType="ComboBoxItem" x:DataType="editors:ReactiveScriptSection">
+                                        <Setter Property="TextSearch.Text" Value="{Binding Name}" />
+                                    </ControlTheme>
+                                </ComboBox.ItemContainerTheme>
+                            </ComboBox>
+
+                            <Button Content="{x:Static assets:Strings.Remove_Talk_Link}" Command="{Binding RemoveTalkLinkCommand}"/>
+                        </StackPanel>
+
+                        <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Content="{x:Static assets:Strings.Remove_Chibi}"
+                                Command="{Binding RemoveMapCharacterCommand}"/>
+                    </Grid>
+                </WrapPanel>
+            </ScrollViewer>
+        </Grid>
+
+        <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Spacing="10">
+            <Button Content="{x:Static assets:Strings.Add_Chibi}" Command="{Binding AddMapCharacterCommand}"/>
+            <Button Content="{x:Static assets:Strings.Remove_Map_Characters}" Command="{Binding RemoveMapCharactersCommand}"/>
+        </StackPanel>
+    </Grid>
+</UserControl>
+

@@ -1,0 +1,36 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:vm="using:SerialLoops.ViewModels.Dialogs"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:assets="using:SerialLoops.Assets"
+        xmlns:editors="using:SerialLoops.ViewModels.Editors"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        SizeToContent="WidthAndHeight"
+        x:DataType="vm:AddInteractableObjectDialogViewModel"
+        x:Class="SerialLoops.Views.Dialogs.AddInteractableObjectDialog"
+        Title="{x:Static assets:Strings.Add_Interactable_Object}"
+        Name="Dialog">
+    <StackPanel Orientation="Vertical" Spacing="10" Margin="10">
+        <TextBlock IsVisible="{Binding !HackApplied}"
+                   Text="{x:Static assets:Strings.InteractableObjectsAsmHackMessage}"
+                   TextWrapping="Wrap"/>
+
+        <ListBox ItemsSource="{Binding UnusedInteractableObjects}"
+                 SelectedItem="{Binding SelectedInteractableObject}">
+            <ListBox.ItemTemplate>
+                <DataTemplate x:DataType="editors:ReactiveInteractableObject">
+                    <TextBlock Text="{Binding Description}"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <StackPanel Orientation="Horizontal" Spacing="3" HorizontalAlignment="Right">
+            <Button Content="{x:Static assets:Strings.Add}" IsDefault="True"
+                    Command="{Binding AddCommand}" CommandParameter="{Binding #Dialog}"/>
+            <Button Content="{x:Static assets:Strings.Cancel}" IsCancel="True"
+                    Command="{Binding CancelCommand}" CommandParameter="{Binding #Dialog}"/>
+        </StackPanel>
+    </StackPanel>
+</Window>
+
