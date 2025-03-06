@@ -44,9 +44,10 @@ public class VgotoScriptCommandEditorViewModel(ScriptItemCommand command, Script
             this.RaiseAndSetIfChanged(ref _sectionToJumpTo, value);
             ((ScriptSectionScriptParameter)Command.Parameters[1]).Section = _sectionToJumpTo.Section;
             Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
-                .Objects[Command.Index].Parameters[1] = Script.Event.LabelsSection.Objects
+                .Objects[Command.Index].Parameters[2] = Script.Event.LabelsSection.Objects
                 .FirstOrDefault(l => l.Name.Replace("/", "").Equals(_sectionToJumpTo.Name))?.Id ?? 0;
             Script.UnsavedChanges = true;
+            Script.Refresh(ScriptEditor.Window.OpenProject, Log);
             Command.UpdateDisplay();
         }
     }

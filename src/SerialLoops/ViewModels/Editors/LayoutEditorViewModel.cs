@@ -54,7 +54,7 @@ public class LayoutEditorViewModel : EditorViewModel
 
         _layout = item;
         _mainWindow = window;
-        LayoutEntries = new(_layout.Layout.LayoutEntries.Skip(_layout.StartEntry).Take(_layout.NumEntries).Select((_, i) => new LayoutEntryWithImage(_layout, i + _layout.StartEntry, _history)));
+        LayoutEntries = new(_layout.Layout.LayoutEntries.Skip(_layout.StartEntry).Take(_layout.NumEntries).Select((_, i) => new LayoutEntryWithImage(_layout, i + _layout.StartEntry, history: _history)));
         ExportLayoutCommand = ReactiveCommand.CreateFromTask(ExportLayout);
         ExportSourceCommand = ReactiveCommand.CreateFromTask(ExportSource);
 

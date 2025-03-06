@@ -3094,4 +3094,33 @@ This action is irreversible.</value>
   <data name="Clear All Guides" xml:space="preserve">
     <value>Clear All Guides</value><comment>As in "delete all guide markers on the chess board"</comment>
   </data>
+  <data name="Remove Talk Link" xml:space="preserve">
+    <value>Remove Talk Link</value><comment>Remove the association with a script section when you talk to this map character</comment>
+  </data>
+  <data name="Add Chibi" xml:space="preserve">
+    <value>Add Chibi</value><comment>...to the current map</comment>
+  </data>
+  <data name="Are you sure you want to delete the map characters section?" xml:space="preserve">
+    <value>Are you sure you want to delete the map characters section?</value>
+  </data>
+  <data name="Delete Map Characters?" xml:space="preserve">
+    <value>Delete Map Characters?</value>
+  </data>
+  <data name="Add Interactable Object" xml:space="preserve">
+    <value>Add Interactable Object</value>
+  </data>
+  <data name="Remove Interactable Object" xml:space="preserve">
+    <value>Remove Interactable Object</value>
+  </data>
+  <data name="Add Interactable Objects" xml:space="preserve">
+    <value>Add Interactable Objects</value>
+  </data>
+  <data name="Remove Interactable Objects" xml:space="preserve">
+    <value>Remove Interactable Objects</value>
+  </data>
+  <data name="InteractableObjectsAsmHackMessage" xml:space="preserve">
+    <value>By default, the game ignores the IDs of these objects and applies them in order.
+To make this tooling more useful, we highly recommend applying the
+"Sensible Interactable Object Selection" hack by going to Tools → Apply ASM Hacks.</value>
+  </data>
 </root>

@@ -42,11 +42,12 @@ modules:
       - make
       - make install
 
-  - name: OpenAL
+  - name: SDL
     buildsystem: cmake
     sources:
       - type: git
-        url: https://github.com/kcat/openal-soft.git
+        url: https://github.com/libsdl-org/SDL.git
+        branch: release-2.32.x
 
   - name: SerialLoops
     buildsystem: simple

@@ -362,3 +362,8 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+# macOS stuff
+.DS_Store
+SDL/
+libSDL2.dylib

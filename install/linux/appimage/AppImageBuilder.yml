@@ -27,7 +27,7 @@ AppDir:
     - sourceline: deb http://security.ubuntu.com/ubuntu/ bionic-security multiverse
     include:
     - libc6:amd64
-    - libopenal-dev:amd64
+    - libsdl2-dev:amd64
     - make:amd64
   files:
     include: []

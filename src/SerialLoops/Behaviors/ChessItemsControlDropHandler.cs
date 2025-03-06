@@ -8,7 +8,7 @@ using SerialLoops.ViewModels.Editors;
 
 namespace SerialLoops.Behaviors;
 
-public class ItemsControlDropHandler : DropHandlerBase
+public class ChessItemsControlDropHandler : DropHandlerBase
 {
     private bool ValidateChess(ItemsControl itemsControl, DragEventArgs e, ChessPieceOnBoard sourceContext, ChessPuzzleEditorViewModel targetContext, bool bExecute)
     {

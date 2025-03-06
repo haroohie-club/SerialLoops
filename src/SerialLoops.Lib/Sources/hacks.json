@@ -117,5 +117,27 @@
                 "Parameters": []
             }
         ]
+    },
+    {
+        "Name": "Sensible Interactable Object Selection",
+        "Description": "Normally, the game picks which interactable objects to specify sequentially, despite storing the ID of the interactable object in the script. This hack makes it so it uses that ID instead, making the script editor tooling more useful.",
+        "InjectionSites": [
+            {
+                "Code": "ARM9",
+                "Location": "02066678"
+            },
+            {
+                "Code": "ARM9",
+                "Location": "020666B0"
+            }
+        ],
+        "Files": [
+            {
+                "File": "interactableObjById_asm.s",
+                "Destination": "source/interactableObjById_asm.s",
+                "Symbols": [],
+                "Parameters": []
+            }
+        ]
     }
 ]

@@ -8,7 +8,7 @@ URL:            https://haroohie.club/chokurestu/serial-loops/
 Source0:        %{name}-%{version}.tar.gz
 Source1:        https://github.com/haroohie-club/SerialLoops
 BuildRequires:  dotnet-sdk-8.0
-Requires:       openal-soft make
+Requires:       SDL2 make
 
 %global debug_package %{nil}
 %define __os_install_post %{nil}

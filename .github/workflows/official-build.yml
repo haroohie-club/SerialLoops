@@ -211,10 +211,20 @@ jobs:
     runs-on: macos-latest
     strategy:
       matrix:
-        rid: ['osx-x64', 'osx-arm64']
+        type: [ { rid:  'osx-x64', arch: 'x86_64 ' },  { rid: 'osx-arm64', arch: 'arm64' } ]
     steps:
-      - name: Check out
+      - name: Check out Serial Loops
         uses: actions/checkout@v4
+      - name: Check out SDL
+        uses: actions/checkout@v4
+        with:
+          repository: 'libsdl-org/SDL'
+          ref: release-2.32.x
+          path: SDL
+      - name: SDL cmake configure
+        run: pushd ${{ github.workspace }}/SDL && cmake -S . -B build -DSDL_SHARED=ON -DCMAKE_SYSTEM_NAME=Darwin -DCMAKE_OSX_ARCHITECTURES="${{ matrix.type.arch }}" && popd
+      - name: SDL cmake build
+        run: pushd ${{ github.workspace }}/SDL && cmake --build build && popd
       - name: Setup .NET
         uses: actions/setup-dotnet@v4.1.0
         with:
@@ -224,22 +234,24 @@ jobs:
         with:
           python-version: '3.13'
       - run: pip install macos-pkg-builder
+      - name: Copy in SDL
+        run: cp -L ${{ github.workspace }}/SDL/build/libSDL2-2.0.dylib "src/SerialLoops/libSDL2.dylib"
       - name: Restore
-        run: dotnet restore src/SerialLoops/SerialLoops.csproj -r ${{ matrix.rid }}
+        run: dotnet restore src/SerialLoops/SerialLoops.csproj -r ${{ matrix.type.rid }}
       - name: Build .app
-        run: dotnet msbuild src/SerialLoops/SerialLoops.csproj -t:BundleApp -p:Configuration=Release -p:TargetFramework=net8.0 -p:RuntimeIdentifier=${{ matrix.rid }} -p:UseAppHost=true --p:SelfContained=true -p:DebugType=None -p:DebugSymbols=false -p:PublishSingleFile=true
+        run: dotnet msbuild src/SerialLoops/SerialLoops.csproj -t:BundleApp -p:Configuration=Release -p:TargetFramework=net8.0 -p:RuntimeIdentifier=${{ matrix.type.rid }} -p:UseAppHost=true -p:SelfContained=true -p:DebugType=None -p:DebugSymbols=false -p:PublishSingleFile=true -p:CIBuild=true
       - name: Build pkg installer
         run: |
           mkdir "install/macos/Serial Loops.app"
-          cp -r "src/SerialLoops/bin/Release/net8.0/${{ matrix.rid }}/publish/Serial Loops.app" "install/macos/"
+          cp -r "src/SerialLoops/bin/Release/net8.0/${{ matrix.type.rid }}/publish/Serial Loops.app" "install/macos/"
           cd install/macos/
           chmod +x "./Serial Loops.app/Contents/MacOS/SerialLoops"
-          python serial_loops_pkg_builder.py $SLVersion ${{ matrix.rid }}
+          python serial_loops_pkg_builder.py $SLVersion ${{ matrix.type.rid }}
       - name: Upload pkg installer
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.rid }}-installer
-          path: install/macos/SerialLoops-${{ matrix.rid }}.pkg
+          name: ${{ matrix.type.rid }}-installer
+          path: install/macos/SerialLoops-${{ matrix.type.rid }}.pkg
           retention-days: 1
 
   windows:
@@ -372,4 +384,4 @@ jobs:
             * The AppImage is designed to run on all Linux distros and is an easy, click-once option.
             * The `.deb` package is intended for Debian-based distros (e.g. Ubuntu). Install it with `sudo apt install -f ./SerialLoops-linux-x64-${{ env.SLVersion }}.deb`.
             * The `.rpm` package is intended for Red Hat distros (e.g. Fedora). Install it with `sudo dnf install ./SerialLoops-linux-x64-${{ env.SLVersion }}-1.fc39.x86_64.rpm`.
-            * You may also opt to simply use the binaries packaged in the `.tar.gz` archive; when doing so, ensure you install the OpenAL binaries so audio playback works.
+            * You may also opt to simply use the binaries packaged in the `.tar.gz` archive; when doing so, ensure you install the SDL2 binaries so audio playback works.

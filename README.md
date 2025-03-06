@@ -91,8 +91,8 @@ way of getting the Docker path to work, so you will have to use Make.
     - On Windows, you will additionally need to install [Windows Subsystem for Linux (WSL)](https://learn.microsoft.com/en-us/windows/wsl/install).
       From an admin PowerShell or Terminal window (Winkey + X + A), simply type `wsl --install` to install it.
 
-#### Installing OpenAL (Linux)
-If you're running on Linux and _not using one of the package releases_ (the `.deb` or `.rpm`), you will also need to install OpenAL which is used for audio processing.
+#### Installing SDL2 (Linux)
+If you're running on Linux and _not using one of the package releases_ (the Flatpak, AppImage, `.deb` or `.rpm`), you will also need to install SDL2 which is used for audio processing.
 
 </details>
 
@@ -115,9 +115,20 @@ Please file bugs in the Issues tab in this repository. Please include the follow
 ### License
 Serial Loops is licensed under the GPLv3. See [LICENSE](LICENSE) for more information.
 
-### Building
-Serial Loops requires the .NET 8.0 SDK to build. You can download it [here](https://dotnet.microsoft.com/download/dotnet/8.0). To build Serial Loops for your platform, run:
+### Prerequisites
+Serial Loops requires the .NET 8.0 SDK to build. You can download it [here](https://dotnet.microsoft.com/download/dotnet/8.0).
 
+Additionally, on macOS, you will have to install CMake so that the build can compile SDL2. To do this, download the macOS dmg for your
+[here](https://cmake.org/download/) and install it. Then run:
+```bash
+sudo /Applications/CMake.app/Contents/bin/cmake-gui --install
+```
+This will symlink the CMake binaries to `/usr/local/bin` which is necessary for the build to work.
+
+On Linux, you will need to install the SDL2 binaries for your distribution.
+
+### Building
+To build Serial Loops for your platform, run:
 ```bash
 dotnet build
 ```
