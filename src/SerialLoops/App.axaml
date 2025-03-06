@@ -4,6 +4,7 @@
              xmlns:utility="using:SerialLoops.Utility"
              x:Class="SerialLoops.App"
              xmlns:dialoghost="using:DialogHostAvalonia"
+             xmlns:toolbar="using:MiniToolbar.Avalonia"
              xmlns:local="using:SerialLoops"
              xmlns:mintoolbarthemes="using:MiniToolbar.Avalonia.Themes"
              xmlns:tabaloniathemes="using:Tabalonia.Themes.Custom"
@@ -40,20 +41,24 @@
         <StyleInclude Source="avares://Avalonia.Controls.ColorPicker/Themes/Fluent/Fluent.xaml" />
 
         <!-- Toolbar styling -->
+        <Style Selector="toolbar|Toolbar">
+            <Setter Property="MaxHeight" Value="{DynamicResource ToolbarCompactHeightPadded}" />
+            <Setter Property="Height" Value="{DynamicResource ToolbarCompactHeightPadded}" />
+        </Style>
+        <Style Selector="Label.ToolbarLabel">
+            <Setter Property="Foreground" Value="{DynamicResource ResourceKey=ToolbarTextColor}" />
+        </Style>
         <Style Selector="Button.ToolbarButton">
             <!-- We use toolbar height here so these buttons are always proportional & square in the bar -->
-            <Setter Property="Width" Value="{DynamicResource ToolbarNormalHeight}" />
-            <Setter Property="Height" Value="{DynamicResource ToolbarNormalHeight}" />
+            <Setter Property="Width" Value="{DynamicResource ToolbarCompactHeight}" />
+            <Setter Property="Height" Value="{DynamicResource ToolbarCompactHeight}" />
+            <Setter Property="Background" Value="{DynamicResource ToolbarBackgroundColor}" />
             <Setter Property="Padding" Value="5" />
+            <Setter Property="Margin" Value="5 0" />
+            <Setter Property="HorizontalAlignment" Value="Right" />
         </Style>
         <Style Selector="Button.ToolbarButton > StackPanel > TextBlock">
-            <Setter Property="Padding" Value="0, 2" />
-            <Setter Property="HorizontalAlignment" Value="Center" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="TextAlignment" Value="Center" />
-            <Setter Property="TextWrapping" Value="Wrap" />
-            <Setter Property="LineHeight" Value="13" />
-            <Setter Property="FontSize" Value="12.5" />
+            <Setter Property="Text" Value="" />
         </Style>
 
         <!-- Windows menu styling -->
@@ -178,6 +183,9 @@
 
     <Application.Resources>
         <ResourceDictionary>
+            <system:Double x:Key="ToolbarCompactHeight">36</system:Double>
+            <system:Double x:Key="ToolbarCompactHeightPadded">43</system:Double>
+
             <ResourceDictionary.ThemeDictionaries>
                 <ResourceDictionary x:Key="Light">
                     <Color x:Key="BackgroundTint">White</Color>
@@ -198,9 +206,9 @@
                     <SolidColorBrush x:Key="DisabledLinkColor">#77000000</SolidColorBrush>
                     <SolidColorBrush x:Key="GroupLineColor">#55000000</SolidColorBrush>
                     <SolidColorBrush x:Key="AccentColor">#CCCCCC</SolidColorBrush>
-                    <SolidColorBrush x:Key="ToolbarBackgroundColor">Transparent</SolidColorBrush>
-                    <SolidColorBrush x:Key="ToolbarTextColor">#55000000</SolidColorBrush>
+                    <SolidColorBrush x:Key="ToolbarTextColor">#000000</SolidColorBrush>
                     <SolidColorBrush x:Key="ToolbarBorderColor">Transparent</SolidColorBrush>
+                    <SolidColorBrush x:Key="ToolbarBackgroundColor">Transparent</SolidColorBrush>
                     <Color x:Key="CropResizeOverlayColor">#55000000</Color>
 
                     <SolidColorBrush x:Key="TabItemBackgroundBrush" Color="Transparent" />
@@ -224,9 +232,9 @@
                     <SolidColorBrush x:Key="DisabledLinkColor">Gray</SolidColorBrush>
                     <SolidColorBrush x:Key="GroupLineColor">WhiteSmoke</SolidColorBrush>
                     <SolidColorBrush x:Key="AccentColor">#222222</SolidColorBrush>
-                    <SolidColorBrush x:Key="ToolbarBackgroundColor">Transparent</SolidColorBrush>
-                    <SolidColorBrush x:Key="ToolbarTextColor">Gray</SolidColorBrush>
+                    <SolidColorBrush x:Key="ToolbarTextColor">WhiteSmoke</SolidColorBrush>
                     <SolidColorBrush x:Key="ToolbarBorderColor">Transparent</SolidColorBrush>
+                    <SolidColorBrush x:Key="ToolbarBackgroundColor">Transparent</SolidColorBrush>
                     <Color x:Key="CropResizeOverlayColor">#AAFFFFFF</Color>
 
                     <SolidColorBrush x:Key="TabControlWindowActiveBackgroundBrush" Color="Transparent" />
