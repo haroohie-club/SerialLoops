@@ -1,15 +1,17 @@
 ﻿using System;
+#if !WINDOWS
+using NAudio.Sdl2;
+#endif
 using NAudio.Wave;
 
 namespace SerialLoops.Utility;
 
-public class SoundPlayer
+public class BgmVceMixer
 {
 #if WINDOWS
-        private WaveOut _player;
+    private WaveOut _player;
 #else
-    private ALWavePlayer _player;
-    private static readonly ALAudioContext _context = new();
+    private WaveOutSdl _player;
 #endif
     public IWaveProvider WaveProvider { get; set; }
     public PlaybackState PlaybackState => _player.PlaybackState;
@@ -20,14 +22,14 @@ public class SoundPlayer
         remove => _player.PlaybackStopped -= value;
     }
 
-    public SoundPlayer(IWaveProvider waveProvider)
+    public BgmVceMixer(IWaveProvider waveProvider)
     {
         WaveProvider = waveProvider;
 
 #if WINDOWS
         _player = new() { DeviceNumber = -1 };
 #else
-        _player = new(_context, 8192);
+        _player = new() { DesiredLatency = 10 };
 #endif
         _player.Init(WaveProvider);
     }
@@ -44,11 +46,6 @@ public class SoundPlayer
 
     public void Stop()
     {
-#if WINDOWS
-            _player.Stop();
-#else
-        // AL has a static player, so if we stop it we'll throw errors
-        _player.Pause();
-#endif
+        _player.Stop();
     }
 }
