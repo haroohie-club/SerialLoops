@@ -1188,7 +1188,7 @@ public partial class MainWindowViewModel : ViewModelBase
             {
                 Header = Strings.Export_Project,
                 Command = ExportProjectCommand,
-                // Icon = ControlGenerator.GetIcon("Export_Project", Log),
+                Icon = ControlGenerator.GetIcon("Export_Project", Log),
             },
             new NativeMenuItem
             {
