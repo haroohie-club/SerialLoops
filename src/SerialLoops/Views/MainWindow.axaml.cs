@@ -54,7 +54,8 @@ public partial class MainWindow : Window
                 ViewModel.RecentProjectsMenu,
                 new NativeMenuItem
                 {
-                    Header= Strings.Import_Project,
+                    Header = Strings.Import_Project,
+                    Icon = ControlGenerator.GetIcon("Import_Project", ViewModel.Log),
                     Command = ViewModel.ImportProjectCommand,
                 },
                 new NativeMenuItemSeparator(),
