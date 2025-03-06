@@ -105,8 +105,8 @@ public partial class Project
     public Dictionary<int, GraphicsFile> LayoutFiles { get; set; } = [];
     [JsonIgnore]
     public Dictionary<ChessFile.ChessPiece, SKBitmap> ChessPieceImages { get; private set; }
-    [JsonIgnore]
-    public float AverageBgmMaxAmplitude { get; private set; }
+
+    public float AverageBgmMaxAmplitude { get; set; }
 
     // Localization function to make localizing accessible from the lib
     [JsonIgnore]
@@ -572,11 +572,18 @@ public partial class Project
             {
                 tracker.Finished++;
                 BackgroundMusicItem bgmItem = new(bgm, i, this);
-                maxes.Add(bgmItem.GetWaveProvider(log, false).GetMaxAmplitude(log));
+                if (AverageBgmMaxAmplitude == 0)
+                {
+                    maxes.Add(bgmItem.GetWaveProvider(log, false).GetMaxAmplitude(log));
+                }
                 return bgmItem;
             }));
 
-            AverageBgmMaxAmplitude = maxes.Average();
+            if (AverageBgmMaxAmplitude == 0)
+            {
+                AverageBgmMaxAmplitude = maxes.Average();
+                Save(log);
+            }
         }
         catch (Exception ex)
         {
