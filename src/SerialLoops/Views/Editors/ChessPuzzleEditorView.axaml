@@ -35,6 +35,11 @@
     </UserControl.Styles>
 
     <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto" Margin="10">
+        <Panel IsVisible="False">
+            <Button Command="{Binding UndoCommand}" HotKey="{Binding UndoGesture}"/>
+            <Button Command="{Binding RedoCommand}" HotKey="{Binding RedoGesture}"/>
+        </Panel>
+
         <Image Grid.Column="0" Grid.Row="0" Source="{Binding EmptyChessboard, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
         <ItemsControl Grid.Column="0" Grid.Row="0" ItemsSource="{Binding Pieces}" Classes="ItemsDragAndDrop">
             <ItemsControl.ItemsPanel>

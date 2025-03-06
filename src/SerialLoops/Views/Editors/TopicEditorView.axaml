@@ -10,6 +10,11 @@
              x:DataType="vm:TopicEditorViewModel"
              x:Class="SerialLoops.Views.Editors.TopicEditorView">
     <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" Margin="10">
+        <Panel IsVisible="False">
+            <Button Command="{Binding UndoCommand}" HotKey="{Binding UndoGesture}"/>
+            <Button Command="{Binding RedoCommand}" HotKey="{Binding RedoGesture}"/>
+        </Panel>
+
         <TextBlock Grid.Column="0" Grid.Row="0" Text="{x:Static assets:Strings.ID}"/>
         <TextBlock Grid.Column="1" Grid.Row="0" Margin="10,0,0,0" Text="{Binding Topic.TopicEntry.Id}"/>
 

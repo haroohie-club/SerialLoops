@@ -1,4 +1,5 @@
 ﻿using System;
+using ReactiveHistory;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SerialLoops.Lib;
@@ -9,6 +10,7 @@ namespace SerialLoops.Models;
 
 public class LayoutEntryWithImage : ReactiveObject
 {
+    private StackHistory _history;
     private LayoutItem _layout;
     public int Index { get; }
     public SKBitmap FullImage { get; }
@@ -166,8 +168,9 @@ public class LayoutEntryWithImage : ReactiveObject
     [Reactive]
     public bool IsVisible { get; set; } = true;
 
-    public LayoutEntryWithImage(LayoutItem layout, int idx, string tooltip = null)
+    public LayoutEntryWithImage(LayoutItem layout, int idx, string tooltip = null, StackHistory history = null)
     {
+        _history = history;
         _layout = layout;
         Index = idx;
         FullImage = _layout.Layout.LayoutEntries[Index].RelativeShtxIndex >= 0 ? _layout.TilesDict[_layout.Layout.LayoutEntries[Index].RelativeShtxIndex] : null;
@@ -182,6 +185,21 @@ public class LayoutEntryWithImage : ReactiveObject
         _screenY = _layout.Layout.LayoutEntries[Index].ScreenY;
         _tint = _layout.Layout.LayoutEntries[Index].Tint;
         ToolTip = tooltip;
+
+        if (_history is null)
+        {
+            return;
+        }
+
+        this.WhenAnyValue(l => l.TextureX).ObserveWithHistory(tx => TextureX = tx, TextureX, _history);
+        this.WhenAnyValue(l => l.TextureY).ObserveWithHistory(ty => TextureY = ty, TextureY, _history);
+        this.WhenAnyValue(l => l.TextureW).ObserveWithHistory(tw => TextureW = tw, TextureW, _history);
+        this.WhenAnyValue(l => l.TextureH).ObserveWithHistory(th => TextureH = th, TextureH, _history);
+        this.WhenAnyValue(l => l.ScreenX).ObserveWithHistory(sx => ScreenX = sx, ScreenX, _history);
+        this.WhenAnyValue(l => l.ScreenY).ObserveWithHistory(sy => ScreenY = sy, ScreenY, _history);
+        this.WhenAnyValue(l => l.ScreenWidth).ObserveWithHistory(sw => ScreenWidth = sw, ScreenWidth, _history);
+        this.WhenAnyValue(l => l.ScreenHeight).ObserveWithHistory(sh => ScreenHeight = sh, ScreenHeight, _history);
+        this.WhenAnyValue(l => l.Tint).ObserveWithHistory(t => Tint = t, Tint, _history);
     }
 
     public LayoutEntryWithImage()

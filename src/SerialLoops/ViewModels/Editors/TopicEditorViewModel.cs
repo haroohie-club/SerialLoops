@@ -1,12 +1,16 @@
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Input;
+using Avalonia.Input;
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
+using ReactiveHistory;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SerialLoops.Assets;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Util;
+using SerialLoops.Utility;
 using SerialLoops.ViewModels.Panels;
 
 namespace SerialLoops.ViewModels.Editors;
@@ -15,8 +19,7 @@ public class TopicEditorViewModel : EditorViewModel
 {
     public EditorTabsPanelViewModel Tabs { get; }
 
-    [Reactive]
-    public TopicItem Topic { get; set; }
+    public TopicItem Topic { get; }
 
     private string _title;
 
@@ -153,10 +156,19 @@ public class TopicEditorViewModel : EditorViewModel
         }
     }
 
+    private StackHistory _history;
+
+    public ICommand UndoCommand { get; }
+    public ICommand RedoCommand { get; }
+    public KeyGesture UndoGesture { get; }
+    public KeyGesture RedoGesture { get; }
+
     public short MaxShort => short.MaxValue;
 
     public TopicEditorViewModel(TopicItem topic, MainWindowViewModel window, ILogger log) : base(topic, window, log)
     {
+        _history = new();
+
         Tabs = window.EditorTabs;
         Topic = topic;
         _title = Topic.TopicEntry.Title;
@@ -176,5 +188,19 @@ public class TopicEditorViewModel : EditorViewModel
         MikuruTime = BaseTimeGain * _mikuruTimePercentage / 100.0;
         NagatoTime = BaseTimeGain * _nagatoTimePercentage / 100.0;
         KoizumiTime = BaseTimeGain * _koizumiTimePercentage / 100.0;
+
+        this.WhenAnyValue(t => t.AssociatedScript).ObserveWithHistory(s => AssociatedScript = s, AssociatedScript, _history);
+        this.WhenAnyValue(t => t.EpisodeGroup).ObserveWithHistory(g => EpisodeGroup = g, EpisodeGroup, _history);
+        this.WhenAnyValue(t => t.PuzzlePhaseGroup).ObserveWithHistory(g => PuzzlePhaseGroup = g, PuzzlePhaseGroup, _history);
+        this.WhenAnyValue(t => t.BaseTimeGain).ObserveWithHistory(b => BaseTimeGain = b, BaseTimeGain, _history);
+        this.WhenAnyValue(t => t.KyonTimePercentage).ObserveWithHistory(k => KyonTimePercentage = k, KyonTimePercentage, _history);
+        this.WhenAnyValue(t => t.MikuruTimePercentage).ObserveWithHistory(m => MikuruTimePercentage = m, MikuruTimePercentage, _history);
+        this.WhenAnyValue(t => t.NagatoTimePercentage).ObserveWithHistory(n => NagatoTimePercentage = n, NagatoTimePercentage, _history);
+        this.WhenAnyValue(t => t.KoizumiTimePercentage).ObserveWithHistory(k => KoizumiTimePercentage = k, KoizumiTimePercentage, _history);
+
+        UndoCommand = ReactiveCommand.Create(() => _history.Undo());
+        RedoCommand = ReactiveCommand.Create(() => _history.Redo());
+        UndoGesture = GuiExtensions.CreatePlatformAgnosticCtrlGesture(Key.Z);
+        RedoGesture = GuiExtensions.CreatePlatformAgnosticCtrlGesture(Key.Y);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
+using ReactiveHistory;
 using ReactiveUI;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
@@ -26,10 +27,12 @@ public class RouteSelectScenarioCommandEditorViewModel : ScenarioCommandEditorVi
         }
     }
 
-    public RouteSelectScenarioCommandEditorViewModel(PrettyScenarioCommand command, Project project, EditorTabsPanelViewModel tabs) : base(command, tabs)
+    public RouteSelectScenarioCommandEditorViewModel(PrettyScenarioCommand command, Project project, EditorTabsPanelViewModel tabs, StackHistory history) : base(command, tabs, history)
     {
         GroupSelections = new(project.Items.Where(i => i.Type == ItemDescription.ItemType.Group_Selection).Cast<GroupSelectionItem>());
         _groupSelection = GroupSelections.FirstOrDefault(g => g.DisplayName == command.Parameter);
         _parameter = GroupSelections.IndexOf(_groupSelection);
+
+        this.WhenAnyValue(e => e.GroupSelection).ObserveWithHistory(g => GroupSelection = g, GroupSelection, history);
     }
 }

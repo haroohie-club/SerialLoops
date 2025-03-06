@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
+using ReactiveHistory;
 using ReactiveUI;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
@@ -26,10 +27,12 @@ public class PuzzlePhaseScenarioCommandEditorViewModel : ScenarioCommandEditorVi
         }
     }
 
-    public PuzzlePhaseScenarioCommandEditorViewModel(PrettyScenarioCommand command, Project project, EditorTabsPanelViewModel tabs) : base(command, tabs)
+    public PuzzlePhaseScenarioCommandEditorViewModel(PrettyScenarioCommand command, Project project, EditorTabsPanelViewModel tabs, StackHistory history) : base(command, tabs, history)
     {
         Puzzles = new(project.Items.Where(i => i.Type == ItemDescription.ItemType.Puzzle).Cast<PuzzleItem>());
         _puzzle = Puzzles.FirstOrDefault(s => s.DisplayName == command.Parameter);
         _parameter = _puzzle.Puzzle.Index;
+
+        this.WhenAnyValue(e => e.Puzzle).ObserveWithHistory(p => Puzzle = p, Puzzle, history);
     }
 }

@@ -1,18 +1,24 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Input;
+using Avalonia.Input;
+using DynamicData;
 using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Util;
+using ReactiveHistory;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
+using SerialLoops.Utility;
 using SkiaSharp;
 
 namespace SerialLoops.ViewModels.Editors;
 
 public class ChessPuzzleEditorViewModel : EditorViewModel
 {
-    private ChessPuzzleItem _chessPuzzle;
+    private readonly ChessPuzzleItem _chessPuzzle;
 
     public SKBitmap EmptyChessboard { get; }
 
@@ -55,18 +61,33 @@ public class ChessPuzzleEditorViewModel : EditorViewModel
         }
     }
 
+    private readonly StackHistory _history;
+
+    public ICommand UndoCommand { get; }
+    public ICommand RedoCommand { get; }
+    public KeyGesture UndoGesture { get; }
+    public KeyGesture RedoGesture { get; }
+
     public ChessPuzzleEditorViewModel(ChessPuzzleItem chessPuzzle, MainWindowViewModel window, ILogger log) : base(chessPuzzle, window, log)
     {
+        _history = new();
+
         _chessPuzzle = chessPuzzle;
         EmptyChessboard = ChessPuzzleItem.GetEmptyChessboard(Window.OpenProject.Grp);
 
         Pieces = new(_chessPuzzle.ChessPuzzle.Chessboard.Select((p, i) => new ChessPieceOnBoard(p, i, window.OpenProject, this)));
+
         _numMoves = _chessPuzzle.ChessPuzzle.NumMoves;
         _timeLimit = _chessPuzzle.ChessPuzzle.TimeLimit;
         _unknown08 = _chessPuzzle.ChessPuzzle.Unknown08;
+
+        UndoCommand = ReactiveCommand.Create(() => _history.Undo());
+        RedoCommand = ReactiveCommand.Create(() => _history.Redo());
+        UndoGesture = GuiExtensions.CreatePlatformAgnosticCtrlGesture(Key.Z);
+        RedoGesture = GuiExtensions.CreatePlatformAgnosticCtrlGesture(Key.Y);
     }
 
-    public void MovePiece(int currentIndex, int newIndex)
+    public void MovePiece(int currentIndex, int newIndex, bool withHistory = true)
     {
         if (newIndex < 0 || newIndex >= _chessPuzzle.ChessPuzzle.Chessboard.Length)
         {
@@ -78,6 +99,12 @@ public class ChessPuzzleEditorViewModel : EditorViewModel
         Pieces[newIndex].Move(newIndex);
         _chessPuzzle.ChessPuzzle.Chessboard = [.. Pieces.Select(p => p.Piece)];
         _chessPuzzle.UnsavedChanges = true;
+
+        if (withHistory)
+        {
+            _history.Undos.Push(new(() => MovePiece(newIndex, currentIndex, withHistory: false),
+                () => MovePiece(currentIndex, newIndex, withHistory: false), "Undo", "Redo"));
+        }
     }
 }
 

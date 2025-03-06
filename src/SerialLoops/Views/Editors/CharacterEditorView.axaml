@@ -15,6 +15,11 @@
     </UserControl.Resources>
 
     <Grid ColumnDefinitions="Auto,Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+        <Panel IsVisible="False">
+            <Button Command="{Binding UndoCommand}" HotKey="{Binding UndoGesture}"/>
+            <Button Command="{Binding RedoCommand}" HotKey="{Binding RedoGesture}"/>
+        </Panel>
+
         <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Character}"/>
         <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding CharacterName}"/>
 
