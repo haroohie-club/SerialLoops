@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:controls="using:SerialLoops.Controls"
         xmlns:toolbar="using:MiniToolbar.Avalonia"
+        xmlns:utility="clr-namespace:SerialLoops.Utility"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="SerialLoops.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
@@ -41,9 +42,13 @@
             </StackPanel>
             <StackPanel Grid.Row="0" HorizontalAlignment="Stretch">
                 <NativeMenuBar Name="MenuBar"/>
-                <Grid ColumnDefinitions="Auto,*">
-                    <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="20 0"
-                               Text="{Binding OpenProjectName}" />
+                <Grid ColumnDefinitions="Auto,*" Margin="10 0">
+                    <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
+                        <Image Source="{Binding OpenProjectIcon, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
+                               Width="24" Height="24" />
+                        <TextBlock VerticalAlignment="Center" Margin="10 0"
+                                   Text="{Binding OpenProjectName}" />
+                    </StackPanel>
                     <toolbar:Toolbar Grid.Row="0" Grid.Column="1" Name="ToolBar" Orientation="Horizontal"
                                      HorizontalAlignment="Right" DisplayMode="Compact" />
                 </Grid>

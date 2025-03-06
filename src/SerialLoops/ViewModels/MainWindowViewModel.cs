@@ -55,8 +55,21 @@ public partial class MainWindowViewModel : ViewModelBase
     public Size MinSize => new(769, 420);
     [Reactive]
     public Size ClientSize { get; set; } = new(1200, 800);
+
+    // Open project stuff
     [Reactive]
     public string OpenProjectName { get; set; }
+    private SKBitmap _openProjectIcon;
+    public SKBitmap OpenProjectIcon
+    {
+        get
+        {
+            SKBitmap preview = new(24, 24);
+            _openProjectIcon.ScalePixels(preview, SKSamplingOptions.Default);
+            return preview;
+        }
+        set => this.RaiseAndSetIfChanged(ref _openProjectIcon, value);
+    }
 
     public MainWindow Window { get; set; }
     public ProjectsCache ProjectsCache { get; set; }
@@ -245,6 +258,7 @@ public partial class MainWindowViewModel : ViewModelBase
             DataContext = new OpenProjectPanelViewModel(ItemExplorer, EditorTabs),
         };
         OpenProjectName = OpenProject.Name;
+        OpenProjectIcon = OpenProject.Settings.Icon;
 
         InitializeProjectMenu();
 
@@ -491,6 +505,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
         OpenProject = null;
         OpenProjectName = null;
+        OpenProjectIcon = null;
         EditorTabs = null;
         ItemExplorer = null;
         ToolBar.Items.Clear();
