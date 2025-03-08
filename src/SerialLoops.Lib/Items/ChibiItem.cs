@@ -74,14 +74,14 @@ public class ChibiItem : Item, IPreviewableGraphic
         UP_RIGHT = 3
     }
 
-    public static Direction CodeToDirection(string code)
+    public static string DirectionToCode(Direction direction)
     {
-        return code switch
+        return direction switch
         {
-            "BR" => Direction.DOWN_RIGHT,
-            "UL" => Direction.UP_LEFT,
-            "UR" => Direction.UP_RIGHT,
-            _ => Direction.DOWN_LEFT,
+            Direction.DOWN_LEFT => "_BL",
+            Direction.DOWN_RIGHT => "_BR",
+            Direction.UP_LEFT => "_UL",
+            _ => "_UR",
         };
     }
 
