@@ -120,7 +120,7 @@ public partial class AsmHackCreationDialogViewModel : ViewModelBase
         }
     }
 
-    [GeneratedRegex(@"#{{(?<name>\w+)}}")]
+    [GeneratedRegex(@"{{(?<name>\w+)}}")]
     private static partial Regex ParamRegex();
     [GeneratedRegex(@"(?<symbol>\w+):")]
     private static partial Regex AsmDefinedSymbolRegex();

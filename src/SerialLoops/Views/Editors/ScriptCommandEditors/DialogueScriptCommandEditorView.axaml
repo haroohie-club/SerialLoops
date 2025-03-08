@@ -20,11 +20,6 @@
                         <TextBlock Text="{Binding DisplayName, Converter={x:Static utility:SLConverters.CharacterNameCropConverter}}"/>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
-                <ComboBox.ItemContainerTheme>
-                    <ControlTheme TargetType="ComboBoxItem" x:DataType="items:CharacterItem" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
-                        <Setter Property="TextSearch.Text" Value="{Binding DisplayName, Converter={x:Static utility:SLConverters.CharacterNameCropConverter}}" />
-                    </ControlTheme>
-                </ComboBox.ItemContainerTheme>
             </ComboBox>
             <TextBox Name="DialogueTextBox" AcceptsReturn="True" Width="400" Height="100" Text="{Binding DialogueLine}"/>
         </StackPanel>
