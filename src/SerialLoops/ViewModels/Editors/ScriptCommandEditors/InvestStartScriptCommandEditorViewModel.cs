@@ -74,6 +74,7 @@ public class InvestStartScriptCommandEditorViewModel(
                     .Objects[Command.Index].Parameters[4] =
                 Script.Event.LabelsSection.Objects.First(l => l.Name.Replace("/", "").Equals(value.Name)).Id;
             this.RaisePropertyChanged();
+            Script.Refresh(ScriptEditor.Window.OpenProject, Log);
             Script.UnsavedChanges = true;
         }
     }

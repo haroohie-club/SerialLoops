@@ -19,7 +19,8 @@
 
         <StackPanel Orientation="Vertical" Margin="20 30" Spacing="10">
             <TextBox Width="300" Watermark="{x:Static assets:Strings.Template_Name}" Text="{Binding TemplateName}"/>
-            <TextBox Width="300" Height="75" AcceptsReturn="True" Text="{Binding TemplateDescription}" Watermark="{x:Static assets:Strings.Template_Description}"/>
+            <TextBox Width="300" Height="75" AcceptsReturn="True" Text="{Binding TemplateDescription}" Watermark="{x:Static assets:Strings.Template_Description}"
+                     TextWrapping="Wrap"/>
 
             <StackPanel Orientation="Horizontal" Spacing="5" Margin="20" HorizontalAlignment="Center">
                 <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}" CommandParameter="{Binding #GenTemplateDialog}" IsCancel="True"/>

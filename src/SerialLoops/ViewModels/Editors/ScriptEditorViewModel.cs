@@ -714,6 +714,7 @@ public class ScriptEditorViewModel : EditorViewModel
             section.SetCommands(_commands[section.Section]);
         }
         Source.ExpandAll();
+        Description.UnsavedChanges = true;
     }
 
     private async Task GenerateTemplate()
@@ -725,7 +726,7 @@ public class ScriptEditorViewModel : EditorViewModel
             return;
         }
 
-        Lib.IO.WriteStringFile(Path.Combine(_project.Config.ScriptTemplatesDirectory, $"{template.Name}.slscr"),
+        Lib.IO.WriteStringFile(Path.Combine(_project.Config.ScriptTemplatesDirectory, $"{template.Name.Replace("/", "-")}.slscr"),
             JsonSerializer.Serialize(template), _log);
         _project.Config.ScriptTemplates.Add(template);
     }
