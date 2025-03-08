@@ -26,10 +26,10 @@
         </ListBox>
 
         <StackPanel Orientation="Horizontal" Spacing="3" HorizontalAlignment="Right">
-            <Button Content="{x:Static assets:Strings.Add}" IsDefault="True"
-                    Command="{Binding AddCommand}" CommandParameter="{Binding #Dialog}"/>
             <Button Content="{x:Static assets:Strings.Cancel}" IsCancel="True"
                     Command="{Binding CancelCommand}" CommandParameter="{Binding #Dialog}"/>
+            <Button Content="{x:Static assets:Strings.Add}" IsDefault="True"
+                    Command="{Binding AddCommand}" CommandParameter="{Binding #Dialog}"/>
         </StackPanel>
     </StackPanel>
 </Window>

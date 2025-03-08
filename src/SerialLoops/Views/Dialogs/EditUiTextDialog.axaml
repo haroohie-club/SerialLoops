@@ -35,10 +35,10 @@
                 </ItemsRepeater>
             </ScrollViewer>
             <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="3">
-                <Button Content="{x:Static assets:Strings.Save}" Command="{Binding SaveCommand}"
-                        CommandParameter="{Binding #Dialog}" IsDefault="True" HorizontalAlignment="Right"/>
                 <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}"
                         CommandParameter="{Binding #Dialog}" IsCancel="True" HorizontalAlignment="Right"/>
+                <Button Content="{x:Static assets:Strings.Save}" Command="{Binding SaveCommand}"
+                        CommandParameter="{Binding #Dialog}" IsDefault="True" HorizontalAlignment="Right"/>
             </StackPanel>
         </Grid>
     </Panel>

@@ -45,11 +45,12 @@
             </CheckBox>
 
             <StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal" Spacing="3">
+
+                <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}"
+                        Margin="0,10" CommandParameter="{Binding #Dialog}" IsCancel="True" HorizontalAlignment="Center"/>
                 <Button Content="{x:Static assets:Strings.Import}" Command="{Binding ImportCommand}"
                         CommandParameter="{Binding #Dialog}" IsDefault="True"
                         Margin="0,10" IsEnabled="{Binding CanImport}" HorizontalAlignment="Center"/>
-                <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}"
-                        Margin="0,10" CommandParameter="{Binding #Dialog}" IsCancel="True" HorizontalAlignment="Center"/>
             </StackPanel>
         </Grid>
     </Panel>

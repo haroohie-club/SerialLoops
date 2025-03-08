@@ -52,12 +52,12 @@
             </ScrollViewer>
 
             <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="3">
-                <Button Content="{x:Static assets:Strings.Save}" Command="{Binding SaveCommand}"
-                        CommandParameter="{Binding #Dialog}" HorizontalAlignment="Right"
-                        IsDefault="True"/>
                 <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}"
                         CommandParameter="{Binding #Dialog}" HorizontalAlignment="Right"
                         IsCancel="True"/>
+                <Button Content="{x:Static assets:Strings.Save}" Command="{Binding SaveCommand}"
+                        CommandParameter="{Binding #Dialog}" HorizontalAlignment="Right"
+                        IsDefault="True"/>
             </StackPanel>
         </Grid>
     </Panel>

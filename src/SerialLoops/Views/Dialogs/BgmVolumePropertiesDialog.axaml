@@ -37,10 +37,10 @@
                         Width="{Binding Waveform.Width, Converter={StaticResource AdditionConverter},
                         ConverterParameter=105}">
                 <StackPanel Orientation="Horizontal" Spacing="3">
-                    <Button Content="{x:Static assets:Strings.Save}" Command="{Binding SaveCommand}"
-                            CommandParameter="{Binding #BgmVolumeDialog}" IsDefault="True"/>
                     <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}"
                             CommandParameter="{Binding #BgmVolumeDialog}" IsCancel="True"/>
+                    <Button Content="{x:Static assets:Strings.Save}" Command="{Binding SaveCommand}"
+                            CommandParameter="{Binding #BgmVolumeDialog}" IsDefault="True"/>
                 </StackPanel>
             </StackPanel>
         </StackPanel>

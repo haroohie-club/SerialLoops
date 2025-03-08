@@ -119,9 +119,9 @@
 
             <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Spacing="3">
                 <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}"
-                        CommandParameter="{Binding #Dialog}"/>
+                        CommandParameter="{Binding #Dialog}" IsCancel="True"/>
                 <Button Content="{x:Static assets:Strings.Save}" Command="{Binding SaveCommand}"
-                        CommandParameter="{Binding #Dialog}"/>
+                        CommandParameter="{Binding #Dialog}" IsDefault="True"/>
             </StackPanel>
         </Grid>
     </Panel>

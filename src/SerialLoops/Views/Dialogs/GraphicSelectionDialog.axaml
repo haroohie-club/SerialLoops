@@ -42,10 +42,10 @@
                 </StackPanel>
             </Grid>
             <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
-                <Button Content="{x:Static assets:Strings.Confirm}" Command="{Binding ConfirmCommand}"
-                        CommandParameter="{Binding #GraphicSelector}" IsDefault="True" />
                 <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}"
                         CommandParameter="{Binding #GraphicSelector}" IsCancel="True" />
+                <Button Content="{x:Static assets:Strings.Confirm}" Command="{Binding ConfirmCommand}"
+                        CommandParameter="{Binding #GraphicSelector}" IsDefault="True" />
             </StackPanel>
         </StackPanel>
     </Panel>

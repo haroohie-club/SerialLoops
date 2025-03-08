@@ -15,9 +15,13 @@
         x:DataType="vm:AboutDialogViewModel"
         x:Class="SerialLoops.Views.Dialogs.AboutDialog"
         Icon="/Assets/serial-loops.ico"
-        Title="{x:Static assets:Strings.About}">
+        Title="{x:Static assets:Strings.About}"
+        Name="Dialog">
     <Panel>
         <controls:AcrylicBorderHandler/>
+        <StackPanel IsVisible="False">
+            <Button IsCancel="True" Command="{Binding CloseCommand}" CommandParameter="{Binding #Dialog}"/>
+        </StackPanel>
 
         <TabControl Margin="5 30">
             <TabControl.Items>

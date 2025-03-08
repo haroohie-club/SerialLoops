@@ -70,9 +70,9 @@
                         ValueChanged="EndSlider_ValueChanged"/>
                 <StackPanel Orientation="Vertical" Spacing="3" HorizontalAlignment="Right" Width="{Binding Waveform.Width}">
                     <StackPanel Orientation="Horizontal" Spacing="3">
-                        <Button Content="{x:Static assets:Strings.Save}" IsDefault="True" Command="{Binding SaveCommand}"
-                                CommandParameter="{Binding #BgmLoopPropsDialog}"/>
                         <Button Content="{x:Static assets:Strings.Cancel}" IsCancel="True" Command="{Binding CancelCommand}"
+                                CommandParameter="{Binding #BgmLoopPropsDialog}"/>
+                        <Button Content="{x:Static assets:Strings.Save}" IsDefault="True" Command="{Binding SaveCommand}"
                                 CommandParameter="{Binding #BgmLoopPropsDialog}"/>
                     </StackPanel>
                 </StackPanel>

@@ -181,8 +181,8 @@ public class ScriptEditorViewModel : EditorViewModel
 
         MapCharactersSubEditorVm = new(_script, this);
 
-        InteractableObjects.AddRange(_script.Event.InteractableObjectsSection.Objects.Where(o => o.ObjectId > 0).Select(o => new ReactiveInteractableObject(o,
-            MapCharactersSubEditorVm.Maps.ToArray(), _script, this)));
+        InteractableObjects.AddRange(_script.Event.InteractableObjectsSection?.Objects.Where(o => o.ObjectId > 0).Select(o => new ReactiveInteractableObject(o,
+            MapCharactersSubEditorVm.Maps.ToArray(), _script, this)) ?? []);
         UnusedInteractableObjects.AddRange(MapCharactersSubEditorVm.Maps.SelectMany(m => m.Map.InteractableObjects)
             .Where(o => o.ObjectId > 0 && InteractableObjects.All(i => i.InteractableObject.ObjectId != o.ObjectId))
             .Select(o => new ReactiveInteractableObject(new() { ObjectId = (short)o.ObjectId },  MapCharactersSubEditorVm.Maps.ToArray(), _script, this)));
@@ -777,11 +777,10 @@ public class ScriptEditorViewModel : EditorViewModel
         {
             return;
         }
-        _script.Event.InteractableObjectsSection.Objects.Remove(SelectedInteractableObject.InteractableObject);
-        InteractableObjects.Remove(SelectedInteractableObject);
         SelectedInteractableObject.InteractSection = null;
         UnusedInteractableObjects.Add(SelectedInteractableObject);
-        SelectedInteractableObject = null;
+        _script.Event.InteractableObjectsSection.Objects.Remove(SelectedInteractableObject.InteractableObject);
+        InteractableObjects.Remove(SelectedInteractableObject);
         _script.UnsavedChanges = true;
         _script.Refresh(_project, _log);
         UpdatePreview();
@@ -921,7 +920,7 @@ public class ReactiveInteractableObject(
         set
         {
             InteractableObject.ScriptBlock = script.Event.LabelsSection.Objects
-                .First(l => l.Name.Replace("/", "").Equals(value.Name)).Id;
+                .FirstOrDefault(l => l.Name.Replace("/", "").Equals(value?.Name))?.Id ?? 0;
             this.RaisePropertyChanged();
             script.Refresh(scriptEditor.Window.OpenProject, scriptEditor.Window.Log);
             scriptEditor.UpdatePreview();

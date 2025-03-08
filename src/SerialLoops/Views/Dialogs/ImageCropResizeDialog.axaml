@@ -73,8 +73,10 @@
                 </StackPanel>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Spacing="3" Margin="5">
-                <Button Content="{x:Static assets:Strings.Save}" Command="{Binding SaveCommand}" CommandParameter="{Binding ElementName=IcrDialog}"/>
-                <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}" CommandParameter="{Binding ElementName=IcrDialog}"/>
+                <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}"
+                        CommandParameter="{Binding ElementName=IcrDialog}" IsCancel="True"/>
+                <Button Content="{x:Static assets:Strings.Save}" Command="{Binding SaveCommand}"
+                        CommandParameter="{Binding ElementName=IcrDialog}" IsDefault="True"/>
             </StackPanel>
         </StackPanel>
     </Panel>

@@ -22,8 +22,6 @@ public class ItemReferencesDialogViewModel : ViewModelBase
 {
     private readonly ILogger _log;
     private Project _project;
-    [Reactive]
-    public KeyGesture CloseHotKey { get; private set; }
 
     [Reactive]
     public string FoundReferencesLabel { get; private set; } = string.Empty;
@@ -71,7 +69,6 @@ public class ItemReferencesDialogViewModel : ViewModelBase
         FoundReferencesLabel = string.Format(Strings._0__results_found, Items.Count);
         OpenItemCommand = ReactiveCommand.Create<TreeDataGrid>(OpenItem);
         CloseCommand = ReactiveCommand.Create<ItemReferencesDialog>(dialog => dialog.Close());
-        CloseHotKey = new(Key.Escape);
     }
 
     public void OpenItem(TreeDataGrid viewer)
