@@ -3123,4 +3123,7 @@ This action is irreversible.</value>
 To make this tooling more useful, we highly recommend applying the
 "Sensible Interactable Object Selection" hack by going to Tools → Apply ASM Hacks.</value>
   </data>
+  <data name="None" xml:space="preserve">
+    <value>None</value><comment>Used in combo boxes when no item is selected</comment>
+  </data>
 </root>

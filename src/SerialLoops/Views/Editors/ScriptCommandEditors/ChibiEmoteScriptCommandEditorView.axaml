@@ -9,7 +9,7 @@
              x:DataType="vm:ChibiEmoteScriptCommandEditorViewModel"
              x:Class="SerialLoops.Views.Editors.ScriptCommandEditors.ChibiEmoteScriptCommandEditorView">
     <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,Auto">
-        <TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static assets:Strings.Chibi}"/>
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static assets:Strings.Chibi}" VerticalAlignment="Center"/>
         <ComboBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding Chibis}" SelectedItem="{Binding Chibi}">
             <ComboBox.ItemTemplate>
                 <DataTemplate DataType="items:ChibiItem">
@@ -23,7 +23,7 @@
             </ComboBox.ItemContainerTheme>
         </ComboBox>
 
-        <TextBlock Grid.Row="1" Grid.Column="0" Text="{x:Static assets:Strings.Emote}"/>
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="{x:Static assets:Strings.Emote}" VerticalAlignment="Center"/>
         <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding ChibiEmotes}" SelectedItem="{Binding ChibiEmote}">
             <ComboBox.ItemTemplate>
                 <DataTemplate DataType="vm:LocalizedChibiEmote">

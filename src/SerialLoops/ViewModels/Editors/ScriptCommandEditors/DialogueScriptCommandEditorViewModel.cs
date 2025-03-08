@@ -39,7 +39,7 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
         _spriteEntranceTransition = new(((SpriteEntranceScriptParameter)command.Parameters[2]).EntranceTransition);
         _spriteExitTransition = new(((SpriteExitScriptParameter)command.Parameters[3]).ExitTransition);
         _spriteShakeEffect = new(((SpriteShakeScriptParameter)command.Parameters[4]).ShakeEffect);
-        VoicedLines = new(_window.OpenProject.Items.Where(i => i.Type == ItemDescription.ItemType.Voice).Cast<VoicedLineItem>());
+        VoicedLines = new(new List<VoicedLineItem> { null }.Concat(_window.OpenProject.Items.Where(i => i.Type == ItemDescription.ItemType.Voice).Cast<VoicedLineItem>()));
         _voicedLine = ((VoicedLineScriptParameter)command.Parameters[5]).VoiceLine;
         _textVoiceFont = ((DialoguePropertyScriptParameter)command.Parameters[6]).Character;
         _textSpeed = ((DialoguePropertyScriptParameter)command.Parameters[7]).Character;
@@ -215,7 +215,7 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
             this.RaiseAndSetIfChanged(ref _voicedLine, value);
             ((VoicedLineScriptParameter)Command.Parameters[5]).VoiceLine = _voicedLine;
             Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
-                .Objects[Command.Index].Parameters[5] = (short)_voicedLine.Index;
+                .Objects[Command.Index].Parameters[5] = (short)(_voicedLine?.Index ?? 0);
             Script.UnsavedChanges = true;
         }
     }

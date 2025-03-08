@@ -87,12 +87,12 @@
             <ComboBox ItemsSource="{Binding VoicedLines}" SelectedItem="{Binding VoicedLine}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate DataType="items:VoicedLineItem">
-                        <TextBlock Text="{Binding DisplayName}"/>
+                        <TextBlock Text="{Binding DisplayName, TargetNullValue={x:Static assets:Strings.None}}"/>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
                 <ComboBox.ItemContainerTheme>
                     <ControlTheme TargetType="ComboBoxItem" x:DataType="items:VoicedLineItem" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
-                        <Setter Property="TextSearch.Text" Value="{Binding DisplayName}" />
+                        <Setter Property="TextSearch.Text" Value="{Binding DisplayName, TargetNullValue={x:Static assets:Strings.None}}" />
                     </ControlTheme>
                 </ComboBox.ItemContainerTheme>
             </ComboBox>
