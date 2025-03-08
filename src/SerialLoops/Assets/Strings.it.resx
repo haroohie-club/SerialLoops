@@ -387,9 +387,6 @@
   <data name="Extract" xml:space="preserve">
     <value>Estratto</value>
   </data>
-  <data name="Episode 5" xml:space="preserve">
-    <value>Episodio 5</value>
-  </data>
   <data name="Failed to load voice file: file invalid." xml:space="preserve">
     <value>Errore nel caricare il file voce: Formato non valido.</value>
   </data>
@@ -407,9 +404,6 @@
   </data>
   <data name="Create New Project" xml:space="preserve">
     <value>Crea un nuovo progetto</value>
-  </data>
-  <data name="Episode 3" xml:space="preserve">
-    <value>Episodio 3</value>
   </data>
   <data name="Episode 5 title" xml:space="preserve">
     <value>Titolo del 5' episodio</value>
@@ -474,12 +468,6 @@
   <data name="Failed to start emulator" xml:space="preserve">
     <value>Impossibile avviare l'emulatore</value>
   </data>
-  <data name="Episode 1" xml:space="preserve">
-    <value>Episodio 1</value>
-  </data>
-  <data name="Episode 2" xml:space="preserve">
-    <value>Episodio 2</value>
-  </data>
   <data name="Failed to load BGM file: file not found." xml:space="preserve">
     <value>Errore caricare file BGM: File non trovato.</value>
   </data>
@@ -506,9 +494,6 @@
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Cancella</value>
-  </data>
-  <data name="Episode 4" xml:space="preserve">
-    <value>Episodio 4</value>
   </data>
   <data name="Can't rename this item directly -- open it to rename it!" xml:space="preserve">
     <value>Non è possibile rinominare direttamente questo elemento: aprirlo per rinominarlo!</value>

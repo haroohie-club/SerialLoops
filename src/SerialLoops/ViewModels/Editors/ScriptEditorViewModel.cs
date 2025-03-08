@@ -142,6 +142,7 @@ public class ScriptEditorViewModel : EditorViewModel
     public ObservableCollection<ReactiveInteractableObject> UnusedInteractableObjects { get; } = [];
 
 
+
     public ScriptEditorViewModel(ScriptItem script, MainWindowViewModel window, ILogger log) : base(script, window, log)
     {
         _script = script;
@@ -273,6 +274,14 @@ public class ScriptEditorViewModel : EditorViewModel
                 CommandVerb.CHESS_CLEAR_ANNOTATIONS => new EmptyScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.CHESS_RESET => new EmptyScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.SCENE_GOTO_CHESS => new SceneGotoScriptCommandEditorViewModel(_selectedCommand, this, _log, Window),
+                CommandVerb.EPHEADER => new EpheaderScriptCommandEditorViewModel(_selectedCommand, this, _log),
+                CommandVerb.NOOP3 => new EmptyScriptCommandEditorViewModel(_selectedCommand, this, _log),
+                CommandVerb.CONFETTI => new ConfettiScriptCommandEditorViewModel(_selectedCommand, this, _log),
+                CommandVerb.BG_DISPCG => new BgDispCgScriptCommandEditorViewModel(_selectedCommand, this, _log),
+                CommandVerb.BG_SCROLL => new BgScrollScriptCommandEditorViewModel(_selectedCommand, this, _log),
+                CommandVerb.OP_MODE => new EmptyScriptCommandEditorViewModel(_selectedCommand, this, _log),
+                CommandVerb.WAIT_CANCEL => new WaitCancelScriptCommandEditorViewModel(_selectedCommand, this, _log),
+                CommandVerb.BG_REVERT => new EmptyScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.BG_DISP2 => new BgDispScriptCommandEditorViewModel(_selectedCommand, this, _log, Window),
                 _ => new(_selectedCommand, this, _log),
             };
@@ -928,4 +937,10 @@ public class ReactiveInteractableObject(
             script.UnsavedChanges = true;
         }
     }
+}
+
+public class ReactiveChoice(ChoicesSectionEntry choice, ScriptItem script, ScriptEditorViewModel scriptEditor) : ReactiveObject
+{
+    public ChoicesSectionEntry Choice { get; } = choice;
+    
 }

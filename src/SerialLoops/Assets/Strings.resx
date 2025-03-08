@@ -744,17 +744,11 @@ This action is irreversible.</value>
   <data name="Enter/Exit" xml:space="preserve">
     <value>Enter/Exit</value>
   </data>
-  <data name="Episode 1" xml:space="preserve">
-    <value>Episode 1</value>
-  </data>
   <data name="Episode 1 ticker tape" xml:space="preserve">
     <value>Episode 1 ticker tape</value>
   </data>
   <data name="Episode 1 title" xml:space="preserve">
     <value>Episode 1 title</value>
-  </data>
-  <data name="Episode 2" xml:space="preserve">
-    <value>Episode 2</value>
   </data>
   <data name="Episode 2 ticker tape" xml:space="preserve">
     <value>Episode 2 ticker tape</value>
@@ -762,26 +756,17 @@ This action is irreversible.</value>
   <data name="Episode 2 title" xml:space="preserve">
     <value>Episode 2 title</value>
   </data>
-  <data name="Episode 3" xml:space="preserve">
-    <value>Episode 3</value>
-  </data>
   <data name="Episode 3 ticker tape" xml:space="preserve">
     <value>Episode 3 ticker tape</value>
   </data>
   <data name="Episode 3 title" xml:space="preserve">
     <value>Episode 3 title</value>
   </data>
-  <data name="Episode 4" xml:space="preserve">
-    <value>Episode 4</value>
-  </data>
   <data name="Episode 4 ticker tape" xml:space="preserve">
     <value>Episode 4 ticker tape</value>
   </data>
   <data name="Episode 4 title" xml:space="preserve">
     <value>Episode 4 title</value>
-  </data>
-  <data name="Episode 5" xml:space="preserve">
-    <value>Episode 5</value>
   </data>
   <data name="Episode 5 ticker tape" xml:space="preserve">
     <value>Episode 5 ticker tape</value>
@@ -2815,13 +2800,13 @@ This action is irreversible.</value>
   <data name="Exit" xml:space="preserve">
     <value>Exit</value><comment>Used as a verb here</comment>
   </data>
-  <data name="Left" xml:space="preserve">
+  <data name="LEFT" xml:space="preserve">
     <value>Left</value><comment>As in the direction or side of screen</comment>
   </data>
   <data name="Center" xml:space="preserve">
     <value>Center</value><comment>As in the position on the screen</comment>
   </data>
-  <data name="Right" xml:space="preserve">
+  <data name="RIGHT" xml:space="preserve">
     <value>Right</value><comment>As in the position on the screen</comment>
   </data>
   <data name="Slide" xml:space="preserve">
@@ -3122,5 +3107,35 @@ This action is irreversible.</value>
     <value>By default, the game ignores the IDs of these objects and applies them in order.
 To make this tooling more useful, we highly recommend applying the
 "Sensible Interactable Object Selection" hack by going to Tools → Apply ASM Hacks.</value>
+  </data>
+  <data name="EPISODE_1" xml:space="preserve">
+    <value>Episode 1</value>
+  </data>
+  <data name="EPISODE_2" xml:space="preserve">
+    <value>Episode 2</value>
+  </data>
+  <data name="EPISODE_3" xml:space="preserve">
+    <value>Episode 3</value>
+  </data>
+  <data name="EPISODE_4" xml:space="preserve">
+    <value>Episode 4</value>
+  </data>
+  <data name="EPISODE_5" xml:space="preserve">
+    <value>Episode 5</value>
+  </data>
+  <data name="EPILOGUE" xml:space="preserve">
+    <value>Epilogue</value>
+  </data>
+  <data name="DOWN" xml:space="preserve">
+    <value>Down</value>
+  </data>
+  <data name="UP" xml:space="preserve">
+    <value>Up</value>
+  </data>
+  <data name="DIAGONAL_RIGHT_DOWN" xml:space="preserve">
+    <value>Diagonal Down Right</value>
+  </data>
+  <data name="DIAGONAL_LEFT_UP" xml:space="preserve">
+    <value>Diagonal Up Left</value>
   </data>
 </root>

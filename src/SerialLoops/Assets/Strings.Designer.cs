@@ -2347,6 +2347,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Epilogue.
+        /// </summary>
+        public static string EPILOGUE {
+            get {
+                return ResourceManager.GetString("EPILOGUE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Episode: .
         /// </summary>
         public static string Episode_ {
@@ -2367,9 +2376,9 @@ namespace SerialLoops.Assets {
         /// <summary>
         ///   Looks up a localized string similar to Episode 1.
         /// </summary>
-        public static string Episode_1 {
+        public static string EPISODE_1 {
             get {
-                return ResourceManager.GetString("Episode 1", resourceCulture);
+                return ResourceManager.GetString("EPISODE_1", resourceCulture);
             }
         }
         
@@ -2394,9 +2403,9 @@ namespace SerialLoops.Assets {
         /// <summary>
         ///   Looks up a localized string similar to Episode 2.
         /// </summary>
-        public static string Episode_2 {
+        public static string EPISODE_2 {
             get {
-                return ResourceManager.GetString("Episode 2", resourceCulture);
+                return ResourceManager.GetString("EPISODE_2", resourceCulture);
             }
         }
         
@@ -2421,9 +2430,9 @@ namespace SerialLoops.Assets {
         /// <summary>
         ///   Looks up a localized string similar to Episode 3.
         /// </summary>
-        public static string Episode_3 {
+        public static string EPISODE_3 {
             get {
-                return ResourceManager.GetString("Episode 3", resourceCulture);
+                return ResourceManager.GetString("EPISODE_3", resourceCulture);
             }
         }
         
@@ -2448,9 +2457,9 @@ namespace SerialLoops.Assets {
         /// <summary>
         ///   Looks up a localized string similar to Episode 4.
         /// </summary>
-        public static string Episode_4 {
+        public static string EPISODE_4 {
             get {
-                return ResourceManager.GetString("Episode 4", resourceCulture);
+                return ResourceManager.GetString("EPISODE_4", resourceCulture);
             }
         }
         
@@ -2475,9 +2484,9 @@ namespace SerialLoops.Assets {
         /// <summary>
         ///   Looks up a localized string similar to Episode 5.
         /// </summary>
-        public static string Episode_5 {
+        public static string EPISODE_5 {
             get {
-                return ResourceManager.GetString("Episode 5", resourceCulture);
+                return ResourceManager.GetString("EPISODE_5", resourceCulture);
             }
         }
         
@@ -4445,7 +4454,7 @@ namespace SerialLoops.Assets {
         /// </summary>
         public static string Left {
             get {
-                return ResourceManager.GetString("Left", resourceCulture);
+                return ResourceManager.GetString("LEFT", resourceCulture);
             }
         }
         
@@ -6391,7 +6400,7 @@ namespace SerialLoops.Assets {
         /// </summary>
         public static string Right {
             get {
-                return ResourceManager.GetString("Right", resourceCulture);
+                return ResourceManager.GetString("RIGHT", resourceCulture);
             }
         }
         

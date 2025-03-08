@@ -107,7 +107,9 @@
                     </TabItem>
 
                     <TabItem Header="{x:Static assets:Strings.Choices}">
+                        <Grid>
 
+                        </Grid>
                     </TabItem>
 
                     <TabItem Header="{x:Static assets:Strings.Map_Characters}">
