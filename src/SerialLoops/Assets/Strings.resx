@@ -3138,4 +3138,7 @@ To make this tooling more useful, we highly recommend applying the
   <data name="DIAGONAL_LEFT_UP" xml:space="preserve">
     <value>Diagonal Up Left</value>
   </data>
+  <data name="AddChoice" xml:space="preserve">
+    <value>Add Choice</value>
+  </data>
 </root>
