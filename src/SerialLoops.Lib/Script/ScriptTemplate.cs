@@ -44,6 +44,20 @@ public class ScriptTemplate
                 script.Event.NumSections++;
             }
         }
+
+        // Insert any missing conditionals
+        int conditionalInsertLocation = script.Event.ConditionalsSection.Objects.Count > 0
+            ? script.Event.ConditionalsSection.Objects.Count - 1
+            : 0;
+        foreach (TemplateScriptParameter conditionalParam in Sections.SelectMany(s =>
+                     s.Commands.SelectMany(c =>
+                         c.Parameters.Where(p => p.ParameterType == ScriptParameter.ParameterType.CONDITIONAL))))
+        {
+            if (!script.Event.ConditionalsSection.Objects.Contains(conditionalParam.Value))
+            {
+                script.Event.ConditionalsSection.Objects.Insert(conditionalInsertLocation++, conditionalParam.Value);
+            }
+        }
         // We add the sections first and then do it a second time in order to allow ScriptSectionParameters to be able to find their sections
         foreach (TemplateSection section in Sections)
         {
