@@ -29,7 +29,7 @@ public class AsmHack : ReactiveObject
                 using FileStream arm9 = File.OpenRead(Path.Combine(project.IterativeDirectory, "rom", "arm9.bin"));
                 if (site.Repl)
                 {
-                    using FileStream origArm9 = File.OpenRead(Path.Combine(project.BaseDirectory, "original", "arm9.bin"));
+                    using FileStream origArm9 = File.OpenRead(Path.Combine(project.BaseDirectory, "src", "arm9.bin"));
                     origArm9.Seek(site.Offset, SeekOrigin.Begin);
                     arm9.Seek(site.Offset, SeekOrigin.Begin);
                     byte[] origBytes = new byte[4];
@@ -49,7 +49,7 @@ public class AsmHack : ReactiveObject
                 using FileStream overlay = File.OpenRead(Path.Combine(project.IterativeDirectory, "rom", "overlay", $"main_{int.Parse(site.Code):X4}.bin"));
                 if (site.Repl)
                 {
-                    using FileStream origOvl = File.OpenRead(Path.Combine(project.BaseDirectory, "original", "arm9.bin"));
+                    using FileStream origOvl = File.OpenRead(Path.Combine(project.BaseDirectory, "src", "arm9.bin"));
                     origOvl.Seek(site.Offset, SeekOrigin.Begin);
                     overlay.Seek(site.Offset, SeekOrigin.Begin);
                     byte[] origBytes = new byte[4];
@@ -101,6 +101,11 @@ public class AsmHack : ReactiveObject
             {
                 File.Delete(fileToDelete);
                 oneSuccess = true;
+                if (Path.GetFileNameWithoutExtension(fileToDelete) ==
+                    Path.GetFileName(Path.GetDirectoryName(fileToDelete)))
+                {
+                    Directory.Delete(Path.GetDirectoryName(fileToDelete)!);
+                }
             }
         }
         // If there's at least one success, we assume that an older version of the hack was applied and we've now rolled it back
