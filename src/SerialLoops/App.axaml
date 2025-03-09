@@ -65,7 +65,7 @@
         <OnPlatform>
             <OnPlatform.Windows>
                 <Style Selector="NativeMenuBar">
-                    <Setter Property="Margin" Value="10 5 0 0"/>
+                    <Setter Property="Margin" Value="5 5 0 0"/>
                 </Style>
             </OnPlatform.Windows>
             <OnPlatform.Default>
@@ -206,7 +206,7 @@
                     <SolidColorBrush x:Key="DisabledLinkColor">#77000000</SolidColorBrush>
                     <SolidColorBrush x:Key="GroupLineColor">#55000000</SolidColorBrush>
                     <SolidColorBrush x:Key="AccentColor">#CCCCCC</SolidColorBrush>
-                    <SolidColorBrush x:Key="ToolbarTextColor">#000000</SolidColorBrush>
+                    <SolidColorBrush x:Key="ToolbarTextColor">Transparent</SolidColorBrush>
                     <SolidColorBrush x:Key="ToolbarBorderColor">Transparent</SolidColorBrush>
                     <SolidColorBrush x:Key="ToolbarBackgroundColor">Transparent</SolidColorBrush>
                     <Color x:Key="CropResizeOverlayColor">#55000000</Color>
@@ -232,7 +232,7 @@
                     <SolidColorBrush x:Key="DisabledLinkColor">Gray</SolidColorBrush>
                     <SolidColorBrush x:Key="GroupLineColor">WhiteSmoke</SolidColorBrush>
                     <SolidColorBrush x:Key="AccentColor">#222222</SolidColorBrush>
-                    <SolidColorBrush x:Key="ToolbarTextColor">WhiteSmoke</SolidColorBrush>
+                    <SolidColorBrush x:Key="ToolbarTextColor">Transparent</SolidColorBrush>
                     <SolidColorBrush x:Key="ToolbarBorderColor">Transparent</SolidColorBrush>
                     <SolidColorBrush x:Key="ToolbarBackgroundColor">Transparent</SolidColorBrush>
                     <Color x:Key="CropResizeOverlayColor">#AAFFFFFF</Color>
