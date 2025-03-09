@@ -3126,4 +3126,8 @@ To make this tooling more useful, we highly recommend applying the
   <data name="None" xml:space="preserve">
     <value>None</value><comment>Used in combo boxes when no item is selected</comment>
   </data>
+  <data name="UnknownHackFailedMessage" xml:space="preserve">
+    <value>A hack failed, but we weren't able to determine which one. Take a look at the logs for more information.
+All hacks have been rolled back to preserve state.</value>
+  </data>
 </root>

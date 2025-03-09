@@ -34,7 +34,7 @@ public class AsmHacksDialogViewModel : ViewModelBase
     private ILogger _log;
     private Project _project;
     public Config Configuration { get; set; }
-    private Dictionary<HackFile, SelectedHackParameter[]> _hackParameters { get; set; } = [];
+    private Dictionary<HackFile, SelectedHackParameter[]> _hackParameters = [];
     [Reactive]
     public AsmHack SelectedHack { get; set; }
     public ICommand HackChangedCommand { get; set; }

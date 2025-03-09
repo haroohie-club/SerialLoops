@@ -8391,6 +8391,16 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A hack failed, but we weren&apos;t able to determine which one. Take a look at the logs for more information.
+        ///All hacks have been rolled back to preserve state..
+        /// </summary>
+        public static string UnknownHackFailedMessage {
+            get {
+                return ResourceManager.GetString("UnknownHackFailedMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unseen Only.
         /// </summary>
         public static string Unseen_Only {

@@ -95,7 +95,12 @@ public partial class AsmHackCreationDialogViewModel : ViewModelBase
                         continue;
                     }
                     // If it's overlay code, temporarily set it to overlay 1 until we can ask the user which overlay it belongs to
-                    injectionSites.Add(new() { Code = (injectionSiteAddress < 0x020C7660 ? "ARM9" : "01"),  Location = injectionSite });
+                    injectionSites.Add(new()
+                    {
+                        Code = (injectionSiteAddress < 0x020C7660 ? "ARM9" : "01"),
+                        Repl =  match.Groups["type"].Value.Equals("repl"),
+                        Location = injectionSite,
+                    });
                 }
             }
 
@@ -130,7 +135,7 @@ public partial class AsmHackCreationDialogViewModel : ViewModelBase
     private static partial Regex CUndefinedSymbolRegex();
     [GeneratedRegex(@"(?:\w[\w\[\]\*]*) \*?(?<symbol>\w+)\(")]
     private static partial Regex CSymbolRegex();
-    [GeneratedRegex(@"ahook_(?<injectionSite>\w{7,8}):")]
+    [GeneratedRegex(@"a(?<type>hook|repl)_(?<injectionSite>\w{7,8}):")]
     private static partial Regex InjectionSitesRegex();
 }
 

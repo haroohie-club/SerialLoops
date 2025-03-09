@@ -27,21 +27,41 @@ public class AsmHack : ReactiveObject
             if (site.Code.Equals("ARM9"))
             {
                 using FileStream arm9 = File.OpenRead(Path.Combine(project.IterativeDirectory, "rom", "arm9.bin"));
-                arm9.Seek(site.Offset + 3, SeekOrigin.Begin);
-                // All BL functions start with 0xEB
-                if (arm9.ReadByte() == 0xEB)
+                if (site.Repl)
                 {
-                    return true;
+                    using FileStream origArm9 = File.OpenRead(Path.Combine(project.BaseDirectory, "original", "arm9.bin"));
+                    origArm9.Seek(site.Offset, SeekOrigin.Begin);
+                    arm9.Seek(site.Offset, SeekOrigin.Begin);
+                    byte[] origBytes = new byte[4];
+                    byte[] newBytes = new byte[4];
+                    origArm9.ReadExactly(origBytes, 0, 4);
+                    arm9.ReadExactly(newBytes, 0, 4);
+                    return HaruhiChokuretsuLib.Util.IO.ReadInt(origBytes, 0) !=
+                           HaruhiChokuretsuLib.Util.IO.ReadInt(newBytes, 0);
                 }
+
+                // All BL functions start with 0xEB
+                arm9.Seek(site.Offset + 3, SeekOrigin.Begin);
+                return arm9.ReadByte() == 0xEB;
             }
             else
             {
                 using FileStream overlay = File.OpenRead(Path.Combine(project.IterativeDirectory, "rom", "overlay", $"main_{int.Parse(site.Code):X4}.bin"));
-                overlay.Seek(site.Offset + 3, SeekOrigin.Begin);
-                if (overlay.ReadByte() == 0xEB)
+                if (site.Repl)
                 {
-                    return true;
+                    using FileStream origOvl = File.OpenRead(Path.Combine(project.BaseDirectory, "original", "arm9.bin"));
+                    origOvl.Seek(site.Offset, SeekOrigin.Begin);
+                    overlay.Seek(site.Offset, SeekOrigin.Begin);
+                    byte[] origBytes = new byte[4];
+                    byte[] newBytes = new byte[4];
+                    origOvl.ReadExactly(origBytes, 0, 4);
+                    overlay.ReadExactly(newBytes, 0, 4);
+                    return HaruhiChokuretsuLib.Util.IO.ReadInt(origBytes, 0) !=
+                           HaruhiChokuretsuLib.Util.IO.ReadInt(newBytes, 0);
                 }
+
+                overlay.Seek(site.Offset + 3, SeekOrigin.Begin);
+                return overlay.ReadByte() == 0xEB;
             }
         }
         return false;
@@ -115,6 +135,7 @@ public class InjectionSite
 {
     [JsonIgnore]
     public uint Offset { get; set; }
+    public bool Repl { get; set; }
     public string Code { get; set; }
     public string Location
     {

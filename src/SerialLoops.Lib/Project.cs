@@ -1113,6 +1113,13 @@ public partial class Project
                 NdsProjectFile.ConvertProjectFile(Path.Combine(config.ProjectsDirectory, project.Name, "base", "original", $"{project.Name}.xml"));
             }
 
+            // If we detect that the arm9.bin is missing from the original directory, we copy it there
+            if (!File.Exists(Path.Combine(config.ProjectsDirectory, project.Name, "base", "original", "arm9.bin")))
+            {
+                File.Copy(Path.Combine(config.ProjectsDirectory, project.Name, "base", "rom", "arm9.bin"),
+                    Path.Combine(config.ProjectsDirectory, project.Name, "base", "original", "arm9.bin"));
+            }
+
             LoadProjectResult result = project.Load(config, log, tracker);
             if (result.State == LoadProjectState.LOOSELEAF_FILES)
             {

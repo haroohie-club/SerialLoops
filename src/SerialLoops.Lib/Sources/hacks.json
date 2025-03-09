@@ -5,10 +5,12 @@
         "InjectionSites": [
             {
                 "Code": "01",
+                "Repl": false,
                 "Location": "020C7888"
             },
             {
                 "Code": "02",
+                "Repl": false,
                 "Location": "020C77FC"
             }
         ],
@@ -33,6 +35,7 @@
         "InjectionSites": [
             {
                 "Code": "ARM9",
+                "Repl": false,
                 "Location": "0205F180"
             }
         ],
@@ -78,11 +81,28 @@
         "InjectionSites": [
             {
                 "Code": "ARM9",
+                "Repl": false,
                 "Location": "0202293C"
             },
             {
                 "Code": "ARM9",
+                "Repl": false,
                 "Location": "02022944"
+            },
+            {
+                "Code": "ARM9",
+                "Repl": true,
+                "Location": "2022794"
+            },
+            {
+                "Code": "ARM9",
+                "Repl": true,
+                "Location": "202279C"
+            },
+            {
+                "Code": "ARM9",
+                "Repl": true,
+                "Location": "2078DB0"
             }
         ],
         "Files": [
@@ -124,10 +144,12 @@
         "InjectionSites": [
             {
                 "Code": "ARM9",
+                "Repl": false,
                 "Location": "02066678"
             },
             {
                 "Code": "ARM9",
+                "Repl": false,
                 "Location": "020666B0"
             }
         ],
@@ -137,6 +159,60 @@
                 "Destination": "source/interactableObjById_asm.s",
                 "Symbols": [],
                 "Parameters": []
+            }
+        ]
+    },
+    {
+        "Name": "Change Monologue Text Color",
+        "Description": "Changes the monologue text color to one of the other built in colors.",
+        "InjectionSites": [
+            {
+                "Code": "ARM9",
+                "Repl": true,
+                "Location": "0208EFBB"
+            }
+        ],
+        "Files": [
+            {
+                "File": "0208EFBB.s",
+                "Destination": "replSource/0208EFBB/0208EFBB.s",
+                "Symbols": [],
+                "Parameters": [
+                    {
+                        "Name": "newColorCode",
+                        "DescriptiveName": "New Color",
+                        "Values": [
+                            {
+                                "Name": "White",
+                                "Value": "30"
+                            },
+                            {
+                                "Name": "Off-White",
+                                "Value": "32"
+                            },
+                            {
+                                "Name": "Gray",
+                                "Value": "33"
+                            },
+                            {
+                                "Name": "Lavendar",
+                                "Value": "34"
+                            },
+                            {
+                                "Name": "Red",
+                                "Value": "35"
+                            },
+                            {
+                                "Name": "Faded Gray",
+                                "Value": "36"
+                            },
+                            {
+                                "Name": "Black",
+                                "Value": "37"
+                            }
+                        ]
+                    }
+                ]
             }
         ]
     }
