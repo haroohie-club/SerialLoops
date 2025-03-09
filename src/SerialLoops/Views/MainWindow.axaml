@@ -42,12 +42,12 @@
             </StackPanel>
             <StackPanel Grid.Row="0" HorizontalAlignment="Stretch">
                 <NativeMenuBar Name="MenuBar"/>
-                <Grid ColumnDefinitions="Auto,*" Margin="10 0">
+                <Grid ColumnDefinitions="Auto,*" Margin="{OnPlatform Default='10 0', macOS='10 15 10 0'}">
                     <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
                         <Image Source="{Binding OpenProjectIcon, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
                                Width="24" Height="24" />
                         <TextBlock VerticalAlignment="Center" Margin="10 0"
-                                   Text="{Binding OpenProjectName}" />
+                                Text="{Binding OpenProjectName}" />
                     </StackPanel>
                     <toolbar:Toolbar Grid.Row="0" Grid.Column="1" Name="ToolBar" Orientation="Horizontal"
                                      HorizontalAlignment="Right" DisplayMode="Compact" />
