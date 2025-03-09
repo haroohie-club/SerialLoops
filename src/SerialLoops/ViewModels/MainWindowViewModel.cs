@@ -10,13 +10,11 @@ using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
-using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Platform;
 using Avalonia.Platform.Storage;
 using Avalonia.Styling;
 using Avalonia.Threading;
-using DynamicData;
 using HaruhiChokuretsuLib.Archive;
 using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
@@ -1298,26 +1296,26 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             Text = Strings.Save,
             Command = SaveProjectCommand,
-            Icon = ControlGenerator.GetVectorIcon("Save", Log)
+            Icon = ControlGenerator.GetVectorIcon("Save", Log),
         });
         ToolBar.Items.Add(new ToolbarButton
         {
             Text = Strings.Build,
             Command = BuildIterativeCommand,
-            Icon = ControlGenerator.GetVectorIcon("Build", Log)
+            Icon = ControlGenerator.GetVectorIcon("Build", Log),
         });
         ToolBar.Items.Add(new ToolbarButton
         {
             Text = Strings.Build_and_Run,
             Command = BuildAndRunCommand,
-            Icon = ControlGenerator.GetVectorIcon("Build_Run", Log)
+            Icon = ControlGenerator.GetVectorIcon("Build_Run", Log),
         });
         ToolBar.Items.Add(new ToolbarSeparator());
         ToolBar.Items.Add(new ToolbarButton
         {
             Text = Strings.Search,
             Command = SearchProjectCommand,
-            Icon = ControlGenerator.GetVectorIcon("Search", Log)
+            Icon = ControlGenerator.GetVectorIcon("Search", Log),
         });
     }
 }
