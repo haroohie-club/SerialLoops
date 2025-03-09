@@ -16,32 +16,10 @@
         </StackPanel>
 
         <TextBlock Grid.Column="0" Grid.Row="1" Text="{x:Static assets:Strings.Location}" Margin="0,7,0,0"/>
-        <ComboBox Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" ItemsSource="{Binding Locations}" SelectedItem="{Binding Location}">
-            <ComboBox.ItemTemplate>
-                <DataTemplate DataType="vm:LocalizedItemLocation">
-                    <TextBlock Text="{Binding DisplayText}"/>
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
-            <ComboBox.ItemContainerTheme>
-                <ControlTheme TargetType="ComboBoxItem" x:DataType="vm:LocalizedItemLocation" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
-                    <Setter Property="TextSearch.Text" Value="{Binding DisplayText}" />
-                </ControlTheme>
-            </ComboBox.ItemContainerTheme>
-        </ComboBox>
+        <ComboBox Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" ItemsSource="{Binding Locations}" SelectedItem="{Binding Location}"/>
 
         <TextBlock Grid.Column="0" Grid.Row="2" Text="{x:Static assets:Strings.Transition}" Margin="0,7,0,0"/>
-        <ComboBox Grid.Column="1" Grid.Row="2" Margin="10,0,0,0" ItemsSource="{Binding Transitions}" SelectedItem="{Binding Transition}">
-            <ComboBox.ItemTemplate>
-                <DataTemplate DataType="vm:LocalizedItemTransition">
-                    <TextBlock Text="{Binding DisplayText}"/>
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
-            <ComboBox.ItemContainerTheme>
-                <ControlTheme TargetType="ComboBoxItem" x:DataType="vm:LocalizedItemTransition" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
-                    <Setter Property="TextSearch.Text" Value="{Binding DisplayText}" />
-                </ControlTheme>
-            </ComboBox.ItemContainerTheme>
-        </ComboBox>
+        <ComboBox Grid.Column="1" Grid.Row="2" Margin="10,0,0,0" ItemsSource="{Binding Transitions}" SelectedItem="{Binding Transition}"/>
     </Grid>
 </UserControl>
 

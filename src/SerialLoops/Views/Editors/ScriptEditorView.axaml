@@ -126,18 +126,7 @@
                                             <StackPanel Orientation="Horizontal" Spacing="20">
                                                 <ComboBox Margin="10,0,0,0"
                                                           ItemsSource="{Binding ScriptSections}"
-                                                          SelectedItem="{Binding InteractSection}">
-                                                    <ComboBox.ItemTemplate>
-                                                        <DataTemplate DataType="vm:ReactiveScriptSection">
-                                                            <TextBlock Text="{Binding  Name}"/>
-                                                        </DataTemplate>
-                                                    </ComboBox.ItemTemplate>
-                                                    <ComboBox.ItemContainerTheme>
-                                                        <ControlTheme TargetType="ComboBoxItem" x:DataType="vm:ReactiveScriptSection">
-                                                            <Setter Property="TextSearch.Text" Value="{Binding Name}" />
-                                                        </ControlTheme>
-                                                    </ComboBox.ItemContainerTheme>
-                                                </ComboBox>
+                                                          SelectedItem="{Binding InteractSection}"/>
                                                 <TextBlock Text="{Binding Description}"/>
                                             </StackPanel>
                                         </DataTemplate>

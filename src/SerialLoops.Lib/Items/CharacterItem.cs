@@ -147,6 +147,8 @@ public class CharacterItem : Item
         newCanvas.Flush();
         return newNameplate;
     }
+
+    public override string ToString() => DisplayName[4..];
 }
 
 public class NameplateProperties(string name, SKColor nameColor, SKColor plateColor, SKColor outlineColor, bool hasOutline)

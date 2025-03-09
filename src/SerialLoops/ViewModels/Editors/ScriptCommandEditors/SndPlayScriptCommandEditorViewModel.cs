@@ -124,5 +124,5 @@ public class SndPlayScriptCommandEditorViewModel : ScriptCommandEditorViewModel
 public readonly struct SfxModeLocalized(SfxModeScriptParameter.SfxMode mode)
 {
     public SfxModeScriptParameter.SfxMode Mode { get; } = mode;
-    public string DisplayText { get; } = Strings.ResourceManager.GetString(mode.ToString());
+    public override string ToString() => Strings.ResourceManager.GetString(Mode.ToString());
 }

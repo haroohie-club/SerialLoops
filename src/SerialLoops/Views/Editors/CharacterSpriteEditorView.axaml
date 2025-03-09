@@ -3,10 +3,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:SerialLoops.ViewModels.Editors"
-             xmlns:items="using:SerialLoops.Lib.Items"
              xmlns:assets="using:SerialLoops.Assets"
              xmlns:controls="using:SerialLoops.Controls"
-             xmlns:utility="using:SerialLoops.Utility"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:CharacterSpriteEditorViewModel"
              x:Class="SerialLoops.Views.Editors.CharacterSpriteEditorView">
@@ -20,18 +18,7 @@
         <StackPanel Orientation="Horizontal" Spacing="5">
             <StackPanel Orientation="Horizontal" Spacing="3" VerticalAlignment="Center">
                 <TextBlock Text="{x:Static assets:Strings.Character}"/>
-                <ComboBox ItemsSource="{Binding Characters}" SelectedItem="{Binding Character}">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate DataType="items:CharacterItem">
-                            <TextBlock Text="{Binding DisplayName, Converter={x:Static utility:SLConverters.CharacterNameCropConverter}}"/>
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                    <ComboBox.ItemContainerTheme>
-                        <ControlTheme TargetType="ComboBoxItem" x:DataType="items:CharacterItem" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
-                            <Setter Property="TextSearch.Text" Value="{Binding DisplayName, Converter={x:Static utility:SLConverters.CharacterNameCropConverter}}" />
-                        </ControlTheme>
-                    </ComboBox.ItemContainerTheme>
-                </ComboBox>
+                <ComboBox ItemsSource="{Binding Characters}" SelectedItem="{Binding Character}"/>
             </StackPanel>
             <CheckBox IsChecked="{Binding IsLarge}" Content="{x:Static assets:Strings.Is_Large}"/>
         </StackPanel>

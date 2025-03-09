@@ -6,7 +6,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:assets="using:SerialLoops.Assets"
              xmlns:controls="using:SerialLoops.Controls"
-             xmlns:models="using:SerialLoops.Models"
              xmlns:utility="using:SerialLoops.Utility"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:PuzzleEditorViewModel"
@@ -69,46 +68,13 @@
                     <CheckBox Grid.Row="4" Grid.Column="1" Margin="10,0,0,0" IsChecked="{Binding ContinueOnFailure}"/>
 
                     <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Accompanying_Character}"/>
-                    <ComboBox Grid.Row="5" Grid.Column="1" Margin="10,0,0,0" ItemsSource="{Binding Characters}" SelectedItem="{Binding AccompanyingCharacter}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate DataType="models:CharacterFilter">
-                                <TextBlock Text="{Binding DisplayName}"/>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                        <ComboBox.ItemContainerTheme>
-                            <ControlTheme TargetType="ComboBoxItem" x:DataType="models:CharacterFilter" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
-                                <Setter Property="TextSearch.Text" Value="{Binding DisplayName}" />
-                            </ControlTheme>
-                        </ComboBox.ItemContainerTheme>
-                    </ComboBox>
+                    <ComboBox Grid.Row="5" Grid.Column="1" Margin="10,0,0,0" ItemsSource="{Binding Characters}" SelectedItem="{Binding AccompanyingCharacter}"/>
 
                     <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Power_Character_1}"/>
-                    <ComboBox Grid.Row="6" Grid.Column="1" Margin="10,0,0,0" ItemsSource="{Binding Characters}" SelectedItem="{Binding PowerCharacter1}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate DataType="models:CharacterFilter">
-                                <TextBlock Text="{Binding DisplayName}"/>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                        <ComboBox.ItemContainerTheme>
-                            <ControlTheme TargetType="ComboBoxItem" x:DataType="models:CharacterFilter" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
-                                <Setter Property="TextSearch.Text" Value="{Binding DisplayName}" />
-                            </ControlTheme>
-                        </ComboBox.ItemContainerTheme>
-                    </ComboBox>
+                    <ComboBox Grid.Row="6" Grid.Column="1" Margin="10,0,0,0" ItemsSource="{Binding Characters}" SelectedItem="{Binding PowerCharacter1}"/>
 
                     <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Power_Character_2}"/>
-                    <ComboBox Grid.Row="7" Grid.Column="1" Margin="10,0,0,0" ItemsSource="{Binding Characters}" SelectedItem="{Binding PowerCharacter2}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate DataType="models:CharacterFilter">
-                                <TextBlock Text="{Binding DisplayName}"/>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                        <ComboBox.ItemContainerTheme>
-                            <ControlTheme TargetType="ComboBoxItem" x:DataType="models:CharacterFilter" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
-                                <Setter Property="TextSearch.Text" Value="{Binding DisplayName}" />
-                            </ControlTheme>
-                        </ComboBox.ItemContainerTheme>
-                    </ComboBox>
+                    <ComboBox Grid.Row="7" Grid.Column="1" Margin="10,0,0,0" ItemsSource="{Binding Characters}" SelectedItem="{Binding PowerCharacter2}"/>
 
                     <TextBlock Grid.Row="8" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Singularity}"/>
                     <Image Grid.Row="8" Grid.Column="1" Margin="10,0,0,0" Source="{Binding Singularity, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>

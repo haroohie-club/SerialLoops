@@ -37,5 +37,5 @@ public class TransInOutScriptCommandEditorViewModel : ScriptCommandEditorViewMod
 public readonly struct TransitionLocalized(TransitionScriptParameter.TransitionEffect transition)
 {
     public TransitionScriptParameter.TransitionEffect Transition { get; } = transition;
-    public string DisplayText { get; } = Strings.ResourceManager.GetString(transition.ToString());
+    public override string ToString() => Strings.ResourceManager.GetString(Transition.ToString());
 }

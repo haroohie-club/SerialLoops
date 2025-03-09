@@ -316,21 +316,21 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
 public readonly struct SpriteEntranceTransitionLocalized(SpriteEntranceScriptParameter.SpriteEntranceTransition entrance)
 {
     public SpriteEntranceScriptParameter.SpriteEntranceTransition Entrance { get; } = entrance;
-    public string DisplayText { get; } = Strings.ResourceManager.GetString(entrance.ToString());
+    public override string ToString() => Strings.ResourceManager.GetString(Entrance.ToString());
 }
 public readonly struct SpriteExitTransitionLocalized(SpriteExitScriptParameter.SpriteExitTransition exit)
 {
     public SpriteExitScriptParameter.SpriteExitTransition Exit { get; } = exit;
-    public string DisplayText { get; } = Strings.ResourceManager.GetString(exit.ToString());
+    public override string ToString() => Strings.ResourceManager.GetString(Exit.ToString());
 }
 public readonly struct SpriteShakeLocalized(SpriteShakeScriptParameter.SpriteShakeEffect shake)
 {
     public SpriteShakeScriptParameter.SpriteShakeEffect Shake { get; } = shake;
-    public string DisplayText { get; } = Strings.ResourceManager.GetString(shake.ToString());
+    public override string ToString() => Strings.ResourceManager.GetString(Shake.ToString());
 }
 public readonly struct TextEntranceEffectLocalized(TextEntranceEffectScriptParameter.TextEntranceEffect effect)
 {
     public TextEntranceEffectScriptParameter.TextEntranceEffect Effect { get; } = effect;
-    public string DisplayText { get; } = Strings.ResourceManager.GetString(effect.ToString());
+    public override string ToString() => Strings.ResourceManager.GetString(Effect.ToString());
 }
 

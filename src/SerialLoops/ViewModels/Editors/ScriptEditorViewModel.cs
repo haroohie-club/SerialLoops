@@ -833,6 +833,8 @@ public class ReactiveScriptSection(ScriptSection section) : ReactiveObject
         Commands.Clear();
         Commands.AddRange(commands.Select(c => new ScriptCommandTreeItem(c)));
     }
+
+    public override string ToString() => Name;
 }
 
 public class StartingChibiWithImage : ReactiveObject

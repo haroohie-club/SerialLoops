@@ -100,11 +100,11 @@ public class ItemDispimgScriptCommandEditorViewModel : ScriptCommandEditorViewMo
 public readonly struct LocalizedItemLocation(ItemItem.ItemLocation location)
 {
     public ItemItem.ItemLocation Location { get; } = location;
-    public string DisplayText { get; } = Strings.ResourceManager.GetString(location.ToString());
+    public override string ToString() => Strings.ResourceManager.GetString(Location.ToString());
 }
 
 public readonly struct LocalizedItemTransition(ItemItem.ItemTransition transition)
 {
     public ItemItem.ItemTransition Transition { get; } = transition;
-    public string DisplayText { get; } = Strings.ResourceManager.GetString(transition.ToString());
+    public override string ToString() => Strings.ResourceManager.GetString(Transition.ToString());
 }

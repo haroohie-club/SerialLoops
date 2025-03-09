@@ -59,5 +59,5 @@ public class PalEffectScriptCommandEditorViewModel(ScriptItemCommand command, Sc
 public readonly struct PaletteEffectLocalized(PaletteEffectScriptParameter.PaletteEffect effect)
 {
     public PaletteEffectScriptParameter.PaletteEffect Effect { get; } = effect;
-    public string DisplayText { get; } = Strings.ResourceManager.GetString(effect.ToString());
+    public override string ToString() => Strings.ResourceManager.GetString(Effect.ToString());
 }

@@ -6,7 +6,6 @@
              xmlns:assets="using:SerialLoops.Assets"
              xmlns:controls="using:SerialLoops.Controls"
              xmlns:utility="using:SerialLoops.Utility"
-             xmlns:system="using:System"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:VoicedLineEditorViewModel"
              x:Class="SerialLoops.Views.Editors.VoicedLineEditorView">
@@ -31,18 +30,7 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="20">
                     <ComboBox ItemsSource="{Binding SubtitleColors}" SelectedItem="{Binding SubtitleColor}"
-                              VerticalAlignment="Center">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate DataType="vm:LocalizedDialogueColor">
-                                <TextBlock Text="{Binding DisplayText}"/>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                        <ComboBox.ItemContainerTheme>
-                            <ControlTheme TargetType="ComboBoxItem" x:DataType="vm:LocalizedDialogueColor" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
-                                <Setter Property="TextSearch.Text" Value="{Binding DisplayText}" />
-                            </ControlTheme>
-                        </ComboBox.ItemContainerTheme>
-                    </ComboBox>
+                              VerticalAlignment="Center"/>
                     <StackPanel Spacing="3" Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock Text="{x:Static assets:Strings.Target_Screen}"/>
                         <controls:ScreenSelector DataContext="{Binding ScreenSelector}"/>

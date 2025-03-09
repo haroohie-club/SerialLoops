@@ -298,7 +298,7 @@ public class LocalizedDialogueColor(DialogueColor color) : ReactiveObject
     [Reactive]
     public DialogueColor Color { get; set; } = color;
 
-    public string DisplayText => Strings.ResourceManager.GetString(Color.ToString());
+    public override string ToString() => Strings.ResourceManager.GetString(Color.ToString());
 }
 
 public class LocalizedSubtitlePosition(VoiceMapEntry.YPosition position) : ReactiveObject

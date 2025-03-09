@@ -10,18 +10,7 @@
     <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto">
         <TextBlock Grid.Column="0" Grid.Row="0" Margin="0,7,0,0" Text="{x:Static assets:Strings.Mode}"/>
         <ComboBox Grid.Column="1" Grid.Row="0" Margin="10,0,0,0" ItemsSource="{Binding PaletteEffects}"
-                  SelectedItem="{Binding PaletteEffect}">
-            <ComboBox.ItemTemplate>
-                <DataTemplate DataType="vm:PaletteEffectLocalized">
-                    <TextBlock Text="{Binding DisplayText}"/>
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
-            <ComboBox.ItemContainerTheme>
-                <ControlTheme TargetType="ComboBoxItem" x:DataType="vm:PaletteEffectLocalized" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
-                    <Setter Property="TextSearch.Text" Value="{Binding DisplayText}" />
-                </ControlTheme>
-            </ComboBox.ItemContainerTheme>
-        </ComboBox>
+                  SelectedItem="{Binding PaletteEffect}"/>
 
         <TextBlock Grid.Column="0" Grid.Row="1" Margin="0,7,0,0" Text="{x:Static assets:Strings.Time__Frames_}"/>
         <NumericUpDown Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" Value="{Binding TransitionTime}"

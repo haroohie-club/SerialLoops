@@ -34,18 +34,7 @@
 
                 <ScrollViewer Grid.Row="4">
                     <Grid RowDefinitions="Auto,*,Auto,*" DataContext="{Binding SelectedHackFile}">
-                        <ComboBox Grid.Row="0" ItemsSource="{Binding Locations}" SelectedValue="{Binding Location}">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding}"/>
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                            <ComboBox.ItemContainerTheme>
-                                <ControlTheme TargetType="ComboBoxItem" x:DataType="x:String" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
-                                    <Setter Property="TextSearch.Text" Value="{Binding}" />
-                                </ControlTheme>
-                            </ComboBox.ItemContainerTheme>
-                        </ComboBox>
+                        <ComboBox Grid.Row="0" ItemsSource="{Binding Locations}" SelectedValue="{Binding Location}"/>
 
                         <HeaderedContentControl Grid.Row="1" Header="{x:Static assets:Strings.Symbols}" Margin="3" Padding="5">
                             <ItemsRepeater ItemsSource="{Binding Symbols}">
@@ -84,9 +73,9 @@
                                                             <DataTemplate DataType="vm:HackParameterValueContainer">
                                                                 <StackPanel Orientation="Horizontal" Spacing="3">
                                                                     <TextBlock Text="{x:Static assets:Strings.Name}" VerticalAlignment="Center"/>
-                                                                    <TextBox Text="{Binding Name}"/>
+                                                                    <TextBox Text="{Binding Name}" IsTabStop="True"/>
                                                                     <TextBlock Text="{x:Static assets:Strings.Value}" VerticalAlignment="Center"/>
-                                                                    <TextBox Text="{Binding Value}"/>
+                                                                    <TextBox Text="{Binding Value}" IsTabStop="True"/>
                                                                     <Button Command="{Binding RemoveValueCommand}">
                                                                         <Svg Path="avares://SerialLoops/Assets/Icons/Remove.svg" Width="16" Height="16"/>
                                                                     </Button>

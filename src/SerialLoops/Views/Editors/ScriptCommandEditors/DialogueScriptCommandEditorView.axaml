@@ -6,21 +6,13 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              xmlns:assets="using:SerialLoops.Assets"
              xmlns:controls="using:SerialLoops.Controls"
-             xmlns:items="clr-namespace:SerialLoops.Lib.Items;assembly=SerialLoops.Lib"
-             xmlns:utility="using:SerialLoops.Utility"
              x:DataType="vm:DialogueScriptCommandEditorViewModel"
              x:Class="SerialLoops.Views.Editors.ScriptCommandEditors.DialogueScriptCommandEditorView">
     <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
         <TextBlock Grid.Column="0" Grid.Row="0" Text="{x:Static assets:Strings.Dialogue}" Margin="0,40,0,0"/>
         <StackPanel Grid.Column="1" Grid.Row="0" Margin="10,0,0,0" Orientation="Horizontal" VerticalAlignment="Center"
                     Spacing="10">
-            <ComboBox Name="SpeakerComboBox" Margin="0,30,0,0" ItemsSource="{Binding Characters}" SelectedValue="{Binding Speaker}">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate DataType="items:CharacterItem">
-                        <TextBlock Text="{Binding DisplayName, Converter={x:Static utility:SLConverters.CharacterNameCropConverter}}"/>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
+            <ComboBox Name="SpeakerComboBox" Margin="0,30,0,0" ItemsSource="{Binding Characters}" SelectedValue="{Binding Speaker}"/>
             <TextBox Name="DialogueTextBox" AcceptsReturn="True" Width="400" Height="100" Text="{Binding DialogueLine}"/>
         </StackPanel>
 
@@ -33,108 +25,31 @@
 
         <TextBlock Grid.Column="0" Grid.Row="2" Text="{x:Static assets:Strings.Sprite_Entrance_Transition}" Margin="0,12,0,0"/>
         <ComboBox Grid.Column="1" Grid.Row="2" ItemsSource="{Binding SpriteEntranceTransitions}" Margin="10,5,0,0"
-                  SelectedItem="{Binding SpriteEntranceTransition}">
-            <ComboBox.ItemTemplate>
-                <DataTemplate DataType="vm:SpriteEntranceTransitionLocalized">
-                    <TextBlock Text="{Binding DisplayText}"/>
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
-            <ComboBox.ItemContainerTheme>
-                <ControlTheme TargetType="ComboBoxItem" x:DataType="vm:SpriteEntranceTransitionLocalized" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
-                    <Setter Property="TextSearch.Text" Value="{Binding DisplayText}" />
-                </ControlTheme>
-            </ComboBox.ItemContainerTheme>
-        </ComboBox>
+                  SelectedItem="{Binding SpriteEntranceTransition}"/>
 
         <TextBlock Grid.Column="0" Grid.Row="3" Text="{x:Static assets:Strings.Sprite_Exit_Move_Transition}" Margin="0,12,0,0"/>
         <ComboBox Grid.Column="1" Grid.Row="3" ItemsSource="{Binding SpriteExitTransitions}" Margin="10,5,0,0"
-                  SelectedItem="{Binding SpriteExitTransition}">
-            <ComboBox.ItemTemplate>
-                <DataTemplate DataType="vm:SpriteExitTransitionLocalized">
-                    <TextBlock Text="{Binding DisplayText}"/>
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
-            <ComboBox.ItemContainerTheme>
-                <ControlTheme TargetType="ComboBoxItem" x:DataType="vm:SpriteExitTransitionLocalized" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
-                    <Setter Property="TextSearch.Text" Value="{Binding DisplayText}" />
-                </ControlTheme>
-            </ComboBox.ItemContainerTheme>
-        </ComboBox>
+                  SelectedItem="{Binding SpriteExitTransition}"/>
 
         <TextBlock Grid.Column="0" Grid.Row="4" Text="{x:Static assets:Strings.Sprite_Shake}" Margin="0,12,0,0"/>
         <ComboBox Grid.Column="1" Grid.Row="4" ItemsSource="{Binding SpriteShakeEffects}" Margin="10,5,0,0"
-                  SelectedItem="{Binding SpriteShakeEffect}">
-            <ComboBox.ItemTemplate>
-                <DataTemplate DataType="vm:SpriteShakeLocalized">
-                    <TextBlock Text="{Binding DisplayText}"/>
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
-            <ComboBox.ItemContainerTheme>
-                <ControlTheme TargetType="ComboBoxItem" x:DataType="vm:SpriteShakeLocalized" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
-                    <Setter Property="TextSearch.Text" Value="{Binding DisplayText}" />
-                </ControlTheme>
-            </ComboBox.ItemContainerTheme>
-        </ComboBox>
+                  SelectedItem="{Binding SpriteShakeEffect}"/>
 
         <TextBlock Grid.Column="0" Grid.Row="5" Text="{x:Static assets:Strings.Voice_Line}" Margin="0,12,0,0"/>
         <StackPanel Grid.Column="1" Grid.Row="5" Margin="10,5,0,0" Orientation="Horizontal" VerticalAlignment="Center"
                     Spacing="10">
-            <ComboBox ItemsSource="{Binding VoicedLines}" SelectedItem="{Binding VoicedLine}">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate DataType="items:VoicedLineItem">
-                        <TextBlock Text="{Binding DisplayName, TargetNullValue={x:Static assets:Strings.None}}"/>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-                <ComboBox.ItemContainerTheme>
-                    <ControlTheme TargetType="ComboBoxItem" x:DataType="items:VoicedLineItem" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
-                        <Setter Property="TextSearch.Text" Value="{Binding DisplayName, TargetNullValue={x:Static assets:Strings.None}}" />
-                    </ControlTheme>
-                </ComboBox.ItemContainerTheme>
-            </ComboBox>
+            <ComboBox ItemsSource="{Binding VoicedLines}" SelectedItem="{Binding VoicedLine}"/>
             <controls:ItemLink Tabs="{Binding Tabs}" Item="{Binding VoicedLine}"/>
         </StackPanel>
 
         <TextBlock Grid.Column="0" Grid.Row="6" Text="{x:Static assets:Strings.Text_Voice_Font}" Margin="0,12,0,0"/>
-        <ComboBox Grid.Column="1" Grid.Row="6" ItemsSource="{Binding Characters}" SelectedItem="{Binding TextVoiceFont}" Margin="10,5,0,0">
-            <ComboBox.ItemTemplate>
-                <DataTemplate DataType="items:CharacterItem">
-                    <TextBlock Text="{Binding DisplayName, Converter={x:Static utility:SLConverters.CharacterNameCropConverter}}"/>
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
-            <ComboBox.ItemContainerTheme>
-                <ControlTheme TargetType="ComboBoxItem" x:DataType="items:CharacterItem" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
-                    <Setter Property="TextSearch.Text" Value="{Binding DisplayName, Converter={x:Static utility:SLConverters.CharacterNameCropConverter}}" />
-                </ControlTheme>
-            </ComboBox.ItemContainerTheme>
-        </ComboBox>
+        <ComboBox Grid.Column="1" Grid.Row="6" ItemsSource="{Binding Characters}" SelectedItem="{Binding TextVoiceFont}" Margin="10,5,0,0"/>
 
         <TextBlock Grid.Column="0" Grid.Row="7" Text="{x:Static assets:Strings.Text_Speed}" Margin="0,12,0,0"/>
-        <ComboBox Grid.Column="1" Grid.Row="7" ItemsSource="{Binding Characters}" SelectedItem="{Binding TextSpeed}" Margin="10,5,0,0">
-            <ComboBox.ItemTemplate>
-                <DataTemplate DataType="items:CharacterItem">
-                    <TextBlock Text="{Binding DisplayName, Converter={x:Static utility:SLConverters.CharacterNameCropConverter}}"/>
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
-            <ComboBox.ItemContainerTheme>
-                <ControlTheme TargetType="ComboBoxItem" x:DataType="items:CharacterItem" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
-                    <Setter Property="TextSearch.Text" Value="{Binding DisplayName, Converter={x:Static utility:SLConverters.CharacterNameCropConverter}}" />
-                </ControlTheme>
-            </ComboBox.ItemContainerTheme>
-        </ComboBox>
+        <ComboBox Grid.Column="1" Grid.Row="7" ItemsSource="{Binding Characters}" SelectedItem="{Binding TextSpeed}" Margin="10,5,0,0"/>
 
         <TextBlock Grid.Column="0" Grid.Row="8" Text="{x:Static assets:Strings.Text_Entrance_Effect}" Margin="0,12,0,0"/>
-        <ComboBox Grid.Column="1" Grid.Row="8" ItemsSource="{Binding TextEntranceEffects}" SelectedItem="{Binding TextEntranceEffect}" Margin="10,5,0,0">
-            <ComboBox.ItemTemplate>
-                <DataTemplate DataType="vm:TextEntranceEffectLocalized">
-                    <TextBlock Text="{Binding DisplayText}"/>
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
-            <ComboBox.ItemContainerTheme>
-                <ControlTheme TargetType="ComboBoxItem" x:DataType="vm:TextEntranceEffectLocalized" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
-                    <Setter Property="TextSearch.Text" Value="{Binding DisplayText}" />
-                </ControlTheme>
-            </ComboBox.ItemContainerTheme>
-        </ComboBox>
+        <ComboBox Grid.Column="1" Grid.Row="8" ItemsSource="{Binding TextEntranceEffects}" SelectedItem="{Binding TextEntranceEffect}" Margin="10,5,0,0"/>
 
         <TextBlock Grid.Column="0" Grid.Row="9" Text="{x:Static assets:Strings.Sprite_Layer}" Margin="0,12,0,0"/>
         <NumericUpDown Grid.Column="1" Grid.Row="9" Minimum="{Binding MinShort}" Maximum="{Binding MaxShort}" Value="{Binding SpriteLayer}"

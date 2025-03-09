@@ -6,8 +6,6 @@
         xmlns:assets="using:SerialLoops.Assets"
         xmlns:controls="using:SerialLoops.Controls"
         xmlns:dialogs="using:SerialLoops.Views.Dialogs"
-        xmlns:hlibe="using:HaruhiChokuretsuLib.Archive.Event"
-        xmlns:libi="using:SerialLoops.Lib.Items"
         xmlns:utility="using:SerialLoops.Utility"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         Width="900" Height="800"
@@ -306,36 +304,14 @@
                         <Grid RowDefinitions="Auto,Auto,Auto,*" ColumnDefinitions="Auto,*">
                             <StackPanel Margin="10,5" Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Spacing="5">
                                 <TextBlock Margin="0,7,0,0" Text="{x:Static assets:Strings.Script_}"/>
-                                <ComboBox ItemsSource="{Binding ScriptItems}" SelectedItem="{Binding SelectedScriptItem}">
-                                    <ComboBox.ItemTemplate>
-                                        <DataTemplate DataType="libi:ScriptItem">
-                                            <TextBlock Text="{Binding DisplayName}"/>
-                                        </DataTemplate>
-                                    </ComboBox.ItemTemplate>
-                                    <ComboBox.ItemContainerTheme>
-                                        <ControlTheme TargetType="ComboBoxItem" x:DataType="libi:ScriptItem" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
-                                            <Setter Property="TextSearch.Text" Value="{Binding DisplayName}"/>
-                                        </ControlTheme>
-                                    </ComboBox.ItemContainerTheme>
-                                </ComboBox>
+                                <ComboBox ItemsSource="{Binding ScriptItems}" SelectedItem="{Binding SelectedScriptItem}"/>
                                 <controls:ItemLink Item="{Binding SelectedScriptItem}" Tabs="{Binding Tabs}"
                                                    IsVisible="{Binding Tabs, Converter={x:Static ObjectConverters.IsNotNull}}"/>
                             </StackPanel>
 
                             <StackPanel Margin="10,5" Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Spacing="5">
                                 <TextBlock Margin="0,7,0,0" Text="{x:Static assets:Strings.Script_Section}"/>
-                                <ComboBox ItemsSource="{Binding ScriptSections}" SelectedItem="{Binding SelectedScriptSection}">
-                                    <ComboBox.ItemTemplate>
-                                        <DataTemplate DataType="hlibe:ScriptSection">
-                                            <TextBlock Text="{Binding Name}"/>
-                                        </DataTemplate>
-                                    </ComboBox.ItemTemplate>
-                                    <ComboBox.ItemContainerTheme>
-                                        <ControlTheme TargetType="ComboBoxItem" x:DataType="hlibe:ScriptSection" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
-                                            <Setter Property="TextSearch.Text" Value="{Binding Name}"/>
-                                        </ControlTheme>
-                                    </ComboBox.ItemContainerTheme>
-                                </ComboBox>
+                                <ComboBox ItemsSource="{Binding ScriptSections}" SelectedItem="{Binding SelectedScriptSection}"/>
                             </StackPanel>
 
                             <StackPanel Margin="10,5" Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Spacing="5">

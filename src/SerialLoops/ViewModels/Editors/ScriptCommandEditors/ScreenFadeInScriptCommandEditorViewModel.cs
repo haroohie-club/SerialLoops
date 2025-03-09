@@ -79,5 +79,5 @@ public class ScreenFadeInScriptCommandEditorViewModel : ScriptCommandEditorViewM
 public readonly struct ColorMonochromeLocalized(ColorMonochromeScriptParameter.ColorMonochrome color)
 {
     public ColorMonochromeScriptParameter.ColorMonochrome Color { get; } = color;
-    public string DisplayText { get; } = Strings.ResourceManager.GetString(color.ToString());
+    public override string ToString() => Strings.ResourceManager.GetString(Color.ToString());
 }
