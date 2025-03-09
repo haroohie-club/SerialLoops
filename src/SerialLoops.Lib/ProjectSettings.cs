@@ -8,10 +8,21 @@ using SkiaSharp;
 
 namespace SerialLoops.Lib;
 
-public class ProjectSettings(NdsProjectFile file, ILogger log)
+public class ProjectSettings
 {
-    public NdsProjectFile File { get; } = file;
-    private BannerV1 _banner => (BannerV1)File.RomInfo.Banner.Banner;
+    private ILogger _log;
+    public NdsProjectFile File { get; }
+    private BannerV1 _banner => (BannerV1)File?.RomInfo.Banner.Banner ?? new();
+
+    public ProjectSettings()
+    {
+    }
+
+    public ProjectSettings(NdsProjectFile file, ILogger log)
+    {
+        File = file;
+        _log = log;
+    }
 
     public string Name
     {
@@ -30,10 +41,18 @@ public class ProjectSettings(NdsProjectFile file, ILogger log)
     {
         get
         {
-            Rgba8Bitmap bitmap = _banner.GetIcon();
-            return new(bitmap.Width, bitmap.Height)
+            Rgba8Bitmap bitmap;
+            try
             {
-                Pixels = bitmap.Pixels.Select(p => new SKColor(p)).ToArray(),
+                bitmap = _banner?.GetIcon() ?? new(16, 16);
+            }
+            catch
+            {
+                bitmap = new(16, 16);
+            }
+            return new(bitmap?.Width ?? 16, bitmap?.Height ?? 16)
+            {
+                Pixels = bitmap?.Pixels.Select(p => new SKColor(p)).ToArray(),
             };
         }
         set
@@ -44,7 +63,7 @@ public class ProjectSettings(NdsProjectFile file, ILogger log)
                 PixelData = [],
                 PaletteData = [],
             };
-            grp.Initialize([], 0, log);
+            grp.Initialize([], 0, _log);
             grp.FileFunction = GraphicsFile.Function.SHTX;
             grp.ImageForm = GraphicsFile.Form.TILE;
             grp.ImageTileForm = GraphicsFile.TileForm.GBA_4BPP;
