@@ -872,7 +872,7 @@ public class StartingChibiWithImage : ReactiveObject
                     break;
                 }
             }
-            script.Event.StartingChibisSection.Objects.Add(StartingChibi);
+            script.Event.StartingChibisSection.Objects.Insert(script.Event.StartingChibisSection.Objects.Count - 1, StartingChibi);
             script.UnsavedChanges = true;
             scriptEditor.UpdatePreview();
         });
