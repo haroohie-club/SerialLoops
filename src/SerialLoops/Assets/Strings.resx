@@ -3134,6 +3134,6 @@ All hacks have been rolled back to preserve state.</value>
     <value>Replace as AHX</value><comment>"AHX" refers to an audio encoding format (as opposed to ADX, the standard format) specifically designed to encode voice files</comment>
   </data>
   <data name="HelpAhx" xml:space="preserve">
-    <value>AHX is the audio codec most of the voice files are encoded as as it's specifically designed to compress voice. However, our encoder can sometimes cause issues with the game, so we generally recommend encoding these lines with the standard ADX format. However, if you encounter issues with the regular Replace, try using this option!</value>
+    <value>AHX is the audio codec most of the voice files are encoded as as it's specifically designed to compress voice. However, our encoder can sometimes cause issues with the game, so we generally recommend encoding these lines with the standard ADX format. That said, if you encounter issues with the regular Replace, try using this option!</value>
   </data>
 </root>
