@@ -3978,6 +3978,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to AHX is the audio codec most of the voice files are encoded as as it&apos;s specifically designed to compress voice. However, our encoder can sometimes cause issues with the game, so we generally recommend encoding these lines with the standard ADX format. However, if you encounter issues with the regular Replace, try using this option!.
+        /// </summary>
+        public static string HelpAhx {
+            get {
+                return ResourceManager.GetString("HelpAhx", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hidden ID.
         /// </summary>
         public static string Hidden_ID {
@@ -6275,6 +6284,15 @@ namespace SerialLoops.Assets {
         public static string Replace_with_Palette {
             get {
                 return ResourceManager.GetString("Replace with Palette", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace as AHX.
+        /// </summary>
+        public static string ReplaceAsAhx {
+            get {
+                return ResourceManager.GetString("ReplaceAsAhx", resourceCulture);
             }
         }
         

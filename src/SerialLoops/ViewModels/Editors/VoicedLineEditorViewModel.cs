@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia.Input;
 using Avalonia.Platform.Storage;
+using GotaSequenceLib.Playback;
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Audio.ADX;
 using HaruhiChokuretsuLib.Util;
@@ -34,6 +35,7 @@ public class VoicedLineEditorViewModel : EditorViewModel
     private string _subtitle;
 
     public ICommand ReplaceCommand { get; set; }
+    public ICommand ReplaceAsAhxCommand { get; set; }
     public ICommand ExportCommand { get; set; }
     public ICommand RestoreCommand { get; set; }
 
@@ -163,7 +165,9 @@ public class VoicedLineEditorViewModel : EditorViewModel
 
         _vce = item;
         VcePlayer = new(_vce, log, null);
-        ReplaceCommand = ReactiveCommand.CreateFromTask(Replace);
+        VcePlayer.TrackDetails = _vce.AdxType.ToString();
+        ReplaceCommand = ReactiveCommand.CreateFromTask(() => Replace(false));
+        ReplaceAsAhxCommand = ReactiveCommand.CreateFromTask(() => Replace(true));
         ExportCommand = ReactiveCommand.CreateFromTask(Export);
         RestoreCommand = ReactiveCommand.Create(Restore);
 
@@ -196,7 +200,7 @@ public class VoicedLineEditorViewModel : EditorViewModel
         RedoGesture = GuiExtensions.CreatePlatformAgnosticCtrlGesture(Key.Y);
     }
 
-    private async Task Replace()
+    private async Task Replace(bool asAhx)
     {
         IStorageFile openFile = await Window.Window.ShowOpenFilePickerAsync(Strings.Replace_voiced_line, [new(Strings.Supported_Audio_Files) { Patterns = Shared.SupportedAudioFiletypes },
             new(Strings.WAV_files) { Patterns = ["*.wav"] }, new(Strings.FLAC_files) { Patterns = ["*.flac"] },
@@ -210,6 +214,7 @@ public class VoicedLineEditorViewModel : EditorViewModel
                 () => { });
             await new ProgressDialog { DataContext = tracker }.ShowDialog(Window.Window);
             VcePlayer.Stop();
+            VcePlayer.TrackDetails = _vce.AdxType.ToString();
         }
     }
 

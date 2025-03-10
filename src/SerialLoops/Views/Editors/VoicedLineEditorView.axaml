@@ -16,8 +16,15 @@
         </Panel>
 
         <controls:SoundPlayerPanel Name="Player" Grid.Row="0" Grid.Column="0" DataContext="{Binding VcePlayer}"/>
-        <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Spacing="3" Margin="5">
+        <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Spacing="5" Margin="5">
             <Button Content="{x:Static assets:Strings.Replace}" Command="{Binding ReplaceCommand}"/>
+            <Button Command="{Binding ReplaceAsAhxCommand}">
+                <StackPanel Orientation="Horizontal" Spacing="3">
+                    <TextBlock Text="{x:Static assets:Strings.ReplaceAsAhx}" VerticalAlignment="Center"/>
+                    <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" ToolTip.Tip="{x:Static assets:Strings.HelpAhx}"
+                         VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
             <Button Content="{x:Static assets:Strings.Export}" Command="{Binding ExportCommand}"/>
             <Button Content="{x:Static assets:Strings.Restore}" Command="{Binding RestoreCommand}"/>
         </StackPanel>

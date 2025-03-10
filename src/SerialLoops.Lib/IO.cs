@@ -82,7 +82,6 @@ public static class IO
             ],
             [
                 new(Path.Combine(project.BaseDirectory, "rom", $"{project.Name}.json")),
-                new(Path.Combine(project.BaseDirectory, "rom", "arm9.bin")),
             ]);
         IODirectory srcDirectoryTree = new("src",
             [
