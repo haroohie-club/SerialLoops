@@ -63,7 +63,7 @@ public partial class MainWindowViewModel : ViewModelBase
         get
         {
             SKBitmap preview = new(24, 24);
-            _openProjectIcon.ScalePixels(preview, SKSamplingOptions.Default);
+            _openProjectIcon?.ScalePixels(preview, SKSamplingOptions.Default);
             return preview;
         }
         set => this.RaiseAndSetIfChanged(ref _openProjectIcon, value);
