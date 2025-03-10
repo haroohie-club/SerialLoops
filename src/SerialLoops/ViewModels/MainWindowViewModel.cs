@@ -1294,26 +1294,26 @@ public partial class MainWindowViewModel : ViewModelBase
         ToolBar.Items.Clear();
         ToolBar.Items.Add(new ToolbarButton
         {
-            Text = Strings.Save,
+            DataContext = Strings.Save,
             Command = SaveProjectCommand,
             Icon = ControlGenerator.GetVectorIcon("Save", Log),
         });
         ToolBar.Items.Add(new ToolbarButton
         {
-            Text = Strings.Build,
+            DataContext = Strings.Build,
             Command = BuildIterativeCommand,
             Icon = ControlGenerator.GetVectorIcon("Build", Log),
         });
         ToolBar.Items.Add(new ToolbarButton
         {
-            Text = Strings.Build_and_Run,
+            DataContext = Strings.Build_and_Run,
             Command = BuildAndRunCommand,
             Icon = ControlGenerator.GetVectorIcon("Build_Run", Log),
         });
         ToolBar.Items.Add(new ToolbarSeparator());
         ToolBar.Items.Add(new ToolbarButton
         {
-            Text = Strings.Search,
+            DataContext = Strings.Search,
             Command = SearchProjectCommand,
             Icon = ControlGenerator.GetVectorIcon("Search", Log),
         });

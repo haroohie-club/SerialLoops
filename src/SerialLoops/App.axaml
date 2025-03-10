@@ -56,9 +56,7 @@
             <Setter Property="Padding" Value="5" />
             <Setter Property="Margin" Value="5 0" />
             <Setter Property="HorizontalAlignment" Value="Right" />
-        </Style>
-        <Style Selector="Button.ToolbarButton > StackPanel > TextBlock">
-            <Setter Property="Text" Value="" />
+            <Setter Property="ToolTip.Tip" Value="{Binding ., DataType=system:String}"/>
         </Style>
 
         <!-- Tab Control styling -->
