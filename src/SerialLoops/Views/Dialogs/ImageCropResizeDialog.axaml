@@ -33,17 +33,20 @@
                                Canvas.Left="0"
                                Canvas.Top="{Binding BoxHeight}"
                                Width="{Binding BoxWidth}"
-                               Height="{Binding PreviewHeight}"/>
+                               Height="{Binding PreviewHeight}"
+                               IsHitTestVisible="False"/>
                     <Rectangle Fill="Gray" Opacity="0.5"
                                Canvas.Left="{Binding BoxWidth}"
                                Canvas.Top="0"
                                Width="{Binding PreviewWidth}"
-                               Height="{Binding BoxHeight}"/>
+                               Height="{Binding BoxHeight}"
+                               IsHitTestVisible="False"/>
                     <Rectangle Fill="Gray" Opacity="0.5"
                                Canvas.Left="{Binding BoxWidth}"
                                Canvas.Top="{Binding BoxHeight}"
                                Width="{Binding PreviewWidth}"
-                               Height="{Binding PreviewHeight}"/>
+                               Height="{Binding PreviewHeight}"
+                               IsHitTestVisible="False"/>
                 </Canvas>
                 <StackPanel Orientation="Vertical" Spacing="5">
                     <HeaderedContentControl Header="{x:Static assets:Strings.Scale_Image}"
