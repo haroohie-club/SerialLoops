@@ -74,6 +74,7 @@ public partial class ChibiEditorViewModel : EditorViewModel
 
         ExportFramesCommand = ReactiveCommand.CreateFromTask(ExportFrames);
         ExportGifCommand = ReactiveCommand.CreateFromTask(ExportGif);
+        ReplaceFramesCommand = ReactiveCommand.CreateFromTask(ReplaceFrames);
     }
 
     private void UpdateChibi()
