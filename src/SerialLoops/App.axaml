@@ -61,6 +61,28 @@
             <Setter Property="Text" Value="" />
         </Style>
 
+        <!-- Tab Control styling -->
+        <Style Selector="TabControl">
+            <Setter Property="Background" Value="{DynamicResource TabControlBackgroundColor}"/>
+            <Setter Property="CornerRadius" Value="7" />
+        </Style>
+        <Style Selector="TabItem">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Background" Value="{DynamicResource TabItemBackgroundColor}"/>
+            <Setter Property="Margin" Value="0 0 0 0"/>
+            <Setter Property="Padding" Value="10 0"/>
+        </Style>
+        <Style Selector="TabControl.Panel">
+            <Setter Property="Margin" Value="10,5,5,20" />
+        </Style>
+
+        <!-- Numeric Up/Down styling -->
+        <!-- <Style Selector="TabControl"> -->
+        <!--     <Setter Property="FontFamily"></Setter> -->
+        <!-- </Style> -->
+
         <!-- Windows menu styling -->
         <OnPlatform>
             <OnPlatform.Windows>
@@ -209,9 +231,10 @@
                     <SolidColorBrush x:Key="ToolbarTextColor">Transparent</SolidColorBrush>
                     <SolidColorBrush x:Key="ToolbarBorderColor">Transparent</SolidColorBrush>
                     <SolidColorBrush x:Key="ToolbarBackgroundColor">Transparent</SolidColorBrush>
+                    <SolidColorBrush x:Key="TabControlBackgroundColor">#11ffffff</SolidColorBrush>
+                    <SolidColorBrush x:Key="TabBackgroundColor">Transparent</SolidColorBrush>
+                    <SolidColorBrush x:Key="TabStripControlBackground">#11ffffff</SolidColorBrush>
                     <Color x:Key="CropResizeOverlayColor">#55000000</Color>
-
-                    <SolidColorBrush x:Key="TabItemBackgroundBrush" Color="Transparent" />
                 </ResourceDictionary>
                 <ResourceDictionary x:Key="Dark">
                     <Color x:Key="BackgroundTint">Black</Color>
@@ -235,6 +258,9 @@
                     <SolidColorBrush x:Key="ToolbarTextColor">Transparent</SolidColorBrush>
                     <SolidColorBrush x:Key="ToolbarBorderColor">Transparent</SolidColorBrush>
                     <SolidColorBrush x:Key="ToolbarBackgroundColor">Transparent</SolidColorBrush>
+                    <SolidColorBrush x:Key="TabControlBackgroundColor">#11ffffff</SolidColorBrush>
+                    <SolidColorBrush x:Key="TabBackgroundColor">Transparent</SolidColorBrush>
+                    <SolidColorBrush x:Key="TabBackgroundColorSelected">#11ffffff</SolidColorBrush>
                     <Color x:Key="CropResizeOverlayColor">#AAFFFFFF</Color>
 
                     <SolidColorBrush x:Key="TabControlWindowActiveBackgroundBrush" Color="Transparent" />
