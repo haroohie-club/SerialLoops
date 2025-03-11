@@ -1167,6 +1167,10 @@ public partial class Project
             }
             foreach (string file in Directory.GetFiles(Path.Combine(BaseDirectory, "src"), "*", SearchOption.AllDirectories))
             {
+                if (file.Equals("arm9.bin", StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
                 log.Log($"Adding '{file}' to slzip...");
                 slzip.CreateEntryFromFile(file, Path.GetRelativePath(MainDirectory, file));
             }
