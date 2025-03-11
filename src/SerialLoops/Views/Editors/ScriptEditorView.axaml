@@ -119,7 +119,7 @@
                     <TabItem Header="{x:Static assets:Strings.Interactable_Objects}">
                         <Panel>
                             <Grid RowDefinitions="*,Auto,Auto" ColumnDefinitions="Auto,Auto">
-                                <ListBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+                                <ListBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" MaxHeight="384"
                                          ItemsSource="{Binding InteractableObjects}" SelectedItem="{Binding SelectedInteractableObject}">
                                     <ListBox.ItemTemplate>
                                         <DataTemplate x:DataType="vm:ReactiveInteractableObject">
