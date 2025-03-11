@@ -88,7 +88,7 @@ public class ScriptEditorViewModel : EditorViewModel
         set
         {
             this.RaiseAndSetIfChanged(ref _commands, value);
-            Source = new(_commands.Keys.Select(s => new ScriptSectionTreeItem(ScriptSections[_script.Event.ScriptSections.IndexOf(s)], _commands[s])))
+            Source = new(_commands?.Keys.Select(s => new ScriptSectionTreeItem(ScriptSections[_script.Event.ScriptSections.IndexOf(s)], _commands[s])) ?? [])
             {
                 Columns =
                 {
@@ -538,10 +538,6 @@ public class ScriptEditorViewModel : EditorViewModel
             _script.Event.ScriptSections.RemoveAt(sectionIndex);
             _script.Event.NumSections--;
             _script.Event.LabelsSection.Objects.RemoveAt(sectionIndex);
-            for (int i = sectionIndex; i < _script.Event.LabelsSection.Objects.Count; i++)
-            {
-                _script.Event.LabelsSection.Objects[i].Id--;
-            }
 
             ScriptSections.RemoveAt(sectionIndex);
 
