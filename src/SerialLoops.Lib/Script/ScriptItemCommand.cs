@@ -747,6 +747,17 @@ public class ScriptItemCommand : ReactiveObject
             Project = Project,
         };
         clonedCommand.UpdateDisplay();
+        clonedCommand.Invocation.Parameters = clonedCommand.Parameters.SelectMany(p =>
+        {
+            return p.Type switch
+            {
+                ScriptParameter.ParameterType.CHARACTER => p.GetValues(Project.MessInfo),
+                ScriptParameter.ParameterType.CONDITIONAL or ScriptParameter.ParameterType.DIALOGUE
+                    or ScriptParameter.ParameterType.OPTION
+                    or ScriptParameter.ParameterType.SCRIPT_SECTION => p.GetValues(Script),
+                _ => p.GetValues(),
+            };
+        }).ToList();
 
         return clonedCommand;
     }
