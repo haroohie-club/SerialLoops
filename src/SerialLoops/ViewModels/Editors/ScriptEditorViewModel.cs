@@ -473,8 +473,6 @@ public class ScriptEditorViewModel : EditorViewModel
         {
             Name = sectionName,
             CommandsAvailable = CommandsAvailable,
-            SectionType = typeof(ScriptSection),
-            ObjectType = typeof(ScriptCommandInvocation),
         };
         ReactiveScriptSection reactiveSection = new(section);
 
@@ -576,8 +574,6 @@ public class ScriptEditorViewModel : EditorViewModel
         {
             Name = "SCRIPT00",
             CommandsAvailable = CommandsAvailable,
-            SectionType = typeof(ScriptSection),
-            ObjectType = typeof(ScriptCommandInvocation),
         });
         ScriptSections.Clear();
         ScriptSections.Add(new(_script.Event.ScriptSections[0]));
