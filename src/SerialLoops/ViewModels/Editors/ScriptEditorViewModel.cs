@@ -53,6 +53,7 @@ public class ScriptEditorViewModel : EditorViewModel
 
     public ICommand AddStartingChibisCommand { get; }
     public ICommand RemoveStartingChibisCommand { get; }
+    public ICommand AddChoiceCommand { get; }
     public ICommand AddInteractableObjectCommand { get; }
     public ICommand RemoveInteractableObjectCommand { get; }
 
@@ -77,8 +78,10 @@ public class ScriptEditorViewModel : EditorViewModel
     [Reactive]
     public ReactiveScriptSection SelectedSection { get; set; }
 
-    [Reactive] public SKBitmap PreviewBitmap { get; set; }
-    [Reactive] public ScriptCommandEditorViewModel CurrentCommandViewModel { get; set; }
+    [Reactive]
+    public SKBitmap PreviewBitmap { get; set; }
+    [Reactive]
+    public ScriptCommandEditorViewModel CurrentCommandViewModel { get; set; }
 
     public ObservableCollection<ReactiveScriptSection> ScriptSections { get; }
 
@@ -141,6 +144,7 @@ public class ScriptEditorViewModel : EditorViewModel
     public ReactiveInteractableObject SelectedInteractableObject { get; set; }
     public ObservableCollection<ReactiveInteractableObject> UnusedInteractableObjects { get; } = [];
 
+    public ObservableCollection<ReactiveChoice> Choices { get; } = [];
 
     public ScriptEditorViewModel(ScriptItem script, MainWindowViewModel window, ILogger log) : base(script, window, log)
     {
@@ -179,6 +183,8 @@ public class ScriptEditorViewModel : EditorViewModel
             HasStartingChibis = false;
         }
 
+        Choices.AddRange(_script.Event.ChoicesSection.Objects.Where(c => c.Id > 0).Select(c => new ReactiveChoice(c, _script, this)));
+
         MapCharactersSubEditorVm = new(_script, this);
 
         InteractableObjects.AddRange(_script.Event.InteractableObjectsSection.Objects.Where(o => o.ObjectId > 0).Select(o => new ReactiveInteractableObject(o,
@@ -198,6 +204,7 @@ public class ScriptEditorViewModel : EditorViewModel
         GenerateTemplateCommand = ReactiveCommand.CreateFromTask(GenerateTemplate);
         AddStartingChibisCommand = ReactiveCommand.Create(AddStartingChibis);
         RemoveStartingChibisCommand = ReactiveCommand.Create(RemoveStartingChibis);
+        AddChoiceCommand = ReactiveCommand.Create(AddChoice);
         AddInteractableObjectCommand = ReactiveCommand.CreateFromTask(AddInteractableObject);
         RemoveInteractableObjectCommand = ReactiveCommand.Create(RemoveInteractableObject);
 
@@ -273,6 +280,14 @@ public class ScriptEditorViewModel : EditorViewModel
                 CommandVerb.CHESS_CLEAR_ANNOTATIONS => new EmptyScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.CHESS_RESET => new EmptyScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.SCENE_GOTO_CHESS => new SceneGotoScriptCommandEditorViewModel(_selectedCommand, this, _log, Window),
+                CommandVerb.EPHEADER => new EpheaderScriptCommandEditorViewModel(_selectedCommand, this, _log),
+                CommandVerb.NOOP3 => new EmptyScriptCommandEditorViewModel(_selectedCommand, this, _log),
+                CommandVerb.CONFETTI => new ConfettiScriptCommandEditorViewModel(_selectedCommand, this, _log),
+                CommandVerb.BG_DISPCG => new BgDispCgScriptCommandEditorViewModel(_selectedCommand, this, _log),
+                CommandVerb.BG_SCROLL => new BgScrollScriptCommandEditorViewModel(_selectedCommand, this, _log),
+                CommandVerb.OP_MODE => new EmptyScriptCommandEditorViewModel(_selectedCommand, this, _log),
+                CommandVerb.WAIT_CANCEL => new WaitCancelScriptCommandEditorViewModel(_selectedCommand, this, _log),
+                CommandVerb.BG_REVERT => new EmptyScriptCommandEditorViewModel(_selectedCommand, this, _log),
                 CommandVerb.BG_DISP2 => new BgDispScriptCommandEditorViewModel(_selectedCommand, this, _log, Window),
                 _ => new(_selectedCommand, this, _log),
             };
@@ -756,6 +771,25 @@ public class ScriptEditorViewModel : EditorViewModel
         UpdatePreview();
     }
 
+    private void AddChoice()
+    {
+        ChoicesSectionEntry choice = new()
+        {
+            Id = _script.Event.LabelsSection.Objects.FirstOrDefault(i => i.Id > 0)?.Id ?? 0,
+            Text = "Replace me",
+        };
+        if (_script.Event.ChoicesSection.Objects.Count > 0)
+        {
+            _script.Event.ChoicesSection.Objects.Insert(_script.Event.ChoicesSection.Objects.Count - 1, choice);
+        }
+        else
+        {
+            _script.Event.ChoicesSection.Objects.Add(choice);
+        }
+        Choices.Add(new(choice, _script, this));
+        Description.UnsavedChanges = true;
+    }
+
     private async Task AddInteractableObject()
     {
         AddInteractableObjectDialogViewModel addInteractableObjectDialogViewModel = new(UnusedInteractableObjects,
@@ -927,5 +961,55 @@ public class ReactiveInteractableObject(
             scriptEditor.UpdatePreview();
             script.UnsavedChanges = true;
         }
+    }
+}
+
+public class ReactiveChoice : ReactiveObject
+{
+    public ChoicesSectionEntry Choice { get; }
+
+    private ScriptItem _script;
+    private ScriptEditorViewModel _scriptEditor;
+
+    public ReactiveScriptSection AssociatedSection
+    {
+        get => _scriptEditor.ScriptSections.FirstOrDefault(sec => sec.Name.Equals(
+            _script.Event.LabelsSection.Objects.FirstOrDefault(s => s.Id == Choice.Id)?.Name.Replace("/", "")));
+        set
+        {
+            Choice.Id = _script.Event.LabelsSection.Objects.FirstOrDefault(c => c.Name.Replace("/", "").Equals(value.Name))?.Id ?? 0;
+            this.RaisePropertyChanged();
+            _scriptEditor.UpdatePreview();
+            _scriptEditor.Description.UnsavedChanges = true;
+        }
+    }
+
+    public string ChoiceText
+    {
+        get => Choice.Text.GetSubstitutedString(_scriptEditor.Window.OpenProject);
+        set
+        {
+            Choice.Text = value.GetOriginalString(_scriptEditor.Window.OpenProject);
+            this.RaisePropertyChanged();
+            _scriptEditor.UpdatePreview();
+            _scriptEditor.Description.UnsavedChanges = true;
+        }
+    }
+
+    public ICommand DeleteCommand { get; }
+
+    public ReactiveChoice(ChoicesSectionEntry choice, ScriptItem script, ScriptEditorViewModel scriptEditor)
+    {
+        Choice = choice;
+        _script = script;
+        _scriptEditor = scriptEditor;
+
+        DeleteCommand = ReactiveCommand.Create(() =>
+        {
+            _script.Event.ChoicesSection.Objects.Remove(Choice);
+            _scriptEditor.UpdatePreview();
+            _scriptEditor.Description.UnsavedChanges = true;
+            _scriptEditor.Choices.Remove(this);
+        });
     }
 }

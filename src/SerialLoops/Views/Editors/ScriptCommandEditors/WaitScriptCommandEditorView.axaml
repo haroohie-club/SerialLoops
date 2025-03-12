@@ -9,7 +9,7 @@
              x:Class="SerialLoops.Views.Editors.ScriptCommandEditors.WaitScriptCommandEditorView">
     <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto">
         <TextBlock Grid.Row="0" Margin="0,7,0,0" Grid.Column="0" Text="{x:Static assets:Strings.Wait_Time__Frames_}"/>
-        <NumericUpDown Grid.Row="0" Margin="10,0,0,0" Grid.Column="1" Minimum="0" Maximum="{Binding MaxShort}" Value="{Binding WaitTime}"
+        <NumericUpDown Grid.Row="0" Margin="10,0,0,0" Grid.Column="1" Minimum="0" Maximum="1023" Value="{Binding WaitTime}"
                        FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
     </Grid>
 </UserControl>

@@ -173,10 +173,10 @@ public class TopicEditorViewModel : EditorViewModel
         Topic = topic;
         _title = Topic.TopicEntry.Title;
         Scripts = new(window.OpenProject.Items.Where(i => i.Type == ItemDescription.ItemType.Script).Cast<ScriptItem>());
-        short associatedScriptIndex = (short)(Topic.TopicEntry.Type == TopicType.Main ? Topic.HiddenMainTopic?.EventIndex ?? Topic.TopicEntry.EventIndex : Topic.TopicEntry.EventIndex);
+        short associatedScriptIndex = Topic.TopicEntry.Type == TopicType.Main ? Topic.HiddenMainTopic?.EventIndex ?? Topic.TopicEntry.EventIndex : Topic.TopicEntry.EventIndex;
         _associatedScript = (ScriptItem)window.OpenProject.Items.FirstOrDefault(i =>
             i.Type == ItemDescription.ItemType.Script && ((ScriptItem)i).Event.Index == associatedScriptIndex);
-        EpisodeGroups = [Strings.Episode_1, Strings.Episode_2, Strings.Episode_3, Strings.Episode_4, Strings.Episode_5];
+        EpisodeGroups = [Strings.EPISODE_1, Strings.EPISODE_2, Strings.EPISODE_3, Strings.EPISODE_4, Strings.EPISODE_5];
         _episodeGroup = Topic.TopicEntry.EpisodeGroup;
         _puzzlePhaseGroup = Topic.TopicEntry.PuzzlePhaseGroup;
         _baseTimeGain = Topic.TopicEntry.BaseTimeGain;
