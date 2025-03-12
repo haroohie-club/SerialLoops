@@ -74,6 +74,8 @@ public class EditorTabsPanelViewModel : ViewModelBase
                 return new CharacterSpriteEditorViewModel((CharacterSpriteItem)item, MainWindow, _log);
             case ItemDescription.ItemType.Chess_Puzzle:
                 return new ChessPuzzleEditorViewModel((ChessPuzzleItem)item, MainWindow, _log);
+            case ItemDescription.ItemType.Chibi:
+                return new ChibiEditorViewModel((ChibiItem)item, MainWindow, _log);
             case ItemDescription.ItemType.Group_Selection:
                 return new GroupSelectionEditorViewModel((GroupSelectionItem)item, MainWindow, _log);
             case ItemDescription.ItemType.Item:
