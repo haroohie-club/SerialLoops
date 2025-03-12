@@ -5,10 +5,12 @@
         "InjectionSites": [
             {
                 "Code": "01",
+                "Repl": false,
                 "Location": "020C7888"
             },
             {
                 "Code": "02",
+                "Repl": false,
                 "Location": "020C77FC"
             }
         ],
@@ -33,6 +35,7 @@
         "InjectionSites": [
             {
                 "Code": "ARM9",
+                "Repl": false,
                 "Location": "0205F180"
             }
         ],
@@ -69,6 +72,190 @@
                         ]
                     }
                 ]
+            }
+        ]
+    },
+    {
+        "Name": "Enable Debug Printing",
+        "Description": "Enables the game\u0027s built-in debug printing and redirects its output to the emulator console.",
+        "InjectionSites": [
+            {
+                "Code": "ARM9",
+                "Repl": false,
+                "Location": "0202293C"
+            },
+            {
+                "Code": "ARM9",
+                "Repl": false,
+                "Location": "02022944"
+            },
+            {
+                "Code": "ARM9",
+                "Repl": true,
+                "Location": "2022794"
+            },
+            {
+                "Code": "ARM9",
+                "Repl": true,
+                "Location": "202279C"
+            },
+            {
+                "Code": "ARM9",
+                "Repl": true,
+                "Location": "2078DB0"
+            }
+        ],
+        "Files": [
+            {
+                "File": "dbgPrintEnable_asm.s",
+                "Destination": "source/dbgPrintEnable_asm.s",
+                "Symbols": [],
+                "Parameters": []
+            },
+            {
+                "File": "print.s",
+                "Destination": "source/print.s",
+                "Symbols": [],
+                "Parameters": []
+            },
+            {
+                "File": "2022794.s",
+                "Destination": "replSource/2022794/2022794.s",
+                "Symbols": [],
+                "Parameters": []
+            },
+            {
+                "File": "202279C.s",
+                "Destination": "replSource/202279C/202279C.s",
+                "Symbols": [],
+                "Parameters": []
+            },
+            {
+                "File": "2078DB0.s",
+                "Destination": "replSource/2078DB0/2078DB0.s",
+                "Symbols": [],
+                "Parameters": []
+            }
+        ]
+    },
+    {
+        "Name": "Sensible Interactable Object Selection",
+        "Description": "Normally, the game picks which interactable objects to specify sequentially, despite storing the ID of the interactable object in the script. This hack makes it so it uses that ID instead, making the script editor tooling more useful.",
+        "InjectionSites": [
+            {
+                "Code": "ARM9",
+                "Repl": false,
+                "Location": "02066678"
+            },
+            {
+                "Code": "ARM9",
+                "Repl": false,
+                "Location": "020666B0"
+            }
+        ],
+        "Files": [
+            {
+                "File": "interactableObjById_asm.s",
+                "Destination": "source/interactableObjById_asm.s",
+                "Symbols": [],
+                "Parameters": []
+            }
+        ]
+    },
+    {
+        "Name": "Change Monologue Text Color",
+        "Description": "Changes the monologue text color to one of the other built in colors.",
+        "InjectionSites": [
+            {
+                "Code": "ARM9",
+                "Repl": true,
+                "Location": "0208EFBB"
+            }
+        ],
+        "Files": [
+            {
+                "File": "0208EFBB.s",
+                "Destination": "replSource/0208EFBB/0208EFBB.s",
+                "Symbols": [],
+                "Parameters": [
+                    {
+                        "Name": "newColorCode",
+                        "DescriptiveName": "New Color",
+                        "Values": [
+                            {
+                                "Name": "White",
+                                "Value": "30"
+                            },
+                            {
+                                "Name": "Off-White",
+                                "Value": "32"
+                            },
+                            {
+                                "Name": "Gray",
+                                "Value": "33"
+                            },
+                            {
+                                "Name": "Lavendar",
+                                "Value": "34"
+                            },
+                            {
+                                "Name": "Red",
+                                "Value": "35"
+                            },
+                            {
+                                "Name": "Faded Gray",
+                                "Value": "36"
+                            },
+                            {
+                                "Name": "Black",
+                                "Value": "37"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "Name": "Investigation Phase - All Chibis Playable",
+        "Description": "This hack makes all chibis playable in the investigation phase by changing checks that specifically look for Kyon to look for the first chibi placed on the map. Ensure the chibi you want to play as is the first one you place down and this hack will take care of the rest.",
+        "InjectionSites": [
+            {
+                "Repl": false,
+                "Code": "ARM9",
+                "Location": "020664E8"
+            },
+            {
+                "Repl": false,
+                "Code": "ARM9",
+                "Location": "02066680"
+            }
+        ],
+        "Files": [
+            {
+                "File": "allowControllingAllChibis_asm.s",
+                "Destination": "source/allowControllingAllChibis_asm.s",
+                "Symbols": [],
+                "Parameters": []
+            }
+        ]
+    },
+    {
+        "Name": "Make ITEM_DISPIMG Work on Isometric Maps",
+        "Description": "In the base game, ITEM_DISPIMG will display the item behind most of the background layer on maps. This moves it up a few layers so it displays ahead of even the occlusion layer.",
+        "InjectionSites": [
+            {
+                "Repl": true,
+                "Code": "ARM9",
+                "Location": "02062BE8"
+            }
+        ],
+        "Files": [
+            {
+                "File": "02062BE8.s",
+                "Destination": "replSource/02062BE8/02062BE8.s",
+                "Symbols": [],
+                "Parameters": []
             }
         ]
     }

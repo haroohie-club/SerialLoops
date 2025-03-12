@@ -1,0 +1,146 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="using:SerialLoops.ViewModels.Editors"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:assets="using:SerialLoops.Assets"
+             xmlns:controls="using:SerialLoops.Controls"
+             xmlns:i="using:Avalonia.Xaml.Interactivity"
+             xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
+             xmlns:li="using:SerialLoops.Lib.Items"
+             xmlns:sk="using:SkiaSharp"
+             xmlns:utility="using:SerialLoops.Utility"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:GroupSelectionEditorViewModel"
+             x:Class="SerialLoops.Views.Editors.GroupSelectionEditorView">
+
+    <ScrollViewer>
+        <DockPanel>
+            <ItemsControl ItemsSource="{Binding Activities}" DockPanel.Dock="Top">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas Width="512" Height="394"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.DataTemplates>
+                    <DataTemplate DataType="vm:ScenarioActivityViewModel">
+                        <Canvas Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"
+                                Background="{Binding BackgroundColor}" Name="ScenarioActivityCanvas">
+                            <i:Interaction.Behaviors>
+                                <ia:EventTriggerBehavior EventName="Tapped" SourceObject="{Binding #ScenarioActivityCanvas}">
+                                    <ia:InvokeCommandAction Command="{Binding SelectActivityCommand}"/>
+                                </ia:EventTriggerBehavior>
+                            </i:Interaction.Behaviors>
+
+                            <Image Source="{Binding Letter, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
+                                   Canvas.Left="134" Canvas.Top="22" Width="64" Height="64"/>
+                            <Image Source="{Binding TitlePlateSlope, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
+                                   Canvas.Left="52" Canvas.Top="116" Width="32" Height="32"/>
+                            <Image Source="{Binding TitlePlateMain, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
+                                   Canvas.Left="84" Canvas.Top="84" Width="136" Height="64" Stretch="Fill"/>
+                            <Image Source="{Binding TitlePlateText, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
+                                   Canvas.Left="82" Canvas.Top="118" Width="136" Height="32"/>
+
+                            <ItemsRepeater ItemsSource="{Binding LockedIcons}"
+                                           Canvas.Left="10" Canvas.Top="60">
+                                <ItemsRepeater.Layout>
+                                    <UniformGridLayout MinItemHeight="48" MinItemWidth="48" MinColumnSpacing="16" MaximumRowsOrColumns="2"/>
+                                </ItemsRepeater.Layout>
+                                <ItemsRepeater.ItemTemplate>
+                                    <DataTemplate DataType="sk:SKBitmap">
+                                        <Image Source="{Binding Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
+                                    </DataTemplate>
+                                </ItemsRepeater.ItemTemplate>
+                            </ItemsRepeater>
+
+                            <Border Background="Transparent" BorderThickness="2" BorderBrush="Red" IsVisible="{Binding Selected}"
+                                    Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
+                        </Canvas>
+                    </DataTemplate>
+                </ItemsControl.DataTemplates>
+                <ItemsControl.Styles>
+                    <Style Selector="ItemsControl > ContentPresenter" x:DataType="vm:ScenarioActivityViewModel">
+                        <Setter Property="(Canvas.Left)" Value="{Binding CanvasLeft}"/>
+                        <Setter Property="(Canvas.Top)" Value="{Binding CanvasTop}"/>
+                    </Style>
+                </ItemsControl.Styles>
+            </ItemsControl>
+
+            <DockPanel DockPanel.Dock="Bottom" IsVisible="{Binding SelectedActivity, Converter={x:Static ObjectConverters.IsNotNull}}">
+                <StackPanel DataContext="{Binding SelectedActivity}" Orientation="Vertical" Spacing="20">
+                    <Image Source="{Binding SelectedDescriptionImage, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
+                           IsVisible="{Binding SelectedDescriptionImage, Converter={x:Static ObjectConverters.IsNotNull}}"
+                           Stretch="None"/>
+
+                    <StackPanel Orientation="Vertical" Spacing="5">
+                        <TextBlock Text="{x:Static assets:Strings.Title}" HorizontalAlignment="Center"/>
+                        <TextBox Text="{Binding Title}" Width="150"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Vertical" Spacing="5">
+                        <TextBlock Text="{x:Static assets:Strings.Future_Description}" HorizontalAlignment="Center"/>
+                        <TextBox Text="{Binding FutureDesc}" Width="350" Height="60" Name="FutureDescBox"
+                                 AcceptsReturn="True">
+                            <i:Interaction.Behaviors>
+                                <ia:EventTriggerBehavior EventName="GotFocus" SourceObject="{Binding #FutureDescBox}">
+                                    <ia:InvokeCommandAction Command="{Binding SelectFutureDescCommand}"/>
+                                </ia:EventTriggerBehavior>
+                            </i:Interaction.Behaviors>
+                        </TextBox>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Vertical" Spacing="5">
+                        <TextBlock Text="{x:Static assets:Strings.Past_Description}" HorizontalAlignment="Center"/>
+                        <TextBox Text="{Binding PastDesc}" Width="350" Height="60" Name="PastDescBox"
+                                 AcceptsReturn="True">
+                            <i:Interaction.Behaviors>
+                                <ia:EventTriggerBehavior EventName="GotFocus" SourceObject="{Binding #PastDescBox}">
+                                    <ia:InvokeCommandAction Command="{Binding SelectPastDescCommand}"/>
+                                </ia:EventTriggerBehavior>
+                            </i:Interaction.Behaviors>
+                        </TextBox>
+                    </StackPanel>
+
+                    <ItemsRepeater ItemsSource="{Binding Routes}" MinHeight="800">
+                        <ItemsRepeater.Layout>
+                            <UniformGridLayout Orientation="Horizontal" MaximumRowsOrColumns="5" ItemsJustification="Center"
+                                               MinColumnSpacing="32" MinRowSpacing="32" MinItemWidth="200" MinItemHeight="300"/>
+                        </ItemsRepeater.Layout>
+                        <ItemsRepeater.ItemTemplate>
+                            <DataTemplate DataType="vm:ScenarioRouteViewModel">
+                                <StackPanel Orientation="Vertical" Spacing="16">
+                                    <TextBox Text="{Binding Title}" HorizontalAlignment="Center" Width="200"/>
+                                    <controls:ItemLink Item="{Binding Script}" Tabs="{Binding Tabs}"
+                                                       HorizontalAlignment="Center"/>
+                                    <ItemsRepeater ItemsSource="{Binding CharacterIcons}" HorizontalAlignment="Center">
+                                        <ItemsRepeater.Layout>
+                                            <UniformGridLayout Orientation="Horizontal" MaximumRowsOrColumns="3"
+                                                               MinColumnSpacing="4" MinRowSpacing="4"
+                                                               MinItemWidth="32" MinItemHeight="32"/>
+                                        </ItemsRepeater.Layout>
+                                        <ItemsRepeater.ItemTemplate>
+                                            <DataTemplate DataType="sk:SKBitmap">
+                                                <Image Source="{Binding Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
+                                            </DataTemplate>
+                                        </ItemsRepeater.ItemTemplate>
+                                    </ItemsRepeater>
+                                    <StackPanel Orientation="Vertical" Spacing="5" HorizontalAlignment="Center">
+                                        <TextBlock Text="{x:Static assets:Strings.Kyonless_Topics}" HorizontalAlignment="Center"/>
+                                        <ListBox ItemsSource="{Binding KyonlessTopics}" HorizontalAlignment="Center"
+                                                 Height="160">
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate DataType="li:TopicItem">
+                                                    <TextBlock Text="{Binding DisplayName}"/>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+                                    </StackPanel>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsRepeater.ItemTemplate>
+                    </ItemsRepeater>
+                </StackPanel>
+            </DockPanel>
+        </DockPanel>
+    </ScrollViewer>
+</UserControl>

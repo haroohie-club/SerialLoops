@@ -3,7 +3,8 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
-# Archive files used for testing
+# Test files
+assets/
 bgm/
 vce/
 dat.bin
@@ -37,6 +38,12 @@ bld/
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
+
+# Python venv
+.venv/
+
+# Rider solution directory
+.idea/
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/
@@ -355,3 +362,8 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+# macOS stuff
+.DS_Store
+SDL/
+libSDL2.dylib

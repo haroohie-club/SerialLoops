@@ -9,8 +9,8 @@
                     "Verb": "KBG_DISP",
                     "Parameters": [
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.BgScriptParameter",
-                            "ParameterName": "\"Kinetic\" Background",
+                            "ParameterType": "BG",
+                            "ParameterName": "\u0022Kinetic\u0022 Background",
                             "Value": "BG_KBG01"
                         }
                     ]
@@ -19,7 +19,7 @@
                     "Verb": "BG_DISP",
                     "Parameters": [
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.BgScriptParameter",
+                            "ParameterType": "BG",
                             "ParameterName": "Background",
                             "Value": "BG_TMP00_D"
                         }
@@ -29,28 +29,28 @@
                     "Verb": "BGM_PLAY",
                     "Parameters": [
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.BgmScriptParameter",
-                            "ParameterName": "BGM",
+                            "ParameterType": "BGM",
+                            "ParameterName": "Music",
                             "Value": "BGM001"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.BgmModeScriptParameter",
-                            "ParameterName": "BGM Mode",
+                            "ParameterType": "BGM_MODE",
+                            "ParameterName": "Mode",
                             "Value": "2"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.ShortScriptParameter",
+                            "ParameterType": "SHORT",
                             "ParameterName": "Volume",
                             "Value": "100"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.ShortScriptParameter",
-                            "ParameterName": "Fade In Time",
+                            "ParameterType": "SHORT",
+                            "ParameterName": "Fade In Time (Frames)",
                             "Value": "30"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.ShortScriptParameter",
-                            "ParameterName": "Fade Out Time",
+                            "ParameterType": "SHORT",
+                            "ParameterName": "Fade Out Time (Frames)",
                             "Value": "0"
                         }
                     ]
@@ -59,12 +59,12 @@
                     "Verb": "SET_PLACE",
                     "Parameters": [
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.BoolScriptParameter",
-                            "ParameterName": "Display",
-                            "Value": "true,1,0"
+                            "ParameterType": "BOOL",
+                            "ParameterName": "Display?",
+                            "Value": "True,1,0"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.PlaceScriptParameter",
+                            "ParameterType": "PLACE",
                             "ParameterName": "Place",
                             "Value": "1"
                         }
@@ -74,22 +74,22 @@
                     "Verb": "SCREEN_FADEIN",
                     "Parameters": [
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.ShortScriptParameter",
-                            "ParameterName": "Fade In Time",
+                            "ParameterType": "SHORT",
+                            "ParameterName": "Fade Time (Frames)",
                             "Value": "30"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.ShortScriptParameter",
+                            "ParameterType": "SHORT",
                             "ParameterName": "Fade In Percentage",
                             "Value": "0"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.ScreenScriptParameter",
-                            "ParameterName": "Screen",
+                            "ParameterType": "SCREEN",
+                            "ParameterName": "Location",
                             "Value": "2"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.ColorMonochromeScriptParameter",
+                            "ParameterType": "COLOR_MONOCHROME",
                             "ParameterName": "Color",
                             "Value": "1"
                         }

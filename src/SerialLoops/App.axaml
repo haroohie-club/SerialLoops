@@ -1,0 +1,271 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:assets="using:SerialLoops.Assets"
+             xmlns:utility="using:SerialLoops.Utility"
+             x:Class="SerialLoops.App"
+             xmlns:dialoghost="using:DialogHostAvalonia"
+             xmlns:toolbar="using:MiniToolbar.Avalonia"
+             xmlns:local="using:SerialLoops"
+             xmlns:mintoolbarthemes="using:MiniToolbar.Avalonia.Themes"
+             xmlns:tabaloniathemes="using:Tabalonia.Themes.Custom"
+             xmlns:system="using:System"
+             RequestedThemeVariant="Default"
+             Name="Serial Loops">
+    <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+    <Application.DataTemplates>
+        <local:ViewLocator />
+    </Application.DataTemplates>
+
+    <NativeMenu.Menu>
+        <NativeMenu>
+            <NativeMenuItem Header="{x:Static assets:Strings.About_Serial_Loops}" Icon="/Assets/serial-loops.ico"
+                            Click="About_Click" />
+            <NativeMenuItemSeparator />
+            <NativeMenuItem Header="{x:Static assets:Strings._Preferences___}"
+                            Icon="avares://SerialLoops/Assets/Icons/Options.png" Click="Preferences_Click" />
+            <NativeMenuItem Header="{x:Static assets:Strings._Check_for_Updates___}"
+                            Icon="avares://SerialLoops/Assets/Icons/Update.png" Click="Updates_Click" />
+            <NativeMenuItem Header="{x:Static assets:Strings.View__Logs}" Click="Logs_Click" />
+            <NativeMenuItem Header="{x:Static assets:Strings.View_Crash_Log}" Click="CrashLog_Click"/>
+        </NativeMenu>
+    </NativeMenu.Menu>
+
+    <Application.Styles>
+        <FluentTheme />
+        <dialoghost:DialogHostStyles />
+        <tabaloniathemes:CustomTheme />
+        <mintoolbarthemes:MiniToolbarStyles />
+        <StyleInclude Source="avares://Avalonia.Controls.TreeDataGrid/Themes/Fluent.axaml" />
+        <StyleInclude Source="avares://Avalonia.Controls.ColorPicker/Themes/Fluent/Fluent.xaml" />
+        <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
+        <StyleInclude Source="avares://Avalonia.Controls.ColorPicker/Themes/Fluent/Fluent.xaml" />
+
+        <!-- Toolbar styling -->
+        <Style Selector="toolbar|Toolbar">
+            <Setter Property="MaxHeight" Value="{DynamicResource ToolbarCompactHeightPadded}" />
+            <Setter Property="Height" Value="{DynamicResource ToolbarCompactHeightPadded}" />
+        </Style>
+        <Style Selector="Label.ToolbarLabel">
+            <Setter Property="Foreground" Value="{DynamicResource ResourceKey=ToolbarTextColor}" />
+        </Style>
+        <Style Selector="Button.ToolbarButton">
+            <!-- We use toolbar height here so these buttons are always proportional & square in the bar -->
+            <Setter Property="Width" Value="{DynamicResource ToolbarCompactHeight}" />
+            <Setter Property="Height" Value="{DynamicResource ToolbarCompactHeight}" />
+            <Setter Property="Background" Value="{DynamicResource ToolbarBackgroundColor}" />
+            <Setter Property="Padding" Value="5" />
+            <Setter Property="Margin" Value="5 0" />
+            <Setter Property="HorizontalAlignment" Value="Right" />
+            <Setter Property="ToolTip.Tip" Value="{Binding ., DataType=system:String}"/>
+        </Style>
+
+        <!-- Tab Control styling -->
+        <Style Selector="TabControl">
+            <Setter Property="Background" Value="{DynamicResource TabControlBackgroundColor}"/>
+            <Setter Property="CornerRadius" Value="7" />
+        </Style>
+        <Style Selector="TabItem">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Background" Value="{DynamicResource TabItemBackgroundColor}"/>
+            <Setter Property="Margin" Value="0 0 0 0"/>
+            <Setter Property="Padding" Value="10 0"/>
+        </Style>
+        <Style Selector="TabControl.Panel">
+            <Setter Property="Margin" Value="10,5,5,20" />
+        </Style>
+
+        <!-- Numeric Up/Down styling -->
+        <!-- <Style Selector="TabControl"> -->
+        <!--     <Setter Property="FontFamily"></Setter> -->
+        <!-- </Style> -->
+
+        <!-- Windows menu styling -->
+        <OnPlatform>
+            <OnPlatform.Windows>
+                <Style Selector="NativeMenuBar">
+                    <Setter Property="Margin" Value="5 5 0 0"/>
+                </Style>
+            </OnPlatform.Windows>
+            <OnPlatform.Default>
+                <Style Selector="NativeMenuBar">
+                    <Setter Property="Margin" Value="0"/>
+                </Style>
+            </OnPlatform.Default>
+        </OnPlatform>
+
+        <!-- Text styling -->
+        <Style Selector="TextBlock.h1">
+            <Setter Property="FontSize" Value="32" />
+            <Setter Property="FontWeight" Value="Bold" />
+        </Style>
+        <Style Selector="TextBlock.h2">
+            <Setter Property="FontSize" Value="24" />
+            <Setter Property="FontWeight" Value="Bold" />
+        </Style>
+        <Style Selector="TextBlock.b">
+            <Setter Property="FontWeight" Value="Bold" />
+        </Style>
+        <Style Selector="TextBlock.secondary">
+            <Setter Property="Foreground" Value="{DynamicResource SecondaryColor}" />
+        </Style>
+        <Style Selector="TextBlock.keyprompt">
+            <Setter Property="Background" Value="{DynamicResource KeybindBackgroundColor}" />
+            <Setter Property="FontSize" Value="10" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="Padding" Value="2" />
+        </Style>
+        <Style Selector="TextBlock.link">
+            <Setter Property="TextDecorations" Value="Underline" />
+        </Style>
+        <Style Selector="TextBlock.link:not(:disabled)">
+            <Setter Property="Foreground" Value="{DynamicResource ResourceKey=LinkColor}" />
+            <Setter Property="Cursor" Value="Hand" />
+        </Style>
+        <Style Selector="TextBlock.link:disabled">
+            <Setter Property="Foreground" Value="{DynamicResource ResourceKey=DisabledLinkColor}" />
+        </Style>
+        <Style Selector="ComboBox">
+            <Setter Property="IsTextSearchEnabled" Value="True" />
+        </Style>
+
+        <Style Selector="HeaderedContentControl">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Header -->
+                        <Border Grid.Row="0" Grid.Column="0"
+                                ZIndex="1"
+                                Background="{DynamicResource FallbackBackgroundColor}"
+                                Padding="5,0,5,0"
+                                Margin="5,0,0,0"
+                                Name="Header">
+                            <TextBlock
+                                Text="{TemplateBinding Header}"
+                                FontWeight="Bold" />
+                        </Border>
+
+                        <!-- Content Area -->
+                        <Border Grid.Row="0" Grid.Column="0"
+                                Grid.RowSpan="2"
+                                Padding="0,5,0,0"
+                                Grid.ColumnSpan="2"
+                                CornerRadius="4"
+                                Margin="0,10,0,0"
+                                BorderBrush="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                                BorderThickness="1"
+                                Name="Border">
+                            <Border.Clip>
+                                <MultiBinding Converter="{x:Static utility:GapClipMaskConverter.Instance}">
+                                    <Binding ElementName="Border" Path="Bounds" />
+                                    <Binding ElementName="Header" Path="Bounds" />
+                                </MultiBinding>
+                            </Border.Clip>
+                            <ContentPresenter
+                                Name="PART_ContentPresenter"
+                                Padding="8"
+                                Content="{TemplateBinding Content}" />
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+
+        <!--From https://github.com/AvaloniaUI/Avalonia/issues/3016-->
+        <!--Use Classes="RadioButtonListBox" in any ListBox to represent its items as RadioButtons-->
+        <Style Selector="ListBox.RadioButtonListBox">
+            <Setter Property="BorderBrush" Value="Transparent"/>
+        </Style>
+        <Style Selector="ListBox.RadioButtonListBox ListBoxItem">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate x:DataType="ListBoxItem">
+                        <Border Background="Transparent" >
+                            <RadioButton Content="{TemplateBinding ContentPresenter.Content}"
+                                         VerticalAlignment="Center"
+                                         IsChecked="{Binding Path=IsSelected,RelativeSource={RelativeSource TemplatedParent},Mode=TwoWay}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Application.Styles>
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <system:Double x:Key="ToolbarCompactHeight">36</system:Double>
+            <system:Double x:Key="ToolbarCompactHeightPadded">43</system:Double>
+
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Light">
+                    <Color x:Key="BackgroundTint">White</Color>
+                    <OnPlatform x:Key="FallbackBackgroundColor">
+                        <OnPlatform.Default>
+                            <SolidColorBrush>Transparent</SolidColorBrush>
+                        </OnPlatform.Default>
+                        <OnPlatform.Linux>
+                            <SolidColorBrush>#FFDDDDDD</SolidColorBrush>
+                        </OnPlatform.Linux>
+                    </OnPlatform>
+                    <system:Double x:Key="BackgroundAcrylicOpacity">0.65</system:Double>
+                    <system:Double x:Key="BackgroundAcrylicTintStrength">0.9</system:Double>
+                    <IImage x:Key="ColoredIconPath">avares://SerialLoops/Assets/Icons/AppIconLight.png</IImage>
+                    <SolidColorBrush x:Key="LinkColor">Blue</SolidColorBrush>
+                    <SolidColorBrush x:Key="SecondaryColor">#77000000</SolidColorBrush>
+                    <SolidColorBrush x:Key="KeybindBackgroundColor">#44000000</SolidColorBrush>
+                    <SolidColorBrush x:Key="DisabledLinkColor">#77000000</SolidColorBrush>
+                    <SolidColorBrush x:Key="GroupLineColor">#55000000</SolidColorBrush>
+                    <SolidColorBrush x:Key="AccentColor">#CCCCCC</SolidColorBrush>
+                    <SolidColorBrush x:Key="ToolbarTextColor">Transparent</SolidColorBrush>
+                    <SolidColorBrush x:Key="ToolbarBorderColor">Transparent</SolidColorBrush>
+                    <SolidColorBrush x:Key="ToolbarBackgroundColor">Transparent</SolidColorBrush>
+                    <SolidColorBrush x:Key="TabControlBackgroundColor">#11ffffff</SolidColorBrush>
+                    <SolidColorBrush x:Key="TabBackgroundColor">Transparent</SolidColorBrush>
+                    <SolidColorBrush x:Key="TabStripControlBackground">#11ffffff</SolidColorBrush>
+                    <Color x:Key="CropResizeOverlayColor">#55000000</Color>
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Dark">
+                    <Color x:Key="BackgroundTint">Black</Color>
+                    <OnPlatform x:Key="FallbackBackgroundColor">
+                        <OnPlatform.Default>
+                            <SolidColorBrush>Transparent</SolidColorBrush>
+                        </OnPlatform.Default>
+                        <OnPlatform.Linux>
+                            <SolidColorBrush>#FF222222</SolidColorBrush>
+                        </OnPlatform.Linux>
+                    </OnPlatform>
+                    <system:Double x:Key="BackgroundAcrylicOpacity">0.4</system:Double>
+                    <system:Double x:Key="BackgroundAcrylicTintStrength">1</system:Double>
+                    <IImage x:Key="ColoredIconPath">avares://SerialLoops/Assets/Icons/AppIconDark.png</IImage>
+                    <SolidColorBrush x:Key="LinkColor">Cyan</SolidColorBrush>
+                    <SolidColorBrush x:Key="SecondaryColor">Gray</SolidColorBrush>
+                    <SolidColorBrush x:Key="KeybindBackgroundColor">DimGray</SolidColorBrush>
+                    <SolidColorBrush x:Key="DisabledLinkColor">Gray</SolidColorBrush>
+                    <SolidColorBrush x:Key="GroupLineColor">WhiteSmoke</SolidColorBrush>
+                    <SolidColorBrush x:Key="AccentColor">#222222</SolidColorBrush>
+                    <SolidColorBrush x:Key="ToolbarTextColor">Transparent</SolidColorBrush>
+                    <SolidColorBrush x:Key="ToolbarBorderColor">Transparent</SolidColorBrush>
+                    <SolidColorBrush x:Key="ToolbarBackgroundColor">Transparent</SolidColorBrush>
+                    <SolidColorBrush x:Key="TabControlBackgroundColor">#11ffffff</SolidColorBrush>
+                    <SolidColorBrush x:Key="TabBackgroundColor">Transparent</SolidColorBrush>
+                    <SolidColorBrush x:Key="TabBackgroundColorSelected">#11ffffff</SolidColorBrush>
+                    <Color x:Key="CropResizeOverlayColor">#AAFFFFFF</Color>
+
+                    <SolidColorBrush x:Key="TabControlWindowActiveBackgroundBrush" Color="Transparent" />
+                    <SolidColorBrush x:Key="TabControlWindowInactiveBackgroundBrush" Color="Transparent" />
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+
+</Application>

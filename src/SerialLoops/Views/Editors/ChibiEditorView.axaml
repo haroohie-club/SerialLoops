@@ -1,0 +1,47 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="using:SerialLoops.ViewModels.Editors"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:assets="using:SerialLoops.Assets"
+             xmlns:controls="using:SerialLoops.Controls"
+             xmlns:models="using:SerialLoops.Models"
+             xmlns:utiltiy="using:SerialLoops.Utility"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:ChibiEditorViewModel"
+             x:Class="SerialLoops.Views.Editors.ChibiEditorView">
+    <Grid RowDefinitions="Auto,*,Auto" ColumnDefinitions="Auto,*">
+        <controls:AnimatedImage Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" MinHeight="250" DataContext="{Binding AnimatedChibi}"/>
+
+        <HeaderedContentControl Grid.Row="1" Grid.Column="0" Header="{x:Static assets:Strings.Animation}">
+            <StackPanel Orientation="Vertical" Spacing="10">
+                <ComboBox ItemsSource="{Binding ChibiAnimationNames}" SelectedItem="{Binding SelectedAnimation}"/>
+                <controls:ChibiDirectionSelector DataContext="{Binding DirectionSelector}"/>
+            </StackPanel>
+        </HeaderedContentControl>
+        <HeaderedContentControl Grid.Row="1" Grid.Column="1" Header="{x:Static assets:Strings.Frames}">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <ItemsRepeater ItemsSource="{Binding ChibiFrames}">
+                    <ItemsRepeater.Layout>
+                        <WrapLayout Orientation="Horizontal" HorizontalSpacing="10" VerticalSpacing="10"/>
+                    </ItemsRepeater.Layout>
+                    <ItemsRepeater.ItemTemplate>
+                        <DataTemplate x:DataType="models:ReactiveFrameWithTiming">
+                            <StackPanel Orientation="Vertical" Spacing="5">
+                                <Image Source="{Binding Frame, Converter={x:Static utiltiy:SLConverters.SKBitmapToAvaloniaConverter}}" Stretch="None"/>
+                                <NumericUpDown Minimum="0" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" Value="{Binding Timing}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsRepeater.ItemTemplate>
+                </ItemsRepeater>
+            </ScrollViewer>
+        </HeaderedContentControl>
+
+        <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" Spacing="5">
+            <Button Content="{x:Static assets:Strings.Export_Frames}" Command="{Binding ExportFramesCommand}"/>
+            <Button Content="{x:Static assets:Strings.Export_GIF}" Command="{Binding ExportGifCommand}"/>
+            <Button Content="{x:Static assets:Strings.Replace_Frames}" Command="{Binding ReplaceFramesCommand}"/>
+        </StackPanel>
+    </Grid>
+</UserControl>
+

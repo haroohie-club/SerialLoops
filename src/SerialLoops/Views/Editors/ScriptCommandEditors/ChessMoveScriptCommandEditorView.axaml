@@ -1,0 +1,49 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="using:SerialLoops.ViewModels.Editors.ScriptCommandEditors"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:assets="using:SerialLoops.Assets"
+             xmlns:utility="using:SerialLoops.Utility"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:ChessMoveScriptCommandEditorViewModel"
+             x:Class="SerialLoops.Views.Editors.ScriptCommandEditors.ChessMoveScriptCommandEditorView"
+             Loaded="Control_OnLoaded">
+    <Grid ColumnDefinitions="Auto,Auto,Auto" RowDefinitions="Auto,Auto,Auto">
+        <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Spacing="20" Orientation="Horizontal">
+            <StackPanel Orientation="Vertical" Spacing="5">
+                <Rectangle Width="20" Height="20" Fill="Aqua" Opacity="0.5"/>
+                <TextBlock Text="{x:Static assets:Strings.Start}"/>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" Spacing="5">
+                <Rectangle Width="20" Height="20" Fill="Green" Opacity="0.5"/>
+                <TextBlock Text="{x:Static assets:Strings.End}"/>
+            </StackPanel>
+        </StackPanel>
+
+        <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Move_1}"/>
+        <Canvas Grid.Row="1" Grid.Column="1" Margin="10 0 0 0" PointerPressed="Board1_OnPointerPressed"
+                Width="{Binding Chessboard.Width}" Height="{Binding Chessboard.Height}">
+            <Image Canvas.Left="0" Canvas.Top="0" Source="{Binding Chessboard, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
+            <Rectangle Canvas.Left="{Binding Move1BeginX}" Canvas.Top="{Binding Move1BeginY}"
+                       Width="20" Height="20" Fill="Aqua" Opacity="0.5" IsVisible="{Binding Move1BeginPoint, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+            <Rectangle Canvas.Left="{Binding Move1EndX}" Canvas.Top="{Binding Move1EndY}"
+                       Width="20" Height="20" Fill="Green" Opacity="0.5" IsVisible="{Binding Move1EndPoint, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+        </Canvas>
+        <Button Grid.Row="1" Grid.Column="2" Margin="10 0 0 0" VerticalAlignment="Center"
+                Content="{x:Static assets:Strings.Clear_Move}" Command="{Binding ClearMove1Command}"/>
+
+        <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Move_2}"/>
+        <Canvas Grid.Row="2" Grid.Column="1" Margin="10 0 0 0" PointerPressed="Board2_OnPointerPressed"
+                Width="{Binding Chessboard.Width}" Height="{Binding Chessboard.Height}">
+            <Image Canvas.Left="0" Canvas.Top="0" Source="{Binding Chessboard, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
+            <Rectangle Canvas.Left="{Binding Move2BeginX}" Canvas.Top="{Binding Move2BeginY}"
+                       Width="20" Height="20" Fill="Aqua" Opacity="0.5" IsVisible="{Binding Move2BeginPoint, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+            <Rectangle Canvas.Left="{Binding Move2EndX}" Canvas.Top="{Binding Move2EndY}"
+                       Width="20" Height="20" Fill="Green" Opacity="0.5" IsVisible="{Binding Move2EndPoint, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+        </Canvas>
+        <Button Grid.Row="2" Grid.Column="2" Margin="10 0 0 0" VerticalAlignment="Center"
+                Content="{x:Static assets:Strings.Clear_Move}" Command="{Binding ClearMove2Command}"/>
+    </Grid>
+</UserControl>
+

@@ -1,0 +1,39 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:vm="using:SerialLoops.ViewModels.Dialogs"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:controls="using:SerialLoops.Controls"
+        xmlns:i="using:Avalonia.Xaml.Interactivity"
+        xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
+        mc:Ignorable="d" d:DesignWidth="550" d:DesignHeight="300"
+        SizeToContent="Width" Height="400"
+        TransparencyLevelHint="AcrylicBlur"
+        Background="{DynamicResource FallbackBackgroundColor}"
+        x:DataType="vm:ItemReferencesDialogViewModel"
+        x:Class="SerialLoops.Views.Dialogs.ItemReferencesDialog"
+        Icon="/Assets/serial-loops.ico"
+        Title="{Binding Title}"
+        Name="Dialog">
+    <Panel>
+        <controls:AcrylicBorderHandler/>
+        <StackPanel IsVisible="False">
+            <Button IsCancel="True" Command="{Binding CloseCommand}" CommandParameter="{Binding #Dialog}"/>
+        </StackPanel>
+
+        <ScrollViewer>
+            <Grid RowDefinitions="Auto,*" Width="550">
+                <TextBlock Grid.Row="0" Margin="10" FontWeight="Bold" Text="{Binding FoundReferencesLabel}" TextAlignment="Center" />
+                <TreeDataGrid Grid.Row="1" Background="{StaticResource AccentColor}" Margin="10" ShowColumnHeaders="False" CanUserResizeColumns="False" Name="Viewer" Source="{Binding Source}"
+                              KeyUp="Viewer_OnKeyUp">
+                    <i:Interaction.Behaviors>
+                        <ia:EventTriggerBehavior EventName="DoubleTapped" SourceObject="{Binding #Viewer}">
+                            <ia:InvokeCommandAction Command="{Binding OpenItemCommand}" CommandParameter="{Binding #Viewer}"/>
+                        </ia:EventTriggerBehavior>
+                    </i:Interaction.Behaviors>
+                </TreeDataGrid>
+            </Grid>
+        </ScrollViewer>
+    </Panel>
+</Window>
+

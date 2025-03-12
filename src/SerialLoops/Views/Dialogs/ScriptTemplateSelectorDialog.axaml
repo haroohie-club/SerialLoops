@@ -1,0 +1,62 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:SerialLoops.ViewModels.Dialogs"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:assets="using:SerialLoops.Assets"
+        xmlns:controls="using:SerialLoops.Controls"
+        xmlns:script="using:SerialLoops.Lib.Script"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        SizeToContent="Height"
+        Width="800"
+        TransparencyLevelHint="AcrylicBlur"
+        Background="{DynamicResource FallbackBackgroundColor}"
+        ExtendClientAreaToDecorationsHint="True"
+        x:DataType="vm:ScriptTemplateSelectorDialogViewModel"
+        x:Class="SerialLoops.Views.Dialogs.ScriptTemplateSelectorDialog"
+        Title="{x:Static assets:Strings.Select_Template_to_Apply}"
+        Name="ApplyTemplateDialog">
+    <Panel>
+        <controls:AcrylicBorderHandler/>
+
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="10 30" Spacing="10">
+            <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto">
+                <TextBox Grid.Column="0" Grid.Row="0" Width="200"
+                         Watermark="{x:Static assets:Strings.Filter_by_name}"
+                         Text="{Binding Filter}"/>
+                <ScrollViewer Grid.Column="0" Grid.Row="1">
+                    <ListBox Width="200" Height="330" ItemsSource="{Binding ScriptTemplates}"
+                             SelectedItem="{Binding SelectedScriptTemplate}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate DataType="script:ScriptTemplate">
+                                <TextBlock Text="{Binding Name}"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                        <ListBox.ItemContainerTheme>
+                            <ControlTheme TargetType="ListBoxItem" x:DataType="script:ScriptTemplate" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                                <Setter Property="TextSearch.Text" Value="{Binding Name}"/>
+                            </ControlTheme>
+                        </ListBox.ItemContainerTheme>
+                    </ListBox>
+                </ScrollViewer>
+
+                <StackPanel Grid.Column="1" Grid.Row="0" MinWidth="480" Margin="10,7,0,0"
+                            Spacing="3" HorizontalAlignment="Center" IsVisible="{Binding SelectedScriptTemplate, Converter={x:Static ObjectConverters.IsNull}}">
+                    <Svg Path="avares://SerialLoops/Assets/Icons/Template.svg" HorizontalAlignment="Center"
+                         Width="22"/>
+                    <TextBlock HorizontalAlignment="Center" Text="{x:Static assets:Strings.Please_select_a_template}"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Grid.Row="1" MinWidth="480" MinHeight="330" Margin="10" Spacing="5"
+                            Orientation="Vertical" IsVisible="{Binding SelectedScriptTemplate, Converter={x:Static ObjectConverters.IsNotNull}}">
+                    <TextBlock Text="{Binding SelectedScriptTemplate.Name}" Classes="h1"/>
+                    <TextBlock Text="{Binding SelectedScriptTemplate.Description}" TextWrapping="Wrap"/>
+                </StackPanel>
+            </Grid>
+            <StackPanel Orientation="Horizontal" Spacing="5" Margin="20" HorizontalAlignment="Center">
+                <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}" CommandParameter="{Binding #ApplyTemplateDialog}" IsCancel="True"/>
+                <Button Content="{x:Static assets:Strings.Confirm}" Command="{Binding ConfirmCommand}" CommandParameter="{Binding #ApplyTemplateDialog}" IsDefault="True"/>
+            </StackPanel>
+        </StackPanel>
+    </Panel>
+</Window>
+

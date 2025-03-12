@@ -1,0 +1,53 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:SerialLoops.ViewModels.Dialogs"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:assets="using:SerialLoops.Assets"
+        xmlns:controls="using:SerialLoops.Controls"
+        mc:Ignorable="d" d:DesignWidth="550" d:DesignHeight="370"
+        xmlns:utility="using:SerialLoops.Utility"
+        x:DataType="vm:ProjectSettingsDialogViewModel"
+        x:Class="SerialLoops.Views.Dialogs.ProjectSettingsDialog"
+        SizeToContent="WidthAndHeight"
+        CanResize="False"
+        TransparencyLevelHint="AcrylicBlur"
+        Background="{DynamicResource FallbackBackgroundColor}"
+        ExtendClientAreaToDecorationsHint="True"
+        Icon="/Assets/serial-loops.ico"
+        Title="{x:Static assets:Strings.Project_Settings}">
+    <Panel>
+        <controls:AcrylicBorderHandler/>
+
+        <DockPanel Margin="10 30">
+            <StackPanel Spacing="5" Margin="5">
+                <TabControl>
+                    <TabControl.Items>
+                        <TabItem Header="{x:Static assets:Strings.Game_Banner}">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="20" Margin="5 20">
+                                <StackPanel Orientation="Vertical" Spacing="5" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <StackPanel Width="64">
+                                        <Image Source="{Binding Icon, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
+                                               Width="64" Height="64" />
+                                    </StackPanel>
+                                    <Button Content="{x:Static assets:Strings.Replace___}" Command="{Binding ReplaceCommand}" />
+                                </StackPanel>
+                                <StackPanel Orientation="Vertical" Spacing="5" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <TextBlock Text="{x:Static assets:Strings.Game_Title}" />
+                                    <TextBox Text="{Binding GameTitle}" AcceptsReturn="True"
+                                             MaxLines="3" MinLines="3" Width="350" MaxWidth="350" />
+                                </StackPanel>
+                            </StackPanel>
+                        </TabItem>
+                    </TabControl.Items>
+                </TabControl>
+                <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Spacing="5" Width="500">
+                    <StackPanel Orientation="Horizontal" Spacing="5" Margin="5">
+                        <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}" IsCancel="True"/>
+                        <Button Content="{x:Static assets:Strings.Apply}" Command="{Binding ApplyCommand}" IsDefault="True"/>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+        </DockPanel>
+    </Panel>
+</Window>

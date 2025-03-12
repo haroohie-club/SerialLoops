@@ -1,249 +1,112 @@
-﻿using Eto.Drawing;
-using Eto.Forms;
+﻿using System;
+using Avalonia.Controls;
+using Avalonia.Layout;
+using Avalonia.Media;
+using Avalonia.Media.Imaging;
+using Avalonia.Platform;
+using Avalonia.Svg;
 using HaruhiChokuretsuLib.Util;
-using SerialLoops.Controls;
+using SerialLoops.Assets;
 using SerialLoops.Lib.Items;
-using System;
-using SerialLoops.Lib;
-using SkiaSharp;
 
-namespace SerialLoops.Utility
+namespace SerialLoops.Utility;
+
+public static class ControlGenerator
 {
-    public static class ControlGenerator
+    public static Bitmap GetIcon(string iconName, ILogger log, int size = 100)
     {
-        public static StackLayout GetControlWithLabel(string title, Control control)
+        try
         {
-            return new StackLayout
+            return new Bitmap(AssetLoader.Open(new($"avares://SerialLoops/Assets/Icons/{iconName}.png")))
+                .CreateScaledBitmap(new(size, size));
+        }
+        catch (Exception ex)
+        {
+            log.LogWarning($"Failed to load icon '{iconName}': {ex.Message}\n\n{ex.StackTrace}");
+            return null;
+        }
+    }
+
+    public static SvgImage GetVectorIcon(string iconName, ILogger log)
+    {
+        try
+        {
+            var path = $"avares://SerialLoops/Assets/Icons/{iconName}.svg";
+            return new() { Source = SvgSource.Load(path, new(path)) };
+        }
+        catch (Exception ex)
+        {
+            log.LogWarning($"Failed to load icon '{iconName}': {ex.Message}\n\n{ex.StackTrace}");
+            return null;
+        }
+    }
+
+    public static Avalonia.Svg.Svg GetVectorIcon(string iconName, ILogger log, int size = 100)
+    {
+        try
+        {
+            return new(new Uri($"avares://SerialLoops/Assets/Icons/{iconName}.svg"))
             {
-                Orientation = Orientation.Horizontal,
-                HorizontalContentAlignment = HorizontalAlignment.Stretch,
-                VerticalContentAlignment = VerticalAlignment.Center,
-                Spacing = 10,
-                Items =
-                {
-                    title,
-                    control,
-                },
+                Path = $"avares://SerialLoops/Assets/Icons/{iconName}.svg",
+                Width = size,
+                Height = size
             };
         }
+        catch (Exception ex)
+        {
+            log.LogWarning($"Failed to load icon '{iconName}': {ex.Message}\n\n{ex.StackTrace}");
+            return null;
+        }
+    }
 
-        public static TableLayout GetControlWithLabelTable(string title, Control control)
-        {
-            return new TableLayout(new TableRow(new Label { Text = title }, control))
-            {
-                Spacing = new Size(10, 5)
-            };
-        }
+    public static string GetVectorPath(string iconName)
+    {
+        return $"avares://SerialLoops/Assets/Icons/{iconName}.svg";
+    }
 
-        public static StackLayout GetControlWithSuffix(Control control, string suffix)
+    public static string LocalizeItemTypes(ItemDescription.ItemType type)
+    {
+        return type switch
         {
-            return new StackLayout
-            {
-                Orientation = Orientation.Horizontal,
-                HorizontalContentAlignment = HorizontalAlignment.Stretch,
-                VerticalContentAlignment = VerticalAlignment.Center,
-                Spacing = 2,
-                Items =
-                {
-                    control,
-                    suffix,
-                }
-            };
-        }
-        
-        public static StackLayout GetFileLink(ItemDescription description, EditorTabsPanel editorTabs, ILogger log)
-        {
-            ClearableLinkButton link = new() { Text = description.DisplayName };
-            if (description.Name != "NONE")
-            {
-                link.ClickUnique += GetFileLinkClickHandler(description, editorTabs, log);
-            }
-            return GetControlWithIcon(link, description.Type.ToString(), log);
-        }
+            ItemDescription.ItemType.Background => Strings.Backgrounds,
+            ItemDescription.ItemType.BGM => Strings.BGMs,
+            ItemDescription.ItemType.Character => Strings.Characters,
+            ItemDescription.ItemType.Character_Sprite => Strings.Character_Sprites,
+            ItemDescription.ItemType.Chess_Puzzle => Strings.Chess_Puzzles,
+            ItemDescription.ItemType.Chibi => Strings.Chibis,
+            ItemDescription.ItemType.Group_Selection => Strings.Group_Selections,
+            ItemDescription.ItemType.Item => Strings.Items,
+            ItemDescription.ItemType.Layout => Strings.Layouts,
+            ItemDescription.ItemType.Map => Strings.Maps,
+            ItemDescription.ItemType.Place => Strings.Places,
+            ItemDescription.ItemType.Puzzle => Strings.Puzzles,
+            ItemDescription.ItemType.Scenario => Strings.Scenario,
+            ItemDescription.ItemType.Script => Strings.Scripts,
+            ItemDescription.ItemType.SFX => Strings.SFXs,
+            ItemDescription.ItemType.System_Texture => Strings.System_Textures,
+            ItemDescription.ItemType.Topic => Strings.Topics,
+            ItemDescription.ItemType.Transition => Strings.Transitions,
+            ItemDescription.ItemType.Voice => Strings.Voices,
+            _ => "UNKNOWN TYPE",
+        };
+    }
 
-        public static EventHandler<EventArgs> GetFileLinkClickHandler(ItemDescription description, EditorTabsPanel editorTabs, ILogger log)
+    public static StackPanel GetControlWithIcon(Control control, string iconName, ILogger log)
+    {
+        StackPanel panel = new()
         {
-            return (s, e) => { editorTabs.OpenTab(description, log); };
-        }
+            Orientation = Orientation.Horizontal,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Center,
+            Spacing = 5,
+        };
+        panel.Children.Add(GetVectorIcon(iconName, log, size: 16));
+        panel.Children.Add(control);
+        return panel;
+    }
 
-        public static Icon GetItemIcon(ItemDescription.ItemType type, ILogger log)
-        {
-            return GetIcon(type.ToString(), log);
-        }
-        
-        public static Icon GetIcon(string iconName, ILogger log, int size = 16)
-        {
-            try
-            {
-                return Icon.FromResource($"SerialLoops.Icons.{iconName}.png").WithSize(size, size);
-            }
-            catch (Exception exc)
-            {
-                log.LogWarning($"Failed to load icon.\n{exc.Message}\n\n{exc.StackTrace}");
-                return null;
-            }
-        }
-
-        public static ImageView GetCharacterVoicePortrait(Project project, ILogger log, VoicePortraitCharacter character)
-        {
-            ItemDescription id = project.Items.Find(i => i.Name.Equals("SYSTEX_SYS_CMN_B46"));
-            if (id is not SystemTextureItem tex)
-            {
-                log.LogError(string.Format(Application.Instance.Localize(null, "Failed to load character progress voice for {0}."), character));
-                return null;
-            }
-            SKBitmap bitmap = tex.Grp.GetImage(transparentIndex: 0);
-            
-            // Crop a 16x16 bitmap portrait
-            SKBitmap portrait = new(16, 16);
-            int charNum = (int) character - 1;
-            int x = (charNum % 4) * 32;
-            int z = (charNum / 4) * 32;
-            
-            SKRectI cropRect = new(x + 8, z + 4, x + 24, z + 20);
-            bitmap.ExtractSubset(portrait, cropRect);
-            return new ImageView { Image = new SKGuiImage(portrait) };
-        }
-        
-        public enum VoicePortraitCharacter
-        {
-            Kyon = 1,
-            Haruhi = 2,
-            Mikuru = 3,
-            Nagato = 4,
-            Koizumi = 5,
-            Sister = 6,
-            Tsuruya = 7,
-            Taniguchi = 8,
-            Kunikida = 9,
-            Mystery_Girl = 10,
-        }
-        public static StackLayout GetCharacterVoiceControl(Control control, Project project, ILogger log, VoicePortraitCharacter character)
-        {
-            return new StackLayout
-            {
-                Orientation = Orientation.Horizontal,
-                HorizontalContentAlignment = HorizontalAlignment.Left,
-                VerticalContentAlignment = VerticalAlignment.Center,
-                Spacing = 5,
-                Items =
-                {
-                    GetCharacterVoicePortrait(project, log, character),
-                    character.ToString().Replace("_", " "),
-                    control
-                }
-            };
-        }
-        
-        public static ImageView GetCharacterProgressPortrait(Project project, ILogger log, ProgressPortraitCharacter character)
-        {
-            ItemDescription id = project.Items.Find(i => i.Name.Equals("SYSTEX_XTR_PRG_T08"));
-            if (id is not SystemTextureItem tex)
-            {
-                log.LogError(string.Format(Application.Instance.Localize(null, "Failed to load character progress portrait for {0}."), character));
-                return null;
-            }
-            SKBitmap bitmap = tex.Grp.GetImage(transparentIndex: 0, width: 16);
-            
-            // Crop a 16x16 bitmap portrait
-            SKBitmap portrait = new(16, 16);
-            int z = (4 + (int) character) * 16;
-            
-            SKRectI cropRect = new(0, z, 16, z + 16);
-            bitmap.ExtractSubset(portrait, cropRect);
-            return new ImageView { Image = new SKGuiImage(portrait) };
-        }
-        
-        public enum ProgressPortraitCharacter
-        {
-            Haruhi = 1,
-            Mikuru = 2,
-            Nagato = 3,
-            Koizumi = 4,
-            Tsuruya = 5,
-            Unknown = 6,
-        }
-        
-        public static StackLayout GetCharacterProgressControl(Control control, Project project, ILogger log, ProgressPortraitCharacter character)
-        {
-            return new StackLayout
-            {
-                Orientation = Orientation.Horizontal,
-                HorizontalContentAlignment = HorizontalAlignment.Left,
-                VerticalContentAlignment = VerticalAlignment.Center,
-                Spacing = 5,
-                Items =
-                {
-                    GetCharacterProgressPortrait(project, log, character),
-                    character.ToString(),
-                    control
-                }
-            };
-        }
-
-        public static StackLayout GetControlWithIcon(Control control, string iconName, ILogger log)
-        {
-            return new StackLayout
-            {
-                Orientation = Orientation.Horizontal,
-                HorizontalContentAlignment = HorizontalAlignment.Left,
-                VerticalContentAlignment = VerticalAlignment.Center,
-                Spacing = 5,
-                Items =
-                {
-                    new ImageView { Image = new Bitmap(GetIcon(iconName, log)) },
-                    control
-                }
-            };
-        }
-
-        public static ButtonToolItem GetToolBarItem(Command command)
-        {
-            return new(command) { Style = "sl-toolbar-button" };
-        }
-
-        internal static StackLayout GetPlayerStackLayout(SoundPlayerPanel soundPlayer, Control trackName, string trackDetails, short? trackId = null)
-        {
-            StackLayout details = new()
-            {
-                Orientation = Orientation.Vertical,
-                Spacing = 5,
-            };
-            if (trackName is not null)
-            {
-                details.Items.Add(trackName);
-            }
-            StackLayout extraDetails = new()
-            {
-                Orientation = Orientation.Horizontal,
-                Spacing = 5,
-            };
-            if (!string.IsNullOrEmpty(trackDetails))
-            {
-                extraDetails.Items.Add(trackDetails);
-            }
-            if (trackId is not null)
-            {
-                extraDetails.Items.Add($"{trackId}");
-            }
-            details.Items.Add(extraDetails);
-
-            return new StackLayout
-            {
-                Orientation = Orientation.Horizontal,
-                VerticalContentAlignment = VerticalAlignment.Center,
-                Spacing = 10,
-                Items =
-                {
-                    soundPlayer,
-                    details
-                }
-            };
-        }
-
-        internal static Label GetTextHeader(string text, int size = 14)
-        {
-            return new Label { Text = text, Font = new Font(SystemFont.Bold, size) };
-        }
+    internal static TextBlock GetTextHeader(string text, int size = 14)
+    {
+        return new() { Text = text, FontWeight = FontWeight.Bold, FontSize = size };
     }
 }

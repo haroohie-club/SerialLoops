@@ -1,0 +1,1 @@
+wsl --install --no-launch

@@ -1,0 +1,51 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:vm="using:SerialLoops.ViewModels.Dialogs"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:assets="using:SerialLoops.Assets"
+        xmlns:controls="using:SerialLoops.Controls"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        Width="550" SizeToContent="Height"
+        TransparencyLevelHint="AcrylicBlur"
+        Background="{DynamicResource FallbackBackgroundColor}"
+        ExtendClientAreaToDecorationsHint="True"
+        Icon="avares://SerialLoops/Assets/serial-loops.ico"
+        x:DataType="vm:ExportPatchDialogViewModel"
+        x:Class="SerialLoops.Views.Dialogs.ExportPatchDialog"
+        Title="{x:Static assets:Strings.Export_Patch}"
+        Name="Dialog">
+    <Panel>
+        <controls:AcrylicBorderHandler/>
+
+        <StackPanel Orientation="Vertical" Spacing="20" HorizontalAlignment="Center" Margin="10 30">
+            <TextBlock TextWrapping="Wrap" HorizontalAlignment="Center" Text="{x:Static assets:Strings.Note__When_exporting_an_xdelta_patch__the_base_ROM_you_should_use_is_likely_different_than_the_one_you_used_when_creating_the_project__Please_choose_the_base_Japanese_ROM__SHA_1_can_be_confirmed_below__to_ensure_that_people_who_want_to_play_your_hack_only_need_to_patch_the_game_once_}"/>
+
+            <StackPanel Orientation="Vertical" Spacing="10" HorizontalAlignment="Center">
+                <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
+                    <Button Content="{x:Static assets:Strings.Select_base_ROM}" Command="{Binding OpenRomCommand}"
+                            CommandParameter="{Binding #Dialog}"/>
+                    <TextBlock Text="{Binding BaseRomHash}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
+                    <TextBlock Text="{Binding ExpectedRomHashString}" TextWrapping="Wrap"/>
+                    <Svg Path="{Binding MatchSvgPath}" Width="16" Height="16"/>
+                </StackPanel>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
+                <Button Content="{x:Static assets:Strings.XDelta_patch}" Command="{Binding SelectXdeltaPathCommand}"
+                        CommandParameter="{Binding #Dialog}"/>
+                <TextBlock TextWrapping="Wrap" Text="{Binding XDeltaPath}"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Spacing="5" HorizontalAlignment="Center">
+                <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}"
+                        CommandParameter="{Binding #Dialog}" IsCancel="True"/>
+                <Button Content="{x:Static assets:Strings.Create}" Command="{Binding CreateCommand}"
+                        CommandParameter="{Binding #Dialog}" IsDefault="True"/>
+            </StackPanel>
+        </StackPanel>
+    </Panel>
+</Window>
+

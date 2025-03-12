@@ -1,0 +1,94 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:vm="using:SerialLoops.ViewModels.Dialogs"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="550" d:DesignHeight="600"
+        xmlns:assets="using:SerialLoops.Assets"
+        xmlns:controls="using:SerialLoops.Controls"
+        xmlns:i="using:Avalonia.Xaml.Interactivity"
+        xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
+        MinWidth="850" MinHeight="700"
+        Width="900" Height="750"
+        TransparencyLevelHint="AcrylicBlur"
+        Background="{DynamicResource FallbackBackgroundColor}"
+        ExtendClientAreaToDecorationsHint="True"
+        Icon="/Assets/serial-loops.ico"
+        x:DataType="vm:SearchDialogViewModel"
+        x:Class="SerialLoops.Views.Dialogs.SearchDialog"
+        Title="{x:Static assets:Strings.Search_Project}"
+        Name="Dialog">
+    <Panel>
+        <controls:AcrylicBorderHandler/>
+
+        <DockPanel>
+            <Grid RowDefinitions="Auto,Auto,Auto,*" HorizontalAlignment="Center" VerticalAlignment="Top">
+                <StackPanel IsVisible="False">
+                    <Button Command="{Binding CloseCommand}" CommandParameter="{Binding #Dialog}" HotKey="{Binding CloseHotKey}"></Button>
+                    <Button Command="{Binding DeepSearchCommand}" CommandParameter="{Binding #Dialog}" HotKey="{Binding DeepSearchHotKey}"></Button>
+                </StackPanel>
+                <TextBox Grid.Row="0" Name="Search" Width="520" Margin="0 10" Text="{Binding SearchText}"
+                         Watermark="{x:Static assets:Strings.Search___}">
+                    <i:Interaction.Behaviors>
+                        <ia:EventTriggerBehavior EventName="TextChanged" SourceObject="{Binding #Search}">
+                            <ia:InvokeCommandAction Command="{Binding SearchCommand}"
+                                                    CommandParameter="{Binding #Dialog}"/>
+                        </ia:EventTriggerBehavior>
+                        <FocusOnAttachedToVisualTreeBehavior />
+                    </i:Interaction.Behaviors>
+                </TextBox>
+                <Grid Grid.Row="1" ColumnDefinitions="Auto,*">
+                    <!-- Scope filters -->
+                    <StackPanel Grid.Column="0" Spacing="5" Margin="0 0 5 0">
+                        <TextBlock FontWeight="Bold" Text="{x:Static assets:Strings.Search_Scope}" />
+                        <ItemsRepeater ItemsSource="{Binding SearchScopes}">
+                            <ItemsRepeater.Layout>
+                                <UniformGridLayout MaximumRowsOrColumns="10" Orientation="Vertical" ItemsJustification="Start" MinItemWidth="200"/>
+                            </ItemsRepeater.Layout>
+                            <ItemsRepeater.ItemTemplate>
+                                <DataTemplate DataType="vm:LocalizedSearchScope">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <TextBlock Grid.Column="0" FontSize="16" Margin="0,7,7,0" Text="{Binding DisplayText}"/>
+                                        <CheckBox Grid.Column="1" IsChecked="{Binding IsActive}"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsRepeater.ItemTemplate>
+                        </ItemsRepeater>
+                    </StackPanel>
+                    <!-- Item type filters -->
+                    <StackPanel Grid.Column="1" Spacing="5" Margin="5 0 0 0">
+                        <TextBlock FontWeight="Bold" Text="{x:Static assets:Strings.Filter_by_Item}" />
+                        <ItemsRepeater ItemsSource="{Binding ItemScopes}">
+                            <ItemsRepeater.Layout>
+                                <UniformGridLayout MaximumRowsOrColumns="10" Orientation="Vertical" ItemsJustification="Start" MinItemWidth="200"/>
+                            </ItemsRepeater.Layout>
+                            <ItemsRepeater.ItemTemplate>
+                                <DataTemplate DataType="vm:LocalizedItemScope">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <StackPanel Grid.Column="0" Spacing="3" Orientation="Horizontal">
+                                            <Svg Path="{Binding Icon}" Width="16" Height="16"/>
+                                            <TextBlock FontSize="16" Margin="0,7,7,0" Text="{Binding DisplayText}"/>
+                                        </StackPanel>
+                                        <CheckBox Grid.Column="1" IsChecked="{Binding IsActive}"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsRepeater.ItemTemplate>
+                        </ItemsRepeater>
+                        <controls:LinkButton Text="{Binding ToggleText}" Command="{Binding ToggleItemScopesCommand}"/>
+                    </StackPanel>
+                </Grid>
+                <TextBlock Grid.Row="2" Margin="10" FontWeight="Bold" Text="{Binding SearchStatusLabel}" TextAlignment="Center" />
+                <TreeDataGrid Background="{StaticResource AccentColor}" Grid.Row="3" Name="Viewer" ShowColumnHeaders="False" CanUserResizeColumns="False" Source="{Binding Source}">
+                    <i:Interaction.Behaviors>
+                        <ia:EventTriggerBehavior EventName="KeyUp" SourceObject="{Binding #Viewer}">
+                            <ia:InvokeCommandAction Command="{Binding OpenItemCommand}" CommandParameter="{Binding #Viewer}"/>
+                        </ia:EventTriggerBehavior>
+                        <ia:EventTriggerBehavior EventName="DoubleTapped" SourceObject="{Binding #Viewer}">
+                            <ia:InvokeCommandAction Command="{Binding OpenItemCommand}" CommandParameter="{Binding #Viewer}"/>
+                        </ia:EventTriggerBehavior>
+                    </i:Interaction.Behaviors>
+                </TreeDataGrid>
+            </Grid>
+        </DockPanel>
+    </Panel>
+</Window>

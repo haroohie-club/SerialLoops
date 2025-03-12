@@ -9,28 +9,28 @@
                     "Verb": "BGM_PLAY",
                     "Parameters": [
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.BgmScriptParameter",
-                            "ParameterName": "BGM",
+                            "ParameterType": "BGM",
+                            "ParameterName": "Music",
                             "Value": "BGM003"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.BgmModeScriptParameter",
-                            "ParameterName": "BGM Mode",
+                            "ParameterType": "BGM_MODE",
+                            "ParameterName": "Mode",
                             "Value": "2"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.ShortScriptParameter",
+                            "ParameterType": "SHORT",
                             "ParameterName": "Volume",
                             "Value": "100"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.ShortScriptParameter",
-                            "ParameterName": "Fade In Time",
+                            "ParameterType": "SHORT",
+                            "ParameterName": "Fade In Time (Frames)",
                             "Value": "30"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.ShortScriptParameter",
-                            "ParameterName": "Fade Out Time",
+                            "ParameterType": "SHORT",
+                            "ParameterName": "Fade Out Time (Frames)",
                             "Value": "0"
                         }
                     ]
@@ -39,7 +39,7 @@
                     "Verb": "BG_DISP",
                     "Parameters": [
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.BgScriptParameter",
+                            "ParameterType": "BG",
                             "ParameterName": "Background",
                             "Value": "BG_BG_BUND0"
                         }
@@ -49,22 +49,22 @@
                     "Verb": "SCREEN_FADEIN",
                     "Parameters": [
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.ShortScriptParameter",
-                            "ParameterName": "Fade In Time",
+                            "ParameterType": "SHORT",
+                            "ParameterName": "Fade Time (Frames)",
                             "Value": "30"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.ShortScriptParameter",
+                            "ParameterType": "SHORT",
                             "ParameterName": "Fade In Percentage",
                             "Value": "0"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.ScreenScriptParameter",
-                            "ParameterName": "Screen",
+                            "ParameterType": "SCREEN",
+                            "ParameterName": "Location",
                             "Value": "2"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.ColorMonochromeScriptParameter",
+                            "ParameterType": "COLOR_MONOCHROME",
                             "ParameterName": "Color",
                             "Value": "2"
                         }
@@ -74,64 +74,64 @@
                     "Verb": "DIALOGUE",
                     "Parameters": [
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.DialogueScriptParameter",
+                            "ParameterType": "DIALOGUE",
                             "ParameterName": "Dialogue",
-                            "Value": "22||Let's play!"
+                            "Value": "22||Let\u0027s play!"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.SpriteScriptParameter",
+                            "ParameterType": "SPRITE",
                             "ParameterName": "Sprite",
                             "Value": "0"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.SpriteEntranceScriptParameter",
+                            "ParameterType": "SPRITE_ENTRANCE",
                             "ParameterName": "Sprite Entrance Transition",
                             "Value": "7"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.SpriteExitScriptParameter",
+                            "ParameterType": "SPRITE_EXIT",
                             "ParameterName": "Sprite Exit/Move Transition",
                             "Value": "0"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.SpriteShakeScriptParameter",
+                            "ParameterType": "SPRITE_SHAKE",
                             "ParameterName": "Sprite Shake",
                             "Value": "0"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.VoicedLineScriptParameter",
+                            "ParameterType": "VOICE_LINE",
                             "ParameterName": "Voice Line",
                             "Value": "none"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.DialoguePropertyScriptParameter",
+                            "ParameterType": "CHARACTER",
                             "ParameterName": "Text Voice Font",
                             "Value": "22"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.DialoguePropertyScriptParameter",
+                            "ParameterType": "CHARACTER",
                             "ParameterName": "Text Speed",
                             "Value": "22"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.TextEntranceEffectScriptParameter",
+                            "ParameterType": "TEXT_ENTRANCE_EFFECT",
                             "ParameterName": "Text Entrance Effect",
                             "Value": "0"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.ShortScriptParameter",
+                            "ParameterType": "SHORT",
                             "ParameterName": "Sprite Layer",
                             "Value": "0"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.BoolScriptParameter",
-                            "ParameterName": "Don't Clear Text",
-                            "Value": "false,1,0"
+                            "ParameterType": "BOOL",
+                            "ParameterName": "Don\u0027t Clear Text",
+                            "Value": "False,1,0"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.BoolScriptParameter",
+                            "ParameterType": "BOOL",
                             "ParameterName": "Disable Lip Flap",
-                            "Value": "false,1,0"
+                            "Value": "False,1,0"
                         }
                     ]
                 },
@@ -139,7 +139,7 @@
                     "Verb": "CHESS_LOAD",
                     "Parameters": [
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.ChessFileScriptParameter",
+                            "ParameterType": "CHESS_FILE",
                             "ParameterName": "Chess File",
                             "Value": "0"
                         }
@@ -149,7 +149,7 @@
                     "Verb": "PIN_MNL",
                     "Parameters": [
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.DialogueScriptParameter",
+                            "ParameterType": "DIALOGUE",
                             "ParameterName": "Dialogue",
                             "Value": "23||Do the chess"
                         }
@@ -159,18 +159,18 @@
                     "Verb": "CHESS_VGOTO",
                     "Parameters": [
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.ScriptSectionScriptParameter",
-                            "ParameterName": "Clear Block",
+                            "ParameterType": "SCRIPT_SECTION",
+                            "ParameterName": "Win Section",
                             "Value": "NONEClear"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.ScriptSectionScriptParameter",
-                            "ParameterName": "Miss Block",
+                            "ParameterType": "SCRIPT_SECTION",
+                            "ParameterName": "Lose Section",
                             "Value": "NONEMiss"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.ScriptSectionScriptParameter",
-                            "ParameterName": "Miss2 Block",
+                            "ParameterType": "SCRIPT_SECTION",
+                            "ParameterName": "Lose 2 Section",
                             "Value": "none"
                         }
                     ]
@@ -184,64 +184,64 @@
                     "Verb": "DIALOGUE",
                     "Parameters": [
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.DialogueScriptParameter",
+                            "ParameterType": "DIALOGUE",
                             "ParameterName": "Dialogue",
                             "Value": "22||You won the chess!"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.SpriteScriptParameter",
+                            "ParameterType": "SPRITE",
                             "ParameterName": "Sprite",
                             "Value": "0"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.SpriteEntranceScriptParameter",
+                            "ParameterType": "SPRITE_ENTRANCE",
                             "ParameterName": "Sprite Entrance Transition",
-                            "Value": "7"
+                            "Value": "0"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.SpriteExitScriptParameter",
+                            "ParameterType": "SPRITE_EXIT",
                             "ParameterName": "Sprite Exit/Move Transition",
                             "Value": "0"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.SpriteShakeScriptParameter",
+                            "ParameterType": "SPRITE_SHAKE",
                             "ParameterName": "Sprite Shake",
                             "Value": "0"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.VoicedLineScriptParameter",
+                            "ParameterType": "VOICE_LINE",
                             "ParameterName": "Voice Line",
                             "Value": "none"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.DialoguePropertyScriptParameter",
+                            "ParameterType": "CHARACTER",
                             "ParameterName": "Text Voice Font",
                             "Value": "22"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.DialoguePropertyScriptParameter",
+                            "ParameterType": "CHARACTER",
                             "ParameterName": "Text Speed",
                             "Value": "22"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.TextEntranceEffectScriptParameter",
+                            "ParameterType": "TEXT_ENTRANCE_EFFECT",
                             "ParameterName": "Text Entrance Effect",
                             "Value": "0"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.ShortScriptParameter",
+                            "ParameterType": "SHORT",
                             "ParameterName": "Sprite Layer",
                             "Value": "0"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.BoolScriptParameter",
-                            "ParameterName": "Don't Clear Text",
-                            "Value": "false,1,0"
+                            "ParameterType": "BOOL",
+                            "ParameterName": "Don\u0027t Clear Text",
+                            "Value": "False,1,0"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.BoolScriptParameter",
+                            "ParameterType": "BOOL",
                             "ParameterName": "Disable Lip Flap",
-                            "Value": "false,1,0"
+                            "Value": "False,1,0"
                         }
                     ]
                 },
@@ -249,9 +249,9 @@
                     "Verb": "TOGGLE_DIALOGUE",
                     "Parameters": [
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.BoolScriptParameter",
-                            "ParameterName": "Display",
-                            "Value": "false,1,0"
+                            "ParameterType": "BOOL",
+                            "ParameterName": "Show",
+                            "Value": "False,1,0"
                         }
                     ]
                 },
@@ -268,64 +268,64 @@
                     "Verb": "DIALOGUE",
                     "Parameters": [
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.DialogueScriptParameter",
+                            "ParameterType": "DIALOGUE",
                             "ParameterName": "Dialogue",
                             "Value": "22||You lost the chess"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.SpriteScriptParameter",
+                            "ParameterType": "SPRITE",
                             "ParameterName": "Sprite",
                             "Value": "0"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.SpriteEntranceScriptParameter",
+                            "ParameterType": "SPRITE_ENTRANCE",
                             "ParameterName": "Sprite Entrance Transition",
-                            "Value": "7"
+                            "Value": "0"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.SpriteExitScriptParameter",
+                            "ParameterType": "SPRITE_EXIT",
                             "ParameterName": "Sprite Exit/Move Transition",
                             "Value": "0"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.SpriteShakeScriptParameter",
+                            "ParameterType": "SPRITE_SHAKE",
                             "ParameterName": "Sprite Shake",
                             "Value": "0"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.VoicedLineScriptParameter",
+                            "ParameterType": "VOICE_LINE",
                             "ParameterName": "Voice Line",
                             "Value": "none"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.DialoguePropertyScriptParameter",
+                            "ParameterType": "CHARACTER",
                             "ParameterName": "Text Voice Font",
                             "Value": "22"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.DialoguePropertyScriptParameter",
+                            "ParameterType": "CHARACTER",
                             "ParameterName": "Text Speed",
                             "Value": "22"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.TextEntranceEffectScriptParameter",
+                            "ParameterType": "TEXT_ENTRANCE_EFFECT",
                             "ParameterName": "Text Entrance Effect",
                             "Value": "0"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.ShortScriptParameter",
+                            "ParameterType": "SHORT",
                             "ParameterName": "Sprite Layer",
                             "Value": "0"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.BoolScriptParameter",
-                            "ParameterName": "Don't Clear Text",
-                            "Value": "false,1,0"
+                            "ParameterType": "BOOL",
+                            "ParameterName": "Don\u0027t Clear Text",
+                            "Value": "False,1,0"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.BoolScriptParameter",
+                            "ParameterType": "BOOL",
                             "ParameterName": "Disable Lip Flap",
-                            "Value": "false,1,0"
+                            "Value": "False,1,0"
                         }
                     ]
                 },
@@ -333,9 +333,9 @@
                     "Verb": "TOGGLE_DIALOGUE",
                     "Parameters": [
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.BoolScriptParameter",
-                            "ParameterName": "Display",
-                            "Value": "false,1,0"
+                            "ParameterType": "BOOL",
+                            "ParameterName": "Show",
+                            "Value": "False,1,0"
                         }
                     ]
                 },
@@ -352,64 +352,64 @@
                     "Verb": "DIALOGUE",
                     "Parameters": [
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.DialogueScriptParameter",
+                            "ParameterType": "DIALOGUE",
                             "ParameterName": "Dialogue",
                             "Value": "22||You lost the chess 2"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.SpriteScriptParameter",
+                            "ParameterType": "SPRITE",
                             "ParameterName": "Sprite",
                             "Value": "0"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.SpriteEntranceScriptParameter",
+                            "ParameterType": "SPRITE_ENTRANCE",
                             "ParameterName": "Sprite Entrance Transition",
-                            "Value": "7"
+                            "Value": "0"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.SpriteExitScriptParameter",
+                            "ParameterType": "SPRITE_EXIT",
                             "ParameterName": "Sprite Exit/Move Transition",
                             "Value": "0"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.SpriteShakeScriptParameter",
+                            "ParameterType": "SPRITE_SHAKE",
                             "ParameterName": "Sprite Shake",
                             "Value": "0"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.VoicedLineScriptParameter",
+                            "ParameterType": "VOICE_LINE",
                             "ParameterName": "Voice Line",
                             "Value": "none"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.DialoguePropertyScriptParameter",
+                            "ParameterType": "CHARACTER",
                             "ParameterName": "Text Voice Font",
                             "Value": "22"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.DialoguePropertyScriptParameter",
+                            "ParameterType": "CHARACTER",
                             "ParameterName": "Text Speed",
                             "Value": "22"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.TextEntranceEffectScriptParameter",
+                            "ParameterType": "TEXT_ENTRANCE_EFFECT",
                             "ParameterName": "Text Entrance Effect",
                             "Value": "0"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.ShortScriptParameter",
+                            "ParameterType": "SHORT",
                             "ParameterName": "Sprite Layer",
                             "Value": "0"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.BoolScriptParameter",
-                            "ParameterName": "Don't Clear Text",
-                            "Value": "false,1,0"
+                            "ParameterType": "BOOL",
+                            "ParameterName": "Don\u0027t Clear Text",
+                            "Value": "False,1,0"
                         },
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.BoolScriptParameter",
+                            "ParameterType": "BOOL",
                             "ParameterName": "Disable Lip Flap",
-                            "Value": "false,1,0"
+                            "Value": "False,1,0"
                         }
                     ]
                 },
@@ -417,9 +417,9 @@
                     "Verb": "TOGGLE_DIALOGUE",
                     "Parameters": [
                         {
-                            "TypeName": "SerialLoops.Lib.Script.Parameters.BoolScriptParameter",
-                            "ParameterName": "Display",
-                            "Value": "false,1,0"
+                            "ParameterType": "BOOL",
+                            "ParameterName": "Show",
+                            "Value": "False,1,0"
                         }
                     ]
                 },

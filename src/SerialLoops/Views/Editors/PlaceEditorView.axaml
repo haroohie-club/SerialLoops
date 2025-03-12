@@ -1,0 +1,21 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="using:SerialLoops.ViewModels.Editors"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:assets="using:SerialLoops.Assets"
+             xmlns:utility="using:SerialLoops.Utility"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:PlaceEditorViewModel"
+             x:Class="SerialLoops.Views.Editors.PlaceEditorView">
+    <Grid RowDefinitions="Auto,Auto">
+        <Image Grid.Row="0" Stretch="None"
+               Source="{Binding Preview, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
+               HorizontalAlignment="Left"/>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="3">
+            <TextBlock Text="{x:Static assets:Strings.Place_Name}"/>
+            <TextBox Text="{Binding PlaceName}"/>
+        </StackPanel>
+    </Grid>
+</UserControl>
+

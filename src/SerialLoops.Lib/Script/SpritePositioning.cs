@@ -1,30 +1,29 @@
 ﻿using SerialLoops.Lib.Items;
 using SkiaSharp;
 
-namespace SerialLoops.Lib.Script
+namespace SerialLoops.Lib.Script;
+
+public class SpritePositioning
 {
-    public class SpritePositioning
+    public int X { get; set; }
+    public int Layer { get; set; }
+
+    public SKPoint GetSpritePosition(SKBitmap sprite, int verticalOffset)
     {
-        public int X { get; set; }
-        public int Layer { get; set; }
-
-        public SKPoint GetSpritePosition(SKBitmap sprite)
-        {
-            return new SKPoint(X, 384 - sprite.Height);
-        }
-
-        public enum SpritePosition
-        {
-            LEFT,
-            CENTER,
-            RIGHT,
-        }
+        return new(X, 192 + verticalOffset - sprite.Height);
     }
 
-    public struct PositionedSprite
+    public enum SpritePosition
     {
-        public CharacterSpriteItem Sprite { get; set; }
-        public SpritePositioning Positioning { get; set; }
-        public SKPaint PalEffect { get; set; }
+        LEFT,
+        CENTER,
+        RIGHT,
     }
+}
+
+public struct PositionedSprite
+{
+    public CharacterSpriteItem Sprite { get; set; }
+    public SpritePositioning Positioning { get; set; }
+    public SKPaint PalEffect { get; set; }
 }

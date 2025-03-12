@@ -1,0 +1,98 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:SerialLoops.ViewModels.Editors"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:assets="using:SerialLoops.Assets"
+             xmlns:controls="using:SerialLoops.Controls"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:TopicEditorViewModel"
+             x:Class="SerialLoops.Views.Editors.TopicEditorView">
+    <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" Margin="10">
+        <Panel IsVisible="False">
+            <Button Command="{Binding UndoCommand}" HotKey="{Binding UndoGesture}"/>
+            <Button Command="{Binding RedoCommand}" HotKey="{Binding RedoGesture}"/>
+        </Panel>
+
+        <TextBlock Grid.Column="0" Grid.Row="0" Text="{x:Static assets:Strings.ID}"/>
+        <TextBlock Grid.Column="1" Grid.Row="0" Margin="10,0,0,0" Text="{Binding Topic.TopicEntry.Id}"/>
+
+        <TextBlock Grid.Column="0" Grid.Row="1" IsVisible="{Binding Topic.HiddenMainTopic, Converter={x:Static ObjectConverters.IsNotNull}}" Text="{x:Static assets:Strings.Hidden_ID}"/>
+        <TextBlock Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" IsVisible="{Binding Topic.HiddenMainTopic, Converter={x:Static ObjectConverters.IsNotNull}}" Text="{Binding Topic.HiddenMainTopic.Id}"/>
+
+        <TextBlock Grid.Column="0" Grid.Row="2" Margin="0,7,0,0" Text="{x:Static assets:Strings.Title}"/>
+        <TextBox Grid.Column="1" Grid.Row="2" Margin="10,0,0,0" Text="{Binding Title}"/>
+
+        <TextBlock Grid.Column="0" Grid.Row="3" Text="{x:Static assets:Strings.Type}" />
+        <TextBlock Grid.Column="1" Grid.Row="3" Margin="10,0,0,0" Text="{Binding Topic.TopicEntry.CardType}"/>
+
+        <TextBlock Grid.Column="0" Grid.Row="4" Margin="0,7,0,0" Text="{x:Static assets:Strings.Associated_Script}" IsVisible="{Binding Topic.TopicEntry.Type, Converter={x:Static ObjectConverters.NotEqual}, ConverterParameter=3}"/>
+        <StackPanel Grid.Column="1" Grid.Row="4" Margin="10,0,0,0" Orientation="Horizontal" Spacing="5" IsVisible="{Binding Topic.TopicEntry.Type, Converter={x:Static ObjectConverters.NotEqual}, ConverterParameter=3}">
+            <ComboBox ItemsSource="{Binding Scripts}" SelectedItem="{Binding AssociatedScript}"/>
+            <controls:ItemLink Item="{Binding AssociatedScript}" Tabs="{Binding Tabs}"/>
+        </StackPanel>
+
+        <TextBlock Grid.Column="0" Grid.Row="5" Margin="0,7,0,0" Text="{x:Static assets:Strings.Episode_Group}"/>
+        <ComboBox Grid.Column="1" Grid.Row="5" ItemsSource="{Binding EpisodeGroups}" SelectedIndex="{Binding EpisodeGroup}" Margin="10,0,0,0"/>
+
+        <TextBlock Grid.Column="0" Grid.Row="6" Margin="0,7,0,0" Text="{x:Static assets:Strings.Puzzle_Phase_Group}"/>
+        <NumericUpDown Grid.Column="1" Grid.Row="6" Margin="10,0,0,0" Value="{Binding PuzzlePhaseGroup}" Minimum="1" Maximum="6"
+                       FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
+
+        <HeaderedContentControl Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="7" Header="{x:Static assets:Strings.Times}">
+            <Grid ColumnDefinitions="Auto,Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto">
+                <TextBlock Grid.Column="0" Grid.Row="0" Margin="0,7,0,0" Text="{x:Static assets:Strings.Base_Time_Gain}"/>
+                <StackPanel Grid.Column="1" Grid.Row="0" Margin="10,0,0,0" Orientation="Horizontal" Spacing="3">
+                    <NumericUpDown Value="{Binding BaseTimeGain}" Minimum="0" Maximum="{Binding MaxShort}"
+                                   FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
+                    <TextBlock Text="{x:Static assets:Strings.sec}"/>
+                </StackPanel>
+
+                <TextBlock Grid.Column="0" Grid.Row="1" Margin="0,7,0,0" Text="{x:Static assets:Strings.Kyon_Time_Percentage}"/>
+                <StackPanel Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" Orientation="Horizontal">
+                    <NumericUpDown Value="{Binding KyonTimePercentage}" Minimum="0" Maximum="{Binding MaxShort}"
+                                   FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
+                    <TextBlock Text="{x:Static assets:Strings._}"/>
+                </StackPanel>
+                <StackPanel Grid.Column="2" Grid.Row="1" Margin="10,0,0,0" Orientation="Horizontal" Spacing="2">
+                    <TextBlock Text="{Binding KyonTime}"/>
+                    <TextBlock Text="{x:Static assets:Strings.sec}"/>
+                </StackPanel>
+
+                <TextBlock Grid.Column="0" Grid.Row="2" Margin="0,7,0,0" Text="{x:Static assets:Strings.Mikuru_Time_Percentage}"/>
+                <StackPanel Grid.Column="1" Grid.Row="2" Margin="10,0,0,0" Orientation="Horizontal">
+                    <NumericUpDown Value="{Binding MikuruTimePercentage}" Minimum="0" Maximum="{Binding MaxShort}"
+                                   FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
+                    <TextBlock Text="{x:Static assets:Strings._}"/>
+                </StackPanel>
+                <StackPanel Grid.Column="2" Grid.Row="2" Margin="10,0,0,0" Orientation="Horizontal" Spacing="2">
+                    <TextBlock Text="{Binding MikuruTime}"/>
+                    <TextBlock Text="{x:Static assets:Strings.sec}"/>
+                </StackPanel>
+
+                <TextBlock Grid.Column="0" Grid.Row="3" Margin="0,7,0,0" Text="{x:Static assets:Strings.Nagato_Time_Percentage}"/>
+                <StackPanel Grid.Column="1" Grid.Row="3" Margin="10,0,0,0" Orientation="Horizontal">
+                    <NumericUpDown Value="{Binding NagatoTimePercentage}" Minimum="0" Maximum="{Binding MaxShort}"
+                                   FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
+                    <TextBlock Text="{x:Static assets:Strings._}"/>
+                </StackPanel>
+                <StackPanel Grid.Column="2" Grid.Row="3" Margin="10,0,0,0" Orientation="Horizontal" Spacing="2">
+                    <TextBlock Text="{Binding NagatoTime}"/>
+                    <TextBlock Text="{x:Static assets:Strings.sec}"/>
+                </StackPanel>
+
+                <TextBlock Grid.Column="0" Grid.Row="4" Margin="0,7,0,0" Text="{x:Static assets:Strings.Koizumi_Time_Percentage}"/>
+                <StackPanel Grid.Column="1" Grid.Row="4" Margin="10,0,0,0" Orientation="Horizontal">
+                    <NumericUpDown Value="{Binding KoizumiTimePercentage}" Minimum="0" Maximum="{Binding MaxShort}"
+                                   FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
+                    <TextBlock Text="{x:Static assets:Strings._}"/>
+                </StackPanel>
+                <StackPanel Grid.Column="2" Grid.Row="4" Margin="10,0,0,0" Orientation="Horizontal" Spacing="2">
+                    <TextBlock Text="{Binding KoizumiTime}"/>
+                    <TextBlock Text="{x:Static assets:Strings.sec}"/>
+                </StackPanel>
+            </Grid>
+        </HeaderedContentControl>
+    </Grid>
+</UserControl>
+

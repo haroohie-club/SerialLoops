@@ -1,0 +1,60 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:SerialLoops.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:controls="using:SerialLoops.Controls"
+        xmlns:toolbar="using:MiniToolbar.Avalonia"
+        xmlns:utility="clr-namespace:SerialLoops.Utility"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="SerialLoops.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        MinWidth="{Binding MinSize.Width}"
+        MinHeight="{Binding MinSize.Height}"
+        Width="{Binding ClientSize.Width}"
+        Height="{Binding ClientSize.Height}"
+        ClosingBehavior="OwnerAndChildWindows"
+        Closing="Window_Closing"
+        Closed="Window_Closed"
+        Icon="/Assets/serial-loops.ico"
+        Title="{Binding Title}"
+        TransparencyLevelHint="AcrylicBlur"
+        Background="{DynamicResource FallbackBackgroundColor}"
+        ExtendClientAreaToDecorationsHint="True">
+
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <NativeMenu.Menu>
+        <NativeMenu />
+    </NativeMenu.Menu>
+
+    <Panel>
+        <controls:AcrylicBorderHandler/>
+        <Grid RowDefinitions="Auto,*" Margin="5">
+            <StackPanel IsVisible="False">
+                <Button Command="{Binding SaveProjectCommand}" HotKey="{Binding SaveHotKey}"/>
+                <Button Command="{Binding SearchProjectCommand}" HotKey="{Binding SearchHotKey}"/>
+                <Button Command="{Binding CloseProjectCommand}" HotKey="{Binding CloseProjectKey}"/>
+            </StackPanel>
+            <StackPanel Grid.Row="0" HorizontalAlignment="Stretch">
+                <NativeMenuBar Name="MenuBar"/>
+                <Grid ColumnDefinitions="Auto,*" Margin="{OnPlatform Default='10 0', macOS='10 15 10 0'}">
+                    <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
+                        <Image Source="{Binding OpenProjectIcon, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
+                               Width="24" Height="24" />
+                        <TextBlock VerticalAlignment="Center" Margin="10 0"
+                                Text="{Binding OpenProjectName}" />
+                    </StackPanel>
+                    <toolbar:Toolbar Grid.Row="0" Grid.Column="1" Name="ToolBar" Orientation="Horizontal"
+                                     HorizontalAlignment="Right" DisplayMode="Compact" />
+                </Grid>
+            </StackPanel>
+            <ContentControl Name="MainContent" Grid.Row="1"/>
+        </Grid>
+    </Panel>
+
+</Window>

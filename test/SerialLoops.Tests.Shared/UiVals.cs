@@ -1,32 +1,27 @@
-﻿namespace SerialLoops.UITests.Shared
+﻿using System.IO;
+using System.IO.Compression;
+using System.Net.Http;
+using System.Reflection;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Threading.Tasks;
+
+namespace SerialLoops.Tests.Shared;
+
+public class UiVals
 {
-    public class UiVals
+    public string AssetsDirectory { get; set; } = string.Empty;
+    [JsonIgnore] public static string? BaseDirectory => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+    public static async Task<UiVals> DownloadTestAssets()
     {
-        public const string ROM_URI_ENV_VAR = "ROM_URI";
-        public const string ROM_NAME = "HaruhiChokuretsu.nds";
-        public const string APP_LOCATION_ENV_VAR = "APP_LOCATION";
-        public const string PROJECT_NAME_ENV_VAR = "PROJECT_NAME";
-        public const string ARTIFACTS_DIR_ENV_VAR = "BUILD_ARTIFACTSTAGINGDIRECTORY";
-        public const string APPIUM_HOST_ENV_VAR = "APPIUM_HOST";
-
-        public const string SKIP_UPDATE = "Skip Update";
-        public const string NEW_PROJECT = "New Project";
-        public const string OPEN_ROM = "Open ROM";
-        public const string CREATE = "Create";
-        public const string FILE = "File";
-        public const string ABOUT_ELLIPSIS = "About…";
-        public const string ABOUT = "About";
-        public const string PREFERENCES = "Preferences…";
-        public const string USE_DOCKER_FOR_ASM_HACKS = "Use Docker for ASM Hacks";
-        public const string SAVE = "Save";
-        public const string TOOLS = "Tools";
-        public const string OK = "OK";
-        public const string APPLY_HACKS = "Apply Hacks…";
-
-        public string AppLoc { get; set; } = string.Empty;
-        public string ProjectName { get; set; } = string.Empty;
-        public string WinAppDriverLoc { get; set; } = string.Empty;
-        public string RomLoc { get; set; } = string.Empty;
-        public string ArtifactsDir { get; set; } = string.Empty;
+        HttpClient client = new() { DefaultRequestHeaders = { Accept = { new("*/*") }}};
+        await using Stream zipStream = await client.GetStreamAsync(
+            "https://haroohie.nyc3.cdn.digitaloceanspaces.com/bootstrap/serial-loops/test-assets.zip");
+        ZipArchive archive = new(zipStream);
+        UiVals uiVals = new() { AssetsDirectory = Path.Join(BaseDirectory ?? string.Empty, "assets") };
+        archive.ExtractToDirectory(uiVals.AssetsDirectory);
+        await File.WriteAllTextAsync("ui_vals.json", JsonSerializer.Serialize(uiVals));
+        return uiVals;
     }
 }

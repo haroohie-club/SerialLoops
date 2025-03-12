@@ -1,6 +1,4 @@
-﻿using NAudio.Wave;
-using System;
-using System.Linq;
+﻿using System.Linq;
 
 // Adapted from https://github.com/naudio/NAudio.WaveFormRenderer/blob/master/WaveFormRendererLib/MaxPeakProvider.cs
 // Copyright (c) 2021 NAudio
@@ -11,16 +9,15 @@ using System.Linq;
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
-namespace SerialLoops.Lib.Util.WaveformRenderer
+namespace SerialLoops.Lib.Util.WaveformRenderer;
+
+public class MaxPeakProvider : PeakProvider
 {
-    public class MaxPeakProvider : PeakProvider
+    public override PeakInfo GetNextPeak()
     {
-        public override PeakInfo GetNextPeak()
-        {
-            var samplesRead = Provider.Read(ReadBuffer, 0, ReadBuffer.Length - (ReadBuffer.Length % Provider.WaveFormat.BlockAlign));
-            var max = (samplesRead == 0) ? 0 : ReadBuffer.Take(samplesRead).Max();
-            var min = (samplesRead == 0) ? 0 : ReadBuffer.Take(samplesRead).Min();
-            return new PeakInfo(min, max);
-        }
+        var samplesRead = Provider.Read(ReadBuffer, 0, ReadBuffer.Length - (ReadBuffer.Length % Provider.WaveFormat.BlockAlign));
+        var max = (samplesRead == 0) ? 0 : ReadBuffer.Take(samplesRead).Max();
+        var min = (samplesRead == 0) ? 0 : ReadBuffer.Take(samplesRead).Min();
+        return new(min, max);
     }
 }

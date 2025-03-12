@@ -1,22 +1,27 @@
-﻿using Eto;
-using Eto.Forms;
+﻿#if !WINDOWS
+using NAudio.Sdl2;
+#endif
 using NAudio.Wave;
 
-namespace SerialLoops.Utility
+namespace SerialLoops.Utility;
+
+public class SfxMixer
 {
-    [Handler(typeof(ISfxMixer))]
-    public class SfxMixer : Control
+#if WINDOWS
+    private WaveOut _player;
+#else
+    private WaveOutSdl _player;
+#endif
+
+    public IWavePlayer Player => _player;
+
+    public SfxMixer()
     {
-        new ISfxMixer Handler => (ISfxMixer)base.Handler;
+#if WINDOWS
+        _player = new() { DesiredLatency = 100 };
+#else
+        _player = new() { DesiredLatency = 10 };
+#endif
 
-        public IWavePlayer WavePlayer
-        {
-            get => Handler.Player;
-        }
-
-        public interface ISfxMixer
-        {
-            public IWavePlayer Player { get; }
-        }
     }
 }

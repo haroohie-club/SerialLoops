@@ -1,0 +1,52 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:SerialLoops.ViewModels.Dialogs"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:DataType="vm:UpdateAvailableDialogViewModel"
+        x:Class="SerialLoops.Views.Dialogs.UpdateAvailableDialog"
+        xmlns:assets="using:SerialLoops.Assets"
+        xmlns:controls="using:SerialLoops.Controls"
+        xmlns:md="using:Markdown.Avalonia"
+        xmlns:mdh="using:Markdown.Avalonia.Html"
+        xmlns:mdsh="using:Markdown.Avalonia.SyntaxHigh"
+        SizeToContent="WidthAndHeight"
+        CanResize="False"
+        TransparencyLevelHint="AcrylicBlur"
+        Background="{DynamicResource FallbackBackgroundColor}"
+        ExtendClientAreaToDecorationsHint="True"
+        Icon="/Assets/serial-loops.ico"
+        Title="{Binding Title}"
+        Name="Dialog">
+    <Panel>
+        <controls:AcrylicBorderHandler/>
+
+        <Grid HorizontalAlignment="Left" VerticalAlignment="Top"
+                RowDefinitions="Auto,Auto,Auto,Auto,*,Auto" ColumnDefinitions="Auto,Auto,Auto,Auto" Name="UpdateGrid"
+                Margin="20 40">
+            <TextBlock Classes="h2" Text="{Binding Header}" Grid.Row="0" Grid.Column="0"/>
+            <controls:LabelWithIcon Text="{x:Static assets:Strings.A_new_update_for_Serial_Loops_is_available_}"
+                                    Icon="Update" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left"/>
+            <md:MarkdownScrollViewer Width="750" Height="350" Grid.Row="2" Grid.Column="0"
+                                     Markdown="{Binding Changelog}"
+                                     MarkdownStyleName="GithubLike">
+                <md:MarkdownScrollViewer.Plugins>
+                    <md:MdAvPlugins>
+                        <mdh:HtmlPlugin/>
+                        <mdsh:SyntaxHighlight/>
+                    </md:MdAvPlugins>
+                </md:MarkdownScrollViewer.Plugins>
+            </md:MarkdownScrollViewer>
+            <controls:LinkButton Text="{x:Static assets:Strings.Download_release_from_GitHub}"
+                        Grid.Row="3" Grid.Column="0" Command="{Binding OpenReleaseLinkCommand}"/>
+            <StackPanel Grid.Row="5" Grid.Column="0" Orientation="Horizontal" Spacing="20">
+                <Button Content="{x:Static assets:Strings.Download_from_GitHub}" Command="{Binding OpenReleaseLinkCommand}"/>
+                <Button Content="{x:Static assets:Strings.Skip_Update}" Command="{Binding CloseCommand}"
+                        CommandParameter="{Binding #Dialog}" IsCancel="True"/>
+                <CheckBox Content="{x:Static assets:Strings.Check_for_Updates}" IsChecked="{Binding CheckForUpdates}"/>
+                <CheckBox Content="{x:Static assets:Strings.Pre_Release_Channel}" IsChecked="{Binding UsePreReleaseChannel}"/>
+            </StackPanel>
+        </Grid>
+    </Panel>
+</Window>

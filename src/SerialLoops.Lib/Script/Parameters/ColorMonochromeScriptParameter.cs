@@ -1,27 +1,31 @@
 ﻿using HaruhiChokuretsuLib.Archive.Event;
 
-namespace SerialLoops.Lib.Script.Parameters
+namespace SerialLoops.Lib.Script.Parameters;
+
+public class ColorMonochromeScriptParameter : ScriptParameter
 {
-    public class ColorMonochromeScriptParameter : ScriptParameter
+    public ColorMonochrome ColorType { get; set; }
+    public override short[] GetValues(object obj = null) => [(short)ColorType];
+
+    public override string GetValueString(Project project)
     {
-        public ColorMonochrome ColorType { get; set; }
-        public override short[] GetValues(object obj = null) => new short[] { (short)ColorType };
+        return project.Localize(ColorType.ToString());
+    }
 
-        public ColorMonochromeScriptParameter(string name, short colorType) : base(name, ParameterType.COLOR_MONOCHROME)
-        {
-            ColorType = (ColorMonochrome)colorType;
-        }
+    public ColorMonochromeScriptParameter(string name, short colorType) : base(name, ParameterType.COLOR_MONOCHROME)
+    {
+        ColorType = (ColorMonochrome)colorType;
+    }
 
-        public override ColorMonochromeScriptParameter Clone(Project project, EventFile eventFile)
-        {
-            return new(Name, (short)ColorType);
-        }
+    public override ColorMonochromeScriptParameter Clone(Project project, EventFile eventFile)
+    {
+        return new(Name, (short)ColorType);
+    }
 
-        public enum ColorMonochrome : short
-        {
-            CUSTOM = 0,
-            BLACK = 1,
-            WHITE = 2,
-        }
+    public enum ColorMonochrome : short
+    {
+        CUSTOM_COLOR = 0,
+        BLACK = 1,
+        WHITE = 2,
     }
 }

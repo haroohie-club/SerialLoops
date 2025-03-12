@@ -1,0 +1,10 @@
+Package: SerialLoops
+Version: #VERSION#
+Section: custom
+Priority: optional
+Architecture: amd64
+Essential: no
+Depends: libsdl2-dev, make, dotnet-sdk-8.0
+Maintainer: The Haroohie Translation Club <haroohietranslation@gmail.com>
+Homepage: https://haroohie.club/chokurestu/serial-loops/
+Description: Editor for Suzumiya Haruhi no Chokuretsu

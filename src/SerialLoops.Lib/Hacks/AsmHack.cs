@@ -1,208 +1,272 @@
-﻿using HaruhiChokuretsuLib.Util;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json.Serialization;
+using HaruhiChokuretsuLib.Util;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
-namespace SerialLoops.Lib.Hacks
+namespace SerialLoops.Lib.Hacks;
+
+public class AsmHack : ReactiveObject
 {
-    public class AsmHack
+    public string Name { get; set; }
+    public string Description { get; set; }
+    public List<InjectionSite> InjectionSites { get; set; }
+    public List<HackFile> Files { get; set; }
+    [JsonIgnore]
+    public bool ValueChanged { get; set; }
+    [JsonIgnore]
+    [Reactive]
+    public bool IsApplied { get; set; }
+
+    public bool Applied(Project project)
     {
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public List<InjectionSite> InjectionSites { get; set; }
-        public List<HackFile> Files { get; set; }
-        [JsonIgnore]
-        public bool ValueChanged { get; set; }
-
-        public bool Applied(Project project)
+        foreach (InjectionSite site in InjectionSites)
         {
-            foreach (InjectionSite site in InjectionSites)
+            if (site.Code.Equals("ARM9"))
             {
-                if (site.Code.Equals("ARM9"))
+                using FileStream arm9 = File.OpenRead(Path.Combine(project.IterativeDirectory, "rom", "arm9.bin"));
+                if (site.Repl)
                 {
-                    using FileStream arm9 = File.OpenRead(Path.Combine(project.IterativeDirectory, "rom", "arm9.bin"));
-                    arm9.Seek(site.Offset + 3, SeekOrigin.Begin);
-                    // All BL functions start with 0xEB
-                    if (arm9.ReadByte() == 0xEB)
-                    {
-                        return true;
-                    }
+                    using FileStream origArm9 = File.OpenRead(Path.Combine(project.BaseDirectory, "src", "arm9.bin"));
+                    origArm9.Seek(site.Offset, SeekOrigin.Begin);
+                    arm9.Seek(site.Offset, SeekOrigin.Begin);
+                    byte[] origBytes = new byte[4];
+                    byte[] newBytes = new byte[4];
+                    origArm9.ReadExactly(origBytes, 0, 4);
+                    arm9.ReadExactly(newBytes, 0, 4);
+                    return HaruhiChokuretsuLib.Util.IO.ReadInt(origBytes, 0) !=
+                           HaruhiChokuretsuLib.Util.IO.ReadInt(newBytes, 0);
                 }
-                else
-                {
-                    using FileStream overlay = File.OpenRead(Path.Combine(project.IterativeDirectory, "rom", "overlay", $"main_{int.Parse(site.Code):X4}.bin"));
-                    overlay.Seek(site.Offset + 3, SeekOrigin.Begin);
-                    if (overlay.ReadByte() == 0xEB)
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
 
-        public void Apply(Project project, Config config, Dictionary<HackFile, SelectedHackParameter[]> selectedParameters, ILogger log)
-        {
-            if (Applied(project))
-            {
-                log.LogWarning($"Hack '{Name}' already applied, skipping.");
-                return;
+                // All BL functions start with 0xEB
+                arm9.Seek(site.Offset + 3, SeekOrigin.Begin);
+                return arm9.ReadByte() == 0xEB;
             }
-
-            foreach (HackFile file in Files)
+            else
             {
-                string destination = Path.Combine(project.BaseDirectory, "src", file.Destination);
-                if (!Directory.Exists(Path.GetDirectoryName(destination)))
+                using FileStream overlay = File.OpenRead(Path.Combine(project.IterativeDirectory, "rom", "overlay", $"main_{int.Parse(site.Code):X4}.bin"));
+                if (site.Repl)
                 {
-                    Directory.CreateDirectory(Path.GetDirectoryName(destination));
+                    using FileStream origOvl = File.OpenRead(Path.Combine(project.BaseDirectory, "src", "arm9.bin"));
+                    origOvl.Seek(site.Offset, SeekOrigin.Begin);
+                    overlay.Seek(site.Offset, SeekOrigin.Begin);
+                    byte[] origBytes = new byte[4];
+                    byte[] newBytes = new byte[4];
+                    origOvl.ReadExactly(origBytes, 0, 4);
+                    overlay.ReadExactly(newBytes, 0, 4);
+                    return HaruhiChokuretsuLib.Util.IO.ReadInt(origBytes, 0) !=
+                           HaruhiChokuretsuLib.Util.IO.ReadInt(newBytes, 0);
                 }
-                string fileText = File.ReadAllText(Path.Combine(config.HacksDirectory, file.File));
-                foreach (SelectedHackParameter parameter in selectedParameters[file])
-                {
-                    fileText = fileText.Replace($"{{{{{parameter.Parameter.Name}}}}}", parameter.Value);
-                }
-                File.WriteAllText(destination, fileText);
+
+                overlay.Seek(site.Offset + 3, SeekOrigin.Begin);
+                return overlay.ReadByte() == 0xEB;
             }
         }
+        return false;
+    }
 
-        public void Revert(Project project, ILogger log)
+    public void Apply(Project project, Config config, Dictionary<HackFile, SelectedHackParameter[]> selectedParameters, ILogger log, bool forceApplication = false)
+    {
+        if (Applied(project) && !forceApplication)
         {
-            bool oneSuccess = false;
-            try
+            log.LogWarning($"Hack '{Name}' already applied, skipping.");
+            return;
+        }
+
+        foreach (HackFile file in Files)
+        {
+            string destination = Path.Combine(project.BaseDirectory, "src", file.Destination);
+            if (!Directory.Exists(Path.GetDirectoryName(destination)))
             {
-                foreach (HackFile file in Files)
-                {
-                    File.Delete(Path.Combine(project.BaseDirectory, "src", file.Destination));
-                    oneSuccess = true;
-                }
+                Directory.CreateDirectory(Path.GetDirectoryName(destination));
             }
-            catch (IOException)
+            string fileText = File.ReadAllText(Path.Combine(config.HacksDirectory, file.File));
+            foreach (SelectedHackParameter parameter in selectedParameters[file])
             {
-                // If there's at least one success, we assume that an older version of the hack was applied and we've now rolled it back
-                if (!oneSuccess)
-                {
-                    log.LogError(string.Format(project.Localize("Failed to delete files for hack '{0}' -- this hack is likely applied in the ROM base and can't be disabled."), Name));
-                }
+                fileText = fileText.Replace($"{{{{{parameter.Parameter.Name}}}}}", parameter.Value);
             }
-        }
-
-        public override bool Equals(object obj)
-        {
-            return ((AsmHack)obj).Name.Equals(Name);
-        }
-
-        public override int GetHashCode()
-        {
-            return Name.GetHashCode();
-        }
-
-        public bool DeepEquals(AsmHack other)
-        {
-            return other.Name.Equals(Name) && other.Description.Equals(Description) && other.InjectionSites.SequenceEqual(InjectionSites) && other.Files.SequenceEqual(Files);
+            File.WriteAllText(destination, fileText);
         }
     }
 
-    public class InjectionSite
+    public void Revert(Project project, ILogger log)
     {
-        [JsonIgnore]
-        public uint Offset { get; set; }
-        public string Code { get; set; }
-        public string Location
+        bool oneSuccess = false;
+        foreach (HackFile file in Files)
         {
-            get
+            string fileToDelete = Path.Combine(project.BaseDirectory, "src", file.Destination);
+            if (File.Exists(fileToDelete))
             {
-                int startAddress;
-                if (!Code.Equals("ARM9"))
+                File.Delete(fileToDelete);
+                oneSuccess = true;
+                if (Path.GetFileNameWithoutExtension(fileToDelete) ==
+                    Path.GetFileName(Path.GetDirectoryName(fileToDelete)))
                 {
-                    startAddress = 0x020C7660;
+                    Directory.Delete(Path.GetDirectoryName(fileToDelete)!);
                 }
-                else
-                {
-                    startAddress = 0x02000000;
-                }
-                return $"{(uint)(Offset + startAddress):X8}";
-            }
-            set
-            {
-                int startAddress;
-                if (!Code.Equals("ARM9"))
-                {
-                    startAddress = 0x020C7660;
-                }
-                else
-                {
-                    startAddress = 0x02000000;
-                }
-                Offset = (uint)(uint.Parse(value, System.Globalization.NumberStyles.HexNumber) - startAddress);
             }
         }
-
-        public override bool Equals(object obj)
+        // If there's at least one success, we assume that an older version of the hack was applied and we've now rolled it back
+        if (!oneSuccess)
         {
-            return ((InjectionSite)obj).Offset == Offset && ((InjectionSite)obj).Code.Equals(Code);
-        }
-
-        public override int GetHashCode()
-        {
-            return Offset.GetHashCode() * Code.GetHashCode() - (Offset.GetHashCode() + Code.GetHashCode());
+            log.LogError(string.Format(project.Localize("Failed to delete files for hack '{0}' -- this hack is likely applied in the ROM base and can't be disabled."), Name));
+            IsApplied = true;
         }
     }
 
-    public class HackFile
+    public override bool Equals(object obj)
     {
-        public string File { get; set; }
-        public string Destination { get; set; }
-        public string[] Symbols { get; set; }
-        public HackParameter[] Parameters { get; set; }
-
-        public override bool Equals(object obj)
+        if (obj is string name)
         {
-            return (((HackFile)obj).File?.Equals(File) ?? false) && (((HackFile)obj).Destination?.Equals(Destination) ?? false) && (((HackFile)obj)?.Symbols.SequenceEqual(Symbols) ?? false) && (((HackFile)obj).Parameters?.SequenceEqual(Parameters) ?? false);
+            return name.Equals(Name);
         }
-
-        public override int GetHashCode()
-        {
-            return File.GetHashCode();
-        }
+        return ((AsmHack)obj).Name.Equals(Name);
     }
 
-    public class SelectedHackParameter
+    public override int GetHashCode()
     {
-        public HackParameter Parameter { get; set; }
-        public int Selection { get; set; } = -1;
-        public string Value => Parameter.Values[Selection].Value;
+        return Name.GetHashCode();
     }
 
-    public class HackParameter
+    public bool DeepEquals(AsmHack other)
     {
-        public string Name { get; set; }
-        public string DescriptiveName { get; set; }
-        public HackParameterValue[] Values { get; set; }
-
-        public override bool Equals(object obj)
-        {
-            return (((HackParameter)obj).Name?.Equals(Name) ?? false) && (((HackParameter)obj).DescriptiveName?.Equals(DescriptiveName) ?? false) && (((HackParameter)obj).Values?.Equals(Values) ?? false);
-        }
-
-        public override int GetHashCode()
-        {
-            return Name.GetHashCode();
-        }
+        return other.Name.Equals(Name) && other.Description.Equals(Description) && other.InjectionSites.SequenceEqual(InjectionSites) && other.Files.SequenceEqual(Files);
     }
+}
 
-    public class HackParameterValue
+public class InjectionSite
+{
+    [JsonIgnore]
+    public uint Offset { get; set; }
+    public bool Repl { get; set; }
+    public string Code { get; set; }
+    public string Location
     {
-        public string Name { get; set; }
-        public string Value { get; set; }
-
-        public override bool Equals(object obj)
+        get
         {
-            return (((HackParameterValue)obj).Name?.Equals(Name) ?? false) && (((HackParameterValue)obj).Value?.Equals(Value) ?? false);
+            int startAddress;
+            if (!Code.Equals("ARM9"))
+            {
+                startAddress = 0x020C7660;
+            }
+            else
+            {
+                startAddress = 0x02000000;
+            }
+            return $"{(uint)(Offset + startAddress):X8}";
         }
-        public override int GetHashCode()
+        set
         {
-            return Name.GetHashCode();
+            int startAddress;
+            if (!Code.Equals("ARM9"))
+            {
+                startAddress = 0x020C7660;
+            }
+            else
+            {
+                startAddress = 0x02000000;
+            }
+            Offset = (uint)(uint.Parse(value, System.Globalization.NumberStyles.HexNumber) - startAddress);
         }
     }
+
+    public override bool Equals(object obj)
+    {
+        return ((InjectionSite)obj).Offset == Offset && ((InjectionSite)obj).Code.Equals(Code);
+    }
+
+    public override int GetHashCode()
+    {
+        return Offset.GetHashCode() * Code.GetHashCode() - (Offset.GetHashCode() + Code.GetHashCode());
+    }
+}
+
+public class HackFile
+{
+    public string File { get; set; }
+    public string Destination { get; set; }
+    public string[] Symbols { get; set; }
+    public HackParameter[] Parameters { get; set; }
+
+    public override bool Equals(object obj)
+    {
+        return (((HackFile)obj).File?.Equals(File) ?? false) && (((HackFile)obj).Destination?.Equals(Destination) ?? false) && (((HackFile)obj)?.Symbols.SequenceEqual(Symbols) ?? false) && (((HackFile)obj).Parameters?.SequenceEqual(Parameters) ?? false);
+    }
+
+    public override int GetHashCode()
+    {
+        return File.GetHashCode();
+    }
+}
+
+public class SelectedHackParameter
+{
+    public HackParameter Parameter { get; set; }
+    public int Selection { get; set; } = -1;
+    public string Value => Parameter.Values[Selection].Value;
+}
+
+public class HackParameter
+{
+    public string Name { get; set; }
+    public string DescriptiveName { get; set; }
+    public HackParameterValue[] Values { get; set; }
+
+    public override bool Equals(object obj)
+    {
+        return (((HackParameter)obj).Name?.Equals(Name) ?? false) && (((HackParameter)obj).DescriptiveName?.Equals(DescriptiveName) ?? false) && (((HackParameter)obj).Values?.Equals(Values) ?? false);
+    }
+
+    public override int GetHashCode()
+    {
+        return Name.GetHashCode();
+    }
+}
+
+public class HackParameterValue
+{
+    public string Name { get; set; }
+    public string Value { get; set; }
+
+    public override bool Equals(object obj)
+    {
+        return (((HackParameterValue)obj).Name?.Equals(Name) ?? false) && (((HackParameterValue)obj).Value?.Equals(Value) ?? false);
+    }
+    public override int GetHashCode()
+    {
+        return Name.GetHashCode();
+    }
+}
+
+public enum HackLocation
+{
+    ARM9 = -1,
+    Overlay_00,
+    Overlay_01,
+    Overlay_02,
+    Overlay_03,
+    Overlay_04,
+    Overlay_05,
+    Overlay_06,
+    Overlay_07,
+    Overlay_08,
+    Overlay_09,
+    Overlay_10,
+    Overlay_11,
+    Overlay_12,
+    Overlay_13,
+    Overlay_14,
+    Overlay_15,
+    Overlay_16,
+    Overlay_17,
+    Overlay_18,
+    Overlay_19,
+    Overlay_20,
+    Overlay_21,
+    Overlay_22,
+    Overlay_23,
+    Overlay_24,
+    Overlay_25,
 }

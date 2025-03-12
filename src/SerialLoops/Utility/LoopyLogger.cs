@@ -1,71 +1,113 @@
-﻿using Eto.Forms;
-using HaruhiChokuretsuLib.Util;
-using SerialLoops.Lib;
-using System;
+﻿using System;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
+using Avalonia.Controls;
+using Avalonia.Threading;
+using HaruhiChokuretsuLib.Util;
+using MsBox.Avalonia.Enums;
+using SerialLoops.Assets;
+using SerialLoops.Lib;
 
-namespace SerialLoops.Utility
+namespace SerialLoops.Utility;
+
+public class LoopyLogger : ILogger
 {
-    public class LoopyLogger : ILogger
+    private readonly Window _owner;
+    private Config _config;
+    private string _logFile;
+
+    public LoopyLogger(Window window)
     {
-        private Config _config;
-        private StreamWriter _writer;
+        _owner = window;
+    }
 
-        public LoopyLogger()
+    public void Initialize(Config config)
+    {
+        _config = config;
+        if (!Directory.Exists(_config.LogsDirectory))
         {
+            Directory.CreateDirectory(_config.LogsDirectory);
         }
+        _logFile = Path.Combine(_config.LogsDirectory, $"SerialLoops.log");
+    }
 
-        public void Initialize(Config config)
-        {
-            _config = config;
-            if (!Directory.Exists(_config.LogsDirectory))
-            {
-                Directory.CreateDirectory(_config.LogsDirectory);
-            }
-            _writer = File.AppendText(Path.Combine(_config.LogsDirectory, $"SerialLoops.log"));
-        }
+    private static string Stamp => $"\n({Environment.ProcessId}) {DateTimeOffset.Now} - ";
+    public static string CrashLogLocation => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "sl_crash.log");
 
-        public void Log(string message)
+    public void Log(string message)
+    {
+        if (!string.IsNullOrEmpty(_logFile) && !string.IsNullOrEmpty(message))
         {
-            if (_writer is not null && !string.IsNullOrEmpty(message))
+            for (int i = 0; i < 10; i++)
             {
-                _writer.WriteLine($"{DateTimeOffset.Now} - {message}");
-                _writer.Flush();
-            }
-        }
-
-        public void LogError(string message, bool lookForWarnings = false)
-        {
-            Application.Instance.Invoke(() => MessageBox.Show(string.Format("ERROR: {0}", Application.Instance.Localize(this, message)), "Error", MessageBoxType.Error));
-            if (_writer is not null && !string.IsNullOrEmpty(message))
-            {
-                _writer.WriteLine($"{DateTimeOffset.Now} - ERROR: {message}");
-                _writer.Flush();
+                try
+                {
+                    File.AppendAllText(_logFile, $"{Stamp}{message}");
+                    break;
+                }
+                catch (IOException)
+                {
+                    Thread.Sleep(100);
+                }
             }
         }
+    }
 
-        public void LogException(string message, Exception exception)
-        {
-            LogError($"{Application.Instance.Localize(this, message)}\n{exception.Message}");
-            LogWarning($"\n{exception.StackTrace}");
-        }
+    public void LogError(string message, bool lookForWarnings = false)
+    {
+        Dispatcher.UIThread.Invoke(() => LogErrorAsync(message, lookForWarnings));
+    }
 
-        public void LogWarning(string message, bool lookForErrors = false)
+    private async Task LogErrorAsync(string message, bool lookForWarnings = false)
+    {
+        if (!string.IsNullOrEmpty(_logFile) && !string.IsNullOrEmpty(message))
         {
-            if (_writer is not null && !string.IsNullOrEmpty(message))
+            for (int i = 0; i < 10; i++)
             {
-                _writer.WriteLine($"{DateTimeOffset.Now} - WARNING: {message}");
-                _writer.Flush();
+                try
+                {
+                    File.AppendAllText(_logFile, $"{Stamp}ERROR: {message}");
+                    break;
+                }
+                catch (IOException)
+                {
+                    await Task.Delay(TimeSpan.FromMilliseconds(100));
+                }
             }
         }
+        await _owner.ShowMessageBoxAsync(Strings.Error, string.Format(Strings.ERROR___0_, message), ButtonEnum.Ok, Icon.Error, this);
+    }
 
-        public void LogCrash(Exception ex)
+    public void LogException(string message, Exception exception)
+    {
+        LogError($"{message}\n{exception.Message}");
+        LogWarning($"\n{exception.StackTrace}");
+    }
+
+    public void LogWarning(string message, bool lookForErrors = false)
+    {
+        if (!string.IsNullOrEmpty(_logFile) && !string.IsNullOrEmpty(message))
         {
-            if (_writer is not null)
+            for (int i = 0; i < 10; i++)
             {
-                _writer.WriteLine($"{DateTimeOffset.Now} - SERIAL LOOPS CRASH: {ex.Message}\n\n{ex.StackTrace}");
-                _writer.Flush();
+                try
+                {
+                    File.AppendAllText(_logFile, $"{Stamp}WARNING: {message}");
+                    break;
+                }
+                catch (IOException)
+                {
+                    Thread.Sleep(100);
+                }
             }
         }
+    }
+
+    public void LogCrash(Exception ex)
+    {
+        string crashLog = $"{Stamp}SERIAL LOOPS CRASH: {ex.Message}\n\n{ex.StackTrace}";
+        Console.WriteLine(crashLog);
+        File.AppendAllText(CrashLogLocation, crashLog);
     }
 }

@@ -1,21 +1,25 @@
 ﻿using HaruhiChokuretsuLib.Archive.Event;
 using SerialLoops.Lib.Items;
 
-namespace SerialLoops.Lib.Script.Parameters
+namespace SerialLoops.Lib.Script.Parameters;
+
+public class BgmScriptParameter : ScriptParameter
 {
-    public class BgmScriptParameter : ScriptParameter
+    public BackgroundMusicItem Bgm { get; set; }
+    public override short[] GetValues(object obj = null) => [(short)Bgm.Index];
+
+    public override string GetValueString(Project project)
     {
-        public BackgroundMusicItem Bgm { get; set; }
-        public override short[] GetValues(object obj = null) => new short[] { (short)Bgm.Index };
+        return Bgm?.DisplayName;
+    }
 
-        public BgmScriptParameter(string name, BackgroundMusicItem bgm) : base(name, ParameterType.BGM)
-        {
-            Bgm = bgm;
-        }
+    public BgmScriptParameter(string name, BackgroundMusicItem bgm) : base(name, ParameterType.BGM)
+    {
+        Bgm = bgm;
+    }
 
-        public override BgmScriptParameter Clone(Project project, EventFile eventFile)
-        {
-            return new(Name, Bgm);
-        }
+    public override BgmScriptParameter Clone(Project project, EventFile eventFile)
+    {
+        return new(Name, Bgm);
     }
 }

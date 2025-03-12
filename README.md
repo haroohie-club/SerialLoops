@@ -1,5 +1,5 @@
 <h1 align="center">
-    <img alt="Serial Loops app icon; the letters 'SL' emblazoned above four translucent gray rings within a rounded square box colored with a blue-to-green gradient along the negative X-Z axis" src="src/SerialLoops/Icons/AppIcon.png" width="135px" />
+    <img alt="Serial Loops app icon; the letters 'SL' emblazoned above four translucent gray rings within a rounded square box colored with a blue-to-green gradient along the negative X-Z axis" src="src/SerialLoops/Assets/Icons/AppIcon.png" width="135px" />
     <br/>
     Serial Loops
 </h1>
@@ -15,7 +15,7 @@
     </a>
 </p>
 
-**Serial Loops** is a fully-fledged editor for the Nintendo DS game _Suzumiya Haruhi no Chokuretsu_ (The Series of Haruhi Suzumiya).
+**Serial Loops** is a full-fledged editor for the Nintendo DS game _Suzumiya Haruhi no Chokuretsu_ (The Series of Haruhi Suzumiya).
 
 ## Screenshots
 <p align="center">
@@ -31,6 +31,10 @@ Serial Loops is developed by:
 * [Jonko](https://github.com/jonko0493) &ndash; Systems architect & reverse engineering work
 * [William278](https://william278.net) &ndash; UX architect & design work
 
+Additional contributions have been made by:
+* Fuyuko Ayumu
+* Xzonn
+
 ### Translators
 Serial Loops is translated into a variety of langauges thanks to the following contributors:
 * Chinese (Simplified/Traditional): [Xzonn](https://xzonn.top) (traditional is auto-generated via [OpenCC](https://github.com/BYVoid/OpenCC))
@@ -42,8 +46,17 @@ Documentation for how to use Serial Loops can be found on [our website](https://
 
 ## Installation
 ### Prerequisites
-#### A Nintendo DS Emulator
-To test the game easily, you will want to have a Nintendo DS emulator installed. We recommend using [melonDS](https://melonds.kuribo64.net/) for its accuracy.
+It is recommended that you use a distribution of Serial Loops that automatically installs or comes with the necessary prerequisites. For each platform these are:
+
+* Linux: Flatpak
+* macOS: Installer
+* Windows: Installer
+
+Using these will ensure Serial Loops is ready to use after installation. However, if you would rather use a portable build on Windows/Linux, please check the information on installing
+these prerequisites below.
+
+<details>
+    <summary>View prerequisites for non-Flatpak/installer distributions</summary>
 
 #### Installing devkitARM
 [devkitARM](https://devkitpro.org/wiki/Getting_Started) is required to use Serial Loops on all platforms.
@@ -69,7 +82,7 @@ way of getting the Docker path to work, so you will have to use Make.
     - Make comes preinstalled on many Linux distributions, and if you're using the Debian or RPM package, it was definitely installed when you installed
       Serial Loops. If you're using the tar.gz it is not installed on yours, you will likely be able to install it as simply as
       `[packagemanger] install make` from a terminal.
-  
+
   To test if make is installed properly, type `make --verison` into a terminal and see if it produces the version of make.
 * If you would rather not install Make, or if it is not working properly, you can instead run it through a Docker container. To do this, you should
   install [Docker Desktop](https://www.docker.com/products/docker-desktop/) or the Docker Engine. Ensure the Docker engine is running and make sure
@@ -78,8 +91,13 @@ way of getting the Docker path to work, so you will have to use Make.
     - On Windows, you will additionally need to install [Windows Subsystem for Linux (WSL)](https://learn.microsoft.com/en-us/windows/wsl/install).
       From an admin PowerShell or Terminal window (Winkey + X + A), simply type `wsl --install` to install it.
 
-#### Installing OpenAL (Linux)
-If you're running on Linux and _not using one of the package releases_ (the `.deb` or `.rpm`), you will also need to install OpenAL which is used for audio processing.
+#### Installing SDL2 (Linux)
+If you're running on Linux and _not using one of the package releases_ (the Flatpak, AppImage, `.deb` or `.rpm`), you will also need to install SDL2 which is used for audio processing.
+
+</details>
+
+#### A Nintendo DS Emulator
+To test the game easily, you will want to have a Nintendo DS emulator installed. We recommend using [melonDS](https://melonds.kuribo64.net/) for its accuracy.
 
 ### Download & Install
 Once you have installed any necessary prerequisites, to install Serial Loops, download the latest release for your platform from the [Releases tab](https://github.com/haroohie-club/SerialLoops/releases).
@@ -97,65 +115,38 @@ Please file bugs in the Issues tab in this repository. Please include the follow
 ### License
 Serial Loops is licensed under the GPLv3. See [LICENSE](LICENSE) for more information.
 
-### Building
-Serial Loops requires the .NET 8.0 SDK to build. You can download it [here](https://dotnet.microsoft.com/download/dotnet/8.0). To build Serial Loops for your platform, run:
+### Prerequisites
+Serial Loops requires the .NET 8.0 SDK to build. You can download it [here](https://dotnet.microsoft.com/download/dotnet/8.0).
 
+Additionally, on macOS, you will have to install CMake so that the build can compile SDL2. To do this, download the macOS dmg for your
+[here](https://cmake.org/download/) and install it. Then run:
 ```bash
-dotnet build src/PLATFORM
+sudo /Applications/CMake.app/Contents/bin/cmake-gui --install
 ```
+This will symlink the CMake binaries to `/usr/local/bin` which is necessary for the build to work.
 
-Remember to replace `PLATFORM` with the platform you're on:
-* `SerialLoops.Gtk` for Linux
-* `SerialLoops.Mac` for macOS
-* `SerialLoops.Wpf` for Windows
+On Linux, you will need to install the SDL2 binaries for your distribution.
 
-We recommend [Visual Studio 2022](https://visualstudio.microsoft.com/) on Windows or [Rider](https://www.jetbrains.com/rider/) on Linux/Mac for development. If you'd like to contribute new features or fixes, we recommend [getting in touch on Discord first](https://discord.gg/nesRSbpeFM) before submitting a pull request!
+### Building
+To build Serial Loops for your platform, run:
+```bash
+dotnet build
+```
+On Linux/Mac, you need to specify the target framework:
+```bash
+dotnet build -f net8.0
+```
+Specifying this prevents dotnet from trying to build the Windows project, which can cause errors.
+
+We recommend [Rider](https://www.jetbrains.com/rider/) for development as it has the best Avalonia support and is now free to use for non-commercial purposes; however, on Windows, you can also use [Visual Studio 2022](https://visualstudio.microsoft.com/).
+You can also build from both of these IDEs; however, when building from Rider on Linux/Mac, you must go into **Settings &rarr; Build, Execution, Deployment &rarr; Toolset and Build** and add `TargetFramework=net8.0`
+to the MSBuild global properties field. This has the same effect as specifying `-f net8.0` on the command line.
+
+If you'd like to contribute new features or fixes, we recommend [getting in touch on Discord first](https://discord.gg/nesRSbpeFM) before submitting a pull request!
 
 ### Testing
-The `SerialLoops.Tests` project can be run from inside Visual Studio, Rider, or with `dotnet test` as normal. However, our UI tests (currently only runnable on Windows) are a bit more involved.
+Serial Loops has headless tests that run to test the UI and other functionality of the program. To run tests locally, you will need to define either a `ui_vals.json` file or set an environment variable.
 
-Our UI tests rely on [Appium](https://appium.io/).
-#### macOS
-1. You will need to install nodejs and then use it to [install Appium](https://appium.io/docs/en/2.4/quickstart/install/).
-  - The easiest way to install nodejs is to first install [nvm](https://github.com/nvm-sh/nvm) and then run `nvm install <version>` followed by `nvm use <version>` (you can use `16` as the version)
-2. You will then need to install the Mac2 driver with `appium driver install mac2`
-3. Follow [these instructions](https://github.com/appium/appium-mac2-driver?tab=readme-ov-file#requirements) for installing and setting up the necessary prerequisites for the Mac2 driver to work
+First, download [these test assets](https://haroohie.nyc3.cdn.digitaloceanspaces.com/bootstrap/serial-loops/test-assets.zip) -OutFile $(Build.ArtifactStagingDirectory)/test-assets.zip) and unzip them to a directory somewhere. Then, specify that directory in the `ui_vals.json` as `AssetsDirectory` or set the environment variable `ASSETS_DIRECTORY` to that path.
 
-Once you've installed the prerequisites, build the `SerialLoops.Mac` and `SerialLoops.Mac.Tests` projects with `dotnet build src/SerialLoops.Mac/SerialLoops.Mac.csproj` and `dotnet build test/ui/SerialLoops.Mac.Tests/SerialLoops.Mac.Tests.csproj`,
-respectively. Then, inside `test\ui\SerialLoops.Mac.Tests\bin\Debug\net8.0`, create a new text file called `ui_vals.json`. Inside this file, place the following text, replacing necessary values:
-```json
-{
-    "AppLoc": "PATH/TO/Serial Loops.app",
-    "ProjectName": "MacUITest",
-    "RomLoc": "PATH/TO/HaruhiChokuretsu.nds",
-    "ArtifactsDir": "PATH/TO/artifacts"
-}
-```
-The artifacts directory can be any arbitrary directory, but ensure it exists before running the tests. The project name by default is WinUITest, but it can be anything you'd like. Have fun.
-
-Finally, you can then run the tests with `dotnet test test\ui\SerialLoops.Mac.Tests\SerialLoops.Mac.Tests.csproj`. However, it may be better to run `appium` from a different terminal first so you
-can see the server output as well.
-
-#### Windows
-1. You will need to install nodejs and then use it to [install Appium](https://appium.io/docs/en/2.4/quickstart/install/).
-  - The easiest way to install nodejs is to first install [NVM for Windows](https://github.com/coreybutler/nvm-windows) and then run `nvm install latest` followed by `nvm use latest` (you can sub latest for any version)
-2. You will then need to install the [Appium Windows Driver](https://github.com/appium/appium-windows-driver) with `appium driver install --source=npm appium-windows-driver`.
-3. Next, download and install [WinAppDriver](https://github.com/microsoft/WinAppDriver).
-
-Once you've installed all the prerequisites, build the `SerialLoops.Wpf` and `SerialLoops.Wpf.Tests` projects from Visual Studio or with `dotnet build src\ui\SerialLoops.Wpf\SerialLoops.Wpf.csproj` and
-`dotnet build test\ui\SerialLoops.Wpf.Tests\SerialLoops.Wpf.Tests.csproj`, respectively. Then, inside `test\ui\SerialLoops.Wpf.Tests\bin\Debug\net8.0`, create a new text file called `ui_vals.json`.
-Inside this file place the following text, replacing necessary values:
-```json
-{
-    "AppLoc": "PATH\\TO\\SerialLoops.exe",
-    "ProjectName": "WinUITest",
-    "WinAppDriverLoc": "PATH\\TO\\WinAppDriver.exe",
-    "RomLoc": "PATH\\TO\\HaruhiChokuretsu.nds",
-    "ArtifactsDir": "PATH\\TO\\artifacts"
-}
-```
-Ensure you escape your backslashes (`\\` rather than `\`). WinAppDriver is usually installed to `C:\Program Files (x86)\Windows Application Driver\WinAppDriver.exe`. The artifacts directory can
-be any arbitrary directory, but ensure it exists before running the tests. The project name by default is WinUITest, but it can be anything you'd like. Have fun.
-
-Finally, you can then open the solution inside Visual Studio and run the tests from the Test Explorer. Alternatively, running `dotnet test test\ui\SerialLoops.Wpf.Tests\SerialLoops.Wpf.Tests.csproj`
-may also work.
+Tests can be run via `dotnet test` (make sure to add `-f net8.0` on Linux or Mac) or through the test runners in Rider or Visual Studio.

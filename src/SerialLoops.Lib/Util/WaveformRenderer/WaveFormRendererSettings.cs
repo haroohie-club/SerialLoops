@@ -9,40 +9,39 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
-namespace SerialLoops.Lib.Util.WaveformRenderer
+namespace SerialLoops.Lib.Util.WaveformRenderer;
+
+public class WaveFormRendererSettings
 {
-    public class WaveFormRendererSettings
+    public static readonly WaveFormRendererSettings StandardSettings = new()
     {
-        public static readonly WaveFormRendererSettings StandardSettings = new()
-        {
-            Width = 400,
-            TopHeight = 50,
-            BottomHeight = 50,
-            PixelsPerPeak = 1,
-            SpacerPixels = 0,
-            TopPeakPaint = new() { Color = new SKColor(230, 0, 83) },
-            BottomPeakPaint = new() { Color = new SKColor(179, 0, 64) },
-        };
+        Width = 400,
+        TopHeight = 50,
+        BottomHeight = 50,
+        PixelsPerPeak = 1,
+        SpacerPixels = 0,
+        TopPeakPaint = new() { Color = new(230, 0, 83) },
+        BottomPeakPaint = new() { Color = new(179, 0, 64) },
+    };
 
-        public WaveFormRendererSettings()
-        {
-            BackgroundColor = SKColors.Transparent;
-        }
-
-        // for display purposes only
-        public string Name { get; set; }
-
-        public int Width { get; set; }
-
-        public int TopHeight { get; set; }
-        public int BottomHeight { get; set; }
-        public int PixelsPerPeak { get; set; }
-        public int SpacerPixels { get; set; }
-        public virtual SKPaint TopPeakPaint { get; set; }
-        public virtual SKPaint TopSpacerPaint { get; set; }
-        public virtual SKPaint BottomPeakPaint { get; set; }
-        public virtual SKPaint BottomSpacerPaint { get; set; }
-        public bool DecibelScale { get; set; }
-        public SKColor BackgroundColor { get; set; }
+    public WaveFormRendererSettings()
+    {
+        BackgroundColor = SKColors.Transparent;
     }
+
+    // for display purposes only
+    public string Name { get; set; }
+
+    public int Width { get; set; }
+
+    public int TopHeight { get; set; }
+    public int BottomHeight { get; set; }
+    public int PixelsPerPeak { get; set; }
+    public int SpacerPixels { get; set; }
+    public virtual SKPaint TopPeakPaint { get; set; }
+    public virtual SKPaint TopSpacerPaint { get; set; }
+    public virtual SKPaint BottomPeakPaint { get; set; }
+    public virtual SKPaint BottomSpacerPaint { get; set; }
+    public bool DecibelScale { get; set; }
+    public SKColor BackgroundColor { get; set; }
 }

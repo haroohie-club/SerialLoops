@@ -1,0 +1,28 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="using:SerialLoops.ViewModels.Editors"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:assets="using:SerialLoops.Assets"
+             xmlns:controls="using:SerialLoops.Controls"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:SaveEditorViewModel"
+             x:Class="SerialLoops.Views.Editors.SaveEditorView">
+    <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*" HorizontalAlignment="Center">
+        <HeaderedContentControl Grid.Row="0" Margin="5" Header="{x:Static assets:Strings.Save_Files}">
+            <StackPanel Orientation="Vertical" Spacing="5" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <controls:SaveSlotPreview DataContext="{Binding Slot1ViewModel}"/>
+                <controls:SaveSlotPreview DataContext="{Binding Slot2ViewModel}"/>
+                <controls:SaveSlotPreview DataContext="{Binding QuickSaveViewModel}"/>
+            </StackPanel>
+        </HeaderedContentControl>
+
+        <Button Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" Command="{Binding EditCommonSaveDataCommand}">
+            <StackPanel Orientation="Horizontal" Spacing="3">
+                <Svg Width="22" Height="22" Path="avares://SerialLoops/Assets/Icons/Edit_Save.svg"/>
+                <TextBlock Text="{x:Static assets:Strings.Common_Save_Data___}"/>
+            </StackPanel>
+        </Button>
+    </Grid>
+</UserControl>
+

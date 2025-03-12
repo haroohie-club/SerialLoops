@@ -1,0 +1,24 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="using:SerialLoops.ViewModels.Editors.ScriptCommandEditors"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:assets="using:SerialLoops.Assets"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:ChessVgotoScriptCommandEditorViewModel"
+             x:Class="SerialLoops.Views.Editors.ScriptCommandEditors.ChessVgotoScriptCommandEditorView">
+    <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto">
+        <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Clear_Section}"/>
+        <ComboBox Grid.Column="1" Grid.Row="0" Margin="10,0,0,0" ItemsSource="{Binding ScriptEditor.ScriptSections}"
+                  SelectedItem="{Binding ClearSection}"/>
+
+        <TextBlock Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Text="{x:Static assets:Strings.Miss_Section}"/>
+        <ComboBox Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" ItemsSource="{Binding ScriptEditor.ScriptSections}"
+                  SelectedItem="{Binding MissSection}"/>
+
+        <TextBlock Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Text="{x:Static assets:Strings.Miss_2_Section}"/>
+        <ComboBox Grid.Column="1" Grid.Row="2" Margin="10,0,0,0" ItemsSource="{Binding ScriptEditor.ScriptSections}"
+                  SelectedItem="{Binding Miss2Section}"/>
+    </Grid>
+</UserControl>
+

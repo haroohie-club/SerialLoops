@@ -1,45 +1,59 @@
-﻿using HaruhiChokuretsuLib.Archive.Graphics;
+﻿using System.Collections.Generic;
+using System.Linq;
+using HaruhiChokuretsuLib.Archive.Graphics;
 using HaruhiChokuretsuLib.Util;
 using SkiaSharp;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 
-namespace SerialLoops.Lib.Items
+namespace SerialLoops.Lib.Items;
+
+public class LayoutItem : Item, IPreviewableGraphic
 {
-    public class LayoutItem(int layoutIndex, List<GraphicsFile> grps, int startEntry, int numEntries, string name, Project project) : Item(name, ItemType.Layout), IPreviewableGraphic
+    public GraphicsFile Layout { get; set; }
+    public List<GraphicsFile> GraphicsFiles { get; set; }
+    public int StartEntry { get; set; }
+    public int NumEntries { get; set; }
+
+    public Dictionary<int, SKBitmap> TilesDict { get; }
+
+    public LayoutItem(int layoutIndex, List<GraphicsFile> grps, int startEntry, int numEntries, string name, Project project) : base(name, ItemType.Layout)
     {
-        public GraphicsFile Layout { get; set; } = project.LayoutFiles[layoutIndex];
-        public List<GraphicsFile> GraphicsFiles { get; set; } = grps;
-        public int StartEntry { get; set; } = startEntry;
-        public int NumEntries { get; set; } = numEntries;
+        Layout = project.LayoutFiles[layoutIndex];
+        GraphicsFiles = grps;
+        StartEntry = startEntry;
+        NumEntries = numEntries;
+        TilesDict = grps.Select((g, i) => (i, g.GetImage(transparentIndex: 0))).ToDictionary();
+    }
 
-        private readonly Dictionary<int, SKBitmap> _tilesDict = grps.Select((g, i) => (i, g.GetImage(transparentIndex: 0))).ToDictionary();
+    public LayoutItem(GraphicsFile layout, List<GraphicsFile> grps, int startEntry, int numEntries, string name) : base(name, ItemType.Layout)
+    {
+        Layout = layout;
+        GraphicsFiles = grps;
+        StartEntry = startEntry;
+        NumEntries = numEntries;
+        TilesDict = grps.Select((g, i) => (i, g.GetImage(transparentIndex: 0))).ToDictionary();
+    }
 
-        public override void Refresh(Project project, ILogger log)
+    public override void Refresh(Project project, ILogger log)
+    {
+    }
+
+    public SKBitmap GetLayoutImage()
+    {
+        return Layout.GetLayout(GraphicsFiles, Layout.LayoutEntries.Skip(StartEntry).Take(NumEntries).ToList(), darkMode: false, preprocessedList: true).bitmap;
+    }
+
+    public SKBitmap GetLayoutEntryRender(int index)
+    {
+        if (index < 0 || Layout.LayoutEntries[index].RelativeShtxIndex < 0)
         {
+            return null;
         }
 
-        public SKBitmap GetLayoutImage()
-        {
-            return Layout.GetLayout(GraphicsFiles, Layout.LayoutEntries.Skip(StartEntry).Take(NumEntries).ToList(), darkMode: false, preprocessedList: true).bitmap;
-        }
+        return Layout.LayoutEntries[index].GetTileBitmap(TilesDict);
+    }
 
-        public (SKBitmap tile, SKRect dest) GetLayoutEntryRender(int index)
-        {
-            if (index < 0 || Layout.LayoutEntries[index].RelativeShtxIndex < 0)
-            {
-                return (null, new());
-            }
-            else
-            {
-                return (Layout.LayoutEntries[index].GetTileBitmap(_tilesDict), Layout.LayoutEntries[index].GetDestination());
-            }
-        }
-
-        SKBitmap IPreviewableGraphic.GetPreview(Project project)
-        {
-            return GetLayoutImage();
-        }
+    SKBitmap IPreviewableGraphic.GetPreview(Project project)
+    {
+        return GetLayoutImage();
     }
 }

@@ -1,0 +1,31 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="using:SerialLoops.ViewModels.Editors.ScriptCommandEditors"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:assets="using:SerialLoops.Assets"
+             xmlns:utility="using:SerialLoops.Utility"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:ScreenFlashScriptCommandEditorViewModel"
+             x:Class="SerialLoops.Views.Editors.ScriptCommandEditors.ScreenFlashScriptCommandEditorView">
+    <UserControl.Resources>
+        <utility:SKAvaloniaColorConverter x:Key="ColorConverter"/>
+    </UserControl.Resources>
+    <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto">
+        <TextBlock Grid.Column="0" Grid.Row="0" Margin="0,7,0,0" Text="{x:Static assets:Strings.Fade_In_Time__Frames_}"/>
+        <NumericUpDown Grid.Column="1" Grid.Row="0" Margin="10,0,0,0" Minimum="0" Maximum="{Binding MaxShort}"
+                        Value="{Binding FadeInTime}" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
+
+        <TextBlock Grid.Column="0" Grid.Row="1" Margin="0,7,0,0" Text="{x:Static assets:Strings.Hold_Time__Frames_}"/>
+        <NumericUpDown Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" Minimum="0" Maximum="{Binding MaxShort}"
+                        Value="{Binding HoldTime}" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
+
+        <TextBlock Grid.Column="0" Grid.Row="2" Margin="0,7,0,0" Text="{x:Static assets:Strings.Fade_Out_Time__Frames_}"/>
+        <NumericUpDown Grid.Column="1" Grid.Row="2" Margin="10,0,0,0" Minimum="0" Maximum="100"
+                        Value="{Binding FadeOutTime}" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
+
+        <TextBlock Grid.Column="0" Grid.Row="3" Margin="0,7,0,0" Text="{x:Static assets:Strings.CUSTOM_COLOR}"/>
+        <ColorPicker Grid.Column="1" Grid.Row="3" Margin="10,0,0,0" Color="{Binding Color, Converter={StaticResource ColorConverter}, Mode=TwoWay}"/>
+    </Grid>
+
+</UserControl>

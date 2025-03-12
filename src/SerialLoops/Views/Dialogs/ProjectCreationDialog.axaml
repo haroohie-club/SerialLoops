@@ -1,0 +1,64 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:vm="using:SerialLoops.ViewModels.Dialogs"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:assets="using:SerialLoops.Assets"
+        xmlns:controls="using:SerialLoops.Controls"
+        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="275"
+        MinWidth="400" MinHeight="275"
+        Width="400" Height="275"
+        TransparencyLevelHint="AcrylicBlur"
+        Background="{DynamicResource FallbackBackgroundColor}"
+        ExtendClientAreaToDecorationsHint="True"
+        x:DataType="vm:ProjectCreationDialogViewModel"
+        x:Class="SerialLoops.Views.Dialogs.ProjectCreationDialog"
+        Icon="/Assets/serial-loops.ico"
+        Title="{Binding Title}"
+        Name="PcDialog">
+    <Panel>
+        <controls:AcrylicBorderHandler/>
+
+        <StackPanel Spacing="10" HorizontalAlignment="Center" Margin="10 30">
+            <HeaderedContentControl Header="{x:Static assets:Strings.Project_Options}" MinWidth="300" MinHeight="100">
+                <StackPanel Spacing="10" VerticalAlignment="Center" Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Spacing="10" IsVisible="{Binding !Migrate}">
+                        <TextBlock Text="{x:Static assets:Strings.Name}"/>
+                        <TextBox Name="NameBox" Watermark="Haroohie" Width="150" Text="{Binding ProjectName}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Spacing="10">
+                        <TextBlock Text="{x:Static assets:Strings.Language_Template}"/>
+                        <ComboBox SelectedItem="{Binding LanguageTemplateItem, Mode=OneWayToSource}" SelectedIndex="0"
+                                  Name="LanguageComboBox">
+                            <ComboBox.Items>
+                                <ComboBoxItem Tag="en" Content="{x:Static assets:Strings.English}"/>
+                                <ComboBoxItem Tag="ja" Content="{x:Static assets:Strings.Japanese}"/>
+                                <ComboBoxItem Tag="zh-Hans" Content="{x:Static assets:Strings.Chinese__Simplified_}"/>
+                                <ComboBoxItem Tag="ru" Content="{x:Static assets:Strings.Russian}"/>
+                                <ComboBoxItem Tag="es" Content="{x:Static assets:Strings.Spanish}"/>
+                                <ComboBoxItem Tag="pt-BR" Content="{x:Static assets:Strings.Portuguese__Brazilian_}"/>
+                                <ComboBoxItem Tag="it" Content="{x:Static assets:Strings.Italian}"/>
+                                <ComboBoxItem Tag="fr" Content="{x:Static assets:Strings.French}"/>
+                                <ComboBoxItem Tag="de" Content="{x:Static assets:Strings.German}"/>
+                                <ComboBoxItem Tag="el" Content="{x:Static assets:Strings.Greek}"/>
+                            </ComboBox.Items>
+                        </ComboBox>
+                    </StackPanel>
+                </StackPanel>
+            </HeaderedContentControl>
+            <HeaderedContentControl Header="{x:Static assets:Strings.Select_ROM}" Padding="5" MinWidth="300" MinHeight="80">
+                <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                    <Button Content="{x:Static assets:Strings.Open_ROM}" Command="{Binding PickRomCommand}"
+                            Name="OpenRomButton"/>
+                    <TextBlock Text="{Binding RomPath}"/>
+                </StackPanel>
+            </HeaderedContentControl>
+            <StackPanel Orientation="Horizontal" Margin="5" Spacing="10">
+                <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}" CommandParameter="{Binding #PcDialog}"
+                        Name="CancelButton" IsCancel="True"/>
+                <Button Content="{Binding ButtonText}" Command="{Binding CreateCommand}" CommandParameter="{Binding #PcDialog}"
+                        Name="CreateButton" IsDefault="True"/>
+            </StackPanel>
+        </StackPanel>
+    </Panel>
+</Window>
