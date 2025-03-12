@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using HaruhiChokuretsuLib.Util;
 using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
@@ -28,7 +29,17 @@ public class BgmVolumePreviewItem : ReactiveObject, ISoundItem
 
     public IWaveProvider GetWaveProvider(ILogger log, bool loop)
     {
-        _wav.Seek(0, SeekOrigin.Begin);
-        return Provider.ToWaveProvider16();
+        try
+        {
+            _wav.Seek(0, SeekOrigin.Begin);
+            return Provider.ToWaveProvider16();
+        }
+        catch (Exception ex)
+        {
+            log.LogWarning("Failed to seek to beginning of stream!");
+            log.LogWarning(ex.Message);
+            log.LogWarning(ex.StackTrace);
+            return Provider.ToWaveProvider16();
+        }
     }
 }
