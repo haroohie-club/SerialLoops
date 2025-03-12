@@ -44,6 +44,7 @@ public static class MockPreparationExtensions
         fontReplacement.AddRange(JsonSerializer.Deserialize<List<FontReplacement>>(File.ReadAllText(Path.Combine(UiVals.BaseDirectory, "Sources", "charset.json"))));
         mockedProject.FontReplacement = fontReplacement;
         mockedProject.LangCode = "en";
+        mockedProject.Name = "Test";
 
         mockedProject.Localize = s => s;
     }

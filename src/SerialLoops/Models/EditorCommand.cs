@@ -1,5 +1,6 @@
 ﻿using System.Windows.Input;
 using Avalonia.Controls;
+using Avalonia.Styling;
 using HaruhiChokuretsuLib.Util;
 using MiniToolbar.Avalonia;
 using SerialLoops.Utility;

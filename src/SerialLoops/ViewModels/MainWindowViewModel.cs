@@ -54,6 +54,21 @@ public partial class MainWindowViewModel : ViewModelBase
     [Reactive]
     public Size ClientSize { get; set; } = new(1200, 800);
 
+    // Open project stuff
+    [Reactive]
+    public string OpenProjectName { get; set; }
+    private SKBitmap _openProjectIcon;
+    public SKBitmap OpenProjectIcon
+    {
+        get
+        {
+            SKBitmap preview = new(24, 24);
+            _openProjectIcon?.ScalePixels(preview, SKSamplingOptions.Default);
+            return preview;
+        }
+        set => this.RaiseAndSetIfChanged(ref _openProjectIcon, value);
+    }
+
     public MainWindow Window { get; set; }
     public ProjectsCache ProjectsCache { get; set; }
     public Config CurrentConfig { get; set; }
@@ -240,6 +255,8 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             DataContext = new OpenProjectPanelViewModel(ItemExplorer, EditorTabs),
         };
+        OpenProjectName = OpenProject.Name;
+        OpenProjectIcon = OpenProject.Settings?.Icon ?? new();
 
         InitializeProjectMenu();
 
@@ -485,6 +502,8 @@ public partial class MainWindowViewModel : ViewModelBase
         OpenHomePanel();
 
         OpenProject = null;
+        OpenProjectName = null;
+        OpenProjectIcon = null;
         EditorTabs = null;
         ItemExplorer = null;
         ToolBar.Items.Clear();
@@ -1188,7 +1207,7 @@ public partial class MainWindowViewModel : ViewModelBase
             {
                 Header = Strings.Export_Project,
                 Command = ExportProjectCommand,
-                // Icon = ControlGenerator.GetIcon("Export_Project", Log),
+                Icon = ControlGenerator.GetIcon("Export_Project", Log),
             },
             new NativeMenuItem
             {
@@ -1275,25 +1294,26 @@ public partial class MainWindowViewModel : ViewModelBase
         ToolBar.Items.Clear();
         ToolBar.Items.Add(new ToolbarButton
         {
-            Text = Strings.Save,
+            DataContext = Strings.Save,
             Command = SaveProjectCommand,
             Icon = ControlGenerator.GetVectorIcon("Save", Log),
         });
         ToolBar.Items.Add(new ToolbarButton
         {
-            Text = Strings.Build,
+            DataContext = Strings.Build,
             Command = BuildIterativeCommand,
             Icon = ControlGenerator.GetVectorIcon("Build", Log),
         });
         ToolBar.Items.Add(new ToolbarButton
         {
-            Text = Strings.Build_and_Run,
+            DataContext = Strings.Build_and_Run,
             Command = BuildAndRunCommand,
             Icon = ControlGenerator.GetVectorIcon("Build_Run", Log),
         });
+        ToolBar.Items.Add(new ToolbarSeparator());
         ToolBar.Items.Add(new ToolbarButton
         {
-            Text = Strings.Search,
+            DataContext = Strings.Search,
             Command = SearchProjectCommand,
             Icon = ControlGenerator.GetVectorIcon("Search", Log),
         });
