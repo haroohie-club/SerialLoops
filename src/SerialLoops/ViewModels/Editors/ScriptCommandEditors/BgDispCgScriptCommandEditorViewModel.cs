@@ -25,9 +25,9 @@ public class BgDispCgScriptCommandEditorViewModel : ScriptCommandEditorViewModel
         set
         {
             this.RaiseAndSetIfChanged(ref _cg, value);
-            ((BgScriptParameter)Command.Parameters[1]).Background = _cg;
+            ((BgScriptParameter)Command.Parameters[0]).Background = _cg;
             Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
-                .Objects[Command.Index].Parameters[1] = (short?)_cg?.Id ?? 0;
+                .Objects[Command.Index].Parameters[0] = (short?)_cg?.Id ?? 0;
             ScriptEditor.UpdatePreview();
             ScriptEditor.Description.UnsavedChanges = true;
         }
