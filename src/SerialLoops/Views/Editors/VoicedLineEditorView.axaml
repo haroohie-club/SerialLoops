@@ -32,19 +32,19 @@
                        IsVisible="{Binding SubsEnabled}" Grid.Row="2" Grid.Column="0">
             <StackPanel Spacing="5" Orientation="Vertical">
                 <StackPanel Spacing="3" Orientation="Horizontal">
-                    <TextBlock Text="{x:Static assets:Strings.Subtitle_Text}"/>
+                    <TextBlock Text="{x:Static assets:Strings.Subtitle_Text}" VerticalAlignment="Center"/>
                     <TextBox Text="{Binding Subtitle, Mode=TwoWay}" Watermark="{x:Static assets:Strings.Enter_subtitle_text___}" Width="400"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="20">
                     <ComboBox ItemsSource="{Binding SubtitleColors}" SelectedItem="{Binding SubtitleColor}"
                               VerticalAlignment="Center"/>
                     <StackPanel Spacing="3" Orientation="Horizontal" VerticalAlignment="Center">
-                        <TextBlock Text="{x:Static assets:Strings.Target_Screen}"/>
+                        <TextBlock Text="{x:Static assets:Strings.Target_Screen}" VerticalAlignment="Center"/>
                         <controls:ScreenSelector DataContext="{Binding ScreenSelector}"/>
                     </StackPanel>
                     <CheckBox Content="{x:Static assets:Strings.Force_Drop_Shadow}" IsChecked="{Binding ForceDropShadow}"/>
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="3">
-                        <TextBlock Text="{x:Static assets:Strings.Screen_Position}"/>
+                        <TextBlock Text="{x:Static assets:Strings.Screen_Position}" VerticalAlignment="Center"/>
                         <ListBox ItemsSource="{Binding SubtitlePositions}"
                                  SelectedItem="{Binding SubtitlePosition}"
                                  Classes="RadioButtonListBox"/>

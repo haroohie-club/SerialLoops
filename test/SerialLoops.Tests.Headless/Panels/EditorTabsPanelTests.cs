@@ -6,18 +6,21 @@ using Avalonia.Headless;
 using Avalonia.Headless.NUnit;
 using Avalonia.Input;
 using Avalonia.VisualTree;
+using HaroohieClub.NitroPacker;
 using HaruhiChokuretsuLib.Archive;
 using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Graphics;
 using Moq;
 using NUnit.Framework;
 using SerialLoops.Lib;
+using SerialLoops.Lib.Factories;
 using SerialLoops.Lib.Items;
 using SerialLoops.Tests.Shared;
 using SerialLoops.ViewModels;
 using SerialLoops.ViewModels.Editors;
 using SerialLoops.Views;
 using SerialLoops.Views.Panels;
+using SkiaSharp;
 using Tabalonia.Controls;
 
 namespace SerialLoops.Tests.Headless.Panels;
@@ -28,6 +31,7 @@ public class EditorTabsPanelTests
     private UiVals _uiVals;
     private TestConsoleLogger _log;
     private Project _project;
+    private Config _config;
 
     private BgTableFile _bgTableFile;
     private ExtraFile _extra;
@@ -57,7 +61,10 @@ public class EditorTabsPanelTests
     {
         Mock<Project> projectMock = new();
         projectMock.SetupCommonMocks();
+        IConfigFactory factory = new ConfigFactoryMock("config.json");
+        _config = factory.LoadConfig(l => l, _log);
         _project = projectMock.Object;
+        _project.Config = _config;
         _project.SetupMockedProperties(_uiVals);
         _project.Extra = _extra;
         Mock<ArchiveFile<GraphicsFile>> grpMock = new();
@@ -65,6 +72,8 @@ public class EditorTabsPanelTests
         _project.Grp = grpMock.Object;
         _project.Items.Add(new BackgroundItem("BG_ROUD2", 0x4C, _bgTableFile.BgTableEntries[0x4C], _project));
         _project.Items.Add(new BackgroundItem("KBG00", 0xB6, _bgTableFile.BgTableEntries[0xB6], _project));
+        Mock<ProjectSettings> settingsMock = new();
+        _project.Settings = settingsMock.Object;
     }
 
     [AvaloniaTest]

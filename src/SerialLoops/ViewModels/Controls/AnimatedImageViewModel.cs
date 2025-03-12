@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using Avalonia.Threading;
 using ReactiveUI.Fody.Helpers;
+using SerialLoops.Models;
 using SkiaSharp;
 
 namespace SerialLoops.ViewModels.Controls;
@@ -12,17 +15,17 @@ public class AnimatedImageViewModel : ViewModelBase
     public SKBitmap CurrentFrame { get; set; }
     public int CurrentFrameIndex { get; set; }
 
-    public List<(SKBitmap Frame, int Timing)> FramesWithTimings { get; set; }
+    public ObservableCollection<ReactiveFrameWithTiming> FramesWithTimings { get; }
     public DispatcherTimer FrameTimer { get; set; }
 
-    public AnimatedImageViewModel(IEnumerable<(SKBitmap Frame, int Timing)> framesWithTimings)
+    public AnimatedImageViewModel(IEnumerable<(SKBitmap Frame, int Timing)> framesWithTimings, Action changeTimingCallback = null)
     {
-        FramesWithTimings = [.. framesWithTimings];
+        FramesWithTimings = [.. framesWithTimings.Select(f => new ReactiveFrameWithTiming(f.Frame, f.Timing, changeTimingCallback))];
         Initialize();
     }
-    public AnimatedImageViewModel(IEnumerable<(SKBitmap Frame, short Timing)> framesWithTimings)
+    public AnimatedImageViewModel(IEnumerable<(SKBitmap Frame, short Timing)> framesWithTimings, Action changeTimingCallback = null)
     {
-        FramesWithTimings = [.. framesWithTimings];
+        FramesWithTimings = [.. framesWithTimings.Select(f => new ReactiveFrameWithTiming(f.Frame, f.Timing, changeTimingCallback))];
         Initialize();
     }
 

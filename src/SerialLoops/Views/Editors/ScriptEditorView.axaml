@@ -10,7 +10,8 @@
              xmlns:utility="using:SerialLoops.Utility"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:ScriptEditorViewModel"
-             x:Class="SerialLoops.Views.Editors.ScriptEditorView">
+             x:Class="SerialLoops.Views.Editors.ScriptEditorView"
+             Name="Editor">
     <Grid RowDefinitions="Auto,Auto,*">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" MinWidth="250"/>
@@ -107,7 +108,45 @@
                     </TabItem>
 
                     <TabItem Header="{x:Static assets:Strings.Choices}">
+                        <StackPanel Orientation="Vertical" Spacing="5">
+                            <ItemsRepeater ItemsSource="{Binding Choices}">
+                                <ItemsRepeater.Layout>
+                                    <StackLayout Orientation="Vertical" Spacing="3"/>
+                                </ItemsRepeater.Layout>
+                                <ItemsRepeater.ItemTemplate>
+                                    <DataTemplate DataType="vm:ReactiveChoice">
+                                        <Grid RowDefinitions="Auto" ColumnDefinitions="Auto,*,Auto">
+                                            <ComboBox Grid.Row="0" Grid.Column="0" ItemsSource="{Binding #Editor.((vm:ScriptEditorViewModel)DataContext).ScriptSections}"
+                                                      SelectedItem="{Binding AssociatedSection}">
+                                                <ComboBox.ItemTemplate>
+                                                    <DataTemplate DataType="vm:ReactiveScriptSection">
+                                                        <TextBlock Text="{Binding  Name}"/>
+                                                    </DataTemplate>
+                                                </ComboBox.ItemTemplate>
+                                                <ComboBox.ItemContainerTheme>
+                                                    <ControlTheme TargetType="ComboBoxItem" x:DataType="vm:ReactiveScriptSection">
+                                                        <Setter Property="TextSearch.Text" Value="{Binding Name}" />
+                                                    </ControlTheme>
+                                                </ComboBox.ItemContainerTheme>
+                                            </ComboBox>
 
+                                            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding ChoiceText}"/>
+
+                                            <Button Grid.Row="0" Grid.Column="2" Command="{Binding DeleteCommand}">
+                                                <Svg Path="avares://SerialLoops/Assets/Icons/Remove.svg" Width="20"/>
+                                            </Button>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsRepeater.ItemTemplate>
+                            </ItemsRepeater>
+
+                            <Button Command="{Binding AddChoiceCommand}">
+                                <StackPanel Orientation="Horizontal">
+                                    <Svg Path="avares://SerialLoops/Assets/Icons/Add.svg" Width="20"/>
+                                    <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.AddChoice}"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
                     </TabItem>
 
                     <TabItem Header="{x:Static assets:Strings.Map_Characters}">

@@ -400,6 +400,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Choice.
+        /// </summary>
+        public static string AddChoice {
+            get {
+                return ResourceManager.GetString("AddChoice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Adding frames to GIF….
         /// </summary>
         public static string Adding_frames_to_GIF___ {
@@ -1906,6 +1915,24 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Diagonal Up Left.
+        /// </summary>
+        public static string DIAGONAL_LEFT_UP {
+            get {
+                return ResourceManager.GetString("DIAGONAL_LEFT_UP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Diagonal Down Right.
+        /// </summary>
+        public static string DIAGONAL_RIGHT_DOWN {
+            get {
+                return ResourceManager.GetString("DIAGONAL_RIGHT_DOWN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dialogue.
         /// </summary>
         public static string Dialogue {
@@ -2064,6 +2091,15 @@ namespace SerialLoops.Assets {
         public static string Don_t_Clear_Text {
             get {
                 return ResourceManager.GetString("Don\'t Clear Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Down.
+        /// </summary>
+        public static string DOWN {
+            get {
+                return ResourceManager.GetString("DOWN", resourceCulture);
             }
         }
         
@@ -2347,6 +2383,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Epilogue.
+        /// </summary>
+        public static string EPILOGUE {
+            get {
+                return ResourceManager.GetString("EPILOGUE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Episode: .
         /// </summary>
         public static string Episode_ {
@@ -2367,9 +2412,9 @@ namespace SerialLoops.Assets {
         /// <summary>
         ///   Looks up a localized string similar to Episode 1.
         /// </summary>
-        public static string Episode_1 {
+        public static string EPISODE_1 {
             get {
-                return ResourceManager.GetString("Episode 1", resourceCulture);
+                return ResourceManager.GetString("EPISODE_1", resourceCulture);
             }
         }
         
@@ -2394,9 +2439,9 @@ namespace SerialLoops.Assets {
         /// <summary>
         ///   Looks up a localized string similar to Episode 2.
         /// </summary>
-        public static string Episode_2 {
+        public static string EPISODE_2 {
             get {
-                return ResourceManager.GetString("Episode 2", resourceCulture);
+                return ResourceManager.GetString("EPISODE_2", resourceCulture);
             }
         }
         
@@ -2421,9 +2466,9 @@ namespace SerialLoops.Assets {
         /// <summary>
         ///   Looks up a localized string similar to Episode 3.
         /// </summary>
-        public static string Episode_3 {
+        public static string EPISODE_3 {
             get {
-                return ResourceManager.GetString("Episode 3", resourceCulture);
+                return ResourceManager.GetString("EPISODE_3", resourceCulture);
             }
         }
         
@@ -2448,9 +2493,9 @@ namespace SerialLoops.Assets {
         /// <summary>
         ///   Looks up a localized string similar to Episode 4.
         /// </summary>
-        public static string Episode_4 {
+        public static string EPISODE_4 {
             get {
-                return ResourceManager.GetString("Episode 4", resourceCulture);
+                return ResourceManager.GetString("EPISODE_4", resourceCulture);
             }
         }
         
@@ -2475,9 +2520,9 @@ namespace SerialLoops.Assets {
         /// <summary>
         ///   Looks up a localized string similar to Episode 5.
         /// </summary>
-        public static string Episode_5 {
+        public static string EPISODE_5 {
             get {
-                return ResourceManager.GetString("Episode 5", resourceCulture);
+                return ResourceManager.GetString("EPISODE_5", resourceCulture);
             }
         }
         
@@ -4452,9 +4497,9 @@ namespace SerialLoops.Assets {
         /// <summary>
         ///   Looks up a localized string similar to Left.
         /// </summary>
-        public static string Left {
+        public static string LEFT {
             get {
-                return ResourceManager.GetString("Left", resourceCulture);
+                return ResourceManager.GetString("LEFT", resourceCulture);
             }
         }
         
@@ -6416,9 +6461,9 @@ namespace SerialLoops.Assets {
         /// <summary>
         ///   Looks up a localized string similar to Right.
         /// </summary>
-        public static string Right {
+        public static string RIGHT {
             get {
-                return ResourceManager.GetString("Right", resourceCulture);
+                return ResourceManager.GetString("RIGHT", resourceCulture);
             }
         }
         
@@ -8442,6 +8487,15 @@ namespace SerialLoops.Assets {
         public static string Unvoiced_dialogue_volume_options_ticker_tape {
             get {
                 return ResourceManager.GetString("Unvoiced dialogue volume options ticker tape", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Up.
+        /// </summary>
+        public static string UP {
+            get {
+                return ResourceManager.GetString("UP", resourceCulture);
             }
         }
         
