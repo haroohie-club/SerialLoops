@@ -5,7 +5,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:assets="using:SerialLoops.Assets"
              xmlns:controls="using:SerialLoops.Controls"
-             xmlns:items="clr-namespace:SerialLoops.Lib.Items;assembly=SerialLoops.Lib"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:TopicEditorViewModel"
              x:Class="SerialLoops.Views.Editors.TopicEditorView">
@@ -29,13 +28,7 @@
 
         <TextBlock Grid.Column="0" Grid.Row="4" Margin="0,7,0,0" Text="{x:Static assets:Strings.Associated_Script}" IsVisible="{Binding Topic.TopicEntry.Type, Converter={x:Static ObjectConverters.NotEqual}, ConverterParameter=3}"/>
         <StackPanel Grid.Column="1" Grid.Row="4" Margin="10,0,0,0" Orientation="Horizontal" Spacing="5" IsVisible="{Binding Topic.TopicEntry.Type, Converter={x:Static ObjectConverters.NotEqual}, ConverterParameter=3}">
-            <ComboBox ItemsSource="{Binding Scripts}" SelectedItem="{Binding AssociatedScript}">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate DataType="items:ScriptItem">
-                        <TextBlock Text="{Binding DisplayName}"/>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
+            <ComboBox ItemsSource="{Binding Scripts}" SelectedItem="{Binding AssociatedScript}"/>
             <controls:ItemLink Item="{Binding AssociatedScript}" Tabs="{Binding Tabs}"/>
         </StackPanel>
 

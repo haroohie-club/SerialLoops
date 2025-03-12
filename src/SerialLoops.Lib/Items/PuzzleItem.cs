@@ -39,4 +39,6 @@ public class PuzzleItem : Item
         "KOIZUMI",
         "ANY",
     ];
+
+    public override string ToString() => DisplayName;
 }

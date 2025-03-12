@@ -39,7 +39,7 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
         _spriteEntranceTransition = new(((SpriteEntranceScriptParameter)command.Parameters[2]).EntranceTransition);
         _spriteExitTransition = new(((SpriteExitScriptParameter)command.Parameters[3]).ExitTransition);
         _spriteShakeEffect = new(((SpriteShakeScriptParameter)command.Parameters[4]).ShakeEffect);
-        VoicedLines = new(_window.OpenProject.Items.Where(i => i.Type == ItemDescription.ItemType.Voice).Cast<VoicedLineItem>());
+        VoicedLines = new(new List<VoicedLineItem> { null }.Concat(_window.OpenProject.Items.Where(i => i.Type == ItemDescription.ItemType.Voice).Cast<VoicedLineItem>()));
         _voicedLine = ((VoicedLineScriptParameter)command.Parameters[5]).VoiceLine;
         _textVoiceFont = ((DialoguePropertyScriptParameter)command.Parameters[6]).Character;
         _textSpeed = ((DialoguePropertyScriptParameter)command.Parameters[7]).Character;
@@ -215,7 +215,7 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
             this.RaiseAndSetIfChanged(ref _voicedLine, value);
             ((VoicedLineScriptParameter)Command.Parameters[5]).VoiceLine = _voicedLine;
             Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
-                .Objects[Command.Index].Parameters[5] = (short)_voicedLine.Index;
+                .Objects[Command.Index].Parameters[5] = (short)(_voicedLine?.Index ?? 0);
             Script.UnsavedChanges = true;
         }
     }
@@ -316,21 +316,21 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
 public readonly struct SpriteEntranceTransitionLocalized(SpriteEntranceScriptParameter.SpriteEntranceTransition entrance)
 {
     public SpriteEntranceScriptParameter.SpriteEntranceTransition Entrance { get; } = entrance;
-    public string DisplayText { get; } = Strings.ResourceManager.GetString(entrance.ToString());
+    public override string ToString() => Strings.ResourceManager.GetString(Entrance.ToString());
 }
 public readonly struct SpriteExitTransitionLocalized(SpriteExitScriptParameter.SpriteExitTransition exit)
 {
     public SpriteExitScriptParameter.SpriteExitTransition Exit { get; } = exit;
-    public string DisplayText { get; } = Strings.ResourceManager.GetString(exit.ToString());
+    public override string ToString() => Strings.ResourceManager.GetString(Exit.ToString());
 }
 public readonly struct SpriteShakeLocalized(SpriteShakeScriptParameter.SpriteShakeEffect shake)
 {
     public SpriteShakeScriptParameter.SpriteShakeEffect Shake { get; } = shake;
-    public string DisplayText { get; } = Strings.ResourceManager.GetString(shake.ToString());
+    public override string ToString() => Strings.ResourceManager.GetString(Shake.ToString());
 }
 public readonly struct TextEntranceEffectLocalized(TextEntranceEffectScriptParameter.TextEntranceEffect effect)
 {
     public TextEntranceEffectScriptParameter.TextEntranceEffect Effect { get; } = effect;
-    public string DisplayText { get; } = Strings.ResourceManager.GetString(effect.ToString());
+    public override string ToString() => Strings.ResourceManager.GetString(Effect.ToString());
 }
 

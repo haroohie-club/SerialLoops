@@ -100,4 +100,6 @@ public class ChibiItem : Item, IPreviewableGraphic
             IO.WriteBinaryFile(Path.Combine("assets", "graphics", $"{Animation.Index:X3}.bna"), Animation.GetBytes(), project, log);
         }
     }
+
+    public override string ToString() => DisplayName;
 }

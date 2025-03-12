@@ -104,7 +104,7 @@ public class SystemTextureItem : Item
             }
             tileCanvas.Flush();
 
-            Grp.SetImage(tileBitmap);
+            Grp.SetImage(tileBitmap, newSize: true);
         }
         Grp.Palette[0] = TRANSPARENT;
     }

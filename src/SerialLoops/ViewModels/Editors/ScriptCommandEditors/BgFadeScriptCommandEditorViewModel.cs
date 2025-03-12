@@ -57,6 +57,8 @@ public class BgFadeScriptCommandEditorViewModel : ScriptCommandEditorViewModel
         {
             this.RaiseAndSetIfChanged(ref _fadeTime, value);
             ((ShortScriptParameter)Command.Parameters[2]).Value = _fadeTime;
+            Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
+                .Objects[Command.Index].Parameters[2] = _fadeTime;
             Script.UnsavedChanges = true;
         }
     }

@@ -4023,6 +4023,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to AHX is the audio codec most of the voice files are encoded as as it&apos;s specifically designed to compress voice. However, our encoder can sometimes cause issues with the game, so we generally recommend encoding these lines with the standard ADX format. That said, if you encounter issues with the regular Replace, try using this option!.
+        /// </summary>
+        public static string HelpAhx {
+            get {
+                return ResourceManager.GetString("HelpAhx", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hidden ID.
         /// </summary>
         public static string Hidden_ID {
@@ -5199,6 +5208,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to None.
+        /// </summary>
+        public static string None {
+            get {
+                return ResourceManager.GetString("None", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to None Selected.
         /// </summary>
         public static string None_Selected {
@@ -6311,6 +6329,15 @@ namespace SerialLoops.Assets {
         public static string Replace_with_Palette {
             get {
                 return ResourceManager.GetString("Replace with Palette", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace as AHX.
+        /// </summary>
+        public static string ReplaceAsAhx {
+            get {
+                return ResourceManager.GetString("ReplaceAsAhx", resourceCulture);
             }
         }
         
@@ -8423,6 +8450,16 @@ namespace SerialLoops.Assets {
         public static string unknown04 {
             get {
                 return ResourceManager.GetString("unknown04", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A hack failed, but we weren&apos;t able to determine which one. Take a look at the logs for more information.
+        ///All hacks have been rolled back to preserve state..
+        /// </summary>
+        public static string UnknownHackFailedMessage {
+            get {
+                return ResourceManager.GetString("UnknownHackFailedMessage", resourceCulture);
             }
         }
         

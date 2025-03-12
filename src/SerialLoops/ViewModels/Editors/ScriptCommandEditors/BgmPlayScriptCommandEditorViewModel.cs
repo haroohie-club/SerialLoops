@@ -103,6 +103,6 @@ public class BgmPlayScriptCommandEditorViewModel : ScriptCommandEditorViewModel
 
 public readonly struct BgmModeLocalized(BgmModeScriptParameter.BgmMode mode)
 {
-    public string DisplayString { get; } = Strings.ResourceManager.GetString(mode.ToString());
     public BgmModeScriptParameter.BgmMode Mode { get; } = mode;
+    public override string ToString() => Strings.ResourceManager.GetString(Mode.ToString());
 }

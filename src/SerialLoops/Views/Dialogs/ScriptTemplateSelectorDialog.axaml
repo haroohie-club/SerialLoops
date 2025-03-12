@@ -7,7 +7,8 @@
         xmlns:controls="using:SerialLoops.Controls"
         xmlns:script="using:SerialLoops.Lib.Script"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        SizeToContent="WidthAndHeight"
+        SizeToContent="Height"
+        Width="800"
         TransparencyLevelHint="AcrylicBlur"
         Background="{DynamicResource FallbackBackgroundColor}"
         ExtendClientAreaToDecorationsHint="True"
@@ -48,12 +49,12 @@
                 <StackPanel Grid.Column="1" Grid.Row="1" MinWidth="480" MinHeight="330" Margin="10" Spacing="5"
                             Orientation="Vertical" IsVisible="{Binding SelectedScriptTemplate, Converter={x:Static ObjectConverters.IsNotNull}}">
                     <TextBlock Text="{Binding SelectedScriptTemplate.Name}" Classes="h1"/>
-                    <TextBlock Text="{Binding SelectedScriptTemplate.Description}"/>
+                    <TextBlock Text="{Binding SelectedScriptTemplate.Description}" TextWrapping="Wrap"/>
                 </StackPanel>
             </Grid>
             <StackPanel Orientation="Horizontal" Spacing="5" Margin="20" HorizontalAlignment="Center">
-                <Button Content="{x:Static assets:Strings.Confirm}" Command="{Binding ConfirmCommand}" CommandParameter="{Binding #ApplyTemplateDialog}" IsDefault="True"/>
                 <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}" CommandParameter="{Binding #ApplyTemplateDialog}" IsCancel="True"/>
+                <Button Content="{x:Static assets:Strings.Confirm}" Command="{Binding ConfirmCommand}" CommandParameter="{Binding #ApplyTemplateDialog}" IsDefault="True"/>
             </StackPanel>
         </StackPanel>
     </Panel>

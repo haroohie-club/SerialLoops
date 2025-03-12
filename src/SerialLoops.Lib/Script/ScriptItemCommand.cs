@@ -78,8 +78,6 @@ public class ScriptItemCommand : ReactiveObject
     {
         List<ScriptItemCommand> commands = [];
 
-        Func<ScriptSectionEdge, double> weightFunction = new((ScriptSectionEdge edge) => 1);
-
         if (Section != commandTree.Keys.First())
         {
             DepthFirstSearchAlgorithm<ScriptSection, ScriptSectionEdge> dfs = new(graph);
@@ -205,7 +203,7 @@ public class ScriptItemCommand : ReactiveObject
                             parameters.Add(new ShortScriptParameter(localize("Fade Out Percentage"), parameter));
                             break;
                         case 2:
-                            parameters.Add(new ColorScriptParameter(localize("Custom Color"), parameter));
+                            parameters.Add(new ColorScriptParameter("Custom Color", parameter));
                             break;
                         case 3:
                             ((ColorScriptParameter)parameters.Last()).SetGreen(parameter);

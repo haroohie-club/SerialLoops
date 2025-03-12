@@ -15,18 +15,7 @@
         <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding SelectedScenarioCommand.Verb}"/>
         <TextBlock Grid.Row="1" Grid.Column="0" Margin="5" Text="{x:Static assets:Strings.Group_Selection}"/>
         <StackPanel Orientation="Horizontal" Spacing="3" Grid.Row="1" Grid.Column="1" Margin="5">
-            <ComboBox ItemsSource="{Binding GroupSelections}" SelectedItem="{Binding GroupSelection}">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate x:DataType="items:GroupSelectionItem">
-                        <TextBlock Text="{Binding DisplayName}"/>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-                <ComboBox.ItemContainerTheme>
-                    <ControlTheme TargetType="ComboBoxItem" x:DataType="items:GroupSelectionItem" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
-                        <Setter Property="TextSearch.Text" Value="{Binding TextSearch}" />
-                    </ControlTheme>
-                </ComboBox.ItemContainerTheme>
-            </ComboBox>
+            <ComboBox ItemsSource="{Binding GroupSelections}" SelectedItem="{Binding GroupSelection}"/>
             <controls:ItemLink Item="{Binding GroupSelection}" Tabs="{Binding Tabs}"/>
         </StackPanel>
     </Grid>

@@ -27,6 +27,7 @@ public class SoundPlayerPanelViewModel : ViewModelBase
     public string TrackName { get; set; }
     public ICommand TrackNameCommand { get; set; }
     public bool UseTextBoxForTrackName => TrackNameCommand is not null;
+    [Reactive]
     public string TrackDetails { get; set; }
     public short? TrackFlag { get; set; }
 

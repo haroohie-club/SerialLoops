@@ -51,5 +51,5 @@ public struct LocalizedChibiEmote(ChibiEmoteScriptParameter.ChibiEmote chibiEmot
 {
     public ChibiEmoteScriptParameter.ChibiEmote Emote { get; } = chibiEmote;
 
-    public string DisplayName => Strings.ResourceManager.GetString(Emote.ToString());
+    public override string ToString() => Strings.ResourceManager.GetString(Emote.ToString());
 }

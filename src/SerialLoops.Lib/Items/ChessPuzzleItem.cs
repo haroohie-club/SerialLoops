@@ -310,4 +310,6 @@ public class ChessPuzzleItem : Item
             return (x == file || y == rank) && !(x == file && y == rank);
         }
     }
+
+    public override string ToString() => DisplayName;
 }

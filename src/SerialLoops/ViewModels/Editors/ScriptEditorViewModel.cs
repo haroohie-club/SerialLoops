@@ -91,7 +91,7 @@ public class ScriptEditorViewModel : EditorViewModel
         set
         {
             this.RaiseAndSetIfChanged(ref _commands, value);
-            Source = new(_commands.Keys.Select(s => new ScriptSectionTreeItem(ScriptSections[_script.Event.ScriptSections.IndexOf(s)], _commands[s])))
+            Source = new(_commands?.Keys.Select(s => new ScriptSectionTreeItem(ScriptSections[_script.Event.ScriptSections.IndexOf(s)], _commands[s])) ?? [])
             {
                 Columns =
                 {
@@ -187,8 +187,8 @@ public class ScriptEditorViewModel : EditorViewModel
 
         MapCharactersSubEditorVm = new(_script, this);
 
-        InteractableObjects.AddRange(_script.Event.InteractableObjectsSection.Objects.Where(o => o.ObjectId > 0).Select(o => new ReactiveInteractableObject(o,
-            MapCharactersSubEditorVm.Maps.ToArray(), _script, this)));
+        InteractableObjects.AddRange(_script.Event.InteractableObjectsSection?.Objects.Where(o => o.ObjectId > 0).Select(o => new ReactiveInteractableObject(o,
+            MapCharactersSubEditorVm.Maps.ToArray(), _script, this)) ?? []);
         UnusedInteractableObjects.AddRange(MapCharactersSubEditorVm.Maps.SelectMany(m => m.Map.InteractableObjects)
             .Where(o => o.ObjectId > 0 && InteractableObjects.All(i => i.InteractableObject.ObjectId != o.ObjectId))
             .Select(o => new ReactiveInteractableObject(new() { ObjectId = (short)o.ObjectId },  MapCharactersSubEditorVm.Maps.ToArray(), _script, this)));
@@ -488,8 +488,6 @@ public class ScriptEditorViewModel : EditorViewModel
         {
             Name = sectionName,
             CommandsAvailable = CommandsAvailable,
-            SectionType = typeof(ScriptSection),
-            ObjectType = typeof(ScriptCommandInvocation),
         };
         ReactiveScriptSection reactiveSection = new(section);
 
@@ -555,10 +553,6 @@ public class ScriptEditorViewModel : EditorViewModel
             _script.Event.ScriptSections.RemoveAt(sectionIndex);
             _script.Event.NumSections--;
             _script.Event.LabelsSection.Objects.RemoveAt(sectionIndex);
-            for (int i = sectionIndex; i < _script.Event.LabelsSection.Objects.Count; i++)
-            {
-                _script.Event.LabelsSection.Objects[i].Id--;
-            }
 
             ScriptSections.RemoveAt(sectionIndex);
 
@@ -591,8 +585,6 @@ public class ScriptEditorViewModel : EditorViewModel
         {
             Name = "SCRIPT00",
             CommandsAvailable = CommandsAvailable,
-            SectionType = typeof(ScriptSection),
-            ObjectType = typeof(ScriptCommandInvocation),
         });
         ScriptSections.Clear();
         ScriptSections.Add(new(_script.Event.ScriptSections[0]));
@@ -729,6 +721,7 @@ public class ScriptEditorViewModel : EditorViewModel
             section.SetCommands(_commands[section.Section]);
         }
         Source.ExpandAll();
+        Description.UnsavedChanges = true;
     }
 
     private async Task GenerateTemplate()
@@ -740,7 +733,7 @@ public class ScriptEditorViewModel : EditorViewModel
             return;
         }
 
-        Lib.IO.WriteStringFile(Path.Combine(_project.Config.ScriptTemplatesDirectory, $"{template.Name}.slscr"),
+        Lib.IO.WriteStringFile(Path.Combine(_project.Config.ScriptTemplatesDirectory, $"{template.Name.Replace("/", "-")}.slscr"),
             JsonSerializer.Serialize(template), _log);
         _project.Config.ScriptTemplates.Add(template);
     }
@@ -811,11 +804,10 @@ public class ScriptEditorViewModel : EditorViewModel
         {
             return;
         }
-        _script.Event.InteractableObjectsSection.Objects.Remove(SelectedInteractableObject.InteractableObject);
-        InteractableObjects.Remove(SelectedInteractableObject);
         SelectedInteractableObject.InteractSection = null;
         UnusedInteractableObjects.Add(SelectedInteractableObject);
-        SelectedInteractableObject = null;
+        _script.Event.InteractableObjectsSection.Objects.Remove(SelectedInteractableObject.InteractableObject);
+        InteractableObjects.Remove(SelectedInteractableObject);
         _script.UnsavedChanges = true;
         _script.Refresh(_project, _log);
         UpdatePreview();
@@ -867,6 +859,8 @@ public class ReactiveScriptSection(ScriptSection section) : ReactiveObject
         Commands.Clear();
         Commands.AddRange(commands.Select(c => new ScriptCommandTreeItem(c)));
     }
+
+    public override string ToString() => Name;
 }
 
 public class StartingChibiWithImage : ReactiveObject
@@ -904,7 +898,7 @@ public class StartingChibiWithImage : ReactiveObject
                     break;
                 }
             }
-            script.Event.StartingChibisSection.Objects.Add(StartingChibi);
+            script.Event.StartingChibisSection.Objects.Insert(script.Event.StartingChibisSection.Objects.Count - 1, StartingChibi);
             script.UnsavedChanges = true;
             scriptEditor.UpdatePreview();
         });
@@ -955,7 +949,7 @@ public class ReactiveInteractableObject(
         set
         {
             InteractableObject.ScriptBlock = script.Event.LabelsSection.Objects
-                .First(l => l.Name.Replace("/", "").Equals(value.Name)).Id;
+                .FirstOrDefault(l => l.Name.Replace("/", "").Equals(value?.Name))?.Id ?? 0;
             this.RaisePropertyChanged();
             script.Refresh(scriptEditor.Window.OpenProject, scriptEditor.Window.Log);
             scriptEditor.UpdatePreview();

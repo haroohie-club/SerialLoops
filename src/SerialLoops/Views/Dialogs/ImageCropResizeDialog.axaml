@@ -33,33 +33,36 @@
                                Canvas.Left="0"
                                Canvas.Top="{Binding BoxHeight}"
                                Width="{Binding BoxWidth}"
-                               Height="{Binding PreviewHeight}"/>
+                               Height="{Binding PreviewHeight}"
+                               IsHitTestVisible="False"/>
                     <Rectangle Fill="Gray" Opacity="0.5"
                                Canvas.Left="{Binding BoxWidth}"
                                Canvas.Top="0"
                                Width="{Binding PreviewWidth}"
-                               Height="{Binding BoxHeight}"/>
+                               Height="{Binding BoxHeight}"
+                               IsHitTestVisible="False"/>
                     <Rectangle Fill="Gray" Opacity="0.5"
                                Canvas.Left="{Binding BoxWidth}"
                                Canvas.Top="{Binding BoxHeight}"
                                Width="{Binding PreviewWidth}"
-                               Height="{Binding PreviewHeight}"/>
+                               Height="{Binding PreviewHeight}"
+                               IsHitTestVisible="False"/>
                 </Canvas>
                 <StackPanel Orientation="Vertical" Spacing="5">
                     <HeaderedContentControl Header="{x:Static assets:Strings.Scale_Image}"
                                    Width="200" Padding="5">
                         <StackPanel Orientation="Vertical" Spacing="5" Margin="5">
-                            <StackPanel Orientation="Horizontal" Spacing="3" VerticalAlignment="Center" HorizontalAlignment="Right">
-                                <TextBlock Text="{x:Static assets:Strings.Size_}"/>
-                                <StackPanel Orientation="Vertical">
-                                    <!-- <NumericUpDown Name="WidthStepper" Value="{Binding #PreviewCanvas.PreviewWidth}" /> -->
-                                    <!-- <NumericUpDown Name="HeightStepper" Value="{Binding #PreviewCanvas.PreviewHeight}" /> -->
-                                </StackPanel>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Spacing="3" VerticalAlignment="Center">
-                                <TextBlock Text="{x:Static assets:Strings.Preserve_Aspect_Ratio_}"/>
-                                <CheckBox IsChecked="{Binding PreserveAspectRatio}"/>
-                            </StackPanel>
+                            <!-- <StackPanel Orientation="Horizontal" Spacing="3" VerticalAlignment="Center" HorizontalAlignment="Right"> -->
+                            <!--     <TextBlock Text="{x:Static assets:Strings.Size_}"/> -->
+                            <!--     <StackPanel Orientation="Vertical"> -->
+                            <!--         <NumericUpDown Name="WidthStepper" Value="{Binding #PreviewCanvas.PreviewWidth}" /> -->
+                            <!--         <NumericUpDown Name="HeightStepper" Value="{Binding #PreviewCanvas.PreviewHeight}" /> -->
+                            <!--     </StackPanel> -->
+                            <!-- </StackPanel> -->
+                            <!-- <StackPanel Orientation="Horizontal" Spacing="3" VerticalAlignment="Center"> -->
+                            <!--     <TextBlock Text="{x:Static assets:Strings.Preserve_Aspect_Ratio_}"/> -->
+                            <!--     <CheckBox IsChecked="{Binding PreserveAspectRatio}"/> -->
+                            <!-- </StackPanel> -->
                             <StackPanel Orientation="Horizontal" Spacing="3" VerticalAlignment="Center">
                                 <TextBlock Text="{x:Static assets:Strings.Scale_to_Fit_}"/>
                                 <Button Content="{x:Static assets:Strings.Apply}" Command="{Binding ScaleToFitCommand}"
@@ -73,8 +76,10 @@
                 </StackPanel>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Spacing="3" Margin="5">
-                <Button Content="{x:Static assets:Strings.Save}" Command="{Binding SaveCommand}" CommandParameter="{Binding ElementName=IcrDialog}"/>
-                <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}" CommandParameter="{Binding ElementName=IcrDialog}"/>
+                <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}"
+                        CommandParameter="{Binding ElementName=IcrDialog}" IsCancel="True"/>
+                <Button Content="{x:Static assets:Strings.Save}" Command="{Binding SaveCommand}"
+                        CommandParameter="{Binding ElementName=IcrDialog}" IsDefault="True"/>
             </StackPanel>
         </StackPanel>
     </Panel>

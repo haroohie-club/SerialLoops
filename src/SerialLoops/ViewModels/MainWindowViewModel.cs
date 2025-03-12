@@ -406,7 +406,7 @@ public partial class MainWindowViewModel : ViewModelBase
                         Value = v.Value,
                     }).ToArray(),
                 }).ToArray(),
-                Symbols = h.Symbols.Select(s => $"{s.Symbol} = 0x{s.LocationString}").ToArray(),
+                Symbols = h.Symbols.Select(s => $"{s.Symbol} = 0x{s.LocationString};").ToArray(),
             }).ToList(),
             InjectionSites = [.. hackFiles.SelectMany(f => f.InjectionSites)],
         };

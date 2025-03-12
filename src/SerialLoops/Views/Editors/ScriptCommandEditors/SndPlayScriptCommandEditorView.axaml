@@ -5,41 +5,18 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:assets="using:SerialLoops.Assets"
              xmlns:controls="using:SerialLoops.Controls"
-             xmlns:items="clr-namespace:SerialLoops.Lib.Items;assembly=SerialLoops.Lib"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:SndPlayScriptCommandEditorViewModel"
              x:Class="SerialLoops.Views.Editors.ScriptCommandEditors.SndPlayScriptCommandEditorView">
     <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto">
         <TextBlock Grid.Column="0" Grid.Row="0" Margin="0,7,0,0" Text="{x:Static assets:Strings.Sound}"/>
         <StackPanel Grid.Column="1" Grid.Row="0" Margin="10,0,0,0" Orientation="Horizontal" Spacing="3">
-            <ComboBox ItemsSource="{Binding SfxChoices}" SelectedItem="{Binding SelectedSfx}">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate DataType="items:SfxItem">
-                        <TextBlock Text="{Binding DisplayName}"/>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-                <ComboBox.ItemContainerTheme>
-                    <ControlTheme TargetType="ComboBoxItem" x:DataType="items:SfxItem" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
-                        <Setter Property="TextSearch.Text" Value="{Binding DisplayName}" />
-                    </ControlTheme>
-                </ComboBox.ItemContainerTheme>
-            </ComboBox>
+            <ComboBox ItemsSource="{Binding SfxChoices}" SelectedItem="{Binding SelectedSfx}"/>
             <controls:ItemLink Item="{Binding SelectedSfx}" Tabs="{Binding Tabs}"/>
         </StackPanel>
 
         <TextBlock Grid.Column="0" Grid.Row="1" Margin="0,7,0,0" Text="{x:Static assets:Strings.Mode}"/>
-        <ComboBox Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" ItemsSource="{Binding SfxPlayModes}" SelectedItem="{Binding SfxMode}">
-            <ComboBox.ItemTemplate>
-                <DataTemplate DataType="vm:SfxModeLocalized">
-                    <TextBlock Text="{Binding DisplayText}"/>
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
-            <ComboBox.ItemContainerTheme>
-                <ControlTheme TargetType="ComboBoxItem" x:DataType="vm:SfxModeLocalized" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
-                    <Setter Property="TextSearch.Text" Value="{Binding DisplayText}" />
-                </ControlTheme>
-            </ComboBox.ItemContainerTheme>
-        </ComboBox>
+        <ComboBox Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" ItemsSource="{Binding SfxPlayModes}" SelectedItem="{Binding SfxMode}"/>
 
         <TextBlock Grid.Column="0" Grid.Row="2" Margin="0,7,0,0" Text="{x:Static assets:Strings.Volume}"/>
         <NumericUpDown Grid.Column="1" Grid.Row="2" Margin="10,0,0,0" Minimum="0" Maximum="100" Value="{Binding Volume}"

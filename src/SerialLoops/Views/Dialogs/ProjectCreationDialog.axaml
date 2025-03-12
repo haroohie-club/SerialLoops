@@ -54,10 +54,10 @@
                 </StackPanel>
             </HeaderedContentControl>
             <StackPanel Orientation="Horizontal" Margin="5" Spacing="10">
-                <Button Content="{Binding ButtonText}" Command="{Binding CreateCommand}" CommandParameter="{Binding #PcDialog}"
-                        Name="CreateButton"/>
                 <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}" CommandParameter="{Binding #PcDialog}"
-                        Name="CancelButton"/>
+                        Name="CancelButton" IsCancel="True"/>
+                <Button Content="{Binding ButtonText}" Command="{Binding CreateCommand}" CommandParameter="{Binding #PcDialog}"
+                        Name="CreateButton" IsDefault="True"/>
             </StackPanel>
         </StackPanel>
     </Panel>

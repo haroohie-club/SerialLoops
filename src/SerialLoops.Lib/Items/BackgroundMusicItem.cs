@@ -216,4 +216,6 @@ public class BackgroundMusicItem : Item, ISoundItem
             }
         }
     }
+
+    public override string ToString() => DisplayName;
 }

@@ -18,4 +18,6 @@ public class GroupSelectionItem : Item
     public override void Refresh(Project project, ILogger log)
     {
     }
+
+    public override string ToString() => DisplayName;
 }

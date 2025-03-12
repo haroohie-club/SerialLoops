@@ -1255,4 +1255,6 @@ public class ScriptItem : Item
         Graph.AddVertexRange(Event.ScriptSections);
         CalculateGraphEdges(GetScriptCommandTree(project, log), log);
     }
+
+    public override string ToString() => DisplayName;
 }

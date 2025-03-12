@@ -43,8 +43,8 @@
                 </TabControl>
                 <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Spacing="5" Width="500">
                     <StackPanel Orientation="Horizontal" Spacing="5" Margin="5">
-                        <Button Content="{x:Static assets:Strings.Apply}" Command="{Binding ApplyCommand}"/>
                         <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}" IsCancel="True"/>
+                        <Button Content="{x:Static assets:Strings.Apply}" Command="{Binding ApplyCommand}" IsDefault="True"/>
                     </StackPanel>
                 </StackPanel>
             </StackPanel>

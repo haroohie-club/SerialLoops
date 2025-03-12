@@ -62,7 +62,7 @@ public class VoicedLineItem : Item, ISoundItem
         return new AdxWaveProvider(decoder);
     }
 
-    public void Replace(string audioFile, string baseDirectory, string iterativeDirectory, string vceCachedFile, ILogger log, VoiceMapFile.VoiceMapEntry vceMapEntry = null)
+    public void Replace(string audioFile, string baseDirectory, string iterativeDirectory, string vceCachedFile, ILogger log, VoiceMapFile.VoiceMapEntry vceMapEntry = null, bool asAhx = false)
     {
         // The MP3 decoder is able to create wave files but for whatever reason messes with the ADX encoder
         // So we just convert to WAV AOT
@@ -119,13 +119,29 @@ public class VoicedLineItem : Item, ISoundItem
                 }
             }
 
-            log.Log("Encoding audio to AHX...");
-            AdxUtil.EncodeWav(newAudioFile, Path.Combine(baseDirectory, VoiceFile), true);
+            if (asAhx)
+            {
+                log.Log("Encoding audio to AHX...");
+                AdxUtil.EncodeWav(newAudioFile, Path.Combine(baseDirectory, VoiceFile), true);
+            }
+            else
+            {
+                log.Log("Encoding audio to ADX...");
+                AdxUtil.EncodeWav(newAudioFile, Path.Combine(baseDirectory, VoiceFile), false);
+            }
         }
         else
         {
-            log.Log("Encoding audio to AHX...");
-            AdxUtil.EncodeAudio(audio, Path.Combine(baseDirectory, VoiceFile), true);
+            if (asAhx)
+            {
+                log.Log("Encoding audio to AHX...");
+                AdxUtil.EncodeAudio(audio, Path.Combine(baseDirectory, VoiceFile), true);
+            }
+            else
+            {
+                log.Log("Encoding audio to ADX...");
+                AdxUtil.EncodeAudio(audio, Path.Combine(baseDirectory, VoiceFile), false);
+            }
         }
         File.Copy(Path.Combine(baseDirectory, VoiceFile), Path.Combine(iterativeDirectory, VoiceFile), true);
 
@@ -140,4 +156,6 @@ public class VoicedLineItem : Item, ISoundItem
     public override void Refresh(Project project, ILogger log)
     {
     }
+
+    public override string ToString() => DisplayName ?? "NONE";
 }

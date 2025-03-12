@@ -10,8 +10,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia.Headless.NUnit" Version="11.2.5" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.5" />
+    <PackageReference Include="Avalonia.Headless.NUnit" Version="11.3.999-cibuild0055319-alpha" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.999-cibuild0055319-alpha" />
     <PackageReference Include="Codeuctivity.ImageSharpCompare" Version="4.0.298" />
     <PackageReference Include="coverlet.collector" Version="6.0.4">
       <PrivateAssets>all</PrivateAssets>

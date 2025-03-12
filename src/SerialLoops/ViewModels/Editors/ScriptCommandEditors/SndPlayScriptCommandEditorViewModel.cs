@@ -112,7 +112,8 @@ public class SndPlayScriptCommandEditorViewModel : ScriptCommandEditorViewModel
         base(command, scriptEditor, log)
     {
         Tabs = window.EditorTabs;
-        SfxChoices = new(window.OpenProject.Items.Where(i => i.Type == ItemDescription.ItemType.SFX && ((SfxItem)i).AssociatedGroups.Contains(window.OpenProject.Snd.Groups[Script.SfxGroupIndex].Name)).Cast<SfxItem>());
+        SfxChoices = new(window.OpenProject.Items.Where(i => i.Type == ItemDescription.ItemType.SFX && (((SfxItem)i).AssociatedGroups.Contains("GROUP_ONMEM") ||
+                                                             ((SfxItem)i).AssociatedGroups.Contains(window.OpenProject.Snd.Groups[Script.SfxGroupIndex].Name))).Cast<SfxItem>());
         _selectedSfx = ((SfxScriptParameter)Command.Parameters[0]).Sfx;
         _sfxMode = new(((SfxModeScriptParameter)Command.Parameters[1]).Mode);
         _volume = ((ShortScriptParameter)Command.Parameters[2]).Value;
@@ -124,5 +125,5 @@ public class SndPlayScriptCommandEditorViewModel : ScriptCommandEditorViewModel
 public readonly struct SfxModeLocalized(SfxModeScriptParameter.SfxMode mode)
 {
     public SfxModeScriptParameter.SfxMode Mode { get; } = mode;
-    public string DisplayText { get; } = Strings.ResourceManager.GetString(mode.ToString());
+    public override string ToString() => Strings.ResourceManager.GetString(Mode.ToString());
 }

@@ -61,5 +61,5 @@ public class ChibiEnterExitScriptCommandEditorViewModel(ScriptItemCommand comman
 public readonly struct LocalizedChibiEnterExitType(ChibiEnterExitScriptParameter.ChibiEnterExitType type)
 {
     public ChibiEnterExitScriptParameter.ChibiEnterExitType Mode { get; } = type;
-    public string DisplayName { get; } = Strings.ResourceManager.GetString(type.ToString());
+    public override string ToString() => Strings.ResourceManager.GetString(Mode.ToString());
 }

@@ -34,7 +34,7 @@ public class AsmHacksDialogViewModel : ViewModelBase
     private ILogger _log;
     private Project _project;
     public Config Configuration { get; set; }
-    private Dictionary<HackFile, SelectedHackParameter[]> _hackParameters { get; set; } = [];
+    private Dictionary<HackFile, SelectedHackParameter[]> _hackParameters = [];
     [Reactive]
     public AsmHack SelectedHack { get; set; }
     public ICommand HackChangedCommand { get; set; }
@@ -170,12 +170,12 @@ public class AsmHacksDialogViewModel : ViewModelBase
         }
 
         // Write the symbols file based on what the hacks say they need
-        File.WriteAllLines(Path.Combine(_project.BaseDirectory, "src", "symbols.x"), appliedHacks.Concat(alreadyAppliedHacks).SelectMany(h => h.Files.Where(f => !f.Destination.Contains("overlays", StringComparison.OrdinalIgnoreCase)).SelectMany(f => f.Symbols)));
+        await File.WriteAllLinesAsync(Path.Combine(_project.BaseDirectory, "src", "symbols.x"), appliedHacks.Concat(alreadyAppliedHacks).SelectMany(h => h.Files.Where(f => !f.Destination.Contains("overlays", StringComparison.OrdinalIgnoreCase)).SelectMany(f => f.Symbols)));
         for (int i = 0; i < NUM_OVERLAYS; i++)
         {
             if (appliedHacks.Concat(alreadyAppliedHacks).Any(h => h.Files.Any(f => f.Destination.Contains($"main_{i:X4}", StringComparison.OrdinalIgnoreCase))))
             {
-                File.WriteAllLines(Path.Combine(_project.BaseDirectory, "src", "overlays", $"main_{i:X4}", "symbols.x"), appliedHacks.Concat(alreadyAppliedHacks).SelectMany(h => h.Files.Where(f => f.Destination.Contains($"main_{i:X4}", StringComparison.OrdinalIgnoreCase)).SelectMany(f => f.Symbols)));
+                await File.WriteAllLinesAsync(Path.Combine(_project.BaseDirectory, "src", "overlays", $"main_{i:X4}", "symbols.x"), appliedHacks.Concat(alreadyAppliedHacks).SelectMany(h => h.Files.Where(f => f.Destination.Contains($"main_{i:X4}", StringComparison.OrdinalIgnoreCase)).SelectMany(f => f.Symbols)));
             }
         }
 
@@ -184,7 +184,7 @@ public class AsmHacksDialogViewModel : ViewModelBase
         ARM9 arm9 = null;
         try
         {
-            arm9 = new(File.ReadAllBytes(arm9Path), 0x02000000);
+            arm9 = new(await File.ReadAllBytesAsync(arm9Path), 0x02000000);
         }
         catch (Exception ex)
         {
@@ -239,34 +239,36 @@ public class AsmHacksDialogViewModel : ViewModelBase
 
         // Patch the overlays
         string overlaySourceDir = Path.Combine(_project.BaseDirectory, "src", "overlays");
-        for (int i = 0; i < overlays.Count; i++)
+        foreach (Overlay overlay in overlays)
         {
-            if (Directory.GetDirectories(overlaySourceDir).Contains(Path.Combine(overlaySourceDir, overlays[i].Name)))
+            if (!Directory.GetDirectories(overlaySourceDir).Contains(Path.Combine(overlaySourceDir, overlay.Name)))
             {
-                // If the overlay directory is empty, we've reverted all the hacks in it and should clean it up
-                if (Directory.GetFiles(Path.Combine(overlaySourceDir, overlays[i].Name, "source")).Length == 0)
+                continue;
+            }
+
+            // If the overlay directory is empty, we've reverted all the hacks in it and should clean it up
+            if (Directory.GetFiles(Path.Combine(overlaySourceDir, overlay.Name, "source")).Length == 0)
+            {
+                Directory.Delete(Path.Combine(overlaySourceDir, overlay.Name), true);
+            }
+            else
+            {
+                try
                 {
-                    Directory.Delete(Path.Combine(overlaySourceDir, overlays[i].Name), true);
+                    ProgressDialogViewModel tracker =
+                        new(string.Format(Strings.Patching_Overlay__0_, overlay.Name));
+                    tracker.InitializeTasks(() =>
+                    {
+                        OverlayAsmHack.Insert(overlaySourceDir, overlay, newRomInfoPath, Configuration.UseDocker ? Configuration.DevkitArmDockerTag : string.Empty,
+                            (_, e) => { _log.Log(e.Data); ((IProgressTracker)tracker).Focus(e.Data, 1); },
+                            (_, e) => _log.LogWarning(e.Data),
+                            devkitArmPath: Configuration.DevkitArmPath);
+                    }, () => { });
+                    await new ProgressDialog { DataContext = tracker }.ShowDialog(dialog);
                 }
-                else
+                catch (Exception ex)
                 {
-                    try
-                    {
-                        ProgressDialogViewModel tracker =
-                            new(string.Format(Strings.Patching_Overlay__0_, overlays[i].Name));
-                        tracker.InitializeTasks(() =>
-                        {
-                            OverlayAsmHack.Insert(overlaySourceDir, overlays[i], newRomInfoPath, Configuration.UseDocker ? Configuration.DevkitArmDockerTag : string.Empty,
-                                (_, e) => { _log.Log(e.Data); ((IProgressTracker)tracker).Focus(e.Data, 1); },
-                                (_, e) => _log.LogWarning(e.Data),
-                                devkitArmPath: Configuration.DevkitArmPath);
-                        }, () => { });
-                        await new ProgressDialog { DataContext = tracker }.ShowDialog(dialog);
-                    }
-                    catch (Exception ex)
-                    {
-                        _log.LogException(string.Format(Strings.Failed_to_insert_hacks_into_overlay__0__, overlays[i].Name), ex);
-                    }
+                    _log.LogException(string.Format(Strings.Failed_to_insert_hacks_into_overlay__0__, overlay.Name), ex);
                 }
             }
         }
@@ -290,8 +292,8 @@ public class AsmHacksDialogViewModel : ViewModelBase
         // We don't provide visible errors during the compilation of the hacks because it will deadlock the threads
         // So at the end, we should check if any of the hacks that were supposed to be applied are not applied,
         // and if there are some then we should let the user know.
-        IEnumerable<string> failedHackNames = appliedHacks.Where(h => !h.Applied(_project)).Select(h => h.Name);
-        if (failedHackNames.Any())
+        string[] failedHackNames = appliedHacks.Where(h => !h.Applied(_project)).Select(h => h.Name).ToArray();
+        if (failedHackNames.Length > 0)
         {
             _log.LogError(string.Format(Strings.Failed_to_apply_the_following_hacks_to_the_ROM__n_0__n_nPlease_check_the_log_file_for_more_information__n_nIn_order_to_preserve_state__no_hacks_were_applied_, string.Join(", ", failedHackNames)));
             foreach (AsmHack hack in appliedHacks)

@@ -23,7 +23,7 @@ public class FlagScriptCommandEditorViewModel(ScriptItemCommand command, ScriptE
                 this.RaiseAndSetIfChanged(ref _flagId, flag);
                 ((FlagScriptParameter)Command.Parameters[0]).Id = _flagId;
                 Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
-                    .Objects[Command.Index].Parameters[0] = _flagId;
+                    .Objects[Command.Index].Parameters[0] = (short)(_flagId + 1);
                 Script.UnsavedChanges = true;
             }
         }
