@@ -2,7 +2,7 @@ name: Serial Loops Official Build
 run-name: "Official release build for Serial Loops"
 on:
   schedule:
-    - cron: '0 0 * * *' # runs daily at 00:00
+    - cron: '35 1 * * *' # runs daily at 00:00
   workflow_dispatch:
     inputs:
       version:
