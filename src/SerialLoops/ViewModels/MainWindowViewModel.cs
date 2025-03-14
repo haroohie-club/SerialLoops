@@ -537,7 +537,11 @@ public partial class MainWindowViewModel : ViewModelBase
 
     private void UpdateRecentProjects()
     {
-        RecentProjectsMenu.Menu = [];
+        if (RecentProjectsMenu.Menu is null)
+        {
+            RecentProjectsMenu.Menu = [];
+        }
+        RecentProjectsMenu.Menu.Items.Clear();
 
         List<string> projectsToRemove = [];
         foreach (string project in ProjectsCache.RecentProjects)
