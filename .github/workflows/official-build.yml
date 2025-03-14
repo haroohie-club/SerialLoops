@@ -41,7 +41,7 @@ jobs:
 
   linux-flatpak-setup:
     needs: check-new-commits
-    if: ${{ github.env.NEW_COMMIT_COUNT > 0 }}
+    if: ${{ github.env.NEW_COMMIT_COUNT != '0' }}
     runs-on: ubuntu-latest
     steps:
       - name: Check out
@@ -111,7 +111,7 @@ jobs:
   linux-appimage:
     runs-on: ubuntu-latest
     needs: check-new-commits
-    if: ${{ github.env.NEW_COMMIT_COUNT > 0 }}
+    if: ${{ github.env.NEW_COMMIT_COUNT != '0' }}
     steps:
       - name: Check out
         uses: actions/checkout@v4
@@ -144,7 +144,7 @@ jobs:
 
   linux-dpkg-tarball:
     needs: check-new-commits
-    if: ${{ github.env.NEW_COMMIT_COUNT > 0 }}
+    if: ${{ github.env.NEW_COMMIT_COUNT != '0' }}
     runs-on: ubuntu-latest
     steps:
       - name: Check out
@@ -190,7 +190,7 @@ jobs:
 
   linux-rpm:
     needs: check-new-commits
-    if: ${{ github.env.NEW_COMMIT_COUNT > 0 }}
+    if: ${{ github.env.NEW_COMMIT_COUNT != '0' }}
     runs-on: ubuntu-latest
     container:
       image: fedora:39
@@ -216,7 +216,7 @@ jobs:
 
   macos-pkg:
     needs: check-new-commits
-    if: ${{ github.env.NEW_COMMIT_COUNT > 0 }}
+    if: ${{ github.env.NEW_COMMIT_COUNT != '0' }}
     runs-on: macos-latest
     strategy:
       matrix:
@@ -265,7 +265,7 @@ jobs:
 
   windows:
     needs: check-new-commits
-    if: ${{ github.env.NEW_COMMIT_COUNT > 0 }}
+    if: ${{ github.env.NEW_COMMIT_COUNT != '0' }}
     runs-on: windows-latest
     steps:
       - name: Check out
@@ -303,7 +303,7 @@ jobs:
           retention-days: 1
 
   release:
-    if: ${{ github.env.NEW_COMMIT_COUNT > 0 }}
+    if: ${{ github.env.NEW_COMMIT_COUNT != '0' }}
     runs-on: ubuntu-latest
     needs: [ linux-flatpak, linux-appimage, linux-dpkg-tarball, linux-rpm, macos-pkg, windows ]
     steps:
