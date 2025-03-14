@@ -25,6 +25,8 @@ jobs:
   check-new-commits:
     runs-on: ubuntu-latest
     steps:
+      - name: Check out
+        uses: actions/checkout@v4
       - name: Check if new commits
         run: echo "NEW_COMMIT_COUNT=$(git log --oneline --since '24 hours ago' | wc -l)" >> $GITHUB_ENV
         if: ${{ github.event_name == 'schedule' }}
