@@ -3,7 +3,11 @@ run-name: "Official release build for Serial Loops"
 on:
   schedule:
     - cron: '35 0 * * *'
+    - cron: '35 4 * * *'
+    - cron: '35 8 * * *'
     - cron: '35 12 * * *'
+    - cron: '35 16 * * *'
+    - cron: '35 20 * * *'
   workflow_dispatch:
     inputs:
       version:
@@ -29,7 +33,7 @@ jobs:
       - name: Check out
         uses: actions/checkout@v4
       - name: Check if new commits
-        run: echo "NEW_COMMIT_COUNT=$(git log --oneline --since '24 hours ago' | wc -l)" >> $GITHUB_ENV
+        run: echo "NEW_COMMIT_COUNT=$(git log --oneline --since '24 hours ago' | wc -l | sed 's/ //g')" >> $GITHUB_ENV
         if: ${{ github.event_name == 'schedule' }}
       - name: Pass because dispatched
         run: echo "NEW_COMMIT_COUNT=1" >> $GITHUB_ENV
