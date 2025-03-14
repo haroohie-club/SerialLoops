@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Runtime.Intrinsics.Arm;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
@@ -1060,6 +1061,10 @@ public partial class Project
         IO.CopyFiles(Path.Combine(tempDir, "data", "vce"), Path.Combine(BaseDirectory, "original", "vce"), log, "*.bin");
         IO.CopyFiles(Path.Combine(tempDir, "overlay"), Path.Combine(BaseDirectory, "original", "overlay"), log, "*.bin");
         IO.CopyFiles(Path.Combine(tempDir, "data", "movie"), Path.Combine(BaseDirectory, "rom", "data", "movie"), log, "*.mods");
+        File.Copy(Path.Combine(tempDir, "arm9.bin"), Path.Combine(BaseDirectory, "rom", "arm9.bin"), overwrite: true);
+        File.Copy(Path.Combine(tempDir, "arm9.bin"), Path.Combine(BaseDirectory, "src", "arm9.bin"), overwrite: true);
+        File.Copy(Path.Combine(tempDir, "arm9.bin"), Path.Combine(IterativeDirectory, "rom", "arm9.bin"), overwrite: true);
+        File.Copy(Path.Combine(tempDir, "arm9.bin"), Path.Combine(IterativeDirectory, "src", "arm9.bin"), overwrite: true);
 
         Build.BuildBase(this, config, log, tracker);
 

@@ -469,8 +469,9 @@ public partial class MainWindowViewModel : ViewModelBase
                 OpenProject = new(OpenProject.Name, newLangCode, CurrentConfig, Strings.ResourceManager.GetString, Log);
                 OpenProject.Load(CurrentConfig, Log, tracker);
                 OpenProject.SetBaseRomHash(newRom);
+                OpenProject.Save(Log);
             }, async void () => await Window.ShowMessageBoxAsync(Strings.Migration_Complete_, Strings.Migrated_to_new_ROM_, ButtonEnum.Ok, Icon.Success, Log));
-            await new ProgressDialog() { DataContext = tracker }.ShowDialog(Window);
+            await new ProgressDialog { DataContext = tracker }.ShowDialog(Window);
             OpenProjectView(OpenProject, tracker);
         }
     }
