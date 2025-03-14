@@ -1,7 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using DynamicData;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
 using SerialLoops.Assets;

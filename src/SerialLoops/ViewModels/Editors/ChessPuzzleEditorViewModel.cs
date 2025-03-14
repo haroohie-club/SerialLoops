@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using Avalonia.Input;
-using DynamicData;
 using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Util;
 using ReactiveHistory;
