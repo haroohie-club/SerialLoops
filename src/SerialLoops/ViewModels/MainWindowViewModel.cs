@@ -535,7 +535,7 @@ public partial class MainWindowViewModel : ViewModelBase
         UpdateRecentProjects();
     }
 
-    private void UpdateRecentProjects()
+    public void UpdateRecentProjects()
     {
         if (RecentProjectsMenu.Menu is null)
         {

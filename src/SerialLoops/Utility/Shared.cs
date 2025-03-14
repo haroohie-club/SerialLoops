@@ -92,6 +92,7 @@ public static class Shared
             }
             mainWindow.ProjectsCache.RemoveProject(path);
             mainWindow.ProjectsCache.Save(mainWindow.Log);
+            mainWindow.UpdateRecentProjects();
             return true;
         }
 
