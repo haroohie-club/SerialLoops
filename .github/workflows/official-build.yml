@@ -3,6 +3,7 @@ run-name: "Official release build for Serial Loops"
 on:
   schedule:
     - cron: '35 0 * * *'
+    - cron: '35 12 * * *'
   workflow_dispatch:
     inputs:
       version:
