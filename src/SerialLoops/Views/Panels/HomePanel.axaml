@@ -53,7 +53,15 @@
                                 <StackPanel Orientation="Horizontal" Spacing="2">
                                     <TextBlock Text="{x:Static assets:Strings.Missing_}" IsVisible="{Binding IsMissing}" Foreground="{StaticResource DisabledLinkColor}"/>
                                     <controls:LinkButton Text="{Binding Text}" Command="{Binding Command}" IsEnabled="{Binding !IsMissing}"
-                                                         Foreground="{StaticResource {Binding LinkColorKey}}"/>
+                                                         Foreground="{StaticResource {Binding LinkColorKey}}">
+                                        <controls:LinkButton.ContextMenu>
+                                            <ContextMenu>
+                                                <MenuItem Header="{x:Static assets:Strings.ProjectRenameText}" Command="{Binding RenameCommand}"/>
+                                                <MenuItem Header="{x:Static assets:Strings.ProjectDuplicateText}" Command="{Binding DuplicateCommand}"/>
+                                                <MenuItem Header="{x:Static assets:Strings.ProjectDeleteText}" Command="{Binding DeleteCommand}"/>
+                                            </ContextMenu>
+                                        </controls:LinkButton.ContextMenu>
+                                    </controls:LinkButton>
                                 </StackPanel>
                             </StackPanel>
                         </DataTemplate>

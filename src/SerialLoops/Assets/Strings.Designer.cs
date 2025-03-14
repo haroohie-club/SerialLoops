@@ -5910,6 +5910,69 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete this project?.
+        /// </summary>
+        public static string ProjectDeleteConfirmText {
+            get {
+                return ResourceManager.GetString("ProjectDeleteConfirmText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete This Project?.
+        /// </summary>
+        public static string ProjectDeleteConfirmTitle {
+            get {
+                return ResourceManager.GetString("ProjectDeleteConfirmTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to move the project to the trash/recycle bin! Would you like to permanently delete the project instead? WARNING: This cannot be undone!.
+        /// </summary>
+        public static string ProjectDeleteFailedText {
+            get {
+                return ResourceManager.GetString("ProjectDeleteFailedText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failure! Permanently Delete?.
+        /// </summary>
+        public static string ProjectDeleteFailedTitle {
+            get {
+                return ResourceManager.GetString("ProjectDeleteFailedTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete Project.
+        /// </summary>
+        public static string ProjectDeleteText {
+            get {
+                return ResourceManager.GetString("ProjectDeleteText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Duplicate (Copy) Project.
+        /// </summary>
+        public static string ProjectDuplicateText {
+            get {
+                return ResourceManager.GetString("ProjectDuplicateText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename Project.
+        /// </summary>
+        public static string ProjectRenameText {
+            get {
+                return ResourceManager.GetString("ProjectRenameText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Projects.
         /// </summary>
         public static string Projects {

@@ -72,6 +72,12 @@ public class ProjectsCache
         RecentProjects.Insert(0, projectPath);
         RecentWorkspaces.Add(projectPath, new(workspaceItems, selectedTabIndex));
     }
+
+    public void RemoveProject(string projectPath)
+    {
+        RecentProjects.Remove(projectPath);
+        RecentWorkspaces.Remove(projectPath);
+    }
 }
 
 public record struct RecentWorkspace(List<string> Tabs, int SelectedTabIndex);
