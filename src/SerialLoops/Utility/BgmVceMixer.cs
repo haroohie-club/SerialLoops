@@ -18,20 +18,30 @@ public class BgmVceMixer : IDisposable
 
     public event EventHandler<StoppedEventArgs> PlaybackStopped
     {
-        add => _player.PlaybackStopped += value;
-        remove => _player.PlaybackStopped -= value;
+        add
+        {
+            if (_player is not null)
+            {
+                _player.PlaybackStopped += value;
+            }
+        }
+        remove
+        {
+            if (_player is not null)
+            {
+                _player.PlaybackStopped -= value;
+            }
+        }
     }
 
     public BgmVceMixer(IWaveProvider waveProvider)
     {
         WaveProvider = waveProvider;
-
 #if WINDOWS
         _player = new() { DeviceNumber = -1 };
-#else
-        _player = new() { DesiredLatency = 10 };
-#endif
         _player.Init(WaveProvider);
+#endif
+        _player = new() { DesiredLatency = 10 };
     }
 
     public void Pause()
@@ -41,12 +51,18 @@ public class BgmVceMixer : IDisposable
 
     public void Play()
     {
+#if !WINDOWS
+        _player.Init(WaveProvider);
+#endif
         _player.Play();
     }
 
     public void Stop()
     {
         _player.Stop();
+#if !WINDOWS
+        _player.Dispose();
+#endif
     }
 
     public void Dispose() => _player?.Dispose();

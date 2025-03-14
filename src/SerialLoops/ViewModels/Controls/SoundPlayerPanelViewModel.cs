@@ -74,7 +74,7 @@ public class SoundPlayerPanelViewModel : ViewModelBase, IDisposable
     private void PlayPause_Executed()
     {
         StopButtonEnabled = true;
-        if (_player.PlaybackState == PlaybackState.Playing)
+        if ((_player?.PlaybackState ?? PlaybackState.Stopped) == PlaybackState.Playing)
         {
             _player?.Pause();
             PlayPauseImagePath = ControlGenerator.GetVectorPath("Play");

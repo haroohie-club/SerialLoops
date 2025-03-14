@@ -833,6 +833,24 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to adjust volume for background music. Please check the logs and file an issue if this reoccurs..
+        /// </summary>
+        public static string BgmAdjustVolumeError {
+            get {
+                return ResourceManager.GetString("BgmAdjustVolumeError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to adjust loop data for background music. Please check the logs and file an issue if this reoccurs..
+        /// </summary>
+        public static string BgmLoopErrorMessage {
+            get {
+                return ResourceManager.GetString("BgmLoopErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to BGMs.
         /// </summary>
         public static string BGMs {

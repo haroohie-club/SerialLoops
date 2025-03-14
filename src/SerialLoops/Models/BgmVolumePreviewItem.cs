@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 using HaruhiChokuretsuLib.Util;
 using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
@@ -9,7 +10,7 @@ using SerialLoops.Lib.Items;
 
 namespace SerialLoops.Models;
 
-public class BgmVolumePreviewItem : ReactiveObject, ISoundItem
+public class BgmVolumePreviewItem : ReactiveObject, ISoundItem, IDisposable, IAsyncDisposable
 {
     private WaveStream _wav;
     [Reactive]
@@ -41,5 +42,20 @@ public class BgmVolumePreviewItem : ReactiveObject, ISoundItem
             log.LogWarning(ex.StackTrace);
             return Provider.ToWaveProvider16();
         }
+    }
+
+    public void Dispose()
+    {
+        _wav?.Dispose();
+        GC.SuppressFinalize(this);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_wav != null)
+        {
+            await _wav.DisposeAsync();
+        }
+        GC.SuppressFinalize(this);
     }
 }
