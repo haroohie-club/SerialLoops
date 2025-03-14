@@ -1053,6 +1053,8 @@ public partial class MainWindowViewModel : ViewModelBase
             IO.WriteStringFile(Path.Combine("assets", "events", $"{OpenProject.VoiceMap.Index:X3}.s"),
                 OpenProject.VoiceMap.GetSource(), OpenProject, Log);
         }
+
+        OpenProject.Save(Log);
     }
 
     public void SearchProject_Executed()
