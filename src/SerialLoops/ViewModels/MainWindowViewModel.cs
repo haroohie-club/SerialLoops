@@ -687,10 +687,7 @@ public partial class MainWindowViewModel : ViewModelBase
         }.ShowDialog<(string, string)>(Window);
         if (!string.IsNullOrEmpty(slzipPath) && !string.IsNullOrEmpty(romPath))
         {
-            if (await CloseProject_Executed(null))
-            {
-                return;
-            }
+            await CloseProject_Executed(null);
 
             Project.LoadProjectResult result = new() { State = Project.LoadProjectState.FAILED };
             ProgressDialogViewModel tracker = new(Strings.Importing_Project);
