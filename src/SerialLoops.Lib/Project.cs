@@ -1164,16 +1164,16 @@ public partial class Project
             slzip.CreateEntryFromFile(ProjectFile, Path.GetFileName(ProjectFile)!);
             slzip.Comment = BaseRomHash;
             log.Log("Adding charset.json to slzip...");
-            slzip.CreateEntryFromFile(Path.Combine(MainDirectory, "font", "charset.json"), Path.Combine("font", "charset.json"));
+            slzip.CreateEntryFromFile(Path.Combine(MainDirectory, "font", "charset.json"), Path.Combine("font", "charset.json").ToUnixPath());
             foreach (string file in Directory.GetFiles(BaseDirectory, "*"))
             {
                 log.Log($"Adding '{file}' to slzip...");
-                slzip.CreateEntryFromFile(file, Path.GetRelativePath(MainDirectory, file));
+                slzip.CreateEntryFromFile(file, Path.GetRelativePath(MainDirectory, file).ToUnixPath());
             }
             foreach (string file in Directory.GetFiles(Path.Combine(BaseDirectory, "assets"), "*", SearchOption.AllDirectories))
             {
                 log.Log($"Adding '{file}' to slzip...");
-                slzip.CreateEntryFromFile(file, Path.GetRelativePath(MainDirectory, file));
+                slzip.CreateEntryFromFile(file, Path.GetRelativePath(MainDirectory, file).ToUnixPath());
             }
             foreach (string file in Directory.GetFiles(Path.Combine(BaseDirectory, "src"), "*", SearchOption.AllDirectories))
             {
@@ -1182,24 +1182,24 @@ public partial class Project
                     continue;
                 }
                 log.Log($"Adding '{file}' to slzip...");
-                slzip.CreateEntryFromFile(file, Path.GetRelativePath(MainDirectory, file));
+                slzip.CreateEntryFromFile(file, Path.GetRelativePath(MainDirectory, file).ToUnixPath());
             }
-            slzip.CreateEntryFromFile(Path.Combine(BaseDirectory, "rom", $"{Name}.json"), Path.Combine("base", "rom", $"{Name}.json"));
-            slzip.CreateEntryFromFile(Path.Combine(BaseDirectory, "rom", "banner.bin"), Path.Combine("base", "rom", "banner.bin"));
+            slzip.CreateEntryFromFile(Path.Combine(BaseDirectory, "rom", $"{Name}.json"), Path.Combine("base", "rom", $"{Name}.json").ToUnixPath());
+            slzip.CreateEntryFromFile(Path.Combine(BaseDirectory, "rom", "banner.bin"), Path.Combine("base", "rom", "banner.bin").ToUnixPath());
             foreach (string file in Directory.GetFiles(Path.Combine(BaseDirectory, "rom", "data", "bgm"), "*"))
             {
                 log.Log($"Adding '{file}' to slzip...");
-                slzip.CreateEntryFromFile(file, Path.GetRelativePath(MainDirectory, file));
+                slzip.CreateEntryFromFile(file, Path.GetRelativePath(MainDirectory, file).ToUnixPath());
             }
             foreach (string file in Directory.GetFiles(Path.Combine(BaseDirectory, "rom", "data", "movie"), "*"))
             {
                 log.Log($"Adding '{file}' to slzip...");
-                slzip.CreateEntryFromFile(file, Path.GetRelativePath(MainDirectory, file));
+                slzip.CreateEntryFromFile(file, Path.GetRelativePath(MainDirectory, file).ToUnixPath());
             }
             foreach (string file in Directory.GetFiles(Path.Combine(BaseDirectory, "rom", "data", "vce"), "*"))
             {
                 log.Log($"Adding '{file}' to slzip...");
-                slzip.CreateEntryFromFile(file, Path.GetRelativePath(MainDirectory, file));
+                slzip.CreateEntryFromFile(file, Path.GetRelativePath(MainDirectory, file).ToUnixPath());
             }
         }
         catch (Exception ex)
