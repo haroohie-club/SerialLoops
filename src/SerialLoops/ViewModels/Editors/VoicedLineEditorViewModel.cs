@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia.Input;
 using Avalonia.Platform.Storage;
-using GotaSequenceLib.Playback;
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Audio.ADX;
 using HaruhiChokuretsuLib.Util;

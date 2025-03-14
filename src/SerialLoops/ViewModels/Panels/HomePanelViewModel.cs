@@ -3,16 +3,13 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Emik;
 using HaruhiChokuretsuLib.Util;
 using MsBox.Avalonia.Enums;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SerialLoops.Assets;
-using SerialLoops.Lib;
 using SerialLoops.Utility;
 using SerialLoops.ViewModels.Dialogs;
-using SerialLoops.Views;
 using SerialLoops.Views.Dialogs;
 
 namespace SerialLoops.ViewModels.Panels;
