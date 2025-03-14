@@ -170,6 +170,11 @@ public partial class Project
         }
     }
 
+    public static Project Deserialize(string path)
+    {
+        return JsonSerializer.Deserialize<Project>(File.ReadAllText(path), SERIALIZER_OPTIONS);
+    }
+
     public LoadProjectResult Load(Config config, ILogger log, IProgressTracker tracker)
     {
         Config = config;
@@ -1101,7 +1106,7 @@ public partial class Project
         try
         {
             tracker.Focus($"{Path.GetFileNameWithoutExtension(projFile)} Project Data", 1);
-            Project project = JsonSerializer.Deserialize<Project>(File.ReadAllText(projFile), SERIALIZER_OPTIONS);
+            Project project = Deserialize(projFile);
             project.Localize = localize;
             tracker.Finished++;
 
@@ -1206,7 +1211,7 @@ public partial class Project
             using ZipArchive slzip = new(slzipFs, ZipArchiveMode.Read);
             string slprojTemp = Path.GetTempFileName();
             slzip.Entries.FirstOrDefault(f => f.Name.EndsWith(".slproj"))?.ExtractToFile(slprojTemp, overwrite: true);
-            Project project = JsonSerializer.Deserialize<Project>(File.ReadAllText(slprojTemp), SERIALIZER_OPTIONS);
+            Project project = Deserialize(slprojTemp);
             project.Config = config;
             File.Delete(slprojTemp);
             string oldProjectName = project.Name;

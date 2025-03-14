@@ -2194,6 +2194,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Duplicate.
+        /// </summary>
+        public static string Duplicate {
+            get {
+                return ResourceManager.GetString("Duplicate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Duplicate Section Name.
         /// </summary>
         public static string Duplicate_Section_Name {
@@ -5910,6 +5919,24 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A project of that name already exists! Please choose a different name for your project..
+        /// </summary>
+        public static string ProjectAlreadyExistsErrorText {
+            get {
+                return ResourceManager.GetString("ProjectAlreadyExistsErrorText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project Already Exists!.
+        /// </summary>
+        public static string ProjectAlreadyExistsErrorTitle {
+            get {
+                return ResourceManager.GetString("ProjectAlreadyExistsErrorTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to delete this project?.
         /// </summary>
         public static string ProjectDeleteConfirmText {
@@ -5955,11 +5982,65 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to duplicated project. Please check the logs and file an issue if this is a recurring problem..
+        /// </summary>
+        public static string ProjectDuplicatedFailureText {
+            get {
+                return ResourceManager.GetString("ProjectDuplicatedFailureText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project Duplication Failed!.
+        /// </summary>
+        public static string ProjectDuplicatedFailureTitle {
+            get {
+                return ResourceManager.GetString("ProjectDuplicatedFailureTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project successfully duplicated! Would you like to open it now?.
+        /// </summary>
+        public static string ProjectDuplicatedSuccessText {
+            get {
+                return ResourceManager.GetString("ProjectDuplicatedSuccessText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project Duplication Succeeded!.
+        /// </summary>
+        public static string ProjectDuplicatedSuccessTitle {
+            get {
+                return ResourceManager.GetString("ProjectDuplicatedSuccessTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Duplicate (Copy) Project.
         /// </summary>
         public static string ProjectDuplicateText {
             get {
                 return ResourceManager.GetString("ProjectDuplicateText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must enter a name for the project!.
+        /// </summary>
+        public static string ProjectRenameDuplicateMustEnterNameErrorText {
+            get {
+                return ResourceManager.GetString("ProjectRenameDuplicateMustEnterNameErrorText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Must Enter Project Name!.
+        /// </summary>
+        public static string ProjectRenameDuplicateMustEnterNameErrorTitle {
+            get {
+                return ResourceManager.GetString("ProjectRenameDuplicateMustEnterNameErrorTitle", resourceCulture);
             }
         }
         

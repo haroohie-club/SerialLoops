@@ -52,10 +52,10 @@
                                 <Svg Path="{Binding IconPath}" Width="16"/>
                                 <StackPanel Orientation="Horizontal" Spacing="2">
                                     <TextBlock Text="{x:Static assets:Strings.Missing_}" IsVisible="{Binding IsMissing}" Foreground="{StaticResource DisabledLinkColor}"/>
-                                    <controls:LinkButton Text="{Binding Text}" Command="{Binding Command}" IsEnabled="{Binding !IsMissing}"
+                                    <controls:LinkButton Text="{Binding Text}" Command="{Binding OpenCommand}" IsEnabled="{Binding !IsMissing}"
                                                          Foreground="{StaticResource {Binding LinkColorKey}}">
                                         <controls:LinkButton.ContextMenu>
-                                            <ContextMenu>
+                                            <ContextMenu IsEnabled="{Binding !IsMissing}">
                                                 <MenuItem Header="{x:Static assets:Strings.ProjectRenameText}" Command="{Binding RenameCommand}"/>
                                                 <MenuItem Header="{x:Static assets:Strings.ProjectDuplicateText}" Command="{Binding DuplicateCommand}"/>
                                                 <MenuItem Header="{x:Static assets:Strings.ProjectDeleteText}" Command="{Binding DeleteCommand}"/>

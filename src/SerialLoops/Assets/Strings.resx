@@ -3175,4 +3175,31 @@ All hacks have been rolled back to preserve state.</value>
   <data name="ProjectDeleteFailedText" xml:space="preserve">
     <value>Failed to move the project to the trash/recycle bin! Would you like to permanently delete the project instead? WARNING: This cannot be undone!</value>
   </data>
+  <data name="Duplicate" xml:space="preserve">
+    <value>Duplicate</value>
+  </data>
+  <data name="ProjectRenameDuplicateMustEnterNameErrorTitle" xml:space="preserve">
+    <value>Must Enter Project Name!</value>
+  </data>
+  <data name="ProjectRenameDuplicateMustEnterNameErrorText" xml:space="preserve">
+    <value>You must enter a name for the project!</value>
+  </data>
+  <data name="ProjectAlreadyExistsErrorTitle" xml:space="preserve">
+    <value>Project Already Exists!</value>
+  </data>
+  <data name="ProjectAlreadyExistsErrorText" xml:space="preserve">
+    <value>A project of that name already exists! Please choose a different name for your project.</value>
+  </data>
+  <data name="ProjectDuplicatedSuccessTitle" xml:space="preserve">
+    <value>Project Duplication Succeeded!</value>
+  </data>
+  <data name="ProjectDuplicatedSuccessText" xml:space="preserve">
+    <value>Project successfully duplicated! Would you like to open it now?</value>
+  </data>
+  <data name="ProjectDuplicatedFailureTitle" xml:space="preserve">
+    <value>Project Duplication Failed!</value>
+  </data>
+  <data name="ProjectDuplicatedFailureText" xml:space="preserve">
+    <value>Failed to duplicated project. Please check the logs and file an issue if this is a recurring problem.</value>
+  </data>
 </root>

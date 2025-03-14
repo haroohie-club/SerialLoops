@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Emik;
 using HaruhiChokuretsuLib.Util;
@@ -8,7 +9,11 @@ using MsBox.Avalonia.Enums;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SerialLoops.Assets;
+using SerialLoops.Lib;
 using SerialLoops.Utility;
+using SerialLoops.ViewModels.Dialogs;
+using SerialLoops.Views;
+using SerialLoops.Views.Dialogs;
 
 namespace SerialLoops.ViewModels.Panels;
 
@@ -17,7 +22,7 @@ public class HomePanelViewModel : ViewModelBase
     public MainWindowViewModel MainWindow { get; set; }
     public ILogger Log => MainWindow.Log;
 
-    public ObservableCollection<RecentProjectViewModel> RecentProjects { get; private set; }
+    public ObservableCollection<RecentProjectViewModel> RecentProjects { get; }
 
 
     public HomePanelViewModel(MainWindowViewModel mainWindow)
@@ -32,50 +37,91 @@ public class RecentProjectViewModel : ReactiveObject
 {
     [Reactive]
     public string Text { get; set; }
-    public ICommand Command { get; }
     public bool IsMissing { get; set; }
     public string IconPath { get; set; }
     public string LinkColorKey { get; set; }
 
-    public ICommand RenameCommand { get; }
-    public ICommand DuplicateCommand { get; }
-    public ICommand DeleteCommand { get; }
+    [Reactive]
+    public ICommand OpenCommand { get; private set; }
+    [Reactive]
+    public ICommand RenameCommand { get; private set; }
+    [Reactive]
+    public ICommand DuplicateCommand { get; private set; }
+    [Reactive]
+    public ICommand DeleteCommand { get; private set; }
 
     public RecentProjectViewModel(string path, HomePanelViewModel parent)
     {
         Text = Path.GetFileName(path);
-        Command = ReactiveCommand.Create(() => parent.MainWindow.OpenRecentProjectCommand.Execute(path));
+        OpenCommand = ReactiveCommand.Create(() => parent.MainWindow.OpenRecentProjectCommand.Execute(path));
         IsMissing = !File.Exists(path);
         IconPath = IsMissing ? "avares://SerialLoops/Assets/Icons/Warning.svg" : "avares://SerialLoops/Assets/Icons/AppIconSimple.svg";
         LinkColorKey = IsMissing ? "DisabledLinkColor" : "LinkColor";
 
-        RenameCommand = ReactiveCommand.CreateFromTask(async () =>
-        {
-            
-        });
+        RenameCommand = ReactiveCommand.CreateFromTask(async () => await Rename(path, parent));
 
-        DeleteCommand = ReactiveCommand.CreateFromTask(async () =>
+        DuplicateCommand = ReactiveCommand.CreateFromTask(async () => await Duplicate(path, parent));
+
+        DeleteCommand = ReactiveCommand.CreateFromTask(async () => await Delete(path, parent));
+    }
+
+    private async Task Rename(string path, HomePanelViewModel parent)
+    {
+        ProjectRenameDuplicateDialogViewModel renameDialogViewModel =
+            new(true, path, parent.MainWindow.CurrentConfig, parent.MainWindow.Log);
+        string newProj = await new ProjectRenameDuplicateDialog { DataContext = renameDialogViewModel }.ShowDialog<string>(parent.MainWindow.Window);
+        if (string.IsNullOrEmpty(newProj))
         {
-            if (await parent.MainWindow.Window.ShowMessageBoxAsync(Strings.ProjectDeleteConfirmTitle,
-                    Strings.ProjectDeleteConfirmText,
-                    ButtonEnum.YesNoCancel, Icon.Warning, parent.MainWindow.Log) == ButtonResult.Yes)
+            return;
+        }
+
+        Text = Path.GetFileName(newProj);
+        OpenCommand = ReactiveCommand.Create(() => parent.MainWindow.OpenRecentProjectCommand.Execute(newProj));
+        RenameCommand = ReactiveCommand.CreateFromTask(async () => await Rename(newProj, parent));
+        DuplicateCommand = ReactiveCommand.CreateFromTask(async () => await Duplicate(newProj, parent));
+        DeleteCommand = ReactiveCommand.CreateFromTask(async () => await Delete(newProj, parent));
+        parent.MainWindow.ProjectsCache.RenameProject(path, newProj);
+        parent.MainWindow.ProjectsCache.Save(parent.MainWindow.Log);
+    }
+
+    private async Task Duplicate(string path, HomePanelViewModel parent)
+    {
+        ProjectRenameDuplicateDialogViewModel renameDialogViewModel =
+            new(false, path, parent.MainWindow.CurrentConfig, parent.MainWindow.Log);
+        string newProj = await new ProjectRenameDuplicateDialog { DataContext = renameDialogViewModel }.ShowDialog<string>(parent.MainWindow.Window);
+        if (string.IsNullOrEmpty(newProj))
+        {
+            return;
+        }
+
+        if (await parent.MainWindow.Window.ShowMessageBoxAsync(Strings.ProjectDuplicatedSuccessTitle,
+                Strings.ProjectDuplicatedSuccessText, ButtonEnum.YesNo, Icon.Success, parent.MainWindow.Log) == ButtonResult.Yes)
+        {
+            parent.MainWindow.OpenRecentProjectCommand.Execute(newProj);
+        }
+    }
+
+    private async Task Delete(string path, HomePanelViewModel parent)
+    {
+        if (await parent.MainWindow.Window.ShowMessageBoxAsync(Strings.ProjectDeleteConfirmTitle,
+                Strings.ProjectDeleteConfirmText,
+                ButtonEnum.YesNoCancel, Icon.Warning, parent.MainWindow.Log) == ButtonResult.Yes)
+        {
+            if (!await Rubbish.MoveAsync(Path.GetDirectoryName(path)))
             {
-                if (!await Rubbish.MoveAsync(Path.GetDirectoryName(path)))
+                if (await parent.MainWindow.Window.ShowMessageBoxAsync(Strings.ProjectDeleteFailedTitle,
+                        Strings.ProjectDeleteFailedText,ButtonEnum.YesNoCancel, Icon.Error, parent.MainWindow.Log) == ButtonResult.Yes)
                 {
-                    if (await parent.MainWindow.Window.ShowMessageBoxAsync(Strings.ProjectDeleteFailedTitle,
-                            Strings.ProjectDeleteFailedText,ButtonEnum.YesNoCancel, Icon.Error, parent.MainWindow.Log) == ButtonResult.Yes)
-                    {
-                        Directory.Delete(Path.GetDirectoryName(path)!, true);
-                    }
-                    else
-                    {
-                        return; // don't remove this project if we didn't delete it
-                    }
+                    Directory.Delete(Path.GetDirectoryName(path)!, true);
                 }
-                parent.RecentProjects.Remove(this);
-                parent.MainWindow.ProjectsCache.RemoveProject(path);
-                parent.MainWindow.ProjectsCache.Save(parent.MainWindow.Log);
+                else
+                {
+                    return; // don't remove this project if we didn't delete it
+                }
             }
-        });
+            parent.RecentProjects.Remove(this);
+            parent.MainWindow.ProjectsCache.RemoveProject(path);
+            parent.MainWindow.ProjectsCache.Save(parent.MainWindow.Log);
+        }
     }
 }
