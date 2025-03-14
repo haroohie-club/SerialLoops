@@ -69,6 +69,8 @@ public partial class MainWindowViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _openProjectIcon, value);
     }
 
+    public HomePanelViewModel HomePanel { get; set; }
+
     public MainWindow Window { get; set; }
     public ProjectsCache ProjectsCache { get; set; }
     public Config CurrentConfig { get; set; }
@@ -91,6 +93,7 @@ public partial class MainWindowViewModel : ViewModelBase
     public ICommand OpenProjectCommand { get; }
     public ICommand OpenRecentProjectCommand { get; }
     public ICommand ImportProjectCommand { get; }
+    public ICommand DeleteProjectCommand { get; }
     public ICommand EditSaveCommand { get; }
     public ICommand AboutCommand { get; }
     public ICommand PreferencesCommand { get; }
@@ -134,6 +137,7 @@ public partial class MainWindowViewModel : ViewModelBase
         OpenProjectCommand = ReactiveCommand.CreateFromTask(OpenProjectCommand_Executed);
         OpenRecentProjectCommand = ReactiveCommand.CreateFromTask<string>(OpenRecentProjectCommand_Executed);
         ImportProjectCommand = ReactiveCommand.CreateFromTask<string>(ImportProjectCommand_Executed);
+        DeleteProjectCommand = ReactiveCommand.CreateFromTask(DeleteProjectCommand_Executed);
         EditSaveCommand = ReactiveCommand.CreateFromTask(EditSaveFileCommand_Executed);
         AboutCommand = ReactiveCommand.CreateFromTask(AboutCommand_Executed);
         PreferencesCommand = ReactiveCommand.CreateFromTask(PreferencesCommand_Executed);
@@ -243,7 +247,8 @@ public partial class MainWindowViewModel : ViewModelBase
 
     private void OpenHomePanel()
     {
-        HomePanel homePanel = new() { DataContext = new HomePanelViewModel(this) };
+        HomePanel = new(this);
+        HomePanel homePanel = new() { DataContext = HomePanel };
         Window.MainContent.Content = homePanel;
     }
 
@@ -272,6 +277,7 @@ public partial class MainWindowViewModel : ViewModelBase
         LoadCachedData();
 
         Window.MainContent.Content = ProjectPanel;
+        HomePanel = null;
     }
 
     private void LoadCachedData()
@@ -704,6 +710,30 @@ public partial class MainWindowViewModel : ViewModelBase
             {
                 await CloseProjectView();
             }
+        }
+    }
+
+    private async Task DeleteProjectCommand_Executed()
+    {
+        string projFile;
+        if (OpenProject is null)
+        {
+            projFile = (await Window.ShowOpenFilePickerAsync(Strings.ProjectDeleteText,
+                [new(Strings.Serial_Loops_Project) { Patterns = [$"*.{Project.PROJECT_FORMAT}"] }]))?.TryGetLocalPath();
+            if (string.IsNullOrEmpty(projFile))
+            {
+                return;
+            }
+        }
+        else
+        {
+            projFile = OpenProject.ProjectFile;
+            await CloseProjectView();
+        }
+
+        if (await Shared.DeleteProjectAsync(projFile, this))
+        {
+            HomePanel?.RecentProjects.Remove(HomePanel.RecentProjects.FirstOrDefault(p => p.Text == Path.GetFileName(projFile)));
         }
     }
 

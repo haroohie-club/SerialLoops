@@ -103,25 +103,9 @@ public class RecentProjectViewModel : ReactiveObject
 
     private async Task Delete(string path, HomePanelViewModel parent)
     {
-        if (await parent.MainWindow.Window.ShowMessageBoxAsync(Strings.ProjectDeleteConfirmTitle,
-                Strings.ProjectDeleteConfirmText,
-                ButtonEnum.YesNoCancel, Icon.Warning, parent.MainWindow.Log) == ButtonResult.Yes)
+        if (await Shared.DeleteProjectAsync(path, parent.MainWindow))
         {
-            if (!await Rubbish.MoveAsync(Path.GetDirectoryName(path)))
-            {
-                if (await parent.MainWindow.Window.ShowMessageBoxAsync(Strings.ProjectDeleteFailedTitle,
-                        Strings.ProjectDeleteFailedText,ButtonEnum.YesNoCancel, Icon.Error, parent.MainWindow.Log) == ButtonResult.Yes)
-                {
-                    Directory.Delete(Path.GetDirectoryName(path)!, true);
-                }
-                else
-                {
-                    return; // don't remove this project if we didn't delete it
-                }
-            }
             parent.RecentProjects.Remove(this);
-            parent.MainWindow.ProjectsCache.RemoveProject(path);
-            parent.MainWindow.ProjectsCache.Save(parent.MainWindow.Log);
         }
     }
 }

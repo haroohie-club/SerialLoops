@@ -58,6 +58,12 @@ public partial class MainWindow : Window
                     Icon = ControlGenerator.GetIcon("Import_Project", ViewModel.Log),
                     Command = ViewModel.ImportProjectCommand,
                 },
+                new NativeMenuItem
+                {
+                    Header = Strings.ProjectDeleteText,
+                    Icon = ControlGenerator.GetIcon("Remove", ViewModel.Log),
+                    Command = ViewModel.DeleteProjectCommand,
+                },
                 new NativeMenuItemSeparator(),
                 new NativeMenuItem()
                 {
