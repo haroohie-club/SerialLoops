@@ -1115,12 +1115,12 @@ public class ScriptItem : Item
         {
             DialogueLine line = ((DialogueScriptParameter)preview.LastDialogueCommand.Parameters[0]).Line;
             SKPaint dialoguePaint = preview.LastDialogueCommand.Verb == CommandVerb.PIN_MNL
-                ? DialogueScriptParameter.Paint01
+                ? project.DialogueColorFilters[1]
                 : line.Speaker switch
                 {
-                    Speaker.MONOLOGUE => DialogueScriptParameter.Paint01,
-                    Speaker.INFO => DialogueScriptParameter.Paint04,
-                    _ => DialogueScriptParameter.Paint00,
+                    Speaker.MONOLOGUE => project.DialogueColorFilters[1],
+                    Speaker.INFO => project.DialogueColorFilters[4],
+                    _ => project.DialogueColorFilters[0],
                 };
             if (!string.IsNullOrEmpty(line.Text))
             {
@@ -1181,7 +1181,7 @@ public class ScriptItem : Item
                 choiceCanvas.DrawRect(1, 1, 216, 16, new() { Color = new(146, 146, 146) });
                 choiceCanvas.DrawRect(2, 2, 214, 14, new() { Color = new(69, 69, 69) });
                 int choiceWidth = project.LangCode.Equals("ja") ? choice.Length * 14 : choice.Sum(c => project.FontReplacement.ReverseLookup(c).Offset);
-                choiceCanvas.DrawHaroohieText(choice, DialogueScriptParameter.Paint00, project, (218 - choiceWidth) / 2, 2);
+                choiceCanvas.DrawHaroohieText(choice, project.DialogueColorFilters[0], project, (218 - choiceWidth) / 2, 2);
                 choiceCanvas.Flush();
                 choiceGraphics.Add(choiceGraphic);
             }

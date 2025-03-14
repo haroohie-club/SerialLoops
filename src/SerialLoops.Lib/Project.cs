@@ -9,6 +9,7 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
+using DynamicData;
 using HaroohieClub.NitroPacker;
 using HaruhiChokuretsuLib.Archive;
 using HaruhiChokuretsuLib.Archive.Data;
@@ -105,6 +106,12 @@ public partial class Project
     public Dictionary<int, GraphicsFile> LayoutFiles { get; set; } = [];
     [JsonIgnore]
     public Dictionary<ChessFile.ChessPiece, SKBitmap> ChessPieceImages { get; private set; }
+    [JsonIgnore]
+    public GraphicsFile DialoguePaletteFile { get; set; }
+    [JsonIgnore]
+    public SKColor[] DialogueColors { get; set; } = new SKColor[16];
+    [JsonIgnore]
+    public SKPaint[] DialogueColorFilters { get; set; } = new SKPaint[16];
 
     public float AverageBgmMaxAmplitude { get; set; }
 
@@ -377,6 +384,24 @@ public partial class Project
             return new(LoadProjectState.FAILED);
         }
         tracker.Finished++;
+
+        tracker.Focus("Dialogue Colors", DialogueColorFilters.Length);
+        try
+        {
+            DialoguePaletteFile = Grp.GetFileByName("FONT0DNX");
+            for (int i = 0; i < DialogueColorFilters.Length; i++)
+            {
+                SKColor color = DialoguePaletteFile.Palette[i * 16 + 15];
+                DialogueColors[i] = color;
+                DialogueColorFilters[i] = color.GetColorFilter();
+                tracker.Finished++;
+            }
+        }
+        catch (Exception ex)
+        {
+            log.LogException("Failed to load dialogue colors", ex);
+            return new(LoadProjectState.FAILED);
+        }
 
         tracker.Focus("Chess Piece Images", 12);
         try
