@@ -6,16 +6,19 @@
         xmlns:assets="using:SerialLoops.Assets"
         xmlns:controls="using:SerialLoops.Controls"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        TransparencyLevelHint="AcrylicBlur"
+        Background="{DynamicResource FallbackBackgroundColor}"
+        ExtendClientAreaToDecorationsHint="True"
+        Width="470" Height="420"
         x:DataType="vm:EditDialogueColorsDialogViewModel"
         x:Class="SerialLoops.Views.Dialogs.EditDialogueColorsDialog"
-        Width="470" Height="420"
         Title="{x:Static assets:Strings.EditDialogueColorsDialogTitle}"
         Icon="/Assets/serial-loops.ico"
         Name="Dialog">
     <Panel>
         <controls:AcrylicBorderHandler/>
 
-        <Grid RowDefinitions="*, Auto" Margin="10">
+        <Grid RowDefinitions="*, Auto" Margin="10 30 10 10">
             <ScrollViewer Grid.Row="0">
                 <ItemsRepeater ItemsSource="{Binding Colors}">
                     <ItemsRepeater.Layout>
