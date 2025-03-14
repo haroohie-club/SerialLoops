@@ -3167,7 +3167,7 @@ All hacks have been rolled back to preserve state.</value>
     <value>Default black color (including subtitle shadow)</value>
   </data>
   <data name="DialogueColorHeader" xml:space="preserve">
-    <value>Color {0}</value><comment>{0} is the index of the particular color (1-16) in the dialogue color palette</comment>
+    <value>#P{0:D2}</value><comment>{0} is the index of the particular color (1-16) in the dialogue color palette</comment>
   </data>
   <data name="EditDialogueColorsDialogTitle" xml:space="preserve">
     <value>Edit Dialogue Colors</value>

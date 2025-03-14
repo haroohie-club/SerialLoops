@@ -2041,7 +2041,7 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Color {0}.
+        ///   Looks up a localized string similar to #P{0:D2}.
         /// </summary>
         public static string DialogueColorHeader {
             get {
