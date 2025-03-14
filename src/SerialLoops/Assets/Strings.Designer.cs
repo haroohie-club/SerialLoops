@@ -6893,6 +6893,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sorry, but you currently have too many sound items open to open another one. Please close some and then try again..
+        /// </summary>
+        public static string SdlExceptionTooManyDevicesText {
+            get {
+                return ResourceManager.GetString("SdlExceptionTooManyDevicesText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Search.
         /// </summary>
         public static string Search {

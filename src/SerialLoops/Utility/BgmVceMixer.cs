@@ -6,7 +6,7 @@ using NAudio.Wave;
 
 namespace SerialLoops.Utility;
 
-public class BgmVceMixer
+public class BgmVceMixer : IDisposable
 {
 #if WINDOWS
     private WaveOut _player;
@@ -48,4 +48,6 @@ public class BgmVceMixer
     {
         _player.Stop();
     }
+
+    public void Dispose() => _player?.Dispose();
 }

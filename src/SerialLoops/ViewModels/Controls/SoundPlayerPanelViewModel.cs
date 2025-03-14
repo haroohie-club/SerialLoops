@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Windows.Input;
 using HaruhiChokuretsuLib.Util;
 using NAudio.Wave;
 using ReactiveUI;
@@ -9,7 +10,7 @@ using SkiaSharp;
 
 namespace SerialLoops.ViewModels.Controls;
 
-public class SoundPlayerPanelViewModel : ViewModelBase
+public class SoundPlayerPanelViewModel : ViewModelBase, IDisposable
 {
     private ILogger _log;
     private ISoundItem _item;
@@ -88,5 +89,16 @@ public class SoundPlayerPanelViewModel : ViewModelBase
     private void Stop_Executed()
     {
         Stop();
+    }
+
+    public void Dispose()
+    {
+        if (_player?.PlaybackState != PlaybackState.Stopped)
+        {
+            _player?.Stop();
+        }
+        _player?.Dispose();
+        Waveform?.Dispose();
+        GC.SuppressFinalize(this);
     }
 }

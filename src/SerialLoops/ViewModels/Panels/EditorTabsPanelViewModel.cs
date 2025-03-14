@@ -1,10 +1,13 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Avalonia.Logging;
 using HaruhiChokuretsuLib.Util;
 using MsBox.Avalonia.Enums;
+using NAudio.Sdl2.Structures;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SerialLoops.Assets;
@@ -67,7 +70,20 @@ public class EditorTabsPanelViewModel : ViewModelBase
             case ItemDescription.ItemType.Background:
                 return new BackgroundEditorViewModel((BackgroundItem)item, MainWindow, _project, _log);
             case ItemDescription.ItemType.BGM:
-                return new BackgroundMusicEditorViewModel((BackgroundMusicItem)item, MainWindow, _project, _log);
+#if !WINDOWS
+                try
+                {
+#endif
+                    return new BackgroundMusicEditorViewModel((BackgroundMusicItem)item, MainWindow, _project, _log);
+#if !WINDOWS
+                }
+                catch (SdlException ex)
+                {
+                    _log.LogWarning($"SDL Exception: {ex.Message}\n{ex.StackTrace}");
+                    _log.LogError(Strings.SdlExceptionTooManyDevicesText);
+                    return null;
+                }
+#endif
             case ItemDescription.ItemType.Character:
                 return new CharacterEditorViewModel((CharacterItem)item, MainWindow, _log);
             case ItemDescription.ItemType.Character_Sprite:
@@ -93,13 +109,39 @@ public class EditorTabsPanelViewModel : ViewModelBase
             case ItemDescription.ItemType.Script:
                 return new ScriptEditorViewModel((ScriptItem)item, MainWindow, _log);
             case ItemDescription.ItemType.SFX:
-                return new SfxEditorViewModel((SfxItem)item, MainWindow, _log);
+#if !WINDOWS
+                try
+                {
+#endif
+                    return new SfxEditorViewModel((SfxItem)item, MainWindow, _log);
+#if !WINDOWS
+                }
+                catch (SdlException ex)
+                {
+                    _log.LogWarning($"SDL Exception: {ex.Message}\n{ex.StackTrace}");
+                    _log.LogError(Strings.SdlExceptionTooManyDevicesText);
+                    return null;
+                }
+#endif
             case ItemDescription.ItemType.System_Texture:
                 return new SystemTextureEditorViewModel((SystemTextureItem)item, MainWindow, _project, _log);
             case ItemDescription.ItemType.Topic:
                 return new TopicEditorViewModel((TopicItem)item, MainWindow, _log);
             case ItemDescription.ItemType.Voice:
-                return new VoicedLineEditorViewModel((VoicedLineItem)item, MainWindow, _log);
+#if !WINDOWS
+                try
+                {
+#endif
+                    return new VoicedLineEditorViewModel((VoicedLineItem)item, MainWindow, _log);
+#if !WINDOWS
+                }
+                catch (SdlException ex)
+                {
+                    _log.LogWarning($"SDL Exception: {ex.Message}\n{ex.StackTrace}");
+                    _log.LogError(Strings.SdlExceptionTooManyDevicesText);
+                    return null;
+                }
+#endif
             case ItemDescription.ItemType.Save:
                 return new SaveEditorViewModel((SaveItem)item, MainWindow, _log);
             default:
@@ -115,17 +157,24 @@ public class EditorTabsPanelViewModel : ViewModelBase
 
     public async Task OnTabClosed(EditorViewModel closedEditor)
     {
-        if (closedEditor.Description.Type == ItemDescription.ItemType.BGM)
+        if (closedEditor.Description.Type is ItemDescription.ItemType.BGM or ItemDescription.ItemType.Voice or ItemDescription.ItemType.SFX)
         {
-            ((BackgroundMusicEditorViewModel)closedEditor).BgmPlayer.Stop();
+            switch (closedEditor.Description.Type)
+            {
+                case ItemDescription.ItemType.BGM:
+                    ((BackgroundMusicEditorViewModel)closedEditor).BgmPlayer.Dispose();
+                    break;
+                case ItemDescription.ItemType.SFX:
+                    ((SfxEditorViewModel)closedEditor).SfxPlayerPanel.Dispose();
+                    break;
+                case ItemDescription.ItemType.Voice:
+                    ((VoicedLineEditorViewModel)closedEditor).VcePlayer.Dispose();
+                    break;
+            }
         }
         else if (closedEditor.Description.Type == ItemDescription.ItemType.Character_Sprite)
         {
             ((CharacterSpriteEditorViewModel)closedEditor).AnimatedImage.Stop();
-        }
-        else if (closedEditor.Description.Type == ItemDescription.ItemType.SFX)
-        {
-            ((SfxEditorViewModel)closedEditor).SfxPlayerPanel.Stop();
         }
         else if (closedEditor.Description.Type == ItemDescription.ItemType.Save)
         {

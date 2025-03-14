@@ -115,8 +115,6 @@ public partial class MainWindowViewModel : ViewModelBase
     public ICommand BuildBaseCommand { get; }
     public ICommand BuildAndRunCommand { get; }
 
-    public SfxMixer SfxMixer { get; } = new();
-
     [Reactive]
     public KeyGesture SaveHotKey { get; set; }
     [Reactive]

@@ -1,11 +1,12 @@
 ﻿#if !WINDOWS
 using NAudio.Sdl2;
 #endif
+using System;
 using NAudio.Wave;
 
 namespace SerialLoops.Utility;
 
-public class SfxMixer
+public class SfxMixer : IDisposable
 {
 #if WINDOWS
     private WaveOut _player;
@@ -22,6 +23,7 @@ public class SfxMixer
 #else
         _player = new() { DesiredLatency = 10 };
 #endif
-
     }
+
+    public void Dispose() => _player?.Dispose();
 }
