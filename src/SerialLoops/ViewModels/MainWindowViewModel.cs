@@ -296,7 +296,7 @@ public partial class MainWindowViewModel : ViewModelBase
         Title = $"{BASE_TITLE} - {project.Name}";
 
         LoadCachedData();
-        
+
         Window.MainContent.Content = ProjectPanel;
         HomePanel = null;
     }
@@ -774,6 +774,14 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             OpenProject.Name = Path.GetFileNameWithoutExtension(newProj);
             OpenProjectName = OpenProject.Name;
+            foreach (BackgroundMusicItem bgm in OpenProject.Items.Where(i => i.Type == ItemDescription.ItemType.BGM).Cast<BackgroundMusicItem>())
+            {
+                bgm.SetBgmFile(OpenProject, Path.GetDirectoryName(projectPath));
+            }
+            foreach (VoicedLineItem vce in OpenProject.Items.Where(i => i.Type == ItemDescription.ItemType.Voice).Cast<VoicedLineItem>())
+            {
+                vce.SetVoiceFile(OpenProject, Path.GetDirectoryName(projectPath));
+            }
         }
         ProjectsCache.RenameProject(projectPath, newProj);
         ProjectsCache.Save(Log);

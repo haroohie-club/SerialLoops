@@ -39,7 +39,12 @@ public class ScriptTemplate
         {
             if (script.Event.ScriptSections.FindIndex(s => s.Name == section.Name) < 0)
             {
-                script.Event.LabelsSection.Objects.Add(new() { Id = (short)(script.Event.LabelsSection.Objects.Count > 0 ? script.Event.LabelsSection.Objects.Max(l => l.Id) + 1 : 1001), Name = section.Name });
+                script.Event.LabelsSection.Objects.Insert(script.Event.LabelsSection.Objects.Count == 0 ? 0 : script.Event.LabelsSection.Objects.Count - 1,
+                    new()
+                    {
+                        Id = (short)(script.Event.LabelsSection.Objects.Count > 0 ? script.Event.LabelsSection.Objects.Max(l => l.Id) + 1 : 1001),
+                        Name = section.Name,
+                    });
                 script.Event.ScriptSections.Add(new() { Name = section.Name, CommandsAvailable = EventFile.CommandsAvailable });
                 script.Event.NumSections++;
             }

@@ -13,7 +13,7 @@ namespace SerialLoops.Lib.Items;
 
 public class VoicedLineItem : Item, ISoundItem
 {
-    private readonly string _vceFile;
+    private string _vceFile;
 
     public string VoiceFile { get; set; }
     public int Index { get; set; }
@@ -21,9 +21,18 @@ public class VoicedLineItem : Item, ISoundItem
 
     public VoicedLineItem(string voiceFile, int index, Project project) : base(Path.GetFileNameWithoutExtension(voiceFile), ItemType.Voice)
     {
-        VoiceFile = Path.GetRelativePath(project.IterativeDirectory, voiceFile);
         _vceFile = voiceFile;
+        SetVoiceFile(project);
         Index = index;
+    }
+
+    public void SetVoiceFile(Project project, string oldProjDir = null)
+    {
+        if (!string.IsNullOrEmpty(oldProjDir))
+        {
+            _vceFile = _vceFile.Replace(oldProjDir, project.MainDirectory);
+        }
+        VoiceFile = Path.GetRelativePath(project.IterativeDirectory, _vceFile);
     }
 
     public IWaveProvider GetWaveProvider(ILogger log, bool loop = false)
