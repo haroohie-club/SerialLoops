@@ -1,0 +1,38 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:vm="using:SerialLoops.ViewModels.Dialogs"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:assets="using:SerialLoops.Assets"
+        xmlns:controls="using:SerialLoops.Controls"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        SizeToContent="WidthAndHeight"
+        TransparencyLevelHint="AcrylicBlur"
+        Background="{DynamicResource FallbackBackgroundColor}"
+        ExtendClientAreaToDecorationsHint="True"
+        x:DataType="vm:ProjectRenameDuplicateDialogViewModel"
+        x:Class="SerialLoops.Views.Dialogs.ProjectRenameDuplicateDialog"
+        Icon="/Assets/serial-loops.ico"
+        Title="{Binding Title}"
+        Name="Dialog">
+    <Panel>
+        <controls:AcrylicBorderHandler/>
+
+        <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto" Margin="30 45 30 15">
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static assets:Strings.Name}" VerticalAlignment="Center" />
+
+            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding NewName}"
+                     Watermark="{x:Static assets:Strings.Haroohie}" Margin="10 0 0 0"
+                     Width="200" Name="NameBox"/>
+
+            <StackPanel Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Orientation="Horizontal" Spacing="5"
+                        Margin="0 30 0 0">
+                <Button Content="{x:Static assets:Strings.Cancel}" IsCancel="True" Command="{Binding CancelCommand}"
+                        CommandParameter="{Binding #Dialog}"/>
+                <Button Content="{Binding SubmitText}" IsDefault="True" Command="{Binding SubmitCommand}"
+                        CommandParameter="{Binding #Dialog}"/>
+            </StackPanel>
+        </Grid>
+    </Panel>
+</Window>
+

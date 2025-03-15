@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
+using Emik;
 using HaruhiChokuretsuLib.Util;
+using MsBox.Avalonia.Enums;
 using SerialLoops.Assets;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Util;
+using SerialLoops.ViewModels;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Gif;
 using SixLabors.ImageSharp.PixelFormats;
@@ -65,5 +70,39 @@ public static class Shared
         SKRectI cropRect = new(x + 8, z + 4, x + 24, z + 20);
         bitmap.ExtractSubset(portrait, cropRect);
         return portrait;
+    }
+
+    public static async Task<bool> DeleteProjectAsync(string path, MainWindowViewModel mainWindow)
+    {
+        if (await mainWindow.Window.ShowMessageBoxAsync(Strings.ProjectDeleteConfirmTitle,
+                Strings.ProjectDeleteConfirmText,
+                ButtonEnum.YesNoCancel, Icon.Warning, mainWindow.Log) == ButtonResult.Yes)
+        {
+            if (!await Rubbish.MoveAsync(Path.GetDirectoryName(path)))
+            {
+                if (await mainWindow.Window.ShowMessageBoxAsync(Strings.ProjectDeleteFailedTitle,
+                        Strings.ProjectDeleteFailedText,ButtonEnum.YesNoCancel, Icon.Error, mainWindow.Log) == ButtonResult.Yes)
+                {
+                    try
+                    {
+                        Directory.Delete(Path.GetDirectoryName(path)!, true);
+                    }
+                    catch (Exception ex)
+                    {
+                        mainWindow.Log.LogException(Strings.ProjectDeleteHardFailedErrorMsg, ex);
+                    }
+                }
+                else
+                {
+                    return false; // don't remove this project if we didn't delete it
+                }
+            }
+            mainWindow.ProjectsCache.RemoveProject(path);
+            mainWindow.ProjectsCache.Save(mainWindow.Log);
+            mainWindow.UpdateRecentProjects();
+            return true;
+        }
+
+        return false;
     }
 }

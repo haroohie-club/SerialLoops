@@ -170,6 +170,11 @@ public partial class Project
         }
     }
 
+    public static Project Deserialize(string path)
+    {
+        return JsonSerializer.Deserialize<Project>(File.ReadAllText(path), SERIALIZER_OPTIONS);
+    }
+
     public LoadProjectResult Load(Config config, ILogger log, IProgressTracker tracker)
     {
         Config = config;
@@ -1055,6 +1060,10 @@ public partial class Project
         IO.CopyFiles(Path.Combine(tempDir, "data", "vce"), Path.Combine(BaseDirectory, "original", "vce"), log, "*.bin");
         IO.CopyFiles(Path.Combine(tempDir, "overlay"), Path.Combine(BaseDirectory, "original", "overlay"), log, "*.bin");
         IO.CopyFiles(Path.Combine(tempDir, "data", "movie"), Path.Combine(BaseDirectory, "rom", "data", "movie"), log, "*.mods");
+        File.Copy(Path.Combine(tempDir, "arm9.bin"), Path.Combine(BaseDirectory, "rom", "arm9.bin"), overwrite: true);
+        File.Copy(Path.Combine(tempDir, "arm9.bin"), Path.Combine(BaseDirectory, "src", "arm9.bin"), overwrite: true);
+        File.Copy(Path.Combine(tempDir, "arm9.bin"), Path.Combine(IterativeDirectory, "rom", "arm9.bin"), overwrite: true);
+        File.Copy(Path.Combine(tempDir, "arm9.bin"), Path.Combine(IterativeDirectory, "src", "arm9.bin"), overwrite: true);
 
         Build.BuildBase(this, config, log, tracker);
 
@@ -1101,7 +1110,7 @@ public partial class Project
         try
         {
             tracker.Focus($"{Path.GetFileNameWithoutExtension(projFile)} Project Data", 1);
-            Project project = JsonSerializer.Deserialize<Project>(File.ReadAllText(projFile), SERIALIZER_OPTIONS);
+            Project project = Deserialize(projFile);
             project.Localize = localize;
             tracker.Finished++;
 
@@ -1154,16 +1163,16 @@ public partial class Project
             slzip.CreateEntryFromFile(ProjectFile, Path.GetFileName(ProjectFile)!);
             slzip.Comment = BaseRomHash;
             log.Log("Adding charset.json to slzip...");
-            slzip.CreateEntryFromFile(Path.Combine(MainDirectory, "font", "charset.json"), Path.Combine("font", "charset.json"));
+            slzip.CreateEntryFromFile(Path.Combine(MainDirectory, "font", "charset.json"), Path.Combine("font", "charset.json").ToUnixPath());
             foreach (string file in Directory.GetFiles(BaseDirectory, "*"))
             {
                 log.Log($"Adding '{file}' to slzip...");
-                slzip.CreateEntryFromFile(file, Path.GetRelativePath(MainDirectory, file));
+                slzip.CreateEntryFromFile(file, Path.GetRelativePath(MainDirectory, file).ToUnixPath());
             }
             foreach (string file in Directory.GetFiles(Path.Combine(BaseDirectory, "assets"), "*", SearchOption.AllDirectories))
             {
                 log.Log($"Adding '{file}' to slzip...");
-                slzip.CreateEntryFromFile(file, Path.GetRelativePath(MainDirectory, file));
+                slzip.CreateEntryFromFile(file, Path.GetRelativePath(MainDirectory, file).ToUnixPath());
             }
             foreach (string file in Directory.GetFiles(Path.Combine(BaseDirectory, "src"), "*", SearchOption.AllDirectories))
             {
@@ -1172,24 +1181,24 @@ public partial class Project
                     continue;
                 }
                 log.Log($"Adding '{file}' to slzip...");
-                slzip.CreateEntryFromFile(file, Path.GetRelativePath(MainDirectory, file));
+                slzip.CreateEntryFromFile(file, Path.GetRelativePath(MainDirectory, file).ToUnixPath());
             }
-            slzip.CreateEntryFromFile(Path.Combine(BaseDirectory, "rom", $"{Name}.json"), Path.Combine("base", "rom", $"{Name}.json"));
-            slzip.CreateEntryFromFile(Path.Combine(BaseDirectory, "rom", "banner.bin"), Path.Combine("base", "rom", "banner.bin"));
+            slzip.CreateEntryFromFile(Path.Combine(BaseDirectory, "rom", $"{Name}.json"), Path.Combine("base", "rom", $"{Name}.json").ToUnixPath());
+            slzip.CreateEntryFromFile(Path.Combine(BaseDirectory, "rom", "banner.bin"), Path.Combine("base", "rom", "banner.bin").ToUnixPath());
             foreach (string file in Directory.GetFiles(Path.Combine(BaseDirectory, "rom", "data", "bgm"), "*"))
             {
                 log.Log($"Adding '{file}' to slzip...");
-                slzip.CreateEntryFromFile(file, Path.GetRelativePath(MainDirectory, file));
+                slzip.CreateEntryFromFile(file, Path.GetRelativePath(MainDirectory, file).ToUnixPath());
             }
             foreach (string file in Directory.GetFiles(Path.Combine(BaseDirectory, "rom", "data", "movie"), "*"))
             {
                 log.Log($"Adding '{file}' to slzip...");
-                slzip.CreateEntryFromFile(file, Path.GetRelativePath(MainDirectory, file));
+                slzip.CreateEntryFromFile(file, Path.GetRelativePath(MainDirectory, file).ToUnixPath());
             }
             foreach (string file in Directory.GetFiles(Path.Combine(BaseDirectory, "rom", "data", "vce"), "*"))
             {
                 log.Log($"Adding '{file}' to slzip...");
-                slzip.CreateEntryFromFile(file, Path.GetRelativePath(MainDirectory, file));
+                slzip.CreateEntryFromFile(file, Path.GetRelativePath(MainDirectory, file).ToUnixPath());
             }
         }
         catch (Exception ex)
@@ -1206,7 +1215,7 @@ public partial class Project
             using ZipArchive slzip = new(slzipFs, ZipArchiveMode.Read);
             string slprojTemp = Path.GetTempFileName();
             slzip.Entries.FirstOrDefault(f => f.Name.EndsWith(".slproj"))?.ExtractToFile(slprojTemp, overwrite: true);
-            Project project = JsonSerializer.Deserialize<Project>(File.ReadAllText(slprojTemp), SERIALIZER_OPTIONS);
+            Project project = Deserialize(slprojTemp);
             project.Config = config;
             File.Delete(slprojTemp);
             string oldProjectName = project.Name;
