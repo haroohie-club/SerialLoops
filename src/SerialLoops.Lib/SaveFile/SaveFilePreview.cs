@@ -47,7 +47,7 @@ public class SaveFilePreview(SaveSlotData slotData, Project project)
     {
         canvas.DrawHaroohieText(
             _project.LangCode != "ja" ? text.GetOriginalString(_project) : text,
-            paint ?? DialogueScriptParameter.Paint00,
+            paint ?? _project.DialogueColorFilters[0],
             _project,
             x,
             y
@@ -107,8 +107,8 @@ public class SaveFilePreview(SaveSlotData slotData, Project project)
         if (_project.Items.Find(item => item.Type == ItemDescription.ItemType.System_Texture
                                         && item.Name == "SYSTEX_SYS_MNU_B00") is not SystemTextureItem graphic)
         {
-            DrawText(canvas, date, 60, 25, DialogueScriptParameter.Paint01);
-            DrawText(canvas, time, 180, 25, DialogueScriptParameter.Paint01);
+            DrawText(canvas, date, 60, 25, project.DialogueColorFilters[1]);
+            DrawText(canvas, time, 180, 25, _project.DialogueColorFilters[0]);
             return;
         }
         SKBitmap bitmap = graphic.Grp.GetImage(transparentIndex: 0);

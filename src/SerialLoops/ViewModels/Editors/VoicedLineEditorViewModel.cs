@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Audio.ADX;
@@ -14,9 +16,11 @@ using ReactiveHistory;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SerialLoops.Assets;
+using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script.Parameters;
 using SerialLoops.Lib.Util;
+using SerialLoops.Models;
 using SerialLoops.Utility;
 using SerialLoops.ViewModels.Controls;
 using SerialLoops.ViewModels.Dialogs;
@@ -44,17 +48,17 @@ public class VoicedLineEditorViewModel : EditorViewModel
     [Reactive]
     public SKBitmap SubtitlesPreview { get; set; } = new(256, 384);
 
-    public ObservableCollection<LocalizedDialogueColor> SubtitleColors { get; } = new(Enum.GetValues<DialogueColor>().Select(c => new LocalizedDialogueColor(c)));
-    private LocalizedDialogueColor _subtitleColor;
-    public LocalizedDialogueColor SubtitleColor
+    public DialogueColorPalette DialogueColorPalette { get; }
+    private int _subtitleColor;
+    public Color SubtitleColor
     {
-        get => _subtitleColor;
+        get => _project.DialogueColors[_subtitleColor].ToAvalonia();
         set
         {
-            this.RaiseAndSetIfChanged(ref _subtitleColor, value);
+            this.RaiseAndSetIfChanged(ref _subtitleColor, _project.DialogueColors.Select(c => c.ToAvalonia()).ToList().IndexOf(value));
             if (_voiceMapEntry is not null)
             {
-                _voiceMapEntry.Color = _subtitleColor.Color;
+                _voiceMapEntry.Color = (DialogueColor)_subtitleColor;
                 UpdatePreview();
                 Description.UnsavedChanges = true;
             }
@@ -179,8 +183,8 @@ public class VoicedLineEditorViewModel : EditorViewModel
         _voiceMapEntry = _project.VoiceMap?.VoiceMapEntries.FirstOrDefault(v => v.VoiceFileName.Equals(Path.GetFileNameWithoutExtension(_vce.VoiceFile)));
         if (_voiceMapEntry is not null)
         {
-            _subtitleColor = (int)_voiceMapEntry.Color == 100 ? SubtitleColors.First(c => c.Color == DialogueColor.WHITE) :
-                SubtitleColors.First(c => c.Color == _voiceMapEntry.Color);
+            DialogueColorPalette = new(_project);
+            _subtitleColor = (int)_voiceMapEntry.Color == 100 ? 0 : (int)_voiceMapEntry.Color;
             _subtitle = _voiceMapEntry.Subtitle;
             _subtitleScreen = _voiceMapEntry.TargetScreen == VoiceMapEntry.Screen.BOTTOM ? DsScreen.BOTTOM : DsScreen.TOP;
             _forceDropShadow = _voiceMapEntry.TargetScreen == VoiceMapEntry.Screen.TOP_FORCE_SHADOW;
@@ -245,7 +249,7 @@ public class VoicedLineEditorViewModel : EditorViewModel
         SubtitlesPreview = new(256, 384);
         SKCanvas canvas = new(SubtitlesPreview);
         canvas.DrawColor(SKColors.DarkGray);
-        canvas.DrawLine(new() { X = 0, Y = 192 }, new() { X = 256, Y = 192 }, DialogueScriptParameter.Paint00);
+        canvas.DrawLine(new() { X = 0, Y = 192 }, new() { X = 256, Y = 192 }, _project.DialogueColorFilters[0]);
 
         if (_voiceMapEntry.TargetScreen == VoiceMapEntry.Screen.BOTTOM)
         {
@@ -253,7 +257,7 @@ public class VoicedLineEditorViewModel : EditorViewModel
             {
                 canvas.DrawHaroohieText(
                     _subtitle,
-                    DialogueScriptParameter.Paint07,
+                    _project.DialogueColorFilters[7],
                     _project,
                     i + _voiceMapEntry.X,
                     1 + _voiceMapEntry.Y + 192,
@@ -265,7 +269,7 @@ public class VoicedLineEditorViewModel : EditorViewModel
         {
             canvas.DrawHaroohieText(
                 _subtitle,
-                DialogueScriptParameter.Paint07,
+                _project.DialogueColorFilters[7],
                 _project,
                 1 + _voiceMapEntry.X,
                 1 + _voiceMapEntry.Y,
@@ -275,18 +279,7 @@ public class VoicedLineEditorViewModel : EditorViewModel
 
         canvas.DrawHaroohieText(
             _subtitle,
-            _voiceMapEntry.Color switch
-            {
-                DialogueColor.WHITE => DialogueScriptParameter.Paint00,
-                DialogueColor.YELLOW => DialogueScriptParameter.Paint01,
-                DialogueColor.OFF_WHITE => DialogueScriptParameter.Paint02,
-                DialogueColor.GRAY => DialogueScriptParameter.Paint03,
-                DialogueColor.LAVENDER => DialogueScriptParameter.Paint04,
-                DialogueColor.RED => DialogueScriptParameter.Paint05,
-                DialogueColor.FADED_GRAY => DialogueScriptParameter.Paint06,
-                DialogueColor.BLACK => DialogueScriptParameter.Paint07,
-                _ => DialogueScriptParameter.Paint00,
-            },
+            _project.DialogueColorFilters[(int)_voiceMapEntry.Color],
             _project,
             _voiceMapEntry.X,
             _voiceMapEntry.Y + (_voiceMapEntry.TargetScreen == VoiceMapEntry.Screen.BOTTOM ? 192 : 0),
@@ -295,14 +288,6 @@ public class VoicedLineEditorViewModel : EditorViewModel
 
         canvas.Flush();
     }
-}
-
-public class LocalizedDialogueColor(DialogueColor color) : ReactiveObject
-{
-    [Reactive]
-    public DialogueColor Color { get; set; } = color;
-
-    public override string ToString() => Strings.ResourceManager.GetString(Color.ToString());
 }
 
 public class LocalizedSubtitlePosition(VoiceMapEntry.YPosition position) : ReactiveObject

@@ -3154,6 +3154,24 @@ All hacks have been rolled back to preserve state.</value>
   <data name="HelpAhx" xml:space="preserve">
     <value>AHX is the audio codec most of the voice files are encoded as as it's specifically designed to compress voice. However, our encoder can sometimes cause issues with the game, so we generally recommend encoding these lines with the standard ADX format. That said, if you encounter issues with the regular Replace, try using this option!</value>
   </data>
+  <data name="DialogueColor0Info" xml:space="preserve">
+    <value>Default dialogue color</value>
+  </data>
+  <data name="DialogueColor1Info" xml:space="preserve">
+    <value>Default monologue color</value>
+  </data>
+  <data name="DialogueColor4Info" xml:space="preserve">
+    <value>Default information color</value>
+  </data>
+  <data name="DialogueColor7Info" xml:space="preserve">
+    <value>Default black color (including subtitle shadow)</value>
+  </data>
+  <data name="DialogueColorHeader" xml:space="preserve">
+    <value>#P{0:D2}</value><comment>{0} is the index of the particular color (1-16) in the dialogue color palette</comment>
+  </data>
+  <data name="EditDialogueColorsDialogTitle" xml:space="preserve">
+    <value>Edit Dialogue Colors</value>
+  </data>
   <data name="ProjectRenameText" xml:space="preserve">
     <value>Rename Project</value>
   </data>
