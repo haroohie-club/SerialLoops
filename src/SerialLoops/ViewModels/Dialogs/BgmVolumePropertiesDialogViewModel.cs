@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Windows.Input;
 using HaruhiChokuretsuLib.Util;
 using NAudio.Wave;
@@ -14,7 +15,7 @@ using SkiaSharp;
 
 namespace SerialLoops.ViewModels.Dialogs;
 
-public class BgmVolumePropertiesDialogViewModel : ViewModelBase
+public class BgmVolumePropertiesDialogViewModel : ViewModelBase, IDisposable
 {
     private ILogger _log;
     private WaveStream _wav;
@@ -70,5 +71,13 @@ public class BgmVolumePropertiesDialogViewModel : ViewModelBase
         VolumePreviewPlayer.Stop();
         float volumeNormalizationFactor = _maxAmplitude / VolumePreview.Provider.GetMaxAmplitude(_log);
         Volume *= volumeNormalizationFactor;
+    }
+
+    public void Dispose()
+    {
+        _wav?.Dispose();
+        VolumePreview?.Dispose();
+        Waveform?.Dispose();
+        GC.SuppressFinalize(this);
     }
 }

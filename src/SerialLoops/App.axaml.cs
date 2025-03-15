@@ -31,7 +31,22 @@ public partial class App : Application
                 DataContext = new MainWindowViewModel(),
             };
 
-            ((MainWindowViewModel)desktop.MainWindow.DataContext).Args = desktop.Args;
+            // We don't care that this is obsolete; the replacement doesn't seem to work? or at least I can't get it to
+#pragma warning disable CS0618 // Type or member is obsolete
+            UrlsOpened += (_, args) =>
+#pragma warning restore CS0618 // Type or member is obsolete
+            {
+                if (args?.Urls is not null && args.Urls.Length > 0)
+                {
+                    ((MainWindowViewModel)desktop.MainWindow.DataContext).Args = args.Urls;
+                    ((MainWindowViewModel)desktop.MainWindow.DataContext).HandleFilesAndPreviousProjects();
+                }
+            };
+
+            if (!OperatingSystem.IsMacOS())
+            {
+                ((MainWindowViewModel)desktop.MainWindow.DataContext).Args = desktop.Args;
+            }
         }
 
         base.OnFrameworkInitializationCompleted();

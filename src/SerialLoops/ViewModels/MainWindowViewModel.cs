@@ -47,6 +47,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private const string BASE_TITLE = "Serial Loops";
 
     public string[] Args { get; set; }
+    private bool _alreadyHandledStartup = false;
 
     [Reactive]
     public string Title { get; set; } = BASE_TITLE;
@@ -119,8 +120,6 @@ public partial class MainWindowViewModel : ViewModelBase
     public ICommand BuildIterativeCommand { get; }
     public ICommand BuildBaseCommand { get; }
     public ICommand BuildAndRunCommand { get; }
-
-    public SfxMixer SfxMixer { get; } = new();
 
     [Reactive]
     public KeyGesture SaveHotKey { get; set; }
@@ -227,32 +226,47 @@ public partial class MainWindowViewModel : ViewModelBase
             CheckForUpdatesCommand.Execute(null);
         }
 
+        // We handle file opening in an event for macOS, so let's skip all this here
+        if (OperatingSystem.IsMacOS() || !HandleFilesAndPreviousProjects())
+        {
+            OpenHomePanel(isAppStartup: true);
+        }
+    }
+
+    public bool HandleFilesAndPreviousProjects()
+    {
+        if (_alreadyHandledStartup)
+        {
+            return true;
+        }
+        _alreadyHandledStartup = true;
+
         if (Args?.Length > 0)
         {
             if (Args[0].EndsWith(".slproj", StringComparison.OrdinalIgnoreCase))
             {
-                OpenRecentProjectCommand.Execute(Args[0]);
+                OpenRecentProjectCommand.Execute(Args[0].Replace("file://", ""));
             }
             else if (Args[0].EndsWith(".slzip", StringComparison.OrdinalIgnoreCase))
             {
                 OpenHomePanel();
-                ImportProjectCommand.Execute(Args[0]);
+                ImportProjectCommand.Execute(Args[0].Replace("file://", ""));
             }
+
+            return true;
         }
         else if (CurrentConfig.AutoReopenLastProject && ProjectsCache.RecentProjects.Count > 0)
         {
             OpenRecentProjectCommand.Execute(ProjectsCache.RecentProjects[0]);
+            return true;
         }
-        else
-        {
-            OpenHomePanel();
-        }
+        return false;
     }
 
-    private void OpenHomePanel()
+    private void OpenHomePanel(bool isAppStartup = false)
     {
         HomePanel = new(this);
-        HomePanel homePanel = new() { DataContext = HomePanel };
+        HomePanel homePanel = new() { DataContext = HomePanel, IsAppStartup = isAppStartup };
         Window.MainContent.Content = homePanel;
     }
 

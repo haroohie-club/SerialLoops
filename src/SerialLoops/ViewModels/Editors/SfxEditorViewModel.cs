@@ -34,7 +34,7 @@ public class SfxEditorViewModel : EditorViewModel
         _archive = _project.Snd.SequenceArchives[Sfx.Entry.SequenceArchive].File;
         _sequence = _archive.Sequences[Sfx.Entry.Index];
 
-        _player = new(new(window.SfxMixer.Player));
+        _player = new(new(new SfxMixer().Player));
         _player.PrepareForSong([_sequence.Bank.File], _sequence.Bank.GetAssociatedWaves());
         _archive.ReadCommandData();
         _player.LoadSong(_archive.Commands, _archive.PublicLabels.ElementAt(_archive.Sequences.IndexOf(_sequence)).Value);
