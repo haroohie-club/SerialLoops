@@ -296,6 +296,7 @@ public partial class MainWindowViewModel : ViewModelBase
         Title = $"{BASE_TITLE} - {project.Name}";
 
         LoadCachedData();
+        UpdateRecentProjects();
 
         Window.MainContent.Content = ProjectPanel;
         HomePanel = null;

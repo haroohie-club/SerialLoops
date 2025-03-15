@@ -34,7 +34,7 @@
 
     <Panel>
         <controls:AcrylicBorderHandler/>
-        <Grid RowDefinitions="Auto,*">
+        <Grid RowDefinitions="Auto,*" Margin="{OnPlatform macOS='0 15 0 0', Default='0'}">
             <StackPanel IsVisible="False" Margin="5">
                 <Button Command="{Binding SaveProjectCommand}" HotKey="{Binding SaveHotKey}"/>
                 <Button Command="{Binding SearchProjectCommand}" HotKey="{Binding SearchHotKey}"/>

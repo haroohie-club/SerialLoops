@@ -90,8 +90,8 @@ public class ScriptItem : Item
                             new ScriptSectionEdge { Source = section, Target = s }));
                         Graph.AddEdgeRange(Event.ScriptSections.Where(s =>
                             Event.LabelsSection.Objects.Where(l =>
-                                    Event.InteractableObjectsSection.Objects.Select(o => o.ScriptBlock)
-                                        .Contains(l.Id))
+                                    Event.InteractableObjectsSection?.Objects.Select(o => o.ScriptBlock)
+                                        .Contains(l.Id) ?? false)
                                 .Select(l => l.Name.Replace("/", "")).Contains(s.Name)).Select(s =>
                             new ScriptSectionEdge { Source = section, Target = s }));
                         @continue = true;
