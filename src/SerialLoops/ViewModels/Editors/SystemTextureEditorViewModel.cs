@@ -80,6 +80,10 @@ public class SystemTextureEditorViewModel : EditorViewModel
                     tracker.InitializeTasks(() => SystemTexture.SetTexture(finalImage, replacePalette, _log), () => { });
                     await new ProgressDialog { DataContext = tracker }.ShowDialog(Window.Window);
                     this.RaisePropertyChanged(nameof(SystemTextureBitmap));
+                    if (replacePalette)
+                    {
+                        this.RaisePropertyChanged(nameof(PaletteBitmap));
+                    }
                     Description.UnsavedChanges = true;
                 }
                 catch (Exception ex)
