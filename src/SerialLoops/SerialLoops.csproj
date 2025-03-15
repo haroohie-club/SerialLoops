@@ -27,7 +27,6 @@
 
   <PropertyGroup>
     <CFBundleName>Serial Loops</CFBundleName>
-    <!-- Also defines .app file name -->
     <CFBundleDisplayName>Serial Loops</CFBundleDisplayName>
     <CFBundleIdentifier>club.haroohie.SerialLoops</CFBundleIdentifier>
     <CFBundleVersion>$(SLAssemblyVersion)</CFBundleVersion>
@@ -43,15 +42,13 @@
   <ItemGroup>
     <CFBundleDocumentTypes Include="slproj">
       <CFBundleTypeName>Serial Loops Project</CFBundleTypeName>
-      <CFBundleTypeIconFile>SerialLoops.icns</CFBundleTypeIconFile>
       <CFBundleTypeExtensions>slproj</CFBundleTypeExtensions>
       <CFBundleTypeRole>Editor</CFBundleTypeRole>
     </CFBundleDocumentTypes>
     <CFBundleDocumentTypes Include="slzip">
       <CFBundleTypeName>Serial Loops Exported Project</CFBundleTypeName>
-      <CFBundleTypeIconFile>SerialLoops.icns</CFBundleTypeIconFile>
       <CFBundleTypeExtensions>slzip</CFBundleTypeExtensions>
-      <CFBundleTypeRole>Editor</CFBundleTypeRole>
+      <CFBundleTypeRole>Viewer</CFBundleTypeRole>
     </CFBundleDocumentTypes>
   </ItemGroup>
 

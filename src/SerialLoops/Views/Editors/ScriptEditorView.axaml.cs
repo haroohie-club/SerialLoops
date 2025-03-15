@@ -56,21 +56,18 @@ public partial class ScriptEditorView : UserControl
                 Header = Strings.Cut,
                 Command = vm.CutCommand,
                 Icon = ControlGenerator.GetIcon("Cut", window.Log),
-                Gesture = vm.CutHotKey,
             },
             new NativeMenuItem
             {
                 Header = Strings.Copy,
                 Command = vm.CopyCommand,
                 Icon = ControlGenerator.GetIcon("Copy", window.Log),
-                Gesture = vm.CopyHotKey,
             },
             new NativeMenuItem
             {
                 Header = Strings.Paste,
                 Command = vm.PasteCommand,
                 Icon = ControlGenerator.GetIcon("Paste", window.Log),
-                Gesture = vm.PasteHotKey,
             },
         ];
         // window.WindowMenu[MenuHeader.EDIT].Menu!.Items.Last().Bind(NativeMenuItem.IsEnabledProperty,
@@ -132,5 +129,30 @@ public partial class ScriptEditorView : UserControl
         _dragSource = null;
         e.Inner.DragEffects = DragDropEffects.None;
         e.Handled = true;
+    }
+
+    private void CommandTree_OnKeyDown(object sender, KeyEventArgs e)
+    {
+        ScriptEditorViewModel vm = (ScriptEditorViewModel)DataContext!;
+        if (vm.CutHotKey.Matches(e))
+        {
+            vm.CutCommand.Execute(null);
+        }
+        else if (vm.CopyHotKey.Matches(e))
+        {
+            vm.CopyCommand.Execute(null);
+        }
+        else if (vm.PasteHotKey.Matches(e))
+        {
+            vm.PasteCommand.Execute(null);
+        }
+        else if (vm.DeleteHotKey.Matches(e))
+        {
+            vm.DeleteScriptCommandOrSectionCommand.Execute(null);
+        }
+        else if (vm.AddCommandHotKey.Matches(e))
+        {
+            vm.AddScriptCommandCommand.Execute(null);
+        }
     }
 }
