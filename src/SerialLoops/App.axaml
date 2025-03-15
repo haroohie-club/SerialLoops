@@ -66,7 +66,7 @@
         </Style>
         <Style Selector="TabItem">
             <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Height" Value="30"/>
+            <Setter Property="Height" Value="26"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Background" Value="{DynamicResource TabItemBackgroundColor}"/>
             <Setter Property="Margin" Value="0 0 0 0"/>
@@ -77,9 +77,67 @@
         </Style>
 
         <!-- Numeric Up/Down styling -->
-        <!-- <Style Selector="TabControl"> -->
-        <!--     <Setter Property="FontFamily"></Setter> -->
-        <!-- </Style> -->
+        <Style Selector="NumericUpDown /template/ ButtonSpinner">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <DataValidationErrors>
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="{TemplateBinding CornerRadius}"
+                                MinHeight="{TemplateBinding MinHeight}">
+                            <DockPanel>
+                                <UniformGrid Rows="2" Name="PART_SpinnerPanel"
+                                             DockPanel.Dock="Right"
+                                             Margin="3 0 0 0"
+                                             IsVisible="{TemplateBinding ShowButtonSpinner}">
+                                    <RepeatButton Name="PART_IncreaseButton"
+                                                  Classes="ButtonSpinnerRepeatButton"
+                                                  VerticalContentAlignment="Center"
+                                                  Foreground="{TemplateBinding Foreground}"
+                                                  BorderThickness="0"
+                                                  Background="{TemplateBinding Background}"
+                                                  FontSize="{TemplateBinding FontSize}">
+                                        <Path Fill="{TemplateBinding Foreground}"
+                                              Width="15"
+                                              Height="5"
+                                              Stretch="Uniform"
+                                              HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              Data="{StaticResource ButtonSpinnerIncreaseButtonIcon}" />
+                                    </RepeatButton>
+
+                                    <RepeatButton Name="PART_DecreaseButton"
+                                                  Classes="ButtonSpinnerRepeatButton"
+                                                  Foreground="{TemplateBinding Foreground}"
+                                                  BorderThickness="0"
+                                                  BorderBrush="{TemplateBinding BorderBrush}"
+                                                  Background="{TemplateBinding Background}"
+                                                  VerticalContentAlignment="Center"
+                                                  FontSize="{TemplateBinding FontSize}">
+                                        <Path Fill="{TemplateBinding Foreground}"
+                                              Width="15"
+                                              Height="5"
+                                              Stretch="Uniform"
+                                              HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              Data="{StaticResource ButtonSpinnerDecreaseButtonIcon}" />
+                                    </RepeatButton>
+                                </UniformGrid>
+
+                                <ContentPresenter Name="PART_ContentPresenter"
+                                                  Grid.Column="1"
+                                                  ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                  Content="{TemplateBinding Content}"
+                                                  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                  Padding="{TemplateBinding Padding}" />
+                            </DockPanel>
+                        </Border>
+                    </DataValidationErrors>
+                </ControlTemplate>
+            </Setter>
+        </Style>
 
         <!-- Windows menu styling -->
         <OnPlatform>
