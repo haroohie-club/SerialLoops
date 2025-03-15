@@ -42,19 +42,12 @@ modules:
       - make
       - make install
 
-  - name: SDL
-    buildsystem: cmake
-    sources:
-      - type: git
-        url: https://github.com/libsdl-org/SDL.git
-        branch: release-2.32.x
-
   - name: SerialLoops
     buildsystem: simple
     sources:
       - type: git
         url: https://github.com/haroohie-club/SerialLoops.git
-        branch: Avalonia
+        branch: main
       - ./nuget-sources.json
       - type: patch
         path: patches/sandbox.patch
