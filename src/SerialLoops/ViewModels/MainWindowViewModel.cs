@@ -268,7 +268,6 @@ public partial class MainWindowViewModel : ViewModelBase
 
     private void OpenHomePanel(bool isAppStartup = false)
     {
-        ToolBar.Classes.Clear();
         HomePanel = new(this);
         HomePanel homePanel = new() { DataContext = HomePanel, IsAppStartup = isAppStartup };
         Window.MainContent.Content = homePanel;
@@ -297,8 +296,7 @@ public partial class MainWindowViewModel : ViewModelBase
         Title = $"{BASE_TITLE} - {project.Name}";
 
         LoadCachedData();
-
-        ToolBar.Classes.Add("project");
+        
         Window.MainContent.Content = ProjectPanel;
         HomePanel = null;
     }
