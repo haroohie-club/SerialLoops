@@ -1,6 +1,5 @@
 ﻿using HaruhiChokuretsuLib.Archive.Event;
 using SerialLoops.Lib.Util;
-using SkiaSharp;
 
 namespace SerialLoops.Lib.Script.Parameters;
 
