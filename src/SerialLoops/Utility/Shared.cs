@@ -83,7 +83,14 @@ public static class Shared
                 if (await mainWindow.Window.ShowMessageBoxAsync(Strings.ProjectDeleteFailedTitle,
                         Strings.ProjectDeleteFailedText,ButtonEnum.YesNoCancel, Icon.Error, mainWindow.Log) == ButtonResult.Yes)
                 {
-                    Directory.Delete(Path.GetDirectoryName(path)!, true);
+                    try
+                    {
+                        Directory.Delete(Path.GetDirectoryName(path)!, true);
+                    }
+                    catch (Exception ex)
+                    {
+                        mainWindow.Log.LogException(Strings.ProjectDeleteHardFailedErrorMsg, ex);
+                    }
                 }
                 else
                 {

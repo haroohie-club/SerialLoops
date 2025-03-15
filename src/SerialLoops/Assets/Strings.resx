@@ -3202,4 +3202,7 @@ All hacks have been rolled back to preserve state.</value>
   <data name="ProjectDuplicatedFailureText" xml:space="preserve">
     <value>Failed to duplicated project. Please check the logs and file an issue if this is a recurring problem.</value>
   </data>
+  <data name="ProjectDeleteHardFailedErrorMsg" xml:space="preserve">
+    <value>Failed to hard delete project.</value>
+  </data>
 </root>

@@ -731,7 +731,7 @@ public partial class MainWindowViewModel : ViewModelBase
         else
         {
             projectPath = (await Window.ShowOpenFilePickerAsync(Strings.ProjectRenameText,
-                [new(Strings.Serial_Loops_Project) { Patterns = [$"*{Project.PROJECT_FORMAT}"] }],
+                [new(Strings.Serial_Loops_Project) { Patterns = [$"*.{Project.PROJECT_FORMAT}"] }],
                 CurrentConfig.ProjectsDirectory))?.TryGetLocalPath();
             if (string.IsNullOrEmpty(projectPath))
             {
@@ -748,7 +748,8 @@ public partial class MainWindowViewModel : ViewModelBase
 
         if (OpenProject is not null)
         {
-            OpenProjectName = Path.GetFileNameWithoutExtension(newProj);
+            OpenProject.Name = Path.GetFileNameWithoutExtension(newProj);
+            OpenProjectName = OpenProject.Name;
         }
         ProjectsCache.RenameProject(projectPath, newProj);
         ProjectsCache.Save(Log);
@@ -766,7 +767,7 @@ public partial class MainWindowViewModel : ViewModelBase
         else
         {
             projectPath = (await Window.ShowOpenFilePickerAsync(Strings.ProjectRenameText,
-                [new(Strings.Serial_Loops_Project) { Patterns = [$"*{Project.PROJECT_FORMAT}"] }],
+                [new(Strings.Serial_Loops_Project) { Patterns = [$"*.{Project.PROJECT_FORMAT}"] }],
                 CurrentConfig.ProjectsDirectory))?.TryGetLocalPath();
             if (string.IsNullOrEmpty(projectPath))
             {

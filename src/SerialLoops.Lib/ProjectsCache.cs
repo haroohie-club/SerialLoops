@@ -81,11 +81,13 @@ public class ProjectsCache
 
     public void RenameProject(string oldProject, string newProject)
     {
-        RecentProjects.Remove(oldProject);
-        RecentProjects.Add(newProject);
-        RecentWorkspace oldWorkspace = RecentWorkspaces[oldProject];
-        RecentWorkspaces.Remove(oldProject);
-        RecentWorkspaces.Add(newProject, oldWorkspace);
+        if (RecentProjects.Remove(oldProject))
+        {
+            RecentProjects.Add(newProject);
+            RecentWorkspace oldWorkspace = RecentWorkspaces[oldProject];
+            RecentWorkspaces.Remove(oldProject);
+            RecentWorkspaces.Add(newProject, oldWorkspace);
+        }
     }
 }
 

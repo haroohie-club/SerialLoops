@@ -5973,6 +5973,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to hard delete project..
+        /// </summary>
+        public static string ProjectDeleteHardFailedErrorMsg {
+            get {
+                return ResourceManager.GetString("ProjectDeleteHardFailedErrorMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete Project.
         /// </summary>
         public static string ProjectDeleteText {
