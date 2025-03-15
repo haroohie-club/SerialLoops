@@ -1,0 +1,51 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:vm="using:SerialLoops.ViewModels.Dialogs"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:assets="using:SerialLoops.Assets"
+        xmlns:controls="using:SerialLoops.Controls"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        TransparencyLevelHint="AcrylicBlur"
+        Background="{DynamicResource FallbackBackgroundColor}"
+        ExtendClientAreaToDecorationsHint="True"
+        Width="470" Height="420"
+        x:DataType="vm:EditDialogueColorsDialogViewModel"
+        x:Class="SerialLoops.Views.Dialogs.EditDialogueColorsDialog"
+        Title="{x:Static assets:Strings.EditDialogueColorsDialogTitle}"
+        Icon="/Assets/serial-loops.ico"
+        Name="Dialog">
+    <Panel>
+        <controls:AcrylicBorderHandler/>
+
+        <Grid RowDefinitions="*, Auto" Margin="10 30 10 10">
+            <ScrollViewer Grid.Row="0">
+                <ItemsRepeater ItemsSource="{Binding Colors}">
+                    <ItemsRepeater.Layout>
+                        <WrapLayout Orientation="Horizontal" HorizontalSpacing="20" VerticalSpacing="20"/>
+                    </ItemsRepeater.Layout>
+                    <ItemsRepeater.ItemTemplate>
+                        <DataTemplate x:DataType="vm:DialogueColorWithInfo">
+                            <controls:HeaderedContentControlWithSvg Header="{Binding IndexHeader}"
+                                                                    IconPath="avares://SerialLoops/Assets/Icons/Help.svg"
+                                                                    IconTip="{Binding Info}">
+                                <StackPanel Orientation="Horizontal" Spacing="3">
+                                    <ColorPicker Color="{Binding Color}" IsAlphaVisible="False" IsAlphaEnabled="False"
+                                                 Palette="{Binding #Dialog.((vm:EditDialogueColorsDialogViewModel)DataContext).DialogueColorPalette}"/>
+                                </StackPanel>
+                            </controls:HeaderedContentControlWithSvg>
+                        </DataTemplate>
+                    </ItemsRepeater.ItemTemplate>
+                </ItemsRepeater>
+            </ScrollViewer>
+
+            <StackPanel Grid.Row="1" HorizontalAlignment="Right" Orientation="Horizontal">
+                <Button Content="{x:Static assets:Strings.Cancel}" IsCancel="True"
+                        Command="{Binding CancelCommand}" CommandParameter="{Binding #Dialog}"/>
+                <Button Content="{x:Static assets:Strings.Save}" IsDefault="True"
+                        Command="{Binding SaveCommand}" CommandParameter="{Binding #Dialog}"/>
+            </StackPanel>
+        </Grid>
+    </Panel>
+</Window>
+

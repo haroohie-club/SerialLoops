@@ -2023,6 +2023,51 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Default dialogue color.
+        /// </summary>
+        public static string DialogueColor0Info {
+            get {
+                return ResourceManager.GetString("DialogueColor0Info", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default monologue color.
+        /// </summary>
+        public static string DialogueColor1Info {
+            get {
+                return ResourceManager.GetString("DialogueColor1Info", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default information color.
+        /// </summary>
+        public static string DialogueColor4Info {
+            get {
+                return ResourceManager.GetString("DialogueColor4Info", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default black color (including subtitle shadow).
+        /// </summary>
+        public static string DialogueColor7Info {
+            get {
+                return ResourceManager.GetString("DialogueColor7Info", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to #P{0:D2}.
+        /// </summary>
+        public static string DialogueColorHeader {
+            get {
+                return ResourceManager.GetString("DialogueColorHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dimmed.
         /// </summary>
         public static string DIMMED {
@@ -2307,6 +2352,15 @@ namespace SerialLoops.Assets {
         public static string Edit_UI_Text___ {
             get {
                 return ResourceManager.GetString("Edit UI Text...", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit Dialogue Colors.
+        /// </summary>
+        public static string EditDialogueColorsDialogTitle {
+            get {
+                return ResourceManager.GetString("EditDialogueColorsDialogTitle", resourceCulture);
             }
         }
         

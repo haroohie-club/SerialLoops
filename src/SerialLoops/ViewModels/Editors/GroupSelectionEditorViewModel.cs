@@ -275,7 +275,7 @@ public class ScenarioActivityViewModel : ViewModelBase
     {
         TitlePlateText = new(68, 16);
         using SKCanvas titlePlateCanvas = new(TitlePlateText);
-        titlePlateCanvas.DrawHaroohieText(Activity.Title, DialogueScriptParameter.Paint00, _selection.OpenProject, 0, 0);
+        titlePlateCanvas.DrawHaroohieText(Activity.Title, _selection.OpenProject.DialogueColorFilters[0], _selection.OpenProject, 0, 0);
         titlePlateCanvas.Flush();
         TitlePlateText = TitlePlateText.Resize(new SKSizeI(136, 32), SKSamplingOptions.Default);
     }
@@ -289,7 +289,7 @@ public class ScenarioActivityViewModel : ViewModelBase
         canvas.DrawRect(0, 12, 256, 28, new() { Color = dialogueBoxColor });
         canvas.DrawBitmap(_selection.OpenProject.DialogueBitmap, new(0, 37, 32, 64),
             new SKRect(224, 13, 256, 40));
-        canvas.DrawHaroohieText(description, DialogueScriptParameter.Paint00, _selection.OpenProject, y: 8);
+        canvas.DrawHaroohieText(description, _selection.OpenProject.DialogueColorFilters[0], _selection.OpenProject, y: 8);
         canvas.Flush();
         SelectedDescriptionImage = SelectedDescriptionImage.Resize(new SKSizeI(512, 80), SKSamplingOptions.Default);
     }

@@ -36,8 +36,10 @@
                     <TextBox Text="{Binding Subtitle, Mode=TwoWay}" Watermark="{x:Static assets:Strings.Enter_subtitle_text___}" Width="400"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="20">
-                    <ComboBox ItemsSource="{Binding SubtitleColors}" SelectedItem="{Binding SubtitleColor}"
-                              VerticalAlignment="Center"/>
+                    <ColorView Palette="{Binding DialogueColorPalette}" SelectedIndex="1" IsColorPaletteVisible="True"
+                               IsAlphaVisible="False" IsAccentColorsVisible="False" IsColorComponentsVisible="False" IsColorModelVisible="False"
+                               IsColorSpectrumVisible="False" IsComponentSliderVisible="False" IsHexInputVisible="False" IsColorSpectrumSliderVisible="False"
+                               IsComponentTextInputVisible="False" Color="{Binding SubtitleColor}"/>
                     <StackPanel Spacing="3" Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock Text="{x:Static assets:Strings.Target_Screen}" VerticalAlignment="Center"/>
                         <controls:ScreenSelector DataContext="{Binding ScreenSelector}"/>

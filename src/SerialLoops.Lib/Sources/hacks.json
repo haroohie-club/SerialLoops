@@ -163,60 +163,6 @@
         ]
     },
     {
-        "Name": "Change Monologue Text Color",
-        "Description": "Changes the monologue text color to one of the other built in colors.",
-        "InjectionSites": [
-            {
-                "Code": "ARM9",
-                "Repl": true,
-                "Location": "0208EFBB"
-            }
-        ],
-        "Files": [
-            {
-                "File": "0208EFBB.s",
-                "Destination": "replSource/0208EFBB/0208EFBB.s",
-                "Symbols": [],
-                "Parameters": [
-                    {
-                        "Name": "newColorCode",
-                        "DescriptiveName": "New Color",
-                        "Values": [
-                            {
-                                "Name": "White",
-                                "Value": "30"
-                            },
-                            {
-                                "Name": "Off-White",
-                                "Value": "32"
-                            },
-                            {
-                                "Name": "Gray",
-                                "Value": "33"
-                            },
-                            {
-                                "Name": "Lavendar",
-                                "Value": "34"
-                            },
-                            {
-                                "Name": "Red",
-                                "Value": "35"
-                            },
-                            {
-                                "Name": "Faded Gray",
-                                "Value": "36"
-                            },
-                            {
-                                "Name": "Black",
-                                "Value": "37"
-                            }
-                        ]
-                    }
-                ]
-            }
-        ]
-    },
-    {
         "Name": "Investigation Phase - All Chibis Playable",
         "Description": "This hack makes all chibis playable in the investigation phase by changing checks that specifically look for Kyon to look for the first chibi placed on the map. Ensure the chibi you want to play as is the first one you place down and this hack will take care of the rest.",
         "InjectionSites": [

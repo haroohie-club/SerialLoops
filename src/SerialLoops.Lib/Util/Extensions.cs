@@ -20,7 +20,7 @@ using static SerialLoops.Lib.Script.SpritePositioning;
 
 namespace SerialLoops.Lib.Util;
 
-public static class Extensions
+public static partial class Extensions
 {
     public static SKSamplingOptions HighQualitySamplingOptions => new(SKFilterMode.Linear, SKMipmapMode.Linear);
 
@@ -99,6 +99,20 @@ public static class Extensions
             }
 
             foreach (Match match in Regex.Matches(originalString, @"。Ｐ(\d{2})").Cast<Match>())
+            {
+                originalString = originalString.Replace(match.Value, match.Value.GetSubstitutedString(project));
+            }
+
+            foreach (Match match in Regex.Matches(originalString, @"。ｘ(\d{2})").Cast<Match>())
+            {
+                originalString = originalString.Replace(match.Value, match.Value.GetSubstitutedString(project));
+            }
+            foreach (Match match in Regex.Matches(originalString, @"。ｙ(\d{2})").Cast<Match>())
+            {
+                originalString = originalString.Replace(match.Value, match.Value.GetSubstitutedString(project));
+            }
+            originalString = Regex.Replace(originalString, @"。Ｘ", "#X");
+            foreach (Match match in Regex.Matches(originalString, @"。Ｙ(\d{1,2})").Cast<Match>())
             {
                 originalString = originalString.Replace(match.Value, match.Value.GetSubstitutedString(project));
             }
@@ -314,19 +328,39 @@ public static class Extensions
         public short Index { get; set; }
     }
 
+    public static SKPaint GetColorFilter(this SKColor color)
+    {
+        return new()
+        {
+            ColorFilter = SKColorFilter.CreateColorMatrix(
+                [color.Red / 256f, 0f,                 0f,                0f, 0f,
+                    0f,                color.Green / 256f, 0f,                0f, 0f,
+                    0f,                0f,                 color.Blue / 256f, 0f, 0f,
+                    0f,                0f,                 0f,                1f, 0f]
+            ),
+        };
+    }
+
     public static void DrawHaroohieText(this SKCanvas canvas, string text, SKPaint color, Project project, int x = 10,
         int y = 352, bool formatting = true)
     {
         int currentX = x;
         int currentY = y;
+        int manualX = -1;
+        int manualY = -1;
+        int manualIndent = 0;
 
         for (int i = 0; i < text.Length; i++)
         {
             // handle newlines
-            if (text[i] == '\n')
+            if (text[i] == '\n' || (i < text.Length - 2 && text[i..(i + 2)] == "#n"))
             {
-                currentX = 10;
-                currentY += 14;
+                currentX = 10 + manualIndent;
+                currentY += manualY >= 0 ? manualY : 14;
+                if (text[i] == '#')
+                {
+                    i++;
+                }
                 continue;
             }
 
@@ -355,18 +389,26 @@ public static class Extensions
                 }
                 else if (i < text.Length - 4 && Regex.IsMatch(text[i..(i + 4)], @"#P\d{2}"))
                 {
-                    color = int.Parse(Regex.Match(text[i..(i + 4)], @"#P(?<id>\d{2})").Groups["id"].Value) switch
-                    {
-                        1 => DialogueScriptParameter.Paint01,
-                        2 => DialogueScriptParameter.Paint02,
-                        3 => DialogueScriptParameter.Paint03,
-                        4 => DialogueScriptParameter.Paint04,
-                        5 => DialogueScriptParameter.Paint05,
-                        6 => DialogueScriptParameter.Paint06,
-                        7 => DialogueScriptParameter.Paint07,
-                        _ => DialogueScriptParameter.Paint00,
-                    };
+                    color = project.DialogueColorFilters.ElementAtOrDefault(int.Parse(Regex.Match(text[i..(i + 4)], @"#P(?<id>\d{2})").Groups["id"].Value));
                     i += 3;
+                    continue;
+                }
+                else if (i < text.Length - 4 && ManualXRegex().IsMatch(text[i..(i + 4)]))
+                {
+                    manualX = int.Parse(ManualXRegex().Match(text[i..(i + 4)]).Groups["offset"].Value) + 14;
+                    i += 3;
+                    continue;
+                }
+                else if (i < text.Length - 4 && ManualYRegex().IsMatch(text[i..(i + 4)]))
+                {
+                    manualY = int.Parse(ManualYRegex().Match(text[i..(i + 4)]).Groups["offset"].Value) + 14;
+                    i += 3;
+                    continue;
+                }
+                else if (i < text.Length - 2 && text[i..(i + 2)] == "#X")
+                {
+                    manualIndent = currentX;
+                    i++;
                     continue;
                 }
                 else if (i < text.Length - 3 && text[i..(i + 3)] == "#DP")
@@ -397,14 +439,21 @@ public static class Extensions
                 }
             }
 
-            FontReplacement replacement = project.FontReplacement.ReverseLookup(text[i]);
-            if (replacement is not null && project.LangCode != "ja")
+            if (manualX >= 0)
             {
-                currentX += replacement.Offset;
+                currentX += manualX;
             }
             else
             {
-                currentX += 14;
+                FontReplacement replacement = project.FontReplacement.ReverseLookup(text[i]);
+                if (replacement is not null && project.LangCode != "ja")
+                {
+                    currentX += replacement.Offset;
+                }
+                else
+                {
+                    currentX += 14;
+                }
             }
         }
     }
@@ -464,6 +513,11 @@ public static class Extensions
     {
         return str.Replace('\\', '/');
     }
+
+    [GeneratedRegex(@"#x(?<offset>\d{2})")]
+    private static partial Regex ManualXRegex();
+    [GeneratedRegex(@"#y(?<offset>\d{2})")]
+    private static partial Regex ManualYRegex();
 }
 
 public class SKColorJsonConverter : JsonConverter<SKColor>

@@ -114,6 +114,7 @@ public partial class MainWindowViewModel : ViewModelBase
     public ICommand ApplyHacksCommand { get; }
     public ICommand CreateAsmHackCommand { get; }
     public ICommand EditUiTextCommand { get; }
+    public ICommand EditDialogueColorsCommand { get; }
     public ICommand EditTutorialMappingsCommand { get; }
     public ICommand SearchProjectCommand { get; }
 
@@ -152,6 +153,7 @@ public partial class MainWindowViewModel : ViewModelBase
         ApplyHacksCommand = ReactiveCommand.CreateFromTask(ApplyHacksCommand_Executed);
         CreateAsmHackCommand = ReactiveCommand.CreateFromTask(CreateAsmHackCommand_Executed);
         EditUiTextCommand = ReactiveCommand.CreateFromTask(EditUiTextCommand_Executed);
+        EditDialogueColorsCommand = ReactiveCommand.CreateFromTask(EditDialogueColorsCommand_Executed);
         EditTutorialMappingsCommand = ReactiveCommand.CreateFromTask(EditTutorialMappingsCommand_Executed);
         ProjectSettingsCommand = ReactiveCommand.CreateFromTask(ProjectSettingsCommand_Executed);
         MigrateProjectCommand = ReactiveCommand.CreateFromTask(MigrateProjectCommand_Executed);
@@ -462,6 +464,13 @@ public partial class MainWindowViewModel : ViewModelBase
         EditUiTextDialogViewModel editUiTextDialogViewModel = new(OpenProject, Log);
         EditUiTextDialog editUiTextDialog = new() { DataContext = editUiTextDialogViewModel };
         await editUiTextDialog.ShowDialog(Window);
+    }
+
+    private async Task EditDialogueColorsCommand_Executed()
+    {
+        EditDialogueColorsDialogViewModel editDialogueColorsDialogViewModel = new(OpenProject, Log);
+        EditDialogueColorsDialog editDialogueColorsDialog = new() { DataContext = editDialogueColorsDialogViewModel };
+        await editDialogueColorsDialog.ShowDialog(Window);
     }
 
     private async Task EditTutorialMappingsCommand_Executed()
@@ -1366,6 +1375,11 @@ public partial class MainWindowViewModel : ViewModelBase
                 Header = Strings.Edit_UI_Text___,
                 Command = EditUiTextCommand,
                 Icon = ControlGenerator.GetIcon("Edit_UI_Text", Log),
+            },
+            new NativeMenuItem
+            {
+                Header = Strings.EditDialogueColorsDialogTitle,
+                Command = EditDialogueColorsCommand,
             },
             new NativeMenuItem
             {
