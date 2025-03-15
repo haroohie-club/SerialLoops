@@ -4,7 +4,6 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using SerialLoops.Lib;
-using SerialLoops.Lib.Factories;
 using SerialLoops.Tests.Shared;
 
 namespace SerialLoops.Tests.Headless.Panels;

@@ -2,7 +2,6 @@
 using HaruhiChokuretsuLib.Util;
 #if !WINDOWS
 using NAudio.Sdl2;
-using NAudio.Sdl2.Structures;
 #endif
 using NAudio.Wave;
 
