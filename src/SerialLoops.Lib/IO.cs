@@ -140,6 +140,27 @@ public static class IO
         }
     }
 
+    public static bool CopyDirectoryRecursively(string directory, string destination)
+    {
+        if (string.IsNullOrEmpty(destination) || !Directory.Exists(directory) || Directory.Exists(destination))
+        {
+            return false;
+        }
+
+        Directory.CreateDirectory(destination);
+        foreach (string file in Directory.GetFiles(directory))
+        {
+            File.Copy(file, Path.Combine(destination, Path.GetFileName(file)));
+        }
+
+        foreach (string subdirectory in Directory.GetDirectories(directory))
+        {
+            CopyDirectoryRecursively(subdirectory, Path.Combine(destination, Path.GetFileName(subdirectory)));
+        }
+
+        return true;
+    }
+
     public static void CopyFileToDirectories(Project project, string sourceFile, string relativePath, ILogger log)
     {
         string baseFile = Path.Combine(project.BaseDirectory, relativePath);

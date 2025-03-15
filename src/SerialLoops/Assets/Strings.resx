@@ -3172,6 +3172,57 @@ All hacks have been rolled back to preserve state.</value>
   <data name="EditDialogueColorsDialogTitle" xml:space="preserve">
     <value>Edit Dialogue Colors</value>
   </data>
+  <data name="ProjectRenameText" xml:space="preserve">
+    <value>Rename Project</value>
+  </data>
+  <data name="ProjectDuplicateText" xml:space="preserve">
+    <value>Duplicate (Copy) Project</value>
+  </data>
+  <data name="ProjectDeleteText" xml:space="preserve">
+    <value>Delete Project</value>
+  </data>
+  <data name="ProjectDeleteConfirmTitle" xml:space="preserve">
+    <value>Delete This Project?</value>
+  </data>
+  <data name="ProjectDeleteConfirmText" xml:space="preserve">
+    <value>Are you sure you want to delete this project?</value>
+  </data>
+  <data name="ProjectDeleteFailedTitle" xml:space="preserve">
+    <value>Failure! Permanently Delete?</value>
+  </data>
+  <data name="ProjectDeleteFailedText" xml:space="preserve">
+    <value>Failed to move the project to the trash/recycle bin! Would you like to permanently delete the project instead? WARNING: This cannot be undone!</value>
+  </data>
+  <data name="Duplicate" xml:space="preserve">
+    <value>Duplicate</value>
+  </data>
+  <data name="ProjectRenameDuplicateMustEnterNameErrorTitle" xml:space="preserve">
+    <value>Must Enter Project Name!</value>
+  </data>
+  <data name="ProjectRenameDuplicateMustEnterNameErrorText" xml:space="preserve">
+    <value>You must enter a name for the project!</value>
+  </data>
+  <data name="ProjectAlreadyExistsErrorTitle" xml:space="preserve">
+    <value>Project Already Exists!</value>
+  </data>
+  <data name="ProjectAlreadyExistsErrorText" xml:space="preserve">
+    <value>A project of that name already exists! Please choose a different name for your project.</value>
+  </data>
+  <data name="ProjectDuplicatedSuccessTitle" xml:space="preserve">
+    <value>Project Duplication Succeeded!</value>
+  </data>
+  <data name="ProjectDuplicatedSuccessText" xml:space="preserve">
+    <value>Project successfully duplicated! Would you like to open it now?</value>
+  </data>
+  <data name="ProjectDuplicatedFailureTitle" xml:space="preserve">
+    <value>Project Duplication Failed!</value>
+  </data>
+  <data name="ProjectDuplicatedFailureText" xml:space="preserve">
+    <value>Failed to duplicated project. Please check the logs and file an issue if this is a recurring problem.</value>
+  </data>
+  <data name="ProjectDeleteHardFailedErrorMsg" xml:space="preserve">
+    <value>Failed to hard delete project.</value>
+  </data>
   <data name="SdlExceptionTooManyDevicesText" xml:space="preserve">
     <value>Sorry, but you currently have too many sound items open to open another one. Please close some and then try again.</value>
   </data>

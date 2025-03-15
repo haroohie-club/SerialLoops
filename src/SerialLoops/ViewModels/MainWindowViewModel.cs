@@ -70,6 +70,8 @@ public partial class MainWindowViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _openProjectIcon, value);
     }
 
+    public HomePanelViewModel HomePanel { get; set; }
+
     public MainWindow Window { get; set; }
     public ProjectsCache ProjectsCache { get; set; }
     public Config CurrentConfig { get; set; }
@@ -92,6 +94,9 @@ public partial class MainWindowViewModel : ViewModelBase
     public ICommand OpenProjectCommand { get; }
     public ICommand OpenRecentProjectCommand { get; }
     public ICommand ImportProjectCommand { get; }
+    public ICommand RenameProjectCommand { get; }
+    public ICommand DuplicateProjectCommand { get; }
+    public ICommand DeleteProjectCommand { get; }
     public ICommand EditSaveCommand { get; }
     public ICommand AboutCommand { get; }
     public ICommand PreferencesCommand { get; }
@@ -134,6 +139,9 @@ public partial class MainWindowViewModel : ViewModelBase
         OpenProjectCommand = ReactiveCommand.CreateFromTask(OpenProjectCommand_Executed);
         OpenRecentProjectCommand = ReactiveCommand.CreateFromTask<string>(OpenRecentProjectCommand_Executed);
         ImportProjectCommand = ReactiveCommand.CreateFromTask<string>(ImportProjectCommand_Executed);
+        RenameProjectCommand = ReactiveCommand.CreateFromTask(RenameProjectCommand_Executed);
+        DuplicateProjectCommand = ReactiveCommand.CreateFromTask(DuplicateProjectCommand_Executed);
+        DeleteProjectCommand = ReactiveCommand.CreateFromTask(DeleteProjectCommand_Executed);
         EditSaveCommand = ReactiveCommand.CreateFromTask(EditSaveFileCommand_Executed);
         AboutCommand = ReactiveCommand.CreateFromTask(AboutCommand_Executed);
         PreferencesCommand = ReactiveCommand.CreateFromTask(PreferencesCommand_Executed);
@@ -259,7 +267,8 @@ public partial class MainWindowViewModel : ViewModelBase
 
     private void OpenHomePanel(bool isAppStartup = false)
     {
-        HomePanel homePanel = new() { DataContext = new HomePanelViewModel(this), IsAppStartup = isAppStartup};
+        HomePanel = new(this);
+        HomePanel homePanel = new() { DataContext = HomePanel, IsAppStartup = isAppStartup };
         Window.MainContent.Content = homePanel;
     }
 
@@ -288,6 +297,7 @@ public partial class MainWindowViewModel : ViewModelBase
         LoadCachedData();
 
         Window.MainContent.Content = ProjectPanel;
+        HomePanel = null;
     }
 
     private void LoadCachedData()
@@ -492,8 +502,9 @@ public partial class MainWindowViewModel : ViewModelBase
                 OpenProject = new(OpenProject.Name, newLangCode, CurrentConfig, Strings.ResourceManager.GetString, Log);
                 OpenProject.Load(CurrentConfig, Log, tracker);
                 OpenProject.SetBaseRomHash(newRom);
+                OpenProject.Save(Log);
             }, async void () => await Window.ShowMessageBoxAsync(Strings.Migration_Complete_, Strings.Migrated_to_new_ROM_, ButtonEnum.Ok, Icon.Success, Log));
-            await new ProgressDialog() { DataContext = tracker }.ShowDialog(Window);
+            await new ProgressDialog { DataContext = tracker }.ShowDialog(Window);
             OpenProjectView(OpenProject, tracker);
         }
     }
@@ -551,9 +562,13 @@ public partial class MainWindowViewModel : ViewModelBase
         UpdateRecentProjects();
     }
 
-    private void UpdateRecentProjects()
+    public void UpdateRecentProjects()
     {
-        RecentProjectsMenu.Menu = [];
+        if (RecentProjectsMenu.Menu is null)
+        {
+            RecentProjectsMenu.Menu = [];
+        }
+        RecentProjectsMenu.Menu.Items.Clear();
 
         List<string> projectsToRemove = [];
         foreach (string project in ProjectsCache.RecentProjects)
@@ -709,10 +724,7 @@ public partial class MainWindowViewModel : ViewModelBase
         }.ShowDialog<(string, string)>(Window);
         if (!string.IsNullOrEmpty(slzipPath) && !string.IsNullOrEmpty(romPath))
         {
-            if (await CloseProject_Executed(null))
-            {
-                return;
-            }
+            await CloseProject_Executed(null);
 
             Project.LoadProjectResult result = new() { State = Project.LoadProjectState.FAILED };
             ProgressDialogViewModel tracker = new(Strings.Importing_Project);
@@ -729,6 +741,98 @@ public partial class MainWindowViewModel : ViewModelBase
             {
                 await CloseProjectView();
             }
+        }
+    }
+
+    private async Task RenameProjectCommand_Executed()
+    {
+        string projectPath;
+        if (OpenProject is not null)
+        {
+            projectPath = OpenProject.ProjectFile;
+        }
+        else
+        {
+            projectPath = (await Window.ShowOpenFilePickerAsync(Strings.ProjectRenameText,
+                [new(Strings.Serial_Loops_Project) { Patterns = [$"*.{Project.PROJECT_FORMAT}"] }],
+                CurrentConfig.ProjectsDirectory))?.TryGetLocalPath();
+            if (string.IsNullOrEmpty(projectPath))
+            {
+                return;
+            }
+        }
+
+        ProjectRenameDuplicateDialogViewModel renameDialogViewModel = new(true, projectPath, CurrentConfig, Log);
+        string newProj = await new ProjectRenameDuplicateDialog { DataContext = renameDialogViewModel }.ShowDialog<string>(Window);
+        if (string.IsNullOrEmpty(newProj))
+        {
+            return;
+        }
+
+        if (OpenProject is not null)
+        {
+            OpenProject.Name = Path.GetFileNameWithoutExtension(newProj);
+            OpenProjectName = OpenProject.Name;
+        }
+        ProjectsCache.RenameProject(projectPath, newProj);
+        ProjectsCache.Save(Log);
+        UpdateRecentProjects();
+        HomePanel?.RecentProjects.FirstOrDefault(p => p.Text == Path.GetFileName(projectPath))?.Rename(newProj, HomePanel);
+    }
+
+    private async Task DuplicateProjectCommand_Executed()
+    {
+        string projectPath;
+        if (OpenProject is not null)
+        {
+            projectPath = OpenProject.ProjectFile;
+        }
+        else
+        {
+            projectPath = (await Window.ShowOpenFilePickerAsync(Strings.ProjectRenameText,
+                [new(Strings.Serial_Loops_Project) { Patterns = [$"*.{Project.PROJECT_FORMAT}"] }],
+                CurrentConfig.ProjectsDirectory))?.TryGetLocalPath();
+            if (string.IsNullOrEmpty(projectPath))
+            {
+                return;
+            }
+        }
+
+        ProjectRenameDuplicateDialogViewModel renameDialogViewModel = new(false, projectPath, CurrentConfig, Log);
+        string newProj = await new ProjectRenameDuplicateDialog { DataContext = renameDialogViewModel }.ShowDialog<string>(Window);
+        if (string.IsNullOrEmpty(newProj))
+        {
+            return;
+        }
+
+        if (await Window.ShowMessageBoxAsync(Strings.ProjectDuplicatedSuccessTitle,
+                Strings.ProjectDuplicatedSuccessText, ButtonEnum.YesNo, Icon.Success, Log) == ButtonResult.Yes)
+        {
+            OpenRecentProjectCommand.Execute(newProj);
+        }
+    }
+
+    private async Task DeleteProjectCommand_Executed()
+    {
+        string projFile;
+        if (OpenProject is null)
+        {
+            projFile = (await Window.ShowOpenFilePickerAsync(Strings.ProjectDeleteText,
+                [new(Strings.Serial_Loops_Project) { Patterns = [$"*.{Project.PROJECT_FORMAT}"] }]))?.TryGetLocalPath();
+            if (string.IsNullOrEmpty(projFile))
+            {
+                return;
+            }
+        }
+        else
+        {
+            projFile = OpenProject.ProjectFile;
+            await CloseProjectView();
+        }
+
+        if (await Shared.DeleteProjectAsync(projFile, this))
+        {
+            HomePanel?.RecentProjects.Remove(HomePanel?.RecentProjects.FirstOrDefault(p => p.Text == Path.GetFileName(projFile)));
         }
     }
 
@@ -1075,6 +1179,8 @@ public partial class MainWindowViewModel : ViewModelBase
             IO.WriteStringFile(Path.Combine("assets", "events", $"{OpenProject.VoiceMap.Index:X3}.s"),
                 OpenProject.VoiceMap.GetSource(), OpenProject, Log);
         }
+
+        OpenProject.Save(Log);
     }
 
     public void SearchProject_Executed()

@@ -59,6 +59,25 @@ public partial class MainWindow : Window
                     Command = ViewModel.ImportProjectCommand,
                 },
                 new NativeMenuItemSeparator(),
+                new NativeMenuItem
+                {
+                    Header = Strings.ProjectRenameText,
+                    Icon = ControlGenerator.GetIcon("Rename_Item", ViewModel.Log),
+                    Command = ViewModel.RenameProjectCommand,
+                },
+                new NativeMenuItem
+                {
+                    Header = Strings.ProjectDuplicateText,
+                    Icon = ControlGenerator.GetIcon("Copy", ViewModel.Log),
+                    Command = ViewModel.DuplicateProjectCommand,
+                },
+                new NativeMenuItem
+                {
+                    Header = Strings.ProjectDeleteText,
+                    Icon = ControlGenerator.GetIcon("Remove", ViewModel.Log),
+                    Command = ViewModel.DeleteProjectCommand,
+                },
+                new NativeMenuItemSeparator(),
                 new NativeMenuItem()
                 {
                     Header = Strings.Edit_Save_File,

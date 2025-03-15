@@ -72,6 +72,23 @@ public class ProjectsCache
         RecentProjects.Insert(0, projectPath);
         RecentWorkspaces.Add(projectPath, new(workspaceItems, selectedTabIndex));
     }
+
+    public void RemoveProject(string projectPath)
+    {
+        RecentProjects.Remove(projectPath);
+        RecentWorkspaces.Remove(projectPath);
+    }
+
+    public void RenameProject(string oldProject, string newProject)
+    {
+        if (RecentProjects.Remove(oldProject))
+        {
+            RecentProjects.Add(newProject);
+            RecentWorkspace oldWorkspace = RecentWorkspaces[oldProject];
+            RecentWorkspaces.Remove(oldProject);
+            RecentWorkspaces.Add(newProject, oldWorkspace);
+        }
+    }
 }
 
 public record struct RecentWorkspace(List<string> Tabs, int SelectedTabIndex);

@@ -505,6 +505,15 @@ public static partial class Extensions
         return $"{str[0].ToString().ToUpper()}{str[1..]}";
     }
 
+    // We need this stupid method for project export because Path.Combine
+    // on Windows it results in inserting filenames with \ instead of /
+    // which then breaks extraction for those archives on Unix
+    // i hate it lol
+    public static string ToUnixPath(this string str)
+    {
+        return str.Replace('\\', '/');
+    }
+
     [GeneratedRegex(@"#x(?<offset>\d{2})")]
     private static partial Regex ManualXRegex();
     [GeneratedRegex(@"#y(?<offset>\d{2})")]
