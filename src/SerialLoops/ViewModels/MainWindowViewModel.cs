@@ -47,6 +47,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private const string BASE_TITLE = "Serial Loops";
 
     public string[] Args { get; set; }
+    private bool _alreadyHandledStartup = false;
 
     [Reactive]
     public string Title { get; set; } = BASE_TITLE;
@@ -220,12 +221,18 @@ public partial class MainWindowViewModel : ViewModelBase
         // We handle file opening in an event for macOS, so let's skip all this here
         if (OperatingSystem.IsMacOS() || !HandleFilesAndPreviousProjects())
         {
-            OpenHomePanel();
+            OpenHomePanel(isAppStartup: true);
         }
     }
 
     public bool HandleFilesAndPreviousProjects()
     {
+        if (_alreadyHandledStartup)
+        {
+            return true;
+        }
+        _alreadyHandledStartup = true;
+
         if (Args?.Length > 0)
         {
             if (Args[0].EndsWith(".slproj", StringComparison.OrdinalIgnoreCase))
@@ -248,9 +255,9 @@ public partial class MainWindowViewModel : ViewModelBase
         return false;
     }
 
-    private void OpenHomePanel()
+    private void OpenHomePanel(bool isAppStartup = false)
     {
-        HomePanel homePanel = new() { DataContext = new HomePanelViewModel(this) };
+        HomePanel homePanel = new() { DataContext = new HomePanelViewModel(this), IsAppStartup = isAppStartup};
         Window.MainContent.Content = homePanel;
     }
 
