@@ -833,6 +833,24 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to adjust volume for background music. Please check the logs and file an issue if this reoccurs..
+        /// </summary>
+        public static string BgmAdjustVolumeError {
+            get {
+                return ResourceManager.GetString("BgmAdjustVolumeError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to adjust loop data for background music. Please check the logs and file an issue if this reoccurs..
+        /// </summary>
+        public static string BgmLoopErrorMessage {
+            get {
+                return ResourceManager.GetString("BgmLoopErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to BGMs.
         /// </summary>
         public static string BGMs {
@@ -6889,6 +6907,15 @@ namespace SerialLoops.Assets {
         public static string Scrolling_BG {
             get {
                 return ResourceManager.GetString("Scrolling BG", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sorry, but you currently have too many sound items open to open another one. Please close some and then try again..
+        /// </summary>
+        public static string SdlExceptionTooManyDevicesText {
+            get {
+                return ResourceManager.GetString("SdlExceptionTooManyDevicesText", resourceCulture);
             }
         }
         

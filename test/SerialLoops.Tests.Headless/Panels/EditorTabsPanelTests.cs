@@ -6,7 +6,6 @@ using Avalonia.Headless;
 using Avalonia.Headless.NUnit;
 using Avalonia.Input;
 using Avalonia.VisualTree;
-using HaroohieClub.NitroPacker;
 using HaruhiChokuretsuLib.Archive;
 using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Graphics;
@@ -20,7 +19,6 @@ using SerialLoops.ViewModels;
 using SerialLoops.ViewModels.Editors;
 using SerialLoops.Views;
 using SerialLoops.Views.Panels;
-using SkiaSharp;
 using Tabalonia.Controls;
 
 namespace SerialLoops.Tests.Headless.Panels;

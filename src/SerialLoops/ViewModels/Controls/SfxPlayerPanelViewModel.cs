@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Windows.Input;
 using GotaSequenceLib.Playback;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
@@ -6,7 +7,7 @@ using ReactiveUI.Fody.Helpers;
 
 namespace SerialLoops.ViewModels.Controls;
 
-public class SfxPlayerPanelViewModel : ViewModelBase
+public class SfxPlayerPanelViewModel : ViewModelBase, IDisposable
 {
     private ILogger _log;
     private Player _player;
@@ -48,5 +49,15 @@ public class SfxPlayerPanelViewModel : ViewModelBase
         StopButtonEnabled = false;
         PlayPauseImagePath = "avares://SerialLoops/Assets/Icons/Play.svg";
         _player.Stop();
+    }
+
+    public void Dispose()
+    {
+        if (_player?.State != PlayerState.Stopped)
+        {
+            _player?.Stop();
+        }
+        _player?.Dispose();
+        GC.SuppressFinalize(this);
     }
 }

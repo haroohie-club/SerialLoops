@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 using HaruhiChokuretsuLib.Util;
 using NAudio.Wave;
 using ReactiveUI;
@@ -8,10 +9,9 @@ using SerialLoops.Lib.Items;
 
 namespace SerialLoops.Models;
 
-public class BgmLoopPreviewItem(WaveStream wav, bool loopEnabled, uint startSample, uint endSample) : ReactiveObject, ISoundItem
+public class BgmLoopPreviewItem(WaveStream wav, bool loopEnabled, uint startSample, uint endSample) : ReactiveObject, ISoundItem, IDisposable, IAsyncDisposable
 {
-    [Reactive]
-    public WaveStream Wave { get; set; } = wav;
+    public WaveStream Wave { get; } = wav;
     [Reactive]
     public bool LoopEnabled { get; set; } = loopEnabled;
     [Reactive]
@@ -47,5 +47,20 @@ public class BgmLoopPreviewItem(WaveStream wav, bool loopEnabled, uint startSamp
     public uint GetSampleFromTimestamp(double timestamp)
     {
         return (uint)(timestamp * Wave.WaveFormat.SampleRate);
+    }
+
+    public void Dispose()
+    {
+        Wave?.Dispose();
+        GC.SuppressFinalize(this);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (Wave != null)
+        {
+            await Wave.DisposeAsync();
+        }
+        GC.SuppressFinalize(this);
     }
 }

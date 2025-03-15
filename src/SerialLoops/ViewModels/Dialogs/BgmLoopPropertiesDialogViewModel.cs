@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Windows.Input;
 using HaruhiChokuretsuLib.Util;
 using NAudio.Wave;
 using ReactiveUI;
@@ -12,7 +13,7 @@ using SkiaSharp;
 
 namespace SerialLoops.ViewModels.Dialogs;
 
-public class BgmLoopPropertiesDialogViewModel : ViewModelBase
+public class BgmLoopPropertiesDialogViewModel : ViewModelBase, IDisposable
 {
     public ILogger Log { get; set; }
 
@@ -41,5 +42,12 @@ public class BgmLoopPropertiesDialogViewModel : ViewModelBase
 
         SaveCommand = ReactiveCommand.Create<BgmLoopPropertiesDialog>((dialog) => dialog.Close(LoopPreview));
         CancelCommand = ReactiveCommand.Create<BgmLoopPropertiesDialog>((dialog) => dialog.Close());
+    }
+
+    public void Dispose()
+    {
+        LoopPreview?.Dispose();
+        Waveform?.Dispose();
+        GC.SuppressFinalize(this);
     }
 }

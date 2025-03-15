@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -22,7 +23,7 @@ namespace SerialLoops.ViewModels.Editors;
 
 public class BackgroundMusicEditorViewModel : EditorViewModel
 {
-    public BackgroundMusicItem Bgm { get; set; }
+    public BackgroundMusicItem Bgm { get; }
     [Reactive]
     public SoundPlayerPanelViewModel BgmPlayer { get; set; }
     private bool _loopEnabled;
@@ -115,76 +116,127 @@ public class BackgroundMusicEditorViewModel : EditorViewModel
 
     private async Task ManageLoop_Executed()
     {
-        BgmPlayer.Stop();
-        ProgressDialogViewModel firstTracker = new(Strings.Caching_BGM, Strings.Adjusting_Loop_Info);
-        firstTracker.InitializeTasks(() => WaveFileWriter.CreateWaveFile(_bgmCachedFile, Bgm.GetWaveProvider(_log, false)), () => { });
-        if (!File.Exists(_bgmCachedFile))
+        try
         {
-            await new ProgressDialog { DataContext = firstTracker }.ShowDialog(Window.Window);
+            BgmPlayer.Stop();
+            ProgressDialogViewModel firstTracker = new(Strings.Caching_BGM, Strings.Adjusting_Loop_Info);
+            firstTracker.InitializeTasks(
+                () => WaveFileWriter.CreateWaveFile(_bgmCachedFile, Bgm.GetWaveProvider(_log, false)), () => { });
+            if (!File.Exists(_bgmCachedFile))
+            {
+                await new ProgressDialog { DataContext = firstTracker }.ShowDialog(Window.Window);
+            }
+
+            string loopAdjustedWav = Path.Combine(Path.GetDirectoryName(_bgmCachedFile),
+                $"{Path.GetFileNameWithoutExtension(_bgmCachedFile)}-loop.wav");
+            File.Copy(_bgmCachedFile, loopAdjustedWav, true);
+            await using WaveFileReader reader = new(loopAdjustedWav);
+            BgmLoopPropertiesDialogViewModel loopPropertiesDialog = new(reader, Bgm.Name, _log,
+                ((AdxWaveProvider)BgmPlayer.Sound).LoopEnabled, ((AdxWaveProvider)BgmPlayer.Sound).LoopStartSample,
+                ((AdxWaveProvider)BgmPlayer.Sound).LoopEndSample);
+            await using BgmLoopPreviewItem loopPreview =
+                await new BgmLoopPropertiesDialog { DataContext = loopPropertiesDialog }.ShowDialog<BgmLoopPreviewItem>(
+                    Window.Window);
+            if (loopPreview is not null)
+            {
+                _loopEnabled = loopPreview.LoopEnabled;
+                _loopStartSample = loopPreview.StartSample;
+                _loopEndSample = loopPreview.EndSample;
+                Shared.AudioReplacementCancellation.Cancel();
+                Shared.AudioReplacementCancellation = new();
+                ProgressDialogViewModel secondTracker = new(Strings.Set_BGM_loop_info, Strings.Adjusting_Loop_Info);
+                ProgressDialogViewModel thirdTracker = new(Strings.Set_BGM_loop_info, Strings.Adjusting_Loop_Info);
+                thirdTracker.InitializeTasks(() =>
+                    {
+                        Bgm.Replace(_bgmCachedFile, _project.BaseDirectory, _project.IterativeDirectory, _bgmCachedFile,
+                            _loopEnabled, _loopStartSample, _loopEndSample, _log, secondTracker,
+                            Shared.AudioReplacementCancellation.Token);
+                        reader.Dispose();
+                        File.Delete(loopAdjustedWav);
+                    },
+                    () =>
+                    {
+                        BgmPlayer = new(Bgm, _log, Bgm.BgmName, Bgm.Name, Bgm.Flag,
+                            !string.IsNullOrEmpty(Bgm.BgmName) ? _titleBoxTextChangedCommand : null);
+                    });
+                await new ProgressDialog { DataContext = thirdTracker }.ShowDialog(Window.Window);
+            }
+            loopPropertiesDialog.Dispose();
         }
-        string loopAdjustedWav = Path.Combine(Path.GetDirectoryName(_bgmCachedFile), $"{Path.GetFileNameWithoutExtension(_bgmCachedFile)}-loop.wav");
-        File.Copy(_bgmCachedFile, loopAdjustedWav, true);
-        using WaveFileReader reader = new(loopAdjustedWav);
-        BgmLoopPropertiesDialogViewModel loopPropertiesDialog = new(reader, Bgm.Name, _log,
-            ((AdxWaveProvider)BgmPlayer.Sound).LoopEnabled, ((AdxWaveProvider)BgmPlayer.Sound).LoopStartSample, ((AdxWaveProvider)BgmPlayer.Sound).LoopEndSample);
-        BgmLoopPreviewItem loopPreview = await new BgmLoopPropertiesDialog { DataContext = loopPropertiesDialog }.ShowDialog<BgmLoopPreviewItem>(Window.Window);
-        if (loopPreview is not null)
+#if !WINDOWS
+        catch (NAudio.Sdl2.Structures.SdlException ex)
         {
-            _loopEnabled = loopPreview.LoopEnabled;
-            _loopStartSample = loopPreview.StartSample;
-            _loopEndSample = loopPreview.EndSample;
-            Shared.AudioReplacementCancellation.Cancel();
-            Shared.AudioReplacementCancellation = new();
-            ProgressDialogViewModel secondTracker = new(Strings.Set_BGM_loop_info, Strings.Adjusting_Loop_Info);
-            ProgressDialogViewModel thirdTracker = new(Strings.Set_BGM_loop_info, Strings.Adjusting_Loop_Info);
-            thirdTracker.InitializeTasks(() =>
-                {
-                    Bgm.Replace(_bgmCachedFile, _project.BaseDirectory, _project.IterativeDirectory, _bgmCachedFile, _loopEnabled, _loopStartSample, _loopEndSample, _log, secondTracker, Shared.AudioReplacementCancellation.Token);
-                    reader.Dispose();
-                    File.Delete(loopAdjustedWav);
-                },
-                () =>
-                {
-                    BgmPlayer = new(Bgm, _log, Bgm.BgmName, Bgm.Name, Bgm.Flag, !string.IsNullOrEmpty(Bgm.BgmName) ? _titleBoxTextChangedCommand : null);
-                });
-            await new ProgressDialog { DataContext = thirdTracker }.ShowDialog(Window.Window);
+            _log.LogWarning($"SDL Exception: {ex.Message}\n{ex.StackTrace}");
+            _log.LogError(Strings.SdlExceptionTooManyDevicesText);
+        }
+#endif
+        catch (Exception ex)
+        {
+            _log.LogException(Strings.BgmLoopErrorMessage, ex);
         }
     }
 
     private async Task AdjustVolume_Executed()
     {
-        BgmPlayer.Stop();
-        ProgressDialogViewModel firstTracker = new(Strings.Caching_BGM, Strings.Adjusting_Volume);
-        firstTracker.InitializeTasks(() => WaveFileWriter.CreateWaveFile(_bgmCachedFile, Bgm.GetWaveProvider(_log, false)), () => { });
-        if (!File.Exists(_bgmCachedFile))
+        try
         {
-            await new ProgressDialog { DataContext = firstTracker }.ShowDialog(Window.Window);
-        }
-        string volumeAdjustedWav = Path.Combine(Path.GetDirectoryName(_bgmCachedFile), $"{Path.GetFileNameWithoutExtension(_bgmCachedFile)}-volume.wav");
-        File.Copy(_bgmCachedFile, volumeAdjustedWav, true);
-        await using WaveFileReader reader = new(volumeAdjustedWav);
-        BgmVolumePropertiesDialogViewModel volumeDialog = new(reader, Bgm.Name, _project.AverageBgmMaxAmplitude, _log);
-        BgmVolumePreviewItem volumePreview = await new BgmVolumePropertiesDialog { DataContext = volumeDialog }.ShowDialog<BgmVolumePreviewItem>(Window.Window);
-        if (volumePreview is not null)
-        {
-            ProgressDialogViewModel secondTracker = new(Strings.Replace_BGM_track, Strings.Adjusting_Volume) { Total = 2 };
-            ProgressDialogViewModel thirdTracker = new(Strings.Replace_BGM_track, Strings.Adjusting_Volume);
             BgmPlayer.Stop();
-            Shared.AudioReplacementCancellation.Cancel();
-            Shared.AudioReplacementCancellation = new();
-            thirdTracker.InitializeTasks(() =>
+            ProgressDialogViewModel firstTracker = new(Strings.Caching_BGM, Strings.Adjusting_Volume);
+            firstTracker.InitializeTasks(
+                () => WaveFileWriter.CreateWaveFile(_bgmCachedFile, Bgm.GetWaveProvider(_log, false)), () => { });
+            if (!File.Exists(_bgmCachedFile))
             {
-                WaveFileWriter.CreateWaveFile(_bgmCachedFile, volumeDialog.VolumePreview.GetWaveProvider(_log, false));
-                secondTracker.Finished++;
-                Bgm.Replace(_bgmCachedFile, _project.BaseDirectory, _project.IterativeDirectory, _bgmCachedFile, _loopEnabled, _loopStartSample, _loopEndSample, _log, secondTracker, Shared.AudioReplacementCancellation.Token);
-                secondTracker.Finished++;
-                reader.Dispose();
-                File.Delete(volumeAdjustedWav);
-            }, () =>
+                await new ProgressDialog { DataContext = firstTracker }.ShowDialog(Window.Window);
+            }
+
+            string volumeAdjustedWav = Path.Combine(Path.GetDirectoryName(_bgmCachedFile),
+                $"{Path.GetFileNameWithoutExtension(_bgmCachedFile)}-volume.wav");
+            File.Copy(_bgmCachedFile, volumeAdjustedWav, true);
+            await using WaveFileReader reader = new(volumeAdjustedWav);
+            BgmVolumePropertiesDialogViewModel volumeDialog = new(reader, Bgm.Name,
+                _project.AverageBgmMaxAmplitude, _log);
+            await using BgmVolumePreviewItem volumePreview =
+                await new BgmVolumePropertiesDialog { DataContext = volumeDialog }.ShowDialog<BgmVolumePreviewItem>(
+                    Window.Window);
+            if (volumePreview is not null)
             {
-                BgmPlayer = new(Bgm, _log, Bgm.BgmName, Bgm.Name, Bgm.Flag, !string.IsNullOrEmpty(Bgm.BgmName) ? _titleBoxTextChangedCommand : null);
-            });
-            await new ProgressDialog { DataContext = thirdTracker }.ShowDialog(Window.Window);
+                ProgressDialogViewModel secondTracker =
+                    new(Strings.Replace_BGM_track, Strings.Adjusting_Volume) { Total = 2 };
+                ProgressDialogViewModel thirdTracker = new(Strings.Replace_BGM_track, Strings.Adjusting_Volume);
+                BgmPlayer.Stop();
+                Shared.AudioReplacementCancellation.Cancel();
+                Shared.AudioReplacementCancellation = new();
+                thirdTracker.InitializeTasks(() =>
+                    {
+                        WaveFileWriter.CreateWaveFile(_bgmCachedFile,
+                            volumeDialog.VolumePreview.GetWaveProvider(_log, false));
+                        secondTracker.Finished++;
+                        Bgm.Replace(_bgmCachedFile, _project.BaseDirectory, _project.IterativeDirectory, _bgmCachedFile,
+                            _loopEnabled, _loopStartSample, _loopEndSample, _log, secondTracker,
+                            Shared.AudioReplacementCancellation.Token);
+                        secondTracker.Finished++;
+                        reader.Dispose();
+                        File.Delete(volumeAdjustedWav);
+                    },
+                    () =>
+                    {
+                        BgmPlayer = new(Bgm, _log, Bgm.BgmName, Bgm.Name, Bgm.Flag,
+                            !string.IsNullOrEmpty(Bgm.BgmName) ? _titleBoxTextChangedCommand : null);
+                    });
+                await new ProgressDialog { DataContext = thirdTracker }.ShowDialog(Window.Window);
+            }
+            volumeDialog.Dispose();
+        }
+#if !WINDOWS
+        catch (NAudio.Sdl2.Structures.SdlException ex)
+        {
+            _log.LogWarning($"SDL Exception: {ex.Message}\n{ex.StackTrace}");
+            _log.LogError(Strings.SdlExceptionTooManyDevicesText);
+        }
+#endif
+        catch (Exception ex)
+        {
+            _log.LogException(Strings.BgmAdjustVolumeError, ex);
         }
     }
 }
