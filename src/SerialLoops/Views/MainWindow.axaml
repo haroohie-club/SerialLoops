@@ -42,7 +42,7 @@
             </StackPanel>
             <StackPanel Grid.Row="0" HorizontalAlignment="Stretch" Margin="0 5">
                 <NativeMenuBar Name="MenuBar" Margin="0 0 0 5"/>
-                <Grid ColumnDefinitions="Auto,*" Classes="project" Margin="0" VerticalAlignment="Center">
+                <Grid ColumnDefinitions="Auto,*" Classes.project="{Binding OpenProject, Converter={x:Static ObjectConverters.IsNotNull}}" Margin="0" VerticalAlignment="Center">
                     <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Margin="{OnPlatform Default='10 0 0 0', macOS='10 0 10 0'}">
                         <Image Source="{Binding OpenProjectIcon, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
                                Width="24" Height="24" />

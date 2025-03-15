@@ -75,6 +75,7 @@ public partial class MainWindowViewModel : ViewModelBase
     public MainWindow Window { get; set; }
     public ProjectsCache ProjectsCache { get; set; }
     public Config CurrentConfig { get; set; }
+    [Reactive]
     public Project OpenProject { get; set; }
     public OpenProjectPanel ProjectPanel { get; set; }
     public Dictionary<MenuHeader, NativeMenuItem> WindowMenu { get; set; }
@@ -267,6 +268,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
     private void OpenHomePanel(bool isAppStartup = false)
     {
+        ToolBar.Classes.Clear();
         HomePanel = new(this);
         HomePanel homePanel = new() { DataContext = HomePanel, IsAppStartup = isAppStartup };
         Window.MainContent.Content = homePanel;
@@ -296,6 +298,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
         LoadCachedData();
 
+        ToolBar.Classes.Add("project");
         Window.MainContent.Content = ProjectPanel;
         HomePanel = null;
     }
