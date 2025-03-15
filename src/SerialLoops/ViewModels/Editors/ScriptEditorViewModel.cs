@@ -212,7 +212,7 @@ public class ScriptEditorViewModel : EditorViewModel
         CutHotKey = GuiExtensions.CreatePlatformAgnosticCtrlGesture(Key.X);
         CopyHotKey = GuiExtensions.CreatePlatformAgnosticCtrlGesture(Key.C);
         PasteHotKey = GuiExtensions.CreatePlatformAgnosticCtrlGesture(Key.V);
-        DeleteHotKey = new(Key.Delete, KeyModifiers.Shift);
+        DeleteHotKey = new(Key.Delete);
     }
 
     private void UpdateCommandViewModel()
