@@ -6,7 +6,6 @@ using System.Windows.Input;
 using Avalonia.Platform.Storage;
 using HaruhiChokuretsuLib.Audio.ADX;
 using HaruhiChokuretsuLib.Util;
-using NAudio.Sdl2.Structures;
 using NAudio.Wave;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -165,7 +164,7 @@ public class BackgroundMusicEditorViewModel : EditorViewModel
             loopPropertiesDialog.Dispose();
         }
 #if !WINDOWS
-        catch (SdlException ex)
+        catch (NAudio.Sdl2.Structures.SdlException ex)
         {
             _log.LogWarning($"SDL Exception: {ex.Message}\n{ex.StackTrace}");
             _log.LogError(Strings.SdlExceptionTooManyDevicesText);
@@ -229,7 +228,7 @@ public class BackgroundMusicEditorViewModel : EditorViewModel
             volumeDialog.Dispose();
         }
 #if !WINDOWS
-        catch (SdlException ex)
+        catch (NAudio.Sdl2.Structures.SdlException ex)
         {
             _log.LogWarning($"SDL Exception: {ex.Message}\n{ex.StackTrace}");
             _log.LogError(Strings.SdlExceptionTooManyDevicesText);

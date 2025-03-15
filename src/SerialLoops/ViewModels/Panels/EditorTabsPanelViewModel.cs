@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using HaruhiChokuretsuLib.Util;
 using MsBox.Avalonia.Enums;
-using NAudio.Sdl2.Structures;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SerialLoops.Assets;
@@ -75,7 +74,7 @@ public class EditorTabsPanelViewModel : ViewModelBase
                     return new BackgroundMusicEditorViewModel((BackgroundMusicItem)item, MainWindow, _project, _log);
 #if !WINDOWS
                 }
-                catch (SdlException ex)
+                catch (NAudio.Sdl2.Structures.SdlException ex)
                 {
                     _log.LogWarning($"SDL Exception: {ex.Message}\n{ex.StackTrace}");
                     _log.LogError(Strings.SdlExceptionTooManyDevicesText);
@@ -114,7 +113,7 @@ public class EditorTabsPanelViewModel : ViewModelBase
                     return new SfxEditorViewModel((SfxItem)item, MainWindow, _log);
 #if !WINDOWS
                 }
-                catch (SdlException ex)
+                catch (NAudio.Sdl2.Structures.SdlException ex)
                 {
                     _log.LogWarning($"SDL Exception: {ex.Message}\n{ex.StackTrace}");
                     _log.LogError(Strings.SdlExceptionTooManyDevicesText);
@@ -133,7 +132,7 @@ public class EditorTabsPanelViewModel : ViewModelBase
                     return new VoicedLineEditorViewModel((VoicedLineItem)item, MainWindow, _log);
 #if !WINDOWS
                 }
-                catch (SdlException ex)
+                catch (NAudio.Sdl2.Structures.SdlException ex)
                 {
                     _log.LogWarning($"SDL Exception: {ex.Message}\n{ex.StackTrace}");
                     _log.LogError(Strings.SdlExceptionTooManyDevicesText);
