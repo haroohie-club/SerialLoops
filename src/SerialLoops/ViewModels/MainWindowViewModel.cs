@@ -93,6 +93,8 @@ public partial class MainWindowViewModel : ViewModelBase
     public ICommand OpenProjectCommand { get; }
     public ICommand OpenRecentProjectCommand { get; }
     public ICommand ImportProjectCommand { get; }
+    public ICommand RenameProjectCommand { get; }
+    public ICommand DuplicateProjectCommand { get; }
     public ICommand DeleteProjectCommand { get; }
     public ICommand EditSaveCommand { get; }
     public ICommand AboutCommand { get; }
@@ -137,6 +139,8 @@ public partial class MainWindowViewModel : ViewModelBase
         OpenProjectCommand = ReactiveCommand.CreateFromTask(OpenProjectCommand_Executed);
         OpenRecentProjectCommand = ReactiveCommand.CreateFromTask<string>(OpenRecentProjectCommand_Executed);
         ImportProjectCommand = ReactiveCommand.CreateFromTask<string>(ImportProjectCommand_Executed);
+        RenameProjectCommand = ReactiveCommand.CreateFromTask(RenameProjectCommand_Executed);
+        DuplicateProjectCommand = ReactiveCommand.CreateFromTask(DuplicateProjectCommand_Executed);
         DeleteProjectCommand = ReactiveCommand.CreateFromTask(DeleteProjectCommand_Executed);
         EditSaveCommand = ReactiveCommand.CreateFromTask(EditSaveFileCommand_Executed);
         AboutCommand = ReactiveCommand.CreateFromTask(AboutCommand_Executed);
@@ -717,6 +721,73 @@ public partial class MainWindowViewModel : ViewModelBase
         }
     }
 
+    private async Task RenameProjectCommand_Executed()
+    {
+        string projectPath;
+        if (OpenProject is not null)
+        {
+            projectPath = OpenProject.ProjectFile;
+        }
+        else
+        {
+            projectPath = (await Window.ShowOpenFilePickerAsync(Strings.ProjectRenameText,
+                [new(Strings.Serial_Loops_Project) { Patterns = [$"*{Project.PROJECT_FORMAT}"] }],
+                CurrentConfig.ProjectsDirectory))?.TryGetLocalPath();
+            if (string.IsNullOrEmpty(projectPath))
+            {
+                return;
+            }
+        }
+
+        ProjectRenameDuplicateDialogViewModel renameDialogViewModel = new(true, projectPath, CurrentConfig, Log);
+        string newProj = await new ProjectRenameDuplicateDialog { DataContext = renameDialogViewModel }.ShowDialog<string>(Window);
+        if (string.IsNullOrEmpty(newProj))
+        {
+            return;
+        }
+
+        if (OpenProject is not null)
+        {
+            OpenProjectName = Path.GetFileNameWithoutExtension(newProj);
+        }
+        ProjectsCache.RenameProject(projectPath, newProj);
+        ProjectsCache.Save(Log);
+        UpdateRecentProjects();
+        HomePanel?.RecentProjects.FirstOrDefault(p => p.Text == Path.GetFileName(projectPath))?.Rename(newProj, HomePanel);
+    }
+
+    private async Task DuplicateProjectCommand_Executed()
+    {
+        string projectPath;
+        if (OpenProject is not null)
+        {
+            projectPath = OpenProject.ProjectFile;
+        }
+        else
+        {
+            projectPath = (await Window.ShowOpenFilePickerAsync(Strings.ProjectRenameText,
+                [new(Strings.Serial_Loops_Project) { Patterns = [$"*{Project.PROJECT_FORMAT}"] }],
+                CurrentConfig.ProjectsDirectory))?.TryGetLocalPath();
+            if (string.IsNullOrEmpty(projectPath))
+            {
+                return;
+            }
+        }
+
+        ProjectRenameDuplicateDialogViewModel renameDialogViewModel = new(false, projectPath, CurrentConfig, Log);
+        string newProj = await new ProjectRenameDuplicateDialog { DataContext = renameDialogViewModel }.ShowDialog<string>(Window);
+        if (string.IsNullOrEmpty(newProj))
+        {
+            return;
+        }
+
+        if (await Window.ShowMessageBoxAsync(Strings.ProjectDuplicatedSuccessTitle,
+                Strings.ProjectDuplicatedSuccessText, ButtonEnum.YesNo, Icon.Success, Log) == ButtonResult.Yes)
+        {
+            OpenRecentProjectCommand.Execute(newProj);
+        }
+    }
+
     private async Task DeleteProjectCommand_Executed()
     {
         string projFile;
@@ -737,7 +808,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
         if (await Shared.DeleteProjectAsync(projFile, this))
         {
-            HomePanel?.RecentProjects.Remove(HomePanel.RecentProjects.FirstOrDefault(p => p.Text == Path.GetFileName(projFile)));
+            HomePanel?.RecentProjects.Remove(HomePanel?.RecentProjects.FirstOrDefault(p => p.Text == Path.GetFileName(projFile)));
         }
     }
 

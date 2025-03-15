@@ -55,14 +55,23 @@ public class RecentProjectViewModel : ReactiveObject
         IconPath = IsMissing ? "avares://SerialLoops/Assets/Icons/Warning.svg" : "avares://SerialLoops/Assets/Icons/AppIconSimple.svg";
         LinkColorKey = IsMissing ? "DisabledLinkColor" : "LinkColor";
 
-        RenameCommand = ReactiveCommand.CreateFromTask(async () => await Rename(path, parent));
+        RenameCommand = ReactiveCommand.CreateFromTask(async () => await RenameTask(path, parent));
 
         DuplicateCommand = ReactiveCommand.CreateFromTask(async () => await Duplicate(path, parent));
 
         DeleteCommand = ReactiveCommand.CreateFromTask(async () => await Delete(path, parent));
     }
 
-    private async Task Rename(string path, HomePanelViewModel parent)
+    public void Rename(string newProj, HomePanelViewModel parent)
+    {
+        Text = Path.GetFileName(newProj);
+        OpenCommand = ReactiveCommand.Create(() => parent.MainWindow.OpenRecentProjectCommand.Execute(newProj));
+        RenameCommand = ReactiveCommand.CreateFromTask(async () => await RenameTask(newProj, parent));
+        DuplicateCommand = ReactiveCommand.CreateFromTask(async () => await Duplicate(newProj, parent));
+        DeleteCommand = ReactiveCommand.CreateFromTask(async () => await Delete(newProj, parent));
+    }
+
+    private async Task RenameTask(string path, HomePanelViewModel parent)
     {
         ProjectRenameDuplicateDialogViewModel renameDialogViewModel =
             new(true, path, parent.MainWindow.CurrentConfig, parent.MainWindow.Log);
@@ -71,12 +80,7 @@ public class RecentProjectViewModel : ReactiveObject
         {
             return;
         }
-
-        Text = Path.GetFileName(newProj);
-        OpenCommand = ReactiveCommand.Create(() => parent.MainWindow.OpenRecentProjectCommand.Execute(newProj));
-        RenameCommand = ReactiveCommand.CreateFromTask(async () => await Rename(newProj, parent));
-        DuplicateCommand = ReactiveCommand.CreateFromTask(async () => await Duplicate(newProj, parent));
-        DeleteCommand = ReactiveCommand.CreateFromTask(async () => await Delete(newProj, parent));
+        Rename(newProj, parent);
         parent.MainWindow.ProjectsCache.RenameProject(path, newProj);
         parent.MainWindow.ProjectsCache.Save(parent.MainWindow.Log);
     }
