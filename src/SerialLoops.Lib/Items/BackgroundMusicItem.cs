@@ -25,13 +25,22 @@ public class BackgroundMusicItem : Item, ISoundItem
 
     public BackgroundMusicItem(string bgmFile, int index, Project project) : base(Path.GetFileNameWithoutExtension(bgmFile), ItemType.BGM)
     {
-        BgmFile = Path.GetRelativePath(project.IterativeDirectory, bgmFile);
         _bgmFile = bgmFile;
+        SetBgmFile(project);
         Index = index;
         BgmName = project.Extra.Bgms.FirstOrDefault(b => b.Index == Index)?.Name?.GetSubstitutedString(project) ?? "";
         Flag = project.Extra.Bgms.FirstOrDefault(b => b.Index == Index)?.Flag;
         DisplayName = string.IsNullOrEmpty(BgmName) ? Name : $"{Name} - {BgmName}";
         CanRename = string.IsNullOrEmpty(BgmName);
+    }
+
+    public void SetBgmFile(Project project, string oldProjDir = null)
+    {
+        if (!string.IsNullOrEmpty(oldProjDir))
+        {
+            _bgmFile = _bgmFile.Replace(oldProjDir, project.MainDirectory);
+        }
+        BgmFile = Path.GetRelativePath(project.IterativeDirectory, _bgmFile);
     }
 
     public override void Refresh(Project project, ILogger log)

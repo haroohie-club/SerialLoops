@@ -113,7 +113,7 @@ public class SndPlayScriptCommandEditorViewModel : ScriptCommandEditorViewModel
     {
         Tabs = window.EditorTabs;
         SfxChoices = new(window.OpenProject.Items.Where(i => i.Type == ItemDescription.ItemType.SFX && (((SfxItem)i).AssociatedGroups.Contains("GROUP_ONMEM") ||
-                                                             ((SfxItem)i).AssociatedGroups.Contains(window.OpenProject.Snd.Groups[Script.SfxGroupIndex].Name))).Cast<SfxItem>());
+                                                             (Script.SfxGroupIndex >= 0 && ((SfxItem)i).AssociatedGroups.Contains(window.OpenProject.Snd.Groups[Script.SfxGroupIndex].Name)))).Cast<SfxItem>());
         _selectedSfx = ((SfxScriptParameter)Command.Parameters[0]).Sfx;
         _sfxMode = new(((SfxModeScriptParameter)Command.Parameters[1]).Mode);
         _volume = ((ShortScriptParameter)Command.Parameters[2]).Value;

@@ -1,4 +1,5 @@
 ﻿using System;
+using HaruhiChokuretsuLib.Util;
 #if !WINDOWS
 using NAudio.Sdl2;
 #endif
@@ -8,6 +9,7 @@ namespace SerialLoops.Utility;
 
 public class BgmVceMixer : IDisposable
 {
+    private ILogger _log;
 #if WINDOWS
     private WaveOut _player;
 #else
@@ -34,8 +36,9 @@ public class BgmVceMixer : IDisposable
         }
     }
 
-    public BgmVceMixer(IWaveProvider waveProvider)
+    public BgmVceMixer(IWaveProvider waveProvider, ILogger log)
     {
+        _log = log;
         WaveProvider = waveProvider;
 #if WINDOWS
         _player = new() { DeviceNumber = -1 };
@@ -52,10 +55,20 @@ public class BgmVceMixer : IDisposable
 
     public void Play()
     {
+        try
+        {
 #if !WINDOWS
-        _player.Init(WaveProvider);
+            if (_player.PlaybackState == PlaybackState.Stopped)
+            {
+                _player.Init(WaveProvider);
+            }
 #endif
-        _player.Play();
+            _player.Play();
+        }
+        catch (Exception ex)
+        {
+            _log.LogWarning($"Failed to init wave provider due to exception: {ex.Message}\n{ex.StackTrace}");
+        }
     }
 
     public void Stop()

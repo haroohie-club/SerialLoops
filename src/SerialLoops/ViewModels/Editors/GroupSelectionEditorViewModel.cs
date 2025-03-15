@@ -10,7 +10,6 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
-using SerialLoops.Lib.Script.Parameters;
 using SerialLoops.Lib.Util;
 using SerialLoops.ViewModels.Panels;
 using SkiaSharp;

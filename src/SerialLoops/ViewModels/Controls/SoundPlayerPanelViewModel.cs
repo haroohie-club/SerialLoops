@@ -60,7 +60,7 @@ public class SoundPlayerPanelViewModel : ViewModelBase, IDisposable
     {
         _log.Log("Attempting to initialize sound player...");
         Sound = _item.GetWaveProvider(_log, true);
-        _player = new(Sound);
+        _player = new(Sound, _log);
         _log.Log("Sound player successfully initialized.");
     }
     public void Stop()
