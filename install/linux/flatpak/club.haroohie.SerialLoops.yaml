@@ -50,10 +50,7 @@ modules:
         branch: release-2.32.x
     build-commands:
       - mkdir ../build
-      - cd ../build
-      - cmake -S .. -B . -DCMAKE_BUILD_TYPE=Release
-      - cmake --build . --config Release --parallel
-      - cmake --install . --config Release
+      - cd ../build && cmake -S ../SDL -B . -DCMAKE_BUILD_TYPE=Release && cmake --build . --config Release --parallel && cmake --install . --config Release
 
   - name: SerialLoops
     buildsystem: simple
