@@ -49,8 +49,8 @@ modules:
         url: https://github.com/libsdl-org/SDL.git
         branch: release-2.32.x
     build-commands:
-      - mkdir build
-      - cd build
+      - mkdir ../build
+      - cd ../build
       - cmake -S .. -B . -DCMAKE_BUILD_TYPE=Release
       - cmake --build . --config Release --parallel
       - cmake --install . --config Release
