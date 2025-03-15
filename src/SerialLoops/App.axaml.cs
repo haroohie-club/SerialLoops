@@ -31,7 +31,7 @@ public partial class App : Application
                 DataContext = new MainWindowViewModel(),
             };
 
-            // We don't care that this is obsolete; the replacement doesn't seem to support doing this yet
+            // We don't care that this is obsolete; the replacement doesn't seem to work? or at least I can't get it to
 #pragma warning disable CS0618 // Type or member is obsolete
             UrlsOpened += (_, args) =>
 #pragma warning restore CS0618 // Type or member is obsolete
