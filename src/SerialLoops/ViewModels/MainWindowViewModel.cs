@@ -217,26 +217,35 @@ public partial class MainWindowViewModel : ViewModelBase
             CheckForUpdatesCommand.Execute(null);
         }
 
+        // We handle file opening in an event for macOS, so let's skip all this here
+        if (OperatingSystem.IsMacOS() || !HandleFilesAndPreviousProjects())
+        {
+            OpenHomePanel();
+        }
+    }
+
+    public bool HandleFilesAndPreviousProjects()
+    {
         if (Args?.Length > 0)
         {
             if (Args[0].EndsWith(".slproj", StringComparison.OrdinalIgnoreCase))
             {
-                OpenRecentProjectCommand.Execute(Args[0]);
+                OpenRecentProjectCommand.Execute(Args[0].Replace("file://", ""));
             }
             else if (Args[0].EndsWith(".slzip", StringComparison.OrdinalIgnoreCase))
             {
                 OpenHomePanel();
-                ImportProjectCommand.Execute(Args[0]);
+                ImportProjectCommand.Execute(Args[0].Replace("file://", ""));
             }
+
+            return true;
         }
         else if (CurrentConfig.AutoReopenLastProject && ProjectsCache.RecentProjects.Count > 0)
         {
             OpenRecentProjectCommand.Execute(ProjectsCache.RecentProjects[0]);
+            return true;
         }
-        else
-        {
-            OpenHomePanel();
-        }
+        return false;
     }
 
     private void OpenHomePanel()

@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Reactive;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -31,7 +32,24 @@ public partial class App : Application
                 DataContext = new MainWindowViewModel(),
             };
 
-            ((MainWindowViewModel)desktop.MainWindow.DataContext).Args = desktop.Args;
+            // We don't care that this is obsolete; the replacement doesn't seem to support doing this yet
+            // Maybe I'm stupid, but I can't figure out how to do this yet?
+#pragma warning disable CS0618 // Type or member is obsolete
+            UrlsOpened += (_, args) =>
+#pragma warning restore CS0618 // Type or member is obsolete
+            {
+                if (args?.Urls is not null && args.Urls.Length > 0)
+                {
+                    File.WriteAllLines(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "SL.Log"), args.Urls);
+                    ((MainWindowViewModel)desktop.MainWindow.DataContext).Args = args.Urls;
+                    ((MainWindowViewModel)desktop.MainWindow.DataContext).HandleFilesAndPreviousProjects();
+                }
+            };
+
+            if (!OperatingSystem.IsMacOS())
+            {
+                ((MainWindowViewModel)desktop.MainWindow.DataContext).Args = desktop.Args;
+            }
         }
 
         base.OnFrameworkInitializationCompleted();
