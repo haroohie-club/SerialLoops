@@ -34,26 +34,26 @@
 
     <Panel>
         <controls:AcrylicBorderHandler/>
-        <Grid RowDefinitions="Auto,*" Margin="5">
-            <StackPanel IsVisible="False">
+        <Grid RowDefinitions="Auto,*">
+            <StackPanel IsVisible="False" Margin="5">
                 <Button Command="{Binding SaveProjectCommand}" HotKey="{Binding SaveHotKey}"/>
                 <Button Command="{Binding SearchProjectCommand}" HotKey="{Binding SearchHotKey}"/>
                 <Button Command="{Binding CloseProjectCommand}" HotKey="{Binding CloseProjectKey}"/>
             </StackPanel>
-            <StackPanel Grid.Row="0" HorizontalAlignment="Stretch">
-                <NativeMenuBar Name="MenuBar"/>
-                <Grid ColumnDefinitions="Auto,*" Margin="{OnPlatform Default='10 0', macOS='10 15 10 0'}">
-                    <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
+            <StackPanel Grid.Row="0" HorizontalAlignment="Stretch" Margin="0 5">
+                <NativeMenuBar Name="MenuBar" Margin="0 0 0 5"/>
+                <Grid ColumnDefinitions="Auto,*" Classes="project" Margin="0" VerticalAlignment="Center">
+                    <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Margin="{OnPlatform Default='10 0 0 0', macOS='10 0 10 0'}">
                         <Image Source="{Binding OpenProjectIcon, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
                                Width="24" Height="24" />
                         <TextBlock VerticalAlignment="Center" Margin="10 0"
                                 Text="{Binding OpenProjectName}" />
                     </StackPanel>
                     <toolbar:Toolbar Grid.Row="0" Grid.Column="1" Name="ToolBar" Orientation="Horizontal"
-                                     HorizontalAlignment="Right" DisplayMode="Compact" />
+                         Margin="0" HorizontalAlignment="Right" VerticalAlignment="Center" DisplayMode="Compact" />
                 </Grid>
             </StackPanel>
-            <ContentControl Name="MainContent" Grid.Row="1"/>
+            <ContentControl Name="MainContent" Grid.Row="1" Margin="5" />
         </Grid>
     </Panel>
 

@@ -59,6 +59,11 @@
             <Setter Property="ToolTip.Tip" Value="{Binding ., DataType=system:String}"/>
         </Style>
 
+        <!-- Project bar color -->
+        <Style Selector="Grid.project">
+            <Setter Property="Background" Value="{DynamicResource ProjectBarGradient}" />
+        </Style>
+
         <!-- Tab Control styling -->
         <Style Selector="TabControl">
             <Setter Property="Background" Value="{DynamicResource TabControlBackgroundColor}"/>
@@ -263,6 +268,13 @@
         <ResourceDictionary>
             <system:Double x:Key="ToolbarCompactHeight">36</system:Double>
             <system:Double x:Key="ToolbarCompactHeightPadded">43</system:Double>
+
+            <LinearGradientBrush x:Key="ProjectBarGradient" StartPoint="0%,0%" EndPoint="100%,0%">
+                <GradientStop Color="#1F000000" Offset="0.0"/>
+                <GradientStop Color="#1F00c4f3" Offset="0.05"/>
+                <GradientStop Color="#1F86c226" Offset="0.1"/>
+                <GradientStop Color="#1F000000" Offset="0.2"/>
+            </LinearGradientBrush>
 
             <ResourceDictionary.ThemeDictionaries>
                 <ResourceDictionary x:Key="Light">
