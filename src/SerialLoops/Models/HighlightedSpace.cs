@@ -4,9 +4,7 @@ using Avalonia.Skia;
 using HaruhiChokuretsuLib.Archive.Data;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
-using SerialLoops.Lib.Util;
 using SkiaSharp;
 
 namespace SerialLoops.Models;

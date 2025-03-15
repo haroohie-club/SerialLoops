@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia.Input;
 using Avalonia.Platform.Storage;
-using GotaSequenceLib.Playback;
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Audio.ADX;
 using HaruhiChokuretsuLib.Util;
@@ -177,7 +176,7 @@ public class VoicedLineEditorViewModel : EditorViewModel
             SubtitleScreen = ScreenSelector.SelectedScreen;
         };
 
-        _voiceMapEntry = _project.VoiceMap.VoiceMapEntries.FirstOrDefault(v => v.VoiceFileName.Equals(Path.GetFileNameWithoutExtension(_vce.VoiceFile)));
+        _voiceMapEntry = _project.VoiceMap?.VoiceMapEntries.FirstOrDefault(v => v.VoiceFileName.Equals(Path.GetFileNameWithoutExtension(_vce.VoiceFile)));
         if (_voiceMapEntry is not null)
         {
             _subtitleColor = (int)_voiceMapEntry.Color == 100 ? SubtitleColors.First(c => c.Color == DialogueColor.WHITE) :

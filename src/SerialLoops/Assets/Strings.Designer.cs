@@ -833,6 +833,24 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to adjust volume for background music. Please check the logs and file an issue if this reoccurs..
+        /// </summary>
+        public static string BgmAdjustVolumeError {
+            get {
+                return ResourceManager.GetString("BgmAdjustVolumeError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to adjust loop data for background music. Please check the logs and file an issue if this reoccurs..
+        /// </summary>
+        public static string BgmLoopErrorMessage {
+            get {
+                return ResourceManager.GetString("BgmLoopErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to BGMs.
         /// </summary>
         public static string BGMs {
@@ -2190,6 +2208,15 @@ namespace SerialLoops.Assets {
         public static string Drawing_top_screen_tiles___ {
             get {
                 return ResourceManager.GetString("Drawing top screen tiles...", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Duplicate.
+        /// </summary>
+        public static string Duplicate {
+            get {
+                return ResourceManager.GetString("Duplicate", resourceCulture);
             }
         }
         
@@ -5910,6 +5937,150 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A project of that name already exists! Please choose a different name for your project..
+        /// </summary>
+        public static string ProjectAlreadyExistsErrorText {
+            get {
+                return ResourceManager.GetString("ProjectAlreadyExistsErrorText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project Already Exists!.
+        /// </summary>
+        public static string ProjectAlreadyExistsErrorTitle {
+            get {
+                return ResourceManager.GetString("ProjectAlreadyExistsErrorTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete this project?.
+        /// </summary>
+        public static string ProjectDeleteConfirmText {
+            get {
+                return ResourceManager.GetString("ProjectDeleteConfirmText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete This Project?.
+        /// </summary>
+        public static string ProjectDeleteConfirmTitle {
+            get {
+                return ResourceManager.GetString("ProjectDeleteConfirmTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to move the project to the trash/recycle bin! Would you like to permanently delete the project instead? WARNING: This cannot be undone!.
+        /// </summary>
+        public static string ProjectDeleteFailedText {
+            get {
+                return ResourceManager.GetString("ProjectDeleteFailedText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failure! Permanently Delete?.
+        /// </summary>
+        public static string ProjectDeleteFailedTitle {
+            get {
+                return ResourceManager.GetString("ProjectDeleteFailedTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to hard delete project..
+        /// </summary>
+        public static string ProjectDeleteHardFailedErrorMsg {
+            get {
+                return ResourceManager.GetString("ProjectDeleteHardFailedErrorMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete Project.
+        /// </summary>
+        public static string ProjectDeleteText {
+            get {
+                return ResourceManager.GetString("ProjectDeleteText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to duplicated project. Please check the logs and file an issue if this is a recurring problem..
+        /// </summary>
+        public static string ProjectDuplicatedFailureText {
+            get {
+                return ResourceManager.GetString("ProjectDuplicatedFailureText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project Duplication Failed!.
+        /// </summary>
+        public static string ProjectDuplicatedFailureTitle {
+            get {
+                return ResourceManager.GetString("ProjectDuplicatedFailureTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project successfully duplicated! Would you like to open it now?.
+        /// </summary>
+        public static string ProjectDuplicatedSuccessText {
+            get {
+                return ResourceManager.GetString("ProjectDuplicatedSuccessText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project Duplication Succeeded!.
+        /// </summary>
+        public static string ProjectDuplicatedSuccessTitle {
+            get {
+                return ResourceManager.GetString("ProjectDuplicatedSuccessTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Duplicate (Copy) Project.
+        /// </summary>
+        public static string ProjectDuplicateText {
+            get {
+                return ResourceManager.GetString("ProjectDuplicateText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must enter a name for the project!.
+        /// </summary>
+        public static string ProjectRenameDuplicateMustEnterNameErrorText {
+            get {
+                return ResourceManager.GetString("ProjectRenameDuplicateMustEnterNameErrorText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Must Enter Project Name!.
+        /// </summary>
+        public static string ProjectRenameDuplicateMustEnterNameErrorTitle {
+            get {
+                return ResourceManager.GetString("ProjectRenameDuplicateMustEnterNameErrorTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename Project.
+        /// </summary>
+        public static string ProjectRenameText {
+            get {
+                return ResourceManager.GetString("ProjectRenameText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Projects.
         /// </summary>
         public static string Projects {
@@ -6889,6 +7060,15 @@ namespace SerialLoops.Assets {
         public static string Scrolling_BG {
             get {
                 return ResourceManager.GetString("Scrolling BG", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sorry, but you currently have too many sound items open to open another one. Please close some and then try again..
+        /// </summary>
+        public static string SdlExceptionTooManyDevicesText {
+            get {
+                return ResourceManager.GetString("SdlExceptionTooManyDevicesText", resourceCulture);
             }
         }
         

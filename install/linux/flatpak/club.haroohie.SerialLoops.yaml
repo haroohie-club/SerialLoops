@@ -42,6 +42,19 @@ modules:
       - make
       - make install
 
+  - name: SDL
+    buildsystem: simple
+    sources:
+      - type: git
+        url: https://github.com/libsdl-org/SDL.git
+        branch: release-2.32.x
+    build-commands:
+      - mkdir build
+      - cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+      - cmake --build build --config Release --parallel
+      - cmake --install build --config Release --prefix ${FLATPAK_DEST}
+      - ln -s /app/lib/libSDL2.so ${FLATPAK_DEST}/bin/libSDL2.so
+
   - name: SerialLoops
     buildsystem: simple
     sources:

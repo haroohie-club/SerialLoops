@@ -1,6 +1,5 @@
 using System.Collections.ObjectModel;
 using System.Windows.Input;
-using HaruhiChokuretsuLib.Archive.Data;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SerialLoops.ViewModels.Editors;
