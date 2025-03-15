@@ -176,7 +176,7 @@ public class VoicedLineEditorViewModel : EditorViewModel
             SubtitleScreen = ScreenSelector.SelectedScreen;
         };
 
-        _voiceMapEntry = _project.VoiceMap.VoiceMapEntries.FirstOrDefault(v => v.VoiceFileName.Equals(Path.GetFileNameWithoutExtension(_vce.VoiceFile)));
+        _voiceMapEntry = _project.VoiceMap?.VoiceMapEntries.FirstOrDefault(v => v.VoiceFileName.Equals(Path.GetFileNameWithoutExtension(_vce.VoiceFile)));
         if (_voiceMapEntry is not null)
         {
             _subtitleColor = (int)_voiceMapEntry.Color == 100 ? SubtitleColors.First(c => c.Color == DialogueColor.WHITE) :

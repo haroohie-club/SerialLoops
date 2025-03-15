@@ -40,8 +40,9 @@ public class BgmVceMixer : IDisposable
 #if WINDOWS
         _player = new() { DeviceNumber = -1 };
         _player.Init(WaveProvider);
-#endif
+#else
         _player = new() { DesiredLatency = 10 };
+#endif
     }
 
     public void Pause()
