@@ -1,0 +1,39 @@
+name: PR Tests
+
+on:
+  pull_request:
+    branches: [ 'main' ]
+
+jobs:
+  build-and-test:
+    strategy:
+      matrix:
+        platform:
+        - { rid: 'linux-x64', vm: 'ubuntu-latest', tfm: 'net8.0', filter: '--filter "Name !~ BackgroundMusicEditor_ReplacementAndRestoreWork"' }
+        - { rid: 'osx-arm64', vm: 'macos-latest', tfm: 'net8.0', filter: '' }
+        - { rid: 'win-x64', vm: 'windows-latest', tfm: 'net8.0-windows', filter: '--filter "Name !~ BackgroundMusicEditor_ReplacementAndRestoreWork"' }
+      fail-fast: false
+    runs-on: ${{ matrix.platform.vm }}
+    steps:
+      - name: Check out Serial Loops
+        uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4.1.0
+        with:
+          dotnet-version: '8.0.x'
+      - name: Build
+        run: dotnet build src/SerialLoops/SerialLoops.csproj -f ${{ matrix.platform.tfm }}
+      - name: Test
+        run: dotnet test test/SerialLoops.Tests.Headless/SerialLoops.Tests.Headless.csproj -f ${{ matrix.platform.tfm }} ${{ matrix.platform.filter }} --logger:"trx;LogFileName=TestResults.trx"
+      - name: Upload test results for reporter
+        uses: actions/upload-artifact@v4
+        if: success() || failure()
+        with:
+          name: test-results-${{ matrix.platform.rid }}
+          path: test/SerialLoops.Tests.Headless/TestResults/TestResults.trx
+      - name: Upload test artifacts for review
+        uses: actions/upload-artifact@v4
+        if: success() || failure()
+        with:
+          name: test-artifacts-${{ matrix.platform.rid }}
+          path: test/SerialLoops.Tests.Headless/bin/Debug/${{ matrix.platform.tfm }}/assets/artifacts

@@ -7,16 +7,24 @@ using SerialLoops.Lib.Factories;
 
 namespace SerialLoops.Tests.Headless;
 
-public class ConfigFactoryMock(string configPath) : IConfigFactory
+public class ConfigFactoryMock(string configPath, Config config = null) : IConfigFactory
 {
-    private string _configPath = configPath;
-
     public Config LoadConfig(Func<string, string> localize, ILogger log)
     {
-        if (File.Exists(_configPath))
+        if (config is not null)
         {
-            Config newConfig = JsonSerializer.Deserialize<Config>(File.ReadAllText(_configPath));
-            newConfig.ConfigPath = _configPath;
+            config.ConfigPath = configPath;
+            config.CurrentCultureName = "en-US";
+            config.CheckForUpdates = false;
+            config.RememberProjectWorkspace = false;
+            config.InitializeHacks(log);
+            config.Save(log);
+            return config;
+        }
+        else if (File.Exists(configPath))
+        {
+            Config newConfig = JsonSerializer.Deserialize<Config>(File.ReadAllText(configPath));
+            newConfig.ConfigPath = configPath;
             newConfig.InitializeHacks(log);
             return newConfig;
         }
@@ -24,7 +32,7 @@ public class ConfigFactoryMock(string configPath) : IConfigFactory
         {
             Config newConfig = ConfigFactory.GetDefault(log);
             newConfig.RememberProjectWorkspace = false;
-            newConfig.ConfigPath = _configPath;
+            newConfig.ConfigPath = configPath;
             newConfig.CurrentCultureName = "en-US"; // there's a chance that the locale will be something we don't recognize (like Invariant culture) so we force this for tests
             newConfig.InitializeHacks(log);
             newConfig.Save(log);

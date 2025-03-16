@@ -296,9 +296,10 @@ public partial class MainWindowViewModel : ViewModelBase
         Title = $"{BASE_TITLE} - {project.Name}";
 
         LoadCachedData();
-        UpdateRecentProjects();
 
         Window.MainContent.Content = ProjectPanel;
+        CacheCurrentProject();
+        UpdateRecentProjects();
         HomePanel = null;
     }
 
@@ -382,20 +383,25 @@ public partial class MainWindowViewModel : ViewModelBase
                 }
             }
 
-            // Record open items
-            List<string> openItems = EditorTabs.Tabs
-                .Select(t => t.Description)
-                .Select(i => i.DisplayName)
-                .ToList();
-            ProjectsCache.CacheRecentProject(OpenProject.ProjectFile, openItems, EditorTabs.Tabs.IndexOf(EditorTabs.SelectedTab));
-            ProjectsCache.HadProjectOpenOnLastClose = true;
-            ProjectsCache.Save(Log);
+            CacheCurrentProject();
         }
         else
         {
             cancel = true;
         }
         return cancel;
+    }
+
+    private void CacheCurrentProject()
+    {
+        // Record open items
+        List<string> openItems = EditorTabs.Tabs
+            .Select(t => t.Description)
+            .Select(i => i.DisplayName)
+            .ToList();
+        ProjectsCache.CacheRecentProject(OpenProject.ProjectFile, openItems, EditorTabs.Tabs.IndexOf(EditorTabs.SelectedTab));
+        ProjectsCache.HadProjectOpenOnLastClose = true;
+        ProjectsCache.Save(Log);
     }
 
     private async Task ApplyHacksCommand_Executed()
@@ -828,7 +834,8 @@ public partial class MainWindowViewModel : ViewModelBase
         if (OpenProject is null)
         {
             projFile = (await Window.ShowOpenFilePickerAsync(Strings.ProjectDeleteText,
-                [new(Strings.Serial_Loops_Project) { Patterns = [$"*.{Project.PROJECT_FORMAT}"] }]))?.TryGetLocalPath();
+                [new(Strings.Serial_Loops_Project) { Patterns = [$"*.{Project.PROJECT_FORMAT}"] }],
+                CurrentConfig.ProjectsDirectory))?.TryGetLocalPath();
             if (string.IsNullOrEmpty(projFile))
             {
                 return;

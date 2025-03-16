@@ -1,10 +1,12 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Headless;
 using Avalonia.Headless.NUnit;
+using Avalonia.Input;
 using Codeuctivity.ImageSharpCompare;
 using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Graphics;
@@ -16,6 +18,7 @@ using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Util;
 using SerialLoops.Lib.Util.WaveformRenderer;
 using SerialLoops.Tests.Shared;
+using SerialLoops.Utility;
 using SerialLoops.ViewModels;
 using SerialLoops.ViewModels.Editors;
 using SerialLoops.Views.Editors;
@@ -66,7 +69,11 @@ public class BackgroundMusicEditorTests
         windowMock.SetupCommonMocks();
         _mainWindowViewModel = windowMock.Object;
         _mainWindowViewModel.SetupMockedProperties(_project, _log);
-        _mainWindowViewModel.CurrentConfig = new ConfigFactoryMock("config.json").LoadConfig(s => s, _log);
+
+        string testId = Guid.NewGuid().ToString();
+        Config config = new() { UserDirectory = Path.Combine(Path.GetTempPath(), testId) };
+        ConfigFactoryMock configFactory = new($"{testId}.json", config);
+        _mainWindowViewModel.CurrentConfig = configFactory.LoadConfig(s => s, _log);
         _project.Config = _mainWindowViewModel.CurrentConfig;
         _project.Name = nameof(BackgroundMusicEditorTests);
 
@@ -233,5 +240,46 @@ public class BackgroundMusicEditorTests
         TextBox titleBox = editor.Player.Get<TextBox>("TrackNameBox");
         Assert.That(titleBox, Is.Not.Null);
         Assert.That(titleBox.IsVisible, Is.False);
+    }
+
+    [AvaloniaTest]
+    public void BackgroundMusicEditor_CanOpenAfterProjectRename()
+    {
+        BackgroundMusicItem bgm = (BackgroundMusicItem)_project.Items.First(i => i.Name == "BGM031");
+        Assert.That(bgm, Is.Not.Null);
+
+        string testId = Guid.NewGuid().ToString();
+        Config config = new() { UserDirectory = Path.Combine(Path.GetTempPath(), testId) };
+
+        ConfigFactoryMock configFactory = new($"{testId}.json", config);
+        Mock<MainWindowViewModel> windowMock = new();
+        MainWindowViewModel mainWindowVm = windowMock.Object;
+        mainWindowVm.Window = new() { DataContext = mainWindowVm, ConfigurationFactory = configFactory };
+        mainWindowVm.Window.Show();
+        Directory.CreateDirectory(mainWindowVm.CurrentConfig.ProjectsDirectory);
+
+        Mock<Project> projectMock = new();
+        projectMock.SetupCommonMocks();
+        Project project = projectMock.Object;
+        project.SetupMockedProperties(_uiVals);
+        project.Extra = _extra;
+        project.Config = mainWindowVm.CurrentConfig;
+        mainWindowVm.OpenProject = project;
+        Directory.CreateDirectory(Path.Combine(mainWindowVm.CurrentConfig.ProjectsDirectory, project.Name));
+        project.Save(_log);
+
+        mainWindowVm.RenameProjectCommand.Execute(null);
+        mainWindowVm.Window.KeyTextInput("RenameTest");
+        mainWindowVm.Window.KeyPress(Key.Enter, RawInputModifiers.None, PhysicalKey.Enter, "Enter");
+
+        Assert.That(project.Name, Is.EqualTo("RenameTest"));
+        BackgroundMusicEditorViewModel editorVm = new(bgm, mainWindowVm, _project, _log, initializePlayer: false);
+        BackgroundMusicEditorView editor = new() { DataContext = editorVm };
+        Window window = new() { Content = editor };
+        Assert.DoesNotThrow(window.Show);
+
+        mainWindowVm.RenameProjectCommand.Execute(null);
+        mainWindowVm.Window.KeyTextInput(nameof(BackgroundEditorTests));
+        mainWindowVm.Window.KeyPress(Key.Enter, RawInputModifiers.None, PhysicalKey.Enter, "Enter");
     }
 }
