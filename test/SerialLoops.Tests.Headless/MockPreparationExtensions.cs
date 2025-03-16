@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using HaruhiChokuretsuLib.Archive;
@@ -23,7 +24,11 @@ public static class MockPreparationExtensions
 
     public static void SetupMockedProperties(this MainWindowViewModel mockedWindowVm, Project project, ILogger log)
     {
-        MainWindow window = new() { ConfigurationFactory = new ConfigFactoryMock("config.json") };
+        string testId = Guid.NewGuid().ToString();
+        Config config = new() { UserDirectory = Path.Combine(Path.GetTempPath(), testId) };
+        ConfigFactoryMock configFactory = new($"{testId}.json", config);
+
+        MainWindow window = new() { ConfigurationFactory = configFactory };
         mockedWindowVm.Window = window;
         mockedWindowVm.OpenProject = project;
         EditorTabsPanelViewModel editorTabs = new(mockedWindowVm, project, log);
