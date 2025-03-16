@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.IO.Compression;
 using System.Net.Http;
 using System.Reflection;
@@ -22,6 +23,13 @@ public class UiVals
         UiVals uiVals = new() { AssetsDirectory = Path.Join(BaseDirectory ?? string.Empty, "assets") };
         archive.ExtractToDirectory(uiVals.AssetsDirectory);
         await File.WriteAllTextAsync("ui_vals.json", JsonSerializer.Serialize(uiVals));
+        // On Linux CI tests, we want to ensure libSDL2.so is present, so we include it with the test assets and copy it
+        // into the assembly's directory
+        if (OperatingSystem.IsLinux())
+        {
+            File.Copy(Path.Combine(uiVals.AssetsDirectory, "libSDL2.so"),
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "libSDL2.so"));
+        }
         return uiVals;
     }
 }
