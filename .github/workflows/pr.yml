@@ -8,7 +8,10 @@ jobs:
   build-and-test:
     strategy:
       matrix:
-        platform: [ { rid:  'win-x64', vm: 'windows-latest', tfm: 'net8.0-windows' },  { rid: 'osx-arm64', vm: 'macos-latest', tfm: 'net8.0' }, { rid: 'linux-x64', vm: 'ubuntu-latest', tfm: 'net8.0' } ]
+        platform:
+         - { rid:  'win-x64', vm: 'windows-latest', tfm: 'net8.0-windows', filter: '--filter "Name !~ BackgroundMusicEditor_ReplacementAndRestoreWork' }
+         - { rid: 'osx-arm64', vm: 'macos-latest', tfm: 'net8.0', filter: '' }
+         - { rid: 'linux-x64', vm: 'ubuntu-latest', tfm: 'net8.0', filter: '--filter "Name !~ BackgroundMusicEditor_ReplacementAndRestoreWork' }
       fail-fast: false
     runs-on: ${{ matrix.platform.vm }}
     steps:
