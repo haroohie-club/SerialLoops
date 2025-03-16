@@ -8,7 +8,7 @@ jobs:
   build-and-test:
     strategy:
       matrix:
-        platform: [ { rid:  'win-x64', vm: 'windows-latest', tfm: 'net8.0-windows' },  { rid: 'osx-arm64', arch: 'macos-latest', tfm: 'net8.0' }, { rid: 'linux-x64', arch: 'ubuntu-latest', tfm: 'net8.0' } ]
+        platform: [ { rid:  'win-x64', vm: 'windows-latest', tfm: 'net8.0-windows' },  { rid: 'osx-arm64', vm: 'macos-latest', tfm: 'net8.0' }, { rid: 'linux-x64', vm: 'ubuntu-latest', tfm: 'net8.0' } ]
     runs-on: ${{ matrix.platform.vm }}
     steps:
       - name: Check out Serial Loops
