@@ -70,7 +70,7 @@ jobs:
         with:
           image: devkitpro/devkitarm:latest
           options: -v ${{ github.workspace }}:/work -w /work
-          run: tar -czvf devkitarm.tar.gz /opt/devkitpro/
+          run: tar -czvf devkitarm.tar.gz /opt/devkitpro/devkitARM /opt/devkitpro/libnds
       - name: Publish devkitARM tarball
         uses: actions/upload-artifact@v4
         with:
