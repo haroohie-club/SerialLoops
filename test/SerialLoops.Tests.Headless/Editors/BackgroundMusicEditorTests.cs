@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Headless;
 using Avalonia.Headless.NUnit;
+using Avalonia.Input;
 using Codeuctivity.ImageSharpCompare;
 using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Graphics;
@@ -233,5 +234,28 @@ public class BackgroundMusicEditorTests
         TextBox titleBox = editor.Player.Get<TextBox>("TrackNameBox");
         Assert.That(titleBox, Is.Not.Null);
         Assert.That(titleBox.IsVisible, Is.False);
+    }
+
+    [AvaloniaTest]
+    public void BackgroundMusicEditor_CanOpenAfterProjectRename()
+    {
+        BackgroundMusicItem bgm = (BackgroundMusicItem)_project.Items.First(i => i.Name == "BGM031");
+        Assert.That(bgm, Is.Not.Null);
+
+        _mainWindowViewModel.Window.Show();
+        _project.Save(_log);
+        _mainWindowViewModel.RenameProjectCommand.Execute(null);
+        _mainWindowViewModel.Window.KeyTextInput("RenameTest");
+        _mainWindowViewModel.Window.KeyPress(Key.Enter, RawInputModifiers.None, PhysicalKey.Enter, "Enter");
+
+        Assert.That(_project.Name, Is.EqualTo("RenameTest"));
+        BackgroundMusicEditorViewModel editorVm = new(bgm, _mainWindowViewModel, _project, _log, initializePlayer: false);
+        BackgroundMusicEditorView editor = new() { DataContext = editorVm };
+        Window window = new() { Content = editor };
+        Assert.DoesNotThrow(window.Show);
+
+        _mainWindowViewModel.RenameProjectCommand.Execute(null);
+        _mainWindowViewModel.Window.KeyTextInput(nameof(BackgroundEditorTests));
+        _mainWindowViewModel.Window.KeyPress(Key.Enter, RawInputModifiers.None, PhysicalKey.Enter, "Enter");
     }
 }

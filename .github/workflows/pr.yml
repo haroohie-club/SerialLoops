@@ -23,9 +23,10 @@ jobs:
           dotnet-version: '8.0.x'
       - name: Build
         run: dotnet build src/SerialLoops/SerialLoops.csproj -f ${{ matrix.platform.tfm }}
-      - name: test
+      - name: Test
         run: dotnet test test/SerialLoops.Tests.Headless/SerialLoops.Tests.Headless.csproj -f ${{ matrix.platform.tfm }} ${{ matrix.platform.filter }} --logger:"trx;LogFileName=TestResults.trx"
-      - uses: actions/upload-artifact@v4
+      - name: Upload test results for reporter
+        uses: actions/upload-artifact@v4
         if: success() || failure()
         with:
           name: test-results-${{ matrix.platform.rid }}

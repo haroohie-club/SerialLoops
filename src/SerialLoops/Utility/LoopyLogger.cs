@@ -17,6 +17,13 @@ public class LoopyLogger : ILogger
     private Config _config;
     private string _logFile;
 
+    /// <summary>
+    /// WARNING: Do not use this method. It is only here for mocking
+    /// </summary>
+    public LoopyLogger()
+    {
+    }
+
     public LoopyLogger(Window window)
     {
         _owner = window;
@@ -35,7 +42,7 @@ public class LoopyLogger : ILogger
     private static string Stamp => $"\n({Environment.ProcessId}) {DateTimeOffset.Now} - ";
     public static string CrashLogLocation => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "sl_crash.log");
 
-    public void Log(string message)
+    public virtual void Log(string message)
     {
         if (!string.IsNullOrEmpty(_logFile) && !string.IsNullOrEmpty(message))
         {
