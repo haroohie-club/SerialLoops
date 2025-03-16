@@ -828,7 +828,8 @@ public partial class MainWindowViewModel : ViewModelBase
         if (OpenProject is null)
         {
             projFile = (await Window.ShowOpenFilePickerAsync(Strings.ProjectDeleteText,
-                [new(Strings.Serial_Loops_Project) { Patterns = [$"*.{Project.PROJECT_FORMAT}"] }]))?.TryGetLocalPath();
+                [new(Strings.Serial_Loops_Project) { Patterns = [$"*.{Project.PROJECT_FORMAT}"] }],
+                CurrentConfig.ProjectsDirectory))?.TryGetLocalPath();
             if (string.IsNullOrEmpty(projFile))
             {
                 return;

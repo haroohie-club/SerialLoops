@@ -1,0 +1,46 @@
+name: PR Tests
+
+on:
+  pull_request:
+    branches: [ 'main' ]
+
+permissions:
+  contents: read
+  checks: write
+
+jobs:
+  build-and-test:
+    strategy:
+      matrix:
+        platform: [ { rid:  'win-x64', vm: 'windows-latest', tfm: 'net8.0-windows' },  { rid: 'osx-arm64', arch: 'macos-latest', tfm: 'net8.0' }, { rid: 'linux-x64', arch: 'ubuntu-latest', tfm: 'net8.0' } ]
+    runs-on: ${{ matrix.platform.vm }}
+    steps:
+      - name: Check out Serial Loops
+        uses: actions/checkout@v4
+      - name: Check out SDL
+        uses: actions/checkout@v4
+        with:
+          repository: 'libsdl-org/SDL'
+          ref: release-2.32.x
+          path: SDL
+        if: ${{ matrix.platform.vm == 'macos-latest' }}
+      - name: SDL cmake configure
+        run: pushd ${{ github.workspace }}/SDL && cmake -S . -B build -DSDL_SHARED=ON -DCMAKE_SYSTEM_NAME=Darwin -DCMAKE_OSX_ARCHITECTURES="arm64" && popd
+        if: ${{ matrix.platform.vm == 'macos-latest' }}
+      - name: SDL cmake build
+        run: pushd ${{ github.workspace }}/SDL && cmake --build build && popd
+        if: ${{ matrix.platform.vm == 'macos-latest' }}
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4.1.0
+        with:
+          dotnet-version: '8.0.x'
+      - name: Build
+        run: dotnet build src/SerialLoops/SerialLoops.csproj -f ${{ matrix.platform.tfm }}
+      - name: test
+        run: dotnet test test/SerialLoops.Tests.Headless/SerialLoops.Tests.Headless.csproj -f ${{ matrix.platform.tfm }} --logger:"trx"
+      - name: Dotnet Test Reporter
+        uses: bibipkins/dotnet-test-reporter@v1.5.1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          comment-title: 'Unit Test Results'
+          results-path: ./**/TestResults/*.trx
