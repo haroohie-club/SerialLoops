@@ -15,6 +15,8 @@ public class ConfigFactoryMock(string configPath, Config config = null) : IConfi
         {
             config.ConfigPath = configPath;
             config.CurrentCultureName = "en-US";
+            config.CheckForUpdates = false;
+            config.RememberProjectWorkspace = false;
             config.InitializeHacks(log);
             config.Save(log);
             return config;
