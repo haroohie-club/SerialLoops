@@ -19,8 +19,6 @@ public class HomePanelTests
 {
     private UiVals _uiVals;
     private TestConsoleLogger _log;
-    private MainWindowViewModel _mainWindowVm;
-    private Dictionary<string, Project> _projects = [];
 
     [OneTimeSetUp]
     public async Task OneTimeSetup()
@@ -36,130 +34,147 @@ public class HomePanelTests
         }
     }
 
-    [SetUp]
-    public void Setup()
+    private (MainWindowViewModel, Dictionary<string, Project>) Setup()
     {
         string testId = Guid.NewGuid().ToString();
         ConfigFactoryMock configFactory = new($"{testId}.json");
         Mock<MainWindowViewModel> windowMock = new();
-        _mainWindowVm = windowMock.Object;
+        MainWindowViewModel mainWindowVm = windowMock.Object;
 
-        _mainWindowVm.Window = new() { DataContext = _mainWindowVm, ConfigurationFactory = configFactory };
-        _mainWindowVm.Window.Show();
-        _mainWindowVm.CurrentConfig.UserDirectory = Path.Combine(Path.GetTempPath(), testId);
+        mainWindowVm.Window = new() { DataContext = mainWindowVm, ConfigurationFactory = configFactory };
+        mainWindowVm.Window.Show();
+        mainWindowVm.CurrentConfig.UserDirectory = Path.Combine(Path.GetTempPath(), testId);
 
         Mock<LoopyLogger> loggerMock = new();
         loggerMock.Setup(l => l.Log(It.IsAny<string>())).Verifiable();
-        _mainWindowVm.Log = loggerMock.Object;
+        mainWindowVm.Log = loggerMock.Object;
 
         string[] projectNames = ["TestProject", "RecentProject", "MostRecentProject"];
 
+        Dictionary<string, Project> projects = [];
         foreach (string projectName in projectNames)
         {
-            Directory.CreateDirectory(Path.Combine(_mainWindowVm.CurrentConfig.ProjectsDirectory, projectName));
+            Directory.CreateDirectory(Path.Combine(mainWindowVm.CurrentConfig.ProjectsDirectory, projectName));
             Mock<Project> projectMock = new();
             projectMock.SetupCommonMocks();
             Project project = projectMock.Object;
             project.SetupMockedProperties(_uiVals);
-            project.Config = _mainWindowVm.CurrentConfig;
+            project.Config = mainWindowVm.CurrentConfig;
             project.Name = projectName;
             project.Items = [];
             project.Save(_log);
-            _projects.Add(projectName, project);
+            projects.Add(projectName, project);
         }
 
-        _mainWindowVm.ProjectsCache = new()
+        mainWindowVm.ProjectsCache = new()
         {
-            CacheFilePath = Path.Combine(_mainWindowVm.CurrentConfig.UserDirectory, "projects-cache.json"),
-            RecentProjects = [_projects["MostRecentProject"].ProjectFile, _projects["RecentProject"].ProjectFile],
-            RecentWorkspaces = new() { { _projects["MostRecentProject"].ProjectFile, new() }, { _projects["RecentProject"].ProjectFile, new() } },
+            CacheFilePath = Path.Combine(mainWindowVm.CurrentConfig.UserDirectory, "projects-cache.json"),
+            RecentProjects = [projects["MostRecentProject"].ProjectFile, projects["RecentProject"].ProjectFile],
+            RecentWorkspaces = new() { { projects["MostRecentProject"].ProjectFile, new() }, { projects["RecentProject"].ProjectFile, new() } },
         };
-        _mainWindowVm.ProjectsCache.Save(_log);
-        _mainWindowVm.WindowMenu = new() { { MenuHeader.TOOLS, new() } };
+        mainWindowVm.ProjectsCache.Save(_log);
+        mainWindowVm.WindowMenu = new() { { MenuHeader.TOOLS, new() } };
+
+        return (mainWindowVm, projects);
     }
 
-    [TearDown]
-    public void TearDown()
+    private void TearDown(MainWindowViewModel mainWindowVm)
     {
-        Directory.Delete(_mainWindowVm.CurrentConfig.UserDirectory, true);
+        if (mainWindowVm.CurrentConfig.UserDirectory !=
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "SerialLoops"))
+        {
+            Directory.Delete(mainWindowVm.CurrentConfig.UserDirectory, true);
+        }
     }
 
     [AvaloniaTest]
     public void HomePanel_OpeningProjectAddsToRecentProjects()
     {
-        _mainWindowVm.HomePanel = new(_mainWindowVm);
+        (MainWindowViewModel mainWindowVm, Dictionary<string, Project> projects) = Setup();
+
+        mainWindowVm.HomePanel = new(mainWindowVm);
         Assert.Multiple(() =>
         {
-            Assert.That(_mainWindowVm.ProjectsCache.RecentProjects, Has.Count.EqualTo(2));
-            Assert.That(_mainWindowVm.HomePanel.RecentProjects, Has.Count.EqualTo(2));
+            Assert.That(mainWindowVm.ProjectsCache.RecentProjects, Has.Count.EqualTo(2));
+            Assert.That(mainWindowVm.HomePanel.RecentProjects, Has.Count.EqualTo(2));
         });
         Assert.Multiple(() =>
         {
-            Assert.That(_mainWindowVm.HomePanel.RecentProjects[0].Text, Is.EqualTo("MostRecentProject.slproj"));
-            Assert.That(_mainWindowVm.HomePanel.RecentProjects[0].Text, Is.EqualTo(Path.GetFileName(_mainWindowVm.ProjectsCache.RecentProjects[0])));
-            Assert.That(_mainWindowVm.HomePanel.RecentProjects[1].Text, Is.EqualTo("RecentProject.slproj"));
-            Assert.That(_mainWindowVm.HomePanel.RecentProjects[1].Text, Is.EqualTo(Path.GetFileName(_mainWindowVm.ProjectsCache.RecentProjects[1])));
+            Assert.That(mainWindowVm.HomePanel.RecentProjects[0].Text, Is.EqualTo("MostRecentProject.slproj"));
+            Assert.That(mainWindowVm.HomePanel.RecentProjects[0].Text, Is.EqualTo(Path.GetFileName(mainWindowVm.ProjectsCache.RecentProjects[0])));
+            Assert.That(mainWindowVm.HomePanel.RecentProjects[1].Text, Is.EqualTo("RecentProject.slproj"));
+            Assert.That(mainWindowVm.HomePanel.RecentProjects[1].Text, Is.EqualTo(Path.GetFileName(mainWindowVm.ProjectsCache.RecentProjects[1])));
         });
 
-        _mainWindowVm.OpenProject = _projects["TestProject"];
-        _mainWindowVm.OpenProjectView(_projects["TestProject"], new TestProgressTracker());
-        Assert.That(_mainWindowVm.ProjectsCache.RecentProjects, Has.Count.EqualTo(3));
-        _mainWindowVm.CloseProjectCommand.Execute(null);
+        mainWindowVm.OpenProject = projects["TestProject"];
+        mainWindowVm.OpenProjectView(projects["TestProject"], new TestProgressTracker());
+        Assert.That(mainWindowVm.ProjectsCache.RecentProjects, Has.Count.EqualTo(3));
+        mainWindowVm.CloseProjectCommand.Execute(null);
 
-        Assert.That(_mainWindowVm.HomePanel.RecentProjects, Has.Count.EqualTo(3));
+        Assert.That(mainWindowVm.HomePanel.RecentProjects, Has.Count.EqualTo(3));
         Assert.Multiple(() =>
         {
-            Assert.That(_mainWindowVm.HomePanel.RecentProjects[0].Text, Is.EqualTo("TestProject.slproj"));
-            Assert.That(_mainWindowVm.HomePanel.RecentProjects[0].Text, Is.EqualTo(Path.GetFileName(_mainWindowVm.ProjectsCache.RecentProjects[0])));
-            Assert.That(_mainWindowVm.HomePanel.RecentProjects[1].Text, Is.EqualTo("MostRecentProject.slproj"));
-            Assert.That(_mainWindowVm.HomePanel.RecentProjects[1].Text, Is.EqualTo(Path.GetFileName(_mainWindowVm.ProjectsCache.RecentProjects[1])));
-            Assert.That(_mainWindowVm.HomePanel.RecentProjects[2].Text, Is.EqualTo("RecentProject.slproj"));
-            Assert.That(_mainWindowVm.HomePanel.RecentProjects[2].Text, Is.EqualTo(Path.GetFileName(_mainWindowVm.ProjectsCache.RecentProjects[2])));
+            Assert.That(mainWindowVm.HomePanel.RecentProjects[0].Text, Is.EqualTo("TestProject.slproj"));
+            Assert.That(mainWindowVm.HomePanel.RecentProjects[0].Text, Is.EqualTo(Path.GetFileName(mainWindowVm.ProjectsCache.RecentProjects[0])));
+            Assert.That(mainWindowVm.HomePanel.RecentProjects[1].Text, Is.EqualTo("MostRecentProject.slproj"));
+            Assert.That(mainWindowVm.HomePanel.RecentProjects[1].Text, Is.EqualTo(Path.GetFileName(mainWindowVm.ProjectsCache.RecentProjects[1])));
+            Assert.That(mainWindowVm.HomePanel.RecentProjects[2].Text, Is.EqualTo("RecentProject.slproj"));
+            Assert.That(mainWindowVm.HomePanel.RecentProjects[2].Text, Is.EqualTo(Path.GetFileName(mainWindowVm.ProjectsCache.RecentProjects[2])));
         });
+
+        TearDown(mainWindowVm);
     }
 
     [AvaloniaTest]
     public void HomePanel_CanRename()
     {
-        _mainWindowVm.HomePanel = new(_mainWindowVm);
-        Assert.Multiple(() =>
-        {
-            Assert.That(_mainWindowVm.HomePanel.RecentProjects[0].Text, Is.EqualTo("MostRecentProject.slproj"));
-            Assert.That(_mainWindowVm.HomePanel.RecentProjects[1].Text, Is.EqualTo("RecentProject.slproj"));
-        });
-        string oldFile = _mainWindowVm.ProjectsCache.RecentProjects[0];
+        (MainWindowViewModel mainWindowVm, _) = Setup();
 
-        _mainWindowVm.HomePanel.RecentProjects[0].RenameCommand.Execute(null);
-        _mainWindowVm.Window.KeyTextInput("BetterProject");
-        _mainWindowVm.Window.KeyPress(Key.Enter, RawInputModifiers.None, PhysicalKey.Enter, "Enter");
+        mainWindowVm.HomePanel = new(mainWindowVm);
         Assert.Multiple(() =>
         {
-            Assert.That(_mainWindowVm.HomePanel.RecentProjects[0].Text, Is.EqualTo("BetterProject.slproj"));
-            Assert.That(_mainWindowVm.HomePanel.RecentProjects[1].Text, Is.EqualTo("RecentProject.slproj"));
-            Assert.That(File.Exists(_mainWindowVm.ProjectsCache.RecentProjects[0]), Is.True);
+            Assert.That(mainWindowVm.HomePanel.RecentProjects[0].Text, Is.EqualTo("MostRecentProject.slproj"));
+            Assert.That(mainWindowVm.HomePanel.RecentProjects[1].Text, Is.EqualTo("RecentProject.slproj"));
+        });
+        string oldFile = mainWindowVm.ProjectsCache.RecentProjects[0];
+
+        mainWindowVm.HomePanel.RecentProjects[0].RenameCommand.Execute(null);
+        mainWindowVm.Window.KeyTextInput("BetterProject");
+        mainWindowVm.Window.KeyPress(Key.Enter, RawInputModifiers.None, PhysicalKey.Enter, "Enter");
+        Assert.Multiple(() =>
+        {
+            Assert.That(mainWindowVm.HomePanel.RecentProjects[0].Text, Is.EqualTo("BetterProject.slproj"));
+            Assert.That(mainWindowVm.HomePanel.RecentProjects[1].Text, Is.EqualTo("RecentProject.slproj"));
+            Assert.That(File.Exists(mainWindowVm.ProjectsCache.RecentProjects[0]), Is.True);
             Assert.That(File.Exists(oldFile), Is.False);
         });
+
+        TearDown(mainWindowVm);
     }
 
     [AvaloniaTest]
     public void HomePanel_CannotRenameToExisting()
     {
-        _mainWindowVm.HomePanel = new(_mainWindowVm);
-        Assert.Multiple(() =>
-        {
-            Assert.That(_mainWindowVm.HomePanel.RecentProjects[0].Text, Is.EqualTo("MostRecentProject.slproj"));
-            Assert.That(_mainWindowVm.HomePanel.RecentProjects[1].Text, Is.EqualTo("RecentProject.slproj"));
-        });
-        string oldFile = _mainWindowVm.ProjectsCache.RecentProjects[0];
+        (MainWindowViewModel mainWindowVm, _) = Setup();
 
-        _mainWindowVm.HomePanel.RecentProjects[0].RenameCommand.Execute(null);
-        _mainWindowVm.Window.KeyTextInput("RecentProject");
-        _mainWindowVm.Window.KeyPress(Key.Enter, RawInputModifiers.None, PhysicalKey.Enter, "Enter");
+        mainWindowVm.HomePanel = new(mainWindowVm);
         Assert.Multiple(() =>
         {
-            Assert.That(_mainWindowVm.HomePanel.RecentProjects[0].Text, Is.EqualTo("MostRecentProject.slproj"));
-            Assert.That(_mainWindowVm.HomePanel.RecentProjects[1].Text, Is.EqualTo("RecentProject.slproj"));
+            Assert.That(mainWindowVm.HomePanel.RecentProjects[0].Text, Is.EqualTo("MostRecentProject.slproj"));
+            Assert.That(mainWindowVm.HomePanel.RecentProjects[1].Text, Is.EqualTo("RecentProject.slproj"));
+        });
+        string oldFile = mainWindowVm.ProjectsCache.RecentProjects[0];
+
+        mainWindowVm.HomePanel.RecentProjects[0].RenameCommand.Execute(null);
+        mainWindowVm.Window.KeyTextInput("RecentProject");
+        mainWindowVm.Window.KeyPress(Key.Enter, RawInputModifiers.None, PhysicalKey.Enter, "Enter");
+        Assert.Multiple(() =>
+        {
+            Assert.That(mainWindowVm.HomePanel.RecentProjects[0].Text, Is.EqualTo("MostRecentProject.slproj"));
+            Assert.That(mainWindowVm.HomePanel.RecentProjects[1].Text, Is.EqualTo("RecentProject.slproj"));
             Assert.That(File.Exists(oldFile), Is.True);
         });
+
+        TearDown(mainWindowVm);
     }
 }
