@@ -85,7 +85,7 @@ public static class GuiExtensions
             SystemDecorations = SystemDecorations.Full,
         };
 
-        return await MessageBoxManager.GetMessageBoxStandard(msgParams).ShowWindowDialogAsync(window);
+        return await MessageBoxManager.GetMessageBoxStandard(msgParams).ShowAsPopupAsync(window);
     }
 
     public static void AddRange(this ItemCollection itemCollection, IEnumerable<ContentControl> items)

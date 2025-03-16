@@ -177,4 +177,56 @@ public class HomePanelTests
 
         TearDown(mainWindowVm);
     }
+
+    [AvaloniaTest]
+    public void HomePanel_CanDuplicate()
+    {
+        (MainWindowViewModel mainWindowVm, _) = Setup();
+
+        mainWindowVm.HomePanel = new(mainWindowVm);
+        Assert.Multiple(() =>
+        {
+            Assert.That(mainWindowVm.HomePanel.RecentProjects[0].Text, Is.EqualTo("MostRecentProject.slproj"));
+            Assert.That(mainWindowVm.HomePanel.RecentProjects[1].Text, Is.EqualTo("RecentProject.slproj"));
+        });
+        string oldFile = mainWindowVm.ProjectsCache.RecentProjects[0];
+
+        mainWindowVm.HomePanel.RecentProjects[0].DuplicateCommand.Execute(null);
+        mainWindowVm.Window.KeyTextInput("TheBestProjectEver");
+        mainWindowVm.Window.KeyPress(Key.Enter, RawInputModifiers.None, PhysicalKey.Enter, "Enter");
+        Assert.Multiple(() =>
+        {
+            Assert.That(mainWindowVm.HomePanel.RecentProjects[0].Text, Is.EqualTo("MostRecentProject.slproj"));
+            Assert.That(mainWindowVm.HomePanel.RecentProjects[1].Text, Is.EqualTo("RecentProject.slproj"));
+            Assert.That(File.Exists(oldFile), Is.True);
+            Assert.That(File.Exists(Path.Combine(mainWindowVm.CurrentConfig.ProjectsDirectory, "TheBestProjectEver", "TheBestProjectEver.slproj")), Is.True);
+        });
+
+        TearDown(mainWindowVm);
+    }
+
+    [AvaloniaTest]
+    public async Task HomePanel_CanDelete()
+    {
+        (MainWindowViewModel mainWindowVm, _) = Setup();
+
+        mainWindowVm.HomePanel = new(mainWindowVm);
+        Assert.Multiple(() =>
+        {
+            Assert.That(mainWindowVm.HomePanel.RecentProjects[0].Text, Is.EqualTo("MostRecentProject.slproj"));
+            Assert.That(mainWindowVm.HomePanel.RecentProjects[1].Text, Is.EqualTo("RecentProject.slproj"));
+        });
+        string oldFile = mainWindowVm.ProjectsCache.RecentProjects[0];
+
+        mainWindowVm.HomePanel.RecentProjects[0].DeleteCommand.Execute(null);
+        mainWindowVm.Window.KeyPress(Key.Enter, RawInputModifiers.None, PhysicalKey.Enter, "Enter");
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(mainWindowVm.HomePanel.RecentProjects[0].Text, Is.EqualTo("RecentProject.slproj"));
+            Assert.That(File.Exists(oldFile), Is.False);
+        });
+
+        TearDown(mainWindowVm);
+    }
 }
