@@ -9,9 +9,9 @@ jobs:
     strategy:
       matrix:
         platform:
-         - { rid:  'win-x64', vm: 'windows-latest', tfm: 'net8.0-windows', filter: '--filter "Name !~ BackgroundMusicEditor_ReplacementAndRestoreWork' }
+         - { rid:  'win-x64', vm: 'windows-latest', tfm: 'net8.0-windows', filter: '--filter "Name !~ BackgroundMusicEditor_ReplacementAndRestoreWork"' }
          - { rid: 'osx-arm64', vm: 'macos-latest', tfm: 'net8.0', filter: '' }
-         - { rid: 'linux-x64', vm: 'ubuntu-latest', tfm: 'net8.0', filter: '--filter "Name !~ BackgroundMusicEditor_ReplacementAndRestoreWork' }
+         - { rid: 'linux-x64', vm: 'ubuntu-latest', tfm: 'net8.0', filter: '--filter "Name !~ BackgroundMusicEditor_ReplacementAndRestoreWork"' }
       fail-fast: false
     runs-on: ${{ matrix.platform.vm }}
     steps:

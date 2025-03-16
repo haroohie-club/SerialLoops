@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Avalonia.Controls;
@@ -9,6 +10,7 @@ using Avalonia.VisualTree;
 using HaruhiChokuretsuLib.Archive;
 using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Graphics;
+using Microsoft.VisualBasic.CompilerServices;
 using Moq;
 using NUnit.Framework;
 using SerialLoops.Lib;
@@ -114,8 +116,9 @@ public class EditorTabsPanelTests
         ItemExplorerPanel itemExplorerPanel = window.FindDescendantOfType<ItemExplorerPanel>();
         DragTabItem tab = editorTabsPanel.FindDescendantOfType<DragTabItem>();
         StackPanel header = tab.FindDescendantOfType<StackPanel>();
-        window.MouseDown(new(itemExplorerPanel.Width + header.Bounds.Center.X, 105), MouseButton.Middle);
-        window.MouseUp(new(itemExplorerPanel.Width + header.Bounds.Center.X, 105), MouseButton.Middle);
+        int addedMargin = OperatingSystem.IsMacOS() ? 15 : 0; // We have an extra 15px top margin on macOS
+        window.MouseDown(new(itemExplorerPanel.Width + header.Bounds.Center.X, 105 + addedMargin), MouseButton.Middle);
+        window.MouseUp(new(itemExplorerPanel.Width + header.Bounds.Center.X, 105 + addedMargin), MouseButton.Middle);
         window.CaptureAndSaveFrame(Path.Combine(_uiVals.AssetsDirectory, "artifacts"), TestContext.CurrentContext.Test.Name, ref currentFrame);
         Assert.That(mainWindow.EditorTabs.Tabs, Has.Count.EqualTo(0));
     }
