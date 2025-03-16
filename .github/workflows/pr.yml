@@ -31,3 +31,9 @@ jobs:
         with:
           name: test-results-${{ matrix.platform.rid }}
           path: test/SerialLoops.Tests.Headless/TestResults/TestResults.trx
+      - name: Upload test artifacts for review
+        uses: actions/upload-artifact@v4
+        if: success() || failure()
+        with:
+          name: test-artifacts-${{ matrix.platform.rid }}
+          path: test/SerialLoops.Tests.Headless/bin/Debug/${{ matrix.platform.tfm }}/assets/artifacts
