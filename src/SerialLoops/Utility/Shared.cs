@@ -78,8 +78,7 @@ public static class Shared
                 Strings.ProjectDeleteConfirmText,
                 ButtonEnum.YesNoCancel, Icon.Warning, mainWindow.Log) == ButtonResult.Yes)
         {
-            // Move async fails on unix platforms in tests (though it seems to work fine in reality)
-            if (!Rubbish.Move(Path.GetDirectoryName(path)))
+            if (!await Rubbish.MoveAsync(Path.GetDirectoryName(path)))
             {
                 if (await mainWindow.Window.ShowMessageBoxAsync(Strings.ProjectDeleteFailedTitle,
                         Strings.ProjectDeleteFailedText,ButtonEnum.YesNoCancel, Icon.Error, mainWindow.Log) == ButtonResult.Yes)
