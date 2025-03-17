@@ -7451,6 +7451,33 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The the color type to use. Except for special transitions, it is generally recommended to use Custom Color as it provides the most flexibility..
+        /// </summary>
+        public static string ScriptCommandParameterHelpFadeColor {
+            get {
+                return ResourceManager.GetString("ScriptCommandParameterHelpFadeColor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This color will only be applied if you have selected &quot;Custom Color&quot; for the &quot;Color&quot; property below..
+        /// </summary>
+        public static string ScriptCommandParameterHelpFadeCustomColor {
+            get {
+                return ResourceManager.GetString("ScriptCommandParameterHelpFadeCustomColor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The screen to apply the fade to. Except for the initial fade in SCRIPT00, you must use Custom Color to fade both screens..
+        /// </summary>
+        public static string ScriptCommandParameterHelpFadeLocation {
+            get {
+                return ResourceManager.GetString("ScriptCommandParameterHelpFadeLocation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The speed at which the background scrolls; higher is faster. Default is 1..
         /// </summary>
         public static string ScriptCommandParameterHelpScrollSpeed {
@@ -7460,11 +7487,47 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If this is -1, this option is always shown. If it is a value 0 or above, this option is shown until the flag of that value is set..
+        /// </summary>
+        public static string ScriptCommandParameterHelpSelectDisplayFlag {
+            get {
+                return ResourceManager.GetString("ScriptCommandParameterHelpSelectDisplayFlag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set to -1 to shake the screen until the SCREEN_SHAKE_STOP command is executed.
+        /// </summary>
+        public static string ScriptCommandParameterHelpShakeDuration {
+            get {
+                return ResourceManager.GetString("ScriptCommandParameterHelpShakeDuration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This must be checked when a sound is played initially. If a sound plays for a long time and you want to change its volume, uncheck this and set the crossfade time instead..
+        /// </summary>
+        public static string ScriptCommandParameterHelpSoundLoad {
+            get {
+                return ResourceManager.GetString("ScriptCommandParameterHelpSoundLoad", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The &quot;layer&quot; on which to display the sprite -- this determines which sprites appear on top of the others. Higher numbers will display on top of higher numbers..
         /// </summary>
         public static string ScriptCommandParameterHelpSpriteLayer {
             get {
                 return ResourceManager.GetString("ScriptCommandParameterHelpSpriteLayer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Should be the same as the previous SCREEN_FADEOUT command.
+        /// </summary>
+        public static string ScriptCommandScreenFadeInParamWarning {
+            get {
+                return ResourceManager.GetString("ScriptCommandScreenFadeInParamWarning", resourceCulture);
             }
         }
         

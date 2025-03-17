@@ -8,17 +8,24 @@
              x:DataType="vm:ScreenShakeScriptCommandEditorViewModel"
              x:Class="SerialLoops.Views.Editors.ScriptCommandEditors.ScreenShakeScriptCommandEditorView">
     <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto">
-        <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Duration__Frames_}"/>
-        <NumericUpDown Grid.Column="1" Grid.Row="0" Value="{Binding Duration}" Minimum="0"
-                       Maximum="{Binding MaxShort}" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
+        <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" Spacing="3">
+            <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.Duration__Frames_}"/>
+            <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" VerticalAlignment="Center"
+                 ToolTip.Tip="{x:Static assets:Strings.ScriptCommandParameterHelpShakeDuration}"/>
+        </StackPanel>
+        <NumericUpDown Grid.Column="1" Grid.Row="0" Value="{Binding Duration}" Minimum="-1"
+                       Maximum="{Binding MaxShort}" FormatString="N0"
+                       Increment="1" ParsingNumberStyle="Integer" Margin="10 0 0 0"/>
 
         <TextBlock Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Text="{x:Static assets:Strings.Horizontal_Intensity}"/>
         <NumericUpDown Grid.Column="1" Grid.Row="1" Value="{Binding HorizontalIntensity}" Minimum="0"
-                       Maximum="{Binding MaxShort}" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
+                       Maximum="{Binding MaxShort}" FormatString="N0"
+                       Increment="1" ParsingNumberStyle="Integer" Margin="10 0 0 0"/>
 
         <TextBlock Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Text="{x:Static assets:Strings.Vertical_Intensity}"/>
         <NumericUpDown Grid.Column="1" Grid.Row="2" Value="{Binding VerticalIntensity}" Minimum="0"
-                       Maximum="{Binding MaxShort}" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
+                       Maximum="{Binding MaxShort}" FormatString="N0"
+                       Increment="1" ParsingNumberStyle="Integer" Margin="10 0 0 0"/>
     </Grid>
 </UserControl>
 

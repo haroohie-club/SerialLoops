@@ -17,10 +17,18 @@
         <NumericUpDown Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" Minimum="0" Maximum="100"
                        Value="{Binding FadePercentage}" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
 
-        <TextBlock Grid.Column="0" Grid.Row="2" Margin="0,15,0,0" Text="{x:Static assets:Strings.Location}"/>
+        <StackPanel Grid.Column="0" Grid.Row="2" Orientation="Horizontal" Spacing="3">
+            <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.Location}"/>
+            <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" VerticalAlignment="Center"
+                 ToolTip.Tip="{x:Static assets:Strings.ScriptCommandScreenFadeInParamWarning}"/>
+        </StackPanel>
         <controls:ScreenSelector Grid.Column="1" Grid.Row="2" Margin="10,0,0,0" DataContext="{Binding ScreenSelector}"/>
 
-        <TextBlock Grid.Column="0" Grid.Row="3" VerticalAlignment="Center" Text="{x:Static assets:Strings.Color}"/>
+        <StackPanel Grid.Column="0" Grid.Row="3" Orientation="Horizontal" Spacing="3">
+            <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.Color}"/>
+            <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" VerticalAlignment="Center"
+                 ToolTip.Tip="{x:Static assets:Strings.ScriptCommandScreenFadeInParamWarning}"/>
+        </StackPanel>
         <ComboBox Grid.Column="1" Grid.Row="3" Margin="10,0,0,0" ItemsSource="{Binding Colors}" SelectedItem="{Binding Color}"/>
     </Grid>
 </UserControl>

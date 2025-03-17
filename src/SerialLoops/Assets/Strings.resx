@@ -3566,4 +3566,25 @@ SELECT cannot be used in the initial, unnamed script block.</value>
   <data name="ScriptCommandParameterHelpDontClearText" xml:space="preserve">
     <value>If set, the text box will not be cleared and the next text will be displayed immediately. This allows for cool effects where you can change things like the text entrance effect, voice font, etc. in the same box.</value><comment>Help tooltip for the "Don't Clear Text" parameter of the DIALOGUE command</comment>
   </data>
+  <data name="ScriptCommandScreenFadeInParamWarning" xml:space="preserve">
+    <value>Should be the same as the previous SCREEN_FADEOUT command</value>
+  </data>
+  <data name="ScriptCommandParameterHelpFadeColor" xml:space="preserve">
+    <value>The the color type to use. Except for special transitions, it is generally recommended to use Custom Color as it provides the most flexibility.</value>
+  </data>
+  <data name="ScriptCommandParameterHelpFadeCustomColor" xml:space="preserve">
+    <value>This color will only be applied if you have selected "Custom Color" for the "Color" property below.</value>
+  </data>
+  <data name="ScriptCommandParameterHelpFadeLocation" xml:space="preserve">
+    <value>The screen to apply the fade to. Except for the initial fade in SCRIPT00, you must use Custom Color to fade both screens.</value>
+  </data>
+  <data name="ScriptCommandParameterHelpShakeDuration" xml:space="preserve">
+    <value>Set to -1 to shake the screen until the SCREEN_SHAKE_STOP command is executed</value>
+  </data>
+  <data name="ScriptCommandParameterHelpSelectDisplayFlag" xml:space="preserve">
+    <value>If this is -1, this option is always shown. If it is a value 0 or above, this option is shown until the flag of that value is set.</value>
+  </data>
+  <data name="ScriptCommandParameterHelpSoundLoad" xml:space="preserve">
+    <value>This must be checked when a sound is played initially. If a sound plays for a long time and you want to change its volume, uncheck this and set the crossfade time instead.</value>
+  </data>
 </root>
