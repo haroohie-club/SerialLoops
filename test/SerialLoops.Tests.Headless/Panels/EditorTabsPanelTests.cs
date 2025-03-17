@@ -13,7 +13,6 @@ using HaruhiChokuretsuLib.Archive.Graphics;
 using Moq;
 using NUnit.Framework;
 using SerialLoops.Lib;
-using SerialLoops.Lib.Factories;
 using SerialLoops.Lib.Items;
 using SerialLoops.Tests.Shared;
 using SerialLoops.ViewModels;
