@@ -173,7 +173,14 @@ public class CharacterEditorTests
         {
             _mainWindowViewModel.Window.KeyPress(Key.S, RawInputModifiers.Control, PhysicalKey.S, "Ctrl+S");
         }
-        editor.Description.UnsavedChanges = false;
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(_mainWindowViewModel.EditorTabs.SelectedTab.Description.DisplayName[4..], Is.EqualTo(newName));
+            Assert.That(editor.TextColor, Is.EqualTo(newColor));
+            Assert.That(editor.PlateColor, Is.EqualTo(newColor));
+            Assert.That(editor.OutlineColor, Is.EqualTo(newOutline));
+        }
+        
         _mainWindowViewModel.CloseProjectCommand.Execute(null);
         _mainWindowViewModel.Window.CaptureAndSaveFrame(Path.Combine(_uiVals.AssetsDirectory, "artifacts"), TestContext.CurrentContext.Test.Name, ref currentFrame);
         _mainWindowViewModel.OpenProject = _project;
