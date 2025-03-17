@@ -22,7 +22,7 @@ public class BgScrollScriptCommandEditorViewModel(ScriptItemCommand command, Scr
         set
         {
             this.RaiseAndSetIfChanged(ref _scrollDirection, value);
-            ((BgScrollDirectionScriptParameter)command.Parameters[0]).ScrollDirection = _scrollDirection.Direction;
+            ((BgScrollDirectionScriptParameter)Command.Parameters[0]).ScrollDirection = _scrollDirection.Direction;
             Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
                 .Objects[Command.Index].Parameters[0] = (short)_scrollDirection.Direction;
             ScriptEditor.UpdatePreview();
