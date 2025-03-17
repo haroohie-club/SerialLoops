@@ -15,7 +15,7 @@
             <controls:ItemLink Tabs="{Binding Tabs}" Item="{Binding Cg}"/>
         </StackPanel>
 
-        <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Spacing="">
+        <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Spacing="">
             <TextBlock Text="{x:Static assets:Strings.Display_from_Bottom}" VerticalAlignment="Center"/>
             <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" VerticalAlignment="Center"
                  ToolTip.Tip="{x:Static assets:Strings.ScriptCommandParameterHelpDisplayFromBottom}"/>
