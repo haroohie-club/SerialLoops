@@ -2292,8 +2292,8 @@ If you wish to ignore this, please check the "Ignore Hash" checkbox.</value>
   <data name="This script is not included in the event table." xml:space="preserve">
     <value>This script is not included in the event table.</value>
   </data>
-  <data name="This system texture uses a common palette, so palette replacement has been disabled" xml:space="preserve">
-    <value>This system texture uses a common palette, so palette replacement has been disabled</value>
+  <data name="SystemTexturePaletteReplacementDisabled" xml:space="preserve">
+    <value>This system texture uses the common main palette, so palette replacement has been disabled.</value>
   </data>
   <data name="Time (Frames)" xml:space="preserve">
     <value>Transition Time (Frames)</value>
@@ -3231,5 +3231,137 @@ All hacks have been rolled back to preserve state.</value>
   </data>
   <data name="BgmLoopErrorMessage" xml:space="preserve">
     <value>Failed to adjust loop data for background music. Please check the logs and file an issue if this reoccurs.</value>
+  </data>
+  <data name="BackgroundEditorHelpBgTypeTEX_BG" xml:space="preserve">
+    <value>A standard visual novel background used on the bottom screen, something that sprites would be displayed on top of. Displayed with BG_DISP or BG_FADE.</value>
+  </data>
+  <data name="BackgroundEditorHelpBgTypeKINETIC_SCREEN" xml:space="preserve">
+    <value>A simple top-screen scrolling graphic, used in the base game to indicate time of day. Displayed with KBG_DISP.</value>
+  </data>
+  <data name="BackgroundEditorHelpBgTypeTEX_CG" xml:space="preserve">
+    <value>A standard CG (character graphic) that displays a scene on the bottom screen. Sprites would not be placed on top of this. Displayed with BG_DISPCG or BG_FADE.</value>
+  </data>
+  <data name="BackgroundEditorHelpBgTypeTEX_CG_DUAL_SCREEN" xml:space="preserve">
+    <value>A tall CG (character graphic) displayed across both screens. It is too tall to be viewed at once, so it can be scrolled up and down with BG_SCROLL. Displayed with BG_DISPCG.</value>
+  </data>
+  <data name="BackgroundEditorHelpBgTypeTEX_CG_WIDE" xml:space="preserve">
+    <value>A wide CG (character graphic) displayed on the bottom screen. Can be scrolled left and right with BG_SCROLL. Displayed with BG_DISPCG.</value>
+  </data>
+  <data name="BackgroundEditorHelpBgTypeTEX_CG_SINGLE" xml:space="preserve">
+    <value>A tall CG (character graphic) displayed on the bottom screen only. It can be scrolled up and down with BG_SCROLL. Displayed with BG_DISPCG.</value>
+  </data>
+  <data name="BackgroundEditorHelpCgName" xml:space="preserve">
+    <value>The title of the CG as it will appear in the Extras mode's Album (CG viewer)</value>
+  </data>
+  <data name="BgmEditorLoopInfoHelp" xml:space="preserve">
+    <value>The audio format used by Chokuretsu encodes loop information into audio file itself, denoting where the track should loop from and to. Click this button to edit this information.</value>
+  </data>
+  <data name="BgmEditorVolumeHelp" xml:space="preserve">
+    <value>Click this button to adjust the volume of the track.</value>
+  </data>
+  <data name="BgmVolumeNormalizeHelp" xml:space="preserve">
+    <value>Click this to normalize the volume to match the default volume of all other tracks in the game. Recommended.</value>
+  </data>
+  <data name="CharacterEditorVoiceFontHelp" xml:space="preserve">
+    <value>The voice font is the sound effect that plays when there isn't a voiced line for this character (i.e. the little beeps)</value>
+  </data>
+  <data name="CharacterEditorTextTimerHelp" xml:space="preserve">
+    <value>The text timer represents how fast the character speaks. The higher the value, the slower the text will appear on screen.</value>
+  </data>
+  <data name="ChibiEditorAnim00Help" xml:space="preserve">
+    <value>Default idle animation</value>
+  </data>
+  <data name="ChibiEditorAnim01Help" xml:space="preserve">
+    <value>Walk cycle animation</value>
+  </data>
+  <data name="ChibiEditorAnim02Help" xml:space="preserve">
+    <value>"Searching" animation (puzzle phase)</value>
+  </data>
+  <data name="ChibiEditorAnim03Help" xml:space="preserve">
+    <value>"Cleaning" animation (puzzle phase)</value>
+  </data>
+  <data name="ChibiEditorAnim04Help" xml:space="preserve">
+    <value>Lose animation (puzzle phase)</value>
+  </data>
+  <data name="ChibiEditorAnim05Help" xml:space="preserve">
+    <value>Win animation (puzzle phase)</value>
+  </data>
+  <data name="ChibiEditorAnim06Help" xml:space="preserve">
+    <value>Technique animation (puzzle phase)</value>
+  </data>
+  <data name="ChibiEditorAnim07Help" xml:space="preserve">
+    <value>Technique failed animation (puzzle phase)</value>
+  </data>
+  <data name="ChibiEditorAnim08Help" xml:space="preserve">
+    <value>Running animation (unused)</value>
+  </data>
+  <data name="ChibiEditorAnim10Help" xml:space="preserve">
+    <value>Alternate idle animation (unused)</value>
+  </data>
+  <data name="ChibiEditorAnim97Help" xml:space="preserve">
+    <value>Still pose for "good" group selection result</value>
+  </data>
+  <data name="ChibiEditorAnim98Help" xml:space="preserve">
+    <value>Still pose for "neutral" group selection result</value>
+  </data>
+  <data name="ChibiEditorAnim99Help" xml:space="preserve">
+    <value>Still pose for "bad" group selection result</value>
+  </data>
+  <data name="ScenarioVerbHelpNEW_GAME" xml:space="preserve">
+    <value>This command defines where the "New Game" menu item takes the player. For example, if NEW_GAME 5 defines where selecting New Game → Episode 5 will take the player.</value>
+  </data>
+  <data name="ScenarioVerbHelpSAVE" xml:space="preserve">
+    <value>This command prompts the user to save the game, creating a checkpoint save. Typically, the first save in an episode is denoted by setting the parameter to 2 and incrementing it for each checkpoint after that.</value>
+  </data>
+  <data name="ScenarioVerbHelpLOAD_SCENE" xml:space="preserve">
+    <value>This command loads a particular script file.</value>
+  </data>
+  <data name="ScenarioVerbHelpPUZZLE_PHASE" xml:space="preserve">
+    <value>This command starts a particular puzzle phase.</value>
+  </data>
+  <data name="ScenarioVerbHelpROUTE_SELECT" xml:space="preserve">
+    <value>This command starts a particular group selection.</value>
+  </data>
+  <data name="ScenarioVerbHelpSTOP" xml:space="preserve">
+    <value>This command stops the game. It is not actually used.</value>
+  </data>
+  <data name="ScenarioVerbHelpSAVE2" xml:space="preserve">
+    <value>This command also prompts the user to save the game. While the precise mechanical differences between this and SAVE are not well understood, it is known that it is used after the UNLOCK command and before the NEW_GAME or END commands. This implies that it interacts more directly with the common save than do checkpoint saves. Its parameter is always 0.</value>
+  </data>
+  <data name="ScenarioVerbHelpTOPICS" xml:space="preserve">
+    <value>This command displays which topics the player has collected over the previous scene(s) following group selection.</value>
+  </data>
+  <data name="ScenarioVerbHelpCOMPANION_SELECT" xml:space="preserve">
+    <value>This loads a companion selection screen, allowing the player to select which Brigade member will accompany Haruhi during the puzzle phase.</value>
+  </data>
+  <data name="ScenarioVerbHelpPLAY_VIDEO" xml:space="preserve">
+    <value>Plays a video; 0 plays the OP and 1 plays the ED.</value>
+  </data>
+  <data name="ScenarioVerbHelpNOP" xml:space="preserve">
+    <value>Does nothing.</value>
+  </data>
+  <data name="ScenarioVerbHelpUNLOCK_ENDINGS" xml:space="preserve">
+    <value>This command unlocks a character ending scene based on the friendship levels. Used at the end of the game.</value>
+  </data>
+  <data name="ScenarioVerbHelpUNLOCK" xml:space="preserve">
+    <value>Unlocks particular functionality. The exact mapping between the parameter specified and which functionality is unlocked is currently unknown.</value>
+  </data>
+  <data name="ScenarioVerbHelpEND" xml:space="preserve">
+    <value>Ends the scenario and returns to the title screen.</value>
+  </data>
+  <data name="SystemTextureReplaceHelp" xml:space="preserve">
+    <value>Click this button to replace the texture WITHOUT changing the existing palette. This means that you will want to design the replacement to have the colors displayed below for maximum fidelity. We recommend using this option only if palette replacement is disabled.</value>
+  </data>
+  <data name="SystemTextureReplaceWithPaletteHelp" xml:space="preserve">
+    <value>Click this button to replace the texture AND the texture's palette. This will adapt the palette to match the new image you upload, preserving color as much as possible. If this option is available, we recommend using it.</value>
+  </data>
+  <data name="SystemTexturePaletteReplacementDisabledChess" xml:space="preserve">
+    <value>This system texture uses the common chess palette, so palette replacement has been disabled.</value>
+  </data>
+  <data name="TopicTimesHelp" xml:space="preserve">
+    <value>These times represent the amount of time gained in the puzzle phase when using this topic. The character accompanying Haruhi applies a percentage modifier to the base time gain to result in the amounts seen in-game and in the right-hand column.</value>
+  </data>
+  <data name="TopicEditorHiddenIdHelp" xml:space="preserve">
+    <value>All main topics have a second "hidden" ID in addition to their main one. This is displayed for internal accounting and is generally not interesting to you as a user.</value>
   </data>
 </root>

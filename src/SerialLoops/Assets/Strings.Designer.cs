@@ -698,6 +698,69 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A simple top-screen scrolling graphic, used in the base game to indicate time of day. Displayed with KBG_DISP..
+        /// </summary>
+        public static string BackgroundEditorHelpBgTypeKINETIC_SCREEN {
+            get {
+                return ResourceManager.GetString("BackgroundEditorHelpBgTypeKINETIC_SCREEN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A standard visual novel background used on the bottom screen, something that sprites would be displayed on top of. Displayed with BG_DISP or BG_FADE..
+        /// </summary>
+        public static string BackgroundEditorHelpBgTypeTEX_BG {
+            get {
+                return ResourceManager.GetString("BackgroundEditorHelpBgTypeTEX_BG", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A standard CG (character graphic) that displays a scene on the bottom screen. Sprites would not be placed on top of this. Displayed with BG_DISPCG or BG_FADE..
+        /// </summary>
+        public static string BackgroundEditorHelpBgTypeTEX_CG {
+            get {
+                return ResourceManager.GetString("BackgroundEditorHelpBgTypeTEX_CG", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A tall CG (character graphic) displayed across both screens. It is too tall to be viewed at once, so it can be scrolled up and down with BG_SCROLL. Displayed with BG_DISPCG..
+        /// </summary>
+        public static string BackgroundEditorHelpBgTypeTEX_CG_DUAL_SCREEN {
+            get {
+                return ResourceManager.GetString("BackgroundEditorHelpBgTypeTEX_CG_DUAL_SCREEN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A tall CG (character graphic) displayed on the bottom screen only. It can be scrolled up and down with BG_SCROLL. Displayed with BG_DISPCG..
+        /// </summary>
+        public static string BackgroundEditorHelpBgTypeTEX_CG_SINGLE {
+            get {
+                return ResourceManager.GetString("BackgroundEditorHelpBgTypeTEX_CG_SINGLE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A wide CG (character graphic) displayed on the bottom screen. Can be scrolled left and right with BG_SCROLL. Displayed with BG_DISPCG..
+        /// </summary>
+        public static string BackgroundEditorHelpBgTypeTEX_CG_WIDE {
+            get {
+                return ResourceManager.GetString("BackgroundEditorHelpBgTypeTEX_CG_WIDE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The title of the CG as it will appear in the Extras mode&apos;s Album (CG viewer).
+        /// </summary>
+        public static string BackgroundEditorHelpCgName {
+            get {
+                return ResourceManager.GetString("BackgroundEditorHelpCgName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Backgrounds.
         /// </summary>
         public static string Backgrounds {
@@ -842,6 +905,24 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The audio format used by Chokuretsu encodes loop information into audio file itself, denoting where the track should loop from and to. Click this button to edit this information..
+        /// </summary>
+        public static string BgmEditorLoopInfoHelp {
+            get {
+                return ResourceManager.GetString("BgmEditorLoopInfoHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Click this button to adjust the volume of the track..
+        /// </summary>
+        public static string BgmEditorVolumeHelp {
+            get {
+                return ResourceManager.GetString("BgmEditorVolumeHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to adjust loop data for background music. Please check the logs and file an issue if this reoccurs..
         /// </summary>
         public static string BgmLoopErrorMessage {
@@ -856,6 +937,15 @@ namespace SerialLoops.Assets {
         public static string BGMs {
             get {
                 return ResourceManager.GetString("BGMs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Click this to normalize the volume to match the default volume of all other tracks in the game. Recommended..
+        /// </summary>
+        public static string BgmVolumeNormalizeHelp {
+            get {
+                return ResourceManager.GetString("BgmVolumeNormalizeHelp", resourceCulture);
             }
         }
         
@@ -1202,6 +1292,24 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The text timer represents how fast the character speaks. The higher the value, the slower the text will appear on screen..
+        /// </summary>
+        public static string CharacterEditorTextTimerHelp {
+            get {
+                return ResourceManager.GetString("CharacterEditorTextTimerHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The voice font is the sound effect that plays when there isn&apos;t a voiced line for this character (i.e. the little beeps).
+        /// </summary>
+        public static string CharacterEditorVoiceFontHelp {
+            get {
+                return ResourceManager.GetString("CharacterEditorVoiceFontHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Characters.
         /// </summary>
         public static string Characters {
@@ -1288,6 +1396,123 @@ namespace SerialLoops.Assets {
         public static string Chibi_frames_exported_ {
             get {
                 return ResourceManager.GetString("Chibi frames exported!", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default idle animation.
+        /// </summary>
+        public static string ChibiEditorAnim00Help {
+            get {
+                return ResourceManager.GetString("ChibiEditorAnim00Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Walk cycle animation.
+        /// </summary>
+        public static string ChibiEditorAnim01Help {
+            get {
+                return ResourceManager.GetString("ChibiEditorAnim01Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &quot;Searching&quot; animation (puzzle phase).
+        /// </summary>
+        public static string ChibiEditorAnim02Help {
+            get {
+                return ResourceManager.GetString("ChibiEditorAnim02Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &quot;Cleaning&quot; animation (puzzle phase).
+        /// </summary>
+        public static string ChibiEditorAnim03Help {
+            get {
+                return ResourceManager.GetString("ChibiEditorAnim03Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lose animation (puzzle phase).
+        /// </summary>
+        public static string ChibiEditorAnim04Help {
+            get {
+                return ResourceManager.GetString("ChibiEditorAnim04Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Win animation (puzzle phase).
+        /// </summary>
+        public static string ChibiEditorAnim05Help {
+            get {
+                return ResourceManager.GetString("ChibiEditorAnim05Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Technique animation (puzzle phase).
+        /// </summary>
+        public static string ChibiEditorAnim06Help {
+            get {
+                return ResourceManager.GetString("ChibiEditorAnim06Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Technique failed animation (puzzle phase).
+        /// </summary>
+        public static string ChibiEditorAnim07Help {
+            get {
+                return ResourceManager.GetString("ChibiEditorAnim07Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Running animation (unused).
+        /// </summary>
+        public static string ChibiEditorAnim08Help {
+            get {
+                return ResourceManager.GetString("ChibiEditorAnim08Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Alternate idle animation (unused).
+        /// </summary>
+        public static string ChibiEditorAnim10Help {
+            get {
+                return ResourceManager.GetString("ChibiEditorAnim10Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Still pose for &quot;good&quot; group selection result.
+        /// </summary>
+        public static string ChibiEditorAnim97Help {
+            get {
+                return ResourceManager.GetString("ChibiEditorAnim97Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Still pose for &quot;neutral&quot; group selection result.
+        /// </summary>
+        public static string ChibiEditorAnim98Help {
+            get {
+                return ResourceManager.GetString("ChibiEditorAnim98Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Still pose for &quot;bad&quot; group selection result.
+        /// </summary>
+        public static string ChibiEditorAnim99Help {
+            get {
+                return ResourceManager.GetString("ChibiEditorAnim99Help", resourceCulture);
             }
         }
         
@@ -7001,6 +7226,132 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This loads a companion selection screen, allowing the player to select which Brigade member will accompany Haruhi during the puzzle phase..
+        /// </summary>
+        public static string ScenarioVerbHelpCOMPANION_SELECT {
+            get {
+                return ResourceManager.GetString("ScenarioVerbHelpCOMPANION_SELECT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ends the scenario and returns to the title screen..
+        /// </summary>
+        public static string ScenarioVerbHelpEND {
+            get {
+                return ResourceManager.GetString("ScenarioVerbHelpEND", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This command loads a particular script file..
+        /// </summary>
+        public static string ScenarioVerbHelpLOAD_SCENE {
+            get {
+                return ResourceManager.GetString("ScenarioVerbHelpLOAD_SCENE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This command defines where the &quot;New Game&quot; menu item takes the player. For example, if NEW_GAME 5 defines where selecting New Game → Episode 5 will take the player..
+        /// </summary>
+        public static string ScenarioVerbHelpNEW_GAME {
+            get {
+                return ResourceManager.GetString("ScenarioVerbHelpNEW_GAME", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Does nothing..
+        /// </summary>
+        public static string ScenarioVerbHelpNOP {
+            get {
+                return ResourceManager.GetString("ScenarioVerbHelpNOP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plays a video; 0 plays the OP and 1 plays the ED..
+        /// </summary>
+        public static string ScenarioVerbHelpPLAY_VIDEO {
+            get {
+                return ResourceManager.GetString("ScenarioVerbHelpPLAY_VIDEO", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This command starts a particular puzzle phase..
+        /// </summary>
+        public static string ScenarioVerbHelpPUZZLE_PHASE {
+            get {
+                return ResourceManager.GetString("ScenarioVerbHelpPUZZLE_PHASE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This command starts a particular group selection..
+        /// </summary>
+        public static string ScenarioVerbHelpROUTE_SELECT {
+            get {
+                return ResourceManager.GetString("ScenarioVerbHelpROUTE_SELECT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This command prompts the user to save the game, creating a checkpoint save. Typically, the first save in an episode is denoted by setting the parameter to 2 and incrementing it for each checkpoint after that..
+        /// </summary>
+        public static string ScenarioVerbHelpSAVE {
+            get {
+                return ResourceManager.GetString("ScenarioVerbHelpSAVE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This command also prompts the user to save the game. While the precise mechanical differences between this and SAVE are not well understood, it is known that it is used after the UNLOCK command and before the NEW_GAME or END commands. This implies that it interacts more directly with the common save than do checkpoint saves. Its parameter is always 0..
+        /// </summary>
+        public static string ScenarioVerbHelpSAVE2 {
+            get {
+                return ResourceManager.GetString("ScenarioVerbHelpSAVE2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This command stops the game. It is not actually used..
+        /// </summary>
+        public static string ScenarioVerbHelpSTOP {
+            get {
+                return ResourceManager.GetString("ScenarioVerbHelpSTOP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This command displays which topics the player has collected over the previous scene(s) following group selection..
+        /// </summary>
+        public static string ScenarioVerbHelpTOPICS {
+            get {
+                return ResourceManager.GetString("ScenarioVerbHelpTOPICS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unlocks particular functionality. The exact mapping between the parameter specified and which functionality is unlocked is currently unknown..
+        /// </summary>
+        public static string ScenarioVerbHelpUNLOCK {
+            get {
+                return ResourceManager.GetString("ScenarioVerbHelpUNLOCK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This command unlocks a character ending scene based on the friendship levels. Used at the end of the game..
+        /// </summary>
+        public static string ScenarioVerbHelpUNLOCK_ENDINGS {
+            get {
+                return ResourceManager.GetString("ScenarioVerbHelpUNLOCK_ENDINGS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Scene.
         /// </summary>
         public static string Scene {
@@ -8010,6 +8361,42 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This system texture uses the common main palette, so palette replacement has been disabled..
+        /// </summary>
+        public static string SystemTexturePaletteReplacementDisabled {
+            get {
+                return ResourceManager.GetString("SystemTexturePaletteReplacementDisabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This system texture uses the common chess palette, so palette replacement has been disabled..
+        /// </summary>
+        public static string SystemTexturePaletteReplacementDisabledChess {
+            get {
+                return ResourceManager.GetString("SystemTexturePaletteReplacementDisabledChess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Click this button to replace the texture WITHOUT changing the existing palette. This means that you will want to design the replacement to have the colors displayed below for maximum fidelity. We recommend using this option only if palette replacement is disabled..
+        /// </summary>
+        public static string SystemTextureReplaceHelp {
+            get {
+                return ResourceManager.GetString("SystemTextureReplaceHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Click this button to replace the texture AND the texture&apos;s palette. This will adapt the palette to match the new image you upload, preserving color as much as possible. If this option is available, we recommend using it..
+        /// </summary>
+        public static string SystemTextureReplaceWithPaletteHelp {
+            get {
+                return ResourceManager.GetString("SystemTextureReplaceWithPaletteHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Target Number.
         /// </summary>
         public static string Target_Number {
@@ -8222,16 +8609,6 @@ namespace SerialLoops.Assets {
         public static string This_script_is_not_included_in_the_event_table_ {
             get {
                 return ResourceManager.GetString("This script is not included in the event table.", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to This system texture uses a common palette, so palette replacement has been disabled.
-        /// </summary>
-        public static string This_system_texture_uses_a_common_palette__so_palette_replacement_has_been_disabled {
-            get {
-                return ResourceManager.GetString(("This system texture uses a common palette, so palette replacement has been disabl" +
-                        "ed"), resourceCulture);
             }
         }
         
@@ -8481,11 +8858,29 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All main topics have a second &quot;hidden&quot; ID in addition to their main one. This is displayed for internal accounting and is generally not interesting to you as a user..
+        /// </summary>
+        public static string TopicEditorHiddenIdHelp {
+            get {
+                return ResourceManager.GetString("TopicEditorHiddenIdHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Topics.
         /// </summary>
         public static string Topics {
             get {
                 return ResourceManager.GetString("Topics", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to These times represent the amount of time gained in the puzzle phase when using this topic. The character accompanying Haruhi applies a percentage modifier to the base time gain to result in the amounts seen in-game and in the right-hand column..
+        /// </summary>
+        public static string TopicTimesHelp {
+            get {
+                return ResourceManager.GetString("TopicTimesHelp", resourceCulture);
             }
         }
         

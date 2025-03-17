@@ -24,6 +24,8 @@ public class SystemTextureEditorViewModel : EditorViewModel
     public ICommand ReplaceWithPaletteCommand { get; set; }
     public SKBitmap SystemTextureBitmap => SystemTexture.GetTexture();
     public bool UsesCommonPalette => SystemTexture.UsesCommonPalette();
+    public bool UsesMainPalette => SystemTexture.UsesMainPalette();
+    public bool UsesChessPalette => SystemTexture.UsesChessPalette();
     public SKBitmap PaletteBitmap => SystemTexture.Grp.GetPalette();
 
     public SystemTextureEditorViewModel(SystemTextureItem item, MainWindowViewModel window, Project project, ILogger log) : base(item, window, log, project)

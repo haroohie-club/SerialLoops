@@ -2331,8 +2331,8 @@
   <data name="Project exported successfully!" xml:space="preserve">
     <value>Project exported successfully!</value>
   </data>
-  <data name="This system texture uses a common palette, so palette replacement has been disabled" xml:space="preserve">
-    <value>This system texture uses a common palette, so palette replacement has been disabled</value>
+  <data name="SystemTexturePaletteReplacementDisabled" xml:space="preserve">
+    <value>This system texture uses a common palette, so palette replacement has been disabled.</value>
   </data>
   <data name="Add to Event Table" xml:space="preserve">
     <value>Add to Event Table</value>

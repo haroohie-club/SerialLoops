@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Emik;
+using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
 using MsBox.Avalonia.Enums;
 using SerialLoops.Assets;
@@ -104,5 +105,27 @@ public static class Shared
         }
 
         return false;
+    }
+
+    public static string GetScenarioVerbHelp(ScenarioCommand.ScenarioVerb verb)
+    {
+        return verb switch
+        {
+            ScenarioCommand.ScenarioVerb.NEW_GAME => Strings.ScenarioVerbHelpNEW_GAME,
+            ScenarioCommand.ScenarioVerb.SAVE => Strings.ScenarioVerbHelpSAVE,
+            ScenarioCommand.ScenarioVerb.LOAD_SCENE => Strings.ScenarioVerbHelpLOAD_SCENE,
+            ScenarioCommand.ScenarioVerb.PUZZLE_PHASE => Strings.ScenarioVerbHelpPUZZLE_PHASE,
+            ScenarioCommand.ScenarioVerb.ROUTE_SELECT => Strings.ScenarioVerbHelpROUTE_SELECT,
+            ScenarioCommand.ScenarioVerb.STOP => Strings.ScenarioVerbHelpSTOP,
+            ScenarioCommand.ScenarioVerb.SAVE2 => Strings.ScenarioVerbHelpSAVE2,
+            ScenarioCommand.ScenarioVerb.TOPICS => Strings.ScenarioVerbHelpTOPICS,
+            ScenarioCommand.ScenarioVerb.COMPANION_SELECT => Strings.ScenarioVerbHelpCOMPANION_SELECT,
+            ScenarioCommand.ScenarioVerb.PLAY_VIDEO => Strings.ScenarioVerbHelpPLAY_VIDEO,
+            ScenarioCommand.ScenarioVerb.NOP => Strings.ScenarioVerbHelpNOP,
+            ScenarioCommand.ScenarioVerb.UNLOCK_ENDINGS => Strings.ScenarioVerbHelpUNLOCK_ENDINGS,
+            ScenarioCommand.ScenarioVerb.UNLOCK => Strings.ScenarioVerbHelpUNLOCK,
+            ScenarioCommand.ScenarioVerb.END => Strings.ScenarioVerbHelpEND,
+            _ => string.Empty,
+        };
     }
 }

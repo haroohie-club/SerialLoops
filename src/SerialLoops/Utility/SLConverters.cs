@@ -10,6 +10,7 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Avalonia.Skia;
 using HaruhiChokuretsuLib.Archive.Event;
+using SerialLoops.Assets;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Util;
@@ -29,6 +30,8 @@ public static partial class SLConverters
     public static FuncValueConverter<bool, IImmutableSolidColorBrush> BooleanBrushConverter => new((val) => val ? Brushes.Transparent : Brushes.LightGreen);
     public static FuncValueConverter<string, string> CharacterNameCropConverter => new((name) => name[4..]);
     public static FuncValueConverter<List<Speaker>, string> ListDisplayConverter => new((strs) => string.Join(", ", strs.Select(s => s.ToString())));
+
+    public static FuncValueConverter<ScenarioCommand.ScenarioVerb, string> ScenarioVerbHelpConverter => new(Shared.GetScenarioVerbHelp);
 }
 
 public class DisplayNameConverter : IMultiValueConverter

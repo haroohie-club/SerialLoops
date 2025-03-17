@@ -2174,7 +2174,7 @@
   <data name="This script is not included in the event table." xml:space="preserve">
     <value>此脚本未包含在事件表中。</value>
   </data>
-  <data name="This system texture uses a common palette, so palette replacement has been disabled" xml:space="preserve">
+  <data name="SystemTexturePaletteReplacementDisabled" xml:space="preserve">
     <value>此系统纹理使用通用调色板，因此已禁用调色板替换</value>
   </data>
   <data name="Time (Frames)" xml:space="preserve">

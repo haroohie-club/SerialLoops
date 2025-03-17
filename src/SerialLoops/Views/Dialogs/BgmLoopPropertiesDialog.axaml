@@ -30,7 +30,7 @@
                 <StackPanel Height="{Binding Waveform.Height, Converter={StaticResource SubtractionConverter},
                             ConverterParameter=65}"/>
                 <StackPanel Orientation="Horizontal" Spacing="3">
-                    <TextBlock Text="{x:Static assets:Strings.Start}"/>
+                    <TextBlock Text="{x:Static assets:Strings.Start}" VerticalAlignment="Center"/>
                     <NumericUpDown Name="StartSampleBox" Minimum="0" Maximum="{Binding #EndSampleBox.Value}"
                                    FormatString="0.0000">
                         <NumericUpDown.Value>
@@ -42,7 +42,7 @@
                     </NumericUpDown>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Spacing="3">
-                    <TextBlock Text="{x:Static assets:Strings.End}"/>
+                    <TextBlock Text="{x:Static assets:Strings.End}" VerticalAlignment="Center"/>
                     <NumericUpDown Name="EndSampleBox" Minimum="{Binding #StartSampleBox.Value}" FormatString="0.0000">
                         <NumericUpDown.Maximum>
                             <MultiBinding Converter="{StaticResource SampleToTimestampConverter}">
@@ -59,7 +59,7 @@
                     </NumericUpDown>
                 </StackPanel>
             </StackPanel>
-            <StackPanel Orientation="Vertical" Spacing="5">
+            <StackPanel Orientation="Vertical" Spacing="5" VerticalAlignment="Center">
                 <Image Source="{Binding Waveform, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
                        Width="{Binding Waveform.Width}" Height="{Binding Waveform.Height}"/>
                 <Slider Name="StartSampleSlider" Width="{Binding Waveform.Width}" Minimum="0"
@@ -69,7 +69,7 @@
                         Maximum="{Binding #EndSampleBox.Maximum}"
                         ValueChanged="EndSlider_ValueChanged"/>
                 <StackPanel Orientation="Vertical" Spacing="3" HorizontalAlignment="Right" Width="{Binding Waveform.Width}">
-                    <StackPanel Orientation="Horizontal" Spacing="3">
+                    <StackPanel Orientation="Horizontal" Spacing="3" HorizontalAlignment="Right">
                         <Button Content="{x:Static assets:Strings.Cancel}" IsCancel="True" Command="{Binding CancelCommand}"
                                 CommandParameter="{Binding #BgmLoopPropsDialog}"/>
                         <Button Content="{x:Static assets:Strings.Save}" IsDefault="True" Command="{Binding SaveCommand}"
