@@ -61,6 +61,7 @@ public partial class ChibiEditorViewModel : EditorViewModel
                 "97" => Strings.ChibiEditorAnim97Help,
                 "98" => Strings.ChibiEditorAnim98Help,
                 "99" => Strings.ChibiEditorAnim99Help,
+                _ => string.Empty,
             };
         }
     }
