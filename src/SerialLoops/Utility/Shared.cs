@@ -17,6 +17,7 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Gif;
 using SixLabors.ImageSharp.PixelFormats;
 using SkiaSharp;
+using static HaruhiChokuretsuLib.Archive.Event.EventFile;
 
 namespace SerialLoops.Utility;
 
@@ -125,6 +126,82 @@ public static class Shared
             ScenarioCommand.ScenarioVerb.UNLOCK_ENDINGS => Strings.ScenarioVerbHelpUNLOCK_ENDINGS,
             ScenarioCommand.ScenarioVerb.UNLOCK => Strings.ScenarioVerbHelpUNLOCK,
             ScenarioCommand.ScenarioVerb.END => Strings.ScenarioVerbHelpEND,
+            _ => string.Empty,
+        };
+    }
+
+    public static string GetScriptVerbHelp(string verb)
+    {
+        return Enum.TryParse<CommandVerb>(verb, out var parsedVerb) ? GetScriptVerbHelp(parsedVerb) : string.Empty;
+    }
+    public static string GetScriptVerbHelp(CommandVerb verb)
+    {
+        return verb switch
+        {
+            CommandVerb.AVOID_DISP => Strings.ScriptCommandVerbHelpAVOID_DISP,
+            CommandVerb.BACK => Strings.ScriptCommandVerbHelpBACK,
+            CommandVerb.BG_DISP => Strings.ScriptCommandVerbHelpBG_DISP,
+            CommandVerb.BG_DISP2 => Strings.ScriptCommandVerbHelpBG_DISP2,
+            CommandVerb.BG_DISPCG => Strings.ScriptCommandVerbHelpBG_DISPCG,
+            CommandVerb.BG_FADE => Strings.ScriptCommandVerbHelpBG_FADE,
+            CommandVerb.BG_REVERT => Strings.ScriptCommandVerbHelpBG_REVERT,
+            CommandVerb.BG_SCROLL => Strings.ScriptCommandVerbHelpBG_SCROLL,
+            CommandVerb.BGM_PLAY => Strings.ScriptCommandVerbHelpBGM_PLAY,
+            CommandVerb.CHESS_CLEAR_ANNOTATIONS => Strings.ScriptCommandVerbHelpCHESS_CLEAR_ANNOTATIONS,
+            CommandVerb.CHESS_LOAD => Strings.ScriptCommandVerbHelpCHESS_LOAD,
+            CommandVerb.CHESS_MOVE => Strings.ScriptCommandVerbHelpCHESS_MOVE,
+            CommandVerb.CHESS_RESET => Strings.ScriptCommandVerbHelpCHESS_RESET,
+            CommandVerb.CHESS_TOGGLE_CROSS => Strings.ScriptCommandVerbHelpCHESS_TOGGLE_CROSS,
+            CommandVerb.CHESS_TOGGLE_GUIDE => Strings.ScriptCommandVerbHelpCHESS_TOGGLE_GUIDE,
+            CommandVerb.CHESS_TOGGLE_HIGHLIGHT => Strings.ScriptCommandVerbHelpCHESS_TOGGLE_HIGHLIGHT,
+            CommandVerb.CHESS_VGOTO => Strings.ScriptCommandVerbHelpCHESS_VGOTO,
+            CommandVerb.CHIBI_EMOTE => Strings.ScriptCommandVerbHelpCHIBI_EMOTE,
+            CommandVerb.CHIBI_ENTEREXIT => Strings.ScriptCommandVerbHelpCHIBI_ENTEREXIT,
+            CommandVerb.CONFETTI => Strings.ScriptCommandVerbHelpCONFETTI,
+            CommandVerb.DIALOGUE => Strings.ScriptCommandVerbHelpDIALOGUE,
+            CommandVerb.EPHEADER => Strings.ScriptCommandVerbHelpEPHEADER,
+            CommandVerb.FLAG => Strings.ScriptCommandVerbHelpFLAG,
+            CommandVerb.GLOBAL2D => Strings.ScriptCommandVerbHelpGLOBAL2D,
+            CommandVerb.GOTO => Strings.ScriptCommandVerbHelpGOTO,
+            CommandVerb.HARUHI_METER => Strings.ScriptCommandVerbHelpHARUHI_METER,
+            CommandVerb.HARUHI_METER_NOSHOW => Strings.ScriptCommandVerbHelpHARUHI_METER_NOSHOW,
+            CommandVerb.HOLD => Strings.ScriptCommandVerbHelpHOLD,
+            CommandVerb.INIT_READ_FLAG => Strings.ScriptCommandVerbHelpINIT_READ_FLAG,
+            CommandVerb.INVEST_END => Strings.ScriptCommandVerbHelpINVEST_END,
+            CommandVerb.INVEST_START => Strings.ScriptCommandVerbHelpINVEST_START,
+            CommandVerb.ITEM_DISPIMG  => Strings.ScriptCommandVerbHelpITEM_DISPIMG,
+            CommandVerb.KBG_DISP  => Strings.ScriptCommandVerbHelpKBG_DISP,
+            CommandVerb.LOAD_ISOMAP => Strings.ScriptCommandVerbHelpLOAD_ISOMAP,
+            CommandVerb.MODIFY_FRIENDSHIP => Strings.ScriptCommandVerbHelpMODIFY_FRIENDSHIP,
+            CommandVerb.NEXT_SCENE => Strings.ScriptCommandVerbHelpNEXT_SCENE,
+            CommandVerb.NOOP1 => Strings.ScriptCommandVerbHelpNOOP,
+            CommandVerb.NOOP2 => Strings.ScriptCommandVerbHelpNOOP,
+            CommandVerb.NOOP3 => Strings.ScriptCommandVerbHelpNOOP,
+            CommandVerb.OP_MODE => Strings.ScriptCommandVerbHelpOP_MODE,
+            CommandVerb.PALEFFECT => Strings.ScriptCommandVerbHelpPALEFFECT,
+            CommandVerb.PIN_MNL => Strings.ScriptCommandVerbHelpPIN_MNL,
+            CommandVerb.REMOVED => Strings.ScriptCommandVerbHelpREMOVED,
+            CommandVerb.SCENE_GOTO => Strings.ScriptCommandVerbHelpSCENE_GOTO,
+            CommandVerb.SCENE_GOTO_CHESS => Strings.ScriptCommandVerbHelpSCENE_GOTO_CHESS,
+            CommandVerb.SCREEN_FADEIN => Strings.ScriptCommandVerbHelpSCREEN_FADEIN,
+            CommandVerb.SCREEN_FADEOUT => Strings.ScriptCommandVerbHelpSCREEN_FADEOUT,
+            CommandVerb.SCREEN_FLASH => Strings.ScriptCommandVerbHelpSCREEN_FLASH,
+            CommandVerb.SCREEN_SHAKE => Strings.ScriptCommandVerbHelpSCREEN_SHAKE,
+            CommandVerb.SCREEN_SHAKE_STOP => Strings.ScriptCommandVerbHelpSCREEN_SHAKE_STOP,
+            CommandVerb.SELECT => Strings.ScriptCommandVerbHelpSELECT,
+            CommandVerb.SET_PLACE => Strings.ScriptCommandVerbHelpSET_PLACE,
+            CommandVerb.SKIP_SCENE => Strings.ScriptCommandVerbHelpSKIP_SCENE,
+            CommandVerb.SND_PLAY => Strings.ScriptCommandVerbHelpSND_PLAY,
+            CommandVerb.SND_STOP => Strings.ScriptCommandVerbHelpSND_STOP,
+            CommandVerb.STOP => Strings.ScriptCommandVerbHelpSTOP,
+            CommandVerb.TOGGLE_DIALOGUE => Strings.ScriptCommandVerbHelpTOGGLE_DIALOGUE,
+            CommandVerb.TOPIC_GET => Strings.ScriptCommandVerbHelpTOPIC_GET,
+            CommandVerb.TRANS_IN => Strings.ScriptCommandVerbHelpTRANS_IN,
+            CommandVerb.TRANS_OUT => Strings.ScriptCommandVerbHelpTRANS_OUT,
+            CommandVerb.VCE_PLAY => Strings.ScriptCommandVerbHelpVCE_PLAY,
+            CommandVerb.VGOTO => Strings.ScriptCommandVerbHelpVGOTO,
+            CommandVerb.WAIT => Strings.ScriptCommandVerbHelpWAIT,
+            CommandVerb.WAIT_CANCEL => Strings.ScriptCommandVerbHelpWAIT_CANCEL,
             _ => string.Empty,
         };
     }

@@ -7433,6 +7433,568 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Displays the &quot;Main Topic → Avoid&quot; graphics..
+        /// </summary>
+        public static string ScriptCommandVerbHelpAVOID_DISP {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpAVOID_DISP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When used in the initial script section, starts execution to the first script block. Otherwise, makes the script return to whatever called it (e.g. the puzzle phase) or returns you to the investigation phase..
+        /// </summary>
+        public static string ScriptCommandVerbHelpBACK {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpBACK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Displays a background image on the lower screen. The background image can only be of type TEX_BG..
+        /// </summary>
+        public static string ScriptCommandVerbHelpBG_DISP {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpBG_DISP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The same as BG_DISP. Use that command instead..
+        /// </summary>
+        public static string ScriptCommandVerbHelpBG_DISP2 {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpBG_DISP2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to BG_DISPCG works as BG_DISP but can display a larger variety of textures – namely, TEX_CG, TEX_CG_DUAL_SCREEN, TEX_CG_WIDE, and TEX_CG_SINGLE BGs. Notably, these are all CGs as opposed to VN backgrounds. Before displaying a standard BG after calling BG_DISPCG, one should call BG_REVERT..
+        /// </summary>
+        public static string ScriptCommandVerbHelpBG_DISPCG {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpBG_DISPCG", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Like the other BG display commands but crossfades the background rather than just displaying it..
+        /// </summary>
+        public static string ScriptCommandVerbHelpBG_FADE {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpBG_FADE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reverts the background to the last call of BG_DISP (i.e. undoes any BG_FADE or BG_DISPCG calls). This is required before returning to displaying standard TEX_BG BGs. Note that if reverting a TEX_CG_DUAL_SCREEN BG, SET_PLACE must have been used to set the place location and have it displayed.
+        ///
+        ///BG_REVERT does something odd to previously displayed CGs that makes attempting to display them again after the BG_REVERT crash/freeze/soft lock the game. If you need to go back and forth between the same CGs, consider  [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string ScriptCommandVerbHelpBG_REVERT {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpBG_REVERT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When a background that is larger than the screen is shown (such as TEX_CG_DUAL_SCREEN, TEX_CG_WIDE, and TEX_CG_SINGLE), scrolls the background in a defined direction..
+        /// </summary>
+        public static string ScriptCommandVerbHelpBG_SCROLL {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpBG_SCROLL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plays or stops background music..
+        /// </summary>
+        public static string ScriptCommandVerbHelpBGM_PLAY {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpBGM_PLAY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clears all chessboard annotations. Unused..
+        /// </summary>
+        public static string ScriptCommandVerbHelpCHESS_CLEAR_ANNOTATIONS {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpCHESS_CLEAR_ANNOTATIONS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loads a chess file into memory and (if the chess overlay is loaded) places it on the chessboard..
+        /// </summary>
+        public static string ScriptCommandVerbHelpCHESS_LOAD {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpCHESS_LOAD", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Moves a piece (or pieces) on the chessboard..
+        /// </summary>
+        public static string ScriptCommandVerbHelpCHESS_MOVE {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpCHESS_MOVE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Resets the chessboard to its original state..
+        /// </summary>
+        public static string ScriptCommandVerbHelpCHESS_RESET {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpCHESS_RESET", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Crosses out spaces on the chessboard with a red X. If a space is already crossed out, this command uncrosses it out..
+        /// </summary>
+        public static string ScriptCommandVerbHelpCHESS_TOGGLE_CROSS {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpCHESS_TOGGLE_CROSS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Highlights the potential moves of a piece in red. If a piece has already been highlighted, this command unhighlights it. Optionally, can specify to clear all guides currently on the board..
+        /// </summary>
+        public static string ScriptCommandVerbHelpCHESS_TOGGLE_GUIDE {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpCHESS_TOGGLE_GUIDE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Highlights spaces on the chessboard in yellow. If a space is already highlighted, this command unhighlights it..
+        /// </summary>
+        public static string ScriptCommandVerbHelpCHESS_TOGGLE_HIGHLIGHT {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpCHESS_TOGGLE_HIGHLIGHT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Monitors for the end of the chess game and then jumps to a specified script block depending on the outcome..
+        /// </summary>
+        public static string ScriptCommandVerbHelpCHESS_VGOTO {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpCHESS_VGOTO", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This command displays an emote in a speech bubble above a chibi figure on the top screen..
+        /// </summary>
+        public static string ScriptCommandVerbHelpCHIBI_EMOTE {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpCHIBI_EMOTE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Specifies a chibi figure to enter or exit the top screen. To be used by this command, a chibi must have a walk cycle (animation 01) in addition to its default idle animation (animation 00)..
+        /// </summary>
+        public static string ScriptCommandVerbHelpCHIBI_ENTEREXIT {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpCHIBI_ENTEREXIT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Displays falling confetti on the top screen..
+        /// </summary>
+        public static string ScriptCommandVerbHelpCONFETTI {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpCONFETTI", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Displays a line of dialogue and/or manipulates character sprites. Can optionally play a voiced line..
+        /// </summary>
+        public static string ScriptCommandVerbHelpDIALOGUE {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpDIALOGUE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sets the upper screen to be an episode title texture..
+        /// </summary>
+        public static string ScriptCommandVerbHelpEPHEADER {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpEPHEADER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sets or clears a flag..
+        /// </summary>
+        public static string ScriptCommandVerbHelpFLAG {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpFLAG", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sets a global variable to a specified value. Only used in one place so it&apos;s difficult to determine what it affects..
+        /// </summary>
+        public static string ScriptCommandVerbHelpGLOBAL2D {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpGLOBAL2D", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Jumps to a particular script section..
+        /// </summary>
+        public static string ScriptCommandVerbHelpGOTO {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpGOTO", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Modifies the value of the Haruhi Meter. The meter minimum is 0 (corresponding to 10%) and the meter maximum is 9 (corresponding to 100%)..
+        /// </summary>
+        public static string ScriptCommandVerbHelpHARUHI_METER {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpHARUHI_METER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Adds to the Haruhi Meter without showing the Haruhi Meter UI (the sound effects are still played). Unused in the game..
+        /// </summary>
+        public static string ScriptCommandVerbHelpHARUHI_METER_NOSHOW {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpHARUHI_METER_NOSHOW", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stops script execution until input is received from the player..
+        /// </summary>
+        public static string ScriptCommandVerbHelpHOLD {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpHOLD", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Seems to initialize read flags for the current script; however, it&apos;s utility is unknown as it is unused in the game..
+        /// </summary>
+        public static string ScriptCommandVerbHelpINIT_READ_FLAG {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpINIT_READ_FLAG", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ends investigation mode and returns to the main visual novel format of the game. Automatically fades screen to black..
+        /// </summary>
+        public static string ScriptCommandVerbHelpINVEST_END {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpINVEST_END", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Starts investigation mode. Automatically clears most of the screen UI and then fades screen out to black and then back in from black..
+        /// </summary>
+        public static string ScriptCommandVerbHelpINVEST_START {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpINVEST_START", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Displays the specified item image. The item system is entirely unused in the game, so this command goes unused as well..
+        /// </summary>
+        public static string ScriptCommandVerbHelpITEM_DISPIMG {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpITEM_DISPIMG", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Displays a particular &quot;kinetic&quot; (my word) background on the top screen. Must be of type KINETIC_SCREEN..
+        /// </summary>
+        public static string ScriptCommandVerbHelpKBG_DISP {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpKBG_DISP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loads an isometric map for usage by INVEST_START..
+        /// </summary>
+        public static string ScriptCommandVerbHelpLOAD_ISOMAP {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpLOAD_ISOMAP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Modifies a character&apos;s &quot;Friendship Level&quot; by adding a particular value to it. The value can be positive or negative. Friendship levels start at 1, have a max of 64, and persist throughout a playthrough..
+        /// </summary>
+        public static string ScriptCommandVerbHelpMODIFY_FRIENDSHIP {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpMODIFY_FRIENDSHIP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ends the scene and moves to the next one as listed in the Scenario item..
+        /// </summary>
+        public static string ScriptCommandVerbHelpNEXT_SCENE {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpNEXT_SCENE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Does nothing..
+        /// </summary>
+        public static string ScriptCommandVerbHelpNOOP {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpNOOP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Suppresses the top screen UI, shows BG_KBG04 on the top screen, disables dialogue skipping, and marks the center of the screen as the position the Kyon chibi walks to, and sends the Kyon chibi out. Used only in the opening text crawl..
+        /// </summary>
+        public static string ScriptCommandVerbHelpOP_MODE {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpOP_MODE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Changes the color of currently displayed UI elements using a specified filter..
+        /// </summary>
+        public static string ScriptCommandVerbHelpPALEFFECT {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpPALEFFECT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Draws a dialogue line as monologue over all other dialogue. Undone by completing a chess game..
+        /// </summary>
+        public static string ScriptCommandVerbHelpPIN_MNL {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpPIN_MNL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Removed in the final version of the game (not referenced in any scripts.).
+        /// </summary>
+        public static string ScriptCommandVerbHelpREMOVED {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpREMOVED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Goes to a particular scene. Note that this scene cannot be just any script file; it must be contained within the event table..
+        /// </summary>
+        public static string ScriptCommandVerbHelpSCENE_GOTO {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpSCENE_GOTO", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Behaves as SCENE_GOTO except that it&apos;s used to go to scripts that contain chess puzzles..
+        /// </summary>
+        public static string ScriptCommandVerbHelpSCENE_GOTO_CHESS {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpSCENE_GOTO_CHESS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Causes the screen to fade in..
+        /// </summary>
+        public static string ScriptCommandVerbHelpSCREEN_FADEIN {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpSCREEN_FADEIN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Causes the screen to fade out..
+        /// </summary>
+        public static string ScriptCommandVerbHelpSCREEN_FADEOUT {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpSCREEN_FADEOUT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Flashes the screen a specified color for a specified amount of time..
+        /// </summary>
+        public static string ScriptCommandVerbHelpSCREEN_FLASH {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpSCREEN_FLASH", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shakes the bottom screen..
+        /// </summary>
+        public static string ScriptCommandVerbHelpSCREEN_SHAKE {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpSCREEN_SHAKE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stops screen shaking from a SCREEN_SHAKE command. (Used when the Duration parameter of said SCREEN_SHAKE is set to -1)..
+        /// </summary>
+        public static string ScriptCommandVerbHelpSCREEN_SHAKE_STOP {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpSCREEN_SHAKE_STOP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Presents the player with a series of choices that branch the dialogue tree. Choices are defined in their own section and have IDs that correspond to labels set in the labels section. When a choice is chosen, this ID is used to select which script block will be jumped to.
+        ///
+        ///SELECT cannot be used in the initial, unnamed script block..
+        /// </summary>
+        public static string ScriptCommandVerbHelpSELECT {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpSELECT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Modifies the displayed place name..
+        /// </summary>
+        public static string ScriptCommandVerbHelpSET_PLACE {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpSET_PLACE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sets up the NEXT_SCENE command to skip a specified number of scenes as defined in the Scenario..
+        /// </summary>
+        public static string ScriptCommandVerbHelpSKIP_SCENE {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpSKIP_SCENE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plays a sound from the SDAT snd.bin..
+        /// </summary>
+        public static string ScriptCommandVerbHelpSND_PLAY {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpSND_PLAY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stops the currently playing sound. Unused in game..
+        /// </summary>
+        public static string ScriptCommandVerbHelpSND_STOP {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpSND_STOP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stops script execution and soft locks the game. Unused..
+        /// </summary>
+        public static string ScriptCommandVerbHelpSTOP {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpSTOP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shows/hides the dialogue box. Note that plenty of other commands already do one of these (e.g., DIALOGUE automatically shows the dialogue box)..
+        /// </summary>
+        public static string ScriptCommandVerbHelpTOGGLE_DIALOGUE {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpTOGGLE_DIALOGUE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gives the player a particular topic..
+        /// </summary>
+        public static string ScriptCommandVerbHelpTOPIC_GET {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpTOPIC_GET", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plays a transition from black into the scene..
+        /// </summary>
+        public static string ScriptCommandVerbHelpTRANS_IN {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpTRANS_IN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plays a transition to black..
+        /// </summary>
+        public static string ScriptCommandVerbHelpTRANS_OUT {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpTRANS_OUT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plays a voice file..
+        /// </summary>
+        public static string ScriptCommandVerbHelpVCE_PLAY {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpVCE_PLAY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Goes to a specified script section if a specified conditional is true..
+        /// </summary>
+        public static string ScriptCommandVerbHelpVGOTO {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpVGOTO", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Waits a particular number of frames..
+        /// </summary>
+        public static string ScriptCommandVerbHelpWAIT {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpWAIT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A command nearly identical to WAIT, but allows for the wait to be canceled with a button press or screen tap..
+        /// </summary>
+        public static string ScriptCommandVerbHelpWAIT_CANCEL {
+            get {
+                return ResourceManager.GetString("ScriptCommandVerbHelpWAIT_CANCEL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Scripts.
         /// </summary>
         public static string Scripts {
