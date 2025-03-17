@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using HaruhiChokuretsuLib.Archive;
+using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Graphics;
+using HaruhiChokuretsuLib.Audio.SDAT;
+using HaruhiChokuretsuLib.Audio.SDAT.SoundArchiveComponents;
 using HaruhiChokuretsuLib.Font;
 using HaruhiChokuretsuLib.Util;
 using Moq;
@@ -84,5 +87,25 @@ public static class MockPreparationExtensions
         grpMock.SetupMockedFile("EV285_128.DNX", assetDirectory, 0x35D, log, ref offset);
         grpMock.SetupMockedFile("EV285_64.DNX", assetDirectory, 0x35E, log, ref offset);
         grpMock.SetupMockedFile("EV381_256.DNX", assetDirectory, 0x397, log, ref offset);
+    }
+
+    public static void SetupSndMock(this SoundArchive sndMock, SfxEntry[] entries, ILogger log)
+    {
+        sndMock.SequenceArchives = [];
+        sndMock.Groups = [];
+
+        foreach (SfxEntry entry in entries)
+        {
+            while (sndMock.SequenceArchives.Count <= entry.SequenceArchive)
+            {
+                sndMock.SequenceArchives.Add(new() { File = new() });
+            }
+            while (sndMock.SequenceArchives[entry.SequenceArchive].File.Sequences.Count <= entry.Index)
+            {
+                sndMock.SequenceArchives[entry.SequenceArchive].File.Sequences.Add(new());
+            }
+            sndMock.SequenceArchives[entry.SequenceArchive].File.Sequences[entry.Index].Bank = new() { Name = "BANK_SE_fONMEM" };
+        }
+        sndMock.Groups.Add(new() { Name = "GROUP_ONMEM", Entries = [ new() { LoadBank = true, Entry = new BankInfo { Name = "BANK_ONMEM" }} ] });
     }
 }

@@ -5,7 +5,6 @@ using Avalonia.Controls;
 using Avalonia.Headless;
 using Avalonia.Headless.NUnit;
 using Avalonia.Input;
-using HaruhiChokuretsuLib.Archive.Data;
 using Moq;
 using NUnit.Framework;
 using SerialLoops.Controls;
@@ -25,7 +24,6 @@ public class ItemLinkTests
     private TestConsoleLogger _log;
     private MainWindowViewModel _mainWindowViewModel;
     private Project _project;
-    private ExtraFile _extra;
 
     // TODO: once https://github.com/AvaloniaUI/Avalonia/pull/18306 merges, put this attribute back and remove the direct call
     // [SetUp]

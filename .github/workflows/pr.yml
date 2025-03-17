@@ -24,13 +24,13 @@ jobs:
       - name: Build
         run: dotnet build src/SerialLoops/SerialLoops.csproj -f ${{ matrix.platform.tfm }}
       - name: Test
-        run: dotnet test test/SerialLoops.Tests.Headless/SerialLoops.Tests.Headless.csproj -f ${{ matrix.platform.tfm }} ${{ matrix.platform.filter }} --logger:"trx;LogFileName=TestResults.trx"
+        run: dotnet test test/SerialLoops.Tests.Headless/SerialLoops.Tests.Headless.csproj -f ${{ matrix.platform.tfm }} ${{ matrix.platform.filter }} --logger:"trx;LogFileName=TestResults_${{ matrix.platform.rid }}.trx"
       - name: Upload test results for reporter
         uses: actions/upload-artifact@v4
         if: success() || failure()
         with:
           name: test-results-${{ matrix.platform.rid }}
-          path: test/SerialLoops.Tests.Headless/TestResults/TestResults.trx
+          path: test/SerialLoops.Tests.Headless/TestResults/TestResults_${{ matrix.platform.rid }}.trx
       - name: Upload test artifacts for review
         uses: actions/upload-artifact@v4
         if: success() || failure()

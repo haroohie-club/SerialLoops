@@ -10,7 +10,6 @@ using Avalonia.VisualTree;
 using HaruhiChokuretsuLib.Archive;
 using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Graphics;
-using Microsoft.VisualBasic.CompilerServices;
 using Moq;
 using NUnit.Framework;
 using SerialLoops.Lib;
