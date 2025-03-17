@@ -29,6 +29,7 @@ public class ItemExplorerPanelTests
     private Config _config;
 
     private BgTableFile _bgTableFile;
+    private ExtraFile _extra;
 
     [OneTimeSetUp]
     public async Task OneTimeSetup()
@@ -42,6 +43,9 @@ public class ItemExplorerPanelTests
         {
             _uiVals = await UiVals.DownloadTestAssets();
         }
+
+        _extra = new();
+        _extra.Initialize(await File.ReadAllBytesAsync(Path.Combine(_uiVals.AssetsDirectory, "EXTRA.bin")), 0, _log);
 
         _bgTableFile = new();
         _bgTableFile.Initialize(await File.ReadAllBytesAsync(Path.Combine(_uiVals.AssetsDirectory, "BGTBL.bin")), 1, _log);
@@ -60,6 +64,7 @@ public class ItemExplorerPanelTests
         _project.Name = "Test";
         Directory.CreateDirectory(Path.Combine(_project.MainDirectory));
         _project.SetupMockedProperties(_uiVals);
+        _project.Extra = _extra;
         Mock<ArchiveFile<GraphicsFile>> grpMock = new();
         grpMock.SetupGrpMock(_uiVals.AssetsDirectory, _log);
         _project.Grp = grpMock.Object;
