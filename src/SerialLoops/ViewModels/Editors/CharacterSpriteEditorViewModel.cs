@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia.Input;
 using Avalonia.Platform.Storage;
+using HaroohieClub.NitroPacker.Nitro.Gx;
 using HaruhiChokuretsuLib.Util;
 using ReactiveHistory;
 using ReactiveUI;
@@ -20,7 +22,7 @@ using SkiaSharp;
 
 namespace SerialLoops.ViewModels.Editors;
 
-public class CharacterSpriteEditorViewModel : EditorViewModel
+public partial class CharacterSpriteEditorViewModel : EditorViewModel
 {
     private CharacterSpriteItem _sprite;
     private CharacterItem _character;
@@ -104,7 +106,61 @@ public class CharacterSpriteEditorViewModel : EditorViewModel
 
     private async Task ReplaceSprite()
     {
+        string baseFile = (await Window.Window.ShowOpenFilePickerAsync(Strings.CharacterSpriteEditorSelectBase,
+            [new(Strings.Image_Files) { Patterns = Shared.SupportedImageFiletypes }]))?.TryGetLocalPath();
+        if (string.IsNullOrEmpty(baseFile))
+        {
+            return;
+        }
+        string[] eyeFiles = (await Window.Window.ShowOpenMultiFilePickerAsync(Strings.CharacterSpriteEditorSelectEyeFrames,
+                [new(Strings.Image_Files) { Patterns = Shared.SupportedImageFiletypes }]))?
+            .Select(f => f.TryGetLocalPath()).ToArray();
+        if (eyeFiles is null || eyeFiles.Length == 0)
+        {
+            return;
+        }
+        string[] mouthFiles = (await Window.Window.ShowOpenMultiFilePickerAsync(Strings.CharacterSpriteEditorSelectMouthFrames,
+                [new(Strings.Image_Files) { Patterns = Shared.SupportedImageFiletypes }]))?
+            .Select(f => f.TryGetLocalPath()).ToArray();
+        if (mouthFiles is null || mouthFiles.Length == 0)
+        {
+            return;
+        }
 
+        SKBitmap baseLayout = SKBitmap.Decode(baseFile);
+        Match eyePosMatch = EyePosRegex().Match(Path.GetFileNameWithoutExtension(baseFile));
+        Match mouthPosMatch = MouthPosRegex().Match(Path.GetFileNameWithoutExtension(baseFile));
+        short eyePosX = eyePosMatch.Success ? short.Parse(eyePosMatch.Groups["x"].Value) : (short)0;
+        short eyePosY = eyePosMatch.Success ? short.Parse(eyePosMatch.Groups["y"].Value) : (short)0;
+        short mouthPosX = mouthPosMatch.Success ? short.Parse(mouthPosMatch.Groups["x"].Value) : (short)0;
+        short mouthPosY = mouthPosMatch.Success ? short.Parse(mouthPosMatch.Groups["y"].Value) : (short)0;
+
+        List<SKBitmap> eyeFrames = eyeFiles.OrderBy(f => f).Select(f => SKBitmap.Decode(f)).ToList();
+        short[] eyeTimings = new short[eyeFrames.Count];
+        Array.Fill<short>(eyeTimings, 32);
+        for (int i = 0; i < eyeTimings.Length; i++)
+        {
+            if (Path.GetFileNameWithoutExtension(eyeFiles[i])!.EndsWith("f", StringComparison.OrdinalIgnoreCase))
+            {
+                eyeTimings[i] = short.Parse(Path.GetFileNameWithoutExtension(eyeFiles[i]).Split('_').Last()[..^1]);
+            }
+        }
+        List<(SKBitmap Frame, short Timing)> eyeFramesAndTimings = eyeFrames.Zip(eyeTimings).ToList();
+
+        List<SKBitmap> mouthFrames = mouthFiles.OrderBy(f => f).Select(f => SKBitmap.Decode(f)).ToList();
+        short[] mouthTimings = new short[mouthFrames.Count];
+        Array.Fill<short>(mouthTimings, 32);
+        for (int i = 0; i < mouthTimings.Length; i++)
+        {
+            if (Path.GetFileNameWithoutExtension(mouthFiles[i])!.EndsWith("f", StringComparison.OrdinalIgnoreCase))
+            {
+                mouthTimings[i] = short.Parse(Path.GetFileNameWithoutExtension(mouthFiles[i]).Split('_').Last()[..^1]);
+            }
+        }
+        List<(SKBitmap Frame, short Timing)> mouthFramesAndTimings = mouthFrames.Zip(mouthTimings).ToList();
+
+        _sprite.SetSprite(baseLayout, eyeFramesAndTimings, mouthFramesAndTimings, eyePosX, eyePosY, mouthPosX, mouthPosY);
+        Description.UnsavedChanges = true;
     }
 
     private async Task ExportFrames()
@@ -188,4 +244,11 @@ public class CharacterSpriteEditorViewModel : EditorViewModel
             await new ProgressDialog { DataContext = tracker }.ShowDialog(Window.Window);
         }
     }
+
+    [GeneratedRegex(@"_(?<frameCount>\d{1,4})f(?:_|$)", RegexOptions.IgnoreCase, "en-US")]
+    private static partial Regex FrameCountRegex();
+    [GeneratedRegex(@"_E(?<x>\d{1,3}),(?<y>\d{1,3})(?:_|$)")]
+    private static partial Regex EyePosRegex();
+    [GeneratedRegex(@"_M(?<x>\d{1,3}),(?<y>\d{1,3})(?:_|$)")]
+    private static partial Regex MouthPosRegex();
 }
