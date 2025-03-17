@@ -61,7 +61,7 @@ public class EditorTabsPanelTests
     {
         Mock<Project> projectMock = new();
         projectMock.SetupCommonMocks();
-        _config = new() { ConfigPath = "config.json", };
+        _config = new() { ConfigPath = "config.json", UserDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString()) };
         _configFactory = new("config.json", _config);
         _project = projectMock.Object;
         _project.Config = _config;
