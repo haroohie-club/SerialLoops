@@ -7433,6 +7433,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to By default, tall CGs will display from the top. If this is checked, it will instead display from the bottom..
+        /// </summary>
+        public static string ScriptCommandParameterHelpDisplayFromBottom {
+            get {
+                return ResourceManager.GetString("ScriptCommandParameterHelpDisplayFromBottom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Displays the &quot;Main Topic → Avoid&quot; graphics..
         /// </summary>
         public static string ScriptCommandVerbHelpAVOID_DISP {

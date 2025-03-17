@@ -9,7 +9,7 @@
              x:DataType="vm:KbgDispScriptCommandEditorViewModel"
              x:Class="SerialLoops.Views.Editors.ScriptCommandEditors.KbgDispScriptCommandEditorView">
     <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto">
-        <TextBlock Grid.Column="0" Grid.Row="0" Text="{x:Static assets:Strings._Kinetic__Background}" Margin="0,7,0,0"/>
+        <TextBlock Grid.Column="0" Grid.Row="0" Text="{x:Static assets:Strings._Kinetic__Background}" VerticalAlignment="Center"/>
         <StackPanel Grid.Column="1" Grid.Row="0" Margin="10,0,0,0" Orientation="Horizontal" Spacing="10">
             <Button Content="{x:Static assets:Strings.Select___}" Command="{Binding ReplaceKbgCommand}"/>
             <controls:ItemLink Tabs="{Binding Tabs}" Item="{Binding Kbg}"/>

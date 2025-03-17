@@ -14,7 +14,7 @@
         <utility:TextSubstitionConverter x:Key="TextSubstitionConverter"/>
     </UserControl.Resources>
     <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
-        <TextBlock Grid.Column="0" Grid.Row="0" Margin="0,7,0,0" Text="{x:Static assets:Strings.Option_1}"/>
+        <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Option_1}"/>
         <ComboBox Grid.Column="1" Grid.Row="0" Margin="10,0,0,0" ItemsSource="{Binding AvailableChoices}" SelectedItem="{Binding Option1}">
             <ComboBox.ItemTemplate>
                 <DataTemplate DataType="hlib:ChoicesSectionEntry">
@@ -29,7 +29,7 @@
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
-        <TextBlock Grid.Column="0" Grid.Row="1" Margin="0,7,0,0" Text="{x:Static assets:Strings.Option_2}"/>
+        <TextBlock Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Text="{x:Static assets:Strings.Option_2}"/>
         <ComboBox Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" ItemsSource="{Binding AvailableChoices}" SelectedItem="{Binding Option2}">
             <ComboBox.ItemTemplate>
                 <DataTemplate DataType="hlib:ChoicesSectionEntry">
@@ -56,7 +56,7 @@
                 </ControlTheme>
             </ComboBox.ItemContainerTheme>
         </ComboBox>
-        <TextBlock Grid.Column="0" Grid.Row="2" Margin="0,7,0,0" Text="{x:Static assets:Strings.Option_3}"/>
+        <TextBlock Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Text="{x:Static assets:Strings.Option_3}"/>
         <ComboBox Grid.Column="1" Grid.Row="2" Margin="10,0,0,0" ItemsSource="{Binding AvailableChoices}" SelectedItem="{Binding Option3}">
             <ComboBox.ItemTemplate>
                 <DataTemplate DataType="hlib:ChoicesSectionEntry">
@@ -83,7 +83,7 @@
                 </ControlTheme>
             </ComboBox.ItemContainerTheme>
         </ComboBox>
-        <TextBlock Grid.Column="0" Grid.Row="3" Margin="0,7,0,0" Text="{x:Static assets:Strings.Option_4}"/>
+        <TextBlock Grid.Column="0" Grid.Row="3" VerticalAlignment="Center" Text="{x:Static assets:Strings.Option_4}"/>
         <ComboBox Grid.Column="1" Grid.Row="3" Margin="10,0,0,0" ItemsSource="{Binding AvailableChoices}" SelectedItem="{Binding Option4}">
             <ComboBox.ItemTemplate>
                 <DataTemplate DataType="hlib:ChoicesSectionEntry">
@@ -111,16 +111,16 @@
             </ComboBox.ItemContainerTheme>
         </ComboBox>
 
-        <TextBlock Grid.Column="0" Grid.Row="4" Margin="0,7,0,0" Text="{x:Static assets:Strings.Display_Flag_1}"/>
+        <TextBlock Grid.Column="0" Grid.Row="4" VerticalAlignment="Center" Text="{x:Static assets:Strings.Display_Flag_1}"/>
         <NumericUpDown Grid.Column="1" Grid.Row="4" Margin="10,0,0,0" Value="{Binding DisplayFlag1}"
                        Minimum="0" Maximum="{Binding MaxShort}" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
-        <TextBlock Grid.Column="0" Grid.Row="5" Margin="0,7,0,0" Text="{x:Static assets:Strings.Display_Flag_2}"/>
+        <TextBlock Grid.Column="0" Grid.Row="5" VerticalAlignment="Center" Text="{x:Static assets:Strings.Display_Flag_2}"/>
         <NumericUpDown Grid.Column="1" Grid.Row="5" Margin="10,0,0,0" Value="{Binding DisplayFlag2}"
                        Minimum="0" Maximum="{Binding MaxShort}" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
-        <TextBlock Grid.Column="0" Grid.Row="6" Margin="0,7,0,0" Text="{x:Static assets:Strings.Display_Flag_3}"/>
+        <TextBlock Grid.Column="0" Grid.Row="6" VerticalAlignment="Center" Text="{x:Static assets:Strings.Display_Flag_3}"/>
         <NumericUpDown Grid.Column="1" Grid.Row="6" Margin="10,0,0,0" Value="{Binding DisplayFlag3}"
                        Minimum="0" Maximum="{Binding MaxShort}" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
-        <TextBlock Grid.Column="0" Grid.Row="7" Margin="0,7,0,0" Text="{x:Static assets:Strings.Display_Flag_4}"/>
+        <TextBlock Grid.Column="0" Grid.Row="7" VerticalAlignment="Center" Text="{x:Static assets:Strings.Display_Flag_4}"/>
         <NumericUpDown Grid.Column="1" Grid.Row="7" Margin="10,0,0,0" Value="{Binding DisplayFlag4}"
                        Minimum="0" Maximum="{Binding MaxShort}" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
     </Grid>

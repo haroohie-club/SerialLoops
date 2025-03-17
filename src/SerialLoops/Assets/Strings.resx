@@ -3554,4 +3554,7 @@ SELECT cannot be used in the initial, unnamed script block.</value>
   <data name="ScriptCommandVerbHelpBACK" xml:space="preserve">
     <value>When used in the initial script section, starts execution to the first script block. Otherwise, makes the script return to whatever called it (e.g. the puzzle phase) or returns you to the investigation phase.</value>
   </data>
+  <data name="ScriptCommandParameterHelpDisplayFromBottom" xml:space="preserve">
+    <value>By default, tall CGs will display from the top. If this is checked, it will instead display from the bottom.</value>
+  </data>
 </root>
