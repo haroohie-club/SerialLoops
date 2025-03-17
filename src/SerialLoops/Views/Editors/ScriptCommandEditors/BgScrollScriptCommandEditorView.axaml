@@ -8,7 +8,7 @@
              x:DataType="vm:BgScrollScriptCommandEditorViewModel"
              x:Class="SerialLoops.Views.Editors.ScriptCommandEditors.BgScrollScriptCommandEditorView">
     <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,Auto">
-        <TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static assets:Strings.Scroll_Direction}"/>
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static assets:Strings.Scroll_Direction}" VerticalAlignment="Center"/>
         <ComboBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding ScrollDirections}" SelectedItem="{Binding ScrollDirection}">
             <ComboBox.ItemTemplate>
                 <DataTemplate DataType="vm:LocalizedBgScrollDirection">
@@ -22,7 +22,11 @@
             </ComboBox.ItemContainerTheme>
         </ComboBox>
 
-        <TextBlock Grid.Row="1" Grid.Column="0" Text="{x:Static assets:Strings.Scroll_Speed}"/>
+        <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Spacing="3">
+            <TextBlock Text="{x:Static assets:Strings.Scroll_Speed}" VerticalAlignment="Center"/>
+            <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" VerticalAlignment="Center"
+                 ToolTip.Tip=""/>
+        </StackPanel>
         <NumericUpDown Grid.Row="1" Grid.Column="1" Value="{Binding ScrollSpeed}" Minimum="1" Maximum="6"
                        FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
     </Grid>

@@ -3415,7 +3415,7 @@ BG_REVERT does something odd to previously displayed CGs that makes attempting t
     <value>Monitors for the end of the chess game and then jumps to a specified script block depending on the outcome.</value>
   </data>
   <data name="ScriptCommandVerbHelpCHIBI_EMOTE" xml:space="preserve">
-    <value>This command displays an emote in a speech bubble above a chibi figure on the top screen.</value>
+    <value>Displays an emote in a speech bubble above a chibi figure on the top screen.</value>
   </data>
   <data name="ScriptCommandVerbHelpCHIBI_ENTEREXIT" xml:space="preserve">
     <value>Specifies a chibi figure to enter or exit the top screen. To be used by this command, a chibi must have a walk cycle (animation 01) in addition to its default idle animation (animation 00).</value>
@@ -3519,7 +3519,7 @@ SELECT cannot be used in the initial, unnamed script block.</value>
     <value>Sets up the NEXT_SCENE command to skip a specified number of scenes as defined in the Scenario.</value>
   </data>
   <data name="ScriptCommandVerbHelpSND_PLAY" xml:space="preserve">
-    <value>Plays a sound from the SDAT snd.bin.</value>
+    <value>Plays a sound effect.</value>
   </data>
   <data name="ScriptCommandVerbHelpSND_STOP" xml:space="preserve">
     <value>Stops the currently playing sound. Unused in game.</value>
@@ -3556,5 +3556,14 @@ SELECT cannot be used in the initial, unnamed script block.</value>
   </data>
   <data name="ScriptCommandParameterHelpDisplayFromBottom" xml:space="preserve">
     <value>By default, tall CGs will display from the top. If this is checked, it will instead display from the bottom.</value>
+  </data>
+  <data name="ScriptCommandParameterHelpScrollSpeed" xml:space="preserve">
+    <value>The speed at which the background scrolls; higher is faster. Default is 1.</value>
+  </data>
+  <data name="ScriptCommandParameterHelpSpriteLayer" xml:space="preserve">
+    <value>The "layer" on which to display the sprite -- this determines which sprites appear on top of the others. Higher numbers will display on top of higher numbers.</value>
+  </data>
+  <data name="ScriptCommandParameterHelpDontClearText" xml:space="preserve">
+    <value>If set, the text box will not be cleared and the next text will be displayed immediately. This allows for cool effects where you can change things like the text entrance effect, voice font, etc. in the same box.</value><comment>Help tooltip for the "Don't Clear Text" parameter of the DIALOGUE command</comment>
   </data>
 </root>

@@ -8,7 +8,7 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:BgDispCgScriptCommandEditorViewModel"
              x:Class="SerialLoops.Views.Editors.ScriptCommandEditors.BgDispCgScriptCommandEditorView">
-    <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,Auto">
+    <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,Auto">
         <TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static assets:Strings.Background__CG_}" VerticalAlignment="Center"/>
         <StackPanel Grid.Row="0" Grid.Column="1" Margin="10,0,0,0" Orientation="Horizontal" Spacing="10">
             <Button Content="{x:Static assets:Strings.Select___}" Command="{Binding ReplaceCgCommand}"/>

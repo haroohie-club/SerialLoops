@@ -7442,6 +7442,33 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If set, the text box will not be cleared and the next text will be displayed immediately. This allows for cool effects where you can change things like the text entrance effect, voice font, etc. in the same box..
+        /// </summary>
+        public static string ScriptCommandParameterHelpDontClearText {
+            get {
+                return ResourceManager.GetString("ScriptCommandParameterHelpDontClearText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The speed at which the background scrolls; higher is faster. Default is 1..
+        /// </summary>
+        public static string ScriptCommandParameterHelpScrollSpeed {
+            get {
+                return ResourceManager.GetString("ScriptCommandParameterHelpScrollSpeed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &quot;layer&quot; on which to display the sprite -- this determines which sprites appear on top of the others. Higher numbers will display on top of higher numbers..
+        /// </summary>
+        public static string ScriptCommandParameterHelpSpriteLayer {
+            get {
+                return ResourceManager.GetString("ScriptCommandParameterHelpSpriteLayer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Displays the &quot;Main Topic → Avoid&quot; graphics..
         /// </summary>
         public static string ScriptCommandVerbHelpAVOID_DISP {
@@ -7597,7 +7624,7 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This command displays an emote in a speech bubble above a chibi figure on the top screen..
+        ///   Looks up a localized string similar to Displays an emote in a speech bubble above a chibi figure on the top screen..
         /// </summary>
         public static string ScriptCommandVerbHelpCHIBI_EMOTE {
             get {
@@ -7905,7 +7932,7 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Plays a sound from the SDAT snd.bin..
+        ///   Looks up a localized string similar to Plays a sound effect..
         /// </summary>
         public static string ScriptCommandVerbHelpSND_PLAY {
             get {

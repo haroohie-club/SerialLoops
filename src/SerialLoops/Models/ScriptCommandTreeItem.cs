@@ -1,8 +1,11 @@
 ﻿using System.Collections.ObjectModel;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Layout;
+using HaruhiChokuretsuLib.Archive.Event;
 using ReactiveUI;
 using SerialLoops.Lib.Script;
+using SerialLoops.Utility;
 
 namespace SerialLoops.Models;
 
@@ -25,7 +28,9 @@ public class ScriptCommandTreeItem : ITreeItem, IViewFor<ScriptItemCommand>
     {
         ViewModel = command;
         this.OneWayBind(ViewModel, vm => vm.Display, v => v._textBlock.Text);
+        _textBlock.VerticalAlignment = VerticalAlignment.Center;
         _panel.Children.Add(_textBlock);
+        _panel[ToolTip.TipProperty] = Shared.GetScriptVerbHelp(ViewModel?.Verb ?? EventFile.CommandVerb.NOOP1);
     }
 
     public Control GetDisplay()
