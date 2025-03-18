@@ -104,7 +104,7 @@ public class CharacterSpriteEditorViewModel : EditorViewModel
 
     private async Task ReplaceSprite()
     {
-
+        await Task.Delay(10);
     }
 
     private async Task ExportFrames()

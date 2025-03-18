@@ -17,10 +17,10 @@ public class EpheaderScriptCommandEditorViewModel(ScriptItemCommand command, Scr
 
     public LocalizedEpisode SelectedEpisode
     {
-        get => Episodes.First(e => e.Episode == ((EpisodeHeaderScriptParameter)command.Parameters[0]).EpisodeHeaderIndex);
+        get => Episodes.First(e => e.Episode == ((EpisodeHeaderScriptParameter)Command.Parameters[0]).EpisodeHeaderIndex);
         set
         {
-            ((EpisodeHeaderScriptParameter)command.Parameters[0]).EpisodeHeaderIndex = value.Episode;
+            ((EpisodeHeaderScriptParameter)Command.Parameters[0]).EpisodeHeaderIndex = value.Episode;
             Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
                 .Objects[Command.Index].Parameters[0] = (short)value.Episode;
             this.RaisePropertyChanged();

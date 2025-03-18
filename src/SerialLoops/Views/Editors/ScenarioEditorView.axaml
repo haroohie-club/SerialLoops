@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:vm="using:SerialLoops.ViewModels.Editors"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:assets="using:SerialLoops.Assets"
              xmlns:models="using:SerialLoops.Models"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:ScenarioEditorViewModel"
@@ -16,21 +17,21 @@
 
         <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right"
                     Width="{Binding #CommandsBox.Width}" Spacing="5" Margin="5">
-            <Button ToolTip.Tip="Add Command" Width="22" Command="{Binding AddCommand}">
+            <Button ToolTip.Tip="{x:Static assets:Strings.Add_Command}" Width="22" Command="{Binding AddCommand}">
                 <Svg Path="avares://SerialLoops/Assets/Icons/Add.svg" Width="22"/>
             </Button>
-            <Button ToolTip.Tip="Remove Command" Width="22" Command="{Binding DeleteCommand}"
+            <Button ToolTip.Tip="{x:Static assets:Strings.Remove_Command}" Width="22" Command="{Binding DeleteCommand}"
                     IsEnabled="{Binding SelectedCommand, Converter={x:Static ObjectConverters.IsNotNull}}">
                 <Svg Path="avares://SerialLoops/Assets/Icons/Remove.svg" Width="22"/>
             </Button>
-            <Button ToolTip.Tip="Clear Scenario" Width="22" Command="{Binding ClearCommand}">
+            <Button ToolTip.Tip="{x:Static assets:Strings.Clear_Scenario}" Width="22" Command="{Binding ClearCommand}">
                 <Svg Path="avares://SerialLoops/Assets/Icons/Clear.svg" Width="22"/>
             </Button>
-            <Button ToolTip.Tip="Move Command Up" Width="22" Command="{Binding UpCommand}"
+            <Button ToolTip.Tip="{x:Static assets:Strings.Move_Command_Up}" Width="22" Command="{Binding UpCommand}"
                     IsEnabled="{Binding SelectedCommand, Converter={x:Static ObjectConverters.IsNotNull}}">
                 <Svg Path="avares://SerialLoops/Assets/Icons/Move_Up.svg" Width="22"/>
             </Button>
-            <Button ToolTip.Tip="Move Command Down" Width="22" Command="{Binding DownCommand}"
+            <Button ToolTip.Tip="{x:Static assets:Strings.Move_Command_Down}" Width="22" Command="{Binding DownCommand}"
                     IsEnabled="{Binding SelectedCommand, Converter={x:Static ObjectConverters.IsNotNull}}">
                 <Svg Path="avares://SerialLoops/Assets/Icons/Move_Down.svg" Width="22"/>
             </Button>

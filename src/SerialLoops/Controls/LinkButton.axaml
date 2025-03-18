@@ -5,8 +5,8 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SerialLoops.Controls.LinkButton">
     <Grid ColumnDefinitions="Auto,Auto" VerticalAlignment="Center">
-        <Svg Grid.Column="0" Name="IconPath" Width="18"/>
-        <TextBlock Grid.Column="1" Classes="link" IsEnabled="True" Name="LinkText"/>
+        <Svg Grid.Column="0" Name="IconPath" Width="18" VerticalAlignment="Center" />
+        <TextBlock Grid.Column="1" Classes="link" IsEnabled="True" Name="LinkText" VerticalAlignment="Center" />
         <!-- TODO: (Maybe?) Remove this kludge (routes around https://github.com/AvaloniaUI/Avalonia/issues/15281) -->
         <Button Grid.Column="1" Cursor="Hand" Background="Transparent" Width="{Binding #LinkText.Bounds.Size.Width}"
                 Height="{Binding #LinkText.Bounds.Size.Height}" Name="BackingButton"/>

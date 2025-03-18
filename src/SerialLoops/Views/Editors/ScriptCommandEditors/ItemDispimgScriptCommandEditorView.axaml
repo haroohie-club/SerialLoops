@@ -9,16 +9,16 @@
              x:DataType="vm:ItemDispimgScriptCommandEditorViewModel"
              x:Class="SerialLoops.Views.Editors.ScriptCommandEditors.ItemDispimgScriptCommandEditorView">
     <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto">
-        <TextBlock Grid.Column="0" Grid.Row="0" Margin="0,7,0,0" Text="{x:Static assets:Strings.Item}"/>
+        <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Item}"/>
         <StackPanel Grid.Column="1" Grid.Row="0" Margin="10,0,0,0" Orientation="Horizontal" Spacing="10">
             <Button Content="{x:Static assets:Strings.Select___}" Command="{Binding ChangeItemCommand}"/>
             <controls:ItemLink Tabs="{Binding Tabs}" Item="{Binding Item}"/>
         </StackPanel>
 
-        <TextBlock Grid.Column="0" Grid.Row="1" Text="{x:Static assets:Strings.Location}" Margin="0,7,0,0"/>
+        <TextBlock Grid.Column="0" Grid.Row="1" Text="{x:Static assets:Strings.Location}" VerticalAlignment="Center"/>
         <ComboBox Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" ItemsSource="{Binding Locations}" SelectedItem="{Binding Location}"/>
 
-        <TextBlock Grid.Column="0" Grid.Row="2" Text="{x:Static assets:Strings.Transition}" Margin="0,7,0,0"/>
+        <TextBlock Grid.Column="0" Grid.Row="2" Text="{x:Static assets:Strings.Transition}" VerticalAlignment="Center"/>
         <ComboBox Grid.Column="1" Grid.Row="2" Margin="10,0,0,0" ItemsSource="{Binding Transitions}" SelectedItem="{Binding Transition}"/>
     </Grid>
 </UserControl>

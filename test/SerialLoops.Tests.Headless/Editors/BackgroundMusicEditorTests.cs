@@ -18,7 +18,6 @@ using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Util;
 using SerialLoops.Lib.Util.WaveformRenderer;
 using SerialLoops.Tests.Shared;
-using SerialLoops.Utility;
 using SerialLoops.ViewModels;
 using SerialLoops.ViewModels.Editors;
 using SerialLoops.Views.Editors;
