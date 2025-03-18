@@ -24,6 +24,17 @@ public class BackgroundEditorViewModel : EditorViewModel
     public BackgroundItem Bg { get; set; }
     public SKBitmap BgBitmap => Bg.GetBackground();
     public string BgDescription => $"{Bg.Id} (0x{Bg.Id:X3}); {Bg.BackgroundType}";
+
+    public string DescriptionToolTip => Bg.BackgroundType switch
+    {
+        BgType.KINETIC_SCREEN => Strings.BackgroundEditorHelpBgTypeKINETIC_SCREEN,
+        BgType.TEX_BG => Strings.BackgroundEditorHelpBgTypeTEX_BG,
+        BgType.TEX_CG => Strings.BackgroundEditorHelpBgTypeTEX_CG,
+        BgType.TEX_CG_DUAL_SCREEN => Strings.BackgroundEditorHelpBgTypeTEX_CG_DUAL_SCREEN,
+        BgType.TEX_CG_WIDE => Strings.BackgroundEditorHelpBgTypeTEX_CG_WIDE,
+        BgType.TEX_CG_SINGLE => Strings.BackgroundEditorHelpBgTypeTEX_CG_SINGLE,
+        _ => string.Empty,
+    };
     public ICommand ExportCommand { get; set; }
     public ICommand ReplaceCommand { get; set; }
     public ICommand CgNameChangeCommand { get; set; }

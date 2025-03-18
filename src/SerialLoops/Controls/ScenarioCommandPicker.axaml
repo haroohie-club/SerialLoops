@@ -7,7 +7,7 @@
              x:DataType="vm:ScenarioCommandPickerViewModel"
              x:Class="SerialLoops.Controls.ScenarioCommandPicker">
     <StackPanel Orientation="Horizontal" Spacing="5">
-        <TextBlock Text="{Binding ScenarioCommandIndex}" Margin="0,7,0,0"/>
+        <TextBlock Text="{Binding ScenarioCommandIndex}" VerticalAlignment="Center"/>
         <Button Content="{Binding ScenarioCommandText}">
             <Button.Flyout>
                 <Flyout>

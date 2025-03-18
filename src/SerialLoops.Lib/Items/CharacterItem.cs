@@ -60,7 +60,7 @@ public class CharacterItem : Item
         int totalWidth = NameplateProperties.Name.Sum(c =>
         {
             project.FontReplacement.TryGetValue(c, out FontReplacement fr);
-            return fr is not null ? fr.Offset : 15;
+            return fr?.Offset ?? 15;
         });
         if (totalWidth > 53)
         {

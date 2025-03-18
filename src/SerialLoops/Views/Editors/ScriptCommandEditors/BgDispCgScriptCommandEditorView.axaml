@@ -8,14 +8,18 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:BgDispCgScriptCommandEditorViewModel"
              x:Class="SerialLoops.Views.Editors.ScriptCommandEditors.BgDispCgScriptCommandEditorView">
-    <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,Auto">
+    <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,Auto">
         <TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static assets:Strings.Background__CG_}" VerticalAlignment="Center"/>
-        <StackPanel Grid.Row="0" Grid.Column="1"  Margin="10,0,0,0" Orientation="Horizontal" Spacing="10">
+        <StackPanel Grid.Row="0" Grid.Column="1" Margin="10,0,0,0" Orientation="Horizontal" Spacing="10">
             <Button Content="{x:Static assets:Strings.Select___}" Command="{Binding ReplaceCgCommand}"/>
             <controls:ItemLink Tabs="{Binding Tabs}" Item="{Binding Cg}"/>
         </StackPanel>
 
-        <TextBlock Grid.Row="1" Grid.Column="0" Text="{x:Static assets:Strings.Display_from_Bottom}" VerticalAlignment="Center"/>
+        <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Spacing="">
+            <TextBlock Text="{x:Static assets:Strings.Display_from_Bottom}" VerticalAlignment="Center"/>
+            <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" VerticalAlignment="Center"
+                 ToolTip.Tip="{x:Static assets:Strings.ScriptCommandParameterHelpDisplayFromBottom}"/>
+        </StackPanel>
         <CheckBox Grid.Row="1" Grid.Column="1" Margin="10,0,0,0" IsChecked="{Binding DisplayFromBottom}"/>
     </Grid>
 </UserControl>

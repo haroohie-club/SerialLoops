@@ -5,7 +5,7 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SerialLoops.Controls.LabelWithIcon">
     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="5">
-        <Svg Name="IconPath" Width="18" />
-        <TextBlock Name="LabelText" />
+        <Svg Name="IconPath" Width="18" VerticalAlignment="Center" />
+        <TextBlock Name="LabelText" VerticalAlignment="Center" />
     </StackPanel>
 </UserControl>

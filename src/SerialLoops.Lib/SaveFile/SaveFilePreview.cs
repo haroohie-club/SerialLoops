@@ -12,24 +12,21 @@ public class SaveFilePreview(SaveSlotData slotData, Project project)
     private const int HEIGHT = 42;
     private const float SCALE = 2f;
 
-    private readonly SaveSlotData _slotData = slotData;
-    private readonly Project _project = project;
-
     public SKBitmap DrawPreview()
     {
         SKBitmap bitmap = new(WIDTH, HEIGHT);
 
         using SKCanvas canvas = new(bitmap);
         DrawBox(canvas);
-        if (_slotData.EpisodeNumber == 0)
+        if (slotData.EpisodeNumber == 0)
         {
-            DrawText(canvas, _project.UiText.Messages[27]);
+            DrawText(canvas, project.UiText.Messages[27]);
         }
         else
         {
-            DrawEpisodeNumber(canvas, _slotData.EpisodeNumber);
-            DrawText(canvas, GetEpisodeTitle(_slotData.EpisodeNumber), 90);
-            DrawSaveTime(canvas, _slotData.SaveTime);
+            DrawEpisodeNumber(canvas, slotData.EpisodeNumber);
+            DrawText(canvas, GetEpisodeTitle(slotData.EpisodeNumber), 90);
+            DrawSaveTime(canvas, slotData.SaveTime);
         }
 
         canvas.Flush();
@@ -45,9 +42,9 @@ public class SaveFilePreview(SaveSlotData slotData, Project project)
     private void DrawText(SKCanvas canvas, string text, int x = 10, int y = 5, SKPaint paint = null)
     {
         canvas.DrawHaroohieText(
-            _project.LangCode != "ja" ? text.GetOriginalString(_project) : text,
-            paint ?? _project.DialogueColorFilters[0],
-            _project,
+            project.LangCode != "ja" ? text.GetOriginalString(project) : text,
+            paint ?? project.DialogueColorFilters[0],
+            project,
             x,
             y
         );
@@ -74,10 +71,10 @@ public class SaveFilePreview(SaveSlotData slotData, Project project)
 
     private void DrawEpisodeNumber(SKCanvas canvas, int number)
     {
-        if (_project.Items.Find(item => item.Type == ItemDescription.ItemType.System_Texture
+        if (project.Items.Find(item => item.Type == ItemDescription.ItemType.System_Texture
                                         && item.Name == "SYSTEX_SYS_CMN_B38") is not SystemTextureItem graphic)
         {
-            DrawText(canvas, string.Format(_project.Localize("EPISODE: {0}"), number));
+            DrawText(canvas, string.Format(project.Localize("EPISODE: {0}"), number));
             return;
         }
 
@@ -103,11 +100,11 @@ public class SaveFilePreview(SaveSlotData slotData, Project project)
     {
         string date = saveTime.ToString("yyyy/MM/dd");
         string time = saveTime.ToString("HH:mm:ss");
-        if (_project.Items.Find(item => item.Type == ItemDescription.ItemType.System_Texture
+        if (project.Items.Find(item => item.Type == ItemDescription.ItemType.System_Texture
                                         && item.Name == "SYSTEX_SYS_MNU_B00") is not SystemTextureItem graphic)
         {
             DrawText(canvas, date, 60, 25, project.DialogueColorFilters[1]);
-            DrawText(canvas, time, 180, 25, _project.DialogueColorFilters[0]);
+            DrawText(canvas, time, 180, 25, project.DialogueColorFilters[0]);
             return;
         }
         SKBitmap bitmap = graphic.Grp.GetImage(transparentIndex: 0);
@@ -154,6 +151,6 @@ public class SaveFilePreview(SaveSlotData slotData, Project project)
 
     private string GetEpisodeTitle(int number)
     {
-        return _project.UiText.Messages[16 + number];
+        return project.UiText.Messages[16 + number];
     }
 }

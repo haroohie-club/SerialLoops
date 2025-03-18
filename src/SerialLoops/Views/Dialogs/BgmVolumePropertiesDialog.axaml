@@ -27,8 +27,13 @@
                 <controls:SoundPlayerPanel DataContext="{Binding VolumePreviewPlayer}"/>
                 <StackPanel Orientation="Vertical" Spacing="5">
                     <Slider Name="VolumeSlider" Minimum="0" Maximum="200" Height="{Binding Waveform.Height}"
-                            Orientation="Vertical" Value="{Binding Volume}" />
-                    <Button Content="{x:Static assets:Strings.Normalize}" Command="{Binding NormalizeCommand}"/>
+                            Orientation="Vertical" Value="{Binding Volume}" ToolTip.Tip="{Binding Volume}"/>
+                    <Button Command="{Binding NormalizeCommand}">
+                        <StackPanel Orientation="Horizontal" Spacing="3">
+                            <TextBlock Text="{x:Static assets:Strings.Normalize}" VerticalAlignment="Center"/>
+                            <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" ToolTip.Tip="{x:Static assets:Strings.BgmVolumeNormalizeHelp}"/>
+                        </StackPanel>
+                    </Button>
                 </StackPanel>
                 <Image Source="{Binding Waveform, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
                        Width="{Binding Waveform.Width}" Height="{Binding Waveform.Height}"/>

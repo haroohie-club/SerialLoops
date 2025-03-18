@@ -516,7 +516,7 @@ public class ScriptItem : Item
                 continue;
             }
 
-            if (commands[i].Verb == CommandVerb.BG_SCROLL)
+            if (commands[i].Verb == CommandVerb.BG_SCROLL && bgScrollCommand is null)
             {
                 bgScrollCommand = commands[i];
                 continue;

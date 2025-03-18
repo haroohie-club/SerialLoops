@@ -104,6 +104,22 @@ Once you have installed any necessary prerequisites, to install Serial Loops, do
 
 Be sure to [read the Serial Loops documentation](https://haroohie.club/chokuretsu/serial-loops/docs) for instructions on how to use it!
 
+### Uninstalling
+Uninstalling Serial Loops itself is quite simple; however, you may also want to uninstall the packaged dependencies. Follow the instructions below for each platform to do this.
+
+#### Linux
+* If you installed the Flatpak, simply run `flatpak uninstall --delete-data club.haroohie.SerialLoops` to remove the Flatpak and all its associated data. If you don't want to keep your project data,
+ensure you delete the `~/SerialLoops` directory as well.
+* If you installed the deb or rpm package, run your package manager's uninstall command for the `SerialLoops` package. Afterwards, you can uninstall devkitARM by running the uninstall command for the `devkitpro-pacman` package.
+Finally, run `sudo rm -r /opt/devkitpro && sudo rm -r /etc/apt/sources.list.d/devkitpro.list` to delete the remainder of the devkitARM files on your system.
+* If you downloaded the tarball, delete the unpacked files from your system and then run the above commands to remove devkitARM from your system as well. You may also run your package manager's uninstallation command for SDL2.
+
+#### macOS
+Simply drag the Serial Loops application from the Applications folder to the trash. Afterwards, you can remove devkitARM from your system, you can open a terminal and run `sudo rm -rf /opt/devkitpro`.
+
+#### Windows
+Go into Add or Remove Programs and remove Serial Loops, the devkitPro installer, and Docker Desktop. Then, open an administrator PowerShell or CMD terminal (Win+X,A) and run `wsl --uninstall` to uninstall WSL.
+
 ## Bugs
 Please file bugs in the Issues tab in this repository. Please include the following information:
 * The platform you are running Serial Loops on

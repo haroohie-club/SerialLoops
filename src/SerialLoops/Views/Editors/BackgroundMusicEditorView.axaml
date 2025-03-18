@@ -11,8 +11,18 @@
     <Grid RowDefinitions="Auto,Auto,Auto,*">
         <controls:SoundPlayerPanel Name="Player" Grid.Row="0" DataContext="{Binding BgmPlayer}"/>
         <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="3" Margin="2">
-            <Button Content="{x:Static assets:Strings.Manage_Loop}" Command="{Binding ManageLoopCommand}"/>
-            <Button Content="{x:Static assets:Strings.Adjust_Volume}" Command="{Binding AdjustVolumeCommand}"/>
+            <Button Command="{Binding ManageLoopCommand}">
+                <StackPanel Orientation="Horizontal" Spacing="3">
+                    <TextBlock Text="{x:Static assets:Strings.Manage_Loop}" VerticalAlignment="Center"/>
+                    <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" ToolTip.Tip="{x:Static assets:Strings.BgmEditorLoopInfoHelp}"/>
+                </StackPanel>
+            </Button>
+            <Button Command="{Binding AdjustVolumeCommand}">
+                <StackPanel Orientation="Horizontal" Spacing="3">
+                    <TextBlock Text="{x:Static assets:Strings.Adjust_Volume}" VerticalAlignment="Center"/>
+                    <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" ToolTip.Tip="{x:Static assets:Strings.BgmEditorVolumeHelp}"/>
+                </StackPanel>
+            </Button>
         </StackPanel>
         <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="3" Margin="2">
             <Button Content="{x:Static assets:Strings.Replace}" Command="{Binding ReplaceCommand}"/>

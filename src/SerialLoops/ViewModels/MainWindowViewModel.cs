@@ -282,7 +282,7 @@ public partial class MainWindowViewModel : ViewModelBase
             DataContext = new OpenProjectPanelViewModel(ItemExplorer, EditorTabs),
         };
         OpenProjectName = OpenProject.Name;
-        OpenProjectIcon = OpenProject.Settings?.Icon ?? new();
+        OpenProjectIcon = OpenProject.Settings?.Icon ?? new(24, 24);
 
         InitializeProjectMenu();
 

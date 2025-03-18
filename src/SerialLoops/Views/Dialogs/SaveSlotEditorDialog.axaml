@@ -43,25 +43,25 @@
                             <HeaderedContentControl Grid.Row="1" Grid.Column="0" Header="{x:Static assets:Strings.Volume_Config}" Margin="10"
                                            HorizontalAlignment="Center" HorizontalContentAlignment="Center">
                                 <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,Auto" VerticalAlignment="Center">
-                                    <TextBlock Grid.Column="0" Grid.Row="0" Margin="0,7,0,0" Text="{x:Static assets:Strings.Music_}" />
+                                    <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Music_}" />
                                     <NumericUpDown Grid.Column="1" Grid.Row="0" Margin="10,0,0,0"
                                                    Value="{Binding BgmVolume}" Minimum="0"
                                                    Maximum="100" FormatString="N0" Increment="1"
                                                    ParsingNumberStyle="Integer" />
 
-                                    <TextBlock Grid.Column="0" Grid.Row="1" Margin="0,7,0,0" Text="{x:Static assets:Strings.Sound_Effects_}" />
+                                    <TextBlock Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Text="{x:Static assets:Strings.Sound_Effects_}" />
                                     <NumericUpDown Grid.Column="1" Grid.Row="1" Margin="10,0,0,0"
                                                    Value="{Binding SfxVolume}" Minimum="0"
                                                    Maximum="100" FormatString="N0" Increment="1"
                                                    ParsingNumberStyle="Integer" />
 
-                                    <TextBlock Grid.Column="0" Grid.Row="2" Margin="0,7,0,0" Text="{x:Static assets:Strings.Dialogue_}" />
+                                    <TextBlock Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Text="{x:Static assets:Strings.Dialogue_}" />
                                     <NumericUpDown Grid.Column="1" Grid.Row="2" Margin="10,0,0,0"
                                                    Value="{Binding WordsVolume}" Minimum="0"
                                                    Maximum="100" FormatString="N0" Increment="1"
                                                    ParsingNumberStyle="Integer" />
 
-                                    <TextBlock Grid.Column="0" Grid.Row="3" Margin="0,7,0,0" Text="{x:Static assets:Strings.Voices_}" />
+                                    <TextBlock Grid.Column="0" Grid.Row="3" VerticalAlignment="Center" Text="{x:Static assets:Strings.Voices_}" />
                                     <NumericUpDown Grid.Column="1" Grid.Row="3" Margin="10,0,0,0"
                                                    Value="{Binding VoiceVolume}" Minimum="0"
                                                    Maximum="100" FormatString="N0" Increment="1"
@@ -165,22 +165,22 @@
                                                            HorizontalAlignment="Center" HorizontalContentAlignment="Center">
                                                 <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,Auto">
                                                     <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Spacing="5">
-                                                        <TextBlock Margin="0,7,0,0" Text="{x:Static assets:Strings.Level}"/>
+                                                        <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.Level}"/>
                                                         <NumericUpDown Value="{Binding Level}" Minimum="1"
                                                                        Maximum="5" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
                                                     </StackPanel>
                                                     <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Spacing="5">
-                                                        <TextBlock Margin="0,7,0,0" Text="{x:Static assets:Strings.Remaining_Uses}"/>
+                                                        <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.Remaining_Uses}"/>
                                                         <NumericUpDown Value="{Binding RemainingUses}" Minimum="0"
                                                                        Maximum="9" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
                                                     </StackPanel>
                                                     <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Spacing="5">
-                                                        <TextBlock Margin="0,7,0,0" Text="{x:Static assets:Strings.Uses_Since_Level_Up}"/>
+                                                        <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.Uses_Since_Level_Up}"/>
                                                         <NumericUpDown Value="{Binding UsesSinceLevelUp}" Minimum="0"
                                                                        Maximum="10" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
                                                     </StackPanel>
                                                     <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Spacing="5">
-                                                        <TextBlock Margin="0,7,0,0" Text="{x:Static assets:Strings.Uses_to_Level_Up}"/>
+                                                        <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.Uses_to_Level_Up}"/>
                                                         <NumericUpDown Value="{Binding UsesToLevelUp}" Minimum="1"
                                                                        Maximum="10" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
                                                     </StackPanel>
@@ -199,16 +199,16 @@
                          GotFocus="CharacterPortraitTab_OnGotFocus">
                     <ScrollViewer>
                         <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,Auto">
-                            <TextBlock Grid.Row="0" Grid.Column="0" Margin="0,7,0,0" Text="{x:Static assets:Strings.Save_Time_}"/>
+                            <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Save_Time_}"/>
                             <StackPanel Grid.Row="0" Grid.Column="1" Margin="10,0,0,0" Orientation="Horizontal" Spacing="3">
                                 <CalendarDatePicker SelectedDate="{Binding SaveDate}"/>
                                 <TimePicker SelectedTime="{Binding SaveTime}"/>
                             </StackPanel>
 
-                            <TextBlock Grid.Row="1" Grid.Column="0" Margin="0,7,0,0" Text="{x:Static assets:Strings.Scenario_Command_Index_}"/>
+                            <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Scenario_Command_Index_}"/>
                             <controls:ScenarioCommandPicker Grid.Row="1" Grid.Column="1" DataContext="{Binding ScenarioCommandPickerVm}"/>
 
-                            <TextBlock Grid.Row="2" Grid.Column="0" Margin="0,7,0,0" Text="{x:Static assets:Strings.Episode_Number}"/>
+                            <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Episode_Number}"/>
                             <NumericUpDown Grid.Row="2" Grid.Column="1" Margin="10,0,0,0" Value="{Binding Episode}" Minimum="1"
                                            Maximum="5" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
 
@@ -259,37 +259,37 @@
                                 <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,Auto">
                                     <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Spacing="5">
                                         <Image Source="{Binding HaruhiVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
-                                        <TextBlock Text="{Binding HaruhiName}" Margin="0,7,0,0"/>
+                                        <TextBlock Text="{Binding HaruhiName}" VerticalAlignment="Center"/>
                                         <NumericUpDown Value="{Binding HaruhiFriendshipLevel}" Minimum="1"
                                                        Maximum="255" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
                                     </StackPanel>
                                     <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Spacing="5">
                                         <Image Source="{Binding AsahinaVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
-                                        <TextBlock Text="{Binding AsahinaName}" Margin="0,7,0,0"/>
+                                        <TextBlock Text="{Binding AsahinaName}" VerticalAlignment="Center"/>
                                         <NumericUpDown Value="{Binding AsahinaFriendshipLevel}" Minimum="1"
                                                        Maximum="255" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
                                     </StackPanel>
                                     <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Spacing="5">
                                         <Image Source="{Binding NagatoVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
-                                        <TextBlock Text="{Binding NagatoName}" Margin="0,7,0,0"/>
+                                        <TextBlock Text="{Binding NagatoName}" VerticalAlignment="Center"/>
                                         <NumericUpDown Value="{Binding NagatoFriendshipLevel}" Minimum="1"
                                                        Maximum="255" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
                                     </StackPanel>
                                     <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Spacing="5">
                                         <Image Source="{Binding KoizumiVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
-                                        <TextBlock Text="{Binding KoizumiName}" Margin="0,7,0,0"/>
+                                        <TextBlock Text="{Binding KoizumiName}" VerticalAlignment="Center"/>
                                         <NumericUpDown Value="{Binding KoizumiFriendshipLevel}" Minimum="1"
                                                        Maximum="255" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
                                     </StackPanel>
                                     <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Spacing="5">
                                         <Image Source="{Binding TsuruyaVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
-                                        <TextBlock Text="{Binding TsuruyaName}" Margin="0,7,0,0"/>
+                                        <TextBlock Text="{Binding TsuruyaName}" VerticalAlignment="Center"/>
                                         <NumericUpDown Value="{Binding TsuruyaFriendshipLevel}" Minimum="1"
                                                        Maximum="255" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
                                     </StackPanel>
                                     <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Spacing="5">
                                         <Border Width="16" Height="16" Background="Transparent"/>
-                                        <TextBlock Text="{x:Static assets:Strings.Unknown}" Margin="0,7,0,0"/>
+                                        <TextBlock Text="{x:Static assets:Strings.Unknown}" VerticalAlignment="Center"/>
                                         <NumericUpDown Value="{Binding UnknownFriendshipLevel}" Minimum="1"
                                                        Maximum="255" FormatString="N0" Increment="1" ParsingNumberStyle="Integer" />
                                     </StackPanel>
@@ -303,19 +303,19 @@
                     <ScrollViewer>
                         <Grid RowDefinitions="Auto,Auto,Auto,*" ColumnDefinitions="Auto,*">
                             <StackPanel Margin="10,5" Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Spacing="5">
-                                <TextBlock Margin="0,7,0,0" Text="{x:Static assets:Strings.Script_}"/>
+                                <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.Script_}"/>
                                 <ComboBox ItemsSource="{Binding ScriptItems}" SelectedItem="{Binding SelectedScriptItem}"/>
                                 <controls:ItemLink Item="{Binding SelectedScriptItem}" Tabs="{Binding Tabs}"
                                                    IsVisible="{Binding Tabs, Converter={x:Static ObjectConverters.IsNotNull}}"/>
                             </StackPanel>
 
                             <StackPanel Margin="10,5" Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Spacing="5">
-                                <TextBlock Margin="0,7,0,0" Text="{x:Static assets:Strings.Script_Section}"/>
+                                <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.Script_Section}"/>
                                 <ComboBox ItemsSource="{Binding ScriptSections}" SelectedItem="{Binding SelectedScriptSection}"/>
                             </StackPanel>
 
                             <StackPanel Margin="10,5" Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Spacing="5">
-                                <TextBlock Margin="0,7,0,0" Text="{x:Static assets:Strings.Command_Index_}"/>
+                                <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.Command_Index_}"/>
                                 <NumericUpDown Value="{Binding ScriptCommandIndex}"
                                                Minimum="0" Maximum="{Binding SelectedScriptSection.Objects.Count, Converter={StaticResource SubtractionConverter}, ConverterParameter=1}"
                                                FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>

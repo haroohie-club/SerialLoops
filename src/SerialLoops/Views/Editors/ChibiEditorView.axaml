@@ -15,7 +15,11 @@
 
         <HeaderedContentControl Grid.Row="1" Grid.Column="0" Header="{x:Static assets:Strings.Animation}">
             <StackPanel Orientation="Vertical" Spacing="10">
-                <ComboBox ItemsSource="{Binding ChibiAnimationNames}" SelectedItem="{Binding SelectedAnimation}"/>
+                <StackPanel Orientation="Horizontal" Spacing="3">
+                    <ComboBox ItemsSource="{Binding ChibiAnimationNames}" SelectedItem="{Binding SelectedAnimation}"
+                              VerticalAlignment="Center"/>
+                    <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" VerticalAlignment="Center" ToolTip.Tip="{Binding SelectedAnimToolTip}"/>
+                </StackPanel>
                 <controls:ChibiDirectionSelector DataContext="{Binding DirectionSelector}"/>
             </StackPanel>
         </HeaderedContentControl>
