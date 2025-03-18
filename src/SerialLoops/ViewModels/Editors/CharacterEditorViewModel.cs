@@ -1,25 +1,42 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Platform;
+using Avalonia.Platform.Storage;
 using HaruhiChokuretsuLib.Util;
 using ReactiveHistory;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using SerialLoops.Assets;
 using SerialLoops.Lib.Items;
 using SerialLoops.Utility;
+using SerialLoops.ViewModels.Dialogs;
 using SerialLoops.ViewModels.Panels;
+using SerialLoops.Views.Dialogs;
 using SkiaSharp;
 
 namespace SerialLoops.ViewModels.Editors;
 
 public class CharacterEditorViewModel : EditorViewModel
 {
-    private CharacterItem _character;
+    private readonly CharacterItem _character;
+
+    public bool OverrideGeneratedNameplate
+    {
+        get => _character.NameplateOverride is not null;
+        set
+        {
+            _character.NameplateOverride = value ? NameplateBitmap : null;
+            this.RaisePropertyChanged();
+            Description.UnsavedChanges = true;
+        }
+    }
 
     public EditorTabsPanelViewModel Tabs { get; }
 
@@ -113,6 +130,8 @@ public class CharacterEditorViewModel : EditorViewModel
     private readonly SKBitmap _blankNameplateBitmap;
     private readonly SKBitmap _blankNameplateBaseArrowBitmap;
 
+    public ICommand OverrideNameplateCommand { get; }
+
     private StackHistory _history;
     public ICommand UndoCommand { get; }
     public ICommand RedoCommand { get; }
@@ -141,6 +160,8 @@ public class CharacterEditorViewModel : EditorViewModel
         window.OpenProject.NameplateBitmap.ExtractSubset(NameplateBitmap,
             new(0, 16 * ((int)_character.MessageInfo.Character - 1), 64, 16 * (int)_character.MessageInfo.Character));
 
+        OverrideNameplateCommand = ReactiveCommand.CreateFromTask(OverrideNameplate);
+
         this.WhenAnyValue(c => c.TextColor).ObserveWithHistory(t => TextColor = t, TextColor, _history);
         this.WhenAnyValue(c => c.PlateColor).ObserveWithHistory(p => PlateColor = p, PlateColor, _history);
         this.WhenAnyValue(c => c.OutlineColor).ObserveWithHistory(o => OutlineColor = o, OutlineColor, _history);
@@ -154,8 +175,36 @@ public class CharacterEditorViewModel : EditorViewModel
         RedoGesture = GuiExtensions.CreatePlatformAgnosticCtrlGesture(Key.Y);
     }
 
+    private async Task OverrideNameplate()
+    {
+        string nameplateFile = (await Window.Window.ShowOpenFilePickerAsync(Strings.CharacterEditorSelectNameplateFilePickerTitle,
+            [new(Strings.Supported_Images) { Patterns = Shared.SupportedImageFiletypes }]))?.TryGetLocalPath();
+        if (string.IsNullOrEmpty(nameplateFile))
+        {
+            return;
+        }
+
+        ImageCropResizeDialogViewModel cropResizeDialogViewModel = new(nameplateFile, NameplateBitmap.Width, NameplateBitmap.Height, _log);
+        SKBitmap finalImage = await new ImageCropResizeDialog
+        {
+            DataContext = cropResizeDialogViewModel,
+        }.ShowDialog<SKBitmap>(Window.Window);
+        if (finalImage is null)
+        {
+            return;
+        }
+
+        NameplateBitmap = finalImage;
+        _character.NameplateOverride = NameplateBitmap;
+        Description.UnsavedChanges = true;
+    }
+
     private void UpdateNameplateBitmap()
     {
+        if (OverrideGeneratedNameplate)
+        {
+            return;
+        }
         NameplateBitmap =
             _character.GetNewNameplate(_blankNameplateBitmap, _blankNameplateBaseArrowBitmap, Window.OpenProject);
     }

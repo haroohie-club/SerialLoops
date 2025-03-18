@@ -3232,4 +3232,13 @@ All hacks have been rolled back to preserve state.</value>
   <data name="BgmLoopErrorMessage" xml:space="preserve">
     <value>Failed to adjust loop data for background music. Please check the logs and file an issue if this reoccurs.</value>
   </data>
+  <data name="CharacterEditorOverrideNameplateText" xml:space="preserve">
+    <value>Override Nameplate</value>
+  </data>
+  <data name="CharacterEditorSelectNameplateFilePickerTitle" xml:space="preserve">
+    <value>Select nameplate image</value>
+  </data>
+  <data name="CharacterEditorNameplateReplaceErrorMessage" xml:space="preserve">
+    <value>Failed to replace nameplate for character {0} with image {1}</value>
+  </data>
 </root>

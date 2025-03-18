@@ -13,7 +13,7 @@
         <utility:SKAvaloniaColorConverter x:Key="ColorConverter"/>
     </UserControl.Resources>
 
-    <Grid ColumnDefinitions="Auto,Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+    <Grid ColumnDefinitions="Auto,Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
         <Panel IsVisible="False">
             <Button Command="{Binding UndoCommand}" HotKey="{Binding UndoGesture}"/>
             <Button Command="{Binding RedoCommand}" HotKey="{Binding RedoGesture}"/>
@@ -24,27 +24,32 @@
 
         <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Text_Color}"/>
         <ColorPicker Grid.Row="1" Grid.Column="1" Color="{Binding TextColor, Converter={StaticResource ColorConverter}}"
-                     IsColorPaletteVisible="True" Palette="{Binding ColorPalette}"/>
+                     IsColorPaletteVisible="True" Palette="{Binding ColorPalette}" IsEnabled="{Binding !OverrideGeneratedNameplate}"/>
 
         <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Plate_Color}"/>
         <ColorPicker Grid.Row="2" Grid.Column="1" Color="{Binding PlateColor, Converter={StaticResource ColorConverter}}"
-                     IsColorPaletteVisible="True" Palette="{Binding ColorPalette}"/>
+                     IsColorPaletteVisible="True" Palette="{Binding ColorPalette}" IsEnabled="{Binding !OverrideGeneratedNameplate}"/>
 
         <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Outline_Color}"/>
         <ColorPicker Grid.Row="3" Grid.Column="1" Color="{Binding OutlineColor, Converter={StaticResource ColorConverter}}"/>
         <CheckBox Grid.Row="3" Grid.Column="2" VerticalAlignment="Center" Content="{x:Static assets:Strings.Has_Outline_}"
-                  IsChecked="{Binding HasOutline}"/>
+                  IsChecked="{Binding HasOutline}" IsEnabled="{Binding !OverrideGeneratedNameplate}"/>
 
         <Image Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Stretch="None" Margin="15"
                Source="{Binding NameplateBitmap, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
 
-        <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Voice_Font}"/>
-        <ComboBox Grid.Row="5" Grid.Column="1" ItemsSource="{Binding Sfxs}" SelectedItem="{Binding VoiceFont}"/>
-        <controls:ItemLink Grid.Row="5" Grid.Column="2" Item="{Binding VoiceFont}"
+        <CheckBox Grid.Row="5" Grid.Column="0" Content="{x:Static assets:Strings.CharacterEditorOverrideNameplateText}"
+                  IsChecked="{Binding OverrideGeneratedNameplate}"/>
+        <Button Grid.Row="5" Grid.Column="1" Content="{x:Static assets:Strings.Replace}" IsEnabled="{Binding OverrideGeneratedNameplate}"
+                Command="{Binding OverrideNameplateCommand}"/>
+
+        <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Voice_Font}"/>
+        <ComboBox Grid.Row="6" Grid.Column="1" ItemsSource="{Binding Sfxs}" SelectedItem="{Binding VoiceFont}"/>
+        <controls:ItemLink Grid.Row="6" Grid.Column="2" Item="{Binding VoiceFont}"
                            Tabs="{Binding Tabs}"/>
 
-        <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Text_Timer}"/>
-        <NumericUpDown Grid.Row="6" Grid.Column="1" Value="{Binding TextTimer}"
+        <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Text_Timer}"/>
+        <NumericUpDown Grid.Row="7" Grid.Column="1" Value="{Binding TextTimer}"
                        FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
     </Grid>
 </UserControl>

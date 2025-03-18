@@ -1202,6 +1202,33 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to replace nameplate for character {0} with image {1}.
+        /// </summary>
+        public static string CharacterEditorNameplateReplaceErrorMessage {
+            get {
+                return ResourceManager.GetString("CharacterEditorNameplateReplaceErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Override Nameplate.
+        /// </summary>
+        public static string CharacterEditorOverrideNameplateText {
+            get {
+                return ResourceManager.GetString("CharacterEditorOverrideNameplateText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select nameplate image.
+        /// </summary>
+        public static string CharacterEditorSelectNameplateFilePickerTitle {
+            get {
+                return ResourceManager.GetString("CharacterEditorSelectNameplateFilePickerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Characters.
         /// </summary>
         public static string Characters {
