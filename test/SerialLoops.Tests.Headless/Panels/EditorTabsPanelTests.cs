@@ -13,7 +13,6 @@ using HaruhiChokuretsuLib.Archive.Graphics;
 using Moq;
 using NUnit.Framework;
 using SerialLoops.Lib;
-using SerialLoops.Lib.Factories;
 using SerialLoops.Lib.Items;
 using SerialLoops.Tests.Shared;
 using SerialLoops.ViewModels;
@@ -30,6 +29,7 @@ public class EditorTabsPanelTests
     private UiVals _uiVals;
     private TestConsoleLogger _log;
     private Project _project;
+    private ConfigFactoryMock _configFactory;
     private Config _config;
 
     private BgTableFile _bgTableFile;
@@ -60,8 +60,8 @@ public class EditorTabsPanelTests
     {
         Mock<Project> projectMock = new();
         projectMock.SetupCommonMocks();
-        IConfigFactory factory = new ConfigFactoryMock("config.json");
-        _config = factory.LoadConfig(l => l, _log);
+        _config = new() { ConfigPath = "config.json", UserDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString()) };
+        _configFactory = new("config.json", _config);
         _project = projectMock.Object;
         _project.Config = _config;
         _project.SetupMockedProperties(_uiVals);
@@ -80,7 +80,7 @@ public class EditorTabsPanelTests
     {
         int currentFrame = 0;
         MainWindowViewModel mainWindow = new() { OpenProject = _project };
-        MainWindow window = new() { DataContext = mainWindow, ConfigurationFactory = new ConfigFactoryMock("config.json") };
+        MainWindow window = new() { DataContext = mainWindow, ConfigurationFactory = _configFactory };
         window.Show();
         mainWindow.Window = window;
         mainWindow.OpenProjectView(_project, new TestProgressTracker());
@@ -100,7 +100,7 @@ public class EditorTabsPanelTests
     {
         int currentFrame = 0;
         MainWindowViewModel mainWindow = new() { OpenProject = _project };
-        MainWindow window = new() { DataContext = mainWindow, ConfigurationFactory = new ConfigFactoryMock("config.json") };
+        MainWindow window = new() { DataContext = mainWindow, ConfigurationFactory = _configFactory };
         window.Show();
         mainWindow.Window = window;
         mainWindow.OpenProjectView(_project, new TestProgressTracker());
