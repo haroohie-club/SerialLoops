@@ -2292,8 +2292,8 @@ If you wish to ignore this, please check the "Ignore Hash" checkbox.</value>
   <data name="This script is not included in the event table." xml:space="preserve">
     <value>This script is not included in the event table.</value>
   </data>
-  <data name="This system texture uses a common palette, so palette replacement has been disabled" xml:space="preserve">
-    <value>This system texture uses a common palette, so palette replacement has been disabled</value>
+  <data name="SystemTexturePaletteReplacementDisabled" xml:space="preserve">
+    <value>This system texture uses the common main palette, so palette replacement has been disabled.</value>
   </data>
   <data name="Time (Frames)" xml:space="preserve">
     <value>Transition Time (Frames)</value>
@@ -3231,6 +3231,361 @@ All hacks have been rolled back to preserve state.</value>
   </data>
   <data name="BgmLoopErrorMessage" xml:space="preserve">
     <value>Failed to adjust loop data for background music. Please check the logs and file an issue if this reoccurs.</value>
+  </data>
+  <data name="BackgroundEditorHelpBgTypeTEX_BG" xml:space="preserve">
+    <value>A standard visual novel background used on the bottom screen, something that sprites would be displayed on top of. Displayed with BG_DISP or BG_FADE.</value>
+  </data>
+  <data name="BackgroundEditorHelpBgTypeKINETIC_SCREEN" xml:space="preserve">
+    <value>A simple top-screen scrolling graphic, used in the base game to indicate time of day. Displayed with KBG_DISP.</value>
+  </data>
+  <data name="BackgroundEditorHelpBgTypeTEX_CG" xml:space="preserve">
+    <value>A standard CG (character graphic) that displays a scene on the bottom screen. Sprites would not be placed on top of this. Displayed with BG_DISPCG or BG_FADE.</value>
+  </data>
+  <data name="BackgroundEditorHelpBgTypeTEX_CG_DUAL_SCREEN" xml:space="preserve">
+    <value>A tall CG (character graphic) displayed across both screens. It is too tall to be viewed at once, so it can be scrolled up and down with BG_SCROLL. Displayed with BG_DISPCG.</value>
+  </data>
+  <data name="BackgroundEditorHelpBgTypeTEX_CG_WIDE" xml:space="preserve">
+    <value>A wide CG (character graphic) displayed on the bottom screen. Can be scrolled left and right with BG_SCROLL. Displayed with BG_DISPCG.</value>
+  </data>
+  <data name="BackgroundEditorHelpBgTypeTEX_CG_SINGLE" xml:space="preserve">
+    <value>A tall CG (character graphic) displayed on the bottom screen only. It can be scrolled up and down with BG_SCROLL. Displayed with BG_DISPCG.</value>
+  </data>
+  <data name="BackgroundEditorHelpCgName" xml:space="preserve">
+    <value>The title of the CG as it will appear in the Extras mode's Album (CG viewer)</value>
+  </data>
+  <data name="BgmEditorLoopInfoHelp" xml:space="preserve">
+    <value>The audio format used by Chokuretsu encodes loop information into audio file itself, denoting where the track should loop from and to. Click this button to edit this information.</value>
+  </data>
+  <data name="BgmEditorVolumeHelp" xml:space="preserve">
+    <value>Click this button to adjust the volume of the track.</value>
+  </data>
+  <data name="BgmVolumeNormalizeHelp" xml:space="preserve">
+    <value>Click this to normalize the volume to match the default volume of all other tracks in the game. Recommended.</value>
+  </data>
+  <data name="CharacterEditorVoiceFontHelp" xml:space="preserve">
+    <value>The voice font is the sound effect that plays when there isn't a voiced line for this character (i.e. the little beeps)</value>
+  </data>
+  <data name="CharacterEditorTextTimerHelp" xml:space="preserve">
+    <value>The text timer represents how fast the character speaks. The higher the value, the slower the text will appear on screen.</value>
+  </data>
+  <data name="ChibiEditorAnim00Help" xml:space="preserve">
+    <value>Default idle animation</value>
+  </data>
+  <data name="ChibiEditorAnim01Help" xml:space="preserve">
+    <value>Walk cycle animation</value>
+  </data>
+  <data name="ChibiEditorAnim02Help" xml:space="preserve">
+    <value>"Searching" animation (puzzle phase)</value>
+  </data>
+  <data name="ChibiEditorAnim03Help" xml:space="preserve">
+    <value>"Cleaning" animation (puzzle phase)</value>
+  </data>
+  <data name="ChibiEditorAnim04Help" xml:space="preserve">
+    <value>Lose animation (puzzle phase)</value>
+  </data>
+  <data name="ChibiEditorAnim05Help" xml:space="preserve">
+    <value>Win animation (puzzle phase)</value>
+  </data>
+  <data name="ChibiEditorAnim06Help" xml:space="preserve">
+    <value>Technique animation (puzzle phase)</value>
+  </data>
+  <data name="ChibiEditorAnim07Help" xml:space="preserve">
+    <value>Technique failed animation (puzzle phase)</value>
+  </data>
+  <data name="ChibiEditorAnim08Help" xml:space="preserve">
+    <value>Running animation (unused)</value>
+  </data>
+  <data name="ChibiEditorAnim10Help" xml:space="preserve">
+    <value>Alternate idle animation (unused)</value>
+  </data>
+  <data name="ChibiEditorAnim97Help" xml:space="preserve">
+    <value>Still pose for "good" group selection result</value>
+  </data>
+  <data name="ChibiEditorAnim98Help" xml:space="preserve">
+    <value>Still pose for "neutral" group selection result</value>
+  </data>
+  <data name="ChibiEditorAnim99Help" xml:space="preserve">
+    <value>Still pose for "bad" group selection result</value>
+  </data>
+  <data name="ScenarioVerbHelpNEW_GAME" xml:space="preserve">
+    <value>This command defines where the "New Game" menu item takes the player. For example, if NEW_GAME 5 defines where selecting New Game → Episode 5 will take the player.</value>
+  </data>
+  <data name="ScenarioVerbHelpSAVE" xml:space="preserve">
+    <value>This command prompts the user to save the game, creating a checkpoint save. Typically, the first save in an episode is denoted by setting the parameter to 2 and incrementing it for each checkpoint after that.</value>
+  </data>
+  <data name="ScenarioVerbHelpLOAD_SCENE" xml:space="preserve">
+    <value>This command loads a particular script file.</value>
+  </data>
+  <data name="ScenarioVerbHelpPUZZLE_PHASE" xml:space="preserve">
+    <value>This command starts a particular puzzle phase.</value>
+  </data>
+  <data name="ScenarioVerbHelpROUTE_SELECT" xml:space="preserve">
+    <value>This command starts a particular group selection.</value>
+  </data>
+  <data name="ScenarioVerbHelpSTOP" xml:space="preserve">
+    <value>This command stops the game. It is not actually used.</value>
+  </data>
+  <data name="ScenarioVerbHelpSAVE2" xml:space="preserve">
+    <value>This command also prompts the user to save the game. While the precise mechanical differences between this and SAVE are not well understood, it is known that it is used after the UNLOCK command and before the NEW_GAME or END commands. This implies that it interacts more directly with the common save than do checkpoint saves. Its parameter is always 0.</value>
+  </data>
+  <data name="ScenarioVerbHelpTOPICS" xml:space="preserve">
+    <value>This command displays which topics the player has collected over the previous scene(s) following group selection.</value>
+  </data>
+  <data name="ScenarioVerbHelpCOMPANION_SELECT" xml:space="preserve">
+    <value>This loads a companion selection screen, allowing the player to select which Brigade member will accompany Haruhi during the puzzle phase.</value>
+  </data>
+  <data name="ScenarioVerbHelpPLAY_VIDEO" xml:space="preserve">
+    <value>Plays a video; 0 plays the OP and 1 plays the ED.</value>
+  </data>
+  <data name="ScenarioVerbHelpNOP" xml:space="preserve">
+    <value>Does nothing.</value>
+  </data>
+  <data name="ScenarioVerbHelpUNLOCK_ENDINGS" xml:space="preserve">
+    <value>This command unlocks a character ending scene based on the friendship levels. Used at the end of the game.</value>
+  </data>
+  <data name="ScenarioVerbHelpUNLOCK" xml:space="preserve">
+    <value>Unlocks particular functionality. The exact mapping between the parameter specified and which functionality is unlocked is currently unknown.</value>
+  </data>
+  <data name="ScenarioVerbHelpEND" xml:space="preserve">
+    <value>Ends the scenario and returns to the title screen.</value>
+  </data>
+  <data name="SystemTextureReplaceHelp" xml:space="preserve">
+    <value>Click this button to replace the texture WITHOUT changing the existing palette. This means that you will want to design the replacement to have the colors displayed below for maximum fidelity. We recommend using this option only if palette replacement is disabled.</value>
+  </data>
+  <data name="SystemTextureReplaceWithPaletteHelp" xml:space="preserve">
+    <value>Click this button to replace the texture AND the texture's palette. This will adapt the palette to match the new image you upload, preserving color as much as possible. If this option is available, we recommend using it.</value>
+  </data>
+  <data name="SystemTexturePaletteReplacementDisabledChess" xml:space="preserve">
+    <value>This system texture uses the common chess palette, so palette replacement has been disabled.</value>
+  </data>
+  <data name="TopicTimesHelp" xml:space="preserve">
+    <value>These times represent the amount of time gained in the puzzle phase when using this topic. The character accompanying Haruhi applies a percentage modifier to the base time gain to result in the amounts seen in-game and in the right-hand column.</value>
+  </data>
+  <data name="TopicEditorHiddenIdHelp" xml:space="preserve">
+    <value>All main topics have a second "hidden" ID in addition to their main one. This is displayed for internal accounting and is generally not interesting to you as a user.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpAVOID_DISP" xml:space="preserve">
+    <value>Displays the "Main Topic → Avoid" graphics.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpBG_DISP" xml:space="preserve">
+    <value>Displays a background image on the lower screen. The background image can only be of type TEX_BG.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpBG_DISP2" xml:space="preserve">
+    <value>The same as BG_DISP. Use that command instead.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpBG_DISPCG" xml:space="preserve">
+    <value>BG_DISPCG works as BG_DISP but can display a larger variety of textures – namely, TEX_CG, TEX_CG_DUAL_SCREEN, TEX_CG_WIDE, and TEX_CG_SINGLE BGs. Notably, these are all CGs as opposed to VN backgrounds. Before displaying a standard BG after calling BG_DISPCG, one should call BG_REVERT.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpBG_FADE" xml:space="preserve">
+    <value>Like the other BG display commands but crossfades the background rather than just displaying it.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpBG_REVERT" xml:space="preserve">
+    <value>Reverts the background to the last call of BG_DISP (i.e. undoes any BG_FADE or BG_DISPCG calls). This is required before returning to displaying standard TEX_BG BGs. Note that if reverting a TEX_CG_DUAL_SCREEN BG, SET_PLACE must have been used to set the place location and have it displayed.
+
+BG_REVERT does something odd to previously displayed CGs that makes attempting to display them again after the BG_REVERT crash/freeze/soft lock the game. If you need to go back and forth between the same CGs, consider using BG_FADE.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpBG_SCROLL" xml:space="preserve">
+    <value>When a background that is larger than the screen is shown (such as TEX_CG_DUAL_SCREEN, TEX_CG_WIDE, and TEX_CG_SINGLE), scrolls the background in a defined direction.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpBGM_PLAY" xml:space="preserve">
+    <value>Plays or stops background music.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpCHESS_CLEAR_ANNOTATIONS" xml:space="preserve">
+    <value>Clears all chessboard annotations. Unused.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpCHESS_LOAD" xml:space="preserve">
+    <value>Loads a chess file into memory and (if the chess overlay is loaded) places it on the chessboard.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpCHESS_MOVE" xml:space="preserve">
+    <value>Moves a piece (or pieces) on the chessboard.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpCHESS_RESET" xml:space="preserve">
+    <value>Resets the chessboard to its original state.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpCHESS_TOGGLE_CROSS" xml:space="preserve">
+    <value>Crosses out spaces on the chessboard with a red X. If a space is already crossed out, this command uncrosses it out.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpCHESS_TOGGLE_GUIDE" xml:space="preserve">
+    <value>Highlights the potential moves of a piece in red. If a piece has already been highlighted, this command unhighlights it. Optionally, can specify to clear all guides currently on the board.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpCHESS_TOGGLE_HIGHLIGHT" xml:space="preserve">
+    <value>Highlights spaces on the chessboard in yellow. If a space is already highlighted, this command unhighlights it.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpCHESS_VGOTO" xml:space="preserve">
+    <value>Monitors for the end of the chess game and then jumps to a specified script block depending on the outcome.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpCHIBI_EMOTE" xml:space="preserve">
+    <value>Displays an emote in a speech bubble above a chibi figure on the top screen.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpCHIBI_ENTEREXIT" xml:space="preserve">
+    <value>Specifies a chibi figure to enter or exit the top screen. To be used by this command, a chibi must have a walk cycle (animation 01) in addition to its default idle animation (animation 00).</value>
+  </data>
+  <data name="ScriptCommandVerbHelpCONFETTI" xml:space="preserve">
+    <value>Displays falling confetti on the top screen.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpDIALOGUE" xml:space="preserve">
+    <value>Displays a line of dialogue and/or manipulates character sprites. Can optionally play a voiced line.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpEPHEADER" xml:space="preserve">
+    <value>Sets the upper screen to be an episode title texture.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpFLAG" xml:space="preserve">
+    <value>Sets or clears a flag.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpGLOBAL2D" xml:space="preserve">
+    <value>Sets a global variable to a specified value. Only used in one place so it's difficult to determine what it affects.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpGOTO" xml:space="preserve">
+    <value>Jumps to a particular script section.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpHARUHI_METER" xml:space="preserve">
+    <value>Modifies the value of the Haruhi Meter. The meter minimum is 0 (corresponding to 10%) and the meter maximum is 9 (corresponding to 100%).</value>
+  </data>
+  <data name="ScriptCommandVerbHelpHARUHI_METER_NOSHOW" xml:space="preserve">
+    <value>Adds to the Haruhi Meter without showing the Haruhi Meter UI (the sound effects are still played). Unused in the game.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpHOLD" xml:space="preserve">
+    <value>Stops script execution until input is received from the player.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpINIT_READ_FLAG" xml:space="preserve">
+    <value>Seems to initialize read flags for the current script; however, it's utility is unknown as it is unused in the game.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpINVEST_END" xml:space="preserve">
+    <value>Ends investigation mode and returns to the main visual novel format of the game. Automatically fades screen to black.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpINVEST_START" xml:space="preserve">
+    <value>Starts investigation mode. Automatically clears most of the screen UI and then fades screen out to black and then back in from black.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpITEM_DISPIMG" xml:space="preserve">
+    <value>Displays the specified item image. The item system is entirely unused in the game, so this command goes unused as well.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpKBG_DISP" xml:space="preserve">
+    <value>Displays a particular "kinetic" (my word) background on the top screen. Must be of type KINETIC_SCREEN.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpLOAD_ISOMAP" xml:space="preserve">
+    <value>Loads an isometric map for usage by INVEST_START.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpMODIFY_FRIENDSHIP" xml:space="preserve">
+    <value>Modifies a character's "Friendship Level" by adding a particular value to it. The value can be positive or negative. Friendship levels start at 1, have a max of 64, and persist throughout a playthrough.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpNEXT_SCENE" xml:space="preserve">
+    <value>Ends the scene and moves to the next one as listed in the Scenario item.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpNOOP" xml:space="preserve">
+    <value>Does nothing.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpOP_MODE" xml:space="preserve">
+    <value>Suppresses the top screen UI, shows BG_KBG04 on the top screen, disables dialogue skipping, and marks the center of the screen as the position the Kyon chibi walks to, and sends the Kyon chibi out. Used only in the opening text crawl.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpPALEFFECT" xml:space="preserve">
+    <value>Changes the color of currently displayed UI elements using a specified filter.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpPIN_MNL" xml:space="preserve">
+    <value>Draws a dialogue line as monologue over all other dialogue. Undone by completing a chess game.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpREMOVED" xml:space="preserve">
+    <value>Removed in the final version of the game (not referenced in any scripts.)</value>
+  </data>
+  <data name="ScriptCommandVerbHelpSCENE_GOTO" xml:space="preserve">
+    <value>Goes to a particular scene. Note that this scene cannot be just any script file; it must be contained within the event table.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpSCENE_GOTO_CHESS" xml:space="preserve">
+    <value>Behaves as SCENE_GOTO except that it's used to go to scripts that contain chess puzzles.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpSCREEN_FADEIN" xml:space="preserve">
+    <value>Causes the screen to fade in.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpSCREEN_FADEOUT" xml:space="preserve">
+    <value>Causes the screen to fade out.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpSCREEN_FLASH" xml:space="preserve">
+    <value>Flashes the screen a specified color for a specified amount of time.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpSCREEN_SHAKE" xml:space="preserve">
+    <value>Shakes the bottom screen.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpSCREEN_SHAKE_STOP" xml:space="preserve">
+    <value>Stops screen shaking from a SCREEN_SHAKE command. (Used when the Duration parameter of said SCREEN_SHAKE is set to -1).</value>
+  </data>
+  <data name="ScriptCommandVerbHelpSELECT" xml:space="preserve">
+    <value>Presents the player with a series of choices that branch the dialogue tree. Choices are defined in their own section and have IDs that correspond to labels set in the labels section. When a choice is chosen, this ID is used to select which script block will be jumped to.
+
+SELECT cannot be used in the initial, unnamed script block.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpSET_PLACE" xml:space="preserve">
+    <value>Modifies the displayed place name.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpSKIP_SCENE" xml:space="preserve">
+    <value>Sets up the NEXT_SCENE command to skip a specified number of scenes as defined in the Scenario.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpSND_PLAY" xml:space="preserve">
+    <value>Plays a sound effect.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpSND_STOP" xml:space="preserve">
+    <value>Stops the currently playing sound. Unused in game.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpSTOP" xml:space="preserve">
+    <value>Stops script execution and soft locks the game. Unused.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpTOGGLE_DIALOGUE" xml:space="preserve">
+    <value>Shows/hides the dialogue box. Note that plenty of other commands already do one of these (e.g., DIALOGUE automatically shows the dialogue box).</value>
+  </data>
+  <data name="ScriptCommandVerbHelpTOPIC_GET" xml:space="preserve">
+    <value>Gives the player a particular topic.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpTRANS_OUT" xml:space="preserve">
+    <value>Plays a transition to black.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpTRANS_IN" xml:space="preserve">
+    <value>Plays a transition from black into the scene.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpVCE_PLAY" xml:space="preserve">
+    <value>Plays a voice file.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpVGOTO" xml:space="preserve">
+    <value>Goes to a specified script section if a specified conditional is true.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpWAIT" xml:space="preserve">
+    <value>Waits a particular number of frames.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpWAIT_CANCEL" xml:space="preserve">
+    <value>A command nearly identical to WAIT, but allows for the wait to be canceled with a button press or screen tap.</value>
+  </data>
+  <data name="ScriptCommandVerbHelpBACK" xml:space="preserve">
+    <value>When used in the initial script section, starts execution to the first script block. Otherwise, makes the script return to whatever called it (e.g. the puzzle phase) or returns you to the investigation phase.</value>
+  </data>
+  <data name="ScriptCommandParameterHelpDisplayFromBottom" xml:space="preserve">
+    <value>By default, tall CGs will display from the top. If this is checked, it will instead display from the bottom.</value>
+  </data>
+  <data name="ScriptCommandParameterHelpScrollSpeed" xml:space="preserve">
+    <value>The speed at which the background scrolls; higher is faster. Default is 1.</value>
+  </data>
+  <data name="ScriptCommandParameterHelpSpriteLayer" xml:space="preserve">
+    <value>The "layer" on which to display the sprite -- this determines which sprites appear on top of the others. Higher numbers will display on top of higher numbers.</value>
+  </data>
+  <data name="ScriptCommandParameterHelpDontClearText" xml:space="preserve">
+    <value>If set, the text box will not be cleared and the next text will be displayed immediately. This allows for cool effects where you can change things like the text entrance effect, voice font, etc. in the same box.</value><comment>Help tooltip for the "Don't Clear Text" parameter of the DIALOGUE command</comment>
+  </data>
+  <data name="ScriptCommandScreenFadeInParamWarning" xml:space="preserve">
+    <value>Should be the same as the previous SCREEN_FADEOUT command</value>
+  </data>
+  <data name="ScriptCommandParameterHelpFadeColor" xml:space="preserve">
+    <value>The the color type to use. Except for special transitions, it is generally recommended to use Custom Color as it provides the most flexibility.</value>
+  </data>
+  <data name="ScriptCommandParameterHelpFadeCustomColor" xml:space="preserve">
+    <value>This color will only be applied if you have selected "Custom Color" for the "Color" property below.</value>
+  </data>
+  <data name="ScriptCommandParameterHelpFadeLocation" xml:space="preserve">
+    <value>The screen to apply the fade to. Except for the initial fade in SCRIPT00, you must use Custom Color to fade both screens.</value>
+  </data>
+  <data name="ScriptCommandParameterHelpShakeDuration" xml:space="preserve">
+    <value>Set to -1 to shake the screen until the SCREEN_SHAKE_STOP command is executed</value>
+  </data>
+  <data name="ScriptCommandParameterHelpSelectDisplayFlag" xml:space="preserve">
+    <value>If this is -1, this option is always shown. If it is a value 0 or above, this option is shown until the flag of that value is set.</value>
+  </data>
+  <data name="ScriptCommandParameterHelpSoundLoad" xml:space="preserve">
+    <value>This must be checked when a sound is played initially. If a sound plays for a long time and you want to change its volume, uncheck this and set the crossfade time instead.</value>
   </data>
   <data name="CharacterSpriteEditorSelectBase" xml:space="preserve">
     <value>Select sprite base</value>

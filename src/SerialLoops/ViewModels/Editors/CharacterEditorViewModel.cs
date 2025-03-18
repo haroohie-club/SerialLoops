@@ -19,7 +19,7 @@ namespace SerialLoops.ViewModels.Editors;
 
 public class CharacterEditorViewModel : EditorViewModel
 {
-    private CharacterItem _character;
+    private readonly CharacterItem _character;
 
     public EditorTabsPanelViewModel Tabs { get; }
 

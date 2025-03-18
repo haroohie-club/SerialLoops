@@ -29,6 +29,9 @@ public static partial class SLConverters
     public static FuncValueConverter<bool, IImmutableSolidColorBrush> BooleanBrushConverter => new((val) => val ? Brushes.Transparent : Brushes.LightGreen);
     public static FuncValueConverter<string, string> CharacterNameCropConverter => new((name) => name[4..]);
     public static FuncValueConverter<List<Speaker>, string> ListDisplayConverter => new((strs) => string.Join(", ", strs.Select(s => s.ToString())));
+    public static FuncValueConverter<ScenarioCommand.ScenarioVerb, string> ScenarioVerbHelpConverter => new(Shared.GetScenarioVerbHelp);
+    public static FuncValueConverter<EventFile.CommandVerb, string> ScriptVerbHelpConverter => new(Shared.GetScriptVerbHelp);
+    public static FuncValueConverter<string, string> ScriptVerbStringHelpConverter => new(Shared.GetScriptVerbHelp);
 }
 
 public class DisplayNameConverter : IMultiValueConverter

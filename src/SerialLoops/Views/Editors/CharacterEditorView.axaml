@@ -38,12 +38,18 @@
         <Image Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Stretch="None" Margin="15"
                Source="{Binding NameplateBitmap, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
 
-        <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Voice_Font}"/>
+        <StackPanel Grid.Row="5" Grid.Column="0" Orientation="Horizontal" Spacing="3" Margin="0 0 10 0">
+            <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.Voice_Font}"/>
+            <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" VerticalAlignment="Center" ToolTip.Tip="{x:Static assets:Strings.CharacterEditorVoiceFontHelp}"/>
+        </StackPanel>
         <ComboBox Grid.Row="5" Grid.Column="1" ItemsSource="{Binding Sfxs}" SelectedItem="{Binding VoiceFont}"/>
         <controls:ItemLink Grid.Row="5" Grid.Column="2" Item="{Binding VoiceFont}"
                            Tabs="{Binding Tabs}"/>
 
-        <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Text_Timer}"/>
+        <StackPanel Grid.Row="6" Grid.Column="0" Orientation="Horizontal" Spacing="3" Margin="0 0 10 0">
+            <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.Text_Timer}"/>
+            <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" VerticalAlignment="Center" ToolTip.Tip="{x:Static assets:Strings.CharacterEditorTextTimerHelp}"/>
+        </StackPanel>
         <NumericUpDown Grid.Row="6" Grid.Column="1" Value="{Binding TextTimer}"
                        FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
     </Grid>

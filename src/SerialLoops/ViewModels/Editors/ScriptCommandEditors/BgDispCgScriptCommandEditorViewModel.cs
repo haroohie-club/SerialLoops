@@ -54,6 +54,7 @@ public class BgDispCgScriptCommandEditorViewModel : ScriptCommandEditorViewModel
         : base(command, scriptEditor, log)
     {
         _window = ScriptEditor.Window;
+        _cg = ((BgScriptParameter)Command.Parameters[0]).Background;
         Tabs = scriptEditor.Window.EditorTabs;
 
         ReplaceCgCommand = ReactiveCommand.CreateFromTask(ReplaceCg);
