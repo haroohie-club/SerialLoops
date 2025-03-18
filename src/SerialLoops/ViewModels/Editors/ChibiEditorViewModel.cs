@@ -46,8 +46,27 @@ public partial class ChibiEditorViewModel : EditorViewModel
             DirectionSelector.SelectedDirection = DirectionSelector.Directions[2];
             _selectedDirection = DirectionSelector.SelectedDirection.Direction;
             UpdateChibi();
+            SelectedAnimToolTip = _selectedAnimation[(_selectedAnimation.Length - 2).._selectedAnimation.Length] switch
+            {
+                "00" => Strings.ChibiEditorAnim00Help,
+                "01" => Strings.ChibiEditorAnim01Help,
+                "02" => Strings.ChibiEditorAnim02Help,
+                "03" => Strings.ChibiEditorAnim03Help,
+                "04" => Strings.ChibiEditorAnim04Help,
+                "05" => Strings.ChibiEditorAnim05Help,
+                "06" => Strings.ChibiEditorAnim06Help,
+                "07" => Strings.ChibiEditorAnim07Help,
+                "08" => Strings.ChibiEditorAnim08Help,
+                "10" => Strings.ChibiEditorAnim10Help,
+                "97" => Strings.ChibiEditorAnim97Help,
+                "98" => Strings.ChibiEditorAnim98Help,
+                "99" => Strings.ChibiEditorAnim99Help,
+                _ => string.Empty,
+            };
         }
     }
+    [Reactive]
+    public string SelectedAnimToolTip { get; set; } = Strings.ChibiEditorAnim00Help;
 
     public ObservableCollection<ReactiveFrameWithTiming> ChibiFrames { get; } = [];
 

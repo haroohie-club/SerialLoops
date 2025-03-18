@@ -13,7 +13,8 @@ namespace SerialLoops.ViewModels.Editors.ScriptCommandEditors;
 public class ChibiEmoteScriptCommandEditorViewModel(ScriptItemCommand command, ScriptEditorViewModel scriptEditor, ILogger log) : ScriptCommandEditorViewModel(command, scriptEditor, log)
 {
     public ObservableCollection<ChibiItem> Chibis { get; } = new(scriptEditor.Window.OpenProject.Items
-        .Where(i => i.Type == ItemDescription.ItemType.Chibi).Cast<ChibiItem>());
+        .Where(i => i.Type == ItemDescription.ItemType.Chibi
+                    && ((ChibiItem)i).ChibiEntries.Any(e => e.Name.Contains("01"))).Cast<ChibiItem>());
     public ChibiItem Chibi
     {
         get => ((ChibiScriptParameter)Command.Parameters[0]).Chibi;

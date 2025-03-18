@@ -11,8 +11,12 @@
              x:Class="SerialLoops.Views.Editors.ScenarioCommandEditors.RouteSelectScenarioCommandEditorView">
     <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,Auto"
           VerticalAlignment="Center" Margin="10">
-        <TextBlock Grid.Row="0" Grid.Column="0" Margin="5" Text="{x:Static assets:Strings.Command}"/>
-        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding SelectedScenarioCommand.Verb}"/>
+        <TextBlock Grid.Row="0" Grid.Column="0" Margin="5" Text="{x:Static assets:Strings.Command}" VerticalAlignment="Center"/>
+        <StackPanel Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Orientation="Horizontal" Spacing="3">
+            <TextBlock Text="{Binding SelectedScenarioCommand.Verb}" VerticalAlignment="Center"/>
+            <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" VerticalAlignment="Center"
+                 ToolTip.Tip="{x:Static assets:Strings.ScenarioVerbHelpROUTE_SELECT}"/>
+        </StackPanel>
         <TextBlock Grid.Row="1" Grid.Column="0" Margin="5" Text="{x:Static assets:Strings.Group_Selection}"/>
         <StackPanel Orientation="Horizontal" Spacing="3" Grid.Row="1" Grid.Column="1" Margin="5">
             <ComboBox ItemsSource="{Binding GroupSelections}" SelectedItem="{Binding GroupSelection}"/>
