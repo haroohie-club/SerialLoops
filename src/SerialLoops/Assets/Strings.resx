@@ -3587,4 +3587,8 @@ SELECT cannot be used in the initial, unnamed script block.</value>
   <data name="ScriptCommandParameterHelpSoundLoad" xml:space="preserve">
     <value>This must be checked when a sound is played initially. If a sound plays for a long time and you want to change its volume, uncheck this and set the crossfade time instead.</value>
   </data>
+  <data name="TypeToSearchHelp" xml:space="preserve">
+    <value>Tip: Type to jump to an 
+item in the dropdown!</value>
+  </data>
 </root>

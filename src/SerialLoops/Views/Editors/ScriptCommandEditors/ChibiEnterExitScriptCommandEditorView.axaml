@@ -4,7 +4,6 @@
              xmlns:vm="using:SerialLoops.ViewModels.Editors.ScriptCommandEditors"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:assets="using:SerialLoops.Assets"
-             xmlns:items="using:SerialLoops.Lib.Items"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:ChibiEnterExitScriptCommandEditorViewModel"
              x:Class="SerialLoops.Views.Editors.ScriptCommandEditors.ChibiEnterExitScriptCommandEditorView">

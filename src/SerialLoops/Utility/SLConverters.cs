@@ -149,27 +149,6 @@ public class IntAdditionConverter : IValueConverter
     }
 }
 
-public class HeightConverter : IValueConverter
-{
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-        if (double.IsNaN((double)value))
-        {
-            return double.PositiveInfinity;
-        }
-        return (double)value / 2 - 125;
-    }
-
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-        if (double.IsNaN((double)value))
-        {
-            return double.PositiveInfinity;
-        }
-        return ((double)value + 125) * 2;
-    }
-}
-
 public class BgmLoopSampleToTimestampConverter : IMultiValueConverter
 {
     public object Convert(IList<object> values, Type targetType, object parameter, CultureInfo culture)
