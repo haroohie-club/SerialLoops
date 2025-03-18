@@ -377,15 +377,22 @@ jobs:
             Because our application contacts GitHub's servers to check for new releases on launch, it is possible it will get flagged by firewall software &ndash; please allow it through so it can function correctly.
 
             ### Windows
-            Simply download the Windows installer application and run it. It will walk you through installation, including installing the necessary dependencies. Alternatively, you can download the zip file for a portable application; however, dependencies are not included with this option.
+            Simply download the Windows installer application and run it. It will walk you through installation, including installing the necessary dependencies. Specifically, it will run the **devkitPro** installer, the **Docker Desktop** installer, and the **Windows Subsystem for Linux (WSL)** installer.
+            * For the devkitPro installer, you can select "Remove Downloaded Files" and uncheck all components except the "NDS Development". It will pop several terminal windows as it installs the necessary components; this is normal, so don't worry!
+            * The WSL installer will run automatically. It may pop a window afterwards with more information about WSL; you can close this without reading it as it is not relevant for the project.
+            * The Docker Desktop installer will take a little while to run and afterwards ask you to log out to finish the installation process. You can close the Serial Loops installer once it is finished and then log out and log back in.
+
+            Alternatively, you can download the zip file for a portable application; however, dependencies are not included with this option.
 
             ### macOS
-            Pick the macOS pkg installer that fits your computer's architecture. Before executing it, you will need to open the Terminal application and run `xattr -cr ~/Downloads/SerialLoops-macOS-arm-${{ env.SLVersion }}-installer.pkg` for the ARM installer and `xattr -cr ~/Downloads/SerialLoops-macOS-x64-${{ env.SLVersion }}-installer.pkg` for the x64 installer. This is required because we currently don't codesign the installer, meaning macOS will refuse to run it without explicit approval from you.
+            Pick the macOS pkg installer that fits your computer's architecture. Before executing it, you will need to open the Terminal application and run `xattr -cr ~/Downloads/SerialLoops-macOS-arm-v${{ env.SLVersion }}-installer.pkg` for the ARM installer and `xattr -cr ~/Downloads/SerialLoops-macOS-x64-v${{ env.SLVersion }}-installer.pkg` for the x64 installer. This is required because we currently don't codesign the installer, meaning macOS will refuse to run it without explicit approval from you.
 
             The pkg installer will guide you through installing Serial Loops and will automatically install the dependencies devkitARM and make if necessary.
 
             #### Which macOS pkg installer should I choose?
             If your Mac is newer, you will probably want the ARM installer. If it is older, you may want the x64 one. To make sure, go to Settings → About and check your chip. If it is an Intel, you want the x64 installer. If it is an Apple chip, you want the ARM installer.
+
+            The first time you install Serial Loops, this process can take several minutes, so please be patient!
 
             ### Linux
             We recommend using the provided Flatpak as it is the easiest to use. First, install [Flatpak](https://flatpak.org/setup/) if you haven't already. Then, download the Serial Loops Flatpak artifact and double click it or run `flatpak install` on it from the terminal. It will then install itself, bringing all the necessary dependencies with it.
