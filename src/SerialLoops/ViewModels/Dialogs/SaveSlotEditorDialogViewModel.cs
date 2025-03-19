@@ -76,55 +76,55 @@ public class SaveSlotEditorDialogViewModel : ViewModelBase
             {
                 _currentCommandTree = _selectedScriptItem.GetScriptCommandTree(_project, _log);
                 _selectedScriptItem.CalculateGraphEdges(_currentCommandTree, _log);
-                ScriptSections = new(_selectedScriptItem.Event.ScriptSections);
+                ScriptSections.AddRange(_selectedScriptItem.Event.ScriptSections);
                 SelectedScriptSection = ScriptSections[_quickSave.CurrentScriptBlock];
                 _scriptCommandIndex = _quickSave.CurrentScriptCommand;
-            }
 
-            List<(ChibiItem Chibi, int X, int Y)> topScreenChibis = [];
-            int chibiCurrentX = 80;
-            const int chibiY = 100;
-            for (int i = 1; i <= 5; i++)
-            {
-                if (!_quickSave.TopScreenChibis.HasFlag((CharacterMask)(1 << i)))
+                List<(ChibiItem Chibi, int X, int Y)> topScreenChibis = [];
+                int chibiCurrentX = 80;
+                const int chibiY = 100;
+                for (int i = 1; i <= 5; i++)
                 {
-                    continue;
+                    if (!_quickSave.TopScreenChibis.HasFlag((CharacterMask)(1 << i)))
+                    {
+                        continue;
+                    }
+
+                    ChibiItem chibi = (ChibiItem)_project.Items.First(it => it.Type == ItemDescription.ItemType.Chibi && ((ChibiItem)it).TopScreenIndex == i);
+                    topScreenChibis.Add((chibi, chibiCurrentX, chibiY));
+                    chibiCurrentX += chibi.ChibiAnimations.First().Value.ElementAt(0).Frame.Width - 16;
                 }
 
-                ChibiItem chibi = (ChibiItem)_project.Items.First(it => it.Type == ItemDescription.ItemType.Chibi && ((ChibiItem)it).TopScreenIndex == i);
-                topScreenChibis.Add((chibi, chibiCurrentX, chibiY));
-                chibiCurrentX += chibi.ChibiAnimations.First().Value.ElementAt(0).Frame.Width - 16;
+                _scriptPreview = new()
+                {
+                    Background = (BackgroundItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == (_quickSave.CgIndex != 0 ? _quickSave.CgIndex : _quickSave.BgIndex)),
+                    BgPalEffect = (PaletteEffectScriptParameter.PaletteEffect)_quickSave.BgPalEffect,
+                    EpisodeHeader = _quickSave.EpisodeHeader,
+                    Kbg = (BackgroundItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == _quickSave.KbgIndex),
+                    Place = (PlaceItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Place && ((PlaceItem)i).Index == _quickSave.Place),
+                    TopScreenChibis = topScreenChibis,
+                    Sprites =
+                    [
+                        new()
+                        {
+                            Sprite = (CharacterSpriteItem)_project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Character_Sprite && ((CharacterSpriteItem)i).Index == _quickSave.FirstCharacterSprite),
+                            Positioning = new() { X = _quickSave.Sprite1XOffset, Layer = 2 },
+                        },
+                        new()
+                        {
+                            Sprite = (CharacterSpriteItem)_project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Character_Sprite && ((CharacterSpriteItem)i).Index == _quickSave.SecondCharacterSprite),
+                            Positioning = new() { X = _quickSave.Sprite2XOffset, Layer = 1 },
+                        },
+                        new()
+                        {
+                            Sprite = (CharacterSpriteItem)_project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Character_Sprite && ((CharacterSpriteItem)i).Index == _quickSave.ThirdCharacterSprite),
+                            Positioning = new() { X = _quickSave.Sprite3XOffset, Layer = 0 },
+                        },
+                    ],
+                };
+
+                (ScriptPreview, ErrorImagePath) = ScriptItem.GeneratePreviewImage(_scriptPreview, _project);
             }
-
-            _scriptPreview = new()
-            {
-                Background = (BackgroundItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == (_quickSave.CgIndex != 0 ? _quickSave.CgIndex : _quickSave.BgIndex)),
-                BgPalEffect = (PaletteEffectScriptParameter.PaletteEffect)_quickSave.BgPalEffect,
-                EpisodeHeader = _quickSave.EpisodeHeader,
-                Kbg = (BackgroundItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == _quickSave.KbgIndex),
-                Place = (PlaceItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Place && ((PlaceItem)i).Index == _quickSave.Place),
-                TopScreenChibis = topScreenChibis,
-                Sprites =
-                [
-                    new()
-                    {
-                        Sprite = (CharacterSpriteItem)_project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Character_Sprite && ((CharacterSpriteItem)i).Index == _quickSave.FirstCharacterSprite),
-                        Positioning = new() { X = _quickSave.Sprite1XOffset, Layer = 2 },
-                    },
-                    new()
-                    {
-                        Sprite = (CharacterSpriteItem)_project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Character_Sprite && ((CharacterSpriteItem)i).Index == _quickSave.SecondCharacterSprite),
-                        Positioning = new() { X = _quickSave.Sprite2XOffset, Layer = 1 },
-                    },
-                    new()
-                    {
-                        Sprite = (CharacterSpriteItem)_project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Character_Sprite && ((CharacterSpriteItem)i).Index == _quickSave.ThirdCharacterSprite),
-                        Positioning = new() { X = _quickSave.Sprite3XOffset, Layer = 0 },
-                    },
-                ],
-            };
-
-            (ScriptPreview, ErrorImagePath) = ScriptItem.GeneratePreviewImage(_scriptPreview, _project);
         }
         if (SaveSection is SaveSlotData saveSlot)
         {
@@ -132,8 +132,8 @@ public class SaveSlotEditorDialogViewModel : ViewModelBase
             _saveSlot = saveSlot;
             LoadCharacterPortraits();
 
-            SaveDate = _saveSlot.SaveTime.Date;
-            SaveTime = _saveSlot.SaveTime.TimeOfDay;
+            SaveDate = _saveSlot.SaveTime.Date.Year < 2000 ? DateTime.Today : _saveSlot.SaveTime.Date;
+            SaveTime = _saveSlot.SaveTime.Date.Year < 2000 ? DateTime.Now.TimeOfDay : _saveSlot.SaveTime.TimeOfDay;
             ScenarioCommandPickerVm = new(_saveSlot.ScenarioPosition, (ScenarioItem)_project.Items.First(s => s.Type == ItemDescription.ItemType.Scenario));
             Episode = _saveSlot.EpisodeNumber;
             HaruhiFriendshipLevel = _saveSlot.HaruhiFriendshipLevel;
@@ -549,7 +549,7 @@ public class SaveSlotEditorDialogViewModel : ViewModelBase
             SelectedScriptSection = ScriptSections.First();
         }
     }
-    public ObservableCollection<ScriptSection> ScriptSections { get; }
+    public ObservableCollection<ScriptSection> ScriptSections { get; } = [];
     private ScriptSection _selectedScriptSection;
     public ScriptSection SelectedScriptSection
     {
