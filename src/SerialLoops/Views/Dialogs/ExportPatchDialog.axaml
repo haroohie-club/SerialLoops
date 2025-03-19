@@ -22,21 +22,21 @@
             <TextBlock TextWrapping="Wrap" HorizontalAlignment="Center" Text="{x:Static assets:Strings.Note__When_exporting_an_xdelta_patch__the_base_ROM_you_should_use_is_likely_different_than_the_one_you_used_when_creating_the_project__Please_choose_the_base_Japanese_ROM__SHA_1_can_be_confirmed_below__to_ensure_that_people_who_want_to_play_your_hack_only_need_to_patch_the_game_once_}"/>
 
             <StackPanel Orientation="Vertical" Spacing="10" HorizontalAlignment="Center">
-                <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
+                <StackPanel Orientation="Vertical" Spacing="10" HorizontalAlignment="Center">
                     <Button Content="{x:Static assets:Strings.Select_base_ROM}" Command="{Binding OpenRomCommand}"
-                            CommandParameter="{Binding #Dialog}"/>
-                    <TextBlock Text="{Binding BaseRomHash}"/>
+                            CommandParameter="{Binding #Dialog}" HorizontalAlignment="Center"/>
+                    <TextBlock Text="{Binding BaseRomHash}" HorizontalAlignment="Center"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
-                    <TextBlock Text="{Binding ExpectedRomHashString}" TextWrapping="Wrap"/>
-                    <Svg Path="{Binding MatchSvgPath}" Width="16" Height="16"/>
+                    <TextBlock Text="{Binding ExpectedRomHashString}" TextWrapping="Wrap" HorizontalAlignment="Center"/>
+                    <Svg Path="{Binding MatchSvgPath}" Width="16" Height="16" HorizontalAlignment="Center"/>
                 </StackPanel>
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
+            <StackPanel Orientation="Vertical" Spacing="10" HorizontalAlignment="Center">
                 <Button Content="{x:Static assets:Strings.XDelta_patch}" Command="{Binding SelectXdeltaPathCommand}"
-                        CommandParameter="{Binding #Dialog}"/>
-                <TextBlock TextWrapping="Wrap" Text="{Binding XDeltaPath}"/>
+                        CommandParameter="{Binding #Dialog}" HorizontalAlignment="Center"/>
+                <TextBlock TextWrapping="Wrap" Text="{Binding XDeltaPath}" HorizontalAlignment="Center"/>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Spacing="5" HorizontalAlignment="Center">
