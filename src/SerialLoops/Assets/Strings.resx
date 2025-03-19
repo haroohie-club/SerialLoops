@@ -3593,4 +3593,7 @@ SELECT cannot be used in the initial, unnamed script block.</value>
   <data name="LoadSaveErrorMessage" xml:space="preserve">
     <value>Unable to load project save file. Please ensure you have set your emulator to melonDS and have built and run at least once.</value>
   </data>
+  <data name="CantLoadToTopicWarning" xml:space="preserve">
+    <value>The current script you're loading into looks like a topic file. Have you considered loading it via the Extra mode's topic viewer instead? This is usually safer.</value>
+  </data>
 </root>

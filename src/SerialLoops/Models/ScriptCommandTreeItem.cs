@@ -65,37 +65,25 @@ public class ScriptCommandTreeItem : ITreeItem, IViewFor<ScriptItemCommand>
                 QuickSaveSlotData quickSave = ViewModel.Project.ProjectSaveFile!.Save.QuickSaveSlot;
                 quickSave.SaveTime = DateTimeOffset.Now;
 
-                if (scenarioRef is null && groupSelectionRef is null && topicRef is null)
+                if (scenarioRef is not null)
                 {
-                    log.LogWarning($"Unable to find references to current script '{ViewModel.Script.Name}' (0x{ViewModel.Script.Index:X3}' within other items. Could be dangerous!");
-                    quickSave.ScenarioPosition = 1;
+                    quickSave.ScenarioPosition = (short)(scenarioRef.Scenario.Commands.FindIndex(c =>
+                        c.Verb == ScenarioCommand.ScenarioVerb.LOAD_SCENE && c.Parameter == ViewModel.Script.Index) + 1);
+                }
+                else if (groupSelectionRef is not null)
+                {
+                    quickSave.ScenarioPosition = (short)(ViewModel.Project.Scenario.Commands.FindIndex(c =>
+                        c.Verb == ScenarioCommand.ScenarioVerb.ROUTE_SELECT && c.Parameter == groupSelectionRef.Index) + 1);
+                }
+                else if (topicRef is not null && ViewModel.CurrentPreview.Kbg is null)
+                {
+                    log.LogError(Strings.CantLoadToTopicWarning);
+                    return;
                 }
                 else
                 {
-                    if (scenarioRef is not null)
-                    {
-                        quickSave.ScenarioPosition = (short)scenarioRef.Scenario.Commands.FindIndex(c =>
-                            c.Verb == ScenarioCommand.ScenarioVerb.LOAD_SCENE && c.Parameter == ViewModel.Script.Index);
-                    }
-                    else if (groupSelectionRef is not null)
-                    {
-                        quickSave.ScenarioPosition = (short)ViewModel.Project.Scenario.Commands.FindIndex(c =>
-                            c.Verb == ScenarioCommand.ScenarioVerb.ROUTE_SELECT && c.Parameter == groupSelectionRef.Index);
-                    }
-                    else
-                    {
-                        PuzzleItem puzzleRef = (PuzzleItem)topicRef.GetReferencesTo(ViewModel.Project).FirstOrDefault(i => i.Type == ItemDescription.ItemType.Puzzle);
-                        if (puzzleRef is null)
-                        {
-                            log.LogWarning($"Current script '{ViewModel.Script.Name}' (0x{ViewModel.Script.Index:X3}' is referenced by topic {topicRef.Name} ({topicRef.DisplayName}, but this topic is not referenced by any puzzles. Could be dangerous!");
-                            quickSave.ScenarioPosition = 1;
-                        }
-                        else
-                        {
-                            quickSave.ScenarioPosition = (short)ViewModel.Project.Scenario.Commands.FindIndex(c =>
-                                c.Verb == ScenarioCommand.ScenarioVerb.PUZZLE_PHASE && c.Parameter == puzzleRef.Puzzle.Index);
-                        }
-                    }
+                    log.LogWarning($"Unable to find references to current script '{ViewModel.Script.Name}' (0x{ViewModel.Script.Index:X3}' within other items. Could be dangerous!");
+                    quickSave.ScenarioPosition = 1;
                 }
                 quickSave.EpisodeNumber = 1;
                 quickSave.CurrentScript = ViewModel.Script.Index;
