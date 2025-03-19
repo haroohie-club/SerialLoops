@@ -15,6 +15,7 @@ using SerialLoops.Lib.Items;
 using SerialLoops.Lib.SaveFile;
 using SerialLoops.Lib.Script;
 using SerialLoops.Lib.Script.Parameters;
+using SerialLoops.Lib.Util;
 using SerialLoops.Utility;
 using SerialLoops.ViewModels.Controls;
 using SerialLoops.ViewModels.Panels;
@@ -99,6 +100,7 @@ public class SaveSlotEditorDialogViewModel : ViewModelBase
             _scriptPreview = new()
             {
                 Background = (BackgroundItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == (_quickSave.CgIndex != 0 ? _quickSave.CgIndex : _quickSave.BgIndex)),
+                Bgm = (BackgroundMusicItem)_project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.BGM && ((BackgroundMusicItem)i).Index == _quickSave.BgmIndex),
                 BgPalEffect = (PaletteEffectScriptParameter.PaletteEffect)_quickSave.BgPalEffect,
                 EpisodeHeader = _quickSave.EpisodeHeader,
                 Kbg = (BackgroundItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == _quickSave.KbgIndex),
@@ -357,41 +359,7 @@ public class SaveSlotEditorDialogViewModel : ViewModelBase
             _quickSave.CurrentScript = SelectedScriptItem.Event.Index;
             _quickSave.CurrentScriptBlock = SelectedScriptItem.Event.ScriptSections.IndexOf(SelectedScriptSection);
             _quickSave.CurrentScriptCommand = ScriptCommandIndex;
-            _quickSave.KbgIndex = (short)(_scriptPreview.Kbg?.Id ?? 0);
-            _quickSave.Place = (short)(_scriptPreview.Place?.Index ?? 0);
-            if (_scriptPreview.Background.BackgroundType == HaruhiChokuretsuLib.Archive.Data.BgType.TEX_BG)
-            {
-                _quickSave.BgIndex = (short)_scriptPreview.Background.Id;
-            }
-            else
-            {
-                OrderedDictionary<ScriptSection, List<ScriptItemCommand>> commandTree = SelectedScriptItem.GetScriptCommandTree(_project, _log);
-                ScriptItemCommand currentCommand = commandTree[SelectedScriptItem.Event.ScriptSections[_quickSave.CurrentScriptBlock]][ScriptCommandIndex];
-                List<ScriptItemCommand> commands = currentCommand.WalkCommandGraph(commandTree, SelectedScriptItem.Graph);
-                for (int i = commands.Count - 1; i >= 0; i--)
-                {
-                    if (commands[i].Verb == EventFile.CommandVerb.BG_DISP || commands[i].Verb == EventFile.CommandVerb.BG_DISP2 || (commands[i].Verb == EventFile.CommandVerb.BG_FADE && (((BgScriptParameter)commands[i].Parameters[0]).Background is not null)))
-                    {
-                        _quickSave.BgIndex = (short)((BgScriptParameter)commands[i].Parameters[0]).Background.Id;
-                    }
-                }
-                _quickSave.CgIndex = (short)_scriptPreview.Background.Id;
-            }
-            _quickSave.BgPalEffect = (short)_scriptPreview.BgPalEffect;
-            _quickSave.EpisodeHeader = _scriptPreview.EpisodeHeader;
-            for (int i = 1; i <= 5; i++)
-            {
-                if (_scriptPreview.TopScreenChibis.Any(c => c.Chibi.TopScreenIndex == i))
-                {
-                    _quickSave.TopScreenChibis |= (CharacterMask)(1 << i);
-                }
-            }
-            _quickSave.FirstCharacterSprite = _scriptPreview.Sprites.ElementAtOrDefault(0).Sprite?.Index ?? 0;
-            _quickSave.SecondCharacterSprite = _scriptPreview.Sprites.ElementAtOrDefault(1).Sprite?.Index ?? 0;
-            _quickSave.ThirdCharacterSprite = _scriptPreview.Sprites.ElementAtOrDefault(2).Sprite?.Index ?? 0;
-            _quickSave.Sprite1XOffset = (short)(_scriptPreview.Sprites.ElementAtOrDefault(0).Positioning?.X ?? 0);
-            _quickSave.Sprite2XOffset = (short)(_scriptPreview.Sprites.ElementAtOrDefault(1).Positioning?.X ?? 0);
-            _quickSave.Sprite3XOffset = (short)(_scriptPreview.Sprites.ElementAtOrDefault(2).Positioning?.X ?? 0);
+            _quickSave.ApplyScriptPreview(_scriptPreview, SelectedScriptItem, ScriptCommandIndex, _project, _log);
         }
 
         dialog.Close();

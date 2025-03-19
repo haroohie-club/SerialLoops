@@ -13,6 +13,7 @@ using SerialLoops.Assets;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
 using SerialLoops.Lib.Script.Parameters;
+using SerialLoops.Lib.Util;
 using SerialLoops.Utility;
 using SoftCircuits.Collections;
 
@@ -90,42 +91,7 @@ public class ScriptCommandTreeItem : ITreeItem, IViewFor<ScriptItemCommand>
                 quickSave.CurrentScriptBlock = ViewModel.Script.ScriptSections.IndexOf(ViewModel.Section);
                 quickSave.CurrentScriptCommand = ViewModel.Index;
 
-                quickSave.KbgIndex = (short)(ViewModel.CurrentPreview.Kbg?.Id ?? 0);
-                quickSave.Place = (short)(ViewModel.CurrentPreview.Place?.Index ?? 0);
-                if (ViewModel.CurrentPreview.Background.BackgroundType == HaruhiChokuretsuLib.Archive.Data.BgType.TEX_BG)
-                {
-                    quickSave.BgIndex = (short)ViewModel.CurrentPreview.Background.Id;
-                    quickSave.CgIndex = 0;
-                }
-                else
-                {
-                    OrderedDictionary<ScriptSection, List<ScriptItemCommand>> commandTree = script.GetScriptCommandTree(ViewModel.Project, log);
-                    ScriptItemCommand currentCommand = commandTree[ViewModel.Script.ScriptSections[quickSave.CurrentScriptBlock]][ViewModel.Index];
-                    List<ScriptItemCommand> commands = currentCommand.WalkCommandGraph(commandTree, script.Graph);
-                    for (int i = commands.Count - 1; i >= 0; i--)
-                    {
-                        if (commands[i].Verb == EventFile.CommandVerb.BG_DISP || commands[i].Verb == EventFile.CommandVerb.BG_DISP2 || (commands[i].Verb == EventFile.CommandVerb.BG_FADE && ((BgScriptParameter)commands[i].Parameters[0]).Background is not null))
-                        {
-                            quickSave.BgIndex = (short)((BgScriptParameter)commands[i].Parameters[0]).Background.Id;
-                        }
-                    }
-                    quickSave.CgIndex = (short)ViewModel.CurrentPreview.Background.Id;
-                }
-                quickSave.BgPalEffect = (short)ViewModel.CurrentPreview.BgPalEffect;
-                quickSave.EpisodeHeader = ViewModel.CurrentPreview.EpisodeHeader;
-                for (int i = 1; i <= 5; i++)
-                {
-                    if (ViewModel.CurrentPreview.TopScreenChibis.Any(c => c.Chibi.TopScreenIndex == i))
-                    {
-                        quickSave.TopScreenChibis |= (CharacterMask)(1 << i);
-                    }
-                }
-                quickSave.FirstCharacterSprite = ViewModel.CurrentPreview.Sprites.ElementAtOrDefault(0).Sprite?.Index ?? 0;
-                quickSave.SecondCharacterSprite = ViewModel.CurrentPreview.Sprites.ElementAtOrDefault(1).Sprite?.Index ?? 0;
-                quickSave.ThirdCharacterSprite = ViewModel.CurrentPreview.Sprites.ElementAtOrDefault(2).Sprite?.Index ?? 0;
-                quickSave.Sprite1XOffset = (short)(ViewModel.CurrentPreview.Sprites.ElementAtOrDefault(0).Positioning?.X ?? 0);
-                quickSave.Sprite2XOffset = (short)(ViewModel.CurrentPreview.Sprites.ElementAtOrDefault(1).Positioning?.X ?? 0);
-                quickSave.Sprite3XOffset = (short)(ViewModel.CurrentPreview.Sprites.ElementAtOrDefault(2).Positioning?.X ?? 0);
+                quickSave.ApplyScriptPreview(ViewModel.CurrentPreview, script, ViewModel.Index, ViewModel.Project, log);
 
                 File.WriteAllBytes(ViewModel.Project.ProjectSaveFile.SaveLoc, ViewModel.Project.ProjectSaveFile.Save.GetBytes());
             }),
