@@ -7433,6 +7433,42 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Conditional 1.
+        /// </summary>
+        public static string ScriptCommandEditorSelectParam4 {
+            get {
+                return ResourceManager.GetString("ScriptCommandEditorSelectParam4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Conditional 2.
+        /// </summary>
+        public static string ScriptCommandEditorSelectParam5 {
+            get {
+                return ResourceManager.GetString("ScriptCommandEditorSelectParam5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Conditional 3.
+        /// </summary>
+        public static string ScriptCommandEditorSelectParam6 {
+            get {
+                return ResourceManager.GetString("ScriptCommandEditorSelectParam6", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Conditional 4.
+        /// </summary>
+        public static string ScriptCommandEditorSelectParam7 {
+            get {
+                return ResourceManager.GetString("ScriptCommandEditorSelectParam7", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to By default, tall CGs will display from the top. If this is checked, it will instead display from the bottom..
         /// </summary>
         public static string ScriptCommandParameterHelpDisplayFromBottom {
@@ -7487,11 +7523,11 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If this is -1, this option is always shown. If it is a value 0 or above, this option is shown until the flag of that value is set..
+        ///   Looks up a localized string similar to If this is left blank, the option is always shown. Otherwise, this is a conditional value that if evaluated to true will display the option and will hide it if false.
         /// </summary>
-        public static string ScriptCommandParameterHelpSelectDisplayFlag {
+        public static string ScriptCommandParameterHelpSelectConditional {
             get {
-                return ResourceManager.GetString("ScriptCommandParameterHelpSelectDisplayFlag", resourceCulture);
+                return ResourceManager.GetString("ScriptCommandParameterHelpSelectConditional", resourceCulture);
             }
         }
         

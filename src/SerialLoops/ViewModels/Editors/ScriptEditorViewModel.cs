@@ -23,6 +23,7 @@ using ReactiveUI.Fody.Helpers;
 using SerialLoops.Assets;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
+using SerialLoops.Lib.Script.Parameters;
 using SerialLoops.Lib.Util;
 using SerialLoops.Models;
 using SerialLoops.Utility;
@@ -608,6 +609,39 @@ public class ScriptEditorViewModel : EditorViewModel
                 return;
             }
 
+            foreach ((_, List<ScriptItemCommand> commands) in _commands)
+            {
+                foreach (ScriptItemCommand command in commands)
+                {
+                    if (command.Verb is CommandVerb.VGOTO or CommandVerb.GOTO or CommandVerb.INVEST_START)
+                    {
+                        int paramIdx = command.Verb switch
+                        {
+                            CommandVerb.VGOTO => 1,
+                            CommandVerb.GOTO => 0,
+                            _ => 4,
+                        };
+                        if (((ScriptSectionScriptParameter)command.Parameters[paramIdx]).Section.Name == SelectedSection.Name)
+                        {
+                            command.Parameters[paramIdx] = new ScriptSectionScriptParameter("Script Section",
+                                ScriptSections.FirstOrDefault(s => s.Name.StartsWith("NONE"))?.Section);
+                            _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(command.Section)]
+                                .Objects[command.Index].Parameters[paramIdx] = _script.Event.LabelsSection.Objects.FirstOrDefault(l => l.Name.Replace("/", "") == command.Parameters[paramIdx].Name)?.Id ?? 0;
+                            command.UpdateDisplay();
+                        }
+                    }
+                }
+            }
+
+            foreach (ReactiveChoice choice in Choices)
+            {
+                if (choice.AssociatedSection == SelectedSection)
+                {
+                    choice.AssociatedSection = null;
+                    _script.Event.ChoicesSection.Objects[_script.Event.ChoicesSection.Objects.IndexOf(choice.Choice)].Id = 0;
+                }
+            }
+
             SelectedSection = null;
             SelectedCommand = Commands[_script.Event.ScriptSections[sectionIndex - 1]][^1];
             Source.RowSelection?.Select(new(_script.Event.ScriptSections.IndexOf(SelectedCommand.Section), SelectedCommand.Index));
@@ -882,7 +916,7 @@ public class ReactiveScriptSection(ScriptSection section) : ReactiveObject
 
     private string _name = section.Name;
 
-    public string Name
+    public string DisplayName
     {
         get => _name.StartsWith("NONE") ? _name[4..] : _name;
         set
@@ -890,6 +924,12 @@ public class ReactiveScriptSection(ScriptSection section) : ReactiveObject
             this.RaiseAndSetIfChanged(ref _name, value is "SCRIPT00" or "SCRIPT01" ? value : $"NONE{value}");
             Section.Name = _name;
         }
+    }
+
+    public string Name
+    {
+        get => _name;
+        set => _name = value;
     }
 
     public ObservableCollection<ITreeItem> Commands { get; private set; } = [];
@@ -922,7 +962,7 @@ public class ReactiveScriptSection(ScriptSection section) : ReactiveObject
         Commands.AddRange(commands.Select(c => new ScriptCommandTreeItem(c)));
     }
 
-    public override string ToString() => Name;
+    public override string ToString() => DisplayName;
 }
 
 public class StartingChibiWithImage : ReactiveObject
@@ -1036,6 +1076,7 @@ public class ReactiveChoice : ReactiveObject
             Choice.Id = _script.Event.LabelsSection.Objects.FirstOrDefault(c => c.Name.Replace("/", "").Equals(value.Name))?.Id ?? 0;
             this.RaisePropertyChanged();
             _scriptEditor.UpdatePreview();
+            _script.Refresh(_scriptEditor.Window.OpenProject, _scriptEditor.Window.Log);
             _scriptEditor.Description.UnsavedChanges = true;
         }
     }

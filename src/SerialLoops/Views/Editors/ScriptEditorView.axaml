@@ -130,18 +130,7 @@
                                         <DataTemplate DataType="vm:ReactiveChoice">
                                             <Grid RowDefinitions="Auto" ColumnDefinitions="Auto,*,Auto">
                                                 <ComboBox Grid.Row="0" Grid.Column="0" ItemsSource="{Binding #Editor.((vm:ScriptEditorViewModel)DataContext).ScriptSections}"
-                                                          SelectedItem="{Binding AssociatedSection}">
-                                                    <ComboBox.ItemTemplate>
-                                                        <DataTemplate DataType="vm:ReactiveScriptSection">
-                                                            <TextBlock Text="{Binding  Name}"/>
-                                                        </DataTemplate>
-                                                    </ComboBox.ItemTemplate>
-                                                    <ComboBox.ItemContainerTheme>
-                                                        <ControlTheme TargetType="ComboBoxItem" x:DataType="vm:ReactiveScriptSection">
-                                                            <Setter Property="TextSearch.Text" Value="{Binding Name}" />
-                                                        </ControlTheme>
-                                                    </ComboBox.ItemContainerTheme>
-                                                </ComboBox>
+                                                          SelectedItem="{Binding AssociatedSection}"/>
 
                                                 <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding ChoiceText}"/>
 

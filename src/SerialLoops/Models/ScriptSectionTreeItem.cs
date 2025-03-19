@@ -31,7 +31,7 @@ public class ScriptSectionTreeItem : ITreeItem, IViewFor<ReactiveScriptSection>
     {
         ViewModel = section;
         this.OneWayBind(ViewModel, vm => vm.Commands, v => v.Children);
-        this.OneWayBind(ViewModel, vm => vm.Name, v => v._textBlock.Text);
+        this.OneWayBind(ViewModel, vm => vm.DisplayName, v => v._textBlock.Text);
         this.Bind(ViewModel, vm => vm.Name, v => v.Text);
         _panel.Children.Add(_textBlock);
     }

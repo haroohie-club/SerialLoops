@@ -3581,8 +3581,8 @@ SELECT cannot be used in the initial, unnamed script block.</value>
   <data name="ScriptCommandParameterHelpShakeDuration" xml:space="preserve">
     <value>Set to -1 to shake the screen until the SCREEN_SHAKE_STOP command is executed</value>
   </data>
-  <data name="ScriptCommandParameterHelpSelectDisplayFlag" xml:space="preserve">
-    <value>If this is -1, this option is always shown. If it is a value 0 or above, this option is shown until the flag of that value is set.</value>
+  <data name="ScriptCommandParameterHelpSelectConditional" xml:space="preserve">
+    <value>If this is left blank, the option is always shown. Otherwise, this is a conditional value that if evaluated to true will display the option and will hide it if false</value>
   </data>
   <data name="ScriptCommandParameterHelpSoundLoad" xml:space="preserve">
     <value>This must be checked when a sound is played initially. If a sound plays for a long time and you want to change its volume, uncheck this and set the crossfade time instead.</value>
@@ -3596,5 +3596,17 @@ item in the dropdown!</value>
   </data>
   <data name="ScriptEditorScript00NoMoveTip" xml:space="preserve">
     <value>SCRIPT00 must always be the first script section, so you can't move it.</value>
+  </data>
+  <data name="ScriptCommandEditorSelectParam4" xml:space="preserve">
+    <value>Conditional 1</value>
+  </data>
+  <data name="ScriptCommandEditorSelectParam5" xml:space="preserve">
+    <value>Conditional 2</value>
+  </data>
+  <data name="ScriptCommandEditorSelectParam6" xml:space="preserve">
+    <value>Conditional 3</value>
+  </data>
+  <data name="ScriptCommandEditorSelectParam7" xml:space="preserve">
+    <value>Conditional 4</value>
   </data>
 </root>
