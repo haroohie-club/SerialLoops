@@ -13,6 +13,10 @@
              x:Class="SerialLoops.Views.Editors.ScriptEditorView"
              Name="Editor">
 
+    <UserControl.Resources>
+        <utility:IntGreaterThanConverter x:Key="GreaterThanConverter"/>
+    </UserControl.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -26,17 +30,21 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
+        <ToolTip Tip="{x:Static assets:Strings.ScriptEditorScript00NoMoveTip}"
+                 IsOpen="{Binding Script00TipVisible}"/>
+
         <StackPanel Grid.Column="0" Grid.Row="0" Margin="5" Spacing="5" HorizontalAlignment="Left" Orientation="Horizontal">
-            <Button Command="{Binding AddScriptCommandCommand}" HotKey="{Binding AddCommandHotKey}">
+            <Button Command="{Binding AddScriptCommandCommand}" HotKey="{Binding AddCommandHotKey}"
+                    ToolTip.Tip="{x:Static assets:Strings.Add_Command}">
                 <Svg Path="avares://SerialLoops/Assets/Icons/Add.svg" Width="22"/>
             </Button>
-            <Button Command="{Binding AddScriptSectionCommand}">
+            <Button Command="{Binding AddScriptSectionCommand}" ToolTip.Tip="{x:Static assets:Strings.Add_Section}">
                 <Svg Path="avares://SerialLoops/Assets/Icons/Add_Section.svg" Width="22"/>
             </Button>
-            <Button Command="{Binding DeleteScriptCommandOrSectionCommand}">
+            <Button Command="{Binding DeleteScriptCommandOrSectionCommand}" ToolTip.Tip="{x:Static assets:Strings.ScriptEditorRemoveCommandOrSectionTip}">
                 <Svg Path="avares://SerialLoops/Assets/Icons/Remove.svg" Width="22"/>
             </Button>
-            <Button Command="{Binding ClearScriptCommand}">
+            <Button Command="{Binding ClearScriptCommand}" ToolTip.Tip="{x:Static assets:Strings.Clear_Script}">
                 <Svg Path="avares://SerialLoops/Assets/Icons/Clear.svg" Width="22"/>
             </Button>
         </StackPanel>

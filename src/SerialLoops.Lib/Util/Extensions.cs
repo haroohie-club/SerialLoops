@@ -15,6 +15,7 @@ using NAudio.Wave;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script.Parameters;
 using SkiaSharp;
+using SoftCircuits.Collections;
 using static HaruhiChokuretsuLib.Archive.Event.EventFile;
 using static SerialLoops.Lib.Script.SpritePositioning;
 
@@ -512,6 +513,29 @@ public static partial class Extensions
     public static string ToUnixPath(this string str)
     {
         return str.Replace('\\', '/');
+    }
+
+    public static bool Swap<T, TS>(this OrderedDictionary<T, TS> orderedDict, int firstIndex, int secondIndex)
+    {
+        if (firstIndex < 0 || secondIndex < 0 || firstIndex >= orderedDict.Count || secondIndex >= orderedDict.Count || firstIndex == secondIndex)
+        {
+            return false;
+        }
+
+        T item1Key = orderedDict.Keys[firstIndex];
+        TS item1Value = orderedDict.ByIndex[firstIndex];
+        T item2Key = orderedDict.Keys[secondIndex];
+        TS item2Value = orderedDict.ByIndex[secondIndex];
+
+        orderedDict.RemoveAt(firstIndex);
+        orderedDict.RemoveAt(firstIndex < secondIndex ? secondIndex - 1 : secondIndex);
+        if (secondIndex < firstIndex)
+        {
+            firstIndex--;
+        }
+        orderedDict.Insert(firstIndex, item2Key, item2Value);
+        orderedDict.Insert(secondIndex, item1Key, item1Value);
+        return true;
     }
 
     [GeneratedRegex(@"#x(?<offset>\d{2})")]

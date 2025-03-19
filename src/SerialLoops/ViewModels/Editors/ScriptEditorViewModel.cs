@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
@@ -146,6 +147,11 @@ public class ScriptEditorViewModel : EditorViewModel
 
     public ObservableCollection<ReactiveChoice> Choices { get; } = [];
 
+    [Reactive]
+    public bool Script00TipVisible { get; set; }
+
+    private Timer Script00TipTimer { get; set; }
+
     public ScriptEditorViewModel(ScriptItem script, MainWindowViewModel window, ILogger log) : base(script, window, log)
     {
         _script = script;
@@ -192,6 +198,13 @@ public class ScriptEditorViewModel : EditorViewModel
         UnusedInteractableObjects.AddRange(MapCharactersSubEditorVm.Maps.SelectMany(m => m.Map.InteractableObjects)
             .Where(o => o.ObjectId > 0 && InteractableObjects.All(i => i.InteractableObject.ObjectId != o.ObjectId))
             .Select(o => new ReactiveInteractableObject(new() { ObjectId = (short)o.ObjectId },  MapCharactersSubEditorVm.Maps.ToArray(), _script, this)));
+
+        Script00TipTimer = new(TimeSpan.FromSeconds(5)) { AutoReset = false };
+        Script00TipTimer.Elapsed += (_, _) =>
+        {
+            Script00TipVisible = false;
+            Script00TipTimer.Stop();
+        };
 
         AddScriptCommandCommand = ReactiveCommand.CreateFromTask(AddCommand);
         AddScriptSectionCommand = ReactiveCommand.CreateFromTask(AddSection);
@@ -373,11 +386,60 @@ public class ScriptEditorViewModel : EditorViewModel
             _script.Refresh(_project, _log);
             _script.UnsavedChanges = true;
         }
+        else if (source is ScriptSectionTreeItem sourceSectionItem)
+        {
+            ReactiveScriptSection sourceSection = sourceSectionItem.ViewModel;
+            int targetSectionIndex;
+            if (target is ScriptCommandTreeItem targetCommand)
+            {
+                targetSectionIndex = _script.Event.ScriptSections.IndexOf(targetCommand.ViewModel!.Section);
+            }
+            else if (target is ScriptSectionTreeItem targetSection)
+            {
+                if (position == TreeDataGridRowDropPosition.Before && ScriptSections.IndexOf(targetSection.ViewModel!) > 0)
+                {
+                    targetSectionIndex = ScriptSections.IndexOf(targetSection.ViewModel!) - 1;
+                }
+                else
+                {
+                    targetSectionIndex = ScriptSections.IndexOf(targetSection.ViewModel!);
+                }
+            }
+            else
+            {
+                return;
+            }
+
+            if (targetSectionIndex == 0)
+            {
+                Script00TipVisible = true;
+                Script00TipTimer.Start();
+                return;
+            }
+
+            int sourceSectionIndex = ScriptSections.IndexOf(sourceSection);
+            if (!_commands.Swap(sourceSectionIndex, targetSectionIndex))
+            {
+                return;
+            }
+            Commands = _commands;
+            ScriptSections.Swap(sourceSectionIndex, targetSectionIndex);
+            _script.Event.ScriptSections.Swap(sourceSectionIndex, targetSectionIndex);
+
+            _script.Refresh(_project, _log);
+            Description.UnsavedChanges = true;
+        }
     }
 
     public bool CanDrag(ITreeItem source)
     {
-        return source is not ScriptSectionTreeItem;
+        if (source is ScriptSectionTreeItem sectionTreeItem && sectionTreeItem.ViewModel!.Name.Equals("SCRIPT00"))
+        {
+            Script00TipTimer.Start();
+            Script00TipVisible = true;
+            return false;
+        }
+        return true;
     }
 
     private void RowSelection_SelectionChanged(object sender, TreeSelectionModelSelectionChangedEventArgs<ITreeItem> e)
@@ -822,10 +884,10 @@ public class ReactiveScriptSection(ScriptSection section) : ReactiveObject
 
     public string Name
     {
-        get => _name;
+        get => _name.StartsWith("NONE") ? _name[4..] : _name;
         set
         {
-            this.RaiseAndSetIfChanged(ref _name, value);
+            this.RaiseAndSetIfChanged(ref _name, value is "SCRIPT00" or "SCRIPT01" ? value : $"NONE{value}");
             Section.Name = _name;
         }
     }

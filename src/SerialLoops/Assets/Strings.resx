@@ -3591,4 +3591,10 @@ SELECT cannot be used in the initial, unnamed script block.</value>
     <value>Tip: Type to jump to an 
 item in the dropdown!</value>
   </data>
+  <data name="ScriptEditorRemoveCommandOrSectionTip" xml:space="preserve">
+    <value>Remove Command or Section</value>
+  </data>
+  <data name="ScriptEditorScript00NoMoveTip" xml:space="preserve">
+    <value>SCRIPT00 must always be the first script section, so you can't move it.</value>
+  </data>
 </root>

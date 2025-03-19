@@ -8094,6 +8094,24 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove Command or Section.
+        /// </summary>
+        public static string ScriptEditorRemoveCommandOrSectionTip {
+            get {
+                return ResourceManager.GetString("ScriptEditorRemoveCommandOrSectionTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SCRIPT00 must always be the first script section, so you can&apos;t move it..
+        /// </summary>
+        public static string ScriptEditorScript00NoMoveTip {
+            get {
+                return ResourceManager.GetString("ScriptEditorScript00NoMoveTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Scripts.
         /// </summary>
         public static string Scripts {
