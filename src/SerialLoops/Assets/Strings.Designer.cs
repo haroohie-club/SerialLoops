@@ -4927,6 +4927,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unable to load project save file. Please ensure you have set your emulator to melonDS and have built and run at least once..
+        /// </summary>
+        public static string LoadSaveErrorMessage {
+            get {
+                return ResourceManager.GetString("LoadSaveErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Location.
         /// </summary>
         public static string Location {
@@ -7532,6 +7541,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Set Quick Save Here.
+        /// </summary>
+        public static string ScriptCommandSetQuickSaveText {
+            get {
+                return ResourceManager.GetString("ScriptCommandSetQuickSaveText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Displays the &quot;Main Topic → Avoid&quot; graphics..
         /// </summary>
         public static string ScriptCommandVerbHelpAVOID_DISP {
@@ -7588,7 +7606,7 @@ namespace SerialLoops.Assets {
         /// <summary>
         ///   Looks up a localized string similar to Reverts the background to the last call of BG_DISP (i.e. undoes any BG_FADE or BG_DISPCG calls). This is required before returning to displaying standard TEX_BG BGs. Note that if reverting a TEX_CG_DUAL_SCREEN BG, SET_PLACE must have been used to set the place location and have it displayed.
         ///
-        ///BG_REVERT does something odd to previously displayed CGs that makes attempting to display them again after the BG_REVERT crash/freeze/soft lock the game. If you need to go back and forth between the same CGs, consider  [rest of string was truncated]&quot;;.
+        ///BG_REVERT does something odd to previously displayed CGs that makes attempting to display them again after the BG_REVERT crash/freeze/soft lock the game. If you need to go back and forth between the same CGs, conside [rest of string was truncated]&quot;;.
         /// </summary>
         public static string ScriptCommandVerbHelpBG_REVERT {
             get {

@@ -3587,4 +3587,10 @@ SELECT cannot be used in the initial, unnamed script block.</value>
   <data name="ScriptCommandParameterHelpSoundLoad" xml:space="preserve">
     <value>This must be checked when a sound is played initially. If a sound plays for a long time and you want to change its volume, uncheck this and set the crossfade time instead.</value>
   </data>
+  <data name="ScriptCommandSetQuickSaveText" xml:space="preserve">
+    <value>Set Quick Save Here</value>
+  </data>
+  <data name="LoadSaveErrorMessage" xml:space="preserve">
+    <value>Unable to load project save file. Please ensure you have set your emulator to melonDS and have built and run at least once.</value>
+  </data>
 </root>
