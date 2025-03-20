@@ -3651,4 +3651,13 @@ item in the dropdown!</value>
   <data name="CantLoadToTopicWarning" xml:space="preserve">
     <value>The current script you're loading into looks like a topic file. Have you considered loading it via the Extra mode's topic viewer instead? This is usually safer.</value>
   </data>
+  <data name="CharacterSpriteEditorSelectBase" xml:space="preserve">
+    <value>Select sprite base</value>
+  </data>
+  <data name="CharacterSpriteEditorSelectEyeFrames" xml:space="preserve">
+    <value>Select eye animation frames</value>
+  </data>
+  <data name="CharacterSpriteEditorSelectMouthFrames" xml:space="preserve">
+    <value>Select mouth animation frames</value>
+  </data>
 </root>
