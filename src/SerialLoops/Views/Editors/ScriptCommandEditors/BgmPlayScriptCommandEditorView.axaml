@@ -22,11 +22,19 @@
         <NumericUpDown Grid.Column="1" Grid.Row="2" Margin="10,0,0,0" Value="{Binding Volume}"
                        FormatString="N0" Increment="1" ParsingNumberStyle="Integer" Minimum="0" Maximum="100"/>
 
-        <TextBlock Grid.Column="0" Grid.Row="3" VerticalAlignment="Center" Text="{x:Static assets:Strings.Fade_In_Time__Frames_}"/>
+        <StackPanel Grid.Column="0" Grid.Row="3" Orientation="Horizontal" Spacing="3">
+            <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.Fade_In_Time__Frames_}"/>
+            <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" VerticalAlignment="Center"
+                 ToolTip.Tip="{x:Static assets:Strings.FramesToSecondsHelp}"/>
+        </StackPanel>
         <NumericUpDown Grid.Column="1" Grid.Row="3" Margin="10,0,0,0" Value="{Binding FadeInTime}"
                        FormatString="N0" Increment="1" ParsingNumberStyle="Integer" Minimum="-1" Maximum="{Binding MaxShort}"/>
 
-        <TextBlock Grid.Column="0" Grid.Row="4" VerticalAlignment="Center" Text="{x:Static assets:Strings.Fade_Out_Time__Frames_}"/>
+        <StackPanel Grid.Column="0" Grid.Row="4" Orientation="Horizontal" Spacing="3">
+            <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.Fade_Out_Time__Frames_}"/>
+            <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" VerticalAlignment="Center"
+                 ToolTip.Tip="{x:Static assets:Strings.FramesToSecondsHelp}"/>
+        </StackPanel>
         <NumericUpDown Grid.Column="1" Grid.Row="4" Margin="10,0,0,0" Value="{Binding FadeOutTime}"
                        FormatString="N0" Increment="1" ParsingNumberStyle="Integer" Minimum="-1" Maximum="{Binding MaxShort}"/>
     </Grid>

@@ -16,7 +16,7 @@ using SoftCircuits.Collections;
 
 namespace SerialLoops.ViewModels.Dialogs;
 
-public class GenerateTemplateDialogViewModel
+public class GenerateTemplateDialogViewModel : ViewModelBase
 {
     public string TemplateName { get; set; }
     public string TemplateDescription { get; set; }

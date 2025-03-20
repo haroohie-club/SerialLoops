@@ -9,25 +9,33 @@
              x:DataType="vm:ScreenFadeInScriptCommandEditorViewModel"
              x:Class="SerialLoops.Views.Editors.ScriptCommandEditors.ScreenFadeInScriptCommandEditorView">
     <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto">
-        <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Fade_Time__Frames_}"/>
+        <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" Spacing="3">
+            <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.Fade_Time__Frames_}"/>
+            <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" VerticalAlignment="Center"
+                 ToolTip.Tip="{x:Static assets:Strings.FramesToSecondsHelp}"/>
+        </StackPanel>
         <NumericUpDown Grid.Column="1" Grid.Row="0" Margin="10,0,0,0" Minimum="0" Maximum="{Binding MaxShort}"
                        Value="{Binding FadeTime}" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
 
-        <TextBlock Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Text="{x:Static assets:Strings.Fade_In_Percentage}"/>
+        <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Horizontal" Spacing="3">
+            <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.Fade_In_Percentage}"/>
+            <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" VerticalAlignment="Center"
+                 ToolTip.Tip="{x:Static assets:Strings.ScriptCommandParameterFadePercHelp}"/>
+        </StackPanel>
         <NumericUpDown Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" Minimum="0" Maximum="100"
                        Value="{Binding FadePercentage}" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
 
         <StackPanel Grid.Column="0" Grid.Row="2" Orientation="Horizontal" Spacing="3">
             <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.Location}"/>
             <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" VerticalAlignment="Center"
-                 ToolTip.Tip="{x:Static assets:Strings.ScriptCommandScreenFadeInParamWarning}"/>
+                 ToolTip.Tip="{x:Static assets:Strings.ScriptCommandScreenParamFadeInLocationHelp}"/>
         </StackPanel>
         <controls:ScreenSelector Grid.Column="1" Grid.Row="2" Margin="10,0,0,0" DataContext="{Binding ScreenSelector}"/>
 
         <StackPanel Grid.Column="0" Grid.Row="3" Orientation="Horizontal" Spacing="3">
             <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.Color}"/>
             <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" VerticalAlignment="Center"
-                 ToolTip.Tip="{x:Static assets:Strings.ScriptCommandScreenFadeInParamWarning}"/>
+                 ToolTip.Tip="{x:Static assets:Strings.ScriptCommandScreenParamFadeInColorHelp}"/>
         </StackPanel>
         <ComboBox Grid.Column="1" Grid.Row="3" Margin="10,0,0,0" ItemsSource="{Binding Colors}" SelectedItem="{Binding Color}"/>
     </Grid>

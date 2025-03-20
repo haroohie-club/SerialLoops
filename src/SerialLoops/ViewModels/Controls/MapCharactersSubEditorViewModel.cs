@@ -235,7 +235,7 @@ public class MapCharactersSubEditorViewModel : ViewModelBase
         LoadMapCharacters();
     }
 
-    private void LoadMapCharacters(bool refresh = false, bool clean = false)
+    private void LoadMapCharacters(bool refresh = false, bool clean = false, ReactiveMapCharacter selected = null)
     {
         if (clean)
         {
@@ -271,6 +271,11 @@ public class MapCharactersSubEditorViewModel : ViewModelBase
                 ObjectLayer.Insert(layoutIndex, character);
             }
         }
+
+        if (selected is not null)
+        {
+            SelectedMapCharacter = MapCharacters.FirstOrDefault(c => c.MapCharacter == selected.MapCharacter);
+        }
     }
 
     public void UpdateMapCharacter(ReactiveMapCharacter mapCharacter, short x, short y)
@@ -278,7 +283,7 @@ public class MapCharactersSubEditorViewModel : ViewModelBase
         bool noChange = mapCharacter.MapCharacter.X == x && mapCharacter.MapCharacter.Y == y;
         mapCharacter.MapCharacter.X = x;
         mapCharacter.MapCharacter.Y = y;
-        LoadMapCharacters(refresh: true, clean: true);
+        LoadMapCharacters(refresh: true, clean: true, selected: mapCharacter);
 
         if (noChange)
         {

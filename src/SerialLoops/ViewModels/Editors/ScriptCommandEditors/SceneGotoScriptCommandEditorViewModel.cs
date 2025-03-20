@@ -23,19 +23,9 @@ public class SceneGotoScriptCommandEditorViewModel : ScriptCommandEditorViewMode
         {
             this.RaiseAndSetIfChanged(ref _selectedScript, value);
             ((ConditionalScriptParameter)Command.Parameters[0]).Conditional = _selectedScript.Name;
-            if (Script.Event.ConditionalsSection.Objects.Contains(_selectedScript.Name))
-            {
-                Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
-                        .Objects[Command.Index].Parameters[0] =
-                    (short)Script.Event.ConditionalsSection.Objects.IndexOf(_selectedScript.Name);
-            }
-            else
-            {
-                Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
-                        .Objects[Command.Index].Parameters[0] =
-                    (short)(Script.Event.ConditionalsSection.Objects.Count - 1);
-                Script.Event.ConditionalsSection.Objects.Insert(Script.Event.ConditionalsSection.Objects.Count - 1, _selectedScript.Name);
-            }
+            Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
+                    .Objects[Command.Index].Parameters[0] = (short)Script.Event.ConditionalsSection.Objects.Count;
+            Script.Event.ConditionalsSection.Objects.Add(_selectedScript.Name);
             Script.UnsavedChanges = true;
         }
     }

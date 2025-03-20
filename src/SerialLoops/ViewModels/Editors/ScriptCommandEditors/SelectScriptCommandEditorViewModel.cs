@@ -56,44 +56,44 @@ public class SelectScriptCommandEditorViewModel : ScriptCommandEditorViewModel
         }
     }
 
-    private short _displayFlag1;
-    public short DisplayFlag1
+    private string _condtional1;
+    public string Conditional1
     {
-        get => _displayFlag1;
+        get => _condtional1;
         set
         {
-            this.RaiseAndSetIfChanged(ref _displayFlag1, value);
-            EditDisplayFlag(0, _displayFlag1);
+            this.RaiseAndSetIfChanged(ref _condtional1, value);
+            EditConditional(0, _condtional1);
         }
     }
-    private short _displayFlag2;
-    public short DisplayFlag2
+    private string _condtional2;
+    public string Conditional2
     {
-        get => _displayFlag2;
+        get => _condtional2;
         set
         {
-            this.RaiseAndSetIfChanged(ref _displayFlag2, value);
-            EditDisplayFlag(1, _displayFlag2);
+            this.RaiseAndSetIfChanged(ref _condtional2, value);
+            EditConditional(1, _condtional2);
         }
     }
-    private short _displayFlag3;
-    public short DisplayFlag3
+    private string _condtional3;
+    public string Conditional3
     {
-        get => _displayFlag3;
+        get => _condtional3;
         set
         {
-            this.RaiseAndSetIfChanged(ref _displayFlag3, value);
-            EditDisplayFlag(2, _displayFlag3);
+            this.RaiseAndSetIfChanged(ref _condtional3, value);
+            EditConditional(2, _condtional3);
         }
     }
-    private short _displayFlag4;
-    public short DisplayFlag4
+    private string _condtional4;
+    public string Conditional4
     {
-        get => _displayFlag4;
+        get => _condtional4;
         set
         {
-            this.RaiseAndSetIfChanged(ref _displayFlag4, value);
-            EditDisplayFlag(3, _displayFlag4);
+            this.RaiseAndSetIfChanged(ref _condtional4, value);
+            EditConditional(3, _condtional4);
         }
     }
 
@@ -108,27 +108,37 @@ public class SelectScriptCommandEditorViewModel : ScriptCommandEditorViewModel
         _option2 = ((OptionScriptParameter)Command.Parameters[1]).Option.Id == 0 ? AvailableChoices[0] : ((OptionScriptParameter)Command.Parameters[1]).Option;
         _option3 = ((OptionScriptParameter)Command.Parameters[2]).Option.Id == 0 ? AvailableChoices[0] : ((OptionScriptParameter)Command.Parameters[2]).Option;
         _option4 = ((OptionScriptParameter)Command.Parameters[3]).Option.Id == 0 ? AvailableChoices[0] : ((OptionScriptParameter)Command.Parameters[3]).Option;
-        _displayFlag1 = ((ShortScriptParameter)Command.Parameters[4]).Value;
-        _displayFlag2 = ((ShortScriptParameter)Command.Parameters[5]).Value;
-        _displayFlag3 = ((ShortScriptParameter)Command.Parameters[6]).Value;
-        _displayFlag4 = ((ShortScriptParameter)Command.Parameters[7]).Value;
+        _condtional1 = ((ConditionalScriptParameter)Command.Parameters[4]).Conditional;
+        _condtional2 = ((ConditionalScriptParameter)Command.Parameters[5]).Conditional;
+        _condtional3 = ((ConditionalScriptParameter)Command.Parameters[6]).Conditional;
+        _condtional4 = ((ConditionalScriptParameter)Command.Parameters[7]).Conditional;
     }
 
     private void EditOptionParameter(int index, ChoicesSectionEntry option)
     {
         ((OptionScriptParameter)Command.Parameters[index]).Option = option;
         Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
-            .Objects[Command.Index].Parameters[index] = Script.Event.ChoicesSection.Objects.IndexOf(option) == -1 ? (short)0 : (short)Script.Event.ChoicesSection.Objects.IndexOf(option) ;
+            .Objects[Command.Index].Parameters[index] = Script.Event.ChoicesSection.Objects.IndexOf(option) == -1
+            ? (short)0
+            : (short)Script.Event.ChoicesSection.Objects.IndexOf(option);
         Script.UnsavedChanges = true;
         ScriptEditor.UpdatePreview();
         Script.Refresh(OpenProject, Log);
     }
 
-    private void EditDisplayFlag(int index, short displayFlag)
+    private void EditConditional(int index, string conditional)
     {
-        ((ShortScriptParameter)Command.Parameters[index + 4]).Value = displayFlag;
+        ((ConditionalScriptParameter)Command.Parameters[index + 4]).Conditional = conditional;
+        if (string.IsNullOrEmpty(conditional))
+        {
+            Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
+                .Objects[Command.Index].Parameters[index + 4] = -1;
+            Script.UnsavedChanges = true;
+            return;
+        }
         Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
-            .Objects[Command.Index].Parameters[index + 4] = displayFlag;
+                .Objects[Command.Index].Parameters[index + 4] = (short)Script.Event.ConditionalsSection.Objects.Count;
+        Script.Event.ConditionalsSection.Objects.Add(conditional);
         Script.UnsavedChanges = true;
     }
 }

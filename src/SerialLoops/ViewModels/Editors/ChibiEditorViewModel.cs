@@ -123,7 +123,7 @@ public partial class ChibiEditorViewModel : EditorViewModel
             try
             {
                 await using FileStream fs = File.Create(Path.Combine(exportFolder,
-                    $"{_chibi.DisplayName}_{_selectedAnimation}{ChibiItem.DirectionToCode(_selectedDirection)}_{i++:D3}_{ChibiFrames[i].Timing}f.png"));
+                    $"{_chibi.DisplayName}_{_selectedAnimation}{ChibiItem.DirectionToCode(_selectedDirection)}_{i:D3}_{ChibiFrames[i].Timing}f.png"));
                 ChibiFrames[i].Frame.Encode(fs, SKEncodedImageFormat.Png, 1);
             }
             catch (Exception ex)

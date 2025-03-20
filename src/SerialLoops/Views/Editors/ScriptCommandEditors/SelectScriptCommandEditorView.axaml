@@ -84,64 +84,27 @@
             </ComboBox.ItemContainerTheme>
         </ComboBox>
         <TextBlock Grid.Column="0" Grid.Row="3" VerticalAlignment="Center" Text="{x:Static assets:Strings.Option_4}"/>
-        <ComboBox Grid.Column="1" Grid.Row="3" Margin="10,0,0,0" ItemsSource="{Binding AvailableChoices}" SelectedItem="{Binding Option4}">
-            <ComboBox.ItemTemplate>
-                <DataTemplate DataType="hlib:ChoicesSectionEntry">
-                    <TextBlock>
-                        <TextBlock.Text>
-                            <MultiBinding Converter="{StaticResource TextSubstitionConverter}">
-                                <Binding Path="Text"/>
-                                <Binding Path="$parent[editors:SelectScriptCommandEditorView].((vm:SelectScriptCommandEditorViewModel)DataContext).OpenProject"/>
-                            </MultiBinding>
-                        </TextBlock.Text>
-                    </TextBlock>
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
-            <ComboBox.ItemContainerTheme>
-                <ControlTheme TargetType="ComboBoxItem" x:DataType="hlib:ChoicesSectionEntry" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
-                    <Setter Property="TextSearch.Text">
-                        <Setter.Value>
-                            <MultiBinding Converter="{StaticResource TextSubstitionConverter}">
-                                <Binding Path="Text"/>
-                                <Binding Path="$parent[editors:SelectScriptCommandEditorView].((vm:SelectScriptCommandEditorViewModel)DataContext).OpenProject"/>
-                            </MultiBinding>
-                        </Setter.Value>
-                    </Setter>
-                </ControlTheme>
-            </ComboBox.ItemContainerTheme>
-        </ComboBox>
 
         <StackPanel Grid.Column="0" Grid.Row="4" Orientation="Horizontal" Spacing="3">
-            <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.Display_Flag_1}"/>
+            <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.ScriptCommandEditorSelectParam4}"/>
             <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" VerticalAlignment="Center"
-                 ToolTip.Tip="{x:Static assets:Strings.ScriptCommandParameterHelpSelectDisplayFlag}"/>
+                 ToolTip.Tip="{x:Static assets:Strings.ScriptCommandParameterHelpSelectConditional}"/>
         </StackPanel>
-        <NumericUpDown Grid.Column="1" Grid.Row="4" Margin="10,0,0,0" Value="{Binding DisplayFlag1}"
-                       Minimum="-1" Maximum="{Binding MaxShort}" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
+        <TextBox Grid.Column="1" Grid.Row="4" Margin="10,0,0,0" Text="{Binding Conditional1}"/>
 
         <StackPanel Grid.Column="0" Grid.Row="5" Orientation="Horizontal" Spacing="3">
-            <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.Display_Flag_2}"/>
+            <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.ScriptCommandEditorSelectParam5}"/>
             <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" VerticalAlignment="Center"
-                 ToolTip.Tip="{x:Static assets:Strings.ScriptCommandParameterHelpSelectDisplayFlag}"/>
+                 ToolTip.Tip="{x:Static assets:Strings.ScriptCommandParameterHelpSelectConditional}"/>
         </StackPanel>
-        <NumericUpDown Grid.Column="1" Grid.Row="5" Margin="10,0,0,0" Value="{Binding DisplayFlag2}"
-                       Minimum="-1" Maximum="{Binding MaxShort}" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
+        <TextBox Grid.Column="1" Grid.Row="5" Margin="10,0,0,0" Text="{Binding Conditional2}"/>
 
         <StackPanel Grid.Column="0" Grid.Row="6" Orientation="Horizontal" Spacing="3">
-            <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.Display_Flag_3}"/>
+            <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.ScriptCommandEditorSelectParam6}"/>
             <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" VerticalAlignment="Center"
-                 ToolTip.Tip="{x:Static assets:Strings.ScriptCommandParameterHelpSelectDisplayFlag}"/>
+                 ToolTip.Tip="{x:Static assets:Strings.ScriptCommandParameterHelpSelectConditional}"/>
         </StackPanel>
-        <NumericUpDown Grid.Column="1" Grid.Row="6" Margin="10,0,0,0" Value="{Binding DisplayFlag3}"
-                       Minimum="-1" Maximum="{Binding MaxShort}" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
-
-        <StackPanel Grid.Column="0" Grid.Row="7" Orientation="Horizontal" Spacing="3">
-            <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.Display_Flag_4}"/>
-            <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" VerticalAlignment="Center"
-                 ToolTip.Tip="{x:Static assets:Strings.ScriptCommandParameterHelpSelectDisplayFlag}"/>
-        </StackPanel>
-        <NumericUpDown Grid.Column="1" Grid.Row="7" Margin="10,0,0,0" Value="{Binding DisplayFlag4}"
-                       Minimum="-1" Maximum="{Binding MaxShort}" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
+        <TextBox Grid.Column="1" Grid.Row="6" Margin="10,0,0,0" Text="{Binding Conditional3}"/>
     </Grid>
 </UserControl>
 
