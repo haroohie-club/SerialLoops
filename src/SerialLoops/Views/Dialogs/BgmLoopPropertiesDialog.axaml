@@ -10,7 +10,7 @@
         TransparencyLevelHint="AcrylicBlur"
         Background="{DynamicResource FallbackBackgroundColor}"
         ExtendClientAreaToDecorationsHint="True"
-        SizeToContent="WidthAndHeight"
+        SizeToContent="WidthAndHeight" CanResize="False"
         x:DataType="vm:BgmLoopPropertiesDialogViewModel"
         x:Class="SerialLoops.Views.Dialogs.BgmLoopPropertiesDialog"
         Icon="/Assets/serial-loops.ico"

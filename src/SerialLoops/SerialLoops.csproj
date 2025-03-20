@@ -96,7 +96,7 @@
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.3.999-cibuild0055319-alpha" />
     <!--The behaviors packages past 11.1.0.4 break our middle click to close functionality, so we're staying on that package for now.-->
-    <PackageReference Include="Avalonia.Xaml.Behaviors" Version="11.1.0.4" />
+    <PackageReference Include="Avalonia.Xaml.Behaviors" Version="11.2.0.14" />
     <PackageReference Include="DialogHost.Avalonia" Version="0.9.2" />
     <PackageReference Include="Emik.Rubbish" Version="1.1.0" />
     <PackageReference Include="HaroohieClub.DotNet.Bundle" Version="1.0.3" />
@@ -104,11 +104,11 @@
     <PackageReference Include="MessageBox.Avalonia" Version="3.2.0" />
     <PackageReference Include="MiniToolbar.Avalonia" Version="1.0.81" />
     <PackageReference Include="ReactiveHistory" Version="0.10.7" />
-    <PackageReference Include="ReactiveUI" Version="20.1.63" />
+    <PackageReference Include="ReactiveUI" Version="20.2.45" />
     <PackageReference Include="ReactiveUI.Fody" Version="19.5.41" />
     <PackageReference Include="SixLabors.Fonts" Version="2.1.2" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.1.7" />
-    <PackageReference Include="Tabalonia" Version="0.10.4.2" />
+    <PackageReference Include="Tabalonia" Version="0.10.5.1" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net8.0-windows'">

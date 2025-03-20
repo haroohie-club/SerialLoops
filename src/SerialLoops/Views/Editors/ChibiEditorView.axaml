@@ -23,7 +23,9 @@
                 <controls:ChibiDirectionSelector DataContext="{Binding DirectionSelector}"/>
             </StackPanel>
         </HeaderedContentControl>
-        <HeaderedContentControl Grid.Row="1" Grid.Column="1" Header="{x:Static assets:Strings.Frames}">
+        <controls:HeaderedContentControlWithSvg Grid.Row="1" Grid.Column="1" Header="{x:Static assets:Strings.Frames}"
+                                                IconPath="avares://SerialLoops/Assets/Icons/Help.svg"
+                                                IconTip="{x:Static assets:Strings.FramesToSecondsHelp}">
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <ItemsRepeater ItemsSource="{Binding ChibiFrames}">
                     <ItemsRepeater.Layout>
@@ -39,7 +41,7 @@
                     </ItemsRepeater.ItemTemplate>
                 </ItemsRepeater>
             </ScrollViewer>
-        </HeaderedContentControl>
+        </controls:HeaderedContentControlWithSvg>
 
         <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" Spacing="5">
             <Button Content="{x:Static assets:Strings.Export_Frames}" Command="{Binding ExportFramesCommand}"/>

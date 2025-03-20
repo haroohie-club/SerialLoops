@@ -123,7 +123,7 @@ public class ConfigFactory : IConfigFactory
             DevkitArmPath = devkitArmDir,
             EmulatorPath = emulatorPath,
             EmulatorFlatpak = emulatorFlatpak,
-            UseDocker = false,
+            UseDocker = OperatingSystem.IsWindows(),
             DevkitArmDockerTag = "latest",
             AutoReopenLastProject = false,
             RememberProjectWorkspace = true,

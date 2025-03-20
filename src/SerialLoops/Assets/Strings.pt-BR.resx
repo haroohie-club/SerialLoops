@@ -234,7 +234,7 @@
   <data name="Batch Dialogue Display option" xml:space="preserve">
     <value>Opção de Visualizar Diálogo</value>
   </data>
-  <data name="Arrow Keys - Move Image" xml:space="preserve">
+  <data name="ImageCropResizeInstructions" xml:space="preserve">
     <value>Teclas de Seta - Mover imagem</value>
   </data>
   <data name="Building Iteratively" xml:space="preserve">

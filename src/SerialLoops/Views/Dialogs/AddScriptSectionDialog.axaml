@@ -22,7 +22,6 @@
             <StackPanel Orientation="Vertical" Spacing="3">
                 <TextBlock Text="{x:Static assets:Strings.Section_Name_}"/>
                 <StackPanel Orientation="Horizontal" Spacing="2">
-                    <TextBlock Text="NONE"/>
                     <TextBox Text="{Binding SectionName}"/>
                 </StackPanel>
             </StackPanel>

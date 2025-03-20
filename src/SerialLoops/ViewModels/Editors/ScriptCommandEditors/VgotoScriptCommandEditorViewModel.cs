@@ -17,19 +17,9 @@ public class VgotoScriptCommandEditorViewModel(ScriptItemCommand command, Script
         {
             this.RaiseAndSetIfChanged(ref _conditional, value);
             ((ConditionalScriptParameter)Command.Parameters[0]).Conditional = value;
-            if (Script.Event.ConditionalsSection.Objects.Contains(_conditional))
-            {
-                Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
-                        .Objects[Command.Index].Parameters[0] =
-                    (short)Script.Event.ConditionalsSection.Objects.IndexOf(_conditional);
-            }
-            else
-            {
-                Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
-                        .Objects[Command.Index].Parameters[0] =
-                    (short)(Script.Event.ConditionalsSection.Objects.Count - 1);
-                Script.Event.ConditionalsSection.Objects.Insert(Script.Event.ConditionalsSection.Objects.Count - 1, _conditional);
-            }
+            Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
+                .Objects[Command.Index].Parameters[0] = (short)Script.Event.ConditionalsSection.Objects.Count;
+            Script.Event.ConditionalsSection.Objects.Add(_conditional);
             Script.UnsavedChanges = true;
             Command.UpdateDisplay();
         }

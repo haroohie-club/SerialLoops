@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
@@ -22,6 +23,7 @@ using ReactiveUI.Fody.Helpers;
 using SerialLoops.Assets;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
+using SerialLoops.Lib.Script.Parameters;
 using SerialLoops.Lib.Util;
 using SerialLoops.Models;
 using SerialLoops.Utility;
@@ -146,6 +148,11 @@ public class ScriptEditorViewModel : EditorViewModel
 
     public ObservableCollection<ReactiveChoice> Choices { get; } = [];
 
+    [Reactive]
+    public bool Script00TipVisible { get; set; }
+
+    private Timer Script00TipTimer { get; set; }
+
     public ScriptEditorViewModel(ScriptItem script, MainWindowViewModel window, ILogger log) : base(script, window, log)
     {
         _script = script;
@@ -192,6 +199,13 @@ public class ScriptEditorViewModel : EditorViewModel
         UnusedInteractableObjects.AddRange(MapCharactersSubEditorVm.Maps.SelectMany(m => m.Map.InteractableObjects)
             .Where(o => o.ObjectId > 0 && InteractableObjects.All(i => i.InteractableObject.ObjectId != o.ObjectId))
             .Select(o => new ReactiveInteractableObject(new() { ObjectId = (short)o.ObjectId },  MapCharactersSubEditorVm.Maps.ToArray(), _script, this)));
+
+        Script00TipTimer = new(TimeSpan.FromSeconds(5)) { AutoReset = false };
+        Script00TipTimer.Elapsed += (_, _) =>
+        {
+            Script00TipVisible = false;
+            Script00TipTimer.Stop();
+        };
 
         AddScriptCommandCommand = ReactiveCommand.CreateFromTask(AddCommand);
         AddScriptSectionCommand = ReactiveCommand.CreateFromTask(AddSection);
@@ -373,11 +387,60 @@ public class ScriptEditorViewModel : EditorViewModel
             _script.Refresh(_project, _log);
             _script.UnsavedChanges = true;
         }
+        else if (source is ScriptSectionTreeItem sourceSectionItem)
+        {
+            ReactiveScriptSection sourceSection = sourceSectionItem.ViewModel;
+            int targetSectionIndex;
+            if (target is ScriptCommandTreeItem targetCommand)
+            {
+                targetSectionIndex = _script.Event.ScriptSections.IndexOf(targetCommand.ViewModel!.Section);
+            }
+            else if (target is ScriptSectionTreeItem targetSection)
+            {
+                if (position == TreeDataGridRowDropPosition.Before && ScriptSections.IndexOf(targetSection.ViewModel!) > 0)
+                {
+                    targetSectionIndex = ScriptSections.IndexOf(targetSection.ViewModel!) - 1;
+                }
+                else
+                {
+                    targetSectionIndex = ScriptSections.IndexOf(targetSection.ViewModel!);
+                }
+            }
+            else
+            {
+                return;
+            }
+
+            if (targetSectionIndex == 0)
+            {
+                Script00TipVisible = true;
+                Script00TipTimer.Start();
+                return;
+            }
+
+            int sourceSectionIndex = ScriptSections.IndexOf(sourceSection);
+            if (!_commands.Swap(sourceSectionIndex, targetSectionIndex))
+            {
+                return;
+            }
+            Commands = _commands;
+            ScriptSections.Swap(sourceSectionIndex, targetSectionIndex);
+            _script.Event.ScriptSections.Swap(sourceSectionIndex, targetSectionIndex);
+
+            _script.Refresh(_project, _log);
+            Description.UnsavedChanges = true;
+        }
     }
 
     public bool CanDrag(ITreeItem source)
     {
-        return source is not ScriptSectionTreeItem;
+        if (source is ScriptSectionTreeItem sectionTreeItem && sectionTreeItem.ViewModel!.Name.Equals("SCRIPT00"))
+        {
+            Script00TipTimer.Start();
+            Script00TipVisible = true;
+            return false;
+        }
+        return true;
     }
 
     private void RowSelection_SelectionChanged(object sender, TreeSelectionModelSelectionChangedEventArgs<ITreeItem> e)
@@ -544,6 +607,39 @@ public class ScriptEditorViewModel : EditorViewModel
                     Strings.The_root_section_cannot_be_deleted_, ButtonEnum.Ok,
                     Icon.Warning, _log);
                 return;
+            }
+
+            foreach ((_, List<ScriptItemCommand> commands) in _commands)
+            {
+                foreach (ScriptItemCommand command in commands)
+                {
+                    if (command.Verb is CommandVerb.VGOTO or CommandVerb.GOTO or CommandVerb.INVEST_START)
+                    {
+                        int paramIdx = command.Verb switch
+                        {
+                            CommandVerb.VGOTO => 1,
+                            CommandVerb.GOTO => 0,
+                            _ => 4,
+                        };
+                        if (((ScriptSectionScriptParameter)command.Parameters[paramIdx]).Section.Name == SelectedSection.Name)
+                        {
+                            command.Parameters[paramIdx] = new ScriptSectionScriptParameter("Script Section",
+                                ScriptSections.FirstOrDefault(s => s.Name.StartsWith("NONE"))?.Section);
+                            _script.Event.ScriptSections[_script.Event.ScriptSections.IndexOf(command.Section)]
+                                .Objects[command.Index].Parameters[paramIdx] = _script.Event.LabelsSection.Objects.FirstOrDefault(l => l.Name.Replace("/", "") == command.Parameters[paramIdx].Name)?.Id ?? 0;
+                            command.UpdateDisplay();
+                        }
+                    }
+                }
+            }
+
+            foreach (ReactiveChoice choice in Choices)
+            {
+                if (choice.AssociatedSection == SelectedSection)
+                {
+                    choice.AssociatedSection = null;
+                    _script.Event.ChoicesSection.Objects[_script.Event.ChoicesSection.Objects.IndexOf(choice.Choice)].Id = 0;
+                }
             }
 
             SelectedSection = null;
@@ -820,14 +916,20 @@ public class ReactiveScriptSection(ScriptSection section) : ReactiveObject
 
     private string _name = section.Name;
 
+    public string DisplayName
+    {
+        get => _name.StartsWith("NONE") ? _name[4..] : _name;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _name, value is "SCRIPT00" or "SCRIPT01" ? value : $"NONE{value}");
+            Section.Name = _name;
+        }
+    }
+
     public string Name
     {
         get => _name;
-        set
-        {
-            this.RaiseAndSetIfChanged(ref _name, value);
-            Section.Name = _name;
-        }
+        set => _name = value;
     }
 
     public ObservableCollection<ITreeItem> Commands { get; private set; } = [];
@@ -860,7 +962,7 @@ public class ReactiveScriptSection(ScriptSection section) : ReactiveObject
         Commands.AddRange(commands.Select(c => new ScriptCommandTreeItem(c)));
     }
 
-    public override string ToString() => Name;
+    public override string ToString() => DisplayName;
 }
 
 public class StartingChibiWithImage : ReactiveObject
@@ -974,6 +1076,7 @@ public class ReactiveChoice : ReactiveObject
             Choice.Id = _script.Event.LabelsSection.Objects.FirstOrDefault(c => c.Name.Replace("/", "").Equals(value.Name))?.Id ?? 0;
             this.RaisePropertyChanged();
             _scriptEditor.UpdatePreview();
+            _script.Refresh(_scriptEditor.Window.OpenProject, _scriptEditor.Window.Log);
             _scriptEditor.Description.UnsavedChanges = true;
         }
     }

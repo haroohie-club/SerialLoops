@@ -9,7 +9,7 @@
         TransparencyLevelHint="AcrylicBlur"
         Background="{DynamicResource FallbackBackgroundColor}"
         ExtendClientAreaToDecorationsHint="True"
-        SizeToContent="WidthAndHeight"
+        SizeToContent="WidthAndHeight" CanResize="False"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:DataType="vm:BgmVolumePropertiesDialogViewModel"
         x:Class="SerialLoops.Views.Dialogs.BgmVolumePropertiesDialog"
