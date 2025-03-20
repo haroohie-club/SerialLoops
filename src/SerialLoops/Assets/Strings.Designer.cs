@@ -1337,6 +1337,33 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select sprite base.
+        /// </summary>
+        public static string CharacterSpriteEditorSelectBase {
+            get {
+                return ResourceManager.GetString("CharacterSpriteEditorSelectBase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select eye animation frames.
+        /// </summary>
+        public static string CharacterSpriteEditorSelectEyeFrames {
+            get {
+                return ResourceManager.GetString("CharacterSpriteEditorSelectEyeFrames", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select mouth animation frames.
+        /// </summary>
+        public static string CharacterSpriteEditorSelectMouthFrames {
+            get {
+                return ResourceManager.GetString("CharacterSpriteEditorSelectMouthFrames", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Check for Updates.
         /// </summary>
         public static string Check_for_Updates {

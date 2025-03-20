@@ -3591,7 +3591,7 @@ SELECT cannot be used in the initial, unnamed script block.</value>
     <value>This must be checked when a sound is played initially. If a sound plays for a long time and you want to change its volume, uncheck this and set the crossfade time instead.</value>
   </data>
   <data name="TypeToSearchHelp" xml:space="preserve">
-    <value>Tip: Type to jump to an 
+    <value>Tip: Type to jump to an
 item in the dropdown!</value>
   </data>
   <data name="ScriptEditorRemoveCommandOrSectionTip" xml:space="preserve">
@@ -3641,5 +3641,14 @@ item in the dropdown!</value>
   </data>
   <data name="FramesToSecondsHelp" xml:space="preserve">
     <value>The game runs at 60 frames per second, so 60 frames is equivalent to 1 second.</value>
+  </data>
+  <data name="CharacterSpriteEditorSelectBase" xml:space="preserve">
+    <value>Select sprite base</value>
+  </data>
+  <data name="CharacterSpriteEditorSelectEyeFrames" xml:space="preserve">
+    <value>Select eye animation frames</value>
+  </data>
+  <data name="CharacterSpriteEditorSelectMouthFrames" xml:space="preserve">
+    <value>Select mouth animation frames</value>
   </data>
 </root>
