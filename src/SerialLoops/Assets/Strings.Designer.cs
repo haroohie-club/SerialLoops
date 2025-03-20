@@ -590,15 +590,6 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Arrow Keys - Move Image.
-        /// </summary>
-        public static string Arrow_Keys___Move_Image {
-            get {
-                return ResourceManager.GetString("Arrow Keys - Move Image", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Asahina companion selected description.
         /// </summary>
         public static string Asahina_companion_selected_description {
@@ -4424,6 +4415,18 @@ namespace SerialLoops.Assets {
         public static string Image_Files {
             get {
                 return ResourceManager.GetString("Image Files", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Arrow Keys - Move Image
+        ///+/- - Zoom In/Out
+        ///
+        ///Hold Shift to increase step.
+        /// </summary>
+        public static string ImageCropResizeInstructions {
+            get {
+                return ResourceManager.GetString("ImageCropResizeInstructions", resourceCulture);
             }
         }
         
