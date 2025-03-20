@@ -16,7 +16,7 @@ using SerialLoops.Views.Dialogs;
 
 namespace SerialLoops.ViewModels.Dialogs;
 
-public class ExportPatchDialogViewModel
+public class ExportPatchDialogViewModel : ViewModelBase
 {
     private Project _project;
     private ILogger _log;

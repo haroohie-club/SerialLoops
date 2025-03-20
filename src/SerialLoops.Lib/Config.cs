@@ -52,10 +52,6 @@ public class Config
 
     public void ValidateConfig(Func<string, string> localize, ILogger log)
     {
-        if (string.IsNullOrWhiteSpace(DevkitArmPath))
-        {
-            log.LogError(localize("devkitARM is not detected at the default or specified install location. Please set devkitARM path."));
-        }
         if (CurrentCultureName is null)
         {
             CurrentCultureName = CultureInfo.CurrentCulture.Name;

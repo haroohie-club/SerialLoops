@@ -199,7 +199,7 @@
   <data name="Add Starting Chibis" xml:space="preserve">
     <value>Aggiungi Chibi</value>
   </data>
-  <data name="Arrow Keys - Move Image" xml:space="preserve">
+  <data name="ImageCropResizeInstructions" xml:space="preserve">
     <value>Freccette - Sposta immagine</value>
   </data>
   <data name="Apply Assembly Hack" xml:space="preserve">

@@ -328,16 +328,16 @@ public class ScriptItemCommand : ReactiveObject
                             parameters.Add(new OptionScriptParameter(localize("Option 4"), eventFile.ChoicesSection.Objects[parameter]));
                             break;
                         case 4:
-                            parameters.Add(new ShortScriptParameter(localize("Display Flag 1"), parameter));
+                            parameters.Add(new ConditionalScriptParameter(localize("Conditional 1"), eventFile.ConditionalsSection.Objects.ElementAtOrDefault(parameter) ?? string.Empty));
                             break;
                         case 5:
-                            parameters.Add(new ShortScriptParameter(localize("Display Flag 2"), parameter));
+                            parameters.Add(new ConditionalScriptParameter(localize("Conditional 2"), eventFile.ConditionalsSection.Objects.ElementAtOrDefault(parameter) ?? string.Empty));
                             break;
                         case 6:
-                            parameters.Add(new ShortScriptParameter(localize("Display Flag 3"), parameter));
+                            parameters.Add(new ConditionalScriptParameter(localize("Conditional 3"), eventFile.ConditionalsSection.Objects.ElementAtOrDefault(parameter) ?? string.Empty));
                             break;
                         case 7:
-                            parameters.Add(new ShortScriptParameter(localize("Display Flag 4"), parameter));
+                            parameters.Add(new ConditionalScriptParameter(localize("Conditional 4"), eventFile.ConditionalsSection.Objects.ElementAtOrDefault(parameter) ?? string.Empty));
                             break;
                     }
                     break;
@@ -715,11 +715,12 @@ public class ScriptItemCommand : ReactiveObject
                 str += $" {((DialogueScriptParameter)Parameters[0]).Line.Text.GetSubstitutedString(Project)[..Math.Min(((DialogueScriptParameter)Parameters[0]).Line.Text.Length, 10)]}...";
                 break;
             case CommandVerb.GOTO:
-                str += $" {((ScriptSectionScriptParameter)Parameters[0]).Section.Name}";
+                str += $" {(((ScriptSectionScriptParameter)Parameters[0]).Section.Name.StartsWith("NONE") ? ((ScriptSectionScriptParameter)Parameters[0]).Section.Name[4..] : ((ScriptSectionScriptParameter)Parameters[0]).Section.Name)}";
                 break;
             case CommandVerb.VGOTO:
                 string conditional = ((ConditionalScriptParameter)Parameters[0]).Conditional;
-                str += $" '{(conditional.Length > 10 ? $"{conditional[..10]}..." : conditional)}', {((ScriptSectionScriptParameter)Parameters[1]).Section.Name}";
+                str += $" '{(conditional.Length > 10 ? $"{conditional[..10]}..." : conditional)}'," +
+                       $" {(((ScriptSectionScriptParameter)Parameters[1]).Section.Name.StartsWith("NONE") ? ((ScriptSectionScriptParameter)Parameters[1]).Section.Name[4..] : ((ScriptSectionScriptParameter)Parameters[1]).Section.Name)}";
                 break;
             case CommandVerb.WAIT:
                 str += $" {((ShortScriptParameter)Parameters[0]).Value}";

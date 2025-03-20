@@ -9,7 +9,7 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:DataType="vm:AddScenarioCommandDialogViewModel"
         x:Class="SerialLoops.Views.Dialogs.AddScenarioCommandDialog"
-        SizeToContent="WidthAndHeight"
+        SizeToContent="WidthAndHeight" CanResize="False"
         TransparencyLevelHint="AcrylicBlur"
         Background="{DynamicResource FallbackBackgroundColor}"
         ExtendClientAreaToDecorationsHint="True"
@@ -20,7 +20,7 @@
     <Panel>
         <controls:AcrylicBorderHandler/>
 
-        <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto" VerticalAlignment="Center">
+        <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto" VerticalAlignment="Center">
             <TextBlock Text="{x:Static assets:Strings.Command_Type_}" VerticalAlignment="Center" Margin="10"/>
             <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" Spacing="3" Margin="5">
                 <ComboBox ItemsSource="{Binding Verbs}"
@@ -32,6 +32,8 @@
                 <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}" CommandParameter="{Binding #AddCommandDialog}" IsCancel="True"/>
                 <Button Content="{x:Static assets:Strings.Create}" Command="{Binding CreateCommand}" CommandParameter="{Binding #AddCommandDialog}" IsDefault="True"/>
             </StackPanel>
+            <TextBlock Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Text="{x:Static assets:Strings.TypeToSearchHelp}" VerticalAlignment="Center" TextAlignment="Center"
+                       TextWrapping="Wrap" Margin="0 0 0 10"/>
         </Grid>
     </Panel>
 </Window>

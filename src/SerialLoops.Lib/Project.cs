@@ -1486,7 +1486,7 @@ public partial class Project
                                                    parameters.Count <= c.Parameters.Count &&
                                                    c.Parameters.Zip(parameters)
                                                        .All(z => string.IsNullOrWhiteSpace(z.Second) || z.Second == "*" ||
-                                                                 (z.Second.StartsWith("!") && !(z.First?.GetValueString(this)?.Contains(z.Second, StringComparison.OrdinalIgnoreCase) ?? false)) ||
+                                                                 (z.Second.StartsWith("!") && !(z.First?.GetValueString(this)?.Contains(z.Second[1..], StringComparison.OrdinalIgnoreCase) ?? false)) ||
                                                                  (z.First?.GetValueString(this)?.Contains(z.Second, StringComparison.OrdinalIgnoreCase) ?? false))));
                 }
                 return false;

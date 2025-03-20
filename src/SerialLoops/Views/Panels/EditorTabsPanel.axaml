@@ -20,7 +20,12 @@
         <tab:TabsControl Name="Tabs" ShowDefaultAddButton="False" ItemsSource="{Binding Tabs}"
                          ContainerClearing="Tabs_ContainerClearing" IsVisible="{Binding ShowTabsPanel}"
                          SelectedItem="{Binding SelectedTab}" LastTabClosedAction="{x:Null}"
-                         LeftThumbWidth="4" RightThumbWidth="4" Grid.Row="0" Grid.Column="0" Margin="0 8 0 0">
+                         LeftThumbWidth="4" RightThumbWidth="4" Grid.Row="0" Grid.Column="0" Margin="0 8 0 0"
+                         CloseItemHeaderText="{x:Static assets:Strings.TabaloniaCloseItem}"
+                         CloseAllButThisHeaderText="{x:Static assets:Strings.TabaloniaCloseAllOtherTabs}"
+                         CloseAllToRightHeaderText="{x:Static assets:Strings.TabaloniaCloseAllToRight}"
+                         CloseAllToLeftHeaderText="{x:Static assets:Strings.TabaloniaCloseAllToLeft}"
+                         CloseAllHeaderText="{x:Static assets:Strings.TabaloniaCloseAll}">
             <i:Interaction.Behaviors>
                 <ia:EventTriggerBehavior EventName="SelectionChanged" SourceObject="{Binding #Tabs}">
                     <ia:InvokeCommandAction Command="{Binding TabSwitchedCommand}"/>

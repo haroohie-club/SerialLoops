@@ -300,38 +300,49 @@ public static partial class Extensions
     {
         // Collect conditional garbage
         IEnumerable<string> conditionalContainingCommands =
-            new[] { CommandVerb.VGOTO, CommandVerb.SCENE_GOTO, CommandVerb.SCENE_GOTO_CHESS }.Select(c => c.ToString());
+            new[] { CommandVerb.SELECT, CommandVerb.VGOTO, CommandVerb.SCENE_GOTO, CommandVerb.SCENE_GOTO_CHESS }.Select(c => c.ToString());
         List<UsedIndex> conditionalUsedIndices = [];
         foreach (ScriptCommandInvocation conditionalCommand in evt.ScriptSections.SelectMany(s => s.Objects)
                      .Where(c => conditionalContainingCommands.Contains(c.Command.Mnemonic)))
         {
-            conditionalUsedIndices.Add(new()
+            if (conditionalCommand.Command.Mnemonic == CommandVerb.SELECT.ToString())
             {
-                Command = conditionalCommand, Index = conditionalCommand.Parameters[0]
-            });
+                conditionalUsedIndices.AddRange(conditionalCommand.Parameters[4..8].Where(p => p >= 0)
+                    .Select((p, i) => new UsedIndex { Command = conditionalCommand, ConditionalIndex = p, ParameterIndex = i + 4 }));
+            }
+            conditionalUsedIndices.Add(new() { Command = conditionalCommand, ConditionalIndex = conditionalCommand.Parameters[0], ParameterIndex = 0});
         }
 
-        if (conditionalUsedIndices.DistinctBy(c => c.Index).Count() < evt.ConditionalsSection.Objects.Count)
+        if (conditionalUsedIndices.DistinctBy(c => c.ConditionalIndex).Count() < evt.ConditionalsSection.Objects.Count)
         {
+            List<int> indicesForDeletion = [];
             for (short i = 0; i < evt.ConditionalsSection.Objects.Count; i++)
             {
                 if (evt.ConditionalsSection.Objects[i] is null)
                 {
                     continue;
                 }
-                if (!conditionalUsedIndices.Select(idx => idx.Index).Contains(i))
+                if (!conditionalUsedIndices.Select(idx => idx.ConditionalIndex).Contains(i))
                 {
-                    evt.ConditionalsSection.Objects.RemoveAt(i);
-                    for (int j = 0; j < conditionalUsedIndices.Count; j++)
-                    {
-                        if (conditionalUsedIndices[j].Index >= i)
-                        {
-                            conditionalUsedIndices[j].Command.Parameters[0]--;
-                            conditionalUsedIndices[j].Index--;
-                        }
-                    }
+                    indicesForDeletion.Add(i);
+                }
+            }
 
-                    i--;
+            for (int i = 0; i < indicesForDeletion.Count; i++)
+            {
+                evt.ConditionalsSection.Objects.RemoveAt(indicesForDeletion[i]);
+                for (int j = 0; j < conditionalUsedIndices.Count; j++)
+                {
+                    if (conditionalUsedIndices[j].ConditionalIndex >= indicesForDeletion[i])
+                    {
+                        conditionalUsedIndices[j].Command.Parameters[conditionalUsedIndices[j].ParameterIndex]--;
+                        conditionalUsedIndices[j].ConditionalIndex--;
+                    }
+                }
+
+                for (int k = i + 1; k < indicesForDeletion.Count; k++)
+                {
+                    indicesForDeletion[k]--;
                 }
             }
         }
@@ -369,7 +380,8 @@ public static partial class Extensions
     private class UsedIndex
     {
         public ScriptCommandInvocation Command { get; set; }
-        public short Index { get; set; }
+        public short ConditionalIndex { get; set; }
+        public int ParameterIndex { get; set; }
     }
 
     public static SKPaint GetColorFilter(this SKColor color)
@@ -556,6 +568,29 @@ public static partial class Extensions
     public static string ToUnixPath(this string str)
     {
         return str.Replace('\\', '/');
+    }
+
+    public static bool Swap<T, TS>(this OrderedDictionary<T, TS> orderedDict, int firstIndex, int secondIndex)
+    {
+        if (firstIndex < 0 || secondIndex < 0 || firstIndex >= orderedDict.Count || secondIndex >= orderedDict.Count || firstIndex == secondIndex)
+        {
+            return false;
+        }
+
+        T item1Key = orderedDict.Keys[firstIndex];
+        TS item1Value = orderedDict.ByIndex[firstIndex];
+        T item2Key = orderedDict.Keys[secondIndex];
+        TS item2Value = orderedDict.ByIndex[secondIndex];
+
+        orderedDict.RemoveAt(firstIndex);
+        orderedDict.RemoveAt(firstIndex < secondIndex ? secondIndex - 1 : secondIndex);
+        if (secondIndex < firstIndex)
+        {
+            firstIndex--;
+        }
+        orderedDict.Insert(firstIndex, item2Key, item2Value);
+        orderedDict.Insert(secondIndex, item1Key, item1Value);
+        return true;
     }
 
     [GeneratedRegex(@"#x(?<offset>\d{2})")]

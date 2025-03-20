@@ -22,7 +22,7 @@
 
         <StackPanel Orientation="Vertical" Spacing="5" HorizontalAlignment="Center" Margin="10 30">
             <StackPanel Orientation="Horizontal" Margin="5">
-                <Canvas Width="650" Height="600" ClipToBounds="True" Name="MainCanvas">
+                <Canvas Width="600" Height="550" ClipToBounds="True" Name="MainCanvas">
                     <paz:ZoomBorder Stretch="None" ZoomSpeed="1.2" ClipToBounds="True" Focusable="True"
                                     VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
                                     EnablePan="True" PanButton="Left" Name="Paz"
@@ -52,17 +52,6 @@
                     <HeaderedContentControl Header="{x:Static assets:Strings.Scale_Image}"
                                    Width="200" Padding="5">
                         <StackPanel Orientation="Vertical" Spacing="5" Margin="5">
-                            <!-- <StackPanel Orientation="Horizontal" Spacing="3" VerticalAlignment="Center" HorizontalAlignment="Right"> -->
-                            <!--     <TextBlock Text="{x:Static assets:Strings.Size_}"/> -->
-                            <!--     <StackPanel Orientation="Vertical"> -->
-                            <!--         <NumericUpDown Name="WidthStepper" Value="{Binding #PreviewCanvas.PreviewWidth}" /> -->
-                            <!--         <NumericUpDown Name="HeightStepper" Value="{Binding #PreviewCanvas.PreviewHeight}" /> -->
-                            <!--     </StackPanel> -->
-                            <!-- </StackPanel> -->
-                            <!-- <StackPanel Orientation="Horizontal" Spacing="3" VerticalAlignment="Center"> -->
-                            <!--     <TextBlock Text="{x:Static assets:Strings.Preserve_Aspect_Ratio_}"/> -->
-                            <!--     <CheckBox IsChecked="{Binding PreserveAspectRatio}"/> -->
-                            <!-- </StackPanel> -->
                             <StackPanel Orientation="Horizontal" Spacing="3" VerticalAlignment="Center">
                                 <TextBlock Text="{x:Static assets:Strings.Scale_to_Fit_}"/>
                                 <Button Content="{x:Static assets:Strings.Apply}" Command="{Binding ScaleToFitCommand}"
@@ -71,7 +60,7 @@
                         </StackPanel>
                     </HeaderedContentControl>
                     <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Width="200" Margin="5">
-                        <TextBlock Text="{x:Static assets:Strings.Arrow_Keys___Move_Image}"/>
+                        <TextBlock Text="{x:Static assets:Strings.ImageCropResizeInstructions}" TextAlignment="Center" HorizontalAlignment="Center"/>
                     </StackPanel>
                 </StackPanel>
             </StackPanel>

@@ -590,15 +590,6 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Arrow Keys - Move Image.
-        /// </summary>
-        public static string Arrow_Keys___Move_Image {
-            get {
-                return ResourceManager.GetString("Arrow Keys - Move Image", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Asahina companion selected description.
         /// </summary>
         public static string Asahina_companion_selected_description {
@@ -923,11 +914,29 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Once this position is reached, the BGM will loop back to the start loop position if looping is enabled..
+        /// </summary>
+        public static string BgmLoopEndHelp {
+            get {
+                return ResourceManager.GetString("BgmLoopEndHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to adjust loop data for background music. Please check the logs and file an issue if this reoccurs..
         /// </summary>
         public static string BgmLoopErrorMessage {
             get {
                 return ResourceManager.GetString("BgmLoopErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to BGMs always start from the very beginning. This is the position it will loop back to after it reaches the end loop marker if looping is enabled..
+        /// </summary>
+        public static string BgmLoopStartHelp {
+            get {
+                return ResourceManager.GetString("BgmLoopStartHelp", resourceCulture);
             }
         }
         
@@ -4059,6 +4068,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The game runs at 60 frames per second, so 60 frames is equivalent to 1 second..
+        /// </summary>
+        public static string FramesToSecondsHelp {
+            get {
+                return ResourceManager.GetString("FramesToSecondsHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to French.
         /// </summary>
         public static string French {
@@ -4415,6 +4433,18 @@ namespace SerialLoops.Assets {
         public static string Image_Files {
             get {
                 return ResourceManager.GetString("Image Files", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Arrow Keys - Move Image
+        ///+/- - Zoom In/Out
+        ///
+        ///Hold Shift to increase step.
+        /// </summary>
+        public static string ImageCropResizeInstructions {
+            get {
+                return ResourceManager.GetString("ImageCropResizeInstructions", resourceCulture);
             }
         }
         
@@ -7451,6 +7481,51 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Conditional 1.
+        /// </summary>
+        public static string ScriptCommandEditorSelectParam4 {
+            get {
+                return ResourceManager.GetString("ScriptCommandEditorSelectParam4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Conditional 2.
+        /// </summary>
+        public static string ScriptCommandEditorSelectParam5 {
+            get {
+                return ResourceManager.GetString("ScriptCommandEditorSelectParam5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Conditional 3.
+        /// </summary>
+        public static string ScriptCommandEditorSelectParam6 {
+            get {
+                return ResourceManager.GetString("ScriptCommandEditorSelectParam6", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Conditional 4.
+        /// </summary>
+        public static string ScriptCommandEditorSelectParam7 {
+            get {
+                return ResourceManager.GetString("ScriptCommandEditorSelectParam7", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If this is not set to the default value, the screen will not fully fade in/out. This should not be changed unless you are experimenting with a very specific effect..
+        /// </summary>
+        public static string ScriptCommandParameterFadePercHelp {
+            get {
+                return ResourceManager.GetString("ScriptCommandParameterFadePercHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to By default, tall CGs will display from the top. If this is checked, it will instead display from the bottom..
         /// </summary>
         public static string ScriptCommandParameterHelpDisplayFromBottom {
@@ -7465,15 +7540,6 @@ namespace SerialLoops.Assets {
         public static string ScriptCommandParameterHelpDontClearText {
             get {
                 return ResourceManager.GetString("ScriptCommandParameterHelpDontClearText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The the color type to use. Except for special transitions, it is generally recommended to use Custom Color as it provides the most flexibility..
-        /// </summary>
-        public static string ScriptCommandParameterHelpFadeColor {
-            get {
-                return ResourceManager.GetString("ScriptCommandParameterHelpFadeColor", resourceCulture);
             }
         }
         
@@ -7496,6 +7562,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The the color type to use. Except for special transitions, it is generally recommended to use Custom Color as it provides the most flexibility..
+        /// </summary>
+        public static string ScriptCommandParameterHelpFadeOutColor {
+            get {
+                return ResourceManager.GetString("ScriptCommandParameterHelpFadeOutColor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The speed at which the background scrolls; higher is faster. Default is 1..
         /// </summary>
         public static string ScriptCommandParameterHelpScrollSpeed {
@@ -7505,16 +7580,16 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If this is -1, this option is always shown. If it is a value 0 or above, this option is shown until the flag of that value is set..
+        ///   Looks up a localized string similar to If this is left blank, the option is always shown. Otherwise, this is a conditional value that if evaluated to true will display the option and will hide it if false.
         /// </summary>
-        public static string ScriptCommandParameterHelpSelectDisplayFlag {
+        public static string ScriptCommandParameterHelpSelectConditional {
             get {
-                return ResourceManager.GetString("ScriptCommandParameterHelpSelectDisplayFlag", resourceCulture);
+                return ResourceManager.GetString("ScriptCommandParameterHelpSelectConditional", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Set to -1 to shake the screen until the SCREEN_SHAKE_STOP command is executed.
+        ///   Looks up a localized string similar to Set to -1 to shake the screen until the SCREEN_SHAKE_STOP command is executed. The game runs at 60 frames per second, so 60 frames is equivalent to 1 second..
         /// </summary>
         public static string ScriptCommandParameterHelpShakeDuration {
             get {
@@ -7541,11 +7616,20 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Should be the same as the previous SCREEN_FADEOUT command.
+        ///   Looks up a localized string similar to Should be the same as the previous SCREEN_FADEOUT command. In SCRIPT00 (the first fade of the scene), this must be Black for the fade to work properly..
         /// </summary>
-        public static string ScriptCommandScreenFadeInParamWarning {
+        public static string ScriptCommandScreenParamFadeInColorHelp {
             get {
-                return ResourceManager.GetString("ScriptCommandScreenFadeInParamWarning", resourceCulture);
+                return ResourceManager.GetString("ScriptCommandScreenParamFadeInColorHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Should be the same as the previous SCREEN_FADEOUT command. In SCRIPT00 (the first fade of the scene), this must be Both screens for the fade to work properly..
+        /// </summary>
+        public static string ScriptCommandScreenParamFadeInLocationHelp {
+            get {
+                return ResourceManager.GetString("ScriptCommandScreenParamFadeInLocationHelp", resourceCulture);
             }
         }
         
@@ -8117,6 +8201,24 @@ namespace SerialLoops.Assets {
         public static string ScriptCommandVerbHelpWAIT_CANCEL {
             get {
                 return ResourceManager.GetString("ScriptCommandVerbHelpWAIT_CANCEL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove Command or Section.
+        /// </summary>
+        public static string ScriptEditorRemoveCommandOrSectionTip {
+            get {
+                return ResourceManager.GetString("ScriptEditorRemoveCommandOrSectionTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SCRIPT00 must always be the first script section, so you can&apos;t move it..
+        /// </summary>
+        public static string ScriptEditorScript00NoMoveTip {
+            get {
+                return ResourceManager.GetString("ScriptEditorScript00NoMoveTip", resourceCulture);
             }
         }
         
@@ -9085,6 +9187,51 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Close All.
+        /// </summary>
+        public static string TabaloniaCloseAll {
+            get {
+                return ResourceManager.GetString("TabaloniaCloseAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close All Other Tabs.
+        /// </summary>
+        public static string TabaloniaCloseAllOtherTabs {
+            get {
+                return ResourceManager.GetString("TabaloniaCloseAllOtherTabs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close All to Left.
+        /// </summary>
+        public static string TabaloniaCloseAllToLeft {
+            get {
+                return ResourceManager.GetString("TabaloniaCloseAllToLeft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close All to Right.
+        /// </summary>
+        public static string TabaloniaCloseAllToRight {
+            get {
+                return ResourceManager.GetString("TabaloniaCloseAllToRight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close Item.
+        /// </summary>
+        public static string TabaloniaCloseItem {
+            get {
+                return ResourceManager.GetString("TabaloniaCloseItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Target Number.
         /// </summary>
         public static string Target_Number {
@@ -9641,6 +9788,16 @@ namespace SerialLoops.Assets {
         public static string Type {
             get {
                 return ResourceManager.GetString("Type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tip: Type to jump to an 
+        ///item in the dropdown!.
+        /// </summary>
+        public static string TypeToSearchHelp {
+            get {
+                return ResourceManager.GetString("TypeToSearchHelp", resourceCulture);
             }
         }
         
