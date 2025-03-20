@@ -22,7 +22,7 @@
 
         <StackPanel Orientation="Vertical" Spacing="5" HorizontalAlignment="Center" Margin="10 30">
             <StackPanel Orientation="Horizontal" Margin="5">
-                <Canvas Width="450" Height="400" ClipToBounds="True" Name="MainCanvas">
+                <Canvas Width="600" Height="550" ClipToBounds="True" Name="MainCanvas">
                     <paz:ZoomBorder Stretch="None" ZoomSpeed="1.2" ClipToBounds="True" Focusable="True"
                                     VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
                                     EnablePan="True" PanButton="Left" Name="Paz"
