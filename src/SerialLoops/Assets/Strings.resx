@@ -3609,4 +3609,25 @@ item in the dropdown!</value>
   <data name="ScriptCommandEditorSelectParam7" xml:space="preserve">
     <value>Conditional 4</value>
   </data>
+  <data name="BgmLoopStartHelp" xml:space="preserve">
+    <value>BGMs always start from the very beginning. This is the position it will loop back to after it reaches the end loop marker if looping is enabled.</value>
+  </data>
+  <data name="BgmLoopEndHelp" xml:space="preserve">
+    <value>Once this position is reached, the BGM will loop back to the start loop position if looping is enabled.</value>
+  </data>
+  <data name="TabaloniaCloseItem" xml:space="preserve">
+    <value>Close Item</value>
+  </data>
+  <data name="TabaloniaCloseAll" xml:space="preserve">
+    <value>Close All</value>
+  </data>
+  <data name="TabaloniaCloseAllOtherTabs" xml:space="preserve">
+    <value>Close All Other Tabs</value>
+  </data>
+  <data name="TabaloniaCloseAllToRight" xml:space="preserve">
+    <value>Close All to Right</value>
+  </data>
+  <data name="TabaloniaCloseAllToLeft" xml:space="preserve">
+    <value>Close All to Left</value>
+  </data>
 </root>

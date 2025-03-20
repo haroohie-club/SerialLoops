@@ -923,11 +923,29 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Once this position is reached, the BGM will loop back to the start loop position if looping is enabled..
+        /// </summary>
+        public static string BgmLoopEndHelp {
+            get {
+                return ResourceManager.GetString("BgmLoopEndHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to adjust loop data for background music. Please check the logs and file an issue if this reoccurs..
         /// </summary>
         public static string BgmLoopErrorMessage {
             get {
                 return ResourceManager.GetString("BgmLoopErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to BGMs always start from the very beginning. This is the position it will loop back to after it reaches the end loop marker if looping is enabled..
+        /// </summary>
+        public static string BgmLoopStartHelp {
+            get {
+                return ResourceManager.GetString("BgmLoopStartHelp", resourceCulture);
             }
         }
         
@@ -9108,6 +9126,51 @@ namespace SerialLoops.Assets {
         public static string SystemTextureReplaceWithPaletteHelp {
             get {
                 return ResourceManager.GetString("SystemTextureReplaceWithPaletteHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close All.
+        /// </summary>
+        public static string TabaloniaCloseAll {
+            get {
+                return ResourceManager.GetString("TabaloniaCloseAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close All Other Tabs.
+        /// </summary>
+        public static string TabaloniaCloseAllOtherTabs {
+            get {
+                return ResourceManager.GetString("TabaloniaCloseAllOtherTabs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close All to Left.
+        /// </summary>
+        public static string TabaloniaCloseAllToLeft {
+            get {
+                return ResourceManager.GetString("TabaloniaCloseAllToLeft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close All to Right.
+        /// </summary>
+        public static string TabaloniaCloseAllToRight {
+            get {
+                return ResourceManager.GetString("TabaloniaCloseAllToRight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close Item.
+        /// </summary>
+        public static string TabaloniaCloseItem {
+            get {
+                return ResourceManager.GetString("TabaloniaCloseItem", resourceCulture);
             }
         }
         
