@@ -3660,4 +3660,7 @@ item in the dropdown!</value>
   <data name="CharacterSpriteEditorSelectMouthFrames" xml:space="preserve">
     <value>Select mouth animation frames</value>
   </data>
+  <data name="ScriptCommandSetQuickSaveAdvancedText" xml:space="preserve">
+    <value>Set Quick Save Here (Advanced)</value>
+  </data>
 </root>

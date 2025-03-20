@@ -7661,6 +7661,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Set Quick Save Here (Advanced).
+        /// </summary>
+        public static string ScriptCommandSetQuickSaveAdvancedText {
+            get {
+                return ResourceManager.GetString("ScriptCommandSetQuickSaveAdvancedText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Set Quick Save Here.
         /// </summary>
         public static string ScriptCommandSetQuickSaveText {
@@ -9819,7 +9828,7 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tip: Type to jump to an 
+        ///   Looks up a localized string similar to Tip: Type to jump to an
         ///item in the dropdown!.
         /// </summary>
         public static string TypeToSearchHelp {
