@@ -3651,4 +3651,13 @@ item in the dropdown!</value>
   <data name="CharacterEditorNameplateReplaceErrorMessage" xml:space="preserve">
     <value>Failed to replace nameplate for character {0} with image {1}</value>
   </data>
+  <data name="CharacterSpriteEditorSelectBase" xml:space="preserve">
+    <value>Select sprite base</value>
+  </data>
+  <data name="CharacterSpriteEditorSelectEyeFrames" xml:space="preserve">
+    <value>Select eye animation frames</value>
+  </data>
+  <data name="CharacterSpriteEditorSelectMouthFrames" xml:space="preserve">
+    <value>Select mouth animation frames</value>
+  </data>
 </root>
