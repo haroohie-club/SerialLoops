@@ -4059,6 +4059,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The game runs at 60 frames per second, so 60 frames is equivalent to 1 second..
+        /// </summary>
+        public static string FramesToSecondsHelp {
+            get {
+                return ResourceManager.GetString("FramesToSecondsHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to French.
         /// </summary>
         public static string French {
@@ -7490,6 +7499,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If this is not set to the default value, the screen will not fully fade in/out. This should not be changed unless you are experimenting with a very specific effect..
+        /// </summary>
+        public static string ScriptCommandParameterFadePercHelp {
+            get {
+                return ResourceManager.GetString("ScriptCommandParameterFadePercHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to By default, tall CGs will display from the top. If this is checked, it will instead display from the bottom..
         /// </summary>
         public static string ScriptCommandParameterHelpDisplayFromBottom {
@@ -7504,15 +7522,6 @@ namespace SerialLoops.Assets {
         public static string ScriptCommandParameterHelpDontClearText {
             get {
                 return ResourceManager.GetString("ScriptCommandParameterHelpDontClearText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The the color type to use. Except for special transitions, it is generally recommended to use Custom Color as it provides the most flexibility..
-        /// </summary>
-        public static string ScriptCommandParameterHelpFadeColor {
-            get {
-                return ResourceManager.GetString("ScriptCommandParameterHelpFadeColor", resourceCulture);
             }
         }
         
@@ -7535,6 +7544,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The the color type to use. Except for special transitions, it is generally recommended to use Custom Color as it provides the most flexibility..
+        /// </summary>
+        public static string ScriptCommandParameterHelpFadeOutColor {
+            get {
+                return ResourceManager.GetString("ScriptCommandParameterHelpFadeOutColor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The speed at which the background scrolls; higher is faster. Default is 1..
         /// </summary>
         public static string ScriptCommandParameterHelpScrollSpeed {
@@ -7553,7 +7571,7 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Set to -1 to shake the screen until the SCREEN_SHAKE_STOP command is executed.
+        ///   Looks up a localized string similar to Set to -1 to shake the screen until the SCREEN_SHAKE_STOP command is executed. The game runs at 60 frames per second, so 60 frames is equivalent to 1 second..
         /// </summary>
         public static string ScriptCommandParameterHelpShakeDuration {
             get {
@@ -7580,11 +7598,20 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Should be the same as the previous SCREEN_FADEOUT command.
+        ///   Looks up a localized string similar to Should be the same as the previous SCREEN_FADEOUT command. In SCRIPT00 (the first fade of the scene), this must be Black for the fade to work properly..
         /// </summary>
-        public static string ScriptCommandScreenFadeInParamWarning {
+        public static string ScriptCommandScreenParamFadeInColorHelp {
             get {
-                return ResourceManager.GetString("ScriptCommandScreenFadeInParamWarning", resourceCulture);
+                return ResourceManager.GetString("ScriptCommandScreenParamFadeInColorHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Should be the same as the previous SCREEN_FADEOUT command. In SCRIPT00 (the first fade of the scene), this must be Both screens for the fade to work properly..
+        /// </summary>
+        public static string ScriptCommandScreenParamFadeInLocationHelp {
+            get {
+                return ResourceManager.GetString("ScriptCommandScreenParamFadeInLocationHelp", resourceCulture);
             }
         }
         
