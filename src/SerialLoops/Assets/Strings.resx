@@ -228,8 +228,11 @@
     <value>Apply Template</value>
     <comment>The template in question is a script template</comment>
   </data>
-  <data name="Arrow Keys - Move Image" xml:space="preserve">
-    <value>Arrow Keys - Move Image</value>
+  <data name="ImageCropResizeInstructions" xml:space="preserve">
+    <value>Arrow Keys - Move Image
++/- - Zoom In/Out
+
+Hold Shift to increase step</value>
   </data>
   <data name="Asahina companion selected description" xml:space="preserve">
     <value>Asahina companion selected description</value>
@@ -3566,10 +3569,10 @@ SELECT cannot be used in the initial, unnamed script block.</value>
   <data name="ScriptCommandParameterHelpDontClearText" xml:space="preserve">
     <value>If set, the text box will not be cleared and the next text will be displayed immediately. This allows for cool effects where you can change things like the text entrance effect, voice font, etc. in the same box.</value><comment>Help tooltip for the "Don't Clear Text" parameter of the DIALOGUE command</comment>
   </data>
-  <data name="ScriptCommandScreenFadeInParamWarning" xml:space="preserve">
-    <value>Should be the same as the previous SCREEN_FADEOUT command</value>
+  <data name="ScriptCommandScreenParamFadeInLocationHelp" xml:space="preserve">
+    <value>Should be the same as the previous SCREEN_FADEOUT command. In SCRIPT00 (the first fade of the scene), this must be Both screens for the fade to work properly.</value>
   </data>
-  <data name="ScriptCommandParameterHelpFadeColor" xml:space="preserve">
+  <data name="ScriptCommandParameterHelpFadeOutColor" xml:space="preserve">
     <value>The the color type to use. Except for special transitions, it is generally recommended to use Custom Color as it provides the most flexibility.</value>
   </data>
   <data name="ScriptCommandParameterHelpFadeCustomColor" xml:space="preserve">
@@ -3579,13 +3582,65 @@ SELECT cannot be used in the initial, unnamed script block.</value>
     <value>The screen to apply the fade to. Except for the initial fade in SCRIPT00, you must use Custom Color to fade both screens.</value>
   </data>
   <data name="ScriptCommandParameterHelpShakeDuration" xml:space="preserve">
-    <value>Set to -1 to shake the screen until the SCREEN_SHAKE_STOP command is executed</value>
+    <value>Set to -1 to shake the screen until the SCREEN_SHAKE_STOP command is executed. The game runs at 60 frames per second, so 60 frames is equivalent to 1 second.</value>
   </data>
-  <data name="ScriptCommandParameterHelpSelectDisplayFlag" xml:space="preserve">
-    <value>If this is -1, this option is always shown. If it is a value 0 or above, this option is shown until the flag of that value is set.</value>
+  <data name="ScriptCommandParameterHelpSelectConditional" xml:space="preserve">
+    <value>If this is left blank, the option is always shown. Otherwise, this is a conditional value that if evaluated to true will display the option and will hide it if false</value>
   </data>
   <data name="ScriptCommandParameterHelpSoundLoad" xml:space="preserve">
     <value>This must be checked when a sound is played initially. If a sound plays for a long time and you want to change its volume, uncheck this and set the crossfade time instead.</value>
+  </data>
+  <data name="TypeToSearchHelp" xml:space="preserve">
+    <value>Tip: Type to jump to an
+item in the dropdown!</value>
+  </data>
+  <data name="ScriptEditorRemoveCommandOrSectionTip" xml:space="preserve">
+    <value>Remove Command or Section</value>
+  </data>
+  <data name="ScriptEditorScript00NoMoveTip" xml:space="preserve">
+    <value>SCRIPT00 must always be the first script section, so you can't move it.</value>
+  </data>
+  <data name="ScriptCommandEditorSelectParam4" xml:space="preserve">
+    <value>Conditional 1</value>
+  </data>
+  <data name="ScriptCommandEditorSelectParam5" xml:space="preserve">
+    <value>Conditional 2</value>
+  </data>
+  <data name="ScriptCommandEditorSelectParam6" xml:space="preserve">
+    <value>Conditional 3</value>
+  </data>
+  <data name="ScriptCommandEditorSelectParam7" xml:space="preserve">
+    <value>Conditional 4</value>
+  </data>
+  <data name="BgmLoopStartHelp" xml:space="preserve">
+    <value>BGMs always start from the very beginning. This is the position it will loop back to after it reaches the end loop marker if looping is enabled.</value>
+  </data>
+  <data name="BgmLoopEndHelp" xml:space="preserve">
+    <value>Once this position is reached, the BGM will loop back to the start loop position if looping is enabled.</value>
+  </data>
+  <data name="TabaloniaCloseItem" xml:space="preserve">
+    <value>Close Item</value>
+  </data>
+  <data name="TabaloniaCloseAll" xml:space="preserve">
+    <value>Close All</value>
+  </data>
+  <data name="TabaloniaCloseAllOtherTabs" xml:space="preserve">
+    <value>Close All Other Tabs</value>
+  </data>
+  <data name="TabaloniaCloseAllToRight" xml:space="preserve">
+    <value>Close All to Right</value>
+  </data>
+  <data name="TabaloniaCloseAllToLeft" xml:space="preserve">
+    <value>Close All to Left</value>
+  </data>
+  <data name="ScriptCommandParameterFadePercHelp" xml:space="preserve">
+    <value>If this is not set to the default value, the screen will not fully fade in/out. This should not be changed unless you are experimenting with a very specific effect.</value>
+  </data>
+  <data name="ScriptCommandScreenParamFadeInColorHelp" xml:space="preserve">
+    <value>Should be the same as the previous SCREEN_FADEOUT command. In SCRIPT00 (the first fade of the scene), this must be Black for the fade to work properly.</value>
+  </data>
+  <data name="FramesToSecondsHelp" xml:space="preserve">
+    <value>The game runs at 60 frames per second, so 60 frames is equivalent to 1 second.</value>
   </data>
   <data name="CharacterEditorOverrideNameplateText" xml:space="preserve">
     <value>Override Nameplate</value>

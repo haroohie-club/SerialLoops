@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using Avalonia;
 using Avalonia.Data;
 using Avalonia.Data.Converters;
@@ -27,10 +26,8 @@ public static partial class SLConverters
     public static FuncValueConverter<DsScreen, bool> BottomScreenSelectableConverter => new((screen) => screen != DsScreen.BOTTOM);
     public static FuncValueConverter<DsScreen, bool> BothScreensSelectedConverter => new((screen) => screen == DsScreen.BOTH);
     public static FuncValueConverter<bool, IImmutableSolidColorBrush> BooleanBrushConverter => new((val) => val ? Brushes.Transparent : Brushes.LightGreen);
-    public static FuncValueConverter<string, string> CharacterNameCropConverter => new((name) => name[4..]);
-    public static FuncValueConverter<List<Speaker>, string> ListDisplayConverter => new((strs) => string.Join(", ", strs.Select(s => s.ToString())));
+    public static FuncValueConverter<string, string> CharacterNameCropConverter => new(name => name[4..]);
     public static FuncValueConverter<ScenarioCommand.ScenarioVerb, string> ScenarioVerbHelpConverter => new(Shared.GetScenarioVerbHelp);
-    public static FuncValueConverter<EventFile.CommandVerb, string> ScriptVerbHelpConverter => new(Shared.GetScriptVerbHelp);
     public static FuncValueConverter<string, string> ScriptVerbStringHelpConverter => new(Shared.GetScriptVerbHelp);
 }
 
@@ -146,27 +143,6 @@ public class IntAdditionConverter : IValueConverter
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
     {
         return (int)value - int.Parse((string)parameter);
-    }
-}
-
-public class HeightConverter : IValueConverter
-{
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-        if (double.IsNaN((double)value))
-        {
-            return double.PositiveInfinity;
-        }
-        return (double)value / 2 - 125;
-    }
-
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-        if (double.IsNaN((double)value))
-        {
-            return double.PositiveInfinity;
-        }
-        return ((double)value + 125) * 2;
     }
 }
 

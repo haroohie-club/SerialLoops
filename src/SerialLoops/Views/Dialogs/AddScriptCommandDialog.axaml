@@ -7,7 +7,7 @@
         xmlns:controls="using:SerialLoops.Controls"
         xmlns:utility="using:SerialLoops.Utility"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        SizeToContent="Width" Height="150"
+        SizeToContent="Width" Height="200" CanResize="False"
         TransparencyLevelHint="AcrylicBlur"
         Background="{DynamicResource FallbackBackgroundColor}"
         ExtendClientAreaToDecorationsHint="True"
@@ -35,6 +35,8 @@
                 <Button Content="{x:Static assets:Strings.Create}" Command="{Binding CreateCommand}"
                         CommandParameter="{Binding #AddCommandDialog}" IsDefault="True"/>
             </StackPanel>
+            <TextBlock Text="{x:Static assets:Strings.TypeToSearchHelp}" VerticalAlignment="Center" TextAlignment="Center"
+                       TextWrapping="Wrap"/>
         </StackPanel>
     </Panel>
 </Window>
