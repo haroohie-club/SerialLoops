@@ -4696,6 +4696,42 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Center.
+        /// </summary>
+        public static string ItemLocationCenter {
+            get {
+                return ResourceManager.GetString("ItemLocationCenter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exit.
+        /// </summary>
+        public static string ItemLocationExit {
+            get {
+                return ResourceManager.GetString("ItemLocationExit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Left.
+        /// </summary>
+        public static string ItemLocationLeft {
+            get {
+                return ResourceManager.GetString("ItemLocationLeft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Right.
+        /// </summary>
+        public static string ItemLocationRight {
+            get {
+                return ResourceManager.GetString("ItemLocationRight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Items.
         /// </summary>
         public static string Items {
@@ -9792,7 +9828,7 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tip: Type to jump to an 
+        ///   Looks up a localized string similar to Tip: Type to jump to an
         ///item in the dropdown!.
         /// </summary>
         public static string TypeToSearchHelp {
