@@ -3651,4 +3651,10 @@ item in the dropdown!</value>
   <data name="CharacterSpriteEditorSelectMouthFrames" xml:space="preserve">
     <value>Select mouth animation frames</value>
   </data>
+  <data name="ChessPuzzleEditorRemoveMoveLimitText" xml:space="preserve">
+    <value>Remove Limit</value>
+  </data>
+  <data name="ChessPuzzleEditorRemoveLimitHelp" xml:space="preserve">
+    <value>The game's move counter only has sprites going up to five; however, if you're fine with glitched numbers and want to play a longer game of chess, you cancheck this box and have fun.</value>
+  </data>
 </root>
