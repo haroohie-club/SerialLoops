@@ -257,7 +257,7 @@ public static partial class Extensions
 
     public static void ApplyScriptPreview(this QuickSaveSlotData quickSave, ScriptPreview scriptPreview, ScriptItem script, int commandIndex, Project project, ILogger log)
     {
-        quickSave.KbgIndex = (short)(scriptPreview.Kbg?.Id ?? 0);
+        quickSave.KbgIndex = (short)(scriptPreview.Kbg?.Id ?? ((BackgroundItem)project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).BackgroundType == BgType.KINETIC_SCREEN)).Id);
         quickSave.BgmIndex = (short)(scriptPreview.Bgm?.Index ?? -1);
         quickSave.Place = (short)(scriptPreview.Place?.Index ?? 0);
         if (scriptPreview.Background.BackgroundType == BgType.TEX_BG)

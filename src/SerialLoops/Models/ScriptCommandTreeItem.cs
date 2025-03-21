@@ -85,7 +85,6 @@ public class ScriptCommandTreeItem : ITreeItem, IViewFor<ScriptItemCommand>
             List<ItemDescription> references = script.GetReferencesTo(ViewModel.Project);
             ScenarioItem scenarioRef = (ScenarioItem)references.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Scenario);
             GroupSelectionItem groupSelectionRef = (GroupSelectionItem)references.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Group_Selection);
-            TopicItem topicRef = (TopicItem)references.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Topic);
 
             QuickSaveSlotData quickSave = ViewModel.Project.ProjectSaveFile!.Save.QuickSaveSlot;
             quickSave.SaveTime = DateTimeOffset.Now;
@@ -100,14 +99,9 @@ public class ScriptCommandTreeItem : ITreeItem, IViewFor<ScriptItemCommand>
                 quickSave.ScenarioPosition = (short)(ViewModel.Project.Scenario.Commands.FindIndex(c =>
                     c.Verb == ScenarioCommand.ScenarioVerb.ROUTE_SELECT && c.Parameter == groupSelectionRef.Index) + 1);
             }
-            else if (topicRef is not null && ViewModel.CurrentPreview.Kbg is null)
-            {
-                log.LogError(Strings.CantLoadToTopicWarning);
-                return false;
-            }
             else
             {
-                log.LogWarning($"Unable to find references to current script '{ViewModel.Script.Name}' (0x{ViewModel.Script.Index:X3}' within other items. Could be dangerous!");
+                log.LogWarning($"Unable to find references to current script '{ViewModel.Script.Name}' (0x{ViewModel.Script.Index:X3}' within other scenario. Could be dangerous!");
                 quickSave.ScenarioPosition = 1;
             }
             quickSave.EpisodeNumber = 1;

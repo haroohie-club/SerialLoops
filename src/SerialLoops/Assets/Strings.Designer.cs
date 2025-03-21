@@ -1211,15 +1211,6 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The current script you&apos;re loading into looks like a topic file. Have you considered loading it via the Extra mode&apos;s topic viewer instead? This is usually safer..
-        /// </summary>
-        public static string CantLoadToTopicWarning {
-            get {
-                return ResourceManager.GetString("CantLoadToTopicWarning", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Center.
         /// </summary>
         public static string Center {
