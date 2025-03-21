@@ -30,7 +30,7 @@ public class TopicEditorViewModel : EditorViewModel
         {
             this.RaiseAndSetIfChanged(ref _title, value.GetOriginalString(Window.OpenProject));
             Topic.TopicEntry.Title = _title;
-            Topic.DisplayName = $"{Topic.TopicEntry.Id} - {_title.GetSubstitutedString(Window.OpenProject)}";
+            Topic.DisplayName = $"{Topic.TopicEntry.Id - 1} - {_title.GetSubstitutedString(Window.OpenProject)}";
             Topic.UnsavedChanges = true;
         }
     }

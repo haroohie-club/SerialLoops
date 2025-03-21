@@ -12,7 +12,7 @@ public class TopicItem : Item
 
     public TopicItem(Topic topic, Project project) : base($"{topic.Id}", ItemType.Topic)
     {
-        DisplayName = $"{topic.Id} - {topic.Title.GetSubstitutedString(project)}";
+        DisplayName = $"{topic.Id - 1} - {topic.Title.GetSubstitutedString(project)}";
         CanRename = false;
         TopicEntry = topic;
     }

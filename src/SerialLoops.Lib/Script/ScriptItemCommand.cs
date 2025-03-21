@@ -25,6 +25,7 @@ public class ScriptItemCommand : ReactiveObject
     public EventFile Script { get; set; }
     public int Index { get; set; }
     public Project Project { get; set; }
+    public ScriptPreview CurrentPreview { get; set; }
 
     public static ScriptItemCommand FromInvocation(ScriptCommandInvocation invocation, ScriptSection section, int index, EventFile eventFile, Project project, Func<string, string> localize, ILogger log)
     {
