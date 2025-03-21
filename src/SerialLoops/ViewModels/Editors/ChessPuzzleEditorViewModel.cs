@@ -23,6 +23,19 @@ public class ChessPuzzleEditorViewModel : EditorViewModel
     [Reactive]
     public ObservableCollection<ChessPieceOnBoard> Pieces { get; private set; }
 
+    private bool _removeMovesLimit = false;
+
+    public bool RemoveMovesLimit
+    {
+        get => _removeMovesLimit;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _removeMovesLimit, value);
+            NumMovesLimit = value ? 10000 : 5;
+        }
+    }
+    [Reactive]
+    public int NumMovesLimit { get; set; } = 5;
     private int _numMoves;
     public int NumMoves
     {
