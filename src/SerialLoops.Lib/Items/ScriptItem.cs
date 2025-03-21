@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
+using HaruhiChokuretsuLib.Font;
 using HaruhiChokuretsuLib.Util;
 using QuikGraph;
 using SerialLoops.Lib.Script;
@@ -1179,7 +1180,7 @@ public class ScriptItem : Item
                 SKCanvas choiceCanvas = new(choiceGraphic);
                 choiceCanvas.DrawRect(1, 1, 216, 16, new() { Color = new(146, 146, 146) });
                 choiceCanvas.DrawRect(2, 2, 214, 14, new() { Color = new(69, 69, 69) });
-                int choiceWidth = project.LangCode.Equals("ja") ? choice.Length * 14 : choice.Sum(c => project.FontReplacement.ReverseLookup(c).Offset);
+                int choiceWidth = choice.CalculateHaroohieTextWidth(project);
                 choiceCanvas.DrawHaroohieText(choice, project.DialogueColorFilters[0], project, (218 - choiceWidth) / 2, 2);
                 choiceCanvas.Flush();
                 choiceGraphics.Add(choiceGraphic);

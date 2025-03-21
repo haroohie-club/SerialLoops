@@ -354,6 +354,36 @@ public static partial class Extensions
         };
     }
 
+    public static int CalculateHaroohieTextWidth(this string str, Project project)
+    {
+        if (project.LangCode.Equals("ja"))
+        {
+            return str.Length * 14;
+        }
+        int strWidth = 0;
+        for (int i = 0; i < str.Length; i++)
+        {
+            project.FontReplacement.TryGetValue(str[i], out FontReplacement fr);
+            if ((fr?.CauseOffsetAdjust ?? false) && i < str.Length - 1)
+            {
+                project.FontReplacement.TryGetValue(str[i + 1], out FontReplacement nextFr);
+                if (nextFr?.TakeOffsetAdjust ?? false)
+                {
+                    strWidth += fr.Offset - 1;
+                }
+                else
+                {
+                    strWidth += fr.Offset;
+                }
+            }
+            else
+            {
+                strWidth += fr?.Offset ?? 15;
+            }
+        }
+        return strWidth;
+    }
+
     public static void DrawHaroohieText(this SKCanvas canvas, string text, SKPaint color, Project project, int x = 10,
         int y = 352, bool formatting = true)
     {
@@ -461,7 +491,22 @@ public static partial class Extensions
                 FontReplacement replacement = project.FontReplacement.ReverseLookup(text[i]);
                 if (replacement is not null && project.LangCode != "ja")
                 {
-                    currentX += replacement.Offset;
+                    if (replacement.CauseOffsetAdjust && i < text.Length - 1)
+                    {
+                        project.FontReplacement.TryGetValue(text[i + 1], out FontReplacement nextFr);
+                        if (nextFr?.TakeOffsetAdjust ?? false)
+                        {
+                            currentX += replacement.Offset - 1;
+                        }
+                        else
+                        {
+                            currentX += replacement.Offset;
+                        }
+                    }
+                    else
+                    {
+                        currentX += replacement.Offset;
+                    }
                 }
                 else
                 {
