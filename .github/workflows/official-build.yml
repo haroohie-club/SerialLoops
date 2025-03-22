@@ -380,7 +380,7 @@ jobs:
             Simply download the Windows installer application and run it. It will walk you through installation, including installing the necessary dependencies. Specifically, it will run the **devkitPro** installer, the **Docker Desktop** installer, and the **Windows Subsystem for Linux (WSL)** installer.
             * For the devkitPro installer, you can select "Remove Downloaded Files" and uncheck all components except the "NDS Development". It will pop several terminal windows as it installs the necessary components; this is normal, so don't worry!
             * The WSL installer will run automatically. It may pop a window afterwards with more information about WSL; you can close this without reading it as it is not relevant for the project.
-            * The Docker Desktop installer will take a little while to run and afterwards ask you to log out to finish the installation process. You can close the Serial Loops installer once it is finished and then log out and log back in.
+            * The Docker Desktop installer will take a little while to run and afterwards ask you to restart to finish the installation process. You can close the Serial Loops installer once it is finished and then restart your system.
 
             Alternatively, you can download the zip file for a portable application; however, dependencies are not included with this option.
 

@@ -1281,10 +1281,9 @@ public partial class MainWindowViewModel : ViewModelBase
                             {
                                 emulatorExecutable = PatchableConstants.FlatpakProcess;
                             }
-                            if (emulatorExecutable.EndsWith(".app"))
+                            else if (emulatorExecutable.EndsWith(".app"))
                             {
-                                emulatorExecutable = Path.Combine(CurrentConfig.EmulatorPath, "Contents", "MacOS",
-                                    Path.GetFileNameWithoutExtension(CurrentConfig.EmulatorPath));
+                                emulatorExecutable = "open";
                             }
 
                             string[] emulatorArgs = [Path.Combine(OpenProject.MainDirectory, $"{OpenProject.Name}.nds")];
@@ -1293,6 +1292,14 @@ public partial class MainWindowViewModel : ViewModelBase
                                 emulatorArgs =
                                 [
                                     ..PatchableConstants.FlatpakProcessBaseArgs, "run", CurrentConfig.EmulatorFlatpak,
+                                    Path.Combine(OpenProject.MainDirectory, $"{OpenProject.Name}.nds"),
+                                ];
+                            }
+                            else if (emulatorExecutable == "open")
+                            {
+                                emulatorArgs =
+                                [
+                                    CurrentConfig.EmulatorPath, "--args",
                                     Path.Combine(OpenProject.MainDirectory, $"{OpenProject.Name}.nds"),
                                 ];
                             }
