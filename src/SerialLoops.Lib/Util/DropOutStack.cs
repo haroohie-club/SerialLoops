@@ -10,6 +10,10 @@ public class DropOutStack<T>(int capacity) where T : class
 
     public void Push(T item)
     {
+        if (_stack.Count == Capacity)
+        {
+            _stack.RemoveAt(0);
+        }
         _stack.Add(item);
     }
 
