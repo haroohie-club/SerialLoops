@@ -35,13 +35,26 @@
 
         <StackPanel Grid.Column="0" Grid.Row="0" Margin="5" Spacing="5" HorizontalAlignment="Left" Orientation="Horizontal">
             <Button Command="{Binding AddScriptCommandCommand}" HotKey="{Binding AddCommandHotKey}"
-                    ToolTip.Tip="{x:Static assets:Strings.Add_Command}">
+                    ToolTip.Tip="{x:Static assets:Strings.Add_Command}" ToolTip.ShowOnDisabled="True">
+                <Button.IsEnabled>
+                    <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                        <Binding Path="SelectedCommand" Converter="{x:Static ObjectConverters.IsNotNull}"/>
+                        <Binding Path="SelectedSection" Converter="{x:Static ObjectConverters.IsNotNull}"/>
+                    </MultiBinding>
+                </Button.IsEnabled>
                 <Svg Path="avares://SerialLoops/Assets/Icons/Add.svg" Width="22"/>
             </Button>
             <Button Command="{Binding AddScriptSectionCommand}" ToolTip.Tip="{x:Static assets:Strings.Add_Section}">
                 <Svg Path="avares://SerialLoops/Assets/Icons/Add_Section.svg" Width="22"/>
             </Button>
-            <Button Command="{Binding DeleteScriptCommandOrSectionCommand}" ToolTip.Tip="{x:Static assets:Strings.ScriptEditorRemoveCommandOrSectionTip}">
+            <Button Command="{Binding DeleteScriptCommandOrSectionCommand}" ToolTip.ShowOnDisabled="True"
+                    ToolTip.Tip="{x:Static assets:Strings.ScriptEditorRemoveCommandOrSectionTip}">
+                <Button.IsEnabled>
+                    <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                        <Binding Path="SelectedCommand" Converter="{x:Static ObjectConverters.IsNotNull}"/>
+                        <Binding Path="SelectedSection" Converter="{x:Static ObjectConverters.IsNotNull}"/>
+                    </MultiBinding>
+                </Button.IsEnabled>
                 <Svg Path="avares://SerialLoops/Assets/Icons/Remove.svg" Width="22"/>
             </Button>
             <Button Command="{Binding ClearScriptCommand}" ToolTip.Tip="{x:Static assets:Strings.Clear_Script}">
