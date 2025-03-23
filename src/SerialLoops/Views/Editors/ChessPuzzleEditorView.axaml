@@ -61,10 +61,16 @@
                 </Style>
             </ItemsControl.Styles>
         </ItemsControl>
-        <Grid Grid.Column="1" Grid.Row="0" ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto">
+        <Grid Grid.Column="1" Grid.Row="0" ColumnDefinitions="Auto,Auto,Auto" RowDefinitions="Auto,Auto,Auto">
             <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Number_of_Moves}"/>
             <NumericUpDown Grid.Column="1" Grid.Row="0" Margin="10,0,0,0" Value="{Binding NumMoves}"
-                           Minimum="0" Maximum="5" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
+                           Minimum="0" Maximum="{Binding NumMovesLimit}" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
+            <StackPanel Grid.Column="2" Grid.Row="0" Orientation="Horizontal" Spacing="3" Margin="5 0 0 0">
+                <CheckBox VerticalAlignment="Center" Content="{x:Static assets:Strings.ChessPuzzleEditorRemoveMoveLimitText}"
+                          IsChecked="{Binding RemoveMovesLimit}"/>
+                <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" VerticalAlignment="Center"
+                     ToolTip.Tip="{x:Static assets:Strings.ChessPuzzleEditorRemoveLimitHelp}"/>
+            </StackPanel>
 
             <TextBlock Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Text="{x:Static assets:Strings.Time_Limit}"/>
             <NumericUpDown Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" Value="{Binding TimeLimit}"

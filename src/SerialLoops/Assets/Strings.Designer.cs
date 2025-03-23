@@ -1445,6 +1445,24 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The game&apos;s move counter only has sprites going up to five; however, if you&apos;re fine with glitched numbers and want to play a longer game of chess, you cancheck this box and have fun..
+        /// </summary>
+        public static string ChessPuzzleEditorRemoveLimitHelp {
+            get {
+                return ResourceManager.GetString("ChessPuzzleEditorRemoveLimitHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove Limit.
+        /// </summary>
+        public static string ChessPuzzleEditorRemoveMoveLimitText {
+            get {
+                return ResourceManager.GetString("ChessPuzzleEditorRemoveMoveLimitText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Chibi.
         /// </summary>
         public static string Chibi {
@@ -9819,7 +9837,7 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tip: Type to jump to an 
+        ///   Looks up a localized string similar to Tip: Type to jump to an
         ///item in the dropdown!.
         /// </summary>
         public static string TypeToSearchHelp {
