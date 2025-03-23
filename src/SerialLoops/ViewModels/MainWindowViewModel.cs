@@ -1362,6 +1362,7 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             insertionPoint--;
         }
+        NativeMenu fileMenu = ((NativeMenuItem)menu.Items.First(m => m is NativeMenuItem nm && nm.Header == Strings._File)).Menu;
 
         // FILE (additions and removals)
         NativeMenuItem projectRenameItem = (NativeMenuItem)WindowMenu[MenuHeader.FILE].Menu!.Items
@@ -1372,23 +1373,28 @@ public partial class MainWindowViewModel : ViewModelBase
         NativeMenuItem projectDeleteItem = (NativeMenuItem)WindowMenu[MenuHeader.FILE].Menu.Items
             .First(m => m is NativeMenuItem nm && nm.Header?.Equals(Strings.ProjectDeleteText) == true);
         WindowMenu[MenuHeader.FILE].Menu.Items.Remove(projectRenameItem);
+        fileMenu!.Items.Remove(projectRenameItem);
         WindowMenu[MenuHeader.FILE].Menu.Items.Remove(projectDuplicateItem);
+        fileMenu.Items.Remove(projectDuplicateItem);
         WindowMenu[MenuHeader.FILE].Menu.Items.Remove(projectDeleteItem);
+        fileMenu.Items.Remove(projectDeleteItem);
 
-        WindowMenu[MenuHeader.FILE].Menu.Items.Insert(projectAreaIndex, new NativeMenuItem
+        NativeMenuItem projectSaveItem = new()
         {
             Header = Strings.Save_Project,
             Command = SaveProjectCommand,
             Icon = ControlGenerator.GetIcon("Save", Log),
             Gesture = SaveHotKey,
-        });
-        WindowMenu[MenuHeader.FILE].Menu.Items.Insert(projectAreaIndex + 1, new NativeMenuItem
+        };
+        NativeMenuItem projectCloseItem = new()
         {
             Header = Strings.Close_Project,
             Command = CloseProjectCommand,
             Icon = ControlGenerator.GetIcon("Close", Log),
             Gesture = CloseProjectKey,
-        });
+        };
+        WindowMenu[MenuHeader.FILE].Menu.Items.Insert(projectAreaIndex, projectSaveItem);
+        WindowMenu[MenuHeader.FILE].Menu.Items.Insert(projectAreaIndex + 1, projectCloseItem);
 
         // PROJECT
         WindowMenu.Add(MenuHeader.PROJECT, new(Strings._Project));
