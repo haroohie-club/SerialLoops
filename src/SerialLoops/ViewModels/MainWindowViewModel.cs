@@ -1311,6 +1311,10 @@ public partial class MainWindowViewModel : ViewModelBase
                             {
                                 emulatorExecutable = PatchableConstants.FlatpakProcess;
                             }
+                            else if (!string.IsNullOrEmpty(PatchableConstants.FlatpakRunProcess))
+                            {
+                                emulatorExecutable = PatchableConstants.FlatpakRunProcess;
+                            }
                             else if (emulatorExecutable.EndsWith(".app"))
                             {
                                 emulatorExecutable = "open";
@@ -1322,6 +1326,14 @@ public partial class MainWindowViewModel : ViewModelBase
                                 emulatorArgs =
                                 [
                                     ..PatchableConstants.FlatpakProcessBaseArgs, "run", CurrentConfig.EmulatorFlatpak,
+                                    Path.Combine(OpenProject.MainDirectory, $"{OpenProject.Name}.nds"),
+                                ];
+                            }
+                            else if (emulatorExecutable.Equals(PatchableConstants.FlatpakRunProcess))
+                            {
+                                emulatorArgs =
+                                [
+                                    ..PatchableConstants.FlatpakRunProcessBaseArgs, CurrentConfig.EmulatorPath,
                                     Path.Combine(OpenProject.MainDirectory, $"{OpenProject.Name}.nds"),
                                 ];
                             }
