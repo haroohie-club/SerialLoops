@@ -134,7 +134,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         SaveHotKey = GuiExtensions.CreatePlatformAgnosticCtrlGesture(Key.S);
         SearchHotKey = GuiExtensions.CreatePlatformAgnosticCtrlGesture(Key.F);
-        CloseProjectKey = GuiExtensions.CreatePlatformAgnosticCtrlGesture(Key.W);
+        CloseProjectKey = GuiExtensions.CreatePlatformAgnosticCtrlGesture(Key.Q);
 
         NewProjectCommand = ReactiveCommand.CreateFromTask(NewProjectCommand_Executed);
         OpenProjectCommand = ReactiveCommand.CreateFromTask(OpenProjectCommand_Executed);
