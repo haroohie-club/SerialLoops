@@ -3669,4 +3669,10 @@ item in the dropdown!</value>
   <data name="ChessPuzzleEditorRemoveLimitHelp" xml:space="preserve">
     <value>The game's move counter only has sprites going up to five; however, if you're fine with glitched numbers and want to play a longer game of chess, you cancheck this box and have fun.</value>
   </data>
+  <data name="ScriptEditorDialogueSpriteEntranceHelp" xml:space="preserve">
+    <value>The sprite entrance transition is necessary for making the sprite appear on the screen when first entering a scene. It plays before the dialogue is shown.</value>
+  </data>
+  <data name="ScriptEditorDialogueSpriteExitHelp" xml:space="preserve">
+    <value>The sprite exit transition is necessary for making sprites leave or move around on the screen. It plays after the dialogue has been advanced.</value>
+  </data>
 </root>

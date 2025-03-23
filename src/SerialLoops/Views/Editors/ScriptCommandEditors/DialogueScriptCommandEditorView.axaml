@@ -23,11 +23,19 @@
             <controls:ItemLink Tabs="{Binding Tabs}" Item="{Binding CharacterSprite}"/>
         </StackPanel>
 
-        <TextBlock Grid.Column="0" Grid.Row="2" Text="{x:Static assets:Strings.Sprite_Entrance_Transition}" VerticalAlignment="Center"/>
+        <StackPanel Grid.Column="0" Grid.Row="2" Orientation="Horizontal" Spacing="3">
+            <TextBlock Text="{x:Static assets:Strings.Sprite_Entrance_Transition}" VerticalAlignment="Center"/>
+            <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" VerticalAlignment="Center"
+                 ToolTip.Tip="{x:Static assets:Strings.ScriptEditorDialogueSpriteEntranceHelp}"/>
+        </StackPanel>
         <ComboBox Grid.Column="1" Grid.Row="2" ItemsSource="{Binding SpriteEntranceTransitions}" Margin="10,5,0,0"
                   SelectedItem="{Binding SpriteEntranceTransition}"/>
 
-        <TextBlock Grid.Column="0" Grid.Row="3" Text="{x:Static assets:Strings.Sprite_Exit_Move_Transition}" VerticalAlignment="Center"/>
+        <StackPanel Grid.Column="0" Grid.Row="3" Orientation="Horizontal" Spacing="3">
+            <TextBlock Text="{x:Static assets:Strings.Sprite_Exit_Move_Transition}" VerticalAlignment="Center"/>
+            <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" VerticalAlignment="Center"
+                 ToolTip.Tip="{x:Static assets:Strings.ScriptEditorDialogueSpriteExitHelp}"/>
+        </StackPanel>
         <ComboBox Grid.Column="1" Grid.Row="3" ItemsSource="{Binding SpriteExitTransitions}" Margin="10,5,0,0"
                   SelectedItem="{Binding SpriteExitTransition}"/>
 
@@ -59,7 +67,7 @@
         <NumericUpDown Grid.Column="1" Grid.Row="9" Minimum="{Binding MinShort}" Maximum="{Binding MaxShort}" Value="{Binding SpriteLayer}"
                        Margin="10,5,0,0" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
 
-        <StackPanel Grid.Column="0" Grid.Row="10">
+        <StackPanel Grid.Column="0" Grid.Row="10" Orientation="Horizontal" Spacing="3">
             <TextBlock Text="{x:Static assets:Strings.Don_t_Clear_Text}" VerticalAlignment="Center"/>
             <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" VerticalAlignment="Center"
                  ToolTip.Tip="{x:Static assets:Strings.ScriptCommandParameterHelpDontClearText}"/>
