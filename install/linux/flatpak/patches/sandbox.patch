@@ -1,15 +1,20 @@
 diff --git a/src/SerialLoops.Lib/PatchableConstants.cs b/src/SerialLoops.Lib/PatchableConstants.cs
-index 4bbfb0c..5eb628b 100644
+index 3fb563d..946f308 100644
 --- a/src/SerialLoops.Lib/PatchableConstants.cs
 +++ b/src/SerialLoops.Lib/PatchableConstants.cs
-@@ -6,7 +6,7 @@ namespace SerialLoops.Lib;
+@@ -6,9 +6,9 @@ namespace SerialLoops.Lib;
  // go more smoothly
  public static class PatchableConstants
  {
 -    public static string UnixDefaultDevkitArmDir => Path.Combine("/opt", "devkitpro", "devkitARM");
 -    public const string FlatpakProcess = "flatpak";
 -    public static string[] FlatpakProcessBaseArgs => [];
+-    public const string FlatpakRunProcess = "";
+-    public static string[] FlatpakRunProcessBaseArgs => [];
 +    public static string UnixDefaultDevkitArmDir => Path.Combine("/app", "opt", "devkitpro", "devkitARM");
 +    public const string FlatpakProcess = "flatpak-spawn";
 +    public static string[] FlatpakProcessBaseArgs => ["--host", "flatpak"];
++    public const string FlatpakRunProcess = "flatpak-spawn";
++    public static string[] FlatpakRunProcessBaseArgs => ["--host"];
+ "flatpak"];
  }
