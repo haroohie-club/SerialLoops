@@ -9259,6 +9259,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This system texture uses the common extra mode palette, so palette replacement has been disabled..
+        /// </summary>
+        public static string SystemTexturePaletteReplacementDisabledExtra {
+            get {
+                return ResourceManager.GetString("SystemTexturePaletteReplacementDisabledExtra", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Click this button to replace the texture WITHOUT changing the existing palette. This means that you will want to design the replacement to have the colors displayed below for maximum fidelity. We recommend using this option only if palette replacement is disabled..
         /// </summary>
         public static string SystemTextureReplaceHelp {

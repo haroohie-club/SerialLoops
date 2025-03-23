@@ -31,6 +31,7 @@
                 </Button>
             </StackPanel>
             <TextBlock IsVisible="{Binding UsesMainPalette}" Text="{x:Static assets:Strings.SystemTexturePaletteReplacementDisabled}"/>
+            <TextBlock IsVisible="{Binding UsesExtraPalette}" Text="{x:Static assets:Strings.SystemTexturePaletteReplacementDisabledExtra}"/>
             <TextBlock IsVisible="{Binding UsesChessPalette}" Text="{x:Static assets:Strings.SystemTexturePaletteReplacementDisabledChess}"/>
             <HeaderedContentControl Header="{x:Static assets:Strings.Palette}" Width="264" HorizontalAlignment="Left">
                 <Image Source="{Binding PaletteBitmap, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
