@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Input;
+using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
 using SerialLoops.Assets;
@@ -25,6 +26,17 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
     public EditorTabsPanelViewModel Tabs { get; set; }
     private Func<ItemDescription, bool> _specialPredicate;
     private readonly Timer _dialogueUpdateTimer;
+    private List<ScriptItemCommand> _scriptCommands;
+
+    private static SpriteExitScriptParameter.SpriteExitTransition[] s_spriteExits =
+    [
+        SpriteExitScriptParameter.SpriteExitTransition.SLIDE_FROM_CENTER_TO_RIGHT_FADE_OUT,
+        SpriteExitScriptParameter.SpriteExitTransition.SLIDE_FROM_CENTER_TO_LEFT_FADE_OUT,
+        SpriteExitScriptParameter.SpriteExitTransition.SLIDE_LEFT_TO_RIGHT_FADE_OUT,
+        SpriteExitScriptParameter.SpriteExitTransition.SLIDE_LEFT_TO_LEFT_FADE_OUT,
+        SpriteExitScriptParameter.SpriteExitTransition.FADE_OUT_CENTER,
+        SpriteExitScriptParameter.SpriteExitTransition.FADE_OUT_LEFT,
+    ];
 
     public DialogueScriptCommandEditorViewModel(ScriptItemCommand command, ScriptEditorViewModel scriptEditor, ILogger log, MainWindowViewModel window) : base(command, scriptEditor, log)
     {
@@ -78,6 +90,18 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
             ((DialogueScriptParameter)Command.Parameters[0]).Line.Speaker = _speaker.MessageInfo.Character;
             Script.Event.DialogueSection.Objects[Command.Section.Objects[Command.Index].Parameters[0]].Speaker = _speaker.MessageInfo.Character;
             _specialPredicate = i => i.Name != "NONE" && ((CharacterSpriteItem)i).Sprite.Character == _speaker.MessageInfo.Character;
+            if (_characterSprite is null)
+            {
+                _scriptCommands ??= Command.WalkCommandGraph(ScriptEditor.Commands, Script.Graph);
+                ScriptItemCommand lastDialogueCommand = _scriptCommands[..^1].LastOrDefault(c => c.Verb == EventFile.CommandVerb.DIALOGUE
+                    && ((DialogueScriptParameter)c.Parameters[0]).Line?.Speaker == _speaker.MessageInfo.Character);
+                if (((SpriteScriptParameter)lastDialogueCommand?.Parameters[1])?.Sprite is not null &&
+                    !s_spriteExits.Contains(((SpriteExitScriptParameter)lastDialogueCommand.Parameters[3]).ExitTransition))
+                {
+                    CharacterSprite = ((SpriteScriptParameter)lastDialogueCommand.Parameters[1]).Sprite;
+                    return; // return here to avoid updating the script preview twice
+                }
+            }
             Script.UnsavedChanges = true;
             ScriptEditor.UpdatePreview();
         }

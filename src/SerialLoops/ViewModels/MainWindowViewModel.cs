@@ -370,10 +370,10 @@ public partial class MainWindowViewModel : ViewModelBase
                         SaveProject_Executed();
                         if (!skipBuild)
                         {
-                            //BuildIterativeProject_Executed(sender, e); // make sure we lock in the changes
+                            BuildIterativeCommand.Execute(null); // make sure we lock in the changes
                         }
                         break;
-                    default:
+                    case ButtonResult.Cancel:
                         cancel = true;
                         if (e is not null)
                         {

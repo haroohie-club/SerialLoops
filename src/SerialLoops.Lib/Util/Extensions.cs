@@ -13,6 +13,7 @@ using HaruhiChokuretsuLib.Font;
 using HaruhiChokuretsuLib.Util;
 using NAudio.Wave;
 using SerialLoops.Lib.Items;
+using SerialLoops.Lib.Script;
 using SerialLoops.Lib.Script.Parameters;
 using SkiaSharp;
 using SoftCircuits.Collections;
@@ -217,6 +218,12 @@ public static partial class Extensions
 
             case CommandVerb.SCREEN_FADEOUT:
                 invocation.Parameters[1] = 100;
+                break;
+
+            case CommandVerb.SCREEN_FLASH:
+                invocation.Parameters[0] = 5;
+                invocation.Parameters[1] = 30;
+                invocation.Parameters[2] = 5;
                 break;
 
             case CommandVerb.SND_PLAY:
