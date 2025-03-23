@@ -15,18 +15,18 @@
                    HorizontalAlignment="Left"/>
             <StackPanel Orientation="Horizontal" Spacing="3">
                 <Button Content="{x:Static assets:Strings.Export}" Command="{Binding ExportCommand}"/>
-                <Button Command="{Binding ReplaceCommand}">
-                    <StackPanel Orientation="Horizontal" Spacing="3">
-                        <TextBlock Text="{x:Static assets:Strings.Replace}" VerticalAlignment="Center"/>
-                        <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" VerticalAlignment="Center"
-                             ToolTip.Tip="{x:Static assets:Strings.SystemTextureReplaceHelp}"/>
-                    </StackPanel>
-                </Button>
                 <Button IsEnabled="{Binding !UsesCommonPalette}" Command="{Binding ReplaceWithPaletteCommand}">
                     <StackPanel Orientation="Horizontal" Spacing="3">
-                        <TextBlock Text="{x:Static assets:Strings.Replace_with_Palette}" VerticalAlignment="Center"/>
+                        <TextBlock Text="{x:Static assets:Strings.SystemTextureEditorReplaceButtonText}" VerticalAlignment="Center"/>
                         <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" VerticalAlignment="Center"
                              ToolTip.Tip="{x:Static assets:Strings.SystemTextureReplaceWithPaletteHelp}" ToolTip.ShowOnDisabled="True"/>
+                    </StackPanel>
+                </Button>
+                <Button Command="{Binding ReplaceCommand}">
+                    <StackPanel Orientation="Horizontal" Spacing="3">
+                        <TextBlock Text="{x:Static assets:Strings.SystemTextureEditorReplaceWithoutPaletteButtonText}" VerticalAlignment="Center"/>
+                        <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" VerticalAlignment="Center"
+                             ToolTip.Tip="{x:Static assets:Strings.SystemTextureReplaceHelp}"/>
                     </StackPanel>
                 </Button>
             </StackPanel>

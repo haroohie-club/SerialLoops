@@ -9223,6 +9223,24 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Replace.
+        /// </summary>
+        public static string SystemTextureEditorReplaceButtonText {
+            get {
+                return ResourceManager.GetString("SystemTextureEditorReplaceButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace Without Palette Change.
+        /// </summary>
+        public static string SystemTextureEditorReplaceWithoutPaletteButtonText {
+            get {
+                return ResourceManager.GetString("SystemTextureEditorReplaceWithoutPaletteButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This system texture uses the common main palette, so palette replacement has been disabled..
         /// </summary>
         public static string SystemTexturePaletteReplacementDisabled {

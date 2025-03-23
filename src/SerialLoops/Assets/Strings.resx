@@ -3675,4 +3675,10 @@ item in the dropdown!</value>
   <data name="ScriptEditorDialogueSpriteExitHelp" xml:space="preserve">
     <value>The sprite exit transition is necessary for making sprites leave or move around on the screen. It plays after the dialogue has been advanced.</value>
   </data>
+  <data name="SystemTextureEditorReplaceButtonText" xml:space="preserve">
+    <value>Replace</value>
+  </data>
+  <data name="SystemTextureEditorReplaceWithoutPaletteButtonText" xml:space="preserve">
+    <value>Replace Without Palette Change</value>
+  </data>
 </root>
