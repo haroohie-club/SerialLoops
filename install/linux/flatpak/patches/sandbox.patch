@@ -16,5 +16,4 @@ index 3fb563d..946f308 100644
 +    public static string[] FlatpakProcessBaseArgs => ["--host", "flatpak"];
 +    public const string FlatpakRunProcess = "flatpak-spawn";
 +    public static string[] FlatpakRunProcessBaseArgs => ["--host"];
- "flatpak"];
  }
