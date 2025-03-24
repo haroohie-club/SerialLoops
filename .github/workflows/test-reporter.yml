@@ -19,15 +19,18 @@ jobs:
         name: Test Results (Linux)
         path: '*.trx'
         reporter: dotnet-trx
+      if: success() || failure()
     - uses: dorny/test-reporter@v2
       with:
         artifact: test-results-osx-arm64
         name: Test Results (macOS)
         path: '*.trx'
         reporter: dotnet-trx
+      if: success() || failure()
     - uses: dorny/test-reporter@v2
       with:
         artifact: test-results-win-x64
         name: Test Results (Windows)
         path: '*.trx'
         reporter: dotnet-trx
+      if: success() || failure()
