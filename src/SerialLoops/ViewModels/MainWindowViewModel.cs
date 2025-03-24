@@ -347,6 +347,8 @@ public partial class MainWindowViewModel : ViewModelBase
                 return false;
             }
 
+            CacheCurrentProject();
+
             // Warn against unsaved items
             ItemDescription[] unsavedItems = OpenProject.Items.Where(i => i.UnsavedChanges).ToArray();
             if (unsavedItems.Length > 0)
@@ -360,7 +362,6 @@ public partial class MainWindowViewModel : ViewModelBase
                 }
                 else if (e?.IsProgrammatic ?? false)
                 {
-                    CacheCurrentProject();
                     return false;
                 }
                 else

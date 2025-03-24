@@ -423,13 +423,13 @@ public class ScriptEditorViewModel : EditorViewModel
             }
 
             int sourceSectionIndex = ScriptSections.IndexOf(sourceSection);
-            if (!_commands.Swap(sourceSectionIndex, targetSectionIndex))
+            if (!_commands.Move(sourceSectionIndex, targetSectionIndex))
             {
                 return;
             }
             Commands = _commands;
-            ScriptSections.Swap(sourceSectionIndex, targetSectionIndex);
-            _script.Event.ScriptSections.Swap(sourceSectionIndex, targetSectionIndex);
+            ScriptSections.Move(sourceSectionIndex, targetSectionIndex);
+            _script.Event.ScriptSections.Move(sourceSectionIndex, targetSectionIndex);
 
             _script.Refresh(_project, _log);
             Description.UnsavedChanges = true;
@@ -727,7 +727,7 @@ public class ScriptEditorViewModel : EditorViewModel
         _script.UnsavedChanges = true;
     }
 
-    public void MoveUp()
+    private void MoveUp()
     {
         if (SelectedCommand is null && SelectedSection is null)
         {
@@ -772,11 +772,13 @@ public class ScriptEditorViewModel : EditorViewModel
             ScriptSections.Swap(sectionIndex, sectionIndex - 1);
             _script.Event.ScriptSections.Swap(sectionIndex, sectionIndex - 1);
             Source.RowSelection?.Select(new(sectionIndex - 1));
+
+            _script.Refresh(_project, _log);
             Description.UnsavedChanges = true;
         }
     }
 
-    public void MoveDown()
+    private void MoveDown()
     {
         if (SelectedCommand is null && SelectedSection is null)
         {
@@ -819,6 +821,8 @@ public class ScriptEditorViewModel : EditorViewModel
             ScriptSections.Swap(sectionIndex, sectionIndex + 1);
             _script.Event.ScriptSections.Swap(sectionIndex, sectionIndex + 1);
             Source.RowSelection?.Select(new(sectionIndex + 1));
+
+            _script.Refresh(_project, _log);
             Description.UnsavedChanges = true;
         }
     }

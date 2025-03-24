@@ -601,6 +601,33 @@ public static partial class Extensions
         return true;
     }
 
+    public static bool Move<T, TS>(this OrderedDictionary<T, TS> orderedDict, int firstIndex, int secondIndex)
+    {
+        if (firstIndex < 0 || secondIndex < 0 || firstIndex >= orderedDict.Count || secondIndex >= orderedDict.Count || firstIndex == secondIndex)
+        {
+            return false;
+        }
+
+        T itemKey = orderedDict.Keys[firstIndex];
+        TS itemValue = orderedDict.ByIndex[firstIndex];
+
+        orderedDict.RemoveAt(firstIndex);
+        orderedDict.Insert(secondIndex, itemKey, itemValue);
+        return true;
+    }
+
+    public static void Move<T>(this IList<T> list, int firstIndex, int secondIndex)
+    {
+        if (firstIndex < 0 || secondIndex < 0 || firstIndex >= list.Count || secondIndex >= list.Count || firstIndex == secondIndex)
+        {
+            return;
+        }
+
+        T item = list[firstIndex];
+        list.RemoveAt(firstIndex);
+        list.Insert(secondIndex, item);
+    }
+
     [GeneratedRegex(@"#x(?<offset>\d{2})")]
     private static partial Regex ManualXRegex();
     [GeneratedRegex(@"#y(?<offset>\d{2})")]
