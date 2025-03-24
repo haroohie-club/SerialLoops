@@ -89,6 +89,7 @@ public class EditorTabsPanelViewModel : ViewModelBase
             Tabs.Insert(mostRecentTab.ClosedIndex > Tabs.Count ? Tabs.Count : mostRecentTab.ClosedIndex, mostRecentTab);
             SelectedTab = mostRecentTab;
         }
+        ShowTabsPanel = Tabs.Any();
     }
 
     private EditorViewModel CreateTab(ItemDescription item)
