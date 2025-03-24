@@ -771,6 +771,7 @@ public class ScriptEditorViewModel : EditorViewModel
             Commands = _commands;
             ScriptSections.Swap(sectionIndex, sectionIndex - 1);
             _script.Event.ScriptSections.Swap(sectionIndex, sectionIndex - 1);
+            Source.RowSelection?.Select(new(sectionIndex - 1));
             Description.UnsavedChanges = true;
         }
     }
@@ -817,6 +818,7 @@ public class ScriptEditorViewModel : EditorViewModel
             Commands = _commands;
             ScriptSections.Swap(sectionIndex, sectionIndex + 1);
             _script.Event.ScriptSections.Swap(sectionIndex, sectionIndex + 1);
+            Source.RowSelection?.Select(new(sectionIndex + 1));
             Description.UnsavedChanges = true;
         }
     }
