@@ -382,10 +382,16 @@ public partial class MainWindowViewModel : ViewModelBase
                         {
                             await BuildIterative_Executed(); // make sure we lock in the changes
                         }
-                        Window.Close();
+                        if (e is not null)
+                        {
+                            Window.Close();
+                        }
                         break;
                     case ButtonResult.No:
-                        Window.Close();
+                        if (e is not null)
+                        {
+                            Window.Close();
+                        }
                         break;
                 }
             }
