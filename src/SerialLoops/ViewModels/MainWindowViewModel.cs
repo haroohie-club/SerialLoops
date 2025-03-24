@@ -348,8 +348,8 @@ public partial class MainWindowViewModel : ViewModelBase
             }
 
             // Warn against unsaved items
-            IEnumerable<ItemDescription> unsavedItems = OpenProject.Items.Where(i => i.UnsavedChanges);
-            if (unsavedItems.Any())
+            ItemDescription[] unsavedItems = OpenProject.Items.Where(i => i.UnsavedChanges).ToArray();
+            if (unsavedItems.Length > 0)
             {
                 ButtonResult result;
                 bool skipBuild = false;
@@ -358,9 +358,18 @@ public partial class MainWindowViewModel : ViewModelBase
                     result = ButtonResult.Yes;
                     skipBuild = true;
                 }
+                else if (e?.IsProgrammatic ?? false)
+                {
+                    CacheCurrentProject();
+                    return false;
+                }
                 else
                 {
                     // message box with yes no cancel buttons
+                    if (e is not null)
+                    {
+                        e.Cancel = true;
+                    }
                     result = await Window.ShowMessageBoxAsync(Strings.Confirm, string.Format(Strings.You_have_unsaved_changes_in__0__item_s___Would_you_like_to_save_before_closing_the_project_, unsavedItems.Count()),
                         ButtonEnum.YesNoCancel, Icon.Warning, Log);
                 }
@@ -370,20 +379,15 @@ public partial class MainWindowViewModel : ViewModelBase
                         SaveProject_Executed();
                         if (!skipBuild)
                         {
-                            BuildIterativeCommand.Execute(null); // make sure we lock in the changes
+                            await BuildIterative_Executed(); // make sure we lock in the changes
                         }
+                        Window.Close();
                         break;
-                    case ButtonResult.Cancel:
-                        cancel = true;
-                        if (e is not null)
-                        {
-                            e.Cancel = true;
-                        }
+                    case ButtonResult.No:
+                        Window.Close();
                         break;
                 }
             }
-
-            CacheCurrentProject();
         }
         else
         {
