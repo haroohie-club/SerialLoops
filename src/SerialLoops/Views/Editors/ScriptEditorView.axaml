@@ -60,6 +60,26 @@
             <Button Command="{Binding ClearScriptCommand}" ToolTip.Tip="{x:Static assets:Strings.Clear_Script}">
                 <Svg Path="avares://SerialLoops/Assets/Icons/Clear.svg" Width="22"/>
             </Button>
+            <Button Command="{Binding MoveUpCommand}" ToolTip.ShowOnDisabled="True"
+                    ToolTip.Tip="{x:Static assets:Strings.ScriptEditorMoveUpTip}">
+                <Button.IsEnabled>
+                    <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                        <Binding Path="SelectedCommand" Converter="{x:Static ObjectConverters.IsNotNull}"/>
+                        <Binding Path="SelectedSection" Converter="{x:Static ObjectConverters.IsNotNull}"/>
+                    </MultiBinding>
+                </Button.IsEnabled>
+                <Svg Path="avares://SerialLoops/Assets/Icons/Move_Up.svg" Width="22"/>
+            </Button>
+            <Button Command="{Binding MoveDownCommand}" ToolTip.ShowOnDisabled="True"
+                    ToolTip.Tip="{x:Static assets:Strings.ScriptEditorMoveDownTip}">
+                <Button.IsEnabled>
+                    <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                        <Binding Path="SelectedCommand" Converter="{x:Static ObjectConverters.IsNotNull}"/>
+                        <Binding Path="SelectedSection" Converter="{x:Static ObjectConverters.IsNotNull}"/>
+                    </MultiBinding>
+                </Button.IsEnabled>
+                <Svg Path="avares://SerialLoops/Assets/Icons/Move_Down.svg" Width="22"/>
+            </Button>
         </StackPanel>
         <TreeDataGrid Grid.Column="0" Grid.Row="1" Grid.RowSpan="3" Source="{Binding Source}"
                       ShowColumnHeaders="False" CanUserResizeColumns="False" Name="CommandTree"

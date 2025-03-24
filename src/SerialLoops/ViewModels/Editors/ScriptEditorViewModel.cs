@@ -47,6 +47,8 @@ public class ScriptEditorViewModel : EditorViewModel
     public ICommand AddScriptSectionCommand { get; }
     public ICommand DeleteScriptCommandOrSectionCommand { get; }
     public ICommand ClearScriptCommand { get; }
+    public ICommand MoveUpCommand { get; }
+    public ICommand MoveDownCommand { get; }
     public ICommand CutCommand { get; }
     public ICommand CopyCommand { get; }
     public ICommand PasteCommand { get; }
@@ -211,6 +213,8 @@ public class ScriptEditorViewModel : EditorViewModel
         AddScriptSectionCommand = ReactiveCommand.CreateFromTask(AddSection);
         DeleteScriptCommandOrSectionCommand = ReactiveCommand.CreateFromTask(Delete);
         ClearScriptCommand = ReactiveCommand.CreateFromTask(Clear);
+        MoveUpCommand = ReactiveCommand.Create(MoveUp);
+        MoveDownCommand = ReactiveCommand.Create(MoveDown);
         CutCommand = ReactiveCommand.Create(Cut);
         CopyCommand = ReactiveCommand.Create(Copy);
         PasteCommand = ReactiveCommand.Create(Paste);
@@ -723,6 +727,74 @@ public class ScriptEditorViewModel : EditorViewModel
         _script.UnsavedChanges = true;
     }
 
+    public void MoveUp()
+    {
+        if (SelectedCommand is null && SelectedSection is null)
+        {
+            return;
+        }
+
+        if (SelectedCommand is not null)
+        {
+            int sectionIndex = ScriptSections.IndexOf(ScriptSections.First(s => s.Name == SelectedCommand.Section.Name));
+            int commandIndex = SelectedCommand.Index;
+            if (SelectedCommand.Index == 0)
+            {
+                if (_script.Event.ScriptSections.IndexOf(SelectedCommand.Section) == 0)
+                {
+                    return;
+                }
+
+                ScriptItemCommand selectedCommandTemp = SelectedCommand;
+                ScriptSections[sectionIndex].DeleteCommand(0, Commands);
+                ScriptSections[sectionIndex - 1].InsertCommand(ScriptSections[sectionIndex - 1].Commands.Count - 1, selectedCommandTemp, Commands);
+                Source.RowSelection?.Select(new(sectionIndex - 1, ScriptSections[sectionIndex - 1].Commands.Count - 1));
+            }
+            else
+            {
+                ScriptSections[sectionIndex].SwapCommands(commandIndex, commandIndex - 1, Commands);
+                Source.RowSelection?.Select(new(sectionIndex, commandIndex - 1));
+            }
+        }
+        else
+        {
+
+        }
+    }
+
+    public void MoveDown()
+    {
+        if (SelectedCommand is null && SelectedSection is null)
+        {
+            return;
+        }
+
+        if (SelectedCommand is not null)
+        {
+            int sectionIndex = ScriptSections.IndexOf(ScriptSections.First(s => s.Name == SelectedCommand.Section.Name));
+            int commandIndex = SelectedCommand.Index;
+            if (SelectedCommand.Index == ScriptSections[sectionIndex].Commands.Count - 1)
+            {
+                if (_script.Event.ScriptSections.IndexOf(SelectedCommand.Section) == _script.Event.ScriptSections.Count - 1)
+                {
+                    return;
+                }
+                ScriptSections[sectionIndex].DeleteCommand(ScriptSections[sectionIndex].Commands.Count - 1, Commands);
+                ScriptSections[sectionIndex + 1].InsertCommand(0, SelectedCommand, Commands);
+
+            }
+            else
+            {
+                ScriptSections[sectionIndex].SwapCommands(commandIndex, commandIndex + 1, Commands);
+            }
+            Source.RowSelection?.Select(new(sectionIndex, commandIndex + 1));
+        }
+        else
+        {
+
+        }
+    }
+
     private void Cut()
     {
         if (SelectedCommand is null)
@@ -954,6 +1026,27 @@ public class ReactiveScriptSection(ScriptSection section) : ReactiveObject
         {
             commands[Section][i].Index--;
         }
+    }
+
+    public void SwapCommands(int index1, int index2, OrderedDictionary<ScriptSection, List<ScriptItemCommand>> commands)
+    {
+        if (index1 == index2)
+        {
+            return;
+        }
+
+        if (index1 > index2)
+        {
+            (index1, index2) = (index2, index1);
+        }
+
+        ScriptItemCommand command1 = commands[Section][index1];
+        ScriptItemCommand command2 = commands[Section][index2];
+        DeleteCommand(index2, commands);
+        DeleteCommand(index1, commands);
+        InsertCommand(index1, command2, commands);
+        InsertCommand(index2, command1, commands);
+        (command1.Index, command2.Index) = (command2.Index, command1.Index);
     }
 
     internal void SetCommands(IEnumerable<ScriptItemCommand> commands)

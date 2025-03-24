@@ -3684,4 +3684,10 @@ item in the dropdown!</value>
   <data name="SystemTexturePaletteReplacementDisabledExtra" xml:space="preserve">
     <value>This system texture uses the common extra mode palette, so palette replacement has been disabled.</value>
   </data>
+  <data name="ScriptEditorMoveUpTip" xml:space="preserve">
+    <value>Move Up</value>
+  </data>
+  <data name="ScriptEditorMoveDownTip" xml:space="preserve">
+    <value>Move Down</value>
+  </data>
 </root>
