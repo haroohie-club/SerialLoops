@@ -13,7 +13,6 @@ using HaruhiChokuretsuLib.Font;
 using HaruhiChokuretsuLib.Util;
 using NAudio.Wave;
 using SerialLoops.Lib.Items;
-using SerialLoops.Lib.Script;
 using SerialLoops.Lib.Script.Parameters;
 using SkiaSharp;
 using SoftCircuits.Collections;

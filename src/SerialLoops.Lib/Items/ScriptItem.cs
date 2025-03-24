@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
-using HaruhiChokuretsuLib.Font;
 using HaruhiChokuretsuLib.Util;
 using QuikGraph;
 using SerialLoops.Lib.Script;
@@ -22,8 +21,6 @@ public class ScriptItem : Item
     public short SfxGroupIndex { get; set; }
     public AdjacencyGraph<ScriptSection, ScriptSectionEdge> Graph { get; set; } = new();
     private readonly Func<string, string> _localize;
-
-
 
     public ScriptItem(string name) : base(name, ItemType.Script)
     {
@@ -385,6 +382,14 @@ public class ScriptItem : Item
                 {
                     log.LogWarning($"Chibi {chibi.Name} not currently on screen; cannot display emote.");
                 }
+            }
+
+            // The Haruhi Meter is a bottom screen element but will freeze the game in chess mode, so we can
+            // ignore it for the purpose of previews (it will be caught by the validator)
+            if (commands.Last().Verb == CommandVerb.HARUHI_METER &&
+                ((ShortScriptParameter)commands.Last().Parameters[0]).Value != 0)
+            {
+                preview.HaruhiMeterVisible = true;
             }
         }
         else
@@ -1192,6 +1197,12 @@ public class ScriptItem : Item
                 canvas.DrawBitmap(choiceGraphic, 19, graphicY);
                 graphicY += 26;
             }
+        }
+
+        if (preview.HaruhiMeterVisible)
+        {
+            SKBitmap haruhiMeterBitmap = ((SystemTextureItem)project.Items.First(i => i.Name == "SYSTEX_SYS_CMN_B14")).GetTexture();
+            canvas.DrawBitmap(haruhiMeterBitmap, 0, 192);
         }
 
         canvas.Flush();

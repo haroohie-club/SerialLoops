@@ -10,7 +10,7 @@ namespace SerialLoops.ViewModels.Editors.ScriptCommandEditors;
 public class HaruhiMeterScriptCommandEditorViewModel(ScriptItemCommand command, ScriptEditorViewModel scriptEditor, ILogger log, bool noShow)
     : ScriptCommandEditorViewModel(command, scriptEditor, log)
 {
-    public string[] Modes => noShow ? [Strings.Add] : [Strings.Add, Strings.Set];
+    public string[] Modes => NoShow ? [Strings.Add] : [Strings.Add, Strings.Set];
     private string _selectedMode = noShow || ((ShortScriptParameter)command.Parameters[1]).Value == 0 ? Strings.Add : Strings.Set;
     public string SelectedMode
     {
