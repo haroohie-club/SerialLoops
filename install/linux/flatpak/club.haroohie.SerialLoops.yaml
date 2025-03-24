@@ -76,9 +76,7 @@ modules:
         path: devkitarm.tar.gz
     build-commands:
       - tar -xvf devkitarm.tar.gz -C ${FLATPAK_DEST}/
-      - export SLVersion=$(cat VERSION)
-      - export SLAssemblyVersion=$(sed -n 's/pre/9999/p' VERSION)
-      - dotnet publish src/SerialLoops/SerialLoops.csproj -c Release -f net8.0 --no-self-contained --source ./nuget-sources
+      - SLVersion=$(cat VERSION) SLAssemblyVersion=$(sed -n 's/apre/8888/p' VERSION) dotnet publish src/SerialLoops/SerialLoops.csproj -c Release -f net8.0 --no-self-contained --source ./nuget-sources
       - mkdir -p ${FLATPAK_DEST}/bin
       - cp -r src/SerialLoops/bin/Release/net8.0/publish/* ${FLATPAK_DEST}/bin
       - sed -i "s/#VERSION#/$SLVersion/g" club.haroohie.SerialLoops.desktop

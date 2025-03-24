@@ -3690,4 +3690,7 @@ item in the dropdown!</value>
   <data name="ScriptEditorMoveDownTip" xml:space="preserve">
     <value>Move Down</value>
   </data>
+  <data name="AboutDialogVersionString" xml:space="preserve">
+    <value>Version {0}</value><comment>{0} denotes the version of the application as displayed in the about dialog</comment>
+  </data>
 </root>

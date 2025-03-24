@@ -1,7 +1,6 @@
 using System;
 using System.Diagnostics;
 using Avalonia.Controls;
-using Avalonia.Interactivity;
 using SerialLoops.Assets;
 using SerialLoops.Lib.Factories;
 using SerialLoops.Utility;

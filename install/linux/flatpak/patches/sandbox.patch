@@ -9,11 +9,7 @@ index 3fb563d..946f308 100644
 -    public static string UnixDefaultDevkitArmDir => Path.Combine("/opt", "devkitpro", "devkitARM");
 -    public const string FlatpakProcess = "flatpak";
 -    public static string[] FlatpakProcessBaseArgs => [];
--    public const string FlatpakRunProcess = "";
--    public static string[] FlatpakRunProcessBaseArgs => [];
 +    public static string UnixDefaultDevkitArmDir => Path.Combine("/app", "opt", "devkitpro", "devkitARM");
 +    public const string FlatpakProcess = "flatpak-spawn";
 +    public static string[] FlatpakProcessBaseArgs => ["--host", "flatpak"];
-+    public const string FlatpakRunProcess = "flatpak-spawn";
-+    public static string[] FlatpakRunProcessBaseArgs => ["--host"];
  }

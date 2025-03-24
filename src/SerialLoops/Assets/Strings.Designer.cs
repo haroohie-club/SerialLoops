@@ -274,6 +274,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Version {0}.
+        /// </summary>
+        public static string AboutDialogVersionString {
+            get {
+                return ResourceManager.GetString("AboutDialogVersionString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Above Bottom.
         /// </summary>
         public static string Above_Bottom {
