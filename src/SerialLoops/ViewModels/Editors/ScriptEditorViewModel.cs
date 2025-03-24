@@ -889,6 +889,7 @@ public class ScriptEditorViewModel : EditorViewModel
             section.SetCommands(_commands[section.Section]);
         }
         Source.ExpandAll();
+        _script.Refresh(_project, _log);
         Description.UnsavedChanges = true;
     }
 
