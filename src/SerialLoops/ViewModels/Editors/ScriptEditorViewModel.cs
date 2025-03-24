@@ -758,7 +758,20 @@ public class ScriptEditorViewModel : EditorViewModel
         }
         else
         {
+            int sectionIndex = ScriptSections.IndexOf(SelectedSection);
+            if (sectionIndex < 2)
+            {
+                return;
+            }
 
+            if (!_commands.Swap(sectionIndex, sectionIndex - 1))
+            {
+                return;
+            }
+            Commands = _commands;
+            ScriptSections.Swap(sectionIndex, sectionIndex - 1);
+            _script.Event.ScriptSections.Swap(sectionIndex, sectionIndex - 1);
+            Description.UnsavedChanges = true;
         }
     }
 
@@ -791,7 +804,20 @@ public class ScriptEditorViewModel : EditorViewModel
         }
         else
         {
+            int sectionIndex = ScriptSections.IndexOf(SelectedSection);
+            if (sectionIndex == 0 || sectionIndex == ScriptSections.Count - 1)
+            {
+                return;
+            }
 
+            if (!_commands.Swap(sectionIndex, sectionIndex + 1))
+            {
+                return;
+            }
+            Commands = _commands;
+            ScriptSections.Swap(sectionIndex, sectionIndex + 1);
+            _script.Event.ScriptSections.Swap(sectionIndex, sectionIndex + 1);
+            Description.UnsavedChanges = true;
         }
     }
 
