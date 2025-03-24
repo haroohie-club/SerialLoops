@@ -387,7 +387,7 @@ jobs:
             ### macOS
             Pick the macOS pkg installer that fits your computer's architecture. Before executing it, you will need to open the Terminal application and run `xattr -cr ~/Downloads/SerialLoops-macOS-arm-v${{ env.SLVersion }}-installer.pkg` for the ARM installer and `xattr -cr ~/Downloads/SerialLoops-macOS-x64-v${{ env.SLVersion }}-installer.pkg` for the x64 installer. This is required because we currently don't codesign the installer, meaning macOS will refuse to run it without explicit approval from you.
 
-            The pkg installer will guide you through installing Serial Loops and will automatically install the dependencies devkitARM and make if necessary.
+            The pkg installer will guide you through installing Serial Loops and will automatically install the dependencies devkitARM and make if necessary. Note that in order to install make we install xcode-tools&mdash;this installation can take a long time, so please be patient!
 
             #### Which macOS pkg installer should I choose?
             If your Mac is newer, you will probably want the ARM installer. If it is older, you may want the x64 one. To make sure, go to Settings → About and check your chip. If it is an Intel, you want the x64 installer. If it is an Apple chip, you want the ARM installer.
