@@ -117,7 +117,7 @@ public class BackgroundMusicEditorTests
         originalWaveStream.Close();
 
         string replacedFile = $"{bgmName}_replaced.wav";
-        bgm.Replace(wavFile, _project.BaseDirectory, _project.IterativeDirectory, replacedFile, false, 0, 0, _log, new TestProgressTracker(), new());
+        bgm.Replace(wavFile, _project, replacedFile, false, 0, 0, _log, new TestProgressTracker(), new());
         using MemoryStream replacedStream = new();
         using WaveFileReader replacedWaveStream = new(replacedFile);
         Assert.That(File.Exists(replacedFile), Is.True);
@@ -155,7 +155,7 @@ public class BackgroundMusicEditorTests
         originalWaveStream.Close();
 
         string replacedFile = $"{bgmName}_replaced.wav";
-        bgm.Replace(Path.Combine(_uiVals.AssetsDirectory, "music.wav"), _project.BaseDirectory, _project.IterativeDirectory, replacedFile, false, 0, 0, _log, new TestProgressTracker(), new());
+        bgm.Replace(Path.Combine(_uiVals.AssetsDirectory, "music.wav"), _project, replacedFile, false, 0, 0, _log, new TestProgressTracker(), new());
         using MemoryStream replacedStream = new();
         using WaveFileReader replacedWaveStream = new(replacedFile);
         Assert.That(File.Exists(replacedFile), Is.True);

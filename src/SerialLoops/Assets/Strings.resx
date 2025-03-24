@@ -2511,8 +2511,8 @@ No project is currently open. Would you like to create a new project?</value>
   <data name="Volume Config" xml:space="preserve">
     <value>Volume Config</value>
   </data>
-  <data name="Vorbis files" xml:space="preserve">
-    <value>Vorbis files</value>
+  <data name="OggFiles" xml:space="preserve">
+    <value>Opus or Vorbis-encoded OGG files</value>
   </data>
   <data name="Wait Time (Frames)" xml:space="preserve">
     <value>Wait Time (Frames)</value>
@@ -3692,5 +3692,8 @@ item in the dropdown!</value>
   </data>
   <data name="AboutDialogVersionString" xml:space="preserve">
     <value>Version {0}</value><comment>{0} denotes the version of the application as displayed in the about dialog</comment>
+  </data>
+  <data name="OggDecodeFailedMessage" xml:space="preserve">
+    <value>Failed to decode provided ogg file; only Vorbis and Opus codecs are supported.</value>
   </data>
 </root>

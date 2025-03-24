@@ -5769,6 +5769,24 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to decode provided ogg file; only Vorbis and Opus codecs are supported..
+        /// </summary>
+        public static string OggDecodeFailedMessage {
+            get {
+                return ResourceManager.GetString("OggDecodeFailedMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Opus or Vorbis-encoded OGG files.
+        /// </summary>
+        public static string OggFiles {
+            get {
+                return ResourceManager.GetString("OggFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to On.
         /// </summary>
         public static string On {
@@ -10294,15 +10312,6 @@ namespace SerialLoops.Assets {
         public static string Volume_Config {
             get {
                 return ResourceManager.GetString("Volume Config", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Vorbis files.
-        /// </summary>
-        public static string Vorbis_files {
-            get {
-                return ResourceManager.GetString("Vorbis files", resourceCulture);
             }
         }
         

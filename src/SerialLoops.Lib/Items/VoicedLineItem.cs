@@ -8,6 +8,7 @@ using NAudio.Vorbis;
 using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
 using NLayer.NAudioSupport;
+using SerialLoops.Lib.Util;
 
 namespace SerialLoops.Lib.Items;
 
@@ -59,7 +60,7 @@ public class VoicedLineItem : Item, ISoundItem
         AdxType = (AdxEncoding)adxBytes[4];
 
         IAdxDecoder decoder;
-        if (AdxType == AdxEncoding.Ahx10 || AdxType == AdxEncoding.Ahx11)
+        if (AdxType is AdxEncoding.Ahx10 or AdxEncoding.Ahx11)
         {
             decoder = new AhxDecoder(adxBytes, log);
         }
@@ -71,7 +72,7 @@ public class VoicedLineItem : Item, ISoundItem
         return new AdxWaveProvider(decoder);
     }
 
-    public void Replace(string audioFile, string baseDirectory, string iterativeDirectory, string vceCachedFile, ILogger log, VoiceMapFile.VoiceMapEntry vceMapEntry = null, bool asAhx = false)
+    public void Replace(string audioFile, Project project, string vceCachedFile, ILogger log, VoiceMapFile.VoiceMapEntry vceMapEntry = null, bool asAhx = false)
     {
         // The MP3 decoder is able to create wave files but for whatever reason messes with the ADX encoder
         // So we just convert to WAV AOT
@@ -81,12 +82,29 @@ public class VoicedLineItem : Item, ISoundItem
             WaveFileWriter.CreateWaveFile(vceCachedFile, mp3Reader.ToSampleProvider().ToWaveProvider16());
             audioFile = vceCachedFile;
         }
-        // Ditto the Vorbis decoder
+        // Ditto the Vorbis/Opus decoders
         else if (Path.GetExtension(audioFile).Equals(".ogg", StringComparison.OrdinalIgnoreCase))
         {
-            using VorbisWaveReader vorbisReader = new(audioFile);
-            WaveFileWriter.CreateWaveFile(vceCachedFile, vorbisReader.ToSampleProvider().ToWaveProvider16());
-            audioFile = vceCachedFile;
+            try
+            {
+                using VorbisWaveReader vorbisReader = new(audioFile);
+                WaveFileWriter.CreateWaveFile(vceCachedFile, vorbisReader.ToSampleProvider().ToWaveProvider16());
+                audioFile = vceCachedFile;
+            }
+            catch (Exception vEx)
+            {
+                log.LogWarning($"Provided ogg was not vorbis; trying opus... (Exception: {vEx.Message})");
+                try
+                {
+                    using OggOpusFileReader opusReader = new(audioFile, log);
+                    WaveFileWriter.CreateWaveFile(vceCachedFile, opusReader.ToSampleProvider().ToWaveProvider16());
+                    audioFile = vceCachedFile;
+                }
+                catch (Exception opEx)
+                {
+                    log.LogException(project.Localize("OggDecodeFailedMessage"), opEx);
+                }
+            }
         }
 
         using WaveStream audio = Path.GetExtension(audioFile).ToLower() switch
@@ -98,7 +116,7 @@ public class VoicedLineItem : Item, ISoundItem
 
         if (audio is null)
         {
-            log.LogError("Invalid audio file selected.");
+            log.LogError(project.Localize("Invalid audio file selected."));
             log.LogWarning(audioFile);
             return;
         }
@@ -131,12 +149,12 @@ public class VoicedLineItem : Item, ISoundItem
             if (asAhx)
             {
                 log.Log("Encoding audio to AHX...");
-                AdxUtil.EncodeWav(newAudioFile, Path.Combine(baseDirectory, VoiceFile), true);
+                AdxUtil.EncodeWav(newAudioFile, Path.Combine(project.BaseDirectory, VoiceFile), true);
             }
             else
             {
                 log.Log("Encoding audio to ADX...");
-                AdxUtil.EncodeWav(newAudioFile, Path.Combine(baseDirectory, VoiceFile), false);
+                AdxUtil.EncodeWav(newAudioFile, Path.Combine(project.BaseDirectory, VoiceFile), false);
             }
         }
         else
@@ -144,15 +162,15 @@ public class VoicedLineItem : Item, ISoundItem
             if (asAhx)
             {
                 log.Log("Encoding audio to AHX...");
-                AdxUtil.EncodeAudio(audio, Path.Combine(baseDirectory, VoiceFile), true);
+                AdxUtil.EncodeAudio(audio, Path.Combine(project.BaseDirectory, VoiceFile), true);
             }
             else
             {
                 log.Log("Encoding audio to ADX...");
-                AdxUtil.EncodeAudio(audio, Path.Combine(baseDirectory, VoiceFile), false);
+                AdxUtil.EncodeAudio(audio, Path.Combine(project.BaseDirectory, VoiceFile), false);
             }
         }
-        File.Copy(Path.Combine(baseDirectory, VoiceFile), Path.Combine(iterativeDirectory, VoiceFile), true);
+        File.Copy(Path.Combine(project.BaseDirectory, VoiceFile), Path.Combine(project.IterativeDirectory, VoiceFile), true);
 
         // Adjust subtitle length to new voice item length
         if (vceMapEntry is not null)

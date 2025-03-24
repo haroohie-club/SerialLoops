@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="BunLabs.NAudio.Flac" Version="2.0.1" />
+    <PackageReference Include="Concentus.Oggfile" Version="1.0.6" />
     <PackageReference Include="HarfBuzzSharp.NativeAssets.Linux" Version="8.3.0.1" />
     <PackageReference Include="HarfBuzzSharp.NativeAssets.macOS" Version="8.3.0.1" />
     <PackageReference Include="HaroohieClub.NitroPacker" Version="3.1.7" />
@@ -23,6 +24,7 @@
     <PackageReference Include="SoftCircuits.OrderedDictionary" Version="3.3.0" />
     <PackageReference Include="Topten.RichTextKit" Version="0.4.167" />
     <PackageReference Include="VCDiff" Version="4.0.1" />
+    <PackageReference Include="VGAudio" Version="3.0.1" />
   </ItemGroup>
 
   <ItemGroup>
