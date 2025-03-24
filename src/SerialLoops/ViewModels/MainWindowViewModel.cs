@@ -388,6 +388,10 @@ public partial class MainWindowViewModel : ViewModelBase
                         break;
                 }
             }
+            else
+            {
+                CacheCurrentProject();
+            }
         }
         else
         {
