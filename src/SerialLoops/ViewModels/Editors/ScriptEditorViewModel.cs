@@ -745,9 +745,11 @@ public class ScriptEditorViewModel : EditorViewModel
                     return;
                 }
 
-                ScriptItemCommand selectedCommandTemp = SelectedCommand;
+                ScriptItemCommand selectedCommandRef = SelectedCommand;
                 ScriptSections[sectionIndex].DeleteCommand(0, Commands);
-                ScriptSections[sectionIndex - 1].InsertCommand(ScriptSections[sectionIndex - 1].Commands.Count - 1, selectedCommandTemp, Commands);
+                ScriptSections[sectionIndex - 1].InsertCommand(ScriptSections[sectionIndex - 1].Commands.Count, selectedCommandRef, Commands);
+                selectedCommandRef.Index = ScriptSections[sectionIndex - 1].Commands.Count - 1;
+                selectedCommandRef.Section = ScriptSections[sectionIndex - 1].Section;
                 Source.RowSelection?.Select(new(sectionIndex - 1, ScriptSections[sectionIndex - 1].Commands.Count - 1));
             }
             else
@@ -795,15 +797,19 @@ public class ScriptEditorViewModel : EditorViewModel
                 {
                     return;
                 }
-                ScriptSections[sectionIndex].DeleteCommand(ScriptSections[sectionIndex].Commands.Count - 1, Commands);
-                ScriptSections[sectionIndex + 1].InsertCommand(0, SelectedCommand, Commands);
 
+                ScriptItemCommand selectedCommandRef = SelectedCommand;
+                ScriptSections[sectionIndex].DeleteCommand(ScriptSections[sectionIndex].Commands.Count - 1, Commands);
+                ScriptSections[sectionIndex + 1].InsertCommand(0, selectedCommandRef, Commands);
+                selectedCommandRef.Index = 0;
+                selectedCommandRef.Section = ScriptSections[sectionIndex + 1].Section;
+                Source.RowSelection?.Select(new(sectionIndex + 1, 0));
             }
             else
             {
                 ScriptSections[sectionIndex].SwapCommands(commandIndex, commandIndex + 1, Commands);
+                Source.RowSelection?.Select(new(sectionIndex, commandIndex + 1));
             }
-            Source.RowSelection?.Select(new(sectionIndex, commandIndex + 1));
         }
         else
         {
