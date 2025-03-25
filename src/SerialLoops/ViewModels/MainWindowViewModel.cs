@@ -1367,6 +1367,14 @@ public partial class MainWindowViewModel : ViewModelBase
                             emulatorProcess.ErrorDataReceived += (_, e) => Log.LogWarning(e.Data);
                             emulatorProcess.Start();
                             emulatorProcess.BeginErrorReadLine();
+                            Task.Run(() =>
+                            {
+                                emulatorProcess.WaitForExit();
+                                if (emulatorProcess.ExitCode != 0)
+                                {
+                                    Log.LogError(Strings.EmulatorLaunchFailedErrorMessage);
+                                }
+                            });
                         }
                         catch (Exception ex)
                         {
