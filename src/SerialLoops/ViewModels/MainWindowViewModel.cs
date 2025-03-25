@@ -1336,7 +1336,8 @@ public partial class MainWindowViewModel : ViewModelBase
                             }
 
                             string[] emulatorArgs = [Path.Combine(OpenProject.MainDirectory, $"{OpenProject.Name}.nds")];
-                            if (emulatorExecutable.Equals(PatchableConstants.FlatpakProcess))
+                            if (emulatorExecutable.Equals(PatchableConstants.FlatpakProcess)
+                                && !string.IsNullOrWhiteSpace(CurrentConfig.EmulatorFlatpak))
                             {
                                 emulatorArgs =
                                 [
