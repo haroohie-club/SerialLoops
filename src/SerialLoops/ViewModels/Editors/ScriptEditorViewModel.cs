@@ -48,6 +48,8 @@ public class ScriptEditorViewModel : EditorViewModel
     public ICommand AddScriptSectionCommand { get; }
     public ICommand DeleteScriptCommandOrSectionCommand { get; }
     public ICommand ClearScriptCommand { get; }
+    public ICommand MoveUpCommand { get; }
+    public ICommand MoveDownCommand { get; }
     public ICommand CutCommand { get; }
     public ICommand CopyCommand { get; }
     public ICommand PasteCommand { get; }
@@ -212,6 +214,8 @@ public class ScriptEditorViewModel : EditorViewModel
         AddScriptSectionCommand = ReactiveCommand.CreateFromTask(AddSection);
         DeleteScriptCommandOrSectionCommand = ReactiveCommand.CreateFromTask(Delete);
         ClearScriptCommand = ReactiveCommand.CreateFromTask(Clear);
+        MoveUpCommand = ReactiveCommand.Create(MoveUp);
+        MoveDownCommand = ReactiveCommand.Create(MoveDown);
         CutCommand = ReactiveCommand.Create(Cut);
         CopyCommand = ReactiveCommand.Create(Copy);
         PasteCommand = ReactiveCommand.Create(Paste);
@@ -422,13 +426,13 @@ public class ScriptEditorViewModel : EditorViewModel
             }
 
             int sourceSectionIndex = ScriptSections.IndexOf(sourceSection);
-            if (!_commands.Swap(sourceSectionIndex, targetSectionIndex))
+            if (!_commands.Move(sourceSectionIndex, targetSectionIndex))
             {
                 return;
             }
             Commands = _commands;
-            ScriptSections.Swap(sourceSectionIndex, targetSectionIndex);
-            _script.Event.ScriptSections.Swap(sourceSectionIndex, targetSectionIndex);
+            ScriptSections.Move(sourceSectionIndex, targetSectionIndex);
+            _script.Event.ScriptSections.Move(sourceSectionIndex, targetSectionIndex);
 
             _script.Refresh(_project, _log);
             Description.UnsavedChanges = true;
@@ -726,6 +730,112 @@ public class ScriptEditorViewModel : EditorViewModel
         _script.UnsavedChanges = true;
     }
 
+    private void MoveUp()
+    {
+        if (SelectedCommand is null && SelectedSection is null)
+        {
+            return;
+        }
+
+        if (SelectedCommand is not null)
+        {
+            int sectionIndex = ScriptSections.IndexOf(ScriptSections.First(s => s.Name == SelectedCommand.Section.Name));
+            int commandIndex = SelectedCommand.Index;
+            if (SelectedCommand.Index == 0)
+            {
+                if (_script.Event.ScriptSections.IndexOf(SelectedCommand.Section) == 0)
+                {
+                    return;
+                }
+
+                ScriptItemCommand selectedCommandRef = SelectedCommand;
+                ScriptSections[sectionIndex].DeleteCommand(0, Commands);
+                ScriptSections[sectionIndex - 1].InsertCommand(ScriptSections[sectionIndex - 1].Commands.Count, selectedCommandRef, Commands);
+                selectedCommandRef.Index = ScriptSections[sectionIndex - 1].Commands.Count - 1;
+                selectedCommandRef.Section = ScriptSections[sectionIndex - 1].Section;
+                Source.RowSelection?.Select(new(sectionIndex - 1, ScriptSections[sectionIndex - 1].Commands.Count - 1));
+            }
+            else
+            {
+                ScriptSections[sectionIndex].SwapCommands(commandIndex, commandIndex - 1, Commands);
+                Source.RowSelection?.Select(new(sectionIndex, commandIndex - 1));
+            }
+        }
+        else
+        {
+            int sectionIndex = ScriptSections.IndexOf(SelectedSection);
+            if (sectionIndex < 2)
+            {
+                return;
+            }
+
+            if (!_commands.Swap(sectionIndex, sectionIndex - 1))
+            {
+                return;
+            }
+            Commands = _commands;
+            ScriptSections.Swap(sectionIndex, sectionIndex - 1);
+            _script.Event.ScriptSections.Swap(sectionIndex, sectionIndex - 1);
+            Source.RowSelection?.Select(new(sectionIndex - 1));
+
+            _script.Refresh(_project, _log);
+            Description.UnsavedChanges = true;
+        }
+    }
+
+    private void MoveDown()
+    {
+        if (SelectedCommand is null && SelectedSection is null)
+        {
+            return;
+        }
+
+        if (SelectedCommand is not null)
+        {
+            int sectionIndex = ScriptSections.IndexOf(ScriptSections.First(s => s.Name == SelectedCommand.Section.Name));
+            int commandIndex = SelectedCommand.Index;
+            if (SelectedCommand.Index == ScriptSections[sectionIndex].Commands.Count - 1)
+            {
+                if (_script.Event.ScriptSections.IndexOf(SelectedCommand.Section) == _script.Event.ScriptSections.Count - 1)
+                {
+                    return;
+                }
+
+                ScriptItemCommand selectedCommandRef = SelectedCommand;
+                ScriptSections[sectionIndex].DeleteCommand(ScriptSections[sectionIndex].Commands.Count - 1, Commands);
+                ScriptSections[sectionIndex + 1].InsertCommand(0, selectedCommandRef, Commands);
+                selectedCommandRef.Index = 0;
+                selectedCommandRef.Section = ScriptSections[sectionIndex + 1].Section;
+                Source.RowSelection?.Select(new(sectionIndex + 1, 0));
+            }
+            else
+            {
+                ScriptSections[sectionIndex].SwapCommands(commandIndex, commandIndex + 1, Commands);
+                Source.RowSelection?.Select(new(sectionIndex, commandIndex + 1));
+            }
+        }
+        else
+        {
+            int sectionIndex = ScriptSections.IndexOf(SelectedSection);
+            if (sectionIndex == 0 || sectionIndex == ScriptSections.Count - 1)
+            {
+                return;
+            }
+
+            if (!_commands.Swap(sectionIndex, sectionIndex + 1))
+            {
+                return;
+            }
+            Commands = _commands;
+            ScriptSections.Swap(sectionIndex, sectionIndex + 1);
+            _script.Event.ScriptSections.Swap(sectionIndex, sectionIndex + 1);
+            Source.RowSelection?.Select(new(sectionIndex + 1));
+
+            _script.Refresh(_project, _log);
+            Description.UnsavedChanges = true;
+        }
+    }
+
     private void Cut()
     {
         if (SelectedCommand is null)
@@ -820,6 +930,7 @@ public class ScriptEditorViewModel : EditorViewModel
             section.SetCommands(_commands[section.Section]);
         }
         Source.ExpandAll();
+        _script.Refresh(_project, _log);
         Description.UnsavedChanges = true;
     }
 
@@ -957,6 +1068,27 @@ public class ReactiveScriptSection(ScriptSection section, ILogger log, MainWindo
         {
             commands[Section][i].Index--;
         }
+    }
+
+    public void SwapCommands(int index1, int index2, OrderedDictionary<ScriptSection, List<ScriptItemCommand>> commands)
+    {
+        if (index1 == index2)
+        {
+            return;
+        }
+
+        if (index1 > index2)
+        {
+            (index1, index2) = (index2, index1);
+        }
+
+        ScriptItemCommand command1 = commands[Section][index1];
+        ScriptItemCommand command2 = commands[Section][index2];
+        DeleteCommand(index2, commands);
+        DeleteCommand(index1, commands);
+        InsertCommand(index1, command2, commands);
+        InsertCommand(index2, command1, commands);
+        (command1.Index, command2.Index) = (command2.Index, command1.Index);
     }
 
     internal void SetCommands(IEnumerable<ScriptItemCommand> commands)

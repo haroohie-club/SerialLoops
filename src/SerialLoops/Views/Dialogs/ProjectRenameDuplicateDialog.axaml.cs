@@ -10,14 +10,14 @@ public partial class ProjectRenameDuplicateDialog : Window
     public ProjectRenameDuplicateDialog()
     {
         InitializeComponent();
+        NameBox.AddHandler(TextInputEvent, NameBox_TextInput, RoutingStrategies.Tunnel);
     }
 
-    private void NameBox_KeyDown(object sender, KeyEventArgs e)
+    private void NameBox_TextInput(object sender, TextInputEventArgs e)
     {
-        if (!string.IsNullOrEmpty(e.KeySymbol) && !Regex.IsMatch(e.KeySymbol, @"[A-Za-z\d-_\.]") && e.Key != Key.Back)
+        if (!string.IsNullOrEmpty(e.Text) && !AllowedCharactersRegex().IsMatch(e.Text))
         {
             e.Handled = true;
-            return;
         }
     }
 
@@ -26,5 +26,8 @@ public partial class ProjectRenameDuplicateDialog : Window
         base.OnLoaded(e);
         NameBox.Focus();
     }
+
+    [GeneratedRegex(@"[A-Za-z\d-_\.]")]
+    private static partial Regex AllowedCharactersRegex();
 }
 

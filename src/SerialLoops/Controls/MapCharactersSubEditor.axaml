@@ -97,7 +97,7 @@
                             </ItemsControl>
                         </Canvas>
 
-                        <Grid HorizontalAlignment="Center" ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto" MinWidth="300"
+                        <Grid HorizontalAlignment="Center" ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto" MinWidth="300"
                               IsEnabled="{Binding SelectedMapCharacter, Converter={x:Static ObjectConverters.IsNotNull}}"
                               Margin="15 5 15 5">
                             <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Chibi}"/>
@@ -109,8 +109,7 @@
 
                             <TextBlock Grid.Row="2" Grid.Column="0" Text="{x:Static assets:Strings.Script_Section}"/>
                             <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Spacing="10" Margin="10,0,0,0">
-                                <ComboBox Margin="10,0,0,0"
-                                          ItemsSource="{Binding ScriptEditor.ScriptSections}"
+                                <ComboBox ItemsSource="{Binding ScriptEditor.ScriptSections}"
                                           SelectedItem="{Binding SelectedMapCharacter.TalkSection}"/>
 
                                 <Button Content="{x:Static assets:Strings.Remove_Talk_Link}" Command="{Binding RemoveTalkLinkCommand}"/>
@@ -118,14 +117,14 @@
 
                             <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Content="{x:Static assets:Strings.Remove_Chibi}"
                                     Command="{Binding RemoveMapCharacterCommand}"/>
+
+                            <StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
+                                <Button Content="{x:Static assets:Strings.Add_Chibi}" Command="{Binding AddMapCharacterCommand}"/>
+                                <Button Content="{x:Static assets:Strings.Remove_Map_Characters}" Command="{Binding RemoveMapCharactersCommand}"/>
+                            </StackPanel>
                         </Grid>
                     </WrapPanel>
             </Grid>
-
-            <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
-                <Button Content="{x:Static assets:Strings.Add_Chibi}" Command="{Binding AddMapCharacterCommand}"/>
-                <Button Content="{x:Static assets:Strings.Remove_Map_Characters}" Command="{Binding RemoveMapCharactersCommand}"/>
-            </StackPanel>
         </Grid>
     </ScrollViewer>
 </UserControl>

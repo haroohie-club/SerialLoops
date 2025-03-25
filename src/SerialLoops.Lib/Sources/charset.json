@@ -1,1424 +1,1914 @@
 [
   {
-    "OriginalCharacter": "　",
+    "OriginalCharacter": "\u3000",
     "ReplacedCharacter": " ",
-    "Code": 33088,
-    "Offset": 3
+    "CodePoint": 33088,
+    "Offset": 3,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "＠",
     "ReplacedCharacter": "@",
-    "Code": 33175,
-    "Offset": 10
+    "CodePoint": 33175,
+    "Offset": 10,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "、",
     "ReplacedCharacter": ",",
-    "Code": 33089,
-    "Offset": 3
+    "CodePoint": 33089,
+    "Offset": 3,
+    "CauseOffsetAdjust": true,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "。",
     "ReplacedCharacter": "#",
-    "Code": 33090,
-    "Offset": 8
+    "CodePoint": 33090,
+    "Offset": 8,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "．",
     "ReplacedCharacter": ".",
-    "Code": 33092,
-    "Offset": 2
+    "CodePoint": 33092,
+    "Offset": 2,
+    "CauseOffsetAdjust": true,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "・",
     "ReplacedCharacter": ";",
-    "Code": 33093,
-    "Offset": 3
+    "CodePoint": 33093,
+    "Offset": 3,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "：",
     "ReplacedCharacter": ":",
-    "Code": 33094,
-    "Offset": 2
+    "CodePoint": 33094,
+    "Offset": 2,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "？",
     "ReplacedCharacter": "?",
-    "Code": 33096,
-    "Offset": 6
+    "CodePoint": 33096,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "！",
     "ReplacedCharacter": "!",
-    "Code": 33097,
-    "Offset": 4
+    "CodePoint": 33097,
+    "Offset": 4,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "＿",
     "ReplacedCharacter": "_",
-    "Code": 33105,
-    "Offset": 8
+    "CodePoint": 33105,
+    "Offset": 8,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "々",
     "ReplacedCharacter": "*",
-    "Code": 33112,
-    "Offset": 6
+    "CodePoint": 33112,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ー",
     "ReplacedCharacter": "—",
-    "Code": 33115,
-    "Offset": 13
+    "CodePoint": 33115,
+    "Offset": 13,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "―",
     "ReplacedCharacter": "-",
-    "Code": 33116,
-    "Offset": 6
+    "CodePoint": 33116,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "～",
     "ReplacedCharacter": "~",
-    "Code": 33120,
-    "Offset": 7
+    "CodePoint": 33120,
+    "Offset": 7,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "…",
     "ReplacedCharacter": "…",
-    "Code": 33123,
-    "Offset": 7
+    "CodePoint": 33123,
+    "Offset": 7,
+    "CauseOffsetAdjust": true,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "‘",
     "ReplacedCharacter": "‘",
-    "Code": 33125,
-    "Offset": 2
+    "CodePoint": 33125,
+    "Offset": 2,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "’",
-    "ReplacedCharacter": "'",
-    "Code": 33126,
-    "Offset": 2
+    "ReplacedCharacter": "\u0027",
+    "CodePoint": 33126,
+    "Offset": 2,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "“",
-    "ReplacedCharacter": "\"",
-    "Code": 33127,
-    "Offset": 6
+    "ReplacedCharacter": "\u0022",
+    "CodePoint": 33127,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "”",
     "ReplacedCharacter": "”",
-    "Code": 33128,
-    "Offset": 6
+    "CodePoint": 33128,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "（",
     "ReplacedCharacter": "(",
-    "Code": 33129,
-    "Offset": 4
+    "CodePoint": 33129,
+    "Offset": 4,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "）",
     "ReplacedCharacter": ")",
-    "Code": 33130,
-    "Offset": 4
+    "CodePoint": 33130,
+    "Offset": 4,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "《",
-    "ReplacedCharacter": "《",
-    "Code": 33139,
-    "Offset": 14
+    "ReplacedCharacter": "\u003C",
+    "CodePoint": 33139,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "》",
-    "ReplacedCharacter": "》",
-    "Code": 33140,
-    "Offset": 14
+    "ReplacedCharacter": "\u003E",
+    "CodePoint": 33140,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "「",
     "ReplacedCharacter": "「",
-    "Code": 33141,
-    "Offset": 14
+    "CodePoint": 33141,
+    "Offset": 14,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "」",
     "ReplacedCharacter": "」",
-    "Code": 33142,
-    "Offset": 14
+    "CodePoint": 33142,
+    "Offset": 14,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "『",
     "ReplacedCharacter": "『",
-    "Code": 33143,
-    "Offset": 14
+    "CodePoint": 33143,
+    "Offset": 14,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "』",
     "ReplacedCharacter": "』",
-    "Code": 33144,
-    "Offset": 14
+    "CodePoint": 33144,
+    "Offset": 14,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "【",
     "ReplacedCharacter": "[",
-    "Code": 33145,
-    "Offset": 4
+    "CodePoint": 33145,
+    "Offset": 4,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "】",
     "ReplacedCharacter": "]",
-    "Code": 33146,
-    "Offset": 4
+    "CodePoint": 33146,
+    "Offset": 4,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "＋",
-    "ReplacedCharacter": "+",
-    "Code": 33147,
-    "Offset": 6
+    "ReplacedCharacter": "\u002B",
+    "CodePoint": 33147,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "－",
     "ReplacedCharacter": "-",
-    "Code": 33148,
-    "Offset": 6
+    "CodePoint": 33148,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "×",
     "ReplacedCharacter": "×",
-    "Code": 33150,
-    "Offset": 10
+    "CodePoint": 33150,
+    "Offset": 10,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "＝",
     "ReplacedCharacter": "=",
-    "Code": 33153,
-    "Offset": 6
+    "CodePoint": 33153,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "°",
     "ReplacedCharacter": "°",
-    "Code": 33163,
-    "Offset": 5
+    "CodePoint": 33163,
+    "Offset": 5,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "％",
     "ReplacedCharacter": "%",
-    "Code": 33171,
-    "Offset": 7
+    "CodePoint": 33171,
+    "Offset": 7,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "＆",
-    "ReplacedCharacter": "&",
-    "Code": 33173,
-    "Offset": 7
+    "ReplacedCharacter": "\u0026",
+    "CodePoint": 33173,
+    "Offset": 7,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "☆",
     "ReplacedCharacter": "☆",
-    "Code": 33177,
-    "Offset": 14
+    "CodePoint": 33177,
+    "Offset": 14,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "■",
     "ReplacedCharacter": "■",
-    "Code": 33185,
-    "Offset": 14
+    "CodePoint": 33185,
+    "Offset": 14,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "♪",
     "ReplacedCharacter": "♪",
-    "Code": 33268,
-    "Offset": 9
+    "CodePoint": 33268,
+    "Offset": 9,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "０",
     "ReplacedCharacter": "0",
-    "Code": 33359,
-    "Offset": 6
+    "CodePoint": 33359,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "１",
     "ReplacedCharacter": "1",
-    "Code": 33360,
-    "Offset": 3
+    "CodePoint": 33360,
+    "Offset": 3,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "２",
     "ReplacedCharacter": "2",
-    "Code": 33361,
-    "Offset": 6
+    "CodePoint": 33361,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "３",
     "ReplacedCharacter": "3",
-    "Code": 33362,
-    "Offset": 6
+    "CodePoint": 33362,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "４",
     "ReplacedCharacter": "4",
-    "Code": 33363,
-    "Offset": 7
+    "CodePoint": 33363,
+    "Offset": 7,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "５",
     "ReplacedCharacter": "5",
-    "Code": 33364,
-    "Offset": 6
+    "CodePoint": 33364,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "６",
     "ReplacedCharacter": "6",
-    "Code": 33365,
-    "Offset": 6
+    "CodePoint": 33365,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "７",
     "ReplacedCharacter": "7",
-    "Code": 33366,
-    "Offset": 6
+    "CodePoint": 33366,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "８",
     "ReplacedCharacter": "8",
-    "Code": 33367,
-    "Offset": 6
+    "CodePoint": 33367,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "９",
     "ReplacedCharacter": "9",
-    "Code": 33368,
-    "Offset": 6
+    "CodePoint": 33368,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "Ａ",
     "ReplacedCharacter": "A",
-    "Code": 33376,
-    "Offset": 6
+    "CodePoint": 33376,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "Ｂ",
     "ReplacedCharacter": "B",
-    "Code": 33377,
-    "Offset": 6
+    "CodePoint": 33377,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "Ｃ",
     "ReplacedCharacter": "C",
-    "Code": 33378,
-    "Offset": 7
+    "CodePoint": 33378,
+    "Offset": 7,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "Ｄ",
     "ReplacedCharacter": "D",
-    "Code": 33379,
-    "Offset": 6
+    "CodePoint": 33379,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "Ｅ",
     "ReplacedCharacter": "E",
-    "Code": 33380,
-    "Offset": 6
+    "CodePoint": 33380,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "Ｆ",
     "ReplacedCharacter": "F",
-    "Code": 33381,
-    "Offset": 6
+    "CodePoint": 33381,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "Ｇ",
     "ReplacedCharacter": "G",
-    "Code": 33382,
-    "Offset": 7
+    "CodePoint": 33382,
+    "Offset": 7,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "Ｈ",
     "ReplacedCharacter": "H",
-    "Code": 33383,
-    "Offset": 6
+    "CodePoint": 33383,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "Ｉ",
     "ReplacedCharacter": "I",
-    "Code": 33384,
-    "Offset": 4
+    "CodePoint": 33384,
+    "Offset": 4,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "Ｊ",
     "ReplacedCharacter": "J",
-    "Code": 33385,
-    "Offset": 6
+    "CodePoint": 33385,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "Ｋ",
     "ReplacedCharacter": "K",
-    "Code": 33386,
-    "Offset": 7
+    "CodePoint": 33386,
+    "Offset": 7,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "Ｌ",
     "ReplacedCharacter": "L",
-    "Code": 33387,
-    "Offset": 7
+    "CodePoint": 33387,
+    "Offset": 7,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "Ｍ",
     "ReplacedCharacter": "M",
-    "Code": 33388,
-    "Offset": 6
+    "CodePoint": 33388,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "Ｎ",
     "ReplacedCharacter": "N",
-    "Code": 33389,
-    "Offset": 6
+    "CodePoint": 33389,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "Ｏ",
     "ReplacedCharacter": "O",
-    "Code": 33390,
-    "Offset": 7
+    "CodePoint": 33390,
+    "Offset": 7,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "Ｐ",
     "ReplacedCharacter": "P",
-    "Code": 33391,
-    "Offset": 6
+    "CodePoint": 33391,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "Ｑ",
     "ReplacedCharacter": "Q",
-    "Code": 33392,
-    "Offset": 7
+    "CodePoint": 33392,
+    "Offset": 7,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "Ｒ",
     "ReplacedCharacter": "R",
-    "Code": 33393,
-    "Offset": 6
+    "CodePoint": 33393,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "Ｓ",
     "ReplacedCharacter": "S",
-    "Code": 33394,
-    "Offset": 6
+    "CodePoint": 33394,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "Ｔ",
     "ReplacedCharacter": "T",
-    "Code": 33395,
-    "Offset": 6
+    "CodePoint": 33395,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "Ｕ",
     "ReplacedCharacter": "U",
-    "Code": 33396,
-    "Offset": 6
+    "CodePoint": 33396,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "Ｖ",
     "ReplacedCharacter": "V",
-    "Code": 33397,
-    "Offset": 6
+    "CodePoint": 33397,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "Ｗ",
     "ReplacedCharacter": "W",
-    "Code": 33398,
-    "Offset": 6
+    "CodePoint": 33398,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "Ｘ",
     "ReplacedCharacter": "X",
-    "Code": 33399,
-    "Offset": 6
+    "CodePoint": 33399,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "Ｙ",
     "ReplacedCharacter": "Y",
-    "Code": 33400,
-    "Offset": 6
+    "CodePoint": 33400,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "Ｚ",
     "ReplacedCharacter": "Z",
-    "Code": 33401,
-    "Offset": 6
+    "CodePoint": 33401,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ａ",
     "ReplacedCharacter": "a",
-    "Code": 33409,
-    "Offset": 7
+    "CodePoint": 33409,
+    "Offset": 7,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ｂ",
     "ReplacedCharacter": "b",
-    "Code": 33410,
-    "Offset": 6
+    "CodePoint": 33410,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ｃ",
     "ReplacedCharacter": "c",
-    "Code": 33411,
-    "Offset": 6
+    "CodePoint": 33411,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ｄ",
     "ReplacedCharacter": "d",
-    "Code": 33412,
-    "Offset": 6
+    "CodePoint": 33412,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ｅ",
     "ReplacedCharacter": "e",
-    "Code": 33413,
-    "Offset": 6
+    "CodePoint": 33413,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ｆ",
     "ReplacedCharacter": "f",
-    "Code": 33414,
-    "Offset": 5
+    "CodePoint": 33414,
+    "Offset": 5,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": true
   },
   {
     "OriginalCharacter": "ｇ",
     "ReplacedCharacter": "g",
-    "Code": 33415,
-    "Offset": 7
+    "CodePoint": 33415,
+    "Offset": 7,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ｈ",
     "ReplacedCharacter": "h",
-    "Code": 33416,
-    "Offset": 6
+    "CodePoint": 33416,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ｉ",
     "ReplacedCharacter": "i",
-    "Code": 33417,
-    "Offset": 2
+    "CodePoint": 33417,
+    "Offset": 2,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ｊ",
     "ReplacedCharacter": "j",
-    "Code": 33418,
-    "Offset": 4
+    "CodePoint": 33418,
+    "Offset": 4,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ｋ",
     "ReplacedCharacter": "k",
-    "Code": 33419,
-    "Offset": 6
+    "CodePoint": 33419,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ｌ",
     "ReplacedCharacter": "l",
-    "Code": 33420,
-    "Offset": 2
+    "CodePoint": 33420,
+    "Offset": 2,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ｍ",
     "ReplacedCharacter": "m",
-    "Code": 33421,
-    "Offset": 6
+    "CodePoint": 33421,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ｎ",
     "ReplacedCharacter": "n",
-    "Code": 33422,
-    "Offset": 6
+    "CodePoint": 33422,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ｏ",
     "ReplacedCharacter": "o",
-    "Code": 33423,
-    "Offset": 6
+    "CodePoint": 33423,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ｐ",
     "ReplacedCharacter": "p",
-    "Code": 33424,
-    "Offset": 6
+    "CodePoint": 33424,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ｑ",
     "ReplacedCharacter": "q",
-    "Code": 33425,
-    "Offset": 6
+    "CodePoint": 33425,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ｒ",
     "ReplacedCharacter": "r",
-    "Code": 33426,
-    "Offset": 5
+    "CodePoint": 33426,
+    "Offset": 5,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": true
   },
   {
     "OriginalCharacter": "ｓ",
     "ReplacedCharacter": "s",
-    "Code": 33427,
-    "Offset": 6
+    "CodePoint": 33427,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ｔ",
     "ReplacedCharacter": "t",
-    "Code": 33428,
-    "Offset": 5
+    "CodePoint": 33428,
+    "Offset": 5,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ｕ",
     "ReplacedCharacter": "u",
-    "Code": 33429,
-    "Offset": 6
+    "CodePoint": 33429,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ｖ",
     "ReplacedCharacter": "v",
-    "Code": 33430,
-    "Offset": 6
+    "CodePoint": 33430,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ｗ",
     "ReplacedCharacter": "w",
-    "Code": 33431,
-    "Offset": 6
+    "CodePoint": 33431,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ｘ",
     "ReplacedCharacter": "x",
-    "Code": 33432,
-    "Offset": 6
+    "CodePoint": 33432,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ｙ",
     "ReplacedCharacter": "y",
-    "Code": 33433,
-    "Offset": 6
+    "CodePoint": 33433,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": true
   },
   {
     "OriginalCharacter": "ｚ",
     "ReplacedCharacter": "z",
-    "Code": 33434,
-    "Offset": 6
+    "CodePoint": 33434,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ぁ",
     "ReplacedCharacter": "À",
-    "Code": 33439,
-    "Offset": 6
+    "CodePoint": 33439,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "あ",
     "ReplacedCharacter": "Á",
-    "Code": 33440,
-    "Offset": 6
+    "CodePoint": 33440,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ぃ",
     "ReplacedCharacter": "Â",
-    "Code": 33441,
-    "Offset": 6
+    "CodePoint": 33441,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "い",
     "ReplacedCharacter": "Ã",
-    "Code": 33442,
-    "Offset": 6
+    "CodePoint": 33442,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ぅ",
     "ReplacedCharacter": "Ä",
-    "Code": 33443,
-    "Offset": 6
+    "CodePoint": 33443,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "う",
     "ReplacedCharacter": "Å",
-    "Code": 33444,
-    "Offset": 6
+    "CodePoint": 33444,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ぇ",
     "ReplacedCharacter": "Æ",
-    "Code": 33445,
-    "Offset": 7
+    "CodePoint": 33445,
+    "Offset": 7,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "え",
     "ReplacedCharacter": "Ç",
-    "Code": 33446,
-    "Offset": 7
+    "CodePoint": 33446,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ぉ",
     "ReplacedCharacter": "È",
-    "Code": 33447,
-    "Offset": 6
+    "CodePoint": 33447,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "お",
     "ReplacedCharacter": "É",
-    "Code": 33448,
-    "Offset": 6
+    "CodePoint": 33448,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "か",
     "ReplacedCharacter": "Ê",
-    "Code": 33449,
-    "Offset": 6
+    "CodePoint": 33449,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "が",
     "ReplacedCharacter": "Ë",
-    "Code": 33450,
-    "Offset": 6
+    "CodePoint": 33450,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "き",
     "ReplacedCharacter": "Ì",
-    "Code": 33451,
-    "Offset": 4
+    "CodePoint": 33451,
+    "Offset": 4,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ぎ",
     "ReplacedCharacter": "Í",
-    "Code": 33452,
-    "Offset": 4
+    "CodePoint": 33452,
+    "Offset": 4,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "く",
     "ReplacedCharacter": "Î",
-    "Code": 33453,
-    "Offset": 4
+    "CodePoint": 33453,
+    "Offset": 4,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ぐ",
     "ReplacedCharacter": "Ï",
-    "Code": 33454,
-    "Offset": 4
+    "CodePoint": 33454,
+    "Offset": 4,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "け",
     "ReplacedCharacter": "Ð",
-    "Code": 33455,
-    "Offset": 7
+    "CodePoint": 33455,
+    "Offset": 7,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "げ",
     "ReplacedCharacter": "Ñ",
-    "Code": 33456,
-    "Offset": 6
+    "CodePoint": 33456,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "こ",
     "ReplacedCharacter": "Ò",
-    "Code": 33457,
-    "Offset": 7
+    "CodePoint": 33457,
+    "Offset": 7,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ご",
     "ReplacedCharacter": "Ó",
-    "Code": 33458,
-    "Offset": 7
+    "CodePoint": 33458,
+    "Offset": 7,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "さ",
     "ReplacedCharacter": "Ô",
-    "Code": 33459,
-    "Offset": 7
+    "CodePoint": 33459,
+    "Offset": 7,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ざ",
     "ReplacedCharacter": "Õ",
-    "Code": 33460,
-    "Offset": 7
+    "CodePoint": 33460,
+    "Offset": 7,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "し",
     "ReplacedCharacter": "Ö",
-    "Code": 33461,
-    "Offset": 7
+    "CodePoint": 33461,
+    "Offset": 7,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "じ",
     "ReplacedCharacter": "Ø",
-    "Code": 33462,
-    "Offset": 7
+    "CodePoint": 33462,
+    "Offset": 7,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "す",
     "ReplacedCharacter": "Ù",
-    "Code": 33463,
-    "Offset": 6
+    "CodePoint": 33463,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ず",
     "ReplacedCharacter": "Ú",
-    "Code": 33464,
-    "Offset": 6
+    "CodePoint": 33464,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "せ",
     "ReplacedCharacter": "Û",
-    "Code": 33465,
-    "Offset": 6
+    "CodePoint": 33465,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ぜ",
     "ReplacedCharacter": "Ü",
-    "Code": 33466,
-    "Offset": 6
+    "CodePoint": 33466,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "そ",
     "ReplacedCharacter": "Ý",
-    "Code": 33467,
-    "Offset": 6
+    "CodePoint": 33467,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ぞ",
     "ReplacedCharacter": "Þ",
-    "Code": 33468,
-    "Offset": 6
+    "CodePoint": 33468,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "た",
     "ReplacedCharacter": "ß",
-    "Code": 33469,
-    "Offset": 6
+    "CodePoint": 33469,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "だ",
     "ReplacedCharacter": "à",
-    "Code": 33470,
-    "Offset": 7
+    "CodePoint": 33470,
+    "Offset": 7,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ち",
     "ReplacedCharacter": "á",
-    "Code": 33471,
-    "Offset": 7
+    "CodePoint": 33471,
+    "Offset": 7,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ぢ",
     "ReplacedCharacter": "â",
-    "Code": 33472,
-    "Offset": 7
+    "CodePoint": 33472,
+    "Offset": 7,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "っ",
     "ReplacedCharacter": "ã",
-    "Code": 33473,
-    "Offset": 7
+    "CodePoint": 33473,
+    "Offset": 7,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "つ",
     "ReplacedCharacter": "ä",
-    "Code": 33474,
-    "Offset": 7
+    "CodePoint": 33474,
+    "Offset": 7,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "づ",
     "ReplacedCharacter": "å",
-    "Code": 33475,
-    "Offset": 7
+    "CodePoint": 33475,
+    "Offset": 7,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "て",
     "ReplacedCharacter": "æ",
-    "Code": 33476,
-    "Offset": 7
+    "CodePoint": 33476,
+    "Offset": 7,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "で",
     "ReplacedCharacter": "ç",
-    "Code": 33477,
-    "Offset": 7
+    "CodePoint": 33477,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "と",
     "ReplacedCharacter": "è",
-    "Code": 33478,
-    "Offset": 6
+    "CodePoint": 33478,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ど",
     "ReplacedCharacter": "é",
-    "Code": 33479,
-    "Offset": 6
+    "CodePoint": 33479,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "な",
     "ReplacedCharacter": "ê",
-    "Code": 33480,
-    "Offset": 6
+    "CodePoint": 33480,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "に",
     "ReplacedCharacter": "ë",
-    "Code": 33481,
-    "Offset": 6
+    "CodePoint": 33481,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ぬ",
     "ReplacedCharacter": "ì",
-    "Code": 33482,
-    "Offset": 3
+    "CodePoint": 33482,
+    "Offset": 3,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ね",
     "ReplacedCharacter": "í",
-    "Code": 33483,
-    "Offset": 3
+    "CodePoint": 33483,
+    "Offset": 3,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "の",
     "ReplacedCharacter": "î",
-    "Code": 33484,
-    "Offset": 4
+    "CodePoint": 33484,
+    "Offset": 4,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "は",
     "ReplacedCharacter": "ï",
-    "Code": 33485,
-    "Offset": 4
+    "CodePoint": 33485,
+    "Offset": 4,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ば",
     "ReplacedCharacter": "ð",
-    "Code": 33486,
-    "Offset": 7
+    "CodePoint": 33486,
+    "Offset": 7,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ぱ",
     "ReplacedCharacter": "ñ",
-    "Code": 33487,
-    "Offset": 6
+    "CodePoint": 33487,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ひ",
     "ReplacedCharacter": "ò",
-    "Code": 33488,
-    "Offset": 6
+    "CodePoint": 33488,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "び",
     "ReplacedCharacter": "ó",
-    "Code": 33489,
-    "Offset": 6
+    "CodePoint": 33489,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ぴ",
     "ReplacedCharacter": "ô",
-    "Code": 33490,
-    "Offset": 6
+    "CodePoint": 33490,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ふ",
     "ReplacedCharacter": "õ",
-    "Code": 33491,
-    "Offset": 6
+    "CodePoint": 33491,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ぶ",
     "ReplacedCharacter": "ö",
-    "Code": 33492,
-    "Offset": 6
+    "CodePoint": 33492,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ぷ",
     "ReplacedCharacter": "ø",
-    "Code": 33493,
-    "Offset": 6
+    "CodePoint": 33493,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "へ",
     "ReplacedCharacter": "ù",
-    "Code": 33494,
-    "Offset": 6
+    "CodePoint": 33494,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "べ",
     "ReplacedCharacter": "ú",
-    "Code": 33495,
-    "Offset": 6
+    "CodePoint": 33495,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ぺ",
     "ReplacedCharacter": "û",
-    "Code": 33496,
-    "Offset": 6
+    "CodePoint": 33496,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ほ",
     "ReplacedCharacter": "ü",
-    "Code": 33497,
-    "Offset": 6
+    "CodePoint": 33497,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ぼ",
     "ReplacedCharacter": "ý",
-    "Code": 33498,
-    "Offset": 6
+    "CodePoint": 33498,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ぽ",
     "ReplacedCharacter": "þ",
-    "Code": 33499,
-    "Offset": 5
+    "CodePoint": 33499,
+    "Offset": 5,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ま",
     "ReplacedCharacter": "ÿ",
-    "Code": 33500,
-    "Offset": 6
+    "CodePoint": 33500,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "み",
     "ReplacedCharacter": "ı",
-    "Code": 33501,
-    "Offset": 2
+    "CodePoint": 33501,
+    "Offset": 2,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "む",
     "ReplacedCharacter": "Œ",
-    "Code": 33502,
-    "Offset": 7
+    "CodePoint": 33502,
+    "Offset": 7,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "め",
     "ReplacedCharacter": "œ",
-    "Code": 33503,
-    "Offset": 7
+    "CodePoint": 33503,
+    "Offset": 7,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "も",
     "ReplacedCharacter": "Š",
-    "Code": 33504,
-    "Offset": 6
+    "CodePoint": 33504,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ゃ",
     "ReplacedCharacter": "š",
-    "Code": 33505,
-    "Offset": 6
+    "CodePoint": 33505,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "や",
     "ReplacedCharacter": "Ÿ",
-    "Code": 33506,
-    "Offset": 6
+    "CodePoint": 33506,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ゅ",
     "ReplacedCharacter": "Ž",
-    "Code": 33507,
-    "Offset": 6
+    "CodePoint": 33507,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ゆ",
     "ReplacedCharacter": "ž",
-    "Code": 33508,
-    "Offset": 6
+    "CodePoint": 33508,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ょ",
     "ReplacedCharacter": "ю",
-    "Code": 33509,
-    "Offset": 9
+    "CodePoint": 33509,
+    "Offset": 9,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "よ",
     "ReplacedCharacter": "а",
-    "Code": 33510,
-    "Offset": 6
+    "CodePoint": 33510,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ら",
     "ReplacedCharacter": "б",
-    "Code": 33511,
-    "Offset": 6
+    "CodePoint": 33511,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "り",
     "ReplacedCharacter": "ц",
-    "Code": 33512,
-    "Offset": 7
+    "CodePoint": 33512,
+    "Offset": 7,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "る",
     "ReplacedCharacter": "д",
-    "Code": 33513,
-    "Offset": 6
+    "CodePoint": 33513,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "れ",
     "ReplacedCharacter": "е",
-    "Code": 33514,
-    "Offset": 6
+    "CodePoint": 33514,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ろ",
     "ReplacedCharacter": "ф",
-    "Code": 33515,
-    "Offset": 8
+    "CodePoint": 33515,
+    "Offset": 8,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "わ",
     "ReplacedCharacter": "г",
-    "Code": 33517,
-    "Offset": 5
+    "CodePoint": 33517,
+    "Offset": 5,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "を",
     "ReplacedCharacter": "х",
-    "Code": 33520,
-    "Offset": 6
+    "CodePoint": 33520,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ん",
     "ReplacedCharacter": "и",
-    "Code": 33521,
-    "Offset": 6
+    "CodePoint": 33521,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ァ",
     "ReplacedCharacter": "й",
-    "Code": 33600,
-    "Offset": 6
+    "CodePoint": 33600,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ア",
     "ReplacedCharacter": "к",
-    "Code": 33601,
-    "Offset": 7
+    "CodePoint": 33601,
+    "Offset": 7,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ィ",
     "ReplacedCharacter": "л",
-    "Code": 33602,
-    "Offset": 6
+    "CodePoint": 33602,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "イ",
     "ReplacedCharacter": "м",
-    "Code": 33603,
-    "Offset": 9
+    "CodePoint": 33603,
+    "Offset": 9,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ゥ",
     "ReplacedCharacter": "н",
-    "Code": 33604,
-    "Offset": 6
+    "CodePoint": 33604,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ウ",
     "ReplacedCharacter": "о",
-    "Code": 33605,
-    "Offset": 6
+    "CodePoint": 33605,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ェ",
     "ReplacedCharacter": "п",
-    "Code": 33606,
-    "Offset": 6
+    "CodePoint": 33606,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "エ",
     "ReplacedCharacter": "я",
-    "Code": 33607,
-    "Offset": 6
+    "CodePoint": 33607,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ォ",
     "ReplacedCharacter": "р",
-    "Code": 33608,
-    "Offset": 6
+    "CodePoint": 33608,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "オ",
     "ReplacedCharacter": "с",
-    "Code": 33609,
-    "Offset": 5
+    "CodePoint": 33609,
+    "Offset": 5,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "カ",
     "ReplacedCharacter": "т",
-    "Code": 33610,
-    "Offset": 6
+    "CodePoint": 33610,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ガ",
     "ReplacedCharacter": "у",
-    "Code": 33611,
-    "Offset": 6
+    "CodePoint": 33611,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "キ",
     "ReplacedCharacter": "ж",
-    "Code": 33612,
-    "Offset": 9
+    "CodePoint": 33612,
+    "Offset": 9,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ギ",
     "ReplacedCharacter": "в",
-    "Code": 33613,
-    "Offset": 6
+    "CodePoint": 33613,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ク",
     "ReplacedCharacter": "ь",
-    "Code": 33614,
-    "Offset": 5
+    "CodePoint": 33614,
+    "Offset": 5,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "グ",
     "ReplacedCharacter": "ы",
-    "Code": 33615,
-    "Offset": 8
+    "CodePoint": 33615,
+    "Offset": 8,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ケ",
     "ReplacedCharacter": "з",
-    "Code": 33616,
-    "Offset": 5
+    "CodePoint": 33616,
+    "Offset": 5,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ゲ",
     "ReplacedCharacter": "ш",
-    "Code": 33617,
-    "Offset": 9
+    "CodePoint": 33617,
+    "Offset": 9,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "コ",
     "ReplacedCharacter": "э",
-    "Code": 33618,
-    "Offset": 5
+    "CodePoint": 33618,
+    "Offset": 5,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ゴ",
     "ReplacedCharacter": "щ",
-    "Code": 33619,
-    "Offset": 10
+    "CodePoint": 33619,
+    "Offset": 10,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "サ",
     "ReplacedCharacter": "ч",
-    "Code": 33620,
-    "Offset": 6
+    "CodePoint": 33620,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ザ",
     "ReplacedCharacter": "ъ",
-    "Code": 33621,
-    "Offset": 7
+    "CodePoint": 33621,
+    "Offset": 7,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "シ",
     "ReplacedCharacter": "Ю",
-    "Code": 33622,
-    "Offset": 11
+    "CodePoint": 33622,
+    "Offset": 11,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ジ",
     "ReplacedCharacter": "А",
-    "Code": 33623,
-    "Offset": 9
+    "CodePoint": 33623,
+    "Offset": 9,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ス",
     "ReplacedCharacter": "Б",
-    "Code": 33624,
-    "Offset": 7
+    "CodePoint": 33624,
+    "Offset": 7,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ズ",
     "ReplacedCharacter": "Ц",
-    "Code": 33625,
-    "Offset": 8
+    "CodePoint": 33625,
+    "Offset": 8,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "セ",
     "ReplacedCharacter": "Д",
-    "Code": 33626,
-    "Offset": 9
+    "CodePoint": 33626,
+    "Offset": 9,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ゼ",
     "ReplacedCharacter": "Е",
-    "Code": 33627,
-    "Offset": 6
+    "CodePoint": 33627,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ソ",
     "ReplacedCharacter": "Ф",
-    "Code": 33628,
-    "Offset": 8
+    "CodePoint": 33628,
+    "Offset": 8,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ゾ",
     "ReplacedCharacter": "Г",
-    "Code": 33629,
-    "Offset": 6
+    "CodePoint": 33629,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "タ",
     "ReplacedCharacter": "Х",
-    "Code": 33630,
-    "Offset": 8
+    "CodePoint": 33630,
+    "Offset": 8,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ダ",
     "ReplacedCharacter": "И",
-    "Code": 33631,
-    "Offset": 8
+    "CodePoint": 33631,
+    "Offset": 8,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "チ",
     "ReplacedCharacter": "Й",
-    "Code": 33632,
-    "Offset": 8
+    "CodePoint": 33632,
+    "Offset": 8,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ヂ",
     "ReplacedCharacter": "К",
-    "Code": 33633,
-    "Offset": 7
+    "CodePoint": 33633,
+    "Offset": 7,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ッ",
     "ReplacedCharacter": "Л",
-    "Code": 33634,
-    "Offset": 8
+    "CodePoint": 33634,
+    "Offset": 8,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ツ",
     "ReplacedCharacter": "М",
-    "Code": 33635,
-    "Offset": 8
+    "CodePoint": 33635,
+    "Offset": 8,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ヅ",
     "ReplacedCharacter": "Н",
-    "Code": 33636,
-    "Offset": 7
+    "CodePoint": 33636,
+    "Offset": 7,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "テ",
     "ReplacedCharacter": "О",
-    "Code": 33637,
-    "Offset": 7
+    "CodePoint": 33637,
+    "Offset": 7,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "デ",
     "ReplacedCharacter": "П",
-    "Code": 33638,
-    "Offset": 7
+    "CodePoint": 33638,
+    "Offset": 7,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ト",
     "ReplacedCharacter": "Я",
-    "Code": 33639,
-    "Offset": 7
+    "CodePoint": 33639,
+    "Offset": 7,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ド",
     "ReplacedCharacter": "Р",
-    "Code": 33640,
-    "Offset": 7
+    "CodePoint": 33640,
+    "Offset": 7,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ナ",
     "ReplacedCharacter": "С",
-    "Code": 33641,
-    "Offset": 7
+    "CodePoint": 33641,
+    "Offset": 7,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ニ",
     "ReplacedCharacter": "Т",
-    "Code": 33642,
-    "Offset": 6
+    "CodePoint": 33642,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ヌ",
     "ReplacedCharacter": "У",
-    "Code": 33643,
-    "Offset": 8
+    "CodePoint": 33643,
+    "Offset": 8,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ネ",
     "ReplacedCharacter": "Ж",
-    "Code": 33644,
-    "Offset": 11
+    "CodePoint": 33644,
+    "Offset": 11,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ノ",
     "ReplacedCharacter": "В",
-    "Code": 33645,
-    "Offset": 7
+    "CodePoint": 33645,
+    "Offset": 7,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ハ",
     "ReplacedCharacter": "Ь",
-    "Code": 33646,
-    "Offset": 7
+    "CodePoint": 33646,
+    "Offset": 7,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "バ",
     "ReplacedCharacter": "Ы",
-    "Code": 33647,
-    "Offset": 10
+    "CodePoint": 33647,
+    "Offset": 10,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "パ",
     "ReplacedCharacter": "З",
-    "Code": 33648,
-    "Offset": 6
+    "CodePoint": 33648,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ヒ",
     "ReplacedCharacter": "Ш",
-    "Code": 33649,
-    "Offset": 11
+    "CodePoint": 33649,
+    "Offset": 11,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ビ",
     "ReplacedCharacter": "Э",
-    "Code": 33650,
-    "Offset": 7
+    "CodePoint": 33650,
+    "Offset": 7,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ピ",
     "ReplacedCharacter": "Щ",
-    "Code": 33651,
-    "Offset": 12
+    "CodePoint": 33651,
+    "Offset": 12,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "フ",
     "ReplacedCharacter": "Ч",
-    "Code": 33652,
-    "Offset": 7
+    "CodePoint": 33652,
+    "Offset": 7,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ブ",
     "ReplacedCharacter": "Ъ",
-    "Code": 33653,
-    "Offset": 8
+    "CodePoint": 33653,
+    "Offset": 8,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "プ",
     "ReplacedCharacter": "ё",
-    "Code": 33654,
-    "Offset": 6
+    "CodePoint": 33654,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   },
   {
     "OriginalCharacter": "ヘ",
     "ReplacedCharacter": "Ё",
-    "Code": 33655,
-    "Offset": 6
+    "CodePoint": 33655,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
+  },
+  {
+    "OriginalCharacter": "ベ",
+    "ReplacedCharacter": "₂",
+    "CodePoint": 33656,
+    "Offset": 4,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
+  },
+  {
+    "OriginalCharacter": "ペ",
+    "ReplacedCharacter": "/",
+    "CodePoint": 33657,
+    "Offset": 6,
+    "CauseOffsetAdjust": false,
+    "TakeOffsetAdjust": false
   }
 ]

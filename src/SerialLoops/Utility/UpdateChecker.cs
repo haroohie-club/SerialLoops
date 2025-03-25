@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net.Http;
-using System.Reflection;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using HaruhiChokuretsuLib.Util;
@@ -19,9 +18,7 @@ internal class UpdateChecker(MainWindowViewModel mainWindowViewModel)
     private const string REPO = "SerialLoops";
     private const string GET_RELEASES = $"{ENDPOINT}/repos/{ORG}/{REPO}/releases";
 
-    public bool UpdateOnClose { get; set; } = false;
-
-    private readonly string _currentVersion = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "0.1.0.0";
+    private readonly string _currentVersion = Shared.GetVersion();
 
     private MainWindowViewModel _mainWindowViewModel = mainWindowViewModel;
     private ILogger _logger => _mainWindowViewModel.Log;

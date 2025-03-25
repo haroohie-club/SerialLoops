@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Avalonia.Input;
 using HaruhiChokuretsuLib.Util;
 using MsBox.Avalonia.Enums;
 using ReactiveUI;
@@ -11,6 +12,7 @@ using SerialLoops.Assets;
 using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.SaveFile;
+using SerialLoops.Lib.Util;
 using SerialLoops.Utility;
 using SerialLoops.ViewModels.Editors;
 
@@ -28,12 +30,25 @@ public class EditorTabsPanelViewModel : ViewModelBase
     [Reactive]
     public bool ShowTabsPanel { get; set; }
 
-    public ICommand TabSwitchedCommand { get; set; }
     public ObservableCollection<EditorViewModel> Tabs { get; set; } = [];
+    private readonly DropOutStack<EditorViewModel> _closedTabs = new(20);
+
+    public ICommand CloseCurrentTabCommand { get; }
+    public ICommand ReopenTabCommand { get; }
+
+    [Reactive]
+    public KeyGesture CloseTabKeyGesture { get; set; }
+    [Reactive]
+    public KeyGesture ReopenTabKeyGesture { get; set; }
 
     public EditorTabsPanelViewModel(MainWindowViewModel mainWindow, Project project, ILogger log)
     {
-        TabSwitchedCommand = ReactiveCommand.Create(OnTabSwitched);
+        CloseCurrentTabCommand = ReactiveCommand.Create(CloseCurrentTab);
+        ReopenTabCommand = ReactiveCommand.Create(ReopenTab);
+
+        CloseTabKeyGesture = GuiExtensions.CreatePlatformAgnosticCtrlGesture(Key.W);
+        ReopenTabKeyGesture = GuiExtensions.CreatePlatformAgnosticCtrlGesture(Key.T, KeyModifiers.Shift);
+
         MainWindow = mainWindow;
         _project = project;
         _log = log;
@@ -56,6 +71,23 @@ public class EditorTabsPanelViewModel : ViewModelBase
         {
             Tabs.Add(newTab);
             SelectedTab = newTab;
+        }
+        ShowTabsPanel = Tabs.Any();
+    }
+
+    private void CloseCurrentTab()
+    {
+        Tabs.Remove(SelectedTab);
+        ShowTabsPanel = Tabs.Any();
+    }
+
+    private void ReopenTab()
+    {
+        EditorViewModel mostRecentTab = _closedTabs.Pop();
+        if (mostRecentTab is not null)
+        {
+            Tabs.Insert(mostRecentTab.ClosedIndex > Tabs.Count ? Tabs.Count : mostRecentTab.ClosedIndex, mostRecentTab);
+            SelectedTab = mostRecentTab;
         }
         ShowTabsPanel = Tabs.Any();
     }
@@ -147,12 +179,7 @@ public class EditorTabsPanelViewModel : ViewModelBase
         }
     }
 
-    private void OnTabSwitched()
-    {
-
-    }
-
-    public async Task OnTabClosed(EditorViewModel closedEditor)
+    public async Task OnTabClosed(EditorViewModel closedEditor, int closedIndex)
     {
         if (closedEditor.Description.Type is ItemDescription.ItemType.BGM or ItemDescription.ItemType.Voice or ItemDescription.ItemType.SFX)
         {
@@ -194,12 +221,9 @@ public class EditorTabsPanelViewModel : ViewModelBase
                     break;
             }
         }
-        ShowTabsPanel = Tabs.Any();
-    }
 
-    public void OnTabMiddleClicked()
-    {
-        Tabs.Remove(SelectedTab);
+        closedEditor.ClosedIndex = closedIndex;
+        _closedTabs.Push(closedEditor);
         ShowTabsPanel = Tabs.Any();
     }
 }

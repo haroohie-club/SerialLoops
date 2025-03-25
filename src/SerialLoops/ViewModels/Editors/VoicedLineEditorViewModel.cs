@@ -204,12 +204,12 @@ public class VoicedLineEditorViewModel : EditorViewModel
     {
         IStorageFile openFile = await Window.Window.ShowOpenFilePickerAsync(Strings.Replace_voiced_line, [new(Strings.Supported_Audio_Files) { Patterns = Shared.SupportedAudioFiletypes },
             new(Strings.WAV_files) { Patterns = ["*.wav"] }, new(Strings.FLAC_files) { Patterns = ["*.flac"] },
-            new(Strings.MP3_files) { Patterns = ["*.mp3"] }, new(Strings.Vorbis_files) { Patterns = ["*.ogg"] }]);
+            new(Strings.MP3_files) { Patterns = ["*.mp3"] }, new(Strings.OggFiles) { Patterns = ["*.ogg"] }]);
         if (openFile is not null)
         {
             ProgressDialogViewModel tracker = new(Strings.Replace_voiced_line);
             VcePlayer.Stop();
-            tracker.InitializeTasks(() => _vce.Replace(openFile.Path.LocalPath, _project.BaseDirectory, _project.IterativeDirectory, Path.Combine(_project.Config.CachesDirectory, "vce", $"{_vce.Name}.wav"), _log,
+            tracker.InitializeTasks(() => _vce.Replace(openFile.Path.LocalPath, _project, Path.Combine(_project.Config.CachesDirectory, "vce", $"{_vce.Name}.wav"), _log,
                     _voiceMapEntry),
                 () => { });
             await new ProgressDialog { DataContext = tracker }.ShowDialog(Window.Window);

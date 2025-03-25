@@ -12,7 +12,7 @@ public class LoadIsomapScriptCommandEditorViewModel(ScriptItemCommand command, S
     : ScriptCommandEditorViewModel(command, scriptEditor, log)
 {
     public ObservableCollection<MapItem> Maps { get; } = new(scriptEditor.Window.OpenProject.Items
-        .Where(i => i.Type == ItemDescription.ItemType.Map).Cast<MapItem>());
+        .Where(i => i.Type == ItemDescription.ItemType.Map && !((MapItem)i).Map.Settings.SlgMode).Cast<MapItem>());
     private MapItem _selectedMap = ((MapScriptParameter)command.Parameters[0]).Map;
     public MapItem SelectedMap
     {

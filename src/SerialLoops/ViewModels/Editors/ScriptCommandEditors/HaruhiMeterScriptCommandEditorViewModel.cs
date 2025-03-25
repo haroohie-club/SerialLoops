@@ -1,5 +1,7 @@
 ﻿using HaruhiChokuretsuLib.Util;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
+using SerialLoops.Assets;
 using SerialLoops.Lib.Script;
 using SerialLoops.Lib.Script.Parameters;
 
@@ -8,7 +10,20 @@ namespace SerialLoops.ViewModels.Editors.ScriptCommandEditors;
 public class HaruhiMeterScriptCommandEditorViewModel(ScriptItemCommand command, ScriptEditorViewModel scriptEditor, ILogger log, bool noShow)
     : ScriptCommandEditorViewModel(command, scriptEditor, log)
 {
-    public bool NoShow { get; }
+    public string[] Modes => NoShow ? [Strings.Add] : [Strings.Add, Strings.Set];
+    private string _selectedMode = noShow || ((ShortScriptParameter)command.Parameters[1]).Value == 0 ? Strings.Add : Strings.Set;
+    public string SelectedMode
+    {
+        get => _selectedMode;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _selectedMode, value);
+            IsAdd = value == Strings.Add;
+        }
+    }
+    [Reactive] public bool IsAdd { get; set; } = noShow || ((ShortScriptParameter)command.Parameters[1]).Value == 0;
+
+    public bool NoShow { get; } = noShow;
 
     private short _addAmount = noShow ? (short)0 : ((ShortScriptParameter)command.Parameters[0]).Value;
     public short AddAmount
@@ -36,7 +51,7 @@ public class HaruhiMeterScriptCommandEditorViewModel(ScriptItemCommand command, 
         }
     }
 
-    private short _addNoShowAmount = noShow ? ((ShortScriptParameter)command.Parameters[0]).Value : (short)0;
+    private short _addNoShowAmount = !noShow ? ((ShortScriptParameter)command.Parameters[0]).Value : (short)0;
     public short AddNoShowAmount
     {
         get => _addNoShowAmount;

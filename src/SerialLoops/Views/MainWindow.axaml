@@ -14,7 +14,6 @@
         Width="{Binding ClientSize.Width}"
         Height="{Binding ClientSize.Height}"
         ClosingBehavior="OwnerAndChildWindows"
-        Closing="Window_Closing"
         Closed="Window_Closed"
         Icon="/Assets/serial-loops.ico"
         Title="{Binding Title}"

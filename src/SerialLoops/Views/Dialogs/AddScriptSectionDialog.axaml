@@ -22,7 +22,7 @@
             <StackPanel Orientation="Vertical" Spacing="3">
                 <TextBlock Text="{x:Static assets:Strings.Section_Name_}"/>
                 <StackPanel Orientation="Horizontal" Spacing="2">
-                    <TextBox Text="{Binding SectionName}"/>
+                    <TextBox Text="{Binding SectionName}" Name="NameBox"/>
                 </StackPanel>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Spacing="5">

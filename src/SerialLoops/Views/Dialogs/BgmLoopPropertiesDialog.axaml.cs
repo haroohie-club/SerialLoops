@@ -37,10 +37,12 @@ public partial class BgmLoopPropertiesDialog : Window
             StartSampleSlider.ValueChanged += StartSlider_ValueChanged;
             return;
         }
+        StartSampleBox.ValueChanged -= StartSampleBox_OnValueChanged;
         StartSampleBox.Value = (decimal)StartSampleSlider.Value;
+        StartSampleBox.ValueChanged += StartSampleBox_OnValueChanged;
+
         viewModel!.LoopPreview.StartSample = viewModel.LoopPreview.GetSampleFromTimestamp(StartSampleSlider.Value);
         viewModel.LoopPreviewPlayer.Stop();
-        viewModel.LoopPreviewPlayer.Sound = viewModel.LoopPreview.Wave;
     }
 
     private void EndSlider_ValueChanged(object sender, Avalonia.Controls.Primitives.RangeBaseValueChangedEventArgs e)
@@ -53,7 +55,46 @@ public partial class BgmLoopPropertiesDialog : Window
             EndSampleSlider.ValueChanged += EndSlider_ValueChanged;
             return;
         }
+        EndSampleBox.ValueChanged -= EndSampleBox_OnValueChanged;
         EndSampleBox.Value = (decimal)EndSampleSlider.Value;
+        EndSampleBox.ValueChanged += EndSampleBox_OnValueChanged;
+
+        viewModel!.LoopPreview.EndSample = viewModel.LoopPreview.GetSampleFromTimestamp(EndSampleSlider.Value);
+        viewModel.LoopPreviewPlayer.Stop();
+    }
+
+    private void StartSampleBox_OnValueChanged(object sender, NumericUpDownValueChangedEventArgs e)
+    {
+        BgmLoopPropertiesDialogViewModel viewModel = (BgmLoopPropertiesDialogViewModel)DataContext;
+        if (StartSampleBox.Value > EndSampleBox.Value)
+        {
+            StartSampleBox.ValueChanged -= StartSampleBox_OnValueChanged;
+            StartSampleBox.Value = EndSampleBox.Value;
+            StartSampleBox.ValueChanged += StartSampleBox_OnValueChanged;
+            return;
+        }
+        StartSampleSlider.ValueChanged -= StartSlider_ValueChanged;
+        StartSampleSlider.Value = (double)StartSampleBox.Value!;
+        StartSampleSlider.ValueChanged += StartSlider_ValueChanged;
+
+        viewModel!.LoopPreview.StartSample = viewModel.LoopPreview.GetSampleFromTimestamp(StartSampleSlider.Value);
+        viewModel.LoopPreviewPlayer.Stop();
+    }
+
+    private void EndSampleBox_OnValueChanged(object sender, NumericUpDownValueChangedEventArgs e)
+    {
+        BgmLoopPropertiesDialogViewModel viewModel = (BgmLoopPropertiesDialogViewModel)DataContext;
+        if (EndSampleBox.Value < StartSampleBox.Value)
+        {
+            EndSampleBox.ValueChanged -= EndSampleBox_OnValueChanged;
+            EndSampleBox.Value = StartSampleBox.Value;
+            EndSampleBox.ValueChanged += EndSampleBox_OnValueChanged;
+            return;
+        }
+        EndSampleSlider.ValueChanged -= EndSlider_ValueChanged;
+        EndSampleSlider.Value = (double)EndSampleBox.Value!;
+        EndSampleSlider.ValueChanged += EndSlider_ValueChanged;
+
         viewModel!.LoopPreview.EndSample = viewModel.LoopPreview.GetSampleFromTimestamp(EndSampleSlider.Value);
         viewModel.LoopPreviewPlayer.Stop();
     }

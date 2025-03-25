@@ -221,6 +221,12 @@ public static partial class Extensions
                 invocation.Parameters[1] = 100;
                 break;
 
+            case CommandVerb.SCREEN_FLASH:
+                invocation.Parameters[0] = 5;
+                invocation.Parameters[1] = 30;
+                invocation.Parameters[2] = 5;
+                break;
+
             case CommandVerb.SND_PLAY:
                 invocation.Parameters[1] = (short)SfxModeScriptParameter.SfxMode.Start;
                 invocation.Parameters[2] = 100;
@@ -397,6 +403,36 @@ public static partial class Extensions
         };
     }
 
+    public static int CalculateHaroohieTextWidth(this string str, Project project)
+    {
+        if (project.LangCode.Equals("ja"))
+        {
+            return str.Length * 14;
+        }
+        int strWidth = 0;
+        for (int i = 0; i < str.Length; i++)
+        {
+            project.FontReplacement.TryGetValue(str[i], out FontReplacement fr);
+            if ((fr?.CauseOffsetAdjust ?? false) && i < str.Length - 1)
+            {
+                project.FontReplacement.TryGetValue(str[i + 1], out FontReplacement nextFr);
+                if (nextFr?.TakeOffsetAdjust ?? false)
+                {
+                    strWidth += fr.Offset - 1;
+                }
+                else
+                {
+                    strWidth += fr.Offset;
+                }
+            }
+            else
+            {
+                strWidth += fr?.Offset ?? 15;
+            }
+        }
+        return strWidth;
+    }
+
     public static void DrawHaroohieText(this SKCanvas canvas, string text, SKPaint color, Project project, int x = 10,
         int y = 352, bool formatting = true)
     {
@@ -504,7 +540,22 @@ public static partial class Extensions
                 FontReplacement replacement = project.FontReplacement.ReverseLookup(text[i]);
                 if (replacement is not null && project.LangCode != "ja")
                 {
-                    currentX += replacement.Offset;
+                    if (replacement.CauseOffsetAdjust && i < text.Length - 1)
+                    {
+                        project.FontReplacement.TryGetValue(text[i + 1], out FontReplacement nextFr);
+                        if (nextFr?.TakeOffsetAdjust ?? false)
+                        {
+                            currentX += replacement.Offset - 1;
+                        }
+                        else
+                        {
+                            currentX += replacement.Offset;
+                        }
+                    }
+                    else
+                    {
+                        currentX += replacement.Offset;
+                    }
                 }
                 else
                 {
@@ -591,6 +642,33 @@ public static partial class Extensions
         orderedDict.Insert(firstIndex, item2Key, item2Value);
         orderedDict.Insert(secondIndex, item1Key, item1Value);
         return true;
+    }
+
+    public static bool Move<T, TS>(this OrderedDictionary<T, TS> orderedDict, int firstIndex, int secondIndex)
+    {
+        if (firstIndex < 0 || secondIndex < 0 || firstIndex >= orderedDict.Count || secondIndex >= orderedDict.Count || firstIndex == secondIndex)
+        {
+            return false;
+        }
+
+        T itemKey = orderedDict.Keys[firstIndex];
+        TS itemValue = orderedDict.ByIndex[firstIndex];
+
+        orderedDict.RemoveAt(firstIndex);
+        orderedDict.Insert(secondIndex, itemKey, itemValue);
+        return true;
+    }
+
+    public static void Move<T>(this IList<T> list, int firstIndex, int secondIndex)
+    {
+        if (firstIndex < 0 || secondIndex < 0 || firstIndex >= list.Count || secondIndex >= list.Count || firstIndex == secondIndex)
+        {
+            return;
+        }
+
+        T item = list[firstIndex];
+        list.RemoveAt(firstIndex);
+        list.Insert(secondIndex, item);
     }
 
     [GeneratedRegex(@"#x(?<offset>\d{2})")]

@@ -22,8 +22,6 @@ public class ScriptItem : Item
     public AdjacencyGraph<ScriptSection, ScriptSectionEdge> Graph { get; set; } = new();
     private readonly Func<string, string> _localize;
 
-
-
     public ScriptItem(string name) : base(name, ItemType.Script)
     {
     }
@@ -391,6 +389,14 @@ public class ScriptItem : Item
                 {
                     log.LogWarning($"Chibi {chibi.Name} not currently on screen; cannot display emote.");
                 }
+            }
+
+            // The Haruhi Meter is a bottom screen element but will freeze the game in chess mode, so we can
+            // ignore it for the purpose of previews (it will be caught by the validator)
+            if (commands.Last().Verb == CommandVerb.HARUHI_METER &&
+                ((ShortScriptParameter)commands.Last().Parameters[0]).Value != 0)
+            {
+                preview.HaruhiMeterVisible = true;
             }
         }
         else
@@ -1186,7 +1192,7 @@ public class ScriptItem : Item
                 SKCanvas choiceCanvas = new(choiceGraphic);
                 choiceCanvas.DrawRect(1, 1, 216, 16, new() { Color = new(146, 146, 146) });
                 choiceCanvas.DrawRect(2, 2, 214, 14, new() { Color = new(69, 69, 69) });
-                int choiceWidth = project.LangCode.Equals("ja") ? choice.Length * 14 : choice.Sum(c => project.FontReplacement.ReverseLookup(c).Offset);
+                int choiceWidth = choice.CalculateHaroohieTextWidth(project);
                 choiceCanvas.DrawHaroohieText(choice, project.DialogueColorFilters[0], project, (218 - choiceWidth) / 2, 2);
                 choiceCanvas.Flush();
                 choiceGraphics.Add(choiceGraphic);
@@ -1198,6 +1204,12 @@ public class ScriptItem : Item
                 canvas.DrawBitmap(choiceGraphic, 19, graphicY);
                 graphicY += 26;
             }
+        }
+
+        if (preview.HaruhiMeterVisible)
+        {
+            SKBitmap haruhiMeterBitmap = ((SystemTextureItem)project.Items.First(i => i.Name == "SYSTEX_SYS_CMN_B14")).GetTexture();
+            canvas.DrawBitmap(haruhiMeterBitmap, 0, 192);
         }
 
         canvas.Flush();

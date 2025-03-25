@@ -25,6 +25,7 @@ public class SystemTextureEditorViewModel : EditorViewModel
     public SKBitmap SystemTextureBitmap => SystemTexture.GetTexture();
     public bool UsesCommonPalette => SystemTexture.UsesCommonPalette();
     public bool UsesMainPalette => SystemTexture.UsesMainPalette();
+    public bool UsesExtraPalette => SystemTexture.UsesExtraPalette();
     public bool UsesChessPalette => SystemTexture.UsesChessPalette();
     public SKBitmap PaletteBitmap => SystemTexture.Grp.GetPalette();
 

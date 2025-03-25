@@ -14,15 +14,15 @@
     <color type="primary" scheme_preference="dark">#042058</color>
   </branding>
   <screenshots>
-    <screenshot type="default">
-      <caption>Serial Loops startup screen</caption>
-      <image>https://raw.githubusercontent.com/haroohie-club/SerialLoops/main/install/linux/flatpak/screenshots/main_screen.png</image>
-    </screenshot>
     <screenshot>
       <screenshot type="default">
         <caption>Serial Loops script editor</caption>
         <image>https://raw.githubusercontent.com/haroohie-club/SerialLoops/main/install/linux/flatpak/screenshots/script_editor.png</image>
       </screenshot>
+    </screenshot>
+    <screenshot type="default">
+      <caption>Serial Loops startup screen</caption>
+      <image>https://raw.githubusercontent.com/haroohie-club/SerialLoops/main/install/linux/flatpak/screenshots/main_screen.png</image>
     </screenshot>
     <screenshot>
       <screenshot type="default">
