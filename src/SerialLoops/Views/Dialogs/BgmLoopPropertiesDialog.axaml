@@ -17,66 +17,59 @@
         Title="{Binding Title}"
         Name="BgmLoopPropsDialog">
     <Window.Resources>
-        <utility:IntSubtractionConverter x:Key="SubtractionConverter"/>
         <utility:BgmLoopSampleToTimestampConverter x:Key="SampleToTimestampConverter"/>
     </Window.Resources>
     <Panel>
         <controls:AcrylicBorderHandler/>
 
-        <StackPanel Orientation="Horizontal" Spacing="5" Margin="10 30">
-            <StackPanel Orientation="Vertical" Spacing="10" HorizontalAlignment="Center">
-                <controls:SoundPlayerPanel DataContext="{Binding LoopPreviewPlayer}"/>
-                <CheckBox Content="{x:Static assets:Strings.Loop_}" IsChecked="{Binding LoopPreview.LoopEnabled}"/>
-                <StackPanel Height="{Binding Waveform.Height, Converter={StaticResource SubtractionConverter},
-                            ConverterParameter=65}"/>
-                <StackPanel Orientation="Horizontal" Spacing="3">
-                    <TextBlock Text="{x:Static assets:Strings.Start}" VerticalAlignment="Center"/>
-                    <NumericUpDown Name="StartSampleBox" Minimum="0" Maximum="{Binding #EndSampleBox.Value}"
-                                   FormatString="0.0000">
-                        <NumericUpDown.Value>
-                            <MultiBinding Converter="{StaticResource SampleToTimestampConverter}">
-                                <Binding Path="LoopPreview"/>
-                                <Binding Path="LoopPreview.StartSample"/>
-                            </MultiBinding>
-                        </NumericUpDown.Value>
-                    </NumericUpDown>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" Spacing="3">
-                    <TextBlock Text="{x:Static assets:Strings.End}" VerticalAlignment="Center"/>
-                    <NumericUpDown Name="EndSampleBox" Minimum="{Binding #StartSampleBox.Value}" FormatString="0.0000">
-                        <NumericUpDown.Maximum>
-                            <MultiBinding Converter="{StaticResource SampleToTimestampConverter}">
-                                <Binding Path="LoopPreview"/>
-                                <Binding Path="MaxSample"/>
-                            </MultiBinding>
-                        </NumericUpDown.Maximum>
-                        <NumericUpDown.Value>
-                            <MultiBinding Converter="{StaticResource SampleToTimestampConverter}">
-                                <Binding Path="LoopPreview"/>
-                                <Binding Path="LoopPreview.EndSample"/>
-                            </MultiBinding>
-                        </NumericUpDown.Value>
-                    </NumericUpDown>
-                </StackPanel>
-            </StackPanel>
-            <StackPanel Orientation="Vertical" Spacing="5" VerticalAlignment="Center">
-                <Image Source="{Binding Waveform, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
-                       Width="{Binding Waveform.Width}" Height="{Binding Waveform.Height}"/>
-                <Slider Name="StartSampleSlider" Width="{Binding Waveform.Width}" Minimum="0"
+        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,Auto,*" Margin="10 30">
+            <controls:SoundPlayerPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" DataContext="{Binding LoopPreviewPlayer}"/>
+            <CheckBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Content="{x:Static assets:Strings.Loop_}" IsChecked="{Binding LoopPreview.LoopEnabled}"/>
+
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="{x:Static assets:Strings.Start}" VerticalAlignment="Center"/>
+            <NumericUpDown Grid.Row="2" Grid.Column="1" Name="StartSampleBox" Minimum="0"
+                           FormatString="0.0000" VerticalAlignment="Center" ValueChanged="StartSampleBox_OnValueChanged">
+                <NumericUpDown.Value>
+                    <MultiBinding Converter="{StaticResource SampleToTimestampConverter}">
+                        <Binding Path="LoopPreview"/>
+                        <Binding Path="LoopPreview.StartSample"/>
+                    </MultiBinding>
+                </NumericUpDown.Value>
+            </NumericUpDown>
+
+            <TextBlock Grid.Row="3" Grid.Column="0" Text="{x:Static assets:Strings.End}" VerticalAlignment="Center"/>
+            <NumericUpDown Grid.Row="3" Grid.Column="1" Name="EndSampleBox" FormatString="0.0000"
+                           VerticalAlignment="Center" ValueChanged="EndSampleBox_OnValueChanged">
+                <NumericUpDown.Maximum>
+                    <MultiBinding Converter="{StaticResource SampleToTimestampConverter}">
+                        <Binding Path="LoopPreview"/>
+                        <Binding Path="MaxSample"/>
+                    </MultiBinding>
+                </NumericUpDown.Maximum>
+                <NumericUpDown.Value>
+                    <MultiBinding Converter="{StaticResource SampleToTimestampConverter}">
+                        <Binding Path="LoopPreview"/>
+                        <Binding Path="LoopPreview.EndSample"/>
+                    </MultiBinding>
+                </NumericUpDown.Value>
+            </NumericUpDown>
+
+            <Image Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Source="{Binding Waveform, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
+                       Width="{Binding Waveform.Width}" Height="{Binding Waveform.Height}"
+                       Margin="20 0 0 0"/>
+            <Slider Grid.Row="2" Grid.Column="2" Name="StartSampleSlider" Width="{Binding Waveform.Width}" Minimum="0"
                         Maximum="{Binding #EndSampleBox.Maximum}"
                         ValueChanged="StartSlider_ValueChanged" />
-                <Slider Name="EndSampleSlider" Width="{Binding Waveform.Width}" Minimum="0"
-                        Maximum="{Binding #EndSampleBox.Maximum}"
-                        ValueChanged="EndSlider_ValueChanged"/>
-                <StackPanel Orientation="Vertical" Spacing="3" HorizontalAlignment="Right" Width="{Binding Waveform.Width}">
-                    <StackPanel Orientation="Horizontal" Spacing="3" HorizontalAlignment="Right">
-                        <Button Content="{x:Static assets:Strings.Cancel}" IsCancel="True" Command="{Binding CancelCommand}"
-                                CommandParameter="{Binding #BgmLoopPropsDialog}"/>
-                        <Button Content="{x:Static assets:Strings.Save}" IsDefault="True" Command="{Binding SaveCommand}"
-                                CommandParameter="{Binding #BgmLoopPropsDialog}"/>
-                    </StackPanel>
-                </StackPanel>
+            <Slider  Grid.Row="3" Grid.Column="2" Name="EndSampleSlider" Width="{Binding Waveform.Width}" Minimum="0"
+                     Maximum="{Binding #EndSampleBox.Maximum}"
+                     ValueChanged="EndSlider_ValueChanged"/>
+
+            <StackPanel Grid.Row="4" Grid.Column="2" Orientation="Horizontal" Spacing="3" HorizontalAlignment="Right">
+                <Button Content="{x:Static assets:Strings.Cancel}" IsCancel="True" Command="{Binding CancelCommand}"
+                        CommandParameter="{Binding #BgmLoopPropsDialog}" HorizontalAlignment="Right"/>
+                <Button Content="{x:Static assets:Strings.Save}" IsDefault="True" Command="{Binding SaveCommand}"
+                        CommandParameter="{Binding #BgmLoopPropsDialog}" HorizontalAlignment="Right"/>
             </StackPanel>
-        </StackPanel>
+        </Grid>
     </Panel>
 </Window>

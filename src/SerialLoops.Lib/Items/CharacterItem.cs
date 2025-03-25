@@ -57,11 +57,7 @@ public class CharacterItem : Item
         newCanvas.DrawBitmap(blankNameplate, new SKPoint(0, 0));
 
         double widthFactor = 1.0;
-        int totalWidth = NameplateProperties.Name.Sum(c =>
-        {
-            project.FontReplacement.TryGetValue(c, out FontReplacement fr);
-            return fr?.Offset ?? 15;
-        });
+        int totalWidth = NameplateProperties.Name.CalculateHaroohieTextWidth(project);
         if (totalWidth > 53)
         {
             widthFactor = 53.0 / totalWidth;
@@ -92,7 +88,22 @@ public class CharacterItem : Item
             project.FontReplacement.TryGetValue(NameplateProperties.Name[i], out FontReplacement replacement);
             if (replacement is not null && project.LangCode != "ja")
             {
-                currentX += (int)(replacement.Offset * widthFactor);
+                if (replacement.CauseOffsetAdjust && i < NameplateProperties.Name.Length - 1)
+                {
+                    project.FontReplacement.TryGetValue(NameplateProperties.Name[i + 1], out FontReplacement nextReplacement);
+                    if (nextReplacement?.TakeOffsetAdjust ?? false)
+                    {
+                        currentX += (int)((replacement.Offset - 1) * widthFactor);
+                    }
+                    else
+                    {
+                        currentX += (int)(replacement.Offset * widthFactor);
+                    }
+                }
+                else
+                {
+                    currentX += (int)(replacement.Offset * widthFactor);
+                }
             }
             else
             {

@@ -2375,7 +2375,7 @@
   <data name="Volume Config" xml:space="preserve">
     <value>音量设置</value>
   </data>
-  <data name="Vorbis files" xml:space="preserve">
+  <data name="OggFiles" xml:space="preserve">
     <value>Vorbis 文件</value>
   </data>
   <data name="Wait Time (Frames)" xml:space="preserve">

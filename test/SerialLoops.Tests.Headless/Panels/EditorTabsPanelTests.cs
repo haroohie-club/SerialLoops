@@ -112,12 +112,11 @@ public class EditorTabsPanelTests
 
         EditorTabsPanel editorTabsPanel = mainWindow.Window.FindDescendantOfType<EditorTabsPanel>();
         Assert.That(editorTabsPanel, Is.Not.Null);
-        ItemExplorerPanel itemExplorerPanel = window.FindDescendantOfType<ItemExplorerPanel>();
         DragTabItem tab = editorTabsPanel.FindDescendantOfType<DragTabItem>();
         StackPanel header = tab.FindDescendantOfType<StackPanel>();
         int addedMargin = OperatingSystem.IsMacOS() ? 15 : 5; // We have an extra 15px top margin on macOS
-        window.MouseDown(new(itemExplorerPanel.Width + header.Bounds.Center.X, 105 + addedMargin), MouseButton.Middle);
-        window.MouseUp(new(itemExplorerPanel.Width + header.Bounds.Center.X, 105 + addedMargin), MouseButton.Middle);
+        window.MouseDown(new(300 + header.Bounds.Center.X, 105 + addedMargin), MouseButton.Middle);
+        window.MouseUp(new(300 + header.Bounds.Center.X, 105 + addedMargin), MouseButton.Middle);
         window.CaptureAndSaveFrame(Path.Combine(_uiVals.AssetsDirectory, "artifacts"), TestContext.CurrentContext.Test.Name, ref currentFrame);
         Assert.That(mainWindow.EditorTabs.Tabs, Has.Count.EqualTo(0));
     }

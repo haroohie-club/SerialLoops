@@ -18,7 +18,6 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
     }
-
     public override void Show()
     {
         base.Show();
@@ -134,7 +133,7 @@ public partial class MainWindow : Window
         return menu;
     }
 
-    private async void Window_Closing(object sender, WindowClosingEventArgs e)
+    protected override async void OnClosing(WindowClosingEventArgs e)
     {
         await ViewModel.CloseProject_Executed(e);
     }

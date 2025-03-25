@@ -10,7 +10,7 @@ public partial class ProjectCreationDialog : Window
     public ProjectCreationDialog()
     {
         InitializeComponent();
-        NameBox.AddHandler(KeyDownEvent, NameBox_KeyDown, RoutingStrategies.Tunnel);
+        NameBox.AddHandler(TextInputEvent, NameBox_TextInput, RoutingStrategies.Tunnel);
     }
 
     protected override void OnLoaded(RoutedEventArgs e)
@@ -18,12 +18,11 @@ public partial class ProjectCreationDialog : Window
         NameBox.Focus();
     }
 
-    private void NameBox_KeyDown(object sender, KeyEventArgs e)
+    private void NameBox_TextInput(object sender, TextInputEventArgs e)
     {
-        if (!string.IsNullOrEmpty(e.KeySymbol) && !AllowedCharactersRegex().IsMatch(e.KeySymbol) && e.Key != Key.Back)
+        if (!string.IsNullOrEmpty(e.Text) && !AllowedCharactersRegex().IsMatch(e.Text))
         {
             e.Handled = true;
-            return;
         }
     }
 

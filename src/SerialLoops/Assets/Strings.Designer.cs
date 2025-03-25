@@ -274,6 +274,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Version {0}.
+        /// </summary>
+        public static string AboutDialogVersionString {
+            get {
+                return ResourceManager.GetString("AboutDialogVersionString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Above Bottom.
         /// </summary>
         public static string Above_Bottom {
@@ -4741,6 +4750,42 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Center.
+        /// </summary>
+        public static string ItemLocationCenter {
+            get {
+                return ResourceManager.GetString("ItemLocationCenter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exit.
+        /// </summary>
+        public static string ItemLocationExit {
+            get {
+                return ResourceManager.GetString("ItemLocationExit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Left.
+        /// </summary>
+        public static string ItemLocationLeft {
+            get {
+                return ResourceManager.GetString("ItemLocationLeft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Right.
+        /// </summary>
+        public static string ItemLocationRight {
+            get {
+                return ResourceManager.GetString("ItemLocationRight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Items.
         /// </summary>
         public static string Items {
@@ -5747,6 +5792,24 @@ namespace SerialLoops.Assets {
         public static string OFF_WHITE {
             get {
                 return ResourceManager.GetString("OFF_WHITE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to decode provided ogg file; only Vorbis and Opus codecs are supported..
+        /// </summary>
+        public static string OggDecodeFailedMessage {
+            get {
+                return ResourceManager.GetString("OggDecodeFailedMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Opus or Vorbis-encoded OGG files.
+        /// </summary>
+        public static string OggFiles {
+            get {
+                return ResourceManager.GetString("OggFiles", resourceCulture);
             }
         }
         
@@ -7744,7 +7807,7 @@ namespace SerialLoops.Assets {
         /// <summary>
         ///   Looks up a localized string similar to Reverts the background to the last call of BG_DISP (i.e. undoes any BG_FADE or BG_DISPCG calls). This is required before returning to displaying standard TEX_BG BGs. Note that if reverting a TEX_CG_DUAL_SCREEN BG, SET_PLACE must have been used to set the place location and have it displayed.
         ///
-        ///BG_REVERT does something odd to previously displayed CGs that makes attempting to display them again after the BG_REVERT crash/freeze/soft lock the game. If you need to go back and forth between the same CGs, conside [rest of string was truncated]&quot;;.
+        ///BG_REVERT does something odd to previously displayed CGs that makes attempting to display them again after the BG_REVERT crash/freeze/soft lock the game. If you need to go back and forth between the same CGs, consider  [rest of string was truncated]&quot;;.
         /// </summary>
         public static string ScriptCommandVerbHelpBG_REVERT {
             get {
@@ -8246,6 +8309,42 @@ namespace SerialLoops.Assets {
         public static string ScriptCommandVerbHelpWAIT_CANCEL {
             get {
                 return ResourceManager.GetString("ScriptCommandVerbHelpWAIT_CANCEL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The sprite entrance transition is necessary for making the sprite appear on the screen when first entering a scene. It plays before the dialogue is shown..
+        /// </summary>
+        public static string ScriptEditorDialogueSpriteEntranceHelp {
+            get {
+                return ResourceManager.GetString("ScriptEditorDialogueSpriteEntranceHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The sprite exit transition is necessary for making sprites leave or move around on the screen. It plays after the dialogue has been advanced..
+        /// </summary>
+        public static string ScriptEditorDialogueSpriteExitHelp {
+            get {
+                return ResourceManager.GetString("ScriptEditorDialogueSpriteExitHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move Down.
+        /// </summary>
+        public static string ScriptEditorMoveDownTip {
+            get {
+                return ResourceManager.GetString("ScriptEditorMoveDownTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move Up.
+        /// </summary>
+        public static string ScriptEditorMoveUpTip {
+            get {
+                return ResourceManager.GetString("ScriptEditorMoveUpTip", resourceCulture);
             }
         }
         
@@ -9196,6 +9295,24 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Replace.
+        /// </summary>
+        public static string SystemTextureEditorReplaceButtonText {
+            get {
+                return ResourceManager.GetString("SystemTextureEditorReplaceButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace Without Palette Change.
+        /// </summary>
+        public static string SystemTextureEditorReplaceWithoutPaletteButtonText {
+            get {
+                return ResourceManager.GetString("SystemTextureEditorReplaceWithoutPaletteButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This system texture uses the common main palette, so palette replacement has been disabled..
         /// </summary>
         public static string SystemTexturePaletteReplacementDisabled {
@@ -9210,6 +9327,15 @@ namespace SerialLoops.Assets {
         public static string SystemTexturePaletteReplacementDisabledChess {
             get {
                 return ResourceManager.GetString("SystemTexturePaletteReplacementDisabledChess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This system texture uses the common extra mode palette, so palette replacement has been disabled..
+        /// </summary>
+        public static string SystemTexturePaletteReplacementDisabledExtra {
+            get {
+                return ResourceManager.GetString("SystemTexturePaletteReplacementDisabledExtra", resourceCulture);
             }
         }
         
@@ -10213,15 +10339,6 @@ namespace SerialLoops.Assets {
         public static string Volume_Config {
             get {
                 return ResourceManager.GetString("Volume Config", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Vorbis files.
-        /// </summary>
-        public static string Vorbis_files {
-            get {
-                return ResourceManager.GetString("Vorbis files", resourceCulture);
             }
         }
         

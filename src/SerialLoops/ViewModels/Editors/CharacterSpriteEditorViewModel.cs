@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia.Input;
 using Avalonia.Platform.Storage;
-using HaroohieClub.NitroPacker.Nitro.Gx;
 using HaruhiChokuretsuLib.Util;
 using ReactiveHistory;
 using ReactiveUI;

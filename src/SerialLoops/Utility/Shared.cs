@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Emik;
@@ -23,6 +24,13 @@ namespace SerialLoops.Utility;
 
 public static class Shared
 {
+    public static string GetVersion()
+    {
+        string infoVersionWithCommit = Assembly.GetExecutingAssembly()
+            .GetCustomAttribute<AssemblyInformationalVersionAttribute>()!.InformationalVersion;
+        return infoVersionWithCommit[..infoVersionWithCommit.IndexOf('+')];
+    }
+
     public static CancellationTokenSource AudioReplacementCancellation { get; set; } = new();
 
     public static string[] SupportedImageFiletypes => ["*.bmp", "*.gif", "*.heif", "*.jpg", "*.jpeg", "*.png", "*.webp",];

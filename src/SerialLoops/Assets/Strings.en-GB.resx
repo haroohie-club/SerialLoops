@@ -2223,7 +2223,7 @@
   <data name="Volume Config" xml:space="preserve">
     <value>Volume Config</value>
   </data>
-  <data name="Vorbis files" xml:space="preserve">
+  <data name="OggFiles" xml:space="preserve">
     <value>Vorbis files</value>
   </data>
   <data name="Wait Time (Frames)" xml:space="preserve">

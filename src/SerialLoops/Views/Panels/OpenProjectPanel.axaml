@@ -8,17 +8,10 @@
              x:DataType="vm:OpenProjectPanelViewModel"
              x:Class="SerialLoops.Views.Panels.OpenProjectPanel">
 
-    <Grid RowDefinitions="Auto,*">
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" MinWidth="300"/>
-                <ColumnDefinition Width="2"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <panels:ItemExplorerPanel Grid.Column="0" Name="ItemExplorer" DataContext="{Binding Explorer}" Width="300"/>
-            <GridSplitter Grid.Column="1" Background="{StaticResource GroupLineColor}" ResizeDirection="Columns"/>
-            <panels:EditorTabsPanel Grid.Column="2" Name="EditorTabs" DataContext="{Binding EditorTabs}"/>
-        </Grid>
+    <Grid ColumnDefinitions="300,2,*">
+        <panels:ItemExplorerPanel Grid.Column="0" Name="ItemExplorer" DataContext="{Binding Explorer}" />
+        <GridSplitter Grid.Column="1" Background="{StaticResource GroupLineColor}" ResizeDirection="Columns"/>
+        <panels:EditorTabsPanel Grid.Column="2" Name="EditorTabs" DataContext="{Binding EditorTabs}"/>
     </Grid>
 
 </UserControl>
