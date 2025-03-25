@@ -992,9 +992,6 @@
   <data name="Failed to set viewr contents for script command list panel." xml:space="preserve">
     <value>为脚本命令列表面板设置查看器内容失败。</value>
   </data>
-  <data name="Failed to start emulator" xml:space="preserve">
-    <value>启动模拟器失败</value>
-  </data>
   <data name="Failed to unpack ROM" xml:space="preserve">
     <value>解压缩 ROM失败</value>
   </data>

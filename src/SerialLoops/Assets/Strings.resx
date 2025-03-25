@@ -1069,9 +1069,6 @@ In order to preserve state, no hacks were applied.</value>
   <data name="Failed to set viewr contents for script command list panel." xml:space="preserve">
     <value>Failed to set viewr contents for script command list panel.</value>
   </data>
-  <data name="Failed to start emulator" xml:space="preserve">
-    <value>Failed to start emulator</value>
-  </data>
   <data name="Failed to unpack ROM" xml:space="preserve">
     <value>Failed to unpack ROM</value>
   </data>
@@ -3695,5 +3692,8 @@ item in the dropdown!</value>
   </data>
   <data name="OggDecodeFailedMessage" xml:space="preserve">
     <value>Failed to decode provided ogg file; only Vorbis and Opus codecs are supported.</value>
+  </data>
+  <data name="EmulatorLaunchFailedErrorMessage" xml:space="preserve">
+    <value>Failed to start emulator. Check the logs for more information."</value>
   </data>
 </root>

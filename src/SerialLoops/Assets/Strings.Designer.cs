@@ -2689,6 +2689,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to start emulator. Check the logs for more information.&quot;.
+        /// </summary>
+        public static string EmulatorLaunchFailedErrorMessage {
+            get {
+                return ResourceManager.GetString("EmulatorLaunchFailedErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Encoding.
         /// </summary>
         public static string Encoding {
@@ -3884,15 +3893,6 @@ namespace SerialLoops.Assets {
         public static string Failed_to_set_viewr_contents_for_script_command_list_panel_ {
             get {
                 return ResourceManager.GetString("Failed to set viewr contents for script command list panel.", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Failed to start emulator.
-        /// </summary>
-        public static string Failed_to_start_emulator {
-            get {
-                return ResourceManager.GetString("Failed to start emulator", resourceCulture);
             }
         }
         

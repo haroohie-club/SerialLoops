@@ -929,9 +929,6 @@
   <data name="Failed to set viewr contents for script command list panel." xml:space="preserve">
     <value>Failed to set viewr contents for script command list panel.</value>
   </data>
-  <data name="Failed to start emulator" xml:space="preserve">
-    <value>Failed to start emulator</value>
-  </data>
   <data name="Failed to unpack ROM" xml:space="preserve">
     <value>Failed to unpack ROM</value>
   </data>

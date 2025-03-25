@@ -59,7 +59,7 @@ modules:
     buildsystem: simple
     sources:
       - type: git
-        url: https://github.com/haroohie-club/SerialLoops.git
+        url: https://github.com/jonko0493/SerialLoops.git
         branch: main
       - ./nuget-sources.json
       - type: patch
@@ -79,7 +79,7 @@ modules:
       - SLVersion=$(cat VERSION) SLAssemblyVersion=$(sed -n 's/apre/8888/p' VERSION) dotnet publish src/SerialLoops/SerialLoops.csproj -c Release -f net8.0 --no-self-contained --source ./nuget-sources
       - mkdir -p ${FLATPAK_DEST}/bin
       - cp -r src/SerialLoops/bin/Release/net8.0/publish/* ${FLATPAK_DEST}/bin
-      - sed -i "s/#VERSION#/$SLVersion/g" club.haroohie.SerialLoops.desktop
+      - sed -i "s/#VERSION#/$(cat VERSION)/g" club.haroohie.SerialLoops.desktop
       - install -Dm644 AppIcon.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/club.haroohie.SerialLoops.svg
       - install -Dm644 club.haroohie.SerialLoops.metainfo.xml ${FLATPAK_DEST}/share/metainfo/club.haroohie.SerialLoops.metainfo.xml
       - install -Dm644 club.haroohie.SerialLoops.desktop ${FLATPAK_DEST}/share/applications/club.haroohie.SerialLoops.desktop

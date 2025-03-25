@@ -1360,11 +1360,26 @@ public partial class MainWindowViewModel : ViewModelBase
                                     Path.Combine(OpenProject.MainDirectory, $"{OpenProject.Name}.nds"),
                                 ];
                             }
-                            Process.Start(emulatorExecutable, emulatorArgs);
+                            Log.Log($"Launching emulator executable '{emulatorExecutable}' with args '{string.Join(' ', emulatorArgs)}'");
+                            ProcessStartInfo emulatorPsi = new(emulatorExecutable, emulatorArgs)
+                            {
+                                RedirectStandardOutput = true, RedirectStandardError = true,
+                            };
+                            Process emulatorProcess = new() { StartInfo = emulatorPsi };
+                            emulatorProcess.OutputDataReceived += (_, e) => Log.Log(e.Data);
+                            emulatorProcess.ErrorDataReceived += (_, e) => Log.LogWarning(e.Data);
+                            emulatorProcess.Start();
+                            emulatorProcess.BeginOutputReadLine();
+                            emulatorProcess.BeginErrorReadLine();
+                            emulatorProcess.WaitForExit();
+                            if (emulatorProcess.ExitCode != 0)
+                            {
+                                Log.LogError(Strings.EmulatorLaunchFailedErrorMessage);
+                            }
                         }
                         catch (Exception ex)
                         {
-                            Log.LogException($"Failed to start emulator", ex);
+                            Log.LogException(Strings.EmulatorLaunchFailedErrorMessage, ex);
                         }
                     }
                     else
