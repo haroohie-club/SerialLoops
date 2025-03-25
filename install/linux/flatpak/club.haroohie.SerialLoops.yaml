@@ -59,8 +59,8 @@ modules:
     buildsystem: simple
     sources:
       - type: git
-        url: https://github.com/jonko0493/SerialLoops.git
-        branch: FixupFlatpak
+        url: https://github.com/haroohie-club/SerialLoops.git
+        branch: main
       - ./nuget-sources.json
       - type: patch
         path: patches/sandbox.patch
