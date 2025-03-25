@@ -441,15 +441,15 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             Name = name,
             Description = description,
-            Files = hackFiles.Select(h => new HackFile()
+            Files = hackFiles.Select(h => new HackFile
             {
                 File = h.HackFileName,
                 Destination = h.Destination,
-                Parameters = h.Parameters.Select(p => new HackParameter()
+                Parameters = h.Parameters.Select(p => new HackParameter
                 {
                     Name = p.Name,
                     DescriptiveName = p.DescriptiveName,
-                    Values = p.Values.Select(v => new HackParameterValue()
+                    Values = p.Values.Select(v => new HackParameterValue
                     {
                         Name = v.Name,
                         Value = v.Value,
@@ -770,7 +770,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public async Task ImportProjectCommand_Executed(string slzipPath)
     {
-        (slzipPath, string romPath) = await new ImportProjectDialog()
+        (slzipPath, string romPath) = await new ImportProjectDialog
         {
             DataContext = new ImportProjectDialogViewModel(slzipPath, Log),
         }.ShowDialog<(string, string)>(Window);

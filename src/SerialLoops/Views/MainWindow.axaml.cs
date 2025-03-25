@@ -77,7 +77,7 @@ public partial class MainWindow : Window
                     Command = ViewModel.DeleteProjectCommand,
                 },
                 new NativeMenuItemSeparator(),
-                new NativeMenuItem()
+                new NativeMenuItem
                 {
                     Header = Strings.Edit_Save_File,
                     Icon = ControlGenerator.GetIcon("Edit_Save", ViewModel.Log),

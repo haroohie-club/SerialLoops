@@ -3639,6 +3639,12 @@ item in the dropdown!</value>
   <data name="FramesToSecondsHelp" xml:space="preserve">
     <value>The game runs at 60 frames per second, so 60 frames is equivalent to 1 second.</value>
   </data>
+  <data name="ScriptCommandSetQuickSaveText" xml:space="preserve">
+    <value>Set Quick Save Here</value>
+  </data>
+  <data name="LoadSaveErrorMessage" xml:space="preserve">
+    <value>Unable to load project save file. Please ensure you have set your emulator to melonDS and have built and run at least once.</value>
+  </data>
   <data name="CharacterSpriteEditorSelectBase" xml:space="preserve">
     <value>Select sprite base</value>
   </data>
@@ -3647,6 +3653,9 @@ item in the dropdown!</value>
   </data>
   <data name="CharacterSpriteEditorSelectMouthFrames" xml:space="preserve">
     <value>Select mouth animation frames</value>
+  </data>
+  <data name="ScriptCommandSetQuickSaveAdvancedText" xml:space="preserve">
+    <value>Set Quick Save Here (Advanced)</value>
   </data>
   <data name="ItemLocationLeft" xml:space="preserve">
     <value>Left</value>
