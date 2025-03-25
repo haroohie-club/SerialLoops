@@ -2689,7 +2689,7 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to start emulator. Check the logs for more information.&quot;.
+        ///   Looks up a localized string similar to Failed to start emulator. Check the logs for more information..
         /// </summary>
         public static string EmulatorLaunchFailedErrorMessage {
             get {
