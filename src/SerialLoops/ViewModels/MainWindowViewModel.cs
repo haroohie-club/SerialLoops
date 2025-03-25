@@ -1361,15 +1361,10 @@ public partial class MainWindowViewModel : ViewModelBase
                                 ];
                             }
                             Log.Log($"Launching emulator executable '{emulatorExecutable}' with args '{string.Join(' ', emulatorArgs)}'");
-                            ProcessStartInfo emulatorPsi = new(emulatorExecutable, emulatorArgs)
-                            {
-                                RedirectStandardOutput = true, RedirectStandardError = true,
-                            };
+                            ProcessStartInfo emulatorPsi = new(emulatorExecutable, emulatorArgs) { RedirectStandardError = true };
                             Process emulatorProcess = new() { StartInfo = emulatorPsi };
-                            emulatorProcess.OutputDataReceived += (_, e) => Log.Log(e.Data);
                             emulatorProcess.ErrorDataReceived += (_, e) => Log.LogWarning(e.Data);
                             emulatorProcess.Start();
-                            emulatorProcess.BeginOutputReadLine();
                             emulatorProcess.BeginErrorReadLine();
                             emulatorProcess.WaitForExit();
                             if (emulatorProcess.ExitCode != 0)
