@@ -22,32 +22,30 @@
     <Panel>
         <controls:AcrylicBorderHandler/>
 
-        <StackPanel Orientation="Vertical" Spacing="5" Margin="10 30">
-            <StackPanel Orientation="Horizontal" Spacing="5">
-                <controls:SoundPlayerPanel DataContext="{Binding VolumePreviewPlayer}"/>
-                <StackPanel Orientation="Vertical" Spacing="5">
-                    <Slider Name="VolumeSlider" Minimum="0" Maximum="200" Height="{Binding Waveform.Height}"
-                            Orientation="Vertical" Value="{Binding Volume}" ToolTip.Tip="{Binding Volume}"/>
-                    <Button Command="{Binding NormalizeCommand}">
-                        <StackPanel Orientation="Horizontal" Spacing="3">
-                            <TextBlock Text="{x:Static assets:Strings.Normalize}" VerticalAlignment="Center"/>
-                            <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" ToolTip.Tip="{x:Static assets:Strings.BgmVolumeNormalizeHelp}"/>
-                        </StackPanel>
-                    </Button>
-                </StackPanel>
-                <Image Source="{Binding Waveform, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
-                       Width="{Binding Waveform.Width}" Height="{Binding Waveform.Height}"/>
-            </StackPanel>
-            <StackPanel Orientation="Vertical" Spacing="3" HorizontalAlignment="Right"
-                        Width="{Binding Waveform.Width, Converter={StaticResource AdditionConverter},
-                        ConverterParameter=105}">
+        <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,Auto,*" Margin="10 30">
+            <controls:SoundPlayerPanel Grid.Row="0" Grid.Column="0" DataContext="{Binding VolumePreviewPlayer}"/>
+
+            <Slider Grid.Row="0" Grid.Column="1" Name="VolumeSlider" Minimum="0" Maximum="200" Height="{Binding Waveform.Height}"
+                    Orientation="Vertical" Value="{Binding Volume}" ToolTip.Tip="{Binding Volume}"
+                    HorizontalAlignment="Center"/>
+            <Button Grid.Row="1" Grid.Column="1" Command="{Binding NormalizeCommand}" HorizontalAlignment="Center" Margin="0 5 0 0">
                 <StackPanel Orientation="Horizontal" Spacing="3">
-                    <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}"
-                            CommandParameter="{Binding #BgmVolumeDialog}" IsCancel="True"/>
-                    <Button Content="{x:Static assets:Strings.Save}" Command="{Binding SaveCommand}"
-                            CommandParameter="{Binding #BgmVolumeDialog}" IsDefault="True"/>
+                    <TextBlock Text="{x:Static assets:Strings.Normalize}" VerticalAlignment="Center"/>
+                    <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" ToolTip.Tip="{x:Static assets:Strings.BgmVolumeNormalizeHelp}"/>
                 </StackPanel>
+            </Button>
+
+            <Image Grid.Row="0" Grid.Column="2" Source="{Binding Waveform, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
+                   Width="{Binding Waveform.Width}" Height="{Binding Waveform.Height}"/>
+
+            <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal" Spacing="3" HorizontalAlignment="Right">
+                <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}"
+                        CommandParameter="{Binding #BgmVolumeDialog}" IsCancel="True"
+                        HorizontalAlignment="Right"/>
+                <Button Content="{x:Static assets:Strings.Save}" Command="{Binding SaveCommand}"
+                        CommandParameter="{Binding #BgmVolumeDialog}" IsDefault="True"
+                        HorizontalAlignment="Right"/>
             </StackPanel>
-        </StackPanel>
+        </Grid>
     </Panel>
 </Window>

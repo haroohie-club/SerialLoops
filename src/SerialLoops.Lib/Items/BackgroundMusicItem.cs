@@ -47,7 +47,7 @@ public class BackgroundMusicItem : Item, ISoundItem
     {
     }
 
-    public void Replace(string audioFile, string baseDirectory, string iterativeDirectory, string bgmCachedFile, bool loopEnabled, uint loopStartSample, uint loopEndSample, ILogger log, IProgressTracker tracker, CancellationToken cancellationToken)
+    public void Replace(string audioFile, Project project, string bgmCachedFile, bool loopEnabled, uint loopStartSample, uint loopEndSample, ILogger log, IProgressTracker tracker, CancellationToken cancellationToken)
     {
         try
         {
@@ -63,16 +63,35 @@ public class BackgroundMusicItem : Item, ISoundItem
                 audioFile = mp3ConvertedFile;
                 tracker.Finished++;
             }
-            // Ditto the Vorbis decoder
+            // Ditto the Vorbis/Opus decoders
             else if (Path.GetExtension(audioFile).Equals(".ogg", StringComparison.OrdinalIgnoreCase))
             {
                 string oggConvertedFile = Path.Combine(Path.GetDirectoryName(bgmCachedFile), $"{Path.GetFileNameWithoutExtension(bgmCachedFile)}-converted.wav");
                 log.Log($"Converting {audioFile} to WAV...");
-                tracker.Focus("Converting from Vorbis...", 1);
-                using VorbisWaveReader vorbisReader = new(audioFile);
-                WaveFileWriter.CreateWaveFile(oggConvertedFile, vorbisReader.ToSampleProvider().ToWaveProvider16());
-                audioFile = oggConvertedFile;
-                tracker.Finished++;
+                try
+                {
+                    tracker.Focus("Converting from Vorbis...", 1);
+                    using VorbisWaveReader vorbisReader = new(audioFile);
+                    WaveFileWriter.CreateWaveFile(oggConvertedFile, vorbisReader.ToSampleProvider().ToWaveProvider16());
+                    audioFile = oggConvertedFile;
+                    tracker.Finished++;
+                }
+                catch (Exception vEx)
+                {
+                    log.LogWarning($"Provided ogg was not vorbis; trying opus... (Exception: {vEx.Message})");
+                    try
+                    {
+                        tracker.Focus("Converting from Opus...", 1);
+                        using OggOpusFileReader opusReader = new(audioFile, log);
+                        WaveFileWriter.CreateWaveFile(oggConvertedFile, opusReader.ToSampleProvider().ToWaveProvider16());
+                        audioFile = oggConvertedFile;
+                        tracker.Finished++;
+                    }
+                    catch (Exception opEx)
+                    {
+                        log.LogException(project.Localize("OggDecodeFailedMessage"), opEx);
+                    }
+                }
             }
         }
         catch (Exception ex)
@@ -120,7 +139,7 @@ public class BackgroundMusicItem : Item, ISoundItem
             try
             {
                 log.Log($"Encoding audio to ADX...");
-                AdxUtil.EncodeWav(newAudioFile, Path.Combine(baseDirectory, BgmFile), loopEnabled, loopStartSample, loopEndSample, cancellationToken);
+                AdxUtil.EncodeWav(newAudioFile, Path.Combine(project.BaseDirectory, BgmFile), loopEnabled, loopStartSample, loopEndSample, cancellationToken);
                 audioFile = newAudioFile;
             }
             catch (Exception ex)
@@ -136,7 +155,7 @@ public class BackgroundMusicItem : Item, ISoundItem
             try
             {
                 log.Log($"Encoding audio to ADX...");
-                AdxUtil.EncodeAudio(audio, Path.Combine(baseDirectory, BgmFile), loopEnabled, loopStartSample, loopEndSample, cancellationToken);
+                AdxUtil.EncodeAudio(audio, Path.Combine(project.BaseDirectory, BgmFile), loopEnabled, loopStartSample, loopEndSample, cancellationToken);
             }
             catch (Exception ex)
             {
@@ -146,7 +165,7 @@ public class BackgroundMusicItem : Item, ISoundItem
             tracker.Finished++;
         }
         tracker.Focus("Caching", 2);
-        File.Copy(Path.Combine(baseDirectory, BgmFile), Path.Combine(iterativeDirectory, BgmFile), true);
+        File.Copy(Path.Combine(project.BaseDirectory, BgmFile), Path.Combine(project.IterativeDirectory, BgmFile), true);
         tracker.Finished++;
         if (!string.Equals(audioFile, bgmCachedFile))
         {

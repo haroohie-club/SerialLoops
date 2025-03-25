@@ -134,7 +134,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         SaveHotKey = GuiExtensions.CreatePlatformAgnosticCtrlGesture(Key.S);
         SearchHotKey = GuiExtensions.CreatePlatformAgnosticCtrlGesture(Key.F);
-        CloseProjectKey = GuiExtensions.CreatePlatformAgnosticCtrlGesture(Key.W);
+        CloseProjectKey = GuiExtensions.CreatePlatformAgnosticCtrlGesture(Key.Q);
 
         NewProjectCommand = ReactiveCommand.CreateFromTask(NewProjectCommand_Executed);
         OpenProjectCommand = ReactiveCommand.CreateFromTask(OpenProjectCommand_Executed);
@@ -347,9 +347,11 @@ public partial class MainWindowViewModel : ViewModelBase
                 return false;
             }
 
+            CacheCurrentProject();
+
             // Warn against unsaved items
-            IEnumerable<ItemDescription> unsavedItems = OpenProject.Items.Where(i => i.UnsavedChanges);
-            if (unsavedItems.Any())
+            ItemDescription[] unsavedItems = OpenProject.Items.Where(i => i.UnsavedChanges).ToArray();
+            if (unsavedItems.Length > 0)
             {
                 ButtonResult result;
                 bool skipBuild = false;
@@ -358,9 +360,17 @@ public partial class MainWindowViewModel : ViewModelBase
                     result = ButtonResult.Yes;
                     skipBuild = true;
                 }
+                else if (e?.IsProgrammatic ?? false)
+                {
+                    return false;
+                }
                 else
                 {
                     // message box with yes no cancel buttons
+                    if (e is not null)
+                    {
+                        e.Cancel = true;
+                    }
                     result = await Window.ShowMessageBoxAsync(Strings.Confirm, string.Format(Strings.You_have_unsaved_changes_in__0__item_s___Would_you_like_to_save_before_closing_the_project_, unsavedItems.Count()),
                         ButtonEnum.YesNoCancel, Icon.Warning, Log);
                 }
@@ -370,20 +380,25 @@ public partial class MainWindowViewModel : ViewModelBase
                         SaveProject_Executed();
                         if (!skipBuild)
                         {
-                            //BuildIterativeProject_Executed(sender, e); // make sure we lock in the changes
+                            await BuildIterative_Executed(); // make sure we lock in the changes
                         }
-                        break;
-                    default:
-                        cancel = true;
                         if (e is not null)
                         {
-                            e.Cancel = true;
+                            Window.Close();
+                        }
+                        break;
+                    case ButtonResult.No:
+                        if (e is not null)
+                        {
+                            Window.Close();
                         }
                         break;
                 }
             }
-
-            CacheCurrentProject();
+            else
+            {
+                CacheCurrentProject();
+            }
         }
         else
         {
@@ -550,9 +565,33 @@ public partial class MainWindowViewModel : ViewModelBase
         ItemExplorer = null;
         ToolBar.Items.Clear();
 
+
         NativeMenu menu = NativeMenu.GetMenu(Window);
+
         if (WindowMenu.ContainsKey(MenuHeader.PROJECT))
         {
+            NativeMenuItem projectRenameItem = (NativeMenuItem)WindowMenu[MenuHeader.PROJECT].Menu!.Items
+                .First(m => m is NativeMenuItem nm && nm.Header?.Equals(Strings.ProjectRenameText) == true);
+            NativeMenuItem projectDuplicateItem = (NativeMenuItem)WindowMenu[MenuHeader.PROJECT].Menu.Items
+                .First(m => m is NativeMenuItem nm && nm.Header?.Equals(Strings.ProjectDuplicateText) == true);
+            NativeMenuItem projectDeleteItem = (NativeMenuItem)WindowMenu[MenuHeader.PROJECT].Menu.Items
+                .First(m => m is NativeMenuItem nm && nm.Header?.Equals(Strings.ProjectDeleteText) == true);
+
+            NativeMenuItem projectSaveItem = (NativeMenuItem)WindowMenu[MenuHeader.FILE].Menu!.Items
+                .First(m => m is NativeMenuItem nm && nm.Header?.Equals(Strings.Save_Project) == true);
+            NativeMenuItem projectCloseItem = (NativeMenuItem)WindowMenu[MenuHeader.FILE].Menu.Items
+                .First(m => m is NativeMenuItem nm && nm.Header?.Equals(Strings.Close_Project) == true);
+            int projectAreaIndex = WindowMenu[MenuHeader.FILE].Menu.Items.IndexOf(projectSaveItem);
+
+            WindowMenu[MenuHeader.PROJECT].Menu.Items.Remove(projectRenameItem);
+            WindowMenu[MenuHeader.PROJECT].Menu.Items.Remove(projectDuplicateItem);
+            WindowMenu[MenuHeader.PROJECT].Menu.Items.Remove(projectDeleteItem);
+            WindowMenu[MenuHeader.FILE].Menu.Items.Remove(projectSaveItem);
+            WindowMenu[MenuHeader.FILE].Menu.Items.Remove(projectCloseItem);
+            WindowMenu[MenuHeader.FILE].Menu.Items.Insert(projectAreaIndex, projectRenameItem);
+            WindowMenu[MenuHeader.FILE].Menu.Items.Insert(projectAreaIndex + 1, projectDuplicateItem);
+            WindowMenu[MenuHeader.FILE].Menu.Items.Insert(projectAreaIndex + 2, projectDeleteItem);
+
             menu.Items.Remove(WindowMenu[MenuHeader.PROJECT]);
             WindowMenu.Remove(MenuHeader.PROJECT);
         }
@@ -565,6 +604,11 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             menu.Items.Remove(WindowMenu[MenuHeader.BUILD]);
             WindowMenu.Remove(MenuHeader.BUILD);
+        }
+        if (WindowMenu.ContainsKey(MenuHeader.EDIT))
+        {
+            menu.Items.Remove(WindowMenu[MenuHeader.EDIT]);
+            WindowMenu.Remove(MenuHeader.EDIT);
         }
         ProjectsCache.HadProjectOpenOnLastClose = false;
         UpdateRecentProjects();
@@ -781,6 +825,7 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             OpenProject.Name = Path.GetFileNameWithoutExtension(newProj);
             OpenProjectName = OpenProject.Name;
+            Title = $"{BASE_TITLE} - {OpenProject.Name}";
             foreach (BackgroundMusicItem bgm in OpenProject.Items.Where(i => i.Type == ItemDescription.ItemType.BGM).Cast<BackgroundMusicItem>())
             {
                 bgm.SetBgmFile(OpenProject, Path.GetDirectoryName(projectPath));
@@ -1281,10 +1326,13 @@ public partial class MainWindowViewModel : ViewModelBase
                             {
                                 emulatorExecutable = PatchableConstants.FlatpakProcess;
                             }
-                            if (emulatorExecutable.EndsWith(".app"))
+                            else if (!string.IsNullOrEmpty(PatchableConstants.FlatpakRunProcess))
                             {
-                                emulatorExecutable = Path.Combine(CurrentConfig.EmulatorPath, "Contents", "MacOS",
-                                    Path.GetFileNameWithoutExtension(CurrentConfig.EmulatorPath));
+                                emulatorExecutable = PatchableConstants.FlatpakRunProcess;
+                            }
+                            else if (emulatorExecutable.EndsWith(".app"))
+                            {
+                                emulatorExecutable = "open";
                             }
 
                             string[] emulatorArgs = [Path.Combine(OpenProject.MainDirectory, $"{OpenProject.Name}.nds")];
@@ -1293,6 +1341,22 @@ public partial class MainWindowViewModel : ViewModelBase
                                 emulatorArgs =
                                 [
                                     ..PatchableConstants.FlatpakProcessBaseArgs, "run", CurrentConfig.EmulatorFlatpak,
+                                    Path.Combine(OpenProject.MainDirectory, $"{OpenProject.Name}.nds"),
+                                ];
+                            }
+                            else if (emulatorExecutable.Equals(PatchableConstants.FlatpakRunProcess))
+                            {
+                                emulatorArgs =
+                                [
+                                    ..PatchableConstants.FlatpakRunProcessBaseArgs, CurrentConfig.EmulatorPath,
+                                    Path.Combine(OpenProject.MainDirectory, $"{OpenProject.Name}.nds"),
+                                ];
+                            }
+                            else if (emulatorExecutable == "open")
+                            {
+                                emulatorArgs =
+                                [
+                                    CurrentConfig.EmulatorPath, "--args",
                                     Path.Combine(OpenProject.MainDirectory, $"{OpenProject.Name}.nds"),
                                 ];
                             }
@@ -1325,18 +1389,44 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             insertionPoint--;
         }
+        NativeMenu fileMenu = ((NativeMenuItem)menu.Items.First(m => m is NativeMenuItem nm && nm.Header == Strings._File)).Menu;
+
+        // FILE (additions and removals)
+        NativeMenuItem projectRenameItem = (NativeMenuItem)WindowMenu[MenuHeader.FILE].Menu!.Items
+            .First(m => m is NativeMenuItem nm && nm.Header?.Equals(Strings.ProjectRenameText) == true);
+        int projectAreaIndex = WindowMenu[MenuHeader.FILE].Menu.Items.IndexOf(projectRenameItem);
+        NativeMenuItem projectDuplicateItem = (NativeMenuItem)WindowMenu[MenuHeader.FILE].Menu.Items
+            .First(m => m is NativeMenuItem nm && nm.Header?.Equals(Strings.ProjectDuplicateText) == true);
+        NativeMenuItem projectDeleteItem = (NativeMenuItem)WindowMenu[MenuHeader.FILE].Menu.Items
+            .First(m => m is NativeMenuItem nm && nm.Header?.Equals(Strings.ProjectDeleteText) == true);
+        WindowMenu[MenuHeader.FILE].Menu.Items.Remove(projectRenameItem);
+        fileMenu!.Items.Remove(projectRenameItem);
+        WindowMenu[MenuHeader.FILE].Menu.Items.Remove(projectDuplicateItem);
+        fileMenu.Items.Remove(projectDuplicateItem);
+        WindowMenu[MenuHeader.FILE].Menu.Items.Remove(projectDeleteItem);
+        fileMenu.Items.Remove(projectDeleteItem);
+
+        NativeMenuItem projectSaveItem = new()
+        {
+            Header = Strings.Save_Project,
+            Command = SaveProjectCommand,
+            Icon = ControlGenerator.GetIcon("Save", Log),
+            Gesture = SaveHotKey,
+        };
+        NativeMenuItem projectCloseItem = new()
+        {
+            Header = Strings.Close_Project,
+            Command = CloseProjectCommand,
+            Icon = ControlGenerator.GetIcon("Close", Log),
+            Gesture = CloseProjectKey,
+        };
+        WindowMenu[MenuHeader.FILE].Menu.Items.Insert(projectAreaIndex, projectSaveItem);
+        WindowMenu[MenuHeader.FILE].Menu.Items.Insert(projectAreaIndex + 1, projectCloseItem);
 
         // PROJECT
         WindowMenu.Add(MenuHeader.PROJECT, new(Strings._Project));
         WindowMenu[MenuHeader.PROJECT].Menu =
         [
-            new NativeMenuItem
-            {
-                Header = Strings.Save_Project,
-                Command = SaveProjectCommand,
-                Icon = ControlGenerator.GetIcon("Save", Log),
-                Gesture = SaveHotKey,
-            },
             new NativeMenuItem
             {
                 Header = Strings.Project_Settings___,
@@ -1361,13 +1451,10 @@ public partial class MainWindowViewModel : ViewModelBase
                 Command = ExportPatchCommand,
                 Icon = ControlGenerator.GetIcon("Export_Patch", Log),
             },
-            new NativeMenuItem
-            {
-                Header = Strings.Close_Project,
-                Command = CloseProjectCommand,
-                Icon = ControlGenerator.GetIcon("Close", Log),
-                Gesture = CloseProjectKey,
-            },
+            new NativeMenuItemSeparator(),
+            projectRenameItem,
+            projectDuplicateItem,
+            projectDeleteItem,
         ];
         menu.Items.Insert(insertionPoint, WindowMenu[MenuHeader.PROJECT]);
         insertionPoint++;
@@ -1410,7 +1497,7 @@ public partial class MainWindowViewModel : ViewModelBase
                 Command = SearchProjectCommand,
                 Icon = ControlGenerator.GetIcon("Search", Log),
                 Gesture = SearchHotKey,
-            }
+            },
         ];
         menu.Items.Insert(insertionPoint, WindowMenu[MenuHeader.TOOLS]);
         insertionPoint++;

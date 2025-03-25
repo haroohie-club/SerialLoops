@@ -17,6 +17,10 @@
     </UserControl.Resources>
 
     <Grid>
+        <StackPanel IsVisible="False" Margin="5">
+            <Button Command="{Binding CloseCurrentTabCommand}" HotKey="{Binding CloseTabKeyGesture}"/>
+            <Button Command="{Binding ReopenTabCommand}" HotKey="{Binding ReopenTabKeyGesture}"/>
+        </StackPanel>
         <tab:TabsControl Name="Tabs" ShowDefaultAddButton="False" ItemsSource="{Binding Tabs}"
                          ContainerClearing="Tabs_ContainerClearing" IsVisible="{Binding ShowTabsPanel}"
                          SelectedItem="{Binding SelectedTab}" LastTabClosedAction="{x:Null}"
@@ -26,11 +30,6 @@
                          CloseAllToRightHeaderText="{x:Static assets:Strings.TabaloniaCloseAllToRight}"
                          CloseAllToLeftHeaderText="{x:Static assets:Strings.TabaloniaCloseAllToLeft}"
                          CloseAllHeaderText="{x:Static assets:Strings.TabaloniaCloseAll}">
-            <i:Interaction.Behaviors>
-                <ia:EventTriggerBehavior EventName="SelectionChanged" SourceObject="{Binding #Tabs}">
-                    <ia:InvokeCommandAction Command="{Binding TabSwitchedCommand}"/>
-                </ia:EventTriggerBehavior>
-            </i:Interaction.Behaviors>
             <tab:TabsControl.ItemTemplate>
                 <DataTemplate DataType="editors:EditorViewModel">
                     <StackPanel Orientation="Horizontal" Spacing="3" Name="TabHeader">

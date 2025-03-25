@@ -10,18 +10,17 @@
              x:DataType="vm:ItemExplorerPanelViewModel"
              x:Class="SerialLoops.Views.Panels.ItemExplorerPanel">
 
-    <Grid RowDefinitions="Auto,*">
-        <StackPanel Grid.Row="0" Margin="10" Orientation="Horizontal" HorizontalAlignment="Stretch" Spacing="10">
-            <TextBox Name="Search" Focusable="True" Width="240" Height="30" Watermark="{x:Static assets:Strings.Search___}">
-                <i:Interaction.Behaviors>
-                    <ia:EventTriggerBehavior EventName="TextChanged" SourceObject="{Binding #Search}">
-                        <ia:InvokeCommandAction Command="{Binding SearchCommand}" CommandParameter="{Binding #Search.Text}"/>
-                    </ia:EventTriggerBehavior>
-                </i:Interaction.Behaviors>
-            </TextBox>
-            <Button Command="{Binding SearchProjectCommand}" Width="30" Height="30">...</Button>
-        </StackPanel>
-        <TreeDataGrid Grid.Row="1" Margin="5" ShowColumnHeaders="False" CanUserResizeColumns="False" Name="Viewer" Source="{Binding Source}"
+    <Grid RowDefinitions="Auto,*" ColumnDefinitions="*,30">
+        <TextBox Grid.Row="0" Grid.Column="0" Name="Search" Focusable="True" Height="30" Watermark="{x:Static assets:Strings.Search___}">
+            <i:Interaction.Behaviors>
+                <ia:EventTriggerBehavior EventName="TextChanged" SourceObject="{Binding #Search}">
+                    <ia:InvokeCommandAction Command="{Binding SearchCommand}" CommandParameter="{Binding #Search.Text}"/>
+                </ia:EventTriggerBehavior>
+            </i:Interaction.Behaviors>
+        </TextBox>
+        <Button Grid.Row="0" Grid.Column="1" Command="{Binding SearchProjectCommand}" Height="30">...</Button>
+
+        <TreeDataGrid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="5" ShowColumnHeaders="False" CanUserResizeColumns="False" Name="Viewer" Source="{Binding Source}"
                       KeyUp="Viewer_OnKeyUp" Loaded="Viewer_OnLoaded">
             <i:Interaction.Behaviors>
                 <ia:EventTriggerBehavior EventName="DoubleTapped" SourceObject="{Binding #Viewer}">

@@ -2511,8 +2511,8 @@ No project is currently open. Would you like to create a new project?</value>
   <data name="Volume Config" xml:space="preserve">
     <value>Volume Config</value>
   </data>
-  <data name="Vorbis files" xml:space="preserve">
-    <value>Vorbis files</value>
+  <data name="OggFiles" xml:space="preserve">
+    <value>Opus or Vorbis-encoded OGG files</value>
   </data>
   <data name="Wait Time (Frames)" xml:space="preserve">
     <value>Wait Time (Frames)</value>
@@ -3651,10 +3651,49 @@ item in the dropdown!</value>
   <data name="CharacterSpriteEditorSelectMouthFrames" xml:space="preserve">
     <value>Select mouth animation frames</value>
   </data>
+  <data name="ItemLocationLeft" xml:space="preserve">
+    <value>Left</value>
+  </data>
+  <data name="ItemLocationRight" xml:space="preserve">
+    <value>Right</value>
+  </data>
+  <data name="ItemLocationCenter" xml:space="preserve">
+    <value>Center</value>
+  </data>
+  <data name="ItemLocationExit" xml:space="preserve">
+    <value>Exit</value>
+  </data>
   <data name="ChessPuzzleEditorRemoveMoveLimitText" xml:space="preserve">
     <value>Remove Limit</value>
   </data>
   <data name="ChessPuzzleEditorRemoveLimitHelp" xml:space="preserve">
     <value>The game's move counter only has sprites going up to five; however, if you're fine with glitched numbers and want to play a longer game of chess, you cancheck this box and have fun.</value>
+  </data>
+  <data name="ScriptEditorDialogueSpriteEntranceHelp" xml:space="preserve">
+    <value>The sprite entrance transition is necessary for making the sprite appear on the screen when first entering a scene. It plays before the dialogue is shown.</value>
+  </data>
+  <data name="ScriptEditorDialogueSpriteExitHelp" xml:space="preserve">
+    <value>The sprite exit transition is necessary for making sprites leave or move around on the screen. It plays after the dialogue has been advanced.</value>
+  </data>
+  <data name="SystemTextureEditorReplaceButtonText" xml:space="preserve">
+    <value>Replace</value>
+  </data>
+  <data name="SystemTextureEditorReplaceWithoutPaletteButtonText" xml:space="preserve">
+    <value>Replace Without Palette Change</value>
+  </data>
+  <data name="SystemTexturePaletteReplacementDisabledExtra" xml:space="preserve">
+    <value>This system texture uses the common extra mode palette, so palette replacement has been disabled.</value>
+  </data>
+  <data name="ScriptEditorMoveUpTip" xml:space="preserve">
+    <value>Move Up</value>
+  </data>
+  <data name="ScriptEditorMoveDownTip" xml:space="preserve">
+    <value>Move Down</value>
+  </data>
+  <data name="AboutDialogVersionString" xml:space="preserve">
+    <value>Version {0}</value><comment>{0} denotes the version of the application as displayed in the about dialog</comment>
+  </data>
+  <data name="OggDecodeFailedMessage" xml:space="preserve">
+    <value>Failed to decode provided ogg file; only Vorbis and Opus codecs are supported.</value>
   </data>
 </root>
