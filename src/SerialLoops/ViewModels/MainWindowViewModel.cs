@@ -1087,18 +1087,36 @@ public partial class MainWindowViewModel : ViewModelBase
                     break;
                 case ItemDescription.ItemType.Character:
                     CharacterItem characterItem = (CharacterItem)item;
-                    if (characterItem.NameplateProperties.Name != item.DisplayName[4..])
+                    if (characterItem.NameplateProperties.Name != item.DisplayName[4..] || characterItem.NameplateOverride is not null)
                     {
                         characterItem.Rename($"CHR_{characterItem.NameplateProperties.Name}", OpenProject);
-                        nameplateCanvas.DrawBitmap(
-                            characterItem.GetNewNameplate(_blankNameplate, _blankNameplateBaseArrow, OpenProject),
-                            new SKRect(0, 16 * ((int)characterItem.MessageInfo.Character - 1), 64,
-                                16 * ((int)characterItem.MessageInfo.Character)));
-                        speakerCanvas.DrawBitmap(
-                            characterItem.GetNewNameplate(_blankNameplate, _blankNameplateBaseArrow, OpenProject,
-                                transparent: true),
-                            new SKRect(0, 16 * ((int)characterItem.MessageInfo.Character - 1), 64,
-                                16 * ((int)characterItem.MessageInfo.Character)));
+                        if (characterItem.NameplateOverride is not null)
+                        {
+                            nameplateCanvas.DrawRect(new(0, 16 * ((int)characterItem.MessageInfo.Character - 1), 64,
+                                16 * (int)characterItem.MessageInfo.Character), new() { Color = new(0, 128, 0)});
+                            OpenProject.SpeakerBitmap.Erase(SKColors.Transparent, new(0, 16 * ((int)characterItem.MessageInfo.Character - 1), 64,
+                                16 * (int)characterItem.MessageInfo.Character));
+                            nameplateCanvas.DrawBitmap(
+                                characterItem.NameplateOverride,
+                                new SKRect(0, 16 * ((int)characterItem.MessageInfo.Character - 1), 64,
+                                    16 * (int)characterItem.MessageInfo.Character));
+                            speakerCanvas.DrawBitmap(
+                                characterItem.NameplateOverride,
+                                new SKRect(0, 16 * ((int)characterItem.MessageInfo.Character - 1), 64,
+                                    16 * (int)characterItem.MessageInfo.Character));
+                        }
+                        else
+                        {
+                            nameplateCanvas.DrawBitmap(
+                                characterItem.GetNewNameplate(_blankNameplate, _blankNameplateBaseArrow, OpenProject),
+                                new SKRect(0, 16 * ((int)characterItem.MessageInfo.Character - 1), 64,
+                                    16 * (int)characterItem.MessageInfo.Character));
+                            speakerCanvas.DrawBitmap(
+                                characterItem.GetNewNameplate(_blankNameplate, _blankNameplateBaseArrow, OpenProject,
+                                    transparent: true),
+                                new SKRect(0, 16 * ((int)characterItem.MessageInfo.Character - 1), 64,
+                                    16 * (int)characterItem.MessageInfo.Character));
+                        }
                         changedNameplates = true;
                     }
 

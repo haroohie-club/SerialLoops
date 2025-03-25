@@ -12,6 +12,7 @@ public class CharacterItem : Item
 {
     public MessageInfo MessageInfo { get; set; }
     public NameplateProperties NameplateProperties { get; set; }
+    public SKBitmap NameplateOverride { get; set; }
 
     public CharacterItem(MessageInfo character, NameplateProperties nameplateProperties, Project project) : base($"CHR_{project.Characters[(int)character.Character].Name}", ItemType.Character)
     {

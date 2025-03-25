@@ -3639,6 +3639,15 @@ item in the dropdown!</value>
   <data name="FramesToSecondsHelp" xml:space="preserve">
     <value>The game runs at 60 frames per second, so 60 frames is equivalent to 1 second.</value>
   </data>
+  <data name="CharacterEditorOverrideNameplateText" xml:space="preserve">
+    <value>Override Nameplate</value>
+  </data>
+  <data name="CharacterEditorSelectNameplateFilePickerTitle" xml:space="preserve">
+    <value>Select nameplate image</value>
+  </data>
+  <data name="CharacterEditorNameplateReplaceErrorMessage" xml:space="preserve">
+    <value>Failed to replace nameplate for character {0} with image {1}</value>
+  </data>
   <data name="CharacterSpriteEditorSelectBase" xml:space="preserve">
     <value>Select sprite base</value>
   </data>
