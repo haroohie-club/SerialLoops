@@ -923,6 +923,8 @@ public partial class Project
 
             // ADV bottom screen layouts
             LayoutFiles.Add(0xB5B, Grp.GetFileByIndex(0xB5B));
+            LayoutFiles.Add(0xE42, Grp.GetFileByIndex(0xE42));
+
             List <GraphicsFile> advBottomGraphics =
             [
                 Grp.GetFileByIndex(0xB73),
@@ -976,6 +978,12 @@ public partial class Project
                 Grp.GetFileByIndex(0xB5D),
                 Grp.GetFileByIndex(0xB5E),
             ];
+            SystemTextureFile systexFile = Dat.GetFileByName("SYSTEXS").CastTo<SystemTextureFile>();
+            List<GraphicsFile> xtrTpcGraphicFiles = systexFile.LoadOrders[0x120..0x12A]
+                .Select(l => Grp.GetFileByIndex(systexFile.SystemTextures[l].GrpIndex)).ToList();
+            xtrTpcGraphicFiles.Add(Grp.GetFileByIndex(systexFile.SystemTextures[0x5F].GrpIndex));
+            xtrTpcGraphicFiles = xtrTpcGraphicFiles.OrderBy(g => g.Name).ToList();
+            xtrTpcGraphicFiles.Insert(7, xtrTpcGraphicFiles[7]);
 
             Items.Add(new LayoutItem(0xC45, puzzlePhaseGraphics, 54, 13, "LYT_ACCIDENT_OCCURRED", this));
             tracker.Finished++;
@@ -1022,6 +1030,9 @@ public partial class Project
 
             Items.Add(new LayoutItem(0xB5B, advBottomGraphics, 0, 13, "LYT_CHOICE_SELECT_BOX", this));
             Items.Add(new LayoutItem(0xB5B, advBottomGraphics, 13, 2, "LYT_DIALOGUE_BOX", this));
+
+            Items.Add(new LayoutItem(0xE42, xtrTpcGraphicFiles, 0, 104, "LYT_EXTRA_TOPIC_VIEWER", this));
+            Items.Add(new LayoutItem(0xE42, xtrTpcGraphicFiles, 104, 36, "LYT_EXTRA_TOPIC_CHAR_SELECT", this));
             tracker.Finished++;
         }
         catch (Exception ex)
