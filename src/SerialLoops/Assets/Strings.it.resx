@@ -465,9 +465,6 @@
   <data name="Export Frames" xml:space="preserve">
     <value>Esporta frames</value>
   </data>
-  <data name="Failed to start emulator" xml:space="preserve">
-    <value>Impossibile avviare l'emulatore</value>
-  </data>
   <data name="Failed to load BGM file: file not found." xml:space="preserve">
     <value>Errore caricare file BGM: File non trovato.</value>
   </data>
