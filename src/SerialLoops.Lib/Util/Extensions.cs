@@ -369,10 +369,10 @@ public static partial class Extensions
         int strWidth = 0;
         for (int i = 0; i < str.Length; i++)
         {
-            project.FontReplacement.TryGetValue(str[i], out FontReplacement fr);
+            FontReplacement fr = project.FontReplacement.ReverseLookup(str[i]);
             if ((fr?.CauseOffsetAdjust ?? false) && i < str.Length - 1)
             {
-                project.FontReplacement.TryGetValue(str[i + 1], out FontReplacement nextFr);
+                FontReplacement nextFr = project.FontReplacement.ReverseLookup(str[i + 1]);
                 if (nextFr?.TakeOffsetAdjust ?? false)
                 {
                     strWidth += fr.Offset - 1;
