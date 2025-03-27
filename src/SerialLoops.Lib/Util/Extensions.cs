@@ -104,6 +104,11 @@ public static partial class Extensions
                 originalString = originalString.Replace(match.Value, match.Value.GetSubstitutedString(project));
             }
 
+            foreach (Match match in Regex.Matches(originalString, @"。Ｑ(\d{2})").Cast<Match>())
+            {
+                originalString = originalString.Replace(match.Value, match.Value.GetSubstitutedString(project));
+            }
+
             foreach (Match match in Regex.Matches(originalString, @"。ｘ(\d{2})").Cast<Match>())
             {
                 originalString = originalString.Replace(match.Value, match.Value.GetSubstitutedString(project));
@@ -467,6 +472,10 @@ public static partial class Extensions
                 else if (i < text.Length - 6 && Regex.IsMatch(text[i..(i + 6)], @"#SE\d{3}"))
                 {
                     i += 6;
+                }
+                else if (i < text.Length - 6 && Regex.IsMatch(text[i..(i + 4)], @"#Q\d{2}"))
+                {
+                    i += 4;
                 }
                 else if (i < text.Length - 4 && text[i..(i + 4)] == "#SK0")
                 {
