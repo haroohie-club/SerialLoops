@@ -12,6 +12,34 @@
     </UserControl.Resources>
 
     <Canvas Width="256" Height="384">
+        <!-- Background (TEX_BG) -->
+        <Image Source="{Binding Bg}" Canvas.Left="{Binding BgOrigin.X}"
+               Canvas.Top="{Binding BgOrigin.Y}"/>
+
+        <!-- Item -->
+        <controls:AnimatingImage Canvas.Left="{Binding Item.FinalPosition.X}" Canvas.Top="{Binding Item.FinalPosition.Y}"
+                                 Source="{Binding Item.Image}" Name="Item" Opacity="{Binding Item.FinalOpacity}">
+            <controls:AnimatingImage.Styles>
+                <Style Selector="controls|AnimatingImage:animating">
+                    <Style.Animations>
+                        <Animation Duration="0:0:0.5">
+                            <KeyFrame Cue="0%">
+                                <Setter Property="Opacity" Value="{Binding Item.StartOpacity}"/>
+                                <Setter Property="Canvas.Left" Value="{Binding Item.StartPosition.X}"/>
+                                <Setter Property="Canvas.Top" Value="{Binding Item.StartPosition.Y}"/>
+                            </KeyFrame>
+                            <KeyFrame Cue="100%">
+                                <Setter Property="Opacity" Value="{Binding Item.FinalOpacity}"/>
+                                <Setter Property="Canvas.Left" Value="{Binding Item.FinalPosition.X}"/>
+                                <Setter Property="Canvas.Top" Value="{Binding Item.FinalPosition.Y}"/>
+                            </KeyFrame>
+                        </Animation>
+                    </Style.Animations>
+                </Style>
+            </controls:AnimatingImage.Styles>
+        </controls:AnimatingImage>
+
+        <!-- KBG -->
         <Image Canvas.Left="0" Canvas.Top="0" Source="{Binding Kbg}"
                IsVisible="{Binding KbgVisible}">
             <Image.Styles>
@@ -47,9 +75,11 @@
             </Image.Styles>
         </Image>
 
+        <!-- Place -->
         <Image Canvas.Left="5" Canvas.Top="34" Source="{Binding Place}"
                IsVisible="{Binding PlaceVisible}"/>
 
+        <!-- Top Screen Chibis -->
         <ItemsControl ItemsSource="{Binding TopScreenChibis}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -70,6 +100,7 @@
             </ItemsControl.Styles>
         </ItemsControl>
 
+        <!-- Chibi Emote -->
         <controls:AnimatingImage Canvas.Left="{Binding ChibiEmote.X}" Canvas.Top="{Binding ChibiEmote.Y}"
                Source="{Binding ChibiEmote.Emote}" IsVisible="{Binding TopScreenChibisVisible}"
                Name="ChibiEmote">
@@ -92,36 +123,39 @@
             </controls:AnimatingImage.Styles>
         </controls:AnimatingImage>
 
-        <Image Source="{Binding Bg}" Canvas.Left="{Binding BgOrigin.X}"
-               Canvas.Top="{Binding BgOrigin.Y}"/>
+        <!-- Character Sprites -->
+        <ItemsControl Canvas.Left="0" Canvas.Top="{Binding VerticalOffset}" ItemsSource="{Binding Sprites}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas Width="256" Height="192"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="vm:AnimatedPositionedSprite">
+                    <controls:AnimatedImage DataContext="{Binding AnimatedImage}">
 
-        <controls:AnimatingImage Canvas.Left="{Binding Item.FinalPosition.X}" Canvas.Top="{Binding Item.FinalPosition.Y}"
-                                 Source="{Binding Item.Image}" Name="Item">
-            <controls:AnimatingImage.Styles>
-                <Style Selector="controls|AnimatingImage:animating">
-                    <Style.Animations>
-                        <Animation Duration="0:0:0.5">
-                            <KeyFrame Cue="0%">
-                                <Setter Property="Opacity" Value="{Binding Item.StartOpacity}"/>
-                                <Setter Property="Canvas.Left" Value="{Binding Item.StartPosition.X}"/>
-                                <Setter Property="Canvas.Top" Value="{Binding Item.StartPosition.Y}"/>
-                            </KeyFrame>
-                            <KeyFrame Cue="100%">
-                                <Setter Property="Opacity" Value="1.0"/>
-                                <Setter Property="Canvas.Left" Value="{Binding Item.FinalPosition.X}"/>
-                                <Setter Property="Canvas.Top" Value="{Binding Item.FinalPosition.Y}"/>
-                            </KeyFrame>
-                        </Animation>
-                    </Style.Animations>
+                    </controls:AnimatedImage>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <ItemsControl.Styles>
+                <Style Selector="ItemsControl > ContentPresenter" x:DataType="vm:AnimatedPositionedSprite">
+                    <Setter Property="(Canvas.Left)" Value="{Binding Sprite.Positioning.X}"/>
+                    <Setter Property="(Canvas.Top)" Value="{Binding YPosition}"/>
                 </Style>
-            </controls:AnimatingImage.Styles>
-        </controls:AnimatingImage>
+            </ItemsControl.Styles>
+        </ItemsControl>
 
+        <!-- CGs -->
         <Image Source="{Binding BottomScreenCg}" Canvas.Left="0" Canvas.Top="192"/>
         <Image Source="{Binding TopScreenCg}" Canvas.Left="0" Canvas.Top="0"/>
 
+        <!-- Episode Header -->
         <Image Canvas.Left="0"  Canvas.Top="0" Source="{Binding EpisodeHeader}"
                IsVisible="{Binding EpisodeHeaderVisible}"/>
+
+        <!-- Dialogue -->
+        <Image Canvas.Left="0" Canvas.Top="{Binding DialogueY}" Source="{Binding Dialogue}"/>
+
     </Canvas>
 </UserControl>
 

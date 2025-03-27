@@ -566,9 +566,9 @@ public class ScriptItem : Item
                     ? ((ItemTransitionScriptParameter)lastItemCommand.Parameters[2]).Transition
                     : 0;
                 preview.Item = (item, ((ItemLocationScriptParameter)lastItemCommand.Parameters[1]).Location, transition);
-                if (preview.Item.Location == ItemItem.ItemLocation.Exit)
+                if (preview.Item.Location == ItemItem.ItemLocation.Exit && commands.IndexOf(lastItemCommand) == commands.Count - 1)
                 {
-                    ScriptItemCommand oneBeforeLastItemCommand = commands[..lastItemCommand.Index].LastOrDefault(c => c.Verb == CommandVerb.ITEM_DISPIMG);
+                    ScriptItemCommand oneBeforeLastItemCommand = commands[..^1].LastOrDefault(c => c.Verb == CommandVerb.ITEM_DISPIMG);
                     preview.ItemPreviousLocation =
                         ((ItemLocationScriptParameter)oneBeforeLastItemCommand?.Parameters[1])?.Location ??
                         ItemItem.ItemLocation.Exit;

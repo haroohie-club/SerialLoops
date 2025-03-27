@@ -3,6 +3,7 @@ using System.Linq;
 using Avalonia;
 using AvaloniaEdit.Utils;
 using HaruhiChokuretsuLib.Archive.Data;
+using HaruhiChokuretsuLib.Archive.Event;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SerialLoops.Controls;
@@ -10,6 +11,7 @@ using SerialLoops.Lib;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
 using SerialLoops.Lib.Script.Parameters;
+using SerialLoops.Lib.Util;
 using SerialLoops.Models;
 using SkiaSharp;
 
@@ -32,6 +34,8 @@ public class ScriptPreviewCanvasViewModel(Project project) : ReactiveObject
             {
                 return;
             }
+
+            VerticalOffset = _preview.ChessMode ? 0 : 192;
 
             if (previous?.EpisodeHeader != _preview.EpisodeHeader)
             {
@@ -165,7 +169,7 @@ public class ScriptPreviewCanvasViewModel(Project project) : ReactiveObject
                                 PaletteEffectScriptParameter.GetPaletteEffectPaint(_preview.PalEffect));
                             canvas.Flush();
                             Bg = new(bottomScreenBitmap);
-                            BgOrigin = _preview.ChessMode ? new(0, 0) : new(0, 192);
+                            BgOrigin = new(0, VerticalOffset);
                             break;
                         }
                     }
@@ -180,8 +184,52 @@ public class ScriptPreviewCanvasViewModel(Project project) : ReactiveObject
                 }
                 else
                 {
-                    Item = new(_preview.Item.Item, _preview.Item.Location, _preview.Item.Transition, _preview.ItemPreviousLocation, ChessMode ? 0 : 192);
+                    Item = new(_preview.Item.Item, _preview.Item.Location, _preview.Item.Transition, _preview.ItemPreviousLocation, VerticalOffset);
                 }
+            }
+
+            Sprites.Clear();
+            Sprites.AddRange(_preview.Sprites.Select(s => new AnimatedPositionedSprite(s, project)));
+
+            if (_preview.LastDialogueCommand is not null)
+            {
+                DialogueLine line = ((DialogueScriptParameter)_preview.LastDialogueCommand.Parameters[0]).Line;
+                SKPaint dialoguePaint = _preview.LastDialogueCommand.Verb == EventFile.CommandVerb.PIN_MNL
+                    ? project.DialogueColorFilters[1]
+                    : line.Speaker switch
+                    {
+                        Speaker.MONOLOGUE => project.DialogueColorFilters[1],
+                        Speaker.INFO => project.DialogueColorFilters[4],
+                        _ => project.DialogueColorFilters[0],
+                    };
+                if (!string.IsNullOrEmpty(line.Text))
+                {
+                    SKBitmap dialogueBitmap = new(256, 52);
+                    using SKCanvas canvas = new(dialogueBitmap);
+
+                    canvas.DrawBitmap(project.DialogueBitmap, new(0, 24, 32, 36), new SKRect(0, 12, 256, 24));
+                    SKColor dialogueBoxColor = project.DialogueBitmap.GetPixel(0, 28);
+                    canvas.DrawRect(0, 24, 256, 28, new() { Color = dialogueBoxColor });
+                    canvas.DrawBitmap(project.DialogueBitmap, new(0, 37, 32, 64),
+                        new SKRect(224, 25, 256, 52));
+                    if (_preview.LastDialogueCommand.Verb != EventFile.CommandVerb.PIN_MNL)
+                    {
+                        canvas.DrawBitmap(project.SpeakerBitmap,
+                            new(0, 16 * ((int)line.Speaker - 1), 64, 16 * ((int)line.Speaker)),
+                            new SKRect(0, 0, 64, 16));
+                    }
+
+                    canvas.DrawHaroohieText(line.Text, dialoguePaint, project, y: 20);
+                    canvas.DrawBitmap(project.DialogueArrow, new(0, 0, 16, 16), new SKRect(240, 36, 256, 52));
+                    canvas.Flush();
+                    Dialogue = new(dialogueBitmap);
+                }
+
+                DialogueY = VerticalOffset + 140;
+            }
+            else
+            {
+                Dialogue = null;
             }
 
             PreviewCanvas.RunNonLoopingAnimations();
@@ -222,15 +270,19 @@ public class ScriptPreviewCanvasViewModel(Project project) : ReactiveObject
     [Reactive]
     public AnimatedPositionedItem Item { get; set; }
 
-    public ObservableCollection<PositionedSprite> Sprites { get; set; } = [];
+    public ObservableCollection<AnimatedPositionedSprite> Sprites { get; set; } = [];
+    [Reactive]
+    public int VerticalOffset { get; set; }
 
     [Reactive]
-    public ScriptItemCommand LastDialogueCommand { get; set; }
+    public SKAvaloniaImage Dialogue { get; set; }
+    [Reactive]
+    public int DialogueY { get; set; }
 
     [Reactive]
-    public SKAvaloniaImage TopicChyron { get; set; }
+    public SKAvaloniaImage TopicFlyout { get; set; }
 
-    public ObservableCollection<string> CurrentChoices { get; set; }
+    public ObservableCollection<SKAvaloniaImage> CurrentChoices { get; set; }
 
     [Reactive]
     public SKAvaloniaImage HaruhiMeter { get; set; }
@@ -261,7 +313,37 @@ public class AnimatedPositionedChibi(PositionedChibi chibi) : ReactiveObject
         }
     }
 
+    [Reactive]
     public AnimatedImageViewModel AnimatedImage { get; set; } = new(chibi.Chibi.ChibiAnimations.ElementAt(0).Value);
+}
+
+public class AnimatedPositionedSprite : ReactiveObject
+{
+    private Project _project;
+    private PositionedSprite _sprite;
+    public PositionedSprite Sprite
+    {
+        get => _sprite;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _sprite, value);
+            AnimatedImage = new(_sprite.Sprite.GetClosedMouthAnimation(_project));
+        }
+    }
+
+    [Reactive]
+    public int YPosition { get; set; }
+
+    [Reactive]
+    public AnimatedImageViewModel AnimatedImage { get; set; }
+
+    public AnimatedPositionedSprite(PositionedSprite sprite, Project project)
+    {
+        _project = project;
+        _sprite = sprite;
+        AnimatedImage = new(sprite.Sprite.GetClosedMouthAnimation(project));
+        YPosition  = 192 - AnimatedImage.CurrentFrame.Height;
+    }
 }
 
 public class PositionedChibiEmote(SKAvaloniaImage emote, int x, int y)
@@ -278,6 +360,7 @@ public class AnimatedPositionedItem
     public Point FinalPosition { get; }
     public Point StartPosition { get; }
     public double StartOpacity { get; }
+    public double FinalOpacity { get; } = 1.0;
 
     public AnimatedPositionedItem(ItemItem item, ItemItem.ItemLocation location, ItemItem.ItemTransition transition,
         ItemItem.ItemLocation previousItemLocation, int verticalOffset)
@@ -286,11 +369,27 @@ public class AnimatedPositionedItem
         if (FinalPosition.X < 0)
         {
             FinalPosition = GetItemPosition(previousItemLocation, item.ItemGraphic.Width, verticalOffset);
-            if (FinalPosition.X < 0)
+            if (FinalPosition.X < 0 || transition == 0)
             {
                 Image = null;
-                return;
             }
+            else
+            {
+                Image = new(item.ItemGraphic.GetImage(transparentIndex: 0));
+                StartOpacity = 1;
+                FinalOpacity = transition == ItemItem.ItemTransition.Fade ? 0 : 1;
+                StartPosition = FinalPosition;
+                FinalPosition = transition == ItemItem.ItemTransition.Fade
+                    ? FinalPosition
+                    : location switch
+                    {
+                        ItemItem.ItemLocation.Left => new(-item.ItemGraphic.Width, FinalPosition.Y),
+                        ItemItem.ItemLocation.Right => new(256 + item.ItemGraphic.Width, FinalPosition.Y),
+                        ItemItem.ItemLocation.Center => new(FinalPosition.X, verticalOffset - item.ItemGraphic.Height),
+                        _ => new(0, 0),
+                    };
+            }
+            return;
         }
         Image = new(item.ItemGraphic.GetImage(transparentIndex: 0));
         if (transition == 0)
@@ -300,14 +399,14 @@ public class AnimatedPositionedItem
             return;
         }
 
-        StartOpacity = 0;
+        StartOpacity = transition == ItemItem.ItemTransition.Fade ? 0 : 1;
         StartPosition = transition == ItemItem.ItemTransition.Fade
             ? FinalPosition
             : location switch
             {
-                ItemItem.ItemLocation.Left => new(FinalPosition.X - 32, FinalPosition.Y),
-                ItemItem.ItemLocation.Right => new(FinalPosition.X + 32, FinalPosition.Y),
-                ItemItem.ItemLocation.Center => new(FinalPosition.X, FinalPosition.Y - 32),
+                ItemItem.ItemLocation.Left => new(-item.ItemGraphic.Width, FinalPosition.Y),
+                ItemItem.ItemLocation.Right => new(256 + item.ItemGraphic.Width, FinalPosition.Y),
+                ItemItem.ItemLocation.Center => new(FinalPosition.X, verticalOffset - item.ItemGraphic.Height),
                 _ => new(0, 0),
             };
     }

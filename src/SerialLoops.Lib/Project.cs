@@ -78,6 +78,8 @@ public partial class Project
     [JsonIgnore]
     public SKBitmap DialogueBitmap { get; set; }
     [JsonIgnore]
+    public SKBitmap DialogueArrow { get; set; }
+    [JsonIgnore]
     public SKBitmap FontBitmap { get; set; }
 
     // Files shared between items
@@ -369,6 +371,7 @@ public partial class Project
         try
         {
             DialogueBitmap = Grp.GetFileByName("SYS_CMN_B02DNX").GetImage(transparentIndex: 0);
+            DialogueArrow = Grp.GetFileByName("SYS_CMN_B17DNX").GetImage(transparentIndex: 0);
         }
         catch (Exception ex)
         {

@@ -25,7 +25,6 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
     private readonly MainWindowViewModel _window;
     public EditorTabsPanelViewModel Tabs { get; set; }
     private Func<ItemDescription, bool> _specialPredicate;
-    private readonly Timer _dialogueUpdateTimer;
     private List<ScriptItemCommand> _scriptCommands;
 
     private static SpriteExitScriptParameter.SpriteExitTransition[] s_spriteExits =
@@ -59,13 +58,6 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
         _spriteLayer = ((ShortScriptParameter)command.Parameters[9]).Value;
         _dontClearText = ((BoolScriptParameter)command.Parameters[10]).Value;
         _disableLipFlap = ((BoolScriptParameter)command.Parameters[11]).Value;
-
-        _dialogueUpdateTimer = new(TimeSpan.FromMilliseconds(250));
-        _dialogueUpdateTimer.Elapsed += (_, _) =>
-        {
-            ScriptEditor.UpdatePreview();
-            _dialogueUpdateTimer.Stop();
-        };
     }
 
     public ObservableCollection<CharacterItem> Characters { get; }
@@ -142,8 +134,7 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
                 Script.Event.DialogueSection.Objects[Command.Section.Objects[Command.Index].Parameters[0]].Text = _dialogueLine;
             }
 
-            _dialogueUpdateTimer.Stop();
-            _dialogueUpdateTimer.Start();
+            ScriptEditor.UpdatePreview();
             Script.UnsavedChanges = true;
             Command.UpdateDisplay();
         }
