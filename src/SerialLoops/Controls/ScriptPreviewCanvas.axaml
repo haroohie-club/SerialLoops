@@ -1,0 +1,127 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="using:SerialLoops.ViewModels.Controls"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="using:SerialLoops.Controls"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:ScriptPreviewCanvasViewModel"
+             x:Class="SerialLoops.Controls.ScriptPreviewCanvas"
+             Name="Control">
+    <UserControl.Resources>
+    </UserControl.Resources>
+
+    <Canvas Width="256" Height="384">
+        <Image Canvas.Left="0" Canvas.Top="0" Source="{Binding Kbg}"
+               IsVisible="{Binding KbgVisible}">
+            <Image.Styles>
+                <Style Selector="Image">
+                    <Style.Animations>
+                        <Animation Duration="0:0:8" IterationCount="INFINITE">
+                            <KeyFrame Cue="0%">
+                                <Setter Property="Canvas.Left" Value="0"/>
+                            </KeyFrame>
+                            <KeyFrame Cue="100%">
+                                <Setter Property="Canvas.Left" Value="-256"/>
+                            </KeyFrame>
+                        </Animation>
+                    </Style.Animations>
+                </Style>
+            </Image.Styles>
+        </Image>
+        <Image Canvas.Left="256" Canvas.Top="0" Source="{Binding Kbg}"
+               IsVisible="{Binding KbgVisible}">
+            <Image.Styles>
+                <Style Selector="Image">
+                    <Style.Animations>
+                        <Animation Duration="0:0:8" IterationCount="INFINITE">
+                            <KeyFrame Cue="0%">
+                                <Setter Property="Canvas.Left" Value="256"/>
+                            </KeyFrame>
+                            <KeyFrame Cue="100%">
+                                <Setter Property="Canvas.Left" Value="0"/>
+                            </KeyFrame>
+                        </Animation>
+                    </Style.Animations>
+                </Style>
+            </Image.Styles>
+        </Image>
+
+        <Image Canvas.Left="5" Canvas.Top="34" Source="{Binding Place}"
+               IsVisible="{Binding PlaceVisible}"/>
+
+        <ItemsControl ItemsSource="{Binding TopScreenChibis}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas Width="256" Height="384"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="vm:AnimatedPositionedChibi">
+                    <controls:AnimatedImage DataContext="{Binding AnimatedImage}"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <ItemsControl.Styles>
+                <Style Selector="ItemsControl > ContentPresenter" x:DataType="vm:AnimatedPositionedChibi">
+                    <Setter Property="(Canvas.Left)" Value="{Binding Chibi.X}"/>
+                    <Setter Property="(Canvas.Top)" Value="{Binding Chibi.Y}"/>
+                    <Setter Property="IsVisible" Value="{Binding #Control.((vm:ScriptPreviewCanvasViewModel)DataContext).TopScreenChibisVisible}"/>
+                </Style>
+            </ItemsControl.Styles>
+        </ItemsControl>
+
+        <controls:AnimatingImage Canvas.Left="{Binding ChibiEmote.X}" Canvas.Top="{Binding ChibiEmote.Y}"
+               Source="{Binding ChibiEmote.Emote}" IsVisible="{Binding TopScreenChibisVisible}"
+               Name="ChibiEmote">
+            <controls:AnimatingImage.Styles>
+                <Style Selector="controls|AnimatingImage:animating">
+                    <Style.Animations>
+                        <Animation Duration="0:0:0.5">
+                            <KeyFrame Cue="0%">
+                                <Setter Property="Canvas.Top" Value="{Binding ChibiEmote.Y}"/>
+                            </KeyFrame>
+                            <KeyFrame Cue="50%">
+                                <Setter Property="Canvas.Top" Value="{Binding ChibiEmote.AnimatedY}"/>
+                            </KeyFrame>
+                            <KeyFrame Cue="100%">
+                                <Setter Property="Canvas.Top" Value="{Binding ChibiEmote.Y}"/>
+                            </KeyFrame>
+                        </Animation>
+                    </Style.Animations>
+                </Style>
+            </controls:AnimatingImage.Styles>
+        </controls:AnimatingImage>
+
+        <Image Source="{Binding Bg}" Canvas.Left="{Binding BgOrigin.X}"
+               Canvas.Top="{Binding BgOrigin.Y}"/>
+
+        <controls:AnimatingImage Canvas.Left="{Binding Item.FinalPosition.X}" Canvas.Top="{Binding Item.FinalPosition.Y}"
+                                 Source="{Binding Item.Image}" Name="Item">
+            <controls:AnimatingImage.Styles>
+                <Style Selector="controls|AnimatingImage:animating">
+                    <Style.Animations>
+                        <Animation Duration="0:0:0.5">
+                            <KeyFrame Cue="0%">
+                                <Setter Property="Opacity" Value="{Binding Item.StartOpacity}"/>
+                                <Setter Property="Canvas.Left" Value="{Binding Item.StartPosition.X}"/>
+                                <Setter Property="Canvas.Top" Value="{Binding Item.StartPosition.Y}"/>
+                            </KeyFrame>
+                            <KeyFrame Cue="100%">
+                                <Setter Property="Opacity" Value="1.0"/>
+                                <Setter Property="Canvas.Left" Value="{Binding Item.FinalPosition.X}"/>
+                                <Setter Property="Canvas.Top" Value="{Binding Item.FinalPosition.Y}"/>
+                            </KeyFrame>
+                        </Animation>
+                    </Style.Animations>
+                </Style>
+            </controls:AnimatingImage.Styles>
+        </controls:AnimatingImage>
+
+        <Image Source="{Binding BottomScreenCg}" Canvas.Left="0" Canvas.Top="192"/>
+        <Image Source="{Binding TopScreenCg}" Canvas.Left="0" Canvas.Top="0"/>
+
+        <Image Canvas.Left="0"  Canvas.Top="0" Source="{Binding EpisodeHeader}"
+               IsVisible="{Binding EpisodeHeaderVisible}"/>
+    </Canvas>
+</UserControl>
+

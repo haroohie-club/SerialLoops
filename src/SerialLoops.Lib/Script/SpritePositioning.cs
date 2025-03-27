@@ -27,3 +27,5 @@ public struct PositionedSprite
     public SpritePositioning Positioning { get; set; }
     public SKPaint PalEffect { get; set; }
 }
+
+public record PositionedChibi(ChibiItem Chibi, int X, int Y);

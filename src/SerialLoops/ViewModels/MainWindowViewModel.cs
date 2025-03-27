@@ -1041,8 +1041,8 @@ public partial class MainWindowViewModel : ViewModelBase
         bool changedTopics = false;
         bool changedSubs = false;
         List<int> changedLayouts = [];
-        SKCanvas nameplateCanvas = new(OpenProject.NameplateBitmap);
-        SKCanvas speakerCanvas = new(OpenProject.SpeakerBitmap);
+        using SKCanvas nameplateCanvas = new(OpenProject.NameplateBitmap);
+        using SKCanvas speakerCanvas = new(OpenProject.SpeakerBitmap);
 
         Dictionary<string, IncludeEntry[]> includes = new()
         {

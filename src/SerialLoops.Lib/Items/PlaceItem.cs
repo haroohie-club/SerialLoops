@@ -26,7 +26,7 @@ public class PlaceItem : Item, IPreviewableGraphic
     public static SKBitmap Unscramble(SKBitmap placeGraphic)
     {
         SKBitmap adjustedPlace = new(placeGraphic.Width, placeGraphic.Height);
-        SKCanvas canvas = new(adjustedPlace);
+        using SKCanvas canvas = new(adjustedPlace);
 
         int col = 0, row = 0;
         for (int y = 0; y < 4; y++)
@@ -58,7 +58,7 @@ public class PlaceItem : Item, IPreviewableGraphic
     {
         string spaceAdjustedText = PlaceName.Replace(" ", "   ");
         SKBitmap newPlaceBitmap = new(PlaceGraphic.Width, PlaceGraphic.Height);
-        SKCanvas canvas = new(newPlaceBitmap);
+        using SKCanvas canvas = new(newPlaceBitmap);
         SKColor bgColor = new(0, 249, 0);
         canvas.DrawRegion(new(new SKRectI(0, 0, newPlaceBitmap.Width, newPlaceBitmap.Height)), new() { Color = bgColor });
         TextBlock placeText = new()

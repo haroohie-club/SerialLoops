@@ -80,7 +80,7 @@ public class SaveSlotEditorDialogViewModel : ViewModelBase
                 SelectedScriptSection = ScriptSections[_quickSave.CurrentScriptBlock];
                 _scriptCommandIndex = _quickSave.CurrentScriptCommand;
 
-                List<(ChibiItem Chibi, int X, int Y)> topScreenChibis = [];
+                List<PositionedChibi> topScreenChibis = [];
                 int chibiCurrentX = 80;
                 const int chibiY = 100;
                 for (int i = 1; i <= 5; i++)
@@ -91,14 +91,14 @@ public class SaveSlotEditorDialogViewModel : ViewModelBase
                     }
 
                     ChibiItem chibi = (ChibiItem)_project.Items.First(it => it.Type == ItemDescription.ItemType.Chibi && ((ChibiItem)it).TopScreenIndex == i);
-                    topScreenChibis.Add((chibi, chibiCurrentX, chibiY));
+                    topScreenChibis.Add(new(chibi, chibiCurrentX, chibiY));
                     chibiCurrentX += chibi.ChibiAnimations.First().Value.ElementAt(0).Frame.Width - 16;
                 }
 
                 _scriptPreview = new()
                 {
                     Background = (BackgroundItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == (_quickSave.CgIndex != 0 ? _quickSave.CgIndex : _quickSave.BgIndex)),
-                    BgPalEffect = (PaletteEffectScriptParameter.PaletteEffect)_quickSave.BgPalEffect,
+                    PalEffect = (PaletteEffectScriptParameter.PaletteEffect)_quickSave.BgPalEffect,
                     EpisodeHeader = _quickSave.EpisodeHeader,
                     Kbg = (BackgroundItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == _quickSave.KbgIndex),
                     Place = (PlaceItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Place && ((PlaceItem)i).Index == _quickSave.Place),
@@ -377,7 +377,7 @@ public class SaveSlotEditorDialogViewModel : ViewModelBase
                 }
                 _quickSave.CgIndex = (short)_scriptPreview.Background.Id;
             }
-            _quickSave.BgPalEffect = (short)_scriptPreview.BgPalEffect;
+            _quickSave.BgPalEffect = (short)_scriptPreview.PalEffect;
             _quickSave.EpisodeHeader = _scriptPreview.EpisodeHeader;
             for (int i = 1; i <= 5; i++)
             {

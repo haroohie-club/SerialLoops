@@ -344,25 +344,22 @@ public class ScriptItem : Item
             }
             else
             {
-                chibiStartX = 80;
+                chibiStartX = 75;
                 chibiY = 100;
             }
 
             int chibiCurrentX = chibiStartX;
-            int chibiWidth = 0;
             foreach (ChibiItem chibi in chibis)
             {
-                SKBitmap chibiFrame = chibi.ChibiAnimations.First().Value.ElementAt(0).Frame;
-                preview.TopScreenChibis.Add((chibi, chibiCurrentX, chibiY));
-                chibiWidth = chibiFrame.Width - 16;
+                preview.TopScreenChibis.Add(new(chibi, chibiCurrentX, chibiY));
                 if (chibiY == 50)
                 {
                     chibiY = 100;
-                    chibiCurrentX = 80;
+                    chibiCurrentX = 75;
                 }
                 else
                 {
-                    chibiCurrentX += chibiWidth;
+                    chibiCurrentX += 30;
                 }
             }
 
@@ -375,7 +372,7 @@ public class ScriptItem : Item
                     int chibiIndex = chibis.IndexOf(chibi);
                     int internalYOffset =
                         ((int)((ChibiEmoteScriptParameter)currentCommand.Parameters[1]).Emote - 1) * 32;
-                    int externalXOffset = chibiStartX + chibiWidth * chibiIndex;
+                    int externalXOffset = chibiStartX + 30 * chibiIndex;
                     preview.ChibiEmote = (internalYOffset, externalXOffset, chibi);
                 }
                 else
@@ -510,7 +507,7 @@ public class ScriptItem : Item
         if (palCommand is not null && lastBgCommand is not null &&
             commands.IndexOf(palCommand) > commands.IndexOf(lastBgCommand))
         {
-            preview.BgPalEffect = ((PaletteEffectScriptParameter)palCommand.Parameters[0]).Effect;
+            preview.PalEffect = ((PaletteEffectScriptParameter)palCommand.Parameters[0]).Effect;
         }
 
         ScriptItemCommand bgScrollCommand = null;
@@ -563,10 +560,19 @@ public class ScriptItem : Item
             ItemItem item = (ItemItem)project.Items.FirstOrDefault(i =>
                 i.Type == ItemType.Item && ((ItemScriptParameter)lastItemCommand.Parameters[0]).ItemIndex ==
                 ((ItemItem)i).ItemIndex);
-            if (item is not null && ((ItemLocationScriptParameter)lastItemCommand.Parameters[1]).Location !=
-                ItemItem.ItemLocation.Exit)
+            if (item is not null)
             {
-                preview.Item = (item, ((ItemLocationScriptParameter)lastItemCommand.Parameters[1]).Location);
+                ItemItem.ItemTransition transition = lastItemCommand == commands.Last()
+                    ? ((ItemTransitionScriptParameter)lastItemCommand.Parameters[2]).Transition
+                    : 0;
+                preview.Item = (item, ((ItemLocationScriptParameter)lastItemCommand.Parameters[1]).Location, transition);
+                if (preview.Item.Location == ItemItem.ItemLocation.Exit)
+                {
+                    ScriptItemCommand oneBeforeLastItemCommand = commands[..lastItemCommand.Index].LastOrDefault(c => c.Verb == CommandVerb.ITEM_DISPIMG);
+                    preview.ItemPreviousLocation =
+                        ((ItemLocationScriptParameter)oneBeforeLastItemCommand?.Parameters[1])?.Location ??
+                        ItemItem.ItemLocation.Exit;
+                }
             }
         }
 
@@ -911,22 +917,22 @@ public class ScriptItem : Item
         // Draw SELECT choices
         if (currentCommand.Verb == CommandVerb.SELECT)
         {
-            preview.CurrentChocies = [];
+            preview.CurrentChoices = [];
             if (((OptionScriptParameter)currentCommand.Parameters[0]).Option.Id > 0)
             {
-                preview.CurrentChocies.Add(((OptionScriptParameter)currentCommand.Parameters[0]).Option.Text);
+                preview.CurrentChoices.Add(((OptionScriptParameter)currentCommand.Parameters[0]).Option.Text);
             }
             if (((OptionScriptParameter)currentCommand.Parameters[1]).Option.Id > 0)
             {
-                preview.CurrentChocies.Add(((OptionScriptParameter)currentCommand.Parameters[1]).Option.Text);
+                preview.CurrentChoices.Add(((OptionScriptParameter)currentCommand.Parameters[1]).Option.Text);
             }
             if (((OptionScriptParameter)currentCommand.Parameters[2]).Option.Id > 0)
             {
-                preview.CurrentChocies.Add(((OptionScriptParameter)currentCommand.Parameters[2]).Option.Text);
+                preview.CurrentChoices.Add(((OptionScriptParameter)currentCommand.Parameters[2]).Option.Text);
             }
             if (((OptionScriptParameter)currentCommand.Parameters[3]).Option.Id > 0)
             {
-                preview.CurrentChocies.Add(((OptionScriptParameter)currentCommand.Parameters[3]).Option.Text);
+                preview.CurrentChoices.Add(((OptionScriptParameter)currentCommand.Parameters[3]).Option.Text);
             }
         }
 
@@ -937,7 +943,7 @@ public class ScriptItem : Item
         Project project)
     {
         SKBitmap previewBitmap = new(256, 384);
-        SKCanvas canvas = new(previewBitmap);
+        using SKCanvas canvas = new(previewBitmap);
         canvas.DrawColor(SKColors.Black);
 
         if (!string.IsNullOrEmpty(preview.ErrorImage))
@@ -1074,7 +1080,7 @@ public class ScriptItem : Item
 
                 default:
                     canvas.DrawBitmap(preview.Background.GetBackground(), new SKPoint(0, verticalOffset),
-                        PaletteEffectScriptParameter.GetPaletteEffectPaint(preview.BgPalEffect));
+                        PaletteEffectScriptParameter.GetPaletteEffectPaint(preview.PalEffect));
                     break;
             }
         }
@@ -1150,7 +1156,7 @@ public class ScriptItem : Item
         {
             SKBitmap flyoutSysTex = project.Grp.GetFileByName("SYS_ADV_B01DNX").GetImage(transparentIndex: 0);
             SKBitmap topicFlyout = new(76, 32);
-            SKCanvas flyoutCanvas = new(topicFlyout);
+            using SKCanvas flyoutCanvas = new(topicFlyout);
 
             flyoutCanvas.DrawBitmap(flyoutSysTex, new(0, 20, 32, 32),
                 new SKRect(0, 12, 32, 24));
@@ -1176,13 +1182,13 @@ public class ScriptItem : Item
         }
 
         // Draw select choices
-        if (preview.CurrentChocies?.Count > 0)
+        if (preview.CurrentChoices?.Count > 0)
         {
             List<SKBitmap> choiceGraphics = [];
-            foreach (string choice in preview.CurrentChocies)
+            foreach (string choice in preview.CurrentChoices)
             {
                 SKBitmap choiceGraphic = new(218, 18);
-                SKCanvas choiceCanvas = new(choiceGraphic);
+                using SKCanvas choiceCanvas = new(choiceGraphic);
                 choiceCanvas.DrawRect(1, 1, 216, 16, new() { Color = new(146, 146, 146) });
                 choiceCanvas.DrawRect(2, 2, 214, 14, new() { Color = new(69, 69, 69) });
                 int choiceWidth = choice.CalculateHaroohieTextWidth(project);
