@@ -12,258 +12,263 @@
     </UserControl.Resources>
 
     <Canvas Width="256" Height="384">
-        <!-- Chessboard -->
-        <Image Source="{Binding ChessBoard}" Canvas.Left="8" Canvas.Top="188"/>
+        <Image Canvas.Left="0" Canvas.Top="0" Width="256" Height="384" IsVisible="{Binding DisplayError}"
+               Source="{Binding ErrorImage}"/>
 
-        <ItemsControl ItemsSource="{Binding ChessGuideSpaces}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <Canvas Width="256" Height="384"/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate x:DataType="Point">
-                    <Rectangle Width="20" Height="19" Fill="DarkRed" Opacity="0.5"/>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-            <ItemsControl.Styles>
-                <Style Selector="ItemsControl > ContentPresenter" x:DataType="Point">
-                    <Setter Property="(Canvas.Left)" Value="{Binding X}"/>
-                    <Setter Property="(Canvas.Top)" Value="{Binding Y}"/>
-                </Style>
-            </ItemsControl.Styles>
-        </ItemsControl>
+        <Canvas Canvas.Left="0" Canvas.Top="0" Width="256" Height="384" IsVisible="{Binding !DisplayError}">
+            <!-- Chessboard -->
+            <Image Source="{Binding ChessBoard}" Canvas.Left="8" Canvas.Top="188"/>
 
-        <ItemsControl ItemsSource="{Binding ChessHighlightedSpaces}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <Canvas Width="256" Height="384"/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate x:DataType="Point">
-                    <Rectangle Width="20" Height="19" Fill="Gold" Opacity="0.5"/>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-            <ItemsControl.Styles>
-                <Style Selector="ItemsControl > ContentPresenter" x:DataType="Point">
-                    <Setter Property="(Canvas.Left)" Value="{Binding X}"/>
-                    <Setter Property="(Canvas.Top)" Value="{Binding Y}"/>
-                </Style>
-            </ItemsControl.Styles>
-        </ItemsControl>
+            <ItemsControl ItemsSource="{Binding ChessGuideSpaces}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas Width="256" Height="384"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="Point">
+                        <Rectangle Width="20" Height="19" Fill="DarkRed" Opacity="0.5"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <ItemsControl.Styles>
+                    <Style Selector="ItemsControl > ContentPresenter" x:DataType="Point">
+                        <Setter Property="(Canvas.Left)" Value="{Binding X}"/>
+                        <Setter Property="(Canvas.Top)" Value="{Binding Y}"/>
+                    </Style>
+                </ItemsControl.Styles>
+            </ItemsControl>
 
-        <ItemsControl ItemsSource="{Binding ChessCrossedSpaces}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <Canvas Width="256" Height="384"/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate x:DataType="Point">
-                    <Svg Path="avares://SerialLoops/Assets/Icons/Close.svg" Width="20" Height="20" Opacity="0.5">
-                        <Svg.Styles>
-                            <Style Selector="Svg">
-                                <Setter Property="Css" Value="path { fill: #FF0000 !important }" />
-                            </Style>
-                        </Svg.Styles>
-                    </Svg>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-            <ItemsControl.Styles>
-                <Style Selector="ItemsControl > ContentPresenter" x:DataType="Point">
-                    <Setter Property="(Canvas.Left)" Value="{Binding X}"/>
-                    <Setter Property="(Canvas.Top)" Value="{Binding Y}"/>
-                </Style>
-            </ItemsControl.Styles>
-        </ItemsControl>
+            <ItemsControl ItemsSource="{Binding ChessHighlightedSpaces}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas Width="256" Height="384"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="Point">
+                        <Rectangle Width="20" Height="19" Fill="Gold" Opacity="0.5"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <ItemsControl.Styles>
+                    <Style Selector="ItemsControl > ContentPresenter" x:DataType="Point">
+                        <Setter Property="(Canvas.Left)" Value="{Binding X}"/>
+                        <Setter Property="(Canvas.Top)" Value="{Binding Y}"/>
+                    </Style>
+                </ItemsControl.Styles>
+            </ItemsControl>
 
-        <!-- Background (TEX_BG) -->
-        <Image Source="{Binding Bg}" Canvas.Left="{Binding BgOrigin.X}"
-               Canvas.Top="{Binding BgOrigin.Y}"/>
+            <ItemsControl ItemsSource="{Binding ChessCrossedSpaces}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas Width="256" Height="384"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="Point">
+                        <Svg Path="avares://SerialLoops/Assets/Icons/Close.svg" Width="20" Height="20" Opacity="0.5">
+                            <Svg.Styles>
+                                <Style Selector="Svg">
+                                    <Setter Property="Css" Value="path { fill: #FF0000 !important }" />
+                                </Style>
+                            </Svg.Styles>
+                        </Svg>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <ItemsControl.Styles>
+                    <Style Selector="ItemsControl > ContentPresenter" x:DataType="Point">
+                        <Setter Property="(Canvas.Left)" Value="{Binding X}"/>
+                        <Setter Property="(Canvas.Top)" Value="{Binding Y}"/>
+                    </Style>
+                </ItemsControl.Styles>
+            </ItemsControl>
 
-        <!-- Item -->
-        <controls:AnimatingImage Canvas.Left="{Binding Item.FinalPosition.X}" Canvas.Top="{Binding Item.FinalPosition.Y}"
-                                 Source="{Binding Item.Image}" Name="Item" Opacity="{Binding Item.FinalOpacity}">
-            <controls:AnimatingImage.Styles>
-                <Style Selector="controls|AnimatingImage:animating">
-                    <Style.Animations>
-                        <Animation Duration="0:0:0.5">
-                            <KeyFrame Cue="0%">
-                                <Setter Property="Opacity" Value="{Binding Item.StartOpacity}"/>
-                                <Setter Property="Canvas.Left" Value="{Binding Item.StartPosition.X}"/>
-                                <Setter Property="Canvas.Top" Value="{Binding Item.StartPosition.Y}"/>
-                            </KeyFrame>
-                            <KeyFrame Cue="100%">
-                                <Setter Property="Opacity" Value="{Binding Item.FinalOpacity}"/>
-                                <Setter Property="Canvas.Left" Value="{Binding Item.FinalPosition.X}"/>
-                                <Setter Property="Canvas.Top" Value="{Binding Item.FinalPosition.Y}"/>
-                            </KeyFrame>
-                        </Animation>
-                    </Style.Animations>
-                </Style>
-            </controls:AnimatingImage.Styles>
-        </controls:AnimatingImage>
+            <!-- Background (TEX_BG) -->
+            <Image Source="{Binding Bg}" Canvas.Left="{Binding BgOrigin.X}"
+                   Canvas.Top="{Binding BgOrigin.Y}"/>
 
-        <!-- KBG -->
-        <Image Canvas.Left="0" Canvas.Top="0" Source="{Binding Kbg}"
-               IsVisible="{Binding KbgVisible}">
-            <Image.Styles>
-                <Style Selector="Image">
-                    <Style.Animations>
-                        <Animation Duration="0:0:8" IterationCount="INFINITE">
-                            <KeyFrame Cue="0%">
-                                <Setter Property="Canvas.Left" Value="0"/>
-                            </KeyFrame>
-                            <KeyFrame Cue="100%">
-                                <Setter Property="Canvas.Left" Value="-256"/>
-                            </KeyFrame>
-                        </Animation>
-                    </Style.Animations>
-                </Style>
-            </Image.Styles>
-        </Image>
-        <Image Canvas.Left="256" Canvas.Top="0" Source="{Binding Kbg}"
-               IsVisible="{Binding KbgVisible}">
-            <Image.Styles>
-                <Style Selector="Image">
-                    <Style.Animations>
-                        <Animation Duration="0:0:8" IterationCount="INFINITE">
-                            <KeyFrame Cue="0%">
-                                <Setter Property="Canvas.Left" Value="256"/>
-                            </KeyFrame>
-                            <KeyFrame Cue="100%">
-                                <Setter Property="Canvas.Left" Value="0"/>
-                            </KeyFrame>
-                        </Animation>
-                    </Style.Animations>
-                </Style>
-            </Image.Styles>
-        </Image>
+            <!-- Item -->
+            <controls:AnimatingImage Canvas.Left="{Binding Item.FinalPosition.X}" Canvas.Top="{Binding Item.FinalPosition.Y}"
+                                     Source="{Binding Item.Image}" Name="Item" Opacity="{Binding Item.FinalOpacity}">
+                <controls:AnimatingImage.Styles>
+                    <Style Selector="controls|AnimatingImage:animating">
+                        <Style.Animations>
+                            <Animation Duration="0:0:0.5">
+                                <KeyFrame Cue="0%">
+                                    <Setter Property="Opacity" Value="{Binding Item.StartOpacity}"/>
+                                    <Setter Property="Canvas.Left" Value="{Binding Item.StartPosition.X}"/>
+                                    <Setter Property="Canvas.Top" Value="{Binding Item.StartPosition.Y}"/>
+                                </KeyFrame>
+                                <KeyFrame Cue="100%">
+                                    <Setter Property="Opacity" Value="{Binding Item.FinalOpacity}"/>
+                                    <Setter Property="Canvas.Left" Value="{Binding Item.FinalPosition.X}"/>
+                                    <Setter Property="Canvas.Top" Value="{Binding Item.FinalPosition.Y}"/>
+                                </KeyFrame>
+                            </Animation>
+                        </Style.Animations>
+                    </Style>
+                </controls:AnimatingImage.Styles>
+            </controls:AnimatingImage>
 
-        <!-- Place -->
-        <Image Canvas.Left="5" Canvas.Top="34" Source="{Binding Place}"
-               IsVisible="{Binding PlaceVisible}"/>
+            <!-- KBG -->
+            <Image Canvas.Left="0" Canvas.Top="0" Source="{Binding Kbg}"
+                   IsVisible="{Binding KbgVisible}">
+                <Image.Styles>
+                    <Style Selector="Image">
+                        <Style.Animations>
+                            <Animation Duration="0:0:8" IterationCount="INFINITE">
+                                <KeyFrame Cue="0%">
+                                    <Setter Property="Canvas.Left" Value="0"/>
+                                </KeyFrame>
+                                <KeyFrame Cue="100%">
+                                    <Setter Property="Canvas.Left" Value="-256"/>
+                                </KeyFrame>
+                            </Animation>
+                        </Style.Animations>
+                    </Style>
+                </Image.Styles>
+            </Image>
+            <Image Canvas.Left="256" Canvas.Top="0" Source="{Binding Kbg}"
+                   IsVisible="{Binding KbgVisible}">
+                <Image.Styles>
+                    <Style Selector="Image">
+                        <Style.Animations>
+                            <Animation Duration="0:0:8" IterationCount="INFINITE">
+                                <KeyFrame Cue="0%">
+                                    <Setter Property="Canvas.Left" Value="256"/>
+                                </KeyFrame>
+                                <KeyFrame Cue="100%">
+                                    <Setter Property="Canvas.Left" Value="0"/>
+                                </KeyFrame>
+                            </Animation>
+                        </Style.Animations>
+                    </Style>
+                </Image.Styles>
+            </Image>
 
-        <!-- Top Screen Chibis -->
-        <ItemsControl ItemsSource="{Binding TopScreenChibis}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <Canvas Width="256" Height="384"/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate x:DataType="vm:AnimatedPositionedChibi">
-                    <controls:AnimatedImage DataContext="{Binding AnimatedImage}"/>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-            <ItemsControl.Styles>
-                <Style Selector="ItemsControl > ContentPresenter" x:DataType="vm:AnimatedPositionedChibi">
-                    <Setter Property="(Canvas.Left)" Value="{Binding Chibi.X}"/>
-                    <Setter Property="(Canvas.Top)" Value="{Binding Chibi.Y}"/>
-                    <Setter Property="IsVisible" Value="{Binding #Control.((vm:ScriptPreviewCanvasViewModel)DataContext).TopScreenChibisVisible}"/>
-                </Style>
-            </ItemsControl.Styles>
-        </ItemsControl>
+            <!-- Place -->
+            <Image Canvas.Left="5" Canvas.Top="34" Source="{Binding Place}"
+                   IsVisible="{Binding PlaceVisible}"/>
 
-        <!-- Chibi Emote -->
-        <controls:AnimatingImage Canvas.Left="{Binding ChibiEmote.X}" Canvas.Top="{Binding ChibiEmote.Y}"
-               Source="{Binding ChibiEmote.Emote}" IsVisible="{Binding TopScreenChibisVisible}"
-               Name="ChibiEmote">
-            <controls:AnimatingImage.Styles>
-                <Style Selector="controls|AnimatingImage:animating">
-                    <Style.Animations>
-                        <Animation Duration="0:0:0.5">
-                            <KeyFrame Cue="0%">
-                                <Setter Property="Canvas.Top" Value="{Binding ChibiEmote.Y}"/>
-                            </KeyFrame>
-                            <KeyFrame Cue="50%">
-                                <Setter Property="Canvas.Top" Value="{Binding ChibiEmote.AnimatedY}"/>
-                            </KeyFrame>
-                            <KeyFrame Cue="100%">
-                                <Setter Property="Canvas.Top" Value="{Binding ChibiEmote.Y}"/>
-                            </KeyFrame>
-                        </Animation>
-                    </Style.Animations>
-                </Style>
-            </controls:AnimatingImage.Styles>
-        </controls:AnimatingImage>
+            <!-- Top Screen Chibis -->
+            <ItemsControl ItemsSource="{Binding TopScreenChibis}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas Width="256" Height="384"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="vm:AnimatedPositionedChibi">
+                        <controls:AnimatedImage DataContext="{Binding AnimatedImage}"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <ItemsControl.Styles>
+                    <Style Selector="ItemsControl > ContentPresenter" x:DataType="vm:AnimatedPositionedChibi">
+                        <Setter Property="(Canvas.Left)" Value="{Binding Chibi.X}"/>
+                        <Setter Property="(Canvas.Top)" Value="{Binding Chibi.Y}"/>
+                        <Setter Property="IsVisible" Value="{Binding #Control.((vm:ScriptPreviewCanvasViewModel)DataContext).TopScreenChibisVisible}"/>
+                    </Style>
+                </ItemsControl.Styles>
+            </ItemsControl>
 
-        <!-- Character Sprites -->
-        <ItemsControl Canvas.Left="0" Canvas.Top="{Binding VerticalOffset}" ItemsSource="{Binding Sprites}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <Canvas Width="256" Height="192"/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate x:DataType="vm:AnimatedPositionedSprite">
-                    <controls:AnimatedImage DataContext="{Binding AnimatedImage}">
+            <!-- Chibi Emote -->
+            <controls:AnimatingImage Canvas.Left="{Binding ChibiEmote.X}" Canvas.Top="{Binding ChibiEmote.Y}"
+                   Source="{Binding ChibiEmote.Emote}" IsVisible="{Binding TopScreenChibisVisible}"
+                   Name="ChibiEmote">
+                <controls:AnimatingImage.Styles>
+                    <Style Selector="controls|AnimatingImage:animating">
+                        <Style.Animations>
+                            <Animation Duration="0:0:0.5">
+                                <KeyFrame Cue="0%">
+                                    <Setter Property="Canvas.Top" Value="{Binding ChibiEmote.Y}"/>
+                                </KeyFrame>
+                                <KeyFrame Cue="50%">
+                                    <Setter Property="Canvas.Top" Value="{Binding ChibiEmote.AnimatedY}"/>
+                                </KeyFrame>
+                                <KeyFrame Cue="100%">
+                                    <Setter Property="Canvas.Top" Value="{Binding ChibiEmote.Y}"/>
+                                </KeyFrame>
+                            </Animation>
+                        </Style.Animations>
+                    </Style>
+                </controls:AnimatingImage.Styles>
+            </controls:AnimatingImage>
 
-                    </controls:AnimatedImage>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-            <ItemsControl.Styles>
-                <Style Selector="ItemsControl > ContentPresenter" x:DataType="vm:AnimatedPositionedSprite">
-                    <Setter Property="(Canvas.Left)" Value="{Binding Sprite.Positioning.X}"/>
-                    <Setter Property="(Canvas.Top)" Value="{Binding YPosition}"/>
-                </Style>
-            </ItemsControl.Styles>
-        </ItemsControl>
+            <!-- Character Sprites -->
+            <ItemsControl Canvas.Left="0" Canvas.Top="{Binding VerticalOffset}" ItemsSource="{Binding Sprites}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas Width="256" Height="192"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="vm:AnimatedPositionedSprite">
+                        <controls:AnimatedImage DataContext="{Binding AnimatedImage}">
 
-        <!-- CGs -->
-        <Image Source="{Binding BottomScreenCg}" Canvas.Left="0" Canvas.Top="192"/>
-        <Image Source="{Binding TopScreenCg}" Canvas.Left="0" Canvas.Top="0"/>
+                        </controls:AnimatedImage>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <ItemsControl.Styles>
+                    <Style Selector="ItemsControl > ContentPresenter" x:DataType="vm:AnimatedPositionedSprite">
+                        <Setter Property="(Canvas.Left)" Value="{Binding Sprite.Positioning.X}"/>
+                        <Setter Property="(Canvas.Top)" Value="{Binding YPosition}"/>
+                    </Style>
+                </ItemsControl.Styles>
+            </ItemsControl>
 
-        <!-- Episode Header -->
-        <Image Canvas.Left="0"  Canvas.Top="0" Source="{Binding EpisodeHeader}"
-               IsVisible="{Binding EpisodeHeaderVisible}"/>
+            <!-- CGs -->
+            <Image Source="{Binding BottomScreenCg}" Canvas.Left="0" Canvas.Top="192"/>
+            <Image Source="{Binding TopScreenCg}" Canvas.Left="0" Canvas.Top="0"/>
 
-        <!-- Dialogue -->
-        <Image Canvas.Left="0" Canvas.Top="{Binding DialogueY}" Source="{Binding Dialogue}"/>
+            <!-- Episode Header -->
+            <Image Canvas.Left="0"  Canvas.Top="0" Source="{Binding EpisodeHeader}"
+                   IsVisible="{Binding EpisodeHeaderVisible}"/>
 
-        <!-- Topic Flyout -->
-        <controls:AnimatingImage Canvas.Left="180" Canvas.Top="{Binding TopicFlyoutY}"
-                                 Source="{Binding TopicFlyout}" Name="TopicFlyout">
-            <controls:AnimatingImage.Styles>
-                <Style Selector="controls|AnimatingImage:animating">
-                    <Style.Animations>
-                        <Animation Duration="0:0:0.5">
-                            <KeyFrame Cue="0%">
-                                <Setter Property="Canvas.Left" Value="256"/>
-                            </KeyFrame>
-                            <KeyFrame Cue="100%">
-                                <Setter Property="Canvas.Left" Value="180"/>
-                            </KeyFrame>
-                        </Animation>
-                    </Style.Animations>
-                </Style>
-            </controls:AnimatingImage.Styles>
-        </controls:AnimatingImage>
+            <!-- Dialogue -->
+            <Image Canvas.Left="0" Canvas.Top="{Binding DialogueY}" Source="{Binding Dialogue}"/>
 
-        <!-- Choices -->
-        <ItemsControl ItemsSource="{Binding CurrentChoices}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <Canvas Width="256" Height="384"/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate x:DataType="vm:PositionedChoice">
-                    <Image Source="{Binding Graphic}"/>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-            <ItemsControl.Styles>
-                <Style Selector="ItemsControl > ContentPresenter" x:DataType="vm:PositionedChoice">
-                    <Setter Property="(Canvas.Left)" Value="19"/>
-                    <Setter Property="(Canvas.Top)" Value="{Binding Y}"/>
-                </Style>
-            </ItemsControl.Styles>
-        </ItemsControl>
+            <!-- Topic Flyout -->
+            <controls:AnimatingImage Canvas.Left="180" Canvas.Top="{Binding TopicFlyoutY}"
+                                     Source="{Binding TopicFlyout}" Name="TopicFlyout">
+                <controls:AnimatingImage.Styles>
+                    <Style Selector="controls|AnimatingImage:animating">
+                        <Style.Animations>
+                            <Animation Duration="0:0:0.5">
+                                <KeyFrame Cue="0%">
+                                    <Setter Property="Canvas.Left" Value="256"/>
+                                </KeyFrame>
+                                <KeyFrame Cue="100%">
+                                    <Setter Property="Canvas.Left" Value="180"/>
+                                </KeyFrame>
+                            </Animation>
+                        </Style.Animations>
+                    </Style>
+                </controls:AnimatingImage.Styles>
+            </controls:AnimatingImage>
 
-        <!-- Haruhi Meter -->
-        <Image Canvas.Left="0" Canvas.Top="192" Source="{Binding HaruhiMeter}"
-               IsVisible="{Binding HaruhiMeterVisible}"/>
+            <!-- Choices -->
+            <ItemsControl ItemsSource="{Binding CurrentChoices}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas Width="256" Height="384"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="vm:PositionedChoice">
+                        <Image Source="{Binding Graphic}"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <ItemsControl.Styles>
+                    <Style Selector="ItemsControl > ContentPresenter" x:DataType="vm:PositionedChoice">
+                        <Setter Property="(Canvas.Left)" Value="19"/>
+                        <Setter Property="(Canvas.Top)" Value="{Binding Y}"/>
+                    </Style>
+                </ItemsControl.Styles>
+            </ItemsControl>
+
+            <!-- Haruhi Meter -->
+            <Image Canvas.Left="0" Canvas.Top="192" Source="{Binding HaruhiMeter}"
+                   IsVisible="{Binding HaruhiMeterVisible}"/>
+        </Canvas>
     </Canvas>
 </UserControl>
 

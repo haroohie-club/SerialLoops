@@ -1,7 +1,10 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using Avalonia;
+using Avalonia.Media.Imaging;
+using Avalonia.Platform;
 using AvaloniaEdit.Utils;
 using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
@@ -36,6 +39,14 @@ public class ScriptPreviewCanvasViewModel(Project project) : ReactiveObject
                 return;
             }
 
+            if (!string.IsNullOrEmpty(_preview.ErrorImage))
+            {
+                ErrorImage = new(AssetLoader.Open(new(_preview.ErrorImage)));
+                DisplayError = true;
+                return;
+            }
+
+            DisplayError = false;
             VerticalOffset = _preview.ChessMode ? 0 : 192;
 
             if (!_preview.ChessMode)
@@ -395,7 +406,9 @@ public class ScriptPreviewCanvasViewModel(Project project) : ReactiveObject
     public ObservableCollection<Point> ChessCrossedSpaces { get; set; } = [];
 
     [Reactive]
-    public SKAvaloniaImage ErrorImage { get; set; }
+    public Bitmap ErrorImage { get; set; }
+    [Reactive]
+    public bool DisplayError { get; set; }
 }
 
 public class AnimatedPositionedChibi(PositionedChibi chibi) : ReactiveObject

@@ -1,4 +1,5 @@
 ﻿using SerialLoops.Lib.Items;
+using SerialLoops.Lib.Script.Parameters;
 using SkiaSharp;
 
 namespace SerialLoops.Lib.Script;
@@ -26,6 +27,7 @@ public struct PositionedSprite
     public CharacterSpriteItem Sprite { get; set; }
     public SpritePositioning Positioning { get; set; }
     public SKPaint PalEffect { get; set; }
+    public SpriteEntranceScriptParameter.SpriteEntranceTransition EntranceTransition { get; set; }
 }
 
 public record PositionedChibi(ChibiItem Chibi, int X, int Y);
