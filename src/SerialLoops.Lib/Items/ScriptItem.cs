@@ -716,6 +716,7 @@ public class ScriptItem : Item
                                             X = SpritePositioning.SpritePosition.CENTER.GetSpriteX(), Layer = layer,
                                         },
                                     PalEffect = spritePaint,
+                                    EntranceTransition = spriteEntranceParam.EntranceTransition,
                                 };
                                 break;
 
@@ -732,6 +733,7 @@ public class ScriptItem : Item
                                                 Layer = layer,
                                             },
                                         PalEffect = spritePaint,
+                                        EntranceTransition = spriteEntranceParam.EntranceTransition,
                                     };
                                 }
 
@@ -741,7 +743,7 @@ public class ScriptItem : Item
                             case SpriteEntranceScriptParameter.SpriteEntranceTransition.PEEK_RIGHT_TO_LEFT:
                             case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_LEFT:
                             case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_LEFT_FAST:
-                            case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_LEFT_SLOW:
+                            case SpriteEntranceScriptParameter.SpriteEntranceTransition.BOUNCE_RIGHT_TO_LEFT:
                                 if (spriteIsNew)
                                 {
                                     sprites[character] = new()
@@ -754,6 +756,7 @@ public class ScriptItem : Item
                                                 Layer = layer,
                                             },
                                         PalEffect = spritePaint,
+                                        EntranceTransition = spriteEntranceParam.EntranceTransition,
                                     };
                                 }
                                 else if (previousCharacter != character &&
@@ -770,6 +773,7 @@ public class ScriptItem : Item
                                                 Layer = layer,
                                             },
                                         PalEffect = spritePaint,
+                                        EntranceTransition = spriteEntranceParam.EntranceTransition,
                                     };
                                 }
 
@@ -777,7 +781,7 @@ public class ScriptItem : Item
 
                             case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_RIGHT:
                             case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_RIGHT_FAST:
-                            case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_RIGHT_SLOW:
+                            case SpriteEntranceScriptParameter.SpriteEntranceTransition.BOUNCE_LEFT_TO_RIGHT:
                                 if (spriteIsNew)
                                 {
                                     sprites[character] = new()
@@ -790,6 +794,7 @@ public class ScriptItem : Item
                                                 Layer = layer,
                                             },
                                         PalEffect = spritePaint,
+                                        EntranceTransition = spriteEntranceParam.EntranceTransition,
                                     };
                                 }
                                 else if (previousCharacter != character &&
@@ -806,6 +811,7 @@ public class ScriptItem : Item
                                                 Layer = layer,
                                             },
                                         PalEffect = spritePaint,
+                                        EntranceTransition = spriteEntranceParam.EntranceTransition,
                                     };
                                 }
 
@@ -816,7 +822,10 @@ public class ScriptItem : Item
                     {
                         sprites[character] = new()
                         {
-                            Sprite = spriteParam.Sprite, Positioning = sprite.Positioning, PalEffect = spritePaint,
+                            Sprite = spriteParam.Sprite,
+                            Positioning = sprite.Positioning,
+                            PalEffect = spritePaint,
+                            EntranceTransition = spriteEntranceParam.EntranceTransition,
                         };
                     }
 
@@ -832,6 +841,7 @@ public class ScriptItem : Item
                                     Positioning =
                                         new() { X = SpritePositioning.SpritePosition.LEFT.GetSpriteX(), Layer = layer },
                                     PalEffect = spritePaint,
+                                    EntranceTransition = spriteEntranceParam.EntranceTransition,
                                 };
                                 break;
 
@@ -845,6 +855,7 @@ public class ScriptItem : Item
                                             X = SpritePositioning.SpritePosition.RIGHT.GetSpriteX(), Layer = layer,
                                         },
                                     PalEffect = spritePaint,
+                                    EntranceTransition = spriteEntranceParam.EntranceTransition,
                                 };
                                 break;
 
@@ -861,6 +872,7 @@ public class ScriptItem : Item
                                             X = SpritePositioning.SpritePosition.CENTER.GetSpriteX(), Layer = layer,
                                         },
                                     PalEffect = spritePaint,
+                                    EntranceTransition = spriteEntranceParam.EntranceTransition,
                                 };
                                 break;
                         }

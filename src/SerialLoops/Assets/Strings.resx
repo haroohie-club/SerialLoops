@@ -2628,11 +2628,11 @@ No project is currently open. Would you like to create a new project?</value>
   <data name="SLIDE_RIGHT_TO_LEFT" xml:space="preserve">
     <value>Slide Right to Left</value>
   </data>
-  <data name="SLIDE_LEFT_TO_RIGHT_SLOW" xml:space="preserve">
-    <value>Slide Left to Right (Slow)</value>
+  <data name="BOUNCE_LEFT_TO_RIGHT" xml:space="preserve">
+    <value>Bounce Left to Right</value>
   </data>
-  <data name="SLIDE_RIGHT_TO_LEFT_SLOW" xml:space="preserve">
-    <value>Slide Right to Left (Slow)</value>
+  <data name="BOUNCE_RIGHT_TO_LEFT" xml:space="preserve">
+    <value>Bounce Right to Left</value>
   </data>
   <data name="FADE_TO_CENTER" xml:space="preserve">
     <value>Fade to Center</value>

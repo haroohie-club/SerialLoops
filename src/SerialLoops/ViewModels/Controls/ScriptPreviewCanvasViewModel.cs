@@ -1,8 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
 using Avalonia;
+using Avalonia.Animation.Easings;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using AvaloniaEdit.Utils;
@@ -446,6 +447,19 @@ public class AnimatedPositionedSprite : ReactiveObject
     public int YPosition { get; set; }
 
     [Reactive]
+    public double StartXPosition { get; set; }
+    [Reactive]
+    public double EndXPosition { get; set; }
+    [Reactive]
+    public Easing AnimEasing { get; set; }
+    [Reactive]
+    public double StartOpacity { get; set; }
+    [Reactive]
+    public double EndOpacity { get; set; }
+    [Reactive]
+    public TimeSpan AnimDuration { get; set; }
+
+    [Reactive]
     public AnimatedImageViewModel AnimatedImage { get; set; }
 
     public AnimatedPositionedSprite(PositionedSprite sprite, Project project)
@@ -466,6 +480,77 @@ public class AnimatedPositionedSprite : ReactiveObject
         }
         AnimatedImage = new(framesWithTimings);
         YPosition  = 192 - AnimatedImage.CurrentFrame.Height;
+
+        EndXPosition = sprite.Positioning.X;
+        EndOpacity = 1.0;
+        switch (sprite.EntranceTransition)
+        {
+            case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_RIGHT:
+            case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_CENTER:
+                AnimDuration = TimeSpan.FromSeconds(0.25);
+                StartXPosition = 256;
+                StartOpacity = 0;
+                AnimEasing = new LinearEasing();
+                break;
+
+            case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_LEFT:
+            case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_CENTER:
+                AnimDuration = TimeSpan.FromSeconds(0.25);
+                StartXPosition = -framesWithTimings[0].Frame.Width;
+                StartOpacity = 0;
+                AnimEasing = new LinearEasing();
+                break;
+
+            case SpriteEntranceScriptParameter.SpriteEntranceTransition.BOUNCE_LEFT_TO_RIGHT:
+                AnimDuration = TimeSpan.FromSeconds(1);
+                StartXPosition = EndXPosition + 32;
+                StartOpacity = 1.0;
+                AnimEasing = new ElasticEaseOut();
+                break;
+
+            case SpriteEntranceScriptParameter.SpriteEntranceTransition.BOUNCE_RIGHT_TO_LEFT:
+                AnimDuration = TimeSpan.FromSeconds(1);
+                StartXPosition = EndXPosition - 32;
+                StartOpacity = 1.0;
+                AnimEasing = new ElasticEaseOut();
+                break;
+
+            case SpriteEntranceScriptParameter.SpriteEntranceTransition.FADE_TO_CENTER:
+            case SpriteEntranceScriptParameter.SpriteEntranceTransition.FADE_IN_LEFT:
+                AnimDuration = TimeSpan.FromSeconds(0.5);
+                StartXPosition = EndXPosition;
+                StartOpacity = 0;
+                AnimEasing = new LinearEasing();
+                break;
+
+            case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_RIGHT_FAST:
+                AnimDuration = TimeSpan.FromSeconds(0.125);
+                StartXPosition = 256;
+                StartOpacity = 1;
+                AnimEasing = new LinearEasing();
+                break;
+
+            case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_LEFT_FAST:
+                AnimDuration = TimeSpan.FromSeconds(0.125);
+                StartXPosition = -framesWithTimings[0].Frame.Width;
+                StartOpacity = 1;
+                AnimEasing = new LinearEasing();
+                break;
+
+            case SpriteEntranceScriptParameter.SpriteEntranceTransition.PEEK_RIGHT_TO_LEFT:
+                AnimDuration = TimeSpan.FromSeconds(1.5);
+                StartXPosition = -framesWithTimings[0].Frame.Width;
+                StartOpacity = 1;
+                AnimEasing = new BounceEaseInOut();
+                break;
+
+            default:
+            case SpriteEntranceScriptParameter.SpriteEntranceTransition.NO_TRANSITION:
+                AnimDuration = TimeSpan.Zero;
+                StartXPosition = EndXPosition;
+                AnimEasing = new LinearEasing();
+                break;
+        }
     }
 }
 
@@ -507,7 +592,7 @@ public class AnimatedPositionedItem
                     : location switch
                     {
                         ItemItem.ItemLocation.Left => new(-item.ItemGraphic.Width, FinalPosition.Y),
-                        ItemItem.ItemLocation.Right => new(256 + item.ItemGraphic.Width, FinalPosition.Y),
+                        ItemItem.ItemLocation.Right => new(256, FinalPosition.Y),
                         ItemItem.ItemLocation.Center => new(FinalPosition.X, verticalOffset - item.ItemGraphic.Height),
                         _ => new(0, 0),
                     };

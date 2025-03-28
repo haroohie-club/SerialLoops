@@ -194,7 +194,8 @@
             </controls:AnimatingImage>
 
             <!-- Character Sprites -->
-            <ItemsControl Canvas.Left="0" Canvas.Top="{Binding VerticalOffset}" ItemsSource="{Binding Sprites}">
+            <ItemsControl Canvas.Left="0" Canvas.Top="{Binding VerticalOffset}"
+                          ItemsSource="{Binding Sprites}" Name="Sprites">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <Canvas Width="256" Height="192"/>
@@ -202,14 +203,12 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate x:DataType="vm:AnimatedPositionedSprite">
-                        <controls:AnimatedImage DataContext="{Binding AnimatedImage}">
-
-                        </controls:AnimatedImage>
+                        <controls:AnimatedImage DataContext="{Binding AnimatedImage}"/>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
                 <ItemsControl.Styles>
                     <Style Selector="ItemsControl > ContentPresenter" x:DataType="vm:AnimatedPositionedSprite">
-                        <Setter Property="(Canvas.Left)" Value="{Binding Sprite.Positioning.X}"/>
+                        <Setter Property="(Canvas.Left)" Value="{Binding EndXPosition}"/>
                         <Setter Property="(Canvas.Top)" Value="{Binding YPosition}"/>
                     </Style>
                 </ItemsControl.Styles>

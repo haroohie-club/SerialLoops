@@ -1058,6 +1058,24 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bounce Left to Right.
+        /// </summary>
+        public static string BOUNCE_LEFT_TO_RIGHT {
+            get {
+                return ResourceManager.GetString("BOUNCE_LEFT_TO_RIGHT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bounce Right to Left.
+        /// </summary>
+        public static string BOUNCE_RIGHT_TO_LEFT {
+            get {
+                return ResourceManager.GetString("BOUNCE_RIGHT_TO_LEFT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Build.
         /// </summary>
         public static string Build {
@@ -8952,15 +8970,6 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Slide Left to Right (Slow).
-        /// </summary>
-        public static string SLIDE_LEFT_TO_RIGHT_SLOW {
-            get {
-                return ResourceManager.GetString("SLIDE_LEFT_TO_RIGHT_SLOW", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Slide Right to Center.
         /// </summary>
         public static string SLIDE_RIGHT_TO_CENTER {
@@ -8993,15 +9002,6 @@ namespace SerialLoops.Assets {
         public static string SLIDE_RIGHT_TO_LEFT_FAST {
             get {
                 return ResourceManager.GetString("SLIDE_RIGHT_TO_LEFT_FAST", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Slide Right to Left (Slow).
-        /// </summary>
-        public static string SLIDE_RIGHT_TO_LEFT_SLOW {
-            get {
-                return ResourceManager.GetString("SLIDE_RIGHT_TO_LEFT_SLOW", resourceCulture);
             }
         }
         
