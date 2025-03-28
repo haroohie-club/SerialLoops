@@ -78,7 +78,7 @@ public class ScriptItem : Item
                     {
                         Graph.AddEdge(new()
                         {
-                            Source = section, Target = ((ScriptSectionScriptParameter)command.Parameters[4]).Section
+                            Source = section, Target = ((ScriptSectionScriptParameter)command.Parameters[4]).Section,
                         });
                         Graph.AddEdgeRange(Event.ScriptSections.Where(s =>
                             Event.LabelsSection.Objects.Where(l =>
@@ -101,7 +101,7 @@ public class ScriptItem : Item
                             Graph.AddEdge(new()
                             {
                                 Source = section,
-                                Target = ((ScriptSectionScriptParameter)command.Parameters[0]).Section
+                                Target = ((ScriptSectionScriptParameter)command.Parameters[0]).Section,
                             });
                         }
                         catch (ArgumentOutOfRangeException)
@@ -119,7 +119,7 @@ public class ScriptItem : Item
                             Graph.AddEdge(new()
                             {
                                 Source = section,
-                                Target = ((ScriptSectionScriptParameter)command.Parameters[1]).Section
+                                Target = ((ScriptSectionScriptParameter)command.Parameters[1]).Section,
                             });
                         }
                         catch (ArgumentOutOfRangeException)
@@ -139,7 +139,7 @@ public class ScriptItem : Item
                         {
                             Graph.AddEdge(new()
                             {
-                                Source = section, Target = Event.ScriptSections.First(s => s.Name == "NONEMiss2")
+                                Source = section, Target = Event.ScriptSections.First(s => s.Name == "NONEMiss2"),
                             }); // hardcode this section, even tho you can't get to it
                         }
                     }
@@ -168,7 +168,7 @@ public class ScriptItem : Item
                     {
                         Graph.AddEdge(new()
                         {
-                            Source = Event.ScriptSections[1], Target = section
+                            Source = Event.ScriptSections[1], Target = section,
                         }); // these particular chess files have no VGOTOs, so uh... we manually hardcode them
                     }
                 }
@@ -183,7 +183,7 @@ public class ScriptItem : Item
                     Graph.AddEdge(new()
                     {
                         Source = section,
-                        Target = commandTree.Keys.ElementAt(commandTree.Keys.ToList().IndexOf(section) + 1)
+                        Target = commandTree.Keys.ElementAt(commandTree.Keys.ToList().IndexOf(section) + 1),
                     });
                 }
             }
@@ -624,8 +624,8 @@ public class ScriptItem : Item
                                 Sprite = previousSpriteParam.Sprite,
                                 Positioning = new()
                                 {
-                                    X = SpritePositioning.SpritePosition.LEFT.GetSpriteX(), Layer = layer
-                                }
+                                    X = SpritePositioning.SpritePosition.LEFT.GetSpriteX(), Layer = layer,
+                                },
                             };
                             break;
 
@@ -636,8 +636,8 @@ public class ScriptItem : Item
                                 Sprite = previousSpriteParam.Sprite,
                                 Positioning = new()
                                 {
-                                    X = SpritePositioning.SpritePosition.RIGHT.GetSpriteX(), Layer = layer
-                                }
+                                    X = SpritePositioning.SpritePosition.RIGHT.GetSpriteX(), Layer = layer,
+                                },
                             };
                             break;
                     }
@@ -647,7 +647,7 @@ public class ScriptItem : Item
             if (command.Verb == CommandVerb.DIALOGUE)
             {
                 SpriteScriptParameter spriteParam = (SpriteScriptParameter)command.Parameters[1];
-                SKPaint spritePaint = PaletteEffectScriptParameter.IdentityPaint;
+                SKPaint spritePaint = null;
                 if (commands.IndexOf(palCommand) > commands.IndexOf(command))
                 {
                     spritePaint = ((PaletteEffectScriptParameter)palCommand.Parameters[0]).Effect switch
@@ -659,7 +659,7 @@ public class ScriptItem : Item
                         PaletteEffectScriptParameter.PaletteEffect.SEPIA => PaletteEffectScriptParameter.SepiaPaint,
                         PaletteEffectScriptParameter.PaletteEffect.DIMMED => PaletteEffectScriptParameter
                             .DimmedPaint,
-                        _ => PaletteEffectScriptParameter.IdentityPaint,
+                        _ => null,
                     };
                 }
 
@@ -713,9 +713,9 @@ public class ScriptItem : Item
                                     Positioning =
                                         new()
                                         {
-                                            X = SpritePositioning.SpritePosition.CENTER.GetSpriteX(), Layer = layer
+                                            X = SpritePositioning.SpritePosition.CENTER.GetSpriteX(), Layer = layer,
                                         },
-                                    PalEffect = spritePaint
+                                    PalEffect = spritePaint,
                                 };
                                 break;
 
@@ -729,9 +729,9 @@ public class ScriptItem : Item
                                             new()
                                             {
                                                 X = SpritePositioning.SpritePosition.CENTER.GetSpriteX(),
-                                                Layer = layer
+                                                Layer = layer,
                                             },
-                                        PalEffect = spritePaint
+                                        PalEffect = spritePaint,
                                     };
                                 }
 
@@ -751,9 +751,9 @@ public class ScriptItem : Item
                                             new()
                                             {
                                                 X = SpritePositioning.SpritePosition.LEFT.GetSpriteX(),
-                                                Layer = layer
+                                                Layer = layer,
                                             },
-                                        PalEffect = spritePaint
+                                        PalEffect = spritePaint,
                                     };
                                 }
                                 else if (previousCharacter != character &&
@@ -767,9 +767,9 @@ public class ScriptItem : Item
                                             new()
                                             {
                                                 X = SpritePositioning.SpritePosition.CENTER.GetSpriteX(),
-                                                Layer = layer
+                                                Layer = layer,
                                             },
-                                        PalEffect = spritePaint
+                                        PalEffect = spritePaint,
                                     };
                                 }
 
@@ -787,9 +787,9 @@ public class ScriptItem : Item
                                             new()
                                             {
                                                 X = SpritePositioning.SpritePosition.RIGHT.GetSpriteX(),
-                                                Layer = layer
+                                                Layer = layer,
                                             },
-                                        PalEffect = spritePaint
+                                        PalEffect = spritePaint,
                                     };
                                 }
                                 else if (previousCharacter != character &&
@@ -803,9 +803,9 @@ public class ScriptItem : Item
                                             new()
                                             {
                                                 X = SpritePositioning.SpritePosition.CENTER.GetSpriteX(),
-                                                Layer = layer
+                                                Layer = layer,
                                             },
-                                        PalEffect = spritePaint
+                                        PalEffect = spritePaint,
                                     };
                                 }
 
@@ -816,7 +816,7 @@ public class ScriptItem : Item
                     {
                         sprites[character] = new()
                         {
-                            Sprite = spriteParam.Sprite, Positioning = sprite.Positioning, PalEffect = spritePaint
+                            Sprite = spriteParam.Sprite, Positioning = sprite.Positioning, PalEffect = spritePaint,
                         };
                     }
 
@@ -831,7 +831,7 @@ public class ScriptItem : Item
                                     Sprite = spriteParam.Sprite,
                                     Positioning =
                                         new() { X = SpritePositioning.SpritePosition.LEFT.GetSpriteX(), Layer = layer },
-                                    PalEffect = spritePaint
+                                    PalEffect = spritePaint,
                                 };
                                 break;
 
@@ -842,9 +842,9 @@ public class ScriptItem : Item
                                     Positioning =
                                         new()
                                         {
-                                            X = SpritePositioning.SpritePosition.RIGHT.GetSpriteX(), Layer = layer
+                                            X = SpritePositioning.SpritePosition.RIGHT.GetSpriteX(), Layer = layer,
                                         },
-                                    PalEffect = spritePaint
+                                    PalEffect = spritePaint,
                                 };
                                 break;
 
@@ -858,9 +858,9 @@ public class ScriptItem : Item
                                     Positioning =
                                         new()
                                         {
-                                            X = SpritePositioning.SpritePosition.CENTER.GetSpriteX(), Layer = layer
+                                            X = SpritePositioning.SpritePosition.CENTER.GetSpriteX(), Layer = layer,
                                         },
-                                    PalEffect = spritePaint
+                                    PalEffect = spritePaint,
                                 };
                                 break;
                         }
@@ -1117,7 +1117,7 @@ public class ScriptItem : Item
             {
                 SKBitmap spriteBitmap = sprite.Sprite.GetClosedMouthAnimation(project)[0].Frame;
                 canvas.DrawBitmap(spriteBitmap, sprite.Positioning.GetSpritePosition(spriteBitmap, verticalOffset),
-                    sprite.PalEffect);
+                    sprite.PalEffect ?? PaletteEffectScriptParameter.IdentityPaint);
             }
         }
 
@@ -1205,11 +1205,11 @@ public class ScriptItem : Item
             }
         }
 
-        if (preview.HaruhiMeterVisible)
-        {
-            SKBitmap haruhiMeterBitmap = ((SystemTextureItem)project.Items.First(i => i.Name == "SYSTEX_SYS_CMN_B14")).GetTexture();
-            canvas.DrawBitmap(haruhiMeterBitmap, 0, 192);
-        }
+            if (preview.HaruhiMeterVisible)
+            {
+                SKBitmap haruhiMeterBitmap = ((SystemTextureItem)project.Items.First(i => i.Name == "SYSTEX_SYS_CMN_B14")).GetTexture();
+                canvas.DrawBitmap(haruhiMeterBitmap, 0, 192);
+            }
 
         canvas.Flush();
         return (previewBitmap, null);

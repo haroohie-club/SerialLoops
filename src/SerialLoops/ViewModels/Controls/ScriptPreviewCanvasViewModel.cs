@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Avalonia;
@@ -37,54 +38,90 @@ public class ScriptPreviewCanvasViewModel(Project project) : ReactiveObject
 
             VerticalOffset = _preview.ChessMode ? 0 : 192;
 
-            if (previous?.EpisodeHeader != _preview.EpisodeHeader)
+            if (!_preview.ChessMode)
             {
-                if (_preview.EpisodeHeader == (short)EpisodeHeaderScriptParameter.Episode.None)
+                if (previous?.EpisodeHeader != _preview.EpisodeHeader)
                 {
-                    EpisodeHeader = null;
-                    EpisodeHeaderVisible = false;
-                    KbgVisible = true;
-                    PlaceVisible = true;
-                    TopScreenChibisVisible = true;
+                    if (_preview.EpisodeHeader == (short)EpisodeHeaderScriptParameter.Episode.None)
+                    {
+                        EpisodeHeader = null;
+                        EpisodeHeaderVisible = false;
+                        KbgVisible = true;
+                        PlaceVisible = true;
+                        TopScreenChibisVisible = true;
+                    }
+                    else
+                    {
+                        EpisodeHeader = new(EpisodeHeaderScriptParameter
+                            .GetTexture((EpisodeHeaderScriptParameter.Episode)_preview.EpisodeHeader, project).GetTexture());
+                        EpisodeHeaderVisible = true;
+                        KbgVisible = false;
+                        PlaceVisible = false;
+                        TopScreenChibisVisible = false;
+                    }
+                }
+
+                if (previous?.Kbg != _preview.Kbg)
+                {
+                    Kbg = new(_preview.Kbg?.GetBackground());
+                }
+
+                if (previous?.Place != _preview.Place)
+                {
+                    Place = new(_preview.Place?.GetPreview(project));
+                }
+
+                TopScreenChibis.Clear();
+                TopScreenChibis.AddRange(_preview.TopScreenChibis.Select(c => new AnimatedPositionedChibi(c)));
+
+                if (_preview.ChibiEmote.EmotingChibi is not null)
+                {
+                    SKBitmap emotes = project.Grp.GetFileByName("SYS_ADV_T08DNX").GetImage(width: 32, transparentIndex: 0);
+                    SKBitmap emote = new(32, 32);
+                    emotes.ExtractSubset(emote, new(0, _preview.ChibiEmote.InternalYOffset, 32, _preview.ChibiEmote.InternalYOffset + 32));
+                    int chibiY = _preview.TopScreenChibis.First(c => c.Chibi == _preview.ChibiEmote.EmotingChibi).Y;
+                    ChibiEmote = new(new(emote), _preview.ChibiEmote.ExternalXOffset + 16, chibiY - 32);
                 }
                 else
                 {
-                    EpisodeHeader = new(EpisodeHeaderScriptParameter
-                        .GetTexture((EpisodeHeaderScriptParameter.Episode)_preview.EpisodeHeader, project).GetTexture());
-                    EpisodeHeaderVisible = true;
-                    KbgVisible = false;
-                    PlaceVisible = false;
-                    TopScreenChibisVisible = false;
+                    ChibiEmote = null;
+                }
+
+                ChessBoard = null;
+                ChessGuideSpaces.Clear();
+                ChessHighlightedSpaces.Clear();
+                ChessCrossedSpaces.Clear();
+            }
+            else if (_preview.ChessPuzzle is not null)
+            {
+                KbgVisible = false;
+                PlaceVisible = false;
+                TopScreenChibis.Clear();
+                ChibiEmote = null;
+
+                ChessBoard = new(_preview.ChessPuzzle.GetChessboard(project));
+
+                ChessGuideSpaces.Clear();
+                foreach (SKPoint rectOrigin in _preview.ChessGuideSpaces.Select(g => ChessPuzzleItem.GetChessPiecePosition(g)))
+                {
+                    ChessGuideSpaces.Add(new(rectOrigin.X + 5, rectOrigin.Y + 203));
+                }
+
+                ChessHighlightedSpaces.Clear();
+                foreach (SKPoint rectOrigin in _preview.ChessHighlightedSpaces.Select(h => ChessPuzzleItem.GetChessSpacePosition(h)))
+                {
+                    ChessHighlightedSpaces.Add(new(rectOrigin.X + 5, rectOrigin.Y + 203));
+                }
+
+                ChessCrossedSpaces.Clear();
+                foreach (SKPoint rectOrigin in _preview.ChessCrossedSpaces.Select(c => ChessPuzzleItem.GetChessSpacePosition(c)))
+                {
+                    ChessCrossedSpaces.Add(new(rectOrigin.X + 5, rectOrigin.Y + 203));
                 }
             }
 
-            if (previous?.Kbg != _preview.Kbg)
-            {
-                Kbg = new(_preview.Kbg?.GetBackground());
-            }
-
-            if (previous?.Place != _preview.Place)
-            {
-                Place = new(_preview.Place?.GetPreview(project));
-            }
-
-            TopScreenChibis.Clear();
-            TopScreenChibis.AddRange(_preview.TopScreenChibis.Select(c => new AnimatedPositionedChibi(c)));
-
-            if (_preview.ChibiEmote.EmotingChibi is not null)
-            {
-                SKBitmap emotes = project.Grp.GetFileByName("SYS_ADV_T08DNX").GetImage(width: 32, transparentIndex: 0);
-                SKBitmap emote = new(32, 32);
-                emotes.ExtractSubset(emote, new(0, _preview.ChibiEmote.InternalYOffset, 32, _preview.ChibiEmote.InternalYOffset + 32));
-                int chibiY = _preview.TopScreenChibis.First(c => c.Chibi == _preview.ChibiEmote.EmotingChibi).Y;
-                ChibiEmote = new(new(emote), _preview.ChibiEmote.ExternalXOffset + 16, chibiY - 32);
-            }
-            else
-            {
-                ChibiEmote = null;
-            }
-
-            if (previous?.Background != _preview.Background || previous?.BgPositionBool != _preview.BgPositionBool || previous?.BgScrollCommand != _preview.BgScrollCommand)
+            if (previous?.Background != _preview.Background || previous?.BgPositionBool != _preview.BgPositionBool ||
+                previous?.BgScrollCommand != _preview.BgScrollCommand || previous?.PalEffect != _preview.PalEffect)
             {
                 if (_preview.Background is null)
                 {
@@ -232,6 +269,65 @@ public class ScriptPreviewCanvasViewModel(Project project) : ReactiveObject
                 Dialogue = null;
             }
 
+            if (_preview.Topic is not null)
+            {
+                SKBitmap flyoutSysTex = project.Grp.GetFileByName("SYS_ADV_B01DNX").GetImage(transparentIndex: 0);
+                SKBitmap topicFlyout = new(76, 32);
+                using SKCanvas flyoutCanvas = new(topicFlyout);
+
+                flyoutCanvas.DrawBitmap(flyoutSysTex, new(0, 20, 32, 32),
+                    new SKRect(0, 12, 32, 24));
+                flyoutCanvas.DrawBitmap(flyoutSysTex, new(0, 0, 44, 20),
+                    new SKRect(32, 6, 76, 26));
+
+                SKBitmap topicCards = project.Grp.GetFileByName("SYS_CMN_B09DNX").GetImage(transparentIndex: 0);
+                int srcX = _preview.Topic.TopicEntry.CardType switch
+                {
+                    TopicCardType.Haruhi => 0,
+                    TopicCardType.Mikuru => 20,
+                    TopicCardType.Nagato => 40,
+                    TopicCardType.Koizumi => 60,
+                    TopicCardType.Main => 80,
+                    _ => 100,
+                };
+
+                flyoutCanvas.DrawBitmap(topicCards, new(srcX, 0, srcX + 20, 24),
+                    new SKRect(10, 2, 30, 26));
+                flyoutCanvas.Flush();
+                TopicFlyout = new(topicFlyout);
+                TopicFlyoutY = VerticalOffset + 128;
+            }
+            else
+            {
+                TopicFlyout = null;
+            }
+
+            CurrentChoices.Clear();
+            if (_preview.CurrentChoices?.Count > 0)
+            {
+                List<SKBitmap> choiceGraphics = [];
+                foreach (string choice in _preview.CurrentChoices)
+                {
+                    SKBitmap choiceGraphic = new(218, 18);
+                    using SKCanvas choiceCanvas = new(choiceGraphic);
+                    choiceCanvas.DrawRect(1, 1, 216, 16, new() { Color = new(146, 146, 146) });
+                    choiceCanvas.DrawRect(2, 2, 214, 14, new() { Color = new(69, 69, 69) });
+                    int choiceWidth = choice.CalculateHaroohieTextWidth(project);
+                    choiceCanvas.DrawHaroohieText(choice, project.DialogueColorFilters[0], project, (218 - choiceWidth) / 2, 2);
+                    choiceCanvas.Flush();
+                    choiceGraphics.Add(choiceGraphic);
+                }
+
+                int graphicY = (192 - (choiceGraphics.Count * 18 + (choiceGraphics.Count - 1) * 8)) / 2 + 184;
+                foreach (SKBitmap choiceGraphic in choiceGraphics)
+                {
+                    CurrentChoices.Add(new(new(choiceGraphic), graphicY));
+                    graphicY += 26;
+                }
+            }
+
+            HaruhiMeterVisible = _preview.HaruhiMeterVisible;
+
             PreviewCanvas.RunNonLoopingAnimations();
         }
     }
@@ -281,20 +377,22 @@ public class ScriptPreviewCanvasViewModel(Project project) : ReactiveObject
 
     [Reactive]
     public SKAvaloniaImage TopicFlyout { get; set; }
-
-    public ObservableCollection<SKAvaloniaImage> CurrentChoices { get; set; }
-
     [Reactive]
-    public SKAvaloniaImage HaruhiMeter { get; set; }
+    public int TopicFlyoutY { get; set; }
+
+    public ObservableCollection<PositionedChoice> CurrentChoices { get; set; } = [];
+
+    public SKAvaloniaImage HaruhiMeter { get; } = new(((SystemTextureItem)project.Items.First(i => i.Name == "SYSTEX_SYS_CMN_B14")).GetTexture());
+    [Reactive]
+    public bool HaruhiMeterVisible { get; set; }
 
     [Reactive]
     public bool ChessMode { get; set; }
     [Reactive]
-    public ChessPuzzleItem ChessPuzzle { get; set; }
-    public ObservableCollection<short> ChessHighlightedSpaces { get; set; } = [];
-    public ObservableCollection<short> ChessGuidePieces { get; set; } = [];
-    public ObservableCollection<short> ChessGuideSpaces { get; set; } = [];
-    public ObservableCollection<short> ChessCrossedSpaces { get; set; } = [];
+    public SKAvaloniaImage ChessBoard { get; set; }
+    public ObservableCollection<Point> ChessHighlightedSpaces { get; set; } = [];
+    public ObservableCollection<Point> ChessGuideSpaces { get; set; } = [];
+    public ObservableCollection<Point> ChessCrossedSpaces { get; set; } = [];
 
     [Reactive]
     public SKAvaloniaImage ErrorImage { get; set; }
@@ -341,7 +439,19 @@ public class AnimatedPositionedSprite : ReactiveObject
     {
         _project = project;
         _sprite = sprite;
-        AnimatedImage = new(sprite.Sprite.GetClosedMouthAnimation(project));
+        var framesWithTimings = sprite.Sprite.GetClosedMouthAnimation(project);
+        if (sprite.PalEffect is not null)
+        {
+            for (int i = 0; i < framesWithTimings.Count; i++)
+            {
+                SKBitmap tintedFrame = new(framesWithTimings[i].Frame.Width, framesWithTimings[i].Frame.Height);
+                using SKCanvas canvas = new(tintedFrame);
+                canvas.DrawBitmap(framesWithTimings[i].Frame, 0, 0, sprite.PalEffect);
+                canvas.Flush();
+                framesWithTimings[i] = (tintedFrame, framesWithTimings[i].Timing);
+            }
+        }
+        AnimatedImage = new(framesWithTimings);
         YPosition  = 192 - AnimatedImage.CurrentFrame.Height;
     }
 }
@@ -421,4 +531,10 @@ public class AnimatedPositionedItem
             _ => new(-1, -1),
         };
     }
+}
+
+public class PositionedChoice(SKAvaloniaImage choice, int y)
+{
+    public SKAvaloniaImage Graphic { get; } = choice;
+    public int Y { get; } = y;
 }

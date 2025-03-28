@@ -21,6 +21,7 @@ public partial class ScriptPreviewCanvas : UserControl
     {
         ChibiEmote.Animate();
         Item.Animate();
+        TopicFlyout.Animate();
     }
 }
 
