@@ -26,14 +26,14 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
     private Func<ItemDescription, bool> _specialPredicate;
     private List<ScriptItemCommand> _scriptCommands;
 
-    private static SpriteExitScriptParameter.SpriteExitTransition[] s_spriteExits =
+    private static SpritePostManipScriptParameter.SpritePostTransition[] s_spriteExits =
     [
-        SpriteExitScriptParameter.SpriteExitTransition.SLIDE_FROM_CENTER_TO_RIGHT_FADE_OUT,
-        SpriteExitScriptParameter.SpriteExitTransition.SLIDE_FROM_CENTER_TO_LEFT_FADE_OUT,
-        SpriteExitScriptParameter.SpriteExitTransition.SLIDE_LEFT_TO_RIGHT_FADE_OUT,
-        SpriteExitScriptParameter.SpriteExitTransition.SLIDE_LEFT_TO_LEFT_FADE_OUT,
-        SpriteExitScriptParameter.SpriteExitTransition.FADE_OUT_CENTER,
-        SpriteExitScriptParameter.SpriteExitTransition.FADE_OUT_LEFT,
+        SpritePostManipScriptParameter.SpritePostTransition.SLIDE_FROM_CENTER_TO_RIGHT_FADE_OUT,
+        SpritePostManipScriptParameter.SpritePostTransition.SLIDE_FROM_CENTER_TO_LEFT_FADE_OUT,
+        SpritePostManipScriptParameter.SpritePostTransition.SLIDE_RIGHT_FADE_OUT,
+        SpritePostManipScriptParameter.SpritePostTransition.SLIDE_LEFT_FADE_OUT,
+        SpritePostManipScriptParameter.SpritePostTransition.FADE_OUT_CENTER,
+        SpritePostManipScriptParameter.SpritePostTransition.FADE_OUT_LEFT,
     ];
 
     public DialogueScriptCommandEditorViewModel(ScriptItemCommand command, ScriptEditorViewModel scriptEditor, ILogger log, MainWindowViewModel window) : base(command, scriptEditor, log)
@@ -46,8 +46,8 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
         _dialogueLine = ((DialogueScriptParameter)command.Parameters[0]).Line.Text;
         _characterSprite = ((SpriteScriptParameter)command.Parameters[1]).Sprite;
         SelectCharacterSpriteCommand = ReactiveCommand.CreateFromTask(SelectCharacterSpriteCommand_Executed);
-        _spriteEntranceTransition = new(((SpriteEntranceScriptParameter)command.Parameters[2]).EntranceTransition);
-        _spriteExitTransition = new(((SpriteExitScriptParameter)command.Parameters[3]).ExitTransition);
+        _spriteEntranceTransition = new(((SpritePreManipScriptParameter)command.Parameters[2]).PreTransition);
+        _spriteExitTransition = new(((SpritePostManipScriptParameter)command.Parameters[3]).PostTransition);
         _spriteShakeEffect = new(((SpriteShakeScriptParameter)command.Parameters[4]).ShakeEffect);
         VoicedLines = new(new List<VoicedLineItem> { null }.Concat(_window.OpenProject.Items.Where(i => i.Type == ItemDescription.ItemType.Voice).Cast<VoicedLineItem>()));
         _voicedLine = ((VoicedLineScriptParameter)command.Parameters[5]).VoiceLine;
@@ -87,7 +87,7 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
                 ScriptItemCommand lastDialogueCommand = _scriptCommands[..^1].LastOrDefault(c => c.Verb == EventFile.CommandVerb.DIALOGUE
                     && ((DialogueScriptParameter)c.Parameters[0]).Line?.Speaker == _speaker.MessageInfo.Character);
                 if (((SpriteScriptParameter)lastDialogueCommand?.Parameters[1])?.Sprite is not null &&
-                    !s_spriteExits.Contains(((SpriteExitScriptParameter)lastDialogueCommand.Parameters[3]).ExitTransition))
+                    !s_spriteExits.Contains(((SpritePostManipScriptParameter)lastDialogueCommand.Parameters[3]).PostTransition))
                 {
                     CharacterSprite = ((SpriteScriptParameter)lastDialogueCommand.Parameters[1]).Sprite;
                     return; // return here to avoid updating the script preview twice
@@ -171,7 +171,7 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
     }
 
     public ObservableCollection<SpriteEntranceTransitionLocalized> SpriteEntranceTransitions { get; } =
-        new(Enum.GetValues<SpriteEntranceScriptParameter.SpriteEntranceTransition>().Select(e => new SpriteEntranceTransitionLocalized(e)));
+        new(Enum.GetValues<SpritePreManipScriptParameter.SpritePreTransition>().Select(e => new SpriteEntranceTransitionLocalized(e)));
     private SpriteEntranceTransitionLocalized _spriteEntranceTransition;
     public SpriteEntranceTransitionLocalized SpriteEntranceTransition
     {
@@ -179,16 +179,16 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
         set
         {
             this.RaiseAndSetIfChanged(ref _spriteEntranceTransition, value);
-            ((SpriteEntranceScriptParameter)Command.Parameters[2]).EntranceTransition = _spriteEntranceTransition.Entrance;
+            ((SpritePreManipScriptParameter)Command.Parameters[2]).PreTransition = _spriteEntranceTransition.PreTransition;
             Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
-                .Objects[Command.Index].Parameters[2] = (short)_spriteEntranceTransition.Entrance;
+                .Objects[Command.Index].Parameters[2] = (short)_spriteEntranceTransition.PreTransition;
             ScriptEditor.UpdatePreview();
             Script.UnsavedChanges = true;
         }
     }
 
     public ObservableCollection<SpriteExitTransitionLocalized> SpriteExitTransitions { get; } =
-        new(Enum.GetValues<SpriteExitScriptParameter.SpriteExitTransition>().Select(e => new SpriteExitTransitionLocalized(e)));
+        new(Enum.GetValues<SpritePostManipScriptParameter.SpritePostTransition>().Select(e => new SpriteExitTransitionLocalized(e)));
     private SpriteExitTransitionLocalized _spriteExitTransition;
     public SpriteExitTransitionLocalized SpriteExitTransition
     {
@@ -196,9 +196,9 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
         set
         {
             this.RaiseAndSetIfChanged(ref _spriteExitTransition, value);
-            ((SpriteExitScriptParameter)Command.Parameters[3]).ExitTransition = _spriteExitTransition.Exit;
+            ((SpritePostManipScriptParameter)Command.Parameters[3]).PostTransition = _spriteExitTransition.Post;
             Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
-                .Objects[Command.Index].Parameters[3] = (short)_spriteExitTransition.Exit;
+                .Objects[Command.Index].Parameters[3] = (short)_spriteExitTransition.Post;
             Script.UnsavedChanges = true;
         }
     }
@@ -327,15 +327,15 @@ public partial class DialogueScriptCommandEditorViewModel : ScriptCommandEditorV
     private static partial Regex MidStringOpenQuotes();
 }
 
-public readonly struct SpriteEntranceTransitionLocalized(SpriteEntranceScriptParameter.SpriteEntranceTransition entrance)
+public readonly struct SpriteEntranceTransitionLocalized(SpritePreManipScriptParameter.SpritePreTransition preTransition)
 {
-    public SpriteEntranceScriptParameter.SpriteEntranceTransition Entrance { get; } = entrance;
-    public override string ToString() => Strings.ResourceManager.GetString(Entrance.ToString());
+    public SpritePreManipScriptParameter.SpritePreTransition PreTransition { get; } = preTransition;
+    public override string ToString() => Strings.ResourceManager.GetString(PreTransition.ToString());
 }
-public readonly struct SpriteExitTransitionLocalized(SpriteExitScriptParameter.SpriteExitTransition exit)
+public readonly struct SpriteExitTransitionLocalized(SpritePostManipScriptParameter.SpritePostTransition post)
 {
-    public SpriteExitScriptParameter.SpriteExitTransition Exit { get; } = exit;
-    public override string ToString() => Strings.ResourceManager.GetString(Exit.ToString());
+    public SpritePostManipScriptParameter.SpritePostTransition Post { get; } = post;
+    public override string ToString() => Strings.ResourceManager.GetString(Post.ToString());
 }
 public readonly struct SpriteShakeLocalized(SpriteShakeScriptParameter.SpriteShakeEffect shake)
 {

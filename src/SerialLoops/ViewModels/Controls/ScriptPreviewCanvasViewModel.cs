@@ -481,75 +481,167 @@ public class AnimatedPositionedSprite : ReactiveObject
         AnimatedImage = new(framesWithTimings);
         YPosition  = 192 - AnimatedImage.CurrentFrame.Height;
 
-        EndXPosition = sprite.Positioning.X;
-        EndOpacity = 1.0;
-        switch (sprite.EntranceTransition)
+        if (sprite.PreTransition != SpritePreManipScriptParameter.SpritePreTransition.NO_TRANSITION)
         {
-            case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_RIGHT:
-            case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_CENTER:
-                AnimDuration = TimeSpan.FromSeconds(0.25);
-                StartXPosition = 256;
-                StartOpacity = 0;
-                AnimEasing = new LinearEasing();
-                break;
+            EndXPosition = sprite.Positioning.X;
+            EndOpacity = 1.0;
+            switch (sprite.PreTransition)
+            {
+                case SpritePreManipScriptParameter.SpritePreTransition.SLIDE_LEFT_TO_RIGHT:
+                case SpritePreManipScriptParameter.SpritePreTransition.SLIDE_LEFT_TO_CENTER:
+                    AnimDuration = TimeSpan.FromSeconds(0.25);
+                    StartXPosition = 256;
+                    StartOpacity = 0;
+                    AnimEasing = new LinearEasing();
+                    break;
 
-            case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_LEFT:
-            case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_CENTER:
-                AnimDuration = TimeSpan.FromSeconds(0.25);
-                StartXPosition = -framesWithTimings[0].Frame.Width;
-                StartOpacity = 0;
-                AnimEasing = new LinearEasing();
-                break;
+                case SpritePreManipScriptParameter.SpritePreTransition.SLIDE_RIGHT_TO_LEFT:
+                case SpritePreManipScriptParameter.SpritePreTransition.SLIDE_RIGHT_TO_CENTER:
+                    AnimDuration = TimeSpan.FromSeconds(0.25);
+                    StartXPosition = -framesWithTimings[0].Frame.Width;
+                    StartOpacity = 0;
+                    AnimEasing = new LinearEasing();
+                    break;
 
-            case SpriteEntranceScriptParameter.SpriteEntranceTransition.BOUNCE_LEFT_TO_RIGHT:
-                AnimDuration = TimeSpan.FromSeconds(1);
-                StartXPosition = EndXPosition + 32;
-                StartOpacity = 1.0;
-                AnimEasing = new ElasticEaseOut();
-                break;
+                case SpritePreManipScriptParameter.SpritePreTransition.BOUNCE_LEFT_TO_RIGHT:
+                    AnimDuration = TimeSpan.FromSeconds(1);
+                    StartXPosition = EndXPosition + 32;
+                    StartOpacity = 1.0;
+                    AnimEasing = new ElasticEaseOut();
+                    break;
 
-            case SpriteEntranceScriptParameter.SpriteEntranceTransition.BOUNCE_RIGHT_TO_LEFT:
-                AnimDuration = TimeSpan.FromSeconds(1);
-                StartXPosition = EndXPosition - 32;
-                StartOpacity = 1.0;
-                AnimEasing = new ElasticEaseOut();
-                break;
+                case SpritePreManipScriptParameter.SpritePreTransition.BOUNCE_RIGHT_TO_LEFT:
+                    AnimDuration = TimeSpan.FromSeconds(1);
+                    StartXPosition = EndXPosition - 32;
+                    StartOpacity = 1.0;
+                    AnimEasing = new ElasticEaseOut();
+                    break;
 
-            case SpriteEntranceScriptParameter.SpriteEntranceTransition.FADE_TO_CENTER:
-            case SpriteEntranceScriptParameter.SpriteEntranceTransition.FADE_IN_LEFT:
-                AnimDuration = TimeSpan.FromSeconds(0.5);
-                StartXPosition = EndXPosition;
-                StartOpacity = 0;
-                AnimEasing = new LinearEasing();
-                break;
+                case SpritePreManipScriptParameter.SpritePreTransition.FADE_TO_CENTER:
+                case SpritePreManipScriptParameter.SpritePreTransition.FADE_IN_LEFT:
+                    AnimDuration = TimeSpan.FromSeconds(0.5);
+                    StartXPosition = EndXPosition;
+                    StartOpacity = 0;
+                    AnimEasing = new LinearEasing();
+                    break;
 
-            case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_LEFT_TO_RIGHT_FAST:
-                AnimDuration = TimeSpan.FromSeconds(0.125);
-                StartXPosition = 256;
-                StartOpacity = 1;
-                AnimEasing = new LinearEasing();
-                break;
+                case SpritePreManipScriptParameter.SpritePreTransition.SLIDE_LEFT_TO_RIGHT_FAST:
+                    AnimDuration = TimeSpan.FromSeconds(0.125);
+                    StartXPosition = 256;
+                    StartOpacity = 1;
+                    AnimEasing = new LinearEasing();
+                    break;
 
-            case SpriteEntranceScriptParameter.SpriteEntranceTransition.SLIDE_RIGHT_TO_LEFT_FAST:
-                AnimDuration = TimeSpan.FromSeconds(0.125);
-                StartXPosition = -framesWithTimings[0].Frame.Width;
-                StartOpacity = 1;
-                AnimEasing = new LinearEasing();
-                break;
+                case SpritePreManipScriptParameter.SpritePreTransition.SLIDE_RIGHT_TO_LEFT_FAST:
+                    AnimDuration = TimeSpan.FromSeconds(0.125);
+                    StartXPosition = -framesWithTimings[0].Frame.Width;
+                    StartOpacity = 1;
+                    AnimEasing = new LinearEasing();
+                    break;
 
-            case SpriteEntranceScriptParameter.SpriteEntranceTransition.PEEK_RIGHT_TO_LEFT:
-                AnimDuration = TimeSpan.FromSeconds(1.5);
-                StartXPosition = -framesWithTimings[0].Frame.Width;
-                StartOpacity = 1;
-                AnimEasing = new BounceEaseInOut();
-                break;
+                case SpritePreManipScriptParameter.SpritePreTransition.PEEK_RIGHT_TO_LEFT:
+                    AnimDuration = TimeSpan.FromSeconds(1.5);
+                    StartXPosition = -framesWithTimings[0].Frame.Width;
+                    StartOpacity = 1;
+                    AnimEasing = new BounceEaseInOut();
+                    break;
+            }
+        }
+        else if (sprite.PostTransition != SpritePostManipScriptParameter.SpritePostTransition.NO_EXIT)
+        {
+            switch (sprite.PostTransition)
+            {
+                case SpritePostManipScriptParameter.SpritePostTransition.SLIDE_FROM_CENTER_TO_RIGHT_FADE_OUT:
+                    AnimDuration = TimeSpan.FromSeconds(0.25);
+                    StartXPosition = SpritePositioning.SpritePosition.CENTER.GetSpriteX();
+                    EndXPosition = 256;
+                    StartOpacity = 1.0;
+                    EndOpacity = 0.0;
+                    AnimEasing = new LinearEasing();
+                    break;
 
-            default:
-            case SpriteEntranceScriptParameter.SpriteEntranceTransition.NO_TRANSITION:
-                AnimDuration = TimeSpan.Zero;
-                StartXPosition = EndXPosition;
-                AnimEasing = new LinearEasing();
-                break;
+                case SpritePostManipScriptParameter.SpritePostTransition.SLIDE_FROM_CENTER_TO_LEFT_FADE_OUT:
+                    AnimDuration = TimeSpan.FromSeconds(0.25);
+                    StartXPosition = SpritePositioning.SpritePosition.CENTER.GetSpriteX();
+                    EndXPosition = -framesWithTimings[0].Frame.Width;
+                    StartOpacity = 1.0;
+                    EndOpacity = 0.0;
+                    AnimEasing = new LinearEasing();
+                    break;
+
+                case SpritePostManipScriptParameter.SpritePostTransition.SLIDE_CENTER_TO_RIGHT_AND_STAY:
+                case SpritePostManipScriptParameter.SpritePostTransition.SLIDE_CENTER_TO_LEFT_AND_STAY:
+                    AnimDuration = TimeSpan.FromSeconds(0.25);
+                    StartXPosition = SpritePositioning.SpritePosition.CENTER.GetSpriteX();
+                    EndXPosition = sprite.Positioning.X;
+                    StartOpacity = 1.0;
+                    EndOpacity = 1.0;
+                    AnimEasing = new QuadraticEaseInOut();
+                    break;
+
+                case SpritePostManipScriptParameter.SpritePostTransition.SLIDE_RIGHT_FADE_OUT:
+                    AnimDuration = TimeSpan.FromSeconds(0.25);
+                    StartXPosition = SpritePositioning.SpritePosition.LEFT.GetSpriteX();
+                    EndXPosition = 128;
+                    StartOpacity = 1.0;
+                    EndOpacity = 0;
+                    AnimEasing = new LinearEasing();
+                    break;
+
+                case SpritePostManipScriptParameter.SpritePostTransition.SLIDE_LEFT_FADE_OUT:
+                    AnimDuration = TimeSpan.FromSeconds(0.25);
+                    StartXPosition = SpritePositioning.SpritePosition.LEFT.GetSpriteX();
+                    EndXPosition = -framesWithTimings[0].Frame.Width;
+                    StartOpacity = 1.0;
+                    EndOpacity = 0;
+                    AnimEasing = new LinearEasing();
+                    break;
+
+                case SpritePostManipScriptParameter.SpritePostTransition.FADE_OUT_CENTER:
+                    AnimDuration = TimeSpan.FromSeconds(0.5);
+                    StartXPosition = SpritePositioning.SpritePosition.CENTER.GetSpriteX();
+                    EndXPosition = SpritePositioning.SpritePosition.CENTER.GetSpriteX();
+                    StartOpacity = 1.0;
+                    EndOpacity = 0;
+                    AnimEasing = new LinearEasing();
+                    break;
+
+                case SpritePostManipScriptParameter.SpritePostTransition.FADE_OUT_LEFT:
+                    AnimDuration = TimeSpan.FromSeconds(0.5);
+                    StartXPosition = SpritePositioning.SpritePosition.LEFT.GetSpriteX();
+                    EndXPosition = SpritePositioning.SpritePosition.LEFT.GetSpriteX();
+                    StartOpacity = 1.0;
+                    EndOpacity = 0;
+                    AnimEasing = new LinearEasing();
+                    break;
+
+                case SpritePostManipScriptParameter.SpritePostTransition.SLIDE_LEFT_TO_RIGHT_AND_STAY:
+                    AnimDuration = TimeSpan.FromSeconds(0.25);
+                    StartXPosition = SpritePositioning.SpritePosition.LEFT.GetSpriteX();
+                    EndXPosition = sprite.Positioning.X;
+                    StartOpacity = 1.0;
+                    EndOpacity = 1.0;
+                    AnimEasing = new QuadraticEaseInOut();
+                    break;
+
+                case SpritePostManipScriptParameter.SpritePostTransition.SLIDE_RIGHT_TO_LEFT_AND_STAY:
+                    AnimDuration = TimeSpan.FromSeconds(0.25);
+                    StartXPosition = SpritePositioning.SpritePosition.RIGHT.GetSpriteX();
+                    EndXPosition = sprite.Positioning.X;
+                    StartOpacity = 1.0;
+                    EndOpacity = 1.0;
+                    AnimEasing = new QuadraticEaseInOut();
+                    break;
+            }
+        }
+        else
+        {
+            AnimDuration = TimeSpan.Zero;
+            StartXPosition = EndXPosition;
+            EndXPosition = sprite.Positioning.X;
+            StartOpacity = 1.0;
+            EndOpacity = 1.0;
+            AnimEasing = new LinearEasing();
         }
     }
 }

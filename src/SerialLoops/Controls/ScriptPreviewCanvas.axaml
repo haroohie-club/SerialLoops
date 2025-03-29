@@ -208,6 +208,7 @@
                 </ItemsControl.ItemTemplate>
                 <ItemsControl.Styles>
                     <Style Selector="ItemsControl > ContentPresenter" x:DataType="vm:AnimatedPositionedSprite">
+                        <Setter Property="Opacity" Value="{Binding EndOpacity}"/>
                         <Setter Property="(Canvas.Left)" Value="{Binding EndXPosition}"/>
                         <Setter Property="(Canvas.Top)" Value="{Binding YPosition}"/>
                     </Style>

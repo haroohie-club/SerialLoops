@@ -22,12 +22,13 @@ public class SpritePositioning
     }
 }
 
-public struct PositionedSprite
+public class PositionedSprite
 {
     public CharacterSpriteItem Sprite { get; set; }
     public SpritePositioning Positioning { get; set; }
     public SKPaint PalEffect { get; set; }
-    public SpriteEntranceScriptParameter.SpriteEntranceTransition EntranceTransition { get; set; }
+    public SpritePreManipScriptParameter.SpritePreTransition PreTransition { get; set; }
+    public SpritePostManipScriptParameter.SpritePostTransition PostTransition { get; set; }
 }
 
 public record PositionedChibi(ChibiItem Chibi, int X, int Y);
