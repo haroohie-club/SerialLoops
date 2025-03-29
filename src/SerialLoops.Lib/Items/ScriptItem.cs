@@ -565,6 +565,7 @@ public class ScriptItem : Item
                 CommandVerb.BG_FADE => ((BgScriptParameter)prevBgCommand.Parameters[0]).Background ?? ((BgScriptParameter)prevBgCommand.Parameters[1]).Background,
                 _ => ((BgScriptParameter)prevBgCommand.Parameters[0]).Background,
             };
+            preview.BgFadeFrames = ((ShortScriptParameter)currentCommand.Parameters[2]).Value;
         }
 
         ScriptItemCommand bgScrollCommand = null;

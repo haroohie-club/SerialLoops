@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Avalonia;
-using Avalonia.Animation;
 using Avalonia.Animation.Easings;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
@@ -81,7 +80,7 @@ public class ScriptPreviewCanvasViewModel(Project project) : ReactiveObject
                            FadeColor =
                                ((ColorMonochromeScriptParameter)_preview.CurrentFade.Parameters[3]).ColorType switch
                                {
-                                   ColorMonochromeScriptParameter.ColorMonochrome.CUSTOM_COLOR => new ImmutableSolidColorBrush(((SKColor)_preview.FadedColor).ToAvalonia()),
+                                   ColorMonochromeScriptParameter.ColorMonochrome.CUSTOM_COLOR => new ImmutableSolidColorBrush(((SKColor)_preview.FadedColor!).ToAvalonia()),
                                    ColorMonochromeScriptParameter.ColorMonochrome.WHITE => Brushes.White,
                                    _ => Brushes.Black,
                                };
@@ -118,7 +117,7 @@ public class ScriptPreviewCanvasViewModel(Project project) : ReactiveObject
                 {
                     FadeTime = TimeSpan.Zero;
                     FlashTime = TimeSpan.Zero;
-                    FadeColor = new ImmutableSolidColorBrush(((SKColor)_preview.FadedColor).ToAvalonia());
+                    FadeColor = new ImmutableSolidColorBrush(((SKColor)_preview.FadedColor!).ToAvalonia());
                     FadeTopScreen = _preview.FadedScreens is ScreenScriptParameter.DsScreen.TOP or ScreenScriptParameter.DsScreen.BOTH;
                     FadeBottomScreen = _preview.FadedScreens is ScreenScriptParameter.DsScreen.BOTTOM or ScreenScriptParameter.DsScreen.BOTH;
                     ConstantFadeOpacity = 0.5;
@@ -308,6 +307,17 @@ public class ScriptPreviewCanvasViewModel(Project project) : ReactiveObject
                 }
             }
 
+            if (_preview.PrevFadeBackground is not null)
+            {
+                PreviousBg = new(_preview.PrevFadeBackground.GetBackground());
+                BgFadeTime = TimeSpan.FromSeconds(_preview.BgFadeFrames / 60.0);
+            }
+            else
+            {
+                PreviousBg = null;
+                BgFadeTime = TimeSpan.Zero;
+            }
+
             if (previous?.Item != _preview.Item)
             {
                 if (_preview.Item.Item is null)
@@ -470,7 +480,6 @@ public class ScriptPreviewCanvasViewModel(Project project) : ReactiveObject
     [Reactive]
     public PositionedChibiEmote ChibiEmote { get; set; }
 
-
     [Reactive]
     public SKAvaloniaImage TopScreenCg { get; set; }
     [Reactive]
@@ -479,6 +488,10 @@ public class ScriptPreviewCanvasViewModel(Project project) : ReactiveObject
     public SKAvaloniaImage Bg { get; set; }
     [Reactive]
     public Point BgOrigin { get; set; }
+    [Reactive]
+    public SKAvaloniaImage PreviousBg { get; set; }
+    [Reactive]
+    public TimeSpan BgFadeTime { get; set; }
 
     [Reactive]
     public AnimatedPositionedItem Item { get; set; }

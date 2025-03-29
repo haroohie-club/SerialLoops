@@ -218,6 +218,23 @@
             <!-- CGs -->
             <Image Source="{Binding BottomScreenCg}" Canvas.Left="0" Canvas.Top="192"/>
             <Image Source="{Binding TopScreenCg}" Canvas.Left="0" Canvas.Top="0"/>
+            <controls:AnimatingImage Source="{Binding PreviousBg}" Canvas.Left="0" Canvas.Top="192"
+                                     Opacity="0" Name="BgFade">
+                <controls:AnimatingImage.Styles>
+                    <Style Selector="controls|AnimatingImage:animating">
+                        <Style.Animations>
+                            <Animation Duration="{Binding BgFadeTime}">
+                                <KeyFrame Cue="0%">
+                                    <Setter Property="Opacity" Value="1.0"/>
+                                </KeyFrame>
+                                <KeyFrame Cue="100%">
+                                    <Setter Property="Opacity" Value="0.0"/>
+                                </KeyFrame>
+                            </Animation>
+                        </Style.Animations>
+                    </Style>
+                </controls:AnimatingImage.Styles>
+            </controls:AnimatingImage>
 
             <!-- Episode Header -->
             <Image Canvas.Left="0"  Canvas.Top="0" Source="{Binding EpisodeHeader}"

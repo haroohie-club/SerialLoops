@@ -17,6 +17,7 @@ public class ScriptPreview
     public ScriptItemCommand CurrentFade { get; set; }
     public BackgroundItem Background { get; set; }
     public BackgroundItem PrevFadeBackground { get; set; }
+    public short BgFadeFrames { get; set; }
     public PaletteEffectScriptParameter.PaletteEffect PalEffect { get; set; }
     public ScriptItemCommand BgScrollCommand { get; set; }
     public bool BgPositionBool { get; set; }

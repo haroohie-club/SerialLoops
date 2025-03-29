@@ -30,6 +30,7 @@ public partial class ScriptPreviewCanvas : UserControl
     {
         TopScreenFade.Animate();
         BottomScreenFade.Animate();
+        BgFade.Animate();
         ChibiEmote.Animate();
         Item.Animate();
         TopicFlyout.Animate();
