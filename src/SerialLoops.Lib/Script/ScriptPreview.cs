@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script.Parameters;
+using SkiaSharp;
 
 namespace SerialLoops.Lib.Script;
 
@@ -11,7 +12,11 @@ public class ScriptPreview
     public PlaceItem Place { get; set; }
     public List<PositionedChibi> TopScreenChibis { get; set; } = [];
     public (int InternalYOffset, int ExternalXOffset, ChibiItem EmotingChibi) ChibiEmote { get; set; }
+    public SKColor? FadedColor { get; set; }
+    public ScreenScriptParameter.DsScreen FadedScreens { get; set; }
+    public ScriptItemCommand CurrentFade { get; set; }
     public BackgroundItem Background { get; set; }
+    public BackgroundItem PrevFadeBackground { get; set; }
     public PaletteEffectScriptParameter.PaletteEffect PalEffect { get; set; }
     public ScriptItemCommand BgScrollCommand { get; set; }
     public bool BgPositionBool { get; set; }

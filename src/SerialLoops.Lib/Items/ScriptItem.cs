@@ -219,6 +219,56 @@ public class ScriptItem : Item
             preview.ChessMode = true;
         }
 
+        // Render fades
+        if (currentCommand.Verb is CommandVerb.SCREEN_FADEOUT or CommandVerb.SCREEN_FADEIN or CommandVerb.SCREEN_FLASH or CommandVerb.INVEST_START)
+        {
+            preview.CurrentFade = currentCommand;
+            if (currentCommand.Verb == CommandVerb.SCREEN_FADEIN)
+            {
+                ScriptItemCommand prevFade = commands.FindLast(c => c.Verb is CommandVerb.SCREEN_FADEOUT or CommandVerb.INVEST_START);
+                if (prevFade?.Verb == CommandVerb.SCREEN_FADEOUT)
+                {
+                    preview.FadedColor = ((ColorMonochromeScriptParameter)prevFade.Parameters[4]).ColorType switch
+                    {
+                        ColorMonochromeScriptParameter.ColorMonochrome.CUSTOM_COLOR => ((ColorScriptParameter)prevFade.Parameters[2]).Color,
+                        ColorMonochromeScriptParameter.ColorMonochrome.BLACK => SKColors.Black,
+                        _ => SKColors.White,
+                    };
+                }
+                else
+                {
+                    preview.FadedColor = SKColors.Black;
+                }
+            }
+        }
+        else if (commands.FindLastIndex(c =>
+                     c.Verb is CommandVerb.SCREEN_FADEOUT or CommandVerb.INVEST_START) >
+                 commands.FindLastIndex(c => c.Verb == CommandVerb.SCREEN_FADEIN))
+        {
+            if (commands.FindLastIndex(c => c.Verb == CommandVerb.SCREEN_FADEOUT) >
+                commands.FindLastIndex(c => c.Verb is CommandVerb.INVEST_START))
+            {
+                ScriptItemCommand lastFadeOut = commands.FindLast(c => c.Verb == CommandVerb.SCREEN_FADEOUT);
+                preview.FadedColor = ((ColorMonochromeScriptParameter)lastFadeOut.Parameters[4]).ColorType switch
+                {
+                    ColorMonochromeScriptParameter.ColorMonochrome.CUSTOM_COLOR => ((ColorScriptParameter)lastFadeOut.Parameters[2]).Color,
+                    ColorMonochromeScriptParameter.ColorMonochrome.BLACK => SKColors.Black,
+                    _ => SKColors.White,
+                };
+                preview.FadedScreens = ((ScreenScriptParameter)lastFadeOut.Parameters[3]).Screen;
+            }
+            else
+            {
+                preview.FadedColor = SKColors.Black;
+                preview.FadedScreens = ScreenScriptParameter.DsScreen.BOTTOM;
+            }
+        }
+        else if (commands.FindIndex(c => c.Verb == CommandVerb.SCREEN_FADEIN) < 0)
+        {
+            preview.FadedColor = SKColors.Black;
+            preview.FadedScreens = ScreenScriptParameter.DsScreen.BOTH;
+        }
+
         // If we're in chess mode, we don't need to draw any of the top screen stuff as the screens are flipped
         if (!preview.ChessMode)
         {
@@ -499,15 +549,22 @@ public class ScriptItem : Item
         // Draw background
         bool bgReverted = false;
         ScriptItemCommand palCommand = commands.LastOrDefault(c => c.Verb == CommandVerb.PALEFFECT);
-        ScriptItemCommand lastBgCommand = commands.LastOrDefault(c => c.Verb == CommandVerb.BG_DISP ||
-                                                                      c.Verb == CommandVerb.BG_DISP2 ||
-                                                                      c.Verb == CommandVerb.BG_DISPCG ||
-                                                                      c.Verb == CommandVerb.BG_FADE ||
-                                                                      c.Verb == CommandVerb.BG_REVERT);
+        ScriptItemCommand lastBgCommand = commands.LastOrDefault(c => c.Verb is CommandVerb.BG_DISP or CommandVerb.BG_DISP2 or CommandVerb.BG_DISPCG or CommandVerb.BG_FADE or CommandVerb.BG_REVERT);
         if (palCommand is not null && lastBgCommand is not null &&
             commands.IndexOf(palCommand) > commands.IndexOf(lastBgCommand))
         {
             preview.PalEffect = ((PaletteEffectScriptParameter)palCommand.Parameters[0]).Effect;
+        }
+
+        if (lastBgCommand == currentCommand && lastBgCommand.Verb == CommandVerb.BG_FADE)
+        {
+            ScriptItemCommand prevBgCommand = commands[..commands.IndexOf(lastBgCommand)]
+                .LastOrDefault(c => c.Verb is CommandVerb.BG_DISP or CommandVerb.BG_DISP2 or CommandVerb.BG_DISPCG or CommandVerb.BG_FADE);
+            preview.PrevFadeBackground = prevBgCommand.Verb switch
+            {
+                CommandVerb.BG_FADE => ((BgScriptParameter)prevBgCommand.Parameters[0]).Background ?? ((BgScriptParameter)prevBgCommand.Parameters[1]).Background,
+                _ => ((BgScriptParameter)prevBgCommand.Parameters[0]).Background,
+            };
         }
 
         ScriptItemCommand bgScrollCommand = null;

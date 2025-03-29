@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Avalonia;
+using Avalonia.Animation;
 using Avalonia.Animation.Easings;
+using Avalonia.Media;
 using Avalonia.Media.Imaging;
+using Avalonia.Media.Immutable;
 using Avalonia.Platform;
 using AvaloniaEdit.Utils;
 using HaruhiChokuretsuLib.Archive.Data;
@@ -18,6 +21,7 @@ using SerialLoops.Lib.Script;
 using SerialLoops.Lib.Script.Parameters;
 using SerialLoops.Lib.Util;
 using SerialLoops.Models;
+using SerialLoops.Utility;
 using SkiaSharp;
 
 namespace SerialLoops.ViewModels.Controls;
@@ -49,6 +53,85 @@ public class ScriptPreviewCanvasViewModel(Project project) : ReactiveObject
 
             DisplayError = false;
             VerticalOffset = _preview.ChessMode ? 0 : 192;
+
+            if (_preview.FadedColor is not null || _preview.CurrentFade is not null)
+            {
+                if (_preview.CurrentFade is not null)
+                {
+                    switch (_preview.CurrentFade.Verb)
+                    {
+                       case EventFile.CommandVerb.SCREEN_FADEOUT:
+                           FadeColor =
+                               ((ColorMonochromeScriptParameter)_preview.CurrentFade.Parameters[4]).ColorType switch
+                               {
+                                   ColorMonochromeScriptParameter.ColorMonochrome.CUSTOM_COLOR =>
+                                       new ImmutableSolidColorBrush(((ColorScriptParameter)_preview.CurrentFade.Parameters[2]).Color.ToAvalonia()),
+                                   ColorMonochromeScriptParameter.ColorMonochrome.WHITE => Brushes.White,
+                                   _ => Brushes.Black,
+                               };
+                           FadeTime = TimeSpan.FromSeconds(((ShortScriptParameter)_preview.CurrentFade.Parameters[0]).Value / 60.0);
+                           FadeTopScreen = ((ScreenScriptParameter)_preview.CurrentFade.Parameters[3]).Screen is ScreenScriptParameter.DsScreen.TOP or ScreenScriptParameter.DsScreen.BOTH;
+                           FadeBottomScreen = ((ScreenScriptParameter)_preview.CurrentFade.Parameters[3]).Screen is ScreenScriptParameter.DsScreen.BOTTOM or ScreenScriptParameter.DsScreen.BOTH;
+                           StartFadeOpacity = 0.0;
+                           EndFadeOpacity = 1.0;
+                           ConstantFadeOpacity = 0.5;
+                           break;
+
+                       case EventFile.CommandVerb.SCREEN_FADEIN:
+                           FadeColor =
+                               ((ColorMonochromeScriptParameter)_preview.CurrentFade.Parameters[3]).ColorType switch
+                               {
+                                   ColorMonochromeScriptParameter.ColorMonochrome.CUSTOM_COLOR => new ImmutableSolidColorBrush(((SKColor)_preview.FadedColor).ToAvalonia()),
+                                   ColorMonochromeScriptParameter.ColorMonochrome.WHITE => Brushes.White,
+                                   _ => Brushes.Black,
+                               };
+                           FadeTime = TimeSpan.FromSeconds(((ShortScriptParameter)_preview.CurrentFade.Parameters[0]).Value / 60.0);
+                           FadeTopScreen = ((ScreenScriptParameter)_preview.CurrentFade.Parameters[2]).Screen is ScreenScriptParameter.DsScreen.TOP or ScreenScriptParameter.DsScreen.BOTH;
+                           FadeBottomScreen = ((ScreenScriptParameter)_preview.CurrentFade.Parameters[2]).Screen is ScreenScriptParameter.DsScreen.BOTTOM or ScreenScriptParameter.DsScreen.BOTH;
+                           StartFadeOpacity = 1.0;
+                           EndFadeOpacity = 0.0;
+                           ConstantFadeOpacity = 0.0;
+                           break;
+
+                       case EventFile.CommandVerb.INVEST_START:
+                           FadeColor = Brushes.Black;
+                           FadeTime = TimeSpan.FromSeconds(1.0);
+                           FadeTopScreen = false;
+                           FadeBottomScreen = true;
+                           StartFadeOpacity = 0.0;
+                           EndFadeOpacity = 1.0;
+                           ConstantFadeOpacity = 0.0;
+                           break;
+
+                       case EventFile.CommandVerb.SCREEN_FLASH:
+                           FadeColor = new ImmutableSolidColorBrush(((ColorScriptParameter)_preview.CurrentFade.Parameters[3]).Color.ToAvalonia());
+                           short fadeInFrames = ((ShortScriptParameter)_preview.CurrentFade.Parameters[0]).Value;
+                           short fadeOutFrames = ((ShortScriptParameter)_preview.CurrentFade.Parameters[2]).Value;
+                           FlashTime = TimeSpan.FromSeconds(
+                               (fadeInFrames + ((ShortScriptParameter)_preview.CurrentFade.Parameters[1]).Value + fadeOutFrames) / 60.0);
+                           Hold1Percentage = fadeInFrames / 60.0 / FlashTime.TotalSeconds;
+                           Hold2Percentage = 1 - fadeOutFrames / 60.0 / FlashTime.TotalSeconds;
+                           break;
+                    }
+                }
+                else
+                {
+                    FadeTime = TimeSpan.Zero;
+                    FlashTime = TimeSpan.Zero;
+                    FadeColor = new ImmutableSolidColorBrush(((SKColor)_preview.FadedColor).ToAvalonia());
+                    FadeTopScreen = _preview.FadedScreens is ScreenScriptParameter.DsScreen.TOP or ScreenScriptParameter.DsScreen.BOTH;
+                    FadeBottomScreen = _preview.FadedScreens is ScreenScriptParameter.DsScreen.BOTTOM or ScreenScriptParameter.DsScreen.BOTH;
+                    ConstantFadeOpacity = 0.5;
+                }
+            }
+            else
+            {
+                FadeTime = TimeSpan.Zero;
+                FlashTime = TimeSpan.Zero;
+                FadeTopScreen = false;
+                FadeBottomScreen = false;
+                ConstantFadeOpacity = 0.0;
+            }
 
             if (!_preview.ChessMode)
             {
@@ -343,6 +426,28 @@ public class ScriptPreviewCanvasViewModel(Project project) : ReactiveObject
             PreviewCanvas.RunNonLoopingAnimations();
         }
     }
+
+    [Reactive]
+    public bool FadeTopScreen { get; set; }
+    [Reactive]
+    public bool FadeBottomScreen { get; set; }
+    [Reactive]
+    public IImmutableSolidColorBrush FadeColor { get; set; }
+    [Reactive]
+    public TimeSpan FadeTime { get; set; }
+    [Reactive]
+    public double StartFadeOpacity { get; set; }
+    [Reactive]
+    public double EndFadeOpacity { get; set; }
+    [Reactive]
+    public double ConstantFadeOpacity { get; set; }
+
+    [Reactive]
+    public TimeSpan FlashTime { get; set; }
+    [Reactive]
+    public double Hold1Percentage { get; set; }
+    [Reactive]
+    public double Hold2Percentage { get; set; }
 
     [Reactive]
     public SKAvaloniaImage EpisodeHeader { get; set; }

@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
@@ -12,6 +13,8 @@ namespace SerialLoops.Controls;
 
 public partial class ScriptPreviewCanvas : UserControl
 {
+    private static CancellationTokenSource s_cancellationTokenSource = new();
+
     public ScriptPreviewCanvas()
     {
         InitializeComponent();
@@ -25,6 +28,8 @@ public partial class ScriptPreviewCanvas : UserControl
 
     public void RunNonLoopingAnimations()
     {
+        TopScreenFade.Animate();
+        BottomScreenFade.Animate();
         ChibiEmote.Animate();
         Item.Animate();
         TopicFlyout.Animate();
@@ -68,6 +73,54 @@ public partial class ScriptPreviewCanvas : UserControl
                         }
                     });
             }
+        }
+
+        // Binding Cues doesn't seem to work, so we construct flash animations in code-behind
+        ScriptPreviewCanvasViewModel vm = (ScriptPreviewCanvasViewModel)DataContext!;
+        if (vm.FlashTime > TimeSpan.Zero)
+        {
+            Animation flashAnim = new()
+            {
+                Duration = vm.FlashTime,
+                Children =
+                {
+                    new()
+                    {
+                        Cue = new(0.0),
+                        Setters =
+                        {
+                            new Setter(OpacityProperty, 0.0),
+                        },
+                    },
+                    new()
+                    {
+                        Cue = new(vm.Hold1Percentage),
+                        Setters =
+                        {
+                            new Setter(OpacityProperty, 1.0),
+                        },
+                    },
+                    new()
+                    {
+                        Cue = new(vm.Hold2Percentage),
+                        Setters =
+                        {
+                            new Setter(OpacityProperty, 1.0),
+                        },
+                    },
+                    new()
+                    {
+                        Cue = new(1.0),
+                        Setters =
+                        {
+                            new Setter(OpacityProperty, 0.0),
+                        },
+                    },
+                },
+            };
+            s_cancellationTokenSource.Cancel();
+            s_cancellationTokenSource = new();
+            flashAnim.RunAsync(ScreenFlash, s_cancellationTokenSource.Token);
         }
     }
 }

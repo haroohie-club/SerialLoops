@@ -268,6 +268,44 @@
             <!-- Haruhi Meter -->
             <Image Canvas.Left="0" Canvas.Top="192" Source="{Binding HaruhiMeter}"
                    IsVisible="{Binding HaruhiMeterVisible}"/>
+
+            <!-- Fades -->
+            <controls:AnimatingRectangle Canvas.Left="0" Canvas.Top="0" Width="256" Height="192" Fill="{Binding FadeColor}"
+                                         Opacity="{Binding ConstantFadeOpacity}" Name="TopScreenFade" IsVisible="{Binding FadeTopScreen}">
+                <Rectangle.Styles>
+                    <Style Selector="controls|AnimatingRectangle:animating">
+                        <Style.Animations>
+                            <Animation Duration="{Binding FadeTime}">
+                                <KeyFrame Cue="0%">
+                                    <Setter Property="Opacity" Value="{Binding StartFadeOpacity}"/>
+                                </KeyFrame>
+                                <KeyFrame Cue="100%">
+                                    <Setter Property="Opacity" Value="{Binding EndFadeOpacity}"/>
+                                </KeyFrame>
+                            </Animation>
+                        </Style.Animations>
+                    </Style>
+                </Rectangle.Styles>
+            </controls:AnimatingRectangle>
+            <controls:AnimatingRectangle Canvas.Left="0" Canvas.Top="192" Width="256" Height="192" Fill="{Binding FadeColor}"
+                       Opacity="{Binding ConstantFadeOpacity}" Name="BottomScreenFade" IsVisible="{Binding FadeBottomScreen}">
+                <Rectangle.Styles>
+                    <Style Selector="controls|AnimatingRectangle:animating">
+                        <Style.Animations>
+                            <Animation Duration="{Binding FadeTime}">
+                                <KeyFrame Cue="0%">
+                                    <Setter Property="Opacity" Value="{Binding StartFadeOpacity}"/>
+                                </KeyFrame>
+                                <KeyFrame Cue="100%">
+                                    <Setter Property="Opacity" Value="{Binding EndFadeOpacity}"/>
+                                </KeyFrame>
+                            </Animation>
+                        </Style.Animations>
+                    </Style>
+                </Rectangle.Styles>
+            </controls:AnimatingRectangle>
+            <Rectangle Canvas.Left="0" Canvas.Top="192" Width="256" Height="192" Fill="{Binding FadeColor}"
+                                         Opacity="0" Name="ScreenFlash"/>
         </Canvas>
     </Canvas>
 </UserControl>
