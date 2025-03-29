@@ -1058,6 +1058,24 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bounce Left to Right.
+        /// </summary>
+        public static string BOUNCE_LEFT_TO_RIGHT {
+            get {
+                return ResourceManager.GetString("BOUNCE_LEFT_TO_RIGHT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bounce Right to Left.
+        /// </summary>
+        public static string BOUNCE_RIGHT_TO_LEFT {
+            get {
+                return ResourceManager.GetString("BOUNCE_RIGHT_TO_LEFT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Build.
         /// </summary>
         public static string Build {
@@ -7780,7 +7798,7 @@ namespace SerialLoops.Assets {
         /// <summary>
         ///   Looks up a localized string similar to Reverts the background to the last call of BG_DISP (i.e. undoes any BG_FADE or BG_DISPCG calls). This is required before returning to displaying standard TEX_BG BGs. Note that if reverting a TEX_CG_DUAL_SCREEN BG, SET_PLACE must have been used to set the place location and have it displayed.
         ///
-        ///BG_REVERT does something odd to previously displayed CGs that makes attempting to display them again after the BG_REVERT crash/freeze/soft lock the game. If you need to go back and forth between the same CGs, consider  [rest of string was truncated]&quot;;.
+        ///BG_REVERT does something odd to previously displayed CGs that makes attempting to display them again after the BG_REVERT crash/freeze/soft lock the game. If you need to go back and forth between the same CGs, conside [rest of string was truncated]&quot;;.
         /// </summary>
         public static string ScriptCommandVerbHelpBG_REVERT {
             get {
@@ -8898,20 +8916,29 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Slide Left (Transition).
+        /// </summary>
+        public static string SLIDE_LEFT {
+            get {
+                return ResourceManager.GetString("SLIDE_LEFT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Slide Left and Fade Out.
+        /// </summary>
+        public static string SLIDE_LEFT_FADE_OUT {
+            get {
+                return ResourceManager.GetString("SLIDE_LEFT_FADE_OUT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Slide Left to Center.
         /// </summary>
         public static string SLIDE_LEFT_TO_CENTER {
             get {
                 return ResourceManager.GetString("SLIDE_LEFT_TO_CENTER", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Slide Left to Left and Fade Out.
-        /// </summary>
-        public static string SLIDE_LEFT_TO_LEFT_FADE_OUT {
-            get {
-                return ResourceManager.GetString("SLIDE_LEFT_TO_LEFT_FADE_OUT", resourceCulture);
             }
         }
         
@@ -8934,29 +8961,20 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Slide Left to Right and Fade Out.
+        ///   Looks up a localized string similar to Slide Right (Transition).
         /// </summary>
-        public static string SLIDE_LEFT_TO_RIGHT_FADE_OUT {
+        public static string SLIDE_RIGHT {
             get {
-                return ResourceManager.GetString("SLIDE_LEFT_TO_RIGHT_FADE_OUT", resourceCulture);
+                return ResourceManager.GetString("SLIDE_RIGHT", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Slight Left to Right (Fast).
+        ///   Looks up a localized string similar to Slide Right and Fade Out.
         /// </summary>
-        public static string SLIDE_LEFT_TO_RIGHT_FAST {
+        public static string SLIDE_RIGHT_FADE_OUT {
             get {
-                return ResourceManager.GetString("SLIDE_LEFT_TO_RIGHT_FAST", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Slide Left to Right (Slow).
-        /// </summary>
-        public static string SLIDE_LEFT_TO_RIGHT_SLOW {
-            get {
-                return ResourceManager.GetString("SLIDE_LEFT_TO_RIGHT_SLOW", resourceCulture);
+                return ResourceManager.GetString("SLIDE_RIGHT_FADE_OUT", resourceCulture);
             }
         }
         
@@ -8984,24 +9002,6 @@ namespace SerialLoops.Assets {
         public static string SLIDE_RIGHT_TO_LEFT_AND_STAY {
             get {
                 return ResourceManager.GetString("SLIDE_RIGHT_TO_LEFT_AND_STAY", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Slide Right to Left (Fast).
-        /// </summary>
-        public static string SLIDE_RIGHT_TO_LEFT_FAST {
-            get {
-                return ResourceManager.GetString("SLIDE_RIGHT_TO_LEFT_FAST", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Slide Right to Left (Slow).
-        /// </summary>
-        public static string SLIDE_RIGHT_TO_LEFT_SLOW {
-            get {
-                return ResourceManager.GetString("SLIDE_RIGHT_TO_LEFT_SLOW", resourceCulture);
             }
         }
         
@@ -9078,24 +9078,6 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sprite Entrance Transition.
-        /// </summary>
-        public static string Sprite_Entrance_Transition {
-            get {
-                return ResourceManager.GetString("Sprite Entrance Transition", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Sprite Exit/Move Transition.
-        /// </summary>
-        public static string Sprite_Exit_Move_Transition {
-            get {
-                return ResourceManager.GetString("Sprite Exit/Move Transition", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Sprite Layer.
         /// </summary>
         public static string Sprite_Layer {
@@ -9110,6 +9092,24 @@ namespace SerialLoops.Assets {
         public static string Sprite_Shake {
             get {
                 return ResourceManager.GetString("Sprite Shake", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sprite Post-Command Transition.
+        /// </summary>
+        public static string SpritePostCommandTransition {
+            get {
+                return ResourceManager.GetString("SpritePostCommandTransition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sprite Pre-Command Transition.
+        /// </summary>
+        public static string SpritePreCommandTransition {
+            get {
+                return ResourceManager.GetString("SpritePreCommandTransition", resourceCulture);
             }
         }
         

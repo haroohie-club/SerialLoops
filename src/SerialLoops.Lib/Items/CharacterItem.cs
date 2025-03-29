@@ -52,7 +52,7 @@ public class CharacterItem : Item
         }
 
         SKBitmap newNameplate = new(64, 16);
-        SKCanvas newCanvas = new(newNameplate);
+        using SKCanvas newCanvas = new(newNameplate);
         newCanvas.DrawBitmap(blankNameplate, new SKPoint(0, 0));
 
         double widthFactor = 1.0;

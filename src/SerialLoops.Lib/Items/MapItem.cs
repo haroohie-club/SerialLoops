@@ -45,7 +45,7 @@ public class MapItem : Item
             map = Map.GetMapImages(grp, 0, grp.GetFileByIndex(Map.Settings.LayoutFileIndex).LayoutEntries.Count);
         }
         SKBitmap mapWithGrid = new(map.Width, map.Height);
-        SKCanvas canvas = new(mapWithGrid);
+        using SKCanvas canvas = new(mapWithGrid);
         canvas.DrawBitmap(map, new SKPoint(0, 0));
 
         SKPoint gridZero = GetOrigin(grp);

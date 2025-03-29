@@ -24,7 +24,7 @@
         </StackPanel>
 
         <StackPanel Grid.Column="0" Grid.Row="2" Orientation="Horizontal" Spacing="3">
-            <TextBlock Text="{x:Static assets:Strings.Sprite_Entrance_Transition}" VerticalAlignment="Center"/>
+            <TextBlock Text="{x:Static assets:Strings.SpritePreCommandTransition}" VerticalAlignment="Center"/>
             <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" VerticalAlignment="Center"
                  ToolTip.Tip="{x:Static assets:Strings.ScriptEditorDialogueSpriteEntranceHelp}"/>
         </StackPanel>
@@ -32,7 +32,7 @@
                   SelectedItem="{Binding SpriteEntranceTransition}"/>
 
         <StackPanel Grid.Column="0" Grid.Row="3" Orientation="Horizontal" Spacing="3">
-            <TextBlock Text="{x:Static assets:Strings.Sprite_Exit_Move_Transition}" VerticalAlignment="Center"/>
+            <TextBlock Text="{x:Static assets:Strings.SpritePostCommandTransition}" VerticalAlignment="Center"/>
             <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" VerticalAlignment="Center"
                  ToolTip.Tip="{x:Static assets:Strings.ScriptEditorDialogueSpriteExitHelp}"/>
         </StackPanel>

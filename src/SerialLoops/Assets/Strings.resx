@@ -2186,11 +2186,11 @@ Please set the path to a Nintendo DS emulator or specify a Nintendo DS emulator 
   <data name="Sprite" xml:space="preserve">
     <value>Sprite</value>
   </data>
-  <data name="Sprite Entrance Transition" xml:space="preserve">
-    <value>Sprite Entrance Transition</value>
+  <data name="SpritePreCommandTransition" xml:space="preserve">
+    <value>Sprite Pre-Command Transition</value>
   </data>
-  <data name="Sprite Exit/Move Transition" xml:space="preserve">
-    <value>Sprite Exit/Move Transition</value>
+  <data name="SpritePostCommandTransition" xml:space="preserve">
+    <value>Sprite Post-Command Transition</value>
   </data>
   <data name="Sprite Layer" xml:space="preserve">
     <value>Sprite Layer</value>
@@ -2628,20 +2628,20 @@ No project is currently open. Would you like to create a new project?</value>
   <data name="SLIDE_RIGHT_TO_LEFT" xml:space="preserve">
     <value>Slide Right to Left</value>
   </data>
-  <data name="SLIDE_LEFT_TO_RIGHT_SLOW" xml:space="preserve">
-    <value>Slide Left to Right (Slow)</value>
+  <data name="BOUNCE_LEFT_TO_RIGHT" xml:space="preserve">
+    <value>Bounce Left to Right</value>
   </data>
-  <data name="SLIDE_RIGHT_TO_LEFT_SLOW" xml:space="preserve">
-    <value>Slide Right to Left (Slow)</value>
+  <data name="BOUNCE_RIGHT_TO_LEFT" xml:space="preserve">
+    <value>Bounce Right to Left</value>
   </data>
   <data name="FADE_TO_CENTER" xml:space="preserve">
     <value>Fade to Center</value>
   </data>
-  <data name="SLIDE_LEFT_TO_RIGHT_FAST" xml:space="preserve">
-    <value>Slight Left to Right (Fast)</value>
+  <data name="SLIDE_LEFT" xml:space="preserve">
+    <value>Slide Left (Transition)</value>
   </data>
-  <data name="SLIDE_RIGHT_TO_LEFT_FAST" xml:space="preserve">
-    <value>Slide Right to Left (Fast)</value>
+  <data name="SLIDE_RIGHT" xml:space="preserve">
+    <value>Slide Right (Transition)</value>
   </data>
   <data name="PEEK_RIGHT_TO_LEFT" xml:space="preserve">
     <value>Peek Right to Left</value>
@@ -2664,11 +2664,11 @@ No project is currently open. Would you like to create a new project?</value>
   <data name="SLIDE_CENTER_TO_LEFT_AND_STAY" xml:space="preserve">
     <value>Slide from Center to Left and Stay (Transition)</value>
   </data>
-  <data name="SLIDE_LEFT_TO_RIGHT_FADE_OUT" xml:space="preserve">
-    <value>Slide Left to Right and Fade Out</value>
+  <data name="SLIDE_RIGHT_FADE_OUT" xml:space="preserve">
+    <value>Slide Right and Fade Out</value>
   </data>
-  <data name="SLIDE_LEFT_TO_LEFT_FADE_OUT" xml:space="preserve">
-    <value>Slide Left to Left and Fade Out</value>
+  <data name="SLIDE_LEFT_FADE_OUT" xml:space="preserve">
+    <value>Slide Left and Fade Out</value>
   </data>
   <data name="FADE_OUT_CENTER" xml:space="preserve">
     <value>Fade Out Center</value>

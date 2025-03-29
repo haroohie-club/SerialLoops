@@ -57,7 +57,7 @@ public class CharacterSpriteItem(CharacterSprite sprite, CharacterDataFile chrda
         Graphics.MouthAnimation.AnimationX = mouthX;
         Graphics.MouthAnimation.AnimationY = mouthY;
     }
-        
+
     public SKBitmap GetPreview(Project project)
     {
         return GetClosedMouthAnimation(project).First().Frame;
@@ -90,7 +90,7 @@ public class CharacterSpriteItem(CharacterSprite sprite, CharacterDataFile chrda
                 continue;
             }
 
-            SKCanvas textureCanvas = new(texture);
+            using SKCanvas textureCanvas = new(texture);
 
             for (short y = 0; y < texture.Height; y += 32)
             {

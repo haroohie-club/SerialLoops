@@ -52,7 +52,7 @@ public class SystemTextureItem : Item
         {
             SKBitmap tileBitmap = new(Width, Height);
             SKBitmap tiles = Grp.GetImage(width: SysTex.TileWidth, transparentIndex: 0);
-            SKCanvas tileCanvas = new(tileBitmap);
+            using SKCanvas tileCanvas = new(tileBitmap);
             int currentTile = 0;
             for (int y = 0; y < tileBitmap.Height; y += SysTex.TileHeight)
             {
@@ -91,7 +91,7 @@ public class SystemTextureItem : Item
         else
         {
             SKBitmap tileBitmap = new(SysTex.TileWidth, bitmap.Width / SysTex.TileWidth * bitmap.Height);
-            SKCanvas tileCanvas = new(tileBitmap);
+            using SKCanvas tileCanvas = new(tileBitmap);
 
             int currentTile = 0;
             for (int y = 0; y < bitmap.Height; y += SysTex.TileHeight)

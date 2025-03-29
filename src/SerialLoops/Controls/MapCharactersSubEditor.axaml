@@ -63,7 +63,7 @@
                                                PointerPressed="DoDrag" PointerReleased="MapCharacter_OnPointerReleased">
                                             <Image Source="{Binding CroppedImage, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
                                                    Stretch="Fill" Width="{Binding Width}" Height="{Binding Height}"
-                                                   IsHitTestVisible="{Binding HitTestVisible}"/>
+                                                   IsHitTestVisible="{Binding HitTestVisible}" Opacity="2.0"/>
                                         </Panel>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>

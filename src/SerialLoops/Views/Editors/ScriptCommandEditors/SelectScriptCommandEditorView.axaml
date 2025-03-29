@@ -83,7 +83,6 @@
                 </ControlTheme>
             </ComboBox.ItemContainerTheme>
         </ComboBox>
-        <TextBlock Grid.Column="0" Grid.Row="3" VerticalAlignment="Center" Text="{x:Static assets:Strings.Option_4}"/>
 
         <StackPanel Grid.Column="0" Grid.Row="4" Orientation="Horizontal" Spacing="3">
             <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.ScriptCommandEditorSelectParam4}"/>

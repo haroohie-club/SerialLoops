@@ -3,14 +3,13 @@ using Avalonia.Controls.Metadata;
 
 namespace SerialLoops.Controls;
 
+/// <summary>
+/// Different from an AnimatedImage which contains a frame animation, this image is capable of one-time control animations
+/// AnimatedImage can also do this stuff tho :P
+/// </summary>
 [PseudoClasses(":animating")]
-public partial class AnimatedImage : UserControl
+public class AnimatingImage : Image
 {
-    public AnimatedImage()
-    {
-        InitializeComponent();
-    }
-
     public void Animate()
     {
         PseudoClasses.Set(":animating", false);

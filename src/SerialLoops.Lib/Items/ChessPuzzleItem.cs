@@ -29,7 +29,7 @@ public class ChessPuzzleItem : Item
     public static SKBitmap GetEmptyChessboard(ArchiveFile<GraphicsFile> grp)
     {
         SKBitmap board = new(256, 192);
-        SKCanvas canvas = new(board);
+        using SKCanvas canvas = new(board);
         SKBitmap chs1 = grp.GetFileByName("CHS_SYS_01DNX").GetImage(transparentIndex: 0);
 
         canvas.DrawBitmap(chs1, new(0,0,80,80), new SKRect(0,16,80,96));
@@ -44,7 +44,7 @@ public class ChessPuzzleItem : Item
     public SKBitmap GetChessboard(Project project)
     {
         SKBitmap board = new(256, 192);
-        SKCanvas canvas = new(board);
+        using SKCanvas canvas = new(board);
 
         SKBitmap emptyBoard = GetEmptyChessboard(project.Grp);
         canvas.DrawBitmap(emptyBoard, 0, 0);
@@ -61,7 +61,7 @@ public class ChessPuzzleItem : Item
     public static SKBitmap GetChessPiece(ChessFile.ChessPiece piece, ArchiveFile<GraphicsFile> grp)
     {
         SKBitmap pieceBitmap = new(16, 32);
-        SKCanvas canvas = new(pieceBitmap);
+        using SKCanvas canvas = new(pieceBitmap);
         SKBitmap chs0 = (byte)piece < 0x80
             ? grp.GetFileByName("CHS_SYS_00DNX").GetImage(transparentIndex: 0)
             : grp.GetFileByName("CHS_SYS_00DNX").GetImage(transparentIndex: 16, paletteOffset: 16);

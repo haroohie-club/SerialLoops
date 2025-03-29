@@ -1,16 +1,12 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
+using Avalonia.Controls.Shapes;
 
 namespace SerialLoops.Controls;
 
 [PseudoClasses(":animating")]
-public partial class AnimatedImage : UserControl
+public class AnimatingRectangle : Rectangle
 {
-    public AnimatedImage()
-    {
-        InitializeComponent();
-    }
-
     public void Animate()
     {
         PseudoClasses.Set(":animating", false);

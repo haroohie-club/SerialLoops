@@ -26,7 +26,8 @@ public class SKBitmapDrawOperation : ICustomDrawOperation
             {
                 lease.SkCanvas.DrawImage(SKImage.FromBitmap(bitmap),
                     SKRect.Create((float)Bounds.X, (float)Bounds.Y, (float)Bounds.Width, (float)Bounds.Height),
-                    Extensions.HighQualitySamplingOptions);
+                    Extensions.HighQualitySamplingOptions,
+                    new() { Color = new(255, 255, 255, (byte)(255 * lease.CurrentOpacity)) });
             }
         }
     }
@@ -40,7 +41,7 @@ public class SKAvaloniaImage : IImage, IDisposable
     public SKAvaloniaImage(SKBitmap bitmap)
     {
         _bitmap = bitmap;
-        if (_bitmap?.Info.Size is SKSizeI size)
+        if (_bitmap?.Info.Size is { } size)
         {
             Size = new(size.Width, size.Height);
         }
@@ -48,7 +49,12 @@ public class SKAvaloniaImage : IImage, IDisposable
 
     public Size Size { get; }
 
-    public void Dispose() => throw new NotImplementedException();
+    public void Dispose()
+    {
+        _bitmap?.Dispose();
+        _drawOperation?.Dispose();
+        GC.SuppressFinalize(this);
+    }
     public void Draw(DrawingContext context, Rect sourceRect, Rect destRect)
     {
         _drawOperation ??= new()

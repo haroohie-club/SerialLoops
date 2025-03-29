@@ -24,6 +24,7 @@ public class PalEffectScriptCommandEditorViewModel(ScriptItemCommand command, Sc
             ((PaletteEffectScriptParameter)Command.Parameters[0]).Effect = _paletteEffect.Effect;
             Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
                 .Objects[Command.Index].Parameters[0] = (short)_paletteEffect.Effect;
+            ScriptEditor.UpdatePreview();
             Script.UnsavedChanges = true;
         }
     }

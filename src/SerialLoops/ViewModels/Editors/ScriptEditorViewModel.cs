@@ -13,7 +13,6 @@ using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Controls.Selection;
 using Avalonia.Controls.Templates;
 using Avalonia.Input;
-using Avalonia.Platform;
 using DynamicData;
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Util;
@@ -82,8 +81,8 @@ public class ScriptEditorViewModel : EditorViewModel
     [Reactive]
     public ReactiveScriptSection SelectedSection { get; set; }
 
-    [Reactive]
-    public SKBitmap PreviewBitmap { get; set; }
+    public ScriptPreviewCanvasViewModel ScriptPreviewCanvas { get; set; }
+
     [Reactive]
     public ScriptCommandEditorViewModel CurrentCommandViewModel { get; set; }
 
@@ -160,6 +159,7 @@ public class ScriptEditorViewModel : EditorViewModel
         _script = script;
         ScriptSections = new(script.Event.ScriptSections.Select(s => new ReactiveScriptSection(s)));
         _project = window.OpenProject;
+        ScriptPreviewCanvas = new(_project);
         Commands = _script.GetScriptCommandTree(_project, _log);
         _script.CalculateGraphEdges(_commands, _log);
         foreach (ReactiveScriptSection section in ScriptSections)
@@ -318,7 +318,7 @@ public class ScriptEditorViewModel : EditorViewModel
         {
             if (_selectedCommand is null)
             {
-                PreviewBitmap = null;
+                ScriptPreviewCanvas.Preview = null;
             }
             else
             {
@@ -331,18 +331,7 @@ public class ScriptEditorViewModel : EditorViewModel
                 CurrentCrossedSpaces.Clear();
                 CurrentCrossedSpaces.AddRange(preview.ChessCrossedSpaces);
 
-                (SKBitmap previewBitmap, string errorImage) = ScriptItem.GeneratePreviewImage(preview, _project);
-                if (previewBitmap is null)
-                {
-                    previewBitmap = new(256, 384);
-                    SKCanvas canvas = new(previewBitmap);
-                    canvas.DrawColor(SKColors.Black);
-                    using Stream noPreviewStream = AssetLoader.Open(new(errorImage));
-                    canvas.DrawImage(SKImage.FromEncodedData(noPreviewStream), new SKPoint(0, 0));
-                    canvas.Flush();
-                }
-
-                PreviewBitmap = previewBitmap;
+                ScriptPreviewCanvas.Preview = preview;
             }
         }
         catch (Exception ex)
