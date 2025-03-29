@@ -26,9 +26,10 @@ public class PositionedSprite
 {
     public CharacterSpriteItem Sprite { get; set; }
     public SpritePositioning Positioning { get; set; }
+    public int StartPosition { get; set; }
     public SKPaint PalEffect { get; set; }
-    public SpritePreManipScriptParameter.SpritePreTransition PreTransition { get; set; }
-    public SpritePostManipScriptParameter.SpritePostTransition PostTransition { get; set; }
+    public SpritePreTransitionScriptParameter.SpritePreTransition PreTransition { get; set; }
+    public SpritePostTransitionScriptParameter.SpritePostTransition PostTransition { get; set; }
 }
 
 public record PositionedChibi(ChibiItem Chibi, int X, int Y);

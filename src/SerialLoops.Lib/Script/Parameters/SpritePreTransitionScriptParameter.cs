@@ -2,7 +2,7 @@
 
 namespace SerialLoops.Lib.Script.Parameters;
 
-public class SpritePreManipScriptParameter : ScriptParameter
+public class SpritePreTransitionScriptParameter : ScriptParameter
 {
     public SpritePreTransition PreTransition { get; set; }
     public override short[] GetValues(object obj = null) => [(short)PreTransition];
@@ -12,12 +12,12 @@ public class SpritePreManipScriptParameter : ScriptParameter
         return project.Localize(PreTransition.ToString());
     }
 
-    public SpritePreManipScriptParameter(string name, short entranceTransition) : base(name, ParameterType.SPRITE_ENTRANCE)
+    public SpritePreTransitionScriptParameter(string name, short entranceTransition) : base(name, ParameterType.SPRITE_ENTRANCE)
     {
         PreTransition = (SpritePreTransition)entranceTransition;
     }
 
-    public override SpritePreManipScriptParameter Clone(Project project, EventFile eventFile)
+    public override SpritePreTransitionScriptParameter Clone(Project project, EventFile eventFile)
     {
         return new(Name, (short)PreTransition);
     }
@@ -32,8 +32,8 @@ public class SpritePreManipScriptParameter : ScriptParameter
         BOUNCE_LEFT_TO_RIGHT = 5,
         BOUNCE_RIGHT_TO_LEFT = 6,
         FADE_TO_CENTER = 7,
-        SLIDE_LEFT_TO_RIGHT_FAST = 8,
-        SLIDE_RIGHT_TO_LEFT_FAST = 9,
+        SLIDE_LEFT = 8,
+        SLIDE_RIGHT = 9,
         PEEK_RIGHT_TO_LEFT = 10,
         FADE_IN_LEFT = 11,
     }

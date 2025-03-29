@@ -586,7 +586,7 @@ public class ScriptItem : Item
         {
             foreach (CharacterItem character in previousSprites.Keys)
             {
-                if (SpritePostManipScriptParameter.ExitTransitions.Contains(previousSprites[character].PostTransition))
+                if (SpritePostTransitionScriptParameter.ExitTransitions.Contains(previousSprites[character].PostTransition))
                 {
                     sprites.Remove(character);
                     previousSprites.Remove(character);
@@ -594,8 +594,8 @@ public class ScriptItem : Item
             }
             if (previousCommand?.Verb == CommandVerb.DIALOGUE) // exits/moves happen _after_ dialogue is advanced, so we check these at this point
             {
-                SpritePostManipScriptParameter spritePostManipMoveParam = (SpritePostManipScriptParameter)previousCommand?.Parameters[3];
-                if (spritePostManipMoveParam.PostTransition != SpritePostManipScriptParameter.SpritePostTransition.NO_EXIT)
+                SpritePostTransitionScriptParameter spritePostTransitionMoveParam = (SpritePostTransitionScriptParameter)previousCommand?.Parameters[3];
+                if (spritePostTransitionMoveParam.PostTransition != SpritePostTransitionScriptParameter.SpritePostTransition.NO_EXIT)
                 {
                     CharacterItem prevCharacter = (CharacterItem)project.Items.First(i =>
                         i.Type == ItemType.Character &&
@@ -604,14 +604,14 @@ public class ScriptItem : Item
                     SpriteScriptParameter previousSpriteParam =
                         (SpriteScriptParameter)previousCommand.Parameters[1];
                     short layer = ((ShortScriptParameter)previousCommand.Parameters[9]).Value;
-                    switch (spritePostManipMoveParam.PostTransition)
+                    switch (spritePostTransitionMoveParam.PostTransition)
                     {
-                        case SpritePostManipScriptParameter.SpritePostTransition.SLIDE_LEFT_FADE_OUT:
-                        case SpritePostManipScriptParameter.SpritePostTransition.SLIDE_RIGHT_FADE_OUT:
-                        case SpritePostManipScriptParameter.SpritePostTransition.SLIDE_FROM_CENTER_TO_LEFT_FADE_OUT:
-                        case SpritePostManipScriptParameter.SpritePostTransition.SLIDE_FROM_CENTER_TO_RIGHT_FADE_OUT:
-                        case SpritePostManipScriptParameter.SpritePostTransition.FADE_OUT_CENTER:
-                        case SpritePostManipScriptParameter.SpritePostTransition.FADE_OUT_LEFT:
+                        case SpritePostTransitionScriptParameter.SpritePostTransition.SLIDE_LEFT_FADE_OUT:
+                        case SpritePostTransitionScriptParameter.SpritePostTransition.SLIDE_RIGHT_FADE_OUT:
+                        case SpritePostTransitionScriptParameter.SpritePostTransition.SLIDE_FROM_CENTER_TO_LEFT_FADE_OUT:
+                        case SpritePostTransitionScriptParameter.SpritePostTransition.SLIDE_FROM_CENTER_TO_RIGHT_FADE_OUT:
+                        case SpritePostTransitionScriptParameter.SpritePostTransition.FADE_OUT_CENTER:
+                        case SpritePostTransitionScriptParameter.SpritePostTransition.FADE_OUT_LEFT:
                             if (sprites.ContainsKey(prevCharacter) && previousSprites.ContainsKey(prevCharacter) &&
                                 ((SpriteScriptParameter)previousCommand.Parameters[1]).Sprite?.Sprite?.Character ==
                                 prevCharacter.MessageInfo.Character && commands.IndexOf(previousCommand) != commands.Count - 2)
@@ -622,8 +622,8 @@ public class ScriptItem : Item
 
                             break;
 
-                        case SpritePostManipScriptParameter.SpritePostTransition.SLIDE_CENTER_TO_LEFT_AND_STAY:
-                        case SpritePostManipScriptParameter.SpritePostTransition.SLIDE_RIGHT_TO_LEFT_AND_STAY:
+                        case SpritePostTransitionScriptParameter.SpritePostTransition.SLIDE_CENTER_TO_LEFT_AND_STAY:
+                        case SpritePostTransitionScriptParameter.SpritePostTransition.SLIDE_RIGHT_TO_LEFT_AND_STAY:
                             sprites[prevCharacter] = new()
                             {
                                 Sprite = previousSpriteParam.Sprite,
@@ -634,8 +634,8 @@ public class ScriptItem : Item
                             };
                             break;
 
-                        case SpritePostManipScriptParameter.SpritePostTransition.SLIDE_CENTER_TO_RIGHT_AND_STAY:
-                        case SpritePostManipScriptParameter.SpritePostTransition.SLIDE_LEFT_TO_RIGHT_AND_STAY:
+                        case SpritePostTransitionScriptParameter.SpritePostTransition.SLIDE_CENTER_TO_RIGHT_AND_STAY:
+                        case SpritePostTransitionScriptParameter.SpritePostTransition.SLIDE_LEFT_TO_RIGHT_AND_STAY:
                             sprites[prevCharacter] = new()
                             {
                                 Sprite = previousSpriteParam.Sprite,
@@ -650,7 +650,7 @@ public class ScriptItem : Item
                     // Log sprite exit transitions for animation purposes
                     if (commands.IndexOf(previousCommand) == commands.Count - 2)
                     {
-                        sprites[prevCharacter].PostTransition = spritePostManipMoveParam.PostTransition;
+                        sprites[prevCharacter].PostTransition = spritePostTransitionMoveParam.PostTransition;
                     }
                 }
             }
@@ -692,32 +692,32 @@ public class ScriptItem : Item
                         return preview;
                     }
 
-                    SpritePreManipScriptParameter spritePreManipParam =
-                        (SpritePreManipScriptParameter)command.Parameters[2];
+                    SpritePreTransitionScriptParameter spritePreTransitionParam =
+                        (SpritePreTransitionScriptParameter)command.Parameters[2];
                     SpriteShakeScriptParameter spriteShakeParam = (SpriteShakeScriptParameter)command.Parameters[4];
                     short layer = ((ShortScriptParameter)command.Parameters[9]).Value;
 
                     bool spriteIsNew = !sprites.ContainsKey(character);
-                    if (spriteIsNew && spritePreManipParam.PreTransition !=
-                        SpritePreManipScriptParameter.SpritePreTransition.NO_TRANSITION)
+                    if (spriteIsNew && spritePreTransitionParam.PreTransition !=
+                        SpritePreTransitionScriptParameter.SpritePreTransition.NO_TRANSITION)
                     {
                         sprites.Add(character, new());
                         previousSprites.Add(character, new());
                     }
 
-                    if (sprites.ContainsKey(character))
+                    if (sprites.TryGetValue(character, out PositionedSprite chrSprite))
                     {
-                        previousSprites[character] = sprites[character];
+                        previousSprites[character] = chrSprite;
                     }
 
-                    if (spritePreManipParam.PreTransition !=
-                        SpritePreManipScriptParameter.SpritePreTransition.NO_TRANSITION)
+                    if (spritePreTransitionParam.PreTransition !=
+                        SpritePreTransitionScriptParameter.SpritePreTransition.NO_TRANSITION)
                     {
-                        switch (spritePreManipParam.PreTransition)
+                        switch (spritePreTransitionParam.PreTransition)
                         {
                             // These ones will do their thing no matter what
-                            case SpritePreManipScriptParameter.SpritePreTransition.SLIDE_LEFT_TO_CENTER:
-                            case SpritePreManipScriptParameter.SpritePreTransition.SLIDE_RIGHT_TO_CENTER:
+                            case SpritePreTransitionScriptParameter.SpritePreTransition.SLIDE_LEFT_TO_CENTER:
+                            case SpritePreTransitionScriptParameter.SpritePreTransition.SLIDE_RIGHT_TO_CENTER:
                                 sprites[character] = new()
                                 {
                                     Sprite = spriteParam.Sprite,
@@ -730,8 +730,8 @@ public class ScriptItem : Item
                                 };
                                 break;
 
-                            case SpritePreManipScriptParameter.SpritePreTransition.FADE_TO_CENTER:
-                                if (spriteIsNew)
+                            case SpritePreTransitionScriptParameter.SpritePreTransition.FADE_TO_CENTER:
+                                if (spriteIsNew || previousCharacter != character)
                                 {
                                     sprites[character] = new()
                                     {
@@ -748,11 +748,27 @@ public class ScriptItem : Item
 
                                 break;
 
-                            case SpritePreManipScriptParameter.SpritePreTransition.FADE_IN_LEFT:
-                            case SpritePreManipScriptParameter.SpritePreTransition.PEEK_RIGHT_TO_LEFT:
-                            case SpritePreManipScriptParameter.SpritePreTransition.SLIDE_RIGHT_TO_LEFT:
-                            case SpritePreManipScriptParameter.SpritePreTransition.SLIDE_RIGHT_TO_LEFT_FAST:
-                            case SpritePreManipScriptParameter.SpritePreTransition.BOUNCE_RIGHT_TO_LEFT:
+                            case SpritePreTransitionScriptParameter.SpritePreTransition.FADE_IN_LEFT:
+                            case SpritePreTransitionScriptParameter.SpritePreTransition.PEEK_RIGHT_TO_LEFT:
+                            case SpritePreTransitionScriptParameter.SpritePreTransition.SLIDE_RIGHT_TO_LEFT:
+                            case SpritePreTransitionScriptParameter.SpritePreTransition.BOUNCE_RIGHT_TO_LEFT:
+                                if (spriteIsNew || previousCharacter != character)
+                                {
+                                    sprites[character] = new()
+                                    {
+                                        Sprite = spriteParam.Sprite,
+                                        Positioning =
+                                            new()
+                                            {
+                                                X = SpritePositioning.SpritePosition.LEFT.GetSpriteX(),
+                                                Layer = layer,
+                                            },
+                                        PalEffect = spritePaint,
+                                    };
+                                }
+                                break;
+
+                            case SpritePreTransitionScriptParameter.SpritePreTransition.SLIDE_RIGHT:
                                 if (spriteIsNew)
                                 {
                                     sprites[character] = new()
@@ -767,10 +783,9 @@ public class ScriptItem : Item
                                         PalEffect = spritePaint,
                                     };
                                 }
-                                else if (previousCharacter != character &&
-                                         (spritePreManipParam.PreTransition == SpritePreManipScriptParameter
-                                             .SpritePreTransition.SLIDE_RIGHT_TO_LEFT_FAST))
+                                else if (previousCharacter != character)
                                 {
+                                    int startPos = sprites[character].Positioning.X;
                                     sprites[character] = new()
                                     {
                                         Sprite = spriteParam.Sprite,
@@ -780,15 +795,32 @@ public class ScriptItem : Item
                                                 X = SpritePositioning.SpritePosition.CENTER.GetSpriteX(),
                                                 Layer = layer,
                                             },
+                                        StartPosition = startPos,
                                         PalEffect = spritePaint,
                                     };
                                 }
 
                                 break;
 
-                            case SpritePreManipScriptParameter.SpritePreTransition.SLIDE_LEFT_TO_RIGHT:
-                            case SpritePreManipScriptParameter.SpritePreTransition.SLIDE_LEFT_TO_RIGHT_FAST:
-                            case SpritePreManipScriptParameter.SpritePreTransition.BOUNCE_LEFT_TO_RIGHT:
+                            case SpritePreTransitionScriptParameter.SpritePreTransition.SLIDE_LEFT_TO_RIGHT:
+                            case SpritePreTransitionScriptParameter.SpritePreTransition.BOUNCE_LEFT_TO_RIGHT:
+                                if (spriteIsNew || previousCharacter != character)
+                                {
+                                    sprites[character] = new()
+                                    {
+                                        Sprite = spriteParam.Sprite,
+                                        Positioning =
+                                            new()
+                                            {
+                                                X = SpritePositioning.SpritePosition.RIGHT.GetSpriteX(),
+                                                Layer = layer,
+                                            },
+                                        PalEffect = spritePaint,
+                                    };
+                                }
+                                break;
+
+                            case SpritePreTransitionScriptParameter.SpritePreTransition.SLIDE_LEFT:
                                 if (spriteIsNew)
                                 {
                                     sprites[character] = new()
@@ -803,10 +835,9 @@ public class ScriptItem : Item
                                         PalEffect = spritePaint,
                                     };
                                 }
-                                else if (previousCharacter != character &&
-                                         (spritePreManipParam.PreTransition == SpritePreManipScriptParameter
-                                             .SpritePreTransition.SLIDE_LEFT_TO_RIGHT_FAST))
+                                else if (previousCharacter != character)
                                 {
+                                    int startPos = sprites[character].Positioning.X;
                                     sprites[character] = new()
                                     {
                                         Sprite = spriteParam.Sprite,
@@ -816,16 +847,16 @@ public class ScriptItem : Item
                                                 X = SpritePositioning.SpritePosition.CENTER.GetSpriteX(),
                                                 Layer = layer,
                                             },
+                                        StartPosition = startPos,
                                         PalEffect = spritePaint,
                                     };
                                 }
-
                                 break;
                         }
 
-                        if (commands.IndexOf(command) == commands.Count - 1)
+                        if (commands.IndexOf(command) == commands.Count - 1 && (spriteIsNew || previousCharacter != character))
                         {
-                            sprites[character].PreTransition = spritePreManipParam.PreTransition;
+                            sprites[character].PreTransition = spritePreTransitionParam.PreTransition;
                         }
                     }
                     else if (sprites.TryGetValue(character, out PositionedSprite sprite))

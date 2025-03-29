@@ -278,11 +278,11 @@ public class TemplateScriptParameter
                 break;
 
             case ScriptParameter.ParameterType.SPRITE_ENTRANCE:
-                Value = $"{(short)((SpritePreManipScriptParameter)parameter).PreTransition}";
+                Value = $"{(short)((SpritePreTransitionScriptParameter)parameter).PreTransition}";
                 break;
 
             case ScriptParameter.ParameterType.SPRITE_EXIT:
-                Value = $"{(short)((SpritePostManipScriptParameter)parameter).PostTransition}";
+                Value = $"{(short)((SpritePostTransitionScriptParameter)parameter).PostTransition}";
                 break;
 
             case ScriptParameter.ParameterType.SPRITE:
@@ -438,10 +438,10 @@ public class TemplateScriptParameter
                     return new ShortScriptParameter(localizedName, short.Parse(value));
 
                 case ScriptParameter.ParameterType.SPRITE_ENTRANCE:
-                    return new SpritePreManipScriptParameter(localizedName, short.Parse(value));
+                    return new SpritePreTransitionScriptParameter(localizedName, short.Parse(value));
 
                 case ScriptParameter.ParameterType.SPRITE_EXIT:
-                    return new SpritePostManipScriptParameter(localizedName, short.Parse(value));
+                    return new SpritePostTransitionScriptParameter(localizedName, short.Parse(value));
 
                 case ScriptParameter.ParameterType.SPRITE:
                     return new SpriteScriptParameter(localizedName, (CharacterSpriteItem)project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.Character_Sprite && ((CharacterSpriteItem)i).Index == short.Parse(value)));

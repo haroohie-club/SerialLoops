@@ -2637,11 +2637,11 @@ No project is currently open. Would you like to create a new project?</value>
   <data name="FADE_TO_CENTER" xml:space="preserve">
     <value>Fade to Center</value>
   </data>
-  <data name="SLIDE_LEFT_TO_RIGHT_FAST" xml:space="preserve">
-    <value>Slight Left to Right (Fast)</value>
+  <data name="SLIDE_LEFT" xml:space="preserve">
+    <value>Slide Left (Transition)</value>
   </data>
-  <data name="SLIDE_RIGHT_TO_LEFT_FAST" xml:space="preserve">
-    <value>Slide Right to Left (Fast)</value>
+  <data name="SLIDE_RIGHT" xml:space="preserve">
+    <value>Slide Right (Transition)</value>
   </data>
   <data name="PEEK_RIGHT_TO_LEFT" xml:space="preserve">
     <value>Peek Right to Left</value>

@@ -481,65 +481,65 @@ public class AnimatedPositionedSprite : ReactiveObject
         AnimatedImage = new(framesWithTimings);
         YPosition  = 192 - AnimatedImage.CurrentFrame.Height;
 
-        if (sprite.PreTransition != SpritePreManipScriptParameter.SpritePreTransition.NO_TRANSITION)
+        if (sprite.PreTransition != SpritePreTransitionScriptParameter.SpritePreTransition.NO_TRANSITION)
         {
             EndXPosition = sprite.Positioning.X;
             EndOpacity = 1.0;
             switch (sprite.PreTransition)
             {
-                case SpritePreManipScriptParameter.SpritePreTransition.SLIDE_LEFT_TO_RIGHT:
-                case SpritePreManipScriptParameter.SpritePreTransition.SLIDE_LEFT_TO_CENTER:
+                case SpritePreTransitionScriptParameter.SpritePreTransition.SLIDE_LEFT_TO_RIGHT:
+                case SpritePreTransitionScriptParameter.SpritePreTransition.SLIDE_LEFT_TO_CENTER:
                     AnimDuration = TimeSpan.FromSeconds(0.25);
                     StartXPosition = 256;
                     StartOpacity = 0;
                     AnimEasing = new LinearEasing();
                     break;
 
-                case SpritePreManipScriptParameter.SpritePreTransition.SLIDE_RIGHT_TO_LEFT:
-                case SpritePreManipScriptParameter.SpritePreTransition.SLIDE_RIGHT_TO_CENTER:
+                case SpritePreTransitionScriptParameter.SpritePreTransition.SLIDE_RIGHT_TO_LEFT:
+                case SpritePreTransitionScriptParameter.SpritePreTransition.SLIDE_RIGHT_TO_CENTER:
                     AnimDuration = TimeSpan.FromSeconds(0.25);
                     StartXPosition = -framesWithTimings[0].Frame.Width;
                     StartOpacity = 0;
                     AnimEasing = new LinearEasing();
                     break;
 
-                case SpritePreManipScriptParameter.SpritePreTransition.BOUNCE_LEFT_TO_RIGHT:
+                case SpritePreTransitionScriptParameter.SpritePreTransition.BOUNCE_LEFT_TO_RIGHT:
                     AnimDuration = TimeSpan.FromSeconds(1);
                     StartXPosition = EndXPosition + 32;
                     StartOpacity = 1.0;
                     AnimEasing = new ElasticEaseOut();
                     break;
 
-                case SpritePreManipScriptParameter.SpritePreTransition.BOUNCE_RIGHT_TO_LEFT:
+                case SpritePreTransitionScriptParameter.SpritePreTransition.BOUNCE_RIGHT_TO_LEFT:
                     AnimDuration = TimeSpan.FromSeconds(1);
                     StartXPosition = EndXPosition - 32;
                     StartOpacity = 1.0;
                     AnimEasing = new ElasticEaseOut();
                     break;
 
-                case SpritePreManipScriptParameter.SpritePreTransition.FADE_TO_CENTER:
-                case SpritePreManipScriptParameter.SpritePreTransition.FADE_IN_LEFT:
+                case SpritePreTransitionScriptParameter.SpritePreTransition.FADE_TO_CENTER:
+                case SpritePreTransitionScriptParameter.SpritePreTransition.FADE_IN_LEFT:
                     AnimDuration = TimeSpan.FromSeconds(0.5);
                     StartXPosition = EndXPosition;
                     StartOpacity = 0;
                     AnimEasing = new LinearEasing();
                     break;
 
-                case SpritePreManipScriptParameter.SpritePreTransition.SLIDE_LEFT_TO_RIGHT_FAST:
-                    AnimDuration = TimeSpan.FromSeconds(0.125);
-                    StartXPosition = 256;
+                case SpritePreTransitionScriptParameter.SpritePreTransition.SLIDE_LEFT:
+                    AnimDuration = TimeSpan.FromSeconds(0.25);
+                    StartXPosition = sprite.StartPosition == 0 ? 256 :  sprite.StartPosition;
                     StartOpacity = 1;
                     AnimEasing = new LinearEasing();
                     break;
 
-                case SpritePreManipScriptParameter.SpritePreTransition.SLIDE_RIGHT_TO_LEFT_FAST:
-                    AnimDuration = TimeSpan.FromSeconds(0.125);
-                    StartXPosition = -framesWithTimings[0].Frame.Width;
+                case SpritePreTransitionScriptParameter.SpritePreTransition.SLIDE_RIGHT:
+                    AnimDuration = TimeSpan.FromSeconds(0.25);
+                    StartXPosition = sprite.StartPosition == 0 ? -framesWithTimings[0].Frame.Width :  sprite.StartPosition;
                     StartOpacity = 1;
                     AnimEasing = new LinearEasing();
                     break;
 
-                case SpritePreManipScriptParameter.SpritePreTransition.PEEK_RIGHT_TO_LEFT:
+                case SpritePreTransitionScriptParameter.SpritePreTransition.PEEK_RIGHT_TO_LEFT:
                     AnimDuration = TimeSpan.FromSeconds(1.5);
                     StartXPosition = -framesWithTimings[0].Frame.Width;
                     StartOpacity = 1;
@@ -547,11 +547,11 @@ public class AnimatedPositionedSprite : ReactiveObject
                     break;
             }
         }
-        else if (sprite.PostTransition != SpritePostManipScriptParameter.SpritePostTransition.NO_EXIT)
+        else if (sprite.PostTransition != SpritePostTransitionScriptParameter.SpritePostTransition.NO_EXIT)
         {
             switch (sprite.PostTransition)
             {
-                case SpritePostManipScriptParameter.SpritePostTransition.SLIDE_FROM_CENTER_TO_RIGHT_FADE_OUT:
+                case SpritePostTransitionScriptParameter.SpritePostTransition.SLIDE_FROM_CENTER_TO_RIGHT_FADE_OUT:
                     AnimDuration = TimeSpan.FromSeconds(0.25);
                     StartXPosition = SpritePositioning.SpritePosition.CENTER.GetSpriteX();
                     EndXPosition = 256;
@@ -560,7 +560,7 @@ public class AnimatedPositionedSprite : ReactiveObject
                     AnimEasing = new LinearEasing();
                     break;
 
-                case SpritePostManipScriptParameter.SpritePostTransition.SLIDE_FROM_CENTER_TO_LEFT_FADE_OUT:
+                case SpritePostTransitionScriptParameter.SpritePostTransition.SLIDE_FROM_CENTER_TO_LEFT_FADE_OUT:
                     AnimDuration = TimeSpan.FromSeconds(0.25);
                     StartXPosition = SpritePositioning.SpritePosition.CENTER.GetSpriteX();
                     EndXPosition = -framesWithTimings[0].Frame.Width;
@@ -569,8 +569,8 @@ public class AnimatedPositionedSprite : ReactiveObject
                     AnimEasing = new LinearEasing();
                     break;
 
-                case SpritePostManipScriptParameter.SpritePostTransition.SLIDE_CENTER_TO_RIGHT_AND_STAY:
-                case SpritePostManipScriptParameter.SpritePostTransition.SLIDE_CENTER_TO_LEFT_AND_STAY:
+                case SpritePostTransitionScriptParameter.SpritePostTransition.SLIDE_CENTER_TO_RIGHT_AND_STAY:
+                case SpritePostTransitionScriptParameter.SpritePostTransition.SLIDE_CENTER_TO_LEFT_AND_STAY:
                     AnimDuration = TimeSpan.FromSeconds(0.25);
                     StartXPosition = SpritePositioning.SpritePosition.CENTER.GetSpriteX();
                     EndXPosition = sprite.Positioning.X;
@@ -579,7 +579,7 @@ public class AnimatedPositionedSprite : ReactiveObject
                     AnimEasing = new QuadraticEaseInOut();
                     break;
 
-                case SpritePostManipScriptParameter.SpritePostTransition.SLIDE_RIGHT_FADE_OUT:
+                case SpritePostTransitionScriptParameter.SpritePostTransition.SLIDE_RIGHT_FADE_OUT:
                     AnimDuration = TimeSpan.FromSeconds(0.25);
                     StartXPosition = SpritePositioning.SpritePosition.LEFT.GetSpriteX();
                     EndXPosition = 128;
@@ -588,7 +588,7 @@ public class AnimatedPositionedSprite : ReactiveObject
                     AnimEasing = new LinearEasing();
                     break;
 
-                case SpritePostManipScriptParameter.SpritePostTransition.SLIDE_LEFT_FADE_OUT:
+                case SpritePostTransitionScriptParameter.SpritePostTransition.SLIDE_LEFT_FADE_OUT:
                     AnimDuration = TimeSpan.FromSeconds(0.25);
                     StartXPosition = SpritePositioning.SpritePosition.LEFT.GetSpriteX();
                     EndXPosition = -framesWithTimings[0].Frame.Width;
@@ -597,7 +597,7 @@ public class AnimatedPositionedSprite : ReactiveObject
                     AnimEasing = new LinearEasing();
                     break;
 
-                case SpritePostManipScriptParameter.SpritePostTransition.FADE_OUT_CENTER:
+                case SpritePostTransitionScriptParameter.SpritePostTransition.FADE_OUT_CENTER:
                     AnimDuration = TimeSpan.FromSeconds(0.5);
                     StartXPosition = SpritePositioning.SpritePosition.CENTER.GetSpriteX();
                     EndXPosition = SpritePositioning.SpritePosition.CENTER.GetSpriteX();
@@ -606,7 +606,7 @@ public class AnimatedPositionedSprite : ReactiveObject
                     AnimEasing = new LinearEasing();
                     break;
 
-                case SpritePostManipScriptParameter.SpritePostTransition.FADE_OUT_LEFT:
+                case SpritePostTransitionScriptParameter.SpritePostTransition.FADE_OUT_LEFT:
                     AnimDuration = TimeSpan.FromSeconds(0.5);
                     StartXPosition = SpritePositioning.SpritePosition.LEFT.GetSpriteX();
                     EndXPosition = SpritePositioning.SpritePosition.LEFT.GetSpriteX();
@@ -615,7 +615,7 @@ public class AnimatedPositionedSprite : ReactiveObject
                     AnimEasing = new LinearEasing();
                     break;
 
-                case SpritePostManipScriptParameter.SpritePostTransition.SLIDE_LEFT_TO_RIGHT_AND_STAY:
+                case SpritePostTransitionScriptParameter.SpritePostTransition.SLIDE_LEFT_TO_RIGHT_AND_STAY:
                     AnimDuration = TimeSpan.FromSeconds(0.25);
                     StartXPosition = SpritePositioning.SpritePosition.LEFT.GetSpriteX();
                     EndXPosition = sprite.Positioning.X;
@@ -624,7 +624,7 @@ public class AnimatedPositionedSprite : ReactiveObject
                     AnimEasing = new QuadraticEaseInOut();
                     break;
 
-                case SpritePostManipScriptParameter.SpritePostTransition.SLIDE_RIGHT_TO_LEFT_AND_STAY:
+                case SpritePostTransitionScriptParameter.SpritePostTransition.SLIDE_RIGHT_TO_LEFT_AND_STAY:
                     AnimDuration = TimeSpan.FromSeconds(0.25);
                     StartXPosition = SpritePositioning.SpritePosition.RIGHT.GetSpriteX();
                     EndXPosition = sprite.Positioning.X;

@@ -2,7 +2,7 @@
 
 namespace SerialLoops.Lib.Script.Parameters;
 
-public class SpritePostManipScriptParameter : ScriptParameter
+public class SpritePostTransitionScriptParameter : ScriptParameter
 {
     public SpritePostTransition PostTransition { get; set; }
     public override short[] GetValues(object obj = null) => [(short)PostTransition];
@@ -12,12 +12,12 @@ public class SpritePostManipScriptParameter : ScriptParameter
         return project.Localize(PostTransition.ToString());
     }
 
-    public SpritePostManipScriptParameter(string name, short exitTransition) : base(name, ParameterType.SPRITE_EXIT)
+    public SpritePostTransitionScriptParameter(string name, short exitTransition) : base(name, ParameterType.SPRITE_EXIT)
     {
         PostTransition = (SpritePostTransition)exitTransition;
     }
 
-    public override SpritePostManipScriptParameter Clone(Project project, EventFile eventFile)
+    public override SpritePostTransitionScriptParameter Clone(Project project, EventFile eventFile)
     {
         return new(Name, (short)PostTransition);
     }
