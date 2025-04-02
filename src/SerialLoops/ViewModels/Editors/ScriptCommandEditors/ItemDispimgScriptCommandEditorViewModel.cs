@@ -65,6 +65,7 @@ public class ItemDispimgScriptCommandEditorViewModel : ScriptCommandEditorViewMo
             ((ItemTransitionScriptParameter)Command.Parameters[2]).Transition = _transition.Transition;
             Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
                 .Objects[Command.Index].Parameters[2] = (short)_transition.Transition;
+            ScriptEditor.UpdatePreview();
             Script.UnsavedChanges = true;
         }
     }

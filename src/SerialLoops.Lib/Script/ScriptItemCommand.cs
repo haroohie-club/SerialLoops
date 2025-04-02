@@ -124,10 +124,10 @@ public class ScriptItemCommand : ReactiveObject
                             parameters.Add(new SpriteScriptParameter(localize("Sprite"), (CharacterSpriteItem)project.Items.FirstOrDefault(item => item.Type == ItemDescription.ItemType.Character_Sprite && parameter == ((CharacterSpriteItem)item).Index)));
                             break;
                         case 2:
-                            parameters.Add(new SpriteEntranceScriptParameter(localize("Sprite Entrance Transition"), parameter));
+                            parameters.Add(new SpritePreTransitionScriptParameter(localize("Sprite Entrance Transition"), parameter));
                             break;
                         case 3:
-                            parameters.Add(new SpriteExitScriptParameter(localize("Sprite Exit/Move Transition"), parameter));
+                            parameters.Add(new SpritePostTransitionScriptParameter(localize("Sprite Exit/Move Transition"), parameter));
                             break;
                         case 4:
                             parameters.Add(new SpriteShakeScriptParameter(localize("Sprite Shake"), parameter));

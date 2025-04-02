@@ -1944,10 +1944,10 @@
   <data name="Sprite" xml:space="preserve">
     <value>Sprite</value>
   </data>
-  <data name="Sprite Entrance Transition" xml:space="preserve">
+  <data name="SpritePreCommandTransition" xml:space="preserve">
     <value>Sprite Entrance Transition</value>
   </data>
-  <data name="Sprite Exit/Move Transition" xml:space="preserve">
+  <data name="SpritePostCommandTransition" xml:space="preserve">
     <value>Sprite Exit/Move Transition</value>
   </data>
   <data name="Sprite Layer" xml:space="preserve">

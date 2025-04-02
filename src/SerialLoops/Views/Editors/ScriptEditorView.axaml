@@ -85,8 +85,7 @@
         <GridSplitter Grid.Column="1" Grid.Row="0" Grid.RowSpan="4" Background="{StaticResource GroupLineColor}" ResizeDirection="Columns"/>
 
         <Grid Grid.Column="2" Grid.Row="1" ColumnDefinitions="Auto,*" RowDefinitions="*">
-            <Image Source="{Binding PreviewBitmap, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
-                   Grid.Column="0" Grid.Row="0" Width="256" VerticalAlignment="Top"/>
+            <controls:ScriptPreviewCanvas DataContext="{Binding ScriptPreviewCanvas}" Grid.Column="0" Grid.Row="0" Width="256" VerticalAlignment="Top"/>
             <TabControl Grid.Column="1" Grid.Row="0">
                 <TabControl.Items>
 

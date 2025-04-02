@@ -244,7 +244,7 @@ public class VoicedLineEditorViewModel : EditorViewModel
     private void UpdatePreview()
     {
         SubtitlesPreview = new(256, 384);
-        SKCanvas canvas = new(SubtitlesPreview);
+        using SKCanvas canvas = new(SubtitlesPreview);
         canvas.DrawColor(SKColors.DarkGray);
         canvas.DrawLine(new() { X = 0, Y = 192 }, new() { X = 256, Y = 192 }, _project.DialogueColorFilters[0]);
 

@@ -23,6 +23,7 @@ public class ScreenFadeInScriptCommandEditorViewModel : ScriptCommandEditorViewM
             ((ShortScriptParameter)Command.Parameters[0]).Value = _fadeTime;
             Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
                 .Objects[Command.Index].Parameters[0] = _fadeTime;
+            ScriptEditor.UpdatePreview();
             Script.UnsavedChanges = true;
         }
     }
@@ -56,6 +57,7 @@ public class ScreenFadeInScriptCommandEditorViewModel : ScriptCommandEditorViewM
             ((ColorMonochromeScriptParameter)Command.Parameters[3]).ColorType = _color.Color;
             Script.Event.ScriptSections[Script.Event.ScriptSections.IndexOf(Command.Section)]
                 .Objects[Command.Index].Parameters[3] = (short)_color.Color;
+            ScriptEditor.UpdatePreview();
             Script.UnsavedChanges = true;
         }
     }

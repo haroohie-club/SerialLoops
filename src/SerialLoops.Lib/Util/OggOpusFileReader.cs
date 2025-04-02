@@ -1,11 +1,9 @@
 using System;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Concentus;
 using Concentus.Oggfile;
-using Concentus.Structs;
 using HaruhiChokuretsuLib.Util;
 using NAudio.Wave;
 

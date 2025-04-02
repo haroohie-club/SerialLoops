@@ -89,7 +89,7 @@ public class LayoutEditorViewModel : EditorViewModel
         {
             await using FileStream fs = File.Create(path);
             SKBitmap preview = SelectedLayoutEntry.FullImage.Copy();
-            SKCanvas canvas = new(preview);
+            using SKCanvas canvas = new(preview);
             canvas.DrawRect(SelectedLayoutEntry.TextureX, SelectedLayoutEntry.TextureY, SelectedLayoutEntry.TextureW, SelectedLayoutEntry.TextureH, new() { Color = SKColors.Red, Style = SKPaintStyle.Stroke });
             canvas.Flush();
             preview.Encode(fs, SKEncodedImageFormat.Png, GraphicsFile.PNG_QUALITY);
