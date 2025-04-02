@@ -5,9 +5,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:assets="using:SerialLoops.Assets"
              xmlns:controls="using:SerialLoops.Controls"
+             xmlns:utility="using:SerialLoops.Utility"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:TopicEditorViewModel"
              x:Class="SerialLoops.Views.Editors.TopicEditorView">
+    <UserControl.Resources>
+        <utility:ShortSubtractionConverter x:Key="SubtractionConverter"/>
+    </UserControl.Resources>
+
     <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" Margin="10">
         <Panel IsVisible="False">
             <Button Command="{Binding UndoCommand}" HotKey="{Binding UndoGesture}"/>
@@ -15,14 +20,16 @@
         </Panel>
 
         <TextBlock Grid.Column="0" Grid.Row="0" Text="{x:Static assets:Strings.ID}"/>
-        <TextBlock Grid.Column="1" Grid.Row="0" Margin="10,0,0,0" Text="{Binding Topic.TopicEntry.Id}"/>
+        <TextBlock Grid.Column="1" Grid.Row="0" Margin="10,0,0,0"
+                   Text="{Binding Topic.TopicEntry.Id, Converter={StaticResource SubtractionConverter}, ConverterParameter=1}"/>
 
         <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Horizontal" Spacing="3"
                     IsVisible="{Binding Topic.HiddenMainTopic, Converter={x:Static ObjectConverters.IsNotNull}}">
             <TextBlock Text="{x:Static assets:Strings.Hidden_ID}" VerticalAlignment="Center"/>
             <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" VerticalAlignment="Center" ToolTip.Tip="{x:Static assets:Strings.TopicEditorHiddenIdHelp}"/>
         </StackPanel>
-        <TextBlock Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" IsVisible="{Binding Topic.HiddenMainTopic, Converter={x:Static ObjectConverters.IsNotNull}}" Text="{Binding Topic.HiddenMainTopic.Id}"/>
+        <TextBlock Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" IsVisible="{Binding Topic.HiddenMainTopic, Converter={x:Static ObjectConverters.IsNotNull}}"
+                   Text="{Binding Topic.HiddenMainTopic.Id, Converter={StaticResource SubtractionConverter}, ConverterParameter=1}"/>
 
         <TextBlock Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Text="{x:Static assets:Strings.Title}"/>
         <TextBox Grid.Column="1" Grid.Row="2" Margin="10,0,0,0" Text="{Binding Title}"/>

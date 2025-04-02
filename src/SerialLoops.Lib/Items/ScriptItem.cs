@@ -228,6 +228,13 @@ public class ScriptItem : Item
             preview.ChessMode = true;
         }
 
+        // Get the BGM first
+        ScriptItemCommand bgmCommand = commands.LastOrDefault(c => c.Verb == CommandVerb.BGM_PLAY);
+        if (bgmCommand is not null && ((BgmModeScriptParameter)bgmCommand.Parameters[1]).Mode == BgmModeScriptParameter.BgmMode.Start)
+        {
+            preview.Bgm = ((BgmScriptParameter)bgmCommand.Parameters[0]).Bgm;
+        }
+
         // If we're in chess mode, we don't need to draw any of the top screen stuff as the screens are flipped
         if (!preview.ChessMode)
         {

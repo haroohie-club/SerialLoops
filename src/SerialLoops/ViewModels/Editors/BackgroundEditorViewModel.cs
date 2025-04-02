@@ -39,7 +39,7 @@ public class BackgroundEditorViewModel : EditorViewModel
     public ICommand ReplaceCommand { get; set; }
     public ICommand CgNameChangeCommand { get; set; }
     public bool ShowExtras => Bg.BackgroundType != BgType.TEX_BG && Bg.BackgroundType != BgType.KINETIC_SCREEN;
-    public string FlagDescription => string.Format(Strings.Flag___0_, Bg.Flag);
+    public string FlagDescription => string.Format(Strings.Flag___0_, Bg.Flag - 1);
     public string UnknownExtrasShortDescription => string.Format(Strings.Unknown_Extras_Short___0_, Bg.ExtrasShort);
     public string UnknownExtrasByteDescription => string.Format(Strings.Unknown_Extras_Byte___0_, Bg.ExtrasByte);
 
