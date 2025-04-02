@@ -51,13 +51,18 @@
         </Style>
         <Style Selector="Button.ToolbarButton">
             <!-- We use toolbar height here so these buttons are always proportional & square in the bar -->
-            <Setter Property="Width" Value="{DynamicResource ToolbarCompactHeight}" />
+            <Setter Property="Width" Value="{DynamicResource ToolbarCompactHeightPadded}" />
             <Setter Property="Height" Value="{DynamicResource ToolbarCompactHeight}" />
             <Setter Property="Background" Value="{DynamicResource ToolbarBackgroundColor}" />
             <Setter Property="Padding" Value="5" />
             <Setter Property="Margin" Value="5 0" />
             <Setter Property="HorizontalAlignment" Value="Right" />
             <Setter Property="ToolTip.Tip" Value="{Binding ., DataType=system:String}"/>
+            <Setter Property="FontSize" Value="{DynamicResource ResourceKey=ToolbarFontSize}"/>
+            <Setter Property="FontStretch" Value="ExtraCondensed"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
+            <Setter Property="TextBlock.TextAlignment" Value="Center"/>
         </Style>
 
         <!-- Project bar color -->
@@ -324,8 +329,8 @@
 
     <Application.Resources>
         <ResourceDictionary>
-            <system:Double x:Key="ToolbarCompactHeight">36</system:Double>
-            <system:Double x:Key="ToolbarCompactHeightPadded">43</system:Double>
+            <system:Double x:Key="ToolbarCompactHeight">63</system:Double>
+            <system:Double x:Key="ToolbarCompactHeightPadded">70</system:Double>
 
             <LinearGradientBrush x:Key="ProjectBarGradient" StartPoint="0%,0%" EndPoint="100%,0%">
                 <GradientStop Color="#1F000000" Offset="0.0"/>
@@ -354,7 +359,8 @@
                     <SolidColorBrush x:Key="DisabledLinkColor">#77000000</SolidColorBrush>
                     <SolidColorBrush x:Key="GroupLineColor">#55000000</SolidColorBrush>
                     <SolidColorBrush x:Key="AccentColor">#CCCCCC</SolidColorBrush>
-                    <SolidColorBrush x:Key="ToolbarTextColor">Transparent</SolidColorBrush>
+                    <SolidColorBrush x:Key="ToolbarTextColor">Black</SolidColorBrush>
+                    <system:Double x:Key="ToolbarFontSize">10.0</system:Double>
                     <SolidColorBrush x:Key="ToolbarBorderColor">Transparent</SolidColorBrush>
                     <SolidColorBrush x:Key="ToolbarBackgroundColor">Transparent</SolidColorBrush>
                     <SolidColorBrush x:Key="TabControlBackgroundColor">#11ffffff</SolidColorBrush>
@@ -372,7 +378,7 @@
                             <SolidColorBrush>#FF222222</SolidColorBrush>
                         </OnPlatform.Linux>
                     </OnPlatform>
-                    <system:Double x:Key="BackgroundAcrylicOpacity">0.4</system:Double>
+                    <system:Double x:Key="BackgroundAcrylicOpacity">0.65</system:Double>
                     <system:Double x:Key="BackgroundAcrylicTintStrength">1</system:Double>
                     <IImage x:Key="ColoredIconPath">avares://SerialLoops/Assets/Icons/AppIconDark.png</IImage>
                     <SolidColorBrush x:Key="LinkColor">Cyan</SolidColorBrush>
@@ -381,7 +387,7 @@
                     <SolidColorBrush x:Key="DisabledLinkColor">Gray</SolidColorBrush>
                     <SolidColorBrush x:Key="GroupLineColor">WhiteSmoke</SolidColorBrush>
                     <SolidColorBrush x:Key="AccentColor">#222222</SolidColorBrush>
-                    <SolidColorBrush x:Key="ToolbarTextColor">Transparent</SolidColorBrush>
+                    <SolidColorBrush x:Key="ToolbarTextColor">WhiteSmoke</SolidColorBrush>
                     <SolidColorBrush x:Key="ToolbarBorderColor">Transparent</SolidColorBrush>
                     <SolidColorBrush x:Key="ToolbarBackgroundColor">Transparent</SolidColorBrush>
                     <SolidColorBrush x:Key="TabControlBackgroundColor">#11ffffff</SolidColorBrush>

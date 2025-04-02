@@ -1547,18 +1547,21 @@ public partial class MainWindowViewModel : ViewModelBase
         ToolBar.Items.Add(new ToolbarButton
         {
             DataContext = Strings.Save,
+            Text = Strings.Save,
             Command = SaveProjectCommand,
             Icon = ControlGenerator.GetVectorIcon("Save", Log),
         });
         ToolBar.Items.Add(new ToolbarButton
         {
             DataContext = Strings.Build,
+            Text = Strings.Build,
             Command = BuildIterativeCommand,
             Icon = ControlGenerator.GetVectorIcon("Build", Log),
         });
         ToolBar.Items.Add(new ToolbarButton
         {
             DataContext = Strings.Build_and_Run,
+            Text = Strings.Build_and_Run,
             Command = BuildAndRunCommand,
             Icon = ControlGenerator.GetVectorIcon("Build_Run", Log),
         });
@@ -1566,6 +1569,7 @@ public partial class MainWindowViewModel : ViewModelBase
         ToolBar.Items.Add(new ToolbarButton
         {
             DataContext = Strings.Search,
+            Text = Strings.Search,
             Command = SearchProjectCommand,
             Icon = ControlGenerator.GetVectorIcon("Search", Log),
         });

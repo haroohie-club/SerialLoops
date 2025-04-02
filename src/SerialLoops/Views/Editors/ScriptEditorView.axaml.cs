@@ -77,6 +77,7 @@ public partial class ScriptEditorView : UserControl
         ToolbarButton applyTemplateButton = new()
         {
             DataContext = Strings.Apply_Template,
+            Text = Strings.Template,
             Command = vm.ApplyTemplateCommand,
             Icon = ControlGenerator.GetVectorIcon("Template", window.Log),
         };
