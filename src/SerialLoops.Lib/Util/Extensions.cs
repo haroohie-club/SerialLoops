@@ -290,7 +290,7 @@ public static partial class Extensions
             }
             quickSave.CgIndex = (short)scriptPreview.Background.Id;
         }
-        quickSave.BgPalEffect = (short)scriptPreview.BgPalEffect;
+        quickSave.BgPalEffect = (short)scriptPreview.PalEffect;
         quickSave.EpisodeHeader = scriptPreview.EpisodeHeader;
         for (int i = 1; i <= 5; i++)
         {
