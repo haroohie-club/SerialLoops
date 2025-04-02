@@ -104,6 +104,11 @@ public static partial class Extensions
                 originalString = originalString.Replace(match.Value, match.Value.GetSubstitutedString(project));
             }
 
+            foreach (Match match in Regex.Matches(originalString, @"。Ｑ(\d{2})").Cast<Match>())
+            {
+                originalString = originalString.Replace(match.Value, match.Value.GetSubstitutedString(project));
+            }
+
             foreach (Match match in Regex.Matches(originalString, @"。ｘ(\d{2})").Cast<Match>())
             {
                 originalString = originalString.Replace(match.Value, match.Value.GetSubstitutedString(project));
@@ -369,10 +374,10 @@ public static partial class Extensions
         int strWidth = 0;
         for (int i = 0; i < str.Length; i++)
         {
-            project.FontReplacement.TryGetValue(str[i], out FontReplacement fr);
+            FontReplacement fr = project.FontReplacement.ReverseLookup(str[i]);
             if ((fr?.CauseOffsetAdjust ?? false) && i < str.Length - 1)
             {
-                project.FontReplacement.TryGetValue(str[i + 1], out FontReplacement nextFr);
+                FontReplacement nextFr = project.FontReplacement.ReverseLookup(str[i + 1]);
                 if (nextFr?.TakeOffsetAdjust ?? false)
                 {
                     strWidth += fr.Offset - 1;
@@ -467,6 +472,10 @@ public static partial class Extensions
                 else if (i < text.Length - 6 && Regex.IsMatch(text[i..(i + 6)], @"#SE\d{3}"))
                 {
                     i += 6;
+                }
+                else if (i < text.Length - 6 && Regex.IsMatch(text[i..(i + 4)], @"#Q\d{2}"))
+                {
+                    i += 4;
                 }
                 else if (i < text.Length - 4 && text[i..(i + 4)] == "#SK0")
                 {

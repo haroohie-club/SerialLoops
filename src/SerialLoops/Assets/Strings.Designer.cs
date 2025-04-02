@@ -7780,7 +7780,7 @@ namespace SerialLoops.Assets {
         /// <summary>
         ///   Looks up a localized string similar to Reverts the background to the last call of BG_DISP (i.e. undoes any BG_FADE or BG_DISPCG calls). This is required before returning to displaying standard TEX_BG BGs. Note that if reverting a TEX_CG_DUAL_SCREEN BG, SET_PLACE must have been used to set the place location and have it displayed.
         ///
-        ///BG_REVERT does something odd to previously displayed CGs that makes attempting to display them again after the BG_REVERT crash/freeze/soft lock the game. If you need to go back and forth between the same CGs, consider  [rest of string was truncated]&quot;;.
+        ///BG_REVERT does something odd to previously displayed CGs that makes attempting to display them again after the BG_REVERT crash/freeze/soft lock the game. If you need to go back and forth between the same CGs, conside [rest of string was truncated]&quot;;.
         /// </summary>
         public static string ScriptCommandVerbHelpBG_REVERT {
             get {
