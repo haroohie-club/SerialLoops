@@ -19,6 +19,7 @@ using HaruhiChokuretsuLib.Font;
 using HaruhiChokuretsuLib.Util;
 using HaruhiChokuretsuLib.Util.Exceptions;
 using SerialLoops.Lib.Items;
+using SerialLoops.Lib.SaveFile;
 using SerialLoops.Lib.Script.Parameters;
 using SerialLoops.Lib.Util;
 using SkiaSharp;
@@ -113,6 +114,8 @@ public partial class Project
     public SKColor[] DialogueColors { get; set; } = new SKColor[16];
     [JsonIgnore]
     public SKPaint[] DialogueColorFilters { get; set; } = new SKPaint[16];
+    [JsonIgnore]
+    public SaveItem ProjectSaveFile { get; set; }
 
     public float AverageBgmMaxAmplitude { get; set; }
 
@@ -1320,6 +1323,18 @@ public partial class Project
     public CharacterItem GetCharacterBySpeaker(Speaker speaker)
     {
         return (CharacterItem)Items.First(i => i.Type == ItemType.Character && i.DisplayName == $"CHR_{Characters[(int)speaker].Name}");
+    }
+
+    public bool LoadProjectSave()
+    {
+        string savPath = Path.Combine(MainDirectory, $"{Name}.sav");
+        if (!File.Exists(savPath))
+        {
+            return false;
+        }
+
+        ProjectSaveFile = new(savPath, $"{Name}.sav");
+        return ProjectSaveFile is not null;
     }
 
     private bool ItemMatches(ItemDescription item, string term, SearchQuery.DataHolder scope, ILogger logger)

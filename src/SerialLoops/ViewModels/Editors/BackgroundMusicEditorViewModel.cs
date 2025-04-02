@@ -47,7 +47,7 @@ public class BackgroundMusicEditorViewModel : EditorViewModel
         _bgmCachedFile = Path.Combine(project.Config.CachesDirectory, "bgm", $"{Bgm.Name}.wav");
 
         _titleBoxTextChangedCommand = ReactiveCommand.Create<string>(TitleBox_TextChanged);
-        BgmPlayer = new(Bgm, _log, Bgm.BgmName, Bgm.Name, Bgm.Flag, !string.IsNullOrEmpty(Bgm.BgmName) ? _titleBoxTextChangedCommand : null, initializePlayer);
+        BgmPlayer = new(Bgm, _log, Bgm.BgmName, Bgm.Name, (short?)(Bgm.Flag - 1), !string.IsNullOrEmpty(Bgm.BgmName) ? _titleBoxTextChangedCommand : null, initializePlayer);
         ManageLoopCommand = ReactiveCommand.CreateFromTask(ManageLoop_Executed);
         AdjustVolumeCommand = ReactiveCommand.CreateFromTask(AdjustVolume_Executed);
         ExtractCommand = ReactiveCommand.CreateFromTask(Extract_Executed);
@@ -97,7 +97,7 @@ public class BackgroundMusicEditorViewModel : EditorViewModel
             Shared.AudioReplacementCancellation.Cancel();
             Shared.AudioReplacementCancellation = new();
             firstTracker.InitializeTasks(() => Bgm.Replace(file.Path.LocalPath, _project, _bgmCachedFile, _loopEnabled, _loopStartSample, _loopEndSample, _log, secondTracker, Shared.AudioReplacementCancellation.Token),
-            () => BgmPlayer = new(Bgm, _log, Bgm.BgmName, Bgm.Name, Bgm.Flag, !string.IsNullOrEmpty(Bgm.BgmName) ? _titleBoxTextChangedCommand : null));
+            () => BgmPlayer = new(Bgm, _log, Bgm.BgmName, Bgm.Name, (short?)(Bgm.Flag - 1), !string.IsNullOrEmpty(Bgm.BgmName) ? _titleBoxTextChangedCommand : null));
             await new ProgressDialog { DataContext = firstTracker }.ShowDialog(Window.Window);
         }
     }
@@ -111,7 +111,7 @@ public class BackgroundMusicEditorViewModel : EditorViewModel
         }
         File.Copy(Path.Combine(_project.BaseDirectory, "original", "bgm", Path.GetFileName(Bgm.BgmFile)), Path.Combine(_project.BaseDirectory, Bgm.BgmFile), true);
         File.Copy(Path.Combine(_project.IterativeDirectory, "original", "bgm", Path.GetFileName(Bgm.BgmFile)), Path.Combine(_project.IterativeDirectory, Bgm.BgmFile), true);
-        BgmPlayer = new(Bgm, _log, Bgm.BgmName, Bgm.Name, Bgm.Flag, !string.IsNullOrEmpty(Bgm.BgmName) ? _titleBoxTextChangedCommand : null);
+        BgmPlayer = new(Bgm, _log, Bgm.BgmName, Bgm.Name, (short?)(Bgm.Flag - 1), !string.IsNullOrEmpty(Bgm.BgmName) ? _titleBoxTextChangedCommand : null);
     }
 
     private async Task ManageLoop_Executed()
@@ -142,7 +142,7 @@ public class BackgroundMusicEditorViewModel : EditorViewModel
                 _loopEnabled = loopPreview.LoopEnabled;
                 _loopStartSample = loopPreview.StartSample;
                 _loopEndSample = loopPreview.EndSample;
-                Shared.AudioReplacementCancellation.Cancel();
+                await Shared.AudioReplacementCancellation.CancelAsync();
                 Shared.AudioReplacementCancellation = new();
                 ProgressDialogViewModel secondTracker = new(Strings.Set_BGM_loop_info, Strings.Adjusting_Loop_Info);
                 ProgressDialogViewModel thirdTracker = new(Strings.Set_BGM_loop_info, Strings.Adjusting_Loop_Info);
@@ -156,7 +156,7 @@ public class BackgroundMusicEditorViewModel : EditorViewModel
                     },
                     () =>
                     {
-                        BgmPlayer = new(Bgm, _log, Bgm.BgmName, Bgm.Name, Bgm.Flag,
+                        BgmPlayer = new(Bgm, _log, Bgm.BgmName, Bgm.Name, (short?)(Bgm.Flag - 1),
                             !string.IsNullOrEmpty(Bgm.BgmName) ? _titleBoxTextChangedCommand : null);
                     });
                 await new ProgressDialog { DataContext = thirdTracker }.ShowDialog(Window.Window);
@@ -220,7 +220,7 @@ public class BackgroundMusicEditorViewModel : EditorViewModel
                     },
                     () =>
                     {
-                        BgmPlayer = new(Bgm, _log, Bgm.BgmName, Bgm.Name, Bgm.Flag,
+                        BgmPlayer = new(Bgm, _log, Bgm.BgmName, Bgm.Name, (short?)(Bgm.Flag - 1),
                             !string.IsNullOrEmpty(Bgm.BgmName) ? _titleBoxTextChangedCommand : null);
                     });
                 await new ProgressDialog { DataContext = thirdTracker }.ShowDialog(Window.Window);

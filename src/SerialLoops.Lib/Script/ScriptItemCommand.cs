@@ -25,6 +25,7 @@ public class ScriptItemCommand : ReactiveObject
     public EventFile Script { get; set; }
     public int Index { get; set; }
     public Project Project { get; set; }
+    public ScriptPreview CurrentPreview { get; set; }
 
     public static ScriptItemCommand FromInvocation(ScriptCommandInvocation invocation, ScriptSection section, int index, EventFile eventFile, Project project, Func<string, string> localize, ILogger log)
     {
@@ -95,7 +96,7 @@ public class ScriptItemCommand : ReactiveObject
 
             foreach (ScriptSectionEdge edge in path)
             {
-                commands.AddRange(commandTree[edge.Source]);
+                commands.AddRange(commandTree[edge.Source].Take(edge.SourceCommandIndex + 1));
             }
         }
         commands.AddRange(commandTree[Section].TakeWhile(c => c.Index != Index));

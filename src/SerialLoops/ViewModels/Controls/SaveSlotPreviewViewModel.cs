@@ -40,7 +40,7 @@ public class SaveSlotPreviewViewModel : ViewModelBase
 
     private async Task EditSlot()
     {
-        await new SaveSlotEditorDialog()
+        await new SaveSlotEditorDialog
         {
             DataContext = new SaveSlotEditorDialogViewModel(_save, SlotData, _save.DisplayName, SlotName,
                 _window.OpenProject, _window.Log, _window.EditorTabs),

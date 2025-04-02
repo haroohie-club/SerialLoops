@@ -9,6 +9,7 @@ public class ScriptPreview
 {
     public short EpisodeHeader { get; set; }
     public BackgroundItem Kbg { get; set; }
+    public BackgroundMusicItem Bgm { get; set; }
     public PlaceItem Place { get; set; }
     public List<PositionedChibi> TopScreenChibis { get; set; } = [];
     public (int InternalYOffset, int ExternalXOffset, ChibiItem EmotingChibi) ChibiEmote { get; set; }

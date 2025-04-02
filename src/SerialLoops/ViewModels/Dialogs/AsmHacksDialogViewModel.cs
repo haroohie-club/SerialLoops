@@ -94,7 +94,7 @@ public class AsmHacksDialogViewModel : ViewModelBase
                 };
 
                 StackPanel paramDescPanel = new() { Orientation = Orientation.Horizontal, Spacing = 5 };
-                paramDescPanel.Children.Add(new TextBlock()
+                paramDescPanel.Children.Add(new TextBlock
                 {
                     Text = _hackParameters[file][currentParam].Parameter.DescriptiveName,
                     VerticalAlignment = VerticalAlignment.Center,

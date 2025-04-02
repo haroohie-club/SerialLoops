@@ -5065,6 +5065,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unable to load project save file. Please ensure you have set your emulator to melonDS and have built and run at least once..
+        /// </summary>
+        public static string LoadSaveErrorMessage {
+            get {
+                return ResourceManager.GetString("LoadSaveErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Location.
         /// </summary>
         public static string Location {
@@ -7738,6 +7747,24 @@ namespace SerialLoops.Assets {
         public static string ScriptCommandScreenParamFadeInLocationHelp {
             get {
                 return ResourceManager.GetString("ScriptCommandScreenParamFadeInLocationHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set Quick Save Here (Advanced).
+        /// </summary>
+        public static string ScriptCommandSetQuickSaveAdvancedText {
+            get {
+                return ResourceManager.GetString("ScriptCommandSetQuickSaveAdvancedText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set Quick Save Here.
+        /// </summary>
+        public static string ScriptCommandSetQuickSaveText {
+            get {
+                return ResourceManager.GetString("ScriptCommandSetQuickSaveText", resourceCulture);
             }
         }
         

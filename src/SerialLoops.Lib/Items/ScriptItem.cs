@@ -78,7 +78,9 @@ public class ScriptItem : Item
                     {
                         Graph.AddEdge(new()
                         {
-                            Source = section, Target = ((ScriptSectionScriptParameter)command.Parameters[4]).Section,
+                            Source = section,
+                            SourceCommandIndex = command.Index,
+                            Target = ((ScriptSectionScriptParameter)command.Parameters[4]).Section,
                         });
                         Graph.AddEdgeRange(Event.ScriptSections.Where(s =>
                             Event.LabelsSection.Objects.Where(l =>
@@ -101,6 +103,7 @@ public class ScriptItem : Item
                             Graph.AddEdge(new()
                             {
                                 Source = section,
+                                SourceCommandIndex = command.Index,
                                 Target = ((ScriptSectionScriptParameter)command.Parameters[0]).Section,
                             });
                         }
@@ -119,7 +122,8 @@ public class ScriptItem : Item
                             Graph.AddEdge(new()
                             {
                                 Source = section,
-                                Target = ((ScriptSectionScriptParameter)command.Parameters[1]).Section,
+                                SourceCommandIndex = command.Index,
+                                Target = ((ScriptSectionScriptParameter)command.Parameters[1]).Section
                             });
                         }
                         catch (ArgumentOutOfRangeException)
@@ -139,7 +143,9 @@ public class ScriptItem : Item
                         {
                             Graph.AddEdge(new()
                             {
-                                Source = section, Target = Event.ScriptSections.First(s => s.Name == "NONEMiss2"),
+                                Source = section,
+                                SourceCommandIndex = command.Index,
+                                Target = Event.ScriptSections.First(s => s.Name == "NONEMiss2")
                             }); // hardcode this section, even tho you can't get to it
                         }
                     }
@@ -152,7 +158,7 @@ public class ScriptItem : Item
                                             .Cast<OptionScriptParameter>()
                                             .Where(p => p.Option.Id > 0).Select(p => p.Option.Id).Contains(l.Id))
                                     .Select(l => l.Name.Replace("/", "")).Contains(s.Name))
-                            .Select(s => new ScriptSectionEdge { Source = section, Target = s }));
+                            .Select(s => new ScriptSectionEdge { Source = section, SourceCommandIndex = command.Index, Target = s }));
                         @continue = true;
                     }
                     else if (command.Verb == CommandVerb.NEXT_SCENE)
@@ -168,7 +174,9 @@ public class ScriptItem : Item
                     {
                         Graph.AddEdge(new()
                         {
-                            Source = Event.ScriptSections[1], Target = section,
+                            Source = Event.ScriptSections[1],
+                            SourceCommandIndex = section.Objects.Count - 1,
+                            Target = section,
                         }); // these particular chess files have no VGOTOs, so uh... we manually hardcode them
                     }
                 }
@@ -183,7 +191,8 @@ public class ScriptItem : Item
                     Graph.AddEdge(new()
                     {
                         Source = section,
-                        Target = commandTree.Keys.ElementAt(commandTree.Keys.ToList().IndexOf(section) + 1),
+                        SourceCommandIndex = section.Objects.Count - 1,
+                        Target = commandTree.Keys.ElementAt(commandTree.Keys.ToList().IndexOf(section) + 1)
                     });
                 }
             }
@@ -217,6 +226,13 @@ public class ScriptItem : Item
         if (commandTree.SelectMany(kv => kv.Value).Any(c => c.Verb == CommandVerb.CHESS_LOAD))
         {
             preview.ChessMode = true;
+        }
+
+        // Get the BGM first
+        ScriptItemCommand bgmCommand = commands.LastOrDefault(c => c.Verb == CommandVerb.BGM_PLAY);
+        if (bgmCommand is not null && ((BgmModeScriptParameter)bgmCommand.Parameters[1]).Mode == BgmModeScriptParameter.BgmMode.Start)
+        {
+            preview.Bgm = ((BgmScriptParameter)bgmCommand.Parameters[0]).Bgm;
         }
 
         // Render fades

@@ -15,6 +15,7 @@ using SerialLoops.Lib.Items;
 using SerialLoops.Lib.SaveFile;
 using SerialLoops.Lib.Script;
 using SerialLoops.Lib.Script.Parameters;
+using SerialLoops.Lib.Util;
 using SerialLoops.Utility;
 using SerialLoops.ViewModels.Controls;
 using SerialLoops.ViewModels.Panels;
@@ -56,7 +57,7 @@ public class SaveSlotEditorDialogViewModel : ViewModelBase
     public ICommand CancelCommand { get; }
 
     public SaveSlotEditorDialogViewModel(SaveItem save, SaveSection saveSection, string saveName, string slotName, Project project,
-        ILogger log, EditorTabsPanelViewModel tabs = null)
+        ILogger log, EditorTabsPanelViewModel tabs = null, bool dontTreatAsQuickSave = false)
     {
         _save = save;
         _log = log;
@@ -66,7 +67,7 @@ public class SaveSlotEditorDialogViewModel : ViewModelBase
         _project = project;
         Tabs = tabs;
 
-        if (SaveSection is QuickSaveSlotData quickSave)
+        if (!dontTreatAsQuickSave && SaveSection is QuickSaveSlotData quickSave)
         {
             IsQuickSave = true;
             _quickSave = quickSave;
@@ -99,6 +100,7 @@ public class SaveSlotEditorDialogViewModel : ViewModelBase
                 {
                     Background = (BackgroundItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == (_quickSave.CgIndex != 0 ? _quickSave.CgIndex : _quickSave.BgIndex)),
                     PalEffect = (PaletteEffectScriptParameter.PaletteEffect)_quickSave.BgPalEffect,
+                    Bgm = (BackgroundMusicItem)_project.Items.FirstOrDefault(i => i.Type == ItemDescription.ItemType.BGM && ((BackgroundMusicItem)i).Index == _quickSave.BgmIndex),
                     EpisodeHeader = _quickSave.EpisodeHeader,
                     Kbg = (BackgroundItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).Id == _quickSave.KbgIndex),
                     Place = (PlaceItem)_project.Items.First(i => i.Type == ItemDescription.ItemType.Place && ((PlaceItem)i).Index == _quickSave.Place),
@@ -191,10 +193,10 @@ public class SaveSlotEditorDialogViewModel : ViewModelBase
             ];
         }
 
-        _flags = new LocalizedFlag[Flags.NUM_FLAGS];
-        for (int i = 0; i < _flags.Length; i++)
+        _flags = new LocalizedFlag[Flags.NUM_FLAGS - 1];
+        for (int i = 1; i <= _flags.Length; i++)
         {
-            _flags[i] = new(i, project, saveSection.IsFlagSet(i));
+            _flags[i - 1] = new(i, project, saveSection.IsFlagSet(i));
         }
         _filteredFlags = _flags;
         VisibleFlags.AddRange(_filteredFlags[..12]);
@@ -392,6 +394,7 @@ public class SaveSlotEditorDialogViewModel : ViewModelBase
             _quickSave.Sprite1XOffset = (short)(_scriptPreview.Sprites.ElementAtOrDefault(0).Positioning?.X ?? 0);
             _quickSave.Sprite2XOffset = (short)(_scriptPreview.Sprites.ElementAtOrDefault(1).Positioning?.X ?? 0);
             _quickSave.Sprite3XOffset = (short)(_scriptPreview.Sprites.ElementAtOrDefault(2).Positioning?.X ?? 0);
+            _quickSave.ApplyScriptPreview(_scriptPreview, SelectedScriptItem, ScriptCommandIndex, _project, _log);
         }
 
         dialog.Close();
@@ -611,7 +614,7 @@ public class SaveSlotEditorDialogViewModel : ViewModelBase
 public class LocalizedFlag(int id, Project project, bool isSet)
 {
     public int Id { get; } = id;
-    public string Description { get; } = Flags.GetFlagNickname(id, project);
+    public string Description { get; } = Flags.GetFlagNickname(id - 1, project);
     public bool IsSet { get; set; } = isSet;
 }
 

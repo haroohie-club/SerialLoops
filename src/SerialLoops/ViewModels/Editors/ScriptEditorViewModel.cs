@@ -29,6 +29,7 @@ using SerialLoops.Utility;
 using SerialLoops.ViewModels.Controls;
 using SerialLoops.ViewModels.Dialogs;
 using SerialLoops.ViewModels.Editors.ScriptCommandEditors;
+using SerialLoops.Views;
 using SerialLoops.Views.Dialogs;
 using SkiaSharp;
 using SoftCircuits.Collections;
@@ -157,7 +158,7 @@ public class ScriptEditorViewModel : EditorViewModel
     public ScriptEditorViewModel(ScriptItem script, MainWindowViewModel window, ILogger log) : base(script, window, log)
     {
         _script = script;
-        ScriptSections = new(script.Event.ScriptSections.Select(s => new ReactiveScriptSection(s)));
+        ScriptSections = new(script.Event.ScriptSections.Select(s => new ReactiveScriptSection(s, log, Window.Window)));
         _project = window.OpenProject;
         ScriptPreviewCanvas = new(_project);
         Commands = _script.GetScriptCommandTree(_project, _log);
@@ -323,6 +324,8 @@ public class ScriptEditorViewModel : EditorViewModel
             else
             {
                 ScriptPreview preview = _script.GetScriptPreview(_commands, _selectedCommand, _project, _log);
+                _selectedCommand.CurrentPreview = preview;
+
                 CurrentChessBoard = preview.ChessPuzzle;
                 CurrentGuidePieces.Clear();
                 CurrentGuidePieces.AddRange(preview.ChessGuidePieces);
@@ -545,7 +548,7 @@ public class ScriptEditorViewModel : EditorViewModel
             Name = sectionName,
             CommandsAvailable = CommandsAvailable,
         };
-        ReactiveScriptSection reactiveSection = new(section);
+        ReactiveScriptSection reactiveSection = new(section, _log, Window.Window);
 
         _script.Event.ScriptSections.Insert(sectionIndex, section);
         _script.Event.NumSections++;
@@ -676,7 +679,7 @@ public class ScriptEditorViewModel : EditorViewModel
             CommandsAvailable = CommandsAvailable,
         });
         ScriptSections.Clear();
-        ScriptSections.Add(new(_script.Event.ScriptSections[0]));
+        ScriptSections.Add(new(_script.Event.ScriptSections[0], _log, Window.Window));
         if (_script.Event.LabelsSection?.Objects?.Count > 2)
         {
             _script.Event.LabelsSection.Objects.RemoveRange(1, _script.Event.LabelsSection.Objects.Count - 2);
@@ -909,7 +912,7 @@ public class ScriptEditorViewModel : EditorViewModel
         Source.RowSelection?.Select(new());
         template.Apply(_script, _project, _log);
         ScriptSections.Clear();
-        ScriptSections.AddRange(_script.Event.ScriptSections.Select(s => new ReactiveScriptSection(s)));
+        ScriptSections.AddRange(_script.Event.ScriptSections.Select(s => new ReactiveScriptSection(s, _log, Window.Window)));
         Commands = _script.GetScriptCommandTree(_project, _log);
         foreach (ReactiveScriptSection section in ScriptSections)
         {
@@ -1010,7 +1013,7 @@ public class ScriptEditorViewModel : EditorViewModel
     }
 }
 
-public class ReactiveScriptSection(ScriptSection section) : ReactiveObject
+public class ReactiveScriptSection(ScriptSection section, ILogger log, MainWindow window) : ReactiveObject
 {
     public ScriptSection Section { get; } = section;
 
@@ -1036,7 +1039,7 @@ public class ReactiveScriptSection(ScriptSection section) : ReactiveObject
 
     public void InsertCommand(int index, ScriptItemCommand command, OrderedDictionary<ScriptSection, List<ScriptItemCommand>> commands)
     {
-        Commands.Insert(index, new ScriptCommandTreeItem(command));
+        Commands.Insert(index, new ScriptCommandTreeItem(command, log, window));
         Section.Objects.Insert(index, command.Invocation);
         commands[Section].Insert(index, command);
         for (int i = index + 1; i < commands[Section].Count; i++)
@@ -1080,7 +1083,7 @@ public class ReactiveScriptSection(ScriptSection section) : ReactiveObject
     internal void SetCommands(IEnumerable<ScriptItemCommand> commands)
     {
         Commands.Clear();
-        Commands.AddRange(commands.Select(c => new ScriptCommandTreeItem(c)));
+        Commands.AddRange(commands.Select(c => new ScriptCommandTreeItem(c, log, window)));
     }
 
     public override string ToString() => DisplayName;

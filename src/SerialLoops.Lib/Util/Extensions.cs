@@ -10,9 +10,11 @@ using HaruhiChokuretsuLib.Archive.Data;
 using HaruhiChokuretsuLib.Archive.Event;
 using HaruhiChokuretsuLib.Archive.Graphics;
 using HaruhiChokuretsuLib.Font;
+using HaruhiChokuretsuLib.Save;
 using HaruhiChokuretsuLib.Util;
 using NAudio.Wave;
 using SerialLoops.Lib.Items;
+using SerialLoops.Lib.Script;
 using SerialLoops.Lib.Script.Parameters;
 using SkiaSharp;
 using SoftCircuits.Collections;
@@ -100,6 +102,11 @@ public static partial class Extensions
             }
 
             foreach (Match match in Regex.Matches(originalString, @"。Ｐ(\d{2})").Cast<Match>())
+            {
+                originalString = originalString.Replace(match.Value, match.Value.GetSubstitutedString(project));
+            }
+
+            foreach (Match match in Regex.Matches(originalString, @"。Ｑ(\d{2})").Cast<Match>())
             {
                 originalString = originalString.Replace(match.Value, match.Value.GetSubstitutedString(project));
             }
@@ -259,6 +266,47 @@ public static partial class Extensions
         return clonedInvocation;
     }
 
+    public static void ApplyScriptPreview(this QuickSaveSlotData quickSave, ScriptPreview scriptPreview, ScriptItem script, int commandIndex, Project project, ILogger log)
+    {
+        quickSave.KbgIndex = (short)(scriptPreview.Kbg?.Id ?? ((BackgroundItem)project.Items.First(i => i.Type == ItemDescription.ItemType.Background && ((BackgroundItem)i).BackgroundType == BgType.KINETIC_SCREEN)).Id);
+        quickSave.BgmIndex = (short)(scriptPreview.Bgm?.Index ?? -1);
+        quickSave.Place = (short)(scriptPreview.Place?.Index ?? 0);
+        if (scriptPreview.Background.BackgroundType == BgType.TEX_BG)
+        {
+            quickSave.BgIndex = (short)scriptPreview.Background.Id;
+            quickSave.CgIndex = 0;
+        }
+        else
+        {
+            OrderedDictionary<ScriptSection, List<ScriptItemCommand>> commandTree = script.GetScriptCommandTree(project, log);
+            ScriptItemCommand currentCommand = commandTree[script.Event.ScriptSections[quickSave.CurrentScriptBlock]][commandIndex];
+            List<ScriptItemCommand> commands = currentCommand.WalkCommandGraph(commandTree, script.Graph);
+            for (int i = commands.Count - 1; i >= 0; i--)
+            {
+                if (commands[i].Verb == CommandVerb.BG_DISP || commands[i].Verb == CommandVerb.BG_DISP2 || (commands[i].Verb == CommandVerb.BG_FADE && ((BgScriptParameter)commands[i].Parameters[0]).Background is not null))
+                {
+                    quickSave.BgIndex = (short)((BgScriptParameter)commands[i].Parameters[0]).Background.Id;
+                }
+            }
+            quickSave.CgIndex = (short)scriptPreview.Background.Id;
+        }
+        quickSave.BgPalEffect = (short)scriptPreview.BgPalEffect;
+        quickSave.EpisodeHeader = scriptPreview.EpisodeHeader;
+        for (int i = 1; i <= 5; i++)
+        {
+            if (scriptPreview.TopScreenChibis.Any(c => c.Chibi.TopScreenIndex == i))
+            {
+                quickSave.TopScreenChibis |= (CharacterMask)(1 << i);
+            }
+        }
+        quickSave.FirstCharacterSprite = scriptPreview.Sprites.ElementAtOrDefault(0).Sprite?.Index ?? 0;
+        quickSave.SecondCharacterSprite = scriptPreview.Sprites.ElementAtOrDefault(1).Sprite?.Index ?? 0;
+        quickSave.ThirdCharacterSprite = scriptPreview.Sprites.ElementAtOrDefault(2).Sprite?.Index ?? 0;
+        quickSave.Sprite1XOffset = (short)(scriptPreview.Sprites.ElementAtOrDefault(0).Positioning?.X ?? 0);
+        quickSave.Sprite2XOffset = (short)(scriptPreview.Sprites.ElementAtOrDefault(1).Positioning?.X ?? 0);
+        quickSave.Sprite3XOffset = (short)(scriptPreview.Sprites.ElementAtOrDefault(2).Positioning?.X ?? 0);
+    }
+
     public static void CollectGarbage(this EventFile evt)
     {
         // Collect conditional garbage
@@ -369,10 +417,10 @@ public static partial class Extensions
         int strWidth = 0;
         for (int i = 0; i < str.Length; i++)
         {
-            project.FontReplacement.TryGetValue(str[i], out FontReplacement fr);
+            FontReplacement fr = project.FontReplacement.ReverseLookup(str[i]);
             if ((fr?.CauseOffsetAdjust ?? false) && i < str.Length - 1)
             {
-                project.FontReplacement.TryGetValue(str[i + 1], out FontReplacement nextFr);
+                FontReplacement nextFr = project.FontReplacement.ReverseLookup(str[i + 1]);
                 if (nextFr?.TakeOffsetAdjust ?? false)
                 {
                     strWidth += fr.Offset - 1;
@@ -467,6 +515,10 @@ public static partial class Extensions
                 else if (i < text.Length - 6 && Regex.IsMatch(text[i..(i + 6)], @"#SE\d{3}"))
                 {
                     i += 6;
+                }
+                else if (i < text.Length - 6 && Regex.IsMatch(text[i..(i + 4)], @"#Q\d{2}"))
+                {
+                    i += 4;
                 }
                 else if (i < text.Length - 4 && text[i..(i + 4)] == "#SK0")
                 {
