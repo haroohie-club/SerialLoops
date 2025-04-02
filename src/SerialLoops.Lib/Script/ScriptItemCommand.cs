@@ -95,7 +95,7 @@ public class ScriptItemCommand : ReactiveObject
 
             foreach (ScriptSectionEdge edge in path)
             {
-                commands.AddRange(commandTree[edge.Source]);
+                commands.AddRange(commandTree[edge.Source].Take(edge.SourceCommandIndex + 1));
             }
         }
         commands.AddRange(commandTree[Section].TakeWhile(c => c.Index != Index));
