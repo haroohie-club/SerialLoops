@@ -299,12 +299,12 @@ public static partial class Extensions
                 quickSave.TopScreenChibis |= (CharacterMask)(1 << i);
             }
         }
-        quickSave.FirstCharacterSprite = scriptPreview.Sprites.ElementAtOrDefault(0).Sprite?.Index ?? 0;
-        quickSave.SecondCharacterSprite = scriptPreview.Sprites.ElementAtOrDefault(1).Sprite?.Index ?? 0;
-        quickSave.ThirdCharacterSprite = scriptPreview.Sprites.ElementAtOrDefault(2).Sprite?.Index ?? 0;
-        quickSave.Sprite1XOffset = (short)(scriptPreview.Sprites.ElementAtOrDefault(0).Positioning?.X ?? 0);
-        quickSave.Sprite2XOffset = (short)(scriptPreview.Sprites.ElementAtOrDefault(1).Positioning?.X ?? 0);
-        quickSave.Sprite3XOffset = (short)(scriptPreview.Sprites.ElementAtOrDefault(2).Positioning?.X ?? 0);
+        quickSave.FirstCharacterSprite = scriptPreview.Sprites.ElementAtOrDefault(0)?.Sprite?.Index ?? 0;
+        quickSave.SecondCharacterSprite = scriptPreview.Sprites.ElementAtOrDefault(1)?.Sprite?.Index ?? 0;
+        quickSave.ThirdCharacterSprite = scriptPreview.Sprites.ElementAtOrDefault(2)?.Sprite?.Index ?? 0;
+        quickSave.Sprite1XOffset = (short)(scriptPreview.Sprites.ElementAtOrDefault(0)?.Positioning?.X ?? 0);
+        quickSave.Sprite2XOffset = (short)(scriptPreview.Sprites.ElementAtOrDefault(1)?.Positioning?.X ?? 0);
+        quickSave.Sprite3XOffset = (short)(scriptPreview.Sprites.ElementAtOrDefault(2)?.Positioning?.X ?? 0);
     }
 
     public static void CollectGarbage(this EventFile evt)
