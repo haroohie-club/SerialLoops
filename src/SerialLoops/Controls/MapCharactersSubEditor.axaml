@@ -97,30 +97,36 @@
                             </ItemsControl>
                         </Canvas>
 
+
                         <Grid HorizontalAlignment="Center" ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto" MinWidth="300"
-                              IsEnabled="{Binding SelectedMapCharacter, Converter={x:Static ObjectConverters.IsNotNull}}"
                               Margin="15 5 15 5">
                             <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Chibi}"/>
                             <ComboBox Grid.Row="0" Grid.Column="1" Margin="10,0,0,0"
+                                      IsEnabled="{Binding SelectedMapCharacter, Converter={x:Static ObjectConverters.IsNotNull}}"
                                       ItemsSource="{Binding Chibis}" SelectedItem="{Binding SelectedMapCharacter.Chibi}"/>
 
-                            <controls:ChibiDirectionSelector Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
-                                                             DataContext="{Binding ChibiDirectionSelector}"/>
+                            <Panel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" IsEnabled="{Binding SelectedMapCharacter, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                <controls:ChibiDirectionSelector
+                                    DataContext="{Binding ChibiDirectionSelector}"/>
+                            </Panel>
 
                             <TextBlock Grid.Row="2" Grid.Column="0" Text="{x:Static assets:Strings.Script_Section}"/>
                             <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Spacing="10" Margin="10,0,0,0">
                                 <ComboBox ItemsSource="{Binding ScriptEditor.ScriptSections}"
-                                          SelectedItem="{Binding SelectedMapCharacter.TalkSection}"/>
-
-                                <Button Content="{x:Static assets:Strings.Remove_Talk_Link}" Command="{Binding RemoveTalkLinkCommand}"/>
+                                          SelectedItem="{Binding SelectedMapCharacter.TalkSection}"
+                                          IsEnabled="{Binding SelectedMapCharacter, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+                                <Button Content="{x:Static assets:Strings.Remove_Talk_Link}" Command="{Binding RemoveTalkLinkCommand}"
+                                        IsEnabled="{Binding SelectedMapCharacter, Converter={x:Static ObjectConverters.IsNotNull}}"/>
                             </StackPanel>
 
                             <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Content="{x:Static assets:Strings.Remove_Chibi}"
-                                    Command="{Binding RemoveMapCharacterCommand}"/>
+                                    Command="{Binding RemoveMapCharacterCommand}"
+                                    IsEnabled="{Binding SelectedMapCharacter, Converter={x:Static ObjectConverters.IsNotNull}}"/>
 
                             <StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
                                 <Button Content="{x:Static assets:Strings.Add_Chibi}" Command="{Binding AddMapCharacterCommand}"/>
-                                <Button Content="{x:Static assets:Strings.Remove_Map_Characters}" Command="{Binding RemoveMapCharactersCommand}"/>
+                                <Button Content="{x:Static assets:Strings.Remove_Map_Characters}" Command="{Binding RemoveMapCharactersCommand}"
+                                        IsEnabled="{Binding SelectedMapCharacter, Converter={x:Static ObjectConverters.IsNotNull}}"/>
                             </StackPanel>
                         </Grid>
                     </WrapPanel>
