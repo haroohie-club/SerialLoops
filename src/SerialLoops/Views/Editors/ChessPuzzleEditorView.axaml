@@ -50,7 +50,8 @@
             <ItemsControl.DataTemplates>
                 <DataTemplate DataType="vm:ChessPieceOnBoard">
                     <Panel PointerEntered="ChessPiece_OnPointerEntered" PointerExited="ChessPiece_OnPointerExited" Opacity="0.5">
-                        <Image Source="{Binding Image, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
+                        <Image Source="{Binding Image, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"
+                               Opacity="2.0"/>
                     </Panel>
                 </DataTemplate>
             </ItemsControl.DataTemplates>
