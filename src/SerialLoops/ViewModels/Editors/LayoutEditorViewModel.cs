@@ -34,7 +34,10 @@ public class LayoutEditorViewModel : EditorViewModel
                 _selectedLayoutEntry.IsSelected = false;
             }
             this.RaiseAndSetIfChanged(ref _selectedLayoutEntry, value);
-            _selectedLayoutEntry.IsSelected = true;
+            if (_selectedLayoutEntry is not null)
+            {
+                _selectedLayoutEntry.IsSelected = true;
+            }
         }
     }
 
