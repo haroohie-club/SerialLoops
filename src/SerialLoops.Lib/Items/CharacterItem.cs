@@ -56,7 +56,7 @@ public class CharacterItem : Item
         newCanvas.DrawBitmap(blankNameplate, new SKPoint(0, 0));
 
         double widthFactor = 1.0;
-        int totalWidth = NameplateProperties.Name.CalculateHaroohieTextWidth(project);
+        int totalWidth = NameplateProperties.Name.CalculateHaroohieTextWidthReplaced(project);
         if (totalWidth > 53)
         {
             widthFactor = 53.0 / totalWidth;
@@ -134,7 +134,7 @@ public class CharacterItem : Item
                     {
                         newNameplate.SetPixel(x, y, NameplateProperties.OutlineColor);
                     }
-                    if (transparent && pixel.Red == 0 && pixel.Green == 128 && pixel.Blue == 0)
+                    if (transparent && pixel is { Red: 0, Green: 128, Blue: 0 })
                     {
                         newNameplate.SetPixel(x, y, SKColors.Transparent);
                     }
