@@ -408,7 +408,12 @@ public static partial class Extensions
         };
     }
 
-    public static int CalculateHaroohieTextWidth(this string str, Project project)
+    public static int CalculateHaroohieTextWidthReplaced(this string str, Project project)
+    {
+        return str.CalculateHaroohieTextWidth(project, replaced: true);
+    }
+
+    public static int CalculateHaroohieTextWidth(this string str, Project project, bool replaced = false)
     {
         if (project.LangCode.Equals("ja"))
         {
@@ -417,10 +422,10 @@ public static partial class Extensions
         int strWidth = 0;
         for (int i = 0; i < str.Length; i++)
         {
-            FontReplacement fr = project.FontReplacement.ReverseLookup(str[i]);
+            FontReplacement fr = replaced ? project.FontReplacement[str[i]] : project.FontReplacement.ReverseLookup(str[i]);
             if ((fr?.CauseOffsetAdjust ?? false) && i < str.Length - 1)
             {
-                FontReplacement nextFr = project.FontReplacement.ReverseLookup(str[i + 1]);
+                FontReplacement nextFr = replaced ? project.FontReplacement[str[i + 1]] : project.FontReplacement.ReverseLookup(str[i + 1]);
                 if (nextFr?.TakeOffsetAdjust ?? false)
                 {
                     strWidth += fr.Offset - 1;
