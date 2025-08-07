@@ -11,4 +11,5 @@ public static class PatchableConstants
     public static string[] FlatpakProcessBaseArgs => [];
     public const string FlatpakRunProcess = "";
     public static string[] FlatpakRunProcessBaseArgs => [];
+    public const bool UseUpdater = true;
 }
