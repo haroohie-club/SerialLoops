@@ -146,7 +146,10 @@ public partial class MainWindowViewModel : ViewModelBase
         EditSaveCommand = ReactiveCommand.CreateFromTask(EditSaveFileCommand_Executed);
         AboutCommand = ReactiveCommand.CreateFromTask(AboutCommand_Executed);
         PreferencesCommand = ReactiveCommand.CreateFromTask(PreferencesCommand_Executed);
-        CheckForUpdatesCommand = ReactiveCommand.CreateFromTask(new UpdateChecker(this).Check);
+        if (PatchableConstants.UseUpdater)
+        {
+            CheckForUpdatesCommand = ReactiveCommand.CreateFromTask(new UpdateChecker(this).Check);
+        }
 
         SaveProjectCommand = ReactiveCommand.Create(SaveProject_Executed);
         SearchProjectCommand = ReactiveCommand.Create(SearchProject_Executed);
@@ -224,7 +227,7 @@ public partial class MainWindowViewModel : ViewModelBase
         ProjectsCache = ProjectsCache.LoadCache(CurrentConfig, Log);
         UpdateRecentProjects();
 
-        if (CurrentConfig.CheckForUpdates)
+        if (PatchableConstants.UseUpdater && CurrentConfig.CheckForUpdates)
         {
             CheckForUpdatesCommand.Execute(null);
         }

@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using Avalonia.Controls;
 using SerialLoops.Assets;
+using SerialLoops.Lib;
 using SerialLoops.Lib.Factories;
 using SerialLoops.Utility;
 using SerialLoops.ViewModels;
@@ -95,12 +96,15 @@ public partial class MainWindow : Window
                 Icon = ControlGenerator.GetIcon("Options", ViewModel.Log),
                 Command = ViewModel.PreferencesCommand,
             });
-            fileMenu.Menu.Items.Add(new NativeMenuItem
+            if (PatchableConstants.UseUpdater)
             {
-                Header = Strings._Check_for_Updates___,
-                Icon = ControlGenerator.GetIcon("Update", ViewModel.Log),
-                Command = ViewModel.CheckForUpdatesCommand,
-            });
+                fileMenu.Menu.Items.Add(new NativeMenuItem
+                {
+                    Header = Strings._Check_for_Updates___,
+                    Icon = ControlGenerator.GetIcon("Update", ViewModel.Log),
+                    Command = ViewModel.CheckForUpdatesCommand,
+                });
+            }
             fileMenu.Menu.Items.Add(new NativeMenuItem
             {
                 Header = Strings.View__Logs,
