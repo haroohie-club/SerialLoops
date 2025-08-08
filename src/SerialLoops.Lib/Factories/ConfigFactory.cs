@@ -85,7 +85,7 @@ public class ConfigFactory : IConfigFactory
         }
 
         string ninjaPath = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-            ? Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "ninja.exe")
+            ? Path.Combine(AppContext.BaseDirectory, "ninja.exe")
             : RuntimeInformation.IsOSPlatform(OSPlatform.OSX)
                 ? Path.Combine("/opt/homebrew/bin/ninja")
                 : Path.Combine("/usr/bin/ninja");
