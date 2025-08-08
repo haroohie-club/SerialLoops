@@ -50,10 +50,10 @@ public class PreferencesDialogViewModel : ViewModelBase
                 Path = Configuration.LlvmPath,
                 OnChange = path => Configuration.LlvmPath = path,
             },
-            new TextOption
+            new FileOption(_preferencesDialog)
             {
                 OptionName = Strings.ConfigOptionNinjaPath,
-                Value = Configuration.NinjaPath,
+                Path = Configuration.NinjaPath,
                 OnChange = value => Configuration.NinjaPath = value,
             },
             new FileOption(_preferencesDialog)
