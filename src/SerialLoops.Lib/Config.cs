@@ -33,9 +33,8 @@ public class Config
     [JsonIgnore]
     public ObservableCollection<ScriptTemplate> ScriptTemplates { get; set; }
     public string CurrentCultureName { get; set; }
-    public string DevkitArmPath { get; set; }
-    public bool UseDocker { get; set; }
-    public string DevkitArmDockerTag { get; set; }
+    public string LlvmPath { get; set; }
+    public string NinjaPath { get; set; }
     public string EmulatorFlatpak { get; set; }
     public string EmulatorPath { get; set; }
     public bool AutoReopenLastProject { get; set; }

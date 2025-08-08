@@ -46,37 +46,29 @@ public class PreferencesDialogViewModel : ViewModelBase
         [
             new FolderOption(_preferencesDialog)
             {
-                OptionName = Strings.devkitARM_Path,
-                Path = Configuration.DevkitArmPath,
-                OnChange = (path) => Configuration.DevkitArmPath = path,
+                OptionName = Strings.ConfigOptionLlvmPath,
+                Path = Configuration.LlvmPath,
+                OnChange = path => Configuration.LlvmPath = path,
+            },
+            new TextOption
+            {
+                OptionName = Strings.ConfigOptionNinjaPath,
+                Value = Configuration.NinjaPath,
+                OnChange = value => Configuration.NinjaPath = value,
             },
             new FileOption(_preferencesDialog)
             {
                 OptionName = Strings.Emulator_Path,
                 Path = Configuration.EmulatorPath,
-                OnChange = (path) => Configuration.EmulatorPath = path,
+                OnChange = path => Configuration.EmulatorPath = path,
             },
             new TextOption
             {
                 OptionName = Strings.Emulator_Flatpak,
                 Value = Configuration.EmulatorFlatpak,
-                OnChange = (flatpak) => Configuration.EmulatorFlatpak = flatpak,
+                OnChange = flatpak => Configuration.EmulatorFlatpak = flatpak,
                 Enabled = OperatingSystem.IsLinux(),
             },
-            new BooleanOption
-            {
-                OptionName = Strings.Use_Docker_for_ASM_Hacks,
-                Value = Configuration.UseDocker,
-                OnChange = (value) => Configuration.UseDocker = value,
-                Enabled = !OperatingSystem.IsMacOS(),
-            },
-            new TextOption
-            {
-                OptionName = Strings.devkitARM_Docker_Tag,
-                Value = Configuration.DevkitArmDockerTag,
-                OnChange = (value) => Configuration.DevkitArmDockerTag = value,
-                Enabled = !OperatingSystem.IsMacOS(),
-            }
         ]);
         _preferencesDialog.ProjectOptions.InitializeOptions(Strings.Projects,
         [
@@ -84,19 +76,19 @@ public class PreferencesDialogViewModel : ViewModelBase
             {
                 OptionName = Strings.Auto_Re_Open_Last_Project,
                 Value = Configuration.AutoReopenLastProject,
-                OnChange = (value) => Configuration.AutoReopenLastProject = value,
+                OnChange = value => Configuration.AutoReopenLastProject = value,
             },
             new BooleanOption
             {
                 OptionName = Strings.Remember_Project_Workspace,
                 Value = Configuration.RememberProjectWorkspace,
-                OnChange = (value) => Configuration.RememberProjectWorkspace = value,
+                OnChange = value => Configuration.RememberProjectWorkspace = value,
             },
             new BooleanOption
             {
                 OptionName = Strings.Remove_Missing_Projects,
                 Value = Configuration.RemoveMissingProjects,
-                OnChange = (value) => Configuration.RemoveMissingProjects = value,
+                OnChange = value => Configuration.RemoveMissingProjects = value,
             },
         ]);
         _preferencesDialog.SerialLoopsOptions.InitializeOptions("Serial Loops",
@@ -114,7 +106,7 @@ public class PreferencesDialogViewModel : ViewModelBase
             {
                 OptionName = Strings.Language,
                 Value = Strings.Culture.Name,
-                OnChange = (value) =>
+                OnChange = value =>
                 {
                     Strings.Culture = CultureInfo.CurrentCulture;
                     Configuration.CurrentCultureName = value;
@@ -123,12 +115,12 @@ public class PreferencesDialogViewModel : ViewModelBase
             },
             new ComboBoxOption([
                 ("", string.Format(Strings.Default_Font_Display, Strings.Default_Font)),
-                ..SystemFonts.Collection.Families.Select(_ => (_.Name, _.Name)),
+                ..SystemFonts.Collection.Families.Select(f => (f.Name, f.Name)),
             ], font: true)
             {
                 OptionName = Strings.Display_Font,
                 Value = Configuration.DisplayFont ?? "",
-                OnChange = (value) =>
+                OnChange = value =>
                 {
                     Configuration.DisplayFont = value;
                     RequireRestart = true;
@@ -138,14 +130,16 @@ public class PreferencesDialogViewModel : ViewModelBase
             {
                 OptionName = Strings.Check_for_Updates_on_Startup,
                 Value = Configuration.CheckForUpdates,
-                OnChange = (value) => Configuration.CheckForUpdates = value,
+                OnChange = value => Configuration.CheckForUpdates = value,
+                Enabled = PatchableConstants.UseUpdater,
             },
             new BooleanOption
             {
                 OptionName = Strings.Use_Pre_Release_Update_Channel,
                 Value = Configuration.PreReleaseChannel,
-                OnChange = (value) => Configuration.PreReleaseChannel = value,
-            }
+                OnChange = value => Configuration.PreReleaseChannel = value,
+                Enabled = PatchableConstants.UseUpdater,
+            },
         ]);
 
         SaveCommand = ReactiveCommand.Create(SaveCommand_Executed);

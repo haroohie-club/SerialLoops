@@ -6,7 +6,7 @@ namespace SerialLoops.Lib;
 // go more smoothly
 public static class PatchableConstants
 {
-    public static string UnixDefaultDevkitArmDir => Path.Combine("/opt", "devkitpro", "devkitARM");
+    public static string LinuxDefaultLlvmDir => Path.Combine("/usr", "lib", "llvm");
     public const string FlatpakProcess = "flatpak";
     public static string[] FlatpakProcessBaseArgs => [];
     public const string FlatpakRunProcess = "";

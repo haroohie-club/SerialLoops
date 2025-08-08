@@ -626,6 +626,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Patching ARM9 and overlays.
+        /// </summary>
+        public static string AsmHackPatchingMessage {
+            get {
+                return ResourceManager.GetString("AsmHackPatchingMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Associated Main Topics.
         /// </summary>
         public static string Associated_Main_Topics {
@@ -1910,6 +1919,24 @@ namespace SerialLoops.Assets {
         public static string Config_Data {
             get {
                 return ResourceManager.GetString("Config Data", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to LLVM Path.
+        /// </summary>
+        public static string ConfigOptionLlvmPath {
+            get {
+                return ResourceManager.GetString("ConfigOptionLlvmPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ninja Path.
+        /// </summary>
+        public static string ConfigOptionNinjaPath {
+            get {
+                return ResourceManager.GetString("ConfigOptionNinjaPath", resourceCulture);
             }
         }
         

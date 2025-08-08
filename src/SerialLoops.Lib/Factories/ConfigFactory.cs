@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text.Json;
 using HaruhiChokuretsuLib.Util;
@@ -16,6 +17,9 @@ namespace SerialLoops.Lib.Factories;
 // "You've forgotten the mocks."
 public class ConfigFactory : IConfigFactory
 {
+    private const int LlvmMinVersion = 17;
+    private const int LlvmMaxVersion = 21;
+
     public Config LoadConfig(Func<string, string> localize, ILogger log)
     {
         string configJson = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SerialLoops", "config.json");
@@ -56,20 +60,38 @@ public class ConfigFactory : IConfigFactory
 
     public static Config GetDefault(ILogger log)
     {
-        string devkitArmDir = Environment.GetEnvironmentVariable("DEVKITARM") ?? string.Empty;
-        if (!string.IsNullOrEmpty(devkitArmDir) && !Directory.Exists(devkitArmDir))
+        string llvmDir = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+            ? Path.Combine("C:", "Program Files", "LLVM")
+            : RuntimeInformation.IsOSPlatform(OSPlatform.OSX)
+                ? Path.Combine("/opt", "homebrew", "opt", "llvm")
+                : PatchableConstants.LinuxDefaultLlvmDir;
+        if (!Directory.Exists(llvmDir))
         {
-            devkitArmDir = string.Empty;
+            llvmDir = string.Empty;
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                // Go this direction so that if (for some reason) multiple LLVM installations exist, we use the latest one
+                for (int i = LlvmMaxVersion; i >= LlvmMinVersion; i--)
+                {
+                    if (!Directory.Exists($"{PatchableConstants.LinuxDefaultLlvmDir}-{i}"))
+                    {
+                        continue;
+                    }
+
+                    llvmDir = $"{PatchableConstants.LinuxDefaultLlvmDir}-{i}";
+                    break;
+                }
+            }
         }
-        if (string.IsNullOrEmpty(devkitArmDir))
+
+        string ninjaPath = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+            ? Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "ninja.exe")
+            : RuntimeInformation.IsOSPlatform(OSPlatform.OSX)
+                ? Path.Combine("/opt/homebrew/bin/ninja")
+                : Path.Combine("/usr/bin/ninja");
+        if (!File.Exists(ninjaPath))
         {
-            devkitArmDir = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-                ? Path.Combine("C:", "devkitPro", "devkitARM")
-                : PatchableConstants.UnixDefaultDevkitArmDir;
-        }
-        if (!Directory.Exists(devkitArmDir))
-        {
-            devkitArmDir = string.Empty;
+            ninjaPath = string.Empty;
         }
 
         bool emulatorExists = false;
@@ -120,11 +142,10 @@ public class ConfigFactory : IConfigFactory
         {
             UserDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "SerialLoops"),
             CurrentCultureName = CultureInfo.CurrentCulture.Name,
-            DevkitArmPath = devkitArmDir,
+            LlvmPath = llvmDir,
+            NinjaPath = ninjaPath,
             EmulatorPath = emulatorPath,
             EmulatorFlatpak = emulatorFlatpak,
-            UseDocker = OperatingSystem.IsWindows(),
-            DevkitArmDockerTag = "latest",
             AutoReopenLastProject = false,
             RememberProjectWorkspace = true,
             RemoveMissingProjects = false,

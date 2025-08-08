@@ -136,18 +136,18 @@ public static class Build
                     }
                     else if (Path.GetExtension(file).Equals(".s", StringComparison.OrdinalIgnoreCase))
                     {
-                        if (string.IsNullOrEmpty(config.DevkitArmPath))
+                        if (string.IsNullOrEmpty(config.LlvmPath))
                         {
-                            log.LogError("DevkitARM must be supplied in order to build!");
+                            log.LogError("LLVM must be supplied in order to build!");
                             return false;
                         }
                         if (file.Contains("events"))
                         {
-                            ReplaceSingleSourceFile(evt, file, index, config.DevkitArmPath, directory, project.Localize, log);
+                            ReplaceSingleSourceFile(evt, file, index, config.LlvmPath, directory, project.Localize, log);
                         }
                         else if (file.Contains("data"))
                         {
-                            ReplaceSingleSourceFile(dat, file, index, config.DevkitArmPath, directory, project.Localize, log);
+                            ReplaceSingleSourceFile(dat, file, index, config.LlvmPath, directory, project.Localize, log);
                         }
                         else
                         {
@@ -313,11 +313,11 @@ public static class Build
         }
     }
 
-    private static bool ReplaceSingleSourceFile(ArchiveFile<EventFile> archive, string filePath, int index, string devkitArm, string workingDirectory, Func<string, string> localize, ILogger log)
+    private static bool ReplaceSingleSourceFile(ArchiveFile<EventFile> archive, string filePath, int index, string llvm, string workingDirectory, Func<string, string> localize, ILogger log)
     {
         try
         {
-            (string objFile, string binFile) = CompileSourceFile(filePath, devkitArm, workingDirectory, localize, log);
+            (string objFile, string binFile) = CompileSourceFile(filePath, llvm, workingDirectory, localize, log);
             if (!File.Exists(binFile))
             {
                 log.LogError(string.Format(localize("Compiled file {0} does not exist!"), binFile));
@@ -334,11 +334,11 @@ public static class Build
             return false;
         }
     }
-    private static bool ReplaceSingleSourceFile(ArchiveFile<DataFile> archive, string filePath, int index, string devkitArm, string workingDirectory, Func<string, string> localize, ILogger log)
+    private static bool ReplaceSingleSourceFile(ArchiveFile<DataFile> archive, string filePath, int index, string llvm, string workingDirectory, Func<string, string> localize, ILogger log)
     {
         try
         {
-            (string objFile, string binFile) = CompileSourceFile(filePath, devkitArm, workingDirectory, localize, log);
+            (string objFile, string binFile) = CompileSourceFile(filePath, llvm, workingDirectory, localize, log);
             if (!File.Exists(binFile))
             {
                 log.LogError(string.Format(localize("Compiled file {0} does not exist!"), binFile));
@@ -356,38 +356,38 @@ public static class Build
         }
     }
 
-    private static (string, string) CompileSourceFile(string filePath, string devkitArm, string workingDirectory, Func<string, string> localize, ILogger log)
+    private static (string, string) CompileSourceFile(string filePath, string llvm, string workingDirectory, Func<string, string> localize, ILogger log)
     {
         string exeExtension = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? ".exe" : string.Empty;
 
-        string objFile = $"{Path.Combine(Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath))}.o";
-        string binFile = $"{Path.Combine(Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath))}.bin";
-        ProcessStartInfo gccStartInfo = new(Path.Combine(devkitArm, "bin", $"arm-none-eabi-gcc{exeExtension}"), $"-c -nostdlib -static \"{filePath}\" -o \"{objFile}")
+        string objFile = $"{Path.Combine(Path.GetDirectoryName(filePath)!, Path.GetFileNameWithoutExtension(filePath))}.o";
+        string binFile = $"{Path.Combine(Path.GetDirectoryName(filePath)!, Path.GetFileNameWithoutExtension(filePath))}.bin";
+        ProcessStartInfo clangStartInfo = new(Path.Combine(llvm, "bin", $"clang{exeExtension}"), $"-target armv5-none-eabi -nodefaultlibs -static -o \"{objFile}\" \"{filePath}\"")
         {
             CreateNoWindow = true,
             WorkingDirectory = workingDirectory,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
         };
-        if (!File.Exists(gccStartInfo.FileName))
+        if (!File.Exists(clangStartInfo.FileName))
         {
-            log.LogError(string.Format(localize("gcc not found at '{0}'"), gccStartInfo.FileName));
+            log.LogError(string.Format(localize("clang (LLVM compiler) not found at '{0}'"), clangStartInfo.FileName));
             return (string.Empty, string.Empty);
         }
-        log.Log($"Compiling '{filePath}' to '{objFile}' with '{gccStartInfo.FileName}'...");
-        Process gcc = new() { StartInfo = gccStartInfo };
-        gcc.OutputDataReceived += (object sender, DataReceivedEventArgs e) => log.Log(e.Data);
-        gcc.ErrorDataReceived += (object sender, DataReceivedEventArgs e) => log.LogWarning(e.Data);
+        log.Log($"Compiling '{filePath}' to '{objFile}' with '{clangStartInfo.FileName}'...");
+        Process gcc = new() { StartInfo = clangStartInfo };
+        gcc.OutputDataReceived += (_, e) => log.Log(e.Data);
+        gcc.ErrorDataReceived += (_, e) => log.LogWarning(e.Data);
         gcc.Start();
         gcc.WaitForExit();
         Task.Delay(50); // ensures process is actually complete
         if (gcc.ExitCode != 0)
         {
-            log.LogError(string.Format(localize("gcc exited with code {0}"), gcc.ExitCode));
+            log.LogError(string.Format(localize("clang (LLVM compiler) exited with code {0}"), gcc.ExitCode));
             return (string.Empty, string.Empty);
         }
 
-        ProcessStartInfo objcopyStartInfo = new(Path.Combine(devkitArm, "bin", $"arm-none-eabi-objcopy{exeExtension}"), $"-O binary \"{objFile}\" \"{binFile}")
+        ProcessStartInfo objcopyStartInfo = new(Path.Combine(llvm, "bin", $"llvm-objcopy{exeExtension}"), $"-O binary \"{objFile}\" \"{binFile}\"")
         {
             CreateNoWindow = true,
             WorkingDirectory = workingDirectory,
@@ -396,19 +396,19 @@ public static class Build
         };
         if (!File.Exists(objcopyStartInfo.FileName))
         {
-            log.LogError(string.Format(localize("objcopy not found at '{0}'"), objcopyStartInfo.FileName));
+            log.LogError(string.Format(localize("llvm-objcopy not found at '{0}'"), objcopyStartInfo.FileName));
             return (string.Empty, string.Empty);
         }
         log.Log($"Objcopying '{objFile}' to '{binFile}' with '{objcopyStartInfo.FileName}'...");
         Process objcopy = new() { StartInfo = objcopyStartInfo };
-        objcopy.OutputDataReceived += (object sender, DataReceivedEventArgs e) => log.Log(e.Data);
-        objcopy.ErrorDataReceived += (object sender, DataReceivedEventArgs e) => log.LogWarning(e.Data);
+        objcopy.OutputDataReceived += (_, e) => log.Log(e.Data);
+        objcopy.ErrorDataReceived += (_, e) => log.LogWarning(e.Data);
         objcopy.Start();
         objcopy.WaitForExit();
         Task.Delay(50); // ensures process is actually complete
         if (objcopy.ExitCode != 0)
         {
-            log.LogError(string.Format(localize("objcopy exited with code {0}"), objcopy.ExitCode));
+            log.LogError(string.Format(localize("llvm-objcopy exited with code {0}"), objcopy.ExitCode));
             return (string.Empty, string.Empty);
         }
 

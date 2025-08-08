@@ -3705,4 +3705,13 @@ item in the dropdown!</value>
   <data name="EmulatorLaunchFailedErrorMessage" xml:space="preserve">
     <value>Failed to start emulator. Check the logs for more information.</value>
   </data>
+  <data name="ConfigOptionLlvmPath" xml:space="preserve">
+    <value>LLVM Path</value><comment>The path to the LLVM installation the user is using</comment>
+  </data>
+  <data name="ConfigOptionNinjaPath" xml:space="preserve">
+    <value>Ninja Path</value><comment>The path to the ninja build executable (option)</comment>
+  </data>
+  <data name="AsmHackPatchingMessage" xml:space="preserve">
+    <value>Patching ARM9 and overlays</value>
+  </data>
 </root>
