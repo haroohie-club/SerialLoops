@@ -362,7 +362,7 @@ public static class Build
 
         string objFile = $"{Path.Combine(Path.GetDirectoryName(filePath)!, Path.GetFileNameWithoutExtension(filePath))}.o";
         string binFile = $"{Path.Combine(Path.GetDirectoryName(filePath)!, Path.GetFileNameWithoutExtension(filePath))}.bin";
-        ProcessStartInfo clangStartInfo = new(Path.Combine(llvm, "bin", $"clang{exeExtension}"), $"-target armv5-none-eabi -nodefaultlibs -static -o \"{objFile}\" \"{filePath}\"")
+        ProcessStartInfo clangStartInfo = new(Path.Combine(llvm, "bin", $"clang{exeExtension}"), $"-target armv5-none-eabi -nodefaultlibs -I. -static -c -o \"{objFile}\" \"{filePath}\"")
         {
             CreateNoWindow = true,
             WorkingDirectory = workingDirectory,
@@ -375,15 +375,15 @@ public static class Build
             return (string.Empty, string.Empty);
         }
         log.Log($"Compiling '{filePath}' to '{objFile}' with '{clangStartInfo.FileName}'...");
-        Process gcc = new() { StartInfo = clangStartInfo };
-        gcc.OutputDataReceived += (_, e) => log.Log(e.Data);
-        gcc.ErrorDataReceived += (_, e) => log.LogWarning(e.Data);
-        gcc.Start();
-        gcc.WaitForExit();
+        Process clang = new() { StartInfo = clangStartInfo };
+        clang.OutputDataReceived += (_, e) => log.Log(e.Data);
+        clang.ErrorDataReceived += (_, e) => log.LogWarning(e.Data);
+        clang.Start();
+        clang.WaitForExit();
         Task.Delay(50); // ensures process is actually complete
-        if (gcc.ExitCode != 0)
+        if (clang.ExitCode != 0)
         {
-            log.LogError(string.Format(localize("clang (LLVM compiler) exited with code {0}"), gcc.ExitCode));
+            log.LogError(string.Format(localize("clang (LLVM compiler) exited with code {0}"), clang.ExitCode));
             return (string.Empty, string.Empty);
         }
 
