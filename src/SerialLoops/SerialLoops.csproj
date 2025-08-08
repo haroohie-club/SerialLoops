@@ -120,6 +120,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\submodules\NitroPacker\HaroohieClub.NitroPacker.SymTableHelper\HaroohieClub.NitroPacker.SymTableHelper.csproj" />
     <ProjectReference Include="..\SerialLoops.Lib\SerialLoops.Lib.csproj" />
   </ItemGroup>
 
