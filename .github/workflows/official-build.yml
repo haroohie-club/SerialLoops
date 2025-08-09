@@ -46,10 +46,7 @@ jobs:
           retention-days: 1
   linux-flatpak:
     needs: linux-flatpak-setup
-    strategy:
-      matrix:
-        type: [ { image: 'ubuntu-latest', rid: 'linux-x64' },  { image: 'ubuntu-24.04-arm', rid: 'linux-arm64' } ]
-    runs-on: ${{ matrix.type.image }}
+    runs-on: ubuntu-latest
     container:
       image: bilelmoussaoui/flatpak-github-actions:freedesktop-23.08
       options: --privileged
@@ -69,13 +66,13 @@ jobs:
         uses: flatpak/flatpak-github-actions/flatpak-builder@v6
         with:
           manifest-path: install/linux/flatpak/club.haroohie.SerialLoops.yaml
-          bundle: SerialLoops-${{ matrix.type.rid }}.flatpak
+          bundle: SerialLoops.flatpak
           cache-key: flatpak-builder-${{ github.sha }}
       - name: Upload flatpak
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.type.rid }}-flatpak
-          path: SerialLoops-${{ matrix.type.rid }}.flatpak
+          name: linux-x64-flatpak
+          path: SerialLoops.flatpak
           retention-days: 1
 
   linux-appimage:
@@ -101,7 +98,7 @@ jobs:
           sed -i "s/#ARCH#/${{ matrix.type.arch }}/g" ./install/linux/appimage/AppImageBuilder.yml
           mkdir -p ./install/linux/appimage/AppDir/usr/bin
           chmod +x ./src/SerialLoops/bin/Release/net8.0/${{ matrix.type.rid }}/publish/SerialLoops
-          chmod +x ./src/SerialLoops/bin/Release/net8.0/${{ matrix.type.rid }}/publish/NitroPacker.NitroPacker.SymTableHelper
+          chmod +x ./src/SerialLoops/bin/Release/net8.0/${{ matrix.type.rid }}/publish/NitroPacker.SymTableHelper
           mv ./src/SerialLoops/bin/Release/net8.0/${{ matrix.type.rid }}/publish/* ./install/linux/appimage/AppDir/usr/bin/
           mkdir -p ./install/linux/appimage/AppDir/usr/share/icons/default/scalable/apps/
           cp ./src/SerialLoops/Assets/Icons/AppIcon.svg ./install/linux/appimage/AppDir/usr/share/icons/default/scalable/apps/club.haroohie.SerialLoops.svg
@@ -375,7 +372,7 @@ jobs:
         run: |
           New-Item -Type Directory -Path release
           Get-ChildItem .
-          Move-Item -Path SerialLoops-linux-x64.flatpak -Destination release/SerialLoops-linux-x64-v$($env:SLVersion).flatpak
+          Move-Item -Path SerialLoops.flatpak -Destination release/SerialLoops-linux-x64-v$($env:SLVersion).flatpak
           Move-Item -Path SerialLoops-linux-x86_64.AppImage -Destination release/SerialLoops-linux-x64-v$($env:SLVersion).AppImage
           Move-Item -Path SerialLoops-linux-aarch64.AppImage -Destination release/SerialLoops-linux-arm64-v$($env:SLVersion).AppImage
           Move-Item -Path SerialLoops-linux-x64.tar.gz -Destination release/SerialLoops-linux-x64-v$($env:SLVersion).tar.gz
@@ -431,7 +428,7 @@ jobs:
 
             You can also install the official [melonDS Flatpak from Flathub](https://flathub.org/apps/net.kuribo64.melonDS) to use as your emulator.
 
-            The other ways to install Serial Loops are:
+            We don't currently provide ARM builds for the flatpak (they will be made available when the app is added to Flathub!). If you are using Linux on ARM, or if you would prefer to not use a Flatpak, use one of the following releases:
             * The AppImage is designed to run on all Linux distros and is an easy, click-once option.
             * The `.deb` package is intended for Debian-based distros (e.g. Ubuntu). Install it with `sudo apt install -f ./SerialLoops-linux-x64-${{ env.SLVersion }}.deb`.
             * The `.rpm` package is intended for Red Hat-based distros (e.g. Fedora). Install it with `sudo dnf install ./SerialLoops-linux-x64-${{ env.SLVersion }}-1.fc39.x86_64.rpm`.
