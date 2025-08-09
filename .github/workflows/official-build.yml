@@ -204,6 +204,10 @@ jobs:
       matrix:
         type: [ { rid: 'osx-x64', arch: 'x86_64' },  { rid: 'osx-arm64', arch: 'arm64' } ]
     steps:
+      - name: Install git on container
+        run: |
+          apt update
+          apt install -y git
       - name: Check out Serial Loops
         uses: actions/checkout@v4
         with:
