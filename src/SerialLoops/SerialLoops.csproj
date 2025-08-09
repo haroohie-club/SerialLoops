@@ -12,7 +12,7 @@
     <ApplicationIcon>Assets\serial-loops.ico</ApplicationIcon>
   </PropertyGroup>
 
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent" Condition="$([System.OperatingSystem]::IsMacOS()) And !Exists('libSDL2.dylib') And '$(CIBuild)' != 'true'">
+  <Target Name="PreBuildSDL" BeforeTargets="PreBuildEvent" Condition="$([System.OperatingSystem]::IsMacOS()) And !Exists('libSDL2.dylib') And '$(CIBuild)' != 'true'">
     <Exec Command="/bin/bash -C install-sdl-macos.sh ../src/SerialLoops/libSDL2.dylib" WorkingDirectory="../.."/>
   </Target>
   <ItemGroup Condition="$([System.OperatingSystem]::IsMacOS())">
@@ -25,7 +25,7 @@
     </None>
   </ItemGroup>
 
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent" Condition="'$(RuntimeIdentifier)' != ''">
+  <Target Name="PreBuildSTH" BeforeTargets="PreBuildEvent" Condition="'$(RuntimeIdentifier)' != ''">
     <Exec Command="dotnet publish submodules/NitroPacker.SymTableHelper/HaroohieClub.NitroPacker.SymTableHelper.csproj -c Release -f net8.0 -r $(RuntimeIdentifier) --self-contained /p:DebugType=None /p:DebugSymbols=false" WorkingDirectory="../.."/>
   </Target>
   <ItemGroup>
