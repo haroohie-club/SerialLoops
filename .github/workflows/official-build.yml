@@ -78,7 +78,9 @@ jobs:
   linux-appimage:
     strategy:
       matrix:
-        type: [ { image: 'ubuntu-latest', rid: 'linux-x64', arch: 'x86_64', apt_arch: 'amd64', apt_uri: 'http://archive.ubuntu.com/ubuntu/' },  { image: 'ubuntu-24.04-arm', rid: 'linux-arm64', arch: 'aarch64', apt_arch: 'arm64', apt_uri: 'http://ports.ubuntu.com/ubuntu-ports' } ]
+        type:
+          - { image: 'ubuntu-latest', rid: 'linux-x64', arch: 'x86_64', apt_arch: 'amd64', apt_uri: 'http://archive.ubuntu.com/ubuntu/' }
+          - { image: 'ubuntu-24.04-arm', rid: 'linux-arm64', arch: 'aarch64', apt_arch: 'arm64', apt_uri: 'http://ports.ubuntu.com/ubuntu-ports/' }
     runs-on: ${{ matrix.type.image }}
     steps:
       - name: Check out
