@@ -56,6 +56,8 @@ jobs:
     steps:
       - name: Check out
         uses: actions/checkout@v4
+        with:
+          submodules: true
       - name: Download nuget-sources.json
         uses: actions/download-artifact@v4.1.8
         with:
@@ -84,6 +86,8 @@ jobs:
     steps:
       - name: Check out
         uses: actions/checkout@v4
+        with:
+          submodules: true
       - name: Setup .NET
         uses: actions/setup-dotnet@v4.1.0
         with:
@@ -122,6 +126,8 @@ jobs:
     steps:
       - name: Check out
         uses: actions/checkout@v4
+        with:
+          submodules: true
       - name: Setup .NET
         uses: actions/setup-dotnet@v4.1.0
         with:
@@ -174,6 +180,8 @@ jobs:
     steps:
       - name: Check out
         uses: actions/checkout@v4
+        with:
+          submodules: true
       - name: Create RPM
         run: |
           cp -r install/linux/rpm/rpmbuild ~/
@@ -201,6 +209,8 @@ jobs:
     steps:
       - name: Check out Serial Loops
         uses: actions/checkout@v4
+        with:
+          submodules: true
       - name: Check out SDL
         uses: actions/checkout@v4
         with:
@@ -253,6 +263,8 @@ jobs:
     steps:
       - name: Check out
         uses: actions/checkout@v4
+        with:
+          submodules: true
       - name: Setup .NET
         uses: actions/setup-dotnet@v4.1.0
         with:
