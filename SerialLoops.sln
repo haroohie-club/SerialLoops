@@ -17,7 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialLoops.Tests.Shared", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "z_submodules", "z_submodules", "{8092BC8D-7D40-48E2-853E-2999DC2A9D09}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HaroohieClub.NitroPacker.SymTableHelper", "submodules\NitroPacker\HaroohieClub.NitroPacker.SymTableHelper\HaroohieClub.NitroPacker.SymTableHelper.csproj", "{24BB519A-0F53-4A99-BB8C-942BEE580DE0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HaroohieClub.NitroPacker.SymTableHelper", "submodules\NitroPacker.SymTableHelper\HaroohieClub.NitroPacker.SymTableHelper.csproj", "{24BB519A-0F53-4A99-BB8C-942BEE580DE0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

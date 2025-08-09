@@ -26,14 +26,14 @@
   </ItemGroup>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent" Condition="'$(RuntimeIdentifier)' != ''">
-    <Exec Command="dotnet publish submodules/NitroPacker/HaroohieClub.NitroPacker.SymTableHelper/HaroohieClub.NitroPacker.SymTableHelper.csproj -c Release -f net8.0 -r $(RuntimeIdentifier) --self-contained /p:DebugType=None /p:DebugSymbols=false" WorkingDirectory="../.."/>
+    <Exec Command="dotnet publish submodules/NitroPacker.SymTableHelper/HaroohieClub.NitroPacker.SymTableHelper.csproj -c Release -f net8.0 -r $(RuntimeIdentifier) --self-contained /p:DebugType=None /p:DebugSymbols=false" WorkingDirectory="../.."/>
   </Target>
   <ItemGroup>
-    <None Condition="'$(RuntimeIdentifier)' != '' And $([System.OperatingSystem]::IsWindows())" Include="..\..\submodules\NitroPacker\HaroohieClub.NitroPacker.SymTableHelper\bin\Release\net8.0\$(RuntimeIdentifier)\publish\NitroPacker.SymTableHelper.exe">
+    <None Condition="'$(RuntimeIdentifier)' != '' And $([System.OperatingSystem]::IsWindows())" Include="..\..\submodules\NitroPacker.SymTableHelper\bin\Release\net8.0\$(RuntimeIdentifier)\publish\NitroPacker.SymTableHelper.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <CopyToPublishDirectory>Always</CopyToPublishDirectory>
     </None>
-    <None Condition="'$(RuntimeIdentifier)' != '' And !$([System.OperatingSystem]::IsWindows())" Include="..\..\submodules\NitroPacker\HaroohieClub.NitroPacker.SymTableHelper\bin\Release\net8.0\$(RuntimeIdentifier)\publish\NitroPacker.SymTableHelper">
+    <None Condition="'$(RuntimeIdentifier)' != '' And !$([System.OperatingSystem]::IsWindows())" Include="..\..\submodules\NitroPacker.SymTableHelper\bin\Release\net8.0\$(RuntimeIdentifier)\publish\NitroPacker.SymTableHelper">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <CopyToPublishDirectory>Always</CopyToPublishDirectory>
     </None>
@@ -134,7 +134,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Condition="'$(RuntimeIdentifier)' == ''" Include="..\..\submodules\NitroPacker\HaroohieClub.NitroPacker.SymTableHelper\HaroohieClub.NitroPacker.SymTableHelper.csproj" />
+    <ProjectReference Condition="'$(RuntimeIdentifier)' == ''" Include="..\..\submodules\NitroPacker.SymTableHelper\HaroohieClub.NitroPacker.SymTableHelper.csproj" />
     <ProjectReference Include="..\SerialLoops.Lib\SerialLoops.Lib.csproj" />
   </ItemGroup>
 
