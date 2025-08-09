@@ -253,15 +253,10 @@ jobs:
         uses: actions/setup-dotnet@v4.1.0
         with:
           dotnet-version: '8.0.x'
-      - name: Build & Publish SymTableHelper
-        shell: pwsh
-        run: |
-          dotnet publish submodules/NitroPacker/HaroohieClub.NitroPacker.SymTableHelper/HaroohieClub.NitroPacker.SymTableHelper.csproj -c Release -f net8.0 -r ${{ matrix.type.rid }} --self-contained /p:DebugType=None /p:DebugSymbols=false /p:PublishSingleFile=true
       - name: Build & Publish Serial Loops
         shell: pwsh
         run: |
           dotnet publish src/SerialLoops/SerialLoops.csproj -c Release -f net8.0-windows -r ${{ matrix.type.rid }} --self-contained /p:DebugType=None /p:DebugSymbols=false /p:PublishSingleFile=true
-          Copy-Item -Path submodules/NitroPacker/HaroohieClub.NitroPacker.SymTableHelper/bin/Release/net8.0/${{ matrix.type.rid }}/publish/NitroPacker.SymTableHelper.exe -DestinationPath src/SerialLoops/bin/Release/net8.0-windows/${{ matrix.type.rid }}/publish/
           Compress-Archive -Path src/SerialLoops/bin/Release/net8.0-windows/${{ matrix.type.rid }}/publish/ -DestinationPath src/SerialLoops/bin/Release/net8.0-windows/${{ matrix.type.rid }}/SerialLoops-${{ matrix.type.rid  }}.zip
       - name: Upload Windows zip
         uses: actions/upload-artifact@v4
