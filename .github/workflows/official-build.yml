@@ -78,7 +78,7 @@ jobs:
   linux-appimage:
     strategy:
       matrix:
-        type: [ { image: 'ubuntu-latest', rid: 'linux-x64', arch: 'x86_64', apt_arch: 'amd64' },  { image: 'ubuntu-24.04-arm', rid: 'linux-arm64', arch: 'aarch64', apt_arch: 'arm64' } ]
+        type: [ { image: 'ubuntu-latest', rid: 'linux-x64', arch: 'x86_64', apt_arch: 'amd64', apt_uri: 'http://archive.ubuntu.com/ubuntu/' },  { image: 'ubuntu-24.04-arm', rid: 'linux-arm64', arch: 'aarch64', apt_arch: 'arm64', apt_uri: 'http://ports.ubuntu.com/ubuntu-ports' } ]
     runs-on: ${{ matrix.type.image }}
     steps:
       - name: Check out
@@ -95,6 +95,7 @@ jobs:
         run: |
           sed -i "s/#VERSION#/$SLVersion/g" ./install/linux/appimage/AppImageBuilder.yml
           sed -i "s/#APT_ARCH#/${{ matrix.type.apt_arch }}/g" ./install/linux/appimage/AppImageBuilder.yml
+          sed -i "s/#URI#/${{ matrix.type.apt_uri }}/g" ./install/linux/appimage/AppImageBuilder.yml
           sed -i "s/#ARCH#/${{ matrix.type.arch }}/g" ./install/linux/appimage/AppImageBuilder.yml
           mkdir -p ./install/linux/appimage/AppDir/usr/bin
           chmod +x ./src/SerialLoops/bin/Release/net8.0/${{ matrix.type.rid }}/publish/SerialLoops

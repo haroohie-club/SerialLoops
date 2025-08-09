@@ -14,10 +14,10 @@ AppDir:
     - #APT_ARCH#
     allow_unauthenticated: true
     sources:
-    - sourceline: deb http://archive.ubuntu.com/ubuntu/ noble main restricted universe multiverse
-    - sourceline: deb http://archive.ubuntu.com/ubuntu/ noble-updates main restricted universe multiverse
-    - sourceline: deb http://archive.ubuntu.com/ubuntu/ noble-security main restricted universe multiverse
-    - sourceline: deb http://archive.ubuntu.com/ubuntu/ noble-backports main restricted universe multiverse
+    - sourceline: deb #URI# noble main restricted universe multiverse
+    - sourceline: deb #URI# noble-updates main restricted universe multiverse
+    - sourceline: deb #URI# noble-security main restricted universe multiverse
+    - sourceline: deb #URI# noble-backports main restricted universe multiverse
     include:
     - libc6:#APT_ARCH#
     - libsdl2-dev:#APT_ARCH#
