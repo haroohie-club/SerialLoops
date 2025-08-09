@@ -385,7 +385,7 @@ jobs:
           Move-Item -Path SerialLoops-linux-x64.deb -Destination release/SerialLoops-linux-x64-$($env:SLVersion).deb
           Move-Item -Path SerialLoops-linux-arm64.deb -Destination release/SerialLoops-linux-arm64-$($env:SLVersion).deb
           Move-Item -Path SerialLoops-linux-x64.rpm -Destination release/SerialLoops-linux-x64-$($env:SLVersion)-1.fc39.x86_64.rpm
-          Move-Item -Path SerialLoops-linux-arm64.rpm -Destination release/SerialLoops-linux-x64-$($env:SLVersion)-1.fc39.aarch64.rpm
+          Move-Item -Path SerialLoops-linux-arm64.rpm -Destination release/SerialLoops-linux-arm64-$($env:SLVersion)-1.fc39.aarch64.rpm
           Move-Item -Path SerialLoops-osx-arm64.pkg -Destination release/SerialLoops-macOS-arm-v$($env:SLVersion)-installer.pkg
           Move-Item -Path SerialLoops-osx-x64.pkg -Destination release/SerialLoops-macOS-x64-v$($env:SLVersion)-installer.pkg
           Move-Item -Path SLInstaller-win-x64.exe -Destination release/SerialLoops-windows-x64-v$($env:SLVersion)-installer.exe
