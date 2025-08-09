@@ -106,6 +106,7 @@ jobs:
           sed -i "s/#VERSION#/$SLVersion/g" ./install/linux/appimage/AppImageBuilder.yml
           mkdir -p ./install/linux/appimage/AppDir/usr/bin
           chmod +x ./src/SerialLoops/bin/Release/net8.0/linux-x64/publish/SerialLoops
+          chmod +x ./src/SerialLoops/bin/Release/net8.0/linux-x64/publish/SymTableHelper
           mv ./src/SerialLoops/bin/Release/net8.0/linux-x64/publish/* ./install/linux/appimage/AppDir/usr/bin/
           mkdir -p ./install/linux/appimage/AppDir/usr/share/icons/default/scalable/apps/
           cp ./src/SerialLoops/Assets/Icons/AppIcon.svg ./install/linux/appimage/AppDir/usr/share/icons/default/scalable/apps/club.haroohie.SerialLoops.svg
@@ -136,6 +137,7 @@ jobs:
       - name: Create tarball
         run: |
           chmod +x ./src/SerialLoops/bin/Release/net8.0/linux-x64/publish/SerialLoops
+          chmod +x ./src/SerialLoops/bin/Release/net8.0/linux-x64/publish/SymTableHelper
           pushd ./src/SerialLoops/bin/Release/net8.0/linux-x64/publish
           tar -czvf ../SerialLoops.tar.gz --transform "s,^\.\/,SerialLoops-$SLVersion/," .
           popd
@@ -229,6 +231,7 @@ jobs:
           cp -r "src/SerialLoops/bin/Release/net8.0/${{ matrix.type.rid }}/publish/Serial Loops.app" "install/macos/"
           cd install/macos/
           chmod +x "./Serial Loops.app/Contents/MacOS/SerialLoops"
+          chmod +x "./Serial Loops.app/Contents/MacOS/SymTableHelper"
           python serial_loops_pkg_builder.py $SLVersion ${{ matrix.type.rid }}
       - name: Upload pkg installer
         uses: actions/upload-artifact@v4
