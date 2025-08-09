@@ -194,7 +194,7 @@ jobs:
     runs-on: macos-latest
     strategy:
       matrix:
-        type: [ { rid:  'osx-x64', arch: 'x86_64 ' },  { rid: 'osx-arm64', arch: 'arm64' } ]
+        type: [ { rid: 'osx-x64', arch: 'x86_64 ' },  { rid: 'osx-arm64', arch: 'arm64' } ]
     steps:
       - name: Check out Serial Loops
         uses: actions/checkout@v4
@@ -239,6 +239,13 @@ jobs:
 
   windows:
     runs-on: windows-latest
+    strategy:
+      matrix:
+        type: [
+          { rid: 'win-x64', ninja: 'https://github.com/ninja-build/ninja/releases/download/v1.13.1/ninja-win.zip', llvm: 'LLVM-19.1.6-win64.exe' },
+          { rid: 'win-x86', ninja: 'https://haroohie.nyc3.cdn.digitaloceanspaces.com/bootstrap/serial-loops/ninja/ninja-win-x86.zip', llvm: 'LLVM-19.1.6-win32.exe' },
+          { rid: 'win-arm64', ninja: 'https://github.com/ninja-build/ninja/releases/download/v1.13.1/ninja-winarm64.zip', llvm: 'LLVM-19.1.6-woa64.exe' }
+          ]
     steps:
       - name: Check out
         uses: actions/checkout@v4
@@ -246,32 +253,38 @@ jobs:
         uses: actions/setup-dotnet@v4.1.0
         with:
           dotnet-version: '8.0.x'
+      - name: Build & Publish SymTableHelper
+        shell: pwsh
+        run: |
+          dotnet publish submodules/NitroPacker/HaroohieClub.NitroPacker.SymTableHelper/HaroohieClub.NitroPacker.SymTableHelper.csproj -c Release -f net8.0 -r ${{ matrix.type.rid }} --self-contained /p:DebugType=None /p:DebugSymbols=false /p:PublishSingleFile=true
       - name: Build & Publish Serial Loops
         shell: pwsh
         run: |
-          dotnet publish src/SerialLoops/SerialLoops.csproj -c Release -f net8.0-windows -r win-x64 --self-contained /p:DebugType=None /p:DebugSymbols=false /p:PublishSingleFile=true
-          Compress-Archive -Path src/SerialLoops/bin/Release/net8.0-windows/win-x64/publish/ -DestinationPath src/SerialLoops/bin/Release/net8.0-windows/win-x64/SerialLoops-winx64.zip
+          dotnet publish src/SerialLoops/SerialLoops.csproj -c Release -f net8.0-windows -r ${{ matrix.type.rid }} --self-contained /p:DebugType=None /p:DebugSymbols=false /p:PublishSingleFile=true
+          Copy-Item -Path submodules/NitroPacker/HaroohieClub.NitroPacker.SymTableHelper/bin/Release/net8.0/${{ matrix.type.rid }}/publish/NitroPacker.SymTableHelper.exe -DestinationPath src/SerialLoops/bin/Release/net8.0-windows/${{ matrix.type.rid }}/publish/
+          Compress-Archive -Path src/SerialLoops/bin/Release/net8.0-windows/${{ matrix.type.rid }}/publish/ -DestinationPath src/SerialLoops/bin/Release/net8.0-windows/${{ matrix.type.rid }}/SerialLoops-${{ matrix.type.rid  }}.zip
       - name: Upload Windows zip
         uses: actions/upload-artifact@v4
         with:
-          name: windows-x64-zip
-          path: src/SerialLoops/bin/Release/net8.0-windows/win-x64/SerialLoops-winx64.zip
+          name: ${{ matrix.type.rid }}-zip
+          path: src/SerialLoops/bin/Release/net8.0-windows/${{ matrix.type.rid }}/SerialLoops-${{ matrix.type.rid }}.zip
           retention-days: 1
-      - name: Download ISCC, Docker Desktop Installer, and devkitPro Updater
+      - name: Download ISCC, Ninja, and LLVM Installer
         shell: pwsh
         run: |
           ((Get-Content -Path install\windows\serial-loops.iss) -replace '#VERSION#', "$env:SLVersion") | Set-Content -Path install\windows\serial-loops.iss
           Start-BitsTransfer -Source https://haroohie.nyc3.cdn.digitaloceanspaces.com/bootstrap/serial-loops/iscc.zip -Destination install\windows\iscc.zip
           Expand-Archive -Path install\windows\iscc.zip -DestinationPath install\windows\
-          Start-BitsTransfer -Source https://github.com/devkitPro/installer/releases/download/v3.0.3/devkitProUpdater-3.0.3.exe -Destination install\windows\devkitProUpdater-3.0.3.exe
-          Start-BitsTransfer -Source https://desktop.docker.com/win/main/amd64/Docker%20Desktop%20Installer.exe -Destination "install\windows\Docker Desktop Installer.exe"
+          Start-BitsTransfer -Source ${{ matrix.type.ninja }} -Destination install\windows\ninja.zip
+          Expand-Archive -Path install\windows\ninja.zip -DestinationPath install\windows\
+          Start-BitsTransfer -Source https://github.com/llvm/llvm-project/releases/download/llvmorg-19.1.6/${{ matrix.type.llvm }} -Destination install\windows\llvm.exe
       - name: Compile Windows installer
-        run: install\windows\iscc\ISCC.exe .\install\windows\serial-loops.iss
+        run: install\windows\iscc\ISCC.exe /DTargetArchitecture=${{ matrix.type.rid }} .\install\windows\serial-loops.iss
       - name: Upload Windows installer
         uses: actions/upload-artifact@v4
         with:
-          name: windows-x64-installer
-          path: install/windows/Output/SerialLoopsInstaller.exe
+          name: ${{ matrix.type.rid }}-installer
+          path: install/windows/Output/SLInstaller-${{ matrix.type.rid }}.exe
           retention-days: 1
 
   release:
@@ -306,14 +319,30 @@ jobs:
         uses: actions/download-artifact@v4.1.8
         with:
           name: osx-x64-installer
-      - name: Download Windows installer
+      - name: Download Windows x64 installer
         uses: actions/download-artifact@v4.1.8
         with:
-          name: windows-x64-installer
-      - name: Download Windows portable zip
+          name: win-x64-installer
+      - name: Download Windows x86 installer
         uses: actions/download-artifact@v4.1.8
         with:
-          name: windows-x64-zip
+          name: win-x86-installer
+      - name: Download Windows arm64 installer
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: win-arm64-installer
+      - name: Download Windows x64 portable zip
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: win-x64-zip
+      - name: Download Windows x86 portable zip
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: win-x86-zip
+      - name: Download Windows arm64 portable zip
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: win-arm64-zip
       - name: Move and rename artifacts
         shell: pwsh
         run: |
@@ -326,8 +355,12 @@ jobs:
           Move-Item -Path SerialLoops.rpm -Destination release/SerialLoops-linux-x64-$($env:SLVersion)-1.fc39.x86_64.rpm
           Move-Item -Path SerialLoops-osx-arm64.pkg -Destination release/SerialLoops-macOS-arm-v$($env:SLVersion)-installer.pkg
           Move-Item -Path SerialLoops-osx-x64.pkg -Destination release/SerialLoops-macOS-x64-v$($env:SLVersion)-installer.pkg
-          Move-Item -Path SerialLoopsInstaller.exe -Destination release/SerialLoops-windows-x64-v$($env:SLVersion)-installer.exe
-          Move-Item -Path SerialLoops-winx64.zip -Destination release/SerialLoops-windows-x64-v$($env:SLVersion)-portable.zip
+          Move-Item -Path SLInstaller-win-x64.exe -Destination release/SerialLoops-windows-x64-v$($env:SLVersion)-installer.exe
+          Move-Item -Path SLInstaller-win-x86.exe -Destination release/SerialLoops-windows-x86-v$($env:SLVersion)-installer.exe
+          Move-Item -Path SLInstaller-win-arm64.exe -Destination release/SerialLoops-windows-arm64-v$($env:SLVersion)-installer.exe
+          Move-Item -Path SerialLoops-win-x64.zip -Destination release/SerialLoops-windows-x64-v$($env:SLVersion)-portable.zip
+          Move-Item -Path SerialLoops-win-x86.zip -Destination release/SerialLoops-windows-x86-v$($env:SLVersion)-portable.zip
+          Move-Item -Path SerialLoops-win-arm64.zip -Destination release/SerialLoops-windows-arm64-v$($env:SLVersion)-portable.zip
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
@@ -345,17 +378,17 @@ jobs:
             Because our application contacts GitHub's servers to check for new releases on launch, it is possible it will get flagged by firewall software &ndash; please allow it through so it can function correctly.
 
             ### Windows
-            Simply download the Windows installer application and run it. It will walk you through installation, including installing the necessary dependencies. Specifically, it will run the **devkitPro** installer, the **Docker Desktop** installer, and the **Windows Subsystem for Linux (WSL)** installer.
-            * For the devkitPro installer, you can select "Remove Downloaded Files" and uncheck all components except the "NDS Development". It will pop several terminal windows as it installs the necessary components; this is normal, so don't worry!
-            * The WSL installer will run automatically. It may pop a window afterwards with more information about WSL; you can close this without reading it as it is not relevant for the project.
-            * The Docker Desktop installer will take a little while to run and afterwards ask you to restart to finish the installation process. You can close the Serial Loops installer once it is finished and then restart your system.
+            Simply download the Windows installer application for your architecture and run it. It will walk you through installation, including installing the necessary dependencies. Specifically, it will run the **LLVM installer**.
 
             Alternatively, you can download the zip file for a portable application; however, dependencies are not included with this option.
+
+            #### Which Windows installer should I choose?
+            Most modern Windows machines are x64-based; however, there are quite a few Windows laptops that now run with ARM processors. If you're not sure, you can download both&mdash;only the one that matches your computer's architecture will run. The x86 installer should only be used on older Windows hardware (theoretically, it should support Windows 7+, though we do not officially support older operating systems).
 
             ### macOS
             Pick the macOS pkg installer that fits your computer's architecture. Before executing it, you will need to open the Terminal application and run `xattr -cr ~/Downloads/SerialLoops-macOS-arm-v${{ env.SLVersion }}-installer.pkg` for the ARM installer and `xattr -cr ~/Downloads/SerialLoops-macOS-x64-v${{ env.SLVersion }}-installer.pkg` for the x64 installer. This is required because we currently don't codesign the installer, meaning macOS will refuse to run it without explicit approval from you.
 
-            The pkg installer will guide you through installing Serial Loops and will automatically install the dependencies devkitARM and make if necessary. Note that in order to install make we install xcode-tools&mdash;this installation can take a long time, so please be patient!
+            The pkg installer will guide you through installing Serial Loops and will automatically install the LLVM and ninja dependencies. If you don't already have the [Homebrew package manager](https://brew.sh) installed, it will automatically install this for you and then use it to install LLVM (and LLD) and ninja. This may take about a minute&mdash;please be patient!
 
             #### Which macOS pkg installer should I choose?
             If your Mac is newer, you will probably want the ARM installer. If it is older, you may want the x64 one. To make sure, go to Settings → About and check your chip. If it is an Intel, you want the x64 installer. If it is an Apple chip, you want the ARM installer.
