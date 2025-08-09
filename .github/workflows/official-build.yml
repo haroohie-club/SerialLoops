@@ -378,8 +378,8 @@ jobs:
           New-Item -Type Directory -Path release
           Get-ChildItem .
           Move-Item -Path SerialLoops.flatpak -Destination release/SerialLoops-linux-x64-v$($env:SLVersion).flatpak
-          Move-Item -Path SerialLoops-linux-x86_64.AppImage -Destination release/SerialLoops-linux-x64-v$($env:SLVersion).AppImage
-          Move-Item -Path SerialLoops-linux-aarch64.AppImage -Destination release/SerialLoops-linux-arm64-v$($env:SLVersion).AppImage
+          Move-Item -Path SerialLoops-x86_64.AppImage -Destination release/SerialLoops-linux-x64-v$($env:SLVersion).AppImage
+          Move-Item -Path SerialLoops-aarch64.AppImage -Destination release/SerialLoops-linux-arm64-v$($env:SLVersion).AppImage
           Move-Item -Path SerialLoops-linux-x64.tar.gz -Destination release/SerialLoops-linux-x64-v$($env:SLVersion).tar.gz
           Move-Item -Path SerialLoops-linux-arm64.tar.gz -Destination release/SerialLoops-linux-arm64-v$($env:SLVersion).tar.gz
           Move-Item -Path SerialLoops-linux-x64.deb -Destination release/SerialLoops-linux-x64-$($env:SLVersion).deb
