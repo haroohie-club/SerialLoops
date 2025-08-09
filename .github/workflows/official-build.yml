@@ -101,7 +101,7 @@ jobs:
           sed -i "s/#ARCH#/${{ matrix.type.arch }}/g" ./install/linux/appimage/AppImageBuilder.yml
           mkdir -p ./install/linux/appimage/AppDir/usr/bin
           chmod +x ./src/SerialLoops/bin/Release/net8.0/${{ matrix.type.rid }}/publish/SerialLoops
-          chmod +x ./src/SerialLoops/bin/Release/net8.0/${{ matrix.type.rid }}/publish/SymTableHelper
+          chmod +x ./src/SerialLoops/bin/Release/net8.0/${{ matrix.type.rid }}/publish/NitroPacker.NitroPacker.SymTableHelper
           mv ./src/SerialLoops/bin/Release/net8.0/${{ matrix.type.rid }}/publish/* ./install/linux/appimage/AppDir/usr/bin/
           mkdir -p ./install/linux/appimage/AppDir/usr/share/icons/default/scalable/apps/
           cp ./src/SerialLoops/Assets/Icons/AppIcon.svg ./install/linux/appimage/AppDir/usr/share/icons/default/scalable/apps/club.haroohie.SerialLoops.svg
@@ -137,7 +137,7 @@ jobs:
       - name: Create tarball
         run: |
           chmod +x ./src/SerialLoops/bin/Release/net8.0/${{ matrix.type.rid }}/publish/SerialLoops
-          chmod +x ./src/SerialLoops/bin/Release/net8.0/${{ matrix.type.rid }}/publish/SymTableHelper
+          chmod +x ./src/SerialLoops/bin/Release/net8.0/${{ matrix.type.rid }}/publish/NitroPacker.SymTableHelper
           pushd ./src/SerialLoops/bin/Release/net8.0/${{ matrix.type.rid }}/publish
           tar -czvf ../SerialLoops-${{ matrix.type.rid }}.tar.gz --transform "s,^\.\/,SerialLoops-$SLVersion/," .
           popd
@@ -242,7 +242,7 @@ jobs:
           cp -r "src/SerialLoops/bin/Release/net8.0/${{ matrix.type.rid }}/publish/Serial Loops.app" "install/macos/"
           cd install/macos/
           chmod +x "./Serial Loops.app/Contents/MacOS/SerialLoops"
-          chmod +x "./Serial Loops.app/Contents/MacOS/SymTableHelper"
+          chmod +x "./Serial Loops.app/Contents/MacOS/NitroPacker.SymTableHelper"
           python serial_loops_pkg_builder.py $SLVersion ${{ matrix.type.rid }}
       - name: Upload pkg installer
         uses: actions/upload-artifact@v4
