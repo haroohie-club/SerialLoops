@@ -44,21 +44,12 @@ jobs:
           name: nuget-sources
           path: nuget-sources.json
           retention-days: 1
-      - name: Export devkitARM latest
-        uses: addnab/docker-run-action@v3
-        with:
-          image: devkitpro/devkitarm:latest
-          options: -v ${{ github.workspace }}:/work -w /work
-          run: tar -czvf devkitarm.tar.gz /opt/devkitpro/devkitARM /opt/devkitpro/libnds
-      - name: Publish devkitARM tarball
-        uses: actions/upload-artifact@v4
-        with:
-          name: devkitARM
-          path: devkitarm.tar.gz
-          retention-days: 1
   linux-flatpak:
     needs: linux-flatpak-setup
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        type: [ { image: 'ubuntu-latest', rid: 'linux-x64' },  { image: 'ubuntu-24.04-arm', rid: 'linux-arm64' } ]
+    runs-on: ${{ matrix.type.image }}
     container:
       image: bilelmoussaoui/flatpak-github-actions:freedesktop-23.08
       options: --privileged
@@ -70,28 +61,26 @@ jobs:
         with:
           name: nuget-sources
           path: install/linux/flatpak/
-      - name: Download devkitARM
-        uses: actions/download-artifact@v4.1.8
-        with:
-          name: devkitARM
-          path: install/linux/flatpak/
       - name: Export version
         run: echo $SLVersion > install/linux/flatpak/VERSION
       - name: Build flatpak
         uses: flatpak/flatpak-github-actions/flatpak-builder@v6
         with:
           manifest-path: install/linux/flatpak/club.haroohie.SerialLoops.yaml
-          bundle: SerialLoops.flatpak
+          bundle: SerialLoops-${{ matrix.type.rid }}.flatpak
           cache-key: flatpak-builder-${{ github.sha }}
       - name: Upload flatpak
         uses: actions/upload-artifact@v4
         with:
-          name: linux-x64-flatpak
-          path: SerialLoops.flatpak
+          name: ${{ matrix.type.rid }}-flatpak
+          path: SerialLoops-${{ matrix.type.rid }}.flatpak
           retention-days: 1
 
   linux-appimage:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        type: [ { image: 'ubuntu-latest', rid: 'linux-x64', arch: 'x86_64', apt_arch: 'amd64' },  { image: 'ubuntu-24.04-arm', rid: 'linux-arm64', arch: 'aarch64', apt_arch: 'arm64' } ]
+    runs-on: ${{ matrix.type.image }}
     steps:
       - name: Check out
         uses: actions/checkout@v4
@@ -100,14 +89,16 @@ jobs:
         with:
           dotnet-version: '8.0.x'
       - name: Build & Publish Serial Loops
-        run: dotnet publish src/SerialLoops/SerialLoops.csproj -c Release -f net8.0 -r linux-x64 --self-contained /p:DebugType=None /p:DebugSymbols=false /p:PublishSingleFile=true
+        run: dotnet publish src/SerialLoops/SerialLoops.csproj -c Release -f net8.0 -r ${{ matrix.type.rid }} --self-contained /p:DebugType=None /p:DebugSymbols=false /p:PublishSingleFile=true
       - name: Set up AppDir
         run: |
           sed -i "s/#VERSION#/$SLVersion/g" ./install/linux/appimage/AppImageBuilder.yml
+          sed -i "s/#APT_ARCH#/${{ matrix.type.apt_arch }}/g" ./install/linux/appimage/AppImageBuilder.yml
+          sed -i "s/#ARCH#/${{ matrix.type.arch }}/g" ./install/linux/appimage/AppImageBuilder.yml
           mkdir -p ./install/linux/appimage/AppDir/usr/bin
-          chmod +x ./src/SerialLoops/bin/Release/net8.0/linux-x64/publish/SerialLoops
-          chmod +x ./src/SerialLoops/bin/Release/net8.0/linux-x64/publish/SymTableHelper
-          mv ./src/SerialLoops/bin/Release/net8.0/linux-x64/publish/* ./install/linux/appimage/AppDir/usr/bin/
+          chmod +x ./src/SerialLoops/bin/Release/net8.0/${{ matrix.type.rid }}/publish/SerialLoops
+          chmod +x ./src/SerialLoops/bin/Release/net8.0/${{ matrix.type.rid }}/publish/SymTableHelper
+          mv ./src/SerialLoops/bin/Release/net8.0/${{ matrix.type.rid }}/publish/* ./install/linux/appimage/AppDir/usr/bin/
           mkdir -p ./install/linux/appimage/AppDir/usr/share/icons/default/scalable/apps/
           cp ./src/SerialLoops/Assets/Icons/AppIcon.svg ./install/linux/appimage/AppDir/usr/share/icons/default/scalable/apps/club.haroohie.SerialLoops.svg
       - name: Build AppImage
@@ -119,12 +110,15 @@ jobs:
       - name: Upload AppImage
         uses: actions/upload-artifact@v4
         with:
-          name: linux-x64-appimage
-          path: SerialLoops.AppImage
+          name: ${{ matrix.type.rid }}-appimage
+          path: SerialLoops-${{ matrix.type.arch }}.AppImage
           retention-days: 1
 
   linux-dpkg-tarball:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        type: [ { image: 'ubuntu-latest', rid: 'linux-x64', arch: 'amd64' },  { image: 'ubuntu-24.04-arm', rid: 'linux-arm64', arch: 'arm64' } ]
+    runs-on: ${{ matrix.type.image }}
     steps:
       - name: Check out
         uses: actions/checkout@v4
@@ -133,19 +127,19 @@ jobs:
         with:
           dotnet-version: '8.0.x'
       - name: Build & Publish Serial Loops
-        run: dotnet publish src/SerialLoops/SerialLoops.csproj -c Release -f net8.0 -r linux-x64 --self-contained /p:DebugType=None /p:DebugSymbols=false /p:PublishSingleFile=true
+        run: dotnet publish src/SerialLoops/SerialLoops.csproj -c Release -f net8.0 -r ${{ matrix.type.rid }} --self-contained /p:DebugType=None /p:DebugSymbols=false /p:PublishSingleFile=true
       - name: Create tarball
         run: |
-          chmod +x ./src/SerialLoops/bin/Release/net8.0/linux-x64/publish/SerialLoops
-          chmod +x ./src/SerialLoops/bin/Release/net8.0/linux-x64/publish/SymTableHelper
-          pushd ./src/SerialLoops/bin/Release/net8.0/linux-x64/publish
-          tar -czvf ../SerialLoops.tar.gz --transform "s,^\.\/,SerialLoops-$SLVersion/," .
+          chmod +x ./src/SerialLoops/bin/Release/net8.0/${{ matrix.type.rid }}/publish/SerialLoops
+          chmod +x ./src/SerialLoops/bin/Release/net8.0/${{ matrix.type.rid }}/publish/SymTableHelper
+          pushd ./src/SerialLoops/bin/Release/net8.0/${{ matrix.type.rid }}/publish
+          tar -czvf ../SerialLoops-${{ matrix.type.rid }}.tar.gz --transform "s,^\.\/,SerialLoops-$SLVersion/," .
           popd
       - name: Upload tarball
         uses: actions/upload-artifact@v4
         with:
-          name: linux-x64-tarball
-          path: src/SerialLoops/bin/Release/net8.0/linux-x64/SerialLoops.tar.gz
+          name: ${{ matrix.type.rid }}-tarball
+          path: src/SerialLoops/bin/Release/net8.0/${{ matrix.type.rid }}/SerialLoops-${{ matrix.type.rid }}.tar.gz
           retention-days: 1
       - name: Create deb package
         shell: pwsh
@@ -154,22 +148,27 @@ jobs:
           New-Item -ItemType "directory" -Path ./dpkg-build/SerialLoops/usr -Name bin
           Push-Location ./dpkg-build/SerialLoops
           ((Get-Content -Path DEBIAN/control) -replace '#VERSION#', "$env:SLVersion") | Set-Content -Path DEBIAN/control
+          ((Get-Content -Path DEBIAN/control) -replace '#ARCH#', '${{ matrix.type.arch }}') | Set-Content -Path DEBIAN/control
           ((Get-Content -Path usr/share/applications/SerialLoops.desktop) -replace '#VERSION#', "$env:SLVersion") | Set-Content -Path usr/share/applications/SerialLoops.desktop
-          Copy-Item -Path ../../src/SerialLoops/bin/Release/net8.0/linux-x64/publish/* -Destination ./usr/lib/SerialLoops -Recurse
+          Copy-Item -Path ../../src/SerialLoops/bin/Release/net8.0/${{ matrix.type.rid }}/publish/* -Destination ./usr/lib/SerialLoops -Recurse
           ln -s /usr/lib/SerialLoops/SerialLoops usr/bin/SerialLoops
           Copy-Item -Path ../../src/SerialLoops/Assets/Icons/AppIcon.png usr/lib/SerialLoops/SerialLoops.png
           Set-Location ..
           dpkg-deb --build SerialLoops
           Pop-Location
+          Move-Item -Path dpkg-build/SerialLoops.deb -Destination dpkg-build/SerialLoops-${{ matrix.type.rid }}.deb
       - name: Upload dpkg
         uses: actions/upload-artifact@v4
         with:
-          name: linux-x64-dpkg
-          path: dpkg-build/SerialLoops.deb
+          name: ${{ matrix.type.rid }}-dpkg
+          path: dpkg-build/SerialLoops-${{ matrix.type.rid }}.deb
           retention-days: 1
 
   linux-rpm:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        type: [ { image: 'ubuntu-latest', rid: 'linux-x64', arch: 'x86_64' },  { image: 'ubuntu-24.04-arm', rid: 'linux-arm64', arch: 'aarch64' } ]
+    runs-on: ${{ matrix.type.image }}
     container:
       image: fedora:39
     steps:
@@ -180,23 +179,25 @@ jobs:
           cp -r install/linux/rpm/rpmbuild ~/
           tar -czvf ~/rpmbuild/SOURCES/SerialLoops-$SLVersion.tar.gz --transform "s,^\.\/,SerialLoops-$SLVersion/," .
           sed -i "s/#VERSION#/$SLVersion/g" ~/rpmbuild/SPECS/SerialLoops.spec
+          sed -i "s/#RID#/${{ matrix.type.rid }}/g" ~/rpmbuild/SPECS/SerialLoops.spec
+          sed -i "s/#ARCH#/${{ matrix.type.arch }}/g" ~/rpmbuild/SPECS/SerialLoops.spec
           dnf install -y rpmdevtools rpmlint dotnet-sdk-8.0
           pushd ~
           rpmbuild -bb rpmbuild/SPECS/SerialLoops.spec
           popd
-          mv ~/rpmbuild/RPMS/x86_64/SerialLoops-${{ env.SLVersion }}-1.fc39.x86_64.rpm SerialLoops.rpm
+          mv ~/rpmbuild/RPMS/${{ matrix.type.arch }}/SerialLoops-${{ env.SLVersion }}-1.fc39.${{ matrix.type.arch }}.rpm SerialLoops-${{ matrix.type.rid }}.rpm
       - name: Upload rpm
         uses: actions/upload-artifact@v4
         with:
-          name: linux-x64-rpm
-          path: SerialLoops.rpm
+          name: ${{ matrix.type.rid }}-rpm
+          path: SerialLoops-${{ matrix.type.rid }}.rpm
           retention-days: 1
 
   macos-pkg:
     runs-on: macos-latest
     strategy:
       matrix:
-        type: [ { rid: 'osx-x64', arch: 'x86_64 ' },  { rid: 'osx-arm64', arch: 'arm64' } ]
+        type: [ { rid: 'osx-x64', arch: 'x86_64' },  { rid: 'osx-arm64', arch: 'arm64' } ]
     steps:
       - name: Check out Serial Loops
         uses: actions/checkout@v4
@@ -293,22 +294,38 @@ jobs:
         uses: actions/download-artifact@v4.1.8
         with:
           name: linux-x64-flatpak
-      - name: Download Linux AppImage
+      - name: Download Linux x64 AppImage
         uses: actions/download-artifact@v4.1.8
         with:
           name: linux-x64-appimage
-      - name: Download Linux tarball
+      - name: Download Linux ARM64 AppImage
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: linux-arm64-appimage
+      - name: Download Linux x64 tarball
         uses: actions/download-artifact@v4.1.8
         with:
           name: linux-x64-tarball
-      - name: Download Linux dpkg
+      - name: Download Linux ARM tarball
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: linux-arm64-tarball
+      - name: Download Linu x64x dpkg
         uses: actions/download-artifact@v4.1.8
         with:
           name: linux-x64-dpkg
-      - name: Download Linux rpm
+      - name: Download Linux ARM64 dpkg
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: linux-arm64-dpkg
+      - name: Download Linux x64 rpm
         uses: actions/download-artifact@v4.1.8
         with:
           name: linux-x64-rpm
+      - name: Download Linux ARM64 rpm
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: linux-arm64-rpm
       - name: Download Apple Silicon macOS installer
         uses: actions/download-artifact@v4.1.8
         with:
@@ -346,11 +363,15 @@ jobs:
         run: |
           New-Item -Type Directory -Path release
           Get-ChildItem .
-          Move-Item -Path SerialLoops.flatpak -Destination release/SerialLoops-linux-x64-v$($env:SLVersion).flatpak
-          Move-Item -Path SerialLoops.AppImage -Destination release/SerialLoops-linux-x64-v$($env:SLVersion).AppImage
-          Move-Item -Path SerialLoops.tar.gz -Destination release/SerialLoops-linux-x64-v$($env:SLVersion).tar.gz
-          Move-Item -Path SerialLoops.deb -Destination release/SerialLoops-linux-x64-$($env:SLVersion).deb
-          Move-Item -Path SerialLoops.rpm -Destination release/SerialLoops-linux-x64-$($env:SLVersion)-1.fc39.x86_64.rpm
+          Move-Item -Path SerialLoops-linux-x64.flatpak -Destination release/SerialLoops-linux-x64-v$($env:SLVersion).flatpak
+          Move-Item -Path SerialLoops-linux-x86_64.AppImage -Destination release/SerialLoops-linux-x64-v$($env:SLVersion).AppImage
+          Move-Item -Path SerialLoops-linux-aarch64.AppImage -Destination release/SerialLoops-linux-arm64-v$($env:SLVersion).AppImage
+          Move-Item -Path SerialLoops-linux-x64.tar.gz -Destination release/SerialLoops-linux-x64-v$($env:SLVersion).tar.gz
+          Move-Item -Path SerialLoops-linux-arm64.tar.gz -Destination release/SerialLoops-linux-arm64-v$($env:SLVersion).tar.gz
+          Move-Item -Path SerialLoops-linux-x64.deb -Destination release/SerialLoops-linux-x64-$($env:SLVersion).deb
+          Move-Item -Path SerialLoops-linux-arm64.deb -Destination release/SerialLoops-linux-arm64-$($env:SLVersion).deb
+          Move-Item -Path SerialLoops-linux-x64.rpm -Destination release/SerialLoops-linux-x64-$($env:SLVersion)-1.fc39.x86_64.rpm
+          Move-Item -Path SerialLoops-linux-arm64.rpm -Destination release/SerialLoops-linux-x64-$($env:SLVersion)-1.fc39.aarch64.rpm
           Move-Item -Path SerialLoops-osx-arm64.pkg -Destination release/SerialLoops-macOS-arm-v$($env:SLVersion)-installer.pkg
           Move-Item -Path SerialLoops-osx-x64.pkg -Destination release/SerialLoops-macOS-x64-v$($env:SLVersion)-installer.pkg
           Move-Item -Path SLInstaller-win-x64.exe -Destination release/SerialLoops-windows-x64-v$($env:SLVersion)-installer.exe
@@ -396,10 +417,10 @@ jobs:
             ### Linux
             We recommend using the provided Flatpak as it is the easiest to use. First, install [Flatpak](https://flatpak.org/setup/) if you haven't already. Then, download the Serial Loops Flatpak artifact and double click it or run `flatpak install` on it from the terminal. It will then install itself, bringing all the necessary dependencies with it.
 
-            You can also install the official [melonDS Flatpak from Flathub](https://flathub.org/apps/net.kuribo64.melonDS) to use as your emulator. We recommend installing it from the [flathub-beta](https://docs.flathub.org/docs/for-users/installation/#flathub-beta-repository) repository as that is where the most up-to-date versions tend to be pushed.
+            You can also install the official [melonDS Flatpak from Flathub](https://flathub.org/apps/net.kuribo64.melonDS) to use as your emulator.
 
-            The main benefit of the Flatpak is that it is packaged with devkitARM for ease of use. However, if you already have devkitARM installed or would like to use something more lightweight, we also provide the following options (all of which require [installing devkitARM yourself](https://devkitpro.org/wiki/Getting_Started)):
+            The other ways to install Serial Loops are:
             * The AppImage is designed to run on all Linux distros and is an easy, click-once option.
             * The `.deb` package is intended for Debian-based distros (e.g. Ubuntu). Install it with `sudo apt install -f ./SerialLoops-linux-x64-${{ env.SLVersion }}.deb`.
-            * The `.rpm` package is intended for Red Hat distros (e.g. Fedora). Install it with `sudo dnf install ./SerialLoops-linux-x64-${{ env.SLVersion }}-1.fc39.x86_64.rpm`.
+            * The `.rpm` package is intended for Red Hat-based distros (e.g. Fedora). Install it with `sudo dnf install ./SerialLoops-linux-x64-${{ env.SLVersion }}-1.fc39.x86_64.rpm`.
             * You may also opt to simply use the binaries packaged in the `.tar.gz` archive; when doing so, ensure you install the SDL2 binaries so audio playback works.

@@ -15,14 +15,10 @@ finish-args:
   - --device=dri
   - --socket=x11
   - --share=ipc
-  - --share=network
   - --socket=pulseaudio
   - --filesystem=~/SerialLoops:create
   - --filesystem=xdg-config:create
   - --env=DOTNET_ROOT=/app/lib/dotnet
-  - --env=DEVKITPRO=/opt/devkitpro
-  - --env=DEVKITARM=${DEVKITPRO}/devkitARM
-  - --env="PATH=${DEVKITPRO}/tools/bin:$PATH"
   - --talk-name=org.freedesktop.Flatpak
 
 modules:
@@ -30,17 +26,6 @@ modules:
     buildsystem: simple
     build-commands:
     - /usr/lib/sdk/dotnet8/bin/install.sh
-
-  - name: make
-    buildsystem: autotools
-    sources:
-      - type: archive
-        url: https://mirror.team-cymru.com/gnu/make/make-4.4.tar.gz
-        sha256: 581f4d4e872da74b3941c874215898a7d35802f03732bdccee1d4a7979105d18
-    build-commands:
-      - ./configure --prefix=${FLATPAK_DEST}/app/usr/local
-      - make
-      - make install
 
   - name: SDL
     buildsystem: simple
@@ -72,10 +57,7 @@ modules:
         path: ../../../src/SerialLoops/Assets/Icons/AppIcon.svg
       - type: file
         path: VERSION
-      - type: file
-        path: devkitarm.tar.gz
     build-commands:
-      - tar -xvf devkitarm.tar.gz -C ${FLATPAK_DEST}/
       - SLVersion=$(cat VERSION) SLAssemblyVersion=$(sed -n 's/apre/8888/p' VERSION) dotnet publish src/SerialLoops/SerialLoops.csproj -c Release -f net8.0 --no-self-contained --source ./nuget-sources
       - mkdir -p ${FLATPAK_DEST}/bin
       - cp -r src/SerialLoops/bin/Release/net8.0/publish/* ${FLATPAK_DEST}/bin

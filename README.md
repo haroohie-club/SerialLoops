@@ -48,53 +48,19 @@ Documentation for how to use Serial Loops can be found on [our website](https://
 ### Prerequisites
 It is recommended that you use a distribution of Serial Loops that automatically installs or comes with the necessary prerequisites. For each platform these are:
 
-* Linux: Flatpak
+* Linux: Flatpak (soon: from Flathub)
+  - The AppImage, deb, and rpm packages are also good, but if you're not sure which to choose, go with the Flatpak
 * macOS: Installer
 * Windows: Installer
 
-Using these will ensure Serial Loops is ready to use after installation. However, if you would rather use a portable build on Windows/Linux, please check the information on installing
-these prerequisites below.
+Using these will ensure Serial Loops is ready to use after installation. However, if you would rather use a portable build on Windows/Linux, please check the information on installing these prerequisites in the next section.
 
-<details>
-    <summary>View prerequisites for non-Flatpak/installer distributions</summary>
+#### Dependencies for Non-Packages Releases
+If you opt to use one of the non-packaged releases on Windows or Linux, you will need to install a few dependencies. These are:
 
-#### Installing devkitARM
-[devkitARM](https://devkitpro.org/wiki/Getting_Started) is required to use Serial Loops on all platforms.
-
-* Using the Windows graphical installer, you can simply select the devkitARM (Nintendo DS) workloads
-* On macOS and Linux, run `sudo dkp-pacman -S nds-dev` from the terminal after installing the devkitPro pacman distribution.
-
-#### Installing Make or Docker
-To assemble ASM hacks you want to apply, you will need to decide whether to use Make or Docker. Make is automatically installed when using the Debian and RPM
-packages we distribute, so you don't need to worry about this step if you're using either of those.
-
-Currently, the Docker path is **only supported on Windows** due to operating system and framework limitations. It is possible to get Docker running
-just fine on Linux distros by running SerialLoops as root (e.g. `sudo SerialLoops`), but it's easier to just use Make. On macOS, there is no known
-way of getting the Docker path to work, so you will have to use Make.
-
-* [Make](https://www.gnu.org/software/make/) is the software used to assemble assembly hacks. Installing Make allows you to build the hacks
-  directly on your system.
-    - To install on Windows, you will have to use a terminal and a package manager. Your options are Winget (installed by default on Win10+) or
-      [Chocolatey](https://chocolatey.org/). Open an admin PowerShell or Terminal window (Winkey + X + A) and enter `winget install GnuWin32.make`
-      for Winget or `choco install make` for Chocolatey. If using Winget, you will then have to go into system preferences and add Make to the path.
-    - Installation on macOS can be done through Xcode or Homebrew. If using Xcode, open a terminal and type `xcode-select --install`. If you would
-      rather use Homebrew, open a terminal after installing Homebrew and type `brew install make`.
-    - Make comes preinstalled on many Linux distributions, and if you're using the Debian or RPM package, it was definitely installed when you installed
-      Serial Loops. If you're using the tar.gz it is not installed on yours, you will likely be able to install it as simply as
-      `[packagemanger] install make` from a terminal.
-
-  To test if make is installed properly, type `make --verison` into a terminal and see if it produces the version of make.
-* If you would rather not install Make, or if it is not working properly, you can instead run it through a Docker container. To do this, you should
-  install [Docker Desktop](https://www.docker.com/products/docker-desktop/) or the Docker Engine. Ensure the Docker engine is running and make sure
-  to check the "Use Docker for ASM Hacks" option in Preferences. You may want to occasionally clean up containers created by Serial Loops, as it will
-  create many of them.
-    - On Windows, you will additionally need to install [Windows Subsystem for Linux (WSL)](https://learn.microsoft.com/en-us/windows/wsl/install).
-      From an admin PowerShell or Terminal window (Winkey + X + A), simply type `wsl --install` to install it.
-
-#### Installing SDL2 (Linux)
-If you're running on Linux and _not using one of the package releases_ (the Flatpak, AppImage, `.deb` or `.rpm`), you will also need to install SDL2 which is used for audio processing.
-
-</details>
+* Clang and LLD from [LLVM](http://llvm.org) (on Windows, it's best to just use the LLVM installer as it will install both of these; on Linux, you can opt to install just the `clang` and `lld` packages from your package manager)
+* [Ninja](https://ninja-build.org)
+* On Linux, you will also need SDL2
 
 #### A Nintendo DS Emulator
 To test the game easily, you will want to have a Nintendo DS emulator installed. We recommend using [melonDS](https://melonds.kuribo64.net/) for its accuracy.
@@ -108,17 +74,15 @@ Be sure to [read the Serial Loops documentation](https://haroohie.club/chokurets
 Uninstalling Serial Loops itself is quite simple; however, you may also want to uninstall the packaged dependencies. Follow the instructions below for each platform to do this.
 
 #### Linux
-* If you installed the Flatpak, simply run `flatpak uninstall --delete-data club.haroohie.SerialLoops` to remove the Flatpak and all its associated data. If you don't want to keep your project data,
-ensure you delete the `~/SerialLoops` directory as well.
-* If you installed the deb or rpm package, run your package manager's uninstall command for the `SerialLoops` package. Afterwards, you can uninstall devkitARM by running the uninstall command for the `devkitpro-pacman` package.
-Finally, run `sudo rm -r /opt/devkitpro && sudo rm -r /etc/apt/sources.list.d/devkitpro.list` to delete the remainder of the devkitARM files on your system.
-* If you downloaded the tarball, delete the unpacked files from your system and then run the above commands to remove devkitARM from your system as well. You may also run your package manager's uninstallation command for SDL2.
+* If you installed the Flatpak, simply run `flatpak uninstall --delete-data club.haroohie.SerialLoops` to remove the Flatpak and all its associated data. If you don't want to keep your project data, ensure you delete the `~/SerialLoops` directory as well.
+* If you installed the deb or rpm package, run your package manager's uninstall command for the `SerialLoops` package.
+* If you downloaded the tarball, delete the unpacked files from your system. You may also run your package manager's uninstallation command for Clang, LLD, Ninja, and SDL2.
 
 #### macOS
-Simply drag the Serial Loops application from the Applications folder to the trash. Afterwards, you can remove devkitARM from your system, you can open a terminal and run `sudo rm -rf /opt/devkitpro`.
+Simply drag the Serial Loops application from the Applications folder to the trash.
 
 #### Windows
-Go into Add or Remove Programs and remove Serial Loops, the devkitPro installer, and Docker Desktop. Then, open an administrator PowerShell or CMD terminal (Win+X,A) and run `wsl --uninstall` to uninstall WSL.
+Go into Add or Remove Programs and remove Serial Loops and (if you don't want it anymore) LLVM.
 
 ## Bugs
 Please file bugs in the Issues tab in this repository. Please include the following information:

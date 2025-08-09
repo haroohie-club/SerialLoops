@@ -90,13 +90,11 @@ public static class IO
                 new("overlays", [],
                 [
                     new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "linker.x")),
-                    new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Makefile_overlay"), "Makefile"),
                 ]),
             ],
             [
                 new(Path.Combine(project.BaseDirectory, "rom", "arm9.bin")),
                 new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "linker.x")),
-                new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Makefile_main"), "Makefile"),
             ]);
         IODirectory assetsDirectoryTree = new("assets",
         [
