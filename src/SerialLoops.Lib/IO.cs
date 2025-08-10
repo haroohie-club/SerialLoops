@@ -165,14 +165,9 @@ public static class IO
         string iterativeFile = Path.Combine(project.IterativeDirectory, relativePath);
         try
         {
-            if (!Directory.Exists(Path.GetDirectoryName(baseFile)))
-            {
-                Directory.CreateDirectory(Path.GetDirectoryName(baseFile));
-            }
-            if (!Directory.Exists(Path.GetDirectoryName(iterativeFile)))
-            {
-                Directory.CreateDirectory(Path.GetDirectoryName(iterativeFile));
-            }
+
+            CreateDirectory(baseFile);
+            CreateDirectory(iterativeFile);
 
             File.Copy(sourceFile, baseFile, true);
             File.Copy(sourceFile, iterativeFile, true);
@@ -270,6 +265,7 @@ public static class IO
     {
         try
         {
+            CreateDirectory(file);
             File.WriteAllText(file, str);
             return true;
         }
@@ -284,6 +280,7 @@ public static class IO
     {
         try
         {
+            CreateDirectory(file);
             File.WriteAllBytes(file, bytes);
             return true;
         }
@@ -291,6 +288,14 @@ public static class IO
         {
             log.LogException($"Exception occurred while writing file '{file}' to disk.", ex);
             return false;
+        }
+    }
+
+    private static void CreateDirectory(string file)
+    {
+        if (!string.IsNullOrEmpty(file) && !Directory.Exists(Path.GetDirectoryName(file)))
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(file)!);
         }
     }
 }
