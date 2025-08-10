@@ -35,7 +35,7 @@ AppDir:
 
   runtime:
     env:
-      SL_SYS_CONFIG_PATH: $XDG_CONFIG_HOME/SerialLoops/appimage-sysconfig.json
+      SL_SYS_CONFIG_PATH: $HOME/.config/SerialLoops/appimage-sysconfig.json
       SL_LLVM_PATH: $APPDIR/usr/lib/llvm-19
       SL_NINJA_PATH: $APPDIR/usr/bin/ninja
       SL_USE_UPDATER: true
