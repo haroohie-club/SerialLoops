@@ -22,7 +22,6 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('output', help='The output JSON sources file')
     parser.add_argument('project', help='The project file')
-    parser.add_argument('second_project', help='The second project file')
     parser.add_argument('--runtime', '-r', help='The target runtime to restore packages for')
     parser.add_argument('--freedesktop', '-f', help='The target version of the freedesktop sdk to use',
                         default=freedesktop_default)
@@ -41,7 +40,6 @@ def main():
             runtime_args.extend(('-r', args.runtime))
 
         subprocess.run(['dotnet', 'restore', '--packages', tmp, args.project] + runtime_args)
-        subprocess.run(['dotnet', 'restore', '--packages', tmp, args.second_project] + runtime_args)
 
         for path in Path(tmp).glob('**/*.nupkg.sha512'):
             name = path.parent.parent.name
