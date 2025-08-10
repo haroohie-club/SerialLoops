@@ -70,10 +70,10 @@ public class BackgroundMusicEditorTests
         _mainWindowViewModel.SetupMockedProperties(_project, _log);
 
         string testId = Guid.NewGuid().ToString();
-        Config config = new() { UserDirectory = Path.Combine(Path.GetTempPath(), testId) };
-        ConfigFactoryMock configFactory = new($"{testId}.json", config);
+        ConfigUser configUser = new() { UserDirectory = Path.Combine(Path.GetTempPath(), testId) };
+        ConfigFactoryMock configFactory = new($"{testId}.json", configUser);
         _mainWindowViewModel.CurrentConfig = configFactory.LoadConfig(s => s, _log);
-        _project.Config = _mainWindowViewModel.CurrentConfig;
+        _project.ConfigUser = _mainWindowViewModel.CurrentConfig;
         _project.Name = nameof(BackgroundMusicEditorTests);
 
         IO.CopyFileToDirectories(_project, Path.Combine(_uiVals.AssetsDirectory, "BGM027.bin"), Path.Combine("original", "bgm", "BGM027.bin"), _log);
@@ -248,9 +248,9 @@ public class BackgroundMusicEditorTests
         Assert.That(bgm, Is.Not.Null);
 
         string testId = Guid.NewGuid().ToString();
-        Config config = new() { UserDirectory = Path.Combine(Path.GetTempPath(), testId) };
+        ConfigUser configUser = new() { UserDirectory = Path.Combine(Path.GetTempPath(), testId) };
 
-        ConfigFactoryMock configFactory = new($"{testId}.json", config);
+        ConfigFactoryMock configFactory = new($"{testId}.json", configUser);
         Mock<MainWindowViewModel> windowMock = new();
         MainWindowViewModel mainWindowVm = windowMock.Object;
         mainWindowVm.Window = new() { DataContext = mainWindowVm, ConfigurationFactory = configFactory };
@@ -262,7 +262,7 @@ public class BackgroundMusicEditorTests
         Project project = projectMock.Object;
         project.SetupMockedProperties(_uiVals);
         project.Extra = _extra;
-        project.Config = mainWindowVm.CurrentConfig;
+        project.ConfigUser = mainWindowVm.CurrentConfig;
         mainWindowVm.OpenProject = project;
         Directory.CreateDirectory(Path.Combine(mainWindowVm.CurrentConfig.ProjectsDirectory, project.Name));
         project.Save(_log);

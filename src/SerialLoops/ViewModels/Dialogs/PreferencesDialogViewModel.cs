@@ -21,7 +21,7 @@ public class PreferencesDialogViewModel : ViewModelBase
     public ICommand CancelCommand { get; private set; }
 
     private IConfigFactory _configFactory;
-    public Config Configuration { get; set; }
+    public ConfigUser Configuration { get; set; }
     public ILogger Log { get; set; }
     [Reactive]
     public bool RequireRestart { get; set; }
@@ -47,14 +47,14 @@ public class PreferencesDialogViewModel : ViewModelBase
             new FolderOption(_preferencesDialog)
             {
                 OptionName = Strings.ConfigOptionLlvmPath,
-                Path = Configuration.LlvmPath,
-                OnChange = path => Configuration.LlvmPath = path,
+                Path = Configuration.SysConfig.LlvmPath,
+                OnChange = path => Configuration.SysConfig.LlvmPath = path,
             },
             new FileOption(_preferencesDialog)
             {
                 OptionName = Strings.ConfigOptionNinjaPath,
-                Path = Configuration.NinjaPath,
-                OnChange = value => Configuration.NinjaPath = value,
+                Path = Configuration.SysConfig.NinjaPath,
+                OnChange = value => Configuration.SysConfig.NinjaPath = value,
             },
             new FileOption(_preferencesDialog)
             {
@@ -131,14 +131,14 @@ public class PreferencesDialogViewModel : ViewModelBase
                 OptionName = Strings.Check_for_Updates_on_Startup,
                 Value = Configuration.CheckForUpdates,
                 OnChange = value => Configuration.CheckForUpdates = value,
-                Enabled = PatchableConstants.UseUpdater,
+                Enabled = Configuration.SysConfig.UseUpdater,
             },
             new BooleanOption
             {
                 OptionName = Strings.Use_Pre_Release_Update_Channel,
                 Value = Configuration.PreReleaseChannel,
                 OnChange = value => Configuration.PreReleaseChannel = value,
-                Enabled = PatchableConstants.UseUpdater,
+                Enabled = Configuration.SysConfig.UseUpdater,
             },
         ]);
 

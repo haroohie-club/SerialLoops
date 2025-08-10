@@ -33,7 +33,7 @@ public class AsmHacksDialogViewModel : ViewModelBase
 
     private ILogger _log;
     private Project _project;
-    public Config Configuration { get; set; }
+    public ConfigUser Configuration { get; set; }
     private Dictionary<HackFile, SelectedHackParameter[]> _hackParameters = [];
     [Reactive]
     public AsmHack SelectedHack { get; set; }
@@ -42,11 +42,11 @@ public class AsmHacksDialogViewModel : ViewModelBase
     public ICommand SaveCommand { get; set; }
     public ICommand CancelCommand { get; set; }
 
-    public AsmHacksDialogViewModel(Project project, Config config, ILogger log)
+    public AsmHacksDialogViewModel(Project project, ConfigUser configUser, ILogger log)
     {
         _log = log;
         _project = project;
-        Configuration = config;
+        Configuration = configUser;
         HackChangedCommand = ReactiveCommand.Create<StackPanel>(HackChangedCommand_Executed);
         ImportHackCommand = ReactiveCommand.CreateFromTask<AsmHacksDialog>(ImportHackCommand_Executed);
         SaveCommand = ReactiveCommand.CreateFromTask<AsmHacksDialog>(SaveCommand_Executed);
@@ -202,7 +202,7 @@ public class AsmHacksDialogViewModel : ViewModelBase
                 {
                     overlays = NinjaLlvmPatch.PatchAndReturnOverlays(Path.Combine(_project.BaseDirectory, "src"), arm9,
                         Path.Combine(_project.BaseDirectory, "original", "overlay"),
-                        Configuration.NinjaPath, Configuration.LlvmPath, romInfoPath, 0x2005ECC,
+                        Configuration.SysConfig.NinjaPath, Configuration.SysConfig.LlvmPath, romInfoPath, 0x2005ECC,
                         outputDataReceived: (_, e) =>
                         {
                             _log.Log(e.Data);

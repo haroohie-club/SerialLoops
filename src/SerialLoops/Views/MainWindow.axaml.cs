@@ -96,7 +96,7 @@ public partial class MainWindow : Window
                 Icon = ControlGenerator.GetIcon("Options", ViewModel.Log),
                 Command = ViewModel.PreferencesCommand,
             });
-            if (PatchableConstants.UseUpdater)
+            if (Environment.GetEnvironmentVariable(EnvironmentVariables.UseUpdater)?.Equals(bool.TrueString, StringComparison.OrdinalIgnoreCase) ?? false)
             {
                 fileMenu.Menu.Items.Add(new NativeMenuItem
                 {

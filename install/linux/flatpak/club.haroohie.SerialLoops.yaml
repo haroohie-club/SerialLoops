@@ -1,9 +1,10 @@
 id: club.haroohie.SerialLoops
 runtime: org.freedesktop.Platform
-runtime-version: '23.08'
+runtime-version: '24.08'
 sdk: org.freedesktop.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.dotnet8
+  - org.freedesktop.Sdk.Extension.llvm20
 build-options:
   prepend-path: "/usr/lib/sdk/dotnet8/bin"
   append-ld-library-path: "/usr/lib/sdk/dotnet8/lib"
@@ -19,6 +20,14 @@ finish-args:
   - --filesystem=~/SerialLoops:create
   - --filesystem=xdg-config:create
   - --env=DOTNET_ROOT=/app/lib/dotnet
+  - --env=SL_SYS_CONFIG_PATH=/app/config/sysconfig.json
+  - --env=SL_LLVM_PATH=/app/usr/lib/llvm
+  - --env=SL_NINJA_PATH=/app/usr/bin/ninja
+  - --env=SL_FLATPAK_PROC=flatpak-spawn
+  - --env=SL_FLATPAK_PROC_ARG=--host flatpak
+  - --env=SL_FLATPAK_RUN_PROC=flatpak-spawn
+  - --env=SL_FLATPAK_RUN_PROC_ARG=--host
+  - --env=SL_USE_UPDATER=false
   - --talk-name=org.freedesktop.Flatpak
 
 modules:
@@ -40,6 +49,24 @@ modules:
       - cmake --install build --config Release --prefix ${FLATPAK_DEST}
       - ln -s /app/lib/libSDL2.so ${FLATPAK_DEST}/bin/libSDL2.so
 
+  - name: Ninja
+    buildsystem: simple
+    sources:
+      - type: archive
+        url: https://github.com/ninja-build/ninja/releases/download/v1.13.1/ninja-linux.zip
+        sha256: 0830252db77884957a1a4b87b05a1e2d9b5f658b8367f82999a941884cbe0238
+        dest-filename: ninja.zip
+        only-arches:
+          - x86_64
+      - type: archive
+        url: https://github.com/ninja-build/ninja/releases/download/v1.13.1/ninja-linux-aarch64.zip
+        sha256: 740f1b9f9d8ae68438240a6a2f3f7a27fc8b1946d2024a6a6b25857ee877987b
+        dest-filename: ninja.zip
+        only-arches:
+          - aarch64
+    build-commands:
+      - unzip ninja.zip -d ${FLATPAK_DEST}/usr/bin/
+
   - name: SerialLoops
     buildsystem: simple
     sources:
@@ -47,8 +74,6 @@ modules:
         url: https://github.com/haroohie-club/SerialLoops.git
         branch: main
       - ./nuget-sources.json
-      - type: patch
-        path: patches/sandbox.patch
       - type: file
         path: club.haroohie.SerialLoops.metainfo.xml
       - type: file

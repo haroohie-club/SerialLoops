@@ -49,7 +49,7 @@ public class ItemLinkTests
         _mainWindowViewModel = windowMock.Object;
         _mainWindowViewModel.SetupMockedProperties(_project, _log);
         _mainWindowViewModel.CurrentConfig = new ConfigFactoryMock("config.json").LoadConfig(s => s, _log);
-        _project.Config = _mainWindowViewModel.CurrentConfig;
+        _project.ConfigUser = _mainWindowViewModel.CurrentConfig;
         _project.Name = nameof(ItemLinkTests);
     }
 

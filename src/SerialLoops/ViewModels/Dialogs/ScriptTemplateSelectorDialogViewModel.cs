@@ -20,7 +20,7 @@ public class ScriptTemplateSelectorDialogViewModel : ViewModelBase
 
     public ScriptTemplateSelectorDialogViewModel(Project project)
     {
-        ScriptTemplates = project.Config.ScriptTemplates;
+        ScriptTemplates = project.ConfigUser.ScriptTemplates;
         ConfirmCommand = ReactiveCommand.Create<ScriptTemplateSelectorDialog>((dialog) => dialog.Close(SelectedScriptTemplate));
         CancelCommand = ReactiveCommand.Create<ScriptTemplateSelectorDialog>((dialog) => dialog.Close());
     }

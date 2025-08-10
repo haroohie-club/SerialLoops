@@ -28,8 +28,8 @@ public static class MockPreparationExtensions
     public static void SetupMockedProperties(this MainWindowViewModel mockedWindowVm, Project project, ILogger log)
     {
         string testId = Guid.NewGuid().ToString();
-        Config config = new() { UserDirectory = Path.Combine(Path.GetTempPath(), testId) };
-        ConfigFactoryMock configFactory = new($"{testId}.json", config);
+        ConfigUser configUser = new() { UserDirectory = Path.Combine(Path.GetTempPath(), testId) };
+        ConfigFactoryMock configFactory = new($"{testId}.json", configUser);
 
         MainWindow window = new() { ConfigurationFactory = configFactory };
         mockedWindowVm.Window = window;

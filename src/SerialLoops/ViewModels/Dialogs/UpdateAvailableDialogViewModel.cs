@@ -21,7 +21,7 @@ public class UpdateAvailableDialogViewModel : ViewModelBase
     public string Header { get; set; }
     public ICommand OpenReleaseLinkCommand { get; set; }
     public ICommand CloseCommand { get; set; }
-    private Config _config { get; }
+    private ConfigUser ConfigUser { get; }
     private ILogger _log;
 
     [Reactive]
@@ -38,16 +38,16 @@ public class UpdateAvailableDialogViewModel : ViewModelBase
 
         Title = string.Format(Strings.New_Update_Available___0_, Version);
         Header = string.Format(Strings.Serial_Loops_v_0_, Version);
-        _config = mainWindowViewModel.CurrentConfig;
-        CheckForUpdates = _config.CheckForUpdates;
-        UsePreReleaseChannel = _config.PreReleaseChannel;
+        ConfigUser = mainWindowViewModel.CurrentConfig;
+        CheckForUpdates = ConfigUser.CheckForUpdates;
+        UsePreReleaseChannel = ConfigUser.PreReleaseChannel;
 
         OpenReleaseLinkCommand = ReactiveCommand.Create(OpenReleaseLink);
         CloseCommand = ReactiveCommand.Create<UpdateAvailableDialog>((dialog) =>
         {
-            _config.CheckForUpdates = CheckForUpdates;
-            _config.PreReleaseChannel = UsePreReleaseChannel;
-            _config.Save(_log);
+            ConfigUser.CheckForUpdates = CheckForUpdates;
+            ConfigUser.PreReleaseChannel = UsePreReleaseChannel;
+            ConfigUser.Save(_log);
             dialog.Close();
         });
     }

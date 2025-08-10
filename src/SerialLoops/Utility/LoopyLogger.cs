@@ -14,7 +14,7 @@ namespace SerialLoops.Utility;
 public class LoopyLogger : ILogger
 {
     private readonly Window _owner;
-    private Config _config;
+    private ConfigUser _configUser;
     private string _logFile;
 
     /// <summary>
@@ -29,14 +29,14 @@ public class LoopyLogger : ILogger
         _owner = window;
     }
 
-    public void Initialize(Config config)
+    public void Initialize(ConfigUser configUser)
     {
-        _config = config;
-        if (!Directory.Exists(_config.LogsDirectory))
+        _configUser = configUser;
+        if (!Directory.Exists(_configUser.LogsDirectory))
         {
-            Directory.CreateDirectory(_config.LogsDirectory);
+            Directory.CreateDirectory(_configUser.LogsDirectory);
         }
-        _logFile = Path.Combine(_config.LogsDirectory, $"SerialLoops.log");
+        _logFile = Path.Combine(_configUser.LogsDirectory, $"SerialLoops.log");
     }
 
     private static string Stamp => $"\n({Environment.ProcessId}) {DateTimeOffset.Now} - ";

@@ -44,7 +44,7 @@ public class BackgroundMusicEditorViewModel : EditorViewModel
     {
         Bgm = bgm;
 
-        _bgmCachedFile = Path.Combine(project.Config.CachesDirectory, "bgm", $"{Bgm.Name}.wav");
+        _bgmCachedFile = Path.Combine(project.ConfigUser.CachesDirectory, "bgm", $"{Bgm.Name}.wav");
 
         _titleBoxTextChangedCommand = ReactiveCommand.Create<string>(TitleBox_TextChanged);
         BgmPlayer = new(Bgm, _log, Bgm.BgmName, Bgm.Name, (short?)(Bgm.Flag - 1), !string.IsNullOrEmpty(Bgm.BgmName) ? _titleBoxTextChangedCommand : null, initializePlayer);
@@ -105,7 +105,7 @@ public class BackgroundMusicEditorViewModel : EditorViewModel
     private void Restore_Executed()
     {
         BgmPlayer.Stop();
-        if (Directory.Exists(_project.Config.CachesDirectory))
+        if (Directory.Exists(_project.ConfigUser.CachesDirectory))
         {
             File.Delete(_bgmCachedFile); // Clear the cached WAV as we're restoring the original ADX
         }

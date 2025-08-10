@@ -37,9 +37,9 @@ public class HomePanelTests
     private (MainWindowViewModel, Dictionary<string, Project>) Setup()
     {
         string testId = Guid.NewGuid().ToString();
-        Config config = new() { UserDirectory = Path.Combine(Path.GetTempPath(), testId) };
+        ConfigUser configUser = new() { UserDirectory = Path.Combine(Path.GetTempPath(), testId) };
 
-        ConfigFactoryMock configFactory = new($"{testId}.json", config);
+        ConfigFactoryMock configFactory = new($"{testId}.json", configUser);
         Mock<MainWindowViewModel> windowMock = new();
         MainWindowViewModel mainWindowVm = windowMock.Object;
 
@@ -60,7 +60,7 @@ public class HomePanelTests
             projectMock.SetupCommonMocks();
             Project project = projectMock.Object;
             project.SetupMockedProperties(_uiVals);
-            project.Config = mainWindowVm.CurrentConfig;
+            project.ConfigUser = mainWindowVm.CurrentConfig;
             project.Name = projectName;
             project.Items = [];
             project.Save(_log);

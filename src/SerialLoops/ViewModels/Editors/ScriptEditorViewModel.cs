@@ -932,9 +932,9 @@ public class ScriptEditorViewModel : EditorViewModel
             return;
         }
 
-        Lib.IO.WriteStringFile(Path.Combine(_project.Config.ScriptTemplatesDirectory, $"{template.Name.Replace("/", "-")}.slscr"),
+        Lib.IO.WriteStringFile(Path.Combine(_project.ConfigUser.ScriptTemplatesDirectory, $"{template.Name.Replace("/", "-")}.slscr"),
             JsonSerializer.Serialize(template), _log);
-        _project.Config.ScriptTemplates.Add(template);
+        _project.ConfigUser.ScriptTemplates.Add(template);
     }
 
     private void AddStartingChibis()
@@ -985,7 +985,7 @@ public class ScriptEditorViewModel : EditorViewModel
     private async Task AddInteractableObject()
     {
         AddInteractableObjectDialogViewModel addInteractableObjectDialogViewModel = new(UnusedInteractableObjects,
-            _project.Config.Hacks.FirstOrDefault(h => h.Name.Equals("Sensible Interactable Object Selection"))?.IsApplied ?? false);
+            _project.ConfigUser.Hacks.FirstOrDefault(h => h.Name.Equals("Sensible Interactable Object Selection"))?.IsApplied ?? false);
         ReactiveInteractableObject obj =
             await new AddInteractableObjectDialog { DataContext = addInteractableObjectDialogViewModel }
                 .ShowDialog<ReactiveInteractableObject>(Window.Window);

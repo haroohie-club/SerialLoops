@@ -19,51 +19,79 @@ public class ConfigFactory : IConfigFactory
     private const int LlvmMinVersion = 17;
     private const int LlvmMaxVersion = 21;
 
-    public Config LoadConfig(Func<string, string> localize, ILogger log)
+    public ConfigUser LoadConfig(Func<string, string> localize, ILogger log)
     {
         string configJson = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SerialLoops", "config.json");
+        string sysConfigJson = Environment.GetEnvironmentVariable(EnvironmentVariables.SysConfigPath) ?? Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SerialLoops", "sysconfig.json");
+
+        ConfigSystem sysConfig;
+        if (!File.Exists(sysConfigJson))
+        {
+            sysConfig = GetDefaultSystem(log);
+            if (!Directory.Exists(Path.GetDirectoryName(sysConfigJson)))
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(configJson)!);
+            }
+
+            IO.WriteStringFile(sysConfigJson, JsonSerializer.Serialize(sysConfig), log);
+        }
+        else
+        {
+            try
+            {
+                sysConfig = JsonSerializer.Deserialize<ConfigSystem>(File.ReadAllText(configJson));
+            }
+            catch (JsonException exc)
+            {
+                log.LogException(localize("Exception occurred while parsing sysconfig.json!"), exc);
+                sysConfig = GetDefaultSystem(log);
+                IO.WriteStringFile(sysConfigJson, JsonSerializer.Serialize(sysConfig), log);
+            }
+        }
 
         if (!File.Exists(configJson))
         {
-            Config defaultConfig = GetDefault(log);
-            defaultConfig.ValidateConfig(localize, log);
-            defaultConfig.ConfigPath = configJson;
-            defaultConfig.InitializeHacks(log);
-            defaultConfig.InitializeScriptTemplates(localize, log);
+            ConfigUser defaultConfigUser = GetDefault(sysConfig, log);
+            defaultConfigUser.ValidateConfig(localize, log);
+            defaultConfigUser.ConfigPath = configJson;
+            defaultConfigUser.InitializeHacks(log);
+            defaultConfigUser.InitializeScriptTemplates(localize, log);
             if (!Directory.Exists(Path.GetDirectoryName(configJson)))
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(configJson)!);
             }
-            IO.WriteStringFile(configJson, JsonSerializer.Serialize(defaultConfig), log);
-            return defaultConfig;
+            IO.WriteStringFile(configJson, JsonSerializer.Serialize(defaultConfigUser), log);
+            return defaultConfigUser;
         }
 
         try
         {
-            Config config = JsonSerializer.Deserialize<Config>(File.ReadAllText(configJson));
-            config.ValidateConfig(localize, log);
-            config.ConfigPath = configJson;
-            config.InitializeHacks(log);
-            config.InitializeScriptTemplates(localize, log);
-            return config;
+            ConfigUser configUser = JsonSerializer.Deserialize<ConfigUser>(File.ReadAllText(configJson));
+            configUser.SysConfig = sysConfig;
+            configUser.ValidateConfig(localize, log);
+            configUser.ConfigPath = configJson;
+            configUser.InitializeHacks(log);
+            configUser.InitializeScriptTemplates(localize, log);
+            return configUser;
         }
         catch (JsonException exc)
         {
             log.LogException(localize("Exception occurred while parsing config.json!"), exc);
-            Config defaultConfig = GetDefault(log);
-            defaultConfig.ValidateConfig(localize, log);
-            IO.WriteStringFile(configJson, JsonSerializer.Serialize(defaultConfig), log);
-            return defaultConfig;
+            ConfigUser defaultConfigUser = GetDefault(sysConfig, log);
+            defaultConfigUser.ValidateConfig(localize, log);
+            IO.WriteStringFile(configJson, JsonSerializer.Serialize(defaultConfigUser), log);
+            return defaultConfigUser;
         }
     }
 
-    public static Config GetDefault(ILogger log)
+    public static ConfigSystem GetDefaultSystem(ILogger log)
     {
         string llvmDir = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
             ? Path.Combine("C:", "Program Files", "LLVM")
             : RuntimeInformation.IsOSPlatform(OSPlatform.OSX)
                 ? Path.Combine("/opt", "homebrew", "opt", "llvm")
-                : PatchableConstants.LinuxDefaultLlvmDir;
+                : Environment.GetEnvironmentVariable(EnvironmentVariables.LlvmPath) ?? "/usr/lib/llvm";
         if (!Directory.Exists(llvmDir))
         {
             llvmDir = string.Empty;
@@ -72,13 +100,18 @@ public class ConfigFactory : IConfigFactory
                 // Go this direction so that if (for some reason) multiple LLVM installations exist, we use the latest one
                 for (int i = LlvmMaxVersion; i >= LlvmMinVersion; i--)
                 {
-                    if (!Directory.Exists($"{PatchableConstants.LinuxDefaultLlvmDir}-{i}"))
+                    if (!Directory.Exists($"/usr/lib/llvm-{i}"))
                     {
                         continue;
                     }
 
-                    llvmDir = $"{PatchableConstants.LinuxDefaultLlvmDir}-{i}";
+                    llvmDir = $"/usr/liv/llvm-{i}";
                     break;
+                }
+
+                if (string.IsNullOrEmpty(llvmDir) && File.Exists("/usr/bin/clang"))
+                {
+                    llvmDir = "/usr/bin";
                 }
             }
         }
@@ -87,12 +120,34 @@ public class ConfigFactory : IConfigFactory
             ? Path.Combine(AppContext.BaseDirectory, "ninja.exe")
             : RuntimeInformation.IsOSPlatform(OSPlatform.OSX)
                 ? Path.Combine("/opt/homebrew/bin/ninja")
-                : Path.Combine("/usr/bin/ninja");
+                : Environment.GetEnvironmentVariable(EnvironmentVariables.NinjaPath) ?? Path.Combine("/usr/bin/ninja");
         if (!File.Exists(ninjaPath))
         {
             ninjaPath = string.Empty;
         }
+        string flatpakProcess = Environment.GetEnvironmentVariable(EnvironmentVariables.FlatpakProcess) ?? "flatpak";
+        string[] flatpakProcessBaseArgs = Environment.GetEnvironmentVariable(EnvironmentVariables.FlatpakProcArg)?.Split(' ') ?? [];
 
+        string flatpakRunProcess = Environment.GetEnvironmentVariable(EnvironmentVariables.FlatpakRunProcess) ?? string.Empty;
+        string[] flatpakRunProcessBaseArgs = Environment.GetEnvironmentVariable(EnvironmentVariables.FlatpakRunProcArg)?.Split(' ') ?? [];
+
+        bool useUpdater = Environment.GetEnvironmentVariable(EnvironmentVariables.UseUpdater)
+            ?.Equals(bool.TrueString, StringComparison.OrdinalIgnoreCase) ?? false;
+
+        return new()
+        {
+            LlvmPath = llvmDir,
+            NinjaPath = ninjaPath,
+            FlatpakProcess = flatpakProcess,
+            FlatpakProcessBaseArgs = flatpakProcessBaseArgs,
+            FlatpakRunProcess = flatpakRunProcess,
+            FlatpakRunProcessBaseArgs = flatpakRunProcessBaseArgs,
+            UseUpdater = useUpdater,
+        };
+    }
+
+    public static ConfigUser GetDefault(ConfigSystem sysConfig, ILogger log)
+    {
         bool emulatorExists = false;
         string emulatorPath = string.Empty;
         string emulatorFlatpak = string.Empty;
@@ -108,7 +163,7 @@ public class ConfigFactory : IConfigFactory
             {
                 Process flatpakProc = new()
                 {
-                    StartInfo = new(PatchableConstants.FlatpakProcess, [..PatchableConstants.FlatpakProcessBaseArgs, "info", emulatorFlatpak])
+                    StartInfo = new(sysConfig.FlatpakProcess, [..sysConfig.FlatpakProcessBaseArgs, "info", emulatorFlatpak])
                     {
                         RedirectStandardError = true, RedirectStandardOutput = true,
                     },
@@ -130,7 +185,7 @@ public class ConfigFactory : IConfigFactory
                 emulatorExists = false;
             }
         }
-        if (!emulatorExists) // on Mac, .app is a dir, so we check both of these
+        if (!emulatorExists)
         {
             emulatorPath = string.Empty;
             emulatorFlatpak = string.Empty;
@@ -139,10 +194,9 @@ public class ConfigFactory : IConfigFactory
 
         return new()
         {
+            SysConfig = sysConfig,
             UserDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "SerialLoops"),
             CurrentCultureName = CultureInfo.CurrentCulture.Name,
-            LlvmPath = llvmDir,
-            NinjaPath = ninjaPath,
             EmulatorPath = emulatorPath,
             EmulatorFlatpak = emulatorFlatpak,
             AutoReopenLastProject = false,

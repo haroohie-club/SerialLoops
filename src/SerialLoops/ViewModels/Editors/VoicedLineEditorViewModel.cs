@@ -209,7 +209,7 @@ public class VoicedLineEditorViewModel : EditorViewModel
         {
             ProgressDialogViewModel tracker = new(Strings.Replace_voiced_line);
             VcePlayer.Stop();
-            tracker.InitializeTasks(() => _vce.Replace(openFile.Path.LocalPath, _project, Path.Combine(_project.Config.CachesDirectory, "vce", $"{_vce.Name}.wav"), _log,
+            tracker.InitializeTasks(() => _vce.Replace(openFile.Path.LocalPath, _project, Path.Combine(_project.ConfigUser.CachesDirectory, "vce", $"{_vce.Name}.wav"), _log,
                     _voiceMapEntry),
                 () => { });
             await new ProgressDialog { DataContext = tracker }.ShowDialog(Window.Window);

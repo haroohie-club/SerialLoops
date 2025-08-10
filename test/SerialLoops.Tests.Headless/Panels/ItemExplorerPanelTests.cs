@@ -26,7 +26,7 @@ public class ItemExplorerPanelTests
     private UiVals _uiVals;
     private TestConsoleLogger _log;
     private Project _project;
-    private Config _config;
+    private ConfigUser _configUser;
 
     private BgTableFile _bgTableFile;
     private ExtraFile _extra;
@@ -56,11 +56,11 @@ public class ItemExplorerPanelTests
     {
         Mock<Project> projectMock = new();
         projectMock.SetupCommonMocks();
-        Config config = new() { UserDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString()), };
-        ConfigFactoryMock factory = new("config.json", config);
-        _config = factory.LoadConfig(l => l, _log);
+        ConfigUser configUser = new() { UserDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString()), };
+        ConfigFactoryMock factory = new("config.json", configUser);
+        _configUser = factory.LoadConfig(l => l, _log);
         _project = projectMock.Object;
-        _project.Config = _config;
+        _project.ConfigUser = _configUser;
         _project.Name = "Test";
         Directory.CreateDirectory(Path.Combine(_project.MainDirectory));
         _project.SetupMockedProperties(_uiVals);

@@ -20,9 +20,9 @@ namespace SerialLoops.Lib;
 
 public static class Build
 {
-    public static bool BuildIterative(Project project, Config config, ILogger log, IProgressTracker tracker)
+    public static bool BuildIterative(Project project, ConfigUser configUser, ILogger log, IProgressTracker tracker)
     {
-        bool result = DoBuild(project.IterativeDirectory, project, config, log, tracker);
+        bool result = DoBuild(project.IterativeDirectory, project, configUser, log, tracker);
         CopyToArchivesToIterativeOriginal(Path.Combine(project.IterativeDirectory, "rom", "data"),
             Path.Combine(project.IterativeDirectory, "original", "archives"), log, tracker);
         ReplicateProjectSettingsAndBanner(Path.Combine(project.IterativeDirectory, "rom"),
@@ -34,9 +34,9 @@ public static class Build
         return result;
     }
 
-    public static bool BuildBase(Project project, Config config, ILogger log, IProgressTracker tracker)
+    public static bool BuildBase(Project project, ConfigUser configUser, ILogger log, IProgressTracker tracker)
     {
-        bool result = DoBuild(project.BaseDirectory, project, config, log, tracker);
+        bool result = DoBuild(project.BaseDirectory, project, configUser, log, tracker);
         CopyToArchivesToIterativeOriginal(Path.Combine(project.BaseDirectory, "rom", "data"),
             Path.Combine(project.IterativeDirectory, "original", "archives"), log, tracker);
         ReplicateProjectSettingsAndBanner(Path.Combine(project.BaseDirectory, "rom"),
@@ -70,7 +70,7 @@ public static class Build
         }
     }
 
-    private static bool DoBuild(string directory, Project project, Config config, ILogger log, IProgressTracker tracker)
+    private static bool DoBuild(string directory, Project project, ConfigUser configUser, ILogger log, IProgressTracker tracker)
     {
         // Export includes
         StringBuilder commandsIncSb = new();
@@ -136,18 +136,18 @@ public static class Build
                     }
                     else if (Path.GetExtension(file).Equals(".s", StringComparison.OrdinalIgnoreCase))
                     {
-                        if (string.IsNullOrEmpty(config.LlvmPath))
+                        if (string.IsNullOrEmpty(configUser.SysConfig.LlvmPath))
                         {
                             log.LogError("LLVM must be supplied in order to build!");
                             return false;
                         }
                         if (file.Contains("events"))
                         {
-                            ReplaceSingleSourceFile(evt, file, index, config.LlvmPath, directory, project.Localize, log);
+                            ReplaceSingleSourceFile(evt, file, index, configUser.SysConfig.LlvmPath, directory, project.Localize, log);
                         }
                         else if (file.Contains("data"))
                         {
-                            ReplaceSingleSourceFile(dat, file, index, config.LlvmPath, directory, project.Localize, log);
+                            ReplaceSingleSourceFile(dat, file, index, configUser.SysConfig.LlvmPath, directory, project.Localize, log);
                         }
                         else
                         {

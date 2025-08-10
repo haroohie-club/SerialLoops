@@ -41,7 +41,7 @@ public partial class Project
 
     // SL settings
     [JsonIgnore]
-    public string MainDirectory => Path.Combine(Config.ProjectsDirectory, Name);
+    public string MainDirectory => Path.Combine(ConfigUser.ProjectsDirectory, Name);
     [JsonIgnore]
     public string BaseDirectory => Path.Combine(MainDirectory, "base");
     [JsonIgnore]
@@ -49,7 +49,7 @@ public partial class Project
     [JsonIgnore]
     public string ProjectFile => Path.Combine(MainDirectory, $"{Name}.{PROJECT_FORMAT}");
     [JsonIgnore]
-    public Config Config { get; set; }
+    public ConfigUser ConfigUser { get; set; }
     [JsonIgnore]
     public ProjectSettings Settings { get; set; }
     [JsonIgnore]
@@ -130,11 +130,11 @@ public partial class Project
     {
     }
 
-    public Project(string name, string langCode, Config config, Func<string, string> localize, ILogger log)
+    public Project(string name, string langCode, ConfigUser configUser, Func<string, string> localize, ILogger log)
     {
         Name = name;
         LangCode = langCode;
-        Config = config;
+        ConfigUser = configUser;
         Localize = localize;
         log.Log("Creating project directories...");
         try
@@ -186,11 +186,11 @@ public partial class Project
         return JsonSerializer.Deserialize<Project>(File.ReadAllText(path), SERIALIZER_OPTIONS);
     }
 
-    public LoadProjectResult Load(Config config, ILogger log, IProgressTracker tracker)
+    public LoadProjectResult Load(ConfigUser configUser, ILogger log, IProgressTracker tracker)
     {
-        Config = config;
+        ConfigUser = configUser;
         LoadProjectSettings(log, tracker);
-        ClearOrCreateCaches(config.CachesDirectory, log);
+        ClearOrCreateCaches(configUser.CachesDirectory, log);
         if (Directory.GetFiles(Path.Combine(IterativeDirectory, "assets"), "*", SearchOption.AllDirectories).Length > 0)
         {
             return new(LoadProjectState.LOOSELEAF_FILES);
@@ -1073,7 +1073,7 @@ public partial class Project
         Items.Where(i => i.Type == ItemType.Script).Cast<ScriptItem>().ToList().ForEach(s => s.UpdateEventTableInfo(EventTableFile.EvtTbl));
     }
 
-    public void MigrateProject(string newRom, Config config, ILogger log, IProgressTracker tracker)
+    public void MigrateProject(string newRom, ConfigUser configUser, ILogger log, IProgressTracker tracker)
     {
         log.Log($"Attempting to migrate base ROM to {newRom}");
 
@@ -1089,7 +1089,7 @@ public partial class Project
         File.Copy(Path.Combine(tempDir, "arm9.bin"), Path.Combine(IterativeDirectory, "rom", "arm9.bin"), overwrite: true);
         File.Copy(Path.Combine(tempDir, "arm9.bin"), Path.Combine(IterativeDirectory, "src", "arm9.bin"), overwrite: true);
 
-        Build.BuildBase(this, config, log, tracker);
+        Build.BuildBase(this, configUser, log, tracker);
 
         Directory.Delete(tempDir, true);
     }
@@ -1123,7 +1123,7 @@ public partial class Project
         return Items.FirstOrDefault(i => i.DisplayName == name);
     }
 
-    public static (Project Project, LoadProjectResult Result) OpenProject(string projFile, Config config, Func<string, string> localize, ILogger log, IProgressTracker tracker)
+    public static (Project Project, LoadProjectResult Result) OpenProject(string projFile, ConfigUser configUser, Func<string, string> localize, ILogger log, IProgressTracker tracker)
     {
         log.Log($"Loading project from '{projFile}'...");
         if (!File.Exists(projFile))
@@ -1139,14 +1139,14 @@ public partial class Project
             tracker.Finished++;
 
             // If we detect an old NP format, auto-migrate it
-            if (!File.Exists(Path.Combine(config.ProjectsDirectory, project.Name, "base", "rom", $"{project.Name}.json")))
+            if (!File.Exists(Path.Combine(configUser.ProjectsDirectory, project.Name, "base", "rom", $"{project.Name}.json")))
             {
-                NdsProjectFile.ConvertProjectFile(Path.Combine(config.ProjectsDirectory, project.Name, "base", "rom", $"{project.Name}.xml"));
-                NdsProjectFile.ConvertProjectFile(Path.Combine(config.ProjectsDirectory, project.Name, "iterative", "rom", $"{project.Name}.xml"));
-                NdsProjectFile.ConvertProjectFile(Path.Combine(config.ProjectsDirectory, project.Name, "base", "original", $"{project.Name}.xml"));
+                NdsProjectFile.ConvertProjectFile(Path.Combine(configUser.ProjectsDirectory, project.Name, "base", "rom", $"{project.Name}.xml"));
+                NdsProjectFile.ConvertProjectFile(Path.Combine(configUser.ProjectsDirectory, project.Name, "iterative", "rom", $"{project.Name}.xml"));
+                NdsProjectFile.ConvertProjectFile(Path.Combine(configUser.ProjectsDirectory, project.Name, "base", "original", $"{project.Name}.xml"));
             }
 
-            LoadProjectResult result = project.Load(config, log, tracker);
+            LoadProjectResult result = project.Load(configUser, log, tracker);
             if (result.State == LoadProjectState.LOOSELEAF_FILES)
             {
                 log.LogWarning("Found looseleaf files in iterative directory; prompting user for build before loading archives...");
@@ -1231,7 +1231,7 @@ public partial class Project
         }
     }
 
-    public static (Project Project, LoadProjectResult LoadResult) Import(string slzipFile, string romPath, Config config, Func<string, string> localize, ILogger log, IProgressTracker tracker)
+    public static (Project Project, LoadProjectResult LoadResult) Import(string slzipFile, string romPath, ConfigUser configUser, Func<string, string> localize, ILogger log, IProgressTracker tracker)
     {
         try
         {
@@ -1240,7 +1240,7 @@ public partial class Project
             string slprojTemp = Path.GetTempFileName();
             slzip.Entries.FirstOrDefault(f => f.Name.EndsWith(".slproj"))?.ExtractToFile(slprojTemp, overwrite: true);
             Project project = Deserialize(slprojTemp);
-            project.Config = config;
+            project.ConfigUser = configUser;
             File.Delete(slprojTemp);
             string oldProjectName = project.Name;
             while (Directory.Exists(project.MainDirectory))
@@ -1267,9 +1267,9 @@ public partial class Project
             project.Settings = new(NdsProjectFile.Deserialize(Path.Combine(project.BaseDirectory, newNdsProjFile)), log);
             Directory.CreateDirectory(project.IterativeDirectory);
             IO.CopyFiles(project.BaseDirectory, project.IterativeDirectory, log, recursive: true);
-            Build.BuildBase(project, config, log, tracker);
+            Build.BuildBase(project, configUser, log, tracker);
 
-            return (project, project.Load(config, log, tracker));
+            return (project, project.Load(configUser, log, tracker));
         }
         catch (Exception ex)
         {
