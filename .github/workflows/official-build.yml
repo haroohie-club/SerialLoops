@@ -322,11 +322,11 @@ jobs:
         uses: actions/download-artifact@v4.1.8
         with:
           name: linux-x64-tarball
-      - name: Download Linux ARM tarball
+      - name: Download Linux ARM64 tarball
         uses: actions/download-artifact@v4.1.8
         with:
           name: linux-arm64-tarball
-      - name: Download Linu x64x dpkg
+      - name: Download Linu x64 dpkg
         uses: actions/download-artifact@v4.1.8
         with:
           name: linux-x64-dpkg
@@ -358,7 +358,7 @@ jobs:
         uses: actions/download-artifact@v4.1.8
         with:
           name: win-x86-installer
-      - name: Download Windows arm64 installer
+      - name: Download Windows ARM64 installer
         uses: actions/download-artifact@v4.1.8
         with:
           name: win-arm64-installer
@@ -370,7 +370,7 @@ jobs:
         uses: actions/download-artifact@v4.1.8
         with:
           name: win-x86-zip
-      - name: Download Windows arm64 portable zip
+      - name: Download Windows ARM64 portable zip
         uses: actions/download-artifact@v4.1.8
         with:
           name: win-arm64-zip
