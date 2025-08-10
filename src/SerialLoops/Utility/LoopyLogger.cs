@@ -36,7 +36,7 @@ public class LoopyLogger : ILogger
         {
             Directory.CreateDirectory(_configUser.LogsDirectory);
         }
-        _logFile = Path.Combine(_configUser.LogsDirectory, $"SerialLoops.log");
+        _logFile = Path.Combine(_configUser.LogsDirectory, "SerialLoops.log");
     }
 
     private static string Stamp => $"\n({Environment.ProcessId}) {DateTimeOffset.Now} - ";
