@@ -82,7 +82,7 @@ modules:
       - type: file
         path: VERSION
     build-commands:
-      - SLVersion=$(cat VERSION) SLAssemblyVersion=$(sed -n 's/apre/8888/p' VERSION) dotnet publish src/SerialLoops/SerialLoops.csproj -c Release -f net8.0 --no-self-contained --source ./nuget-sources
+      - SLVersion=$(cat VERSION) SLAssemblyVersion=$(sed -n 's/apre/8888/p' VERSION) dotnet publish src/SerialLoops/SerialLoops.csproj -c Release -f net8.0 --no-self-contained --source ./nuget-sources /p:PublishSingleFile=false /p:PublishTrimmed=false
       - mkdir -p ${FLATPAK_DEST}/bin
       - cp -r src/SerialLoops/bin/Release/net8.0/publish/* ${FLATPAK_DEST}/bin
       - sed -i "s/#VERSION#/$(cat VERSION)/g" club.haroohie.SerialLoops.desktop
