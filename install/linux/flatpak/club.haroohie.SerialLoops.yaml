@@ -21,8 +21,8 @@ finish-args:
   - --filesystem=xdg-config:create
   - --env=DOTNET_ROOT=/app/lib/dotnet
   - --env=SL_SYS_CONFIG_PATH=/app/config/sysconfig.json
-  - --env=SL_LLVM_PATH=/app/usr/lib/llvm
-  - --env=SL_NINJA_PATH=/app/usr/bin/ninja
+  - --env=SL_LLVM_PATH=/app/lib/llvm
+  - --env=SL_NINJA_PATH=/app/bin/ninja
   - --env=SL_FLATPAK_PROC=flatpak-spawn
   - --env=SL_FLATPAK_PROC_ARG=--host flatpak
   - --env=SL_FLATPAK_RUN_PROC=flatpak-spawn
@@ -64,7 +64,7 @@ modules:
         only-arches:
           - aarch64
     build-commands:
-      - mv ninja ${FLATPAK_DEST}/usr/bin/ninja
+      - mv ninja ${FLATPAK_DEST}/bin/ninja
 
   - name: SerialLoops
     buildsystem: simple
