@@ -28,7 +28,7 @@ finish-args:
   - --env=SL_FLATPAK_RUN_PROC=flatpak-spawn
   - --env=SL_FLATPAK_RUN_PROC_ARG=--host
   - --env=SL_USE_UPDATER=false
-  - --talk-name=org.freedesktop.Flatpak
+  - --talk-name=net.kuribo64.melonDS
 
 modules:
   - name: dotnet
@@ -41,7 +41,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/libsdl-org/SDL.git
-        branch: release-2.32.x
+        tag: release-2.32.8
     build-commands:
       - mkdir build
       - cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
@@ -64,7 +64,7 @@ modules:
         only-arches:
           - aarch64
     build-commands:
-      - mv ninja -d ${FLATPAK_DEST}/usr/bin/
+      - mv ninja ${FLATPAK_DEST}/usr/bin/ninja
 
   - name: SerialLoops
     buildsystem: simple
