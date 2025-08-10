@@ -21,8 +21,8 @@ AppDir:
     include:
     - libc6:#APT_ARCH#
     - libsdl2-dev:#APT_ARCH#
-    - clang:#APT_ARCH#
-    - lld:#APT_ARCH#
+    - clang-19:#APT_ARCH#
+    - lld-19:#APT_ARCH#
     - ninja-build:#APT_ARCH#
   files:
     include: []
@@ -36,7 +36,7 @@ AppDir:
   runtime:
     env:
       SL_SYS_CONFIG_PATH: $APPDIR/config/sysconfig.json
-      SL_LLVM_PATH: $APPDIR/usr/lib/llvm/
+      SL_LLVM_PATH: $APPDIR/usr/lib/llvm-19
       SL_NINJA_PATH: $APPDIR/usr/bin/ninja
       SL_USE_UPDATER: true
 
