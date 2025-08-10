@@ -61,11 +61,10 @@ modules:
       - type: archive
         url: https://github.com/ninja-build/ninja/releases/download/v1.13.1/ninja-linux-aarch64.zip
         sha256: 740f1b9f9d8ae68438240a6a2f3f7a27fc8b1946d2024a6a6b25857ee877987b
-        dest-filename: ninja.zip
         only-arches:
           - aarch64
     build-commands:
-      - unzip ninja.zip -d ${FLATPAK_DEST}/usr/bin/
+      - mv ninja -d ${FLATPAK_DEST}/usr/bin/
 
   - name: SerialLoops
     buildsystem: simple
