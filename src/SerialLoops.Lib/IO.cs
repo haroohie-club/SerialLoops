@@ -293,7 +293,7 @@ public static class IO
 
     private static void CreateDirectory(string file)
     {
-        if (!string.IsNullOrEmpty(file) && !Directory.Exists(Path.GetDirectoryName(file)))
+        if (!string.IsNullOrEmpty(Path.GetDirectoryName(file)) && !Directory.Exists(Path.GetDirectoryName(file)))
         {
             Directory.CreateDirectory(Path.GetDirectoryName(file)!);
         }
