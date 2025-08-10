@@ -28,7 +28,7 @@ finish-args:
   - --env=SL_FLATPAK_RUN_PROC=flatpak-spawn
   - --env=SL_FLATPAK_RUN_PROC_ARG=--host
   - --env=SL_USE_UPDATER=false
-  - --talk-name=net.kuribo64.melonDS
+  - --talk-name=org.freedesktop.Flatpak.net.kuribo64.melonDS
 
 modules:
   - name: dotnet

@@ -146,7 +146,7 @@ public partial class MainWindowViewModel : ViewModelBase
         EditSaveCommand = ReactiveCommand.CreateFromTask(EditSaveFileCommand_Executed);
         AboutCommand = ReactiveCommand.CreateFromTask(AboutCommand_Executed);
         PreferencesCommand = ReactiveCommand.CreateFromTask(PreferencesCommand_Executed);
-        if (Environment.GetEnvironmentVariable(EnvironmentVariables.UseUpdater)?.Equals(bool.TrueString, StringComparison.OrdinalIgnoreCase) ?? false)
+        if (Environment.GetEnvironmentVariable(EnvironmentVariables.UseUpdater)?.Equals(bool.TrueString, StringComparison.OrdinalIgnoreCase) ?? true)
         {
             CheckForUpdatesCommand = ReactiveCommand.CreateFromTask(new UpdateChecker(this).Check);
         }

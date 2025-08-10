@@ -32,6 +32,14 @@ AppDir:
     - usr/share/doc/*/changelog.*
     - usr/share/doc/*/NEWS.*
     - usr/share/doc/*/TODO.*
+
+  runtime:
+    env:
+      SL_SYS_CONFIG_PATH: $APPDIR/config/sysconfig.json
+      SL_LLVM_PATH: $APPDIR/usr/lib/llvm/
+      SL_NINJA_PATH: $APPDIR/usr/bin/ninja
+      SL_USE_UPDATER: true
+
   test:
     fedora-30:
       image: appimagecrafters/tests-env:fedora-30

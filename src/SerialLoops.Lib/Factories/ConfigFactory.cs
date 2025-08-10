@@ -132,7 +132,7 @@ public class ConfigFactory : IConfigFactory
         string[] flatpakRunProcessBaseArgs = Environment.GetEnvironmentVariable(EnvironmentVariables.FlatpakRunProcArg)?.Split(' ') ?? [];
 
         bool useUpdater = Environment.GetEnvironmentVariable(EnvironmentVariables.UseUpdater)
-            ?.Equals(bool.TrueString, StringComparison.OrdinalIgnoreCase) ?? false;
+            ?.Equals(bool.TrueString, StringComparison.OrdinalIgnoreCase) ?? true;
 
         return new()
         {
