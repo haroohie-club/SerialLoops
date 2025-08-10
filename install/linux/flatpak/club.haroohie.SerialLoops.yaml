@@ -70,8 +70,8 @@ modules:
     buildsystem: simple
     sources:
       - type: git
-        url: https://github.com/haroohie-club/SerialLoops.git
-        branch: main
+        url: https://github.com/jonko0493/SerialLoops.git
+        branch: llvm-ninja
       - ./nuget-sources.json
       - type: file
         path: club.haroohie.SerialLoops.metainfo.xml
