@@ -23,6 +23,7 @@ AppDir:
     - libsdl2-dev:#APT_ARCH#
     - clang-19:#APT_ARCH#
     - lld-19:#APT_ARCH#
+    - llvm-19:#APT_ARCH#
     - ninja-build:#APT_ARCH#
   files:
     include: []
