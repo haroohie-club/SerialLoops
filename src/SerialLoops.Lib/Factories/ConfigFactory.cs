@@ -40,7 +40,7 @@ public class ConfigFactory : IConfigFactory
         {
             try
             {
-                sysConfig = JsonSerializer.Deserialize<ConfigSystem>(File.ReadAllText(configJson));
+                sysConfig = JsonSerializer.Deserialize<ConfigSystem>(File.ReadAllText(sysConfigJson));
             }
             catch (JsonException exc)
             {
@@ -100,13 +100,16 @@ public class ConfigFactory : IConfigFactory
                 // Go this direction so that if (for some reason) multiple LLVM installations exist, we use the latest one
                 for (int i = LlvmMaxVersion; i >= LlvmMinVersion; i--)
                 {
-                    if (!Directory.Exists($"/usr/lib/llvm-{i}"))
+                    if (Directory.Exists($"/usr/lib/llvm-{i}"))
                     {
-                        continue;
+                        llvmDir = $"/usr/lib/llvm-{i}";
+                        break;
                     }
-
-                    llvmDir = $"/usr/liv/llvm-{i}";
-                    break;
+                    if (Directory.Exists($"/usr/lib/llvm{i}"))
+                    {
+                        llvmDir = $"/usr/lib/llvm{i}";
+                        break;
+                    }
                 }
 
                 if (string.IsNullOrEmpty(llvmDir) && File.Exists("/usr/bin/clang"))
