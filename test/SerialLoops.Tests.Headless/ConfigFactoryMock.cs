@@ -14,6 +14,7 @@ public class ConfigFactoryMock(string configPath, ConfigUser configUser = null) 
         if (configUser is not null)
         {
             configUser.ConfigPath = configPath;
+            configUser.SysConfig = ConfigFactory.GetDefaultSystem(log);
             configUser.CurrentCultureName = "en-US";
             configUser.CheckForUpdates = false;
             configUser.RememberProjectWorkspace = false;
@@ -24,6 +25,7 @@ public class ConfigFactoryMock(string configPath, ConfigUser configUser = null) 
         else if (File.Exists(configPath))
         {
             ConfigUser newConfigUser = JsonSerializer.Deserialize<ConfigUser>(File.ReadAllText(configPath));
+            newConfigUser.SysConfig = ConfigFactory.GetDefaultSystem(log);
             newConfigUser.ConfigPath = configPath;
             newConfigUser.InitializeHacks(log);
             return newConfigUser;
