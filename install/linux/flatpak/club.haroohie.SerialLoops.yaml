@@ -21,7 +21,7 @@ finish-args:
   - --socket=pulseaudio
   - --filesystem=~/SerialLoops:create
   - --env=DOTNET_ROOT=/app/lib/dotnet
-  - --env=SL_LLVM_PATH=/app/bin
+  - --env=SL_LLVM_PATH=/app/lib/llvm20
   - --env=SL_NINJA_PATH=/app/bin/ninja
   - --env=SL_FLATPAK_PROC=flatpak-spawn
   - --env=SL_FLATPAK_PROC_ARG=--host flatpak
@@ -39,11 +39,7 @@ modules:
   - name: llvm
     buildsystem: simple
     build-commands:
-    - cp /usr/lib/sdk/llvm20/bin/clang /app/bin
-    - cp /usr/lib/sdk/llvm20/bin/ld.lld /app/bin
-    - cp /usr/lib/sdk/llvm20/bin/llvm-objcopy /app/bin
-    - cp /usr/lib/sdk/llvm20/bin/llvm-objdump /app/bin
-    - cp -r /usr/lib/sdk/llvm20/lib/* /app/lib/
+    - cp -r /usr/lib/sdk/llvm20/ /app/lib
 
   - name: SDL
     buildsystem: simple
