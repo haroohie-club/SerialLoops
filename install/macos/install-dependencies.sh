@@ -12,7 +12,7 @@ _runAsUser() {
     uid=$(/usr/bin/id -u "${currentUser}")
 
 	if [[ "${currentUser}" != "loginwindow" ]]; then
-		/bin/launchctl asuser "$uid" sudo -u "${currentUser}" "$@"
+		/bin/launchctl asuser "$uid" sudo -u "${currentUser}" "open -a Terminal.app \"$@; exit 0\""
 	else
 		echo "No user logged in, exiting..."
 		exit 1
