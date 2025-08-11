@@ -26,7 +26,8 @@ public class ConfigFactory : IConfigFactory
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SerialLoops", "sysconfig.json");
 
         ConfigSystem sysConfig;
-        if (!File.Exists(sysConfigJson))
+        // Always create a new system config for appimages
+        if (!File.Exists(sysConfigJson) || sysConfigJson.Contains(Path.GetFileName("appimage"), StringComparison.OrdinalIgnoreCase))
         {
             sysConfig = GetDefaultSystem(log);
             if (!Directory.Exists(Path.GetDirectoryName(sysConfigJson)))
