@@ -4,13 +4,13 @@ runtime-version: '24.08'
 sdk: org.freedesktop.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.dotnet8
-  - org.freedesktop.Sdk.Extension.llvm18
+  - org.freedesktop.Sdk.Extension.llvm20
 build-options:
   prepend-path: "/usr/lib/sdk/dotnet8/bin"
   append-ld-library-path: "/usr/lib/sdk/dotnet8/lib"
   prepend-pkg-config-path: "/usr/lib/sdk/dotnet8/lib/pkgconfig"
-  append-path: "/usr/lib/sdk/llvm18/bin"
-  prepend-ld-library-path: "/usr/lib/sdk/llvm18/lib"
+  append-path: "/usr/lib/sdk/llvm20/bin"
+  prepend-ld-library-path: "/usr/lib/sdk/llvm20/lib"
 
 command: SerialLoops
 
@@ -21,7 +21,7 @@ finish-args:
   - --socket=pulseaudio
   - --filesystem=~/SerialLoops:create
   - --env=DOTNET_ROOT=/app/lib/dotnet
-  - --env=SL_LLVM_PATH=/app/lib/llvm18
+  - --env=SL_LLVM_PATH=/app/lib/llvm20
   - --env=SL_NINJA_PATH=/app/bin/ninja
   - --env=SL_FLATPAK_PROC=flatpak-spawn
   - --env=SL_FLATPAK_PROC_ARG=--host flatpak
@@ -39,7 +39,7 @@ modules:
   - name: llvm
     buildsystem: simple
     build-commands:
-    - cp -r /usr/lib/sdk/llvm18/ /app/lib
+    - cp -r /usr/lib/sdk/llvm20/ /app/lib
 
   - name: SDL
     buildsystem: simple
