@@ -3714,4 +3714,16 @@ item in the dropdown!</value>
   <data name="AsmHackPatchingMessage" xml:space="preserve">
     <value>Patching ARM9 and overlays</value>
   </data>
+  <data name="ClangNotFoundMessage" xml:space="preserve">
+    <value>clang (LLVM compiler) not found at '{0}'</value>
+  </data>
+  <data name="ClangExitedWithFailureMessage" xml:space="preserve">
+    <value>clang (LLVM compiler) exited with code {0}</value>
+  </data>
+  <data name="ObjcopyNotFoundMessage" xml:space="preserve">
+    <value>llvm-objcopy not found at '{0}'</value>
+  </data>
+  <data name="ObjcopyExitedWithFailureMessage" xml:space="preserve">
+    <value>llvm-objcopy exited with code {0}</value>
+  </data>
 </root>

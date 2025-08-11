@@ -1652,6 +1652,24 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to clang (LLVM compiler) exited with code {0}.
+        /// </summary>
+        public static string ClangExitedWithFailureMessage {
+            get {
+                return ResourceManager.GetString("ClangExitedWithFailureMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to clang (LLVM compiler) not found at &apos;{0}&apos;.
+        /// </summary>
+        public static string ClangNotFoundMessage {
+            get {
+                return ResourceManager.GetString("ClangNotFoundMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cleaning Iterative Directory.
         /// </summary>
         public static string Cleaning_Iterative_Directory {
@@ -5774,6 +5792,24 @@ namespace SerialLoops.Assets {
         public static string objcopy_not_found_at___0__ {
             get {
                 return ResourceManager.GetString("objcopy not found at \'{0}\'", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to llvm-objcopy exited with code {0}.
+        /// </summary>
+        public static string ObjcopyExitedWithFailureMessage {
+            get {
+                return ResourceManager.GetString("ObjcopyExitedWithFailureMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to llvm-objcopy not found at &apos;{0}&apos;.
+        /// </summary>
+        public static string ObjcopyNotFoundMessage {
+            get {
+                return ResourceManager.GetString("ObjcopyNotFoundMessage", resourceCulture);
             }
         }
         

@@ -371,7 +371,7 @@ public static class Build
         };
         if (!File.Exists(clangStartInfo.FileName))
         {
-            log.LogError(string.Format(localize("clang (LLVM compiler) not found at '{0}'"), clangStartInfo.FileName));
+            log.LogError(string.Format(localize("ClangNotFoundMessage"), clangStartInfo.FileName));
             return (string.Empty, string.Empty);
         }
         log.Log($"Compiling '{filePath}' to '{objFile}' with '{clangStartInfo.FileName}'...");
@@ -383,7 +383,7 @@ public static class Build
         Task.Delay(50); // ensures process is actually complete
         if (clang.ExitCode != 0)
         {
-            log.LogError(string.Format(localize("clang (LLVM compiler) exited with code {0}"), clang.ExitCode));
+            log.LogError(string.Format(localize("ClangExitedWithFailureMessage"), clang.ExitCode));
             return (string.Empty, string.Empty);
         }
 
@@ -396,7 +396,7 @@ public static class Build
         };
         if (!File.Exists(objcopyStartInfo.FileName))
         {
-            log.LogError(string.Format(localize("llvm-objcopy not found at '{0}'"), objcopyStartInfo.FileName));
+            log.LogError(string.Format(localize("ObjcopyNotFoundMessage"), objcopyStartInfo.FileName));
             return (string.Empty, string.Empty);
         }
         log.Log($"Objcopying '{objFile}' to '{binFile}' with '{objcopyStartInfo.FileName}'...");
@@ -408,7 +408,7 @@ public static class Build
         Task.Delay(50); // ensures process is actually complete
         if (objcopy.ExitCode != 0)
         {
-            log.LogError(string.Format(localize("llvm-objcopy exited with code {0}"), objcopy.ExitCode));
+            log.LogError(string.Format(localize("ObjcopyExitedWithFailureMessage"), objcopy.ExitCode));
             return (string.Empty, string.Empty);
         }
 
