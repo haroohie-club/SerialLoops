@@ -56,7 +56,7 @@ public class PreferencesDialogViewModel : ViewModelBase
                 OnChange = path =>
                 {
                     Configuration.SysConfig.EmulatorPath = path;
-                    if (!Configuration.SysConfig.StoreEmulatorPath)
+                    if (Configuration.SysConfig.StoreEmulatorPath)
                     {
                         new ConfigEmulator()
                         {
