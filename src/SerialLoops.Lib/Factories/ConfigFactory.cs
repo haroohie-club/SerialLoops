@@ -119,7 +119,7 @@ public class ConfigFactory : IConfigFactory
 
                 if (string.IsNullOrEmpty(llvmDir) && File.Exists("/usr/bin/clang"))
                 {
-                    llvmDir = "/usr/bin";
+                    llvmDir = "/usr";
                 }
             }
         }
