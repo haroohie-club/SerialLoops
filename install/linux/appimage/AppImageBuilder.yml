@@ -38,7 +38,7 @@ AppDir:
     env:
       SL_LLVM_PATH: $APPDIR/usr/lib/llvm-19
       SL_NINJA_PATH: $APPDIR/usr/bin/ninja
-      SL_STORE_SYS_CONFIG: false
+      SL_STORE_SYS_CONFIG: "false"
 
   test:
     fedora-30:
