@@ -156,35 +156,18 @@ public class ConfigFactory : IConfigFactory
                 var emulatorConfig = JsonSerializer.Deserialize<ConfigEmulator>(File.ReadAllText(ConfigEmulator.EmulatorConfigPath));
                 emulatorPath = emulatorConfig.EmulatorPath;
                 emulatorFlatpak = emulatorConfig.EmulatorFlatpak;
+                if (string.IsNullOrEmpty(emulatorPath) && string.IsNullOrEmpty(emulatorFlatpak))
+                {
+                    (emulatorFlatpak, emulatorExists) = TestEmulatorFlatpak(log);
+                }
+                else
+                {
+                    emulatorExists = true;
+                }
             }
             else
             {
-                emulatorFlatpak = "net.kuribo64.melonDS";
-                try
-                {
-                    Process flatpakProc = new()
-                    {
-                        StartInfo = new("flatpak", ["info", emulatorFlatpak])
-                        {
-                            RedirectStandardError = true, RedirectStandardOutput = true,
-                        },
-                    };
-                    flatpakProc.OutputDataReceived += (_, args) => log.Log(args.Data ?? string.Empty);
-                    flatpakProc.ErrorDataReceived += (_, args) =>
-                    {
-                        if (!string.IsNullOrEmpty(args.Data))
-                        {
-                            log.LogWarning(args.Data);
-                        }
-                    };
-                    flatpakProc.Start();
-                    flatpakProc.WaitForExit();
-                    emulatorExists = flatpakProc.ExitCode == 0;
-                }
-                catch
-                {
-                    emulatorExists = false;
-                }
+                (emulatorFlatpak, emulatorExists) = TestEmulatorFlatpak(log);
             }
         }
 
@@ -213,6 +196,39 @@ public class ConfigFactory : IConfigFactory
             StoreSysConfig = storeSysConfig,
             UseUpdater = useUpdater,
         };
+    }
+
+    private static (string, bool) TestEmulatorFlatpak(ILogger log)
+    {
+        string emulatorFlatpak = "net.kuribo64.melonDS";
+        bool emulatorExists = true;
+        try
+        {
+            Process flatpakProc = new()
+            {
+                StartInfo = new("flatpak", ["info", emulatorFlatpak])
+                {
+                    RedirectStandardError = true, RedirectStandardOutput = true,
+                },
+            };
+            flatpakProc.OutputDataReceived += (_, args) => log.Log(args.Data ?? string.Empty);
+            flatpakProc.ErrorDataReceived += (_, args) =>
+            {
+                if (!string.IsNullOrEmpty(args.Data))
+                {
+                    log.LogWarning(args.Data);
+                }
+            };
+            flatpakProc.Start();
+            flatpakProc.WaitForExit();
+            emulatorExists = flatpakProc.ExitCode == 0;
+        }
+        catch
+        {
+            emulatorExists = false;
+        }
+
+        return (emulatorFlatpak, emulatorExists);
     }
 
     public static ConfigUser GetDefault(ConfigSystem sysConfig, ILogger log)
