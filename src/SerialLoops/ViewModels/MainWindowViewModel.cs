@@ -1307,7 +1307,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         if (OpenProject is not null)
         {
-            if (string.IsNullOrWhiteSpace(CurrentConfig.EmulatorPath) && string.IsNullOrWhiteSpace(CurrentConfig.EmulatorFlatpak))
+            if (string.IsNullOrWhiteSpace(CurrentConfig.SysConfig.EmulatorPath) && string.IsNullOrWhiteSpace(CurrentConfig.SysConfig.EmulatorFlatpak))
             {
                 Log.LogWarning("Attempted to build and run project while no emulator path/flatpak was set.");
                 await Window.ShowMessageBoxAsync(Strings.No_Emulator_Path, Strings.No_emulator_path_has_been_set__nPlease_set_the_path_to_a_Nintendo_DS_emulator_in_Preferences_to_use_Build___Run_,
@@ -1324,8 +1324,8 @@ public partial class MainWindowViewModel : ViewModelBase
                         Log.Log("Build succeeded!");
                         try
                         {
-                            string emulatorExecutable = CurrentConfig.EmulatorPath;
-                            if (!string.IsNullOrWhiteSpace(CurrentConfig.EmulatorFlatpak))
+                            string emulatorExecutable = CurrentConfig.SysConfig.EmulatorPath;
+                            if (!string.IsNullOrWhiteSpace(CurrentConfig.SysConfig.EmulatorFlatpak))
                             {
                                 emulatorExecutable = FlatpakProcess;
                             }
@@ -1336,11 +1336,11 @@ public partial class MainWindowViewModel : ViewModelBase
 
                             string[] emulatorArgs = [Path.Combine(OpenProject.MainDirectory, $"{OpenProject.Name}.nds")];
                             if (emulatorExecutable.Equals(FlatpakProcess)
-                                && !string.IsNullOrWhiteSpace(CurrentConfig.EmulatorFlatpak))
+                                && !string.IsNullOrWhiteSpace(CurrentConfig.SysConfig.EmulatorFlatpak))
                             {
                                 emulatorArgs =
                                 [
-                                    "run", CurrentConfig.EmulatorFlatpak,
+                                    "run", CurrentConfig.SysConfig.EmulatorFlatpak,
                                     Path.Combine(OpenProject.MainDirectory, $"{OpenProject.Name}.nds"),
                                 ];
                             }
@@ -1348,7 +1348,7 @@ public partial class MainWindowViewModel : ViewModelBase
                             {
                                 emulatorArgs =
                                 [
-                                    CurrentConfig.EmulatorPath, "--args",
+                                    CurrentConfig.SysConfig.EmulatorPath, "--args",
                                     Path.Combine(OpenProject.MainDirectory, $"{OpenProject.Name}.nds"),
                                 ];
                             }

@@ -52,15 +52,37 @@ public class PreferencesDialogViewModel : ViewModelBase
             new FileOption(_preferencesDialog)
             {
                 OptionName = Strings.Emulator_Path,
-                Path = Configuration.EmulatorPath,
-                OnChange = path => Configuration.EmulatorPath = path,
+                Path = Configuration.SysConfig.EmulatorPath,
+                OnChange = path =>
+                {
+                    Configuration.SysConfig.EmulatorPath = path;
+                    if (!Configuration.SysConfig.StoreEmulatorPath)
+                    {
+                        new ConfigEmulator()
+                        {
+                            EmulatorPath = Configuration.SysConfig.EmulatorPath,
+                            EmulatorFlatpak = Configuration.SysConfig.EmulatorFlatpak,
+                        }.Write();
+                    }
+                },
                 Enabled = string.IsNullOrEmpty(Configuration.SysConfig.BundledEmulator),
             },
             new TextOption
             {
                 OptionName = Strings.Emulator_Flatpak,
-                Value = Configuration.EmulatorFlatpak,
-                OnChange = flatpak => Configuration.EmulatorFlatpak = flatpak,
+                Value = Configuration.SysConfig.EmulatorFlatpak,
+                OnChange = flatpak =>
+                {
+                    Configuration.SysConfig.EmulatorFlatpak = flatpak;
+                    if (Configuration.SysConfig.StoreEmulatorPath)
+                    {
+                        new ConfigEmulator()
+                        {
+                            EmulatorPath = Configuration.SysConfig.EmulatorPath,
+                            EmulatorFlatpak = Configuration.SysConfig.EmulatorFlatpak,
+                        }.Write();
+                    }
+                },
                 Enabled = OperatingSystem.IsLinux() && string.IsNullOrEmpty(Configuration.SysConfig.BundledEmulator),
             },
         ]);

@@ -14,7 +14,7 @@ public class ConfigFactoryMock(string configPath, ConfigUser configUser = null) 
         if (configUser is not null)
         {
             configUser.ConfigPath = configPath;
-            configUser.SysConfig = ConfigFactory.GetDefaultSystem(log);
+            configUser.SysConfig = ConfigFactory.GetDefaultSystem(true, log);
             configUser.CurrentCultureName = "en-US";
             configUser.CheckForUpdates = false;
             configUser.RememberProjectWorkspace = false;
@@ -25,14 +25,14 @@ public class ConfigFactoryMock(string configPath, ConfigUser configUser = null) 
         else if (File.Exists(configPath))
         {
             ConfigUser newConfigUser = JsonSerializer.Deserialize<ConfigUser>(File.ReadAllText(configPath));
-            newConfigUser.SysConfig = ConfigFactory.GetDefaultSystem(log);
+            newConfigUser.SysConfig = ConfigFactory.GetDefaultSystem(true, log);
             newConfigUser.ConfigPath = configPath;
             newConfigUser.InitializeHacks(log);
             return newConfigUser;
         }
         else
         {
-            ConfigUser newConfigUser = ConfigFactory.GetDefault(ConfigFactory.GetDefaultSystem(log), log);
+            ConfigUser newConfigUser = ConfigFactory.GetDefault(ConfigFactory.GetDefaultSystem(true, log), log);
             newConfigUser.RememberProjectWorkspace = false;
             newConfigUser.ConfigPath = configPath;
             newConfigUser.CurrentCultureName = "en-US"; // there's a chance that the locale will be something we don't recognize (like Invariant culture) so we force this for tests

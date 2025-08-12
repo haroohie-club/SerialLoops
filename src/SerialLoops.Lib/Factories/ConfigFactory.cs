@@ -30,7 +30,7 @@ public class ConfigFactory : IConfigFactory
             bool.TrueString, StringComparison.OrdinalIgnoreCase);
         if (!File.Exists(sysConfigJson) || !storeSysConfig)
         {
-            sysConfig = GetDefaultSystem(log);
+            sysConfig = GetDefaultSystem(storeSysConfig, log);
             if (!Directory.Exists(Path.GetDirectoryName(sysConfigJson)))
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(configJson)!);
@@ -50,7 +50,7 @@ public class ConfigFactory : IConfigFactory
             catch (JsonException exc)
             {
                 log.LogException(localize("Exception occurred while parsing sysconfig.json!"), exc);
-                sysConfig = GetDefaultSystem(log);
+                sysConfig = GetDefaultSystem(true, log);
                 IO.WriteStringFile(sysConfigJson, JsonSerializer.Serialize(sysConfig), log);
             }
         }
@@ -90,7 +90,7 @@ public class ConfigFactory : IConfigFactory
         }
     }
 
-    public static ConfigSystem GetDefaultSystem(ILogger log)
+    public static ConfigSystem GetDefaultSystem(bool storeSysConfig, ILogger log)
     {
         string llvmDir = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
             ? Path.Combine("C:", "Program Files", "LLVM")
@@ -136,27 +136,13 @@ public class ConfigFactory : IConfigFactory
 
         string bundledEmulator = Environment.GetEnvironmentVariable(EnvironmentVariables.BundledEmulator) ?? string.Empty;
 
-        bool useUpdater = Environment.GetEnvironmentVariable(EnvironmentVariables.UseUpdater)
-            ?.Equals(bool.TrueString, StringComparison.OrdinalIgnoreCase) ?? true;
-
-        return new()
-        {
-            LlvmPath = llvmDir,
-            NinjaPath = ninjaPath,
-            BundledEmulator = bundledEmulator,
-            UseUpdater = useUpdater,
-        };
-    }
-
-    public static ConfigUser GetDefault(ConfigSystem sysConfig, ILogger log)
-    {
         bool emulatorExists = false;
         string emulatorPath = string.Empty;
         string emulatorFlatpak = string.Empty;
-        if (!string.IsNullOrEmpty(sysConfig.BundledEmulator))
+        if (!string.IsNullOrEmpty(bundledEmulator))
         {
             emulatorExists = true;
-            emulatorPath = sysConfig.BundledEmulator;
+            emulatorPath = bundledEmulator;
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
         {
@@ -165,47 +151,77 @@ public class ConfigFactory : IConfigFactory
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
-            emulatorFlatpak = "net.kuribo64.melonDS";
-            try
+            if (!storeSysConfig && File.Exists(ConfigEmulator.EmulatorConfigPath))
             {
-                Process flatpakProc = new()
-                {
-                    StartInfo = new("flatpak", ["info", emulatorFlatpak])
-                    {
-                        RedirectStandardError = true, RedirectStandardOutput = true,
-                    },
-                };
-                flatpakProc.OutputDataReceived += (_, args) => log.Log(args.Data ?? string.Empty);
-                flatpakProc.ErrorDataReceived += (_, args) =>
-                {
-                    if (!string.IsNullOrEmpty(args.Data))
-                    {
-                        log.LogWarning(args.Data);
-                    }
-                };
-                flatpakProc.Start();
-                flatpakProc.WaitForExit();
-                emulatorExists = flatpakProc.ExitCode == 0;
+                var emulatorConfig = JsonSerializer.Deserialize<ConfigEmulator>(ConfigEmulator.EmulatorConfigPath);
+                emulatorPath = emulatorConfig.EmulatorPath;
+                emulatorFlatpak = emulatorConfig.EmulatorFlatpak;
             }
-            catch
+            else
             {
-                emulatorExists = false;
+                emulatorFlatpak = "net.kuribo64.melonDS";
+                try
+                {
+                    Process flatpakProc = new()
+                    {
+                        StartInfo = new("flatpak", ["info", emulatorFlatpak])
+                        {
+                            RedirectStandardError = true, RedirectStandardOutput = true,
+                        },
+                    };
+                    flatpakProc.OutputDataReceived += (_, args) => log.Log(args.Data ?? string.Empty);
+                    flatpakProc.ErrorDataReceived += (_, args) =>
+                    {
+                        if (!string.IsNullOrEmpty(args.Data))
+                        {
+                            log.LogWarning(args.Data);
+                        }
+                    };
+                    flatpakProc.Start();
+                    flatpakProc.WaitForExit();
+                    emulatorExists = flatpakProc.ExitCode == 0;
+                }
+                catch
+                {
+                    emulatorExists = false;
+                }
             }
         }
+
         if (!emulatorExists)
         {
             emulatorPath = string.Empty;
             emulatorFlatpak = string.Empty;
             log.LogWarning("Valid emulator path not found in config.json.");
         }
+        else if (!storeSysConfig && string.IsNullOrEmpty(bundledEmulator))
+        {
+            ConfigEmulator emulatorConfig = new() { EmulatorPath = emulatorPath, EmulatorFlatpak = emulatorFlatpak };
+            emulatorConfig.Write();
+        }
 
+        bool useUpdater = Environment.GetEnvironmentVariable(EnvironmentVariables.UseUpdater)
+            ?.Equals(bool.TrueString, StringComparison.OrdinalIgnoreCase) ?? true;
+
+        return new()
+        {
+            LlvmPath = llvmDir,
+            NinjaPath = ninjaPath,
+            BundledEmulator = bundledEmulator,
+            EmulatorPath = emulatorPath,
+            EmulatorFlatpak = emulatorFlatpak,
+            StoreSysConfig = storeSysConfig,
+            UseUpdater = useUpdater,
+        };
+    }
+
+    public static ConfigUser GetDefault(ConfigSystem sysConfig, ILogger log)
+    {
         return new()
         {
             SysConfig = sysConfig,
             UserDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "SerialLoops"),
             CurrentCultureName = CultureInfo.CurrentCulture.Name,
-            EmulatorPath = emulatorPath,
-            EmulatorFlatpak = emulatorFlatpak,
             AutoReopenLastProject = false,
             RememberProjectWorkspace = true,
             RemoveMissingProjects = false,

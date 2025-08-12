@@ -35,8 +35,6 @@ public class ConfigUser
     [JsonIgnore]
     public ObservableCollection<ScriptTemplate> ScriptTemplates { get; set; }
     public string CurrentCultureName { get; set; }
-    public string EmulatorFlatpak { get; set; }
-    public string EmulatorPath { get; set; }
     public bool AutoReopenLastProject { get; set; }
     public bool RememberProjectWorkspace { get; set; }
     public bool RemoveMissingProjects { get; set; }
