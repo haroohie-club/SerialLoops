@@ -153,7 +153,7 @@ public class ConfigFactory : IConfigFactory
         {
             if (!storeSysConfig && File.Exists(ConfigEmulator.EmulatorConfigPath))
             {
-                var emulatorConfig = JsonSerializer.Deserialize<ConfigEmulator>(ConfigEmulator.EmulatorConfigPath);
+                var emulatorConfig = JsonSerializer.Deserialize<ConfigEmulator>(File.ReadAllText(ConfigEmulator.EmulatorConfigPath));
                 emulatorPath = emulatorConfig.EmulatorPath;
                 emulatorFlatpak = emulatorConfig.EmulatorFlatpak;
             }
