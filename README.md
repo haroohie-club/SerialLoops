@@ -48,8 +48,8 @@ Documentation for how to use Serial Loops can be found on [our website](https://
 ### Prerequisites
 It is recommended that you use a distribution of Serial Loops that automatically installs or comes with the necessary prerequisites. For each platform these are:
 
-* Linux: Flatpak (soon: from Flathub)
-  - The AppImage, deb, and rpm packages are also good, but if you're not sure which to choose, go with the Flatpak
+* Linux: [Flatpak from Flathub](https://flathub.org/apps/club.haroohie.SerialLoops)
+  - The AppImage, deb, and rpm packages are also easy to use, but if you're not sure which to choose, go with the Flatpak
 * macOS: Installer
 * Windows: Installer
 
@@ -63,7 +63,7 @@ If you opt to use one of the non-packaged releases on Windows or Linux, you will
 * On Linux, you will also need SDL2
 
 #### A Nintendo DS Emulator
-To test the game easily, you will want to have a Nintendo DS emulator installed. We recommend using [melonDS](https://melonds.kuribo64.net/) for its accuracy.
+To test the game easily, you will want to have a Nintendo DS emulator installed. We recommend using [melonDS](https://melonds.kuribo64.net/) for its accuracy. If you are using the Flatpak release, melonDS comes pre-packaged with it.
 
 ### Download & Install
 Once you have installed any necessary prerequisites, to install Serial Loops, download the latest release for your platform from the [Releases tab](https://github.com/haroohie-club/SerialLoops/releases).
@@ -74,12 +74,13 @@ Be sure to [read the Serial Loops documentation](https://haroohie.club/chokurets
 Uninstalling Serial Loops itself is quite simple; however, you may also want to uninstall the packaged dependencies. Follow the instructions below for each platform to do this.
 
 #### Linux
-* If you installed the Flatpak, simply run `flatpak uninstall --delete-data club.haroohie.SerialLoops` to remove the Flatpak and all its associated data. If you don't want to keep your project data, ensure you delete the `~/SerialLoops` directory as well.
+* If you installed the Flatpak, simply run uninstall it via the Warehouse app or your software/app store application. Alternatively, you can run `flatpak uninstall --delete-data club.haroohie.SerialLoops` to remove the Flatpak and all its associated data. If you don't want to keep your project data, ensure you delete the `~/SerialLoops` directory as well.
+* If you installed the AppImage, simply delete it from your machine.
 * If you installed the deb or rpm package, run your package manager's uninstall command for the `SerialLoops` package.
 * If you downloaded the tarball, delete the unpacked files from your system. You may also run your package manager's uninstallation command for Clang, LLD, Ninja, and SDL2.
 
 #### macOS
-Simply drag the Serial Loops application from the Applications folder to the trash.
+Simply drag the Serial Loops application from the Applications folder to the trash. Then run `brew uninstall llvm` and `brew uninstall ninja-build` to remove LLVM and Ninja (if you want to do so). Finally, if you also want to uninstall Homebrew, you can run `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/uninstall.sh)"`.
 
 #### Windows
 Go into Add or Remove Programs and remove Serial Loops and (if you don't want it anymore) LLVM.
@@ -103,7 +104,8 @@ Additionally, on macOS, you will have to install CMake so that the build can com
 ```bash
 sudo /Applications/CMake.app/Contents/bin/cmake-gui --install
 ```
-This will symlink the CMake binaries to `/usr/local/bin` which is necessary for the build to work.
+This will symlink the CMake binaries to `/usr/local/bin` which is necessary for the build to work. Alternatively, you can install
+cmake via Homebrew with `brew install cmake`.
 
 On Linux, you will need to install the SDL2 binaries for your distribution.
 
@@ -125,8 +127,6 @@ to the MSBuild global properties field. This has the same effect as specifying `
 If you'd like to contribute new features or fixes, we recommend [getting in touch on Discord first](https://discord.gg/nesRSbpeFM) before submitting a pull request!
 
 ### Testing
-Serial Loops has headless tests that run to test the UI and other functionality of the program. To run tests locally, you will need to define either a `ui_vals.json` file or set an environment variable.
-
-First, download [these test assets](https://haroohie.nyc3.cdn.digitaloceanspaces.com/bootstrap/serial-loops/test-assets.zip) -OutFile $(Build.ArtifactStagingDirectory)/test-assets.zip) and unzip them to a directory somewhere. Then, specify that directory in the `ui_vals.json` as `AssetsDirectory` or set the environment variable `ASSETS_DIRECTORY` to that path.
+Serial Loops has headless tests that run to test the UI and other functionality of the program.
 
 Tests can be run via `dotnet test` (make sure to add `-f net8.0` on Linux or Mac) or through the test runners in Rider or Visual Studio.

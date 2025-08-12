@@ -46,6 +46,7 @@ public class ConfigFactory : IConfigFactory
             try
             {
                 sysConfig = JsonSerializer.Deserialize<ConfigSystem>(File.ReadAllText(sysConfigJson));
+                sysConfig.StoreSysConfig = true;
             }
             catch (JsonException exc)
             {
