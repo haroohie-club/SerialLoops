@@ -372,7 +372,7 @@ jobs:
             The first time you install Serial Loops, this process can take several minutes, so please be patient!
 
             ### Linux
-            We highly recommend installing the Serial Loops Flatpak from Flathub. This is the simplest way to run Serial Loops and comes with the added benefit of auto-updates for major versions via Flathub.
+            We highly recommend installing the [Serial Loops Flatpak from Flathub](https://flathub.org/apps/club.haroohie.SerialLoops). This is the simplest way to run Serial Loops and comes with the added benefit of auto-updates for major versions via Flathub.
 
             You can also install the official [melonDS Flatpak from Flathub](https://flathub.org/apps/net.kuribo64.melonDS) to use as your emulator.
 
