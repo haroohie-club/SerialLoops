@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using HaruhiChokuretsuLib.Util;
 
 namespace SerialLoops.Lib;
 
@@ -19,6 +20,11 @@ public class ConfigSystem
     public string BundledEmulator { get; set; }
     [JsonIgnore]
     public bool UseUpdater { get; set; }
+
+    public void Save(string sysConfigPath, ILogger log)
+    {
+        IO.WriteStringFile(sysConfigPath, JsonSerializer.Serialize(this), log);
+    }
 }
 
 public class ConfigEmulator

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Windows.Input;
 using HaruhiChokuretsuLib.Util;
@@ -165,6 +166,18 @@ public class PreferencesDialogViewModel : ViewModelBase
     private void SaveCommand_Executed()
     {
         Configuration.Save(Log);
+        if (Configuration.SysConfig.StoreSysConfig)
+        {
+            Configuration.SysConfig.Save(Path.Combine(Path.GetDirectoryName(Configuration.ConfigPath)!, "sysconfig.json"), Log);
+        }
+        else if (Configuration.SysConfig.StoreEmulatorPath)
+        {
+            new ConfigEmulator()
+            {
+                EmulatorPath = Configuration.SysConfig.EmulatorPath,
+                EmulatorFlatpak = Configuration.SysConfig.EmulatorFlatpak,
+            }.Write();
+        }
         Saved = true;
         _preferencesDialog.Close();
     }

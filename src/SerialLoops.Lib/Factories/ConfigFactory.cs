@@ -38,7 +38,7 @@ public class ConfigFactory : IConfigFactory
 
             if (storeSysConfig)
             {
-                IO.WriteStringFile(sysConfigJson, JsonSerializer.Serialize(sysConfig), log);
+                sysConfig.Save(sysConfigJson, log);
             }
         }
         else
@@ -51,7 +51,7 @@ public class ConfigFactory : IConfigFactory
             {
                 log.LogException(localize("Exception occurred while parsing sysconfig.json!"), exc);
                 sysConfig = GetDefaultSystem(true, log);
-                IO.WriteStringFile(sysConfigJson, JsonSerializer.Serialize(sysConfig), log);
+                sysConfig.Save(sysConfigJson, log);
             }
         }
 
