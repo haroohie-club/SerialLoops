@@ -23,60 +23,6 @@ env:
   SLAssemblyVersion: ${{ inputs.version == '' && format('0.4.8888.{0}', github.run_number) || inputs.version }}
 
 jobs:
-  linux-flatpak-setup:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out
-        uses: actions/checkout@v4
-        with:
-          submodules: true
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.13'
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4.1.0
-        with:
-          dotnet-version: '8.0.x'
-      - run: pip install requests
-      - run: python install/linux/flatpak/flatpak-dotnet-generator.py --dotnet 8 --freedesktop 24.08 nuget-sources.json src/SerialLoops/SerialLoops.csproj
-      - name: Publish nuget-sources.json
-        uses: actions/upload-artifact@v4
-        with:
-          name: nuget-sources
-          path: nuget-sources.json
-          retention-days: 1
-  linux-flatpak:
-    needs: linux-flatpak-setup
-    runs-on: ubuntu-latest
-    container:
-      image: bilelmoussaoui/flatpak-github-actions:freedesktop-24.08
-      options: --privileged
-    steps:
-      - name: Check out
-        uses: actions/checkout@v4
-        with:
-          submodules: true
-      - name: Download nuget-sources.json
-        uses: actions/download-artifact@v4.1.8
-        with:
-          name: nuget-sources
-          path: install/linux/flatpak/
-      - name: Export version
-        run: echo $SLVersion > install/linux/flatpak/VERSION
-      - name: Build flatpak
-        uses: flatpak/flatpak-github-actions/flatpak-builder@v6
-        with:
-          manifest-path: install/linux/flatpak/club.haroohie.SerialLoops.yaml
-          bundle: SerialLoops.flatpak
-          cache-key: flatpak-builder-${{ github.sha }}
-      - name: Upload flatpak
-        uses: actions/upload-artifact@v4
-        with:
-          name: linux-x64-flatpak
-          path: SerialLoops.flatpak
-          retention-days: 1
-
   linux-appimage:
     strategy:
       matrix:
@@ -304,12 +250,8 @@ jobs:
 
   release:
     runs-on: ubuntu-latest
-    needs: [ linux-flatpak, linux-appimage, linux-dpkg-tarball, linux-rpm, macos-pkg, windows ]
+    needs: [ linux-appimage, linux-dpkg-tarball, linux-rpm, macos-pkg, windows ]
     steps:
-      - name: Download Linux flatpak
-        uses: actions/download-artifact@v4.1.8
-        with:
-          name: linux-x64-flatpak
       - name: Download Linux x64 AppImage
         uses: actions/download-artifact@v4.1.8
         with:
@@ -379,7 +321,6 @@ jobs:
         run: |
           New-Item -Type Directory -Path release
           Get-ChildItem .
-          Move-Item -Path SerialLoops.flatpak -Destination release/SerialLoops-linux-x64-v$($env:SLVersion).flatpak
           Move-Item -Path SerialLoops-x86_64.AppImage -Destination release/SerialLoops-linux-x64-v$($env:SLVersion).AppImage
           Move-Item -Path SerialLoops-aarch64.AppImage -Destination release/SerialLoops-linux-arm64-v$($env:SLVersion).AppImage
           Move-Item -Path SerialLoops-linux-x64.tar.gz -Destination release/SerialLoops-linux-x64-v$($env:SLVersion).tar.gz
@@ -431,11 +372,11 @@ jobs:
             The first time you install Serial Loops, this process can take several minutes, so please be patient!
 
             ### Linux
-            We recommend using the provided Flatpak as it is the easiest to use. First, install [Flatpak](https://flatpak.org/setup/) if you haven't already. Then, download the Serial Loops Flatpak artifact and double click it or run `flatpak install` on it from the terminal. It will then install itself, bringing all the necessary dependencies with it.
+            We highly recommend installing the Serial Loops Flatpak from Flathub. This is the simplest way to run Serial Loops and comes with the added benefit of auto-updates for major versions via Flathub.
 
             You can also install the official [melonDS Flatpak from Flathub](https://flathub.org/apps/net.kuribo64.melonDS) to use as your emulator.
 
-            We don't currently provide ARM builds for the flatpak (they will be made available when the app is added to Flathub!). If you are using Linux on ARM, or if you would prefer to not use a Flatpak, use one of the following releases:
+            However, if you want to use a preview version of Serial Loops or you simply don't want to install Flatpak, you can instead use one of our other distribution:
             * The AppImage is designed to run on all Linux distros and is an easy, click-once option.
             * The `.deb` package is intended for Debian-based distros (e.g. Ubuntu). Install it with `sudo apt install -f ./SerialLoops-linux-x64-${{ env.SLVersion }}.deb`.
             * The `.rpm` package is intended for Red Hat-based distros (e.g. Fedora). Install it with `sudo dnf install ./SerialLoops-linux-x64-${{ env.SLVersion }}-1.fc39.x86_64.rpm`.
