@@ -22,7 +22,7 @@ public class PreferencesDialogViewModel : ViewModelBase
 
     private IConfigFactory _configFactory;
     public ConfigUser Configuration { get; set; }
-    public ILogger Log { get; set; }
+    private ILogger Log { get; set; }
     [Reactive]
     public bool RequireRestart { get; set; }
     public bool Saved { get; set; }
@@ -31,14 +31,7 @@ public class PreferencesDialogViewModel : ViewModelBase
     public void Initialize(PreferencesDialog preferencesDialog, ILogger log, IConfigFactory configFactory = null)
     {
         _preferencesDialog = preferencesDialog;
-        if (configFactory is not null)
-        {
-            _configFactory = configFactory;
-        }
-        else
-        {
-            _configFactory = new ConfigFactory();
-        }
+        _configFactory = configFactory ?? new ConfigFactory();
         Configuration = _configFactory.LoadConfig(s => s, log);
         Log = log;
 
@@ -61,13 +54,14 @@ public class PreferencesDialogViewModel : ViewModelBase
                 OptionName = Strings.Emulator_Path,
                 Path = Configuration.EmulatorPath,
                 OnChange = path => Configuration.EmulatorPath = path,
+                Enabled = string.IsNullOrEmpty(Configuration.SysConfig.BundledEmulator),
             },
             new TextOption
             {
                 OptionName = Strings.Emulator_Flatpak,
                 Value = Configuration.EmulatorFlatpak,
                 OnChange = flatpak => Configuration.EmulatorFlatpak = flatpak,
-                Enabled = OperatingSystem.IsLinux(),
+                Enabled = OperatingSystem.IsLinux() && string.IsNullOrEmpty(Configuration.SysConfig.BundledEmulator),
             },
         ]);
         _preferencesDialog.ProjectOptions.InitializeOptions(Strings.Projects,
@@ -146,7 +140,7 @@ public class PreferencesDialogViewModel : ViewModelBase
         CancelCommand = ReactiveCommand.Create(_preferencesDialog.Close);
     }
 
-    public void SaveCommand_Executed()
+    private void SaveCommand_Executed()
     {
         Configuration.Save(Log);
         Saved = true;

@@ -16,7 +16,7 @@ namespace SerialLoops.Lib.Factories;
 // "You've forgotten the mocks."
 public class ConfigFactory : IConfigFactory
 {
-    private const int LlvmMinVersion = 17;
+    private const int LlvmMinVersion = 15;
     private const int LlvmMaxVersion = 21;
 
     public ConfigUser LoadConfig(Func<string, string> localize, ILogger log)
@@ -26,8 +26,9 @@ public class ConfigFactory : IConfigFactory
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SerialLoops", "sysconfig.json");
 
         ConfigSystem sysConfig;
-        // Always create a new system config for appimages
-        if (!File.Exists(sysConfigJson) || sysConfigJson.Contains(Path.GetFileName("appimage"), StringComparison.OrdinalIgnoreCase))
+        bool storeSysConfig = (Environment.GetEnvironmentVariable(EnvironmentVariables.StoreSysConfig) ?? bool.TrueString).Equals(
+            bool.TrueString, StringComparison.OrdinalIgnoreCase);
+        if (!File.Exists(sysConfigJson) || !storeSysConfig)
         {
             sysConfig = GetDefaultSystem(log);
             if (!Directory.Exists(Path.GetDirectoryName(sysConfigJson)))
@@ -35,7 +36,10 @@ public class ConfigFactory : IConfigFactory
                 Directory.CreateDirectory(Path.GetDirectoryName(configJson)!);
             }
 
-            IO.WriteStringFile(sysConfigJson, JsonSerializer.Serialize(sysConfig), log);
+            if (storeSysConfig)
+            {
+                IO.WriteStringFile(sysConfigJson, JsonSerializer.Serialize(sysConfig), log);
+            }
         }
         else
         {
@@ -129,11 +133,8 @@ public class ConfigFactory : IConfigFactory
         {
             ninjaPath = string.Empty;
         }
-        string flatpakProcess = Environment.GetEnvironmentVariable(EnvironmentVariables.FlatpakProcess) ?? "flatpak";
-        string[] flatpakProcessBaseArgs = Environment.GetEnvironmentVariable(EnvironmentVariables.FlatpakProcArg)?.Split(' ') ?? [];
 
-        string flatpakRunProcess = Environment.GetEnvironmentVariable(EnvironmentVariables.FlatpakRunProcess) ?? string.Empty;
-        string[] flatpakRunProcessBaseArgs = Environment.GetEnvironmentVariable(EnvironmentVariables.FlatpakRunProcArg)?.Split(' ') ?? [];
+        string bundledEmulator = Environment.GetEnvironmentVariable(EnvironmentVariables.BundledEmulator) ?? string.Empty;
 
         bool useUpdater = Environment.GetEnvironmentVariable(EnvironmentVariables.UseUpdater)
             ?.Equals(bool.TrueString, StringComparison.OrdinalIgnoreCase) ?? true;
@@ -142,10 +143,7 @@ public class ConfigFactory : IConfigFactory
         {
             LlvmPath = llvmDir,
             NinjaPath = ninjaPath,
-            FlatpakProcess = flatpakProcess,
-            FlatpakProcessBaseArgs = flatpakProcessBaseArgs,
-            FlatpakRunProcess = flatpakRunProcess,
-            FlatpakRunProcessBaseArgs = flatpakRunProcessBaseArgs,
+            BundledEmulator = bundledEmulator,
             UseUpdater = useUpdater,
         };
     }
@@ -155,7 +153,12 @@ public class ConfigFactory : IConfigFactory
         bool emulatorExists = false;
         string emulatorPath = string.Empty;
         string emulatorFlatpak = string.Empty;
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+        if (!string.IsNullOrEmpty(sysConfig.BundledEmulator))
+        {
+            emulatorExists = true;
+            emulatorPath = sysConfig.BundledEmulator;
+        }
+        else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
         {
             emulatorPath = Path.Combine("/Applications", "melonDS.app");
             emulatorExists = Directory.Exists(emulatorPath);
@@ -167,7 +170,7 @@ public class ConfigFactory : IConfigFactory
             {
                 Process flatpakProc = new()
                 {
-                    StartInfo = new(sysConfig.FlatpakProcess, [..sysConfig.FlatpakProcessBaseArgs, "info", emulatorFlatpak])
+                    StartInfo = new("flatpak", ["info", emulatorFlatpak])
                     {
                         RedirectStandardError = true, RedirectStandardOutput = true,
                     },

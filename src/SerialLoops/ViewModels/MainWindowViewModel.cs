@@ -44,13 +44,14 @@ namespace SerialLoops.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
-    private const string BASE_TITLE = "Serial Loops";
+    private const string BaseTitle = "Serial Loops";
+    private const string FlatpakProcess = "flatpak";
 
     public string[] Args { get; set; }
     private bool _alreadyHandledStartup = false;
 
     [Reactive]
-    public string Title { get; set; } = BASE_TITLE;
+    public string Title { get; set; } = BaseTitle;
     public Size MinSize => new(769, 420);
     [Reactive]
     public Size ClientSize { get; set; } = new(1200, 800);
@@ -296,7 +297,7 @@ public partial class MainWindowViewModel : ViewModelBase
         using Stream typefaceStream = AssetLoader.Open(new("avares://SerialLoops/Assets/Graphics/MS-Gothic-Haruhi.ttf"));
         _msGothicHaruhi = SKTypeface.FromStream(typefaceStream);
 
-        Title = $"{BASE_TITLE} - {project.Name}";
+        Title = $"{BaseTitle} - {project.Name}";
 
         LoadCachedData();
 
@@ -558,7 +559,7 @@ public partial class MainWindowViewModel : ViewModelBase
             return;
         }
 
-        Title = BASE_TITLE;
+        Title = BaseTitle;
         OpenHomePanel();
 
         OpenProject = null;
@@ -828,7 +829,7 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             OpenProject.Name = Path.GetFileNameWithoutExtension(newProj);
             OpenProjectName = OpenProject.Name;
-            Title = $"{BASE_TITLE} - {OpenProject.Name}";
+            Title = $"{BaseTitle} - {OpenProject.Name}";
             foreach (BackgroundMusicItem bgm in OpenProject.Items.Where(i => i.Type == ItemDescription.ItemType.BGM).Cast<BackgroundMusicItem>())
             {
                 bgm.SetBgmFile(OpenProject, Path.GetDirectoryName(projectPath));
@@ -1326,11 +1327,7 @@ public partial class MainWindowViewModel : ViewModelBase
                             string emulatorExecutable = CurrentConfig.EmulatorPath;
                             if (!string.IsNullOrWhiteSpace(CurrentConfig.EmulatorFlatpak))
                             {
-                                emulatorExecutable = CurrentConfig.SysConfig.FlatpakProcess;
-                            }
-                            else if (!string.IsNullOrEmpty(CurrentConfig.SysConfig.FlatpakRunProcess))
-                            {
-                                emulatorExecutable = CurrentConfig.SysConfig.FlatpakRunProcess;
+                                emulatorExecutable = FlatpakProcess;
                             }
                             else if (emulatorExecutable.EndsWith(".app"))
                             {
@@ -1338,20 +1335,12 @@ public partial class MainWindowViewModel : ViewModelBase
                             }
 
                             string[] emulatorArgs = [Path.Combine(OpenProject.MainDirectory, $"{OpenProject.Name}.nds")];
-                            if (emulatorExecutable.Equals(CurrentConfig.SysConfig.FlatpakProcess)
+                            if (emulatorExecutable.Equals(FlatpakProcess)
                                 && !string.IsNullOrWhiteSpace(CurrentConfig.EmulatorFlatpak))
                             {
                                 emulatorArgs =
                                 [
-                                    ..CurrentConfig.SysConfig.FlatpakProcessBaseArgs, "run", CurrentConfig.EmulatorFlatpak,
-                                    Path.Combine(OpenProject.MainDirectory, $"{OpenProject.Name}.nds"),
-                                ];
-                            }
-                            else if (emulatorExecutable.Equals(CurrentConfig.SysConfig.FlatpakRunProcess))
-                            {
-                                emulatorArgs =
-                                [
-                                    ..CurrentConfig.SysConfig.FlatpakRunProcessBaseArgs, CurrentConfig.EmulatorPath,
+                                    "run", CurrentConfig.EmulatorFlatpak,
                                     Path.Combine(OpenProject.MainDirectory, $"{OpenProject.Name}.nds"),
                                 ];
                             }
