@@ -96,12 +96,12 @@ public class CharacterEditorTests
         _mainWindowViewModel.SetupMockedProperties(_project, _log);
 
         string testId = Guid.NewGuid().ToString();
-        Config config = new() { UserDirectory = Path.Combine(Path.GetTempPath(), testId) };
-        ConfigFactoryMock configFactory = new($"{testId}.json", config);
+        ConfigUser configUser = new() { UserDirectory = Path.Combine(Path.GetTempPath(), testId) };
+        ConfigFactoryMock configFactory = new($"{testId}.json", configUser);
         _mainWindowViewModel.Window = new() { ConfigurationFactory = configFactory, DataContext = _mainWindowViewModel };
         _mainWindowViewModel.Window.Show();
 
-        _project.Config = _mainWindowViewModel.CurrentConfig;
+        _project.ConfigUser = _mainWindowViewModel.CurrentConfig;
         _project.Name = nameof(CharacterEditorTests);
         Directory.CreateDirectory(Path.Combine(_project.IterativeDirectory, "assets", "graphics"));
         Directory.CreateDirectory(Path.Combine(_project.BaseDirectory, "assets", "graphics"));

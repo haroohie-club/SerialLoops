@@ -120,19 +120,19 @@
             },
             {
                 "File": "2022794.s",
-                "Destination": "replSource/2022794/2022794.s",
+                "Destination": "replSource/2022794.s",
                 "Symbols": [],
                 "Parameters": []
             },
             {
                 "File": "202279C.s",
-                "Destination": "replSource/202279C/202279C.s",
+                "Destination": "replSource/202279C.s",
                 "Symbols": [],
                 "Parameters": []
             },
             {
                 "File": "2078DB0.s",
-                "Destination": "replSource/2078DB0/2078DB0.s",
+                "Destination": "replSource/2078DB0.s",
                 "Symbols": [],
                 "Parameters": []
             }
@@ -199,7 +199,7 @@
         "Files": [
             {
                 "File": "02062BE8.s",
-                "Destination": "replSource/02062BE8/02062BE8.s",
+                "Destination": "replSource/02062BE8.s",
                 "Symbols": [],
                 "Parameters": []
             }

@@ -13,8 +13,10 @@ using SerialLoops.Lib.Script;
 
 namespace SerialLoops.Lib;
 
-public class Config
+public class ConfigUser
 {
+    [JsonIgnore]
+    public ConfigSystem SysConfig { get; set; }
     [JsonIgnore]
     public string ConfigPath { get; set; }
     public string UserDirectory { get; set; }
@@ -33,11 +35,6 @@ public class Config
     [JsonIgnore]
     public ObservableCollection<ScriptTemplate> ScriptTemplates { get; set; }
     public string CurrentCultureName { get; set; }
-    public string DevkitArmPath { get; set; }
-    public bool UseDocker { get; set; }
-    public string DevkitArmDockerTag { get; set; }
-    public string EmulatorFlatpak { get; set; }
-    public string EmulatorPath { get; set; }
     public bool AutoReopenLastProject { get; set; }
     public bool RememberProjectWorkspace { get; set; }
     public bool RemoveMissingProjects { get; set; }

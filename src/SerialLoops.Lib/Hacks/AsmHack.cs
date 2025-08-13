@@ -67,7 +67,7 @@ public class AsmHack : ReactiveObject
         return false;
     }
 
-    public void Apply(Project project, Config config, Dictionary<HackFile, SelectedHackParameter[]> selectedParameters, ILogger log, bool forceApplication = false)
+    public void Apply(Project project, ConfigUser configUser, Dictionary<HackFile, SelectedHackParameter[]> selectedParameters, ILogger log, bool forceApplication = false)
     {
         if (Applied(project) && !forceApplication)
         {
@@ -82,7 +82,7 @@ public class AsmHack : ReactiveObject
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(destination));
             }
-            string fileText = File.ReadAllText(Path.Combine(config.HacksDirectory, file.File));
+            string fileText = File.ReadAllText(Path.Combine(configUser.HacksDirectory, file.File));
             foreach (SelectedHackParameter parameter in selectedParameters[file])
             {
                 fileText = fileText.Replace($"{{{{{parameter.Parameter.Name}}}}}", parameter.Value);

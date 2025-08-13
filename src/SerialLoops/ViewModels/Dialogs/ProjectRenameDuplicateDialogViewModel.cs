@@ -22,7 +22,7 @@ public class ProjectRenameDuplicateDialogViewModel : ViewModelBase
     public ICommand CancelCommand { get; }
     public ICommand SubmitCommand { get; }
 
-    public ProjectRenameDuplicateDialogViewModel(bool rename, string project, Config config, ILogger log)
+    public ProjectRenameDuplicateDialogViewModel(bool rename, string project, ConfigUser configUser, ILogger log)
     {
         Title = rename ? Strings.ProjectRenameText : Strings.ProjectDuplicateText;
         SubmitText = rename ? Strings.Rename : Strings.Duplicate;
@@ -38,7 +38,7 @@ public class ProjectRenameDuplicateDialogViewModel : ViewModelBase
                 return;
             }
 
-            string newPath = Path.Combine(config.ProjectsDirectory, NewName);
+            string newPath = Path.Combine(configUser.ProjectsDirectory, NewName);
             if (Directory.Exists(newPath))
             {
                 await dialog.ShowMessageBoxAsync(Strings.ProjectAlreadyExistsErrorTitle, Strings.ProjectAlreadyExistsErrorText,
@@ -84,7 +84,7 @@ public class ProjectRenameDuplicateDialogViewModel : ViewModelBase
             }
 
             Project deserializedProject = Project.Deserialize(newProj);
-            deserializedProject.Config = config;
+            deserializedProject.ConfigUser = configUser;
             deserializedProject.Name = NewName;
             deserializedProject.Save(log);
 

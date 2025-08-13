@@ -30,7 +30,7 @@ public class EditorTabsPanelTests
     private TestConsoleLogger _log;
     private Project _project;
     private ConfigFactoryMock _configFactory;
-    private Config _config;
+    private ConfigUser _configUser;
 
     private BgTableFile _bgTableFile;
     private ExtraFile _extra;
@@ -60,10 +60,10 @@ public class EditorTabsPanelTests
     {
         Mock<Project> projectMock = new();
         projectMock.SetupCommonMocks();
-        _config = new() { ConfigPath = "config.json", UserDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString()) };
-        _configFactory = new("config.json", _config);
+        _configUser = new() { ConfigPath = "config.json", UserDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString()) };
+        _configFactory = new("config.json", _configUser);
         _project = projectMock.Object;
-        _project.Config = _config;
+        _project.ConfigUser = _configUser;
         _project.SetupMockedProperties(_uiVals);
         _project.Extra = _extra;
         Mock<ArchiveFile<GraphicsFile>> grpMock = new();

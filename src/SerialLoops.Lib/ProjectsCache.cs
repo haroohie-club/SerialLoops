@@ -21,9 +21,9 @@ public class ProjectsCache
         IO.WriteStringFile(CacheFilePath, JsonSerializer.Serialize(this), log);
     }
 
-    public static ProjectsCache LoadCache(Config config, ILogger log)
+    public static ProjectsCache LoadCache(ConfigUser configUser, ILogger log)
     {
-        string recentProjectsJson = Path.Combine(config.UserDirectory, "projects_cache.json");
+        string recentProjectsJson = Path.Combine(configUser.UserDirectory, "projects_cache.json");
         if (!File.Exists(recentProjectsJson))
         {
             log.Log($"Creating default recent project and workspaces cache at '{recentProjectsJson}'...");

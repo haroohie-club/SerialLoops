@@ -44,13 +44,14 @@ namespace SerialLoops.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
-    private const string BASE_TITLE = "Serial Loops";
+    private const string BaseTitle = "Serial Loops";
+    private const string FlatpakProcess = "flatpak";
 
     public string[] Args { get; set; }
     private bool _alreadyHandledStartup = false;
 
     [Reactive]
-    public string Title { get; set; } = BASE_TITLE;
+    public string Title { get; set; } = BaseTitle;
     public Size MinSize => new(769, 420);
     [Reactive]
     public Size ClientSize { get; set; } = new(1200, 800);
@@ -74,7 +75,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public MainWindow Window { get; set; }
     public ProjectsCache ProjectsCache { get; set; }
-    public Config CurrentConfig { get; set; }
+    public ConfigUser CurrentConfig { get; set; }
     [Reactive]
     public Project OpenProject { get; set; }
     public OpenProjectPanel ProjectPanel { get; set; }
@@ -146,7 +147,7 @@ public partial class MainWindowViewModel : ViewModelBase
         EditSaveCommand = ReactiveCommand.CreateFromTask(EditSaveFileCommand_Executed);
         AboutCommand = ReactiveCommand.CreateFromTask(AboutCommand_Executed);
         PreferencesCommand = ReactiveCommand.CreateFromTask(PreferencesCommand_Executed);
-        if (PatchableConstants.UseUpdater)
+        if (Environment.GetEnvironmentVariable(EnvironmentVariables.UseUpdater)?.Equals(bool.TrueString, StringComparison.OrdinalIgnoreCase) ?? true)
         {
             CheckForUpdatesCommand = ReactiveCommand.CreateFromTask(new UpdateChecker(this).Check);
         }
@@ -227,7 +228,7 @@ public partial class MainWindowViewModel : ViewModelBase
         ProjectsCache = ProjectsCache.LoadCache(CurrentConfig, Log);
         UpdateRecentProjects();
 
-        if (PatchableConstants.UseUpdater && CurrentConfig.CheckForUpdates)
+        if (CurrentConfig.SysConfig.UseUpdater && CurrentConfig.CheckForUpdates)
         {
             CheckForUpdatesCommand.Execute(null);
         }
@@ -296,7 +297,7 @@ public partial class MainWindowViewModel : ViewModelBase
         using Stream typefaceStream = AssetLoader.Open(new("avares://SerialLoops/Assets/Graphics/MS-Gothic-Haruhi.ttf"));
         _msGothicHaruhi = SKTypeface.FromStream(typefaceStream);
 
-        Title = $"{BASE_TITLE} - {project.Name}";
+        Title = $"{BaseTitle} - {project.Name}";
 
         LoadCachedData();
 
@@ -558,7 +559,7 @@ public partial class MainWindowViewModel : ViewModelBase
             return;
         }
 
-        Title = BASE_TITLE;
+        Title = BaseTitle;
         OpenHomePanel();
 
         OpenProject = null;
@@ -828,7 +829,7 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             OpenProject.Name = Path.GetFileNameWithoutExtension(newProj);
             OpenProjectName = OpenProject.Name;
-            Title = $"{BASE_TITLE} - {OpenProject.Name}";
+            Title = $"{BaseTitle} - {OpenProject.Name}";
             foreach (BackgroundMusicItem bgm in OpenProject.Items.Where(i => i.Type == ItemDescription.ItemType.BGM).Cast<BackgroundMusicItem>())
             {
                 bgm.SetBgmFile(OpenProject, Path.GetDirectoryName(projectPath));
@@ -1306,7 +1307,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         if (OpenProject is not null)
         {
-            if (string.IsNullOrWhiteSpace(CurrentConfig.EmulatorPath) && string.IsNullOrWhiteSpace(CurrentConfig.EmulatorFlatpak))
+            if (string.IsNullOrWhiteSpace(CurrentConfig.SysConfig.EmulatorPath) && string.IsNullOrWhiteSpace(CurrentConfig.SysConfig.EmulatorFlatpak))
             {
                 Log.LogWarning("Attempted to build and run project while no emulator path/flatpak was set.");
                 await Window.ShowMessageBoxAsync(Strings.No_Emulator_Path, Strings.No_emulator_path_has_been_set__nPlease_set_the_path_to_a_Nintendo_DS_emulator_in_Preferences_to_use_Build___Run_,
@@ -1323,15 +1324,10 @@ public partial class MainWindowViewModel : ViewModelBase
                         Log.Log("Build succeeded!");
                         try
                         {
-                            // If the EmulatorPath is an .app bundle, we need to run the executable inside it
-                            string emulatorExecutable = CurrentConfig.EmulatorPath;
-                            if (!string.IsNullOrWhiteSpace(CurrentConfig.EmulatorFlatpak))
+                            string emulatorExecutable = CurrentConfig.SysConfig.EmulatorPath;
+                            if (!string.IsNullOrWhiteSpace(CurrentConfig.SysConfig.EmulatorFlatpak))
                             {
-                                emulatorExecutable = PatchableConstants.FlatpakProcess;
-                            }
-                            else if (!string.IsNullOrEmpty(PatchableConstants.FlatpakRunProcess))
-                            {
-                                emulatorExecutable = PatchableConstants.FlatpakRunProcess;
+                                emulatorExecutable = FlatpakProcess;
                             }
                             else if (emulatorExecutable.EndsWith(".app"))
                             {
@@ -1339,20 +1335,12 @@ public partial class MainWindowViewModel : ViewModelBase
                             }
 
                             string[] emulatorArgs = [Path.Combine(OpenProject.MainDirectory, $"{OpenProject.Name}.nds")];
-                            if (emulatorExecutable.Equals(PatchableConstants.FlatpakProcess)
-                                && !string.IsNullOrWhiteSpace(CurrentConfig.EmulatorFlatpak))
+                            if (emulatorExecutable.Equals(FlatpakProcess)
+                                && !string.IsNullOrWhiteSpace(CurrentConfig.SysConfig.EmulatorFlatpak))
                             {
                                 emulatorArgs =
                                 [
-                                    ..PatchableConstants.FlatpakProcessBaseArgs, "run", CurrentConfig.EmulatorFlatpak,
-                                    Path.Combine(OpenProject.MainDirectory, $"{OpenProject.Name}.nds"),
-                                ];
-                            }
-                            else if (emulatorExecutable.Equals(PatchableConstants.FlatpakRunProcess))
-                            {
-                                emulatorArgs =
-                                [
-                                    ..PatchableConstants.FlatpakRunProcessBaseArgs, CurrentConfig.EmulatorPath,
+                                    "run", CurrentConfig.SysConfig.EmulatorFlatpak,
                                     Path.Combine(OpenProject.MainDirectory, $"{OpenProject.Name}.nds"),
                                 ];
                             }
@@ -1360,7 +1348,7 @@ public partial class MainWindowViewModel : ViewModelBase
                             {
                                 emulatorArgs =
                                 [
-                                    CurrentConfig.EmulatorPath, "--args",
+                                    CurrentConfig.SysConfig.EmulatorPath, "--args",
                                     Path.Combine(OpenProject.MainDirectory, $"{OpenProject.Name}.nds"),
                                 ];
                             }

@@ -24,9 +24,14 @@ AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
 DefaultDirName={autopf}\{#MyAppName}
-; "ArchitecturesAllowed=x64compatible" specifies that Setup cannot run
-; on anything but x64 and Windows 11 on Arm.
-ArchitecturesAllowed=x64compatible
+; Specify our architectures depending on what platform we're compiling for
+#if TargetArchitecture == "win-arm64"
+    ArchitecturesAllowed=arm64
+#elif TargetArchitecture == "win-x86"
+    ArchitecturesAllowed=x86compatible and not x64compatible
+#else
+    ArchitecturesAllowed=x64compatible and not arm64
+#endif
 ; "ArchitecturesInstallIn64BitMode=x64compatible" requests that the
 ; install be done in "64-bit mode" on x64 or Windows 11 on Arm,
 ; meaning it should use the native 64-bit Program Files directory and
@@ -39,7 +44,7 @@ UninstallDisplayIcon={app}\{#MyAppExeName}
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 ;PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=commandline
-OutputBaseFilename=SerialLoopsInstaller
+OutputBaseFilename=SLInstaller-{#TargetArchitecture}
 SetupIconFile=..\..\src\SerialLoops\Assets\serial-loops.ico
 Compression=lzma
 SolidCompression=yes
@@ -50,15 +55,13 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
-Name: "devkitarm"; Description: "Install devkitARM"; GroupDescription: "Install Other Tools"; Flags: checkedonce
-Name: "dockerdesktop"; Description: "Install Docker Desktop"; GroupDescription: "Install Other Tools"; Flags: checkedonce
+Name: "llvm"; Description: "Install LLVM"; GroupDescription: "Install Other Tools"; Flags: checkedonce
 
 [Files]
-Source: "..\..\src\SerialLoops\bin\Release\net8.0-windows\win-x64\publish\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\..\src\SerialLoops\bin\Release\net8.0-windows\win-x64\publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "devkitProUpdater-3.0.3.exe"; DestDir: {tmp}; Flags: deleteafterinstall; Tasks: devkitarm
-Source: "wsl-install.bat"; DestDir: {tmp}; Flags: deleteafterinstall; Tasks: dockerdesktop
-Source: "Docker Desktop Installer.exe"; DestDir: {tmp}; Flags: deleteafterinstall; Tasks: dockerdesktop
+Source: "..\..\src\SerialLoops\bin\Release\net8.0-windows\{#TargetArchitecture}\publish\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\..\src\SerialLoops\bin\Release\net8.0-windows\{#TargetArchitecture}\publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "ninja.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "llvm.exe"; DestDir: {tmp}; Flags: deleteafterinstall; Tasks: llvm
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Registry]
@@ -77,8 +80,6 @@ Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
 [Run]
-Filename: "{tmp}\devkitProUpdater-3.0.3.exe"; WorkingDir: {tmp}; Tasks: devkitarm
-Filename: "{tmp}\wsl-install.bat"; WorkingDir: {tmp}; Tasks: dockerdesktop
-Filename: "{tmp}\Docker Desktop Installer.exe"; WorkingDir: {tmp}; Tasks: dockerdesktop
+Filename: "{tmp}\llvm.exe"; WorkingDir: {tmp}; Tasks: llvm
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 

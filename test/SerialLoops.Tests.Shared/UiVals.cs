@@ -1,7 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.IO.Compression;
 using System.Net.Http;
-using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
@@ -11,7 +11,7 @@ namespace SerialLoops.Tests.Shared;
 public class UiVals
 {
     public string AssetsDirectory { get; set; } = string.Empty;
-    [JsonIgnore] public static string? BaseDirectory => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+    [JsonIgnore] public static string? BaseDirectory => AppContext.BaseDirectory;
 
     public static async Task<UiVals> DownloadTestAssets()
     {

@@ -12,7 +12,7 @@
     <ApplicationIcon>Assets\serial-loops.ico</ApplicationIcon>
   </PropertyGroup>
 
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent" Condition="$([System.OperatingSystem]::IsMacOS()) And !Exists('libSDL2.dylib') And '$(CIBuild)' != 'true'">
+  <Target Name="PreBuildSDL" BeforeTargets="PreBuildEvent" Condition="$([System.OperatingSystem]::IsMacOS()) And !Exists('libSDL2.dylib') And '$(CIBuild)' != 'true'">
     <Exec Command="/bin/bash -C install-sdl-macos.sh ../src/SerialLoops/libSDL2.dylib" WorkingDirectory="../.."/>
   </Target>
   <ItemGroup Condition="$([System.OperatingSystem]::IsMacOS())">
@@ -21,6 +21,20 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="libSDL2.dylib">
+      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+    </None>
+  </ItemGroup>
+
+  <Target Name="PreBuildSTH" BeforeTargets="PreBuildEvent" Condition="'$(RuntimeIdentifier)' != ''">
+    <Exec Command="dotnet publish submodules/NitroPacker.SymTableHelper/HaroohieClub.NitroPacker.SymTableHelper.csproj -c Release -f net8.0 -r $(RuntimeIdentifier) --self-contained /p:DebugType=None /p:DebugSymbols=false" WorkingDirectory="../.."/>
+  </Target>
+  <ItemGroup>
+    <None Condition="'$(RuntimeIdentifier)' != '' And $([System.OperatingSystem]::IsWindows())" Include="..\..\submodules\NitroPacker.SymTableHelper\bin\Release\net8.0\$(RuntimeIdentifier)\publish\NitroPacker.SymTableHelper.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+    </None>
+    <None Condition="'$(RuntimeIdentifier)' != '' And !$([System.OperatingSystem]::IsWindows())" Include="..\..\submodules\NitroPacker.SymTableHelper\bin\Release\net8.0\$(RuntimeIdentifier)\publish\NitroPacker.SymTableHelper">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <CopyToPublishDirectory>Always</CopyToPublishDirectory>
     </None>
   </ItemGroup>
@@ -120,6 +134,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Condition="'$(RuntimeIdentifier)' == ''" Include="..\..\submodules\NitroPacker.SymTableHelper\HaroohieClub.NitroPacker.SymTableHelper.csproj" />
     <ProjectReference Include="..\SerialLoops.Lib\SerialLoops.Lib.csproj" />
   </ItemGroup>
 

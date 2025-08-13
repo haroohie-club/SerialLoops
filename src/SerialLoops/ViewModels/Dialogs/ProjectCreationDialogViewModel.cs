@@ -18,7 +18,7 @@ public partial class ProjectCreationDialogViewModel : ViewModelBase
 {
     private ILogger _log;
     private MainWindowViewModel _mainWindow;
-    private Config _config;
+    private ConfigUser _configUser;
 
     public string ProjectName { get; set; }
     public ComboBoxItem LanguageTemplateItem { get; set; }
@@ -35,11 +35,11 @@ public partial class ProjectCreationDialogViewModel : ViewModelBase
     public ICommand CreateCommand { get; set; }
     public ICommand CancelCommand { get; set; }
 
-    public ProjectCreationDialogViewModel(Config config, MainWindowViewModel mainWindow, ILogger log, bool migrate = false)
+    public ProjectCreationDialogViewModel(ConfigUser configUser, MainWindowViewModel mainWindow, ILogger log, bool migrate = false)
     {
         _log = log;
         _mainWindow = mainWindow;
-        _config = config;
+        _configUser = configUser;
         Migrate = migrate;
         PickRomCommand = ReactiveCommand.CreateFromTask(PickRom);
         CreateCommand = Migrate ? ReactiveCommand.Create<ProjectCreationDialog>(dialog => dialog.Close((RomPath, LanguageTemplateCode))) : ReactiveCommand.CreateFromTask<ProjectCreationDialog>(CreateProject);
@@ -67,14 +67,14 @@ public partial class ProjectCreationDialogViewModel : ViewModelBase
         }
         else
         {
-            Project newProject = new(ProjectName, LanguageTemplateCode, _config, Strings.ResourceManager.GetString, _log);
+            Project newProject = new(ProjectName, LanguageTemplateCode, _configUser, Strings.ResourceManager.GetString, _log);
             ProgressDialogViewModel tracker = new(Strings.Creating_Project);
             tracker.InitializeTasks(() =>
             {
                 ((IProgressTracker)tracker).Focus(Strings.Creating_Project, 1);
                 Lib.IO.OpenRom(newProject, RomPath, _log, tracker);
                 tracker.Finished++;
-                newProject.Load(_config, _log, tracker);
+                newProject.Load(_configUser, _log, tracker);
                 newProject.SetBaseRomHash(RomPath);
                 newProject.Save(_log);
             }, () => dialog.Close(newProject));

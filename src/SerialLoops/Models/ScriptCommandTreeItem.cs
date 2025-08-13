@@ -13,13 +13,11 @@ using ReactiveUI;
 using SerialLoops.Assets;
 using SerialLoops.Lib.Items;
 using SerialLoops.Lib.Script;
-using SerialLoops.Lib.Script.Parameters;
 using SerialLoops.Lib.Util;
 using SerialLoops.Utility;
 using SerialLoops.ViewModels.Dialogs;
 using SerialLoops.Views;
 using SerialLoops.Views.Dialogs;
-using SoftCircuits.Collections;
 
 namespace SerialLoops.Models;
 

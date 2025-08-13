@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Windows.Input;
 using HaruhiChokuretsuLib.Util;
@@ -21,8 +22,8 @@ public class PreferencesDialogViewModel : ViewModelBase
     public ICommand CancelCommand { get; private set; }
 
     private IConfigFactory _configFactory;
-    public Config Configuration { get; set; }
-    public ILogger Log { get; set; }
+    public ConfigUser Configuration { get; set; }
+    private ILogger Log { get; set; }
     [Reactive]
     public bool RequireRestart { get; set; }
     public bool Saved { get; set; }
@@ -31,14 +32,7 @@ public class PreferencesDialogViewModel : ViewModelBase
     public void Initialize(PreferencesDialog preferencesDialog, ILogger log, IConfigFactory configFactory = null)
     {
         _preferencesDialog = preferencesDialog;
-        if (configFactory is not null)
-        {
-            _configFactory = configFactory;
-        }
-        else
-        {
-            _configFactory = new ConfigFactory();
-        }
+        _configFactory = configFactory ?? new ConfigFactory();
         Configuration = _configFactory.LoadConfig(s => s, log);
         Log = log;
 
@@ -46,37 +40,52 @@ public class PreferencesDialogViewModel : ViewModelBase
         [
             new FolderOption(_preferencesDialog)
             {
-                OptionName = Strings.devkitARM_Path,
-                Path = Configuration.DevkitArmPath,
-                OnChange = (path) => Configuration.DevkitArmPath = path,
+                OptionName = Strings.ConfigOptionLlvmPath,
+                Path = Configuration.SysConfig.LlvmPath,
+                OnChange = path => Configuration.SysConfig.LlvmPath = path,
+            },
+            new FileOption(_preferencesDialog)
+            {
+                OptionName = Strings.ConfigOptionNinjaPath,
+                Path = Configuration.SysConfig.NinjaPath,
+                OnChange = value => Configuration.SysConfig.NinjaPath = value,
             },
             new FileOption(_preferencesDialog)
             {
                 OptionName = Strings.Emulator_Path,
-                Path = Configuration.EmulatorPath,
-                OnChange = (path) => Configuration.EmulatorPath = path,
+                Path = Configuration.SysConfig.EmulatorPath,
+                OnChange = path =>
+                {
+                    Configuration.SysConfig.EmulatorPath = path;
+                    if (Configuration.SysConfig.StoreEmulatorPath)
+                    {
+                        new ConfigEmulator()
+                        {
+                            EmulatorPath = Configuration.SysConfig.EmulatorPath,
+                            EmulatorFlatpak = Configuration.SysConfig.EmulatorFlatpak,
+                        }.Write();
+                    }
+                },
+                Enabled = string.IsNullOrEmpty(Configuration.SysConfig.BundledEmulator),
             },
             new TextOption
             {
                 OptionName = Strings.Emulator_Flatpak,
-                Value = Configuration.EmulatorFlatpak,
-                OnChange = (flatpak) => Configuration.EmulatorFlatpak = flatpak,
-                Enabled = OperatingSystem.IsLinux(),
+                Value = Configuration.SysConfig.EmulatorFlatpak,
+                OnChange = flatpak =>
+                {
+                    Configuration.SysConfig.EmulatorFlatpak = flatpak;
+                    if (Configuration.SysConfig.StoreEmulatorPath)
+                    {
+                        new ConfigEmulator()
+                        {
+                            EmulatorPath = Configuration.SysConfig.EmulatorPath,
+                            EmulatorFlatpak = Configuration.SysConfig.EmulatorFlatpak,
+                        }.Write();
+                    }
+                },
+                Enabled = OperatingSystem.IsLinux() && string.IsNullOrEmpty(Configuration.SysConfig.BundledEmulator),
             },
-            new BooleanOption
-            {
-                OptionName = Strings.Use_Docker_for_ASM_Hacks,
-                Value = Configuration.UseDocker,
-                OnChange = (value) => Configuration.UseDocker = value,
-                Enabled = !OperatingSystem.IsMacOS(),
-            },
-            new TextOption
-            {
-                OptionName = Strings.devkitARM_Docker_Tag,
-                Value = Configuration.DevkitArmDockerTag,
-                OnChange = (value) => Configuration.DevkitArmDockerTag = value,
-                Enabled = !OperatingSystem.IsMacOS(),
-            }
         ]);
         _preferencesDialog.ProjectOptions.InitializeOptions(Strings.Projects,
         [
@@ -84,19 +93,19 @@ public class PreferencesDialogViewModel : ViewModelBase
             {
                 OptionName = Strings.Auto_Re_Open_Last_Project,
                 Value = Configuration.AutoReopenLastProject,
-                OnChange = (value) => Configuration.AutoReopenLastProject = value,
+                OnChange = value => Configuration.AutoReopenLastProject = value,
             },
             new BooleanOption
             {
                 OptionName = Strings.Remember_Project_Workspace,
                 Value = Configuration.RememberProjectWorkspace,
-                OnChange = (value) => Configuration.RememberProjectWorkspace = value,
+                OnChange = value => Configuration.RememberProjectWorkspace = value,
             },
             new BooleanOption
             {
                 OptionName = Strings.Remove_Missing_Projects,
                 Value = Configuration.RemoveMissingProjects,
-                OnChange = (value) => Configuration.RemoveMissingProjects = value,
+                OnChange = value => Configuration.RemoveMissingProjects = value,
             },
         ]);
         _preferencesDialog.SerialLoopsOptions.InitializeOptions("Serial Loops",
@@ -114,7 +123,7 @@ public class PreferencesDialogViewModel : ViewModelBase
             {
                 OptionName = Strings.Language,
                 Value = Strings.Culture.Name,
-                OnChange = (value) =>
+                OnChange = value =>
                 {
                     Strings.Culture = CultureInfo.CurrentCulture;
                     Configuration.CurrentCultureName = value;
@@ -123,12 +132,12 @@ public class PreferencesDialogViewModel : ViewModelBase
             },
             new ComboBoxOption([
                 ("", string.Format(Strings.Default_Font_Display, Strings.Default_Font)),
-                ..SystemFonts.Collection.Families.Select(_ => (_.Name, _.Name)),
+                ..SystemFonts.Collection.Families.Select(f => (f.Name, f.Name)),
             ], font: true)
             {
                 OptionName = Strings.Display_Font,
                 Value = Configuration.DisplayFont ?? "",
-                OnChange = (value) =>
+                OnChange = value =>
                 {
                     Configuration.DisplayFont = value;
                     RequireRestart = true;
@@ -138,23 +147,37 @@ public class PreferencesDialogViewModel : ViewModelBase
             {
                 OptionName = Strings.Check_for_Updates_on_Startup,
                 Value = Configuration.CheckForUpdates,
-                OnChange = (value) => Configuration.CheckForUpdates = value,
+                OnChange = value => Configuration.CheckForUpdates = value,
+                Enabled = Configuration.SysConfig.UseUpdater,
             },
             new BooleanOption
             {
                 OptionName = Strings.Use_Pre_Release_Update_Channel,
                 Value = Configuration.PreReleaseChannel,
-                OnChange = (value) => Configuration.PreReleaseChannel = value,
-            }
+                OnChange = value => Configuration.PreReleaseChannel = value,
+                Enabled = Configuration.SysConfig.UseUpdater,
+            },
         ]);
 
         SaveCommand = ReactiveCommand.Create(SaveCommand_Executed);
         CancelCommand = ReactiveCommand.Create(_preferencesDialog.Close);
     }
 
-    public void SaveCommand_Executed()
+    private void SaveCommand_Executed()
     {
         Configuration.Save(Log);
+        if (Configuration.SysConfig.StoreSysConfig)
+        {
+            Configuration.SysConfig.Save(Path.Combine(Path.GetDirectoryName(Configuration.ConfigPath)!, "sysconfig.json"), Log);
+        }
+        else if (Configuration.SysConfig.StoreEmulatorPath)
+        {
+            new ConfigEmulator()
+            {
+                EmulatorPath = Configuration.SysConfig.EmulatorPath,
+                EmulatorFlatpak = Configuration.SysConfig.EmulatorFlatpak,
+            }.Write();
+        }
         Saved = true;
         _preferencesDialog.Close();
     }

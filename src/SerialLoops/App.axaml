@@ -6,7 +6,6 @@
              xmlns:controls="using:SerialLoops.Controls"
              xmlns:dialoghost="using:DialogHostAvalonia"
              xmlns:toolbar="using:MiniToolbar.Avalonia"
-             xmlns:lib="using:SerialLoops.Lib"
              xmlns:local="using:SerialLoops"
              xmlns:mintoolbarthemes="using:MiniToolbar.Avalonia.Themes"
              xmlns:tabaloniathemes="using:Tabalonia.Themes.Custom"
@@ -25,8 +24,7 @@
             <NativeMenuItemSeparator />
             <NativeMenuItem Header="{x:Static assets:Strings._Preferences___}"
                             Icon="avares://SerialLoops/Assets/Icons/Options.png" Click="Preferences_Click" />
-            <NativeMenuItem IsVisible="{x:Static lib:PatchableConstants.UseUpdater}"
-                            Header="{x:Static assets:Strings._Check_for_Updates___}"
+            <NativeMenuItem Header="{x:Static assets:Strings._Check_for_Updates___}"
                             Icon="avares://SerialLoops/Assets/Icons/Update.png" Click="Updates_Click" />
             <NativeMenuItem Header="{x:Static assets:Strings.View__Logs}" Click="Logs_Click" />
             <NativeMenuItem Header="{x:Static assets:Strings.View_Crash_Log}" Click="CrashLog_Click"/>
