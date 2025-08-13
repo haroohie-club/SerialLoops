@@ -12,10 +12,7 @@ _runAsUser() {
     uid=$(/usr/bin/id -u "${currentUser}")
 
 	if [[ "${currentUser}" != "loginwindow" ]]; then
-        echo "$@; exit 0" > /var/tmp/install.sh
-        chmod +x /var/tmp/install.sh
-		/bin/launchctl asuser "$uid" sudo -u "${currentUser}" /usr/bin/open -a Terminal.app /var/tmp/install.sh
-        rm /var/tmp/install.sh
+		/bin/launchctl asuser "$uid" sudo -u "${currentUser}" /usr/bin/open -a Terminal.app $@
 	else
 		echo "No user logged in, exiting..."
 		exit 1
@@ -27,12 +24,18 @@ if [ ! -d "/opt/homebrew" ]; then
 fi
 
 if [ ! -d "/opt/homebrew/opt/llvm" ]; then
-    _runAsUser /opt/homebrew/bin/brew install llvm 2>> /var/tmp/SerialLoopsInstaller.log
-    _runAsUser /opt/homebrew/bin/brew install lld 2>> /var/tmp/SerialLoopsInstaller.log
+    echo "/opt/homebrew/bin/brew install llvm; exit 0" > /var/tmp/install_llvm.sh
+    chmod +x /var/tmp/install_llvm.sh
+    echo "/opt/homebrew/bin/brew install lld; exit 0" > /var/tmp/install_lld.sh
+    chmod +x /var/tmp/install_lld.sh
+    _runAsUser /var/tmp/install_llvm.sh 2>> /var/tmp/SerialLoopsInstaller.log
+    _runAsUser /var/tmp/install_lld.sh 2>> /var/tmp/SerialLoopsInstaller.log
 fi
 
 if [ ! -d "/opt/homebrew/bin/ninja" ]; then
-    _runAsUser /opt/homebrew/bin/brew install ninja 2>> /var/tmp/SerialLoopsInstaller.log
+    echo "/opt/homebrew/bin/brew install ninja; exit 0" > /var/tmp/install_ninja.sh
+    chmod +x /var/tmp/install_ninja.sh
+    _runAsUser /var/tmp/install_ninja.sh 2>> /var/tmp/SerialLoopsInstaller.log
 fi
 
 exit 0
