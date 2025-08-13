@@ -58,7 +58,7 @@ Using these will ensure Serial Loops is ready to use after installation. However
 #### Dependencies for Non-Packages Releases
 If you opt to use one of the non-packaged releases on Windows or Linux, you will need to install a few dependencies. These are:
 
-* Clang and LLD from [LLVM](http://llvm.org) (on Windows, it's best to just use the LLVM installer as it will install both of these; on Linux, you can opt to install just the `clang` and `lld` packages from your package manager)
+* Clang and LLD from [LLVM](http://llvm.org) (on Windows, it's best to just use the LLVM installer as it will install both of these; on Linux, you can opt to install just the `clang`, `lld`, and possibly `llvm` packages from your package manager)
 * [Ninja](https://ninja-build.org)
 * On Linux, you will also need SDL2
 
