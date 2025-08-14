@@ -170,10 +170,18 @@ public partial class MainWindowViewModel : ViewModelBase
         BuildBaseCommand = ReactiveCommand.CreateFromTask(BuildBase_Executed);
         BuildAndRunCommand = ReactiveCommand.CreateFromTask(BuildAndRun_Executed);
 
-        ViewLogsCommand = ReactiveCommand.Create(() =>
+        ViewLogsCommand = ReactiveCommand.CreateFromTask(async Task () =>
         {
             try
             {
+                if ((Environment.GetEnvironmentVariable(EnvironmentVariables.Sandboxed) ?? bool.FalseString).Equals(
+                        bool.TrueString, StringComparison.OrdinalIgnoreCase))
+                {
+                    await Window.ShowMessageBoxAsync(Strings.SandboxedLogLocationMboxTitle,
+                        string.Format(Strings.SandboxedLogLocationMboxMessage,
+                            Path.Combine(CurrentConfig.UserDirectory, "Logs", "SerialLoops.log")),
+                        ButtonEnum.Ok, Icon.Info, Log);
+                }
                 Process.Start(new ProcessStartInfo
                 {
                     FileName = Path.Combine(CurrentConfig.UserDirectory, "Logs", "SerialLoops.log"),
@@ -197,11 +205,21 @@ public partial class MainWindowViewModel : ViewModelBase
 
             try
             {
-                Process.Start(new ProcessStartInfo
+                if ((Environment.GetEnvironmentVariable(EnvironmentVariables.Sandboxed) ?? bool.FalseString).Equals(
+                        bool.TrueString, StringComparison.OrdinalIgnoreCase))
                 {
-                    FileName = Path.Combine(LoopyLogger.CrashLogLocation),
-                    UseShellExecute = true,
-                });
+                    await Window.ShowMessageBoxAsync(Strings.SandboxedLogLocationMboxTitle,
+                        string.Format(Strings.SandboxedLogLocationMboxMessage, LoopyLogger.CrashLogLocation),
+                        ButtonEnum.Ok, Icon.Info, Log);
+                }
+                else
+                {
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = Path.Combine(LoopyLogger.CrashLogLocation),
+                        UseShellExecute = true,
+                    });
+                }
             }
             catch (Exception ex)
             {

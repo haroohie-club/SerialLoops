@@ -7191,6 +7191,24 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Application is sandboxed so logs cannot be directly opened. Logs are located at {0}.
+        /// </summary>
+        public static string SandboxedLogLocationMboxMessage {
+            get {
+                return ResourceManager.GetString("SandboxedLogLocationMboxMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sandboxed Log Location.
+        /// </summary>
+        public static string SandboxedLogLocationMboxTitle {
+            get {
+                return ResourceManager.GetString("SandboxedLogLocationMboxTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save.
         /// </summary>
         public static string Save {

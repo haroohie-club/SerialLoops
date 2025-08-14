@@ -3726,4 +3726,10 @@ item in the dropdown!</value>
   <data name="ObjcopyExitedWithFailureMessage" xml:space="preserve">
     <value>llvm-objcopy exited with code {0}</value>
   </data>
+  <data name="SandboxedLogLocationMboxTitle" xml:space="preserve">
+    <value>Sandboxed Log Location</value>
+  </data>
+  <data name="SandboxedLogLocationMboxMessage" xml:space="preserve">
+    <value>Application is sandboxed so logs cannot be directly opened. Logs are located at {0}</value>
+  </data>
 </root>
