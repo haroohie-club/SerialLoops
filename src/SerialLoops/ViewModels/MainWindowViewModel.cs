@@ -175,12 +175,9 @@ public partial class MainWindowViewModel : ViewModelBase
             try
             {
                 // Temp debugging
-                Log.Log("/usr/lib\n" + string.Join('\n', Directory.GetDirectories("/usr/lib")) +
-                        string.Join('\n', Directory.GetFiles("/usr/lib")));
-                Log.Log("/usr/bin\n" + string.Join('\n', Directory.GetDirectories("/usr/bin")) +
-                        string.Join('\n', Directory.GetFiles("/usr/bin")));
-                Log.Log("/usr/lib/x86_64-linux-gnu\n" + string.Join('\n', Directory.GetDirectories("/usr/lib/x86_64-linux-gnu")) +
-                        string.Join('\n', Directory.GetFiles("/usr/lib/x86_64-linux-gnu")));
+                Log.Log("/usr/lib\n" + string.Join('\n', Directory.GetFileSystemEntries("/usr/lib")));
+                Log.Log("/usr/bin\n" + string.Join('\n', Directory.GetFileSystemEntries("/usr/bin")));
+                Log.Log("/usr/lib/x86_64-linux-gnu\n" + string.Join('\n', Directory.GetFileSystemEntries("/usr/lib/x86_64-linux-gnu")));
 
                 if ((Environment.GetEnvironmentVariable(EnvironmentVariables.Sandboxed) ?? bool.FalseString).Equals(
                         bool.TrueString, StringComparison.OrdinalIgnoreCase))
