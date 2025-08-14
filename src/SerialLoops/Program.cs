@@ -18,11 +18,13 @@ internal sealed class Program
     {
         try
         {
+#if !WINDOWS
             if ((Environment.GetEnvironmentVariable(EnvironmentVariables.Flatpak) ?? bool.FalseString).Equals(
                     bool.TrueString, StringComparison.OrdinalIgnoreCase))
             {
                 NativeLibrary.SetDllImportResolver(Assembly.GetAssembly(typeof(NAudio.Sdl2.WaveInSdl))!, DllImportResolver);
             }
+#endif
             BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
         }
         catch (Exception ex)
