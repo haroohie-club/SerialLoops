@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Reflection;
+using System.Runtime.InteropServices;
 using Avalonia;
 using Avalonia.ReactiveUI;
+using SerialLoops.Lib;
 using SerialLoops.Utility;
 
 namespace SerialLoops;
@@ -15,6 +18,13 @@ internal sealed class Program
     {
         try
         {
+#if !WINDOWS
+            if ((Environment.GetEnvironmentVariable(EnvironmentVariables.Flatpak) ?? bool.FalseString).Equals(
+                    bool.TrueString, StringComparison.OrdinalIgnoreCase))
+            {
+                NativeLibrary.SetDllImportResolver(Assembly.GetAssembly(typeof(NAudio.Sdl2.WaveInSdl))!, DllImportResolver);
+            }
+#endif
             BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
         }
         catch (Exception ex)
@@ -34,4 +44,11 @@ internal sealed class Program
             .UseReactiveUI()
             .WithInterFont()
             .LogToTrace();
+
+    private static IntPtr DllImportResolver(string libraryName, Assembly assembly, DllImportSearchPath? searchPath)
+    {
+        return libraryName.Equals("SDL2") ?
+            // Flatpak runtime doesn't have libSDL2.so, so we make do
+            NativeLibrary.Load("libSDL2-2.0.so.0", assembly, searchPath) : IntPtr.Zero;
+    }
 }

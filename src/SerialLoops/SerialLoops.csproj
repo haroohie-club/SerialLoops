@@ -94,6 +94,7 @@
 
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="11.3.3" />
+    <PackageReference Include="Avalonia.AvaloniaEdit" Version="11.3.0" />
     <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.3.3" />
     <PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="11.1.5" />
     <PackageReference Include="Avalonia.Controls.PanAndZoom" Version="11.3.0" />

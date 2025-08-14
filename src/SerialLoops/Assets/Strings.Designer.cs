@@ -2040,6 +2040,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Crash Log.
+        /// </summary>
+        public static string CrashLogName {
+            get {
+                return ResourceManager.GetString("CrashLogName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create.
         /// </summary>
         public static string Create {
@@ -4113,6 +4122,42 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Import Projects.
+        /// </summary>
+        public static string FirstTimeFlatpakButton {
+            get {
+                return ResourceManager.GetString("FirstTimeFlatpakButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string FirstTimeFlatpakImportProjectsFolder {
+            get {
+                return ResourceManager.GetString("FirstTimeFlatpakImportProjectsFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Flatpak version of Serial Loops is sandboxed, so if you used a previous version, your projects won&apos;t show up here. Click the button below to import them!.
+        /// </summary>
+        public static string FirstTimeFlatpakMainMessage {
+            get {
+                return ResourceManager.GetString("FirstTimeFlatpakMainMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Looking for your projects?.
+        /// </summary>
+        public static string FirstTimeFlatpakTitleMessage {
+            get {
+                return ResourceManager.GetString("FirstTimeFlatpakTitleMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to FLAC files.
         /// </summary>
         public static string FLAC_files {
@@ -5124,6 +5169,24 @@ namespace SerialLoops.Assets {
         public static string Location {
             get {
                 return ResourceManager.GetString("Location", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Serial Loops Log.
+        /// </summary>
+        public static string LogName {
+            get {
+                return ResourceManager.GetString("LogName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} - Log Viewer.
+        /// </summary>
+        public static string LogViewerTitleFormatString {
+            get {
+                return ResourceManager.GetString("LogViewerTitleFormatString", resourceCulture);
             }
         }
         
@@ -7187,6 +7250,24 @@ namespace SerialLoops.Assets {
         public static string Russian {
             get {
                 return ResourceManager.GetString("Russian", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Application is sandboxed so logs cannot be directly opened. Logs are located in the Flatpak data directory, which is typically ~/.var/app/club.haroohie.SerialLoops/SerialLoops.
+        /// </summary>
+        public static string SandboxedLogLocationMboxMessage {
+            get {
+                return ResourceManager.GetString("SandboxedLogLocationMboxMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sandboxed App Cannot Launch Log Viewer.
+        /// </summary>
+        public static string SandboxedLogLocationMboxTitle {
+            get {
+                return ResourceManager.GetString("SandboxedLogLocationMboxTitle", resourceCulture);
             }
         }
         

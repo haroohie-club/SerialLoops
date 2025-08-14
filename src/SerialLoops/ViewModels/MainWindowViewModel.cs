@@ -170,15 +170,25 @@ public partial class MainWindowViewModel : ViewModelBase
         BuildBaseCommand = ReactiveCommand.CreateFromTask(BuildBase_Executed);
         BuildAndRunCommand = ReactiveCommand.CreateFromTask(BuildAndRun_Executed);
 
-        ViewLogsCommand = ReactiveCommand.Create(() =>
+        ViewLogsCommand = ReactiveCommand.CreateFromTask(async Task () =>
         {
             try
             {
-                Process.Start(new ProcessStartInfo
+                if ((Environment.GetEnvironmentVariable(EnvironmentVariables.Flatpak) ?? bool.FalseString).Equals(
+                        bool.TrueString, StringComparison.OrdinalIgnoreCase))
                 {
-                    FileName = Path.Combine(CurrentConfig.UserDirectory, "Logs", "SerialLoops.log"),
-                    UseShellExecute = true,
-                });
+                    LogViewerDialogViewModel logViewerViewModel =
+                        new(Strings.CrashLogName, Log.ReadLog());
+                    await new LogViewerDialog() { DataContext = logViewerViewModel }.ShowDialog(Window);
+                }
+                else
+                {
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = Path.Combine(CurrentConfig.UserDirectory, "Logs", "SerialLoops.log"),
+                        UseShellExecute = true,
+                    });
+                }
             }
             catch (Exception ex)
             {
@@ -197,11 +207,21 @@ public partial class MainWindowViewModel : ViewModelBase
 
             try
             {
-                Process.Start(new ProcessStartInfo
+                if ((Environment.GetEnvironmentVariable(EnvironmentVariables.Flatpak) ?? bool.FalseString).Equals(
+                        bool.TrueString, StringComparison.OrdinalIgnoreCase))
                 {
-                    FileName = Path.Combine(LoopyLogger.CrashLogLocation),
-                    UseShellExecute = true,
-                });
+                    LogViewerDialogViewModel logViewerViewModel =
+                        new(Strings.CrashLogName, File.ReadAllText(LoopyLogger.CrashLogLocation));
+                    await new LogViewerDialog() { DataContext = logViewerViewModel }.ShowDialog(Window);
+                }
+                else
+                {
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = Path.Combine(LoopyLogger.CrashLogLocation),
+                        UseShellExecute = true,
+                    });
+                }
             }
             catch (Exception ex)
             {

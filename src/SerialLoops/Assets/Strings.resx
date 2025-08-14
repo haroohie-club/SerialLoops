@@ -3726,4 +3726,31 @@ item in the dropdown!</value>
   <data name="ObjcopyExitedWithFailureMessage" xml:space="preserve">
     <value>llvm-objcopy exited with code {0}</value>
   </data>
+  <data name="SandboxedLogLocationMboxTitle" xml:space="preserve">
+    <value>Sandboxed App Cannot Launch Log Viewer</value>
+  </data>
+  <data name="SandboxedLogLocationMboxMessage" xml:space="preserve">
+    <value>Application is sandboxed so logs cannot be directly opened. Logs are located in the Flatpak data directory, which is typically ~/.var/app/club.haroohie.SerialLoops/SerialLoops</value>
+  </data>
+  <data name="LogViewerTitleFormatString" xml:space="preserve">
+    <value>{0} - Log Viewer</value>
+  </data>
+  <data name="CrashLogName" xml:space="preserve">
+    <value>Crash Log</value>
+  </data>
+  <data name="LogName" xml:space="preserve">
+    <value>Serial Loops Log</value>
+  </data>
+  <data name="FirstTimeFlatpakTitleMessage" xml:space="preserve">
+    <value>Looking for your projects?</value>
+  </data>
+  <data name="FirstTimeFlatpakMainMessage" xml:space="preserve">
+    <value>The Flatpak version of Serial Loops is sandboxed, so if you used a previous version, your projects won't show up here. Click the button below to import them!</value>
+  </data>
+  <data name="FirstTimeFlatpakButton" xml:space="preserve">
+    <value>Import Projects</value>
+  </data>
+  <data name="FirstTimeFlatpakImportProjectsFolder" xml:space="preserve">
+    <value />
+  </data>
 </root>

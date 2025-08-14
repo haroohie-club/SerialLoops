@@ -8,4 +8,5 @@ public static class EnvironmentVariables
     public const string BundledEmulator = "SL_BUNDLED_EMULATOR";
     public const string StoreSysConfig = "SL_STORE_SYS_CONFIG";
     public const string UseUpdater = "SL_USE_UPDATER";
+    public const string Flatpak = "SL_FLATPAK";
 }

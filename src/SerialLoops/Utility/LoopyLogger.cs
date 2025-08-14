@@ -40,7 +40,7 @@ public class LoopyLogger : ILogger
     }
 
     private static string Stamp => $"\n({Environment.ProcessId}) {DateTimeOffset.Now} - ";
-    public static string CrashLogLocation => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "sl_crash.log");
+    public static string CrashLogLocation => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "SerialLoops", "sl_crash.log");
 
     public virtual void Log(string message)
     {
@@ -115,6 +115,15 @@ public class LoopyLogger : ILogger
     {
         string crashLog = $"{Stamp}SERIAL LOOPS CRASH: {ex.Message}\n\n{ex.StackTrace}";
         Console.WriteLine(crashLog);
+        if (!Directory.Exists(Path.GetDirectoryName(CrashLogLocation)))
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(CrashLogLocation)!);
+        }
         File.AppendAllText(CrashLogLocation, crashLog);
+    }
+
+    public string ReadLog()
+    {
+        return File.ReadAllText(_logFile);
     }
 }
