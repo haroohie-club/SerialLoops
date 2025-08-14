@@ -18,7 +18,11 @@ internal sealed class Program
     {
         try
         {
-            NativeLibrary.SetDllImportResolver(Assembly.GetAssembly(typeof(NAudio.Sdl2.WaveInSdl))!, DllImportResolver);
+            if ((Environment.GetEnvironmentVariable(EnvironmentVariables.Flatpak) ?? bool.FalseString).Equals(
+                    bool.TrueString, StringComparison.OrdinalIgnoreCase))
+            {
+                NativeLibrary.SetDllImportResolver(Assembly.GetAssembly(typeof(NAudio.Sdl2.WaveInSdl))!, DllImportResolver);
+            }
             BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
         }
         catch (Exception ex)
@@ -41,14 +45,8 @@ internal sealed class Program
 
     private static IntPtr DllImportResolver(string libraryName, Assembly assembly, DllImportSearchPath? searchPath)
     {
-        if (libraryName.Equals("SDL2") &&
-            (Environment.GetEnvironmentVariable(EnvironmentVariables.Flatpak) ?? bool.FalseString).Equals(
-                bool.TrueString, StringComparison.OrdinalIgnoreCase))
-        {
+        return libraryName.Equals("SDL2") ?
             // Flatpak runtime doesn't have libSDL2.so, so we make do
-            return NativeLibrary.Load("libSDL2-2.0.so.0", assembly, searchPath);
-        }
-
-        return IntPtr.Zero;
+            NativeLibrary.Load("libSDL2-2.0.so.0", assembly, searchPath) : IntPtr.Zero;
     }
 }
