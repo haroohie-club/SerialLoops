@@ -45,7 +45,8 @@ internal sealed class Program
             (Environment.GetEnvironmentVariable(EnvironmentVariables.Sandboxed) ?? bool.FalseString).Equals(
                 bool.TrueString, StringComparison.OrdinalIgnoreCase))
         {
-            return NativeLibrary.Load("SDL2-2.0", assembly, searchPath);
+            // Flatpak runtime doesn't have libSDL2.so, so we make do
+            return NativeLibrary.Load("libSDL2-2.0.so.0", assembly, searchPath);
         }
 
         return IntPtr.Zero;
