@@ -174,6 +174,9 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             try
             {
+                // Temp debugging
+                Log.Log("/usr/lib");
+                Log.Log(string.Join('\n', Directory.GetDirectories("/usr/lib/")));
                 if ((Environment.GetEnvironmentVariable(EnvironmentVariables.Sandboxed) ?? bool.FalseString).Equals(
                         bool.TrueString, StringComparison.OrdinalIgnoreCase))
                 {
