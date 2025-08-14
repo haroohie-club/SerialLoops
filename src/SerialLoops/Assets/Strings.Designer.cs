@@ -4122,6 +4122,42 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Import Projects.
+        /// </summary>
+        public static string FirstTimeFlatpakButton {
+            get {
+                return ResourceManager.GetString("FirstTimeFlatpakButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string FirstTimeFlatpakImportProjectsFolder {
+            get {
+                return ResourceManager.GetString("FirstTimeFlatpakImportProjectsFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Flatpak version of Serial Loops is sandboxed, so if you used a previous version, your projects won&apos;t show up here. Click the button below to import them!.
+        /// </summary>
+        public static string FirstTimeFlatpakMainMessage {
+            get {
+                return ResourceManager.GetString("FirstTimeFlatpakMainMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Looking for your projects?.
+        /// </summary>
+        public static string FirstTimeFlatpakTitleMessage {
+            get {
+                return ResourceManager.GetString("FirstTimeFlatpakTitleMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to FLAC files.
         /// </summary>
         public static string FLAC_files {

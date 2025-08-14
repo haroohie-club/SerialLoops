@@ -43,7 +43,15 @@
                     <controls:LinkButton Command="{Binding MainWindow.AboutCommand}" Text="{x:Static assets:Strings.About}"/>
                 </StackPanel>
             </StackPanel>
-            <StackPanel DockPanel.Dock="Right" Margin="13" Spacing="10" MinWidth="450" MinHeight="400">
+            <StackPanel IsVisible="{Binding DisplayFirstTimeFlatpakMessage}" Spacing="10" VerticalAlignment="Center">
+                <TextBlock Classes="h3" Text="{x:Static assets:Strings.FirstTimeFlatpakTitleMessage}" HorizontalAlignment="Center"/>
+                <TextBlock TextWrapping="Wrap" Text="{x:Static assets:Strings.FirstTimeFlatpakMainMessage}"
+                           HorizontalAlignment="Center" TextAlignment="Center"/>
+                <Button Content="{x:Static assets:Strings.FirstTimeFlatpakButton}" Command="{Binding ImportProjectsCommand}"
+                        HorizontalAlignment="Center"/>
+            </StackPanel>
+            <StackPanel DockPanel.Dock="Right" Margin="13" Spacing="10" MinWidth="450" MinHeight="400"
+                        IsVisible="{Binding !DisplayFirstTimeFlatpakMessage}">
                 <TextBlock Classes="h2" Text="{x:Static assets:Strings.Recents}"/>
                 <ItemsControl ItemsSource="{Binding RecentProjects}">
                     <ItemsControl.ItemTemplate>

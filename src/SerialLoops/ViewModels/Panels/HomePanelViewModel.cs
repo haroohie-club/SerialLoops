@@ -3,6 +3,8 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Avalonia.Platform.Storage;
+using DynamicData;
 using HaruhiChokuretsuLib.Util;
 using MsBox.Avalonia.Enums;
 using ReactiveUI;
@@ -21,12 +23,34 @@ public class HomePanelViewModel : ViewModelBase
 
     public ObservableCollection<RecentProjectViewModel> RecentProjects { get; }
 
+    [Reactive]
+    public bool DisplayFirstTimeFlatpakMessage { get; set; }
+
+    public ICommand ImportProjectsCommand { get; }
+
 
     public HomePanelViewModel(MainWindowViewModel mainWindow)
     {
         MainWindow = mainWindow;
         RecentProjects = new(MainWindow.ProjectsCache.RecentProjects.Where(p => !MainWindow.CurrentConfig.RemoveMissingProjects || File.Exists(p))
             .Select(p => new RecentProjectViewModel(p, this)));
+        DisplayFirstTimeFlatpakMessage = MainWindow.CurrentConfig.FirstTimeFlatpak && !RecentProjects.Any();
+        MainWindow.CurrentConfig.FirstTimeFlatpak = false;
+        ImportProjectsCommand = ReactiveCommand.CreateFromTask(ImportProjectsFolderToSandbox);
+    }
+
+    private async Task ImportProjectsFolderToSandbox()
+    {
+        string oldProjectsFolder = (await MainWindow.Window.ShowOpenFolderPickerAsync(Strings.FirstTimeFlatpakButton))
+            .TryGetLocalPath();
+        if (!string.IsNullOrEmpty(oldProjectsFolder))
+        {
+            Lib.IO.CopyDirectoryRecursively(oldProjectsFolder, MainWindow.CurrentConfig.ProjectsDirectory);
+        }
+        RecentProjects.Clear();
+        RecentProjects.AddRange(Directory.GetFiles(MainWindow.CurrentConfig.ProjectsDirectory, "*.slproj", SearchOption.AllDirectories)
+            .Select(p => new RecentProjectViewModel(p, this)));
+        DisplayFirstTimeFlatpakMessage = false;
     }
 }
 
