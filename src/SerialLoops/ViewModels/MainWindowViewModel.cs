@@ -178,6 +178,7 @@ public partial class MainWindowViewModel : ViewModelBase
                 Log.Log("/usr/lib\n" + string.Join('\n', Directory.GetFileSystemEntries("/usr/lib")));
                 Log.Log("/usr/bin\n" + string.Join('\n', Directory.GetFileSystemEntries("/usr/bin")));
                 Log.Log("/usr/lib/x86_64-linux-gnu\n" + string.Join('\n', Directory.GetFileSystemEntries("/usr/lib/x86_64-linux-gnu")));
+                Log.Log($"/usr/lib/x86_64-linux-gnu/libSDL2.so exists: {File.Exists("/usr/lib/x86_64-linux-gnu/libSDL2.so")}");
 
                 if ((Environment.GetEnvironmentVariable(EnvironmentVariables.Sandboxed) ?? bool.FalseString).Equals(
                         bool.TrueString, StringComparison.OrdinalIgnoreCase))
