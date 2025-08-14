@@ -7191,7 +7191,7 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Application is sandboxed so logs cannot be directly opened. Logs are located at {0}.
+        ///   Looks up a localized string similar to Application is sandboxed so logs cannot be directly opened. Logs are located in the Flatpak data directory, which is typically ~/.var/app/club.haroohie.SerialLoops/SerialLoops.
         /// </summary>
         public static string SandboxedLogLocationMboxMessage {
             get {
@@ -7200,7 +7200,7 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sandboxed Log Location.
+        ///   Looks up a localized string similar to Sandboxed App Cannot Launch Log Viewer.
         /// </summary>
         public static string SandboxedLogLocationMboxTitle {
             get {
