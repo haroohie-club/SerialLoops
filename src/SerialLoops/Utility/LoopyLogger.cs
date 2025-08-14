@@ -121,4 +121,9 @@ public class LoopyLogger : ILogger
         }
         File.AppendAllText(CrashLogLocation, crashLog);
     }
+
+    public string ReadLog()
+    {
+        return File.ReadAllText(_logFile);
+    }
 }

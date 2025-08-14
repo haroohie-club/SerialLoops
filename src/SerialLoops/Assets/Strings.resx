@@ -3732,4 +3732,13 @@ item in the dropdown!</value>
   <data name="SandboxedLogLocationMboxMessage" xml:space="preserve">
     <value>Application is sandboxed so logs cannot be directly opened. Logs are located in the Flatpak data directory, which is typically ~/.var/app/club.haroohie.SerialLoops/SerialLoops</value>
   </data>
+  <data name="LogViewerTitleFormatString" xml:space="preserve">
+    <value>{0} - Log Viewer</value>
+  </data>
+  <data name="CrashLogName" xml:space="preserve">
+    <value>Crash Log</value>
+  </data>
+  <data name="LogName" xml:space="preserve">
+    <value>Serial Loops Log</value>
+  </data>
 </root>

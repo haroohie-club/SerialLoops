@@ -177,15 +177,18 @@ public partial class MainWindowViewModel : ViewModelBase
                 if ((Environment.GetEnvironmentVariable(EnvironmentVariables.Flatpak) ?? bool.FalseString).Equals(
                         bool.TrueString, StringComparison.OrdinalIgnoreCase))
                 {
-                    await Window.ShowMessageBoxAsync(Strings.SandboxedLogLocationMboxTitle,
-                        Strings.SandboxedLogLocationMboxMessage,
-                        ButtonEnum.Ok, Icon.Info, Log);
+                    LogViewerDialogViewModel logViewerViewModel =
+                        new(Strings.CrashLogName, Log.ReadLog());
+                    await new LogViewerDialog() { DataContext = logViewerViewModel }.ShowDialog(Window);
                 }
-                Process.Start(new ProcessStartInfo
+                else
                 {
-                    FileName = Path.Combine(CurrentConfig.UserDirectory, "Logs", "SerialLoops.log"),
-                    UseShellExecute = true,
-                });
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = Path.Combine(CurrentConfig.UserDirectory, "Logs", "SerialLoops.log"),
+                        UseShellExecute = true,
+                    });
+                }
             }
             catch (Exception ex)
             {
@@ -207,9 +210,9 @@ public partial class MainWindowViewModel : ViewModelBase
                 if ((Environment.GetEnvironmentVariable(EnvironmentVariables.Flatpak) ?? bool.FalseString).Equals(
                         bool.TrueString, StringComparison.OrdinalIgnoreCase))
                 {
-                    await Window.ShowMessageBoxAsync(Strings.SandboxedLogLocationMboxTitle,
-                        Strings.SandboxedLogLocationMboxMessage,
-                        ButtonEnum.Ok, Icon.Info, Log);
+                    LogViewerDialogViewModel logViewerViewModel =
+                        new(Strings.CrashLogName, File.ReadAllText(LoopyLogger.CrashLogLocation));
+                    await new LogViewerDialog() { DataContext = logViewerViewModel }.ShowDialog(Window);
                 }
                 else
                 {

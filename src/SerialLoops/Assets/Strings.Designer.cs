@@ -2040,6 +2040,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Crash Log.
+        /// </summary>
+        public static string CrashLogName {
+            get {
+                return ResourceManager.GetString("CrashLogName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create.
         /// </summary>
         public static string Create {
@@ -5124,6 +5133,24 @@ namespace SerialLoops.Assets {
         public static string Location {
             get {
                 return ResourceManager.GetString("Location", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Serial Loops Log.
+        /// </summary>
+        public static string LogName {
+            get {
+                return ResourceManager.GetString("LogName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} - Log Viewer.
+        /// </summary>
+        public static string LogViewerTitleFormatString {
+            get {
+                return ResourceManager.GetString("LogViewerTitleFormatString", resourceCulture);
             }
         }
         
