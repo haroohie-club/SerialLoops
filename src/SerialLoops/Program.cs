@@ -42,7 +42,7 @@ internal sealed class Program
     private static IntPtr DllImportResolver(string libraryName, Assembly assembly, DllImportSearchPath? searchPath)
     {
         if (libraryName.Equals("SDL2") &&
-            (Environment.GetEnvironmentVariable(EnvironmentVariables.Sandboxed) ?? bool.FalseString).Equals(
+            (Environment.GetEnvironmentVariable(EnvironmentVariables.Flatpak) ?? bool.FalseString).Equals(
                 bool.TrueString, StringComparison.OrdinalIgnoreCase))
         {
             // Flatpak runtime doesn't have libSDL2.so, so we make do

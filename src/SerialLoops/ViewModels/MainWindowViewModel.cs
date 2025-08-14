@@ -174,7 +174,7 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             try
             {
-                if ((Environment.GetEnvironmentVariable(EnvironmentVariables.Sandboxed) ?? bool.FalseString).Equals(
+                if ((Environment.GetEnvironmentVariable(EnvironmentVariables.Flatpak) ?? bool.FalseString).Equals(
                         bool.TrueString, StringComparison.OrdinalIgnoreCase))
                 {
                     await Window.ShowMessageBoxAsync(Strings.SandboxedLogLocationMboxTitle,
@@ -204,7 +204,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
             try
             {
-                if ((Environment.GetEnvironmentVariable(EnvironmentVariables.Sandboxed) ?? bool.FalseString).Equals(
+                if ((Environment.GetEnvironmentVariable(EnvironmentVariables.Flatpak) ?? bool.FalseString).Equals(
                         bool.TrueString, StringComparison.OrdinalIgnoreCase))
                 {
                     await Window.ShowMessageBoxAsync(Strings.SandboxedLogLocationMboxTitle,
