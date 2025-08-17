@@ -28,21 +28,17 @@
     <color type="primary" scheme_preference="dark">#042058</color>
   </branding>
   <screenshots>
-    <screenshot>
-      <screenshot type="default">
-        <caption>Serial Loops script editor</caption>
-        <image>https://raw.githubusercontent.com/haroohie-club/SerialLoops/0.3.3/install/linux/flatpak/screenshots/script_editor.png</image>
-      </screenshot>
+    <screenshot type="default">
+      <caption>Serial Loops script editor</caption>
+      <image>https://raw.githubusercontent.com/haroohie-club/SerialLoops/0.3.3/install/linux/flatpak/screenshots/script_editor.png</image>
     </screenshot>
     <screenshot type="default">
       <caption>Serial Loops startup screen</caption>
       <image>https://raw.githubusercontent.com/haroohie-club/SerialLoops/0.3.3/install/linux/flatpak/screenshots/main_screen.png</image>
     </screenshot>
-    <screenshot>
-      <screenshot type="default">
-        <caption>Serial Loops map editor</caption>
-        <image>https://raw.githubusercontent.com/haroohie-club/SerialLoops/0.3.3/install/linux/flatpak/screenshots/map_editor.png</image>
-      </screenshot>
+    <screenshot type="default">
+      <caption>Serial Loops map editor</caption>
+      <image>https://raw.githubusercontent.com/haroohie-club/SerialLoops/0.3.3/install/linux/flatpak/screenshots/map_editor.png</image>
     </screenshot>
   </screenshots>
   <developer_name>The Haroohie Translation Club</developer_name>
