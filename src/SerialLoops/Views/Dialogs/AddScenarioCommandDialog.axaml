@@ -14,7 +14,7 @@
         Background="{DynamicResource FallbackBackgroundColor}"
         ExtendClientAreaToDecorationsHint="True"
         ExtendClientAreaChromeHints="NoChrome"
-        Title="{x:Static assets:Strings.Add_Command}"
+        Title="{x:Static assets:Strings.ScriptEditorAddCommandLabel}"
         Name="AddCommandDialog">
 
     <Panel>

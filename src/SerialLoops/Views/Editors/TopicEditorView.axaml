@@ -65,7 +65,7 @@
                 <StackPanel Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" Orientation="Horizontal">
                     <NumericUpDown Value="{Binding KyonTimePercentage}" Minimum="0" Maximum="{Binding MaxShort}"
                                    FormatString="N0" Increment="1" ParsingNumberStyle="Integer" VerticalAlignment="Center"/>
-                    <TextBlock Text="{x:Static assets:Strings._}" VerticalAlignment="Center"/>
+                    <TextBlock Text="{x:Static assets:Strings.PercentSign}" VerticalAlignment="Center"/>
                 </StackPanel>
                 <StackPanel Grid.Column="2" Grid.Row="1" Margin="10,0,0,0" Orientation="Horizontal" Spacing="2"
                             VerticalAlignment="Center">
@@ -77,7 +77,7 @@
                 <StackPanel Grid.Column="1" Grid.Row="2" Margin="10,0,0,0" Orientation="Horizontal">
                     <NumericUpDown Value="{Binding MikuruTimePercentage}" Minimum="0" Maximum="{Binding MaxShort}"
                                    FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
-                    <TextBlock Text="{x:Static assets:Strings._}" VerticalAlignment="Center"/>
+                    <TextBlock Text="{x:Static assets:Strings.PercentSign}" VerticalAlignment="Center"/>
                 </StackPanel>
                 <StackPanel Grid.Column="2" Grid.Row="2" Margin="10,0,0,0" Orientation="Horizontal" Spacing="2"
                             VerticalAlignment="Center">
@@ -89,7 +89,7 @@
                 <StackPanel Grid.Column="1" Grid.Row="3" Margin="10,0,0,0" Orientation="Horizontal">
                     <NumericUpDown Value="{Binding NagatoTimePercentage}" Minimum="0" Maximum="{Binding MaxShort}"
                                    FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
-                    <TextBlock Text="{x:Static assets:Strings._}" VerticalAlignment="Center"/>
+                    <TextBlock Text="{x:Static assets:Strings.PercentSign}" VerticalAlignment="Center"/>
                 </StackPanel>
                 <StackPanel Grid.Column="2" Grid.Row="3" Margin="10,0,0,0" Orientation="Horizontal" Spacing="2"
                             VerticalAlignment="Center">
@@ -101,7 +101,7 @@
                 <StackPanel Grid.Column="1" Grid.Row="4" Margin="10,0,0,0" Orientation="Horizontal">
                     <NumericUpDown Value="{Binding KoizumiTimePercentage}" Minimum="0" Maximum="{Binding MaxShort}"
                                    FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
-                    <TextBlock Text="{x:Static assets:Strings._}" VerticalAlignment="Center"/>
+                    <TextBlock Text="{x:Static assets:Strings.PercentSign}" VerticalAlignment="Center"/>
                 </StackPanel>
                 <StackPanel Grid.Column="2" Grid.Row="4" Margin="10,0,0,0" Orientation="Horizontal" Spacing="2"
                             VerticalAlignment="Center">

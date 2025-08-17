@@ -119,7 +119,7 @@ public class BackgroundMusicEditorViewModel : EditorViewModel
         try
         {
             BgmPlayer.Stop();
-            ProgressDialogViewModel firstTracker = new(Strings.Caching_BGM, Strings.Adjusting_Loop_Info);
+            ProgressDialogViewModel firstTracker = new(Strings.Caching_BGM, Strings.BgmEditorLoopInfoStatusMessage);
             firstTracker.InitializeTasks(
                 () => WaveFileWriter.CreateWaveFile(_bgmCachedFile, Bgm.GetWaveProvider(_log, false)), () => { });
             if (!File.Exists(_bgmCachedFile))
@@ -144,8 +144,8 @@ public class BackgroundMusicEditorViewModel : EditorViewModel
                 _loopEndSample = loopPreview.EndSample;
                 await Shared.AudioReplacementCancellation.CancelAsync();
                 Shared.AudioReplacementCancellation = new();
-                ProgressDialogViewModel secondTracker = new(Strings.Set_BGM_loop_info, Strings.Adjusting_Loop_Info);
-                ProgressDialogViewModel thirdTracker = new(Strings.Set_BGM_loop_info, Strings.Adjusting_Loop_Info);
+                ProgressDialogViewModel secondTracker = new(Strings.Set_BGM_loop_info, Strings.BgmEditorLoopInfoStatusMessage);
+                ProgressDialogViewModel thirdTracker = new(Strings.Set_BGM_loop_info, Strings.BgmEditorLoopInfoStatusMessage);
                 thirdTracker.InitializeTasks(() =>
                     {
                         Bgm.Replace(_bgmCachedFile, _project, _bgmCachedFile,
@@ -181,7 +181,7 @@ public class BackgroundMusicEditorViewModel : EditorViewModel
         try
         {
             BgmPlayer.Stop();
-            ProgressDialogViewModel firstTracker = new(Strings.Caching_BGM, Strings.Adjusting_Volume);
+            ProgressDialogViewModel firstTracker = new(Strings.Caching_BGM, Strings.BgmEditorVolumeStatusMessage);
             firstTracker.InitializeTasks(
                 () => WaveFileWriter.CreateWaveFile(_bgmCachedFile, Bgm.GetWaveProvider(_log, false)), () => { });
             if (!File.Exists(_bgmCachedFile))
@@ -201,8 +201,8 @@ public class BackgroundMusicEditorViewModel : EditorViewModel
             if (volumePreview is not null)
             {
                 ProgressDialogViewModel secondTracker =
-                    new(Strings.Replace_BGM_track, Strings.Adjusting_Volume) { Total = 2 };
-                ProgressDialogViewModel thirdTracker = new(Strings.Replace_BGM_track, Strings.Adjusting_Volume);
+                    new(Strings.Replace_BGM_track, Strings.BgmEditorVolumeStatusMessage) { Total = 2 };
+                ProgressDialogViewModel thirdTracker = new(Strings.Replace_BGM_track, Strings.BgmEditorVolumeStatusMessage);
                 BgmPlayer.Stop();
                 Shared.AudioReplacementCancellation.Cancel();
                 Shared.AudioReplacementCancellation = new();

@@ -19,7 +19,7 @@
 
     <NativeMenu.Menu>
         <NativeMenu>
-            <NativeMenuItem Header="{x:Static assets:Strings.About_Serial_Loops}" Icon="/Assets/serial-loops.ico"
+            <NativeMenuItem Header="{x:Static assets:Strings.AboutSerialLoops}" Icon="/Assets/serial-loops.ico"
                             Click="About_Click" />
             <NativeMenuItemSeparator />
             <NativeMenuItem Header="{x:Static assets:Strings._Preferences___}"

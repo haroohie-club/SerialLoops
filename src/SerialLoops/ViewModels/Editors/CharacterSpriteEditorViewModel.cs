@@ -216,7 +216,7 @@ public partial class CharacterSpriteEditorViewModel : EditorViewModel
     private async Task ExportGIF()
     {
         List<(SKBitmap bitmap, int timing)> animationFrames;
-        if (await Window.Window.ShowMessageBoxAsync(Strings.Animation_Export_Option, Strings.Include_lip_flap_animation_, MsBox.Avalonia.Enums.ButtonEnum.YesNo, MsBox.Avalonia.Enums.Icon.Question, _log) == MsBox.Avalonia.Enums.ButtonResult.Yes)
+        if (await Window.Window.ShowMessageBoxAsync(Strings.ChibiEditorAnimationExportOptionMessageBoxTitle, Strings.Include_lip_flap_animation_, MsBox.Avalonia.Enums.ButtonEnum.YesNo, MsBox.Avalonia.Enums.Icon.Question, _log) == MsBox.Avalonia.Enums.ButtonResult.Yes)
         {
             animationFrames = _sprite.GetLipFlapAnimation(Window.OpenProject);
         }

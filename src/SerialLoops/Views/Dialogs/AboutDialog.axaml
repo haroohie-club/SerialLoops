@@ -14,7 +14,7 @@
         x:DataType="vm:AboutDialogViewModel"
         x:Class="SerialLoops.Views.Dialogs.AboutDialog"
         Icon="/Assets/serial-loops.ico"
-        Title="{x:Static assets:Strings.About}"
+        Title="{x:Static assets:Strings.AboutMenuTitle}"
         Name="Dialog">
     <Panel>
         <controls:AcrylicBorderHandler/>
@@ -24,7 +24,7 @@
 
         <TabControl Margin="5 30">
             <TabControl.Items>
-                <TabItem Header="{x:Static assets:Strings.About}">
+                <TabItem Header="{x:Static assets:Strings.AboutMenuTitle}">
                     <StackPanel Spacing="15" Margin="5" Orientation="Vertical">
                         <TextBlock Classes="h2" Text="Serial Loops"/>
                         <TextBlock Text="{Binding Version}"/>

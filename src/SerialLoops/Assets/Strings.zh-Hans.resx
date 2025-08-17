@@ -117,90 +117,83 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="&quot;Kinetic&quot; Background" xml:space="preserve">
+  <data name="BackgroundEditorKineticBackgroundLabel" xml:space="preserve">
     <value>“动态”背景</value>
   </data>
-  <data name="%" xml:space="preserve">
+  <data name="PercentSign" xml:space="preserve">
     <value>%</value>
   </data>
-  <data name="(Missing)" xml:space="preserve">
+  <data name="ProjectMissingLabel" xml:space="preserve">
     <value>（缺失）</value>
   </data>
-  <data name="100%'d game message box" xml:space="preserve">
+  <data name="UiMessage127Label" xml:space="preserve">
     <value>100% 游戏消息框</value>
   </data>
-  <data name="A new update for Serial Loops is available!" xml:space="preserve">
+  <data name="UpdaterTitleMessage" xml:space="preserve">
     <value>Serial Loops 的新更新可用！</value>
   </data>
-  <data name="About" xml:space="preserve">
+  <data name="AboutMenuTitle" xml:space="preserve">
     <value>关于</value>
   </data>
-  <data name="About..." xml:space="preserve">
+  <data name="AboutDetails" xml:space="preserve">
     <value>关于…</value>
   </data>
-  <data name="Accessing save data prompt message box" xml:space="preserve">
+  <data name="UiMessage40Label" xml:space="preserve">
     <value>“访问保存数据提示”消息框</value>
   </data>
-  <data name="Accompanying Character" xml:space="preserve">
+  <data name="PuzzleEditorAccompanyingCharacterLabel" xml:space="preserve">
     <value>同行的角色</value>
   </data>
   <data name="Add" xml:space="preserve">
     <value>添加</value>
     <comment>As in add/subtract</comment>
   </data>
-  <data name="Add Command" xml:space="preserve">
+  <data name="ScriptEditorAddCommandLabel" xml:space="preserve">
     <value>增加命令</value>
   </data>
-  <data name="Add Frames" xml:space="preserve">
+  <data name="ChibiAndSpriteEditorAddFramesLabel" xml:space="preserve">
     <value>添加帧</value>
   </data>
-  <data name="Add Map Characters" xml:space="preserve">
+  <data name="ScriptEditorAddMapCharactersSectionLabel" xml:space="preserve">
     <value>添加地图角色</value>
   </data>
-  <data name="Add Read Flag" xml:space="preserve">
-    <value>添加读取旗标</value>
-    <comment>As in "add a read flag to the script"</comment>
-  </data>
-  <data name="Add Section" xml:space="preserve">
+  <data name="ScriptEditorAddScriptSectionToolTip" xml:space="preserve">
     <value>添加小节</value>
   </data>
-  <data name="Add Starting Chibis" xml:space="preserve">
+  <data name="ScriptEditorAddStartingChibisSectionLabel" xml:space="preserve">
     <value>添加开始的 Q 版角色</value>
   </data>
-  <data name="Add to Event Table" xml:space="preserve">
-    <value>添加到事件表</value>
-  </data>
-  <data name="Adding frames to GIF..." xml:space="preserve">
+  <data name="GifExportAddingFramesStatusMessage" xml:space="preserve">
     <value>将帧添加到 GIF…</value>
   </data>
-  <data name="Adjust Volume" xml:space="preserve">
+  <data name="BgmEditorAdjustVolumeLabel" xml:space="preserve">
     <value>调整音量</value>
   </data>
-  <data name="Adjusting Loop Info" xml:space="preserve">
+  <data name="BgmEditorLoopInfoStatusMessage" xml:space="preserve">
     <value>调整循环信息</value>
   </data>
-  <data name="Adjusting Volume" xml:space="preserve">
+  <data name="BgmEditorVolumeStatusMessage" xml:space="preserve">
     <value>调整音量</value>
   </data>
-  <data name="All data erased message box" xml:space="preserve">
+  <data name="UiMessage93Label" xml:space="preserve">
     <value>“所有数据已清除”消息框</value>
   </data>
-  <data name="All data will be erased prompt message box" xml:space="preserve">
+  <data name="UiMessage90Label" xml:space="preserve">
     <value>“所有数据将被清除提示”消息框</value>
   </data>
-  <data name="Animation" xml:space="preserve">
+  <data name="ChibiEditorAnimationHeader" xml:space="preserve">
     <value>动画</value>
   </data>
-  <data name="Animation Export Option" xml:space="preserve">
+  <data name="ChibiEditorAnimationExportOptionMessageBoxTitle" xml:space="preserve">
     <value>动画导出选项</value>
   </data>
   <data name="Apply" xml:space="preserve">
     <value>应用</value>
   </data>
-  <data name="Apply Assembly Hack" xml:space="preserve">
+  <data name="AssemblyHacksApplyLabel" xml:space="preserve">
     <value>应用汇编修改</value>
   </data>
-  <data name="Apply Hacks..." xml:space="preserve">
+  <data name="AssemblyHacksApplyDetails" xml:space="preserve">
     <value>应用修改…</value>
   </data>
   <data name="Apply Template" xml:space="preserve">

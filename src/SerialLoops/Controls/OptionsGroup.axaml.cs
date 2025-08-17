@@ -225,7 +225,7 @@ public class BooleanToggleOption : BooleanOption
 {
 
     public LinkButton ToggleButton;
-    private string _buttonText => Value ? Strings.All_On : Strings.All_Off;
+    private string _buttonText => Value ? Strings.SearchDialogAllBooleansOn : Strings.SearchDialogAllBooleansOff;
 
     public BooleanToggleOption(List<Option> options)
     {

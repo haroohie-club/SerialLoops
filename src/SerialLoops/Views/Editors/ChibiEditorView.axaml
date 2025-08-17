@@ -13,7 +13,7 @@
     <Grid RowDefinitions="Auto,*,Auto" ColumnDefinitions="Auto,*">
         <controls:AnimatedImage Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" MinHeight="250" DataContext="{Binding AnimatedChibi}"/>
 
-        <HeaderedContentControl Grid.Row="1" Grid.Column="0" Header="{x:Static assets:Strings.Animation}">
+        <HeaderedContentControl Grid.Row="1" Grid.Column="0" Header="{x:Static assets:Strings.ChibiEditorAnimationHeader}">
             <StackPanel Orientation="Vertical" Spacing="10">
                 <StackPanel Orientation="Horizontal" Spacing="3">
                     <ComboBox ItemsSource="{Binding ChibiAnimationNames}" SelectedItem="{Binding SelectedAnimation}"

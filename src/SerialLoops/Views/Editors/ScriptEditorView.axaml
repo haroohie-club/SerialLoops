@@ -30,7 +30,7 @@
 
         <StackPanel Grid.Column="0" Grid.Row="0" Margin="5" Spacing="5" HorizontalAlignment="Left" Orientation="Horizontal">
             <Button Command="{Binding AddScriptCommandCommand}" HotKey="{Binding AddCommandHotKey}"
-                    ToolTip.Tip="{x:Static assets:Strings.Add_Command}" ToolTip.ShowOnDisabled="True">
+                    ToolTip.Tip="{x:Static assets:Strings.ScriptEditorAddCommandLabel}" ToolTip.ShowOnDisabled="True">
                 <Button.IsEnabled>
                     <MultiBinding Converter="{x:Static BoolConverters.Or}">
                         <Binding Path="SelectedCommand" Converter="{x:Static ObjectConverters.IsNotNull}"/>
@@ -39,7 +39,7 @@
                 </Button.IsEnabled>
                 <Svg Path="avares://SerialLoops/Assets/Icons/Add.svg" Width="22"/>
             </Button>
-            <Button Command="{Binding AddScriptSectionCommand}" ToolTip.Tip="{x:Static assets:Strings.Add_Section}">
+            <Button Command="{Binding AddScriptSectionCommand}" ToolTip.Tip="{x:Static assets:Strings.ScriptEditorAddScriptSectionToolTip}">
                 <Svg Path="avares://SerialLoops/Assets/Icons/Add_Section.svg" Width="22"/>
             </Button>
             <Button Command="{Binding DeleteScriptCommandOrSectionCommand}" ToolTip.ShowOnDisabled="True"
@@ -140,7 +140,7 @@
                                             Command="{Binding RemoveStartingChibisCommand}"/>
                                 </Grid>
 
-                                <Button Content="{x:Static assets:Strings.Add_Starting_Chibis}" IsVisible="{Binding !HasStartingChibis}"
+                                <Button Content="{x:Static assets:Strings.ScriptEditorAddStartingChibisSectionLabel}" IsVisible="{Binding !HasStartingChibis}"
                                         Command="{Binding AddStartingChibisCommand}"/>
                             </Panel>
                         </ScrollViewer>
@@ -172,7 +172,7 @@
                                 <Button Command="{Binding AddChoiceCommand}">
                                     <StackPanel Orientation="Horizontal">
                                         <Svg Path="avares://SerialLoops/Assets/Icons/Add.svg" Width="20"/>
-                                        <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.AddChoice}"/>
+                                        <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.ScriptEditorAddChoiceLabel}"/>
                                     </StackPanel>
                                 </Button>
                             </StackPanel>
@@ -200,7 +200,7 @@
                                             </DataTemplate>
                                         </ListBox.ItemTemplate>
                                     </ListBox>
-                                    <Button Grid.Row="1" Grid.Column="0" Content="{x:Static assets:Strings.Add_Interactable_Object}" Command="{Binding AddInteractableObjectCommand}"/>
+                                    <Button Grid.Row="1" Grid.Column="0" Content="{x:Static assets:Strings.ScriptEditorAddInteractableObjectLabel}" Command="{Binding AddInteractableObjectCommand}"/>
                                     <Button Grid.Row="1" Grid.Column="1" Content="{x:Static assets:Strings.Remove_Interactable_Object}" Command="{Binding RemoveInteractableObjectCommand}"/>
                                 </Grid>
                             </Panel>

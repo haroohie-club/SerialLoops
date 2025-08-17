@@ -9,7 +9,7 @@
         SizeToContent="WidthAndHeight"
         x:DataType="vm:AddInteractableObjectDialogViewModel"
         x:Class="SerialLoops.Views.Dialogs.AddInteractableObjectDialog"
-        Title="{x:Static assets:Strings.Add_Interactable_Object}"
+        Title="{x:Static assets:Strings.ScriptEditorAddInteractableObjectLabel}"
         Name="Dialog">
     <StackPanel Orientation="Vertical" Spacing="10" Margin="10">
         <TextBlock IsVisible="{Binding !HackApplied}"

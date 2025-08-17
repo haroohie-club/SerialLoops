@@ -40,7 +40,7 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Spacing="5">
                     <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16"/>
-                    <controls:LinkButton Command="{Binding MainWindow.AboutCommand}" Text="{x:Static assets:Strings.About}"/>
+                    <controls:LinkButton Command="{Binding MainWindow.AboutCommand}" Text="{x:Static assets:Strings.AboutMenuTitle}"/>
                 </StackPanel>
             </StackPanel>
             <StackPanel DockPanel.Dock="Right" Margin="13" Spacing="10" MinWidth="450" MinHeight="400">

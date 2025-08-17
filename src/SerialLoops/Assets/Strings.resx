@@ -117,108 +117,97 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="&quot;Kinetic&quot; Background" xml:space="preserve">
+  <data name="BackgroundEditorKineticBackgroundLabel" xml:space="preserve">
     <value>"Kinetic" Background</value>
   </data>
-  <data name="%" xml:space="preserve">
+  <data name="PercentSign" xml:space="preserve">
     <value>%</value>
     <comment>Just the percentage symbol</comment>
   </data>
-  <data name="(Missing)" xml:space="preserve">
+  <data name="ProjectMissingLabel" xml:space="preserve">
     <value> (Missing)</value>
     <comment>For when a project file has been deleted</comment>
   </data>
-  <data name="100%'d game message box" xml:space="preserve">
+  <data name="UiMessage127Label" xml:space="preserve">
     <value>100%'d game message box</value>
   </data>
-  <data name="A new update for Serial Loops is available!" xml:space="preserve">
+  <data name="UpdaterTitleMessage" xml:space="preserve">
     <value>A new update for Serial Loops is available!</value>
   </data>
-  <data name="About" xml:space="preserve">
+  <data name="AboutMenuTitle" xml:space="preserve">
     <value>About</value>
   </data>
-  <data name="About Serial Loops" xml:space="preserve">
+  <data name="AboutSerialLoops" xml:space="preserve">
     <value>About Serial Loops</value>
   </data>
-  <data name="About..." xml:space="preserve">
+  <data name="AboutDetails" xml:space="preserve">
     <value>About…</value>
   </data>
-  <data name="Above Bottom" xml:space="preserve">
-    <value>Above Bottom</value>
-    <comment>As in "above the bottom of the screen"; subtitle location</comment>
-  </data>
-  <data name="Accessing save data prompt message box" xml:space="preserve">
+  <data name="UiMessage40Label" xml:space="preserve">
     <value>Accessing save data prompt message box</value>
   </data>
-  <data name="Accompanying Character" xml:space="preserve">
+  <data name="PuzzleEditorAccompanyingCharacterLabel" xml:space="preserve">
     <value>Accompanying Character</value>
   </data>
   <data name="Add" xml:space="preserve">
     <value>Add</value>
     <comment>As in add/subtract</comment>
   </data>
-  <data name="Add Command" xml:space="preserve">
+  <data name="ScriptEditorAddCommandLabel" xml:space="preserve">
     <value>Add Command</value>
   </data>
-  <data name="Add Frames" xml:space="preserve">
+  <data name="ChibiAndSpriteEditorAddFramesLabel" xml:space="preserve">
     <value>Add Frames</value>
     <comment>For Chibis/Character sprites</comment>
   </data>
-  <data name="Add Map Characters" xml:space="preserve">
+  <data name="ScriptEditorAddMapCharactersSectionLabel" xml:space="preserve">
     <value>Add Map Characters</value>
   </data>
-  <data name="Add Read Flag" xml:space="preserve">
-    <value>Add Read Flag</value>
-    <comment>As in "add a read flag to the script"</comment>
-  </data>
-  <data name="Add Section" xml:space="preserve">
+  <data name="ScriptEditorAddScriptSectionToolTip" xml:space="preserve">
     <value>Add Section</value>
   </data>
-  <data name="Add Starting Chibis" xml:space="preserve">
+  <data name="ScriptEditorAddStartingChibisSectionLabel" xml:space="preserve">
     <value>Add Starting Chibis</value>
   </data>
-  <data name="Add to Event Table" xml:space="preserve">
-    <value>Add to Event Table</value>
-  </data>
-  <data name="Adding frames to GIF..." xml:space="preserve">
+  <data name="GifExportAddingFramesStatusMessage" xml:space="preserve">
     <value>Adding frames to GIF…</value>
   </data>
-  <data name="Adjust Volume" xml:space="preserve">
+  <data name="BgmEditorAdjustVolumeLabel" xml:space="preserve">
     <value>Adjust Volume</value>
     <comment>For BGM</comment>
   </data>
-  <data name="Adjusting Loop Info" xml:space="preserve">
+  <data name="BgmEditorLoopInfoStatusMessage" xml:space="preserve">
     <value>Adjusting Loop Info</value>
     <comment>For BGM</comment>
   </data>
-  <data name="Adjusting Volume" xml:space="preserve">
+  <data name="BgmEditorVolumeStatusMessage" xml:space="preserve">
     <value>Adjusting Volume</value>
     <comment>For BGM</comment>
   </data>
-  <data name="All data erased message box" xml:space="preserve">
+  <data name="UiMessage93Label" xml:space="preserve">
     <value>All data erased message box</value>
   </data>
-  <data name="All data will be erased prompt message box" xml:space="preserve">
+  <data name="UiMessage90Label" xml:space="preserve">
     <value>All data will be erased prompt message box</value>
   </data>
-  <data name="All Off" xml:space="preserve">
+  <data name="SearchDialogAllBooleansOff" xml:space="preserve">
     <value>Toggle All Off</value>
     <comment>Turn all boolean options off</comment>
   </data>
-  <data name="All On" xml:space="preserve">
+  <data name="SearchDialogAllBooleansOn" xml:space="preserve">
     <value>Toggle All On</value>
     <comment>Turn all boolean options on</comment>
   </data>
-  <data name="Animation" xml:space="preserve">
+  <data name="ChibiEditorAnimationHeader" xml:space="preserve">
     <value>Animation</value>
   </data>
-  <data name="Animation Export Option" xml:space="preserve">
-    <value>Animation Export Option</value>
+  <data name="ChibiEditorAnimationExportOptionMessageBoxTitle" xml:space="preserve">
+    <value>Animation Export Option</value><comment>Used for the title of the message box asking if you want to export with lip flaps or not</comment>
   </data>
   <data name="Apply" xml:space="preserve">
     <value>Apply</value>
   </data>
-  <data name="Apply Assembly Hack" xml:space="preserve">
+  <data name="AssemblyHacksApplyLabel" xml:space="preserve">
     <value>Apply Assembly Hacks</value>
   </data>
   <data name="Apply Hacks..." xml:space="preserve">
@@ -2767,7 +2756,7 @@ This action is irreversible.</value>
   <data name="Time Limit" xml:space="preserve">
     <value>Time Limit</value><comment>The time limit for a given chess puzzle</comment>
   </data>
-  <data name="&quot;Failed to open log file directly. Logs can be found at {0}&quot;" xml:space="preserve">
+  <data name="LogFailedDirectOpenMessage" xml:space="preserve">
     <value>"Failed to open log file directly. Logs can be found at {0}"</value>
   </data>
   <data name="Error while loading project" xml:space="preserve">
@@ -2980,7 +2969,7 @@ This action is irreversible.</value>
   <data name="Failed to create XDelta patch!" xml:space="preserve">
     <value>Failed to create XDelta patch!</value>
   </data>
-  <data name="Any Character" xml:space="preserve">
+  <data name="CharacterFilterAnyCharacter" xml:space="preserve">
     <value>Any</value>
   </data>
   <data name="No Character" xml:space="preserve">
@@ -2996,7 +2985,7 @@ This action is irreversible.</value>
     <value>Light Bulb</value>
   </data>
   <data name="ANGER_MARK" xml:space="preserve">
-    <value>Anger Mark</value>
+    <value>Anger Mark</value><comment>Top screen chibi emote description</comment>
   </data>
   <data name="MUSIC_NOTE" xml:space="preserve">
     <value>Music Note</value>
@@ -3062,16 +3051,16 @@ This action is irreversible.</value>
     <value>There are no Serial Loops crash logs. No crashes so far!</value>
   </data>
   <data name="Y_TOP" xml:space="preserve">
-    <value>Top</value>
+    <value>Top</value><comment>As in "at the top of the screen", subtitle position</comment>
   </data>
   <data name="Y_BELOW_TOP" xml:space="preserve">
-    <value>Below Top</value>
+    <value>Below Top</value><comment>As in "below the top of the screen"; subtitle location</comment>
   </data>
   <data name="Y_ABOVE_BOTTOM" xml:space="preserve">
-    <value>Above Bottom</value>
+    <value>Above Bottom</value><comment>As in "above the bottom of the screen"; subtitle location</comment>
   </data>
   <data name="Y_BOTTOM" xml:space="preserve">
-    <value>Bottom</value>
+    <value>Bottom</value><comment>As in "at the bottom of the screen", subtitle location</comment>
   </data>
   <data name="Clear Move" xml:space="preserve">
     <value>Clear Move</value><comment>As in "delete a chess move"</comment>
@@ -3082,7 +3071,7 @@ This action is irreversible.</value>
   <data name="Remove Talk Link" xml:space="preserve">
     <value>Remove Talk Link</value><comment>Remove the association with a script section when you talk to this map character</comment>
   </data>
-  <data name="Add Chibi" xml:space="preserve">
+  <data name="ScriptMapEditorAddChibiLabel" xml:space="preserve">
     <value>Add Chibi</value><comment>...to the current map</comment>
   </data>
   <data name="Are you sure you want to delete the map characters section?" xml:space="preserve">
@@ -3091,14 +3080,11 @@ This action is irreversible.</value>
   <data name="Delete Map Characters?" xml:space="preserve">
     <value>Delete Map Characters?</value>
   </data>
-  <data name="Add Interactable Object" xml:space="preserve">
+  <data name="ScriptEditorAddInteractableObjectLabel" xml:space="preserve">
     <value>Add Interactable Object</value>
   </data>
   <data name="Remove Interactable Object" xml:space="preserve">
     <value>Remove Interactable Object</value>
-  </data>
-  <data name="Add Interactable Objects" xml:space="preserve">
-    <value>Add Interactable Objects</value>
   </data>
   <data name="Remove Interactable Objects" xml:space="preserve">
     <value>Remove Interactable Objects</value>
@@ -3138,7 +3124,7 @@ To make this tooling more useful, we highly recommend applying the
   <data name="DIAGONAL_LEFT_UP" xml:space="preserve">
     <value>Diagonal Up Left</value>
   </data>
-  <data name="AddChoice" xml:space="preserve">
+  <data name="ScriptEditorAddChoiceLabel" xml:space="preserve">
     <value>Add Choice</value>
   </data>
   <data name="None" xml:space="preserve">

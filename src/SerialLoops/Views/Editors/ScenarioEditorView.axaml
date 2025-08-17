@@ -17,7 +17,7 @@
 
         <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right"
                     Width="{Binding #CommandsBox.Width}" Spacing="5" Margin="5">
-            <Button ToolTip.Tip="{x:Static assets:Strings.Add_Command}" Width="22" Command="{Binding AddCommand}">
+            <Button ToolTip.Tip="{x:Static assets:Strings.ScriptEditorAddCommandLabel}" Width="22" Command="{Binding AddCommand}">
                 <Svg Path="avares://SerialLoops/Assets/Icons/Add.svg" Width="22"/>
             </Button>
             <Button ToolTip.Tip="{x:Static assets:Strings.Remove_Command}" Width="22" Command="{Binding DeleteCommand}"

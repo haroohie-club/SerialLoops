@@ -182,7 +182,7 @@ public partial class MainWindowViewModel : ViewModelBase
             }
             catch (Exception ex)
             {
-                Log.LogException(string.Format(Strings._Failed_to_open_log_file_directly__Logs_can_be_found_at__0__,
+                Log.LogException(string.Format(Strings.LogFailedDirectOpenMessage,
                     Path.Combine(CurrentConfig.UserDirectory, "Logs", "SerialLoops.log")), ex);
             }
         });
@@ -205,7 +205,7 @@ public partial class MainWindowViewModel : ViewModelBase
             }
             catch (Exception ex)
             {
-                Log.LogException(string.Format(Strings._Failed_to_open_log_file_directly__Logs_can_be_found_at__0__,
+                Log.LogException(string.Format(Strings.LogFailedDirectOpenMessage,
                     LoopyLogger.CrashLogLocation), ex);
             }
         });

@@ -119,13 +119,13 @@ public class SearchDialogViewModel : ViewModelBase
                 scope.IsActive = _toggleScopesTo;
             }
             _toggleScopesTo = !_toggleScopesTo;
-            ToggleText = _toggleScopesTo ? Strings.All_On : Strings.All_Off;
+            ToggleText = _toggleScopesTo ? Strings.SearchDialogAllBooleansOn : Strings.SearchDialogAllBooleansOff;
         });
         CloseHotKey = new(Key.Escape);
         DeepSearchHotKey = new(Key.Enter);
 
         SearchScopes[0].IsActive = true;
-        ToggleText = Strings.All_Off;
+        ToggleText = Strings.SearchDialogAllBooleansOff;
     }
 
     public async Task DeepSearch(SearchDialog dialog) => await Search(dialog, true);

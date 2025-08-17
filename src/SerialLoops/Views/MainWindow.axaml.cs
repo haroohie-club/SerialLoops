@@ -123,7 +123,7 @@ public partial class MainWindow : Window
                 [
                     new NativeMenuItem
                     {
-                        Header = Strings.About___,
+                        Header = Strings.AboutDetails,
                         Icon = ControlGenerator.GetIcon("Help", ViewModel.Log),
                         Command = ViewModel.AboutCommand,
                     },

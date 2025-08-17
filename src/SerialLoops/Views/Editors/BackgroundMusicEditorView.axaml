@@ -19,7 +19,7 @@
             </Button>
             <Button Command="{Binding AdjustVolumeCommand}">
                 <StackPanel Orientation="Horizontal" Spacing="3">
-                    <TextBlock Text="{x:Static assets:Strings.Adjust_Volume}" VerticalAlignment="Center"/>
+                    <TextBlock Text="{x:Static assets:Strings.BgmEditorAdjustVolumeLabel}" VerticalAlignment="Center"/>
                     <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" ToolTip.Tip="{x:Static assets:Strings.BgmEditorVolumeHelp}"/>
                 </StackPanel>
             </Button>

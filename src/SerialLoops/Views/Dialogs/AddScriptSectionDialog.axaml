@@ -13,7 +13,7 @@
         ExtendClientAreaChromeHints="NoChrome"
         x:DataType="vm:AddScriptSectionDialogViewModel"
         x:Class="SerialLoops.Views.Dialogs.AddScriptSectionDialog"
-        Title="{x:Static assets:Strings.Add_Section}"
+        Title="{x:Static assets:Strings.ScriptEditorAddScriptSectionToolTip}"
         Name="AddSectionDialog">
     <Panel>
         <controls:AcrylicBorderHandler/>

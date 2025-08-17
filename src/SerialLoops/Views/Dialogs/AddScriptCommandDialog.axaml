@@ -14,7 +14,7 @@
         ExtendClientAreaChromeHints="NoChrome"
         x:DataType="vm:AddScriptCommandDialogViewModel"
         x:Class="SerialLoops.Views.Dialogs.AddScriptCommandDialog"
-        Title="{x:Static assets:Strings.Add_Command}"
+        Title="{x:Static assets:Strings.ScriptEditorAddCommandLabel}"
         Name="AddCommandDialog">
     <Panel>
         <controls:AcrylicBorderHandler/>

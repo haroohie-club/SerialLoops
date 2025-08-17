@@ -44,7 +44,7 @@ public static class Shared
         tracker.Focus(Strings.Converting_frames___, 1);
         IEnumerable<Image<Rgba32>> gifFrames = frames.Select(f => Image.LoadPixelData<Rgba32>(f.Pixels.Select(c => new Rgba32(c.Red, c.Green, c.Blue, c.Alpha)).ToArray(), f.Width, f.Height));
         tracker.Finished++;
-        tracker.Focus(Strings.Adding_frames_to_GIF___, gifFrames.Count());
+        tracker.Focus(Strings.GifExportAddingFramesStatusMessage, gifFrames.Count());
         foreach (Image<Rgba32> gifFrame in gifFrames)
         {
             GifFrameMetadata metadata = gifFrame.Frames.RootFrame.Metadata.GetGifMetadata();

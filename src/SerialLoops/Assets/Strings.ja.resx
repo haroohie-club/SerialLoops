@@ -130,59 +130,59 @@
   <data name="Search..." xml:space="preserve">
     <value>探す</value>
   </data>
-  <data name="About" xml:space="preserve">
+  <data name="AboutMenuTitle" xml:space="preserve">
     <value>Serial Loopsについて</value>
   </data>
-  <data name="100%'d game message box" xml:space="preserve">
+  <data name="UiMessage127Label" xml:space="preserve">
     <value>１００％クリアした表示</value>
   </data>
-  <data name="Accompanying Character" xml:space="preserve">
+  <data name="PuzzleEditorAccompanyingCharacterLabel" xml:space="preserve">
     <value>同行者</value>
   </data>
   <data name="_Tools" xml:space="preserve">
     <value>ツール（_T）</value>
   </data>
-  <data name="Add Command" xml:space="preserve">
+  <data name="ScriptEditorAddCommandLabel" xml:space="preserve">
     <value>コマンドを追加</value>
   </data>
-  <data name="Add Section" xml:space="preserve">
+  <data name="ScriptEditorAddScriptSectionToolTip" xml:space="preserve">
     <value>区分を追加</value>
   </data>
-  <data name="Adding frames to GIF..." xml:space="preserve">
+  <data name="GifExportAddingFramesStatusMessage" xml:space="preserve">
     <value>GIFにフレームを追加してしいます…</value>
   </data>
-  <data name="About..." xml:space="preserve">
+  <data name="AboutDetails" xml:space="preserve">
     <value>Serial Loopsについて</value>
   </data>
-  <data name="Add Starting Chibis" xml:space="preserve">
+  <data name="ScriptEditorAddStartingChibisSectionLabel" xml:space="preserve">
     <value>開始時のチビを追加</value>
   </data>
-  <data name="&quot;Kinetic&quot; Background" xml:space="preserve">
+  <data name="BackgroundEditorKineticBackgroundLabel" xml:space="preserve">
     <value>動的背景</value>
   </data>
   <data name="Add" xml:space="preserve">
     <value>追加</value>
     <comment>As in add/subtract</comment>
   </data>
-  <data name="Accessing save data prompt message box" xml:space="preserve">
+  <data name="UiMessage40Label" xml:space="preserve">
     <value>セーブデータにアクセスする時の表示</value>
   </data>
-  <data name="(Missing)" xml:space="preserve">
+  <data name="ProjectMissingLabel" xml:space="preserve">
     <value> (欠落)</value>
   </data>
   <data name="_Build" xml:space="preserve">
     <value>ビルド（_B）</value>
   </data>
-  <data name="A new update for Serial Loops is available!" xml:space="preserve">
+  <data name="UpdaterTitleMessage" xml:space="preserve">
     <value>新しいバージョンがあります</value>
   </data>
-  <data name="Add Map Characters" xml:space="preserve">
+  <data name="ScriptEditorAddMapCharactersSectionLabel" xml:space="preserve">
     <value>マップのキャラクターを追加</value>
   </data>
-  <data name="Adjust Volume" xml:space="preserve">
+  <data name="BgmEditorAdjustVolumeLabel" xml:space="preserve">
     <value>音量の調整</value>
   </data>
-  <data name="%" xml:space="preserve">
+  <data name="PercentSign" xml:space="preserve">
     <value>％</value>
   </data>
   <data name="_Edit" xml:space="preserve">
@@ -194,23 +194,16 @@
   <data name="_Preferences..." xml:space="preserve">
     <value>設定（_P）</value>
   </data>
-  <data name="Add Frames" xml:space="preserve">
+  <data name="ChibiAndSpriteEditorAddFramesLabel" xml:space="preserve">
     <value>フレームを追加</value>
   </data>
-  <data name="Adjusting Volume" xml:space="preserve">
+  <data name="BgmEditorVolumeStatusMessage" xml:space="preserve">
     <value>音量を調整しています</value>
   </data>
-  <data name="Adjusting Loop Info" xml:space="preserve">
+  <data name="BgmEditorLoopInfoStatusMessage" xml:space="preserve">
     <value>ループ情報を調整しています</value>
   </data>
-  <data name="Add to Event Table" xml:space="preserve">
-    <value>イベントテーブルに追加</value>
-  </data>
-  <data name="Add Read Flag" xml:space="preserve">
-    <value>読んだフラグを追加</value>
-    <comment>As in "add a read flag to the script"</comment>
-  </data>
-  <data name="Animation" xml:space="preserve">
+  <data name="ChibiEditorAnimationHeader" xml:space="preserve">
     <value>アニメーション</value>
   </data>
   <data name="Default Font" xml:space="preserve">

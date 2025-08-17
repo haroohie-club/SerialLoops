@@ -14,7 +14,7 @@
 
     <ScrollViewer>
         <Grid RowDefinitions="Auto,*,Auto" HorizontalAlignment="Center">
-            <Button Grid.Row="0" Content="{x:Static assets:Strings.Add_Map_Characters}"
+            <Button Grid.Row="0" Content="{x:Static assets:Strings.ScriptEditorAddMapCharactersSectionLabel}"
                     Command="{Binding AddMapCharactersCommand}"
                     IsVisible="{Binding !HasMapCharacters}"/>
 
@@ -124,7 +124,7 @@
                                     IsEnabled="{Binding SelectedMapCharacter, Converter={x:Static ObjectConverters.IsNotNull}}"/>
 
                             <StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
-                                <Button Content="{x:Static assets:Strings.Add_Chibi}" Command="{Binding AddMapCharacterCommand}"/>
+                                <Button Content="{x:Static assets:Strings.ScriptMapEditorAddChibiLabel}" Command="{Binding AddMapCharacterCommand}"/>
                                 <Button Content="{x:Static assets:Strings.Remove_Map_Characters}" Command="{Binding RemoveMapCharactersCommand}"
                                         IsEnabled="{Binding SelectedMapCharacter, Converter={x:Static ObjectConverters.IsNotNull}}"/>
                             </StackPanel>
