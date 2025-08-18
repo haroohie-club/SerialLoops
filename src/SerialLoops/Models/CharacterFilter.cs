@@ -9,6 +9,6 @@ public class CharacterFilter(CharacterItem character)
     public CharacterItem Character { get; set; } = character;
 
     public override string ToString() =>
-        (Character?.MessageInfo.Character == Speaker.UNKNOWN ? Strings.Any_Character : Character?.DisplayName[4..]) ??
+        (Character?.MessageInfo.Character == Speaker.UNKNOWN ? Strings.CharacterFilterAnyCharacter : Character?.DisplayName[4..]) ??
         Strings.No_Character;
 }

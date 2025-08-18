@@ -18,7 +18,7 @@
         x:DataType="vm:AsmHacksDialogViewModel"
         x:Class="SerialLoops.Views.Dialogs.AsmHacksDialog"
         Icon="/Assets/serial-loops.ico"
-        Title="{x:Static assets:Strings.Apply_Assembly_Hack}">
+        Title="{x:Static assets:Strings.AssemblyHacksApplyLabel}">
     <Panel>
         <controls:AcrylicBorderHandler/>
 
