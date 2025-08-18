@@ -4,14 +4,16 @@
     Serial Loops
 </h1>
 <p align="center">
-    <a href="https://dev.azure.com/jonko0493/haroohie-private/_apis/build/status%2FSerialLoops-Official?branchName=main">
-        <img alt="Azure Pipelines build status badge" src="https://dev.azure.com/jonko0493/haroohie-private/_apis/build/status%2FSerialLoops-Official?branchName=main" />
-    </a>
     <a href="https://discord.gg/nesRSbpeFM">
         <img alt="Haroohie Translation Club Discord Server badge " src="https://img.shields.io/discord/904791358609424436.svg?label=&logo=discord&logoColor=fff&color=7389D8&labelColor=6A7EC2" />
     </a>
     <a href="https://haroohie.club/chokuretsu/serial-loops/docs">
         <img alt="Serial Loops documentation link badge" src="https://img.shields.io/badge/docs-haroohie.club-00C4F5?logo=github" />
+    </a>
+</p>
+<p align="center">
+    <a href='https://flathub.org/apps/club.haroohie.SerialLoops'>
+        <img width='140' alt='Get it on Flathub' src='https://flathub.org/api/badge?locale=en'/>
     </a>
 </p>
 
