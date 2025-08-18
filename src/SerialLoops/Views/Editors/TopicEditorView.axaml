@@ -37,7 +37,7 @@
         <TextBlock Grid.Column="0" Grid.Row="3" Text="{x:Static assets:Strings.Type}" />
         <TextBlock Grid.Column="1" Grid.Row="3" Margin="10,0,0,0" Text="{Binding Topic.TopicEntry.CardType}"/>
 
-        <TextBlock Grid.Column="0" Grid.Row="4" VerticalAlignment="Center" Text="{x:Static assets:Strings.Associated_Script}" IsVisible="{Binding Topic.TopicEntry.Type, Converter={x:Static ObjectConverters.NotEqual}, ConverterParameter=3}"/>
+        <TextBlock Grid.Column="0" Grid.Row="4" VerticalAlignment="Center" Text="{x:Static assets:Strings.EditorItemAssociatedScriptLabel}" IsVisible="{Binding Topic.TopicEntry.Type, Converter={x:Static ObjectConverters.NotEqual}, ConverterParameter=3}"/>
         <StackPanel Grid.Column="1" Grid.Row="4" Margin="10,0,0,0" Orientation="Horizontal" Spacing="5" IsVisible="{Binding Topic.TopicEntry.Type, Converter={x:Static ObjectConverters.NotEqual}, ConverterParameter=3}">
             <ComboBox ItemsSource="{Binding Scripts}" SelectedItem="{Binding AssociatedScript}"/>
             <controls:ItemLink Item="{Binding AssociatedScript}" Tabs="{Binding Tabs}"/>

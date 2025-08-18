@@ -123,7 +123,7 @@
   <data name="AboutMenuTitle" xml:space="preserve">
     <value>Informazioni</value>
   </data>
-  <data name="Auto Re-Open Last Project" xml:space="preserve">
+  <data name="SettingsAutoReopenLabel" xml:space="preserve">
     <value>Avvia automaticamente ultimo progetto</value>
   </data>
   <data name="Command" xml:space="preserve">
@@ -157,7 +157,7 @@
   <data name="Characters Involved" xml:space="preserve">
     <value>Personaggi Coinvolti</value>
   </data>
-  <data name="Associated Main Topics" xml:space="preserve">
+  <data name="PuzzleEditorAssociatedMainTopicsHeader" xml:space="preserve">
     <value>Discussioni principali associati</value>
   </data>
   <data name="AssemblyHacksApplyDetails" xml:space="preserve">
@@ -211,7 +211,7 @@
   <data name="BgmEditorLoopInfoStatusMessage" xml:space="preserve">
     <value>Configura info Loop</value>
   </data>
-  <data name="Asahina companion selected description" xml:space="preserve">
+  <data name="UiMessage57Label" xml:space="preserve">
     <value>Descrizione di Asahina Mikuru come compagna</value>
   </data>
   <data name="Cancel" xml:space="preserve">
@@ -220,7 +220,7 @@
   <data name="Chibi" xml:space="preserve">
     <value>Chibi</value>
   </data>
-  <data name="Add" xml:space="preserve">
+  <data name="AddItemLabel" xml:space="preserve">
     <value>Aggiungi</value>
     <comment>As in add/subtract</comment>
   </data>
@@ -288,7 +288,7 @@
   <data name="BgmEditorAdjustVolumeLabel" xml:space="preserve">
     <value>Configura Volume</value>
   </data>
-  <data name="Apply Template" xml:space="preserve">
+  <data name="ScriptEditorApplyTemplateLabel" xml:space="preserve">
     <value>Applica Template</value>
   </data>
   <data name="Check for Updates" xml:space="preserve">
@@ -300,7 +300,7 @@
   <data name="PercentSign" xml:space="preserve">
     <value>%</value>
   </data>
-  <data name="Background (CG)" xml:space="preserve">
+  <data name="EditorBackgroundCGItemLabel" xml:space="preserve">
     <value>Sfondo (CG)</value>
   </data>
   <data name="Chibis" xml:space="preserve">
@@ -333,10 +333,10 @@
   <data name="_Check for Updates..." xml:space="preserve">
     <value>Controlla _Aggiornamenti…</value>
   </data>
-  <data name="Background" xml:space="preserve">
+  <data name="EditorBackgroundItemLabel" xml:space="preserve">
     <value>Sfondo</value>
   </data>
-  <data name="Asahina puzzle phase selected description" xml:space="preserve">
+  <data name="UiMessage61Label" xml:space="preserve">
     <value>Descrizione di Asahina Mikuru durante le fasi puzzle</value>
   </data>
   <data name="Characters" xml:space="preserve">
@@ -354,7 +354,7 @@
   <data name="Building and Running" xml:space="preserve">
     <value>Compilando e Avviando</value>
   </data>
-  <data name="Associated Script" xml:space="preserve">
+  <data name="EditorItemAssociatedScriptLabel" xml:space="preserve">
     <value>Script associati</value>
   </data>
   <data name="Background_ID" xml:space="preserve">

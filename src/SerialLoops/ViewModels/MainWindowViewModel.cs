@@ -1490,7 +1490,7 @@ public partial class MainWindowViewModel : ViewModelBase
         [
             new NativeMenuItem
             {
-                Header = Strings.Apply_Hacks___,
+                Header = Strings.AssemblyHacksApplyDetails,
                 Command = ApplyHacksCommand,
                 Icon = ControlGenerator.GetIcon("Apply_Hacks", Log),
             },

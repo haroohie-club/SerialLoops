@@ -236,7 +236,7 @@
                                                         <Image Source="{Binding $parent[dialogs:SaveSlotEditorDialog].((vm:SaveSlotEditorDialogViewModel)DataContext).HaruhiVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
                                                     </CheckBox>
                                                     <CheckBox Grid.Row="1" Grid.Column="2" IsChecked="{Binding AsahinaPresent}"
-                                                              ToolTip.Tip="{x:Static assets:Strings.Asahina_Present}" Margin="10,0">
+                                                              ToolTip.Tip="{x:Static assets:Strings.SaveEditorAsahinaPresent}" Margin="10,0">
                                                         <Image Source="{Binding $parent[dialogs:SaveSlotEditorDialog].((vm:SaveSlotEditorDialogViewModel)DataContext).AsahinaVoicePortrait, Converter={x:Static utility:SLConverters.SKBitmapToAvaloniaConverter}}"/>
                                                     </CheckBox>
                                                     <CheckBox Grid.Row="1" Grid.Column="3" IsChecked="{Binding NagatoPresent}"

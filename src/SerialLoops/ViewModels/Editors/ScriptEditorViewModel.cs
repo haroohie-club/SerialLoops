@@ -662,7 +662,7 @@ public class ScriptEditorViewModel : EditorViewModel
     private async Task Clear()
     {
         if (await Window.Window.ShowMessageBoxAsync(Strings.Clear_Script_,
-                Strings.Are_you_sure_you_want_to_clear_the_script__nThis_action_is_irreversible_,
+                Strings.ScriptEditorClearScriptPrompt,
                 ButtonEnum.YesNo, Icon.Question, _log) != ButtonResult.Yes)
         {
             return;

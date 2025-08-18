@@ -12,7 +12,7 @@
              x:Class="SerialLoops.Views.Editors.PuzzleEditorView">
     <ScrollViewer>
         <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,Auto">
-            <HeaderedContentControl Grid.Row="0" Grid.Column="0" Header="{x:Static assets:Strings.Associated_Main_Topics}"
+            <HeaderedContentControl Grid.Row="0" Grid.Column="0" Header="{x:Static assets:Strings.PuzzleEditorAssociatedMainTopicsHeader}"
                            Margin="20, 10">
                 <ItemsRepeater ItemsSource="{Binding AssociatedMainTopics}">
                     <ItemsRepeater.Layout>

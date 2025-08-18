@@ -152,7 +152,7 @@
     <value>Ajustando Info do Loop</value>
     <comment>For BGM</comment>
   </data>
-  <data name="Add" xml:space="preserve">
+  <data name="AddItemLabel" xml:space="preserve">
     <value>Adicionar</value>
     <comment>As in add/subtract</comment>
   </data>
@@ -307,7 +307,7 @@
   <data name="Clear Section" xml:space="preserve">
     <value>Seção de Vitória</value>
   </data>
-  <data name="Apply Template" xml:space="preserve">
+  <data name="ScriptEditorApplyTemplateLabel" xml:space="preserve">
     <value>Aplicar Modelo</value>
   </data>
   <data name="Check for Updates" xml:space="preserve">
@@ -319,7 +319,7 @@
   <data name="Chess File" xml:space="preserve">
     <value>Arquivo Xadrez</value>
   </data>
-  <data name="Background (CG)" xml:space="preserve">
+  <data name="EditorBackgroundCGItemLabel" xml:space="preserve">
     <value>Plano de Fundo (CG)</value>
   </data>
   <data name="Chibis" xml:space="preserve">
@@ -349,7 +349,7 @@
   <data name="Background_Type" xml:space="preserve">
     <value>Tipo de Plano de Fundo</value>
   </data>
-  <data name="Background" xml:space="preserve">
+  <data name="EditorBackgroundItemLabel" xml:space="preserve">
     <value>Plano de Fundo</value>
   </data>
   <data name="Characters" xml:space="preserve">

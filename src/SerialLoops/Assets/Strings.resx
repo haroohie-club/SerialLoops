@@ -149,9 +149,9 @@
   <data name="PuzzleEditorAccompanyingCharacterLabel" xml:space="preserve">
     <value>Accompanying Character</value>
   </data>
-  <data name="Add" xml:space="preserve">
+  <data name="AddItemLabel" xml:space="preserve">
     <value>Add</value>
-    <comment>As in add/subtract</comment>
+    <comment>As in add an item</comment>
   </data>
   <data name="ScriptEditorAddCommandLabel" xml:space="preserve">
     <value>Add Command</value>
@@ -205,15 +205,12 @@
     <value>Animation Export Option</value><comment>Used for the title of the message box asking if you want to export with lip flaps or not</comment>
   </data>
   <data name="Apply" xml:space="preserve">
-    <value>Apply</value>
+    <value>Apply</value><comment>Used in diff contexts, but meaning "apply setting" or "apply template", etc. It's a button label.</comment>
   </data>
   <data name="AssemblyHacksApplyLabel" xml:space="preserve">
     <value>Apply Assembly Hacks</value>
   </data>
-  <data name="Apply Hacks..." xml:space="preserve">
-    <value>Apply Hacks…</value>
-  </data>
-  <data name="Apply Template" xml:space="preserve">
+  <data name="ScriptEditorApplyTemplateLabel" xml:space="preserve">
     <value>Apply Template</value>
     <comment>The template in question is a script template</comment>
   </data>
@@ -223,25 +220,25 @@
 
 Hold Shift to increase step</value>
   </data>
-  <data name="Asahina companion selected description" xml:space="preserve">
+  <data name="UiMessage57Label" xml:space="preserve">
     <value>Asahina companion selected description</value>
   </data>
-  <data name="Asahina puzzle phase selected description" xml:space="preserve">
+  <data name="UiMessage61Label" xml:space="preserve">
     <value>Asahina puzzle phase selected description</value>
   </data>
-  <data name="Associated Main Topics" xml:space="preserve">
+  <data name="PuzzleEditorAssociatedMainTopicsHeader" xml:space="preserve">
     <value>Associated Main Topics</value>
   </data>
-  <data name="Associated Script" xml:space="preserve">
-    <value>Associated Script</value>
+  <data name="EditorItemAssociatedScriptLabel" xml:space="preserve">
+    <value>Associated Script</value><comment>The script associated with a particular item, e.g. the script that plays when you select a topic or when a tutorial is activated</comment>
   </data>
-  <data name="Auto Re-Open Last Project" xml:space="preserve">
+  <data name="SettingsAutoReopenLabel" xml:space="preserve">
     <value>Auto Re-Open Last Project</value>
   </data>
-  <data name="Background" xml:space="preserve">
+  <data name="EditorBackgroundItemLabel" xml:space="preserve">
     <value>Background</value>
   </data>
-  <data name="Background (CG)" xml:space="preserve">
+  <data name="EditorBackgroundCGItemLabel" xml:space="preserve">
     <value>Background (CG)</value>
   </data>
   <data name="Background music volume options ticker tape" xml:space="preserve">
@@ -2737,7 +2734,7 @@ No project is currently open. Would you like to create a new project?</value>
   <data name="Clear Script?" xml:space="preserve">
     <value>Clear Script?</value>
   </data>
-  <data name="Are you sure you want to clear the script?\nThis action is irreversible." xml:space="preserve">
+  <data name="ScriptEditorClearScriptPrompt" xml:space="preserve">
     <value>Are you sure you want to clear the script?
 This action is irreversible.</value>
   </data>
@@ -2831,8 +2828,8 @@ This action is irreversible.</value>
   <data name="Kyon Present" xml:space="preserve">
     <value>Kyon Present</value>
   </data>
-  <data name="Asahina Present" xml:space="preserve">
-    <value>Asahina Present</value>
+  <data name="SaveEditorAsahinaPresent" xml:space="preserve">
+    <value>Asahina Present</value><comment>Tool tip indicating that Asahina was present in a paritcular objective in the save file</comment>
   </data>
   <data name="Nagato Present" xml:space="preserve">
     <value>Nagato Present</value>
@@ -2907,10 +2904,10 @@ This action is irreversible.</value>
     <value>Error getting script command tree for script {0} ({1}): {2} {3}</value><comment>{0} is the script display name, {1} is the script's underlying name, {2} is the command and {3} is the command's parameters</comment>
   </data>
   <data name="Archive_Index" xml:space="preserve">
-    <value>Archive Index</value>
+    <value>Archive Index</value><comment>Search query (the index of an item in the bin archives)</comment>
   </data>
   <data name="Archive_Filename" xml:space="preserve">
-    <value>Archive Filename</value>
+    <value>Archive Filename</value><comment>Search query (the name of an item in the bin archives)</comment>
   </data>
   <data name="Temporary Project Already Exists!" xml:space="preserve">
     <value>Temporary Project Already Exists!</value>
@@ -3074,7 +3071,7 @@ This action is irreversible.</value>
   <data name="ScriptMapEditorAddChibiLabel" xml:space="preserve">
     <value>Add Chibi</value><comment>...to the current map</comment>
   </data>
-  <data name="Are you sure you want to delete the map characters section?" xml:space="preserve">
+  <data name="MapCharactersEditorDeletePrompt" xml:space="preserve">
     <value>Are you sure you want to delete the map characters section?</value>
   </data>
   <data name="Delete Map Characters?" xml:space="preserve">
@@ -3738,5 +3735,11 @@ item in the dropdown!</value>
   </data>
   <data name="FirstTimeFlatpakImportProjectsFolder" xml:space="preserve">
     <value />
+  </data>
+  <data name="AssemblyHacksApplyDetails" xml:space="preserve">
+    <value>Apply Hacks...</value>
+  </data>
+  <data name="AddAmountLabel" xml:space="preserve">
+    <value>Add</value><comment>As in add/subtract</comment>
   </data>
 </root>

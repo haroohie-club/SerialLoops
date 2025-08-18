@@ -29,7 +29,7 @@
                         <DataTemplate DataType="vm:TutorialMapping">
                             <HeaderedContentControl Header="{Binding TutorialName}">
                                 <StackPanel Orientation="Horizontal" Margin="10" Spacing="5">
-                                    <TextBlock Text="{x:Static assets:Strings.Associated_Script}"/>
+                                    <TextBlock Text="{x:Static assets:Strings.EditorItemAssociatedScriptLabel}"/>
                                     <ComboBox ItemsSource="{Binding Scripts}" SelectedItem="{Binding Script}"/>
                                     <controls:ItemLink Item="{Binding Script}" Tabs="{Binding Tabs}"/>
                                 </StackPanel>

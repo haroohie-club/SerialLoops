@@ -144,7 +144,7 @@
   <data name="PuzzleEditorAccompanyingCharacterLabel" xml:space="preserve">
     <value>Accompanying Character</value>
   </data>
-  <data name="Add" xml:space="preserve">
+  <data name="AddItemLabel" xml:space="preserve">
     <value>Add</value>
     <comment>As in add/subtract</comment>
   </data>
@@ -196,31 +196,31 @@
   <data name="AssemblyHacksApplyDetails" xml:space="preserve">
     <value>Apply Hacks…</value>
   </data>
-  <data name="Apply Template" xml:space="preserve">
+  <data name="ScriptEditorApplyTemplateLabel" xml:space="preserve">
     <value>Apply Template</value>
   </data>
   <data name="ImageCropResizeInstructions" xml:space="preserve">
     <value>Arrow Keys - Move Image</value>
   </data>
-  <data name="Asahina companion selected description" xml:space="preserve">
+  <data name="UiMessage57Label" xml:space="preserve">
     <value>Asahina companion selected description</value>
   </data>
-  <data name="Asahina puzzle phase selected description" xml:space="preserve">
+  <data name="UiMessage61Label" xml:space="preserve">
     <value>Asahina puzzle phase selected description</value>
   </data>
-  <data name="Associated Main Topics" xml:space="preserve">
+  <data name="PuzzleEditorAssociatedMainTopicsHeader" xml:space="preserve">
     <value>Associated Main Topics</value>
   </data>
-  <data name="Associated Script" xml:space="preserve">
+  <data name="EditorItemAssociatedScriptLabel" xml:space="preserve">
     <value>Associated Script</value>
   </data>
-  <data name="Auto Re-Open Last Project" xml:space="preserve">
+  <data name="SettingsAutoReopenLabel" xml:space="preserve">
     <value>Auto Re-Open Last Project</value>
   </data>
-  <data name="Background" xml:space="preserve">
+  <data name="EditorBackgroundItemLabel" xml:space="preserve">
     <value>Background</value>
   </data>
-  <data name="Background (CG)" xml:space="preserve">
+  <data name="EditorBackgroundCGItemLabel" xml:space="preserve">
     <value>Background (CG)</value>
   </data>
   <data name="Background music volume options ticker tape" xml:space="preserve">

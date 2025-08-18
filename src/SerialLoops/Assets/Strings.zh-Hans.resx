@@ -144,7 +144,7 @@
   <data name="PuzzleEditorAccompanyingCharacterLabel" xml:space="preserve">
     <value>同行的角色</value>
   </data>
-  <data name="Add" xml:space="preserve">
+  <data name="AddItemLabel" xml:space="preserve">
     <value>添加</value>
     <comment>As in add/subtract</comment>
   </data>
@@ -196,31 +196,31 @@
   <data name="AssemblyHacksApplyDetails" xml:space="preserve">
     <value>应用修改…</value>
   </data>
-  <data name="Apply Template" xml:space="preserve">
+  <data name="ScriptEditorApplyTemplateLabel" xml:space="preserve">
     <value>应用模板</value>
   </data>
   <data name="ImageCropResizeInstructions" xml:space="preserve">
     <value>方向键 - 移动图像</value>
   </data>
-  <data name="Asahina companion selected description" xml:space="preserve">
+  <data name="UiMessage57Label" xml:space="preserve">
     <value>选择“和朝比奈同行”描述</value>
   </data>
-  <data name="Asahina puzzle phase selected description" xml:space="preserve">
+  <data name="UiMessage61Label" xml:space="preserve">
     <value>选择“朝比奈解谜阶段”描述</value>
   </data>
-  <data name="Associated Main Topics" xml:space="preserve">
+  <data name="PuzzleEditorAssociatedMainTopicsHeader" xml:space="preserve">
     <value>相关的主要话题</value>
   </data>
-  <data name="Associated Script" xml:space="preserve">
+  <data name="EditorItemAssociatedScriptLabel" xml:space="preserve">
     <value>相关的脚本</value>
   </data>
-  <data name="Auto Re-Open Last Project" xml:space="preserve">
+  <data name="SettingsAutoReopenLabel" xml:space="preserve">
     <value>自动重新打开上一个项目</value>
   </data>
-  <data name="Background" xml:space="preserve">
+  <data name="EditorBackgroundItemLabel" xml:space="preserve">
     <value>背景</value>
   </data>
-  <data name="Background (CG)" xml:space="preserve">
+  <data name="EditorBackgroundCGItemLabel" xml:space="preserve">
     <value>背景（CG）</value>
   </data>
   <data name="Background music volume options ticker tape" xml:space="preserve">

@@ -160,7 +160,7 @@
   <data name="BackgroundEditorKineticBackgroundLabel" xml:space="preserve">
     <value>動的背景</value>
   </data>
-  <data name="Add" xml:space="preserve">
+  <data name="AddItemLabel" xml:space="preserve">
     <value>追加</value>
     <comment>As in add/subtract</comment>
   </data>

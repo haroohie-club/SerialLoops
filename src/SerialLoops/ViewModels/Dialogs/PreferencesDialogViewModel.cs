@@ -91,7 +91,7 @@ public class PreferencesDialogViewModel : ViewModelBase
         [
             new BooleanOption
             {
-                OptionName = Strings.Auto_Re_Open_Last_Project,
+                OptionName = Strings.SettingsAutoReopenLabel,
                 Value = Configuration.AutoReopenLastProject,
                 OnChange = value => Configuration.AutoReopenLastProject = value,
             },

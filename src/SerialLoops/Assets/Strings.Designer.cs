@@ -231,9 +231,18 @@ namespace SerialLoops.Assets {
         /// <summary>
         ///   Looks up a localized string similar to Add.
         /// </summary>
-        public static string Add {
+        public static string AddAmountLabel {
             get {
-                return ResourceManager.GetString("Add", resourceCulture);
+                return ResourceManager.GetString("AddAmountLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add.
+        /// </summary>
+        public static string AddItemLabel {
+            get {
+                return ResourceManager.GetString("AddItemLabel", resourceCulture);
             }
         }
         
@@ -256,24 +265,6 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Apply Hacks….
-        /// </summary>
-        public static string Apply_Hacks___ {
-            get {
-                return ResourceManager.GetString("Apply Hacks...", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Apply Template.
-        /// </summary>
-        public static string Apply_Template {
-            get {
-                return ResourceManager.GetString("Apply Template", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Archive Filename.
         /// </summary>
         public static string Archive_Filename {
@@ -292,52 +283,6 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to clear the script?
-        ///This action is irreversible..
-        /// </summary>
-        public static string Are_you_sure_you_want_to_clear_the_script__nThis_action_is_irreversible_ {
-            get {
-                return ResourceManager.GetString("Are you sure you want to clear the script?\\nThis action is irreversible.", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to delete the map characters section?.
-        /// </summary>
-        public static string Are_you_sure_you_want_to_delete_the_map_characters_section_ {
-            get {
-                return ResourceManager.GetString("Are you sure you want to delete the map characters section?", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Asahina companion selected description.
-        /// </summary>
-        public static string Asahina_companion_selected_description {
-            get {
-                return ResourceManager.GetString("Asahina companion selected description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Asahina Present.
-        /// </summary>
-        public static string Asahina_Present {
-            get {
-                return ResourceManager.GetString("Asahina Present", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Asahina puzzle phase selected description.
-        /// </summary>
-        public static string Asahina_puzzle_phase_selected_description {
-            get {
-                return ResourceManager.GetString("Asahina puzzle phase selected description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Patching ARM9 and overlays.
         /// </summary>
         public static string AsmHackPatchingMessage {
@@ -347,56 +292,20 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Apply Hacks....
+        /// </summary>
+        public static string AssemblyHacksApplyDetails {
+            get {
+                return ResourceManager.GetString("AssemblyHacksApplyDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Apply Assembly Hacks.
         /// </summary>
         public static string AssemblyHacksApplyLabel {
             get {
                 return ResourceManager.GetString("AssemblyHacksApplyLabel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Associated Main Topics.
-        /// </summary>
-        public static string Associated_Main_Topics {
-            get {
-                return ResourceManager.GetString("Associated Main Topics", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Associated Script.
-        /// </summary>
-        public static string Associated_Script {
-            get {
-                return ResourceManager.GetString("Associated Script", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Auto Re-Open Last Project.
-        /// </summary>
-        public static string Auto_Re_Open_Last_Project {
-            get {
-                return ResourceManager.GetString("Auto Re-Open Last Project", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Background.
-        /// </summary>
-        public static string Background {
-            get {
-                return ResourceManager.GetString("Background", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Background (CG).
-        /// </summary>
-        public static string Background__CG_ {
-            get {
-                return ResourceManager.GetString("Background (CG)", resourceCulture);
             }
         }
         
@@ -2523,6 +2432,33 @@ namespace SerialLoops.Assets {
         public static string Editor_Tabs_not_provided_to_project_creation_dialog {
             get {
                 return ResourceManager.GetString("Editor Tabs not provided to project creation dialog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Background (CG).
+        /// </summary>
+        public static string EditorBackgroundCGItemLabel {
+            get {
+                return ResourceManager.GetString("EditorBackgroundCGItemLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Background.
+        /// </summary>
+        public static string EditorBackgroundItemLabel {
+            get {
+                return ResourceManager.GetString("EditorBackgroundItemLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Associated Script.
+        /// </summary>
+        public static string EditorItemAssociatedScriptLabel {
+            get {
+                return ResourceManager.GetString("EditorItemAssociatedScriptLabel", resourceCulture);
             }
         }
         
@@ -5056,6 +4992,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete the map characters section?.
+        /// </summary>
+        public static string MapCharactersEditorDeletePrompt {
+            get {
+                return ResourceManager.GetString("MapCharactersEditorDeletePrompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Maps.
         /// </summary>
         public static string Maps {
@@ -6588,6 +6533,15 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Associated Main Topics.
+        /// </summary>
+        public static string PuzzleEditorAssociatedMainTopicsHeader {
+            get {
+                return ResourceManager.GetString("PuzzleEditorAssociatedMainTopicsHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Puzzles.
         /// </summary>
         public static string Puzzles {
@@ -7306,6 +7260,15 @@ namespace SerialLoops.Assets {
                 return ResourceManager.GetString("Saved but unbuilt files were detected in the project directory. Would you like to" +
                         " build before loading the project? Not building could result in these files bein" +
                         "g overwritten.", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Asahina Present.
+        /// </summary>
+        public static string SaveEditorAsahinaPresent {
+            get {
+                return ResourceManager.GetString("SaveEditorAsahinaPresent", resourceCulture);
             }
         }
         
@@ -8367,6 +8330,25 @@ namespace SerialLoops.Assets {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Apply Template.
+        /// </summary>
+        public static string ScriptEditorApplyTemplateLabel {
+            get {
+                return ResourceManager.GetString("ScriptEditorApplyTemplateLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to clear the script?
+        ///This action is irreversible..
+        /// </summary>
+        public static string ScriptEditorClearScriptPrompt {
+            get {
+                return ResourceManager.GetString("ScriptEditorClearScriptPrompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The sprite entrance transition is necessary for making the sprite appear on the screen when first entering a scene. It plays before the dialogue is shown..
         /// </summary>
         public static string ScriptEditorDialogueSpriteEntranceHelp {
@@ -8849,6 +8831,15 @@ namespace SerialLoops.Assets {
         public static string Settings {
             get {
                 return ResourceManager.GetString("Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Auto Re-Open Last Project.
+        /// </summary>
+        public static string SettingsAutoReopenLabel {
+            get {
+                return ResourceManager.GetString("SettingsAutoReopenLabel", resourceCulture);
             }
         }
         
@@ -10050,6 +10041,24 @@ namespace SerialLoops.Assets {
         public static string UiMessage40Label {
             get {
                 return ResourceManager.GetString("UiMessage40Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Asahina companion selected description.
+        /// </summary>
+        public static string UiMessage57Label {
+            get {
+                return ResourceManager.GetString("UiMessage57Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Asahina puzzle phase selected description.
+        /// </summary>
+        public static string UiMessage61Label {
+            get {
+                return ResourceManager.GetString("UiMessage61Label", resourceCulture);
             }
         }
         

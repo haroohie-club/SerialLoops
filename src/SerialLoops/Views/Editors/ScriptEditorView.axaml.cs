@@ -47,7 +47,7 @@ public partial class ScriptEditorView : UserControl
             },
             new NativeMenuItem
             {
-                Header = Strings.Apply_Template,
+                Header = Strings.ScriptEditorApplyTemplateLabel,
                 Command = vm.ApplyTemplateCommand,
                 Icon = ControlGenerator.GetIcon("Template", window.Log),
             },
@@ -76,7 +76,7 @@ public partial class ScriptEditorView : UserControl
 
         ToolbarButton applyTemplateButton = new()
         {
-            DataContext = Strings.Apply_Template,
+            DataContext = Strings.ScriptEditorApplyTemplateLabel,
             Text = Strings.Template,
             Command = vm.ApplyTemplateCommand,
             Icon = ControlGenerator.GetVectorIcon("Template", window.Log),
