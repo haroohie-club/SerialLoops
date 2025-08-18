@@ -244,6 +244,8 @@ public class ConfigFactory : IConfigFactory
             RemoveMissingProjects = false,
             CheckForUpdates = true,
             PreReleaseChannel = false,
+            FirstTimeFlatpak = (Environment.GetEnvironmentVariable(EnvironmentVariables.Flatpak) ?? bool.FalseString)
+                .Equals(bool.TrueString, StringComparison.OrdinalIgnoreCase),
         };
     }
 }

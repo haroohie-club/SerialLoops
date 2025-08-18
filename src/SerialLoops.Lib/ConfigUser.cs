@@ -41,6 +41,7 @@ public class ConfigUser
     public bool CheckForUpdates { get; set; }
     public bool PreReleaseChannel { get; set; }
     public string DisplayFont { get; set; }
+    public bool FirstTimeFlatpak { get; set; }
 
     public void Save(ILogger log)
     {
@@ -72,16 +73,16 @@ public class ConfigUser
 
         // Pull in new hacks in case we've updated the program with more
         List<AsmHack> builtinHacks = JsonSerializer.Deserialize<List<AsmHack>>(File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "hacks.json")));
-        IEnumerable<AsmHack> missingHacks = builtinHacks.Where(h => !Hacks.Contains(h));
-        if (missingHacks.Any())
+        AsmHack[] missingHacks = builtinHacks.Where(h => !Hacks.Contains(h)).ToArray();
+        if (missingHacks.Length != 0)
         {
             IO.CopyFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Hacks"), HacksDirectory, log);
             Hacks.AddRange(missingHacks);
             File.WriteAllText(Path.Combine(HacksDirectory, "hacks.json"), JsonSerializer.Serialize(Hacks));
         }
 
-        IEnumerable<AsmHack> updatedHacks = builtinHacks.Where(h => !Hacks.FirstOrDefault(o => h.Name == o.Name)?.DeepEquals(h) ?? false);
-        if (updatedHacks.Any())
+        AsmHack[] updatedHacks = builtinHacks.Where(h => !Hacks.FirstOrDefault(o => h.Name == o.Name)?.DeepEquals(h) ?? false).ToArray();
+        if (updatedHacks.Length != 0)
         {
             IO.CopyFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "Hacks"), HacksDirectory, log);
             foreach (AsmHack updatedHack in updatedHacks)
