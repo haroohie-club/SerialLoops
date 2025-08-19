@@ -15,7 +15,7 @@
         Background="{DynamicResource FallbackBackgroundColor}"
         ExtendClientAreaToDecorationsHint="True"
         Icon="/Assets/serial-loops.ico"
-        Title="{x:Static assets:Strings.Crop___Scale}"
+        Title="{x:Static assets:Strings.ImageCropAndScale}"
         Name="IcrDialog">
     <Panel>
         <controls:AcrylicBorderHandler/>

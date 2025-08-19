@@ -42,7 +42,7 @@
             <StackPanel Orientation="Horizontal" Spacing="5" HorizontalAlignment="Center">
                 <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}"
                         CommandParameter="{Binding #Dialog}" IsCancel="True"/>
-                <Button Content="{x:Static assets:Strings.Create}" Command="{Binding CreateCommand}"
+                <Button Content="{x:Static assets:Strings.Export}" Command="{Binding CreateCommand}"
                         CommandParameter="{Binding #Dialog}" IsDefault="True"/>
             </StackPanel>
         </StackPanel>

@@ -223,10 +223,10 @@
   <data name="EditorBackgroundCGItemLabel" xml:space="preserve">
     <value>Background (CG)</value>
   </data>
-  <data name="Background music volume options ticker tape" xml:space="preserve">
+  <data name="UiMessage74Label" xml:space="preserve">
     <value>Background music volume options ticker tape</value>
   </data>
-  <data name="Backgrounds" xml:space="preserve">
+  <data name="ItemsPanelBackgrounds" xml:space="preserve">
     <value>Backgrounds</value>
   </data>
   <data name="Background_ID" xml:space="preserve">
@@ -235,204 +235,177 @@
   <data name="Background_Type" xml:space="preserve">
     <value>Background Type</value>
   </data>
-  <data name="Bank" xml:space="preserve">
+  <data name="SfxEditorBank" xml:space="preserve">
     <value>Bank</value>
     <comment>As in "Sound Bank"</comment>
   </data>
-  <data name="Base Time" xml:space="preserve">
+  <data name="PuzzleEditorBaseTimeLabel" xml:space="preserve">
     <value>Base Time</value>
   </data>
-  <data name="Base Time Gain" xml:space="preserve">
+  <data name="TopicEditorBaseTimeGainLabel" xml:space="preserve">
     <value>Base Time Gain</value>
   </data>
-  <data name="Batch Dialogue Display" xml:space="preserve">
+  <data name="SaveEditorOptionBatchDialogueDisplay" xml:space="preserve">
     <value>Batch Dialogue Display</value>
   </data>
-  <data name="Batch Dialogue Display Off" xml:space="preserve">
+  <data name="UiMessage102Label" xml:space="preserve">
     <value>Batch Dialogue Display Off</value>
   </data>
-  <data name="Batch Dialogue Display On" xml:space="preserve">
+  <data name="UiMessage103Label" xml:space="preserve">
     <value>Batch Dialogue Display On</value>
   </data>
-  <data name="Batch Dialogue Display option" xml:space="preserve">
+  <data name="UiMessage94Label" xml:space="preserve">
     <value>Batch Dialogue Display option</value>
   </data>
-  <data name="Batch Dialogue Display ticker tape" xml:space="preserve">
+  <data name="UiMessage98Label" xml:space="preserve">
     <value>Batch Dialogue Display ticker tape</value>
   </data>
   <data name="BGM" xml:space="preserve">
     <value>BGM</value>
   </data>
-  <data name="BGMs" xml:space="preserve">
+  <data name="ItemsPanelBGMs" xml:space="preserve">
     <value>BGMs</value>
   </data>
-  <data name="Both" xml:space="preserve">
+  <data name="ScreenSelectorBothScreens" xml:space="preserve">
     <value>Both</value>
     <comment>Checkbox for "Both Screens"</comment>
   </data>
-  <data name="Both Screens" xml:space="preserve">
-    <value>Both Screens</value>
-  </data>
-  <data name="Bottom Screen" xml:space="preserve">
+  <data name="ScreenSelectorBottomScreen" xml:space="preserve">
     <value>Bottom Screen</value>
   </data>
   <data name="Build" xml:space="preserve">
     <value>Build</value>
   </data>
-  <data name="Build and Run" xml:space="preserve">
+  <data name="BuildAndRun" xml:space="preserve">
     <value>Build &amp; Run</value>
   </data>
-  <data name="Build failed!" xml:space="preserve">
+  <data name="BuildFailed" xml:space="preserve">
     <value>Build failed!</value>
   </data>
-  <data name="Build from Scratch" xml:space="preserve">
+  <data name="BuildFromScratch" xml:space="preserve">
     <value>Build from Scratch</value>
   </data>
-  <data name="Build succeeded!" xml:space="preserve">
+  <data name="BuildSucceeded" xml:space="preserve">
     <value>Build succeeded!</value>
   </data>
-  <data name="Build Unbuilt Files?" xml:space="preserve">
+  <data name="ProjectLoadBuildUnbuiltFiles" xml:space="preserve">
     <value>Build Unbuilt Files?</value>
   </data>
-  <data name="Building and Running" xml:space="preserve">
+  <data name="BuildingAndRunningMessage" xml:space="preserve">
     <value>Building and Running</value>
   </data>
-  <data name="Building from Scratch" xml:space="preserve">
+  <data name="BuildingFromScratchMessage" xml:space="preserve">
     <value>Building from Scratch</value>
   </data>
-  <data name="Building Iteratively" xml:space="preserve">
+  <data name="BuildingIterativelyMessage" xml:space="preserve">
     <value>Building Iteratively</value>
   </data>
-  <data name="Building:" xml:space="preserve">
+  <data name="BuildingPrefix" xml:space="preserve">
     <value>Building:</value>
   </data>
-  <data name="Caching" xml:space="preserve">
+  <data name="BgmItemCachingMessage" xml:space="preserve">
     <value>Caching</value>
   </data>
-  <data name="Caching BGM" xml:space="preserve">
+  <data name="BgmEditorCachingBGMMessage" xml:space="preserve">
     <value>Caching BGM</value>
-  </data>
-  <data name="Can't Rename Item" xml:space="preserve">
-    <value>Can't Rename Item</value>
-  </data>
-  <data name="Can't rename this item directly -- open it to rename it!" xml:space="preserve">
-    <value>Can't rename this item directly -- open it to rename it!</value>
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
-  <data name="Character" xml:space="preserve">
+  <data name="EditorCharacterLabel" xml:space="preserve">
     <value>Character</value>
   </data>
-  <data name="Character Distribution" xml:space="preserve">
+  <data name="UiMessage06Label" xml:space="preserve">
     <value>Character Distribution</value>
   </data>
-  <data name="Character distribution instructions" xml:space="preserve">
+  <data name="UiMessage09Label" xml:space="preserve">
     <value>Character distribution instructions</value>
   </data>
-  <data name="Character sprite frames exported!" xml:space="preserve">
+  <data name="CharacterSpriteEditorFramesExportedMessage" xml:space="preserve">
     <value>Character sprite frames exported!</value>
   </data>
-  <data name="Character Topic" xml:space="preserve">
+  <data name="UiMessage04Label" xml:space="preserve">
     <value>Character Topic</value>
   </data>
-  <data name="Character voice toggle options ticker tape" xml:space="preserve">
+  <data name="UiMessage78Label" xml:space="preserve">
     <value>Character voice toggle options ticker tape</value>
-  </data>
-  <data name="Characters" xml:space="preserve">
-    <value>Characters</value>
-  </data>
-  <data name="Characters Involved" xml:space="preserve">
-    <value>Characters Involved</value>
   </data>
   <data name="Character_Sprite" xml:space="preserve">
     <value>Character Sprite</value>
   </data>
-  <data name="Character_Sprites" xml:space="preserve">
+  <data name="ItemsPanelCharacterSprites" xml:space="preserve">
     <value>Character Sprites</value>
   </data>
-  <data name="Check for Updates" xml:space="preserve">
+  <data name="MenuOptionCheckForUpdates" xml:space="preserve">
     <value>Check for Updates</value>
   </data>
-  <data name="Check for Updates on Startup" xml:space="preserve">
+  <data name="PreferencesCheckForUpdatesOnStartup" xml:space="preserve">
     <value>Check for Updates on Startup</value>
   </data>
-  <data name="Chess File" xml:space="preserve">
+  <data name="ScriptEditorChessFileLabel" xml:space="preserve">
     <value>Chess File</value>
   </data>
-  <data name="Chess Mode Unlocked message box" xml:space="preserve">
+  <data name="UiMessage115Label" xml:space="preserve">
     <value>Chess Mode Unlocked message box</value>
   </data>
   <data name="Chess_Puzzle" xml:space="preserve">
     <value>Chess Puzzle</value>
   </data>
-  <data name="Chess_Puzzles" xml:space="preserve">
+  <data name="ItemsPanelChessPuzzles" xml:space="preserve">
     <value>Chess Puzzles</value>
   </data>
   <data name="Chibi" xml:space="preserve">
     <value>Chibi</value>
   </data>
-  <data name="Chibi frames exported!" xml:space="preserve">
+  <data name="ChibiEditorFramesExportedMessage" xml:space="preserve">
     <value>Chibi frames exported!</value>
   </data>
-  <data name="Chibis" xml:space="preserve">
-    <value>Chibis</value>
-  </data>
-  <data name="Chinese (Simplified)" xml:space="preserve">
+  <data name="TranslatorCreditsSimplifiedChinese" xml:space="preserve">
     <value>Chinese (Simplified)</value>
   </data>
-  <data name="Choices" xml:space="preserve">
+  <data name="ScriptEditorChoicesLabel" xml:space="preserve">
     <value>Choices</value>
   </data>
-  <data name="Chokuretsu ROM" xml:space="preserve">
+  <data name="ProjectCreationChokuretsuROMLabel" xml:space="preserve">
     <value>Chokuretsu ROM</value>
   </data>
-  <data name="Chokuretsu Save File" xml:space="preserve">
+  <data name="FiletypeChokuretsuSave" xml:space="preserve">
     <value>Chokuretsu Save File</value>
   </data>
-  <data name="Cleaning Iterative Directory" xml:space="preserve">
+  <data name="BuildCleaningIterativeDirectory" xml:space="preserve">
     <value>Cleaning Iterative Directory</value>
   </data>
-  <data name="Clear all commands from the game scenario?\nThis action is irreversible." xml:space="preserve">
+  <data name="ScenarioEditorClearCommandsMessage" xml:space="preserve">
     <value>Clear all commands from the game scenario?\nThis action is irreversible.</value>
   </data>
-  <data name="Clear Section" xml:space="preserve">
+  <data name="ScriptEditorChessWinSectionLabel" xml:space="preserve">
     <value>Win Section</value>
   </data>
-  <data name="Clear Scenario" xml:space="preserve">
+  <data name="ScenarioEditorClearScenarioLabel" xml:space="preserve">
     <value>Clear Scenario</value>
   </data>
-  <data name="Clear Script" xml:space="preserve">
+  <data name="ScriptEditorClearScriptLabel" xml:space="preserve">
     <value>Clear Script</value>
   </data>
-  <data name="Cleared all chess puzzles message box" xml:space="preserve">
+  <data name="UiMessage126Label" xml:space="preserve">
     <value>Cleared all chess puzzles message box</value>
   </data>
-  <data name="Close All" xml:space="preserve">
-    <value>Close All</value>
-  </data>
-  <data name="Close All But This" xml:space="preserve">
-    <value>Close All But This</value>
-  </data>
-  <data name="Close All To Right" xml:space="preserve">
-    <value>Close All To Right</value>
-  </data>
-  <data name="Close Project" xml:space="preserve">
+  <data name="CloseProjectLabel" xml:space="preserve">
     <value>Close Project</value>
   </data>
-  <data name="Collected all Haruhi topics message box" xml:space="preserve">
+  <data name="UiMessage121Label" xml:space="preserve">
     <value>Collected all Haruhi topics message box</value>
   </data>
-  <data name="Collected all Koizumi topics message box" xml:space="preserve">
+  <data name="UiMessage124Label" xml:space="preserve">
     <value>Collected all Koizumi topics message box</value>
   </data>
-  <data name="Collected all main topics message box" xml:space="preserve">
+  <data name="UiMessage125Label" xml:space="preserve">
     <value>Collected all main topics message box</value>
   </data>
-  <data name="Collected all Mikuru topics message box" xml:space="preserve">
+  <data name="UiMessage122Label" xml:space="preserve">
     <value>Collected all Mikuru topics message box</value>
   </data>
-  <data name="Collected all Nagato topics message box" xml:space="preserve">
+  <data name="UiMessage123Label" xml:space="preserve">
     <value>Collected all Nagato topics message box</value>
   </data>
   <data name="Color" xml:space="preserve">
@@ -441,143 +414,124 @@
   <data name="Command" xml:space="preserve">
     <value>Command</value>
   </data>
-  <data name="Command Index:" xml:space="preserve">
+  <data name="CommandIndexLabel" xml:space="preserve">
     <value>Command Index: </value>
   </data>
-  <data name="Command Type:" xml:space="preserve">
+  <data name="CommandTypeLabel" xml:space="preserve">
     <value>Command Type:</value>
   </data>
-  <data name="Common Save Data" xml:space="preserve">
+  <data name="SaveEditorCommonSaveDataLabel" xml:space="preserve">
     <value>Common Save Data</value>
   </data>
-  <data name="Common Save Data..." xml:space="preserve">
+  <data name="SaveEditorCommonSaveDataEditButtonLabel" xml:space="preserve">
     <value>Common Save Data…</value>
   </data>
-  <data name="Companion Selection" xml:space="preserve">
+  <data name="UiMessage08Label" xml:space="preserve">
     <value>Companion Selection</value>
   </data>
-  <data name="Companion selection description" xml:space="preserve">
+  <data name="UiMessage55Label" xml:space="preserve">
     <value>Companion selection description</value>
   </data>
-  <data name="Compiled file {0} does not exist!" xml:space="preserve">
+  <data name="BuildErrorCompiledFileNotExist" xml:space="preserve">
     <value>Compiled file {0} does not exist!</value>
   </data>
-  <data name="Conditional" xml:space="preserve">
+  <data name="ScriptEditorConditionalParameterLabel" xml:space="preserve">
     <value>Conditional</value>
   </data>
-  <data name="Config Data" xml:space="preserve">
+  <data name="SaveEditorConfigDataLabel" xml:space="preserve">
     <value>Config Data</value>
   </data>
   <data name="Confirm" xml:space="preserve">
     <value>Confirm</value>
   </data>
-  <data name="Continue on Failure" xml:space="preserve">
+  <data name="PuzzleEditorContinueOnFailureLabel" xml:space="preserve">
     <value>Continue on Failure</value>
   </data>
-  <data name="Converting frames..." xml:space="preserve">
+  <data name="EditorConvertingFramesMessage" xml:space="preserve">
     <value>Converting frames…</value>
   </data>
-  <data name="Converting from MP3..." xml:space="preserve">
+  <data name="SoundEditorConvertingFromMp3Message" xml:space="preserve">
     <value>Converting from MP3…</value>
   </data>
-  <data name="Converting from Vorbis..." xml:space="preserve">
+  <data name="SoundEditorConvertingFromVorbisMessage" xml:space="preserve">
     <value>Converting from Vorbis…</value>
   </data>
   <data name="Copy" xml:space="preserve">
     <value>Copy</value>
   </data>
-  <data name="Copying Archives to Iterative Originals" xml:space="preserve">
+  <data name="BuildCopyingArchivesMessage" xml:space="preserve">
     <value>Copying Archives to Iterative Originals</value>
   </data>
-  <data name="Copying Files" xml:space="preserve">
+  <data name="IOCopyingFilesMessage" xml:space="preserve">
     <value>Copying Files</value>
   </data>
-  <data name="Corrupted File Detected!" xml:space="preserve">
+  <data name="ProjectLoadCorruptedFileDetectedTitle" xml:space="preserve">
     <value>Corrupted File Detected!</value>
   </data>
-  <data name="Create" xml:space="preserve">
+  <data name="ProjectCreateButtonLabel" xml:space="preserve">
     <value>Create</value>
   </data>
-  <data name="Create New Project" xml:space="preserve">
+  <data name="ProjectCreationCreateNewProjectTitle" xml:space="preserve">
     <value>Create New Project</value>
   </data>
-  <data name="Creating Directories" xml:space="preserve">
+  <data name="IOCreatingDirectoriesMessage" xml:space="preserve">
     <value>Creating Directories</value>
   </data>
-  <data name="Creating Patch" xml:space="preserve">
+  <data name="ExportPatchProgressMessage" xml:space="preserve">
     <value>Creating Patch</value>
   </data>
-  <data name="Creating Project" xml:space="preserve">
+  <data name="ProjectCreationProgressMessage" xml:space="preserve">
     <value>Creating Project</value>
   </data>
-  <data name="Crop &amp; Scale" xml:space="preserve">
+  <data name="ImageCropAndScale" xml:space="preserve">
     <value>Crop &amp; Scale</value>
   </data>
-  <data name="Cross Space {0}" xml:space="preserve">
-    <value>Cross Space {0}"</value>
-    <comment>As on a chessboard</comment>
-  </data>
-  <data name="Crossfade Time (Frames)" xml:space="preserve">
+  <data name="ScriptParameterCrossfadeTime" xml:space="preserve">
     <value>Crossfade Time (Frames)</value>
   </data>
-  <data name="Ctrl+Scroll - Scale Image" xml:space="preserve">
-    <value>Ctrl+Scroll - Scale Image</value>
-  </data>
-  <data name="CUSTOM_COLOR" xml:space="preserve">
+  <data name="ColorMonoParamCustom" xml:space="preserve">
     <value>Custom Colour</value>
   </data>
   <data name="Cut" xml:space="preserve">
     <value>Cut</value>
   </data>
-  <data name="Data reset message box" xml:space="preserve">
+  <data name="UiMessage92Label" xml:space="preserve">
     <value>Data reset message box</value>
   </data>
-  <data name="Defaults" xml:space="preserve">
-    <value>Defaults</value>
-  </data>
-  <data name="Delay (Frames)" xml:space="preserve">
+  <data name="ScriptParameterDelay" xml:space="preserve">
     <value>Delay (Frames)</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
   </data>
-  <data name="Deleting all data message box" xml:space="preserve">
+  <data name="UiMessage47Label" xml:space="preserve">
     <value>Deleting all data message box</value>
   </data>
-  <data name="devkitARM Docker Tag" xml:space="preserve">
-    <value>devkitARM Docker Tag</value>
-  </data>
-  <data name="DevkitARM must be supplied in order to build!" xml:space="preserve">
-    <value>DevkitARM must be supplied in order to build!</value>
-  </data>
-  <data name="devkitARM Path" xml:space="preserve">
-    <value>devkitARM Path</value>
-  </data>
-  <data name="Dialogue" xml:space="preserve">
+  <data name="ScriptParamDialogue" xml:space="preserve">
     <value>Dialogue</value>
   </data>
-  <data name="Dialogue Skipping" xml:space="preserve">
+  <data name="SaveEditorDialogueSkippingSetting" xml:space="preserve">
     <value>Dialogue Skipping</value>
   </data>
-  <data name="Dialogue Skipping Fast Forward" xml:space="preserve">
+  <data name="UiMessage107Label" xml:space="preserve">
     <value>Dialogue Skipping Fast Forward</value>
   </data>
-  <data name="Dialogue Skipping setting" xml:space="preserve">
+  <data name="UiMessage95Label" xml:space="preserve">
     <value>Dialogue Skipping setting</value>
   </data>
-  <data name="Dialogue Skipping Skip Already Read" xml:space="preserve">
+  <data name="UiMessage108Label" xml:space="preserve">
     <value>Dialogue Skipping Skip Already Read</value>
   </data>
-  <data name="Dialogue Skipping ticker tape" xml:space="preserve">
+  <data name="UiMessage99Label" xml:space="preserve">
     <value>Dialogue Skipping ticker tape</value>
   </data>
-  <data name="Dialogue:" xml:space="preserve">
+  <data name="SaveEditorDialogueVolumeConfigLabel" xml:space="preserve">
     <value>Dialogue: </value>
   </data>
   <data name="Dialogue_Text" xml:space="preserve">
     <value>Dialogue Text</value>
   </data>
-  <data name="Disable Lip Flap" xml:space="preserve">
+  <data name="ScriptParamDisableLipFlap" xml:space="preserve">
     <value>Disable Lip Flap</value>
   </data>
   <data name="Display Flag 1" xml:space="preserve">
@@ -2293,9 +2247,6 @@
   <data name="Restart required" xml:space="preserve">
     <value>Restart required</value>
   </data>
-  <data name="devkitARM is not detected at the default or specified install location. Please set devkitARM path." xml:space="preserve">
-    <value>devkitARM is not detected at the default or specified install location. Please set devkitARM path.</value>
-  </data>
   <data name="Start Read Flag" xml:space="preserve">
     <value>Start Read Flag</value>
     <comment>As in, the first read flag of the script file</comment>
@@ -2337,9 +2288,6 @@
   </data>
   <data name="The base ROM hash does not match the expected hash! Please check the \&quot;Ignore Hash\&quot; checkbox if you wish to override this." xml:space="preserve">
     <value>The base ROM hash does not match the expected hash! Please check the \"Ignore Hash\" checkbox if you wish to override this.</value>
-  </data>
-  <data name="Both an exported project and a base ROM must be selected to import a project." xml:space="preserve">
-    <value>Both an exported project and a base ROM must be selected to import a project.</value>
   </data>
   <data name="Export Project..." xml:space="preserve">
     <value>Export Project...</value>
@@ -2444,5 +2392,8 @@
   </data>
   <data name="Loading Project: &quot;{0}&quot;" xml:space="preserve">
     <value>Loading Project: "{0}"</value>
+  </data>
+  <data name="LanguageChineseSimplified" xml:space="preserve">
+    <value>Chinese (Simplified)</value>
   </data>
 </root>

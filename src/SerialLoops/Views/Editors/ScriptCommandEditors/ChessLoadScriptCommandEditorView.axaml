@@ -9,7 +9,7 @@
              x:DataType="vm:ChessLoadScriptCommandEditorViewModel"
              x:Class="SerialLoops.Views.Editors.ScriptCommandEditors.ChessLoadScriptCommandEditorView">
     <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto">
-        <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Chess_File}"/>
+        <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.ScriptEditorChessFileLabel}"/>
         <StackPanel Grid.Column="1" Grid.Row="0" Margin="10,0,0,0" Orientation="Horizontal" Spacing="5">
             <ComboBox ItemsSource="{Binding ChessPuzzles}" SelectedItem="{Binding ChessPuzzle}"/>
             <controls:ItemLink Tabs="{Binding Tabs}" Item="{Binding ChessPuzzle}"/>

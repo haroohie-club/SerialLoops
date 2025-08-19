@@ -54,7 +54,7 @@
                                                 IconPath="avares://SerialLoops/Assets/Icons/Help.svg"
                                                 IconTip="{x:Static assets:Strings.TopicTimesHelp}">
             <Grid ColumnDefinitions="Auto,Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto">
-                <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Base_Time_Gain}"/>
+                <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.TopicEditorBaseTimeGainLabel}"/>
                 <StackPanel Grid.Column="1" Grid.Row="0" Margin="10,0,0,0" Orientation="Horizontal" Spacing="3">
                     <NumericUpDown Value="{Binding BaseTimeGain}" Minimum="0" Maximum="{Binding MaxShort}"
                                    FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>

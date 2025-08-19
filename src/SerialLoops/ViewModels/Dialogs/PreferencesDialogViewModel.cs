@@ -131,11 +131,11 @@ public class PreferencesDialogViewModel : ViewModelBase
                 },
             },
             new ComboBoxOption([
-                ("", string.Format(Strings.Default_Font_Display, Strings.Default_Font)),
+                ("", string.Format(Strings.DefaultFontDisplay, Strings.DefaultFont)),
                 ..SystemFonts.Collection.Families.Select(f => (f.Name, f.Name)),
             ], font: true)
             {
-                OptionName = Strings.Display_Font,
+                OptionName = Strings.PreferencesDisplayFontLabel,
                 Value = Configuration.DisplayFont ?? "",
                 OnChange = value =>
                 {
@@ -145,7 +145,7 @@ public class PreferencesDialogViewModel : ViewModelBase
             },
             new BooleanOption
             {
-                OptionName = Strings.Check_for_Updates_on_Startup,
+                OptionName = Strings.PreferencesCheckForUpdatesOnStartup,
                 Value = Configuration.CheckForUpdates,
                 OnChange = value => Configuration.CheckForUpdates = value,
                 Enabled = Configuration.SysConfig.UseUpdater,

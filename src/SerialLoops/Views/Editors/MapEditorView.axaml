@@ -18,11 +18,11 @@
     <Grid RowDefinitions="Auto,Auto,Auto,*">
         <StackPanel Grid.Row="0" Orientation="Vertical" Margin="20" Spacing="10" HorizontalAlignment="Center">
             <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
-                <CheckBox IsChecked="{Binding BgLayerDisplayed}" Content="{x:Static assets:Strings.BG_Layer}"
+                <CheckBox IsChecked="{Binding BgLayerDisplayed}" Content="{x:Static assets:Strings.MapEditorBGLayerLabel}"
                           HorizontalAlignment="Center"/>
-                <CheckBox IsChecked="{Binding BgObjectLayerDisplayed}" Content="{x:Static assets:Strings.BG_Object_Layer}"
+                <CheckBox IsChecked="{Binding BgObjectLayerDisplayed}" Content="{x:Static assets:Strings.MapEditorBGObjectLayerLabel}"
                           HorizontalAlignment="Center"/>
-                <CheckBox IsChecked="{Binding BgOcclusionLayerDisplayed}" Content="{x:Static assets:Strings.BG_Occlusion_Layer}"
+                <CheckBox IsChecked="{Binding BgOcclusionLayerDisplayed}" Content="{x:Static assets:Strings.MapEditorBGOcclusionLayerLabel}"
                           HorizontalAlignment="Center"/>
                 <CheckBox IsChecked="{Binding ObjectLayerDisplayed}" Content="{x:Static assets:Strings.Object_Layer}"
                           HorizontalAlignment="Center"/>
@@ -32,7 +32,7 @@
                           HorizontalAlignment="Center"/>
                 <CheckBox IsChecked="{Binding InfoLayerDisplayed}" Content="{x:Static assets:Strings.Info_Layer}"
                           HorizontalAlignment="Center"/>
-                <CheckBox IsChecked="{Binding BgJunkLayerDisplayed}" Content="{x:Static assets:Strings.BG_Junk_Layer}"
+                <CheckBox IsChecked="{Binding BgJunkLayerDisplayed}" Content="{x:Static assets:Strings.MapEditorBGJunkLayerLabel}"
                           HorizontalAlignment="Center"/>
                 <CheckBox IsChecked="{Binding ObjectJunkLayerDisplayed}" Content="{x:Static assets:Strings.Object_Junk_Layer}"
                           HorizontalAlignment="Center"/>
@@ -47,7 +47,7 @@
                           HorizontalAlignment="Center"/>
                 <CheckBox IsChecked="{Binding InteractableObjectsDisplayed}" Content="{x:Static assets:Strings.Interactable_Objects}"
                           HorizontalAlignment="Center"/>
-                <CheckBox IsChecked="{Binding DrawCameraTruckingDefinitions}" Content="{x:Static assets:Strings.Camera_Trucking}"
+                <CheckBox IsChecked="{Binding DrawCameraTruckingDefinitions}" Content="{x:Static assets:Strings.MapEditorCameraTruckingLayerLabel}"
                           HorizontalAlignment="Center"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">

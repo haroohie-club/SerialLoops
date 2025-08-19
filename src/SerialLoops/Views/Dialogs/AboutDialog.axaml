@@ -30,9 +30,9 @@
                         <TextBlock Text="{Binding Version}"/>
                     </StackPanel>
                 </TabItem>
-                <TabItem Header="{x:Static assets:Strings.Credits}">
+                <TabItem Header="{x:Static assets:Strings.AboutDialogCredits}">
                     <StackPanel Spacing="10" Margin="5" Orientation="Vertical">
-                        <TextBlock Classes="h2" Text="{x:Static assets:Strings.Development}"/>
+                        <TextBlock Classes="h2" Text="{x:Static assets:Strings.AboutDialogDevelopmentHeader}"/>
                         <StackPanel Spacing="5" Orientation="Vertical">
                             <Grid ColumnDefinitions="Auto,*,Auto" Width="450">
                                 <TextBlock Grid.Column="0" Text="Jonko"/>
@@ -47,7 +47,7 @@
                         <StackPanel Spacing="5" Orientation="Vertical">
                             <Grid ColumnDefinitions="Auto,*,Auto" Width="450">
                                 <TextBlock Grid.Column="0" Text="Xzonn"/>
-                                <TextBlock Grid.Column="2" Text="{x:Static assets:Strings.Chinese__Simplified_}"/>
+                                <TextBlock Grid.Column="2" Text="{x:Static assets:Strings.LanguageChineseSimplified}"/>
                             </Grid>
                             <Grid ColumnDefinitions="Auto,*,Auto" Width="450">
                                 <TextBlock Grid.Column="0" Text="Oropuro_49, Fuyuko Ayumu"/>

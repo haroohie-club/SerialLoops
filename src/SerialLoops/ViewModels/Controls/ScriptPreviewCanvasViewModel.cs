@@ -63,9 +63,9 @@ public class ScriptPreviewCanvasViewModel(Project project) : ReactiveObject
                            FadeColor =
                                ((ColorMonochromeScriptParameter)_preview.CurrentFade.Parameters[4]).ColorType switch
                                {
-                                   ColorMonochromeScriptParameter.ColorMonochrome.CUSTOM_COLOR =>
+                                   ColorMonochromeScriptParameter.ColorMonochrome.ColorMonoParamCustom =>
                                        new ImmutableSolidColorBrush(((ColorScriptParameter)_preview.CurrentFade.Parameters[2]).Color.ToAvalonia()),
-                                   ColorMonochromeScriptParameter.ColorMonochrome.WHITE => Brushes.White,
+                                   ColorMonochromeScriptParameter.ColorMonochrome.ColorMonoParamWhite => Brushes.White,
                                    _ => Brushes.Black,
                                };
                            FadeTime = TimeSpan.FromSeconds(((ShortScriptParameter)_preview.CurrentFade.Parameters[0]).Value / 60.0);
@@ -80,8 +80,8 @@ public class ScriptPreviewCanvasViewModel(Project project) : ReactiveObject
                            FadeColor =
                                ((ColorMonochromeScriptParameter)_preview.CurrentFade.Parameters[3]).ColorType switch
                                {
-                                   ColorMonochromeScriptParameter.ColorMonochrome.CUSTOM_COLOR => new ImmutableSolidColorBrush(((SKColor)_preview.FadedColor!).ToAvalonia()),
-                                   ColorMonochromeScriptParameter.ColorMonochrome.WHITE => Brushes.White,
+                                   ColorMonochromeScriptParameter.ColorMonochrome.ColorMonoParamCustom => new ImmutableSolidColorBrush(((SKColor)_preview.FadedColor!).ToAvalonia()),
+                                   ColorMonochromeScriptParameter.ColorMonochrome.ColorMonoParamWhite => Brushes.White,
                                    _ => Brushes.Black,
                                };
                            FadeTime = TimeSpan.FromSeconds(((ShortScriptParameter)_preview.CurrentFade.Parameters[0]).Value / 60.0);

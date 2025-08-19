@@ -68,12 +68,12 @@ public static class ControlGenerator
     {
         return type switch
         {
-            ItemDescription.ItemType.Background => Strings.Backgrounds,
-            ItemDescription.ItemType.BGM => Strings.BGMs,
-            ItemDescription.ItemType.Character => Strings.Characters,
-            ItemDescription.ItemType.Character_Sprite => Strings.Character_Sprites,
-            ItemDescription.ItemType.Chess_Puzzle => Strings.Chess_Puzzles,
-            ItemDescription.ItemType.Chibi => Strings.Chibis,
+            ItemDescription.ItemType.Background => Strings.ItemsPanelBackgrounds,
+            ItemDescription.ItemType.BGM => Strings.ItemsPanelBGMs,
+            ItemDescription.ItemType.Character => Strings.ItemsPanelCharacters,
+            ItemDescription.ItemType.Character_Sprite => Strings.ItemsPanelCharacterSprites,
+            ItemDescription.ItemType.Chess_Puzzle => Strings.ItemsPanelChessPuzzles,
+            ItemDescription.ItemType.Chibi => Strings.ItemsPanelChibis,
             ItemDescription.ItemType.Group_Selection => Strings.Group_Selections,
             ItemDescription.ItemType.Item => Strings.Items,
             ItemDescription.ItemType.Layout => Strings.Layouts,

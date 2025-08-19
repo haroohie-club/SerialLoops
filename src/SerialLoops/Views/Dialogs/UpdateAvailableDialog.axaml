@@ -44,7 +44,7 @@
                 <Button Content="{x:Static assets:Strings.Download_from_GitHub}" Command="{Binding OpenReleaseLinkCommand}"/>
                 <Button Content="{x:Static assets:Strings.Skip_Update}" Command="{Binding CloseCommand}"
                         CommandParameter="{Binding #Dialog}" IsCancel="True"/>
-                <CheckBox Content="{x:Static assets:Strings.Check_for_Updates}" IsChecked="{Binding CheckForUpdates}"/>
+                <CheckBox Content="{x:Static assets:Strings.MenuOptionCheckForUpdates}" IsChecked="{Binding CheckForUpdates}"/>
                 <CheckBox Content="{x:Static assets:Strings.Pre_Release_Channel}" IsChecked="{Binding UsePreReleaseChannel}"/>
             </StackPanel>
         </Grid>

@@ -33,7 +33,7 @@
                             <ComboBox.Items>
                                 <ComboBoxItem Tag="en" Content="{x:Static assets:Strings.English}"/>
                                 <ComboBoxItem Tag="ja" Content="{x:Static assets:Strings.Japanese}"/>
-                                <ComboBoxItem Tag="zh-Hans" Content="{x:Static assets:Strings.Chinese__Simplified_}"/>
+                                <ComboBoxItem Tag="zh-Hans" Content="{x:Static assets:Strings.LanguageChineseSimplified}"/>
                                 <ComboBoxItem Tag="ru" Content="{x:Static assets:Strings.Russian}"/>
                                 <ComboBoxItem Tag="es" Content="{x:Static assets:Strings.Spanish}"/>
                                 <ComboBoxItem Tag="pt-BR" Content="{x:Static assets:Strings.Portuguese__Brazilian_}"/>

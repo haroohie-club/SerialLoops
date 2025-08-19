@@ -209,7 +209,7 @@ public partial class CharacterSpriteEditorViewModel : EditorViewModel
                     _log.LogException(string.Format(Strings.Failed_to_export_mouth_animation__0__for_sprite__1__to_file, i, _sprite.DisplayName), ex);
                 }
             }
-            await Window.Window.ShowMessageBoxAsync(Strings.Success_, Strings.Character_sprite_frames_exported_, MsBox.Avalonia.Enums.ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Success, _log);
+            await Window.Window.ShowMessageBoxAsync(Strings.Success_, Strings.CharacterSpriteEditorFramesExportedMessage, MsBox.Avalonia.Enums.ButtonEnum.Ok, MsBox.Avalonia.Enums.Icon.Success, _log);
         }
     }
 

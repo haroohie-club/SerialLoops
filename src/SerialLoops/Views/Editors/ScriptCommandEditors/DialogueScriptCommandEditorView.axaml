@@ -9,7 +9,7 @@
              x:DataType="vm:DialogueScriptCommandEditorViewModel"
              x:Class="SerialLoops.Views.Editors.ScriptCommandEditors.DialogueScriptCommandEditorView">
     <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
-        <TextBlock Grid.Column="0" Grid.Row="0" Text="{x:Static assets:Strings.Dialogue}" Margin="0,40,0,0"/>
+        <TextBlock Grid.Column="0" Grid.Row="0" Text="{x:Static assets:Strings.ScriptParamDialogue}" Margin="0,40,0,0"/>
         <StackPanel Grid.Column="1" Grid.Row="0" Margin="10,0,0,0" Orientation="Horizontal" VerticalAlignment="Center"
                     Spacing="10">
             <ComboBox Name="SpeakerComboBox" Margin="0,30,0,0" ItemsSource="{Binding Characters}" SelectedValue="{Binding Speaker}"/>
@@ -74,7 +74,7 @@
         </StackPanel>
         <CheckBox Grid.Column="1" Grid.Row="10" Margin="10,5,0,0" IsChecked="{Binding DontClearText}" />
 
-        <TextBlock Grid.Column="0" Grid.Row="11" Text="{x:Static assets:Strings.Disable_Lip_Flap}" VerticalAlignment="Center"/>
+        <TextBlock Grid.Column="0" Grid.Row="11" Text="{x:Static assets:Strings.ScriptParamDisableLipFlap}" VerticalAlignment="Center"/>
         <CheckBox Grid.Column="1" Grid.Row="11" Margin="10,5,0,0" IsChecked="{Binding DisableLipFlap}" />
     </Grid>
 </UserControl>

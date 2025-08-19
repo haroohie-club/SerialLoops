@@ -30,7 +30,7 @@
         <CheckBox Grid.Column="1" Grid.Row="3" Margin="10,0,0,0" IsChecked="{Binding LoadSound}"/>
 
         <StackPanel Grid.Column="0" Grid.Row="4" Orientation="Horizontal" Spacing="3">
-            <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.Crossfade_Time__Frames_}"/>
+            <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.ScriptParameterCrossfadeTime}"/>
             <Svg Path="avares://SerialLoops/Assets/Icons/Help.svg" Width="16" VerticalAlignment="Center"
                  ToolTip.Tip="{x:Static assets:Strings.FramesToSecondsHelp}"/>
         </StackPanel>

@@ -41,7 +41,7 @@ public static class Shared
         using Image<Rgba32> gif = new(frames.Max(f => f.Width), frames.Max(f => f.Height));
         gif.Metadata.GetGifMetadata().RepeatCount = 0;
 
-        tracker.Focus(Strings.Converting_frames___, 1);
+        tracker.Focus(Strings.EditorConvertingFramesMessage, 1);
         IEnumerable<Image<Rgba32>> gifFrames = frames.Select(f => Image.LoadPixelData<Rgba32>(f.Pixels.Select(c => new Rgba32(c.Red, c.Green, c.Blue, c.Alpha)).ToArray(), f.Width, f.Height));
         tracker.Finished++;
         tracker.Focus(Strings.GifExportAddingFramesStatusMessage, gifFrames.Count());

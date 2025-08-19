@@ -21,13 +21,13 @@
             </Border>
             <Border BorderThickness="2" CornerRadius="3"
                     BorderBrush="{Binding #BottomButton.IsEnabled, Converter={x:Static utility:SLConverters.BooleanBrushConverter}}">
-                <Button Name="BottomButton" Width="35" Height="20" Command="{Binding SelectBottomCommand}" ToolTip.Tip="{x:Static assets:Strings.Bottom_Screen}"
+                <Button Name="BottomButton" Width="35" Height="20" Command="{Binding SelectBottomCommand}" ToolTip.Tip="{x:Static assets:Strings.ScreenSelectorBottomScreen}"
                         IsEnabled="{Binding SelectedScreen, Converter={x:Static utility:SLConverters.BottomScreenSelectableConverter}}">
                     <Svg Path="avares://SerialLoops/Assets/Icons/Bottom_Screen.svg" Width="35" Height="20"/>
                 </Button>
             </Border>
         </StackPanel>
-        <CheckBox Name="BothCheckBox" IsVisible="{Binding AllowSelectingBoth}" Content="{x:Static assets:Strings.Both}"
+        <CheckBox Name="BothCheckBox" IsVisible="{Binding AllowSelectingBoth}" Content="{x:Static assets:Strings.ScreenSelectorBothScreens}"
                   IsChecked="{Binding SelectedScreen, Converter={x:Static utility:SLConverters.BothScreensSelectedConverter}}">
             <i:Interaction.Behaviors>
                 <ia:EventTriggerBehavior EventName="IsCheckedChanged" SourceObject="{Binding #BothCheckBox}">

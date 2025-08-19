@@ -43,7 +43,7 @@
                 </ItemsControl.Styles>
             </ItemsControl>
         </Canvas>
-        <CheckBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Content="{x:Static assets:Strings.Clear_All_Guides}"
+        <CheckBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Content="{x:Static assets:Strings.ScriptEditorClearAllChessGuidesLabel}"
                   IsChecked="{Binding ClearAll}"/>
     </Grid>
 </UserControl>

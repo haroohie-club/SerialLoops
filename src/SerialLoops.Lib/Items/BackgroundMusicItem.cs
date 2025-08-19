@@ -55,9 +55,9 @@ public class BackgroundMusicItem : Item, ISoundItem
             // So we just convert to WAV AOT
             if (Path.GetExtension(audioFile).Equals(".mp3", StringComparison.OrdinalIgnoreCase))
             {
-                string mp3ConvertedFile = Path.Combine(Path.GetDirectoryName(bgmCachedFile), $"{Path.GetFileNameWithoutExtension(bgmCachedFile)}-converted.wav");
+                string mp3ConvertedFile = Path.Combine(Path.GetDirectoryName(bgmCachedFile)!, $"{Path.GetFileNameWithoutExtension(bgmCachedFile)}-converted.wav");
                 log.Log($"Converting {audioFile} to WAV...");
-                tracker.Focus("Converting from MP3...", 1);
+                tracker.Focus(project.Localize("SoundEditorConvertingFromMp3Message"), 1);
                 using Mp3FileReaderBase mp3Reader = new(audioFile, new(wf => new Mp3FrameDecompressor(wf)));
                 WaveFileWriter.CreateWaveFile(mp3ConvertedFile, mp3Reader.ToSampleProvider().ToWaveProvider16());
                 audioFile = mp3ConvertedFile;
@@ -66,11 +66,11 @@ public class BackgroundMusicItem : Item, ISoundItem
             // Ditto the Vorbis/Opus decoders
             else if (Path.GetExtension(audioFile).Equals(".ogg", StringComparison.OrdinalIgnoreCase))
             {
-                string oggConvertedFile = Path.Combine(Path.GetDirectoryName(bgmCachedFile), $"{Path.GetFileNameWithoutExtension(bgmCachedFile)}-converted.wav");
+                string oggConvertedFile = Path.Combine(Path.GetDirectoryName(bgmCachedFile)!, $"{Path.GetFileNameWithoutExtension(bgmCachedFile)}-converted.wav");
                 log.Log($"Converting {audioFile} to WAV...");
                 try
                 {
-                    tracker.Focus("Converting from Vorbis...", 1);
+                    tracker.Focus(project.Localize("SoundEditorConvertingFromVorbisMessage"), 1);
                     using VorbisWaveReader vorbisReader = new(audioFile);
                     WaveFileWriter.CreateWaveFile(oggConvertedFile, vorbisReader.ToSampleProvider().ToWaveProvider16());
                     audioFile = oggConvertedFile;
@@ -81,7 +81,7 @@ public class BackgroundMusicItem : Item, ISoundItem
                     log.LogWarning($"Provided ogg was not vorbis; trying opus... (Exception: {vEx.Message})");
                     try
                     {
-                        tracker.Focus("Converting from Opus...", 1);
+                        tracker.Focus(project.Localize("SoundEditorConvertingFromOpusMessage"), 1);
                         using OggOpusFileReader opusReader = new(audioFile, log);
                         WaveFileWriter.CreateWaveFile(oggConvertedFile, opusReader.ToSampleProvider().ToWaveProvider16());
                         audioFile = oggConvertedFile;
@@ -164,7 +164,7 @@ public class BackgroundMusicItem : Item, ISoundItem
             }
             tracker.Finished++;
         }
-        tracker.Focus("Caching", 2);
+        tracker.Focus("BgmItemCachingMessage", 2);
         File.Copy(Path.Combine(project.BaseDirectory, BgmFile), Path.Combine(project.IterativeDirectory, BgmFile), true);
         tracker.Finished++;
         if (!string.Equals(audioFile, bgmCachedFile))
@@ -218,7 +218,7 @@ public class BackgroundMusicItem : Item, ISoundItem
         }
         catch (Exception ex)
         {
-            log.LogException($"Failed to read BGM file; falling back to original...", ex);
+            log.LogException("Failed to read BGM file; falling back to original...", ex);
             log.LogWarning(BgmFile);
 
             try

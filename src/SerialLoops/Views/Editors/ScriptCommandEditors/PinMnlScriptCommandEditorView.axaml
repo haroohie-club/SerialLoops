@@ -8,7 +8,7 @@
              x:DataType="vm:PinMnlScriptCommandEditorViewModel"
              x:Class="SerialLoops.Views.Editors.ScriptCommandEditors.PinMnlScriptCommandEditorView">
     <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto">
-        <TextBlock Grid.Column="0" Grid.Row="0" Text="{x:Static assets:Strings.Dialogue}" Margin="0,40,0,0"/>
+        <TextBlock Grid.Column="0" Grid.Row="0" Text="{x:Static assets:Strings.ScriptParamDialogue}" Margin="0,40,0,0"/>
         <StackPanel Grid.Column="1" Grid.Row="0" Margin="10,0,0,0" Orientation="Horizontal" VerticalAlignment="Center"
                     Spacing="10">
             <ComboBox Name="SpeakerComboBox" Margin="0,30,0,0" ItemsSource="{Binding Characters}" SelectedValue="{Binding Speaker}"/>

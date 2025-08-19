@@ -28,7 +28,7 @@
             <StackPanel Orientation="Horizontal" Spacing="5">
                 <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}"
                         CommandParameter="{Binding #AddSectionDialog}" IsCancel="True"/>
-                <Button Content="{x:Static assets:Strings.Create}" Command="{Binding CreateCommand}"
+                <Button Content="{x:Static assets:Strings.AddItemLabel}" Command="{Binding CreateCommand}"
                         CommandParameter="{Binding #AddSectionDialog}" IsDefault="True"/>
             </StackPanel>
         </StackPanel>

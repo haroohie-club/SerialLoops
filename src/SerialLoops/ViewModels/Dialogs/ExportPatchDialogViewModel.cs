@@ -96,7 +96,7 @@ public class ExportPatchDialogViewModel : ViewModelBase
             return;
         }
 
-        ProgressDialogViewModel tracker = new(Strings.Creating_Patch);
+        ProgressDialogViewModel tracker = new(Strings.ExportPatchProgressMessage);
         tracker.InitializeTasks(
             () => Patch.CreatePatch(RomPath, Path.Combine(_project.MainDirectory, $"{_project.Name}.nds"),
                 XDeltaPath, _log),

@@ -246,8 +246,8 @@ public class ScriptItem : Item
                 {
                     preview.FadedColor = ((ColorMonochromeScriptParameter)prevFade.Parameters[4]).ColorType switch
                     {
-                        ColorMonochromeScriptParameter.ColorMonochrome.CUSTOM_COLOR => ((ColorScriptParameter)prevFade.Parameters[2]).Color,
-                        ColorMonochromeScriptParameter.ColorMonochrome.BLACK => SKColors.Black,
+                        ColorMonochromeScriptParameter.ColorMonochrome.ColorMonoParamCustom => ((ColorScriptParameter)prevFade.Parameters[2]).Color,
+                        ColorMonochromeScriptParameter.ColorMonochrome.ColorMonoParamBlack => SKColors.Black,
                         _ => SKColors.White,
                     };
                 }
@@ -267,8 +267,8 @@ public class ScriptItem : Item
                 ScriptItemCommand lastFadeOut = commands.FindLast(c => c.Verb == CommandVerb.SCREEN_FADEOUT);
                 preview.FadedColor = ((ColorMonochromeScriptParameter)lastFadeOut.Parameters[4]).ColorType switch
                 {
-                    ColorMonochromeScriptParameter.ColorMonochrome.CUSTOM_COLOR => ((ColorScriptParameter)lastFadeOut.Parameters[2]).Color,
-                    ColorMonochromeScriptParameter.ColorMonochrome.BLACK => SKColors.Black,
+                    ColorMonochromeScriptParameter.ColorMonochrome.ColorMonoParamCustom => ((ColorScriptParameter)lastFadeOut.Parameters[2]).Color,
+                    ColorMonochromeScriptParameter.ColorMonochrome.ColorMonoParamBlack => SKColors.Black,
                     _ => SKColors.White,
                 };
                 preview.FadedScreens = ((ScreenScriptParameter)lastFadeOut.Parameters[3]).Screen;
@@ -737,12 +737,12 @@ public class ScriptItem : Item
                 {
                     spritePaint = ((PaletteEffectScriptParameter)palCommand.Parameters[0]).Effect switch
                     {
-                        PaletteEffectScriptParameter.PaletteEffect.INVERTED => PaletteEffectScriptParameter
+                        PaletteEffectScriptParameter.PaletteEffect.PalEffectInverted => PaletteEffectScriptParameter
                             .InvertedPaint,
-                        PaletteEffectScriptParameter.PaletteEffect.GRAYSCALE => PaletteEffectScriptParameter
+                        PaletteEffectScriptParameter.PaletteEffect.PalEffectGrayscale => PaletteEffectScriptParameter
                             .GrayscalePaint,
-                        PaletteEffectScriptParameter.PaletteEffect.SEPIA => PaletteEffectScriptParameter.SepiaPaint,
-                        PaletteEffectScriptParameter.PaletteEffect.DIMMED => PaletteEffectScriptParameter
+                        PaletteEffectScriptParameter.PaletteEffect.PalEffectSepia => PaletteEffectScriptParameter.SepiaPaint,
+                        PaletteEffectScriptParameter.PaletteEffect.PalEffectDimmed => PaletteEffectScriptParameter
                             .DimmedPaint,
                         _ => null,
                     };

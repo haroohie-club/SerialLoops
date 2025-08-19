@@ -115,7 +115,7 @@ public static class IO
         tracker.Finished += 6;
 
         // Copy out the files we need to build the ROM
-        tracker.Focus("Copying Files", 4);
+        tracker.Focus(project.Localize("IOCopyingFilesMessage"), 4);
         CopyFiles(Path.Combine(project.BaseDirectory, "rom", "data"), Path.Combine(project.BaseDirectory, "original", "archives"), log, "*.bin");
         tracker.Finished++;
 

@@ -17,7 +17,7 @@
         <controls:AnimatedImage DataContext="{Binding AnimatedImage}" />
         <StackPanel Orientation="Horizontal" Spacing="5">
             <StackPanel Orientation="Horizontal" Spacing="3" VerticalAlignment="Center">
-                <TextBlock Text="{x:Static assets:Strings.Character}"/>
+                <TextBlock Text="{x:Static assets:Strings.EditorCharacterLabel}"/>
                 <ComboBox ItemsSource="{Binding Characters}" SelectedItem="{Binding Character}"/>
             </StackPanel>
             <CheckBox IsChecked="{Binding IsLarge}" Content="{x:Static assets:Strings.Is_Large}"/>

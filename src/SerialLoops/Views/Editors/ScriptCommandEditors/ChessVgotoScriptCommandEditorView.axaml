@@ -8,7 +8,7 @@
              x:DataType="vm:ChessVgotoScriptCommandEditorViewModel"
              x:Class="SerialLoops.Views.Editors.ScriptCommandEditors.ChessVgotoScriptCommandEditorView">
     <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto">
-        <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Clear_Section}"/>
+        <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.ScriptEditorChessWinSectionLabel}"/>
         <ComboBox Grid.Column="1" Grid.Row="0" Margin="10,0,0,0" ItemsSource="{Binding ScriptEditor.ScriptSections}"
                   SelectedItem="{Binding ClearSection}"/>
 

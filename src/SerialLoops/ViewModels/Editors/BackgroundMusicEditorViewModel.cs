@@ -119,7 +119,7 @@ public class BackgroundMusicEditorViewModel : EditorViewModel
         try
         {
             BgmPlayer.Stop();
-            ProgressDialogViewModel firstTracker = new(Strings.Caching_BGM, Strings.BgmEditorLoopInfoStatusMessage);
+            ProgressDialogViewModel firstTracker = new(Strings.BgmEditorCachingBGMMessage, Strings.BgmEditorLoopInfoStatusMessage);
             firstTracker.InitializeTasks(
                 () => WaveFileWriter.CreateWaveFile(_bgmCachedFile, Bgm.GetWaveProvider(_log, false)), () => { });
             if (!File.Exists(_bgmCachedFile))
@@ -181,7 +181,7 @@ public class BackgroundMusicEditorViewModel : EditorViewModel
         try
         {
             BgmPlayer.Stop();
-            ProgressDialogViewModel firstTracker = new(Strings.Caching_BGM, Strings.BgmEditorVolumeStatusMessage);
+            ProgressDialogViewModel firstTracker = new(Strings.BgmEditorCachingBGMMessage, Strings.BgmEditorVolumeStatusMessage);
             firstTracker.InitializeTasks(
                 () => WaveFileWriter.CreateWaveFile(_bgmCachedFile, Bgm.GetWaveProvider(_log, false)), () => { });
             if (!File.Exists(_bgmCachedFile))

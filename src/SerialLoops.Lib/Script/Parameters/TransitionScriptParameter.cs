@@ -24,13 +24,13 @@ public class TransitionScriptParameter : ScriptParameter
 
     public enum TransitionEffect
     {
-        WIPE_RIGHT = 0,
-        WIPE_DOWN = 1,
-        WIPE_DIAGONAL_RIGHT_DOWN = 2,
-        BLINDS = 3,
-        BLINDS2 = 4,
-        WIPE_LEFT = 5,
-        WIPE_UP = 6,
-        WIPE_DIAGONAL_LEFT_UP = 7,
+        TransitionWipeRight = 0,
+        TransitionWipeDown = 1,
+        TransitionWipeDiagonalRightDown = 2,
+        TransitionBlinds = 3,
+        TransitionBlinds2 = 4,
+        TransitionWipeLeft = 5,
+        TransitionWipeUp = 6,
+        TransitionWipeDiagonalLeftUp = 7,
     }
 }

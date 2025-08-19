@@ -29,7 +29,7 @@
             <TabControl Grid.Row="1" Grid.Column="0">
                 <TabItem IsVisible="{Binding IsCommonSave}"
                          IsSelected="{Binding IsCommonSave}"
-                         Header="{x:Static assets:Strings.Config_Data}"
+                         Header="{x:Static assets:Strings.SaveEditorConfigDataLabel}"
                          GotFocus="CharacterPortraitTab_OnGotFocus">
                     <ScrollViewer>
                         <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*,*">
@@ -55,7 +55,7 @@
                                                    Maximum="100" FormatString="N0" Increment="1"
                                                    ParsingNumberStyle="Integer" />
 
-                                    <TextBlock Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Text="{x:Static assets:Strings.Dialogue_}" />
+                                    <TextBlock Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Text="{x:Static assets:Strings.SaveEditorDialogueVolumeConfigLabel}" />
                                     <NumericUpDown Grid.Column="1" Grid.Row="2" Margin="10,0,0,0"
                                                    Value="{Binding WordsVolume}" Minimum="0"
                                                    Maximum="100" FormatString="N0" Increment="1"
@@ -138,14 +138,14 @@
                                     <RadioButton GroupName="TopicStockMode" Content="{x:Static assets:Strings.On}" IsChecked="{Binding TopicStockMode}"/>
                                 </StackPanel>
                             </HeaderedContentControl>
-                            <HeaderedContentControl Grid.Row="3" Grid.Column="0" Header="{x:Static assets:Strings.Dialogue_Skipping}" Margin="10"
+                            <HeaderedContentControl Grid.Row="3" Grid.Column="0" Header="{x:Static assets:Strings.SaveEditorDialogueSkippingSetting}" Margin="10"
                                            HorizontalAlignment="Center" HorizontalContentAlignment="Center">
                                 <StackPanel Orientation="Vertical" Spacing="5">
                                     <RadioButton GroupName="DialogueSkipping" Content="{x:Static assets:Strings.Fast_Forward}" IsChecked="True"/>
                                     <RadioButton GroupName="DialogueSkipping" Content="{x:Static assets:Strings.Skip_Already_Read}" IsChecked="{Binding DialogueSkipping}"/>
                                 </StackPanel>
                             </HeaderedContentControl>
-                            <HeaderedContentControl Grid.Row="3" Grid.Column="1" Header="{x:Static assets:Strings.Batch_Dialogue_Display}" Margin="10"
+                            <HeaderedContentControl Grid.Row="3" Grid.Column="1" Header="{x:Static assets:Strings.SaveEditorOptionBatchDialogueDisplay}" Margin="10"
                                            HorizontalAlignment="Center" HorizontalContentAlignment="Center">
                                 <StackPanel Orientation="Vertical" Spacing="5">
                                     <RadioButton GroupName="BatchDialogueDisplay" Content="{x:Static assets:Strings.Off}" IsChecked="True"/>
@@ -153,7 +153,7 @@
                                 </StackPanel>
                             </HeaderedContentControl>
 
-                            <HeaderedContentControl Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Header="{x:Static assets:Strings.Character_Power_Statuses}" Margin="10"
+                            <HeaderedContentControl Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Header="{x:Static assets:Strings.SaveEditorCharacterPowerStatusesHeader}" Margin="10"
                                            HorizontalAlignment="Center" HorizontalContentAlignment="Center">
                                 <ItemsRepeater ItemsSource="{Binding PowerStatuses}">
                                     <ItemsRepeater.Layout>
@@ -315,7 +315,7 @@
                             </StackPanel>
 
                             <StackPanel Margin="10,5" Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Spacing="5">
-                                <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.Command_Index_}"/>
+                                <TextBlock VerticalAlignment="Center" Text="{x:Static assets:Strings.CommandIndexLabel}"/>
                                 <NumericUpDown Value="{Binding ScriptCommandIndex}"
                                                Minimum="0" Maximum="{Binding SelectedScriptSection.Objects.Count, Converter={StaticResource SubtractionConverter}, ConverterParameter=1}"
                                                FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>

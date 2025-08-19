@@ -241,7 +241,7 @@ public partial class MainWindowViewModel : ViewModelBase
         Log.Initialize(CurrentConfig);
 
         var fontStyle = new Style(x => x.OfType<Window>());
-        var font = FontFamily.Parse(string.IsNullOrEmpty(CurrentConfig.DisplayFont) ? Strings.Default_Font : CurrentConfig.DisplayFont);
+        var font = FontFamily.Parse(string.IsNullOrEmpty(CurrentConfig.DisplayFont) ? Strings.DefaultFont : CurrentConfig.DisplayFont);
         fontStyle.Add(new Setter(Avalonia.Controls.Primitives.TemplatedControl.FontFamilyProperty, font));
         Application.Current!.Styles.Add(fontStyle);
 
@@ -604,7 +604,7 @@ public partial class MainWindowViewModel : ViewModelBase
             NativeMenuItem projectSaveItem = (NativeMenuItem)WindowMenu[MenuHeader.FILE].Menu!.Items
                 .First(m => m is NativeMenuItem nm && nm.Header?.Equals(Strings.Save_Project) == true);
             NativeMenuItem projectCloseItem = (NativeMenuItem)WindowMenu[MenuHeader.FILE].Menu.Items
-                .First(m => m is NativeMenuItem nm && nm.Header?.Equals(Strings.Close_Project) == true);
+                .First(m => m is NativeMenuItem nm && nm.Header?.Equals(Strings.CloseProjectLabel) == true);
             int projectAreaIndex = WindowMenu[MenuHeader.FILE].Menu.Items.IndexOf(projectSaveItem);
 
             WindowMenu[MenuHeader.PROJECT].Menu.Items.Remove(projectRenameItem);
@@ -731,7 +731,7 @@ public partial class MainWindowViewModel : ViewModelBase
         if (OpenProject is not null && result.State == Project.LoadProjectState.LOOSELEAF_FILES)
         {
             if (await Window.ShowMessageBoxAsync(
-                    Strings.Build_Unbuilt_Files_,
+                    Strings.ProjectLoadBuildUnbuiltFiles,
                     Strings.Saved_but_unbuilt_files_were_detected_in_the_project_directory__Would_you_like_to_build_before_loading_the_project__Not_building_could_result_in_these_files_being_overwritten_,
                     ButtonEnum.YesNo, Icon.Question, Log) == ButtonResult.Yes)
             {
@@ -748,7 +748,7 @@ public partial class MainWindowViewModel : ViewModelBase
         }
         else if (result.State == Project.LoadProjectState.CORRUPTED_FILE)
         {
-            if ((await Window.ShowMessageBoxAsync(Strings.Corrupted_File_Detected_,
+            if ((await Window.ShowMessageBoxAsync(Strings.ProjectLoadCorruptedFileDetectedTitle,
                     string.Format(Strings.While_attempting_to_build___file___0_X3__in_archive__1__was_found_to_be_corrupt__Serial_Loops_can_delete_this_file_from_your_base_directory_automatically_which_may_allow_you_to_load_the_rest_of_the_project__but_any_changes_made_to_that_file_will_be_lost__Alternatively__you_can_attempt_to_edit_the_file_manually_to_fix_it__How_would_you_like_to_proceed__Press_OK_to_proceed_with_deleting_the_file_and_Cancel_to_attempt_to_deal_with_it_manually_,
                         result.BadFileIndex, result.BadArchive),
                     ButtonEnum.OkCancel, Icon.Warning, Log)) == ButtonResult.Ok)
@@ -948,7 +948,7 @@ public partial class MainWindowViewModel : ViewModelBase
     public async Task EditSaveFileCommand_Executed()
     {
         IStorageFile saveFile = await Window.ShowOpenFilePickerAsync(Strings.Open_Chokuretsu_Save_File,
-            [new(Strings.Chokuretsu_Save_File) { Patterns = ["*.sav"] }]);
+            [new(Strings.FiletypeChokuretsuSave) { Patterns = ["*.sav"] }]);
         if (saveFile is null)
         {
             return;
@@ -993,10 +993,10 @@ public partial class MainWindowViewModel : ViewModelBase
                 }
             }
             OpenProject = new(projectName, "en", CurrentConfig, Strings.ResourceManager.GetString, Log);
-            ProgressDialogViewModel tracker = new(Strings.Creating_Project);
+            ProgressDialogViewModel tracker = new(Strings.ProjectCreationProgressMessage);
             tracker.InitializeTasks(() =>
             {
-                ((IProgressTracker)tracker).Focus(Strings.Creating_Project, 1);
+                ((IProgressTracker)tracker).Focus(Strings.ProjectCreationProgressMessage, 1);
                 IO.OpenRom(OpenProject, rom, Log, tracker);
                 tracker.Finished++;
                 OpenProject.Load(CurrentConfig, Log, tracker);
@@ -1036,7 +1036,7 @@ public partial class MainWindowViewModel : ViewModelBase
                     },
                     new NativeMenuItem
                     {
-                        Header = Strings.Close_Save_File,
+                        Header = Strings.CloseSaveFileLabel,
                         Command = CloseProjectCommand,
                         Icon = ControlGenerator.GetIcon("Close", Log),
                         Gesture = CloseProjectKey,
@@ -1284,17 +1284,17 @@ public partial class MainWindowViewModel : ViewModelBase
         if (OpenProject is not null)
         {
             bool buildSucceeded = true; // imo it's better to have a false negative than a false positive here
-            ProgressDialogViewModel tracker = new(Strings.Building_Iteratively, Strings.Building_);
+            ProgressDialogViewModel tracker = new(Strings.BuildingIterativelyMessage, Strings.BuildingPrefix);
             tracker.InitializeTasks(() => buildSucceeded = Build.BuildIterative(OpenProject, CurrentConfig, Log, tracker), async () =>
             {
                 if (buildSucceeded)
                 {
                     Log.Log("Build succeeded!");
-                    await Window.ShowMessageBoxAsync(Strings.Build_Result, Strings.Build_succeeded_, ButtonEnum.Ok, Icon.Success, Log);
+                    await Window.ShowMessageBoxAsync(Strings.BuildResult, Strings.BuildSucceeded, ButtonEnum.Ok, Icon.Success, Log);
                 }
                 else
                 {
-                    Log.LogError(Strings.Build_failed_);
+                    Log.LogError(Strings.BuildFailed);
                 }
             });
             await new ProgressDialog { DataContext = tracker }.ShowDialog(Window);
@@ -1306,17 +1306,17 @@ public partial class MainWindowViewModel : ViewModelBase
         if (OpenProject is not null)
         {
             bool buildSucceeded = true;
-            ProgressDialogViewModel tracker = new(Strings.Building_from_Scratch, Strings.Building_);
+            ProgressDialogViewModel tracker = new(Strings.BuildingFromScratchMessage, Strings.BuildingPrefix);
             tracker.InitializeTasks(() => buildSucceeded = Build.BuildBase(OpenProject, CurrentConfig, Log, tracker), async () =>
             {
                 if (buildSucceeded)
                 {
                     Log.Log("Build succeeded!");
-                    await Window.ShowMessageBoxAsync(Strings.Build_Result, Strings.Build_succeeded_, ButtonEnum.Ok, Icon.Success, Log);
+                    await Window.ShowMessageBoxAsync(Strings.BuildResult, Strings.BuildSucceeded, ButtonEnum.Ok, Icon.Success, Log);
                 }
                 else
                 {
-                    Log.LogError(Strings.Build_failed_);
+                    Log.LogError(Strings.BuildFailed);
                 }
             });
             await new ProgressDialog { DataContext = tracker } .ShowDialog(Window);
@@ -1336,7 +1336,7 @@ public partial class MainWindowViewModel : ViewModelBase
                 return;
             }
             bool buildSucceeded = true;
-            ProgressDialogViewModel tracker = new(Strings.Building_and_Running, Strings.Building_);
+            ProgressDialogViewModel tracker = new(Strings.BuildingAndRunningMessage, Strings.BuildingPrefix);
             tracker.InitializeTasks(() => buildSucceeded = Build.BuildIterative(OpenProject, CurrentConfig, Log, tracker), () =>
                 {
                     if (buildSucceeded)
@@ -1394,7 +1394,7 @@ public partial class MainWindowViewModel : ViewModelBase
                     }
                     else
                     {
-                        Log.LogError(Strings.Build_failed_);
+                        Log.LogError(Strings.BuildFailed);
                     }
                 });
             await new ProgressDialog { DataContext = tracker }.ShowDialog(Window);
@@ -1440,7 +1440,7 @@ public partial class MainWindowViewModel : ViewModelBase
         };
         NativeMenuItem projectCloseItem = new()
         {
-            Header = Strings.Close_Project,
+            Header = Strings.CloseProjectLabel,
             Command = CloseProjectCommand,
             Icon = ControlGenerator.GetIcon("Close", Log),
             Gesture = CloseProjectKey,
@@ -1496,7 +1496,7 @@ public partial class MainWindowViewModel : ViewModelBase
             },
             new NativeMenuItem
             {
-                Header = Strings.Create_ASM_Hack,
+                Header = Strings.MenuCreateAsmHackLabel,
                 Command = CreateAsmHackCommand,
             },
             new NativeMenuItem
@@ -1539,13 +1539,13 @@ public partial class MainWindowViewModel : ViewModelBase
             },
             new NativeMenuItem
             {
-                Header = Strings.Build_from_Scratch,
+                Header = Strings.BuildFromScratch,
                 Command = BuildBaseCommand,
                 Icon = ControlGenerator.GetIcon("Build_Scratch", Log),
             },
             new NativeMenuItem
             {
-                Header = Strings.Build_and_Run,
+                Header = Strings.BuildAndRun,
                 Command = BuildAndRunCommand,
                 Icon = ControlGenerator.GetIcon("Build_Run", Log),
             },
@@ -1571,8 +1571,8 @@ public partial class MainWindowViewModel : ViewModelBase
         });
         ToolBar.Items.Add(new ToolbarButton
         {
-            DataContext = Strings.Build_and_Run,
-            Text = Strings.Build_and_Run,
+            DataContext = Strings.BuildAndRun,
+            Text = Strings.BuildAndRun,
             Command = BuildAndRunCommand,
             Icon = ControlGenerator.GetVectorIcon("Build_Run", Log),
         });

@@ -52,7 +52,7 @@
                 </Button.IsEnabled>
                 <Svg Path="avares://SerialLoops/Assets/Icons/Remove.svg" Width="22"/>
             </Button>
-            <Button Command="{Binding ClearScriptCommand}" ToolTip.Tip="{x:Static assets:Strings.Clear_Script}">
+            <Button Command="{Binding ClearScriptCommand}" ToolTip.Tip="{x:Static assets:Strings.ScriptEditorClearScriptLabel}">
                 <Svg Path="avares://SerialLoops/Assets/Icons/Clear.svg" Width="22"/>
             </Button>
             <Button Command="{Binding MoveUpCommand}" ToolTip.ShowOnDisabled="True"
@@ -115,7 +115,7 @@
                                         </ItemsRepeater.ItemTemplate>
                                     </ItemsRepeater>
 
-                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="{x:Static assets:Strings.Chibis}"
+                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="{x:Static assets:Strings.ItemsPanelChibis}"
                                                VerticalAlignment="Center"/>
                                     <ItemsRepeater Grid.Row="1" Grid.Column="1" ItemsSource="{Binding UnusedChibis}" Width="256" Height="86">
                                         <ItemsRepeater.Layout>
@@ -146,7 +146,7 @@
                         </ScrollViewer>
                     </TabItem>
 
-                    <TabItem Header="{x:Static assets:Strings.Choices}">
+                    <TabItem Header="{x:Static assets:Strings.ScriptEditorChoicesLabel}">
                         <ScrollViewer>
                             <StackPanel Orientation="Vertical" Spacing="5" Margin="0 0 0 10">
                                 <ItemsRepeater ItemsSource="{Binding Choices}">

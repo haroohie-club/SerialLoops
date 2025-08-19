@@ -28,8 +28,8 @@ public partial class ProjectCreationDialogViewModel : ViewModelBase
 
     public bool Migrate { get; set; }
 
-    public string Title => Migrate ? Strings.Migrate_Project : Strings.Create_New_Project;
-    public string ButtonText => Migrate ? Strings.Migrate : Strings.Create;
+    public string Title => Migrate ? Strings.Migrate_Project : Strings.ProjectCreationCreateNewProjectTitle;
+    public string ButtonText => Migrate ? Strings.Migrate : Strings.ProjectCreateButtonLabel;
 
     public ICommand PickRomCommand { get; set; }
     public ICommand CreateCommand { get; set; }
@@ -48,7 +48,7 @@ public partial class ProjectCreationDialogViewModel : ViewModelBase
 
     private async Task PickRom()
     {
-        IStorageFile rom = await _mainWindow.Window.ShowOpenFilePickerAsync(Strings.Open_ROM, [new(Strings.Chokuretsu_ROM) { Patterns = ["*.nds"] }]);
+        IStorageFile rom = await _mainWindow.Window.ShowOpenFilePickerAsync(Strings.Open_ROM, [new(Strings.ProjectCreationChokuretsuROMLabel) { Patterns = ["*.nds"] }]);
         if (rom is not null)
         {
             RomPath = rom.Path.LocalPath;
@@ -68,10 +68,10 @@ public partial class ProjectCreationDialogViewModel : ViewModelBase
         else
         {
             Project newProject = new(ProjectName, LanguageTemplateCode, _configUser, Strings.ResourceManager.GetString, _log);
-            ProgressDialogViewModel tracker = new(Strings.Creating_Project);
+            ProgressDialogViewModel tracker = new(Strings.ProjectCreationProgressMessage);
             tracker.InitializeTasks(() =>
             {
-                ((IProgressTracker)tracker).Focus(Strings.Creating_Project, 1);
+                ((IProgressTracker)tracker).Focus(Strings.ProjectCreationProgressMessage, 1);
                 Lib.IO.OpenRom(newProject, RomPath, _log, tracker);
                 tracker.Finished++;
                 newProject.Load(_configUser, _log, tracker);

@@ -25,21 +25,21 @@ public class PaletteEffectScriptParameter : ScriptParameter
 
     public enum PaletteEffect : short
     {
-        DEFAULT_PALETTE = 216,
-        INVERTED = 217,
-        GRAYSCALE = 218,
-        SEPIA = 219,
-        DIMMED = 220,
+        PalEffectDefault = 216,
+        PalEffectInverted = 217,
+        PalEffectGrayscale = 218,
+        PalEffectSepia = 219,
+        PalEffectDimmed = 220,
     }
 
     public static SKPaint GetPaletteEffectPaint(PaletteEffect effect)
     {
         return effect switch
         {
-            PaletteEffect.INVERTED => InvertedPaint,
-            PaletteEffect.GRAYSCALE => GrayscalePaint,
-            PaletteEffect.SEPIA => SepiaPaint,
-            PaletteEffect.DIMMED => DimmedPaint,
+            PaletteEffect.PalEffectInverted => InvertedPaint,
+            PaletteEffect.PalEffectGrayscale => GrayscalePaint,
+            PaletteEffect.PalEffectSepia => SepiaPaint,
+            PaletteEffect.PalEffectDimmed => DimmedPaint,
             _ => IdentityPaint,
         };
     }

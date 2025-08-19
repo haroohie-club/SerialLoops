@@ -24,7 +24,7 @@ public static class Build
     {
         bool result = DoBuild(project.IterativeDirectory, project, configUser, log, tracker);
         CopyToArchivesToIterativeOriginal(Path.Combine(project.IterativeDirectory, "rom", "data"),
-            Path.Combine(project.IterativeDirectory, "original", "archives"), log, tracker);
+            Path.Combine(project.IterativeDirectory, "original", "archives"), project, log, tracker);
         ReplicateProjectSettingsAndBanner(Path.Combine(project.IterativeDirectory, "rom"),
             Path.Combine(project.BaseDirectory, "rom"), project.Name, log, tracker);
         if (result)
@@ -38,7 +38,7 @@ public static class Build
     {
         bool result = DoBuild(project.BaseDirectory, project, configUser, log, tracker);
         CopyToArchivesToIterativeOriginal(Path.Combine(project.BaseDirectory, "rom", "data"),
-            Path.Combine(project.IterativeDirectory, "original", "archives"), log, tracker);
+            Path.Combine(project.IterativeDirectory, "original", "archives"), project, log, tracker);
         ReplicateProjectSettingsAndBanner(Path.Combine(project.BaseDirectory, "rom"),
             Path.Combine(project.IterativeDirectory, "rom"), project.Name, log, tracker);
         if (result)
@@ -52,7 +52,7 @@ public static class Build
     {
         string[] preservedFiles = [];
         string[] cleanableFiles = Directory.GetFiles(Path.Combine(project.IterativeDirectory, "assets"), "*", SearchOption.AllDirectories);
-        tracker.Focus("Cleaning Iterative Directory", cleanableFiles.Length);
+        tracker.Focus("BuildCleaningIterativeDirectory", cleanableFiles.Length);
         foreach (string file in cleanableFiles)
         {
             if (!preservedFiles.Contains(Path.GetFileName(file)))
@@ -217,9 +217,9 @@ public static class Build
         return true;
     }
 
-    private static void CopyToArchivesToIterativeOriginal(string newDataDir, string iterativeOriginalDir, ILogger log, IProgressTracker tracker)
+    private static void CopyToArchivesToIterativeOriginal(string newDataDir, string iterativeOriginalDir, Project project, ILogger log, IProgressTracker tracker)
     {
-        tracker.Focus("Copying Archives to Iterative Originals", 4);
+        tracker.Focus(project.Localize("BuildCopyingArchivesMessage"), 4);
         try
         {
             File.Copy(Path.Combine(newDataDir, "dat.bin"), Path.Combine(iterativeOriginalDir, "dat.bin"), overwrite: true);
@@ -320,7 +320,7 @@ public static class Build
             (string objFile, string binFile) = CompileSourceFile(filePath, llvm, workingDirectory, localize, log);
             if (!File.Exists(binFile))
             {
-                log.LogError(string.Format(localize("Compiled file {0} does not exist!"), binFile));
+                log.LogError(string.Format(localize("BuildErrorCompiledFileNotExist"), binFile));
                 return false;
             }
             ReplaceSingleFile(archive, binFile, index, localize, log);
@@ -341,7 +341,7 @@ public static class Build
             (string objFile, string binFile) = CompileSourceFile(filePath, llvm, workingDirectory, localize, log);
             if (!File.Exists(binFile))
             {
-                log.LogError(string.Format(localize("Compiled file {0} does not exist!"), binFile));
+                log.LogError(string.Format(localize("BuildErrorCompiledFileNotExist"), binFile));
                 return false;
             }
             ReplaceSingleFile(archive, binFile, index, localize, log);

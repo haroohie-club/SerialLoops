@@ -24,7 +24,7 @@
                     IsEnabled="{Binding SelectedCommand, Converter={x:Static ObjectConverters.IsNotNull}}">
                 <Svg Path="avares://SerialLoops/Assets/Icons/Remove.svg" Width="22"/>
             </Button>
-            <Button ToolTip.Tip="{x:Static assets:Strings.Clear_Scenario}" Width="22" Command="{Binding ClearCommand}">
+            <Button ToolTip.Tip="{x:Static assets:Strings.ScenarioEditorClearScenarioLabel}" Width="22" Command="{Binding ClearCommand}">
                 <Svg Path="avares://SerialLoops/Assets/Icons/Clear.svg" Width="22"/>
             </Button>
             <Button ToolTip.Tip="{x:Static assets:Strings.Move_Command_Up}" Width="22" Command="{Binding UpCommand}"

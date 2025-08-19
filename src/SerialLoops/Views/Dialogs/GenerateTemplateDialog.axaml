@@ -24,7 +24,7 @@
 
             <StackPanel Orientation="Horizontal" Spacing="5" Margin="20" HorizontalAlignment="Center">
                 <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}" CommandParameter="{Binding #GenTemplateDialog}" IsCancel="True"/>
-                <Button Content="{x:Static assets:Strings.Create}" Command="{Binding CreateCommand}" CommandParameter="{Binding #GenTemplateDialog}" IsDefault="True"/>
+                <Button Content="{x:Static assets:Strings.ScriptTemplateCreateButtonLabel}" Command="{Binding CreateCommand}" CommandParameter="{Binding #GenTemplateDialog}" IsDefault="True"/>
             </StackPanel>
         </StackPanel>
     </Panel>

@@ -131,7 +131,7 @@ public partial class ChibiEditorViewModel : EditorViewModel
                 _log.LogException(string.Format(Strings.Failed_to_export_chibi_animation__0__for_chibi__1__to_file, i, _chibi.DisplayName), ex);
             }
         }
-        await Window.Window.ShowMessageBoxAsync(Strings.Success_, Strings.Chibi_frames_exported_, ButtonEnum.Ok, Icon.Success, _log);
+        await Window.Window.ShowMessageBoxAsync(Strings.Success_, Strings.ChibiEditorFramesExportedMessage, ButtonEnum.Ok, Icon.Success, _log);
     }
 
     private async Task ExportGif()

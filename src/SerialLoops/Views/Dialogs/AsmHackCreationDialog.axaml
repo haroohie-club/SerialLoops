@@ -10,7 +10,7 @@
         x:Class="SerialLoops.Views.Dialogs.AsmHackCreationDialog"
         SizeToContent="Width" Height="500"
         Icon="/Assets/serial-loops.ico"
-        Title="{x:Static assets:Strings.Create_ASM_Hack}"
+        Title="{x:Static assets:Strings.MenuCreateAsmHackLabel}"
         Name="Dialog"
         TransparencyLevelHint="AcrylicBlur"
         Background="{DynamicResource FallbackBackgroundColor}"

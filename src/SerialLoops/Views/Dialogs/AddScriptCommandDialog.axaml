@@ -32,7 +32,7 @@
             <StackPanel Orientation="Horizontal" Spacing="5">
                 <Button Content="{x:Static assets:Strings.Cancel}" Command="{Binding CancelCommand}"
                         CommandParameter="{Binding #AddCommandDialog}" IsCancel="True"/>
-                <Button Content="{x:Static assets:Strings.Create}" Command="{Binding CreateCommand}"
+                <Button Content="{x:Static assets:Strings.AddItemLabel}" Command="{Binding CreateCommand}"
                         CommandParameter="{Binding #AddCommandDialog}" IsDefault="True"/>
             </StackPanel>
             <TextBlock Text="{x:Static assets:Strings.TypeToSearchHelp}" VerticalAlignment="Center" TextAlignment="Center"

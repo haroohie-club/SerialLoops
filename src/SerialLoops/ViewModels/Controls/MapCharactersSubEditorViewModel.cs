@@ -297,7 +297,7 @@ public class MapCharactersSubEditorViewModel : ViewModelBase
     {
         if (prompt)
         {
-            if (await ScriptEditor.Window.Window.ShowMessageBoxAsync(Strings.Delete_Map_Characters_,
+            if (await ScriptEditor.Window.Window.ShowMessageBoxAsync(Strings.ScriptEditorDeleteMapChacatersPromptTitle,
                     Strings.MapCharactersEditorDeletePrompt,
                     ButtonEnum.YesNo, Icon.Warning, ScriptEditor.Window.Log) != ButtonResult.Yes)
             {

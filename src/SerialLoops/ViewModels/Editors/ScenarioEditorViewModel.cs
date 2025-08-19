@@ -139,7 +139,7 @@ public class ScenarioEditorViewModel : EditorViewModel
     }
     private async Task Clear()
     {
-        if (await Window.Window.ShowMessageBoxAsync(Strings.Clear_Scenario, Strings.Clear_all_commands_from_the_game_scenario__nThis_action_is_irreversible_,
+        if (await Window.Window.ShowMessageBoxAsync(Strings.ScenarioEditorClearScenarioLabel, Strings.ScenarioEditorClearCommandsMessage,
                 ButtonEnum.YesNo, Icon.Warning, _log) == ButtonResult.Yes)
         {
             Commands.Clear();

@@ -188,27 +188,24 @@
     <value>Adicionar Frames</value>
     <comment>For Chibis/Character sprites</comment>
   </data>
-  <data name="Build and Run" xml:space="preserve">
+  <data name="BuildAndRun" xml:space="preserve">
     <value>Compilar e Rodar</value>
   </data>
-  <data name="Batch Dialogue Display" xml:space="preserve">
+  <data name="SaveEditorOptionBatchDialogueDisplay" xml:space="preserve">
     <value>Visualizar Diálogo</value>
   </data>
-  <data name="Bank" xml:space="preserve">
+  <data name="SfxEditorBank" xml:space="preserve">
     <value>Banco</value>
     <comment>As in "Sound Bank"</comment>
   </data>
   <data name="UiMessage90Label" xml:space="preserve">
     <value>Caixa de mensagem Todos os dados serão apagados</value>
   </data>
-  <data name="Caching" xml:space="preserve">
+  <data name="BgmItemCachingMessage" xml:space="preserve">
     <value>Caching</value>
   </data>
   <data name="ChibiEditorAnimationExportOptionMessageBoxTitle" xml:space="preserve">
     <value>Opçõe de Exportação de Animação</value>
-  </data>
-  <data name="Characters Involved" xml:space="preserve">
-    <value>Personagens Envolvidos</value>
   </data>
   <data name="AssemblyHacksApplyDetails" xml:space="preserve">
     <value>Aplicar Hacks…</value>
@@ -216,43 +213,40 @@
   <data name="BGM" xml:space="preserve">
     <value>BGM</value>
   </data>
-  <data name="Character distribution instructions" xml:space="preserve">
+  <data name="UiMessage09Label" xml:space="preserve">
     <value>Instruções para a distribuição de personagem</value>
   </data>
-  <data name="Choices" xml:space="preserve">
+  <data name="ScriptEditorChoicesLabel" xml:space="preserve">
     <value>Escolhas</value>
   </data>
-  <data name="Chinese (Simplified)" xml:space="preserve">
+  <data name="TranslatorCreditsSimplifiedChinese" xml:space="preserve">
     <value>Chinês (Simplificado)</value>
   </data>
-  <data name="Clear Script" xml:space="preserve">
+  <data name="ScriptEditorClearScriptLabel" xml:space="preserve">
     <value>Limpar Script</value>
   </data>
-  <data name="Building:" xml:space="preserve">
+  <data name="BuildingPrefix" xml:space="preserve">
     <value>Compilando:</value>
   </data>
-  <data name="Batch Dialogue Display option" xml:space="preserve">
+  <data name="UiMessage94Label" xml:space="preserve">
     <value>Opção de Visualizar Diálogo</value>
   </data>
   <data name="ImageCropResizeInstructions" xml:space="preserve">
     <value>Teclas de Seta - Mover imagem</value>
   </data>
-  <data name="Building Iteratively" xml:space="preserve">
+  <data name="BuildingIterativelyMessage" xml:space="preserve">
     <value>Compilando Interativamente</value>
   </data>
-  <data name="Chess_Puzzles" xml:space="preserve">
+  <data name="ItemsPanelChessPuzzles" xml:space="preserve">
     <value>Puzzles de Xadrez</value>
   </data>
-  <data name="Building from Scratch" xml:space="preserve">
+  <data name="BuildingFromScratchMessage" xml:space="preserve">
     <value>Compilando do Zero</value>
-  </data>
-  <data name="Can't Rename Item" xml:space="preserve">
-    <value>Impossível Renomear Item</value>
   </data>
   <data name="AssemblyHacksApplyLabel" xml:space="preserve">
     <value>Aplicar Assembly Hacks</value>
   </data>
-  <data name="Character sprite frames exported!" xml:space="preserve">
+  <data name="CharacterSpriteEditorFramesExportedMessage" xml:space="preserve">
     <value>Sprites do personagem exportados!</value>
   </data>
   <data name="Cancel" xml:space="preserve">
@@ -261,90 +255,81 @@
   <data name="Chibi" xml:space="preserve">
     <value>Chibi</value>
   </data>
-  <data name="Both" xml:space="preserve">
+  <data name="ScreenSelectorBothScreens" xml:space="preserve">
     <value>Ambas</value>
     <comment>Checkbox for "Both Screens"</comment>
   </data>
-  <data name="Backgrounds" xml:space="preserve">
+  <data name="ItemsPanelBackgrounds" xml:space="preserve">
     <value>Planos de fundo</value>
   </data>
-  <data name="Batch Dialogue Display On" xml:space="preserve">
+  <data name="UiMessage103Label" xml:space="preserve">
     <value>Visualizar Diálogo On</value>
   </data>
-  <data name="Build succeeded!" xml:space="preserve">
+  <data name="BuildSucceeded" xml:space="preserve">
     <value>Compilação bem-sucedida!</value>
   </data>
-  <data name="BGMs" xml:space="preserve">
+  <data name="ItemsPanelBGMs" xml:space="preserve">
     <value>BGMs</value>
   </data>
   <data name="Character_Sprite" xml:space="preserve">
     <value>Sprite do Personagem</value>
   </data>
-  <data name="Character_Sprites" xml:space="preserve">
+  <data name="ItemsPanelCharacterSprites" xml:space="preserve">
     <value>Sprites do Personagem</value>
   </data>
-  <data name="Chess Mode Unlocked message box" xml:space="preserve">
+  <data name="UiMessage115Label" xml:space="preserve">
     <value>Caixa de mensagem Modo de Xadrez Desbloqueado</value>
   </data>
-  <data name="Batch Dialogue Display Off" xml:space="preserve">
+  <data name="UiMessage102Label" xml:space="preserve">
     <value>Visualizar Diálogo Off</value>
   </data>
-  <data name="Build from Scratch" xml:space="preserve">
+  <data name="BuildFromScratch" xml:space="preserve">
     <value>Compilar do Zero</value>
   </data>
-  <data name="Base Time" xml:space="preserve">
+  <data name="PuzzleEditorBaseTimeLabel" xml:space="preserve">
     <value>Tempo Base</value>
   </data>
-  <data name="Bottom Screen" xml:space="preserve">
+  <data name="ScreenSelectorBottomScreen" xml:space="preserve">
     <value>Tela Inferior</value>
   </data>
-  <data name="Chibi frames exported!" xml:space="preserve">
+  <data name="ChibiEditorFramesExportedMessage" xml:space="preserve">
     <value>Frames Chibi exportados!</value>
   </data>
-  <data name="Check for Updates on Startup" xml:space="preserve">
+  <data name="PreferencesCheckForUpdatesOnStartup" xml:space="preserve">
     <value>Procurar por Atualizações ao Abrir</value>
   </data>
-  <data name="Clear Section" xml:space="preserve">
+  <data name="ScriptEditorChessWinSectionLabel" xml:space="preserve">
     <value>Seção de Vitória</value>
   </data>
   <data name="ScriptEditorApplyTemplateLabel" xml:space="preserve">
     <value>Aplicar Modelo</value>
   </data>
-  <data name="Check for Updates" xml:space="preserve">
+  <data name="MenuOptionCheckForUpdates" xml:space="preserve">
     <value>Procurar Atualizações</value>
   </data>
-  <data name="Character Distribution" xml:space="preserve">
+  <data name="UiMessage06Label" xml:space="preserve">
     <value>Distribuição de Personagem</value>
   </data>
-  <data name="Chess File" xml:space="preserve">
+  <data name="ScriptEditorChessFileLabel" xml:space="preserve">
     <value>Arquivo Xadrez</value>
   </data>
   <data name="EditorBackgroundCGItemLabel" xml:space="preserve">
     <value>Plano de Fundo (CG)</value>
   </data>
-  <data name="Chibis" xml:space="preserve">
-    <value>Chibis</value>
-  </data>
-  <data name="Chokuretsu ROM" xml:space="preserve">
+  <data name="ProjectCreationChokuretsuROMLabel" xml:space="preserve">
     <value>Chokuretsu ROM</value>
   </data>
   <data name="Build" xml:space="preserve">
     <value>Compilar</value>
   </data>
-  <data name="Both Screens" xml:space="preserve">
-    <value>Ambas as Telas</value>
-  </data>
-  <data name="Clear Scenario" xml:space="preserve">
+  <data name="ScenarioEditorClearScenarioLabel" xml:space="preserve">
     <value>Limpar Cenário</value>
   </data>
-  <data name="Caching BGM" xml:space="preserve">
+  <data name="BgmEditorCachingBGMMessage" xml:space="preserve">
     <value>Caching BGM</value>
   </data>
   <data name="Chess_Puzzle" xml:space="preserve">
     <value>Puzzle de Xadrez</value>
-  </data>
-  <data name="Can't rename this item directly -- open it to rename it!" xml:space="preserve">
-    <value>Não é possível renomear esse item diretamente -- abra-o para renomar!</value>
   </data>
   <data name="Background_Type" xml:space="preserve">
     <value>Tipo de Plano de Fundo</value>
@@ -352,25 +337,22 @@
   <data name="EditorBackgroundItemLabel" xml:space="preserve">
     <value>Plano de Fundo</value>
   </data>
-  <data name="Characters" xml:space="preserve">
-    <value>Personagens</value>
-  </data>
-  <data name="Build failed!" xml:space="preserve">
+  <data name="BuildFailed" xml:space="preserve">
     <value>Falha ao compilar!</value>
   </data>
-  <data name="Character" xml:space="preserve">
+  <data name="EditorCharacterLabel" xml:space="preserve">
     <value>Personagem</value>
   </data>
-  <data name="Building and Running" xml:space="preserve">
+  <data name="BuildingAndRunningMessage" xml:space="preserve">
     <value>Compilando e Rodando</value>
   </data>
   <data name="Background_ID" xml:space="preserve">
     <value>ID do Plano de Fundo</value>
   </data>
-  <data name="Base Time Gain" xml:space="preserve">
+  <data name="TopicEditorBaseTimeGainLabel" xml:space="preserve">
     <value>Ganho de Tempo Base</value>
   </data>
-  <data name="Character Topic" xml:space="preserve">
+  <data name="UiMessage04Label" xml:space="preserve">
     <value>Tópico do Personagem</value>
   </data>
   <data name="ChibiEditorAnimationHeader" xml:space="preserve">
@@ -379,7 +361,10 @@
   <data name="Apply" xml:space="preserve">
     <value>Aplicar</value>
   </data>
-  <data name="Chokuretsu Save File" xml:space="preserve">
+  <data name="FiletypeChokuretsuSave" xml:space="preserve">
     <value>Save de Chokuretsu</value>
+  </data>
+  <data name="LanguageChineseSimplified" xml:space="preserve">
+    <value>Cinese (Semplificato)</value>
   </data>
 </root>

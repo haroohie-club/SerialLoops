@@ -599,7 +599,7 @@ public class ScriptEditorViewModel : EditorViewModel
             int sectionIndex = ScriptSections.IndexOf(SelectedSection);
             if (sectionIndex == 0)
             {
-                await Window.Window.ShowMessageBoxAsync(Strings.Cannot_Delete_Root_Section_,
+                await Window.Window.ShowMessageBoxAsync(Strings.ScriptEditorCannotDeleteRootSection,
                     Strings.The_root_section_cannot_be_deleted_, ButtonEnum.Ok,
                     Icon.Warning, _log);
                 return;
@@ -661,7 +661,7 @@ public class ScriptEditorViewModel : EditorViewModel
 
     private async Task Clear()
     {
-        if (await Window.Window.ShowMessageBoxAsync(Strings.Clear_Script_,
+        if (await Window.Window.ShowMessageBoxAsync(Strings.ScriptEditorClearScriptPromptTitle,
                 Strings.ScriptEditorClearScriptPrompt,
                 ButtonEnum.YesNo, Icon.Question, _log) != ButtonResult.Yes)
         {

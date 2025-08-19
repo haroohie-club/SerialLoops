@@ -52,7 +52,7 @@
                     <TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static assets:Strings.Map}"/>
                     <controls:ItemLink Grid.Row="0" Grid.Column="1" Margin="10,0,0,0" Item="{Binding Map}" Tabs="{Binding Tabs}"/>
 
-                    <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Base_Time}"/>
+                    <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.PuzzleEditorBaseTimeLabel}"/>
                     <NumericUpDown Grid.Row="1" Grid.Column="1" Margin="10,0,0,0" Minimum="0" Maximum="999"
                                    Value="{Binding BaseTime}" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
 
@@ -64,7 +64,7 @@
                     <NumericUpDown Grid.Row="3" Grid.Column="1" Margin="10,0,0,0" Minimum="0" Maximum="999"
                                    Value="{Binding Unknown04}" FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
 
-                    <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Continue_on_Failure}"/>
+                    <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.PuzzleEditorContinueOnFailureLabel}"/>
                     <CheckBox Grid.Row="4" Grid.Column="1" Margin="10,0,0,0" IsChecked="{Binding ContinueOnFailure}"/>
 
                     <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.PuzzleEditorAccompanyingCharacterLabel}"/>

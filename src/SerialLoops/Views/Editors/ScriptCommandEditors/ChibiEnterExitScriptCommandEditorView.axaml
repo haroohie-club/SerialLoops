@@ -16,7 +16,7 @@
         <ComboBox Grid.Row="1" Grid.Column="1" Margin="10,0,0,0"
                   ItemsSource="{Binding EnterExitModes}" SelectedItem="{Binding EnterExitMode}"/>
 
-        <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.Delay__Frames_}"/>
+        <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static assets:Strings.ScriptParameterDelay}"/>
         <NumericUpDown Grid.Row="2" Grid.Column="1" Margin="10,0,0,0"  Value="{Binding Delay}"
                                    Minimum="0" Maximum="{Binding MaxShort}"
                                    FormatString="N0" Increment="1" ParsingNumberStyle="Integer"/>
